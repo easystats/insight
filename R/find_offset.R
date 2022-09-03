@@ -27,16 +27,20 @@
 #' }
 #' @export
 find_offset <- function(x) {
-  terms <- find_terms(x, flatten = TRUE)
+  terms <- tryCatch(
+    as.character(attributes(stats::terms(find_formula(x)[[1]]))$variables),
+    error = function(e) find_terms(x)
+  )
   offset <- NULL
 
-  offcol <- grep("^offset\\((.*)\\)", terms)
+  offcol <- grep("offset(", terms, fixed = TRUE)
   if (length(offcol)) {
     offset <- clean_names(terms[offcol])
   }
 
-  if (is.null(offset) && object_has_names(x, "call") && object_has_names(x$call, "offset")) {
-    offset <- clean_names(safe_deparse(x$call$offset))
+  model_call <- get_call(x)
+  if (is.null(offset) && object_has_names(model_call, "offset")) {
+    offset <- clean_names(safe_deparse(model_call$offset))
   }
 
   offset

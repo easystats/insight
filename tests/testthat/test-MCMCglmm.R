@@ -46,7 +46,7 @@ if (!osx && requiet("testthat") &&
   })
 
   test_that("get_random", {
-    expect_equal(get_random(m1), data.frame(FSfamily = PlodiaPO$FSfamily))
+    expect_equal(get_random(m1), data.frame(FSfamily = PlodiaPO$FSfamily), ignore_attr = TRUE)
   })
 
   test_that("find_response", {

@@ -12,6 +12,24 @@ m4 <- feols(
   data = iris
 )
 
+
+test_that("robust variance-covariance", {
+  mod <- feols(mpg ~ hp + drat | cyl, data = mtcars)
+  # default is clustered
+  expect_equal(
+    sqrt(diag(vcov(mod))),
+    sqrt(diag(get_varcov(mod, vcov = ~cyl))))
+
+  # HC1
+  expect_equal(
+    sqrt(diag(vcov(mod, vcov = "HC1"))),
+    sqrt(diag(get_varcov(mod, vcov = "HC1"))))
+
+  expect_true(all(
+    sqrt(diag(vcov(mod))) !=
+    sqrt(diag(get_varcov(mod, vcov = "HC1")))))
+})
+
 test_that("model_info", {
   expect_true(model_info(m1)$is_count)
   expect_true(model_info(m2)$is_linear)
@@ -22,6 +40,10 @@ test_that("find_predictors", {
   expect_identical(find_predictors(m1), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
   expect_identical(find_predictors(m2), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
   expect_identical(find_predictors(m3), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
+  expect_identical(find_predictors(m4), list(
+    conditional = c("Petal.Length", "Sepal.Length"), cluster = "Species",
+    instruments = "Petal.Width", endogenous = "Sepal.Length"
+  ))
   expect_identical(
     find_predictors(m1, component = "all"),
     list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
@@ -39,7 +61,8 @@ test_that("find_predictors", {
     list(
       conditional = c("Petal.Length", "Sepal.Length"),
       cluster = "Species",
-      instruments = "Petal.Width"
+      instruments = "Petal.Width",
+      endogenous = "Sepal.Length"
     )
   )
 })
@@ -48,6 +71,11 @@ test_that("find_random", {
   expect_null(find_random(m1))
   expect_null(find_random(m2))
   expect_null(find_random(m3))
+})
+
+test_that("get_varcov", {
+  expect_equal(vcov(m1), get_varcov(m1), tolerance = 1e-3)
+  expect_equal(vcov(m4), get_varcov(m4), tolerance = 1e-3)
 })
 
 test_that("get_random", {
@@ -223,4 +251,45 @@ test_that("get_predicted", {
   # these used to raise warnings
   expect_warning(get_predicted(m1, ci = .4), NA)
   expect_warning(get_predicted(m1, predict = NULL, type = "link"), NA)
+})
+
+test_that("get_data works when model data has name of  reserved words", {
+  ## NOTE check back every now and then and see if tests still work
+  skip("works interactively")
+  rep <- data.frame(Y = runif(100) > .5, X = rnorm(100))
+  m <- feglm(Y ~ X, data = rep, family = binomial)
+  out <- get_data(m)
+  expect_s3_class(out, "data.frame")
+  expect_equal(
+    head(out),
+    structure(
+      list(
+        Y = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),
+        X = c(
+          -1.37601434046896, -0.0340090992175856, 0.418083058388383,
+          -0.51688491498936, -1.30634551903768, -0.858343109785566
+        )
+      ),
+      is_subset = FALSE, row.names = c(NA, 6L), class = "data.frame"
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+})
+
+
+test_that("find_variables with interaction", {
+  mod <- suppressMessages(feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars))
+  expect_equal(
+    find_variables(mod),
+    list(
+      response = "mpg", conditional = "vs", cluster = "carb",
+      instruments = c("am", "cyl"), endogenous = c("vs", "cyl")
+    ),
+    ignore_attr = TRUE
+  )
+
+  # used to produce a warning
+  mod <- feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars)
+  expect_warning(find_variables(mod), NA)
 })

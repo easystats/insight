@@ -36,7 +36,7 @@
 #' * `is_survival`: model is a survival model
 #' * `is_zero_inflated`: model has zero-inflation component
 #' * `is_hurdle`: model has zero-inflation component and is a hurdle-model (truncated family distribution)
-#' * `is_dispersion`: model has dispersion component
+#' * `is_dispersion`: model has dispersion component (not only dispersion _parameter_)
 #' * `is_mixed`: model is a mixed effects model (with random effects)
 #' * `is_multivariate`: model is a multivariate response model (currently only works for _brmsfit_ objects)
 #' * `is_trial`: model response contains additional information about the trials
@@ -55,7 +55,6 @@
 #' * `link_function`: the link-function
 #' * `family`: the family-object
 #' * `n_obs`: number of observations
-#' * `model_terms`: a list with all model terms, including terms such as random effects or from zero-inflated model parts.
 #'
 #' @examples
 #' ldose <- rep(0:5, 2)
@@ -144,7 +143,7 @@ model_info.model_fit <- function(x, verbose = TRUE, ...) {
 #' @export
 model_info.anova <- function(x, verbose = TRUE, ...) {
   if (!is.null(attributes(x)$heading) && grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
-    .make_family(x, verbose = verbose)
+    .make_family(x, verbose = verbose, ...)
   } else {
     NULL
   }
@@ -152,132 +151,146 @@ model_info.anova <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-model_info.mmclogit <- function(x, verbose = TRUE, ...) {
+model_info.mclogit <- function(x, verbose = TRUE, ...) {
+  .make_family(
+    x,
+    family = "categorical",
+    logit.link = TRUE,
+    link.fun = "logit",
+    verbose = verbose,
+    ...
+  )
+}
+
+#' @export
+model_info.mblogit <- model_info.mclogit
+
+#' @export
+model_info.mmclogit <- model_info.mclogit
+
+
+#' @export
+model_info.maxLik <- function(x, verbose = TRUE, ...) {
   .make_family(x, verbose = verbose, ...)
 }
 
 #' @export
-model_info.maxLik <- model_info.mmclogit
+model_info.mjoint <- model_info.maxLik
 
 #' @export
-model_info.mjoint <- model_info.mmclogit
+model_info.censReg <- model_info.maxLik
 
 #' @export
-model_info.censReg <- model_info.mmclogit
+model_info.htest <- model_info.maxLik
 
 #' @export
-model_info.htest <- model_info.mmclogit
+model_info.BFBayesFactor <- model_info.maxLik
 
 #' @export
-model_info.BFBayesFactor <- model_info.mmclogit
+model_info.lme <- model_info.maxLik
 
 #' @export
-model_info.lme <- model_info.mmclogit
+model_info.bayesx <- model_info.maxLik
 
 #' @export
-model_info.bayesx <- model_info.mmclogit
+model_info.rq <- model_info.maxLik
 
 #' @export
-model_info.rq <- model_info.mmclogit
+model_info.crq <- model_info.maxLik
 
 #' @export
-model_info.crq <- model_info.mmclogit
+model_info.crqs <- model_info.maxLik
 
 #' @export
-model_info.crqs <- model_info.mmclogit
+model_info.nlrq <- model_info.maxLik
 
 #' @export
-model_info.nlrq <- model_info.mmclogit
+model_info.rqss <- model_info.maxLik
 
 #' @export
-model_info.rqss <- model_info.mmclogit
+model_info.mixed <- model_info.maxLik
 
 #' @export
-model_info.mixed <- model_info.mmclogit
+model_info.plm <- model_info.maxLik
 
 #' @export
-model_info.plm <- model_info.mmclogit
+model_info.mcmc <- model_info.maxLik
 
 #' @export
-model_info.mcmc <- model_info.mmclogit
+model_info.bayesQR <- model_info.maxLik
 
 #' @export
-model_info.bayesQR <- model_info.mmclogit
+model_info.gls <- model_info.maxLik
 
 #' @export
-model_info.gls <- model_info.mmclogit
+model_info.nls <- model_info.maxLik
 
 #' @export
-model_info.nls <- model_info.mmclogit
+model_info.MANOVA <- model_info.maxLik
 
 #' @export
-model_info.MANOVA <- model_info.mmclogit
+model_info.RM <- model_info.maxLik
 
 #' @export
-model_info.RM <- model_info.mmclogit
+model_info.truncreg <- model_info.maxLik
 
 #' @export
-model_info.truncreg <- model_info.mmclogit
+model_info.lmRob <- model_info.maxLik
 
 #' @export
-model_info.lmRob <- model_info.mmclogit
+model_info.speedlm <- model_info.maxLik
 
 #' @export
-model_info.speedlm <- model_info.mmclogit
+model_info.lmrob <- model_info.maxLik
 
 #' @export
-model_info.lmrob <- model_info.mmclogit
+model_info.complmrob <- model_info.maxLik
 
 #' @export
-model_info.complmrob <- model_info.mmclogit
+model_info.lm_robust <- model_info.maxLik
 
 #' @export
-model_info.lm_robust <- model_info.mmclogit
+model_info.iv_robust <- model_info.maxLik
 
 #' @export
-model_info.iv_robust <- model_info.mmclogit
+model_info.systemfit <- model_info.maxLik
 
 #' @export
-model_info.systemfit <- model_info.mmclogit
+model_info.lqmm <- model_info.maxLik
 
 #' @export
-model_info.lqmm <- model_info.mmclogit
+model_info.lqm <- model_info.maxLik
 
 #' @export
-model_info.lqm <- model_info.mmclogit
+model_info.felm <- model_info.maxLik
 
 #' @export
-model_info.felm <- model_info.mmclogit
+model_info.feis <- model_info.maxLik
 
 #' @export
-model_info.feis <- model_info.mmclogit
+model_info.ivreg <- model_info.maxLik
 
 #' @export
-model_info.ivreg <- model_info.mmclogit
+model_info.ivFixed <- model_info.maxLik
 
 #' @export
-model_info.ivFixed <- model_info.mmclogit
+model_info.aovlist <- model_info.maxLik
 
 #' @export
-model_info.aovlist <- model_info.mmclogit
+model_info.rma <- model_info.maxLik
 
 #' @export
-model_info.rma <- model_info.mmclogit
+model_info.meta_random <- model_info.maxLik
 
 #' @export
-model_info.meta_random <- model_info.mmclogit
+model_info.meta_bma <- model_info.maxLik
 
 #' @export
-model_info.meta_bma <- model_info.mmclogit
+model_info.meta_fixed <- model_info.maxLik
 
 #' @export
-model_info.meta_fixed <- model_info.mmclogit
+model_info.metaplus <- model_info.maxLik
 
-#' @export
-model_info.metaplus <- model_info.mmclogit
-
-#' @export
-model_info.mclogit <- model_info.mmclogit
 
 #' @export
 model_info.mlm <- function(x, ...) {
@@ -1041,7 +1054,7 @@ model_info.glmmTMB <- function(x, ...) {
     x = x,
     fitfam = faminfo$family,
     zero.inf = zero_inflated,
-    hurdle = grepl("truncated", faminfo$family),
+    hurdle = grepl("truncated", faminfo$family, fixed = TRUE),
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
     dispersion = !is.null(find_formula(x)$dispersion),
@@ -1257,4 +1270,9 @@ model_info.marginaleffects <- function(x, ...) {
 #' @export
 model_info.earth <- function(x, ...) {
   stop("Models of class 'earth' are not yet supported.", call. = FALSE)
+}
+
+#' @export
+model_info.deltaMethod <- function(x, ...) {
+  NULL
 }

@@ -47,7 +47,7 @@ find_algorithm <- function(x, ...) {
 
 #' @export
 find_algorithm.default <- function(x, ...) {
-  warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
+  warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]), call. = FALSE)
   NULL
 }
 
@@ -269,7 +269,7 @@ find_algorithm.lme <- function(x, ...) {
 #' @export
 find_algorithm.MixMod <- function(x, ...) {
   list(
-    ## TODO fix me
+    ## FIXME
     "algorithm" = "quasi-Newton",
     "optimizer" = x$control$optimizer
   )

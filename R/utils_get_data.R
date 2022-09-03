@@ -4,7 +4,6 @@
 # variables transformed during model fitting are not included in this data frame
 #
 .prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
-
   # check if we have any data yet
   if (is_empty_object(mf)) {
     if (isTRUE(verbose)) {
@@ -17,17 +16,40 @@
   mw <- NULL
 
 
+  # make sure it's a data frame -----------------------------------------------
+
+  if (!is.data.frame(mf)) {
+    mf <- tryCatch(as.data.frame(mf), error = function(e) NULL)
+    if (is.null(mf)) {
+      if (isTRUE(verbose)) {
+        warning(format_message(
+          "Cannot coerce data into a data frame.",
+          "No data will be returned."
+        ), call. = FALSE)
+      }
+      return(NULL)
+    }
+  }
+
+
   # offset variables ----------------------------------------------------------
 
   # do we have an offset, not specified in the formula?
-  offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
-  if (length(offcol) && object_has_names(x, "call") && object_has_names(x$call, "offset")) {
-    colnames(mf)[offcol] <- clean_names(safe_deparse(x$call$offset))
+
+  # This is a bit slower - restore if tests fail...
+  # offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
+
+  offcol <- grepl("(offset)", colnames(mf), fixed = TRUE) | grepl("offset(", colnames(mf), fixed = TRUE)
+  model_call <- get_call(x)
+  if (length(offcol) && object_has_names(model_call, "offset")) {
+    colnames(mf)[offcol] <- clean_names(safe_deparse(model_call$offset))
   }
+
 
   # backtransform variables, such as log, sqrt etc ----------------------------
 
   mf <- .backtransform(mf, x)
+
 
   # clean 1-dimensional matrices ---------------------------------------------
 
@@ -40,6 +62,7 @@
       .x
     }
   })
+
 
   # detect matrix columns ----------------------------------------------------
 
@@ -58,6 +81,7 @@
 
   trials.data <- NULL
 
+
   # restore original variables used in matrix-response columns ----------------
 
   if (mc[1] && rn == colnames(mf)[1]) {
@@ -73,7 +97,7 @@
           colnames(trials.data) <- rn_not_combined
 
           # if columns were bound via subtraction, e.g.
-          # "cbind(succes, total - success)", we need to sum up success and
+          # "cbind(success, total - success)", we need to sum up success and
           # total for the original total-column.
 
           pattern <- sprintf("%s(\\s*)-(\\s*)%s", rn_not_combined[2], rn_not_combined[1])
@@ -88,27 +112,40 @@
     }
   }
 
+
   # process matrix-variables (restore original data from matrix variables) ----
 
   # if we have any matrix columns, we remove them from original
   # model frame and convert them to regular data frames, give
   # proper column names and bind them back to the original model frame
   if (any(mc)) {
-
     # try to get model data from environment
     md <- tryCatch(
       {
-        eval(stats::getCall(x)$data, environment(stats::formula(x)))
+        eval(get_call(x)$data, environment(stats::formula(x)))
       },
       error = function(x) {
         NULL
       }
     )
 
+    # in case we have missing data, the data frame in the environment
+    # has more rows than the model frame
+    if (isTRUE(!is.null(md) && nrow(md) != nrow(mf))) {
+      md <- tryCatch(
+        {
+          md <- .recover_data_from_environment(x)
+          md <- stats::na.omit(md[intersect(colnames(md), find_variables(x, effects = "all", component = "all", flatten = TRUE))])
+        },
+        error = function(e) {
+          NULL
+        }
+      )
+    }
+
     # if data not found in environment,
     # reduce matrix variables into regular vectors
     if (is.null(md)) {
-
       # we select the non-matrix variables and convert matrix-variables into
       # regular data frames, then binding them together
       mf_matrix <- mf[, which(mc), drop = FALSE]
@@ -124,7 +161,6 @@
       mf_matrix <- do.call(cbind, mf_list)
       mf <- cbind(mf_nonmatrix, mf_matrix)
     } else {
-
       # fix NA in column names
       if (any(is.na(colnames(md)))) {
         colnames(md) <- make.names(colnames(md))
@@ -163,29 +199,45 @@
         # no further processing for survival models
         mf <- md
       } else {
-
         # get cleaned variable names for those variables
         # that we still need from the original model frame
         needed.vars <- compact_character(unique(clean_names(needed.vars)))
-        mf <- md[, needed.vars, drop = FALSE]
 
-        # we need this hack to save variable and value label attributes, if any
-        value_labels <- lapply(mf, function(.l) attr(.l, "labels", exact = TRUE))
-        variable_labels <- lapply(mf, function(.l) attr(.l, "label", exact = TRUE))
+        # check if data in environment was modified in between?
+        if (!all(needed.vars %in% colnames(md))) {
+          needed.vars <- intersect(needed.vars, colnames(md))
+        }
 
-        # removing NAs drops all label-attributes
-        mf <- stats::na.omit(mf)
+        # if data recovered from environment does not match current
+        # model frame, tell user and skip this step
+        if (!length(needed.vars) || nrow(md) != nrow(mf)) {
+          if (isTRUE(verbose)) {
+            warning(format_message(
+              "Could not find all model variables in the data.",
+              "Maybe the original data frame used to fit the model was modified?"
+            ), call. = FALSE)
+          }
+        } else {
+          mf <- md[, needed.vars, drop = FALSE]
 
-        # then set back attributes
-        mf <- as.data.frame(mapply(function(.d, .l) {
-          attr(.d, "labels") <- .l
-          .d
-        }, mf, value_labels, SIMPLIFY = FALSE), stringsAsFactors = FALSE)
+          # we need this hack to save variable and value label attributes, if any
+          value_labels <- lapply(mf, function(.l) attr(.l, "labels", exact = TRUE))
+          variable_labels <- lapply(mf, function(.l) attr(.l, "label", exact = TRUE))
 
-        mf <- as.data.frame(mapply(function(.d, .l) {
-          attr(.d, "label") <- .l
-          .d
-        }, mf, variable_labels, SIMPLIFY = FALSE), stringsAsFactors = FALSE)
+          # removing NAs drops all label-attributes
+          mf <- stats::na.omit(mf)
+
+          # then set back attributes
+          mf <- as.data.frame(mapply(function(.d, .l) {
+            attr(.d, "labels") <- .l
+            .d
+          }, mf, value_labels, SIMPLIFY = FALSE), stringsAsFactors = FALSE)
+
+          mf <- as.data.frame(mapply(function(.d, .l) {
+            attr(.d, "label") <- .l
+            .d
+          }, mf, variable_labels, SIMPLIFY = FALSE), stringsAsFactors = FALSE)
+        }
       }
 
       # add back model weights, if any
@@ -204,35 +256,46 @@
 
     # still some undetected matrix-variables?
     if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
-      warning(format_message("Some model terms could not be found in model data. You probably need to load the data into the environment."), call. = FALSE)
+      warning(format_message(
+        "Some model terms could not be found in model data.",
+        "You probably need to load the data into the environment."
+      ), call. = FALSE)
     }
   }
+
 
   # monotonic predictors ------------------------------------------------------
 
   # check if we have monotonic variables, included in formula
   # with "mo()"? If yes, remove from model frame
-  mos_eisly <- grepl(pattern = "^mo\\(([^,)]*).*", x = colnames(mf))
-  if (any(mos_eisly)) {
-    mf <- mf[!mos_eisly]
-  }
-
-  # strata-variables in coxph() -----------------------------------------------
-
-  strata_columns <- grepl("^strata\\((.*)\\)", colnames(mf))
-  if (any(strata_columns)) {
-    for (sc in colnames(mf)[strata_columns]) {
-      strata_variable <- gsub("strata\\((.*)\\)", "\\1", sc)
-      levels(mf[[sc]]) <- gsub(paste0("\\Q", strata_variable, "=", "\\E"), "", levels(mf[[sc]]))
+  if (inherits(x, "brmsfit")) {
+    mos_eisly <- grepl("^mo\\(([^,)]*).*", colnames(mf))
+    if (any(mos_eisly)) {
+      mf <- mf[!mos_eisly]
     }
   }
 
-  # restore original data for factors -----------------------------------------
+
+  # strata-variables in coxph() -----------------------------------------------
+
+  strata_columns <- grepl("strata(", colnames(mf), fixed = TRUE)
+  if (any(strata_columns)) {
+    for (sc in colnames(mf)[strata_columns]) {
+      strata_variable <- gsub("strata\\((.*)\\)", "\\1", sc)
+      levels(mf[[sc]]) <- gsub(paste0(strata_variable, "="), "", levels(mf[[sc]]), fixed = TRUE)
+    }
+  }
+
+
+  # restore original data for factors and logicals -----------------------------
 
   # are there any factor variables that have been coerced "on-the-fly",
   # using "factor()" or "as.factor()"? if so, get names and convert back
   # to numeric later
   factors <- colnames(mf)[grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", colnames(mf))]
+  logicals <- colnames(mf)[grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", colnames(mf))]
+
+  ## TODO check! some lines above (see "mos_eisly"). monotonic terms are removed from the model frame
 
   # check for monotonic terms and valid values. In case 'mo()' is used,
   # and predictor is numeric, prettyfied values in the data grid are based
@@ -249,10 +312,28 @@
   # clean variable names
   cvn <- .remove_pattern_from_names(colnames(mf), ignore_lag = TRUE)
 
+
+  # check for interaction pattern ----------------------------------------
+
+  ints <- grepl("interaction(", colnames(mf), fixed = TRUE)
+  interactions <- NULL
+  # add names of 2nd interaction term
+  if (any(ints)) {
+    if (inherits(x, "brmsfit")) {
+      # brms saves original variables, so remove interaction column here
+      mf[ints] <- NULL
+      cvn <- cvn[!ints]
+    } else {
+      interactions <- stats::setNames(cvn[ints], trim_ws(gsub("interaction\\((.*),(.*)\\)", "\\2", colnames(mf)[ints])))
+      factors <- unique(c(factors, interactions, names(interactions)))
+    }
+  }
+
+
   # as-is variables I() -------------------------------------------------------
 
   # keep "as is" variable for response variables in data frame
-  if (colnames(mf)[1] == rn[1] && grepl("^I\\(", rn[1])) {
+  if (colnames(mf)[1] == rn[1] && grepl("I(", rn[1], fixed = TRUE, ignore.case = FALSE)) {
     md <- tryCatch(
       {
         tmp <- .recover_data_from_environment(x)[, unique(c(rn_not_combined, cvn)), drop = FALSE]
@@ -270,13 +351,15 @@
     }
   }
 
+
   # fix duplicated colnames ---------------------------------------------------
 
   # do we have duplicated names?
   dupes <- which(duplicated(cvn))
-  if (!.is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], 1:length(dupes))
+  if (!.is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], seq_along(dupes))
 
   colnames(mf) <- cvn
+
 
   # add weighting variable ----------------------------------------------------
 
@@ -294,6 +377,7 @@
     )
   }
 
+
   # add back possible trials-data ---------------------------------------------
 
   if (!is.null(trials.data)) {
@@ -307,7 +391,16 @@
   #   mf[[1]] <- NULL
   # }
 
-  .add_remaining_missing_variables(x, mf, effects, component = "all", factors = factors)
+  .add_remaining_missing_variables(
+    x,
+    mf,
+    effects,
+    component = "all",
+    factors = factors,
+    logicals = logicals,
+    interactions = interactions,
+    verbose = verbose
+  )
 }
 
 
@@ -317,8 +410,14 @@
 
 # add remainng variables with special pattern -------------------------------
 
-.add_remaining_missing_variables <- function(model, mf, effects, component, factors = NULL) {
-
+.add_remaining_missing_variables <- function(model,
+                                             mf,
+                                             effects,
+                                             component,
+                                             factors = NULL,
+                                             logicals = NULL,
+                                             interactions = NULL,
+                                             verbose = TRUE) {
   # check if data argument was used
   model_call <- get_call(model)
   if (!is.null(model_call)) {
@@ -330,7 +429,7 @@
   }
 
   # do we have variable names like "mtcars$mpg"?
-  if (is.null(data_arg) && all(grepl("(.*)\\$(.*)", colnames(mf)))) {
+  if (is.null(data_arg) && all(grepl("$", colnames(mf), fixed = TRUE))) {
     colnames(mf) <- gsub("(.*)\\$(.*)", "\\2", colnames(mf))
   }
 
@@ -342,7 +441,9 @@
     verbose = FALSE
   )
 
-  missing_vars <- setdiff(predictors, colnames(mf))
+  # include subset variables
+  subset_vars <- tryCatch(all.vars(get_call(model)$subset), error = function(e) NULL)
+  missing_vars <- unique(c(setdiff(predictors, colnames(mf)), subset_vars))
 
   # check if missing variables can be recovered from the environment,
   # and if so, add to model frame.
@@ -353,6 +454,27 @@
       env_data <- stats::na.omit(env_data[shared_columns])
       if (nrow(env_data) == nrow(mf) && !any(missing_vars %in% colnames(mf))) {
         mf <- cbind(mf, env_data[missing_vars])
+      }
+    }
+  }
+
+  # fix interaction terms
+  if (!is.null(interactions)) {
+    full_data <- tryCatch(.recover_data_from_environment(model), error = function(e) NULL)
+    if (!is.null(full_data) && nrow(full_data) == nrow(mf)) {
+      mf[c(interactions, names(interactions))] <- NULL
+      mf <- cbind(mf, full_data[c(interactions, names(interactions))])
+    } else {
+      for (i in seq_along(interactions)) {
+        int <- interactions[i]
+        mf[[names(int)]] <- as.factor(substr(as.character(mf[[int]]), regexpr("\\.[^\\.]*$", as.character(mf[[int]])) + 1, nchar(as.character(mf[[int]]))))
+        mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
+      }
+      if (isTRUE(verbose)) {
+        message(format_message(
+          "The data contains variables used 'interaction()'-functions. These are probably not recovered accurately in the returned data frame.",
+          "Please check the data frame carefully."
+        ))
       }
     }
   }
@@ -370,6 +492,19 @@
     }
     attr(mf, "factors") <- factors
   }
+
+  # add attributes for those that were logicals
+  if (length(logicals)) {
+    logicals <- gsub("^(as\\.logical|as_logical|logical)\\((.*)\\)", "\\2", logicals)
+    for (i in logicals) {
+      mf[[i]] <- as.numeric(mf[[i]])
+      attr(mf[[i]], "logical") <- TRUE
+    }
+    attr(mf, "logicals") <- logicals
+  }
+
+  # add attribute that subset is used
+  attr(mf, "is_subset") <- !is.null(subset_vars) && length(subset_vars)
 
   mf
 }
@@ -465,13 +600,17 @@
 
   if (is_empty_object(dat)) {
     if (isTRUE(verbose)) {
-      warning(format_message(sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)), call. = FALSE)
+      warning(format_message(
+        sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)
+      ), call. = FALSE)
     }
     return(NULL)
   }
 
   if (length(still_missing) && isTRUE(verbose)) {
-    warning(format_message(sprintf("Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,"))), call. = FALSE)
+    warning(format_message(
+      sprintf("Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,"))
+    ), call. = FALSE)
   }
 
   if ("(offset)" %in% colnames(mf) && !("(offset)" %in% colnames(dat))) {
@@ -495,9 +634,10 @@
 .add_zeroinf_data <- function(x, mf, tn) {
   tryCatch(
     {
-      env_data <- eval(x$call$data, envir = parent.frame())[, tn, drop = FALSE]
-      if (object_has_names(x$call, "subset")) {
-        env_data <- subset(env_data, subset = eval(x$call$subset))
+      model_call <- get_call(x)
+      env_data <- eval(model_call$data, envir = parent.frame())[, tn, drop = FALSE]
+      if (object_has_names(model_call, "subset")) {
+        env_data <- subset(env_data, subset = eval(model_call$subset))
       }
 
       .merge_dataframes(env_data, mf, replace = TRUE)
@@ -603,6 +743,14 @@
     }
   )
 
+  # sanity check- if data frame is named like a function, e.g.
+  # rep <- data.frame(...), we now have a function instead of the data
+  # we then need to reset "dat" to NULL and search in the global env
+
+  if (!is.null(dat) && !is.data.frame(dat)) {
+    dat <- tryCatch(as.data.frame(dat), error = function(e) NULL)
+  }
+
   if (is.null(dat)) {
     # second try, global env
     dat <- tryCatch(
@@ -693,8 +841,16 @@
         "log10", "log2", "sqrt", "exp", "expm1", "scale", "cos", "sin",
         "tan", "acos", "asin", "atan"
       )
-      for (i in patterns) {
-        mf <- .backtransform_helper(mf, i, x)
+
+      # to save time, create a full regex and see if we have any
+      # transformation at all, instead of always checking for each pattern
+      full_pattern <- sprintf("%s\\(([^,)]*).*", paste0("(", paste0(patterns, collapse = "|"), ")"))
+
+      # only backtransform if we have any matches
+      if (any(grepl(full_pattern, colnames(mf)))) {
+        for (i in patterns) {
+          mf <- .backtransform_helper(mf, i, x)
+        }
       }
       mf
     },
@@ -805,7 +961,7 @@
         # exeception: list for kruskal-wallis
         if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && grepl("^list\\(", data_name)) {
           l <- eval(.str2lang(x$data.name))
-          names(l) <- paste0("x", 1:length(l))
+          names(l) <- paste0("x", seq_along(l))
           return(l)
         }
 
@@ -813,16 +969,17 @@
         columns <- lapply(data_call, eval)
 
         # preserve table data for McNemar
-        if (!grepl(" (and|by) ", x$data.name) && (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+        if (!grepl(" (and|by) ", x$data.name) &&
+            (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           return(as.table(columns[[1]]))
           # check if data is a list for kruskal-wallis
         } else if (grepl("^Kruskal-Wallis", x$method) && length(columns) == 1 && is.list(columns[[1]])) {
           l <- columns[[1]]
-          names(l) <- paste0("x", 1:length(l))
+          names(l) <- paste0("x", seq_along(l))
           return(l)
         } else {
           max_len <- max(sapply(columns, length))
-          for (i in 1:length(columns)) {
+          for (i in seq_along(columns)) {
             if (length(columns[[i]]) < max_len) {
               columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
             }
@@ -833,7 +990,7 @@
         if (all(grepl("(.*)\\$(.*)", data_name)) && length(data_name) == length(colnames(d))) {
           colnames(d) <- gsub("(.*)\\$(.*)", "\\2", data_name)
         } else if (ncol(d) > 2) {
-          colnames(d) <- paste0("x", 1:ncol(d))
+          colnames(d) <- paste0("x", seq_len(ncol(d)))
         } else if (ncol(d) == 2) {
           colnames(d) <- c("x", "y")
         } else {

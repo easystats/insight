@@ -19,7 +19,6 @@
 #' find_statistic(m)
 #' @export
 find_statistic <- function(x, ...) {
-
   # model object check --------------------------------------------------------
 
   # check if the object is a model object; if not, quit early
@@ -97,7 +96,7 @@ find_statistic <- function(x, ...) {
     "ivreg", "ivFixed", "iv_robust", "ivprobit",
     "lm", "lm_robust", "lm.beta", "lme", "lmerMod", "lmerModLmerTest",
     "lmodel2", "lmRob", "lmrob", "lqm", "lqmm",
-    "maxLik", "mixed", "mhurdle", "mlm", "multinom", "marginaleffects", "marginaleffects.summary",
+    "maxLik", "mixed", "mhurdle", "mlm", "multinom",
     "nlmerMod", "nlrq", "nls",
     "ols", "orcutt",
     "pb1", "pb2", "polr",
@@ -117,15 +116,16 @@ find_statistic <- function(x, ...) {
     "boot_test_mediation", "bracl", "brglm", "brglmFit", "brmultinom", "btergm",
     "cglm", "cph", "clm", "clm2", "clmm", "clmm2", "clogit", "coxme", "coxph",
     "coxr", "crch", "crr",
-    "DirichletRegModel",
+    "deltaMethod", "DirichletRegModel",
     "ergm",
     "feglm", "flexsurvreg",
     "gee", "glimML", "glmm", "glmmadmb", "glmmFit", "glmmLasso", "glmmTMB",
     "glmx", "gmnl",
     "hurdle",
     "lavaan", "loggammacenslmrob", "logitmfx", "logitor", "LORgee", "lrm",
-    "margins", "metaplus", "mixor", "MixMod", "mjoint", "mle", "mle2", "mlogit",
-    "mclogit", "mmclogit", "mvmeta", "mvord",
+    "margins", "marginaleffects", "marginaleffects.summary", "metaplus", "mixor",
+    "MixMod", "mjoint", "mle", "mle2", "mlogit", "mclogit", "mmclogit", "mvmeta",
+    "mvord",
     "negbin", "negbinmfx", "negbinirr", "nlreg",
     "objectiveML", "orm",
     "poissonmfx", "poissonirr", "psm", "probitmfx", "pgmm",
@@ -151,6 +151,7 @@ find_statistic <- function(x, ...) {
   # chi-squared value objects ------------------------------------------------
 
   chi.mods <- c(
+    "anova.rms",
     "coxph.penal",
     "epi.2by2",
     "geeglm",
@@ -345,6 +346,6 @@ find_statistic <- function(x, ...) {
   if (info$family %in% c("Student's-t", "t Family", "gaussian", "Gaussian") || grepl("(\\st)$", info$family)) {
     linear_model <- TRUE
   }
-  tweedie_fam <- grepl("^(tweedie|Tweedie)", info$family) | grepl("^(tweedie|Tweedie)", info$link_function)
+  tweedie_fam <- grepl("tweedie", tolower(info$family), fixed = TRUE) | grepl("tweedie", tolower(info$link_function), fixed = TRUE)
   (linear_model && tweedie_fam) || inherits(model, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
 }

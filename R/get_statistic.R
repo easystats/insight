@@ -61,7 +61,7 @@ get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
   # edge cases: check for NULL
   params <- rownames(cs)
   if (is.null(params)) {
-    params <- paste(1:nrow(cs))
+    params <- paste(seq_len(nrow(cs)))
   }
 
   out <- data.frame(
@@ -180,6 +180,21 @@ get_statistic.afex_aov <- function(x, ...) {
 
 
 #' @export
+get_statistic.anova.rms <- function(x, ...) {
+  out <- data.frame(
+    Parameter = rownames(x),
+    Statistic = as.vector(x[, "Chi-Square"]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.plm <- get_statistic.default
 
 
@@ -242,7 +257,7 @@ get_statistic.mhurdle <- function(x,
   cond_pars <- which(grepl("^h2\\.", rownames(s$coefficients)))
   zi_pars <- which(grepl("^h1\\.", rownames(s$coefficients)))
   ip_pars <- which(grepl("^h3\\.", rownames(s$coefficients)))
-  aux_pars <- (1:length(rownames(s$coefficients)))[-c(cond_pars, zi_pars, ip_pars)]
+  aux_pars <- (seq_along(rownames(s$coefficients)))[-c(cond_pars, zi_pars, ip_pars)]
 
   stats$Component[cond_pars] <- "conditional"
   stats$Component[zi_pars] <- "zero_inflated"
@@ -417,7 +432,7 @@ get_statistic.SemiParBIV <- function(x, ...) {
   s <- summary(x)
   s <- compact_list(s[grepl("^tableP", names(s))])
 
-  params <- do.call(rbind, lapply(1:length(s), function(i) {
+  params <- do.call(rbind, lapply(seq_along(s), function(i) {
     out <- as.data.frame(s[[i]])
     out$Parameter <- rownames(out)
     out$Component <- paste0("Equation", i)
@@ -473,10 +488,7 @@ get_statistic.gamlss <- function(x, ...) {
 
 #' @export
 get_statistic.vglm <- function(x, ...) {
-  if (!requireNamespace("VGAM", quietly = TRUE)) {
-    stop("Package 'VGAM' needed for this function to work. Please install it.")
-  }
-
+  check_if_installed("VGAM")
   cs <- VGAM::coef(VGAM::summary(x))
 
   out <- data.frame(
@@ -548,7 +560,20 @@ get_statistic.cgam <- function(x,
 
 #' @export
 get_statistic.coxph <- function(x, ...) {
-  get_statistic.default(x, column_index = 4)
+  # z is not always in the same column
+  # not sure t is possible, but it is cheap to include it in the regex
+  # avoid calling default method which would be computationally wasteful, since
+  # we need summary() here.
+  cs <- suppressWarnings(stats::coef(summary(x)))
+  column_index <- grep("^z$|^t$", colnames(cs))
+  out <- data.frame(
+    Parameter = row.names(cs),
+    Statistic = cs[, column_index, drop = TRUE],
+    stringsAsFactors = FALSE,
+    row.names = NULL)
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
 }
 
 
@@ -839,7 +864,7 @@ get_statistic.multinom <- function(x, ...) {
 
   if (is.matrix(stderr)) {
     se <- c()
-    for (i in 1:nrow(stderr)) {
+    for (i in seq_len(nrow(stderr))) {
       se <- c(se, as.vector(stderr[i, ]))
     }
   } else {
@@ -881,6 +906,26 @@ get_statistic.bracl <- function(x, ...) {
   out
 }
 
+#' @export
+get_statistic.deltaMethod <- function(x, ...) {
+  stat <- standardize_names(x)
+
+  if (is.null(stat$Statistic)) {
+    s <- stat$Coefficient / stat$SE
+  } else {
+    s <- stat[["Statistic"]]
+  }
+
+  out <- data.frame(
+    Parameter = rownames(stat),
+    Statistic = s,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
 
 #' @export
 get_statistic.mlogit <- function(x, ...) {
@@ -1197,7 +1242,7 @@ get_statistic.btergm <- function(x, verbose = TRUE, ...) {
   bootstraps <- x@boot$t
 
   # standard error
-  sdev <- sapply(1:ncol(bootstraps), function(i) {
+  sdev <- sapply(seq_len(ncol(bootstraps)), function(i) {
     cur <- (bootstraps[, i] - params[i])^2
     sqrt(sum(cur) / length(cur))
   })
@@ -1256,6 +1301,25 @@ get_statistic.HLfit <- function(x, ...) {
   out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
+}
+
+
+#' @export
+get_statistic.marginaleffects.summary <- function(x, ...) {
+  out <- data.frame(
+    Parameter = x$term,
+    Statistic = x$statistic,
+    stringsAsFactors = FALSE
+  )
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
+get_statistic.marginaleffects <- function(x, ...) {
+  get_statistic(summary(x))
 }
 
 
@@ -2306,4 +2370,14 @@ get_statistic.bfsl <- function(x, ...) {
   out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
+}
+
+
+#' @export
+get_statistic.lm_robust <- function(x, ...) {
+  if (is_multivariate(x)) {
+    get_statistic.mlm(x, ...)
+  } else {
+    get_statistic.default(x, ...)
+  }
 }

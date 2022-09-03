@@ -177,6 +177,19 @@ get_df.cgam <- function(x, type = "residual", ...) {
   if (type == "model") {
     .model_df(x)
   } else {
+    # x$resid_df_obs
+    # new in cgam 1.18
+    stats::df.residual(x)
+  }
+}
+
+
+#' @export
+get_df.cgamm <- function(x, type = "residual", ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  if (type == "model") {
+    .model_df(x)
+  } else {
     x$resid_df_obs
   }
 }
@@ -304,6 +317,38 @@ get_df.selection <- function(x, type = "residual", ...) {
 
 
 #' @export
+get_df.lmerMod <- function(x, type = "residual", ...) {
+  dots <- list(...)
+  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger"))
+  # fix name for lmerTest
+  if (type == "kenward") {
+    type <- "kenward-roger"
+  }
+  if (type %in% c("satterthwaite", "kenward-roger")) {
+    check_if_installed("lmerTest")
+    type <- tools::toTitleCase(type) # lmerTest wants title case
+    if (!inherits(dots$data, "data.frame")) {
+      stop("The `data` argument should be a data.frame.", call. = FALSE)
+    }
+    mm <- get_modelmatrix(x, data = dots$data)
+    out <- sapply(
+      seq_len(nrow(mm)), function(i) {
+        suppressMessages(
+          lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
+        )
+      }
+    )
+    return(out)
+  } else {
+    get_df.default(x, type = type, ...)
+  }
+}
+
+#' @export
+get_df.lmerModTest <- get_df.lmerMod
+
+
+#' @export
 get_df.logitor <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model"))
   if (type == "model") {
@@ -421,7 +466,7 @@ get_df.systemfit <- function(x, type = "residual", ...) {
   f <- find_formula(x)
   system_names <- names(f)
 
-  for (i in 1:length(system_names)) {
+  for (i in seq_along(system_names)) {
     dfs <- rep(s[[i]]$df[2], length(params[[i]]))
     df_names <- rep(names(params[i]), length(params[[i]]))
     df <- c(df, stats::setNames(dfs, df_names))

@@ -15,6 +15,7 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
 # ======================================================================
 
 
+#' @rdname get_predicted
 #' @export
 get_predicted.principal <- function(x, data = NULL, ...) {
   if (is.null(data)) {
@@ -48,7 +49,9 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   check_if_installed("fungible")
 
   if (is.null(data)) {
-    stop("A dataframe (either the original of a new one) must be provided (`get_predicted(fa_results, data = df`).")
+    stop(format_message(
+      "A dataframe (either the original of a new one) must be provided (`get_predicted(fa_results, data = df`)."
+    ), call. = FALSE)
   } else {
     out <- as.data.frame(fungible::faScores(X = data, faMainObject = x)$fscores)
   }

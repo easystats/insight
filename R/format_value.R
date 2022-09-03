@@ -1,4 +1,10 @@
-#' Numeric Values Formatting
+#' @title Numeric Values Formatting
+#' @name format_value
+#'
+#' @description
+#' `format_value()` converts numeric values into formatted string values2, where
+#' formatting can be something like rounding digits, scientific notation etc.
+#' `format_percent()` is a short-cut for `format_value(as_percent = TRUE)`.
 #'
 #' @param x Numeric value.
 #' @param digits Number of digits for rounding or significant figures. May also
@@ -54,18 +60,58 @@ format_value <- function(x, ...) {
 
 #' @rdname format_value
 #' @export
-format_value.data.frame <- function(x, digits = 2, protect_integers = FALSE, missing = "", width = NULL, as_percent = FALSE, zap_small = FALSE, ...) {
-  as.data.frame(sapply(x, format_value, digits = digits, protect_integers = protect_integers, missing = missing, width = width, as_percent = as_percent, zap_small = zap_small, simplify = FALSE))
+format_value.data.frame <- function(x,
+                                    digits = 2,
+                                    protect_integers = FALSE,
+                                    missing = "",
+                                    width = NULL,
+                                    as_percent = FALSE,
+                                    zap_small = FALSE,
+                                    ...) {
+  as.data.frame(sapply(
+    x,
+    format_value,
+    digits = digits,
+    protect_integers = protect_integers,
+    missing = missing,
+    width = width,
+    as_percent = as_percent,
+    zap_small = zap_small,
+    simplify = FALSE
+  ))
 }
 
 
 #' @rdname format_value
 #' @export
-format_value.numeric <- function(x, digits = 2, protect_integers = FALSE, missing = "", width = NULL, as_percent = FALSE, zap_small = FALSE, ...) {
+format_value.numeric <- function(x,
+                                 digits = 2,
+                                 protect_integers = FALSE,
+                                 missing = "",
+                                 width = NULL,
+                                 as_percent = FALSE,
+                                 zap_small = FALSE,
+                                 ...) {
   if (protect_integers) {
-    out <- .format_value_unless_integer(x, digits = digits, .missing = missing, .width = width, .as_percent = as_percent, .zap_small = zap_small, ...)
+    out <- .format_value_unless_integer(
+      x,
+      digits = digits,
+      .missing = missing,
+      .width = width,
+      .as_percent = as_percent,
+      .zap_small = zap_small,
+      ...
+    )
   } else {
-    out <- .format_value(x, digits = digits, .missing = missing, .width = width, .as_percent = as_percent, .zap_small = zap_small, ...)
+    out <- .format_value(
+      x,
+      digits = digits,
+      .missing = missing,
+      .width = width,
+      .as_percent = as_percent,
+      .zap_small = zap_small,
+      ...
+    )
   }
 
   # Deal with negative zeros
@@ -94,10 +140,32 @@ format_value.logical <- format_value.numeric
 
 
 
+# shortcut
 
-.format_value_unless_integer <- function(x, digits = 2, .missing = "", .width = NULL, .as_percent = FALSE, .zap_small = FALSE, ...) {
+#' @rdname format_value
+#' @export
+format_percent <- function(x, ...) {
+  format_value(x, ..., as_percent = TRUE)
+}
+
+
+
+
+.format_value_unless_integer <- function(x,
+                                         digits = 2,
+                                         .missing = "",
+                                         .width = NULL,
+                                         .as_percent = FALSE,
+                                         .zap_small = FALSE, ...) {
   if (is.numeric(x) && !all(.is.int(stats::na.omit(x)))) {
-    .format_value(x, digits = digits, .missing = .missing, .width = .width, .as_percent = .as_percent, .zap_small = .zap_small)
+    .format_value(
+      x,
+      digits = digits,
+      .missing = .missing,
+      .width = .width,
+      .as_percent = .as_percent,
+      .zap_small = .zap_small
+    )
   } else if (anyNA(x)) {
     .convert_missing(x, .missing)
   } else if (is.numeric(x) && all(.is.int(stats::na.omit(x))) && !is.null(.width)) {
@@ -127,7 +195,7 @@ format_value.logical <- format_value.numeric
         )
       }
     } else {
-      if (is.character(digits) && grepl("^scientific", digits)) {
+      if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
         digits <- tryCatch(
           expr = {
             as.numeric(gsub("scientific", "", digits, fixed = TRUE))
@@ -138,7 +206,7 @@ format_value.logical <- format_value.numeric
         )
         if (is.na(digits)) digits <- 5
         x <- sprintf("%.*e", digits, x)
-      } else if (is.character(digits) && grepl("^signif", digits)) {
+      } else if (is.character(digits) && grepl("signif", digits, fixed = TRUE)) {
         digits <- tryCatch(
           expr = {
             as.numeric(gsub("signif", "", digits, fixed = TRUE))
@@ -191,7 +259,6 @@ format_value.logical <- format_value.numeric
   x[!missings] <- as.character(x)
   x
 }
-
 
 
 .is.int <- function(x) {

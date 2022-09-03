@@ -81,7 +81,7 @@ get_deviance.stanreg <- function(x, verbose = TRUE, ...) {
 
     dev <- sum(dev_resids_fun(y, mu, w))
   } else {
-    stop("Could not compute deviance for this type of model")
+    stop("Could not compute deviance for this type of model.", call. = FALSE)
   }
 
   # Not sure if it generalizes to other models though since deviance.glm

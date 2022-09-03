@@ -276,8 +276,62 @@ get_parameters.systemfit <- function(x, ...) {
 }
 
 #' @export
-get_parameters.marginaleffects <- function(x, ...) {
-  params <- x[!names(x) %in% c("rowid", "type", "std.error", "contrast", "term", "dydx")]
-  params$Estimate <- x$dydx
-  params
+get_parameters.marginaleffects <- function(x, summary = FALSE, merge_parameters = FALSE, ...) {
+  # check if we have a Bayesian model here
+  if (isTRUE(summary)) {
+    s <- summary(x)
+    estimate_pos <- which(colnames(s) == "estimate")
+    params <- s[, seq_len(estimate_pos - 1), drop = FALSE]
+    if (isTRUE(merge_parameters) && ncol(params) > 1) {
+      r <- apply(params, 1, function(i) paste0(colnames(params), " [", i, "]"))
+      out <- data.frame(
+        Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),
+        Estimate = s[[estimate_pos]],
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    } else {
+      out <- data.frame(
+        params,
+        Estimate = s[[estimate_pos]],
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    }
+    if (isTRUE(merge_parameters)) {
+      colnames(out)[1] <- "Parameter"
+    }
+  } else {
+    excl <- c(
+      "rowid", "type", "std.error", "contrast", "term", "dydx",
+      "statistic", "p.value", "conf.low", "conf.high", "predicted_hi",
+      "predicted_lo", "eps", "marginaleffects_eps"
+    )
+    out <- as.data.frame(x[, !names(x) %in% excl, drop = FALSE])
+    if ("dydx" %in% colnames(x)) {
+      out$Estimate <- x$dydx
+    } else {
+      out$Estimate <- x$estimate
+    }
+  }
+  text_remove_backticks(out)
+}
+
+
+#' @export
+get_parameters.marginaleffects.summary <- function(x, ...) {
+  get_parameters.marginaleffects(x, summary = FALSE, ...)
+}
+
+
+#' @export
+get_parameters.deltaMethod <- function(x, ...) {
+  params <- standardize_names(x)
+
+  data.frame(
+    Parameter = rownames(params),
+    Estimate = params$Coefficient,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
 }

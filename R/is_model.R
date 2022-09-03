@@ -40,7 +40,7 @@ is_regression_model <- function(x) {
 # Helpers -----------------------------------------------------------------
 
 .get_class_list <- function(x) {
-  if (length(class(x)) > 1 || class(x) != "list") {
+  if (length(class(x)) > 1 || !inherits(x, "list")) {
     return(x)
   }
 
@@ -57,7 +57,7 @@ is_regression_model <- function(x) {
 
     # a --------------------
     "aareg", "afex_aov", "AKP", "ancova", "anova", "Anova.mlm",
-    "aov", "aovlist", "Arima", "averaging",
+    "anova.rms", "aov", "aovlist", "Arima", "averaging",
 
     # b --------------------
     "bamlss", "bamlss.frame", "bayesGAM", "bayesmeta", "bayesx",
@@ -74,7 +74,7 @@ is_regression_model <- function(x) {
     "cpglm", "cpglmm", "crch", "crq", "crqs", "crr", "dglm",
 
     # d --------------------
-    "dep.effect", "DirichletRegModel", "drc",
+    "dep.effect", "deltaMethod", "DirichletRegModel", "drc",
 
     # e --------------------
     "eglm", "elm", "emmGrid", "emm_list", "epi.2by2", "ergm",
@@ -117,7 +117,7 @@ is_regression_model <- function(x) {
     "mhurdle", "mipo", "mira", "mixed", "mixor", "MixMod", "mjoint",
     "mle", "mle2", "mlergm", "mlm", "mlma", "mlogit", "model_fit",
     "multinom", "mvmeta", "mvord", "mvr", "marginaleffects",
-    "marginaleffects.summary",
+    "marginaleffects.summary", "mblogit", "mclogit",
 
     # n --------------------
     "negbin", "negbinmfx", "negbinirr", "nlreg", "nlrq", "nls",
@@ -163,7 +163,8 @@ is_regression_model <- function(x) {
 
   if (isTRUE(regression_only)) {
     out <- setdiff(out, c(
-      "emmGrid", "emm_list", "htest", "pairwise.htest", "summary.lm"
+      "emmGrid", "emm_list", "htest", "pairwise.htest", "summary.lm",
+      "marginaleffects", "marginaleffects.summary"
     ))
   }
 

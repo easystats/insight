@@ -59,7 +59,6 @@ get_loglikelihood.lmerMod <- function(x,
                                       check_response = FALSE,
                                       verbose = TRUE,
                                       ...) {
-
   # use defaults for REML?
   if ((missing(estimator) || is.null(estimator)) && missing(REML)) {
     lls <- stats::logLik(x)
@@ -128,14 +127,19 @@ get_loglikelihood.afex_aov <- function(x, ...) {
                                   check_response = FALSE,
                                   verbose = TRUE,
                                   ...) {
-
-
   # Replace arg if compatibility base R is activated
   if (REML) estimator <- "REML"
   if (is.null(estimator)) estimator <- "ML"
 
   # Get weights
   w <- get_weights(x, null_as_ones = TRUE)
+  res <- get_residuals(x, verbose = verbose)
+
+  excl <- w == 0
+  if (any(excl)) {
+    res <- res[!excl]
+    w <- w[!excl]
+  }
 
   # Get LogLikelihood
   estimator <- tolower(estimator)
@@ -147,7 +151,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
       stop("REML estimation not available for this model.", call. = FALSE)
     }
     N <- get_df(x, type = "residual") # n_obs - p
-    val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * get_residuals(x, verbose = verbose)^2))))
+    val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
     p <- n_parameters(x, remove_nonestimable = TRUE)
     ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
     return(.loglikelihood_prep_output(x, ll, check_response = check_response, REML = REML, verbose = verbose))
@@ -160,10 +164,10 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   } else if (estimator == "ml") {
     s2 <- (s * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
   } else {
-    stop("'estimator' should be one of 'ML', 'REML' or 'OLS'.")
+    stop("'estimator' should be one of 'ML', 'REML' or 'OLS'.", call. = FALSE)
   }
   # Get individual log-likelihoods
-  lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = verbose)^2) / s2))
+  lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * res^2) / s2))
 
   .loglikelihood_prep_output(x, lls, check_response = check_response, REML = REML, verbose = verbose)
 }
@@ -175,7 +179,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   w <- get_weights(x, null_as_ones = TRUE)
   dev <- stats::deviance(x)
   disp <- dev / sum(w)
-  predicted <- get_predicted(x, verbose = verbose)
+  predicted <- get_predicted(x, ci = NULL, verbose = verbose)
 
   # Make adjustment for binomial models with matrix as input
   if (info$is_binomial) {
@@ -283,35 +287,30 @@ get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
 
 
 #' @export
-get_loglikelihood.iv_robust <- function(x, ...) {
+get_loglikelihood.iv_robust <- function(x, verbose = TRUE, ...) {
   res <- get_residuals(x)
-  p <- x$rank
-  w <- x$weights
+  w <- get_weights(x, null_as_ones = TRUE)
 
-  N <- length(res)
-
-  if (is.null(w)) {
-    w <- rep.int(1, N)
-  } else {
-    excl <- w == 0
-    if (any(excl)) {
-      res <- res[!excl]
-      N <- length(res)
-      w <- w[!excl]
-    }
+  # drop weights that are exactly zero
+  excl <- w == 0
+  if (any(excl)) {
+    res <- res[!excl]
+    w <- w[!excl]
   }
 
-  val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
+  N <- length(res)
+  lls <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
 
-  attr(val, "nall") <- N
-  attr(val, "nobs") <- N
-  attr(val, "df") <- p + 1
-  class(val) <- "logLik"
-
-  val
+  .loglikelihood_prep_output(
+    x,
+    lls,
+    df = get_df(x, type = "model"),
+    verbose = verbose
+  )
 }
 
-
+#' @export
+get_loglikelihood.lm_robust <- get_loglikelihood.iv_robust
 
 
 #' @export
@@ -327,14 +326,20 @@ get_loglikelihood.crr <- function(x, ...) {
 
 
 #' @export
-get_loglikelihood.plm <- function(x, ...) {
+get_loglikelihood.plm <- function(x, check_response = FALSE, verbose = TRUE, ...) {
   res <- get_residuals(x)
   w <- get_weights(x, null_as_ones = TRUE)
   N <- n_obs(x)
 
   ll <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
 
-  .loglikelihood_prep_output(x, lls = ll, df = get_df(x, type = "model"))
+  .loglikelihood_prep_output(
+    x,
+    lls = ll,
+    df = get_df(x, type = "model"),
+    check_response = check_response,
+    verbose = verbose
+  )
 }
 
 
@@ -374,14 +379,24 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
       # we only use the jacobian adjustment, because it can handle weights
       model_weights <- get_weights(x, na_rm = TRUE)
-      ll_adjustment <- .ll_jacobian_adjustment(x, model_weights)
+      ll_adjustment <- .ll_analytic_adjustment(x, model_weights)
+
+      # for debugging
+
+      # if (is.null(list(...)$debug)) {
+      #   ll_adjustment <- .ll_jacobian_adjustment(x, model_weights)
+      # } else if (list(...)$debug == "analytic") {
+      #   ll_adjustment <- .ll_analytic_adjustment(x, model_weights)
+      # } else {
+      #   ll_adjustment <- .ll_log_adjustment(x)
+      # }
 
       if (is.null(ll_adjustment) && isTRUE(verbose)) {
         warning(format_message("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate."), call. = FALSE)
       } else {
         out[1] <- out[1] + ll_adjustment
         if (isTRUE(list(...)$REML) && isTRUE(verbose)) {
-          warning(format_message("Log-likelihood is corrected for models with transformed response. However, this ignores 'REML=TRUE'. Log-likelihood value is probably inaccurate."), call. = FALSE)
+          warning(format_message("Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate."), call. = FALSE)
         }
       }
     }
@@ -399,6 +414,41 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
   out
 }
 
+
+
+
+.ll_analytic_adjustment <- function(x, model_weights = NULL) {
+  tryCatch(
+    {
+      trans <- find_transformation(x)
+
+      if (trans == "identity") {
+        .weighted_sum(log(get_response(x)), w = model_weights)
+      } else if (trans == "log") {
+        .weighted_sum(log(1 / get_response(x)), w = model_weights)
+      } else if (trans == "log1p") {
+        .weighted_sum(log(1 / (get_response(x) + 1)), w = model_weights)
+      } else if (trans == "log2") {
+        .weighted_sum(log(1 / (get_response(x) * log(2))), w = model_weights)
+      } else if (trans == "log10") {
+        .weighted_sum(log(1 / (get_response(x) * log(10))), w = model_weights)
+      } else if (trans == "exp") {
+        .weighted_sum(get_response(x), w = model_weights)
+      } else if (trans == "expm1") {
+        .weighted_sum((get_response(x) - 1), w = model_weights)
+      } else if (trans == "sqrt") {
+        .weighted_sum(log(.5 / sqrt(get_response(x))), w = model_weights)
+      } else if (is.null(model_weights)) {
+        .ll_log_adjustment(x)
+      } else {
+        .ll_jacobian_adjustment(x, model_weights)
+      }
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
 
 
 

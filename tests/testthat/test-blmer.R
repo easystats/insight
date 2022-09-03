@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("blme")) {
+if (requiet("testthat") && requiet("insight") && requiet("blme")) {
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -26,6 +24,10 @@ if (requiet("testthat") &&
     expect_true(model_info(m1)$is_linear)
     expect_true(model_info(m2)$is_linear)
     expect_true(model_info(m1)$is_bayesian)
+  })
+
+  test_that("get_varcov", {
+    expect_equal(as.matrix(vcov(m1)), get_varcov(m1), tolerance = 1e-3)
   })
 
   test_that("find_predictors", {

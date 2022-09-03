@@ -9,7 +9,6 @@ get_predicted.hurdle <- function(x,
                                  iterations = NULL,
                                  verbose = TRUE,
                                  ...) {
-
   # pscl models return the fitted values immediately and ignores the `type`
   # argument when `data` is NULL
   if (is.null(data)) {
@@ -46,7 +45,6 @@ get_predicted.hurdle <- function(x,
 
   # on the response scale, we simulate predictions for CIs...
   if (args$scale == "response") {
-
     # intermediate step: predictions for ZI model
     zi_predictions <- stats::predict(
       x,

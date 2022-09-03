@@ -14,33 +14,35 @@
     return(list(family = fitfam, link_function = link.fun))
   }
 
+  fitfam_lower <- tolower(fitfam)
+
   # create logical for family
 
   # binomial family --------
 
   binom_fam <-
-    fitfam %in% c("bernoulli", "binomial", "quasibinomial", "binomialff") |
-      grepl("\\Qbinomial\\E", fitfam, ignore.case = TRUE)
+    fitfam_lower %in% c("bernoulli", "binomial", "quasibinomial", "binomialff") |
+      grepl("binomial", fitfam_lower, fixed = TRUE)
 
 
   # poisson family --------
 
   poisson_fam <-
     fitfam %in% c("poisson", "quasipoisson", "genpois", "ziplss") |
-      grepl("\\Qpoisson\\E", fitfam, ignore.case = TRUE)
+      grepl("poisson", fitfam_lower, fixed = TRUE)
 
 
   # negative binomial family --------
 
   neg_bin_fam <-
-    grepl("\\Qnegative binomial\\E", fitfam, ignore.case = TRUE) |
-      grepl("\\Qnbinom\\E", fitfam, ignore.case = TRUE) |
-      grepl("\\Qnegbin\\E", fitfam, ignore.case = TRUE) |
-      grepl("\\Qnzbinom\\E", fitfam, ignore.case = TRUE) |
-      grepl("\\Qgenpois\\E", fitfam, ignore.case = TRUE) |
-      grepl("\\Qnegbinomial\\E", fitfam, ignore.case = TRUE) |
-      grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE) |
-      fitfam %in% c("ztnbinom", "nbinom")
+    grepl("negative binomial", fitfam_lower, fixed = TRUE) |
+      grepl("nbinom", fitfam_lower, fixed = TRUE) |
+      grepl("negbin", fitfam_lower, fixed = TRUE) |
+      grepl("nzbinom", fitfam_lower, fixed = TRUE) |
+      grepl("genpois", fitfam_lower, fixed = TRUE) |
+      grepl("negbinomial", fitfam_lower, fixed = TRUE) |
+      grepl("neg_binomial", fitfam_lower, fixed = TRUE) |
+      fitfam_lower %in% c("ztnbinom", "nbinom")
 
 
   # bernoulli family --------
@@ -48,11 +50,11 @@
   is_bernoulli <- FALSE
 
   if (binom_fam && inherits(x, "glm") && !neg_bin_fam && !poisson_fam) {
-    resp <- get_response(x, verbose = FALSE)
-    if (is.data.frame(resp) && ncol(resp) == 1) {
+    resp <- stats::model.response(stats::model.frame(x))
+    if ((is.data.frame(resp) || is.matrix(resp)) && ncol(resp) == 1) {
       resp <- as.vector(resp[[1]])
     }
-    if (!is.data.frame(resp) && all(.is.int(.factor_to_numeric(resp[[1]])))) {
+    if (!is.data.frame(resp) && !is.matrix(resp) && all(.is.int(.factor_to_numeric(resp[[1]])))) {
       is_bernoulli <- TRUE
     }
   } else if (fitfam %in% "bernoulli") {
@@ -91,13 +93,13 @@
 
   # zero-inflated or hurdle component --------
 
-  zero.inf <- zero.inf | fitfam == "ziplss" |
-    grepl("\\Qzero_inflated\\E", fitfam, ignore.case = TRUE) |
-    grepl("\\Qzero-inflated\\E", fitfam, ignore.case = TRUE) |
-    grepl("\\Qneg_binomial\\E", fitfam, ignore.case = TRUE) |
-    grepl("\\Qhurdle\\E", fitfam, ignore.case = TRUE) |
-    grepl("^(zt|zi|za|hu)", fitfam, perl = TRUE) |
-    grepl("^truncated", fitfam, perl = TRUE)
+  zero.inf <- zero.inf | fitfam_lower == "ziplss" |
+    grepl("zero_inflated", fitfam_lower, fixed = TRUE) |
+    grepl("zero-inflated", fitfam_lower, fixed = TRUE) |
+    grepl("neg_binomial", fitfam_lower, fixed = TRUE) |
+    grepl("hurdle", fitfam_lower, fixed = TRUE) |
+    grepl("^(zt|zi|za|hu)", fitfam_lower, perl = TRUE) |
+    grepl("truncated", fitfam_lower, fixed = TRUE)
 
   # overwrite for glmmTMB exceptions
   if (inherits(x, "glmmTMB")) {
@@ -108,9 +110,9 @@
   # only hurdle component --------
 
   hurdle <- hurdle |
-    grepl("\\Qhurdle\\E", fitfam, ignore.case = TRUE) |
+    grepl("hurdle", fitfam_lower, fixed = TRUE) |
     grepl("^hu", fitfam, perl = TRUE) |
-    grepl("^truncated", fitfam, perl = TRUE) |
+    grepl("truncated", fitfam, fixed = TRUE) |
     fitfam == "ztnbinom" |
     fitfam %in% c("truncpoiss", "truncnbinom", "truncnbinom1", "truncpoisson")
 
@@ -125,7 +127,7 @@
   # multinomial family --------
 
   is.multinomial <-
-    inherits(x, c("gmnl", "mlogit", "DirichletRegModel", "multinom", "brmultinom")) |
+    inherits(x, c("gmnl", "mclogit", "mblogit", "mmclogit", "mlogit", "DirichletRegModel", "multinom", "brmultinom")) |
       fitfam %in% c("cratio", "sratio", "acat", "multinom", "multinomial", "multinomial2", "dirichlet")
 
 
@@ -211,32 +213,35 @@
 
   # save model terms --------
 
-  if (isTRUE(dots$no_terms)) {
-    model_terms <- NULL
-  } else {
-    if (inherits(x, "mcmc")) {
-      model_terms <- find_parameters(x)
-    } else {
-      model_terms <- tryCatch(
-        {
-          find_variables(
-            x,
-            effects = "all",
-            component = "all",
-            flatten = FALSE,
-            verbose = FALSE
-          )
-        },
-        error = function(x) {
-          NULL
-        }
-      )
-    }
-  }
+  # drop this for now...
+
+  # if (isTRUE(dots$no_terms)) {
+  #   model_terms <- NULL
+  # } else {
+  #   if (inherits(x, "mcmc")) {
+  #     model_terms <- find_parameters(x)
+  #   } else {
+  #     model_terms <- tryCatch(
+  #       {
+  #         find_variables(
+  #           x,
+  #           effects = "all",
+  #           component = "all",
+  #           flatten = FALSE,
+  #           verbose = FALSE
+  #         )
+  #       },
+  #       error = function(x) {
+  #         NULL
+  #       }
+  #     )
+  #   }
+  # }
 
 
   # significance tests --------
 
+  is_ftest <- FALSE
   is_ttest <- FALSE
   is_correlation <- FALSE
   is_oneway <- FALSE
@@ -247,6 +252,9 @@
   is_xtab <- FALSE
   is_levenetest <- FALSE
 
+  ## TODO: special handling of shapiro needed
+  # see https://github.com/easystats/report/issues/256
+
   if (inherits(x, "htest")) {
     if (grepl("kruskal-wallis", tolower(x$method), fixed = TRUE) ||
       grepl("design-based kruskalwallis", tolower(x$method), fixed = TRUE) ||
@@ -255,8 +263,10 @@
       grepl("wilcoxon", tolower(x$method), fixed = TRUE) ||
       grepl("friedman", tolower(x$method), fixed = TRUE)) {
       is_ranktest <- TRUE
-    } else if (grepl("t-test", x$method)) {
+    } else if (grepl("t-test", x$method, fixed = TRUE)) {
       is_ttest <- TRUE
+    } else if (grepl("F test", x$method, fixed = TRUE)) {
+      is_ftest <- TRUE
     } else if (grepl("^One-way", x$method)) {
       is_oneway <- TRUE
     } else if (x$method == "Exact binomial test") {
@@ -284,7 +294,9 @@
   }
 
   # exceptions: car::leveneTest
-  if (inherits(x, "anova") && !is.null(attributes(x)$heading) && grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
+  if (inherits(x, "anova") &&
+      !is.null(attributes(x)$heading) &&
+      grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
     is_levenetest <- TRUE
   }
 
@@ -292,6 +304,7 @@
 
   is_meta <- FALSE
   if (inherits(x, "BFBayesFactor")) {
+    is_ftest <- FALSE
     is_ttest <- FALSE
     is_correlation <- FALSE
     is_oneway <- FALSE
@@ -331,9 +344,9 @@
   # gaussian family --------
 
   linear_model <- TRUE
-  if (binom_fam | exponential_fam | poisson_fam | neg_bin_fam | logit.link |
-    dirichlet_fam | is.ordinal | zero.inf | is.censored | is.survival | is_binomtest |
-    is.categorical | hurdle | is.multinomial | is_chi2test | is_proptest | is_xtab) {
+  if (binom_fam || exponential_fam || poisson_fam || neg_bin_fam || logit.link ||
+    dirichlet_fam || is.ordinal || zero.inf || is.censored || is.survival || is_binomtest ||
+    is.categorical || hurdle || is.multinomial || is_chi2test || is_proptest || is_xtab) {
     linear_model <- FALSE
   } else if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian")) && !grepl("(\\st)$", fitfam)) {
     linear_model <- FALSE
@@ -345,7 +358,7 @@
 
   # tweedie family --------
 
-  tweedie_fam <- grepl("^(tweedie|Tweedie)", fitfam) | grepl("^(tweedie|Tweedie)", link.fun)
+  tweedie_fam <- grepl("tweedie", fitfam_lower, fixed = TRUE) | grepl("tweedie", tolower(link.fun), fixed = TRUE)
   tweedie_model <- tweedie_fam | inherits(x, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
 
 
@@ -392,11 +405,11 @@
     is_xtab = is_xtab,
     is_proptest = is_proptest,
     is_binomtest = is_binomtest,
+    is_ftest = is_ftest,
     is_meta = is_meta,
     link_function = link.fun,
     family = fitfam,
-    n_obs = n_obs(x),
-    model_terms = model_terms
+    n_obs = n_obs(x)
   )
 }
 

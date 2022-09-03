@@ -4,12 +4,15 @@
 #' @description This functions tries to get the data that was used to fit the
 #'   model and returns it as data frame.
 #'
-#' @param effects Should model data for fixed effects, random effects
-#'   or both be returned? Only applies to mixed models.
+#' @param effects Should model data for fixed effects (`"fixed"`), random
+#'   effects (`"random"`) or both (`"all"`) be returned? Only applies to mixed
+#'   or gee models.
 #' @param verbose Toggle messages and warnings.
 #'
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
+#'
+#' @inheritSection find_predictors Model components
 #'
 #' @return The data that was used to fit the model.
 #'
@@ -35,7 +38,7 @@ get_data <- function(x, ...) {
 
 # default method ------------------------------------------------------
 
-
+#' @rdname get_data
 #' @export
 get_data.default <- function(x, verbose = TRUE, ...) {
   if (inherits(x, "list") && object_has_names(x, "gam")) {
@@ -56,7 +59,7 @@ get_data.default <- function(x, verbose = TRUE, ...) {
     }
   )
 
-  if (is.null(mf)) {
+  if (is.null(mf) || nrow(mf) == 0) {
     mf <- tryCatch(
       {
         dat <- .recover_data_from_environment(x)
@@ -99,7 +102,10 @@ get_data.model_fit <- function(x, verbose = TRUE, ...) {
 }
 
 
-
+#' @export
+get_data.mhurdle <- function(x, verbose = TRUE, ...) {
+  x[["model"]]
+}
 
 
 # classical and survival models -----------------------------------------------
@@ -128,13 +134,33 @@ get_data.mjoint <- function(x, verbose = TRUE, ...) {
 }
 
 
-#' @rdname get_data
+#' @export
+get_data.geeglm <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
+  if (!is.null(mf)) {
+    id <- data.frame(x$id)
+    colnames(id) <- deparse(parse(text = safe_deparse(get_call(x)))[[1]][["id"]])
+    mf <- cbind(mf, id)
+    # select effects
+    vars <- switch(effects,
+      all = find_variables(x, flatten = TRUE, verbose = FALSE),
+      fixed = find_variables(x, effects = "fixed", flatten = TRUE, verbose = FALSE),
+      random = find_random(x, flatten = TRUE)
+    )
+    mf <- mf[, intersect(vars, colnames(mf)), drop = FALSE]
+  }
+
+  .prepare_get_data(x, mf, effects = effects, verbose = verbose)
+}
+
+
 #' @export
 get_data.gee <- function(x,
-                         effects = c("all", "fixed", "random"),
+                         effects = "all",
                          verbose = TRUE,
                          ...) {
-  effects <- match.arg(effects)
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- tryCatch(
     {
       dat <- .recover_data_from_environment(x)
@@ -154,14 +180,9 @@ get_data.gee <- function(x,
 }
 
 
-
-#' @rdname get_data
 #' @export
-get_data.rqss <- function(x,
-                          component = c("all", "conditional", "smooth_terms"),
-                          verbose = TRUE,
-                          ...) {
-  component <- match.arg(component)
+get_data.rqss <- function(x, component = "all", verbose = TRUE, ...) {
+  component <- match.arg(component, choices = c("all", "conditional", "smooth_terms"))
 
   mf <- tryCatch(
     {
@@ -255,13 +276,9 @@ get_data.gnls <- get_data.gls
 # zero-inflated models -------------------------------------------------------
 
 
-#' @rdname get_data
 #' @export
-get_data.hurdle <- function(x,
-                            component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-                            verbose = TRUE,
-                            ...) {
-  component <- match.arg(component)
+get_data.hurdle <- function(x, component = "all", verbose = TRUE, ...) {
+  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated", "dispersion"))
   .return_zeroinf_data(x, component, verbose = verbose)
 }
 
@@ -272,13 +289,9 @@ get_data.zeroinfl <- get_data.hurdle
 get_data.zerotrunc <- get_data.hurdle
 
 
-#' @rdname get_data
 #' @export
-get_data.zcpglm <- function(x,
-                            component = c("all", "conditional", "zi", "zero_inflated"),
-                            verbose = TRUE,
-                            ...) {
-  component <- match.arg(component)
+get_data.zcpglm <- function(x, component = "all", verbose = TRUE, ...) {
+  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated"))
 
   mf <- stats::model.frame(x)
   mf_zero <- mf$zero
@@ -310,13 +323,9 @@ get_data.zcpglm <- function(x,
 
 #' @rdname get_data
 #' @export
-get_data.glmmTMB <- function(x,
-                             effects = c("all", "fixed", "random"),
-                             component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-                             verbose = TRUE,
-                             ...) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+get_data.glmmTMB <- function(x, effects = "all", component = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated", "dispersion"))
 
   model.terms <- find_variables(
     x,
@@ -347,13 +356,9 @@ get_data.glmmTMB <- function(x,
 
 
 
-#' @rdname get_data
 #' @export
-get_data.merMod <- function(x,
-                            effects = c("all", "fixed", "random"),
-                            verbose = TRUE,
-                            ...) {
-  effects <- match.arg(effects)
+get_data.merMod <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
   mf <- tryCatch(
     {
@@ -372,8 +377,8 @@ get_data.merMod <- function(x,
 }
 
 #' @export
-get_data.merModList <- function(x, effects = c("all", "fixed", "random"), ...) {
-  warning("Can't access data for 'merModList' objects.", call. = FALSE)
+get_data.merModList <- function(x, effects = "all", ...) {
+  warning("Can't access data for `merModList` objects.", call. = FALSE)
   return(NULL)
 }
 
@@ -381,10 +386,10 @@ get_data.merModList <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 #' @export
 get_data.MANOVA <- function(x,
-                            effects = c("all", "fixed", "random"),
+                            effects = "all",
                             verbose = TRUE,
                             ...) {
-  effects <- match.arg(effects)
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
   mf <- tryCatch(
     {
@@ -409,10 +414,10 @@ get_data.RM <- get_data.MANOVA
 
 #' @export
 get_data.cpglmm <- function(x,
-                            effects = c("all", "fixed", "random"),
+                            effects = "all",
                             verbose = TRUE,
                             ...) {
-  effects <- match.arg(effects)
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   dat <- stats::model.frame(x)
 
   mf <- tryCatch(
@@ -437,10 +442,10 @@ get_data.HLfit <- get_data.cpglmm
 
 #' @export
 get_data.glmm <- function(x,
-                          effects = c("all", "fixed", "random"),
+                          effects = "all",
                           verbose = TRUE,
                           ...) {
-  effects <- match.arg(effects)
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   dat <- get_data.default(x, verbose = verbose)
 
   mf <- tryCatch(
@@ -465,10 +470,10 @@ get_data.glmm <- function(x,
 
 #' @export
 get_data.mixor <- function(x,
-                           effects = c("all", "fixed", "random"),
+                           effects = "all",
                            verbose = TRUE,
                            ...) {
-  effects <- match.arg(effects)
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
   mf <- tryCatch(
     {
@@ -491,13 +496,9 @@ get_data.mixor <- function(x,
 
 
 
-#' @rdname get_data
 #' @export
-get_data.glmmadmb <- function(x,
-                              effects = c("all", "fixed", "random"),
-                              verbose = TRUE,
-                              ...) {
-  effects <- match.arg(effects)
+get_data.glmmadmb <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
   fixed_data <- x$frame
   random_data <- .recover_data_from_environment(x)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
@@ -520,21 +521,18 @@ get_data.glmmadmb <- function(x,
 
 
 
-#' @rdname get_data
 #' @export
-get_data.rlmerMod <- function(x, effects = c("all", "fixed", "random"), ...) {
-  effects <- match.arg(effects)
+get_data.rlmerMod <- function(x, effects = "all", ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   .get_data_from_modelframe(x, stats::model.frame(x), effects)
 }
 
-#' @rdname get_data
 #' @export
 get_data.clmm <- get_data.rlmerMod
 
-#' @rdname get_data
 #' @export
-get_data.mixed <- function(x, effects = c("all", "fixed", "random"), ...) {
-  effects <- match.arg(effects)
+get_data.mixed <- function(x, effects = "all", ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   .get_data_from_modelframe(x, x$data, effects)
 }
 
@@ -556,8 +554,8 @@ get_data.afex_aov <- function(x, shape = c("long", "wide"), ...) {
 
 
 #' @export
-get_data.sem <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
-  effects <- match.arg(effects)
+get_data.sem <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- tryCatch(
     {
       dat <- .recover_data_from_environment(x)
@@ -578,10 +576,9 @@ get_data.sem <- function(x, effects = c("all", "fixed", "random"), verbose = TRU
 
 
 
-#' @rdname get_data
 #' @export
-get_data.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
-  effects <- match.arg(effects)
+get_data.lme <- function(x, effects = "all", ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   dat <- tryCatch(
     {
       x$data
@@ -596,15 +593,10 @@ get_data.lme <- function(x, effects = c("all", "fixed", "random"), ...) {
 
 
 
-#' @rdname get_data
 #' @export
-get_data.MixMod <- function(x,
-                            effects = c("all", "fixed", "random"),
-                            component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-                            verbose = TRUE,
-                            ...) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+get_data.MixMod <- function(x, effects = "all", component = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated", "dispersion"))
 
   tryCatch(
     {
@@ -614,7 +606,7 @@ get_data.MixMod <- function(x,
       fitfram_zi_re <- stats::model.frame(x, type = "zi_random")
 
       if (!is_empty_object(fitfram_re)) {
-        for (i in 1:length(fitfram_re)) {
+        for (i in seq_along(fitfram_re)) {
           fitfram <- .merge_dataframes(fitfram_re[[i]], fitfram, replace = TRUE)
         }
       }
@@ -622,7 +614,7 @@ get_data.MixMod <- function(x,
         fitfram <- .merge_dataframes(fitfram_zi, fitfram, replace = TRUE)
       }
       if (!is_empty_object(fitfram_zi_re)) {
-        for (i in 1:length(fitfram_zi_re)) {
+        for (i in seq_along(fitfram_zi_re)) {
           fitfram <- .merge_dataframes(fitfram_zi_re[[i]], fitfram, replace = TRUE)
         }
       }
@@ -652,8 +644,8 @@ get_data.MixMod <- function(x,
 
 
 #' @export
-get_data.BBmm <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
-  effects <- match.arg(effects)
+get_data.BBmm <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- tryCatch(
     {
       dat <- .recover_data_from_environment(x)[, find_variables(x, flatten = TRUE), drop = FALSE]
@@ -673,8 +665,8 @@ get_data.BBmm <- function(x, effects = c("all", "fixed", "random"), verbose = TR
 
 
 #' @export
-get_data.glimML <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
-  effects <- match.arg(effects)
+get_data.glimML <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   dat <- x@data
   mf <- switch(effects,
     all = dat[, find_variables(x, flatten = TRUE), drop = FALSE],
@@ -770,39 +762,38 @@ get_data.gamlss <- function(x, verbose = TRUE, ...) {
 # fixed effects and panel regression --------------------------------------
 
 #' @export
-get_data.felm <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
-  effects <- match.arg(effects)
+get_data.felm <- function(x, effects = "all", verbose = TRUE, ...) {
+  # original data does not appear to be stored in the model object
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   .get_data_from_modelframe(x, stats::model.frame(x), effects, verbose = verbose)
 }
 
 
 #' @export
-get_data.feis <- function(x, effects = c("all", "fixed", "random"), ...) {
-  effects <- match.arg(effects)
-  mf <- tryCatch(
-    {
-      .recover_data_from_environment(x)
-    },
-    error = function(x) {
-      stats::model.frame(x)
-    }
-  )
-
-  .get_data_from_modelframe(x, mf, effects)
+get_data.feis <- function(x, effects = "all", verbose = TRUE, ...) {
+  # original data does not appear to be stored in the model object
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  mf <- tryCatch(.recover_data_from_environment(x),
+                 error = function(x) stats::model.frame(x))
+  .get_data_from_modelframe(x, mf, effects, verbose = verbose)
 }
 
 
 #' @export
-get_data.fixest <- function(x, ...) {
-  mf <- .recover_data_from_environment(x)
-  .get_data_from_modelframe(x, mf, effects = "all")
+get_data.fixest <- function(x, verbose = TRUE, ...) {
+  # original data does not appear to be stored in the model object
+  # see https://github.com/lrberge/fixest/issues/340 and #629
+  model_call <- get_call(x)
+  mf <- eval(model_call$data, envir = parent.env(x$call_env))
+  # mf <- .recover_data_from_environment(x)
+  .get_data_from_modelframe(x, mf, effects = "all", verbose = verbose)
 }
 
 
 #' @export
-get_data.feglm <- function(x, ...) {
+get_data.feglm <- function(x, verbose = TRUE, ...) {
   mf <- as.data.frame(x$data)
-  .get_data_from_modelframe(x, mf, effects = "all")
+  .get_data_from_modelframe(x, mf, effects = "all", verbose = verbose)
 }
 
 
@@ -842,8 +833,8 @@ get_data.plm <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-get_data.wbm <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
-  effects <- match.arg(effects)
+get_data.wbm <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- stats::model.frame(x)
 
   # dat <- as.data.frame(x@orig_data)
@@ -853,7 +844,7 @@ get_data.wbm <- function(x, effects = c("all", "fixed", "random"), verbose = TRU
   }
 
   resp.col <- which(colnames(mf) == find_response(x))
-  mf <- mf[, c(resp.col, (1:ncol(mf))[-resp.col])]
+  mf <- mf[, c(resp.col, (seq_len(ncol(mf)))[-resp.col])]
 
   .prepare_get_data(x, stats::na.omit(mf), effects, verbose = verbose)
 }
@@ -865,19 +856,30 @@ get_data.wbgee <- get_data.wbm
 
 #' @export
 get_data.ivreg <- function(x, verbose = TRUE, ...) {
-  mf <- stats::model.frame(x)
-  cn <- clean_names(colnames(mf))
+  mf <- tryCatch(stats::model.frame(x), error = function(e) NULL)
   ft <- find_variables(x, flatten = TRUE)
 
-  remain <- setdiff(ft, cn)
-
-  if (is_empty_object(remain)) {
-    final_mf <- mf
+  if (!insight::is_empty_object(mf)) {
+    cn <- clean_names(colnames(mf))
+    remain <- setdiff(ft, cn)
+    if (is_empty_object(remain)) {
+      final_mf <- mf
+    } else {
+      final_mf <- tryCatch(
+        {
+          dat <- .recover_data_from_environment(x)
+          cbind(mf, dat[, remain, drop = FALSE])
+        },
+        error = function(x) {
+          NULL
+        }
+      )
+    }
   } else {
     final_mf <- tryCatch(
       {
         dat <- .recover_data_from_environment(x)
-        cbind(mf, dat[, remain, drop = FALSE])
+        dat[, ft, drop = FALSE]
       },
       error = function(x) {
         NULL
@@ -887,6 +889,7 @@ get_data.ivreg <- function(x, verbose = TRUE, ...) {
 
   .prepare_get_data(x, stats::na.omit(final_mf), verbose = verbose)
 }
+
 
 #' @export
 get_data.iv_robust <- get_data.ivreg
@@ -899,8 +902,8 @@ get_data.ivprobit <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-get_data.bife <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
-  effects <- match.arg(effects)
+get_data.bife <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- as.data.frame(x$data)
 
   if (effects == "random") {
@@ -923,13 +926,8 @@ get_data.bife <- function(x, effects = c("all", "fixed", "random"), verbose = TR
 # Bayesian regression ---------------------------------------------------
 
 
-#' @rdname get_data
 #' @export
-get_data.brmsfit <- function(x,
-                             effects = "all",
-                             component = "all",
-                             verbose = TRUE,
-                             ...) {
+get_data.brmsfit <- function(x, effects = "all", component = "all", verbose = TRUE, ...) {
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   component <- match.arg(component, choices = c("all", .all_elements()))
 
@@ -955,13 +953,9 @@ get_data.brmsfit <- function(x,
 
 
 
-#' @rdname get_data
 #' @export
-get_data.stanreg <- function(x,
-                             effects = c("all", "fixed", "random"),
-                             verbose = TRUE,
-                             ...) {
-  effects <- match.arg(effects)
+get_data.stanreg <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
   model.terms <- find_variables(x,
     effects = "all",
@@ -991,10 +985,9 @@ get_data.BFBayesFactor <- function(x, ...) {
 
 
 
-#' @rdname get_data
 #' @export
-get_data.MCMCglmm <- function(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...) {
-  effects <- match.arg(effects)
+get_data.MCMCglmm <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- tryCatch(
     {
       env_dataframes <- names(which(unlist(eapply(.GlobalEnv, is.data.frame))))
@@ -1116,7 +1109,7 @@ get_data.glht <- function(x, ...) {
 get_data.averaging <- function(x, ...) {
   ml <- attributes(x)$modelList
   if (is.null(ml)) {
-    warning("Can't retrieve data. Please use 'fit = TRUE' in 'model.avg()'.", call. = FALSE)
+    warning("Can't retrieve data. Please use `fit = TRUE` in `model.avg()`.", call. = FALSE)
     return(NULL)
   }
 
@@ -1161,11 +1154,13 @@ get_data.Arima <- function(x, ...) {
 #' @export
 get_data.coxph <- function(x, ...) {
   # first try, parent frame
-  dat <- tryCatch({
-    mf <- .recover_data_from_environment(x)
-    mf <- .prepare_get_data(x, stats::na.omit(mf), verbose = FALSE)
+  dat <- tryCatch(
+    {
+      mf <- .recover_data_from_environment(x)
+      mf <- .prepare_get_data(x, stats::na.omit(mf), verbose = FALSE)
     },
-    error = function(x) NULL)
+    error = function(x) NULL
+  )
 
   # second try, default extractor. Less good because of coercion to other types
   if (is.null(dat)) {
@@ -1232,8 +1227,8 @@ get_data.bigglm <- get_data.biglm
 
 
 #' @export
-get_data.LORgee <- function(x, effects = c("all", "fixed", "random"), ...) {
-  effects <- match.arg(effects)
+get_data.LORgee <- function(x, effects = "all", ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- tryCatch(
     {
       dat <- .recover_data_from_environment(x)[, find_variables(x, flatten = TRUE), drop = FALSE]

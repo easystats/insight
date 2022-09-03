@@ -29,6 +29,11 @@ if (requiet("testthat") &&
     expect_equal(get_response(m2), FoodExpenditure[, c("food", "income")])
   })
 
+  test_that("get_varcov", {
+    expect_equal(get_varcov(m1, component = "all"), vcov(m1), tolerance = 1e-3)
+    expect_equal(get_varcov(m1), vcov(m1)[-12, -12], tolerance = 1e-3)
+  })
+
   test_that("link_inverse", {
     expect_identical(link_inverse(m1)(.2), plogis(.2))
   })
@@ -128,5 +133,33 @@ if (requiet("testthat") &&
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "z-statistic")
     expect_identical(find_statistic(m2), "z-statistic")
+  })
+
+  test_that("get_modelmatrix", {
+    mm <- get_modelmatrix(m1)
+    expect_true(is.matrix(mm))
+    expect_equal(dim(mm), c(32, 11))
+    mm <- get_modelmatrix(m1, data = head(GasolineYield))
+    expect_true(is.matrix(mm))
+    expect_equal(dim(mm), c(6, 11))
+  })
+
+  test_that("get_predicted", {
+    p <- suppressWarnings(get_predicted(m1))
+    expect_s3_class(p, "get_predicted")
+    expect_equal(length(p), 32)
+    p <- suppressWarnings(get_predicted(m1, data = head(GasolineYield)))
+    expect_s3_class(p, "get_predicted")
+    expect_equal(length(p), 6)
+
+    # delta method does not work, so we omit SE and issue warning
+    expect_warning(get_predicted(m2, predict = "expectation"))
+    expect_warning(get_predicted(m2, predict = "link"), NA)
+    p1 <- suppressWarnings(get_predicted(m2, predict = "expectation", ci = .95))
+    p2 <- get_predicted(m2, predict = "link", ci = .95)
+    p1 <- data.frame(p1)
+    p2 <- data.frame(p2)
+    expect_true(!"SE" %in% colnames(p1))
+    expect_true("SE" %in% colnames(p2))
   })
 }

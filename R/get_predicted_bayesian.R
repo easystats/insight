@@ -8,11 +8,19 @@ get_predicted.stanreg <- function(x,
                                   data = NULL,
                                   predict = "expectation",
                                   iterations = NULL,
+                                  ci = NULL,
+                                  ci_method = NULL,
                                   include_random = "default",
                                   include_smooth = TRUE,
                                   verbose = TRUE,
                                   ...) {
   check_if_installed("rstantools", minimum_version = "2.1.0")
+
+  if (is.null(ci_method)) ci_method <- "quantile"
+  ci_method <- match.arg(
+    tolower(ci_method),
+    choices = c("quantile", "eti", "hdi")
+  )
 
   args <- .get_predicted_args(
     x,
@@ -20,6 +28,7 @@ get_predicted.stanreg <- function(x,
     predict = predict,
     include_random = include_random,
     include_smooth = include_smooth,
+    ci = ci,
     verbose = verbose,
     ...
   )
@@ -41,10 +50,11 @@ get_predicted.stanreg <- function(x,
 
   # prepare arguments, avoid possible matching by multiple actual arguments
   fun_args <- list(x,
-                   newdata = args$data,
-                   re.form = args$re.form,
-                   ndraws = iterations,
-                   draws = iterations)
+    newdata = args$data,
+    re.form = args$re.form,
+    ndraws = iterations,
+    draws = iterations
+  )
 
   # The following makes the argument passed to predict "nsamples" or "ndraws",
   # as it got changed in recent brms versions (but we want to preserve compatibility)
@@ -78,6 +88,8 @@ get_predicted.stanreg <- function(x,
     predictions = predictions,
     data = args$data,
     ci_type = args$ci_type,
+    ci = ci,
+    ci_method = ci_method,
     ...
   )
 

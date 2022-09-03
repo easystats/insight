@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest) {
+if (.runThisTest && utils::packageVersion("robustlmm") >= "3.0.1") {
   if (requiet("testthat") &&
     requiet("insight") && requiet("lme4") && requiet("robustlmm")) {
     data(sleepstudy)
@@ -263,11 +263,11 @@ if (.runThisTest) {
       expect_equal(
         get_variance(m1),
         list(
-          var.fixed = 996.527014102253, var.random = 1900.02213435247,
-          var.residual = 406.64157297696, var.distribution = 406.64157297696,
-          var.dispersion = 0, var.intercept = c(Subject = 709.851005030477),
-          var.slope = c(Subject.Days = 39.9364799454489),
-          cor.slope_intercept = c(Subject = 0.0343034180029383)
+          var.fixed = 944.68388146469, var.random = 1911.1173962696,
+          var.residual = 399.07090932584, var.distribution = 399.07090932584,
+          var.dispersion = 0, var.intercept = c(Subject = 782.758817383975),
+          var.slope = c(Subject.Days = 41.8070895953001),
+          cor.slope_intercept = c(Subject = -0.0387835013909591)
         ),
         tolerance = 1e-3
       )

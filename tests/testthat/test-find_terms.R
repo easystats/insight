@@ -37,7 +37,7 @@ if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
   dat$time1 <- dat$time - 8
   dat$post <- 0
   dat$post[dat$time >= 8] <- 1
-  m <- lmer(y ~ post + time1 + (post + time1 - 1 | g2), data = dat)
+  m <- suppressMessages(lmer(y ~ post + time1 + (post + time1 - 1 | g2), data = dat))
 
   test_that("find_terms", {
     expect_equal(

@@ -41,15 +41,12 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
   if (inherits(x, "data.frame") &&
     !"iterations" %in% names(attributes(x)) &&
     !"Response" %in% colnames(x)) {
-    out <- as.data.frame.data.frame(x)
+    return(as.data.frame.data.frame(x))
     # grouped response level (e.g., polr or multinom)
   } else if (inherits(x, "data.frame") && "Response" %in% colnames(x)) {
     out <- as.data.frame.data.frame(x)
     if ("ci_data" %in% names(attributes(x))) {
       out <- merge(out, attributes(x)$ci_data, by = c("Row", "Response"), sort = FALSE)
-    }
-    if ("iterations" %in% names(attributes(x)) && keep_iterations == TRUE) {
-      out <- cbind(out, attributes(x)$iterations)
     }
   } else {
     # Then it must be predictions from a regression model
@@ -57,11 +54,15 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
     if ("ci_data" %in% names(attributes(x))) {
       out <- cbind(out, attributes(x)$ci_data)
     }
-    if ("iterations" %in% names(attributes(x)) && keep_iterations == TRUE) {
-      out <- cbind(out, attributes(x)$iterations)
-    }
   }
 
+  if ("iterations" %in% names(attributes(x)) && (keep_iterations == TRUE || is.numeric(keep_iterations))) {
+    iter <- attributes(x)$iterations
+    if (is.numeric(keep_iterations)) {
+      iter <- iter[1:keep_iterations]
+    }
+    out <- cbind(out, iter)
+  }
   out
 }
 

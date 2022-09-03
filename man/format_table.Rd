@@ -2,7 +2,6 @@
 % Please edit documentation in R/format_table.R
 \name{format_table}
 \alias{format_table}
-\alias{parameters_table}
 \title{Parameter table formatting}
 \usage{
 format_table(
@@ -15,24 +14,10 @@ format_table(
   ci_digits = 2,
   p_digits = 3,
   rope_digits = 2,
+  ic_digits = 1,
   zap_small = FALSE,
   preserve_attributes = FALSE,
-  verbose = TRUE,
-  ...
-)
-
-parameters_table(
-  x,
-  pretty_names = TRUE,
-  stars = FALSE,
-  digits = 2,
-  ci_width = "auto",
-  ci_brackets = TRUE,
-  ci_digits = 2,
-  p_digits = 3,
-  rope_digits = 2,
-  zap_small = FALSE,
-  preserve_attributes = FALSE,
+  exact = TRUE,
   verbose = TRUE,
   ...
 )
@@ -47,8 +32,8 @@ names.}
 
 \item{stars}{Add significance stars (e.g., p < .001***).}
 
-\item{digits, ci_digits, p_digits, rope_digits}{Number of digits for rounding or
-significant figures. May also be \code{"signif"} to return significant
+\item{digits, ci_digits, p_digits, rope_digits, ic_digits}{Number of digits for
+rounding or significant figures. May also be \code{"signif"} to return significant
 figures or \code{"scientific"} to return scientific notation. Control the
 number of digits by adding the value as suffix, e.g. \code{digits = "scientific4"}
 to have scientific notation with 4 decimal places, or \code{digits = "signif5"}
@@ -68,6 +53,12 @@ places than \code{digits} are printed in scientific notation.}
 
 \item{preserve_attributes}{Logical, if \code{TRUE}, preserves all attributes
 from the input data frame.}
+
+\item{exact}{Formatting for Bayes factor columns, in case the provided data
+frame contains such a column (i.e. columns named \code{"BF"} or \code{"log_BF"}).
+For \code{exact = TRUE}, very large or very small values are then either reported
+with a scientific format (e.g., 4.24e5), else as truncated values (as "> 1000"
+and "< 1/1000").}
 
 \item{verbose}{Toggle messages and warnings.}
 

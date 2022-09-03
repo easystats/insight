@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.16.0.12
+Version: 0.18.2.8
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -36,7 +36,7 @@ Authors@R:
       person(given = "Vincent", 
              family = "Arel-Bundock", 
              email = "vincent.arel-bundock@umontreal.ca", 
-             role = c("ctb"),
+             role = c("aut", "ctb"),
              comment = c(ORCID = "0000-0003-2042-7063")),
       person(given = "Alex",
              family = "Hayes",
@@ -57,7 +57,7 @@ License: GPL-3
 URL: https://easystats.github.io/insight/
 BugReports: https://github.com/easystats/insight/issues
 Depends:
-    R (>= 3.4)
+    R (>= 3.5)
 Imports:
     methods,
     stats,
@@ -108,6 +108,7 @@ Suggests:
     lavaan,
     lfe,
     lme4,
+    lmerTest,
     lmtest,
     logistf,
     MASS,
@@ -120,6 +121,7 @@ Suggests:
     mgcv,
     mice,
     mlogit,
+    mhurdle,
     multgee,
     nlme,
     nnet,
@@ -128,6 +130,7 @@ Suggests:
     panelr,
     parameters,
     parsnip,
+    pbkrtest,
     performance,
     plm,
     poorman,
@@ -143,13 +146,11 @@ Suggests:
     rstudioapi,
     sandwich,
     speedglm,
-    spelling,
     splines,
     statmod,
     survey,
     survival,
     testthat,
-    tripack,
     truncreg,
     tweedie,
     VGAM
@@ -157,6 +158,10 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.1.2
-Config/testthat/edition: 3
+RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
+Config/testthat/edition: 3
+Config/Needs/website:
+    rstudio/bslib,
+    r-lib/pkgdown,
+    easystats/easystatstemplate

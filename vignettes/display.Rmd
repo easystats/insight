@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 
 if (!requireNamespace("poorman", quietly = TRUE) ||
-    !requireNamespace("gt", quietly = TRUE)) {
+  !requireNamespace("gt", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 } else {
   library(poorman)
@@ -47,7 +47,6 @@ When I display in in the console (calling an object - e.g. `df` - is actually eq
 
 ```{r, eval=FALSE}
 knitr::kable(df, format = "markdown")
-
 ```
 ```
 | Variable|Group |   CI| CI_low| CI_high|      p|
@@ -82,8 +81,8 @@ format_table(df)
 As you can see, `format_table()` modifies columns, turning number into characters (so that it has the same amount of digits), and  detecting confidence intervals. This is usually combined with column-specific formatting functions, like `format_p()`:
 
 ```{r}
-df %>% 
-  mutate(p = format_p(p, stars = TRUE)) %>% 
+df %>%
+  mutate(p = format_p(p, stars = TRUE)) %>%
   format_table()
 ```
 
@@ -113,8 +112,8 @@ export_table(df, format = "html")
 This can be combined with `format_table()`.
 
 ```{r}
-df %>% 
-  format_table(ci_brackets = c("(", ")")) %>% 
+df %>%
+  format_table(ci_brackets = c("(", ")")) %>%
   export_table(format = "html")
 ```
 

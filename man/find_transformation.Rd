@@ -13,14 +13,14 @@ find_transformation(x)
 A string, with the name of the function of the applied transformation.
 Returns \code{"identity"} for no transformation, and e.g. \code{"log(x+3)"} when
 a specific values was added to the response variables before
-log-transforming.
+log-transforming. For unknown transformations, returns \code{NULL}.
 }
 \description{
 This functions checks whether any transformation, such as log-
 or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula. Currently, following patterns are
-detected: \code{log}, \code{log1p}, \code{exp}, \code{expm1}, \code{sqrt}, \verb{log(x+<number>)} and
-\code{log-log}.
+detected: \code{log}, \code{log1p}, \code{log2}, \code{log10}, \code{exp}, \code{expm1}, \code{sqrt},
+\verb{log(x+<number>)}, \code{log-log} and \code{power} (to 2nd power, like \code{I(x^2)}).
 }
 \examples{
 # identity, no transformation

@@ -12,16 +12,18 @@
 #'   `find_terms()` may return a variable multiple times in case of
 #'   transformations or when arithmetic expressions were used in the formula.
 #'
+#' @inheritSection find_predictors Model components
+#'
 #' @return A list with (depending on the model) following elements (character
 #'    vectors):
-#' * `response`, the name of the response variable
-#' * `conditional`, the names of the predictor variables from the *conditional* model (as opposed to the zero-inflated part of a model)
-#' * `cluster`, the names of cluster or grouping variables
-#' * `dispersion`, the name of the dispersion terms
-#' * `instruments`, the names of instrumental variables
-#' * `random`, the names of the random effects (grouping factors)
-#' * `zero_inflated`, the names of the predictor variables from the *zero-inflated* part of the model
-#' * `zero_inflated_random`, the names of the random effects (grouping factors)
+#' - `response`, the name of the response variable
+#' - `conditional`, the names of the predictor variables from the *conditional* model (as opposed to the zero-inflated part of a model)
+#' - `cluster`, the names of cluster or grouping variables
+#' - `dispersion`, the name of the dispersion terms
+#' - `instruments`, the names of instrumental variables
+#' - `random`, the names of the random effects (grouping factors)
+#' - `zero_inflated`, the names of the predictor variables from the *zero-inflated* part of the model
+#' - `zero_inflated_random`, the names of the random effects (grouping factors)
 #'
 #' @examples
 #' if (require("lme4")) {
@@ -53,12 +55,12 @@
 #' }
 #' @export
 find_variables <- function(x,
-                           effects = c("all", "fixed", "random"),
-                           component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "smooth_terms"),
+                           effects = "all",
+                           component = "all",
                            flatten = FALSE,
                            verbose = TRUE) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "smooth_terms"))
 
   if (component %in% c("all", "conditional")) {
     resp <- find_response(x, combine = FALSE)

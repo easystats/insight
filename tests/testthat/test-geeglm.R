@@ -33,6 +33,11 @@ if (requiet("testthat") &&
     expect_identical(find_response(m1), "breaks")
   })
 
+  test_that("get_varcov", {
+    out <- get_varcov(m1)
+    expect_equal(colnames(out), names(coef(m1)))
+  })
+
   test_that("get_response", {
     expect_equal(get_response(m1), warpbreaks$breaks)
   })
@@ -42,7 +47,7 @@ if (requiet("testthat") &&
   })
 
   test_that("get_random", {
-    expect_equal(get_random(m1), warpbreaks[, "wool", drop = FALSE])
+    expect_equal(get_random(m1), warpbreaks[, "wool", drop = FALSE], ignore_attr = TRUE)
   })
 
   test_that("get_predictors", {

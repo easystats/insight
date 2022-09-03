@@ -125,7 +125,7 @@ get_parameters.mhurdle <- function(x,
   cond_pars <- which(grepl("^h2\\.", names(cf)))
   zi_pars <- which(grepl("^h1\\.", names(cf)))
   ip_pars <- which(grepl("^h3\\.", names(cf)))
-  aux_pars <- (1:length(names(cf)))[-c(cond_pars, zi_pars, ip_pars)]
+  aux_pars <- (seq_along(names(cf)))[-c(cond_pars, zi_pars, ip_pars)]
 
   if (length(cond_pars)) {
     cond_dat <- data.frame(

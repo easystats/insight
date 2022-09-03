@@ -47,6 +47,7 @@
 #'   output, like markdown files), the table is split into two parts. Else,
 #'   if `table_width` is numeric and table rows are larger than `table_width`,
 #'   the table is split into two parts.
+#' @param ... Currently not used.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
@@ -118,8 +119,8 @@ export_table <- function(x,
                          group_by = NULL,
                          zap_small = FALSE,
                          table_width = NULL,
-                         verbose = TRUE) {
-
+                         verbose = TRUE,
+                         ...) {
   # check args
   if (is.null(format)) {
     format <- "text"
@@ -161,7 +162,6 @@ export_table <- function(x,
   # table from single data frame --------------------------------------------
 
   if (is.data.frame(x)) {
-
     # check default attributes for caption, sub-title and footer
     if (!is.null(title)) {
       caption <- title
@@ -200,14 +200,13 @@ export_table <- function(x,
       table_width = table_width
     )
   } else if (is.list(x)) {
-
     # table from list of data frames -----------------------------------------
 
     # remove empty elements
     l <- compact_list(x)
 
     # list of data frames
-    tmp <- lapply(1:length(l), function(element) {
+    tmp <- lapply(seq_along(l), function(element) {
       i <- l[[element]]
 
       # use individual footer for each list element...
@@ -279,12 +278,12 @@ export_table <- function(x,
 
     out <- c()
     if (format == "text") {
-      for (i in 1:length(tmp)) {
+      for (i in seq_along(tmp)) {
         out <- paste0(out, tmp[[i]], "\n")
       }
       out <- substr(out, 1, nchar(out) - 1)
     } else if (format == "markdown") {
-      for (i in 1:length(tmp)) {
+      for (i in seq_along(tmp)) {
         out <- c(out, tmp[[i]], "")
       }
       out <- out[1:(length(out) - 1)]
@@ -408,7 +407,7 @@ print.insight_table <- function(x, ...) {
 
     # first column definitely right alignment, fixed width
     first_row <- as.character(aligned[1, ])
-    for (i in 1:length(first_row)) {
+    for (i in seq_along(first_row)) {
       aligned[1, i] <- format(trim_ws(first_row[i]), width = nchar(first_row[i]), justify = "right")
     }
 
@@ -421,7 +420,6 @@ print.insight_table <- function(x, ...) {
     }
 
     if (format == "text") {
-
       # go for simple text output
       out <- .format_basic_table(
         final,
@@ -441,7 +439,6 @@ print.insight_table <- function(x, ...) {
         table_width = table_width
       )
     } else if (format == "markdown") {
-
       # markdown is a bit different...
       out <- .format_markdown_table(
         final,
@@ -482,12 +479,11 @@ print.insight_table <- function(x, ...) {
                                 col_width = NULL,
                                 col_align = NULL,
                                 table_width = NULL) {
-
   # align table, if requested. unlike the generic aligments that have
   # been done previously, we now look for column-specific alignments
 
   if (!is.null(align) && length(align) == 1) {
-    for (i in 1:ncol(final)) {
+    for (i in seq_len(ncol(final))) {
       align_char <- ""
       if (align %in% c("left", "right", "center", "firstleft")) {
         align_char <- ""
@@ -557,7 +553,6 @@ print.insight_table <- function(x, ...) {
   # given width is required
 
   if (identical(table_width, "auto") || (!is.null(table_width) && is.numeric(table_width))) {
-
     # define the length of a table line. if specific table width is defined
     # (i.e. table_width is numeric), use that to define length of table lines.
     # else, if "auto", check the current width of the user console and use that
@@ -663,12 +658,25 @@ print.insight_table <- function(x, ...) {
 .table_parts <- function(rows, final, header, sep, cross, empty_line) {
   # "final" is a matrix here. we now paste each row into a character string,
   # add separator chars etc.
-  for (row in 1:nrow(final)) {
+  for (row in seq_len(nrow(final))) {
+    # create a string for each row, where cells from original matrix are
+    # separated by the separator char
     final_row <- paste0(final[row, ], collapse = sep)
-
-    # check if we have an empty row
+    # check if we have an empty row, and if so, fill with an
+    # "empty line separator", if requested by user
     if (!is.null(empty_line) && all(nchar(trim_ws(final[row, ])) == 0)) {
-      rows <- paste0(rows, paste0(rep_len(empty_line, nchar(final_row)), collapse = ""), sep = "\n")
+      # check whether user wants to have a "cross" char where vertical and
+      # horizontal lines (from empty line separator) cross. But don't add
+      # a "cross" when the empty line is the last row in the table...
+      empty_line_with_cross <- .insert_cross(
+        # the empty line, which is just empty cells with separator char,
+        # will now be replaced by the "empty line char", so we have a
+        # clean separator line
+        paste0(rep_len(empty_line, nchar(final_row)), collapse = ""),
+        cross, sep, final_row,
+        is_last_row = row == nrow(final)
+      )
+      rows <- paste0(rows, empty_line_with_cross, sep = "\n")
     } else {
       rows <- paste0(rows, final_row, sep = "\n")
     }
@@ -677,16 +685,13 @@ print.insight_table <- function(x, ...) {
     if (row == 1) {
       # check if we have any separator for the header row
       if (!is.null(header)) {
-        header_line <- paste0(rep_len(header, nchar(final_row)), collapse = "")
-        # check if at places where row and column "lines" cross, we need a
-        # special char. E.g., if columns are separated with "|" and header line
-        # with "-", we might have a "+" to have properly "crossed lines"
-        if (!is.null(cross)) {
-          cross_position <- unlist(gregexpr(trim_ws(sep), final_row, fixed = TRUE))
-          for (pp in cross_position) {
-            substr(header_line, pp, pp) <- cross
-          }
-        }
+        # check whether user wants to have a "cross" char where vertical and
+        # horizontal lines (from header line) cross.
+        header_line <- .insert_cross(
+          paste0(rep_len(header, nchar(final_row)), collapse = ""),
+          cross, sep, final_row,
+          is_last_row = row == nrow(final)
+        )
         # add separator row after header line
         rows <- paste0(rows, header_line, sep = "\n")
       }
@@ -694,6 +699,20 @@ print.insight_table <- function(x, ...) {
   }
 
   rows
+}
+
+
+.insert_cross <- function(row, cross, sep, pattern, is_last_row) {
+  # check if at places where row and column "lines" cross, we need a
+  # special char. E.g., if columns are separated with "|" and header line
+  # with "-", we might have a "+" to have properly "crossed lines"
+  if (!is.null(cross) && !is_last_row) {
+    cross_position <- unlist(gregexpr(trim_ws(sep), pattern, fixed = TRUE))
+    for (pp in cross_position) {
+      substr(row, pp, pp) <- cross
+    }
+  }
+  row
 }
 
 
@@ -748,7 +767,7 @@ print.insight_table <- function(x, ...) {
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
 
   # find rows that should not be indented
-  non_grp_rows <- 1:nrow(final)
+  non_grp_rows <- seq_len(nrow(final))
   non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
 
   # paste whitespace at end, to ensure equal width for each string
@@ -773,11 +792,11 @@ print.insight_table <- function(x, ...) {
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
 
   # find rows that should not be indented
-  non_grp_rows <- 1:nrow(final)
+  non_grp_rows <- seq_len(nrow(final))
   non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
 
   # remove indent token
-  final[, 1] <- gsub("# ", "", final[, 1])
+  final[, 1] <- gsub("# ", "", final[, 1], fixed = TRUE)
 
   final
 }
@@ -809,7 +828,6 @@ print.insight_table <- function(x, ...) {
 
   # go through all columns of the data frame
   for (i in 1:n_columns) {
-
     # create separator line for current column
     line <- paste0(rep_len("-", column_width[i]), collapse = "")
 
@@ -826,7 +844,6 @@ print.insight_table <- function(x, ...) {
 
     # auto-alignment?
     if (is.null(align)) {
-
       # if so, check if string in column starts with
       # whitespace (indicating right-alignment) or not.
       if (grepl("^\\s", final[2, i])) {
@@ -866,7 +883,7 @@ print.insight_table <- function(x, ...) {
 
   # Transform to character
   rows <- c()
-  for (row in 1:nrow(final)) {
+  for (row in seq_len(nrow(final))) {
     final_row <- paste0("|", paste0(final[row, ], collapse = "|"), "|", collapse = "")
     rows <- c(rows, final_row)
 
@@ -922,7 +939,6 @@ print.insight_table <- function(x, ...) {
   if (!length(group_by_columns)) {
     group_by_columns <- NULL
   } else {
-
     # remove columns with only 1 unique value - this *should* be safe to
     # remove, but we may check if all printed sub titles look like intended
 
@@ -978,7 +994,7 @@ print.insight_table <- function(x, ...) {
 
   tab <- gt::gt(final, groupname_col = group_by_columns)
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
-  footer <- gt::tab_source_note(header, source_note = footer)
+  footer <- gt::tab_source_note(header, source_note = gt::html(footer))
   out <- gt::cols_align(footer, align = "center")
 
   # align columns

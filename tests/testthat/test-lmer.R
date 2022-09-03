@@ -50,6 +50,14 @@ if (.runThisTest &&
     expect_equal(n_parameters(m2, effects = "random"), 3)
   })
 
+  test_that("find_offset", {
+    data(mtcars)
+    model_off <- lmer(log(mpg) ~ disp + (1 | cyl), offset = log(wt), data = mtcars)
+    expect_identical(find_offset(model_off), "wt")
+    model_off <- lmer(log(mpg) ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars)
+    expect_identical(find_offset(model_off), "wt")
+  })
+
   test_that("find_predictors", {
     expect_equal(
       find_predictors(m1, effects = "all"),
@@ -433,6 +441,39 @@ if (.runThisTest &&
     )
   })
 
+  test_that("satterthwaite dof vs. emmeans", {
+    requiet("emmeans")
+    requiet("pbkrtest")
+
+    v1 <- get_varcov(m2, vcov = "kenward-roger")
+    v2 <- as.matrix(vcovAdj(m2))
+    expect_equal(v1, v2)
+
+    p1 <- get_predicted(m2, ci_method = "satterthwaite", ci = .95)
+    p1 <- data.frame(p1)
+    em1 <- ref_grid(
+      object = m2,
+      specs = ~Days,
+      at = list(Days = sleepstudy$Days),
+      lmer.df = "satterthwaite"
+    )
+    em1 <- confint(em1)
+    expect_equal(p1$CI_low, em1$lower.CL)
+    expect_equal(p1$CI_high, em1$upper.CL)
+
+    p2 <- get_predicted(m2, ci_method = "kenward-roger", ci = .95)
+    p2 <- data.frame(p2)
+    em2 <- ref_grid(
+      object = m2,
+      specs = ~Days,
+      at = list(Days = sleepstudy$Days),
+      lmer.df = "kenward-roger"
+    )
+    em2 <- confint(em2)
+    expect_equal(p2$CI_low, em2$lower.CL)
+    expect_equal(p2$CI_high, em2$upper.CL)
+  })
+
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "t-statistic")
     expect_identical(find_statistic(m2), "t-statistic")
@@ -451,7 +492,7 @@ if (.runThisTest &&
     newdata <- ChickWeight[ChickWeight$Time %in% 0:10 & ChickWeight$Chick %in% c(1, 40), ]
     newdata$Chick[newdata$Chick == "1"] <- NA
     expect_equal(
-      head(as.data.frame(get_predicted(mod, data = newdata, include_random = FALSE))),
+      head(as.data.frame(get_predicted(mod, data = newdata, include_random = FALSE, ci = .95))),
       data.frame(
         Predicted = c(37.53433, 47.95719, 58.78866, 70.02873, 81.67742, 93.73472),
         SE = c(1.68687, 0.82574, 1.52747, 2.56109, 3.61936, 4.76178),

@@ -30,7 +30,7 @@ find_weights.default <- function(x, ...) {
         w <- safe_deparse(parse(text = call_string)[[1]]$weights)
 
         # edge case, users use "eval(parse())" to parse weight variables
-        if (grepl("^eval\\(parse\\(", w)) {
+        if (grepl("eval(parse(", w, fixed = TRUE)) {
           w <- eval(parse(text = trim_ws(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
         }
 
@@ -84,7 +84,7 @@ find_weights.merMod <- function(x, ...) {
       w <- safe_deparse(parse(text = safe_deparse(x@call))[[1]]$weights)
 
       # edge case, users use "eval(parse())" to parse weight variables
-      if (grepl("^eval\\(parse\\(", w)) {
+      if (grepl("eval(parse(", w, fixed = TRUE)) {
         w <- eval(parse(text = trim_ws(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
       }
 

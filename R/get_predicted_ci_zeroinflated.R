@@ -3,13 +3,16 @@
                                      predictions,
                                      nsim = NULL,
                                      ci = .95) {
-
-
   # Since the zero inflation and the conditional model are working in "opposite
   # directions", confidence intervals can not be derived directly  from the
   # "predict()"-function. Thus, confidence intervals are based on quantiles
   # of simulated draws from a multivariate normal distribution
   # (see also _Brooks et al. 2017, pp.391-392_ for details).
+
+  # don't even start if no CIs were requested
+  if (is.null(ci)) {
+    return(NULL)
+  }
 
   if (is.null(newdata)) {
     newdata <- get_data(model)
@@ -144,7 +147,6 @@
 
 
 .simulate_predictions_zeroinfl <- function(model, newdata, nsim = 1000) {
-
   # check for at least to factor levels, in order to build contrasts
   single_factor_levels <- sapply(newdata, function(i) is.factor(i) && nlevels(i) == 1)
   if (any(single_factor_levels)) {
@@ -228,8 +230,6 @@
                                     beta.zero_inflated,
                                     matrix.conditional,
                                     matrix.zero_inflated) {
-
-
   # if formula has a polynomial term, and this term is one that is held
   # constant, model.matrix() with "newdata" will throw an error - so we
   # re-build the newdata-argument by including all values for poly-terms, if

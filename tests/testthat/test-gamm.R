@@ -4,7 +4,7 @@ if (.runThisTest) {
   unloadNamespace("gam")
   if (requiet("testthat") && requiet("insight") && requiet("mgcv")) {
     set.seed(0)
-    dat <- gamSim(6, n = 200, scale = .2, dist = "poisson")
+    void <- capture.output(dat <- gamSim(6, n = 200, scale = .2, dist = "poisson"))
     m1 <-
       gamm(
         y ~ s(x0) + s(x1) + s(x2),
@@ -108,7 +108,7 @@ if (.runThisTest) {
     set.seed(0)
     n.g <- 10
     n <- n.g * 10 * 4
-    dat <- gamSim(1, n = n, scale = 2)
+    void <- capture.output(dat <- gamSim(1, n = n, scale = 2))
     f <- dat$f
     ## simulate nested random effects....
     fa <- as.factor(rep(1:10, rep(4 * n.g, 10)))

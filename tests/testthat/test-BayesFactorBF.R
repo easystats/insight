@@ -26,9 +26,9 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
   x <- rnorm(1000, 0, 1)
   y <- rnorm(1000, 0, 1)
 
-  t1 <- ttestBF(x = x, mu = 60)
+  t1 <- suppressMessages(ttestBF(x = x, mu = 60))
   t2 <- ttestBF(x = x, y = y)
-  t2d <- ttestBF(x = x, y = y, paired = TRUE, mu = 60)
+  t2d <- suppressMessages(ttestBF(x = x, y = y, paired = TRUE, mu = 60))
 
   test_that("get_data", {
     expect_true(is.data.frame(get_data(t1)))
@@ -90,7 +90,7 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
     data(ToothGrowth)
     ToothGrowth$dose <- factor(ToothGrowth$dose)
     levels(ToothGrowth$dose) <- c("Low", "Medium", "High")
-    x <- anovaBF(len ~ supp * dose, data = ToothGrowth)
+    x <- anovaBF(len ~ supp * dose, data = ToothGrowth, progress = FALSE)
 
     test_that("get_data", {
       expect_true(is.data.frame(get_data(x)))
@@ -104,7 +104,7 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
     })
 
     test_that("get_parameters", {
-      expect_equal(colnames(get_parameters(x)), c("mu", "supp-OJ", "supp-VC", "sig2", "g_supp"))
+      expect_equal(colnames(get_parameters(x, verbose = FALSE)), c("mu", "supp-OJ", "supp-VC", "sig2", "g_supp"))
     })
 
     test_that("clean_parameters", {
@@ -128,7 +128,7 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
 
     # ---------------------------
     data(puzzles)
-    x <- anovaBF(RT ~ shape * color + ID, data = puzzles, whichRandom = "ID")
+    x <- anovaBF(RT ~ shape * color + ID, data = puzzles, whichRandom = "ID", progress = FALSE)
 
     test_that("get_data", {
       expect_true(is.data.frame(get_data(x)))
@@ -147,7 +147,7 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
 
     test_that("get_parameters", {
       expect_equal(
-        colnames(get_parameters(x)),
+        colnames(get_parameters(x, verbose = FALSE)),
         c(
           "mu", "shape-round", "shape-square", "ID-1", "ID-2", "ID-3",
           "ID-4", "ID-5", "ID-6", "ID-7", "ID-8", "ID-9", "ID-10", "ID-11",
@@ -239,7 +239,7 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
 
 
     # ---------------------------
-    x <- lmBF(len ~ supp + dose, data = ToothGrowth)
+    x <- lmBF(len ~ supp + dose, data = ToothGrowth, progress = FALSE)
     test_that("get_data", {
       expect_true(is.data.frame(get_data(x)))
     })
@@ -258,7 +258,7 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
 
 
 
-    x2 <- lmBF(len ~ supp + dose + supp:dose, data = ToothGrowth)
+    x2 <- lmBF(len ~ supp + dose + supp:dose, data = ToothGrowth, progress = FALSE)
     x <- x / x2
     test_that("get_data", {
       expect_true(is.data.frame(get_data(x)))
@@ -268,7 +268,7 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
     })
     test_that("get_parameters", {
       expect_equal(
-        colnames(get_parameters(x)),
+        colnames(get_parameters(x, verbose = FALSE)),
         c(
           "mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
           "sig2", "g_supp", "g_dose"

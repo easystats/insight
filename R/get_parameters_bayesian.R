@@ -492,9 +492,9 @@ get_parameters.sim <- function(x,
 # use temporarily code from BGGM package, as long as that package is archived on CRAN
 
 .bggm_posterior_samples <- function(object, ...) {
-  if (methods::is(object, "estimate") | methods::is(object, "explore")) {
+  if (methods::is(object, "estimate") || methods::is(object, "explore")) {
     if (!methods::is(object, "default")) {
-      stop("object most be from 'estimate' or 'explore'")
+      stop("Object must be from 'estimate' or 'explore'.", call. = FALSE)
     }
     p <- object$p
     pcors_total <- p * (p - 1) * 0.5
@@ -548,7 +548,7 @@ get_parameters.sim <- function(x,
     }
   } else if (methods::is(object, "var_estimate")) {
     if (!methods::is(object, "default")) {
-      stop("object most be from 'var_estimate'")
+      stop("Object must be from 'var_estimate'.", call. = FALSE)
     }
     p <- object$p
     pcors_total <- p * (p - 1) * 0.5
@@ -588,7 +588,7 @@ get_parameters.sim <- function(x,
     }
     posterior_samples <- cbind(posterior_samples, beta_start)
   } else {
-    stop("object class not currently supported")
+    stop("Object class not currently supported.", call. = FALSE)
   }
 
   posterior_samples

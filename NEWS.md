@@ -1,4 +1,149 @@
-# insight 0.16.1
+# insight 0.18.3
+
+## Changes to functions
+
+* `get_predicted()` for models of class `clm` now includes confidence intervals
+  of predictions.
+
+* `format_message()` gets some additional formatting features. See 'Details'
+  in `?format_message` for more information and some current limitations.
+
+* `format_message()` gets an `indention` argument, to specify indention string
+  for subsequent lines.
+
+* `format_table()` now merges IC and IC weights columns into one column (e.g.,
+  former columns `"AIC"` and `"AIC_wt"` will now be printed as one column, named
+  `"AIC (weights)"`). Furthermore, an `ic_digits` argument was added to control
+  the number of significant digits for the IC values.
+
+* `print_color()` and `color_text()` now support bright variants of colors and
+  background colors.
+
+* `get_datagrid()` gets more options for `at` and `range`, to provide more
+  control how to generate the reference grid.
+
+* `get_data()` for models of class `geeglm` and `fixest`now more reliably
+  retrieves the model data.
+
+## Bug fixes
+
+* Fixed issues with wrong attribute `adjusted_for` in `insight::get_datagrid()`.
+
+* Fixed issue (resp. implemented workaround) in `get_data.iv_robust()`, which
+  failed due to a bug in the _estimatr_ package.
+
+* Fixed issue where `get_predicted()` failed when data contains factors with 
+  only one or incomplete levels.
+
+* Fixed issue where `get_predicted()` failed to compute confidence intervals
+  of predictions when model contained matrix-alike response columns, e.g. a 
+  response variable created with `cbind()`.
+
+# insight 0.18.2
+
+## New functions
+
+* `format_percent()` as short-cut for `format_value(as_percent = TRUE)`.
+
+* `is_converged()`, to check whether a mixed model has converged or not.
+
+## Changes to functions
+
+* `format_table()` gains an `exact` argument, to either report exact or rounded
+  Bayes factors.
+
+* `get_predicted()` gets a method for models of class `gamlss` (and thereby,
+  `get_loglikelihood()` now also works for those model classes).
+
+* `get_predicted()` now better handles models of class `polr`, `multinom` and 
+  `rlm`.
+
+## Bug fixes
+
+* Fixed test failures.
+
+* Minor fixes to address changes in other packages.
+
+# insight 0.18.0
+
+## Breaking changes
+
+* The `ci` argument in `get_predicted()` now defaults to `NULL`. One reason was
+  to make the function faster if confidence intervals are not required, which 
+  was the case for many downstream usages of that function. Please set `ci` 
+  explicitly to compute confidence intervals for predictions.
+  
+* `get_data()` no longer returns logical types for numeric variables that have
+  been converted to logicals on-the-fly within formulas (like `y ~ as.logical(x)`).
+  Instead, for each numeric variable that was coerced to logical within a formula
+  gets a `logical` attribute (set to `TRUE`), and the returned data frame gets
+  a `logicals` attribute including all names of affected variables.
+
+* `parameters_table()`, the alias for `format_table()`, was removed.
+
+## Changes to functions
+
+* `find_transformation()` and `get_transformation()` now also work for models 
+  where the response was transformed using `log2()` or `log10()`.
+
+## Bug fixes
+
+* `get_sigma()` for models from package _VGAM_ returned wrong sigma-parameter.
+
+* `find_predictors()` for models from package _fixest_ that contained 
+  interaction terms in the endogenous formula part did not correctly return
+  all instruments.
+
+* Fixed formatting of HTML table footers in `export_table()`.
+
+* Several fixes to `get_predicted()` for models from `mgcv::gam()`.
+
+* The `component` argument in `find_parameters()` for `stanmvreg` models did
+  not accept the `"location"` value.
+
+* `null_model()` did not consider offset-terms if these were specified inside
+  formulas.
+
+* Argument `allow.new.levels` was not passed to `predict()` for 
+  `get_predicted.glmmTMB()`.
+  
+* `clean_names()` now works correctly when several variables are specified in 
+  `s()` (#573, @etiennebacher).
+
+# insight 0.17.1
+
+## New supported model classes
+
+* `deltaMethod` (*car*), `marginaleffects`, `marginaleffects.summary`
+  (*marginaleffects*)
+
+## General
+
+* `get_predicted()` now supports models of class `iv_robust` and `ivreg`.
+
+* For `get_predicted()`, when both `type` and `predict` are given, `type` 
+  will overwrite `predict`. Note that this will print a message, because 
+  `predict` is the preferred argument.
+
+* `get_varcov()` gains `vcov` and `vcov_args` arguments, to specify the
+  variance-covariance matrix used to compute uncertainty estimates (e.g., for 
+  robust standard errors).
+
+* `get_loglikehood()` improved handling of models from package *estimator*.
+
+## Bug fixes
+
+* Fixed bug in `get_data()` for model objects whose data needs to be recovered
+  from the environment, and where the data name was a reserved word (e.g., named
+  like an R function).
+
+* The matrix returned by `get_varcov()` for models of class *bife* now returns 
+  row and column names.
+  
+* `find_offset()` did not find offset-terms for `merMod` objects when the 
+  offset was specified as `offset` argument in the function call.
+
+# insight 0.17.0
 
 ## Breaking changes
 
@@ -6,6 +151,11 @@
   `get_predicted_se()` and `get_predicted_ci()` are replaced by `vcov` and
   `vcov_args`, to have a more simplified and common interface to control
   robust covariance matrix estimation.
+
+## General
+
+* Improved performance for various functions, in particular `get_data()` and
+  `model_info()`.
 
 ## New functions
 
@@ -34,10 +184,16 @@
 
 * `get_loglikelihood()` and `get_df()` now support more model classes.
 
-* `get_predicted()` was improved for multinominal models from *brms*.
+* `get_predicted()` was improved for multinomial models from *brms*.
 
 * `get_variance()` was improved to cover more edge cases of (more complex)
   random effect structures.
+
+* `get_data()` now includes variables in the returned data frame that were
+  used in the `subset` argument of regression functions (like `lm()`).
+
+* In some edge cases, where `get_data()` is unable to retrieve the data that 
+  was used to fit the model, now a more informative error is printed.
 
 * `ellipses_info()` now also accepts a list of model objects, is more stable
   and returns more information about the provided models (like if all fixed 
@@ -56,8 +212,8 @@
 
 * Fixed issue with `get_datagrid()` for *brms* models with monotonic factors.
 
-* Fixed issue in `find_formula()` when argument `correlation` was defined 
-outside of `lme()` and `gls()` (@etiennebacher, #525).
+* Fixed issue in `find_formula()` when argument `correlation` was defined
+  outside of `lme()` and `gls()` (@etiennebacher, #525).
 
 * Fixed issue with `get_data()` when back-transforming data from predictors 
   that used `cos()`, `sin()` or `tan()` transformations.

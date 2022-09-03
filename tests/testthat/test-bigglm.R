@@ -37,6 +37,10 @@ if (.runThisTest) {
       expect_warning(get_random(m1))
     })
 
+    test_that("get_varcov", {
+      expect_equal(vcov(m1), get_varcov(m1), tolerance = 1e-3)
+    })
+
     test_that("find_response", {
       expect_identical(find_response(m1), "count")
     })

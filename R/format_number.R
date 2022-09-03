@@ -79,7 +79,7 @@ format_number <- function(x, textual = TRUE, ...) {
   } else {
     nSuffix <- ((nDigits + 2) %/% 3) - 1
     if (nSuffix > length(suffixes)) {
-      stop(paste(x, "is too large!"))
+      stop(paste(x, "is too large!"), call. = FALSE)
     }
     .trim_ws_and(paste(
       Recall(.make_number(digits[nDigits:(3 * nSuffix + 1)])),

@@ -19,6 +19,8 @@
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
+#' @inheritSection find_predictors Model components
+#'
 #' @return A list of parameter names. For simple models, only one list-element,
 #'    `conditional`, is returned.
 #'
@@ -58,7 +60,7 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
   if (is.null(pars$conditional) || is.null(pars)) {
     if (isTRUE(verbose)) {
-      warning(format_message(sprintf("Parameters can't be retrieved for objects of class '%s'.", class(x)[1])), call. = FALSE)
+      warning(format_message(sprintf("Parameters can't be retrieved for objects of class `%s`.", class(x)[1])), call. = FALSE)
     }
     return(NULL)
   }
@@ -75,7 +77,7 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
 #' @export
 find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
-  stop("A data frame is no valid object for this function.")
+  stop("A data frame is no valid object for this function.", call. = FALSE)
 }
 
 
@@ -514,6 +516,18 @@ find_parameters.afex_aov <- function(x, flatten = FALSE, ...) {
     find_parameters(x$aov, flatten = flatten, ...)
   } else {
     find_parameters(x$lm, flatten = flatten, ...)
+  }
+}
+
+
+#' @export
+find_parameters.anova.rms <- function(x, flatten = FALSE, ...) {
+  l <- list(conditional = text_remove_backticks(rownames(x)))
+
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
   }
 }
 

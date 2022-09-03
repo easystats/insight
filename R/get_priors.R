@@ -98,8 +98,8 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   }
   prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))]
 
-  colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
-  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info))
+  colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info), fixed = TRUE)
+  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info), fixed = TRUE)
 
   priors <- as.data.frame(lapply(prior_info, function(x) {
     if (.is_numeric_character(x)) {
@@ -152,8 +152,8 @@ get_priors.stanmvreg <- function(x, ...) {
 
   prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale", "response"), colnames(prior_info))]
 
-  colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info))
-  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info))
+  colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info), fixed = TRUE)
+  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info), fixed = TRUE)
 
   priors <- as.data.frame(lapply(prior_info, function(x) {
     if (.is_numeric_character(x)) {
@@ -292,7 +292,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
       return(out)
     }
     if (is.null(names(ls))) {
-      stop("Argument 'ls' must be named.")
+      stop("Argument 'ls' must be named.", call. = FALSE)
     }
     for (name in names(ls)) {
       out <- out & brms::do_call(fun, list(x[[name]], ls[[name]]))
@@ -552,7 +552,7 @@ get_priors.BFBayesFactor <- function(x, ...) {
     find_types[interactions] <- gsub("(.*):(.*)", "\\2", find_types[interactions])
     cont_types <- data_types == "continuous"
     data_types[cont_types] <- paste0(data_types[cont_types], ".", names(data_types[cont_types]))
-    for (i in 1:length(data_types)) {
+    for (i in seq_along(data_types)) {
       out$Scale[find_types == names(data_types)[i]] <- prior_scale[data_types[i]]
     }
 

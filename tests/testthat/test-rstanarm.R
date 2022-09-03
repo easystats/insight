@@ -6,7 +6,6 @@ if (.runThisTest && .runStanTest) {
     requiet("insight") && requiet("lme4") &&
     requiet("BayesFactor") &&
     requiet("rstanarm"))) {
-
     # skip_on_cran()
 
     # defining models ---------------------
@@ -145,8 +144,8 @@ if (.runThisTest && .runStanTest) {
           is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
           is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
           is_xtab = FALSE, is_proptest = FALSE, is_binomtest = FALSE,
-          is_meta = FALSE, link_function = "logit", family = "binomial",
-          n_obs = 56L, model_terms = list(response = c("incidence", "size"), conditional = c("size", "period"), random = "herd")
+          is_ftest = FALSE, is_meta = FALSE, link_function = "logit",
+          family = "binomial", n_obs = 56L
         )
       )
 
@@ -166,8 +165,8 @@ if (.runThisTest && .runStanTest) {
           is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
           is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
           is_xtab = FALSE, is_proptest = FALSE, is_binomtest = FALSE,
-          is_meta = FALSE, link_function = "identity", family = "gaussian",
-          n_obs = 150L, model_terms = list(response = "Sepal.Width", conditional = c("Species", "Petal.Length"))
+          is_ftest = FALSE, is_meta = FALSE, link_function = "identity",
+          family = "gaussian", n_obs = 150L
         )
       )
 
@@ -187,8 +186,8 @@ if (.runThisTest && .runStanTest) {
           is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
           is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
           is_xtab = FALSE, is_proptest = FALSE, is_binomtest = FALSE,
-          is_meta = FALSE, link_function = "logit", family = "binomial",
-          n_obs = 32L, model_terms = list(response = "vs", conditional = "wt")
+          is_ftest = FALSE, is_meta = FALSE, link_function = "logit",
+          family = "binomial", n_obs = 32L
         )
       )
 

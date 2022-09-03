@@ -5,10 +5,10 @@
                                 predict = "expectation",
                                 include_random = "default",
                                 include_smooth = TRUE,
-                                ci = 0.95,
+                                ci = NULL,
+                                ci_method = NULL,
                                 verbose = TRUE,
                                 ...) {
-
   # First step, check whether "predict" or type argument is used -------------
   ############################################################################
 
@@ -21,12 +21,13 @@
   }
 
   # ...but not both
-  if (!is.null(dots$type) && !is.null(predict)) {
-    stop(format_message(
-      "`predict` and `type` cannot both be given. The preferred argument for `get_predicted()` is `predict`.",
-      "To use the `type` argument, set `predict = NULL` explicitly, e.g.,:",
-      '`get_predicted(model, predict = NULL, type = "response")`'
-    ), call. = FALSE)
+  if (!is.null(dots$type) && !is.null(predict) && isTRUE(verbose)) {
+    message(format_message(
+      "Both `predict` and `type` were given, thus, `type` was used and `predict` was ignored.",
+      "Note that the preferred argument for `get_predicted()` is `predict`.",
+      "If the `type` argument should be used and to avoid this message, set `predict = NULL` explicitly, e.g.,:",
+      "`get_predicted(model, predict = NULL, type = \"response\")`"
+    ))
   }
 
   # copy "type" to "predict"
@@ -37,7 +38,7 @@
   if (length(predict) > 1) {
     predict <- predict[1]
     if (isTRUE(verbose)) {
-      msg <- format_message(sprintf("More than one option provided in `predict`. Using first option '%s' now."), predict[1])
+      msg <- format_message(sprintf("More than one option provided in `predict`. Using first option `%s` now."), predict[1])
       warning(msg, call. = FALSE)
     }
   }
@@ -52,6 +53,30 @@
   # Data
   if (!is.null(dots$newdata) && is.null(data)) data <- dots$newdata
   if (is.null(data)) data <- get_data(x, verbose = verbose)
+
+
+  # Intermediate step, check data classes  ------
+  # if data=NULL, check terms
+  # if data!=NULL, check data
+  ############################################################################
+
+  if (is.null(data)) {
+    flag_matrix <- tryCatch(
+      any(grepl("matrix", attributes(stats::terms(x))$dataClasses, fixed = TRUE)),
+      error = function(e) FALSE
+    )
+  } else {
+    flag_matrix <- tryCatch(
+      any(sapply(data, function(x) inherits(x, "matrix"))),
+      error = function(e) FALSE
+    )
+  }
+  if (isTRUE(flag_matrix) && isTRUE(verbose)) {
+    message(format_message(
+      "Some of the variables were in matrix-format - probably you used 'scale()' on your data?",
+      "If so, and you get an error, please try 'datawizard::standardize()' to standardize your data."
+    ))
+  }
 
 
   # Second step, evaluate "predict" argument                      ------------
@@ -98,7 +123,7 @@
   # model-supported predicted type
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
     msg <- format_message(
-      sprintf('`predict` = "%s"` is not officially supported by `get_predicted()`.', predict),
+      sprintf("`predict` = \"%s\"` is not officially supported by `get_predicted()`.", predict),
       "`predict` will be passed directly to the `predict()` method for the model and not validated.",
       "Please check the validity and scale of the results.",
       "Set `verbose = FALSE` to silence this warning, or use one of the supported values for the `predict` argument:",
@@ -127,7 +152,7 @@
     transform <- FALSE
 
     # linear models are always on response scale (there is no other)
-  } else if (info$is_linear) {
+  } else if (info$is_linear && !info$is_gam) {
     type_arg <- "response"
     scale_arg <- "response"
     transform <- FALSE
@@ -236,7 +261,6 @@
 
   # only check and yield warnings when random effects are requested.
   if ((isTRUE(include_random) || identical(include_random, "default")) && !is.null(data) && !is.null(x)) {
-
     # get random effect terms
     re_terms <- find_random(x, flatten = TRUE)
 
@@ -245,13 +269,12 @@
     if (!all(re_terms %in% names(data))) {
       if (isTRUE(verbose) && isTRUE(include_random)) {
         warning(format_message(
-          "`include_random` was set to `TRUE`, but not all random effects were found in 'data'.",
+          "`include_random` was set to `TRUE`, but not all random effects were found in `data`.",
           "Setting `include_random = FALSE` now."
         ), call. = FALSE)
       }
       include_random <- FALSE
     } else if (!allow_new_levels) {
-
       # we have random effects in data, but do we also have new levels?
       # get data of random effects from the model, and compare random effect
       # variables with data provided by the user - all values/levels need to
@@ -266,7 +289,7 @@
       if (!all(all_levels_found)) {
         if (isTRUE(verbose) && isTRUE(include_random)) {
           warning(format_message(
-            "`include_random` was set to `TRUE`, but grouping factor(s) in 'data' has new levels not in the original data.",
+            "`include_random` was set to `TRUE`, but grouping factor(s) in `data` has new levels not in the original data.",
             "Either use `allow.new.levels=TRUE`, or make sure to include only valid values for grouping factor(s).",
             "Setting `include_random = FALSE` now."
           ), call. = FALSE)
@@ -315,6 +338,7 @@
     include_smooth = include_smooth,
     ci_type = ci_type,
     ci = ci,
+    ci_method = ci_method,
     type = type_arg,
     predict = predict,
     scale = scale_arg,

@@ -40,7 +40,6 @@ format_p <- function(p,
                      decimal_separator = NULL,
                      digits = 3,
                      ...) {
-
   # only convert p if it's a valid numeric, or at least coercible to
   # valid numeric values...
   if (!is.numeric(p)) {
@@ -61,14 +60,9 @@ format_p <- function(p,
     digits <- 3
   }
 
-  if (is.character(digits) && grepl("^scientific", digits)) {
-    digits <- tryCatch(
-      {
-        as.numeric(gsub("scientific", "", digits, fixed = TRUE))
-      },
-      error = function(e) {
-        NA
-      }
+  if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
+    digits <- tryCatch(as.numeric(gsub("scientific", "", digits, fixed = TRUE)),
+      error = function(e) NA
     )
     if (is.na(digits)) {
       digits <- 5
@@ -117,7 +111,7 @@ format_p <- function(p,
   missing_index <- is.na(text)
 
   if (is.null(name)) {
-    text <- gsub("= ", "", text)
+    text <- gsub("= ", "", text, fixed = TRUE)
   } else {
     text <- paste(name, text)
   }
@@ -125,7 +119,7 @@ format_p <- function(p,
   if (stars_only == TRUE) {
     text <- gsub("[^\\*]", "", text)
   } else if (stars == FALSE) {
-    text <- gsub("\\*", "", text)
+    text <- gsub("*", "", text, fixed = TRUE)
   }
 
   # replace missing with related string

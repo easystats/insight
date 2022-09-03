@@ -20,6 +20,8 @@
 #' @inheritParams find_parameters
 #' @inheritParams find_predictors
 #'
+#' @inheritSection find_predictors Model components
+#'
 #' @return \itemize{
 #'   \item for non-Bayesian models, a data frame with two columns: the parameter names and the related point estimates.
 #'   \item for Anova (`aov()`) with error term, a list of parameters for the conditional and the random effects parameters
@@ -62,7 +64,7 @@ get_parameters.default <- function(x, verbose = TRUE, ...) {
       cf <- stats::coef(x)
       params <- names(cf)
       if (is.null(params)) {
-        params <- paste(1:length(cf))
+        params <- paste(seq_along(cf))
       }
 
       params <- data.frame(
@@ -76,7 +78,7 @@ get_parameters.default <- function(x, verbose = TRUE, ...) {
     },
     error = function(x) {
       if (isTRUE(verbose)) {
-        warning(sprintf("Parameters can't be retrieved for objects of class '%s'.", class(x)[1]), call. = FALSE)
+        warning(sprintf("Parameters can't be retrieved for objects of class `%s`.", class(x)[1]), call. = FALSE)
       }
       return(NULL)
     }
@@ -397,7 +399,7 @@ get_parameters.multinom <- function(x, ...) {
 
   if (is.matrix(params)) {
     out <- data.frame()
-    for (i in 1:nrow(params)) {
+    for (i in seq_len(nrow(params))) {
       out <- rbind(out, data.frame(
         Parameter = colnames(params),
         Estimate = unname(params[i, ]),
@@ -667,7 +669,7 @@ get_parameters.bracl <- function(x, ...) {
 
 
 
-# Standard models --------------------------------------------------
+# Anova and Standard models --------------------------------------------------
 
 
 #' @export
@@ -775,10 +777,10 @@ get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
     re <- x@ranef
     dat <- data.frame()
 
-    for (i in 1:length(re)) {
+    for (i in seq_along(re)) {
       dn <- dimnames(re[[i]])[[2]]
       cn <- dimnames(re[[i]])[[3]]
-      l <- lapply(1:length(dn), function(j) {
+      l <- lapply(seq_along(dn), function(j) {
         d <- as.data.frame(re[[i]][, j, ])
         colnames(d) <- sprintf("%s.%s", cn, dn[j])
         d
@@ -792,4 +794,14 @@ get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
   }
 
   dat
+}
+
+
+#' @export
+get_parameters.lm_robust <- function(x, ...) {
+  if (is_multivariate(x)) {
+    get_parameters.mlm(x, ...)
+  } else {
+    get_parameters.default(x, ...)
+  }
 }

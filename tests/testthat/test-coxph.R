@@ -1,4 +1,3 @@
-library(survival)
 requiet("survival")
 requiet("insight")
 
@@ -29,22 +28,45 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
+  ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
   expect_s3_class(get_data(m1), "data.frame")
   expect_equal(dim(get_data(m1)), c(166, 10))
 })
 
 test_that("get_data: regression test for previous bug", {
+  ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
-  dat_regression_test <- data.frame(time = c(4, 3, 1, 1, 2, 2, 3),
-                                    status = c(1, 1, 1, 0, 1, 1, 0),
-                                    x = c(0, 2, 1, 1, 1, 0, 0),
-                                    sex = c(0, 0, 0, 0, 1, 1, 1))
+  dat_regression_test <- data.frame(
+    time = c(4, 3, 1, 1, 2, 2, 3),
+    status = c(1, 1, 1, 0, 1, 1, 0),
+    x = c(0, 2, 1, 1, 1, 0, 0),
+    sex = c(0, 0, 0, 0, 1, 1, 1)
+  )
   mod <- coxph(Surv(time, status) ~ x + strata(sex),
-               data = dat_regression_test,
-               ties = "breslow")
-  expect_equal(get_data(mod), dat_regression_test)
+    data = dat_regression_test,
+    ties = "breslow"
+  )
+  expect_equal(get_data(mod), dat_regression_test, ignore_attr = TRUE)
 })
+
+
+test_that("get_data: regression test for data stored as list", {
+  ## NOTE check back every now and then and see if tests still work
+  skip("works interactively")
+  dat_regression_test <- list(
+    time = c(4, 3, 1, 1, 2, 2, 3),
+    status = c(1, 1, 1, 0, 1, 1, 0),
+    x = c(0, 2, 1, 1, 1, 0, 0),
+    sex = c(0, 0, 0, 0, 1, 1, 1)
+  )
+  mod <- coxph(Surv(time, status) ~ x + strata(sex),
+    data = dat_regression_test,
+    ties = "breslow"
+  )
+  expect_equal(get_data(mod), as.data.frame(dat_regression_test), ignore_attr = TRUE)
+})
+
 
 test_that("find_formula", {
   expect_length(find_formula(m1), 1)
@@ -114,4 +136,15 @@ test_that("JM", {
   d <- get_data(m)
   expect_equal(dim(d), c(1405, 12))
   expect_equal(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
+})
+
+test_that("get_statistic", {
+  requiet("survival")
+  bladder1 <- bladder[bladder$enum < 5, ] 
+  mod <- coxph(
+    Surv(stop, event) ~ (rx + size + number) * strata(enum),
+    cluster = id, bladder1, robust = TRUE)
+  z1 <- get_statistic(mod)$Statistic
+  z2 <- coef(summary(mod))[, "z"]
+  expect_equal(z1, z2, ignore_attr = TRUE)
 })

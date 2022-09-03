@@ -22,6 +22,28 @@
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
+#' @section Model components:
+#' Possible values for the `component` argument depend on the model class.
+#' Following are valid options:
+#' - `"all"`: returns all model components, applies to all models, but will only
+#'   have an effect for models with more than just the conditional model component.
+#' - `"conditional"`: only returns the conditional component, i.e. "fixed effects"
+#'   terms from the model. Will only have an effect for models with more than
+#'   just the conditional model component.
+#' - `"smooth_terms"`: returns smooth terms, only applies to GAMs (or similar
+#'   models that may contain smooth terms).
+#' - `"zero_inflated"` (or `"zi"`): returns the zero-inflation component.
+#' - `"dispersion"`: returns the dispersion model component. This is common
+#'   for models with zero-inflation or that can model the dispersion parameter.
+#' - `"instruments"`: for instrumental-variable or some fixed effects regression,
+#'   returns the instruments.
+#' - `"location"`: returns location parameters such as `conditional`,
+#'   `zero_inflated`, `smooth_terms`, or `instruments` (everything that are
+#'   fixed or random effects - depending on the `effects` argument - but no
+#'   auxiliary parameters).
+#' - `"distributional"` (or `"auxiliary"`): components like `sigma`, `dispersion`,
+#'   `beta` or `precision` (and other auxiliary parameters) are returned.
+#'
 #' @return A list of character vectors that represent the name(s) of the
 #'    predictor variables. Depending on the combination of the arguments
 #'    `effects` and `component`, the returned list has following
@@ -127,19 +149,33 @@ find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 find_predictors.fixest <- function(x, flatten = FALSE, ...) {
   response <- find_response(x)
   instruments <- x$iv_inst_names
+  endo <- x$iv_endo_fml
   cluster <- x$fixef_vars
+
+  if (!is.null(instruments)) {
+    instruments <- all.vars(stats::as.formula(paste0("~", paste(instruments, collapse = "+"))))
+  }
+  if (!is.null(endo)) {
+    endo <- all.vars(endo)
+  }
+  if (!is.null(cluster)) {
+    cluster <- all.vars(stats::as.formula(paste0("~", paste(cluster, collapse = "+"))))
+  }
+
   conditional <- all.vars(stats::formula(x))
   conditional <- setdiff(conditional, c(instruments, cluster, find_response(x)))
-  l <- list(
+
+  l <- compact_list(list(
     "conditional" = conditional,
     "cluster" = cluster,
-    "instruments" = instruments
-  )
-  l <- Filter(function(x) length(x) > 0, l)
-  if (isTRUE(flatten)) {
-    l <- unlist(l)
+    "instruments" = instruments,
+    "endogenous" = endo
+  ))
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
   }
-  l
 }
 
 

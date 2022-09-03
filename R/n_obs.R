@@ -86,7 +86,7 @@ n_obs.glm <- function(x, disaggregate = FALSE, ...) {
     resp_data <- get_response(x, verbose = FALSE)
 
     # response is a matrix of numbers of trials and successes
-    if (grepl("^cbind\\(", resp)) {
+    if (grepl("cbind(", resp, fixed = TRUE)) {
       trials <- trim_ws(sub("cbind\\((.*),(.*)\\)", "\\2", resp))
       if (grepl("-", trials, fixed = TRUE)) {
         .nobs <- sum(resp_data[[2]])
@@ -148,7 +148,7 @@ n_obs.gamm <- function(x, ...) {
   if (object_has_names(x, "gam")) {
     n_obs(x$gam, ...)
   } else {
-    stop("Cannot find n_obs for this object. Please an open an issue!")
+    stop("Cannot find n_obs for this object. Please an open an issue!", call. = FALSE)
   }
 }
 
@@ -485,6 +485,12 @@ n_obs.comprisk <- function(x, ...) {
 #' @export
 n_obs.riskRegression <- function(x, ...) {
   nrow(x$response)
+}
+
+
+#' @export
+n_obs.marginaleffects <- function(x, ...) {
+  n_obs(attributes(x)$model)
 }
 
 

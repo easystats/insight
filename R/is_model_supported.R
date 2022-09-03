@@ -44,8 +44,8 @@ supported_models <- function() {
 .supported_models_list <- function() {
   c(
     # a ----------------------------
-    "aareg", "afex_aov", "aov", "aovlist", "AKP", "Anova.mlm", "Arima",
-    "averaging",
+    "aareg", "afex_aov", "aov", "aovlist", "AKP", "Anova.mlm", "anova.rms",
+    "Arima", "averaging",
 
     # b ----------------------------
     "bamlss", "bamlss.frame", "bayesx", "bayesQR", "BBmm", "BBreg", "bcplm",
@@ -84,11 +84,12 @@ supported_models <- function() {
     "lqm", "lqmm", "lrm",
 
     # m ----------------------------
-    "manova", "MANOVA", "margins", "maxLik", "mcmc", "MCMCglmm", "mcp12", "mcp1",
-    "mcp2", "med1way", "mediate", "metaplus", "merMod", "merModList", "mipo",
-    "mira", "mixed", "mixor", "MixMod", "mhurdle", "mjoint", "mle", "mle2",
-    "mlm", "mclogit", "mcmc.list", "meta_bma", "meta_fixed", "meta_random",
-    "mlogit", "mmlogit", "model_fit", "multinom", "mvord",
+    "manova", "MANOVA", "margins", "marginaleffects", "marginaleffects.summary",
+    "maxLik", "mcmc", "MCMCglmm", "mcp12", "mcp1", "mcp2", "med1way", "mediate",
+    "metaplus", "merMod", "merModList", "mipo", "mira", "mixed", "mixor", "MixMod",
+    "mhurdle", "mjoint", "mle", "mle2", "mlm", "mclogit", "mcmc.list", "meta_bma",
+    "meta_fixed", "meta_random", "mlogit", "mmlogit", "model_fit", "multinom",
+    "mvord", "mblogit", "mmclogit",
 
     # n ----------------------------
     "negbinmfx", "negbinirr",

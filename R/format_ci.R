@@ -42,7 +42,6 @@ format_ci <- function(CI_low,
                       width_high = width,
                       missing = "",
                       zap_small = FALSE) {
-
   # check proper defaults
   if (isTRUE(brackets)) {
     ci_brackets <- c("[", "]")
@@ -70,7 +69,7 @@ format_ci <- function(CI_low,
 
     # round CI-values for standard rounding, or scientific
     if (is.numeric(CI_low) && is.numeric(CI_high)) {
-      if (is.numeric(digits) || (is.character(digits) && grepl("^scientific", digits))) {
+      if (is.numeric(digits) || (is.character(digits) && grepl("scientific", digits, fixed = TRUE))) {
         CI_low <- round(CI_low, sig_digits)
         CI_high <- round(CI_high, sig_digits)
       } else {
