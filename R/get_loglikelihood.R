@@ -98,6 +98,25 @@ get_loglikelihood.glmerMod <- function(x, check_response = FALSE, verbose = TRUE
 get_loglikelihood.glmmTMB <- get_loglikelihood.lmerMod
 
 #' @export
+get_loglikelihood.mblogit <- function(x, verbose = TRUE, ...) {
+  .loglikelihood_prep_output(
+    x,
+    lls = stats::logLik(x),
+    check_response = FALSE,
+    verbose = verbose,
+    REML = FALSE,
+    lls2 = .per_observation_ll(x),
+    ...
+  )
+}
+
+#' @export
+get_loglikelihood.mclogit <- get_loglikelihood.mblogit
+
+#' @export
+get_loglikelihood.mlogit <- get_loglikelihood.mblogit
+
+#' @export
 get_loglikelihood.model_fit <- function(x,
                                         estimator = "ML",
                                         REML = FALSE,
@@ -196,7 +215,10 @@ get_loglikelihood.afex_aov <- function(x, ...) {
 
   # Calculate Log Likelihoods depending on the family
   lls <- switch(fam,
-    binomial = {
+    binomial = ,
+    categorical = ,
+    multinomial = ,
+    ordinal = {
       stats::dbinom(round(n * resp), round(n), predicted, log = TRUE) * w
     },
     quasibinomial = {

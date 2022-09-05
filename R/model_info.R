@@ -154,7 +154,7 @@ model_info.anova <- function(x, verbose = TRUE, ...) {
 model_info.mclogit <- function(x, verbose = TRUE, ...) {
   .make_family(
     x,
-    family = "categorical",
+    fitfam = "categorical",
     logit.link = TRUE,
     link.fun = "logit",
     verbose = verbose,

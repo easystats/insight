@@ -25,6 +25,10 @@
 * `get_data()` for models of class `geeglm` and `fixest`now more reliably
   retrieves the model data.
 
+## New supported models
+
+* Support for models of class `mblogit` and `mclogit`.
+
 ## Bug fixes
 
 * Fixed issues with wrong attribute `adjusted_for` in `insight::get_datagrid()`.
