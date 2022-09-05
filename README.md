@@ -208,9 +208,9 @@ l <- as.data.frame(l)
 
 cbind(l, predictions = predict(m, newdata = l))
 #>      Species Petal.Width Sepal.Width predictions
-#> 1     setosa    1.199333    3.057333    5.101427
-#> 2 versicolor    1.199333    3.057333    6.089557
-#> 3  virginica    1.199333    3.057333    6.339015
+#> 1     setosa         1.2         3.1         5.1
+#> 2 versicolor         1.2         3.1         6.1
+#> 3  virginica         1.2         3.1         6.3
 ```
 
 #### Printing Model Coefficients
