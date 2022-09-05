@@ -381,18 +381,20 @@ if (.runThisTest &&
     data = sleepstudy
   )
 
-  m4 <- lme4::lmer(Reaction ~ (1 |
-    mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
+  m4 <- lme4::lmer(
+    Reaction ~ (1 |
+      mygrp / mysubgrp) + (1 | Subject),
+    data = sleepstudy
   )
 
   m5 <- lme4::lmer(Reaction ~ 1 + (1 + Days | Subject),
     data = sleepstudy
   )
 
-  m6 <- lme4::lmer(Reaction ~ 1 + (1 |
-    mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
+  m6 <- lme4::lmer(
+    Reaction ~ 1 + (1 |
+      mygrp / mysubgrp) + (1 | Subject),
+    data = sleepstudy
   )
 
   test_that("find_formula", {

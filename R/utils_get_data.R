@@ -121,7 +121,8 @@
   if (any(mc)) {
     # try to get model data from environment
     md <- tryCatch(eval(model_call$data, environment(stats::formula(x))),
-                   error = function(x) NULL)
+      error = function(x) NULL
+    )
 
     # in case we have missing data, the data frame in the environment
     # has more rows than the model frame
@@ -240,7 +241,8 @@
 
     # check if we really have all formula terms in our model frame now
     pv <- tryCatch(find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose),
-                   error = function(x) NULL)
+      error = function(x) NULL
+    )
 
     # still some undetected matrix-variables?
     if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
@@ -958,7 +960,7 @@
 
         # preserve table data for McNemar
         if (!grepl(" (and|by) ", x$data.name) &&
-            (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+          (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           return(as.table(columns[[1]]))
           # check if data is a list for kruskal-wallis
         } else if (grepl("^Kruskal-Wallis", x$method) && length(columns) == 1 && is.list(columns[[1]])) {

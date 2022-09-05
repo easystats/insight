@@ -78,12 +78,13 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
     # treated as "interaction"
     .x <- sub("\\[(\\d+):(\\d+)\\]", "", .x)
     if (grepl(":", .x, fixed = TRUE) && !grepl("::", .x, fixed = TRUE)) {
-      paste(sapply(
-        strsplit(.x, ":", fixed = TRUE),
-        .remove_pattern_from_names,
-        is_emmeans = is_emmeans
-      ),
-      collapse = ":"
+      paste(
+        sapply(
+          strsplit(.x, ":", fixed = TRUE),
+          .remove_pattern_from_names,
+          is_emmeans = is_emmeans
+        ),
+        collapse = ":"
       )
     } else {
       .remove_pattern_from_names(.x, is_emmeans = is_emmeans)

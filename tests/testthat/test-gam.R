@@ -99,11 +99,12 @@ if (.runThisTest) {
       expect_length(find_formula(m3), 2)
       expect_equal(
         find_formula(m3),
-        structure(list(
-          y0 = list(conditional = as.formula("y0 ~ s(x0) + s(x1)")),
-          y1 = list(conditional = as.formula("y1 ~ s(x2) + s(x3)"))
-        ),
-        is_mv = "1"
+        structure(
+          list(
+            y0 = list(conditional = as.formula("y0 ~ s(x0) + s(x1)")),
+            y1 = list(conditional = as.formula("y1 ~ s(x2) + s(x3)"))
+          ),
+          is_mv = "1"
         ),
         ignore_attr = TRUE
       )

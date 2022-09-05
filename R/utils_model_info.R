@@ -295,8 +295,8 @@
 
   # exceptions: car::leveneTest
   if (inherits(x, "anova") &&
-      !is.null(attributes(x)$heading) &&
-      grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
+    !is.null(attributes(x)$heading) &&
+    grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
     is_levenetest <- TRUE
   }
 

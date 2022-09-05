@@ -321,27 +321,28 @@ if (.runThisTest) {
 
       expect_equal(
         find_parameters(m2),
-        structure(list(
-          SepalLength = list(
-            conditional = c(
-              "b_SepalLength_Intercept",
-              "b_SepalLength_Petal.Length",
-              "b_SepalLength_Sepal.Width",
-              "b_SepalLength_Speciesversicolor",
-              "b_SepalLength_Speciesvirginica"
+        structure(
+          list(
+            SepalLength = list(
+              conditional = c(
+                "b_SepalLength_Intercept",
+                "b_SepalLength_Petal.Length",
+                "b_SepalLength_Sepal.Width",
+                "b_SepalLength_Speciesversicolor",
+                "b_SepalLength_Speciesvirginica"
+              ),
+              sigma = "sigma_SepalLength"
             ),
-            sigma = "sigma_SepalLength"
+            SepalWidth = list(
+              conditional = c(
+                "b_SepalWidth_Intercept",
+                "b_SepalWidth_Speciesversicolor",
+                "b_SepalWidth_Speciesvirginica"
+              ),
+              sigma = "sigma_SepalWidth"
+            )
           ),
-          SepalWidth = list(
-            conditional = c(
-              "b_SepalWidth_Intercept",
-              "b_SepalWidth_Speciesversicolor",
-              "b_SepalWidth_Speciesvirginica"
-            ),
-            sigma = "sigma_SepalWidth"
-          )
-        ),
-        "is_mv" = "1"
+          "is_mv" = "1"
         )
       )
 
@@ -357,25 +358,26 @@ if (.runThisTest) {
 
       expect_equal(
         find_parameters(m5, effects = "all"),
-        structure(list(
-          count = list(
-            conditional = c("b_count_Intercept", "b_count_child", "b_count_camper"),
-            random = c(sprintf("r_persons__count[%i,Intercept]", 1:4), "sd_persons__count_Intercept"),
-            zero_inflated = c("b_zi_count_Intercept", "b_zi_count_camper"),
-            zero_inflated_random = c(sprintf("r_persons__zi_count[%i,Intercept]", 1:4), "sd_persons__zi_count_Intercept")
-          ),
-          count2 = list(
-            conditional = c(
-              "b_count2_Intercept",
-              "b_count2_child",
-              "b_count2_livebait"
+        structure(
+          list(
+            count = list(
+              conditional = c("b_count_Intercept", "b_count_child", "b_count_camper"),
+              random = c(sprintf("r_persons__count[%i,Intercept]", 1:4), "sd_persons__count_Intercept"),
+              zero_inflated = c("b_zi_count_Intercept", "b_zi_count_camper"),
+              zero_inflated_random = c(sprintf("r_persons__zi_count[%i,Intercept]", 1:4), "sd_persons__zi_count_Intercept")
             ),
-            random = c(sprintf("r_persons__count2[%i,Intercept]", 1:4), "sd_persons__count2_Intercept"),
-            zero_inflated = c("b_zi_count2_Intercept", "b_zi_count2_child"),
-            zero_inflated_random = c(sprintf("r_persons__zi_count2[%i,Intercept]", 1:4), "sd_persons__zi_count2_Intercept")
-          )
-        ),
-        "is_mv" = "1"
+            count2 = list(
+              conditional = c(
+                "b_count2_Intercept",
+                "b_count2_child",
+                "b_count2_livebait"
+              ),
+              random = c(sprintf("r_persons__count2[%i,Intercept]", 1:4), "sd_persons__count2_Intercept"),
+              zero_inflated = c("b_zi_count2_Intercept", "b_zi_count2_child"),
+              zero_inflated_random = c(sprintf("r_persons__zi_count2[%i,Intercept]", 1:4), "sd_persons__zi_count2_Intercept")
+            )
+          ),
+          "is_mv" = "1"
         )
       )
     })

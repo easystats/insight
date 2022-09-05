@@ -570,7 +570,8 @@ get_statistic.coxph <- function(x, ...) {
     Parameter = row.names(cs),
     Statistic = cs[, column_index, drop = TRUE],
     stringsAsFactors = FALSE,
-    row.names = NULL)
+    row.names = NULL
+  )
   out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out

@@ -774,7 +774,8 @@ get_data.feis <- function(x, effects = "all", verbose = TRUE, ...) {
   # original data does not appear to be stored in the model object
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- tryCatch(.recover_data_from_environment(x),
-                 error = function(x) stats::model.frame(x))
+    error = function(x) stats::model.frame(x)
+  )
   .get_data_from_modelframe(x, mf, effects, verbose = verbose)
 }
 

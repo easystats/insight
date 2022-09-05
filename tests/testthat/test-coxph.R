@@ -140,10 +140,11 @@ test_that("JM", {
 
 test_that("get_statistic", {
   requiet("survival")
-  bladder1 <- bladder[bladder$enum < 5, ] 
+  bladder1 <- bladder[bladder$enum < 5, ]
   mod <- coxph(
     Surv(stop, event) ~ (rx + size + number) * strata(enum),
-    cluster = id, bladder1, robust = TRUE)
+    cluster = id, bladder1, robust = TRUE
+  )
   z1 <- get_statistic(mod)$Statistic
   z2 <- coef(summary(mod))[, "z"]
   expect_equal(z1, z2, ignore_attr = TRUE)

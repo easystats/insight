@@ -241,7 +241,8 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && requiet("gl
     )
 
     grid <- insight::get_datagrid(
-      model, at = "k618", range = "grid", preserve_range = FALSE,
+      model,
+      at = "k618", range = "grid", preserve_range = FALSE,
       verbose = FALSE, include_response = TRUE
     )
     expect_equal(

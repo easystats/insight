@@ -233,8 +233,10 @@ format_table <- function(x,
     x$p.value <- format(x$p.value, justify = "left")
   }
 
-  for (stats in c("p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA",
-                  "p_ROPE", "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR")) {
+  for (stats in c(
+    "p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA",
+    "p_ROPE", "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR"
+  )) {
     if (stats %in% names(x)) {
       x[[stats]] <- format_p(x[[stats]], stars = stars, name = NULL, missing = "", digits = p_digits)
       x[[stats]] <- format(x[[stats]], justify = "left")
@@ -617,9 +619,11 @@ format_table <- function(x,
 
   # add IC weights to IC columns. The next code lines only apply if we have
   # both the IC and IC weights in the data frame
-  all_ics <- list(AIC = c("AIC", "AIC_wt"), BIC = c("BIC", "BIC_wt"),
-                  AICc = c("AICc", "AICc_wt"), WAIC = c("WAIC", "WAIC_wt"),
-                  LOOIC = c("LOOIC", "LOOIC_wt"))
+  all_ics <- list(
+    AIC = c("AIC", "AIC_wt"), BIC = c("BIC", "BIC_wt"),
+    AICc = c("AICc", "AICc_wt"), WAIC = c("WAIC", "WAIC_wt"),
+    LOOIC = c("LOOIC", "LOOIC_wt")
+  )
   for (ic in names(all_ics)) {
     ics <- all_ics[[ic]]
     if (all(ics %in% colnames(x))) {
