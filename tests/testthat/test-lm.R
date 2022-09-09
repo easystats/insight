@@ -273,4 +273,10 @@ if (requiet("testthat") &&
     expect_identical(find_statistic(m3), "t-statistic")
     expect_identical(find_statistic(m4), "z-statistic")
   })
+
+  test_that("find_statistic", {
+    data("mtcars")
+    m <- lm(cbind(mpg, hp) ~ cyl + drat, data = mtcars)
+    expect_s3_class(get_predicted(m), "get_predicted")
+  })
 }
