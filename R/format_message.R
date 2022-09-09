@@ -114,17 +114,17 @@ format_alert <- function(string, ..., line_length = 0.9 * getOption("width", 89)
   if (type == "message") {
     message(format_message(
       string = string, ...,
-      line_length = 0.9 * getOption("width", 89), indent = "  "
+      line_length = line_length, indent = indent
     ))
   } else if (type == "warning") {
     warning(format_message(
       string = string, ...,
-      line_length = 0.9 * getOption("width", 89), indent = "  "
+      line_length = line_length, indent = indent
     ), call. = call.)
   } else {
     stop(format_message(
       string = string, ...,
-      line_length = 0.9 * getOption("width", 89), indent = "  "
+      line_length = line_length, indent = indent
     ), call. = call.)
   }
 }
