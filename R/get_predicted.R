@@ -315,6 +315,7 @@ get_predicted.lm <- function(x,
     data = args$data,
     ci = ci,
     ci_type = args$ci_type,
+    verbose = verbose,
     ...
   )
 

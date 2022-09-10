@@ -39,6 +39,8 @@
 * Fixed issue where `get_predicted()` failed when data contains factors with 
   only one or incomplete levels.
 
+* Fixed issue in `get_predicted()` for models of class `mlm`.
+
 * Fixed issue where `get_predicted()` failed to compute confidence intervals
   of predictions when model contained matrix-alike response columns, e.g. a 
   response variable created with `cbind()`.

@@ -73,8 +73,8 @@
   }
   if (isTRUE(flag_matrix) && isTRUE(verbose)) {
     message(format_message(
-      "Some of the variables were in matrix-format - probably you used 'scale()' on your data?",
-      "If so, and you get an error, please try 'datawizard::standardize()' to standardize your data."
+      "Some of the variables were in matrix-format - probably you used `scale()` on your data?",
+      "If so, and you get an error, please try `datawizard::standardize()` to standardize your data."
     ))
   }
 
