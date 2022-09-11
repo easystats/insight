@@ -88,13 +88,29 @@ matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
 
 \item{predict}{string or \code{NULL}
 \itemize{
-\item \code{"link"} returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).
-\item \code{"expectation"} (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).
-\item \code{"prediction"} also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models).
-\item \code{"classification"} only differs from \code{"prediction"} for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor).
-\item Other strings are passed directly to the \code{type} argument of the \code{predict()} method supplied by the modelling package.
-\item When \code{predict = NULL}, alternative arguments such as \code{type} will be captured by the \code{...} ellipsis and passed directly to the \code{predict()} method supplied by the modelling package. Note that this might result in conflicts with multiple matching \code{type} arguments - thus, the recommendation is to use the \code{predict} argument for those values.
-\item Notes: You can see the 4 options for predictions as on a gradient from "close to the model" to "close to the response data": "link", "expectation", "prediction", "classification". The \code{predict} argument modulates two things: the scale of the output and the type of certainty interval. Read more about in the \strong{Details} section below.
+\item \code{"link"} returns predictions on the model's link-scale (for logistic models,
+that means the log-odds scale) with a confidence interval (CI).
+\item \code{"expectation"} (default) also returns confidence intervals, but this time
+the output is on the response scale (for logistic models, that means
+probabilities).
+\item \code{"prediction"} also gives an output on the response scale, but this time
+associated with a prediction interval (PI), which is larger than a confidence
+interval (though it mostly make sense for linear models).
+\item \code{"classification"} only differs from \code{"prediction"} for binomial models
+where it additionally transforms the predictions into the original response's
+type (for instance, to a factor).
+\item Other strings are passed directly to the \code{type} argument of the \code{predict()}
+method supplied by the modelling package.
+\item When \code{predict = NULL}, alternative arguments such as \code{type} will be captured
+by the \code{...} ellipsis and passed directly to the \code{predict()} method supplied
+by the modelling package. Note that this might result in conflicts with
+multiple matching \code{type} arguments - thus, the recommendation is to use the
+\code{predict} argument for those values.
+\item Notes: You can see the 4 options for predictions as on a gradient from
+"close to the model" to "close to the response data": "link", "expectation",
+"prediction", "classification". The \code{predict} argument modulates two things:
+the scale of the output and the type of certainty interval. Read more about
+in the \strong{Details} section below.
 }}
 
 \item{ci}{The interval level. Default is \code{NULL}, to be fast even for larger
@@ -116,15 +132,18 @@ other models (e.g., \code{glm}), prediction intervals are somewhat useless
 (for instance, for a binomial model for which the dependent variable is a
 vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 
-\item{ci_method}{The method for computing p values and confidence intervals. Possible values depend on model type.
+\item{ci_method}{The method for computing p values and confidence intervals.
+Possible values depend on model type.
 \itemize{
 \item \code{NULL} uses the default method, which varies based on the model type.
 \item Most frequentist models: \code{"normal"} (default).
 \item Bayesian models:  \code{"quantile"}  (default), \code{"hdi"}, \code{"eti"}, and \code{"spi"}.
-\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, and \code{"kenward"}.
+\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, and
+\code{"kenward"}.
 }}
 
-\item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary: \code{"sd"} or \code{"mad"}.}
+\item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary:
+\code{"sd"} or \code{"mad"}.}
 
 \item{vcov}{Variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors). This argument accepts a covariance matrix, a function which returns a covariance matrix, or a string which identifies the function to be used to compute the covariance matrix.
 \itemize{
