@@ -3,11 +3,17 @@
 #'
 #' @description Inserts line breaks into a longer message or warning string.
 #'   Line length is adjusted to maximum length of the console, if the width
-#'   can be accessed. By default, new lines are indented by two whitespace.
+#'   can be accessed. By default, new lines are indented by two spaces.
+#'
+#'   `format_alert()` is a wrapper that combines formatting a string with a
+#'   call to `message()`, `warning()` or `stop()`. By default, `format_alert()`
+#'   creates a `message()`. `format_warning()` and `format_error()` change the
+#'   default type of exception to `warning()` and `stop()`, respectively.
 #'
 #' @param string A string.
 #' @param ... Further strings that will be concatenated as indented new lines.
 #' @param line_length Numeric, the maximum length of a line.
+#'   The default is 90% of the width of the console window.
 #' @param indent Character vector. If further lines are specified in `...`, a
 #' user-defined string can be specified to indent subsequent lines. Defaults to
 #' `"  "` (two white spaces), hence for each start of the line after the first
@@ -29,7 +35,9 @@
 #' format tag (`{.b one two three}`), a line break might occur inside this tag,
 #' and the formatting no longer works (messing up the message-string).
 #'
-#' @return A formatted string.
+#' @return For `format_message()`, a formatted string.
+#'   For `format_alert()` and related functions, the requested exception,
+#'   with the exception formatted using `format_message()`.
 #' @examples
 #' msg <- format_message("Much too long string for just one line, I guess!",
 #'   line_length = 15
@@ -61,14 +69,17 @@
 #' message(msg)
 #'
 #' @export
-format_message <- function(string, ..., line_length = 0.9 * options()$width, indent = "  ") {
+format_message <- function(string,
+                           ...,
+                           line_length = 0.9 * getOption("width", 80),
+                           indent = "  ") {
   if (is.null(line_length) || is.infinite(line_length) || line_length < 1) {
     line_length <- 70
   }
 
   all_lines <- c(string, ...)
 
-  string <- .wrap_message_line(all_lines[1], line_length)
+  string <- .wrap_message_line(all_lines[1], line_length = line_length)
   further_lines <- all_lines[-1]
 
   if (length(further_lines)) {
@@ -81,7 +92,68 @@ format_message <- function(string, ..., line_length = 0.9 * options()$width, ind
   string
 }
 
+#' @name format_alert
+#' @rdname format_message
+#'
+#' @param type Type of exception alert to raise.
+#'   Can be `"message"` for `message()`, `"warning"` for `warning()`,
+#'   or `"error"` for `stop()`.
+#' @param call. Logical. Indicating if the call should be included in the the
+#'   error message. This is usually confusing for users when the function
+#'   producing the warning or error is deep within another function, so the
+#'   default is `FALSE`.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   format_alert("This is a message.")
+#'   format_alert("This is a warning.", type = "warning")
+#'   format_warning("This is a warning.")
+#'   format_error("This is an error.")
+#' }
+format_alert <- function(string,
+                         ...,
+                         line_length = 0.9 * getOption("width", 80),
+                         indent = "  ",
+                         type = "message",
+                         call. = FALSE) {
+  type <- match.arg(type, choices = c("message", "warning", "error"))
+  if (type == "message") {
+    message(format_message(
+      string = string, ...,
+      line_length = line_length, indent = indent
+    ))
+  } else if (type == "warning") {
+    warning(format_message(
+      string = string, ...,
+      line_length = line_length, indent = indent
+    ), call. = call.)
+  } else {
+    stop(format_message(
+      string = string, ...,
+      line_length = line_length, indent = indent
+    ), call. = call.)
+  }
+}
 
+#' @name format_warning
+#' @rdname format_message
+#' @export
+format_warning <- function(...) {
+  format_alert(..., type = "warning")
+}
+
+#' @name format_error
+#' @rdname format_message
+#' @export
+format_error <- function(...) {
+  format_alert(..., type = "error")
+}
+
+
+
+# helper -----------------------
 
 .wrap_message_line <- function(string, line_length, indent = NULL) {
   line_length <- round(line_length)

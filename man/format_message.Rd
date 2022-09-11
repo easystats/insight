@@ -2,29 +2,67 @@
 % Please edit documentation in R/format_message.R
 \name{format_message}
 \alias{format_message}
+\alias{format_alert}
+\alias{format_warning}
+\alias{format_error}
 \title{Format messages and warnings}
 \usage{
-format_message(string, ..., line_length = 0.9 * options()$width, indent = "  ")
+format_message(
+  string,
+  ...,
+  line_length = 0.9 * getOption("width", 80),
+  indent = "  "
+)
+
+format_alert(
+  string,
+  ...,
+  line_length = 0.9 * getOption("width", 80),
+  indent = "  ",
+  type = "message",
+  call. = FALSE
+)
+
+format_warning(...)
+
+format_error(...)
 }
 \arguments{
 \item{string}{A string.}
 
 \item{...}{Further strings that will be concatenated as indented new lines.}
 
-\item{line_length}{Numeric, the maximum length of a line.}
+\item{line_length}{Numeric, the maximum length of a line.
+The default is 90\% of the width of the console window.}
 
 \item{indent}{Character vector. If further lines are specified in \code{...}, a
 user-defined string can be specified to indent subsequent lines. Defaults to
 \code{"  "} (two white spaces), hence for each start of the line after the first
 line, two white space characters are inserted.}
+
+\item{type}{Type of exception alert to raise.
+Can be \code{"message"} for \code{message()}, \code{"warning"} for \code{warning()},
+or \code{"error"} for \code{stop()}.}
+
+\item{call.}{Logical. Indicating if the call should be included in the the
+error message. This is usually confusing for users when the function
+producing the warning or error is deep within another function, so the
+default is \code{FALSE}.}
 }
 \value{
-A formatted string.
+For \code{format_message()}, a formatted string.
+For \code{format_alert()} and related functions, the requested exception,
+with the exception formatted using \code{format_message()}.
 }
 \description{
 Inserts line breaks into a longer message or warning string.
 Line length is adjusted to maximum length of the console, if the width
-can be accessed. By default, new lines are indented by two whitespace.
+can be accessed. By default, new lines are indented by two spaces.
+
+\code{format_alert()} is a wrapper that combines formatting a string with a
+call to \code{message()}, \code{warning()} or \code{stop()}. By default, \code{format_alert()}
+creates a \code{message()}. \code{format_warning()} and \code{format_error()} change the
+default type of exception to \code{warning()} and \code{stop()}, respectively.
 }
 \details{
 There is an experimental formatting feature implemented in this function.
@@ -74,4 +112,10 @@ msg <- format_message(
 )
 message(msg)
 
+\dontrun{
+  format_alert("This is a message.")
+  format_alert("This is a warning.", type = "warning")
+  format_warning("This is a warning.")
+  format_error("This is an error.")
+}
 }
