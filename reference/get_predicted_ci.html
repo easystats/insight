@@ -163,15 +163,18 @@ vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd
 
 
 <dt>ci_method</dt>
-<dd><p>The method for computing p values and confidence intervals. Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the default method, which varies based on the model type.</p></li>
+<dd><p>The method for computing p values and confidence intervals.
+Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the default method, which varies based on the model type.</p></li>
 <li><p>Most frequentist models: <code>"normal"</code> (default).</p></li>
 <li><p>Bayesian models:  <code>"quantile"</code>  (default), <code>"hdi"</code>, <code>"eti"</code>, and <code>"spi"</code>.</p></li>
-<li><p>Mixed effects <strong>lme4</strong> models: <code>"normal"</code> (default), <code>"satterthwaite"</code>, and <code>"kenward"</code>.</p></li>
+<li><p>Mixed effects <strong>lme4</strong> models: <code>"normal"</code> (default), <code>"satterthwaite"</code>, and
+<code>"kenward"</code>.</p></li>
 </ul></dd>
 
 
 <dt>dispersion_method</dt>
-<dd><p>Bootstrap dispersion and Bayesian posterior summary: <code>"sd"</code> or <code>"mad"</code>.</p></dd>
+<dd><p>Bootstrap dispersion and Bayesian posterior summary:
+<code>"sd"</code> or <code>"mad"</code>.</p></dd>
 
 
 <dt>vcov</dt>

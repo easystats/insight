@@ -223,13 +223,29 @@ matrices can be generated using <code><a href="get_datagrid.html">get_datagrid()
 
 
 <dt>predict</dt>
-<dd><p>string or <code>NULL</code></p><ul><li><p><code>"link"</code> returns predictions on the model's link-scale (for logistic models, that means the log-odds scale) with a confidence interval (CI).</p></li>
-<li><p><code>"expectation"</code> (default) also returns confidence intervals, but this time the output is on the response scale (for logistic models, that means probabilities).</p></li>
-<li><p><code>"prediction"</code> also gives an output on the response scale, but this time associated with a prediction interval (PI), which is larger than a confidence interval (though it mostly make sense for linear models).</p></li>
-<li><p><code>"classification"</code> only differs from <code>"prediction"</code> for binomial models where it additionally transforms the predictions into the original response's type (for instance, to a factor).</p></li>
-<li><p>Other strings are passed directly to the <code>type</code> argument of the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method supplied by the modelling package.</p></li>
-<li><p>When <code>predict = NULL</code>, alternative arguments such as <code>type</code> will be captured by the <code>...</code> ellipsis and passed directly to the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method supplied by the modelling package. Note that this might result in conflicts with multiple matching <code>type</code> arguments - thus, the recommendation is to use the <code>predict</code> argument for those values.</p></li>
-<li><p>Notes: You can see the 4 options for predictions as on a gradient from "close to the model" to "close to the response data": "link", "expectation", "prediction", "classification". The <code>predict</code> argument modulates two things: the scale of the output and the type of certainty interval. Read more about in the <strong>Details</strong> section below.</p></li>
+<dd><p>string or <code>NULL</code></p><ul><li><p><code>"link"</code> returns predictions on the model's link-scale (for logistic models,
+that means the log-odds scale) with a confidence interval (CI).</p></li>
+<li><p><code>"expectation"</code> (default) also returns confidence intervals, but this time
+the output is on the response scale (for logistic models, that means
+probabilities).</p></li>
+<li><p><code>"prediction"</code> also gives an output on the response scale, but this time
+associated with a prediction interval (PI), which is larger than a confidence
+interval (though it mostly make sense for linear models).</p></li>
+<li><p><code>"classification"</code> only differs from <code>"prediction"</code> for binomial models
+where it additionally transforms the predictions into the original response's
+type (for instance, to a factor).</p></li>
+<li><p>Other strings are passed directly to the <code>type</code> argument of the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>
+method supplied by the modelling package.</p></li>
+<li><p>When <code>predict = NULL</code>, alternative arguments such as <code>type</code> will be captured
+by the <code>...</code> ellipsis and passed directly to the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method supplied
+by the modelling package. Note that this might result in conflicts with
+multiple matching <code>type</code> arguments - thus, the recommendation is to use the
+<code>predict</code> argument for those values.</p></li>
+<li><p>Notes: You can see the 4 options for predictions as on a gradient from
+"close to the model" to "close to the response data": "link", "expectation",
+"prediction", "classification". The <code>predict</code> argument modulates two things:
+the scale of the output and the type of certainty interval. Read more about
+in the <strong>Details</strong> section below.</p></li>
 </ul></dd>
 
 
@@ -257,15 +273,18 @@ vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd
 
 
 <dt>ci_method</dt>
-<dd><p>The method for computing p values and confidence intervals. Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the default method, which varies based on the model type.</p></li>
+<dd><p>The method for computing p values and confidence intervals.
+Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the default method, which varies based on the model type.</p></li>
 <li><p>Most frequentist models: <code>"normal"</code> (default).</p></li>
 <li><p>Bayesian models:  <code>"quantile"</code>  (default), <code>"hdi"</code>, <code>"eti"</code>, and <code>"spi"</code>.</p></li>
-<li><p>Mixed effects <strong>lme4</strong> models: <code>"normal"</code> (default), <code>"satterthwaite"</code>, and <code>"kenward"</code>.</p></li>
+<li><p>Mixed effects <strong>lme4</strong> models: <code>"normal"</code> (default), <code>"satterthwaite"</code>, and
+<code>"kenward"</code>.</p></li>
 </ul></dd>
 
 
 <dt>dispersion_method</dt>
-<dd><p>Bootstrap dispersion and Bayesian posterior summary: <code>"sd"</code> or <code>"mad"</code>.</p></dd>
+<dd><p>Bootstrap dispersion and Bayesian posterior summary:
+<code>"sd"</code> or <code>"mad"</code>.</p></dd>
 
 
 <dt>vcov</dt>
