@@ -10,22 +10,22 @@
 format_message(
   string,
   ...,
-  line_length = 0.9 * getOption("width", 89),
+  line_length = 0.9 * getOption("width", 80),
   indent = "  "
 )
 
 format_alert(
   string,
   ...,
-  line_length = 0.9 * getOption("width", 89),
+  line_length = 0.9 * getOption("width", 80),
   indent = "  ",
-  type = c("message", "warning", "error"),
+  type = "message",
   call. = FALSE
 )
 
-format_warning(..., type = "warning")
+format_warning(...)
 
-format_error(..., type = "error")
+format_error(...)
 }
 \arguments{
 \item{string}{A string.}

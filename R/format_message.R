@@ -69,14 +69,17 @@
 #' message(msg)
 #'
 #' @export
-format_message <- function(string, ..., line_length = 0.9 * getOption("width", 89), indent = "  ") {
+format_message <- function(string,
+                           ...,
+                           line_length = 0.9 * getOption("width", 80),
+                           indent = "  ") {
   if (is.null(line_length) || is.infinite(line_length) || line_length < 1) {
     line_length <- 70
   }
 
   all_lines <- c(string, ...)
 
-  string <- .wrap_message_line(all_lines[1], line_length)
+  string <- .wrap_message_line(all_lines[1], line_length = line_length)
   further_lines <- all_lines[-1]
 
   if (length(further_lines)) {
@@ -109,7 +112,12 @@ format_message <- function(string, ..., line_length = 0.9 * getOption("width", 8
 #'   format_warning("This is a warning.")
 #'   format_error("This is an error.")
 #' }
-format_alert <- function(string, ..., line_length = 0.9 * getOption("width", 89), indent = "  ", type = c("message", "warning", "error"), call. = FALSE) {
+format_alert <- function(string,
+                         ...,
+                         line_length = 0.9 * getOption("width", 80),
+                         indent = "  ",
+                         type = "message",
+                         call. = FALSE) {
   type <- match.arg(type, choices = c("message", "warning", "error"))
   if (type == "message") {
     message(format_message(
@@ -132,17 +140,20 @@ format_alert <- function(string, ..., line_length = 0.9 * getOption("width", 89)
 #' @name format_warning
 #' @rdname format_message
 #' @export
-format_warning <- function(..., type = "warning") {
-  format_alert(..., type = type)
+format_warning <- function(...) {
+  format_alert(..., type = "warning")
 }
 
 #' @name format_error
 #' @rdname format_message
 #' @export
-format_error <- function(..., type = "error") {
-  format_alert(..., type = type)
+format_error <- function(...) {
+  format_alert(..., type = "error")
 }
 
+
+
+# helper -----------------------
 
 .wrap_message_line <- function(string, line_length, indent = NULL) {
   line_length <- round(line_length)
