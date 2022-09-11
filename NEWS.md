@@ -1,5 +1,12 @@
 # insight 0.18.3
 
+## New functions
+
+* `format_alert()`, `format_warning()` and `format_error()`, as convenient
+  wrappers around `message()`, `warning()` or `stop()` in combination with
+  `format_message()`. You can use these funcionts to format messages, warnings
+  or errors.
+
 ## Changes to functions
 
 * `get_predicted()` for models of class `clm` now includes confidence intervals
@@ -8,7 +15,7 @@
 * `format_message()` gets some additional formatting features. See 'Details'
   in `?format_message` for more information and some current limitations.
 
-* `format_message()` gets an `indention` argument, to specify indention string
+* `format_message()` gets an `indent` argument, to specify indention string
   for subsequent lines.
 
 * `format_table()` now merges IC and IC weights columns into one column (e.g.,
