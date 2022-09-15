@@ -37,7 +37,6 @@ if (requiet("testthat") &&
     expect_identical(find_response(m2), "mode")
   })
 
-  if (getRversion() >= "3.6.0") {
     test_that("get_response", {
       expect_equal(get_response(m1), as.vector(Fish$mode))
     })
