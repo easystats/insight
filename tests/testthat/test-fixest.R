@@ -1,4 +1,5 @@
 skip_on_os("mac")
+skip_if(getRversion() < "3.6.0")
 skip_if_not_installed("fixest")
 requiet("fixest")
 

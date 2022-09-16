@@ -1,9 +1,5 @@
 # insight 0.18.3
 
-## BREAKING CHANGES
-
-* The minimum needed R version has been bumped to `3.6`.
-
 ## New functions
 
 * `format_alert()`, `format_warning()` and `format_error()`, as convenient
