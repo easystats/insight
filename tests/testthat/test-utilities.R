@@ -1,13 +1,15 @@
 test_that("trim_ws() works with data frames", {
   test_trim <- data.frame(
     x = 1:5,
-    y = c("a", "b c", " d", "e f ", "g ")
+    y = c("a", "b c", " d", "e f ", "g "),
+    stringsAsFactors = FALSE
   )
   expect_equal(
     trim_ws(test_trim),
     data.frame(
       x = 1:5,
-      y = c("a", "b c", "d", "e f", "g")
+      y = c("a", "b c", "d", "e f", "g"),
+      stringsAsFactors = FALSE
     )
   )
 })
