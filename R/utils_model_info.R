@@ -273,6 +273,10 @@
       binom_fam <- TRUE
       is_binomtest <- TRUE
       fitfam <- "binomial"
+    } else if (x$method == "Shapiro-Wilk normality test") {
+      ## TODO: what family and test?
+    } else if (grepl("Bartlett test", x$method, fixed = TRUE)) {
+      ## TODO: what family and test?
     } else if (grepl("\\d+-sample(.*)proportions(.*)", x$method)) {
       binom_fam <- TRUE
       is_proptest <- TRUE
