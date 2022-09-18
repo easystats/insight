@@ -565,7 +565,7 @@ get_statistic.coxph <- function(x, ...) {
   # avoid calling default method which would be computationally wasteful, since
   # we need summary() here.
   cs <- suppressWarnings(stats::coef(summary(x)))
-  column_index <- grep("^z$|^t$", colnames(cs))
+  column_index <- grep("^z$|^t$|Chisq", colnames(cs))
   out <- data.frame(
     Parameter = row.names(cs),
     Statistic = cs[, column_index, drop = TRUE],
