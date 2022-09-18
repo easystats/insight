@@ -1,6 +1,6 @@
 testthat::skip_on_cran()
 
-if (requiet("marginaleffects") && requiet("insight") && requiet("testthat")) {
+if (requiet("marginaleffects") && requiet("insight") && requiet("emmeans") && requiet("testthat")) {
   test_that("marginaleffects", {
     m <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
