@@ -59,6 +59,40 @@ test_that("mgcv", {
   )
 })
 
+test_that("lm with poly and NA in response", {
+  s1 <- summary(iris$Sepal.Length)
+  model <- lm(Petal.Length ~ log(Sepal.Width) + Sepal.Length,
+    data = iris
+  )
+  # Same min-max
+  s2 <- summary(insight::get_data(model)$Sepal.Length)
+
+  model <- lm(Petal.Length ~ log(1 + Sepal.Width) + Sepal.Length,
+    data = iris
+  )
+  s3 <- summary(insight::get_data(model)$Sepal.Length)
+
+  model <- lm(Petal.Length ~ log(Sepal.Width + 1) + Sepal.Length,
+    data = iris
+  )
+  s4 <- summary(insight::get_data(model)$Sepal.Length)
+
+  model <- lm(Petal.Length ~ log1p(Sepal.Width) + Sepal.Length,
+    data = iris
+  )
+  s5 <- summary(insight::get_data(model)$Sepal.Length)
+
+  expect_equal(s1, s2, tolerance = 1e-4)
+  expect_equal(s1, s3, tolerance = 1e-4)
+  expect_equal(s1, s4, tolerance = 1e-4)
+  expect_equal(s1, s5, tolerance = 1e-4)
+  expect_equal(s2, s3, tolerance = 1e-4)
+  expect_equal(s2, s4, tolerance = 1e-4)
+  expect_equal(s2, s5, tolerance = 1e-4)
+  expect_equal(s3, s4, tolerance = 1e-4)
+  expect_equal(s3, s5, tolerance = 1e-4)
+  expect_equal(s4, s5, tolerance = 1e-4)
+})
 
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
