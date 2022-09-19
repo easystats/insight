@@ -114,6 +114,7 @@ Suggests:
     MASS,
     marginaleffects,
     Matrix,
+    mclogit,
     mclust,
     MCMCglmm,
     merTools,
