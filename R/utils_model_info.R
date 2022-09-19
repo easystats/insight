@@ -251,6 +251,7 @@
   is_ranktest <- FALSE
   is_xtab <- FALSE
   is_levenetest <- FALSE
+  is_variancetest <- FALSE
 
   ## TODO: special handling of shapiro needed
   # see https://github.com/easystats/report/issues/256
@@ -274,9 +275,11 @@
       is_binomtest <- TRUE
       fitfam <- "binomial"
     } else if (x$method == "Shapiro-Wilk normality test") {
-      ## TODO: what family and test?
+      is_variancetest <- TRUE
+      fitfam <- "shapiro"
     } else if (grepl("Bartlett test", x$method, fixed = TRUE)) {
-      ## TODO: what family and test?
+      is_variancetest <- TRUE
+      fitfam <- "bartlett"
     } else if (grepl("\\d+-sample(.*)proportions(.*)", x$method)) {
       binom_fam <- TRUE
       is_proptest <- TRUE
@@ -302,6 +305,7 @@
     !is.null(attributes(x)$heading) &&
     grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
     is_levenetest <- TRUE
+    is_variancetest <- TRUE
   }
 
   # Bayesfactors terms --------
@@ -406,6 +410,7 @@
     is_chi2test = is_chi2test,
     is_ranktest = is_ranktest,
     is_levenetest = is_levenetest,
+    is_variancetest = is_variancetest,
     is_xtab = is_xtab,
     is_proptest = is_proptest,
     is_binomtest = is_binomtest,
