@@ -131,15 +131,18 @@ if (requiet("testthat") &&
 test_that("mblogit and mclogit is not linear", {
   requiet("mclogit")
 
-  mod <- mblogit(factor(gear) ~ mpg + hp, data = mtcars, trace = FALSE)
-  expect_false(model_info(mod)$is_linear)
-  expect_true(model_info(mod)$is_logit)
-  expect_true(is_model(mod))
-  expect_true(is_model_supported(mod))
+  if (packageVersion("mclogit") >= "0.9.1") {
+    data(Transport)
+    mod <- mblogit(factor(gear) ~ mpg + hp, data = mtcars, trace = FALSE)
+    expect_false(model_info(mod)$is_linear)
+    expect_true(model_info(mod)$is_logit)
+    expect_true(is_model(mod))
+    expect_true(is_model_supported(mod))
 
-  mod <- mclogit(factor(gear) ~ mpg + hp, data = mtcars, trace = FALSE)
-  expect_false(model_info(mod)$is_linear)
-  expect_true(model_info(mod)$is_logit)
-  expect_true(is_model(mod))
-  expect_true(is_model_supported(mod))
+    mod <- mclogit(resp | suburb ~ distance + cost, data = Transport)
+    expect_false(model_info(mod)$is_linear)
+    expect_true(model_info(mod)$is_logit)
+    expect_true(is_model(mod))
+    expect_true(is_model_supported(mod))
+  }
 })
