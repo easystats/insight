@@ -862,7 +862,24 @@
       } else if (type == "log\\(log") {
         mf[[i]] <- exp(exp(mf[[i]]))
       } else if (type == "log") {
-        mf[[i]] <- exp(mf[[i]])
+        # exceptions: log(x+1) or log(1+x)
+        # 1. try: log(x + number)
+        plus_minus <- tryCatch(
+          eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", cn))),
+          error = function(e) NULL
+        )
+        # 2. try: log(number + x)
+        if (is.null(plus_minus)) {
+          plus_minus <- tryCatch(
+            eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", cn))),
+            error = function(e) NULL
+          )
+        }
+        if (is.null(plus_minus)) {
+          mf[[i]] <- exp(mf[[i]])
+        } else {
+          mf[[i]] <- exp(mf[[i]]) - plus_minus
+        }
       } else if (type == "log1p") {
         mf[[i]] <- expm1(mf[[i]])
       } else if (type == "log10") {
@@ -910,7 +927,13 @@
     x <- find_terms(model, flatten = TRUE)
   }
   pattern <- sprintf("%s\\(([^,\\+)]*).*", type)
-  trim_ws(gsub(pattern, "\\1", x[grepl(pattern, x)]))
+  out <- trim_ws(gsub(pattern, "\\1", x[grepl(pattern, x)]))
+  # sanity check - when we have something like "log(1+x)" instead "log(x+1)",
+  # the regex pattern returns "1" instead of "x3"
+  if (!is.na(suppressWarnings(as.numeric(out)))) {
+    out <- trim_ws(gsub(pattern, "\\2", x[grepl(pattern, x)]))
+  }
+  out
 }
 
 
