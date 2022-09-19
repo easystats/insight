@@ -23,6 +23,14 @@ if (requiet("testthat") && requiet("insight")) {
     )
   })
 
+  test_that("find_transformation - log+x 2", {
+    model <- lm(log(2 + Sepal.Length) ~ Species, data = iris)
+    expect_equal(
+      find_transformation(model),
+      "log(x+2)"
+    )
+  })
+
   test_that("find_transformation - log-log", {
     model <- lm(log(log(Sepal.Length)) ~ Species, data = iris)
     expect_equal(
