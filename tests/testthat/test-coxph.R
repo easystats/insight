@@ -148,4 +148,13 @@ test_that("get_statistic", {
   z1 <- get_statistic(mod)$Statistic
   z2 <- coef(summary(mod))[, "z"]
   expect_equal(z1, z2, ignore_attr = TRUE)
+
+  lung <- survival::lung
+  mod <- survival::coxph(
+    formula = Surv(time, status) ~ age + sex + frailty(inst),
+    data = lung
+  )
+  z1 <- get_statistic(mod)$Statistic
+  z2 <- coef(summary(mod))[, "Chisq"]
+  expect_equal(z1, z2, ignore_attr = TRUE)
 })
