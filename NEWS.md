@@ -1,3 +1,10 @@
+# insight 0.18.4
+
+## Bug fixes
+
+* Fixed issue in `get_data()` which did not correctly backtransform to original
+  data when terms had log-transformations such as `log(1 + x)` or `log(x + 1)`.
+
 # insight 0.18.3
 
 ## New functions
