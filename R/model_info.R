@@ -46,6 +46,7 @@
 #' * `is_ttest`: model is an an object of class `htest`, returned by `t.test()`
 #' * `is_correlation`: model is an an object of class `htest`, returned by `cor.test()`
 #' * `is_ranktest`: model is an an object of class `htest`, returned by `cor.test()` (if Spearman's rank correlation), `wilcox.text()` or `kruskal.test()`.
+#' * `is_variancetest`: model is an an object of class `htest`, returned by `bartlett.test()`, `shapiro.test()` or `car::leveneTest()`.
 #' * `is_levenetest`: model is an an object of class `anova`, returned by `car::leveneTest()`.
 #' * `is_onewaytest`: model is an an object of class `htest`, returned by `oneway.test()`
 #' * `is_proptest`: model is an an object of class `htest`, returned by `prop.test()`
@@ -53,7 +54,7 @@
 #' * `is_chi2test`: model is an an object of class `htest`, returned by `chisq.test()`
 #' * `is_xtab`: model is an an object of class `htest` or `BFBayesFactor`, and test-statistic stems from a contingency table (i.e. `chisq.test()` or `BayesFactor::contingencyTableBF()`).
 #' * `link_function`: the link-function
-#' * `family`: the family-object
+#' * `family`: name of the distributional family of the model. For some exceptions (like some `htest` objects), can also be the name of the test.
 #' * `n_obs`: number of observations
 #'
 #' @examples
