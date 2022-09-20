@@ -1,0 +1,1 @@
+This submission fixes errors found in CRAN checks, as requested by the CRAN team.
