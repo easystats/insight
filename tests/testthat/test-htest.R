@@ -123,5 +123,6 @@ if (requiet("testthat") && requiet("insight")) {
 
   test_that("model_info.shapiro-test", {
     expect_true(model_info(m)$is_variancetest)
+    expect_equal(model_info(m)$family, "shapiro")
   })
 }
