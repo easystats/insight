@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.3.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -155,6 +155,7 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <li><p><code>is_ttest</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test()</a></code></p></li>
 <li><p><code>is_correlation</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test()</a></code></p></li>
 <li><p><code>is_ranktest</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test()</a></code> (if Spearman's rank correlation), <code>wilcox.text()</code> or <code><a href="https://rdrr.io/r/stats/kruskal.test.html" class="external-link">kruskal.test()</a></code>.</p></li>
+<li><p><code>is_variancetest</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/bartlett.test.html" class="external-link">bartlett.test()</a></code>, <code><a href="https://rdrr.io/r/stats/shapiro.test.html" class="external-link">shapiro.test()</a></code> or <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html" class="external-link">car::leveneTest()</a></code>.</p></li>
 <li><p><code>is_levenetest</code>: model is an an object of class <code>anova</code>, returned by <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html" class="external-link">car::leveneTest()</a></code>.</p></li>
 <li><p><code>is_onewaytest</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/oneway.test.html" class="external-link">oneway.test()</a></code></p></li>
 <li><p><code>is_proptest</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">prop.test()</a></code></p></li>
@@ -162,7 +163,7 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <li><p><code>is_chi2test</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code></p></li>
 <li><p><code>is_xtab</code>: model is an an object of class <code>htest</code> or <code>BFBayesFactor</code>, and test-statistic stems from a contingency table (i.e. <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code> or <code><a href="https://rdrr.io/pkg/BayesFactor/man/contingencyTableBF.html" class="external-link">BayesFactor::contingencyTableBF()</a></code>).</p></li>
 <li><p><code>link_function</code>: the link-function</p></li>
-<li><p><code>family</code>: the family-object</p></li>
+<li><p><code>family</code>: name of the distributional family of the model. For some exceptions (like some <code>htest</code> objects), can also be the name of the test.</p></li>
 <li><p><code>n_obs</code>: number of observations</p></li>
 </ul></div>
 
@@ -285,6 +286,9 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_levenetest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_variancetest</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_xtab</span>
@@ -433,6 +437,9 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_levenetest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_variancetest</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_xtab</span>
