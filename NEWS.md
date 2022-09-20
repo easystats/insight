@@ -3,7 +3,7 @@
 ## Changes to functions
 
 * `model_info()` now includes information for `htest` objects from
-  `shapiro.test()` and `bartlett.test()` (will return `$is_varianctest = TRUE`).
+  `shapiro.test()` and `bartlett.test()` (will return `$is_variancetest = TRUE`).
 
 ## Bug fixes
 
