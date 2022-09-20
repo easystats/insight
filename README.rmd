@@ -43,6 +43,12 @@ Once you have downloaded the package, you can then load it using:
 library("insight")
 ```
 
+> **Tip**
+>
+> Instead of `library(insight)`, use `library(easystats)`. This will make all features of the  easystats-ecosystem available.
+>
+> To stay updated, use `easystats::install_latest()`.
+
 ## Documentation
 
 [![Documentation](https://img.shields.io/badge/documentation-insight-orange.svg?colorB=E91E63)](https://easystats.github.io/insight/)
