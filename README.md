@@ -49,7 +49,7 @@ library("insight")
 
 > **Tip**
 >
-> Instead of `library(datawizard)`, use `library(easystats)`. This will
+> Instead of `library(insight)`, use `library(easystats)`. This will
 > make all features of the easystats-ecosystem available.
 >
 > To stay updated, use `easystats::install_latest()`.
