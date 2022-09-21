@@ -118,7 +118,7 @@ converts all columns into character vectors!</p>
 <span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  preserve_attributes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  exact <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  format_symbols <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  use_symbols <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -181,7 +181,7 @@ with a scientific format (e.g., 4.24e5), else as truncated values (as "&gt; 1000
 and "&lt; 1/1000").</p></dd>
 
 
-<dt>format_symbols</dt>
+<dt>use_symbols</dt>
 <dd><p>Logical, if <code>TRUE</code>, column names that refer to particular
 effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
 instead of the written name. This only works on Windows for R &gt;= 4.2, and on
