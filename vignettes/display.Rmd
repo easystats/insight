@@ -86,18 +86,40 @@ df %>%
   format_table()
 ```
 
+## Using unicode symbols as effect size names
+
+With `use_symbols = TRUE`, it is possible to render certain effect size names as symbols, if these are used as column names. Note that this only works on OS X or Linux, or on Windows from R 4.2 or higher.
+
+```{r}
+x <- data.frame(
+  phi_adjusted = .3,
+  Glass_delta = .4,
+  Epsilon2 = .7,
+  R2 = 0.4
+)
+
+# standard output
+format_table(x)
+
+# column names of effect sizes as symbols
+format_table(x, use_symbols = TRUE)
+```
+
+In combination with `export_table()` (see next section), this will give you nicely formatted tables.
+
+```{r}
+export_table(format_table(x, use_symbols = TRUE))
+```
 
 ### Exporting
 
 The next step is *exporting*, which takes a data frame and renders it in a given format, so that it looks good in the console, or in markdown, HTML or latex.
 
-For console output, we need to `cat()` the returned result to get nicely printed code:
-
 ```{r}
-cat(export_table(df))
+export_table(df)
 ```
 
-For markdown or HTML, simply modify the `format` argument to markdown ("md")...
+For markdown or HTML, simply change the `format` argument to markdown ("md")...
 
 ```{r}
 export_table(df, format = "md")
