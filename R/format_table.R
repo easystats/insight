@@ -314,6 +314,7 @@ format_table <- function(x,
     names(x)[names(x) == "Glass_delta"] <- "Glass' \u0394"
     names(x)[names(x) == "phi"] <- "\u03D5"
     names(x)[names(x) == "phi_adjusted"] <- "\u03D5 (adj.)"
+    ## TODO: Fei is misaligned in export_table(), see #642
     names(x)[names(x) == "Fei"] <- "\u05E4\u200E"
     names(x)[names(x) == "Eta2"] <- "\u03B7\u00b2"
     names(x)[names(x) == "Eta2_partial"] <- "\u03B7\u00b2 (partial)"
