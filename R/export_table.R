@@ -408,7 +408,11 @@ print.insight_table <- function(x, ...) {
     # first column definitely right alignment, fixed width
     first_row <- as.character(aligned[1, ])
     for (i in seq_along(first_row)) {
-      aligned[1, i] <- format(trim_ws(first_row[i]), width = nchar(first_row[i]), justify = "right")
+      aligned[1, i] <- format(
+        trim_ws(first_row[i]),
+        width = nchar(first_row[i], type = "width"),
+        justify = "right"
+      )
     }
 
     final <- as.matrix(aligned)
@@ -566,13 +570,13 @@ print.insight_table <- function(x, ...) {
 
     # width of first table row of complete table. Currently, "final" is still
     # a matrix, so we need to paste the columns of the first row into a string
-    row_width <- nchar(paste0(final[1, ], collapse = sep))
+    row_width <- nchar(paste0(final[1, ], collapse = sep), type = "width")
 
     # possibly first split - all table columns longer than "line_width"
     # (i.e. first table row) go into a second string
     if (row_width > line_width) {
       i <- 1
-      while (nchar(paste0(final[1, 1:i], collapse = sep)) < line_width) {
+      while (nchar(paste0(final[1, 1:i], collapse = sep), type = "width") < line_width) {
         i <- i + 1
       }
       if (i > 2 && i < ncol(final)) {
@@ -582,13 +586,13 @@ print.insight_table <- function(x, ...) {
     }
 
     # width of first table row of remaing second table part
-    row_width <- nchar(paste0(final2[1, ], collapse = sep))
+    row_width <- nchar(paste0(final2[1, ], collapse = sep), type = "width")
 
     # possibly second split - all table columns longer than "line_width"
     # (i.e. first table row) go into a third string
     if (row_width > line_width) {
       i <- 1
-      while (nchar(paste0(final2[1, 1:i], collapse = sep)) < line_width) {
+      while (nchar(paste0(final2[1, 1:i], collapse = sep), type = "width") < line_width) {
         i <- i + 1
       }
       if (i > 2 && i < ncol(final2)) {
@@ -664,7 +668,7 @@ print.insight_table <- function(x, ...) {
     final_row <- paste0(final[row, ], collapse = sep)
     # check if we have an empty row, and if so, fill with an
     # "empty line separator", if requested by user
-    if (!is.null(empty_line) && all(nchar(trim_ws(final[row, ])) == 0)) {
+    if (!is.null(empty_line) && all(nchar(trim_ws(final[row, ]), type = "width") == 0)) {
       # check whether user wants to have a "cross" char where vertical and
       # horizontal lines (from empty line separator) cross. But don't add
       # a "cross" when the empty line is the last row in the table...
@@ -672,7 +676,7 @@ print.insight_table <- function(x, ...) {
         # the empty line, which is just empty cells with separator char,
         # will now be replaced by the "empty line char", so we have a
         # clean separator line
-        paste0(rep_len(empty_line, nchar(final_row)), collapse = ""),
+        paste0(rep_len(empty_line, nchar(final_row, type = "width")), collapse = ""),
         cross, sep, final_row,
         is_last_row = row == nrow(final)
       )
@@ -688,7 +692,7 @@ print.insight_table <- function(x, ...) {
         # check whether user wants to have a "cross" char where vertical and
         # horizontal lines (from header line) cross.
         header_line <- .insert_cross(
-          paste0(rep_len(header, nchar(final_row)), collapse = ""),
+          paste0(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
           cross, sep, final_row,
           is_last_row = row == nrow(final)
         )
@@ -734,7 +738,7 @@ print.insight_table <- function(x, ...) {
 
 .indent_groups <- function(final, indent_groups) {
   # check length of indent string
-  whitespace <- sprintf("%*s", nchar(indent_groups), " ")
+  whitespace <- sprintf("%*s", nchar(indent_groups, type = "width"), " ")
 
   # find start index of groups
   grps <- grep(indent_groups, final[, 1], fixed = TRUE)
@@ -753,7 +757,7 @@ print.insight_table <- function(x, ...) {
   final[, 1] <- trimws(final[, 1], which = "right")
 
   # move group name (indent header) to left
-  final[, 1] <- format(final[, 1], justify = "left", width = max(nchar(final[, 1])))
+  final[, 1] <- format(final[, 1], justify = "left", width = max(nchar(final[, 1], type = "width")))
   final
 }
 
@@ -778,7 +782,7 @@ print.insight_table <- function(x, ...) {
   final[, 1] <- gsub("# ", "", final[, 1], fixed = TRUE)
 
   # move group name (indent header) to left
-  final[grps, 1] <- format(final[grps, 1], justify = "left", width = max(nchar(final[, 1])))
+  final[grps, 1] <- format(final[grps, 1], justify = "left", width = max(nchar(final[, 1], type = "width")))
   final
 }
 

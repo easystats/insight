@@ -6,6 +6,11 @@
   refer to particular effectsizes (like Phi, Omega or Epsilon) include the related unicode-character instead of the written name. This only works on Windows for
   R >= 4.2, and on OS X or Linux for R >= 4.0.
 
+## Bug fixes
+
+* Fixed issue with column alignment in `export_table()` when the data frame 
+  to print contained unicode-characters longer than 1 byte.
+
 # insight 0.18.4
 
 ## Changes to functions
