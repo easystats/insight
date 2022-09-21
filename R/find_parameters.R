@@ -60,7 +60,7 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
   if (is.null(pars$conditional) || is.null(pars)) {
     if (isTRUE(verbose)) {
-      warning(format_message(sprintf("Parameters can't be retrieved for objects of class `%s`.", class(x)[1])), call. = FALSE)
+      format_warning(sprintf("Parameters can't be retrieved for objects of class `%s`.", class(x)[1]))
     }
     return(NULL)
   }
@@ -77,7 +77,7 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
 #' @export
 find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
-  stop("A data frame is no valid object for this function.", call. = FALSE)
+  format_error("A data frame is no valid object for this function.")
 }
 
 

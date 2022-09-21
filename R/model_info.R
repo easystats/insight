@@ -1270,7 +1270,7 @@ model_info.marginaleffects <- function(x, ...) {
 
 #' @export
 model_info.earth <- function(x, ...) {
-  stop("Models of class 'earth' are not yet supported.", call. = FALSE)
+  format_error("Models of class `earth` are not yet supported.")
 }
 
 #' @export

@@ -167,7 +167,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   # TODO: Find a way of reversing this formula to pull the sums out and get individual lls
   if (estimator == "reml") {
     if (!"qr" %in% names(x)) {
-      stop("REML estimation not available for this model.", call. = FALSE)
+      format_error("REML estimation not available for this model.")
     }
     N <- get_df(x, type = "residual") # n_obs - p
     val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
@@ -183,7 +183,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   } else if (estimator == "ml") {
     s2 <- (s * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
   } else {
-    stop("'estimator' should be one of 'ML', 'REML' or 'OLS'.", call. = FALSE)
+    format_error("`estimator` should be one of \"ML\", \"REML\" or \"OLS\".")
   }
   # Get individual log-likelihoods
   lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * res^2) / s2))

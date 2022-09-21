@@ -23,7 +23,7 @@ find_statistic <- function(x, ...) {
 
   # check if the object is a model object; if not, quit early
   if (isFALSE(is_model(x))) {
-    stop("The entered object is not a model object.", call. = FALSE)
+    format_error("The entered object is not a model object.")
   }
 
   # handle 'htest' objects specifically

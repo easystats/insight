@@ -25,7 +25,7 @@ is_nested_models <- function(...) {
   object_names <- match.call(expand.dots = FALSE)$`...`
 
   if (!all(sapply(objects, is_regression_model))) {
-    stop("All models must be valid regression model objects.", call. = FALSE)
+    format_error("All models must be valid regression model objects.")
   }
   names(objects) <- object_names
   info <- ellipsis_info.ListRegressions(objects)
