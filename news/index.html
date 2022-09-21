@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.4.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.4.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,10 @@
 <h3 id="changes-to-functions-0-18-5">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-18-5"></a></h3>
 <ul><li>
 <code><a href="../reference/format_table.html">format_table()</a></code> gets a <code>use_symbols</code> argument. If <code>TRUE</code>, column names that refer to particular effectsizes (like Phi, Omega or Epsilon) include the related unicode-character instead of the written name. This only works on Windows for R &gt;= 4.2, and on OS X or Linux for R &gt;= 4.0.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-18-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-5"></a></h3>
+<ul><li>Fixed issue with column alignment in <code><a href="../reference/export_table.html">export_table()</a></code> when the data frame to print contained unicode-characters longer than 1 byte.</li>
 </ul></div>
 </div>
     <div class="section level2">
