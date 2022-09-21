@@ -31,6 +31,10 @@
 #'   For `exact = TRUE`, very large or very small values are then either reported
 #'   with a scientific format (e.g., 4.24e5), else as truncated values (as "> 1000"
 #'   and "< 1/1000").
+#' @param format_symbols Logical, if `TRUE`, column names that refer to particular
+#' effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
+#' instead of the written name. This only works on Windows for R >= 4.2, and on
+#' OS X or Linux for R >= 4.0.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
@@ -71,6 +75,7 @@ format_table <- function(x,
                          zap_small = FALSE,
                          preserve_attributes = FALSE,
                          exact = TRUE,
+                         format_symbols = FALSE,
                          verbose = TRUE,
                          ...) {
   # sanity check
@@ -86,6 +91,7 @@ format_table <- function(x,
   if (missing(ci_digits)) ci_digits <- .additional_arguments(x, "ci_digits", 2)
   if (missing(p_digits)) p_digits <- .additional_arguments(x, "p_digits", 3)
   if (missing(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", 2)
+  if (missing(ic_digits)) ic_digits <- .additional_arguments(x, "ic_digits", 1)
 
   att <- attributes(x)
   x <- as.data.frame(x, stringsAsFactors = FALSE)
@@ -147,14 +153,6 @@ format_table <- function(x,
   other_ci_colname <- out$other_ci_colname
 
 
-  # Misc / Effect Sizes
-  names(x)[names(x) == "Cohens_d"] <- "Cohen's d"
-  names(x)[names(x) == "Cramers_v"] <- "Cramer's V"
-  names(x)[names(x) == "phi_adjusted"] <- "phi (adj.)"
-  names(x)[names(x) == "r_rank_biserial"] <- "r (rank biserial)"
-  names(x)[names(x) == "Cramers_v_adjusted"] <- "Cramer's V (adj.)"
-
-
   # Standardized ----
   x <- .format_std_columns(x, other_ci_colname, digits, zap_small)
 
@@ -168,6 +166,10 @@ format_table <- function(x,
     gsub("_partial$", "", names(x)[grepl("_partial$", names(x))]),
     " (partial)"
   )
+
+
+  # Misc / Effect Sizes
+  x <- .format_effectsize_columns(x, format_symbols)
 
 
   # metafor ----
@@ -187,7 +189,7 @@ format_table <- function(x,
 
 
   # rename performance columns
-  x <- .format_performance_columns(x, digits, ic_digits, zap_small)
+  x <- .format_performance_columns(x, digits, ic_digits, zap_small, format_symbols)
 
 
   # Format remaining columns
@@ -223,6 +225,9 @@ format_table <- function(x,
 # sub-routines ---------------
 
 
+# Format various p-values, coming from different easystats-packages
+# like bayestestR (p_ROPE, p_MAP) or performance (p_Chi2)
+
 .format_p_values <- function(x, stars, p_digits) {
   if ("p" %in% names(x)) {
     x$p <- format_p(x$p, stars = stars, name = NULL, missing = "", digits = p_digits)
@@ -248,7 +253,10 @@ format_table <- function(x,
 }
 
 
-
+# Format df-columns. We have df's for errors, numerator and denominator
+# However, if df and df-error present, we have two different df-column names,
+# but df-error becomes "df" is no df-column present. This is taken care of in
+# this function.
 
 .format_df_columns <- function(x) {
   # generic df
@@ -278,6 +286,66 @@ format_table <- function(x,
 }
 
 
+# formatting for various effect size columns. This function also checks if
+# unicode for special characters is available, and if so, use these for
+# column name formatting
+
+.format_effectsize_columns <- function(x, format_symbols) {
+  names(x)[names(x) == "Cohens_d"] <- "Cohen's d"
+  names(x)[names(x) == "Cohens_w"] <- "Cohen's w"
+  names(x)[names(x) == "Cohens_h"] <- "Cohen's h"
+  names(x)[names(x) == "Cohens_g"] <- "Cohen's g"
+  names(x)[names(x) == "Cohens_f"] <- "Cohen's f"
+  names(x)[names(x) == "Cohens_f_partial"] <- "Cohen's f (partial)"
+  names(x)[names(x) == "Cramers_v"] <- "Cramer's V"
+  names(x)[names(x) == "Cramers_v_adjusted"] <- "Cramer's V (adj.)"
+  names(x)[names(x) == "r_rank_biserial"] <- "r (rank biserial)"
+  names(x)[names(x) == "Hedges_g"] <- "Hedges' g"
+  names(x)[names(x) == "Mahalanobis_D"] <- "Mahalanobis' D"
+  names(x)[names(x) == "Pearsons_c"] <- "Pearson's C"
+  names(x)[names(x) == "Kendalls_W"] <- "Kendall's W"
+  names(x)[names(x) == "Odds_ratio"] <- "Odds ratio"
+  names(x)[names(x) == "log_Odds_ratio"] <- "log(Odds ratio)"
+  names(x)[names(x) == "Risk_ratio"] <- "Risk ratio"
+  names(x)[names(x) == "log_Risk_ratio"] <- "log(Risk ratio)"
+
+  # we can use unicode symbols
+  if (isTRUE(format_symbols) && .unicode_symbols()) {
+    names(x)[names(x) == "Glass_delta"] <- "Glass' \u0394"
+    names(x)[names(x) == "phi"] <- "\u03D5"
+    names(x)[names(x) == "phi_adjusted"] <- "\u03D5 (adj.)"
+    names(x)[names(x) == "Fei"] <- "\u05E4\u200E"
+    names(x)[names(x) == "Eta2"] <- "\u03B7\u00b2"
+    names(x)[names(x) == "Eta2_partial"] <- "\u03B7\u00b2 (partial)"
+    names(x)[names(x) == "Eta2_generalized"] <- "\u03B7\u00b2 (generalized)"
+    names(x)[names(x) == "Epsilon2"] <- "\u03F5\u00b2"
+    names(x)[names(x) == "Epsilon2_partial"] <- "\u03F5\u00b2 (partial)"
+    names(x)[names(x) == "Omega2"] <- "u03C9\u00b2"
+    names(x)[names(x) == "Omega2_partial"] <- "u03C9\u00b2 (partial)"
+    names(x)[names(x) == "Cohens_f2"] <- "Cohen's f\u00b2"
+    names(x)[names(x) == "Cohens_f2"] <- "Cohen's f\u00b2 (partial)"
+    names(x)[names(x) == "rank_epsilon_squared"] <- "\u03B5\u00b2(R)"
+    names(x)[names(x) == "rank_eta_squared"] <- "u03B7\u00b2(H)"
+  } else {
+    names(x)[names(x) == "Glass_delta"] <- "Glass' delta"
+    names(x)[names(x) == "phi"] <- "Phi"
+    names(x)[names(x) == "phi_adjusted"] <- "Phi (adj.)"
+    names(x)[names(x) == "Fei"] <- "Fei"
+    names(x)[names(x) == "Eta2"] <- "Eta2"
+    names(x)[names(x) == "Eta2_partial"] <- "Eta2 (partial)"
+    names(x)[names(x) == "Eta2_generalized"] <- "Eta2 (generalized)"
+    names(x)[names(x) == "Epsilon2"] <- "Epsilon2"
+    names(x)[names(x) == "Epsilon2_partial"] <- "Epsilon2 (partial)"
+    names(x)[names(x) == "Omega2"] <- "Omega2"
+    names(x)[names(x) == "Omega2_partial"] <- "Omega2 (partial)"
+    names(x)[names(x) == "Cohens_f2"] <- "Cohen's f2"
+    names(x)[names(x) == "Cohens_f2_partial"] <- "Cohen's f2 (partial)"
+    names(x)[names(x) == "rank_epsilon_squared"] <- "Epsilon2 (rank)"
+    names(x)[names(x) == "rank_eta_squared"] <- "Eta2 (rank)"
+  }
+  x
+}
+
 
 
 .format_aov_columns <- function(x) {
@@ -290,7 +358,6 @@ format_table <- function(x,
   }
   x
 }
-
 
 
 
@@ -333,7 +400,6 @@ format_table <- function(x,
 
   x
 }
-
 
 
 
@@ -410,7 +476,6 @@ format_table <- function(x,
 
 
 
-
 .format_other_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE, zap_small) {
   other_ci_low <- names(x)[grep("_CI_low$", names(x))]
   other_ci_high <- names(x)[grep("_CI_high$", names(x))]
@@ -459,7 +524,6 @@ format_table <- function(x,
 
 
 
-
 .format_broom_ci_columns <- function(x,
                                      ci_digits,
                                      ci_width = "auto",
@@ -496,7 +560,6 @@ format_table <- function(x,
 
 
 
-
 .format_rope_columns <- function(x, ci_width = "auto", ci_brackets = TRUE, zap_small) {
   if (all(c("ROPE_low", "ROPE_high") %in% names(x))) {
     x$ROPE_low <- format_ci(
@@ -513,7 +576,6 @@ format_table <- function(x,
   }
   x
 }
-
 
 
 
@@ -544,7 +606,6 @@ format_table <- function(x,
 
   x
 }
-
 
 
 
@@ -604,13 +665,21 @@ format_table <- function(x,
 
 
 
-
-.format_performance_columns <- function(x, digits, ic_digits, zap_small) {
-  if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R2 (adj.)"
-  if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R2 (cond.)"
-  if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R2 (marg.)"
-  if ("R2_Tjur" %in% names(x)) names(x)[names(x) == "R2_Tjur"] <- "Tjur's R2"
-  if ("R2_Nagelkerke" %in% names(x)) names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R2"
+.format_performance_columns <- function(x, digits, ic_digits, zap_small, format_symbols) {
+  if (isTRUE(format_symbols) && .unicode_symbols()) {
+    if ("R2" %in% names(x)) names(x)[names(x) == "R2"] <- "R\u00b2"
+    if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R\u00b2 (adj.)"
+    if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R\u00b2 (cond.)"
+    if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R\u00b2 (marg.)"
+    if ("R2_Tjur" %in% names(x)) names(x)[names(x) == "R2_Tjur"] <- "Tjur's R\u00b2"
+    if ("R2_Nagelkerke" %in% names(x)) names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R\u00b2"
+  } else {
+    if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R2 (adj.)"
+    if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R2 (cond.)"
+    if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R2 (marg.)"
+    if ("R2_Tjur" %in% names(x)) names(x)[names(x) == "R2_Tjur"] <- "Tjur's R2"
+    if ("R2_Nagelkerke" %in% names(x)) names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R2"
+  }
   if ("Performance_Score" %in% names(x)) names(x)[names(x) == "Performance_Score"] <- "Performance-Score"
   if ("Wu_Hausman" %in% names(x)) names(x)[names(x) == "Wu_Hausman"] <- "Wu & Hausman"
   if ("p(Wu_Hausman)" %in% names(x)) names(x)[names(x) == "p(Wu_Hausman)"] <- "p(Wu & Hausman)"
@@ -688,7 +757,6 @@ format_table <- function(x,
 
 
 
-
 .additional_arguments <- function(x, value, default) {
   args <- attributes(x)$additional_arguments
 
@@ -703,4 +771,24 @@ format_table <- function(x,
   }
 
   out
+}
+
+
+
+.unicode_symbols <- function() {
+  # symbols only work on windows from R 4.2 and higher
+  win_os <- tryCatch(
+    {
+      si <- Sys.info()
+      if (!is.null(si["sysname"])) {
+        si["sysname"] == "Windows" || grepl("^mingw", R.version$os)
+      } else {
+        FALSE
+      }
+    },
+    error = function(e) {
+      TRUE
+    }
+  )
+  (win_os && getRversion() >= "4.2") || (!win_os && getRversion() >= "4.0")
 }

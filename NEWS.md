@@ -1,3 +1,11 @@
+# insight 0.18.5
+
+## Changes to functions
+
+* `format_table()` gets a `format_symbol` argument. If `TRUE`, column names that
+  refer to particular effectsizes (like Phi, Omega or Epsilon) include the related unicode-character instead of the written name. This only works on Windows for
+  R >= 4.2, and on OS X or Linux for R >= 4.0.
+
 # insight 0.18.4
 
 ## Changes to functions
