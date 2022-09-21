@@ -31,7 +31,7 @@
 #'   For `exact = TRUE`, very large or very small values are then either reported
 #'   with a scientific format (e.g., 4.24e5), else as truncated values (as "> 1000"
 #'   and "< 1/1000").
-#' @param format_symbols Logical, if `TRUE`, column names that refer to particular
+#' @param use_symbols Logical, if `TRUE`, column names that refer to particular
 #' effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
 #' instead of the written name. This only works on Windows for R >= 4.2, and on
 #' OS X or Linux for R >= 4.0.
@@ -75,7 +75,7 @@ format_table <- function(x,
                          zap_small = FALSE,
                          preserve_attributes = FALSE,
                          exact = TRUE,
-                         format_symbols = FALSE,
+                         use_symbols = FALSE,
                          verbose = TRUE,
                          ...) {
   # sanity check
@@ -169,7 +169,7 @@ format_table <- function(x,
 
 
   # Misc / Effect Sizes
-  x <- .format_effectsize_columns(x, format_symbols)
+  x <- .format_effectsize_columns(x, use_symbols)
 
 
   # metafor ----
@@ -189,7 +189,7 @@ format_table <- function(x,
 
 
   # rename performance columns
-  x <- .format_performance_columns(x, digits, ic_digits, zap_small, format_symbols)
+  x <- .format_performance_columns(x, digits, ic_digits, zap_small, use_symbols)
 
 
   # Format remaining columns
@@ -290,7 +290,7 @@ format_table <- function(x,
 # unicode for special characters is available, and if so, use these for
 # column name formatting
 
-.format_effectsize_columns <- function(x, format_symbols) {
+.format_effectsize_columns <- function(x, use_symbols) {
   names(x)[names(x) == "Cohens_d"] <- "Cohen's d"
   names(x)[names(x) == "Cohens_w"] <- "Cohen's w"
   names(x)[names(x) == "Cohens_h"] <- "Cohen's h"
@@ -310,7 +310,7 @@ format_table <- function(x,
   names(x)[names(x) == "log_Risk_ratio"] <- "log(Risk ratio)"
 
   # we can use unicode symbols
-  if (isTRUE(format_symbols) && .unicode_symbols()) {
+  if (isTRUE(use_symbols) && .unicode_symbols()) {
     names(x)[names(x) == "Glass_delta"] <- "Glass' \u0394"
     names(x)[names(x) == "phi"] <- "\u03D5"
     names(x)[names(x) == "phi_adjusted"] <- "\u03D5 (adj.)"
@@ -665,8 +665,8 @@ format_table <- function(x,
 
 
 
-.format_performance_columns <- function(x, digits, ic_digits, zap_small, format_symbols) {
-  if (isTRUE(format_symbols) && .unicode_symbols()) {
+.format_performance_columns <- function(x, digits, ic_digits, zap_small, use_symbols) {
+  if (isTRUE(use_symbols) && .unicode_symbols()) {
     if ("R2" %in% names(x)) names(x)[names(x) == "R2"] <- "R\u00b2"
     if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R\u00b2 (adj.)"
     if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R\u00b2 (cond.)"

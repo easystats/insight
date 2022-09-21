@@ -18,7 +18,7 @@ format_table(
   zap_small = FALSE,
   preserve_attributes = FALSE,
   exact = TRUE,
-  format_symbols = FALSE,
+  use_symbols = FALSE,
   verbose = TRUE,
   ...
 )
@@ -61,7 +61,7 @@ For \code{exact = TRUE}, very large or very small values are then either reporte
 with a scientific format (e.g., 4.24e5), else as truncated values (as "> 1000"
 and "< 1/1000").}
 
-\item{format_symbols}{Logical, if \code{TRUE}, column names that refer to particular
+\item{use_symbols}{Logical, if \code{TRUE}, column names that refer to particular
 effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
 instead of the written name. This only works on Windows for R >= 4.2, and on
 OS X or Linux for R >= 4.0.}
