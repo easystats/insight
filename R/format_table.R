@@ -192,6 +192,10 @@ format_table <- function(x,
   x <- .format_performance_columns(x, digits, ic_digits, zap_small, use_symbols)
 
 
+  # format symbols in column names, if any left
+  x <- .format_symbols(x, use_symbols)
+
+
   # Format remaining columns
   other_cols <- names(x)[sapply(x, is.numeric)]
   x[other_cols[other_cols %in% names(x)]] <- format_value(
@@ -320,12 +324,12 @@ format_table <- function(x,
     names(x)[names(x) == "Eta2_generalized"] <- "\u03B7\u00b2 (generalized)"
     names(x)[names(x) == "Epsilon2"] <- "\u03b5\u00b2"
     names(x)[names(x) == "Epsilon2_partial"] <- "\u03b5\u00b2 (partial)"
-    names(x)[names(x) == "Omega2"] <- "u03C9\u00b2"
-    names(x)[names(x) == "Omega2_partial"] <- "u03C9\u00b2 (partial)"
+    names(x)[names(x) == "Omega2"] <- "\u03C9\u00b2"
+    names(x)[names(x) == "Omega2_partial"] <- "\u03C9\u00b2 (partial)"
     names(x)[names(x) == "Cohens_f2"] <- "Cohen's f\u00b2"
     names(x)[names(x) == "Cohens_f2"] <- "Cohen's f\u00b2 (partial)"
     names(x)[names(x) == "rank_epsilon_squared"] <- "\u03B5\u00b2(R)"
-    names(x)[names(x) == "rank_eta_squared"] <- "u03B7\u00b2(H)"
+    names(x)[names(x) == "rank_eta_squared"] <- "\u03B7\u00b2(H)"
   } else {
     names(x)[names(x) == "Glass_delta"] <- "Glass' delta"
     names(x)[names(x) == "phi"] <- "Phi"
@@ -740,6 +744,25 @@ format_table <- function(x,
   x
 }
 
+
+
+.format_symbols <- function(x, use_symbols) {
+  if (isTRUE(use_symbols) && .unicode_symbols()) {
+    colnames(x) <- gsub("Delta", "\u0394", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Phi", "\u03D5", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Eta", "\u03B7", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Epsilon", "\u03b5", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Omega", "\u03b5", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("R2", "R\u00b2", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Chi2", "\u03C7\u00b2", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Chi", "\u03C7", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Sigma", "\u03C3", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Rho", "\u03C1", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Mu", "\u03BC", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Theta", "\u03B8", colnames(x), ignore.case = TRUE)
+  }
+  x
+}
 
 
 
