@@ -32,9 +32,10 @@
 #'   with a scientific format (e.g., 4.24e5), else as truncated values (as "> 1000"
 #'   and "< 1/1000").
 #' @param use_symbols Logical, if `TRUE`, column names that refer to particular
-#' effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
-#' instead of the written name. This only works on Windows for R >= 4.2, and on
-#' OS X or Linux for R >= 4.0.
+#'   effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
+#'   instead of the written name. This only works on Windows for R >= 4.2, and on
+#'   OS X or Linux for R >= 4.0. It is possible to define a global option for this
+#'   setting, see 'Note'.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
@@ -43,6 +44,8 @@
 #' @seealso Vignettes [Formatting, printing and exporting tables](https://easystats.github.io/insight/articles/display.html)
 #' and [Formatting model parameters](https://easystats.github.io/parameters/articles/model_parameters_formatting.html).
 #'
+#' @note `options(insight_use_symbols = TRUE)` override the `use_symbols` argument
+#'   and always displays symbols, if possible.
 #' @examples
 #' format_table(head(iris), digits = 1)
 #'
@@ -75,7 +78,7 @@ format_table <- function(x,
                          zap_small = FALSE,
                          preserve_attributes = FALSE,
                          exact = TRUE,
-                         use_symbols = FALSE,
+                         use_symbols = getOption("insight_use_symbols", FALSE),
                          verbose = TRUE,
                          ...) {
   # sanity check

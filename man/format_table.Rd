@@ -18,7 +18,7 @@ format_table(
   zap_small = FALSE,
   preserve_attributes = FALSE,
   exact = TRUE,
-  use_symbols = FALSE,
+  use_symbols = getOption("insight_use_symbols", FALSE),
   verbose = TRUE,
   ...
 )
@@ -64,7 +64,8 @@ and "< 1/1000").}
 \item{use_symbols}{Logical, if \code{TRUE}, column names that refer to particular
 effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
 instead of the written name. This only works on Windows for R >= 4.2, and on
-OS X or Linux for R >= 4.0.}
+OS X or Linux for R >= 4.0. It is possible to define a global option for this
+setting, see 'Note'.}
 
 \item{verbose}{Toggle messages and warnings.}
 
@@ -80,6 +81,10 @@ and formats certain columns into a more readable layout (like collapsing
 separate columns for lower and upper confidence interval values). Furthermore,
 column names are formatted as well. Note that \code{format_table()}
 converts all columns into character vectors!
+}
+\note{
+\code{options(insight_use_symbols = TRUE)} override the \code{use_symbols} argument
+and always displays symbols, if possible.
 }
 \examples{
 format_table(head(iris), digits = 1)
