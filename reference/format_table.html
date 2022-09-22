@@ -118,7 +118,7 @@ converts all columns into character vectors!</p>
 <span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  preserve_attributes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  exact <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  use_symbols <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  use_symbols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"insight_use_symbols"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -185,7 +185,8 @@ and "&lt; 1/1000").</p></dd>
 <dd><p>Logical, if <code>TRUE</code>, column names that refer to particular
 effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
 instead of the written name. This only works on Windows for R &gt;= 4.2, and on
-OS X or Linux for R &gt;= 4.0.</p></dd>
+OS X or Linux for R &gt;= 4.0. It is possible to define a global option for this
+setting, see 'Note'.</p></dd>
 
 
 <dt>verbose</dt>
@@ -202,6 +203,11 @@ OS X or Linux for R &gt;= 4.0.</p></dd>
 
 <p>A data frame. Note that <code>format_table()</code> converts all columns
 into character vectors!</p>
+    </div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p><code>options(insight_use_symbols = TRUE)</code> override the <code>use_symbols</code> argument
+and always displays symbols, if possible.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
