@@ -68,7 +68,8 @@ if (.runThisTest &&
     expect_equal(
       as.vector(get_df(m1, type = "kenward")),
       c(17, 17),
-      ignore_attr = TRUE
+      ignore_attr = TRUE,
+      tolerance = 1e-4
     )
   })
 
