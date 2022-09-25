@@ -30,8 +30,8 @@ if (.runThisTest) {
     if (requiet("parameters")) {
       test_that("get_df", {
         expect_equal(
-          get_df(m3, type = "residuals"),
-          parameters::degrees_of_freedom(m3, type = "residuals"),
+          get_df(m3, type = "residual"),
+          parameters::degrees_of_freedom(m3, type = "residual"),
           ignore_attr = TRUE
         )
         expect_equal(
