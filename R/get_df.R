@@ -62,7 +62,7 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     choices = c("residual", "model", "analytical", "wald", "normal", "ml1")
   )
 
-  # check if user already passed "statistic" argument, to 
+  # check if user already passed "statistic" argument, to
   # avoid multiple calls to "find_statistic()"
   dots <- list(...)
   statistic <- dots$statistic
