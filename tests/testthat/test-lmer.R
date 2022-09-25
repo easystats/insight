@@ -43,6 +43,41 @@ if (.runThisTest &&
     expect_equal(get_df(m2, type = "model"), attr(logLik(m2), "df"), ignore_attr = TRUE)
   })
 
+  if (requiet("parameters")) {
+    test_that("get_df", {
+      expect_equal(
+        get_df(m1, type = "residuals"),
+        parameters::degrees_of_freedom(m1, type = "residuals"),
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m1, type = "normal"),
+        parameters::degrees_of_freedom(m1, type = "normal"),
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m1, type = "analytical"),
+        parameters::degrees_of_freedom(m1, type = "analytical"),
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m1, type = "wald"),
+        parameters::degrees_of_freedom(m1, type = "wald"),
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m1, type = "satterthwaite"),
+        parameters::degrees_of_freedom(m1, type = "satterthwaite"),
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m1, type = "kenward"),
+        parameters::degrees_of_freedom(m1, type = "kenward"),
+        ignore_attr = TRUE
+      )
+    })
+  }
+
   test_that("n_parameters", {
     expect_equal(n_parameters(m1), 2)
     expect_equal(n_parameters(m2), 2)
