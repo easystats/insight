@@ -49,7 +49,7 @@ if (requiet("testthat") &&
       )
       expect_equal(
         get_df(m1, type = "analytical"),
-        parameters::degrees_of_freedom(m1, method = "analytical"),
+        unique(parameters::degrees_of_freedom(m1, method = "analytical")),
         ignore_attr = TRUE
       )
       expect_equal(
