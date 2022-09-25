@@ -14,11 +14,21 @@ get_df(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{type}{Can be \code{"residual"}, \code{"model"} or \code{"analytical"}. \code{"residual"}
-tries to extract residual degrees of freedoms. If residual degrees of freedom
-could not be extracted, returns analytical degrees of freedom, i.e. \code{n-k}
-(number of observations minus number of parameters). \code{"model"} returns
-model-based degrees of freedom, i.e. the number of (estimated) parameters.}
+\item{type}{Can be \code{"residual"}, \code{"wald"}, \code{"normal"}, \code{"analytical"}, or
+\code{"model"}.
+\itemize{
+\item \code{"residual"} tries to extract residual degrees of freedoms. If residual
+degrees of freedom could not be extracted, returns analytical degrees of
+freedom, i.e. \code{n-k} (number of observations minus number of parameters).
+\item \code{"wald"} for models with z-statistic, returns \code{"Inf"}. Else, tries to
+extract residual degrees of freedoms. If residual degrees of freedom could
+not be extracted, returns \code{"Inf"}.
+\item \code{"analytical"} returns analytical degrees of freedom, i.e. \code{n-k}
+(number of observations minus number of parameters).
+\item \code{"normal"} always returns \code{"Inf"}.
+\item \code{"model"} returns model-based degrees of freedom, i.e. the number of
+(estimated) parameters.
+}}
 
 \item{verbose}{Toggle warnings.}
 }
