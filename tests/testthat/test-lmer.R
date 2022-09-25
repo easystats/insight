@@ -47,7 +47,7 @@ if (.runThisTest &&
     test_that("get_df", {
       expect_equal(
         get_df(m1, type = "residual"),
-        parameters::degrees_of_freedom(m1, type = "residual"),
+        parameters::degrees_of_freedom(m1, method = "residual"),
         ignore_attr = TRUE
       )
       expect_equal(
@@ -57,22 +57,22 @@ if (.runThisTest &&
       )
       expect_equal(
         get_df(m1, type = "analytical"),
-        parameters::degrees_of_freedom(m1, type = "analytical"),
+        parameters::degrees_of_freedom(m1, method = "analytical"),
         ignore_attr = TRUE
       )
       expect_equal(
         get_df(m1, type = "wald"),
-        parameters::degrees_of_freedom(m1, type = "wald"),
+        parameters::degrees_of_freedom(m1, method = "wald"),
         ignore_attr = TRUE
       )
       expect_equal(
         get_df(m1, type = "satterthwaite"),
-        parameters::degrees_of_freedom(m1, type = "satterthwaite"),
+        parameters::degrees_of_freedom(m1, method = "satterthwaite"),
         ignore_attr = TRUE
       )
       expect_equal(
         get_df(m1, type = "kenward"),
-        parameters::degrees_of_freedom(m1, type = "kenward"),
+        parameters::degrees_of_freedom(m1, method = "kenward"),
         ignore_attr = TRUE
       )
     })
