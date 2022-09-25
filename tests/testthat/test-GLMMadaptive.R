@@ -36,7 +36,7 @@ if (.runThisTest) {
         )
         expect_equal(
           get_df(m3, type = "normal"),
-          parameters::degrees_of_freedom(m3, type = "normal"),
+          parameters::degrees_of_freedom(m3, method = "normal"),
           ignore_attr = TRUE
         )
         expect_equal(

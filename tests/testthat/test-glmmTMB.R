@@ -95,7 +95,7 @@ if (requiet("testthat") &&
       )
       expect_equal(
         get_df(m2, type = "normal"),
-        parameters::degrees_of_freedom(m2, type = "normal"),
+        parameters::degrees_of_freedom(m2, method = "normal"),
         ignore_attr = TRUE
       )
       expect_equal(

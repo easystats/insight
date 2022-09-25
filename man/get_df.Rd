@@ -21,8 +21,8 @@ get_df(x, ...)
 degrees of freedom could not be extracted, returns analytical degrees of
 freedom, i.e. \code{n-k} (number of observations minus number of parameters).
 \item \code{"wald"} for models with z-statistic, returns \code{"Inf"}. Else, tries to
-extract residual degrees of freedoms. If residual degrees of freedom could
-not be extracted, returns \code{"Inf"}.
+extract residual degrees of freedoms. If residual degrees of freedom
+cannot be extracted, returns \code{"Inf"}.
 \item \code{"analytical"} returns analytical degrees of freedom, i.e. \code{n-k}
 (number of observations minus number of parameters).
 \item \code{"normal"} always returns \code{"Inf"}.
