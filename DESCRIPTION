@@ -106,6 +106,7 @@ Suggests:
     JM,
     knitr,
     lavaan,
+    lavaSearch2,
     lfe,
     lme4,
     lmerTest,
