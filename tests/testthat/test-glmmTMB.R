@@ -100,7 +100,12 @@ if (requiet("testthat") &&
       )
       expect_equal(
         get_df(m2, type = "wald"),
-        parameters::degrees_of_freedom(m2, method = "wald"),
+        Inf,
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m2, type = "ml1"),
+        c(`(Intercept)` = 247, child = 247, camper1 = 247),
         ignore_attr = TRUE
       )
     })
