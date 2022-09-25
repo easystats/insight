@@ -9,13 +9,14 @@
 #'   `"model"`.
 #'
 #' - `"residual"` tries to extract residual degrees of freedoms. If residual
-#'   degrees of freedom could not be extracted, returns analytical degrees of
+#'   degrees of freedom cannot be extracted, returns analytical degrees of
 #'   freedom, i.e. `n-k` (number of observations minus number of parameters).
 #' - `"wald"` for models with z-statistic, returns `"Inf"`. Else, tries to
 #'   extract residual degrees of freedoms. If residual degrees of freedom
 #'   cannot be extracted, returns `"Inf"`.
-#' - `"analytical"` returns analytical degrees of freedom, i.e. `n-k`
-#'   (number of observations minus number of parameters).
+#' - `"analytical"` for models with z-statistic, returns `"Inf"`. Else, returns
+#'   analytical degrees of freedom, i.e. `n-k` (number of observations minus
+#'   number of parameters).
 #' - `"normal"` always returns `"Inf"`.
 #' - `"model"` returns model-based degrees of freedom, i.e. the number of
 #'   (estimated) parameters.
@@ -36,25 +37,48 @@ get_df <- function(x, ...) {
 #' @rdname get_df
 #' @export
 get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
+  # check valid options
   type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "wald", "normal"))
 
+  # check if user already passed "statistic" argument, to 
+  # avoid multiple calls to "find_statistic()"
+  dots <- list(...)
+  statistic <- dots$statistic
+  if (is.null(statistic)) {
+    statistic <- find_statistic(x)
+  }
+
+  # Wald normal approximation - always Inf -----
   if (type == "normal") {
     return(Inf)
+
+  # residual df, falls back to analytical if we have no residual df method -----
   } else if (type == "residual") {
     dof <- .degrees_of_freedom_residual(x, verbose = verbose)
     if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
       dof <- .degrees_of_freedom_analytical(x)
     }
+
+  # Wald df - always Inf for z-statistic, else residual df -----
   } else if (type == "wald") {
-    if (find_statistic(x) == "z-statistic") {
+    # z-statistic always Inf, *unless* we have residual df (which we have for some models)
+    if (identical(statistic, "z-statistic")) {
       return(Inf)
     }
     dof <- .degrees_of_freedom_residual(x, verbose = verbose)
     if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
       return(Inf)
     }
+
+  # analytical df - always Inf for z-statistic, else n-k -----
   } else if (type == "analytical") {
+    # z-statistic always Inf, *unless* we have residual df (which we have for some models)
+    if (identical(statistic, "z-statistic")) {
+      return(Inf)
+    }
     dof <- .degrees_of_freedom_analytical(x)
+
+  # remaining option is model-based df, i.e. number of estimated parameters
   } else {
     dof <- .model_df(x)
   }
@@ -74,71 +98,6 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
 #' @export
 get_df.model_fit <- function(x, type = "residual", verbose = TRUE, ...) {
   get_df(x$fit, type = type, verbose = verbose, ...)
-}
-
-
-#' @export
-get_df.ivFixed <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    as.vector(x$df)
-  }
-}
-
-#' @export
-get_df.ivprobit <- get_df.ivFixed
-
-
-#' @export
-get_df.fixest <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
-  if (type %in% c("residual", "wald")) {
-    s <- summary(x)
-    vcov_scaled <- s$cov.scaled
-    if (is.null(vcov_scaled)) {
-      s$nobs - s$nparams
-    } else {
-      max(s$nobs - attr(vcov_scaled, "dof.K"), 1)
-    }
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    .model_df(x)
-  }
-}
-
-
-#' @export
-get_df.multinom <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
-  stat <- find_statistic(x)
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal" || (type == "wald" && stat == "z-statistic")) {
-    return(Inf)
-  } else {
-    n_obs(x) - x$edf
-  }
-}
-
-#' @export
-get_df.nnet <- get_df.multinom
-
-
-#' @export
-get_df.summary.lm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    x$fstatistic[3]
-  }
 }
 
 
@@ -173,89 +132,13 @@ get_df.coeftest <- function(x, ...) {
 }
 
 
-#' @export
-get_df.lqmm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    cs <- summary(x)
-    tryCatch(
-      {
-        if (!is.null(cs$rdf)) {
-          cs$rdf
-        } else {
-          attr(cs$B, "R") - 1
-        }
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-  }
-}
-
-
-#' @export
-get_df.lqm <- get_df.lqmm
-
-
-#' @export
-get_df.cgam <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
-  stat <- find_statistic(x)
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal" || (type == "wald" && stat == "z-statistic")) {
-    return(Inf)
-  } else {
-    # x$resid_df_obs
-    # new in cgam 1.18
-    stats::df.residual(x)
-  }
-}
-
-
-#' @export
-get_df.cgamm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
-  stat <- find_statistic(x)
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal" || (type == "wald" && stat == "z-statistic")) {
-    return(Inf)
-  } else {
-    x$resid_df_obs
-  }
-}
-
-
-#' @export
-get_df.glht <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    x$df
-  }
-}
-
-#' @export
-get_df.BBmm <- get_df.glht
-
-#' @export
-get_df.BBreg <- get_df.glht
 
 
 # methods for models w/o df.residual() method --------------
 
 #' @export
 get_df.rlm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical"))
   stat <- find_statistic(x)
   if (type == "normal" || (type == "wald" && stat == "z-statistic")) {
     return(Inf)
@@ -293,85 +176,15 @@ get_df.truncreg <- get_df.rlm
 
 
 
-#' @export
-get_df.rq <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "residual") {
-    tryCatch(
-      {
-        s <- suppressWarnings(summary(x, covariance = TRUE))
-        cs <- lapply(s, function(i) i$rdf)
-        unique(unlist(cs))
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    .model_df(x)
-  }
-}
-
-
-#' @export
-get_df.rqss <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "residual") {
-    n_obs(x) - x$edf
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    .model_df(x)
-  }
-}
-
-
-#' @export
-get_df.bfsl <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "residual") {
-    x$df.residual
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    .model_df(x)
-  }
-}
-
-
-#' @export
-get_df.plm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "residual") {
-    x$df.residual
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    .model_df(x)
-  }
-}
-
-
-#' @export
-get_df.selection <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    s <- summary(x)
-    s$param$df
-  }
-}
-
+# Mixed models - special treatment --------------
 
 #' @export
 get_df.lmerMod <- function(x, type = "residual", ...) {
   dots <- list(...)
-  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger", "normal", "wald"))
+  type <- match.arg(
+    tolower(type),
+    choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger", "normal", "wald")
+  )
   # fix name for lmerTest
   if (type == "kenward") {
     type <- "kenward-roger"
@@ -400,9 +213,14 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
 get_df.lmerModTest <- get_df.lmerMod
 
 
+
+
+# Other models ------------------
+
+
 #' @export
 get_df.logitor <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical"))
   if (type == "model") {
     .model_df(x)
   } else if (type == "normal") {
@@ -412,59 +230,37 @@ get_df.logitor <- function(x, type = "residual", ...) {
   }
 }
 
-
 #' @export
 get_df.poissonirr <- get_df.logitor
-
 
 #' @export
 get_df.negbinirr <- get_df.logitor
 
-
 #' @export
 get_df.poissonmfx <- get_df.logitor
-
 
 #' @export
 get_df.logitmfx <- get_df.logitor
 
-
 #' @export
 get_df.negbinmfx <- get_df.logitor
-
 
 #' @export
 get_df.probitmfx <- get_df.logitor
 
-
 #' @export
 get_df.betaor <- get_df.logitor
-
 
 #' @export
 get_df.betamfx <- get_df.logitor
 
 
 #' @export
-get_df.merModList <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    s <- suppressWarnings(summary(x))
-    s$fe$df
-  }
-}
-
-
-#' @export
-get_df.mira <- function(x, type = "residual", ...) {
+get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
   # installed?
   check_if_installed("mice")
   type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  get_df(mice::pool(x), type, ...)
+  get_df(mice::pool(x), type, verbose = verbose, ...)
 }
 
 
@@ -481,67 +277,6 @@ get_df.mipo <- function(x, type = "residual", ...) {
 }
 
 
-#' @export
-get_df.vgam <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    params <- get_parameters(x)
-    out <- stats::setNames(rep(NA, nrow(params)), params$Parameter)
-    out[names(x@nl.df)] <- x@nl.df
-    out
-  }
-}
-
-
-#' @export
-get_df.rqs <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    tryCatch(
-      {
-        s <- suppressWarnings(summary(x, covariance = TRUE))
-        cs <- lapply(s, function(i) i$rdf)
-        unique(unlist(cs))
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-  }
-}
-
-
-#' @export
-get_df.systemfit <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "normal") {
-    return(Inf)
-  }
-  
-  df <- c()
-  s <- summary(x)$eq
-  params <- find_parameters(x)
-  f <- find_formula(x)
-  system_names <- names(f)
-
-  for (i in seq_along(system_names)) {
-    dfs <- rep(s[[i]]$df[2], length(params[[i]]))
-    df_names <- rep(names(params[i]), length(params[[i]]))
-    df <- c(df, stats::setNames(dfs, df_names))
-  }
-
-  df
-}
-
-
 
 
 # not yet supported --------------------
@@ -550,7 +285,6 @@ get_df.systemfit <- function(x, type = "residual", ...) {
 get_df.mediate <- function(x, ...) {
   NULL
 }
-
 
 
 
@@ -569,47 +303,6 @@ get_df.mediate <- function(x, ...) {
 
   return(n - nparam)
 }
-
-
-
-
-# Model approach (Residual df) ------------------------------
-
-
-#' @keywords internal
-.degrees_of_freedom_residual <- function(model, verbose = TRUE) {
-  if (.is_bayesian_model(model) && !inherits(model, c("bayesx", "blmerMod", "bglmerMod"))) {
-    if (check_if_installed("bayestestR", quietly = TRUE)) {
-      model <- bayestestR::bayesian_as_frequentist(model)
-    } else {
-      if (isTRUE(verbose)) {
-        warning("Can't extract degrees of freedom from Bayesian model.", call. = FALSE)
-      }
-      return(NULL)
-    }
-  }
-
-  # 1st try
-  dof <- try(stats::df.residual(model), silent = TRUE)
-
-  # 2nd try
-  if (inherits(dof, "try-error") || is.null(dof) || all(is.na(dof))) {
-    junk <- utils::capture.output(dof = try(summary(model)$df[2], silent = TRUE))
-  }
-
-  # 3rd try, nlme
-  if (inherits(dof, "try-error") || is.null(dof) || all(is.na(dof))) {
-    dof <- try(unname(model$fixDF$X), silent = TRUE)
-  }
-
-  # last try
-  if (inherits(dof, "try-error")) {
-    dof <- NULL
-  }
-
-  dof
-}
-
 
 
 

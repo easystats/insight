@@ -18,13 +18,14 @@ get_df(x, ...)
 \code{"model"}.
 \itemize{
 \item \code{"residual"} tries to extract residual degrees of freedoms. If residual
-degrees of freedom could not be extracted, returns analytical degrees of
+degrees of freedom cannot be extracted, returns analytical degrees of
 freedom, i.e. \code{n-k} (number of observations minus number of parameters).
 \item \code{"wald"} for models with z-statistic, returns \code{"Inf"}. Else, tries to
 extract residual degrees of freedoms. If residual degrees of freedom
 cannot be extracted, returns \code{"Inf"}.
-\item \code{"analytical"} returns analytical degrees of freedom, i.e. \code{n-k}
-(number of observations minus number of parameters).
+\item \code{"analytical"} for models with z-statistic, returns \code{"Inf"}. Else, returns
+analytical degrees of freedom, i.e. \code{n-k} (number of observations minus
+number of parameters).
 \item \code{"normal"} always returns \code{"Inf"}.
 \item \code{"model"} returns model-based degrees of freedom, i.e. the number of
 (estimated) parameters.
