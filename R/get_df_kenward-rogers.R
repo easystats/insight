@@ -5,7 +5,7 @@
 
 #' @keywords internal
 .degrees_of_freedom_kr.default <- function(x, ...) {
-  parameters <- find_parameters(x = , effects = "fixed", flatten = TRUE)
+  parameters <- find_parameters(x, effects = "fixed", flatten = TRUE)
   L <- as.data.frame(diag(rep(1, n_parameters(x, effects = "fixed"))))
   krvcov <- .vcov_kenward_ajusted(x)
 

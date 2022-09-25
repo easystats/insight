@@ -203,12 +203,10 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     tolower(type),
     choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger", "normal", "wald", "ml1")
   )
-  # fix name for lmerTest
-  if (type == "kenward") {
-    type <- "kenward-roger"
-  } else if (type == "satterthwaite") {
+  
+  if (type == "satterthwaite") {
     .degrees_of_freedom_satterthwaite(x)
-  } else if (type == "kenward-roger") {
+  } else if (type %in% c("kenward", "kenward-roger")) {
     .degrees_of_freedom_kr(x)
   } else {
     get_df.default(x, type = type, ...)
