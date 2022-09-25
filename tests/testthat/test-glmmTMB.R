@@ -86,6 +86,31 @@ if (requiet("testthat") &&
     expect_equal(get_df(m2, type = "model"), 4)
   })
 
+  if (requiet("parameters")) {
+    test_that("get_df", {
+      expect_equal(
+        get_df(m2, type = "residuals"),
+        parameters::degrees_of_freedom(m2, type = "residuals"),
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m2, type = "normal"),
+        parameters::degrees_of_freedom(m2, type = "normal"),
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m2, type = "analytical"),
+        parameters::degrees_of_freedom(m2, type = "analytical"),
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m2, type = "wald"),
+        parameters::degrees_of_freedom(m2, type = "wald"),
+        ignore_attr = TRUE
+      )
+    })
+  }
+
   test_that("model_info", {
     expect_true(model_info(m1)$is_zero_inflated)
     expect_false(model_info(m2)$is_zero_inflated)

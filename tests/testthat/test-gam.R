@@ -28,6 +28,31 @@ if (.runThisTest) {
       expect_equal(clean_names(m3), c("y0", "y1", "x0", "x1", "x2", "x3"))
     })
 
+    if (requiet("parameters")) {
+      test_that("get_df", {
+        expect_equal(
+          get_df(m1, type = "residuals"),
+          parameters::degrees_of_freedom(m1, type = "residuals"),
+          ignore_attr = TRUE
+        )
+        expect_equal(
+          get_df(m1, type = "normal"),
+          parameters::degrees_of_freedom(m1, type = "normal"),
+          ignore_attr = TRUE
+        )
+        expect_equal(
+          get_df(m1, type = "analytical"),
+          parameters::degrees_of_freedom(m1, type = "analytical"),
+          ignore_attr = TRUE
+        )
+        expect_equal(
+          get_df(m1, type = "wald"),
+          parameters::degrees_of_freedom(m1, type = "wald"),
+          ignore_attr = TRUE
+        )
+      })
+    }
+
     test_that("find_predictors", {
       expect_identical(find_predictors(m1), list(conditional = c("x0", "x1", "x2", "x3")))
       expect_identical(

@@ -27,6 +27,31 @@ if (.runThisTest) {
       expect_equal(get_df(m3, type = "model"), 5)
     })
 
+    if (requiet("parameters")) {
+      test_that("get_df", {
+        expect_equal(
+          get_df(m3, type = "residuals"),
+          parameters::degrees_of_freedom(m3, type = "residuals"),
+          ignore_attr = TRUE
+        )
+        expect_equal(
+          get_df(m3, type = "normal"),
+          parameters::degrees_of_freedom(m3, type = "normal"),
+          ignore_attr = TRUE
+        )
+        expect_equal(
+          get_df(m3, type = "analytical"),
+          parameters::degrees_of_freedom(m3, type = "analytical"),
+          ignore_attr = TRUE
+        )
+        expect_equal(
+          get_df(m3, type = "wald"),
+          parameters::degrees_of_freedom(m3, type = "wald"),
+          ignore_attr = TRUE
+        )
+      })
+    }
+
     test_that("n_parameters", {
       expect_equal(n_parameters(m), 6)
       expect_equal(n_parameters(m2), 6)

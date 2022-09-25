@@ -128,6 +128,31 @@ test_that("get_data", {
   expect_true(is.numeric(tmp) && length(tmp) == nrow(iris))
 })
 
+if (requiet("parameters")) {
+  test_that("get_df", {
+    expect_equal(
+      get_df(m1, type = "residuals"),
+      parameters::degrees_of_freedom(m1, type = "residuals"),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "normal"),
+      parameters::degrees_of_freedom(m1, type = "normal"),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "analytical"),
+      parameters::degrees_of_freedom(m1, type = "analytical"),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "wald"),
+      parameters::degrees_of_freedom(m1, type = "wald"),
+      ignore_attr = TRUE
+    )
+  })
+}
+
 test_that("find_formula", {
   expect_length(find_formula(m1), 2)
   expect_equal(
