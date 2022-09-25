@@ -1,5 +1,6 @@
 # Model approach (Residual df) ------------------------------
 
+#' @keywords internal
 .degrees_of_freedom_residual <- function(x, ...) {
   UseMethod(".degrees_of_freedom_residual")
 }

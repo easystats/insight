@@ -189,21 +189,10 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
   if (type == "kenward") {
     type <- "kenward-roger"
   }
-  if (type %in% c("satterthwaite", "kenward-roger")) {
-    check_if_installed("lmerTest")
-    type <- tools::toTitleCase(type) # lmerTest wants title case
-    if (!inherits(dots$data, "data.frame")) {
-      format_error("The `data` argument should be a data.frame.")
-    }
-    mm <- get_modelmatrix(x, data = dots$data)
-    out <- sapply(
-      seq_len(nrow(mm)), function(i) {
-        suppressMessages(
-          lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
-        )
-      }
-    )
-    return(out)
+  if (type == "satterthwaite") {
+    .degrees_of_freedom_satterthwaite(x)
+  } else if (type == "kenward-roger") {
+    .degrees_of_freedom_kr(x)
   } else {
     get_df.default(x, type = type, ...)
   }
@@ -211,6 +200,9 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
 
 #' @export
 get_df.lmerModTest <- get_df.lmerMod
+
+#' @export
+get_df.lme <- get_df.lmerMod
 
 
 
@@ -294,7 +286,7 @@ get_df.mediate <- function(x, ...) {
 
 #' @keywords internal
 .degrees_of_freedom_analytical <- function(model) {
-  nparam <- n_parameters(model)
+  nparam <- .model_df(model)
   n <- n_obs(model)
 
   if (is.null(n)) {
@@ -311,14 +303,7 @@ get_df.mediate <- function(x, ...) {
 
 
 .model_df <- function(x) {
-  dof <- tryCatch(
-    {
-      attr(stats::logLik(x), "df")
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  dof <- tryCatch(attr(stats::logLik(x), "df"), error = function(e) NULL)
 
   if (is.null(dof) || all(is.infinite(dof)) || all(is.na(dof))) {
     if (!is.null(x$rank)) {
