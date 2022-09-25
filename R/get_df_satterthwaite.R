@@ -7,7 +7,7 @@
 .degrees_of_freedom_satterthwaite.lmerMod <- function(x, ...) {
   check_if_installed("lmerTest")
 
-  parameters <- find_parameters(model, effects = "fixed", flatten = TRUE)
+  parameters <- find_parameters(x, effects = "fixed", flatten = TRUE)
   lmerTest_model <- lmerTest::as_lmerModLmerTest(x)
   s <- summary(lmerTest_model)
 
@@ -18,8 +18,8 @@
 .degrees_of_freedom_satterthwaite.lme <- function(x, ...) {
   check_if_installed("lavaSearch2")
 
-  parameters <- find_parameters(model, effects = "fixed", flatten = TRUE)
-  lavaSearch2::sCorrect(model) <- TRUE
-  s <- lavaSearch2::summary2(model)
+  parameters <- find_parameters(x, effects = "fixed", flatten = TRUE)
+  lavaSearch2::sCorrect(x) <- TRUE
+  s <- lavaSearch2::summary2(x)
   stats::setNames(as.vector(s$tTable[, "df"]), parameters)
 }
