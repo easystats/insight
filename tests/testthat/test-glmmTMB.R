@@ -90,17 +90,12 @@ if (requiet("testthat") &&
     test_that("get_df", {
       expect_equal(
         get_df(m2, type = "residual"),
-        parameters::degrees_of_freedom(m2, method = "residual"),
+        df.residual(m2),
         ignore_attr = TRUE
       )
       expect_equal(
         get_df(m2, type = "normal"),
-        parameters::degrees_of_freedom(m2, method = "normal"),
-        ignore_attr = TRUE
-      )
-      expect_equal(
-        get_df(m2, type = "analytical"),
-        parameters::degrees_of_freedom(m2, method = "analytical"),
+        Inf,
         ignore_attr = TRUE
       )
       expect_equal(

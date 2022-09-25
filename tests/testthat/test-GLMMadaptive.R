@@ -31,17 +31,12 @@ if (.runThisTest) {
       test_that("get_df", {
         expect_equal(
           get_df(m3, type = "residual"),
-          parameters::degrees_of_freedom(m3, method = "residual"),
+          df.residual(m3),
           ignore_attr = TRUE
         )
         expect_equal(
           get_df(m3, type = "normal"),
           parameters::degrees_of_freedom(m3, method = "normal"),
-          ignore_attr = TRUE
-        )
-        expect_equal(
-          get_df(m3, type = "analytical"),
-          parameters::degrees_of_freedom(m3, method = "analytical"),
           ignore_attr = TRUE
         )
         expect_equal(

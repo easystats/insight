@@ -325,8 +325,9 @@ get_df.mediate <- function(x, ...) {
   dof <- tryCatch(attr(stats::logLik(x), "df"), error = function(e) NULL)
 
   if (is.null(dof) || all(is.infinite(dof)) || all(is.na(dof))) {
-    if (!is.null(x$rank)) {
-      dof <- x$rank + 1
+    r <- tryCatch(x$rank, error = function(e) NULL)
+    if (!is.null(r)) {
+      dof <- r + 1
     } else {
       n <- n_parameters(x)
       extra <- 0
