@@ -4,9 +4,9 @@ invisible(sapply(pkgs, requiet))
 test_that("get_predicted.default - ordinal - match CI", {
   data(wine, package = "ordinal")
   m <- clm(rating ~ temp * contact, data = wine)
-  dg <- get_datagrid(m, "temp")
+  dg <- get_datagrid(m, "temp", verbose = FALSE)
 
-  out <- get_predicted(m, ci = .95, data = dg)
+  out <- get_predicted(m, ci = .95, data = dg, verbose = FALSE)
   p <- predict(m, newdata = dg, interval = TRUE, se.fit = TRUE)
 
   expect_equal(
