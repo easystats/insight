@@ -6,7 +6,7 @@
 #' @keywords internal
 .degrees_of_freedom_ml1.default <- function(x, ...) {
   if (!is_mixed_model(x)) {
-    format_error("`x`` must be a mixed model.")
+    format_error("Model must be a mixed model.")
   }
 
   re_groups <- get_random(x)
