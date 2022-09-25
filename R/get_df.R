@@ -26,12 +26,19 @@ get_df <- function(x, ...) {
 #' @rdname get_df
 #' @export
 get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "wald", "normal"))
 
-  if (type == "residual") {
+  if (type == "normal") {
+    return(Inf)
+  } else if (type == "residual") {
     dof <- .degrees_of_freedom_residual(x, verbose = verbose)
     if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
       dof <- .degrees_of_freedom_analytical(x)
+    }
+  } else if (type == "wald") {
+    dof <- .degrees_of_freedom_residual(x, verbose = verbose)
+    if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
+      return(Inf)
     }
   } else if (type == "analytical") {
     dof <- .degrees_of_freedom_analytical(x)
@@ -59,9 +66,11 @@ get_df.model_fit <- function(x, type = "residual", verbose = TRUE, ...) {
 
 #' @export
 get_df.ivFixed <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     as.vector(x$df)
   }
@@ -73,7 +82,7 @@ get_df.ivprobit <- get_df.ivFixed
 
 #' @export
 get_df.fixest <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "residual") {
     s <- summary(x)
     vcov_scaled <- s$cov.scaled
@@ -82,6 +91,8 @@ get_df.fixest <- function(x, type = "residual", ...) {
     } else {
       max(s$nobs - attr(vcov_scaled, "dof.K"), 1)
     }
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     .model_df(x)
   }
@@ -90,9 +101,11 @@ get_df.fixest <- function(x, type = "residual", ...) {
 
 #' @export
 get_df.multinom <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     n_obs(x) - x$edf
   }
@@ -104,9 +117,11 @@ get_df.nnet <- get_df.multinom
 
 #' @export
 get_df.summary.lm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     x$fstatistic[3]
   }
@@ -146,9 +161,11 @@ get_df.coeftest <- function(x, ...) {
 
 #' @export
 get_df.lqmm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     cs <- summary(x)
     tryCatch(
@@ -173,9 +190,11 @@ get_df.lqm <- get_df.lqmm
 
 #' @export
 get_df.cgam <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     # x$resid_df_obs
     # new in cgam 1.18
@@ -186,9 +205,11 @@ get_df.cgam <- function(x, type = "residual", ...) {
 
 #' @export
 get_df.cgamm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     x$resid_df_obs
   }
@@ -197,9 +218,11 @@ get_df.cgamm <- function(x, type = "residual", ...) {
 
 #' @export
 get_df.glht <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     x$df
   }
@@ -216,9 +239,11 @@ get_df.BBreg <- get_df.glht
 
 #' @export
 get_df.rlm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "residual") {
     .degrees_of_freedom_analytical(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     .model_df(x)
   }
@@ -253,7 +278,7 @@ get_df.truncreg <- get_df.rlm
 
 #' @export
 get_df.rq <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "residual") {
     tryCatch(
       {
@@ -265,6 +290,8 @@ get_df.rq <- function(x, type = "residual", ...) {
         NULL
       }
     )
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     .model_df(x)
   }
@@ -273,9 +300,11 @@ get_df.rq <- function(x, type = "residual", ...) {
 
 #' @export
 get_df.rqss <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "residual") {
     n_obs(x) - x$edf
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     .model_df(x)
   }
@@ -284,9 +313,11 @@ get_df.rqss <- function(x, type = "residual", ...) {
 
 #' @export
 get_df.bfsl <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "residual") {
     x$df.residual
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     .model_df(x)
   }
@@ -295,9 +326,11 @@ get_df.bfsl <- function(x, type = "residual", ...) {
 
 #' @export
 get_df.plm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "residual") {
     x$df.residual
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     .model_df(x)
   }
@@ -306,9 +339,11 @@ get_df.plm <- function(x, type = "residual", ...) {
 
 #' @export
 get_df.selection <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     s <- summary(x)
     s$param$df
@@ -319,7 +354,7 @@ get_df.selection <- function(x, type = "residual", ...) {
 #' @export
 get_df.lmerMod <- function(x, type = "residual", ...) {
   dots <- list(...)
-  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger", "normal", "wald"))
   # fix name for lmerTest
   if (type == "kenward") {
     type <- "kenward-roger"
@@ -350,11 +385,13 @@ get_df.lmerModTest <- get_df.lmerMod
 
 #' @export
 get_df.logitor <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
-    get_df.default(x$fit, ...)
+    get_df.default(x$fit, type = type, ...)
   }
 }
 
@@ -393,9 +430,11 @@ get_df.betamfx <- get_df.logitor
 
 #' @export
 get_df.merModList <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     s <- suppressWarnings(summary(x))
     s$fe$df
@@ -407,16 +446,18 @@ get_df.merModList <- function(x, type = "residual", ...) {
 get_df.mira <- function(x, type = "residual", ...) {
   # installed?
   check_if_installed("mice")
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   get_df(mice::pool(x), type, ...)
 }
 
 
 #' @export
 get_df.mipo <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     as.vector(summary(x)$df)
   }
