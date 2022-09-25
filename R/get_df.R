@@ -5,18 +5,17 @@
 #'   from regression models.
 #'
 #' @param x A statistical model.
-#' @param type Can be `"residual"`, `"wald"`, `"normal"`, `"analytical"`, or
-#'   `"model"`.
+#' @param type Can be `"residual"`, `"wald"`, `"normal"`, or
+#'   `"model"`. `"analytical"` is an alias for `"residual"`.
 #'
-#' - `"residual"` tries to extract residual degrees of freedoms. If residual
-#'   degrees of freedom cannot be extracted, returns analytical degrees of
-#'   freedom, i.e. `n-k` (number of observations minus number of parameters).
-#' - `"wald"` for models with z-statistic, returns `"Inf"`. Else, tries to
-#'   extract residual degrees of freedoms. If residual degrees of freedom
-#'   cannot be extracted, returns `"Inf"`.
-#' - `"analytical"` for models with z-statistic, returns `"Inf"`. Else, returns
-#'   analytical degrees of freedom, i.e. `n-k` (number of observations minus
-#'   number of parameters).
+#' - "normal" returns Inf.
+#' - `"residual"` (aka `"analytical"`) returns `n-k` (number of observations
+#'   minus number of estimated parameters). This is what [`stats::df.residual()]`
+#'   usually returns. If residual degrees of freedom cannot be extracted,
+#'   returns `Inf`.
+#' - `"wald"`` returns residual (aka analytical) degrees of freedom for models
+#'   with t-statistic, and `Inf` for all other models. Also returns `Inf` if
+#'   residual degrees of freedom cannot be extracted.
 #' - `"normal"` always returns `"Inf"`.
 #' - `"model"` returns model-based degrees of freedom, i.e. the number of
 #'   (estimated) parameters.
@@ -32,7 +31,7 @@
 #' is small (even if the sample size of level-1 units is high). In such cases
 #' it is recommended to approximate a more accurate number of degrees of freedom
 #' for such inferential statistics. Unlike simpler approximation heuristics
-#' like the "m-l-1" rule (`dof_ml1`), the Satterthwaite or Kenward-Rogers 
+#' like the "m-l-1" rule (`dof_ml1`), the Satterthwaite or Kenward-Rogers
 #' approximation is also applicable in more complex multilevel designs. However,
 #' the "m-l-1" heuristic also applies to generalized mixed models, while
 #' approaches like Kenward-Roger or Satterthwaite are limited to linear mixed
@@ -68,16 +67,19 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     statistic <- find_statistic(x)
   }
 
+  # handle aliases
+  if (type == "analytical") {
+    type <- "residual"
+  }
+
+
   # Wald normal approximation - always Inf -----
   if (type == "normal") {
     return(Inf)
 
-  # residual df, falls back to analytical if we have no residual df method -----
+  # residual/analytical df, falls back to Inf if we have no residual df method -----
   } else if (type == "residual") {
-    dof <- .degrees_of_freedom_residual(x, verbose = verbose)
-    if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
-      dof <- .degrees_of_freedom_analytical(x)
-    }
+    dof <- .get_residual_df(x, verbose)
 
   # Wald df - always Inf for z-statistic, else residual df -----
   } else if (type == "wald") {
@@ -85,18 +87,7 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     if (identical(statistic, "z-statistic")) {
       return(Inf)
     }
-    dof <- .degrees_of_freedom_residual(x, verbose = verbose)
-    if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
-      return(Inf)
-    }
-
-  # analytical df - always Inf for z-statistic, else n-k -----
-  } else if (type == "analytical") {
-    # z-statistic always Inf, *unless* we have residual df (which we have for some models)
-    if (identical(statistic, "z-statistic")) {
-      return(Inf)
-    }
-    dof <- .degrees_of_freedom_analytical(x)
+    dof <- .get_residual_df(x, verbose)
 
   # remaining option is model-based df, i.e. number of estimated parameters
   } else {
@@ -159,11 +150,11 @@ get_df.coeftest <- function(x, ...) {
 #' @export
 get_df.rlm <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical"))
-  stat <- find_statistic(x)
-  if (type == "normal" || (type == "wald" && stat == "z-statistic")) {
+  statistic <- find_statistic(x)
+  if (type == "normal" || (type == "wald" && identical(statistic, "z-statistic"))) {
     return(Inf)
   } else if (type %in% c("residual", "wald")) {
-    .degrees_of_freedom_analytical(x)
+    .get_residual_df(x)
   } else {
     .model_df(x)
   }
@@ -208,8 +199,7 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
   # fix name for lmerTest
   if (type == "kenward") {
     type <- "kenward-roger"
-  }
-  if (type == "satterthwaite") {
+  } else if (type == "satterthwaite") {
     .degrees_of_freedom_satterthwaite(x)
   } else if (type == "kenward-roger") {
     .degrees_of_freedom_kr(x)
@@ -302,6 +292,15 @@ get_df.mediate <- function(x, ...) {
 
 
 # Analytical approach ------------------------------
+
+
+.get_residual_df <- function(x, verbose = TRUE) {
+  dof <- .degrees_of_freedom_residual(x, verbose = verbose)
+  if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
+    dof <- .degrees_of_freedom_analytical(x)
+  }
+  dof
+}
 
 
 #' @keywords internal

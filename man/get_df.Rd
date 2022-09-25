@@ -14,18 +14,16 @@ get_df(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{type}{Can be \code{"residual"}, \code{"wald"}, \code{"normal"}, \code{"analytical"}, or
-\code{"model"}.
+\item{type}{Can be \code{"residual"}, \code{"wald"}, \code{"normal"}, or
+\code{"model"}. \code{"analytical"} is an alias for \code{"residual"}.
 \itemize{
-\item \code{"residual"} tries to extract residual degrees of freedoms. If residual
-degrees of freedom cannot be extracted, returns analytical degrees of
-freedom, i.e. \code{n-k} (number of observations minus number of parameters).
-\item \code{"wald"} for models with z-statistic, returns \code{"Inf"}. Else, tries to
-extract residual degrees of freedoms. If residual degrees of freedom
-cannot be extracted, returns \code{"Inf"}.
-\item \code{"analytical"} for models with z-statistic, returns \code{"Inf"}. Else, returns
-analytical degrees of freedom, i.e. \code{n-k} (number of observations minus
-number of parameters).
+\item "normal" returns Inf.
+\item \code{"residual"} (aka \code{"analytical"}) returns \code{n-k} (number of observations
+minus number of estimated parameters). This is what [\verb{stats::df.residual()]}
+usually returns. If residual degrees of freedom cannot be extracted,
+returns \code{Inf}.
+\item \verb{"wald"`` returns residual (aka analytical) degrees of freedom for models with t-statistic, and }Inf\verb{for all other models. Also returns}Inf` if
+residual degrees of freedom cannot be extracted.
 \item \code{"normal"} always returns \code{"Inf"}.
 \item \code{"model"} returns model-based degrees of freedom, i.e. the number of
 (estimated) parameters.
