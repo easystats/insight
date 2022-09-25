@@ -12,8 +12,8 @@
 #'   degrees of freedom could not be extracted, returns analytical degrees of
 #'   freedom, i.e. `n-k` (number of observations minus number of parameters).
 #' - `"wald"` for models with z-statistic, returns `"Inf"`. Else, tries to
-#'   extract residual degrees of freedoms. If residual degrees of freedom could
-#'   not be extracted, returns `"Inf"`.
+#'   extract residual degrees of freedoms. If residual degrees of freedom
+#'   cannot be extracted, returns `"Inf"`.
 #' - `"analytical"` returns analytical degrees of freedom, i.e. `n-k`
 #'   (number of observations minus number of parameters).
 #' - `"normal"` always returns `"Inf"`.
