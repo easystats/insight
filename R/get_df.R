@@ -203,7 +203,7 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     tolower(type),
     choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger", "normal", "wald", "ml1")
   )
-  
+
   if (type == "satterthwaite") {
     .degrees_of_freedom_satterthwaite(x)
   } else if (type %in% c("kenward", "kenward-roger")) {
