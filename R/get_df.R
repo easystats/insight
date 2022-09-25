@@ -21,8 +21,28 @@
 #' - `"model"` returns model-based degrees of freedom, i.e. the number of
 #'   (estimated) parameters.
 #'
+#' For mixed models of class `merMod`, can also be `"satterthwaite"` or
+#' `"kenward-rogers"`. See 'Details'.
+#'
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
+#'
+#' @details Inferential statistics (like p-values, confidence intervals and
+#' standard errors) may be biased in mixed models when the number of clusters
+#' is small (even if the sample size of level-1 units is high). In such cases
+#' it is recommended to approximate a more accurate number of degrees of freedom
+#' for such inferential statistics. Unlike simpler approximation heuristics
+#' like the "m-l-1" rule (`dof_ml1`), the Satterthwaite or Kenward-Rogers 
+#' approximation is also applicable in more complex multilevel designs. However,
+#' the "m-l-1" heuristic also applies to generalized mixed models, while
+#' approaches like Kenward-Roger or Satterthwaite are limited to linear mixed
+#' models only.
+#'
+#' @references
+#' - Kenward, M. G., & Roger, J. H. (1997). Small sample inference for
+#'   fixed effects from restricted maximum likelihood. Biometrics, 983-997.
+#' - Satterthwaite FE (1946) An approximate distribution of estimates of
+#'   variance components. Biometrics Bulletin 2 (6):110–4.
 #'
 #' @examples
 #' model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)

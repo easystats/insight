@@ -29,7 +29,10 @@ number of parameters).
 \item \code{"normal"} always returns \code{"Inf"}.
 \item \code{"model"} returns model-based degrees of freedom, i.e. the number of
 (estimated) parameters.
-}}
+}
+
+For mixed models of class \code{merMod}, can also be \code{"satterthwaite"} or
+\code{"kenward-rogers"}. See 'Details'.}
 
 \item{verbose}{Toggle warnings.}
 }
@@ -37,8 +40,28 @@ number of parameters).
 Estimate or extract residual or model-based degrees of freedom
 from regression models.
 }
+\details{
+Inferential statistics (like p-values, confidence intervals and
+standard errors) may be biased in mixed models when the number of clusters
+is small (even if the sample size of level-1 units is high). In such cases
+it is recommended to approximate a more accurate number of degrees of freedom
+for such inferential statistics. Unlike simpler approximation heuristics
+like the "m-l-1" rule (\code{dof_ml1}), the Satterthwaite or Kenward-Rogers
+approximation is also applicable in more complex multilevel designs. However,
+the "m-l-1" heuristic also applies to generalized mixed models, while
+approaches like Kenward-Roger or Satterthwaite are limited to linear mixed
+models only.
+}
 \examples{
 model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
 get_df(model) # same as df.residual(model)
 get_df(model, type = "model") # same as attr(logLik(model), "df")
+}
+\references{
+\itemize{
+\item Kenward, M. G., & Roger, J. H. (1997). Small sample inference for
+fixed effects from restricted maximum likelihood. Biometrics, 983-997.
+\item Satterthwaite FE (1946) An approximate distribution of estimates of
+variance components. Biometrics Bulletin 2 (6):110–4.
+}
 }
