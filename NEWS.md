@@ -6,6 +6,9 @@
   refer to particular effectsizes (like Phi, Omega or Epsilon) include the related unicode-character instead of the written name. This only works on Windows for
   R >= 4.2, and on OS X or Linux for R >= 4.0.
 
+* `get_df()` gets more `type` options to return different type of degrees of
+  freedom (namely, `"wald"` and `"normal"`).
+
 ## Bug fixes
 
 * Fixed issue with column alignment in `export_table()` when the data frame 
