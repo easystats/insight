@@ -31,7 +31,7 @@
 #' is small (even if the sample size of level-1 units is high). In such cases
 #' it is recommended to approximate a more accurate number of degrees of freedom
 #' for such inferential statistics. Unlike simpler approximation heuristics
-#' like the "m-l-1" rule (`dof_ml1`), the Satterthwaite or Kenward-Rogers
+#' like the "m-l-1" rule (`type = "ml1"`), the Satterthwaite or Kenward-Rogers
 #' approximation is also applicable in more complex multilevel designs. However,
 #' the "m-l-1" heuristic also applies to generalized mixed models, while
 #' approaches like Kenward-Roger or Satterthwaite are limited to linear mixed
@@ -57,7 +57,10 @@ get_df <- function(x, ...) {
 #' @export
 get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   # check valid options
-  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "wald", "normal"))
+  type <- match.arg(
+    tolower(type),
+    choices = c("residual", "model", "analytical", "wald", "normal", "ml1")
+  )
 
   # check if user already passed "statistic" argument, to 
   # avoid multiple calls to "find_statistic()"
@@ -88,6 +91,10 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
       return(Inf)
     }
     dof <- .get_residual_df(x, verbose)
+
+  # ml1 - only for certain mixed models -----
+  } else if (type == "ml1") {
+    dof <- .degrees_of_freedom_ml1(x)
 
   # remaining option is model-based df, i.e. number of estimated parameters
   } else {
@@ -194,7 +201,7 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
   dots <- list(...)
   type <- match.arg(
     tolower(type),
-    choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger", "normal", "wald")
+    choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger", "normal", "wald", "ml1")
   )
   # fix name for lmerTest
   if (type == "kenward") {
