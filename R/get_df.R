@@ -219,7 +219,8 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
   dots <- list(...)
   type <- match.arg(
     tolower(type),
-    choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger", "normal", "wald", "ml1")
+    choices = c("residual", "model", "analytical", "satterthwaite", "kenward",
+                "kenward-roger", "normal", "wald", "ml1", "betwithin")
   )
 
   if (type == "satterthwaite") {
