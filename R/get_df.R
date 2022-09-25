@@ -96,7 +96,7 @@ get_df.ivprobit <- get_df.ivFixed
 #' @export
 get_df.fixest <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
-  if (type %n% c("residual", "wald")) {
+  if (type %in% c("residual", "wald")) {
     s <- summary(x)
     vcov_scaled <- s$cov.scaled
     if (is.null(vcov_scaled)) {
