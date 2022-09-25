@@ -42,7 +42,12 @@ Authors@R:
              family = "Hayes",
              role = c("rev"),
              email = "alexpghayes@gmail.com",
-             comment = c(ORCID = "0000-0002-4985-5160")))
+             comment = c(ORCID = "0000-0002-4985-5160")),
+      person(given = "Grant",
+             family = "McDermott",
+             role = c("ctb"),
+             email = "grantmcd@uoregon.edu",
+             comment = c(ORCID = "0000-0001-7883-8573")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: A tool to provide an easy, intuitive and consistent
     access to information contained in various R models, like model
