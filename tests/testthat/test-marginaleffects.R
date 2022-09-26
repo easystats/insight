@@ -23,7 +23,7 @@ if (requiet("marginaleffects") && requiet("insight") && requiet("emmeans") && re
     # Find parameters
     expect_equal(insight::find_parameters(x)$marginaleffects, "Species")
 
-     # Find statistic
+    # Find statistic
     expect_equal(insight::find_statistic(x), "z-statistic")
   })
 }
