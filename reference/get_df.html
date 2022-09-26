@@ -114,10 +114,12 @@ from regression models.</p>
 <dt>type</dt>
 <dd><p>Can be <code>"residual"</code>, <code>"wald"</code>, <code>"normal"</code>, or
 <code>"model"</code>. <code>"analytical"</code> is an alias for <code>"residual"</code>.</p><ul><li><p><code>"residual"</code> (aka <code>"analytical"</code>) returns <code>n-k</code> (number of observations
-minus number of estimated parameters). This is what [<code>stats::df.residual()]</code>
+minus number of estimated parameters). This is what <code><a href="https://rdrr.io/r/stats/df.residual.html" class="external-link">stats::df.residual()</a></code>
 usually returns. If residual degrees of freedom cannot be extracted,
 returns <code>Inf</code>.</p></li>
-<li><p><code>"wald"`` returns residual (aka analytical) degrees of freedom for models with t-statistic, </code>1<code>for models with Chi-squared statistic, and</code>Inf<code>for all other models. Also returns</code>Inf` if residual degrees of freedom cannot
+<li><p><code>"wald"</code> returns residual (aka analytical) degrees of freedom for models
+with t-statistic, <code>1</code> for models with Chi-squared statistic, and <code>Inf</code> for
+all other models. Also returns <code>Inf</code> if residual degrees of freedom cannot
 be extracted.</p></li>
 <li><p><code>"normal"</code> always returns <code>"Inf"</code>.</p></li>
 <li><p><code>"model"</code> returns model-based degrees of freedom, i.e. the number of
