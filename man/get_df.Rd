@@ -21,8 +21,8 @@ get_df(x, ...)
 minus number of estimated parameters). This is what [\verb{stats::df.residual()]}
 usually returns. If residual degrees of freedom cannot be extracted,
 returns \code{Inf}.
-\item \verb{"wald"`` returns residual (aka analytical) degrees of freedom for models with t-statistic, and }Inf\verb{for all other models. Also returns}Inf` if
-residual degrees of freedom cannot be extracted.
+\item \verb{"wald"`` returns residual (aka analytical) degrees of freedom for models with t-statistic, }1\verb{for models with Chi-squared statistic, and}Inf\verb{for all other models. Also returns}Inf` if residual degrees of freedom cannot
+be extracted.
 \item \code{"normal"} always returns \code{"Inf"}.
 \item \code{"model"} returns model-based degrees of freedom, i.e. the number of
 (estimated) parameters.

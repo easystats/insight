@@ -173,6 +173,29 @@ get_df.coeftest <- function(x, ...) {
 }
 
 
+#' @export
+get_df.fixest <- function(x, type = "residual", ...) {
+  # fixest degrees of freedom can be tricky. best to use the function by the
+  # package.
+  check_if_installed("fixest")
+  if (is.null(type)) {
+    type <- "residual"
+  }
+  type <- match.arg(
+    tolower(type),
+    choices = c("wald", "residual", "normal")
+  )
+  type <- switch(type,
+    "wald" = "t",
+    "residual" = "resid",
+    type
+  )
+  if (type == "normal") {
+    return(Inf)
+  }
+  fixest::degrees_freedom(x, type = type)
+}
+
 
 
 # methods for models w/o df.residual() method --------------
