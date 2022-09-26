@@ -298,10 +298,10 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   }
   check_if_installed("lmerTest")
   type <- tools::toTitleCase(type) # lmerTest wants title case
-  if (!inherits(dots$data, "data.frame")) {
+  if (!inherits(data, "data.frame")) {
     format_error("The `data` argument should be a data frame.")
   }
-  mm <- get_modelmatrix(x, data = dots$data)
+  mm <- get_modelmatrix(x, data = data)
   out <- sapply(
     seq_len(nrow(mm)), function(i) {
       suppressMessages(
