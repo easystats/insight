@@ -8,7 +8,6 @@
 #' @param type Can be `"residual"`, `"wald"`, `"normal"`, or
 #'   `"model"`. `"analytical"` is an alias for `"residual"`.
 #'
-#' - "normal" returns Inf.
 #' - `"residual"` (aka `"analytical"`) returns `n-k` (number of observations
 #'   minus number of estimated parameters). This is what [`stats::df.residual()]`
 #'   usually returns. If residual degrees of freedom cannot be extracted,

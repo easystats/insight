@@ -17,7 +17,6 @@ get_df(x, ...)
 \item{type}{Can be \code{"residual"}, \code{"wald"}, \code{"normal"}, or
 \code{"model"}. \code{"analytical"} is an alias for \code{"residual"}.
 \itemize{
-\item "normal" returns Inf.
 \item \code{"residual"} (aka \code{"analytical"}) returns \code{n-k} (number of observations
 minus number of estimated parameters). This is what [\verb{stats::df.residual()]}
 usually returns. If residual degrees of freedom cannot be extracted,
