@@ -198,53 +198,6 @@ get_df.fixest <- function(x, type = "residual", ...) {
 
 
 
-# methods for models w/o df.residual() method --------------
-
-#' @export
-get_df.rlm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical"))
-  statistic <- find_statistic(x)
-  # Wald-z or normal
-  if (type == "normal" || (type == "wald" && identical(statistic, "z-statistic"))) {
-    return(Inf)
-  # Wald Chi-squared
-  } else if (type == "wald" && identical(statistic, "chi-squared statistic")) {
-    return(1)
-  # Residual or Wald-t
-  } else if (type %in% c("residual", "wald", "analytical")) {
-    .get_residual_df(x)
-  } else {
-    .model_df(x)
-  }
-}
-
-#' @export
-get_df.bigglm <- get_df.rlm
-
-#' @export
-get_df.biglm <- get_df.rlm
-
-#' @export
-get_df.complmrob <- get_df.rlm
-
-#' @export
-get_df.gls <- get_df.rlm
-
-#' @export
-get_df.garch <- get_df.rlm
-
-#' @export
-get_df.mhurdle <- get_df.rlm
-
-#' @export
-get_df.nlrq <- get_df.rlm
-
-#' @export
-get_df.truncreg <- get_df.rlm
-
-
-
-
 # Mixed models - special treatment --------------
 
 #' @export
@@ -277,15 +230,9 @@ get_df.lme <- get_df.lmerMod
 
 
 #' @export
-get_df.logitor <- function(x, type = "residual", ...) {
+get_df.logitor <- function(x, type = "residual", verbose = TRUE, ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical"))
-  if (type == "model") {
-    .model_df(x)
-  } else if (type == "normal") {
-    return(Inf)
-  } else {
-    get_df.default(x$fit, type = type, ...)
-  }
+  get_df.default(x$fit, type = type, verbose = verbose, ...)
 }
 
 #' @export
