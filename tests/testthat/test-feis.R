@@ -94,7 +94,7 @@ if (!osx && requiet("testthat") &&
     )
     expect_equal(
       get_df(m1, type = "wald"),
-      parameters::degrees_of_freedom(m1, method = "wald"),
+      2290,
       ignore_attr = TRUE
     )
   })
