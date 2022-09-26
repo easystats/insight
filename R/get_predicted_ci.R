@@ -230,7 +230,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 
   # data is required for satterthwaite
   if (isTRUE(ci_method %in% c("satterthwaite", "kenward", "kenward-roger"))) {
-    dof <- get_df(x, type = ci_method, data = data)
+    dof <- .satterthwaite_kr_df_per_obs(x, type = ci_method, data = data)
   } else {
     dof <- get_df(x)
   }
@@ -269,6 +269,25 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 }
 
 
+.satterthwaite_kr_df_per_obs <- function(x, type, data = NULL) {
+  if (type == "kenward") {
+    type <- "kenward-roger"
+  }
+  check_if_installed("lmerTest")
+  type <- tools::toTitleCase(type) # lmerTest wants title case
+  if (!inherits(dots$data, "data.frame")) {
+    format_error("The `data` argument should be a data frame.")
+  }
+  mm <- get_modelmatrix(x, data = dots$data)
+  out <- sapply(
+    seq_len(nrow(mm)), function(i) {
+      suppressMessages(
+        lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
+      )
+    }
+  )
+  out
+}
 
 
 .get_predicted_se_to_ci_zeroinfl <- function(x,

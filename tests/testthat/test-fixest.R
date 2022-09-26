@@ -130,21 +130,10 @@ test_that("get_data", {
 
 if (requiet("parameters")) {
   test_that("get_df", {
-    expect_equal(
-      get_df(m1, type = "residual"),
-      df.residual(m1),
-      ignore_attr = TRUE
-    )
-    expect_equal(
-      get_df(m1, type = "normal"),
-      Inf,
-      ignore_attr = TRUE
-    )
-    expect_equal(
-      get_df(m1, type = "wald"),
-      parameters::degrees_of_freedom(m1, method = "wald"),
-      ignore_attr = TRUE
-    )
+    expect_equal(get_df(m1, type = "residual"), 38290, ignore_attr = TRUE)
+    expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
+    ## TODO: check if statistic is z or t for this model
+    expect_equal(get_df(m1, type = "wald"), Inf, ignore_attr = TRUE)
   })
 }
 
