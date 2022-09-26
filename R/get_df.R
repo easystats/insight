@@ -20,7 +20,7 @@
 #'   (estimated) parameters.
 #'
 #' For mixed models, can also be `"ml1"` or `"betwithin"`, and for models of
-#' class `merMod`, `type` can also be `"satterthwaite"` or `"kenward-rogers"`.
+#' class `merMod`, `type` can also be `"satterthwaite"` or `"kenward-roger"`.
 #' See 'Details'.
 #'
 #' @param verbose Toggle warnings.
@@ -219,12 +219,12 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
   type <- match.arg(
     tolower(type),
     choices = c("residual", "model", "analytical", "satterthwaite", "kenward",
-                "kenward-roger", "normal", "wald", "ml1", "betwithin")
+                "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin")
   )
 
   if (type == "satterthwaite") {
     .degrees_of_freedom_satterthwaite(x)
-  } else if (type %in% c("kenward", "kenward-roger")) {
+  } else if (type %in% c("kr", "kenward", "kenward-roger")) {
     .degrees_of_freedom_kr(x)
   } else {
     get_df.default(x, type = type, ...)

@@ -7,7 +7,8 @@
   R >= 4.2, and on OS X or Linux for R >= 4.0.
 
 * `get_df()` gets more `type` options to return different type of degrees of
-  freedom (namely, `"wald"` and `"normal"`).
+  freedom (namely, `"wald"` and `"normal"`, and for mixed models, `"ml1"`,
+  `"betwithin"`, `"satterthwaite"` and `"kenward-rogers"`).
 
 ## Bug fixes
 

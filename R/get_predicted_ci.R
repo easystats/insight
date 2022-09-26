@@ -231,7 +231,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   } # Same as predicted
 
   # data is required for satterthwaite
-  if (isTRUE(ci_method %in% c("satterthwaite", "kenward", "kenward-roger"))) {
+  if (isTRUE(ci_method %in% c("satterthwaite", "kr", "kenward", "kenward-roger"))) {
     dof <- .satterthwaite_kr_df_per_obs(x, type = ci_method, data = data)
   } else {
     dof <- get_df(x, type = ci_method)
@@ -272,7 +272,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 
 
 .satterthwaite_kr_df_per_obs <- function(x, type, data = NULL) {
-  if (type == "kenward") {
+  if (type %in% c("kr", "kenward")) {
     type <- "kenward-roger"
   }
   check_if_installed("lmerTest")

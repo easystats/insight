@@ -18,7 +18,7 @@ get_predicted_se <- function(x,
   ## TODO: what about Satterthwaite?
 
   # kenward-roger adjusts both the dof and the varcov
-  if (isTRUE(ci_method %in% c("kenward-roger", "kenward"))) {
+  if (isTRUE(ci_method %in% c("kenward-roger", "kenward", "kr"))) {
     if (is.null(vcov) && is.null(vcov_args)) {
       check_if_installed("pbkrtest")
       vcovmat <- as.matrix(pbkrtest::vcovAdj(x))
