@@ -15,13 +15,10 @@ if (requiet("marginaleffects") && requiet("insight") && requiet("emmeans") && re
     p1 <- insight::get_parameters(x)
     p2 <- insight::get_parameters(x2)
 
-    ## TODO: breaks since marginaleffects 0.7.1 @vincentarelbundock
-    # expect_equal(names(p1), names(p2))
-    expect_equal(max(p1$Estimate - p2$Estimate), 0, tolerance = 0.001)
-
-    ## TODO: breaks since marginaleffects 0.7.1 @vincentarelbundock
-    # Find parameters
-    # expect_equal(insight::find_parameters(x)$marginaleffects, "Species")
+    expect_true("Estimate" %in% colnames(p1))
+    expect_true("Species" %in% colnames(p1))
+    expect_true("Petal.Length" %in% colnames(p1))
+    expect_equal(p1$Estimate, p2$Estimate, tolerance = 0.001)
 
     # Find statistic
     expect_equal(insight::find_statistic(x), "z-statistic")
