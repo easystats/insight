@@ -132,6 +132,8 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     warning("Could not extract degrees of freedom.", call. = FALSE)
   }
 
+  # add attributes
+  dof <- .add_dof_attributes(dof, type, statistic)
   dof
 }
 
@@ -198,6 +200,7 @@ get_df.fixest <- function(x, type = "residual", ...) {
 
 
 
+
 # Mixed models - special treatment --------------
 
 #' @export
@@ -209,12 +212,14 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
   )
 
   if (type == "satterthwaite") {
-    .degrees_of_freedom_satterthwaite(x)
+    dof <- .degrees_of_freedom_satterthwaite(x)
   } else if (type %in% c("kr", "kenward", "kenward-roger")) {
-    .degrees_of_freedom_kr(x)
+    dof <- .degrees_of_freedom_kr(x)
   } else {
-    get_df.default(x, type = type, ...)
+    return(get_df.default(x, type = type, ...))
   }
+  dof <- .add_dof_attributes(dof, type, "t-statistic")
+  dof
 }
 
 #' @export
@@ -227,7 +232,6 @@ get_df.lme <- get_df.lmerMod
 
 
 # Other models ------------------
-
 
 #' @export
 get_df.logitor <- function(x, type = "residual", verbose = TRUE, ...) {
@@ -294,8 +298,58 @@ get_df.mediate <- function(x, ...) {
 
 
 
-# Analytical approach ------------------------------
+# methods --------------------
 
+#' @export
+print.insight_df <- function(x, ...) {
+  type <- attributes(x)$type
+  statistic <- attributes(x)$statistic
+
+  s1 <- switch(type,
+    "residual" = "Residual",
+    "normal" = ,
+    "wald" = "Wald",
+    "kr" = ,
+    "kenward" = ,
+    "kenward-roger" = "Kenward-Rogers",
+    "satterthwaite" = "Satterthwaite",
+    "ml1" = "m-l-1",
+    "betwithin" = "Between-within",
+    "model" = "Estimated model parameters"
+  )
+
+  s2 <- ""
+  if (type == "normal" || (type == "wald" && grepl("^z", statistic))) {
+    s2 <- "-z"
+  } else if (type == "wald" && grepl("^t", statistic)) {
+    s2 <- "-t"
+  } else if (type == "wald" && grepl("^chi", statistic)) {
+    s2 <- "-chi2"
+  }
+
+  string <- paste0(s1, s2, ifelse(identical(type, "model"), " ", " degrees of freedom"))
+
+  if (length(x) > 1 && !is.null(names(x))) {
+    out <- data.frame(
+      Parameter = names(x),
+      df = x,
+      stringsAsFactors = FALSE
+    )
+    cat(export_table(out, caption = c(string, "blue")))
+  } else {
+    cat(paste0(as.vector(x), "(", print_color(string, "blue"), ")\n"))
+  }
+}
+
+#' @export
+as.numeric.insight_df <- function(x, ...) {
+  as.vector(x)
+}
+
+
+
+
+# Analytical approach ------------------------------
 
 .get_residual_df <- function(x, verbose = TRUE) {
   dof <- .degrees_of_freedom_residual(x, verbose = verbose)
@@ -304,7 +358,6 @@ get_df.mediate <- function(x, ...) {
   }
   dof
 }
-
 
 #' @keywords internal
 .degrees_of_freedom_analytical <- function(model) {
@@ -322,7 +375,6 @@ get_df.mediate <- function(x, ...) {
 
 
 # Model approach (model-based / logLik df) ------------------------------
-
 
 .model_df <- function(x) {
   dof <- tryCatch(attr(stats::logLik(x), "df"), error = function(e) NULL)
@@ -347,8 +399,21 @@ get_df.mediate <- function(x, ...) {
   dof
 }
 
-
 .boot_em_df <- function(model) {
   est <- get_parameters(model, summary = FALSE)
   rep(NA, ncol(est))
+}
+
+
+
+
+# helper ------
+
+.add_dof_attributes <- function(dof, type, statistic) {
+  if (!is.null(dof)) {
+    attr(dof, "type") <- type
+    attr(dof, "statistic") <- statistic
+    class(dof) <- unique(c("insight_df", class(dof)))
+  }
+  dof
 }
