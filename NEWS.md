@@ -8,7 +8,7 @@
 
 * `get_df()` gets more `type` options to return different type of degrees of
   freedom (namely, `"wald"` and `"normal"`, and for mixed models, `"ml1"`,
-  `"betwithin"`, `"satterthwaite"` and `"kenward-rogers"`).
+  `"betwithin"`, `"satterthwaite"` and `"kenward-roger"`).
 
 ## Bug fixes
 
