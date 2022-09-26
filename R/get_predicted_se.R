@@ -15,7 +15,7 @@ get_predicted_se <- function(x,
   # which are then multiplied by 1.96 for the confidence intervals.
 
 
-  ## TODO: what about Satterthwaite?
+  ## TODO: what about Satterthwaite? @vincentarelbundock
 
   # kenward-roger adjusts both the dof and the varcov
   if (isTRUE(ci_method %in% c("kenward-roger", "kenward", "kr"))) {
