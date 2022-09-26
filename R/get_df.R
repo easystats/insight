@@ -13,8 +13,9 @@
 #'   usually returns. If residual degrees of freedom cannot be extracted,
 #'   returns `Inf`.
 #' - `"wald"`` returns residual (aka analytical) degrees of freedom for models
-#'   with t-statistic, and `Inf` for all other models. Also returns `Inf` if
-#'   residual degrees of freedom cannot be extracted.
+#'   with t-statistic, `1` for models with Chi-squared statistic, and `Inf` for
+#'   all other models. Also returns `Inf` if residual degrees of freedom cannot
+#'   be extracted.
 #' - `"normal"` always returns `"Inf"`.
 #' - `"model"` returns model-based degrees of freedom, i.e. the number of
 #'   (estimated) parameters.
@@ -102,6 +103,10 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     # z-statistic always Inf, *unless* we have residual df (which we have for some models)
     if (identical(statistic, "z-statistic")) {
       return(Inf)
+    }
+    # Chi2-distributions usually have 1 df
+    if (identical(statistic, "chi-squared statistic")) {
+      return(1)
     }
     dof <- .get_residual_df(x, verbose)
 
