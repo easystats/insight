@@ -8,21 +8,21 @@
 #' @param type Can be `"residual"`, `"wald"`, `"normal"`, or
 #'   `"model"`. `"analytical"` is an alias for `"residual"`.
 #'
-#' - `"residual"` (aka `"analytical"`) returns `n-k` (number of observations
-#'   minus number of estimated parameters). This is what [`stats::df.residual()]`
-#'   usually returns. If residual degrees of freedom cannot be extracted,
-#'   returns `Inf`.
-#' - `"wald"`` returns residual (aka analytical) degrees of freedom for models
-#'   with t-statistic, `1` for models with Chi-squared statistic, and `Inf` for
-#'   all other models. Also returns `Inf` if residual degrees of freedom cannot
-#'   be extracted.
-#' - `"normal"` always returns `"Inf"`.
-#' - `"model"` returns model-based degrees of freedom, i.e. the number of
-#'   (estimated) parameters.
+#'   + `"residual"` (aka `"analytical"`) returns `n-k` (number of observations
+#'     minus number of estimated parameters). This is what [`stats::df.residual()`]
+#'     usually returns. If residual degrees of freedom cannot be extracted,
+#'     returns `Inf`.
+#'   + `"wald"` returns residual (aka analytical) degrees of freedom for models
+#'     with t-statistic, `1` for models with Chi-squared statistic, and `Inf` for
+#'     all other models. Also returns `Inf` if residual degrees of freedom cannot
+#'     be extracted.
+#'   + `"normal"` always returns `"Inf"`.
+#'   + `"model"` returns model-based degrees of freedom, i.e. the number of
+#'     (estimated) parameters.
 #'
-#' For mixed models, can also be `"ml1"` or `"betwithin"`, and for models of
-#' class `merMod`, `type` can also be `"satterthwaite"` or `"kenward-roger"`.
-#' See 'Details'.
+#'   For mixed models, can also be `"ml1"` or `"betwithin"`, and for models of
+#'   class `merMod`, `type` can also be `"satterthwaite"` or `"kenward-roger"`.
+#'   See 'Details'.
 #'
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.

@@ -18,10 +18,12 @@ get_df(x, ...)
 \code{"model"}. \code{"analytical"} is an alias for \code{"residual"}.
 \itemize{
 \item \code{"residual"} (aka \code{"analytical"}) returns \code{n-k} (number of observations
-minus number of estimated parameters). This is what [\verb{stats::df.residual()]}
+minus number of estimated parameters). This is what \code{\link[stats:df.residual]{stats::df.residual()}}
 usually returns. If residual degrees of freedom cannot be extracted,
 returns \code{Inf}.
-\item \verb{"wald"`` returns residual (aka analytical) degrees of freedom for models with t-statistic, }1\verb{for models with Chi-squared statistic, and}Inf\verb{for all other models. Also returns}Inf` if residual degrees of freedom cannot
+\item \code{"wald"} returns residual (aka analytical) degrees of freedom for models
+with t-statistic, \code{1} for models with Chi-squared statistic, and \code{Inf} for
+all other models. Also returns \code{Inf} if residual degrees of freedom cannot
 be extracted.
 \item \code{"normal"} always returns \code{"Inf"}.
 \item \code{"model"} returns model-based degrees of freedom, i.e. the number of
