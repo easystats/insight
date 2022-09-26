@@ -38,8 +38,9 @@
   if (length(predict) > 1) {
     predict <- predict[1]
     if (isTRUE(verbose)) {
-      msg <- format_message(sprintf("More than one option provided in `predict`. Using first option `%s` now."), predict[1])
-      warning(msg, call. = FALSE)
+      format_warning(
+        sprintf("More than one option provided in `predict`. Using first option `%s` now.", predict[1])
+      )
     }
   }
 

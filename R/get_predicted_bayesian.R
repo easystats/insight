@@ -16,7 +16,9 @@ get_predicted.stanreg <- function(x,
                                   ...) {
   check_if_installed("rstantools", minimum_version = "2.1.0")
 
-  if (is.null(ci_method)) ci_method <- "quantile"
+  if (is.null(ci_method)) {
+    ci_method <- "quantile"
+  }
   ci_method <- match.arg(
     tolower(ci_method),
     choices = c("quantile", "eti", "hdi")

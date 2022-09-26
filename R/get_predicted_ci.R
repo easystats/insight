@@ -135,11 +135,29 @@ get_predicted_ci.default <- function(x,
   if (is.null(ci)) {
     out <- data.frame(SE = se)
   } else if (length(ci) == 1) {
-    out <- ci_function(x, predictions, ci = ci, se = se, ci_method = ci_method, data = data, verbose = verbose, ...)
+    out <- ci_function(
+      x,
+      predictions,
+      ci = ci,
+      se = se,
+      ci_method = ci_method,
+      data = data,
+      verbose = verbose,
+      ...
+    )
   } else {
     out <- data.frame(SE = se)
     for (ci_val in ci) {
-      temp <- ci_function(x, predictions, ci = ci_val, se = se, ci_method = ci_method, data = data, verbose = verbose, ...)
+      temp <- ci_function(
+        x,
+        predictions,
+        ci = ci_val,
+        se = se,
+        ci_method = ci_method,
+        data = data,
+        verbose = verbose,
+        ...
+      )
       temp$SE <- NULL
       names(temp) <- paste0(names(temp), "_", ci_val)
       out <- cbind(out, temp)
@@ -152,7 +170,7 @@ get_predicted_ci.default <- function(x,
 #' @export
 get_predicted_ci.mlm <- function(x, verbose = TRUE, ...) {
   if (verbose) {
-    message(format_message(paste0("Confidence intervals are not yet supported for models of class '", class(x)[1], "'.")))
+    format_alert(paste0("Confidence intervals are not yet supported for models of class `", class(x)[1], "`."))
   }
   NULL
 }
@@ -210,7 +228,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
                                     predictions = NULL,
                                     se = NULL,
                                     ci = 0.95,
-                                    ci_method = "quantile",
+                                    ci_method = "wald",
                                     data = NULL,
                                     ...) {
   # TODO: Prediction interval for binomial: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-i/
@@ -225,10 +243,13 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   if (is.null(predictions)) {
     return(data.frame(SE = se))
   }
-
   if (is.null(ci)) {
+    # Same as predicted
     return(data.frame(CI_low = predictions, CI_high = predictions))
-  } # Same as predicted
+  }
+  if (is.null(ci_method)) {
+    ci_method <- "wald"
+  }
 
   # data is required for satterthwaite
   if (isTRUE(ci_method %in% c("satterthwaite", "kr", "kenward", "kenward-roger"))) {
