@@ -99,6 +99,16 @@ if (requiet("testthat") &&
     expect_equal(colnames(get_data(m2)), c("distance", "age", "Sex"))
   })
 
+  test_that("get_df", {
+    expect_equal(get_df(m1, type = "residual"), c(161, 161), ignore_attr = TRUE)
+    expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
+    expect_equal(get_df(m1, type = "wald"), c(161, 161), ignore_attr = TRUE)
+    expect_equal(get_df(m2, type = "residual"), c(80, 80, 25), ignore_attr = TRUE)
+    expect_equal(get_df(m2, type = "normal"), Inf, ignore_attr = TRUE)
+    expect_equal(get_df(m3, type = "residual"), c(98, 76), ignore_attr = TRUE)
+    expect_equal(get_df(m3, type = "normal"), Inf, ignore_attr = TRUE)
+  })
+
   test_that("find_formula", {
     expect_length(find_formula(m1), 2)
     expect_equal(

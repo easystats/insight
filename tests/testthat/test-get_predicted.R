@@ -522,19 +522,19 @@ test_that("hurdle: get_predicted matches `predict()`", {
   data("bioChemists", package = "pscl")
   mod <- pscl::hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
   known <- predict(mod, type = "response")
-  unknown <- get_predicted(mod, predict = "response", ci = .95)
+  unknown <- get_predicted(mod, predict = "response", ci = .95, verbose = FALSE)
   expect_equal(known, unknown, ignore_attr = TRUE)
   known <- predict(mod, type = "zero")
-  unknown <- get_predicted(mod, predict = "zero", ci = .95)
+  unknown <- get_predicted(mod, predict = "zero", ci = .95, verbose = FALSE)
   expect_equal(known, unknown, ignore_attr = TRUE)
 })
 
 
 test_that("bugfix: used to return all zeros", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
-  pred <- get_predicted(mod, predict = "response", ci = .95)
+  pred <- get_predicted(mod, predict = "response", ci = .95, verbose = FALSE)
   expect_false(any(pred == 0))
-  expect_error(expect_warning(get_predicted(mod, predict = "original", ci = .95)))
+  expect_error(expect_warning(get_predicted(mod, predict = "original", ci = .95, verbose = FALSE)))
 })
 
 

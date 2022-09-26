@@ -43,6 +43,50 @@ if (.runThisTest &&
     expect_equal(get_df(m2, type = "model"), attr(logLik(m2), "df"), ignore_attr = TRUE)
   })
 
+  test_that("get_df", {
+    expect_equal(
+      get_df(m1, type = "residual"),
+      df.residual(m1),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "normal"),
+      Inf,
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "wald"),
+      df.residual(m1),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "satterthwaite"),
+      c(`(Intercept)` = 16.99973, Days = 16.99998),
+      ignore_attr = TRUE,
+      tolerance = 1e-4
+    )
+    expect_equal(
+      as.vector(get_df(m1, type = "kenward")),
+      c(17, 17),
+      ignore_attr = TRUE,
+      tolerance = 1e-4
+    )
+    if (requiet("pbkrtest")) {
+      expect_equal(
+        as.vector(get_df(m1, type = "kenward")),
+        c(pbkrtest::get_Lb_ddf(m1, c(1, 0)), pbkrtest::get_Lb_ddf(m1, c(0, 1))),
+        ignore_attr = TRUE,
+        tolerance = 1e-4
+      )
+      expect_equal(
+        unique(as.vector(get_df(m2, type = "kenward"))),
+        c(pbkrtest::get_Lb_ddf(m2, c(1, 0)), pbkrtest::get_Lb_ddf(m2, c(0, 1))),
+        ignore_attr = TRUE,
+        tolerance = 1e-4
+      )
+    }
+  })
+
   test_that("n_parameters", {
     expect_equal(n_parameters(m1), 2)
     expect_equal(n_parameters(m2), 2)

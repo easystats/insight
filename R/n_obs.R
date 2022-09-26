@@ -55,14 +55,7 @@ n_obs.default <- function(x, ...) {
     return(n_obs.glm(x, ...))
   }
 
-  tryCatch(
-    {
-      stats::nobs(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
+  tryCatch(stats::nobs(x), error = function(x) NULL)
 }
 
 

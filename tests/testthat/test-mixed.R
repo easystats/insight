@@ -121,6 +121,24 @@ if (requiet("testthat") &&
     expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
   })
 
+  test_that("get_df", {
+    expect_equal(
+      get_df(m1, type = "residual"),
+      Inf,
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "normal"),
+      Inf,
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "wald"),
+      Inf,
+      ignore_attr = TRUE
+    )
+  })
+
   test_that("find_formula", {
     expect_length(find_formula(m1), 2)
     expect_length(find_formula(m2), 2)

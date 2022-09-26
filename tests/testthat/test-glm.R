@@ -26,6 +26,24 @@ if (requiet("testthat") &&
     expect_equal(get_df(m1, type = "model"), attr(logLik(m1), "df"), ignore_attr = TRUE)
   })
 
+  test_that("get_df", {
+    expect_equal(
+      get_df(m1, type = "residual"),
+      df.residual(m1),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "normal"),
+      Inf,
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "wald"),
+      Inf,
+      ignore_attr = TRUE
+    )
+  })
+
 
   test_that("find_predictors", {
     expect_identical(find_predictors(m1), list(conditional = c("mined", "cover", "sample")))
