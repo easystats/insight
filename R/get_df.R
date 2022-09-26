@@ -92,7 +92,7 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
 
   # Wald normal approximation - always Inf -----
   if (type == "normal") {
-    return(Inf)
+    dof <- Inf
 
   # residual/analytical df, falls back to Inf if we have no residual df method -----
   } else if (type == "residual") {
@@ -100,16 +100,17 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
 
   # Wald df - always Inf for z-statistic, 1 for Chi2-statistic, else residual df -----
   } else if (type == "wald") {
-    # z-statistic always Inf, *unless* we have residual df (which we have for some models)
     if (identical(statistic, "z-statistic")) {
-      return(Inf)
+      # z-statistic always Inf, *unless* we have residual df
+      # (which we have for some models)
+      dof <- Inf
+    } else if (identical(statistic, "chi-squared statistic")) {
+      # Chi2-statistic usually have 1 df
+      dof <- 1
+    } else {
+      # Wald t-statistic
+      dof <- .get_residual_df(x, verbose)
     }
-    # Chi2-statistic usually have 1 df
-    if (identical(statistic, "chi-squared statistic")) {
-      return(1)
-    }
-    # Wald t-statistic
-    dof <- .get_residual_df(x, verbose)
 
   # ml1 - only for certain mixed models -----
   } else if (type == "ml1") {
@@ -337,7 +338,7 @@ print.insight_df <- function(x, ...) {
     )
     cat(export_table(out, caption = c(string, "blue")))
   } else {
-    cat(paste0(as.vector(x), "(", print_color(string, "blue"), ")\n"))
+    cat(paste0(as.vector(x), " (", color_text(string, "blue"), ")\n"))
   }
 }
 
