@@ -88,7 +88,7 @@ get_predicted_ci.default <- function(x,
     if ("iterations" %in% names(attributes(predictions))) {
       ci_method <- "quantile"
     } else {
-      ci_method <- "normal"
+      ci_method <- "wald"
     }
   }
 
@@ -111,7 +111,9 @@ get_predicted_ci.default <- function(x,
   # 1. Find appropriate interval function
   if (!is.null(se)) {
     ci_function <- .get_predicted_se_to_ci
-  } else if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov) && is.matrix(vcov))) {
+  } else if (ci_type == "confidence" ||
+             identical(get_family(x)$family, "gaussian") ||
+             (!is.null(vcov) && is.matrix(vcov))) {
     # gaussian or CI
     se <- get_predicted_se(
       x,
@@ -232,7 +234,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   if (isTRUE(ci_method %in% c("satterthwaite", "kenward", "kenward-roger"))) {
     dof <- .satterthwaite_kr_df_per_obs(x, type = ci_method, data = data)
   } else {
-    dof <- get_df(x)
+    dof <- get_df(x, type = ci_method)
   }
 
   # Return NA
@@ -255,9 +257,9 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
         # for multiple length, SE and predictions may match, could be intended?
         # could there be any cases where we have twice or x times the length of
         # predictions as standard errors?
-        warning(format_message("Predictions and standard errors are not of the same length. Please check if you need the `data` argument."), call. = FALSE)
+        format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.")
       } else {
-        stop(format_message("Predictions and standard errors are not of the same length. Please specify the `data` argument."), call. = FALSE)
+        format_error("Predictions and standard errors are not of the same length. Please specify the `data` argument.")
       }
     }
 
@@ -392,7 +394,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   # Interval
   ci_method <- match.arg(
     tolower(ci_method),
-    c("quantile", "hdi", "eti", "spi", "satterthwaite", "normal")
+    c("quantile", "hdi", "eti", "spi", "satterthwaite", "normal", "wald")
   )
 
   if (ci_method == "quantile") {

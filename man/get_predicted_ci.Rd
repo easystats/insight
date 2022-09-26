@@ -62,10 +62,11 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 Possible values depend on model type.
 \itemize{
 \item \code{NULL} uses the default method, which varies based on the model type.
-\item Most frequentist models: \code{"normal"} (default).
+\item Most frequentist models: \code{"wald"} (default) or \code{"normal"}.
 \item Bayesian models:  \code{"quantile"}  (default), \code{"hdi"}, \code{"eti"}, and \code{"spi"}.
-\item Mixed effects \strong{lme4} models: \code{"normal"} (default), \code{"satterthwaite"}, and
-\code{"kenward"}.
+\item Mixed effects \strong{lme4} models: \code{"wald"} (default), \code{"normal"},
+\code{"satterthwaite"}, and \code{"kenward"}.
+See \code{\link[=get_df]{get_df()}} for details.
 }}
 
 \item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary:
