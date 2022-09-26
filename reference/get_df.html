@@ -113,20 +113,27 @@ from regression models.</p>
 
 <dt>type</dt>
 <dd><p>Can be <code>"residual"</code>, <code>"wald"</code>, <code>"normal"</code>, or
-<code>"model"</code>. <code>"analytical"</code> is an alias for <code>"residual"</code>.</p><ul><li><p><code>"residual"</code> (aka <code>"analytical"</code>) returns <code>n-k</code> (number of observations
-minus number of estimated parameters). This is what <code><a href="https://rdrr.io/r/stats/df.residual.html" class="external-link">stats::df.residual()</a></code>
-usually returns. If residual degrees of freedom cannot be extracted,
-returns <code>Inf</code>.</p></li>
+<code>"model"</code>. <code>"analytical"</code> is an alias for <code>"residual"</code>.</p><ul><li><p><code>"residual"</code> (aka <code>"analytical"</code>) returns the residual degrees of
+freedom, which usually is what <code><a href="https://rdrr.io/r/stats/df.residual.html" class="external-link">stats::df.residual()</a></code> returns. If a
+model object has no method to extract residual degrees of freedom, these
+are calculated as <code>n-p</code>, i.e. the number of observations minus the number
+of estimated parameters. If residual degrees of freedom cannot be extracted
+by either approach, returns <code>Inf</code>.</p></li>
 <li><p><code>"wald"</code> returns residual (aka analytical) degrees of freedom for models
 with t-statistic, <code>1</code> for models with Chi-squared statistic, and <code>Inf</code> for
 all other models. Also returns <code>Inf</code> if residual degrees of freedom cannot
 be extracted.</p></li>
-<li><p><code>"normal"</code> always returns <code>"Inf"</code>.</p></li>
+<li><p><code>"normal"</code> always returns <code>Inf</code>.</p></li>
 <li><p><code>"model"</code> returns model-based degrees of freedom, i.e. the number of
-(estimated) parameters.</p></li>
-</ul><p>For mixed models, can also be <code>"ml1"</code> or <code>"betwithin"</code>, and for models of
-class <code>merMod</code>, <code>type</code> can also be <code>"satterthwaite"</code> or <code>"kenward-roger"</code>.
-See 'Details'.</p></dd>
+(estimated) parameters.
+For mixed models, can also be <code>"ml1"</code> (approximation of degrees of freedom
+based on a "m-l-1" heuristic as suggested by <em>Elff et al. (2019)</em>) or
+<code>"betwithin"</code>, and for models of class <code>merMod</code>, <code>type</code> can also be
+<code>"satterthwaite"</code> or <code>"kenward-roger"</code>.
+See 'Details'. Usually, when degrees of freedom are required to calculate
+p-values or confidence intervals, <code>type = "wald"</code> is likely to be the best
+choice in most cases.</p></li>
+</ul></dd>
 
 
 <dt>verbose</dt>
@@ -135,21 +142,38 @@ See 'Details'.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Inferential statistics (like p-values, confidence intervals and
+    <p><strong>Degrees of freedom for mixed models</strong></p>
+<p>Inferential statistics (like p-values, confidence intervals and
 standard errors) may be biased in mixed models when the number of clusters
 is small (even if the sample size of level-1 units is high). In such cases
 it is recommended to approximate a more accurate number of degrees of freedom
-for such inferential statistics. Unlike simpler approximation heuristics
-like the "m-l-1" rule (<code>type = "ml1"</code>), the Satterthwaite or Kenward-Rogers
-approximation is also applicable in more complex multilevel designs. However,
-the "m-l-1" heuristic also applies to generalized mixed models, while
-approaches like Kenward-Roger or Satterthwaite are limited to linear mixed
-models only. The <em>between-within</em> denominator degrees of freedom approximation
-is recommended in particular for (generalized) linear mixed models with repeated
-measurements (longitudinal design). <code>get_df(type = "betwithin")</code> implements a
-heuristic based on the between-within approach. <strong>Note</strong> that this implementation
-does not return exactly the same results as shown in <em>Li and Redden 2015</em>,
-but similar.</p>
+for such inferential statistics (see <em>Li and Redden 2015</em>).</p>
+<p><em>m-l-1 degrees of freedom</em></p>
+<p>The <em>m-l-1</em> heuristic is an approach that uses a t-distribution with fewer
+degrees of freedom. In particular for repeated measure designs (longitudinal
+data analysis), the m-l-1 heuristic is likely to be more accurate than simply
+using the residual or infinite degrees of freedom, because <code>get_df(type = "ml1")</code>
+returns different degrees of freedom for within-cluster and between-cluster
+effects. Note that the "m-l-1" heuristic is not applicable (or at least less
+accurate) for complex multilevel designs, e.g. with cross-classified clusters.
+In such cases, more accurate approaches like the Kenward-Roger approximation
+is recommended. However, the "m-l-1" heuristic also applies to generalized
+mixed models, while approaches like Kenward-Roger or Satterthwaite are limited
+to linear mixed models only.</p>
+<p><em>Between-within degrees of freedom</em></p>
+<p>The Between-within denominator degrees of freedom approximation is, similar
+to the "m-l-1" heuristic, recommended in particular for (generalized) linear
+mixed models with repeated measurements (longitudinal design).
+<code>get_df(type = "betwithin")</code> implements a heuristic based on the between-within
+approach, i.e. this type returns different degrees of freedom for within-cluster
+and between-cluster effects. Note that this implementation does not return
+exactly the same results as shown in <em>Li and Redden 2015</em>, but similar.</p>
+<p><em>Satterthwaite and Kenward-Rogers degrees of freedom</em></p>
+<p>Unlike simpler approximation heuristics like the "m-l-1" rule (<code>type = "ml1"</code>),
+the Satterthwaite or Kenward-Rogers approximation is also applicable in more
+complex multilevel designs. However, the "m-l-1" or "between-within" heuristics
+also apply to generalized mixed models, while approaches like Kenward-Roger
+or Satterthwaite are limited to linear mixed models only.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

@@ -275,9 +275,9 @@ vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd
 <dt>ci_method</dt>
 <dd><p>The method for computing p values and confidence intervals.
 Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the default method, which varies based on the model type.</p></li>
-<li><p>Most frequentist models: <code>"wald"</code> (default) or <code>"normal"</code>.</p></li>
+<li><p>Most frequentist models: <code>"wald"</code> (default), <code>"residual"</code> or <code>"normal"</code>.</p></li>
 <li><p>Bayesian models:  <code>"quantile"</code>  (default), <code>"hdi"</code>, <code>"eti"</code>, and <code>"spi"</code>.</p></li>
-<li><p>Mixed effects <strong>lme4</strong> models: <code>"wald"</code> (default), <code>"normal"</code>,
+<li><p>Mixed effects <strong>lme4</strong> models: <code>"wald"</code> (default), <code>"residual"</code>, <code>"normal"</code>,
 <code>"satterthwaite"</code>, and <code>"kenward-roger"</code>.
 See <code><a href="get_df.html">get_df()</a></code> for details.</p></li>
 </ul></dd>
