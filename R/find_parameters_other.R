@@ -191,7 +191,7 @@ find_parameters.marginaleffects <- function(x, flatten = FALSE, ...) {
   excl <- c(
     "rowid", "type", "std.error", "contrast", "term", "dydx",
     "statistic", "p.value", "conf.low", "conf.high", "predicted_hi",
-    "predicted_lo", "eps", "marginaleffects_eps"
+    "predicted_lo", "predicted", "eps", "marginaleffects_eps"
   )
 
   params <- x[!names(x) %in% excl]
