@@ -13,7 +13,7 @@ if (requiet("testthat") &&
   )
 
   set.seed(123)
-  d <<- Ovary
+  d <- Ovary
   d$x1 <- runif(nrow(d))
   d$x2 <- sample(1:10, size = nrow(d), replace = TRUE)
   m3 <- gls(follicles ~ Time + x1 + x2,
