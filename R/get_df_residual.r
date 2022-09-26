@@ -69,13 +69,8 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.fixest <- function(x, verbose = TRUE, ...) {
-  s <- summary(x)
-  vcov_scaled <- s$cov.scaled
-  if (is.null(vcov_scaled)) {
-    s$nobs - s$nparams
-  } else {
-    max(s$nobs - attr(vcov_scaled, "dof.K"), 1)
-  }
+  check_if_installed("fixest")
+  fixest::degrees_freedom(x, type = "resid")
 }
 
 #' @keywords internal
