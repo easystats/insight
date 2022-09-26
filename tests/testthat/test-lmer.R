@@ -73,8 +73,8 @@ if (.runThisTest &&
     )
     if (requiet("pbkrtest")) {
       expect_equal(
-        unique(as.vector(get_df(m1, type = "kenward"))),
-        pbkrtest::get_Lb_ddf(m1, c(0, 1)),
+        as.vector(get_df(m1, type = "kenward")),
+        c(pbkrtest::get_Lb_ddf(m1, c(1, 0)), pbkrtest::get_Lb_ddf(m1, c(0, 1))),
         ignore_attr = TRUE,
         tolerance = 1e-4
       )
