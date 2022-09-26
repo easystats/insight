@@ -12,7 +12,7 @@ from regression models."><meta property="og:image" content="https://easystats.gi
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.4.4</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.4.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,17 +112,59 @@ from regression models.</p>
 
 
 <dt>type</dt>
-<dd><p>Can be <code>"residual"</code>, <code>"model"</code> or <code>"analytical"</code>. <code>"residual"</code>
-tries to extract residual degrees of freedoms. If residual degrees of freedom
-could not be extracted, returns analytical degrees of freedom, i.e. <code>n-k</code>
-(number of observations minus number of parameters). <code>"model"</code> returns
-model-based degrees of freedom, i.e. the number of (estimated) parameters.</p></dd>
+<dd><p>Can be <code>"residual"</code>, <code>"wald"</code>, <code>"normal"</code>, or
+<code>"model"</code>. <code>"analytical"</code> is an alias for <code>"residual"</code>.</p><ul><li><p><code>"residual"</code> (aka <code>"analytical"</code>) returns <code>n-k</code> (number of observations
+minus number of estimated parameters). This is what [<code>stats::df.residual()]</code>
+usually returns. If residual degrees of freedom cannot be extracted,
+returns <code>Inf</code>.</p></li>
+<li><p><code>"wald"`` returns residual (aka analytical) degrees of freedom for models with t-statistic, </code>1<code>for models with Chi-squared statistic, and</code>Inf<code>for all other models. Also returns</code>Inf` if residual degrees of freedom cannot
+be extracted.</p></li>
+<li><p><code>"normal"</code> always returns <code>"Inf"</code>.</p></li>
+<li><p><code>"model"</code> returns model-based degrees of freedom, i.e. the number of
+(estimated) parameters.</p></li>
+</ul><p>For mixed models, can also be <code>"ml1"</code> or <code>"betwithin"</code>, and for models of
+class <code>merMod</code>, <code>type</code> can also be <code>"satterthwaite"</code> or <code>"kenward-roger"</code>.
+See 'Details'.</p></dd>
 
 
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Inferential statistics (like p-values, confidence intervals and
+standard errors) may be biased in mixed models when the number of clusters
+is small (even if the sample size of level-1 units is high). In such cases
+it is recommended to approximate a more accurate number of degrees of freedom
+for such inferential statistics. Unlike simpler approximation heuristics
+like the "m-l-1" rule (<code>type = "ml1"</code>), the Satterthwaite or Kenward-Rogers
+approximation is also applicable in more complex multilevel designs. However,
+the "m-l-1" heuristic also applies to generalized mixed models, while
+approaches like Kenward-Roger or Satterthwaite are limited to linear mixed
+models only. The <em>between-within</em> denominator degrees of freedom approximation
+is recommended in particular for (generalized) linear mixed models with repeated
+measurements (longitudinal design). <code>get_df(type = "betwithin")</code> implements a
+heuristic based on the between-within approach. <strong>Note</strong> that this implementation
+does not return exactly the same results as shown in <em>Li and Redden 2015</em>,
+but similar.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    
+<ul><li><p>Kenward, M. G., &amp; Roger, J. H. (1997). Small sample inference for
+fixed effects from restricted maximum likelihood. Biometrics, 983-997.</p></li>
+<li><p>Satterthwaite FE (1946) An approximate distribution of estimates of
+variance components. Biometrics Bulletin 2 (6):110–4.</p></li>
+<li><p>Elff, M.; Heisig, J.P.; Schaeffer, M.; Shikano, S. (2019). Multilevel
+Analysis with Few Clusters: Improving Likelihood-based Methods to Provide
+Unbiased Estimates and Accurate Inference, British Journal of Political
+Science.</p></li>
+<li><p>Li, P., Redden, D. T. (2015). Comparing denominator degrees of freedom
+approximations for the generalized linear mixed model in analyzing binary
+outcome in small sample cluster-randomized trials. BMC Medical Research
+Methodology, 15(1), 38</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
