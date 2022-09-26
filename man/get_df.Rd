@@ -29,7 +29,7 @@ residual degrees of freedom cannot be extracted.
 }
 
 For mixed models, can also be \code{"ml1"} or \code{"betwithin"}, and for models of
-class \code{merMod}, \code{type} can also be \code{"satterthwaite"} or \code{"kenward-rogers"}.
+class \code{merMod}, \code{type} can also be \code{"satterthwaite"} or \code{"kenward-roger"}.
 See 'Details'.}
 
 \item{verbose}{Toggle warnings.}

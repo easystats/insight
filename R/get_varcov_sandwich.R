@@ -7,12 +7,14 @@
                                  ...) {
   dots <- list(...)
 
+  ## TODO: remove deprecated warnings in a future update
+
   # deprecated
   if (isTRUE(verbose) && "vcov_type" %in% names(dots)) {
-    warning(format_message("The `vcov_type` argument is superseded by the `vcov_args` argument."), call. = FALSE)
+    format_warning("The `vcov_type` argument is superseded by the `vcov_args` argument.")
   }
   if (isTRUE(verbose) && "robust" %in% names(dots)) {
-    warning(format_message("The `robust` argument is superseded by the `vcov` argument."), call. = FALSE)
+    format_warning("The `robust` argument is superseded by the `vcov` argument.")
   }
 
   if (is.null(vcov_args)) {
@@ -76,6 +78,8 @@
     return(.vcov)
   }
 
+  ## TODO: what about Sattherthwaite? @vincentarelbundock
+
   if (!grepl("^(vcov|kernHAC|NeweyWest)", vcov_fun)) {
     vcov_fun <- switch(vcov_fun,
       "HC0" = ,
@@ -132,7 +136,7 @@
   # extract variance-covariance matrix
   if (!inherits(.vcov, "matrix")) {
     msg <- sprintf("Unable to extract a variance-covariance matrix for model object of class `%s`. Different values of the `vcov` argument trigger calls to the `sandwich` or `clubSandwich` packages in order to extract the matrix (see `?insight::get_varcov`). Your model or the requested estimation type may not be supported by one or both of those packages, or you were missing one or more required arguments in `vcov_args` (like `cluster`).", class(x)[1])
-    stop(format_message(msg), call. = FALSE)
+    format_error(msg)
   }
 
   .vcov
