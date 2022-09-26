@@ -316,3 +316,18 @@ test_that("find_variables with interaction", {
   mod <- feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars)
   expect_warning(find_variables(mod), NA)
 })
+
+
+test_that("find_predictors with i(f1, i.f2) interaction", {
+  aq <- airquality
+  aq$week <- aq$Day %/% 7 + 1
+
+  mod <- feols(Ozone ~ i(Month, i.week), aq, notes = FALSE)
+  expect_equal(
+    find_predictors(mod),
+    list(
+      conditional = c("Month", "week")
+    ),
+    ignore_attr = TRUE
+  )
+})
