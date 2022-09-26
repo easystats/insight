@@ -32,17 +32,34 @@
     junk <- utils::capture.output(dof = try(summary(x)$df[2], silent = TRUE))
   }
 
-  # 3rd try, nlme
-  if (inherits(dof, "try-error") || is.null(dof) || all(is.na(dof))) {
-    dof <- try(unname(x$fixDF$X), silent = TRUE)
-  }
-
   # last try
   if (inherits(dof, "try-error")) {
     dof <- NULL
   }
 
   dof
+}
+
+#' @keywords internal
+.degrees_of_freedom_residual.lme <- function(x, verbose = TRUE, ...) {
+  dof <- try(unname(x$fixDF$X), silent = TRUE)
+  # last try
+  if (inherits(dof, "try-error")) {
+    dof <- NULL
+  }
+  dof
+}
+
+#' @keywords internal
+.degrees_of_freedom_residual.gls <- function(x, verbose = TRUE, ...) {
+  nparam <- n_parameters(x)
+  n <- n_obs(x)
+
+  if (is.null(n) || is.null(nparam)) {
+    return(Inf)
+  }
+
+  return(n - nparam)
 }
 
 #' @keywords internal
