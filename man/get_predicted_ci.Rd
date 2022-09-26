@@ -62,9 +62,9 @@ vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
 Possible values depend on model type.
 \itemize{
 \item \code{NULL} uses the default method, which varies based on the model type.
-\item Most frequentist models: \code{"wald"} (default) or \code{"normal"}.
+\item Most frequentist models: \code{"wald"} (default), \code{"residual"} or \code{"normal"}.
 \item Bayesian models:  \code{"quantile"}  (default), \code{"hdi"}, \code{"eti"}, and \code{"spi"}.
-\item Mixed effects \strong{lme4} models: \code{"wald"} (default), \code{"normal"},
+\item Mixed effects \strong{lme4} models: \code{"wald"} (default), \code{"residual"}, \code{"normal"},
 \code{"satterthwaite"}, and \code{"kenward-roger"}.
 See \code{\link[=get_df]{get_df()}} for details.
 }}

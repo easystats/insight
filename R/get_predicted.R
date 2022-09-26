@@ -85,9 +85,9 @@
 #' @param ci_method The method for computing p values and confidence intervals.
 #'   Possible values depend on model type.
 #'   + `NULL` uses the default method, which varies based on the model type.
-#'   + Most frequentist models: `"wald"` (default) or `"normal"`.
+#'   + Most frequentist models: `"wald"` (default), `"residual"` or `"normal"`.
 #'   + Bayesian models:  `"quantile"`  (default), `"hdi"`, `"eti"`, and `"spi"`.
-#'   + Mixed effects **lme4** models: `"wald"` (default), `"normal"`,
+#'   + Mixed effects **lme4** models: `"wald"` (default), `"residual"`, `"normal"`,
 #'   `"satterthwaite"`, and `"kenward-roger"`.
 #'   See [`get_df()`] for details.
 #' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary:

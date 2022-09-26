@@ -7,41 +7,69 @@
 #' @param x A statistical model.
 #' @param type Can be `"residual"`, `"wald"`, `"normal"`, or
 #'   `"model"`. `"analytical"` is an alias for `"residual"`.
-#'
-#'   + `"residual"` (aka `"analytical"`) returns `n-k` (number of observations
-#'     minus number of estimated parameters). This is what [`stats::df.residual()`]
-#'     usually returns. If residual degrees of freedom cannot be extracted,
-#'     returns `Inf`.
+#'   + `"residual"` (aka `"analytical"`) returns the residual degrees of
+#'     freedom, which usually is what [`stats::df.residual()`] returns. If a
+#'     model object has no method to extract residual degrees of freedom, these
+#'     are calculated as `n-p`, i.e. the number of observations minus the number
+#'     of estimated parameters. If residual degrees of freedom cannot be extracted
+#'     by either approach, returns `Inf`.
 #'   + `"wald"` returns residual (aka analytical) degrees of freedom for models
 #'     with t-statistic, `1` for models with Chi-squared statistic, and `Inf` for
 #'     all other models. Also returns `Inf` if residual degrees of freedom cannot
 #'     be extracted.
-#'   + `"normal"` always returns `"Inf"`.
+#'   + `"normal"` always returns `Inf`.
 #'   + `"model"` returns model-based degrees of freedom, i.e. the number of
 #'     (estimated) parameters.
-#'
-#'   For mixed models, can also be `"ml1"` or `"betwithin"`, and for models of
-#'   class `merMod`, `type` can also be `"satterthwaite"` or `"kenward-roger"`.
-#'   See 'Details'.
-#'
+#'   For mixed models, can also be `"ml1"` (approximation of degrees of freedom
+#'   based on a "m-l-1" heuristic as suggested by _Elff et al. (2019)_) or
+#'   `"betwithin"`, and for models of class `merMod`, `type` can also be
+#'   `"satterthwaite"` or `"kenward-roger"`.
+#'   See 'Details'. Usually, when degrees of freedom are required to calculate
+#'   p-values or confidence intervals, `type = "wald"` is likely to be the best
+#'   choice in most cases.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
-#' @details Inferential statistics (like p-values, confidence intervals and
+#' @details
+#' **Degrees of freedom for mixed models**
+#'
+#' Inferential statistics (like p-values, confidence intervals and
 #' standard errors) may be biased in mixed models when the number of clusters
 #' is small (even if the sample size of level-1 units is high). In such cases
 #' it is recommended to approximate a more accurate number of degrees of freedom
-#' for such inferential statistics. Unlike simpler approximation heuristics
-#' like the "m-l-1" rule (`type = "ml1"`), the Satterthwaite or Kenward-Rogers
-#' approximation is also applicable in more complex multilevel designs. However,
-#' the "m-l-1" heuristic also applies to generalized mixed models, while
-#' approaches like Kenward-Roger or Satterthwaite are limited to linear mixed
-#' models only. The *between-within* denominator degrees of freedom approximation
-#' is recommended in particular for (generalized) linear mixed models with repeated
-#' measurements (longitudinal design). `get_df(type = "betwithin")` implements a
-#' heuristic based on the between-within approach. **Note** that this implementation
-#' does not return exactly the same results as shown in *Li and Redden 2015*,
-#' but similar.
+#' for such inferential statistics (see _Li and Redden 2015_).
+#'
+#' *m-l-1 degrees of freedom*
+#'
+#' The _m-l-1_ heuristic is an approach that uses a t-distribution with fewer
+#' degrees of freedom. In particular for repeated measure designs (longitudinal
+#' data analysis), the m-l-1 heuristic is likely to be more accurate than simply
+#' using the residual or infinite degrees of freedom, because `get_df(type = "ml1")`
+#' returns different degrees of freedom for within-cluster and between-cluster
+#' effects. Note that the "m-l-1" heuristic is not applicable (or at least less
+#' accurate) for complex multilevel designs, e.g. with cross-classified clusters.
+#' In such cases, more accurate approaches like the Kenward-Roger approximation
+#' is recommended. However, the "m-l-1" heuristic also applies to generalized
+#' mixed models, while approaches like Kenward-Roger or Satterthwaite are limited
+#' to linear mixed models only.
+#'
+#' *Between-within degrees of freedom*
+#'
+#' The Between-within denominator degrees of freedom approximation is, similar
+#' to the "m-l-1" heuristic, recommended in particular for (generalized) linear
+#' mixed models with repeated measurements (longitudinal design).
+#' `get_df(type = "betwithin")` implements a heuristic based on the between-within
+#' approach, i.e. this type returns different degrees of freedom for within-cluster
+#' and between-cluster effects. Note that this implementation does not return
+#' exactly the same results as shown in _Li and Redden 2015_, but similar.
+#'
+#' *Satterthwaite and Kenward-Rogers degrees of freedom*
+#'
+#' Unlike simpler approximation heuristics like the "m-l-1" rule (`type = "ml1"`),
+#' the Satterthwaite or Kenward-Rogers approximation is also applicable in more
+#' complex multilevel designs. However, the "m-l-1" or "between-within" heuristics
+#' also apply to generalized mixed models, while approaches like Kenward-Roger
+#' or Satterthwaite are limited to linear mixed models only.
 #'
 #' @references
 #' - Kenward, M. G., & Roger, J. H. (1997). Small sample inference for
