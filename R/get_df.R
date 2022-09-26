@@ -215,7 +215,6 @@ get_df.truncreg <- get_df.rlm
 
 #' @export
 get_df.lmerMod <- function(x, type = "residual", ...) {
-  dots <- list(...)
   type <- match.arg(
     tolower(type),
     choices = c("residual", "model", "analytical", "satterthwaite", "kenward",
