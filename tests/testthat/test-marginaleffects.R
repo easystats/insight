@@ -20,7 +20,10 @@ if (requiet("marginaleffects") && requiet("insight") && requiet("emmeans") && re
     expect_true("Petal.Length" %in% colnames(p1))
     expect_equal(p1$Estimate, p2$Estimate, tolerance = 0.001)
 
-    # Find statistic
+    # Find parameters
+    expect_equal(insight::find_parameters(x)$marginaleffects, "Species")
+
+     # Find statistic
     expect_equal(insight::find_statistic(x), "z-statistic")
   })
 }
