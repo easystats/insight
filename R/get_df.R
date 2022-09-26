@@ -98,16 +98,17 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   } else if (type == "residual") {
     dof <- .get_residual_df(x, verbose)
 
-  # Wald df - always Inf for z-statistic, else residual df -----
+  # Wald df - always Inf for z-statistic, 1 for Chi2-statistic, else residual df -----
   } else if (type == "wald") {
     # z-statistic always Inf, *unless* we have residual df (which we have for some models)
     if (identical(statistic, "z-statistic")) {
       return(Inf)
     }
-    # Chi2-distributions usually have 1 df
+    # Chi2-statistic usually have 1 df
     if (identical(statistic, "chi-squared statistic")) {
       return(1)
     }
+    # Wald t-statistic
     dof <- .get_residual_df(x, verbose)
 
   # ml1 - only for certain mixed models -----
@@ -180,9 +181,14 @@ get_df.coeftest <- function(x, ...) {
 get_df.rlm <- function(x, type = "residual", ...) {
   type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical"))
   statistic <- find_statistic(x)
+  # Wald-z or normal
   if (type == "normal" || (type == "wald" && identical(statistic, "z-statistic"))) {
     return(Inf)
-  } else if (type %in% c("residual", "wald")) {
+  # Wald Chi-squared
+  } else if (type == "wald" && identical(statistic, "chi-squared statistic")) {
+    return(1)
+  # Residual or Wald-t
+  } else if (type %in% c("residual", "wald", "analytical")) {
     .get_residual_df(x)
   } else {
     .model_df(x)
