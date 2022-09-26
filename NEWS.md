@@ -10,6 +10,8 @@
 
 * Fixed issue with column alignment in `export_table()` when the data frame 
   to print contained unicode-characters longer than 1 byte.
+* Correctly extract predictors for `fixest::i(f1, i.f2)` interactions (#649 by 
+  @grantmcdermott).
 
 # insight 0.18.4
 

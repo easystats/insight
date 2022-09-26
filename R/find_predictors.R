@@ -164,6 +164,10 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
 
   conditional <- all.vars(stats::formula(x))
   conditional <- setdiff(conditional, c(instruments, cluster, find_response(x)))
+  # Catch for interacted fixest::i(f0, i.f2)
+  if (any(grepl(", i.", x$fml, fixed = TRUE))) {
+    conditional <- gsub("^i\\.", "", conditional)
+  }
 
   l <- compact_list(list(
     "conditional" = conditional,
