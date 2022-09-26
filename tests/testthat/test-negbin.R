@@ -44,7 +44,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       )
       expect_equal(
         get_df(m1, type = "wald"),
-        df.residual(m1),
+        Inf,
         ignore_attr = TRUE
       )
     })

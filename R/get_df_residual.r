@@ -46,6 +46,12 @@
 }
 
 #' @keywords internal
+.degrees_of_freedom_residual.glimML <- function(x, verbose = TRUE, ...) {
+  check_if_installed("aod")
+  aod::df.residual(x)
+}
+
+#' @keywords internal
 .degrees_of_freedom_residual.ivFixed <- function(x, verbose = TRUE, ...) {
   as.vector(x$df)
 }
