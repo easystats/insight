@@ -7,6 +7,7 @@
 #' @param x A statistical model.
 #' @param type Can be `"residual"`, `"wald"`, `"normal"`, or
 #'   `"model"`. `"analytical"` is an alias for `"residual"`.
+#'
 #'   + `"residual"` (aka `"analytical"`) returns the residual degrees of
 #'     freedom, which usually is what [`stats::df.residual()`] returns. If a
 #'     model object has no method to extract residual degrees of freedom, these
@@ -20,13 +21,14 @@
 #'   + `"normal"` always returns `Inf`.
 #'   + `"model"` returns model-based degrees of freedom, i.e. the number of
 #'     (estimated) parameters.
-#'   For mixed models, can also be `"ml1"` (approximation of degrees of freedom
-#'   based on a "m-l-1" heuristic as suggested by _Elff et al. (2019)_) or
-#'   `"betwithin"`, and for models of class `merMod`, `type` can also be
-#'   `"satterthwaite"` or `"kenward-roger"`.
-#'   See 'Details'. Usually, when degrees of freedom are required to calculate
-#'   p-values or confidence intervals, `type = "wald"` is likely to be the best
-#'   choice in most cases.
+#'   + For mixed models, can also be `"ml1"` (approximation of degrees of freedom
+#'     based on a "m-l-1" heuristic as suggested by _Elff et al. 2019_) or
+#'     `"betwithin"`, and for models of class `merMod`, `type` can also be
+#'     `"satterthwaite"` or `"kenward-roger"`. See 'Details'.
+#'
+#' Usually, when degrees of freedom are required to calculate
+#' p-values or confidence intervals, `type = "wald"` is likely to be the best
+#' choice in most cases.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'

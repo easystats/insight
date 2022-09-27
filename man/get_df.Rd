@@ -30,14 +30,15 @@ be extracted.
 \item \code{"normal"} always returns \code{Inf}.
 \item \code{"model"} returns model-based degrees of freedom, i.e. the number of
 (estimated) parameters.
-For mixed models, can also be \code{"ml1"} (approximation of degrees of freedom
-based on a "m-l-1" heuristic as suggested by \emph{Elff et al. (2019)}) or
+\item For mixed models, can also be \code{"ml1"} (approximation of degrees of freedom
+based on a "m-l-1" heuristic as suggested by \emph{Elff et al. 2019}) or
 \code{"betwithin"}, and for models of class \code{merMod}, \code{type} can also be
-\code{"satterthwaite"} or \code{"kenward-roger"}.
-See 'Details'. Usually, when degrees of freedom are required to calculate
+\code{"satterthwaite"} or \code{"kenward-roger"}. See 'Details'.
+}
+
+Usually, when degrees of freedom are required to calculate
 p-values or confidence intervals, \code{type = "wald"} is likely to be the best
-choice in most cases.
-}}
+choice in most cases.}
 
 \item{verbose}{Toggle warnings.}
 }
