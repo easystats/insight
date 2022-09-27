@@ -61,10 +61,8 @@ get_family.model_fit <- function(x, ...) {
     fam <- stats::poisson(link = info$link_function)
   } else {
     format_error(
-      paste0(
-        "Could not retrieve family from this object of class `", class(x)[1], "`.",
-        "Open an issue at {.url https://github.com/easystats/insight/issues}"
-      )
+      paste0("Could not retrieve family from this object of class `", class(x)[1], "`."),
+      "Open an issue at {.url https://github.com/easystats/insight/issues}"
     )
   }
   fam
