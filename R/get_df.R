@@ -26,9 +26,9 @@
 #'     `"betwithin"`, and for models of class `merMod`, `type` can also be
 #'     `"satterthwaite"` or `"kenward-roger"`. See 'Details'.
 #'
-#' Usually, when degrees of freedom are required to calculate
-#' p-values or confidence intervals, `type = "wald"` is likely to be the best
-#' choice in most cases.
+#' Usually, when degrees of freedom are required to calculate p-values or
+#' confidence intervals, `type = "wald"` is likely to be the best choice in
+#' most cases.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'

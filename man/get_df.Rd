@@ -36,9 +36,9 @@ based on a "m-l-1" heuristic as suggested by \emph{Elff et al. 2019}) or
 \code{"satterthwaite"} or \code{"kenward-roger"}. See 'Details'.
 }
 
-Usually, when degrees of freedom are required to calculate
-p-values or confidence intervals, \code{type = "wald"} is likely to be the best
-choice in most cases.}
+Usually, when degrees of freedom are required to calculate p-values or
+confidence intervals, \code{type = "wald"} is likely to be the best choice in
+most cases.}
 
 \item{verbose}{Toggle warnings.}
 }
