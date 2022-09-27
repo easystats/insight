@@ -249,6 +249,13 @@ get_predicted.default <- function(x,
     predictions <- tryCatch(do.call("fitted", predict_args), error = function(e) NULL)
   }
 
+  # stop here if we have no predictions
+  if (is.null(predictions) && isTRUE(verbose)) {
+    format_warning(
+      paste0("Could not compute predictions for model of class `", class(x)[1], "`.")
+    )
+  }
+
   # 2. step: confidence intervals
   ci_data <- tryCatch(
     {
