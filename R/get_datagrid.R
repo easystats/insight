@@ -261,17 +261,17 @@ get_datagrid.data.frame <- function(x,
         if (length(length) == 1) {
           length <- rep(length, length(numvars))
         } else if (length(length) != length(numvars)) {
-          stop(format_message(
+          format_error(
             "The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ")."
-          ), call. = FALSE)
+          )
         }
         # Sanitize 'range' argument
         if (length(range) == 1) {
           range <- rep(range, length(numvars))
         } else if (length(range) != length(numvars)) {
-          stop(format_message(
+          format_error(
             "The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."
-          ), call. = FALSE)
+          )
         }
 
         # Get datagrids
@@ -330,7 +330,7 @@ get_datagrid.data.frame <- function(x,
       }
 
       if (nrow(targets) == 0) {
-        stop(format_message("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE."), call. = FALSE)
+        format_error("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE.")
       }
     }
   }
@@ -424,10 +424,10 @@ get_datagrid.data.frame <- function(x,
       } else if (is.character(x) || is.logical(x)) {
         out <- unique(x)[1]
       } else {
-        stop(format_message(paste0(
+        format_error(paste0(
           "Argument is not numeric nor factor but ", class(x), ".",
           "Please report the bug at https://github.com/easystats/insight/issues"
-        )), call. = FALSE)
+        ))
       }
       # see "get_modelmatrix()" and #626. Reference level is currently
       # a character vector, which causes the error
@@ -608,9 +608,9 @@ get_datagrid.logical <- get_datagrid.character
       if (!is.na(varname)) {
         x <- x[[varname]]
       } else {
-        stop(format_message(
+        format_error(
           "Couldn't find which variable were selected in `at`. Check spelling and specification."
-        ), call. = FALSE)
+        )
       }
     }
 
@@ -666,9 +666,9 @@ get_datagrid.logical <- get_datagrid.character
           } else if (is.numeric(parts)) {
             expression <- parts
           } else {
-            stop(format_message(
+            format_error(
               paste0("The `at` argument (", at, ") should either indicate the minimum and the maximum, or one of the following options: ", paste0(shortcuts, collapse = ", ", "."))
-            ), call. = FALSE)
+            )
           }
           # If only two, it's probably the range
         } else if (length(parts) == 2) {
@@ -691,9 +691,9 @@ get_datagrid.logical <- get_datagrid.character
           eval(parse(text = at))
         },
         error = function(r) {
-          stop(format_message(
+          format_error(
             paste0("The `at` argument (`", original_target, "`) cannot be read and could be mispecified.")
-          ), call. = FALSE)
+          )
         }
       )
     }
@@ -914,10 +914,10 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 
   # still found no data - stop here
   if (is.null(data)) {
-    stop(format_message(
+    format_error(
       "Can't access data that was used to fit the model in order to create the reference grid.",
       "Please use the `data` argument."
-    ), call. = FALSE)
+    )
   }
 
   data
