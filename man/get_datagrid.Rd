@@ -47,18 +47,19 @@ get_datagrid(x, ...)
 \item{...}{Arguments passed to or from other methods (for instance, \code{length}
 or \code{range} to control the spread of numeric variables.).}
 
-\item{at}{Indicate at which values \emph{focal predictors} (variables) should be
-represented. If not specified otherwise, representative values for numeric
-variables or predictors are evenly distributed from the minimum to the maximum,
-with a total number of \code{length} values covering that range (see 'Examples').
-Possible options for \code{at} are:
+\item{at}{Indicates the \emph{focal predictors} (variables) for the reference grid
+and at which values focal predictors should be represented. If not specified
+otherwise, representative values for numeric variables or predictors are
+evenly distributed from the minimum to the maximum, with a total number of
+\code{length} values covering that range (see 'Examples'). Possible options for
+\code{at} are:
 \itemize{
 \item \code{"all"}, which will include all variables or predictors.
 \item a character vector of one or more variable or predictor names, like
 \code{c("Species", "Sepal.Width")}, which will create a grid of all combinations
 of unique values. For factors, will use all levels, for numeric variables,
 will use a range of length \code{length} (evenly spread from minimum to maximum)
-and for character vectors, will use all values.
+and for character vectors, will use all unique values.
 \item a list of named elements, indicating focal predictors and their representative
 values, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}.
 \item a string with assignments, e.g. \code{at = "Sepal.Length = 2"} or
@@ -70,7 +71,7 @@ There is a special handling of assignments with \emph{brackets}, i.e. values
 defined inside \code{[} and \verb{]}.For \strong{numeric} variables, the value(s) inside
 the brackets should either be
 \itemize{
-\item two values, indicating minum and maximung (e.g. \verb{at = "Sepal.Length = [0, 5]}),
+\item two values, indicating minimum and maximum (e.g. \code{at = "Sepal.Length = [0, 5]"}),
 for which a range of length \code{length} (evenly spread from given minimum to
 maximum) is created.
 \item more than two numeric values \code{at = "Sepal.Length = [2,3,4,5]"}, in which
@@ -89,7 +90,7 @@ case these values are used as representative values.
 }
 }
 
-For \strong{factors} variables, the value(s) inside the brackets should indicate
+For \strong{factor} variables, the value(s) inside the brackets should indicate
 one or more factor levels, like \code{at = "Species = [setosa, versicolor]"}.
 \strong{Note}: the \code{length} argument will be ignored when using brackets-tokens.
 

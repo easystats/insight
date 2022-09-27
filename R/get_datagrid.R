@@ -6,17 +6,18 @@
 #' for a tutorial on how to create a visualisation matrix using this function.
 #'
 #' @param x An object from which to construct the reference grid.
-#' @param at Indicate at which values _focal predictors_ (variables) should be
-#'   represented. If not specified otherwise, representative values for numeric
-#'   variables or predictors are evenly distributed from the minimum to the maximum,
-#'   with a total number of `length` values covering that range (see 'Examples').
-#'   Possible options for `at` are:
+#' @param at Indicates the _focal predictors_ (variables) for the reference grid
+#'   and at which values focal predictors should be represented. If not specified
+#'   otherwise, representative values for numeric variables or predictors are
+#'   evenly distributed from the minimum to the maximum, with a total number of
+#'   `length` values covering that range (see 'Examples'). Possible options for
+#'   `at` are:
 #'   - `"all"`, which will include all variables or predictors.
 #'   - a character vector of one or more variable or predictor names, like
 #'   `c("Species", "Sepal.Width")`, which will create a grid of all combinations
 #'   of unique values. For factors, will use all levels, for numeric variables,
 #'   will use a range of length `length` (evenly spread from minimum to maximum)
-#'   and for character vectors, will use all values.
+#'   and for character vectors, will use all unique values.
 #'   - a list of named elements, indicating focal predictors and their representative
 #'   values, e.g. `at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))`.
 #'   - a string with assignments, e.g. `at = "Sepal.Length = 2"` or
@@ -26,7 +27,7 @@
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
 #'   the brackets should either be
-#'   - two values, indicating minum and maximung (e.g. `at = "Sepal.Length = [0, 5]`),
+#'   - two values, indicating minimum and maximum (e.g. `at = "Sepal.Length = [0, 5]"`),
 #'   for which a range of length `length` (evenly spread from given minimum to
 #'   maximum) is created.
 #'   - more than two numeric values `at = "Sepal.Length = [2,3,4,5]"`, in which
@@ -42,7 +43,7 @@
 #'     - for minimum and maximum value: `"x = [minmax]"`
 #'     - for 0 and the maximum value: `"x = [zeromax]"`
 #'
-#'   For **factors** variables, the value(s) inside the brackets should indicate
+#'   For **factor** variables, the value(s) inside the brackets should indicate
 #'   one or more factor levels, like `at = "Species = [setosa, versicolor]"`.
 #'   **Note**: the `length` argument will be ignored when using brackets-tokens.
 #'
@@ -62,7 +63,7 @@
 #'   [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or
 #'   [`"eti"`][bayestestR::eti()], it will spread the values within that range
 #'   (the default CI width is `95%` but this can be changed by adding for instance
-#'   `ci = 0.90`.) See [IQR()] and [bayestestR::ci()]. This can be useful to have
+#'   `ci = 0.90`.) See [`IQR()`] and [`bayestestR::ci()`]. This can be useful to have
 #'   more robust change and skipping extreme values.
 #'   - if [`"sd"`][sd()] or [`"mad"`][mad()], it will spread by this dispersion
 #'   index around the mean or the median, respectively. If the `length` argument
