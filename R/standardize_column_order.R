@@ -78,6 +78,7 @@ standardize_column_order.parameters_model <- function(data,
       # statistic
       "t", "t value", "z", "z value", "F", "F value", "Chi2", "Chi2 value",
       "chisq", "Chisq", "chi-sq", "t / F", "z / Chisq", "z / Chi2", "W", "S",
+      "Statistic",
       # degrees of freedom
       "df", "df_error", "df_residual",
       # p-value
