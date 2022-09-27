@@ -66,8 +66,9 @@ Possible values depend on model type.
 \item Bayesian models:  \code{"quantile"}  (default), \code{"hdi"}, \code{"eti"}, and \code{"spi"}.
 \item Mixed effects \strong{lme4} models: \code{"wald"} (default), \code{"residual"}, \code{"normal"},
 \code{"satterthwaite"}, and \code{"kenward-roger"}.
-See \code{\link[=get_df]{get_df()}} for details.
-}}
+}
+
+See \code{\link[=get_df]{get_df()}} for details.}
 
 \item{dispersion_method}{Bootstrap dispersion and Bayesian posterior summary:
 \code{"sd"} or \code{"mad"}.}

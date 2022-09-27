@@ -89,6 +89,7 @@
 #'   + Bayesian models:  `"quantile"`  (default), `"hdi"`, `"eti"`, and `"spi"`.
 #'   + Mixed effects **lme4** models: `"wald"` (default), `"residual"`, `"normal"`,
 #'   `"satterthwaite"`, and `"kenward-roger"`.
+#'
 #'   See [`get_df()`] for details.
 #' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary:
 #'   `"sd"` or `"mad"`.
