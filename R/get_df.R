@@ -237,8 +237,11 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     choices = c("residual", "model", "analytical", "satterthwaite", "kenward",
                 "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin")
   )
+  dots <- list(...)
 
-  if (type == "satterthwaite") {
+  if (type %in% c("satterthwaite", "kr", "kenward", "kenward-roger") && isTRUE(dots$df_per_obs)) {
+    .satterthwaite_kr_df_per_obs(x, type, dots$data)
+  } else if (type == "satterthwaite") {
     .degrees_of_freedom_satterthwaite(x)
   } else if (type %in% c("kr", "kenward", "kenward-roger")) {
     .degrees_of_freedom_kr(x)
