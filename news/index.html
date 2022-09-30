@@ -88,9 +88,15 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.18.5" id="insight-0185">insight 0.18.5<a class="anchor" aria-label="anchor" href="#insight-0185"></a></h2>
 <div class="section level3">
+<h3 id="breaking-0-18-5">Breaking<a class="anchor" aria-label="anchor" href="#breaking-0-18-5"></a></h3>
+<ul><li>
+<code>get_df(type = "satterthwaite")</code> for <code>lmerMod</code> objects now return degrees of freedom per parameter, and no longer per observation. Use <code>df_per_obs TRUE</code> to return degrees of freedom per observation.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="changes-to-functions-0-18-5">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-18-5"></a></h3>
 <ul><li><p><code><a href="../reference/format_table.html">format_table()</a></code> gets a <code>use_symbols</code> argument. If <code>TRUE</code>, column names that refer to particular effectsizes (like Phi, Omega or Epsilon) include the related unicode-character instead of the written name. This only works on Windows for R &gt;= 4.2, and on OS X or Linux for R &gt;= 4.0.</p></li>
 <li><p><code><a href="../reference/get_df.html">get_df()</a></code> gets more <code>type</code> options to return different type of degrees of freedom (namely, <code>"wald"</code> and <code>"normal"</code>, and for mixed models, <code>"ml1"</code>, <code>"betwithin"</code>, <code>"satterthwaite"</code> and <code>"kenward-roger"</code>).</p></li>
+<li><p><code><a href="../reference/standardize_names.html">standardize_names()</a></code> now recognized more classes from package <em>marginaleffects</em>.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-18-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-5"></a></h3>
