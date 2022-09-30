@@ -1,5 +1,11 @@
 # insight 0.18.5
 
+## Breaking
+
+* `get_df(type = "satterthwaite")` for `lmerMod` objects now return degrees of
+  freedom per parameter, and no longer per observation. Use `df_per_obs TRUE`
+  to return degrees of freedom per observation.
+
 ## Changes to functions
 
 * `format_table()` gets a `use_symbols` argument. If `TRUE`, column names that
@@ -9,6 +15,8 @@
 * `get_df()` gets more `type` options to return different type of degrees of
   freedom (namely, `"wald"` and `"normal"`, and for mixed models, `"ml1"`,
   `"betwithin"`, `"satterthwaite"` and `"kenward-roger"`).
+
+* `standardize_names()` now recognized more classes from package _marginaleffects_.
 
 ## Bug fixes
 
