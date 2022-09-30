@@ -7,3 +7,8 @@ test_that("object_has_* helpers", {
   expect_false(object_has_rownames(iris))
   expect_error(object_has_rownames(list("x" = 1, "y" = 2)))
 })
+
+test_that("object_has_* helpers, additional test", {
+  skip_if_not_installed("psych")
+  expect_true(object_has_rownames(psych::bfi))
+})
