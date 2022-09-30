@@ -84,5 +84,5 @@ object_has_rownames <- function(x) {
     stop("Only dataframe objects are allowed.", call. = FALSE)
   }
 
-  !identical(attributes(x)$row.names, 1:nrow(x))
+  !identical(attributes(x)$row.names, seq_len(nrow(x)))
 }

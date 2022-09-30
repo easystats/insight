@@ -5,6 +5,7 @@ test_that("object_has_* helpers", {
 
   expect_true(object_has_rownames(mtcars))
   expect_false(object_has_rownames(iris))
+  expect_false(object_has_rownames(data.frame()))
   expect_error(object_has_rownames(list("x" = 1, "y" = 2)))
 })
 
