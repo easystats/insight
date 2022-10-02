@@ -244,6 +244,11 @@ find_predictors.afex_aov <- function(x,
     nf <- stats::formula(x)
     if (!is.null(attr(nf$formula, "nl", exact = TRUE)) && object_has_names(nf, "pforms")) {
       nl_parms <- names(nf$pforms)
+      # this is a hack because it puts everything in "conditional". But at least
+      # it extracts all the predictors, which fixes Issue #645 where
+      # get_data.brmsfit did not extract all columns on multi-equation nl=TRUE fits
+      l_pforms <- unname(unlist(lapply(nf$pforms, all.vars), recursive = TRUE))
+      l[[1]] <- unique(c(l[[1]], l_pforms))
       l <- lapply(l, .remove_values, nl_parms)
     }
   }

@@ -844,3 +844,20 @@ if (.runThisTest) {
     })
   }
 }
+
+
+test_that("Issue #645", {
+  skip_if(!.runThisTest)
+  void <- capture.output(suppressMessages({
+  mod <- brm(
+    data = mtcars,
+    backend = "cmdstanr",
+    family = cumulative(probit),
+    formula = bf(
+      cyl ~ 1 + mpg + drat + gearnl,
+      gearnl ~ 0 + (1 | gear),
+      nl = TRUE))
+  }))
+  p <- find_predictors(mod, flatten = TRUE)
+  expect_true("gear" %in% p)
+})
