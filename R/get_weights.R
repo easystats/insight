@@ -73,7 +73,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
     w <- stats::na.omit(w)
   }
 
-  if (is.null(w) && isTRUE(null_as_ones)) {
+  if ((is.null(w) || !length(w)) && isTRUE(null_as_ones)) {
     w <- rep.int(1, n_obs(x))
   }
 
