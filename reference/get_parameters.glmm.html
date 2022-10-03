@@ -98,6 +98,14 @@
 <span><span class="co"># S3 method for coxme</span></span>
 <span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for nlmerMod</span></span>
+<span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,</span>
+<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"nonlinear"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for merMod</span></span>
 <span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
@@ -150,7 +158,7 @@ other auxiliary parameters) are returned.</p></dd>
 <p>If <code>effects = "fixed"</code>, a data frame with two columns: the
 parameter names and the related point estimates. If <code>effects = "random"</code>, a list of data frames with the random effects (as returned by
 <code><a href="https://rdrr.io/pkg/nlme/man/random.effects.html" class="external-link">ranef()</a></code>), unless the random effects have the same simplified
-structure as fixed effects (e.g. for models from <span class="pkg">MCMCglmm</span>).</p>
+structure as fixed effects (e.g. for models from <strong>MCMCglmm</strong>).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
