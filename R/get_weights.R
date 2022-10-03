@@ -10,9 +10,9 @@
 #'   to 1).
 #' @param ... Currently not used.
 #'
-#' @return The weighting variable, or `NULL` if no weights were specified
-#' or if weights were 1. If the weighting variable should also be returned
-#' (instead of `NULL`), when all weights are set to 1 (i.e. no weighting),
+#' @return The weighting variable, or `NULL` if no weights were specified.
+#' If the weighting variable should also be returned (instead of `NULL`)
+#' when all weights are set to 1 (i.e. no weighting),
 #' set `null_as_ones = TRUE`.
 #'
 #' @examples
@@ -81,8 +81,9 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
     )
   }
 
-  # if all weights are 1, set return value to NULL
-  if (!is.null(w) && all(w == 1L)) {
+  # if all weights are 1, set return value to NULL,
+  # unless the weights were explicitly set in the model call
+  if (!is.null(w) && all(w == 1L) && !is.null(find_weights(x))) {
     w <- NULL
   }
 
