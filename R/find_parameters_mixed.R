@@ -23,16 +23,16 @@
 #' @inheritParams find_predictors
 #'
 #' @return A list of parameter names. The returned list may have following
-#'   elements:
-#'    \itemize{
-#'      \item `conditional`, the "fixed effects" part from the model.
-#'      \item `random`, the "random effects" part from the model.
-#'      \item `zero_inflated`, the "fixed effects" part from the
-#'      zero-inflation component of the model.
-#'      \item `zero_inflated_random`, the "random effects" part from the
-#'      zero-inflation component of the model.
-#'      \item `dispersion`, the dispersion parameters (auxiliary parameter)
-#'    }
+#' elements:
+#'
+#' - `conditional`, the "fixed effects" part from the model.
+#' - `random`, the "random effects" part from the model.
+#' - `zero_inflated`, the "fixed effects" part from the zero-inflation component
+#'   of the model.
+#'- `zero_inflated_random`, the "random effects" part from the zero-inflation
+#'   component of the model.
+#' - `dispersion`, the dispersion parameters (auxiliary parameter)
+#' - `nonlinear`, the parameters from the nonlinear formula.
 #'
 #' @examples
 #' data(mtcars)
@@ -123,15 +123,18 @@ find_parameters.MixMod <- function(x,
 
 
 
+#' @rdname find_parameters.glmmTMB
 #' @export
 find_parameters.nlmerMod <- function(x,
                                      effects = c("all", "fixed", "random"),
+                                     component = c("all", "conditional", "nonlinear"),
                                      flatten = FALSE,
                                      ...) {
   # installed
   check_if_installed("lme4")
 
   effects <- match.arg(effects)
+  component <- match.arg(component)
   startvectors <- .get_startvector_from_env(x)
 
   if (effects == "fixed") {
@@ -147,7 +150,7 @@ find_parameters.nlmerMod <- function(x,
     ))
   }
 
-  .filter_parameters(l, effects = effects, flatten = flatten)
+  .filter_parameters(l, effects = effects, component = component, flatten = flatten)
 }
 
 
