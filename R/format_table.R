@@ -182,7 +182,7 @@ format_table <- function(x,
   # Bayesian ---
   x <- .format_bayes_columns(
     x,
-    stars,
+    stars = stars,
     rope_digits = rope_digits,
     zap_small = zap_small,
     ci_width = ci_width,
@@ -617,19 +617,28 @@ format_table <- function(x,
 
 
 .format_bayes_columns <- function(x,
-                                  stars,
+                                  stars = FALSE,
                                   rope_digits = 2,
                                   zap_small,
                                   ci_width = "auto",
                                   ci_brackets = TRUE,
                                   exact = TRUE) {
+
+  # Specify stars for which column
+  if(is.character(stars)) {
+    starlist <- list("BF" = FALSE, "log_BF" = FALSE, "pd" = FALSE)
+    starlist[stars] <- TRUE
+  } else{
+    starlist <- list("BF" = stars, "log_BF" = stars, "pd" = stars)
+  }
+
   # Indices
-  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars, exact = exact)
+  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = starlist[["BF"]], exact = exact)
   if ("log_BF" %in% names(x)) {
-    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = stars, exact = exact)
+    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = starlist[["log_BF"]], exact = exact)
     x$log_BF <- NULL
   }
-  if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = stars)
+  if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = starlist[["pd"]])
   if ("Rhat" %in% names(x)) x$Rhat <- format_value(x$Rhat, digits = 3)
   if ("ESS" %in% names(x)) x$ESS <- round(x$ESS)
 
