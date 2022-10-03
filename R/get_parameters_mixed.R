@@ -130,11 +130,16 @@ get_parameters.wbgee <- function(x, ...) {
 
 
 #' @export
-get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
+get_parameters.nlmerMod <- function(x,
+                                    effects = c("fixed", "random"),
+                                    component = c("all", "conditional", "nonlinear"),
+                                    ...) {
   # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)
+  component <- match.arg(component)
+
   startvectors <- .get_startvector_from_env(x)
   fx <- lme4::fixef(x)
 
@@ -151,22 +156,27 @@ get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
     ))
   }
 
+  fixed_cond <- data.frame(
+    Parameter = names(l$conditional),
+    Estimate = unname(l$conditional),
+    Component = rep("fixed", length(l$conditional)),
+    stringsAsFactors = FALSE
+  )
 
-  fixed <- data.frame(
-    Parameter = c(
-      names(l$conditional),
-      names(l$nonlinear)
-    ),
-    Estimate = c(unname(l$conditional), unname(l$nonlinear)),
-    Component = c(
-      rep("fixed", length(l$conditional)),
-      rep("nonlinear", length(l$nonlinear))
-    ),
+  fixed_nl <- data.frame(
+    Parameter = names(l$nonlinear),
+    Estimate = unname(l$nonlinear),
+    Component = rep("nonlinear", length(l$nonlinear)),
     stringsAsFactors = FALSE
   )
 
   if (effects == "fixed") {
-    text_remove_backticks(fixed)
+    params <- switch(component,
+      all = rbind(fixed_cond, fixed_nl),
+      conditional = fixed_cond,
+      nonlinear = fixed_nl
+    )
+    text_remove_backticks(params)
   } else {
     l$random
   }
@@ -364,7 +374,7 @@ get_parameters.MixMod <- function(x,
   has_zeroinf <- !is.null(find_formula(x, verbose = FALSE)[["zero_inflated"]])
 
   if (component %in% c("zi", "zero_inflated") && !has_zeroinf) {
-    stop("Model has no zero-inflation component.", call. = FALSE)
+    format_error("Model has no zero-inflation component.")
   }
 
 
