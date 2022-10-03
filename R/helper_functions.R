@@ -235,7 +235,7 @@
   random_parameters <- c("random", "zero_inflated_random", "sigma_random", "beta_random", "car")
 
   # conditional component
-  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "smooth_terms"))
+  conditional_component <- setdiff(elements, c(auxiliary_parameters, zero_inflated_component, "smooth_terms", "nonlinear"))
 
   # location parameters
   location_parameters <- switch(effects,
