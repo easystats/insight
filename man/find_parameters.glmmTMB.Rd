@@ -2,6 +2,7 @@
 % Please edit documentation in R/find_parameters_mixed.R
 \name{find_parameters.glmmTMB}
 \alias{find_parameters.glmmTMB}
+\alias{find_parameters.nlmerMod}
 \alias{find_parameters.merMod}
 \title{Find names of model parameters from mixed models}
 \usage{
@@ -9,6 +10,14 @@
   x,
   effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  flatten = FALSE,
+  ...
+)
+
+\method{find_parameters}{nlmerMod}(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "nonlinear"),
   flatten = FALSE,
   ...
 )

@@ -123,6 +123,7 @@ find_parameters.MixMod <- function(x,
 
 
 
+#' @rdname find_parameters.glmmTMB
 #' @export
 find_parameters.nlmerMod <- function(x,
                                      effects = c("all", "fixed", "random"),
