@@ -11,6 +11,7 @@ test_that("lme4", {
   expect_s3_class(get_data(m), "data.frame")
 })
 
+
 test_that("lm", {
   set.seed(1023)
   x <- rnorm(1000, sd = 4)
@@ -23,6 +24,32 @@ test_that("lm", {
   expect_equal(get_data(mod1)$x, dat$x, ignore_attr = TRUE)
   expect_equal(get_data(mod2)$x, dat$x, ignore_attr = TRUE)
 })
+
+
+test_that("get_data include weights, even if ones", {
+  set.seed(123)
+  y <- rnorm(100)
+  x <- rnorm(100)
+  wn <- runif(100)
+  w1 <- rep(1, 100)
+
+  #Model with nonuniform weights
+  fn <- lm(y ~ x, weights = wn)
+  expect_equal(colnames(get_data(fn)), c("y", "x", "(weights)", "wn"))
+
+  #Model with weights equal to 1
+  f1 <- lm(y ~ x, weights = w1)
+  expect_equal(colnames(get_data(f1)), c("y", "x", "(weights)", "w1"))
+
+  #Model with no weights
+  f0 <- lm(y ~ x)
+  expect_equal(colnames(get_data(f0)), c("y", "x"))
+
+  # check get_weights still works
+  expect_null(get_weights(f0))
+  expect_equal(get_weights(f0, null_as_ones = TRUE), w1)
+})
+
 
 test_that("lm with transformations", {
   d <- data.frame(

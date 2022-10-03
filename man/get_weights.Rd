@@ -21,9 +21,9 @@ if no weights were specified in the model (as if the weights were all set
 to 1).}
 }
 \value{
-The weighting variable, or \code{NULL} if no weights were specified
-or if weights were 1. If the weighting variable should also be returned
-(instead of \code{NULL}), when all weights are set to 1 (i.e. no weighting),
+The weighting variable, or \code{NULL} if no weights were specified.
+If the weighting variable should also be returned (instead of \code{NULL})
+when all weights are set to 1 (i.e. no weighting),
 set \code{null_as_ones = TRUE}.
 }
 \description{
