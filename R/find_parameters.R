@@ -801,9 +801,13 @@ find_parameters.mira <- function(x, flatten = FALSE, ...) {
 
 ## For questions or problems with this ask Fernando Miguez (femiguez@iastate.edu)
 #' @export
-find_parameters.nls <- function(x, flatten = FALSE, ...) {
+find_parameters.nls <- function(x,
+                                component = c("all", "conditional", "nonlinear"),
+                                flatten = FALSE,
+                                ...) {
+  component <- match.arg(component)
   f <- find_formula(x)
-  elements <- .get_elements(effects = "fixed", component = "all")
+  elements <- .get_elements(effects = "fixed", component = component)
   f <- .prepare_predictors(x, f, elements)
   pars <- .return_vars(f, x)
 
