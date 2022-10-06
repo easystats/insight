@@ -1196,7 +1196,14 @@ find_formula.sem <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.lme <- function(x, verbose = TRUE, ...) {
-  fm <- eval(x$call$fixed)
+  env <- environment(x$terms)
+  fm <- x$terms
+  attributes(fm) <- list(class = "formula")
+  environment(fm) <- if(is.null(env)) {
+	  globalenv()
+  } else {
+	  env
+  }
   fmr <- eval(x$call$random)
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
