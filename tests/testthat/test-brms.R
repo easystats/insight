@@ -844,17 +844,19 @@ if (.runThisTest) {
     })
 
     test_that("Issue #645", {
-      skip_if(!.runThisTest)
+      # apparently BH is required to fit these brms models
+      skip_if_not_installed("BH") 
 
-      void <- capture.output(suppressMessages({
+      void <- capture.output(suppressMessages(suppressWarnings(({
       mod <- brm(
+        silent = 2,
         data = mtcars,
         family = cumulative(probit),
         formula = bf(
           cyl ~ 1 + mpg + drat + gearnl,
           gearnl ~ 0 + (1 | gear),
           nl = TRUE))
-      }))
+      }))))
 
       p <- find_predictors(mod, flatten = TRUE)
       d <- get_data(mod)
