@@ -219,4 +219,23 @@ if (requiet("testthat") &&
     expect_identical(find_statistic(m2), "t-statistic")
     expect_identical(find_statistic(m3), "t-statistic")
   })
+
+
+  test_that("Issue #658", {
+    requiet("nlme")
+    models <- lapply(
+      c("", " + Sex"),
+      function(x) {
+        lme(as.formula(paste0("distance  ~ age", x)),
+          random = ~1,
+          data = Orthodont)
+      })
+    dat <- lapply(models, get_data)
+    form <- lapply(models, find_formula)
+    expect_s3_class(form[[1]], "insight_formula")
+    expect_s3_class(form[[2]], "insight_formula")
+    expect_s3_class(dat[[1]], "data.frame")
+    expect_s3_class(dat[[2]], "data.frame")
+  })
+
 }
