@@ -239,14 +239,25 @@ find_predictors.afex_aov <- function(x,
   empty_elements <- sapply(l, is_empty_object)
   l <- compact_list(l)
 
-  # here we handle special cases for non-linear model in brms
+  # here we handle special cases for non-linear model in brms (nl=TRUE)
   if (inherits(x, "brmsfit")) {
     nf <- stats::formula(x)
-    if (!is.null(attr(nf$formula, "nl", exact = TRUE)) && object_has_names(nf, "pforms")) {
+    at_nl <- attr(nf$formula, "nl", exact = TRUE)
+    if (!is.null(at_nl) && !isFALSE(at_nl) && object_has_names(nf, "pforms")) {
       nl_parms <- names(nf$pforms)
-      l <- lapply(l, .remove_values, nl_parms)
+      # All variables in the non-linear formulas get dumped in the "non-linear"
+      # vector of the list. This may include cluster variables which identify
+      # random effects components.
+      l_pforms <- unname(unlist(lapply(nf$pforms, all.vars), recursive = TRUE))
+      # don't overwrite. maybe this could be smarter
+      if (length(l_pforms) > 0 && !"nonlinear" %in% names(l) && !"nonlinear" %in% names(f)) {
+        f <- c(f, list(nonlinear = NULL)) # need this for renaming and subsetting later
+        l <- c(l, list(nonlinear = unique(l_pforms)))
+        l <- lapply(l, .remove_values, nl_parms)
+      }
     }
   }
+  
 
   # remove constants
   l <- lapply(l, .remove_values, c(".", "pi", "1", "0"))
