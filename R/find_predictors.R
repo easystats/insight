@@ -242,7 +242,8 @@ find_predictors.afex_aov <- function(x,
   # here we handle special cases for non-linear model in brms (nl=TRUE)
   if (inherits(x, "brmsfit")) {
     nf <- stats::formula(x)
-    if (!is.null(attr(nf$formula, "nl", exact = TRUE)) && object_has_names(nf, "pforms")) {
+    at_nl <- attr(nf$formula, "nl", exact = TRUE)
+    if (!is.null(at_nl) && !isFALSE(at_nl) && object_has_names(nf, "pforms")) {
       nl_parms <- names(nf$pforms)
       # All variables in the non-linear formulas get dumped in the "non-linear"
       # vector of the list. This may include cluster variables which identify

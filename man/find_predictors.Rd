@@ -11,7 +11,7 @@ find_predictors(x, ...)
   x,
   effects = c("fixed", "random", "all"),
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
-    "correlation", "smooth_terms"),
+    "correlation", "smooth_terms", "nonlinear"),
   flatten = FALSE,
   verbose = TRUE,
   ...

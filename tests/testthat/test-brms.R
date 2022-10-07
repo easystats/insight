@@ -849,7 +849,6 @@ if (.runThisTest) {
       void <- capture.output(suppressMessages({
       mod <- brm(
         data = mtcars,
-        backend = "cmdstanr",
         family = cumulative(probit),
         formula = bf(
           cyl ~ 1 + mpg + drat + gearnl,
