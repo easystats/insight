@@ -845,6 +845,7 @@ if (.runThisTest) {
 
     test_that("Issue #645", {
       skip_if(!.runThisTest)
+
       void <- capture.output(suppressMessages({
       mod <- brm(
         data = mtcars,
@@ -855,10 +856,12 @@ if (.runThisTest) {
           gearnl ~ 0 + (1 | gear),
           nl = TRUE))
       }))
+
       p <- find_predictors(mod, flatten = TRUE)
+      d <- get_data(mod)
       expect_true("gear" %in% p)
+      expect_true("gear" %in% colnames(d))
     })
 
   }
 }
-
