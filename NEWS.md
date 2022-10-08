@@ -25,6 +25,8 @@
 
 * `standardize_names()` now recognized more classes from package _marginaleffects_.
 
+* Minor improvements to `find_parameters()` for models with nonlinear formula.
+
 ## Bug fixes
 
 * Fixed issue with column alignment in `export_table()` when the data frame 

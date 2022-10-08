@@ -25,7 +25,7 @@ find_weights <- function(x, ...) {
 find_weights.default <- function(x, ...) {
   tryCatch(
     {
-      call_string <- safe_deparse(x$call)
+      call_string <- safe_deparse(get_call(x))
       if (!is.null(call_string)) {
         w <- safe_deparse(parse(text = call_string)[[1]]$weights)
 

@@ -3,6 +3,7 @@
 \name{get_parameters.glmm}
 \alias{get_parameters.glmm}
 \alias{get_parameters.coxme}
+\alias{get_parameters.nlmerMod}
 \alias{get_parameters.merMod}
 \alias{get_parameters.glmmTMB}
 \alias{get_parameters.glimML}
@@ -11,6 +12,13 @@
 \method{get_parameters}{glmm}(x, effects = c("all", "fixed", "random"), ...)
 
 \method{get_parameters}{coxme}(x, effects = c("fixed", "random"), ...)
+
+\method{get_parameters}{nlmerMod}(
+  x,
+  effects = c("fixed", "random"),
+  component = c("all", "conditional", "nonlinear"),
+  ...
+)
 
 \method{get_parameters}{merMod}(x, effects = c("fixed", "random"), ...)
 
@@ -48,7 +56,7 @@ other auxiliary parameters) are returned.}
 If \code{effects = "fixed"}, a data frame with two columns: the
 parameter names and the related point estimates. If \code{effects = "random"}, a list of data frames with the random effects (as returned by
 \code{ranef()}), unless the random effects have the same simplified
-structure as fixed effects (e.g. for models from \pkg{MCMCglmm}).
+structure as fixed effects (e.g. for models from \strong{MCMCglmm}).
 }
 \description{
 Returns the coefficients from a model.
