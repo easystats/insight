@@ -625,10 +625,10 @@ format_table <- function(x,
                                   exact = TRUE) {
 
   # Specify stars for which column
-  if(is.character(stars)) {
+  if (is.character(stars)) {
     starlist <- list("BF" = FALSE, "log_BF" = FALSE, "pd" = FALSE)
     starlist[stars] <- TRUE
-  } else{
+  } else {
     starlist <- list("BF" = stars, "log_BF" = stars, "pd" = stars)
   }
 
