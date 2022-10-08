@@ -560,7 +560,21 @@ get_statistic.cgam <- function(x,
 
 #' @export
 get_statistic.coxph <- function(x, ...) {
-  get_statistic.default(x, column_index = 4)
+  # z is not always in the same column
+  # not sure t is possible, but it is cheap to include it in the regex
+  # avoid calling default method which would be computationally wasteful, since
+  # we need summary() here.
+  cs <- suppressWarnings(stats::coef(summary(x)))
+  column_index <- grep("^z$|^t$|Chisq", colnames(cs))
+  out <- data.frame(
+    Parameter = row.names(cs),
+    Statistic = cs[, column_index, drop = TRUE],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
 }
 
 
@@ -2357,4 +2371,14 @@ get_statistic.bfsl <- function(x, ...) {
   out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
+}
+
+
+#' @export
+get_statistic.lm_robust <- function(x, ...) {
+  if (is_multivariate(x)) {
+    get_statistic.mlm(x, ...)
+  } else {
+    get_statistic.default(x, ...)
+  }
 }

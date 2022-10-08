@@ -23,7 +23,8 @@ export_table(
   group_by = NULL,
   zap_small = FALSE,
   table_width = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 }
 \arguments{
@@ -104,6 +105,8 @@ if \code{table_width} is numeric and table rows are larger than \code{table_widt
 the table is split into two parts.}
 
 \item{verbose}{Toggle messages and warnings.}
+
+\item{...}{Currently not used.}
 }
 \value{
 A data frame in character format.

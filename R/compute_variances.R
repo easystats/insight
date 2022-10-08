@@ -584,9 +584,7 @@
 # on the lognormal-approximation.
 #
 .variance_distributional <- function(x, faminfo, sig, name, verbose = TRUE) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needs to be installed to compute variances for mixed models.", call. = FALSE)
-  }
+  check_if_installed("lme4", "to compute variances for mixed models")
 
   # lognormal-approximation of distributional variance,
   # see Nakagawa et al. 2017

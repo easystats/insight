@@ -61,7 +61,7 @@ standardize_column_order.parameters_model <- function(data,
       # estimate
       "Parameter1", "Parameter2", "Parameter", "Mean_Parameter1", "Mean_Parameter2",
       "Mean_Group1", "Mean_Group2", "Coefficient", "r", "rho", "tau", "Estimate",
-      "Median", "Mean", "MAP", "MAD", "Dxy", "Difference", "Psihat",
+      "Median", "Mean", "MAP", "MAD", "Dxy", "Difference", "Predicted", "Psihat",
       "Trimmed_Mean", "R2", "Mu",
       # type of estimate
       "Group", "Component", "Response", "Effects", "Weight",
@@ -78,6 +78,7 @@ standardize_column_order.parameters_model <- function(data,
       # statistic
       "t", "t value", "z", "z value", "F", "F value", "Chi2", "Chi2 value",
       "chisq", "Chisq", "chi-sq", "t / F", "z / Chisq", "z / Chi2", "W", "S",
+      "Statistic",
       # degrees of freedom
       "df", "df_error", "df_residual",
       # p-value
@@ -104,7 +105,7 @@ standardize_column_order.parameters_model <- function(data,
   if (style == "broom") {
     col_order <- c(
       # estimate
-      "estimate", "mean.group1", "mean.group2",
+      "estimate", "mean.group1", "mean.group2", "predicted",
       # type of estimate
       "group", "component", "response", "effects", "weight",
       # uncertainty

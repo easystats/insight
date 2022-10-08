@@ -11,6 +11,7 @@ test_that("lme4", {
   expect_s3_class(get_data(m), "data.frame")
 })
 
+
 test_that("lm", {
   set.seed(1023)
   x <- rnorm(1000, sd = 4)
@@ -23,6 +24,32 @@ test_that("lm", {
   expect_equal(get_data(mod1)$x, dat$x, ignore_attr = TRUE)
   expect_equal(get_data(mod2)$x, dat$x, ignore_attr = TRUE)
 })
+
+
+test_that("get_data include weights, even if ones", {
+  set.seed(123)
+  y <- rnorm(100)
+  x <- rnorm(100)
+  wn <- runif(100)
+  w1 <- rep(1, 100)
+
+  #Model with nonuniform weights
+  fn <- lm(y ~ x, weights = wn)
+  expect_equal(colnames(get_data(fn)), c("y", "x", "(weights)", "wn"))
+
+  #Model with weights equal to 1
+  f1 <- lm(y ~ x, weights = w1)
+  expect_equal(colnames(get_data(f1)), c("y", "x", "(weights)", "w1"))
+
+  #Model with no weights
+  f0 <- lm(y ~ x)
+  expect_equal(colnames(get_data(f0)), c("y", "x"))
+
+  # check get_weights still works
+  expect_null(get_weights(f0))
+  expect_equal(get_weights(f0, null_as_ones = TRUE), w1)
+})
+
 
 test_that("lm with transformations", {
   d <- data.frame(
@@ -59,6 +86,40 @@ test_that("mgcv", {
   )
 })
 
+test_that("lm with poly and NA in response", {
+  s1 <- summary(iris$Sepal.Length)
+  model <- lm(Petal.Length ~ log(Sepal.Width) + Sepal.Length,
+    data = iris
+  )
+  # Same min-max
+  s2 <- summary(insight::get_data(model)$Sepal.Length)
+
+  model <- lm(Petal.Length ~ log(1 + Sepal.Width) + Sepal.Length,
+    data = iris
+  )
+  s3 <- summary(insight::get_data(model)$Sepal.Length)
+
+  model <- lm(Petal.Length ~ log(Sepal.Width + 1) + Sepal.Length,
+    data = iris
+  )
+  s4 <- summary(insight::get_data(model)$Sepal.Length)
+
+  model <- lm(Petal.Length ~ log1p(Sepal.Width) + Sepal.Length,
+    data = iris
+  )
+  s5 <- summary(insight::get_data(model)$Sepal.Length)
+
+  expect_equal(s1, s2, tolerance = 1e-4)
+  expect_equal(s1, s3, tolerance = 1e-4)
+  expect_equal(s1, s4, tolerance = 1e-4)
+  expect_equal(s1, s5, tolerance = 1e-4)
+  expect_equal(s2, s3, tolerance = 1e-4)
+  expect_equal(s2, s4, tolerance = 1e-4)
+  expect_equal(s2, s5, tolerance = 1e-4)
+  expect_equal(s3, s4, tolerance = 1e-4)
+  expect_equal(s3, s5, tolerance = 1e-4)
+  expect_equal(s4, s5, tolerance = 1e-4)
+})
 
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
@@ -100,6 +161,30 @@ if (.runThisTest) {
   test_that("log", {
     expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
   })
+
+
+  # workaround bug in estimatr
+  if (requiet("ivreg") && requiet("estimatr")) {
+    data("CigaretteDemand")
+    m <- estimatr::iv_robust(
+      log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
+      data = CigaretteDemand
+    )
+    out <- get_data(m)
+    test_that("estimatr works", {
+      expect_equal(
+        head(out$packs),
+        c(101.08543, 111.04297, 71.95417, 56.85931, 82.58292, 79.47219),
+        tolerance = 1e-3
+      )
+      expect_equal(
+        colnames(out),
+        c("packs", "rprice", "rincome", "salestax"),
+        tolerance = 1e-3
+      )
+    })
+  }
+
 
   if (.runStanTest) {
     requiet("brms")

@@ -55,14 +55,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   s <- .get_sigma(x, verbose = verbose)
 
   # Confidence interval for sigma
-  ci <- tryCatch(
-    {
-      .get_sigma_ci(x, ci = ci)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  ci <- tryCatch(.get_sigma_ci(x, ci = ci), error = function(e) NULL)
 
   if (!is.null(ci)) {
     attributes(s) <- c(attributes(s), ci)
@@ -228,14 +221,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   }
 
   # default sigma ---------------
-  s <- tryCatch(
-    {
-      stats::sigma(x)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  s <- tryCatch(stats::sigma(x), error = function(e) NULL)
 
 
   # compute sigma manually ---------------
@@ -247,27 +233,19 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   }
 
   if (is_empty_object(s)) {
-    info <- model_info(x, verbose = FALSE)
+    if (is.null(info)) {
+      info <- model_info(x, verbose = FALSE)
+    }
     if (!is.null(info) && info$is_mixed) {
-      s <- tryCatch(
-        {
-          sqrt(get_variance_residual(x, verbose = FALSE))
-        },
-        error = function(e) {
-          NULL
-        }
-      )
+      s <- tryCatch(sqrt(get_variance_residual(x, verbose = FALSE)),
+                         error = function(e) NULL)
     }
   }
 
   if (is_empty_object(s)) {
     s <- tryCatch(
-      {
-        sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
-      },
-      error = function(e) {
-        NULL
-      }
+      sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose)),
+      error = function(e) NULL
     )
   }
 

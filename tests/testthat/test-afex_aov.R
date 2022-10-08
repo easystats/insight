@@ -72,11 +72,11 @@ if (requiet("testthat") && requiet("insight") && requiet("afex")) {
 
   test_that("afex_aov: model values", {
     expect_equal(suppressWarnings(sapply(mods, get_auxiliary)),
-      c(1.746, 1.768, 1.764, 1.233, 2.075),
+      c(1.75262, 1.77497, 1.77038, 1.29973, 2.08001),
       tolerance = 0.01
     )
     expect_equal(suppressWarnings(sapply(mods, get_df)),
-      c(135, 135, 150, 10, 225),
+      c(134, 134, 149, 9, 224),
       tolerance = 0.01
     )
     expect_equal(sapply(mods, get_loglikelihood),
@@ -84,7 +84,7 @@ if (requiet("testthat") && requiet("insight") && requiet("afex")) {
       tolerance = 0.01
     )
     expect_equal(suppressWarnings(sapply(mods, get_sigma)),
-      c(1.746, 1.768, 1.764, 1.233, 2.075),
+      c(1.75262, 1.77497, 1.77038, 1.29973, 2.08001),
       tolerance = 0.01
     )
     expect_equal(sapply(mods, n_obs),

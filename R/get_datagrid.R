@@ -6,17 +6,18 @@
 #' for a tutorial on how to create a visualisation matrix using this function.
 #'
 #' @param x An object from which to construct the reference grid.
-#' @param at Indicate at which values _focal predictors_ (variables) should be
-#'   represented. If not specified otherwise, representative values for numeric
-#'   variables or predictors are evenly distributed from the minimum to the maximum,
-#'   with a total number of `length` values covering that range (see 'Examples').
-#'   Possible options for `at` are:
+#' @param at Indicates the _focal predictors_ (variables) for the reference grid
+#'   and at which values focal predictors should be represented. If not specified
+#'   otherwise, representative values for numeric variables or predictors are
+#'   evenly distributed from the minimum to the maximum, with a total number of
+#'   `length` values covering that range (see 'Examples'). Possible options for
+#'   `at` are:
 #'   - `"all"`, which will include all variables or predictors.
 #'   - a character vector of one or more variable or predictor names, like
 #'   `c("Species", "Sepal.Width")`, which will create a grid of all combinations
 #'   of unique values. For factors, will use all levels, for numeric variables,
 #'   will use a range of length `length` (evenly spread from minimum to maximum)
-#'   and for character vectors, will use all values.
+#'   and for character vectors, will use all unique values.
 #'   - a list of named elements, indicating focal predictors and their representative
 #'   values, e.g. `at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))`.
 #'   - a string with assignments, e.g. `at = "Sepal.Length = 2"` or
@@ -26,7 +27,7 @@
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
 #'   the brackets should either be
-#'   - two values, indicating minum and maximung (e.g. `at = "Sepal.Length = [0, 5]`),
+#'   - two values, indicating minimum and maximum (e.g. `at = "Sepal.Length = [0, 5]"`),
 #'   for which a range of length `length` (evenly spread from given minimum to
 #'   maximum) is created.
 #'   - more than two numeric values `at = "Sepal.Length = [2,3,4,5]"`, in which
@@ -42,7 +43,7 @@
 #'     - for minimum and maximum value: `"x = [minmax]"`
 #'     - for 0 and the maximum value: `"x = [zeromax]"`
 #'
-#'   For **factors** variables, the value(s) inside the brackets should indicate
+#'   For **factor** variables, the value(s) inside the brackets should indicate
 #'   one or more factor levels, like `at = "Species = [setosa, versicolor]"`.
 #'   **Note**: the `length` argument will be ignored when using brackets-tokens.
 #'
@@ -62,7 +63,7 @@
 #'   [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or
 #'   [`"eti"`][bayestestR::eti()], it will spread the values within that range
 #'   (the default CI width is `95%` but this can be changed by adding for instance
-#'   `ci = 0.90`.) See [IQR()] and [bayestestR::ci()]. This can be useful to have
+#'   `ci = 0.90`.) See [`IQR()`] and [`bayestestR::ci()`]. This can be useful to have
 #'   more robust change and skipping extreme values.
 #'   - if [`"sd"`][sd()] or [`"mad"`][mad()], it will spread by this dispersion
 #'   index around the mean or the median, respectively. If the `length` argument
@@ -102,6 +103,7 @@
 #'   variable should be included in the data grid or not.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
+#' @param verbose Toggle warnings.
 #' @param ... Arguments passed to or from other methods (for instance, `length`
 #'   or `range` to control the spread of numeric variables.).
 #'
@@ -260,17 +262,17 @@ get_datagrid.data.frame <- function(x,
         if (length(length) == 1) {
           length <- rep(length, length(numvars))
         } else if (length(length) != length(numvars)) {
-          stop(format_message(
+          format_error(
             "The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ")."
-          ), call. = FALSE)
+          )
         }
         # Sanitize 'range' argument
         if (length(range) == 1) {
           range <- rep(range, length(numvars))
         } else if (length(range) != length(numvars)) {
-          stop(format_message(
+          format_error(
             "The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."
-          ), call. = FALSE)
+          )
         }
 
         # Get datagrids
@@ -329,7 +331,7 @@ get_datagrid.data.frame <- function(x,
       }
 
       if (nrow(targets) == 0) {
-        stop(format_message("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE."), call. = FALSE)
+        format_error("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE.")
       }
     }
   }
@@ -423,11 +425,19 @@ get_datagrid.data.frame <- function(x,
       } else if (is.character(x) || is.logical(x)) {
         out <- unique(x)[1]
       } else {
-        stop(format_message(paste0(
+        format_error(paste0(
           "Argument is not numeric nor factor but ", class(x), ".",
           "Please report the bug at https://github.com/easystats/insight/issues"
-        )), call. = FALSE)
+        ))
       }
+      # see "get_modelmatrix()" and #626. Reference level is currently
+      # a character vector, which causes the error
+      # > Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]) :
+      # > contrasts can be applied only to factors with 2 or more levels
+      # this is usually avoided by calling ".pad_modelmatrix()", but this
+      # function ignores character vectors. so we need to make sure that this
+      # factor level is also of class factor.
+      out <- factor(out)
     }
   }
   out
@@ -465,7 +475,7 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
 
   # Sanity check
   if (!is.numeric(length)) {
-    stop("`length` argument should be an number.", call. = FALSE)
+    format_error("`length` argument should be an number.")
   }
 
   # Create a spread
@@ -599,9 +609,9 @@ get_datagrid.logical <- get_datagrid.character
       if (!is.na(varname)) {
         x <- x[[varname]]
       } else {
-        stop(format_message(
+        format_error(
           "Couldn't find which variable were selected in `at`. Check spelling and specification."
-        ), call. = FALSE)
+        )
       }
     }
 
@@ -657,9 +667,9 @@ get_datagrid.logical <- get_datagrid.character
           } else if (is.numeric(parts)) {
             expression <- parts
           } else {
-            stop(format_message(
+            format_error(
               paste0("The `at` argument (", at, ") should either indicate the minimum and the maximum, or one of the following options: ", paste0(shortcuts, collapse = ", ", "."))
-            ), call. = FALSE)
+            )
           }
           # If only two, it's probably the range
         } else if (length(parts) == 2) {
@@ -682,9 +692,9 @@ get_datagrid.logical <- get_datagrid.character
           eval(parse(text = at))
         },
         error = function(r) {
-          stop(format_message(
+          format_error(
             paste0("The `at` argument (`", original_target, "`) cannot be read and could be mispecified.")
-          ), call. = FALSE)
+          )
         }
       )
     }
@@ -711,21 +721,34 @@ get_datagrid.default <- function(x,
                                  include_random = FALSE,
                                  include_response = FALSE,
                                  data = NULL,
+                                 verbose = TRUE,
                                  ...) {
   # sanity check
   if (!is_model(x)) {
-    stop("`x` must be a statistical model.", call. = FALSE)
+    format_error("`x` must be a statistical model.")
   }
 
   # Retrieve data from model
   data <- .get_model_data_for_grid(x, data)
 
-  # Deal with intercept-only models
+  # save response - might be necessary to include
   response <- find_response(x)
+
+  # check some exceptions here: logistic regression models with factor response
+  # usually require the response to be included in the model, else `get_modelmatrix()`
+  # fails, which is required to compute SE/CI for `get_predicted()`
+  minfo <- model_info(x)
+  if (minfo$is_binomial && minfo$is_logit && is.factor(data[[response]]) && !include_response && verbose) {
+    format_warning(
+      "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions."
+    )
+  }
+
+  # Deal with intercept-only models
   if (isFALSE(include_response)) {
     data <- data[!colnames(data) %in% response]
     if (ncol(data) < 1) {
-      stop(format_message("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."), call. = FALSE)
+      format_error("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid.")
     }
   }
 
@@ -892,10 +915,10 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 
   # still found no data - stop here
   if (is.null(data)) {
-    stop(format_message(
+    format_error(
       "Can't access data that was used to fit the model in order to create the reference grid.",
       "Please use the `data` argument."
-    ), call. = FALSE)
+    )
   }
 
   data

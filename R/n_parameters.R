@@ -234,6 +234,12 @@ n_parameters.stanmvreg <- n_parameters.stanreg
 
 
 #' @export
+n_parameters.gls <- function(x, ...) {
+  x$dims[["p"]]
+}
+
+
+#' @export
 n_parameters.lavaan <- function(x, ...) {
   # TODO
   # installed?

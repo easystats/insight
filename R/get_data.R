@@ -59,7 +59,7 @@ get_data.default <- function(x, verbose = TRUE, ...) {
     }
   )
 
-  if (is.null(mf)) {
+  if (is.null(mf) || nrow(mf) == 0) {
     mf <- tryCatch(
       {
         dat <- .recover_data_from_environment(x)
@@ -131,6 +131,27 @@ get_data.mjoint <- function(x, verbose = TRUE, ...) {
   )
 
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
+}
+
+
+#' @export
+get_data.geeglm <- function(x, effects = "all", verbose = TRUE, ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
+  if (!is.null(mf)) {
+    id <- data.frame(x$id)
+    colnames(id) <- deparse(parse(text = safe_deparse(get_call(x)))[[1]][["id"]])
+    mf <- cbind(mf, id)
+    # select effects
+    vars <- switch(effects,
+      all = find_variables(x, flatten = TRUE, verbose = FALSE),
+      fixed = find_variables(x, effects = "fixed", flatten = TRUE, verbose = FALSE),
+      random = find_random(x, flatten = TRUE)
+    )
+    mf <- mf[, intersect(vars, colnames(mf)), drop = FALSE]
+  }
+
+  .prepare_get_data(x, mf, effects = effects, verbose = verbose)
 }
 
 
@@ -749,34 +770,31 @@ get_data.felm <- function(x, effects = "all", verbose = TRUE, ...) {
 
 
 #' @export
-get_data.feis <- function(x, effects = "all", ...) {
+get_data.feis <- function(x, effects = "all", verbose = TRUE, ...) {
   # original data does not appear to be stored in the model object
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  mf <- tryCatch(
-    {
-      .recover_data_from_environment(x)
-    },
-    error = function(x) {
-      stats::model.frame(x)
-    }
+  mf <- tryCatch(.recover_data_from_environment(x),
+    error = function(x) stats::model.frame(x)
   )
-
-  .get_data_from_modelframe(x, mf, effects)
+  .get_data_from_modelframe(x, mf, effects, verbose = verbose)
 }
 
 
 #' @export
-get_data.fixest <- function(x, ...) {
+get_data.fixest <- function(x, verbose = TRUE, ...) {
   # original data does not appear to be stored in the model object
-  mf <- .recover_data_from_environment(x)
-  .get_data_from_modelframe(x, mf, effects = "all")
+  # see https://github.com/lrberge/fixest/issues/340 and #629
+  model_call <- get_call(x)
+  mf <- eval(model_call$data, envir = parent.env(x$call_env))
+  # mf <- .recover_data_from_environment(x)
+  .get_data_from_modelframe(x, mf, effects = "all", verbose = verbose)
 }
 
 
 #' @export
-get_data.feglm <- function(x, ...) {
+get_data.feglm <- function(x, verbose = TRUE, ...) {
   mf <- as.data.frame(x$data)
-  .get_data_from_modelframe(x, mf, effects = "all")
+  .get_data_from_modelframe(x, mf, effects = "all", verbose = verbose)
 }
 
 
@@ -839,19 +857,30 @@ get_data.wbgee <- get_data.wbm
 
 #' @export
 get_data.ivreg <- function(x, verbose = TRUE, ...) {
-  mf <- stats::model.frame(x)
-  cn <- clean_names(colnames(mf))
+  mf <- tryCatch(stats::model.frame(x), error = function(e) NULL)
   ft <- find_variables(x, flatten = TRUE)
 
-  remain <- setdiff(ft, cn)
-
-  if (is_empty_object(remain)) {
-    final_mf <- mf
+  if (!insight::is_empty_object(mf)) {
+    cn <- clean_names(colnames(mf))
+    remain <- setdiff(ft, cn)
+    if (is_empty_object(remain)) {
+      final_mf <- mf
+    } else {
+      final_mf <- tryCatch(
+        {
+          dat <- .recover_data_from_environment(x)
+          cbind(mf, dat[, remain, drop = FALSE])
+        },
+        error = function(x) {
+          NULL
+        }
+      )
+    }
   } else {
     final_mf <- tryCatch(
       {
         dat <- .recover_data_from_environment(x)
-        cbind(mf, dat[, remain, drop = FALSE])
+        dat[, ft, drop = FALSE]
       },
       error = function(x) {
         NULL
@@ -861,6 +890,7 @@ get_data.ivreg <- function(x, verbose = TRUE, ...) {
 
   .prepare_get_data(x, stats::na.omit(final_mf), verbose = verbose)
 }
+
 
 #' @export
 get_data.iv_robust <- get_data.ivreg

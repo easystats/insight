@@ -238,6 +238,15 @@ link_inverse.gmnl <- function(x, ...) {
 link_inverse.mlogit <- link_inverse.gmnl
 
 #' @export
+link_inverse.mclogit <- link_inverse.gmnl
+
+#' @export
+link_inverse.mmclogit <- link_inverse.gmnl
+
+#' @export
+link_inverse.mblogit <- link_inverse.gmnl
+
+#' @export
 link_inverse.BBreg <- link_inverse.gmnl
 
 #' @export

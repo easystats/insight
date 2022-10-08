@@ -88,7 +88,7 @@ get_predicted_ci.default <- function(x,
     if ("iterations" %in% names(attributes(predictions))) {
       ci_method <- "quantile"
     } else {
-      ci_method <- "normal"
+      ci_method <- "wald"
     }
   }
 
@@ -111,7 +111,9 @@ get_predicted_ci.default <- function(x,
   # 1. Find appropriate interval function
   if (!is.null(se)) {
     ci_function <- .get_predicted_se_to_ci
-  } else if (ci_type == "confidence" || get_family(x)$family %in% c("gaussian") || (!is.null(vcov) && is.matrix(vcov))) {
+  } else if (ci_type == "confidence" ||
+             identical(get_family(x)$family, "gaussian") ||
+             (!is.null(vcov) && is.matrix(vcov))) {
     # gaussian or CI
     se <- get_predicted_se(
       x,
@@ -133,11 +135,29 @@ get_predicted_ci.default <- function(x,
   if (is.null(ci)) {
     out <- data.frame(SE = se)
   } else if (length(ci) == 1) {
-    out <- ci_function(x, predictions, ci = ci, se = se, ci_method = ci_method, data = data, verbose = verbose, ...)
+    out <- ci_function(
+      x,
+      predictions,
+      ci = ci,
+      se = se,
+      ci_method = ci_method,
+      data = data,
+      verbose = verbose,
+      ...
+    )
   } else {
     out <- data.frame(SE = se)
     for (ci_val in ci) {
-      temp <- ci_function(x, predictions, ci = ci_val, se = se, ci_method = ci_method, data = data, verbose = verbose, ...)
+      temp <- ci_function(
+        x,
+        predictions,
+        ci = ci_val,
+        se = se,
+        ci_method = ci_method,
+        data = data,
+        verbose = verbose,
+        ...
+      )
       temp$SE <- NULL
       names(temp) <- paste0(names(temp), "_", ci_val)
       out <- cbind(out, temp)
@@ -150,7 +170,7 @@ get_predicted_ci.default <- function(x,
 #' @export
 get_predicted_ci.mlm <- function(x, verbose = TRUE, ...) {
   if (verbose) {
-    message(format_message(paste0("Confidence intervals are not yet supported for models of class '", class(x)[1], "'.")))
+    format_alert(paste0("Confidence intervals are not yet supported for models of class `", class(x)[1], "`."))
   }
   NULL
 }
@@ -208,7 +228,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
                                     predictions = NULL,
                                     se = NULL,
                                     ci = 0.95,
-                                    ci_method = "quantile",
+                                    ci_method = "wald",
                                     data = NULL,
                                     ...) {
   # TODO: Prediction interval for binomial: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-i/
@@ -223,16 +243,19 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   if (is.null(predictions)) {
     return(data.frame(SE = se))
   }
-
   if (is.null(ci)) {
+    # Same as predicted
     return(data.frame(CI_low = predictions, CI_high = predictions))
-  } # Same as predicted
+  }
+  if (is.null(ci_method)) {
+    ci_method <- "wald"
+  }
 
   # data is required for satterthwaite
-  if (isTRUE(ci_method %in% c("satterthwaite", "kenward", "kenward-roger"))) {
-    dof <- get_df(x, type = ci_method, data = data)
+  if (isTRUE(ci_method %in% c("satterthwaite", "kr", "kenward", "kenward-roger"))) {
+    dof <- .satterthwaite_kr_df_per_obs(x, type = ci_method, data = data)
   } else {
-    dof <- get_df(x)
+    dof <- get_df(x, type = ci_method)
   }
 
   # Return NA
@@ -255,9 +278,9 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
         # for multiple length, SE and predictions may match, could be intended?
         # could there be any cases where we have twice or x times the length of
         # predictions as standard errors?
-        warning(format_message("Predictions and standard errors are not of the same length. Please check if you need the `data` argument."), call. = FALSE)
+        format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.")
       } else {
-        stop(format_message("Predictions and standard errors are not of the same length. Please specify the `data` argument."), call. = FALSE)
+        format_error("Predictions and standard errors are not of the same length. Please specify the `data` argument.")
       }
     }
 
@@ -269,6 +292,25 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 }
 
 
+.satterthwaite_kr_df_per_obs <- function(x, type, data = NULL) {
+  if (type %in% c("kr", "kenward")) {
+    type <- "kenward-roger"
+  }
+  check_if_installed("lmerTest")
+  type <- tools::toTitleCase(type) # lmerTest wants title case
+  if (!inherits(data, "data.frame")) {
+    format_error("The `data` argument should be a data frame.")
+  }
+  mm <- get_modelmatrix(x, data = data)
+  out <- sapply(
+    seq_len(nrow(mm)), function(i) {
+      suppressMessages(
+        lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
+      )
+    }
+  )
+  out
+}
 
 
 .get_predicted_se_to_ci_zeroinfl <- function(x,
@@ -373,7 +415,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   # Interval
   ci_method <- match.arg(
     tolower(ci_method),
-    c("quantile", "hdi", "eti", "spi", "satterthwaite", "normal")
+    c("quantile", "hdi", "eti", "spi", "satterthwaite", "normal", "wald")
   )
 
   if (ci_method == "quantile") {

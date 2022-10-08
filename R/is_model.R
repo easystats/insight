@@ -117,7 +117,7 @@ is_regression_model <- function(x) {
     "mhurdle", "mipo", "mira", "mixed", "mixor", "MixMod", "mjoint",
     "mle", "mle2", "mlergm", "mlm", "mlma", "mlogit", "model_fit",
     "multinom", "mvmeta", "mvord", "mvr", "marginaleffects",
-    "marginaleffects.summary",
+    "marginaleffects.summary", "mblogit", "mclogit",
 
     # n --------------------
     "negbin", "negbinmfx", "negbinirr", "nlreg", "nlrq", "nls",

@@ -28,23 +28,9 @@ get_family <- function(x, ...) {
 
 #' @export
 get_family.default <- function(x, ...) {
-  fam <- tryCatch(
-    {
-      stats::family(x, ...)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  fam <- tryCatch(stats::family(x, ...), error = function(e) NULL)
   if (is.null(fam)) {
-    fam <- tryCatch(
-      {
-        .get_family(x, ...)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    fam <- tryCatch(.get_family(x, ...), error = function(e) NULL)
   }
   fam
 }
@@ -54,7 +40,7 @@ get_family.list <- function(x, ...) {
   if ("gam" %in% names(x)) {
     .get_family(x)
   } else {
-    stop(format_message("Could not retrieve family from this list. Check the input."), call. = FALSE)
+    format_error("Could not retrieve family from this list. Check the input.")
   }
 }
 
@@ -74,9 +60,10 @@ get_family.model_fit <- function(x, ...) {
   } else if (info$is_poisson) {
     fam <- stats::poisson(link = info$link_function)
   } else {
-    stop(format_message(
-      "Could not retrieve family from this object. Open an issue on the insight's GitHub."
-    ), call. = FALSE)
+    format_error(
+      paste0("Could not retrieve family from this object of class `", class(x)[1], "`."),
+      "Open an issue at {.url https://github.com/easystats/insight/issues}"
+    )
   }
   fam
 }

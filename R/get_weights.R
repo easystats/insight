@@ -10,9 +10,9 @@
 #'   to 1).
 #' @param ... Currently not used.
 #'
-#' @return The weighting variable, or `NULL` if no weights were specified
-#' or if weights were 1. If the weighting variable should also be returned
-#' (instead of `NULL`), when all weights are set to 1 (i.e. no weighting),
+#' @return The weighting variable, or `NULL` if no weights were specified.
+#' If the weighting variable should also be returned (instead of `NULL`)
+#' when all weights are set to 1 (i.e. no weighting),
 #' set `null_as_ones = TRUE`.
 #'
 #' @examples
@@ -42,47 +42,35 @@ get_weights <- function(x, ...) {
 get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   w <- NULL
   tryCatch(
-    {
-      w <- stats::weights(x, ...)
-    },
-    error = function(e) {
-      NULL
-    },
-    warning = function(w) {
-      NULL
-    }
+    w <- stats::weights(x, ...),
+    error = function(e) NULL,
+    warning = function(w) NULL
   )
 
   if (is.null(w)) {
     tryCatch(
-      {
-        w <- stats::model.frame(x)[["(weights)"]]
-      },
-      error = function(e) {
-        NULL
-      },
-      warning = function(w) {
-        NULL
-      }
+      w <- stats::model.frame(x)[["(weights)"]],
+      error = function(e) NULL,
+      warning = function(w) NULL
     )
   }
 
   if (is.null(w)) {
     tryCatch(
-      {
-        w <- .recover_data_from_environment(x)[[find_weights(x)]]
-      },
-      error = function(e) {
-        NULL
-      },
-      warning = function(w) {
-        NULL
-      }
+      w <- .recover_data_from_environment(x)[[find_weights(x)]],
+      error = function(e) NULL,
+      warning = function(w) NULL
     )
   }
 
-  # if all weights are 1, set return value to NULL
-  if (!is.null(w) && all(w == 1L)) {
+  # sanity check - if weights is empty, set to NULL
+  if (!length(w)) {
+    w <- NULL
+  }
+
+  # if all weights are 1, set return value to NULL,
+  # unless the weights were explicitly set in the model call
+  if (!is.null(w) && all(w == 1L) && is.null(find_weights(x))) {
     w <- NULL
   }
 
@@ -139,6 +127,6 @@ get_weights.list <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   if ("gam" %in% names(x)) {
     get_weights(x$gam, na_rm = na_rm, null_as_ones = null_as_ones, ...)
   } else {
-    stop("Cannot find weights in this object. Please an open an issue!", call. = FALSE)
+    format_error("Cannot find weights in this object. Please an open an issue!")
   }
 }

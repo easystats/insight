@@ -60,6 +60,7 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{is_ttest}: model is an an object of class \code{htest}, returned by \code{t.test()}
 \item \code{is_correlation}: model is an an object of class \code{htest}, returned by \code{cor.test()}
 \item \code{is_ranktest}: model is an an object of class \code{htest}, returned by \code{cor.test()} (if Spearman's rank correlation), \code{wilcox.text()} or \code{kruskal.test()}.
+\item \code{is_variancetest}: model is an an object of class \code{htest}, returned by \code{bartlett.test()}, \code{shapiro.test()} or \code{car::leveneTest()}.
 \item \code{is_levenetest}: model is an an object of class \code{anova}, returned by \code{car::leveneTest()}.
 \item \code{is_onewaytest}: model is an an object of class \code{htest}, returned by \code{oneway.test()}
 \item \code{is_proptest}: model is an an object of class \code{htest}, returned by \code{prop.test()}
@@ -67,7 +68,7 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{is_chi2test}: model is an an object of class \code{htest}, returned by \code{chisq.test()}
 \item \code{is_xtab}: model is an an object of class \code{htest} or \code{BFBayesFactor}, and test-statistic stems from a contingency table (i.e. \code{chisq.test()} or \code{BayesFactor::contingencyTableBF()}).
 \item \code{link_function}: the link-function
-\item \code{family}: the family-object
+\item \code{family}: name of the distributional family of the model. For some exceptions (like some \code{htest} objects), can also be the name of the test.
 \item \code{n_obs}: number of observations
 }
 }

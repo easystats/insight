@@ -38,8 +38,9 @@
   if (length(predict) > 1) {
     predict <- predict[1]
     if (isTRUE(verbose)) {
-      msg <- format_message(sprintf("More than one option provided in `predict`. Using first option `%s` now."), predict[1])
-      warning(msg, call. = FALSE)
+      format_warning(
+        sprintf("More than one option provided in `predict`. Using first option `%s` now.", predict[1])
+      )
     }
   }
 
@@ -73,8 +74,8 @@
   }
   if (isTRUE(flag_matrix) && isTRUE(verbose)) {
     message(format_message(
-      "Some of the variables were in matrix-format - probably you used 'scale()' on your data?",
-      "If so, and you get an error, please try 'datawizard::standardize()' to standardize your data."
+      "Some of the variables were in matrix-format - probably you used `scale()` on your data?",
+      "If so, and you get an error, please try `datawizard::standardize()` to standardize your data."
     ))
   }
 

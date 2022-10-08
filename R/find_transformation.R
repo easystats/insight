@@ -43,7 +43,18 @@ find_transformation <- function(x) {
     if (grepl("log\\(log\\((.*)\\)\\)", rv)) {
       transform_fun <- "log-log"
     } else {
-      plus_minus <- eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", rv)))
+      # 1. try: log(x + number)
+      plus_minus <- tryCatch(
+        eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", rv))),
+        error = function(e) NULL
+      )
+      # 2. try: log(number + x)
+      if (is.null(plus_minus)) {
+        plus_minus <- tryCatch(
+          eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", rv))),
+          error = function(e) NULL
+        )
+      }
       if (is.null(plus_minus)) {
         transform_fun <- "log"
       } else {

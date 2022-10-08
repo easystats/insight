@@ -399,7 +399,7 @@ get_parameters.multinom <- function(x, ...) {
 
   if (is.matrix(params)) {
     out <- data.frame()
-    for (i in 1:nrow(params)) {
+    for (i in seq_len(nrow(params))) {
       out <- rbind(out, data.frame(
         Parameter = colnames(params),
         Estimate = unname(params[i, ]),
@@ -425,6 +425,23 @@ get_parameters.multinom <- function(x, ...) {
 get_parameters.brmultinom <- get_parameters.multinom
 
 
+#' @export
+get_parameters.mblogit <- function(x, ...) {
+  params <- stats::coef(x)
+
+  out <- data.frame(
+    Parameter = gsub("(.*)~(.*)", "\\2", names(params)),
+    Estimate = unname(params),
+    Response = gsub("(.*)~(.*)", "\\1", names(params)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  text_remove_backticks(out)
+}
+
+#' @export
+get_parameters.mclogit <- get_parameters.mblogit
 
 
 #' @export
@@ -794,4 +811,14 @@ get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
   }
 
   dat
+}
+
+
+#' @export
+get_parameters.lm_robust <- function(x, ...) {
+  if (is_multivariate(x)) {
+    get_parameters.mlm(x, ...)
+  } else {
+    get_parameters.default(x, ...)
+  }
 }

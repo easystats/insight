@@ -120,13 +120,8 @@
   # proper column names and bind them back to the original model frame
   if (any(mc)) {
     # try to get model data from environment
-    md <- tryCatch(
-      {
-        eval(get_call(x)$data, environment(stats::formula(x)))
-      },
-      error = function(x) {
-        NULL
-      }
+    md <- tryCatch(eval(model_call$data, environment(stats::formula(x))),
+      error = function(x) NULL
     )
 
     # in case we have missing data, the data frame in the environment
@@ -245,13 +240,8 @@
     }
 
     # check if we really have all formula terms in our model frame now
-    pv <- tryCatch(
-      {
-        find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose)
-      },
-      error = function(x) {
-        NULL
-      }
+    pv <- tryCatch(find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose),
+      error = function(x) NULL
     )
 
     # still some undetected matrix-variables?
@@ -442,7 +432,7 @@
   )
 
   # include subset variables
-  subset_vars <- tryCatch(all.vars(get_call(model)$subset), error = function(e) NULL)
+  subset_vars <- tryCatch(all.vars(model_call$subset), error = function(e) NULL)
   missing_vars <- unique(c(setdiff(predictors, colnames(mf)), subset_vars))
 
   # check if missing variables can be recovered from the environment,
@@ -601,7 +591,7 @@
   if (is_empty_object(dat)) {
     if (isTRUE(verbose)) {
       warning(format_message(
-        sprintf("Data frame is empty, probably component '%s' does not exist in the %s-part of the model?", component, effects)
+        sprintf("Data frame is empty, probably component `%s` does not exist in the %s-part of the model?", component, effects)
       ), call. = FALSE)
     }
     return(NULL)
@@ -872,7 +862,24 @@
       } else if (type == "log\\(log") {
         mf[[i]] <- exp(exp(mf[[i]]))
       } else if (type == "log") {
-        mf[[i]] <- exp(mf[[i]])
+        # exceptions: log(x+1) or log(1+x)
+        # 1. try: log(x + number)
+        plus_minus <- tryCatch(
+          eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", cn))),
+          error = function(e) NULL
+        )
+        # 2. try: log(number + x)
+        if (is.null(plus_minus)) {
+          plus_minus <- tryCatch(
+            eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", cn))),
+            error = function(e) NULL
+          )
+        }
+        if (is.null(plus_minus)) {
+          mf[[i]] <- exp(mf[[i]])
+        } else {
+          mf[[i]] <- exp(mf[[i]]) - plus_minus
+        }
       } else if (type == "log1p") {
         mf[[i]] <- expm1(mf[[i]])
       } else if (type == "log10") {
@@ -920,7 +927,13 @@
     x <- find_terms(model, flatten = TRUE)
   }
   pattern <- sprintf("%s\\(([^,\\+)]*).*", type)
-  trim_ws(gsub(pattern, "\\1", x[grepl(pattern, x)]))
+  out <- trim_ws(gsub(pattern, "\\1", x[grepl(pattern, x)]))
+  # sanity check - when we have something like "log(1+x)" instead "log(x+1)",
+  # the regex pattern returns "1" instead of "x3"
+  if (!is.na(suppressWarnings(as.numeric(out)))) {
+    out <- trim_ws(gsub(pattern, "\\2", x[grepl(pattern, x)]))
+  }
+  out
 }
 
 
@@ -970,7 +983,7 @@
 
         # preserve table data for McNemar
         if (!grepl(" (and|by) ", x$data.name) &&
-            (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+          (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           return(as.table(columns[[1]]))
           # check if data is a list for kruskal-wallis
         } else if (grepl("^Kruskal-Wallis", x$method) && length(columns) == 1 && is.list(columns[[1]])) {

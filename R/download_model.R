@@ -26,9 +26,7 @@ download_model <- function(name, url = NULL) {
 
 # Download rda files from github
 .download_data_github <- function(name, url) {
-  if (!requireNamespace("httr", quietly = TRUE)) {
-    stop("Package `httr` required to download models from the circus-repo.", call. = FALSE)
-  }
+  check_if_installed("httr", "to download models from the circus-repo")
 
   if (is.null(url)) {
     url <- "https://raw.github.com/easystats/circus/master/data/"

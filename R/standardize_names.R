@@ -1,8 +1,8 @@
 #' Standardize column names
 #'
 #' Standardize column names from data frames, in particular objects returned
-#' from [parameters::model_parameters()], so column
-#' names are consistent and the same for any model object.
+#' from [parameters::model_parameters()], so column names are consistent and
+#' the same for any model object.
 #'
 #' @param data A data frame. In particular, objects from *easystats*
 #'   package functions like
@@ -20,19 +20,18 @@
 #' @return A data frame, with standardized column names.
 #'
 #' @details This method is in particular useful for package developers or users
-#'   who use, e.g.,
-#'   [parameters::model_parameters()] in their own
+#'   who use, e.g., [`parameters::model_parameters()`] in their own
 #'   code or functions to retrieve model parameters for further processing. As
 #'   `model_parameters()` returns a data frame with varying column names
 #'   (depending on the input), accessing the required information is probably
 #'   not quite straightforward. In such cases, `standardize_names()` can be
 #'   used to get consistent, i.e. always the same column names, no matter what
 #'   kind of model was used in `model_parameters()`.
-#'   \cr \cr
+#'
 #'   For `style = "broom"`, column names are renamed to match \pkg{broom}'s
 #'   naming scheme, i.e. `Parameter` is renamed to `term`,
 #'   `Coefficient` becomes `estimate` and so on.
-#'   \cr \cr
+#'
 #'   For `style = "easystats"`, when `data` is an object from
 #'   `broom::tidy()`, column names are converted from "broom"-style into
 #'   "easystats"-style.
@@ -54,7 +53,7 @@ standardize_names <- function(data, ...) {
 
 #' @export
 standardize_names.default <- function(data, ...) {
-  print_color(sprintf("Objects of class '%s' are currently not supported.\n", class(data)[1]), "red")
+  print_color(sprintf("Objects of class `%s` are currently not supported.\n", class(data)[1]), "red")
 }
 
 
@@ -121,6 +120,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "bayes.factor"] <- "BF"
   cn[cn == "component"]    <- "Component"
   cn[cn == "effect"]       <- "Effects"
+  cn[cn == "predicted"]    <- "Predicted"
   cn[cn == "response"]     <- "Response"
   cn[cn == "statistic"]    <- "Statistic"
   cn[cn == "conf.low"]     <- "CI_low"

@@ -59,7 +59,7 @@ supported_models <- function() {
     "coxph.penal", "coxr", "cpglm", "cpglmm", "crch", "crq", "crqs", "crr",
 
     # d ----------------------------
-    "dep.effect", "DirichletRegModel", "drc",
+    "dep.effect", "DirichletRegModel", "draws", "drc",
 
     # e ----------------------------
     "eglm", "elm", "epi.2by2", "ergm",
@@ -87,9 +87,9 @@ supported_models <- function() {
     "manova", "MANOVA", "margins", "marginaleffects", "marginaleffects.summary",
     "maxLik", "mcmc", "MCMCglmm", "mcp12", "mcp1", "mcp2", "med1way", "mediate",
     "metaplus", "merMod", "merModList", "mipo", "mira", "mixed", "mixor", "MixMod",
-    "mhurdle", "mjoint", "mle", "mle2", "mlm", "mclogit", "mcmc.list", "meta_bma",
-    "meta_fixed", "meta_random", "mlogit", "mmlogit", "model_fit", "multinom",
-    "mvord",
+    "mhurdle", "mjoint", "mle", "mle2", "mlm", "mblogit", "mclogit", "mcmc.list",
+    "meta_bma", "meta_fixed", "meta_random", "mlogit", "mmlogit", "model_fit",
+    "multinom", "mvord", "mmclogit",
 
     # n ----------------------------
     "negbinmfx", "negbinirr",
@@ -103,7 +103,7 @@ supported_models <- function() {
 
     # r ----------------------------
     "Rchoice", "ridgelm", "riskRegression", "rjags", "rlm", "rlmerMod",
-    "robtab", "RM", "rma", "rma.uni", "robmixglm", "rq", "rqs", "rqss",
+    "robtab", "RM", "rma", "rma.uni", "robmixglm", "rq", "rqs", "rqss", "rvar",
 
     # s ----------------------------
     "Sarlm", "scam", "selection", "sem", "semLm", "semLme", "SemiParBIV", "slm",

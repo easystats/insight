@@ -123,7 +123,7 @@ find_formula.list <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.data.frame <- function(x, verbose = TRUE, ...) {
-  stop("A data frame is not a valid object for this function.", call. = FALSE)
+  format_error("A data frame is not a valid object for this function.")
 }
 
 
@@ -137,7 +137,7 @@ find_formula.aovlist <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.anova <- function(x, verbose = TRUE, ...) {
-  stop("Formulas cannot be retrieved from anova() objects.", call. = FALSE)
+  format_error("Formulas cannot be retrieved from anova() objects.")
 }
 
 
@@ -1196,7 +1196,7 @@ find_formula.sem <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.lme <- function(x, verbose = TRUE, ...) {
-  fm <- eval(x$call$fixed)
+  fm <- stats::formula(x$terms)
   fmr <- eval(x$call$random)
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
@@ -1724,11 +1724,12 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   if (grepl("(.*)poly\\((.*),\\s*raw\\s*=\\s*T\\)", f)) {
     if (verbose) {
-      warning(format_message(
-        "Looks like you are using 'poly()' with 'raw = T'. This results in unexpected behaviour, because 'all.vars()' considers 'T' as variable.",
-        "Please use 'raw = TRUE'."
-      ),
-      call. = FALSE
+      warning(
+        format_message(
+          "Looks like you are using 'poly()' with 'raw = T'. This results in unexpected behaviour, because 'all.vars()' considers 'T' as variable.",
+          "Please use 'raw = TRUE'."
+        ),
+        call. = FALSE
       )
     }
     return(FALSE)
@@ -1749,16 +1750,13 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   if (any(grepl("\\$", safe_deparse(f[[1]])))) {
     fc <- try(.formula_clean(f[[1]]), silent = TRUE)
     if (inherits(fc, "try-error")) {
-      stop(attributes(fc)$condition$message, call. = FALSE)
+      format_error(attributes(fc)$condition$message)
     } else {
       if (verbose) {
-        warning(
-          format_message(paste0(
-            "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.",
-            "\n  Try: ", fc$formula, ", data = ", fc$data
-          )),
-          call. = FALSE
-        )
+        format_warning(paste0(
+          "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.",
+          "\n  Try: ", fc$formula, ", data = ", fc$data
+        ))
       }
       return(FALSE)
     }
@@ -1781,7 +1779,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   d_RHS <- unique(gsub("(.*)\\$(.*)", "\\1", parts[grepl("(.*)\\$(.*)", parts)]))
 
   if (n_unique(c(d_LHS, d_RHS)) > 1) {
-    stop("Multiple data objects present in formula. Specify your model using the `data` argument instead.", call. = FALSE)
+    format_error("Multiple data objects present in formula. Specify your model using the `data` argument instead.")
   } else {
     d <- unique(d_RHS)
   }

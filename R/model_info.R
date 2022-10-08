@@ -46,6 +46,7 @@
 #' * `is_ttest`: model is an an object of class `htest`, returned by `t.test()`
 #' * `is_correlation`: model is an an object of class `htest`, returned by `cor.test()`
 #' * `is_ranktest`: model is an an object of class `htest`, returned by `cor.test()` (if Spearman's rank correlation), `wilcox.text()` or `kruskal.test()`.
+#' * `is_variancetest`: model is an an object of class `htest`, returned by `bartlett.test()`, `shapiro.test()` or `car::leveneTest()`.
 #' * `is_levenetest`: model is an an object of class `anova`, returned by `car::leveneTest()`.
 #' * `is_onewaytest`: model is an an object of class `htest`, returned by `oneway.test()`
 #' * `is_proptest`: model is an an object of class `htest`, returned by `prop.test()`
@@ -53,7 +54,7 @@
 #' * `is_chi2test`: model is an an object of class `htest`, returned by `chisq.test()`
 #' * `is_xtab`: model is an an object of class `htest` or `BFBayesFactor`, and test-statistic stems from a contingency table (i.e. `chisq.test()` or `BayesFactor::contingencyTableBF()`).
 #' * `link_function`: the link-function
-#' * `family`: the family-object
+#' * `family`: name of the distributional family of the model. For some exceptions (like some `htest` objects), can also be the name of the test.
 #' * `n_obs`: number of observations
 #'
 #' @examples
@@ -151,132 +152,146 @@ model_info.anova <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-model_info.mmclogit <- function(x, verbose = TRUE, ...) {
+model_info.mclogit <- function(x, verbose = TRUE, ...) {
+  .make_family(
+    x,
+    fitfam = "categorical",
+    logit.link = TRUE,
+    link.fun = "logit",
+    verbose = verbose,
+    ...
+  )
+}
+
+#' @export
+model_info.mblogit <- model_info.mclogit
+
+#' @export
+model_info.mmclogit <- model_info.mclogit
+
+
+#' @export
+model_info.maxLik <- function(x, verbose = TRUE, ...) {
   .make_family(x, verbose = verbose, ...)
 }
 
 #' @export
-model_info.maxLik <- model_info.mmclogit
+model_info.mjoint <- model_info.maxLik
 
 #' @export
-model_info.mjoint <- model_info.mmclogit
+model_info.censReg <- model_info.maxLik
 
 #' @export
-model_info.censReg <- model_info.mmclogit
+model_info.htest <- model_info.maxLik
 
 #' @export
-model_info.htest <- model_info.mmclogit
+model_info.BFBayesFactor <- model_info.maxLik
 
 #' @export
-model_info.BFBayesFactor <- model_info.mmclogit
+model_info.lme <- model_info.maxLik
 
 #' @export
-model_info.lme <- model_info.mmclogit
+model_info.bayesx <- model_info.maxLik
 
 #' @export
-model_info.bayesx <- model_info.mmclogit
+model_info.rq <- model_info.maxLik
 
 #' @export
-model_info.rq <- model_info.mmclogit
+model_info.crq <- model_info.maxLik
 
 #' @export
-model_info.crq <- model_info.mmclogit
+model_info.crqs <- model_info.maxLik
 
 #' @export
-model_info.crqs <- model_info.mmclogit
+model_info.nlrq <- model_info.maxLik
 
 #' @export
-model_info.nlrq <- model_info.mmclogit
+model_info.rqss <- model_info.maxLik
 
 #' @export
-model_info.rqss <- model_info.mmclogit
+model_info.mixed <- model_info.maxLik
 
 #' @export
-model_info.mixed <- model_info.mmclogit
+model_info.plm <- model_info.maxLik
 
 #' @export
-model_info.plm <- model_info.mmclogit
+model_info.mcmc <- model_info.maxLik
 
 #' @export
-model_info.mcmc <- model_info.mmclogit
+model_info.bayesQR <- model_info.maxLik
 
 #' @export
-model_info.bayesQR <- model_info.mmclogit
+model_info.gls <- model_info.maxLik
 
 #' @export
-model_info.gls <- model_info.mmclogit
+model_info.nls <- model_info.maxLik
 
 #' @export
-model_info.nls <- model_info.mmclogit
+model_info.MANOVA <- model_info.maxLik
 
 #' @export
-model_info.MANOVA <- model_info.mmclogit
+model_info.RM <- model_info.maxLik
 
 #' @export
-model_info.RM <- model_info.mmclogit
+model_info.truncreg <- model_info.maxLik
 
 #' @export
-model_info.truncreg <- model_info.mmclogit
+model_info.lmRob <- model_info.maxLik
 
 #' @export
-model_info.lmRob <- model_info.mmclogit
+model_info.speedlm <- model_info.maxLik
 
 #' @export
-model_info.speedlm <- model_info.mmclogit
+model_info.lmrob <- model_info.maxLik
 
 #' @export
-model_info.lmrob <- model_info.mmclogit
+model_info.complmrob <- model_info.maxLik
 
 #' @export
-model_info.complmrob <- model_info.mmclogit
+model_info.lm_robust <- model_info.maxLik
 
 #' @export
-model_info.lm_robust <- model_info.mmclogit
+model_info.iv_robust <- model_info.maxLik
 
 #' @export
-model_info.iv_robust <- model_info.mmclogit
+model_info.systemfit <- model_info.maxLik
 
 #' @export
-model_info.systemfit <- model_info.mmclogit
+model_info.lqmm <- model_info.maxLik
 
 #' @export
-model_info.lqmm <- model_info.mmclogit
+model_info.lqm <- model_info.maxLik
 
 #' @export
-model_info.lqm <- model_info.mmclogit
+model_info.felm <- model_info.maxLik
 
 #' @export
-model_info.felm <- model_info.mmclogit
+model_info.feis <- model_info.maxLik
 
 #' @export
-model_info.feis <- model_info.mmclogit
+model_info.ivreg <- model_info.maxLik
 
 #' @export
-model_info.ivreg <- model_info.mmclogit
+model_info.ivFixed <- model_info.maxLik
 
 #' @export
-model_info.ivFixed <- model_info.mmclogit
+model_info.aovlist <- model_info.maxLik
 
 #' @export
-model_info.aovlist <- model_info.mmclogit
+model_info.rma <- model_info.maxLik
 
 #' @export
-model_info.rma <- model_info.mmclogit
+model_info.meta_random <- model_info.maxLik
 
 #' @export
-model_info.meta_random <- model_info.mmclogit
+model_info.meta_bma <- model_info.maxLik
 
 #' @export
-model_info.meta_bma <- model_info.mmclogit
+model_info.meta_fixed <- model_info.maxLik
 
 #' @export
-model_info.meta_fixed <- model_info.mmclogit
+model_info.metaplus <- model_info.maxLik
 
-#' @export
-model_info.metaplus <- model_info.mmclogit
-
-#' @export
-model_info.mclogit <- model_info.mmclogit
 
 #' @export
 model_info.mlm <- function(x, ...) {
@@ -1255,7 +1270,7 @@ model_info.marginaleffects <- function(x, ...) {
 
 #' @export
 model_info.earth <- function(x, ...) {
-  stop("Models of class 'earth' are not yet supported.", call. = FALSE)
+  format_error("Models of class `earth` are not yet supported.")
 }
 
 #' @export

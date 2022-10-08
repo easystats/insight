@@ -99,6 +99,16 @@ if (requiet("testthat") &&
     expect_equal(colnames(get_data(m2)), c("distance", "age", "Sex"))
   })
 
+  test_that("get_df", {
+    expect_equal(get_df(m1, type = "residual"), c(161, 161), ignore_attr = TRUE)
+    expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
+    expect_equal(get_df(m1, type = "wald"), c(161, 161), ignore_attr = TRUE)
+    expect_equal(get_df(m2, type = "residual"), c(80, 80, 25), ignore_attr = TRUE)
+    expect_equal(get_df(m2, type = "normal"), Inf, ignore_attr = TRUE)
+    expect_equal(get_df(m3, type = "residual"), c(98, 76), ignore_attr = TRUE)
+    expect_equal(get_df(m3, type = "normal"), Inf, ignore_attr = TRUE)
+  })
+
   test_that("find_formula", {
     expect_length(find_formula(m1), 2)
     expect_equal(
@@ -209,4 +219,23 @@ if (requiet("testthat") &&
     expect_identical(find_statistic(m2), "t-statistic")
     expect_identical(find_statistic(m3), "t-statistic")
   })
+
+
+  test_that("Issue #658", {
+    requiet("nlme")
+    models <- lapply(
+      c("", " + Sex"),
+      function(x) {
+        lme(as.formula(paste0("distance  ~ age", x)),
+          random = ~1,
+          data = Orthodont)
+      })
+    dat <- lapply(models, get_data)
+    form <- lapply(models, find_formula)
+    expect_s3_class(form[[1]], "insight_formula")
+    expect_s3_class(form[[2]], "insight_formula")
+    expect_s3_class(dat[[1]], "data.frame")
+    expect_s3_class(dat[[2]], "data.frame")
+  })
+
 }

@@ -5,13 +5,87 @@
 #'   from regression models.
 #'
 #' @param x A statistical model.
-#' @param type Can be `"residual"`, `"model"` or `"analytical"`. `"residual"`
-#' tries to extract residual degrees of freedoms. If residual degrees of freedom
-#' could not be extracted, returns analytical degrees of freedom, i.e. `n-k`
-#' (number of observations minus number of parameters). `"model"` returns
-#' model-based degrees of freedom, i.e. the number of (estimated) parameters.
+#' @param type Can be `"residual"`, `"wald"`, `"normal"`, or
+#'   `"model"`. `"analytical"` is an alias for `"residual"`.
+#'
+#'   + `"residual"` (aka `"analytical"`) returns the residual degrees of
+#'     freedom, which usually is what [`stats::df.residual()`] returns. If a
+#'     model object has no method to extract residual degrees of freedom, these
+#'     are calculated as `n-p`, i.e. the number of observations minus the number
+#'     of estimated parameters. If residual degrees of freedom cannot be extracted
+#'     by either approach, returns `Inf`.
+#'   + `"wald"` returns residual (aka analytical) degrees of freedom for models
+#'     with t-statistic, `1` for models with Chi-squared statistic, and `Inf` for
+#'     all other models. Also returns `Inf` if residual degrees of freedom cannot
+#'     be extracted.
+#'   + `"normal"` always returns `Inf`.
+#'   + `"model"` returns model-based degrees of freedom, i.e. the number of
+#'     (estimated) parameters.
+#'   + For mixed models, can also be `"ml1"` (approximation of degrees of freedom
+#'     based on a "m-l-1" heuristic as suggested by _Elff et al. 2019_) or
+#'     `"betwithin"`, and for models of class `merMod`, `type` can also be
+#'     `"satterthwaite"` or `"kenward-roger"`. See 'Details'.
+#'
+#' Usually, when degrees of freedom are required to calculate p-values or
+#' confidence intervals, `type = "wald"` is likely to be the best choice in
+#' most cases.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
+#'
+#' @details
+#' **Degrees of freedom for mixed models**
+#'
+#' Inferential statistics (like p-values, confidence intervals and
+#' standard errors) may be biased in mixed models when the number of clusters
+#' is small (even if the sample size of level-1 units is high). In such cases
+#' it is recommended to approximate a more accurate number of degrees of freedom
+#' for such inferential statistics (see _Li and Redden 2015_).
+#'
+#' *m-l-1 degrees of freedom*
+#'
+#' The _m-l-1_ heuristic is an approach that uses a t-distribution with fewer
+#' degrees of freedom. In particular for repeated measure designs (longitudinal
+#' data analysis), the m-l-1 heuristic is likely to be more accurate than simply
+#' using the residual or infinite degrees of freedom, because `get_df(type = "ml1")`
+#' returns different degrees of freedom for within-cluster and between-cluster
+#' effects. Note that the "m-l-1" heuristic is not applicable (or at least less
+#' accurate) for complex multilevel designs, e.g. with cross-classified clusters.
+#' In such cases, more accurate approaches like the Kenward-Roger approximation
+#' is recommended. However, the "m-l-1" heuristic also applies to generalized
+#' mixed models, while approaches like Kenward-Roger or Satterthwaite are limited
+#' to linear mixed models only.
+#'
+#' *Between-within degrees of freedom*
+#'
+#' The Between-within denominator degrees of freedom approximation is, similar
+#' to the "m-l-1" heuristic, recommended in particular for (generalized) linear
+#' mixed models with repeated measurements (longitudinal design).
+#' `get_df(type = "betwithin")` implements a heuristic based on the between-within
+#' approach, i.e. this type returns different degrees of freedom for within-cluster
+#' and between-cluster effects. Note that this implementation does not return
+#' exactly the same results as shown in _Li and Redden 2015_, but similar.
+#'
+#' *Satterthwaite and Kenward-Rogers degrees of freedom*
+#'
+#' Unlike simpler approximation heuristics like the "m-l-1" rule (`type = "ml1"`),
+#' the Satterthwaite or Kenward-Rogers approximation is also applicable in more
+#' complex multilevel designs. However, the "m-l-1" or "between-within" heuristics
+#' also apply to generalized mixed models, while approaches like Kenward-Roger
+#' or Satterthwaite are limited to linear mixed models only.
+#'
+#' @references
+#' - Kenward, M. G., & Roger, J. H. (1997). Small sample inference for
+#'   fixed effects from restricted maximum likelihood. Biometrics, 983-997.
+#' - Satterthwaite FE (1946) An approximate distribution of estimates of
+#'   variance components. Biometrics Bulletin 2 (6):110–4.
+#' - Elff, M.; Heisig, J.P.; Schaeffer, M.; Shikano, S. (2019). Multilevel
+#'   Analysis with Few Clusters: Improving Likelihood-based Methods to Provide
+#'   Unbiased Estimates and Accurate Inference, British Journal of Political
+#'   Science.
+#' - Li, P., Redden, D. T. (2015). Comparing denominator degrees of freedom
+#'   approximations for the generalized linear mixed model in analyzing binary
+#'   outcome in small sample cluster-randomized trials. BMC Medical Research
+#'   Methodology, 15(1), 38
 #'
 #' @examples
 #' model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
@@ -26,15 +100,56 @@ get_df <- function(x, ...) {
 #' @rdname get_df
 #' @export
 get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical"))
+  # check valid options
+  type <- match.arg(
+    tolower(type),
+    choices = c("residual", "model", "analytical", "wald", "normal", "ml1", "betwithin")
+  )
 
-  if (type == "residual") {
-    dof <- .degrees_of_freedom_residual(x, verbose = verbose)
-    if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
-      dof <- .degrees_of_freedom_analytical(x)
+  # check if user already passed "statistic" argument, to
+  # avoid multiple calls to "find_statistic()"
+  dots <- list(...)
+  statistic <- dots$statistic
+  if (is.null(statistic)) {
+    statistic <- find_statistic(x)
+  }
+
+  # handle aliases
+  if (type == "analytical") {
+    type <- "residual"
+  }
+
+
+  # Wald normal approximation - always Inf -----
+  if (type == "normal") {
+    return(Inf)
+
+  # residual/analytical df, falls back to Inf if we have no residual df method -----
+  } else if (type == "residual") {
+    dof <- .get_residual_df(x, verbose)
+
+  # Wald df - always Inf for z-statistic, 1 for Chi2-statistic, else residual df -----
+  } else if (type == "wald") {
+    # z-statistic always Inf, *unless* we have residual df (which we have for some models)
+    if (identical(statistic, "z-statistic")) {
+      return(Inf)
     }
-  } else if (type == "analytical") {
-    dof <- .degrees_of_freedom_analytical(x)
+    # Chi2-statistic usually have 1 df
+    if (identical(statistic, "chi-squared statistic")) {
+      return(1)
+    }
+    # Wald t-statistic
+    dof <- .get_residual_df(x, verbose)
+
+  # ml1 - only for certain mixed models -----
+  } else if (type == "ml1") {
+    dof <- .degrees_of_freedom_ml1(x)
+
+  # between-within - only for certain mixed models -----
+  } else if (type == "betwithin") {
+    dof <- .degrees_of_freedom_betwithin(x)
+
+  # remaining option is model-based df, i.e. number of estimated parameters
   } else {
     dof <- .model_df(x)
   }
@@ -54,62 +169,6 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
 #' @export
 get_df.model_fit <- function(x, type = "residual", verbose = TRUE, ...) {
   get_df(x$fit, type = type, verbose = verbose, ...)
-}
-
-
-#' @export
-get_df.ivFixed <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    as.vector(x$df)
-  }
-}
-
-#' @export
-get_df.ivprobit <- get_df.ivFixed
-
-
-#' @export
-get_df.fixest <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "residual") {
-    s <- summary(x)
-    vcov_scaled <- s$cov.scaled
-    if (is.null(vcov_scaled)) {
-      s$nobs - s$nparams
-    } else {
-      max(s$nobs - attr(vcov_scaled, "dof.K"), 1)
-    }
-  } else {
-    .model_df(x)
-  }
-}
-
-
-#' @export
-get_df.multinom <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    n_obs(x) - x$edf
-  }
-}
-
-#' @export
-get_df.nnet <- get_df.multinom
-
-
-#' @export
-get_df.summary.lm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    x$fstatistic[3]
-  }
 }
 
 
@@ -145,200 +204,47 @@ get_df.coeftest <- function(x, ...) {
 
 
 #' @export
-get_df.lqmm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    cs <- summary(x)
-    tryCatch(
-      {
-        if (!is.null(cs$rdf)) {
-          cs$rdf
-        } else {
-          attr(cs$B, "R") - 1
-        }
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+get_df.fixest <- function(x, type = "residual", ...) {
+  # fixest degrees of freedom can be tricky. best to use the function by the
+  # package.
+  check_if_installed("fixest")
+  if (is.null(type)) {
+    type <- "residual"
   }
+  type <- match.arg(
+    tolower(type),
+    choices = c("wald", "residual", "normal")
+  )
+  type <- switch(type,
+    "wald" = "t",
+    "residual" = "resid",
+    type
+  )
+  if (type == "normal") {
+    return(Inf)
+  }
+  fixest::degrees_freedom(x, type = type)
 }
 
 
-#' @export
-get_df.lqm <- get_df.lqmm
 
-
-#' @export
-get_df.cgam <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    # x$resid_df_obs
-    # new in cgam 1.18
-    stats::df.residual(x)
-  }
-}
-
-
-#' @export
-get_df.cgamm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    x$resid_df_obs
-  }
-}
-
-
-#' @export
-get_df.glht <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    x$df
-  }
-}
-
-#' @export
-get_df.BBmm <- get_df.glht
-
-#' @export
-get_df.BBreg <- get_df.glht
-
-
-# methods for models w/o df.residual() method --------------
-
-#' @export
-get_df.rlm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "residual") {
-    .degrees_of_freedom_analytical(x)
-  } else {
-    .model_df(x)
-  }
-}
-
-#' @export
-get_df.bigglm <- get_df.rlm
-
-#' @export
-get_df.biglm <- get_df.rlm
-
-#' @export
-get_df.complmrob <- get_df.rlm
-
-#' @export
-get_df.gls <- get_df.rlm
-
-#' @export
-get_df.garch <- get_df.rlm
-
-#' @export
-get_df.mhurdle <- get_df.rlm
-
-#' @export
-get_df.nlrq <- get_df.rlm
-
-#' @export
-get_df.truncreg <- get_df.rlm
-
-
-
-
-#' @export
-get_df.rq <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "residual") {
-    tryCatch(
-      {
-        s <- suppressWarnings(summary(x, covariance = TRUE))
-        cs <- lapply(s, function(i) i$rdf)
-        unique(unlist(cs))
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-  } else {
-    .model_df(x)
-  }
-}
-
-
-#' @export
-get_df.rqss <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "residual") {
-    n_obs(x) - x$edf
-  } else {
-    .model_df(x)
-  }
-}
-
-
-#' @export
-get_df.bfsl <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "residual") {
-    x$df.residual
-  } else {
-    .model_df(x)
-  }
-}
-
-
-#' @export
-get_df.plm <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "residual") {
-    x$df.residual
-  } else {
-    .model_df(x)
-  }
-}
-
-
-#' @export
-get_df.selection <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    s <- summary(x)
-    s$param$df
-  }
-}
-
+# Mixed models - special treatment --------------
 
 #' @export
 get_df.lmerMod <- function(x, type = "residual", ...) {
+  type <- match.arg(
+    tolower(type),
+    choices = c("residual", "model", "analytical", "satterthwaite", "kenward",
+                "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin")
+  )
   dots <- list(...)
-  type <- match.arg(tolower(type), choices = c("residual", "model", "analytical", "satterthwaite", "kenward", "kenward-roger"))
-  # fix name for lmerTest
-  if (type == "kenward") {
-    type <- "kenward-roger"
-  }
-  if (type %in% c("satterthwaite", "kenward-roger")) {
-    check_if_installed("lmerTest")
-    type <- tools::toTitleCase(type) # lmerTest wants title case
-    if (!inherits(dots$data, "data.frame")) {
-      stop("The `data` argument should be a data.frame.", call. = FALSE)
-    }
-    mm <- get_modelmatrix(x, data = dots$data)
-    out <- sapply(
-      seq_len(nrow(mm)), function(i) {
-        suppressMessages(
-          lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
-        )
-      }
-    )
-    return(out)
+
+  if (type %in% c("satterthwaite", "kr", "kenward", "kenward-roger") && isTRUE(dots$df_per_obs)) {
+    .satterthwaite_kr_df_per_obs(x, type, dots$data)
+  } else if (type == "satterthwaite") {
+    .degrees_of_freedom_satterthwaite(x)
+  } else if (type %in% c("kr", "kenward", "kenward-roger")) {
+    .degrees_of_freedom_kr(x)
   } else {
     get_df.default(x, type = type, ...)
   }
@@ -347,132 +253,65 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
 #' @export
 get_df.lmerModTest <- get_df.lmerMod
 
+#' @export
+get_df.lme <- get_df.lmerMod
+
+
+
+
+# Other models ------------------
+
 
 #' @export
-get_df.logitor <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    get_df.default(x$fit, ...)
-  }
+get_df.logitor <- function(x, type = "residual", verbose = TRUE, ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical"))
+  get_df.default(x$fit, type = type, verbose = verbose, ...)
 }
-
 
 #' @export
 get_df.poissonirr <- get_df.logitor
 
-
 #' @export
 get_df.negbinirr <- get_df.logitor
-
 
 #' @export
 get_df.poissonmfx <- get_df.logitor
 
-
 #' @export
 get_df.logitmfx <- get_df.logitor
-
 
 #' @export
 get_df.negbinmfx <- get_df.logitor
 
-
 #' @export
 get_df.probitmfx <- get_df.logitor
 
-
 #' @export
 get_df.betaor <- get_df.logitor
-
 
 #' @export
 get_df.betamfx <- get_df.logitor
 
 
 #' @export
-get_df.merModList <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    s <- suppressWarnings(summary(x))
-    s$fe$df
-  }
-}
-
-
-#' @export
-get_df.mira <- function(x, type = "residual", ...) {
+get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
   # installed?
   check_if_installed("mice")
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  get_df(mice::pool(x), type, ...)
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
+  get_df(mice::pool(x), type, verbose = verbose, ...)
 }
 
 
 #' @export
 get_df.mipo <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
   if (type == "model") {
     .model_df(x)
+  } else if (type == "normal") {
+    return(Inf)
   } else {
     as.vector(summary(x)$df)
   }
-}
-
-
-#' @export
-get_df.vgam <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    params <- get_parameters(x)
-    out <- stats::setNames(rep(NA, nrow(params)), params$Parameter)
-    out[names(x@nl.df)] <- x@nl.df
-    out
-  }
-}
-
-
-#' @export
-get_df.rqs <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  if (type == "model") {
-    .model_df(x)
-  } else {
-    tryCatch(
-      {
-        s <- suppressWarnings(summary(x, covariance = TRUE))
-        cs <- lapply(s, function(i) i$rdf)
-        unique(unlist(cs))
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-  }
-}
-
-
-#' @export
-get_df.systemfit <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model"))
-  df <- c()
-  s <- summary(x)$eq
-  params <- find_parameters(x)
-  f <- find_formula(x)
-  system_names <- names(f)
-
-  for (i in seq_along(system_names)) {
-    dfs <- rep(s[[i]]$df[2], length(params[[i]]))
-    df_names <- rep(names(params[i]), length(params[[i]]))
-    df <- c(df, stats::setNames(dfs, df_names))
-  }
-
-  df
 }
 
 
@@ -488,13 +327,21 @@ get_df.mediate <- function(x, ...) {
 
 
 
-
 # Analytical approach ------------------------------
+
+
+.get_residual_df <- function(x, verbose = TRUE) {
+  dof <- .degrees_of_freedom_residual(x, verbose = verbose)
+  if (is.null(dof) || all(is.infinite(dof)) || anyNA(dof)) {
+    dof <- .degrees_of_freedom_analytical(x)
+  }
+  dof
+}
 
 
 #' @keywords internal
 .degrees_of_freedom_analytical <- function(model) {
-  nparam <- n_parameters(model)
+  nparam <- .model_df(model)
   n <- n_obs(model)
 
   if (is.null(n)) {
@@ -507,63 +354,16 @@ get_df.mediate <- function(x, ...) {
 
 
 
-# Model approach (Residual df) ------------------------------
-
-
-#' @keywords internal
-.degrees_of_freedom_residual <- function(model, verbose = TRUE) {
-  if (.is_bayesian_model(model) && !inherits(model, c("bayesx", "blmerMod", "bglmerMod"))) {
-    if (check_if_installed("bayestestR", quietly = TRUE)) {
-      model <- bayestestR::bayesian_as_frequentist(model)
-    } else {
-      if (isTRUE(verbose)) {
-        warning("Can't extract degrees of freedom from Bayesian model.", call. = FALSE)
-      }
-      return(NULL)
-    }
-  }
-
-  # 1st try
-  dof <- try(stats::df.residual(model), silent = TRUE)
-
-  # 2nd try
-  if (inherits(dof, "try-error") || is.null(dof) || all(is.na(dof))) {
-    junk <- utils::capture.output(dof = try(summary(model)$df[2], silent = TRUE))
-  }
-
-  # 3rd try, nlme
-  if (inherits(dof, "try-error") || is.null(dof) || all(is.na(dof))) {
-    dof <- try(unname(model$fixDF$X), silent = TRUE)
-  }
-
-  # last try
-  if (inherits(dof, "try-error")) {
-    dof <- NULL
-  }
-
-  dof
-}
-
-
-
-
-
 # Model approach (model-based / logLik df) ------------------------------
 
 
 .model_df <- function(x) {
-  dof <- tryCatch(
-    {
-      attr(stats::logLik(x), "df")
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  dof <- tryCatch(attr(stats::logLik(x), "df"), error = function(e) NULL)
 
   if (is.null(dof) || all(is.infinite(dof)) || all(is.na(dof))) {
-    if (!is.null(x$rank)) {
-      dof <- x$rank + 1
+    r <- tryCatch(x$rank, error = function(e) NULL)
+    if (!is.null(r)) {
+      dof <- r + 1
     } else {
       n <- n_parameters(x)
       extra <- 0

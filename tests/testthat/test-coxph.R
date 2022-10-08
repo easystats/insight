@@ -137,3 +137,24 @@ test_that("JM", {
   expect_equal(dim(d), c(1405, 12))
   expect_equal(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
 })
+
+test_that("get_statistic", {
+  requiet("survival")
+  bladder1 <- bladder[bladder$enum < 5, ]
+  mod <- coxph(
+    Surv(stop, event) ~ (rx + size + number) * strata(enum),
+    cluster = id, bladder1, robust = TRUE
+  )
+  z1 <- get_statistic(mod)$Statistic
+  z2 <- coef(summary(mod))[, "z"]
+  expect_equal(z1, z2, ignore_attr = TRUE)
+
+  lung <- survival::lung
+  mod <- survival::coxph(
+    formula = Surv(time, status) ~ age + sex + frailty(inst),
+    data = lung
+  )
+  z1 <- get_statistic(mod)$Statistic
+  z2 <- coef(summary(mod))[, "Chisq"]
+  expect_equal(z1, z2, ignore_attr = TRUE)
+})

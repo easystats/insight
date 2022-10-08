@@ -55,14 +55,7 @@ n_obs.default <- function(x, ...) {
     return(n_obs.glm(x, ...))
   }
 
-  tryCatch(
-    {
-      stats::nobs(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
+  tryCatch(stats::nobs(x), error = function(x) NULL)
 }
 
 
@@ -703,9 +696,7 @@ n_obs.mipo <- function(x, ...) {
 
 #' @export
 n_obs.mira <- function(x, ...) {
-  if (!requireNamespace("mice", quietly = TRUE)) {
-    stop("Package `mice` required. Please install it.", call. = FALSE)
-  }
+  check_if_installed("mice")
   n_obs(mice::pool(x), ...)
 }
 

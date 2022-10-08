@@ -243,9 +243,9 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
   fac <- lapply(Filter(is.factor, data), unique)
   fac_len <- sapply(fac, length)
   if (all(fac_len > min_levels)) {
-      out <- data
-      attr(out, "pad") <- 0
-      return(out)
+    out <- data
+    attr(out, "pad") <- 0
+    return(out)
   }
 
   # factors from data in model object
@@ -254,7 +254,7 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
   pad <- lapply(seq_len(min_levels), function(...) utils::head(data, n = 1))
   pad <- do.call("rbind", pad)
   for (n in names(fac)) {
-      pad[[n]] <- fac[[n]]
+    pad[[n]] <- fac[[n]]
   }
 
   out <- rbind(pad, data)

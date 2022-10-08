@@ -163,7 +163,7 @@ get_parameters.BFBayesFactor <- function(x,
       BayesFactor::posterior(x, iterations = iterations, progress = progress)
     )))
     posts <- posts[, seq_len(cells)]
-    if (sum(posts[1, ]) == 1) {
+    if (all(posts[1, ] <= 1)) {
       posts <- posts * N
     }
     colnames(posts) <- gsub("(pi|lambda)", "cell", colnames(posts))

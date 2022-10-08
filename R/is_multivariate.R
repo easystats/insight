@@ -31,13 +31,27 @@
 #' }
 #' @export
 is_multivariate <- function(x) {
-  if (inherits(x, "gam", which = TRUE) == 1) {
-    f <- .gam_family(x)
-    gam_mv <- !is.null(f) && f$family == "Multivariate normal"
-  } else {
-    gam_mv <- FALSE
+  mv_classes <- c("stanmvreg", "mlm", "mvord")
+  if (inherits(x, mv_classes)) {
+    return(TRUE)
   }
 
-  (inherits(x, "brmsfit") && !is.null(stats::formula(x)$response)) |
-    inherits(x, c("stanmvreg", "mlm", "mvord")) | gam_mv | !is.null(attr(x, "is_mv", exact = TRUE))
+  if (inherits(x, "gam", which = TRUE) == 1) {
+    f <- .gam_family(x)
+    return(isTRUE(!is.null(f) && f$family == "Multivariate normal"))
+  }
+
+  if (inherits(x, "brmsfit")) {
+    return(!is.null(stats::formula(x)$response))
+  }
+
+  if (!is.null(attr(x, "is_mv", exact = TRUE))) {
+    return(TRUE)
+  }
+
+  if (inherits(x, "lm_robust")) {
+    return(isTRUE(ncol(x$coefficients) > 1))
+  }
+
+  return(FALSE)
 }

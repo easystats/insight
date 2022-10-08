@@ -341,14 +341,15 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
   test_that("get_priors for xtable", {
     expect_equal(
       get_priors(xtab_BF1),
-      structure(list(
-        Parameter = "Ratio",
-        Distribution = "independent multinomial",
-        Location = 0,
-        Scale = 2
-      ),
-      class = "data.frame",
-      row.names = c(NA, -1L)
+      structure(
+        list(
+          Parameter = "Ratio",
+          Distribution = "independent multinomial",
+          Location = 0,
+          Scale = 2
+        ),
+        class = "data.frame",
+        row.names = c(NA, -1L)
       ),
       tolerance = 1e-5
     )
@@ -371,14 +372,15 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
   test_that("get_priors for t-test", {
     expect_equal(
       get_priors(ttest_BF1),
-      structure(list(
-        Parameter = "Difference",
-        Distribution = "cauchy",
-        Location = 0,
-        Scale = 0.707106781186548
-      ),
-      class = "data.frame",
-      row.names = c(NA, -1L)
+      structure(
+        list(
+          Parameter = "Difference",
+          Distribution = "cauchy",
+          Location = 0,
+          Scale = 0.707106781186548
+        ),
+        class = "data.frame",
+        row.names = c(NA, -1L)
       ),
       tolerance = 1e-5
     )

@@ -30,7 +30,7 @@ test_that("Issue #612: factor padding", {
   expect_equal(nrow(mm), 6)
 
   # not enough factor levels
-  mm <- get_modelmatrix(mod, data = dat[3,])
+  mm <- get_modelmatrix(mod, data = dat[3, ])
   expect_equal(nrow(mm), 1)
 })
 

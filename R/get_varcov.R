@@ -21,14 +21,21 @@
 #'   applies to models of class `mixor`.
 #' @param complete Logical, if `TRUE`, for `aov`, returns the full
 #'   variance-covariance matrix.
-#' @param vcov Variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors). This argument accepts a covariance matrix, a function which returns a covariance matrix, or a string which identifies the function to be used to compute the covariance matrix.
+#' @param vcov Variance-covariance matrix used to compute uncertainty estimates
+#' (e.g., for robust standard errors). This argument accepts a covariance
+#' matrix, a function which returns a covariance matrix, or a string which
+#' identifies the function to be used to compute the covariance matrix.
 #'  * A covariance matrix
 #'  * A function which returns a covariance matrix (e.g., `stats::vcov()`)
 #'  * A string which indicates the kind of uncertainty estimates to return.
-#'    - Heteroskedasticity-consistent: `"vcovHC"`, `"HC"`, `"HC0"`, `"HC1"`, `"HC2"`, `"HC3"`, `"HC4"`, `"HC4m"`, `"HC5"`. See `?sandwich::vcovHC`
-#'    - Cluster-robust: `"vcovCR"`, `"CR0"`, `"CR1"`, `"CR1p"`, `"CR1S"`, `"CR2"`, `"CR3"`. See `?clubSandwich::vcovCR()`
-#'    - Bootstrap: `"vcovBS"`, `"xy"`, `"residual"`, `"wild"`, `"mammen"`, `"webb"`. See `?sandwich::vcovBS`
-#'    - Other `sandwich` package functions: `"vcovHAC"`, `"vcovPC"`, `"vcovCL"`, `"vcovPL"`.
+#'    - Heteroskedasticity-consistent: `"vcovHC"`, `"HC"`, `"HC0"`, `"HC1"`,
+#'      `"HC2"`, `"HC3"`, `"HC4"`, `"HC4m"`, `"HC5"`. See `?sandwich::vcovHC`
+#'    - Cluster-robust: `"vcovCR"`, `"CR0"`, `"CR1"`, `"CR1p"`, `"CR1S"`,
+#'      `"CR2"`, `"CR3"`. See `?clubSandwich::vcovCR()`
+#'    - Bootstrap: `"vcovBS"`, `"xy"`, `"residual"`, `"wild"`, `"mammen"`,
+#'      `"webb"`. See `?sandwich::vcovBS`
+#'    - Other `sandwich` package functions: `"vcovHAC"`, `"vcovPC"`, `"vcovCL"`,
+#'      `"vcovPL"`.
 #' @param vcov_args List of arguments to be passed to the function identified by
 #'   the `vcov` argument. This function is typically supplied by the **sandwich**
 #'   or **clubSandwich** packages. Please refer to their documentation (e.g.,
@@ -1058,8 +1065,9 @@ get_varcov.LORgee <- get_varcov.gee
   # not be passed here through ... and will not trigger a
   # warning here.
   if ("vcov" %in% names(dots) && !is.null(dots[["vcov"]])) {
-    msg <- sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/"))
-    warning(format_message(msg), call. = FALSE)
+    format_warning(
+      sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/"))
+    )
   }
 }
 

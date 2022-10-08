@@ -27,6 +27,24 @@ if (.runThisTest) {
       expect_equal(get_df(m3, type = "model"), 5)
     })
 
+    test_that("get_df", {
+      expect_equal(
+        get_df(m3, type = "residual"),
+        51,
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m3, type = "normal"),
+        Inf,
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m3, type = "wald"),
+        Inf,
+        ignore_attr = TRUE
+      )
+    })
+
     test_that("n_parameters", {
       expect_equal(n_parameters(m), 6)
       expect_equal(n_parameters(m2), 6)

@@ -46,6 +46,24 @@ if (requiet("testthat") &&
     )
   })
 
+  test_that("get_df", {
+    expect_equal(
+      get_df(m1, type = "residual"),
+      df.residual(m1),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "normal"),
+      Inf,
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "wald"),
+      Inf,
+      ignore_attr = TRUE
+    )
+  })
+
   test_that("find_formula", {
     expect_length(find_formula(m1), 2)
     expect_equal(
