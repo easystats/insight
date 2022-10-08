@@ -36,6 +36,14 @@
 #'   instead of the written name. This only works on Windows for R >= 4.2, and on
 #'   OS X or Linux for R >= 4.0. It is possible to define a global option for this
 #'   setting, see 'Note'.
+#' @param stars If `TRUE`, add significance stars (e.g., `p < .001***`). Can
+#'   also be a character vector, naming the columns that should include stars
+#'   for significant values. This is especially useful for Bayesian models,
+#'   where we might have multiple columns with significant values, e.g. `BF`
+#'   for the Bayes factor or `pd` for the probability of direction. In such
+#'   cases, use `stars = c("pd", "BF")` to add stars to both columns, or
+#'   `stars = "BF"` to only add stars to the Bayes factor and exclude the `pd`
+#'   column. Currently, following columns are recognized: `"BF"`, `"pd"` and `"p"`.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
@@ -235,13 +243,34 @@ format_table <- function(x,
 # Format various p-values, coming from different easystats-packages
 # like bayestestR (p_ROPE, p_MAP) or performance (p_Chi2)
 
-.format_p_values <- function(x, stars, p_digits) {
+.format_p_values <- function(x, stars = FALSE, p_digits) {
+
+  # Specify stars for which column
+  if (is.character(stars)) {
+    starlist <- list("p" = FALSE)
+    starlist[stars] <- TRUE
+  } else {
+    starlist <- list("p" = stars)
+  }
+
   if ("p" %in% names(x)) {
-    x$p <- format_p(x$p, stars = stars, name = NULL, missing = "", digits = p_digits)
+    x$p <- format_p(
+      x$p,
+      stars = starlist[["p"]],
+      name = NULL,
+      missing = "",
+      digits = p_digits
+    )
     x$p <- format(x$p, justify = "left")
   }
   if ("p.value" %in% names(x)) {
-    x$p.value <- format_p(x$p.value, stars = stars, name = NULL, missing = "", digits = p_digits)
+    x$p.value <- format_p(
+      x$p.value,
+      stars = starlist[["p"]],
+      name = NULL,
+      missing = "",
+      digits = p_digits
+    )
     x$p.value <- format(x$p.value, justify = "left")
   }
 
@@ -250,7 +279,13 @@ format_table <- function(x,
     "p_ROPE", "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR"
   )) {
     if (stats %in% names(x)) {
-      x[[stats]] <- format_p(x[[stats]], stars = stars, name = NULL, missing = "", digits = p_digits)
+      x[[stats]] <- format_p(
+        x[[stats]],
+        stars = starlist[["p"]],
+        name = NULL,
+        missing = "",
+        digits = p_digits
+      )
       x[[stats]] <- format(x[[stats]], justify = "left")
       p_name <- gsub("(.*)_p$", "\\1", gsub("^p_(.*)", "\\1", stats))
       names(x)[names(x) == stats] <- paste0("p (", p_name, ")")
@@ -626,16 +661,16 @@ format_table <- function(x,
 
   # Specify stars for which column
   if (is.character(stars)) {
-    starlist <- list("BF" = FALSE, "log_BF" = FALSE, "pd" = FALSE)
+    starlist <- list("BF" = FALSE, "pd" = FALSE)
     starlist[stars] <- TRUE
   } else {
-    starlist <- list("BF" = stars, "log_BF" = stars, "pd" = stars)
+    starlist <- list("BF" = stars, "pd" = stars)
   }
 
   # Indices
   if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = starlist[["BF"]], exact = exact)
   if ("log_BF" %in% names(x)) {
-    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = starlist[["log_BF"]], exact = exact)
+    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = starlist[["BF"]], exact = exact)
     x$log_BF <- NULL
   }
   if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = starlist[["pd"]])
