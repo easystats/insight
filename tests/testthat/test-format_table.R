@@ -36,8 +36,6 @@ if (requiet("testthat") && requiet("insight")) {
     })
   }
 
-dput(out$pd)
-
   # test for freq models -----------------
   if (requiet("parameters")) {
     x <- as.data.frame(model_parameters(lm(Sepal.Length ~ Species + Sepal.Width, data = iris)))
