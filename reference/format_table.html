@@ -18,7 +18,7 @@ converts all columns into character vectors!"><meta property="og:image" content=
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.4.7</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.4.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -138,7 +138,14 @@ names.</p></dd>
 
 
 <dt>stars</dt>
-<dd><p>Add significance stars (e.g., p &lt; .001***).</p></dd>
+<dd><p>If <code>TRUE</code>, add significance stars (e.g., <code>p &lt; .001***</code>). Can
+also be a character vector, naming the columns that should include stars
+for significant values. This is especially useful for Bayesian models,
+where we might have multiple columns with significant values, e.g. <code>BF</code>
+for the Bayes factor or <code>pd</code> for the probability of direction. In such
+cases, use <code>stars = c("pd", "BF")</code> to add stars to both columns, or
+<code>stars = "BF"</code> to only add stars to the Bayes factor and exclude the <code>pd</code>
+column. Currently, following columns are recognized: <code>"BF"</code>, <code>"pd"</code> and <code>"p"</code>.</p></dd>
 
 
 <dt>digits, ci_digits, p_digits, rope_digits, ic_digits</dt>

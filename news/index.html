@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.4.7</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.4.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,6 +95,7 @@
 <div class="section level3">
 <h3 id="changes-to-functions-0-18-5">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-18-5"></a></h3>
 <ul><li><p><code><a href="../reference/format_table.html">format_table()</a></code> gets a <code>use_symbols</code> argument. If <code>TRUE</code>, column names that refer to particular effectsizes (like Phi, Omega or Epsilon) include the related unicode-character instead of the written name. This only works on Windows for R &gt;= 4.2, and on OS X or Linux for R &gt;= 4.0.</p></li>
+<li><p>The <code>stars</code> argument in <code><a href="../reference/format_table.html">format_table()</a></code> can now also be a character vector, naming the columns that should include stars for significant values. This is especially useful for Bayesian models, where we might have multiple columns with significant values, e.g. <code>"BF"</code> for the Bayes factor or <code>"pd"</code> for the probability of direction.</p></li>
 <li><p><code><a href="../reference/get_df.html">get_df()</a></code> gets more <code>type</code> options to return different type of degrees of freedom (namely, <code>"wald"</code> and <code>"normal"</code>, and for mixed models, <code>"ml1"</code>, <code>"betwithin"</code>, <code>"satterthwaite"</code> and <code>"kenward-roger"</code>).</p></li>
 <li><p><code><a href="../reference/standardize_names.html">standardize_names()</a></code> now recognized more classes from package <em>marginaleffects</em>.</p></li>
 <li><p>Minor improvements to <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for models with nonlinear formula.</p></li>
