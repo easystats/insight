@@ -5,36 +5,38 @@ if (requiet("testthat") && requiet("insight")) {
   # test for bayesian models -----------------
   if (.runThisTest && requiet("bayestestR")) {
     m1 <- insight::download_model("stanreg_glm_1")
+    set.seed(123)
     x <- as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf")))
 
     test_that("format_table with stars bayes", {
       out <- format_table(x)
       expect_equal(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
-      expect_equal(out$BF, c("67.60", "119.13"))
+      expect_equal(out$BF, c("62.73", "114.21"))
       expect_equal(out$pd, c("99.98%", "100%"))
 
       out <- format_table(x, stars = TRUE)
       expect_equal(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
-      expect_equal(out$BF, c("67.60***", "119.13***"))
+      expect_equal(out$BF, c("62.73***", "114.21***"))
       expect_equal(out$pd, c("99.98%***", "100%***"))
 
       out <- format_table(x, stars = c("pd", "BF"))
       expect_equal(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
-      expect_equal(out$BF, c("67.60***", "119.13***"))
+      expect_equal(out$BF, c("62.73***", "114.21***"))
       expect_equal(out$pd, c("99.98%***", "100%***"))
 
       out <- format_table(x, stars = "pd")
       expect_equal(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
-      expect_equal(out$BF, c("67.60", "119.13"))
+      expect_equal(out$BF, c("62.73", "114.21"))
       expect_equal(out$pd, c("99.98%***", "100%***"))
 
       out <- format_table(x, stars = "BF")
       expect_equal(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
-      expect_equal(out$BF, c("67.60***", "119.13***"))
+      expect_equal(out$BF, c("62.73***", "114.21***"))
       expect_equal(out$pd, c("99.98%", "100%"))
     })
   }
 
+dput(out$pd)
 
   # test for freq models -----------------
   if (requiet("parameters")) {
