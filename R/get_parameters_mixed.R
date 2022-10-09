@@ -385,7 +385,7 @@ get_parameters.MixMod <- function(x,
 
   if (has_zeroinf) {
     z_inflated <- lme4::fixef(x, sub_model = "zero_part")
-    z_inflated_random <- re[grepl("^zi_", re.names, perl = TRUE)]
+    z_inflated_random <- re[startsWith(re.names, "zi_")]
   } else {
     z_inflated <- NULL
     z_inflated_random <- NULL
