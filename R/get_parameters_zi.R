@@ -122,9 +122,9 @@ get_parameters.mhurdle <- function(x,
   component <- match.arg(component)
   cf <- stats::coef(x)
 
-  cond_pars <- which(grepl("^h2\\.", names(cf)))
-  zi_pars <- which(grepl("^h1\\.", names(cf)))
-  ip_pars <- which(grepl("^h3\\.", names(cf)))
+  cond_pars <- which(startsWith(names(cf), "h2."))
+  zi_pars <- which(startsWith(names(cf), "h1."))
+  ip_pars <- which(startsWith(names(cf), "h3."))
   aux_pars <- (seq_along(names(cf)))[-c(cond_pars, zi_pars, ip_pars)]
 
   if (length(cond_pars)) {
