@@ -18,7 +18,6 @@
   with significant values, e.g. `"BF"` for the Bayes factor or `"pd"` for the
   probability of direction.
 
-
 * `get_df()` gets more `type` options to return different type of degrees of
   freedom (namely, `"wald"` and `"normal"`, and for mixed models, `"ml1"`,
   `"betwithin"`, `"satterthwaite"` and `"kenward-roger"`).
@@ -26,6 +25,8 @@
 * `standardize_names()` now recognized more classes from package _marginaleffects_.
 
 * Minor improvements to `find_parameters()` for models with nonlinear formula.
+
+* Minor speed improvements.
 
 ## Bug fixes
 
