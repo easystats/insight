@@ -1,9 +1,23 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
+win_os <- tryCatch(
+  {
+    si <- Sys.info()
+    if (!is.null(si["sysname"])) {
+      si["sysname"] == "Windows" || grepl("^mingw", R.version$os)
+    } else {
+      FALSE
+    }
+  },
+  error = function(e) {
+    TRUE
+  }
+)
+
 if (requiet("testthat") && requiet("insight")) {
 
   # test for bayesian models -----------------
-  if (.runThisTest && requiet("bayestestR")) {
+  if (.runThisTest && win_os && requiet("bayestestR")) {
     m1 <- insight::download_model("stanreg_glm_1")
     set.seed(123)
     x <- as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf")))
