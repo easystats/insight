@@ -385,4 +385,26 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
       tolerance = 1e-5
     )
   })
+
+
+  # ---------------------------
+  # Comes from https://github.com/easystats/bayestestR/issues/505
+
+  mtcars$cyl <- factor(mtcars$cyl)
+  mtcars$gear <- factor(mtcars$gear)
+  model <- lmBF(mpg ~ cyl + gear + cyl:gear, mtcars,
+                progress = FALSE, whichRandom = c("gear", "cyl:gear"))
+
+  test_that("find_formula for lmBF", {
+
+    predicted_form <- find_formula(model)$conditional
+    true_form <- formula(mpg ~ cyl + cyl:gear)
+
+    expect_equal(
+      predicted_form,
+      true_form,
+      ignore_attr = TRUE
+    )
+  })
+
 }

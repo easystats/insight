@@ -31,7 +31,14 @@ of the \strong{easystats}-packages. May also be a result from
 \item{pretty_names}{Return "pretty" (i.e. more human readable) parameter
 names.}
 
-\item{stars}{Add significance stars (e.g., p < .001***).}
+\item{stars}{If \code{TRUE}, add significance stars (e.g., \verb{p < .001***}). Can
+also be a character vector, naming the columns that should include stars
+for significant values. This is especially useful for Bayesian models,
+where we might have multiple columns with significant values, e.g. \code{BF}
+for the Bayes factor or \code{pd} for the probability of direction. In such
+cases, use \code{stars = c("pd", "BF")} to add stars to both columns, or
+\code{stars = "BF"} to only add stars to the Bayes factor and exclude the \code{pd}
+column. Currently, following columns are recognized: \code{"BF"}, \code{"pd"} and \code{"p"}.}
 
 \item{digits, ci_digits, p_digits, rope_digits, ic_digits}{Number of digits for
 rounding or significant figures. May also be \code{"signif"} to return significant
