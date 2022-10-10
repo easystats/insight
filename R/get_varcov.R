@@ -148,10 +148,7 @@ get_varcov.mlm <- function(x,
   .check_get_varcov_dots(x, ...)
   if (!is.null(x$weights)) {
     if (!is.null(vcov)) {
-      stop(format_message(
-        "The `vcov` argument is not supported with",
-        "weights in a `mlm` model."
-      ), call. = FALSE)
+      format_error("The `vcov` argument is not supported with weights in a `mlm` model.")
     }
     s <- summary(x)[[1L]]
     .get_weighted_varcov(x, s$cov.unscaled)
@@ -1046,12 +1043,12 @@ get_varcov.LORgee <- get_varcov.gee
   } else {
     if (is.vector(w)) {
       if (length(w) != nrow(x)) {
-        stop("'w' is the wrong length.", call. = FALSE)
+        stop("`w` is the wrong length.", call. = FALSE)
       }
       return(crossprod(x, w * x))
     } else {
       if (nrow(w) != ncol(w) || nrow(w) != nrow(x)) {
-        stop("'w' is the wrong dimension.", call. = FALSE)
+        stop("`w` is the wrong dimension.", call. = FALSE)
       }
       return(crossprod(x, w %*% x))
     }

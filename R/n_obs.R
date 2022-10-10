@@ -141,7 +141,7 @@ n_obs.gamm <- function(x, ...) {
   if (object_has_names(x, "gam")) {
     n_obs(x$gam, ...)
   } else {
-    stop("Cannot find n_obs for this object. Please an open an issue!", call. = FALSE)
+    format_error("Cannot find `n_obs` method for this object. Please an open an issue!")
   }
 }
 

@@ -494,7 +494,7 @@ get_parameters.sim <- function(x,
 .bggm_posterior_samples <- function(object, ...) {
   if (methods::is(object, "estimate") || methods::is(object, "explore")) {
     if (!methods::is(object, "default")) {
-      stop("Object must be from 'estimate' or 'explore'.", call. = FALSE)
+      format_error("Object must be from `estimate` or `explore`.")
     }
     p <- object$p
     pcors_total <- p * (p - 1) * 0.5
