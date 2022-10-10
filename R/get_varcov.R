@@ -196,7 +196,7 @@ get_varcov.DirichletRegModel <- function(x,
       vc <- vc[keep, keep, drop = FALSE]
     } else if (component == "precision") {
       vc <- stats::vcov(x)
-      keep <- grepl("^\\(phi\\)", rownames(vc), perl = TRUE)
+      keep <- startsWith(rownames(vc), "(phi)")
       vc <- vc[keep, keep, drop = FALSE]
     } else {
       vc <- stats::vcov(x)
