@@ -78,8 +78,8 @@ get_parameters.zcpglm <- function(x,
 .return_zeroinf_parms <- function(x, component) {
   cf <- stats::coef(x)
 
-  conditional <- grepl("^count_", names(cf), perl = TRUE)
-  zero_inflated <- grepl("^zero_", names(cf), perl = TRUE)
+  conditional <- startsWith(names(cf), "count_")
+  zero_inflated <- startsWith(names(cf), "zero_")
 
   cond <- data.frame(
     Parameter = names(cf)[conditional],

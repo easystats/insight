@@ -98,7 +98,7 @@
     grepl("zero-inflated", fitfam_lower, fixed = TRUE) |
     grepl("neg_binomial", fitfam_lower, fixed = TRUE) |
     grepl("hurdle", fitfam_lower, fixed = TRUE) |
-    grepl("^(zt|zi|za|hu)", fitfam_lower, perl = TRUE) |
+    grepl("^(zt|zi|za|hu)", fitfam_lower) |
     grepl("truncated", fitfam_lower, fixed = TRUE)
 
   # overwrite for glmmTMB exceptions

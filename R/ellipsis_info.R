@@ -54,7 +54,7 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
       if (!is.character(object_names)) {
         object_names <- safe_deparse(object_names)
       }
-      if (all(grepl("^list\\(", object_names))) {
+      if (all(startsWith(object_names, "list("))) {
         # we now should have something like "list(m1, m2)" ...
         object_names <- trim_ws(unlist(strsplit(gsub("list\\((.*)\\)", "\\1", object_names), ",")))
       } else {
