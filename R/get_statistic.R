@@ -254,9 +254,9 @@ get_statistic.mhurdle <- function(x,
     stringsAsFactors = FALSE
   )
 
-  cond_pars <- which(grepl("^h2\\.", rownames(s$coefficients)))
-  zi_pars <- which(grepl("^h1\\.", rownames(s$coefficients)))
-  ip_pars <- which(grepl("^h3\\.", rownames(s$coefficients)))
+  cond_pars <- which(startsWith(rownames(s$coefficients), "h2."))
+  zi_pars <- which(startsWith(rownames(s$coefficients), "h1."))
+  ip_pars <- which(startsWith(rownames(s$coefficients), "h3."))
   aux_pars <- (seq_along(rownames(s$coefficients)))[-c(cond_pars, zi_pars, ip_pars)]
 
   stats$Component[cond_pars] <- "conditional"

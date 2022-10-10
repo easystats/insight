@@ -532,9 +532,9 @@ clean_parameters.mlm <- function(x, ...) {
     out$Cleaned_Parameter[cor_sd] <- gsub("^(sd_|cor_)(.*?)__(.*)", "\\3", out$Parameter[cor_sd], perl = TRUE)
     out$Group[cor_sd] <- paste("SD/Cor:", gsub("^(sd_|cor_)(.*?)__(.*)", "\\2", out$Parameter[cor_sd], perl = TRUE))
     # replace "__" by "~"
-    cor_only <- grepl("^cor_", out$Parameter[cor_sd])
+    cor_only <- startsWith(out$Parameter[cor_sd], "cor_")
     if (any(cor_only)) {
-      out$Cleaned_Parameter[which(cor_sd)[cor_only]] <- sub("__", " ~ ", out$Cleaned_Parameter[which(cor_sd)[cor_only]])
+      out$Cleaned_Parameter[which(cor_sd)[cor_only]] <- sub("__", " ~ ", out$Cleaned_Parameter[which(cor_sd)[cor_only]], fixed = TRUE)
     }
   }
 
@@ -555,7 +555,7 @@ clean_parameters.mlm <- function(x, ...) {
       r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\1", out$Cleaned_Parameter[rand_eff])
       # we want to have same behaviour as for frequentist models,
       # including levels of grouop factors
-      r_levels <- gsub("__zi", "", r_levels)
+      r_levels <- gsub("__zi", "", r_levels, fixed = TRUE)
       out$Level[rand_eff] <- r_levels
       # fix labelling of SD and correlation component
       sd_cor <- grepl("SD/Cor:", out$Group, fixed = TRUE)
@@ -563,8 +563,8 @@ clean_parameters.mlm <- function(x, ...) {
         out$Group[sd_cor] <- gsub("SD/Cor: (.*)", "\\1", out$Group[sd_cor])
       }
     }
-    r_pars <- gsub("__zi", "", r_pars)
-    r_grps <- gsub("__zi", "", r_grps)
+    r_pars <- gsub("__zi", "", r_pars, fixed = TRUE)
+    r_grps <- gsub("__zi", "", r_grps, fixed = TRUE)
 
     out$Cleaned_Parameter[rand_eff] <- r_pars
     out$Group[rand_eff] <- r_grps
@@ -572,19 +572,19 @@ clean_parameters.mlm <- function(x, ...) {
 
   # clean remaining parameters
 
-  priors <- grepl("^prior_", out$Cleaned_Parameter)
+  priors <- startsWith(out$Cleaned_Parameter, "prior_")
   if (length(priors)) {
     out$Cleaned_Parameter <- gsub("^prior_", "", out$Cleaned_Parameter)
     out$Component[priors] <- "priors"
   }
 
-  simplex <- grepl("^simo_", out$Cleaned_Parameter)
+  simplex <- startsWith(out$Cleaned_Parameter, "simo_")
   if (length(simplex)) {
     out$Cleaned_Parameter[simplex] <- gsub("^(simo_|simo_mo)(.*)\\[(\\d)\\]$", "\\2[\\3]", out$Cleaned_Parameter[simplex])
     out$Component[simplex] <- "simplex"
   }
 
-  smooth <- grepl("^sds_", out$Cleaned_Parameter)
+  smooth <- startsWith(out$Cleaned_Parameter, "sds_")
   if (length(smooth)) {
     out$Cleaned_Parameter <- gsub("^sds_", "", out$Cleaned_Parameter)
     out$Component[smooth] <- "smooth_sd"
@@ -599,14 +599,14 @@ clean_parameters.mlm <- function(x, ...) {
     out$Cleaned_Parameter[intercepts] <- "(Intercept)"
   }
 
-  interaction_terms <- which(grepl("\\.", out$Cleaned_Parameter))
+  interaction_terms <- which(grepl(".", out$Cleaned_Parameter, fixed = TRUE))
 
   if (length(interaction_terms)) {
     for (i in interaction_terms) {
-      i_terms <- strsplit(out$Cleaned_Parameter[i], "\\.")
+      i_terms <- strsplit(out$Cleaned_Parameter[i], ".", fixed = TRUE)
       find_i_terms <- sapply(i_terms, function(j) j %in% out$Cleaned_Parameter)
       if (all(find_i_terms)) {
-        out$Cleaned_Parameter[i] <- gsub("\\.", ":", out$Cleaned_Parameter[i])
+        out$Cleaned_Parameter[i] <- gsub(".", ":", out$Cleaned_Parameter[i], fixed = TRUE)
       }
     }
   }
@@ -622,7 +622,7 @@ clean_parameters.mlm <- function(x, ...) {
 
   # extract group-names from random effects and clean random effects
 
-  rand_intercepts <- grepl("^b\\[\\(Intercept\\)", out$Cleaned_Parameter)
+  rand_intercepts <- startsWith(out$Cleaned_Parameter, "b[(Intercept)")
 
   if (any(rand_intercepts)) {
     re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_intercepts])
@@ -637,7 +637,7 @@ clean_parameters.mlm <- function(x, ...) {
 
   # correlation and sd
 
-  cor_sd <- grepl("^Sigma\\[(.*)", out$Cleaned_Parameter)
+  cor_sd <- startsWith(out$Cleaned_Parameter, "Sigma[")
 
   if (any(cor_sd)) {
     parm1 <- gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\2", out$Parameter[cor_sd], perl = TRUE)
@@ -653,7 +653,7 @@ clean_parameters.mlm <- function(x, ...) {
 
   # extract group-names from random effects and clean random effects
 
-  rand_effects <- grepl("^b\\[", out$Cleaned_Parameter)
+  rand_effects <- startsWith(out$Cleaned_Parameter, "b[")
 
   if (any(rand_effects)) {
     r_pars <- gsub("b\\[(.*) (.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
@@ -679,7 +679,7 @@ clean_parameters.mlm <- function(x, ...) {
 
   # clean remaining parameters
 
-  smooth <- grepl("^smooth_sd\\[", out$Cleaned_Parameter)
+  smooth <- startsWith(out$Cleaned_Parameter, "smooth_sd[")
 
   if (length(smooth)) {
     out$Cleaned_Parameter <- gsub("^smooth_sd\\[(.*)\\]", "\\1", out$Cleaned_Parameter)
