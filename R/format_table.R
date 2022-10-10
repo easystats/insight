@@ -208,7 +208,7 @@ format_table <- function(x,
 
 
   # Format remaining columns
-  other_cols <- names(x)[sapply(x, is.numeric)]
+  other_cols <- names(x)[vapply(x, is.numeric, logical(1))]
   x[other_cols[other_cols %in% names(x)]] <- format_value(
     x[other_cols[other_cols %in% names(x)]],
     digits = digits,

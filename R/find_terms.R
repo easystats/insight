@@ -160,7 +160,7 @@ find_terms.mipo <- function(x, ...) {
 
   f <- lapply(f, function(.x) {
     if (is.list(.x)) {
-      .x <- sapply(.x, .formula_to_string)
+      .x <- vapply(.x, .formula_to_string, character(1))
     } else {
       if (!is.character(.x)) .x <- safe_deparse(.x)
     }

@@ -236,7 +236,7 @@ find_predictors.afex_aov <- function(x,
     }
   })
 
-  empty_elements <- sapply(l, is_empty_object)
+  empty_elements <- vapply(l, is_empty_object, logical(1))
   l <- compact_list(l)
 
   # here we handle special cases for non-linear model in brms
