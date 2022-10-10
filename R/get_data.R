@@ -1110,7 +1110,7 @@ get_data.glht <- function(x, ...) {
 get_data.averaging <- function(x, ...) {
   ml <- attributes(x)$modelList
   if (is.null(ml)) {
-    warning("Can't retrieve data. Please use `fit = TRUE` in `model.avg()`.", call. = FALSE)
+    format_warning("Can't retrieve data. Please use `fit = TRUE` in `model.avg()`.")
     return(NULL)
   }
 

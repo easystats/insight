@@ -150,7 +150,7 @@
   # check for at least to factor levels, in order to build contrasts
   single_factor_levels <- sapply(newdata, function(i) is.factor(i) && nlevels(i) == 1)
   if (any(single_factor_levels)) {
-    warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
+    format_warning("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals.")
     return(NULL)
   }
 

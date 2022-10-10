@@ -50,7 +50,7 @@ get_predicted.clm <- function(x,
   if (!is.null(ci)) {
     if (type_arg == "class") {
       if (verbose) {
-        warning(format_message("Confidence intervals are not available for classification."), call. = FALSE)
+        format_warning("Confidence intervals are not available for classification.")
       }
       ci <- NULL
     }
