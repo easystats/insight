@@ -52,7 +52,7 @@ get_parameters.BGGM <- function(x,
   #
   # out <- as.data.frame(BGGM::posterior_samples(x))
   out <- as.data.frame(.bggm_posterior_samples(x))
-  intercepts <- grepl("_\\(Intercept\\)$", colnames(out))
+  intercepts <- endsWith(colnames(out), "_(Intercept)")
   correlations <- grepl("(.*)--(.*)", colnames(out))
   conditional <- !intercepts & !correlations
 

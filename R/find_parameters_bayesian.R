@@ -503,11 +503,11 @@ find_parameters.stanmvreg <- function(x,
   fe <- colnames(as.data.frame(x))
   rn <- names(find_response(x))
 
-  cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !grepl("\\|sigma$", fe, perl = TRUE)]
+  cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !endsWith(fe, "|sigma")]
   rand <- fe[startsWith(fe, "b[")]
   rand_sd <- fe[startsWith(fe, "Sigma[")]
   smooth_terms <- fe[startsWith(fe, "smooth_sd")]
-  sigma <- fe[grepl("\\|sigma$", fe, perl = TRUE) & .grep_non_smoothers(fe)]
+  sigma <- fe[endsWith(fe, "|sigma") & .grep_non_smoothers(fe)]
   auxiliary <- fe[grepl("(shape|phi|precision)", fe)]
 
   # remove auxiliary from conditional

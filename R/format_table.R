@@ -519,8 +519,8 @@ format_table <- function(x,
 
 
 .format_other_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE, zap_small) {
-  other_ci_low <- names(x)[grep("_CI_low$", names(x))]
-  other_ci_high <- names(x)[grep("_CI_high$", names(x))]
+  other_ci_low <- names(x)[endsWith(names(x), "_CI_low")]
+  other_ci_high <- names(x)[endsWith(names(x), "_CI_high")]
   if (length(other_ci_low) >= 1 && length(other_ci_low) == length(other_ci_high)) {
     other <- unlist(strsplit(other_ci_low, "_CI_low$"))
 
