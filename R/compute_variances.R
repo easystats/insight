@@ -71,7 +71,7 @@
   }
 
   # Separate observation variance from variance of random effects
-  nr <- sapply(vals$re, nrow)
+  nr <- vapply(vals$re, nrow, numeric(1))
   not.obs.terms <- names(nr[nr != n_obs(x)])
   obs.terms <- names(nr[nr == n_obs(x)])
 
