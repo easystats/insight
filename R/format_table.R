@@ -169,12 +169,12 @@ format_table <- function(x,
 
 
   # Partial ----
-  x[names(x)[grepl("_partial$", names(x))]] <- format_value(
-    x[names(x)[grepl("_partial$", names(x))]],
+  x[names(x)[endsWith(names(x), "_partial")]] <- format_value(
+    x[names(x)[endsWith(names(x), "_partial")]],
     zap_small = zap_small
   )
-  names(x)[grepl("_partial$", names(x))] <- paste0(
-    gsub("_partial$", "", names(x)[grepl("_partial$", names(x))]),
+  names(x)[endsWith(names(x), "_partial")] <- paste0(
+    gsub("_partial$", "", names(x)[endsWith(names(x), "_partial")]),
     " (partial)"
   )
 

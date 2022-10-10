@@ -199,14 +199,14 @@
     vc1 <- vc2 <- NULL
     re_names <- find_random(x)
 
-    vc_cond <- !grepl("^zi_", colnames(x$D))
+    vc_cond <- !startsWith(colnames(x$D), "zi_")
     if (any(vc_cond)) {
       vc1 <- x$D[vc_cond, vc_cond, drop = FALSE]
       attr(vc1, "stddev") <- sqrt(diag(vc1))
       attr(vc1, "correlation") <- stats::cov2cor(x$D[vc_cond, vc_cond, drop = FALSE])
     }
 
-    vc_zi <- grepl("^zi_", colnames(x$D))
+    vc_zi <- startsWith(colnames(x$D), "zi_")
     if (any(vc_zi)) {
       colnames(x$D) <- gsub("^zi_(.*)", "\\1", colnames(x$D))
       rownames(x$D) <- colnames(x$D)
@@ -441,7 +441,7 @@
     rn <- rownames(Sigma)
 
     # fix for models w/o intercept
-    if (!any(grepl("^\\(Intercept\\)", colnames(vals$X)))) {
+    if (!any(startsWith(colnames(vals$X), "(Intercept)"))) {
       vals$X <- cbind("(Intercept)" = 1, vals$X)
     }
 
@@ -902,7 +902,7 @@
 .between_subject_variance <- function(vals, x) {
   vars <- lapply(vals$vc, function(i) i[1])
   # check for uncorrelated random slopes-intercept
-  non_intercepts <- which(sapply(vals$vc, function(i) !grepl("^\\(Intercept\\)", dimnames(i)[[1]][1])))
+  non_intercepts <- which(sapply(vals$vc, function(i) !startsWith(dimnames(i)[[1]][1], "(Intercept)")))
   if (length(non_intercepts)) {
     vars <- vars[-non_intercepts]
   }
@@ -923,7 +923,7 @@
     # random slopes for correlated slope-intercept
     out <- unlist(lapply(vals$vc, function(x) diag(x)[-1]))
     # check for uncorrelated random slopes-intercept
-    non_intercepts <- which(sapply(vals$vc, function(i) !grepl("^\\(Intercept\\)", dimnames(i)[[1]][1])))
+    non_intercepts <- which(sapply(vals$vc, function(i) !startsWith(dimnames(i)[[1]][1], "(Intercept)")))
     if (length(non_intercepts) == length(vals$vc)) {
       out <- unlist(lapply(vals$vc, function(x) diag(x)))
     } else if (length(non_intercepts)) {

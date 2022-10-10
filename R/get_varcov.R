@@ -415,9 +415,9 @@ get_varcov.hurdle <- function(x,
       ...
     )
     keep <- switch(component,
-      "conditional" = grepl("^count_", colnames(vc)),
+      "conditional" = startsWith(colnames(vc), "count_"),
       "zi" = ,
-      "zero_inflated" = grepl("^zero_", colnames(vc)),
+      "zero_inflated" = startsWith(colnames(vc), "zero_"),
       seq_len(ncol(vc))
     )
     vc <- vc[keep, keep, drop = FALSE]
@@ -444,8 +444,8 @@ get_varcov.zcpglm <- function(x,
   check_if_installed("cplm")
 
   vc <- cplm::vcov(x)
-  tweedie <- which(grepl("^tw_", rownames(vc)))
-  zero <- which(grepl("^zero_", rownames(vc)))
+  tweedie <- which(startsWith(rownames(vc), "tw_"))
+  zero <- which(startsWith(rownames(vc), "zero_"))
 
   vc <- switch(component,
     "conditional" = vc[tweedie, tweedie, drop = FALSE],
