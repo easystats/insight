@@ -624,12 +624,7 @@
 .add_zeroinf_data <- function(x, mf, tn) {
   tryCatch(
     {
-      model_call <- get_call(x)
-      env_data <- eval(model_call$data, envir = parent.frame())[, tn, drop = FALSE]
-      if (object_has_names(model_call, "subset")) {
-        env_data <- subset(env_data, subset = eval(model_call$subset))
-      }
-
+      env_data <- .recover_data_from_environment(x)[, tn, drop = FALSE]
       .merge_dataframes(env_data, mf, replace = TRUE)
     },
     error = function(x) {
@@ -723,15 +718,16 @@
 # and subset the data, if necessary
 .recover_data_from_environment <- function(x) {
   model_call <- get_call(x)
-  # first try, parent frame
-  dat <- tryCatch(
-    {
-      eval(model_call$data, envir = parent.frame())
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+
+  # first, try environment of formula, see #666
+  dat <- tryCatch(eval(model_call$data, envir = environment(model_call$formula)),
+                  error = function(e) NULL)
+
+  # next try, parent frame
+  if (is.null(dat)) {
+    dat <- tryCatch(eval(model_call$data, envir = parent.frame()),
+                         error = function(e) NULL)
+  }
 
   # sanity check- if data frame is named like a function, e.g.
   # rep <- data.frame(...), we now have a function instead of the data
@@ -741,58 +737,14 @@
     dat <- tryCatch(as.data.frame(dat), error = function(e) NULL)
   }
 
+  # thirs try, global env
   if (is.null(dat)) {
-    # second try, global env
-    dat <- tryCatch(
-      {
-        eval(model_call$data, envir = globalenv())
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    dat <- tryCatch(eval(model_call$data, envir = globalenv()),
+                    error = function(e) NULL)
   }
-
 
   if (!is.null(dat) && object_has_names(model_call, "subset")) {
     dat <- subset(dat, subset = eval(model_call$subset))
-  }
-
-  dat
-}
-
-
-
-# find data from the environment, for models with S4 --------------------------
-
-# return data from a data frame that is in the environment,
-# and subset the data, if necessary
-.get_S4_data_from_env <- function(x) {
-  # first try, parent frame
-  dat <- tryCatch(
-    {
-      eval(x@call$data, envir = parent.frame())
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-
-  if (is.null(dat)) {
-    # second try, global env
-    dat <- tryCatch(
-      {
-        eval(x@call$data, envir = globalenv())
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-  }
-
-
-  if (!is.null(dat) && object_has_names(x@call, "subset")) {
-    dat <- subset(dat, subset = eval(x@call$subset))
   }
 
   dat
