@@ -20,7 +20,7 @@ format_capitalize <- function(x, verbose = TRUE) {
   }
   if (!is.character(x)) {
     if (verbose) {
-      warning(format_message("This function only works on factors or character vector."), call. = FALSE)
+      format_warning("This function only works on factors or character vector.")
     }
     return(x)
   }

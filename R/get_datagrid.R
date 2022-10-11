@@ -195,7 +195,7 @@ get_datagrid.data.frame <- function(x,
                                     range = "range",
                                     ...) {
   # find numerics that were coerced to factor in-formula
-  numeric_factors <- colnames(x)[sapply(x, function(i) isTRUE(attributes(i)$factor))]
+  numeric_factors <- colnames(x)[vapply(x, function(i) isTRUE(attributes(i)$factor), logical(1))]
 
   specs <- NULL
 

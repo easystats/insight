@@ -94,12 +94,9 @@ get_predicted.glmmTMB <- function(x,
   if (!is.null(predict) && predict %in% c("prediction", "predicted", "classification")) {
     predict <- "expectation"
     if (verbose) {
-      warning(
-        format_message(
-          "\"prediction\" and \"classification\" are currently not supported by the `predict` argument for `glmmTMB` models.",
-          "Changing to `predict=\"expectation\"`."
-        ),
-        call. = FALSE
+      format_warning(
+        "\"prediction\" and \"classification\" are currently not supported by the `predict` argument for `glmmTMB` models.",
+        "Changing to `predict=\"expectation\"`."
       )
     }
   }
@@ -196,12 +193,9 @@ get_predicted.MixMod <- function(x,
   if (!is.null(predict) && predict %in% c("prediction", "predicted", "classification")) {
     predict <- "expectation"
     if (verbose) {
-      warning(
-        format_message(
-          "\"prediction\" and \"classification\" are currently not supported by the `predict` argument for `GLMMadaptive` models.",
-          "Changing to `predict=\"expectation\"`."
-        ),
-        call. = FALSE
+      format_warning(
+        "\"prediction\" and \"classification\" are currently not supported by the `predict` argument for `GLMMadaptive` models.",
+        "Changing to `predict=\"expectation\"`."
       )
     }
   }

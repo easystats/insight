@@ -49,9 +49,9 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   check_if_installed("fungible")
 
   if (is.null(data)) {
-    stop(format_message(
+    format_error(
       "A dataframe (either the original of a new one) must be provided (`get_predicted(fa_results, data = df`)."
-    ), call. = FALSE)
+    )
   } else {
     out <- as.data.frame(fungible::faScores(X = data, faMainObject = x)$fscores)
   }

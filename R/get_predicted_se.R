@@ -165,7 +165,7 @@ get_predicted_se <- function(x,
       single_factor_levels <- sapply(data, function(i) is.factor(i) && nlevels(i) == 1)
       if (any(single_factor_levels)) {
         if (verbose) {
-          warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
+          format_warning("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals.")
         }
         return(NULL)
       }
@@ -190,9 +190,9 @@ get_predicted_se <- function(x,
     if (inherits(mm, "simpleError")) {
       if (verbose) {
         if (grepl("2 or more levels", mm$message, fixed = TRUE)) {
-          warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
+          format_warning("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals.")
         } else {
-          warning(format_message("Something went wrong with computing standard errors and confidence intervals for predictions."), call. = FALSE)
+          format_warning("Something went wrong with computing standard errors and confidence intervals for predictions.")
         }
       }
       return(NULL)

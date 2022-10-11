@@ -45,7 +45,7 @@ get_modelmatrix.bracl <- function(x, ...) {
   if ("data" %in% names(dots)) {
     mm <- stats::model.matrix(object = x, data = dots$data, ...)
   } else {
-    stop(format_message("The 'data' argument is required to return the model matrix."), call. = FALSE)
+    format_error("The `data` argument is required to return the model matrix.")
   }
 
   mm

@@ -81,7 +81,7 @@ object_has_names <- function(x, names) {
 #' @export
 object_has_rownames <- function(x) {
   if (!is.data.frame(x)) {
-    stop("Only dataframe objects are allowed.", call. = FALSE)
+    stop("Only data frames are allowed.", call. = FALSE)
   }
 
   !identical(attributes(x)$row.names, seq_len(nrow(x)))

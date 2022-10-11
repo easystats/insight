@@ -17,17 +17,17 @@
 
   # one of "type" or "predict" must be provided...
   if (is.null(dots$type) && is.null(predict)) {
-    stop(format_message("Please supply a value for the `predict` argument."), call. = FALSE)
+    format_error("Please supply a value for the `predict` argument.")
   }
 
   # ...but not both
   if (!is.null(dots$type) && !is.null(predict) && isTRUE(verbose)) {
-    message(format_message(
+    format_alert(
       "Both `predict` and `type` were given, thus, `type` was used and `predict` was ignored.",
       "Note that the preferred argument for `get_predicted()` is `predict`.",
       "If the `type` argument should be used and to avoid this message, set `predict = NULL` explicitly, e.g.,:",
       "`get_predicted(model, predict = NULL, type = \"response\")`"
-    ))
+    )
   }
 
   # copy "type" to "predict"
@@ -123,14 +123,13 @@
   # Warn if get_predicted() is not called with an easystats- or
   # model-supported predicted type
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
-    msg <- format_message(
+    format_warning(
       sprintf("`predict` = \"%s\"` is not officially supported by `get_predicted()`.", predict),
       "`predict` will be passed directly to the `predict()` method for the model and not validated.",
       "Please check the validity and scale of the results.",
       "Set `verbose = FALSE` to silence this warning, or use one of the supported values for the `predict` argument:",
       paste(" ", paste(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted"))), collapse = ", "))
     )
-    warning(msg, call. = FALSE)
   }
 
 
@@ -269,10 +268,10 @@
     # or not all random factors in data, set include_random to FALSE
     if (!all(re_terms %in% names(data))) {
       if (isTRUE(verbose) && isTRUE(include_random)) {
-        warning(format_message(
+        format_warning(
           "`include_random` was set to `TRUE`, but not all random effects were found in `data`.",
           "Setting `include_random = FALSE` now."
-        ), call. = FALSE)
+        )
       }
       include_random <- FALSE
     } else if (!allow_new_levels) {
@@ -289,11 +288,11 @@
 
       if (!all(all_levels_found)) {
         if (isTRUE(verbose) && isTRUE(include_random)) {
-          warning(format_message(
+          format_warning(
             "`include_random` was set to `TRUE`, but grouping factor(s) in `data` has new levels not in the original data.",
             "Either use `allow.new.levels=TRUE`, or make sure to include only valid values for grouping factor(s).",
             "Setting `include_random = FALSE` now."
-          ), call. = FALSE)
+          )
         }
         include_random <- FALSE
       } else {

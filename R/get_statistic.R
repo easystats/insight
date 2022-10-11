@@ -1381,9 +1381,7 @@ get_statistic.mira <- function(x, ...) {
 
 #' @export
 get_statistic.mle2 <- function(x, ...) {
-  if (!requireNamespace("bbmle", quietly = TRUE)) {
-    stop("Package `bbmle` needs to be installed to extract test statistic.", call. = FALSE)
-  }
+  check_if_installed("bbmle", reason = "to extract test statistic")
   s <- bbmle::summary(x)
 
   params <- data.frame(

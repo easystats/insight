@@ -5,7 +5,10 @@
 #' efficient function to trim leading and trailing whitespaces from character
 #' vectors or strings. `n_unique()` returns the number of unique values in a
 #' vector. `safe_deparse()` is comparable to `deparse1()`, i.e. it can safely
-#' deparse very long expressions into a single string.
+#' deparse very long expressions into a single string. `safe_deparse_symbol()`
+#' only deparses a substituted expressions when possible, which can be much faster
+#' than `deparse(substitute())` for those cases where `substitute()` returns no
+#' valid object name.
 #'
 #' @param x A (character) vector, or for some functions may also be a data frame.
 #' @param na.rm Logical, if missing values should be removed from the input.
@@ -99,4 +102,19 @@ safe_deparse <- function(x, ...) {
     return(NULL)
   }
   paste0(sapply(deparse(x, width.cutoff = 500), trim_ws, simplify = TRUE), collapse = " ")
+}
+
+
+
+# safe_substitute ---------------------------------------
+
+#' @rdname trim_ws
+#' @export
+safe_deparse_symbol <- function(x) {
+  if (is.name(x)) {
+    out <- safe_deparse(x)
+  } else {
+    out <- NULL
+  }
+  return(out)
 }

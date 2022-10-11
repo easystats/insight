@@ -948,7 +948,7 @@
   out <- tryCatch(
     {
       # special handling of survey-objects
-      if (grepl("^svy", x$data.name)) {
+      if (startsWith(x$data.name, "svy")) {
         if (grepl("pearson's x^2", tolower(x$method), fixed = TRUE)) {
           d <- x$observed
         } else {

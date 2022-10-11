@@ -16,10 +16,10 @@
 
   if (faminfo$family %in% c("truncated_nbinom1")) {
     if (verbose) {
-      warning(format_message(sprintf(
+      format_warning(sprintf(
         "Truncated negative binomial families are currently not supported by `%s`.",
         name_fun
-      )), call. = FALSE)
+      ))
     }
     return(NA)
   }
@@ -38,10 +38,10 @@
   no_random_variance <- FALSE
   if (.is_singular(x, vals, tolerance = tolerance) && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
-      warning(format_message(
+      format_warning(
         sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).", name_full),
         "Solution: Respecify random structure! You may also decrease the `tolerance` level to enforce the calculation of random effect variances."
-      ), call. = FALSE)
+      )
     }
     no_random_variance <- TRUE
   }
@@ -64,14 +64,14 @@
 
   # Are random slopes present as fixed effects? Warn.
   if (!.random_slopes_in_fixed(x) && verbose) {
-    warning(format_message(
+    format_warning(
       sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.", name_full),
       "Solution: Respecify fixed structure!"
-    ), call. = FALSE)
+    )
   }
 
   # Separate observation variance from variance of random effects
-  nr <- sapply(vals$re, nrow)
+  nr <- vapply(vals$re, nrow, numeric(1))
   not.obs.terms <- names(nr[nr != n_obs(x)])
   obs.terms <- names(nr[nr == n_obs(x)])
 
@@ -386,9 +386,9 @@
 # is supported or not
 .badlink <- function(link, family, verbose = TRUE) {
   if (verbose) {
-    warning(format_message(sprintf(
+    format_warning(sprintf(
       "Model link `%s` is not yet supported for the %s distribution.", link, family
-    )), call. = FALSE)
+    ))
   }
   return(NA)
 }
@@ -608,16 +608,16 @@
 
   if (is.na(mu)) {
     if (verbose) {
-      warning(format_message(
+      format_warning(
         "Can't calculate model's distribution-specific variance. Results are not reliable."
-      ), call. = FALSE)
+      )
     }
     return(0)
   } else if (mu < 6) {
     if (verbose) {
-      warning(format_message(
+      format_warning(
         sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)
-      ), call. = FALSE)
+      )
     }
   }
 
@@ -661,17 +661,17 @@
       )
 
       if (vv < 0 && isTRUE(verbose)) {
-        warning(format_message(
+        format_warning(
           "Model's distribution-specific variance is negative. Results are not reliable."
-        ), call. = FALSE)
+        )
       }
       vv / mu^2
     },
     error = function(x) {
       if (verbose) {
-        warning(format_message(
+        format_warning(
           "Can't calculate model's distribution-specific variance. Results are not reliable."
-        ), call. = FALSE)
+        )
       }
       0
     }
