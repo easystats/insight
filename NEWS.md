@@ -8,7 +8,7 @@
 
 ## New functions
 
-* `safe_deparse_substitute()` to only deparses a substituted expressions when
+* `safe_deparse_symbol()` to only deparses a substituted expressions when
   possible,which increases performance in case many calls to
   `deparse(substitute())`.
 
@@ -35,6 +35,9 @@
 * Minor speed improvements.
 
 ## Bug fixes
+
+* Fixed issue in `get_data()` for models of class `plm`, which accidentally
+  converted factors into character vectors.
 
 * Fixed issue with column alignment in `export_table()` when the data frame 
   to print contained unicode-characters longer than 1 byte.
