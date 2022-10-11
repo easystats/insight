@@ -6,6 +6,12 @@
   freedom per parameter, and no longer per observation. Use `df_per_obs TRUE`
   to return degrees of freedom per observation.
 
+## New functions
+
+* `safe_deparse_substitute()` to only deparses a substituted expressions when
+  possible,which increases performance in case many calls to
+  `deparse(substitute())`.
+
 ## Changes to functions
 
 * `format_table()` gets a `use_symbols` argument. If `TRUE`, column names that
