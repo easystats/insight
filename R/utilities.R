@@ -111,9 +111,8 @@ safe_deparse <- function(x, ...) {
 #' @rdname trim_ws
 #' @export
 safe_deparse_substitute <- function(x) {
-  xsub <- substitute(x)
-  if (is.name(xsub)) {
-    out <- safe_deparse(xsub)
+  if (is.name(x)) {
+    out <- safe_deparse(x)
   } else {
     out <- NULL
   }
