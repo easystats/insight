@@ -682,7 +682,6 @@ get_data.glimML <- function(x, effects = "all", verbose = TRUE, ...) {
 
 #' @export
 get_data.lavaan <- function(x, verbose = TRUE, ...) {
-  ## TODO: add test
   mf <- tryCatch(.recover_data_from_environment(x),
                  error = function(x) NULL)
 
