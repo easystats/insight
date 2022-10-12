@@ -415,7 +415,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   # Interval
   ci_method <- match.arg(
     tolower(ci_method),
-    c("quantile", "hdi", "eti", "spi", "satterthwaite", "normal", "wald")
+    c("quantile", "hdi", "eti", "spi", "bci", "satterthwaite", "normal", "wald")
   )
 
   if (ci_method == "quantile") {

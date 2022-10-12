@@ -103,8 +103,16 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   # check valid options
   type <- match.arg(
     tolower(type),
-    choices = c("residual", "model", "analytical", "wald", "normal", "ml1", "betwithin")
+    choices = c(
+      # valid choices
+      "residual", "model", "analytical", "wald", "normal", "ml1", "betwithin",
+      # these can come from "ci_method" arguments - need to capture for now
+      "profile", "uniroot", "quantile", "eti", "hdi", "bci", "boot", "spi"
+    )
   )
+
+  # handle mixing of ci_method and type arguments
+  type <- .check_df_type(type)
 
   # check if user already passed "statistic" argument, to
   # avoid multiple calls to "find_statistic()"
@@ -235,8 +243,13 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
   type <- match.arg(
     tolower(type),
     choices = c("residual", "model", "analytical", "satterthwaite", "kenward",
-                "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin")
+                "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin",
+                # these can come from "ci_method" arguments - need to capture for now
+                "profile", "uniroot", "quantile", "eti", "hdi", "bci", "boot", "spi")
   )
+  # handle mixing of ci_method and type arguments
+  type <- .check_df_type(type)
+
   dots <- list(...)
 
   if (type %in% c("satterthwaite", "kr", "kenward", "kenward-roger") && isTRUE(dots$df_per_obs)) {
@@ -258,9 +271,7 @@ get_df.lme <- get_df.lmerMod
 
 
 
-
 # Other models ------------------
-
 
 #' @export
 get_df.logitor <- function(x, type = "residual", verbose = TRUE, ...) {
@@ -316,7 +327,6 @@ get_df.mipo <- function(x, type = "residual", ...) {
 
 
 
-
 # not yet supported --------------------
 
 #' @export
@@ -326,9 +336,7 @@ get_df.mediate <- function(x, ...) {
 
 
 
-
 # Analytical approach ------------------------------
-
 
 .get_residual_df <- function(x, verbose = TRUE) {
   dof <- .degrees_of_freedom_residual(x, verbose = verbose)
@@ -353,9 +361,7 @@ get_df.mediate <- function(x, ...) {
 
 
 
-
 # Model approach (model-based / logLik df) ------------------------------
-
 
 .model_df <- function(x) {
   dof <- tryCatch(attr(stats::logLik(x), "df"), error = function(e) NULL)
@@ -384,4 +390,16 @@ get_df.mediate <- function(x, ...) {
 .boot_em_df <- function(model) {
   est <- get_parameters(model, summary = FALSE)
   rep(NA, ncol(est))
+}
+
+
+
+# tools ----------------
+
+.check_df_type <- function(type) {
+  # handle mixing of ci_method and type arguments
+  if (type %in% c("profile", "uniroot", "quantile", "eti", "hdi", "bci", "boot", "spi")) {
+    type <- "residual"
+  }
+  type
 }
