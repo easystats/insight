@@ -335,15 +335,7 @@ get_data.glmmTMB <- function(x, effects = "all", component = "all", verbose = TR
     verbose = FALSE
   )
 
-  mf <- tryCatch(
-    {
-      stats::model.frame(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
   mf <- .prepare_get_data(x, mf, effects, verbose = verbose)
 
   # add variables from other model components
