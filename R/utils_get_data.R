@@ -240,16 +240,17 @@
     }
 
     # check if we really have all formula terms in our model frame now
-    pv <- tryCatch(find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose),
+    pv <- tryCatch(
+      find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose),
       error = function(x) NULL
     )
 
     # still some undetected matrix-variables?
     if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
-      warning(format_message(
+      format_warning(
         "Some model terms could not be found in model data.",
         "You probably need to load the data into the environment."
-      ), call. = FALSE)
+      )
     }
   }
 
@@ -461,10 +462,10 @@
         mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
       }
       if (isTRUE(verbose)) {
-        message(format_message(
+        format_warning(
           "The data contains variables used 'interaction()'-functions. These are probably not recovered accurately in the returned data frame.",
           "Please check the data frame carefully."
-        ))
+        )
       }
     }
   }
@@ -590,17 +591,17 @@
 
   if (is_empty_object(dat)) {
     if (isTRUE(verbose)) {
-      warning(format_message(
+      format_warning(
         sprintf("Data frame is empty, probably component `%s` does not exist in the %s-part of the model?", component, effects)
-      ), call. = FALSE)
+      )
     }
     return(NULL)
   }
 
   if (length(still_missing) && isTRUE(verbose)) {
-    warning(format_message(
+    format_warning(
       sprintf("Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,"))
-    ), call. = FALSE)
+    )
   }
 
   if ("(offset)" %in% colnames(mf) && !("(offset)" %in% colnames(dat))) {
@@ -686,18 +687,9 @@
     all = find_variables(x, flatten = TRUE),
     random = find_random(x, split_nested = TRUE, flatten = TRUE)
   )
-
   remain <- intersect(c(ft, find_weights(x)), cn)
 
-  mf <- tryCatch(
-    {
-      dat[, remain, drop = FALSE]
-    },
-    error = function(x) {
-      dat
-    }
-  )
-
+  mf <- tryCatch(dat[, remain, drop = FALSE], error = function(x) dat)
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
