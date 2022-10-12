@@ -386,7 +386,7 @@ get_df.mediate <- function(x, ...) {
 
 .check_df_type <- function(type) {
   # handle mixing of ci_method and type arguments
-  if (type %in% c("profile", "uniroot", "quantile", "eti", "hdi", "bci", "boot", "spi")) {
+  if (tolower(type) %in% c("profile", "uniroot", "quantile", "eti", "hdi", "bci", "boot", "spi")) {
     type <- "residual"
   }
   type
