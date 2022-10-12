@@ -652,15 +652,7 @@
   model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE, verbose = FALSE)
   model.terms$offset <- find_offset(x)
 
-  mf <- tryCatch(
-    {
-      stats::model.frame(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
   mf <- .prepare_get_data(x, mf, verbose = verbose)
   # add variables from other model components
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
