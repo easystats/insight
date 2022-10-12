@@ -240,16 +240,17 @@
     }
 
     # check if we really have all formula terms in our model frame now
-    pv <- tryCatch(find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose),
+    pv <- tryCatch(
+      find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose),
       error = function(x) NULL
     )
 
     # still some undetected matrix-variables?
     if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
-      warning(format_message(
+      format_warning(
         "Some model terms could not be found in model data.",
         "You probably need to load the data into the environment."
-      ), call. = FALSE)
+      )
     }
   }
 
@@ -461,10 +462,10 @@
         mf[[int]] <- as.factor(substr(as.character(mf[[int]]), 0, regexpr("\\.[^\\.]*$", as.character(mf[[int]])) - 1))
       }
       if (isTRUE(verbose)) {
-        message(format_message(
+        format_warning(
           "The data contains variables used 'interaction()'-functions. These are probably not recovered accurately in the returned data frame.",
           "Please check the data frame carefully."
-        ))
+        )
       }
     }
   }
@@ -590,17 +591,17 @@
 
   if (is_empty_object(dat)) {
     if (isTRUE(verbose)) {
-      warning(format_message(
+      format_warning(
         sprintf("Data frame is empty, probably component `%s` does not exist in the %s-part of the model?", component, effects)
-      ), call. = FALSE)
+      )
     }
     return(NULL)
   }
 
   if (length(still_missing) && isTRUE(verbose)) {
-    warning(format_message(
+    format_warning(
       sprintf("Following potential variables could not be found in the data: %s", paste0(still_missing, collapse = " ,"))
-    ), call. = FALSE)
+    )
   }
 
   if ("(offset)" %in% colnames(mf) && !("(offset)" %in% colnames(dat))) {
@@ -624,12 +625,7 @@
 .add_zeroinf_data <- function(x, mf, tn) {
   tryCatch(
     {
-      model_call <- get_call(x)
-      env_data <- eval(model_call$data, envir = parent.frame())[, tn, drop = FALSE]
-      if (object_has_names(model_call, "subset")) {
-        env_data <- subset(env_data, subset = eval(model_call$subset))
-      }
-
+      env_data <- .recover_data_from_environment(x)[, tn, drop = FALSE]
       .merge_dataframes(env_data, mf, replace = TRUE)
     },
     error = function(x) {
@@ -657,15 +653,7 @@
   model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE, verbose = FALSE)
   model.terms$offset <- find_offset(x)
 
-  mf <- tryCatch(
-    {
-      stats::model.frame(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
   mf <- .prepare_get_data(x, mf, verbose = verbose)
   # add variables from other model components
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
@@ -699,18 +687,9 @@
     all = find_variables(x, flatten = TRUE),
     random = find_random(x, split_nested = TRUE, flatten = TRUE)
   )
-
   remain <- intersect(c(ft, find_weights(x)), cn)
 
-  mf <- tryCatch(
-    {
-      dat[, remain, drop = FALSE]
-    },
-    error = function(x) {
-      dat
-    }
-  )
-
+  mf <- tryCatch(dat[, remain, drop = FALSE], error = function(x) dat)
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
@@ -723,15 +702,16 @@
 # and subset the data, if necessary
 .recover_data_from_environment <- function(x) {
   model_call <- get_call(x)
-  # first try, parent frame
-  dat <- tryCatch(
-    {
-      eval(model_call$data, envir = parent.frame())
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+
+  # first, try environment of formula, see #666
+  dat <- tryCatch(eval(model_call$data, envir = environment(model_call$formula)),
+                  error = function(e) NULL)
+
+  # next try, parent frame
+  if (is.null(dat)) {
+    dat <- tryCatch(eval(model_call$data, envir = parent.frame()),
+                         error = function(e) NULL)
+  }
 
   # sanity check- if data frame is named like a function, e.g.
   # rep <- data.frame(...), we now have a function instead of the data
@@ -741,58 +721,14 @@
     dat <- tryCatch(as.data.frame(dat), error = function(e) NULL)
   }
 
+  # thirs try, global env
   if (is.null(dat)) {
-    # second try, global env
-    dat <- tryCatch(
-      {
-        eval(model_call$data, envir = globalenv())
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    dat <- tryCatch(eval(model_call$data, envir = globalenv()),
+                    error = function(e) NULL)
   }
-
 
   if (!is.null(dat) && object_has_names(model_call, "subset")) {
     dat <- subset(dat, subset = eval(model_call$subset))
-  }
-
-  dat
-}
-
-
-
-# find data from the environment, for models with S4 --------------------------
-
-# return data from a data frame that is in the environment,
-# and subset the data, if necessary
-.get_S4_data_from_env <- function(x) {
-  # first try, parent frame
-  dat <- tryCatch(
-    {
-      eval(x@call$data, envir = parent.frame())
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-
-  if (is.null(dat)) {
-    # second try, global env
-    dat <- tryCatch(
-      {
-        eval(x@call$data, envir = globalenv())
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-  }
-
-
-  if (!is.null(dat) && object_has_names(x@call, "subset")) {
-    dat <- subset(dat, subset = eval(x@call$subset))
   }
 
   dat

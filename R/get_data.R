@@ -335,15 +335,7 @@ get_data.glmmTMB <- function(x, effects = "all", component = "all", verbose = TR
     verbose = FALSE
   )
 
-  mf <- tryCatch(
-    {
-      stats::model.frame(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
   mf <- .prepare_get_data(x, mf, effects, verbose = verbose)
 
   # add variables from other model components
@@ -682,14 +674,8 @@ get_data.glimML <- function(x, effects = "all", verbose = TRUE, ...) {
 
 #' @export
 get_data.lavaan <- function(x, verbose = TRUE, ...) {
-  mf <- tryCatch(
-    {
-      .get_S4_data_from_env(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
+  mf <- tryCatch(.recover_data_from_environment(x),
+                 error = function(x) NULL)
 
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
