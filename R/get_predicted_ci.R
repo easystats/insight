@@ -255,7 +255,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   if (isTRUE(ci_method %in% c("satterthwaite", "kr", "kenward", "kenward-roger"))) {
     dof <- .satterthwaite_kr_df_per_obs(x, type = ci_method, data = data)
   } else {
-    dof <- get_df(x, type = ci_method)
+    dof <- get_df(x, type = .check_df_type(ci_method))
   }
 
   # Return NA

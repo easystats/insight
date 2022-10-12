@@ -103,16 +103,8 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   # check valid options
   type <- match.arg(
     tolower(type),
-    choices = c(
-      # valid choices
-      "residual", "model", "analytical", "wald", "normal", "ml1", "betwithin",
-      # these can come from "ci_method" arguments - need to capture for now
-      "profile", "uniroot", "quantile", "eti", "hdi", "bci", "boot", "spi"
-    )
+    choices = c("residual", "model", "analytical", "wald", "normal", "ml1", "betwithin")
   )
-
-  # handle mixing of ci_method and type arguments
-  type <- .check_df_type(type)
 
   # check if user already passed "statistic" argument, to
   # avoid multiple calls to "find_statistic()"
@@ -243,12 +235,8 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
   type <- match.arg(
     tolower(type),
     choices = c("residual", "model", "analytical", "satterthwaite", "kenward",
-                "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin",
-                # these can come from "ci_method" arguments - need to capture for now
-                "profile", "uniroot", "quantile", "eti", "hdi", "bci", "boot", "spi")
+                "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin")
   )
-  # handle mixing of ci_method and type arguments
-  type <- .check_df_type(type)
 
   dots <- list(...)
 
