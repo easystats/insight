@@ -352,20 +352,13 @@ higher.</p>
 <span></span>
 <span><span class="co"># standard output</span></span>
 <span><span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Phi (adj.) Glass' delta Epsilon2   R2</span></span>
-<span><span class="co">#&gt; 1       0.30         0.40     0.70 0.40</span></span>
 <span></span>
 <span><span class="co"># column names of effect sizes as symbols</span></span>
-<span><span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="va">x</span>, use_symbols <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   ϕ (adj.) Glass' Δ   ε²   R²</span></span>
-<span><span class="co">#&gt; 1     0.30     0.40 0.70 0.40</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="va">x</span>, use_symbols <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>In combination with <code><a href="../reference/export_table.html">export_table()</a></code> (see next section),
 this will give you nicely formatted tables.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="va">x</span>, use_symbols <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ϕ (adj.) | Glass' Δ |   ε² |   R²</span></span>
-<span><span class="co">#&gt; ---------------------------------</span></span>
-<span><span class="co">#&gt; 0.30     |     0.40 | 0.70 | 0.40</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="va">x</span>, use_symbols <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="exporting">Exporting<a class="anchor" aria-label="anchor" href="#exporting"></a>
 </h3>
@@ -440,12 +433,12 @@ to markdown (“md”)…</p>
 <p>…or HTML format.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">df</span>, format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></span></code></pre></div>
-<div id="xquejmlukw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="mkjbbjbtgg" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#xquejmlukw .gt_table {
+#mkjbbjbtgg .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -470,7 +463,7 @@ to markdown (“md”)…</p>
   border-left-color: #D3D3D3;
 }
 
-#xquejmlukw .gt_heading {
+#mkjbbjbtgg .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -482,7 +475,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#xquejmlukw .gt_title {
+#mkjbbjbtgg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -494,7 +487,7 @@ to markdown (“md”)…</p>
   border-bottom-width: 0;
 }
 
-#xquejmlukw .gt_subtitle {
+#mkjbbjbtgg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -506,13 +499,13 @@ to markdown (“md”)…</p>
   border-top-width: 0;
 }
 
-#xquejmlukw .gt_bottom_border {
+#mkjbbjbtgg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#xquejmlukw .gt_col_headings {
+#mkjbbjbtgg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -527,7 +520,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#xquejmlukw .gt_col_heading {
+#mkjbbjbtgg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -547,7 +540,7 @@ to markdown (“md”)…</p>
   overflow-x: hidden;
 }
 
-#xquejmlukw .gt_column_spanner_outer {
+#mkjbbjbtgg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -559,15 +552,15 @@ to markdown (“md”)…</p>
   padding-right: 4px;
 }
 
-#xquejmlukw .gt_column_spanner_outer:first-child {
+#mkjbbjbtgg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xquejmlukw .gt_column_spanner_outer:last-child {
+#mkjbbjbtgg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xquejmlukw .gt_column_spanner {
+#mkjbbjbtgg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -579,7 +572,7 @@ to markdown (“md”)…</p>
   width: 100%;
 }
 
-#xquejmlukw .gt_group_heading {
+#mkjbbjbtgg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -604,7 +597,7 @@ to markdown (“md”)…</p>
   vertical-align: middle;
 }
 
-#xquejmlukw .gt_empty_group_heading {
+#mkjbbjbtgg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -619,15 +612,15 @@ to markdown (“md”)…</p>
   vertical-align: middle;
 }
 
-#xquejmlukw .gt_from_md > :first-child {
+#mkjbbjbtgg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xquejmlukw .gt_from_md > :last-child {
+#mkjbbjbtgg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xquejmlukw .gt_row {
+#mkjbbjbtgg .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -646,7 +639,7 @@ to markdown (“md”)…</p>
   overflow-x: hidden;
 }
 
-#xquejmlukw .gt_stub {
+#mkjbbjbtgg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -659,7 +652,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#xquejmlukw .gt_stub_row_group {
+#mkjbbjbtgg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -673,11 +666,11 @@ to markdown (“md”)…</p>
   vertical-align: top;
 }
 
-#xquejmlukw .gt_row_group_first td {
+#mkjbbjbtgg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#xquejmlukw .gt_summary_row {
+#mkjbbjbtgg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -687,16 +680,16 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#xquejmlukw .gt_first_summary_row {
+#mkjbbjbtgg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#xquejmlukw .gt_first_summary_row.thick {
+#mkjbbjbtgg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#xquejmlukw .gt_last_summary_row {
+#mkjbbjbtgg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -706,7 +699,7 @@ to markdown (“md”)…</p>
   border-bottom-color: #D3D3D3;
 }
 
-#xquejmlukw .gt_grand_summary_row {
+#mkjbbjbtgg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -716,7 +709,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#xquejmlukw .gt_first_grand_summary_row {
+#mkjbbjbtgg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -726,11 +719,11 @@ to markdown (“md”)…</p>
   border-top-color: #D3D3D3;
 }
 
-#xquejmlukw .gt_striped {
+#mkjbbjbtgg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#xquejmlukw .gt_table_body {
+#mkjbbjbtgg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -739,7 +732,7 @@ to markdown (“md”)…</p>
   border-bottom-color: #D3D3D3;
 }
 
-#xquejmlukw .gt_footnotes {
+#mkjbbjbtgg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -753,7 +746,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#xquejmlukw .gt_footnote {
+#mkjbbjbtgg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -762,7 +755,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#xquejmlukw .gt_sourcenotes {
+#mkjbbjbtgg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -776,7 +769,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#xquejmlukw .gt_sourcenote {
+#mkjbbjbtgg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -784,64 +777,64 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#xquejmlukw .gt_left {
+#mkjbbjbtgg .gt_left {
   text-align: left;
 }
 
-#xquejmlukw .gt_center {
+#mkjbbjbtgg .gt_center {
   text-align: center;
 }
 
-#xquejmlukw .gt_right {
+#mkjbbjbtgg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xquejmlukw .gt_font_normal {
+#mkjbbjbtgg .gt_font_normal {
   font-weight: normal;
 }
 
-#xquejmlukw .gt_font_bold {
+#mkjbbjbtgg .gt_font_bold {
   font-weight: bold;
 }
 
-#xquejmlukw .gt_font_italic {
+#mkjbbjbtgg .gt_font_italic {
   font-style: italic;
 }
 
-#xquejmlukw .gt_super {
+#mkjbbjbtgg .gt_super {
   font-size: 65%;
 }
 
-#xquejmlukw .gt_footnote_marks {
+#mkjbbjbtgg .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#xquejmlukw .gt_asterisk {
+#mkjbbjbtgg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#xquejmlukw .gt_indent_1 {
+#mkjbbjbtgg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#xquejmlukw .gt_indent_2 {
+#mkjbbjbtgg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#xquejmlukw .gt_indent_3 {
+#mkjbbjbtgg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#xquejmlukw .gt_indent_4 {
+#mkjbbjbtgg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#xquejmlukw .gt_indent_5 {
+#mkjbbjbtgg .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -906,12 +899,12 @@ to markdown (“md”)…</p>
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span>ci_brackets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"("</span>, <span class="st">")"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></span></code></pre></div>
-<div id="ljmzrfdxtw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="jbmcstywtw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ljmzrfdxtw .gt_table {
+#jbmcstywtw .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -936,7 +929,7 @@ to markdown (“md”)…</p>
   border-left-color: #D3D3D3;
 }
 
-#ljmzrfdxtw .gt_heading {
+#jbmcstywtw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -948,7 +941,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#ljmzrfdxtw .gt_title {
+#jbmcstywtw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -960,7 +953,7 @@ to markdown (“md”)…</p>
   border-bottom-width: 0;
 }
 
-#ljmzrfdxtw .gt_subtitle {
+#jbmcstywtw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -972,13 +965,13 @@ to markdown (“md”)…</p>
   border-top-width: 0;
 }
 
-#ljmzrfdxtw .gt_bottom_border {
+#jbmcstywtw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ljmzrfdxtw .gt_col_headings {
+#jbmcstywtw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -993,7 +986,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#ljmzrfdxtw .gt_col_heading {
+#jbmcstywtw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1013,7 +1006,7 @@ to markdown (“md”)…</p>
   overflow-x: hidden;
 }
 
-#ljmzrfdxtw .gt_column_spanner_outer {
+#jbmcstywtw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1025,15 +1018,15 @@ to markdown (“md”)…</p>
   padding-right: 4px;
 }
 
-#ljmzrfdxtw .gt_column_spanner_outer:first-child {
+#jbmcstywtw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ljmzrfdxtw .gt_column_spanner_outer:last-child {
+#jbmcstywtw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ljmzrfdxtw .gt_column_spanner {
+#jbmcstywtw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1045,7 +1038,7 @@ to markdown (“md”)…</p>
   width: 100%;
 }
 
-#ljmzrfdxtw .gt_group_heading {
+#jbmcstywtw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1070,7 +1063,7 @@ to markdown (“md”)…</p>
   vertical-align: middle;
 }
 
-#ljmzrfdxtw .gt_empty_group_heading {
+#jbmcstywtw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1085,15 +1078,15 @@ to markdown (“md”)…</p>
   vertical-align: middle;
 }
 
-#ljmzrfdxtw .gt_from_md > :first-child {
+#jbmcstywtw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ljmzrfdxtw .gt_from_md > :last-child {
+#jbmcstywtw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ljmzrfdxtw .gt_row {
+#jbmcstywtw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1112,7 +1105,7 @@ to markdown (“md”)…</p>
   overflow-x: hidden;
 }
 
-#ljmzrfdxtw .gt_stub {
+#jbmcstywtw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1125,7 +1118,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#ljmzrfdxtw .gt_stub_row_group {
+#jbmcstywtw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1139,11 +1132,11 @@ to markdown (“md”)…</p>
   vertical-align: top;
 }
 
-#ljmzrfdxtw .gt_row_group_first td {
+#jbmcstywtw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ljmzrfdxtw .gt_summary_row {
+#jbmcstywtw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1153,16 +1146,16 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#ljmzrfdxtw .gt_first_summary_row {
+#jbmcstywtw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ljmzrfdxtw .gt_first_summary_row.thick {
+#jbmcstywtw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ljmzrfdxtw .gt_last_summary_row {
+#jbmcstywtw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1172,7 +1165,7 @@ to markdown (“md”)…</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ljmzrfdxtw .gt_grand_summary_row {
+#jbmcstywtw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1182,7 +1175,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#ljmzrfdxtw .gt_first_grand_summary_row {
+#jbmcstywtw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1192,11 +1185,11 @@ to markdown (“md”)…</p>
   border-top-color: #D3D3D3;
 }
 
-#ljmzrfdxtw .gt_striped {
+#jbmcstywtw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ljmzrfdxtw .gt_table_body {
+#jbmcstywtw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1205,7 +1198,7 @@ to markdown (“md”)…</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ljmzrfdxtw .gt_footnotes {
+#jbmcstywtw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1219,7 +1212,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#ljmzrfdxtw .gt_footnote {
+#jbmcstywtw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1228,7 +1221,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#ljmzrfdxtw .gt_sourcenotes {
+#jbmcstywtw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1242,7 +1235,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#ljmzrfdxtw .gt_sourcenote {
+#jbmcstywtw .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1250,64 +1243,64 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#ljmzrfdxtw .gt_left {
+#jbmcstywtw .gt_left {
   text-align: left;
 }
 
-#ljmzrfdxtw .gt_center {
+#jbmcstywtw .gt_center {
   text-align: center;
 }
 
-#ljmzrfdxtw .gt_right {
+#jbmcstywtw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ljmzrfdxtw .gt_font_normal {
+#jbmcstywtw .gt_font_normal {
   font-weight: normal;
 }
 
-#ljmzrfdxtw .gt_font_bold {
+#jbmcstywtw .gt_font_bold {
   font-weight: bold;
 }
 
-#ljmzrfdxtw .gt_font_italic {
+#jbmcstywtw .gt_font_italic {
   font-style: italic;
 }
 
-#ljmzrfdxtw .gt_super {
+#jbmcstywtw .gt_super {
   font-size: 65%;
 }
 
-#ljmzrfdxtw .gt_footnote_marks {
+#jbmcstywtw .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#ljmzrfdxtw .gt_asterisk {
+#jbmcstywtw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ljmzrfdxtw .gt_indent_1 {
+#jbmcstywtw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ljmzrfdxtw .gt_indent_2 {
+#jbmcstywtw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ljmzrfdxtw .gt_indent_3 {
+#jbmcstywtw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ljmzrfdxtw .gt_indent_4 {
+#jbmcstywtw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ljmzrfdxtw .gt_indent_5 {
+#jbmcstywtw .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
