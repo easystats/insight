@@ -107,7 +107,7 @@ format_table(x, use_symbols = TRUE)
 
 In combination with `export_table()` (see next section), this will give you nicely formatted tables.
 
-```{r}
+```{r eval=.Platform$OS.type == "windows"}
 export_table(format_table(x, use_symbols = TRUE))
 ```
 
