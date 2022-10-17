@@ -329,13 +329,9 @@ get_predicted.lm <- function(x,
     length.dataClasses <- length(dataClasses)
     names.dataClasses <- names(dataClasses)
     attributes(x[["terms"]])$dataClasses <- stats::setNames(
-      unlist(lapply(dataClasses, function(x) {
-        if (x == "nmatrix.1") {
-          "numeric"
-        } else {
-          x
-        }
-      })), names.dataClasses)
+      unlist(lapply(dataClasses, function(x) if (x == "nmatrix.1") "numeric" else x)), 
+      names.dataClasses
+    )
   }
 
   # 1. step: predictions
