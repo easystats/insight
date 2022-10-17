@@ -316,11 +316,29 @@ get_predicted.lm <- function(x,
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
-  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   predict_function <- function(x, data, ...) {
-    stats::predict(x, newdata = data, interval = "none", type = args$type, se.fit = FALSE, ...)
+    stats::predict(x, newdata = data, interval = "none",
+                   type = args$type, se.fit = FALSE, ...)
   }
+
+  # 0. step: convert matrix variable types attributes to numeric, if necessary
+  dataClasses <- attributes(x[["terms"]])$dataClasses
+  if ("nmatrix.1" %in% dataClasses) {
+    length.dataClasses <- length(dataClasses)
+    names.dataClasses <- names(dataClasses)
+    new.class <- stats::setNames(
+      unlist(lapply(dataClasses, function(x) if (x == "nmatrix.1") "numeric" else x)),
+      names.dataClasses)
+    attributes(x$terms)$dataClasses <- new.class
+    attributes(attributes(x$model)$terms)$dataClasses <- new.class
+    data.rownames <- row.names(x$model)
+    x$model[] <- as.data.frame(lapply(x$model, function (x) {
+      if (all(class(x) == c("matrix", "array"))) as.numeric(x) else x }))
+    row.names(x$model) <- data.rownames
+  }
+
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   # 1. step: predictions
   if (is.null(iterations)) {
