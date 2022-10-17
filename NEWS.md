@@ -44,6 +44,8 @@
 
 * Correctly extract predictors for `fixest::i(f1, i.f2)` interactions (#649 by 
   @grantmcdermott).
+  
+* `get_predicted` now correctly handles variables of class numeric matrix created by base R `scale`, which fixes a bug in `performance::check_model` (easystats/performance#432).
 
 # insight 0.18.4
 

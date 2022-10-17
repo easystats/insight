@@ -49,6 +49,7 @@ Other contributors:
 \itemize{
   \item Alex Hayes \email{alexpghayes@gmail.com} (\href{https://orcid.org/0000-0002-4985-5160}{ORCID}) [reviewer]
   \item Grant McDermott \email{grantmcd@uoregon.edu} (\href{https://orcid.org/0000-0001-7883-8573}{ORCID}) [contributor]
+  \item Rémi Thériault \email{remi.theriault@mail.mcgill.ca} (\href{https://orcid.org/0000-0003-4315-6788}{ORCID}) (@rempsyc) [contributor]
 }
 
 }

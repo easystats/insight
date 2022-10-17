@@ -537,6 +537,21 @@ test_that("bugfix: used to return all zeros", {
   expect_error(expect_warning(get_predicted(mod, predict = "original", ci = .95, verbose = FALSE)))
 })
 
+# Original Error: "variables were specified with different types from the fit"
+# Originates from using base R scale on dataframe (easystats/performance#432)
+test_that("bugfix: used to fail with matrix variables", {
+  mtcars2 <- mtcars
+  mtcars2$wt <- scale(mtcars2$wt)
+  m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars2)
+  pred <- get_predicted(m)
+  expect_equal(class(pred), c("get_predicted", "numeric"))
+  expect_true(all(attributes(attributes(attributes(
+    pred)$data)$terms)$dataClasses == "numeric"))
+  mtcars2$wt <- as.numeric(mtcars2$wt)
+  m2 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars2)
+  pred2 <- get_predicted(m2)
+  expect_equal(pred, pred2)
+})
 
 test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   skip_if(isFALSE(run_stan))
