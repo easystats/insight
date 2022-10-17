@@ -111,6 +111,7 @@
 <ul><li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models of class <code>plm</code>, which accidentally converted factors into character vectors.</p></li>
 <li><p>Fixed issue with column alignment in <code><a href="../reference/export_table.html">export_table()</a></code> when the data frame to print contained unicode-characters longer than 1 byte.</p></li>
 <li><p>Correctly extract predictors for <code>fixest::i(f1, i.f2)</code> interactions (<a href="https://github.com/easystats/insight/issues/649" class="external-link">#649</a> by <a href="https://github.com/grantmcdermott" class="external-link">@grantmcdermott</a>).</p></li>
+<li><p><code>get_predicted</code> now correctly handles variables of class numeric matrix created by base R <code>scale</code>, which fixes a bug in <code><a href="https://easystats.github.io/performance/reference/check_model.html" class="external-link">performance::check_model</a></code> (easystats/performance#432).</p></li>
 </ul></div>
 </div>
     <div class="section level2">
