@@ -860,5 +860,6 @@ format_table <- function(x,
       TRUE
     }
   )
-  (win_os && getRversion() >= "4.2") || (!win_os && getRversion() >= "4.0")
+
+  l10n_info()[["UTF-8"]] && ((win_os && getRversion() >= "4.2") || (!win_os && getRversion() >= "4.0"))
 }
