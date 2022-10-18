@@ -9,6 +9,9 @@
   created by `scale()`, which fixes a bug in `performance::check_model()`
   (easystats/performance#432).
 
+* Fixed issue with `iterations` argument in `get_predicted()` with _brms_
+  models.
+
 # insight 0.18.5
 
 ## Breaking
