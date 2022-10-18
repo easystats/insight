@@ -324,17 +324,24 @@ get_predicted.lm <- function(x,
 
   # 0. step: convert matrix variable types attributes to numeric, if necessary
   dataClasses <- attributes(x[["terms"]])$dataClasses
+  # see https://github.com/easystats/insight/pull/671
   if ("nmatrix.1" %in% dataClasses) {
     length.dataClasses <- length(dataClasses)
     names.dataClasses <- names(dataClasses)
     new.class <- stats::setNames(
       unlist(lapply(dataClasses, function(x) if (x == "nmatrix.1") "numeric" else x)),
-      names.dataClasses)
+      names.dataClasses
+    )
     attributes(x$terms)$dataClasses <- new.class
     attributes(attributes(x$model)$terms)$dataClasses <- new.class
     data.rownames <- row.names(x$model)
-    x$model[] <- as.data.frame(lapply(x$model, function (x) {
-      if (all(class(x) == c("matrix", "array"))) as.numeric(x) else x }))
+    x$model[] <- as.data.frame(lapply(x$model, function(x) {
+      if (all(class(x) == c("matrix", "array"))) {
+        as.numeric(x)
+      } else {
+        x
+      }
+    }))
     row.names(x$model) <- data.rownames
   }
 
