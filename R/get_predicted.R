@@ -326,23 +326,17 @@ get_predicted.lm <- function(x,
   dataClasses <- attributes(x[["terms"]])$dataClasses
   # see https://github.com/easystats/insight/pull/671
   if ("nmatrix.1" %in% dataClasses) {
-    length.dataClasses <- length(dataClasses)
-    names.dataClasses <- names(dataClasses)
-    new.class <- stats::setNames(
-      unlist(lapply(dataClasses, function(x) if (x == "nmatrix.1") "numeric" else x)),
-      names.dataClasses
-    )
-    attributes(x$terms)$dataClasses <- new.class
-    attributes(attributes(x$model)$terms)$dataClasses <- new.class
-    data.rownames <- row.names(x$model)
-    x$model[] <- as.data.frame(lapply(x$model, function(x) {
+    dataClasses <- attributes(stats::terms(x))$dataClasses
+    dataClasses[dataClasses == "nmatrix.1"] <- "numeric"
+    attributes(x$terms)$dataClasses <- dataClasses
+    attributes(attributes(x$model)$terms)$dataClasses <- dataClasses
+    x$model[] <- lapply(x$model, function(x) {
       if (all(class(x) == c("matrix", "array"))) {
         as.numeric(x)
       } else {
         x
       }
-    }))
-    row.names(x$model) <- data.rownames
+    })
   }
 
   args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
