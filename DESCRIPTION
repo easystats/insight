@@ -122,6 +122,7 @@ Suggests:
     lmerTest,
     lmtest,
     logistf,
+    logitr,
     MASS,
     marginaleffects,
     Matrix,
