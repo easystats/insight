@@ -146,6 +146,18 @@ find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
 
 #' @export
+find_predictors.logitr <- function(x, flatten = FALSE, ...) {
+  l <- find_predictors.default(x)
+  l[["cluster"]] <- get_call(x)$obsID
+  if (flatten) {
+    unique(unlist(l))
+  } else {
+    l
+  }
+}
+
+
+#' @export
 find_predictors.fixest <- function(x, flatten = FALSE, ...) {
   response <- find_response(x)
   instruments <- x$iv_inst_names
@@ -274,7 +286,10 @@ find_predictors.afex_aov <- function(x,
 
   # from conditional model, remove response
   if (object_has_names(f, "conditional")) {
-    f[["conditional"]] <- f[["conditional"]][[3]]
+    f[["conditional"]] <- tryCatch(
+      f[["conditional"]][[3]],
+      # some models like {logitr} return a one-sided formula
+      error = function(e) f[["conditional"]][[2]])
 
     # for survival models, separate out strata element
     if (inherits(x, "coxph")) {
