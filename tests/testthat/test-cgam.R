@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("cgam")) {
+if (requiet("testthat") && requiet("insight") && requiet("cgam") && getRversion() >= "4.0.0") {
   data(cubic, package = "cgam")
   m <- cgam(y ~ incr.conv(x), data = cubic)
 
