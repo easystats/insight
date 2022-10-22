@@ -12,7 +12,7 @@
 * Fixed issue with `iterations` argument in `get_predicted()` with _brms_
   models.
 
-* Support the `logitr` package: `get_data()`, `find_variables()` and more.
+* Support the *logitr* package: `get_data()`, `find_variables()` and more.
 
 # insight 0.18.5
 
