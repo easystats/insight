@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
+if (requiet("testthat") && requiet("insight") && requiet("lme4") && getRversion() >= "4.0.0") {
   data(cbpp)
   data(sleepstudy)
   set.seed(1)

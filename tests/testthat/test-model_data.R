@@ -4,7 +4,8 @@ if (.runThisTest &&
   requiet("testthat") &&
   requiet("insight") &&
   requiet("splines") &&
-  requiet("glmmTMB")) {
+  requiet("glmmTMB") &&
+  getRversion() >= "4.0.0") {
   data(iris)
 
   m1 <- lm(Sepal.Length ~ Species + ns(Petal.Width), data = iris)

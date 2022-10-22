@@ -4,7 +4,8 @@ if (.runThisTest &&
   requiet("testthat") &&
   requiet("insight") &&
   requiet("glmmTMB") &&
-  requiet("lme4")) {
+  requiet("lme4") &&
+  getRversion() >= "4.0.0") {
   data(mtcars)
   m1 <- suppressWarnings(glmer.nb(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
   m2 <- suppressWarnings(glmer.nb(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))

@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight")) {
+if (requiet("testthat") && requiet("insight") && getRversion() >= "4.0.0") {
   m1 <- lm(hp ~ ordered(cyl), data = mtcars)
   m2 <- lm(hp ~ as.ordered(cyl), data = mtcars)
   m3 <- lm(hp ~ as.factor(cyl), data = mtcars)
