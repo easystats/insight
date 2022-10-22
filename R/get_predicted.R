@@ -326,7 +326,6 @@ get_predicted.lm <- function(x,
   dataClasses <- attributes(x[["terms"]])$dataClasses
   # see https://github.com/easystats/insight/pull/671
   if ("nmatrix.1" %in% dataClasses) {
-    dataClasses <- attributes(stats::terms(x))$dataClasses
     dataClasses[dataClasses == "nmatrix.1"] <- "numeric"
     attributes(x$terms)$dataClasses <- dataClasses
     attributes(attributes(x$model)$terms)$dataClasses <- dataClasses
