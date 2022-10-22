@@ -1,5 +1,6 @@
 requiet("survival")
 requiet("insight")
+requiet("JM")
 
 lung <- subset(survival::lung, subset = ph.ecog %in% 0:2)
 lung$sex <- factor(lung$sex, labels = c("male", "female"))
