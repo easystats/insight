@@ -60,14 +60,7 @@ link_inverse.default <- function(x, ...) {
 
 #' @export
 link_inverse.glm <- function(x, ...) {
-  tryCatch(
-    {
-      stats::family(x)$linkinv
-    },
-    error = function(x) {
-      NULL
-    }
-  )
+  tryCatch(stats::family(x)$linkinv, error = function(x) NULL)
 }
 
 #' @export
@@ -245,6 +238,9 @@ link_inverse.mmclogit <- link_inverse.gmnl
 
 #' @export
 link_inverse.mblogit <- link_inverse.gmnl
+
+#' @export
+link_inverse.logitr <- link_inverse.gmnl
 
 #' @export
 link_inverse.BBreg <- link_inverse.gmnl

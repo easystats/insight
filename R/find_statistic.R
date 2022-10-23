@@ -122,7 +122,7 @@ find_statistic <- function(x, ...) {
     "gee", "glimML", "glmm", "glmmadmb", "glmmFit", "glmmLasso", "glmmTMB",
     "glmx", "gmnl",
     "hurdle",
-    "lavaan", "loggammacenslmrob", "logitmfx", "logitor", "LORgee", "lrm",
+    "lavaan", "loggammacenslmrob", "logitmfx", "logitor", "logitr", "LORgee", "lrm",
     "margins", "marginaleffects", "marginaleffects.summary", "metaplus", "mixor",
     "MixMod", "mjoint", "mle", "mle2", "mlogit", "mclogit", "mmclogit", "mvmeta",
     "mvord",
