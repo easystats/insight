@@ -808,6 +808,13 @@ get_datagrid.default <- function(x,
 }
 
 
+#' @export
+get_datagrid.logitr <- function(x, ...) {
+  datagrid <- get_datagrid.default(x, ...)
+  obsID <- parse(text = safe_deparse(get_call(x)))[[1]]$obsID
+  datagrid[[obsID]] <- x$data[[obsID]][1]
+  datagrid
+}
 
 
 #' @export
