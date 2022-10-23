@@ -17,7 +17,7 @@
 #' diagnose, and present statistical models by streamlining access to every
 #' aspect of many model objects via consistent syntax and output.
 #'
-#' References: Lüdecke et al. (2019) <doi:10.21105/joss.01412>.
+#' References: Lüdecke et al. (2019) \doi{10.21105/joss.01412}.
 #'
 #' @docType package
 #' @aliases insight insight-package
