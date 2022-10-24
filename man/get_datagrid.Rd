@@ -61,7 +61,7 @@ of unique values. For factors, will use all levels, for numeric variables,
 will use a range of length \code{length} (evenly spread from minimum to maximum)
 and for character vectors, will use all unique values.
 \item a list of named elements, indicating focal predictors and their representative
-values, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}.
+values, e.g. \code{at = list(Sepal.Length = c(2, 4), Species = "setosa")}.
 \item a string with assignments, e.g. \code{at = "Sepal.Length = 2"} or
 \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
 and double quotes to assign strings within strings.
