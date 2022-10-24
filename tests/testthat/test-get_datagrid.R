@@ -76,6 +76,17 @@ if (requiet("testthat") && requiet("insight") && getRversion() >= "4.0.0") {
     dg <- insight::get_datagrid(m, c("Species", "Petal.Width"))
     expect_equal(colnames(dg), c("Species", "Petal.Width", "Petal.Length"))
   })
+
+
+  # list-argument
+  test_that("get_datagrid - list-argument", {
+    at <- list(Sepal.Length = c(3, 5), Species = c("versicolor", "virginica"))
+    dg1 <- get_datagrid(iris, at = at)
+    at <- c("Sepal.Length = c(3, 5)", "Species = c('versicolor', 'virginica')")
+    dg2 <- get_datagrid(iris, at = at)
+
+    expect_equal(dg1, dg2, tolerance = 1e-4)
+  })
 }
 
 
