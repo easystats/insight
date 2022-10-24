@@ -210,7 +210,7 @@ get_datagrid.data.frame <- function(x,
     # if list, convert to character
     if (is.list(at)) {
       at <- unname(vapply(names(at), function(i) {
-        if (is.numeric(at[[i]])) {
+        if (is.numeric(x[[i]])) {
           paste0(i, "=c(", toString(x[[i]]), ")")
         } else {
           paste0(i, "=c(", toString(sprintf("'%s'", x[[i]])), ")")
