@@ -546,7 +546,8 @@ test_that("bugfix: used to fail with matrix variables", {
   pred <- get_predicted(m)
   expect_equal(class(pred), c("get_predicted", "numeric"))
   expect_true(all(attributes(attributes(attributes(
-    pred)$data)$terms)$dataClasses == "numeric"))
+    pred
+  )$data)$terms)$dataClasses == "numeric"))
   mtcars2$wt <- as.numeric(mtcars2$wt)
   m2 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars2)
   pred2 <- get_predicted(m2)

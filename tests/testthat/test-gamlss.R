@@ -6,7 +6,7 @@ if (requiet("testthat") &&
     m1 <-
       gamlss(
         y ~ pb(x),
-        sigma.formula =  ~ pb(x),
+        sigma.formula = ~ pb(x),
         family = BCT,
         data = abdom,
         method = mixed(1, 20)

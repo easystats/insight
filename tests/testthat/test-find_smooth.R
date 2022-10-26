@@ -44,7 +44,7 @@ if (requiet("testthat") && requiet("insight") && requiet("mgcv") && requiet("gam
       model <- suppressWarnings(
         rstanarm::stan_gamm4(
           Petal.Length ~ Petal.Width + s(Sepal.Length),
-          random =  ~ (1 | Species),
+          random = ~ (1 | Species),
           data = iris,
           iter = 100,
           chains = 1,

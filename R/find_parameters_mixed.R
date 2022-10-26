@@ -29,7 +29,7 @@
 #' - `random`, the "random effects" part from the model.
 #' - `zero_inflated`, the "fixed effects" part from the zero-inflation component
 #'   of the model.
-#'- `zero_inflated_random`, the "random effects" part from the zero-inflation
+#' - `zero_inflated_random`, the "random effects" part from the zero-inflation
 #'   component of the model.
 #' - `dispersion`, the dispersion parameters (auxiliary parameter)
 #' - `nonlinear`, the parameters from the nonlinear formula.

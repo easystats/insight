@@ -316,10 +316,11 @@ get_predicted.lm <- function(x,
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
-
   predict_function <- function(x, data, ...) {
-    stats::predict(x, newdata = data, interval = "none",
-                   type = args$type, se.fit = FALSE, ...)
+    stats::predict(x,
+      newdata = data, interval = "none",
+      type = args$type, se.fit = FALSE, ...
+    )
   }
 
   # 0. step: convert matrix variable types attributes to numeric, if necessary

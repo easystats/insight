@@ -112,8 +112,8 @@ get_predicted_ci.default <- function(x,
   if (!is.null(se)) {
     ci_function <- .get_predicted_se_to_ci
   } else if (ci_type == "confidence" ||
-             identical(get_family(x)$family, "gaussian") ||
-             (!is.null(vcov) && is.matrix(vcov))) {
+    identical(get_family(x)$family, "gaussian") ||
+    (!is.null(vcov) && is.matrix(vcov))) {
     # gaussian or CI
     se <- get_predicted_se(
       x,

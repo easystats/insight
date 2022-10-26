@@ -705,12 +705,14 @@
 
   # first, try environment of formula, see #666
   dat <- tryCatch(eval(model_call$data, envir = environment(model_call$formula)),
-                  error = function(e) NULL)
+    error = function(e) NULL
+  )
 
   # next try, parent frame
   if (is.null(dat)) {
     dat <- tryCatch(eval(model_call$data, envir = parent.frame()),
-                         error = function(e) NULL)
+      error = function(e) NULL
+    )
   }
 
   # sanity check- if data frame is named like a function, e.g.
@@ -724,7 +726,8 @@
   # thirs try, global env
   if (is.null(dat)) {
     dat <- tryCatch(eval(model_call$data, envir = globalenv()),
-                    error = function(e) NULL)
+      error = function(e) NULL
+    )
   }
 
   if (!is.null(dat) && object_has_names(model_call, "subset")) {

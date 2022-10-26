@@ -269,7 +269,7 @@ find_predictors.afex_aov <- function(x,
       }
     }
   }
-  
+
 
   # remove constants
   l <- lapply(l, .remove_values, c(".", "pi", "1", "0"))
@@ -289,7 +289,8 @@ find_predictors.afex_aov <- function(x,
     f[["conditional"]] <- tryCatch(
       f[["conditional"]][[3]],
       # some models like {logitr} return a one-sided formula
-      error = function(e) f[["conditional"]][[2]])
+      error = function(e) f[["conditional"]][[2]]
+    )
 
     # for survival models, separate out strata element
     if (inherits(x, "coxph")) {

@@ -144,7 +144,7 @@ if (.runThisTest && .runStanTest) {
           is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
           is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
           is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
-          is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE, 
+          is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
           link_function = "logit", family = "binomial", n_obs = 56L
         )
       )

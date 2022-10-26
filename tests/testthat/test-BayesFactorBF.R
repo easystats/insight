@@ -393,10 +393,10 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
   mtcars$cyl <- factor(mtcars$cyl)
   mtcars$gear <- factor(mtcars$gear)
   model <- lmBF(mpg ~ cyl + gear + cyl:gear, mtcars,
-                progress = FALSE, whichRandom = c("gear", "cyl:gear"))
+    progress = FALSE, whichRandom = c("gear", "cyl:gear")
+  )
 
   test_that("find_formula for lmBF", {
-
     predicted_form <- find_formula(model)$conditional
     true_form <- formula(mpg ~ cyl + cyl:gear)
 
@@ -406,5 +406,4 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
       ignore_attr = TRUE
     )
   })
-
 }

@@ -5,7 +5,8 @@ mod <- suppressMessages(logitr::logitr(
   data    = yogurt,
   outcome = "choice",
   obsID   = "obsID",
-  pars    = c("price", "feat", "brand")))
+  pars    = c("price", "feat", "brand")
+))
 
 test_that("minimalist tests", {
   d <- get_data(mod)

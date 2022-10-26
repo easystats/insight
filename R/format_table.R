@@ -244,7 +244,6 @@ format_table <- function(x,
 # like bayestestR (p_ROPE, p_MAP) or performance (p_Chi2)
 
 .format_p_values <- function(x, stars = FALSE, p_digits) {
-
   # Specify stars for which column
   if (is.character(stars)) {
     starlist <- list("p" = FALSE)
@@ -658,7 +657,6 @@ format_table <- function(x,
                                   ci_width = "auto",
                                   ci_brackets = TRUE,
                                   exact = TRUE) {
-
   # Specify stars for which column
   if (is.character(stars)) {
     starlist <- list("BF" = FALSE, "pd" = FALSE)

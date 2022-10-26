@@ -242,8 +242,7 @@ n_parameters.gls <- function(x, ...) {
 #' @export
 n_parameters.logitr <- function(x, effects = c("all", "fixed", "random"), ...) {
   effects <- match.arg(effects)
-  switch(
-    effects,
+  switch(effects,
     "fixed" = x$n$parsFixed,
     "random" = x$n$parsRandom,
     x$n$parsFixed + x$n$parsRandom
