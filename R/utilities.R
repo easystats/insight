@@ -77,7 +77,7 @@ n_unique.default <- function(x, na.rm = TRUE, ...) {
   if (is.null(x)) {
     return(0)
   }
-  if (isTRUE(na.rm)) x <- stats::na.omit(x)
+  if (isTRUE(na.rm)) x <- x[!is.na(x)]
   length(unique(x))
 }
 

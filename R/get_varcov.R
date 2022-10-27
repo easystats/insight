@@ -510,7 +510,8 @@ get_varcov.MixMod <- function(x,
     )
 
     # drop random parameters
-    random_parms <- stats::na.omit(match(colnames(random_vc), colnames(vc)))
+    m <- match(colnames(random_vc), colnames(vc))
+    random_parms <- m[!is.na(m)]
     if (length(random_parms)) {
       vc <- vc[-random_parms, -random_parms, drop = FALSE]
     }
