@@ -116,9 +116,9 @@ format_p <- function(p,
     text <- paste(name, text)
   }
 
-  if (stars_only == TRUE) {
+  if (stars_only) {
     text <- gsub("[^\\*]", "", text)
-  } else if (stars == FALSE) {
+  } else if (!stars) {
     text <- gsub("*", "", text, fixed = TRUE)
   }
 

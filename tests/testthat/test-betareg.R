@@ -155,8 +155,8 @@ if (requiet("testthat") &&
     # delta method does not work, so we omit SE and issue warning
     expect_warning(get_predicted(m2, predict = "expectation"))
     expect_warning(get_predicted(m2, predict = "link"), NA)
-    p1 <- suppressWarnings(get_predicted(m2, predict = "expectation", ci = .95))
-    p2 <- get_predicted(m2, predict = "link", ci = .95)
+    p1 <- suppressWarnings(get_predicted(m2, predict = "expectation", ci = 0.95))
+    p2 <- get_predicted(m2, predict = "link", ci = 0.95)
     p1 <- data.frame(p1)
     p2 <- data.frame(p2)
     expect_true(!"SE" %in% colnames(p1))

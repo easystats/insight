@@ -2,7 +2,7 @@
                                      newdata,
                                      predictions,
                                      nsim = NULL,
-                                     ci = .95) {
+                                     ci = 0.95) {
   # Since the zero inflation and the conditional model are working in "opposite
   # directions", confidence intervals can not be derived directly  from the
   # "predict()"-function. Thus, confidence intervals are based on quantiles

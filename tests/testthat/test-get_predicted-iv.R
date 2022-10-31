@@ -25,7 +25,7 @@ test_that("get_predicted.default - iv_robust", {
     ignore_attr = TRUE
   )
 
-  out <- get_predicted(x, predict = "expectation", data = head(Kmenta), ci = .95)
+  out <- get_predicted(x, predict = "expectation", data = head(Kmenta), ci = 0.95)
   expect_equal(
     as.numeric(out),
     as.numeric(predict(x, newdata = head(Kmenta))),
@@ -65,7 +65,7 @@ test_that("get_predicted.default - ivreg", {
     ignore_attr = TRUE
   )
 
-  out <- get_predicted(x, predict = "expectation", data = head(Kmenta), ci = .95)
+  out <- get_predicted(x, predict = "expectation", data = head(Kmenta), ci = 0.95)
   expect_equal(
     as.numeric(out),
     as.numeric(predict(x, newdata = head(Kmenta))),
