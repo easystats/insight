@@ -709,7 +709,7 @@ clean_parameters.mlm <- function(x, ...) {
           i[2] <- ""
         } else if (grepl(":", i[1], fixed = TRUE)) {
           f <- unlist(strsplit(i[1], ":", fixed = TRUE))
-          l <- unlist(strsplit(i[2], ".&.", fixed = TRUE))          
+          l <- unlist(strsplit(i[2], ".&.", fixed = TRUE))
           m <- match(f, l)
           matches <- m[!is.na(m)]
           l[matches] <- ""

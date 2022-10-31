@@ -78,10 +78,10 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
   is_model <- sapply(objects, insight::is_model)
 
   # Drop non-models if need be
-  if (only_models && any(is_model == FALSE)) {
+  if (only_models && any(!is_model)) {
     if (isTRUE(verbose)) {
       format_warning(paste(
-        paste0(object_names[is_model == FALSE], collapse = ", "),
+        paste0(object_names[!is_model], collapse = ", "),
         "are not supported models and have been dropped."
       ))
     }

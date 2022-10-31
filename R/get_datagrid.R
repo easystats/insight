@@ -257,7 +257,7 @@ get_datagrid.data.frame <- function(x,
 
     # Create target list of factors -----------------------------------------
     facs <- list()
-    for (fac in specs[specs$is_factor == TRUE, "varname"]) {
+    for (fac in specs[specs$is_factor, "varname"]) {
       facs[[fac]] <- get_datagrid(
         x[[fac]],
         at = specs[specs$varname == fac, "expression"]
@@ -266,7 +266,7 @@ get_datagrid.data.frame <- function(x,
 
     # Create target list of numerics ----------------------------------------
     nums <- list()
-    numvars <- specs[specs$is_factor == FALSE, "varname"]
+    numvars <- specs[!specs$is_factor, "varname"]
     if (length(numvars)) {
       # Sanitize 'length' argument
       if (length(length) == 1) {
@@ -308,7 +308,7 @@ get_datagrid.data.frame <- function(x,
     targets <- tryCatch(targets[specs$varname], error = function(e) targets)
 
     # Preserve range ---------------------------------------------------------
-    if (preserve_range == TRUE && length(facs) > 0 && length(nums) > 0) {
+    if (preserve_range && length(facs) > 0 && length(nums) > 0) {
       # Loop through the combinations of factors
       facs_combinations <- expand.grid(facs)
       for (i in seq_len(nrow(facs_combinations))) {
@@ -405,7 +405,7 @@ get_datagrid.data.frame <- function(x,
 
 #' @keywords internal
 .get_datagrid_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE, ...) {
-  if (na.rm == TRUE) x <- stats::na.omit(x)
+  if (na.rm) x <- stats::na.omit(x)
 
   if (is.numeric(x)) {
     if (is.numeric(numerics)) {
