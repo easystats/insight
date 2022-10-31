@@ -281,7 +281,7 @@ reshaped into a long format by \code{bayestestR::reshape_iterations(iter)}.
 data(mtcars)
 x <- lm(mpg ~ cyl + hp, data = mtcars)
 
-predictions <- get_predicted(x, ci = .95)
+predictions <- get_predicted(x, ci = 0.95)
 predictions
 
 # Options and methods ---------------------
@@ -305,19 +305,19 @@ data <- droplevels(iris[1:100, ])
 x <- glm(Species ~ Sepal.Length, data = data, family = "binomial")
 
 # Expectation (default): response scale + CI
-pred <- get_predicted(x, predict = "expectation", ci = .95)
+pred <- get_predicted(x, predict = "expectation", ci = 0.95)
 head(as.data.frame(pred))
 
 # Prediction: response scale + PI
-pred <- get_predicted(x, predict = "prediction", ci = .95)
+pred <- get_predicted(x, predict = "prediction", ci = 0.95)
 head(as.data.frame(pred))
 
 # Link: link scale + CI
-pred <- get_predicted(x, predict = "link", ci = .95)
+pred <- get_predicted(x, predict = "link", ci = 0.95)
 head(as.data.frame(pred))
 
 # Classification: classification "type" + PI
-pred <- get_predicted(x, predict = "classification", ci = .95)
+pred <- get_predicted(x, predict = "classification", ci = 0.95)
 head(as.data.frame(pred))
 
 }
