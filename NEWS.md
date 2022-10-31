@@ -1,5 +1,10 @@
 # insight 0.18.7
 
+## Changes to functions
+
+* `ellipses_info()` now includes an attribute `$is_binomial`, which is `TRUE`
+  for each model from binomial family.
+
 ## Bug fixes
 
 * Fixed behaviour of the `at` argument in `get_datagrid()`.
