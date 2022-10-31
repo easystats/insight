@@ -426,7 +426,7 @@ reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, ci <span class="op">=</span> <span class="fl">.95</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, ci <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Predicted values:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -538,7 +538,7 @@ reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">~</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Expectation (default): response scale + CI</span></span></span>
-<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"expectation"</span>, ci <span class="op">=</span> <span class="fl">.95</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"expectation"</span>, ci <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted         SE      CI_low    CI_high</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.16579367 0.05943589 0.078854431 0.31573138</span>
@@ -549,7 +549,7 @@ reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.48159935 0.07901420 0.333158095 0.63336131</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Prediction: response scale + PI</span></span></span>
-<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"prediction"</span>, ci <span class="op">=</span> <span class="fl">.95</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"prediction"</span>, ci <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Predicted       CI_low      CI_high</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.16579367 2.220446e-16 1.000000e+00</span>
@@ -560,7 +560,7 @@ reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.48159935 2.220446e-16 1.000000e+00</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Link: link scale + CI</span></span></span>
-<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"link"</span>, ci <span class="op">=</span> <span class="fl">.95</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"link"</span>, ci <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Predicted        SE     CI_low    CI_high</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.61573668 0.4297415 -2.4580146 -0.7734588</span>
@@ -571,7 +571,7 @@ reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 -0.07363584 0.3164854 -0.6939359  0.5466642</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Classification: classification "type" + PI</span></span></span>
-<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"classification"</span>, ci <span class="op">=</span> <span class="fl">.95</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, predict <span class="op">=</span> <span class="st">"classification"</span>, ci <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Predicted CI_low    CI_high</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    setosa setosa versicolor</span>
