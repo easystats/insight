@@ -69,6 +69,7 @@ if (requiet("testthat") && requiet("insight")) {
     expect_true(all(attributes(info)$is_binomial))
     expect_false(any(attributes(info)$is_linear))
   })
+
   if (requiet("lme4")) {
     data(sleepstudy)
     m1 <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
