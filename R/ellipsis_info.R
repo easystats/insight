@@ -75,7 +75,7 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
   }
 
   # Check whether all are models
-  is_model <- sapply(objects, insight::is_model)
+  is_model <- vapply(objects, is_model, logical(1))
 
   # Drop non-models if need be
   if (only_models && any(!is_model)) {
