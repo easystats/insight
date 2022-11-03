@@ -204,7 +204,7 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.systemfit <- function(x, verbose = TRUE, ...) {
-  df <- c()
+  df <- NULL
   s <- summary(x)$eq
   params <- find_parameters(x)
   f <- find_formula(x)

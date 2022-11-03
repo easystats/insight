@@ -864,7 +864,7 @@ get_statistic.multinom <- function(x, ...) {
   stderr <- summary(x)$standard.errors
 
   if (is.matrix(stderr)) {
-    se <- c()
+    se <- NULL
     for (i in seq_len(nrow(stderr))) {
       se <- c(se, as.vector(stderr[i, ]))
     }

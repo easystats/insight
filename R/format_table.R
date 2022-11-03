@@ -220,7 +220,8 @@ format_table <- function(x,
     x$Link <- paste(x$To, x$Operator, x$From)
 
     col_position <- which(names(x) == "To")
-    x <- x[c(names(x)[0:(col_position - 1)], "Link", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
+    # Replace at initial position
+    x <- x[c(names(x)[0:(col_position - 1)], "Link", names(x)[col_position:(length(names(x)) - 1)])]
     x$To <- x$Operator <- x$From <- NULL
   }
 
@@ -557,7 +558,7 @@ format_table <- function(x,
       x[[paste0(i, "_CI")]] <- NULL
     }
   } else {
-    other_ci_colname <- c()
+    other_ci_colname <- NULL
   }
 
   list(x = x, other_ci_colname = other_ci_colname)
@@ -705,7 +706,8 @@ format_table <- function(x,
     x$Prior <- trim_ws(gsub("( +- )", "", x$Prior, fixed = TRUE))
 
     col_position <- which(names(x) == "Prior_Distribution")
-    x <- x[c(names(x)[0:(col_position - 1)], "Prior", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
+    # Replace at initial position
+    x <- x[c(names(x)[0:(col_position - 1)], "Prior", names(x)[col_position:(length(names(x)) - 1)])]
     x$Prior_Distribution <- x$Prior_Location <- x$Prior_Scale <- x$Prior_df <- NULL
   }
 

@@ -164,7 +164,7 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   attr(objects, "same_response") <- isTRUE(same_response)
 
   # Check if nested
-  is_nested_increasing <- is_nested_decreasing <- same_fixef <- c()
+  is_nested_increasing <- is_nested_decreasing <- same_fixef <- NULL
   len <- length(objects)
 
   for (i in 2:len) {
@@ -211,7 +211,7 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
   # if we have mixed models, check for nested random effects
   if (all(mixed_models)) {
-    re_nested_increasing <- re_nested_decreasing <- same_ranef <- c()
+    re_nested_increasing <- re_nested_decreasing <- same_ranef <- NULL
     len <- length(objects)
 
     for (i in 2:len) {

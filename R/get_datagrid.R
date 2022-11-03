@@ -323,7 +323,7 @@ get_datagrid.data.frame <- function(x,
         }
 
         # Else, filter given the range of numerics
-        rows_to_remove <- c()
+        rows_to_remove <- NULL
         for (num in names(nums)) {
           mini <- min(subset[[num]], na.rm = TRUE)
           maxi <- max(subset[[num]], na.rm = TRUE)

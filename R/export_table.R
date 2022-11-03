@@ -276,7 +276,7 @@ export_table <- function(x,
     # insert new lines between tables, but this is only needed
     # for text or markdown tables
 
-    out <- c()
+    out <- NULL
     if (format == "text") {
       for (i in seq_along(tmp)) {
         out <- paste0(out, tmp[[i]], "\n")
@@ -886,7 +886,7 @@ print.insight_table <- function(x, ...) {
   }
 
   # Transform to character
-  rows <- c()
+  rows <- NULL
   for (row in seq_len(nrow(final))) {
     final_row <- paste0("|", paste0(final[row, ], collapse = "|"), "|", collapse = "")
     rows <- c(rows, final_row)
@@ -1006,7 +1006,7 @@ print.insight_table <- function(x, ...) {
     if (align == "firstleft") {
       out[["_boxhead"]]$column_align[1] <- "left"
     } else {
-      col_align <- c()
+      col_align <- NULL
       for (i in 1:nchar(align)) {
         col_align <- c(col_align, switch(substr(align, i, i),
           "l" = "left",
