@@ -5,9 +5,6 @@
 * `ellipses_info()` now includes an attribute `$is_binomial`, which is `TRUE`
   for each model from binomial family.
 
-* `export_table()` gets a `html_options` argument, which - when
-  `format = "html"` - is passed down to `gt::tab_options()`.
-
 ## Bug fixes
 
 * Fixed behaviour of the `at` argument in `get_datagrid()`.

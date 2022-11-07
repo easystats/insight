@@ -23,7 +23,6 @@ export_table(
   group_by = NULL,
   zap_small = FALSE,
   table_width = NULL,
-  html_options = NULL,
   verbose = TRUE,
   ...
 )
@@ -104,9 +103,6 @@ width (i.e. line length) of the console (or any other source for textual
 output, like markdown files), the table is split into two parts. Else,
 if \code{table_width} is numeric and table rows are larger than \code{table_width},
 the table is split into two parts.}
-
-\item{html_options}{List of options passed down to \code{gt::tab_options()}. Only
-applies when \code{format = "HTML"}.}
 
 \item{verbose}{Toggle messages and warnings.}
 
