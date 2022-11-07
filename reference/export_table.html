@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.6.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.6.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,6 +111,7 @@
 <span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  table_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  html_options <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -224,6 +225,11 @@ width (i.e. line length) of the console (or any other source for textual
 output, like markdown files), the table is split into two parts. Else,
 if <code>table_width</code> is numeric and table rows are larger than <code>table_width</code>,
 the table is split into two parts.</p></dd>
+
+
+<dt>html_options</dt>
+<dd><p>List of options passed down to <code><a href="https://gt.rstudio.com/reference/tab_options.html" class="external-link">gt::tab_options()</a></code>. Only
+applies when <code>format = "HTML"</code>.</p></dd>
 
 
 <dt>verbose</dt>
