@@ -47,6 +47,8 @@
 #'   output, like markdown files), the table is split into two parts. Else,
 #'   if `table_width` is numeric and table rows are larger than `table_width`,
 #'   the table is split into two parts.
+#' @param html_options List of options passed down to `gt::tab_options()`. Only
+#' applies when `format = "HTML"`.
 #' @param ... Currently not used.
 #' @inheritParams format_value
 #' @inheritParams get_data
@@ -119,6 +121,7 @@ export_table <- function(x,
                          group_by = NULL,
                          zap_small = FALSE,
                          table_width = NULL,
+                         html_options = NULL,
                          verbose = TRUE,
                          ...) {
   # check args
@@ -197,7 +200,8 @@ export_table <- function(x,
       empty_line = empty_line,
       indent_groups = indent_groups,
       indent_rows = indent_rows,
-      table_width = table_width
+      table_width = table_width,
+      html_options = html_options
     )
   } else if (is.list(x)) {
     # table from list of data frames -----------------------------------------
@@ -269,7 +273,8 @@ export_table <- function(x,
         empty_line = empty_line,
         indent_groups = indent_groups,
         indent_rows = indent_rows,
-        table_width = table_width
+        table_width = table_width,
+        html_options = html_options
       )
     })
 
@@ -350,7 +355,8 @@ print.insight_table <- function(x, ...) {
                           empty_line = NULL,
                           indent_groups = NULL,
                           indent_rows = NULL,
-                          table_width = NULL) {
+                          table_width = NULL,
+                          html_options = NULL) {
   df <- as.data.frame(x)
 
   # check width argument, for format value. cannot have
@@ -391,7 +397,8 @@ print.insight_table <- function(x, ...) {
       align = align,
       group_by = group_by,
       indent_groups = indent_groups,
-      indent_rows = indent_rows
+      indent_rows = indent_rows,
+      html_options = html_options
     )
 
     # text and markdown go here...
@@ -931,7 +938,8 @@ print.insight_table <- function(x, ...) {
                                align = "center",
                                group_by = NULL,
                                indent_groups = NULL,
-                               indent_rows = NULL) {
+                               indent_rows = NULL,
+                               html_options = NULL) {
   # installed?
   check_if_installed("gt")
 
@@ -1000,6 +1008,10 @@ print.insight_table <- function(x, ...) {
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
   footer <- gt::tab_source_note(header, source_note = gt::html(footer))
   out <- gt::cols_align(footer, align = "center")
+  # extra options?
+  if (!is.null(html_options)) {
+    out <- do.call(gt::tab_options, list(out, html_options))
+  }
 
   # align columns
   if (!is.null(out[["_boxhead"]]) && !is.null(out[["_boxhead"]]$column_align)) {
