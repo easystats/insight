@@ -153,7 +153,6 @@ get_predicted.glmmTMB <- function(x,
       newdata = data,
       type = "zprob",
       re.form = args$re.form,
-      unconditional = FALSE,
       ...
     )
     predictions <- link_inverse(x)(predictions) * (1 - as.vector(zi_predictions))
