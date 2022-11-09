@@ -24,7 +24,7 @@
 
 ## Bug fixes
 
-* Better dectection of unicode-support, to avoid failures when building
+* Better detection of unicode-support, to avoid failures when building
   vignettes.
 
 * `get_predicted()` now correctly handles variables of class numeric matrix
