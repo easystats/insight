@@ -9,6 +9,8 @@
 
 * Fixed behaviour of the `at` argument in `get_datagrid()`.
 
+* Fixed issue for accessing model data in `get_datagrid()` for some edge cases.
+
 # insight 0.18.6
 
 ## New supported models
