@@ -22,7 +22,7 @@ objects. These tools aid applied research in virtually any field who fit,
 diagnose, and present statistical models by streamlining access to every
 aspect of many model objects via consistent syntax and output.
 
-References: Lüdecke et al. (2019) \url{doi:10.21105/joss.01412}.
+References: Lüdecke et al. (2019) \doi{10.21105/joss.01412}.
 }
 \seealso{
 Useful links:
@@ -49,6 +49,7 @@ Other contributors:
 \itemize{
   \item Alex Hayes \email{alexpghayes@gmail.com} (\href{https://orcid.org/0000-0002-4985-5160}{ORCID}) [reviewer]
   \item Grant McDermott \email{grantmcd@uoregon.edu} (\href{https://orcid.org/0000-0001-7883-8573}{ORCID}) [contributor]
+  \item Rémi Thériault \email{remi.theriault@mail.mcgill.ca} (\href{https://orcid.org/0000-0003-4315-6788}{ORCID}) (@rempsyc) [contributor]
 }
 
 }

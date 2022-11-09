@@ -335,15 +335,7 @@ get_data.glmmTMB <- function(x, effects = "all", component = "all", verbose = TR
     verbose = FALSE
   )
 
-  mf <- tryCatch(
-    {
-      stats::model.frame(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
   mf <- .prepare_get_data(x, mf, effects, verbose = verbose)
 
   # add variables from other model components
@@ -682,13 +674,8 @@ get_data.glimML <- function(x, effects = "all", verbose = TRUE, ...) {
 
 #' @export
 get_data.lavaan <- function(x, verbose = TRUE, ...) {
-  mf <- tryCatch(
-    {
-      .get_S4_data_from_env(x)
-    },
-    error = function(x) {
-      NULL
-    }
+  mf <- tryCatch(.recover_data_from_environment(x),
+    error = function(x) NULL
   )
 
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
@@ -813,7 +800,21 @@ get_data.plm <- function(x, verbose = TRUE, ...) {
   mf <- stats::model.frame(x)
   model_terms <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
   cn <- colnames(mf)
-  mf <- as.data.frame(lapply(mf, as.vector))
+  mf <- as.data.frame(lapply(mf, function(i) {
+    if (is.factor(i)) {
+      as.factor(i)
+    } else if (is.character(i)) {
+      as.character(i)
+    } else if (is.integer(i)) {
+      as.integer(i)
+    } else if (is.numeric(i)) {
+      as.numeric(i)
+    } else if (is.logical(i)) {
+      as.logical(i)
+    } else {
+      as.vector(i)
+    }
+  }))
   colnames(mf) <- clean_names(cn)
 
   # find index variables

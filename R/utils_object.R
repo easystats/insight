@@ -20,7 +20,7 @@ is_empty_object <- function(x) {
     flag_empty <- TRUE
     if (nrow(x) > 0 && ncol(x) > 0) {
       i <- 0
-      while (flag_empty == TRUE && i <= ncol(x)) {
+      while (flag_empty && i <= ncol(x)) {
         i <- i + 1
         flag_empty <- all(is.na(x[[i]]))
       }

@@ -91,15 +91,15 @@ as *coefficients*.
 
 #### Response and Predictors
 
--   **response**: the outcome or response variable (dependent variable)
-    of a regression model.
--   **predictor**: independent variables of (the *fixed* part of) a
-    regression model. For mixed models, variables that are only in the
-    *random effects* part (i.e. grouping factors) of the model are not
-    returned as predictors by default. However, these can be included
-    using additional arguments in the function call, treating predictors
-    are “unique”. As such, if a variable appears as a fixed effect and a
-    random slope, it is treated as one (the same) predictor.
+- **response**: the outcome or response variable (dependent variable) of
+  a regression model.
+- **predictor**: independent variables of (the *fixed* part of) a
+  regression model. For mixed models, variables that are only in the
+  *random effects* part (i.e. grouping factors) of the model are not
+  returned as predictors by default. However, these can be included
+  using additional arguments in the function call, treating predictors
+  are “unique”. As such, if a variable appears as a fixed effect and a
+  random slope, it is treated as one (the same) predictor.
 
 #### Variables
 
@@ -117,10 +117,10 @@ and `poly(x, 2)`.
 
 #### Random Effects
 
--   **random slopes**: variables that are specified as random slopes in
-    a mixed effects model.
--   **random or grouping factors**: variables that are specified as
-    grouping variables in a mixed effects model.
+- **random slopes**: variables that are specified as random slopes in a
+  mixed effects model.
+- **random or grouping factors**: variables that are specified as
+  grouping variables in a mixed effects model.
 
 *Aren’t the predictors, terms and parameters the same thing?*
 
@@ -283,7 +283,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 215 model classes are supported.
+Currently, 216 model classes are supported.
 
 ``` r
 supported_models()
@@ -342,64 +342,64 @@ supported_models()
 #> [105] "lmodel2"                 "lmrob"                  
 #> [107] "lmRob"                   "logistf"                
 #> [109] "logitmfx"                "logitor"                
-#> [111] "LORgee"                  "lqm"                    
-#> [113] "lqmm"                    "lrm"                    
-#> [115] "manova"                  "MANOVA"                 
-#> [117] "marginaleffects"         "marginaleffects.summary"
-#> [119] "margins"                 "maxLik"                 
-#> [121] "mblogit"                 "mclogit"                
-#> [123] "mcmc"                    "mcmc.list"              
-#> [125] "MCMCglmm"                "mcp1"                   
-#> [127] "mcp12"                   "mcp2"                   
-#> [129] "med1way"                 "mediate"                
-#> [131] "merMod"                  "merModList"             
-#> [133] "meta_bma"                "meta_fixed"             
-#> [135] "meta_random"             "metaplus"               
-#> [137] "mhurdle"                 "mipo"                   
-#> [139] "mira"                    "mixed"                  
-#> [141] "MixMod"                  "mixor"                  
-#> [143] "mjoint"                  "mle"                    
-#> [145] "mle2"                    "mlm"                    
-#> [147] "mlogit"                  "mmclogit"               
-#> [149] "mmlogit"                 "model_fit"              
-#> [151] "multinom"                "mvord"                  
-#> [153] "negbinirr"               "negbinmfx"              
-#> [155] "ols"                     "onesampb"               
-#> [157] "orm"                     "pgmm"                   
-#> [159] "plm"                     "PMCMR"                  
-#> [161] "poissonirr"              "poissonmfx"             
-#> [163] "polr"                    "probitmfx"              
-#> [165] "psm"                     "Rchoice"                
-#> [167] "ridgelm"                 "riskRegression"         
-#> [169] "rjags"                   "rlm"                    
-#> [171] "rlmerMod"                "RM"                     
-#> [173] "rma"                     "rma.uni"                
-#> [175] "robmixglm"               "robtab"                 
-#> [177] "rq"                      "rqs"                    
-#> [179] "rqss"                    "rvar"                   
-#> [181] "Sarlm"                   "scam"                   
-#> [183] "selection"               "sem"                    
-#> [185] "SemiParBIV"              "semLm"                  
-#> [187] "semLme"                  "slm"                    
-#> [189] "speedglm"                "speedlm"                
-#> [191] "stanfit"                 "stanmvreg"              
-#> [193] "stanreg"                 "summary.lm"             
-#> [195] "survfit"                 "survreg"                
-#> [197] "svy_vglm"                "svychisq"               
-#> [199] "svyglm"                  "svyolr"                 
-#> [201] "t1way"                   "tobit"                  
-#> [203] "trimcibt"                "truncreg"               
-#> [205] "vgam"                    "vglm"                   
-#> [207] "wbgee"                   "wblm"                   
-#> [209] "wbm"                     "wmcpAKP"                
-#> [211] "yuen"                    "yuend"                  
-#> [213] "zcpglm"                  "zeroinfl"               
-#> [215] "zerotrunc"
+#> [111] "logitr"                  "LORgee"                 
+#> [113] "lqm"                     "lqmm"                   
+#> [115] "lrm"                     "manova"                 
+#> [117] "MANOVA"                  "marginaleffects"        
+#> [119] "marginaleffects.summary" "margins"                
+#> [121] "maxLik"                  "mblogit"                
+#> [123] "mclogit"                 "mcmc"                   
+#> [125] "mcmc.list"               "MCMCglmm"               
+#> [127] "mcp1"                    "mcp12"                  
+#> [129] "mcp2"                    "med1way"                
+#> [131] "mediate"                 "merMod"                 
+#> [133] "merModList"              "meta_bma"               
+#> [135] "meta_fixed"              "meta_random"            
+#> [137] "metaplus"                "mhurdle"                
+#> [139] "mipo"                    "mira"                   
+#> [141] "mixed"                   "MixMod"                 
+#> [143] "mixor"                   "mjoint"                 
+#> [145] "mle"                     "mle2"                   
+#> [147] "mlm"                     "mlogit"                 
+#> [149] "mmclogit"                "mmlogit"                
+#> [151] "model_fit"               "multinom"               
+#> [153] "mvord"                   "negbinirr"              
+#> [155] "negbinmfx"               "ols"                    
+#> [157] "onesampb"                "orm"                    
+#> [159] "pgmm"                    "plm"                    
+#> [161] "PMCMR"                   "poissonirr"             
+#> [163] "poissonmfx"              "polr"                   
+#> [165] "probitmfx"               "psm"                    
+#> [167] "Rchoice"                 "ridgelm"                
+#> [169] "riskRegression"          "rjags"                  
+#> [171] "rlm"                     "rlmerMod"               
+#> [173] "RM"                      "rma"                    
+#> [175] "rma.uni"                 "robmixglm"              
+#> [177] "robtab"                  "rq"                     
+#> [179] "rqs"                     "rqss"                   
+#> [181] "rvar"                    "Sarlm"                  
+#> [183] "scam"                    "selection"              
+#> [185] "sem"                     "SemiParBIV"             
+#> [187] "semLm"                   "semLme"                 
+#> [189] "slm"                     "speedglm"               
+#> [191] "speedlm"                 "stanfit"                
+#> [193] "stanmvreg"               "stanreg"                
+#> [195] "summary.lm"              "survfit"                
+#> [197] "survreg"                 "svy_vglm"               
+#> [199] "svychisq"                "svyglm"                 
+#> [201] "svyolr"                  "t1way"                  
+#> [203] "tobit"                   "trimcibt"               
+#> [205] "truncreg"                "vgam"                   
+#> [207] "vglm"                    "wbgee"                  
+#> [209] "wblm"                    "wbm"                    
+#> [211] "wmcpAKP"                 "yuen"                   
+#> [213] "yuend"                   "zcpglm"                 
+#> [215] "zeroinfl"                "zerotrunc"
 ```
 
--   **Didn’t find a model?** [File an
-    issue](https://github.com/easystats/insight/issues) and request
-    additional model-support in *insight*!
+- **Didn’t find a model?** [File an
+  issue](https://github.com/easystats/insight/issues) and request
+  additional model-support in *insight*!
 
 ## Citation
 

@@ -11,7 +11,8 @@
   if (.is_bayesian_model(x) && !inherits(x, c("bayesx", "blmerMod", "bglmerMod"))) {
     if (check_if_installed("bayestestR", quietly = TRUE)) {
       x <- tryCatch(bayestestR::bayesian_as_frequentist(x),
-                    error = function(e) NULL)
+        error = function(e) NULL
+      )
       if (is.null(x)) {
         format_warning("Can't extract degrees of freedom from Bayesian model.")
       }
@@ -203,7 +204,7 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.systemfit <- function(x, verbose = TRUE, ...) {
-  df <- c()
+  df <- NULL
   s <- summary(x)$eq
   params <- find_parameters(x)
   f <- find_formula(x)

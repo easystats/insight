@@ -111,7 +111,7 @@
 
   hurdle <- hurdle |
     grepl("hurdle", fitfam_lower, fixed = TRUE) |
-    grepl("^hu", fitfam, perl = TRUE) |
+    startsWith(fitfam, "hu") |
     grepl("truncated", fitfam, fixed = TRUE) |
     fitfam == "ztnbinom" |
     fitfam %in% c("truncpoiss", "truncnbinom", "truncnbinom1", "truncpoisson")

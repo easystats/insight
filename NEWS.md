@@ -1,3 +1,32 @@
+# insight 0.18.7
+
+## Changes to functions
+
+* `ellipses_info()` now includes an attribute `$is_binomial`, which is `TRUE`
+  for each model from binomial family.
+
+## Bug fixes
+
+* Fixed behaviour of the `at` argument in `get_datagrid()`.
+
+# insight 0.18.6
+
+## New supported models
+
+* Support the *logitr* package: `get_data()`, `find_variables()` and more.
+
+## Bug fixes
+
+* Better dectection of unicode-support, to avoid failures when building
+  vignettes.
+
+* `get_predicted()` now correctly handles variables of class numeric matrix
+  created by `scale()`, which fixes a bug in `performance::check_model()`
+  (easystats/performance#432).
+
+* Fixed issue with `iterations` argument in `get_predicted()` with _brms_
+  models.
+
 # insight 0.18.5
 
 ## Breaking
@@ -5,6 +34,12 @@
 * `get_df(type = "satterthwaite")` for `lmerMod` objects now return degrees of
   freedom per parameter, and no longer per observation. Use `df_per_obs TRUE`
   to return degrees of freedom per observation.
+
+## New functions
+
+* `safe_deparse_symbol()` to only deparses a substituted expressions when
+  possible,which increases performance in case many calls to
+  `deparse(substitute())`.
 
 ## Changes to functions
 
@@ -30,12 +65,15 @@
 
 ## Bug fixes
 
+* Fixed issue in `get_data()` for models of class `plm`, which accidentally
+  converted factors into character vectors.
+
 * Fixed issue with column alignment in `export_table()` when the data frame 
   to print contained unicode-characters longer than 1 byte.
 
 * Correctly extract predictors for `fixest::i(f1, i.f2)` interactions (#649 by 
   @grantmcdermott).
-
+  
 # insight 0.18.4
 
 ## Changes to functions

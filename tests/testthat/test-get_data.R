@@ -26,6 +26,32 @@ test_that("lm", {
 })
 
 
+test_that("get_data lavaan", {
+  requiet("lavaan")
+  data(PoliticalDemocracy)
+  model <- "
+    # latent variable definitions
+      ind60 =~ x1 + x2 + x3
+      dem60 =~ y1 + a*y2 + b*y3 + c*y4
+      dem65 =~ y5 + a*y6 + b*y7 + c*y8
+
+    # regressions
+      dem60 ~ ind60
+      dem65 ~ ind60 + dem60
+
+    # residual correlations
+      y1 ~~ y5
+      y2 ~~ y4 + y6
+      y3 ~~ y7
+      y4 ~~ y8
+      y6 ~~ y8
+  "
+  m <- sem(model, data = PoliticalDemocracy)
+  expect_s3_class(get_data(m), "data.frame")
+  expect_equal(head(get_data(m)), head(PoliticalDemocracy), ignore_attr = TRUE, tolerance = 1e-3)
+})
+
+
 test_that("get_data include weights, even if ones", {
   set.seed(123)
   y <- rnorm(100)
@@ -33,15 +59,15 @@ test_that("get_data include weights, even if ones", {
   wn <- runif(100)
   w1 <- rep(1, 100)
 
-  #Model with nonuniform weights
+  # Model with nonuniform weights
   fn <- lm(y ~ x, weights = wn)
   expect_equal(colnames(get_data(fn)), c("y", "x", "(weights)", "wn"))
 
-  #Model with weights equal to 1
+  # Model with weights equal to 1
   f1 <- lm(y ~ x, weights = w1)
   expect_equal(colnames(get_data(f1)), c("y", "x", "(weights)", "w1"))
 
-  #Model with no weights
+  # Model with no weights
   f0 <- lm(y ~ x)
   expect_equal(colnames(get_data(f0)), c("y", "x"))
 

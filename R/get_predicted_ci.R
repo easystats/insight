@@ -112,8 +112,8 @@ get_predicted_ci.default <- function(x,
   if (!is.null(se)) {
     ci_function <- .get_predicted_se_to_ci
   } else if (ci_type == "confidence" ||
-             identical(get_family(x)$family, "gaussian") ||
-             (!is.null(vcov) && is.matrix(vcov))) {
+    identical(get_family(x)$family, "gaussian") ||
+    (!is.null(vcov) && is.matrix(vcov))) {
     # gaussian or CI
     se <- get_predicted_se(
       x,
@@ -255,7 +255,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   if (isTRUE(ci_method %in% c("satterthwaite", "kr", "kenward", "kenward-roger"))) {
     dof <- .satterthwaite_kr_df_per_obs(x, type = ci_method, data = data)
   } else {
-    dof <- get_df(x, type = ci_method)
+    dof <- get_df(x, type = .check_df_type(ci_method))
   }
 
   # Return NA
@@ -415,7 +415,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   # Interval
   ci_method <- match.arg(
     tolower(ci_method),
-    c("quantile", "hdi", "eti", "spi", "satterthwaite", "normal", "wald")
+    c("quantile", "hdi", "eti", "spi", "bci", "satterthwaite", "normal", "wald")
   )
 
   if (ci_method == "quantile") {

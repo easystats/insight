@@ -208,7 +208,7 @@ format_table <- function(x,
 
 
   # Format remaining columns
-  other_cols <- names(x)[sapply(x, is.numeric)]
+  other_cols <- names(x)[vapply(x, is.numeric, logical(1))]
   x[other_cols[other_cols %in% names(x)]] <- format_value(
     x[other_cols[other_cols %in% names(x)]],
     digits = digits,
@@ -220,7 +220,8 @@ format_table <- function(x,
     x$Link <- paste(x$To, x$Operator, x$From)
 
     col_position <- which(names(x) == "To")
-    x <- x[c(names(x)[0:(col_position - 1)], "Link", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
+    # Replace at initial position
+    x <- x[c(names(x)[0:(col_position - 1)], "Link", names(x)[col_position:(length(names(x)) - 1)])]
     x$To <- x$Operator <- x$From <- NULL
   }
 
@@ -244,7 +245,6 @@ format_table <- function(x,
 # like bayestestR (p_ROPE, p_MAP) or performance (p_Chi2)
 
 .format_p_values <- function(x, stars = FALSE, p_digits) {
-
   # Specify stars for which column
   if (is.character(stars)) {
     starlist <- list("p" = FALSE)
@@ -558,7 +558,7 @@ format_table <- function(x,
       x[[paste0(i, "_CI")]] <- NULL
     }
   } else {
-    other_ci_colname <- c()
+    other_ci_colname <- NULL
   }
 
   list(x = x, other_ci_colname = other_ci_colname)
@@ -658,7 +658,6 @@ format_table <- function(x,
                                   ci_width = "auto",
                                   ci_brackets = TRUE,
                                   exact = TRUE) {
-
   # Specify stars for which column
   if (is.character(stars)) {
     starlist <- list("BF" = FALSE, "pd" = FALSE)
@@ -707,7 +706,8 @@ format_table <- function(x,
     x$Prior <- trim_ws(gsub("( +- )", "", x$Prior, fixed = TRUE))
 
     col_position <- which(names(x) == "Prior_Distribution")
-    x <- x[c(names(x)[0:(col_position - 1)], "Prior", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
+    # Replace at initial position
+    x <- x[c(names(x)[0:(col_position - 1)], "Prior", names(x)[col_position:(length(names(x)) - 1)])]
     x$Prior_Distribution <- x$Prior_Location <- x$Prior_Scale <- x$Prior_df <- NULL
   }
 
@@ -851,7 +851,7 @@ format_table <- function(x,
     {
       si <- Sys.info()
       if (!is.null(si["sysname"])) {
-        si["sysname"] == "Windows" || grepl("^mingw", R.version$os)
+        si["sysname"] == "Windows" || startsWith(R.version$os, "mingw")
       } else {
         FALSE
       }
@@ -860,5 +860,6 @@ format_table <- function(x,
       TRUE
     }
   )
-  (win_os && getRversion() >= "4.2") || (!win_os && getRversion() >= "4.0")
+
+  l10n_info()[["UTF-8"]] && ((win_os && getRversion() >= "4.2") || (!win_os && getRversion() >= "4.0"))
 }

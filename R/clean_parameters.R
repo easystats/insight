@@ -710,8 +710,8 @@ clean_parameters.mlm <- function(x, ...) {
         } else if (grepl(":", i[1], fixed = TRUE)) {
           f <- unlist(strsplit(i[1], ":", fixed = TRUE))
           l <- unlist(strsplit(i[2], ".&.", fixed = TRUE))
-
-          matches <- stats::na.omit(match(f, l))
+          m <- match(f, l)
+          matches <- m[!is.na(m)]
           l[matches] <- ""
           l[-matches] <- paste0("[", l[-matches], "]")
           i[1] <- paste0(f, l, collapse = " * ")

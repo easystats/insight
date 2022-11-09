@@ -90,7 +90,7 @@ df %>%
 
 With `use_symbols = TRUE`, it is possible to render certain effect size names as symbols, if these are used as column names. Note that this only works on OS X or Linux, or on Windows from R 4.2 or higher.
 
-```{r}
+```{r eval=.Platform$OS.type == "windows"}
 x <- data.frame(
   phi_adjusted = .3,
   Glass_delta = .4,
@@ -107,7 +107,7 @@ format_table(x, use_symbols = TRUE)
 
 In combination with `export_table()` (see next section), this will give you nicely formatted tables.
 
-```{r}
+```{r eval=.Platform$OS.type == "windows"}
 export_table(format_table(x, use_symbols = TRUE))
 ```
 

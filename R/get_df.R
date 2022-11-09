@@ -124,11 +124,11 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   if (type == "normal") {
     return(Inf)
 
-  # residual/analytical df, falls back to Inf if we have no residual df method -----
+    # residual/analytical df, falls back to Inf if we have no residual df method -----
   } else if (type == "residual") {
     dof <- .get_residual_df(x, verbose)
 
-  # Wald df - always Inf for z-statistic, 1 for Chi2-statistic, else residual df -----
+    # Wald df - always Inf for z-statistic, 1 for Chi2-statistic, else residual df -----
   } else if (type == "wald") {
     # z-statistic always Inf, *unless* we have residual df (which we have for some models)
     if (identical(statistic, "z-statistic")) {
@@ -141,15 +141,15 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     # Wald t-statistic
     dof <- .get_residual_df(x, verbose)
 
-  # ml1 - only for certain mixed models -----
+    # ml1 - only for certain mixed models -----
   } else if (type == "ml1") {
     dof <- .degrees_of_freedom_ml1(x)
 
-  # between-within - only for certain mixed models -----
+    # between-within - only for certain mixed models -----
   } else if (type == "betwithin") {
     dof <- .degrees_of_freedom_betwithin(x)
 
-  # remaining option is model-based df, i.e. number of estimated parameters
+    # remaining option is model-based df, i.e. number of estimated parameters
   } else {
     dof <- .model_df(x)
   }
@@ -234,9 +234,12 @@ get_df.fixest <- function(x, type = "residual", ...) {
 get_df.lmerMod <- function(x, type = "residual", ...) {
   type <- match.arg(
     tolower(type),
-    choices = c("residual", "model", "analytical", "satterthwaite", "kenward",
-                "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin")
+    choices = c(
+      "residual", "model", "analytical", "satterthwaite", "kenward",
+      "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin"
+    )
   )
+
   dots <- list(...)
 
   if (type %in% c("satterthwaite", "kr", "kenward", "kenward-roger") && isTRUE(dots$df_per_obs)) {
@@ -258,9 +261,7 @@ get_df.lme <- get_df.lmerMod
 
 
 
-
 # Other models ------------------
-
 
 #' @export
 get_df.logitor <- function(x, type = "residual", verbose = TRUE, ...) {
@@ -316,7 +317,6 @@ get_df.mipo <- function(x, type = "residual", ...) {
 
 
 
-
 # not yet supported --------------------
 
 #' @export
@@ -326,9 +326,7 @@ get_df.mediate <- function(x, ...) {
 
 
 
-
 # Analytical approach ------------------------------
-
 
 .get_residual_df <- function(x, verbose = TRUE) {
   dof <- .degrees_of_freedom_residual(x, verbose = verbose)
@@ -353,9 +351,7 @@ get_df.mediate <- function(x, ...) {
 
 
 
-
 # Model approach (model-based / logLik df) ------------------------------
-
 
 .model_df <- function(x) {
   dof <- tryCatch(attr(stats::logLik(x), "df"), error = function(e) NULL)
@@ -384,4 +380,16 @@ get_df.mediate <- function(x, ...) {
 .boot_em_df <- function(model) {
   est <- get_parameters(model, summary = FALSE)
   rep(NA, ncol(est))
+}
+
+
+
+# tools ----------------
+
+.check_df_type <- function(type) {
+  # handle mixing of ci_method and type arguments
+  if (tolower(type) %in% c("profile", "uniroot", "quantile", "eti", "hdi", "bci", "boot", "spi")) {
+    type <- "residual"
+  }
+  type
 }

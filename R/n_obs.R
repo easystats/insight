@@ -200,6 +200,12 @@ n_obs.mediate <- function(x, ...) {
 
 
 #' @export
+n_obs.logitr <- function(x, ...) {
+  x$n$obs
+}
+
+
+#' @export
 n_obs.garch <- function(x, ...) {
   x$n.used
 }

@@ -6,6 +6,7 @@
 \alias{n_unique}
 \alias{n_unique.default}
 \alias{safe_deparse}
+\alias{safe_deparse_symbol}
 \title{Small helper functions}
 \usage{
 trim_ws(x, ...)
@@ -17,6 +18,8 @@ n_unique(x, ...)
 \method{n_unique}{default}(x, na.rm = TRUE, ...)
 
 safe_deparse(x, ...)
+
+safe_deparse_symbol(x)
 }
 \arguments{
 \item{x}{A (character) vector, or for some functions may also be a data frame.}
@@ -39,7 +42,10 @@ Collection of small helper functions. \code{trim_ws()} is an
 efficient function to trim leading and trailing whitespaces from character
 vectors or strings. \code{n_unique()} returns the number of unique values in a
 vector. \code{safe_deparse()} is comparable to \code{deparse1()}, i.e. it can safely
-deparse very long expressions into a single string.
+deparse very long expressions into a single string. \code{safe_deparse_symbol()}
+only deparses a substituted expressions when possible, which can be much faster
+than \code{deparse(substitute())} for those cases where \code{substitute()} returns no
+valid object name.
 }
 \examples{
 trim_ws("  no space!  ")

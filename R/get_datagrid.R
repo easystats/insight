@@ -19,7 +19,7 @@
 #'   will use a range of length `length` (evenly spread from minimum to maximum)
 #'   and for character vectors, will use all unique values.
 #'   - a list of named elements, indicating focal predictors and their representative
-#'   values, e.g. `at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))`.
+#'   values, e.g. `at = list(Sepal.Length = c(2, 4), Species = "setosa")`.
 #'   - a string with assignments, e.g. `at = "Sepal.Length = 2"` or
 #'   `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
 #'   and double quotes to assign strings within strings.
@@ -195,7 +195,7 @@ get_datagrid.data.frame <- function(x,
                                     range = "range",
                                     ...) {
   # find numerics that were coerced to factor in-formula
-  numeric_factors <- colnames(x)[sapply(x, function(i) isTRUE(attributes(i)$factor))]
+  numeric_factors <- colnames(x)[vapply(x, function(i) isTRUE(attributes(i)$factor), logical(1))]
 
   specs <- NULL
 
@@ -206,6 +206,17 @@ get_datagrid.data.frame <- function(x,
     at <- .extract_at_interactions(at)
 
     # Validate at argument ============================
+
+    # if list, convert to character
+    if (is.list(at)) {
+      at <- unname(vapply(names(at), function(i) {
+        if (is.numeric(at[[i]])) {
+          paste0(i, " = c(", toString(at[[i]]), ")")
+        } else {
+          paste0(i, " = c(", toString(sprintf("'%s'", at[[i]])), ")")
+        }
+      }, character(1)))
+    }
 
     if (all(at == "all")) {
       at <- colnames(x)
@@ -237,61 +248,55 @@ get_datagrid.data.frame <- function(x,
 
     # Deal with targets =======================================================
 
-    if (is.character(at)) {
-      # Find eventual user-defined specifications for each target
-      specs <- do.call(rbind, lapply(at, .get_datagrid_clean_target, x = x))
-      specs$varname <- as.character(specs$varname) # make sure it's a string not fac
-      specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
+    # Find eventual user-defined specifications for each target
+    specs <- do.call(rbind, lapply(at, .get_datagrid_clean_target, x = x))
+    specs$varname <- as.character(specs$varname) # make sure it's a string not fac
+    specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
-      specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
+    specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
 
-      # Create target list of factors -----------------------------------------
-      facs <- list()
-      for (fac in specs[specs$is_factor == TRUE, "varname"]) {
-        facs[[fac]] <- get_datagrid(
-          x[[fac]],
-          at = specs[specs$varname == fac, "expression"]
+    # Create target list of factors -----------------------------------------
+    facs <- list()
+    for (fac in specs[specs$is_factor, "varname"]) {
+      facs[[fac]] <- get_datagrid(
+        x[[fac]],
+        at = specs[specs$varname == fac, "expression"]
+      )
+    }
+
+    # Create target list of numerics ----------------------------------------
+    nums <- list()
+    numvars <- specs[!specs$is_factor, "varname"]
+    if (length(numvars)) {
+      # Sanitize 'length' argument
+      if (length(length) == 1) {
+        length <- rep(length, length(numvars))
+      } else if (length(length) != length(numvars)) {
+        format_error(
+          "The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ")."
+        )
+      }
+      # Sanitize 'range' argument
+      if (length(range) == 1) {
+        range <- rep(range, length(numvars))
+      } else if (length(range) != length(numvars)) {
+        format_error(
+          "The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."
         )
       }
 
-      # Create target list of numerics ----------------------------------------
-      nums <- list()
-      numvars <- specs[specs$is_factor == FALSE, "varname"]
-      if (length(numvars)) {
-        # Sanitize 'length' argument
-        if (length(length) == 1) {
-          length <- rep(length, length(numvars))
-        } else if (length(length) != length(numvars)) {
-          format_error(
-            "The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ")."
-          )
-        }
-        # Sanitize 'range' argument
-        if (length(range) == 1) {
-          range <- rep(range, length(numvars))
-        } else if (length(range) != length(numvars)) {
-          format_error(
-            "The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."
-          )
-        }
-
-        # Get datagrids
-        for (i in seq_along(numvars)) {
-          num <- numvars[i]
-          nums[[num]] <- get_datagrid(x[[num]],
-            at = specs[specs$varname == num, "expression"],
-            reference = reference[[num]],
-            length = length[i],
-            range = range[i],
-            is_first_predictor = specs$varname[1] == num,
-            ...
-          )
-        }
+      # Get datagrids
+      for (i in seq_along(numvars)) {
+        num <- numvars[i]
+        nums[[num]] <- get_datagrid(x[[num]],
+          at = specs[specs$varname == num, "expression"],
+          reference = reference[[num]],
+          length = length[i],
+          range = range[i],
+          is_first_predictor = specs$varname[1] == num,
+          ...
+        )
       }
-    } else if (is.list(at)) {
-      # we have a list as at-values
-      facs <- at[sapply(x[names(at)], is.factor)]
-      nums <- at[sapply(x[names(at)], is.numeric)]
     }
 
     # Assemble the two - the goal is to have two named lists, where variable
@@ -303,7 +308,7 @@ get_datagrid.data.frame <- function(x,
     targets <- tryCatch(targets[specs$varname], error = function(e) targets)
 
     # Preserve range ---------------------------------------------------------
-    if (preserve_range == TRUE && length(facs) > 0 && length(nums) > 0) {
+    if (preserve_range && length(facs) > 0 && length(nums) > 0) {
       # Loop through the combinations of factors
       facs_combinations <- expand.grid(facs)
       for (i in seq_len(nrow(facs_combinations))) {
@@ -318,7 +323,7 @@ get_datagrid.data.frame <- function(x,
         }
 
         # Else, filter given the range of numerics
-        rows_to_remove <- c()
+        rows_to_remove <- NULL
         for (num in names(nums)) {
           mini <- min(subset[[num]], na.rm = TRUE)
           maxi <- max(subset[[num]], na.rm = TRUE)
@@ -400,7 +405,7 @@ get_datagrid.data.frame <- function(x,
 
 #' @keywords internal
 .get_datagrid_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE, ...) {
-  if (na.rm == TRUE) x <- stats::na.omit(x)
+  if (na.rm) x <- stats::na.omit(x)
 
   if (is.numeric(x)) {
     if (is.numeric(numerics)) {
@@ -808,6 +813,13 @@ get_datagrid.default <- function(x,
 }
 
 
+#' @export
+get_datagrid.logitr <- function(x, ...) {
+  datagrid <- get_datagrid.default(x, ...)
+  obsID <- parse(text = safe_deparse(get_call(x)))[[1]]$obsID
+  datagrid[[obsID]] <- x$data[[obsID]][1]
+  datagrid
+}
 
 
 #' @export

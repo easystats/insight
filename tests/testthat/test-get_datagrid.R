@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight")) {
+if (requiet("testthat") && requiet("insight") && getRversion() >= "4.0.0") {
   m1 <- lm(hp ~ ordered(cyl), data = mtcars)
   m2 <- lm(hp ~ as.ordered(cyl), data = mtcars)
   m3 <- lm(hp ~ as.factor(cyl), data = mtcars)
@@ -76,10 +76,21 @@ if (requiet("testthat") && requiet("insight")) {
     dg <- insight::get_datagrid(m, c("Species", "Petal.Width"))
     expect_equal(colnames(dg), c("Species", "Petal.Width", "Petal.Length"))
   })
+
+
+  # list-argument
+  test_that("get_datagrid - list-argument", {
+    at <- list(Sepal.Length = c(3, 5), Species = c("versicolor", "virginica"))
+    dg1 <- get_datagrid(iris, at = at)
+    at <- c("Sepal.Length = c(3, 5)", "Species = c('versicolor', 'virginica')")
+    dg2 <- get_datagrid(iris, at = at)
+
+    expect_equal(dg1, dg2, tolerance = 1e-4)
+  })
 }
 
 
-if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
+if (requiet("testthat") && requiet("insight") && requiet("bayestestR") && getRversion() >= "4.0.0") {
   test_that("get_datagrid - data", {
     # Factors
     expect_equal(length(get_datagrid(iris$Species)), 3)
@@ -135,7 +146,7 @@ if (requiet("testthat") && requiet("insight") && requiet("bayestestR")) {
 
 
 
-if (requiet("testthat") && requiet("insight") && requiet("gamm4") && requiet("glmmTMB") && requiet("mgcv") && requiet("rstanarm")) {
+if (requiet("testthat") && requiet("insight") && requiet("gamm4") && getRversion() >= "4.0.0" && requiet("glmmTMB") && requiet("mgcv") && requiet("rstanarm")) {
   test_that("get_datagrid - models", {
     # GLM
     mod <- glm(Petal.Length ~ Petal.Width * Sepal.Length, data = iris)

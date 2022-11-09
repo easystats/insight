@@ -1,5 +1,4 @@
 if (requiet("testthat") && requiet("insight")) {
-
   # t test ---------------
 
   x <- t.test(1:3, c(1, 1:3))

@@ -75,7 +75,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   }
 
   if (!is.null(w) && anyNA(w) && isTRUE(na_rm)) {
-    w <- stats::na.omit(w)
+    w <- w[!is.na(w)]
   }
 
   if (is.null(w) && isTRUE(null_as_ones)) {

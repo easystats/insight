@@ -164,7 +164,7 @@
 #' data(mtcars)
 #' x <- lm(mpg ~ cyl + hp, data = mtcars)
 #'
-#' predictions <- get_predicted(x, ci = .95)
+#' predictions <- get_predicted(x, ci = 0.95)
 #' predictions
 #'
 #' # Options and methods ---------------------
@@ -188,19 +188,19 @@
 #' x <- glm(Species ~ Sepal.Length, data = data, family = "binomial")
 #'
 #' # Expectation (default): response scale + CI
-#' pred <- get_predicted(x, predict = "expectation", ci = .95)
+#' pred <- get_predicted(x, predict = "expectation", ci = 0.95)
 #' head(as.data.frame(pred))
 #'
 #' # Prediction: response scale + PI
-#' pred <- get_predicted(x, predict = "prediction", ci = .95)
+#' pred <- get_predicted(x, predict = "prediction", ci = 0.95)
 #' head(as.data.frame(pred))
 #'
 #' # Link: link scale + CI
-#' pred <- get_predicted(x, predict = "link", ci = .95)
+#' pred <- get_predicted(x, predict = "link", ci = 0.95)
 #' head(as.data.frame(pred))
 #'
 #' # Classification: classification "type" + PI
-#' pred <- get_predicted(x, predict = "classification", ci = .95)
+#' pred <- get_predicted(x, predict = "classification", ci = 0.95)
 #' head(as.data.frame(pred))
 #'
 #' @export
@@ -316,11 +316,30 @@ get_predicted.lm <- function(x,
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
-  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
-
   predict_function <- function(x, data, ...) {
-    stats::predict(x, newdata = data, interval = "none", type = args$type, se.fit = FALSE, ...)
+    stats::predict(x,
+      newdata = data, interval = "none",
+      type = args$type, se.fit = FALSE, ...
+    )
   }
+
+  # 0. step: convert matrix variable types attributes to numeric, if necessary
+  dataClasses <- attributes(x[["terms"]])$dataClasses
+  # see https://github.com/easystats/insight/pull/671
+  if ("nmatrix.1" %in% dataClasses) {
+    dataClasses[dataClasses == "nmatrix.1"] <- "numeric"
+    attributes(x$terms)$dataClasses <- dataClasses
+    attributes(attributes(x$model)$terms)$dataClasses <- dataClasses
+    x$model[] <- lapply(x$model, function(x) {
+      if (all(class(x) == c("matrix", "array"))) {
+        as.numeric(x)
+      } else {
+        x
+      }
+    })
+  }
+
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   # 1. step: predictions
   if (is.null(iterations)) {

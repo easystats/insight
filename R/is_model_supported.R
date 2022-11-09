@@ -80,8 +80,8 @@ supported_models <- function() {
 
     # l ----------------------------
     "lavaan", "lm", "lm_robust", "lme", "lmrob", "lmRob", "lmerMod",
-    "lmerModLmerTest", "lmodel2", "logitmfx", "logitor", "logistf", "LORgee",
-    "lqm", "lqmm", "lrm",
+    "lmerModLmerTest", "lmodel2", "logitmfx", "logitor", "logistf", "logitr",
+    "LORgee", "lqm", "lqmm", "lrm",
 
     # m ----------------------------
     "manova", "MANOVA", "margins", "marginaleffects", "marginaleffects.summary",

@@ -238,7 +238,8 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
     }
     if (!is.null(info) && info$is_mixed) {
       s <- tryCatch(sqrt(get_variance_residual(x, verbose = FALSE)),
-                         error = function(e) NULL)
+        error = function(e) NULL
+      )
     }
   }
 

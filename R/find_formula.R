@@ -445,6 +445,23 @@ find_formula.betareg <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+find_formula.logitr <- function(x, verbose = TRUE, ...) {
+  f <- tryCatch(list(conditional = stats::formula(x)), error = function(x) NULL)
+  # formula() for logitr does not include outcome
+  # need to paste "outcome" value from call manually to the formula
+  f_cond <- trim_ws(safe_deparse(f$conditional))
+  if (startsWith(f_cond, "~")) {
+    resp <- parse(text = safe_deparse(get_call(x)))[[1]]$outcome
+    f$conditional <- stats::as.formula(paste(resp, f_cond))
+  }
+  # random effects?
+  ran_pars <- names(x$parIDs$r)
+  ## TODO @vincentarelbundock any ideas?
+  .find_formula_return(f, verbose = verbose)
+}
+
+
+#' @export
 find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
   if (length(attr(x, "within")) == 0L) {
     fff <- find_formula(x$lm, verbose = verbose, ...)

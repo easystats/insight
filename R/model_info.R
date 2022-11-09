@@ -169,6 +169,9 @@ model_info.mblogit <- model_info.mclogit
 #' @export
 model_info.mmclogit <- model_info.mclogit
 
+#' @export
+model_info.logitr <- model_info.mclogit
+
 
 #' @export
 model_info.maxLik <- function(x, verbose = TRUE, ...) {

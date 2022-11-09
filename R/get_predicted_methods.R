@@ -56,7 +56,7 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
     }
   }
 
-  if ("iterations" %in% names(attributes(x)) && (keep_iterations == TRUE || is.numeric(keep_iterations))) {
+  if ("iterations" %in% names(attributes(x)) && (keep_iterations || is.numeric(keep_iterations))) {
     iter <- attributes(x)$iterations
     if (is.numeric(keep_iterations)) {
       iter <- iter[1:keep_iterations]

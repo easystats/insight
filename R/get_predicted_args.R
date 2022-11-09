@@ -230,7 +230,7 @@
   if (!is.null(smooths)) {
     for (smooth in smooths) {
       # Fix smooth to average value
-      if (!smooth %in% names(data) || include_smooth == FALSE) {
+      if (!smooth %in% names(data) || !include_smooth) {
         include_smooth <- FALSE
         data[[smooth]] <- mean(get_data(x)[[smooth]], na.rm = TRUE)
       }

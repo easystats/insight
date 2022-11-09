@@ -228,8 +228,10 @@ if (requiet("testthat") &&
       function(x) {
         lme(as.formula(paste0("distance  ~ age", x)),
           random = ~1,
-          data = Orthodont)
-      })
+          data = Orthodont
+        )
+      }
+    )
     dat <- lapply(models, get_data)
     form <- lapply(models, find_formula)
     expect_s3_class(form[[1]], "insight_formula")
@@ -237,5 +239,4 @@ if (requiet("testthat") &&
     expect_s3_class(dat[[1]], "data.frame")
     expect_s3_class(dat[[2]], "data.frame")
   })
-
 }

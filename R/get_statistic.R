@@ -864,7 +864,7 @@ get_statistic.multinom <- function(x, ...) {
   stderr <- summary(x)$standard.errors
 
   if (is.matrix(stderr)) {
-    se <- c()
+    se <- NULL
     for (i in seq_len(nrow(stderr))) {
       se <- c(se, as.vector(stderr[i, ]))
     }
@@ -1421,7 +1421,7 @@ get_statistic.glht <- function(x, ...) {
 
 #' @rdname get_statistic
 #' @export
-get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters = FALSE, ...) {
+get_statistic.emmGrid <- function(x, ci = 0.95, adjust = "none", merge_parameters = FALSE, ...) {
   s <- summary(x, level = ci, adjust = adjust, infer = TRUE)
 
   stat <- s[["t.ratio"]]
@@ -1457,7 +1457,7 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters
 
 
 #' @export
-get_statistic.emm_list <- function(x, ci = .95, adjust = "none", ...) {
+get_statistic.emm_list <- function(x, ci = 0.95, adjust = "none", ...) {
   params <- get_parameters(x)
   s <- summary(x, level = ci, adjust = adjust, infer = TRUE)
 

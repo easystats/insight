@@ -75,13 +75,13 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
   }
 
   # Check whether all are models
-  is_model <- sapply(objects, insight::is_model)
+  is_model <- vapply(objects, is_model, logical(1))
 
   # Drop non-models if need be
-  if (only_models && any(is_model == FALSE)) {
+  if (only_models && any(!is_model)) {
     if (isTRUE(verbose)) {
       format_warning(paste(
-        paste0(object_names[is_model == FALSE], collapse = ", "),
+        paste0(object_names[!is_model], collapse = ", "),
         "are not supported models and have been dropped."
       ))
     }
@@ -164,7 +164,7 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   attr(objects, "same_response") <- isTRUE(same_response)
 
   # Check if nested
-  is_nested_increasing <- is_nested_decreasing <- same_fixef <- c()
+  is_nested_increasing <- is_nested_decreasing <- same_fixef <- NULL
   len <- length(objects)
 
   for (i in 2:len) {
@@ -211,7 +211,7 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
   # if we have mixed models, check for nested random effects
   if (all(mixed_models)) {
-    re_nested_increasing <- re_nested_decreasing <- same_ranef <- c()
+    re_nested_increasing <- re_nested_decreasing <- same_ranef <- NULL
     len <- length(objects)
 
     for (i in 2:len) {
@@ -241,8 +241,13 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     message(format_message(msg))
   }
 
-  # determine which is linear model
-  attr(objects, "is_linear") <- sapply(objects, function(i) isTRUE(model_info(i)$is_linear))
+  # determine which is linear or binomial model
+  model_infos <- lapply(objects, function(i) {
+    mi <- model_info(i)
+    c(isTRUE(mi$is_linear), isTRUE(mi$is_binomial))
+  })
+  attr(objects, "is_linear") <- vapply(model_infos, function(i) i[1], logical(1))
+  attr(objects, "is_binomial") <- vapply(model_infos, function(i) i[2], logical(1))
 
   objects
 }

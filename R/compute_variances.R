@@ -71,7 +71,7 @@
   }
 
   # Separate observation variance from variance of random effects
-  nr <- sapply(vals$re, nrow)
+  nr <- vapply(vals$re, nrow, numeric(1))
   not.obs.terms <- names(nr[nr != n_obs(x)])
   obs.terms <- names(nr[nr == n_obs(x)])
 
@@ -942,7 +942,7 @@
       missig_rnd_slope <- setdiff(names(out), names(rndslopes))
       if (length(missig_rnd_slope)) {
         # sanity check
-        to_remove <- c()
+        to_remove <- NULL
         for (j in seq_along(out)) {
           # identical random slopes might have different names, so
           # we here check if random slopes from correlated and uncorrelated

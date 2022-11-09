@@ -196,7 +196,7 @@ get_varcov.DirichletRegModel <- function(x,
       vc <- vc[keep, keep, drop = FALSE]
     } else if (component == "precision") {
       vc <- stats::vcov(x)
-      keep <- grepl("^\\(phi\\)", rownames(vc), perl = TRUE)
+      keep <- startsWith(rownames(vc), "(phi)")
       vc <- vc[keep, keep, drop = FALSE]
     } else {
       vc <- stats::vcov(x)
@@ -510,7 +510,8 @@ get_varcov.MixMod <- function(x,
     )
 
     # drop random parameters
-    random_parms <- stats::na.omit(match(colnames(random_vc), colnames(vc)))
+    m <- match(colnames(random_vc), colnames(vc))
+    random_parms <- m[!is.na(m)]
     if (length(random_parms)) {
       vc <- vc[-random_parms, -random_parms, drop = FALSE]
     }

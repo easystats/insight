@@ -49,6 +49,11 @@ find_response.default <- function(x, combine = TRUE, ...) {
 }
 
 
+#' @export
+find_response.logitr <- function(x, ...) {
+  get_call(x)$outcome
+}
+
 
 
 #' @export

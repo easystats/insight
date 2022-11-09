@@ -132,7 +132,7 @@ get_predicted.clm <- function(x,
 # =======================================================================
 
 #' @export
-get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = .95, verbose = TRUE, ...) {
+get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = 0.95, verbose = TRUE, ...) {
   dots <- list(...)
 
   # `type` argument can be: probs | class
