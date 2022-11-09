@@ -189,7 +189,7 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && getRversion
     k <- 3
     mod <- mgcv::gam(mpg ~ s(wt, k = k), data = mtcars)
     out2 <- insight::get_datagrid(mod)
-    expect_equal(out1, out2)
+    expect_equal(out1, out2, ignore_attr = TRUE, tolerance = 1e-4)
 
 
     # STAN_GAMM4
