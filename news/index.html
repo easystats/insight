@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.6.3</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.6.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +88,10 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.18.7" id="insight-0187">insight 0.18.7<a class="anchor" aria-label="anchor" href="#insight-0187"></a></h2>
 <div class="section level3">
+<h3 id="general-0-18-7">General<a class="anchor" aria-label="anchor" href="#general-0-18-7"></a></h3>
+<ul><li>Minor revisions to <code>get_predicted.glmmTMB()</code> due to changes in behaviour of <code>predict.glmmTMB()</code> for truncated-family models since <em>glmmTMB</em> 1.1.5.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="changes-to-functions-0-18-7">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-18-7"></a></h3>
 <ul><li>
 <code>ellipses_info()</code> now includes an attribute <code>$is_binomial</code>, which is <code>TRUE</code> for each model from binomial family.</li>
@@ -106,7 +110,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-18-6">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-6"></a></h3>
-<ul><li><p>Better dectection of unicode-support, to avoid failures when building vignettes.</p></li>
+<ul><li><p>Better detection of unicode-support, to avoid failures when building vignettes.</p></li>
 <li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> now correctly handles variables of class numeric matrix created by <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale()</a></code>, which fixes a bug in <code><a href="https://easystats.github.io/performance/reference/check_model.html" class="external-link">performance::check_model()</a></code> (easystats/performance#432).</p></li>
 <li><p>Fixed issue with <code>iterations</code> argument in <code><a href="../reference/get_predicted.html">get_predicted()</a></code> with <em>brms</em> models.</p></li>
 </ul></div>
