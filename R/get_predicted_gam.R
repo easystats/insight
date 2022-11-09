@@ -18,12 +18,9 @@ get_predicted.gam <- function(x,
     # Sanity checks
     if (predict %in% c("prediction", "predicted")) {
       if (verbose) {
-        warning(
-          format_message(
-            "`predict=\"prediction\"` is currently not available for GAM models.",
-            "Changing to `predict=\"expectation\"`."
-          ),
-          call. = FALSE
+        format_warning(
+          "`predict=\"prediction\"` is currently not available for GAM models.",
+          "Changing to `predict=\"expectation\"`."
         )
       }
       predict <- "expectation"

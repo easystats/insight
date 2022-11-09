@@ -90,7 +90,7 @@ null_model <- function(model, verbose = TRUE, ...) {
         if (verbose) {
           if (grepl("(^object)(.*)(not found$)", msg)) {
             print_color("Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n", "red")
-          } else if (grepl("^could not find function", msg)) {
+          } else if (startsWith(msg, "could not find function")) {
             print_color("Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n", "red")
           }
         }

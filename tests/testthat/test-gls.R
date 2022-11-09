@@ -12,6 +12,15 @@ if (requiet("testthat") &&
     correlation = cr
   )
 
+  set.seed(123)
+  d <- Ovary
+  d$x1 <- runif(nrow(d))
+  d$x2 <- sample(1:10, size = nrow(d), replace = TRUE)
+  m3 <- gls(follicles ~ Time + x1 + x2,
+    d,
+    correlation = corAR1(form = ~ 1 | Mare)
+  )
+
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
   })
@@ -36,6 +45,15 @@ if (requiet("testthat") &&
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 308)
     expect_equal(colnames(get_data(m1)), c("Mare", "Time", "follicles"))
+  })
+
+  test_that("get_df", {
+    expect_equal(get_df(m1, type = "residual"), 305, ignore_attr = TRUE)
+    expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
+    expect_equal(get_df(m1, type = "wald"), 305, ignore_attr = TRUE)
+    expect_equal(get_df(m3, type = "residual"), 304, ignore_attr = TRUE)
+    expect_equal(get_df(m3, type = "normal"), Inf, ignore_attr = TRUE)
+    expect_equal(get_df(m3, type = "wald"), 304, ignore_attr = TRUE)
   })
 
   test_that("find_formula", {

@@ -98,7 +98,7 @@
     grepl("zero-inflated", fitfam_lower, fixed = TRUE) |
     grepl("neg_binomial", fitfam_lower, fixed = TRUE) |
     grepl("hurdle", fitfam_lower, fixed = TRUE) |
-    grepl("^(zt|zi|za|hu)", fitfam_lower, perl = TRUE) |
+    grepl("^(zt|zi|za|hu)", fitfam_lower) |
     grepl("truncated", fitfam_lower, fixed = TRUE)
 
   # overwrite for glmmTMB exceptions
@@ -111,7 +111,7 @@
 
   hurdle <- hurdle |
     grepl("hurdle", fitfam_lower, fixed = TRUE) |
-    grepl("^hu", fitfam, perl = TRUE) |
+    startsWith(fitfam, "hu") |
     grepl("truncated", fitfam, fixed = TRUE) |
     fitfam == "ztnbinom" |
     fitfam %in% c("truncpoiss", "truncnbinom", "truncnbinom1", "truncpoisson")
@@ -251,6 +251,7 @@
   is_ranktest <- FALSE
   is_xtab <- FALSE
   is_levenetest <- FALSE
+  is_variancetest <- FALSE
 
   ## TODO: special handling of shapiro needed
   # see https://github.com/easystats/report/issues/256
@@ -273,6 +274,12 @@
       binom_fam <- TRUE
       is_binomtest <- TRUE
       fitfam <- "binomial"
+    } else if (x$method == "Shapiro-Wilk normality test") {
+      is_variancetest <- TRUE
+      fitfam <- "shapiro"
+    } else if (grepl("Bartlett test", x$method, fixed = TRUE)) {
+      is_variancetest <- TRUE
+      fitfam <- "bartlett"
     } else if (grepl("\\d+-sample(.*)proportions(.*)", x$method)) {
       binom_fam <- TRUE
       is_proptest <- TRUE
@@ -295,9 +302,10 @@
 
   # exceptions: car::leveneTest
   if (inherits(x, "anova") &&
-      !is.null(attributes(x)$heading) &&
-      grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
+    !is.null(attributes(x)$heading) &&
+    grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
     is_levenetest <- TRUE
+    is_variancetest <- TRUE
   }
 
   # Bayesfactors terms --------
@@ -402,6 +410,7 @@
     is_chi2test = is_chi2test,
     is_ranktest = is_ranktest,
     is_levenetest = is_levenetest,
+    is_variancetest = is_variancetest,
     is_xtab = is_xtab,
     is_proptest = is_proptest,
     is_binomtest = is_binomtest,

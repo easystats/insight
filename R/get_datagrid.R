@@ -6,19 +6,20 @@
 #' for a tutorial on how to create a visualisation matrix using this function.
 #'
 #' @param x An object from which to construct the reference grid.
-#' @param at Indicate at which values _focal predictors_ (variables) should be
-#'   represented. If not specified otherwise, representative values for numeric
-#'   variables or predictors are evenly distributed from the minimum to the maximum,
-#'   with a total number of `length` values covering that range (see 'Examples').
-#'   Possible options for `at` are:
+#' @param at Indicates the _focal predictors_ (variables) for the reference grid
+#'   and at which values focal predictors should be represented. If not specified
+#'   otherwise, representative values for numeric variables or predictors are
+#'   evenly distributed from the minimum to the maximum, with a total number of
+#'   `length` values covering that range (see 'Examples'). Possible options for
+#'   `at` are:
 #'   - `"all"`, which will include all variables or predictors.
 #'   - a character vector of one or more variable or predictor names, like
 #'   `c("Species", "Sepal.Width")`, which will create a grid of all combinations
 #'   of unique values. For factors, will use all levels, for numeric variables,
 #'   will use a range of length `length` (evenly spread from minimum to maximum)
-#'   and for character vectors, will use all values.
+#'   and for character vectors, will use all unique values.
 #'   - a list of named elements, indicating focal predictors and their representative
-#'   values, e.g. `at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))`.
+#'   values, e.g. `at = list(Sepal.Length = c(2, 4), Species = "setosa")`.
 #'   - a string with assignments, e.g. `at = "Sepal.Length = 2"` or
 #'   `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
 #'   and double quotes to assign strings within strings.
@@ -26,7 +27,7 @@
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
 #'   the brackets should either be
-#'   - two values, indicating minum and maximung (e.g. `at = "Sepal.Length = [0, 5]`),
+#'   - two values, indicating minimum and maximum (e.g. `at = "Sepal.Length = [0, 5]"`),
 #'   for which a range of length `length` (evenly spread from given minimum to
 #'   maximum) is created.
 #'   - more than two numeric values `at = "Sepal.Length = [2,3,4,5]"`, in which
@@ -42,7 +43,7 @@
 #'     - for minimum and maximum value: `"x = [minmax]"`
 #'     - for 0 and the maximum value: `"x = [zeromax]"`
 #'
-#'   For **factors** variables, the value(s) inside the brackets should indicate
+#'   For **factor** variables, the value(s) inside the brackets should indicate
 #'   one or more factor levels, like `at = "Species = [setosa, versicolor]"`.
 #'   **Note**: the `length` argument will be ignored when using brackets-tokens.
 #'
@@ -62,7 +63,7 @@
 #'   [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or
 #'   [`"eti"`][bayestestR::eti()], it will spread the values within that range
 #'   (the default CI width is `95%` but this can be changed by adding for instance
-#'   `ci = 0.90`.) See [IQR()] and [bayestestR::ci()]. This can be useful to have
+#'   `ci = 0.90`.) See [`IQR()`] and [`bayestestR::ci()`]. This can be useful to have
 #'   more robust change and skipping extreme values.
 #'   - if [`"sd"`][sd()] or [`"mad"`][mad()], it will spread by this dispersion
 #'   index around the mean or the median, respectively. If the `length` argument
@@ -194,7 +195,7 @@ get_datagrid.data.frame <- function(x,
                                     range = "range",
                                     ...) {
   # find numerics that were coerced to factor in-formula
-  numeric_factors <- colnames(x)[sapply(x, function(i) isTRUE(attributes(i)$factor))]
+  numeric_factors <- colnames(x)[vapply(x, function(i) isTRUE(attributes(i)$factor), logical(1))]
 
   specs <- NULL
 
@@ -205,6 +206,17 @@ get_datagrid.data.frame <- function(x,
     at <- .extract_at_interactions(at)
 
     # Validate at argument ============================
+
+    # if list, convert to character
+    if (is.list(at)) {
+      at <- unname(vapply(names(at), function(i) {
+        if (is.numeric(at[[i]])) {
+          paste0(i, " = c(", toString(at[[i]]), ")")
+        } else {
+          paste0(i, " = c(", toString(sprintf("'%s'", at[[i]])), ")")
+        }
+      }, character(1)))
+    }
 
     if (all(at == "all")) {
       at <- colnames(x)
@@ -236,61 +248,55 @@ get_datagrid.data.frame <- function(x,
 
     # Deal with targets =======================================================
 
-    if (is.character(at)) {
-      # Find eventual user-defined specifications for each target
-      specs <- do.call(rbind, lapply(at, .get_datagrid_clean_target, x = x))
-      specs$varname <- as.character(specs$varname) # make sure it's a string not fac
-      specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
+    # Find eventual user-defined specifications for each target
+    specs <- do.call(rbind, lapply(at, .get_datagrid_clean_target, x = x))
+    specs$varname <- as.character(specs$varname) # make sure it's a string not fac
+    specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
-      specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
+    specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
 
-      # Create target list of factors -----------------------------------------
-      facs <- list()
-      for (fac in specs[specs$is_factor == TRUE, "varname"]) {
-        facs[[fac]] <- get_datagrid(
-          x[[fac]],
-          at = specs[specs$varname == fac, "expression"]
+    # Create target list of factors -----------------------------------------
+    facs <- list()
+    for (fac in specs[specs$is_factor, "varname"]) {
+      facs[[fac]] <- get_datagrid(
+        x[[fac]],
+        at = specs[specs$varname == fac, "expression"]
+      )
+    }
+
+    # Create target list of numerics ----------------------------------------
+    nums <- list()
+    numvars <- specs[!specs$is_factor, "varname"]
+    if (length(numvars)) {
+      # Sanitize 'length' argument
+      if (length(length) == 1) {
+        length <- rep(length, length(numvars))
+      } else if (length(length) != length(numvars)) {
+        format_error(
+          "The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ")."
+        )
+      }
+      # Sanitize 'range' argument
+      if (length(range) == 1) {
+        range <- rep(range, length(numvars))
+      } else if (length(range) != length(numvars)) {
+        format_error(
+          "The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."
         )
       }
 
-      # Create target list of numerics ----------------------------------------
-      nums <- list()
-      numvars <- specs[specs$is_factor == FALSE, "varname"]
-      if (length(numvars)) {
-        # Sanitize 'length' argument
-        if (length(length) == 1) {
-          length <- rep(length, length(numvars))
-        } else if (length(length) != length(numvars)) {
-          stop(format_message(
-            "The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ")."
-          ), call. = FALSE)
-        }
-        # Sanitize 'range' argument
-        if (length(range) == 1) {
-          range <- rep(range, length(numvars))
-        } else if (length(range) != length(numvars)) {
-          stop(format_message(
-            "The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."
-          ), call. = FALSE)
-        }
-
-        # Get datagrids
-        for (i in seq_along(numvars)) {
-          num <- numvars[i]
-          nums[[num]] <- get_datagrid(x[[num]],
-            at = specs[specs$varname == num, "expression"],
-            reference = reference[[num]],
-            length = length[i],
-            range = range[i],
-            is_first_predictor = specs$varname[1] == num,
-            ...
-          )
-        }
+      # Get datagrids
+      for (i in seq_along(numvars)) {
+        num <- numvars[i]
+        nums[[num]] <- get_datagrid(x[[num]],
+          at = specs[specs$varname == num, "expression"],
+          reference = reference[[num]],
+          length = length[i],
+          range = range[i],
+          is_first_predictor = specs$varname[1] == num,
+          ...
+        )
       }
-    } else if (is.list(at)) {
-      # we have a list as at-values
-      facs <- at[sapply(x[names(at)], is.factor)]
-      nums <- at[sapply(x[names(at)], is.numeric)]
     }
 
     # Assemble the two - the goal is to have two named lists, where variable
@@ -302,7 +308,7 @@ get_datagrid.data.frame <- function(x,
     targets <- tryCatch(targets[specs$varname], error = function(e) targets)
 
     # Preserve range ---------------------------------------------------------
-    if (preserve_range == TRUE && length(facs) > 0 && length(nums) > 0) {
+    if (preserve_range && length(facs) > 0 && length(nums) > 0) {
       # Loop through the combinations of factors
       facs_combinations <- expand.grid(facs)
       for (i in seq_len(nrow(facs_combinations))) {
@@ -317,7 +323,7 @@ get_datagrid.data.frame <- function(x,
         }
 
         # Else, filter given the range of numerics
-        rows_to_remove <- c()
+        rows_to_remove <- NULL
         for (num in names(nums)) {
           mini <- min(subset[[num]], na.rm = TRUE)
           maxi <- max(subset[[num]], na.rm = TRUE)
@@ -330,7 +336,7 @@ get_datagrid.data.frame <- function(x,
       }
 
       if (nrow(targets) == 0) {
-        stop(format_message("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE."), call. = FALSE)
+        format_error("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE.")
       }
     }
   }
@@ -399,7 +405,7 @@ get_datagrid.data.frame <- function(x,
 
 #' @keywords internal
 .get_datagrid_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE, ...) {
-  if (na.rm == TRUE) x <- stats::na.omit(x)
+  if (na.rm) x <- stats::na.omit(x)
 
   if (is.numeric(x)) {
     if (is.numeric(numerics)) {
@@ -424,10 +430,10 @@ get_datagrid.data.frame <- function(x,
       } else if (is.character(x) || is.logical(x)) {
         out <- unique(x)[1]
       } else {
-        stop(format_message(paste0(
+        format_error(paste0(
           "Argument is not numeric nor factor but ", class(x), ".",
           "Please report the bug at https://github.com/easystats/insight/issues"
-        )), call. = FALSE)
+        ))
       }
       # see "get_modelmatrix()" and #626. Reference level is currently
       # a character vector, which causes the error
@@ -474,7 +480,7 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
 
   # Sanity check
   if (!is.numeric(length)) {
-    stop("`length` argument should be an number.", call. = FALSE)
+    format_error("`length` argument should be an number.")
   }
 
   # Create a spread
@@ -608,9 +614,9 @@ get_datagrid.logical <- get_datagrid.character
       if (!is.na(varname)) {
         x <- x[[varname]]
       } else {
-        stop(format_message(
+        format_error(
           "Couldn't find which variable were selected in `at`. Check spelling and specification."
-        ), call. = FALSE)
+        )
       }
     }
 
@@ -666,9 +672,9 @@ get_datagrid.logical <- get_datagrid.character
           } else if (is.numeric(parts)) {
             expression <- parts
           } else {
-            stop(format_message(
+            format_error(
               paste0("The `at` argument (", at, ") should either indicate the minimum and the maximum, or one of the following options: ", paste0(shortcuts, collapse = ", ", "."))
-            ), call. = FALSE)
+            )
           }
           # If only two, it's probably the range
         } else if (length(parts) == 2) {
@@ -691,9 +697,9 @@ get_datagrid.logical <- get_datagrid.character
           eval(parse(text = at))
         },
         error = function(r) {
-          stop(format_message(
+          format_error(
             paste0("The `at` argument (`", original_target, "`) cannot be read and could be mispecified.")
-          ), call. = FALSE)
+          )
         }
       )
     }
@@ -724,7 +730,7 @@ get_datagrid.default <- function(x,
                                  ...) {
   # sanity check
   if (!is_model(x)) {
-    stop("`x` must be a statistical model.", call. = FALSE)
+    format_error("`x` must be a statistical model.")
   }
 
   # Retrieve data from model
@@ -738,16 +744,16 @@ get_datagrid.default <- function(x,
   # fails, which is required to compute SE/CI for `get_predicted()`
   minfo <- model_info(x)
   if (minfo$is_binomial && minfo$is_logit && is.factor(data[[response]]) && !include_response && verbose) {
-    warning(format_message(
+    format_warning(
       "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions."
-    ), call. = FALSE)
+    )
   }
 
   # Deal with intercept-only models
   if (isFALSE(include_response)) {
     data <- data[!colnames(data) %in% response]
     if (ncol(data) < 1) {
-      stop(format_message("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."), call. = FALSE)
+      format_error("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid.")
     }
   }
 
@@ -807,6 +813,13 @@ get_datagrid.default <- function(x,
 }
 
 
+#' @export
+get_datagrid.logitr <- function(x, ...) {
+  datagrid <- get_datagrid.default(x, ...)
+  obsID <- parse(text = safe_deparse(get_call(x)))[[1]]$obsID
+  datagrid[[obsID]] <- x$data[[obsID]][1]
+  datagrid
+}
 
 
 #' @export
@@ -914,10 +927,10 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 
   # still found no data - stop here
   if (is.null(data)) {
-    stop(format_message(
+    format_error(
       "Can't access data that was used to fit the model in order to create the reference grid.",
       "Please use the `data` argument."
-    ), call. = FALSE)
+    )
   }
 
   data

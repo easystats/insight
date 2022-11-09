@@ -1,4 +1,101 @@
+# insight 0.18.7
+
+## Changes to functions
+
+* `ellipses_info()` now includes an attribute `$is_binomial`, which is `TRUE`
+  for each model from binomial family.
+
+## Bug fixes
+
+* Fixed behaviour of the `at` argument in `get_datagrid()`.
+
+# insight 0.18.6
+
+## New supported models
+
+* Support the *logitr* package: `get_data()`, `find_variables()` and more.
+
+## Bug fixes
+
+* Better dectection of unicode-support, to avoid failures when building
+  vignettes.
+
+* `get_predicted()` now correctly handles variables of class numeric matrix
+  created by `scale()`, which fixes a bug in `performance::check_model()`
+  (easystats/performance#432).
+
+* Fixed issue with `iterations` argument in `get_predicted()` with _brms_
+  models.
+
+# insight 0.18.5
+
+## Breaking
+
+* `get_df(type = "satterthwaite")` for `lmerMod` objects now return degrees of
+  freedom per parameter, and no longer per observation. Use `df_per_obs TRUE`
+  to return degrees of freedom per observation.
+
+## New functions
+
+* `safe_deparse_symbol()` to only deparses a substituted expressions when
+  possible,which increases performance in case many calls to
+  `deparse(substitute())`.
+
+## Changes to functions
+
+* `format_table()` gets a `use_symbols` argument. If `TRUE`, column names that
+  refer to particular effectsizes (like Phi, Omega or Epsilon) include the related unicode-character instead of the written name. This only works on Windows for
+  R >= 4.2, and on OS X or Linux for R >= 4.0.
+
+* The `stars` argument in `format_table()` can now also be a character vector,
+  naming the columns that should include stars for significant values. This is
+  especially useful for Bayesian models, where we might have multiple columns
+  with significant values, e.g. `"BF"` for the Bayes factor or `"pd"` for the
+  probability of direction.
+
+* `get_df()` gets more `type` options to return different type of degrees of
+  freedom (namely, `"wald"` and `"normal"`, and for mixed models, `"ml1"`,
+  `"betwithin"`, `"satterthwaite"` and `"kenward-roger"`).
+
+* `standardize_names()` now recognized more classes from package _marginaleffects_.
+
+* Minor improvements to `find_parameters()` for models with nonlinear formula.
+
+* Minor speed improvements.
+
+## Bug fixes
+
+* Fixed issue in `get_data()` for models of class `plm`, which accidentally
+  converted factors into character vectors.
+
+* Fixed issue with column alignment in `export_table()` when the data frame 
+  to print contained unicode-characters longer than 1 byte.
+
+* Correctly extract predictors for `fixest::i(f1, i.f2)` interactions (#649 by 
+  @grantmcdermott).
+  
+# insight 0.18.4
+
+## Changes to functions
+
+* `model_info()` now includes information for `htest` objects from
+  `shapiro.test()` and `bartlett.test()` (will return `$is_variancetest = TRUE`).
+
+## Bug fixes
+
+* Fixed issue in `get_data()` which did not correctly backtransform to original
+  data when terms had log-transformations such as `log(1 + x)` or `log(x + 1)`.
+
+* Fixed CRAN check issues.
+
 # insight 0.18.3
+
+## New functions
+
+* `format_alert()`, `format_warning()` and `format_error()`, as convenient
+  wrappers around `message()`, `warning()` or `stop()` in combination with
+  `format_message()`. You can use these funcionts to format messages, warnings
+  or errors.
 
 ## Changes to functions
 
@@ -8,7 +105,7 @@
 * `format_message()` gets some additional formatting features. See 'Details'
   in `?format_message` for more information and some current limitations.
 
-* `format_message()` gets an `indention` argument, to specify indention string
+* `format_message()` gets an `indent` argument, to specify indention string
   for subsequent lines.
 
 * `format_table()` now merges IC and IC weights columns into one column (e.g.,
@@ -25,6 +122,10 @@
 * `get_data()` for models of class `geeglm` and `fixest`now more reliably
   retrieves the model data.
 
+## New supported models
+
+* Support for models of class `mblogit` and `mclogit`.
+
 ## Bug fixes
 
 * Fixed issues with wrong attribute `adjusted_for` in `insight::get_datagrid()`.
@@ -34,6 +135,8 @@
 
 * Fixed issue where `get_predicted()` failed when data contains factors with 
   only one or incomplete levels.
+
+* Fixed issue in `get_predicted()` for models of class `mlm`.
 
 * Fixed issue where `get_predicted()` failed to compute confidence intervals
   of predictions when model contained matrix-alike response columns, e.g. a 

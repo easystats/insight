@@ -32,7 +32,7 @@ get_parameters.htest <- function(x, ...) {
   } else if (m_info$is_binomtest) {
     out <- .extract_htest_binom(x)
   } else {
-    stop("'get_parameters()' not implemented for such hypothesis tests yet.", call. = FALSE)
+    format_error("`get_parameters()` not implemented for such hypothesis tests yet.")
   }
   row.names(out) <- NULL
   out

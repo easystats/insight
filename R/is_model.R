@@ -107,7 +107,7 @@ is_regression_model <- function(x) {
     "lavaan", "lm", "lm_robust", "lme", "lmrob", "lmRob",
     "loggammacenslmrob", "logistf", "LogitBoost", "loo",
     "LORgee", "lmodel2", "lmerMod", "lmerModLmerTest",
-    "logitmfx", "logitor", "lqm", "lqmm", "lrm",
+    "logitmfx", "logitor", "logitr", "lqm", "lqmm", "lrm",
 
     # m --------------------
     "maov", "manova", "MANOVA", "margins", "maxLik", "mboostLSS",

@@ -78,12 +78,13 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
     # treated as "interaction"
     .x <- sub("\\[(\\d+):(\\d+)\\]", "", .x)
     if (grepl(":", .x, fixed = TRUE) && !grepl("::", .x, fixed = TRUE)) {
-      paste(sapply(
-        strsplit(.x, ":", fixed = TRUE),
-        .remove_pattern_from_names,
-        is_emmeans = is_emmeans
-      ),
-      collapse = ":"
+      paste(
+        sapply(
+          strsplit(.x, ":", fixed = TRUE),
+          .remove_pattern_from_names,
+          is_emmeans = is_emmeans
+        ),
+        collapse = ":"
       )
     } else {
       .remove_pattern_from_names(.x, is_emmeans = is_emmeans)
@@ -164,13 +165,13 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           p <- paste0("^", pattern[j], "\\((.*)\\).*")
           g <- trim_ws(sub(p, "\\1", x[i]))
           x[i] <- trim_ws(unlist(strsplit(g, ",")))
-        } else if (pattern[j] == "s" && grepl("^s\\(", x[i])) {
+        } else if (pattern[j] == "s" && startsWith(x[i], "s(")) {
           x[i] <- gsub("^s\\(", "", x[i])
           x[i] <- gsub("\\)$", "", x[i])
           if (grepl("=|[[:digit:]]", x[i])) {
             new_x <- trim_ws(unlist(strsplit(x[i], ",")))
             to_remove <- which(!grepl("\\D", new_x))
-            to_remove <- c(to_remove, which(grepl("=", new_x)))
+            to_remove <- c(to_remove, which(grepl("=", new_x, fixed = TRUE)))
             if (length(to_remove) == 0) {
               x[i] <- paste(new_x, collapse = ", ")
             } else {

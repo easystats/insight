@@ -50,7 +50,7 @@ get_predicted.clm <- function(x,
   if (!is.null(ci)) {
     if (type_arg == "class") {
       if (verbose) {
-        warning(format_message("Confidence intervals are not available for classification."), call. = FALSE)
+        format_warning("Confidence intervals are not available for classification.")
       }
       ci <- NULL
     }
@@ -132,7 +132,7 @@ get_predicted.clm <- function(x,
 # =======================================================================
 
 #' @export
-get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = .95, verbose = TRUE, ...) {
+get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = 0.95, verbose = TRUE, ...) {
   dots <- list(...)
 
   # `type` argument can be: probs | class
@@ -142,7 +142,7 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci =
   } else if ("type" %in% names(dots)) {
     type_arg <- match.arg(dots$type, choices = c("class", "probs"))
   } else {
-    stop("The `predict` argument must be either \"expectation\" or \"classification\".", call. = FALSE)
+    format_error("The `predict` argument must be either \"expectation\" or \"classification\".")
   }
 
   args <- c(list(x, "data" = data, ci = ci, predict = type_arg), list(...))

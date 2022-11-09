@@ -15,14 +15,15 @@ get_predicted_se <- function(x,
   # which are then multiplied by 1.96 for the confidence intervals.
 
 
+  ## TODO: what about Satterthwaite? @vincentarelbundock
+
   # kenward-roger adjusts both the dof and the varcov
-  if (isTRUE(ci_method %in% c("kenward-roger", "kenward"))) {
+  if (isTRUE(ci_method %in% c("kenward-roger", "kenward", "kr"))) {
     if (is.null(vcov) && is.null(vcov_args)) {
       check_if_installed("pbkrtest")
       vcovmat <- as.matrix(pbkrtest::vcovAdj(x))
     } else {
-      msg <- "The `vcov` argument cannot be used together with the `ci_method=\"kenward-roger\"` argument."
-      stop(format_message(msg), call. = FALSE)
+      format_error("The `vcov` argument cannot be used together with the `ci_method=\"kenward-roger\"` argument.")
     }
 
     # all other varcov types can be supplied manually
@@ -81,7 +82,7 @@ get_predicted_se <- function(x,
     # still no match?
     if (isTRUE(ncol(mm) != ncol(vcovmat))) {
       if (verbose) {
-        warning(format_message("Could not compute standard errors or confidence intervals because the model and variance-covariance matrices are non-conformable. This can sometimes happen when the `data` used to make predictions fails to include all the levels of a factor variable or all the interaction components."), call. = FALSE)
+        format_warning("Could not compute standard errors or confidence intervals because the model and variance-covariance matrices are non-conformable. This can sometimes happen when the `data` used to make predictions fails to include all the levels of a factor variable or all the interaction components.")
       }
       return(NULL)
     }
@@ -164,7 +165,7 @@ get_predicted_se <- function(x,
       single_factor_levels <- sapply(data, function(i) is.factor(i) && nlevels(i) == 1)
       if (any(single_factor_levels)) {
         if (verbose) {
-          warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
+          format_warning("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals.")
         }
         return(NULL)
       }
@@ -189,9 +190,9 @@ get_predicted_se <- function(x,
     if (inherits(mm, "simpleError")) {
       if (verbose) {
         if (grepl("2 or more levels", mm$message, fixed = TRUE)) {
-          warning(format_message("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."), call. = FALSE)
+          format_warning("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals.")
         } else {
-          warning(format_message("Something went wrong with computing standard errors and confidence intervals for predictions."), call. = FALSE)
+          format_warning("Something went wrong with computing standard errors and confidence intervals for predictions.")
         }
       }
       return(NULL)

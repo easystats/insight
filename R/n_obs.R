@@ -55,14 +55,7 @@ n_obs.default <- function(x, ...) {
     return(n_obs.glm(x, ...))
   }
 
-  tryCatch(
-    {
-      stats::nobs(x)
-    },
-    error = function(x) {
-      NULL
-    }
-  )
+  tryCatch(stats::nobs(x), error = function(x) NULL)
 }
 
 
@@ -148,7 +141,7 @@ n_obs.gamm <- function(x, ...) {
   if (object_has_names(x, "gam")) {
     n_obs(x$gam, ...)
   } else {
-    stop("Cannot find n_obs for this object. Please an open an issue!", call. = FALSE)
+    format_error("Cannot find `n_obs` method for this object. Please an open an issue!")
   }
 }
 
@@ -203,6 +196,12 @@ n_obs.summary.lm <- function(x, ...) {
 #' @export
 n_obs.mediate <- function(x, ...) {
   x$nobs
+}
+
+
+#' @export
+n_obs.logitr <- function(x, ...) {
+  x$n$obs
 }
 
 
@@ -703,9 +702,7 @@ n_obs.mipo <- function(x, ...) {
 
 #' @export
 n_obs.mira <- function(x, ...) {
-  if (!requireNamespace("mice", quietly = TRUE)) {
-    stop("Package `mice` required. Please install it.", call. = FALSE)
-  }
+  check_if_installed("mice")
   n_obs(mice::pool(x), ...)
 }
 

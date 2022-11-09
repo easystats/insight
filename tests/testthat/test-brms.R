@@ -19,8 +19,8 @@ if (.runThisTest) {
     test_that("get_predicted.brmsfit: ordinal dv", {
       skip_if_not_installed("bayestestR")
 
-      pred1 <- get_predicted(m8, ci = .95)
-      pred2 <- get_predicted(m8, ci_method = "hdi", ci = .95)
+      pred1 <- get_predicted(m8, ci = 0.95)
+      pred2 <- get_predicted(m8, ci_method = "hdi", ci = 0.95)
       expect_true(inherits(pred1, "get_predicted"))
       expect_true(inherits(pred1, "data.frame"))
       expect_true(all(c("Row", "Response") %in% colnames(pred1)))
@@ -36,7 +36,7 @@ if (.runThisTest) {
       expect_false(mean(pred1$CI_high == pred2$CI_high) > 0.1) # most CI bounds are different
 
       # compare to manual predictions
-      pred3 <- get_predicted(m8, centrality_function = stats::median, ci = .95)
+      pred3 <- get_predicted(m8, centrality_function = stats::median, ci = 0.95)
       manual <- rstantools::posterior_epred(m8)
       manual <- apply(manual[, , 1], 2, median)
       expect_equal(pred3$Predicted[1:32], manual)
@@ -321,27 +321,28 @@ if (.runThisTest) {
 
       expect_equal(
         find_parameters(m2),
-        structure(list(
-          SepalLength = list(
-            conditional = c(
-              "b_SepalLength_Intercept",
-              "b_SepalLength_Petal.Length",
-              "b_SepalLength_Sepal.Width",
-              "b_SepalLength_Speciesversicolor",
-              "b_SepalLength_Speciesvirginica"
+        structure(
+          list(
+            SepalLength = list(
+              conditional = c(
+                "b_SepalLength_Intercept",
+                "b_SepalLength_Petal.Length",
+                "b_SepalLength_Sepal.Width",
+                "b_SepalLength_Speciesversicolor",
+                "b_SepalLength_Speciesvirginica"
+              ),
+              sigma = "sigma_SepalLength"
             ),
-            sigma = "sigma_SepalLength"
+            SepalWidth = list(
+              conditional = c(
+                "b_SepalWidth_Intercept",
+                "b_SepalWidth_Speciesversicolor",
+                "b_SepalWidth_Speciesvirginica"
+              ),
+              sigma = "sigma_SepalWidth"
+            )
           ),
-          SepalWidth = list(
-            conditional = c(
-              "b_SepalWidth_Intercept",
-              "b_SepalWidth_Speciesversicolor",
-              "b_SepalWidth_Speciesvirginica"
-            ),
-            sigma = "sigma_SepalWidth"
-          )
-        ),
-        "is_mv" = "1"
+          "is_mv" = "1"
         )
       )
 
@@ -357,25 +358,26 @@ if (.runThisTest) {
 
       expect_equal(
         find_parameters(m5, effects = "all"),
-        structure(list(
-          count = list(
-            conditional = c("b_count_Intercept", "b_count_child", "b_count_camper"),
-            random = c(sprintf("r_persons__count[%i,Intercept]", 1:4), "sd_persons__count_Intercept"),
-            zero_inflated = c("b_zi_count_Intercept", "b_zi_count_camper"),
-            zero_inflated_random = c(sprintf("r_persons__zi_count[%i,Intercept]", 1:4), "sd_persons__zi_count_Intercept")
-          ),
-          count2 = list(
-            conditional = c(
-              "b_count2_Intercept",
-              "b_count2_child",
-              "b_count2_livebait"
+        structure(
+          list(
+            count = list(
+              conditional = c("b_count_Intercept", "b_count_child", "b_count_camper"),
+              random = c(sprintf("r_persons__count[%i,Intercept]", 1:4), "sd_persons__count_Intercept"),
+              zero_inflated = c("b_zi_count_Intercept", "b_zi_count_camper"),
+              zero_inflated_random = c(sprintf("r_persons__zi_count[%i,Intercept]", 1:4), "sd_persons__zi_count_Intercept")
             ),
-            random = c(sprintf("r_persons__count2[%i,Intercept]", 1:4), "sd_persons__count2_Intercept"),
-            zero_inflated = c("b_zi_count2_Intercept", "b_zi_count2_child"),
-            zero_inflated_random = c(sprintf("r_persons__zi_count2[%i,Intercept]", 1:4), "sd_persons__zi_count2_Intercept")
-          )
-        ),
-        "is_mv" = "1"
+            count2 = list(
+              conditional = c(
+                "b_count2_Intercept",
+                "b_count2_child",
+                "b_count2_livebait"
+              ),
+              random = c(sprintf("r_persons__count2[%i,Intercept]", 1:4), "sd_persons__count2_Intercept"),
+              zero_inflated = c("b_zi_count2_Intercept", "b_zi_count2_child"),
+              zero_inflated_random = c(sprintf("r_persons__zi_count2[%i,Intercept]", 1:4), "sd_persons__zi_count2_Intercept")
+            )
+          ),
+          "is_mv" = "1"
         )
       )
     })
@@ -531,6 +533,28 @@ if (.runThisTest) {
       )
     })
 
+    test_that("Issue #645", {
+      # apparently BH is required to fit these brms models
+      skip_if_not_installed("BH")
+
+      void <- capture.output(suppressMessages(suppressWarnings(({
+        mod <- brm(
+          silent = 2,
+          data = mtcars,
+          family = cumulative(probit),
+          formula = bf(
+            cyl ~ 1 + mpg + drat + gearnl,
+            gearnl ~ 0 + (1 | gear),
+            nl = TRUE
+          )
+        )
+      }))))
+
+      p <- find_predictors(mod, flatten = TRUE)
+      d <- get_data(mod)
+      expect_true("gear" %in% p)
+      expect_true("gear" %in% colnames(d))
+    })
 
     test_that("clean_parameters", {
       expect_equal(

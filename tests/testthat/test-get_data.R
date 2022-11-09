@@ -11,6 +11,7 @@ test_that("lme4", {
   expect_s3_class(get_data(m), "data.frame")
 })
 
+
 test_that("lm", {
   set.seed(1023)
   x <- rnorm(1000, sd = 4)
@@ -23,6 +24,58 @@ test_that("lm", {
   expect_equal(get_data(mod1)$x, dat$x, ignore_attr = TRUE)
   expect_equal(get_data(mod2)$x, dat$x, ignore_attr = TRUE)
 })
+
+
+test_that("get_data lavaan", {
+  requiet("lavaan")
+  data(PoliticalDemocracy)
+  model <- "
+    # latent variable definitions
+      ind60 =~ x1 + x2 + x3
+      dem60 =~ y1 + a*y2 + b*y3 + c*y4
+      dem65 =~ y5 + a*y6 + b*y7 + c*y8
+
+    # regressions
+      dem60 ~ ind60
+      dem65 ~ ind60 + dem60
+
+    # residual correlations
+      y1 ~~ y5
+      y2 ~~ y4 + y6
+      y3 ~~ y7
+      y4 ~~ y8
+      y6 ~~ y8
+  "
+  m <- sem(model, data = PoliticalDemocracy)
+  expect_s3_class(get_data(m), "data.frame")
+  expect_equal(head(get_data(m)), head(PoliticalDemocracy), ignore_attr = TRUE, tolerance = 1e-3)
+})
+
+
+test_that("get_data include weights, even if ones", {
+  set.seed(123)
+  y <- rnorm(100)
+  x <- rnorm(100)
+  wn <- runif(100)
+  w1 <- rep(1, 100)
+
+  # Model with nonuniform weights
+  fn <- lm(y ~ x, weights = wn)
+  expect_equal(colnames(get_data(fn)), c("y", "x", "(weights)", "wn"))
+
+  # Model with weights equal to 1
+  f1 <- lm(y ~ x, weights = w1)
+  expect_equal(colnames(get_data(f1)), c("y", "x", "(weights)", "w1"))
+
+  # Model with no weights
+  f0 <- lm(y ~ x)
+  expect_equal(colnames(get_data(f0)), c("y", "x"))
+
+  # check get_weights still works
+  expect_null(get_weights(f0))
+  expect_equal(get_weights(f0, null_as_ones = TRUE), w1)
+})
+
 
 test_that("lm with transformations", {
   d <- data.frame(
@@ -59,6 +112,40 @@ test_that("mgcv", {
   )
 })
 
+test_that("lm with poly and NA in response", {
+  s1 <- summary(iris$Sepal.Length)
+  model <- lm(Petal.Length ~ log(Sepal.Width) + Sepal.Length,
+    data = iris
+  )
+  # Same min-max
+  s2 <- summary(insight::get_data(model)$Sepal.Length)
+
+  model <- lm(Petal.Length ~ log(1 + Sepal.Width) + Sepal.Length,
+    data = iris
+  )
+  s3 <- summary(insight::get_data(model)$Sepal.Length)
+
+  model <- lm(Petal.Length ~ log(Sepal.Width + 1) + Sepal.Length,
+    data = iris
+  )
+  s4 <- summary(insight::get_data(model)$Sepal.Length)
+
+  model <- lm(Petal.Length ~ log1p(Sepal.Width) + Sepal.Length,
+    data = iris
+  )
+  s5 <- summary(insight::get_data(model)$Sepal.Length)
+
+  expect_equal(s1, s2, tolerance = 1e-4)
+  expect_equal(s1, s3, tolerance = 1e-4)
+  expect_equal(s1, s4, tolerance = 1e-4)
+  expect_equal(s1, s5, tolerance = 1e-4)
+  expect_equal(s2, s3, tolerance = 1e-4)
+  expect_equal(s2, s4, tolerance = 1e-4)
+  expect_equal(s2, s5, tolerance = 1e-4)
+  expect_equal(s3, s4, tolerance = 1e-4)
+  expect_equal(s3, s5, tolerance = 1e-4)
+  expect_equal(s4, s5, tolerance = 1e-4)
+})
 
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"

@@ -234,6 +234,23 @@ n_parameters.stanmvreg <- n_parameters.stanreg
 
 
 #' @export
+n_parameters.gls <- function(x, ...) {
+  x$dims[["p"]]
+}
+
+
+#' @export
+n_parameters.logitr <- function(x, effects = c("all", "fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  switch(effects,
+    "fixed" = x$n$parsFixed,
+    "random" = x$n$parsRandom,
+    x$n$parsFixed + x$n$parsRandom
+  )
+}
+
+
+#' @export
 n_parameters.lavaan <- function(x, ...) {
   # TODO
   # installed?

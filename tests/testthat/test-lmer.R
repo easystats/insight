@@ -43,6 +43,50 @@ if (.runThisTest &&
     expect_equal(get_df(m2, type = "model"), attr(logLik(m2), "df"), ignore_attr = TRUE)
   })
 
+  test_that("get_df", {
+    expect_equal(
+      get_df(m1, type = "residual"),
+      df.residual(m1),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "normal"),
+      Inf,
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "wald"),
+      df.residual(m1),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m1, type = "satterthwaite"),
+      c(`(Intercept)` = 16.99973, Days = 16.99998),
+      ignore_attr = TRUE,
+      tolerance = 1e-4
+    )
+    expect_equal(
+      as.vector(get_df(m1, type = "kenward")),
+      c(17, 17),
+      ignore_attr = TRUE,
+      tolerance = 1e-4
+    )
+    if (requiet("pbkrtest")) {
+      expect_equal(
+        as.vector(get_df(m1, type = "kenward")),
+        c(pbkrtest::get_Lb_ddf(m1, c(1, 0)), pbkrtest::get_Lb_ddf(m1, c(0, 1))),
+        ignore_attr = TRUE,
+        tolerance = 1e-4
+      )
+      expect_equal(
+        unique(as.vector(get_df(m2, type = "kenward"))),
+        c(pbkrtest::get_Lb_ddf(m2, c(1, 0)), pbkrtest::get_Lb_ddf(m2, c(0, 1))),
+        ignore_attr = TRUE,
+        tolerance = 1e-4
+      )
+    }
+  })
+
   test_that("n_parameters", {
     expect_equal(n_parameters(m1), 2)
     expect_equal(n_parameters(m2), 2)
@@ -381,18 +425,20 @@ if (.runThisTest &&
     data = sleepstudy
   )
 
-  m4 <- lme4::lmer(Reaction ~ (1 |
-    mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
+  m4 <- lme4::lmer(
+    Reaction ~ (1 |
+      mygrp / mysubgrp) + (1 | Subject),
+    data = sleepstudy
   )
 
   m5 <- lme4::lmer(Reaction ~ 1 + (1 + Days | Subject),
     data = sleepstudy
   )
 
-  m6 <- lme4::lmer(Reaction ~ 1 + (1 |
-    mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
+  m6 <- lme4::lmer(
+    Reaction ~ 1 + (1 |
+      mygrp / mysubgrp) + (1 | Subject),
+    data = sleepstudy
   )
 
   test_that("find_formula", {
@@ -449,7 +495,7 @@ if (.runThisTest &&
     v2 <- as.matrix(vcovAdj(m2))
     expect_equal(v1, v2)
 
-    p1 <- get_predicted(m2, ci_method = "satterthwaite", ci = .95)
+    p1 <- get_predicted(m2, ci_method = "satterthwaite", ci = 0.95)
     p1 <- data.frame(p1)
     em1 <- ref_grid(
       object = m2,
@@ -461,7 +507,7 @@ if (.runThisTest &&
     expect_equal(p1$CI_low, em1$lower.CL)
     expect_equal(p1$CI_high, em1$upper.CL)
 
-    p2 <- get_predicted(m2, ci_method = "kenward-roger", ci = .95)
+    p2 <- get_predicted(m2, ci_method = "kenward-roger", ci = 0.95)
     p2 <- data.frame(p2)
     em2 <- ref_grid(
       object = m2,
@@ -492,7 +538,7 @@ if (.runThisTest &&
     newdata <- ChickWeight[ChickWeight$Time %in% 0:10 & ChickWeight$Chick %in% c(1, 40), ]
     newdata$Chick[newdata$Chick == "1"] <- NA
     expect_equal(
-      head(as.data.frame(get_predicted(mod, data = newdata, include_random = FALSE, ci = .95))),
+      head(as.data.frame(get_predicted(mod, data = newdata, include_random = FALSE, ci = 0.95))),
       data.frame(
         Predicted = c(37.53433, 47.95719, 58.78866, 70.02873, 81.67742, 93.73472),
         SE = c(1.68687, 0.82574, 1.52747, 2.56109, 3.61936, 4.76178),

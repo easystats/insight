@@ -30,8 +30,8 @@ find_parameters.zeroinfl <- function(x,
   component <- match.arg(component)
 
   l <- compact_list(list(
-    conditional = cf[grepl("^count_", cf, perl = TRUE)],
-    zero_inflated = cf[grepl("^zero_", cf, perl = TRUE)]
+    conditional = cf[startsWith(cf, "count_")],
+    zero_inflated = cf[startsWith(cf, "zero_")]
   ))
 
   .filter_parameters(
@@ -79,9 +79,9 @@ find_parameters.mhurdle <- function(x,
   component <- match.arg(component)
   cf <- stats::coef(x)
 
-  cond_pars <- which(grepl("^h2\\.", names(cf)))
-  zi_pars <- which(grepl("^h1\\.", names(cf)))
-  ip_pars <- which(grepl("^h3\\.", names(cf)))
+  cond_pars <- which(startsWith(names(cf), "h2."))
+  zi_pars <- which(startsWith(names(cf), "h1."))
+  ip_pars <- which(startsWith(names(cf), "h3."))
   aux_pars <- (seq_along(names(cf)))[-c(cond_pars, zi_pars, ip_pars)]
 
   # names(cf) <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", names(cf))

@@ -183,6 +183,9 @@ link_function.multinom <- function(x, ...) {
 }
 
 #' @export
+link_function.logitr <- link_function.multinom
+
+#' @export
 link_function.BBreg <- link_function.multinom
 
 #' @export

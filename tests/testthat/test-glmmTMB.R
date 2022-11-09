@@ -14,7 +14,8 @@ osx <- tryCatch(
 
 if (requiet("testthat") &&
   requiet("insight") &&
-  requiet("glmmTMB")) {
+  requiet("glmmTMB") &&
+  getRversion() >= "4.0.0") {
   # fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
   # fish$nofish <- as.factor(fish$nofish)
   # fish$livebait <- as.factor(fish$livebait)
@@ -84,6 +85,29 @@ if (requiet("testthat") &&
     expect_equal(get_deviance(m2), 1697.449311, tolerance = 1e-3)
     expect_equal(get_loglikelihood(m2), logLik(m2), tolerance = 1e-3, ignore_attr = TRUE)
     expect_equal(get_df(m2, type = "model"), 4)
+  })
+
+  test_that("get_df", {
+    expect_equal(
+      get_df(m2, type = "residual"),
+      df.residual(m2),
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m2, type = "normal"),
+      Inf,
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m2, type = "wald"),
+      Inf,
+      ignore_attr = TRUE
+    )
+    expect_equal(
+      get_df(m2, type = "ml1"),
+      c(`(Intercept)` = 247, child = 247, camper1 = 247),
+      ignore_attr = TRUE
+    )
   })
 
   test_that("model_info", {

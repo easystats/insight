@@ -1,4 +1,5 @@
 unloadNamespace("gam")
+skip_on_os("mac")
 
 if (requiet("testthat") && requiet("insight") && requiet("VGAM")) {
   d.AD <- data.frame(

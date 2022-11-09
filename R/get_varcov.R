@@ -21,14 +21,21 @@
 #'   applies to models of class `mixor`.
 #' @param complete Logical, if `TRUE`, for `aov`, returns the full
 #'   variance-covariance matrix.
-#' @param vcov Variance-covariance matrix used to compute uncertainty estimates (e.g., for robust standard errors). This argument accepts a covariance matrix, a function which returns a covariance matrix, or a string which identifies the function to be used to compute the covariance matrix.
+#' @param vcov Variance-covariance matrix used to compute uncertainty estimates
+#' (e.g., for robust standard errors). This argument accepts a covariance
+#' matrix, a function which returns a covariance matrix, or a string which
+#' identifies the function to be used to compute the covariance matrix.
 #'  * A covariance matrix
 #'  * A function which returns a covariance matrix (e.g., `stats::vcov()`)
 #'  * A string which indicates the kind of uncertainty estimates to return.
-#'    - Heteroskedasticity-consistent: `"vcovHC"`, `"HC"`, `"HC0"`, `"HC1"`, `"HC2"`, `"HC3"`, `"HC4"`, `"HC4m"`, `"HC5"`. See `?sandwich::vcovHC`
-#'    - Cluster-robust: `"vcovCR"`, `"CR0"`, `"CR1"`, `"CR1p"`, `"CR1S"`, `"CR2"`, `"CR3"`. See `?clubSandwich::vcovCR()`
-#'    - Bootstrap: `"vcovBS"`, `"xy"`, `"residual"`, `"wild"`, `"mammen"`, `"webb"`. See `?sandwich::vcovBS`
-#'    - Other `sandwich` package functions: `"vcovHAC"`, `"vcovPC"`, `"vcovCL"`, `"vcovPL"`.
+#'    - Heteroskedasticity-consistent: `"vcovHC"`, `"HC"`, `"HC0"`, `"HC1"`,
+#'      `"HC2"`, `"HC3"`, `"HC4"`, `"HC4m"`, `"HC5"`. See `?sandwich::vcovHC`
+#'    - Cluster-robust: `"vcovCR"`, `"CR0"`, `"CR1"`, `"CR1p"`, `"CR1S"`,
+#'      `"CR2"`, `"CR3"`. See `?clubSandwich::vcovCR()`
+#'    - Bootstrap: `"vcovBS"`, `"xy"`, `"residual"`, `"wild"`, `"mammen"`,
+#'      `"webb"`. See `?sandwich::vcovBS`
+#'    - Other `sandwich` package functions: `"vcovHAC"`, `"vcovPC"`, `"vcovCL"`,
+#'      `"vcovPL"`.
 #' @param vcov_args List of arguments to be passed to the function identified by
 #'   the `vcov` argument. This function is typically supplied by the **sandwich**
 #'   or **clubSandwich** packages. Please refer to their documentation (e.g.,
@@ -141,10 +148,7 @@ get_varcov.mlm <- function(x,
   .check_get_varcov_dots(x, ...)
   if (!is.null(x$weights)) {
     if (!is.null(vcov)) {
-      stop(format_message(
-        "The `vcov` argument is not supported with",
-        "weights in a `mlm` model."
-      ), call. = FALSE)
+      format_error("The `vcov` argument is not supported with weights in a `mlm` model.")
     }
     s <- summary(x)[[1L]]
     .get_weighted_varcov(x, s$cov.unscaled)
@@ -192,7 +196,7 @@ get_varcov.DirichletRegModel <- function(x,
       vc <- vc[keep, keep, drop = FALSE]
     } else if (component == "precision") {
       vc <- stats::vcov(x)
-      keep <- grepl("^\\(phi\\)", rownames(vc), perl = TRUE)
+      keep <- startsWith(rownames(vc), "(phi)")
       vc <- vc[keep, keep, drop = FALSE]
     } else {
       vc <- stats::vcov(x)
@@ -408,9 +412,9 @@ get_varcov.hurdle <- function(x,
       ...
     )
     keep <- switch(component,
-      "conditional" = grepl("^count_", colnames(vc)),
+      "conditional" = startsWith(colnames(vc), "count_"),
       "zi" = ,
-      "zero_inflated" = grepl("^zero_", colnames(vc)),
+      "zero_inflated" = startsWith(colnames(vc), "zero_"),
       seq_len(ncol(vc))
     )
     vc <- vc[keep, keep, drop = FALSE]
@@ -437,8 +441,8 @@ get_varcov.zcpglm <- function(x,
   check_if_installed("cplm")
 
   vc <- cplm::vcov(x)
-  tweedie <- which(grepl("^tw_", rownames(vc)))
-  zero <- which(grepl("^zero_", rownames(vc)))
+  tweedie <- which(startsWith(rownames(vc), "tw_"))
+  zero <- which(startsWith(rownames(vc), "zero_"))
 
   vc <- switch(component,
     "conditional" = vc[tweedie, tweedie, drop = FALSE],
@@ -506,7 +510,8 @@ get_varcov.MixMod <- function(x,
     )
 
     # drop random parameters
-    random_parms <- stats::na.omit(match(colnames(random_vc), colnames(vc)))
+    m <- match(colnames(random_vc), colnames(vc))
+    random_parms <- m[!is.na(m)]
     if (length(random_parms)) {
       vc <- vc[-random_parms, -random_parms, drop = FALSE]
     }
@@ -1039,12 +1044,12 @@ get_varcov.LORgee <- get_varcov.gee
   } else {
     if (is.vector(w)) {
       if (length(w) != nrow(x)) {
-        stop("'w' is the wrong length.", call. = FALSE)
+        stop("`w` is the wrong length.", call. = FALSE)
       }
       return(crossprod(x, w * x))
     } else {
       if (nrow(w) != ncol(w) || nrow(w) != nrow(x)) {
-        stop("'w' is the wrong dimension.", call. = FALSE)
+        stop("`w` is the wrong dimension.", call. = FALSE)
       }
       return(crossprod(x, w %*% x))
     }
@@ -1058,8 +1063,9 @@ get_varcov.LORgee <- get_varcov.gee
   # not be passed here through ... and will not trigger a
   # warning here.
   if ("vcov" %in% names(dots) && !is.null(dots[["vcov"]])) {
-    msg <- sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/"))
-    warning(format_message(msg), call. = FALSE)
+    format_warning(
+      sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/"))
+    )
   }
 }
 

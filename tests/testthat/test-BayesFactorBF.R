@@ -341,14 +341,15 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
   test_that("get_priors for xtable", {
     expect_equal(
       get_priors(xtab_BF1),
-      structure(list(
-        Parameter = "Ratio",
-        Distribution = "independent multinomial",
-        Location = 0,
-        Scale = 2
-      ),
-      class = "data.frame",
-      row.names = c(NA, -1L)
+      structure(
+        list(
+          Parameter = "Ratio",
+          Distribution = "independent multinomial",
+          Location = 0,
+          Scale = 2
+        ),
+        class = "data.frame",
+        row.names = c(NA, -1L)
       ),
       tolerance = 1e-5
     )
@@ -371,16 +372,38 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats"
   test_that("get_priors for t-test", {
     expect_equal(
       get_priors(ttest_BF1),
-      structure(list(
-        Parameter = "Difference",
-        Distribution = "cauchy",
-        Location = 0,
-        Scale = 0.707106781186548
-      ),
-      class = "data.frame",
-      row.names = c(NA, -1L)
+      structure(
+        list(
+          Parameter = "Difference",
+          Distribution = "cauchy",
+          Location = 0,
+          Scale = 0.707106781186548
+        ),
+        class = "data.frame",
+        row.names = c(NA, -1L)
       ),
       tolerance = 1e-5
+    )
+  })
+
+
+  # ---------------------------
+  # Comes from https://github.com/easystats/bayestestR/issues/505
+
+  mtcars$cyl <- factor(mtcars$cyl)
+  mtcars$gear <- factor(mtcars$gear)
+  model <- lmBF(mpg ~ cyl + gear + cyl:gear, mtcars,
+    progress = FALSE, whichRandom = c("gear", "cyl:gear")
+  )
+
+  test_that("find_formula for lmBF", {
+    predicted_form <- find_formula(model)$conditional
+    true_form <- formula(mpg ~ cyl + cyl:gear)
+
+    expect_equal(
+      predicted_form,
+      true_form,
+      ignore_attr = TRUE
     )
   })
 }

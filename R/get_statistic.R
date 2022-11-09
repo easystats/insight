@@ -254,9 +254,9 @@ get_statistic.mhurdle <- function(x,
     stringsAsFactors = FALSE
   )
 
-  cond_pars <- which(grepl("^h2\\.", rownames(s$coefficients)))
-  zi_pars <- which(grepl("^h1\\.", rownames(s$coefficients)))
-  ip_pars <- which(grepl("^h3\\.", rownames(s$coefficients)))
+  cond_pars <- which(startsWith(rownames(s$coefficients), "h2."))
+  zi_pars <- which(startsWith(rownames(s$coefficients), "h1."))
+  ip_pars <- which(startsWith(rownames(s$coefficients), "h3."))
   aux_pars <- (seq_along(rownames(s$coefficients)))[-c(cond_pars, zi_pars, ip_pars)]
 
   stats$Component[cond_pars] <- "conditional"
@@ -565,12 +565,13 @@ get_statistic.coxph <- function(x, ...) {
   # avoid calling default method which would be computationally wasteful, since
   # we need summary() here.
   cs <- suppressWarnings(stats::coef(summary(x)))
-  column_index <- grep("^z$|^t$", colnames(cs))
+  column_index <- grep("^z$|^t$|Chisq", colnames(cs))
   out <- data.frame(
     Parameter = row.names(cs),
     Statistic = cs[, column_index, drop = TRUE],
     stringsAsFactors = FALSE,
-    row.names = NULL)
+    row.names = NULL
+  )
   out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
   out
@@ -863,7 +864,7 @@ get_statistic.multinom <- function(x, ...) {
   stderr <- summary(x)$standard.errors
 
   if (is.matrix(stderr)) {
-    se <- c()
+    se <- NULL
     for (i in seq_len(nrow(stderr))) {
       se <- c(se, as.vector(stderr[i, ]))
     }
@@ -1380,9 +1381,7 @@ get_statistic.mira <- function(x, ...) {
 
 #' @export
 get_statistic.mle2 <- function(x, ...) {
-  if (!requireNamespace("bbmle", quietly = TRUE)) {
-    stop("Package `bbmle` needs to be installed to extract test statistic.", call. = FALSE)
-  }
+  check_if_installed("bbmle", reason = "to extract test statistic")
   s <- bbmle::summary(x)
 
   params <- data.frame(
@@ -1422,7 +1421,7 @@ get_statistic.glht <- function(x, ...) {
 
 #' @rdname get_statistic
 #' @export
-get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters = FALSE, ...) {
+get_statistic.emmGrid <- function(x, ci = 0.95, adjust = "none", merge_parameters = FALSE, ...) {
   s <- summary(x, level = ci, adjust = adjust, infer = TRUE)
 
   stat <- s[["t.ratio"]]
@@ -1458,7 +1457,7 @@ get_statistic.emmGrid <- function(x, ci = .95, adjust = "none", merge_parameters
 
 
 #' @export
-get_statistic.emm_list <- function(x, ci = .95, adjust = "none", ...) {
+get_statistic.emm_list <- function(x, ci = 0.95, adjust = "none", ...) {
   params <- get_parameters(x)
   s <- summary(x, level = ci, adjust = adjust, infer = TRUE)
 

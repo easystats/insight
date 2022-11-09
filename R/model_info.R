@@ -46,6 +46,7 @@
 #' * `is_ttest`: model is an an object of class `htest`, returned by `t.test()`
 #' * `is_correlation`: model is an an object of class `htest`, returned by `cor.test()`
 #' * `is_ranktest`: model is an an object of class `htest`, returned by `cor.test()` (if Spearman's rank correlation), `wilcox.text()` or `kruskal.test()`.
+#' * `is_variancetest`: model is an an object of class `htest`, returned by `bartlett.test()`, `shapiro.test()` or `car::leveneTest()`.
 #' * `is_levenetest`: model is an an object of class `anova`, returned by `car::leveneTest()`.
 #' * `is_onewaytest`: model is an an object of class `htest`, returned by `oneway.test()`
 #' * `is_proptest`: model is an an object of class `htest`, returned by `prop.test()`
@@ -53,7 +54,7 @@
 #' * `is_chi2test`: model is an an object of class `htest`, returned by `chisq.test()`
 #' * `is_xtab`: model is an an object of class `htest` or `BFBayesFactor`, and test-statistic stems from a contingency table (i.e. `chisq.test()` or `BayesFactor::contingencyTableBF()`).
 #' * `link_function`: the link-function
-#' * `family`: the family-object
+#' * `family`: name of the distributional family of the model. For some exceptions (like some `htest` objects), can also be the name of the test.
 #' * `n_obs`: number of observations
 #'
 #' @examples
@@ -154,7 +155,7 @@ model_info.anova <- function(x, verbose = TRUE, ...) {
 model_info.mclogit <- function(x, verbose = TRUE, ...) {
   .make_family(
     x,
-    family = "categorical",
+    fitfam = "categorical",
     logit.link = TRUE,
     link.fun = "logit",
     verbose = verbose,
@@ -167,6 +168,9 @@ model_info.mblogit <- model_info.mclogit
 
 #' @export
 model_info.mmclogit <- model_info.mclogit
+
+#' @export
+model_info.logitr <- model_info.mclogit
 
 
 #' @export
@@ -1269,7 +1273,7 @@ model_info.marginaleffects <- function(x, ...) {
 
 #' @export
 model_info.earth <- function(x, ...) {
-  stop("Models of class 'earth' are not yet supported.", call. = FALSE)
+  format_error("Models of class `earth` are not yet supported.")
 }
 
 #' @export

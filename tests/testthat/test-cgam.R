@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("cgam")) {
+if (requiet("testthat") && requiet("insight") && requiet("cgam") && getRversion() >= "4.0.0") {
   data(cubic, package = "cgam")
   m <- cgam(y ~ incr.conv(x), data = cubic)
 
@@ -56,6 +56,7 @@ if (requiet("testthat") && requiet("insight") && requiet("cgam")) {
 
   test_that("get_df", {
     expect_equal(get_df(m), 39.5, tolerance = 1e-3)
+    expect_equal(get_df(m, type = "wald"), 39.5, tolerance = 1e-3)
     expect_equal(get_df(m, type = "model"), 2, tolerance = 1e-3)
   })
 

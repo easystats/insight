@@ -31,7 +31,6 @@
 #' }
 #' @export
 is_multivariate <- function(x) {
-
   mv_classes <- c("stanmvreg", "mlm", "mvord")
   if (inherits(x, mv_classes)) {
     return(TRUE)

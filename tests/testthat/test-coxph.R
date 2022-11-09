@@ -1,5 +1,6 @@
 requiet("survival")
 requiet("insight")
+requiet("JM")
 
 lung <- subset(survival::lung, subset = ph.ecog %in% 0:2)
 lung$sex <- factor(lung$sex, labels = c("male", "female"))
@@ -140,11 +141,21 @@ test_that("JM", {
 
 test_that("get_statistic", {
   requiet("survival")
-  bladder1 <- bladder[bladder$enum < 5, ] 
+  bladder1 <- bladder[bladder$enum < 5, ]
   mod <- coxph(
     Surv(stop, event) ~ (rx + size + number) * strata(enum),
-    cluster = id, bladder1, robust = TRUE)
+    cluster = id, bladder1, robust = TRUE
+  )
   z1 <- get_statistic(mod)$Statistic
   z2 <- coef(summary(mod))[, "z"]
+  expect_equal(z1, z2, ignore_attr = TRUE)
+
+  lung <- survival::lung
+  mod <- survival::coxph(
+    formula = Surv(time, status) ~ age + sex + frailty(inst),
+    data = lung
+  )
+  z1 <- get_statistic(mod)$Statistic
+  z2 <- coef(summary(mod))[, "Chisq"]
   expect_equal(z1, z2, ignore_attr = TRUE)
 })

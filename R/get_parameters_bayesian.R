@@ -52,7 +52,7 @@ get_parameters.BGGM <- function(x,
   #
   # out <- as.data.frame(BGGM::posterior_samples(x))
   out <- as.data.frame(.bggm_posterior_samples(x))
-  intercepts <- grepl("_\\(Intercept\\)$", colnames(out))
+  intercepts <- endsWith(colnames(out), "_(Intercept)")
   correlations <- grepl("(.*)--(.*)", colnames(out))
   conditional <- !intercepts & !correlations
 
@@ -163,7 +163,7 @@ get_parameters.BFBayesFactor <- function(x,
       BayesFactor::posterior(x, iterations = iterations, progress = progress)
     )))
     posts <- posts[, seq_len(cells)]
-    if (sum(posts[1, ]) == 1) {
+    if (all(posts[1, ] <= 1)) {
       posts <- posts * N
     }
     colnames(posts) <- gsub("(pi|lambda)", "cell", colnames(posts))
@@ -494,7 +494,7 @@ get_parameters.sim <- function(x,
 .bggm_posterior_samples <- function(object, ...) {
   if (methods::is(object, "estimate") || methods::is(object, "explore")) {
     if (!methods::is(object, "default")) {
-      stop("Object must be from 'estimate' or 'explore'.", call. = FALSE)
+      format_error("Object must be from `estimate` or `explore`.")
     }
     p <- object$p
     pcors_total <- p * (p - 1) * 0.5

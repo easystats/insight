@@ -31,6 +31,19 @@
 #'   For `exact = TRUE`, very large or very small values are then either reported
 #'   with a scientific format (e.g., 4.24e5), else as truncated values (as "> 1000"
 #'   and "< 1/1000").
+#' @param use_symbols Logical, if `TRUE`, column names that refer to particular
+#'   effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
+#'   instead of the written name. This only works on Windows for R >= 4.2, and on
+#'   OS X or Linux for R >= 4.0. It is possible to define a global option for this
+#'   setting, see 'Note'.
+#' @param stars If `TRUE`, add significance stars (e.g., `p < .001***`). Can
+#'   also be a character vector, naming the columns that should include stars
+#'   for significant values. This is especially useful for Bayesian models,
+#'   where we might have multiple columns with significant values, e.g. `BF`
+#'   for the Bayes factor or `pd` for the probability of direction. In such
+#'   cases, use `stars = c("pd", "BF")` to add stars to both columns, or
+#'   `stars = "BF"` to only add stars to the Bayes factor and exclude the `pd`
+#'   column. Currently, following columns are recognized: `"BF"`, `"pd"` and `"p"`.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
@@ -39,6 +52,8 @@
 #' @seealso Vignettes [Formatting, printing and exporting tables](https://easystats.github.io/insight/articles/display.html)
 #' and [Formatting model parameters](https://easystats.github.io/parameters/articles/model_parameters_formatting.html).
 #'
+#' @note `options(insight_use_symbols = TRUE)` override the `use_symbols` argument
+#'   and always displays symbols, if possible.
 #' @examples
 #' format_table(head(iris), digits = 1)
 #'
@@ -71,6 +86,7 @@ format_table <- function(x,
                          zap_small = FALSE,
                          preserve_attributes = FALSE,
                          exact = TRUE,
+                         use_symbols = getOption("insight_use_symbols", FALSE),
                          verbose = TRUE,
                          ...) {
   # sanity check
@@ -86,6 +102,7 @@ format_table <- function(x,
   if (missing(ci_digits)) ci_digits <- .additional_arguments(x, "ci_digits", 2)
   if (missing(p_digits)) p_digits <- .additional_arguments(x, "p_digits", 3)
   if (missing(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", 2)
+  if (missing(ic_digits)) ic_digits <- .additional_arguments(x, "ic_digits", 1)
 
   att <- attributes(x)
   x <- as.data.frame(x, stringsAsFactors = FALSE)
@@ -147,27 +164,23 @@ format_table <- function(x,
   other_ci_colname <- out$other_ci_colname
 
 
-  # Misc / Effect Sizes
-  names(x)[names(x) == "Cohens_d"] <- "Cohen's d"
-  names(x)[names(x) == "Cramers_v"] <- "Cramer's V"
-  names(x)[names(x) == "phi_adjusted"] <- "phi (adj.)"
-  names(x)[names(x) == "r_rank_biserial"] <- "r (rank biserial)"
-  names(x)[names(x) == "Cramers_v_adjusted"] <- "Cramer's V (adj.)"
-
-
   # Standardized ----
   x <- .format_std_columns(x, other_ci_colname, digits, zap_small)
 
 
   # Partial ----
-  x[names(x)[grepl("_partial$", names(x))]] <- format_value(
-    x[names(x)[grepl("_partial$", names(x))]],
+  x[names(x)[endsWith(names(x), "_partial")]] <- format_value(
+    x[names(x)[endsWith(names(x), "_partial")]],
     zap_small = zap_small
   )
-  names(x)[grepl("_partial$", names(x))] <- paste0(
-    gsub("_partial$", "", names(x)[grepl("_partial$", names(x))]),
+  names(x)[endsWith(names(x), "_partial")] <- paste0(
+    gsub("_partial$", "", names(x)[endsWith(names(x), "_partial")]),
     " (partial)"
   )
+
+
+  # Misc / Effect Sizes
+  x <- .format_effectsize_columns(x, use_symbols)
 
 
   # metafor ----
@@ -177,7 +190,7 @@ format_table <- function(x,
   # Bayesian ---
   x <- .format_bayes_columns(
     x,
-    stars,
+    stars = stars,
     rope_digits = rope_digits,
     zap_small = zap_small,
     ci_width = ci_width,
@@ -187,11 +200,15 @@ format_table <- function(x,
 
 
   # rename performance columns
-  x <- .format_performance_columns(x, digits, ic_digits, zap_small)
+  x <- .format_performance_columns(x, digits, ic_digits, zap_small, use_symbols)
+
+
+  # format symbols in column names, if any left
+  x <- .format_symbols(x, use_symbols)
 
 
   # Format remaining columns
-  other_cols <- names(x)[sapply(x, is.numeric)]
+  other_cols <- names(x)[vapply(x, is.numeric, logical(1))]
   x[other_cols[other_cols %in% names(x)]] <- format_value(
     x[other_cols[other_cols %in% names(x)]],
     digits = digits,
@@ -203,7 +220,8 @@ format_table <- function(x,
     x$Link <- paste(x$To, x$Operator, x$From)
 
     col_position <- which(names(x) == "To")
-    x <- x[c(names(x)[0:(col_position - 1)], "Link", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
+    # Replace at initial position
+    x <- x[c(names(x)[0:(col_position - 1)], "Link", names(x)[col_position:(length(names(x)) - 1)])]
     x$To <- x$Operator <- x$From <- NULL
   }
 
@@ -223,20 +241,51 @@ format_table <- function(x,
 # sub-routines ---------------
 
 
-.format_p_values <- function(x, stars, p_digits) {
+# Format various p-values, coming from different easystats-packages
+# like bayestestR (p_ROPE, p_MAP) or performance (p_Chi2)
+
+.format_p_values <- function(x, stars = FALSE, p_digits) {
+  # Specify stars for which column
+  if (is.character(stars)) {
+    starlist <- list("p" = FALSE)
+    starlist[stars] <- TRUE
+  } else {
+    starlist <- list("p" = stars)
+  }
+
   if ("p" %in% names(x)) {
-    x$p <- format_p(x$p, stars = stars, name = NULL, missing = "", digits = p_digits)
+    x$p <- format_p(
+      x$p,
+      stars = starlist[["p"]],
+      name = NULL,
+      missing = "",
+      digits = p_digits
+    )
     x$p <- format(x$p, justify = "left")
   }
   if ("p.value" %in% names(x)) {
-    x$p.value <- format_p(x$p.value, stars = stars, name = NULL, missing = "", digits = p_digits)
+    x$p.value <- format_p(
+      x$p.value,
+      stars = starlist[["p"]],
+      name = NULL,
+      missing = "",
+      digits = p_digits
+    )
     x$p.value <- format(x$p.value, justify = "left")
   }
 
-  for (stats in c("p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA",
-                  "p_ROPE", "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR")) {
+  for (stats in c(
+    "p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA",
+    "p_ROPE", "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR"
+  )) {
     if (stats %in% names(x)) {
-      x[[stats]] <- format_p(x[[stats]], stars = stars, name = NULL, missing = "", digits = p_digits)
+      x[[stats]] <- format_p(
+        x[[stats]],
+        stars = starlist[["p"]],
+        name = NULL,
+        missing = "",
+        digits = p_digits
+      )
       x[[stats]] <- format(x[[stats]], justify = "left")
       p_name <- gsub("(.*)_p$", "\\1", gsub("^p_(.*)", "\\1", stats))
       names(x)[names(x) == stats] <- paste0("p (", p_name, ")")
@@ -246,7 +295,10 @@ format_table <- function(x,
 }
 
 
-
+# Format df-columns. We have df's for errors, numerator and denominator
+# However, if df and df-error present, we have two different df-column names,
+# but df-error becomes "df" is no df-column present. This is taken care of in
+# this function.
 
 .format_df_columns <- function(x) {
   # generic df
@@ -276,6 +328,66 @@ format_table <- function(x,
 }
 
 
+# formatting for various effect size columns. This function also checks if
+# unicode for special characters is available, and if so, use these for
+# column name formatting
+
+.format_effectsize_columns <- function(x, use_symbols) {
+  names(x)[names(x) == "Cohens_d"] <- "Cohen's d"
+  names(x)[names(x) == "Cohens_w"] <- "Cohen's w"
+  names(x)[names(x) == "Cohens_h"] <- "Cohen's h"
+  names(x)[names(x) == "Cohens_g"] <- "Cohen's g"
+  names(x)[names(x) == "Cohens_f"] <- "Cohen's f"
+  names(x)[names(x) == "Cohens_f_partial"] <- "Cohen's f (partial)"
+  names(x)[names(x) == "Cramers_v"] <- "Cramer's V"
+  names(x)[names(x) == "Cramers_v_adjusted"] <- "Cramer's V (adj.)"
+  names(x)[names(x) == "r_rank_biserial"] <- "r (rank biserial)"
+  names(x)[names(x) == "Hedges_g"] <- "Hedges' g"
+  names(x)[names(x) == "Mahalanobis_D"] <- "Mahalanobis' D"
+  names(x)[names(x) == "Pearsons_c"] <- "Pearson's C"
+  names(x)[names(x) == "Kendalls_W"] <- "Kendall's W"
+  names(x)[names(x) == "Odds_ratio"] <- "Odds ratio"
+  names(x)[names(x) == "log_Odds_ratio"] <- "log(Odds ratio)"
+  names(x)[names(x) == "Risk_ratio"] <- "Risk ratio"
+  names(x)[names(x) == "log_Risk_ratio"] <- "log(Risk ratio)"
+
+  # we can use unicode symbols
+  if (isTRUE(use_symbols) && .unicode_symbols()) {
+    names(x)[names(x) == "Glass_delta"] <- "Glass' \u0394"
+    names(x)[names(x) == "phi"] <- "\u03D5"
+    names(x)[names(x) == "phi_adjusted"] <- "\u03D5 (adj.)"
+    names(x)[names(x) == "Fei"] <- "\u05E4\u200E"
+    names(x)[names(x) == "Eta2"] <- "\u03B7\u00b2"
+    names(x)[names(x) == "Eta2_partial"] <- "\u03B7\u00b2 (partial)"
+    names(x)[names(x) == "Eta2_generalized"] <- "\u03B7\u00b2 (generalized)"
+    names(x)[names(x) == "Epsilon2"] <- "\u03b5\u00b2"
+    names(x)[names(x) == "Epsilon2_partial"] <- "\u03b5\u00b2 (partial)"
+    names(x)[names(x) == "Omega2"] <- "\u03C9\u00b2"
+    names(x)[names(x) == "Omega2_partial"] <- "\u03C9\u00b2 (partial)"
+    names(x)[names(x) == "Cohens_f2"] <- "Cohen's f\u00b2"
+    names(x)[names(x) == "Cohens_f2"] <- "Cohen's f\u00b2 (partial)"
+    names(x)[names(x) == "rank_epsilon_squared"] <- "\u03B5\u00b2(R)"
+    names(x)[names(x) == "rank_eta_squared"] <- "\u03B7\u00b2(H)"
+  } else {
+    names(x)[names(x) == "Glass_delta"] <- "Glass' delta"
+    names(x)[names(x) == "phi"] <- "Phi"
+    names(x)[names(x) == "phi_adjusted"] <- "Phi (adj.)"
+    names(x)[names(x) == "Fei"] <- "Fei"
+    names(x)[names(x) == "Eta2"] <- "Eta2"
+    names(x)[names(x) == "Eta2_partial"] <- "Eta2 (partial)"
+    names(x)[names(x) == "Eta2_generalized"] <- "Eta2 (generalized)"
+    names(x)[names(x) == "Epsilon2"] <- "Epsilon2"
+    names(x)[names(x) == "Epsilon2_partial"] <- "Epsilon2 (partial)"
+    names(x)[names(x) == "Omega2"] <- "Omega2"
+    names(x)[names(x) == "Omega2_partial"] <- "Omega2 (partial)"
+    names(x)[names(x) == "Cohens_f2"] <- "Cohen's f2"
+    names(x)[names(x) == "Cohens_f2_partial"] <- "Cohen's f2 (partial)"
+    names(x)[names(x) == "rank_epsilon_squared"] <- "Epsilon2 (rank)"
+    names(x)[names(x) == "rank_eta_squared"] <- "Eta2 (rank)"
+  }
+  x
+}
+
 
 
 .format_aov_columns <- function(x) {
@@ -288,7 +400,6 @@ format_table <- function(x,
   }
   x
 }
-
 
 
 
@@ -331,7 +442,6 @@ format_table <- function(x,
 
   x
 }
-
 
 
 
@@ -408,10 +518,9 @@ format_table <- function(x,
 
 
 
-
 .format_other_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE, zap_small) {
-  other_ci_low <- names(x)[grep("_CI_low$", names(x))]
-  other_ci_high <- names(x)[grep("_CI_high$", names(x))]
+  other_ci_low <- names(x)[endsWith(names(x), "_CI_low")]
+  other_ci_high <- names(x)[endsWith(names(x), "_CI_high")]
   if (length(other_ci_low) >= 1 && length(other_ci_low) == length(other_ci_high)) {
     other <- unlist(strsplit(other_ci_low, "_CI_low$"))
 
@@ -449,12 +558,11 @@ format_table <- function(x,
       x[[paste0(i, "_CI")]] <- NULL
     }
   } else {
-    other_ci_colname <- c()
+    other_ci_colname <- NULL
   }
 
   list(x = x, other_ci_colname = other_ci_colname)
 }
-
 
 
 
@@ -494,7 +602,6 @@ format_table <- function(x,
 
 
 
-
 .format_rope_columns <- function(x, ci_width = "auto", ci_brackets = TRUE, zap_small) {
   if (all(c("ROPE_low", "ROPE_high") %in% names(x))) {
     x$ROPE_low <- format_ci(
@@ -511,7 +618,6 @@ format_table <- function(x,
   }
   x
 }
-
 
 
 
@@ -545,21 +651,28 @@ format_table <- function(x,
 
 
 
-
 .format_bayes_columns <- function(x,
-                                  stars,
+                                  stars = FALSE,
                                   rope_digits = 2,
                                   zap_small,
                                   ci_width = "auto",
                                   ci_brackets = TRUE,
                                   exact = TRUE) {
+  # Specify stars for which column
+  if (is.character(stars)) {
+    starlist <- list("BF" = FALSE, "pd" = FALSE)
+    starlist[stars] <- TRUE
+  } else {
+    starlist <- list("BF" = stars, "pd" = stars)
+  }
+
   # Indices
-  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = stars, exact = exact)
+  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = starlist[["BF"]], exact = exact)
   if ("log_BF" %in% names(x)) {
-    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = stars, exact = exact)
+    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = starlist[["BF"]], exact = exact)
     x$log_BF <- NULL
   }
-  if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = stars)
+  if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = starlist[["pd"]])
   if ("Rhat" %in% names(x)) x$Rhat <- format_value(x$Rhat, digits = 3)
   if ("ESS" %in% names(x)) x$ESS <- round(x$ESS)
 
@@ -593,7 +706,8 @@ format_table <- function(x,
     x$Prior <- trim_ws(gsub("( +- )", "", x$Prior, fixed = TRUE))
 
     col_position <- which(names(x) == "Prior_Distribution")
-    x <- x[c(names(x)[0:(col_position - 1)], "Prior", names(x)[col_position:(length(names(x)) - 1)])] # Replace at initial position
+    # Replace at initial position
+    x <- x[c(names(x)[0:(col_position - 1)], "Prior", names(x)[col_position:(length(names(x)) - 1)])]
     x$Prior_Distribution <- x$Prior_Location <- x$Prior_Scale <- x$Prior_df <- NULL
   }
 
@@ -602,13 +716,21 @@ format_table <- function(x,
 
 
 
-
-.format_performance_columns <- function(x, digits, ic_digits, zap_small) {
-  if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R2 (adj.)"
-  if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R2 (cond.)"
-  if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R2 (marg.)"
-  if ("R2_Tjur" %in% names(x)) names(x)[names(x) == "R2_Tjur"] <- "Tjur's R2"
-  if ("R2_Nagelkerke" %in% names(x)) names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R2"
+.format_performance_columns <- function(x, digits, ic_digits, zap_small, use_symbols) {
+  if (isTRUE(use_symbols) && .unicode_symbols()) {
+    if ("R2" %in% names(x)) names(x)[names(x) == "R2"] <- "R\u00b2"
+    if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R\u00b2 (adj.)"
+    if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R\u00b2 (cond.)"
+    if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R\u00b2 (marg.)"
+    if ("R2_Tjur" %in% names(x)) names(x)[names(x) == "R2_Tjur"] <- "Tjur's R\u00b2"
+    if ("R2_Nagelkerke" %in% names(x)) names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R\u00b2"
+  } else {
+    if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R2 (adj.)"
+    if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R2 (cond.)"
+    if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R2 (marg.)"
+    if ("R2_Tjur" %in% names(x)) names(x)[names(x) == "R2_Tjur"] <- "Tjur's R2"
+    if ("R2_Nagelkerke" %in% names(x)) names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R2"
+  }
   if ("Performance_Score" %in% names(x)) names(x)[names(x) == "Performance_Score"] <- "Performance-Score"
   if ("Wu_Hausman" %in% names(x)) names(x)[names(x) == "Wu_Hausman"] <- "Wu & Hausman"
   if ("p(Wu_Hausman)" %in% names(x)) names(x)[names(x) == "p(Wu_Hausman)"] <- "p(Wu & Hausman)"
@@ -617,9 +739,11 @@ format_table <- function(x,
 
   # add IC weights to IC columns. The next code lines only apply if we have
   # both the IC and IC weights in the data frame
-  all_ics <- list(AIC = c("AIC", "AIC_wt"), BIC = c("BIC", "BIC_wt"),
-                  AICc = c("AICc", "AICc_wt"), WAIC = c("WAIC", "WAIC_wt"),
-                  LOOIC = c("LOOIC", "LOOIC_wt"))
+  all_ics <- list(
+    AIC = c("AIC", "AIC_wt"), BIC = c("BIC", "BIC_wt"),
+    AICc = c("AICc", "AICc_wt"), WAIC = c("WAIC", "WAIC_wt"),
+    LOOIC = c("LOOIC", "LOOIC_wt")
+  )
   for (ic in names(all_ics)) {
     ics <- all_ics[[ic]]
     if (all(ics %in% colnames(x))) {
@@ -669,6 +793,25 @@ format_table <- function(x,
 
 
 
+.format_symbols <- function(x, use_symbols) {
+  if (isTRUE(use_symbols) && .unicode_symbols()) {
+    colnames(x) <- gsub("Delta", "\u0394", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Phi", "\u03D5", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Eta", "\u03B7", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Epsilon", "\u03b5", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Omega", "\u03b5", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("R2", "R\u00b2", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Chi2", "\u03C7\u00b2", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Chi", "\u03C7", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Sigma", "\u03C3", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Rho", "\u03C1", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Mu", "\u03BC", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Theta", "\u03B8", colnames(x), ignore.case = TRUE)
+  }
+  x
+}
+
+
 
 # helper ---------------------
 
@@ -681,7 +824,6 @@ format_table <- function(x,
   }
   x
 }
-
 
 
 
@@ -699,4 +841,25 @@ format_table <- function(x,
   }
 
   out
+}
+
+
+
+.unicode_symbols <- function() {
+  # symbols only work on windows from R 4.2 and higher
+  win_os <- tryCatch(
+    {
+      si <- Sys.info()
+      if (!is.null(si["sysname"])) {
+        si["sysname"] == "Windows" || startsWith(R.version$os, "mingw")
+      } else {
+        FALSE
+      }
+    },
+    error = function(e) {
+      TRUE
+    }
+  )
+
+  l10n_info()[["UTF-8"]] && ((win_os && getRversion() >= "4.2") || (!win_os && getRversion() >= "4.0"))
 }

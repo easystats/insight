@@ -2,17 +2,15 @@
 output: github_document
 ---
 
-
 ```{r, warning=FALSE, message=FALSE, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  tidy.opts = list(width.cutoff = 80),
-  tidy = TRUE,
   warning = FALSE,
   message = FALSE,
   fig.path = "README-",
   comment = "#>"
 )
+
 options(knitr.kable.NA = "", digits = 2, width = 80)
 ```
 
@@ -29,20 +27,27 @@ When fitting any statistical model, there are many useful pieces of information 
 
 ## Installation
 
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight) [![insight status badge](https://easystats.r-universe.dev/badges/insight)](https://easystats.r-universe.dev) [![R check](https://github.com/easystats/insight/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/insight/actions)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight) [![insight status badge](https://easystats.r-universe.dev/badges/insight)](https://easystats.r-universe.dev) [![R-CMD-check](https://github.com/easystats/insight/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/insight/actions)
 
-The *insight* package is available on CRAN, while its latest development version is available on R-universe (from _rOpenSci_).
+The *insight* package is available on CRAN, while its latest development version is available on R-universe (from _rOpenSci_) or GitHub.
 
 Type | Source | Command
 ---|---|---
 Release | CRAN | `install.packages("insight")`
-Development | R-universe | `install.packages("insight", repos = "https://easystats.r-universe.dev")`
+Development | r-universe | `install.packages("insight", repos = "https://easystats.r-universe.dev")`
+Development | GitHub | `remotes::install_github("easystats/insight")`
 
 Once you have downloaded the package, you can then load it using:
 
 ```{r, eval=FALSE}
 library("insight")
 ```
+
+> **Tip**
+>
+> Instead of `library(insight)`, use `library(easystats)`. This will make all features of the  easystats-ecosystem available.
+>
+> To stay updated, use `easystats::install_latest()`.
 
 ## Documentation
 
@@ -186,7 +191,7 @@ supported_models()
 - **Didn't find a model?** [File an issue](https://github.com/easystats/insight/issues) and request additional model-support in _insight_!
 
 
-## Credits
+## Citation
 
 If this package helped you, please consider citing as follows:
 

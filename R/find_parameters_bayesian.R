@@ -191,9 +191,9 @@ find_parameters.bamlss <- function(x,
 
   ignore <- grepl("(\\.alpha|logLik|\\.accepted|\\.edf)$", cn)
   cond <- cn[grepl("^(mu\\.p\\.|pi\\.p\\.)", cn) & !ignore]
-  sigma <- cn[grepl("^sigma\\.p\\.", cn) & !ignore]
+  sigma <- cn[startsWith(cn, "sigma.p.") & !ignore]
   smooth_terms <- cn[grepl("^mu\\.s\\.(.*)(\\.tau\\d+|\\.edf)$", cn)]
-  alpha <- cn[grepl("\\.alpha$", cn)]
+  alpha <- cn[endsWith(cn, ".alpha")]
 
   elements <- .get_elements(effects = "all", component = component)
   l <- compact_list(list(
@@ -235,7 +235,7 @@ find_parameters.brmsfit <- function(x,
   is_mv <- NULL
 
   # remove "Intercept"
-  fe <- fe[!grepl("^Intercept", fe)]
+  fe <- fe[!startsWith(fe, "Intercept")]
 
   cond <- fe[grepl("^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
   zi <- fe[grepl("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
@@ -245,11 +245,11 @@ find_parameters.brmsfit <- function(x,
   randzi_sd <- fe[grepl("^sd_(.*_zi)", fe, perl = TRUE)]
   rand_cor <- fe[grepl("(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
   randzi_cor <- fe[grepl("^cor_(.*_zi)", fe, perl = TRUE)]
-  simo <- fe[grepl("^simo_", fe, perl = TRUE)]
+  simo <- fe[startsWith(fe, "simo_")]
   car_struc <- fe[fe %in% c("car", "sdcar")]
-  smooth_terms <- fe[grepl("^sds_", fe, perl = TRUE)]
-  priors <- fe[grepl("^prior_", fe, perl = TRUE)]
-  sigma <- fe[grepl("^sigma_", fe, perl = TRUE) | grepl("sigma", fe, fixed = TRUE)]
+  smooth_terms <- fe[startsWith(fe, "sds_")]
+  priors <- fe[startsWith(fe, "prior_")]
+  sigma <- fe[startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE)]
   randsigma <- fe[grepl("^r_(.*__sigma)", fe, perl = TRUE)]
   beta <- fe[grepl("beta", fe, fixed = TRUE)]
   randbeta <- fe[grepl("^r_(.*__beta)", fe, perl = TRUE)]
@@ -298,7 +298,7 @@ find_parameters.brmsfit <- function(x,
       if (object_has_names(l, "random")) {
         random <- l$random[grepl(sprintf("__\\Q%s\\E\\[", i), l$random) |
           grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
-          grepl("^cor_", l$random) |
+          startsWith(l$random, "cor_") |
           l$random %in% c("car", "sdcar")]
       } else {
         random <- NULL
@@ -313,7 +313,7 @@ find_parameters.brmsfit <- function(x,
       if (object_has_names(l, "zero_inflated_random")) {
         zero_inflated_random <- l$zero_inflated_random[grepl(sprintf("__zi_\\Q%s\\E\\[", i), l$zero_inflated_random) |
           grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$zero_inflated_random) |
-          grepl("^cor_", l$zero_inflated_random)]
+          startsWith(l$zero_inflated_random, "cor_")]
       } else {
         zero_inflated_random <- NULL
       }
@@ -445,9 +445,9 @@ find_parameters.stanreg <- function(x,
   # fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
-  rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
-  rand_sd <- fe[grepl("^Sigma\\[", fe, perl = TRUE)]
-  smooth_terms <- fe[grepl("^smooth_sd", fe, perl = TRUE)]
+  rand <- fe[startsWith(fe, "b[")]
+  rand_sd <- fe[startsWith(fe, "Sigma[")]
+  smooth_terms <- fe[startsWith(fe, "smooth_sd")]
   sigma <- fe[grepl("sigma", fe, fixed = TRUE)]
   auxiliary <- fe[grepl("(shape|phi|precision)", fe)]
 
@@ -503,11 +503,11 @@ find_parameters.stanmvreg <- function(x,
   fe <- colnames(as.data.frame(x))
   rn <- names(find_response(x))
 
-  cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !grepl("\\|sigma$", fe, perl = TRUE)]
-  rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
-  rand_sd <- fe[grepl("^Sigma\\[", fe, perl = TRUE)]
-  smooth_terms <- fe[grepl("^smooth_sd", fe, perl = TRUE)]
-  sigma <- fe[grepl("\\|sigma$", fe, perl = TRUE) & .grep_non_smoothers(fe)]
+  cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !endsWith(fe, "|sigma")]
+  rand <- fe[startsWith(fe, "b[")]
+  rand_sd <- fe[startsWith(fe, "Sigma[")]
+  smooth_terms <- fe[startsWith(fe, "smooth_sd")]
+  sigma <- fe[endsWith(fe, "|sigma") & .grep_non_smoothers(fe)]
   auxiliary <- fe[grepl("(shape|phi|precision)", fe)]
 
   # remove auxiliary from conditional

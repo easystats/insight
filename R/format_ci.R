@@ -58,7 +58,7 @@ format_ci <- function(CI_low,
     # check if we have special handling, like "scientific" or "signif"
     # and then convert to numeric
     if (is.character(digits)) {
-      if (grepl("^scientific", digits)) {
+      if (startsWith(digits, "scientific")) {
         if (digits == "scientific") digits <- "scientific3"
         sig_digits <- as.numeric(gsub("scientific", "", digits, fixed = TRUE)) + 3
       } else {

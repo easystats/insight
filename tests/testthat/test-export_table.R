@@ -19,13 +19,14 @@ if (requiet("testthat") && requiet("insight")) {
 
   test_that("export_table", {
     out <- export_table(d, format = "md")
-    expect_equal(out, structure(c(
-      "|      a|     b|", "|------:|-----:|",
-      "|   1.30|    ab|", "|   2.00|    cd|",
-      "| 543.00| abcde|"
-    ),
-    format = "pipe",
-    class = c("knitr_kable", "character")
+    expect_equal(out, structure(
+      c(
+        "|      a|     b|", "|------:|-----:|",
+        "|   1.30|    ab|", "|   2.00|    cd|",
+        "| 543.00| abcde|"
+      ),
+      format = "pipe",
+      class = c("knitr_kable", "character")
     ))
   })
 
@@ -36,12 +37,13 @@ if (requiet("testthat") && requiet("insight")) {
     out <- export_table(d, format = "md")
     expect_equal(
       out,
-      structure(c(
-        "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
-        "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|"
-      ),
-      format = "pipe",
-      class = c("knitr_kable", "character")
+      structure(
+        c(
+          "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
+          "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|"
+        ),
+        format = "pipe",
+        class = c("knitr_kable", "character")
       )
     )
   })
@@ -53,12 +55,13 @@ if (requiet("testthat") && requiet("insight")) {
     out <- export_table(d, format = "md")
     expect_equal(
       out,
-      structure(c(
-        "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
-        "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|"
-      ),
-      format = "pipe",
-      class = c("knitr_kable", "character")
+      structure(
+        c(
+          "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
+          "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|"
+        ),
+        format = "pipe",
+        class = c("knitr_kable", "character")
       )
     )
   })
@@ -69,12 +72,13 @@ if (requiet("testthat") && requiet("insight")) {
     out <- export_table(d, format = "md", title = "Table Title")
     expect_equal(
       out,
-      structure(c(
-        "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
-        "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|"
-      ),
-      format = "pipe",
-      class = c("knitr_kable", "character")
+      structure(
+        c(
+          "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
+          "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|"
+        ),
+        format = "pipe",
+        class = c("knitr_kable", "character")
       )
     )
   })
@@ -87,13 +91,14 @@ if (requiet("testthat") && requiet("insight")) {
     out <- export_table(d, format = "md")
     expect_equal(
       out,
-      structure(c(
-        "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
-        "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|",
-        "first", "second", "third"
-      ),
-      format = "pipe",
-      class = c("knitr_kable", "character")
+      structure(
+        c(
+          "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
+          "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|",
+          "first", "second", "third"
+        ),
+        format = "pipe",
+        class = c("knitr_kable", "character")
       )
     )
   })

@@ -55,6 +55,19 @@ if (requiet("testthat") && requiet("insight")) {
   test_that("ellipses_info, same fixed effects", {
     expect_true(attributes(info)$same_fixef)
     expect_false(attributes(info)$is_nested)
+    expect_true(all(attributes(info)$is_linear))
+    expect_false(any(attributes(info)$is_binomial))
+  })
+
+  m1 <- glm(am ~ hp, data = mtcars, family = binomial())
+  m2 <- glm(am ~ hp + gear, data = mtcars, family = binomial())
+  m3 <- glm(am ~ hp + cyl + gear, data = mtcars, family = binomial())
+
+  info <- ellipsis_info(m1, m2, m3)
+  test_that("ellipses_info, binomial", {
+    expect_true(attributes(info)$is_nested)
+    expect_true(all(attributes(info)$is_binomial))
+    expect_false(any(attributes(info)$is_linear))
   })
 
   if (requiet("lme4")) {

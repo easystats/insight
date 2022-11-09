@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if (requiet("testthat") && requiet("insight") && requiet("mgcv")) {
+  if (requiet("testthat") && requiet("insight") && requiet("mgcv") && requiet("httr")) {
     set.seed(123)
     void <- capture.output(
       dat <- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
@@ -26,6 +26,25 @@ if (.runThisTest) {
       expect_equal(clean_names(m1), c("y", "x0", "x1", "x2", "x3"))
       expect_equal(clean_names(m2), c("y", "x2", "x3", "x0", "x1"))
       expect_equal(clean_names(m3), c("y0", "y1", "x0", "x1", "x2", "x3"))
+    })
+
+    test_that("get_df", {
+      expect_equal(
+        get_df(m1, type = "residual"),
+        df.residual(m1),
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m1, type = "normal"),
+        Inf,
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        get_df(m1, type = "wald"),
+        383.0491,
+        ignore_attr = TRUE,
+        tolerance = 1e-3
+      )
     })
 
     test_that("find_predictors", {
@@ -99,11 +118,12 @@ if (.runThisTest) {
       expect_length(find_formula(m3), 2)
       expect_equal(
         find_formula(m3),
-        structure(list(
-          y0 = list(conditional = as.formula("y0 ~ s(x0) + s(x1)")),
-          y1 = list(conditional = as.formula("y1 ~ s(x2) + s(x3)"))
-        ),
-        is_mv = "1"
+        structure(
+          list(
+            y0 = list(conditional = as.formula("y0 ~ s(x0) + s(x1)")),
+            y1 = list(conditional = as.formula("y1 ~ s(x2) + s(x3)"))
+          ),
+          is_mv = "1"
         ),
         ignore_attr = TRUE
       )
@@ -196,7 +216,7 @@ if (.runThisTest) {
 
     test_that("get_predicted", {
       tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = head(dat, 30))
-      pred <- get_predicted(tmp, verbose = FALSE, ci = .95)
+      pred <- get_predicted(tmp, verbose = FALSE, ci = 0.95)
       expect_s3_class(pred, "get_predicted")
       expect_equal(
         as.vector(pred),
@@ -210,15 +230,15 @@ if (.runThisTest) {
         tolerance = 1e-3
       )
 
-      x <- get_predicted(tmp, predict = NULL, type = "link", ci = .95)
-      y <- get_predicted(tmp, predict = "link", ci = .95)
+      x <- get_predicted(tmp, predict = NULL, type = "link", ci = 0.95)
+      y <- get_predicted(tmp, predict = "link", ci = 0.95)
       z <- predict(tmp, type = "link", se.fit = TRUE)
       expect_equal(x, y)
       expect_equal(x, z$fit, ignore_attr = TRUE)
       expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
 
-      x <- get_predicted(tmp, predict = NULL, type = "response", verbose = FALSE, ci = .95)
-      y <- get_predicted(tmp, predict = "expectation", ci = .95)
+      x <- get_predicted(tmp, predict = NULL, type = "response", verbose = FALSE, ci = 0.95)
+      y <- get_predicted(tmp, predict = "expectation", ci = 0.95)
       z <- predict(tmp, type = "response", se.fit = TRUE)
       expect_equal(x, y, ignore_attr = TRUE)
       expect_equal(x, z$fit, ignore_attr = TRUE)
@@ -236,19 +256,19 @@ if (.runThisTest) {
         scale = -1
       )
       d <- get_datagrid(b4, at = "x1")
-      p1 <- get_predicted(b4, data = d, predict = "expectation", ci = .95)
+      p1 <- get_predicted(b4, data = d, predict = "expectation", ci = 0.95)
       p2 <- predict(b4, newdata = d, type = "response")
       expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
 
-      p1 <- get_predicted(b4, data = d, predict = "link", ci = .95)
+      p1 <- get_predicted(b4, data = d, predict = "link", ci = 0.95)
       p2 <- predict(b4, newdata = d, type = "link")
       expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
 
-      p1 <- get_predicted(b4, data = d, type = "link", predict = NULL, ci = .95)
+      p1 <- get_predicted(b4, data = d, type = "link", predict = NULL, ci = 0.95)
       p2 <- predict(b4, newdata = d, type = "link")
       expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
 
-      p1 <- get_predicted(b4, data = d, type = "response", predict = NULL, ci = .95)
+      p1 <- get_predicted(b4, data = d, type = "response", predict = NULL, ci = 0.95)
       p2 <- predict(b4, newdata = d, type = "response")
       expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
 
@@ -265,10 +285,10 @@ if (.runThisTest) {
 
       # exclude argument should be pushed through ...
       p1 <- predict(b4, type = "response", exclude = "s(x1)")
-      p2 <- get_predicted(b4, predict = "expectation", exclude = "s(x1)", ci = .95)
+      p2 <- get_predicted(b4, predict = "expectation", exclude = "s(x1)", ci = 0.95)
       expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
       p1 <- predict(b4, type = "link", exclude = "s(x1)")
-      p2 <- get_predicted(b4, predict = "link", exclude = "s(x1)", ci = .95)
+      p2 <- get_predicted(b4, predict = "link", exclude = "s(x1)", ci = 0.95)
       expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
     })
   }

@@ -23,7 +23,7 @@ find_statistic <- function(x, ...) {
 
   # check if the object is a model object; if not, quit early
   if (isFALSE(is_model(x))) {
-    stop("The entered object is not a model object.", call. = FALSE)
+    format_error("The entered object is not a model object.")
   }
 
   # handle 'htest' objects specifically
@@ -122,7 +122,7 @@ find_statistic <- function(x, ...) {
     "gee", "glimML", "glmm", "glmmadmb", "glmmFit", "glmmLasso", "glmmTMB",
     "glmx", "gmnl",
     "hurdle",
-    "lavaan", "loggammacenslmrob", "logitmfx", "logitor", "LORgee", "lrm",
+    "lavaan", "loggammacenslmrob", "logitmfx", "logitor", "logitr", "LORgee", "lrm",
     "margins", "marginaleffects", "marginaleffects.summary", "metaplus", "mixor",
     "MixMod", "mjoint", "mle", "mle2", "mlogit", "mclogit", "mmclogit", "mvmeta",
     "mvord",

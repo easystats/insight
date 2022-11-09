@@ -157,7 +157,8 @@ format_percent <- function(x, ...) {
                                          .width = NULL,
                                          .as_percent = FALSE,
                                          .zap_small = FALSE, ...) {
-  if (is.numeric(x) && !all(.is.int(stats::na.omit(x)))) {
+  x_nonmiss <- x[!is.na(x)]
+  if (is.numeric(x) && !all(.is.int(x_nonmiss))) {
     .format_value(
       x,
       digits = digits,
@@ -168,7 +169,7 @@ format_percent <- function(x, ...) {
     )
   } else if (anyNA(x)) {
     .convert_missing(x, .missing)
-  } else if (is.numeric(x) && all(.is.int(stats::na.omit(x))) && !is.null(.width)) {
+  } else if (is.numeric(x) && all(.is.int(x_nonmiss)) && !is.null(.width)) {
     format(x, justify = "right", width = .width)
   } else {
     as.character(x)

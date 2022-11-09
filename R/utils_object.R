@@ -20,7 +20,7 @@ is_empty_object <- function(x) {
     flag_empty <- TRUE
     if (nrow(x) > 0 && ncol(x) > 0) {
       i <- 0
-      while (flag_empty == TRUE && i <= ncol(x)) {
+      while (flag_empty && i <= ncol(x)) {
         i <- i + 1
         flag_empty <- all(is.na(x[[i]]))
       }
@@ -81,8 +81,8 @@ object_has_names <- function(x, names) {
 #' @export
 object_has_rownames <- function(x) {
   if (!is.data.frame(x)) {
-    stop("Only dataframe objects are allowed.", call. = FALSE)
+    stop("Only data frames are allowed.", call. = FALSE)
   }
 
-  !identical(as.character(seq_len(nrow(x))), rownames(x))
+  !identical(attributes(x)$row.names, seq_len(nrow(x)))
 }

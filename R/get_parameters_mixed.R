@@ -13,7 +13,7 @@
 #'   parameter names and the related point estimates. If `effects =
 #'   "random"`, a list of data frames with the random effects (as returned by
 #'   `ranef()`), unless the random effects have the same simplified
-#'   structure as fixed effects (e.g. for models from \pkg{MCMCglmm}).
+#'   structure as fixed effects (e.g. for models from **MCMCglmm**).
 #'
 #' @details In most cases when models either return different "effects" (fixed,
 #' random) or "components" (conditional, zero-inflated, ...), the arguments
@@ -129,12 +129,18 @@ get_parameters.wbgee <- function(x, ...) {
 
 
 
+#' @rdname get_parameters.glmm
 #' @export
-get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
+get_parameters.nlmerMod <- function(x,
+                                    effects = c("fixed", "random"),
+                                    component = c("all", "conditional", "nonlinear"),
+                                    ...) {
   # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)
+  component <- match.arg(component)
+
   startvectors <- .get_startvector_from_env(x)
   fx <- lme4::fixef(x)
 
@@ -151,22 +157,27 @@ get_parameters.nlmerMod <- function(x, effects = c("fixed", "random"), ...) {
     ))
   }
 
+  fixed_cond <- data.frame(
+    Parameter = names(l$conditional),
+    Estimate = unname(l$conditional),
+    Component = rep("fixed", length(l$conditional)),
+    stringsAsFactors = FALSE
+  )
 
-  fixed <- data.frame(
-    Parameter = c(
-      names(l$conditional),
-      names(l$nonlinear)
-    ),
-    Estimate = c(unname(l$conditional), unname(l$nonlinear)),
-    Component = c(
-      rep("fixed", length(l$conditional)),
-      rep("nonlinear", length(l$nonlinear))
-    ),
+  fixed_nl <- data.frame(
+    Parameter = names(l$nonlinear),
+    Estimate = unname(l$nonlinear),
+    Component = rep("nonlinear", length(l$nonlinear)),
     stringsAsFactors = FALSE
   )
 
   if (effects == "fixed") {
-    text_remove_backticks(fixed)
+    params <- switch(component,
+      all = rbind(fixed_cond, fixed_nl),
+      conditional = fixed_cond,
+      nonlinear = fixed_nl
+    )
+    text_remove_backticks(params)
   } else {
     l$random
   }
@@ -364,7 +375,7 @@ get_parameters.MixMod <- function(x,
   has_zeroinf <- !is.null(find_formula(x, verbose = FALSE)[["zero_inflated"]])
 
   if (component %in% c("zi", "zero_inflated") && !has_zeroinf) {
-    stop("Model has no zero-inflation component.", call. = FALSE)
+    format_error("Model has no zero-inflation component.")
   }
 
 
@@ -374,7 +385,7 @@ get_parameters.MixMod <- function(x,
 
   if (has_zeroinf) {
     z_inflated <- lme4::fixef(x, sub_model = "zero_part")
-    z_inflated_random <- re[grepl("^zi_", re.names, perl = TRUE)]
+    z_inflated_random <- re[startsWith(re.names, "zi_")]
   } else {
     z_inflated <- NULL
     z_inflated_random <- NULL

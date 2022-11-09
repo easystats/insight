@@ -120,93 +120,99 @@ if (.runThisTest && .runStanTest &&
   test_that("find_paramaters", {
     expect_equal(
       find_parameters(m1, component = "all"),
-      structure(list(
-        y1 = list(
-          conditional = c("(Intercept)", "year"),
-          random = sprintf("b[(Intercept) id:%i]", 1:40),
-          sigma = "sigma"
-        ),
-        y2 = list(
-          conditional = c("(Intercept)", "sexf", "year"),
-          random = sprintf(
-            c("b[(Intercept) id:%i]", "b[year id:%i]"),
-            rep(1:40, each = 2)
+      structure(
+        list(
+          y1 = list(
+            conditional = c("(Intercept)", "year"),
+            random = sprintf("b[(Intercept) id:%i]", 1:40),
+            sigma = "sigma"
           ),
-          sigma = "sigma"
-        )
-      ),
-      is_mv = "1"
+          y2 = list(
+            conditional = c("(Intercept)", "sexf", "year"),
+            random = sprintf(
+              c("b[(Intercept) id:%i]", "b[year id:%i]"),
+              rep(1:40, each = 2)
+            ),
+            sigma = "sigma"
+          )
+        ),
+        is_mv = "1"
       )
     )
 
     expect_equal(
       find_parameters(m1),
-      structure(list(
-        y1 = list(
-          conditional = c("(Intercept)", "year"),
-          random = sprintf("b[(Intercept) id:%i]", 1:40)
-        ),
-        y2 = list(
-          conditional = c("(Intercept)", "sexf", "year"),
-          random = sprintf(
-            c("b[(Intercept) id:%i]", "b[year id:%i]"),
-            rep(1:40, each = 2)
+      structure(
+        list(
+          y1 = list(
+            conditional = c("(Intercept)", "year"),
+            random = sprintf("b[(Intercept) id:%i]", 1:40)
+          ),
+          y2 = list(
+            conditional = c("(Intercept)", "sexf", "year"),
+            random = sprintf(
+              c("b[(Intercept) id:%i]", "b[year id:%i]"),
+              rep(1:40, each = 2)
+            )
           )
-        )
-      ),
-      is_mv = "1"
+        ),
+        is_mv = "1"
       )
     )
 
     expect_equal(
       find_parameters(m1, effects = "fixed", component = "all"),
-      structure(list(
-        y1 = list(
-          conditional = c("(Intercept)", "year"),
-          sigma = "sigma"
+      structure(
+        list(
+          y1 = list(
+            conditional = c("(Intercept)", "year"),
+            sigma = "sigma"
+          ),
+          y2 = list(
+            conditional = c("(Intercept)", "sexf", "year"),
+            sigma = "sigma"
+          )
         ),
-        y2 = list(
-          conditional = c("(Intercept)", "sexf", "year"),
-          sigma = "sigma"
-        )
-      ),
-      is_mv = "1"
+        is_mv = "1"
       )
     )
 
     expect_equal(
       find_parameters(m1, effects = "fixed"),
-      structure(list(
-        y1 = list(conditional = c("(Intercept)", "year")),
-        y2 = list(conditional = c("(Intercept)", "sexf", "year"))
-      ),
-      is_mv = "1"
+      structure(
+        list(
+          y1 = list(conditional = c("(Intercept)", "year")),
+          y2 = list(conditional = c("(Intercept)", "sexf", "year"))
+        ),
+        is_mv = "1"
       )
     )
 
     expect_equal(
       find_parameters(m1, effects = "random", component = "all"),
-      structure(list(
-        y1 = list(random = sprintf("b[(Intercept) id:%i]", 1:40)),
-        y2 = list(random = sprintf(
-          c("b[(Intercept) id:%i]", "b[year id:%i]"),
-          rep(1:40, each = 2)
-        ))
-      ),
-      is_mv = "1"
+      structure(
+        list(
+          y1 = list(random = sprintf("b[(Intercept) id:%i]", 1:40)),
+          y2 = list(random = sprintf(
+            c("b[(Intercept) id:%i]", "b[year id:%i]"),
+            rep(1:40, each = 2)
+          ))
+        ),
+        is_mv = "1"
       )
     )
 
     expect_equal(
       find_parameters(m1, effects = "random"),
-      structure(list(
-        y1 = list(random = sprintf("b[(Intercept) id:%i]", 1:40)),
-        y2 = list(random = sprintf(
-          c("b[(Intercept) id:%i]", "b[year id:%i]"),
-          rep(1:40, each = 2)
-        ))
-      ),
-      is_mv = "1"
+      structure(
+        list(
+          y1 = list(random = sprintf("b[(Intercept) id:%i]", 1:40)),
+          y2 = list(random = sprintf(
+            c("b[(Intercept) id:%i]", "b[year id:%i]"),
+            rep(1:40, each = 2)
+          ))
+        ),
+        is_mv = "1"
       )
     )
   })
