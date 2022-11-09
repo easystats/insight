@@ -912,10 +912,10 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 
   # brute force - use all!
   if (is.null(data)) {
-    cols <- unique(
+    cols <- unique(c(
       find_terms(x, "all", flatten = TRUE),
       find_variables(x, "all", flatten = TRUE)
-    )
+    ))
     data <- tryCatch(
       {
         d <- get_data(x)
