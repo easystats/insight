@@ -178,4 +178,3 @@ Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,
     easystats/easystatstemplate
-Remotes: glmmTMB/glmmTMB/glmmTMB
