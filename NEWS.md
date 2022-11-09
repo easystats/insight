@@ -1,5 +1,10 @@
 # insight 0.18.7
 
+## General
+
+* Minor revisions to `get_predicted.glmmTMB()` due to changes in behaviour
+  of `predict.glmmTMB()` for truncated-family models since _glmmTMB_ 1.1.5.
+
 ## Changes to functions
 
 * `ellipses_info()` now includes an attribute `$is_binomial`, which is `TRUE`
