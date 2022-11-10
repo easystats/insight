@@ -917,7 +917,7 @@ if (requiet("testthat") &&
     )
   })
 
-  if (!osx) {
+  if (!osx && packageVersion("glmmTMB") > "1.1.4") {
     test_that("get_predicted", {
       # response
       x <- get_predicted(m1, predict = "expectation", verbose = FALSE, include_random = TRUE)

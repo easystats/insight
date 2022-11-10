@@ -122,7 +122,6 @@ get_predicted.glmmTMB <- function(x,
       newdata = data,
       type = args$type,
       re.form = args$re.form,
-      unconditional = FALSE,
       allow.new.levels = args$allow_new_levels,
       ...
     )
@@ -148,20 +147,24 @@ get_predicted.glmmTMB <- function(x,
   # for predictions and CIs here.
 
   if (args$scale == "response" && args$info$is_zero_inflated) {
-    # intermediate step: prediction from ZI model
-    zi_predictions <- stats::predict(
-      x,
-      newdata = data,
-      type = "zprob",
-      re.form = args$re.form,
-      unconditional = FALSE,
-      ...
-    )
-    predictions <- link_inverse(x)(predictions) * (1 - as.vector(zi_predictions))
+    # intermediate step: prediction from ZI model, for non-truncated families!
+    # for truncated family, behaviour in glmmTMB changed in 1.1.5  to correct
+    # conditional and response predictions
+    if (!args$info$is_hurdle) {
+      zi_predictions <- stats::predict(
+        x,
+        newdata = data,
+        type = "zprob",
+        re.form = args$re.form,
+        ...
+      )
+      predictions <- link_inverse(x)(predictions) * (1 - as.vector(zi_predictions))
+    }
 
     # 2. and 3. step: confidence intervals and back-transform
     ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
     out <- list(predictions = predictions, ci_data = ci_data)
+
   } else {
     # 2. step: confidence intervals
     ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci, verbose = verbose, ...)

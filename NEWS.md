@@ -1,5 +1,10 @@
 # insight 0.18.7
 
+## General
+
+* Minor revisions to `get_predicted.glmmTMB()` due to changes in behaviour
+  of `predict.glmmTMB()` for truncated-family models since _glmmTMB_ 1.1.5.
+
 ## Changes to functions
 
 * `ellipses_info()` now includes an attribute `$is_binomial`, which is `TRUE`
@@ -9,6 +14,8 @@
 
 * Fixed behaviour of the `at` argument in `get_datagrid()`.
 
+* Fixed issue for accessing model data in `get_datagrid()` for some edge cases.
+
 # insight 0.18.6
 
 ## New supported models
@@ -17,7 +24,7 @@
 
 ## Bug fixes
 
-* Better dectection of unicode-support, to avoid failures when building
+* Better detection of unicode-support, to avoid failures when building
   vignettes.
 
 * `get_predicted()` now correctly handles variables of class numeric matrix
