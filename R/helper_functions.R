@@ -539,7 +539,8 @@
     return(as.numeric(x))
   }
 
-  if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
+  x_no_na <- x[!is.na(x)]
+  if (anyNA(suppressWarnings(as.numeric(as.character(x_no_na))))) {
     if (is.character(x)) {
       x <- as.factor(x)
     }

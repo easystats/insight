@@ -196,7 +196,8 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
     # order of df from models
     model_df <- sapply(objects, n_parameters)
-    identical_models <- is_nested && any(duplicated(model_df)) && length(unique(sapply(objects, model_name, include_formula = FALSE))) == 1
+    model_names <- sapply(objects, model_name, include_formula = FALSE)
+    identical_models <- is_nested && any(duplicated(model_df)) && all(model_names == model_names[1])
 
     attr(objects, "is_nested_increasing") <- all(is_nested_increasing)
     attr(objects, "is_nested_decreasing") <- all(is_nested_decreasing)
