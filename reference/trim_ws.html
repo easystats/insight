@@ -156,21 +156,18 @@ only processes character vectors.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<ul><li><p><code>n_unique()</code></p>
-<p>For a vector, <code>n_unique</code> always returns an integer value, even if the
-input is <code>NULL</code> (the return value will be <code>0</code> then). For data frames or lists,
-<code>n_unique()</code> returns a named numeric vector, with the number of unique values
-for each element.</p></li>
-<li><p><code>has_single_value</code></p>
-<p><code>TRUE</code> if <code>x</code> has only one unique value, <code>FALSE</code> otherwise.</p></li>
-<li><p><code>trim_ws()</code></p>
-<p>A character vector, where trailing and leading white spaces are removed.</p></li>
-<li><p><code>safe_deparse()</code></p>
-<p>A character string of the unevaluated expression or symbol.</p></li>
-<li><p><code>safe_deparse_symbol()</code></p>
-<p>A character string of the unevaluated expression or symbol, if <code>x</code> was a
-symbol. If <code>x</code> is no symbol (i.e. if <code>is.name(x)</code> would return <code>FALSE</code>),
-<code>NULL</code> is returned.</p></li>
+<ul><li><p><code>n_unique()</code>: For a vector, <code>n_unique</code> always returns an integer value,
+even if the input is <code>NULL</code> (the return value will be <code>0</code> then). For data
+frames or lists, <code>n_unique()</code> returns a named numeric vector, with the
+number of unique values for each element.</p></li>
+<li><p><code>has_single_value()</code>: <code>TRUE</code> if <code>x</code> has only one unique value,
+<code>FALSE</code> otherwise.</p></li>
+<li><p><code>trim_ws()</code>: A character vector, where trailing and leading white spaces
+are removed.</p></li>
+<li><p><code>safe_deparse()</code>: A character string of the unevaluated expression or symbol.</p></li>
+<li><p><code>safe_deparse_symbol()</code>: A character string of the unevaluated expression
+or symbol, if <code>x</code> was a symbol. If <code>x</code> is no symbol (i.e. if <code>is.name(x)</code>
+would return <code>FALSE</code>), <code>NULL</code> is returned.</p></li>
 </ul></div>
 
     <div class="section level2">
