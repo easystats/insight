@@ -5,7 +5,7 @@
 * Minor revisions to `get_predicted.glmmTMB()` due to changes in behaviour
   of `predict.glmmTMB()` for truncated-family models since _glmmTMB_ 1.1.5.
   
-* New function `has_one_value()` that is equivalent to `length(unique()) == 1`
+* New function `has_single_value()` that is equivalent to `length(unique()) == 1`
   (or `n_unique() == 1`) but faster.
 
 ## Changes to functions
