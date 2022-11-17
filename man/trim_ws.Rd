@@ -22,7 +22,7 @@ safe_deparse(x, ...)
 
 safe_deparse_symbol(x)
 
-has_single_value(x)
+has_single_value(x, na.rm = FALSE)
 }
 \arguments{
 \item{x}{A (character) vector, or for some functions may also be a data frame.}

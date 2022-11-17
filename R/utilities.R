@@ -126,6 +126,7 @@ safe_deparse_symbol <- function(x) {
 
 #' @rdname trim_ws
 #' @export
-has_single_value <- function(x) {
+has_single_value <- function(x, na.rm = FALSE) {
+  if (na.rm) x <- x[!is.na(x)]
   !is.null(x) &&  isTRUE(all(x == x[1]))
 }
