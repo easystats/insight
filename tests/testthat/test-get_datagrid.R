@@ -250,7 +250,7 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && getRversion
       "504", "505", "506", "507", "508", "509", "510"
     ), class = "data.frame")
 
-    model <- glm(lfp ~ k618 + wc + hc + inc, data = d, family = binomial(link = "logit"))
+    model <- suppressWarnings(glm(lfp ~ k618 + wc + hc + inc, data = d, family = binomial(link = "logit")))
 
     expect_warning(
       insight::get_datagrid(

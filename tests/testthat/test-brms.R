@@ -537,7 +537,7 @@ if (.runThisTest) {
       # apparently BH is required to fit these brms models
       skip_if_not_installed("BH")
 
-      void <- capture.output(suppressMessages(suppressWarnings(({
+      void <- suppressMessages(suppressWarnings(capture.output(
         mod <- brm(
           silent = 2,
           data = mtcars,
@@ -548,7 +548,7 @@ if (.runThisTest) {
             nl = TRUE
           )
         )
-      }))))
+      )))
 
       p <- find_predictors(mod, flatten = TRUE)
       d <- get_data(mod)

@@ -525,7 +525,7 @@ test_that("hurdle: get_predicted matches `predict()`", {
   unknown <- get_predicted(mod, predict = "response", ci = 0.95, verbose = FALSE)
   expect_equal(known, unknown, ignore_attr = TRUE)
   known <- predict(mod, type = "zero")
-  unknown <- get_predicted(mod, predict = "zero", ci = 0.95, verbose = FALSE)
+  unknown <- suppressWarnings(get_predicted(mod, predict = "zero", ci = 0.95, verbose = FALSE))
   expect_equal(known, unknown, ignore_attr = TRUE)
 })
 
