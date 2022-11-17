@@ -43,40 +43,40 @@ test_that("n_unique() works with list", {
   )
 })
 
-test_that("has_one_value() works", {
+test_that("has_single_value() works", {
   x <- c(1, 1)
   expect_identical(
     length(unique(x)) == 1,
-    has_one_value(x)
+    has_single_value(x)
   )
 
   x <- c("a", "a")
   expect_identical(
     length(unique(x)) == 1,
-    has_one_value(x)
+    has_single_value(x)
   )
 
   x <- factor(c("a", "a"))
   expect_identical(
     length(unique(x)) == 1,
-    has_one_value(x)
+    has_single_value(x)
   )
 
   x <- c(NA, 1)
   expect_identical(
     length(unique(x)) == 1,
-    has_one_value(x)
+    has_single_value(x)
   )
 
   x <- c(2, 1)
   expect_identical(
     length(unique(x)) == 1,
-    has_one_value(x)
+    has_single_value(x)
   )
 
   x <- c(NULL)
   expect_identical(
     length(unique(x)) == 1,
-    has_one_value(x)
+    has_single_value(x)
   )
 })
