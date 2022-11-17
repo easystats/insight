@@ -17,15 +17,40 @@
 #' only processes character vectors.
 #' @param ... Currently not used.
 #'
-#' @return For a vector, `n_unique` always returns an integer value, even if the
-#' input is `NULL` (the return value will be `0` then). For data frames or lists,
-#' `n_unique()` returns a named numeric vector, with the number of unique values
-#' for each element.
+#' @return
+#' - `n_unique()`
+#'
+#'   For a vector, `n_unique` always returns an integer value, even if the
+#'   input is `NULL` (the return value will be `0` then). For data frames or lists,
+#'   `n_unique()` returns a named numeric vector, with the number of unique values
+#'   for each element.
+#'
+#' - `has_single_value`
+#'
+#'   `TRUE` if `x` has only one unique value, `FALSE` otherwise.
+#'
+#' - `trim_ws()`
+#'
+#'   A character vector, where trailing and leading white spaces are removed.
+#'
+#' - `safe_deparse()`
+#'
+#'   A character string of the unevaluated expression or symbol.
+#'
+#' - `safe_deparse_symbol()`
+#'
+#'   A character string of the unevaluated expression or symbol, if `x` was a
+#'   symbol. If `x` is no symbol (i.e. if `is.name(x)` would return `FALSE`),
+#'   `NULL` is returned.
 #'
 #' @examples
 #' trim_ws("  no space!  ")
 #' n_unique(iris$Species)
 #' has_single_value(c(1, 1, 2))
+#'
+#' # safe_deparse_symbol() compared to deparse(substitute())
+#' safe_deparse_symbol(as.name("test"))
+#' deparse(substitute(as.name("test")))
 #' @export
 trim_ws <- function(x, ...) {
   UseMethod("trim_ws")

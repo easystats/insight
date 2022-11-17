@@ -35,10 +35,28 @@ only processes character vectors.}
 \item{na.rm}{Logical, if missing values should be removed from the input.}
 }
 \value{
+\itemize{
+\item \code{n_unique()}
+
 For a vector, \code{n_unique} always returns an integer value, even if the
 input is \code{NULL} (the return value will be \code{0} then). For data frames or lists,
 \code{n_unique()} returns a named numeric vector, with the number of unique values
 for each element.
+\item \code{has_single_value}
+
+\code{TRUE} if \code{x} has only one unique value, \code{FALSE} otherwise.
+\item \code{trim_ws()}
+
+A character vector, where trailing and leading white spaces are removed.
+\item \code{safe_deparse()}
+
+A character string of the unevaluated expression or symbol.
+\item \code{safe_deparse_symbol()}
+
+A character string of the unevaluated expression or symbol, if \code{x} was a
+symbol. If \code{x} is no symbol (i.e. if \code{is.name(x)} would return \code{FALSE}),
+\code{NULL} is returned.
+}
 }
 \description{
 Collection of small helper functions. \code{trim_ws()} is an
@@ -55,4 +73,8 @@ valid object name.
 trim_ws("  no space!  ")
 n_unique(iris$Species)
 has_single_value(c(1, 1, 2))
+
+# safe_deparse_symbol() compared to deparse(substitute())
+safe_deparse_symbol(as.name("test"))
+deparse(substitute(as.name("test")))
 }
