@@ -80,3 +80,10 @@ test_that("has_single_value() works", {
     has_single_value(x)
   )
 })
+
+test_that("safe_deparse_symbol() works", {
+  expect_equal(safe_deparse_symbol(as.name("test")), "test")
+  expect_null(safe_deparse_symbol("test"))
+  expect_equal(safe_deparse(as.name("test")), "test")
+  expect_equal(safe_deparse("test"), "\"test\"")
+})

@@ -36,26 +36,18 @@ only processes character vectors.}
 }
 \value{
 \itemize{
-\item \code{n_unique()}
-
-For a vector, \code{n_unique} always returns an integer value, even if the
-input is \code{NULL} (the return value will be \code{0} then). For data frames or lists,
-\code{n_unique()} returns a named numeric vector, with the number of unique values
-for each element.
-\item \code{has_single_value}
-
-\code{TRUE} if \code{x} has only one unique value, \code{FALSE} otherwise.
-\item \code{trim_ws()}
-
-A character vector, where trailing and leading white spaces are removed.
-\item \code{safe_deparse()}
-
-A character string of the unevaluated expression or symbol.
-\item \code{safe_deparse_symbol()}
-
-A character string of the unevaluated expression or symbol, if \code{x} was a
-symbol. If \code{x} is no symbol (i.e. if \code{is.name(x)} would return \code{FALSE}),
-\code{NULL} is returned.
+\item \code{n_unique()}: For a vector, \code{n_unique} always returns an integer value,
+even if the input is \code{NULL} (the return value will be \code{0} then). For data
+frames or lists, \code{n_unique()} returns a named numeric vector, with the
+number of unique values for each element.
+\item \code{has_single_value()}: \code{TRUE} if \code{x} has only one unique value,
+\code{FALSE} otherwise.
+\item \code{trim_ws()}: A character vector, where trailing and leading white spaces
+are removed.
+\item \code{safe_deparse()}: A character string of the unevaluated expression or symbol.
+\item \code{safe_deparse_symbol()}: A character string of the unevaluated expression
+or symbol, if \code{x} was a symbol. If \code{x} is no symbol (i.e. if \code{is.name(x)}
+would return \code{FALSE}), \code{NULL} is returned.
 }
 }
 \description{
