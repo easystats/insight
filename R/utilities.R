@@ -4,7 +4,8 @@
 #' @description Collection of small helper functions. `trim_ws()` is an
 #' efficient function to trim leading and trailing whitespaces from character
 #' vectors or strings. `n_unique()` returns the number of unique values in a
-#' vector. `safe_deparse()` is comparable to `deparse1()`, i.e. it can safely
+#' vector. `has_one_value()` is equivalent to `n_unique() == 1` but is faster.
+#' `safe_deparse()` is comparable to `deparse1()`, i.e. it can safely
 #' deparse very long expressions into a single string. `safe_deparse_symbol()`
 #' only deparses a substituted expressions when possible, which can be much faster
 #' than `deparse(substitute())` for those cases where `substitute()` returns no
@@ -24,6 +25,7 @@
 #' @examples
 #' trim_ws("  no space!  ")
 #' n_unique(iris$Species)
+#' has_one_value(c(1, 1, 2))
 #' @export
 trim_ws <- function(x, ...) {
   UseMethod("trim_ws")
@@ -117,4 +119,13 @@ safe_deparse_symbol <- function(x) {
     out <- NULL
   }
   return(out)
+}
+
+
+# has_one_value ---------------------------------------
+
+#' @rdname trim_ws
+#' @export
+has_one_value <- function(x) {
+  !is.null(x) &&  isTRUE(all(x == x[1]))
 }
