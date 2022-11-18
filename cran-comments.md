@@ -1,1 +1,1 @@
-This submission fixes errors found in CRAN checks, as requested by the CRAN team.
+This submission fixes errors found in CRAN checks, due to the latest glmmTMB update.
