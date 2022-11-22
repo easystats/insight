@@ -116,6 +116,6 @@ message(msg)
 format_alert("This is a message.")
 format_alert("This is a warning.", type = "warning")
 format_warning("This is a warning.")
-format_error("This is an error.")
+try(format_error("This is an error."))
 }
 }
