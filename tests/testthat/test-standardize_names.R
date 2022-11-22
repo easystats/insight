@@ -1,5 +1,6 @@
 if (requiet("testthat") &&
   requiet("insight") &&
+  requiet("performance") &&
   requiet("stats") &&
   requiet("parameters")) {
   .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
@@ -64,7 +65,10 @@ test_that("standardize_names works as expected with performance", {
 
   # lm object
   lm_mod <- lm(wt ~ mpg, mtcars)
-  x <- as.data.frame(performance::model_performance(lm_mod))
+  x <- as.data.frame(performance::model_performance(
+    lm_mod,
+    metrics = c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA")
+  ))
 
   expect_equal(
     names(standardize_names(x, style = "broom")),

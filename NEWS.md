@@ -1,3 +1,9 @@
+# insight 0.18.7.1
+
+## Bug fixes
+
+* Fixed test due to changes in the _performance_ package.
+
 # insight 0.18.7
 
 ## General
