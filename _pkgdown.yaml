@@ -1,0 +1,136 @@
+url: https://easystats.github.io/insight/
+
+template:
+  bootstrap: 5
+  package: easystatstemplate
+
+reference:
+  - title: "Comprehensive Information from Model Objects"
+    contents:
+      - model_info
+
+  - title: "Find Information from Model Objects"
+    desc: >
+      Functions to access names or information from model objects. These
+      functions have no `get_*()`-counterpart.
+    contents:
+      - find_algorithm
+      - find_formula
+      - find_interactions
+      - find_offset
+      - find_random_slopes
+      - find_smooth
+      - find_terms
+      - find_variables
+
+  - title: "Get Data from Model Objects"
+    desc: >
+      Functions to get values or data from model objects. These functions
+      have no `find_*()`-counterpart.
+    contents:
+      - get_auxiliary
+      - get_data
+      - get_datagrid
+      - get_df
+      - get_intercept
+      - get_loglikelihood
+      - get_modelmatrix
+      - get_predicted
+      - get_predicted_ci
+      - get_priors
+      - get_residuals
+      - get_sigma
+      - get_variance
+      - get_varcov
+      - get_deviance
+      - get_family
+
+  - title: "Find Information or Get Data from Model Objects"
+    desc: >
+      Functions to list model-specific objects or to extract values (or data)
+      associated with model-specific objects.
+    contents:
+      - find_parameters
+      - get_parameters
+      - find_predictors
+      - get_predictors
+      - find_random
+      - get_random
+      - find_response
+      - get_response
+      - find_statistic
+      - get_statistic
+      - find_transformation
+      - get_transformation
+      - find_weights
+      - get_weights
+
+  - title: "Access Further Information from Model Objects"
+    desc: >
+      Functions to access specific information from model objects.
+    contents:
+      - get_call
+      - starts_with("link_")
+      - model_name
+      - starts_with("n_")
+
+  - title: "Test Model Properties"
+    desc: >
+      Functions to test specific properties of model objects.
+    contents:
+      - all_models_same_class
+      - has_intercept
+      - starts_with("is_")
+
+  - title: "Value Formatting"
+    desc: >
+      Functions for formatting (summary) output for printing
+    contents:
+      - contains("color")
+      - starts_with("format_")
+      - text_remove_backticks
+
+  - title: "Utilities"
+    desc: >
+      Functions that are not specifically related to access model information,
+      but rather small utility functions (mostly for printing)
+    contents:
+      - starts_with("clean_")
+      - display
+      - download_model
+      - ellipsis_info
+      - export_table
+      - null_model
+      - print_parameters
+      - starts_with("standardize_")
+      - is_empty_object
+      - starts_with("object_has_")
+      - starts_with("compact_")
+      - check_if_installed
+      - safe_deparse
+      - trim_ws
+      - n_unique
+
+  - title: "Example Datasets"
+    desc: >
+      Used in examples or for testing
+    contents:
+      - fish
+
+  - title: "Documentation of Specific Class Objects"
+    contents:
+      - find_parameters.BGGM
+      - find_parameters.emmGrid
+      - find_parameters.gamlss
+      - find_parameters.betamfx
+      - find_parameters.glmmTMB
+      - find_parameters.zeroinfl
+      - find_parameters.averaging
+      - get_parameters.BGGM
+      - get_parameters.emmGrid
+      - get_parameters.gamm
+      - get_parameters.betamfx
+      - get_parameters.glmm
+      - get_parameters.zeroinfl
+      - get_parameters.betareg
+      - get_parameters.htest
