@@ -1,4 +1,4 @@
-# insight 0.18.7.1
+# insight 0.18.8
 
 ## Bug fixes
 

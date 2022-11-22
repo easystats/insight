@@ -1,1 +1,1 @@
-This submission fixes errors found in CRAN checks, due to the latest glmmTMB update.
+This submission fixes issues with reverse-dependencies from a planned update  of the *performance* package. The update of the *performance* package introduces breaking changes, which are anticipated in the fixes included in this release.
