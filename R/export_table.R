@@ -790,7 +790,7 @@ print.insight_table <- function(x, ...) {
 
 .indent_rows_html <- function(final, indent_rows, whitespace = "") {
   # create index for those rows that should be indented
-  grp_rows <- indent_rows + 1
+  grp_rows <- indent_rows
 
   # indent
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])

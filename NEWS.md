@@ -1,3 +1,8 @@
+# insight 0.18.8.1
+
+* Fixed minor issues for HTML tables in `export_table()` when model parameters
+  were grouped.
+
 # insight 0.18.8
 
 ## Bug fixes
