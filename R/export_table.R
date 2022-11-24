@@ -153,6 +153,8 @@ export_table <- function(x,
     }))
   }
 
+  ## TODO: check if we need to move this code before the above if-statement?
+  ## attributes might get lost after do.call()
 
   # check for indention
   indent_groups <- attributes(x)$indent_groups
@@ -765,6 +767,7 @@ print.insight_table <- function(x, ...) {
 
 .indent_rows <- function(final, indent_rows, whitespace = "  ") {
   # create index for those rows that should be indented
+  # for text format, first row is column names, so we need a +1 here
   grp_rows <- indent_rows + 1
 
   # indent
@@ -790,7 +793,7 @@ print.insight_table <- function(x, ...) {
 
 .indent_rows_html <- function(final, indent_rows, whitespace = "") {
   # create index for those rows that should be indented
-  grp_rows <- indent_rows + 1
+  grp_rows <- indent_rows
 
   # indent
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
