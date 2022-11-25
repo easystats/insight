@@ -802,17 +802,21 @@
         mf[[i]] <- exp(exp(mf[[i]]))
       } else if (type == "log") {
         # exceptions: log(x+1) or log(1+x)
-        # 1. try: log(x + number)
-        plus_minus <- tryCatch(
-          eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", cn))),
-          error = function(e) NULL
-        )
-        # 2. try: log(number + x)
-        if (is.null(plus_minus)) {
+        plus_minus <- NULL
+        # no plus-minus?
+        if (grepl("log\\((.*)\\+(.*)\\)", i)) {
+          # 1. try: log(x + number)
           plus_minus <- tryCatch(
-            eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", cn))),
+            eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\2", i))),
             error = function(e) NULL
           )
+          # 2. try: log(number + x)
+          if (is.null(plus_minus)) {
+            plus_minus <- tryCatch(
+              eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\1", i))),
+              error = function(e) NULL
+            )
+          }
         }
         if (is.null(plus_minus)) {
           mf[[i]] <- exp(mf[[i]])
