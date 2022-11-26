@@ -238,7 +238,7 @@ test_that("get_data() log transform", {
   set.seed(123)
   x <- abs(rnorm(100, sd = 5)) + 5
   y <- exp(2 + 0.3 * x + rnorm(100, sd = 0.4))
-  dat <- data.frame(y, x)
+  dat <<- data.frame(y, x)
 
   mod <- lm(log(y) ~ log(x), data = dat)
   expect_equal(
