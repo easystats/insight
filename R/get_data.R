@@ -170,7 +170,8 @@ get_data.data.frame <- function(x, ...) {
 get_data.summary.lm <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     .recover_data_from_environment(x)[, all.vars(x$terms), drop = FALSE],
-    error = function(x) NULL)
+    error = function(x) NULL
+  )
 
   .prepare_get_data(x, mf, verbose = verbose)
 }
