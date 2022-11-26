@@ -69,6 +69,11 @@ get_data <- function(x, ...) {
         resp <- find_response(x, combine = FALSE)
         dat <- dat[setdiff(colnames(dat), resp)]
       }
+      # complete cases only, as in model frames, need to filter attributes
+      cc <- stats::complete.cases(dat)
+      if (any(cc)) {
+        ## TODO: filter, and preserve attributes
+      }
       dat
     },
     error = function(x) {
