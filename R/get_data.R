@@ -64,6 +64,11 @@ get_data <- function(x, ...) {
         vars <- c(vars, find_offset(x))
         dat <- dat[, intersect(unique(vars), colnames(dat)), drop = FALSE]
       }
+      # remove response for random effects
+      if (effects == "random") {
+        resp <- find_response(x, combine = FALSE)
+        dat <- dat[setdiff(colnames(dat), resp)]
+      }
       dat
     },
     error = function(x) {
