@@ -60,7 +60,9 @@ get_data <- function(x, ...) {
       if (!is.null(vars)) {
       # weighting variable?
       vars <- c(vars, find_weights(x))
-      dat <- dat[, intersect(vars, colnames(dat)), drop = FALSE]
+      # offset?
+      vars <- c(vars, find_offset(x))
+      dat <- dat[, intersect(unique(vars), colnames(dat)), drop = FALSE]
       }
       dat
     },
