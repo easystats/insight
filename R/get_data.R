@@ -58,11 +58,11 @@ get_data <- function(x, ...) {
       dat <- .recover_data_from_environment(x)
       # select only those variables from the data that we find in the model
       if (!is.null(vars)) {
-      # weighting variable?
-      vars <- c(vars, find_weights(x))
-      # offset?
-      vars <- c(vars, find_offset(x))
-      dat <- dat[, intersect(unique(vars), colnames(dat)), drop = FALSE]
+        # weighting variable?
+        vars <- c(vars, find_weights(x))
+        # offset?
+        vars <- c(vars, find_offset(x))
+        dat <- dat[, intersect(unique(vars), colnames(dat)), drop = FALSE]
       }
       dat
     },
