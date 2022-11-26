@@ -696,49 +696,6 @@
 
 
 
-# find data from the environment -----------------------------------
-
-# return data from a data frame that is in the environment,
-# and subset the data, if necessary
-.recover_data_from_environment <- function(x) {
-  model_call <- get_call(x)
-
-  # first, try environment of formula, see #666
-  dat <- tryCatch(eval(model_call$data, envir = environment(model_call$formula)),
-    error = function(e) NULL
-  )
-
-  # next try, parent frame
-  if (is.null(dat)) {
-    dat <- tryCatch(eval(model_call$data, envir = parent.frame()),
-      error = function(e) NULL
-    )
-  }
-
-  # sanity check- if data frame is named like a function, e.g.
-  # rep <- data.frame(...), we now have a function instead of the data
-  # we then need to reset "dat" to NULL and search in the global env
-
-  if (!is.null(dat) && !is.data.frame(dat)) {
-    dat <- tryCatch(as.data.frame(dat), error = function(e) NULL)
-  }
-
-  # thirs try, global env
-  if (is.null(dat)) {
-    dat <- tryCatch(eval(model_call$data, envir = globalenv()),
-      error = function(e) NULL
-    )
-  }
-
-  if (!is.null(dat) && object_has_names(model_call, "subset")) {
-    dat <- subset(dat, subset = eval(model_call$subset))
-  }
-
-  dat
-}
-
-
-
 # find start vector of nlmer-models from the environment -----------------------------------
 
 # return data from a data frame that is in the environment,
