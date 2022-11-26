@@ -36,6 +36,22 @@ get_data <- function(x, ...) {
 }
 
 
+# first try, extract data from environment -------------------------------
+
+.get_data_from_environmet <- function(x) {
+  tryCatch(
+    {
+      dat <- .recover_data_from_environment(x)
+      vars <- find_variables(x, flatten = TRUE, verbose = FALSE)
+      dat[, intersect(vars, colnames(dat)), drop = FALSE]
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+}
+
+
 # default method ------------------------------------------------------
 
 #' @rdname get_data
@@ -44,6 +60,11 @@ get_data.default <- function(x, verbose = TRUE, ...) {
   if (inherits(x, "list") && object_has_names(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
+  }
+
+  mf <- .get_data_from_environmet(x)
+  if (!is.null(mf)) {
+    return(mf)
   }
 
   mf <- tryCatch(
@@ -60,16 +81,7 @@ get_data.default <- function(x, verbose = TRUE, ...) {
   )
 
   if (is.null(mf) || nrow(mf) == 0) {
-    mf <- tryCatch(
-      {
-        dat <- .recover_data_from_environment(x)
-        vars <- find_variables(x, flatten = TRUE, verbose = FALSE)
-        dat[, intersect(vars, colnames(dat)), drop = FALSE]
-      },
-      error = function(x) {
-        NULL
-      }
-    )
+    mf <- .get_data_from_environmet(x)
   }
 
   .prepare_get_data(x, mf, verbose = verbose)
