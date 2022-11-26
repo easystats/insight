@@ -1,7 +1,12 @@
 # insight 0.18.8.1
 
+## Bug fixes
+
 * Fixed minor issues for HTML tables in `export_table()` when model parameters
   were grouped.
+
+* Fixed issue with incorrect back-transforming in `get_data()` for models with
+  log-transformed variables.
 
 # insight 0.18.8
 

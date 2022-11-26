@@ -231,3 +231,86 @@ out <- get_data(mod)
 test_that("logicals", {
   expect_equal(out$am, mtcars$am, ignore_attr = TRUE)
 })
+
+
+# See #689
+test_that("get_data() log transform", {
+  set.seed(123)
+  x <- abs(rnorm(100, sd = 5)) + 5
+  y <- exp(2 + 0.3 * x + rnorm(100, sd = 0.4))
+  dat <<- data.frame(y, x)
+
+  mod <- lm(log(y) ~ log(x), data = dat)
+  expect_equal(
+    head(insight::get_data(mod)),
+    head(dat),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  mod <- lm(log(y) ~ x, data = dat)
+  expect_equal(
+    head(insight::get_data(mod)),
+    head(dat),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  mod <- lm(y ~ log(x), data = dat)
+  expect_equal(
+    head(insight::get_data(mod)),
+    head(dat),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  mod <- lm(y ~ log(1 + x), data = dat)
+  expect_equal(
+    head(insight::get_data(mod)[c("y", "x")]),
+    head(dat),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  mod <- lm(y ~ log(x + 1), data = dat)
+  expect_equal(
+    head(insight::get_data(mod)),
+    head(dat),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  mod <- lm(log(y) ~ log(1 + x), data = dat)
+  expect_equal(
+    head(insight::get_data(mod)[c("y", "x")]),
+    head(dat),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  mod <- lm(log(y) ~ log(x + 1), data = dat)
+  expect_equal(
+    head(insight::get_data(mod)),
+    head(dat),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  ## FIXME: this doesn't work yet
+
+  # mod <- lm(log(1 + y) ~ log(1 + x), data = dat)
+  # expect_equal(
+  #   head(insight::get_data(mod)),
+  #   head(dat),
+  #   tolerance = 1e-3,
+  #   ignore_attr = TRUE
+  # )
+
+  mod <- lm(log(y + 1) ~ log(x + 1), data = dat)
+  expect_equal(
+    head(insight::get_data(mod)),
+    head(dat),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+})
