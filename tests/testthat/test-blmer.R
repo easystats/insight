@@ -111,11 +111,11 @@ if (requiet("testthat") && requiet("insight") && requiet("blme")) {
     expect_equal(colnames(get_data(m1, effects = "random")), "Subject")
     expect_equal(
       colnames(get_data(m2)),
-      c("Reaction", "Days", "mygrp", "mysubgrp", "Subject")
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
     )
     expect_equal(
       colnames(get_data(m2, effects = "all")),
-      c("Reaction", "Days", "mygrp", "mysubgrp", "Subject")
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
     )
     expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
   })

@@ -64,17 +64,7 @@ if (.runThisTest) {
       expect_equal(nrow(get_data(m1)), 644)
       expect_equal(
         colnames(get_data(m1)),
-        c(
-          "site",
-          "mined",
-          "cover",
-          "sample",
-          "DOP",
-          "Wtemp",
-          "DOY",
-          "spp",
-          "count"
-        )
+        c("mined", "cover", "sample")
       )
     })
 
