@@ -266,7 +266,7 @@ test_that("get_data() log transform", {
 
   mod <- lm(y ~ log(1 + x), data = dat)
   expect_equal(
-    head(insight::get_data(mod)[c(1, 3)]),
+    head(insight::get_data(mod)[c("y", "x")]),
     head(dat),
     tolerance = 1e-3,
     ignore_attr = TRUE
@@ -282,7 +282,7 @@ test_that("get_data() log transform", {
 
   mod <- lm(log(y) ~ log(1 + x), data = dat)
   expect_equal(
-    head(insight::get_data(mod)[c(1, 3)]),
+    head(insight::get_data(mod)[c("y", "x")]),
     head(dat),
     tolerance = 1e-3,
     ignore_attr = TRUE
