@@ -62,29 +62,28 @@ get_data.default <- function(x, verbose = TRUE, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
-  mf <- .get_data_from_environmet(x)
-  if (!is.null(mf)) {
-    return(mf)
-  }
-
-  mf <- tryCatch(
-    {
-      if (inherits(x, "Zelig-relogit")) {
-        .get_zelig_relogit_frame(x)
-      } else {
-        stats::model.frame(x)
+  model_data <- .get_data_from_environmet(x)
+  if (is.null(model_data)) {
+    mf <- tryCatch(
+      {
+        if (inherits(x, "Zelig-relogit")) {
+          .get_zelig_relogit_frame(x)
+        } else {
+          stats::model.frame(x)
+        }
+      },
+      error = function(x) {
+        NULL
       }
-    },
-    error = function(x) {
-      NULL
+    )
+
+    if (is.null(mf) || nrow(mf) == 0) {
+      mf <- .get_data_from_environmet(x)
     }
-  )
 
-  if (is.null(mf) || nrow(mf) == 0) {
-    mf <- .get_data_from_environmet(x)
+    model_data <- .prepare_get_data(x, mf, verbose = verbose)
   }
-
-  .prepare_get_data(x, mf, verbose = verbose)
+  model_data
 }
 
 
