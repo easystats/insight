@@ -107,6 +107,7 @@ Suggests:
     gbm,
     gee,
     geepack,
+    geoR,
     GLMMadaptive,
     glmmTMB,
     gmnl,

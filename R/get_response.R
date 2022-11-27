@@ -59,7 +59,7 @@ get_response <- function(x, select = NULL, as_proportion = TRUE, verbose = TRUE)
       response <- response[, select, drop = TRUE]
     }
     # check if more than one column, else coerce to vector
-    if (ncol(response) > 1) {
+    if ((is.data.frame(response) || is.matrix(response)) && ncol(response) > 1) {
       # preserve response proportion?
       if (as_proportion && glm_proportion && ncol(response) > 1) {
         response <- response[[1]] / response[[2]]
