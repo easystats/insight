@@ -16,16 +16,18 @@ if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >
       )
   }
 
+  dat <<- sleepstudy
+
   m1 <- rlmer(
     Reaction ~ Days + (Days | Subject),
-    data = sleepstudy,
+    data = dat,
     rho.sigma.e = psi2propII(smoothPsi, k = 2.28),
     rho.sigma.b = chgDefaults(smoothPsi, k = 5.11, s = 10)
   )
 
   m2 <- rlmer(
     Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-    data = sleepstudy,
+    data = dat,
     rho.sigma.e = psi2propII(smoothPsi, k = 2.28),
     rho.sigma.b = chgDefaults(smoothPsi, k = 5.11, s = 10)
   )
