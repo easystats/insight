@@ -97,12 +97,7 @@ if (suppressWarnings(requiet("testthat") &&
     get_data(m4)
     expect_equal(
       colnames(get_data(m5)),
-      c(
-        "cbind(incidence, size - incidence)",
-        "herd",
-        "incidence",
-        "size"
-      )
+      c("incidence", "herd", "size")
     )
   })
 
