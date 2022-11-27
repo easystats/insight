@@ -67,7 +67,7 @@ get_data <- function(x, ...) {
       # remove response for random effects
       if (effects == "random") {
         resp <- find_response(x, combine = FALSE)
-        dat <- dat[, setdiff(colnames(dat), resp)]
+        dat <- dat[, setdiff(colnames(dat), resp), drop = FALSE]
       }
       # complete cases only, as in model frames, need to filter attributes
       cc <- stats::complete.cases(dat)
