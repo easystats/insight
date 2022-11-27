@@ -49,7 +49,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m1)), 26)
     expect_equal(
       colnames(get_data(m1)),
-      c("futime", "fustat", "Surv(futime, fustat)", "ecog.ps", "rx")
+      c("futime", "fustat", "ecog.ps", "rx")
     )
   })
 
