@@ -58,13 +58,17 @@ get_response <- function(x, select = NULL, as_proportion = TRUE, verbose = TRUE)
     if (!is.null(select) && all(select %in% colnames(response))) {
       response <- response[, select, drop = TRUE]
     }
-    # preseresponsee proportion?
-    if (as_proportion && glm_proportion && ncol(response) > 1) {
-      response <- response[[1]] / response[[2]]
+    # check if more than one column, else coerce to vector
+    if (ncol(response) > 1) {
+      # preserve response proportion?
+      if (as_proportion && glm_proportion && ncol(response) > 1) {
+        response <- response[[1]] / response[[2]]
+      }
+    } else {
+      response <- as.vector(response[[1]])
     }
-    if ((!is.factor(response) && !is.numeric(response) && !is.character(response) &&
-        !is.logical(response) && !is.integer(response)) ||
-        (is.data.frame(response) && ncol(response) == 1)) {
+    if (!is.factor(response) && !is.numeric(response) && !is.character(response) &&
+        !is.logical(response) && !is.integer(response)) {
       response <- as.vector(response)
     }
   }
