@@ -122,7 +122,7 @@ get_modelmatrix.svyglm <- function(x, ...) {
       {
         d <- as.data.frame(dots$data)
         response_name <- find_response(x)
-        response_variable <- get_response(x)
+        response_variable <- get_response(x, as_proportion = TRUE)
         if (is.factor(response_variable)) {
           d[[response_name]] <- levels(response_variable)[1]
         } else {

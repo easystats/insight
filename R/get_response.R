@@ -29,7 +29,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_response(m)
 #' @export
-get_response <- function(x, select = NULL, as_proportion = FALSE, verbose = TRUE) {
+get_response <- function(x, select = NULL, as_proportion = TRUE, verbose = TRUE) {
   rn <- find_response(x, combine = FALSE)
   combined_rn <- find_response(x, combine = TRUE)
 
@@ -59,7 +59,7 @@ get_response <- function(x, select = NULL, as_proportion = FALSE, verbose = TRUE
       response <- response[, select, drop = TRUE]
     }
     # preseresponsee proportion?
-    if (as_proportion && length(rn) > 1) {
+    if (as_proportion && glm_proportion && ncol(response) > 1) {
       response <- response[[1]] / response[[2]]
     }
     if (!is.factor(response) && !is.numeric(response) && !is.character(response) &&

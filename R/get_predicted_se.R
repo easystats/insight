@@ -111,7 +111,7 @@ get_predicted_se <- function(x,
   # make sure we repeat SE for each response level for
   # models with categorical or ordinal response.
   if (inherits(x, c("polr", "multinom", "mixor"))) {
-    se <- rep(se, times = n_unique(get_response(x)))
+    se <- rep(se, times = n_unique(get_response(x, as_proportion = TRUE)))
   }
 
   se

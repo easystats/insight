@@ -4,7 +4,7 @@
 \alias{get_response}
 \title{Get the values from the response variable}
 \usage{
-get_response(x, select = NULL, as_proportion = FALSE, verbose = TRUE)
+get_response(x, select = NULL, as_proportion = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{x}{A fitted model.}
