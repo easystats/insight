@@ -245,6 +245,8 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
+  expect_equal(find_response(mod), "log(y)")
+  expect_equal(find_response(mod, combine = FALSE), "y")
 
   mod <- lm(log(y) ~ x, data = dat)
   expect_equal(
@@ -253,6 +255,7 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
+  expect_equal(find_response(mod), "log(y)")
 
   mod <- lm(y ~ log(x), data = dat)
   expect_equal(
@@ -261,6 +264,7 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
+  expect_equal(find_response(mod), "y")
 
   mod <- lm(y ~ log(1 + x), data = dat)
   expect_equal(
@@ -269,6 +273,7 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
+  expect_equal(find_response(mod), "y")
 
   mod <- lm(y ~ log(x + 1), data = dat)
   expect_equal(
@@ -301,6 +306,8 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
+  expect_equal(find_response(mod), "log(1 + y)")
+  expect_equal(find_response(mod, combine = FALSE), "y")
 
   mod <- lm(log(y + 1) ~ log(x + 1), data = dat)
   expect_equal(
