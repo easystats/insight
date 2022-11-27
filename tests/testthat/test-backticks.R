@@ -1,9 +1,10 @@
 if (requiet("testthat") && requiet("insight")) {
   data(iris)
-  iris$`a m` <<- iris$Species
-  iris$`Sepal Width` <<- iris$Sepal.Width
-  m <- lm(`Sepal Width` ~ Petal.Length + `a m` * log(Sepal.Length), data = iris)
-  m2 <- lm(`Sepal Width` ~ Petal.Length + `a m`, data = iris)
+  iris$`a m` <- iris$Species
+  iris$`Sepal Width` <- iris$Sepal.Width
+  dat <- iris
+  m <- lm(`Sepal Width` ~ Petal.Length + `a m` * log(Sepal.Length), data = dat)
+  m2 <- lm(`Sepal Width` ~ Petal.Length + `a m`, data = dat)
 
   test_that("text_remove_backticks", {
     d <- data.frame(Parameter = names(coef(m2)), Estimate = unname(coef(m2)), stringsAsFactors = FALSE)
