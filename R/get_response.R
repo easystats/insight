@@ -62,8 +62,9 @@ get_response <- function(x, select = NULL, as_proportion = TRUE, verbose = TRUE)
     if (as_proportion && glm_proportion && ncol(response) > 1) {
       response <- response[[1]] / response[[2]]
     }
-    if (!is.factor(response) && !is.numeric(response) && !is.character(response) &&
-        !is.logical(response) && !is.integer(response) && !is.data.frame(response)) {
+    if ((!is.factor(response) && !is.numeric(response) && !is.character(response) &&
+        !is.logical(response) && !is.integer(response)) ||
+        (is.data.frame(response) && ncol(response) == 1)) {
       response <- as.vector(response)
     }
   }
