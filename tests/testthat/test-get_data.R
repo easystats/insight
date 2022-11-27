@@ -156,7 +156,6 @@ if (.runThisTest) {
   m <- lm(Sepal.Length ~ Sepal.Width, data = iris)
   out <- get_data(m)
   test_that("subsets", {
-    expect_false(attributes(out)$is_subset)
     expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width"))
     expect_equal(nrow(out), 150)
   })
@@ -164,8 +163,7 @@ if (.runThisTest) {
   m <- lm(Sepal.Length ~ Sepal.Width, data = iris, subset = Species == "versicolor")
   out <- get_data(m)
   test_that("subsets", {
-    expect_true(attributes(out)$is_subset)
-    expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
+    expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width"))
     expect_equal(nrow(out), 50)
   })
 
@@ -296,15 +294,13 @@ test_that("get_data() log transform", {
     ignore_attr = TRUE
   )
 
-  ## FIXME: this doesn't work yet
-
-  # mod <- lm(log(1 + y) ~ log(1 + x), data = dat)
-  # expect_equal(
-  #   head(insight::get_data(mod)),
-  #   head(dat),
-  #   tolerance = 1e-3,
-  #   ignore_attr = TRUE
-  # )
+  mod <- lm(log(1 + y) ~ log(1 + x), data = dat)
+  expect_equal(
+    head(insight::get_data(mod)),
+    head(dat),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
 
   mod <- lm(log(y + 1) ~ log(x + 1), data = dat)
   expect_equal(
