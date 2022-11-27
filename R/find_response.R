@@ -182,7 +182,7 @@ check_cbind <- function(resp, combine, model) {
     if (inherits(model, "DirichletRegModel")) {
       resp <- model$varnames
     } else {
-      resp <- all.vars(.str2lang(resp))
+      resp <- all.vars(.str2lang(paste(resp, collapse = "+")))
     }
   }
 
