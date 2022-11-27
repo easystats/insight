@@ -901,28 +901,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 .get_model_data_for_grid <- function(x, data) {
   # Retrieve data, based on variable names
   if (is.null(data)) {
-    data <- tryCatch(get_data(x)[find_variables(x, "all", flatten = TRUE)], error = function(e) NULL)
-  }
-
-  # For models with transformed parameters, "find_variables" may not return
-  # matching column names - then try retrieving terms instead
-  if (is.null(data)) {
-    data <- tryCatch(get_data(x)[find_terms(x, "all", flatten = TRUE)], error = function(e) NULL)
-  }
-
-  # brute force - use all!
-  if (is.null(data)) {
-    cols <- unique(c(
-      find_terms(x, "all", flatten = TRUE),
-      find_variables(x, "all", flatten = TRUE)
-    ))
-    data <- tryCatch(
-      {
-        d <- get_data(x)
-        d[intersect(colnames(d), cols)]
-      },
-      error = function(e) NULL
-    )
+    data <- get_data(x)
   }
 
   # still found no data - stop here
@@ -931,6 +910,29 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
       "Can't access data that was used to fit the model in order to create the reference grid.",
       "Please use the `data` argument."
     )
+  }
+
+  # find variables that were coerced on-the-fly
+  terms <- find_terms(x, flatten = TRUE)
+  factors <- grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", terms)
+  if (any(factors)) {
+    cleaned_terms <- clean_names(terms[factors])
+    for (i in cleaned_terms) {
+      if (is.numeric(data[[i]])) {
+        attr(data[[i]], "factor") <- TRUE
+      }
+    }
+    attr(mf, "factors") <- cleaned_terms
+  }
+  logicals <- grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", terms)
+  if (any(logicals)) {
+    cleaned_terms <- clean_names(terms[logicals])
+    for (i in cleaned_terms) {
+      if (is.numeric(data[[i]])) {
+        attr(data[[i]], "logical") <- TRUE
+      }
+    }
+    attr(mf, "logicals") <- cleaned_terms
   }
 
   data
