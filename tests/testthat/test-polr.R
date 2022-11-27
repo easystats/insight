@@ -31,7 +31,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m1)), 72)
     expect_equal(
       colnames(get_data(m1)),
-      c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq")
+      c("Sat", "Infl", "Type", "Cont", "Freq")
     )
   })
 
