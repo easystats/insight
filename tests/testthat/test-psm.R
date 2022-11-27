@@ -10,14 +10,12 @@ if (requiet("testthat") && requiet("insight") && requiet("rms")) {
   death <- ifelse(d.time <= cens, 1, 0)
   d.time <- pmin(d.time, cens)
 
-  dat <-
-    data.frame(d.time, death, sex, age, stringsAsFactors = FALSE)
+  dat <<- data.frame(d.time, death, sex, age, stringsAsFactors = FALSE)
 
-  m1 <-
-    psm(Surv(d.time, death) ~ sex * pol(age, 2),
-      dist = "lognormal",
-      data = dat
-    )
+  m1 <- psm(Surv(d.time, death) ~ sex * pol(age, 2),
+    dist = "lognormal",
+    data = dat
+  )
 
   test_that("model_info", {
     expect_false(model_info(m1)$is_binomial)
