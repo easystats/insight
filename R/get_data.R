@@ -943,7 +943,7 @@ get_data.glimML <- function(x, effects = "all", verbose = TRUE, ...) {
 #' @export
 get_data.lavaan <- function(x, verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects)
+  model_data <- .get_data_from_environment(x)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -966,7 +966,7 @@ get_data.blavaan <- get_data.lavaan
 #' @export
 get_data.vgam <- function(x, verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects)
+  model_data <- .get_data_from_environment(x)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -988,7 +988,7 @@ get_data.gamm <- function(x, verbose = TRUE, ...) {
   class(x) <- c(class(x), c("glm", "lm"))
 
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects)
+  model_data <- .get_data_from_environment(x)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1003,7 +1003,7 @@ get_data.gamm <- function(x, verbose = TRUE, ...) {
 #' @export
 get_data.gamlss <- function(x, verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects)
+  model_data <- .get_data_from_environment(x)
 
   if (!is.null(model_data)) {
     return(model_data)
