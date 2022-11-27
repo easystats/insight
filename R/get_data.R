@@ -71,8 +71,8 @@ get_data <- function(x, ...) {
       }
       # complete cases only, as in model frames, need to filter attributes
       cc <- stats::complete.cases(dat)
-      if (any(cc)) {
-        ## TODO: filter, and preserve attributes
+      if (!all(cc)) {
+        dat <- datawizard::data_filter(dat, select = which(cc))
       }
       dat
     },

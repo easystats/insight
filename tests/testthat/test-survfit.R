@@ -23,7 +23,7 @@ if (requiet("testthat") &&
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 228)
+    expect_equal(nrow(get_data(m1)), 227)
     expect_equal(
       colnames(get_data(m1)),
       c("time", "status", "sex", "age", "ph.ecog")
