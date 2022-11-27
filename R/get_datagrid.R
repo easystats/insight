@@ -922,7 +922,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
         attr(data[[i]], "factor") <- TRUE
       }
     }
-    attr(mf, "factors") <- cleaned_terms
+    attr(data, "factors") <- cleaned_terms
   }
   logicals <- grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", terms)
   if (any(logicals)) {
@@ -932,7 +932,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
         attr(data[[i]], "logical") <- TRUE
       }
     }
-    attr(mf, "logicals") <- cleaned_terms
+    attr(data, "logicals") <- cleaned_terms
   }
 
   data
