@@ -7,6 +7,9 @@
 #'
 #' @param select Optional name(s) of response variables for which to extract values.
 #'   Can be used in case of regression models with multiple response variables.
+#' @param as_proportion Logical, if `TRUE` and the response value is a proportion
+#'   (e.g. `y1 / y2`), then the returned response value will be a vector with
+#'   the result of this proportion. Else, always a data frame is returned.
 #' @inheritParams find_predictors
 #'
 #' @return The values of the response variable, as vector, or a data frame if
@@ -26,7 +29,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_response(m)
 #' @export
-get_response <- function(x, select = NULL, verbose = TRUE) {
+get_response <- function(x, select = NULL, as_proportion = FALSE, verbose = TRUE) {
   rn <- find_response(x, combine = FALSE)
   combined_rn <- find_response(x, combine = TRUE)
 
@@ -36,14 +39,7 @@ get_response <- function(x, select = NULL, verbose = TRUE) {
 
   # check if response is a proportion for a binomial glm
   proportion_response <- combined_rn[!grepl("I\\((.*)\\)", combined_rn)]
-  binom_fam <- tryCatch(
-    {
-      stats::family(x)$family == "binomial"
-    },
-    error = function(x) {
-      FALSE
-    }
-  )
+  binom_fam <- tryCatch(stats::family(x)$family == "binomial", error = function(x) FALSE)
   glm_proportion <- any(grepl("/", proportion_response, fixed = TRUE)) && binom_fam
 
   # data used to fit the model
@@ -51,27 +47,25 @@ get_response <- function(x, select = NULL, verbose = TRUE) {
 
   # exceptions
   if (inherits(x, "DirichletRegModel")) {
-    rv <- x$Y
-    class(rv) <- "matrix"
-    data.frame(rv)
+    response <- x$Y
+    class(response) <- "matrix"
+    data.frame(response)
   } else if (inherits(x, "bfsl")) {
-    model_data[["y"]]
-  } else if (length(rn) > 1 && all(rn %in% colnames(model_data)) && !glm_proportion) {
-    rv <- model_data[, rn, drop = FALSE]
-    colnames(rv) <- rn
-    # if user only wants specific response value, return this only
-    if (!is.null(select) && all(select %in% colnames(rv))) {
-      rv <- rv[, select, drop = TRUE]
-    }
-    rv
+    response <- model_data[["y"]]
   } else {
-    rv <- model_data[[combined_rn]]
-    if (!is.factor(rv) &&
-      !is.numeric(rv) &&
-      !is.character(rv) && !is.logical(rv) && !is.integer(rv)) {
-      as.vector(rv)
-    } else {
-      rv
+    response <- model_data[, rn, drop = FALSE]
+    # if user only wants specific response value, return this only
+    if (!is.null(select) && all(select %in% colnames(response))) {
+      response <- response[, select, drop = TRUE]
+    }
+    # preseresponsee proportion?
+    if (as_proportion && length(rn) > 1) {
+      response <- response[[1]] / response[[2]]
+    }
+    if (!is.factor(response) && !is.numeric(response) && !is.character(response) &&
+        !is.logical(response) && !is.integer(response) && !is.data.frame(response)) {
+      response <- as.vector(response)
     }
   }
+  response
 }
