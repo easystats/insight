@@ -735,6 +735,7 @@ get_datagrid.default <- function(x,
 
   # Retrieve data from model
   data <- .get_model_data_for_grid(x, data)
+  data_attr <- attributes(data)
 
   # save response - might be necessary to include
   response <- find_response(x)
@@ -783,6 +784,9 @@ get_datagrid.default <- function(x,
       at <- colnames(data)[!colnames(data) %in% clean_names(s)]
     }
   }
+
+  # set back custom attributes
+  data <- .replace_attr(data, data_attr)
 
   vm <- get_datagrid(
     data,
@@ -950,4 +954,12 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
     )))))
   }
   at
+}
+
+
+.replace_attr <- function(data, custom_attr) {
+  for (nm in setdiff(names(custom_attr), names(attributes(data.frame())))) {
+    attr(data, which = nm) <- custom_attr[[nm]]
+  }
+  data
 }
