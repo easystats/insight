@@ -135,7 +135,8 @@ test_that("JM", {
   data("aids", package = "JM")
   m <- coxph(Surv(start, stop, event) ~ CD4, data = aids)
   d <- get_data(m)
-  expect_equal(dim(d), c(1405, 12))
+  expect_equal(dim(d), c(1405, 4))
+  expect_equal(colnames(d), c("start", "stop", "event", "CD4"))
   expect_equal(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
 })
 

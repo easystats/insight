@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest || Sys.getenv("USER") == "travis") {
+if (.runThisTest) {
   if (requiet("testthat") && requiet("insight") && requiet("glmmTMB")) {
     m1 <- download_model("glmmTMB_spatial_1")
 

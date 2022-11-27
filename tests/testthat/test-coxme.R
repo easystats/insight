@@ -39,13 +39,12 @@ if (requiet("testthat") &&
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 226)
+    expect_equal(nrow(get_data(m1)), 225)
     expect_equal(
       colnames(get_data(m1)),
       c(
         "time",
         "status",
-        "Surv(time, status)",
         "ph.ecog",
         "age",
         "inst"
@@ -56,7 +55,6 @@ if (requiet("testthat") &&
       c(
         "time",
         "status",
-        "Surv(time, status)",
         "ph.ecog",
         "age",
         "inst",
@@ -148,9 +146,9 @@ if (requiet("testthat") &&
 
   test_that("get_response", {
     expect_equal(colnames(get_response(m1)), c("time", "status"))
-    expect_equal(nrow(get_response(m1)), 226)
+    expect_equal(nrow(get_response(m1)), 225)
     expect_equal(colnames(get_response(m1)), c("time", "status"))
-    expect_equal(nrow(get_response(m2)), 226)
+    expect_equal(nrow(get_response(m2)), 225)
   })
 
   test_that("linkfun", {

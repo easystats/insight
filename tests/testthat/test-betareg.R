@@ -44,7 +44,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m2)), 38)
     expect_equal(
       colnames(get_data(m2)),
-      c("I(food/income)", "income", "persons", "food", "income.1")
+      c("food", "income", "persons")
     )
   })
 
