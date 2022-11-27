@@ -72,7 +72,23 @@ get_data <- function(x, ...) {
       # complete cases only, as in model frames, need to filter attributes
       cc <- stats::complete.cases(dat)
       if (!all(cc)) {
-        dat <- datawizard::data_filter(dat, select = which(cc))
+        # save original data, for attributes
+        original_dat <- dat
+        # filter
+        dat <- dat[cc, , drop = FALSE]
+        # add back labels
+        var_label <- compact_list(lapply(original_dat, attr, "label", exact = TRUE))
+        if (length(var_label)) {
+          for (i in names(var_label)) {
+            attr(dat[[i]], "label") <- var_label[[i]]
+          }
+        }
+        val_labels <- compact_list(lapply(original_dat, attr, "labels", exact = TRUE))
+        if (length(val_labels)) {
+          for (i in names(val_labels)) {
+            attr(dat[[i]], "labels") <- val_labels[[i]]
+          }
+        }
       }
       dat
     },
