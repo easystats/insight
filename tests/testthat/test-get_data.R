@@ -78,7 +78,7 @@ test_that("get_data include weights, even if ones", {
 
 
 test_that("lm with transformations", {
-  d <- data.frame(
+  d <<- data.frame(
     time = as.factor(c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)),
     group = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     sum = c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50)
@@ -163,7 +163,7 @@ if (.runThisTest) {
   m <- lm(Sepal.Length ~ Sepal.Width, data = iris, subset = Species == "versicolor")
   out <- get_data(m)
   test_that("subsets", {
-    expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width"))
+    expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
     expect_equal(nrow(out), 50)
   })
 
@@ -245,7 +245,7 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
-  expect_equal(find_response(mod), "log(y)")
+  expect_equal(find_response(mod), "y")
   expect_equal(find_response(mod, combine = FALSE), "y")
 
   mod <- lm(log(y) ~ x, data = dat)
@@ -255,7 +255,7 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
-  expect_equal(find_response(mod), "log(y)")
+  expect_equal(find_response(mod), "y")
 
   mod <- lm(y ~ log(x), data = dat)
   expect_equal(
@@ -306,7 +306,7 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
-  expect_equal(find_response(mod), "log(1 + y)")
+  expect_equal(find_response(mod), "y")
   expect_equal(find_response(mod, combine = FALSE), "y")
 
   mod <- lm(log(y + 1) ~ log(x + 1), data = dat)
