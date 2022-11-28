@@ -65,7 +65,9 @@ get_data <- function(x, ...) {
 
   # if "find_variables()" returns NULL, we assume this is intentional, as
   # specific model components were requested, which are not available
-  } else if (is.null(vars)) {
+  } else if (is.null(vars) && effects != "fixed") {
+    # for fixed effects, always include response,
+    # so return NULL only if effects != "fixed"
     if (verbose) {
       format_warning(
         "Could not find any variables for the specified model component.",
@@ -83,6 +85,10 @@ get_data <- function(x, ...) {
       # slot in the model call with further variables
       if (!is.null(additional_variables)) {
         vars <- c(vars, additional_variables)
+      }
+      # add response
+      if (effects %in% c("all", "fixed")) {
+        vars <- c(vars, find_response(x, combine = FALSE))
       }
       # select only those variables from the data that we find in the model
       if (!is.null(vars)) {
