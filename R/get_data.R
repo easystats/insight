@@ -77,7 +77,7 @@ get_data <- function(x, ...) {
     return(NULL)
   }
 
-  tryCatch(
+  out <- tryCatch(
     {
       # recover data frame from environment
       dat <- .recover_data_from_environment(x)
@@ -139,6 +139,11 @@ get_data <- function(x, ...) {
       NULL
     }
   )
+  # successful?
+  if (is.null(out) && verbose) {
+    format_warning("Could not recover model data from environment.")
+  }
+  out
 }
 
 
