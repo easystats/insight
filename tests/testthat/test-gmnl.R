@@ -5,14 +5,13 @@ if (requiet("testthat") &&
   requiet("MASS")) {
   data(housing, package = "MASS")
 
-  dat <- mlogit.data(housing, choice = "Sat", shape = "wide")
+  dat <<- mlogit.data(housing, choice = "Sat", shape = "wide")
   void <- capture.output(
-    m1 <-
-      gmnl(Sat ~ Infl + Type + Cont | 1,
-        data = dat,
-        model = "smnl",
-        R = 100
-      )
+    m1 <- gmnl(Sat ~ Infl + Type + Cont | 1,
+      data = dat,
+      model = "smnl",
+      R = 100
+    )
   )
 
   test_that("model_info", {

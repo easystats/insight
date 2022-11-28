@@ -64,7 +64,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m1)), 48)
     expect_equal(
       colnames(get_data(m1)),
-      c("packs", "rprice", "rincome", "tdiff", "tax", "cpi")
+      c("packs", "rprice", "rincome", "tdiff", "tax", "cpi", "year")
     )
   })
 

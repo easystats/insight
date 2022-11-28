@@ -44,7 +44,8 @@ get_data <- function(x, ...) {
 .get_data_from_environment <- function(x,
                                        effects = "all",
                                        component = "all",
-                                       additional_variables = NULL) {
+                                       additional_variables = NULL,
+                                       verbose = TRUE) {
   # handle arguments
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   component <- match.arg(component, choices = c("all", "conditional", "zero_inflated", "zi", "smooth_terms", "dispersion"))
@@ -53,10 +54,26 @@ get_data <- function(x, ...) {
   model_call <- get_call(x)
 
   # extract model variables, if possible
-  vars <- tryCatch(
+  vars <- try(
     find_variables(x, effects = effects, component = component, flatten = TRUE, verbose = FALSE),
-    error = function(e) NULL
+    silent = TRUE
   )
+
+  # if "find_variables()" fails, we set it to NULL
+  if (inherits(vars, "try-error")) {
+    vars <- NULL
+
+  # if "find_variables()" returns NULL, we assume this is intentional, as
+  # specific model components were requested, which are not available
+  } else if (is.null(vars)) {
+    if (verbose) {
+      format_warning(
+        "Could not find any variables for the specified model component.",
+        "You may try other values for the `effects` and `component` argument to retrieve model data."
+      )
+    }
+    return(NULL)
+  }
 
   tryCatch(
     {

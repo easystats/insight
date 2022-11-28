@@ -51,7 +51,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m1)), 32)
     expect_equal(
       colnames(get_data(m1)),
-      c("mpg", "carb + wt", "gear", "cyl", "carb", "wt")
+      c("mpg", "gear", "cyl", "carb", "wt")
     )
   })
 

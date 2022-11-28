@@ -44,7 +44,7 @@ if (requiet("testthat") &&
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 308)
-    expect_equal(colnames(get_data(m1)), c("Mare", "Time", "follicles"))
+    expect_equal(colnames(get_data(m1)), c("follicles", "Mare", "Time"))
   })
 
   test_that("get_df", {
