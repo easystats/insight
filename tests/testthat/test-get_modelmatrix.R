@@ -80,7 +80,7 @@ test_that("get_modelmatrix - ivreg", {
 test_that("get_modelmatrix - lm_robust", {
   set.seed(15)
   N <- 1:40
-  dat <- data.frame(
+  dat <<- data.frame(
     N = N,
     y = rpois(N, lambda = 4),
     x = rnorm(N),
