@@ -5,13 +5,9 @@ if (requiet("testthat") && requiet("insight") && getRversion() >= "4.0.0") {
   m4 <- lm(hp ~ factor(cyl), data = mtcars)
 
   test_that("get_datagrid - data from models", {
-    expect_true(attributes(get_data(m1)$cyl)$factor)
     expect_equal(get_datagrid(m1)$cyl, c(4, 6, 8))
-    expect_true(attributes(get_data(m2)$cyl)$factor)
     expect_equal(get_datagrid(m2)$cyl, c(4, 6, 8))
-    expect_true(attributes(get_data(m3)$cyl)$factor)
     expect_equal(get_datagrid(m3)$cyl, c(4, 6, 8))
-    expect_true(attributes(get_data(m4)$cyl)$factor)
     expect_equal(get_datagrid(m4)$cyl, c(4, 6, 8))
   })
 
