@@ -162,6 +162,13 @@ get_data <- function(x, ...) {
     error = function(e) NULL
   )
 
+  # second, try to extract formula directly
+  if (is.null(dat)) {
+    dat <- tryCatch(eval(model_call$data, envir = environment(find_formula(x))),
+      error = function(e) NULL
+    )
+  }
+
   # next try, parent frame
   if (is.null(dat)) {
     dat <- tryCatch(eval(model_call$data, envir = parent.frame()),
