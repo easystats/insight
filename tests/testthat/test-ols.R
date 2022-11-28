@@ -36,7 +36,7 @@ if (requiet("testthat") &&
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 32)
-    expect_equal(colnames(get_data(m1)), c("mpg", "cyl", "wt", "hp"))
+    expect_equal(colnames(get_data(m1)), c("mpg", "hp", "cyl", "wt"))
   })
 
   test_that("find_formula", {

@@ -178,11 +178,14 @@ check_cbind <- function(resp, combine, model) {
       }
     }
     resp <- c(r1, r2)
-  } else if (!combine) {
-    if (inherits(model, "DirichletRegModel")) {
+  } else if (inherits(model, "DirichletRegModel")) {
       resp <- model$varnames
-    } else {
-      resp <- all.vars(.str2lang(paste(resp, collapse = "+")))
+  } else {
+    resp_combined <- all.vars(.str2lang(paste(resp, collapse = "+")))
+    # if we do not want to combine, or if we just have one variable as
+    # response, we want to return the bare name
+    if (!combine || length(resp_combined) == 1) {
+      resp <- resp_combined
     }
   }
 

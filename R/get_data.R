@@ -41,10 +41,16 @@ get_data <- function(x, ...) {
 # main workhorse, we try to recover data from environment as good as possible.
 # the dataset is subset if needed, and weights are added. only those columns
 # are returned that we actually find in the model...
-.get_data_from_environment <- function(x, effects = "all", component = "all") {
+.get_data_from_environment <- function(x,
+                                       effects = "all",
+                                       component = "all",
+                                       additional_variables = NULL) {
   # handle arguments
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   component <- match.arg(component, choices = c("all", "conditional", "zero_inflated", "zi", "smooth_terms", "dispersion"))
+
+  # we want to add the variable for subsettig, too
+  model_call <- get_call(x)
 
   # extract model variables, if possible
   vars <- tryCatch(
@@ -56,12 +62,21 @@ get_data <- function(x, ...) {
     {
       # recover data frame from environment
       dat <- .recover_data_from_environment(x)
+      # additional variables? Some models, like plm::plm(), have an "index"
+      # slot in the model call with further variables
+      if (!is.null(additional_variables)) {
+        vars <- c(vars, additional_variables)
+      }
       # select only those variables from the data that we find in the model
       if (!is.null(vars)) {
         # weighting variable?
         vars <- c(vars, find_weights(x))
         # offset?
         vars <- c(vars, find_offset(x))
+        # subset?
+        if (!is.null(model_call$subset)) {
+          vars <- c(vars, all.vars(model_call$subset))
+        }
         dat <- dat[, intersect(unique(vars), colnames(dat)), drop = FALSE]
       }
       # remove response for random effects
@@ -1134,8 +1149,10 @@ get_data.pgmm <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_data.plm <- function(x, verbose = TRUE, ...) {
+  # extract index variables
+  index <- eval(get_call(x)$index)
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x)
+  model_data <- .get_data_from_environment(x, additional_variables = index)
 
   if (!is.null(model_data)) {
     return(model_data)

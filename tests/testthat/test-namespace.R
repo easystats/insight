@@ -41,7 +41,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m1)), 150)
     expect_equal(
       colnames(get_data(m1)),
-      c("Sepal.Length", "Species", "Petal.Width")
+      c("Sepal.Length", "Petal.Width", "Species")
     )
   })
 

@@ -42,7 +42,7 @@ if (.runThisTest &&
     expect_equal(ncol(mf), 7)
     expect_equal(
       colnames(mf),
-      c("count", "spp", "cover", "mined", "DOP", "DOY", "site")
+      c("count", "spp", "cover", "mined", "DOP", "site", "DOY")
     )
   })
 }

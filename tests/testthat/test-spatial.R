@@ -7,10 +7,10 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("glmmTM
     y = ca20$coords[, 2],
     calcium = ca20$data,
     elevation = ca20$covariate[, 1],
-    region = factor(ca20$covariate[, 2])
+    region = factor(ca20$covariate[, 2]),
+    pos = numFactor(scale(ca20$coords[, 1]), scale(ca20$coords[, 2])),
+    ID = factor(rep(1, length(ca20$coords[, 1])))
   )
-  d$pos <- numFactor(scale(d$x), scale(d$y))
-  d$ID <- factor(rep(1, nrow(d)))
   dat <<- d
 
   m1 <- download_model("glmmTMB_spatial_1")
