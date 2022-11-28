@@ -181,7 +181,17 @@ check_cbind <- function(resp, combine, model) {
   } else if (inherits(model, "DirichletRegModel")) {
       resp <- model$varnames
   } else {
-    resp_combined <- all.vars(.str2lang(paste(resp, collapse = "+")))
+    # if we have more than one string for the response, paste them together
+    # "all.vars()" will take care of extracting the correct variables.
+    resp_combined_string <- paste(resp, collapse = "+")
+    # for some edge cases (see "test-backticks.R"), we may have white spaces
+    # in the variable name, so we enclose in backticks, to make sure "str2lang()"
+    # works as intended
+    if (grepl(" ", resp_combined_string, fixed = TRUE)) {
+      resp_combined_string <- paste0("`", resp_combined_string, "`")
+    }
+    # create an expression, so all.vars() works similar like for formulas
+    resp_combined <- all.vars(.str2lang(resp_combined_string))
     # if we do not want to combine, or if we just have one variable as
     # response, we want to return the bare name
     if (!combine || length(resp_combined) == 1) {
