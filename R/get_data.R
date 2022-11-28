@@ -86,8 +86,9 @@ get_data <- function(x, ...) {
       if (!is.null(additional_variables)) {
         vars <- c(vars, additional_variables)
       }
-      # add response
-      if (effects %in% c("all", "fixed")) {
+      # add response, only required if "find_variables()" does not already
+      # return it (which is the case when component is "all" or "conditional")
+      if (effects %in% c("all", "fixed") && !component %in% c("all", "conditional")) {
         vars <- c(vars, find_response(x, combine = FALSE))
       }
       # select only those variables from the data that we find in the model
