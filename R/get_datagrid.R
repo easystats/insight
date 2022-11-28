@@ -920,7 +920,8 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
   terms <- find_terms(x, flatten = TRUE)
   factors <- grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", terms)
   if (any(factors)) {
-    cleaned_terms <- clean_names(terms[factors])
+    factor_expressions <- lapply(terms[factors], .str2lang)
+    cleaned_terms <- vapply(factor_expressions, all.vars, character(1))
     for (i in cleaned_terms) {
       if (is.numeric(data[[i]])) {
         attr(data[[i]], "factor") <- TRUE
@@ -930,7 +931,8 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
   }
   logicals <- grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", terms)
   if (any(logicals)) {
-    cleaned_terms <- clean_names(terms[logicals])
+    logical_expressions <- lapply(terms[logicals], .str2lang)
+    cleaned_terms <- vapply(logical_expressions, all.vars, character(1))
     for (i in cleaned_terms) {
       if (is.numeric(data[[i]])) {
         attr(data[[i]], "logical") <- TRUE
