@@ -4,7 +4,7 @@ if (.runThisTest) {
   if (requiet("testthat") && requiet("insight") && requiet("mgcv") && requiet("httr")) {
     set.seed(123)
     void <- capture.output(
-      dat <- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
+      dat <<- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
     )
     m1 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
 
@@ -215,7 +215,8 @@ if (.runThisTest) {
     })
 
     test_that("get_predicted", {
-      tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = head(dat, 30))
+      dat2 <<- head(dat, 30)
+      tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = dat2)
       pred <- get_predicted(tmp, verbose = FALSE, ci = 0.95)
       expect_s3_class(pred, "get_predicted")
       expect_equal(
