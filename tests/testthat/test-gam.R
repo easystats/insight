@@ -4,10 +4,27 @@ if (.runThisTest) {
   if (requiet("testthat") && requiet("insight") && requiet("mgcv") && requiet("httr")) {
     set.seed(123)
     void <- capture.output(
-      dat <<- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
+      dat2 <<- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
     )
-    m1 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
 
+    # data for model m3
+    V <- matrix(c(2, 1, 1, 2), 2, 2)
+    f0 <- function(x) 2 * sin(pi * x)
+    f1 <- function(x) exp(2 * x)
+    f2 <- function(x) 0.2 * x^11 * (10 * (1 - x))^6 + 10 * (10 * x)^3 * (1 - x)^10
+    n <- 300
+    x0 <- runif(n)
+    x1 <- runif(n)
+    x2 <- runif(n)
+    x3 <- runif(n)
+    y <- matrix(0, n, 2)
+    for (i in 1:n) {
+      mu <- c(f0(x0[i]) + f1(x1[i]), f2(x2[i]))
+      y[i, ] <- rmvn(1, mu, V)
+    }
+    dat <<- data.frame(y0 = y[, 1], y1 = y[, 2], x0 = x0, x1 = x1, x2 = x2, x3 = x3)
+
+    m1 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat2)
     m2 <- download_model("gam_zi_1")
     m3 <- download_model("gam_mv_1")
 
@@ -247,7 +264,7 @@ if (.runThisTest) {
 
       # poisson
       void <- capture.output(
-        dat <- gamSim(1, n = 400, dist = "poisson", scale = .25)
+        dat <<- gamSim(1, n = 400, dist = "poisson", scale = .25)
       )
       b4 <- gam(
         y ~ s(x0) + s(x1) + s(x2) + s(x3),
@@ -274,7 +291,7 @@ if (.runThisTest) {
       expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
 
       void <- capture.output(
-        dat <- gamSim(1, n = 400, dist = "poisson", scale = .25)
+        dat <<- gamSim(1, n = 400, dist = "poisson", scale = .25)
       )
       b4 <- gam(
         y ~ s(x0) + s(x1) + s(x2) + s(x3),
