@@ -92,11 +92,11 @@ if (.runThisTest) {
     })
 
     test_that("get_call", {
-      expect_identical(deparse(get_call(m1)), "mgcv::gam(formula = y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)")
+      expect_identical(deparse(get_call(m1)), "mgcv::gam(formula = y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat2)")
     })
 
     test_that("get_response", {
-      expect_equal(get_response(m1), dat$y)
+      expect_equal(get_response(m1), dat2$y)
       expect_equal(length(get_response(m2)), 500)
       expect_equal(ncol(get_response(m3)), 2)
     })
@@ -113,7 +113,7 @@ if (.runThisTest) {
       expect_equal(nrow(get_data(m2)), 500)
       expect_equal(colnames(get_data(m2)), c("y", "x2", "x3", "x0", "x1"))
       expect_equal(nrow(get_data(m3)), 300)
-      expect_equal(colnames(get_data(m3)), c("y0", "x0", "x1", "x2", "x3", "y1"))
+      expect_equal(colnames(get_data(m3)), c("y0", "y1", "x0", "x1", "x2", "x3"))
     })
 
     test_that("find_formula", {

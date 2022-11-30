@@ -3,10 +3,11 @@ if (requiet("testthat") &&
   requiet("glmmTMB")) {
   data(Salamanders)
   Salamanders$cover <- abs(Salamanders$cover)
+  dat <<- Salamanders
 
   m1 <- glm(count ~ mined + log(cover) + sample,
     family = poisson,
-    data = Salamanders
+    data = dat
   )
 
   test_that("model_info", {

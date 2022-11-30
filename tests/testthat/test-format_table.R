@@ -19,7 +19,7 @@ if (requiet("testthat") && requiet("insight")) {
   if (.runThisTest && win_os && requiet("bayestestR")) {
     m1 <- insight::download_model("stanreg_glm_1")
     set.seed(123)
-    x <- as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf")))
+    x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf"))))
 
     test_that("format_table with stars bayes", {
       out <- format_table(x)

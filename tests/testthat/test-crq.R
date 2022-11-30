@@ -42,7 +42,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m1)), 200)
     expect_equal(
       colnames(get_data(m1)),
-      c("y", "x", "c", "d")
+      c("y", "c", "d", "x")
     )
   })
 

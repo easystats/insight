@@ -190,6 +190,10 @@ check_cbind <- function(resp, combine, model) {
     # if we do not want to combine, or if we just have one variable as
     # response, we want to return the bare name
     if (!combine || length(resp_combined) == 1) {
+      # if a named vector (e.g. for multivariate response), add back names
+      if (!is.null(names(resp)) && length(names(resp)) == length(resp_combined)) {
+        resp_combined <- stats::setNames(resp_combined, names(resp))
+      }
       resp <- resp_combined
     }
   }
