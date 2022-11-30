@@ -247,6 +247,16 @@ get_data.data.frame <- function(x, ...) {
 
 
 #' @export
+get_data.censReg <- get_data.default
+
+#' @export
+get_data.maxLik <- get_data.default
+
+#' @export
+get_data.maxim <- get_data.default
+
+
+#' @export
 get_data.summary.lm <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
     .recover_data_from_environment(x)[, all.vars(x$terms), drop = FALSE],
@@ -1010,7 +1020,7 @@ get_data.list <- function(x, verbose = TRUE, ...) {
     mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
     model_data <- .prepare_get_data(x, mf, verbose = verbose)
   } else {
-    NextMethod()
+    get_data.default(x, verbose = verbose, ...)
   }
   model_data
 }
