@@ -1022,6 +1022,21 @@ get_data.blavaan <- get_data.lavaan
 # additive models (gam) -------------------------------------
 
 #' @export
+get_data.list <- function(x, verbose = TRUE, ...) {
+  model_data <- NULL
+  if (object_has_names(x, "gam")) {
+    x <- x$gam
+    class(x) <- c(class(x), c("glm", "lm"))
+    mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
+    model_data <- .prepare_get_data(x, mf, verbose = verbose)
+  } else {
+    NextMethod()
+  }
+  model_data
+}
+
+
+#' @export
 get_data.vgam <- function(x, verbose = TRUE, ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x, verbose = FALSE)
