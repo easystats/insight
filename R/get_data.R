@@ -1256,14 +1256,6 @@ get_data.plm <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_data.wbm <- function(x, effects = "all", verbose = TRUE, ...) {
-  # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects)
-
-  if (!is.null(model_data)) {
-    return(model_data)
-  }
-
-  # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- stats::model.frame(x)
 
