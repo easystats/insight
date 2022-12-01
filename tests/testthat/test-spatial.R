@@ -131,7 +131,7 @@ if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("glmmTM
   })
 
   test_that("get_random", {
-    expect_identical(colnames(get_random(m1)), c("pos", "ID"))
+    expect_identical(colnames(get_random(m1)), "ID")
   })
 
   test_that("get_data", {

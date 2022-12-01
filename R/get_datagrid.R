@@ -907,10 +907,10 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
   if (is.null(data)) {
     data <- get_data(x)
     # make sure we only have variables from original data
-    data <- tryCatch(
-      data[find_variables(x, effect = "all", component = "all", flatten = TRUE)],
-      error = function(e) data
-    )
+    all_vars <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
+    if (!is.null(all_vars)) {
+      data <- tryCatch(data[intersect(all_vars, colnames(data))], error = function(e) data)
+    }
   }
 
   # still found no data - stop here

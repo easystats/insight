@@ -91,10 +91,11 @@ get_data <- function(x, ...) {
       if (effects %in% c("all", "fixed") && !component %in% c("all", "conditional")) {
         vars <- c(vars, find_response(x, combine = FALSE))
       }
+      ## TODO: do we want random slopes included? Previuosly, we did not.
       # add random slopes, if any
-      if (effects %in% c("all", "random")) {
-        vars <- c(vars, unlist(find_random_slopes(x)))
-      }
+      # if (effects %in% c("all", "random")) {
+      #   vars <- c(vars, unlist(find_random_slopes(x)))
+      # }
       # select only those variables from the data that we find in the model
       if (!is.null(vars)) {
         # weighting variable?
