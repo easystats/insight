@@ -1014,7 +1014,7 @@ get_data.blavaan <- get_data.lavaan
 #' @export
 get_data.list <- function(x, verbose = TRUE, ...) {
   model_data <- NULL
-  if (object_has_names(x, "gam")) {
+  if (any(c("gam", "gamm") %in% names(x))) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
     mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
@@ -1050,15 +1050,7 @@ get_data.gamm <- function(x, verbose = TRUE, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
 
-  # try to recover data from environment
-  model_data <- .get_data_from_environment(x, verbose = FALSE)
-
-  if (!is.null(model_data)) {
-    return(model_data)
-  }
-
-  # fall back to extract data from model frame
-  mf <- stats::model.frame(x)
+  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
   .prepare_get_data(x, mf, verbose = verbose)
 }
 
