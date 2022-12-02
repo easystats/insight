@@ -2086,7 +2086,7 @@ get_data.htest <- function(x, ...) {
 .check_data_source_arg <- function(source) {
   source <- match.arg(source, choices = c("environment", "mf", "modelframe", "frame"))
   switch(source,
-    "environment" = env,
+    "environment" = "environment",
     "frame"
   )
 }
