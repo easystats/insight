@@ -232,8 +232,8 @@ if (.runThisTest) {
     })
 
     test_that("get_predicted", {
-      dat2 <<- head(dat, 30)
-      tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = dat2)
+      dat3 <<- head(dat, 30)
+      tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = dat3)
       pred <- get_predicted(tmp, verbose = FALSE, ci = 0.95)
       expect_s3_class(pred, "get_predicted")
       expect_equal(
