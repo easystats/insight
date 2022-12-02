@@ -9,7 +9,7 @@
 \usage{
 get_data(x, ...)
 
-\method{get_data}{default}(x, verbose = TRUE, ...)
+\method{get_data}{default}(x, source = "environment", verbose = TRUE, ...)
 
 \method{get_data}{glmmTMB}(x, effects = "all", component = "all", verbose = TRUE, ...)
 
@@ -19,6 +19,17 @@ get_data(x, ...)
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
+
+\item{source}{String, indicating from where data should be recovered. If
+\code{source = "environment"} (default), data is recovered from the environment
+(e.g. if the data is in the workspace). This option is usually the fastest
+way of getting data and ensures that the original variables used for model
+fitting are returned. Note that always the \emph{current} data is recovered from
+the environment. Hence, if the data was modified \emph{after} model fitting
+(e.g., variables were recoded or rows filtered), the returned data may no
+longer equal the model data. If \code{source = "frame"} (or \code{"mf"}), the data
+is taken from the model frame (if possible). Any transformed variables
+are back-transformed}
 
 \item{verbose}{Toggle messages and warnings.}
 

@@ -7,6 +7,16 @@
 #' @param effects Should model data for fixed effects (`"fixed"`), random
 #'   effects (`"random"`) or both (`"all"`) be returned? Only applies to mixed
 #'   or gee models.
+#' @param source String, indicating from where data should be recovered. If
+#'   `source = "environment"` (default), data is recovered from the environment
+#'   (e.g. if the data is in the workspace). This option is usually the fastest
+#'   way of getting data and ensures that the original variables used for model
+#'   fitting are returned. Note that always the _current_ data is recovered from
+#'   the environment. Hence, if the data was modified _after_ model fitting
+#'   (e.g., variables were recoded or rows filtered), the returned data may no
+#'   longer equal the model data. If `source = "frame"` (or `"mf"`), the data
+#'   is taken from the model frame (if possible). Any transformed variables
+#'   are back-transformed
 #' @param verbose Toggle messages and warnings.
 #'
 #' @inheritParams find_predictors
@@ -216,14 +226,22 @@ get_data <- function(x, ...) {
 
 #' @rdname get_data
 #' @export
-get_data.default <- function(x, verbose = TRUE, ...) {
+get_data.default <- function(x, source = "environment", verbose = TRUE, ...) {
+  # process arguments, check whether data should be recovered from
+  # environment or model frame
+  source <- .check_data_source_arg(source)
+
   if (inherits(x, "list") && object_has_names(x, "gam")) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
-  # try to recover data from environment
-  model_data <- .get_data_from_environment(x, verbose = FALSE)
+  if (source == "environment") {
+    # try to recover data from environment
+    model_data <- .get_data_from_environment(x, verbose = FALSE)
+  } else {
+    model_data <- NULL
+  }
 
   # fall back to extract data from model frame
   if (is.null(model_data)) {
@@ -1974,4 +1992,15 @@ get_data.htest <- function(x, ...) {
     out <- .retrieve_htest_data(x)
   }
   out
+}
+
+
+# helper -------------
+
+.check_data_source_arg <- function(source) {
+  source <- match.arg(source, choices = c("environment", "mf", "modelframe", "frame"))
+  switch(source,
+    "environment" = env,
+    "frame"
+  )
 }
