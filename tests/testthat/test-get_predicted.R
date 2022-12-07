@@ -556,8 +556,7 @@ test_that("bugfix: used to fail with matrix variables", {
 
 test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   skip_if(isFALSE(run_stan))
-  skip_if_not_installed("brms")
-  library(brms)
+  requiet("brms")
   void <- capture.output(
     mod <- brm(am ~ hp + mpg,
       family = bernoulli, data = mtcars,
@@ -646,3 +645,20 @@ test_that("zero-inflation stuff works", {
   expect_equal(p2, p4, tolerance = 1e-1, ignore_attr = TRUE)
   expect_equal(p3, p4, tolerance = 1e-1, ignore_attr = TRUE)
 })
+
+
+
+
+
+# # Bug: incorrect results when var-cov and model matrix do not have exactly the same columns
+# library(insight)
+# set.seed(12345)
+# n <- 500
+# x <- sample(1:3, n, replace = TRUE)
+# y <- rnorm(n)
+# z <- ifelse(x + y + rlogis(n) > 1.5, 1, 0)
+# dat <- data.frame(x = factor(x), y = y, z = z)
+# m <- glm(z ~ x + y, family = binomial, data = dat)
+# nd <- head(dat, 2)
+# get_predicted(m, data = head(dat, 2), ci = 0.95, predict = "link") |> data.frame()
+# predict(m, type = "link", newdata = nd, se.fit = TRUE)$se.fit

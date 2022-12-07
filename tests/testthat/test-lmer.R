@@ -18,9 +18,9 @@ if (.runThisTest &&
     data = sleepstudy
   )
 
-  m2 <- lme4::lmer(Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  m2 <- suppressMessages(lme4::lmer(Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
     data = sleepstudy
-  )
+  ))
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -531,22 +531,33 @@ if (.runThisTest &&
   })
 
   test_that("get_predicted_ci: warning when model matrix and varcovmat do not match", {
-    mod <- lmer(
+    mod <- suppressMessages(lmer(
       weight ~ 1 + Time + I(Time^2) + Diet + Time:Diet + I(Time^2):Diet + (1 + Time + I(Time^2) | Chick),
       data = ChickWeight
-    )
+    ))
     newdata <- ChickWeight[ChickWeight$Time %in% 0:10 & ChickWeight$Chick %in% c(1, 40), ]
     newdata$Chick[newdata$Chick == "1"] <- NA
-    expect_equal(
-      head(as.data.frame(get_predicted(mod, data = newdata, include_random = FALSE, ci = 0.95))),
-      data.frame(
+
+    expect_warning(
+      get_predicted(mod, data = newdata, include_random = FALSE, ci = 0.95),
+      regexp = "levels")
+
+    # VAB: Not sure where these hard-coded values come from
+    # Related to Issue #693. Not sure if these are valid since we arbitrarily
+    # shrink the varcov and mm to be conformable. In some cases documented in
+    # Issue #556 of {marginaleffects}, we know that this produces incorrect
+    # results, so it's probably best to be conservative and not return results
+    # here.
+    known <- data.frame(
         Predicted = c(37.53433, 47.95719, 58.78866, 70.02873, 81.67742, 93.73472),
         SE = c(1.68687, 0.82574, 1.52747, 2.56109, 3.61936, 4.76178),
         CI_low = c(34.22096, 46.33525, 55.78837, 64.99819, 74.56822, 84.38154),
-        CI_high = c(40.84771, 49.57913, 61.78894, 75.05927, 88.78662, 103.08789)
-      ),
-      tolerance = 1e-3,
-      ignore_attr = TRUE
-    )
+        CI_high = c(40.84771, 49.57913, 61.78894, 75.05927, 88.78662, 103.08789))
+
+    p <- suppressWarnings(get_predicted(mod, data = newdata, include_random = FALSE, ci = 0.95))
+    expect_equal(
+      head(data.frame(p)$Predicted),
+      known$Predicted,
+      tolerance = 1e-3)
   })
 }
