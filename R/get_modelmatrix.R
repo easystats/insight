@@ -243,6 +243,14 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
   # min_levels is insufficient when used in stats::model.matrix
   modeldata <- get_data(x)
   fac <- lapply(Filter(is.factor, modeldata), unique)
+
+  # no factor
+  if (length(fac) == 0) {
+    out <- data
+    attr(out, "pad") <- 0
+    return(out)
+  }
+
   maxlev <- max(sapply(fac, length))
   pad <- data[rep(1, maxlev), , drop = FALSE]
   for (n in names(fac)) {
