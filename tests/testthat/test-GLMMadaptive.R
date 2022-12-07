@@ -6,10 +6,11 @@ if (.runThisTest) {
     m2 <- download_model("GLMMadaptive_zi_1")
 
     data(cbpp)
+    tmp <<- cbpp
     m3 <- GLMMadaptive::mixed_model(
       cbind(incidence, size - incidence) ~ period,
       random = ~ 1 | herd,
-      data = cbpp,
+      data = tmp,
       family = binomial
     )
 
@@ -224,8 +225,8 @@ if (.runThisTest) {
 
     test_that("get_data", {
       expect_identical(
-        colnames(get_data(m)),
-        c("count", "child", "camper", "livebait", "persons")
+        sort(colnames(get_data(m))),
+        sort(c("count", "child", "camper", "livebait", "persons"))
       )
       expect_identical(
         colnames(get_data(m, effects = "fixed")),
@@ -233,13 +234,12 @@ if (.runThisTest) {
       )
       expect_identical(colnames(get_data(m, effects = "random")), "persons")
       expect_identical(
-        colnames(get_data(m, component = "zi")),
-        c("count", "child", "livebait", "persons")
+        sort(colnames(get_data(m, component = "zi"))),
+        sort(c("count", "child", "livebait", "persons"))
       )
-      expect_identical(colnames(get_data(
-        m,
-        component = "zi", effects = "fixed"
-      )), c("count", "child", "livebait"))
+      expect_identical(
+        sort(colnames(get_data( m, component = "zi", effects = "fixed"))), 
+        sort(c("count", "child", "livebait")))
       expect_identical(colnames(get_data(
         m,
         component = "zi", effects = "random"
@@ -256,7 +256,7 @@ if (.runThisTest) {
         m,
         component = "cond", effects = "random"
       )), "persons")
-      expect_identical(colnames(get_data(m, component = "dispersion")), "count")
+      expect_identical(colnames(suppressWarnings(get_data(m, component = "dispersion"))), "count")
       expect_null(suppressWarnings(get_data(m, component = "dispersion", effects = "random")))
       expect_identical(
         colnames(get_data(m3)),
