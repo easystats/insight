@@ -175,42 +175,41 @@ if (.runThisTest) {
   # expect_warning(expect_warning(out <- get_data(m)))
   # expect_equal(colnames(out), c("Petal.Length", "Sepal.Length"))
 
-  data(iris)
-  m <- lm(log(Sepal.Length) ~ sqrt(Sepal.Width), data = iris)
-  out <- get_data(m)
   test_that("log", {
+    data(iris)
+    m <- lm(log(Sepal.Length) ~ sqrt(Sepal.Width), data = iris)
+    out <- get_data(m)
     expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
   })
 
-  m <- lm(log(Sepal.Length) ~ scale(Sepal.Width), data = iris)
-  out <- get_data(m)
-  test_that("log", {
+  test_that("log II", {
+    m <- lm(log(Sepal.Length) ~ scale(Sepal.Width), data = iris)
+    out <- get_data(m)
     expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
   })
 
 
-  # workaround bug in estimatr
-  if (requiet("ivreg") && requiet("estimatr")) {
+  test_that("workaround bug in estimatr", {
+    requiet("ivreg")
+    requiet("estimatr")
     data("CigaretteDemand")
     m <- estimatr::iv_robust(
       log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
       data = CigaretteDemand
     )
     out <- get_data(m)
-    test_that("estimatr works", {
-      expect_equal(
-        head(out$packs),
-        c(101.08543, 111.04297, 71.95417, 56.85931, 82.58292, 79.47219),
-        tolerance = 1e-3
-      )
-      expect_equal(
-        colnames(out),
-        c("packs", "rprice", "rincome", "salestax"),
-        tolerance = 1e-3
-      )
-    })
-  }
-
+    expect_equal(
+      head(out$packs),
+      c(101.08543, 111.04297, 71.95417, 56.85931, 82.58292, 79.47219),
+      tolerance = 1e-3
+    )
+    expect_equal(
+      colnames(out),
+      c("packs", "rprice", "rincome", "salestax"),
+      tolerance = 1e-3
+    )
+  })
+  
 
   if (.runStanTest) {
     requiet("brms")

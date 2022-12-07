@@ -3,6 +3,9 @@ skip_if(getRversion() < "3.6.0")
 skip_if_not_installed("fixest")
 requiet("fixest")
 
+# avoid warnings
+fixest::setFixest_nthreads(1)
+
 data(trade)
 m1 <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
 m2 <- femlm(log1p(Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")
