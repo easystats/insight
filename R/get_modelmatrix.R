@@ -238,26 +238,26 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
 }
 
 
-.pad_modelmatrix <- function(x, data, min_levels = 2) {
-  # return original data if there are already enough factors
-  fac <- lapply(Filter(is.factor, data), unique)
-  fac_len <- sapply(fac, length)
-  if (all(fac_len > min_levels)) {
+.pad_modelmatrix <- function(x, data, ...) {
+  # recycle to include all factors from all variables
+  # min_levels is insufficient when used in stats::model.matrix
+  modeldata <- get_data(x)
+  fac <- lapply(Filter(is.factor, modeldata), unique)
+
+  # no factor
+  if (length(fac) == 0) {
     out <- data
     attr(out, "pad") <- 0
     return(out)
   }
 
-  # factors from data in model object
-  modeldata <- get_data(x)
-  fac <- lapply(Filter(is.factor, modeldata), function(i) unique(i)[1:min_levels])
-  pad <- lapply(seq_len(min_levels), function(...) utils::head(data, n = 1))
-  pad <- do.call("rbind", pad)
+  maxlev <- max(sapply(fac, length))
+  pad <- data[rep(1, maxlev), , drop = FALSE]
   for (n in names(fac)) {
-    pad[[n]] <- fac[[n]]
+    pad[[n]][seq_along(fac[[n]])] <- fac[[n]]
   }
-
   out <- rbind(pad, data)
+  row.names(out) <- NULL
   attr(out, "pad") <- nrow(pad)
   return(out)
 }
