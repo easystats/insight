@@ -154,8 +154,9 @@ if (requiet("testthat") &&
     expect_true(all(c("Row", "Response", "Predicted") %in% colnames(p3)))
 
     d <- get_datagrid(m1, at = "Type", verbose = FALSE)
-    expect_warning(expect_warning(get_predicted(m1, predict = "expectation", data = d)))
-    p1 <- suppressWarnings(get_predicted(m1, predict = "expectation", data = d, verbose = FALSE))
+
+    p1 <- get_predicted(m1, predict = "expectation", data = d, verbose = FALSE)
+
     expect_equal(colnames(p1), c("Row", "Type", "Response", "Predicted"))
     expect_equal(dim(p1), c(12, 4))
   })
