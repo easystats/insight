@@ -1819,7 +1819,7 @@ get_data.bigglm <- get_data.biglm
 
 
 #' @export
-get_data.LORgee <- function(x, source = "environment", effects = "all", ...) {
+get_data.LORgee <- function(x, source = "environment", effects = "all", verbose = TRUE, ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
 
