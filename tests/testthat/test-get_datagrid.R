@@ -11,6 +11,13 @@ if (requiet("testthat") && requiet("insight") && getRversion() >= "4.0.0") {
     expect_equal(get_datagrid(m4)$cyl, c(4, 6, 8))
   })
 
+  # get_datagrid() preserves all factor levels #695
+  test_that("get_datagrid - preserve factor levels #695", {
+    dat <<- transform(mtcars, cyl = factor(cyl))
+    mod <- lm(mpg ~ cyl + am + hp, data = dat)
+    grid <- get_datagrid(mod, at = "hp")
+    expect_equal(levels(grid$cyl), c("4", "6", "8"))
+  })
 
   m <- lm(Sepal.Width ~ Petal.Length + Petal.Width + Species, data = iris)
   # adjusted for works
@@ -269,12 +276,10 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && getRversion
       )
     )
 
-    # TODO: reinstate test when Issue #695 is solved
-    # out <- get_modelmatrix(model, data = grid)
-    # expect_equal(
-    #   colnames(out),
-    #   c("(Intercept)", "k618", "wcyes", "hcyes", "inc")
-    # )
+    out <- get_modelmatrix(model, data = grid)
+    expect_equal(
+      colnames(out),
+      c("(Intercept)", "k618", "wcyes", "hcyes", "inc")
+    )
   }
 }
-
