@@ -232,35 +232,35 @@ if (.runThisTest) {
     })
 
     test_that("get_predicted", {
-      dat3 <- head(dat, 30)
-      tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = dat3)
-      pred <- get_predicted(tmp, verbose = FALSE, ci = 0.95)
-      expect_s3_class(pred, "get_predicted")
-      expect_equal(
-        as.vector(pred),
-        c(
-          11.99341, 5.58098, 10.89252, 7.10335, 5.94836, 6.5724, 8.5054,
-          5.47147, 5.9343, 8.27001, 5.71199, 9.94999, 5.69979, 6.63532,
-          6.00475, 5.58633, 11.54848, 6.1083, 6.6151, 5.37164, 6.86236,
-          7.80726, 7.38088, 5.70664, 10.60654, 7.62847, 5.8596, 6.06744,
-          5.81571, 10.4606
-        ),
-        tolerance = 1e-3
-      )
+      # dat3 <- head(dat, 30)
+      # tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = dat3)
+      # pred <- get_predicted(tmp, verbose = FALSE, ci = 0.95)
+      # expect_s3_class(pred, "get_predicted")
+      # expect_equal(
+      #   as.vector(pred),
+      #   c(
+      #     11.99341, 5.58098, 10.89252, 7.10335, 5.94836, 6.5724, 8.5054,
+      #     5.47147, 5.9343, 8.27001, 5.71199, 9.94999, 5.69979, 6.63532,
+      #     6.00475, 5.58633, 11.54848, 6.1083, 6.6151, 5.37164, 6.86236,
+      #     7.80726, 7.38088, 5.70664, 10.60654, 7.62847, 5.8596, 6.06744,
+      #     5.81571, 10.4606
+      #   ),
+      #   tolerance = 1e-3
+      # )
 
-      x <- get_predicted(tmp, predict = NULL, type = "link", ci = 0.95)
-      y <- get_predicted(tmp, predict = "link", ci = 0.95)
-      z <- predict(tmp, type = "link", se.fit = TRUE)
-      expect_equal(x, y)
-      expect_equal(x, z$fit, ignore_attr = TRUE)
-      expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
+      # x <- get_predicted(tmp, predict = NULL, type = "link", ci = 0.95)
+      # y <- get_predicted(tmp, predict = "link", ci = 0.95)
+      # z <- predict(tmp, type = "link", se.fit = TRUE)
+      # expect_equal(x, y)
+      # expect_equal(x, z$fit, ignore_attr = TRUE)
+      # expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
 
-      x <- get_predicted(tmp, predict = NULL, type = "response", verbose = FALSE, ci = 0.95)
-      y <- get_predicted(tmp, predict = "expectation", ci = 0.95)
-      z <- predict(tmp, type = "response", se.fit = TRUE)
-      expect_equal(x, y, ignore_attr = TRUE)
-      expect_equal(x, z$fit, ignore_attr = TRUE)
-      expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
+      # x <- get_predicted(tmp, predict = NULL, type = "response", verbose = FALSE, ci = 0.95)
+      # y <- get_predicted(tmp, predict = "expectation", ci = 0.95)
+      # z <- predict(tmp, type = "response", se.fit = TRUE)
+      # expect_equal(x, y, ignore_attr = TRUE)
+      # expect_equal(x, z$fit, ignore_attr = TRUE)
+      # expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
 
       # poisson
       void <- capture.output(
