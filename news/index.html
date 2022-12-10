@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.8.3</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.8.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,6 +87,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.18.8.1" id="insight-01881">insight 0.18.8.1<a class="anchor" aria-label="anchor" href="#insight-01881"></a></h2>
+<div class="section level3">
+<h3 id="changes-to-functions-0-18-8-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-18-8-1"></a></h3>
+<ul><li>
+<code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> preserves all factor levels for factors that are hold constant at their reference level. This is required to work together with <code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> when calculating standard errors for <code><a href="../reference/get_predicted.html">get_predicted()</a></code>.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-18-8-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-8-1"></a></h3>
 <ul><li><p>Fixed minor issues for HTML tables in <code><a href="../reference/export_table.html">export_table()</a></code> when model parameters were grouped.</p></li>
