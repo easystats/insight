@@ -41,7 +41,7 @@ if (requiet("testthat") && requiet("insight") && requiet("aod")) {
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), dja[, c("y", "n")])
+    expect_equal(get_response(m1, verbose = FALSE), dja[, c("y", "n")])
   })
 
   test_that("get_predictors", {

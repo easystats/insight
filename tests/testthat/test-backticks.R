@@ -2,7 +2,7 @@ if (requiet("testthat") && requiet("insight")) {
   data(iris)
   iris$`a m` <- iris$Species
   iris$`Sepal Width` <- iris$Sepal.Width
-  dat <- iris
+  dat <<- iris
   m <- lm(`Sepal Width` ~ Petal.Length + `a m` * log(Sepal.Length), data = dat)
   m2 <- lm(`Sepal Width` ~ Petal.Length + `a m`, data = dat)
 

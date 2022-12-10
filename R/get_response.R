@@ -44,7 +44,7 @@ get_response <- function(x, select = NULL, as_proportion = TRUE, verbose = TRUE)
   glm_proportion <- any(grepl("/", proportion_response, fixed = TRUE)) && binom_fam
 
   # data used to fit the model
-  model_data <- get_data(x, verbose = verbose)
+  model_data <- get_data(x, verbose = FALSE)
 
   # exceptions
   if (inherits(x, "DirichletRegModel")) {
