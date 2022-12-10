@@ -905,7 +905,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 .get_model_data_for_grid <- function(x, data) {
   # Retrieve data, based on variable names
   if (is.null(data)) {
-    data <- get_data(x)
+    data <- get_data(x, verbose = FALSE)
     # make sure we only have variables from original data
     all_vars <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
     if (!is.null(all_vars)) {
