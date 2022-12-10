@@ -8,6 +8,8 @@
 
 ## Bug fixes
 
+* Fixed but in `get_modelmatrix()` handling of incomplete factors which sometimes had downstream implications for numerical results in the uncertainty estimates produced by `get_predicted()`.
+
 * Fixed minor issues for HTML tables in `export_table()` when model parameters
   were grouped.
 
