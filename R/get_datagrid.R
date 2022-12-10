@@ -426,9 +426,9 @@ get_datagrid.data.frame <- function(x,
     } else {
       # Get reference
       if (is.factor(x)) {
-        out <- levels(x)[1]
+        all_levels <- levels(x)
       } else if (is.character(x) || is.logical(x)) {
-        out <- unique(x)[1]
+        all_levels <- unique(x)
       } else {
         format_error(paste0(
           "Argument is not numeric nor factor but ", class(x), ".",
@@ -442,7 +442,10 @@ get_datagrid.data.frame <- function(x,
       # this is usually avoided by calling ".pad_modelmatrix()", but this
       # function ignores character vectors. so we need to make sure that this
       # factor level is also of class factor.
-      out <- factor(out)
+      out <- factor(all_levels[1])
+      # although we have reference level only, we still need information
+      # about all levels, see #695
+      levels(out) <- all_levels
     }
   }
   out
