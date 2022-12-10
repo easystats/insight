@@ -33,20 +33,14 @@ if (requiet("testthat") &&
     skip_on_cran()
 
     expect_equal(
-      insight:::.get_nested_lme_varcorr(m3),
-      list(
-        mysubgrp = structure(
-          7.508310765,
-          .Dim = c(1L, 1L),
-          .Dimnames = list("(Intercept)", "(Intercept)")
-        ),
-        mygrp = structure(
-          0.004897827,
-          .Dim = c(1L, 1L),
-          .Dimnames = list("(Intercept)", "(Intercept)")
-        )
-      ),
+      insight:::.get_nested_lme_varcorr(m3)$mysubgrp[1, 1],
+      7.508310765,
       tolerance = 1e-3
+    )
+    expect_equal(
+      insight:::.get_nested_lme_varcorr(m3)$mygrp[1, 1],
+      0.004897827,
+      tolerance = 1e-2
     )
   })
 

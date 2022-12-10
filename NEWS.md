@@ -1,5 +1,11 @@
 # insight 0.18.8.1
 
+## Changes to functions
+
+* `get_datagrid()` preserves all factor levels for factors that are hold constant
+  at their reference level. This is required to work together with
+  `get_modelmatrix()` when calculating standard errors for `get_predicted()`.
+
 ## Bug fixes
 
 * Fixed minor issues for HTML tables in `export_table()` when model parameters
