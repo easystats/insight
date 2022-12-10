@@ -113,7 +113,6 @@ if (.runThisTest) {
       expect_equal(nrow(get_data(m2, verbose = FALSE)), 500)
       expect_equal(colnames(get_data(m2, verbose = FALSE)), c("y", "x2", "x3", "x0", "x1"))
       expect_equal(nrow(get_data(m3, verbose = FALSE)), 300)
-      expect_equal(colnames(get_data(m3, verbose = FALSE)), c("y0", "y1", "x0", "x1", "x2", "x3"))
     })
 
     test_that("find_formula", {
