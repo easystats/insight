@@ -14,6 +14,7 @@ osx <- tryCatch(
 
 if (requiet("testthat") &&
   requiet("insight") &&
+  requiet("TMB") &&
   requiet("glmmTMB") &&
   getRversion() >= "4.0.0") {
   # fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")

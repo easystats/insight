@@ -166,6 +166,7 @@ Suggests:
     testthat,
     truncreg,
     tweedie,
+    TMB,
     VGAM
 VignetteBuilder: 
     knitr
