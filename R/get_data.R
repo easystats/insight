@@ -1122,6 +1122,13 @@ get_data.blavaan <- get_data.lavaan
 # additive models (gam) -------------------------------------
 
 #' @export
+get_data.gam <- function(x, source = "environment", verbose = TRUE, ...) {
+  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
+  .prepare_get_data(x, mf, verbose = verbose)
+}
+
+
+#' @export
 get_data.list <- function(x, source = "environment", verbose = TRUE, ...) {
   model_data <- NULL
   if (any(c("gam", "gamm") %in% names(x))) {
