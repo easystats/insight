@@ -223,41 +223,43 @@ if (.runThisTest) {
       expect_identical(colnames(get_random(m)), "persons")
     })
 
+
+    # data stems from model frame, since we downloaded models, so it's not
+    # in the environment. Thus, "get_data()" throws warning, and we therefore
+    # set verbose = FALSE
+
     test_that("get_data", {
       expect_identical(
-        sort(colnames(get_data(m))),
+        sort(colnames(get_data(m, verbose = FALSE))),
         sort(c("count", "child", "camper", "livebait", "persons"))
       )
       expect_identical(
-        colnames(get_data(m, effects = "fixed")),
+        colnames(get_data(m, effects = "fixed", verbose = FALSE)),
         c("count", "child", "camper", "livebait")
       )
-      expect_identical(colnames(get_data(m, effects = "random")), "persons")
+      expect_identical(colnames(get_data(m, effects = "random", verbose = FALSE)), "persons")
       expect_identical(
         sort(colnames(get_data(m, component = "zi"))),
         sort(c("count", "child", "livebait", "persons"))
       )
       expect_identical(
-        sort(colnames(get_data( m, component = "zi", effects = "fixed"))), 
+        sort(colnames(get_data(m, component = "zi", effects = "fixed", verbose = FALSE))),
         sort(c("count", "child", "livebait")))
       expect_identical(colnames(get_data(
-        m,
-        component = "zi", effects = "random"
+        m, component = "zi", effects = "random", verbose = FALSE
       )), "persons")
       expect_identical(
         colnames(get_data(m, component = "cond")),
         c("count", "child", "camper", "persons")
       )
       expect_identical(colnames(get_data(
-        m,
-        component = "cond", effects = "fixed"
+        m, component = "cond", effects = "fixed", verbose = FALSE
       )), c("count", "child", "camper"))
       expect_identical(colnames(get_data(
-        m,
-        component = "cond", effects = "random"
+        m, component = "cond", effects = "random", verbose = FALSE
       )), "persons")
       expect_identical(colnames(suppressWarnings(get_data(m, component = "dispersion"))), "count")
-      expect_null(suppressWarnings(get_data(m, component = "dispersion", effects = "random")))
+      expect_null(suppressWarnings(get_data(m, component = "dispersion", effects = "random", verbose = FALSE)))
       expect_identical(
         colnames(get_data(m3)),
         c("incidence", "size", "period", "herd")
