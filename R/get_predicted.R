@@ -685,7 +685,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
                                 iterations = 500,
                                 verbose = TRUE,
                                 ...) {
-  if (is.null(data)) data <- get_data(x, verbose = verbose)
+  if (is.null(data)) data <- get_data(x, verbose = FALSE)
 
   # TODO: how to make it work with the seed argument??
 
@@ -708,7 +708,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
         suppressWarnings(predict_function(model, data = predict_data, ...))
       }
     }
-    draws <- boot::boot(data = get_data(x), boot_fun, R = iterations, predict_data = data, ...)
+    draws <- boot::boot(data = get_data(x, verbose = FALSE), boot_fun, R = iterations, predict_data = data, ...)
   }
 
   # Format draws

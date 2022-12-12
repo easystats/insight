@@ -12,7 +12,7 @@ get_predicted.hurdle <- function(x,
   # pscl models return the fitted values immediately and ignores the `type`
   # argument when `data` is NULL
   if (is.null(data)) {
-    data <- get_data(x)
+    data <- get_data(x, verbose = FALSE)
   }
 
   dots <- list(...)
