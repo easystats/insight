@@ -262,6 +262,23 @@ get_data.default <- function(x, source = "environment", verbose = TRUE, ...) {
         NULL
       }
     )
+    # process arguments, check whether data should be recovered from
+    # environment or model frame
+    source <- .check_data_source_arg(source)
+    # if no data found, extract from environment - we repeat this step here
+    # in case the source was not already environment
+    if ((is.null(mf) || nrow(mf) == 0) && source != "environment") {
+      mf <- tryCatch(
+        {
+          dat <- .recover_data_from_environment(x)
+          vars <- find_variables(x, flatten = TRUE, verbose = FALSE)
+          dat[, intersect(vars, colnames(dat)), drop = FALSE]
+        },
+        error = function(x) {
+          NULL
+        }
+      )
+    }
     model_data <- .prepare_get_data(x, mf, verbose = verbose)
   }
   model_data
