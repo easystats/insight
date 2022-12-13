@@ -1012,7 +1012,7 @@
   # correlation among factor levels
   cat_random_slopes <- tryCatch(
     {
-      d <- get_data(x)[rnd_slopes]
+      d <- get_data(x, verbose = FALSE)[rnd_slopes]
       any(sapply(d, is.factor))
     },
     error = function(e) {

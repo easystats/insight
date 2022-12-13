@@ -497,7 +497,7 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
       trans <- get_transformation(model)$transformation
       .weighted_sum(log(
         diag(attr(with(
-          get_data(model),
+          get_data(model, verbose = FALSE),
           stats::numericDeriv(
             expr = quote(trans(
               get(find_response(model))
