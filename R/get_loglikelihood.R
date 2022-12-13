@@ -225,7 +225,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
       NA
     },
     poisson = {
-      stats::dpois(resp, predicted, log = TRUE) * w
+      stats::dpois(round(resp), predicted, log = TRUE) * w
     },
     quasipoisson = {
       NA
