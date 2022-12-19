@@ -58,8 +58,8 @@ if (requiet("testthat") && requiet("insight") && requiet("VGAM")) {
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 9)
-    expect_equal(colnames(get_data(m1)), c("counts", "outcome", "treatment"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 9)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("counts", "outcome", "treatment"))
   })
 
   test_that("find_formula", {

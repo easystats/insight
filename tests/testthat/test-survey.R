@@ -35,9 +35,9 @@ if (requiet("testthat") &&
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 200)
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 200)
     expect_equal(
-      colnames(get_data(m1)),
+      colnames(get_data(m1, verbose = FALSE)),
       c("api00", "ell", "meals", "mobility", "(weights)")
     )
   })
