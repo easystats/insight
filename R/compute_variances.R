@@ -736,7 +736,12 @@
 # Get distributional variance for tweedie-family
 # ----------------------------------------------
 .variance_family_tweedie <- function(x, mu, phi) {
-  p <- unname(stats::plogis(x$fit$par["thetaf"]) + 1)
+  if ("psi" %in% names(x$fit$par)) {
+     psi <- x$fit$par["psi"] # glmmmTMB >= 1.1.5
+  } else {
+     psi <- x$fit$par["thetaf"]
+  }
+  p <- unname(stats::plogis(psi) + 1)
   phi * mu^p
 }
 
