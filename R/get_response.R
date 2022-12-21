@@ -65,14 +65,14 @@ get_response <- function(x, select = NULL, as_proportion = TRUE, verbose = TRUE)
       if (as_proportion && glm_proportion) {
         response <- response[[1]] / response[[2]]
       }
-    # make sure we have a vector for 1-column data frames
+      # make sure we have a vector for 1-column data frames
     } else {
       response <- response[[1]]
     }
     # for special classes, coerce to simple vector
     if (!is.factor(response) && !is.numeric(response) && !is.character(response) &&
-        !is.logical(response) && !is.integer(response) && !is.data.frame(response) &&
-        !is.matrix(response)) {
+      !is.logical(response) && !is.integer(response) && !is.data.frame(response) &&
+      !is.matrix(response)) {
       response <- as.vector(response)
     }
   }

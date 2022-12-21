@@ -244,19 +244,23 @@ if (.runThisTest) {
       )
       expect_identical(
         sort(colnames(get_data(m, component = "zi", effects = "fixed", verbose = FALSE))),
-        sort(c("count", "child", "livebait")))
+        sort(c("count", "child", "livebait"))
+      )
       expect_identical(colnames(get_data(
-        m, component = "zi", effects = "random", verbose = FALSE
+        m,
+        component = "zi", effects = "random", verbose = FALSE
       )), "persons")
       expect_identical(
         colnames(get_data(m, component = "cond")),
         c("count", "child", "camper", "persons")
       )
       expect_identical(colnames(get_data(
-        m, component = "cond", effects = "fixed", verbose = FALSE
+        m,
+        component = "cond", effects = "fixed", verbose = FALSE
       )), c("count", "child", "camper"))
       expect_identical(colnames(get_data(
-        m, component = "cond", effects = "random", verbose = FALSE
+        m,
+        component = "cond", effects = "random", verbose = FALSE
       )), "persons")
       expect_identical(colnames(suppressWarnings(get_data(m, component = "dispersion"))), "count")
       expect_null(suppressWarnings(get_data(m, component = "dispersion", effects = "random", verbose = FALSE)))

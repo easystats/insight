@@ -141,5 +141,5 @@ safe_deparse_symbol <- function(x) {
 #' @export
 has_single_value <- function(x, na.rm = FALSE) {
   if (na.rm) x <- x[!is.na(x)]
-  !is.null(x) &&  isTRUE(all(x == x[1]))
+  !is.null(x) && isTRUE(all(x == x[1]))
 }

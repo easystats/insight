@@ -207,7 +207,7 @@ if (.runThisTest) {
       tolerance = 1e-3
     )
   })
-  
+
 
   if (.runStanTest) {
     requiet("brms")

@@ -68,7 +68,6 @@ get_predicted_se <- function(x,
       matching_parameters <- stats::na.omit(match(colnames(vcovmat), colnames(mm)))
       vcovmat <- vcovmat[matching_parameters, matching_parameters, drop = FALSE]
     } else {
-
       # VAB: below there is some matching code to reduce matrices to make them
       # conformable. I am not sure at all it is a good idea to do that in
       # general, but we may want to revisit eventually. Currently, the code

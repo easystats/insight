@@ -86,8 +86,8 @@ get_data <- function(x, ...) {
   if (inherits(vars, "try-error")) {
     vars <- NULL
 
-  # if "find_variables()" returns NULL, we assume this is intentional, as
-  # specific model components were requested, which are not available
+    # if "find_variables()" returns NULL, we assume this is intentional, as
+    # specific model components were requested, which are not available
   } else if (is.null(vars) && effects != "fixed") {
     # for fixed effects, always include response,
     # so return NULL only if effects != "fixed"
@@ -401,9 +401,10 @@ get_data.gee <- function(x,
                          ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x,
-                                           effects = effects,
-                                           source = source,
-                                           verbose = verbose)
+    effects = effects,
+    source = source,
+    verbose = verbose
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -437,9 +438,10 @@ get_data.rqss <- function(x,
                           ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x,
-                                           component = component,
-                                           source = source,
-                                           verbose = verbose)
+    component = component,
+    source = source,
+    verbose = verbose
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -545,9 +547,10 @@ get_data.hurdle <- function(x,
                             ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x,
-                                           component = component,
-                                           source = source,
-                                           verbose = verbose)
+    component = component,
+    source = source,
+    verbose = verbose
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -573,9 +576,10 @@ get_data.zcpglm <- function(x,
                             ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x,
-                                           component = component,
-                                           source = source,
-                                           verbose = verbose)
+    component = component,
+    source = source,
+    verbose = verbose
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -635,7 +639,8 @@ get_data.glmmTMB <- function(x,
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   component <- match.arg(component,
-                         choices = c("all", "conditional", "zi", "zero_inflated", "dispersion"))
+    choices = c("all", "conditional", "zi", "zero_inflated", "dispersion")
+  )
 
   model.terms <- find_variables(
     x,
@@ -664,9 +669,10 @@ get_data.merMod <- function(x,
                             ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x,
-                                           effects = effects,
-                                           source = source,
-                                           verbose = verbose)
+    effects = effects,
+    source = source,
+    verbose = verbose
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -777,9 +783,10 @@ get_data.glmm <- function(x,
                           ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x,
-                                           effects = effects,
-                                           source = source,
-                                           verbose = verbose)
+    effects = effects,
+    source = source,
+    verbose = verbose
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -818,9 +825,10 @@ get_data.mixor <- function(x,
                            ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x,
-                                           effects = effects,
-                                           source = source,
-                                           verbose = verbose)
+    effects = effects,
+    source = source,
+    verbose = verbose
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -856,9 +864,10 @@ get_data.glmmadmb <- function(x,
                               ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x,
-                                           effects = effects,
-                                           source = source,
-                                           verbose = verbose)
+    effects = effects,
+    source = source,
+    verbose = verbose
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -913,9 +922,10 @@ get_data.mixed <- function(x,
                            ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x,
-                                           effects = effects,
-                                           source = source,
-                                           verbose = verbose)
+    effects = effects,
+    source = source,
+    verbose = verbose
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -949,9 +959,10 @@ get_data.sem <- function(x,
                          ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x,
-                                           effects = effects,
-                                           source = source,
-                                           verbose = verbose)
+    effects = effects,
+    source = source,
+    verbose = verbose
+  )
 
   if (!is.null(model_data)) {
     return(model_data)

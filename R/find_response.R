@@ -179,14 +179,15 @@ check_cbind <- function(resp, combine, model) {
     }
     resp <- c(r1, r2)
   } else if (inherits(model, "DirichletRegModel")) {
-      resp <- model$varnames
+    resp <- model$varnames
   } else {
     # if we have more than one string for the response, paste them together
     # "all.vars()" will take care of extracting the correct variables.
     resp_combined_string <- paste(resp, collapse = "+")
     # create an expression, so all.vars() works similar like for formulas
     resp_combined <- tryCatch(all.vars(.str2lang(resp_combined_string)),
-                              error = function(e) resp_combined_string)
+      error = function(e) resp_combined_string
+    )
     # if we do not want to combine, or if we just have one variable as
     # response, we want to return the bare name
     if (!combine || length(resp_combined) == 1) {
