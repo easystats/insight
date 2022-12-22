@@ -133,13 +133,12 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
   })
 
   test_that("get_loglikelihood - ivreg", {
-    if (requiet("ivreg")) {
-      data("CigaretteDemand", package = "ivreg")
-      x <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome), data = CigaretteDemand)
+    requiet("ivreg")
+    data("CigaretteDemand", package = "ivreg")
+    x <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome), data = CigaretteDemand)
 
-      ll <- loglikelihood(x)
-      expect_equal(as.numeric(ll), 13.26255, tolerance = 1e-3)
-    }
+    ll <- loglikelihood(x)
+    expect_equal(as.numeric(ll), 13.26255, tolerance = 1e-3)
   })
 
   test_that("get_loglikelihood - plm", {

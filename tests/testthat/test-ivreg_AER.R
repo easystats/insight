@@ -1,18 +1,15 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("AER")) {
+if (requiet("AER")) {
   data(CigarettesSW)
   CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
   CigarettesSW$rincome <-
     with(CigarettesSW, income / population / cpi)
   CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax) / cpi)
 
-  m1 <-
-    AER::ivreg(
-      log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi),
-      data = CigarettesSW,
-      subset = year == "1995"
-    )
+  m1 <- AER::ivreg(
+    log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi),
+    data = CigarettesSW,
+    subset = year == "1995"
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
