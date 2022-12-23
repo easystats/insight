@@ -214,11 +214,7 @@ format_percent <- function(x, ...) {
         isTRUE,
         logical(1)
       )
-      default <- !is.na(x) & !need_sci
-      # format vector
-      x[is.na(x)] <- .missing
-      x[default] <- sprintf("%.*f%s", digits, xn[default], ps)
-      x[need_sci] <- sprintf("%.*e%s", digits, xn[need_sci], ps)
+      x <- ifelse(is.na(x), missing, ifelse(need_sci, sprintf("%.*e%s", digits, xn, ps), sprintf("%.*f%s", digits, xn, ps))) # nolint
     }
 
   # if not numeric, convert NA into character
