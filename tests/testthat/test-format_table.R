@@ -14,11 +14,9 @@ win_os <- tryCatch(
   }
 )
 
-if ( requiet("insight")) {
+if (requiet("testthat") && requiet("insight")) {
   # test for bayesian models -----------------
   if (.runThisTest && win_os && requiet("bayestestR")) {
-    skip_if_offline()
-
     m1 <- insight::download_model("stanreg_glm_1")
     set.seed(123)
     x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf"))))

@@ -1,4 +1,4 @@
-if ( requiet("insight")) {
+if (requiet("testthat") && requiet("insight")) {
   data(iris)
 
   test_that("find_parameters", {

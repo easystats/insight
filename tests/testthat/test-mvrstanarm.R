@@ -2,7 +2,7 @@
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
 if (.runThisTest && .runStanTest &&
-  suppressWarnings(
+  suppressWarnings(requiet("testthat") &&
     requiet("insight") &&
     requiet("rstanarm"))) {
   data("pbcLong")

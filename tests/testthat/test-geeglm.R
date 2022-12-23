@@ -1,4 +1,4 @@
-if (
+if (requiet("testthat") &&
   requiet("insight") &&
   requiet("geepack")) {
   data(warpbreaks)

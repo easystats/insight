@@ -12,7 +12,7 @@ osx <- tryCatch(
   }
 )
 
-if (!osx && 
+if (!osx && requiet("testthat") &&
   requiet("insight") &&
   requiet("plm") &&
   requiet("feisr")) {

@@ -1,4 +1,4 @@
-if (
+if (requiet("testthat") &&
   requiet("insight") &&
   requiet("lmtest")) {
   data("Mandible", package = "lmtest")

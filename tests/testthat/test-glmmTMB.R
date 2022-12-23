@@ -12,7 +12,7 @@ osx <- tryCatch(
   }
 )
 
-if (
+if (requiet("testthat") &&
   requiet("insight") &&
   requiet("TMB") &&
   requiet("glmmTMB") &&

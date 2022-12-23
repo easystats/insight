@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (
+if (requiet("testthat") &&
   requiet("insight") &&
   requiet("pscl")) {
   data("bioChemists")

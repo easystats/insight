@@ -1,4 +1,4 @@
-if (
+if (requiet("testthat") &&
   requiet("insight") &&
   requiet("ordinal")) {
   data(wine, package = "ordinal")

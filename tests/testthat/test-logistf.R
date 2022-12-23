@@ -1,6 +1,6 @@
 testthat::skip_on_covr()
 
-if (
+if (requiet("testthat") &&
   requiet("insight") &&
   requiet("logistf")) {
   data(sex2)

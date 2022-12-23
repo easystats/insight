@@ -1,8 +1,7 @@
-skip_if_offline()
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if ( requiet("insight") && requiet("mgcv") && requiet("httr")) {
+  if (requiet("testthat") && requiet("insight") && requiet("mgcv") && requiet("httr")) {
     set.seed(123)
     void <- capture.output(
       dat2 <<- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)

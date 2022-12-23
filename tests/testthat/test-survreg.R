@@ -1,4 +1,4 @@
-if (
+if (requiet("testthat") &&
   requiet("insight") &&
   requiet("survival")) {
   m1 <- survreg(Surv(futime, fustat) ~ ecog.ps + rx,

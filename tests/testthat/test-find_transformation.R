@@ -1,4 +1,4 @@
-if ( requiet("insight")) {
+if (requiet("testthat") && requiet("insight")) {
   test_that("find_transformation - identity", {
     model <- lm(Sepal.Length ~ Species, data = iris)
     expect_equal(

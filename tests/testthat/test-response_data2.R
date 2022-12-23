@@ -1,4 +1,4 @@
-if (suppressWarnings(
+if (suppressWarnings(requiet("testthat") &&
   requiet("insight") &&
   requiet("lme4"))) {
   data(cbpp)
