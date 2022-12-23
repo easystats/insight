@@ -214,7 +214,11 @@ format_percent <- function(x, ...) {
         isTRUE,
         logical(1)
       )
-      x <- ifelse(is.na(x), missing, ifelse(need_sci, sprintf("%.*e%s", digits, xn, ps), sprintf("%.*f%s", digits, xn, ps))) # nolint
+      x <- ifelse(is.na(x),
+        missing,
+        ifelse(need_sci, # nolint
+          sprintf("%.*e%s", digits, xn, ps),
+          sprintf("%.*f%s", digits, xn, ps)))
     }
 
   # if not numeric, convert NA into character
