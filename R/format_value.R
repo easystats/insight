@@ -203,8 +203,10 @@ format_percent <- function(x, ...) {
       # if percentage, multiply by 100
       if (isTRUE(.as_percent)) {
         xn <- x * 100
+        ps <- "%"
       } else {
         xn <- x
+        ps <- ""
       }
       # define which values need scientific notation and which are default formatting
       need_sci <- vapply(
@@ -215,8 +217,8 @@ format_percent <- function(x, ...) {
       default <- !is.na(x) & !need_sci
       # format vector
       x[is.na(x)] <- .missing
-      x[default] <- sprintf("%.*f", digits, xn[default])
-      x[need_sci] <- sprintf("%.*e", digits, xn[need_sci])
+      x[default] <- sprintf("%.*f%s", digits, xn[default], ps)
+      x[need_sci] <- sprintf("%.*e%s", digits, xn[need_sci], ps)
     }
 
   # if not numeric, convert NA into character
