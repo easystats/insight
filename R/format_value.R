@@ -181,7 +181,7 @@ format_percent <- function(x, ...) {
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
       need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0 & !.zap_small
-      x <- ifelse(is.na(x), missing, ifelse(need_sci, sprintf("%.*e", digits, x), sprintf("%.*f", digits, x))) # nolint
+      x <- ifelse(is.na(x), .missing, ifelse(need_sci, sprintf("%.*e", digits, x), sprintf("%.*f", digits, x))) # nolint
     } else {
       if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
         digits <- tryCatch(as.numeric(gsub("scientific", "", digits, fixed = TRUE)),
@@ -199,7 +199,7 @@ format_percent <- function(x, ...) {
         x <- as.character(signif(x, digits))
       } else {
         need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits)) & x != 0 & !.zap_small
-        x <- ifelse(is.na(x), missing, ifelse(need_sci, sprintf("%.*e", digits, x), sprintf("%.*f", digits, x))) # nolint
+        x <- ifelse(is.na(x), .missing, ifelse(need_sci, sprintf("%.*e", digits, x), sprintf("%.*f", digits, x))) # nolint
       }
     }
   } else if (anyNA(x)) {
