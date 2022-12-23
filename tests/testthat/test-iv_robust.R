@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("estimatr")) {
+if (requiet("estimatr")) {
   data(mtcars)
   m1 <- iv_robust(mpg ~ gear + cyl | carb + wt, data = mtcars)
 

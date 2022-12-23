@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("ivreg")) {
+if (requiet("ivreg")) {
   data("CigaretteDemand")
   m1 <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
     data = CigaretteDemand
