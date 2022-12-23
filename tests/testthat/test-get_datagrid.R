@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && getRversion() >= "4.0.0") {
+if ( requiet("insight") && getRversion() >= "4.0.0") {
   m1 <- lm(hp ~ ordered(cyl), data = mtcars)
   m2 <- lm(hp ~ as.ordered(cyl), data = mtcars)
   m3 <- lm(hp ~ as.factor(cyl), data = mtcars)
@@ -97,7 +97,7 @@ if (requiet("testthat") && requiet("insight") && getRversion() >= "4.0.0") {
 }
 
 
-if (requiet("testthat") && requiet("insight") && requiet("bayestestR") && getRversion() >= "4.0.0") {
+if ( requiet("insight") && requiet("bayestestR") && getRversion() >= "4.0.0") {
   test_that("get_datagrid - data", {
     # Factors
     expect_equal(length(get_datagrid(iris$Species)), 3)
@@ -153,7 +153,7 @@ if (requiet("testthat") && requiet("insight") && requiet("bayestestR") && getRve
 
 
 
-if (requiet("testthat") && requiet("insight") && requiet("gamm4") && getRversion() >= "4.0.0" && requiet("glmmTMB") && requiet("mgcv") && requiet("rstanarm")) {
+if ( requiet("insight") && requiet("gamm4") && getRversion() >= "4.0.0" && requiet("glmmTMB") && requiet("mgcv") && requiet("rstanarm")) {
   test_that("get_datagrid - models", {
     # GLM
     mod <- glm(Petal.Length ~ Petal.Width * Sepal.Length, data = iris)
@@ -208,7 +208,7 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && getRversion
 
 
   # test if factor levels as reference / non-focal terms works
-  if (requiet("testthat") && requiet("insight")) {
+  if ( requiet("insight")) {
     d <- structure(list(
       lfp = structure(c(
         2L, 2L, 2L, 2L, 2L, 2L, 2L,

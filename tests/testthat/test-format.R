@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight")) {
+if ( requiet("insight")) {
   test_that("format_value", {
     expect_equal(nchar(format_value(1.2012313)), 4)
     expect_equal(format_value(4.2, protect_integers = TRUE), "4.20")

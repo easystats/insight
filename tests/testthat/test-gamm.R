@@ -2,7 +2,7 @@
 
 if (.runThisTest) {
   unloadNamespace("gam")
-  if (requiet("testthat") && requiet("insight") && requiet("mgcv")) {
+  if ( requiet("insight") && requiet("mgcv")) {
     set.seed(0)
     void <- capture.output(dat <- gamSim(6, n = 200, scale = .2, dist = "poisson"))
     m1 <-

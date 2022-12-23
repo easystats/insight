@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-  requiet("testthat") &&
+  
   requiet("insight") &&
   requiet("gam")) {
   data(kyphosis)

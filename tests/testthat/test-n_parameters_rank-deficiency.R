@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight")) {
+if ( requiet("insight")) {
   set.seed(123)
   data(mtcars)
   m <- lm(formula = wt ~ am * cyl * vs, data = mtcars)

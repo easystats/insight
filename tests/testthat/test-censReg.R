@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("censReg") && requiet("AER")) {
+if ( requiet("insight") && requiet("censReg") && requiet("AER")) {
   data("Affairs", package = "AER")
   m1 <- censReg(
     affairs ~ age + yearsmarried + religiousness + occupation + rating,
