@@ -68,7 +68,7 @@ format_value.data.frame <- function(x,
                                     as_percent = FALSE,
                                     zap_small = FALSE,
                                     ...) {
-  as.data.frame(sapply(
+  x[] <- lapply(
     x,
     format_value,
     digits = digits,
@@ -76,9 +76,9 @@ format_value.data.frame <- function(x,
     missing = missing,
     width = width,
     as_percent = as_percent,
-    zap_small = zap_small,
-    simplify = FALSE
-  ))
+    zap_small = zap_small
+  )
+  x
 }
 
 
@@ -139,7 +139,6 @@ format_value.factor <- format_value.numeric
 format_value.logical <- format_value.numeric
 
 
-
 # shortcut
 
 #' @rdname format_value
@@ -147,8 +146,6 @@ format_value.logical <- format_value.numeric
 format_percent <- function(x, ...) {
   format_value(x, ..., as_percent = TRUE)
 }
-
-
 
 
 .format_value_unless_integer <- function(x,
@@ -177,23 +174,19 @@ format_percent <- function(x, ...) {
 }
 
 
-
 .format_value <- function(x, digits = 2, .missing = "", .width = NULL, .as_percent = FALSE, .zap_small = FALSE, ...) {
   # proper character NA
   if (is.na(.missing)) .missing <- NA_character_
 
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
-      need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0
-      if (.zap_small) {
-        x <- ifelse(is.na(x), .missing, sprintf("%.*f%%", digits, 100 * x))
+      need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0 & !.zap_small
+      if (is.na(x)) {
+        x <- .missing
+      } else if (need_sci) {
+        x <- sprintf("%.*e%%", digits, 100 * x)
       } else {
-        x <- ifelse(is.na(x), .missing,
-          ifelse(need_sci,
-            sprintf("%.*e%%", digits, 100 * x),
-            sprintf("%.*f%%", digits, 100 * x)
-          )
-        )
+        x <- sprintf("%.*f%%", digits, 100 * x)
       }
     } else {
       if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
@@ -208,27 +201,18 @@ format_percent <- function(x, ...) {
         if (is.na(digits)) digits <- 5
         x <- sprintf("%.*e", digits, x)
       } else if (is.character(digits) && grepl("signif", digits, fixed = TRUE)) {
-        digits <- tryCatch(
-          expr = {
-            as.numeric(gsub("signif", "", digits, fixed = TRUE))
-          },
-          error = function(e) {
-            NA
-          }
-        )
+        digits <- tryCatch(as.numeric(gsub("signif", "", digits, fixed = TRUE)),
+                           error = function(e) NA)
         if (is.na(digits)) digits <- 3
         x <- as.character(signif(x, digits))
       } else {
-        need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits)) & x != 0
-        if (.zap_small) {
-          x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
+        need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits)) & x != 0 & !.zap_small
+        if (is.na(x)) {
+          x <- .missing
+        } else if (need_sci) {
+          x <- sprintf("%.*e", digits, x)
         } else {
-          x <- ifelse(is.na(x), .missing,
-            ifelse(need_sci,
-              sprintf("%.*e", digits, x),
-              sprintf("%.*f", digits, x)
-            )
-          )
+          x <- sprintf("%.*f", digits, x)
         }
       }
     }
@@ -243,6 +227,8 @@ format_percent <- function(x, ...) {
   x
 }
 
+
+# helper -----------------------
 
 .convert_missing <- function(x, .missing) {
   if (is.na(.missing)) {
