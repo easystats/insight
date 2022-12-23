@@ -207,12 +207,16 @@ format_percent <- function(x, ...) {
         xn <- x
       }
       # define which values need scientific notation and which are default formatting
-      need_sci <- isTRUE((abs(xn) >= 1e+5 | (log10(abs(xn)) < -digits)) & xn != 0 & !.zap_small)
+      need_sci <- vapply(
+        (abs(xn) >= 1e+5 | (log10(abs(xn)) < -digits)) & xn != 0 & !.zap_small,
+        isTRUE,
+        logical(1)
+      )
       default <- !is.na(x) & !need_sci
       # format vector
       x[is.na(x)] <- .missing
-      x[default] <- sprintf("%.*f", digits, xn)
-      x[need_sci] <- sprintf("%.*e", digits, xn)
+      x[default] <- sprintf("%.*f", digits, xn[default])
+      x[need_sci] <- sprintf("%.*e", digits, xn[need_sci])
     }
 
   # if not numeric, convert NA into character
