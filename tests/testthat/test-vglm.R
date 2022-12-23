@@ -1,7 +1,7 @@
 unloadNamespace("gam")
 skip_on_os("mac")
 
-if (requiet("testthat") && requiet("insight") && requiet("VGAM")) {
+if ( requiet("insight") && requiet("VGAM")) {
   d.AD <- data.frame(
     treatment = gl(3, 3),
     outcome = gl(3, 1, 9),

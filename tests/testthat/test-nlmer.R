@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
+if ( requiet("insight") && requiet("lme4")) {
   set.seed(123)
   startvec <- c(Asym = 200, xmid = 725, scal = 350)
   nm1 <-

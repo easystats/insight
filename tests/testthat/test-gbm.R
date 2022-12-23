@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if (requiet("testthat") && requiet("insight") && requiet("gbm")) {
+  if ( requiet("insight") && requiet("gbm")) {
     set.seed(102) # for reproducibility
     void <- capture.output(
       m1 <- gbm(

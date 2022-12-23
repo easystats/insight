@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
+if ( requiet("insight") && requiet("lme4")) {
   test_that("find_weights", {
     data(mtcars)
     mtcars$weight <- rnorm(nrow(mtcars), 1, .3)

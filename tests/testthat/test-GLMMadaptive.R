@@ -1,7 +1,8 @@
+skip_if_offline()
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if (requiet("testthat") && requiet("insight") && requiet("GLMMadaptive") && requiet("lme4")) {
+  if ( requiet("insight") && requiet("GLMMadaptive") && requiet("lme4")) {
     m <- download_model("GLMMadaptive_zi_2")
     m2 <- download_model("GLMMadaptive_zi_1")
 

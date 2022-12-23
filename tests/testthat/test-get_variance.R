@@ -14,7 +14,7 @@ osx <- tryCatch(
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (!osx && .runThisTest && requiet("testthat") && requiet("insight") && requiet("lme4")) {
+if (!osx && .runThisTest &&  requiet("insight") && requiet("lme4")) {
   data("sleepstudy")
   data("Penicillin")
   set.seed(12345)

@@ -14,7 +14,7 @@ osx <- tryCatch(
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet("nonnest2")) {
+if (.runThisTest && !osx &&  requiet("insight") && requiet("nonnest2")) {
   data(iris)
   data(mtcars)
 
@@ -80,6 +80,8 @@ if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet
   })
 
   test_that("get_loglikelihood - (g)lmer", {
+    skip_if_offline()
+
     if (requiet("lme4")) {
       x <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
 

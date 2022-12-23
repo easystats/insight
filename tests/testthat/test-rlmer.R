@@ -1,36 +1,8 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >= "3.0.1" &&
-  requiet("testthat") && requiet("insight") && requiet("lme4") && getRversion() >= "4.0.0") {
-  data(sleepstudy)
-
-  set.seed(123)
-  sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
-  sleepstudy$mysubgrp <- NA
-  for (i in 1:5) {
-    filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <-
-      sample(1:30,
-        size = sum(filter_group),
-        replace = TRUE
-      )
-  }
-
-  dat <<- sleepstudy
-
-  m1 <- rlmer(
-    Reaction ~ Days + (Days | Subject),
-    data = dat,
-    rho.sigma.e = psi2propII(smoothPsi, k = 2.28),
-    rho.sigma.b = chgDefaults(smoothPsi, k = 5.11, s = 10)
-  )
-
-  m2 <- rlmer(
-    Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-    data = dat,
-    rho.sigma.e = psi2propII(smoothPsi, k = 2.28),
-    rho.sigma.b = chgDefaults(smoothPsi, k = 5.11, s = 10)
-  )
+if (requiet("testthat") && requiet("insight") && requiet("panelr")) {
+  data("WageData")
+  wages <- panel_data(WageData, id = id, wave = t)
+  m1 <- wbm(lwage ~ lag(union) + wks | blk + fem | blk * lag(union), data = wages)
+  m2 <- wbm(lwage ~ lag(union) + wks | blk + t | (t | id), data = wages)
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -38,267 +10,262 @@ if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >
   })
 
   test_that("find_predictors", {
-    expect_equal(
-      find_predictors(m1, effects = "all"),
-      list(conditional = "Days", random = "Subject")
-    )
-    expect_equal(
-      find_predictors(m1, effects = "all", flatten = TRUE),
-      c("Days", "Subject")
-    )
-    expect_equal(
-      find_predictors(m1, effects = "fixed"),
-      list(conditional = "Days")
-    )
-    expect_equal(
-      find_predictors(m1, effects = "fixed", flatten = TRUE),
-      "Days"
-    )
-    expect_equal(
-      find_predictors(m1, effects = "random"),
-      list(random = "Subject")
-    )
-    expect_equal(
-      find_predictors(m1, effects = "random", flatten = TRUE),
-      "Subject"
-    )
-    expect_equal(
-      find_predictors(m2, effects = "all"),
+    expect_identical(
+      find_predictors(m1),
       list(
-        conditional = "Days",
-        random = c("mysubgrp", "mygrp", "Subject")
+        conditional = c("union", "wks"),
+        instruments = c("blk", "fem"),
+        interactions = c("blk", "union")
       )
     )
-    expect_equal(
-      find_predictors(m2, effects = "all", flatten = TRUE),
-      c("Days", "mysubgrp", "mygrp", "Subject")
+    expect_identical(
+      find_predictors(m1, flatten = TRUE),
+      c("union", "wks", "blk", "fem")
     )
-    expect_equal(
-      find_predictors(m2, effects = "fixed"),
-      list(conditional = "Days")
+    expect_null(find_predictors(m1, effects = "random"))
+
+    expect_identical(
+      find_predictors(m2),
+      list(
+        conditional = c("union", "wks"),
+        instruments = c("blk", "t")
+      )
     )
-    expect_equal(find_predictors(m2, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
-    expect_null(find_predictors(m2, effects = "all", component = "zi"))
-    expect_null(find_predictors(m2, effects = "fixed", component = "zi"))
-    expect_null(find_predictors(m2, effects = "random", component = "zi"))
+    expect_identical(find_predictors(m2, effects = "random"), list(random = "id"))
   })
 
   test_that("find_random", {
-    expect_equal(find_random(m1), list(random = "Subject"))
-    expect_equal(find_random(m1, flatten = TRUE), "Subject")
-    expect_equal(find_random(m2), list(random = c(
-      "mysubgrp:mygrp", "mygrp", "Subject"
-    )))
-    expect_equal(find_random(m2, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
-    expect_equal(
-      find_random(m2, flatten = TRUE),
-      c("mysubgrp:mygrp", "mygrp", "Subject")
-    )
-    expect_equal(
-      find_random(m2, split_nested = TRUE, flatten = TRUE),
-      c("mysubgrp", "mygrp", "Subject")
-    )
+    expect_null(find_random(m1))
+    expect_identical(find_random(m2), list(random = "id"))
+  })
+
+  test_that("get_random", {
+    expect_warning(expect_null(get_random(m1)))
+    expect_equal(get_random(m2)[[1]], model.frame(m2)$id)
   })
 
   test_that("find_response", {
-    expect_identical(find_response(m1), "Reaction")
-    expect_identical(find_response(m2), "Reaction")
+    expect_identical(find_response(m1), "lwage")
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), sleepstudy$Reaction)
+    expect_equal(get_response(m1), model.frame(m1)$lwage)
+  })
+
+  test_that("get_predictors", {
+    expect_equal(
+      colnames(get_predictors(m1)),
+      c("lag(union)", "wks", "blk", "fem")
+    )
+    expect_equal(
+      colnames(get_predictors(m2)),
+      c("lag(union)", "wks", "blk", "t")
+    )
   })
 
   test_that("link_inverse", {
-    expect_identical(link_inverse(m1)(.2), .2)
-    expect_identical(link_inverse(m2)(.2), .2)
+    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+  })
+
+  test_that("clean_parameters", {
+    cp <- clean_parameters(m1)
+    expect_equal(
+      cp$Cleaned_Parameter,
+      c(
+        "union", "wks", "(Intercept)", "imean(lag(union))", "imean(wks)",
+        "blk", "fem", "union:blk"
+      )
+    )
+    expect_equal(
+      cp$Component,
+      c(
+        "conditional", "conditional", "instruments", "instruments",
+        "instruments", "instruments", "instruments", "interactions"
+      )
+    )
   })
 
   test_that("get_data", {
-    expect_equal(colnames(get_data(m1)), c("Reaction", "Days", "Subject"))
-    expect_equal(colnames(get_data(m1, effects = "all")), c("Reaction", "Days", "Subject"))
-    expect_equal(colnames(get_data(m1, effects = "random")), "Subject")
+    expect_equal(nrow(get_data(m1)), 3570)
+    expect_equal(
+      colnames(get_data(m1)),
+      c(
+        "lwage",
+        "id",
+        "t",
+        "lag(union)",
+        "wks",
+        "blk",
+        "fem",
+        "imean(lag(union))",
+        "imean(wks)",
+        "imean(lag(union):blk)",
+        "lag(union):blk"
+      )
+    )
     expect_equal(
       colnames(get_data(m2)),
-      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
+      c(
+        "lwage",
+        "id",
+        "t",
+        "lag(union)",
+        "wks",
+        "blk",
+        "imean(lag(union))",
+        "imean(wks)"
+      )
     )
-    expect_equal(
-      colnames(get_data(m2, effects = "all")),
-      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
-    )
-    expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
   })
 
   test_that("find_formula", {
-    expect_length(find_formula(m1), 2)
-    expect_length(find_formula(m2), 2)
+    expect_length(find_formula(m1), 3)
     expect_equal(
-      find_formula(m1, component = "conditional"),
+      find_formula(m1),
       list(
-        conditional = as.formula("Reaction ~ Days"),
-        random = as.formula("~Days | Subject")
+        conditional = as.formula("lwage ~ lag(union) + wks"),
+        instruments = as.formula("~blk + fem"),
+        interactions = as.formula("~blk * lag(union)")
       ),
       ignore_attr = TRUE
     )
-    expect_equal(
-      find_formula(m2, component = "conditional"),
-      list(
-        conditional = as.formula("Reaction ~ Days"),
-        random = list(
-          as.formula("~1 | mysubgrp:mygrp"),
-          as.formula("~1 | mygrp"),
-          as.formula("~1 | Subject")
-        )
-      ),
-      ignore_attr = TRUE
-    )
-  })
 
-  test_that("find_terms", {
-    expect_identical(
-      find_terms(m1),
+    expect_equal(
+      find_formula(m2),
       list(
-        response = "Reaction",
-        conditional = "Days",
-        random = c("Days", "Subject")
-      )
-    )
-    expect_identical(
-      find_terms(m1, flatten = TRUE),
-      c("Reaction", "Days", "Subject")
-    )
-    expect_identical(
-      find_terms(m2),
-      list(
-        response = "Reaction",
-        conditional = "Days",
-        random = c("mysubgrp", "mygrp", "Subject")
-      )
-    )
-    expect_identical(
-      find_terms(m2, flatten = TRUE),
-      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
+        conditional = as.formula("lwage ~ lag(union) + wks"),
+        instruments = as.formula("~blk + t"),
+        random = as.formula("~t | id")
+      ),
+      ignore_attr = TRUE
     )
   })
 
   test_that("find_variables", {
-    expect_identical(
+    expect_equal(
       find_variables(m1),
       list(
-        response = "Reaction",
-        conditional = "Days",
-        random = "Subject"
+        response = "lwage",
+        conditional = c("union", "wks"),
+        instruments = c("blk", "fem"),
+        interactions = c("blk", "union")
       )
     )
-  })
+    expect_equal(
+      find_variables(m1, flatten = TRUE),
+      c("lwage", "union", "wks", "blk", "fem")
+    )
 
-  test_that("get_response", {
-    expect_identical(get_response(m1), sleepstudy$Reaction)
-  })
-
-  test_that("get_predictors", {
-    expect_identical(colnames(get_predictors(m1)), "Days")
-    expect_identical(colnames(get_predictors(m2)), "Days")
-  })
-
-  test_that("get_random", {
-    expect_identical(colnames(get_random(m1)), "Subject")
-    expect_identical(
-      colnames(get_random(m2)),
-      c("mysubgrp", "mygrp", "Subject")
+    expect_equal(
+      find_variables(m2),
+      list(
+        response = "lwage",
+        conditional = c("union", "wks"),
+        instruments = c("blk", "t"),
+        random = "id"
+      )
+    )
+    expect_equal(
+      find_variables(m2, flatten = TRUE),
+      c("lwage", "union", "wks", "blk", "t", "id")
     )
   })
 
-  test_that("clean_names", {
-    expect_identical(clean_names(m1), c("Reaction", "Days", "Subject"))
-    expect_identical(
-      clean_names(m2),
-      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
-    )
+  test_that("n_obs", {
+    expect_equal(n_obs(m1), 3570)
+    expect_equal(n_obs(m2), 3570)
   })
 
   test_that("linkfun", {
     expect_false(is.null(link_function(m1)))
-    expect_false(is.null(link_function(m2)))
   })
 
   test_that("find_parameters", {
     expect_equal(
       find_parameters(m1),
       list(
-        conditional = c("(Intercept)", "Days"),
-        random = list(Subject = c("(Intercept)", "Days"))
+        conditional = c("lag(union)", "wks"),
+        instruments = c("(Intercept)", "imean(lag(union))", "imean(wks)", "blk", "fem"),
+        random = "lag(union):blk"
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 2)
-    expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "Days"))
+
+    expect_equal(nrow(get_parameters(m1)), 8)
 
     expect_equal(
       find_parameters(m2),
       list(
-        conditional = c("(Intercept)", "Days"),
-        random = list(
-          `mysubgrp:mygrp` = "(Intercept)",
-          Subject = "(Intercept)",
-          mygrp = "(Intercept)"
-        )
+        conditional = c("lag(union)", "wks"),
+        instruments = c("(Intercept)", "imean(lag(union))", "imean(wks)", "blk", "t")
       )
     )
+  })
 
-    expect_equal(nrow(get_parameters(m2)), 2)
-    expect_equal(get_parameters(m2)$Parameter, c("(Intercept)", "Days"))
+
+  test_that("get_parameters", {
     expect_equal(
-      names(get_parameters(m2, effects = "random")),
-      c("mysubgrp:mygrp", "Subject", "mygrp")
+      get_parameters(m1),
+      data.frame(
+        Parameter = c(
+          "lag(union)",
+          "wks",
+          "(Intercept)",
+          "imean(lag(union))",
+          "imean(wks)",
+          "blk",
+          "fem",
+          "lag(union):blk"
+        ),
+        Estimate = c(
+          0.0582474262882615, -0.00163678667081885, 6.59813245629044,
+          -0.0279959204722801, 0.00438047648390025, -0.229414915661438,
+          -0.441756913071962, -0.127319623945541
+        ),
+        Component = c(
+          "within", "within", "between", "between",
+          "between", "between", "between", "interactions"
+        ),
+        stringsAsFactors = FALSE
+      ),
+      tolerance = 1e-4
+    )
+  })
+
+
+  test_that("find_terms", {
+    expect_equal(
+      find_terms(m1),
+      list(
+        response = "lwage",
+        conditional = c("lag(union)", "wks"),
+        instruments = c("blk", "fem"),
+        interactions = c("blk", "lag(union)")
+      )
+    )
+    expect_equal(
+      find_terms(m2),
+      list(
+        response = "lwage",
+        conditional = c("lag(union)", "wks"),
+        instruments = c("blk", "t"),
+        random = c("t", "id")
+      )
     )
   })
 
   test_that("is_multivariate", {
     expect_false(is_multivariate(m1))
-    expect_false(is_multivariate(m2))
-  })
-
-  test_that("get_variance", {
-    skip_on_cran()
-
-    expect_equal(
-      get_variance(m1),
-      list(
-        var.fixed = 944.68388146469, var.random = 1911.1173962696,
-        var.residual = 399.07090932584, var.distribution = 399.07090932584,
-        var.dispersion = 0, var.intercept = c(Subject = 782.758817383975),
-        var.slope = c(Subject.Days = 41.8070895953001),
-        cor.slope_intercept = c(Subject = -0.0387835013909591)
-      ),
-      tolerance = 1e-3
-    )
-
-    expect_equal(
-      get_variance(m2),
-      list(
-        var.fixed = 914.841369705921, var.random = 1406.78220075798,
-        var.residual = 809.318117542254, var.distribution = 809.318117542254,
-        var.dispersion = 0,
-        var.intercept = c(`mysubgrp:mygrp` = 0, Subject = 1390.66848960835, mygrp = 16.1137111496379)
-      ),
-      tolerance = 1e-3
-    )
-  })
-
-  test_that("find_algorithm", {
-    expect_equal(
-      find_algorithm(m1),
-      list(algorithm = "REML", optimizer = "rlmer.fit.DAS.nondiag")
-    )
-  })
-
-  test_that("find_random_slopes", {
-    expect_equal(find_random_slopes(m1), list(random = "Days"))
-    expect_null(find_random_slopes(m2))
   })
 
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "t-statistic")
     expect_identical(find_statistic(m2), "t-statistic")
   })
+
+  .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+  if (.runThisTest) {
+    v <- get_variance(m1)
+    expect_equal(v$var.intercept, c(id = 0.125306895731005), tolerance = 1e-4)
+    expect_equal(v$var.fixed, 0.0273792999320531, tolerance = 1e-4)
+  }
 }

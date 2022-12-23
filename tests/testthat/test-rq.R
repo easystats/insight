@@ -1,6 +1,6 @@
 skip_if_not(getRversion() >= "4.2.0")
 
-if (requiet("testthat") &&
+if (
   requiet("insight") &&
   requiet("quantreg") &&
   getRversion() >= "4.2.0") {

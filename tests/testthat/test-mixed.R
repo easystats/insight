@@ -2,7 +2,7 @@
 
 ## TODO enable once it's clear what the problem is...
 
-if (requiet("testthat") &&
+if (
   requiet("insight") &&
   requiet("lme4") &&
   suppressPackageStartupMessages(requiet("afex")) &&
