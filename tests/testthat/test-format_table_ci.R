@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight")) {
+if ( requiet("insight")) {
   test_that("format_table with ci-level", {
     d <- data.frame(CI = 0.97, CI_low = 1, CI_high = 3)
     ft <- insight::format_table(d)

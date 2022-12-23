@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-  if (requiet("testthat") && requiet("insight") && requiet("aod")) {
+  if ( requiet("insight") && requiet("aod")) {
     data(dja)
     m1 <-
       suppressWarnings(aod::negbin(y ~ group + offset(log(trisk)),

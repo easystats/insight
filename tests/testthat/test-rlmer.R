@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >= "3.0.1" &&
-  requiet("testthat") && requiet("insight") && requiet("lme4")) {
+   requiet("insight") && requiet("lme4")) {
   data(sleepstudy)
 
   set.seed(123)

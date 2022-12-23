@@ -1,7 +1,8 @@
+skip_if_offline()
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest || Sys.getenv("USER") == "travis") {
-  if (requiet("testthat") && requiet("insight") && requiet("glmmTMB")) {
+  if ( requiet("insight") && requiet("glmmTMB")) {
     m1 <- download_model("glmmTMB_spatial_1")
 
     test_that("find_weights", {

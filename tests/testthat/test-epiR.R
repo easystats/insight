@@ -12,7 +12,7 @@ osx <- tryCatch(
   }
 )
 
-if (!osx && requiet("testthat") &&
+if (!osx && 
   requiet("insight") &&
   requiet("epiR")) {
   dat <- matrix(c(13, 2163, 5, 3349), nrow = 2, byrow = TRUE)

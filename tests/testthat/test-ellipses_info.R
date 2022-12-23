@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight")) {
+if ( requiet("insight")) {
   data(iris)
 
   m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)

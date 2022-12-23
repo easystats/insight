@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && getRversion() > "3.5") {
-  if (requiet("testthat") && requiet("insight") && requiet("plm")) {
+  if ( requiet("insight") && requiet("plm")) {
     data(Crime)
     m1 <- suppressWarnings(plm(lcrmrte ~ lprbarr + factor(year) | . - lprbarr + lmix, data = Crime, model = "random"))
 
