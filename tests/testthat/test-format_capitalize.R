@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight")) {
+if ( requiet("insight")) {
   test_that("format_capitalize", {
     expect_equal(format_capitalize("hello"), "Hello")
     expect_equal(format_capitalize(c("hello", "world")), c("Hello", "World"))

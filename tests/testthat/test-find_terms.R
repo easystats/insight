@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
+if ( requiet("insight") && requiet("lme4")) {
   test_that("find_terms", {
     m <- lm(Sepal.Length ~ -1 + Petal.Width + Species, data = iris)
     expect_equal(

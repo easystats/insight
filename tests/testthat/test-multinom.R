@@ -1,4 +1,4 @@
-if (requiet("testthat") &&
+if (
   requiet("insight") &&
   requiet("nnet") &&
   requiet("MASS")) {

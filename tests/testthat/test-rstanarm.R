@@ -1,8 +1,10 @@
+skip_if_offline()
+
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
 if (.runThisTest && .runStanTest) {
-  if (suppressWarnings(requiet("testthat") &&
+  if (suppressWarnings(
     requiet("insight") && requiet("lme4") &&
     requiet("BayesFactor") &&
     requiet("rstanarm"))) {

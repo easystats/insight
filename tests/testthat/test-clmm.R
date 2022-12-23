@@ -15,7 +15,7 @@ osx <- tryCatch(
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-  requiet("testthat") &&
+  
   requiet("insight") &&
   requiet("lme4") &&
   requiet("ordinal")) {

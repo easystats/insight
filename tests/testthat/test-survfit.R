@@ -1,4 +1,4 @@
-if (requiet("testthat") &&
+if (
   requiet("insight") &&
   requiet("survival")) {
   m1 <- survfit(Surv(time, status) ~ sex + age + ph.ecog, data = lung)

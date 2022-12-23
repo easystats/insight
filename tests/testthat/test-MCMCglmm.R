@@ -13,7 +13,7 @@ osx <- tryCatch(
 )
 
 
-if (!osx && requiet("testthat") &&
+if (!osx && 
   requiet("insight") &&
   requiet("MCMCglmm")) {
   data(PlodiaPO)

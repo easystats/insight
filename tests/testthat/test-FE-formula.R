@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight")) {
+if ( requiet("insight")) {
   gfe <- insight:::.get_fixed_effects
 
   test_that(".get_fixed_effects", {

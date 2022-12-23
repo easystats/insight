@@ -63,6 +63,7 @@ Description: A tool to provide an easy, intuitive and consistent
     get the underlying data, starting with 'get_'.  The package has a
     consistent syntax and works with many different model objects, where
     otherwise functions to access these information are missing.
+    References: Lüdecke et al. (2019) <doi:10.21105/joss.01412>.
 License: GPL-3
 URL: https://easystats.github.io/insight/
 BugReports: https://github.com/easystats/insight/issues
@@ -172,7 +173,7 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Config/Needs/website:

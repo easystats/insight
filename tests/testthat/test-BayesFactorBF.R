@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("stats") && requiet("BayesFactor")) {
+if (.runThisTest &&  requiet("insight") && requiet("stats") && requiet("BayesFactor")) {
   x <- correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
   test_that("get_data", {
     expect_true(is.data.frame(get_data(x)))
