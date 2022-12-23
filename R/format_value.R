@@ -180,8 +180,13 @@ format_percent <- function(x, ...) {
 
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
-      need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0 & !.zap_small
-      x <- ifelse(is.na(x), .missing, ifelse(need_sci, sprintf("%.*e", digits, x), sprintf("%.*f", digits, x))) # nolint
+      # define which values need scientific notation and which are default formatting
+      need_sci <- isTRUE((abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0 & !.zap_small)
+      default <- !is.na(x) & !need_sci
+      # format vector
+      x[is.na(x)] <- .missing
+      x[default] <- sprintf("%.*f", digits, 100 * x)
+      x[need_sci] <- sprintf("%.*e", digits, 100 * x)
     } else {
       if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
         digits <- tryCatch(as.numeric(gsub("scientific", "", digits, fixed = TRUE)),
@@ -198,8 +203,13 @@ format_percent <- function(x, ...) {
         }
         x <- as.character(signif(x, digits))
       } else {
-        need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits)) & x != 0 & !.zap_small
-        x <- ifelse(is.na(x), .missing, ifelse(need_sci, sprintf("%.*e", digits, x), sprintf("%.*f", digits, x))) # nolint
+      # define which values need scientific notation and which are default formatting
+        need_sci <- isTRUE((abs(x) >= 1e+5 | (log10(abs(x)) < -digits)) & x != 0 & !.zap_small)
+        default <- !is.na(x) & !need_sci
+        # format vector
+        x[is.na(x)] <- .missing
+        x[default] <- sprintf("%.*f", digits, x)
+        x[need_sci] <- sprintf("%.*e", digits, x)
       }
     }
   } else if (anyNA(x)) {
