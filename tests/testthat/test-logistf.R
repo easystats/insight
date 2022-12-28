@@ -1,7 +1,7 @@
 testthat::skip_on_covr()
 
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("logistf")) {
   data(sex2)
   m1 <- logistf(case ~ age + oc + vic + vicl + vis + dia, data = sex2)

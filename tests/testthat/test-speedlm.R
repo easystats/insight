@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("speedglm")) {
+if (requiet("speedglm")) {
   data(iris)
   data(mtcars)
 

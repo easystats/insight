@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("lfe")) {
   x <- rnorm(1000)
   x2 <- rnorm(length(x))

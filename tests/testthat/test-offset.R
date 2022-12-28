@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("pscl")) {
   # Generate some zero-inflated data
   set.seed(123)

@@ -1,10 +1,10 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("survival") &&
-  requiet("lme4") &&
-  requiet("nlme") &&
-  requiet("bdsmatrix") &&
-  requiet("coxme")) {
+    requiet("lme4") &&
+    requiet("nlme") &&
+    requiet("bdsmatrix") &&
+    requiet("coxme")) {
   set.seed(1234)
   lung$inst2 <- sample(1:10, size = nrow(lung), replace = TRUE)
   lung <- subset(lung, subset = ph.ecog %in% 0:2)

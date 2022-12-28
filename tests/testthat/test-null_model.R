@@ -1,8 +1,8 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-  requiet("testthat") &&
-  requiet("insight") &&
+
+
   requiet("glmmTMB") &&
   requiet("lme4") &&
   getRversion() >= "4.0.0") {

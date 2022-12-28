@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("multgee")) {
   data(arthritis)
   m1 <- ordLORgee(

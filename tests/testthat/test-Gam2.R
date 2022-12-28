@@ -1,8 +1,8 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-  requiet("testthat") &&
-  requiet("insight") &&
+
+
   requiet("gam")) {
   data(kyphosis)
   void <- capture.output(m1 <- gam::gam(

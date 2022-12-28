@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
+if (requiet("lme4")) {
   data(mtcars)
   data(sleepstudy)
   data(iris)

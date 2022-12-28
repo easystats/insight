@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("betareg")) {
   data("GasolineYield")
   data("FoodExpenditure")

@@ -1,6 +1,6 @@
-if (suppressWarnings(requiet("testthat") &&
-  requiet("insight") &&
-  requiet("lme4"))) {
+if (suppressWarnings(
+  requiet("lme4")
+)) {
   data(cbpp)
   cbpp$trials <<- cbpp$size - cbpp$incidence
 

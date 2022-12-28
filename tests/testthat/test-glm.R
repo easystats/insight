@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("glmmTMB")) {
   data(Salamanders)
   Salamanders$cover <- abs(Salamanders$cover)

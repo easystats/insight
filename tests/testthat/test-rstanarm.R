@@ -2,10 +2,11 @@
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
 if (.runThisTest && .runStanTest) {
-  if (suppressWarnings(requiet("testthat") &&
-    requiet("insight") && requiet("lme4") &&
-    requiet("BayesFactor") &&
-    requiet("rstanarm"))) {
+  if (suppressWarnings(
+    requiet("lme4") &&
+      requiet("BayesFactor") &&
+      requiet("rstanarm")
+  )) {
     # skip_on_cran()
 
     # defining models ---------------------

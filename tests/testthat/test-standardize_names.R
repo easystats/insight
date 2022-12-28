@@ -1,11 +1,7 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("performance") &&
+if (requiet("performance") &&
   requiet("datawizard") &&
   requiet("stats") &&
   requiet("parameters")) {
-  .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
   test_that("standardize_names works as expected with parameters", {
     set.seed(123)
 

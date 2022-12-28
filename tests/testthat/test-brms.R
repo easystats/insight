@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("brms")) {
+if (.runThisTest && requiet("brms")) {
   # Model fitting -----------------------------------------------------------
 
   m1 <- suppressWarnings(insight::download_model("brms_mixed_6"))

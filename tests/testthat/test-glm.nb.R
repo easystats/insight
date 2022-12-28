@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("MASS")) {
+if (requiet("MASS")) {
   data(quine)
   set.seed(123)
   m1 <- glm.nb(Days ~ Sex / (Age + Eth * Lrn), data = quine)

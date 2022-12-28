@@ -1,7 +1,7 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("ordinal") &&
-  requiet("MASS")) {
+    requiet("MASS")) {
   data(housing, package = "MASS")
   m1 <- clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 

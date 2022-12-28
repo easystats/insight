@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("rms")) {
   data(mtcars)
   m1 <- ols(mpg ~ rcs(hp, 3) * cyl + wt, data = mtcars)

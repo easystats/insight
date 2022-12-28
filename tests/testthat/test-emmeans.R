@@ -1,4 +1,4 @@
-if (requiet("emmeans") && requiet("insight") && requiet("testthat")) {
+if (requiet("emmeans")) {
   test_that("emmeans", {
     m <- glm(am ~ factor(cyl),
       family = binomial(), data = mtcars

@@ -14,7 +14,7 @@ osx <- tryCatch(
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && !osx && requiet("testthat") && requiet("insight") && requiet("nonnest2")) {
+if (.runThisTest && !osx && requiet("nonnest2")) {
   data(iris)
   data(mtcars)
 

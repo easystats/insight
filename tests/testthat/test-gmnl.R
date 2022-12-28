@@ -1,8 +1,8 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("gmnl") &&
-  requiet("mlogit") &&
-  requiet("MASS")) {
+    requiet("mlogit") &&
+    requiet("MASS")) {
   data(housing, package = "MASS")
 
   dat <<- mlogit.data(housing, choice = "Sat", shape = "wide")

@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("testthat") && requiet("insight") && requiet("glmmTMB") && requiet("geoR")) {
+if (.runThisTest && requiet("glmmTMB") && requiet("geoR")) {
   data(ca20)
   d <- data.frame(
     x = ca20$coords[, 1],

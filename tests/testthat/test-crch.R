@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("crch")) {
   data("RainIbk")
   RainIbk$sqrtensmean <<- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)

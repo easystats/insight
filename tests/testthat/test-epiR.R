@@ -12,8 +12,8 @@ osx <- tryCatch(
   }
 )
 
-if (!osx && requiet("testthat") &&
-  requiet("insight") &&
+if (!osx &&
+
   requiet("epiR")) {
   dat <- matrix(c(13, 2163, 5, 3349), nrow = 2, byrow = TRUE)
   rownames(dat) <- c("DF+", "DF-")

@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("gee")) {
   data(warpbreaks)
   void <- capture.output(suppressMessages(

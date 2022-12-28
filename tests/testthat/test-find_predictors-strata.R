@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("survival")) {
+if (requiet("survival")) {
   f1 <- as.formula("Surv(time, status) ~ strata(sex) * x + x2")
   f2 <- as.formula("Surv(time, status) ~ x * strata(sex) * x2")
   f3 <- as.formula("Surv(time, status) ~ x + x2 * strata(sex)")

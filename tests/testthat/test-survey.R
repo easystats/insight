@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("survey")) {
+if (requiet("survey")) {
   data(api)
   dstrat <-
     svydesign(

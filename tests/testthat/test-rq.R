@@ -1,9 +1,6 @@
 skip_if_not(getRversion() >= "4.2.0")
 
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("quantreg") &&
-  getRversion() >= "4.2.0") {
+if (requiet("quantreg")) {
   data(stackloss)
   m1 <-
     rq(stack.loss ~ Air.Flow + Water.Temp,

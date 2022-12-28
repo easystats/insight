@@ -1,6 +1,6 @@
 if (FALSE &&
-  requiet("testthat") &&
-  requiet("insight") &&
+
+
   requiet("quantreg")) {
   ## NOTE Run this test conditionally every now and then, requires package
   ##      "tripack", which has a non-standard license.

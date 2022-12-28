@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("stats")) {
   data(npk)
   m1 <- aov(yield ~ N * P * K + Error(block), data = npk)

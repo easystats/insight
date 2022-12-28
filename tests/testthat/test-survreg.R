@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("survival")) {
+if (requiet("survival")) {
   m1 <- survreg(Surv(futime, fustat) ~ ecog.ps + rx,
     data = ovarian,
     dist = "exponential"
