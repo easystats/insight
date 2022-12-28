@@ -51,8 +51,8 @@ if (.Platform$OS.type == "windows" &&
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 511)
-    expect_equal(colnames(get_data(m1)), c("FSfamily", "PO", "plate"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 511)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("FSfamily", "PO", "plate"))
   })
 
   test_that("find_formula", {
