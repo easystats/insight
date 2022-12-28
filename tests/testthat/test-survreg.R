@@ -40,7 +40,7 @@ if (requiet("survival")) {
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {

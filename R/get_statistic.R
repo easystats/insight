@@ -2304,7 +2304,7 @@ get_statistic.metaplus <- function(x, ...) {
   ci_low <- as.vector(x$results[, "95% ci.lb"])
   ci_high <- as.vector(x$results[, "95% ci.ub"])
   cis <- apply(cbind(ci_low, ci_high), MARGIN = 1, diff)
-  se <- cis / (2 * stats::qnorm(.975))
+  se <- cis / (2 * stats::qnorm(0.975))
 
   out <- data.frame(
     Parameter = params$Parameter,

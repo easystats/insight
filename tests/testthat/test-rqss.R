@@ -10,7 +10,7 @@ if (FALSE &&
   CobarOre$w <- rnorm(nrow(CobarOre))
 
   # model
-  m1 <- rqss(z ~ w + qss(cbind(x, y), lambda = .08), data = CobarOre)
+  m1 <- rqss(z ~ w + qss(cbind(x, y), lambda = 0.08), data = CobarOre)
 
 
   test_that("model_info", {
@@ -66,11 +66,11 @@ if (FALSE &&
   })
 
   test_that("link_function", {
-    expect_equal(link_function(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_function(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("find_parameters", {

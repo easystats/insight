@@ -85,11 +85,11 @@ if (
 
 
   test_that("link_function", {
-    expect_equal(link_function(m1)(.2), log(.2), tolerance = 1e-3)
+    expect_equal(link_function(m1)(0.2), log(0.2), tolerance = 1e-3)
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-3)
+    expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-3)
   })
 
 

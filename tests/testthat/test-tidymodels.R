@@ -64,11 +64,11 @@ if (.runThisTest && requiet("parsnip")) {
   # })
   #
   # test_that("link_inverse", {
-  #   expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+  #   expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-5)
   # })
   #
   # test_that("linkfun", {
-  #   expect_equal(link_function(m1)(.2), -1.609438, tolerance = 1e-4)
+  #   expect_equal(link_function(m1)(0.2), -1.609438, tolerance = 1e-4)
   # })
   #
   # test_that("get_data", {

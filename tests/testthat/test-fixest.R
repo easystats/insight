@@ -107,15 +107,15 @@ test_that("get_predictors", {
 })
 
 test_that("link_inverse", {
-  expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-4)
-  expect_equal(link_inverse(m2)(.2), .2, tolerance = 1e-4)
-  expect_equal(link_inverse(m3)(.2), exp(.2), tolerance = 1e-4)
+  expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-4)
+  expect_equal(link_inverse(m2)(0.2), 0.2, tolerance = 1e-4)
+  expect_equal(link_inverse(m3)(0.2), exp(0.2), tolerance = 1e-4)
 })
 
 test_that("link_function", {
-  expect_equal(link_function(m1)(.2), log(.2), tolerance = 1e-4)
-  expect_equal(link_function(m2)(.2), .2, tolerance = 1e-4)
-  expect_equal(link_function(m3)(.2), log(.2), tolerance = 1e-4)
+  expect_equal(link_function(m1)(0.2), log(0.2), tolerance = 1e-4)
+  expect_equal(link_function(m2)(0.2), 0.2, tolerance = 1e-4)
+  expect_equal(link_function(m3)(0.2), log(0.2), tolerance = 1e-4)
 })
 
 test_that("get_data", {
@@ -264,14 +264,14 @@ test_that("get_predicted", {
   b <- get_predicted(m1, type = "link", predict = NULL)
   expect_equal(a, b)
   # these used to raise warnings
-  expect_warning(get_predicted(m1, ci = .4), NA)
+  expect_warning(get_predicted(m1, ci = 0.4), NA)
   expect_warning(get_predicted(m1, predict = NULL, type = "link"), NA)
 })
 
 test_that("get_data works when model data has name of  reserved words", {
   ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
-  rep <- data.frame(Y = runif(100) > .5, X = rnorm(100))
+  rep <- data.frame(Y = runif(100) > 0.5, X = rnorm(100))
   m <- feglm(Y ~ X, data = rep, family = binomial)
   out <- get_data(m)
   expect_s3_class(out, "data.frame")

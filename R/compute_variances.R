@@ -953,7 +953,7 @@
           # we here check if random slopes from correlated and uncorrelated
           # are duplicated (i.e. their difference is 0 - including a tolerance)
           # and then remove duplicated elements
-          the_same <- which(abs(outer(out[j], rndslopes, `-`)) < .0001)
+          the_same <- which(abs(outer(out[j], rndslopes, `-`)) < 0.0001)
           if (length(the_same) && grepl(dn[the_same], names(out[j]), fixed = TRUE)) {
             to_remove <- c(to_remove, j)
           }

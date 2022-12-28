@@ -55,7 +55,7 @@ if (.runThisTest && requiet("bayestestR")) {
   set.seed(1234)
   test_that("format_table with multiple si-levels", {
     d <- bayestestR::distribution_normal(1000)
-    x <- bayestestR::hdi(d, ci = c(.80, .90))
+    x <- bayestestR::hdi(d, ci = c(0.80, 0.90))
     out <- capture.output(print(x))
     expect_equal(
       out,

@@ -51,10 +51,10 @@ if (requiet("VGAM")) {
     expect_equal(colnames(get_predictors(m1)), c("outcome", "treatment"))
   })
 
-  li <- suppressWarnings(link_inverse(m1)(.2)[1, 1])
+  li <- suppressWarnings(link_inverse(m1)(0.2)[1, 1])
   test_that("link_inverse", {
-    expect_equal(li, exp(.2), tolerance = 1e-5)
-    expect_warning(link_inverse(m1)(.2))
+    expect_equal(li, exp(0.2), tolerance = 1e-5)
+    expect_warning(link_inverse(m1)(0.2))
   })
 
   test_that("get_data", {

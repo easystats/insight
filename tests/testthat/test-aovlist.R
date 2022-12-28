@@ -39,8 +39,8 @@ test_that("get_predictors", {
 })
 
 test_that("link_inverse", {
-  expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
-  expect_equal(link_inverse(m2)(.2), .2, tolerance = 1e-5)
+  expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
+  expect_equal(link_inverse(m2)(0.2), 0.2, tolerance = 1e-5)
 })
 
 test_that("get_data", {

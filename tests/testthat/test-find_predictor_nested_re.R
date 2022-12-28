@@ -1,7 +1,7 @@
 if (requiet("lme4")) {
   set.seed(1984)
   dat <- data.frame(
-    y = rnorm(1000 * 5, sd = 1 - .20),
+    y = rnorm(1000 * 5, sd = 1 - 0.20),
     time = rep(1:10, 100 * 5),
     g1 = sort(rep(1:100, 10 * 5)),
     g2 = sort(rep(1:10, 100 * 5))

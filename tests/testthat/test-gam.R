@@ -102,9 +102,9 @@ if (.runThisTest) {
     })
 
     test_that("link_inverse", {
-      expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
-      expect_equal(link_inverse(m2)(.2), .2, tolerance = 1e-5)
-      expect_equal(link_inverse(m3)(.2), .2, tolerance = 1e-5)
+      expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
+      expect_equal(link_inverse(m2)(0.2), 0.2, tolerance = 1e-5)
+      expect_equal(link_inverse(m3)(0.2), 0.2, tolerance = 1e-5)
     })
 
     test_that("get_data", {
@@ -263,7 +263,7 @@ if (.runThisTest) {
 
       # poisson
       void <- capture.output(
-        dat <<- gamSim(1, n = 400, dist = "poisson", scale = .25)
+        dat <<- gamSim(1, n = 400, dist = "poisson", scale = 0.25)
       )
       b4 <- gam(
         y ~ s(x0) + s(x1) + s(x2) + s(x3),
@@ -290,7 +290,7 @@ if (.runThisTest) {
       expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
 
       void <- capture.output(
-        dat <<- gamSim(1, n = 400, dist = "poisson", scale = .25)
+        dat <<- gamSim(1, n = 400, dist = "poisson", scale = 0.25)
       )
       b4 <- gam(
         y ~ s(x0) + s(x1) + s(x2) + s(x3),

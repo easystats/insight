@@ -76,7 +76,7 @@ if (.runThisTest && .runStanTest) {
     ybar <- mean(y)
     s_y <- sd(y)
     m11 <- suppressWarnings(stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
-      prior = R2(.75),
+      prior = R2(0.75),
       # the next line is only to make the example go fast
       chains = 1, iter = 500, seed = 12345
     ))
@@ -370,7 +370,7 @@ if (.runThisTest && .runStanTest) {
     })
 
     test_that("link_inverse", {
-      expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-4)
+      expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-4)
     })
 
     test_that("get_data", {

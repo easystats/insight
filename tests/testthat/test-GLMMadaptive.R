@@ -155,7 +155,7 @@ if (.runThisTest) {
     })
 
     test_that("link_inverse", {
-      expect_identical(link_inverse(m)(.2), exp(.2))
+      expect_identical(link_inverse(m)(0.2), exp(0.2))
     })
 
     test_that("clean_names", {

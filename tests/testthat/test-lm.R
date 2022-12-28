@@ -43,8 +43,8 @@ test_that("find_response", {
 })
 
 test_that("link_inverse", {
-  expect_identical(link_inverse(m1)(.2), .2)
-  expect_identical(link_inverse(m2)(.2), .2)
+  expect_identical(link_inverse(m1)(0.2), 0.2)
+  expect_identical(link_inverse(m2)(0.2), 0.2)
 })
 
 test_that("loglik", {

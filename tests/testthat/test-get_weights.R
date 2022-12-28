@@ -9,7 +9,7 @@ if (requiet("lme4")) {
   })
 
   set.seed(123)
-  mtcars$w <- abs(rnorm(nrow(mtcars), sd = .5))
+  mtcars$w <- abs(rnorm(nrow(mtcars), sd = 0.5))
 
   m1 <- lmer(mpg ~ am + (1 | cyl), data = mtcars, weights = w)
   m2 <- lm(mpg ~ am, data = mtcars, weights = w)

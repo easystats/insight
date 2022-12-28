@@ -567,7 +567,7 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   y <- get_predicted(mod, predict = "expectation", ci = 0.95)
   z <- get_predicted(mod, predict = NULL, type = "response", ci = 0.95, verbose = FALSE)
   expect_equal(round(x[1], 1), -1.5, tolerance = 1e-1)
-  expect_equal(round(y[1], 1), .2, tolerance = 1e-1)
+  expect_equal(round(y[1], 1), 0.2, tolerance = 1e-1)
   expect_equal(y, z, ignore_attr = TRUE)
 
   data <- mtcars

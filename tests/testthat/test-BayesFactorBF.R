@@ -66,7 +66,7 @@ test_that("find_parameters", {
   expect_equal(find_parameters(t2d)[[1]], "Difference")
 })
 
-t <- c(-.15, 2.39, 2.42, 2.43)
+t <- c(-0.15, 2.39, 2.42, 2.43)
 N <- c(100, 150, 97, 99)
 x <- meta.ttestBF(t = t, n1 = N, rscale = 1)
 test_that("get_data", {
@@ -303,9 +303,9 @@ ttest_BFk <- ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2
   nullInterval = c(-3, 0)
 )
 
-prop_BF1 <- proportionBF(y = 15, N = 25, p = .5, progress = FALSE)
+prop_BF1 <- proportionBF(y = 15, N = 25, p = 0.5, progress = FALSE)
 prop_BFk <- proportionBF(
-  y = 15, N = 25, p = .5, progress = FALSE,
+  y = 15, N = 25, p = 0.5, progress = FALSE,
   nullInterval = c(0, 0.3)
 )
 

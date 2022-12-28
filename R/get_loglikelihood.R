@@ -459,7 +459,7 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
       } else if (trans == "expm1") {
         .weighted_sum((get_response(x, as_proportion = TRUE) - 1), w = model_weights)
       } else if (trans == "sqrt") {
-        .weighted_sum(log(.5 / sqrt(get_response(x, as_proportion = TRUE))), w = model_weights)
+        .weighted_sum(log(0.5 / sqrt(get_response(x, as_proportion = TRUE))), w = model_weights)
       } else if (is.null(model_weights)) {
         .ll_log_adjustment(x)
       } else {
