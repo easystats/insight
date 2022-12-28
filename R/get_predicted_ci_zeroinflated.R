@@ -15,7 +15,7 @@
   }
 
   if (is.null(newdata)) {
-    newdata <- get_data(model)
+    newdata <- get_data(model, verbose = FALSE)
   }
 
   if (is.null(nsim)) {

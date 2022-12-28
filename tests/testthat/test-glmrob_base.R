@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("robustbase")) {
   data(carrots)
 
@@ -47,13 +47,7 @@ if (
     expect_equal(nrow(get_data(m1)), 24)
     expect_equal(
       colnames(get_data(m1)),
-      c(
-        "cbind(success, total - success)",
-        "logdose",
-        "block",
-        "success",
-        "total"
-      )
+      c("success", "total", "logdose", "block")
     )
   })
 

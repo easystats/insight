@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("rms")) {
   data(mtcars)
   m1 <- ols(mpg ~ rcs(hp, 3) * cyl + wt, data = mtcars)
@@ -36,7 +36,7 @@ if (
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 32)
-    expect_equal(colnames(get_data(m1)), c("mpg", "cyl", "wt", "hp"))
+    expect_equal(colnames(get_data(m1)), c("mpg", "hp", "cyl", "wt"))
   })
 
   test_that("find_formula", {

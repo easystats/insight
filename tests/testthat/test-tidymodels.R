@@ -1,9 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest &&
-  
-  requiet("insight") &&
-  requiet("parsnip")) {
+if (.runThisTest && requiet("parsnip")) {
   data(mtcars)
 
   m <- parsnip::linear_reg()

@@ -12,10 +12,7 @@ osx <- tryCatch(
   }
 )
 
-if (!osx && 
-  requiet("insight") &&
-  requiet("plm") &&
-  requiet("feisr")) {
+if (!osx && requiet("plm") && requiet("feisr")) {
   data(mwp)
   m1 <- feis(
     lnw ~ marry + enrol + as.factor(yeargr) | exp + I(exp^2),

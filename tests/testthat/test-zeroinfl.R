@@ -1,8 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (
-  requiet("insight") &&
-  requiet("pscl")) {
+if (requiet("pscl")) {
   data("bioChemists")
 
   m1 <- zeroinfl(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)

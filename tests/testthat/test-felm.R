@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("lfe")) {
   x <- rnorm(1000)
   x2 <- rnorm(length(x))
@@ -18,7 +18,7 @@ if (
 
   # add them to the outcome
   y <- y + Q + W
-  dat <- data.frame(y, x, x2, x3, x4, id, firm, Q, W)
+  dat <<- data.frame(y, x, x2, x3, x4, id, firm, Q, W)
 
   m1 <- felm(y ~ x + x2 | id + firm | (Q | W ~ x3 + factor(x4)), data = dat)
 

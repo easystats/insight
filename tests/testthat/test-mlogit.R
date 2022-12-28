@@ -1,7 +1,7 @@
 if (
-  requiet("insight") &&
+
   requiet("mlogit") &&
-  requiet("mclogit")) {
+    requiet("mclogit")) {
   data("Fishing")
   Fish <-
     mlogit.data(Fishing,
@@ -44,16 +44,16 @@ if (
     })
 
     test_that("get_data", {
-      expect_equal(nrow(get_data(m1)), 4728)
-      expect_equal(nrow(get_data(m2)), 4728)
+      expect_equal(nrow(get_data(m1, verbose = FALSE)), 4728)
+      expect_equal(nrow(get_data(m2, verbose = FALSE)), 4728)
 
       if (packageVersion("mlogit") <= "1.0-3.1") {
         expect_equal(
-          colnames(get_data(m1)),
+          colnames(get_data(m1, verbose = FALSE)),
           c("mode", "price", "catch", "probabilities", "linpred")
         )
         expect_equal(
-          colnames(get_data(m2)),
+          colnames(get_data(m2, verbose = FALSE)),
           c(
             "mode",
             "price",
@@ -65,11 +65,11 @@ if (
         )
       } else {
         expect_equal(
-          colnames(get_data(m1)),
+          colnames(get_data(m1, verbose = FALSE)),
           c("mode", "price", "catch", "idx", "probabilities", "linpred")
         )
         expect_equal(
-          colnames(get_data(m2)),
+          colnames(get_data(m2, verbose = FALSE)),
           c(
             "mode",
             "price",

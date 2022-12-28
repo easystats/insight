@@ -39,11 +39,11 @@ get_random.default <- function(x) {
     return(NULL)
   }
 
-  get_data(x, effects = "random")
+  get_data(x, effects = "random", verbose = FALSE)
 }
 
 
 #' @export
 get_random.afex_aov <- function(x) {
-  get_data(x, shape = "long")[find_random(x, flatten = TRUE)]
+  get_data(x, shape = "long", verbose = FALSE)[find_random(x, flatten = TRUE)]
 }

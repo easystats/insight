@@ -1,8 +1,7 @@
-skip_if_offline()
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-  if ( requiet("insight") && requiet("VGAM")) {
+  if (requiet("VGAM")) {
     data("hunua")
     m1 <- download_model("vgam_1")
     m2 <- download_model("vgam_2")

@@ -53,7 +53,7 @@
 
   # Data
   if (!is.null(dots$newdata) && is.null(data)) data <- dots$newdata
-  if (is.null(data)) data <- get_data(x, verbose = verbose)
+  if (is.null(data)) data <- get_data(x, verbose = FALSE)
 
 
   # Intermediate step, check data classes  ------
@@ -241,7 +241,7 @@
       # Fix smooth to average value
       if (!smooth %in% names(data) || !include_smooth) {
         include_smooth <- FALSE
-        data[[smooth]] <- mean(get_data(x)[[smooth]], na.rm = TRUE)
+        data[[smooth]] <- mean(get_data(x, verbose = FALSE)[[smooth]], na.rm = TRUE)
       }
     }
   }

@@ -339,7 +339,7 @@ n_obs.zeroinfl <- n_obs.biglm
 
 #' @export
 n_obs.cgam <- function(x, ...) {
-  nrow(get_data(x))
+  nrow(get_data(x, verbose = FALSE))
 }
 
 #' @export
@@ -371,23 +371,9 @@ n_obs.glimML <- function(x, ...) {
 
 #' @export
 n_obs.mle2 <- function(x, ...) {
-  n <- tryCatch(
-    {
-      x@nobs
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  n <- tryCatch(x@nobs, error = function(e) NULL)
   if (is.null(n)) {
-    n <- tryCatch(
-      {
-        nrow(get_data(x))
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    n <- tryCatch(nrow(get_data(x, verbose = FALSE)), error = function(e) NULL)
   }
   n
 }
@@ -427,7 +413,7 @@ n_obs.cpglmm <- function(x, ...) {
 
 #' @export
 n_obs.lmodel2 <- function(x, ...) {
-  nrow(get_data(x))
+  nrow(get_data(x, verbose = FALSE))
 }
 
 

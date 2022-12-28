@@ -1,16 +1,16 @@
-skip_if_offline()
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if ( requiet("insight") && requiet("GLMMadaptive") && requiet("lme4")) {
+  if (requiet("GLMMadaptive") && requiet("lme4")) {
     m <- download_model("GLMMadaptive_zi_2")
     m2 <- download_model("GLMMadaptive_zi_1")
 
     data(cbpp)
+    tmp <<- cbpp
     m3 <- GLMMadaptive::mixed_model(
       cbind(incidence, size - incidence) ~ period,
       random = ~ 1 | herd,
-      data = cbpp,
+      data = tmp,
       family = binomial
     )
 
@@ -223,42 +223,47 @@ if (.runThisTest) {
       expect_identical(colnames(get_random(m)), "persons")
     })
 
+
+    # data stems from model frame, since we downloaded models, so it's not
+    # in the environment. Thus, "get_data()" throws warning, and we therefore
+    # set verbose = FALSE
+
     test_that("get_data", {
       expect_identical(
-        colnames(get_data(m)),
-        c("count", "child", "camper", "livebait", "persons")
+        sort(colnames(get_data(m, verbose = FALSE))),
+        sort(c("count", "child", "camper", "livebait", "persons"))
       )
       expect_identical(
-        colnames(get_data(m, effects = "fixed")),
+        colnames(get_data(m, effects = "fixed", verbose = FALSE)),
         c("count", "child", "camper", "livebait")
       )
-      expect_identical(colnames(get_data(m, effects = "random")), "persons")
+      expect_identical(colnames(get_data(m, effects = "random", verbose = FALSE)), "persons")
       expect_identical(
-        colnames(get_data(m, component = "zi")),
-        c("count", "child", "livebait", "persons")
+        sort(colnames(get_data(m, component = "zi", verbose = FALSE))),
+        sort(c("count", "child", "livebait", "persons"))
+      )
+      expect_identical(
+        sort(colnames(get_data(m, component = "zi", effects = "fixed", verbose = FALSE))),
+        sort(c("count", "child", "livebait"))
       )
       expect_identical(colnames(get_data(
         m,
-        component = "zi", effects = "fixed"
-      )), c("count", "child", "livebait"))
-      expect_identical(colnames(get_data(
-        m,
-        component = "zi", effects = "random"
+        component = "zi", effects = "random", verbose = FALSE
       )), "persons")
       expect_identical(
-        colnames(get_data(m, component = "cond")),
+        colnames(get_data(m, component = "cond", verbose = FALSE)),
         c("count", "child", "camper", "persons")
       )
       expect_identical(colnames(get_data(
         m,
-        component = "cond", effects = "fixed"
+        component = "cond", effects = "fixed", verbose = FALSE
       )), c("count", "child", "camper"))
       expect_identical(colnames(get_data(
         m,
-        component = "cond", effects = "random"
+        component = "cond", effects = "random", verbose = FALSE
       )), "persons")
-      expect_identical(colnames(get_data(m, component = "dispersion")), "count")
-      expect_null(suppressWarnings(get_data(m, component = "dispersion", effects = "random")))
+      expect_identical(colnames(suppressWarnings(get_data(m, component = "dispersion"))), "count")
+      expect_null(suppressWarnings(get_data(m, component = "dispersion", effects = "random", verbose = FALSE)))
       expect_identical(
         colnames(get_data(m3)),
         c("incidence", "size", "period", "herd")

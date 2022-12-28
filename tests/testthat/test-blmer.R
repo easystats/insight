@@ -1,4 +1,4 @@
-if ( requiet("insight") && requiet("blme")) {
+if (requiet("blme")) {
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -111,11 +111,11 @@ if ( requiet("insight") && requiet("blme")) {
     expect_equal(colnames(get_data(m1, effects = "random")), "Subject")
     expect_equal(
       colnames(get_data(m2)),
-      c("Reaction", "Days", "mygrp", "mysubgrp", "Subject")
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
     )
     expect_equal(
       colnames(get_data(m2, effects = "all")),
-      c("Reaction", "Days", "mygrp", "mysubgrp", "Subject")
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
     )
     expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
   })

@@ -1,20 +1,5 @@
-osx <- tryCatch(
-  {
-    si <- Sys.info()
-    if (!is.null(si["sysname"])) {
-      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-    } else {
-      FALSE
-    }
-  },
-  error = function(e) {
-    FALSE
-  }
-)
+if (.Platform$OS.type == "windows" &&
 
-
-if (!osx && 
-  requiet("insight") &&
   requiet("MCMCglmm")) {
   data(PlodiaPO)
   m1 <- MCMCglmm(
@@ -66,8 +51,8 @@ if (!osx &&
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 511)
-    expect_equal(colnames(get_data(m1)), c("FSfamily", "PO", "plate"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 511)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("FSfamily", "PO", "plate"))
   })
 
   test_that("find_formula", {

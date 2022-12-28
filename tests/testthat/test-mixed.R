@@ -3,10 +3,10 @@
 ## TODO enable once it's clear what the problem is...
 
 if (
-  requiet("insight") &&
+
   requiet("lme4") &&
-  suppressPackageStartupMessages(requiet("afex")) &&
-  FALSE) {
+    suppressPackageStartupMessages(requiet("afex")) &&
+    FALSE) {
   data(sleepstudy)
 
   set.seed(123)

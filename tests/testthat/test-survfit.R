@@ -1,6 +1,4 @@
-if (
-  requiet("insight") &&
-  requiet("survival")) {
+if (requiet("survival")) {
   m1 <- survfit(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
 
   test_that("model_info", {
@@ -26,7 +24,7 @@ if (
     expect_equal(nrow(get_data(m1)), 227)
     expect_equal(
       colnames(get_data(m1)),
-      c("time", "status", "age", "sex", "ph.ecog")
+      c("time", "status", "sex", "age", "ph.ecog")
     )
   })
 

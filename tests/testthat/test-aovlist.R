@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("stats")) {
   data(npk)
   m1 <- aov(yield ~ N * P * K + Error(block), data = npk)
@@ -47,10 +47,10 @@ if (
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 24)
-    expect_equal(nrow(get_data(m2)), 24)
-    expect_equal(colnames(get_data(m1)), c("yield", "N", "P", "K", "block"))
-    expect_equal(colnames(get_data(m2)), c("yield", "N", "P", "K"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 24)
+    expect_equal(nrow(get_data(m2, verbose = FALSE)), 24)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("yield", "N", "P", "K", "block"))
+    expect_equal(colnames(get_data(m2, verbose = FALSE)), c("yield", "N", "P", "K"))
   })
 
   test_that("find_formula", {

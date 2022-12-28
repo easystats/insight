@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("ordinal")) {
   data(wine, package = "ordinal")
   m1 <- clm(rating ~ temp * contact, data = wine)

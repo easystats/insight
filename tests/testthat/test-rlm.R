@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (requiet("MASS") && requiet("testthat")) {
+if (requiet("MASS")) {
   test_that("model.matrix.rlm accepts `data` argument", {
     mod <- MASS::rlm(mpg ~ hp + factor(cyl), mtcars)
     mm <- get_modelmatrix(mod)

@@ -1,4 +1,4 @@
-if ( requiet("insight") && requiet("afex")) {
+if (requiet("afex")) {
   data(obk.long, package = "afex")
 
   obk.long$treatment <- as.character(obk.long$treatment)

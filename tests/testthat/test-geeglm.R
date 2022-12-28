@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("geepack")) {
   data(warpbreaks)
   m1 <-

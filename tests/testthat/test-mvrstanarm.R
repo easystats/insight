@@ -3,8 +3,8 @@
 
 if (.runThisTest && .runStanTest &&
   suppressWarnings(
-    requiet("insight") &&
-    requiet("rstanarm"))) {
+    requiet("rstanarm")
+  )) {
   data("pbcLong")
   m1 <- download_model("stanmvreg_1")
 

@@ -1,7 +1,7 @@
 unloadNamespace("gam")
 skip_on_os("mac")
 
-if ( requiet("insight") && requiet("VGAM")) {
+if (requiet("VGAM")) {
   d.AD <- data.frame(
     treatment = gl(3, 3),
     outcome = gl(3, 1, 9),
@@ -58,8 +58,8 @@ if ( requiet("insight") && requiet("VGAM")) {
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 9)
-    expect_equal(colnames(get_data(m1)), c("counts", "outcome", "treatment"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 9)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("counts", "outcome", "treatment"))
   })
 
   test_that("find_formula", {

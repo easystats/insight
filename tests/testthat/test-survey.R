@@ -1,6 +1,4 @@
-if (
-  requiet("insight") &&
-  requiet("survey")) {
+if (requiet("survey")) {
   data(api)
   dstrat <-
     svydesign(
@@ -35,9 +33,9 @@ if (
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 200)
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 200)
     expect_equal(
-      colnames(get_data(m1)),
+      colnames(get_data(m1, verbose = FALSE)),
       c("api00", "ell", "meals", "mobility", "(weights)")
     )
   })

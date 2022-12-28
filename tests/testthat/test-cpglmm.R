@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("cplm")) {
   data("FineRoot")
   m1 <- cpglmm(RLD ~ Stock + Spacing + (1 | Plant), data = FineRoot)

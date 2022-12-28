@@ -738,6 +738,7 @@ get_datagrid.default <- function(x,
 
   # Retrieve data from model
   data <- .get_model_data_for_grid(x, data)
+  data_attr <- attributes(data)
 
   # save response - might be necessary to include
   response <- find_response(x)
@@ -786,6 +787,9 @@ get_datagrid.default <- function(x,
       at <- colnames(data)[!colnames(data) %in% clean_names(s)]
     }
   }
+
+  # set back custom attributes
+  data <- .replace_attr(data, data_attr)
 
   vm <- get_datagrid(
     data,
@@ -904,28 +908,12 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 .get_model_data_for_grid <- function(x, data) {
   # Retrieve data, based on variable names
   if (is.null(data)) {
-    data <- tryCatch(get_data(x)[find_variables(x, "all", flatten = TRUE)], error = function(e) NULL)
-  }
-
-  # For models with transformed parameters, "find_variables" may not return
-  # matching column names - then try retrieving terms instead
-  if (is.null(data)) {
-    data <- tryCatch(get_data(x)[find_terms(x, "all", flatten = TRUE)], error = function(e) NULL)
-  }
-
-  # brute force - use all!
-  if (is.null(data)) {
-    cols <- unique(c(
-      find_terms(x, "all", flatten = TRUE),
-      find_variables(x, "all", flatten = TRUE)
-    ))
-    data <- tryCatch(
-      {
-        d <- get_data(x)
-        d[intersect(colnames(d), cols)]
-      },
-      error = function(e) NULL
-    )
+    data <- get_data(x, verbose = FALSE)
+    # make sure we only have variables from original data
+    all_vars <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
+    if (!is.null(all_vars)) {
+      data <- tryCatch(data[intersect(all_vars, colnames(data))], error = function(e) data)
+    }
   }
 
   # still found no data - stop here
@@ -934,6 +922,31 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
       "Can't access data that was used to fit the model in order to create the reference grid.",
       "Please use the `data` argument."
     )
+  }
+
+  # find variables that were coerced on-the-fly
+  terms <- find_terms(x, flatten = TRUE)
+  factors <- grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", terms)
+  if (any(factors)) {
+    factor_expressions <- lapply(terms[factors], .str2lang)
+    cleaned_terms <- vapply(factor_expressions, all.vars, character(1))
+    for (i in cleaned_terms) {
+      if (is.numeric(data[[i]])) {
+        attr(data[[i]], "factor") <- TRUE
+      }
+    }
+    attr(data, "factors") <- cleaned_terms
+  }
+  logicals <- grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", terms)
+  if (any(logicals)) {
+    logical_expressions <- lapply(terms[logicals], .str2lang)
+    cleaned_terms <- vapply(logical_expressions, all.vars, character(1))
+    for (i in cleaned_terms) {
+      if (is.numeric(data[[i]])) {
+        attr(data[[i]], "logical") <- TRUE
+      }
+    }
+    attr(data, "logicals") <- cleaned_terms
   }
 
   data
@@ -951,4 +964,12 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
     )))))
   }
   at
+}
+
+
+.replace_attr <- function(data, custom_attr) {
+  for (nm in setdiff(names(custom_attr), names(attributes(data.frame())))) {
+    attr(data, which = nm) <- custom_attr[[nm]]
+  }
+  data
 }

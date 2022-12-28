@@ -1,7 +1,4 @@
-if (
-  requiet("insight") &&
-  requiet("truncreg") &&
-  requiet("survival")) {
+if (requiet("truncreg") && requiet("survival")) {
   data("tobin", package = "survival")
   m1 <- truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
 

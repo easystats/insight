@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("splines")) {
   data(iris)
   m1 <- lm(Sepal.Length ~ splines::bs(Petal.Width, df = 4) + Species, data = iris)
@@ -41,7 +41,7 @@ if (
     expect_equal(nrow(get_data(m1)), 150)
     expect_equal(
       colnames(get_data(m1)),
-      c("Sepal.Length", "Species", "Petal.Width")
+      c("Sepal.Length", "Petal.Width", "Species")
     )
   })
 

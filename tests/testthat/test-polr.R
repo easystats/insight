@@ -1,6 +1,4 @@
-if (
-  requiet("insight") &&
-  requiet("MASS")) {
+if (requiet("MASS")) {
   data(housing, package = "MASS")
 
   m1 <- polr(Sat ~ Infl + Type + Cont, data = housing, weights = Freq)
@@ -31,7 +29,7 @@ if (
     expect_equal(nrow(get_data(m1)), 72)
     expect_equal(
       colnames(get_data(m1)),
-      c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq")
+      c("Sat", "Infl", "Type", "Cont", "Freq")
     )
   })
 

@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("pscl")) {
   # Generate some zero-inflated data
   set.seed(123)
@@ -10,7 +10,7 @@ if (
   y <- rpois(N, exp(yhat)) # Poisson process
   y <- ifelse(rbinom(N, 1, 0.3), 0, y) # Zero-inflation process
 
-  d <- data.frame(y = y, x, logOff = log(off)) # Storage dataframe
+  d <<- data.frame(y = y, x, logOff = log(off)) # Storage dataframe
 
   # Fit zeroinfl model using 2 methods of offset input
   m1 <- zeroinfl(y ~ offset(logOff) + x | 1, data = d, dist = "poisson")

@@ -1,4 +1,4 @@
-if ( requiet("insight") && requiet("aod")) {
+if (requiet("aod")) {
   data(dja)
   m1 <- suppressWarnings(betabin(cbind(y, n - y) ~ group * trisk, ~village, data = dja))
 
@@ -41,7 +41,7 @@ if ( requiet("insight") && requiet("aod")) {
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), dja[, c("y", "n")])
+    expect_equal(get_response(m1, verbose = FALSE), dja[, c("y", "n")])
   })
 
   test_that("get_predictors", {
@@ -57,8 +57,8 @@ if ( requiet("insight") && requiet("aod")) {
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 75)
-    expect_equal(colnames(get_data(m1)), c("y", "n", "group", "trisk", "village"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 75)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("y", "n", "group", "trisk", "village"))
   })
 
   test_that("find_formula", {

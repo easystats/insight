@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("stats")) {
   data(iris)
   data(mtcars)

@@ -1,7 +1,7 @@
 if (
-  requiet("insight") &&
+
   requiet("nnet") &&
-  requiet("MASS")) {
+    requiet("MASS")) {
   data("birthwt")
   void <- capture.output({
     m1 <- nnet::multinom(low ~ age + lwt + race + smoke, data = birthwt)

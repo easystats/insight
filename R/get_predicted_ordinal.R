@@ -31,7 +31,7 @@ get_predicted.clm <- function(x,
 
   # hack to get predictions for all response levels
   if (is.null(data)) {
-    data <- get_data(x)
+    data <- get_data(x, verbose = FALSE)
   }
   resp <- find_response(x)
   data <- data[, setdiff(colnames(data), resp), drop = FALSE]

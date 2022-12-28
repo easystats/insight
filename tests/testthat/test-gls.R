@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("nlme")) {
   data(Ovary)
   m1 <- gls(follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time),
@@ -44,7 +44,7 @@ if (
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 308)
-    expect_equal(colnames(get_data(m1)), c("Mare", "Time", "follicles"))
+    expect_equal(colnames(get_data(m1)), c("follicles", "Time", "Mare"))
   })
 
   test_that("get_df", {

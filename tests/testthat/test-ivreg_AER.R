@@ -1,13 +1,14 @@
 if (requiet("AER")) {
   data(CigarettesSW)
   CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
-  CigarettesSW$rincome <-
-    with(CigarettesSW, income / population / cpi)
+  CigarettesSW$rincome <- with(CigarettesSW, income / population / cpi)
   CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax) / cpi)
+
+  cig_data <<- CigarettesSW
 
   m1 <- AER::ivreg(
     log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi),
-    data = CigarettesSW,
+    data = cig_data,
     subset = year == "1995"
   )
 
@@ -43,7 +44,7 @@ if (requiet("AER")) {
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), CigarettesSW$packs[CigarettesSW$year == "1995"])
+    expect_equal(get_response(m1), cig_data$packs[cig_data$year == "1995"])
   })
 
   test_that("get_predictors", {

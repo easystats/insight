@@ -1,6 +1,4 @@
-if (
-  requiet("insight") &&
-  requiet("quantreg")) {
+if (requiet("quantreg")) {
   set.seed(123)
   n <- 200
   x <- rnorm(n)
@@ -8,7 +6,7 @@ if (
   c <- 4 + x + rnorm(n)
   d <- (y > c)
 
-  dat <- data.frame(y, x, c, d)
+  dat <<- data.frame(y, x, c, d)
 
   # model
   m1 <- crq(survival::Surv(pmax(y, c), d, type = "left") ~ x, method = "Portnoy", data = dat)
@@ -31,7 +29,7 @@ if (
 
 
   test_that("find_response", {
-    expect_identical(find_response(m1), "Surv(pmax(y, c), d, type = \"left\")")
+    expect_identical(find_response(m1), "survival::Surv(pmax(y, c), d, type = \"left\")")
   })
 
   test_that("get_predictors", {
@@ -42,7 +40,7 @@ if (
     expect_equal(nrow(get_data(m1)), 200)
     expect_equal(
       colnames(get_data(m1)),
-      c("y", "x", "c", "d")
+      c("y", "c", "d", "x")
     )
   })
 

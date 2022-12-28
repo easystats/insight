@@ -80,7 +80,7 @@ test_that("get_modelmatrix - ivreg", {
 test_that("get_modelmatrix - lm_robust", {
   set.seed(15)
   N <- 1:40
-  dat <- data.frame(
+  dat <<- data.frame(
     N = N,
     y = rpois(N, lambda = 4),
     x = rnorm(N),
@@ -108,7 +108,7 @@ test_that("Issue #693", {
   w <- sample(1:4, n, replace = TRUE)
   y <- rnorm(n)
   z <- ifelse(x + y + rlogis(n) > 1.5, 1, 0)
-  dat <- data.frame(x = factor(x), w = factor(w), y = y, z = z)
+  dat <<- data.frame(x = factor(x), w = factor(w), y = y, z = z)
   m <- glm(z ~ x + w + y, family = binomial, data = dat)
   nd <- head(dat, 2)
   mm <- get_modelmatrix(m, data = head(dat, 1))

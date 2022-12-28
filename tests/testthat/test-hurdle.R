@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("pscl")) {
   data("bioChemists")
 

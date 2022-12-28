@@ -13,10 +13,10 @@ osx <- tryCatch(
 )
 
 if (
-  requiet("insight") &&
+
   requiet("TMB") &&
-  requiet("glmmTMB") &&
-  getRversion() >= "4.0.0") {
+    requiet("glmmTMB") &&
+    getRversion() >= "4.0.0") {
   # fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
   # fish$nofish <- as.factor(fish$nofish)
   # fish$livebait <- as.factor(fish$livebait)
@@ -590,10 +590,10 @@ if (
         "count",
         "child",
         "camper",
-        "livebait",
-        "xb",
         "persons",
-        "ID"
+        "livebait",
+        "ID",
+        "xb"
       )
     )
     expect_identical(
@@ -601,11 +601,11 @@ if (
       c("count", "child", "camper", "livebait", "xb")
     )
     expect_identical(colnames(get_data(m4, effects = "random")), c("persons", "ID"))
-    expect_identical(colnames(get_data(m4, component = "zi")), c("count", "child", "livebait", "ID"))
+    expect_identical(colnames(get_data(m4, component = "zi")), c("child", "livebait", "ID", "count"))
     expect_identical(colnames(get_data(
       m4,
       component = "zi", effects = "fixed"
-    )), c("count", "child", "livebait"))
+    )), c("child", "livebait", "count"))
     expect_identical(colnames(get_data(
       m4,
       component = "zi", effects = "random"
@@ -622,11 +622,11 @@ if (
       m4,
       component = "cond", effects = "random"
     )), "persons")
-    expect_identical(colnames(get_data(m4, component = "disp")), c("count", "xb"))
+    expect_identical(colnames(get_data(m4, component = "disp")), c("xb", "count"))
     expect_identical(colnames(get_data(
       m4,
       component = "disp", effects = "fixed"
-    )), c("count", "xb"))
+    )), c("xb", "count"))
     expect_null(get_data(m4, component = "disp", effects = "random", verbose = FALSE))
   })
 

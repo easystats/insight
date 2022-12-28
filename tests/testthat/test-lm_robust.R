@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("estimatr")) {
   data(mtcars)
   m1 <- lm_robust(mpg ~ gear + wt + cyl, data = mtcars)

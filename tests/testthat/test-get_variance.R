@@ -14,7 +14,7 @@ osx <- tryCatch(
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (!osx && .runThisTest &&  requiet("insight") && requiet("lme4")) {
+if (!osx && .runThisTest && requiet("lme4")) {
   data("sleepstudy")
   data("Penicillin")
   set.seed(12345)
@@ -26,16 +26,18 @@ if (!osx && .runThisTest &&  requiet("insight") && requiet("lme4")) {
       sample(1:30, size = sum(filter_group), replace = TRUE)
   }
 
-  fm1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-  fm2 <- lmer(Reaction ~ Days + (Days || Subject), sleepstudy)
+  study_data <<- sleepstudy
+
+  fm1 <- lmer(Reaction ~ Days + (Days | Subject), study_data)
+  fm2 <- lmer(Reaction ~ Days + (Days || Subject), study_data)
   fm3 <- lmer(
     Reaction ~ Days + (1 + Days || grp / subgrp) + (1 + Days | Subject),
-    data = sleepstudy
+    data = study_data
   )
-  fm4 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+  fm4 <- lmer(Reaction ~ Days + (1 | Subject), study_data)
   fm5 <- lmer(
     Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
-    data = sleepstudy
+    data = study_data
   )
   fm6 <- lmer(diameter ~ 0 + sample + (1 | plate), data = Penicillin)
 
@@ -119,7 +121,7 @@ if (!osx && .runThisTest &&  requiet("insight") && requiet("lme4")) {
     )
   })
 
-  model <- lmer(Reaction ~ Days + (0 + Days || Subject), data = sleepstudy)
+  model <- lmer(Reaction ~ Days + (0 + Days || Subject), data = study_data)
   vmodel <- get_variance(model)
 
   test_that("get_variance-8", {
@@ -138,8 +140,9 @@ if (!osx && .runThisTest &&  requiet("insight") && requiet("lme4")) {
 
   data("sleepstudy")
   sleepstudy$Days2 <- cut(sleepstudy$Days, breaks = c(-1, 3, 6, 10))
+  study_data2 <<- sleepstudy
 
-  model <- lmer(Reaction ~ Days2 + (1 + Days2 | Subject), data = sleepstudy)
+  model <- lmer(Reaction ~ Days2 + (1 + Days2 | Subject), data = study_data2)
   vmodel <- get_variance(model)
 
   test_that("get_variance-9", {
@@ -157,7 +160,7 @@ if (!osx && .runThisTest &&  requiet("insight") && requiet("lme4")) {
     )
   })
 
-  model <- suppressWarnings(lmer(Reaction ~ Days2 + (1 + Days2 || Subject), data = sleepstudy))
+  model <- suppressWarnings(lmer(Reaction ~ Days2 + (1 + Days2 || Subject), data = study_data2))
   vmodel <- suppressWarnings(get_variance(model))
 
   test_that("get_variance-10", {
@@ -177,7 +180,7 @@ if (!osx && .runThisTest &&  requiet("insight") && requiet("lme4")) {
     )
   })
 
-  model <- lmer(Reaction ~ Days2 + (0 + Days2 | Subject), data = sleepstudy)
+  model <- lmer(Reaction ~ Days2 + (0 + Days2 | Subject), data = study_data2)
   vmodel <- get_variance(model)
 
   test_that("get_variance-11", {
@@ -198,7 +201,7 @@ if (!osx && .runThisTest &&  requiet("insight") && requiet("lme4")) {
     )
   })
 
-  model <- lmer(Reaction ~ Days2 + (0 + Days2 || Subject), data = sleepstudy)
+  model <- lmer(Reaction ~ Days2 + (0 + Days2 || Subject), data = study_data2)
   vmodel <- get_variance(model)
 
   test_that("get_variance-12", {
@@ -243,9 +246,10 @@ if (!osx && .runThisTest &&  requiet("insight") && requiet("lme4")) {
   data("sleepstudy")
   set.seed(123)
   sleepstudy$Months <- sample(1:4, nrow(sleepstudy), TRUE)
+  study_data3 <<- sleepstudy
 
-  m2 <- lmer(Reaction ~ Days + (0 + Days | Subject), data = sleepstudy)
-  m5 <- lmer(Reaction ~ Days + (0 + Days + Months | Subject), data = sleepstudy)
+  m2 <- lmer(Reaction ~ Days + (0 + Days | Subject), data = study_data3)
+  m5 <- lmer(Reaction ~ Days + (0 + Days + Months | Subject), data = study_data3)
 
   test_that("random effects CIs, simple slope", {
     vc <- suppressWarnings(get_variance(m2))

@@ -1,7 +1,7 @@
 if (
-  requiet("insight") &&
+
   requiet("ordinal") &&
-  requiet("MASS")) {
+    requiet("MASS")) {
   data(housing, package = "MASS")
   m1 <- clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 
@@ -56,7 +56,7 @@ if (
     expect_equal(nrow(get_data(m1)), 72)
     expect_equal(
       colnames(get_data(m1)),
-      c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq")
+      c("Sat", "Infl", "Type", "Cont", "Freq")
     )
   })
 

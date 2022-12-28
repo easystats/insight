@@ -1,5 +1,5 @@
 if (
-  requiet("insight") &&
+
   requiet("gamlss")) {
   data(abdom)
   void <- capture.output(

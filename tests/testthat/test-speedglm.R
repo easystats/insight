@@ -1,15 +1,11 @@
-if (
-  requiet("insight") &&
-  requiet("speedglm") &&
-  requiet("glmmTMB")) {
+if (requiet("speedglm") && requiet("glmmTMB")) {
   data(Salamanders)
   Salamanders$cover <- abs(Salamanders$cover)
 
-  m1 <-
-    speedglm(count ~ mined + log(cover) + sample,
-      family = poisson(),
-      data = Salamanders
-    )
+  m1 <- speedglm(count ~ mined + log(cover) + sample,
+    family = poisson(),
+    data = Salamanders
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_poisson)
