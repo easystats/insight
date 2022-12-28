@@ -1494,8 +1494,10 @@ get_data.bife <- function(x, effects = "all", source = "environment", verbose = 
 
 
 #' @export
-get_data.brmsfit <- function(x, effects = "all", component = "all", source = "environment", verbose = TRUE, ...) {
+get_data.brmsfit <- function(x, effects = "all", component = "all", source = "environment", verbose = FALSE, ...) {
   # try to recover data from environment
+  # verbose is FALSE by default because `get_call()` often does not work on
+  # `brmsfit` objects, so we typically default to the `data` held in the object.
   model_data <- .get_data_from_environment(x, effects = effects, component = component, source = source, verbose = verbose)
 
   if (!is.null(model_data)) {
