@@ -1,7 +1,4 @@
-if (requiet("performance") &&
-  requiet("datawizard") &&
-  requiet("stats") &&
-  requiet("parameters")) {
+if (requiet("performance") && requiet("datawizard") && requiet("parameters")) {
   test_that("standardize_names works as expected with parameters", {
     set.seed(123)
 

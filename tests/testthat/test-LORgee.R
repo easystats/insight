@@ -1,6 +1,4 @@
-if (
-
-  requiet("multgee")) {
+if (requiet("multgee")) {
   data(arthritis)
   m1 <- ordLORgee(
     y ~ factor(time) + factor(trt) + factor(baseline),
