@@ -239,7 +239,7 @@ if (.runThisTest) {
       )
       expect_identical(colnames(get_data(m, effects = "random", verbose = FALSE)), "persons")
       expect_identical(
-        sort(colnames(get_data(m, component = "zi"))),
+        sort(colnames(get_data(m, component = "zi", verbose = FALSE))),
         sort(c("count", "child", "livebait", "persons"))
       )
       expect_identical(
@@ -251,7 +251,7 @@ if (.runThisTest) {
         component = "zi", effects = "random", verbose = FALSE
       )), "persons")
       expect_identical(
-        colnames(get_data(m, component = "cond")),
+        colnames(get_data(m, component = "cond", verbose = FALSE)),
         c("count", "child", "camper", "persons")
       )
       expect_identical(colnames(get_data(

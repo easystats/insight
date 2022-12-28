@@ -47,8 +47,8 @@ test_that("get_data lavaan", {
       y6 ~~ y8
   "
   m <- sem(model, data = PoliticalDemocracy)
-  expect_s3_class(get_data(m), "data.frame")
-  expect_equal(head(get_data(m)), head(PoliticalDemocracy), ignore_attr = TRUE, tolerance = 1e-3)
+  expect_s3_class(get_data(m, verbose = FALSE), "data.frame")
+  expect_equal(head(get_data(m, verbose = FALSE)), head(PoliticalDemocracy), ignore_attr = TRUE, tolerance = 1e-3)
 })
 
 
@@ -61,15 +61,15 @@ test_that("get_data include weights, even if ones", {
 
   # Model with nonuniform weights
   fn <- lm(y ~ x, weights = wn)
-  expect_equal(colnames(get_data(fn)), c("y", "x", "(weights)", "wn"))
+  expect_equal(colnames(get_data(fn, verbose = FALSE)), c("y", "x", "(weights)", "wn"))
 
   # Model with weights equal to 1
   f1 <- lm(y ~ x, weights = w1)
-  expect_equal(colnames(get_data(f1)), c("y", "x", "(weights)", "w1"))
+  expect_equal(colnames(get_data(f1, verbose = FALSE)), c("y", "x", "(weights)", "w1"))
 
   # Model with no weights
   f0 <- lm(y ~ x)
-  expect_equal(colnames(get_data(f0)), c("y", "x"))
+  expect_equal(colnames(get_data(f0, verbose = FALSE)), c("y", "x"))
 
   # check get_weights still works
   expect_null(get_weights(f0))

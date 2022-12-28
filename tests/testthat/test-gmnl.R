@@ -37,8 +37,8 @@ if (
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 216)
-    expect_equal(colnames(get_data(m1)), c("Sat", "Infl", "Type", "Cont"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 216)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("Sat", "Infl", "Type", "Cont"))
   })
 
   test_that("find_formula", {

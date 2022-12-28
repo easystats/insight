@@ -57,8 +57,8 @@ if (requiet("aod")) {
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 75)
-    expect_equal(colnames(get_data(m1)), c("y", "n", "group", "trisk", "village"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 75)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("y", "n", "group", "trisk", "village"))
   })
 
   test_that("find_formula", {
