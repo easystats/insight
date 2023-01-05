@@ -268,7 +268,7 @@
       is_ttest <- TRUE
     } else if (grepl("F test", x$method, fixed = TRUE)) {
       is_ftest <- TRUE
-    } else if (grepl("^One-way", x$method)) {
+    } else if (startsWith(x$method, "One-way")) {
       is_oneway <- TRUE
     } else if (x$method == "Exact binomial test") {
       binom_fam <- TRUE
@@ -403,7 +403,7 @@
     is_bayesian = is.bayes,
     is_gam = is_gam_model(x),
     is_anova = inherits(x, c("aov", "aovlist", "MANOVA", "RM")),
-    is_timeseries = inherits(x, c("Arima")),
+    is_timeseries = inherits(x, "Arima"),
     is_ttest = is_ttest,
     is_correlation = is_correlation,
     is_onewaytest = is_oneway,
@@ -465,19 +465,19 @@
   # installed?
   check_if_installed("BayesFactor")
 
-  if (any(class(x@denominator) %in% c("BFcorrelation"))) {
+  if (inherits(x@denominator, "BFcorrelation")) {
     "correlation"
-  } else if (any(class(x@denominator) %in% c("BFoneSample"))) {
+  } else if (inherits(x@denominator, "BFoneSample")) {
     "ttest1"
-  } else if (any(class(x@denominator) %in% c("BFindepSample"))) {
+  } else if (inherits(x@denominator, "BFindepSample")) {
     "ttest2"
-  } else if (any(class(x@denominator) %in% c("BFmetat"))) {
+  } else if (inherits(x@denominator, "BFmetat")) {
     "meta"
-  } else if (any(class(x@denominator) %in% c("BFlinearModel"))) {
+  } else if (inherits(x@denominator, "BFlinearModel")) {
     "linear"
-  } else if (any(class(x@denominator) %in% c("BFcontingencyTable"))) {
+  } else if (inherits(x@denominator, "BFcontingencyTable")) {
     "xtable"
-  } else if (any(class(x@denominator) %in% c("BFproportion"))) {
+  } else if (inherits(x@denominator, "BFproportion")) {
     "proptest"
   } else {
     class(x@denominator)

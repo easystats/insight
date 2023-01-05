@@ -927,6 +927,18 @@ model_info.BBmm <- model_info.BBreg
 
 
 #' @export
+model_info.mmrm <- function(x, ...) {
+  .make_family(
+    x = x,
+    ...
+  )
+}
+
+#' @export
+model_info.mmrm_fit <- model_info.mmrm
+
+
+#' @export
 model_info.glmmadmb <- function(x, ...) {
   .make_family(
     x = x,
