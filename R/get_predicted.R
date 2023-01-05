@@ -745,7 +745,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
     # outcome with a single level
   } else {
     # .get_predicted_boot already gives us the correct observation ~ draws format
-    if (is.null(colnames(iter)) || !all(grepl("^iter", colnames(iter)))) {
+    if (is.null(colnames(iter)) || !all(startsWith(colnames(iter), "iter"))) {
       iter <- as.data.frame(t(iter))
     }
     predictions <- apply(iter, 1, centrality_function)

@@ -708,21 +708,19 @@ get_data.mmrm <- function(x,
   fixed_vars <- find_variables(x, effects = "fixed", flatten = TRUE)
   random_vars <- find_random(x, split_nested = TRUE, flatten = TRUE)
   # data from model frame
-  mf <- stats::model.frame(x, fixed.only = TRUE)
-
-  mf <- tryCatch(
+  mf <- .prepare_get_data(x, stats::model.frame(x, full = TRUE), effects, verbose = verbose)
+  tryCatch(
     {
       switch(effects,
-        fixed = mf[fixed_vars],
-        all = mf[unique(c(fixed_vars, random_vars))],
-        random = mf[random_vars]
+        fixed = mf[intersect(colnames(mf), fixed_vars)],
+        all = mf[intersect(colnames(mf), unique(c(fixed_vars, random_vars)))],
+        random = mf[intersect(colnames(mf), random_vars)]
       )
     },
     error = function(x) {
       NULL
     }
   )
-  .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
 #' @export
