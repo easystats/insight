@@ -73,6 +73,12 @@ link_function.lm <- function(x, ...) {
 link_function.lme <- link_function.lm
 
 #' @export
+link_function.mmrm <- link_function.lm
+
+#' @export
+link_function.mmrm_fit <- link_function.lm
+
+#' @export
 link_function.systemfit <- link_function.lm
 
 #' @export

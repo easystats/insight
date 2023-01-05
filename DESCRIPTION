@@ -136,6 +136,7 @@ Suggests:
     mice,
     mlogit,
     mhurdle,
+    mmrm,
     multgee,
     nlme,
     nnet,

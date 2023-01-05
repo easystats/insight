@@ -173,9 +173,14 @@ get_df.model_fit <- function(x, type = "residual", verbose = TRUE, ...) {
 
 
 #' @export
-get_df.mmrm <- function(x, verbose = TRUE, ...) {
-  summary_table <- stats::coef(summary(x))
-  unname(summary_table[, "df"])
+get_df.mmrm <- function(x, type = "residual", verbose = TRUE, ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
+  if (type == "model") {
+    .model_df(x)
+  } else {
+    summary_table <- stats::coef(summary(x))
+    unname(summary_table[, "df"])
+  }
 }
 
 #' @export

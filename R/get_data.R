@@ -696,11 +696,38 @@ get_data.merMod <- function(x,
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
+
 #' @export
-get_data.mmrm <- get_data.merMod
+get_data.mmrm <- function(x,
+                          effects = "all",
+                          source = "environment",
+                          verbose = TRUE,
+                          ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  # find variables
+  fixed_vars <- find_variables(x, effects = "fixed", flatten = TRUE)
+  random_vars <- find_random(x, split_nested = TRUE, flatten = TRUE)
+  # data from model frame
+  mf <- stats::model.frame(x, fixed.only = TRUE)
+
+  mf <- tryCatch(
+    {
+      switch(effects,
+        fixed = mf[fixed_vars],
+        all = mf[unique(c(fixed_vars, random_vars))],
+        random = mf[random_vars]
+      )
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+  .prepare_get_data(x, mf, effects, verbose = verbose)
+}
 
 #' @export
 get_data.mmrm_fit <- get_data.merMod
+
 
 #' @export
 get_data.merModList <- function(x, effects = "all", ...) {
@@ -1805,7 +1832,7 @@ get_data.DirichletRegModel <- function(x, source = "environment", verbose = TRUE
 
   # fall back to extract data from model frame
   mf <- x$data
-  resp <- sapply(x$data, inherits, "DirichletRegData")
+  resp <- vapply(x$data, inherits, TRUE, "DirichletRegData")
   .prepare_get_data(x, mf[!resp], verbose = verbose)
 }
 
