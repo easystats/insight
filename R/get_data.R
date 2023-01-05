@@ -696,6 +696,11 @@ get_data.merMod <- function(x,
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
+#' @export
+get_data.mmrm <- get_data.merMod
+
+#' @export
+get_data.mmrm_fit <- get_data.merMod
 
 #' @export
 get_data.merModList <- function(x, effects = "all", ...) {
