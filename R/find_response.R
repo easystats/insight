@@ -113,7 +113,7 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
     return(NULL)
   }
 
-  conditional <- unlist(lapply(f[grepl("^conditional", names(f))], function(i) safe_deparse(i[[2L]])))
+  conditional <- unlist(lapply(f[startsWith(names(f), "conditional")], function(i) safe_deparse(i[[2L]])))
   survial <- safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
@@ -166,8 +166,8 @@ check_cbind <- function(resp, combine, model) {
     r2 <- trim_ws(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
     # check for "resp_thres" pattern
     r_resp <- trim_ws(unlist(strsplit(resp, "|", fixed = TRUE))[2])
-    if (grepl("^resp_thres", r_resp)) {
-      r3 <- trim_ws(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp)))
+    if (startsWith(r_resp, "resp_thres")) {
+      r3 <- trim_ws(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp), fixed = TRUE))
       names(r3) <- r3
       numeric_values <- suppressWarnings(as.numeric(r2))
       r2 <- r2[is.na(numeric_values)]
@@ -200,7 +200,7 @@ check_cbind <- function(resp, combine, model) {
   }
 
   # exception
-  if (inherits(model, "clogit") && grepl("^rep\\(", resp[1]) && length(resp) == 3) {
+  if (inherits(model, "clogit") && startsWith(resp[1], "rep(") && length(resp) == 3) {
     resp <- c(paste0(resp[1], resp[2]), resp[3])
   }
 
