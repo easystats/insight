@@ -1395,7 +1395,12 @@ get_data.plm <- function(x, source = "environment", verbose = TRUE, ...) {
   # extract index variables
   index <- eval(get_call(x)$index)
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, additional_variables = index, source = source, verbose = verbose, ...)
+  # avoid feeding the same argument twice
+  if ("additional_variables" %in% names(list(...))) {
+    model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
+  } else {
+    model_data <- .get_data_from_environment(x, source = source, additional_variables = index, verbose = verbose, ...)
+  }
 
   if (!is.null(model_data)) {
     return(model_data)
