@@ -186,6 +186,9 @@ get_df.mmrm <- function(x, type = "residual", verbose = TRUE, ...) {
 #' @export
 get_df.mmrm_fit <- get_df.mmrm
 
+#' @export
+get_df.mmrm_tmb <- get_df.mmrm
+
 
 #' @export
 get_df.emmGrid <- function(x, ...) {

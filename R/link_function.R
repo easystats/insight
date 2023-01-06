@@ -79,6 +79,9 @@ link_function.mmrm <- link_function.lm
 link_function.mmrm_fit <- link_function.lm
 
 #' @export
+link_function.mmrm_tmb <- link_function.lm
+
+#' @export
 link_function.systemfit <- link_function.lm
 
 #' @export

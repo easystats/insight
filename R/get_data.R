@@ -746,7 +746,10 @@ get_data.mmrm <- function(x,
 }
 
 #' @export
-get_data.mmrm_fit <- get_data.merMod
+get_data.mmrm_fit <- get_data.mmrm
+
+#' @export
+get_data.mmrm_tmb <- get_data.mmrm
 
 
 #' @export

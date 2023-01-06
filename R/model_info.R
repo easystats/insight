@@ -944,6 +944,9 @@ model_info.mmrm <- function(x, ...) {
 #' @export
 model_info.mmrm_fit <- model_info.mmrm
 
+#' @export
+model_info.mmrm_tmb <- model_info.mmrm
+
 
 #' @export
 model_info.glmmadmb <- function(x, ...) {

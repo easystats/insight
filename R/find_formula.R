@@ -1168,6 +1168,9 @@ find_formula.mmrm <- find_formula.merMod
 find_formula.mmrm_fit <- find_formula.merMod
 
 #' @export
+find_formula.mmrm_tmb <- find_formula.merMod
+
+#' @export
 find_formula.cpglmm <- find_formula.merMod
 
 #' @export

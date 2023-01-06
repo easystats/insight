@@ -112,6 +112,9 @@ link_inverse.mmrm <- link_inverse.lm
 link_inverse.mmrm_fit <- link_inverse.lm
 
 #' @export
+link_inverse.mmrm_tmb <- link_inverse.lm
+
+#' @export
 link_inverse.systemfit <- link_inverse.lm
 
 #' @export

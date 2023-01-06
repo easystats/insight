@@ -158,6 +158,9 @@ get_statistic.mmrm <- function(x, ...) {
 get_statistic.mmrm_fit <- get_statistic.mmrm
 
 #' @export
+get_statistic.mmrm_tmb <- get_statistic.mmrm
+
+#' @export
 get_statistic.merModList <- function(x, ...) {
   s <- suppressWarnings(summary(x))
   out <- data.frame(
