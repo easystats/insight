@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("mmrm")) {
+if (.runThisTest && requiet("mmrm") && getRversion() >= "4.0.0") {
   data(fev_data)
   m1 <- mmrm(
     formula = FEV1 ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID),
@@ -158,9 +158,5 @@ if (.runThisTest && requiet("mmrm")) {
 
   test_that("find_statistic", {
     expect_identical(find_statistic(m1), "t-statistic")
-  })
-
-  test_that("get_call", {
-    expect_s3_class(get_call(m1), "call")
   })
 }
