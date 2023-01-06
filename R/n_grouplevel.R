@@ -1,0 +1,57 @@
+#' Count number of random effect levels in a mixed model
+#'
+#' Returns the number of group levels of random effects from mixed models.
+#'
+#' @param x A mixed model.
+#' @param ... Currently not used.
+#'
+#' @return The number of group levels in the model.
+#'
+#' @examples
+#' if (require("lme4")) {
+#'   data(sleepstudy)
+#'   set.seed(12345)
+#'   sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
+#'   sleepstudy$subgrp <- NA
+#'   for (i in 1:5) {
+#'     filter_group <- sleepstudy$grp == i
+#'     sleepstudy$subgrp[filter_group] <-
+#'       sample(1:30, size = sum(filter_group), replace = TRUE)
+#'   }
+#'   model <- lmer(
+#'     Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
+#'     data = sleepstudy
+#'   )
+#'   n_grouplevel(model)
+#' }
+#' @export
+n_grouplevel <- function(x, ...) {
+  if (!is_mixed_model(x)) {
+    format_error("`x` must be a mixed model.")
+  }
+
+  re_data <- get_data(model, verbose = FALSE)[find_random(model, split_nested = TRUE, flatten = TRUE)]
+  re_levels <- vapply(re_data, n_unique, 1L)
+
+  out <- data.frame(
+    Group = names(re_levels),
+    N_levels = unname(re_levels),
+    stringsAsFactors = FALSE
+  )
+
+  class(out) <- c("n_grouplevel", "data.frame")
+  out
+}
+
+# methods ----------------
+
+#' @export
+format.n_grouplevel <- function(x, ...) {
+  x$N_levels <- format_value(x$N_levels, protect_integers = TRUE)
+  format_table(x, ...)
+}
+
+#' @export
+print.n_grouplevel <- function(x, ...) {
+  cat(export_table(format(x, ...), ...))
+}
