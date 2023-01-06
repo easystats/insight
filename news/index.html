@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.8.7</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.8.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,6 +96,11 @@
 <h3 id="breaking-changes-0-18-9">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-18-9"></a></h3>
 <ul><li>
 <code><a href="../reference/get_data.html">get_data()</a></code> was revised and now always tries to recover the data that was used to fit a model from the environment. If this fails, it falls back to recovering data from the model frame (the former default behaviour). Futrhermore, the <code>source</code> argument can be used to explicitly force the old behaviour: <code>source = "mf"</code> will try to recover data from the model frame first, then possibly falling back to look in the environment.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-functions-0-18-9">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-18-9"></a></h3>
+<ul><li>
+<code><a href="../reference/n_grouplevel.html">n_grouplevel()</a></code>, to return random effect groups and number of group levels for mixed models.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-18-9">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-18-9"></a></h3>
