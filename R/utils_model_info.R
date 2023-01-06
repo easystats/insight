@@ -370,6 +370,16 @@
   tweedie_model <- tweedie_fam | inherits(x, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
 
 
+  # mixed model?
+  is.mixed.model <- !is_levenetest && is_mixed_model(x)
+  if (is.mixed.model) {
+    ngrplvl <- n_grouplevel(x)
+    n.grp.lvl <- stats::setNames(ngrplvl$N_levels, ngrplvl$Group)
+  } else {
+    n.grp.lvl <- NULL
+  }
+
+
   # return...
 
   list(
@@ -397,7 +407,7 @@
     is_cumulative = is.ordinal,
     is_multinomial = is.multinomial | is.categorical,
     is_categorical = is.categorical,
-    is_mixed = !is_levenetest && is_mixed_model(x),
+    is_mixed = is.mixed.model,
     is_multivariate = multi.var,
     is_trial = is.trial,
     is_bayesian = is.bayes,
@@ -418,7 +428,8 @@
     is_meta = is_meta,
     link_function = link.fun,
     family = fitfam,
-    n_obs = n_obs(x)
+    n_obs = n_obs(x),
+    n_grouplevel = n.grp.lvl
   )
 }
 
