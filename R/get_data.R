@@ -106,7 +106,7 @@ get_data <- function(x, ...) {
       dat <- .recover_data_from_environment(x)
       # additional variables? Some models, like plm::plm(), have an "index"
       # slot in the model call with further variables
-      if (!is.null(additional_variables)) {
+      if (!is.null(additional_variables) && !isTRUE(additional_variables)) {
         vars <- c(vars, additional_variables)
       }
       # add response, only required if "find_variables()" does not already
@@ -129,7 +129,9 @@ get_data <- function(x, ...) {
         if (!is.null(model_call$subset)) {
           vars <- c(vars, all.vars(model_call$subset))
         }
-        dat <- dat[, intersect(unique(vars), colnames(dat)), drop = FALSE]
+        if (!isTRUE(additional_variables)) {
+          dat <- dat[, intersect(unique(vars), colnames(dat)), drop = FALSE]
+        }
       }
       # remove response for random effects
       if (effects == "random") {
@@ -246,7 +248,7 @@ get_data.default <- function(x, source = "environment", verbose = TRUE, ...) {
   }
 
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   # fall back to extract data from model frame
   if (is.null(model_data)) {
@@ -329,7 +331,7 @@ get_data.mhurdle <- function(x, verbose = TRUE, ...) {
 #' @export
 get_data.mjoint <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -367,7 +369,8 @@ get_data.geeglm <- function(x,
     x,
     effects = effects,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -403,7 +406,8 @@ get_data.gee <- function(x,
   model_data <- .get_data_from_environment(x,
     effects = effects,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -440,7 +444,8 @@ get_data.rqss <- function(x,
   model_data <- .get_data_from_environment(x,
     component = component,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -473,7 +478,7 @@ get_data.rqss <- function(x,
 #' @export
 get_data.gls <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -518,7 +523,7 @@ get_data.selection <- get_data.gls
 #' @export
 get_data.lqmm <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -549,7 +554,8 @@ get_data.hurdle <- function(x,
   model_data <- .get_data_from_environment(x,
     component = component,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -578,7 +584,8 @@ get_data.zcpglm <- function(x,
   model_data <- .get_data_from_environment(x,
     component = component,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -629,7 +636,8 @@ get_data.glmmTMB <- function(x,
     effects = effects,
     component = component,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -671,7 +679,8 @@ get_data.merMod <- function(x,
   model_data <- .get_data_from_environment(x,
     effects = effects,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -711,7 +720,7 @@ get_data.MANOVA <- function(x,
                             verbose = TRUE,
                             ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -746,7 +755,7 @@ get_data.cpglmm <- function(x,
                             verbose = TRUE,
                             ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -785,7 +794,8 @@ get_data.glmm <- function(x,
   model_data <- .get_data_from_environment(x,
     effects = effects,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -827,7 +837,8 @@ get_data.mixor <- function(x,
   model_data <- .get_data_from_environment(x,
     effects = effects,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -866,7 +877,8 @@ get_data.glmmadmb <- function(x,
   model_data <- .get_data_from_environment(x,
     effects = effects,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -899,7 +911,7 @@ get_data.glmmadmb <- function(x,
 #' @export
 get_data.rlmerMod <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -961,7 +973,8 @@ get_data.sem <- function(x,
   model_data <- .get_data_from_environment(x,
     effects = effects,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -991,7 +1004,7 @@ get_data.sem <- function(x,
 #' @export
 get_data.lme <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1018,7 +1031,8 @@ get_data.MixMod <- function(x,
     effects = effects,
     component = component,
     source = source,
-    verbose = verbose
+    verbose = verbose,
+    ...
   )
 
   if (!is.null(model_data)) {
@@ -1076,7 +1090,7 @@ get_data.MixMod <- function(x,
 #' @export
 get_data.BBmm <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1105,7 +1119,7 @@ get_data.BBmm <- function(x, effects = "all", source = "environment", verbose = 
 #' @export
 get_data.glimML <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1129,7 +1143,7 @@ get_data.glimML <- function(x, effects = "all", source = "environment", verbose 
 #' @export
 get_data.lavaan <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1174,7 +1188,7 @@ get_data.list <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.vgam <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1203,7 +1217,7 @@ get_data.gamm <- function(x, verbose = TRUE, ...) {
 #' @export
 get_data.gamlss <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1246,7 +1260,7 @@ get_data.gamlss <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.felm <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1262,7 +1276,7 @@ get_data.felm <- function(x, effects = "all", source = "environment", verbose = 
 #' @export
 get_data.feis <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1281,7 +1295,7 @@ get_data.feis <- function(x, effects = "all", source = "environment", verbose = 
 #' @export
 get_data.fixest <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1300,7 +1314,7 @@ get_data.fixest <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.feglm <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1315,7 +1329,7 @@ get_data.feglm <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.pgmm <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1335,7 +1349,7 @@ get_data.plm <- function(x, source = "environment", verbose = TRUE, ...) {
   # extract index variables
   index <- eval(get_call(x)$index)
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, additional_variables = index, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, additional_variables = index, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1404,7 +1418,7 @@ get_data.wbgee <- get_data.wbm
 #' @export
 get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1453,7 +1467,7 @@ get_data.iv_robust <- get_data.ivreg
 #' @export
 get_data.ivprobit <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1467,7 +1481,7 @@ get_data.ivprobit <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.bife <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1498,7 +1512,7 @@ get_data.brmsfit <- function(x, effects = "all", component = "all", source = "en
   # try to recover data from environment
   # verbose is FALSE by default because `get_call()` often does not work on
   # `brmsfit` objects, so we typically default to the `data` held in the object.
-  model_data <- .get_data_from_environment(x, effects = effects, component = component, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, component = component, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1532,7 +1546,7 @@ get_data.brmsfit <- function(x, effects = "all", component = "all", source = "en
 #' @export
 get_data.stanreg <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1570,7 +1584,7 @@ get_data.BFBayesFactor <- function(x, ...) {
 #' @export
 get_data.MCMCglmm <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1610,7 +1624,7 @@ get_data.MCMCglmm <- function(x, effects = "all", source = "environment", verbos
 #' @export
 get_data.stanmvreg <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1674,7 +1688,7 @@ get_data.negbinmfx <- get_data.betamfx
 #' @export
 get_data.svy_vglm <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1751,7 +1765,7 @@ get_data.Arima <- function(x, ...) {
 #' @export
 get_data.coxph <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1792,7 +1806,7 @@ get_data.mcmc.list <- function(x, ...) {
 #' @export
 get_data.DirichletRegModel <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1808,7 +1822,7 @@ get_data.DirichletRegModel <- function(x, source = "environment", verbose = TRUE
 #' @export
 get_data.vglm <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1840,7 +1854,7 @@ get_data.vglm <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.biglm <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1858,7 +1872,7 @@ get_data.bigglm <- get_data.biglm
 #' @export
 get_data.LORgee <- function(x, source = "environment", effects = "all", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1887,7 +1901,7 @@ get_data.LORgee <- function(x, source = "environment", effects = "all", verbose 
 #' @export
 get_data.gmnl <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1902,7 +1916,7 @@ get_data.gmnl <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.gbm <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1921,7 +1935,7 @@ get_data.gbm <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.tobit <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1939,7 +1953,7 @@ get_data.tobit <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.clmm2 <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1973,7 +1987,7 @@ get_data.clmm2 <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.clm2 <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -2004,7 +2018,7 @@ get_data.clm2 <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.bracl <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -2019,7 +2033,7 @@ get_data.bracl <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.mlogit <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -2034,7 +2048,7 @@ get_data.mlogit <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.rma <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -2053,7 +2067,7 @@ get_data.metaplus <- get_data.rma
 #' @export
 get_data.meta_random <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -2068,7 +2082,7 @@ get_data.meta_random <- function(x, source = "environment", verbose = TRUE, ...)
 #' @export
 get_data.meta_bma <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose)
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
