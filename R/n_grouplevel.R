@@ -39,6 +39,22 @@ n_grouplevel <- function(x, ...) {
     stringsAsFactors = FALSE
   )
 
+  # add interactions, if any
+  ran_eff <- find_random(model, split_nested = FALSE, flatten = TRUE)
+  re_int <- grep(":", ran_eff, fixed = TRUE, value = TRUE)
+  if (length(re_int)) {
+    tmp <- do.call(rbind, lapply(re_int, function(i) {
+        pars <- unlist(strsplit(i, ":", fixed = TRUE))
+        data.frame(
+          Group = i,
+          N_levels = nrow(unique(re_data[pars])),
+          stringsAsFactors = FALSE
+        )
+      })
+    )
+    out <- rbind(out, tmp)
+  }
+
   class(out) <- c("n_grouplevel", "data.frame")
   out
 }

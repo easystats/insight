@@ -16,7 +16,7 @@ if (requiet("lme4")) {
 
   test_that("n_grouplevel", {
     out <- n_grouplevel(model)
-    expect_identical(out$Group, c("subgrp", "grp", "Subject"))
-    expect_identical(out$N_levels, c(30L, 5L, 18L))
+    expect_identical(out$Group, c("subgrp", "grp", "Subject", "subgrp:grp"))
+    expect_identical(out$N_levels, c(30L, 5L, 18L, 108L))
   })
 }
