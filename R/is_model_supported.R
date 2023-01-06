@@ -65,7 +65,7 @@ supported_models <- function() {
     "eglm", "elm", "epi.2by2", "ergm",
 
     # f ----------------------------
-    "feis", "felm", "feglm", "fitdistr", "fixest", "flexsurvreg",
+    "feis", "felm", "feglm", "fitdistr", "fixest", "flexsurvreg", "flac", "flic",
 
     # g ----------------------------
     "gam", "Gam", "gamlss", "gamm", "gamm4", "garch", "gbm", "gee", "geeglm",
@@ -89,7 +89,7 @@ supported_models <- function() {
     "metaplus", "merMod", "merModList", "mipo", "mira", "mixed", "mixor", "MixMod",
     "mhurdle", "mjoint", "mle", "mle2", "mlm", "mblogit", "mclogit", "mcmc.list",
     "meta_bma", "meta_fixed", "meta_random", "mlogit", "mmlogit", "model_fit",
-    "multinom", "mvord", "mmclogit",
+    "multinom", "mvord", "mmclogit", "mmrm", "mmrm_fit", "mmrm_tmb",
 
     # n ----------------------------
     "negbinmfx", "negbinirr",

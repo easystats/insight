@@ -149,6 +149,13 @@ get_statistic.lme <- function(x, ...) {
 #' @export
 get_statistic.lmerModLmerTest <- get_statistic.lme
 
+#' @export
+get_statistic.mmrm <- function(x, ...) {
+  get_statistic.default(x, column_index = 4)
+}
+
+#' @export
+get_statistic.mmrm_fit <- get_statistic.mmrm
 
 #' @export
 get_statistic.merModList <- function(x, ...) {
@@ -430,7 +437,7 @@ get_statistic.scam <- get_statistic.gam
 #' @export
 get_statistic.SemiParBIV <- function(x, ...) {
   s <- summary(x)
-  s <- compact_list(s[grepl("^tableP", names(s))])
+  s <- compact_list(s[startsWith(names(s), "tableP")])
 
   params <- do.call(rbind, lapply(seq_along(s), function(i) {
     out <- as.data.frame(s[[i]])
@@ -2089,6 +2096,11 @@ get_statistic.logistf <- function(x, ...) {
   out
 }
 
+#' @export
+get_statistic.flac <- get_statistic.logistf
+
+#' @export
+get_statistic.flic <- get_statistic.logistf
 
 
 #' @export

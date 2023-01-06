@@ -114,11 +114,13 @@ get_data <- function(x, ...) {
       if (effects %in% c("all", "fixed") && !component %in% c("all", "conditional")) {
         vars <- c(vars, find_response(x, combine = FALSE))
       }
+
       ## TODO: do we want random slopes included? Previuosly, we did not.
       # add random slopes, if any
       # if (effects %in% c("all", "random")) {
       #   vars <- c(vars, unlist(find_random_slopes(x)))
       # }
+
       # select only those variables from the data that we find in the model
       if (!is.null(vars)) {
         # weighting variable?
@@ -130,10 +132,13 @@ get_data <- function(x, ...) {
           vars <- c(vars, all.vars(model_call$subset))
         }
         vars <- unique(vars)
+        # if "additional_variables" is TRUE, keep *all* variables from original
+        # data, else make sure only required columns are returned
         if (!isTRUE(additional_variables)) {
           dat <- dat[, intersect(vars, colnames(dat)), drop = FALSE]
         }
       }
+
       # remove response for random effects
       if (effects == "random") {
         resp <- find_response(x, combine = FALSE)
@@ -712,6 +717,36 @@ get_data.merMod <- function(x,
   )
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
+
+
+#' @export
+get_data.mmrm <- function(x,
+                          effects = "all",
+                          source = "environment",
+                          verbose = TRUE,
+                          ...) {
+  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
+  # find variables
+  fixed_vars <- find_variables(x, effects = "fixed", flatten = TRUE)
+  random_vars <- find_random(x, split_nested = TRUE, flatten = TRUE)
+  # data from model frame
+  mf <- .prepare_get_data(x, stats::model.frame(x, full = TRUE), effects, verbose = verbose)
+  tryCatch(
+    {
+      switch(effects,
+        fixed = mf[intersect(colnames(mf), fixed_vars)],
+        all = mf[intersect(colnames(mf), unique(c(fixed_vars, random_vars)))],
+        random = mf[intersect(colnames(mf), random_vars)]
+      )
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+}
+
+#' @export
+get_data.mmrm_fit <- get_data.merMod
 
 
 #' @export
@@ -1822,7 +1857,7 @@ get_data.DirichletRegModel <- function(x, source = "environment", verbose = TRUE
 
   # fall back to extract data from model frame
   mf <- x$data
-  resp <- sapply(x$data, inherits, "DirichletRegData")
+  resp <- vapply(x$data, inherits, TRUE, "DirichletRegData")
   .prepare_get_data(x, mf[!resp], verbose = verbose)
 }
 

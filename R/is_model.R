@@ -81,7 +81,7 @@ is_regression_model <- function(x) {
 
     # f --------------------
     "feglm", "feis", "felm", "fitdistr", "fixest", "flexmix",
-    "flexsurvreg",
+    "flexsurvreg", "flac", "flic",
 
     # g --------------------
     "gam", "Gam", "GAMBoost", "gamlr", "gamlss", "gamm", "gamm4",
@@ -117,7 +117,8 @@ is_regression_model <- function(x) {
     "mhurdle", "mipo", "mira", "mixed", "mixor", "MixMod", "mjoint",
     "mle", "mle2", "mlergm", "mlm", "mlma", "mlogit", "model_fit",
     "multinom", "mvmeta", "mvord", "mvr", "marginaleffects",
-    "marginaleffects.summary", "mblogit", "mclogit",
+    "marginaleffects.summary", "mblogit", "mclogit", "mmrm", "mmrm_fit",
+    "mmrm_tmb",
 
     # n --------------------
     "negbin", "negbinmfx", "negbinirr", "nlreg", "nlrq", "nls",

@@ -22,7 +22,7 @@ if (requiet("lme4") && getRversion() >= "4.0.0") {
     expect_true(is_converged(model))
   })
 
-  if (requiet("glmmTMB")) {
+  if (requiet("glmmTMB") && requiet("TMB")) {
     model <- glmmTMB(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
     test_that("is_converged, glmmTMB", {
       expect_true(is_converged(model))

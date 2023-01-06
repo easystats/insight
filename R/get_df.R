@@ -173,6 +173,21 @@ get_df.model_fit <- function(x, type = "residual", verbose = TRUE, ...) {
 
 
 #' @export
+get_df.mmrm <- function(x, type = "residual", verbose = TRUE, ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
+  if (type == "model") {
+    .model_df(x)
+  } else {
+    summary_table <- stats::coef(summary(x))
+    unname(summary_table[, "df"])
+  }
+}
+
+#' @export
+get_df.mmrm_fit <- get_df.mmrm
+
+
+#' @export
 get_df.emmGrid <- function(x, ...) {
   if (!is.null(x@misc$is_boot) && x@misc$is_boot) {
     return(.boot_em_df(x))

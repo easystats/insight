@@ -149,7 +149,7 @@ if (requiet("bayestestR") && getRversion() >= "4.0.0") {
 
 
 
-if (requiet("gamm4") && getRversion() >= "4.0.0" && requiet("glmmTMB") && requiet("mgcv") && requiet("rstanarm")) {
+if (requiet("gamm4") && getRversion() >= "4.0.0" && requiet("glmmTMB") && requiet("mgcv") && requiet("rstanarm") && requiet("TMB")) {
   test_that("get_datagrid - models", {
     # GLM
     mod <- glm(Petal.Length ~ Petal.Width * Sepal.Length, data = iris)

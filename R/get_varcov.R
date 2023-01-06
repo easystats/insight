@@ -518,7 +518,7 @@ get_varcov.MixMod <- function(x,
 
     # filter ZI
     if (component %in% c("zi", "zero_inflated")) {
-      zi_parms <- grepl("^zi_", colnames(vc))
+      zi_parms <- startsWith(colnames(vc), "zi_")
       vc <- vc[zi_parms, zi_parms, drop = FALSE]
     }
   }
@@ -591,6 +591,16 @@ get_varcov.model_fit <- get_varcov.logitmfx
 
 
 # Other models with special handling -----------------------------------------
+
+
+#' @export
+get_varcov.flic <- function(x, verbose = TRUE, ...) {
+  .check_get_varcov_dots(x, ...)
+  .process_vcov(x$var, verbose, ...)
+}
+
+#' @export
+get_varcov.flac <- get_varcov.flic
 
 
 #' @export

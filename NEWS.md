@@ -1,4 +1,17 @@
-# insight 0.18.8.1
+# insight 0.18.9
+
+## New supported models
+
+* `mmrm` (package *mmrm*), `flac` and `flic` (*logistf*)
+
+## Breaking changes
+
+* `get_data()` was revised and now always tries to recover the data that was
+  used to fit a model from the environment. If this fails, it falls back to
+  recovering data from the model frame (the former default behaviour).
+  Futrhermore, the `source` argument can be used to explicitly force the old
+  behaviour: `source = "mf"` will try to recover data from the model frame first,
+  then possibly falling back to look in the environment.
 
 ## Changes to functions
 
@@ -8,7 +21,9 @@
 
 ## Bug fixes
 
-* Fixed but in `get_modelmatrix()` handling of incomplete factors which sometimes had downstream implications for numerical results in the uncertainty estimates produced by `get_predicted()`.
+* Fixed but in `get_modelmatrix()` handling of incomplete factors which
+  sometimes had downstream implications for numerical results in the uncertainty
+  estimates produced by `get_predicted()`.
 
 * Fixed minor issues for HTML tables in `export_table()` when model parameters
   were grouped.

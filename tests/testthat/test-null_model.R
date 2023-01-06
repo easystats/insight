@@ -1,10 +1,9 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-
-
   requiet("glmmTMB") &&
   requiet("lme4") &&
+  requiet("TMB") &&
   getRversion() >= "4.0.0") {
   data(mtcars)
   m1 <- suppressWarnings(glmer.nb(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))

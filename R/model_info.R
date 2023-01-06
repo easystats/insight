@@ -103,7 +103,7 @@ model_info.default <- function(x, verbose = TRUE, ...) {
 
   faminfo <- tryCatch(
     {
-      if (inherits(x, c("Zelig-relogit"))) {
+      if (inherits(x, "Zelig-relogit")) {
         stats::binomial(link = "logit")
       } else {
         stats::family(x)
@@ -325,6 +325,12 @@ model_info.logistf <- function(x, verbose = TRUE, ...) {
     ...
   )
 }
+
+#' @export
+model_info.flac <- model_info.logistf
+
+#' @export
+model_info.flic <- model_info.logistf
 
 #' @export
 model_info.lrm <- model_info.logistf
@@ -924,6 +930,18 @@ model_info.BBreg <- function(x, ...) {
 #' @export
 model_info.BBmm <- model_info.BBreg
 
+
+
+#' @export
+model_info.mmrm <- function(x, ...) {
+  .make_family(
+    x = x,
+    ...
+  )
+}
+
+#' @export
+model_info.mmrm_fit <- model_info.mmrm
 
 
 #' @export

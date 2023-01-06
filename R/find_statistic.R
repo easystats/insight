@@ -96,7 +96,8 @@ find_statistic <- function(x, ...) {
     "ivreg", "ivFixed", "iv_robust", "ivprobit",
     "lm", "lm_robust", "lm.beta", "lme", "lmerMod", "lmerModLmerTest",
     "lmodel2", "lmRob", "lmrob", "lqm", "lqmm",
-    "maxLik", "mixed", "mhurdle", "mlm", "multinom",
+    "maxLik", "mixed", "mhurdle", "mlm", "multinom", "mmrm", "mmrm_fit",
+    "mmrm_tmb",
     "nlmerMod", "nlrq", "nls",
     "ols", "orcutt",
     "pb1", "pb2", "polr",
@@ -154,6 +155,8 @@ find_statistic <- function(x, ...) {
     "anova.rms",
     "coxph.penal",
     "epi.2by2",
+    "flac",
+    "flic",
     "geeglm",
     "logistf",
     "MANOVA", "mlma",
@@ -188,7 +191,7 @@ find_statistic <- function(x, ...) {
 
   # pattern finding ----------------------------------------------------------
 
-  unclear.mods <- c("plm")
+  unclear.mods <- "plm"
 
   if (inherits(x, "glht")) {
     if (x$df == 0) {

@@ -331,7 +331,7 @@ get_predicted.lm <- function(x,
     attributes(x$terms)$dataClasses <- dataClasses
     attributes(attributes(x$model)$terms)$dataClasses <- dataClasses
     x$model[] <- lapply(x$model, function(x) {
-      if (all(class(x) == c("matrix", "array"))) {
+      if (all(class(x) == c("matrix", "array"))) { # nolint
         as.numeric(x)
       } else {
         x
@@ -745,7 +745,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
     # outcome with a single level
   } else {
     # .get_predicted_boot already gives us the correct observation ~ draws format
-    if (is.null(colnames(iter)) || !all(grepl("^iter", colnames(iter)))) {
+    if (is.null(colnames(iter)) || !all(startsWith(colnames(iter), "iter"))) {
       iter <- as.data.frame(t(iter))
     }
     predictions <- apply(iter, 1, centrality_function)
