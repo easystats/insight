@@ -2,7 +2,7 @@
 
 ## New supported models
 
-* `mmrm` (package *mmrm*).
+* `mmrm` (package *mmrm*), `flac` and `flic` (*logistf*)
 
 ## Breaking changes
 

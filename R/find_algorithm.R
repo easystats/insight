@@ -81,6 +81,12 @@ find_algorithm.logistf <- function(x, ...) {
   list("algorithm" = x$method)
 }
 
+#' @export
+find_algorithm.flac <- find_algorithm.logistf
+
+#' @export
+find_algorithm.flic <- find_algorithm.logistf
+
 
 #' @export
 find_algorithm.bigglm <- function(x, ...) {

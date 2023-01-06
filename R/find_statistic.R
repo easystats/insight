@@ -155,6 +155,8 @@ find_statistic <- function(x, ...) {
     "anova.rms",
     "coxph.penal",
     "epi.2by2",
+    "flac",
+    "flic",
     "geeglm",
     "logistf",
     "MANOVA", "mlma",

@@ -327,6 +327,12 @@ model_info.logistf <- function(x, verbose = TRUE, ...) {
 }
 
 #' @export
+model_info.flac <- model_info.logistf
+
+#' @export
+model_info.flic <- model_info.logistf
+
+#' @export
 model_info.lrm <- model_info.logistf
 
 #' @export

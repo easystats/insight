@@ -204,6 +204,12 @@ link_function.gmnl <- link_function.multinom
 link_function.logistf <- link_function.multinom
 
 #' @export
+link_function.flac <- link_function.multinom
+
+#' @export
+link_function.flic <- link_function.multinom
+
+#' @export
 link_function.lrm <- link_function.multinom
 
 #' @export

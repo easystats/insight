@@ -81,7 +81,7 @@ is_regression_model <- function(x) {
 
     # f --------------------
     "feglm", "feis", "felm", "fitdistr", "fixest", "flexmix",
-    "flexsurvreg",
+    "flexsurvreg", "flac", "flic",
 
     # g --------------------
     "gam", "Gam", "GAMBoost", "gamlr", "gamlss", "gamm", "gamm4",

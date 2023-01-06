@@ -2096,6 +2096,11 @@ get_statistic.logistf <- function(x, ...) {
   out
 }
 
+#' @export
+get_statistic.flac <- get_statistic.logistf
+
+#' @export
+get_statistic.flic <- get_statistic.logistf
 
 
 #' @export

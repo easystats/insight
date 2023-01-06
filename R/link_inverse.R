@@ -285,6 +285,12 @@ link_inverse.cph <- link_inverse.gmnl
 link_inverse.logistf <- link_inverse.gmnl
 
 #' @export
+link_inverse.flac <- link_inverse.gmnl
+
+#' @export
+link_inverse.flic <- link_inverse.gmnl
+
+#' @export
 link_inverse.multinom <- link_inverse.gmnl
 
 
