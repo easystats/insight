@@ -3,7 +3,9 @@
 #' Returns the number of group levels of random effects from mixed models.
 #'
 #' @param x A mixed model.
-#' @param ... Currently not used.
+#' @param ... Additional arguments that can be passed to the function. Currently,
+#'   you can use `data` to provide the model data, if available, to avoid
+#'   retrieving model data multiple times.
 #'
 #' @return The number of group levels in the model.
 #'
@@ -30,7 +32,14 @@ n_grouplevel <- function(x, ...) {
     format_error("`x` must be a mixed model.")
   }
 
-  re_data <- get_data(model, verbose = FALSE)[find_random(model, split_nested = TRUE, flatten = TRUE)]
+  # retrieve model data - may be passed via "..."
+  dot_args <- list(...)
+  if ("data" %in% names(dot_args)) {
+    re_data <- dot_args$data
+  } else {
+    re_data <- get_data(model, verbose = FALSE)[find_random(model, split_nested = TRUE, flatten = TRUE)]
+  }
+
   re_levels <- vapply(re_data, n_unique, 1L)
 
   out <- data.frame(

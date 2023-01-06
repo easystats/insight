@@ -9,7 +9,9 @@ n_grouplevel(x, ...)
 \arguments{
 \item{x}{A mixed model.}
 
-\item{...}{Currently not used.}
+\item{...}{Additional arguments that can be passed to the function. Currently,
+you can use \code{data} to provide the model data, if available, to avoid
+retrieving model data multiple times.}
 }
 \value{
 The number of group levels in the model.
