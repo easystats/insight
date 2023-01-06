@@ -129,8 +129,9 @@ get_data <- function(x, ...) {
         if (!is.null(model_call$subset)) {
           vars <- c(vars, all.vars(model_call$subset))
         }
+        vars <- unique(vars)
         if (!isTRUE(additional_variables)) {
-          dat <- dat[, intersect(unique(vars), colnames(dat)), drop = FALSE]
+          dat <- dat[, intersect(vars, colnames(dat)), drop = FALSE]
         }
       }
       # remove response for random effects
@@ -138,8 +139,15 @@ get_data <- function(x, ...) {
         resp <- find_response(x, combine = FALSE)
         dat <- dat[, setdiff(colnames(dat), resp), drop = FALSE]
       }
+
       # complete cases only, as in model frames, need to filter attributes
-      cc <- stats::complete.cases(dat)
+      # only use model variables in complete.cases()
+      if (!is.null(vars)) {
+        cc <- stats::complete.cases(dat[, intersect(vars, colnames(dat))])
+      } else {
+        cc <- stats::complete.cases(dat)
+      }
+
       if (!all(cc)) {
         # save original data, for attributes
         original_dat <- dat

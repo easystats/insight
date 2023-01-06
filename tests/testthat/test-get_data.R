@@ -12,6 +12,18 @@ test_that("lme4", {
 })
 
 
+test_that("additional_variables = TRUE", {
+  dat <- mtcars
+  dat$qsec[1:10] <- NA
+  mod <- lm(mpg ~ hp, dat)
+  n1 <- nrow(dat)
+  n2 <- nrow(insight::get_data(mod))
+  n3 <- nrow(insight::get_data(mod, additional_variables = TRUE))
+  expect_equal(n1, n2)
+  expect_equal(n1, n3)
+})
+
+
 test_that("lm", {
   set.seed(1023)
   x <- rnorm(1000, sd = 4)
