@@ -1052,8 +1052,8 @@ find_formula.DirichletRegModel <- function(x, verbose = TRUE, ...) {
     conditional3 = stats::as.formula(f.cond3)
   ))
 
-  if (x$parametrization == "alternative") {
-    if (length(out) == 2L) names(out)[2] <- "precision"
+  if (x$parametrization == "alternative" && length(out) == 2L) {
+    names(out)[2] <- "precision"
   }
 
   .find_formula_return(out)

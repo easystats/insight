@@ -103,7 +103,7 @@ model_info.default <- function(x, verbose = TRUE, ...) {
 
   faminfo <- tryCatch(
     {
-      if (inherits(x, c("Zelig-relogit"))) {
+      if (inherits(x, "Zelig-relogit")) {
         stats::binomial(link = "logit")
       } else {
         stats::family(x)

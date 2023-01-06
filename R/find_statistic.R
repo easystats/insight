@@ -189,7 +189,7 @@ find_statistic <- function(x, ...) {
 
   # pattern finding ----------------------------------------------------------
 
-  unclear.mods <- c("plm")
+  unclear.mods <- "plm"
 
   if (inherits(x, "glht")) {
     if (x$df == 0) {
