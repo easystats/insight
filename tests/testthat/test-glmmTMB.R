@@ -2,7 +2,7 @@ osx <- tryCatch(
   {
     si <- Sys.info()
     if (!is.null(si["sysname"])) {
-      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+      si["sysname"] == "Darwin" || startsWith(R.version$os, "darwin")
     } else {
       FALSE
     }
@@ -16,6 +16,7 @@ if (
 
   requiet("TMB") &&
     requiet("glmmTMB") &&
+    requiet("TMB") &&
     getRversion() >= "4.0.0") {
   # fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
   # fish$nofish <- as.factor(fish$nofish)
@@ -85,7 +86,7 @@ if (
   test_that("get_deviance + logLik", {
     expect_equal(get_deviance(m2), 1697.449311, tolerance = 1e-3)
     expect_equal(get_loglikelihood(m2), logLik(m2), tolerance = 1e-3, ignore_attr = TRUE)
-    expect_equal(get_df(m2, type = "model"), 4)
+    expect_identical(get_df(m2, type = "model"), 4L)
   })
 
   test_that("get_df", {
@@ -140,7 +141,7 @@ if (
         "xb"
       )
     )
-    expect_identical(clean_names(m6), c("count"))
+    expect_identical(clean_names(m6), "count")
   })
 
   test_that("find_predictors", {
@@ -223,26 +224,26 @@ if (
   })
 
   test_that("get_data", {
-    expect_equal(
+    expect_identical(
       colnames(get_data(m1)),
       c("count", "child", "camper", "persons")
     )
-    expect_equal(
+    expect_identical(
       colnames(get_data(m1, effects = "all")),
       c("count", "child", "camper", "persons")
     )
-    expect_equal(colnames(get_data(m1, effects = "random")), "persons")
-    expect_equal(
+    expect_identical(colnames(get_data(m1, effects = "random")), "persons")
+    expect_identical(
       colnames(get_data(m2)),
       c("count", "child", "camper", "persons")
     )
-    expect_equal(
+    expect_identical(
       colnames(get_data(m2, effects = "all")),
       c("count", "child", "camper", "persons")
     )
-    expect_equal(colnames(get_data(m2, effects = "random", verbose = FALSE)), "persons")
+    expect_identical(colnames(get_data(m2, effects = "random", verbose = FALSE)), "persons")
     get_data(m3)
-    expect_equal(colnames(get_data(m6, verbose = FALSE)), "count")
+    expect_identical(colnames(get_data(m6, verbose = FALSE)), "count")
     expect_null(get_data(m6, effects = "random", verbose = FALSE))
   })
 
@@ -631,7 +632,7 @@ if (
   })
 
   test_that("find_paramaters", {
-    expect_equal(
+    expect_identical(
       find_parameters(m4),
       list(
         conditional = c("(Intercept)", "child", "camper1"),
@@ -641,11 +642,11 @@ if (
       )
     )
 
-    expect_equal(
+    expect_identical(
       find_parameters(m4, flatten = TRUE),
       c("(Intercept)", "child", "camper1", "livebait1")
     )
-    expect_equal(
+    expect_identical(
       find_parameters(m6),
       list(
         conditional = "(Intercept)",
@@ -653,7 +654,7 @@ if (
       )
     )
 
-    expect_equal(
+    expect_identical(
       find_parameters(m3),
       list(
         conditional = c("(Intercept)", "child", "camper1"),
@@ -663,7 +664,7 @@ if (
       )
     )
 
-    expect_equal(
+    expect_identical(
       find_parameters(m3),
       list(
         conditional = c("(Intercept)", "child", "camper1"),
@@ -673,7 +674,7 @@ if (
       )
     )
 
-    expect_equal(
+    expect_identical(
       find_parameters(m3, effects = "fixed"),
       list(
         conditional = c("(Intercept)", "child", "camper1"),
@@ -681,12 +682,12 @@ if (
       )
     )
 
-    expect_equal(
+    expect_identical(
       find_parameters(m3, effects = "random", component = "zi"),
       list(zero_inflated_random = list(persons = "(Intercept)"))
     )
 
-    expect_equal(
+    expect_identical(
       find_parameters(
         m3,
         effects = "fixed",
@@ -699,12 +700,12 @@ if (
 
 
   test_that("get_paramaters", {
-    expect_equal(nrow(get_parameters(m4)), 6)
-    expect_equal(
+    expect_identical(nrow(get_parameters(m4)), 6L)
+    expect_identical(
       colnames(get_parameters(m4)),
       c("Parameter", "Estimate", "Component")
     )
-    expect_equal(
+    expect_identical(
       get_parameters(m4)$Parameter,
       c(
         "(Intercept)",
@@ -715,7 +716,7 @@ if (
         "livebait1"
       )
     )
-    expect_equal(
+    expect_identical(
       get_parameters(m4)$Component,
       c(
         "conditional",
@@ -726,17 +727,17 @@ if (
         "zero_inflated"
       )
     )
-    expect_equal(
+    expect_identical(
       get_parameters(m6)$Parameter,
       c("(Intercept)", "(Intercept)")
     )
 
-    expect_equal(
+    expect_identical(
       get_parameters(m2)$Parameter,
       c("(Intercept)", "child", "camper1")
     )
 
-    expect_equal(
+    expect_identical(
       get_parameters(m2, component = "all")$Parameter,
       c("(Intercept)", "child", "camper1")
     )
@@ -790,7 +791,7 @@ if (
   # })
 
   test_that("find_algorithm", {
-    expect_equal(
+    expect_identical(
       find_algorithm(m1),
       list(algorithm = "ML", optimizer = "nlminb")
     )
@@ -802,7 +803,7 @@ if (
 
     expect_null(find_random_slopes(m6))
 
-    expect_equal(
+    expect_identical(
       find_random_slopes(m7),
       list(
         random = "xb",
@@ -812,7 +813,7 @@ if (
   })
 
   test_that("clean_parameters", {
-    expect_equal(
+    expect_identical(
       clean_parameters(m1),
       structure(
         list(
@@ -893,12 +894,12 @@ if (
   m0 <- glmmTMB(x ~ sd + (1 | t), dispformula = ~sd, data = dat)
 
   test_that("get_paramaters", {
-    expect_equal(nrow(get_parameters(m0)), 4)
-    expect_equal(
+    expect_identical(nrow(get_parameters(m0)), 4L)
+    expect_identical(
       colnames(get_parameters(m0)),
       c("Parameter", "Estimate", "Component")
     )
-    expect_equal(
+    expect_identical(
       get_parameters(m0)$Parameter,
       c(
         "(Intercept)",
@@ -912,7 +913,7 @@ if (
       c(200.03431, -99.71491, 3.20287, 1.38648),
       tolerance = 1e-3
     )
-    expect_equal(
+    expect_identical(
       get_parameters(m0)$Component,
       c("conditional", "conditional", "dispersion", "dispersion")
     )
@@ -950,7 +951,7 @@ if (
       x <- suppressWarnings(get_predicted(m1, predict = "zprob", include_random = TRUE))
       y <- get_predicted(m1, predict = NULL, type = "zprob", include_random = TRUE)
       z <- predict(m1, type = "zprob")
-      expect_equal(x, y)
+      expect_identical(x, y)
       expect_equal(x, z, ignore_attr = TRUE)
 
       ## TODO

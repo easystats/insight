@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("glmmTMB") && requiet("geoR")) {
+if (.runThisTest && requiet("glmmTMB") && requiet("geoR") && requiet("TMB")) {
   data(ca20)
   d <- data.frame(
     x = ca20$coords[, 1],
@@ -53,11 +53,11 @@ if (.runThisTest && requiet("glmmTMB") && requiet("geoR")) {
   })
 
   test_that("get_data", {
-    expect_equal(
+    expect_identical(
       colnames(get_data(m1)),
       c("calcium", "elevation", "region", "pos", "ID")
     )
-    expect_equal(
+    expect_identical(
       colnames(get_data(m1, effects = "all")),
       c("calcium", "elevation", "region", "pos", "ID")
     )
@@ -143,8 +143,8 @@ if (.runThisTest && requiet("glmmTMB") && requiet("geoR")) {
 
 
   test_that("get_paramaters", {
-    expect_equal(nrow(get_parameters(m1)), 5)
-    expect_equal(
+    expect_identical(nrow(get_parameters(m1)), 5L)
+    expect_identical(
       get_parameters(m1)$Parameter,
       c("(Intercept)", "elevation", "region2", "region3", "(Intercept)")
     )
@@ -154,7 +154,7 @@ if (.runThisTest && requiet("glmmTMB") && requiet("geoR")) {
     skip_on_cran()
     skip_on_travis()
 
-    expect_equal(
+    expect_identical(
       find_random_slopes(m1),
       list(random = "pos")
     )
