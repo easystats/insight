@@ -37,7 +37,7 @@ n_grouplevel <- function(x, ...) {
   if ("data" %in% names(dot_args)) {
     re_data <- dot_args$data
   } else {
-    re_data <- get_data(model, verbose = FALSE)[find_random(model, split_nested = TRUE, flatten = TRUE)]
+    re_data <- get_data(x, verbose = FALSE)[find_random(x, split_nested = TRUE, flatten = TRUE)]
   }
 
   re_levels <- vapply(re_data, n_unique, 1L)
@@ -49,7 +49,7 @@ n_grouplevel <- function(x, ...) {
   )
 
   # add interactions, if any
-  ran_eff <- find_random(model, split_nested = FALSE, flatten = TRUE)
+  ran_eff <- find_random(x, split_nested = FALSE, flatten = TRUE)
   re_int <- grep(":", ran_eff, fixed = TRUE, value = TRUE)
   if (length(re_int)) {
     tmp <- do.call(rbind, lapply(re_int, function(i) {
