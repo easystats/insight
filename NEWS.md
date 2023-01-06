@@ -13,6 +13,11 @@
   behaviour: `source = "mf"` will try to recover data from the model frame first,
   then possibly falling back to look in the environment.
 
+## New functions
+
+* `n_grouplevel()`, to return random effect groups and number of group levels
+  for mixed models.
+
 ## Changes to functions
 
 * `get_datagrid()` preserves all factor levels for factors that are hold constant
