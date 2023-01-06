@@ -331,7 +331,7 @@ get_predicted.lm <- function(x,
     attributes(x$terms)$dataClasses <- dataClasses
     attributes(attributes(x$model)$terms)$dataClasses <- dataClasses
     x$model[] <- lapply(x$model, function(x) {
-      if (all(class(x) == c("matrix", "array"))) { #nolint
+      if (all(class(x) == c("matrix", "array"))) { # nolint
         as.numeric(x)
       } else {
         x
