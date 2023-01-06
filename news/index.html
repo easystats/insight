@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.8.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.8.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,14 +86,24 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.18.8.1" id="insight-01881">insight 0.18.8.1<a class="anchor" aria-label="anchor" href="#insight-01881"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.18.9" id="insight-0189">insight 0.18.9<a class="anchor" aria-label="anchor" href="#insight-0189"></a></h2>
 <div class="section level3">
-<h3 id="changes-to-functions-0-18-8-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-18-8-1"></a></h3>
+<h3 id="new-supported-models-0-18-9">New supported models<a class="anchor" aria-label="anchor" href="#new-supported-models-0-18-9"></a></h3>
+<ul><li>
+<code>mmrm</code> (package <em>mmrm</em>), <code>flac</code> and <code>flic</code> (<em>logistf</em>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-0-18-9">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-18-9"></a></h3>
+<ul><li>
+<code><a href="../reference/get_data.html">get_data()</a></code> was revised and now always tries to recover the data that was used to fit a model from the environment. If this fails, it falls back to recovering data from the model frame (the former default behaviour). Futrhermore, the <code>source</code> argument can be used to explicitly force the old behaviour: <code>source = "mf"</code> will try to recover data from the model frame first, then possibly falling back to look in the environment.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-to-functions-0-18-9">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-18-9"></a></h3>
 <ul><li>
 <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> preserves all factor levels for factors that are hold constant at their reference level. This is required to work together with <code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> when calculating standard errors for <code><a href="../reference/get_predicted.html">get_predicted()</a></code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-18-8-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-8-1"></a></h3>
+<h3 id="bug-fixes-0-18-9">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-9"></a></h3>
 <ul><li><p>Fixed but in <code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> handling of incomplete factors which sometimes had downstream implications for numerical results in the uncertainty estimates produced by <code><a href="../reference/get_predicted.html">get_predicted()</a></code>.</p></li>
 <li><p>Fixed minor issues for HTML tables in <code><a href="../reference/export_table.html">export_table()</a></code> when model parameters were grouped.</p></li>
 <li><p>Fixed issue with incorrect back-transforming in <code><a href="../reference/get_data.html">get_data()</a></code> for models with log-transformed variables.</p></li>
