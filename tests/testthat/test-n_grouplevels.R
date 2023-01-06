@@ -14,8 +14,8 @@ if (requiet("lme4")) {
     data = sleepstudy
   )
 
-  test_that("n_grouplevel", {
-    out <- n_grouplevel(model)
+  test_that("n_grouplevels", {
+    out <- n_grouplevels(model)
     expect_identical(out$Group, c("subgrp", "grp", "Subject", "subgrp:grp"))
     expect_identical(out$N_levels, c(30L, 5L, 18L, 108L))
   })

@@ -24,10 +24,10 @@
 #'     Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
 #'     data = sleepstudy
 #'   )
-#'   n_grouplevel(model)
+#'   n_grouplevels(model)
 #' }
 #' @export
-n_grouplevel <- function(x, ...) {
+n_grouplevels <- function(x, ...) {
   if (!is_mixed_model(x)) {
     format_error("`x` must be a mixed model.")
   }
@@ -64,19 +64,19 @@ n_grouplevel <- function(x, ...) {
     out <- rbind(out, tmp)
   }
 
-  class(out) <- c("n_grouplevel", "data.frame")
+  class(out) <- c("n_grouplevels", "data.frame")
   out
 }
 
 # methods ----------------
 
 #' @export
-format.n_grouplevel <- function(x, ...) {
+format.n_grouplevels <- function(x, ...) {
   x$N_levels <- format_value(x$N_levels, protect_integers = TRUE)
   format_table(x, ...)
 }
 
 #' @export
-print.n_grouplevel <- function(x, ...) {
+print.n_grouplevels <- function(x, ...) {
   cat(export_table(format(x, ...), ...))
 }

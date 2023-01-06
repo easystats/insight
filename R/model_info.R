@@ -56,7 +56,7 @@
 #' * `link_function`: the link-function
 #' * `family`: name of the distributional family of the model. For some exceptions (like some `htest` objects), can also be the name of the test.
 #' * `n_obs`: number of observations
-#' * `n_grouplevel`: for mixed models, returns names and numbers of random effect groups
+#' * `n_grouplevels`: for mixed models, returns names and numbers of random effect groups
 #'
 #' @examples
 #' ldose <- rep(0:5, 2)

@@ -15,7 +15,7 @@
 
 ## New functions
 
-* `n_grouplevel()`, to return random effect groups and number of group levels
+* `n_grouplevels()`, to return random effect groups and number of group levels
   for mixed models.
 
 ## Changes to functions

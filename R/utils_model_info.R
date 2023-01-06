@@ -373,7 +373,7 @@
   # mixed model?
   is.mixed.model <- !is_levenetest && is_mixed_model(x)
   if (is.mixed.model) {
-    ngrplvl <- n_grouplevel(x)
+    ngrplvl <- n_grouplevels(x)
     n.grp.lvl <- stats::setNames(ngrplvl$N_levels, ngrplvl$Group)
   } else {
     n.grp.lvl <- NULL
@@ -429,7 +429,7 @@
     link_function = link.fun,
     family = fitfam,
     n_obs = n_obs(x),
-    n_grouplevel = n.grp.lvl
+    n_grouplevels = n.grp.lvl
   )
 }
 
