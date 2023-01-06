@@ -594,7 +594,7 @@ get_varcov.model_fit <- get_varcov.logitmfx
 
 
 #' @export
-get_varcov.flic <- function(x, ...) {
+get_varcov.flic <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   .process_vcov(x$var, verbose, ...)
 }
