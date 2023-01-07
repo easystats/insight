@@ -9,9 +9,10 @@ if (requiet("lme4")) {
       sample(1:30, size = sum(filter_group), replace = TRUE)
   }
 
+  d <<- sleepstudy
   model <- lmer(
     Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
-    data = sleepstudy
+    data = d
   )
 
   test_that("n_grouplevels", {
