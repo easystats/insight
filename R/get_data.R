@@ -55,12 +55,14 @@ get_data <- function(x, ...) {
 # main workhorse, we try to recover data from environment as good as possible.
 # the dataset is subset if needed, and weights are added. only those columns
 # are returned that we actually find in the model...
+# data_name is useful when we have the name of the data frame object stored as a string (e.g., in brmsfit attr(x$data, "data_frame"))
 .get_data_from_environment <- function(x,
                                        effects = "all",
                                        component = "all",
                                        source = "environment",
                                        additional_variables = NULL,
-                                       verbose = FALSE) {
+                                       verbose = FALSE,
+                                       data_name = NULL) {
   # process arguments, check whether data should be recovered from
   # environment or model frame
   source <- .check_data_source_arg(source)
@@ -103,7 +105,7 @@ get_data <- function(x, ...) {
   out <- tryCatch(
     {
       # recover data frame from environment
-      dat <- .recover_data_from_environment(x)
+      dat <- .recover_data_from_environment(x, data_name = data_name)
       # additional variables? Some models, like plm::plm(), have an "index"
       # slot in the model call with further variables
       if (!is.null(additional_variables) && !isTRUE(additional_variables)) {
@@ -197,8 +199,13 @@ get_data <- function(x, ...) {
 
 # return data from a data frame that is in the environment,
 # and subset the data, if necessary
-.recover_data_from_environment <- function(x) {
+.recover_data_from_environment <- function(x, data_name = NULL) {
   model_call <- get_call(x)
+
+  if (is.null(model_call[["data"]]) && is.character(data_name)) {
+    model_call[["data"]] <- as.name(data_name)
+
+  }
 
   # first, try environment of formula, see #666
   dat <- tryCatch(eval(model_call$data, envir = environment(model_call$formula)),
@@ -1563,7 +1570,8 @@ get_data.brmsfit <- function(x, effects = "all", component = "all", source = "en
   # try to recover data from environment
   # verbose is FALSE by default because `get_call()` often does not work on
   # `brmsfit` objects, so we typically default to the `data` held in the object.
-  model_data <- .get_data_from_environment(x, effects = effects, component = component, source = source, verbose = verbose, ...)
+  data_name <- attr(x$data, "data_name")
+  model_data <- .get_data_from_environment(x, effects = effects, component = component, source = source, verbose = verbose, data_name = data_name, ...)
 
   if (!is.null(model_data)) {
     return(model_data)

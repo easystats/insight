@@ -230,6 +230,9 @@ if (.runThisTest) {
     expect_type(out$cyl, "double")
     expect_equal(colnames(out), c("mpg", "hp", "cyl"))
 
+    out <- get_data(m, additional_variables = TRUE)
+    expect_true("qsec" %in% colnames(out))
+
     out <- get_datagrid(m)
     expect_equal(dim(out), c(10, 2))
     expect_equal(out$cyl, c(4, 4, 6, 6, 8, 8, 8, 8, 8, 8))
