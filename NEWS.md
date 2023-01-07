@@ -36,6 +36,8 @@
 * Fixed issue with incorrect back-transforming in `get_data()` for models with
   log-transformed variables.
 
+* Fixes issue in `compact_list()`.
+
 # insight 0.18.8
 
 ## Bug fixes
