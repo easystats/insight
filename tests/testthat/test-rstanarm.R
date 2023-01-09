@@ -8,6 +8,7 @@ if (.runThisTest && .runStanTest) {
       requiet("rstanarm")
   )) {
     # skip_on_cran()
+    skip_if_offline()
 
     # defining models ---------------------
 
@@ -24,7 +25,8 @@ if (.runThisTest && .runStanTest) {
         iter = 500,
         chains = 2,
         refresh = 0
-      ))
+      )
+    )
     m5 <- suppressWarnings(
       stan_glm(
         RT ~ color * shape,
@@ -33,13 +35,16 @@ if (.runThisTest && .runStanTest) {
         iter = 500,
         chains = 2,
         refresh = 0
-      ))
+      )
+    )
     m6 <- insight::download_model("stanreg_gamm4_1")
 
-    m7 <- suppressWarnings(stan_lm(mpg ~ wt + qsec + am,
-      data = mtcars, prior = R2(0.75),
-      chains = 1, iter = 300, refresh = 0
-    ))
+    m7 <- suppressWarnings(
+      stan_lm(mpg ~ wt + qsec + am,
+        data = mtcars, prior = R2(0.75),
+        chains = 1, iter = 300, refresh = 0
+      )
+    )
 
     m8 <- stan_lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy, refresh = 0)
 
@@ -75,33 +80,42 @@ if (.runThisTest && .runStanTest) {
     y <- mtcars$mpg[not_NA]
     ybar <- mean(y)
     s_y <- sd(y)
-    m11 <- suppressWarnings(stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
-      prior = R2(0.75),
-      # the next line is only to make the example go fast
-      refresh = 0,
-      chains = 1, iter = 500, seed = 12345
-    ))
+    m11 <- suppressWarnings(
+      stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
+        prior = R2(0.75),
+        # the next line is only to make the example go fast
+        refresh = 0,
+        chains = 1, iter = 500, seed = 12345
+      )
+    )
 
     dat <- infert[order(infert$stratum), ] # order by strata
-    m12 <- suppressWarnings(stan_clogit(case ~ spontaneous + induced + (1 | education),
-      strata = stratum,
-      data = dat,
-      subset = parity <= 2,
-      QR = TRUE,
-      chains = 2, iter = 500, refresh = 0
-    )) # for speed only
+    m12 <- suppressWarnings(
+      stan_clogit(case ~ spontaneous + induced + (1 | education),
+        strata = stratum,
+        data = dat,
+        subset = parity <= 2,
+        QR = TRUE,
+        chains = 2, iter = 500, refresh = 0
+      )
+    ) # for speed only
 
     if (.Platform$OS.type != "windows" || .Platform$r_arch != "i386") {
       void <- capture.output(
-      m13 <- suppressMessages(suppressWarnings(stan_jm(
-        formulaLong = logBili ~ year + (1 | id),
-        dataLong = pbcLong,
-        formulaEvent = Surv(futimeYears, death) ~ sex + trt,
-        dataEvent = pbcSurv,
-        time_var = "year",
-        # this next line is only to keep the example small in size!
-        chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
-      ))))
+        m13 <- suppressMessages(
+          suppressWarnings(
+            stan_jm(
+              formulaLong = logBili ~ year + (1 | id),
+              dataLong = pbcLong,
+              formulaEvent = Surv(futimeYears, death) ~ sex + trt,
+              dataEvent = pbcSurv,
+              time_var = "year",
+              # this next line is only to keep the example small in size!
+              chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
+            )
+          )
+        )
+      )
       # expect_snapshot(model_info(m13))
     }
 
@@ -120,15 +134,17 @@ if (.runThisTest && .runStanTest) {
     #   iter = 1000
     # )
 
-    m15 <- suppressWarnings(stan_mvmer(
-      formula = list(
-        logBili ~ year + (1 | id),
-        albumin ~ sex + year + (year | id)
-      ),
-      data = pbcLong,
-      # this next line is only to keep the example small in size!
-      chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
-    ))
+    m15 <- suppressWarnings(
+      stan_mvmer(
+        formula = list(
+          logBili ~ year + (1 | id),
+          albumin ~ sex + year + (year | id)
+        ),
+        data = pbcLong,
+        # this next line is only to keep the example small in size!
+        chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
+      )
+    )
 
     test_that("model_info-stanreg-glm", {
       expect_equal(
