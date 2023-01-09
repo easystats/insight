@@ -16,7 +16,7 @@ if (.runThisTest && .runStanTest) {
     m3 <- insight::download_model("stanreg_glm_1")
 
     data("puzzles")
-    m4 <-
+    m4 <- suppressWarnings(
       stan_glm(
         RT ~ color * shape,
         data = puzzles,
@@ -24,8 +24,8 @@ if (.runThisTest && .runStanTest) {
         iter = 500,
         chains = 2,
         refresh = 0
-      )
-    m5 <-
+      ))
+    m5 <- suppressWarnings(
       stan_glm(
         RT ~ color * shape,
         data = puzzles,
@@ -33,7 +33,7 @@ if (.runThisTest && .runStanTest) {
         iter = 500,
         chains = 2,
         refresh = 0
-      )
+      ))
     m6 <- insight::download_model("stanreg_gamm4_1")
 
     m7 <- suppressWarnings(stan_lm(mpg ~ wt + qsec + am,
@@ -78,6 +78,7 @@ if (.runThisTest && .runStanTest) {
     m11 <- suppressWarnings(stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
       prior = R2(0.75),
       # the next line is only to make the example go fast
+      refresh = 0,
       chains = 1, iter = 500, seed = 12345
     ))
 
@@ -91,7 +92,8 @@ if (.runThisTest && .runStanTest) {
     )) # for speed only
 
     if (.Platform$OS.type != "windows" || .Platform$r_arch != "i386") {
-      m13 <- suppressWarnings(stan_jm(
+      void <- capture.output(
+      m13 <- suppressMessages(suppressWarnings(stan_jm(
         formulaLong = logBili ~ year + (1 | id),
         dataLong = pbcLong,
         formulaEvent = Surv(futimeYears, death) ~ sex + trt,
@@ -99,7 +101,7 @@ if (.runThisTest && .runStanTest) {
         time_var = "year",
         # this next line is only to keep the example small in size!
         chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
-      ))
+      ))))
       # expect_snapshot(model_info(m13))
     }
 
@@ -146,7 +148,8 @@ if (.runThisTest && .runStanTest) {
           is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
           is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
           is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
-          link_function = "logit", family = "binomial", n_obs = 56L
+          link_function = "logit", family = "binomial", n_obs = 56L,
+          n_grouplevels = c(herd = 15L)
         )
       )
 
@@ -167,7 +170,8 @@ if (.runThisTest && .runStanTest) {
           is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
           is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
           is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
-          link_function = "identity", family = "gaussian", n_obs = 150L
+          link_function = "identity", family = "gaussian", n_obs = 150L,
+          n_grouplevels = NULL
         )
       )
 
@@ -188,7 +192,8 @@ if (.runThisTest && .runStanTest) {
           is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
           is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
           is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
-          link_function = "logit", family = "binomial", n_obs = 32L
+          link_function = "logit", family = "binomial", n_obs = 32L,
+          n_grouplevels = NULL
         )
       )
 
