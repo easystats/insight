@@ -1,6 +1,4 @@
-if (
-
-  requiet("robustbase")) {
+if (requiet("robustbase")) {
   data(carrots)
 
   m1 <- glmrob(

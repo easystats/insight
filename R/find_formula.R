@@ -1069,13 +1069,11 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
   f.zi <- stats::formula(x, component = "zi")
   f.disp <- stats::formula(x, component = "disp")
 
-  if (identical(safe_deparse(f.zi), "~0") ||
-    identical(safe_deparse(f.zi), "~1")) {
+  if (identical(safe_deparse(f.zi), "~0") || identical(safe_deparse(f.zi), "~1")) {
     f.zi <- NULL
   }
 
-  if (identical(safe_deparse(f.disp), "~0") ||
-    identical(safe_deparse(f.disp), "~1")) {
+  if (identical(safe_deparse(f.disp), "~0") || identical(safe_deparse(f.disp), "~1")) {
     f.disp <- NULL
   }
 

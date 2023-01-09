@@ -1,6 +1,4 @@
-if (
-
-  requiet("splines")) {
+if (requiet("splines")) {
   data(iris)
   m1 <- lm(Sepal.Length ~ splines::bs(Petal.Width, df = 4) + Species, data = iris)
 

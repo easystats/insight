@@ -1,6 +1,4 @@
-if (
-
-  requiet("nlme")) {
+if (requiet("nlme")) {
   data(Ovary)
   m1 <- gls(follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time),
     Ovary,

@@ -3,11 +3,12 @@
 if (.runThisTest && Sys.getenv("USER") != "travis") {
   if (requiet("aod")) {
     data(dja)
-    m1 <-
-      suppressWarnings(aod::negbin(y ~ group + offset(log(trisk)),
+    m1 <- suppressWarnings(
+      aod::negbin(y ~ group + offset(log(trisk)),
         random = ~village,
         data = dja
-      ))
+      )
+    )
 
     test_that("model_info", {
       expect_true(model_info(m1)$is_negbin)

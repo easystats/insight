@@ -1,7 +1,4 @@
-if (
-
-  requiet("nlme") &&
-    requiet("lme4")) {
+if (requiet("nlme") && requiet("lme4")) {
   data("sleepstudy")
   data(Orthodont)
   m1 <- lme(Reaction ~ Days,

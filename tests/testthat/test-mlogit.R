@@ -1,7 +1,4 @@
-if (
-
-  requiet("mlogit") &&
-    requiet("mclogit")) {
+if (requiet("mlogit") && requiet("mclogit")) {
   data("Fishing")
   Fish <-
     mlogit.data(Fishing,

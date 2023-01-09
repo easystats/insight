@@ -1011,11 +1011,14 @@ print.insight_table <- function(x, ...) {
     } else {
       col_align <- NULL
       for (i in 1:nchar(align)) {
-        col_align <- c(col_align, switch(substr(align, i, i),
-          "l" = "left",
-          "r" = "right",
-          "center"
-        ))
+        col_align <- c(
+          col_align,
+          switch(substr(align, i, i),
+            "l" = "left",
+            "r" = "right",
+            "center"
+          )
+        )
       }
       out[["_boxhead"]]$column_align <- col_align
     }

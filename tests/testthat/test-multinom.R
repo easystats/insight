@@ -1,14 +1,8 @@
-if (
-
-  requiet("nnet") &&
-    requiet("MASS")) {
+if (requiet("nnet") && requiet("MASS")) {
   data("birthwt")
   void <- capture.output({
     m1 <- nnet::multinom(low ~ age + lwt + race + smoke, data = birthwt)
   })
-
-
-
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_binomial)

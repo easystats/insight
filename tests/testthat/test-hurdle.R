@@ -1,6 +1,4 @@
-if (
-
-  requiet("pscl")) {
+if (requiet("pscl")) {
   data("bioChemists")
 
   m1 <- hurdle(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)

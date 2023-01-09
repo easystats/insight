@@ -1,6 +1,4 @@
-if (.Platform$OS.type == "windows" &&
-
-  requiet("MCMCglmm")) {
+if (.Platform$OS.type == "windows" && requiet("MCMCglmm")) {
   data(PlodiaPO)
   m1 <- MCMCglmm(
     PO ~ plate,

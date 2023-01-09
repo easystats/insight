@@ -204,7 +204,6 @@ get_data <- function(x, ...) {
 
   if (is.null(model_call[["data"]]) && is.character(data_name)) {
     model_call[["data"]] <- as.name(data_name)
-
   }
 
   # first, try environment of formula, see #666
@@ -862,7 +861,8 @@ get_data.glmm <- function(x,
   mf <- tryCatch(
     {
       switch(effects,
-        fixed = dat[, find_predictors(x,
+        fixed = dat[, find_predictors(
+          x,
           effects = "fixed",
           flatten = TRUE,
           verbose = FALSE

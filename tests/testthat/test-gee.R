@@ -1,6 +1,4 @@
-if (
-
-  requiet("gee")) {
+if (requiet("gee")) {
   data(warpbreaks)
   void <- capture.output(suppressMessages(
     m1 <- gee(breaks ~ tension, id = wool, data = warpbreaks)

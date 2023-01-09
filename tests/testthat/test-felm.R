@@ -1,6 +1,4 @@
-if (
-
-  requiet("lfe")) {
+if (requiet("lfe")) {
   x <- rnorm(1000)
   x2 <- rnorm(length(x))
   id <- factor(sample(20, length(x), replace = TRUE))

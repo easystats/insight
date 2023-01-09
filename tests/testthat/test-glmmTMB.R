@@ -12,12 +12,7 @@ osx <- tryCatch(
   }
 )
 
-if (
-
-  requiet("TMB") &&
-    requiet("glmmTMB") &&
-    requiet("TMB") &&
-    getRversion() >= "4.0.0") {
+if (requiet("TMB") && requiet("glmmTMB") && getRversion() >= "4.0.0") {
   # fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
   # fish$nofish <- as.factor(fish$nofish)
   # fish$livebait <- as.factor(fish$livebait)

@@ -1,6 +1,4 @@
-if (
-
-  requiet("gamlss")) {
+if (requiet("gamlss")) {
   data(abdom)
   void <- capture.output(
     m1 <-
