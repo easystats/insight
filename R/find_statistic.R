@@ -132,7 +132,7 @@ find_statistic <- function(x, ...) {
     "poissonmfx", "poissonirr", "psm", "probitmfx", "pgmm",
     "qr", "QRNLMM", "QRLMM",
     "Rchoice", "riskRegression", "robmixglm", "rma", "rma.mv", "rma.uni", "rrvglm",
-    "Sarlm", "sem", "SemiParBIV", "slm", "survreg", "svy_vglm",
+    "Sarlm", "sem", "SemiParBIV", "slm", "slopes", "survreg", "svy_vglm",
     "test_mediation", "tobit",
     "vglm",
     "wbgee",
