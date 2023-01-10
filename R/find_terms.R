@@ -31,10 +31,10 @@
 #' @examples
 #' if (require("lme4")) {
 #'   data(sleepstudy)
-#'   m <- lmer(
+#'   m <- suppressWarnings(lmer(
 #'     log(Reaction) ~ Days + I(Days^2) + (1 + Days + exp(Days) | Subject),
 #'     data = sleepstudy
-#'   )
+#'   ))
 #'
 #'   find_terms(m)
 #' }
@@ -195,7 +195,7 @@ find_terms.mipo <- function(x, ...) {
   }
 
   # restore -1
-  need_split <- grepl("#1$", f$conditional)
+  need_split <- endsWith(f$conditional, "#1")
   if (any(need_split)) {
     f$conditional <- c(
       f$conditional[!need_split],
@@ -209,10 +209,10 @@ find_terms.mipo <- function(x, ...) {
 }
 
 .get_variables_list_aovlist <- function(f, resp = NULL) {
-  i <- sapply(f[[3]], function(x) {
+  i <- vapply(f[[3]], function(x) {
     x <- as.character(x)
     x[1] == "Error" && length(x) > 1
-  })
+  }, TRUE)
   error <- utils::capture.output(print(f[[3]][i][[1]]))
   f[[3]][i] <- NULL
   f[[3]] <- f[[3]][[2]]

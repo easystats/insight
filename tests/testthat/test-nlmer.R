@@ -9,6 +9,7 @@ if (requiet("lme4")) {
     )
 
   test_that("model_info", {
+    skip_if(getRversion() < "4.1.0")
     expect_true(model_info(nm1)$is_linear)
   })
 

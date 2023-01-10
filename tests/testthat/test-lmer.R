@@ -529,6 +529,7 @@ if (.runThisTest && requiet("lme4")) {
   })
 
   test_that("get_predicted_ci: warning when model matrix and varcovmat do not match", {
+    skip_if(getRversion() < "4.1.0")
     mod <- suppressMessages(lmer(
       weight ~ 1 + Time + I(Time^2) + Diet + Time:Diet + I(Time^2):Diet + (1 + Time + I(Time^2) | Chick),
       data = ChickWeight
