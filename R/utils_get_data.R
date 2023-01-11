@@ -157,7 +157,7 @@
       mf <- cbind(mf_nonmatrix, mf_matrix)
     } else {
       # fix NA in column names
-      if (any(is.na(colnames(md)))) {
+      if (anyNA(colnames(md))) {
         colnames(md) <- make.names(colnames(md))
       }
 
@@ -190,7 +190,7 @@
         }
       }
 
-      if (inherits(x, c("coxph", "coxme", "coxr")) || any(grepl("^Surv\\(", spline.term))) {
+      if (inherits(x, c("coxph", "coxme", "coxr")) || any(startsWith(spline.term, "Surv("))) {
         # no further processing for survival models
         mf <- md
       } else {
@@ -827,11 +827,11 @@
     x <- find_terms(model, flatten = TRUE)
   }
   pattern <- sprintf("%s\\(([^,\\+)]*).*", type)
-  out <- trim_ws(gsub(pattern, "\\1", x[grepl(pattern, x)]))
+  out <- trim_ws(gsub(pattern, "\\1", grep(pattern, x, value = TRUE)))
   # sanity check - when we have something like "log(1+x)" instead "log(x+1)",
   # the regex pattern returns "1" instead of "x3"
   if (!is.na(suppressWarnings(as.numeric(out)))) {
-    out <- trim_ws(gsub(pattern, "\\2", x[grepl(pattern, x)]))
+    out <- trim_ws(gsub(pattern, "\\2", grep(pattern, x, value = TRUE)))
   }
   out
 }
@@ -840,7 +840,7 @@
 # get column names of transformed terms
 .get_transformed_names <- function(x, type = "all") {
   pattern <- sprintf("%s\\(([^,)]*).*", type)
-  x[grepl(pattern, x)]
+  grep(pattern, x, value = TRUE)
 }
 
 
@@ -872,7 +872,7 @@
         }
 
         # exeception: list for kruskal-wallis
-        if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && grepl("^list\\(", data_name)) {
+        if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && startsWith(data_name, "list(")) {
           l <- eval(.str2lang(x$data.name))
           names(l) <- paste0("x", seq_along(l))
           return(l)
@@ -883,15 +883,15 @@
 
         # preserve table data for McNemar
         if (!grepl(" (and|by) ", x$data.name) &&
-          (grepl("^McNemar", x$method) || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+          (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           return(as.table(columns[[1]]))
           # check if data is a list for kruskal-wallis
-        } else if (grepl("^Kruskal-Wallis", x$method) && length(columns) == 1 && is.list(columns[[1]])) {
+        } else if (startsWith(x$method, "Kruskal-Wallis") && length(columns) == 1 && is.list(columns[[1]])) {
           l <- columns[[1]]
           names(l) <- paste0("x", seq_along(l))
           return(l)
         } else {
-          max_len <- max(sapply(columns, length))
+          max_len <- max(vapply(columns, length, 1))
           for (i in seq_along(columns)) {
             if (length(columns[[i]]) < max_len) {
               columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
