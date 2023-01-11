@@ -18,9 +18,11 @@
 #'   is taken from the model frame. Any transformed variables are back-transformed,
 #'   if possible. This option returns the data even if it is not available in
 #'   the environment, however, in certain edge cases back-transforming to the
-#'   original data may fail. If `source = "environment"` and data could not be
-#'   recovered from the environment, `get_data()` tries to extract the data
-#'   from the model frame then.
+#'   original data may fail. If `source = "environment"` fails to recover the
+#'   data, it tries to extract the data from the model frame; if
+#'   `source = "frame"` and data cannot be extracted from the model frame, data
+#'   will be recovered from the environment. Both ways only returns observations
+#'   that have no missing data in the variables used for model fitting.
 #' @param verbose Toggle messages and warnings.
 #'
 #' @inheritParams find_predictors
@@ -29,13 +31,6 @@
 #' @inheritSection find_predictors Model components
 #'
 #' @return The data that was used to fit the model.
-#'
-#' @note Unlike `model.frame()`, which may contain transformed variables
-#'   (e.g. if `poly()` or `scale()` was used inside the formula to
-#'   specify the model), `get_data()` aims at returning the "original",
-#'   untransformed data (if possible). Consequently, column names are changed
-#'   accordingly, i.e. `"log(x)"` will become `"x"` etc. for all data
-#'   columns with transformed values.
 #'
 #' @examples
 #' if (require("lme4")) {
