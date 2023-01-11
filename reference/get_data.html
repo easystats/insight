@@ -136,9 +136,11 @@ longer equal the model data. If <code>source = "frame"</code> (or <code>"mf"</co
 is taken from the model frame. Any transformed variables are back-transformed,
 if possible. This option returns the data even if it is not available in
 the environment, however, in certain edge cases back-transforming to the
-original data may fail. If <code>source = "environment"</code> and data could not be
-recovered from the environment, <code>get_data()</code> tries to extract the data
-from the model frame then.</p></dd>
+original data may fail. If <code>source = "environment"</code> fails to recover the
+data, it tries to extract the data from the model frame; if
+<code>source = "frame"</code> and data cannot be extracted from the model frame, data
+will be recovered from the environment. Both ways only returns observations
+that have no missing data in the variables used for model fitting.</p></dd>
 
 
 <dt>verbose</dt>
@@ -171,15 +173,6 @@ designs.</p></dd>
     
 
 <p>The data that was used to fit the model.</p>
-    </div>
-    <div class="section level2">
-    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>Unlike <code><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">model.frame()</a></code>, which may contain transformed variables
-(e.g. if <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly()</a></code> or <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale()</a></code> was used inside the formula to
-specify the model), <code>get_data()</code> aims at returning the "original",
-untransformed data (if possible). Consequently, column names are changed
-accordingly, i.e. <code>"log(x)"</code> will become <code>"x"</code> etc. for all data
-columns with transformed values.</p>
     </div>
     <div class="section level2">
     <h2 id="model-components">Model components<a class="anchor" aria-label="anchor" href="#model-components"></a></h2>
