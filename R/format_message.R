@@ -193,7 +193,7 @@ format_error <- function(...) {
   # check if line breaks are required
   if (line_length > 0 && nchar(tmp_string) > line_length) {
     # insert line breaks into string at specified length
-    pattern <- paste("(.{1,", line_length, "})(\\s|$)", sep = "")
+    pattern <- paste0("(.{1,", line_length, "})(\\s|$)")
     string <- gsub(pattern, line_separator, string)
 
     # remove last line break
@@ -247,7 +247,7 @@ format_error <- function(...) {
 # check whether a string line contains one of the supported format tags
 .find_tokens <- function(string) {
   tokens <- c("{.b ", "{.i ", "{.url ", "{.pkg ")
-  matches <- sapply(tokens, grepl, string, fixed = TRUE)
+  matches <- vapply(tokens, grepl, TRUE, string, fixed = TRUE)
   if (any(matches)) {
     matches
   } else {
