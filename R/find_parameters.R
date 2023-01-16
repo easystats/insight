@@ -354,7 +354,7 @@ find_parameters.crr <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.riskRegression <- function(x, flatten = FALSE, ...) {
-  junk <- utils::capture.output(cs <- stats::coef(x))
+  junk <- utils::capture.output(cs <- stats::coef(x)) # nolint
   out <- list(conditional = as.vector(cs[, 1]))
 
   if (flatten) {
@@ -554,7 +554,7 @@ find_parameters.mlm <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.mvord <- function(x, flatten = FALSE, ...) {
-  junk <- utils::capture.output(s <- summary(x))
+  junk <- utils::capture.output(s <- summary(x)) # nolint
 
   out <- list(
     thresholds = text_remove_backticks(rownames(s$thresholds)),
@@ -720,7 +720,7 @@ find_parameters.rma <- function(x, flatten = FALSE, ...) {
       cf <- stats::coef(x)
       pars <- list(conditional = names(cf))
 
-      pars$conditional[grepl("intrcpt", pars$conditional)] <- "(Intercept)"
+      pars$conditional[grepl("intrcpt", pars$conditional, fixed = TRUE)] <- "(Intercept)"
       pars$conditional <- text_remove_backticks(pars$conditional)
 
       if (flatten) {
@@ -769,7 +769,7 @@ find_parameters.meta_bma <- find_parameters.meta_random
 #' @export
 find_parameters.metaplus <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = rownames(x$results))
-  pars$conditional[grepl("muhat", pars$conditional)] <- "(Intercept)"
+  pars$conditional[grepl("muhat", pars$conditional, fixed = TRUE)] <- "(Intercept)"
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {

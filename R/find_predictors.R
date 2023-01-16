@@ -92,7 +92,7 @@ find_predictors.default <- function(x,
 
   # random effects are returned as list, so we need to unlist here
   if (is_mv) {
-    l <- lapply(f, function(.i) .return_vars(.i, x))
+    l <- lapply(f, .return_vars, x = x)
   } else {
     l <- .return_vars(f, x)
   }
@@ -131,7 +131,7 @@ find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
     .prepare_predictors(x, i, elements = elements)
   })
 
-  l <- lapply(f, function(.i) .return_vars(.i, x))
+  l <- lapply(f, .return_vars, x = x)
 
   if (is_empty_object(l) || is_empty_object(compact_list(l))) {
     return(NULL)
