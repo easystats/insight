@@ -220,7 +220,7 @@ necessary, also for a cleaner print. See also 'Examples'.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/bayestestR/" class="external-link">bayestestR</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="download_model.html">download_model</a></span><span class="op">(</span><span class="st">"brms_zi_2"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html" class="external-link">hdi</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"all"</span>, component <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
@@ -229,17 +229,116 @@ necessary, also for a cleaner print. See also 'Examples'.</p>
 <span class="r-in"><span><span class="co"># information on parameter names and HDI values</span></span></span>
 <span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">tmp</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Parameter   CI        CI_low     CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 b_Intercept 0.95 -1.5750655217 -0.19121613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                   b_persons 0.95  0.6184455532  1.06881424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     b_child 0.95 -1.3162422984 -0.95758109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                    b_camper 0.95  0.5461831894  0.92611577</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      r_persons[1,Intercept] 0.95 -0.5330733515  0.35294394</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      r_persons[2,Intercept] 0.95 -0.2223371232  0.38996718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     r_persons[3,Intercept] 0.95 -0.3042515304  0.23075738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     r_persons[4,Intercept] 0.95 -0.3385211340  0.42306128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16      sd_persons__Intercept 0.95  0.0001646025  0.53508587</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5              b_zi_Intercept 0.95 -2.1380522885  0.81535164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                  b_zi_child 0.95  1.2372839351  2.55611481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                 b_zi_camper 0.95 -1.5578690989 -0.13785783</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 r_persons__zi[1,Intercept] 0.95 -0.2851875068  2.79744522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 r_persons__zi[2,Intercept] 0.95 -1.2294623420  1.76053356</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 r_persons__zi[3,Intercept] 0.95 -1.6701942638  1.34558714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 r_persons__zi[4,Intercept] 0.95 -2.9688353496  0.08844285</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17   sd_persons__zi_Intercept 0.95  0.3711927016  3.06955610</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Based on the "split_by" argument, we get a list of data frames that</span></span></span>
 <span class="r-in"><span><span class="co"># is split into several parts that reflect the model components.</span></span></span>
 <span class="r-in"><span><span class="fu">print_parameters</span><span class="op">(</span><span class="va">model</span>, <span class="va">tmp</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $fixed.conditional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Cleaned_Parameter   Parameter   CI     CI_low    CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       (Intercept) b_Intercept 0.95 -1.5750655 -0.1912161</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           persons   b_persons 0.95  0.6184456  1.0688142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             child     b_child 0.95 -1.3162423 -0.9575811</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4            camper    b_camper 0.95  0.5461832  0.9261158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $fixed.zero_inflated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Cleaned_Parameter      Parameter   CI    CI_low    CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       (Intercept) b_zi_Intercept 0.95 -2.138052  0.8153516</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11             child     b_zi_child 0.95  1.237284  2.5561148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12            camper    b_zi_camper 0.95 -1.557869 -0.1378578</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`random.conditional.Intercept: persons`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Cleaned_Parameter              Parameter   CI     CI_low   CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         persons.1 r_persons[1,Intercept] 0.95 -0.5330734 0.3529439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         persons.2 r_persons[2,Intercept] 0.95 -0.2223371 0.3899672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         persons.3 r_persons[3,Intercept] 0.95 -0.3042515 0.2307574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         persons.4 r_persons[4,Intercept] 0.95 -0.3385211 0.4230613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`random.zero_inflated.Intercept: persons`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Cleaned_Parameter                  Parameter   CI     CI_low    CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13         persons.1 r_persons__zi[1,Intercept] 0.95 -0.2851875 2.79744522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         persons.2 r_persons__zi[2,Intercept] 0.95 -1.2294623 1.76053356</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15         persons.3 r_persons__zi[3,Intercept] 0.95 -1.6701943 1.34558714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16         persons.4 r_persons__zi[4,Intercept] 0.95 -2.9688353 0.08844285</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`random.conditional.SD/Cor: persons`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Cleaned_Parameter             Parameter   CI       CI_low   CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       (Intercept) sd_persons__Intercept 0.95 0.0001646025 0.5350859</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`random.zero_inflated.SD/Cor: persons`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Cleaned_Parameter                Parameter   CI    CI_low  CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17       (Intercept) sd_persons__zi_Intercept 0.95 0.3711927 3.069556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># This is the standard print()-method for "bayestestR::hdi"-objects.</span></span></span>
 <span class="r-in"><span><span class="co"># For printing methods, it is easy to print complex summary statistics</span></span></span>
 <span class="r-in"><span><span class="co"># in a clean way to the console by splitting the information into</span></span></span>
 <span class="r-in"><span><span class="co"># different model components.</span></span></span>
 <span class="r-in"><span><span class="va">x</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Highest Density Interval</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter   |        95% HDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) | [-1.58, -0.19]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> persons     | [ 0.62,  1.07]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> child       | [-1.32, -0.96]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> camper      | [ 0.55,  0.93]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Fixed effects (zero-inflated)</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter   |        95% HDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) | [-2.14,  0.82]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> child       | [ 1.24,  2.56]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> camper      | [-1.56, -0.14]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Random effects (conditional)</span> <span style="color: #0000BB;">Intercept: persons</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter |        95% HDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> persons.1 | [-0.53,  0.35]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> persons.2 | [-0.22,  0.39]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> persons.3 | [-0.30,  0.23]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> persons.4 | [-0.34,  0.42]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Random effects (zero-inflated)</span> <span style="color: #0000BB;">Intercept: persons</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter |        95% HDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> persons.1 | [-0.29,  2.80]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> persons.2 | [-1.23,  1.76]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> persons.3 | [-1.67,  1.35]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> persons.4 | [-2.97,  0.09]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Random effects (conditional)</span> <span style="color: #0000BB;">SD/Cor: persons</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter   |        95% HDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) | [ 0.00,  0.54]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Random effects (zero-inflated)</span> <span style="color: #0000BB;">SD/Cor: persons</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter   |        95% HDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) | [ 0.37,  3.07]</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
