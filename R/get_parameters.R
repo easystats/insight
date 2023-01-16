@@ -78,7 +78,9 @@ get_parameters.default <- function(x, verbose = TRUE, ...) {
     },
     error = function(x) {
       if (isTRUE(verbose)) {
-        warning(sprintf("Parameters can't be retrieved for objects of class `%s`.", class(x)[1]), call. = FALSE)
+        format_warning(
+          sprintf("Parameters can't be retrieved for objects of class `%s`.", class(x)[1])
+        )
       }
       return(NULL)
     }
@@ -279,7 +281,7 @@ get_parameters.survreg <- function(x, ...) {
 
 #' @export
 get_parameters.riskRegression <- function(x, ...) {
-  junk <- utils::capture.output(cs <- stats::coef(x))
+  junk <- utils::capture.output(cs <- stats::coef(x)) # nolint
   out <- data.frame(
     Parameter = as.vector(cs[, 1]),
     Estimate = as.numeric(cs[, 2]),
@@ -508,7 +510,7 @@ get_parameters.rma <- function(x, ...) {
         row.names = NULL
       )
 
-      params$Parameter[grepl("intrcpt", params$Parameter)] <- "(Intercept)"
+      params$Parameter[grepl("intrcpt", params$Parameter, fixed = TRUE)] <- "(Intercept)"
       text_remove_backticks(params)
     },
     error = function(x) {
@@ -531,7 +533,7 @@ get_parameters.meta_random <- function(x, ...) {
         row.names = NULL
       )
 
-      params$Parameter[grepl("d", params$Parameter)] <- "(Intercept)"
+      params$Parameter[grepl("d", params$Parameter, fixed = TRUE)] <- "(Intercept)"
       text_remove_backticks(params)
     },
     error = function(x) {
@@ -557,7 +559,7 @@ get_parameters.metaplus <- function(x, ...) {
     row.names = NULL
   )
 
-  params$Parameter[grepl("muhat", params$Parameter)] <- "(Intercept)"
+  params$Parameter[grepl("muhat", params$Parameter, fixed = TRUE)] <- "(Intercept)"
   text_remove_backticks(params)
 }
 

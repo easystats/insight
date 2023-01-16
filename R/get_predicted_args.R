@@ -68,15 +68,15 @@
     )
   } else {
     flag_matrix <- tryCatch(
-      any(sapply(data, function(x) inherits(x, "matrix"))),
+      any(vapply(data, inherits, TRUE, what = "matrix")),
       error = function(e) FALSE
     )
   }
   if (isTRUE(flag_matrix) && isTRUE(verbose)) {
-    message(format_message(
+    format_alert(
       "Some of the variables were in matrix-format - probably you used `scale()` on your data?",
       "If so, and you get an error, please try `datawizard::standardize()` to standardize your data."
-    ))
+    )
   }
 
 
@@ -92,7 +92,10 @@
     }
   )
   # check whether model class has a predict method
-  predict_method <- tryCatch(predict_method[!sapply(predict_method, is.null)][[1]], error = function(e) NULL)
+  predict_method <- tryCatch(
+    predict_method[!vapply(predict_method, is.null, TRUE)][[1]],
+    error = function(e) NULL
+  )
   # define easystats prediction-types
   easystats_methods <- c("expectation", "link", "prediction", "classification")
   # retrieve model object's predict-method prediction-types (if any)
@@ -112,10 +115,10 @@
   # backward compatibility
   if (identical(predict, "relation")) {
     if (isTRUE(verbose)) {
-      message(format_message(
+      format_alert(
         '`predict = "relation" is deprecated.',
         'Please use `predict = "expectation" instead.'
-      ))
+      )
     }
     predict <- "expectation"
   }
@@ -128,7 +131,7 @@
       "`predict` will be passed directly to the `predict()` method for the model and not validated.",
       "Please check the validity and scale of the results.",
       "Set `verbose = FALSE` to silence this warning, or use one of the supported values for the `predict` argument:",
-      paste(" ", paste(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted"))), collapse = ", "))
+      paste(" ", toString(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted")))))
     )
   }
 
@@ -291,9 +294,9 @@
       # to TRUE.
 
       re_data <- get_random(x)
-      all_levels_found <- sapply(re_terms, function(i) {
+      all_levels_found <- vapply(re_terms, function(i) {
         all(unique(data[[i]]) %in% re_data[[i]])
-      })
+      }, TRUE)
 
       if (!all(all_levels_found)) {
         if (isTRUE(verbose) && isTRUE(include_random)) {
