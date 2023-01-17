@@ -1,17 +1,17 @@
 if (requiet("lme4")) {
   data(mtcars)
 
-  m1 <- suppressWarnings(glmer(
+  m1 <- suppressMessages(suppressWarnings(glmer(
     vs / cyl ~ disp + (1 | cyl),
     data = mtcars,
     family = binomial(link = "logit")
-  ))
+  )))
 
-  m2 <- suppressWarnings(glmer(
+  m2 <- suppressMessages(suppressWarnings(glmer(
     I(vs / cyl) ~ disp + (1 | cyl),
     data = mtcars,
     family = binomial(link = "logit")
-  ))
+  )))
 
   test_that("get_response", {
     expect_equal(head(get_response(m1, as_proportion = TRUE)), c(0, 0, 0.25, 0.16667, 0, 0.16667), tolerance = 1e-2)

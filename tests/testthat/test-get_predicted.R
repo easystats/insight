@@ -18,7 +18,7 @@ pkgs <- c(
   "rstantools",
   "psych"
 )
-invisible(sapply(pkgs, requiet))
+suppressPackageStartupMessages(sapply(pkgs, requiet))
 
 
 # LM and GLM --------------------------------------------------------------

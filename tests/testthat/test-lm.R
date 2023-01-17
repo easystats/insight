@@ -292,5 +292,9 @@ test_that("find_statistic", {
 test_that("find_statistic", {
   data("mtcars")
   m <- lm(cbind(mpg, hp) ~ cyl + drat, data = mtcars)
-  expect_s3_class(get_predicted(m), "get_predicted")
+  expect_message(
+    get_predicted(m),
+    "not yet supported for models of class `mlm`"
+  )
+  expect_s3_class(suppressMessages(get_predicted(m)), "get_predicted")
 })

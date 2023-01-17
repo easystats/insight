@@ -1,5 +1,5 @@
 requiet("sandwich")
-requiet("clubSandwich")
+suppressPackageStartupMessages(requiet("clubSandwich"))
 
 test_that("informative error in get_varcov.default", {
   requiet("lme4")
