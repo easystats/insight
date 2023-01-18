@@ -433,8 +433,10 @@ test_that("get_predicted - rstanarm", {
 # =========================================================================
 
 test_that("get_predicted - FA / PCA", {
-  skip_if_not_installed("fungible")
-  skip_if_not_installed("psych")
+  suppressMessages({
+    skip_if_not_installed("fungible")
+    skip_if_not_installed("psych")
+  })
   # PCA
   x <- get_predicted(psych::principal(mtcars, 3))
   expect_equal(dim(x), c(32, 3))
