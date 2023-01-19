@@ -189,7 +189,7 @@ find_parameters.bfsl <- function(x, flatten = FALSE, ...) {
 find_parameters.marginaleffects <- function(x, flatten = FALSE, ...) {
   # Recover dataframe
   excl <- c(
-    "rowid", "type", "std.error", "contrast", "term", "dydx",
+    "rowid", "type", "estimate", "std.error", "contrast", "term", "dydx",
     "statistic", "p.value", "conf.low", "conf.high", "predicted_hi",
     "predicted_lo", "predicted", "eps", "marginaleffects_eps"
   )
