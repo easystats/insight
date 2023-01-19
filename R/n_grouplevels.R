@@ -34,7 +34,7 @@ n_grouplevels <- function(x, ...) {
 
   # try to extract random effects
   ran_eff <- tryCatch(
-    find_random(x, split_nested = FALSE, flatten = TRUE),
+    find_random(x, split_nested = TRUE, flatten = TRUE),
     error = function(e) NULL
   )
 
@@ -85,7 +85,8 @@ n_grouplevels <- function(x, ...) {
   }
 
   # add interactions, if any
-  re_int <- grep(":", ran_eff, fixed = TRUE, value = TRUE)
+  ran_eff_int <- find_random(x, split_nested = FALSE, flatten = TRUE)
+  re_int <- grep(":", ran_eff_int, fixed = TRUE, value = TRUE)
   if (length(re_int)) {
     tmp <- do.call(rbind, lapply(re_int, function(i) {
       pars <- unlist(strsplit(i, ":", fixed = TRUE))
