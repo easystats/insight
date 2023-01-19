@@ -41,7 +41,7 @@ n_grouplevels <- function(x, ...) {
   # retrieve model data - may be passed via "..."
   dot_args <- list(...)
   if ("data" %in% names(dot_args)) {
-    re_data <- dot_args$data
+    re_data <- dot_args$data[intersect(colnames(dot_args$data), ran_eff)]
   } else {
     re_data <- tryCatch(
       {
