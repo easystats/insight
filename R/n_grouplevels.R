@@ -44,8 +44,13 @@ n_grouplevels <- function(x, ...) {
     re_data <- dot_args$data
   } else {
     re_data <- tryCatch(
-      get_data(x, verbose = FALSE)[ran_eff],
-      error = function(e) NULL
+      {
+        d <- get_data(x, verbose = FALSE)
+        d[intersect(colnames(d), ran_eff)]
+      },
+      error = function(e) {
+        NULL
+      }
     )
   }
 
