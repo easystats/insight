@@ -57,11 +57,29 @@ n_grouplevels <- function(x, ...) {
   # extract group levels
   re_levels <- vapply(re_data, n_unique, 1L)
 
-  out <- data.frame(
-    Group = names(re_levels),
-    N_levels = unname(re_levels),
-    stringsAsFactors = FALSE
+  # retrieve names - needs checking for names attribute for R < 4.0
+  group_names <- names(re_levels)
+  if (is.null(group_names)) {
+    group_names <- colnames(re_data)
+  }
+
+  out <- tryCatch(
+    {
+      data.frame(
+        Group = group_names,
+        N_levels = unname(re_levels),
+        stringsAsFactors = FALSE
+      )
+    },
+    error = function(e) {
+      NULL
+    }
   )
+
+  # sanity check
+  if (is.null(out)) {
+    return(NULL)
+  }
 
   # add interactions, if any
   re_int <- grep(":", ran_eff, fixed = TRUE, value = TRUE)
