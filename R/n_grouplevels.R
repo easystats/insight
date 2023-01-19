@@ -41,16 +41,11 @@ n_grouplevels <- function(x, ...) {
   # retrieve model data - may be passed via "..."
   dot_args <- list(...)
   if ("data" %in% names(dot_args)) {
-    re_data <- dot_args$data[intersect(colnames(dot_args$data), ran_eff)]
+    re_data <- dot_args$data
   } else {
     re_data <- tryCatch(
-      {
-        d <- get_data(x, verbose = FALSE)
-        d[intersect(colnames(d), ran_eff)]
-      },
-      error = function(e) {
-        NULL
-      }
+      get_data(x, verbose = FALSE),
+      error = function(e) NULL
     )
   }
 
@@ -58,6 +53,9 @@ n_grouplevels <- function(x, ...) {
   if (is.null(re_data) || is.null(ran_eff)) {
     return(NULL)
   }
+
+  # make sure we only have valid columns
+  re_data <- re_data[intersect(colnames(re_data), ran_eff)]
 
   # extract group levels
   re_levels <- vapply(re_data, n_unique, 1L)
