@@ -533,6 +533,8 @@ if (.runThisTest && requiet("brms")) {
   test_that("Issue #645", {
     # apparently BH is required to fit these brms models
     skip_if_not_installed("BH")
+    # sink() writing permission fail on some Windows CI machines
+    skip_on_os("windows")
 
     void <- suppressMessages(suppressWarnings(capture.output(
       mod <- brm(
