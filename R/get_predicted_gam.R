@@ -63,7 +63,13 @@ get_predicted.gam <- function(x,
   }
 
   # Get prediction
-  rez <- predict_function(x, data = args$data, ...)
+  if (is.null(ci)) {
+    rez <- predict_function(x, data = args$data, se.fit = FALSE, ...)
+    rez <- list(fit = rez)
+  } else {
+    rez <- predict_function(x, data = args$data, se.fit = TRUE, ...)
+  }
+
   if (is.null(iterations)) {
     predictions <- rez$fit
   } else {
@@ -78,13 +84,20 @@ get_predicted.gam <- function(x,
   }
 
   # Get CI
-  ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci, verbose = verbose)
+  if (!is.null(ci)) {
+    ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci, verbose = verbose)
+  } else {
+    ci_data <- NULL
+  }
   out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
 
 #' @export
 get_predicted.gamm <- get_predicted.gam
+
+#' @export
+get_predicted.Gam <- get_predicted.gam
 
 #' @export
 get_predicted.list <- get_predicted.gam # gamm4
