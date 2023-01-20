@@ -89,7 +89,7 @@
     if (inherits(x, c("coxph", "flexsurvreg", "coxme", "survreg", "survfit", "crq", "psm", "coxr"))) {
       n_of_responses <- ncol(mf[[1]])
       mf <- cbind(as.data.frame(as.matrix(mf[[1]])), mf)
-      colnames(mf)[1:n_of_responses] <- rn_not_combined
+      colnames(mf)[1:n_of_responses] <- rn_not_combined[1:n_of_responses]
     } else {
       tryCatch(
         {
@@ -216,8 +216,8 @@
           mf <- md[, needed.vars, drop = FALSE]
 
           # we need this hack to save variable and value label attributes, if any
-          value_labels <- lapply(mf, function(.l) attr(.l, "labels", exact = TRUE))
-          variable_labels <- lapply(mf, function(.l) attr(.l, "label", exact = TRUE))
+          value_labels <- lapply(mf, attr, which = "labels", exact = TRUE)
+          variable_labels <- lapply(mf, attr, which = "label", exact = TRUE)
 
           # removing NAs drops all label-attributes
           mf <- stats::na.omit(mf)
@@ -883,7 +883,7 @@
 
         # preserve table data for McNemar
         if (!grepl(" (and|by) ", x$data.name) &&
-          (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+            (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           return(as.table(columns[[1]]))
           # check if data is a list for kruskal-wallis
         } else if (startsWith(x$method, "Kruskal-Wallis") && length(columns) == 1 && is.list(columns[[1]])) {
@@ -891,7 +891,7 @@
           names(l) <- paste0("x", seq_along(l))
           return(l)
         } else {
-          max_len <- max(vapply(columns, length, 1))
+          max_len <- max(lengths(columns))
           for (i in seq_along(columns)) {
             if (length(columns[[i]]) < max_len) {
               columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
