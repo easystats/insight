@@ -224,6 +224,7 @@ if (.runThisTest) {
 
   test_that("get_data colnames", {
     skip_if_not(.runStanTest)
+    skip_if_not(packageVersion("base") >= "4.0.0")
     requiet("brms")
     m <- suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1))
     out <- get_data(m)
