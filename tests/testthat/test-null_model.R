@@ -15,6 +15,7 @@ if (.runThisTest &&
     expect_equal(fixef(nm1), fixef(nm2), tolerance = 1e-4)
   })
 
+  skip_on_os("mac") # error: FreeADFunObject
   m1 <- suppressWarnings(glmmTMB(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
   m2 <- suppressWarnings(glmmTMB(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
 

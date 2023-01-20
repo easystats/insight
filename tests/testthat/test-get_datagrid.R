@@ -165,6 +165,7 @@ if (requiet("gamm4") && getRversion() >= "4.0.0" && requiet("glmmTMB") && requie
     expect_equal(unique(get_datagrid(mod, include_random = FALSE)$Species), 0)
 
     # GLMMTMB
+    skip_on_os("mac") # error: FreeADFunObject
     mod <- suppressWarnings(glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris))
     expect_equal(dim(get_datagrid(mod, include_random = TRUE)), c(10, 2))
     expect_equal(unique(get_datagrid(mod, include_random = FALSE)$Species), NA)

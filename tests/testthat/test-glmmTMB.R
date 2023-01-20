@@ -1,3 +1,6 @@
+skip_on_os("mac") # error: FreeADFunObject
+
+
 osx <- tryCatch(
   {
     si <- Sys.info()
