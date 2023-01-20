@@ -247,8 +247,8 @@ if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >
 
     expect_identical(nrow(get_parameters(m2)), 2L)
     expect_identical(get_parameters(m2)$Parameter, c("(Intercept)", "Days"))
-    expect_identical(
-      names(get_parameters(m2, effects = "random")),
+    expect_named(
+      get_parameters(m2, effects = "random"),
       c("mysubgrp:mygrp", "Subject", "mygrp")
     )
   })
