@@ -222,16 +222,17 @@ if (.runThisTest) {
   })
 
 
-  if (.runStanTest) {
+  test_that("get_data colnames", {
+    skip_if_not(.runStanTest)
     requiet("brms")
     m <- suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1))
     out <- get_data(m)
     expect_type(out$cyl, "double")
     expect_true(all(colnames(out) %in% c("mpg", "hp", "cyl")))
-
     out <- get_data(m, additional_variables = TRUE)
     expect_true("qsec" %in% colnames(out))
-  }
+  })
+
 }
 
 mod <- lm(mpg ~ as.logical(am) + factor(cyl) + as.factor(gear), mtcars)

@@ -312,6 +312,7 @@ if (.runThisTest) {
 
 
     test_that("stats::predict.Gam matches get_predicted.Gam", {
+      requiet("gam")
       data(kyphosis, package = "gam")
       tmp <<- kyphosis
       mod <- gam::gam(Kyphosis ~ gam::s(Age, 4) + Number, family = binomial, data = tmp)
