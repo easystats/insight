@@ -373,8 +373,15 @@
   # mixed model?
   is.mixed.model <- !is_levenetest && is_mixed_model(x)
   if (is.mixed.model) {
-    ngrplvl <- n_grouplevels(x)
-    n.grp.lvl <- stats::setNames(ngrplvl$N_levels, ngrplvl$Group)
+    n.grp.lvl <- tryCatch(
+      {
+        ngrplvl <- n_grouplevels(x)
+        stats::setNames(ngrplvl$N_levels, ngrplvl$Group)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   } else {
     n.grp.lvl <- NULL
   }
