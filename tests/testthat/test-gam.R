@@ -307,6 +307,22 @@ if (.runThisTest) {
       p1 <- predict(b4, type = "link", exclude = "s(x1)")
       p2 <- get_predicted(b4, predict = "link", exclude = "s(x1)", ci = 0.95)
       expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+
     })
+
+
+    test_that("stats::predict.Gam matches get_predicted.Gam", {
+      requiet("gam")
+      data(kyphosis, package = "gam")
+      tmp <<- kyphosis
+      mod <- gam::gam(Kyphosis ~ gam::s(Age, 4) + Number, family = binomial, data = tmp)
+      p1 <- get_predicted(mod, predict = "link")
+      p2 <- predict(mod, type = "link")
+      expect_equal(as.vector(p1), p2, ignore_attr = TRUE)
+      p1 <- get_predicted(mod, predict = "expectation")
+      p2 <- predict(mod, type = "response")
+      expect_equal(as.vector(p1), p2, ignore_attr = TRUE)
+    })
+
   }
 }

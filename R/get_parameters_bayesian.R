@@ -119,17 +119,15 @@ get_parameters.BFBayesFactor <- function(x,
 
   # check if valid model was indexed...
 
-  if (length(x@numerator) > 1 ||
-    !xor(
-      x@denominator@shortName == "Intercept only",
-      grepl("^(Null|Indep)", x@denominator@shortName)
-    )) {
-    if (verbose) {
-      message(
-        "Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.\n",
-        'See help("get_parameters", package = "insight").'
-      )
-    }
+  if ((length(x@numerator) > 1 ||
+      !xor(
+        x@denominator@shortName == "Intercept only",
+        grepl("^(Null|Indep)", x@denominator@shortName)
+      )) && verbose) {
+    format_alert(
+      "Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.",
+      'See help("get_parameters", package = "insight").'
+    )
   }
 
 
@@ -195,7 +193,7 @@ get_parameters.stanmvreg <- function(x,
 
   for (i in names(parms)) {
     parms[[i]]$conditional <- sprintf("%s|%s", i, parms[[i]]$conditional)
-    find_bracket <- regexpr(pattern = "\\[", parms[[i]]$random)
+    find_bracket <- regexpr(pattern = "[", parms[[i]]$random, fixed = TRUE)
     parms[[i]]$random <- paste0(
       substr(parms[[i]]$random, start = 1, stop = find_bracket),
       i, "|",
@@ -460,9 +458,9 @@ get_parameters.sim <- function(x,
 
 .summary_of_posteriors <- function(out, centrality = "mean", ...) {
   s <- switch(centrality,
-    "mean" = sapply(out, mean, na.rm = TRUE),
-    "median" = sapply(out, stats::median, na.rm = TRUE),
-    sapply(out, mean, na.rm = TRUE)
+    "mean" = vapply(out, mean, numeric(1), na.rm = TRUE),
+    "median" = vapply(out, stats::median, numeric(1), na.rm = TRUE),
+    vapply(out, mean, numeric(1), na.rm = TRUE)
   )
   data.frame(
     Parameter = names(s),

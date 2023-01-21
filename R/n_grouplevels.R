@@ -34,7 +34,7 @@ n_grouplevels <- function(x, ...) {
 
   # try to extract random effects
   ran_eff <- tryCatch(
-    find_random(x, split_nested = FALSE, flatten = TRUE),
+    find_random(x, split_nested = TRUE, flatten = TRUE),
     error = function(e) NULL
   )
 
@@ -44,7 +44,7 @@ n_grouplevels <- function(x, ...) {
     re_data <- dot_args$data
   } else {
     re_data <- tryCatch(
-      get_data(x, verbose = FALSE)[ran_eff],
+      get_data(x, verbose = FALSE),
       error = function(e) NULL
     )
   }
@@ -54,17 +54,39 @@ n_grouplevels <- function(x, ...) {
     return(NULL)
   }
 
+  # make sure we only have valid columns
+  re_data <- re_data[intersect(colnames(re_data), ran_eff)]
+
   # extract group levels
   re_levels <- vapply(re_data, n_unique, 1L)
 
-  out <- data.frame(
-    Group = names(re_levels),
-    N_levels = unname(re_levels),
-    stringsAsFactors = FALSE
+  # retrieve names - needs checking for names attribute for R < 4.0
+  group_names <- names(re_levels)
+  if (is.null(group_names)) {
+    group_names <- colnames(re_data)
+  }
+
+  out <- tryCatch(
+    {
+      data.frame(
+        Group = group_names,
+        N_levels = unname(re_levels),
+        stringsAsFactors = FALSE
+      )
+    },
+    error = function(e) {
+      NULL
+    }
   )
 
+  # sanity check
+  if (is.null(out)) {
+    return(NULL)
+  }
+
   # add interactions, if any
-  re_int <- grep(":", ran_eff, fixed = TRUE, value = TRUE)
+  ran_eff_int <- find_random(x, split_nested = FALSE, flatten = TRUE)
+  re_int <- grep(":", ran_eff_int, fixed = TRUE, value = TRUE)
   if (length(re_int)) {
     tmp <- do.call(rbind, lapply(re_int, function(i) {
       pars <- unlist(strsplit(i, ":", fixed = TRUE))

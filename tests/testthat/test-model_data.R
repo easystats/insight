@@ -28,6 +28,7 @@ if (.runThisTest &&
   })
 
   data("Salamanders")
+  skip_on_os("mac") # error: FreeADFunObject
   m <- glmmTMB(
     count ~ spp + cover + mined + poly(DOP, 3) + (1 | site),
     ziformula = ~ spp + mined,
