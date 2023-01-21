@@ -120,10 +120,10 @@ get_parameters.BFBayesFactor <- function(x,
   # check if valid model was indexed...
 
   if ((length(x@numerator) > 1 ||
-      !xor(
-        x@denominator@shortName == "Intercept only",
-        grepl("^(Null|Indep)", x@denominator@shortName)
-      )) && verbose) {
+    !xor(
+      x@denominator@shortName == "Intercept only",
+      grepl("^(Null|Indep)", x@denominator@shortName)
+    )) && verbose) {
     format_alert(
       "Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.",
       'See help("get_parameters", package = "insight").'
