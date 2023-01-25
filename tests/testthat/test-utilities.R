@@ -4,7 +4,7 @@ test_that("trim_ws() works with data frames", {
     y = c("a", "b c", " d", "e f ", "g "),
     stringsAsFactors = FALSE
   )
-  expect_equal(
+  expect_identical(
     trim_ws(test_trim),
     data.frame(
       x = 1:5,
@@ -19,7 +19,7 @@ test_that("trim_ws() works with list", {
     x = 1:5,
     y = c("a", "b c", " d", "e f ", "g ")
   )
-  expect_equal(
+  expect_identical(
     trim_ws(test_trim),
     list(
       x = 1:5,
@@ -29,7 +29,7 @@ test_that("trim_ws() works with list", {
 })
 
 test_that("n_unique() works with NULL", {
-  expect_equal(n_unique(NULL), 0)
+  expect_identical(n_unique(NULL), 0)
 })
 
 test_that("n_unique() works with list", {
@@ -37,9 +37,9 @@ test_that("n_unique() works with list", {
     x = 1:3,
     y = c("a", "b")
   )
-  expect_equal(
+  expect_identical(
     n_unique(test_n_unique),
-    list(x = 3, y = 2)
+    list(x = 3L, y = 2L)
   )
 })
 
@@ -60,7 +60,7 @@ test_that("has_single_value() works", {
   x <- c(2, 1)
   expect_false(has_single_value(x))
 
-  x <- c(NULL)
+  x <- NULL
   expect_false(has_single_value(x))
 
   x <- c(NA, NA)
@@ -69,8 +69,8 @@ test_that("has_single_value() works", {
 })
 
 test_that("safe_deparse_symbol() works", {
-  expect_equal(safe_deparse_symbol(as.name("test")), "test")
+  expect_identical(safe_deparse_symbol(as.name("test")), "test")
   expect_null(safe_deparse_symbol("test"))
-  expect_equal(safe_deparse(as.name("test")), "test")
-  expect_equal(safe_deparse("test"), "\"test\"")
+  expect_identical(safe_deparse(as.name("test")), "test")
+  expect_identical(safe_deparse("test"), "\"test\"")
 })
