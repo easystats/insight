@@ -38,6 +38,9 @@
 
 * Fixes issue in `compact_list()`.
 
+* `has_single_value()` now returns `FALSE` when the object only has `NA` and 
+  `na.rm = TRUE`.
+
 # insight 0.18.8
 
 ## Bug fixes

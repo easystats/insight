@@ -45,40 +45,27 @@ test_that("n_unique() works with list", {
 
 test_that("has_single_value() works", {
   x <- c(1, 1)
-  expect_identical(
-    length(unique(x)) == 1,
-    has_single_value(x)
-  )
+  expect_true(has_single_value(x))
 
   x <- c("a", "a")
-  expect_identical(
-    length(unique(x)) == 1,
-    has_single_value(x)
-  )
+  expect_true(has_single_value(x))
 
   x <- factor(c("a", "a"))
-  expect_identical(
-    length(unique(x)) == 1,
-    has_single_value(x)
-  )
+  expect_true(has_single_value(x))
 
   x <- c(NA, 1)
-  expect_identical(
-    length(unique(x)) == 1,
-    has_single_value(x)
-  )
+  expect_false(has_single_value(x))
+  expect_true(has_single_value(x, na.rm = TRUE))
 
   x <- c(2, 1)
-  expect_identical(
-    length(unique(x)) == 1,
-    has_single_value(x)
-  )
+  expect_false(has_single_value(x))
 
   x <- c(NULL)
-  expect_identical(
-    length(unique(x)) == 1,
-    has_single_value(x)
-  )
+  expect_false(has_single_value(x))
+
+  x <- c(NA, NA)
+  expect_false(has_single_value(x))
+  expect_false(has_single_value(x, na.rm = TRUE))
 })
 
 test_that("safe_deparse_symbol() works", {
