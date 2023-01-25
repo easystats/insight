@@ -233,7 +233,6 @@ if (.runThisTest) {
     out <- get_data(m, additional_variables = TRUE)
     expect_true("qsec" %in% colnames(out))
   })
-
 }
 
 mod <- lm(mpg ~ as.logical(am) + factor(cyl) + as.factor(gear), mtcars)

@@ -883,7 +883,7 @@
 
         # preserve table data for McNemar
         if (!grepl(" (and|by) ", x$data.name) &&
-            (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+          (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           return(as.table(columns[[1]]))
           # check if data is a list for kruskal-wallis
         } else if (startsWith(x$method, "Kruskal-Wallis") && length(columns) == 1 && is.list(columns[[1]])) {
