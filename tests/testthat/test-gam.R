@@ -95,9 +95,9 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), dat2$y)
-    expect_equal(length(get_response(m2)), 500)
-    expect_equal(ncol(get_response(m3)), 2)
+    expect_equal(get_response(m1), dat2$y, ignore_attr = TRUE)
+    expect_length(get_response(m2), 500)
+    expect_identical(ncol(get_response(m3)), 2L)
   })
 
   test_that("link_inverse", {
@@ -107,11 +107,11 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1, verbose = FALSE)), 400)
-    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("y", "x0", "x1", "x2", "x3"))
-    expect_equal(nrow(get_data(m2, verbose = FALSE)), 500)
-    expect_equal(colnames(get_data(m2, verbose = FALSE)), c("y", "x2", "x3", "x0", "x1"))
-    expect_equal(nrow(get_data(m3, verbose = FALSE)), 300)
+    expect_identical(nrow(get_data(m1, verbose = FALSE)), 400L)
+    expect_identical(colnames(get_data(m1, verbose = FALSE)), c("y", "x0", "x1", "x2", "x3"))
+    expect_identical(nrow(get_data(m2, verbose = FALSE)), 500L)
+    expect_identical(colnames(get_data(m2, verbose = FALSE)), c("y", "x2", "x3", "x0", "x1"))
+    expect_identical(nrow(get_data(m3, verbose = FALSE)), 300L)
 
     # extract data from environment allows us to keep additional variables
     miris <- mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris)
@@ -150,18 +150,18 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
   })
 
   test_that("find_variables", {
-    expect_equal(find_variables(m1), list(response = "y", conditional = c("x0", "x1", "x2", "x3")))
-    expect_equal(find_variables(m1, flatten = TRUE), c("y", "x0", "x1", "x2", "x3"))
-    expect_equal(find_variables(m2), list(response = "y", conditional = c("x2", "x3"), zero_inflated = c("x0", "x1")))
-    expect_equal(find_variables(m2, flatten = TRUE), c("y", "x2", "x3", "x0", "x1"))
-    expect_equal(find_variables(m3), list(response = c(y0 = "y0", y1 = "y1"), y0 = list(conditional = c("x0", "x1")), y1 = list(conditional = c("x2", "x3"))))
-    expect_equal(find_variables(m3, flatten = TRUE), c("y0", "y1", "x0", "x1", "x2", "x3"))
+    expect_identical(find_variables(m1), list(response = "y", conditional = c("x0", "x1", "x2", "x3")))
+    expect_identical(find_variables(m1, flatten = TRUE), c("y", "x0", "x1", "x2", "x3"))
+    expect_identical(find_variables(m2), list(response = "y", conditional = c("x2", "x3"), zero_inflated = c("x0", "x1")))
+    expect_identical(find_variables(m2, flatten = TRUE), c("y", "x2", "x3", "x0", "x1"))
+    expect_identical(find_variables(m3), list(response = c(y0 = "y0", y1 = "y1"), y0 = list(conditional = c("x0", "x1")), y1 = list(conditional = c("x2", "x3"))))
+    expect_identical(find_variables(m3, flatten = TRUE), c("y0", "y1", "x0", "x1", "x2", "x3"))
   })
 
   test_that("n_obs", {
-    expect_equal(n_obs(m1), 400)
-    expect_equal(n_obs(m2), 500)
-    expect_equal(n_obs(m3), 300)
+    expect_identical(n_obs(m1), 400L)
+    expect_identical(n_obs(m2), 500L)
+    expect_identical(n_obs(m3), 300L)
   })
 
   test_that("linkfun", {
@@ -169,21 +169,21 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
   })
 
   test_that("find_parameters", {
-    expect_equal(
+    expect_identical(
       find_parameters(m1),
       list(
         conditional = "(Intercept)",
         smooth_terms = c("s(x0)", "s(x1)", "s(x2)", "s(x3)")
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 5)
-    expect_equal(
+    expect_identical(nrow(get_parameters(m1)), 5L)
+    expect_identical(
       get_parameters(m1)$Parameter,
       c("(Intercept)", "s(x0)", "s(x1)", "s(x2)", "s(x3)")
     )
-    expect_equal(nrow(get_parameters(m1, "smooth_terms")), 4)
+    expect_identical(nrow(get_parameters(m1, "smooth_terms")), 4L)
 
-    expect_equal(
+    expect_identical(
       find_parameters(m2),
       list(
         conditional = c("(Intercept)", "(Intercept).1"),
@@ -199,14 +199,14 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
   })
 
   test_that("find_terms", {
-    expect_equal(
+    expect_identical(
       find_terms(m1),
       list(
         response = "y",
         conditional = c("s(x0)", "s(x1)", "s(x2)", "s(x3)")
       )
     )
-    expect_equal(
+    expect_identical(
       find_terms(m2),
       list(
         response = "y",
@@ -214,7 +214,7 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
         zero_inflated = c("s(x0)", "s(x1)")
       )
     )
-    expect_equal(
+    expect_identical(
       find_terms(m3),
       list(
         y0 = list(response = "y0", conditional = c("s(x0)", "s(x1)")),
@@ -224,7 +224,7 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
   })
 
   test_that("find_algorithm", {
-    expect_equal(
+    expect_identical(
       find_algorithm(m1),
       list(algorithm = "GCV", optimizer = "magic")
     )
