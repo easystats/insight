@@ -56,7 +56,9 @@
 #'   If `NA`, will return all the unique values. In case of multiple continuous target
 #'   variables, `length` can also be a vector of different values (see examples).
 #' @param range Option to control the representative values given in `at`, if
-#'   no specific values were provided. `range` can be one of the following:
+#'   no specific values were provided. Use in combination with the `length` argument
+#'   to control the number of values within the specified range. `range` can be
+#'   one of the following:
 #'   - `"range"` (default), will use the minimum and maximum of the original data
 #'   vector as end-points (min and max).
 #'   - if an interval type is specified, such as [`"iqr"`][IQR()],
@@ -129,6 +131,8 @@
 #'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
 #'   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
 #'   get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+#'   # identical to previous line: -1 SD, mean and +1 SD
+#'   get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
 #'   get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
 #'
 #'   # Numeric and categorical variables, generating a grid for plots
@@ -253,7 +257,7 @@ get_datagrid.data.frame <- function(x,
     specs$varname <- as.character(specs$varname) # make sure it's a string not fac
     specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
-    specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
+    specs$is_factor <- vapply(x[specs$varname], function(x) is.factor(x) || is.character(x), TRUE)
 
     # Create target list of factors -----------------------------------------
     facs <- list()
@@ -380,7 +384,7 @@ get_datagrid.data.frame <- function(x,
   # Printing decorations
   attr(targets, "table_title") <- c("Visualisation Grid", "blue")
   if (!(length(rest_vars) == 1 && is.na(rest_vars)) && length(rest_vars) >= 1) {
-    attr(targets, "table_footer") <- paste0("\nMaintained constant: ", paste0(rest_vars, collapse = ", "))
+    attr(targets, "table_footer") <- paste0("\nMaintained constant: ", toString(rest_vars))
   }
   if (!is.null(attr(targets, "table_footer"))) {
     attr(targets, "table_footer") <- c(attr(targets, "table_footer"), "blue")
@@ -631,7 +635,7 @@ get_datagrid.logical <- get_datagrid.character
       # Drop the brackets
       parts <- gsub("\\[|\\]", "", parts)
       # Split by a separator like ','
-      parts <- trim_ws(unlist(strsplit(parts, ",")))
+      parts <- trim_ws(unlist(strsplit(parts, ",", fixed = TRUE)))
       # If the elements have quotes around them, drop them
       if (all(grepl("\\'.*\\'", parts))) parts <- gsub("'", "", parts, fixed = TRUE)
       if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts, fixed = TRUE)
@@ -642,7 +646,7 @@ get_datagrid.logical <- get_datagrid.character
         # Add quotes around them
         parts <- paste0("'", parts, "'")
         # Convert to character
-        expression <- paste0("as.factor(c(", paste0(parts, collapse = ", "), "))")
+        expression <- paste0("as.factor(c(", toString(parts), "))")
       } else {
         # Numeric
         # If one, might be a shortcut
@@ -685,7 +689,7 @@ get_datagrid.logical <- get_datagrid.character
           # If more, it's probably the vector
         } else if (length(parts) > 2) {
           parts <- as.numeric(parts)
-          expression <- paste0("c(", paste0(parts, collapse = ", "), ")")
+          expression <- paste0("c(", toString(parts), ")")
         }
       }
       # Else, try to directly eval the content
