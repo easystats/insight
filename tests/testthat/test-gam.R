@@ -118,7 +118,6 @@ if (.runThisTest) {
       miris <- mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris)
       tmp <- get_data(miris, additional_variables = TRUE)
       expect_true("Petal.Width" %in% colnames(tmp))
-
     })
 
     test_that("find_formula", {
@@ -313,7 +312,6 @@ if (.runThisTest) {
       p1 <- predict(b4, type = "link", exclude = "s(x1)")
       p2 <- get_predicted(b4, predict = "link", exclude = "s(x1)", ci = 0.95)
       expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
-
     })
 
 
@@ -329,6 +327,5 @@ if (.runThisTest) {
       p2 <- predict(mod, type = "response")
       expect_equal(as.vector(p1), p2, ignore_attr = TRUE)
     })
-
   }
 }
