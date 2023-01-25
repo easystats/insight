@@ -1213,6 +1213,13 @@ get_data.blavaan <- get_data.lavaan
 
 #' @export
 get_data.gam <- function(x, source = "environment", verbose = TRUE, ...) {
+  # try to recover data from environment
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
+
+  if (!is.null(model_data)) {
+    return(model_data)
+  }
+
   mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
   .prepare_get_data(x, mf, verbose = verbose)
 }
