@@ -416,8 +416,8 @@ get_statistic.Gam <- function(x, ...) {
 
 #' @export
 get_statistic.gam <- function(x, ...) {
-  p.table <- summary(model)$p.table
-  s.table <- summary(model)$s.table
+  p.table <- summary(x)$p.table
+  s.table <- summary(x)$s.table
 
   d1 <- d2 <- NULL
 
