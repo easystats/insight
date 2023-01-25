@@ -242,6 +242,10 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
     expect_equal(out$Estimate, c(1.501, 1.2384), tolerance = 1e-3)
     expect_identical(out$Parameter, c("s(x0)", "s(x1)"))
 
+    out <- get_statistic(b)
+    expect_equal(out$Statistic, c(0.5319, 14.2444), tolerance = 1e-3)
+    expect_identical(out$Parameter, c("s(x0)", "s(x1)"))
+
     out <- get_parameters(b, component = "conditional")
     expect_null(out)
 
@@ -252,6 +256,10 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
     b <- gam(y ~ x0 + x1, data = dat)
     out <- get_parameters(b)
     expect_equal(out$Estimate, c(4.5481, 0.4386, 6.4379), tolerance = 1e-3)
+    expect_identical(out$Parameter, c("(Intercept)", "x0", "x1"))
+
+    out <- get_statistic(b)
+    expect_equal(out$Statistic, c(9.9086, 0.7234, 10.9056), tolerance = 1e-3)
     expect_identical(out$Parameter, c("(Intercept)", "x0", "x1"))
 
     out <- get_parameters(b, component = "conditional")
