@@ -228,7 +228,9 @@ variables, <code>length</code> can also be a vector of different values (see exa
 
 <dt>range</dt>
 <dd><p>Option to control the representative values given in <code>at</code>, if
-no specific values were provided. <code>range</code> can be one of the following:</p><ul><li><p><code>"range"</code> (default), will use the minimum and maximum of the original data
+no specific values were provided. Use in combination with the <code>length</code> argument
+to control the number of values within the specified range. <code>range</code> can be
+one of the following:</p><ul><li><p><code>"range"</code> (default), will use the minimum and maximum of the original data
 vector as end-points (min and max).</p></li>
 <li><p>if an interval type is specified, such as <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">"iqr"</a></code>,
 <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">"ci"</a></code>, <code><a href="https://easystats.github.io/bayestestR/reference/hdi.html" class="external-link">"hdi"</a></code> or
@@ -309,6 +311,8 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
 <span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"ci"</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span> <span class="co"># change min/max of target</span></span></span>
 <span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [0, 1]"</span><span class="op">)</span> <span class="co"># Manually change min/max</span></span></span>
 <span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [sd]"</span><span class="op">)</span> <span class="co"># -1 SD, mean and +1 SD</span></span></span>
+<span class="r-in"><span>  <span class="co"># identical to previous line: -1 SD, mean and +1 SD</span></span></span>
+<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"sd"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [quartiles]"</span><span class="op">)</span> <span class="co"># quartiles</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Numeric and categorical variables, generating a grid for plots</span></span></span>
