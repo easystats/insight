@@ -170,15 +170,19 @@ get_parameters.SemiParBIV <- function(x, ...) {
 
 
 .return_smooth_parms <- function(conditional, smooth_terms, component) {
-  cond <- data.frame(
-    Parameter = names(conditional),
-    Estimate = conditional,
-    Component = "conditional",
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
+  if (!is_empty_object(conditional)) {
+    cond <- data.frame(
+      Parameter = names(conditional),
+      Estimate = conditional,
+      Component = "conditional",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    cond <- NULL
+  }
 
-  if (!is.null(smooth_terms)) {
+  if (!is_empty_object(smooth_terms)) {
     smooth <- data.frame(
       Parameter = names(smooth_terms),
       Estimate = smooth_terms,

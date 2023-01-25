@@ -41,6 +41,9 @@
 * `has_single_value()` now returns `FALSE` when the object only has `NA` and 
   `na.rm = TRUE`.
 
+* Fixed issue in `get_parameters()` for gam-models without smooth terms, or with
+  only smooth terms and removed intercept.
+
 # insight 0.18.8
 
 ## Bug fixes
