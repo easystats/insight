@@ -123,7 +123,9 @@ If \code{NA}, will return all the unique values. In case of multiple continuous 
 variables, \code{length} can also be a vector of different values (see examples).}
 
 \item{range}{Option to control the representative values given in \code{at}, if
-no specific values were provided. \code{range} can be one of the following:
+no specific values were provided. Use in combination with the \code{length} argument
+to control the number of values within the specified range. \code{range} can be
+one of the following:
 \itemize{
 \item \code{"range"} (default), will use the minimum and maximum of the original data
 vector as end-points (min and max).
@@ -192,6 +194,8 @@ if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE
   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
   get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+  # identical to previous line: -1 SD, mean and +1 SD
+  get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
   get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
 
   # Numeric and categorical variables, generating a grid for plots

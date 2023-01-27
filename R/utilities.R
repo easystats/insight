@@ -53,7 +53,7 @@ trim_ws.default <- function(x, ...) {
 #' @export
 trim_ws.data.frame <- function(x, character_only = TRUE, ...) {
   if (character_only) {
-    chars <- which(sapply(x, is.character))
+    chars <- which(vapply(x, is.character, FUN.VALUE = logical(1L)))
   } else {
     chars <- seq_len(ncol(x))
   }
@@ -66,7 +66,7 @@ trim_ws.data.frame <- function(x, character_only = TRUE, ...) {
 #' @export
 trim_ws.list <- function(x, character_only = TRUE, ...) {
   if (character_only) {
-    chars <- which(sapply(x, is.character))
+    chars <- which(vapply(x, is.character, FUN.VALUE = logical(1L)))
   } else {
     chars <- seq_len(length(x))
   }
@@ -98,7 +98,7 @@ n_unique.default <- function(x, na.rm = TRUE, ...) {
 
 #' @export
 n_unique.data.frame <- function(x, na.rm = TRUE, ...) {
-  sapply(x, n_unique, na.rm = na.rm)
+  vapply(x, n_unique, na.rm = na.rm, FUN.VALUE = numeric(1L))
 }
 
 #' @export
@@ -141,5 +141,5 @@ safe_deparse_symbol <- function(x) {
 #' @export
 has_single_value <- function(x, na.rm = FALSE) {
   if (na.rm) x <- x[!is.na(x)]
-  !is.null(x) && isTRUE(all(x == x[1]))
+  !is.null(x) && length(x) > 0L && isTRUE(all(x == x[1]))
 }
