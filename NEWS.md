@@ -1,4 +1,4 @@
-# insight 0.18.9
+# insight 0.19.0
 
 ## New supported models
 
