@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.8.13</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,29 +86,29 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.18.9" id="insight-0189">insight 0.18.9<a class="anchor" aria-label="anchor" href="#insight-0189"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.19.0" id="insight-0190">insight 0.19.0<a class="anchor" aria-label="anchor" href="#insight-0190"></a></h2>
 <div class="section level3">
-<h3 id="new-supported-models-0-18-9">New supported models<a class="anchor" aria-label="anchor" href="#new-supported-models-0-18-9"></a></h3>
+<h3 id="new-supported-models-0-19-0">New supported models<a class="anchor" aria-label="anchor" href="#new-supported-models-0-19-0"></a></h3>
 <ul><li>
 <code>mmrm</code> (package <em>mmrm</em>), <code>flac</code> and <code>flic</code> (<em>logistf</em>)</li>
 </ul></div>
 <div class="section level3">
-<h3 id="breaking-changes-0-18-9">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-18-9"></a></h3>
+<h3 id="breaking-changes-0-19-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-19-0"></a></h3>
 <ul><li>
 <code><a href="../reference/get_data.html">get_data()</a></code> was revised and now always tries to recover the data that was used to fit a model from the environment. If this fails, it falls back to recovering data from the model frame (the former default behaviour). Futrhermore, the <code>source</code> argument can be used to explicitly force the old behaviour: <code>source = "mf"</code> will try to recover data from the model frame first, then possibly falling back to look in the environment.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-functions-0-18-9">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-18-9"></a></h3>
+<h3 id="new-functions-0-19-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-19-0"></a></h3>
 <ul><li>
 <code><a href="../reference/n_grouplevels.html">n_grouplevels()</a></code>, to return random effect groups and number of group levels for mixed models.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="changes-to-functions-0-18-9">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-18-9"></a></h3>
+<h3 id="changes-to-functions-0-19-0">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-19-0"></a></h3>
 <ul><li>
 <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> preserves all factor levels for factors that are hold constant at their reference level. This is required to work together with <code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> when calculating standard errors for <code><a href="../reference/get_predicted.html">get_predicted()</a></code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-18-9">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-9"></a></h3>
+<h3 id="bug-fixes-0-19-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-19-0"></a></h3>
 <ul><li><p>Fixed but in <code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> handling of incomplete factors which sometimes had downstream implications for numerical results in the uncertainty estimates produced by <code><a href="../reference/get_predicted.html">get_predicted()</a></code>.</p></li>
 <li><p>Fixed minor issues for HTML tables in <code><a href="../reference/export_table.html">export_table()</a></code> when model parameters were grouped.</p></li>
 <li><p>Fixed issue with incorrect back-transforming in <code><a href="../reference/get_data.html">get_data()</a></code> for models with log-transformed variables.</p></li>
@@ -754,7 +754,7 @@
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> now also returns <code>NULL</code> when all weights were 1.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>BFBayesFactor</em> objects gets a <code>verbose</code> argument.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>emmGrid</em> and <em>emm_list</em> objects gets a <code>summary</code> argument, to either return the full posterior samples or the summarized centrality indices for Bayesian models.</p></li>
-<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code><a href="https://rdrr.io/pkg/MuMIn/man/model.avg.html" class="external-link">MuMIn::model.avg()</a></code> now tries to retrieve the random effects part of a formula, when present.</p></li>
+<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code>MuMIn::model.avg()</code> now tries to retrieve the random effects part of a formula, when present.</p></li>
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> gains a <code>na_rm</code> argument to remove possible missing values.</p></li>
 </ul></div>
 <div class="section level3">
@@ -843,7 +843,7 @@
 <li><p>Fixed issue with <code><a href="../reference/get_variance.html">get_variance()</a></code> for <code>lme</code>-models with categorical random slope.</p></li>
 <li><p>Fixed issue that occurred since R 4.0.0 in <code><a href="../reference/find_weights.html">find_weights()</a></code> when function call had no <code>weights</code>-argument.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>-response variables and matrix-like variables in the model frame (e.g. when using <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly()</a></code>).</p></li>
-<li><p>Fixed issues with <code><a href="https://rdrr.io/pkg/PROreg/man/BBmm.html" class="external-link">PROreg::BBmm()</a></code>, due to changes in latest package update.</p></li>
+<li><p>Fixed issues with <code>PROreg::BBmm()</code>, due to changes in latest package update.</p></li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
