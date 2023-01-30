@@ -364,5 +364,4 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
     p2 <- predict(mod, type = "response")
     expect_equal(as.vector(p1), p2, ignore_attr = TRUE)
   })
-
 }

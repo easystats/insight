@@ -1,1 +1,8 @@
-This submission fixes issues with reverse-dependencies from a planned update  of the *performance* package. The update of the *performance* package introduces breaking changes, which are anticipated in the fixes included in this release.
+## revdepcheck results
+
+We checked 33 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 1 new problem
+ * We failed to check 0 packages
+
+We saw one error (failing example) for the *marginaleffects* package. This is expected, the maintainer is informed and has prepared an update of *marginaleffects*, which can be submitted once *insight* is accepted on CRAN.
