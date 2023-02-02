@@ -1,5 +1,5 @@
 pkgs <- c("insight", "estimatr", "ivreg")
-invisible(sapply(pkgs, requiet))
+suppressPackageStartupMessages(sapply(pkgs, requiet))
 
 
 

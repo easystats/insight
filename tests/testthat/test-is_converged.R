@@ -5,11 +5,11 @@ if (requiet("lme4") && getRversion() >= "4.0.0") {
   cbpp$x <- rnorm(nrow(cbpp))
   cbpp$x2 <- runif(nrow(cbpp))
 
-  model <- suppressWarnings(glmer(
+  model <- suppressMessages(suppressWarnings(glmer(
     cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
     data = cbpp,
     family = binomial()
-  ))
+  )))
 
   test_that("is_converged", {
     expect_true(is_converged(model))

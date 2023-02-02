@@ -18,7 +18,7 @@ pkgs <- c(
   "rstantools",
   "psych"
 )
-invisible(sapply(pkgs, requiet))
+suppressPackageStartupMessages(sapply(pkgs, requiet))
 
 
 # LM and GLM --------------------------------------------------------------
@@ -433,8 +433,10 @@ test_that("get_predicted - rstanarm", {
 # =========================================================================
 
 test_that("get_predicted - FA / PCA", {
-  skip_if_not_installed("fungible")
-  skip_if_not_installed("psych")
+  suppressMessages({
+    skip_if_not_installed("fungible")
+    skip_if_not_installed("psych")
+  })
   # PCA
   x <- get_predicted(psych::principal(mtcars, 3))
   expect_equal(dim(x), c(32, 3))
@@ -558,10 +560,10 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   skip_if(isFALSE(run_stan))
   requiet("brms")
   void <- capture.output(
-    mod <- brm(am ~ hp + mpg,
+    suppressMessages(mod <- brm(am ~ hp + mpg,
       family = bernoulli, data = mtcars,
       chains = 2, iter = 1000, seed = 1024, silent = 2
-    )
+    ))
   )
   x <- get_predicted(mod, predict = "link", ci = 0.95)
   y <- get_predicted(mod, predict = "expectation", ci = 0.95)
@@ -573,14 +575,14 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   data <- mtcars
   data$cyl <- as.character(data$cyl)
   void <- capture.output(
-    suppressWarnings(model <- brm(cyl ~ mpg * vs + (1 | carb),
+    suppressMessages(suppressWarnings(model <- brm(cyl ~ mpg * vs + (1 | carb),
       data = data,
       iter = 1000,
       seed = 1024,
       algorithm = "meanfield",
       refresh = 0,
       family = categorical(link = "logit", refcat = "4")
-    ))
+    )))
   )
   x <- as.data.frame(get_predicted(model, ci = 0.95))
   # Test shape
