@@ -105,7 +105,7 @@ format_message <- function(string,
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf getOption("warn") < 2L
 #' \dontrun{
 #' format_alert("This is a message.")
 #' format_alert("This is a warning.", type = "warning")

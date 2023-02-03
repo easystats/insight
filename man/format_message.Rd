@@ -112,10 +112,12 @@ msg <- format_message(
 )
 message(msg)
 
+\dontshow{if (getOption("warn") < 2L) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 format_alert("This is a message.")
 format_alert("This is a warning.", type = "warning")
 format_warning("This is a warning.")
 try(format_error("This is an error."))
 }
+\dontshow{\}) # examplesIf}
 }
