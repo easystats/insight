@@ -103,15 +103,19 @@ format_message <- function(string,
 #'   producing the warning or error is deep within another function, so the
 #'   default is `FALSE`.
 #'
-#' @export
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true")
+#' # message
+#' format_alert("This is a message.")
+#' format_alert("This is a warning.", type = "message")
+#'
+#' # error
+#' try(format_error("This is an error."))
 #'
 #' @examplesIf getOption("warn") < 2L
-#' \dontrun{
-#' format_alert("This is a message.")
-#' format_alert("This is a warning.", type = "warning")
+#' # warning
 #' format_warning("This is a warning.")
-#' try(format_error("This is an error."))
-#' }
+#'
+#' @export
 format_alert <- function(string,
                          ...,
                          line_length = 0.9 * getOption("width", 80),

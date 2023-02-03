@@ -112,12 +112,16 @@ msg <- format_message(
 )
 message(msg)
 
-\dontshow{if (getOption("warn") < 2L) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontrun{
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# message
 format_alert("This is a message.")
-format_alert("This is a warning.", type = "warning")
-format_warning("This is a warning.")
+format_alert("This is a warning.", type = "message")
+
+# error
 try(format_error("This is an error."))
-}
+\dontshow{\}) # examplesIf}
+\dontshow{if (getOption("warn") < 2L) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# warning
+format_warning("This is a warning.")
 \dontshow{\}) # examplesIf}
 }
