@@ -16,14 +16,15 @@
 #' \dontrun{
 #' library(rstanarm)
 #' data("pbcLong")
-#' model <- stan_mvmer(
+#' model <- suppressWarnings(stan_mvmer(
 #'   formula = list(
 #'     logBili ~ year + (1 | id),
 #'     albumin ~ sex + year + (year | id)
 #'   ),
 #'   data = pbcLong,
-#'   chains = 1, cores = 1, seed = 12345, iter = 1000
-#' )
+#'   chains = 1, cores = 1, seed = 12345, iter = 1000,
+#'   show_messages = FALSE, refresh = 0
+#' ))
 #'
 #' f <- find_formula(model)
 #' is_multivariate(model)
