@@ -22,7 +22,7 @@
 #'   function stops and throws an error. Else, a named logical vector is
 #'   returned, indicating which of the packages are installed, and which not.
 #'
-#' @examplesIf FALSE
+#' @examplesIf interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' \dontrun{
 #' check_if_installed("insight")
 #' try(check_if_installed("nonexistent_package"))

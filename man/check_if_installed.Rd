@@ -48,10 +48,12 @@ returned, indicating which of the packages are installed, and which not.
 Checking if needed package is installed
 }
 \examples{
+\dontshow{if (interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 check_if_installed("insight")
 try(check_if_installed("nonexistent_package"))
 try(check_if_installed("insight", minimum_version = "99.8.7"))
 try(check_if_installed(c("nonexistent", "also_not_here"), stop = FALSE))
 }
+\dontshow{\}) # examplesIf}
 }
