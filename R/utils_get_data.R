@@ -130,7 +130,10 @@
       md <- tryCatch(
         {
           md <- .recover_data_from_environment(x)
-          md <- stats::na.omit(md[intersect(colnames(md), find_variables(x, effects = "all", component = "all", flatten = TRUE))])
+          md <- stats::na.omit(md[intersect(
+            colnames(md),
+            find_variables(x, effects = "all", component = "all", flatten = TRUE)
+          )])
         },
         error = function(e) {
           NULL
@@ -147,7 +150,7 @@
       mf_nonmatrix <- mf[, -which(mc), drop = FALSE]
 
       # fix for rms::rcs() functions
-      if (any(class(mf_matrix[[1]]) == "rms")) {
+      if (any(inherits(mf_matrix[[1]], "rms"))) {
         class(mf_matrix[[1]]) <- "matrix"
       }
 
