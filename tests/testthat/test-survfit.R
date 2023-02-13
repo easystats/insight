@@ -1,4 +1,4 @@
-if (requiet("survival")) {
+if (skip_if_not_or_load_if_installed("survival")) {
   m1 <- survfit(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
 
   test_that("model_info", {

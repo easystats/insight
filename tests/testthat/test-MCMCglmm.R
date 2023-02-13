@@ -1,4 +1,4 @@
-if (.Platform$OS.type == "windows" && requiet("MCMCglmm")) {
+if (.Platform$OS.type == "windows" && skip_if_not_or_load_if_installed("MCMCglmm")) {
   data(PlodiaPO)
   m1 <- MCMCglmm(
     PO ~ plate,

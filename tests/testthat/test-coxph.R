@@ -1,6 +1,6 @@
-requiet("survival")
-requiet("insight")
-requiet("JM")
+skip_if_not_or_load_if_installed("survival")
+skip_if_not_or_load_if_installed("insight")
+skip_if_not_or_load_if_installed("JM")
 
 lung <- subset(survival::lung, subset = ph.ecog %in% 0:2)
 lung$sex <- factor(lung$sex, labels = c("male", "female"))
@@ -141,7 +141,7 @@ test_that("JM", {
 })
 
 test_that("get_statistic", {
-  requiet("survival")
+  skip_if_not_or_load_if_installed("survival")
   bladder1 <- bladder[bladder$enum < 5, ]
   mod <- coxph(
     Surv(stop, event) ~ (rx + size + number) * strata(enum),

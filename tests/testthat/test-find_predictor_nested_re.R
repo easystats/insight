@@ -1,4 +1,4 @@
-if (requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   set.seed(1984)
   dat <- data.frame(
     y = rnorm(1000 * 5, sd = 1 - 0.20),

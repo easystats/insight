@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (requiet("pscl")) {
+if (skip_if_not_or_load_if_installed("pscl")) {
   data("bioChemists")
 
   m1 <- zeroinfl(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)
@@ -134,7 +134,7 @@ if (requiet("pscl")) {
   })
 
 
-  if (.runThisTest && requiet("sandwich")) {
+  if (.runThisTest && skip_if_not_or_load_if_installed("sandwich")) {
     set.seed(123)
     vc1 <- get_varcov(m1, component = "all", vcov = "BS", vcov_args = list(R = 50))
     set.seed(123)

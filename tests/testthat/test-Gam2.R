@@ -3,7 +3,7 @@
 if (.runThisTest &&
 
 
-  requiet("gam")) {
+  skip_if_not_or_load_if_installed("gam")) {
   data(kyphosis)
   void <- capture.output(m1 <- gam::gam(
     Kyphosis ~ s(Age, 4) + Number,

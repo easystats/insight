@@ -1,4 +1,4 @@
-if (requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   test_that("find_terms", {
     m <- lm(Sepal.Length ~ -1 + Petal.Width + Species, data = iris)
     expect_equal(

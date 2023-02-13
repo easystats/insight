@@ -1,6 +1,6 @@
 if (
 
-  requiet("robustbase")) {
+  skip_if_not_or_load_if_installed("robustbase")) {
   data(mtcars)
   m1 <- lmrob(mpg ~ gear + wt + cyl, data = mtcars)
 

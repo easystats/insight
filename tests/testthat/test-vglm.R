@@ -1,7 +1,7 @@
 unloadNamespace("gam")
 skip_on_os("mac")
 
-if (requiet("VGAM")) {
+if (skip_if_not_or_load_if_installed("VGAM")) {
   d.AD <- data.frame(
     treatment = gl(3, 3),
     outcome = gl(3, 1, 9),

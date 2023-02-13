@@ -69,7 +69,7 @@ test_that("ellipses_info, binomial", {
   expect_false(any(attributes(info)$is_linear))
 })
 
-if (requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   data(sleepstudy)
   m1 <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
   m2 <- suppressMessages(lmer(Reaction ~ Days + (1 | Subject) + (1 | Days), data = sleepstudy))

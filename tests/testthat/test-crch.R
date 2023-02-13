@@ -1,6 +1,6 @@
 if (
 
-  requiet("crch")) {
+  skip_if_not_or_load_if_installed("crch")) {
   data("RainIbk")
   RainIbk$sqrtensmean <<- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
   RainIbk$sqrtenssd <<- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, sd)

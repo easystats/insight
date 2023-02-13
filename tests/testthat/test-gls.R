@@ -1,4 +1,4 @@
-if (requiet("nlme")) {
+if (skip_if_not_or_load_if_installed("nlme")) {
   data(Ovary)
   m1 <- gls(follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time),
     Ovary,

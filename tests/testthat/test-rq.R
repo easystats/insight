@@ -1,6 +1,6 @@
 skip_if_not(getRversion() >= "4.2.0")
 
-if (requiet("quantreg")) {
+if (skip_if_not_or_load_if_installed("quantreg")) {
   data(stackloss)
   m1 <-
     rq(stack.loss ~ Air.Flow + Water.Temp,

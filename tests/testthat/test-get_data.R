@@ -1,7 +1,7 @@
 skip_on_os(os = "mac")
 
 test_that("lme4", {
-  requiet("lme4")
+  skip_if_not_or_load_if_installed("lme4")
   data("cbpp", package = "lme4")
   set.seed(123)
   cbpp$cont <- rnorm(nrow(cbpp))
@@ -40,7 +40,7 @@ test_that("lm", {
 
 
 test_that("get_data lavaan", {
-  requiet("lavaan")
+  skip_if_not_or_load_if_installed("lavaan")
   data(PoliticalDemocracy)
   model <- "
     # latent variable definitions
@@ -114,7 +114,7 @@ test_that("lm with poly and NA in response", {
 test_that("mgcv", {
   ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
-  requiet("mgcv")
+  skip_if_not_or_load_if_installed("mgcv")
   d <- iris
   d$NewFac <- rep(c(1, 2), length.out = 150)
   model <- gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
@@ -201,8 +201,8 @@ if (.runThisTest) {
 
 
   test_that("workaround bug in estimatr", {
-    requiet("ivreg")
-    requiet("estimatr")
+    skip_if_not_or_load_if_installed("ivreg")
+    skip_if_not_or_load_if_installed("estimatr")
     data("CigaretteDemand")
     m <- estimatr::iv_robust(
       log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
@@ -225,7 +225,7 @@ if (.runThisTest) {
   test_that("get_data colnames", {
     skip_if_not(.runStanTest)
     skip_if_not(packageVersion("base") >= "4.0.0")
-    requiet("brms")
+    skip_if_not_or_load_if_installed("brms")
     m <- suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1))
     out <- get_data(m)
     expect_type(out$cyl, "double")

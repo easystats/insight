@@ -1,4 +1,4 @@
-if (requiet("lme4") && getRversion() >= "4.0.0") {
+if (skip_if_not_or_load_if_installed("lme4") && getRversion() >= "4.0.0") {
   data(cbpp)
   data(sleepstudy)
   set.seed(1)
@@ -24,7 +24,7 @@ if (requiet("lme4") && getRversion() >= "4.0.0") {
 
 
   skip_on_os("mac") # error: FreeADFunObject
-  if (requiet("glmmTMB") && requiet("TMB")) {
+  if (skip_if_not_or_load_if_installed("glmmTMB") && skip_if_not_or_load_if_installed("TMB")) {
     model <- glmmTMB(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
     test_that("is_converged, glmmTMB", {
       expect_true(is_converged(model))

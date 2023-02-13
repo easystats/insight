@@ -1,4 +1,4 @@
-if (requiet("truncreg") && requiet("survival")) {
+if (skip_if_not_or_load_if_installed("truncreg") && skip_if_not_or_load_if_installed("survival")) {
   data("tobin", package = "survival")
   m1 <- truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
 

@@ -14,7 +14,7 @@ osx <- tryCatch(
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("lme4") && requiet("ordinal")) {
+if (.runThisTest && skip_if_not_or_load_if_installed("lme4") && skip_if_not_or_load_if_installed("ordinal")) {
   data(wine, package = "ordinal")
   data(soup)
 

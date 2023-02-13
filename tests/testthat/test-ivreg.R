@@ -1,4 +1,4 @@
-if (requiet("ivreg")) {
+if (skip_if_not_or_load_if_installed("ivreg")) {
   data("CigaretteDemand")
   m1 <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
     data = CigaretteDemand

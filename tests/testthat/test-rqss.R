@@ -1,7 +1,7 @@
 if (FALSE &&
 
 
-  requiet("quantreg")) {
+  skip_if_not_or_load_if_installed("quantreg")) {
   ## NOTE Run this test conditionally every now and then, requires package
   ##      "tripack", which has a non-standard license.
 

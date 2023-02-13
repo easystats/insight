@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("mmrm") && getRversion() >= "4.0.0") {
+if (.runThisTest && skip_if_not_or_load_if_installed("mmrm") && getRversion() >= "4.0.0") {
   data(fev_data)
   m1 <- mmrm(
     formula = FEV1 ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID),

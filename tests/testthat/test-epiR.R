@@ -1,6 +1,6 @@
 skip_on_os("mac")
 skip_if_not(packageVersion("base") >= "4.2.0")
-requiet("epiR")
+skip_if_not_or_load_if_installed("epiR")
 
 
 dat <- matrix(c(13, 2163, 5, 3349), nrow = 2, byrow = TRUE)

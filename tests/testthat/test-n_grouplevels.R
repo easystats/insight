@@ -1,4 +1,4 @@
-if (requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   data(sleepstudy)
   d <- sleepstudy
   set.seed(12345)

@@ -1,4 +1,4 @@
-if (requiet("panelr")) {
+if (skip_if_not_or_load_if_installed("panelr")) {
   data("WageData")
   wages <- panel_data(WageData, id = id, wave = t)
   m1 <- wbm(lwage ~ lag(union) + wks | blk + fem | blk * lag(union), data = wages)

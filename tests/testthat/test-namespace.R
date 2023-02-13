@@ -1,4 +1,4 @@
-if (requiet("splines")) {
+if (skip_if_not_or_load_if_installed("splines")) {
   data(iris)
   m1 <- lm(Sepal.Length ~ splines::bs(Petal.Width, df = 4) + Species, data = iris)
 

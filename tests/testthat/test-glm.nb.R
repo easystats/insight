@@ -1,4 +1,4 @@
-if (requiet("MASS")) {
+if (skip_if_not_or_load_if_installed("MASS")) {
   data(quine)
   set.seed(123)
   m1 <- glm.nb(Days ~ Sex / (Age + Eth * Lrn), data = quine)

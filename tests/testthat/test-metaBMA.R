@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("metaBMA")) {
+if (.runThisTest && skip_if_not_or_load_if_installed("metaBMA")) {
   data(towels)
   set.seed(123)
   mf <- meta_fixed(logOR,

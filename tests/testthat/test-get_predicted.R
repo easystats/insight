@@ -18,7 +18,7 @@ pkgs <- c(
   "rstantools",
   "psych"
 )
-suppressPackageStartupMessages(sapply(pkgs, requiet))
+suppressPackageStartupMessages(sapply(pkgs, skip_if_not_or_load_if_installed))
 
 
 # LM and GLM --------------------------------------------------------------
@@ -147,7 +147,7 @@ test_that("get_predicted - lm (log)", {
 
 
 test_that("robust vcov", {
-  requiet("sandwich")
+  skip_if_not_or_load_if_installed("sandwich")
   mod <- lm(mpg ~ hp, data = mtcars)
   se0 <- insight:::get_predicted_se(mod)
   se1 <- suppressWarnings(insight:::get_predicted_se(mod, vcov_estimation = "HC"))
@@ -180,7 +180,7 @@ test_that("robust vcov", {
 
 
 test_that("MASS::rlm", {
-  requiet("MASS")
+  skip_if_not_or_load_if_installed("MASS")
   mod <- rlm(mpg ~ hp + am, data = mtcars)
   p <- get_predicted.default(mod)
   expect_s3_class(p, "get_predicted")
@@ -558,7 +558,7 @@ test_that("bugfix: used to fail with matrix variables", {
 
 test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   skip_if(isFALSE(run_stan))
-  requiet("brms")
+  skip_if_not_or_load_if_installed("brms")
   void <- capture.output(
     suppressMessages(mod <- brm(am ~ hp + mpg,
       family = bernoulli, data = mtcars,

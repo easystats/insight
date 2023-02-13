@@ -1,4 +1,4 @@
-if (requiet("cgam") && getRversion() >= "4.0.0") {
+if (skip_if_not_or_load_if_installed("cgam") && getRversion() >= "4.0.0") {
   data(cubic, package = "cgam")
   m <- cgam(y ~ incr.conv(x), data = cubic)
 

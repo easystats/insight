@@ -1,4 +1,4 @@
-if (requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   data(mtcars)
   m1 <- lmer(mpg ~ am + (1 | cyl), data = mtcars)
   m2 <- lm(mpg ~ am, data = mtcars)

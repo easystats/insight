@@ -1,4 +1,4 @@
-if (requiet("lfe")) {
+if (skip_if_not_or_load_if_installed("lfe")) {
   x <- rnorm(1000)
   x2 <- rnorm(length(x))
   id <- factor(sample(20, length(x), replace = TRUE))

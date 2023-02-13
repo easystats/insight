@@ -16,7 +16,7 @@ win_os <- tryCatch(
 
 
 # test for bayesian models -----------------
-if (.runThisTest && win_os && requiet("bayestestR")) {
+if (.runThisTest && win_os && skip_if_not_or_load_if_installed("bayestestR")) {
   m1 <- insight::download_model("stanreg_glm_1")
   set.seed(123)
   x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf"))))
@@ -50,7 +50,7 @@ if (.runThisTest && win_os && requiet("bayestestR")) {
 }
 
 # test for freq models -----------------
-if (requiet("parameters")) {
+if (skip_if_not_or_load_if_installed("parameters")) {
   x <- as.data.frame(model_parameters(lm(Sepal.Length ~ Species + Sepal.Width, data = iris)))
 
   test_that("format_table with stars freq", {

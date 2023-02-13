@@ -1,4 +1,4 @@
-if (requiet("MASS")) {
+if (skip_if_not_or_load_if_installed("MASS")) {
   data(quine)
   clotting <- data.frame(
     u = c(5, 10, 15, 20, 30, 40, 60, 80, 100),

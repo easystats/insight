@@ -1,4 +1,4 @@
-if (requiet("speedglm")) {
+if (skip_if_not_or_load_if_installed("speedglm")) {
   data(iris)
   data(mtcars)
 

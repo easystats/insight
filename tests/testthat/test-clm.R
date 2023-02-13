@@ -1,4 +1,4 @@
-if (requiet("ordinal")) {
+if (skip_if_not_or_load_if_installed("ordinal")) {
   data(wine, package = "ordinal")
   m1 <- clm(rating ~ temp * contact, data = wine)
 

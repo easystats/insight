@@ -1,4 +1,4 @@
-if (requiet("gee")) {
+if (skip_if_not_or_load_if_installed("gee")) {
   data(warpbreaks)
   void <- capture.output(suppressMessages(
     m1 <- gee(breaks ~ tension, id = wool, data = warpbreaks)

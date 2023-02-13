@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("lme4")) {
+if (.runThisTest && skip_if_not_or_load_if_installed("lme4")) {
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -70,7 +70,7 @@ if (.runThisTest && requiet("lme4")) {
       ignore_attr = TRUE,
       tolerance = 1e-4
     )
-    if (requiet("pbkrtest")) {
+    if (skip_if_not_or_load_if_installed("pbkrtest")) {
       expect_equal(
         as.vector(get_df(m1, type = "kenward")),
         c(pbkrtest::get_Lb_ddf(m1, c(1, 0)), pbkrtest::get_Lb_ddf(m1, c(0, 1))),
@@ -486,8 +486,8 @@ if (.runThisTest && requiet("lme4")) {
   })
 
   test_that("satterthwaite dof vs. emmeans", {
-    requiet("emmeans")
-    requiet("pbkrtest")
+    skip_if_not_or_load_if_installed("emmeans")
+    skip_if_not_or_load_if_installed("pbkrtest")
 
     v1 <- get_varcov(m2, vcov = "kenward-roger")
     v2 <- as.matrix(vcovAdj(m2))

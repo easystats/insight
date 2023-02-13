@@ -1,4 +1,4 @@
-if (requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   set.seed(123)
   startvec <- c(Asym = 200, xmid = 725, scal = 350)
   nm1 <-

@@ -1,4 +1,4 @@
-if (requiet("quantreg")) {
+if (skip_if_not_or_load_if_installed("quantreg")) {
   set.seed(123)
   n <- 200
   x <- rnorm(n)

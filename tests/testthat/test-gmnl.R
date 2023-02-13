@@ -1,8 +1,8 @@
 if (
 
-  requiet("gmnl") &&
-    requiet("mlogit") &&
-    requiet("MASS")) {
+  skip_if_not_or_load_if_installed("gmnl") &&
+    skip_if_not_or_load_if_installed("mlogit") &&
+    skip_if_not_or_load_if_installed("MASS")) {
   data(housing, package = "MASS")
 
   dat <<- mlogit.data(housing, choice = "Sat", shape = "wide")

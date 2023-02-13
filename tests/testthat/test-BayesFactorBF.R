@@ -1,4 +1,4 @@
-requiet("BayesFactor")
+skip_if_not_or_load_if_installed("BayesFactor")
 
 x <- correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
 test_that("get_data", {

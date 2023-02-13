@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-  if (requiet("VGAM")) {
+  if (skip_if_not_or_load_if_installed("VGAM")) {
     data("hunua")
     m1 <- download_model("vgam_1")
     m2 <- download_model("vgam_2")

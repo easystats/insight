@@ -1,4 +1,4 @@
-if (requiet("censReg") && requiet("AER")) {
+if (skip_if_not_or_load_if_installed("censReg") && skip_if_not_or_load_if_installed("AER")) {
   data("Affairs", package = "AER")
   m1 <- censReg(
     affairs ~ age + yearsmarried + religiousness + occupation + rating,

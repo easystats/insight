@@ -1,4 +1,4 @@
-if (requiet("nlme") && requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed("lme4")) {
   data("sleepstudy")
   data(Orthodont)
   m1 <- lme(Reaction ~ Days,
@@ -213,7 +213,7 @@ if (requiet("nlme") && requiet("lme4")) {
 
 
   test_that("Issue #658", {
-    requiet("nlme")
+    skip_if_not_or_load_if_installed("nlme")
     models <- lapply(
       c("", " + Sex"),
       function(x) {

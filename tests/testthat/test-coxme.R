@@ -1,10 +1,10 @@
 if (
 
-  requiet("survival") &&
-    requiet("lme4") &&
-    requiet("nlme") &&
-    requiet("bdsmatrix") &&
-    requiet("coxme")) {
+  skip_if_not_or_load_if_installed("survival") &&
+    skip_if_not_or_load_if_installed("lme4") &&
+    skip_if_not_or_load_if_installed("nlme") &&
+    skip_if_not_or_load_if_installed("bdsmatrix") &&
+    skip_if_not_or_load_if_installed("coxme")) {
   set.seed(1234)
   lung$inst2 <- sample(1:10, size = nrow(lung), replace = TRUE)
   lung <- subset(lung, subset = ph.ecog %in% 0:2)

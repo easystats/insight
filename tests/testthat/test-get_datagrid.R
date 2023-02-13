@@ -93,7 +93,7 @@ if (getRversion() >= "4.0.0") {
 }
 
 
-if (requiet("bayestestR") && getRversion() >= "4.0.0") {
+if (skip_if_not_or_load_if_installed("bayestestR") && getRversion() >= "4.0.0") {
   test_that("get_datagrid - data", {
     # Factors
     expect_equal(length(get_datagrid(iris$Species)), 3)
@@ -149,7 +149,7 @@ if (requiet("bayestestR") && getRversion() >= "4.0.0") {
 
 
 
-if (requiet("gamm4") && getRversion() >= "4.0.0" && requiet("glmmTMB") && requiet("mgcv") && requiet("rstanarm") && requiet("TMB")) {
+if (skip_if_not_or_load_if_installed("gamm4") && getRversion() >= "4.0.0" && skip_if_not_or_load_if_installed("glmmTMB") && skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed("rstanarm") && skip_if_not_or_load_if_installed("TMB")) {
   test_that("get_datagrid - models", {
     # GLM
     mod <- glm(Petal.Length ~ Petal.Width * Sepal.Length, data = iris)

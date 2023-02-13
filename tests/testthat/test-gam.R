@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("mgcv") && requiet("httr")) {
+if (.runThisTest && skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed("httr")) {
   set.seed(123)
   void <- capture.output(
     dat2 <<- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
@@ -353,7 +353,7 @@ if (.runThisTest && requiet("mgcv") && requiet("httr")) {
 
 
   test_that("stats::predict.Gam matches get_predicted.Gam", {
-    requiet("gam")
+    skip_if_not_or_load_if_installed("gam")
     data(kyphosis, package = "gam")
     tmp <<- kyphosis
     mod <- gam::gam(Kyphosis ~ gam::s(Age, 4) + Number, family = binomial, data = tmp)

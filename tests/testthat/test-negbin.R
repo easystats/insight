@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-  if (requiet("aod")) {
+  if (skip_if_not_or_load_if_installed("aod")) {
     data(dja)
     m1 <- suppressWarnings(
       aod::negbin(y ~ group + offset(log(trisk)),

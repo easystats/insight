@@ -3,7 +3,7 @@
 
 if (.runThisTest && .runStanTest &&
   suppressWarnings(
-    requiet("rstanarm")
+    skip_if_not_or_load_if_installed("rstanarm")
   )) {
   data("pbcLong")
   m1 <- download_model("stanmvreg_1")

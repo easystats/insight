@@ -1,8 +1,8 @@
-requiet("sandwich")
-suppressPackageStartupMessages(requiet("clubSandwich"))
+skip_if_not_or_load_if_installed("sandwich")
+suppressPackageStartupMessages(skip_if_not_or_load_if_installed("clubSandwich"))
 
 test_that("informative error in get_varcov.default", {
-  requiet("lme4")
+  skip_if_not_or_load_if_installed("lme4")
   mod <- lmer(mpg ~ hp + (1 | cyl), data = mtcars)
   # sandwich: not supported
   expect_error(get_varcov(mod, vcov = "HC2"))
@@ -57,7 +57,7 @@ test_that("mlm: sandwich", {
 
 
 test_that("warning: not yet supported", {
-  requiet("pscl")
+  skip_if_not_or_load_if_installed("pscl")
   data("bioChemists", package = "pscl")
   mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
   expect_error(get_varcov(mod, vcov = "HC3"), regexp = "supported by one or")

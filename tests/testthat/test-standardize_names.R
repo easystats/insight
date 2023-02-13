@@ -1,4 +1,4 @@
-if (requiet("performance") && requiet("datawizard") && requiet("parameters")) {
+if (skip_if_not_or_load_if_installed("performance") && skip_if_not_or_load_if_installed("datawizard") && skip_if_not_or_load_if_installed("parameters")) {
   test_that("standardize_names works as expected with parameters", {
     set.seed(123)
 

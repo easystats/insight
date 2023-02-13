@@ -1,4 +1,4 @@
-if (requiet("BayesFactor")) {
+if (skip_if_not_or_load_if_installed("BayesFactor")) {
   model <- BayesFactor::proportionBF(15, 25, p = 0.5)
   mi <- insight::model_info(model)
   test_that("model_info-BF-proptest", {
@@ -16,7 +16,7 @@ if (requiet("BayesFactor")) {
 }
 
 
-if (requiet("tweedie") && requiet("statmod")) {
+if (skip_if_not_or_load_if_installed("tweedie") && skip_if_not_or_load_if_installed("statmod")) {
   unloadNamespace("glmmTMB")
   d <- data.frame(x = 1:20, y = rgamma(20, shape = 5))
   # Fit a poisson generalized linear model with identity link

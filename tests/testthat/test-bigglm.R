@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("glmmTMB") && requiet("biglm")) {
+if (.runThisTest && skip_if_not_or_load_if_installed("glmmTMB") && skip_if_not_or_load_if_installed("biglm")) {
   data(Salamanders)
   Salamanders$cover <- abs(Salamanders$cover)
 

@@ -1,6 +1,6 @@
 if (
 
-  requiet("estimatr")) {
+  skip_if_not_or_load_if_installed("estimatr")) {
   data(mtcars)
   m1 <- lm_robust(mpg ~ gear + wt + cyl, data = mtcars)
 

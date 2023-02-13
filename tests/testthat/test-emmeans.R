@@ -1,4 +1,4 @@
-if (requiet("emmeans")) {
+if (skip_if_not_or_load_if_installed("emmeans")) {
   test_that("emmeans", {
     m <- glm(am ~ factor(cyl),
       family = binomial(), data = mtcars

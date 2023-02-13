@@ -1,4 +1,4 @@
-if (requiet("multgee")) {
+if (skip_if_not_or_load_if_installed("multgee")) {
   data(arthritis)
   m1 <- ordLORgee(
     y ~ factor(time) + factor(trt) + factor(baseline),

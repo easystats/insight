@@ -1,4 +1,4 @@
-if (requiet("aod")) {
+if (skip_if_not_or_load_if_installed("aod")) {
   data(dja)
   m1 <- suppressWarnings(betabin(cbind(y, n - y) ~ group * trisk, ~village, data = dja))
 

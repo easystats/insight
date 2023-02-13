@@ -1,4 +1,4 @@
-if (requiet("blme")) {
+if (skip_if_not_or_load_if_installed("blme")) {
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)

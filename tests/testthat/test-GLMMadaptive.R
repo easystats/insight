@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if (requiet("GLMMadaptive") && requiet("lme4")) {
+  if (skip_if_not_or_load_if_installed("GLMMadaptive") && skip_if_not_or_load_if_installed("lme4")) {
     m <- download_model("GLMMadaptive_zi_2")
     m2 <- download_model("GLMMadaptive_zi_1")
 

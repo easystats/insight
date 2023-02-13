@@ -1,4 +1,4 @@
-if (requiet("afex")) {
+if (skip_if_not_or_load_if_installed("afex")) {
   data(obk.long, package = "afex")
 
   obk.long$treatment <- as.character(obk.long$treatment)

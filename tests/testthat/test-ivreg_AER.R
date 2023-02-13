@@ -1,4 +1,4 @@
-if (requiet("AER")) {
+if (skip_if_not_or_load_if_installed("AER")) {
   data(CigarettesSW)
   CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
   CigarettesSW$rincome <- with(CigarettesSW, income / population / cpi)

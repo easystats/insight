@@ -1,4 +1,4 @@
-if (requiet("mlogit") && requiet("mclogit")) {
+if (skip_if_not_or_load_if_installed("mlogit") && skip_if_not_or_load_if_installed("mclogit")) {
   data("Fishing")
   Fish <-
     mlogit.data(Fishing,
@@ -126,7 +126,7 @@ if (requiet("mlogit") && requiet("mclogit")) {
 
 
 test_that("mblogit and mclogit is not linear", {
-  requiet("mclogit")
+  skip_if_not_or_load_if_installed("mclogit")
 
   if (packageVersion("mclogit") >= "0.9.1") {
     data(Transport)

@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 # TODO: check why this is failing
-if (requiet("lme4") && suppressPackageStartupMessages(requiet("afex")) && FALSE) {
+if (skip_if_not_or_load_if_installed("lme4") && suppressPackageStartupMessages(skip_if_not_or_load_if_installed("afex")) && FALSE) {
   data(sleepstudy)
 
   set.seed(123)

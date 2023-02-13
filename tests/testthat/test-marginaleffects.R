@@ -1,6 +1,6 @@
 testthat::skip_on_cran()
-requiet("marginaleffects")
-requiet("emmeans")
+skip_if_not_or_load_if_installed("marginaleffects")
+skip_if_not_or_load_if_installed("emmeans")
 
 test_that("marginaleffects", {
   m <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)

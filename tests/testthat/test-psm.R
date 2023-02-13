@@ -1,4 +1,4 @@
-if (requiet("rms")) {
+if (skip_if_not_or_load_if_installed("rms")) {
   n <- 400
   set.seed(1)
   age <- rnorm(n, 50, 12)
