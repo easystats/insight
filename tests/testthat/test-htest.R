@@ -79,21 +79,25 @@ test_that("get_data.t-test, two-sample", {
 
   expect_identical(colnames(get_data(tt5)), c("x", "y"))
   expect_equal(
-    head(get_data(tt5)),
-    data.frame(
-      x = c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
-      y = factor(c(1, 1, 1, 1, 1, 1))
-    ),
+    head(get_data(tt5))$x,
+    c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    head(get_data(tt5))$y,
+    structure(c(1L, 1L, 1L, 1L, 1L, 1L), levels = c("1", "2"), class = "factor"),
     ignore_attr = TRUE
   )
 
   expect_identical(colnames(get_data(tt6)), c("x", "y"))
   expect_equal(
-    head(get_data(tt6)),
-    data.frame(
-      x = c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
-      y = factor(c(1, 1, 1, 1, 1, 1))
-    ),
+    head(get_data(tt6))$x,
+    c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    head(get_data(tt6))$y,
+    structure(c(1L, 1L, 1L, 1L, 1L, 1L), levels = c("1", "2"), class = "factor"),
     ignore_attr = TRUE
   )
 
