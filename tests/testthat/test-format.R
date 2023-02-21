@@ -10,6 +10,7 @@ test_that("format_value", {
   expect_identical(format_value(0.0000000123, zap_small = TRUE), "0.00")
   expect_identical(format_value(0.0000000123, digits = 8), "0.00000001")
   expect_identical(format_value(c(0.012, 0.45, -0.03), lead_zero = FALSE), c(".01", ".45", "-.03"))
+  expect_identical(format_value(c(1.012, 0.45, -0.03), lead_zero = FALSE), c("1.01", ".45", "-.03"))
   expect_identical(format_value(0.95, as_percent = TRUE), "95.00%")
   expect_identical(format_value(0.000001, as_percent = TRUE), "1.00e-04%")
   expect_identical(format_value(0.000001, as_percent = TRUE, zap_small = TRUE), "0.00%")
