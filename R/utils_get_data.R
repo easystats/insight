@@ -901,15 +901,22 @@
           l <- columns[[1]]
           names(l) <- paste0("x", seq_along(l))
           return(l)
-        } else if (grepl("(Two|sum)", x$method) && grepl(" (and|by) ", x$data.name)) {
-          return(data.frame(
-            x = unlist(columns),
-            y = c(
-              rep("1", length(columns[[1]])),
-              rep("2", length(columns[[2]]))
-            ),
-            stringsAsFactors = TRUE
-          ))
+        } else if (grepl("(Two|sum)", x$method)) {
+          if (grepl(" and ", x$data.name, fixed = TRUE)) {
+            return(data.frame(
+              x = unlist(columns),
+              y = c(
+                rep("1", length(columns[[1]])),
+                rep("2", length(columns[[2]]))
+              ),
+              stringsAsFactors = TRUE
+            ))
+          } else if (grepl(" by ", x$data.name, fixed = TRUE)) {
+            return(data.frame(
+              x = columns[[1]],
+              y = as.factor(columns[[2]])
+            ))
+          }
         } else if (startsWith(x$method, "Paired")) {
           if (grepl(" (and|by) ", x$data.name)) {
             return(data.frame(

@@ -2,11 +2,80 @@
 
 x <- t.test(1:3, c(1, 1:3))
 test_that("get_data.t-test", {
-  expect_equal(get_data(x)$x, c(1, 2, 3, NA))
+  expect_identical(colnames(get_data(x)), c("x", "y"))
+  expect_equal(
+    get_data(x)$x,
+    c(1, 2, 3, 1, 1, 2, 3)
+  )
+  expect_equal(
+    get_data(x)$y,
+    c(1, 1, 1, 2, 2, 2, 2),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("model_info.t-test", {
   expect_true(model_info(x)$is_ttest)
+})
+
+# One sample
+test_that("get_data.t-test, one-sample", {
+  tt1 <- t.test(mtcars$mpg)
+  tt2 <- t.test(mtcars$mpg ~ 1)
+  expect_equal(
+    head(get_data(tt1)$mpg),
+    c(21, 21, 22.8, 21.4, 18.7, 18.1)
+  )
+  expect_identical(nrow(get_data(tt1)), 32L)
+  expect_equal(
+    head(get_data(tt2)$mpg),
+    c(21, 21, 22.8, 21.4, 18.7, 18.1)
+  )
+  expect_identical(nrow(get_data(tt2)), 32L)
+  expect_true(model_info(tt1)$is_ttest)
+  expect_true(model_info(tt2)$is_ttest)
+})
+
+# Two sample
+test_that("get_data.t-test, two-sample", {
+  tt3 <- t.test(mtcars$mpg ~ mtcars$am)
+  tt4 <- t.test(mtcars$mpg[mtcars$am == 0], mtcars$mpg[mtcars$am == 1])
+  expect_identical(colnames(get_data(tt3)), c("x", "y"))
+  expect_identical(nrow(get_data(tt3)), 32L)
+  expect_equal(
+    head(get_data(tt3)$x),
+    c(21, 21, 22.8, 21.4, 18.7, 18.1)
+  )
+  expect_equal(
+    head(get_data(tt3)$y),
+    c(1, 1, 1, 0, 0, 0),
+    ignore_attr = TRUE
+  )
+
+  expect_identical(colnames(get_data(tt4)), c("x", "y"))
+  expect_identical(nrow(get_data(tt4)), 32L)
+  expect_equal(
+    head(get_data(tt3)$x),
+    c(21, 21, 22.8, 21.4, 18.7, 18.1)
+  )
+  expect_equal(
+    head(get_data(tt3)$y),
+    c(2, 2, 1, 1, 1, 1),
+    ignore_attr = TRUE
+  )
+
+  expect_true(model_info(tt3)$is_ttest)
+  expect_true(model_info(tt4)$is_ttest)
+})
+
+# Paired
+test_that("get_data.t-test, two-sample", {
+  tt5 <- t.test(sleep$extra ~ sleep$group, paired = TRUE)
+  tt6 <- t.test(sleep$extra[sleep$group == "1"], sleep$extra[sleep$group == "2"], paired = TRUE)
+  tt7 <- t.test(Pair(sleep$extra[sleep$group == "1"], sleep$extra[sleep$group == "2"]) ~ 1)
+  expect_true(model_info(tt5)$is_ttest)
+  expect_true(model_info(tt6)$is_ttest)
+  expect_true(model_info(tt7)$is_ttest)
 })
 
 
