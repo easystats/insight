@@ -82,7 +82,7 @@ test_that("get_data.t-test, two-sample", {
     head(get_data(tt5)),
     data.frame(
       x = c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
-      y = c(1, 1, 1, 1, 1, 1)
+      y = factor(c(1, 1, 1, 1, 1, 1))
     ),
     ignore_attr = TRUE
   )
@@ -92,7 +92,7 @@ test_that("get_data.t-test, two-sample", {
     head(get_data(tt6)),
     data.frame(
       x = c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
-      y = c(1, 1, 1, 1, 1, 1)
+      y = factor(c(1, 1, 1, 1, 1, 1))
     ),
     ignore_attr = TRUE
   )
