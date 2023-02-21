@@ -1,3 +1,9 @@
+# insight 0.19.1
+
+## General
+
+* Minor improvements to `get_data()` for `t.test()`.
+
 # insight 0.19.0
 
 ## New supported models
