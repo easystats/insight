@@ -17,6 +17,7 @@ format_value(x, ...)
   width = NULL,
   as_percent = FALSE,
   zap_small = FALSE,
+  lead_zero = TRUE,
   ...
 )
 
@@ -28,6 +29,7 @@ format_value(x, ...)
   width = NULL,
   as_percent = FALSE,
   zap_small = FALSE,
+  lead_zero = TRUE,
   ...
 )
 
@@ -61,6 +63,9 @@ value.}
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
 places than \code{digits} are printed in scientific notation.}
+
+\item{lead_zero}{Logical, if \code{TRUE} (default), includes leading zeros, else
+leading zeros are dropped.}
 }
 \value{
 A formatted string.
@@ -79,6 +84,7 @@ format_value(c(0.0045, .12, .34))
 format_value(c(0.0045, .12, .34), as_percent = TRUE)
 format_value(c(0.0045, .12, .34), digits = "scientific")
 format_value(c(0.0045, .12, .34), digits = "scientific2")
+format_value(c(0.045, .12, .34), lead_zero = FALSE)
 
 # default
 format_value(c(0.0045, .123, .345))

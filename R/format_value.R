@@ -25,6 +25,8 @@
 #' @param zap_small Logical, if `TRUE`, small values are rounded after
 #'   `digits` decimal places. If `FALSE`, values with more decimal
 #'   places than `digits` are printed in scientific notation.
+#' @param lead_zero Logical, if `TRUE` (default), includes leading zeros, else
+#'   leading zeros are dropped.
 #' @param ... Arguments passed to or from other methods.
 #'
 #'
@@ -39,6 +41,7 @@
 #' format_value(c(0.0045, .12, .34), as_percent = TRUE)
 #' format_value(c(0.0045, .12, .34), digits = "scientific")
 #' format_value(c(0.0045, .12, .34), digits = "scientific2")
+#' format_value(c(0.045, .12, .34), lead_zero = FALSE)
 #'
 #' # default
 #' format_value(c(0.0045, .123, .345))
@@ -67,6 +70,7 @@ format_value.data.frame <- function(x,
                                     width = NULL,
                                     as_percent = FALSE,
                                     zap_small = FALSE,
+                                    lead_zero = TRUE,
                                     ...) {
   as.data.frame(sapply(
     x,
@@ -77,6 +81,7 @@ format_value.data.frame <- function(x,
     width = width,
     as_percent = as_percent,
     zap_small = zap_small,
+    lead_zero = lead_zero,
     simplify = FALSE
   ))
 }
@@ -91,6 +96,7 @@ format_value.numeric <- function(x,
                                  width = NULL,
                                  as_percent = FALSE,
                                  zap_small = FALSE,
+                                 lead_zero = TRUE,
                                  ...) {
   if (protect_integers) {
     out <- .format_value_unless_integer(
@@ -122,6 +128,11 @@ format_value.numeric <- function(x,
     out[out == "-0.00"] <- paste0(whitespace, "0.00")
     out[out == "-0.000"] <- paste0(whitespace, "0.000")
     out[out == "-0.0000"] <- paste0(whitespace, "0.0000")
+  }
+
+  # drop leading zero?
+  if (!lead_zero) {
+    out <- gsub("(.*)(0\\.)(.*)", "\\1\\.\\3", out)
   }
   out
 }
@@ -189,7 +200,7 @@ format_percent <- function(x, ...) {
         x <- ifelse(is.na(x), .missing, sprintf("%.*f%%", digits, 100 * x))
       } else {
         x <- ifelse(is.na(x), .missing,
-          ifelse(need_sci,
+          ifelse(need_sci, # nolint
             sprintf("%.*e%%", digits, 100 * x),
             sprintf("%.*f%%", digits, 100 * x)
           )
@@ -224,7 +235,7 @@ format_percent <- function(x, ...) {
           x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
         } else {
           x <- ifelse(is.na(x), .missing,
-            ifelse(need_sci,
+            ifelse(need_sci, # nolint
               sprintf("%.*e", digits, x),
               sprintf("%.*f", digits, x)
             )
