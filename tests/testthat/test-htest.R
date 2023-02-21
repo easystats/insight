@@ -72,6 +72,7 @@ test_that("get_data.t-test, two-sample", {
 
 # Paired
 test_that("get_data.t-test, two-sample", {
+  data(sleep)
   tt5 <- t.test(sleep$extra ~ sleep$group, paired = TRUE)
   tt6 <- t.test(sleep$extra[sleep$group == "1"], sleep$extra[sleep$group == "2"], paired = TRUE)
   tt7 <- t.test(Pair(sleep$extra[sleep$group == "1"], sleep$extra[sleep$group == "2"]) ~ 1)
