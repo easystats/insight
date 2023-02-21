@@ -911,7 +911,7 @@
             stringsAsFactors = TRUE
           ))
         } else if (startsWith(x$method, "Paired")) {
-          if (grepl(" and ", x$data.name, fixed = TRUE)) {
+          if (grepl(" (and|by) ", x$data.name)) {
             return(data.frame(
               x = unlist(columns),
               y = c(
