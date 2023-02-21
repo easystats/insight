@@ -901,7 +901,7 @@
           l <- columns[[1]]
           names(l) <- paste0("x", seq_along(l))
           return(l)
-        } else if (grepl("(Two|sum)", x$method)) {
+        } else if (grepl("Two", x$method, fixed = TRUE)) {
           if (grepl(" and ", x$data.name, fixed = TRUE)) {
             return(data.frame(
               x = unlist(columns),
