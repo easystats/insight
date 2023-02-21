@@ -894,13 +894,26 @@
 
         # preserve table data for McNemar
         if (!grepl(" (and|by) ", x$data.name) &&
-          (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+              (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           return(as.table(columns[[1]]))
           # check if data is a list for kruskal-wallis
         } else if (startsWith(x$method, "Kruskal-Wallis") && length(columns) == 1 && is.list(columns[[1]])) {
           l <- columns[[1]]
           names(l) <- paste0("x", seq_along(l))
           return(l)
+        } else if (grepl("(Two|sum)", model$method)) {
+          if (grepl(" and ", model$data.name, fixed = TRUE)) {
+            d <- data.frame(
+              x = unlist(columns),
+              y = c(
+                rep("group1", length(columns[[1]])),
+                rep("group2", length(columns[[2]]))
+              ),
+              stringsAsFactors = TRUE
+            )
+          } else {
+            ## TODO: but what? Waiting for https://github.com/easystats/effectsize/pull/564
+          }
         } else {
           max_len <- max(lengths(columns))
           for (i in seq_along(columns)) {
