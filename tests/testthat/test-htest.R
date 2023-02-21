@@ -2,11 +2,103 @@
 
 x <- t.test(1:3, c(1, 1:3))
 test_that("get_data.t-test", {
-  expect_equal(get_data(x)$x, c(1, 2, 3, NA))
+  expect_identical(colnames(get_data(x)), c("x", "y"))
+  expect_equal(
+    get_data(x)$x,
+    c(1, 2, 3, 1, 1, 2, 3),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    get_data(x)$y,
+    c(1, 1, 1, 2, 2, 2, 2),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("model_info.t-test", {
   expect_true(model_info(x)$is_ttest)
+})
+
+# One sample
+test_that("get_data.t-test, one-sample", {
+  tt1 <- t.test(mtcars$mpg)
+  tt2 <- t.test(mtcars$mpg ~ 1)
+  expect_equal(
+    head(get_data(tt1)$mpg),
+    c(21, 21, 22.8, 21.4, 18.7, 18.1)
+  )
+  expect_identical(nrow(get_data(tt1)), 32L)
+  expect_equal(
+    head(get_data(tt2)$mpg),
+    c(21, 21, 22.8, 21.4, 18.7, 18.1)
+  )
+  expect_identical(nrow(get_data(tt2)), 32L)
+  expect_true(model_info(tt1)$is_ttest)
+  expect_true(model_info(tt2)$is_ttest)
+})
+
+# Two sample
+test_that("get_data.t-test, two-sample", {
+  data(mtcars)
+  tt3 <- t.test(mtcars$mpg ~ mtcars$am)
+  tt4 <- t.test(mtcars$mpg[mtcars$am == 0], mtcars$mpg[mtcars$am == 1])
+  expect_identical(colnames(get_data(tt3)), c("x", "y"))
+  expect_identical(nrow(get_data(tt3)), 32L)
+  expect_equal(
+    head(get_data(tt3)$x),
+    c(21, 21, 22.8, 21.4, 18.7, 18.1)
+  )
+  expect_equal(
+    head(get_data(tt3)$y),
+    c(2, 2, 2, 1, 1, 1),
+    ignore_attr = TRUE
+  )
+
+  expect_identical(colnames(get_data(tt4)), c("x", "y"))
+  expect_identical(nrow(get_data(tt4)), 32L)
+  expect_equal(
+    head(get_data(tt3)$x),
+    c(21, 21, 22.8, 21.4, 18.7, 18.1)
+  )
+  expect_equal(
+    head(get_data(tt3)$y),
+    c(2, 2, 2, 1, 1, 1),
+    ignore_attr = TRUE
+  )
+
+  expect_true(model_info(tt3)$is_ttest)
+  expect_true(model_info(tt4)$is_ttest)
+})
+
+# Paired
+test_that("get_data.t-test, two-sample", {
+  tt5 <- t.test(sleep$extra ~ sleep$group, paired = TRUE)
+  tt6 <- t.test(sleep$extra[sleep$group == "1"], sleep$extra[sleep$group == "2"], paired = TRUE)
+  tt7 <- t.test(Pair(sleep$extra[sleep$group == "1"], sleep$extra[sleep$group == "2"]) ~ 1)
+
+  expect_identical(colnames(get_data(tt5)), c("x", "y"))
+  expect_equal(
+    head(get_data(tt5)),
+    data.frame(
+      x = c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
+      y = c(1, 1, 1, 1, 1, 1)
+    ),
+    ignore_attr = TRUE
+  )
+
+  expect_identical(colnames(get_data(tt6)), c("x", "y"))
+  expect_equal(
+    head(get_data(tt6)),
+    data.frame(
+      x = c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
+      y = c(1, 1, 1, 1, 1, 1)
+    ),
+    ignore_attr = TRUE
+  )
+
+  expect_true(model_info(tt5)$is_ttest)
+  expect_true(model_info(tt6)$is_ttest)
+  expect_true(model_info(tt7)$is_ttest)
 })
 
 
@@ -29,7 +121,8 @@ test_that("get_data.mcnemar", {
         `1st Survey` = c("Approve", "Disapprove"),
         `2nd Survey` = c("Approve", "Disapprove")
       ), class = "table"
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
@@ -59,7 +152,8 @@ test_that("get_data.fisher", {
         Guess = c("Milk", "Tea"),
         Truth = c("Milk", "Tea")
       ), class = "table"
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
@@ -108,7 +202,7 @@ test_that("get_data.freedman", {
   expect_equal(
     get_data(m),
     data.frame(
-      x <- c(
+      x = c(
         8.67224539231838, 6.07944148117209, 6.20231435178216,
         5.33204814783536, 3.33247659573778, 10.3607394104092, 6.49355143468772,
         -0.899851469888914, 7.10406770469106, 3.5816257768162
@@ -121,5 +215,5 @@ test_that("get_data.freedman", {
 
 test_that("model_info.shapiro-test", {
   expect_true(model_info(m)$is_variancetest)
-  expect_equal(model_info(m)$family, "shapiro")
+  expect_identical(model_info(m)$family, "shapiro")
 })
