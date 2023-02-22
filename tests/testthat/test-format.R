@@ -13,6 +13,11 @@ test_that("format_value", {
   expect_identical(format_value(c(1.012, 0.45, -0.03), lead_zero = FALSE), c("1.01", ".45", "-.03"))
   expect_identical(format_value(c(0.45, -0.03), style_positive = "plus"), c("+0.45", "-0.03"))
   expect_identical(format_value(c(0.45, -0.03), style_positive = "plus", lead_zero = FALSE), c("+.45", "-.03"))
+  expect_equal(
+    format_value(as.factor(c("A", "B", "A"))),
+    structure(c(1L, 2L, 1L), levels = c("A", "B"), class = "factor"),
+    ignore_attr = TRUE
+  )
   expect_identical(
     format_value(c(0.45, -0.03), style_positive = "plus", style_negative = "parens", lead_zero = FALSE),
     c("+.45", "(.03)")
