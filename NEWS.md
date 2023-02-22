@@ -1,8 +1,12 @@
 # insight 0.19.1
 
-## General
+## Changes to functions
 
 * Minor improvements to `get_data()` for `t.test()`.
+
+* `format_value()` gets a `lead_zero` argument, to keep or drop the leading
+  zero of a formatted value, as well as arguments `style_positive` and
+  `style_negative` to style positive or negative numbers.
 
 # insight 0.19.0
 

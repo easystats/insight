@@ -63,7 +63,7 @@ format_number <- function(x, textual = TRUE, ...) {
 
   suffixes <- c("thousand", "million", "billion", "trillion")
 
-  digits <- rev(strsplit(as.character(x), "")[[1]])
+  digits <- rev(strsplit(as.character(x), "", fixed = TRUE)[[1]])
   nDigits <- length(digits)
 
   if (nDigits == 1) {
@@ -79,7 +79,7 @@ format_number <- function(x, textual = TRUE, ...) {
   } else {
     nSuffix <- ((nDigits + 2) %/% 3) - 1
     if (nSuffix > length(suffixes)) {
-      stop(paste(x, "is too large!"), call. = FALSE)
+      format_error(paste(x, "is too large!"))
     }
     .trim_ws_and(paste(
       Recall(.make_number(digits[nDigits:(3 * nSuffix + 1)])),
@@ -99,7 +99,7 @@ format_number <- function(x, textual = TRUE, ...) {
 
 .trim_ws_and <- function(text) {
   # Tidy leading/trailing whitespace, space before comma
-  text <- gsub("^\ ", "", gsub("\ *$", "", gsub("\ ,", ",", text)))
+  text <- gsub("^ ", "", gsub(" *$", "", gsub(" ,", ",", text, fixed = TRUE)))
   # Clear any trailing " and"
   text <- gsub(" and$", "", text)
   # Clear any trailing comma

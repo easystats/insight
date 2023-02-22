@@ -2,7 +2,7 @@
 #' @name format_value
 #'
 #' @description
-#' `format_value()` converts numeric values into formatted string values2, where
+#' `format_value()` converts numeric values into formatted string values, where
 #' formatting can be something like rounding digits, scientific notation etc.
 #' `format_percent()` is a short-cut for `format_value(as_percent = TRUE)`.
 #'
@@ -25,6 +25,15 @@
 #' @param zap_small Logical, if `TRUE`, small values are rounded after
 #'   `digits` decimal places. If `FALSE`, values with more decimal
 #'   places than `digits` are printed in scientific notation.
+#' @param lead_zero Logical, if `TRUE` (default), includes leading zeros, else
+#'   leading zeros are dropped.
+#' @param style_positive  A string that determines the style of positive numbers.
+#'   May be `"none"` (default), `"plus"` to add a plus-sign or `"space"` to
+#'   precede the string by a Unicode "figure space", i.e., a space equally as
+#'   wide as a number or `+`.
+#' @param style_negative  A string that determines the style of negative numbers.
+#'   May be `"hyphen"` (default), `"minus"` for a proper Unicode minus symbol or
+#'   `"parens"` to wrap the number in parentheses.
 #' @param ... Arguments passed to or from other methods.
 #'
 #'
@@ -39,6 +48,7 @@
 #' format_value(c(0.0045, .12, .34), as_percent = TRUE)
 #' format_value(c(0.0045, .12, .34), digits = "scientific")
 #' format_value(c(0.0045, .12, .34), digits = "scientific2")
+#' format_value(c(0.045, .12, .34), lead_zero = FALSE)
 #'
 #' # default
 #' format_value(c(0.0045, .123, .345))
@@ -67,6 +77,9 @@ format_value.data.frame <- function(x,
                                     width = NULL,
                                     as_percent = FALSE,
                                     zap_small = FALSE,
+                                    lead_zero = TRUE,
+                                    style_positive = "none",
+                                    style_negative = "hyphen",
                                     ...) {
   as.data.frame(sapply(
     x,
@@ -77,6 +90,9 @@ format_value.data.frame <- function(x,
     width = width,
     as_percent = as_percent,
     zap_small = zap_small,
+    lead_zero = lead_zero,
+    style_positive = style_positive,
+    style_negative = style_negative,
     simplify = FALSE
   ))
 }
@@ -91,7 +107,14 @@ format_value.numeric <- function(x,
                                  width = NULL,
                                  as_percent = FALSE,
                                  zap_small = FALSE,
+                                 lead_zero = TRUE,
+                                 style_positive = "none",
+                                 style_negative = "hyphen",
                                  ...) {
+  # check input
+  style_positive <- match.arg(style_positive, choices = c("none", "plus", "space"))
+  style_negative <- match.arg(style_negative, choices = c("hyphen", "minus", "parens"))
+
   if (protect_integers) {
     out <- .format_value_unless_integer(
       x,
@@ -114,15 +137,38 @@ format_value.numeric <- function(x,
     )
   }
 
-  # Deal with negative zeros
+  # following changes do not apply to factors
+
   if (!is.factor(x)) {
+    # Deal with negative zeros
     whitespace <- ifelse(is.null(width), "", " ")
     out[out == "-0"] <- paste0(whitespace, "0")
     out[out == "-0.0"] <- paste0(whitespace, "0.0")
     out[out == "-0.00"] <- paste0(whitespace, "0.00")
     out[out == "-0.000"] <- paste0(whitespace, "0.000")
     out[out == "-0.0000"] <- paste0(whitespace, "0.0000")
+
+    # drop leading zero?
+    if (!lead_zero) {
+      out <- gsub("(.*)(0\\.)(.*)", "\\1\\.\\3", out)
+    }
+
+    # find negative values, to deal with sign
+    negatives <- startsWith(out, "-")
+
+    if (style_positive == "plus") {
+      out[!negatives] <- paste0("+", out[!negatives])
+    } else if (style_positive == "space") {
+      out[!negatives] <- paste0("\u2007", out[!negatives])
+    }
+
+    if (style_negative == "minus") {
+      out[negatives] <- gsub("-", "\u2212", out[negatives], fixed = TRUE)
+    } else if (style_negative == "parens") {
+      out[negatives] <- gsub("-(.*)", "\\(\\1\\)", out[negatives])
+    }
   }
+
   out
 }
 
@@ -189,7 +235,7 @@ format_percent <- function(x, ...) {
         x <- ifelse(is.na(x), .missing, sprintf("%.*f%%", digits, 100 * x))
       } else {
         x <- ifelse(is.na(x), .missing,
-          ifelse(need_sci,
+          ifelse(need_sci, # nolint
             sprintf("%.*e%%", digits, 100 * x),
             sprintf("%.*f%%", digits, 100 * x)
           )
@@ -224,7 +270,7 @@ format_percent <- function(x, ...) {
           x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
         } else {
           x <- ifelse(is.na(x), .missing,
-            ifelse(need_sci,
+            ifelse(need_sci, # nolint
               sprintf("%.*e", digits, x),
               sprintf("%.*f", digits, x)
             )

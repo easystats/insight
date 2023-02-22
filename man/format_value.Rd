@@ -17,6 +17,9 @@ format_value(x, ...)
   width = NULL,
   as_percent = FALSE,
   zap_small = FALSE,
+  lead_zero = TRUE,
+  style_positive = "none",
+  style_negative = "hyphen",
   ...
 )
 
@@ -28,6 +31,9 @@ format_value(x, ...)
   width = NULL,
   as_percent = FALSE,
   zap_small = FALSE,
+  lead_zero = TRUE,
+  style_positive = "none",
+  style_negative = "hyphen",
   ...
 )
 
@@ -61,12 +67,24 @@ value.}
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
 places than \code{digits} are printed in scientific notation.}
+
+\item{lead_zero}{Logical, if \code{TRUE} (default), includes leading zeros, else
+leading zeros are dropped.}
+
+\item{style_positive}{A string that determines the style of positive numbers.
+May be \code{"none"} (default), \code{"plus"} to add a plus-sign or \code{"space"} to
+precede the string by a Unicode "figure space", i.e., a space equally as
+wide as a number or \code{+}.}
+
+\item{style_negative}{A string that determines the style of negative numbers.
+May be \code{"hyphen"} (default), \code{"minus"} for a proper Unicode minus symbol or
+\code{"parens"} to wrap the number in parentheses.}
 }
 \value{
 A formatted string.
 }
 \description{
-\code{format_value()} converts numeric values into formatted string values2, where
+\code{format_value()} converts numeric values into formatted string values, where
 formatting can be something like rounding digits, scientific notation etc.
 \code{format_percent()} is a short-cut for \code{format_value(as_percent = TRUE)}.
 }
@@ -79,6 +97,7 @@ format_value(c(0.0045, .12, .34))
 format_value(c(0.0045, .12, .34), as_percent = TRUE)
 format_value(c(0.0045, .12, .34), digits = "scientific")
 format_value(c(0.0045, .12, .34), digits = "scientific2")
+format_value(c(0.045, .12, .34), lead_zero = FALSE)
 
 # default
 format_value(c(0.0045, .123, .345))
