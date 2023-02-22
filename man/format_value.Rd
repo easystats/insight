@@ -18,6 +18,8 @@ format_value(x, ...)
   as_percent = FALSE,
   zap_small = FALSE,
   lead_zero = TRUE,
+  style_positive = "none",
+  style_negative = "hyphen",
   ...
 )
 
@@ -30,6 +32,8 @@ format_value(x, ...)
   as_percent = FALSE,
   zap_small = FALSE,
   lead_zero = TRUE,
+  style_positive = "none",
+  style_negative = "hyphen",
   ...
 )
 
@@ -66,6 +70,15 @@ places than \code{digits} are printed in scientific notation.}
 
 \item{lead_zero}{Logical, if \code{TRUE} (default), includes leading zeros, else
 leading zeros are dropped.}
+
+\item{style_positive}{A string that determines the style of positive numbers.
+May be \code{"none"} (default), \code{"plus"} to add a plus-sign or \code{"space"} to
+precede the string by a Unicode "figure space", i.e., a space equally as
+wide as a number or \code{+}.}
+
+\item{style_negative}{A string that determines the style of negative numbers.
+May be \code{"hyphen"} (default), \code{"minus"} for a proper Unicode minus symbol or
+\code{"parens"} to wrap the number in parentheses.}
 }
 \value{
 A formatted string.

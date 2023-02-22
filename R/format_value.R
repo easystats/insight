@@ -27,6 +27,13 @@
 #'   places than `digits` are printed in scientific notation.
 #' @param lead_zero Logical, if `TRUE` (default), includes leading zeros, else
 #'   leading zeros are dropped.
+#' @param style_positive  A string that determines the style of positive numbers.
+#'   May be `"none"` (default), `"plus"` to add a plus-sign or `"space"` to
+#'   precede the string by a Unicode "figure space", i.e., a space equally as
+#'   wide as a number or `+`.
+#' @param style_negative  A string that determines the style of negative numbers.
+#'   May be `"hyphen"` (default), `"minus"` for a proper Unicode minus symbol or
+#'   `"parens"` to wrap the number in parentheses.
 #' @param ... Arguments passed to or from other methods.
 #'
 #'
@@ -71,6 +78,8 @@ format_value.data.frame <- function(x,
                                     as_percent = FALSE,
                                     zap_small = FALSE,
                                     lead_zero = TRUE,
+                                    style_positive = "none",
+                                    style_negative = "hyphen",
                                     ...) {
   as.data.frame(sapply(
     x,
@@ -82,6 +91,8 @@ format_value.data.frame <- function(x,
     as_percent = as_percent,
     zap_small = zap_small,
     lead_zero = lead_zero,
+    style_positive = style_positive,
+    style_negative = style_negative,
     simplify = FALSE
   ))
 }
@@ -97,7 +108,13 @@ format_value.numeric <- function(x,
                                  as_percent = FALSE,
                                  zap_small = FALSE,
                                  lead_zero = TRUE,
+                                 style_positive = "none",
+                                 style_negative = "hyphen",
                                  ...) {
+  # check input
+  style_positive <- match.arg(style_positive, choices = c("none", "plus", "space"))
+  style_negative <- match.arg(style_negative, choices = c("hyphen", "minus", "parens"))
+
   if (protect_integers) {
     out <- .format_value_unless_integer(
       x,
@@ -134,6 +151,22 @@ format_value.numeric <- function(x,
   if (!lead_zero) {
     out <- gsub("(.*)(0\\.)(.*)", "\\1\\.\\3", out)
   }
+
+  # find negative values, to deal with sign
+  negatives <- startsWith(out, "-")
+
+  if (style_positive == "plus") {
+    out[!negatives] <- paste0("+", out[!negatives])
+  } else if (style_positive == "space") {
+    out[!negatives] <- paste0("\u2007", out[!negatives])
+  }
+
+  if (style_negative == "minus") {
+    out[negatives] <- gsub("-", "\u2212", out[negatives], fixed = TRUE)
+  } else if (style_negative == "parens") {
+    out[negatives] <- gsub("-(.*)", "\\(\\1\\)", out[negatives])
+  }
+
   out
 }
 
