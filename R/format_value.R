@@ -2,7 +2,7 @@
 #' @name format_value
 #'
 #' @description
-#' `format_value()` converts numeric values into formatted string values2, where
+#' `format_value()` converts numeric values into formatted string values, where
 #' formatting can be something like rounding digits, scientific notation etc.
 #' `format_percent()` is a short-cut for `format_value(as_percent = TRUE)`.
 #'
@@ -137,34 +137,36 @@ format_value.numeric <- function(x,
     )
   }
 
-  # Deal with negative zeros
+  # following changes do not apply to factors
+
   if (!is.factor(x)) {
+    # Deal with negative zeros
     whitespace <- ifelse(is.null(width), "", " ")
     out[out == "-0"] <- paste0(whitespace, "0")
     out[out == "-0.0"] <- paste0(whitespace, "0.0")
     out[out == "-0.00"] <- paste0(whitespace, "0.00")
     out[out == "-0.000"] <- paste0(whitespace, "0.000")
     out[out == "-0.0000"] <- paste0(whitespace, "0.0000")
-  }
 
-  # drop leading zero?
-  if (!lead_zero) {
-    out <- gsub("(.*)(0\\.)(.*)", "\\1\\.\\3", out)
-  }
+    # drop leading zero?
+    if (!lead_zero) {
+      out <- gsub("(.*)(0\\.)(.*)", "\\1\\.\\3", out)
+    }
 
-  # find negative values, to deal with sign
-  negatives <- startsWith(out, "-")
+    # find negative values, to deal with sign
+    negatives <- startsWith(out, "-")
 
-  if (style_positive == "plus") {
-    out[!negatives] <- paste0("+", out[!negatives])
-  } else if (style_positive == "space") {
-    out[!negatives] <- paste0("\u2007", out[!negatives])
-  }
+    if (style_positive == "plus") {
+      out[!negatives] <- paste0("+", out[!negatives])
+    } else if (style_positive == "space") {
+      out[!negatives] <- paste0("\u2007", out[!negatives])
+    }
 
-  if (style_negative == "minus") {
-    out[negatives] <- gsub("-", "\u2212", out[negatives], fixed = TRUE)
-  } else if (style_negative == "parens") {
-    out[negatives] <- gsub("-(.*)", "\\(\\1\\)", out[negatives])
+    if (style_negative == "minus") {
+      out[negatives] <- gsub("-", "\u2212", out[negatives], fixed = TRUE)
+    } else if (style_negative == "parens") {
+      out[negatives] <- gsub("-(.*)", "\\(\\1\\)", out[negatives])
+    }
   }
 
   out
