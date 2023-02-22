@@ -84,7 +84,7 @@ May be \code{"hyphen"} (default), \code{"minus"} for a proper Unicode minus symb
 A formatted string.
 }
 \description{
-\code{format_value()} converts numeric values into formatted string values2, where
+\code{format_value()} converts numeric values into formatted string values, where
 formatting can be something like rounding digits, scientific notation etc.
 \code{format_percent()} is a short-cut for \code{format_value(as_percent = TRUE)}.
 }
