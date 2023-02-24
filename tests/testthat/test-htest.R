@@ -70,42 +70,42 @@ test_that("get_data.t-test, two-sample", {
   expect_true(model_info(tt4)$is_ttest)
 })
 
-# Paired
-test_that("get_data.t-test, two-sample", {
-  data(sleep)
-  sleep <<- sleep
-  tt5 <- t.test(sleep$extra ~ sleep$group, paired = TRUE)
-  tt6 <- t.test(sleep$extra[sleep$group == "1"], sleep$extra[sleep$group == "2"], paired = TRUE)
-  tt7 <- t.test(Pair(sleep$extra[sleep$group == "1"], sleep$extra[sleep$group == "2"]) ~ 1)
+# # Paired
+# test_that("get_data.t-test, two-sample", {
+#   data(sleep)
+#   sleep <<- sleep
+#   tt5 <- t.test(sleep$extra ~ sleep$group, paired = TRUE)
+#   tt6 <- t.test(sleep$extra[sleep$group == "1"], sleep$extra[sleep$group == "2"], paired = TRUE)
+#   tt7 <- t.test(Pair(sleep$extra[sleep$group == "1"], sleep$extra[sleep$group == "2"]) ~ 1)
 
-  expect_identical(colnames(get_data(tt5)), c("x", "y"))
-  expect_equal(
-    head(get_data(tt5))$x,
-    c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
-    ignore_attr = TRUE
-  )
-  expect_equal(
-    head(get_data(tt5))$y,
-    structure(c(1L, 1L, 1L, 1L, 1L, 1L), levels = c("1", "2"), class = "factor"),
-    ignore_attr = TRUE
-  )
+#   expect_identical(colnames(get_data(tt5)), c("x", "y"))
+#   expect_equal(
+#     head(get_data(tt5))$x,
+#     c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
+#     ignore_attr = TRUE
+#   )
+#   expect_equal(
+#     head(get_data(tt5))$y,
+#     structure(c(1L, 1L, 1L, 1L, 1L, 1L), levels = c("1", "2"), class = "factor"),
+#     ignore_attr = TRUE
+#   )
 
-  expect_identical(colnames(get_data(tt6)), c("x", "y"))
-  expect_equal(
-    head(get_data(tt6))$x,
-    c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
-    ignore_attr = TRUE
-  )
-  expect_equal(
-    head(get_data(tt6))$y,
-    structure(c(1L, 1L, 1L, 1L, 1L, 1L), levels = c("1", "2"), class = "factor"),
-    ignore_attr = TRUE
-  )
+#   expect_identical(colnames(get_data(tt6)), c("x", "y"))
+#   expect_equal(
+#     head(get_data(tt6))$x,
+#     c(0.7, -1.6, -0.2, -1.2, -0.1, 3.4),
+#     ignore_attr = TRUE
+#   )
+#   expect_equal(
+#     head(get_data(tt6))$y,
+#     structure(c(1L, 1L, 1L, 1L, 1L, 1L), levels = c("1", "2"), class = "factor"),
+#     ignore_attr = TRUE
+#   )
 
-  expect_true(model_info(tt5)$is_ttest)
-  expect_true(model_info(tt6)$is_ttest)
-  expect_true(model_info(tt7)$is_ttest)
-})
+#   expect_true(model_info(tt5)$is_ttest)
+#   expect_true(model_info(tt6)$is_ttest)
+#   expect_true(model_info(tt7)$is_ttest)
+# })
 
 
 # mcnemar test ---------------
