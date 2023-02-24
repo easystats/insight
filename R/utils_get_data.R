@@ -913,49 +913,70 @@
 
           # t-tests ===========================================================
 
-        } else if (grepl("Two", x$method, fixed = TRUE)) {
-          if (grepl(" and ", x$data.name, fixed = TRUE)) {
-            # t-Test: (Welch) Two Sample t-test ----
-            return(.htest_reshape_long(columns))
+        } else if (grepl("t-test", x$method, fixed = TRUE)) {
 
-          } else if (grepl(" by ", x$data.name, fixed = TRUE)) {
-            # t-Test: (Welch) Two Sample t-test ----
-            return(.htest_no_reshape(columns))
-          }
-        } else if (startsWith(x$method, "Paired")) {
-          if (grepl(" (and|by) ", x$data.name)) {
-            # t-Test: Paired t-test ----
-            return(.htest_reshape_long(columns))
+          # t-Test: (Welch) Two Sample t-test ----
+          if (grepl("Two", x$method, fixed = TRUE)) {
+            if (grepl(" and ", x$data.name, fixed = TRUE)) {
+              return(.htest_reshape_long(columns))
 
-          } else if (startsWith(x$data.name, "Pair(")) {
-            # t-Test: Paired t-test ----
-            return(.htest_reshape_matrix(columns))
+            } else if (grepl(" by ", x$data.name, fixed = TRUE)) {
+              return(.htest_no_reshape(columns))
+            }
+
+            # t-Test: Paired t-test
+          } else if (startsWith(x$method, "Paired")) {
+            if (grepl(" and ", x$data.name, fixed = TRUE)) {
+              # t-Test: Paired t-test, two vectors ----
+              return(.htest_reshape_long(columns))
+
+            } else if (grepl(" by ", x$data.name, fixed = TRUE)) {
+              # t-Test: Paired t-test, formula (no reshape required) ----
+              return(.htest_no_reshape(columns))
+
+            } else if (startsWith(x$data.name, "Pair(")) {
+              # t-Test: Paired t-test ----
+              return(.htest_reshape_matrix(columns))
+            }
+
+            # t-Test: One Sample
+          } else {
+            d <- .htest_other_format(columns)
           }
 
           # Wilcoxon ========================================================
 
         } else if (startsWith(x$method, "Wilcoxon rank sum")) {
-          return(.htest_reshape_long(columns))
+          if (grepl(" by ", x$data.name, fixed = TRUE)) {
+            # Wilcoxon: Paired Wilcoxon, formula (no reshape required) ----
+            return(.htest_no_reshape(columns))
+
+          } else {
+            return(.htest_reshape_long(columns))
+          }
 
         } else if (startsWith(x$method, "Wilcoxon signed rank")) {
           if (startsWith(x$data.name, "Pair(")) {
             return(.htest_reshape_matrix(columns))
 
           } else if (grepl(" and ", x$data.name, fixed = TRUE)) {
+            # Wilcoxon: Paired Wilcoxon, two vectors ----
             return(.htest_reshape_long(columns))
+
+          } else if (grepl(" by ", x$data.name, fixed = TRUE)) {
+            # Wilcoxon: Paired Wilcoxon, formula (no reshape required) ----
+            return(.htest_no_reshape(columns))
+
+          } else {
+            # Wilcoxon: One sample ----
+            d <- .htest_other_format(columns)
           }
 
         } else {
 
           # Other htests ======================================================
 
-          max_len <- max(lengths(columns))
-          for (i in seq_along(columns)) {
-            if (length(columns[[i]]) < max_len) {
-              columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
-            }
-          }
-          d <- as.data.frame(columns)
+          d <- .htest_other_format(columns)
         }
 
         # fix column names
@@ -1027,4 +1048,15 @@
     ),
     stringsAsFactors = TRUE
   )
+}
+
+
+.htest_other_format <- function(columns) {
+  max_len <- max(lengths(columns))
+  for (i in seq_along(columns)) {
+    if (length(columns[[i]]) < max_len) {
+      columns[[i]] <- c(columns[[i]], rep(NA, max_len - length(columns[[i]])))
+    }
+  }
+  as.data.frame(columns)
 }
