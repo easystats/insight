@@ -255,31 +255,22 @@ format_table <- function(x,
     starlist <- list("p" = stars)
   }
 
-  if ("p" %in% names(x)) {
-    x$p <- format_p(
-      x$p,
-      stars = starlist[["p"]],
-      name = NULL,
-      missing = "",
-      digits = p_digits
-    )
-    x$p <- format(x$p, justify = "left")
-  }
-  if ("p.value" %in% names(x)) {
-    x$p.value <- format_p(
-      x$p.value,
-      stars = starlist[["p"]],
-      name = NULL,
-      missing = "",
-      digits = p_digits
-    )
-    x$p.value <- format(x$p.value, justify = "left")
+  for (pv in c("p", "p.value", "SGPV")) {
+    if (pv %in% names(x)) {
+      x[[pv]] <- format_p(
+        x[[pv]],
+        stars = starlist[["p"]],
+        name = NULL,
+        missing = "",
+        digits = p_digits
+      )
+      x[[pv]] <- format(x[[pv]], justify = "left")
+    }
   }
 
   for (stats in c(
     "p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA", "p_ROPE",
-    "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR", "p_calibrated",
-    "SGPV"
+    "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR", "p_calibrated"
   )) {
     if (stats %in% names(x)) {
       x[[stats]] <- format_p(
