@@ -278,7 +278,8 @@ format_table <- function(x,
 
   for (stats in c(
     "p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA", "p_ROPE",
-    "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR", "p_calibrated"
+    "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR", "p_calibrated",
+    "SGPV"
   )) {
     if (stats %in% names(x)) {
       x[[stats]] <- format_p(
@@ -628,7 +629,7 @@ format_table <- function(x,
 
 
 .format_std_columns <- function(x, other_ci_colname, digits, zap_small) {
-  std_cols <- names(x)[grepl("Std_", names(x))]
+  std_cols <- names(x)[grepl("Std_", names(x), fixed = TRUE)]
   if (length(std_cols) == 0) {
     return(x)
   }

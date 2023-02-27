@@ -8,6 +8,9 @@
   zero of a formatted value, as well as arguments `style_positive` and
   `style_negative` to style positive or negative numbers.
 
+* `format_table()` now also formats columns named `SGPV` (second generation
+  p-values) as p-values.
+
 # insight 0.19.0
 
 ## New supported models
