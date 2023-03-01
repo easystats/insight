@@ -30,7 +30,7 @@ find_parameters.averaging <- function(x,
   out <- list(conditional = text_remove_backticks(names(cf)))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -164,7 +164,7 @@ find_parameters.systemfit <- function(x, flatten = FALSE, ...) {
   names(out) <- system_names
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -178,7 +178,7 @@ find_parameters.bfsl <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = rownames(cf))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -202,7 +202,7 @@ find_parameters.marginaleffects <- function(x, flatten = FALSE, ...) {
   out <- list(marginaleffects = names(params))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -214,7 +214,7 @@ find_parameters.marginaleffects.summary <- function(x, flatten = FALSE, ...) {
   out <- list(marginaleffects = x$term)
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -227,7 +227,7 @@ find_parameters.deltaMethod <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = rownames(params))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }

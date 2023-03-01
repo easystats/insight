@@ -41,7 +41,7 @@ find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE
   }
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }

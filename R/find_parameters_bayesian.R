@@ -63,7 +63,7 @@ find_parameters.BGGM <- function(x,
   l <- compact_list(l)
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -110,13 +110,13 @@ find_parameters.BFBayesFactor <- function(x,
         } else {
           sprintf("%s-%s", i, i)
         }
-      }))
+      }), use.names = FALSE)
     }
 
     # add interaction terms to conditional
     if ("conditional" %in% names(interactions)) {
       for (i in interactions$conditional) {
-        conditional <- c(conditional, params[grepl(paste0("^\\Q", i, "\\E"), params)])
+        conditional <- c(conditional, grep(paste0("^\\Q", i, "\\E"), params, value = TRUE))
       }
     }
 
@@ -127,7 +127,7 @@ find_parameters.BFBayesFactor <- function(x,
         } else {
           sprintf("%s-%s", i, i)
         }
-      }))
+      }), use.names = FALSE)
     }
 
     extra <- setdiff(params, c(conditional, random))
@@ -138,7 +138,7 @@ find_parameters.BFBayesFactor <- function(x,
   l <- compact_list(l[elements])
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -171,7 +171,7 @@ find_parameters.MCMCglmm <- function(x,
 find_parameters.mcmc.list <- function(x, flatten = FALSE, ...) {
   l <- list(conditional = colnames(x[[1]]))
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -206,7 +206,7 @@ find_parameters.bamlss <- function(x,
   l <- .filter_pars(l, parameters)
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -239,7 +239,7 @@ find_parameters.brmsfit <- function(x,
 
   cond <- fe[grepl("^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
   zi <- fe[grepl("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
-  rand <- fe[grepl("(?!.*__(zi|sigma|beta))(?=.*^r_)", fe, perl = TRUE) & !grepl("^prior_", fe, perl = TRUE)]
+  rand <- fe[grepl("(?!.*__(zi|sigma|beta))(?=.*^r_)", fe, perl = TRUE) & !startsWith(fe, "prior_")]
   randzi <- fe[grepl("^r_(.*__zi)", fe, perl = TRUE)]
   rand_sd <- fe[grepl("(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
   randzi_sd <- fe[grepl("^sd_(.*_zi)", fe, perl = TRUE)]
@@ -394,7 +394,7 @@ find_parameters.brmsfit <- function(x,
   attr(l, "is_mv") <- is_mv
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -424,7 +424,7 @@ find_parameters.bayesx <- function(x,
   l <- compact_list(l[elements])
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -470,7 +470,7 @@ find_parameters.stanreg <- function(x,
   l <- compact_list(l[elements])
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -485,7 +485,7 @@ find_parameters.bcplm <- function(x,
                                   ...) {
   l <- .filter_pars(list(conditional = dimnames(x$sims.list[[1]])[[2]]), parameters)
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -568,7 +568,7 @@ find_parameters.stanmvreg <- function(x,
   attr(l, "is_mv") <- "1"
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -602,7 +602,7 @@ find_parameters.sim.merMod <- function(x,
   l <- compact_list(l[elements])
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -618,7 +618,7 @@ find_parameters.sim <- function(x, flatten = FALSE, parameters = NULL, ...) {
   )
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -631,7 +631,7 @@ find_parameters.mcmc <- function(x, flatten = FALSE, parameters = NULL, ...) {
   l <- .filter_pars(list(conditional = colnames(x)), parameters)
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -644,7 +644,7 @@ find_parameters.bayesQR <- function(x, flatten = FALSE, parameters = NULL, ...) 
   l <- .filter_pars(list(conditional = x[[1]]$names), parameters)
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -661,7 +661,7 @@ find_parameters.stanfit <- function(x,
   fe <- colnames(as.data.frame(x))
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma|lp__))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
-  rand <- fe[grepl("^b\\[", fe, perl = TRUE)]
+  rand <- fe[startsWith(fe, "b[")]
 
   l <- compact_list(list(
     conditional = cond,
@@ -675,7 +675,7 @@ find_parameters.stanfit <- function(x,
   l <- compact_list(l[elements])
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }

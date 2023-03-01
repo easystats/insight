@@ -613,12 +613,10 @@
       )
     }
     return(0)
-  } else if (mu < 6) {
-    if (verbose) {
-      format_warning(
-        sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)
-      )
-    }
+  } else if (mu < 6 && verbose) {
+    format_warning(
+      sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)
+    )
   }
 
   cvsquared <- tryCatch(
@@ -930,7 +928,7 @@
     # check for uncorrelated random slopes-intercept
     non_intercepts <- which(sapply(vals$vc, function(i) !startsWith(dimnames(i)[[1]][1], "(Intercept)")))
     if (length(non_intercepts) == length(vals$vc)) {
-      out <- unlist(lapply(vals$vc, function(x) diag(x)))
+      out <- unlist(lapply(vals$vc, diag))
     } else if (length(non_intercepts)) {
       dn <- unlist(lapply(vals$vc, function(i) dimnames(i)[1])[non_intercepts])
       rndslopes <- unlist(lapply(vals$vc, function(i) {
@@ -978,7 +976,7 @@
 # ----------------------------------------------
 .random_slope_intercept_corr <- function(vals, x) {
   if (inherits(x, "lme")) {
-    rho01 <- unlist(sapply(vals$vc, function(i) attr(i, "cor_slope_intercept")))
+    rho01 <- unlist(sapply(vals$vc, attr, which = "cor_slope_intercept"))
     if (is.null(rho01)) {
       vc <- lme4::VarCorr(x)
       if ("Corr" %in% colnames(vc)) {

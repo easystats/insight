@@ -134,7 +134,7 @@ export_table <- function(x,
   # sanity check
   if (is.null(x) || (is.data.frame(x) && nrow(x) == 0) || is_empty_object(x)) {
     if (isTRUE(verbose)) {
-      message(paste0("Can't export table to ", format, ", data frame is empty."))
+      message("Can't export table to ", format, ", data frame is empty.")
     }
     return(NULL)
   }
@@ -682,25 +682,22 @@ print.insight_table <- function(x, ...) {
         cross, sep, final_row,
         is_last_row = row == nrow(final)
       )
-      rows <- paste0(rows, empty_line_with_cross, sep = "\n")
+      rows <- past0(rows, empty_line_with_cross, sep = "\n")
     } else {
-      rows <- paste0(rows, final_row, sep = "\n")
+      rows <- paste(rows, final_row, sep = "\n")
     }
 
     # After first row, we might have a separator row
-    if (row == 1) {
-      # check if we have any separator for the header row
-      if (!is.null(header)) {
-        # check whether user wants to have a "cross" char where vertical and
-        # horizontal lines (from header line) cross.
-        header_line <- .insert_cross(
-          paste0(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
-          cross, sep, final_row,
-          is_last_row = row == nrow(final)
-        )
-        # add separator row after header line
-        rows <- paste0(rows, header_line, sep = "\n")
-      }
+    if (row == 1 && !is.null(header)) { # check if we have any separator for the header row
+      # check whether user wants to have a "cross" char where vertical and
+      # horizontal lines (from header line) cross.
+      header_line <- .insert_cross(
+        paste0(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
+        cross, sep, final_row,
+        is_last_row = row == nrow(final)
+      )
+      # add separator row after header line
+      rows <- paste(rows, header_line, sep = "\n")
     }
   }
 
@@ -713,7 +710,7 @@ print.insight_table <- function(x, ...) {
   # special char. E.g., if columns are separated with "|" and header line
   # with "-", we might have a "+" to have properly "crossed lines"
   if (!is.null(cross) && !is_last_row) {
-    cross_position <- unlist(gregexpr(trim_ws(sep), pattern, fixed = TRUE))
+    cross_position <- unlist(gregexpr(trim_ws(sep), pattern, fixed = TRUE), use.names = FALSE)
     for (pp in cross_position) {
       substr(row, pp, pp) <- cross
     }
@@ -991,7 +988,7 @@ print.insight_table <- function(x, ...) {
   if (!is.null(footer)) {
     if (is.list(footer)) {
       footer <- lapply(footer, function(i) {
-        gsub("\n", "", i[1])
+        gsub("\n", "", i[1], fixed = TRUE)
       })
     } else {
       footer <- footer[1]

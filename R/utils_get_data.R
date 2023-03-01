@@ -1003,7 +1003,7 @@
     for (parent_level in 1:5) {
       out <- tryCatch(
         {
-          data_name <- trim_ws(unlist(strsplit(x$data.name, "(and|,|by)")))
+          data_name <- trim_ws(unlist(strsplit(x$data.name, "(and|,|by)"), use.names = FALSE))
           as.table(get(data_name, envir = parent.frame(n = parent_level)))
         },
         error = function(e) {

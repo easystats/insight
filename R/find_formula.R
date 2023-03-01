@@ -432,7 +432,7 @@ find_formula.betareg <- function(x, verbose = TRUE, ...) {
   fs <- safe_deparse(f)
 
   if (grepl("|", fs, fixed = TRUE)) {
-    fs <- trim_ws(unlist(strsplit(fs, "|", fixed = TRUE)))
+    fs <- trim_ws(unlist(strsplit(fs, "|", fixed = TRUE), use.names = FALSE))
     f <- list(
       conditional = stats::as.formula(fs[1]),
       precision = stats::as.formula(paste0("~", fs[2]))
@@ -730,7 +730,7 @@ find_formula.pgmm <- find_formula.plm
 #' @export
 find_formula.felm <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- trim_ws(unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE)))
+  f_parts <- trim_ws(unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE))
 
   f.cond <- f_parts[1]
 
@@ -766,7 +766,7 @@ find_formula.felm <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.mhurdle <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x)[[3]])
-  f_parts <- trim_ws(unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE)))
+  f_parts <- trim_ws(unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE))
 
   f.zi <- paste0("~", f_parts[1])
 
@@ -803,7 +803,7 @@ find_formula.mhurdle <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.feglm <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
 
   f.cond <- trim_ws(f_parts[1])
 
@@ -832,7 +832,7 @@ find_formula.feglm <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.fixest <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
 
   f.cond <- trim_ws(f_parts[1])
 
@@ -857,7 +857,7 @@ find_formula.fixest <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.feis <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
 
   f.cond <- trim_ws(f_parts[1])
   id <- parse(text = safe_deparse(x$call))[[1]]$id
@@ -885,7 +885,7 @@ find_formula.feis <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.bife <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "|", fixed = TRUE))
+  f_parts <- unlist(strsplit(f, "|", fixed = TRUE), use.names = FALSE)
 
   f.cond <- trim_ws(f_parts[1])
 
@@ -914,7 +914,7 @@ find_formula.ivprobit <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.wbm <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
 
   f.cond <- trim_ws(f_parts[1])
 
@@ -1629,7 +1629,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  f <- trim_ws(unlist(strsplit(safe_deparse(f), separator)))
+  f <- trim_ws(unlist(strsplit(safe_deparse(f), separator), use.names = FALSE))
 
   c.form <- stats::as.formula(f[1])
   if (length(f) == 2) {
@@ -1793,10 +1793,10 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   pattern <- "[\\s*+:()|^,\\-\\/]" # was: "[\\s\\*\\+:\\-\\|/\\(\\)\\^,]"
 
-  parts <- trim_ws(unlist(strsplit(split = pattern, x = LHS, perl = TRUE)))
+  parts <- trim_ws(unlist(strsplit(split = pattern, x = LHS, perl = TRUE), use.names = FALSE))
   d_LHS <- unique(gsub("(.*)\\$(.*)", "\\1", grep("(.*)\\$(.*)", parts, value = TRUE)))
 
-  parts <- trim_ws(unlist(strsplit(split = pattern, x = RHS, perl = TRUE)))
+  parts <- trim_ws(unlist(strsplit(split = pattern, x = RHS, perl = TRUE), use.names = FALSE))
   d_RHS <- unique(gsub("(.*)\\$(.*)", "\\1", grep("(.*)\\$(.*)", parts, value = TRUE)))
 
   if (n_unique(c(d_LHS, d_RHS)) > 1) {
