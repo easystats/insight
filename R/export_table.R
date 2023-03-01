@@ -682,9 +682,9 @@ print.insight_table <- function(x, ...) {
         cross, sep, final_row,
         is_last_row = row == nrow(final)
       )
-      rows <- past0(rows, empty_line_with_cross, sep = "\n")
+      rows <- paste0(rows, empty_line_with_cross, "\n")
     } else {
-      rows <- paste(rows, final_row, sep = "\n")
+      rows <- paste0(rows, final_row, "\n")
     }
 
     # After first row, we might have a separator row
@@ -697,7 +697,7 @@ print.insight_table <- function(x, ...) {
         is_last_row = row == nrow(final)
       )
       # add separator row after header line
-      rows <- paste(rows, header_line, sep = "\n")
+      rows <- paste0(rows, header_line, "\n")
     }
   }
 
