@@ -722,7 +722,7 @@
 
 
 .isBar <- function(term) {
-  if (is.call(term) && (term[[1]] == as.name("|")) || (term[[1]] == as.name("||"))) {
+  if (is.call(term) && ((term[[1]] == as.name("|") || term[[1]] == as.name("||")))) {
     return(TRUE)
   }
   FALSE
