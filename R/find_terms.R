@@ -60,7 +60,7 @@ find_terms.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   }
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -89,7 +89,7 @@ find_terms.aovlist <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
   l <- .get_variables_list_aovlist(f, resp)
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -109,7 +109,7 @@ find_terms.afex_aov <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   }
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -129,7 +129,7 @@ find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   l <- list(conditional = c(resp, fx))
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -172,7 +172,10 @@ find_terms.mipo <- function(x, ...) {
 
   f <- lapply(f, function(.x) {
     pattern <- "[*+:|\\-\\/](?![^(]*\\))" # was: "[\\*\\+:\\-\\|/](?![^(]*\\))"
-    f_parts <- gsub("~", "", trim_ws(unlist(strsplit(split = pattern, x = .x, perl = TRUE))), fixed = TRUE)
+    f_parts <- gsub("~", "", trim_ws(unlist(
+      strsplit(split = pattern, x = .x, perl = TRUE),
+      use.names = FALSE
+    )), fixed = TRUE)
     # if user has used namespace in formula-functions, these are returned
     # as empty elements. remove those here
     if (any(nchar(f_parts) == 0)) {
@@ -199,7 +202,7 @@ find_terms.mipo <- function(x, ...) {
   if (any(need_split)) {
     f$conditional <- c(
       f$conditional[!need_split],
-      trim_ws(unlist(strsplit(f$conditional[need_split], " ", fixed = TRUE)))
+      trim_ws(unlist(strsplit(f$conditional[need_split], " ", fixed = TRUE), use.names = FALSE))
     )
   }
   f$conditional <- gsub("#1", "-1", f$conditional, fixed = TRUE)

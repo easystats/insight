@@ -522,7 +522,7 @@
 # are included in the returned data frame
 #
 .return_combined_data <- function(x, mf, effects, component, model.terms, is_mv = FALSE, verbose = TRUE) {
-  response <- unlist(model.terms$response)
+  response <- unlist(model.terms$response, use.names = FALSE)
 
   # save factors attribute
   factors <- attr(mf, "factors", exact = TRUE)
@@ -550,12 +550,12 @@
       zero_inflated = sapply(model.terms[-1], function(i) i$zero_inflated_random)
     )
 
-    fixed.component.data <- unlist(fixed.component.data)
-    random.component.data <- unlist(random.component.data)
+    fixed.component.data <- unlist(fixed.component.data, use.names = FALSE)
+    random.component.data <- unlist(random.component.data, use.names = FALSE)
   } else {
     all_elements <- intersect(names(model.terms), .get_elements("fixed", "all"))
     fixed.component.data <- switch(component,
-      all = unlist(model.terms[all_elements]),
+      all = unlist(model.terms[all_elements], use.names = FALSE),
       conditional = model.terms$conditional,
       zi = ,
       zero_inflated = model.terms$zero_inflated,
@@ -868,14 +868,14 @@
       } else {
         # split by "and" and "by". E.g., for t.test(1:3, c(1,1:3)), we have
         # x$data.name = "1:3 and c(1, 1:3)"
-        data_name <- trim_ws(unlist(strsplit(x$data.name, "(and|by)")))
+        data_name <- trim_ws(unlist(strsplit(x$data.name, "(and|by)"), use.names = FALSE))
 
         # now we may have exceptions, e.g. for friedman.test(wb$x, wb$w, wb$t)
         # x$data.name is "wb$x, wb$w and wb$t" and we now have "wb$x, wb$w" and
         # "wb$t", so we need to split at comma as well. However, the above t-test
         # example returns "1:3" and "c(1, 1:3)", so we only must split at comma
         # when it is not inside parentheses.
-        data_comma <- unlist(strsplit(data_name, "(\\([^)]*\\))"))
+        data_comma <- unlist(strsplit(data_name, "(\\([^)]*\\))"), use.names = FALSE)
 
         # any comma not inside parentheses?
         if (any(grepl(",", data_comma, fixed = TRUE))) {

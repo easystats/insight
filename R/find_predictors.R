@@ -138,7 +138,7 @@ find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   }
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -150,7 +150,7 @@ find_predictors.logitr <- function(x, flatten = FALSE, ...) {
   l <- find_predictors.default(x)
   l[["cluster"]] <- get_call(x)$obsID
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -188,7 +188,7 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
     "endogenous" = endo
   ))
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -199,7 +199,7 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
 find_predictors.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   l <- list(conditional = "x")
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -224,7 +224,7 @@ find_predictors.afex_aov <- function(x,
   )[effects]
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }

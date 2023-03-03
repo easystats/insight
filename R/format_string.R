@@ -35,7 +35,7 @@ format_string.default <- function(x, ...) {
 
 #' @export
 format_string.data.frame <- function(x, length = NULL, abbreviate = "...", ...) {
-  as.data.frame(sapply(
+  as.data.frame(sapply( # nolint
     x,
     format_string,
     length = length,
@@ -49,8 +49,11 @@ format_string.data.frame <- function(x, length = NULL, abbreviate = "...", ...) 
 #' @export
 format_string.character <- function(x, length = NULL, abbreviate = "...", ...) {
   if (!is.null(length)) {
-    pattern <- paste("(.{1,", length, "})(\\s|$)", sep = "")
-    tmp <- paste0(substr(x, 0, unlist(regexec(abbreviate, sub(pattern, replacement = paste0("\\1", abbreviate), x), fixed = TRUE)) - 1), abbreviate)
+    pattern <- paste0("(.{1,", length, "})(\\s|$)")
+    tmp <- paste0(substr(x, 0, unlist(
+      regexec(abbreviate, sub(pattern, replacement = paste0("\\1", abbreviate), x), fixed = TRUE),
+      use.names = FALSE
+    ) - 1), abbreviate)
     too.long <- nchar(x) > length
     x[too.long] <- tmp[too.long]
   }

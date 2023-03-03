@@ -620,7 +620,7 @@ find_parameters.flexsurvreg <- find_parameters.lrm
 
 #' @export
 find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
-  l <- list(conditional = unname(text_remove_backticks(unlist(lapply(stats::coef(x), names)))))
+  l <- list(conditional = text_remove_backticks(unlist(lapply(stats::coef(x), names), use.names = FALSE)))
 
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
@@ -635,7 +635,7 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
 find_parameters.rqs <- function(x, flatten = FALSE, ...) {
   sc <- suppressWarnings(summary(x))
 
-  if (all(unlist(lapply(sc, is.list)))) {
+  if (all(unlist(lapply(sc, is.list), use.names = FALSE))) {
     pars <- list(conditional = rownames(stats::coef(sc[[1]])))
   } else {
     return(find_parameters.default(x, flatten = flatten, ...))

@@ -202,7 +202,7 @@ get_parameters.stanmvreg <- function(x,
     parms[[i]]$sigma <- NULL
   }
 
-  out <- as.data.frame(x)[unlist(lapply(compact_list(parms), function(i) i[elements]))]
+  out <- as.data.frame(x)[unlist(lapply(compact_list(parms), function(i) i[elements]), use.names = FALSE)]
 
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality)
@@ -227,7 +227,7 @@ get_parameters.brmsfit <- function(x,
   if (is_multivariate(x)) {
     parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
     elements <- .get_elements(effects, component)
-    out <- as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]))]
+    out <- as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]), use.names = FALSE)]
   } else {
     out <- as.data.frame(x)[.get_parms_data(x, effects, component, parameters)]
   }

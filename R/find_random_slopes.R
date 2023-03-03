@@ -53,9 +53,7 @@ find_random_slopes <- function(x) {
     }
     pattern <- gsub(pattern, "\\1", safe_deparse(forms))
     re <- all.vars(forms)
-    re[sapply(re, function(x) {
-      grepl(x, pattern, fixed = TRUE)
-    })]
+    re[sapply(re, grepl, pattern, fixed = TRUE)]
   })
 
   unique(unlist(compact_list(random_slope)))

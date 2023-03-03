@@ -87,7 +87,7 @@ format_ci <- function(CI_low,
         } else {
           nchar(as.character(.i))
         }
-      })))
+      }), use.names = FALSE))
     }
 
     if (all(is.na(CI_high) | is.infinite(CI_high))) {
@@ -99,7 +99,7 @@ format_ci <- function(CI_low,
         } else {
           nchar(as.character(.i))
         }
-      })))
+      }), use.names = FALSE))
     }
   }
 

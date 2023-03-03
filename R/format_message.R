@@ -86,7 +86,7 @@ format_message <- function(string,
     further_lines <- lapply(further_lines, function(i) {
       .wrap_message_line(string = i, line_length = line_length, indent = indent)
     })
-    string <- paste0(c(string, unlist(further_lines)), collapse = "\n")
+    string <- paste0(c(string, unlist(further_lines, use.names = FALSE)), collapse = "\n")
   }
 
   string

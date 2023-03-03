@@ -18,14 +18,14 @@
 find_smooth <- function(x, flatten = FALSE) {
   all_terms <- find_terms(x, flatten = TRUE, verbose = FALSE)
   patterns <- "^(s|ti|te|t2|gam::s|VGAM::s|mgcv::s|mgcv::ti|mgcv::te|mgcv::t2|brms::s|brms::t2)\\("
-  l <- compact_list(list(smooth_terms = all_terms[grepl(patterns, all_terms)]))
+  l <- compact_list(list(smooth_terms = grep(patterns, all_terms, value = TRUE)))
 
   if (is_empty_object(l)) {
     return(NULL)
   }
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }

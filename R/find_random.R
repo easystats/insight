@@ -63,7 +63,7 @@ find_random.default <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -87,9 +87,9 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
 
   if (object_has_names(f, "random")) {
     if (is.list(f$random)) {
-      r1 <- unique(unlist(lapply(f$random, function(.x) .get_model_random(.x, split_nested, x))))
+      r1 <- unique(unlist(lapply(f$random, .get_model_random, split_nested, model = x), use.names = FALSE))
     } else {
-      r1 <- unique(unlist(.get_model_random(f$random, split_nested, x)))
+      r1 <- unique(unlist(.get_model_random(f$random, split_nested, x), use.names = FALSE))
     }
   } else {
     r1 <- NULL
@@ -98,7 +98,10 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
 
   if (object_has_names(f, "zero_inflated_random")) {
     if (is.list(f$zero_inflated_random)) {
-      r2 <- unique(unlist(lapply(f$zero_inflated_random, function(.x) .get_model_random(.x, split_nested, x))))
+      r2 <- unique(unlist(
+        lapply(f$zero_inflated_random, .get_model_random, split_nested, model = x),
+        use.names = FALSE
+      ))
     } else {
       r2 <- unique(.get_model_random(f$zero_inflated_random, split_nested, x))
     }

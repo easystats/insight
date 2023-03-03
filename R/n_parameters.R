@@ -129,7 +129,7 @@ n_parameters.MixMod <- function(x,
         flatten = FALSE,
         verbose = FALSE,
         ...
-      )
+      ), use.names = FALSE
     ))
   } else {
     params <- get_parameters(x, effects = effects, component = component, ...)
@@ -201,7 +201,7 @@ n_parameters.brmsfit <- function(x,
       flatten = FALSE,
       verbose = FALSE,
       ...
-    )
+    ), use.names = FALSE
   ))
 }
 
@@ -222,7 +222,7 @@ n_parameters.stanreg <- function(x,
       flatten = FALSE,
       verbose = FALSE,
       ...
-    )
+    ), use.names = FALSE
   ))
 }
 
@@ -278,7 +278,7 @@ n_parameters.bayesx <- function(x, ...) {
       flatten = FALSE,
       verbose = FALSE,
       ...
-    )
+    ), use.names = FALSE
   ))
 }
 
@@ -297,7 +297,7 @@ n_parameters.bayesx <- function(x, ...) {
         flatten = FALSE,
         verbose = FALSE,
         ...
-      )
+      ), use.names = FALSE
     ))
   }
 }
@@ -312,7 +312,7 @@ n_parameters.bayesx <- function(x, ...) {
         flatten = FALSE,
         verbose = FALSE,
         ...
-      )
+      ), use.names = FALSE
     ))
   } else {
     params <- get_parameters(x, effects = effects, ...)
