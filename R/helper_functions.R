@@ -171,9 +171,7 @@
 # .get_model_random()
 .get_group_factor <- function(x, f) {
   if (is.list(f)) {
-    f <- lapply(f, function(.x) {
-      .get_model_random(.x, split_nested = TRUE, x)
-    })
+    f <- lapply(f, .get_model_random, split_nested = TRUE, model = x)
   } else {
     f <- .get_model_random(f, split_nested = TRUE, x)
   }
@@ -183,7 +181,7 @@
   }
 
   if (is.list(f)) {
-    f <- lapply(f, function(i) sapply(i, as.symbol))
+    f <- lapply(f, sapply, as.symbol)
   } else {
     f <- sapply(f, as.symbol)
   }
@@ -781,7 +779,11 @@ is.emmean <- function(x) {
   c_ <- is.emmeans.contrast(x)
   t_ <- is.emmeans.trend(x)
 
-  ifelse(c_, "contrasts",
-    ifelse(t_, "emtrends", "emmeans")
-  )
+  if (isTRUE(c_)) {
+    "contrasts"
+  } else if (isTRUE(t_)) {
+    "emtrends"
+  } else {
+    "emmeans"
+  }
 }

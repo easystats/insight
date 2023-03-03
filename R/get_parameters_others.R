@@ -169,7 +169,7 @@ get_parameters.mvord <- function(x,
                                  component = c("all", "conditional", "thresholds", "correlation"),
                                  ...) {
   component <- match.arg(component)
-  junk <- utils::capture.output(s <- summary(x))
+  junk <- utils::capture.output(s <- summary(x)) # nolint
   # intercepts thresholds
   thresholds <- as.data.frame(s$thresholds)
   thresholds$Parameter <- rownames(thresholds)
