@@ -1030,7 +1030,7 @@ find_formula.clm2 <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.DirichletRegModel <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE))
+  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
 
   f.cond <- trim_ws(f_parts[1])
 
@@ -1266,7 +1266,7 @@ find_formula.mixor <- function(x, verbose = TRUE, ...) {
   f_rs <- x$call$which.random.slope
 
   if (!is.null(f_rs)) {
-    f_rs <- trim_ws(unlist(strsplit(safe_deparse(x$call$formula[[3]]), "+", fixed = TRUE)))[f_rs]
+    f_rs <- trim_ws(unlist(strsplit(safe_deparse(x$call$formula[[3]]), "+", fixed = TRUE), use.names = FALSE))[f_rs]
     fmr <- paste(f_rs, "|", f_id)
   } else {
     fmr <- f_id

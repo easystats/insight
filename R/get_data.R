@@ -1588,7 +1588,10 @@ get_data.brmsfit <- function(x, effects = "all", component = "all", source = "en
 
   if (.is_multi_membership(x)) {
     model.terms <- lapply(model.terms, .clean_brms_mm)
-    rs <- setdiff(unname(unlist(find_random_slopes(x))), unname(unlist(model.terms)))
+    rs <- setdiff(
+      unlist(find_random_slopes(x), use.names = FALSE),
+      unlist(model.terms, use.names = FALSE)
+    )
     if (!is_empty_object(rs)) model.terms$random <- c(rs, model.terms$random)
   }
 

@@ -329,13 +329,13 @@
 
 .filter_pars_univariate <- function(l, parameters) {
   lapply(l, function(component) {
-    unlist(unname(sapply(
+    unlist(sapply(
       parameters,
       function(pattern) {
         grep(pattern = pattern, x = component, perl = TRUE, value = TRUE)
       },
       simplify = FALSE
-    )))
+    ), use.names = FALSE)
   })
 }
 

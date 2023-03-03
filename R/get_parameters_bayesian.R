@@ -352,7 +352,7 @@ get_parameters.bamlss <- function(x,
   elements <- .get_elements(effects = "all", component)
 
   parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
-  out <- as.data.frame(unclass(x$samples))[unname(unlist(parms[elements]))]
+  out <- as.data.frame(unclass(x$samples))[unlist(parms[elements], use.names = FALSE)]
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality)
   }

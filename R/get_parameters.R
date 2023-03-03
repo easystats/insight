@@ -175,7 +175,7 @@ get_parameters.epi.2by2 <- function(x, ...) {
 
   params <- data.frame(
     Parameter = names(cf),
-    Estimate = unname(unlist(lapply(cf, function(i) i["est"]))),
+    Estimate = unlist(lapply(cf, function(i) i["est"]), use.names = FALSE),
     stringsAsFactors = FALSE,
     row.names = NULL
   )

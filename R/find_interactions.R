@@ -63,7 +63,7 @@ find_interactions <- function(x,
   }
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }

@@ -205,13 +205,13 @@ get_df.emm_list <- function(x, ...) {
     return(.boot_em_df(x))
   }
   s <- summary(x)
-  unname(unlist(lapply(s, function(i) {
+  unlist(lapply(s, function(i) {
     if (is.null(i$df)) {
       rep(Inf, nrow(i))
     } else {
       i$df
     }
-  })))
+  }), use.names = FALSE)
 }
 
 
