@@ -897,14 +897,13 @@
         # McNemar ============================================================
 
         if (!grepl(" (and|by) ", x$data.name) &&
-              !grepl(x$method, "Paired t-test", fixed = TRUE) &&
-              !startsWith(x$method, "Wilcoxon") &&
-              (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+          !grepl(x$method, "Paired t-test", fixed = TRUE) &&
+          !startsWith(x$method, "Wilcoxon") &&
+          (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           # McNemar: preserve table data for McNemar ----
           return(as.table(columns[[1]]))
 
           # Kruskal Wallis ====================================================
-
         } else if (startsWith(x$method, "Kruskal-Wallis") && length(columns) == 1 && is.list(columns[[1]])) {
           # Kruskal-Wallis: check if data is a list for kruskal-wallis ----
           l <- columns[[1]]
@@ -912,14 +911,11 @@
           return(l)
 
           # t-tests ===========================================================
-
         } else if (grepl("t-test", x$method, fixed = TRUE)) {
-
           # t-Test: (Welch) Two Sample t-test ----
           if (grepl("Two", x$method, fixed = TRUE)) {
             if (grepl(" and ", x$data.name, fixed = TRUE)) {
               return(.htest_reshape_long(columns))
-
             } else if (grepl(" by ", x$data.name, fixed = TRUE)) {
               return(.htest_no_reshape(columns))
             }
@@ -929,11 +925,9 @@
             if (grepl(" and ", x$data.name, fixed = TRUE)) {
               # t-Test: Paired t-test, two vectors ----
               return(.htest_reshape_long(columns))
-
             } else if (grepl(" by ", x$data.name, fixed = TRUE)) {
               # t-Test: Paired t-test, formula (no reshape required) ----
               return(.htest_no_reshape(columns))
-
             } else if (startsWith(x$data.name, "Pair(")) {
               # t-Test: Paired t-test ----
               return(.htest_reshape_matrix(columns))
@@ -945,35 +939,27 @@
           }
 
           # Wilcoxon ========================================================
-
         } else if (startsWith(x$method, "Wilcoxon rank sum")) {
           if (grepl(" by ", x$data.name, fixed = TRUE)) {
             # Wilcoxon: Paired Wilcoxon, formula (no reshape required) ----
             return(.htest_no_reshape(columns))
-
           } else {
             return(.htest_reshape_long(columns))
           }
-
         } else if (startsWith(x$method, "Wilcoxon signed rank")) {
           if (startsWith(x$data.name, "Pair(")) {
             return(.htest_reshape_matrix(columns))
-
           } else if (grepl(" and ", x$data.name, fixed = TRUE)) {
             # Wilcoxon: Paired Wilcoxon, two vectors ----
             return(.htest_reshape_long(columns))
-
           } else if (grepl(" by ", x$data.name, fixed = TRUE)) {
             # Wilcoxon: Paired Wilcoxon, formula (no reshape required) ----
             return(.htest_no_reshape(columns))
-
           } else {
             # Wilcoxon: One sample ----
             d <- .htest_other_format(columns)
           }
-
         } else {
-
           # Other htests ======================================================
 
           d <- .htest_other_format(columns)

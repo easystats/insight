@@ -2110,7 +2110,16 @@ get_data.mlogit <- function(x, source = "environment", verbose = TRUE, ...) {
 
 
 #' @export
-get_data.rma <- function(x, source = "environment", verbose = TRUE, ...) {
+#' @rdname get_data
+#' @param include_interval For meta-analysis models, should normal-approximation
+#'   confidence intervals be added for each response effect size?
+#' @param transf For meta-analysis models, if intervals are included, a function
+#'   applied to each response effect size and its interval.
+#' @param transf_args For meta-analysis models, an optional list of arguments
+#'   passed to the `transf` function.
+#' @param ci For meta-analysis models, the Confidence Interval (CI) level if
+#'   `include_interval = TRUE`. Default to 0.95 (95%).
+get_data.rma <- function(x, source = "environment", verbose = TRUE, include_interval = FALSE, transf = NULL, transf_args = NULL, ci = .95, ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
@@ -2120,11 +2129,48 @@ get_data.rma <- function(x, source = "environment", verbose = TRUE, ...) {
 
   # fall back to extract data from model frame
   mf <- tryCatch(.recover_data_from_environment(x), error = function(x) NULL)
-  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
+  mf_attr <- attributes(mf)
+  mf <- merge(mf, data.frame(Weight = get_weights(mod)), by = "row.names", all = TRUE, sort = FALSE)
+  rownames(mf) <- mf$Row.names
+  mf$Row.names <- NULL
+  mostattributes(mf) <- c(
+    attributes(mf)[c("names", "row.names")],
+    mf_attr[c("yi.names", "vi.names", "digits", "class")]
+  )
+  if (isTRUE(include_interval)) {
+    model_call <- get_call(x)
+    model_response <- tryCatch(mf[[find_response(x)]], error = function(x) NULL)
+    sei <- tryCatch(mf[[model_call$sei]], error = function(x) NULL)
+    if (is.null(sei)) {
+      sei <- tryCatch(sqrt(mf[[model_call$vi]]), error = function(x) NULL)
+    }
+    if (is.null(sei)) {
+      stop("Could not find `sei` or `vi` for this model.", call. = FALSE)
+    }
+    mf$ci <- ci
+    mf$CI_low <- model_response - qnorm((1 - ci) / 2, lower.tail = FALSE) * sei
+    mf$CI_high <- model_response + qnorm((1 - ci) / 2, lower.tail = FALSE) * sei
+    if (!is.null(transf)) {
+      if (!is.function(transf)) {
+        stop("`transf` must be a function.")
+      }
+      if (!is.null(transf_args)) {
+        mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf, transf_args)
+        mf$CI_low <- sapply(mf$CI_low, transf, transf_args)
+        mf$CI_high <- sapply(mf$CI_high, transf, transf_args)
+      } else {
+        mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf)
+        mf$CI_low <- sapply(mf$CI_low, transf)
+        mf$CI_high <- sapply(mf$CI_high, transf)
+      }
+    }
+  }
+  .prepare_get_data(x, mf[rownames(x$X), ], verbose = verbose)
 }
 
 
 #' @export
+# TODO: Check these
 get_data.metaplus <- get_data.rma
 
 
@@ -2159,10 +2205,12 @@ get_data.meta_bma <- function(x, source = "environment", verbose = TRUE, ...) {
 
 
 #' @export
+# TODO: Check these
 get_data.meta_fixed <- get_data.meta_random
 
 
 #' @export
+# TODO: Check these
 get_data.ivFixed <- get_data.rma
 
 
