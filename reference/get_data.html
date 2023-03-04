@@ -111,7 +111,19 @@ model and returns it as data frame.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for afex_aov</span></span>
-<span><span class="fu">get_data</span><span class="op">(</span><span class="va">x</span>, shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"long"</span>, <span class="st">"wide"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">get_data</span><span class="op">(</span><span class="va">x</span>, shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"long"</span>, <span class="st">"wide"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for rma</span></span>
+<span><span class="fu">get_data</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  source <span class="op">=</span> <span class="st">"environment"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  include_interval <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  transf <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transf_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -166,6 +178,26 @@ component, depending on the model.</p></dd>
 <dt>shape</dt>
 <dd><p>Return long or wide data? Only applicable in repeated measures
 designs.</p></dd>
+
+
+<dt>include_interval</dt>
+<dd><p>For meta-analysis models, should normal-approximation
+confidence intervals be added for each response effect size?</p></dd>
+
+
+<dt>transf</dt>
+<dd><p>For meta-analysis models, if intervals are included, a function
+applied to each response effect size and its interval.</p></dd>
+
+
+<dt>transf_args</dt>
+<dd><p>For meta-analysis models, an optional list of arguments
+passed to the <code>transf</code> function.</p></dd>
+
+
+<dt>ci</dt>
+<dd><p>For meta-analysis models, the Confidence Interval (CI) level if
+<code>include_interval = TRUE</code>. Default to 0.95 (95%).</p></dd>
 
 </dl></div>
     <div class="section level2">
