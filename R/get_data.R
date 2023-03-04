@@ -2133,10 +2133,12 @@ get_data.rma <- function(x, source = "environment", verbose = TRUE, include_inte
   mf <- merge(mf, data.frame(Weight = get_weights(mod)), by = "row.names", all = TRUE, sort = FALSE)
   rownames(mf) <- mf$Row.names
   mf$Row.names <- NULL
-  mostattributes(mf) <- c(attributes(mf)[c("names", "row.names")],
-                          mf_attr[c("yi.names", "vi.names", "digits", "class")])
+  mostattributes(mf) <- c(
+    attributes(mf)[c("names", "row.names")],
+    mf_attr[c("yi.names", "vi.names", "digits", "class")]
+  )
   if (isTRUE(include_interval)) {
-    model_call <-  get_call(x)
+    model_call <- get_call(x)
     model_response <- tryCatch(mf[[find_response(x)]], error = function(x) NULL)
     sei <- tryCatch(mf[[model_call$sei]], error = function(x) NULL)
     if (is.null(sei)) {
@@ -2163,7 +2165,7 @@ get_data.rma <- function(x, source = "environment", verbose = TRUE, include_inte
       }
     }
   }
-  .prepare_get_data(x, mf[rownames(x$X),], verbose = verbose)
+  .prepare_get_data(x, mf[rownames(x$X), ], verbose = verbose)
 }
 
 

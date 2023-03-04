@@ -266,7 +266,8 @@ find_formula.rma <- function(x, verbose = TRUE, ...) {
   formula.mods <- `attributes<-`(formula(x, type = "mods"), NULL)
   formula.scale <- `attributes<-`(
     tryCatch(formula(x, type = "scale"), error = function(e) NULL),
-    NULL)
+    NULL
+  )
   model_call <- get_call(x)
   if (is.null(formula.yi)) {
     if (is.null(formula.mods)) {

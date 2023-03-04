@@ -5,11 +5,6 @@
 \alias{get_data.default}
 \alias{get_data.glmmTMB}
 \alias{get_data.afex_aov}
-\alias{get_data.lme}
-\alias{get_data.MixMod}
-\alias{get_data.brmsfit}
-\alias{get_data.stanreg}
-\alias{get_data.MCMCglmm}
 \alias{get_data.rma}
 \title{Get the data that was used to fit the model}
 \usage{
@@ -28,24 +23,9 @@ get_data(x, ...)
 
 \method{get_data}{afex_aov}(x, shape = c("long", "wide"), ...)
 
-\method{get_data}{lme}(x, effects = c("all", "fixed", "random"), ...)
-
-\method{get_data}{MixMod}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-  verbose = TRUE,
-  ...
-)
-
-\method{get_data}{brmsfit}(x, effects = "all", component = "all", verbose = TRUE, ...)
-
-\method{get_data}{stanreg}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
-
-\method{get_data}{MCMCglmm}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
-
 \method{get_data}{rma}(
   x,
+  source = "environment",
   verbose = TRUE,
   include_interval = FALSE,
   transf = NULL,

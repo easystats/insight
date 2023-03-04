@@ -504,10 +504,10 @@ get_predicted.rma <- function(x,
                               transf_args = NULL,
                               ...) {
   args <- .get_predicted_args(x,
-                              data = data,
-                              predict = predict,
-                              verbose = TRUE,
-                              ...
+    data = data,
+    predict = predict,
+    verbose = TRUE,
+    ...
   )
 
   has_scale_model <- inherits(x, "rma.ls")
@@ -526,19 +526,21 @@ get_predicted.rma <- function(x,
       out <- tryCatch(stats::predict(x, transf = transf, targs = transf_args), error = function(e) NULL)
     } else if (has_scale_model) {
       out <- tryCatch(stats::predict(x, newmods = newmods, newscale = newscale, transf = transf, targs = transf_args),
-                      error = function(e) NULL)
+        error = function(e) NULL
+      )
     } else {
       out <- tryCatch(stats::predict(x, newmods = newmods, transf = transf, targs = transf_args),
-                      error = function(e) NULL)
+        error = function(e) NULL
+      )
     }
     if (predict == "prediction") {
       out <- setNames(
-        as.data.frame(out)[,c("pred", "se", "pi.lb", "pi.ub")],
+        as.data.frame(out)[, c("pred", "se", "pi.lb", "pi.ub")],
         c("Predicted", "SE", "CI_low", "CI_high")
       )
     } else {
       out <- setNames(
-        as.data.frame(out)[,c("pred", "se", "ci.lb", "ci.ub")],
+        as.data.frame(out)[, c("pred", "se", "ci.lb", "ci.ub")],
         c("Predicted", "SE", "CI_low", "CI_high")
       )
     }
@@ -548,11 +550,13 @@ get_predicted.rma <- function(x,
     } else if (has_scale_model) {
       # TODO: Remove this helper function if metafor adds support for newmods/newscale in metafor::blup()
       out <- tryCatch(.get_blup_rma(x, newmods = newmods, newscale = newscale, transf = transf, targs = transf_args),
-                      error = function(e) NULL)
+        error = function(e) NULL
+      )
     } else {
       # TODO: Remove this helper function if metafor adds support for newmods in metafor::blup()
       out <- tryCatch(.get_blup_rma(x, newmods = newmods, transf = transf, targs = transf_args),
-                      error = function(e) NULL)
+        error = function(e) NULL
+      )
     }
     out <- setNames(
       as.data.frame(out),
@@ -853,19 +857,9 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
 }
 
 .get_blup_rma <- function(x, data, ...) {
-
-
-
   if (is.element(x$test, c("knha", "adhoc", "t"))) {
-    crit <- qt(level/2, df = x$ddf, lower.tail = FALSE)
+    crit <- qt(level / 2, df = x$ddf, lower.tail = FALSE)
+  } else {
+    crit <- qnorm(level / 2, lower.tail = FALSE)
   }
-  else {
-    crit <- qnorm(level/2, lower.tail = FALSE)
-  }
-
-
 }
-
-
-
-
