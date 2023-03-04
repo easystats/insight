@@ -2,11 +2,13 @@
   if (Sys.getenv("RSTUDIO", "") == "") {
     return(FALSE)
   }
-  if ((cols <- Sys.getenv("RSTUDIO_CONSOLE_COLOR", "")) !=
-    "" && !is.na(as.numeric(cols))) {
+
+  if ((cols <- Sys.getenv("RSTUDIO_CONSOLE_COLOR", "")) != "" && !is.na(as.numeric(cols))) {
     return(TRUE)
   }
-  requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable() &&
+
+  requireNamespace("rstudioapi", quietly = TRUE) &&
+    rstudioapi::isAvailable() &&
     rstudioapi::hasFun("getConsoleHasColor")
 }
 

@@ -4,7 +4,8 @@
 #' @description Collection of small helper functions. `trim_ws()` is an
 #' efficient function to trim leading and trailing whitespaces from character
 #' vectors or strings. `n_unique()` returns the number of unique values in a
-#' vector. `safe_deparse()` is comparable to `deparse1()`, i.e. it can safely
+#' vector. `has_single_value()` is equivalent to `n_unique() == 1` but is faster.
+#' `safe_deparse()` is comparable to `deparse1()`, i.e. it can safely
 #' deparse very long expressions into a single string. `safe_deparse_symbol()`
 #' only deparses a substituted expressions when possible, which can be much faster
 #' than `deparse(substitute())` for those cases where `substitute()` returns no
@@ -16,14 +17,28 @@
 #' only processes character vectors.
 #' @param ... Currently not used.
 #'
-#' @return For a vector, `n_unique` always returns an integer value, even if the
-#' input is `NULL` (the return value will be `0` then). For data frames or lists,
-#' `n_unique()` returns a named numeric vector, with the number of unique values
-#' for each element.
+#' @return
+#' - `n_unique()`: For a vector, `n_unique` always returns an integer value,
+#'   even if the input is `NULL` (the return value will be `0` then). For data
+#'   frames or lists, `n_unique()` returns a named numeric vector, with the
+#'   number of unique values for each element.
+#' - `has_single_value()`: `TRUE` if `x` has only one unique value,
+#'   `FALSE` otherwise.
+#' - `trim_ws()`: A character vector, where trailing and leading white spaces
+#'   are removed.
+#' - `safe_deparse()`: A character string of the unevaluated expression or symbol.
+#' - `safe_deparse_symbol()`: A character string of the unevaluated expression
+#'   or symbol, if `x` was a symbol. If `x` is no symbol (i.e. if `is.name(x)`
+#'   would return `FALSE`), `NULL` is returned.
 #'
 #' @examples
 #' trim_ws("  no space!  ")
 #' n_unique(iris$Species)
+#' has_single_value(c(1, 1, 2))
+#'
+#' # safe_deparse_symbol() compared to deparse(substitute())
+#' safe_deparse_symbol(as.name("test"))
+#' deparse(substitute(as.name("test")))
 #' @export
 trim_ws <- function(x, ...) {
   UseMethod("trim_ws")
@@ -38,7 +53,7 @@ trim_ws.default <- function(x, ...) {
 #' @export
 trim_ws.data.frame <- function(x, character_only = TRUE, ...) {
   if (character_only) {
-    chars <- which(sapply(x, is.character))
+    chars <- which(vapply(x, is.character, FUN.VALUE = logical(1L)))
   } else {
     chars <- seq_len(ncol(x))
   }
@@ -51,7 +66,7 @@ trim_ws.data.frame <- function(x, character_only = TRUE, ...) {
 #' @export
 trim_ws.list <- function(x, character_only = TRUE, ...) {
   if (character_only) {
-    chars <- which(sapply(x, is.character))
+    chars <- which(vapply(x, is.character, FUN.VALUE = logical(1L)))
   } else {
     chars <- seq_len(length(x))
   }
@@ -83,7 +98,7 @@ n_unique.default <- function(x, na.rm = TRUE, ...) {
 
 #' @export
 n_unique.data.frame <- function(x, na.rm = TRUE, ...) {
-  sapply(x, n_unique, na.rm = na.rm)
+  vapply(x, n_unique, na.rm = na.rm, FUN.VALUE = numeric(1L))
 }
 
 #' @export
@@ -117,4 +132,14 @@ safe_deparse_symbol <- function(x) {
     out <- NULL
   }
   return(out)
+}
+
+
+# has_single_value ---------------------------------------
+
+#' @rdname trim_ws
+#' @export
+has_single_value <- function(x, na.rm = FALSE) {
+  if (na.rm) x <- x[!is.na(x)]
+  !is.null(x) && length(x) > 0L && isTRUE(all(x == x[1]))
 }

@@ -1,7 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("mlogit") &&
-  requiet("mclogit")) {
+if (skip_if_not_or_load_if_installed("mlogit") && skip_if_not_or_load_if_installed("mclogit")) {
   data("Fishing")
   Fish <-
     mlogit.data(Fishing,
@@ -44,16 +41,16 @@ if (requiet("testthat") &&
     })
 
     test_that("get_data", {
-      expect_equal(nrow(get_data(m1)), 4728)
-      expect_equal(nrow(get_data(m2)), 4728)
+      expect_equal(nrow(get_data(m1, verbose = FALSE)), 4728)
+      expect_equal(nrow(get_data(m2, verbose = FALSE)), 4728)
 
       if (packageVersion("mlogit") <= "1.0-3.1") {
         expect_equal(
-          colnames(get_data(m1)),
+          colnames(get_data(m1, verbose = FALSE)),
           c("mode", "price", "catch", "probabilities", "linpred")
         )
         expect_equal(
-          colnames(get_data(m2)),
+          colnames(get_data(m2, verbose = FALSE)),
           c(
             "mode",
             "price",
@@ -65,11 +62,11 @@ if (requiet("testthat") &&
         )
       } else {
         expect_equal(
-          colnames(get_data(m1)),
+          colnames(get_data(m1, verbose = FALSE)),
           c("mode", "price", "catch", "idx", "probabilities", "linpred")
         )
         expect_equal(
-          colnames(get_data(m2)),
+          colnames(get_data(m2, verbose = FALSE)),
           c(
             "mode",
             "price",
@@ -85,8 +82,8 @@ if (requiet("testthat") &&
   }
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
-    expect_equal(link_inverse(m2)(.2), plogis(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m2)(0.2), plogis(0.2), tolerance = 1e-5)
   })
 
 
@@ -129,7 +126,7 @@ if (requiet("testthat") &&
 
 
 test_that("mblogit and mclogit is not linear", {
-  requiet("mclogit")
+  skip_if_not_or_load_if_installed("mclogit")
 
   if (packageVersion("mclogit") >= "0.9.1") {
     data(Transport)
@@ -139,7 +136,7 @@ test_that("mblogit and mclogit is not linear", {
     expect_true(is_model(mod))
     expect_true(is_model_supported(mod))
 
-    mod <- mclogit(resp | suburb ~ distance + cost, data = Transport)
+    mod <- mclogit(resp | suburb ~ distance + cost, data = Transport, trace = FALSE)
     expect_false(model_info(mod)$is_linear)
     expect_true(model_info(mod)$is_logit)
     expect_true(is_model(mod))

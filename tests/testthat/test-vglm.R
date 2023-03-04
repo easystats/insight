@@ -1,7 +1,7 @@
 unloadNamespace("gam")
 skip_on_os("mac")
 
-if (requiet("testthat") && requiet("insight") && requiet("VGAM")) {
+if (skip_if_not_or_load_if_installed("VGAM")) {
   d.AD <- data.frame(
     treatment = gl(3, 3),
     outcome = gl(3, 1, 9),
@@ -51,15 +51,15 @@ if (requiet("testthat") && requiet("insight") && requiet("VGAM")) {
     expect_equal(colnames(get_predictors(m1)), c("outcome", "treatment"))
   })
 
-  li <- suppressWarnings(link_inverse(m1)(.2)[1, 1])
+  li <- suppressWarnings(link_inverse(m1)(0.2)[1, 1])
   test_that("link_inverse", {
-    expect_equal(li, exp(.2), tolerance = 1e-5)
-    expect_warning(link_inverse(m1)(.2))
+    expect_equal(li, exp(0.2), tolerance = 1e-5)
+    expect_warning(link_inverse(m1)(0.2))
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 9)
-    expect_equal(colnames(get_data(m1)), c("counts", "outcome", "treatment"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 9)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("counts", "outcome", "treatment"))
   })
 
   test_that("find_formula", {

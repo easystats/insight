@@ -55,7 +55,7 @@ get_parameters.DirichletRegModel <- function(x,
 
     params <- data.frame(
       Parameter = p_names,
-      Estimate = unname(unlist(cf)),
+      Estimate = unlist(cf, use.names = FALSE),
       Response = rep(names(n_comp), sapply(n_comp, function(i) i)),
       stringsAsFactors = FALSE,
       row.names = NULL
@@ -169,7 +169,7 @@ get_parameters.mvord <- function(x,
                                  component = c("all", "conditional", "thresholds", "correlation"),
                                  ...) {
   component <- match.arg(component)
-  junk <- utils::capture.output(s <- summary(x))
+  junk <- utils::capture.output(s <- summary(x)) # nolint
   # intercepts thresholds
   thresholds <- as.data.frame(s$thresholds)
   thresholds$Parameter <- rownames(thresholds)

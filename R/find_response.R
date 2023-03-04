@@ -113,7 +113,7 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
     return(NULL)
   }
 
-  conditional <- unlist(lapply(f[grepl("^conditional", names(f))], function(i) safe_deparse(i[[2L]])))
+  conditional <- unlist(lapply(f[startsWith(names(f), "conditional")], function(i) safe_deparse(i[[2L]])))
   survial <- safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
@@ -160,33 +160,14 @@ find_response.joint <- function(x,
 
 # should not be called for brms-models!
 check_cbind <- function(resp, combine, model) {
-  if (!combine && inherits(model, "DirichletRegModel")) {
-    resp <- model$varnames
-  } else if (!combine && any(grepl("cbind(", resp, fixed = TRUE))) {
-    resp <- .extract_combined_response(resp, "cbind")
-  } else if (!combine && any(grepl("Surv(", resp, fixed = TRUE))) {
-    resp <- .extract_combined_response(resp, "Surv")
-  } else if (!combine && any(grepl("Hist(", resp, fixed = TRUE))) {
-    resp <- .extract_combined_response(resp, "Hist")
-  } else if (!combine && any(grepl("Event(", resp, fixed = TRUE))) {
-    resp <- .extract_combined_response(resp, "Event")
-  } else if (!combine && any(grepl("Curv(", resp, fixed = TRUE))) {
-    resp <- .extract_combined_response(resp, "Curv")
-  } else if (!combine && any(grepl("MMO(", resp, fixed = TRUE))) {
-    resp <- .extract_combined_response(resp, "MMO")
-  } else if (!combine && any(grepl("MMO2(", resp, fixed = TRUE))) {
-    resp <- .extract_combined_response(resp, "MMO2")
-  } else if (!combine && any(grepl("/", resp, fixed = TRUE))) {
-    resp <- strsplit(resp, split = "/", fixed = TRUE)
-    resp <- gsub("(I|\\(|\\))", "", trim_ws(unlist(resp)))
-  } else if (any(.string_contains("|", resp))) {
+  if (any(.string_contains("|", resp))) {
     # check for brms Additional Response Information
     r1 <- trim_ws(sub("(.*)\\|(.*)", "\\1", resp))
     r2 <- trim_ws(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
     # check for "resp_thres" pattern
     r_resp <- trim_ws(unlist(strsplit(resp, "|", fixed = TRUE))[2])
-    if (grepl("^resp_thres", r_resp)) {
-      r3 <- trim_ws(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp)))
+    if (startsWith(r_resp, "resp_thres")) {
+      r3 <- trim_ws(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp), fixed = TRUE))
       names(r3) <- r3
       numeric_values <- suppressWarnings(as.numeric(r2))
       r2 <- r2[is.na(numeric_values)]
@@ -197,31 +178,30 @@ check_cbind <- function(resp, combine, model) {
       }
     }
     resp <- c(r1, r2)
-  } else if (!combine && any(grepl("+", resp, fixed = TRUE))) {
-    resp <- strsplit(resp, split = "+", fixed = TRUE)
-    resp <- gsub("(I|\\(|\\))", "", trim_ws(unlist(resp)))
+  } else if (inherits(model, "DirichletRegModel")) {
+    resp <- model$varnames
+  } else {
+    # if we have more than one string for the response, paste them together
+    # "all.vars()" will take care of extracting the correct variables.
+    resp_combined_string <- paste(resp, collapse = "+")
+    # create an expression, so all.vars() works similar like for formulas
+    resp_combined <- tryCatch(all.vars(.str2lang(resp_combined_string)),
+      error = function(e) resp_combined_string
+    )
+    # if we do not want to combine, or if we just have one variable as
+    # response, we want to return the bare name
+    if (!combine || length(resp_combined) == 1) {
+      # if a named vector (e.g. for multivariate response), add back names
+      if (!is.null(names(resp)) && length(names(resp)) == length(resp_combined)) {
+        resp_combined <- stats::setNames(resp_combined, names(resp))
+      }
+      resp <- resp_combined
+    }
   }
 
   # exception
-  if (inherits(model, "clogit") && grepl("^rep\\(", resp[1]) && length(resp) == 3) {
+  if (inherits(model, "clogit") && startsWith(resp[1], "rep(") && length(resp) == 3) {
     resp <- c(paste0(resp[1], resp[2]), resp[3])
-  }
-
-  .remove_pattern_from_names(resp, ignore_asis = TRUE)
-}
-
-
-.extract_combined_response <- function(resp, pattern) {
-  if (pattern %in% c("MMO", "MMO2") && !grepl(paste0("^", pattern, "\\((.*),(.*)\\)"), resp)) {
-    resp <- gsub(paste0("^", pattern, "\\((.*)\\)"), "\\1", resp)
-  } else {
-    resp <- sub(sprintf("%s\\(([^,].*)([\\)].*)", pattern), "\\1", resp)
-    resp <- strsplit(resp, split = ",", fixed = TRUE)
-    resp <- trim_ws(unlist(resp))
-  }
-
-  if (any(.string_contains("-", resp[2]))) {
-    resp[2] <- trim_ws(sub("(.*)(\\-)(.*)", "\\1", resp[2]))
   }
 
   resp

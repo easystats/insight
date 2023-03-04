@@ -1,20 +1,23 @@
-if (requiet("testthat") && requiet("insight") && getRversion() >= "4.0.0") {
+if (getRversion() >= "4.0.0") {
   m1 <- lm(hp ~ ordered(cyl), data = mtcars)
   m2 <- lm(hp ~ as.ordered(cyl), data = mtcars)
   m3 <- lm(hp ~ as.factor(cyl), data = mtcars)
   m4 <- lm(hp ~ factor(cyl), data = mtcars)
 
   test_that("get_datagrid - data from models", {
-    expect_true(attributes(get_data(m1)$cyl)$factor)
     expect_equal(get_datagrid(m1)$cyl, c(4, 6, 8))
-    expect_true(attributes(get_data(m2)$cyl)$factor)
     expect_equal(get_datagrid(m2)$cyl, c(4, 6, 8))
-    expect_true(attributes(get_data(m3)$cyl)$factor)
     expect_equal(get_datagrid(m3)$cyl, c(4, 6, 8))
-    expect_true(attributes(get_data(m4)$cyl)$factor)
     expect_equal(get_datagrid(m4)$cyl, c(4, 6, 8))
   })
 
+  # get_datagrid() preserves all factor levels #695
+  test_that("get_datagrid - preserve factor levels #695", {
+    dat <<- transform(mtcars, cyl = factor(cyl))
+    mod <- lm(mpg ~ cyl + am + hp, data = dat)
+    grid <- get_datagrid(mod, at = "hp")
+    expect_equal(levels(grid$cyl), c("4", "6", "8"))
+  })
 
   m <- lm(Sepal.Width ~ Petal.Length + Petal.Width + Species, data = iris)
   # adjusted for works
@@ -90,7 +93,7 @@ if (requiet("testthat") && requiet("insight") && getRversion() >= "4.0.0") {
 }
 
 
-if (requiet("testthat") && requiet("insight") && requiet("bayestestR") && getRversion() >= "4.0.0") {
+if (skip_if_not_or_load_if_installed("bayestestR") && getRversion() >= "4.0.0") {
   test_that("get_datagrid - data", {
     # Factors
     expect_equal(length(get_datagrid(iris$Species)), 3)
@@ -146,7 +149,7 @@ if (requiet("testthat") && requiet("insight") && requiet("bayestestR") && getRve
 
 
 
-if (requiet("testthat") && requiet("insight") && requiet("gamm4") && getRversion() >= "4.0.0" && requiet("glmmTMB") && requiet("mgcv") && requiet("rstanarm")) {
+if (skip_if_not_or_load_if_installed("gamm4") && getRversion() >= "4.0.0" && skip_if_not_or_load_if_installed("glmmTMB") && skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed("rstanarm") && skip_if_not_or_load_if_installed("TMB")) {
   test_that("get_datagrid - models", {
     # GLM
     mod <- glm(Petal.Length ~ Petal.Width * Sepal.Length, data = iris)
@@ -162,6 +165,7 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && getRversion
     expect_equal(unique(get_datagrid(mod, include_random = FALSE)$Species), 0)
 
     # GLMMTMB
+    skip_on_os("mac") # error: FreeADFunObject
     mod <- suppressWarnings(glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris))
     expect_equal(dim(get_datagrid(mod, include_random = TRUE)), c(10, 2))
     expect_equal(unique(get_datagrid(mod, include_random = FALSE)$Species), NA)
@@ -182,6 +186,15 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && getRversion
     expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = "fixed")), c(10, 2))
     expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = FALSE)), c(10, 1))
 
+    # MGCV, splines with variables, see #678
+    data(mtcars)
+    mod <- mgcv::gam(mpg ~ s(wt, k = 3), data = mtcars)
+    out1 <- insight::get_datagrid(mod)
+    k <- 3
+    mod <- mgcv::gam(mpg ~ s(wt, k = k), data = mtcars)
+    out2 <- insight::get_datagrid(mod)
+    expect_equal(out1, out2, ignore_attr = TRUE, tolerance = 1e-4)
+
 
     # STAN_GAMM4
     mod <- suppressWarnings(rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~ (1 | Species), data = iris, iter = 100, chains = 2, refresh = 0))
@@ -192,82 +205,81 @@ if (requiet("testthat") && requiet("insight") && requiet("gamm4") && getRversion
 
 
   # test if factor levels as reference / non-focal terms works
-  if (requiet("testthat") && requiet("insight")) {
-    d <- structure(list(
-      lfp = structure(c(
-        2L, 2L, 2L, 2L, 2L, 2L, 2L,
-        2L, 2L, 2L, 2L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L
-      ), levels = c(
-        "no",
-        "yes"
-      ), class = "factor"), k5 = c(
-        1L, 0L, 1L, 0L, 1L, 0L, 0L,
-        0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 2L, 0L
-      ),
-      k618 = c(
-        0L, 2L, 3L, 3L, 2L, 0L, 2L, 0L, 2L, 2L, 1L, 2L,
-        0L, 0L, 2L, 1L, 1L, 0L, 0L, 1L, 0L, 0L
-      ), age = c(
-        32L, 30L,
-        35L, 34L, 31L, 54L, 37L, 54L, 48L, 39L, 33L, 52L, 50L, 33L,
-        44L, 41L, 45L, 53L, 53L, 42L, 32L, 56L
-      ), wc = structure(c(
-        1L,
-        1L, 1L, 1L, 2L, 1L, 2L, 1L, 1L, 1L, 1L, 1L, 1L, 2L, 2L, 1L,
-        1L, 2L, 2L, 1L, 2L, 1L
-      ), levels = c("no", "yes"), class = "factor"),
-      hc = structure(c(
-        1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L,
-        1L, 1L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L, 2L, 1L
-      ), levels = c(
-        "no",
-        "yes"
-      ), class = "factor"), lwg = c(
-        1.2101647, 0.3285041,
-        1.5141279, 0.0921151, 1.5242802, 1.5564855, 2.1202636, 2.0596387,
-        0.7543364, 1.5448993, 1.4019157, 1.1889068, 0.9058391, 1.4934409,
-        1.4913014, 1.2186279, 0.8697261, 1.0620506, 1.1860113, 0.8703095,
-        1.2301208, 1.3053159
-      ), inc = c(
-        10.9100008, 19.5, 12.039999,
-        6.8000002, 20.1000004, 9.8590002, 9.1520004, 10.9000006,
-        17.3050003, 12.9250002, 24.3000011, 14.6000004, 21.6000004,
-        24, 20.8829994, 19.5, 42.7999992, 41.5, 18.9650002, 16.1000004,
-        14.6999998, 18.7999992
-      )
-    ), row.names = c(
-      "1", "2", "3", "4",
-      "5", "6", "7", "8", "9", "10", "11", "500", "501", "502", "503",
-      "504", "505", "506", "507", "508", "509", "510"
-    ), class = "data.frame")
 
-    model <- glm(lfp ~ k618 + wc + hc + inc, data = d, family = binomial(link = "logit"))
-
-    expect_warning(
-      insight::get_datagrid(
-        model,
-        at = "k618", range = "grid", preserve_range = FALSE,
-        verbose = TRUE, include_response = FALSE
-      )
+  d <- structure(list(
+    lfp = structure(c(
+      2L, 2L, 2L, 2L, 2L, 2L, 2L,
+      2L, 2L, 2L, 2L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L
+    ), levels = c(
+      "no",
+      "yes"
+    ), class = "factor"), k5 = c(
+      1L, 0L, 1L, 0L, 1L, 0L, 0L,
+      0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 2L, 0L
+    ),
+    k618 = c(
+      0L, 2L, 3L, 3L, 2L, 0L, 2L, 0L, 2L, 2L, 1L, 2L,
+      0L, 0L, 2L, 1L, 1L, 0L, 0L, 1L, 0L, 0L
+    ), age = c(
+      32L, 30L,
+      35L, 34L, 31L, 54L, 37L, 54L, 48L, 39L, 33L, 52L, 50L, 33L,
+      44L, 41L, 45L, 53L, 53L, 42L, 32L, 56L
+    ), wc = structure(c(
+      1L,
+      1L, 1L, 1L, 2L, 1L, 2L, 1L, 1L, 1L, 1L, 1L, 1L, 2L, 2L, 1L,
+      1L, 2L, 2L, 1L, 2L, 1L
+    ), levels = c("no", "yes"), class = "factor"),
+    hc = structure(c(
+      1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L,
+      1L, 1L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L, 2L, 1L
+    ), levels = c(
+      "no",
+      "yes"
+    ), class = "factor"), lwg = c(
+      1.2101647, 0.3285041,
+      1.5141279, 0.0921151, 1.5242802, 1.5564855, 2.1202636, 2.0596387,
+      0.7543364, 1.5448993, 1.4019157, 1.1889068, 0.9058391, 1.4934409,
+      1.4913014, 1.2186279, 0.8697261, 1.0620506, 1.1860113, 0.8703095,
+      1.2301208, 1.3053159
+    ), inc = c(
+      10.9100008, 19.5, 12.039999,
+      6.8000002, 20.1000004, 9.8590002, 9.1520004, 10.9000006,
+      17.3050003, 12.9250002, 24.3000011, 14.6000004, 21.6000004,
+      24, 20.8829994, 19.5, 42.7999992, 41.5, 18.9650002, 16.1000004,
+      14.6999998, 18.7999992
     )
+  ), row.names = c(
+    "1", "2", "3", "4",
+    "5", "6", "7", "8", "9", "10", "11", "500", "501", "502", "503",
+    "504", "505", "506", "507", "508", "509", "510"
+  ), class = "data.frame")
 
-    grid <- insight::get_datagrid(
+  model <- suppressWarnings(glm(lfp ~ k618 + wc + hc + inc, data = d, family = binomial(link = "logit")))
+
+  expect_warning(
+    insight::get_datagrid(
       model,
       at = "k618", range = "grid", preserve_range = FALSE,
-      verbose = FALSE, include_response = TRUE
+      verbose = TRUE, include_response = FALSE
     )
-    expect_equal(
-      sapply(grid, class),
-      c(
-        k618 = "numeric", lfp = "factor", wc = "factor", hc = "factor",
-        inc = "numeric"
-      )
-    )
+  )
 
-    out <- get_modelmatrix(model, data = grid)
-    expect_equal(
-      colnames(out),
-      c("(Intercept)", "k618", "wcyes", "hcyes", "inc")
+  grid <- insight::get_datagrid(
+    model,
+    at = "k618", range = "grid", preserve_range = FALSE,
+    verbose = FALSE, include_response = TRUE
+  )
+  expect_equal(
+    sapply(grid, class),
+    c(
+      k618 = "numeric", lfp = "factor", wc = "factor", hc = "factor",
+      inc = "numeric"
     )
-  }
+  )
+
+  out <- get_modelmatrix(model, data = grid)
+  expect_equal(
+    colnames(out),
+    c("(Intercept)", "k618", "wcyes", "hcyes", "inc")
+  )
 }

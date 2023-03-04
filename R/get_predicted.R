@@ -331,7 +331,7 @@ get_predicted.lm <- function(x,
     attributes(x$terms)$dataClasses <- dataClasses
     attributes(attributes(x$model)$terms)$dataClasses <- dataClasses
     x$model[] <- lapply(x$model, function(x) {
-      if (all(class(x) == c("matrix", "array"))) {
+      if (all(class(x) == c("matrix", "array"))) { # nolint
         as.numeric(x)
       } else {
         x
@@ -694,7 +694,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
 
     # Transform to response "type"
     if (args$predict == "classification" && model_info(x, verbose = FALSE)$is_binomial) {
-      response <- get_response(x)
+      response <- get_response(x, as_proportion = TRUE)
       ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
       predictions <- .get_predict_transform_response(predictions, response = response)
       if ("iterations" %in% names(attributes(predictions))) {
@@ -768,7 +768,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
                                 iterations = 500,
                                 verbose = TRUE,
                                 ...) {
-  if (is.null(data)) data <- get_data(x, verbose = verbose)
+  if (is.null(data)) data <- get_data(x, verbose = FALSE)
 
   # TODO: how to make it work with the seed argument??
 
@@ -791,7 +791,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
         suppressWarnings(predict_function(model, data = predict_data, ...))
       }
     }
-    draws <- boot::boot(data = get_data(x), boot_fun, R = iterations, predict_data = data, ...)
+    draws <- boot::boot(data = get_data(x, verbose = FALSE), boot_fun, R = iterations, predict_data = data, ...)
   }
 
   # Format draws
@@ -828,7 +828,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
     # outcome with a single level
   } else {
     # .get_predicted_boot already gives us the correct observation ~ draws format
-    if (is.null(colnames(iter)) || !all(grepl("^iter", colnames(iter)))) {
+    if (is.null(colnames(iter)) || !all(startsWith(colnames(iter), "iter"))) {
       iter <- as.data.frame(t(iter))
     }
     predictions <- apply(iter, 1, centrality_function)

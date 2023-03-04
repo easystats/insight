@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-  if (requiet("testthat") && requiet("insight") && requiet("VGAM")) {
+  if (skip_if_not_or_load_if_installed("VGAM")) {
     data("hunua")
     m1 <- download_model("vgam_1")
     m2 <- download_model("vgam_2")
@@ -58,8 +58,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
     test_that("link_inverse", {
-      expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
-      expect_equal(link_inverse(m2)(.2), plogis(.2), tolerance = 1e-5)
+      expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
+      expect_equal(link_inverse(m2)(0.2), plogis(0.2), tolerance = 1e-5)
     })
 
     test_that("get_data", {

@@ -143,7 +143,7 @@ The first approach uses the functions that are available for some, but obviously
 print_params <- function(model) {
   paste0(
     "My parameters are ",
-    paste0(row.names(summary(model)$coefficients), collapse = ", "),
+    toString(row.names(summary(model)$coefficients)),
     ", thank you for your attention!"
   )
 }
@@ -162,7 +162,7 @@ As we can see, the function fails for *gam*-models. As the access to models depe
 print_params <- function(model) {
   paste0(
     "My parameters are ",
-    paste0(insight::find_parameters(model, flatten = TRUE), collapse = ", "),
+    toString(insight::find_parameters(model, flatten = TRUE)),
     ", thank you for your attention!"
   )
 }

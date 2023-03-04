@@ -1,4 +1,77 @@
+# insight 0.19.1
+
+## Changes to functions
+
+* Minor improvements to `get_data()` for `t.test()`.
+
+* `format_value()` gets a `lead_zero` argument, to keep or drop the leading
+  zero of a formatted value, as well as arguments `style_positive` and
+  `style_negative` to style positive or negative numbers.
+
+* `format_table()` now also formats columns named `SGPV` (second generation
+  p-values) as p-values.
+
+# insight 0.19.0
+
+## New supported models
+
+* `mmrm` (package *mmrm*), `flac` and `flic` (*logistf*)
+
+## Breaking changes
+
+* `get_data()` was revised and now always tries to recover the data that was
+  used to fit a model from the environment. If this fails, it falls back to
+  recovering data from the model frame (the former default behaviour).
+  Futrhermore, the `source` argument can be used to explicitly force the old
+  behaviour: `source = "mf"` will try to recover data from the model frame first,
+  then possibly falling back to look in the environment.
+
+## New functions
+
+* `n_grouplevels()`, to return random effect groups and number of group levels
+  for mixed models.
+
+## Changes to functions
+
+* `get_datagrid()` preserves all factor levels for factors that are hold constant
+  at their reference level. This is required to work together with
+  `get_modelmatrix()` when calculating standard errors for `get_predicted()`.
+
+## Bug fixes
+
+* Fixed but in `get_modelmatrix()` handling of incomplete factors which
+  sometimes had downstream implications for numerical results in the uncertainty
+  estimates produced by `get_predicted()`.
+
+* Fixed minor issues for HTML tables in `export_table()` when model parameters
+  were grouped.
+
+* Fixed issue with incorrect back-transforming in `get_data()` for models with
+  log-transformed variables.
+
+* Fixes issue in `compact_list()`.
+
+* `has_single_value()` now returns `FALSE` when the object only has `NA` and 
+  `na.rm = TRUE`.
+
+* Fixed issue in `get_parameters()` for gam-models without smooth terms, or with
+  only smooth terms and removed intercept.
+
+# insight 0.18.8
+
+## Bug fixes
+
+* Fixed test due to changes in the _performance_ package.
+
 # insight 0.18.7
+
+## General
+
+* Minor revisions to `get_predicted.glmmTMB()` due to changes in behaviour
+  of `predict.glmmTMB()` for truncated-family models since _glmmTMB_ 1.1.5.
+  
+* New function `has_single_value()` that is equivalent to `length(unique()) == 1`
+  (or `n_unique() == 1`) but faster.
 
 ## Changes to functions
 
@@ -9,6 +82,8 @@
 
 * Fixed behaviour of the `at` argument in `get_datagrid()`.
 
+* Fixed issue for accessing model data in `get_datagrid()` for some edge cases.
+
 # insight 0.18.6
 
 ## New supported models
@@ -17,7 +92,7 @@
 
 ## Bug fixes
 
-* Better dectection of unicode-support, to avoid failures when building
+* Better detection of unicode-support, to avoid failures when building
   vignettes.
 
 * `get_predicted()` now correctly handles variables of class numeric matrix

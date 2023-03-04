@@ -65,18 +65,23 @@ get_predicted_se <- function(x,
       # we might have a correct model matrix, but the vcov matrix contains values
       # from specific model parameters that do not appear in the model matrix
       # we then need to reduce the vcov matrix.
-
       matching_parameters <- stats::na.omit(match(colnames(vcovmat), colnames(mm)))
       vcovmat <- vcovmat[matching_parameters, matching_parameters, drop = FALSE]
     } else {
-      # model matrix rows might mismatch. we need a larger model matrix and
-      # then filter those rows that match the vcov matrix.
+      # VAB: below there is some matching code to reduce matrices to make them
+      # conformable. I am not sure at all it is a good idea to do that in
+      # general, but we may want to revisit eventually. Currently, the code
+      # below is commented out because it is dangerous and silently produces incorrect
+      # numerical results in some cases. We CANNOT uncomment it before thorough.
+      # See example at the bottom of test-get_predicted.R
 
-      mm_full <- get_modelmatrix(x)
-      mm <- tryCatch(
-        mm_full[as.numeric(row.names(get_modelmatrix(x, data = data))), , drop = FALSE],
-        error = function(e) NULL
-      )
+      # # model matrix rows might mismatch. we need a larger model matrix and
+      # # then filter those rows that match the vcov matrix.
+      # mm_full <- get_modelmatrix(x)
+      # mm <- tryCatch(
+      #   mm_full[as.numeric(row.names(get_modelmatrix(x, data = data))), , drop = FALSE],
+      #   error = function(e) NULL
+      # )
     }
 
     # still no match?
@@ -111,7 +116,7 @@ get_predicted_se <- function(x,
   # make sure we repeat SE for each response level for
   # models with categorical or ordinal response.
   if (inherits(x, c("polr", "multinom", "mixor"))) {
-    se <- rep(se, times = n_unique(get_response(x)))
+    se <- rep(se, times = n_unique(get_response(x, as_proportion = TRUE)))
   }
 
   se

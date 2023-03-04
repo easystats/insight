@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest) {
-  if (requiet("testthat") && requiet("insight") && requiet("gbm")) {
+  if (skip_if_not_or_load_if_installed("gbm")) {
     set.seed(102) # for reproducibility
     void <- capture.output(
       m1 <- gbm(
@@ -56,7 +56,7 @@ if (.runThisTest) {
     })
 
     test_that("link_inverse", {
-      expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+      expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
     })
 
     test_that("get_data", {

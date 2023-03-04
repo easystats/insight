@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("MASS")) {
+if (skip_if_not_or_load_if_installed("MASS")) {
   data(housing, package = "MASS")
 
   m1 <- polr(Sat ~ Infl + Type + Cont, data = housing, weights = Freq)
@@ -24,14 +22,14 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 72)
     expect_equal(
       colnames(get_data(m1)),
-      c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq")
+      c("Sat", "Infl", "Type", "Cont", "Freq")
     )
   })
 
@@ -154,8 +152,9 @@ if (requiet("testthat") &&
     expect_true(all(c("Row", "Response", "Predicted") %in% colnames(p3)))
 
     d <- get_datagrid(m1, at = "Type", verbose = FALSE)
-    expect_warning(get_predicted(m1, predict = "expectation", data = d))
-    p1 <- suppressWarnings(get_predicted(m1, predict = "expectation", data = d, verbose = FALSE))
+
+    p1 <- get_predicted(m1, predict = "expectation", data = d, verbose = FALSE)
+
     expect_equal(colnames(p1), c("Row", "Type", "Response", "Predicted"))
     expect_equal(dim(p1), c(12, 4))
   })

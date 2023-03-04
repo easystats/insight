@@ -1,5 +1,5 @@
 pkgs <- c("insight", "estimatr", "ivreg")
-invisible(sapply(pkgs, requiet))
+suppressPackageStartupMessages(sapply(pkgs, skip_if_not_or_load_if_installed))
 
 
 
@@ -80,7 +80,7 @@ test_that("get_modelmatrix - ivreg", {
 test_that("get_modelmatrix - lm_robust", {
   set.seed(15)
   N <- 1:40
-  dat <- data.frame(
+  dat <<- data.frame(
     N = N,
     y = rpois(N, lambda = 4),
     x = rnorm(N),
@@ -97,4 +97,20 @@ test_that("get_modelmatrix - lm_robust", {
   out2 <- model.matrix(x, data = get_datagrid(x, at = "x", include_response = TRUE))
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
   expect_equal(nrow(get_datagrid(x, at = "x")), nrow(out2))
+})
+
+
+
+test_that("Issue #693", {
+  set.seed(12345)
+  n <- 500
+  x <- sample(1:3, n, replace = TRUE)
+  w <- sample(1:4, n, replace = TRUE)
+  y <- rnorm(n)
+  z <- ifelse(x + y + rlogis(n) > 1.5, 1, 0)
+  dat <<- data.frame(x = factor(x), w = factor(w), y = y, z = z)
+  m <- glm(z ~ x + w + y, family = binomial, data = dat)
+  nd <- head(dat, 2)
+  mm <- get_modelmatrix(m, data = head(dat, 1))
+  expect_true(all(c("x2", "x3", "w2", "w3", "w4") %in% colnames(mm)))
 })

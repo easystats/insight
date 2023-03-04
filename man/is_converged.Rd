@@ -72,6 +72,7 @@ if (require("lme4")) {
   is_converged(model)
 }
 
+\dontshow{if (getOption("warn") < 2L) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 if (require("glmmTMB")) {
   model <- glmmTMB(Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
@@ -80,4 +81,5 @@ if (require("glmmTMB")) {
   is_converged(model)
 }
 }
+\dontshow{\}) # examplesIf}
 }

@@ -1,15 +1,15 @@
-if (requiet("testthat") && requiet("insight") && requiet("lme4") && getRversion() >= "4.0.0") {
+if (skip_if_not_or_load_if_installed("lme4") && getRversion() >= "4.0.0") {
   data(cbpp)
   data(sleepstudy)
   set.seed(1)
   cbpp$x <- rnorm(nrow(cbpp))
   cbpp$x2 <- runif(nrow(cbpp))
 
-  model <- suppressWarnings(glmer(
+  model <- suppressMessages(suppressWarnings(glmer(
     cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
     data = cbpp,
     family = binomial()
-  ))
+  )))
 
   test_that("is_converged", {
     expect_true(is_converged(model))
@@ -22,7 +22,9 @@ if (requiet("testthat") && requiet("insight") && requiet("lme4") && getRversion(
     expect_true(is_converged(model))
   })
 
-  if (requiet("glmmTMB")) {
+
+  skip_on_os("mac") # error: FreeADFunObject
+  if (skip_if_not_or_load_if_installed("glmmTMB") && skip_if_not_or_load_if_installed("TMB")) {
     model <- glmmTMB(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
     test_that("is_converged, glmmTMB", {
       expect_true(is_converged(model))

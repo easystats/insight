@@ -70,6 +70,7 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{link_function}: the link-function
 \item \code{family}: name of the distributional family of the model. For some exceptions (like some \code{htest} objects), can also be the name of the test.
 \item \code{n_obs}: number of observations
+\item \code{n_grouplevels}: for mixed models, returns names and numbers of random effect groups
 }
 }
 \examples{

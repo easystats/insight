@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("aod")) {
+if (skip_if_not_or_load_if_installed("aod")) {
   data(dja)
   m1 <- suppressWarnings(betabin(cbind(y, n - y) ~ group * trisk, ~village, data = dja))
 
@@ -41,7 +41,7 @@ if (requiet("testthat") && requiet("insight") && requiet("aod")) {
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), dja[, c("y", "n")])
+    expect_equal(get_response(m1, verbose = FALSE), dja[, c("y", "n")])
   })
 
   test_that("get_predictors", {
@@ -49,16 +49,16 @@ if (requiet("testthat") && requiet("insight") && requiet("aod")) {
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
   })
 
   test_that("link_function", {
-    expect_equal(link_function(m1)(.2), qlogis(.2), tolerance = 1e-5)
+    expect_equal(link_function(m1)(0.2), qlogis(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 75)
-    expect_equal(colnames(get_data(m1)), c("y", "n", "group", "trisk", "village"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 75)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("y", "n", "group", "trisk", "village"))
   })
 
   test_that("find_formula", {

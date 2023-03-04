@@ -1,10 +1,9 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-  requiet("testthat") &&
-  requiet("insight") &&
-  requiet("glmmTMB") &&
-  requiet("lme4") &&
+  skip_if_not_or_load_if_installed("glmmTMB") &&
+  skip_if_not_or_load_if_installed("lme4") &&
+  skip_if_not_or_load_if_installed("TMB") &&
   getRversion() >= "4.0.0") {
   data(mtcars)
   m1 <- suppressWarnings(glmer.nb(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
@@ -16,6 +15,7 @@ if (.runThisTest &&
     expect_equal(fixef(nm1), fixef(nm2), tolerance = 1e-4)
   })
 
+  skip_on_os("mac") # error: FreeADFunObject
   m1 <- suppressWarnings(glmmTMB(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
   m2 <- suppressWarnings(glmmTMB(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
 

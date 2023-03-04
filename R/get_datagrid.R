@@ -56,7 +56,9 @@
 #'   If `NA`, will return all the unique values. In case of multiple continuous target
 #'   variables, `length` can also be a vector of different values (see examples).
 #' @param range Option to control the representative values given in `at`, if
-#'   no specific values were provided. `range` can be one of the following:
+#'   no specific values were provided. Use in combination with the `length` argument
+#'   to control the number of values within the specified range. `range` can be
+#'   one of the following:
 #'   - `"range"` (default), will use the minimum and maximum of the original data
 #'   vector as end-points (min and max).
 #'   - if an interval type is specified, such as [`"iqr"`][IQR()],
@@ -129,6 +131,8 @@
 #'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
 #'   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
 #'   get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+#'   # identical to previous line: -1 SD, mean and +1 SD
+#'   get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
 #'   get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
 #'
 #'   # Numeric and categorical variables, generating a grid for plots
@@ -253,7 +257,7 @@ get_datagrid.data.frame <- function(x,
     specs$varname <- as.character(specs$varname) # make sure it's a string not fac
     specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
-    specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
+    specs$is_factor <- vapply(x[specs$varname], function(x) is.factor(x) || is.character(x), TRUE)
 
     # Create target list of factors -----------------------------------------
     facs <- list()
@@ -380,7 +384,7 @@ get_datagrid.data.frame <- function(x,
   # Printing decorations
   attr(targets, "table_title") <- c("Visualisation Grid", "blue")
   if (!(length(rest_vars) == 1 && is.na(rest_vars)) && length(rest_vars) >= 1) {
-    attr(targets, "table_footer") <- paste0("\nMaintained constant: ", paste0(rest_vars, collapse = ", "))
+    attr(targets, "table_footer") <- paste0("\nMaintained constant: ", toString(rest_vars))
   }
   if (!is.null(attr(targets, "table_footer"))) {
     attr(targets, "table_footer") <- c(attr(targets, "table_footer"), "blue")
@@ -426,9 +430,9 @@ get_datagrid.data.frame <- function(x,
     } else {
       # Get reference
       if (is.factor(x)) {
-        out <- levels(x)[1]
+        all_levels <- levels(x)
       } else if (is.character(x) || is.logical(x)) {
-        out <- unique(x)[1]
+        all_levels <- unique(x)
       } else {
         format_error(paste0(
           "Argument is not numeric nor factor but ", class(x), ".",
@@ -442,7 +446,10 @@ get_datagrid.data.frame <- function(x,
       # this is usually avoided by calling ".pad_modelmatrix()", but this
       # function ignores character vectors. so we need to make sure that this
       # factor level is also of class factor.
-      out <- factor(out)
+      out <- factor(all_levels[1])
+      # although we have reference level only, we still need information
+      # about all levels, see #695
+      levels(out) <- all_levels
     }
   }
   out
@@ -605,7 +612,7 @@ get_datagrid.logical <- get_datagrid.character
     if (grepl("length.out =", at, fixed = TRUE)) {
       expression <- at # This is an edgecase
     } else if (grepl("=", at, fixed = TRUE)) {
-      parts <- trim_ws(unlist(strsplit(at, "=", fixed = TRUE))) # Split and clean
+      parts <- trim_ws(unlist(strsplit(at, "=", fixed = TRUE), use.names = FALSE)) # Split and clean
       varname <- parts[1] # left-hand part is probably the name of the variable
       at <- parts[2] # right-hand part is the real target
     }
@@ -624,11 +631,11 @@ get_datagrid.logical <- get_datagrid.character
     if (is.na(expression) && grepl("\\[.*\\]", at)) {
       # Clean --------------------
       # Keep the content
-      parts <- trim_ws(unlist(regmatches(at, gregexpr("\\[.+?\\]", at))))
+      parts <- trim_ws(unlist(regmatches(at, gregexpr("\\[.+?\\]", at)), use.names = FALSE))
       # Drop the brackets
       parts <- gsub("\\[|\\]", "", parts)
       # Split by a separator like ','
-      parts <- trim_ws(unlist(strsplit(parts, ",")))
+      parts <- trim_ws(unlist(strsplit(parts, ",", fixed = TRUE), use.names = FALSE))
       # If the elements have quotes around them, drop them
       if (all(grepl("\\'.*\\'", parts))) parts <- gsub("'", "", parts, fixed = TRUE)
       if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts, fixed = TRUE)
@@ -639,7 +646,7 @@ get_datagrid.logical <- get_datagrid.character
         # Add quotes around them
         parts <- paste0("'", parts, "'")
         # Convert to character
-        expression <- paste0("as.factor(c(", paste0(parts, collapse = ", "), "))")
+        expression <- paste0("as.factor(c(", toString(parts), "))")
       } else {
         # Numeric
         # If one, might be a shortcut
@@ -682,7 +689,7 @@ get_datagrid.logical <- get_datagrid.character
           # If more, it's probably the vector
         } else if (length(parts) > 2) {
           parts <- as.numeric(parts)
-          expression <- paste0("c(", paste0(parts, collapse = ", "), ")")
+          expression <- paste0("c(", toString(parts), ")")
         }
       }
       # Else, try to directly eval the content
@@ -735,6 +742,7 @@ get_datagrid.default <- function(x,
 
   # Retrieve data from model
   data <- .get_model_data_for_grid(x, data)
+  data_attr <- attributes(data)
 
   # save response - might be necessary to include
   response <- find_response(x)
@@ -783,6 +791,9 @@ get_datagrid.default <- function(x,
       at <- colnames(data)[!colnames(data) %in% clean_names(s)]
     }
   }
+
+  # set back custom attributes
+  data <- .replace_attr(data, data_attr)
 
   vm <- get_datagrid(
     data,
@@ -901,28 +912,12 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 .get_model_data_for_grid <- function(x, data) {
   # Retrieve data, based on variable names
   if (is.null(data)) {
-    data <- tryCatch(get_data(x)[find_variables(x, "all", flatten = TRUE)], error = function(e) NULL)
-  }
-
-  # For models with transformed parameters, "find_variables" may not return
-  # matching column names - then try retrieving terms instead
-  if (is.null(data)) {
-    data <- tryCatch(get_data(x)[find_terms(x, "all", flatten = TRUE)], error = function(e) NULL)
-  }
-
-  # brute force - use all!
-  if (is.null(data)) {
-    cols <- unique(
-      find_terms(x, "all", flatten = TRUE),
-      find_variables(x, "all", flatten = TRUE)
-    )
-    data <- tryCatch(
-      {
-        d <- get_data(x)
-        d[intersect(colnames(d), cols)]
-      },
-      error = function(e) NULL
-    )
+    data <- get_data(x, verbose = FALSE)
+    # make sure we only have variables from original data
+    all_vars <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
+    if (!is.null(all_vars)) {
+      data <- tryCatch(data[intersect(all_vars, colnames(data))], error = function(e) data)
+    }
   }
 
   # still found no data - stop here
@@ -931,6 +926,31 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
       "Can't access data that was used to fit the model in order to create the reference grid.",
       "Please use the `data` argument."
     )
+  }
+
+  # find variables that were coerced on-the-fly
+  terms <- find_terms(x, flatten = TRUE)
+  factors <- grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", terms)
+  if (any(factors)) {
+    factor_expressions <- lapply(terms[factors], .str2lang)
+    cleaned_terms <- vapply(factor_expressions, all.vars, character(1))
+    for (i in cleaned_terms) {
+      if (is.numeric(data[[i]])) {
+        attr(data[[i]], "factor") <- TRUE
+      }
+    }
+    attr(data, "factors") <- cleaned_terms
+  }
+  logicals <- grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", terms)
+  if (any(logicals)) {
+    logical_expressions <- lapply(terms[logicals], .str2lang)
+    cleaned_terms <- vapply(logical_expressions, all.vars, character(1))
+    for (i in cleaned_terms) {
+      if (is.numeric(data[[i]])) {
+        attr(data[[i]], "logical") <- TRUE
+      }
+    }
+    attr(data, "logicals") <- cleaned_terms
   }
 
   data
@@ -948,4 +968,12 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
     )))))
   }
   at
+}
+
+
+.replace_attr <- function(data, custom_attr) {
+  for (nm in setdiff(names(custom_attr), names(attributes(data.frame())))) {
+    attr(data, which = nm) <- custom_attr[[nm]]
+  }
+  data
 }

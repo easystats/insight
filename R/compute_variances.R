@@ -613,12 +613,10 @@
       )
     }
     return(0)
-  } else if (mu < 6) {
-    if (verbose) {
-      format_warning(
-        sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)
-      )
-    }
+  } else if (mu < 6 && verbose) {
+    format_warning(
+      sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)
+    )
   }
 
   cvsquared <- tryCatch(
@@ -736,7 +734,12 @@
 # Get distributional variance for tweedie-family
 # ----------------------------------------------
 .variance_family_tweedie <- function(x, mu, phi) {
-  p <- unname(stats::plogis(x$fit$par["thetaf"]) + 1)
+  if ("psi" %in% names(x$fit$par)) {
+    psi <- x$fit$par["psi"] # glmmmTMB >= 1.1.5
+  } else {
+    psi <- x$fit$par["thetaf"]
+  }
+  p <- unname(stats::plogis(psi) + 1)
   phi * mu^p
 }
 
@@ -925,7 +928,7 @@
     # check for uncorrelated random slopes-intercept
     non_intercepts <- which(sapply(vals$vc, function(i) !startsWith(dimnames(i)[[1]][1], "(Intercept)")))
     if (length(non_intercepts) == length(vals$vc)) {
-      out <- unlist(lapply(vals$vc, function(x) diag(x)))
+      out <- unlist(lapply(vals$vc, diag))
     } else if (length(non_intercepts)) {
       dn <- unlist(lapply(vals$vc, function(i) dimnames(i)[1])[non_intercepts])
       rndslopes <- unlist(lapply(vals$vc, function(i) {
@@ -948,7 +951,7 @@
           # we here check if random slopes from correlated and uncorrelated
           # are duplicated (i.e. their difference is 0 - including a tolerance)
           # and then remove duplicated elements
-          the_same <- which(abs(outer(out[j], rndslopes, `-`)) < .0001)
+          the_same <- which(abs(outer(out[j], rndslopes, `-`)) < 0.0001)
           if (length(the_same) && grepl(dn[the_same], names(out[j]), fixed = TRUE)) {
             to_remove <- c(to_remove, j)
           }
@@ -973,7 +976,7 @@
 # ----------------------------------------------
 .random_slope_intercept_corr <- function(vals, x) {
   if (inherits(x, "lme")) {
-    rho01 <- unlist(sapply(vals$vc, function(i) attr(i, "cor_slope_intercept")))
+    rho01 <- unlist(sapply(vals$vc, attr, which = "cor_slope_intercept"))
     if (is.null(rho01)) {
       vc <- lme4::VarCorr(x)
       if ("Corr" %in% colnames(vc)) {
@@ -1012,7 +1015,7 @@
   # correlation among factor levels
   cat_random_slopes <- tryCatch(
     {
-      d <- get_data(x)[rnd_slopes]
+      d <- get_data(x, verbose = FALSE)[rnd_slopes]
       any(sapply(d, is.factor))
     },
     error = function(e) {

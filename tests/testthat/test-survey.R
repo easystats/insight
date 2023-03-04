@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("survey")) {
+if (skip_if_not_or_load_if_installed("survey")) {
   data(api)
   dstrat <-
     svydesign(
@@ -31,13 +29,13 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 200)
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 200)
     expect_equal(
-      colnames(get_data(m1)),
+      colnames(get_data(m1, verbose = FALSE)),
       c("api00", "ell", "meals", "mobility", "(weights)")
     )
   })

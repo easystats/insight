@@ -1,8 +1,8 @@
-if (suppressWarnings(requiet("testthat") &&
-  requiet("insight") &&
-  requiet("lme4"))) {
+if (suppressWarnings(
+  skip_if_not_or_load_if_installed("lme4")
+)) {
   data(cbpp)
-  cbpp$trials <- cbpp$size - cbpp$incidence
+  cbpp$trials <<- cbpp$size - cbpp$incidence
 
   m1 <- glmer(
     cbind(incidence, trials) ~ period + (1 | herd),
@@ -75,34 +75,17 @@ if (suppressWarnings(requiet("testthat") &&
   test_that("get_data", {
     expect_equal(
       colnames(get_data(m1)),
-      c(
-        "cbind(incidence, trials)",
-        "period",
-        "herd",
-        "incidence",
-        "trials"
-      )
+      c("incidence", "trials", "period", "herd")
     )
     expect_equal(
       colnames(get_data(m2)),
-      c(
-        "cbind(incidence, size - incidence)",
-        "period",
-        "herd",
-        "incidence",
-        "size"
-      )
+      c("incidence", "size", "period", "herd")
     )
     get_data(m3)
     get_data(m4)
     expect_equal(
       colnames(get_data(m5)),
-      c(
-        "cbind(incidence, size - incidence)",
-        "herd",
-        "incidence",
-        "size"
-      )
+      c("incidence", "size", "herd")
     )
   })
 

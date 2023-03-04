@@ -51,9 +51,9 @@ text_remove_backticks <- function(x, ...) {
 #' @export
 text_remove_backticks.default <- function(x, verbose = FALSE, ...) {
   if (isTRUE(verbose)) {
-    warning(format_message(
+    format_warning(
       paste0("Removing backticks currently not supported for objects of class '", class(x)[1], "'.")
-    ), call. = FALSE)
+    )
   }
   x
 }
@@ -74,10 +74,10 @@ text_remove_backticks.data.frame <- function(x, column = "Parameter", verbose = 
     }
   }
   if (verbose && length(not_found)) {
-    warning(format_message(
+    format_warning(
       "Following columns were not found or were no character vectors:",
       paste0(not_found, collapse = ", ")
-    ), call. = FALSE)
+    )
   }
   x
 }

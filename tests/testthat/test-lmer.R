@@ -1,9 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest &&
-  requiet("testthat") &&
-  requiet("insight") &&
-  requiet("lme4")) {
+if (.runThisTest && skip_if_not_or_load_if_installed("lme4")) {
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -18,8 +15,10 @@ if (.runThisTest &&
     data = sleepstudy
   )
 
-  m2 <- lme4::lmer(Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-    data = sleepstudy
+  m2 <- suppressMessages(
+    lme4::lmer(Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+      data = sleepstudy
+    )
   )
 
   test_that("model_info", {
@@ -71,7 +70,7 @@ if (.runThisTest &&
       ignore_attr = TRUE,
       tolerance = 1e-4
     )
-    if (requiet("pbkrtest")) {
+    if (skip_if_not_or_load_if_installed("pbkrtest")) {
       expect_equal(
         as.vector(get_df(m1, type = "kenward")),
         c(pbkrtest::get_Lb_ddf(m1, c(1, 0)), pbkrtest::get_Lb_ddf(m1, c(0, 1))),
@@ -173,8 +172,8 @@ if (.runThisTest &&
   })
 
   test_that("link_inverse", {
-    expect_identical(link_inverse(m1)(.2), .2)
-    expect_identical(link_inverse(m2)(.2), .2)
+    expect_identical(link_inverse(m1)(0.2), 0.2)
+    expect_identical(link_inverse(m2)(0.2), 0.2)
   })
 
   test_that("get_data", {
@@ -183,11 +182,11 @@ if (.runThisTest &&
     expect_equal(colnames(get_data(m1, effects = "random")), "Subject")
     expect_equal(
       colnames(get_data(m2)),
-      c("Reaction", "Days", "mygrp", "mysubgrp", "Subject")
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
     )
     expect_equal(
       colnames(get_data(m2, effects = "all")),
-      c("Reaction", "Days", "mygrp", "mysubgrp", "Subject")
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
     )
     expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
   })
@@ -436,8 +435,7 @@ if (.runThisTest &&
   )
 
   m6 <- lme4::lmer(
-    Reaction ~ 1 + (1 |
-      mygrp / mysubgrp) + (1 | Subject),
+    Reaction ~ 1 + (1 | mygrp / mysubgrp) + (1 | Subject),
     data = sleepstudy
   )
 
@@ -488,8 +486,8 @@ if (.runThisTest &&
   })
 
   test_that("satterthwaite dof vs. emmeans", {
-    requiet("emmeans")
-    requiet("pbkrtest")
+    skip_if_not_or_load_if_installed("emmeans")
+    skip_if_not_or_load_if_installed("pbkrtest")
 
     v1 <- get_varcov(m2, vcov = "kenward-roger")
     v2 <- as.matrix(vcovAdj(m2))
@@ -531,22 +529,37 @@ if (.runThisTest &&
   })
 
   test_that("get_predicted_ci: warning when model matrix and varcovmat do not match", {
-    mod <- lmer(
+    skip_if(getRversion() < "4.1.0")
+    mod <- suppressMessages(lmer(
       weight ~ 1 + Time + I(Time^2) + Diet + Time:Diet + I(Time^2):Diet + (1 + Time + I(Time^2) | Chick),
       data = ChickWeight
-    )
+    ))
     newdata <- ChickWeight[ChickWeight$Time %in% 0:10 & ChickWeight$Chick %in% c(1, 40), ]
     newdata$Chick[newdata$Chick == "1"] <- NA
+
+    expect_warning(
+      get_predicted(mod, data = newdata, include_random = FALSE, ci = 0.95),
+      regexp = "levels"
+    )
+
+    # VAB: Not sure where these hard-coded values come from
+    # Related to Issue #693. Not sure if these are valid since we arbitrarily
+    # shrink the varcov and mm to be conformable. In some cases documented in
+    # Issue #556 of {marginaleffects}, we know that this produces incorrect
+    # results, so it's probably best to be conservative and not return results
+    # here.
+    known <- data.frame(
+      Predicted = c(37.53433, 47.95719, 58.78866, 70.02873, 81.67742, 93.73472),
+      SE = c(1.68687, 0.82574, 1.52747, 2.56109, 3.61936, 4.76178),
+      CI_low = c(34.22096, 46.33525, 55.78837, 64.99819, 74.56822, 84.38154),
+      CI_high = c(40.84771, 49.57913, 61.78894, 75.05927, 88.78662, 103.08789)
+    )
+
+    p <- suppressWarnings(get_predicted(mod, data = newdata, include_random = FALSE, ci = 0.95))
     expect_equal(
-      head(as.data.frame(get_predicted(mod, data = newdata, include_random = FALSE, ci = 0.95))),
-      data.frame(
-        Predicted = c(37.53433, 47.95719, 58.78866, 70.02873, 81.67742, 93.73472),
-        SE = c(1.68687, 0.82574, 1.52747, 2.56109, 3.61936, 4.76178),
-        CI_low = c(34.22096, 46.33525, 55.78837, 64.99819, 74.56822, 84.38154),
-        CI_high = c(40.84771, 49.57913, 61.78894, 75.05927, 88.78662, 103.08789)
-      ),
-      tolerance = 1e-3,
-      ignore_attr = TRUE
+      head(data.frame(p)$Predicted),
+      known$Predicted,
+      tolerance = 1e-3
     )
   })
 }

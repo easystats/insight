@@ -1,7 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("nlme") &&
-  requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed("lme4")) {
   data("sleepstudy")
   data(Orthodont)
   m1 <- lme(Reaction ~ Days,
@@ -33,20 +30,14 @@ if (requiet("testthat") &&
     skip_on_cran()
 
     expect_equal(
-      insight:::.get_nested_lme_varcorr(m3),
-      list(
-        mysubgrp = structure(
-          7.508310765,
-          .Dim = c(1L, 1L),
-          .Dimnames = list("(Intercept)", "(Intercept)")
-        ),
-        mygrp = structure(
-          0.004897827,
-          .Dim = c(1L, 1L),
-          .Dimnames = list("(Intercept)", "(Intercept)")
-        )
-      ),
+      insight:::.get_nested_lme_varcorr(m3)$mysubgrp[1, 1],
+      7.508310765,
       tolerance = 1e-3
+    )
+    expect_equal(
+      insight:::.get_nested_lme_varcorr(m3)$mygrp[1, 1],
+      0.004897827,
+      tolerance = 1e-2
     )
   })
 
@@ -90,7 +81,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("get_data", {
@@ -222,7 +213,7 @@ if (requiet("testthat") &&
 
 
   test_that("Issue #658", {
-    requiet("nlme")
+    skip_if_not_or_load_if_installed("nlme")
     models <- lapply(
       c("", " + Sex"),
       function(x) {

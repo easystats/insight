@@ -1,18 +1,16 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("AER")) {
+if (skip_if_not_or_load_if_installed("AER")) {
   data(CigarettesSW)
   CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
-  CigarettesSW$rincome <-
-    with(CigarettesSW, income / population / cpi)
+  CigarettesSW$rincome <- with(CigarettesSW, income / population / cpi)
   CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax) / cpi)
 
-  m1 <-
-    AER::ivreg(
-      log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi),
-      data = CigarettesSW,
-      subset = year == "1995"
-    )
+  cig_data <<- CigarettesSW
+
+  m1 <- AER::ivreg(
+    log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi),
+    data = cig_data,
+    subset = year == "1995"
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_linear)
@@ -46,7 +44,7 @@ if (requiet("testthat") &&
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), CigarettesSW$packs[CigarettesSW$year == "1995"])
+    expect_equal(get_response(m1), cig_data$packs[cig_data$year == "1995"])
   })
 
   test_that("get_predictors", {
@@ -57,7 +55,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("get_data", {

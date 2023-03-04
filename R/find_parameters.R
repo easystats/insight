@@ -67,7 +67,7 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -88,7 +88,7 @@ find_parameters.summary.lm <- function(x, flatten = FALSE, ...) {
   l <- list(conditional = text_remove_backticks(rownames(cf)))
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -105,7 +105,7 @@ find_parameters.polr <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -132,7 +132,7 @@ find_parameters.clm2 <- function(x, flatten = FALSE, ...) {
   }
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -149,7 +149,7 @@ find_parameters.bracl <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -171,7 +171,7 @@ find_parameters.multinom <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -226,7 +226,7 @@ find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
   pars <- compact_list(lapply(pars, function(i) i$pars))
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -243,7 +243,7 @@ find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
   pars <- split(pars$Parameter, pars$Component)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -290,7 +290,7 @@ find_parameters.wbm <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -319,7 +319,7 @@ find_parameters.Rchoice <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = cf)
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -332,7 +332,7 @@ find_parameters.btergm <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = names(cf))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -345,7 +345,7 @@ find_parameters.crr <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = names(cs))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -354,11 +354,11 @@ find_parameters.crr <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.riskRegression <- function(x, flatten = FALSE, ...) {
-  junk <- utils::capture.output(cs <- stats::coef(x))
+  junk <- utils::capture.output(cs <- stats::coef(x)) # nolint
   out <- list(conditional = as.vector(cs[, 1]))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -370,7 +370,7 @@ find_parameters.lmodel2 <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = c("Intercept", "Slope"))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -382,7 +382,7 @@ find_parameters.ivFixed <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = rownames(x$coefficients))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -394,7 +394,7 @@ find_parameters.ivprobit <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = x$names)
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -424,7 +424,7 @@ find_parameters.mediate <- function(x, flatten = FALSE, ...) {
     )
   }
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -436,7 +436,7 @@ find_parameters.ridgelm <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = names(x$coef))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -449,7 +449,7 @@ find_parameters.survreg <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = rownames(s$table))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -465,7 +465,7 @@ find_parameters.mle2 <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = rownames(s@coef))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -487,7 +487,7 @@ find_parameters.glht <- function(x, flatten = FALSE, ...) {
   l <- list(conditional = paste(names(s$test$coefficients), alt, x$rhs))
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -499,7 +499,7 @@ find_parameters.manova <- function(x, flatten = FALSE, ...) {
   out <- list(conditional = text_remove_backticks(rownames(stats::na.omit(stats::coef(x)))))
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -525,7 +525,7 @@ find_parameters.anova.rms <- function(x, flatten = FALSE, ...) {
   l <- list(conditional = text_remove_backticks(rownames(x)))
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -544,7 +544,7 @@ find_parameters.mlm <- function(x, flatten = FALSE, ...) {
   attr(out, "is_mv") <- TRUE
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -554,7 +554,7 @@ find_parameters.mlm <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.mvord <- function(x, flatten = FALSE, ...) {
-  junk <- utils::capture.output(s <- summary(x))
+  junk <- utils::capture.output(s <- summary(x)) # nolint
 
   out <- list(
     thresholds = text_remove_backticks(rownames(s$thresholds)),
@@ -564,7 +564,7 @@ find_parameters.mvord <- function(x, flatten = FALSE, ...) {
   attr(out, "is_mv") <- TRUE
 
   if (flatten) {
-    unique(unlist(out))
+    unique(unlist(out, use.names = FALSE))
   } else {
     out
   }
@@ -579,7 +579,7 @@ find_parameters.gbm <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -593,7 +593,7 @@ find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -607,7 +607,7 @@ find_parameters.lrm <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -620,10 +620,10 @@ find_parameters.flexsurvreg <- find_parameters.lrm
 
 #' @export
 find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
-  l <- list(conditional = unname(text_remove_backticks(unlist(lapply(stats::coef(x), names)))))
+  l <- list(conditional = text_remove_backticks(unlist(lapply(stats::coef(x), names), use.names = FALSE)))
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -635,7 +635,7 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
 find_parameters.rqs <- function(x, flatten = FALSE, ...) {
   sc <- suppressWarnings(summary(x))
 
-  if (all(unlist(lapply(sc, is.list)))) {
+  if (all(unlist(lapply(sc, is.list), use.names = FALSE))) {
     pars <- list(conditional = rownames(stats::coef(sc[[1]])))
   } else {
     return(find_parameters.default(x, flatten = flatten, ...))
@@ -643,7 +643,7 @@ find_parameters.rqs <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -662,7 +662,7 @@ find_parameters.crq <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -685,7 +685,7 @@ find_parameters.lqmm <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -705,7 +705,7 @@ find_parameters.aareg <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -720,11 +720,11 @@ find_parameters.rma <- function(x, flatten = FALSE, ...) {
       cf <- stats::coef(x)
       pars <- list(conditional = names(cf))
 
-      pars$conditional[grepl("intrcpt", pars$conditional)] <- "(Intercept)"
+      pars$conditional[grepl("intrcpt", pars$conditional, fixed = TRUE)] <- "(Intercept)"
       pars$conditional <- text_remove_backticks(pars$conditional)
 
       if (flatten) {
-        unique(unlist(pars))
+        unique(unlist(pars, use.names = FALSE))
       } else {
         pars
       }
@@ -746,7 +746,7 @@ find_parameters.meta_random <- function(x, flatten = FALSE, ...) {
       pars$conditional[pars$conditional == "d"] <- "(Intercept)"
 
       if (flatten) {
-        unique(unlist(pars))
+        unique(unlist(pars, use.names = FALSE))
       } else {
         pars
       }
@@ -769,11 +769,11 @@ find_parameters.meta_bma <- find_parameters.meta_random
 #' @export
 find_parameters.metaplus <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = rownames(x$results))
-  pars$conditional[grepl("muhat", pars$conditional)] <- "(Intercept)"
+  pars$conditional[grepl("muhat", pars$conditional, fixed = TRUE)] <- "(Intercept)"
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -787,7 +787,7 @@ find_parameters.mipo <- function(x, flatten = FALSE, ...) {
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -812,7 +812,7 @@ find_parameters.nls <- function(x,
   pars <- .return_vars(f, x)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -835,7 +835,7 @@ find_parameters.nls <- function(x,
   l <- compact_list(l[elements])
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }

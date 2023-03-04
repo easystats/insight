@@ -1,7 +1,7 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("ordinal") &&
-  requiet("MASS")) {
+if (
+
+  skip_if_not_or_load_if_installed("ordinal") &&
+    skip_if_not_or_load_if_installed("MASS")) {
   data(housing, package = "MASS")
   m1 <- clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 
@@ -41,7 +41,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
   })
 
   test_that("find_weights", {
@@ -56,7 +56,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m1)), 72)
     expect_equal(
       colnames(get_data(m1)),
-      c("Sat", "Infl", "Type", "Cont", "(weights)", "Freq")
+      c("Sat", "Infl", "Type", "Cont", "Freq")
     )
   })
 

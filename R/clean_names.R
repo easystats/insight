@@ -118,10 +118,10 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
   pattern <- c(
     "as.factor", "as.numeric", "factor", "frailty", "offset", "log1p", "log10",
     "log2", "log(log", "scale(log", "log", "lag", "diff", "lspline", "as.logical",
-    "logical", "pspline", "scale(poly", "poly", "catg", "asis", "matrx", "pol",
-    "strata", "strat", "scale", "scored", "interaction", "sqrt", "sin", "cos",
-    "tan", "acos", "asin", "atan", "atan2", "exp", "lsp", "rcs", "pb", "lo",
-    "bs", "ns", "mSpline", "bSpline", "t2", "te", "ti", "tt", # need to be fixed first "mmc", "mm",
+    "logical", "ordered", "as.ordered", "pspline", "scale(poly", "poly", "catg",
+    "asis", "matrx", "pol", "strata", "strat", "scale", "scored", "interaction",
+    "sqrt", "sin", "cos", "tan", "acos", "asin", "atan", "atan2", "exp", "lsp",
+    "rcs", "pb", "lo", "bs", "ns", "mSpline", "bSpline", "t2", "te", "ti", "tt", # need to be fixed first "mmc", "mm",
     "mi", "mo", "gp", "s", "I"
   )
 
@@ -164,18 +164,18 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           ## FIXME multimembership-models need to be fixed
           p <- paste0("^", pattern[j], "\\((.*)\\).*")
           g <- trim_ws(sub(p, "\\1", x[i]))
-          x[i] <- trim_ws(unlist(strsplit(g, ",")))
+          x[i] <- trim_ws(unlist(strsplit(g, ",", fixed = TRUE), use.names = FALSE))
         } else if (pattern[j] == "s" && startsWith(x[i], "s(")) {
           x[i] <- gsub("^s\\(", "", x[i])
           x[i] <- gsub("\\)$", "", x[i])
           if (grepl("=|[[:digit:]]", x[i])) {
-            new_x <- trim_ws(unlist(strsplit(x[i], ",")))
+            new_x <- trim_ws(unlist(strsplit(x[i], ",", fixed = TRUE), use.names = FALSE))
             to_remove <- which(!grepl("\\D", new_x))
             to_remove <- c(to_remove, which(grepl("=", new_x, fixed = TRUE)))
             if (length(to_remove) == 0) {
-              x[i] <- paste(new_x, collapse = ", ")
+              x[i] <- toString(new_x)
             } else {
-              x[i] <- paste(new_x[-to_remove], collapse = ", ")
+              x[i] <- toString(new_x[-to_remove])
             }
           }
         } else {
@@ -206,13 +206,13 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 
   # extract terms from mm() / mmc() functions, i.e. get
   # multimembership-terms
-  unname(compact_character(unlist(sapply(c("mmc", "mm"), function(j) {
+  compact_character(unlist(sapply(c("mmc", "mm"), function(j) {
     if (grepl(paste0("^", j, "\\("), x = x)) {
       p <- paste0("^", j, "\\((.*)\\).*")
       g <- trim_ws(sub(p, "\\1", x))
-      trim_ws(unlist(strsplit(g, ",")))
+      trim_ws(unlist(strsplit(g, ",", fixed = TRUE), use.names = FALSE))
     } else {
       ""
     }
-  }, simplify = FALSE))))
+  }, simplify = FALSE), use.names = FALSE))
 }

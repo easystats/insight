@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("ordinal")) {
+if (skip_if_not_or_load_if_installed("ordinal")) {
   data(wine, package = "ordinal")
   m1 <- clm(rating ~ temp * contact, data = wine)
 
@@ -37,7 +35,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {

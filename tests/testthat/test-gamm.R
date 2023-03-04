@@ -2,9 +2,9 @@
 
 if (.runThisTest) {
   unloadNamespace("gam")
-  if (requiet("testthat") && requiet("insight") && requiet("mgcv")) {
+  if (skip_if_not_or_load_if_installed("mgcv")) {
     set.seed(0)
-    void <- capture.output(dat <- gamSim(6, n = 200, scale = .2, dist = "poisson"))
+    void <- capture.output(dat <- gamSim(6, n = 200, scale = 0.2, dist = "poisson"))
     m1 <-
       gamm(
         y ~ s(x0) + s(x1) + s(x2),
@@ -45,7 +45,7 @@ if (.runThisTest) {
     })
 
     test_that("link_inverse", {
-      expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+      expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-5)
     })
 
     test_that("get_data", {
@@ -142,7 +142,7 @@ if (.runThisTest) {
     set.seed(0)
 
     void <- capture.output(
-      dat <- gamSim(6, n = 200, scale = .2, dist = "poisson")
+      dat <- gamSim(6, n = 200, scale = 0.2, dist = "poisson")
     )
 
     m2 <- gamm(

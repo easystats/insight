@@ -52,7 +52,7 @@ find_weights.brmsfit <- function(x, ...) {
   f <- find_formula(x, verbose = FALSE)
 
   if (is_multivariate(f)) {
-    resp <- unlist(lapply(f, function(i) safe_deparse(i$conditional[[2L]])))
+    resp <- unlist(lapply(f, function(i) safe_deparse(i$conditional[[2L]])), use.names = FALSE)
   } else {
     resp <- safe_deparse(f$conditional[[2L]])
   }

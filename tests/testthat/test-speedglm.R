@@ -1,15 +1,11 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("speedglm") &&
-  requiet("glmmTMB")) {
+if (skip_if_not_or_load_if_installed("speedglm") && skip_if_not_or_load_if_installed("glmmTMB")) {
   data(Salamanders)
   Salamanders$cover <- abs(Salamanders$cover)
 
-  m1 <-
-    speedglm(count ~ mined + log(cover) + sample,
-      family = poisson(),
-      data = Salamanders
-    )
+  m1 <- speedglm(count ~ mined + log(cover) + sample,
+    family = poisson(),
+    data = Salamanders
+  )
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_poisson)
@@ -41,24 +37,24 @@ if (requiet("testthat") &&
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), Salamanders$count)
+    expect_identical(get_response(m1), Salamanders$count)
   })
 
   test_that("get_predictors", {
-    expect_equal(colnames(get_predictors(m1)), c("mined", "cover", "sample"))
+    expect_identical(colnames(get_predictors(m1)), c("mined", "cover", "sample"))
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-5)
   })
 
   test_that("linkfun", {
-    expect_equal(link_function(m1)(.2), log(.2), tolerance = 1e-5)
+    expect_equal(link_function(m1)(0.2), log(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 644)
-    expect_equal(
+    expect_identical(nrow(get_data(m1)), 644L)
+    expect_identical(
       colnames(get_data(m1)),
       c("count", "mined", "cover", "sample")
     )
@@ -74,32 +70,32 @@ if (requiet("testthat") &&
   })
 
   test_that("find_variables", {
-    expect_equal(
+    expect_identical(
       find_variables(m1),
       list(
         response = "count",
         conditional = c("mined", "cover", "sample")
       )
     )
-    expect_equal(
+    expect_identical(
       find_variables(m1, flatten = TRUE),
       c("count", "mined", "cover", "sample")
     )
   })
 
   test_that("n_obs", {
-    expect_equal(n_obs(m1), 644)
+    expect_identical(n_obs(m1), 644L)
   })
 
   test_that("find_parameters", {
-    expect_equal(
+    expect_identical(
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "minedno", "log(cover)", "sample")
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 4)
-    expect_equal(
+    expect_identical(nrow(get_parameters(m1)), 4L)
+    expect_identical(
       get_parameters(m1)$Parameter,
       c("(Intercept)", "minedno", "log(cover)", "sample")
     )
@@ -110,7 +106,7 @@ if (requiet("testthat") &&
   })
 
   test_that("find_terms", {
-    expect_equal(
+    expect_identical(
       find_terms(m1),
       list(
         response = "count",
@@ -120,7 +116,7 @@ if (requiet("testthat") &&
   })
 
   test_that("find_algorithm", {
-    expect_equal(find_algorithm(m1), list(algorithm = "eigen"))
+    expect_identical(find_algorithm(m1), list(algorithm = "eigen"))
   })
 
   test_that("find_statistic", {

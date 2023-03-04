@@ -106,6 +106,15 @@ link_inverse.lm <- function(x, ...) {
 link_inverse.bayesx <- link_inverse.lm
 
 #' @export
+link_inverse.mmrm <- link_inverse.lm
+
+#' @export
+link_inverse.mmrm_fit <- link_inverse.lm
+
+#' @export
+link_inverse.mmrm_tmb <- link_inverse.lm
+
+#' @export
 link_inverse.systemfit <- link_inverse.lm
 
 #' @export
@@ -277,6 +286,12 @@ link_inverse.cph <- link_inverse.gmnl
 
 #' @export
 link_inverse.logistf <- link_inverse.gmnl
+
+#' @export
+link_inverse.flac <- link_inverse.gmnl
+
+#' @export
+link_inverse.flic <- link_inverse.gmnl
 
 #' @export
 link_inverse.multinom <- link_inverse.gmnl

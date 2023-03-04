@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("blme")) {
+if (skip_if_not_or_load_if_installed("blme")) {
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -101,8 +101,8 @@ if (requiet("testthat") && requiet("insight") && requiet("blme")) {
   })
 
   test_that("link_inverse", {
-    expect_identical(link_inverse(m1)(.2), .2)
-    expect_identical(link_inverse(m2)(.2), .2)
+    expect_identical(link_inverse(m1)(0.2), 0.2)
+    expect_identical(link_inverse(m2)(0.2), 0.2)
   })
 
   test_that("get_data", {
@@ -111,11 +111,11 @@ if (requiet("testthat") && requiet("insight") && requiet("blme")) {
     expect_equal(colnames(get_data(m1, effects = "random")), "Subject")
     expect_equal(
       colnames(get_data(m2)),
-      c("Reaction", "Days", "mygrp", "mysubgrp", "Subject")
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
     )
     expect_equal(
       colnames(get_data(m2, effects = "all")),
-      c("Reaction", "Days", "mygrp", "mysubgrp", "Subject")
+      c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
     )
     expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
   })

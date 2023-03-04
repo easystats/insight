@@ -693,7 +693,7 @@ clean_parameters.mlm <- function(x, ...) {
 
 
 .clean_bfbayesfactor_params <- function(out) {
-  pars <- do.call(rbind, strsplit(out$Parameter, "-", TRUE))
+  pars <- do.call(rbind, strsplit(out$Parameter, "-", fixed = TRUE))
 
   if (ncol(pars) == 1) {
     return(out)
@@ -708,8 +708,8 @@ clean_parameters.mlm <- function(x, ...) {
           i[1] <- paste0(i[1], " [", i[2], "]")
           i[2] <- ""
         } else if (grepl(":", i[1], fixed = TRUE)) {
-          f <- unlist(strsplit(i[1], ":", fixed = TRUE))
-          l <- unlist(strsplit(i[2], ".&.", fixed = TRUE))
+          f <- unlist(strsplit(i[1], ":", fixed = TRUE), use.names = FALSE)
+          l <- unlist(strsplit(i[2], ".&.", fixed = TRUE), use.names = FALSE)
           m <- match(f, l)
           matches <- m[!is.na(m)]
           l[matches] <- ""

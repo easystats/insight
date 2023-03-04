@@ -134,7 +134,7 @@ export_table <- function(x,
   # sanity check
   if (is.null(x) || (is.data.frame(x) && nrow(x) == 0) || is_empty_object(x)) {
     if (isTRUE(verbose)) {
-      message(paste0("Can't export table to ", format, ", data frame is empty."))
+      message("Can't export table to ", format, ", data frame is empty.")
     }
     return(NULL)
   }
@@ -153,6 +153,8 @@ export_table <- function(x,
     }))
   }
 
+  ## TODO: check if we need to move this code before the above if-statement?
+  ## attributes might get lost after do.call()
 
   # check for indention
   indent_groups <- attributes(x)$indent_groups
@@ -680,25 +682,22 @@ print.insight_table <- function(x, ...) {
         cross, sep, final_row,
         is_last_row = row == nrow(final)
       )
-      rows <- paste0(rows, empty_line_with_cross, sep = "\n")
+      rows <- paste0(rows, empty_line_with_cross, "\n")
     } else {
-      rows <- paste0(rows, final_row, sep = "\n")
+      rows <- paste0(rows, final_row, "\n")
     }
 
     # After first row, we might have a separator row
-    if (row == 1) {
-      # check if we have any separator for the header row
-      if (!is.null(header)) {
-        # check whether user wants to have a "cross" char where vertical and
-        # horizontal lines (from header line) cross.
-        header_line <- .insert_cross(
-          paste0(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
-          cross, sep, final_row,
-          is_last_row = row == nrow(final)
-        )
-        # add separator row after header line
-        rows <- paste0(rows, header_line, sep = "\n")
-      }
+    if (row == 1 && !is.null(header)) { # check if we have any separator for the header row
+      # check whether user wants to have a "cross" char where vertical and
+      # horizontal lines (from header line) cross.
+      header_line <- .insert_cross(
+        paste0(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
+        cross, sep, final_row,
+        is_last_row = row == nrow(final)
+      )
+      # add separator row after header line
+      rows <- paste0(rows, header_line, "\n")
     }
   }
 
@@ -711,7 +710,7 @@ print.insight_table <- function(x, ...) {
   # special char. E.g., if columns are separated with "|" and header line
   # with "-", we might have a "+" to have properly "crossed lines"
   if (!is.null(cross) && !is_last_row) {
-    cross_position <- unlist(gregexpr(trim_ws(sep), pattern, fixed = TRUE))
+    cross_position <- unlist(gregexpr(trim_ws(sep), pattern, fixed = TRUE), use.names = FALSE)
     for (pp in cross_position) {
       substr(row, pp, pp) <- cross
     }
@@ -765,6 +764,7 @@ print.insight_table <- function(x, ...) {
 
 .indent_rows <- function(final, indent_rows, whitespace = "  ") {
   # create index for those rows that should be indented
+  # for text format, first row is column names, so we need a +1 here
   grp_rows <- indent_rows + 1
 
   # indent
@@ -790,7 +790,7 @@ print.insight_table <- function(x, ...) {
 
 .indent_rows_html <- function(final, indent_rows, whitespace = "") {
   # create index for those rows that should be indented
-  grp_rows <- indent_rows + 1
+  grp_rows <- indent_rows
 
   # indent
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
@@ -988,7 +988,7 @@ print.insight_table <- function(x, ...) {
   if (!is.null(footer)) {
     if (is.list(footer)) {
       footer <- lapply(footer, function(i) {
-        gsub("\n", "", i[1])
+        gsub("\n", "", i[1], fixed = TRUE)
       })
     } else {
       footer <- footer[1]
@@ -1008,11 +1008,14 @@ print.insight_table <- function(x, ...) {
     } else {
       col_align <- NULL
       for (i in 1:nchar(align)) {
-        col_align <- c(col_align, switch(substr(align, i, i),
-          "l" = "left",
-          "r" = "right",
-          "center"
-        ))
+        col_align <- c(
+          col_align,
+          switch(substr(align, i, i),
+            "l" = "left",
+            "r" = "right",
+            "center"
+          )
+        )
       }
       out[["_boxhead"]]$column_align <- col_align
     }

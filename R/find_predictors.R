@@ -92,7 +92,7 @@ find_predictors.default <- function(x,
 
   # random effects are returned as list, so we need to unlist here
   if (is_mv) {
-    l <- lapply(f, function(.i) .return_vars(.i, x))
+    l <- lapply(f, .return_vars, x = x)
   } else {
     l <- .return_vars(f, x)
   }
@@ -107,15 +107,15 @@ find_predictors.default <- function(x,
   # manually, so other functions like "get_data()" work as expected...
 
   if (object_has_names(l, "random") && effects == "all") {
-    random_slope <- unname(unlist(find_random_slopes(x)))
-    all_predictors <- unlist(unique(l))
+    random_slope <- unlist(find_random_slopes(x), use.names = FALSE)
+    all_predictors <- unlist(unique(l), use.names = FALSE)
     rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
     if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
   }
 
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -131,14 +131,14 @@ find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
     .prepare_predictors(x, i, elements = elements)
   })
 
-  l <- lapply(f, function(.i) .return_vars(.i, x))
+  l <- lapply(f, .return_vars, x = x)
 
   if (is_empty_object(l) || is_empty_object(compact_list(l))) {
     return(NULL)
   }
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -150,7 +150,7 @@ find_predictors.logitr <- function(x, flatten = FALSE, ...) {
   l <- find_predictors.default(x)
   l[["cluster"]] <- get_call(x)$obsID
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -188,7 +188,7 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
     "endogenous" = endo
   ))
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -199,7 +199,7 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
 find_predictors.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   l <- list(conditional = "x")
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -224,7 +224,7 @@ find_predictors.afex_aov <- function(x,
   )[effects]
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -260,7 +260,7 @@ find_predictors.afex_aov <- function(x,
       # All variables in the non-linear formulas get dumped in the "non-linear"
       # vector of the list. This may include cluster variables which identify
       # random effects components.
-      l_pforms <- unname(unlist(lapply(nf$pforms, all.vars), recursive = TRUE))
+      l_pforms <- unlist(lapply(nf$pforms, all.vars), recursive = TRUE, use.names = FALSE)
       # don't overwrite. maybe this could be smarter
       if (length(l_pforms) > 0 && !"nonlinear" %in% names(l) && !"nonlinear" %in% names(f)) {
         f <- c(f, list(nonlinear = NULL)) # need this for renaming and subsetting later

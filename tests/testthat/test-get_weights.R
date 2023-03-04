@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   data(mtcars)
   m1 <- lmer(mpg ~ am + (1 | cyl), data = mtcars)
   m2 <- lm(mpg ~ am, data = mtcars)
@@ -9,7 +9,7 @@ if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
   })
 
   set.seed(123)
-  mtcars$w <- abs(rnorm(nrow(mtcars), sd = .5))
+  mtcars$w <- abs(rnorm(nrow(mtcars), sd = 0.5))
 
   m1 <- lmer(mpg ~ am + (1 | cyl), data = mtcars, weights = w)
   m2 <- lm(mpg ~ am, data = mtcars, weights = w)

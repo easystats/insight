@@ -53,7 +53,7 @@
 
   # Data
   if (!is.null(dots$newdata) && is.null(data)) data <- dots$newdata
-  if (is.null(data)) data <- get_data(x, verbose = verbose)
+  if (is.null(data)) data <- get_data(x, verbose = FALSE)
 
 
   # Intermediate step, check data classes  ------
@@ -68,15 +68,15 @@
     )
   } else {
     flag_matrix <- tryCatch(
-      any(sapply(data, function(x) inherits(x, "matrix"))),
+      any(vapply(data, inherits, TRUE, what = "matrix")),
       error = function(e) FALSE
     )
   }
   if (isTRUE(flag_matrix) && isTRUE(verbose)) {
-    message(format_message(
+    format_alert(
       "Some of the variables were in matrix-format - probably you used `scale()` on your data?",
       "If so, and you get an error, please try `datawizard::standardize()` to standardize your data."
-    ))
+    )
   }
 
 
@@ -92,7 +92,10 @@
     }
   )
   # check whether model class has a predict method
-  predict_method <- tryCatch(predict_method[!sapply(predict_method, is.null)][[1]], error = function(e) NULL)
+  predict_method <- tryCatch(
+    predict_method[!vapply(predict_method, is.null, TRUE)][[1]],
+    error = function(e) NULL
+  )
   # define easystats prediction-types
   easystats_methods <- c("expectation", "link", "prediction", "classification")
   # retrieve model object's predict-method prediction-types (if any)
@@ -112,10 +115,10 @@
   # backward compatibility
   if (identical(predict, "relation")) {
     if (isTRUE(verbose)) {
-      message(format_message(
+      format_alert(
         '`predict = "relation" is deprecated.',
         'Please use `predict = "expectation" instead.'
-      ))
+      )
     }
     predict <- "expectation"
   }
@@ -128,7 +131,7 @@
       "`predict` will be passed directly to the `predict()` method for the model and not validated.",
       "Please check the validity and scale of the results.",
       "Set `verbose = FALSE` to silence this warning, or use one of the supported values for the `predict` argument:",
-      paste(" ", paste(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted"))), collapse = ", "))
+      paste(" ", toString(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted")))))
     )
   }
 
@@ -159,18 +162,27 @@
 
     # type = "response" always on link-scale - for later back-transformation
   } else if (predict %in% c("expectation", "response", "prediction", "classification")) {
-    if (inherits(x, c("hurdle", "zeroinfl", "zerotrunc"))) {
-      # pscl: hurdle/zeroinfl and countreg
-      type_arg <- "count"
-    } else if (inherits(x, "coxph")) {
-      # survival: coxph
-      type_arg <- "lp"
+    # exception for glmmTMB with truncated family - behaviour changed to
+    # correct conditional and response predictions for truncated distributions
+    # https://github.com/glmmTMB/glmmTMB/issues/634
+    if (inherits(x, "glmmTMB") && isTRUE(info$is_hurdle)) {
+      type_arg <- "response"
+      scale_arg <- "response"
+      transform <- FALSE
     } else {
-      # default behaviour for "response"
-      type_arg <- "link"
+      if (inherits(x, c("hurdle", "zeroinfl", "zerotrunc"))) {
+        # pscl: hurdle/zeroinfl and countreg
+        type_arg <- "count"
+      } else if (inherits(x, "coxph")) {
+        # survival: coxph
+        type_arg <- "lp"
+      } else {
+        # default behaviour for "response"
+        type_arg <- "link"
+      }
+      scale_arg <- "response"
+      transform <- TRUE
     }
-    scale_arg <- "response"
-    transform <- TRUE
 
     # link-scale
   } else if (predict == "link") {
@@ -232,7 +244,7 @@
       # Fix smooth to average value
       if (!smooth %in% names(data) || !include_smooth) {
         include_smooth <- FALSE
-        data[[smooth]] <- mean(get_data(x)[[smooth]], na.rm = TRUE)
+        data[[smooth]] <- mean(get_data(x, verbose = FALSE)[[smooth]], na.rm = TRUE)
       }
     }
   }
@@ -282,9 +294,9 @@
       # to TRUE.
 
       re_data <- get_random(x)
-      all_levels_found <- sapply(re_terms, function(i) {
+      all_levels_found <- vapply(re_terms, function(i) {
         all(unique(data[[i]]) %in% re_data[[i]])
-      })
+      }, TRUE)
 
       if (!all(all_levels_found)) {
         if (isTRUE(verbose) && isTRUE(include_random)) {

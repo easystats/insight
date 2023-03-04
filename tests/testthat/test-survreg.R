@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("survival")) {
+if (skip_if_not_or_load_if_installed("survival")) {
   m1 <- survreg(Surv(futime, fustat) ~ ecog.ps + rx,
     data = ovarian,
     dist = "exponential"
@@ -42,14 +40,14 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 26)
     expect_equal(
       colnames(get_data(m1)),
-      c("futime", "fustat", "Surv(futime, fustat)", "ecog.ps", "rx")
+      c("futime", "fustat", "ecog.ps", "rx")
     )
   })
 

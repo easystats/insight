@@ -15,7 +15,7 @@
   }
 
   if (is.null(newdata)) {
-    newdata <- get_data(model)
+    newdata <- get_data(model, verbose = FALSE)
   }
 
   if (is.null(nsim)) {
@@ -34,6 +34,7 @@
     return(NULL)
   }
 
+  ## FIXME: Need to check whether this also works for truncated families, see #681
   sims <- link_inverse(model)(out$cond) * (1 - stats::plogis(out$zi))
   ci <- (1 + ci) / 2
 

@@ -53,9 +53,9 @@ find_interactions <- function(x,
   elements <- .get_elements(effects = effects, component = component)
 
   if (is_mv) {
-    l <- lapply(f, function(.x) compact_list(lapply(.x[elements], function(i) .get_interaction_terms(i, main_effects))))
+    l <- lapply(f, function(.x) compact_list(lapply(.x[elements], .get_interaction_terms, main_effects)))
   } else {
-    l <- compact_list(lapply(f[elements], function(i) .get_interaction_terms(i, main_effects)))
+    l <- compact_list(lapply(f[elements], .get_interaction_terms, main_effects))
   }
 
   if (is_empty_object(l)) {
@@ -63,7 +63,7 @@ find_interactions <- function(x,
   }
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }

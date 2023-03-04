@@ -66,7 +66,7 @@ get_modelmatrix.iv_robust <- function(x, ...) {
     }
     mm <- do.call(stats::model.matrix, compact_list(list(model_terms, data = d, dots)))
   } else {
-    mm <- stats::model.matrix(model_terms, data = get_data(x), ...)
+    mm <- stats::model.matrix(model_terms, data = get_data(x, verbose = FALSE), ...)
   }
 
   mm
@@ -86,7 +86,7 @@ get_modelmatrix.lm_robust <- function(x, ...) {
     }
     mm <- do.call(stats::model.matrix, compact_list(list(x, data = d, dots)))
   } else {
-    mm <- stats::model.matrix(x, data = get_data(x), ...)
+    mm <- stats::model.matrix(x, data = get_data(x, verbose = FALSE), ...)
   }
   mm
 }
@@ -100,7 +100,7 @@ get_modelmatrix.lme <- function(x, ...) {
   # we check the dots for a "data" argument. To make model.matrix work
   # for certain objects, we need to specify the data-argument explicitly,
   # however, if the user provides a data-argument, this should be used instead.
-  .data_in_dots(..., object = x, default_data = get_data(x))
+  .data_in_dots(..., object = x, default_data = get_data(x, verbose = FALSE))
 }
 
 #' @export
@@ -122,7 +122,7 @@ get_modelmatrix.svyglm <- function(x, ...) {
       {
         d <- as.data.frame(dots$data)
         response_name <- find_response(x)
-        response_variable <- get_response(x)
+        response_variable <- get_response(x, as_proportion = TRUE)
         if (is.factor(response_variable)) {
           d[[response_name]] <- levels(response_variable)[1]
         } else {
@@ -147,7 +147,7 @@ get_modelmatrix.svyglm <- function(x, ...) {
 get_modelmatrix.brmsfit <- function(x, ...) {
   formula_rhs <- safe_deparse(find_formula(x)$conditional[[3]])
   formula_rhs <- stats::as.formula(paste0("~", formula_rhs))
-  .data_in_dots(..., object = formula_rhs, default_data = get_data(x))
+  .data_in_dots(..., object = formula_rhs, default_data = get_data(x, verbose = FALSE))
 }
 
 #' @export
@@ -238,26 +238,26 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
 }
 
 
-.pad_modelmatrix <- function(x, data, min_levels = 2) {
-  # return original data if there are already enough factors
-  fac <- lapply(Filter(is.factor, data), unique)
-  fac_len <- sapply(fac, length)
-  if (all(fac_len > min_levels)) {
+.pad_modelmatrix <- function(x, data, ...) {
+  # recycle to include all factors from all variables
+  # min_levels is insufficient when used in stats::model.matrix
+  modeldata <- get_data(x, verbose = FALSE)
+  fac <- lapply(Filter(is.factor, modeldata), unique)
+
+  # no factor
+  if (length(fac) == 0) {
     out <- data
     attr(out, "pad") <- 0
     return(out)
   }
 
-  # factors from data in model object
-  modeldata <- get_data(x)
-  fac <- lapply(Filter(is.factor, modeldata), function(i) unique(i)[1:min_levels])
-  pad <- lapply(seq_len(min_levels), function(...) utils::head(data, n = 1))
-  pad <- do.call("rbind", pad)
+  maxlev <- max(sapply(fac, length))
+  pad <- data[rep(1, maxlev), , drop = FALSE]
   for (n in names(fac)) {
-    pad[[n]] <- fac[[n]]
+    pad[[n]][seq_along(fac[[n]])] <- fac[[n]]
   }
-
   out <- rbind(pad, data)
+  row.names(out) <- NULL
   attr(out, "pad") <- nrow(pad)
   return(out)
 }

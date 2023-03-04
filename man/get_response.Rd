@@ -4,13 +4,17 @@
 \alias{get_response}
 \title{Get the values from the response variable}
 \usage{
-get_response(x, select = NULL, verbose = TRUE)
+get_response(x, select = NULL, as_proportion = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{x}{A fitted model.}
 
 \item{select}{Optional name(s) of response variables for which to extract values.
 Can be used in case of regression models with multiple response variables.}
+
+\item{as_proportion}{Logical, if \code{TRUE} and the response value is a proportion
+(e.g. \code{y1 / y2}), then the returned response value will be a vector with
+the result of this proportion. Else, always a data frame is returned.}
 
 \item{verbose}{Toggle warnings.}
 }
@@ -27,8 +31,9 @@ from all response variables is returned.
 if (require("lme4")) {
   data(cbpp)
   cbpp$trials <- cbpp$size - cbpp$incidence
+  dat <<- cbpp
 
-  m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+  m <- glm(cbind(incidence, trials) ~ period, data = dat, family = binomial)
   head(get_response(m))
   get_response(m, select = "incidence")
 }

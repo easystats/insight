@@ -145,7 +145,7 @@
     {
       s <- suppressWarnings(summary(x, covariance = TRUE))
       cs <- lapply(s, function(i) i$rdf)
-      unique(unlist(cs))
+      unique(unlist(cs, use.names = FALSE))
     },
     error = function(e) {
       NULL
@@ -159,7 +159,7 @@
     {
       s <- suppressWarnings(summary(x, covariance = TRUE))
       cs <- lapply(s, function(i) i$rdf)
-      unique(unlist(cs))
+      unique(unlist(cs, use.names = FALSE))
     },
     error = function(e) {
       NULL

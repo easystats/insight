@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("splines")) {
+if (skip_if_not_or_load_if_installed("splines")) {
   data(iris)
   m1 <- lm(Sepal.Length ~ splines::bs(Petal.Width, df = 4) + Species, data = iris)
 
@@ -30,18 +28,18 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-4)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-4)
   })
 
   test_that("link_function", {
-    expect_equal(link_function(m1)(.2), .2, tolerance = 1e-4)
+    expect_equal(link_function(m1)(0.2), 0.2, tolerance = 1e-4)
   })
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 150)
     expect_equal(
       colnames(get_data(m1)),
-      c("Sepal.Length", "Species", "Petal.Width")
+      c("Sepal.Length", "Petal.Width", "Species")
     )
   })
 

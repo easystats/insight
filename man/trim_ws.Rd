@@ -7,6 +7,7 @@
 \alias{n_unique.default}
 \alias{safe_deparse}
 \alias{safe_deparse_symbol}
+\alias{has_single_value}
 \title{Small helper functions}
 \usage{
 trim_ws(x, ...)
@@ -20,6 +21,8 @@ n_unique(x, ...)
 safe_deparse(x, ...)
 
 safe_deparse_symbol(x)
+
+has_single_value(x, na.rm = FALSE)
 }
 \arguments{
 \item{x}{A (character) vector, or for some functions may also be a data frame.}
@@ -32,16 +35,27 @@ only processes character vectors.}
 \item{na.rm}{Logical, if missing values should be removed from the input.}
 }
 \value{
-For a vector, \code{n_unique} always returns an integer value, even if the
-input is \code{NULL} (the return value will be \code{0} then). For data frames or lists,
-\code{n_unique()} returns a named numeric vector, with the number of unique values
-for each element.
+\itemize{
+\item \code{n_unique()}: For a vector, \code{n_unique} always returns an integer value,
+even if the input is \code{NULL} (the return value will be \code{0} then). For data
+frames or lists, \code{n_unique()} returns a named numeric vector, with the
+number of unique values for each element.
+\item \code{has_single_value()}: \code{TRUE} if \code{x} has only one unique value,
+\code{FALSE} otherwise.
+\item \code{trim_ws()}: A character vector, where trailing and leading white spaces
+are removed.
+\item \code{safe_deparse()}: A character string of the unevaluated expression or symbol.
+\item \code{safe_deparse_symbol()}: A character string of the unevaluated expression
+or symbol, if \code{x} was a symbol. If \code{x} is no symbol (i.e. if \code{is.name(x)}
+would return \code{FALSE}), \code{NULL} is returned.
+}
 }
 \description{
 Collection of small helper functions. \code{trim_ws()} is an
 efficient function to trim leading and trailing whitespaces from character
 vectors or strings. \code{n_unique()} returns the number of unique values in a
-vector. \code{safe_deparse()} is comparable to \code{deparse1()}, i.e. it can safely
+vector. \code{has_single_value()} is equivalent to \code{n_unique() == 1} but is faster.
+\code{safe_deparse()} is comparable to \code{deparse1()}, i.e. it can safely
 deparse very long expressions into a single string. \code{safe_deparse_symbol()}
 only deparses a substituted expressions when possible, which can be much faster
 than \code{deparse(substitute())} for those cases where \code{substitute()} returns no
@@ -50,4 +64,9 @@ valid object name.
 \examples{
 trim_ws("  no space!  ")
 n_unique(iris$Species)
+has_single_value(c(1, 1, 2))
+
+# safe_deparse_symbol() compared to deparse(substitute())
+safe_deparse_symbol(as.name("test"))
+deparse(substitute(as.name("test")))
 }

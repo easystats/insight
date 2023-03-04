@@ -1,10 +1,9 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-  requiet("testthat") &&
-  requiet("insight") &&
-  requiet("splines") &&
-  requiet("glmmTMB") &&
+  skip_if_not_or_load_if_installed("splines") &&
+  skip_if_not_or_load_if_installed("TMB") &&
+  skip_if_not_or_load_if_installed("glmmTMB") &&
   getRversion() >= "4.0.0") {
   data(iris)
 
@@ -22,13 +21,14 @@ if (.runThisTest &&
     mf4 <- get_data(m4)
     mf5 <- model.frame(m5)
 
-    expect_equal(as.vector(mf1$Petal.Width), as.vector(mf5$Petal.Width))
-    expect_equal(as.vector(mf2$Petal.Width), as.vector(mf5$Petal.Width))
-    expect_equal(as.vector(mf3$Petal.Width), as.vector(mf5$Petal.Width))
-    expect_equal(as.vector(mf4$Petal.Width), as.vector(mf5$Petal.Width))
+    expect_identical(as.vector(mf1$Petal.Width), as.vector(mf5$Petal.Width))
+    expect_identical(as.vector(mf2$Petal.Width), as.vector(mf5$Petal.Width))
+    expect_identical(as.vector(mf3$Petal.Width), as.vector(mf5$Petal.Width))
+    expect_identical(as.vector(mf4$Petal.Width), as.vector(mf5$Petal.Width))
   })
 
   data("Salamanders")
+  skip_on_os("mac") # error: FreeADFunObject
   m <- glmmTMB(
     count ~ spp + cover + mined + poly(DOP, 3) + (1 | site),
     ziformula = ~ spp + mined,
@@ -39,10 +39,10 @@ if (.runThisTest &&
 
   test_that("get_data", {
     mf <- get_data(m)
-    expect_equal(ncol(mf), 7)
-    expect_equal(
+    expect_identical(ncol(mf), 7L)
+    expect_identical(
       colnames(mf),
-      c("count", "spp", "cover", "mined", "DOP", "DOY", "site")
+      c("count", "spp", "cover", "mined", "DOP", "site", "DOY")
     )
   })
 }

@@ -1,5 +1,5 @@
 pkgs <- c("testthat", "insight", "ordinal")
-invisible(sapply(pkgs, requiet))
+invisible(sapply(pkgs, skip_if_not_or_load_if_installed))
 
 test_that("get_predicted.default - ordinal - match CI", {
   skip_if(getRversion() < "4.2.0")

@@ -1,14 +1,8 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("nnet") &&
-  requiet("MASS")) {
+if (skip_if_not_or_load_if_installed("nnet") && skip_if_not_or_load_if_installed("MASS")) {
   data("birthwt")
   void <- capture.output({
     m1 <- nnet::multinom(low ~ age + lwt + race + smoke, data = birthwt)
   })
-
-
-
 
   test_that("model_info", {
     expect_true(model_info(m1)$is_binomial)
@@ -33,7 +27,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {

@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("gee")) {
+if (skip_if_not_or_load_if_installed("gee")) {
   data(warpbreaks)
   void <- capture.output(suppressMessages(
     m1 <- gee(breaks ~ tension, id = wool, data = warpbreaks)
@@ -44,7 +42,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("get_data", {

@@ -1,13 +1,14 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
-  if (requiet("testthat") && requiet("insight") && requiet("aod")) {
+  if (skip_if_not_or_load_if_installed("aod")) {
     data(dja)
-    m1 <-
-      suppressWarnings(aod::negbin(y ~ group + offset(log(trisk)),
+    m1 <- suppressWarnings(
+      aod::negbin(y ~ group + offset(log(trisk)),
         random = ~village,
         data = dja
-      ))
+      )
+    )
 
     test_that("model_info", {
       expect_true(model_info(m1)$is_negbin)
@@ -71,16 +72,16 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     })
 
     test_that("link_inverse", {
-      expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+      expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-5)
     })
 
     test_that("link_function", {
-      expect_equal(link_function(m1)(.2), log(.2), tolerance = 1e-5)
+      expect_equal(link_function(m1)(0.2), log(0.2), tolerance = 1e-5)
     })
 
     test_that("get_data", {
-      expect_equal(nrow(get_data(m1)), 75)
-      expect_equal(colnames(get_data(m1)), c("y", "group", "trisk", "village"))
+      expect_equal(nrow(get_data(m1, verbose = FALSE)), 75)
+      expect_equal(colnames(get_data(m1, verbose = FALSE)), c("y", "group", "trisk", "village"))
     })
 
     test_that("find_formula", {

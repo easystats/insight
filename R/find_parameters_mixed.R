@@ -102,7 +102,7 @@ find_parameters.MixMod <- function(x,
 
   l <- compact_list(list(
     conditional = names(lme4::fixef(x, sub_model = "main")),
-    random = re.names[grepl("^(?!zi_)", re.names, perl = TRUE)],
+    random = grep("^(?!zi_)", re.names, perl = TRUE, value = TRUE),
     zero_inflated = z_inflated,
     zero_inflated_random = z_inflated_random
   ))
@@ -115,7 +115,7 @@ find_parameters.MixMod <- function(x,
   l <- compact_list(l[elements])
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -214,7 +214,7 @@ find_parameters.HLfit <- function(x,
   if (effects == "fixed") {
     l <- list(conditional = names(lme4::fixef(x)))
   } else {
-    utils::capture.output(s <- summary(x))
+    utils::capture.output(s <- summary(x)) # nolint
     l <- compact_list(list(
       conditional = names(lme4::fixef(x)),
       random = s$lambda_table$Term

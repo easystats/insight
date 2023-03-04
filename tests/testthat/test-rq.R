@@ -1,14 +1,11 @@
 skip_if_not(getRversion() >= "4.2.0")
 
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("quantreg") &&
-  getRversion() >= "4.2.0") {
+if (skip_if_not_or_load_if_installed("quantreg")) {
   data(stackloss)
   m1 <-
     rq(stack.loss ~ Air.Flow + Water.Temp,
       data = stackloss,
-      tau = .25
+      tau = 0.25
     )
 
   test_that("model_info", {
@@ -83,11 +80,11 @@ if (requiet("testthat") &&
   })
 
   test_that("link_function", {
-    expect_equal(link_function(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_function(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("find_parameters", {

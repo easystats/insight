@@ -12,10 +12,7 @@ osx <- tryCatch(
   }
 )
 
-if (!osx && requiet("testthat") &&
-  requiet("insight") &&
-  requiet("plm") &&
-  requiet("feisr")) {
+if (!osx && skip_if_not_or_load_if_installed("plm") && skip_if_not_or_load_if_installed("feisr")) {
   data(mwp)
   m1 <- feis(
     lnw ~ marry + enrol + as.factor(yeargr) | exp + I(exp^2),
@@ -70,7 +67,7 @@ if (!osx && requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("get_data", {

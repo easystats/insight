@@ -73,6 +73,15 @@ link_function.lm <- function(x, ...) {
 link_function.lme <- link_function.lm
 
 #' @export
+link_function.mmrm <- link_function.lm
+
+#' @export
+link_function.mmrm_fit <- link_function.lm
+
+#' @export
+link_function.mmrm_tmb <- link_function.lm
+
+#' @export
 link_function.systemfit <- link_function.lm
 
 #' @export
@@ -196,6 +205,12 @@ link_function.gmnl <- link_function.multinom
 
 #' @export
 link_function.logistf <- link_function.multinom
+
+#' @export
+link_function.flac <- link_function.multinom
+
+#' @export
+link_function.flic <- link_function.multinom
 
 #' @export
 link_function.lrm <- link_function.multinom

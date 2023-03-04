@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("robustbase")) {
+if (skip_if_not_or_load_if_installed("robustbase")) {
   data(carrots)
 
   m1 <- glmrob(
@@ -47,13 +45,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m1)), 24)
     expect_equal(
       colnames(get_data(m1)),
-      c(
-        "cbind(success, total - success)",
-        "logdose",
-        "block",
-        "success",
-        "total"
-      )
+      c("success", "total", "logdose", "block")
     )
   })
 
@@ -99,11 +91,11 @@ if (requiet("testthat") &&
   })
 
   test_that("link_function", {
-    expect_equal(link_function(m1)(.2), qlogis(.2), tolerance = 1e-5)
+    expect_equal(link_function(m1)(0.2), qlogis(0.2), tolerance = 1e-5)
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
   })
 
   test_that("find_parameters", {

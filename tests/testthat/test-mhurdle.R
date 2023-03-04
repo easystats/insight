@@ -1,4 +1,4 @@
-requiet("mhurdle")
+skip_if_not_or_load_if_installed("mhurdle")
 data("Interview", package = "mhurdle")
 m1 <- mhurdle(shows ~ 0 | linc + smsa + age + educ + size, data = Interview, h2 = TRUE, dist = "n", method = "bhhh")
 m2 <- mhurdle(shows ~ educ + size | linc | smsa + age,

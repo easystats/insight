@@ -22,14 +22,12 @@
 #'   function stops and throws an error. Else, a named logical vector is
 #'   returned, indicating which of the packages are installed, and which not.
 #'
-#' @examples
+#' @examplesIf interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' \dontrun{
-#' check_if_installed("inexistent_package")
 #' check_if_installed("insight")
-#' check_if_installed("insight", minimum_version = "99.8.7")
-#'
-#' x <- check_if_installed(c("inexistent", "also_not_here"), stop = FALSE)
-#' x
+#' try(check_if_installed("nonexistent_package"))
+#' try(check_if_installed("insight", minimum_version = "99.8.7"))
+#' try(check_if_installed(c("nonexistent", "also_not_here"), stop = FALSE))
 #' }
 #' @export
 check_if_installed <- function(package,

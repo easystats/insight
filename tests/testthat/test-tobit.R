@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("AER")) {
+if (skip_if_not_or_load_if_installed("AER")) {
   data("Affairs", package = "AER")
   m1 <-
     AER::tobit(affairs ~ age + yearsmarried + religiousness + occupation + rating,
@@ -63,7 +63,7 @@ if (requiet("testthat") && requiet("insight") && requiet("AER")) {
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("get_data", {

@@ -61,6 +61,7 @@
 #'   is_converged(model)
 #' }
 #'
+#' @examplesIf getOption("warn") < 2L
 #' \dontrun{
 #' if (require("glmmTMB")) {
 #'   model <- glmmTMB(Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +

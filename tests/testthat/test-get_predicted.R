@@ -18,7 +18,7 @@ pkgs <- c(
   "rstantools",
   "psych"
 )
-invisible(sapply(pkgs, requiet))
+suppressPackageStartupMessages(sapply(pkgs, skip_if_not_or_load_if_installed))
 
 
 # LM and GLM --------------------------------------------------------------
@@ -147,7 +147,7 @@ test_that("get_predicted - lm (log)", {
 
 
 test_that("robust vcov", {
-  requiet("sandwich")
+  skip_if_not_or_load_if_installed("sandwich")
   mod <- lm(mpg ~ hp, data = mtcars)
   se0 <- insight:::get_predicted_se(mod)
   se1 <- suppressWarnings(insight:::get_predicted_se(mod, vcov_estimation = "HC"))
@@ -180,7 +180,7 @@ test_that("robust vcov", {
 
 
 test_that("MASS::rlm", {
-  requiet("MASS")
+  skip_if_not_or_load_if_installed("MASS")
   mod <- rlm(mpg ~ hp + am, data = mtcars)
   p <- get_predicted.default(mod)
   expect_s3_class(p, "get_predicted")
@@ -433,8 +433,10 @@ test_that("get_predicted - rstanarm", {
 # =========================================================================
 
 test_that("get_predicted - FA / PCA", {
-  skip_if_not_installed("fungible")
-  skip_if_not_installed("psych")
+  suppressMessages({
+    skip_if_not_installed("fungible")
+    skip_if_not_installed("psych")
+  })
   # PCA
   x <- get_predicted(psych::principal(mtcars, 3))
   expect_equal(dim(x), c(32, 3))
@@ -525,7 +527,7 @@ test_that("hurdle: get_predicted matches `predict()`", {
   unknown <- get_predicted(mod, predict = "response", ci = 0.95, verbose = FALSE)
   expect_equal(known, unknown, ignore_attr = TRUE)
   known <- predict(mod, type = "zero")
-  unknown <- get_predicted(mod, predict = "zero", ci = 0.95, verbose = FALSE)
+  unknown <- suppressWarnings(get_predicted(mod, predict = "zero", ci = 0.95, verbose = FALSE))
   expect_equal(known, unknown, ignore_attr = TRUE)
 })
 
@@ -556,32 +558,31 @@ test_that("bugfix: used to fail with matrix variables", {
 
 test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   skip_if(isFALSE(run_stan))
-  skip_if_not_installed("brms")
-  library(brms)
+  skip_if_not_or_load_if_installed("brms")
   void <- capture.output(
-    mod <- brm(am ~ hp + mpg,
+    suppressMessages(mod <- brm(am ~ hp + mpg,
       family = bernoulli, data = mtcars,
       chains = 2, iter = 1000, seed = 1024, silent = 2
-    )
+    ))
   )
   x <- get_predicted(mod, predict = "link", ci = 0.95)
   y <- get_predicted(mod, predict = "expectation", ci = 0.95)
   z <- get_predicted(mod, predict = NULL, type = "response", ci = 0.95, verbose = FALSE)
   expect_equal(round(x[1], 1), -1.5, tolerance = 1e-1)
-  expect_equal(round(y[1], 1), .2, tolerance = 1e-1)
+  expect_equal(round(y[1], 1), 0.2, tolerance = 1e-1)
   expect_equal(y, z, ignore_attr = TRUE)
 
   data <- mtcars
   data$cyl <- as.character(data$cyl)
   void <- capture.output(
-    suppressWarnings(model <- brm(cyl ~ mpg * vs + (1 | carb),
+    suppressMessages(suppressWarnings(model <- brm(cyl ~ mpg * vs + (1 | carb),
       data = data,
       iter = 1000,
       seed = 1024,
       algorithm = "meanfield",
       refresh = 0,
       family = categorical(link = "logit", refcat = "4")
-    ))
+    )))
   )
   x <- as.data.frame(get_predicted(model, ci = 0.95))
   # Test shape
@@ -646,3 +647,20 @@ test_that("zero-inflation stuff works", {
   expect_equal(p2, p4, tolerance = 1e-1, ignore_attr = TRUE)
   expect_equal(p3, p4, tolerance = 1e-1, ignore_attr = TRUE)
 })
+
+
+
+
+
+# # Bug: incorrect results when var-cov and model matrix do not have exactly the same columns
+# library(insight)
+# set.seed(12345)
+# n <- 500
+# x <- sample(1:3, n, replace = TRUE)
+# y <- rnorm(n)
+# z <- ifelse(x + y + rlogis(n) > 1.5, 1, 0)
+# dat <- data.frame(x = factor(x), y = y, z = z)
+# m <- glm(z ~ x + y, family = binomial, data = dat)
+# nd <- head(dat, 2)
+# get_predicted(m, data = head(dat, 2), ci = 0.95, predict = "link") |> data.frame()
+# predict(m, type = "link", newdata = nd, se.fit = TRUE)$se.fit

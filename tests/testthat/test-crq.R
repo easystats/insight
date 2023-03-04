@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("quantreg")) {
+if (skip_if_not_or_load_if_installed("quantreg")) {
   set.seed(123)
   n <- 200
   x <- rnorm(n)
@@ -8,7 +6,7 @@ if (requiet("testthat") &&
   c <- 4 + x + rnorm(n)
   d <- (y > c)
 
-  dat <- data.frame(y, x, c, d)
+  dat <<- data.frame(y, x, c, d)
 
   # model
   m1 <- crq(survival::Surv(pmax(y, c), d, type = "left") ~ x, method = "Portnoy", data = dat)
@@ -31,7 +29,7 @@ if (requiet("testthat") &&
 
 
   test_that("find_response", {
-    expect_identical(find_response(m1), "Surv(pmax(y, c), d, type = \"left\")")
+    expect_identical(find_response(m1), "survival::Surv(pmax(y, c), d, type = \"left\")")
   })
 
   test_that("get_predictors", {
@@ -42,7 +40,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m1)), 200)
     expect_equal(
       colnames(get_data(m1)),
-      c("y", "x", "c", "d")
+      c("y", "c", "d", "x")
     )
   })
 
@@ -74,11 +72,11 @@ if (requiet("testthat") &&
   })
 
   test_that("link_function", {
-    expect_equal(link_function(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_function(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("find_parameters", {

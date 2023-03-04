@@ -32,7 +32,7 @@ find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
   pars <- compact_list(pars)
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -61,7 +61,7 @@ find_parameters.gam <- function(x,
   pars <- compact_list(pars[elements])
 
   if (flatten) {
-    unique(unlist(pars))
+    unique(unlist(pars, use.names = FALSE))
   } else {
     pars
   }
@@ -113,7 +113,7 @@ find_parameters.gamm <- function(x,
   l <- find_parameters.gam(x, component = component)
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -143,7 +143,7 @@ find_parameters.cgam <- function(x,
   l <- compact_list(l[elements])
 
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }
@@ -160,7 +160,7 @@ find_parameters.SemiParBIV <- function(x, flatten = FALSE, ...) {
     as.vector(i$Parameter)
   })
   if (flatten) {
-    unique(unlist(l))
+    unique(unlist(l, use.names = FALSE))
   } else {
     l
   }

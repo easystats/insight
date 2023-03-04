@@ -97,7 +97,7 @@
 # if there are any chars left, these come from further terms that come after
 # random effects...
 .formula_empty_after_random_effect <- function(f) {
-  nchar(gsub("(~|\\+|\\*|-|/|:)", "", gsub(" ", "", gsub("\\((.*)\\)", "", f)))) == 0
+  nchar(gsub("(~|\\+|\\*|-|/|:)", "", gsub(" ", "", gsub("\\((.*)\\)", "", f), fixed = TRUE))) == 0
 }
 
 
@@ -125,19 +125,17 @@
       split_nested <- FALSE
     }
   } else {
-    re <- trim_ws(substring(re, max(gregexpr(pattern = "\\|", re)[[1]]) + 1))
+    re <- trim_ws(substring(re, max(gregexpr(pattern = "|", re, fixed = TRUE)[[1]]) + 1))
   }
 
   # check for multi-membership models
-  if (inherits(model, "brmsfit")) {
-    if (grepl("mm\\((.*)\\)", re)) {
-      re <- trim_ws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",")))
-    }
+  if (inherits(model, "brmsfit") && grepl("mm\\((.*)\\)", re)) {
+    re <- trim_ws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",", fixed = TRUE)))
   }
 
   if (split_nested) {
     # remove parenthesis for nested models
-    re <- unique(unlist(strsplit(re, "\\:")))
+    re <- unique(unlist(strsplit(re, ":", fixed = TRUE)))
 
     # nested random effects, e.g. g1 / g2 / g3, deparse to "g0:(g1:g2)".
     # when we split at ":", we have "g0", "(g1" and "g2)". In such cases,
@@ -173,9 +171,7 @@
 # .get_model_random()
 .get_group_factor <- function(x, f) {
   if (is.list(f)) {
-    f <- lapply(f, function(.x) {
-      .get_model_random(.x, split_nested = TRUE, x)
-    })
+    f <- lapply(f, .get_model_random, split_nested = TRUE, model = x)
   } else {
     f <- .get_model_random(f, split_nested = TRUE, x)
   }
@@ -185,7 +181,7 @@
   }
 
   if (is.list(f)) {
-    f <- lapply(f, function(i) sapply(i, as.symbol))
+    f <- lapply(f, sapply, as.symbol)
   } else {
     f <- sapply(f, as.symbol)
   }
@@ -331,13 +327,13 @@
 
 .filter_pars_univariate <- function(l, parameters) {
   lapply(l, function(component) {
-    unlist(unname(sapply(
+    unlist(sapply(
       parameters,
       function(pattern) {
-        component[grepl(pattern = pattern, x = component, perl = TRUE)]
+        grep(pattern = pattern, x = component, perl = TRUE, value = TRUE)
       },
       simplify = FALSE
-    )))
+    ), use.names = FALSE)
   })
 }
 
@@ -539,7 +535,8 @@
     return(as.numeric(x))
   }
 
-  if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
+  x_no_na <- x[!is.na(x)]
+  if (anyNA(suppressWarnings(as.numeric(as.character(x_no_na))))) {
     if (is.character(x)) {
       x <- as.factor(x)
     }
@@ -640,7 +637,8 @@
       expandSlash(list(bb))
     } else {
       unlist(lapply(bb, function(x) {
-        if (length(x) > 2 && is.list(trms <- slashTerms(x[[3]]))) {
+        trms <- slashTerms(x[[3]])
+        if (length(x) > 2 && is.list(trms)) {
           lapply(unlist(makeInteraction(trms)), function(trm) {
             substitute(foo | bar, list(foo = x[[2]], bar = trm))
           })
@@ -722,10 +720,8 @@
 
 
 .isBar <- function(term) {
-  if (is.call(term)) {
-    if ((term[[1]] == as.name("|")) || (term[[1]] == as.name("||"))) {
-      return(TRUE)
-    }
+  if (is.call(term) && ((term[[1]] == as.name("|") || term[[1]] == as.name("||")))) {
+    return(TRUE)
   }
   FALSE
 }
@@ -783,7 +779,11 @@ is.emmean <- function(x) {
   c_ <- is.emmeans.contrast(x)
   t_ <- is.emmeans.trend(x)
 
-  ifelse(c_, "contrasts",
-    ifelse(t_, "emtrends", "emmeans")
-  )
+  if (isTRUE(c_)) {
+    "contrasts"
+  } else if (isTRUE(t_)) {
+    "emtrends"
+  } else {
+    "emmeans"
+  }
 }

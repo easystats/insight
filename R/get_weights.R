@@ -92,9 +92,9 @@ get_weights.brmsfit <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
 
   if (!is.null(w)) {
     if (length(w) > 1) {
-      return(get_data(x)[w])
+      return(get_data(x, verbose = FALSE)[w])
     } else {
-      w <- get_data(x)[[w]]
+      w <- get_data(x, verbose = FALSE)[[w]]
     }
   }
 

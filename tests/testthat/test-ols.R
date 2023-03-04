@@ -1,6 +1,6 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("rms")) {
+if (
+
+  skip_if_not_or_load_if_installed("rms")) {
   data(mtcars)
   m1 <- ols(mpg ~ rcs(hp, 3) * cyl + wt, data = mtcars)
 
@@ -36,7 +36,7 @@ if (requiet("testthat") &&
 
   test_that("get_data", {
     expect_equal(nrow(get_data(m1)), 32)
-    expect_equal(colnames(get_data(m1)), c("mpg", "cyl", "wt", "hp"))
+    expect_equal(colnames(get_data(m1)), c("mpg", "hp", "cyl", "wt"))
   })
 
   test_that("find_formula", {
@@ -64,11 +64,11 @@ if (requiet("testthat") &&
   })
 
   test_that("linkfun", {
-    expect_equal(link_function(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_function(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("find_parameters", {

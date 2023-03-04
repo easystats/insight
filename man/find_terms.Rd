@@ -46,10 +46,10 @@ name only once.
 \examples{
 if (require("lme4")) {
   data(sleepstudy)
-  m <- lmer(
+  m <- suppressWarnings(lmer(
     log(Reaction) ~ Days + I(Days^2) + (1 + Days + exp(Days) | Subject),
     data = sleepstudy
-  )
+  ))
 
   find_terms(m)
 }

@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   test_that("find_terms", {
     m <- lm(Sepal.Length ~ -1 + Petal.Width + Species, data = iris)
     expect_equal(
@@ -28,7 +28,7 @@ if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
 
   set.seed(1984)
   dat <- data.frame(
-    y = rnorm(100 * 5, sd = 1 - .20),
+    y = rnorm(100 * 5, sd = 1 - 0.20),
     time = rep(1:10, 10 * 5),
     g1 = sort(rep(1:100, 5)),
     g2 = sort(rep(1:10, 10 * 5))

@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("lmtest")) {
+if (skip_if_not_or_load_if_installed("lmtest")) {
   data("Mandible", package = "lmtest")
   m <- lm(length ~ age, data = Mandible, subset = (age <= 28))
   ct1 <- coeftest(m)

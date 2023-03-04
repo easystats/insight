@@ -1,23 +1,21 @@
-if (requiet("testthat") && requiet("insight") && requiet("rms")) {
+if (skip_if_not_or_load_if_installed("rms")) {
   n <- 400
   set.seed(1)
   age <- rnorm(n, 50, 12)
   sex <- factor(sample(c("Female", "Male"), n, TRUE))
   # Population hazard function:
-  h <- .02 * exp(.06 * (age - 50) + .8 * (sex == "Female"))
+  h <- 0.02 * exp(0.06 * (age - 50) + 0.8 * (sex == "Female"))
   d.time <- -log(runif(n)) / h
   cens <- 15 * runif(n)
   death <- ifelse(d.time <= cens, 1, 0)
   d.time <- pmin(d.time, cens)
 
-  dat <-
-    data.frame(d.time, death, sex, age, stringsAsFactors = FALSE)
+  dat <<- data.frame(d.time, death, sex, age, stringsAsFactors = FALSE)
 
-  m1 <-
-    psm(Surv(d.time, death) ~ sex * pol(age, 2),
-      dist = "lognormal",
-      data = dat
-    )
+  m1 <- psm(Surv(d.time, death) ~ sex * pol(age, 2),
+    dist = "lognormal",
+    data = dat
+  )
 
   test_that("model_info", {
     expect_false(model_info(m1)$is_binomial)
@@ -52,7 +50,7 @@ if (requiet("testthat") && requiet("insight") && requiet("rms")) {
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {

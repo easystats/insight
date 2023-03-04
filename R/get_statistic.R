@@ -149,6 +149,16 @@ get_statistic.lme <- function(x, ...) {
 #' @export
 get_statistic.lmerModLmerTest <- get_statistic.lme
 
+#' @export
+get_statistic.mmrm <- function(x, ...) {
+  get_statistic.default(x, column_index = 4)
+}
+
+#' @export
+get_statistic.mmrm_fit <- get_statistic.mmrm
+
+#' @export
+get_statistic.mmrm_tmb <- get_statistic.mmrm
 
 #' @export
 get_statistic.merModList <- function(x, ...) {
@@ -406,18 +416,32 @@ get_statistic.Gam <- function(x, ...) {
 
 #' @export
 get_statistic.gam <- function(x, ...) {
-  cs <- summary(x)$p.table
-  cs.smooth <- summary(x)$s.table
+  p.table <- summary(x)$p.table
+  s.table <- summary(x)$s.table
 
-  out <- data.frame(
-    Parameter = c(rownames(cs), rownames(cs.smooth)),
-    Statistic = c(as.vector(cs[, 3]), as.vector(cs.smooth[, 3])),
-    Component = c(rep("conditional", nrow(cs)), rep("smooth_terms", nrow(cs.smooth))),
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
+  d1 <- d2 <- NULL
 
-  out <- text_remove_backticks(out)
+  if (!is.null(p.table)) {
+    d1 <- data.frame(
+      Parameter = rownames(p.table),
+      Statistic = as.vector(p.table[, 3]),
+      Component = "conditional",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
+
+  if (!is.null(s.table)) {
+    d2 <- data.frame(
+      Parameter = rownames(s.table),
+      Statistic = as.vector(s.table[, 3]),
+      Component = "smooth_terms",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
+
+  out <- text_remove_backticks(rbind(d1, d2))
   attr(out, "statistic") <- find_statistic(x)
   out
 }
@@ -430,7 +454,7 @@ get_statistic.scam <- get_statistic.gam
 #' @export
 get_statistic.SemiParBIV <- function(x, ...) {
   s <- summary(x)
-  s <- compact_list(s[grepl("^tableP", names(s))])
+  s <- compact_list(s[startsWith(names(s), "tableP")])
 
   params <- do.call(rbind, lapply(seq_along(s), function(i) {
     out <- as.data.frame(s[[i]])
@@ -470,7 +494,7 @@ get_statistic.list <- function(x, ...) {
 #' @export
 get_statistic.gamlss <- function(x, ...) {
   parms <- get_parameters(x)
-  utils::capture.output(cs <- summary(x))
+  utils::capture.output(cs <- summary(x)) # nolint
 
   out <- data.frame(
     Parameter = parms$Parameter,
@@ -639,7 +663,7 @@ get_statistic.coxme <- function(x, ...) {
 
 #' @export
 get_statistic.riskRegression <- function(x, ...) {
-  junk <- utils::capture.output(cs <- stats::coef(x))
+  junk <- utils::capture.output(cs <- stats::coef(x)) # nolint
 
   out <- data.frame(
     Parameter = as.vector(cs[, 1]),
@@ -766,7 +790,7 @@ get_statistic.mvord <- function(x,
                                 component = c("all", "conditional", "thresholds", "correlation"),
                                 ...) {
   component <- match.arg(component)
-  junk <- utils::capture.output(s <- summary(x))
+  junk <- utils::capture.output(s <- summary(x)) # nolint
   # intercepts thresholds
   thresholds <- as.data.frame(s$thresholds)
   thresholds$Parameter <- rownames(thresholds)
@@ -1292,7 +1316,7 @@ get_statistic.ivprobit <- function(x, ...) {
 
 #' @export
 get_statistic.HLfit <- function(x, ...) {
-  utils::capture.output(s <- summary(x))
+  utils::capture.output(s <- summary(x)) # nolint
 
   out <- data.frame(
     Parameter = rownames(s$beta_table),
@@ -1652,7 +1676,7 @@ get_statistic.cpglm <- function(x, ...) {
   # installed?
   check_if_installed("cplm")
 
-  junk <- utils::capture.output(stats <- cplm::summary(x)$coefficients)
+  junk <- utils::capture.output(stats <- cplm::summary(x)$coefficients) # nolint
   params <- get_parameters(x)
 
   out <- data.frame(
@@ -1676,7 +1700,7 @@ get_statistic.zcpglm <- function(x,
   check_if_installed("cplm")
 
   component <- match.arg(component)
-  junk <- utils::capture.output(stats <- cplm::summary(x)$coefficients)
+  junk <- utils::capture.output(stats <- cplm::summary(x)$coefficients) # nolint
   params <- get_parameters(x)
 
   tweedie <- data.frame(
@@ -2076,7 +2100,7 @@ get_statistic.complmrob <- function(x, ...) {
 #' @export
 get_statistic.logistf <- function(x, ...) {
   parms <- get_parameters(x)
-  utils::capture.output(s <- summary(x))
+  utils::capture.output(s <- summary(x)) # nolint
 
   out <- data.frame(
     Parameter = parms$Parameter,
@@ -2089,6 +2113,11 @@ get_statistic.logistf <- function(x, ...) {
   out
 }
 
+#' @export
+get_statistic.flac <- get_statistic.logistf
+
+#' @export
+get_statistic.flic <- get_statistic.logistf
 
 
 #' @export
@@ -2188,7 +2217,7 @@ get_statistic.DirichletRegModel <- function(x,
                                             ...) {
   component <- match.arg(component)
   parms <- get_parameters(x)
-  junk <- utils::capture.output(cs <- summary(x)$coef.mat)
+  junk <- utils::capture.output(cs <- summary(x)$coef.mat) # nolint
 
   out <- data.frame(
     Parameter = parms$Parameter,
@@ -2304,7 +2333,7 @@ get_statistic.metaplus <- function(x, ...) {
   ci_low <- as.vector(x$results[, "95% ci.lb"])
   ci_high <- as.vector(x$results[, "95% ci.ub"])
   cis <- apply(cbind(ci_low, ci_high), MARGIN = 1, diff)
-  se <- cis / (2 * stats::qnorm(.975))
+  se <- cis / (2 * stats::qnorm(0.975))
 
   out <- data.frame(
     Parameter = params$Parameter,

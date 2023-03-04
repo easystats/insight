@@ -1,8 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("pscl")) {
+if (skip_if_not_or_load_if_installed("pscl")) {
   data("bioChemists")
 
   m1 <- zeroinfl(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)
@@ -38,7 +36,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {
@@ -136,7 +134,7 @@ if (requiet("testthat") &&
   })
 
 
-  if (.runThisTest && requiet("sandwich")) {
+  if (.runThisTest && skip_if_not_or_load_if_installed("sandwich")) {
     set.seed(123)
     vc1 <- get_varcov(m1, component = "all", vcov = "BS", vcov_args = list(R = 50))
     set.seed(123)

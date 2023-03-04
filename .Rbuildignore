@@ -6,6 +6,7 @@
 ^doc$
 ^LICENSE
 ^_pkgdown\.yml$
+^_pkgdown\.yaml$
 ^appveyor\.yml$
 ^pkgdown$
 ^README.Rmd
@@ -18,3 +19,4 @@
 \.code-workspace$
 \.lintr$
 ^CRAN-SUBMISSION$
+^Rplots.pdf$

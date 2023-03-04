@@ -1,6 +1,6 @@
-requiet("survival")
-requiet("insight")
-requiet("JM")
+skip_if_not_or_load_if_installed("survival")
+skip_if_not_or_load_if_installed("insight")
+skip_if_not_or_load_if_installed("JM")
 
 lung <- subset(survival::lung, subset = ph.ecog %in% 0:2)
 lung$sex <- factor(lung$sex, labels = c("male", "female"))
@@ -25,7 +25,7 @@ test_that("find_response", {
 })
 
 test_that("link_inverse", {
-  expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
+  expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
 })
 
 test_that("get_data", {
@@ -135,12 +135,13 @@ test_that("JM", {
   data("aids", package = "JM")
   m <- coxph(Surv(start, stop, event) ~ CD4, data = aids)
   d <- get_data(m)
-  expect_equal(dim(d), c(1405, 12))
+  expect_equal(dim(d), c(1405, 4))
+  expect_equal(colnames(d), c("start", "stop", "event", "CD4"))
   expect_equal(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
 })
 
 test_that("get_statistic", {
-  requiet("survival")
+  skip_if_not_or_load_if_installed("survival")
   bladder1 <- bladder[bladder$enum < 5, ]
   mod <- coxph(
     Surv(stop, event) ~ (rx + size + number) * strata(enum),

@@ -1,11 +1,11 @@
-if (requiet("testthat") && requiet("insight") && requiet("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   data(mtcars)
   data(sleepstudy)
   data(cbpp)
   set.seed(123)
-  mtcars$w <- abs(rnorm(nrow(mtcars), mean = 1, .3))
-  sleepstudy$w <- abs(rnorm(nrow(sleepstudy), mean = 1, .3))
-  cbpp$w <- abs(rnorm(nrow(cbpp), mean = 1, .3))
+  mtcars$w <- abs(rnorm(nrow(mtcars), mean = 1, 0.3))
+  sleepstudy$w <- abs(rnorm(nrow(sleepstudy), mean = 1, 0.3))
+  cbpp$w <- abs(rnorm(nrow(cbpp), mean = 1, 0.3))
 
   test_that("get_residuals - lm", {
     m <- lm(am ~ cyl, weights = w, data = mtcars)

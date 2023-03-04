@@ -15,9 +15,16 @@
 \usage{
 get_data(x, ...)
 
-\method{get_data}{default}(x, verbose = TRUE, ...)
+\method{get_data}{default}(x, source = "environment", verbose = TRUE, ...)
 
-\method{get_data}{glmmTMB}(x, effects = "all", component = "all", verbose = TRUE, ...)
+\method{get_data}{glmmTMB}(
+  x,
+  effects = "all",
+  component = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+)
 
 \method{get_data}{afex_aov}(x, shape = c("long", "wide"), ...)
 
@@ -51,6 +58,23 @@ get_data(x, ...)
 \item{x}{A fitted model.}
 
 \item{...}{Currently not used.}
+
+\item{source}{String, indicating from where data should be recovered. If
+\code{source = "environment"} (default), data is recovered from the environment
+(e.g. if the data is in the workspace). This option is usually the fastest
+way of getting data and ensures that the original variables used for model
+fitting are returned. Note that always the \emph{current} data is recovered from
+the environment. Hence, if the data was modified \emph{after} model fitting
+(e.g., variables were recoded or rows filtered), the returned data may no
+longer equal the model data. If \code{source = "frame"} (or \code{"mf"}), the data
+is taken from the model frame. Any transformed variables are back-transformed,
+if possible. This option returns the data even if it is not available in
+the environment, however, in certain edge cases back-transforming to the
+original data may fail. If \code{source = "environment"} fails to recover the
+data, it tries to extract the data from the model frame; if
+\code{source = "frame"} and data cannot be extracted from the model frame, data
+will be recovered from the environment. Both ways only returns observations
+that have no missing data in the variables used for model fitting.}
 
 \item{verbose}{Toggle messages and warnings.}
 
@@ -87,14 +111,6 @@ The data that was used to fit the model.
 \description{
 This functions tries to get the data that was used to fit the
 model and returns it as data frame.
-}
-\note{
-Unlike \code{model.frame()}, which may contain transformed variables
-(e.g. if \code{poly()} or \code{scale()} was used inside the formula to
-specify the model), \code{get_data()} aims at returning the "original",
-untransformed data (if possible). Consequently, column names are changed
-accordingly, i.e. \code{"log(x)"} will become \code{"x"} etc. for all data
-columns with transformed values.
 }
 \section{Model components}{
 

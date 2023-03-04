@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >= "3.0.1" &&
-  requiet("testthat") && requiet("insight") && requiet("lme4")) {
+if (.runThisTest && skip_if_not_or_load_if_installed("robustlmm") && utils::packageVersion("robustlmm") >= "3.0.1" &&
+  skip_if_not_or_load_if_installed("lme4") && getRversion() >= "4.1.0") {
   data(sleepstudy)
 
   set.seed(123)
@@ -16,16 +16,18 @@ if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >
       )
   }
 
+  dat <<- sleepstudy
+
   m1 <- rlmer(
     Reaction ~ Days + (Days | Subject),
-    data = sleepstudy,
+    data = dat,
     rho.sigma.e = psi2propII(smoothPsi, k = 2.28),
     rho.sigma.b = chgDefaults(smoothPsi, k = 5.11, s = 10)
   )
 
   m2 <- rlmer(
     Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-    data = sleepstudy,
+    data = dat,
     rho.sigma.e = psi2propII(smoothPsi, k = 2.28),
     rho.sigma.b = chgDefaults(smoothPsi, k = 5.11, s = 10)
   )
@@ -36,63 +38,63 @@ if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >
   })
 
   test_that("find_predictors", {
-    expect_equal(
+    expect_identical(
       find_predictors(m1, effects = "all"),
       list(conditional = "Days", random = "Subject")
     )
-    expect_equal(
+    expect_identical(
       find_predictors(m1, effects = "all", flatten = TRUE),
       c("Days", "Subject")
     )
-    expect_equal(
+    expect_identical(
       find_predictors(m1, effects = "fixed"),
       list(conditional = "Days")
     )
-    expect_equal(
+    expect_identical(
       find_predictors(m1, effects = "fixed", flatten = TRUE),
       "Days"
     )
-    expect_equal(
+    expect_identical(
       find_predictors(m1, effects = "random"),
       list(random = "Subject")
     )
-    expect_equal(
+    expect_identical(
       find_predictors(m1, effects = "random", flatten = TRUE),
       "Subject"
     )
-    expect_equal(
+    expect_identical(
       find_predictors(m2, effects = "all"),
       list(
         conditional = "Days",
         random = c("mysubgrp", "mygrp", "Subject")
       )
     )
-    expect_equal(
+    expect_identical(
       find_predictors(m2, effects = "all", flatten = TRUE),
       c("Days", "mysubgrp", "mygrp", "Subject")
     )
-    expect_equal(
+    expect_identical(
       find_predictors(m2, effects = "fixed"),
       list(conditional = "Days")
     )
-    expect_equal(find_predictors(m2, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
+    expect_identical(find_predictors(m2, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
     expect_null(find_predictors(m2, effects = "all", component = "zi"))
     expect_null(find_predictors(m2, effects = "fixed", component = "zi"))
     expect_null(find_predictors(m2, effects = "random", component = "zi"))
   })
 
   test_that("find_random", {
-    expect_equal(find_random(m1), list(random = "Subject"))
-    expect_equal(find_random(m1, flatten = TRUE), "Subject")
-    expect_equal(find_random(m2), list(random = c(
+    expect_identical(find_random(m1), list(random = "Subject"))
+    expect_identical(find_random(m1, flatten = TRUE), "Subject")
+    expect_identical(find_random(m2), list(random = c(
       "mysubgrp:mygrp", "mygrp", "Subject"
     )))
-    expect_equal(find_random(m2, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
-    expect_equal(
+    expect_identical(find_random(m2, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
+    expect_identical(
       find_random(m2, flatten = TRUE),
       c("mysubgrp:mygrp", "mygrp", "Subject")
     )
-    expect_equal(
+    expect_identical(
       find_random(m2, split_nested = TRUE, flatten = TRUE),
       c("mysubgrp", "mygrp", "Subject")
     )
@@ -104,27 +106,27 @@ if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), sleepstudy$Reaction)
+    expect_identical(get_response(m1), sleepstudy$Reaction)
   })
 
   test_that("link_inverse", {
-    expect_identical(link_inverse(m1)(.2), .2)
-    expect_identical(link_inverse(m2)(.2), .2)
+    expect_identical(link_inverse(m1)(0.2), 0.2)
+    expect_identical(link_inverse(m2)(0.2), 0.2)
   })
 
   test_that("get_data", {
-    expect_equal(colnames(get_data(m1)), c("Reaction", "Days", "Subject"))
-    expect_equal(colnames(get_data(m1, effects = "all")), c("Reaction", "Days", "Subject"))
-    expect_equal(colnames(get_data(m1, effects = "random")), "Subject")
-    expect_equal(
+    expect_identical(colnames(get_data(m1)), c("Reaction", "Days", "Subject"))
+    expect_identical(colnames(get_data(m1, effects = "all")), c("Reaction", "Days", "Subject"))
+    expect_identical(colnames(get_data(m1, effects = "random")), "Subject")
+    expect_identical(
       colnames(get_data(m2)),
       c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
     )
-    expect_equal(
+    expect_identical(
       colnames(get_data(m2, effects = "all")),
       c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
     )
-    expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
+    expect_identical(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
   })
 
   test_that("find_formula", {
@@ -221,17 +223,17 @@ if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >
   })
 
   test_that("find_parameters", {
-    expect_equal(
+    expect_identical(
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "Days"),
         random = list(Subject = c("(Intercept)", "Days"))
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 2)
-    expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "Days"))
+    expect_identical(nrow(get_parameters(m1)), 2L)
+    expect_identical(get_parameters(m1)$Parameter, c("(Intercept)", "Days"))
 
-    expect_equal(
+    expect_identical(
       find_parameters(m2),
       list(
         conditional = c("(Intercept)", "Days"),
@@ -243,10 +245,10 @@ if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >
       )
     )
 
-    expect_equal(nrow(get_parameters(m2)), 2)
-    expect_equal(get_parameters(m2)$Parameter, c("(Intercept)", "Days"))
-    expect_equal(
-      names(get_parameters(m2, effects = "random")),
+    expect_identical(nrow(get_parameters(m2)), 2L)
+    expect_identical(get_parameters(m2)$Parameter, c("(Intercept)", "Days"))
+    expect_named(
+      get_parameters(m2, effects = "random"),
       c("mysubgrp:mygrp", "Subject", "mygrp")
     )
   })
@@ -284,14 +286,14 @@ if (.runThisTest && requiet("robustlmm") && utils::packageVersion("robustlmm") >
   })
 
   test_that("find_algorithm", {
-    expect_equal(
+    expect_identical(
       find_algorithm(m1),
       list(algorithm = "REML", optimizer = "rlmer.fit.DAS.nondiag")
     )
   })
 
   test_that("find_random_slopes", {
-    expect_equal(find_random_slopes(m1), list(random = "Days"))
+    expect_identical(find_random_slopes(m1), list(random = "Days"))
     expect_null(find_random_slopes(m2))
   })
 

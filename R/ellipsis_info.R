@@ -56,7 +56,10 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
       }
       if (all(startsWith(object_names, "list("))) {
         # we now should have something like "list(m1, m2)" ...
-        object_names <- trim_ws(unlist(strsplit(gsub("list\\((.*)\\)", "\\1", object_names), ",")))
+        object_names <- trim_ws(unlist(
+          strsplit(gsub("list\\((.*)\\)", "\\1", object_names), ",", fixed = TRUE),
+          use.names = FALSE
+        ))
       } else {
         # ... or a variable/object name, in which case we can use the names
         # of the list-elements directly
@@ -78,10 +81,10 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
   is_model <- vapply(objects, is_model, logical(1))
 
   # Drop non-models if need be
-  if (only_models && any(!is_model)) {
+  if (only_models && !all(is_model)) {
     if (isTRUE(verbose)) {
       format_warning(paste(
-        paste0(object_names[!is_model], collapse = ", "),
+        toString(object_names[!is_model]),
         "are not supported models and have been dropped."
       ))
     }
@@ -196,7 +199,8 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
     # order of df from models
     model_df <- sapply(objects, n_parameters)
-    identical_models <- is_nested && any(duplicated(model_df)) && length(unique(sapply(objects, model_name, include_formula = FALSE))) == 1
+    model_names <- sapply(objects, model_name, include_formula = FALSE)
+    identical_models <- is_nested && anyDuplicated(model_df) > 0 && all(model_names == model_names[1])
 
     attr(objects, "is_nested_increasing") <- all(is_nested_increasing)
     attr(objects, "is_nested_decreasing") <- all(is_nested_decreasing)

@@ -1,7 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("truncreg") &&
-  requiet("survival")) {
+if (skip_if_not_or_load_if_installed("truncreg") && skip_if_not_or_load_if_installed("survival")) {
   data("tobin", package = "survival")
   m1 <- truncreg(durable ~ age + quant, data = tobin, subset = durable > 0)
 
@@ -20,7 +17,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("get_data", {

@@ -31,7 +31,7 @@ get_predicted.clm <- function(x,
 
   # hack to get predictions for all response levels
   if (is.null(data)) {
-    data <- get_data(x)
+    data <- get_data(x, verbose = FALSE)
   }
   resp <- find_response(x)
   data <- data[, setdiff(colnames(data), resp), drop = FALSE]
@@ -132,7 +132,7 @@ get_predicted.clm <- function(x,
 # =======================================================================
 
 #' @export
-get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = 0.95, verbose = TRUE, ...) {
+get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = NULL, verbose = TRUE, ...) {
   dots <- list(...)
 
   # `type` argument can be: probs | class
@@ -158,14 +158,16 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci =
   out <- .get_predicted_out(out, args = args)
 
   # add CI
-  attr(out, "ci_data") <- get_predicted_ci(
-    x,
-    predictions = out,
-    data = data,
-    ci = ci,
-    type = type_arg,
-    verbose = verbose
-  )
+  if (!is.null(ci)) {
+    attr(out, "ci_data") <- get_predicted_ci(
+      x,
+      predictions = out,
+      data = data,
+      ci = ci,
+      type = type_arg,
+      verbose = verbose
+    )
+  }
 
   out
 }

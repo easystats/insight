@@ -2,11 +2,13 @@
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
 if (.runThisTest && .runStanTest) {
-  if (suppressWarnings(requiet("testthat") &&
-    requiet("insight") && requiet("lme4") &&
-    requiet("BayesFactor") &&
-    requiet("rstanarm"))) {
+  if (suppressWarnings(
+    skip_if_not_or_load_if_installed("lme4") &&
+      skip_if_not_or_load_if_installed("BayesFactor") &&
+      skip_if_not_or_load_if_installed("rstanarm")
+  )) {
     # skip_on_cran()
+    skip_if_offline()
 
     # defining models ---------------------
 
@@ -15,7 +17,7 @@ if (.runThisTest && .runStanTest) {
     m3 <- insight::download_model("stanreg_glm_1")
 
     data("puzzles")
-    m4 <-
+    m4 <- suppressWarnings(
       stan_glm(
         RT ~ color * shape,
         data = puzzles,
@@ -24,7 +26,8 @@ if (.runThisTest && .runStanTest) {
         chains = 2,
         refresh = 0
       )
-    m5 <-
+    )
+    m5 <- suppressWarnings(
       stan_glm(
         RT ~ color * shape,
         data = puzzles,
@@ -33,12 +36,15 @@ if (.runThisTest && .runStanTest) {
         chains = 2,
         refresh = 0
       )
+    )
     m6 <- insight::download_model("stanreg_gamm4_1")
 
-    m7 <- suppressWarnings(stan_lm(mpg ~ wt + qsec + am,
-      data = mtcars, prior = R2(0.75),
-      chains = 1, iter = 300, refresh = 0
-    ))
+    m7 <- suppressWarnings(
+      stan_lm(mpg ~ wt + qsec + am,
+        data = mtcars, prior = R2(0.75),
+        chains = 1, iter = 300, refresh = 0
+      )
+    )
 
     m8 <- stan_lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy, refresh = 0)
 
@@ -74,31 +80,42 @@ if (.runThisTest && .runStanTest) {
     y <- mtcars$mpg[not_NA]
     ybar <- mean(y)
     s_y <- sd(y)
-    m11 <- suppressWarnings(stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
-      prior = R2(.75),
-      # the next line is only to make the example go fast
-      chains = 1, iter = 500, seed = 12345
-    ))
+    m11 <- suppressWarnings(
+      stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
+        prior = R2(0.75),
+        # the next line is only to make the example go fast
+        refresh = 0,
+        chains = 1, iter = 500, seed = 12345
+      )
+    )
 
     dat <- infert[order(infert$stratum), ] # order by strata
-    m12 <- suppressWarnings(stan_clogit(case ~ spontaneous + induced + (1 | education),
-      strata = stratum,
-      data = dat,
-      subset = parity <= 2,
-      QR = TRUE,
-      chains = 2, iter = 500, refresh = 0
-    )) # for speed only
+    m12 <- suppressWarnings(
+      stan_clogit(case ~ spontaneous + induced + (1 | education),
+        strata = stratum,
+        data = dat,
+        subset = parity <= 2,
+        QR = TRUE,
+        chains = 2, iter = 500, refresh = 0
+      )
+    ) # for speed only
 
     if (.Platform$OS.type != "windows" || .Platform$r_arch != "i386") {
-      m13 <- suppressWarnings(stan_jm(
-        formulaLong = logBili ~ year + (1 | id),
-        dataLong = pbcLong,
-        formulaEvent = Surv(futimeYears, death) ~ sex + trt,
-        dataEvent = pbcSurv,
-        time_var = "year",
-        # this next line is only to keep the example small in size!
-        chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
-      ))
+      void <- capture.output(
+        m13 <- suppressMessages(
+          suppressWarnings(
+            stan_jm(
+              formulaLong = logBili ~ year + (1 | id),
+              dataLong = pbcLong,
+              formulaEvent = Surv(futimeYears, death) ~ sex + trt,
+              dataEvent = pbcSurv,
+              time_var = "year",
+              # this next line is only to keep the example small in size!
+              chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
+            )
+          )
+        )
+      )
       # expect_snapshot(model_info(m13))
     }
 
@@ -117,15 +134,17 @@ if (.runThisTest && .runStanTest) {
     #   iter = 1000
     # )
 
-    m15 <- suppressWarnings(stan_mvmer(
-      formula = list(
-        logBili ~ year + (1 | id),
-        albumin ~ sex + year + (year | id)
-      ),
-      data = pbcLong,
-      # this next line is only to keep the example small in size!
-      chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
-    ))
+    m15 <- suppressWarnings(
+      stan_mvmer(
+        formula = list(
+          logBili ~ year + (1 | id),
+          albumin ~ sex + year + (year | id)
+        ),
+        data = pbcLong,
+        # this next line is only to keep the example small in size!
+        chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
+      )
+    )
 
     test_that("model_info-stanreg-glm", {
       expect_equal(
@@ -145,7 +164,8 @@ if (.runThisTest && .runStanTest) {
           is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
           is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
           is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
-          link_function = "logit", family = "binomial", n_obs = 56L
+          link_function = "logit", family = "binomial", n_obs = 56L,
+          n_grouplevels = c(herd = 15L)
         )
       )
 
@@ -166,7 +186,8 @@ if (.runThisTest && .runStanTest) {
           is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
           is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
           is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
-          link_function = "identity", family = "gaussian", n_obs = 150L
+          link_function = "identity", family = "gaussian", n_obs = 150L,
+          n_grouplevels = NULL
         )
       )
 
@@ -187,7 +208,8 @@ if (.runThisTest && .runStanTest) {
           is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
           is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
           is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
-          link_function = "logit", family = "binomial", n_obs = 32L
+          link_function = "logit", family = "binomial", n_obs = 32L,
+          n_grouplevels = NULL
         )
       )
 
@@ -369,7 +391,7 @@ if (.runThisTest && .runStanTest) {
     })
 
     test_that("link_inverse", {
-      expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-4)
+      expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-4)
     })
 
     test_that("get_data", {

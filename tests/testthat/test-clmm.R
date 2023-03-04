@@ -14,11 +14,7 @@ osx <- tryCatch(
 
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest &&
-  requiet("testthat") &&
-  requiet("insight") &&
-  requiet("lme4") &&
-  requiet("ordinal")) {
+if (.runThisTest && skip_if_not_or_load_if_installed("lme4") && skip_if_not_or_load_if_installed("ordinal")) {
   data(wine, package = "ordinal")
   data(soup)
 
@@ -92,8 +88,8 @@ if (.runThisTest &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
-    expect_equal(link_inverse(m2)(.2), pnorm(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m2)(0.2), pnorm(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {

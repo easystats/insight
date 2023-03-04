@@ -86,7 +86,7 @@ format_message <- function(string,
     further_lines <- lapply(further_lines, function(i) {
       .wrap_message_line(string = i, line_length = line_length, indent = indent)
     })
-    string <- paste0(c(string, unlist(further_lines)), collapse = "\n")
+    string <- paste0(c(string, unlist(further_lines, use.names = FALSE)), collapse = "\n")
   }
 
   string
@@ -103,15 +103,19 @@ format_message <- function(string,
 #'   producing the warning or error is deep within another function, so the
 #'   default is `FALSE`.
 #'
-#' @export
-#'
-#' @examples
-#' \dontrun{
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true")
+#' # message
 #' format_alert("This is a message.")
-#' format_alert("This is a warning.", type = "warning")
+#' format_alert("This is a warning.", type = "message")
+#'
+#' # error
+#' try(format_error("This is an error."))
+#'
+#' @examplesIf getOption("warn") < 2L
+#' # warning
 #' format_warning("This is a warning.")
-#' format_error("This is an error.")
-#' }
+#'
+#' @export
 format_alert <- function(string,
                          ...,
                          line_length = 0.9 * getOption("width", 80),
@@ -193,7 +197,7 @@ format_error <- function(...) {
   # check if line breaks are required
   if (line_length > 0 && nchar(tmp_string) > line_length) {
     # insert line breaks into string at specified length
-    pattern <- paste("(.{1,", line_length, "})(\\s|$)", sep = "")
+    pattern <- paste0("(.{1,", line_length, "})(\\s|$)")
     string <- gsub(pattern, line_separator, string)
 
     # remove last line break
@@ -247,7 +251,7 @@ format_error <- function(...) {
 # check whether a string line contains one of the supported format tags
 .find_tokens <- function(string) {
   tokens <- c("{.b ", "{.i ", "{.url ", "{.pkg ")
-  matches <- sapply(tokens, grepl, string, fixed = TRUE)
+  matches <- vapply(tokens, grepl, TRUE, string, fixed = TRUE)
   if (any(matches)) {
     matches
   } else {

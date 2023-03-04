@@ -194,7 +194,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
 
 .get_loglikelihood_glm <- function(x, info, verbose = TRUE, ...) {
   fam <- info$family
-  resp <- get_response(x, verbose = verbose)
+  resp <- get_response(x, as_proportion = TRUE, verbose = verbose)
   w <- get_weights(x, null_as_ones = TRUE)
   dev <- stats::deviance(x)
   disp <- dev / sum(w)
@@ -225,7 +225,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
       NA
     },
     poisson = {
-      stats::dpois(resp, predicted, log = TRUE) * w
+      stats::dpois(round(resp), predicted, log = TRUE) * w
     },
     quasipoisson = {
       NA
@@ -445,21 +445,21 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
       trans <- find_transformation(x)
 
       if (trans == "identity") {
-        .weighted_sum(log(get_response(x)), w = model_weights)
+        .weighted_sum(log(get_response(x, as_proportion = TRUE)), w = model_weights)
       } else if (trans == "log") {
-        .weighted_sum(log(1 / get_response(x)), w = model_weights)
+        .weighted_sum(log(1 / get_response(x, as_proportion = TRUE)), w = model_weights)
       } else if (trans == "log1p") {
-        .weighted_sum(log(1 / (get_response(x) + 1)), w = model_weights)
+        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) + 1)), w = model_weights)
       } else if (trans == "log2") {
-        .weighted_sum(log(1 / (get_response(x) * log(2))), w = model_weights)
+        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) * log(2))), w = model_weights)
       } else if (trans == "log10") {
-        .weighted_sum(log(1 / (get_response(x) * log(10))), w = model_weights)
+        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) * log(10))), w = model_weights)
       } else if (trans == "exp") {
-        .weighted_sum(get_response(x), w = model_weights)
+        .weighted_sum(get_response(x, as_proportion = TRUE), w = model_weights)
       } else if (trans == "expm1") {
-        .weighted_sum((get_response(x) - 1), w = model_weights)
+        .weighted_sum((get_response(x, as_proportion = TRUE) - 1), w = model_weights)
       } else if (trans == "sqrt") {
-        .weighted_sum(log(.5 / sqrt(get_response(x))), w = model_weights)
+        .weighted_sum(log(0.5 / sqrt(get_response(x, as_proportion = TRUE))), w = model_weights)
       } else if (is.null(model_weights)) {
         .ll_log_adjustment(x)
       } else {
@@ -478,7 +478,7 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
   tryCatch(
     {
       sum(stats::dlnorm(
-        x = get_response(x),
+        x = get_response(x, as_proportion = TRUE),
         meanlog = stats::fitted(x),
         sdlog = get_sigma(x, ci = NULL, verbose = FALSE),
         log = TRUE
@@ -497,7 +497,7 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
       trans <- get_transformation(model)$transformation
       .weighted_sum(log(
         diag(attr(with(
-          get_data(model),
+          get_data(model, verbose = FALSE),
           stats::numericDeriv(
             expr = quote(trans(
               get(find_response(model))

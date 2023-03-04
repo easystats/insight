@@ -3,11 +3,11 @@ skip_on_os(os = "mac")
 is_dev_version <- length(strsplit(packageDescription("insight")$Version, "\\.")[[1]]) > 3
 run_stan <- .Platform$OS.type == "unix" && is_dev_version
 
-if (run_stan && requiet("testthat") && requiet("insight") && requiet("brms")) {
+if (run_stan && skip_if_not_or_load_if_installed("brms")) {
   data(mtcars)
   set.seed(123)
 
-  model <- brms::brm(mpg ~ wt, data = mtcars, seed = 1, refresh = 0)
+  model <- suppressMessages(brms::brm(mpg ~ wt, data = mtcars, seed = 1, refresh = 0))
   priors <- insight::get_priors(model)
 
   test_that("get_priors", {
