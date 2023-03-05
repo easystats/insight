@@ -148,6 +148,11 @@ get_residuals.model_fit <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 }
 
 
+#' @export
+get_residuals.hglm <- function(x, verbose = TRUE, ...) {
+  x$resid
+}
+
 
 #' @export
 get_residuals.coxph <- function(x, weighted = FALSE, verbose = TRUE, ...) {
@@ -158,11 +163,10 @@ get_residuals.coxph <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 get_residuals.crr <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   if (isTRUE(weighted) && isTRUE(verbose)) {
-    warning("Weighted residuals are not supported for `crr` models.", call. = FALSE)
+    format_warning("Weighted residuals are not supported for `crr` models.")
   }
   x$res
 }
@@ -177,7 +181,7 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
   res <- tryCatch(
     {
-      junk <- utils::capture.output(pred <- stats::predict(x, type = "response"))
+      junk <- utils::capture.output(pred <- stats::predict(x, type = "response")) # nolint
       observed <- .factor_to_numeric(get_response(x))
       observed - pred
     },
@@ -257,16 +261,16 @@ print.insight_residuals <- function(x, ...) {
         res_dev <- res_dev[!is.na(w) & w != 0]
       } else if (verbose) {
         if (is.null(w)) {
-          warning(format_message("Can't calculate weighted residuals from model. Model doesn't seem to have weights."), call. = FALSE)
+          format_warning("Can't calculate weighted residuals from model. Model doesn't seem to have weights.")
         } else if (is.null(res_dev)) {
-          warning(format_message("Can't calculate weighted residuals from model. Could not extract deviance-residuals."), call. = FALSE)
+          format_warning("Can't calculate weighted residuals from model. Could not extract deviance-residuals.")
         }
       }
       res_dev
     },
     error = function(e) {
       if (verbose) {
-        warning("Can't calculate weighted residuals from model.", call. = FALSE)
+        format_warning("Can't calculate weighted residuals from model.")
       }
       NULL
     }

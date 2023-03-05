@@ -1171,6 +1171,33 @@ model_info.polr <- function(x, ...) {
 
 
 #' @export
+model_info.hglm <- function(x, ...) {  
+  fitfam <- tryCatch(
+    {
+      mc <- get_call(x)$family
+      eval(mc)
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(fitfam)) {
+    return(NULL)
+  }
+
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+
+#' @export
 model_info.orm <- function(x, ...) {
   faminfo <- stats::binomial(link = "logit")
   .make_family(
