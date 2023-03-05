@@ -156,16 +156,24 @@ find_parameters.nlmerMod <- function(x,
 
 #' @export
 find_parameters.hglm <- function(x,
-                                 effects = c("all", "fixed", "random"),
+                                 effects = c("all", "fixed", "random", "dispersion"),
                                  flatten = FALSE,
                                  ...) {
   effects <- match.arg(effects)
   fe <- x$fixef
   re <- x$ranef
+  disp <- summary(x)$SummVC1
+
+  if (!inherits(disp, c("matrix", "array"))) {
+    disp_name <- NULL
+  } else {
+    disp_name <- rownames(disp)
+  }
 
   l <- compact_list(list(
     conditional = names(fe),
-    random = names(re)
+    random = names(re),
+    dispersion = disp_name
   ))
 
   .filter_parameters(l, effects = effects, flatten = flatten)

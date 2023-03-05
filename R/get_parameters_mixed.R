@@ -78,10 +78,16 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
 
 
 #' @export
-get_parameters.hglm <- function(x, effects = c("fixed", "random"), ...) {
+get_parameters.hglm <- function(x, effects = c("fixed", "random", "dispersion", "all"), ...) {
   effects <- match.arg(effects)
   fe <- x$fixef
   re <- x$ranef
+  disp <- summary(x)$SummVC1
+
+  if (!inherits(disp, c("matrix", "array"))) {
+    disp <- as.matrix(disp)
+    rownames(disp) <- "disp.param"
+  }
 
   fixed <- data.frame(
     Parameter = names(fe),
@@ -95,10 +101,24 @@ get_parameters.hglm <- function(x, effects = c("fixed", "random"), ...) {
     stringsAsFactors = FALSE
   )
 
+  dispersion <- data.frame(
+    Parameter = rownames(disp),
+    Estimate = as.vector(disp[, 1]),
+    stringsAsFactors = FALSE
+  )
+
   if (effects == "fixed") {
     text_remove_backticks(fixed)
-  } else {
+  } else if (effects == "random") {
     text_remove_backticks(random)
+  } else if (effects == "dispersion") {
+    text_remove_backticks(dispersion)
+  } else {
+    fixed$Component <- "fixed"
+    random$Component <- "random"
+    dispersion$Component <- "dispersion"
+    all_components <- rbind(fixed, random, dispersion)
+    text_remove_backticks(all_components)
   }
 }
 
