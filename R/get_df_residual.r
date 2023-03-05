@@ -129,6 +129,11 @@
 }
 
 #' @keywords internal
+.degrees_of_freedom_residual.hglm <- function(x, verbose = TRUE, ...) {
+  x$dfReFe
+}
+
+#' @keywords internal
 .degrees_of_freedom_residual.glht <- function(x, verbose = TRUE, ...) {
   x$df
 }

@@ -98,6 +98,23 @@ get_loglikelihood.glmerMod <- function(x, check_response = FALSE, verbose = TRUE
 get_loglikelihood.glmmTMB <- get_loglikelihood.lmerMod
 
 #' @export
+get_loglikelihood.hglm <- function(x,
+                                   check_response = FALSE,
+                                   verbose = TRUE,
+                                   ...) {
+  lls <- x$likelihood
+  .loglikelihood_prep_output(
+    x,
+    lls,
+    check_response = check_response,
+    verbose = verbose,
+    REML = REML,
+    lls2 = .per_observation_ll(x),
+    ...
+  )
+}
+
+#' @export
 get_loglikelihood.mblogit <- function(x, verbose = TRUE, ...) {
   .loglikelihood_prep_output(
     x,

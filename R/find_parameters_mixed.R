@@ -154,6 +154,23 @@ find_parameters.nlmerMod <- function(x,
 }
 
 
+#' @export
+find_parameters.hglm <- function(x,
+                                 effects = c("all", "fixed", "random"),
+                                 flatten = FALSE,
+                                 ...) {
+  effects <- match.arg(effects)
+  fe <- x$fixef
+  re <- x$ranef
+
+  l <- compact_list(list(
+    conditional = names(fe),
+    random = names(re)
+  ))
+
+  .filter_parameters(l, effects = effects, flatten = flatten)
+}
+
 
 #' @rdname find_parameters.glmmTMB
 #' @export

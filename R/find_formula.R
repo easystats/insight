@@ -1162,6 +1162,16 @@ find_formula.nlmerMod <- function(x, verbose = TRUE, ...) {
 }
 
 
+#' @export
+find_formula.hglm <- function(x, verbose = TRUE, ...) {
+  mc <- get_call(x)
+  f.cond <- mc$fixed
+  f.random <- mc$random
+
+  f <- compact_list(list(conditional = f.cond, random = f.random))
+  .find_formula_return(f, verbose = verbose)
+}
+
 
 #' @export
 find_formula.merMod <- function(x, verbose = TRUE, ...) {

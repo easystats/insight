@@ -948,6 +948,14 @@ get_varcov.coxr <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+get_varcov.hglm <- function(x, verbose = TRUE, ...) {
+  .check_get_varcov_dots(x, ...)
+  vc <- x$vcov
+  .process_vcov(vc, verbose, ...)
+}
+
+
+#' @export
 get_varcov.gee <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   vc <- x$naive.variance

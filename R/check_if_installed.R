@@ -55,7 +55,7 @@ check_if_installed <- function(package,
     what_you_can_do <- sprintf(
       "Please install %s by running `install.packages(%s)`.",
       if (length(package) > 1L) "them" else "it",
-      paste(sprintf("`%s`", package), collapse = ", ")
+      toString(sprintf("`%s`", package))
     )
   } else if (!is.null(minimum_version)) {
     needs_update <- utils::packageVersion(package) < package_version(minimum_version)
@@ -78,7 +78,7 @@ check_if_installed <- function(package,
       what_you_can_do <- sprintf(
         "Please update %s by running `install.packages(%s)`.",
         if (length(package) > 1L) "them" else "it",
-        paste(sprintf("`%s`", package), collapse = ", ")
+        toString(sprintf("`%s`", package))
       )
     }
   }
@@ -90,8 +90,8 @@ check_if_installed <- function(package,
     if (prompt) {
       what_you_can_do <- sprintf(
         "\nWould you like to %s %s? [y/n] ",
-        if (grepl("update", what_you_can_do)) "update" else "install",
-        if (grepl("them", what_you_can_do)) "them" else "it"
+        if (grepl("update", what_you_can_do, fixed = TRUE)) "update" else "install",
+        if (grepl("them", what_you_can_do, fixed = TRUE)) "them" else "it"
       )
 
       print_color(format_message(what_is_wrong), "red")
@@ -120,7 +120,7 @@ print.check_if_installed <- function(x, ...) {
     print_color(paste0("- ", names(x)[x], collapse = "\n"), "green")
   }
 
-  if (any(!x)) {
+  if (!all(x)) {
     if (any(x)) {
       cat("\n\n")
     }

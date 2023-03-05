@@ -2119,7 +2119,14 @@ get_data.mlogit <- function(x, source = "environment", verbose = TRUE, ...) {
 #'   passed to the `transf` function.
 #' @param ci For meta-analysis models, the Confidence Interval (CI) level if
 #'   `include_interval = TRUE`. Default to 0.95 (95%).
-get_data.rma <- function(x, source = "environment", verbose = TRUE, include_interval = FALSE, transf = NULL, transf_args = NULL, ci = .95, ...) {
+get_data.rma <- function(x,
+                         source = "environment",
+                         verbose = TRUE,
+                         include_interval = FALSE,
+                         transf = NULL,
+                         transf_args = NULL,
+                         ci = 0.95,
+                         ...) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
 
@@ -2145,14 +2152,14 @@ get_data.rma <- function(x, source = "environment", verbose = TRUE, include_inte
       sei <- tryCatch(sqrt(mf[[model_call$vi]]), error = function(x) NULL)
     }
     if (is.null(sei)) {
-      stop("Could not find `sei` or `vi` for this model.", call. = FALSE)
+      format_error("Could not find `sei` or `vi` for this model.")
     }
     mf$ci <- ci
-    mf$CI_low <- model_response - qnorm((1 - ci) / 2, lower.tail = FALSE) * sei
-    mf$CI_high <- model_response + qnorm((1 - ci) / 2, lower.tail = FALSE) * sei
+    mf$CI_low <- model_response - stats::qnorm((1 - ci) / 2, lower.tail = FALSE) * sei
+    mf$CI_high <- model_response + stats::qnorm((1 - ci) / 2, lower.tail = FALSE) * sei
     if (!is.null(transf)) {
       if (!is.function(transf)) {
-        stop("`transf` must be a function.")
+        format_error("`transf` must be a function.")
       }
       if (!is.null(transf_args)) {
         mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf, transf_args)
@@ -2165,7 +2172,7 @@ get_data.rma <- function(x, source = "environment", verbose = TRUE, include_inte
       }
     }
   }
-  .prepare_get_data(x, mf[rownames(x$X), ], verbose = verbose)
+  .prepare_get_data(x, mf[rownames(x$X), , drop = FALSE], verbose = verbose)
 }
 
 

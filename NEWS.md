@@ -1,5 +1,9 @@
 # insight 0.19.1
 
+## New supported models
+
+* `hglm` (package *hglm*).
+
 ## Changes to functions
 
 * Minor improvements to `get_data()` for `t.test()`.

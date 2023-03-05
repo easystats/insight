@@ -92,7 +92,7 @@ is_regression_model <- function(x) {
     "glmRob", "glmx", "gls", "gmnl", "gmm", "gnls", "gsm",
 
     # h --------------------
-    "heavyLme", "HLfit", "htest", "hurdle",
+    "heavyLme", "HLfit", "htest", "hurdle", "hglm",
 
     # i --------------------
     "ivFixed", "iv_robust", "ivreg", "ivprobit",

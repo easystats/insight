@@ -78,6 +78,33 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
 
 
 #' @export
+get_parameters.hglm <- function(x, effects = c("fixed", "random"), ...) {
+  effects <- match.arg(effects)
+  fe <- x$fixef
+  re <- x$ranef
+
+  fixed <- data.frame(
+    Parameter = names(fe),
+    Estimate = unname(fe),
+    stringsAsFactors = FALSE
+  )
+
+  random <- data.frame(
+    Parameter = names(re),
+    Estimate = unname(re),
+    stringsAsFactors = FALSE
+  )
+
+  if (effects == "fixed") {
+    text_remove_backticks(fixed)
+  } else {
+    text_remove_backticks(random)
+  }
+}
+
+
+
+#' @export
 get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
   effects <- match.arg(effects)
 
@@ -246,7 +273,7 @@ get_parameters.HLfit <- function(x, effects = c("fixed", "random"), ...) {
   if (effects == "fixed") {
     l <- list(conditional = lme4::fixef(x))
   } else {
-    utils::capture.output(s <- summary(x))
+    utils::capture.output(s <- summary(x)) # nolint
     l <- compact_list(list(
       conditional = lme4::fixef(x),
       random = lme4::ranef(x)

@@ -73,7 +73,7 @@ supported_models <- function() {
     "glmrob", "glmRob", "glmx", "gls", "gmnl",
 
     # h ----------------------------
-    "HLfit", "htest", "hurdle",
+    "HLfit", "htest", "hurdle", "hglm",
 
     # i ----------------------------
     "ivFixed", "iv_robust", "ivreg", "ivprobit",
