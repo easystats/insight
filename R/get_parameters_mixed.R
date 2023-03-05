@@ -525,7 +525,7 @@ get_parameters.glmmTMB <- function(x,
 
 #' @export
 get_parameters.hglm <- function(x,
-                                effects = c("fixed", "random"),
+                                effects = c("fixed", "random", "all"),
                                 component = c("all", "conditional", "dispersion"),
                                 ...) {
   effects <- match.arg(effects)
@@ -568,6 +568,12 @@ get_parameters.hglm <- function(x,
     text_remove_backticks(fixed)
   } else if (effects == "random") {
     text_remove_backticks(random)
+  } else if (effects == "all") {
+    fixed <- rbind(fixed, random)
+    if (component != "conditional" && !is.null(dispersion)) {
+      fixed <- rbind(fixed, dispersion)
+    }
+    text_remove_backticks(fixed)
   }
 }
 

@@ -156,7 +156,8 @@ find_parameters.nlmerMod <- function(x,
 
 #' @export
 find_parameters.hglm <- function(x,
-                                 effects = c("all", "fixed", "random", "dispersion"),
+                                 effects = c("all", "fixed", "random"),
+                                 component = c("all", "conditional", "dispersion"),
                                  flatten = FALSE,
                                  ...) {
   effects <- match.arg(effects)
@@ -177,7 +178,7 @@ find_parameters.hglm <- function(x,
     dispersion = disp_name
   ))
 
-  .filter_parameters(l, effects = effects, flatten = flatten)
+  .filter_parameters(l, effects = effects, component = component, flatten = flatten)
 }
 
 
