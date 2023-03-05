@@ -1172,7 +1172,7 @@ model_info.polr <- function(x, ...) {
 
 #' @export
 model_info.hglm <- function(x, ...) {  
-  fitfam <- tryCatch(
+  faminfo <- tryCatch(
     {
       mc <- get_call(x)$family
       eval(mc)
