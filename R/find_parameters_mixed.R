@@ -162,12 +162,13 @@ find_parameters.hglm <- function(x,
   effects <- match.arg(effects)
   fe <- x$fixef
   re <- x$ranef
-  disp <- summary(x)$SummVC1
 
-  if (!inherits(disp, c("matrix", "array"))) {
-    disp_name <- NULL
-  } else {
+  f <- find_formula(x)
+  if (!is.null(f$dispersion)) {
+    disp <- summary(x)$SummVC1
     disp_name <- rownames(disp)
+  } else {
+    disp_name <- NULL
   }
 
   l <- compact_list(list(

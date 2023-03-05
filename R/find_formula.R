@@ -1167,8 +1167,9 @@ find_formula.hglm <- function(x, verbose = TRUE, ...) {
   mc <- get_call(x)
   f.cond <- mc$fixed
   f.random <- mc$random
+  f.disp <- mc$disp
 
-  f <- compact_list(list(conditional = f.cond, random = f.random))
+  f <- compact_list(list(conditional = f.cond, random = f.random, dispersion = f.disp))
   .find_formula_return(f, verbose = verbose)
 }
 

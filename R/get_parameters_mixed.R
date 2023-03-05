@@ -78,53 +78,6 @@ get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
 
 
 #' @export
-get_parameters.hglm <- function(x, effects = c("fixed", "random", "dispersion", "all"), ...) {
-  effects <- match.arg(effects)
-  fe <- x$fixef
-  re <- x$ranef
-  disp <- summary(x)$SummVC1
-
-  if (!inherits(disp, c("matrix", "array"))) {
-    disp <- as.matrix(disp)
-    rownames(disp) <- "disp.param"
-  }
-
-  fixed <- data.frame(
-    Parameter = names(fe),
-    Estimate = unname(fe),
-    stringsAsFactors = FALSE
-  )
-
-  random <- data.frame(
-    Parameter = names(re),
-    Estimate = unname(re),
-    stringsAsFactors = FALSE
-  )
-
-  dispersion <- data.frame(
-    Parameter = rownames(disp),
-    Estimate = as.vector(disp[, 1]),
-    stringsAsFactors = FALSE
-  )
-
-  if (effects == "fixed") {
-    text_remove_backticks(fixed)
-  } else if (effects == "random") {
-    text_remove_backticks(random)
-  } else if (effects == "dispersion") {
-    text_remove_backticks(dispersion)
-  } else {
-    fixed$Component <- "fixed"
-    random$Component <- "random"
-    dispersion$Component <- "dispersion"
-    all_components <- rbind(fixed, random, dispersion)
-    text_remove_backticks(all_components)
-  }
-}
-
-
-
-#' @export
 get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
   effects <- match.arg(effects)
 
@@ -565,6 +518,56 @@ get_parameters.glmmTMB <- function(x,
       zi = ,
       zero_inflated = l$zero_inflated_random
     )
+  }
+}
+
+
+
+#' @export
+get_parameters.hglm <- function(x,
+                                effects = c("fixed", "random"),
+                                component = c("all", "conditional", "dispersion"),
+                                ...) {
+  effects <- match.arg(effects)
+  component <- match.arg(component)
+
+  fe <- x$fixef
+  re <- x$ranef
+
+  f <- find_formula(x)
+  if (!is.null(f$dispersion)) {
+    disp <- summary(x)$SummVC1
+    dispersion <- data.frame(
+      Parameter = rownames(disp),
+      Estimate = as.vector(disp[, 1]),
+      Component = "dispersion",
+      stringsAsFactors = FALSE
+    )
+  } else {
+    dispersion <- NULL
+  }
+
+  fixed <- data.frame(
+    Parameter = names(fe),
+    Estimate = unname(fe),
+    Component = "conditional",
+    stringsAsFactors = FALSE
+  )
+
+  random <- data.frame(
+    Parameter = names(re),
+    Estimate = unname(re),
+    Component = "conditional",
+    stringsAsFactors = FALSE
+  )
+
+  if (effects == "fixed") {
+    if (component != "conditional" && !is.null(dispersion)) {
+      fixed <- rbind(fixed, dispersion)
+    }
+    text_remove_backticks(fixed)
+  } else if (effects == "random") {
+    text_remove_backticks(random)
   }
 }
 
