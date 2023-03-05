@@ -108,7 +108,7 @@ get_loglikelihood.hglm <- function(x,
     lls,
     check_response = check_response,
     verbose = verbose,
-    REML = REML,
+    REML = FALSE,
     lls2 = .per_observation_ll(x),
     ...
   )
