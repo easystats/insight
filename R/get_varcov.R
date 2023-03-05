@@ -951,6 +951,14 @@ get_varcov.coxr <- function(x, verbose = TRUE, ...) {
 get_varcov.hglm <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   vc <- x$vcov
+
+  if (is.null(vc)) {
+    if (verbose) {
+      format_warning("Can't extract variance-covariance matrix.")
+    }
+    return(NULL)
+  }
+
   .process_vcov(vc, verbose, ...)
 }
 
