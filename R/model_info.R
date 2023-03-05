@@ -1182,7 +1182,7 @@ model_info.hglm <- function(x, ...) {
     }
   )
 
-  if (is.null(fitfam)) {
+  if (is.null(faminfo)) {
     return(NULL)
   }
 
