@@ -1513,7 +1513,6 @@ get_statistic.emm_list <- function(x, ci = 0.95, adjust = "none", ...) {
 }
 
 
-
 #' @export
 get_statistic.robmixglm <- function(x, ...) {
   cs <- stats::coef(summary(x))
@@ -1521,6 +1520,24 @@ get_statistic.robmixglm <- function(x, ...) {
   out <- data.frame(
     Parameter = rownames(cs),
     Statistic = as.vector(cs[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- out[!is.na(out$Statistic), ]
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
+get_statistic.hglm <- function(x, ...) {
+  s <- summary(x)$FixCoefMat
+
+  out <- data.frame(
+    Parameter = rownames(s),
+    Statistic = as.vector(s[, 3]),
     stringsAsFactors = FALSE,
     row.names = NULL
   )

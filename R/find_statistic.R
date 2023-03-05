@@ -92,7 +92,7 @@ find_statistic <- function(x, ...) {
     "elm",
     "feis", "felm",
     "gamlss", "garch", "glmmPQL", "gls", "gmm", "gnls",
-    "HLfit",
+    "HLfit", "hglm",
     "ivreg", "ivFixed", "iv_robust", "ivprobit",
     "lm", "lm_robust", "lm.beta", "lme", "lmerMod", "lmerModLmerTest",
     "lmodel2", "lmRob", "lmrob", "lqm", "lqmm",
