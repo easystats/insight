@@ -265,3 +265,14 @@ get_predicted.MixMod <- function(x,
   # 4. step: final preparation
   .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
 }
+
+
+
+# HGLM: mixed_model (class hglm) ------------------------------
+# =============================================================
+
+#' @export
+get_predicted.hglm <- function(x, verbose = TRUE, ...) {
+  # hglm only provide fitted values
+  x$fv
+}
