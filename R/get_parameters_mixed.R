@@ -562,18 +562,21 @@ get_parameters.hglm <- function(x,
   )
 
   if (effects == "fixed") {
-    if (component != "conditional" && !is.null(dispersion)) {
-      fixed <- rbind(fixed, dispersion)
-    }
-    text_remove_backticks(fixed)
+    out <- switch(component,
+      "conditional" = fixed,
+      "dispersion" = dispersion,
+      rbind(fixed, dispersion)
+    )
+    text_remove_backticks(out)
   } else if (effects == "random") {
     text_remove_backticks(random)
   } else if (effects == "all") {
-    fixed <- rbind(fixed, random)
-    if (component != "conditional" && !is.null(dispersion)) {
-      fixed <- rbind(fixed, dispersion)
-    }
-    text_remove_backticks(fixed)
+    out <- switch(component,
+      "conditional" = rbind(fixed, random),
+      "dispersion" = dispersion,
+      rbind(fixed, random, dispersion)
+    )
+    text_remove_backticks(out)
   }
 }
 
