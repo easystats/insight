@@ -40,24 +40,23 @@ get_weights <- function(x, ...) {
 #' @rdname get_weights
 #' @export
 get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
-  w <- NULL
-  tryCatch(
-    w <- stats::weights(x, ...),
+  w <- tryCatch(
+    stats::weights(x, ...),
     error = function(e) NULL,
     warning = function(w) NULL
   )
 
   if (is.null(w)) {
-    tryCatch(
-      w <- stats::model.frame(x)[["(weights)"]],
+    w <- tryCatch(
+      stats::model.frame(x)[["(weights)"]],
       error = function(e) NULL,
       warning = function(w) NULL
     )
   }
 
   if (is.null(w)) {
-    tryCatch(
-      w <- .recover_data_from_environment(x)[[find_weights(x)]],
+    w <- tryCatch(
+      .recover_data_from_environment(x)[[find_weights(x)]],
       error = function(e) NULL,
       warning = function(w) NULL
     )

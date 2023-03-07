@@ -101,6 +101,13 @@ get_data <- function(x, ...) {
     {
       # recover data frame from environment
       dat <- .recover_data_from_environment(x, data_name = data_name)
+      # for metafor, we need to add weights...
+      if (inherits(x, c("rma.uni", "rma"))) {
+        ## TODO: check if we need to do this for other meta-analysis packages, too
+        wdat <- data.frame(Weights = get_weights(x))
+        additional_variables <- c(additional_variables, "Weights")
+        dat <- tryCatch(cbind(dat, wdat), error = function(e) dat)
+      }
       # additional variables? Some models, like plm::plm(), have an "index"
       # slot in the model call with further variables
       if (!is.null(additional_variables) && !isTRUE(additional_variables)) {
@@ -2127,8 +2134,22 @@ get_data.rma <- function(x,
                          transf_args = NULL,
                          ci = 0.95,
                          ...) {
+  # standard errors and moderators are not found by find_predictors(),
+  # so we need them as additional variables
+  model_call <- get_call(x)
+  additional_variables <- c(
+    safe_deparse(model_call$vi),
+    safe_deparse(model_call$sei),
+    safe_deparse(model_call$mods)
+  )
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    source = source,
+    additional_variables = additional_variables,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -2137,7 +2158,7 @@ get_data.rma <- function(x,
   # fall back to extract data from model frame
   mf <- tryCatch(.recover_data_from_environment(x), error = function(x) NULL)
   mf_attr <- attributes(mf)
-  mf <- merge(mf, data.frame(Weight = get_weights(mod)), by = "row.names", all = TRUE, sort = FALSE)
+  mf <- merge(mf, data.frame(Weights = get_weights(x)), by = "row.names", all = TRUE, sort = FALSE)
   rownames(mf) <- mf$Row.names
   mf$Row.names <- NULL
   mostattributes(mf) <- c(
@@ -2145,7 +2166,6 @@ get_data.rma <- function(x,
     mf_attr[c("yi.names", "vi.names", "digits", "class")]
   )
   if (isTRUE(include_interval)) {
-    model_call <- get_call(x)
     model_response <- tryCatch(mf[[find_response(x)]], error = function(x) NULL)
     sei <- tryCatch(mf[[model_call$sei]], error = function(x) NULL)
     if (is.null(sei)) {
@@ -2172,7 +2192,11 @@ get_data.rma <- function(x,
       }
     }
   }
-  .prepare_get_data(x, mf[rownames(x$X), , drop = FALSE], verbose = verbose)
+  original_rownames <- rownames(x$X)
+  if (is.null(original_rownames)) {
+    original_rownames <- seq_len(nrow(mf))
+  }
+  .prepare_get_data(x, mf[original_rownames, , drop = FALSE], verbose = verbose)
 }
 
 
