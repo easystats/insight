@@ -43,14 +43,7 @@ link_inverse.default <- function(x, ...) {
   if (inherits(x, "Zelig-relogit")) {
     stats::make.link(link = "logit")$linkinv
   } else {
-    tryCatch(
-      {
-        stats::family(x)$linkinv
-      },
-      error = function(x) {
-        NULL
-      }
-    )
+    .safe(stats::family(x)$linkinv)
   }
 }
 
@@ -665,14 +658,7 @@ link_inverse.model_fit <- link_inverse.svy_vglm
 
 #' @export
 link_inverse.gam <- function(x, ...) {
-  li <- tryCatch(
-    {
-      .gam_family(x)$linkinv
-    },
-    error = function(x) {
-      NULL
-    }
-  )
+  li <- .safe(.gam_family(x)$linkinv)
 
   if (is.null(li)) {
     mi <- .gam_family(x)

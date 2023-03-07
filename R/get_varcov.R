@@ -606,7 +606,7 @@ get_varcov.flac <- get_varcov.flic
 #' @export
 get_varcov.merModList <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
-  warning("Can't access variance-covariance matrix for 'merModList' objects.", call. = FALSE)
+  format_warning("Can't access variance-covariance matrix for 'merModList' objects.")
   return(NULL)
 }
 
@@ -614,7 +614,7 @@ get_varcov.merModList <- function(x, ...) {
 #' @export
 get_varcov.mediate <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
-  warning("Can't access variance-covariance matrix for 'mediate' objects.", call. = FALSE)
+  format_warning("Can't access variance-covariance matrix for 'mediate' objects.")
   return(NULL)
 }
 
@@ -639,7 +639,7 @@ get_varcov.ivFixed <- function(x, verbose = TRUE, ...) {
 get_varcov.averaging <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   if (is.null(attributes(x)$modelList)) {
-    warning("Can't calculate covariance matrix. Please use 'fit = TRUE' in 'model.avg()'.", call. = FALSE)
+    format_warning("Can't calculate covariance matrix. Please use 'fit = TRUE' in 'model.avg()'.")
   } else {
     get_varcov.default(x, verbose = verbose, ...)
   }
@@ -995,14 +995,11 @@ get_varcov.LORgee <- get_varcov.gee
     return(FALSE)
   }
   if (is.matrix(x) && (nrow(x) == ncol(x))) {
-    rv <- tryCatch(
+    rv <- .safe(
       {
         eigenvalues <- eigen(x, only.values = TRUE)$values
         eigenvalues[abs(eigenvalues) < pd_tolerance] <- 0
         any(eigenvalues < 0)
-      },
-      error = function(e) {
-        FALSE
       }
     )
   } else {
@@ -1015,10 +1012,10 @@ get_varcov.LORgee <- get_varcov.gee
 
 .fix_negative_matrix <- function(m) {
   if (requireNamespace("Matrix", quietly = TRUE)) {
-    message(format_message(
+    format_alert(
       "The variance-covariance matrix is not positive definite. Returning the nearest positive definite matrix now.",
       "This ensures that eigenvalues are all positive real numbers, and thereby, for instance, it is possible to calculate standard errors for all relevant parameters."
-    ))
+    )
     as.matrix(Matrix::nearPD(m)$mat)
   } else {
     m
@@ -1029,7 +1026,7 @@ get_varcov.LORgee <- get_varcov.gee
 .fix_rank_deficiency <- function(m, verbose = TRUE) {
   if (anyNA(m)) {
     if (isTRUE(verbose)) {
-      warning(format_message("Model matrix is rank deficient. Some variance-covariance parameters are missing."), call. = FALSE)
+      format_warning("Model matrix is rank deficient. Some variance-covariance parameters are missing.")
     }
     mm <- m[!is.na(m)]
     if (!is.matrix(mm)) {
@@ -1070,12 +1067,12 @@ get_varcov.LORgee <- get_varcov.gee
   } else {
     if (is.vector(w)) {
       if (length(w) != nrow(x)) {
-        stop("`w` is the wrong length.", call. = FALSE)
+        format_error("`w` is the wrong length.")
       }
       return(crossprod(x, w * x))
     } else {
       if (nrow(w) != ncol(w) || nrow(w) != nrow(x)) {
-        stop("`w` is the wrong dimension.", call. = FALSE)
+        format_error("`w` is the wrong dimension.")
       }
       return(crossprod(x, w %*% x))
     }
@@ -1110,9 +1107,7 @@ get_varcov.LORgee <- get_varcov.gee
       vcov <- "HC3"
     }
     if (isTRUE(verbose)) {
-      warning("The `robust` argument is deprecated. Please use `vcov` instead.",
-        call. = FALSE
-      )
+      format_warning("The `robust` argument is deprecated. Please use `vcov` instead.")
     }
   }
 

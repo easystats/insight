@@ -55,7 +55,7 @@ n_obs.default <- function(x, ...) {
     return(n_obs.glm(x, ...))
   }
 
-  tryCatch(stats::nobs(x), error = function(x) NULL)
+  .safe(stats::nobs(x))
 }
 
 
@@ -371,9 +371,9 @@ n_obs.glimML <- function(x, ...) {
 
 #' @export
 n_obs.mle2 <- function(x, ...) {
-  n <- tryCatch(x@nobs, error = function(e) NULL)
+  n <- .safe(x@nobs)
   if (is.null(n)) {
-    n <- tryCatch(nrow(get_data(x, verbose = FALSE)), error = function(e) NULL)
+    n <- .safe(nrow(get_data(x, verbose = FALSE)))
   }
   n
 }
@@ -591,7 +591,7 @@ n_obs.stanmvreg <- function(x, select = NULL, ...) {
     if (select %in% names(x$n_yobs)) {
       n <- x$n_yobs[select]
     } else {
-      print_color(sprintf("Could not find response '%s'. Model's response variables are named %s.\n", select, paste(names(x$n_yobs), collapse = ", ")), "red")
+      print_color(sprintf("Could not find response '%s'. Model's response variables are named %s.\n", select, toString(names(x$n_yobs))), "red")
       cat("Returning smallest number of observations now.\n")
       n <- min(x$n_yobs)
     }

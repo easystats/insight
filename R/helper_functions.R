@@ -1,5 +1,5 @@
 # small wrapper around this commonly used try-catch
-.hush <- function(code, on_error = NULL) {
+.safe <- function(code, on_error = NULL) {
   tryCatch(code, error = function(e) on_error)
 }
 
@@ -425,11 +425,11 @@
 
 
 .gam_family <- function(x) {
-  faminfo <- .hush(stats::family(x))
+  faminfo <- .safe(stats::family(x))
 
   # try to set manually, if not found otherwise
   if (is.null(faminfo)) {
-    faminfo <- .hush(x$family)
+    faminfo <- .safe(x$family)
   }
 
   faminfo
@@ -621,7 +621,7 @@
         return(x)
       }
       if (x[[1]] != as.name("/")) {
-        stop("unparseable formula for grouping factor", call. = FALSE)
+        format_error("unparseable formula for grouping factor")
       }
       list(slashTerms(x[[2]]), slashTerms(x[[3]]))
     }

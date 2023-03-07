@@ -55,19 +55,19 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
     return(.pearson_residuals(x))
   }
 
-  res <- .hush(stats::residuals(x, ...))
+  res <- .safe(stats::residuals(x, ...))
 
   if (is.null(res)) {
-    res <- .hush(x$residuals)
+    res <- .safe(x$residuals)
   }
 
   # For gamm4 objects
   if (is.null(res)) {
-    res <- .hush(x$gam$residuals)
+    res <- .safe(x$gam$residuals)
   }
 
   if (is.null(res)) {
-    res <- .hush(
+    res <- .safe(
       {
         yield_warning <- no_response_resid && verbose
         pred <- stats::predict(x, type = "response")
@@ -78,7 +78,7 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   }
 
   if (is.null(res)) {
-    res <- .hush(
+    res <- .safe(
       {
         yield_warning <- no_response_resid && verbose
         pred <- stats::fitted(x)
@@ -154,19 +154,18 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
     return(.weighted_residuals(x, verbose))
   }
 
-  res <- tryCatch(
+  res <- .safe(
     {
       junk <- utils::capture.output(pred <- stats::predict(x, type = "response")) # nolint
       observed <- .factor_to_numeric(get_response(x))
       observed - pred
-    },
-    error = function(e) {
-      NULL
     }
   )
 
   if (is.null(res) || all(is.na(res))) {
-    if (verbose) warning("Can't extract residuals from model.", call. = FALSE)
+    if (verbose) {
+      format_warning("Can't extract residuals from model.")
+    }
     res <- NULL
   }
 

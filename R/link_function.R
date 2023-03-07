@@ -586,7 +586,7 @@ link_function.gamm <- function(x, ...) {
 #' @export
 link_function.bamlss <- function(x, ...) {
   flink <- stats::family(x)$links[1]
-  .hush(
+  .safe(
     stats::make.link(flink)$linkfun,
     print_colour("\nCould not find appropriate link-function.\n", "red")
   )

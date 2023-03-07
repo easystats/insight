@@ -715,7 +715,7 @@ find_parameters.aareg <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.rma <- function(x, flatten = FALSE, ...) {
-  .hush(
+  .safe(
     {
       cf <- stats::coef(x)
       pars <- list(conditional = names(cf))

@@ -209,16 +209,16 @@ get_data <- function(x, ...) {
   }
 
   # first, try environment of formula, see #666
-  dat <- .hush(eval(model_call$data, envir = environment(model_call$formula)))
+  dat <- .safe(eval(model_call$data, envir = environment(model_call$formula)))
 
   # second, try to extract formula directly
   if (is.null(dat)) {
-    dat <- .hush(eval(model_call$data, envir = environment(find_formula(x))))
+    dat <- .safe(eval(model_call$data, envir = environment(find_formula(x))))
   }
 
   # next try, parent frame
   if (is.null(dat)) {
-    dat <- .hush(eval(model_call$data, envir = parent.frame()))
+    dat <- .safe(eval(model_call$data, envir = parent.frame()))
   }
 
   # sanity check- if data frame is named like a function, e.g.
@@ -226,17 +226,17 @@ get_data <- function(x, ...) {
   # we then need to reset "dat" to NULL and search in the global env
 
   if (!is.null(dat) && !is.data.frame(dat)) {
-    dat <- .hush(as.data.frame(dat))
+    dat <- .safe(as.data.frame(dat))
   }
 
   # third try, global env
   if (is.null(dat)) {
-    dat <- .hush(eval(model_call$data, envir = globalenv()))
+    dat <- .safe(eval(model_call$data, envir = globalenv()))
   }
 
   # last try, internal env
   if (is.null(dat)) {
-    dat <- .hush(eval(model_call$data, envir = parent.env(x$call_env)))
+    dat <- .safe(eval(model_call$data, envir = parent.env(x$call_env)))
   }
 
   if (!is.null(dat) && object_has_names(model_call, "subset")) {
@@ -701,7 +701,7 @@ get_data.merMod <- function(x,
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
-  mf <- .hush(
+  mf <- .safe(
     {
       switch(effects,
         fixed = stats::model.frame(x, fixed.only = TRUE),
@@ -749,7 +749,7 @@ get_data.mmrm_tmb <- get_data.mmrm
 
 #' @export
 get_data.merModList <- function(x, effects = "all", ...) {
-  warning("Can't access data for `merModList` objects.", call. = FALSE)
+  format_warning("Can't access data for `merModList` objects.")
   return(NULL)
 }
 
@@ -770,7 +770,7 @@ get_data.MANOVA <- function(x,
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
-  mf <- .hush(
+  mf <- .safe(
     {
       switch(effects,
         fixed = .remove_column(x$input$data, x$input$subject),
@@ -844,7 +844,7 @@ get_data.glmm <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   dat <- get_data.default(x, verbose = verbose)
 
-  mf <- .hush(
+  mf <- .safe(
     {
       switch(effects,
         fixed = dat[, find_predictors(
@@ -927,7 +927,7 @@ get_data.glmmadmb <- function(x,
   fixed_data <- x$frame
   random_data <- .recover_data_from_environment(x)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
 
-  mf <- .hush(
+  mf <- .safe(
     {
       switch(effects,
         fixed = fixed_data,
@@ -1045,7 +1045,7 @@ get_data.lme <- function(x, effects = "all", source = "environment", verbose = T
 
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  dat <- .hush(x$data)
+  dat <- .safe(x$data)
 
   stats::na.omit(.get_data_from_modelframe(x, dat, effects))
 }
@@ -1470,7 +1470,7 @@ get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
   }
 
   # fall back to extract data from model frame
-  mf <- .hush(stats::model.frame(x))
+  mf <- .safe(stats::model.frame(x))
   ft <- find_variables(x, flatten = TRUE)
 
   if (!insight::is_empty_object(mf)) {
@@ -1479,7 +1479,7 @@ get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
     if (is_empty_object(remain)) {
       final_mf <- mf
     } else {
-      final_mf <- .hush(
+      final_mf <- .safe(
         {
           dat <- .recover_data_from_environment(x)
           cbind(mf, dat[, remain, drop = FALSE])
@@ -1487,7 +1487,7 @@ get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
       )
     }
   } else {
-    final_mf <- .hush(
+    final_mf <- .safe(
       {
         dat <- .recover_data_from_environment(x)
         dat[, ft, drop = FALSE]
@@ -2225,7 +2225,7 @@ get_data.bfsl <- function(x, ...) {
 
 #' @export
 get_data.mipo <- function(x, ...) {
-  .hush(
+  .safe(
     {
       models <- eval(x$call$object)
       get_data(models$analyses[[1]], ...)

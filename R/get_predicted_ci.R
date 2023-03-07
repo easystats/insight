@@ -400,7 +400,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
     } else if (dispersion_method == "mad") {
       se <- apply(data, 2, stats::mad)
     } else {
-      stop("`dispersion_method` argument not recognized.", call. = FALSE)
+      format_error("`dispersion_method` argument not recognized.")
     }
   } else {
     se <- apply(data, 2, dispersion_method)

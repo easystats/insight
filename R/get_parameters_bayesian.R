@@ -546,7 +546,7 @@ get_parameters.sim <- function(x,
     }
   } else if (methods::is(object, "var_estimate")) {
     if (!methods::is(object, "default")) {
-      stop("Object must be from 'var_estimate'.", call. = FALSE)
+      format_error("Object must be from 'var_estimate'.")
     }
     p <- object$p
     pcors_total <- p * (p - 1) * 0.5
@@ -586,7 +586,7 @@ get_parameters.sim <- function(x,
     }
     posterior_samples <- cbind(posterior_samples, beta_start)
   } else {
-    stop("Object class not currently supported.", call. = FALSE)
+    format_error("Object class not currently supported.")
   }
 
   posterior_samples

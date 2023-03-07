@@ -53,7 +53,7 @@ get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
 
   if (column_index > ncol(cs)) {
     if (isTRUE(verbose)) {
-      warning("Could not access test statistic of model parameters.", call. = FALSE)
+      format_warning("Could not access test statistic of model parameters.")
     }
     return(NULL)
   }
@@ -1672,7 +1672,7 @@ get_statistic.sem <- function(x, ...) {
   params <- get_parameters(x, effects = "fixed")
 
   if (is.null(x$se)) {
-    warning(format_message("Model has no standard errors. Please fit model again with bootstrapped standard errors."), call. = FALSE)
+    format_warning("Model has no standard errors. Please fit model again with bootstrapped standard errors.")
     return(NULL)
   }
 
@@ -1832,14 +1832,11 @@ get_statistic.rq <- function(x, ...) {
 
 #' @export
 get_statistic.rqs <- function(x, ...) {
-  stat <- tryCatch(
+  stat <- .safe(
     {
       s <- suppressWarnings(summary(x, covariance = TRUE))
       cs <- do.call(rbind, lapply(s, stats::coef))
       cs[, "t value"]
-    },
-    error = function(e) {
-      NULL
     }
   )
 

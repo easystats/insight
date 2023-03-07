@@ -14,7 +14,7 @@ get_predicted.fixest <- function(x, predict = "expectation", data = NULL, ...) {
     type_arg <- ifelse(predict == "expectation", "response", "link")
   } else {
     if (!"type" %in% names(dots)) {
-      stop("Please specify the `predict` argument.", call. = FALSE)
+      format_error("Please specify the `predict` argument.")
     } else {
       type_arg <- match.arg(dots$type, choices = c("response", "link"))
     }

@@ -309,7 +309,7 @@ get_datagrid.data.frame <- function(x,
     targets <- expand.grid(c(nums, facs))
 
     # sort targets data frame according to order specified in "at"
-    targets <- .hush(targets[specs$varname], targets)
+    targets <- .safe(targets[specs$varname], targets)
 
     # Preserve range ---------------------------------------------------------
     if (preserve_range && length(facs) > 0 && length(nums) > 0) {
@@ -916,7 +916,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
     # make sure we only have variables from original data
     all_vars <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
     if (!is.null(all_vars)) {
-      data <- .hush(data[intersect(all_vars, colnames(data))], data)
+      data <- .safe(data[intersect(all_vars, colnames(data))], data)
     }
   }
 

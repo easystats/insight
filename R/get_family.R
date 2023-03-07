@@ -28,9 +28,9 @@ get_family <- function(x, ...) {
 
 #' @export
 get_family.default <- function(x, ...) {
-  fam <- .hush(stats::family(x, ...))
+  fam <- .safe(stats::family(x, ...))
   if (is.null(fam)) {
-    fam <- .hush(.get_family(x, ...))
+    fam <- .safe(.get_family(x, ...))
   }
   fam
 }

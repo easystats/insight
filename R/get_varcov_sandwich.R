@@ -33,10 +33,8 @@
   }
 
   # deprecated: `vcov_type`
-  if ("vcov_type" %in% names(dots)) {
-    if (!"type" %in% names(vcov_args)) {
-      vcov_args[["type"]] <- dots[["vcov_type"]]
-    }
+  if ("vcov_type" %in% names(dots) && !"type" %in% names(vcov_args)) {
+    vcov_args[["type"]] <- dots[["vcov_type"]]
   }
 
   # vcov_fun is a matrix
@@ -123,7 +121,7 @@
     check_if_installed("sandwich", reason = "to get robust standard errors")
     fun <- try(get(vcov_fun, asNamespace("sandwich")), silent = TRUE)
     if (!is.function(fun)) {
-      stop(sprintf("`%s` is not a function exported by the `sandwich` package.", vcov_fun), call. = FALSE)
+      format_error(sprintf("`%s` is not a function exported by the `sandwich` package.", vcov_fun))
     }
   }
 

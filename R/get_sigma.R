@@ -55,7 +55,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   s <- .get_sigma(x, verbose = verbose)
 
   # Confidence interval for sigma
-  ci <- tryCatch(.get_sigma_ci(x, ci = ci), error = function(e) NULL)
+  ci <- .safe(.get_sigma_ci(x, ci = ci))
 
   if (!is.null(ci)) {
     attributes(s) <- c(attributes(s), ci)
@@ -90,10 +90,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 
 .get_sigma.VGAM <- function(x, verbose = TRUE, ...) {
-  s <- tryCatch(
-    exp(stats::coef(x)[["(Intercept):2"]]),
-    function(e) NULL
-  )
+  s <- .safe(exp(stats::coef(x)[["(Intercept):2"]]))
   class(s) <- c("insight_aux", class(s))
   s
 }
@@ -141,14 +138,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 
 .get_sigma.cpglmm <- function(x, verbose = TRUE, ...) {
-  s <- tryCatch(
-    {
-      stats::deviance(x)[["sigmaML"]]
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  s <- .safe(stats::deviance(x)[["sigmaML"]])
   if (!is.null(s)) {
     class(s) <- c("insight_aux", class(s))
   }
@@ -180,27 +170,13 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   # compute sigma manually ---------------
   if (is_empty_object(s)) {
     # default sigma ---------------
-    s <- tryCatch(
-      {
-        stats::sigma(x)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    s <- .safe(stats::sigma(x))
   }
 
   if (is_empty_object(s)) {
     info <- model_info(x, verbose = FALSE)
     if (!is.null(info) && info$is_mixed) {
-      s <- tryCatch(
-        {
-          sqrt(get_variance_residual(x, verbose = FALSE))
-        },
-        error = function(e) {
-          NULL
-        }
-      )
+      s <- .safe(sqrt(get_variance_residual(x, verbose = FALSE)))
     }
   }
 
@@ -221,7 +197,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   }
 
   # default sigma ---------------
-  s <- tryCatch(stats::sigma(x), error = function(e) NULL)
+  s <- .safe(stats::sigma(x))
 
 
   # compute sigma manually ---------------
@@ -237,16 +213,13 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
       info <- model_info(x, verbose = FALSE)
     }
     if (!is.null(info) && info$is_mixed) {
-      s <- tryCatch(sqrt(get_variance_residual(x, verbose = FALSE)),
-        error = function(e) NULL
-      )
+      s <- .safe(sqrt(get_variance_residual(x, verbose = FALSE)))
     }
   }
 
   if (is_empty_object(s)) {
-    s <- tryCatch(
-      sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose)),
-      error = function(e) NULL
+    s <- .safe(
+      sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
     )
   }
 

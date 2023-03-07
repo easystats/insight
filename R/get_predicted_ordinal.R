@@ -23,7 +23,7 @@ get_predicted.clm <- function(x,
     type_arg <- c("prob", "class")[match(predict, valid)]
   } else {
     if (!"type" %in% names(dots)) {
-      stop("Please specify the `predict` argument.", call. = FALSE)
+      format_error("Please specify the `predict` argument.")
     } else {
       type_arg <- match.arg(dots$type, choices = c("prob", "class"))
     }
@@ -37,7 +37,7 @@ get_predicted.clm <- function(x,
   data <- data[, setdiff(colnames(data), resp), drop = FALSE]
   vars <- as.character(attr(x$terms, "variables"))[-1]
   vars[attr(x$terms, "response")] <- resp
-  s <- paste0("list(", paste(vars, collapse = ", "), ")")
+  s <- paste0("list(", toString(vars), ")")
   new_call <- parse(text = s, keep.source = FALSE)[[1L]]
   attr(x$terms, "variables") <- new_call
 
@@ -47,13 +47,11 @@ get_predicted.clm <- function(x,
   }
 
   # check whether CIs should be returned
-  if (!is.null(ci)) {
-    if (type_arg == "class") {
-      if (verbose) {
-        format_warning("Confidence intervals are not available for classification.")
-      }
-      ci <- NULL
+  if (!is.null(ci) && type_arg == "class") {
+    if (verbose) {
+      format_warning("Confidence intervals are not available for classification.")
     }
+    ci <- NULL
   }
 
   # compute predictions
@@ -187,7 +185,7 @@ get_predicted.rlm <- function(x, predict = "expectation", ...) {
   } else {
     dots <- list(...)
     if (!"type" %in% names(dots)) {
-      stop("Please specify the `predict` argument.", call. = FALSE)
+      format_error("Please specify the `predict` argument.")
     }
     dots[["type"]] <- match.arg(dots$type, choices = "response")
     dots[["x"]] <- x

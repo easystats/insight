@@ -128,31 +128,47 @@
 #' get_variance_residual(m)
 #' }
 #' @export
-get_variance <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, ...) {
+get_variance <- function(x,
+                         component = c("all", "fixed", "random", "residual",
+                                       "distribution", "dispersion", "intercept",
+                                       "slope", "rho01", "rho00"),
+                         verbose = TRUE,
+                         ...) {
   UseMethod("get_variance")
 }
 
 
 #' @export
-get_variance.default <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, ...) {
+get_variance.default <- function(x,
+                                 component = c("all", "fixed", "random", "residual",
+                                               "distribution", "dispersion", "intercept",
+                                               "slope", "rho01", "rho00"),
+                                 verbose = TRUE,
+                                 ...) {
   if (isTRUE(verbose)) {
-    warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]), call. = FALSE)
+    format_warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
   }
   NULL
 }
 
 
 #' @export
-get_variance.merMod <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, tolerance = 1e-5, ...) {
+get_variance.merMod <- function(x,
+                                component = c("all", "fixed", "random", "residual",
+                                              "distribution", "dispersion", "intercept",
+                                              "slope", "rho01", "rho00"),
+                                verbose = TRUE,
+                                tolerance = 1e-5,
+                                ...) {
   component <- match.arg(component)
-  tryCatch(
-    {
-      .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose, tolerance = tolerance)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  .safe(.compute_variances(
+    x,
+    component = component,
+    name_fun = "get_variance",
+    name_full = "random effect variances",
+    verbose = verbose,
+    tolerance = tolerance
+  ))
 }
 
 
@@ -188,16 +204,24 @@ get_variance.brmsfit <- get_variance.merMod
 
 
 #' @export
-get_variance.glmmTMB <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, tolerance = 1e-5, model_component = NULL, ...) {
+get_variance.glmmTMB <- function(x,
+                                 component = c("all", "fixed", "random", "residual",
+                                               "distribution", "dispersion", "intercept",
+                                               "slope", "rho01", "rho00"),
+                                 verbose = TRUE,
+                                 tolerance = 1e-5,
+                                 model_component = NULL,
+                                 ...) {
   component <- match.arg(component)
-  tryCatch(
-    {
-      .compute_variances(x, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose, tolerance = tolerance, model_component = model_component)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  .safe(.compute_variances(
+    x,
+    component = component,
+    name_fun = "get_variance",
+    name_full = "random effect variances",
+    verbose = verbose,
+    tolerance = tolerance,
+    model_component = model_component
+  ))
 }
 
 #' @export
@@ -205,9 +229,22 @@ get_variance.MixMod <- get_variance.glmmTMB
 
 
 #' @export
-get_variance.mixed <- function(x, component = c("all", "fixed", "random", "residual", "distribution", "dispersion", "intercept", "slope", "rho01", "rho00"), verbose = TRUE, tolerance = 1e-5, ...) {
+get_variance.mixed <- function(x,
+                               component = c("all", "fixed", "random", "residual",
+                                             "distribution", "dispersion", "intercept",
+                                             "slope", "rho01", "rho00"),
+                               verbose = TRUE,
+                               tolerance = 1e-5,
+                               ...) {
   component <- match.arg(component)
-  .compute_variances(x$full_model, component = component, name_fun = "get_variance", name_full = "random effect variances", verbose = verbose, tolerance = tolerance)
+  .safe(.compute_variances(
+    x$full_model,
+    component = component,
+    name_fun = "get_variance",
+    name_full = "random effect variances",
+    verbose = verbose,
+    tolerance = tolerance
+  ))
 }
 
 

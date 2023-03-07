@@ -27,7 +27,7 @@
 #' }
 #' @export
 find_offset <- function(x) {
-  terms <- .hush(
+  terms <- .safe(
     as.character(attributes(stats::terms(find_formula(x)[[1]]))$variables),
     find_terms(x)
   )

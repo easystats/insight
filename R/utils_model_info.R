@@ -182,14 +182,7 @@
   is.truncated <- FALSE
 
   if (inherits(x, "brmsfit") && is.null(stats::formula(x)$responses)) {
-    rv <- tryCatch(
-      {
-        safe_deparse(stats::formula(x)$formula[[2L]])
-      },
-      error = function(x) {
-        NULL
-      }
-    )
+    rv <- .safe(safe_deparse(stats::formula(x)$formula[[2L]]))
 
     if (!is.null(rv)) {
       is.trial <- trim_ws(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\2", rv)) %in% c("trials", "resp_trials")
@@ -373,13 +366,10 @@
   # mixed model?
   is.mixed.model <- !is_levenetest && is_mixed_model(x)
   if (is.mixed.model) {
-    n.grp.lvl <- tryCatch(
+    n.grp.lvl <- .safe(
       {
         ngrplvl <- n_grouplevels(x)
         stats::setNames(ngrplvl$N_levels, ngrplvl$Group)
-      },
-      error = function(e) {
-        NULL
       }
     )
   } else {

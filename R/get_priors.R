@@ -125,7 +125,7 @@ get_priors.stanmvreg <- function(x, ...) {
 
   ps <- rstanarm::prior_summary(x)
 
-  l <- compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) {
+  l <- compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) { # nolint
     lapply(.x, function(.i) {
       if (!is.null(.i)) do.call(cbind, .i)
     })
@@ -292,7 +292,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
       return(out)
     }
     if (is.null(names(ls))) {
-      stop("Argument `ls` must be named.", call. = FALSE)
+      format_error("Argument `ls` must be named.")
     }
     for (name in names(ls)) {
       out <- out & brms::do_call(fun, list(x[[name]], ls[[name]]))
@@ -547,7 +547,7 @@ get_priors.BFBayesFactor <- function(x, ...) {
     out$Scale <- NA
 
     # find parameter names pattern to match data types
-    find_types <- do.call(rbind, strsplit(out$Parameter, "-", TRUE))[, 1, drop = TRUE]
+    find_types <- do.call(rbind, strsplit(out$Parameter, "-", fixed = TRUE))[, 1, drop = TRUE]
     interactions <- grepl(":", find_types, fixed = TRUE)
     find_types[interactions] <- gsub("(.*):(.*)", "\\2", find_types[interactions])
     cont_types <- data_types == "continuous"
@@ -596,8 +596,8 @@ get_priors.blavaan <- function(x, ...) {
   pte2 <- which(newpt$free > 0)
 
   relevant_rows <- match(
-    with(newpt, paste(lhs[pte2], op[pte2], rhs[pte2], group[pte2], sep = "")),
-    paste(PE$lhs, PE$op, PE$rhs, PE$group, sep = "")
+    with(newpt, paste0(lhs[pte2], op[pte2], rhs[pte2], group[pte2])),
+    paste0(PE$lhs, PE$op, PE$rhs, PE$group)
   )
 
   # Priors
@@ -606,7 +606,7 @@ get_priors.blavaan <- function(x, ...) {
   priors[is.na(PE$prior)] <- NA
 
   stats::na.omit(data.frame(
-    Parameter = paste(PE$lhs, PE$op, PE$rhs, sep = ""),
+    Parameter = paste0(PE$lhs, PE$op, PE$rhs),
     Distribution = gsub("(.*)\\((.*)", "\\1", priors),
     Location = as.numeric(gsub("(.*)\\((.*)\\,(.*)\\)(.*)", "\\2", priors)),
     Scale = as.numeric(gsub("(.*)\\((.*)\\,(.*)\\)(.*)", "\\3", priors)),

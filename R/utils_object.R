@@ -27,14 +27,7 @@ is_empty_object <- function(x) {
     }
     # a list but not a data.frame
   } else if (is.list(x) && length(x) > 0) {
-    x <- tryCatch(
-      {
-        compact_list(x)
-      },
-      error = function(x) {
-        x
-      }
-    )
+    x <- .safe(compact_list(x), x)
   } else if (!is.null(x)) {
     x <- stats::na.omit(x)
   }
@@ -67,9 +60,7 @@ is_empty_object <- function(x) {
 #' # check if a dataframe has rownames
 #' object_has_rownames(mtcars)
 #'
-#' @return
-#'
-#' A logical or a vector of logicals.
+#' @return A logical or a vector of logicals.
 #'
 #' @rdname object_has_names
 #' @export
@@ -81,7 +72,7 @@ object_has_names <- function(x, names) {
 #' @export
 object_has_rownames <- function(x) {
   if (!is.data.frame(x)) {
-    stop("Only data frames are allowed.", call. = FALSE)
+    format_error("Only data frames are allowed.")
   }
 
   !identical(attributes(x)$row.names, seq_len(nrow(x)))

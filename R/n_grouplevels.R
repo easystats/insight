@@ -33,14 +33,14 @@ n_grouplevels <- function(x, ...) {
   }
 
   # try to extract random effects
-  ran_eff <- .hush(find_random(x, split_nested = TRUE, flatten = TRUE))
+  ran_eff <- .safe(find_random(x, split_nested = TRUE, flatten = TRUE))
 
   # retrieve model data - may be passed via "..."
   dot_args <- list(...)
   if ("data" %in% names(dot_args)) {
     re_data <- dot_args$data
   } else {
-    re_data <- .hush(get_data(x, verbose = FALSE))
+    re_data <- .safe(get_data(x, verbose = FALSE))
   }
 
   # sanity check - did we successfully retrieve data and random effects?
@@ -60,7 +60,7 @@ n_grouplevels <- function(x, ...) {
     group_names <- colnames(re_data)
   }
 
-  out <- .hush(
+  out <- .safe(
     data.frame(
       Group = group_names,
       N_levels = unname(re_levels),

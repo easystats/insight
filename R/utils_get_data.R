@@ -19,7 +19,7 @@
   # make sure it's a data frame -----------------------------------------------
 
   if (!is.data.frame(mf)) {
-    mf <- .hush(as.data.frame(mf))
+    mf <- .safe(as.data.frame(mf))
     if (is.null(mf)) {
       if (isTRUE(verbose)) {
         format_warning(
@@ -120,12 +120,12 @@
   # proper column names and bind them back to the original model frame
   if (any(mc)) {
     # try to get model data from environment
-    md <- .hush(eval(model_call$data, environment(stats::formula(x))))
+    md <- .safe(eval(model_call$data, environment(stats::formula(x))))
 
     # in case we have missing data, the data frame in the environment
     # has more rows than the model frame
     if (isTRUE(!is.null(md) && nrow(md) != nrow(mf))) {
-      md <- .hush(
+      md <- .safe(
         {
           md <- .recover_data_from_environment(x)
           md <- stats::na.omit(md[intersect(
@@ -205,10 +205,10 @@
         # model frame, tell user and skip this step
         if (!length(needed.vars) || nrow(md) != nrow(mf)) {
           if (isTRUE(verbose)) {
-            warning(format_message(
+            format_warning(
               "Could not find all model variables in the data.",
               "Maybe the original data frame used to fit the model was modified?"
-            ), call. = FALSE)
+            )
           }
         } else {
           mf <- md[, needed.vars, drop = FALSE]
@@ -238,10 +238,7 @@
     }
 
     # check if we really have all formula terms in our model frame now
-    pv <- tryCatch(
-      find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose),
-      error = function(x) NULL
-    )
+    pv <- .safe(find_predictors(x, effects = effects, flatten = TRUE, verbose = verbose))
 
     # still some undetected matrix-variables?
     if (!is.null(pv) && !all(pv %in% colnames(mf)) && isTRUE(verbose)) {
@@ -323,7 +320,7 @@
 
   # keep "as is" variable for response variables in data frame
   if (colnames(mf)[1] == rn[1] && grepl("I(", rn[1], fixed = TRUE, ignore.case = FALSE)) {
-    md <- .hush(
+    md <- .safe(
       {
         tmp <- .recover_data_from_environment(x)[, unique(c(rn_not_combined, cvn)), drop = FALSE]
         tmp[, rn_not_combined, drop = FALSE]
@@ -407,9 +404,7 @@
   # check if data argument was used
   model_call <- get_call(model)
   if (!is.null(model_call)) {
-    data_arg <- tryCatch(parse(text = safe_deparse(model_call))[[1]]$data,
-      error = function(e) NULL
-    )
+    data_arg <- .safe(parse(text = safe_deparse(model_call))[[1]]$data)
   } else {
     data_arg <- NULL
   }
@@ -428,7 +423,7 @@
   )
 
   # include subset variables
-  subset_vars <- tryCatch(all.vars(model_call$subset), error = function(e) NULL)
+  subset_vars <- .safe(all.vars(model_call$subset))
   missing_vars <- unique(c(setdiff(predictors, colnames(mf)), subset_vars))
 
   # check if missing variables can be recovered from the environment,
@@ -446,7 +441,7 @@
 
   # fix interaction terms
   if (!is.null(interactions)) {
-    full_data <- tryCatch(.recover_data_from_environment(model), error = function(e) NULL)
+    full_data <- .safe(.recover_data_from_environment(model))
     if (!is.null(full_data) && nrow(full_data) == nrow(mf)) {
       mf[c(interactions, names(interactions))] <- NULL
       mf <- cbind(mf, full_data[c(interactions, names(interactions))])
@@ -656,7 +651,7 @@
   model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE, verbose = FALSE)
   model.terms$offset <- find_offset(x)
 
-  mf <- tryCatch(stats::model.frame(x), error = function(x) NULL)
+  mf <- .safe(stats::model.frame(x))
   mf <- .prepare_get_data(x, mf, verbose = verbose)
   # add variables from other model components
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
@@ -680,7 +675,7 @@
 #
 .get_data_from_modelframe <- function(x, dat, effects, verbose = TRUE) {
   if (is_empty_object(dat)) {
-    warning("Could not get model data.", call. = FALSE)
+    format_warning("Could not get model data.")
     return(NULL)
   }
   cn <- clean_names(colnames(dat))
@@ -692,7 +687,7 @@
   )
   remain <- intersect(c(ft, find_weights(x)), cn)
 
-  mf <- tryCatch(dat[, remain, drop = FALSE], error = function(x) dat)
+  mf <- .safe(dat[, remain, drop = FALSE], dat)
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
@@ -704,14 +699,11 @@
 # return data from a data frame that is in the environment,
 # and subset the data, if necessary
 .get_startvector_from_env <- function(x) {
-  tryCatch(
+  .safe(
     {
       sv <- eval(parse(text = safe_deparse(x@call))[[1]]$start)
       if (is.list(sv)) sv <- sv[["nlpars"]]
       names(sv)
-    },
-    error = function(e) {
-      NULL
     }
   )
 }
@@ -766,16 +758,10 @@
         # no plus-minus?
         if (grepl("log\\((.*)\\+(.*)\\)", i)) {
           # 1. try: log(x + number)
-          plus_minus <- tryCatch(
-            eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\2", i))),
-            error = function(e) NULL
-          )
+          plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\2", i))))
           # 2. try: log(number + x)
           if (is.null(plus_minus)) {
-            plus_minus <- tryCatch(
-              eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\1", i))),
-              error = function(e) NULL
-            )
+            plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\1", i))))
           }
         }
         if (is.null(plus_minus)) {
@@ -979,13 +965,10 @@
   # 2nd try
   if (is.null(out)) {
     for (parent_level in 1:5) {
-      out <- tryCatch(
+      out <- .safe(
         {
           data_name <- trim_ws(unlist(strsplit(x$data.name, "(and|,|by)"), use.names = FALSE))
           as.table(get(data_name, envir = parent.frame(n = parent_level)))
-        },
-        error = function(e) {
-          NULL
         }
       )
       if (!is.null(out)) break

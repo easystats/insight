@@ -24,12 +24,12 @@ get_call <- function(x) {
 
 #' @export
 get_call.default <- function(x) {
-  cl <- .hush(getElement(x, "call"))
+  cl <- .safe(getElement(x, "call"))
 
   # For GAMM4
   if (is.null(cl) && "gam" %in% names(x)) {
     # Where's the call here?
-    cl <- .hush(x$gam$formula)
+    cl <- .safe(x$gam$formula)
   }
 
   cl

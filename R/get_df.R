@@ -155,11 +155,11 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   }
 
   if (!is.null(dof) && length(dof) > 0 && all(dof == 0) && isTRUE(verbose)) {
-    warning("Model has zero degrees of freedom!", call. = FALSE)
+    format_warning("Model has zero degrees of freedom!")
   }
 
   if (is.null(dof) && isTRUE(verbose)) {
-    warning("Could not extract degrees of freedom.", call. = FALSE)
+    format_warning("Could not extract degrees of freedom.")
   }
 
   dof
