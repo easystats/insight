@@ -278,7 +278,7 @@ find_formula.rma <- function(x, verbose = TRUE, ...) {
       formula.yi <- formula.mods
     }
   }
-  f <- .compact_list(list(
+  f <- compact_list(list(
     conditional = formula.yi,
     dispersion = formula.mods
   ))
