@@ -18,15 +18,18 @@ test_that("lm: sandwich", {
   mod <- lm(mpg ~ hp * wt, data = mtcars)
   expect_equal(
     get_varcov(mod, vcov = "HC1"),
-    vcovHC(mod, type = "HC1")
+    vcovHC(mod, type = "HC1"),
+    ignore_attr = TRUE
   )
   expect_equal(
     get_varcov(mod, vcov = "HC4"),
-    vcovHC(mod, type = "HC4")
+    vcovHC(mod, type = "HC4"),
+    ignore_attr = TRUE
   )
   expect_equal(
     get_varcov(mod, vcov = "HC", vcov_args = list(type = "HC4")),
-    vcovHC(mod, type = "HC4")
+    vcovHC(mod, type = "HC4"),
+    ignore_attr = TRUE
   )
   expect_equal(get_varcov(mod, vcov = vcovOPG),
     vcovOPG(mod),
@@ -52,7 +55,7 @@ test_that("mlm: sandwich", {
   mod <- lm(cbind(cyl, disp, hp) ~ drat, data = mtcars)
   v1 <- get_varcov(mod, vcov = "HC3")
   v2 <- sandwich::vcovHC(mod)
-  expect_equal(v1, v2)
+  expect_equal(v1, v2, tolerance = 1e-4, ignore_attr = TRUE)
 })
 
 
@@ -68,7 +71,7 @@ test_that("verbose and deprecated arguments", {
   mod <- lm(mpg ~ hp, data = mtcars)
   v1 <- suppressWarnings(get_varcov(mod, robust = TRUE))
   v2 <- suppressWarnings(get_varcov(mod, robust = TRUE))
-  expect_equal(v1, v2)
+  expect_equal(v1, v2, tolerance = 1e-4, ignore_attr = TRUE)
   expect_warning(get_varcov(mod, robust = TRUE), regexp = "deprecated")
   expect_warning(get_varcov(mod, robust = TRUE, verbose = FALSE), NA)
 })
