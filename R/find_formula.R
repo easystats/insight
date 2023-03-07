@@ -262,16 +262,14 @@ find_formula.gamm <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.rma <- function(x, verbose = TRUE, ...) {
-  formula.yi <- `attributes<-`(formula(x, type = "yi"), NULL)
-  formula.mods <- `attributes<-`(formula(x, type = "mods"), NULL)
-  formula.scale <- `attributes<-`(
-    .hush(formula(x, type = "scale")),
-    NULL
-  )
+  formula.yi <- `attributes<-`(stats::formula(x, type = "yi"), NULL)
+  formula.mods <- `attributes<-`(stats::formula(x, type = "mods"), NULL)
+  formula.scale <- `attributes<-`(.hush(stats::formula(x, type = "scale")), NULL)
+
   model_call <- get_call(x)
   if (is.null(formula.yi)) {
     if (is.null(formula.mods)) {
-      formula.yi <- as.formula(paste(model_call$yi, "~ 1"))
+      formula.yi <- stats::as.formula(paste(model_call$yi, "~ 1"))
     } else {
       formula.mods[3] <- formula.mods[2]
       formula.mods[2] <- model_call$yi
@@ -288,18 +286,6 @@ find_formula.rma <- function(x, verbose = TRUE, ...) {
 #' @export
 # TODO: Check these
 find_formula.metaplus <- find_formula.rma
-
-#' @export
-# TODO: Check these
-find_formula.meta_random <- find_formula.rma
-
-#' @export
-# TODO: Check these
-find_formula.meta_fixed <- find_formula.rma
-
-#' @export
-# TODO: Check these
-find_formula.meta_bma <- find_formula.rma
 
 #' @export
 find_formula.deltaMethod <- find_formula.rma
