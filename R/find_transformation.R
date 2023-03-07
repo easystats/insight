@@ -44,15 +44,13 @@ find_transformation <- function(x) {
       transform_fun <- "log-log"
     } else {
       # 1. try: log(x + number)
-      plus_minus <- tryCatch(
-        eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", rv))),
-        error = function(e) NULL
+      plus_minus <- .hush(
+        eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", rv)))
       )
       # 2. try: log(number + x)
       if (is.null(plus_minus)) {
-        plus_minus <- tryCatch(
-          eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", rv))),
-          error = function(e) NULL
+        plus_minus <- .hush(
+          eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", rv)))
         )
       }
       if (is.null(plus_minus)) {

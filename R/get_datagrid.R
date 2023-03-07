@@ -309,7 +309,7 @@ get_datagrid.data.frame <- function(x,
     targets <- expand.grid(c(nums, facs))
 
     # sort targets data frame according to order specified in "at"
-    targets <- tryCatch(targets[specs$varname], error = function(e) targets)
+    targets <- .hush(targets[specs$varname], targets)
 
     # Preserve range ---------------------------------------------------------
     if (preserve_range && length(facs) > 0 && length(nums) > 0) {
@@ -524,13 +524,13 @@ get_datagrid.double <- get_datagrid.numeric
       disp <- stats::sd(x, na.rm = TRUE)
       center <- mean(x, na.rm = TRUE)
       labs <- ifelse(sign(spread) == -1, paste(spread, "SD"),
-        ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean")
+        ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean") # nolint
       )
     } else {
       disp <- stats::mad(x, na.rm = TRUE)
       center <- stats::median(x, na.rm = TRUE)
       labs <- ifelse(sign(spread) == -1, paste(spread, "MAD"),
-        ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median")
+        ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median") # nolint
       )
     }
     out <- center + spread * disp
@@ -916,7 +916,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
     # make sure we only have variables from original data
     all_vars <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
     if (!is.null(all_vars)) {
-      data <- tryCatch(data[intersect(all_vars, colnames(data))], error = function(e) data)
+      data <- .hush(data[intersect(all_vars, colnames(data))], data)
     }
   }
 

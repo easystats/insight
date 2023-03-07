@@ -1,3 +1,9 @@
+# small wrapper around this commonly used try-catch
+.hush <- function(code, on_error = NULL) {
+  tryCatch(code, error = function(e) on_error)
+}
+
+
 # remove values from vector
 .remove_values <- function(x, values) {
   remove <- x %in% values
@@ -419,25 +425,11 @@
 
 
 .gam_family <- function(x) {
-  faminfo <- tryCatch(
-    {
-      stats::family(x)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  faminfo <- .hush(stats::family(x))
 
   # try to set manually, if not found otherwise
   if (is.null(faminfo)) {
-    faminfo <- tryCatch(
-      {
-        x$family
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    faminfo <- .hush(x$family)
   }
 
   faminfo
@@ -567,7 +559,7 @@
   if (attr(stats::terms(frml), "intercept") != 0) {
     newtrms <- c("1", newtrms)
   }
-  stats::as.formula(paste("~(", paste(vapply(newtrms, function(trm) {
+  stats::as.formula(paste("~(", paste(vapply(newtrms, function(trm) { # nolint
     paste0(trm, "|", deparse(term[[3]]))
   }, ""), collapse = ")+("), ")"))[[2]]
 }

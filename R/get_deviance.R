@@ -28,37 +28,14 @@ get_deviance <- function(x, ...) {
 #' @rdname get_deviance
 #' @export
 get_deviance.default <- function(x, verbose = TRUE, ...) {
-  dev <- tryCatch(
-    {
-      stats::deviance(x, ...)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  dev <- .hush(stats::deviance(x, ...))
 
   if (is.null(dev)) {
-    dev <- tryCatch(
-      {
-        x$deviance
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    dev <- .hush(x$deviance)
   }
-
   if (is.null(dev)) {
-    dev <- tryCatch(
-      {
-        sum(get_residuals(x, weighted = TRUE, verbose = verbose)^2, na.rm = TRUE)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    dev <- .hush(sum(get_residuals(x, weighted = TRUE, verbose = verbose)^2, na.rm = TRUE))
   }
-
   dev
 }
 

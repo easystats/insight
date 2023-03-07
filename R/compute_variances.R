@@ -858,7 +858,7 @@
     },
     error = function(x) {
       if (verbose) {
-        warning("Can't calculate model's distribution-specific variance. Results are not reliable.", call. = FALSE)
+        format_warning("Can't calculate model's distribution-specific variance. Results are not reliable.")
       }
       0
     }

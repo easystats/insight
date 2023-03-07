@@ -586,13 +586,9 @@ link_function.gamm <- function(x, ...) {
 #' @export
 link_function.bamlss <- function(x, ...) {
   flink <- stats::family(x)$links[1]
-  tryCatch(
-    {
-      stats::make.link(flink)$linkfun
-    },
-    error = function(e) {
-      print_colour("\nCould not find appropriate link-function.\n", "red")
-    }
+  .hush(
+    stats::make.link(flink)$linkfun,
+    print_colour("\nCould not find appropriate link-function.\n", "red")
   )
 }
 

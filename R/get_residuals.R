@@ -55,73 +55,48 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
     return(.pearson_residuals(x))
   }
 
-  res <- tryCatch(
-    {
-      stats::residuals(x, ...)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  res <- .hush(stats::residuals(x, ...))
 
   if (is.null(res)) {
-    res <- tryCatch(
-      {
-        x$residuals
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    res <- .hush(x$residuals)
   }
 
   # For gamm4 objects
   if (is.null(res)) {
-    res <- tryCatch(
-      {
-        x$gam$residuals
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    res <- .hush(x$gam$residuals)
   }
 
   if (is.null(res)) {
-    res <- tryCatch(
+    res <- .hush(
       {
         yield_warning <- no_response_resid && verbose
         pred <- stats::predict(x, type = "response")
         observed <- .factor_to_numeric(get_response(x, verbose = FALSE))
         observed - pred
-      },
-      error = function(e) {
-        NULL
       }
     )
   }
 
   if (is.null(res)) {
-    res <- tryCatch(
+    res <- .hush(
       {
         yield_warning <- no_response_resid && verbose
         pred <- stats::fitted(x)
         observed <- .factor_to_numeric(get_response(x, verbose = FALSE))
         observed - pred
-      },
-      error = function(e) {
-        NULL
       }
     )
   }
 
   if (is.null(res) || all(is.na(res))) {
-    if (verbose) warning("Can't extract residuals from model.", call. = FALSE)
+    if (verbose) {
+      format_warning("Can't extract residuals from model.")
+    }
     res <- NULL
   } else if (yield_warning) {
-    warning(format_message(paste0(
+    format_warning(paste0(
       "Can't extract '", res_type, "' residuals. Returning response residuals."
-    )), call. = FALSE)
+    ))
   }
 
   res

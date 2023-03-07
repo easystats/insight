@@ -48,10 +48,10 @@ null_model <- function(model, verbose = TRUE, ...) {
         },
         error = function(e) {
           if (verbose) {
-            warning(format_message(
+            format_warning(
               "Model contains offset-terms, which could not be considered in the returned null-model.",
               "Coefficients might be inaccurate."
-            ), call. = FALSE)
+            )
           }
           stats::update(model, ~1)
         }

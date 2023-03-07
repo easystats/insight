@@ -27,9 +27,9 @@
 #' }
 #' @export
 find_offset <- function(x) {
-  terms <- tryCatch(
+  terms <- .hush(
     as.character(attributes(stats::terms(find_formula(x)[[1]]))$variables),
-    error = function(e) find_terms(x)
+    find_terms(x)
   )
   offset <- NULL
 

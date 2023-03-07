@@ -62,15 +62,11 @@
   ############################################################################
 
   if (is.null(data)) {
-    flag_matrix <- tryCatch(
-      any(grepl("matrix", attributes(stats::terms(x))$dataClasses, fixed = TRUE)),
-      error = function(e) FALSE
+    flag_matrix <- .hush(
+      any(grepl("matrix", attributes(stats::terms(x))$dataClasses, fixed = TRUE)), FALSE
     )
   } else {
-    flag_matrix <- tryCatch(
-      any(vapply(data, inherits, TRUE, what = "matrix")),
-      error = function(e) FALSE
-    )
+    flag_matrix <- .hush(any(vapply(data, inherits, TRUE, what = "matrix")), FALSE)
   }
   if (isTRUE(flag_matrix) && isTRUE(verbose)) {
     format_alert(
@@ -86,15 +82,12 @@
   # check `predict` user-input
   predict_method <- lapply(
     class(x), function(i) {
-      tryCatch(utils::getS3method("predict", i),
-        error = function(e) NULL
-      )
+      .hush(utils::getS3method("predict", i))
     }
   )
   # check whether model class has a predict method
-  predict_method <- tryCatch(
-    predict_method[!vapply(predict_method, is.null, TRUE)][[1]],
-    error = function(e) NULL
+  predict_method <- .hush(
+    predict_method[!vapply(predict_method, is.null, TRUE)][[1]]
   )
   # define easystats prediction-types
   easystats_methods <- c("expectation", "link", "prediction", "classification")

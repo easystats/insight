@@ -265,7 +265,7 @@ find_formula.rma <- function(x, verbose = TRUE, ...) {
   formula.yi <- `attributes<-`(formula(x, type = "yi"), NULL)
   formula.mods <- `attributes<-`(formula(x, type = "mods"), NULL)
   formula.scale <- `attributes<-`(
-    tryCatch(formula(x, type = "scale"), error = function(e) NULL),
+    .hush(formula(x, type = "scale")),
     NULL
   )
   model_call <- get_call(x)
@@ -1497,9 +1497,7 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
       f.cond <- stats::as.formula(fcond)
     }
   } else if (.classify_BFBayesFactor(x) %in% c("ttest1", "ttest2")) {
-    f.cond <- tryCatch(stats::as.formula(x@numerator[[1]]@identifier$formula),
-      error = function(e) NULL
-    )
+    f.cond <- .hush(stats::as.formula(x@numerator[[1]]@identifier$formula))
     f.random <- NULL
   } else {
     return(NULL)

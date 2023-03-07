@@ -102,16 +102,13 @@ model_info.default <- function(x, verbose = TRUE, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
-  faminfo <- tryCatch(
+  faminfo <- .hush(
     {
       if (inherits(x, "Zelig-relogit")) {
         stats::binomial(link = "logit")
       } else {
         stats::family(x)
       }
-    },
-    error = function(x) {
-      NULL
     }
   )
 
@@ -1244,13 +1241,10 @@ model_info.gamlss <- function(x, ...) {
 
 #' @export
 model_info.mipo <- function(x, verbose = TRUE, ...) {
-  tryCatch(
+  .hush(
     {
       models <- eval(x$call$object)
       model_info(models$analyses[[1]], verbose = verbose, ...)
-    },
-    error = function(e) {
-      NULL
     }
   )
 }

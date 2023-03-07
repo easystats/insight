@@ -7,7 +7,7 @@
   # check if we have any data yet
   if (is_empty_object(mf)) {
     if (isTRUE(verbose)) {
-      warning("Could not get model data.", call. = FALSE)
+      format_warning("Could not get model data.")
     }
     return(NULL)
   }
@@ -19,13 +19,13 @@
   # make sure it's a data frame -----------------------------------------------
 
   if (!is.data.frame(mf)) {
-    mf <- tryCatch(as.data.frame(mf), error = function(e) NULL)
+    mf <- .hush(as.data.frame(mf))
     if (is.null(mf)) {
       if (isTRUE(verbose)) {
-        warning(format_message(
+        format_warning(
           "Cannot coerce data into a data frame.",
           "No data will be returned."
-        ), call. = FALSE)
+        )
       }
       return(NULL)
     }
@@ -120,23 +120,18 @@
   # proper column names and bind them back to the original model frame
   if (any(mc)) {
     # try to get model data from environment
-    md <- tryCatch(eval(model_call$data, environment(stats::formula(x))),
-      error = function(x) NULL
-    )
+    md <- .hush(eval(model_call$data, environment(stats::formula(x))))
 
     # in case we have missing data, the data frame in the environment
     # has more rows than the model frame
     if (isTRUE(!is.null(md) && nrow(md) != nrow(mf))) {
-      md <- tryCatch(
+      md <- .hush(
         {
           md <- .recover_data_from_environment(x)
           md <- stats::na.omit(md[intersect(
             colnames(md),
             find_variables(x, effects = "all", component = "all", flatten = TRUE)
           )])
-        },
-        error = function(e) {
-          NULL
         }
       )
     }
@@ -328,13 +323,10 @@
 
   # keep "as is" variable for response variables in data frame
   if (colnames(mf)[1] == rn[1] && grepl("I(", rn[1], fixed = TRUE, ignore.case = FALSE)) {
-    md <- tryCatch(
+    md <- .hush(
       {
         tmp <- .recover_data_from_environment(x)[, unique(c(rn_not_combined, cvn)), drop = FALSE]
         tmp[, rn_not_combined, drop = FALSE]
-      },
-      error = function(x) {
-        NULL
       }
     )
 

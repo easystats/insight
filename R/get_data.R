@@ -209,22 +209,16 @@ get_data <- function(x, ...) {
   }
 
   # first, try environment of formula, see #666
-  dat <- tryCatch(eval(model_call$data, envir = environment(model_call$formula)),
-    error = function(e) NULL
-  )
+  dat <- .hush(eval(model_call$data, envir = environment(model_call$formula)))
 
   # second, try to extract formula directly
   if (is.null(dat)) {
-    dat <- tryCatch(eval(model_call$data, envir = environment(find_formula(x))),
-      error = function(e) NULL
-    )
+    dat <- .hush(eval(model_call$data, envir = environment(find_formula(x))))
   }
 
   # next try, parent frame
   if (is.null(dat)) {
-    dat <- tryCatch(eval(model_call$data, envir = parent.frame()),
-      error = function(e) NULL
-    )
+    dat <- .hush(eval(model_call$data, envir = parent.frame()))
   }
 
   # sanity check- if data frame is named like a function, e.g.
@@ -232,21 +226,17 @@ get_data <- function(x, ...) {
   # we then need to reset "dat" to NULL and search in the global env
 
   if (!is.null(dat) && !is.data.frame(dat)) {
-    dat <- tryCatch(as.data.frame(dat), error = function(e) NULL)
+    dat <- .hush(as.data.frame(dat))
   }
 
   # third try, global env
   if (is.null(dat)) {
-    dat <- tryCatch(eval(model_call$data, envir = globalenv()),
-      error = function(e) NULL
-    )
+    dat <- .hush(eval(model_call$data, envir = globalenv()))
   }
 
   # last try, internal env
   if (is.null(dat)) {
-    dat <- tryCatch(eval(model_call$data, envir = parent.env(x$call_env)),
-      error = function(e) NULL
-    )
+    dat <- .hush(eval(model_call$data, envir = parent.env(x$call_env)))
   }
 
   if (!is.null(dat) && object_has_names(model_call, "subset")) {
@@ -711,16 +701,13 @@ get_data.merMod <- function(x,
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
-  mf <- tryCatch(
+  mf <- .hush(
     {
       switch(effects,
         fixed = stats::model.frame(x, fixed.only = TRUE),
         all = stats::model.frame(x, fixed.only = FALSE),
         random = stats::model.frame(x, fixed.only = FALSE)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
       )
-    },
-    error = function(x) {
-      NULL
     }
   )
   .prepare_get_data(x, mf, effects, verbose = verbose)
@@ -783,16 +770,13 @@ get_data.MANOVA <- function(x,
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
-  mf <- tryCatch(
+  mf <- .hush(
     {
       switch(effects,
         fixed = .remove_column(x$input$data, x$input$subject),
         all = x$input$data,
         random = x$input$data[, x$input$subject, drop = FALSE]
       )
-    },
-    error = function(x) {
-      NULL
     }
   )
   .prepare_get_data(x, mf, effects, verbose = verbose)
@@ -860,7 +844,7 @@ get_data.glmm <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   dat <- get_data.default(x, verbose = verbose)
 
-  mf <- tryCatch(
+  mf <- .hush(
     {
       switch(effects,
         fixed = dat[, find_predictors(
@@ -872,9 +856,6 @@ get_data.glmm <- function(x,
         all = dat,
         random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
       )
-    },
-    error = function(x) {
-      NULL
     }
   )
   .prepare_get_data(x, mf, effects, verbose = verbose)
@@ -946,16 +927,13 @@ get_data.glmmadmb <- function(x,
   fixed_data <- x$frame
   random_data <- .recover_data_from_environment(x)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
 
-  mf <- tryCatch(
+  mf <- .hush(
     {
       switch(effects,
         fixed = fixed_data,
         all = cbind(fixed_data, random_data),
         random = random_data
       )
-    },
-    error = function(x) {
-      NULL
     }
   )
   .prepare_get_data(x, mf, effects, verbose = verbose)
@@ -1067,7 +1045,7 @@ get_data.lme <- function(x, effects = "all", source = "environment", verbose = T
 
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  dat <- tryCatch(x$data, error = function(x) NULL)
+  dat <- .hush(x$data)
 
   stats::na.omit(.get_data_from_modelframe(x, dat, effects))
 }
@@ -1492,7 +1470,7 @@ get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
   }
 
   # fall back to extract data from model frame
-  mf <- tryCatch(stats::model.frame(x), error = function(e) NULL)
+  mf <- .hush(stats::model.frame(x))
   ft <- find_variables(x, flatten = TRUE)
 
   if (!insight::is_empty_object(mf)) {
@@ -1501,24 +1479,18 @@ get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
     if (is_empty_object(remain)) {
       final_mf <- mf
     } else {
-      final_mf <- tryCatch(
+      final_mf <- .hush(
         {
           dat <- .recover_data_from_environment(x)
           cbind(mf, dat[, remain, drop = FALSE])
-        },
-        error = function(x) {
-          NULL
         }
       )
     }
   } else {
-    final_mf <- tryCatch(
+    final_mf <- .hush(
       {
         dat <- .recover_data_from_environment(x)
         dat[, ft, drop = FALSE]
-      },
-      error = function(x) {
-        NULL
       }
     )
   }
@@ -2253,13 +2225,10 @@ get_data.bfsl <- function(x, ...) {
 
 #' @export
 get_data.mipo <- function(x, ...) {
-  tryCatch(
+  .hush(
     {
       models <- eval(x$call$object)
       get_data(models$analyses[[1]], ...)
-    },
-    error = function(e) {
-      NULL
     }
   )
 }
