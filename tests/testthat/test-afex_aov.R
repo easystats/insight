@@ -45,9 +45,9 @@ if (skip_if_not_or_load_if_installed("afex")) {
 
 
   test_that("afex_aov: afex", {
-    expect_equal(unique(unlist(sapply(mods, model_name))), "afex_aov")
-    expect_equal(unique(unlist(sapply(mods, find_algorithm))), "OLS")
-    expect_equal(unique(unlist(sapply(mods, find_statistic))), "F-statistic")
+    expect_identical(unique(unlist(sapply(mods, model_name))), "afex_aov")
+    expect_identical(unique(unlist(sapply(mods, find_algorithm))), "OLS")
+    expect_identical(unique(unlist(sapply(mods, find_statistic))), "F-statistic")
 
     expect_null(unique(unlist(sapply(mods, find_offset))))
     expect_null(unique(unlist(sapply(mods, find_random_slopes))))
@@ -107,7 +107,7 @@ if (skip_if_not_or_load_if_installed("afex")) {
 
   test_that("afex_aov: formula and parameters", {
     # find_formula
-    expect_equal(
+    expect_identical(
       find_terms(Mc2),
       list(
         response = "value",
@@ -115,8 +115,8 @@ if (skip_if_not_or_load_if_installed("afex")) {
         error = "Error(id/(phase * hour))"
       )
     )
-    expect_equal(length(find_interactions(Mc2)$conditional), 14L)
-    expect_equal(
+    expect_length(find_interactions(Mc2)$conditional, 14)
+    expect_identical(
       find_variables(Mc2),
       list(
         response = "value",
@@ -124,32 +124,32 @@ if (skip_if_not_or_load_if_installed("afex")) {
         random = "id"
       )
     )
-    expect_equal(
+    expect_identical(
       find_predictors(Mc2, effects = "all"),
       list(
         fixed = c("treatment", "gender", "age", "phase", "hour"),
         random = "id"
       )
     )
-    expect_equal(
+    expect_identical(
       find_random(Mc2),
       list(random = "id")
     )
-    expect_equal(find_response(Mc2), "value")
+    expect_identical(find_response(Mc2), "value")
   })
 
 
   test_that("afex_aov: formula and parameters", {
-    expect_equal(dim(get_data(Mc2)), c(240, 7))
-    expect_equal(dim(get_statistic(Mc2)), c(19, 2))
+    expect_identical(dim(get_data(Mc2)), c(240L, 7L))
+    expect_identical(dim(get_statistic(Mc2)), c(19L, 2L))
 
-    expect_equal(dim(get_modelmatrix(Mc2)), c(16, 7))
-    expect_equal(length(find_parameters(Mc2)), 15L)
-    expect_equal(length(get_intercept(Mc2)), 15L)
-    expect_equal(dim(get_parameters(Mc2)), c(15 * 7, 3))
-    expect_equal(dim(get_varcov(Mc2)), c(15 * 7, 15 * 7))
+    expect_identical(dim(get_modelmatrix(Mc2)), c(16L, 7L))
+    expect_length(find_parameters(Mc2), 15)
+    expect_length(get_intercept(Mc2), 15)
+    expect_identical(dim(get_parameters(Mc2)), as.integer(c(15 * 7, 3)))
+    expect_identical(dim(get_varcov(Mc2)), as.integer(c(15 * 7, 15 * 7)))
 
-    expect_equal(length(get_predicted(Mc2)), n_obs(Mc2))
-    expect_equal(length(get_residuals(Mc2)), n_obs(Mc2))
+    expect_length(get_predicted(Mc2), n_obs(Mc2))
+    expect_length(get_residuals(Mc2), n_obs(Mc2))
   })
 }
