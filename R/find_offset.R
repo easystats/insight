@@ -47,7 +47,7 @@ find_offset <- function(x) {
   # if we have to implement too many model-specific workarounds, it may eventually be worth it to do S3
   # VAB: no test because I can only replicate in a weird {etwfe} example
   if (inherits(x, "fixest")) {
-    if (is.null(offset) || isTRUE(grepl("^\\.\\.", offset))) {
+    if (is.null(offset) || startsWith(offset, "..")) {
       offset <- clean_names(x[["model_info"]][["offset"]])
     }
     offset <- sub("^~", "", offset)
