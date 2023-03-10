@@ -861,7 +861,8 @@
         }
 
         # exeception: list for kruskal-wallis
-        if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) && startsWith(data_name, "list(")) {
+        if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) &&
+              (length(data_name) == 1 && startsWith(data_name, "list("))) {
           l <- eval(.str2lang(x$data.name))
           names(l) <- paste0("x", seq_along(l))
           return(l)
@@ -874,8 +875,7 @@
 
         # McNemar ============================================================
 
-        if (!grepl(" (and|by) ", x$data.name) &&
-          !grepl(x$method, "Paired t-test", fixed = TRUE) &&
+        if (!grepl(" (and|by) ", x$data.name) && !grepl(x$method, "Paired t-test", fixed = TRUE) &&
           !startsWith(x$method, "Wilcoxon") &&
           (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           # McNemar: preserve table data for McNemar ----

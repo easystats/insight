@@ -223,3 +223,32 @@ test_that("model_info.shapiro-test", {
   expect_true(model_info(m)$is_variancetest)
   expect_identical(model_info(m)$family, "shapiro")
 })
+
+
+# kruskal test ---------------
+
+set.seed(123)
+d <<- data.frame(
+  x = sample(1:8, 50, TRUE),
+  y = sample(1:3, 50, TRUE)
+)
+
+test_that("model_info.shapiro-test", {
+  k1 <- kruskal.test(x ~ y, data = d)
+  expect_null(get_data(k1))
+  k2 <- kruskal.test(list(d$x, d$y))
+  out <- get_data(k2)
+  expect_identical(
+    list(x1 = c(
+      7L, 7L, 3L, 6L, 3L, 2L, 2L, 6L, 3L, 5L, 4L, 6L, 6L,
+      1L, 2L, 3L, 8L, 5L, 3L, 3L, 1L, 4L, 1L, 1L, 5L, 3L, 8L, 2L, 7L,
+      2L, 1L, 6L, 3L, 4L, 6L, 1L, 3L, 7L, 5L, 4L, 7L, 8L, 2L, 5L, 7L,
+      1L, 1L, 2L, 7L, 3L
+    ), x2 = c(
+      1L, 3L, 1L, 3L, 2L, 1L, 2L, 1L, 1L,
+      3L, 1L, 2L, 1L, 1L, 3L, 1L, 2L, 1L, 3L, 1L, 3L, 2L, 3L, 2L, 2L,
+      3L, 2L, 2L, 3L, 3L, 1L, 2L, 2L, 1L, 2L, 1L, 1L, 2L, 3L, 3L, 1L,
+      2L, 1L, 2L, 1L, 3L, 3L, 2L, 3L, 1L
+    ))
+  )
+})
