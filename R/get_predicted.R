@@ -495,6 +495,7 @@ get_predicted.bife <- function(x,
 get_predicted.rma <- function(x,
                               predict = "expectation",
                               data = NULL,
+                              ci = NULL,
                               verbose = TRUE,
                               transf = NULL,
                               transf_args = NULL,
@@ -526,27 +527,28 @@ get_predicted.rma <- function(x,
       out <- .safe(stats::predict(x, newmods = newmods, transf = transf, targs = transf_args))
     }
     if (predict == "prediction") {
-      out <- setNames(
+      out <- stats::setNames(
         as.data.frame(out)[, c("pred", "se", "pi.lb", "pi.ub")],
         c("Predicted", "SE", "CI_low", "CI_high")
       )
     } else {
-      out <- setNames(
+      out <- stats::setNames(
         as.data.frame(out)[, c("pred", "se", "ci.lb", "ci.ub")],
         c("Predicted", "SE", "CI_low", "CI_high")
       )
     }
   } else if (predict == "blup") {
     if (!is.null(data)) {
+      check_if_installed("metafor")
       out <- .safe(metafor::blup(x, transf = transf, targs = transf_args))
     } else if (has_scale_model) {
       # TODO: Remove this helper function if metafor adds support for newmods/newscale in metafor::blup()
-      out <- .safe(.get_blup_rma(x, newmods = newmods, newscale = newscale, transf = transf, targs = transf_args))
+      out <- .safe(.get_blup_rma(x, ci = ci, newmods = newmods, newscale = newscale, transf = transf, targs = transf_args))
     } else {
       # TODO: Remove this helper function if metafor adds support for newmods in metafor::blup()
-      out <- .safe(.get_blup_rma(x, newmods = newmods, transf = transf, targs = transf_args))
+      out <- .safe(.get_blup_rma(x, ci = ci, newmods = newmods, transf = transf, targs = transf_args))
     }
-    out <- setNames(as.data.frame(out), c("Predicted", "SE", "CI_low", "CI_high"))
+    out <- stats::setNames(as.data.frame(out), c("Predicted", "SE", "CI_low", "CI_high"))
   } else {
     format_error("`predict` must be one of 'link', 'expectation', 'prediction', or 'blup'.")
   }
@@ -837,10 +839,10 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
 
 }
 
-.get_blup_rma <- function(x, data, ...) {
+.get_blup_rma <- function(x, data, ci = NULL, ...) {
   if (is.element(x$test, c("knha", "adhoc", "t"))) {
-    crit <- qt(level / 2, df = x$ddf, lower.tail = FALSE)
+    crit <- stats::qt(ci / 2, df = x$ddf, lower.tail = FALSE)
   } else {
-    crit <- qnorm(level / 2, lower.tail = FALSE)
+    crit <- stats::qnorm(ci / 2, lower.tail = FALSE)
   }
 }
