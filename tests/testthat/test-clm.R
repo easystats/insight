@@ -100,7 +100,7 @@ if (skip_if_not_or_load_if_installed("ordinal")) {
   })
 
   test_that("n_obs", {
-    expect_identical(n_obs(m1), 72L)
+    expect_equal(n_obs(m1), 72) # nolint
   })
 
   test_that("linkfun", {
