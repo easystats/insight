@@ -161,7 +161,7 @@ if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed
     expect_identical(
       find_variables(m4),
       list(
-        response = "follicies",
+        response = "follicles",
         conditional = "Time",
         correlation = "Mare"
       )
