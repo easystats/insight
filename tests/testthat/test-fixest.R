@@ -36,6 +36,15 @@ test_that("robust variance-covariance", {
   ))
 })
 
+
+test_that("offset", {
+  tmp <- feols(mpg ~ hp, offset = ~log(qsec), data = mtcars)
+  expect_equal(find_offset(tmp), "qsec")
+  tmp <- feols(mpg ~ hp, offset = ~qsec, data = mtcars)
+  expect_equal(find_offset(tmp), "qsec")
+})
+
+
 test_that("model_info", {
   expect_true(model_info(m1)$is_count)
   expect_true(model_info(m2)$is_linear)

@@ -35,12 +35,12 @@ find_offset <- function(x) {
 
   offcol <- grep("offset(", terms, fixed = TRUE)
   if (length(offcol)) {
-    offset <- clean_names(terms[offcol])
+    offset <- terms[offcol]
   }
 
   model_call <- get_call(x)
   if (is.null(offset) && object_has_names(model_call, "offset")) {
-    offset <- clean_names(safe_deparse(model_call$offset))
+    offset <- safe_deparse(model_call$offset)
   }
 
   # fixest sometimes returns a weird macro syntax instead of the real offset
@@ -48,10 +48,12 @@ find_offset <- function(x) {
   # VAB: no test because I can only replicate in a weird {etwfe} example
   if (inherits(x, "fixest")) {
     if (is.null(offset) || startsWith(offset, "..")) {
-      offset <- clean_names(x[["model_info"]][["offset"]])
+      offset <- x[["model_info"]][["offset"]]
     }
     offset <- sub("^~", "", offset)
   }
+
+  offset <- clean_names(offset)
 
   offset
 }
