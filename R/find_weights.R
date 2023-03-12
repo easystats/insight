@@ -114,3 +114,6 @@ find_weights.lme <- function(x, ...) {
   }
   w
 }
+
+#' @export
+find_weights.gls <- find_weights.lme
