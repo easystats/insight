@@ -19,6 +19,8 @@
 
 * Fixed issue in `get_data()` for results from `kruskal.test()`.
 
+* Fixed issue in `find_weights()` for models of class `lme`.
+
 # insight 0.19.0
 
 ## New supported models
