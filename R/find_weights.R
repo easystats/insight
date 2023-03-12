@@ -96,3 +96,9 @@ find_weights.merMod <- function(x, ...) {
     }
   )
 }
+
+
+#' @export
+find_weights.lme <- function(x, ...) {
+  w <- find_weights.default(x, ...)
+}
