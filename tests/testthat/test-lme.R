@@ -53,10 +53,17 @@ if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed
       find_predictors(m1, effects = "all"),
       list(conditional = "Days", random = "Subject")
     )
-    expect_identical(find_predictors(m2, effects = "all"), list(conditional = c("age", "Sex")))
+    expect_identical(
+      find_predictors(m2, effects = "all"),
+      list(conditional = c("age", "Sex"), random = "Subject")
+    )
     expect_identical(find_predictors(m1, flatten = TRUE), "Days")
     expect_identical(
       find_predictors(m1, effects = "random"),
+      list(random = "Subject")
+    )
+    expect_identical(
+      find_predictors(m2, effects = "random"),
       list(random = "Subject")
     )
   })
@@ -67,17 +74,17 @@ if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed
   })
 
   test_that("get_response", {
-    expect_equal(get_response(m1), sleepstudy$Reaction)
+    expect_equal(get_response(m1), sleepstudy$Reaction, ignore_attr = TRUE)
   })
 
   test_that("find_random", {
-    expect_equal(find_random(m1), list(random = "Subject"))
-    expect_null(find_random(m2))
+    expect_identical(find_random(m1), list(random = "Subject"))
+    expect_identical(find_random(m2), list(random = "Subject"))
   })
 
   test_that("get_random", {
     expect_equal(get_random(m1), data.frame(Subject = sleepstudy$Subject), ignore_attr = TRUE)
-    expect_warning(get_random(m2))
+    expect_equal(get_random(m2), data.frame(Subject = Orthodont$Subject), ignore_attr = TRUE)
   })
 
   test_that("link_inverse", {
@@ -85,9 +92,9 @@ if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 180)
-    expect_equal(colnames(get_data(m1)), c("Reaction", "Days", "Subject"))
-    expect_equal(colnames(get_data(m2)), c("distance", "age", "Sex"))
+    expect_equal(nrow(get_data(m1)), 180, ignore_attr = TRUE)
+    expect_identical(colnames(get_data(m1)), c("Reaction", "Days", "Subject"))
+    expect_identical(colnames(get_data(m2)), c("distance", "age", "Sex", "Subject"))
   })
 
   test_that("get_df", {
@@ -115,7 +122,7 @@ if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed
       find_formula(m2),
       list(
         conditional = as.formula("distance ~ age + Sex"),
-        random = as.formula("~1")
+        random = as.formula("~1 | Subject")
       ),
       ignore_attr = TRUE
     )
@@ -131,7 +138,7 @@ if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed
   })
 
   test_that("find_variables", {
-    expect_equal(
+    expect_identical(
       find_variables(m1),
       list(
         response = "Reaction",
@@ -139,21 +146,30 @@ if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed
         random = "Subject"
       )
     )
-    expect_equal(
+    expect_identical(
       find_variables(m1, flatten = TRUE),
       c("Reaction", "Days", "Subject")
     )
-    expect_equal(
+    expect_identical(
       find_variables(m2),
       list(
         response = "distance",
-        conditional = c("age", "Sex")
+        conditional = c("age", "Sex"),
+        random = "Subject"
+      )
+    )
+    expect_identical(
+      find_variables(m4),
+      list(
+        response = "follicies",
+        conditional = "Time",
+        correlation = "Mare"
       )
     )
   })
 
   test_that("n_obs", {
-    expect_equal(n_obs(m1), 180)
+    expect_equal(n_obs(m1), 180, ignore_attr = TRUE)
   })
 
   test_that("linkfun", {
@@ -161,26 +177,26 @@ if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed
   })
 
   test_that("find_parameters", {
-    expect_equal(
+    expect_identical(
       find_parameters(m1),
       list(
         conditional = c("(Intercept)", "Days"),
         random = c("(Intercept)", "Days")
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 2)
-    expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "Days"))
-    expect_equal(
+    expect_equal(nrow(get_parameters(m1)), 2) # nolint
+    expect_identical(get_parameters(m1)$Parameter, c("(Intercept)", "Days"))
+    expect_identical(
       find_parameters(m2),
       list(
         conditional = c("(Intercept)", "age", "SexFemale"),
-        random = c("(Intercept)")
+        random = "(Intercept)"
       )
     )
   })
 
   test_that("find_algorithm", {
-    expect_equal(
+    expect_identical(
       find_algorithm(m1),
       list(algorithm = "REML", optimizer = "nlminb")
     )

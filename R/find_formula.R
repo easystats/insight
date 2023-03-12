@@ -1254,6 +1254,10 @@ find_formula.sem <- function(x, verbose = TRUE, ...) {
 find_formula.lme <- function(x, verbose = TRUE, ...) {
   fm <- stats::formula(x$terms)
   fmr <- eval(x$call$random)
+  if (!is.null(fmr) && safe_deparse(fmr)[1] == "~1") {
+    check_if_installed("nlme")
+    fmr <- stats::as.formula(paste("~1 |", all.vars(nlme::getGroupsFormula(x))))
+  }
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
   if (!is.null(fcorr)) {
