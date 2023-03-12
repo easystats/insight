@@ -15,6 +15,10 @@
 * `format_table()` now also formats columns named `SGPV` (second generation
   p-values) as p-values.
 
+* Functions for models of class `clm` (like `find_formula()`, `find_variables()`,
+  `get_data()` etc.) now also include variables that were defined as `scale` or
+  `nominal` component.
+
 ## Bug fixes
 
 * Fixed issue in `get_data()` for results from `kruskal.test()`.
