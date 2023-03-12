@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0.9</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0.10</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,10 +97,12 @@
 <ul><li><p>Minor improvements to <code><a href="../reference/get_data.html">get_data()</a></code> for <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test()</a></code>.</p></li>
 <li><p><code><a href="../reference/format_value.html">format_value()</a></code> gets a <code>lead_zero</code> argument, to keep or drop the leading zero of a formatted value, as well as arguments <code>style_positive</code> and <code>style_negative</code> to style positive or negative numbers.</p></li>
 <li><p><code><a href="../reference/format_table.html">format_table()</a></code> now also formats columns named <code>SGPV</code> (second generation p-values) as p-values.</p></li>
+<li><p>Functions for models of class <code>clm</code> (like <code><a href="../reference/find_formula.html">find_formula()</a></code>, <code><a href="../reference/find_variables.html">find_variables()</a></code>, <code><a href="../reference/get_data.html">get_data()</a></code> etc.) now also include variables that were defined as <code>scale</code> or <code>nominal</code> component.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-19-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-19-1"></a></h3>
-<ul><li>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for results from <code><a href="https://rdrr.io/r/stats/kruskal.test.html" class="external-link">kruskal.test()</a></code>.</li>
+<ul><li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for results from <code><a href="https://rdrr.io/r/stats/kruskal.test.html" class="external-link">kruskal.test()</a></code>.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/find_weights.html">find_weights()</a></code> for models of class <code>lme</code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
