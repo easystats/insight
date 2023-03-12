@@ -101,4 +101,16 @@ find_weights.merMod <- function(x, ...) {
 #' @export
 find_weights.lme <- function(x, ...) {
   w <- find_weights.default(x, ...)
+  # any weights? If so, get formula
+  if (!is.null(w)) {
+    # in lme(), weights are either an optional varFunc object or a one-sided
+    # formula. The formula is usally stored in "$modelStruct$varStruct"
+    w_formula <- .safe(stats::formula(x$modelStruct$varStruct))
+    if (!is.null(w_formula)) {
+      w <- all.vars(w_formula)
+    } else {
+      w <- NULL
+    }
+  }
+  w
 }
