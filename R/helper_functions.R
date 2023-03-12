@@ -208,7 +208,8 @@
     "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale",
     "marginal", "alpha", "beta", "survival", "infrequent_purchase", "auxiliary",
     "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi", "aux", "dist",
-    "selection", "outcome", "time_dummies", "sigma_random", "beta_random", "car"
+    "selection", "outcome", "time_dummies", "sigma_random", "beta_random", "car",
+    "nominal"
   )
 }
 

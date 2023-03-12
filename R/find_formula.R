@@ -1038,6 +1038,17 @@ find_formula.clm2 <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+find_formula.clm <- function(x, verbose = TRUE, ...) {
+  f <- compact_list(list(
+    conditional = stats::formula(x),
+    scale = x$formulas$scale,
+    nominal = x$formulas$nominal
+  ))
+  .find_formula_return(f, verbose = verbose)
+}
+
+
+#' @export
 find_formula.DirichletRegModel <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
   f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
