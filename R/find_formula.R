@@ -272,8 +272,10 @@ find_formula.rma <- function(x, verbose = TRUE, ...) {
       formula.yi <- stats::as.formula(paste(model_call$yi, "~ 1"))
     } else {
       formula.mods[3] <- formula.mods[2]
-      formula.mods[2] <- model_call$yi
+      formula.mods[[2]] <- model_call$yi
       formula.yi <- formula.mods
+      # TODO: this code line should be identcal to the three lines above, but maybe safer
+      # formula.yi <- formula.mods <- stats::as.formula(paste(all.vars(model_call$yi), "~", all.vars(formula.mods)))
     }
   }
   f <- compact_list(list(
