@@ -37,6 +37,8 @@ get_weights <- function(x, ...) {
 }
 
 
+## TODO: probably need own method for nlme, see #727
+
 #' @rdname get_weights
 #' @export
 get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
