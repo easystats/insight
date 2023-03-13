@@ -5,10 +5,10 @@ if (getRversion() >= "4.0.0") {
   m4 <- lm(hp ~ factor(cyl), data = mtcars)
 
   test_that("get_datagrid - data from models", {
-    expect_equal(get_datagrid(m1)$cyl, c(4, 6, 8))
-    expect_equal(get_datagrid(m2)$cyl, c(4, 6, 8))
-    expect_equal(get_datagrid(m3)$cyl, c(4, 6, 8))
-    expect_equal(get_datagrid(m4)$cyl, c(4, 6, 8))
+    expect_identical(get_datagrid(m1)$cyl, as.integer(c(4, 6, 8)))
+    expect_identical(get_datagrid(m2)$cyl, as.integer(c(4, 6, 8)))
+    expect_identical(get_datagrid(m3)$cyl, as.integer(c(4, 6, 8)))
+    expect_identical(get_datagrid(m4)$cyl, as.integer(c(4, 6, 8)))
   })
 
   # get_datagrid() preserves all factor levels #695
@@ -16,31 +16,31 @@ if (getRversion() >= "4.0.0") {
     dat <<- transform(mtcars, cyl = factor(cyl))
     mod <- lm(mpg ~ cyl + am + hp, data = dat)
     grid <- get_datagrid(mod, at = "hp")
-    expect_equal(levels(grid$cyl), c("4", "6", "8"))
+    expect_identical(levels(grid$cyl), c("4", "6", "8"))
   })
 
   m <- lm(Sepal.Width ~ Petal.Length + Petal.Width + Species, data = iris)
   # adjusted for works
   test_that("get_datagrid - adjusted for works", {
     dg <- insight::get_datagrid(m, "Species")
-    expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Petal.Width"))
+    expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Petal.Width"))
   })
 
   # bracket tokens
   test_that("get_datagrid - terciles, quartiles, mean-sd", {
     dg <- insight::get_datagrid(m, "Petal.Width = [quartiles]")
     expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width)), tolerance = 1e-4)
-    expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
+    expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
     dg <- insight::get_datagrid(m, "Petal.Width = [meansd]")
     .center <- mean(iris$Petal.Width)
     .spread <- sd(iris$Petal.Width)
     expect_equal(dg$Petal.Width, .center + c(-1, 0, 1) * .spread, tolerance = 1e-4)
-    expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
+    expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
     dg <- insight::get_datagrid(m, "Petal.Width = [terciles]")
     expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width, probs = (1:2) / 3)), tolerance = 1e-4)
-    expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
+    expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
   })
 
   # bracket tokens
@@ -55,29 +55,29 @@ if (getRversion() >= "4.0.0") {
       ),
       tolerance = 1e-3
     )
-    expect_equal(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
+    expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
     m <- lm(Sepal.Width ~ Petal.Length + Petal.Width * Species, data = iris)
     dg <- insight::get_datagrid(m, c("Species", "Petal.Width"), range = "grid", preserve_range = FALSE)
     expect_equal(
       dg$Petal.Width,
       c(
-        `-1 SD` = 0.4371, Mean = 1.1993, `+1 SD` = 1.9616, `-1 SD` = 0.4371,
-        Mean = 1.1993, `+1 SD` = 1.9616, `-1 SD` = 0.4371, Mean = 1.1993,
-        `+1 SD` = 1.9616
+        `-1 SD` = 0.4371, Mean = 1.1993, `+1 SD` = 1.9616, `-1 SD` = 0.4371, # nolint
+        Mean = 1.1993, `+1 SD` = 1.9616, `-1 SD` = 0.4371, Mean = 1.1993,    # nolint
+        `+1 SD` = 1.9616                                                     # nolint
       ),
       tolerance = 1e-3
     )
-    expect_equal(attributes(dg)$adjusted_for, "Petal.Length")
+    expect_identical(attributes(dg)$adjusted_for, "Petal.Length")
   })
 
   # order of columns
   test_that("get_datagrid - column order", {
     m <- lm(Sepal.Width ~ Petal.Length + Petal.Width * Species, data = iris)
     dg <- insight::get_datagrid(m, c("Petal.Width", "Species"))
-    expect_equal(colnames(dg), c("Petal.Width", "Species", "Petal.Length"))
+    expect_identical(colnames(dg), c("Petal.Width", "Species", "Petal.Length"))
     dg <- insight::get_datagrid(m, c("Species", "Petal.Width"))
-    expect_equal(colnames(dg), c("Species", "Petal.Width", "Petal.Length"))
+    expect_identical(colnames(dg), c("Species", "Petal.Width", "Petal.Length"))
   })
 
 
@@ -96,26 +96,26 @@ if (getRversion() >= "4.0.0") {
 if (skip_if_not_or_load_if_installed("bayestestR") && getRversion() >= "4.0.0") {
   test_that("get_datagrid - data", {
     # Factors
-    expect_equal(length(get_datagrid(iris$Species)), 3)
-    expect_equal(length(get_datagrid(c("A", "A", "B"))), 2)
-    expect_equal(length(get_datagrid(x = iris$Species, at = "c('versicolor')")), 1)
-    expect_equal(length(get_datagrid(iris$Species, at = "A = c('versicolor')")), 1)
-    expect_equal(length(get_datagrid(c("A", "A", "B"), at = "dupa = 'A'")), 1)
-    expect_equal(length(get_datagrid(iris$Species, at = "['versicolor', 'virginica']")), 2)
-    expect_equal(length(get_datagrid(iris$Species, at = "[versicolor, virginica]")), 2)
+    expect_length(get_datagrid(iris$Species), 3)
+    expect_length(get_datagrid(c("A", "A", "B")), 2)
+    expect_length(get_datagrid(x = iris$Species, at = "c('versicolor')"), 1)
+    expect_length(get_datagrid(iris$Species, at = "A = c('versicolor')"), 1)
+    expect_length(get_datagrid(c("A", "A", "B"), at = "dupa = 'A'"), 1)
+    expect_length(get_datagrid(iris$Species, at = "['versicolor', 'virginica']"), 2)
+    expect_length(get_datagrid(iris$Species, at = "[versicolor, virginica]"), 2)
 
     # Numerics
-    expect_equal(length(get_datagrid(x = iris$Sepal.Length)), 10)
-    expect_equal(length(get_datagrid(x = iris$Sepal.Length, length = 5)), 5)
-    expect_equal(length(get_datagrid(x = iris$Sepal.Length, length = NA)), length(unique(iris$Sepal.Length)))
+    expect_length(get_datagrid(x = iris$Sepal.Length), 10)
+    expect_length(get_datagrid(x = iris$Sepal.Length, length = 5), 5)
+    expect_length(get_datagrid(x = iris$Sepal.Length, length = NA), length(unique(iris$Sepal.Length)))
     expect_equal(min(get_datagrid(x = iris$Sepal.Length, range = "iqr")), as.numeric(quantile(iris$Sepal.Length, 0.025)))
     expect_equal(min(get_datagrid(x = iris$Sepal.Length, range = "hdi")), as.numeric(bayestestR::hdi(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2])
     expect_equal(min(get_datagrid(x = iris$Sepal.Length, range = "eti")), as.numeric(bayestestR::eti(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2])
-    expect_equal(length(get_datagrid(iris$Sepal.Length, at = "c(1, 3, 4)")), 3)
-    expect_equal(length(get_datagrid(iris$Sepal.Length, at = "A = c(1, 3, 4)")), 3)
-    expect_equal(length(get_datagrid(iris$Sepal.Length, at = "[1, 3, 4]")), 3)
-    expect_equal(length(get_datagrid(iris$Sepal.Length, at = "[1, 4]")), 10)
-    expect_equal(length(get_datagrid(iris$Sepal.Length, range = "sd", length = 10)), 10)
+    expect_length(get_datagrid(iris$Sepal.Length, at = "c(1, 3, 4)"), 3)
+    expect_length(get_datagrid(iris$Sepal.Length, at = "A = c(1, 3, 4)"), 3)
+    expect_length(get_datagrid(iris$Sepal.Length, at = "[1, 3, 4]"), 3)
+    expect_length(get_datagrid(iris$Sepal.Length, at = "[1, 4]"), 10)
+    expect_length(get_datagrid(iris$Sepal.Length, range = "sd", length = 10), 10)
     expect_equal(as.numeric(get_datagrid(iris$Sepal.Length, range = "sd", length = 3)[2]), mean(iris$Sepal.Length))
     expect_equal(as.numeric(get_datagrid(iris$Sepal.Length, range = "mad", length = 4)[2]), median(iris$Sepal.Length))
 
@@ -141,9 +141,9 @@ if (skip_if_not_or_load_if_installed("bayestestR") && getRversion() >= "4.0.0") 
     expect_equal(nrow(get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))), 2)
 
     x1 <- get_datagrid(iris, at = c("Species", "Sepal.Length"), length = 30, preserve_range = TRUE)
-    expect_equal(dim(x1), c(55, 5))
+    expect_identical(dim(x1), c(55L, 5L))
     x2 <- get_datagrid(iris[c("Species", "Sepal.Length")], length = 30, preserve_range = TRUE)
-    expect_equal(dim(x2), c(55, 2))
+    expect_identical(dim(x2), c(55L, 2L))
   })
 }
 
@@ -198,9 +198,9 @@ if (skip_if_not_or_load_if_installed("gamm4") && getRversion() >= "4.0.0" && ski
 
     # STAN_GAMM4
     mod <- suppressWarnings(rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~ (1 | Species), data = iris, iter = 100, chains = 2, refresh = 0))
-    expect_equal(dim(get_datagrid(mod, include_random = TRUE)), c(63, 3))
-    expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = "fixed")), c(10, 2))
-    expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = FALSE)), c(10, 1))
+    expect_identical(dim(get_datagrid(mod, include_random = TRUE)), as.integer(c(63, 3)))
+    expect_identical(dim(get_datagrid(mod, include_random = FALSE, include_smooth = "fixed")), as.integer(c(10, 2)))
+    expect_identical(dim(get_datagrid(mod, include_random = FALSE, include_smooth = FALSE)), as.integer(c(10, 1)))
   })
 
 
@@ -269,7 +269,7 @@ if (skip_if_not_or_load_if_installed("gamm4") && getRversion() >= "4.0.0" && ski
     at = "k618", range = "grid", preserve_range = FALSE,
     verbose = FALSE, include_response = TRUE
   )
-  expect_equal(
+  expect_identical(
     sapply(grid, class),
     c(
       k618 = "numeric", lfp = "factor", wc = "factor", hc = "factor",
@@ -278,8 +278,29 @@ if (skip_if_not_or_load_if_installed("gamm4") && getRversion() >= "4.0.0" && ski
   )
 
   out <- get_modelmatrix(model, data = grid)
-  expect_equal(
+  expect_identical(
     colnames(out),
     c("(Intercept)", "k618", "wcyes", "hcyes", "inc")
   )
+}
+
+if (skip_if_not_or_load_if_installed("nlme") && getRversion() >= "4.0.0") {
+  data("Orthodont", package = "nlme")
+  m <- lme( # a model of variance only
+    distance ~ 1,
+    data = Orthodont, # grand mean
+    weights = varConstPower(form = ~ age | Sex)
+  )
+
+  test_that("get_datagrid - multiple weight variables", {
+    out <- get_datagrid(m, include_response = TRUE)
+    expect_equal(
+      out$distance,
+      c(
+        16.5, 18.16667, 19.83333, 21.5, 23.16667, 24.83333, 26.5, 28.16667,
+        29.83333, 31.5
+      ),
+      tolerance = 1e-3
+    )
+  })
 }

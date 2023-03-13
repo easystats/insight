@@ -183,7 +183,7 @@
         needed.vars <- needed.vars[-which(needed.vars == "(weights)")]
         mw <- mf[["(weights)"]]
         fw <- find_weights(x)
-        if (!is.null(fw) && fw %in% colnames(md)) {
+        if (!is.null(fw) && all(fw %in% colnames(md))) {
           needed.vars <- c(needed.vars, fw)
         }
       }
