@@ -347,7 +347,7 @@
   # add weighting variable ----------------------------------------------------
 
   weighting_var <- find_weights(x)
-  if (!is.null(weighting_var) && !weighting_var %in% colnames(mf) && length(weighting_var) == 1) {
+  if (!is.null(weighting_var) && !all(weighting_var %in% colnames(mf))) {
     mf <- tryCatch(
       {
         tmp <- suppressWarnings(cbind(mf, get_weights(x)))

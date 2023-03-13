@@ -1,5 +1,18 @@
 skip_on_os(os = "mac")
 
+test_that("lme", {
+  skip_if_not_or_load_if_installed("nlme")
+  data("Orthodont", package = "nlme")
+  m <- lme( # a model of variance only
+    distance ~ 1,
+    data = Orthodont, # grand mean
+    weights = varConstPower(form = ~ age | Sex)
+  )
+  expect_identical(dim(get_data(m, source = "mf")), c(108L, 3L))
+  expect_identical(colnames(get_data(m, source = "mf")), c("distance", "age", "Sex"))
+})
+
+
 test_that("lme4", {
   skip_if_not_or_load_if_installed("lme4")
   data("cbpp", package = "lme4")
@@ -20,8 +33,8 @@ test_that("additional_variables = TRUE", {
   n1 <- nrow(k)
   n2 <- nrow(insight::get_data(mod))
   n3 <- nrow(insight::get_data(mod, additional_variables = TRUE))
-  expect_equal(n1, n2)
-  expect_equal(n1, n3)
+  expect_identical(n1, n2)
+  expect_identical(n1, n3)
 })
 
 
@@ -74,19 +87,19 @@ test_that("get_data include weights, even if ones", {
 
   # Model with nonuniform weights
   fn <- lm(y ~ x, weights = wn)
-  expect_equal(colnames(get_data(fn, verbose = FALSE)), c("y", "x", "(weights)", "wn"))
+  expect_identical(colnames(get_data(fn, verbose = FALSE)), c("y", "x", "(weights)", "wn"))
 
   # Model with weights equal to 1
   f1 <- lm(y ~ x, weights = w1)
-  expect_equal(colnames(get_data(f1, verbose = FALSE)), c("y", "x", "(weights)", "w1"))
+  expect_identical(colnames(get_data(f1, verbose = FALSE)), c("y", "x", "(weights)", "w1"))
 
   # Model with no weights
   f0 <- lm(y ~ x)
-  expect_equal(colnames(get_data(f0, verbose = FALSE)), c("y", "x"))
+  expect_identical(colnames(get_data(f0, verbose = FALSE)), c("y", "x"))
 
   # check get_weights still works
   expect_null(get_weights(f0))
-  expect_equal(get_weights(f0, null_as_ones = TRUE), w1)
+  expect_identical(get_weights(f0, null_as_ones = TRUE), w1)
 })
 
 
@@ -97,7 +110,7 @@ test_that("lm with transformations", {
     sum = c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50)
   )
   m <- lm(log(sum + 1) ~ as.numeric(time) * group, data = d)
-  expect_equal(colnames(get_data(m)), c("sum", "time", "group"))
+  expect_identical(colnames(get_data(m)), c("sum", "time", "group"))
 })
 
 
@@ -169,15 +182,15 @@ if (.runThisTest) {
   m <- lm(Sepal.Length ~ Sepal.Width, data = iris)
   out <- get_data(m)
   test_that("subsets", {
-    expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width"))
-    expect_equal(nrow(out), 150)
+    expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width"))
+    expect_identical(nrow(out), 150L)
   })
 
   m <- lm(Sepal.Length ~ Sepal.Width, data = iris, subset = Species == "versicolor")
   out <- get_data(m)
   test_that("subsets", {
-    expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
-    expect_equal(nrow(out), 50)
+    expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
+    expect_identical(nrow(out), 50L)
   })
 
   # d <- iris
@@ -256,8 +269,8 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
-  expect_equal(find_response(mod), "y")
-  expect_equal(find_response(mod, combine = FALSE), "y")
+  expect_identical(find_response(mod), "y")
+  expect_identical(find_response(mod, combine = FALSE), "y")
 
   mod <- lm(log(y) ~ x, data = dat)
   expect_equal(
@@ -266,7 +279,7 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
-  expect_equal(find_response(mod), "y")
+  expect_identical(find_response(mod), "y")
 
   mod <- lm(y ~ log(x), data = dat)
   expect_equal(
@@ -275,7 +288,7 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
-  expect_equal(find_response(mod), "y")
+  expect_identical(find_response(mod), "y")
 
   mod <- lm(y ~ log(1 + x), data = dat)
   expect_equal(
@@ -284,7 +297,7 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
-  expect_equal(find_response(mod), "y")
+  expect_identical(find_response(mod), "y")
 
   mod <- lm(y ~ log(x + 1), data = dat)
   expect_equal(
@@ -317,8 +330,8 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
-  expect_equal(find_response(mod), "y")
-  expect_equal(find_response(mod, combine = FALSE), "y")
+  expect_identical(find_response(mod), "y")
+  expect_identical(find_response(mod, combine = FALSE), "y")
 
   mod <- lm(log(y + 1) ~ log(x + 1), data = dat)
   expect_equal(
