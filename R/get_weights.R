@@ -42,7 +42,7 @@ get_weights <- function(x, ...) {
 #' @rdname get_weights
 #' @export
 get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
-  weight_vars <- NULL
+  weight_vars <- find_weights(x)
   w <- tryCatch(
     stats::weights(x, ...),
     error = function(e) NULL,
@@ -55,7 +55,6 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
       error = function(e) NULL,
       warning = function(w) NULL
     )
-    weight_vars <- find_weights(x)
   }
 
   if (is.null(w)) {
