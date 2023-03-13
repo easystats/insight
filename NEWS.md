@@ -25,6 +25,8 @@
 
 * Fixed issue in `find_weights()` for models of class `lme` and `gls`.
 
+* Fixed issue in `get_datagrid()` for models with multiple weight variables.
+
 # insight 0.19.0
 
 ## New supported models
