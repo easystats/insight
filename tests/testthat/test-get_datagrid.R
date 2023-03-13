@@ -5,10 +5,10 @@ if (getRversion() >= "4.0.0") {
   m4 <- lm(hp ~ factor(cyl), data = mtcars)
 
   test_that("get_datagrid - data from models", {
-    expect_identical(get_datagrid(m1)$cyl, as.integer(c(4, 6, 8)))
-    expect_identical(get_datagrid(m2)$cyl, as.integer(c(4, 6, 8)))
-    expect_identical(get_datagrid(m3)$cyl, as.integer(c(4, 6, 8)))
-    expect_identical(get_datagrid(m4)$cyl, as.integer(c(4, 6, 8)))
+    expect_equal(get_datagrid(m1)$cyl, c(4, 6, 8))
+    expect_equal(get_datagrid(m2)$cyl, c(4, 6, 8))
+    expect_equal(get_datagrid(m3)$cyl, c(4, 6, 8))
+    expect_equal(get_datagrid(m4)$cyl, c(4, 6, 8))
   })
 
   # get_datagrid() preserves all factor levels #695
