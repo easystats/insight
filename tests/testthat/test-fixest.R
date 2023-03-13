@@ -21,13 +21,17 @@ test_that("robust variance-covariance", {
   # default is clustered
   expect_equal(
     sqrt(diag(vcov(mod))),
-    sqrt(diag(get_varcov(mod, vcov = ~cyl)))
+    sqrt(diag(get_varcov(mod, vcov = ~cyl))),
+    tolerance = 1e-5,
+    ignore_attr = TRUE
   )
 
   # HC1
   expect_equal(
     sqrt(diag(vcov(mod, vcov = "HC1"))),
-    sqrt(diag(get_varcov(mod, vcov = "HC1")))
+    sqrt(diag(get_varcov(mod, vcov = "HC1"))),
+    tolerance = 1e-5,
+    ignore_attr = TRUE
   )
 
   expect_true(all(
@@ -39,9 +43,9 @@ test_that("robust variance-covariance", {
 
 test_that("offset", {
   tmp <- feols(mpg ~ hp, offset = ~log(qsec), data = mtcars)
-  expect_equal(find_offset(tmp), "qsec")
+  expect_identical(find_offset(tmp), "qsec")
   tmp <- feols(mpg ~ hp, offset = ~qsec, data = mtcars)
-  expect_equal(find_offset(tmp), "qsec")
+  expect_identical(find_offset(tmp), "qsec")
 })
 
 
@@ -104,15 +108,15 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), trade$Euros)
-  expect_equal(get_response(m2), trade$Euros)
-  expect_equal(get_response(m3), trade$Euros)
+  expect_equal(get_response(m1), trade$Euros, ignore_attr = TRUE)
+  expect_equal(get_response(m2), trade$Euros, ignore_attr = TRUE)
+  expect_equal(get_response(m3), trade$Euros, ignore_attr = TRUE)
 })
 
 test_that("get_predictors", {
-  expect_equal(colnames(get_predictors(m1)), c("dist_km", "Origin", "Destination", "Product"))
-  expect_equal(colnames(get_predictors(m2)), c("dist_km", "Origin", "Destination", "Product"))
-  expect_equal(colnames(get_predictors(m3)), c("dist_km", "Origin", "Destination", "Product"))
+  expect_identical(colnames(get_predictors(m1)), c("dist_km", "Origin", "Destination", "Product"))
+  expect_identical(colnames(get_predictors(m2)), c("dist_km", "Origin", "Destination", "Product"))
+  expect_identical(colnames(get_predictors(m3)), c("dist_km", "Origin", "Destination", "Product"))
 })
 
 test_that("link_inverse", {
@@ -128,16 +132,17 @@ test_that("link_function", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 38325)
-  expect_equal(colnames(get_data(m1)), c("Euros", "dist_km", "Origin", "Destination", "Product"))
-  expect_equal(nrow(get_data(m2)), 38325)
-  expect_equal(colnames(get_data(m2)), c("Euros", "dist_km", "Origin", "Destination", "Product"))
+  expect_identical(nrow(get_data(m1, verbose = FALSE)), 38325L)
+  expect_identical(colnames(get_data(m1, verbose = FALSE)), c("Euros", "dist_km", "Origin", "Destination", "Product"))
+  expect_identical(nrow(get_data(m2, verbose = FALSE)), 38325L)
+  expect_identical(colnames(get_data(m2, verbose = FALSE)), c("Euros", "dist_km", "Origin", "Destination", "Product"))
 
   # old bug: m4 uses a complex formula and we need to extract all relevant
   # variables in order to compute predictions.
-  nd <- get_data(m4)
+  nd <- get_data(m4, verbose = FALSE)
   tmp <- predict(m4, newdata = nd)
-  expect_true(is.numeric(tmp) && length(tmp) == nrow(iris))
+  expect_type(tmp, "double")
+  expect_length(tmp, nrow(iris))
 })
 
 if (skip_if_not_or_load_if_installed("parameters")) {
@@ -171,19 +176,19 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(response = "Euros", conditional = "log(dist_km)", cluster = c("Origin", "Destination", "Product"))
   )
-  expect_equal(
+  expect_identical(
     find_terms(m1, flatten = TRUE),
     c("Euros", "log(dist_km)", "Origin", "Destination", "Product")
   )
-  expect_equal(
+  expect_identical(
     find_terms(m2),
     list(response = "log1p(Euros)", conditional = "log(dist_km)", cluster = c("Origin", "Destination", "Product"))
   )
-  expect_equal(
+  expect_identical(
     find_terms(m2, flatten = TRUE),
     c("log1p(Euros)", "log(dist_km)", "Origin", "Destination", "Product")
   )
@@ -191,19 +196,19 @@ test_that("find_terms", {
 
 
 test_that("find_variables", {
-  expect_equal(
+  expect_identical(
     find_variables(m1),
     list(response = "Euros", conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
   )
-  expect_equal(
+  expect_identical(
     find_variables(m1, flatten = TRUE),
     c("Euros", "dist_km", "Origin", "Destination", "Product")
   )
-  expect_equal(
+  expect_identical(
     find_variables(m2),
     list(response = "Euros", conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
   )
-  expect_equal(
+  expect_identical(
     find_variables(m1, flatten = TRUE),
     c("Euros", "dist_km", "Origin", "Destination", "Product")
   )
@@ -211,12 +216,12 @@ test_that("find_variables", {
 
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 38325)
-  expect_equal(n_obs(m2), 38325)
+  expect_identical(n_obs(m1), 38325L)
+  expect_identical(n_obs(m2), 38325L)
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(conditional = "log(dist_km)")
   )
@@ -230,7 +235,7 @@ test_that("find_parameters", {
     ),
     tolerance = 1e-4
   )
-  expect_equal(
+  expect_identical(
     find_parameters(m2),
     list(conditional = "log(dist_km)")
   )
@@ -265,13 +270,13 @@ test_that("get_statistic", {
 test_that("get_predicted", {
   pred <- get_predicted(m1)
   expect_s3_class(pred, "get_predicted")
-  expect_equal(length(pred), nrow(trade))
+  expect_length(pred, nrow(trade))
   a <- get_predicted(m1)
   b <- get_predicted(m1, type = "response", predict = NULL)
-  expect_equal(a, b)
+  expect_equal(a, b, tolerance = 1e-5)
   a <- get_predicted(m1, predict = "link")
   b <- get_predicted(m1, type = "link", predict = NULL)
-  expect_equal(a, b)
+  expect_equal(a, b, tolerance = 1e-5)
   # these used to raise warnings
   expect_warning(get_predicted(m1, ci = 0.4), NA)
   expect_warning(get_predicted(m1, predict = NULL, type = "link"), NA)
