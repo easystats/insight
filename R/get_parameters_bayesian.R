@@ -222,7 +222,7 @@ get_parameters.brmsfit <- function(x,
                                    centrality = "mean",
                                    ...) {
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  component <- match.arg(component, choices = c("all", .all_elements()))
+  component <- match.arg(component, choices = c("all", .all_elements(), "location", "distributional"))
 
   if (is_multivariate(x)) {
     parms <- find_parameters(x, flatten = FALSE, parameters = parameters)

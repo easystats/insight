@@ -223,7 +223,7 @@ find_parameters.brmsfit <- function(x,
                                     parameters = NULL,
                                     ...) {
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  component <- match.arg(component, choices = c("all", .all_elements()))
+  component <- match.arg(component, choices = c("all", .all_elements(), "location", "distributional"))
 
   fe <- dimnames(x$fit)$parameters
   # fe <- colnames(as.data.frame(x))
