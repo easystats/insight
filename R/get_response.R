@@ -11,6 +11,7 @@
 #'   (e.g. `y1 / y2`), then the returned response value will be a vector with
 #'   the result of this proportion. Else, always a data frame is returned.
 #' @inheritParams find_predictors
+#' @inheritParams get_data
 #'
 #' @return The values of the response variable, as vector, or a data frame if
 #'   `x` has more than one defined response variable.
@@ -30,7 +31,7 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_response(m)
 #' @export
-get_response <- function(x, select = NULL, as_proportion = TRUE, verbose = TRUE) {
+get_response <- function(x, select = NULL, as_proportion = TRUE, source = "environment", verbose = TRUE) {
   rn <- find_response(x, combine = FALSE)
   combined_rn <- find_response(x, combine = TRUE)
 
@@ -44,7 +45,7 @@ get_response <- function(x, select = NULL, as_proportion = TRUE, verbose = TRUE)
   glm_proportion <- any(grepl("/", proportion_response, fixed = TRUE)) && binom_fam
 
   # data used to fit the model
-  model_data <- get_data(x, verbose = FALSE)
+  model_data <- get_data(x, source = source, verbose = FALSE)
 
   # exceptions
   if (inherits(x, "DirichletRegModel")) {
