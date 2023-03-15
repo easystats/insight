@@ -2173,8 +2173,21 @@ get_data.rma <- function(x,
 
 
 #' @export
-# TODO: Check these
-get_data.metaplus <- get_data.rma
+get_data.metaplus <- function(x, source = "environment", verbose = TRUE, ...) {
+  # try to recover data from environment
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
+
+  if (!is.null(model_data)) {
+    return(model_data)
+  }
+
+  # fall back to extract data from model frame
+  mf <- .safe(.recover_data_from_environment(x))
+  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
+}
+
+#' @export
+get_data.ivFixed <- get_data.metaplus
 
 
 #' @export
@@ -2187,9 +2200,12 @@ get_data.meta_random <- function(x, source = "environment", verbose = TRUE, ...)
   }
 
   # fall back to extract data from model frame
-  mf <- tryCatch(x$data$data, error = function(x) NULL)
+  mf <- .safe(x$data$data)
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
+
+#' @export
+get_data.meta_fixed <- get_data.meta_random
 
 
 #' @export
@@ -2205,16 +2221,6 @@ get_data.meta_bma <- function(x, source = "environment", verbose = TRUE, ...) {
   mf <- tryCatch(x$meta$fixed$data$data, error = function(x) NULL)
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }
-
-
-#' @export
-# TODO: Check these
-get_data.meta_fixed <- get_data.meta_random
-
-
-#' @export
-# TODO: Check these
-get_data.ivFixed <- get_data.rma
 
 
 #' @export
