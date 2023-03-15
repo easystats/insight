@@ -285,12 +285,24 @@ find_formula.rma <- function(x, verbose = TRUE, ...) {
   .find_formula_return(f, verbose = verbose)
 }
 
-#' @export
 # TODO: Check these
-find_formula.metaplus <- find_formula.rma
 
 #' @export
-find_formula.deltaMethod <- find_formula.rma
+find_formula.meta_random <- function(x, verbose = TRUE, ...) {
+  NULL
+}
+
+#' @export
+find_formula.metaplus <- find_formula.meta_random
+
+#' @export
+find_formula.meta_fixed <- find_formula.meta_random
+
+#' @export
+find_formula.meta_bma <- find_formula.meta_random
+
+#' @export
+find_formula.deltaMethod <- find_formula.meta_random
 
 
 
