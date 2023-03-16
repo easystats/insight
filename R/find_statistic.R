@@ -349,6 +349,10 @@ find_statistic <- function(x, ...) {
   if (info$family %in% c("Student's-t", "t Family", "gaussian", "Gaussian") || grepl("(\\st)$", info$family)) {
     linear_model <- TRUE
   }
-  tweedie_fam <- grepl("tweedie", tolower(info$family), fixed = TRUE) | grepl("tweedie", tolower(info$link_function), fixed = TRUE)
+
+  tweedie_fam <-
+    grepl("tweedie", tolower(info$family), fixed = TRUE) |
+      grepl("tweedie", tolower(info$link_function), fixed = TRUE)
+
   (linear_model && tweedie_fam) || inherits(model, c("bcplm", "cpglm", "cpglmm", "zcpglm"))
 }

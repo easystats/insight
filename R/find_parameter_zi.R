@@ -51,7 +51,10 @@ find_parameters.zerotrunc <- find_parameters.zeroinfl
 
 
 #' @export
-find_parameters.zcpglm <- function(x, component = c("all", "conditional", "zi", "zero_inflated"), flatten = FALSE, ...) {
+find_parameters.zcpglm <- function(x,
+                                   component = c("all", "conditional", "zi", "zero_inflated"),
+                                   flatten = FALSE,
+                                   ...) {
   cf <- stats::coef(x)
   component <- match.arg(component)
 

@@ -50,7 +50,8 @@ get_data <- function(x, ...) {
 # main workhorse, we try to recover data from environment as good as possible.
 # the dataset is subset if needed, and weights are added. only those columns
 # are returned that we actually find in the model...
-# data_name is useful when we have the name of the data frame object stored as a string (e.g., in brmsfit attr(x$data, "data_frame"))
+# data_name is useful when we have the name of the data frame object stored as
+# a string (e.g., in brmsfit attr(x$data, "data_frame"))
 .get_data_from_environment <- function(x,
                                        effects = "all",
                                        component = "all",
