@@ -701,15 +701,13 @@ get_data.merMod <- function(x,
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
-  mf <- .safe(
-    {
-      switch(effects,
-        fixed = stats::model.frame(x, fixed.only = TRUE),
-        all = stats::model.frame(x, fixed.only = FALSE),
-        random = stats::model.frame(x, fixed.only = FALSE)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-      )
-    }
-  )
+  mf <- .safe({
+    switch(effects,
+      fixed = stats::model.frame(x, fixed.only = TRUE),
+      all = stats::model.frame(x, fixed.only = FALSE),
+      random = stats::model.frame(x, fixed.only = FALSE)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
+    )
+  })
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
@@ -770,15 +768,13 @@ get_data.MANOVA <- function(x,
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
-  mf <- .safe(
-    {
-      switch(effects,
-        fixed = .remove_column(x$input$data, x$input$subject),
-        all = x$input$data,
-        random = x$input$data[, x$input$subject, drop = FALSE]
-      )
-    }
-  )
+  mf <- .safe({
+    switch(effects,
+      fixed = .remove_column(x$input$data, x$input$subject),
+      all = x$input$data,
+      random = x$input$data[, x$input$subject, drop = FALSE]
+    )
+  })
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
@@ -844,20 +840,18 @@ get_data.glmm <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   dat <- get_data.default(x, verbose = verbose)
 
-  mf <- .safe(
-    {
-      switch(effects,
-        fixed = dat[, find_predictors(
-          x,
-          effects = "fixed",
-          flatten = TRUE,
-          verbose = FALSE
-        ), drop = FALSE],
-        all = dat,
-        random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-      )
-    }
-  )
+  mf <- .safe({
+    switch(effects,
+      fixed = dat[, find_predictors(
+        x,
+        effects = "fixed",
+        flatten = TRUE,
+        verbose = FALSE
+      ), drop = FALSE],
+      all = dat,
+      random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
+    )
+  })
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
@@ -927,15 +921,13 @@ get_data.glmmadmb <- function(x,
   fixed_data <- x$frame
   random_data <- .recover_data_from_environment(x)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
 
-  mf <- .safe(
-    {
-      switch(effects,
-        fixed = fixed_data,
-        all = cbind(fixed_data, random_data),
-        random = random_data
-      )
-    }
-  )
+  mf <- .safe({
+    switch(effects,
+      fixed = fixed_data,
+      all = cbind(fixed_data, random_data),
+      random = random_data
+    )
+  })
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
 
@@ -1479,20 +1471,16 @@ get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
     if (is_empty_object(remain)) {
       final_mf <- mf
     } else {
-      final_mf <- .safe(
-        {
-          dat <- .recover_data_from_environment(x)
-          cbind(mf, dat[, remain, drop = FALSE])
-        }
-      )
+      final_mf <- .safe({
+        dat <- .recover_data_from_environment(x)
+        cbind(mf, dat[, remain, drop = FALSE])
+      })
     }
   } else {
-    final_mf <- .safe(
-      {
-        dat <- .recover_data_from_environment(x)
-        dat[, ft, drop = FALSE]
-      }
-    )
+    final_mf <- .safe({
+      dat <- .recover_data_from_environment(x)
+      dat[, ft, drop = FALSE]
+    })
   }
 
   .prepare_get_data(x, stats::na.omit(final_mf), verbose = verbose)
@@ -2231,12 +2219,10 @@ get_data.bfsl <- function(x, ...) {
 
 #' @export
 get_data.mipo <- function(x, ...) {
-  .safe(
-    {
-      models <- eval(x$call$object)
-      get_data(models$analyses[[1]], ...)
-    }
-  )
+  .safe({
+    models <- eval(x$call$object)
+    get_data(models$analyses[[1]], ...)
+  })
 }
 
 
