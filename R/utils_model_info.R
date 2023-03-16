@@ -366,12 +366,10 @@
   # mixed model?
   is.mixed.model <- !is_levenetest && is_mixed_model(x)
   if (is.mixed.model) {
-    n.grp.lvl <- .safe(
-      {
-        ngrplvl <- n_grouplevels(x)
-        stats::setNames(ngrplvl$N_levels, ngrplvl$Group)
-      }
-    )
+    n.grp.lvl <- .safe({
+      ngrplvl <- n_grouplevels(x)
+      stats::setNames(ngrplvl$N_levels, ngrplvl$Group)
+    })
   } else {
     n.grp.lvl <- NULL
   }

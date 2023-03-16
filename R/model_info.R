@@ -102,15 +102,13 @@ model_info.default <- function(x, verbose = TRUE, ...) {
     class(x) <- c(class(x), c("glm", "lm"))
   }
 
-  faminfo <- .safe(
-    {
-      if (inherits(x, "Zelig-relogit")) {
-        stats::binomial(link = "logit")
-      } else {
-        stats::family(x)
-      }
+  faminfo <- .safe({
+    if (inherits(x, "Zelig-relogit")) {
+      stats::binomial(link = "logit")
+    } else {
+      stats::family(x)
     }
-  )
+  })
 
   if (!is.null(faminfo)) {
     .make_family(
@@ -1168,13 +1166,11 @@ model_info.polr <- function(x, ...) {
 
 
 #' @export
-model_info.hglm <- function(x, ...) {  
-  faminfo <- .safe(
-    {
-      mc <- get_call(x)$family
-      eval(mc)
-    }
-  )
+model_info.hglm <- function(x, ...) {
+  faminfo <- .safe({
+    mc <- get_call(x)$family
+    eval(mc)
+  })
 
   if (is.null(faminfo)) {
     return(NULL)
@@ -1238,12 +1234,10 @@ model_info.gamlss <- function(x, ...) {
 
 #' @export
 model_info.mipo <- function(x, verbose = TRUE, ...) {
-  .safe(
-    {
-      models <- eval(x$call$object)
-      model_info(models$analyses[[1]], verbose = verbose, ...)
-    }
-  )
+  .safe({
+    models <- eval(x$call$object)
+    model_info(models$analyses[[1]], verbose = verbose, ...)
+  })
 }
 
 

@@ -67,25 +67,21 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   }
 
   if (is.null(res)) {
-    res <- .safe(
-      {
-        yield_warning <- no_response_resid && verbose
-        pred <- stats::predict(x, type = "response")
-        observed <- .factor_to_numeric(get_response(x, verbose = FALSE))
-        observed - pred
-      }
-    )
+    res <- .safe({
+      yield_warning <- no_response_resid && verbose
+      pred <- stats::predict(x, type = "response")
+      observed <- .factor_to_numeric(get_response(x, verbose = FALSE))
+      observed - pred
+    })
   }
 
   if (is.null(res)) {
-    res <- .safe(
-      {
-        yield_warning <- no_response_resid && verbose
-        pred <- stats::fitted(x)
-        observed <- .factor_to_numeric(get_response(x, verbose = FALSE))
-        observed - pred
-      }
-    )
+    res <- .safe({
+      yield_warning <- no_response_resid && verbose
+      pred <- stats::fitted(x)
+      observed <- .factor_to_numeric(get_response(x, verbose = FALSE))
+      observed - pred
+    })
   }
 
   if (is.null(res) || all(is.na(res))) {
@@ -154,13 +150,11 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
     return(.weighted_residuals(x, verbose))
   }
 
-  res <- .safe(
-    {
-      junk <- utils::capture.output(pred <- stats::predict(x, type = "response")) # nolint
-      observed <- .factor_to_numeric(get_response(x))
-      observed - pred
-    }
-  )
+  res <- .safe({
+    junk <- utils::capture.output(pred <- stats::predict(x, type = "response")) # nolint
+    observed <- .factor_to_numeric(get_response(x))
+    observed - pred
+  })
 
   if (is.null(res) || all(is.na(res))) {
     if (verbose) {

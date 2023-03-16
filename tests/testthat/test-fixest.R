@@ -42,7 +42,7 @@ test_that("robust variance-covariance", {
 
 
 test_that("offset", {
-  tmp <- feols(mpg ~ hp, offset = ~log(qsec), data = mtcars)
+  tmp <- feols(mpg ~ hp, offset = ~ log(qsec), data = mtcars)
   expect_identical(find_offset(tmp), "qsec")
   tmp <- feols(mpg ~ hp, offset = ~qsec, data = mtcars)
   expect_identical(find_offset(tmp), "qsec")

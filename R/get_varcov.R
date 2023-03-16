@@ -1000,7 +1000,8 @@ get_varcov.LORgee <- get_varcov.gee
         eigenvalues <- eigen(x, only.values = TRUE)$values
         eigenvalues[abs(eigenvalues) < pd_tolerance] <- 0
         any(eigenvalues < 0)
-      }, FALSE
+      },
+      FALSE
     )
   } else {
     rv <- FALSE

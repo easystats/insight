@@ -125,15 +125,13 @@
     # in case we have missing data, the data frame in the environment
     # has more rows than the model frame
     if (isTRUE(!is.null(md) && nrow(md) != nrow(mf))) {
-      md <- .safe(
-        {
-          md <- .recover_data_from_environment(x)
-          md <- stats::na.omit(md[intersect(
-            colnames(md),
-            find_variables(x, effects = "all", component = "all", flatten = TRUE)
-          )])
-        }
-      )
+      md <- .safe({
+        md <- .recover_data_from_environment(x)
+        md <- stats::na.omit(md[intersect(
+          colnames(md),
+          find_variables(x, effects = "all", component = "all", flatten = TRUE)
+        )])
+      })
     }
 
     # if data not found in environment,
@@ -320,12 +318,10 @@
 
   # keep "as is" variable for response variables in data frame
   if (colnames(mf)[1] == rn[1] && grepl("I(", rn[1], fixed = TRUE, ignore.case = FALSE)) {
-    md <- .safe(
-      {
-        tmp <- .recover_data_from_environment(x)[, unique(c(rn_not_combined, cvn)), drop = FALSE]
-        tmp[, rn_not_combined, drop = FALSE]
-      }
-    )
+    md <- .safe({
+      tmp <- .recover_data_from_environment(x)[, unique(c(rn_not_combined, cvn)), drop = FALSE]
+      tmp[, rn_not_combined, drop = FALSE]
+    })
 
     if (!is.null(md)) {
       mf <- cbind(mf, md)
@@ -699,13 +695,11 @@
 # return data from a data frame that is in the environment,
 # and subset the data, if necessary
 .get_startvector_from_env <- function(x) {
-  .safe(
-    {
-      sv <- eval(parse(text = safe_deparse(x@call))[[1]]$start)
-      if (is.list(sv)) sv <- sv[["nlpars"]]
-      names(sv)
-    }
-  )
+  .safe({
+    sv <- eval(parse(text = safe_deparse(x@call))[[1]]$start)
+    if (is.list(sv)) sv <- sv[["nlpars"]]
+    names(sv)
+  })
 }
 
 
@@ -862,7 +856,7 @@
 
         # exeception: list for kruskal-wallis
         if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) &&
-              (length(data_name) == 1 && startsWith(data_name, "list("))) {
+          (length(data_name) == 1 && startsWith(data_name, "list("))) {
           l <- eval(.str2lang(x$data.name))
           names(l) <- paste0("x", seq_along(l))
           return(l)
@@ -965,12 +959,10 @@
   # 2nd try
   if (is.null(out)) {
     for (parent_level in 1:5) {
-      out <- .safe(
-        {
-          data_name <- trim_ws(unlist(strsplit(x$data.name, "(and|,|by)"), use.names = FALSE))
-          as.table(get(data_name, envir = parent.frame(n = parent_level)))
-        }
-      )
+      out <- .safe({
+        data_name <- trim_ws(unlist(strsplit(x$data.name, "(and|,|by)"), use.names = FALSE))
+        as.table(get(data_name, envir = parent.frame(n = parent_level)))
+      })
       if (!is.null(out)) break
     }
   }

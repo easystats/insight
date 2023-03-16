@@ -129,9 +129,11 @@
 #' }
 #' @export
 get_variance <- function(x,
-                         component = c("all", "fixed", "random", "residual",
-                                       "distribution", "dispersion", "intercept",
-                                       "slope", "rho01", "rho00"),
+                         component = c(
+                           "all", "fixed", "random", "residual",
+                           "distribution", "dispersion", "intercept",
+                           "slope", "rho01", "rho00"
+                         ),
                          verbose = TRUE,
                          ...) {
   UseMethod("get_variance")
@@ -140,9 +142,11 @@ get_variance <- function(x,
 
 #' @export
 get_variance.default <- function(x,
-                                 component = c("all", "fixed", "random", "residual",
-                                               "distribution", "dispersion", "intercept",
-                                               "slope", "rho01", "rho00"),
+                                 component = c(
+                                   "all", "fixed", "random", "residual",
+                                   "distribution", "dispersion", "intercept",
+                                   "slope", "rho01", "rho00"
+                                 ),
                                  verbose = TRUE,
                                  ...) {
   if (isTRUE(verbose)) {
@@ -154,9 +158,11 @@ get_variance.default <- function(x,
 
 #' @export
 get_variance.merMod <- function(x,
-                                component = c("all", "fixed", "random", "residual",
-                                              "distribution", "dispersion", "intercept",
-                                              "slope", "rho01", "rho00"),
+                                component = c(
+                                  "all", "fixed", "random", "residual",
+                                  "distribution", "dispersion", "intercept",
+                                  "slope", "rho01", "rho00"
+                                ),
                                 verbose = TRUE,
                                 tolerance = 1e-5,
                                 ...) {
@@ -205,9 +211,11 @@ get_variance.brmsfit <- get_variance.merMod
 
 #' @export
 get_variance.glmmTMB <- function(x,
-                                 component = c("all", "fixed", "random", "residual",
-                                               "distribution", "dispersion", "intercept",
-                                               "slope", "rho01", "rho00"),
+                                 component = c(
+                                   "all", "fixed", "random", "residual",
+                                   "distribution", "dispersion", "intercept",
+                                   "slope", "rho01", "rho00"
+                                 ),
                                  verbose = TRUE,
                                  tolerance = 1e-5,
                                  model_component = NULL,
@@ -230,9 +238,11 @@ get_variance.MixMod <- get_variance.glmmTMB
 
 #' @export
 get_variance.mixed <- function(x,
-                               component = c("all", "fixed", "random", "residual",
-                                             "distribution", "dispersion", "intercept",
-                                             "slope", "rho01", "rho00"),
+                               component = c(
+                                 "all", "fixed", "random", "residual",
+                                 "distribution", "dispersion", "intercept",
+                                 "slope", "rho01", "rho00"
+                               ),
                                verbose = TRUE,
                                tolerance = 1e-5,
                                ...) {

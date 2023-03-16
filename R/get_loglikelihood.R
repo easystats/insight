@@ -541,11 +541,9 @@ get_loglikelihood.cpglm <- get_loglikelihood.plm
 
 .per_observation_ll <- function(x) {
   # per observation lls
-  .safe(
-    {
-      w <- get_weights(x, null_as_ones = TRUE)
-      s2 <- (get_sigma(x) * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
-      0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = FALSE)^2) / s2))
-    }
-  )
+  .safe({
+    w <- get_weights(x, null_as_ones = TRUE)
+    s2 <- (get_sigma(x) * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
+    0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = FALSE)^2) / s2))
+  })
 }

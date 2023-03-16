@@ -1832,13 +1832,11 @@ get_statistic.rq <- function(x, ...) {
 
 #' @export
 get_statistic.rqs <- function(x, ...) {
-  stat <- .safe(
-    {
-      s <- suppressWarnings(summary(x, covariance = TRUE))
-      cs <- do.call(rbind, lapply(s, stats::coef))
-      cs[, "t value"]
-    }
-  )
+  stat <- .safe({
+    s <- suppressWarnings(summary(x, covariance = TRUE))
+    cs <- do.call(rbind, lapply(s, stats::coef))
+    cs[, "t value"]
+  })
 
   params <- get_parameters(x)
 

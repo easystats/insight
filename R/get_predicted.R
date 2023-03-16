@@ -257,20 +257,18 @@ get_predicted.default <- function(x,
   }
 
   # 2. step: confidence intervals
-  ci_data <- .safe(
-    {
-      get_predicted_ci(
-        x,
-        predictions,
-        data = args$data,
-        ci_type = args$ci_type,
-        ci_method = ci_method,
-        vcov = vcov,
-        vcov_args = vcov_args,
-        ...
-      )
-    }
-  )
+  ci_data <- .safe({
+    get_predicted_ci(
+      x,
+      predictions,
+      data = args$data,
+      ci_type = args$ci_type,
+      ci_method = ci_method,
+      vcov = vcov,
+      vcov_args = vcov_args,
+      ...
+    )
+  })
 
   # 3. step: back-transform
   if (!is.null(predictions)) {

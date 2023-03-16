@@ -63,8 +63,8 @@ if (getRversion() >= "4.0.0") {
       dg$Petal.Width,
       c(
         `-1 SD` = 0.4371, Mean = 1.1993, `+1 SD` = 1.9616, `-1 SD` = 0.4371, # nolint
-        Mean = 1.1993, `+1 SD` = 1.9616, `-1 SD` = 0.4371, Mean = 1.1993,    # nolint
-        `+1 SD` = 1.9616                                                     # nolint
+        Mean = 1.1993, `+1 SD` = 1.9616, `-1 SD` = 0.4371, Mean = 1.1993, # nolint
+        `+1 SD` = 1.9616 # nolint
       ),
       tolerance = 1e-3
     )
