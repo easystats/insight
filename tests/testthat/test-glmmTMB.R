@@ -1,6 +1,5 @@
 skip_on_os("mac") # error: FreeADFunObject
 
-
 osx <- tryCatch(
   {
     si <- Sys.info()
@@ -15,7 +14,10 @@ osx <- tryCatch(
   }
 )
 
-if (skip_if_not_or_load_if_installed("TMB") && skip_if_not_or_load_if_installed("glmmTMB") && getRversion() >= "4.0.0") {
+skip_if_not_or_load_if_installed("TMB")
+skip_if_not_or_load_if_installed("glmmTMB")
+
+if (getRversion() >= "4.0.0") {
   # fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")
   # fish$nofish <- as.factor(fish$nofish)
   # fish$livebait <- as.factor(fish$livebait)

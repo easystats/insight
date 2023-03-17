@@ -1,6 +1,8 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && skip_if_not_or_load_if_installed("mmrm") && getRversion() >= "4.0.0") {
+if (.runThisTest && getRversion() >= "4.0.0") {
+  skip_if_not_or_load_if_installed("mmrm")
+
   data(fev_data)
   m1 <- mmrm(
     formula = FEV1 ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID),
@@ -30,7 +32,10 @@ if (.runThisTest && skip_if_not_or_load_if_installed("mmrm") && getRversion() >=
   })
 
   test_that("find_offset", {
-    model_off <- mmrm(log(FEV1) ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID) + offset(log(FEV1_BL)), data = fev_data)
+    model_off <- mmrm(
+      log(FEV1) ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID) + offset(log(FEV1_BL)),
+      data = fev_data
+    )
     expect_identical(find_offset(model_off), "FEV1_BL")
   })
 
