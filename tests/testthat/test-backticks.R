@@ -12,7 +12,12 @@ test_that("text_remove_backticks", {
     c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica")
   )
 
-  d <- data.frame(Parameter = names(coef(m2)), Term = names(coef(m2)), Estimate = unname(coef(m2)), stringsAsFactors = FALSE)
+  d <- data.frame(
+    Parameter = names(coef(m2)),
+    Term = names(coef(m2)),
+    Estimate = unname(coef(m2)),
+    stringsAsFactors = FALSE
+  )
   x <- text_remove_backticks(d, c("Parameter", "Term"))
   expect_equal(x$Parameter, c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"))
   expect_equal(x$Term, c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"))

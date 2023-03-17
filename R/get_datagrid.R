@@ -273,11 +273,12 @@ get_datagrid.data.frame <- function(x,
     numvars <- specs[!specs$is_factor, "varname"]
     if (length(numvars)) {
       # Sanitize 'length' argument
-      if (length(length) == 1) {
+      if (length(length) == 1L) {
         length <- rep(length, length(numvars))
       } else if (length(length) != length(numvars)) {
         format_error(
-          "The number of elements in `length` must match the number of numeric target variables (n = ", length(numvars), ")."
+          "The number of elements in `length` must match the number of numeric target variables (n = ",
+          length(numvars), ")."
         )
       }
       # Sanitize 'range' argument
@@ -285,7 +286,8 @@ get_datagrid.data.frame <- function(x,
         range <- rep(range, length(numvars))
       } else if (length(range) != length(numvars)) {
         format_error(
-          "The number of elements in `range` must match the number of numeric target variables (n = ", length(numvars), ")."
+          "The number of elements in `range` must match the number of numeric target variables (n = ",
+          length(numvars), ")."
         )
       }
 
@@ -312,7 +314,7 @@ get_datagrid.data.frame <- function(x,
     targets <- .safe(targets[specs$varname], targets)
 
     # Preserve range ---------------------------------------------------------
-    if (preserve_range && length(facs) > 0 && length(nums) > 0) {
+    if (preserve_range && length(facs) > 0 && length(nums) > 0L) {
       # Loop through the combinations of factors
       facs_combinations <- expand.grid(facs)
       for (i in seq_len(nrow(facs_combinations))) {
