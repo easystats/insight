@@ -59,6 +59,15 @@ find_variables <- function(x,
                            component = "all",
                            flatten = FALSE,
                            verbose = TRUE) {
+  UseMethod("find_variables")
+}
+
+#' @export
+find_variables.default <- function(x,
+                           effects = "all",
+                           component = "all",
+                           flatten = FALSE,
+                           verbose = TRUE) {
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "smooth_terms"))
 
@@ -83,4 +92,13 @@ find_variables <- function(x,
   } else {
     c(list(response = resp), pr)
   }
+}
+
+#' @export
+find_variables.fixest_multi <- function(x,
+                                   effects = "all",
+                                   component = "all",
+                                   flatten = FALSE,
+                                   verbose = TRUE) {
+  lapply(x, find_variables.default, effects, component, flatten, verbose)
 }

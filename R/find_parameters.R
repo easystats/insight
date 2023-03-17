@@ -818,7 +818,7 @@ find_parameters.fixest_multi <- function(x,
                                          component = c("all", "conditional", "nonlinear"),
                                          flatten = FALSE,
                                          ...) {
-  lapply(x, find_parameters.default, component, flatten, ...)
+  lapply(x, find_parameters.default, component = component, flatten = flatten, ...)
 }
 
 

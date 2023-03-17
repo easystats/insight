@@ -456,7 +456,7 @@ link_inverse.feglm <- link_inverse.fixest
 
 #' @export
 link_inverse.fixest_multi <- function(x, ...) {
-  lapply(x, link_inverse.fixest_multi, ...)
+  lapply(x, link_inverse.fixest, ...)
 }
 
 #' @export
