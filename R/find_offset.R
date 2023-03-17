@@ -56,9 +56,9 @@ find_offset <- function(x) {
   offset <- clean_names(offset)
 
   # sometimes we get an empty list (e.g., fixest with iris dataset)
-  if (isTRUE(length(offset) == 0)) {
-    return(NULL)
-  } else {
+  if (length(offset)) {
     return(offset)
+  } else {
+    return(NULL)
   }
 }
