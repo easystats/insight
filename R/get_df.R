@@ -244,6 +244,11 @@ get_df.fixest <- function(x, type = "residual", ...) {
   fixest::degrees_freedom(x, type = type)
 }
 
+#' @export
+get_df.fixest_multi <- function(x, type = "residual", ...) {
+  lapply(x, get_df.fixest, type, ...)
+}
+
 
 
 # Mixed models - special treatment --------------

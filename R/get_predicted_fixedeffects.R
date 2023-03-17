@@ -36,3 +36,8 @@ get_predicted.fixest <- function(x, predict = "expectation", data = NULL, ...) {
 
   .get_predicted_out(predictions, args = args, ci_data = NULL)
 }
+
+#' @export
+get_predicted.fixest_multi <- function(x, predict = "expectation", data = NULL, ...) {
+  lapply(x, get_predicted.fixest, predict, data, ...)
+}

@@ -153,6 +153,15 @@ find_response.joint <- function(x,
 }
 
 
+#' @export
+find_response.fixest_multi <- function(x,
+                                       combine = TRUE,
+                                       component = c("conditional", "survival", "all"),
+                                       ...) {
+  lapply(x, find_response.default, combine, component, ...)
+}
+
+
 
 
 # utils ---------------------

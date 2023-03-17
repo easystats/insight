@@ -777,7 +777,10 @@ get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
   text_remove_backticks(params)
 }
 
-
+#' @export
+get_parameters.fixest_multi <- function(x, component = c("conditional", "all"), ...) {
+  lapply(x, get_parameters.default, component, ...)
+}
 
 
 # utility functions ---------------------------------

@@ -562,6 +562,10 @@ n_obs.fixest <- function(x, ...) {
   x$nobs
 }
 
+#' @export
+n_obs.fixest_multi <- function(x, ...) {
+  lapply(x, n_obs.fixest, ...)
+}
 
 
 #' @export

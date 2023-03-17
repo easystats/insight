@@ -136,6 +136,14 @@ get_varcov.fixest <- function(x,
   do.call("FUN", args)
 }
 
+#' @export
+get_varcov.fixest_multi <- function(x,
+                                    vcov = NULL,
+                                    vcov_args = NULL,
+                                    ...) {
+  lapply(x, get_varcov.fixest, vcov, vcov_args, ...)
+}
+
 
 
 # mlm ---------------------------------------------

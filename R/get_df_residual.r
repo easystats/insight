@@ -92,6 +92,11 @@
 }
 
 #' @keywords internal
+.degrees_of_freedom_residual.fixest_multi <- function(x, verbose = TRUE, ...) {
+  lapply(x, .degrees_of_freedom_residual.fixest, verbose, ...)
+}
+
+#' @keywords internal
 .degrees_of_freedom_residual.summary.lm <- function(x, verbose = TRUE, ...) {
   x$fstatistic[3]
 }

@@ -454,6 +454,10 @@ link_inverse.fixest <- function(x, ...) {
 #' @export
 link_inverse.feglm <- link_inverse.fixest
 
+#' @export
+link_inverse.fixest_multi <- function(x, ...) {
+  lapply(x, link_inverse.fixest_multi, ...)
+}
 
 #' @export
 link_inverse.glmx <- function(x, ...) {
