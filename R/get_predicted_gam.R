@@ -13,7 +13,10 @@ get_predicted.gam <- function(x,
                               ...) {
   # allow users to set `predict=NULL` and specify `type` directly
   if (!is.null(predict)) {
-    predict <- match.arg(predict, choices = c("expectation", "expected", "link", "prediction", "predicted", "classification"))
+    predict <- match.arg(
+      predict,
+      choices = c("expectation", "expected", "link", "prediction", "predicted", "classification")
+    )
 
     # Sanity checks
     if (predict %in% c("prediction", "predicted")) {

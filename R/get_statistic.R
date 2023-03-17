@@ -1497,11 +1497,11 @@ get_statistic.emm_list <- function(x, ci = 0.95, adjust = "none", ...) {
     return(NULL)
   }
 
-  stat <- unlist(stat)
+  stat <- unlist(stat, use.names = FALSE)
 
   out <- data.frame(
     Parameter = params$Parameter,
-    Statistic = as.vector(stat),
+    Statistic = stat,
     Component = params$Component,
     stringsAsFactors = FALSE,
     row.names = NULL
