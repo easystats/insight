@@ -591,7 +591,14 @@ n_obs.stanmvreg <- function(x, select = NULL, ...) {
     if (select %in% names(x$n_yobs)) {
       n <- x$n_yobs[select]
     } else {
-      print_color(sprintf("Could not find response '%s'. Model's response variables are named %s.\n", select, toString(names(x$n_yobs))), "red")
+      print_color(
+        sprintf(
+          "Could not find response '%s'. Model's response variables are named %s.\n",
+          select,
+          toString(names(x$n_yobs))
+        ),
+        "red"
+      )
       cat("Returning smallest number of observations now.\n")
       n <- min(x$n_yobs)
     }
