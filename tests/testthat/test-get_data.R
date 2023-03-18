@@ -1,4 +1,4 @@
-skip_on_os(os = "mac")
+skip_on_os("mac")
 
 test_that("lme", {
   skip_if_not_or_load_if_installed("nlme")

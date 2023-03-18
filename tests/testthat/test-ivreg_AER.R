@@ -139,3 +139,8 @@ test_that("find_terms", {
 test_that("find_statistic", {
   expect_identical(find_statistic(mod_aer_ivreg), "t-statistic")
 })
+
+# to avoid `Registered S3 methods overwritten by 'ivreg'` messages
+if (isNamespaceLoaded("AER")) {
+  unloadNamespace("AER")
+}
