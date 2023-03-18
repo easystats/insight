@@ -541,10 +541,25 @@ get_predicted.rma <- function(x,
       out <- .safe(metafor::blup(x, transf = transf, targs = transf_args))
     } else if (has_scale_model) {
       # TODO: Remove this helper function if metafor adds support for newmods/newscale in metafor::blup()
-      out <- .safe(.get_blup_rma(x, ci = ci, newmods = newmods, newscale = newscale, transf = transf, targs = transf_args))
+      out <- .safe(
+        .get_blup_rma(
+          x,
+          ci = ci,
+          newmods = newmods,
+          newscale = newscale,
+          transf = transf,
+          targs = transf_args
+        )
+      )
     } else {
       # TODO: Remove this helper function if metafor adds support for newmods in metafor::blup()
-      out <- .safe(.get_blup_rma(x, ci = ci, newmods = newmods, transf = transf, targs = transf_args))
+      out <- .safe(.get_blup_rma(
+        x,
+        ci = ci,
+        newmods = newmods,
+        transf = transf,
+        targs = transf_args
+      ))
     }
     out <- stats::setNames(as.data.frame(out), c("Predicted", "SE", "CI_low", "CI_high"))
   } else {
