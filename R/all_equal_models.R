@@ -40,20 +40,16 @@ all_models_equal <- function(..., verbose = FALSE) {
   }
 
   all_equal <- all(
-    vapply(
-      all_classes[-1],
-      function(i) identical(i, all_classes[1]),
-      FUN.VALUE = logical(1)
-    )
+    vapply(all_classes[-1], identical, all_classes[1], FUN.VALUE = logical(1))
   )
 
   if (!all(all_supported) && verbose) {
     differ <- which(!all_supported)
 
     m1 <- "Following objects are no (supported) models:"
-    m2 <- paste0(sprintf("%s", object_names[differ]), collapse = ", ")
+    m2 <- toString(sprintf("%s", object_names[differ]))
 
-    message(paste(m1, m2, collapse = " "))
+    format_alert(paste(m1, m2, collapse = " "))
   }
 
   if (!all(all_equal) && verbose) {
@@ -65,16 +61,15 @@ all_models_equal <- function(..., verbose = FALSE) {
       all_classes[[1]]
     )
 
-    m2 <- paste0(
+    m2 <- toString(
       sprintf(
         "%s (\"%s\")",
         object_names[differ[-1]],
         sapply(all_classes[differ[-1]], function(x) as.vector(x[[1]]))
-      ),
-      collapse = ", "
+      )
     )
 
-    message(paste(m1, m2, collapse = " "))
+    format_alert(paste(m1, m2, collapse = " "))
   }
 
   all(all_supported) && all(all_equal)
