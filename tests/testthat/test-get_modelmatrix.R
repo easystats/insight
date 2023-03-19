@@ -57,6 +57,7 @@ test_that("get_modelmatrix - iv_robust", {
 # ====================================================================
 
 test_that("get_modelmatrix - ivreg", {
+  skip_if(getRversion() < "4.2.0")
   skip_if_not_or_load_if_installed("ivreg")
   data(Kmenta, package = "ivreg")
 
