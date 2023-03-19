@@ -3,6 +3,8 @@ skip_if_not_or_load_if_installed("afex")
 
 data(sleepstudy)
 
+sleepstudy <<- sleepstudy
+
 set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = nrow(sleepstudy), replace = TRUE)
 sleepstudy$mysubgrp <- NA
