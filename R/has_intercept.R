@@ -38,6 +38,6 @@ has_intercept <- function(x, verbose = TRUE) {
     intercept <- as.vector(attr(f_terms, "intercept"))
     return(intercept == 1)
   } else if (verbose) {
-    format_warning(format_message("Cannot extract terms from model formula."))
+    format_warning("Cannot extract terms from model formula.")
   }
 }
