@@ -1,8 +1,3 @@
-pkgs <- c("insight", "estimatr", "ivreg")
-suppressPackageStartupMessages(sapply(pkgs, skip_if_not_or_load_if_installed))
-
-
-
 test_that("Issue #612: factor padding", {
   # stats::model.matrix() breaks on contrasts when a column of `data` has
   # only 1 factor level
@@ -40,7 +35,10 @@ test_that("Issue #612: factor padding", {
 # =========================================================================
 
 test_that("get_modelmatrix - iv_robust", {
+  skip_if_not_or_load_if_installed("ivreg")
+  skip_if_not_or_load_if_installed("estimatr")
   data(Kmenta, package = "ivreg")
+
   x <- iv_robust(Q ~ P + D | D + F + A, se_type = "stata", data = Kmenta)
 
   out1 <- get_modelmatrix(x)
@@ -59,8 +57,12 @@ test_that("get_modelmatrix - iv_robust", {
 # ====================================================================
 
 test_that("get_modelmatrix - ivreg", {
+  skip_if(getRversion() < "4.2.0")
+  skip_if_not_or_load_if_installed("ivreg")
   data(Kmenta, package = "ivreg")
-  x <- ivreg(Q ~ P + D | D + F + A, data = Kmenta)
+
+  set.seed(15)
+  x <- ivreg::ivreg(Q ~ P + D | D + F + A, data = Kmenta)
 
   out1 <- get_modelmatrix(x)
   out2 <- model.matrix(x, data = Kmenta)
@@ -78,6 +80,8 @@ test_that("get_modelmatrix - ivreg", {
 # ====================================================================
 
 test_that("get_modelmatrix - lm_robust", {
+  skip_if_not_or_load_if_installed("estimatr")
+
   set.seed(15)
   N <- 1:40
   dat <<- data.frame(
