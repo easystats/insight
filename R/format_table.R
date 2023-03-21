@@ -740,6 +740,8 @@ format_table <- function(x,
   if ("Performance_Score" %in% names(x)) names(x)[names(x) == "Performance_Score"] <- "Performance-Score"
   if ("Wu_Hausman" %in% names(x)) names(x)[names(x) == "Wu_Hausman"] <- "Wu & Hausman"
   if ("p(Wu_Hausman)" %in% names(x)) names(x)[names(x) == "p(Wu_Hausman)"] <- "p(Wu & Hausman)"
+  if ("weak_instruments" %in% names(x)) names(x)[names(x) == "weak_instruments"] <- "Weak instruments"
+  if ("weak_instruments_p" %in% names(x)) names(x)[names(x) == "weak_instruments_p"] <- "p(Weak instruments)"
 
   # Formatting if we have IC and IC weight columns ----
 
