@@ -141,7 +141,21 @@ get_varcov.fixest_multi <- function(x,
                                     vcov = NULL,
                                     vcov_args = NULL,
                                     ...) {
-  lapply(x, get_varcov.fixest, vcov, vcov_args, ...)
+  out <- lapply(x, get_varcov.fixest, vcov, vcov_args, ...)
+  resp <- find_response(x)
+  for (i in seq_along(out)) {
+    rownames(out[[i]]) <- paste0(resp[[i]], ":", rownames(out[[i]]))
+    colnames(out[[i]]) <- paste0(resp[[i]], ":", colnames(out[[i]]))
+  }
+  print(out)
+
+  # bind lists together to one data frame, save attributes
+  att <- attributes(out[[1]])
+  params <- do.call(rbind, out)
+  row.names(params) <- NULL
+
+  attributes(params) <- utils::modifyList(att, attributes(params))
+  params
 }
 
 

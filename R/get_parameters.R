@@ -779,7 +779,19 @@ get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
 
 #' @export
 get_parameters.fixest_multi <- function(x, component = c("conditional", "all"), ...) {
-  lapply(x, get_parameters.default, component, ...)
+  out <- lapply(x, get_parameters.default, component, ...)
+  resp <- find_response(x)
+  for (i in seq_along(out)) {
+    out[[i]]$Response <- resp[[i]]
+  }
+
+  # bind lists together to one data frame, save attributes
+  att <- attributes(out[[1]])
+  params <- do.call(rbind, out)
+  row.names(params) <- NULL
+
+  attributes(params) <- utils::modifyList(att, attributes(params))
+  params
 }
 
 
