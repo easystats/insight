@@ -92,7 +92,7 @@ format_table <- function(x,
   # sanity check
   if (is.null(x) || (is.data.frame(x) && nrow(x) == 0)) {
     if (isTRUE(verbose)) {
-      message("Can't format table, data frame is empty.")
+      format_alert("Can't format table, data frame is empty.")
     }
     return(NULL)
   }

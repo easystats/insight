@@ -132,10 +132,15 @@ print_parameters <- function(x,
   obj <- Reduce(
     function(x, y) {
       # check for valid column name
-      if (parameter_column != "Parameter" && parameter_column %in% colnames(y) && !"Parameter" %in% colnames(y)) {
+      if (parameter_column != "Parameter" &&
+        parameter_column %in% colnames(y) &&
+        !"Parameter" %in% colnames(y)) {
         colnames(y)[colnames(y) == parameter_column] <- "Parameter"
       }
-      merge_by <- unique(c("Parameter", intersect(colnames(y), intersect(c("Effects", "Component", "Group", "Response"), colnames(x)))))
+      merge_by <- unique(c(
+        "Parameter",
+        intersect(colnames(y), intersect(c("Effects", "Component", "Group", "Response"), colnames(x)))
+      ))
       merge(x, y, all.x = FALSE, by = merge_by, sort = FALSE)
     },
     c(list(cp), obj)
@@ -156,7 +161,7 @@ print_parameters <- function(x,
   # split into groups, remove empty elements
   out <- split(obj, f)
   out <- compact_list(lapply(out, function(i) {
-    if (nrow(i) > 0) i
+    if (nrow(i) > 0L) i
   }))
 
   # remove trailing dots

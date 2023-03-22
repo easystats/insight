@@ -134,7 +134,7 @@ export_table <- function(x,
   # sanity check
   if (is.null(x) || (is.data.frame(x) && nrow(x) == 0) || is_empty_object(x)) {
     if (isTRUE(verbose)) {
-      message("Can't export table to ", format, ", data frame is empty.")
+      format_alert("Can't export table to ", format, ", data frame is empty.")
     }
     return(NULL)
   }
