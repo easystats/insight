@@ -279,7 +279,7 @@ format_table <- function(x,
   for (stats in c(
     "p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA", "p_ROPE",
     "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR", "p_calibrated",
-    "p_weak_instruments"
+    "weak_instruments_p"
   )) {
     if (stats %in% names(x)) {
       x[[stats]] <- format_p(
@@ -742,7 +742,7 @@ format_table <- function(x,
   if ("Wu_Hausman" %in% names(x)) names(x)[names(x) == "Wu_Hausman"] <- "Wu & Hausman"
   if ("p(Wu_Hausman)" %in% names(x)) names(x)[names(x) == "p(Wu_Hausman)"] <- "p(Wu & Hausman)"
   if ("weak_instruments" %in% names(x)) names(x)[names(x) == "weak_instruments"] <- "Weak instruments"
-  if ("p_weak_instruments" %in% names(x)) names(x)[names(x) == "p_weak_instruments"] <- "p(Weak instruments)"
+  if ("weak_instruments_p" %in% names(x)) names(x)[names(x) == "weak_instruments_p"] <- "p(Weak instruments)"
 
   # Formatting if we have IC and IC weight columns ----
 
