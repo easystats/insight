@@ -126,7 +126,7 @@ if (skip_if_not_or_load_if_installed("multgee")) {
         )
       )
     )
-    expect_equal(nrow(get_parameters(m1)), 11)
+    expect_equal(nrow(get_parameters(m1)), 11L)
     expect_equal(
       get_parameters(m1)$Parameter,
       c(
