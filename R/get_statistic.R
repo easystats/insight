@@ -972,6 +972,47 @@ get_statistic.mlogit <- function(x, ...) {
   }
 }
 
+#' @export
+get_statistic.mclogit <- function(x, ...) {
+  if (requireNamespace("mclogit", quietly = TRUE)) {
+    cs <- stats::coef(summary(x))
+
+    out <- data.frame(
+      Parameter = rownames(cs),
+      Statistic = as.vector(cs[, 3]),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+
+    out <- text_remove_backticks(out)
+    attr(out, "statistic") <- find_statistic(x)
+    out
+  } else {
+    NULL
+  }
+}
+
+#' @export
+get_statistic.mblogit <- function(x, ...) {
+  if (requireNamespace("mclogit", quietly = TRUE)) {
+    cs <- stats::coef(summary(x))
+
+    out <- data.frame(
+      Parameter = gsub("(.*)~(.*)", "\\2", rownames(cs)),
+      Statistic = as.vector(cs[, 3]),
+      Response = gsub("(.*)~(.*)", "\\1", rownames(cs)),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+
+    out <- text_remove_backticks(out)
+    attr(out, "statistic") <- find_statistic(x)
+    out
+  } else {
+    NULL
+  }
+}
+
 
 
 # mfx models -------------------------------------------------------
