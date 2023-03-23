@@ -4,6 +4,10 @@
 
 * The minimum needed R version has been bumped to `3.6`.
 
+## General
+
+* Improved support for `mclogit` models (package *mclogit*).
+
 # insight 0.19.1
 
 ## New supported models
