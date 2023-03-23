@@ -2,7 +2,7 @@ if (skip_if_not_or_load_if_installed("mlogit") && skip_if_not_or_load_if_install
   data("Fishing")
   Fish <-
     mlogit.data(Fishing,
-      varying = c(2:9),
+      varying = 2:9,
       shape = "wide",
       choice = "mode"
     )
@@ -37,19 +37,19 @@ if (skip_if_not_or_load_if_installed("mlogit") && skip_if_not_or_load_if_install
 
   if (getRversion() >= "3.6.0") {
     test_that("get_response", {
-      expect_equal(get_response(m1), as.vector(Fish$mode))
+      expect_identical(get_response(m1), as.vector(Fish$mode))
     })
 
     test_that("get_data", {
-      expect_equal(nrow(get_data(m1, verbose = FALSE)), 4728)
-      expect_equal(nrow(get_data(m2, verbose = FALSE)), 4728)
+      expect_identical(nrow(get_data(m1, verbose = FALSE)), 4728L)
+      expect_identical(nrow(get_data(m2, verbose = FALSE)), 4728L)
 
       if (packageVersion("mlogit") <= "1.0-3.1") {
-        expect_equal(
+        expect_identical(
           colnames(get_data(m1, verbose = FALSE)),
           c("mode", "price", "catch", "probabilities", "linpred")
         )
-        expect_equal(
+        expect_identical(
           colnames(get_data(m2, verbose = FALSE)),
           c(
             "mode",
@@ -61,11 +61,11 @@ if (skip_if_not_or_load_if_installed("mlogit") && skip_if_not_or_load_if_install
           )
         )
       } else {
-        expect_equal(
+        expect_identical(
           colnames(get_data(m1, verbose = FALSE)),
           c("mode", "price", "catch", "idx", "probabilities", "linpred")
         )
-        expect_equal(
+        expect_identical(
           colnames(get_data(m2, verbose = FALSE)),
           c(
             "mode",
@@ -93,24 +93,24 @@ if (skip_if_not_or_load_if_installed("mlogit") && skip_if_not_or_load_if_install
   })
 
   test_that("find_terms", {
-    expect_equal(find_terms(m1), list(
+    expect_identical(find_terms(m1), list(
       response = "mode",
       conditional = c("price", "catch")
     ))
-    expect_equal(find_terms(m1, flatten = TRUE), c("mode", "price", "catch"))
-    expect_equal(find_terms(m2), list(
+    expect_identical(find_terms(m1, flatten = TRUE), c("mode", "price", "catch"))
+    expect_identical(find_terms(m2), list(
       response = "mode",
       conditional = c("price", "catch", "income")
     ))
-    expect_equal(
+    expect_identical(
       find_terms(m2, flatten = TRUE),
       c("mode", "price", "catch", "income")
     )
   })
 
   test_that("n_obs", {
-    expect_equal(n_obs(m1), 4728)
-    expect_equal(n_obs(m2), 4728)
+    expect_identical(n_obs(m1), 4728L)
+    expect_identical(n_obs(m2), 4728L)
   })
 
   test_that("linkfun", {
