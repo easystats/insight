@@ -1,3 +1,9 @@
+# insight 0.19.2
+
+## General
+
+* Improved support for `mclogit` models (package *mclogit*).
+
 # insight 0.19.1
 
 ## New supported models
