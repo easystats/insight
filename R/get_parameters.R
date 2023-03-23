@@ -442,8 +442,21 @@ get_parameters.mblogit <- function(x, ...) {
   text_remove_backticks(out)
 }
 
+
 #' @export
-get_parameters.mclogit <- get_parameters.mblogit
+get_parameters.mclogit <- function(x, ...) {
+  params <- stats::coef(x)
+
+  out <- data.frame(
+    Parameter = names(params),
+    Estimate = unname(params),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  text_remove_backticks(out)
+}
+
 
 
 #' @export
