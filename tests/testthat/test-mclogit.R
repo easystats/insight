@@ -41,7 +41,7 @@ test_that("get_parameters", {
 test_that("get_statistic", {
   out <- get_statistic(mod_mb)
   expect_equal(
-    out$Estimate,
+    out$Statistic,
     c(-0.52735, -2.51803, 1.30274, 2.44884, -1.04056, 2.16406),
     tolerance = 1e-4
   )
