@@ -14,11 +14,14 @@ for (i in 1:5) {
     sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
-m1 <- mixed(Reaction ~ Days + (1 + Days | Subject),
+f1 <<- Reaction ~ Days + (1 + Days | Subject)
+f2 <<- Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject)
+
+m1 <- mixed(f1,
   data = sleepstudy
 )
 
-m2 <- mixed(Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+m2 <- mixed(f2,
   data = sleepstudy
 )
 
