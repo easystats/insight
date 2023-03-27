@@ -8,6 +8,10 @@
 
 * Improved support for `mclogit` models (package *mclogit*).
 
+## New supported models
+
+* `phylolm` and `phyloglm` (package *phylolm*).
+
 # insight 0.19.1
 
 ## New supported models
