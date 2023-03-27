@@ -294,7 +294,7 @@ model_info.metaplus <- model_info.maxLik
 
 #' @export
 model_info.mlm <- function(x, ...) {
-  .make_family(x, multi.var = TRUE, verbose = verbose, ...)
+  .make_family(x, multi.var = TRUE, ...)
 }
 
 #' @export
