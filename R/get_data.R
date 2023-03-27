@@ -2078,6 +2078,16 @@ get_data.mlogit <- function(x, source = "environment", verbose = TRUE, ...) {
 
 
 #' @export
+get_data.phylolm <- function(x, source = "environment", verbose = TRUE, ...) {
+  # try to recover data from environment
+  .get_data_from_environment(x, source = source, verbose = verbose, ...)
+}
+
+#' @export
+get_data.phyloglm <- get_data.phylolm
+
+
+#' @export
 #' @rdname get_data
 #' @param include_interval For meta-analysis models, should normal-approximation
 #'   confidence intervals be added for each response effect size?
