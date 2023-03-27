@@ -294,7 +294,7 @@ model_info.metaplus <- model_info.maxLik
 
 #' @export
 model_info.mlm <- function(x, ...) {
-  .make_family(x, multi.var = TRUE, ...)
+  .make_family(x, multi.var = TRUE, verbose = verbose, ...)
 }
 
 #' @export
@@ -342,6 +342,32 @@ model_info.mlogit <- model_info.logistf
 
 #' @export
 model_info.gmnl <- model_info.logistf
+
+
+
+# Phylo logit and poisson family ------------------------------------
+
+#' @export
+model_info.phylolm <- function(x, verbose = TRUE, ...) {
+  .make_family(x, verbose = verbose, ...)
+}
+
+#' @export
+model_info.phyloglm <- function(x, verbose = TRUE, ...) {
+  if (startsWith(x$method, "logistic")) {
+    faminfo <- stats::binomial(link = "logit")
+  } else {
+    faminfo <- stats::poisson()
+  }
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    verbose = verbose,
+    ...
+  )
+}
 
 
 
