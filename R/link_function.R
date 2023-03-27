@@ -70,6 +70,9 @@ link_function.lm <- function(x, ...) {
 }
 
 #' @export
+link_function.phylolm <- link_function.lm
+
+#' @export
 link_function.lme <- link_function.lm
 
 #' @export
@@ -250,6 +253,18 @@ link_function.riskRegression <- link_function.multinom
 
 #' @export
 link_function.comprisk <- link_function.multinom
+
+
+# Phylo glm ------------------------
+
+#' @export
+link_inverse.phyloglm <- function(x, ...) {
+  if (startsWith(x$method, "logistic")) {
+    stats::make.link("logit")$linkfun
+  } else {
+    stats::poisson(link = "log")$linkfun
+  }
+}
 
 
 # Probit link ------------------------
