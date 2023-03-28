@@ -222,6 +222,22 @@ get_df.coeftest <- function(x, ...) {
 
 
 #' @export
+get_df.phylolm <- function(x, type = "residual", ...) {
+  type <- match.arg(
+    tolower(type),
+    choices = c("wald", "residual", "normal", "model")
+  )
+  type <- switch(type,
+    "model" = stats::logLik(x)$df,
+    get_df.default(x, type = "residual")
+  )
+}
+
+#' @export
+get_df.phyloglm <- get_df.phylolm
+
+
+#' @export
 get_df.fixest <- function(x, type = "residual", ...) {
   # fixest degrees of freedom can be tricky. best to use the function by the
   # package.

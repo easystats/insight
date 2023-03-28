@@ -386,6 +386,20 @@ get_loglikelihood.plm <- function(x, check_response = FALSE, verbose = TRUE, ...
 get_loglikelihood.cpglm <- get_loglikelihood.plm
 
 
+#' @export
+get_loglikelihood.phylolm <- function(x, check_response = FALSE, verbose = TRUE, ...) {
+  .loglikelihood_prep_output(
+    x,
+    lls = stats::logLik(x)$logLik,
+    df = get_df(x, type = "model"),
+    check_response = check_response,
+    verbose = verbose
+  )
+}
+
+#' @export
+get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
+
 
 # Helpers -----------------------------------------------------------------
 

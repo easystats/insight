@@ -185,7 +185,7 @@ check_cbind <- function(resp, combine, model) {
     # "all.vars()" will take care of extracting the correct variables.
     resp_combined_string <- paste(resp, collapse = "+")
     # create an expression, so all.vars() works similar like for formulas
-    resp_combined <- tryCatch(all.vars(.str2lang(resp_combined_string)),
+    resp_combined <- tryCatch(all.vars(str2lang(resp_combined_string)),
       error = function(e) resp_combined_string
     )
     # if we do not want to combine, or if we just have one variable as

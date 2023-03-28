@@ -111,6 +111,9 @@ logitr
 logloss
 lqmm
 marginaleffects
+mblogit
+mclogit
+mlogit
 md
 merMod
 merTools

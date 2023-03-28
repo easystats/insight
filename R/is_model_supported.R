@@ -99,7 +99,7 @@ supported_models <- function() {
 
     # p ----------------------------
     "PMCMR", "poissonmfx", "poissonirr", "pgmm", "plm", "polr", "psm",
-    "probitmfx",
+    "probitmfx", "phyloglm", "phylolm",
 
     # r ----------------------------
     "Rchoice", "ridgelm", "riskRegression", "rjags", "rlm", "rlmerMod",

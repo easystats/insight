@@ -354,6 +354,15 @@ n_obs.gbm <- function(x, ...) {
 
 
 #' @export
+n_obs.phylolm <- function(x, ...) {
+  x$n
+}
+
+#' @export
+n_obs.phyloglm <- n_obs.phylolm
+
+
+#' @export
 #' @rdname n_obs
 #' @inheritParams get_data
 n_obs.afex_aov <- function(x, shape = c("long", "wide"), ...) {

@@ -1,3 +1,17 @@
+# insight 0.19.2
+
+## Breaking changes
+
+* The minimum needed R version has been bumped to `3.6`.
+
+## General
+
+* Improved support for `mclogit` models (package *mclogit*).
+
+## New supported models
+
+* `phylolm` and `phyloglm` (package *phylolm*).
+
 # insight 0.19.1
 
 ## New supported models
