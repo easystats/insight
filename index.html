@@ -55,7 +55,7 @@
     
     <a class="navbar-brand me-2" href="index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,9 +146,9 @@
 <p>The <em>insight</em> package is available on CRAN, while its latest development version is available on R-universe (from <em>rOpenSci</em>) or GitHub.</p>
 <table class="table">
 <colgroup>
-<col width="13%">
-<col width="12%">
-<col width="75%">
+<col width="11%">
+<col width="10%">
+<col width="77%">
 </colgroup>
 <thead><tr class="header">
 <th>Type</th>
@@ -327,7 +327,7 @@
 <div class="section level2">
 <h2 id="list-of-supported-models-by-class">List of Supported Models by Class<a class="anchor" aria-label="anchor" href="#list-of-supported-models-by-class"></a>
 </h2>
-<p>Currently, 222 model classes are supported.</p>
+<p>Currently, 224 model classes are supported.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/is_model_supported.html">supported_models</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   [1] "aareg"                   "afex_aov"               </span></span>
@@ -412,35 +412,36 @@
 <span><span class="co">#&gt; [159] "mvord"                   "negbinirr"              </span></span>
 <span><span class="co">#&gt; [161] "negbinmfx"               "ols"                    </span></span>
 <span><span class="co">#&gt; [163] "onesampb"                "orm"                    </span></span>
-<span><span class="co">#&gt; [165] "pgmm"                    "plm"                    </span></span>
-<span><span class="co">#&gt; [167] "PMCMR"                   "poissonirr"             </span></span>
-<span><span class="co">#&gt; [169] "poissonmfx"              "polr"                   </span></span>
-<span><span class="co">#&gt; [171] "probitmfx"               "psm"                    </span></span>
-<span><span class="co">#&gt; [173] "Rchoice"                 "ridgelm"                </span></span>
-<span><span class="co">#&gt; [175] "riskRegression"          "rjags"                  </span></span>
-<span><span class="co">#&gt; [177] "rlm"                     "rlmerMod"               </span></span>
-<span><span class="co">#&gt; [179] "RM"                      "rma"                    </span></span>
-<span><span class="co">#&gt; [181] "rma.uni"                 "robmixglm"              </span></span>
-<span><span class="co">#&gt; [183] "robtab"                  "rq"                     </span></span>
-<span><span class="co">#&gt; [185] "rqs"                     "rqss"                   </span></span>
-<span><span class="co">#&gt; [187] "rvar"                    "Sarlm"                  </span></span>
-<span><span class="co">#&gt; [189] "scam"                    "selection"              </span></span>
-<span><span class="co">#&gt; [191] "sem"                     "SemiParBIV"             </span></span>
-<span><span class="co">#&gt; [193] "semLm"                   "semLme"                 </span></span>
-<span><span class="co">#&gt; [195] "slm"                     "speedglm"               </span></span>
-<span><span class="co">#&gt; [197] "speedlm"                 "stanfit"                </span></span>
-<span><span class="co">#&gt; [199] "stanmvreg"               "stanreg"                </span></span>
-<span><span class="co">#&gt; [201] "summary.lm"              "survfit"                </span></span>
-<span><span class="co">#&gt; [203] "survreg"                 "svy_vglm"               </span></span>
-<span><span class="co">#&gt; [205] "svychisq"                "svyglm"                 </span></span>
-<span><span class="co">#&gt; [207] "svyolr"                  "t1way"                  </span></span>
-<span><span class="co">#&gt; [209] "tobit"                   "trimcibt"               </span></span>
-<span><span class="co">#&gt; [211] "truncreg"                "vgam"                   </span></span>
-<span><span class="co">#&gt; [213] "vglm"                    "wbgee"                  </span></span>
-<span><span class="co">#&gt; [215] "wblm"                    "wbm"                    </span></span>
-<span><span class="co">#&gt; [217] "wmcpAKP"                 "yuen"                   </span></span>
-<span><span class="co">#&gt; [219] "yuend"                   "zcpglm"                 </span></span>
-<span><span class="co">#&gt; [221] "zeroinfl"                "zerotrunc"</span></span></code></pre></div>
+<span><span class="co">#&gt; [165] "pgmm"                    "phyloglm"               </span></span>
+<span><span class="co">#&gt; [167] "phylolm"                 "plm"                    </span></span>
+<span><span class="co">#&gt; [169] "PMCMR"                   "poissonirr"             </span></span>
+<span><span class="co">#&gt; [171] "poissonmfx"              "polr"                   </span></span>
+<span><span class="co">#&gt; [173] "probitmfx"               "psm"                    </span></span>
+<span><span class="co">#&gt; [175] "Rchoice"                 "ridgelm"                </span></span>
+<span><span class="co">#&gt; [177] "riskRegression"          "rjags"                  </span></span>
+<span><span class="co">#&gt; [179] "rlm"                     "rlmerMod"               </span></span>
+<span><span class="co">#&gt; [181] "RM"                      "rma"                    </span></span>
+<span><span class="co">#&gt; [183] "rma.uni"                 "robmixglm"              </span></span>
+<span><span class="co">#&gt; [185] "robtab"                  "rq"                     </span></span>
+<span><span class="co">#&gt; [187] "rqs"                     "rqss"                   </span></span>
+<span><span class="co">#&gt; [189] "rvar"                    "Sarlm"                  </span></span>
+<span><span class="co">#&gt; [191] "scam"                    "selection"              </span></span>
+<span><span class="co">#&gt; [193] "sem"                     "SemiParBIV"             </span></span>
+<span><span class="co">#&gt; [195] "semLm"                   "semLme"                 </span></span>
+<span><span class="co">#&gt; [197] "slm"                     "speedglm"               </span></span>
+<span><span class="co">#&gt; [199] "speedlm"                 "stanfit"                </span></span>
+<span><span class="co">#&gt; [201] "stanmvreg"               "stanreg"                </span></span>
+<span><span class="co">#&gt; [203] "summary.lm"              "survfit"                </span></span>
+<span><span class="co">#&gt; [205] "survreg"                 "svy_vglm"               </span></span>
+<span><span class="co">#&gt; [207] "svychisq"                "svyglm"                 </span></span>
+<span><span class="co">#&gt; [209] "svyolr"                  "t1way"                  </span></span>
+<span><span class="co">#&gt; [211] "tobit"                   "trimcibt"               </span></span>
+<span><span class="co">#&gt; [213] "truncreg"                "vgam"                   </span></span>
+<span><span class="co">#&gt; [215] "vglm"                    "wbgee"                  </span></span>
+<span><span class="co">#&gt; [217] "wblm"                    "wbm"                    </span></span>
+<span><span class="co">#&gt; [219] "wmcpAKP"                 "yuen"                   </span></span>
+<span><span class="co">#&gt; [221] "yuend"                   "zcpglm"                 </span></span>
+<span><span class="co">#&gt; [223] "zeroinfl"                "zerotrunc"</span></span></code></pre></div>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues" class="external-link">File an issue</a> and request additional model-support in <em>insight</em>!</li>
