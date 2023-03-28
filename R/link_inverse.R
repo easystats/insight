@@ -96,6 +96,9 @@ link_inverse.lm <- function(x, ...) {
 }
 
 #' @export
+link_inverse.phylolm <- link_inverse.lm
+
+#' @export
 link_inverse.bayesx <- link_inverse.lm
 
 #' @export
@@ -584,6 +587,16 @@ link_inverse.gbm <- function(x, ...) {
     coxph = ,
     bernoulli = stats::make.link("logit")$linkinv
   )
+}
+
+
+#' @export
+link_inverse.phyloglm <- function(x, ...) {
+  if (startsWith(x$method, "logistic")) {
+    stats::make.link("logit")$linkinv
+  } else {
+    stats::poisson(link = "log")$linkinv
+  }
 }
 
 
