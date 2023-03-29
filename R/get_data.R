@@ -2080,7 +2080,7 @@ get_data.mlogit <- function(x, source = "environment", verbose = TRUE, ...) {
 #' @export
 get_data.phylolm <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  .get_data_from_environment(x, source = source, verbose = verbose, ...)
+  .get_data_from_environment(x, source = "environment", verbose = verbose, ...)
 }
 
 #' @export
