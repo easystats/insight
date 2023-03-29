@@ -35,7 +35,7 @@
 #' models from \pkg{brms} or \pkg{rstanarm}, or for specific terms like smooth-
 #' or spline-terms).
 #'
-#' @examples
+#' @examplesIf require("curl", quietly = TRUE) && curl::has_internet()
 #' \dontrun{
 #' library(brms)
 #' model <- download_model("brms_zi_2")

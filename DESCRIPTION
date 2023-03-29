@@ -93,6 +93,7 @@ Suggests:
     coxme,
     cplm,
     crch,
+    curl,
     datawizard,
     effectsize,
     emmeans,
