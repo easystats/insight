@@ -1,7 +1,6 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
-if (.runThisTest && .runStanTest) {
+if (.runStanTest) {
   if (suppressWarnings(
     skip_if_not_or_load_if_installed("lme4") &&
       skip_if_not_or_load_if_installed("BayesFactor") &&

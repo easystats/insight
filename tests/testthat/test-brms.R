@@ -1,6 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest && skip_if_not_or_load_if_installed("brms")) {
+if (skip_if_not_or_load_if_installed("brms")) {
   # Model fitting -----------------------------------------------------------
 
   m1 <- suppressWarnings(insight::download_model("brms_mixed_6"))

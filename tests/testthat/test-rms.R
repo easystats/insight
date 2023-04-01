@@ -1,6 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest && skip_if_not_or_load_if_installed("rms")) {
+if (skip_if_not_or_load_if_installed("rms")) {
   data(mtcars)
   m1 <- lrm(am ~ mpg + gear, data = mtcars)
 

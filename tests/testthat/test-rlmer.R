@@ -1,6 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest && skip_if_not_or_load_if_installed("robustlmm") && utils::packageVersion("robustlmm") >= "3.0.1" &&
+if (skip_if_not_or_load_if_installed("robustlmm") && utils::packageVersion("robustlmm") >= "3.0.1" &&
   skip_if_not_or_load_if_installed("lme4") && getRversion() >= "4.1.0") {
   data(sleepstudy)
 

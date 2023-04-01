@@ -1,5 +1,3 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
 if (skip_if_not_or_load_if_installed("MASS")) {
   test_that("model.matrix.rlm accepts `data` argument", {
     mod <- MASS::rlm(mpg ~ hp + factor(cyl), mtcars)
@@ -11,7 +9,7 @@ if (skip_if_not_or_load_if_installed("MASS")) {
     expect_equal(dim(mm), c(6, 4))
   })
 
-  if (.runThisTest) {
+  if (TRUE) {
     test_that("predict.rlm", {
       mod <- MASS::rlm(mpg ~ hp + factor(cyl), mtcars)
       a <- get_predicted(mod)

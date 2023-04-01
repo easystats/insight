@@ -1,6 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest && skip_if_not_or_load_if_installed("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   data(sleepstudy)
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -388,7 +386,7 @@ if (.runThisTest && skip_if_not_or_load_if_installed("lme4")) {
       tolerance = 1e-1
     )
 
-    if (.runThisTest) {
+    if (TRUE) {
       expect_equal(
         suppressWarnings(get_variance(m2)),
         list(

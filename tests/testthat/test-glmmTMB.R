@@ -1,19 +1,5 @@
 skip_on_os("mac") # error: FreeADFunObject
 
-osx <- tryCatch(
-  {
-    si <- Sys.info()
-    if (!is.null(si["sysname"])) {
-      si["sysname"] == "Darwin" || startsWith(R.version$os, "darwin")
-    } else {
-      FALSE
-    }
-  },
-  error = function(e) {
-    FALSE
-  }
-)
-
 skip_if_not_or_load_if_installed("TMB")
 skip_if_not_or_load_if_installed("glmmTMB")
 
@@ -799,7 +785,7 @@ if (getRversion() >= "4.0.0") {
 
   test_that("find_random_slopes", {
     skip_on_cran()
-    skip_on_travis()
+
 
     expect_null(find_random_slopes(m6))
 
@@ -919,7 +905,7 @@ if (getRversion() >= "4.0.0") {
     )
   })
 
-  if (!osx && packageVersion("glmmTMB") > "1.1.4") {
+  if (packageVersion("glmmTMB") > "1.1.4") {
     test_that("get_predicted", {
       # response
       x <- get_predicted(m1, predict = "expectation", verbose = FALSE, include_random = TRUE)

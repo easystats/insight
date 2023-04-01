@@ -50,8 +50,8 @@ test_that("format_table with multiple si-levels", {
   expect_equal(colnames(ft), c("BF = 3 SI", "BF = 0.2 SI"))
 })
 
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-if (.runThisTest && skip_if_not_or_load_if_installed("bayestestR")) {
+
+if (skip_if_not_or_load_if_installed("bayestestR")) {
   set.seed(1234)
   test_that("format_table with multiple si-levels", {
     d <- bayestestR::distribution_normal(1000)

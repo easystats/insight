@@ -1,18 +1,4 @@
-osx <- tryCatch(
-  {
-    si <- Sys.info()
-    if (!is.null(si["sysname"])) {
-      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-    } else {
-      FALSE
-    }
-  },
-  error = function(e) {
-    FALSE
-  }
-)
-
-if (!osx && skip_if_not_or_load_if_installed("plm") && skip_if_not_or_load_if_installed("feisr")) {
+if (skip_if_not_or_load_if_installed("plm") && skip_if_not_or_load_if_installed("feisr")) {
   data(mwp)
   m1 <- feis(
     lnw ~ marry + enrol + as.factor(yeargr) | exp + I(exp^2),

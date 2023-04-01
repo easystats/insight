@@ -1,18 +1,4 @@
-osx <- tryCatch(
-  {
-    si <- Sys.info()
-    if (!is.null(si["sysname"])) {
-      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-    } else {
-      FALSE
-    }
-  },
-  error = function(e) {
-    FALSE
-  }
-)
-
-if (skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed("gamm4") && skip_if_not_or_load_if_installed("rstanarm") && !osx) {
+if (skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed("gamm4") && skip_if_not_or_load_if_installed("rstanarm")) {
   set.seed(2) ## simulate some data...
   void <- capture.output(
     dat <- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)

@@ -1,10 +1,8 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest &&
+if (
   skip_if_not_or_load_if_installed("splines") &&
-  skip_if_not_or_load_if_installed("TMB") &&
-  skip_if_not_or_load_if_installed("glmmTMB") &&
-  getRversion() >= "4.0.0") {
+    skip_if_not_or_load_if_installed("TMB") &&
+    skip_if_not_or_load_if_installed("glmmTMB") &&
+    getRversion() >= "4.0.0") {
   data(iris)
 
   m1 <- lm(Sepal.Length ~ Species + ns(Petal.Width), data = iris)

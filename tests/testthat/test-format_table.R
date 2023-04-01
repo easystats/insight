@@ -1,5 +1,3 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
 win_os <- tryCatch(
   {
     si <- Sys.info()
@@ -16,7 +14,7 @@ win_os <- tryCatch(
 
 
 # test for bayesian models -----------------
-if (.runThisTest && win_os && skip_if_not_or_load_if_installed("bayestestR")) {
+if (win_os && skip_if_not_or_load_if_installed("bayestestR")) {
   m1 <- insight::download_model("stanreg_glm_1")
   set.seed(123)
   x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf"))))

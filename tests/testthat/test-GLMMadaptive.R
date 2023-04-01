@@ -1,6 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest) {
+if (TRUE) {
   if (skip_if_not_or_load_if_installed("GLMMadaptive") && skip_if_not_or_load_if_installed("lme4")) {
     m <- download_model("GLMMadaptive_zi_2")
     m2 <- download_model("GLMMadaptive_zi_1")
@@ -341,13 +339,4 @@ if (.runThisTest) {
       )
     })
   }
-
-  # these run successfully for devtools::test_file() locally but fail on Travis
-  # not sure what's going on
-
-  # test_that("find_statistic", {
-  #   expect_identical(find_statistic(m1), "z-statistic")
-  #   expect_identical(find_statistic(m2), "z-statistic")
-  #   expect_identical(find_statistic(m3), "z-statistic")
-  # })
 }

@@ -1,20 +1,4 @@
-osx <- tryCatch(
-  {
-    si <- Sys.info()
-    if (!is.null(si["sysname"])) {
-      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-    } else {
-      FALSE
-    }
-  },
-  error = function(e) {
-    FALSE
-  }
-)
-
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest && skip_if_not_or_load_if_installed("lme4") && skip_if_not_or_load_if_installed("ordinal")) {
+if (skip_if_not_or_load_if_installed("lme4") && skip_if_not_or_load_if_installed("ordinal")) {
   data(wine, package = "ordinal")
   data(soup)
 
@@ -178,7 +162,7 @@ if (.runThisTest && skip_if_not_or_load_if_installed("lme4") && skip_if_not_or_l
     expect_false(is_multivariate(m2))
   })
 
-  if (getRversion() > "3.6.3" && !isTRUE(osx)) {
+  if (getRversion() > "3.6.3") {
     test_that("get_variance", {
       expect_equal(
         get_variance(m1),

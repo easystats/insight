@@ -1,6 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest) {
+if (TRUE) {
   skip_if_not_or_load_if_installed("glmmTMB")
   skip_if_not_or_load_if_installed("geoR")
   skip_if_not_or_load_if_installed("TMB")
@@ -156,7 +154,7 @@ if (.runThisTest) {
 
   test_that("find_random_slopes", {
     skip_on_cran()
-    skip_on_travis()
+
 
     expect_identical(
       find_random_slopes(m1),

@@ -1,6 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest && skip_if_not_or_load_if_installed("parsnip")) {
+if (skip_if_not_or_load_if_installed("parsnip")) {
   data(mtcars)
 
   m <- parsnip::linear_reg()

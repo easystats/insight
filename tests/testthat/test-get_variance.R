@@ -1,20 +1,4 @@
-osx <- tryCatch(
-  {
-    si <- Sys.info()
-    if (!is.null(si["sysname"])) {
-      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-    } else {
-      FALSE
-    }
-  },
-  error = function(e) {
-    FALSE
-  }
-)
-
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (!osx && .runThisTest && skip_if_not_or_load_if_installed("lme4")) {
+if (skip_if_not_or_load_if_installed("lme4")) {
   data("sleepstudy")
   data("Penicillin")
   set.seed(12345)

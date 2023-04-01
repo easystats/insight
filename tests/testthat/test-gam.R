@@ -1,6 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest && skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed("httr")) {
+if (skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed("httr")) {
   set.seed(123)
   void <- capture.output(
     dat2 <<- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)

@@ -1,6 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-
-if (.runThisTest) {
+if (TRUE) {
   unloadNamespace("gam")
   if (skip_if_not_or_load_if_installed("mgcv")) {
     set.seed(0)

@@ -174,10 +174,10 @@ test_that("lm with poly and NA in response", {
 })
 
 
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
-if (.runThisTest) {
+if (TRUE) {
   data(iris)
   m <- lm(Sepal.Length ~ Sepal.Width, data = iris)
   out <- get_data(m)
