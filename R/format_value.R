@@ -232,49 +232,49 @@ format_percent <- function(x, ...) {
     if (isTRUE(.as_percent)) {
       need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0
       if (.zap_small) {
-        x <- ifelse(is.na(x), .missing, sprintf("%.*f%%", digits, 100 * x))
+        x <- if (is.na(x)) {
+          .missing
+        } else {
+          sprintf("%.*f%%", digits, 100 * x)
+        }
       } else {
-        x <- ifelse(is.na(x), .missing,
-          ifelse(need_sci, # nolint
-            sprintf("%.*e%%", digits, 100 * x),
-            sprintf("%.*f%%", digits, 100 * x)
-          )
-        )
+        x <- if (is.na(x)) {
+          .missing
+        } else if (need_sci) {
+          sprintf("%.*e%%", digits, 100 * x)
+        } else {
+          sprintf("%.*f%%", digits, 100 * x)
+        }
       }
     } else {
       if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
-        digits <- tryCatch(
-          expr = {
-            as.numeric(gsub("scientific", "", digits, fixed = TRUE))
-          },
-          error = function(e) {
-            5
-          }
-        )
-        if (is.na(digits)) digits <- 5
+        digits <- .safe(as.numeric(gsub("scientific", "", digits, fixed = TRUE)), 5)
+        if (is.na(digits)) {
+          digits <- 5
+        }
         x <- sprintf("%.*e", digits, x)
       } else if (is.character(digits) && grepl("signif", digits, fixed = TRUE)) {
-        digits <- tryCatch(
-          expr = {
-            as.numeric(gsub("signif", "", digits, fixed = TRUE))
-          },
-          error = function(e) {
-            NA
-          }
-        )
-        if (is.na(digits)) digits <- 3
+        digits <- .safe(as.numeric(gsub("signif", "", digits, fixed = TRUE)), NA)
+        if (is.na(digits)) {
+          digits <- 3
+        }
         x <- as.character(signif(x, digits))
       } else {
         need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits)) & x != 0
         if (.zap_small) {
-          x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
+          x <- if (is.na(x)) {
+            .missing
+          } else {
+            sprintf("%.*f", digits, x)
+          }
         } else {
-          x <- ifelse(is.na(x), .missing,
-            ifelse(need_sci, # nolint
-              sprintf("%.*e", digits, x),
-              sprintf("%.*f", digits, x)
-            )
-          )
+          x <- if (is.na(x)) {
+            .missing
+          } else if (need_sci) {
+            sprintf("%.*e", digits, x)
+          } else {
+            sprintf("%.*f", digits, x)
+          }
         }
       }
     }

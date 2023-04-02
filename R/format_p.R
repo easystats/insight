@@ -67,39 +67,43 @@ format_p <- function(p,
     if (is.na(digits)) {
       digits <- 5
     }
-    text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, sprintf("= %.*e***", digits, p),
-        ifelse(p < 0.01, sprintf("= %.*e**", digits, p),
-          ifelse(p < 0.05, sprintf("= %.*e*", digits, p),
-            ifelse(p > 0.999, sprintf("= %.*e", digits, p),
-              sprintf("= %.*e", digits, p)
-            )
-          )
-        )
-      )
-    )
+    text <- if (is.na(p)) {
+      NA
+    } else if (p < 0.001) {
+      sprintf("= %.*e***", digits, p)
+    } else if (p < 0.01) {
+      sprintf("= %.*e**", digits, p)
+    } else if (p < 0.05) {
+      sprintf("= %.*e*", digits, p)
+    } else {
+      sprintf("= %.*e", digits, p)
+    }
   } else if (digits <= 3) {
-    text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, "< .001***",
-        ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"),
-          ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"),
-            ifelse(p > 0.999, "> .999",
-              paste0("= ", format_value(p, digits))
-            )
-          )
-        )
-      )
-    )
+    text <- if (is.na(p)) {
+      NA
+    } else if (p < 0.001) {
+      "< .001***"
+    } else if (p < 0.01) {
+      paste0("= ", format_value(p, digits), "**")
+    } else if (p < 0.05) {
+      paste0("= ", format_value(p, digits), "*")
+    } else if (p > 0.999) {
+      "> .999"
+    } else {
+      paste0("= ", format_value(p, digits))
+    }
   } else {
-    text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, paste0("= ", format_value(p, digits), "***"),
-        ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"),
-          ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"),
-            paste0("= ", format_value(p, digits))
-          )
-        )
-      )
-    )
+    text <- if (is.na(p)) {
+      NA
+    } else if (p < 0.001) {
+      paste0("= ", format_value(p, digits), "***")
+    } else if (p < 0.01) {
+      paste0("= ", format_value(p, digits), "**")
+    } else if (p < 0.05) {
+      paste0("= ", format_value(p, digits), "*")
+    } else {
+      paste0("= ", format_value(p, digits))
+    }
   }
 
   .add_prefix_and_remove_stars(text, stars, stars_only, name, missing, whitespace, decimal_separator)
