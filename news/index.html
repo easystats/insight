@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.3</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,9 @@
 <h2 class="pkg-version" data-toc-text="0.19.2" id="insight-0192">insight 0.19.2<a class="anchor" aria-label="anchor" href="#insight-0192"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-0-19-2">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-19-2"></a></h3>
-<ul><li>The minimum needed R version has been bumped to <code>3.6</code>.</li>
+<ul><li><p>The minimum needed R version has been bumped to <code>3.6</code>.</p></li>
+<li><p>Tests for package <em>speedglm</em> were removed, because <em>speedglm</em> was archived on CRAN.</p></li>
+<li><p><code><a href="../reference/download_model.html">download_model()</a></code> no longer errors when a model object could not be downloaded, but instead returns <code>NULL</code>. This prevents test failures, and allows to skip tests when the return value of <code><a href="../reference/download_model.html">download_model()</a></code> is <code>NULL</code>.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="general-0-19-2">General<a class="anchor" aria-label="anchor" href="#general-0-19-2"></a></h3>
