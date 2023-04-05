@@ -11,7 +11,8 @@
 #'   changing. By default, models are downloaded from
 #'   `https://raw.github.com/easystats/circus/master/data/`.
 #'
-#' @return A model from the *circus*-repository.
+#' @return A model from the *circus*-repository, or `NULL` if model could
+#' not be downloaded (e.g., due to server problems).
 #'
 #' @details The code that generated the model is available at the
 #'   <https://easystats.github.io/circus/reference/index.html>.

@@ -4,6 +4,13 @@
 
 * The minimum needed R version has been bumped to `3.6`.
 
+* Tests for package *speedglm* were removed, because *speedglm* was archived on
+  CRAN.
+
+* `download_model()` no longer errors when a model object could not be downloaded,
+  but instead returns `NULL`. This prevents test failures, and allows to skip
+  tests when the return value of `download_model()` is `NULL`.
+
 ## General
 
 * Improved support for `mclogit` models (package *mclogit*).
