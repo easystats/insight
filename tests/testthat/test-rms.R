@@ -1,5 +1,5 @@
 if (skip_if_not_installed("rms")) {
-  data(mtcars)
+ 
   m1 <- lrm(am ~ mpg + gear, data = mtcars)
 
   test_that("model_info", {

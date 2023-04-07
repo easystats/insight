@@ -1,5 +1,5 @@
 if (skip_if_not_installed("lme4")) {
-  data(mtcars)
+ 
 
   m1 <- suppressMessages(suppressWarnings(glmer(
     vs / cyl ~ disp + (1 | cyl),

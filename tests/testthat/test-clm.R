@@ -2,7 +2,7 @@ if (skip_if_not_installed("ordinal")) {
   data(wine, package = "ordinal")
   m1 <- clm(rating ~ temp * contact, data = wine)
 
-  data(mtcars)
+ 
   m2 <- suppressWarnings(clm( # nominal + scale effects
     cyl ~ wt,
     scale = ~vs, nominal = ~hp,

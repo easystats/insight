@@ -1,6 +1,6 @@
 if (skip_if_not_installed("robustlmm") && utils::packageVersion("robustlmm") >= "3.0.1" &&
   skip_if_not_installed("lme4") && getRversion() >= "4.1.0") {
-  data(sleepstudy)
+  data(sleepstudy, package = "lme4")
 
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)

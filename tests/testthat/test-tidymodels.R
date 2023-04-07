@@ -1,5 +1,5 @@
 if (skip_if_not_installed("parsnip")) {
-  data(mtcars)
+ 
 
   m <- parsnip::linear_reg()
   m <- parsnip::set_engine(m, "lm")

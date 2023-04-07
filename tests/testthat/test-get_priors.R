@@ -4,7 +4,7 @@ is_dev_version <- length(strsplit(packageDescription("insight")$Version, "\\.")[
 run_stan <- .Platform$OS.type == "unix" && is_dev_version
 
 if (run_stan && skip_if_not_installed("brms")) {
-  data(mtcars)
+ 
   set.seed(123)
 
   model <- suppressMessages(brms::brm(mpg ~ wt, data = mtcars, seed = 1, refresh = 0))

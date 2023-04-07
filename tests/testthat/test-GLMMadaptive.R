@@ -3,7 +3,7 @@ if (TRUE) {
     m <- download_model("GLMMadaptive_zi_2")
     m2 <- download_model("GLMMadaptive_zi_1")
 
-    data(cbpp)
+    data(cbpp, package = "lme4")
     tmp <<- cbpp
     m3 <- GLMMadaptive::mixed_model(
       cbind(incidence, size - incidence) ~ period,

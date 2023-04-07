@@ -3,7 +3,7 @@ if (
     skip_if_not_installed("TMB") &&
     skip_if_not_installed("glmmTMB") &&
     getRversion() >= "4.0.0") {
-  data(iris)
+  
 
   m1 <- lm(Sepal.Length ~ Species + ns(Petal.Width), data = iris)
   m2 <- lm(Sepal.Length ~ Species + ns(Petal.Width, knots = 2), data = iris)
@@ -25,7 +25,7 @@ if (
     expect_identical(as.vector(mf4$Petal.Width), as.vector(mf5$Petal.Width))
   })
 
-  data("Salamanders")
+  data(Salamanders, package = "glmmTMB")
   skip_on_os("mac") # error: FreeADFunObject
   m <- glmmTMB(
     count ~ spp + cover + mined + poly(DOP, 3) + (1 | site),

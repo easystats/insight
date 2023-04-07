@@ -1,7 +1,7 @@
 if (skip_if_not_installed("lme4")) {
-  data(mtcars)
-  data(sleepstudy)
-  data(cbpp)
+ 
+  data(sleepstudy, package = "lme4")
+  data(cbpp, package = "lme4")
   set.seed(123)
   mtcars$w <- abs(rnorm(nrow(mtcars), mean = 1, 0.3))
   sleepstudy$w <- abs(rnorm(nrow(sleepstudy), mean = 1, 0.3))

@@ -1,7 +1,7 @@
 if (
 
   skip_if_not_installed("estimatr")) {
-  data(mtcars)
+ 
   m1 <- lm_robust(mpg ~ gear + wt + cyl, data = mtcars)
 
   test_that("model_info", {

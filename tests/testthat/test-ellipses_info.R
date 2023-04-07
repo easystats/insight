@@ -1,4 +1,4 @@
-data(iris)
+
 
 m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
 m2 <- lm(Sepal.Length ~ Species, data = iris)
@@ -70,7 +70,7 @@ test_that("ellipses_info, binomial", {
 })
 
 if (skip_if_not_installed("lme4")) {
-  data(sleepstudy)
+  data(sleepstudy, package = "lme4")
   m1 <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
   m2 <- suppressMessages(lmer(Reaction ~ Days + (1 | Subject) + (1 | Days), data = sleepstudy))
 

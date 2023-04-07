@@ -1,6 +1,6 @@
 if (skip_if_not_installed("lme4") && getRversion() >= "4.0.0") {
-  data(cbpp)
-  data(sleepstudy)
+  data(cbpp, package = "lme4")
+  data(sleepstudy, package = "lme4")
   set.seed(1)
   cbpp$x <- rnorm(nrow(cbpp))
   cbpp$x2 <- runif(nrow(cbpp))

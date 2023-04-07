@@ -1,7 +1,7 @@
 if (
 
   skip_if_not_installed("rms")) {
-  data(mtcars)
+ 
   m1 <- ols(mpg ~ rcs(hp, 3) * cyl + wt, data = mtcars)
 
   test_that("model_info", {

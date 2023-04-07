@@ -1,5 +1,5 @@
 if (skip_if_not_installed("blme")) {
-  data(sleepstudy)
+  data(sleepstudy, package = "lme4")
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
   sleepstudy$mysubgrp <- NA

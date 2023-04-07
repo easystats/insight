@@ -1,7 +1,7 @@
 if (
 
   skip_if_not_installed("glmmTMB")) {
-  data(Salamanders)
+ data(Salamanders, package = "glmmTMB")
   Salamanders$cover <- abs(Salamanders$cover)
   dat <<- Salamanders
 

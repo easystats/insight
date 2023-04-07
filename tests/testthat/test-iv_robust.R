@@ -1,5 +1,5 @@
 if (skip_if_not_installed("estimatr")) {
-  data(mtcars)
+ 
   m1 <- iv_robust(mpg ~ gear + cyl | carb + wt, data = mtcars)
 
   test_that("model_info", {

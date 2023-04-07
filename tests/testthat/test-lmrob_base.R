@@ -1,7 +1,7 @@
 if (
 
   skip_if_not_installed("robustbase")) {
-  data(mtcars)
+ 
   m1 <- lmrob(mpg ~ gear + wt + cyl, data = mtcars)
 
   test_that("model_info", {

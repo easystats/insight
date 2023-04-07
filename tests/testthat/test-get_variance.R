@@ -1,5 +1,5 @@
 if (skip_if_not_installed("lme4")) {
-  data("sleepstudy")
+  data(sleepstudy, package = "lme4")
   data("Penicillin")
   set.seed(12345)
   sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
@@ -122,7 +122,7 @@ if (skip_if_not_installed("lme4")) {
 
   # categorical rnd slope
 
-  data("sleepstudy")
+  data(sleepstudy, package = "lme4")
   sleepstudy$Days2 <- cut(sleepstudy$Days, breaks = c(-1, 3, 6, 10))
   study_data2 <<- sleepstudy
 
@@ -209,7 +209,7 @@ if (skip_if_not_installed("lme4")) {
 
   # test random slope correlation for categorical random slope
 
-  data(cake)
+  data(cake, package = "lme4")
   m <- lmer(angle ~ temperature + (temperature | recipe), data = cake)
 
   test_that("get_variance-cat_random_slope", {
@@ -227,7 +227,7 @@ if (skip_if_not_installed("lme4")) {
     )
   })
 
-  data("sleepstudy")
+  data(sleepstudy, package = "lme4")
   set.seed(123)
   sleepstudy$Months <- sample(1:4, nrow(sleepstudy), TRUE)
   study_data3 <<- sleepstudy
@@ -266,7 +266,7 @@ if (skip_if_not_installed("lme4")) {
     )
   })
 
-  data(cake)
+  data(cake, package = "lme4")
   m <- lmer(angle ~ poly(temp, 2) + (poly(temp, 2) | replicate) + (1 | recipe), data = cake)
 
   test_that("random effects CIs, poly slope", {

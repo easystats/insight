@@ -1,4 +1,4 @@
-data(iris)
+
 data(mtcars)
 
 m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
@@ -290,7 +290,6 @@ test_that("find_statistic", {
 })
 
 test_that("find_statistic", {
-  data("mtcars")
   m <- lm(cbind(mpg, hp) ~ cyl + drat, data = mtcars)
   expect_message(
     get_predicted(m),

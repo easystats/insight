@@ -1,5 +1,5 @@
 if (skip_if_not_installed("lme4")) {
-  data(sleepstudy)
+  data(sleepstudy, package = "lme4")
   d <- sleepstudy
   set.seed(12345)
   d$grp <- sample(1:5, size = 180, replace = TRUE)

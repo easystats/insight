@@ -2,7 +2,7 @@ if (
 
 
   skip_if_not_installed("gam")) {
-  data(kyphosis)
+  data(kyphosis, package = "rpart")
   void <- capture.output(m1 <- gam::gam(
     Kyphosis ~ s(Age, 4) + Number,
     family = binomial,

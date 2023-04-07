@@ -1,6 +1,6 @@
 if (getRversion() > "3.5") {
   if (skip_if_not_installed("plm")) {
-    data(Crime)
+    data(Crime, package = "plm")
     m1 <- suppressWarnings(plm(lcrmrte ~ lprbarr + factor(year) | . - lprbarr + lmix, data = Crime, model = "random"))
 
     # data

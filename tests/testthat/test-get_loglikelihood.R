@@ -1,6 +1,6 @@
 if (skip_if_not_installed("nonnest2")) {
-  data(iris)
-  data(mtcars)
+  
+ 
 
   test_that("get_loglikelihood - lm", {
     x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
@@ -141,7 +141,7 @@ if (skip_if_not_installed("nonnest2")) {
 
   if (skip_if_not_installed("estimatr")) {
     test_that("get_loglikelihood - iv_robust", {
-      data(mtcars)
+     
       x <- estimatr::iv_robust(mpg ~ gear + cyl | carb + wt, data = mtcars)
 
       ll <- loglikelihood(x)

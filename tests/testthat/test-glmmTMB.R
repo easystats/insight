@@ -46,7 +46,7 @@ if (getRversion() >= "4.0.0") {
     family = truncated_poisson()
   ))
 
-  data(Salamanders)
+  data(Salamanders, package = "glmmTMB")
   m5 <- glmmTMB(
     count ~ mined + (1 | site),
     ziformula = ~mined,
@@ -745,7 +745,7 @@ if (getRversion() >= "4.0.0") {
     expect_false(is_multivariate(m4))
   })
 
-  data("Salamanders")
+  data(Salamanders, package = "glmmTMB")
   mpred <- glmmTMB(
     count ~ mined + (1 | site),
     zi = ~mined,

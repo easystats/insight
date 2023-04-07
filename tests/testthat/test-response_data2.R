@@ -1,7 +1,7 @@
 if (suppressWarnings(
   skip_if_not_installed("lme4")
 )) {
-  data(cbpp)
+  data(cbpp, package = "lme4")
   cbpp$trials <<- cbpp$size - cbpp$incidence
 
   m1 <- glmer(
@@ -90,7 +90,7 @@ if (suppressWarnings(
   })
 
   set.seed(123)
-  data(mtcars)
+ 
   m6 <-
     stats::aov(
       formula = mpg ~ wt + qsec + Error(disp / am),

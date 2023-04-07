@@ -596,7 +596,7 @@ test_that("zero-inflation stuff works", {
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("pscl")
 
-  data("fish")
+  data(fish, package = "glmmTMB")
   m1 <- glmmTMB(
     count ~ child + camper,
     ziformula = ~ child + camper,

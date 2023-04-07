@@ -1,6 +1,6 @@
 if (skip_if_not_installed("lme4") && skip_if_not_installed("ordinal")) {
   data(wine, package = "ordinal")
-  data(soup)
+  data(soup, package = "ordinal")
 
   m1 <- clmm(rating ~ temp + contact + (1 | judge), data = wine)
   m2 <- clmm(SURENESS ~ PROD + (1 | RESP) + (1 | RESP:PROD),

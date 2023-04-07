@@ -1,5 +1,5 @@
 if (skip_if_not_installed("survey")) {
-  data(api)
+  data(api, package = "survey")
   dstrat <-
     svydesign(
       id = ~1,

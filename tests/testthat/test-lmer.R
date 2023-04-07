@@ -1,5 +1,5 @@
 if (skip_if_not_installed("lme4")) {
-  data(sleepstudy)
+  data(sleepstudy, package = "lme4")
   set.seed(123)
   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
   sleepstudy$mysubgrp <- NA
@@ -92,7 +92,7 @@ if (skip_if_not_installed("lme4")) {
   })
 
   test_that("find_offset", {
-    data(mtcars)
+   
     model_off <- lmer(log(mpg) ~ disp + (1 | cyl), offset = log(wt), data = mtcars)
     expect_identical(find_offset(model_off), "wt")
     model_off <- lmer(log(mpg) ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars)

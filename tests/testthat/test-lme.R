@@ -1,6 +1,6 @@
 if (skip_if_not_installed("nlme") && skip_if_not_installed("lme4")) {
-  data("sleepstudy")
-  data(Orthodont)
+  data(sleepstudy, package = "lme4")
+  data(Orthodont, package = "nlme")
   m1 <- lme(Reaction ~ Days,
     random = ~ 1 + Days | Subject,
     data = sleepstudy

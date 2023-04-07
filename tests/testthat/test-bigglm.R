@@ -1,5 +1,5 @@
 if (skip_if_not_installed("glmmTMB") && skip_if_not_installed("biglm")) {
-  data(Salamanders)
+ data(Salamanders, package = "glmmTMB")
   Salamanders$cover <- abs(Salamanders$cover)
 
   m1 <- bigglm(count ~ mined + log(cover) + sample,

@@ -1,6 +1,6 @@
 if (skip_if_not_installed("lme4")) {
-  data(mtcars)
-  data(sleepstudy)
+ 
+  data(sleepstudy, package = "lme4")
 
   m1 <- lm(mpg ~ wt + cyl + vs, data = mtcars)
   m2 <- lm(mpg ~ wt + cyl, data = mtcars)

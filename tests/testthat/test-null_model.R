@@ -3,7 +3,7 @@ if (
     skip_if_not_installed("lme4") &&
     skip_if_not_installed("TMB") &&
     getRversion() >= "4.0.0") {
-  data(mtcars)
+ 
   m1 <- suppressWarnings(glmer.nb(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
   m2 <- suppressWarnings(glmer.nb(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
 

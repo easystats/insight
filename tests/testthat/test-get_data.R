@@ -115,7 +115,7 @@ test_that("lm with transformations", {
 
 
 test_that("lm with poly and NA in response", {
-  data(iris)
+  
   d <- iris
   d[1:25, "Sepal.Length"] <- NA
   d2 <<- d
@@ -178,7 +178,7 @@ test_that("lm with poly and NA in response", {
 .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
 
 if (TRUE) {
-  data(iris)
+  
   m <- lm(Sepal.Length ~ Sepal.Width, data = iris)
   out <- get_data(m)
   test_that("subsets", {
@@ -200,7 +200,7 @@ if (TRUE) {
   # expect_equal(colnames(out), c("Petal.Length", "Sepal.Length"))
 
   test_that("log", {
-    data(iris)
+    
     m <- lm(log(Sepal.Length) ~ sqrt(Sepal.Width), data = iris)
     out <- get_data(m)
     expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)

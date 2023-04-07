@@ -187,7 +187,7 @@ if (skip_if_not_installed("gamm4") && getRversion() >= "4.0.0" && skip_if_not_in
     expect_equal(dim(get_datagrid(mod, include_random = FALSE, include_smooth = FALSE)), c(10, 1))
 
     # MGCV, splines with variables, see #678
-    data(mtcars)
+   
     mod <- mgcv::gam(mpg ~ s(wt, k = 3), data = mtcars)
     out1 <- insight::get_datagrid(mod)
     k <- 3

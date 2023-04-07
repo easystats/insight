@@ -1,5 +1,5 @@
 if (skip_if_not_installed("panelr")) {
-  data("WageData")
+  data("WageData", package = "panelr")
   wages <- panel_data(WageData, id = id, wave = t)
   m1 <- wbm(lwage ~ lag(union) + wks | blk + fem | blk * lag(union), data = wages)
   m2 <- wbm(lwage ~ lag(union) + wks | blk + t | (t | id), data = wages)
