@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("lme4")) {
+if (skip_if_not_installed("lme4")) {
   test_that("find_weights", {
     data(mtcars)
     mtcars$weight <- rnorm(nrow(mtcars), 1, 0.3)
@@ -14,7 +14,7 @@ if (skip_if_not_or_load_if_installed("lme4")) {
 }
 
 
-if (skip_if_not_or_load_if_installed("nlme")) {
+if (skip_if_not_installed("nlme")) {
   data(Orthodont)
   Orthodont$w <- abs(rnorm(nrow(Orthodont)))
 

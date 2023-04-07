@@ -51,7 +51,7 @@ test_that("format_table with multiple si-levels", {
 })
 
 
-if (skip_if_not_or_load_if_installed("bayestestR")) {
+if (skip_if_not_installed("bayestestR")) {
   set.seed(1234)
   test_that("format_table with multiple si-levels", {
     d <- bayestestR::distribution_normal(1000)

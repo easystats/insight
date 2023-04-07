@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("speedglm")) {
+if (skip_if_not_installed("speedglm")) {
   data(iris)
   data(mtcars)
 

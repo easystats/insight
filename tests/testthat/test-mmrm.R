@@ -1,4 +1,4 @@
-skip_if_not_or_load_if_installed("mmrm")
+skip_if_not_installed("mmrm")
 skip_if(getRversion() < "4.0.0")
 
 data(fev_data)

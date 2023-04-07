@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("mlogit") && skip_if_not_or_load_if_installed("mclogit")) {
+if (skip_if_not_installed("mlogit") && skip_if_not_installed("mclogit")) {
   data("Fishing")
   Fish <-
     mlogit.data(Fishing,

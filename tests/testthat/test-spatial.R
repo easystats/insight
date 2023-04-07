@@ -1,7 +1,7 @@
 if (TRUE) {
-  skip_if_not_or_load_if_installed("glmmTMB")
-  skip_if_not_or_load_if_installed("geoR")
-  skip_if_not_or_load_if_installed("TMB")
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("geoR")
+  skip_if_not_installed("TMB")
 
   data(ca20)
   d <- data.frame(

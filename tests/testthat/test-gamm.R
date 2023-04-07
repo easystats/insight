@@ -1,6 +1,6 @@
 if (TRUE) {
   unloadNamespace("gam")
-  if (skip_if_not_or_load_if_installed("mgcv")) {
+  if (skip_if_not_installed("mgcv")) {
     set.seed(0)
     void <- capture.output(dat <- gamSim(6, n = 200, scale = 0.2, dist = "poisson"))
     m1 <-

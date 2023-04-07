@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("nonnest2")) {
+if (skip_if_not_installed("nonnest2")) {
   data(iris)
   data(mtcars)
 
@@ -64,7 +64,7 @@ if (skip_if_not_or_load_if_installed("nonnest2")) {
   })
 
   test_that("get_loglikelihood - (g)lmer", {
-    if (skip_if_not_or_load_if_installed("lme4")) {
+    if (skip_if_not_installed("lme4")) {
       x <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
 
       # REML
@@ -106,7 +106,7 @@ if (skip_if_not_or_load_if_installed("nonnest2")) {
 
   test_that("get_loglikelihood - stanreg", {
     .runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
-    if (skip_if_not_or_load_if_installed("rstanarm") && .runStanTest) {
+    if (skip_if_not_installed("rstanarm") && .runStanTest) {
       x <- rstanarm::stan_glm(Sepal.Length ~ Petal.Width, data = iris, refresh = 0)
       ref <- lm(Sepal.Length ~ Petal.Width, data = iris)
       ll <- loglikelihood(x)
@@ -117,7 +117,7 @@ if (skip_if_not_or_load_if_installed("nonnest2")) {
   })
 
   test_that("get_loglikelihood - ivreg", {
-    skip_if_not_or_load_if_installed("ivreg")
+    skip_if_not_installed("ivreg")
     data("CigaretteDemand", package = "ivreg")
     x <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome), data = CigaretteDemand)
 
@@ -126,7 +126,7 @@ if (skip_if_not_or_load_if_installed("nonnest2")) {
   })
 
   test_that("get_loglikelihood - plm", {
-    if (skip_if_not_or_load_if_installed("plm")) {
+    if (skip_if_not_installed("plm")) {
       data("Produc", package = "plm")
       x <- suppressWarnings(
         plm::plm(log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp,
@@ -139,7 +139,7 @@ if (skip_if_not_or_load_if_installed("nonnest2")) {
     }
   })
 
-  if (skip_if_not_or_load_if_installed("estimatr")) {
+  if (skip_if_not_installed("estimatr")) {
     test_that("get_loglikelihood - iv_robust", {
       data(mtcars)
       x <- estimatr::iv_robust(mpg ~ gear + cyl | carb + wt, data = mtcars)
@@ -149,7 +149,7 @@ if (skip_if_not_or_load_if_installed("nonnest2")) {
     })
   }
 
-  if (skip_if_not_or_load_if_installed("mgcv")) {
+  if (skip_if_not_installed("mgcv")) {
     test_that("get_loglikelihood - mgcv", {
       x <- mgcv::gam(Sepal.Length ~ s(Petal.Width), data = iris)
       ll <- insight::get_loglikelihood(x)
@@ -162,7 +162,7 @@ if (skip_if_not_or_load_if_installed("nonnest2")) {
       # Which one to get?
     })
   }
-  if (skip_if_not_or_load_if_installed("gamm4")) {
+  if (skip_if_not_installed("gamm4")) {
     test_that("get_loglikelihood - gamm4", {
       x <- gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data = iris)
       ll <- insight::get_loglikelihood(x)

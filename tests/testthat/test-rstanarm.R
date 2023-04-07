@@ -2,9 +2,9 @@
 
 if (.runStanTest) {
   if (suppressWarnings(
-    skip_if_not_or_load_if_installed("lme4") &&
-      skip_if_not_or_load_if_installed("BayesFactor") &&
-      skip_if_not_or_load_if_installed("rstanarm")
+    skip_if_not_installed("lme4") &&
+      skip_if_not_installed("BayesFactor") &&
+      skip_if_not_installed("rstanarm")
   )) {
     # skip_on_cran()
     skip_if_offline()

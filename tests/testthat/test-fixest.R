@@ -1,7 +1,7 @@
 skip_on_os("mac")
 skip_if(getRversion() < "3.6.0")
 skip_if_not_installed("fixest")
-skip_if_not_or_load_if_installed("fixest")
+skip_if_not_installed("fixest")
 
 # avoid warnings
 fixest::setFixest_nthreads(1)
@@ -145,7 +145,7 @@ test_that("get_data", {
   expect_length(tmp, nrow(iris))
 })
 
-if (skip_if_not_or_load_if_installed("parameters")) {
+if (skip_if_not_installed("parameters")) {
   test_that("get_df", {
     expect_equal(get_df(m1, type = "residual"), 38290, ignore_attr = TRUE)
     expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)

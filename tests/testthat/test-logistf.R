@@ -2,7 +2,7 @@ testthat::skip_on_covr()
 
 if (
 
-  skip_if_not_or_load_if_installed("logistf")) {
+  skip_if_not_installed("logistf")) {
   data(sex2)
   m1 <- logistf(case ~ age + oc + vic + vicl + vis + dia, data = sex2)
 

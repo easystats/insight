@@ -1,4 +1,4 @@
-skip_if_not_or_load_if_installed("metaplus")
+skip_if_not_installed("metaplus")
 
 data(mag)
 m <- metaplus(yi, sei, slab = study, data = mag)

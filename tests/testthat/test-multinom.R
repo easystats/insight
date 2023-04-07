@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("nnet") && skip_if_not_or_load_if_installed("MASS")) {
+if (skip_if_not_installed("nnet") && skip_if_not_installed("MASS")) {
   data("birthwt")
   void <- capture.output({
     m1 <- nnet::multinom(low ~ age + lwt + race + smoke, data = birthwt)

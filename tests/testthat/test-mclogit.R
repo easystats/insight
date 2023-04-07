@@ -1,4 +1,4 @@
-skip_if_not_or_load_if_installed("mclogit")
+skip_if_not_installed("mclogit")
 
 data(Transport)
 mod_mb <- mblogit(factor(gear) ~ mpg + hp, data = mtcars, trace = FALSE)

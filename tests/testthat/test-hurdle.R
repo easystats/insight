@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("pscl")) {
+if (skip_if_not_installed("pscl")) {
   data("bioChemists")
 
   m1 <- hurdle(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)

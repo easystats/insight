@@ -1,4 +1,4 @@
-skip_if_not_or_load_if_installed("survival")
+skip_if_not_installed("survival")
 
 mod_survreg_1 <- survreg(Surv(futime, fustat) ~ ecog.ps + rx,
   data = ovarian,

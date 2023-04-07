@@ -1,5 +1,5 @@
 if (suppressWarnings(
-  skip_if_not_or_load_if_installed("lme4")
+  skip_if_not_installed("lme4")
 )) {
   data(cbpp)
   cbpp$trials <<- cbpp$size - cbpp$incidence

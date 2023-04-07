@@ -93,7 +93,7 @@ if (getRversion() >= "4.0.0") {
 }
 
 
-if (skip_if_not_or_load_if_installed("bayestestR") && getRversion() >= "4.0.0") {
+if (skip_if_not_installed("bayestestR") && getRversion() >= "4.0.0") {
   test_that("get_datagrid - data", {
     # Factors
     expect_length(get_datagrid(iris$Species), 3)
@@ -149,7 +149,7 @@ if (skip_if_not_or_load_if_installed("bayestestR") && getRversion() >= "4.0.0") 
 
 
 
-if (skip_if_not_or_load_if_installed("gamm4") && getRversion() >= "4.0.0" && skip_if_not_or_load_if_installed("glmmTMB") && skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed("rstanarm") && skip_if_not_or_load_if_installed("TMB")) {
+if (skip_if_not_installed("gamm4") && getRversion() >= "4.0.0" && skip_if_not_installed("glmmTMB") && skip_if_not_installed("mgcv") && skip_if_not_installed("rstanarm") && skip_if_not_installed("TMB")) {
   test_that("get_datagrid - models", {
     # GLM
     mod <- glm(Petal.Length ~ Petal.Width * Sepal.Length, data = iris)
@@ -284,7 +284,7 @@ if (skip_if_not_or_load_if_installed("gamm4") && getRversion() >= "4.0.0" && ski
   )
 }
 
-if (skip_if_not_or_load_if_installed("nlme") && getRversion() >= "4.0.0") {
+if (skip_if_not_installed("nlme") && getRversion() >= "4.0.0") {
   data("Orthodont", package = "nlme")
   m <- lme( # a model of variance only
     distance ~ 1,

@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("survey")) {
+if (skip_if_not_installed("survey")) {
   data(api)
   dstrat <-
     svydesign(

@@ -1,6 +1,6 @@
 if (
 
-  skip_if_not_or_load_if_installed("cplm")) {
+  skip_if_not_installed("cplm")) {
   data("FineRoot")
   m1 <- cpglmm(RLD ~ Stock + Spacing + (1 | Plant), data = FineRoot)
 

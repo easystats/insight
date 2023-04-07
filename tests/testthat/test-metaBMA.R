@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("metaBMA")) {
+if (skip_if_not_installed("metaBMA")) {
   data(towels)
   set.seed(123)
   mf <- meta_fixed(logOR,

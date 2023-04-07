@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed("lme4")) {
+if (skip_if_not_installed("nlme") && skip_if_not_installed("lme4")) {
   data("sleepstudy")
   data(Orthodont)
   m1 <- lme(Reaction ~ Days,
@@ -229,7 +229,7 @@ if (skip_if_not_or_load_if_installed("nlme") && skip_if_not_or_load_if_installed
 
 
   test_that("Issue #658", {
-    skip_if_not_or_load_if_installed("nlme")
+    skip_if_not_installed("nlme")
     models <- lapply(
       c("", " + Sex"),
       function(x) {

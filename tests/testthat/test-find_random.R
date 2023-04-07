@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed("gamm4") && skip_if_not_or_load_if_installed("rstanarm")) {
+if (skip_if_not_installed("mgcv") && skip_if_not_installed("gamm4") && skip_if_not_installed("rstanarm")) {
   data <- iris
   data$g <- data$Species
   data$Xr <- data$Species

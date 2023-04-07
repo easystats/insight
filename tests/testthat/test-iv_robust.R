@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("estimatr")) {
+if (skip_if_not_installed("estimatr")) {
   data(mtcars)
   m1 <- iv_robust(mpg ~ gear + cyl | carb + wt, data = mtcars)
 
@@ -116,7 +116,7 @@ if (skip_if_not_or_load_if_installed("estimatr")) {
     expect_identical(find_statistic(m1), "t-statistic")
   })
 
-  if (skip_if_not_or_load_if_installed("ivreg")) {
+  if (skip_if_not_installed("ivreg")) {
     data("CigaretteDemand", package = "ivreg")
     m2 <- iv_robust(
       log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),

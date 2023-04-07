@@ -1,5 +1,5 @@
 skip_on_os(c("mac", "linux"))
-skip_if_not_or_load_if_installed("MCMCglmm")
+skip_if_not_installed("MCMCglmm")
 
 data(PlodiaPO)
 mod_mcmcglmm <- MCMCglmm(

@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("MASS")) {
+if (skip_if_not_installed("MASS")) {
   data(housing, package = "MASS")
 
   m1 <- polr(Sat ~ Infl + Type + Cont, data = housing, weights = Freq)

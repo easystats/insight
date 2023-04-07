@@ -1,5 +1,5 @@
 if (TRUE) {
-  if (skip_if_not_or_load_if_installed("gbm")) {
+  if (skip_if_not_installed("gbm")) {
     set.seed(102) # for reproducibility
     void <- capture.output(
       m1 <- gbm(

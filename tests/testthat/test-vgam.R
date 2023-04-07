@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("VGAM")) {
+if (skip_if_not_installed("VGAM")) {
   data("hunua")
   m1 <- download_model("vgam_1")
   m2 <- download_model("vgam_2")

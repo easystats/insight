@@ -1,4 +1,4 @@
-skip_if_not_or_load_if_installed("pscl")
+skip_if_not_installed("pscl")
 data("bioChemists")
 
 m1 <- zeroinfl(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)
@@ -132,7 +132,7 @@ test_that("get_statistic", {
 })
 
 test_that("get_varcov", {
-  skip_if_not_or_load_if_installed("sandwich")
+  skip_if_not_installed("sandwich")
 
   set.seed(123)
   vc1 <- get_varcov(m1, component = "all", vcov = "BS", vcov_args = list(R = 50))

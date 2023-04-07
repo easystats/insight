@@ -1,7 +1,7 @@
 skip_on_os("mac") # error: FreeADFunObject
 
-skip_if_not_or_load_if_installed("TMB")
-skip_if_not_or_load_if_installed("glmmTMB")
+skip_if_not_installed("TMB")
+skip_if_not_installed("glmmTMB")
 
 if (getRversion() >= "4.0.0") {
   # fish <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv")

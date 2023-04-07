@@ -22,7 +22,7 @@
 
 skip_if(getRversion() > "4.2.2")
 
-if (skip_if_not_or_load_if_installed("emmeans")) {
+if (skip_if_not_installed("emmeans")) {
   test_that("emmeans", {
     m <- glm(am ~ factor(cyl),
       family = binomial(), data = mtcars

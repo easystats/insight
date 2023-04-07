@@ -1,4 +1,4 @@
-if (skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed("httr")) {
+if (skip_if_not_installed("mgcv") && skip_if_not_installed("httr")) {
   set.seed(123)
   void <- capture.output(
     dat2 <<- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
@@ -351,7 +351,7 @@ if (skip_if_not_or_load_if_installed("mgcv") && skip_if_not_or_load_if_installed
 
 
   test_that("stats::predict.Gam matches get_predicted.Gam", {
-    skip_if_not_or_load_if_installed("gam")
+    skip_if_not_installed("gam")
     data(kyphosis, package = "gam")
     tmp <<- kyphosis
     mod <- gam::gam(Kyphosis ~ gam::s(Age, 4) + Number, family = binomial, data = tmp)

@@ -1,7 +1,7 @@
 if (
 
-  skip_if_not_or_load_if_installed("ordinal") &&
-    skip_if_not_or_load_if_installed("MASS")) {
+  skip_if_not_installed("ordinal") &&
+    skip_if_not_installed("MASS")) {
   data(housing, package = "MASS")
   m1 <- clm2(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 

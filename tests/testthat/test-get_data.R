@@ -1,7 +1,7 @@
 skip_on_os("mac")
 
 test_that("lme", {
-  skip_if_not_or_load_if_installed("nlme")
+  skip_if_not_installed("nlme")
   data("Orthodont", package = "nlme")
   m <- lme( # a model of variance only
     distance ~ 1,
@@ -14,7 +14,7 @@ test_that("lme", {
 
 
 test_that("lme4", {
-  skip_if_not_or_load_if_installed("lme4")
+  skip_if_not_installed("lme4")
   data("cbpp", package = "lme4")
   set.seed(123)
   cbpp$cont <- rnorm(nrow(cbpp))
@@ -53,7 +53,7 @@ test_that("lm", {
 
 
 test_that("get_data lavaan", {
-  skip_if_not_or_load_if_installed("lavaan")
+  skip_if_not_installed("lavaan")
   data(PoliticalDemocracy)
   model <- "
     # latent variable definitions
@@ -127,7 +127,7 @@ test_that("lm with poly and NA in response", {
 test_that("mgcv", {
   ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
-  skip_if_not_or_load_if_installed("mgcv")
+  skip_if_not_installed("mgcv")
   d <- iris
   d$NewFac <- rep(c(1, 2), length.out = 150)
   model <- gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
@@ -214,8 +214,8 @@ if (TRUE) {
 
 
   test_that("workaround bug in estimatr", {
-    skip_if_not_or_load_if_installed("ivreg")
-    skip_if_not_or_load_if_installed("estimatr")
+    skip_if_not_installed("ivreg")
+    skip_if_not_installed("estimatr")
     data("CigaretteDemand")
     m <- estimatr::iv_robust(
       log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
@@ -238,7 +238,7 @@ if (TRUE) {
   test_that("get_data colnames", {
     skip_if_not(.runStanTest)
     skip_if_not(packageVersion("base") >= "4.0.0")
-    skip_if_not_or_load_if_installed("brms")
+    skip_if_not_installed("brms")
     m <- suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1))
     out <- get_data(m)
     expect_type(out$cyl, "double")

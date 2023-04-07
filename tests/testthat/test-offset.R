@@ -1,6 +1,6 @@
 if (
 
-  skip_if_not_or_load_if_installed("pscl")) {
+  skip_if_not_installed("pscl")) {
   # Generate some zero-inflated data
   set.seed(123)
   N <- 100 # Samples
