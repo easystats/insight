@@ -3,10 +3,10 @@ skip_on_os("mac")
 test_that("lme", {
   skip_if_not_installed("nlme")
   data("Orthodont", package = "nlme")
-  m <- lme( # a model of variance only
+  m <- nlme::lme( # a model of variance only
     distance ~ 1,
     data = Orthodont, # grand mean
-    weights = varConstPower(form = ~ age | Sex)
+    weights = nlme::varConstPower(form = ~ age | Sex)
   )
   expect_identical(dim(get_data(m, source = "mf")), c(108L, 3L))
   expect_identical(colnames(get_data(m, source = "mf")), c("distance", "age", "Sex"))
@@ -18,8 +18,8 @@ test_that("lme4", {
   data("cbpp", package = "lme4")
   set.seed(123)
   cbpp$cont <- rnorm(nrow(cbpp))
-  m <- glmer(cbind(incidence, size - incidence) ~ poly(cont, 2) + (1 | herd),
-    data = cbpp, family = binomial
+  m <- lme4::glmer(cbind(incidence, size - incidence) ~ poly(cont, 2) + (1 | herd),
+                   data = cbpp, family = binomial
   )
   expect_s3_class(get_data(m), "data.frame")
 })
@@ -54,7 +54,7 @@ test_that("lm", {
 
 test_that("get_data lavaan", {
   skip_if_not_installed("lavaan")
-  data(PoliticalDemocracy)
+  data(PoliticalDemocracy, package = "lavaan")
   model <- "
     # latent variable definitions
       ind60 =~ x1 + x2 + x3
@@ -72,7 +72,7 @@ test_that("get_data lavaan", {
       y4 ~~ y8
       y6 ~~ y8
   "
-  m <- sem(model, data = PoliticalDemocracy)
+  m <- lavaan::sem(model, data = PoliticalDemocracy)
   expect_s3_class(get_data(m, verbose = FALSE), "data.frame")
   expect_equal(head(get_data(m, verbose = FALSE)), head(PoliticalDemocracy), ignore_attr = TRUE, tolerance = 1e-3)
 })
@@ -115,7 +115,6 @@ test_that("lm with transformations", {
 
 
 test_that("lm with poly and NA in response", {
-  
   d <- iris
   d[1:25, "Sepal.Length"] <- NA
   d2 <<- d
@@ -130,7 +129,7 @@ test_that("mgcv", {
   skip_if_not_installed("mgcv")
   d <- iris
   d$NewFac <- rep(c(1, 2), length.out = 150)
-  model <- gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
+  model <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
   expect_equal(
     head(insight::get_data(model)),
     head(d[c("Sepal.Length", "Petal.Length", "Species", "NewFac")]),
@@ -141,23 +140,23 @@ test_that("mgcv", {
 test_that("lm with poly and NA in response", {
   s1 <- summary(iris$Sepal.Length)
   model <- lm(Petal.Length ~ log(Sepal.Width) + Sepal.Length,
-    data = iris
+              data = iris
   )
   # Same min-max
   s2 <- summary(insight::get_data(model)$Sepal.Length)
 
   model <- lm(Petal.Length ~ log(1 + Sepal.Width) + Sepal.Length,
-    data = iris
+              data = iris
   )
   s3 <- summary(insight::get_data(model)$Sepal.Length)
 
   model <- lm(Petal.Length ~ log(Sepal.Width + 1) + Sepal.Length,
-    data = iris
+              data = iris
   )
   s4 <- summary(insight::get_data(model)$Sepal.Length)
 
   model <- lm(Petal.Length ~ log1p(Sepal.Width) + Sepal.Length,
-    data = iris
+              data = iris
   )
   s5 <- summary(insight::get_data(model)$Sepal.Length)
 
@@ -173,80 +172,6 @@ test_that("lm with poly and NA in response", {
   expect_equal(s4, s5, tolerance = 1e-4)
 })
 
-
-
-.runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
-
-if (TRUE) {
-  
-  m <- lm(Sepal.Length ~ Sepal.Width, data = iris)
-  out <- get_data(m)
-  test_that("subsets", {
-    expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width"))
-    expect_identical(nrow(out), 150L)
-  })
-
-  m <- lm(Sepal.Length ~ Sepal.Width, data = iris, subset = Species == "versicolor")
-  out <- get_data(m)
-  test_that("subsets", {
-    expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
-    expect_identical(nrow(out), 50L)
-  })
-
-  # d <- iris
-  # m <- lm(Petal.Length ~ poly(Sepal.Length), data = d)
-  # d <<- mtcars
-  # expect_warning(expect_warning(out <- get_data(m)))
-  # expect_equal(colnames(out), c("Petal.Length", "Sepal.Length"))
-
-  test_that("log", {
-    
-    m <- lm(log(Sepal.Length) ~ sqrt(Sepal.Width), data = iris)
-    out <- get_data(m)
-    expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
-  })
-
-  test_that("log II", {
-    m <- lm(log(Sepal.Length) ~ scale(Sepal.Width), data = iris)
-    out <- get_data(m)
-    expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
-  })
-
-
-  test_that("workaround bug in estimatr", {
-    skip_if_not_installed("ivreg")
-    skip_if_not_installed("estimatr")
-    data("CigaretteDemand")
-    m <- estimatr::iv_robust(
-      log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
-      data = CigaretteDemand
-    )
-    out <- get_data(m)
-    expect_equal(
-      head(out$packs),
-      c(101.08543, 111.04297, 71.95417, 56.85931, 82.58292, 79.47219),
-      tolerance = 1e-3
-    )
-    expect_equal(
-      colnames(out),
-      c("packs", "rprice", "rincome", "salestax"),
-      tolerance = 1e-3
-    )
-  })
-
-
-  test_that("get_data colnames", {
-    skip_if_not(.runStanTest)
-    skip_if_not(packageVersion("base") >= "4.0.0")
-    skip_if_not_installed("brms")
-    m <- suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1))
-    out <- get_data(m)
-    expect_type(out$cyl, "double")
-    expect_true(all(colnames(out) %in% c("mpg", "hp", "cyl")))
-    out <- get_data(m, additional_variables = TRUE)
-    expect_true("qsec" %in% colnames(out))
-  })
-}
 
 mod <- lm(mpg ~ as.logical(am) + factor(cyl) + as.factor(gear), mtcars)
 out <- get_data(mod)
@@ -340,4 +265,73 @@ test_that("get_data() log transform", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
+})
+
+skip_on_cran()
+
+m <- lm(Sepal.Length ~ Sepal.Width, data = iris)
+out <- get_data(m)
+test_that("subsets", {
+  expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width"))
+  expect_identical(nrow(out), 150L)
+})
+
+m <- lm(Sepal.Length ~ Sepal.Width, data = iris, subset = Species == "versicolor")
+out <- get_data(m)
+test_that("subsets", {
+  expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
+  expect_identical(nrow(out), 50L)
+})
+
+# d <- iris
+# m <- lm(Petal.Length ~ poly(Sepal.Length), data = d)
+# d <<- mtcars
+# expect_warning(expect_warning(out <- get_data(m)))
+# expect_equal(colnames(out), c("Petal.Length", "Sepal.Length"))
+
+test_that("log", {
+
+  m <- lm(log(Sepal.Length) ~ sqrt(Sepal.Width), data = iris)
+  out <- get_data(m)
+  expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
+})
+
+test_that("log II", {
+  m <- lm(log(Sepal.Length) ~ scale(Sepal.Width), data = iris)
+  out <- get_data(m)
+  expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
+})
+
+
+test_that("workaround bug in estimatr", {
+  skip_if_not_installed("ivreg")
+  skip_if_not_installed("estimatr")
+  data("CigaretteDemand", package = "ivreg")
+  m <- estimatr::iv_robust(
+    log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
+    data = CigaretteDemand
+  )
+  out <- get_data(m)
+  expect_equal(
+    head(out$packs),
+    c(101.08543, 111.04297, 71.95417, 56.85931, 82.58292, 79.47219),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    colnames(out),
+    c("packs", "rprice", "rincome", "salestax"),
+    tolerance = 1e-3
+  )
+})
+
+
+test_that("get_data colnames", {
+  skip_if_not(getRversion() >= "4.0.0")
+  skip_if_not_installed("brms")
+  m <- suppressMessages(suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1)))
+  out <- get_data(m)
+  expect_type(out$cyl, "double")
+  expect_true(all(colnames(out) %in% c("mpg", "hp", "cyl")))
+  out <- get_data(m, additional_variables = TRUE)
+  expect_true("qsec" %in% colnames(out))
 })

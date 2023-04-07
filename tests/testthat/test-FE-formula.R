@@ -1,4 +1,4 @@
-gfe <- insight:::.get_fixed_effects
+gfe <- .get_fixed_effects
 
 test_that(".get_fixed_effects", {
   f <- "am ~ disp:wt + (1|gear) + wt + (1+wt|carb)"

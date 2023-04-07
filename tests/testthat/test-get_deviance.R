@@ -1,6 +1,4 @@
-skip_if_not_installed("lme4")
 skip_if_not_installed("rstanarm")
-data(mtcars)
 
 test_that("get_deviance - Bayesian lm", {
   m1 <- lm(mpg ~ disp, data = mtcars)

@@ -8,7 +8,7 @@ rownames(dat) <- c("DF+", "DF-")
 colnames(dat) <- c("FUS+", "FUS-")
 
 # model
-m <- epi.2by2(
+m <- epiR::epi.2by2(
   dat = as.table(dat),
   method = "cohort.count",
   conf.level = 0.95,

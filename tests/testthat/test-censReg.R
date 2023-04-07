@@ -3,7 +3,7 @@ skip_if_not_installed("AER")
 
 data("Affairs", package = "AER")
 
-m1 <- censReg(
+m1 <- censReg::censReg(
   affairs ~ age + yearsmarried + religiousness + occupation + rating,
   data = Affairs
 )
