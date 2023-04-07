@@ -101,7 +101,7 @@ test_that("get_loglikelihood - (g)lmer", {
   expect_equal(get_loglikelihood(model, estimator = "ML"), logLik(model, REML = FALSE), tolerance = 0.01, ignore_attr = TRUE)
 })
 
-test_that("get_loglikelihood - stanreg", {
+test_that("get_loglikelihood - stanreg ", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   x <- rstanarm::stan_glm(Sepal.Length ~ Petal.Width, data = iris, refresh = 0)
