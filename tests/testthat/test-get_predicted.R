@@ -1,25 +1,5 @@
 skip_on_os(os = "mac")
 skip_on_cran()
-is_dev_version <- length(strsplit(packageDescription("insight")$Version, "\\.")[[1]]) > 3
-run_stan <- .Platform$OS.type == "unix" && is_dev_version
-
-pkgs <- c(
-  "lme4",
-  "brms",
-  "glmmTMB",
-  "pscl",
-  "mgcv",
-  "gamm4",
-  "merTools",
-  "emmeans",
-  "bayestestR",
-  "mclust",
-  "rstanarm",
-  "rstantools",
-  "psych"
-)
-suppressPackageStartupMessages(sapply(pkgs, skip_if_not_installed))
-
 
 # LM and GLM --------------------------------------------------------------
 # =========================================================================
