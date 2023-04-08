@@ -39,7 +39,7 @@ test_that("get_modelmatrix - iv_robust", {
   skip_if_not_installed("estimatr")
   data(Kmenta, package = "ivreg")
 
-  x <- iv_robust(Q ~ P + D | D + F + A, se_type = "stata", data = Kmenta)
+  x <- estimatr::iv_robust(Q ~ P + D | D + F + A, se_type = "stata", data = Kmenta)
 
   out1 <- get_modelmatrix(x)
   out2 <- model.matrix(terms(x), data = Kmenta)
@@ -91,7 +91,7 @@ test_that("get_modelmatrix - lm_robust", {
     z = rbinom(N, 1, prob = 0.4)
   )
 
-  x <- lm_robust(y ~ x + z, data = dat)
+  x <- estimatr::lm_robust(y ~ x + z, data = dat)
 
   out1 <- get_modelmatrix(x)
   out2 <- model.matrix(x, data = dat)

@@ -1,5 +1,5 @@
 skip_on_os(os = "mac")
-
+skip_on_cran()
 is_dev_version <- length(strsplit(packageDescription("insight")$Version, "\\.")[[1]]) > 3
 run_stan <- .Platform$OS.type == "unix" && is_dev_version
 
@@ -25,7 +25,7 @@ suppressPackageStartupMessages(sapply(pkgs, skip_if_not_installed))
 # =========================================================================
 
 test_that("get_predicted - lm", {
-  skip_if(isFALSE(run_stan))
+  skip_on_cran()
   skip_if_not_installed("rstanarm")
 
   x <- lm(mpg ~ cyl + hp, data = mtcars)
@@ -50,7 +50,7 @@ test_that("get_predicted - lm", {
   expect_equal(max(abs(as.data.frame(ref$fit)$lwr - rez$CI_low)), 0, tolerance = 1e-10)
 
   # Prediction
-  ref <- predict(x, newdata = insight::get_data(x), se.fit = TRUE, interval = "prediction")
+  ref <- predict(x, newdata = get_data(x), se.fit = TRUE, interval = "prediction")
   rez <- as.data.frame(get_predicted(x, predict = "prediction", ci = 0.95))
   expect_equal(nrow(rez), 32)
   expect_equal(max(abs(as.data.frame(ref$fit)$fit - rez$Predicted)), 0, tolerance = 1e-10)
@@ -58,7 +58,7 @@ test_that("get_predicted - lm", {
 
   # Bootstrap
   set.seed(333)
-  ref <- predict(x, newdata = insight::get_data(x), se.fit = TRUE, interval = "confidence")
+  ref <- predict(x, newdata = get_data(x), se.fit = TRUE, interval = "confidence")
   rez <- get_predicted(x, iterations = 600, ci = 0.95)
   expect_equal(length(rez), 32)
   expect_null(nrow(rez))
@@ -80,7 +80,7 @@ test_that("get_predicted - lm", {
 
 
 test_that("get_predicted - glm", {
-  skip_if(isFALSE(run_stan))
+  skip_on_cran()
   skip_if_not_installed("rstanarm")
 
   x <- glm(vs ~ wt, data = mtcars, family = "binomial")
@@ -105,7 +105,7 @@ test_that("get_predicted - glm", {
   expect_equal(nrow(rez), 32)
   expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-4)
   expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-4)
-  ref <- as.data.frame(suppressWarnings(insight::link_inverse(x)(predict.lm(x, interval = "confidence"))))
+  ref <- as.data.frame(suppressWarnings(link_inverse(x)(predict.lm(x, interval = "confidence"))))
   expect_equal(max(abs(ref$lwr - rez$CI_low)), 0, tolerance = 1e-2)
 
   ref <- predict(x, se.fit = TRUE, type = "link")
@@ -134,7 +134,7 @@ test_that("get_predicted - glm", {
 
 test_that("get_predicted - lm (log)", {
   x <- lm(mpg ~ log(hp), data = mtcars)
-  rez <- insight::get_predicted(x)
+  rez <- get_predicted(x)
   expect_equal(length(rez), 32)
 
   expect_equal(max(abs(rez - stats::fitted(x))), 0)
@@ -149,10 +149,10 @@ test_that("get_predicted - lm (log)", {
 test_that("robust vcov", {
   skip_if_not_installed("sandwich")
   mod <- lm(mpg ~ hp, data = mtcars)
-  se0 <- insight:::get_predicted_se(mod)
-  se1 <- suppressWarnings(insight:::get_predicted_se(mod, vcov_estimation = "HC"))
-  se2 <- suppressWarnings(insight:::get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC3"))
-  se3 <- insight:::get_predicted_se(mod, vcov = "HC", vcov_args = list(type = "HC3"))
+  se0 <- get_predicted_se(mod)
+  se1 <- suppressWarnings(get_predicted_se(mod, vcov_estimation = "HC"))
+  se2 <- suppressWarnings(get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC3"))
+  se3 <- get_predicted_se(mod, vcov = "HC", vcov_args = list(type = "HC3"))
   expect_true(all(se0 != se1))
   expect_true(all(se1 == se2))
   expect_true(all(se1 == se3))
@@ -165,15 +165,15 @@ test_that("robust vcov", {
   ignore_attr = TRUE
   )
   # various user inputs
-  se1 <- suppressWarnings(insight:::get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC2"))
-  se2 <- insight:::get_predicted_se(mod, vcov = "HC2")
-  se3 <- insight:::get_predicted_se(mod, vcov = "vcovHC", vcov_args = list(type = "HC2"))
-  se4 <- insight:::get_predicted_se(mod, vcov = sandwich::vcovHC, vcov_args = list(type = "HC2"))
+  se1 <- suppressWarnings(get_predicted_se(mod, vcov_estimation = "HC", vcov_type = "HC2"))
+  se2 <- get_predicted_se(mod, vcov = "HC2")
+  se3 <- get_predicted_se(mod, vcov = "vcovHC", vcov_args = list(type = "HC2"))
+  se4 <- get_predicted_se(mod, vcov = sandwich::vcovHC, vcov_args = list(type = "HC2"))
   expect_true(all(se1 == se2))
   expect_true(all(se1 == se3))
   expect_true(all(se1 == se4))
-  se1 <- insight:::get_predicted_se(mod, vcov = "HC1")
-  se2 <- insight:::get_predicted_se(mod, vcov = sandwich::vcovHC, vcov_args = list(type = "HC1"))
+  se1 <- get_predicted_se(mod, vcov = "HC1")
+  se2 <- get_predicted_se(mod, vcov = sandwich::vcovHC, vcov_args = list(type = "HC1"))
   expect_true(all(se1 == se2))
 })
 
@@ -181,7 +181,7 @@ test_that("robust vcov", {
 
 test_that("MASS::rlm", {
   skip_if_not_installed("MASS")
-  mod <- rlm(mpg ~ hp + am, data = mtcars)
+  mod <- MASS::rlm(mpg ~ hp + am, data = mtcars)
   p <- get_predicted.default(mod)
   expect_s3_class(p, "get_predicted")
   p <- data.frame(p)
@@ -197,7 +197,7 @@ test_that("get_predicted - lmerMod", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("merTools")
   skip_if_not_installed("rstanarm")
-  skip_if(isFALSE(run_stan))
+  skip_on_cran()
   x <- lme4::lmer(mpg ~ am + (1 | cyl), data = mtcars)
 
   # Link vs. relation
@@ -226,7 +226,7 @@ test_that("get_predicted - lmerMod", {
   # expect_equal(mean(as.data.frame(rez)$CI_low - rez_emmeans$lower.PL), 0, tolerance = 0.5)
 
   # Compare with glmmTMB
-  ref <- insight::get_predicted(glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars), predict = "expectation", ci = 0.95)
+  ref <- get_predicted(glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars), predict = "expectation", ci = 0.95)
   expect_equal(mean(abs(rezrela - ref)), 0, tolerance = 0.1) # A bit high
   # expect_equal(mean(abs(as.data.frame(rezrela)$SE - as.data.frame(ref)$SE)), 0, tolerance = 1e-5)
   # expect_equal(mean(abs(as.data.frame(rezrela)$CI_low - as.data.frame(ref)$CI_low)), 0, tolerance = 1e-5)
@@ -238,7 +238,7 @@ test_that("get_predicted - lmerMod", {
       refresh = 0, iter = 1000, seed = 333
     )
   )
-  rez_stan <- insight::get_predicted(xref, predict = "expectation", ci = 0.95)
+  rez_stan <- get_predicted(xref, predict = "expectation", ci = 0.95)
   expect_equal(mean(abs(rezrela - rez_stan)), 0, tolerance = 0.1)
   # Different indeed
   # expect_equal(mean(as.data.frame(rezrela)$CI_low - as.data.frame(rez_stan)$CI_low), 0, tolerance = 0.5)
@@ -247,7 +247,8 @@ test_that("get_predicted - lmerMod", {
 
 test_that("get_predicted - glmer with matrix response", {
   skip_if_not_installed("lme4")
-  model <- glmer(
+  data(cbpp, package = "lme4")
+  model <- lme4::glmer(
     cbind(incidence, size - incidence) ~ period + (1 | herd),
     data = cbpp, family = binomial
   )
@@ -261,7 +262,7 @@ test_that("get_predicted - glmer with matrix response", {
 test_that("get_predicted - lmerMod (log)", {
   skip_if_not_installed("lme4")
   x <- lme4::lmer(mpg ~ am + log(hp) + (1 | cyl), data = mtcars)
-  rez <- insight::get_predicted(x)
+  rez <- get_predicted(x)
   expect_equal(length(rez), 32)
 
   expect_equal(max(abs(rez - stats::fitted(x))), 0)
@@ -269,7 +270,7 @@ test_that("get_predicted - lmerMod (log)", {
   expect_equal(nrow(as.data.frame(rez)), 32)
 
   # No random
-  rez2 <- insight::get_predicted(x, newdata = mtcars[c("am", "hp")], verbose = FALSE)
+  rez2 <- get_predicted(x, newdata = mtcars[c("am", "hp")], verbose = FALSE)
   expect_true(!all(is.na(as.data.frame(rez2))))
 })
 
@@ -290,7 +291,7 @@ test_that("get_predicted - merMod", {
 
   # Compare with glmmTMB
   xref <- glmmTMB::glmmTMB(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
-  rez_ref <- insight::get_predicted(xref, predict = "expectation", ci = 0.95)
+  rez_ref <- get_predicted(xref, predict = "expectation", ci = 0.95)
   expect_equal(max(abs(rezrela - rez_ref)), 0, tolerance = 1e-5)
   expect_equal(mean(abs(as.data.frame(rezrela)$SE - as.data.frame(rez_ref)$SE)), 0, tolerance = 0.2)
 })
@@ -324,17 +325,17 @@ test_that("get_predicted - glmmTMB", {
   expect_equal(nrow(as.data.frame(rez)), 32)
 
   # No random
-  rez <- insight::get_predicted(x, newdata = mtcars[c("am")], verbose = FALSE, ci = 0.95)
+  rez <- get_predicted(x, newdata = mtcars[c("am")], verbose = FALSE, ci = 0.95)
   expect_true(!all(is.na(as.data.frame(rez))))
   x <- glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
-  rez <- insight::get_predicted(x, data = data.frame(Petal.Width = c(0, 1, 2)), verbose = FALSE)
+  rez <- get_predicted(x, data = data.frame(Petal.Width = c(0, 1, 2)), verbose = FALSE)
   expect_equal(length(rez), 3)
 
   # vs. Bayesian
   # x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
-  # rez <- summary(insight::get_predicted(x))
+  # rez <- summary(get_predicted(x))
   # xref <- rstanarm::stan_lmer(mpg ~ am + (1 | cyl), data = mtcars, refresh = 0, iter = 1000, seed = 333)
-  # rezbayes <- summary(insight::get_predicted(xref))
+  # rezbayes <- summary(get_predicted(xref))
   # expect_equal(mean(abs(rez$Predicted - rezbayes$Predicted)), 0, tolerance = 0.1)
   # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.2)
 })
@@ -345,14 +346,14 @@ test_that("get_predicted - glmmTMB", {
 test_that("get_predicted - mgcv::gam and gamm", {
   skip_if_not_installed("mgcv")
   x <- mgcv::gam(mpg ~ am + s(wt), data = mtcars)
-  expect_equal(length(insight::get_predicted(x, ci = 0.95)), 32)
-  rez <- insight::get_predicted(x, data = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)), ci = 0.95)
+  expect_equal(length(get_predicted(x, ci = 0.95)), 32)
+  rez <- get_predicted(x, data = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)), ci = 0.95)
   expect_equal(length(rez), 3)
 
   # No smooth
-  rez <- insight::get_predicted(x, data = data.frame(am = c(0, 0, 1)), ci = 0.95)
+  rez <- get_predicted(x, data = data.frame(am = c(0, 0, 1)), ci = 0.95)
   expect_equal(length(rez), 3)
-  rez2 <- insight::get_predicted(x, data = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)), ci = 0.95, include_smooth = FALSE)
+  rez2 <- get_predicted(x, data = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)), ci = 0.95, include_smooth = FALSE)
   expect_equal(max(abs(as.numeric(rez - rez2))), 0, tolerance = 1e-4)
   expect_equal(length(unique(attributes(rez)$data$wt)), 1)
 
@@ -363,7 +364,7 @@ test_that("get_predicted - mgcv::gam and gamm", {
 
   # Binomial
   x <- mgcv::gam(vs ~ am + s(wt), data = mtcars, family = "binomial")
-  rez <- insight::get_predicted(x, ci = 0.95)
+  rez <- get_predicted(x, ci = 0.95)
   expect_equal(length(rez), 32)
 
   expect_equal(max(abs(rez - stats::fitted(x))), 0)
@@ -372,7 +373,7 @@ test_that("get_predicted - mgcv::gam and gamm", {
 
   # GAMM
   x <- mgcv::gamm(vs ~ am + s(wt), random = list(cyl = ~1), data = mtcars, family = "binomial", verbosePQL = FALSE)
-  rez <- insight::get_predicted(x, ci = 0.95)
+  rez <- get_predicted(x, ci = 0.95)
   expect_equal(length(rez), 32)
   expect_equal(max(abs(rez - x$gam$fitted.values)), 0)
   expect_equal(max(abs(rez - stats::predict(x$gam, type = "response"))), 0)
@@ -385,7 +386,7 @@ test_that("get_predicted - mgcv::gam and gamm", {
 
 
 test_that("get_predicted - rstanarm", {
-  skip_if(isFALSE(run_stan))
+  skip_on_cran()
   skip_if_not_installed("rstanarm")
 
   # LM
@@ -433,10 +434,9 @@ test_that("get_predicted - rstanarm", {
 # =========================================================================
 
 test_that("get_predicted - FA / PCA", {
-  suppressMessages({
-    skip_if_not_installed("fungible")
-    skip_if_not_installed("psych")
-  })
+  skip_if_not_installed("fungible")
+  skip_if_not_installed("psych")
+
   # PCA
   x <- get_predicted(psych::principal(mtcars, 3))
   expect_equal(dim(x), c(32, 3))
@@ -557,11 +557,11 @@ test_that("bugfix: used to fail with matrix variables", {
 })
 
 test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
-  skip_if(isFALSE(run_stan))
+  skip_on_cran()
   skip_if_not_installed("brms")
   void <- capture.output(
-    suppressMessages(mod <- brm(am ~ hp + mpg,
-      family = bernoulli, data = mtcars,
+    suppressMessages(mod <- brms::brm(am ~ hp + mpg,
+      family = brms::bernoulli, data = mtcars,
       chains = 2, iter = 1000, seed = 1024, silent = 2
     ))
   )
@@ -575,13 +575,13 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   data <- mtcars
   data$cyl <- as.character(data$cyl)
   void <- capture.output(
-    suppressMessages(suppressWarnings(model <- brm(cyl ~ mpg * vs + (1 | carb),
+    suppressMessages(suppressWarnings(model <- brms::brm(cyl ~ mpg * vs + (1 | carb),
       data = data,
       iter = 1000,
       seed = 1024,
       algorithm = "meanfield",
       refresh = 0,
-      family = categorical(link = "logit", refcat = "4")
+      family = brms::categorical(link = "logit", refcat = "4")
     )))
   )
   x <- as.data.frame(get_predicted(model, ci = 0.95))
@@ -596,15 +596,15 @@ test_that("zero-inflation stuff works", {
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("pscl")
 
-  data(fish, package = "glmmTMB")
-  m1 <- glmmTMB(
+  data(fish)
+  m1 <- glmmTMB::glmmTMB(
     count ~ child + camper,
     ziformula = ~ child + camper,
     data = fish,
     family = poisson()
   )
 
-  m2 <- zeroinfl(
+  m2 <- pscl::zeroinfl(
     count ~ child + camper | child + camper,
     data = fish,
     dist = "poisson"
@@ -622,14 +622,14 @@ test_that("zero-inflation stuff works", {
   expect_equal(p2, p4, tolerance = 1e-1, ignore_attr = TRUE)
   expect_equal(p3, p4, tolerance = 1e-1, ignore_attr = TRUE)
 
-  m1 <- glmmTMB(
+  m1 <- glmmTMB::glmmTMB(
     count ~ child + camper,
     ziformula = ~ child + camper,
     data = fish,
-    family = truncated_poisson()
+    family = glmmTMB::truncated_poisson()
   )
 
-  m2 <- hurdle(
+  m2 <- pscl::hurdle(
     count ~ child + camper | child + camper,
     data = fish,
     dist = "poisson"
