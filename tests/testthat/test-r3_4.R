@@ -1,7 +1,4 @@
-if (skip_if_not_installed("insight")) {
- 
+test_that("find_random", {
   m <- glm(am ~ mpg, mtcars, family = binomial())
-  test_that("find_random", {
-    expect_null(find_random(m))
-  })
-}
+  expect_null(find_random(m))
+})
