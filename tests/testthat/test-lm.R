@@ -1,6 +1,3 @@
-
-data(mtcars)
-
 m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
 m2 <- lm(log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE),
   data = mtcars
