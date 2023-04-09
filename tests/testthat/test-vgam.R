@@ -1,3 +1,4 @@
+skip_if_offline()
 skip_if_not_installed("VGAM")
 
 data("hunua", package = "VGAM")

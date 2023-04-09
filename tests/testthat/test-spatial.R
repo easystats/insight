@@ -1,3 +1,4 @@
+skip_if_offline()
 skip_if_not_installed("glmmTMB")
 skip_if_not_installed("geoR")
 skip_if_not_installed("TMB")
