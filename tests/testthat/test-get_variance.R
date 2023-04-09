@@ -271,7 +271,9 @@ test_that("random effects CIs, simple slope", {
 })
 
 data(cake, package = "lme4")
-m <- lme4::lmer(angle ~ poly(temp, 2) + (poly(temp, 2) | replicate) + (1 | recipe), data = cake)
+suppressMessages({
+  m <- lme4::lmer(angle ~ poly(temp, 2) + (poly(temp, 2) | replicate) + (1 | recipe), data = cake)
+})
 
 test_that("random effects CIs, poly slope", {
   vc <- suppressWarnings(get_variance(m))

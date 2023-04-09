@@ -537,11 +537,11 @@ test_that("Issue #645", {
   skip_on_os("windows")
 
   void <- suppressMessages(suppressWarnings(capture.output(
-    mod <- brm(
+    mod <- brms::brm(
       silent = 2,
       data = mtcars,
-      family = cumulative(probit),
-      formula = bf(
+      family = brms::cumulative(probit),
+      formula = brms::bf(
         cyl ~ 1 + mpg + drat + gearnl,
         gearnl ~ 0 + (1 | gear),
         nl = TRUE
