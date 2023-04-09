@@ -1,8 +1,8 @@
 skip_on_os(c("mac", "linux"))
 skip_if_not_installed("MCMCglmm")
 
-data(PlodiaPO)
-mod_mcmcglmm <- MCMCglmm(
+data(PlodiaPO, package = "MCMCglmm")
+mod_mcmcglmm <- MCMCglmm::MCMCglmm(
   PO ~ plate,
   random = ~FSfamily,
   data = PlodiaPO,

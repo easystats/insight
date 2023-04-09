@@ -133,6 +133,7 @@ Suggests:
     MCMCglmm,
     merTools,
     metaBMA,
+    metadat,
     metafor,
     metaplus,
     mgcv,

@@ -1,8 +1,8 @@
 skip_if_not_installed("mmrm")
 skip_if(getRversion() < "4.0.0")
 
-data(fev_data)
-mod_mmrm <- mmrm(
+data(fev_data, package = "mmrm")
+mod_mmrm <- mmrm::mmrm(
   formula = FEV1 ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID),
   data = fev_data
 )
@@ -30,7 +30,7 @@ test_that("n_parameters", {
 })
 
 test_that("find_offset", {
-  model_off <- mmrm(
+  model_off <- mmrm::mmrm(
     log(FEV1) ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID) + offset(log(FEV1_BL)),
     data = fev_data
   )
