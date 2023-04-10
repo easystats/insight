@@ -41,8 +41,8 @@ m6 <- insight::download_model("stanreg_gamm4_1")
 
 m7 <- suppressWarnings(
   stan_lm(mpg ~ wt + qsec + am,
-                    data = mtcars, prior = R2(0.75),
-                    chains = 1, iter = 300, refresh = 0
+    data = mtcars, prior = R2(0.75),
+    chains = 1, iter = 300, refresh = 0
   )
 )
 
@@ -68,8 +68,8 @@ m10 <- stan_betareg(
 )
 
 ols <- lm(mpg ~ wt + qsec + am,
-          data = mtcars, # all row are complete so ...
-          na.action = na.exclude
+  data = mtcars, # all row are complete so ...
+  na.action = na.exclude
 ) # not necessary in this case
 b <- coef(ols)[-1]
 R <- qr.R(ols$qr)[-1, -1]
@@ -82,21 +82,21 @@ ybar <- mean(y)
 s_y <- sd(y)
 m11 <- suppressWarnings(
   stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
-                           prior = R2(0.75),
-                           # the next line is only to make the example go fast
-                           refresh = 0,
-                           chains = 1, iter = 500, seed = 12345
+    prior = R2(0.75),
+    # the next line is only to make the example go fast
+    refresh = 0,
+    chains = 1, iter = 500, seed = 12345
   )
 )
 
 dat <- infert[order(infert$stratum), ] # order by strata
 m12 <- suppressWarnings(
   stan_clogit(case ~ spontaneous + induced + (1 | education),
-                        strata = stratum,
-                        data = dat,
-                        subset = parity <= 2,
-                        QR = TRUE,
-                        chains = 2, iter = 500, refresh = 0
+    strata = stratum,
+    data = dat,
+    subset = parity <= 2,
+    QR = TRUE,
+    chains = 2, iter = 500, refresh = 0
   )
 ) # for speed only
 
@@ -433,24 +433,24 @@ test_that("get_variance", {
   )
 
   expect_equal(get_variance_fixed(m1),
-               c(var.fixed = 0.3627389),
-               tolerance = 1e-4
+    c(var.fixed = 0.3627389),
+    tolerance = 1e-4
   )
   expect_equal(get_variance_random(m1),
-               c(var.random = 0.5988885),
-               tolerance = 1e-4
+    c(var.random = 0.5988885),
+    tolerance = 1e-4
   )
   expect_equal(get_variance_residual(m1),
-               c(var.residual = 3.289868),
-               tolerance = 1e-4
+    c(var.residual = 3.289868),
+    tolerance = 1e-4
   )
   expect_equal(get_variance_distribution(m1),
-               c(var.distribution = 3.289868),
-               tolerance = 1e-4
+    c(var.distribution = 3.289868),
+    tolerance = 1e-4
   )
   expect_equal(get_variance_dispersion(m1),
-               c(var.dispersion = 0),
-               tolerance = 1e-4
+    c(var.dispersion = 0),
+    tolerance = 1e-4
   )
 })
 

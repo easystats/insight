@@ -7,8 +7,8 @@ dat$fac <- fac <- as.factor(sample(1:20, 400, replace = TRUE))
 dat$y <- dat$y + model.matrix(~ fac - 1) %*% rnorm(20) * 0.5
 
 m1 <- gamm4::gamm4(y ~ s(x0) + x1 + s(x2),
-                   data = dat,
-                   random = ~ (1 | fac)
+  data = dat,
+  random = ~ (1 | fac)
 )
 
 test_that("model_info", {

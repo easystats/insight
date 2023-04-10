@@ -7,9 +7,9 @@ data(housing, package = "MASS")
 dat <<- mlogit::mlogit.data(housing, choice = "Sat", shape = "wide")
 void <- capture.output(
   m1 <- gmnl::gmnl(Sat ~ Infl + Type + Cont | 1,
-                   data = dat,
-                   model = "smnl",
-                   R = 100
+    data = dat,
+    model = "smnl",
+    R = 100
   )
 )
 

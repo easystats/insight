@@ -11,8 +11,8 @@ for (i in 1:5) {
   filter_group <- sleepstudy$mygrp == i
   sleepstudy$mysubgrp[filter_group] <-
     sample(1:30,
-           size = sum(filter_group),
-           replace = TRUE
+      size = sum(filter_group),
+      replace = TRUE
     )
 }
 

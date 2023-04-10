@@ -5,8 +5,8 @@ Salamanders$cover <- abs(Salamanders$cover)
 dat <<- Salamanders
 
 m1 <- glm(count ~ mined + log(cover) + sample,
-          family = poisson,
-          data = dat
+  family = poisson,
+  data = dat
 )
 
 test_that("model_info", {

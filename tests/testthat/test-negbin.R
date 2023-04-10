@@ -3,8 +3,8 @@ skip_if_not_installed("aod")
 data(dja, package = "aod")
 m1 <- suppressWarnings(
   aod::negbin(y ~ group + offset(log(trisk)),
-              random = ~village,
-              data = dja
+    random = ~village,
+    data = dja
   )
 )
 

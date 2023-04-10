@@ -4,8 +4,8 @@ skip_if_not_installed("quantreg")
 data(stackloss)
 m1 <-
   quantreg::rq(stack.loss ~ Air.Flow + Water.Temp,
-               data = stackloss,
-               tau = 0.25
+    data = stackloss,
+    tau = 0.25
   )
 
 test_that("model_info", {

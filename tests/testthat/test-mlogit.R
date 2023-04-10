@@ -3,9 +3,9 @@ skip_if_not_installed("mlogit")
 data("Fishing", package = "mlogit")
 Fish <-
   mlogit::mlogit.data(Fishing,
-                      varying = 2:9,
-                      shape = "wide",
-                      choice = "mode"
+    varying = 2:9,
+    shape = "wide",
+    choice = "mode"
   )
 
 m1 <- mlogit::mlogit(mode ~ price + catch, data = Fish)

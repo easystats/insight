@@ -6,9 +6,9 @@ data(soup, package = "ordinal")
 
 m1 <- ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine)
 m2 <- ordinal::clmm(SURENESS ~ PROD + (1 | RESP) + (1 | RESP:PROD),
-                    data = soup,
-                    link = "probit",
-                    threshold = "equidistant"
+  data = soup,
+  link = "probit",
+  threshold = "equidistant"
 )
 
 test_that("model_info", {

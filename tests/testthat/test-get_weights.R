@@ -39,4 +39,3 @@ out <- get_weights(m)
 test_that("get_weights nlme", {
   expect_identical(colnames(out), c("age", "Sex"))
 })
-

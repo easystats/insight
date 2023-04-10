@@ -5,8 +5,8 @@ data(Salamanders, package = "glmmTMB")
 Salamanders$cover <- abs(Salamanders$cover)
 
 m1 <- biglm::bigglm(count ~ mined + log(cover) + sample,
-                    family = poisson(),
-                    data = Salamanders
+  family = poisson(),
+  data = Salamanders
 )
 
 test_that("model_info", {
@@ -131,4 +131,3 @@ test_that("find_algorithm", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "z-statistic")
 })
-

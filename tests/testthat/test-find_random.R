@@ -36,4 +36,3 @@ test_that("find_random - rstanarm::gamm4", {
     ))
   expect_equal(insight::find_random(model, flatten = TRUE), "Species")
 })
-

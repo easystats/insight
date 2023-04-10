@@ -32,7 +32,7 @@ test_that("lm: sandwich", {
     ignore_attr = TRUE
   )
   expect_equal(get_varcov(mod, vcov = sandwich::vcovOPG),
-               sandwich::vcovOPG(mod),
+    sandwich::vcovOPG(mod),
     tolerance = 1e-5
   )
 })

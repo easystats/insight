@@ -58,4 +58,3 @@ test_that("format_table with multiple si-levels", {
   x <- bayestestR::hdi(d, ci = c(0.80, 0.90))
   expect_snapshot(x)
 })
-

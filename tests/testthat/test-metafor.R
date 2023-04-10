@@ -45,8 +45,8 @@ dat <- metafor::escalc(
 )
 dat$alloc <- ifelse(dat$alloc == "random", "random", "other")
 model <- metafor::rma(yi, vi,
-                      mods = ~alloc, data = dat, digits = 3,
-                      slab = author
+  mods = ~alloc, data = dat, digits = 3,
+  slab = author
 )
 test_that("get_data, modelframe", {
   expect_equal(

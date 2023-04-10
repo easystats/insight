@@ -306,4 +306,3 @@ test_that("get_datagrid - multiple weight variables", {
     tolerance = 1e-3
   )
 })
-

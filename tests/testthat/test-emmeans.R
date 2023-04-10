@@ -25,7 +25,7 @@ skip_if_not_installed("emmeans")
 
 test_that("emmeans", {
   m <- glm(am ~ factor(cyl),
-           family = binomial(), data = mtcars
+    family = binomial(), data = mtcars
   )
 
   EList <- emmeans::emmeans(m, pairwise ~ cyl, type = "resp")

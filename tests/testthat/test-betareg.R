@@ -174,4 +174,3 @@ test_that("get_predicted", {
   expect_true(!"SE" %in% colnames(p1))
   expect_true("SE" %in% colnames(p2))
 })
-

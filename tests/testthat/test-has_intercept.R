@@ -24,4 +24,3 @@ test_that("has_intercept", {
   expect_true(has_intercept(m8))
   expect_true(has_intercept(m9))
 })
-

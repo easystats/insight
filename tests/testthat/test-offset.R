@@ -14,9 +14,9 @@ d <<- data.frame(y = y, x, logOff = log(off)) # Storage dataframe
 # Fit zeroinfl model using 2 methods of offset input
 m1 <- pscl::zeroinfl(y ~ offset(logOff) + x | 1, data = d, dist = "poisson")
 m2 <- pscl::zeroinfl(y ~ x | 1,
-                     data = d,
-                     offset = logOff,
-                     dist = "poisson"
+  data = d,
+  offset = logOff,
+  dist = "poisson"
 )
 
 # Fit zeroinfl model without offset data

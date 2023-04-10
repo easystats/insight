@@ -8,8 +8,8 @@ void <- capture.output(
 )
 
 bt <- mgcv::gam(y ~ te(x0, x1, k = 7) + s(x2) + s(x3),
-                data = dat,
-                method = "REML"
+  data = dat,
+  method = "REML"
 )
 
 test_that("find_smooth - gam", {

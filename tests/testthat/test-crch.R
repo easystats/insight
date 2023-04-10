@@ -112,4 +112,3 @@ test_that("is_multivariate", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "z-statistic")
 })
-

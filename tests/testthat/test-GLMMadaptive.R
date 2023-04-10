@@ -307,10 +307,10 @@ test_that("find_parameter", {
   )
   expect_equal(nrow(get_parameters(m2)), 6)
   expect_equal(get_parameters(m2, effects = "random"),
-               list(random = c(
-                 -1.3262364, -0.2048055, 1.3852572, 0.5282277
-               )),
-               tolerance = 1e-5
+    list(random = c(
+      -1.3262364, -0.2048055, 1.3852572, 0.5282277
+    )),
+    tolerance = 1e-5
   )
   expect_equal(
     get_parameters(m3)$Component,

@@ -18,8 +18,8 @@ d.time <- pmin(d.time, cens)
 dat <<- data.frame(d.time, death, sex, age, stringsAsFactors = FALSE)
 
 m1 <- rms::psm(Surv(d.time, death) ~ sex * pol(age, 2),
-               dist = "lognormal",
-               data = dat
+  dist = "lognormal",
+  data = dat
 )
 
 test_that("model_info", {

@@ -126,4 +126,3 @@ test_that("get_residuals - glmer", {
     as.vector(weighted.residuals(m))
   )
 })
-

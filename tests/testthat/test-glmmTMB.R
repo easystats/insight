@@ -55,9 +55,9 @@ m5 <- glmmTMB::glmmTMB(
 
 m6 <-
   glmmTMB::glmmTMB(count ~ 1,
-          ziformula = ~1,
-          family = poisson(),
-          data = Salamanders
+    ziformula = ~1,
+    family = poisson(),
+    data = Salamanders
   )
 
 test_that("find_weights", {

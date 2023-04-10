@@ -13,7 +13,7 @@ dat$post <- 0
 dat$post[dat$time >= 8] <- 1
 m <- suppressWarnings(suppressMessages(
   lme4::lmer(y ~ post + time1 + (1 | g2 / g1 / g0) + (post + time1 - 1 | g2),
-             data = dat
+    data = dat
   )
 ))
 

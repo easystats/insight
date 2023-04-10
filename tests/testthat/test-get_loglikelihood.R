@@ -127,7 +127,7 @@ test_that("get_loglikelihood - plm", {
   data("Produc", package = "plm")
   x <- suppressWarnings(
     plm::plm(log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp,
-             data = Produc, index = c("state", "year")
+      data = Produc, index = c("state", "year")
     )
   )
 

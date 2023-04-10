@@ -130,4 +130,3 @@ test_that("find_algorithm", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "z-statistic")
 })
-

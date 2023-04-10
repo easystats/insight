@@ -11,12 +11,12 @@ for (i in 1:5) {
 }
 
 m1 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject),
-                 data = sleepstudy
+  data = sleepstudy
 )
 
 m2 <- suppressMessages(
   lme4::lmer(Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-             data = sleepstudy
+    data = sleepstudy
   )
 )
 
@@ -347,12 +347,12 @@ test_that("get_variance", {
   )
 
   expect_equal(get_variance_fixed(m1),
-               c(var.fixed = 908.9534),
-               tolerance = 1e-1
+    c(var.fixed = 908.9534),
+    tolerance = 1e-1
   )
   expect_equal(get_variance_random(m1),
-               c(var.random = 1698.084),
-               tolerance = 1e-1
+    c(var.random = 1698.084),
+    tolerance = 1e-1
   )
   expect_equal(
     get_variance_residual(m1),
@@ -365,8 +365,8 @@ test_that("get_variance", {
     tolerance = 1e-1
   )
   expect_equal(get_variance_dispersion(m1),
-               c(var.dispersion = 0),
-               tolerance = 1e-1
+    c(var.dispersion = 0),
+    tolerance = 1e-1
   )
 
   expect_equal(
@@ -419,17 +419,17 @@ test_that("find_random_slopes", {
 
 suppressMessages({
   m3 <- lme4::lmer(Reaction ~ (1 + Days | Subject),
-                   data = sleepstudy
+    data = sleepstudy
   )
 
   m4 <- lme4::lmer(
     Reaction ~ (1 |
-                  mygrp / mysubgrp) + (1 | Subject),
+      mygrp / mysubgrp) + (1 | Subject),
     data = sleepstudy
   )
 
   m5 <- lme4::lmer(Reaction ~ 1 + (1 + Days | Subject),
-                   data = sleepstudy
+    data = sleepstudy
   )
 
   m6 <- lme4::lmer(

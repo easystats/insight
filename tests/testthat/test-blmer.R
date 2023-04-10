@@ -12,8 +12,8 @@ for (i in 1:5) {
 }
 
 m1 <- blme::blmer(Reaction ~ Days + (1 + Days | Subject),
-            data = sleepstudy,
-            cov.prior = NULL
+  data = sleepstudy,
+  cov.prior = NULL
 )
 
 m2 <- suppressWarnings(blme::blmer(
@@ -267,12 +267,12 @@ test_that("get_variance", {
   )
 
   expect_equal(get_variance_fixed(m1),
-               c(var.fixed = 908.9534),
-               tolerance = 1e-1
+    c(var.fixed = 908.9534),
+    tolerance = 1e-1
   )
   expect_equal(get_variance_random(m1),
-               c(var.random = 1698.084),
-               tolerance = 1e-1
+    c(var.random = 1698.084),
+    tolerance = 1e-1
   )
   expect_equal(
     get_variance_residual(m1),
@@ -285,8 +285,8 @@ test_that("get_variance", {
     tolerance = 1e-1
   )
   expect_equal(get_variance_dispersion(m1),
-               c(var.dispersion = 0),
-               tolerance = 1e-1
+    c(var.dispersion = 0),
+    tolerance = 1e-1
   )
 
   expect_equal(
@@ -322,4 +322,3 @@ test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
   expect_identical(find_statistic(m2), "t-statistic")
 })
-

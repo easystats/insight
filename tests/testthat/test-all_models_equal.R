@@ -18,4 +18,3 @@ test_that("all_models_equal", {
   expect_true(is_model_supported(m1))
   expect_false(is_model_supported(mtcars))
 })
-

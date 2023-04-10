@@ -188,4 +188,3 @@ test_that("find_formula-gamm-3", {
     ignore_attr = TRUE
   )
 })
-

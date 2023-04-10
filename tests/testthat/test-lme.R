@@ -6,8 +6,8 @@ data(Orthodont, package = "nlme")
 data(Ovary, package = "nlme")
 
 m1 <- nlme::lme(Reaction ~ Days,
-                random = ~ 1 + Days | Subject,
-                data = sleepstudy
+  random = ~ 1 + Days | Subject,
+  data = sleepstudy
 )
 
 m2 <- nlme::lme(distance ~ age + Sex, data = Orthodont, random = ~1)
@@ -22,8 +22,8 @@ for (i in 1:5) {
 }
 
 m3 <- nlme::lme(Reaction ~ Days,
-                random = ~ 1 | mygrp / mysubgrp,
-                data = sleepstudy
+  random = ~ 1 | mygrp / mysubgrp,
+  data = sleepstudy
 )
 
 # from easystats/insight/482
@@ -238,8 +238,8 @@ test_that("Issue #658", {
     c("", " + Sex"),
     function(x) {
       nlme::lme(as.formula(paste0("distance  ~ age", x)),
-                random = ~1,
-                data = Orthodont
+        random = ~1,
+        data = Orthodont
       )
     }
   )
