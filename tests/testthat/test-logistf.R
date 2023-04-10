@@ -1,4 +1,4 @@
-testthat::skip_on_covr()
+skip_on_covr()
 skip_if_not_installed("logistf")
 
 data(sex2, package = "logistf")
