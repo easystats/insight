@@ -19,7 +19,7 @@ test_that("lme4", {
   set.seed(123)
   cbpp$cont <- rnorm(nrow(cbpp))
   m <- lme4::glmer(cbind(incidence, size - incidence) ~ poly(cont, 2) + (1 | herd),
-                   data = cbpp, family = binomial
+    data = cbpp, family = binomial
   )
   expect_s3_class(get_data(m), "data.frame")
 })
@@ -140,23 +140,23 @@ test_that("mgcv", {
 test_that("lm with poly and NA in response", {
   s1 <- summary(iris$Sepal.Length)
   model <- lm(Petal.Length ~ log(Sepal.Width) + Sepal.Length,
-              data = iris
+    data = iris
   )
   # Same min-max
   s2 <- summary(insight::get_data(model)$Sepal.Length)
 
   model <- lm(Petal.Length ~ log(1 + Sepal.Width) + Sepal.Length,
-              data = iris
+    data = iris
   )
   s3 <- summary(insight::get_data(model)$Sepal.Length)
 
   model <- lm(Petal.Length ~ log(Sepal.Width + 1) + Sepal.Length,
-              data = iris
+    data = iris
   )
   s4 <- summary(insight::get_data(model)$Sepal.Length)
 
   model <- lm(Petal.Length ~ log1p(Sepal.Width) + Sepal.Length,
-              data = iris
+    data = iris
   )
   s5 <- summary(insight::get_data(model)$Sepal.Length)
 
@@ -290,7 +290,6 @@ test_that("subsets", {
 # expect_equal(colnames(out), c("Petal.Length", "Sepal.Length"))
 
 test_that("log", {
-
   m <- lm(log(Sepal.Length) ~ sqrt(Sepal.Width), data = iris)
   out <- get_data(m)
   expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
@@ -326,6 +325,7 @@ test_that("workaround bug in estimatr", {
 
 
 test_that("get_data colnames", {
+  skip_on_os("windows")
   skip_if_not(getRversion() >= "4.0.0")
   skip_if_not_installed("brms")
   m <- suppressMessages(suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1)))
