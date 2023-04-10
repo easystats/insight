@@ -305,6 +305,3 @@ test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
   expect_identical(find_statistic(m2), "t-statistic")
 })
-
-unloadNamespace("robustlmm")
-unloadNamespace("lme4")

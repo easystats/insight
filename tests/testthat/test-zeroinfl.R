@@ -150,8 +150,6 @@ test_that("get_varcov", {
   vc1 <- get_varcov(m1, component = "zero_inflated", vcov = "BS", vcov_args = list(R = 50))
   zero_col <- grepl("^zero_", colnames(vc2))
   expect_equal(vc1, vc2[zero_col, zero_col], ignore_attr = TRUE)
-
-  unloadNamespace("sandwich")
 })
 
 m2 <- pscl::zeroinfl(formula = art ~ . | 1, data = bioChemists, dist = "negbin")

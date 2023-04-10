@@ -178,6 +178,11 @@ test_that("get_predicted - lmerMod", {
   skip_if_not_installed("merTools")
   skip_if_not_installed("rstanarm")
   skip_on_cran()
+
+  suppressPackageStartupMessages({
+    library(rstanarm)
+  })
+
   x <- lme4::lmer(mpg ~ am + (1 | cyl), data = mtcars)
 
   # Link vs. relation
