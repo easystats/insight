@@ -115,6 +115,7 @@ Suggests:
     gmnl,
     gt,
     httr,
+    interp,
     ivreg,
     JM,
     knitr,

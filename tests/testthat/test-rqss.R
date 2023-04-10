@@ -1,5 +1,6 @@
 skip_on_cran()
 skip_if_not_installed("quantreg")
+skip_if_not_installed("interp")
 
 ## NOTE Run this test conditionally every now and then, requires package
 ##      "tripack", which has a non-standard license.
