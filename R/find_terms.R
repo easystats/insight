@@ -140,8 +140,13 @@ find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
 
 #' @export
-find_terms.mipo <- function(x, ...) {
-  NULL
+find_terms.mipo <- function(x, flatten = FALSE, ...) {
+  l <- list(conditional = unique(as.vector(summary(x)$term)))
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    l
+  }
 }
 
 

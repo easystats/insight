@@ -251,7 +251,7 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
     return(out)
   }
 
-  maxlev <- max(sapply(fac, length))
+  maxlev <- max(lengths(fac, use.names = FALSE))
   pad <- data[rep(1, maxlev), , drop = FALSE]
   for (n in names(fac)) {
     pad[[n]][seq_along(fac[[n]])] <- fac[[n]]

@@ -1427,11 +1427,16 @@ get_statistic.lqm <- get_statistic.lqmm
 
 #' @export
 get_statistic.mipo <- function(x, ...) {
+  s <- summary(x)
   params <- data.frame(
-    Parameter = as.vector(summary(x)$term),
-    Statistic = as.vector(summary(x)$statistic),
+    Parameter = as.vector(s$term),
+    Statistic = as.vector(s$statistic),
     stringsAsFactors = FALSE
   )
+  # check for ordinal-alike models
+  if ("y.level" %in% colnames(s)) {
+    params$Response <- as.vector(s$y.level)
+  }
   out <- text_remove_backticks(params)
   attr(out, "statistic") <- find_statistic(x)
   out
