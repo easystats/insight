@@ -375,6 +375,10 @@ test_that("get_predicted - rstanarm", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
 
+  suppressPackageStartupMessages({
+    library(rstanarm)
+  })
+
   # LM
   x <- rstanarm::stan_glm(mpg ~ cyl + hp, data = mtcars, refresh = 0, seed = 333)
   rezlink <- summary(get_predicted(x, predict = "link", ci = 0.95))
