@@ -149,6 +149,13 @@ test_that("get_datagrid - data", {
 
 
 test_that("get_datagrid - models", {
+
+  # see https://github.com/georgheinze/logistf/pull/54
+  skip_if(
+    "as.character.formula" %in% methods(as.character),
+    "Some package uses `formula.tools::as.character.formula()` which breaks `find_formula()`."
+  )
+
   skip_if_not_installed("gamm4")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("mgcv")

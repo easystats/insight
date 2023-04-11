@@ -46,6 +46,13 @@ mods <- list(Mc, Mc2, M, B, W)
 
 
 test_that("afex_aov: afex", {
+
+  # see https://github.com/georgheinze/logistf/pull/54
+  skip_if(
+    "as.character.formula" %in% methods(as.character),
+    "Some package uses `formula.tools::as.character.formula()` which breaks `find_formula()`."
+  )
+
   expect_identical(unique(unlist(sapply(mods, model_name))), "afex_aov")
   expect_identical(unique(unlist(sapply(mods, find_algorithm))), "OLS")
   expect_identical(unique(unlist(sapply(mods, find_statistic))), "F-statistic")
@@ -107,6 +114,13 @@ test_that("afex_aov: model values", {
 })
 
 test_that("afex_aov: formula and parameters", {
+
+  # see https://github.com/georgheinze/logistf/pull/54
+  skip_if(
+    "as.character.formula" %in% methods(as.character),
+    "Some package uses `formula.tools::as.character.formula()` which breaks `find_formula()`."
+  )
+
   # find_formula
   expect_identical(
     find_terms(Mc2),
