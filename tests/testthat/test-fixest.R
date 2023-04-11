@@ -145,14 +145,14 @@ test_that("get_data", {
   expect_length(tmp, nrow(iris))
 })
 
-if (skip_if_not_installed("parameters")) {
-  test_that("get_df", {
-    expect_equal(get_df(m1, type = "residual"), 38290, ignore_attr = TRUE)
-    expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
-    ## TODO: check if statistic is z or t for this model
-    expect_equal(get_df(m1, type = "wald"), 14, ignore_attr = TRUE)
-  })
-}
+skip_if_not_installed("parameters")
+test_that("get_df", {
+  expect_equal(get_df(m1, type = "residual"), 38290, ignore_attr = TRUE)
+  expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
+  ## TODO: check if statistic is z or t for this model
+  expect_equal(get_df(m1, type = "wald"), 14, ignore_attr = TRUE)
+})
+
 
 test_that("find_formula", {
   expect_length(find_formula(m1), 2)

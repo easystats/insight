@@ -46,7 +46,6 @@ mods <- list(Mc, Mc2, M, B, W)
 
 
 test_that("afex_aov: afex", {
-
   # see https://github.com/georgheinze/logistf/pull/54
   skip_if(
     "as.character.formula" %in% methods(as.character),
@@ -114,7 +113,6 @@ test_that("afex_aov: model values", {
 })
 
 test_that("afex_aov: formula and parameters", {
-
   # see https://github.com/georgheinze/logistf/pull/54
   skip_if(
     "as.character.formula" %in% methods(as.character),
