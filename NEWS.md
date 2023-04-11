@@ -13,7 +13,8 @@
 
 ## General
 
-* Improved support for `mclogit` models (package *mclogit*).
+* Improved support for `mclogit` models (package *mclogit*) and `mipo` objects
+  (package *mice*) for models with ordinal or categorical response.
 
 ## New supported models
 

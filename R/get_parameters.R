@@ -293,11 +293,16 @@ get_parameters.riskRegression <- function(x, ...) {
 
 #' @export
 get_parameters.mipo <- function(x, ...) {
+  s <- summary(x)
   out <- data.frame(
-    Parameter = as.vector(summary(x)$term),
-    Estimate = as.vector(summary(x)$estimate),
+    Parameter = as.vector(s$term),
+    Estimate = as.vector(s$estimate),
     stringsAsFactors = FALSE
   )
+  # check for ordinal-alike models
+  if ("y.level" %in% colnames(s)) {
+    out$Response <- as.vector(s$y.level)
+  }
   text_remove_backticks(out)
 }
 
