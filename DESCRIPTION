@@ -30,7 +30,7 @@ Authors@R:
              comment = c(ORCID = "0000-0002-4287-4801")),
       person(given = "Brenton M.",
              family = "Wiernik",
-             role = c("aut"),
+             role = c("aut", "ctb"),
              email = "brenton@wiernik.org",
              comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")),
       person(given = "Vincent", 
@@ -38,6 +38,11 @@ Authors@R:
              email = "vincent.arel-bundock@umontreal.ca", 
              role = c("aut", "ctb"),
              comment = c(ORCID = "0000-0003-2042-7063")),
+      person(given = "Etienne", 
+             family = "Bacher",
+             email = "etienne.bacher@protonmail.com", 
+             role = c("aut", "ctb"),
+             comment = c(ORCID = "0000-0002-9271-5075")),
       person(given = "Alex",
              family = "Hayes",
              role = c("rev"),
@@ -104,6 +109,7 @@ Suggests:
     fungible,
     gam,
     gamlss,
+    gamlss.data,
     gamm4,
     gbm,
     gee,
@@ -114,6 +120,7 @@ Suggests:
     gmnl,
     gt,
     httr,
+    interp,
     ivreg,
     JM,
     knitr,
@@ -133,6 +140,7 @@ Suggests:
     MCMCglmm,
     merTools,
     metaBMA,
+    metadat,
     metafor,
     metaplus,
     mgcv,
@@ -157,6 +165,7 @@ Suggests:
     quantreg,
     rmarkdown,
     rms,
+    rpart,
     robustbase,
     robustlmm,
     rstanarm (>= 2.21.1),
@@ -179,6 +188,7 @@ Language: en-US
 RoxygenNote: 7.2.3.9000
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
+Config/testthat/parallel: true
 Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,

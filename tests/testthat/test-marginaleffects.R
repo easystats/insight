@@ -1,11 +1,11 @@
-testthat::skip_on_cran()
-skip_if_not_or_load_if_installed("marginaleffects")
-skip_if_not_or_load_if_installed("emmeans")
+skip_on_cran()
+skip_if_not_installed("marginaleffects")
+skip_if_not_installed("emmeans")
 
 test_that("marginaleffects", {
   m <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-  x <- marginaleffects(m,
+  x <- marginaleffects::marginaleffects(m,
     variables = "Petal.Length",
     newdata = insight::get_datagrid(m, at = "Species")
   )

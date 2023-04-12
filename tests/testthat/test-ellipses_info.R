@@ -1,5 +1,3 @@
-data(iris)
-
 m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
 m2 <- lm(Sepal.Length ~ Species, data = iris)
 m3 <- lm(Sepal.Length ~ Species, data = iris)
@@ -69,38 +67,38 @@ test_that("ellipses_info, binomial", {
   expect_false(any(attributes(info)$is_linear))
 })
 
-if (skip_if_not_or_load_if_installed("lme4")) {
-  data(sleepstudy)
-  m1 <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-  m2 <- suppressMessages(lmer(Reaction ~ Days + (1 | Subject) + (1 | Days), data = sleepstudy))
+skip_if_not_installed("lme4")
 
-  info <- ellipsis_info(m1, m2, verbose = FALSE)
-  test_that("ellipses_info, random effects", {
-    expect_true(attributes(info)$same_fixef)
-    expect_false(attributes(info)$same_ranef)
-    expect_true(attributes(info)$re_nested)
-    expect_true(attributes(info)$all_mixed_models)
-    expect_true(attributes(info)$re_nested_increasing)
-    expect_false(attributes(info)$re_nested_decreasing)
-  })
+data(sleepstudy, package = "lme4")
+m1 <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+m2 <- suppressMessages(lme4::lmer(Reaction ~ Days + (1 | Subject) + (1 | Days), data = sleepstudy))
 
-  info <- ellipsis_info(m2, m1, verbose = FALSE)
-  test_that("ellipses_info, random effects", {
-    expect_true(attributes(info)$re_nested)
-    expect_false(attributes(info)$re_nested_increasing)
-    expect_true(attributes(info)$re_nested_decreasing)
-  })
+info <- ellipsis_info(m1, m2, verbose = FALSE)
+test_that("ellipses_info, random effects", {
+  expect_true(attributes(info)$same_fixef)
+  expect_false(attributes(info)$same_ranef)
+  expect_true(attributes(info)$re_nested)
+  expect_true(attributes(info)$all_mixed_models)
+  expect_true(attributes(info)$re_nested_increasing)
+  expect_false(attributes(info)$re_nested_decreasing)
+})
 
-  m1 <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-  m2 <- lmer(Reaction ~ 1 + (1 | Subject), data = sleepstudy)
+info <- ellipsis_info(m2, m1, verbose = FALSE)
+test_that("ellipses_info, random effects", {
+  expect_true(attributes(info)$re_nested)
+  expect_false(attributes(info)$re_nested_increasing)
+  expect_true(attributes(info)$re_nested_decreasing)
+})
 
-  info <- ellipsis_info(m1, m2)
-  test_that("ellipses_info, random effects", {
-    expect_false(attributes(info)$same_fixef)
-    expect_true(attributes(info)$same_ranef)
-    expect_true(attributes(info)$re_nested)
-    expect_true(attributes(info)$all_mixed_models)
-    expect_true(attributes(info)$re_nested_increasing)
-    expect_true(attributes(info)$re_nested_decreasing)
-  })
-}
+m1 <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+m2 <- lme4::lmer(Reaction ~ 1 + (1 | Subject), data = sleepstudy)
+
+info <- ellipsis_info(m1, m2)
+test_that("ellipses_info, random effects", {
+  expect_false(attributes(info)$same_fixef)
+  expect_true(attributes(info)$same_ranef)
+  expect_true(attributes(info)$re_nested)
+  expect_true(attributes(info)$all_mixed_models)
+  expect_true(attributes(info)$re_nested_increasing)
+  expect_true(attributes(info)$re_nested_decreasing)
+})

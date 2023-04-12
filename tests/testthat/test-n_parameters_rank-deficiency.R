@@ -1,5 +1,3 @@
-set.seed(123)
-data(mtcars)
 m <- lm(formula = wt ~ am * cyl * vs, data = mtcars)
 
 test_that("n_parameters-rank_deficiency", {

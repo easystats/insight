@@ -1,7 +1,8 @@
-skip_if_not_or_load_if_installed("pscl")
-data("bioChemists")
+skip_if_not_installed("pscl")
 
-m1 <- zeroinfl(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)
+data(bioChemists, package = "pscl")
+
+m1 <- pscl::zeroinfl(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_poisson)
@@ -132,7 +133,7 @@ test_that("get_statistic", {
 })
 
 test_that("get_varcov", {
-  skip_if_not_or_load_if_installed("sandwich")
+  library(sandwich) # needs to be loaded
 
   set.seed(123)
   vc1 <- get_varcov(m1, component = "all", vcov = "BS", vcov_args = list(R = 50))
@@ -151,7 +152,7 @@ test_that("get_varcov", {
   expect_equal(vc1, vc2[zero_col, zero_col], ignore_attr = TRUE)
 })
 
-m2 <- zeroinfl(formula = art ~ . | 1, data = bioChemists, dist = "negbin")
+m2 <- pscl::zeroinfl(formula = art ~ . | 1, data = bioChemists, dist = "negbin")
 
 test_that("get_statistic", {
   expect_equal(

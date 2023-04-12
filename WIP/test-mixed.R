@@ -1,7 +1,7 @@
 # TODO: why the model fails to run
 # see https://github.com/easystats/insight/pull/735
-skip_if_not_or_load_if_installed("lme4")
-skip_if_not_or_load_if_installed("afex")
+skip_if_not_installed("lme4")
+skip_if_not_installed("afex")
 
 data(sleepstudy, package = "lme4")
 df_sleepstudy <- sleepstudy

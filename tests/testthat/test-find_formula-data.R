@@ -1,4 +1,9 @@
-data(mtcars)
+# see https://github.com/georgheinze/logistf/pull/54
+skip_if(
+  "as.character.formula" %in% methods(as.character),
+  "Some package uses `formula.tools::as.character.formula()` which breaks `find_formula()`."
+)
+
 d <- mtcars
 m1 <- lm(mtcars$mpg ~ mtcars$hp * mtcars$cyl + poly(mtcars$drat, 2) / mtcars$disp)
 m2 <- lm(mtcars$mpg ~ d$hp * mtcars$cyl + poly(mtcars$drat, 2) / mtcars$disp)

@@ -1,10 +1,14 @@
-skip_if_not_or_load_if_installed("survival")
+skip_if_not_installed("survival")
 
-mod_survreg_1 <- survreg(Surv(futime, fustat) ~ ecog.ps + rx,
+Surv <- survival::Surv
+strata <- survival::strata
+ovarian <<- survival::ovarian
+
+mod_survreg_1 <- survival::survreg(Surv(futime, fustat) ~ ecog.ps + rx,
   data = ovarian,
   dist = "exponential"
 )
-mod_survreg_2 <- survreg(Surv(time, status) ~ ph.ecog + age + strata(sex), data = lung)
+mod_survreg_2 <- survival::survreg(Surv(time, status) ~ ph.ecog + age + strata(sex), data = survival::lung)
 
 test_that("model_info", {
   expect_false(model_info(mod_survreg_1)$is_linear)

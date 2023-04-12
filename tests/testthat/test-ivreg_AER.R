@@ -1,6 +1,6 @@
-skip_if_not_or_load_if_installed("AER")
+skip_if_not_installed("AER")
 
-data(CigarettesSW)
+data(CigarettesSW, package = "AER")
 CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
 CigarettesSW$rincome <- with(CigarettesSW, income / population / cpi)
 CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax) / cpi)
@@ -139,8 +139,3 @@ test_that("find_terms", {
 test_that("find_statistic", {
   expect_identical(find_statistic(mod_aer_ivreg), "t-statistic")
 })
-
-# to avoid `Registered S3 methods overwritten by 'ivreg'` messages
-if (isNamespaceLoaded("AER")) {
-  unloadNamespace("AER")
-}
