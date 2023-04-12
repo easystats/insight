@@ -1,23 +1,23 @@
 skip_on_os("mac")
 skip_if(getRversion() < "3.6.0")
 skip_if_not_installed("fixest")
-skip_if_not_or_load_if_installed("fixest")
+skip_if_not_installed("fixest")
 
 # avoid warnings
 fixest::setFixest_nthreads(1)
 
-data(trade)
-m1 <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
-m2 <- femlm(log1p(Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")
-m3 <- feglm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "poisson")
-m4 <- feols(
+data(trade, package = "fixest")
+m1 <- fixest::femlm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
+m2 <- fixest::femlm(log1p(Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")
+m3 <- fixest::feglm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "poisson")
+m4 <- fixest::feols(
   Sepal.Width ~ Petal.Length | Species | Sepal.Length ~ Petal.Width,
   data = iris
 )
 
 
 test_that("robust variance-covariance", {
-  mod <- feols(mpg ~ hp + drat | cyl, data = mtcars)
+  mod <- fixest::feols(mpg ~ hp + drat | cyl, data = mtcars)
   # default is clustered
   expect_equal(
     sqrt(diag(vcov(mod))),
@@ -42,9 +42,9 @@ test_that("robust variance-covariance", {
 
 
 test_that("offset", {
-  tmp <- feols(mpg ~ hp, offset = ~ log(qsec), data = mtcars)
+  tmp <- fixest::feols(mpg ~ hp, offset = ~ log(qsec), data = mtcars)
   expect_identical(find_offset(tmp), "qsec")
-  tmp <- feols(mpg ~ hp, offset = ~qsec, data = mtcars)
+  tmp <- fixest::feols(mpg ~ hp, offset = ~qsec, data = mtcars)
   expect_identical(find_offset(tmp), "qsec")
 })
 
@@ -145,14 +145,14 @@ test_that("get_data", {
   expect_length(tmp, nrow(iris))
 })
 
-if (skip_if_not_or_load_if_installed("parameters")) {
-  test_that("get_df", {
-    expect_equal(get_df(m1, type = "residual"), 38290, ignore_attr = TRUE)
-    expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
-    ## TODO: check if statistic is z or t for this model
-    expect_equal(get_df(m1, type = "wald"), 14, ignore_attr = TRUE)
-  })
-}
+skip_if_not_installed("parameters")
+test_that("get_df", {
+  expect_equal(get_df(m1, type = "residual"), 38290, ignore_attr = TRUE)
+  expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
+  ## TODO: check if statistic is z or t for this model
+  expect_equal(get_df(m1, type = "wald"), 14, ignore_attr = TRUE)
+})
+
 
 test_that("find_formula", {
   expect_length(find_formula(m1), 2)
@@ -286,7 +286,7 @@ test_that("get_data works when model data has name of  reserved words", {
   ## NOTE check back every now and then and see if tests still work
   skip("works interactively")
   rep <- data.frame(Y = runif(100) > 0.5, X = rnorm(100))
-  m <- feglm(Y ~ X, data = rep, family = binomial)
+  m <- fixest::feglm(Y ~ X, data = rep, family = binomial)
   out <- get_data(m)
   expect_s3_class(out, "data.frame")
   expect_equal(
@@ -308,7 +308,7 @@ test_that("get_data works when model data has name of  reserved words", {
 
 
 test_that("find_variables with interaction", {
-  mod <- suppressMessages(feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars))
+  mod <- suppressMessages(fixest::feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars))
   expect_equal(
     find_variables(mod),
     list(
@@ -319,7 +319,7 @@ test_that("find_variables with interaction", {
   )
 
   # used to produce a warning
-  mod <- feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars)
+  mod <- fixest::feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars)
   expect_warning(find_variables(mod), NA)
 })
 
@@ -328,7 +328,7 @@ test_that("find_predictors with i(f1, i.f2) interaction", {
   aq <- airquality
   aq$week <- aq$Day %/% 7 + 1
 
-  mod <- feols(Ozone ~ i(Month, i.week), aq, notes = FALSE)
+  mod <- fixest::feols(Ozone ~ i(Month, i.week), aq, notes = FALSE)
   expect_equal(
     find_predictors(mod),
     list(

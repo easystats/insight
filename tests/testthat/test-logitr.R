@@ -1,5 +1,6 @@
-skip_if_not_or_load_if_installed("logitr")
 skip_if_not_installed("logitr", minimum_version = "0.8.0")
+
+data(yogurt, package = "logitr")
 
 mod <- suppressMessages(logitr::logitr(
   data    = yogurt,

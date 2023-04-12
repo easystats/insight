@@ -40,7 +40,6 @@ test_that("get_data.t-test, one-sample", {
 
 # Two sample
 test_that("get_data.t-test, two-sample", {
-  data(mtcars)
   tt3 <- t.test(mtcars$mpg ~ mtcars$am)
   tt4 <- t.test(mtcars$mpg[mtcars$am == 0], mtcars$mpg[mtcars$am == 1])
   expect_identical(colnames(get_data(tt3)), c("x", "y"))

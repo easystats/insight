@@ -1,21 +1,20 @@
-skip_if_not_or_load_if_installed("mclogit")
+skip_if_not_installed("mclogit")
 
-data(Transport)
-mod_mb <- mblogit(factor(gear) ~ mpg + hp, data = mtcars, trace = FALSE)
-mod_mc <- mclogit(resp | suburb ~ distance + cost, data = Transport, trace = FALSE)
+data(Transport, package = "mclogit")
+mod_mb <- mclogit::mblogit(factor(gear) ~ mpg + hp, data = mtcars, trace = FALSE)
+mod_mc <- mclogit::mclogit(resp | suburb ~ distance + cost, data = Transport, trace = FALSE)
 
 test_that("mblogit and mclogit is not linear", {
-  if (packageVersion("mclogit") >= "0.9.1") {
-    expect_false(model_info(mod_mb)$is_linear)
-    expect_true(model_info(mod_mb)$is_logit)
-    expect_true(is_model(mod_mb))
-    expect_true(is_model_supported(mod_mb))
+  skip_if_not(packageVersion("mclogit") >= "0.9.1")
+  expect_false(model_info(mod_mb)$is_linear)
+  expect_true(model_info(mod_mb)$is_logit)
+  expect_true(is_model(mod_mb))
+  expect_true(is_model_supported(mod_mb))
 
-    expect_false(model_info(mod_mc)$is_linear)
-    expect_true(model_info(mod_mc)$is_logit)
-    expect_true(is_model(mod_mc))
-    expect_true(is_model_supported(mod_mc))
-  }
+  expect_false(model_info(mod_mc)$is_linear)
+  expect_true(model_info(mod_mc)$is_logit)
+  expect_true(is_model(mod_mc))
+  expect_true(is_model_supported(mod_mc))
 })
 
 test_that("get_parameters", {

@@ -1,5 +1,3 @@
-data(iris)
-
 test_that("find_parameters", {
   expect_error(find_parameters(iris))
 })

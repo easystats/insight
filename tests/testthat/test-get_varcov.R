@@ -1,9 +1,9 @@
-skip_if_not_or_load_if_installed("sandwich")
-suppressPackageStartupMessages(skip_if_not_or_load_if_installed("clubSandwich"))
+skip_if_not_installed("sandwich")
+skip_if_not_installed("clubSandwich")
 
 test_that("informative error in get_varcov.default", {
-  skip_if_not_or_load_if_installed("lme4")
-  mod <- lmer(mpg ~ hp + (1 | cyl), data = mtcars)
+  skip_if_not_installed("lme4")
+  mod <- lme4::lmer(mpg ~ hp + (1 | cyl), data = mtcars)
   # sandwich: not supported
   expect_error(get_varcov(mod, vcov = "HC2"))
   # clubSandwich: supported
@@ -18,21 +18,21 @@ test_that("lm: sandwich", {
   mod <- lm(mpg ~ hp * wt, data = mtcars)
   expect_equal(
     get_varcov(mod, vcov = "HC1"),
-    vcovHC(mod, type = "HC1"),
+    sandwich::vcovHC(mod, type = "HC1"),
     ignore_attr = TRUE
   )
   expect_equal(
     get_varcov(mod, vcov = "HC4"),
-    vcovHC(mod, type = "HC4"),
+    sandwich::vcovHC(mod, type = "HC4"),
     ignore_attr = TRUE
   )
   expect_equal(
     get_varcov(mod, vcov = "HC", vcov_args = list(type = "HC4")),
-    vcovHC(mod, type = "HC4"),
+    sandwich::vcovHC(mod, type = "HC4"),
     ignore_attr = TRUE
   )
-  expect_equal(get_varcov(mod, vcov = vcovOPG),
-    vcovOPG(mod),
+  expect_equal(get_varcov(mod, vcov = sandwich::vcovOPG),
+    sandwich::vcovOPG(mod),
     tolerance = 1e-5
   )
 })
@@ -60,9 +60,9 @@ test_that("mlm: sandwich", {
 
 
 test_that("warning: not yet supported", {
-  skip_if_not_or_load_if_installed("pscl")
+  skip_if_not_installed("pscl")
   data("bioChemists", package = "pscl")
-  mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+  mod <- pscl::hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
   expect_error(get_varcov(mod, vcov = "HC3"), regexp = "supported by one or")
 })
 

@@ -1,7 +1,8 @@
-skip_if_not_or_load_if_installed("mhurdle")
+skip_if_not_installed("mhurdle")
+
 data("Interview", package = "mhurdle")
-m1 <- mhurdle(shows ~ 0 | linc + smsa + age + educ + size, data = Interview, h2 = TRUE, dist = "n", method = "bhhh")
-m2 <- mhurdle(shows ~ educ + size | linc | smsa + age,
+m1 <- mhurdle::mhurdle(shows ~ 0 | linc + smsa + age + educ + size, data = Interview, h2 = TRUE, dist = "n", method = "bhhh")
+m2 <- mhurdle::mhurdle(shows ~ educ + size | linc | smsa + age,
   data = Interview,
   h2 = FALSE, method = "bhhh", corr = TRUE, finalHessian = TRUE
 )

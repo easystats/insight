@@ -1,7 +1,7 @@
-skip_if_not_or_load_if_installed("metaplus")
+skip_if_not_installed("metaplus")
 
-data(mag)
-m <- metaplus(yi, sei, slab = study, data = mag)
+data(mag, package = "metaplus")
+m <- metaplus::metaplus(yi, sei, slab = study, data = mag)
 
 test_that("find_parameters", {
   expect_identical(

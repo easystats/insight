@@ -1,30 +1,28 @@
-if (skip_if_not_or_load_if_installed("BayesFactor")) {
-  model <- BayesFactor::proportionBF(15, 25, p = 0.5)
-  mi <- insight::model_info(model)
-  test_that("model_info-BF-proptest", {
-    expect_true(mi$is_binomial)
-    expect_false(mi$is_linear)
-  })
+skip_if_not_installed("BayesFactor")
 
-  model <- prop.test(15, 25, p = 0.5)
-  mi <- insight::model_info(model)
-  test_that("model_info-BF-proptest", {
-    expect_true(mi$is_binomial)
-    expect_false(mi$is_linear)
-    expect_false(mi$is_correlation)
-  })
-}
+model <- BayesFactor::proportionBF(15, 25, p = 0.5)
+mi <- insight::model_info(model)
+test_that("model_info-BF-proptest", {
+  expect_true(mi$is_binomial)
+  expect_false(mi$is_linear)
+})
 
+model <- prop.test(15, 25, p = 0.5)
+mi <- insight::model_info(model)
+test_that("model_info-BF-proptest", {
+  expect_true(mi$is_binomial)
+  expect_false(mi$is_linear)
+  expect_false(mi$is_correlation)
+})
 
-if (skip_if_not_or_load_if_installed("tweedie") && skip_if_not_or_load_if_installed("statmod")) {
-  unloadNamespace("glmmTMB")
-  d <- data.frame(x = 1:20, y = rgamma(20, shape = 5))
-  # Fit a poisson generalized linear model with identity link
-  model <- glm(y ~ x, data = d, family = statmod::tweedie(var.power = 1, link.power = 1))
-  mi <- insight::model_info(model)
-  test_that("model_info-tweedie", {
-    expect_true(mi$is_tweedie)
-    expect_false(mi$is_poisson)
-    expect_equal(mi$family, "Tweedie")
-  })
-}
+skip_if_not_installed("tweedie")
+
+d <- data.frame(x = 1:20, y = rgamma(20, shape = 5))
+# Fit a poisson generalized linear model with identity link
+model <- glm(y ~ x, data = d, family = statmod::tweedie(var.power = 1, link.power = 1))
+mi <- insight::model_info(model)
+test_that("model_info-tweedie", {
+  expect_true(mi$is_tweedie)
+  expect_false(mi$is_poisson)
+  expect_equal(mi$family, "Tweedie")
+})

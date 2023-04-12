@@ -1,5 +1,5 @@
 test_that("standardize_names works as expected with parameters", {
-  skip_if_not_or_load_if_installed("parameters")
+  skip_if_not_installed("parameters")
 
   set.seed(123)
 
@@ -55,7 +55,7 @@ test_that("standardize_names works as expected with parameters", {
 
 
 test_that("standardize_names works as expected with performance", {
-  skip_if_not_or_load_if_installed("performance")
+  skip_if_not_installed("performance")
   set.seed(123)
 
   # lm object
@@ -72,7 +72,7 @@ test_that("standardize_names works as expected with performance", {
 })
 
 test_that("standardize_names works as expected with datawizard", {
-  skip_if_not_or_load_if_installed("datawizard")
+  skip_if_not_installed("datawizard")
   set.seed(123)
 
   x <- datawizard::describe_distribution(rnorm(50))

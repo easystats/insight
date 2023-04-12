@@ -1,20 +1,15 @@
 d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
 
 test_that("export_table", {
-  out <- capture.output(cat(export_table(d)))
-  expect_equal(out, c(
-    "     a |     b", "--------------", "  1.30 |    ab",
-    "  2.00 |    cd", "543.00 | abcde"
-  ))
+  expect_snapshot(export_table(d))
 })
 
 test_that("export_table", {
-  out <- capture.output(cat(export_table(d, sep = " ", header = "*", digits = 1)))
-  expect_equal(out, c(
-    "    a     b", "***********", "  1.3    ab",
-    "  2.0    cd", "543.0 abcde"
-  ))
+  expect_snapshot(export_table(d, sep = " ", header = "*", digits = 1))
 })
+
+
+# snapshots have a very messy output for format = "md"
 
 test_that("export_table", {
   out <- export_table(d, format = "md")

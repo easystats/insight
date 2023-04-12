@@ -1,4 +1,3 @@
-data(iris)
 iris$`a m` <- iris$Species
 iris$`Sepal Width` <- iris$Sepal.Width
 dat <<- iris

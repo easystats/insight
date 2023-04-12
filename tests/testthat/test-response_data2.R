@@ -1,116 +1,114 @@
-if (suppressWarnings(
-  skip_if_not_or_load_if_installed("lme4")
-)) {
-  data(cbpp)
-  cbpp$trials <<- cbpp$size - cbpp$incidence
+skip_if_not_installed("lme4")
 
-  m1 <- glmer(
-    cbind(incidence, trials) ~ period + (1 | herd),
-    data = cbpp,
-    family = binomial
+data(cbpp, package = "lme4")
+cbpp$trials <<- cbpp$size - cbpp$incidence
+
+m1 <- lme4::glmer(
+  cbind(incidence, trials) ~ period + (1 | herd),
+  data = cbpp,
+  family = binomial
+)
+m2 <- lme4::glmer(
+  cbind(incidence, size - incidence) ~ period + (1 | herd),
+  data = cbpp,
+  family = binomial
+)
+m3 <- glm(
+  cbind(incidence, trials) ~ period,
+  data = cbpp,
+  family = binomial
+)
+m4 <- glm(
+  cbind(incidence, size - incidence) ~ period,
+  data = cbpp,
+  family = binomial
+)
+m5 <- lme4::glmer(
+  cbind(incidence, size - incidence) ~ (1 | herd),
+  data = cbpp,
+  family = binomial
+)
+
+test_that("find_response", {
+  expect_equal(
+    find_response(m1, combine = TRUE),
+    "cbind(incidence, trials)"
   )
-  m2 <- glmer(
-    cbind(incidence, size - incidence) ~ period + (1 | herd),
-    data = cbpp,
-    family = binomial
+  expect_equal(
+    find_response(m2, combine = TRUE),
+    "cbind(incidence, size - incidence)"
   )
-  m3 <- glm(
-    cbind(incidence, trials) ~ period,
-    data = cbpp,
-    family = binomial
+  expect_equal(
+    find_response(m3, combine = TRUE),
+    "cbind(incidence, trials)"
   )
-  m4 <- glm(
-    cbind(incidence, size - incidence) ~ period,
-    data = cbpp,
-    family = binomial
+  expect_equal(
+    find_response(m4, combine = TRUE),
+    "cbind(incidence, size - incidence)"
   )
-  m5 <- glmer(
-    cbind(incidence, size - incidence) ~ (1 | herd),
-    data = cbpp,
-    family = binomial
+  expect_equal(
+    find_response(m5, combine = TRUE),
+    "cbind(incidence, size - incidence)"
+  )
+  expect_equal(
+    find_response(m1, combine = FALSE),
+    c("incidence", "trials")
+  )
+  expect_equal(find_response(m2, combine = FALSE), c("incidence", "size"))
+  expect_equal(
+    find_response(m3, combine = FALSE),
+    c("incidence", "trials")
+  )
+  expect_equal(find_response(m4, combine = FALSE), c("incidence", "size"))
+  expect_equal(find_response(m5, combine = FALSE), c("incidence", "size"))
+})
+
+test_that("get_response", {
+  expect_equal(colnames(get_response(m1)), c("incidence", "trials"))
+  expect_equal(colnames(get_response(m2)), c("incidence", "size"))
+  expect_equal(colnames(get_response(m3)), c("incidence", "trials"))
+  expect_equal(colnames(get_response(m4)), c("incidence", "size"))
+  expect_equal(colnames(get_response(m5)), c("incidence", "size"))
+})
+
+test_that("get_data", {
+  expect_equal(
+    colnames(get_data(m1)),
+    c("incidence", "trials", "period", "herd")
+  )
+  expect_equal(
+    colnames(get_data(m2)),
+    c("incidence", "size", "period", "herd")
+  )
+  get_data(m3)
+  get_data(m4)
+  expect_equal(
+    colnames(get_data(m5)),
+    c("incidence", "size", "herd")
+  )
+})
+
+set.seed(123)
+
+m6 <-
+  stats::aov(
+    formula = mpg ~ wt + qsec + Error(disp / am),
+    data = mtcars
   )
 
-  test_that("find_response", {
-    expect_equal(
-      find_response(m1, combine = TRUE),
-      "cbind(incidence, trials)"
-    )
-    expect_equal(
-      find_response(m2, combine = TRUE),
-      "cbind(incidence, size - incidence)"
-    )
-    expect_equal(
-      find_response(m3, combine = TRUE),
-      "cbind(incidence, trials)"
-    )
-    expect_equal(
-      find_response(m4, combine = TRUE),
-      "cbind(incidence, size - incidence)"
-    )
-    expect_equal(
-      find_response(m5, combine = TRUE),
-      "cbind(incidence, size - incidence)"
-    )
-    expect_equal(
-      find_response(m1, combine = FALSE),
-      c("incidence", "trials")
-    )
-    expect_equal(find_response(m2, combine = FALSE), c("incidence", "size"))
-    expect_equal(
-      find_response(m3, combine = FALSE),
-      c("incidence", "trials")
-    )
-    expect_equal(find_response(m4, combine = FALSE), c("incidence", "size"))
-    expect_equal(find_response(m5, combine = FALSE), c("incidence", "size"))
-  })
+# TO DO
+# test_that("mod-info", {
+#   get_data(m6)
+#   find_response(m6)
+#   get_response(m6)
+#   find_formula(m6)
+# })
 
-  test_that("get_response", {
-    expect_equal(colnames(get_response(m1)), c("incidence", "trials"))
-    expect_equal(colnames(get_response(m2)), c("incidence", "size"))
-    expect_equal(colnames(get_response(m3)), c("incidence", "trials"))
-    expect_equal(colnames(get_response(m4)), c("incidence", "size"))
-    expect_equal(colnames(get_response(m5)), c("incidence", "size"))
-  })
-
-  test_that("get_data", {
-    expect_equal(
-      colnames(get_data(m1)),
-      c("incidence", "trials", "period", "herd")
-    )
-    expect_equal(
-      colnames(get_data(m2)),
-      c("incidence", "size", "period", "herd")
-    )
-    get_data(m3)
-    get_data(m4)
-    expect_equal(
-      colnames(get_data(m5)),
-      c("incidence", "size", "herd")
-    )
-  })
-
-  set.seed(123)
-  data(mtcars)
-  m6 <-
-    stats::aov(
-      formula = mpg ~ wt + qsec + Error(disp / am),
-      data = mtcars
-    )
-
-  # TO DO
-  # test_that("mod-info", {
-  #   get_data(m6)
-  #   find_response(m6)
-  #   get_response(m6)
-  #   find_formula(m6)
-  # })
-
-  test_that("find_statistic", {
-    expect_identical(find_statistic(m1), "z-statistic")
-    expect_identical(find_statistic(m2), "z-statistic")
-    expect_identical(find_statistic(m3), "z-statistic")
-    expect_identical(find_statistic(m4), "z-statistic")
-    expect_identical(find_statistic(m5), "z-statistic")
-    expect_identical(find_statistic(m6), "F-statistic")
-  })
-}
+test_that("find_statistic", {
+  expect_identical(find_statistic(m1), "z-statistic")
+  expect_identical(find_statistic(m2), "z-statistic")
+  expect_identical(find_statistic(m3), "z-statistic")
+  expect_identical(find_statistic(m4), "z-statistic")
+  expect_identical(find_statistic(m5), "z-statistic")
+  expect_identical(find_statistic(m6), "F-statistic")
+})

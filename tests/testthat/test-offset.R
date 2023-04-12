@@ -1,43 +1,41 @@
-if (
+skip_if_not_installed("pscl")
 
-  skip_if_not_or_load_if_installed("pscl")) {
-  # Generate some zero-inflated data
-  set.seed(123)
-  N <- 100 # Samples
-  x <- runif(N, 0, 10) # Predictor
-  off <- rgamma(N, 3, 2) # Offset variable
-  yhat <- -1 + x * 0.5 + log(off) # Prediction on log scale
-  y <- rpois(N, exp(yhat)) # Poisson process
-  y <- ifelse(rbinom(N, 1, 0.3), 0, y) # Zero-inflation process
+# Generate some zero-inflated data
+set.seed(123)
+N <- 100 # Samples
+x <- runif(N, 0, 10) # Predictor
+off <- rgamma(N, 3, 2) # Offset variable
+yhat <- -1 + x * 0.5 + log(off) # Prediction on log scale
+y <- rpois(N, exp(yhat)) # Poisson process
+y <- ifelse(rbinom(N, 1, 0.3), 0, y) # Zero-inflation process
 
-  d <<- data.frame(y = y, x, logOff = log(off)) # Storage dataframe
+d <<- data.frame(y = y, x, logOff = log(off)) # Storage dataframe
 
-  # Fit zeroinfl model using 2 methods of offset input
-  m1 <- zeroinfl(y ~ offset(logOff) + x | 1, data = d, dist = "poisson")
-  m2 <- zeroinfl(y ~ x | 1,
-    data = d,
-    offset = logOff,
-    dist = "poisson"
-  )
+# Fit zeroinfl model using 2 methods of offset input
+m1 <- pscl::zeroinfl(y ~ offset(logOff) + x | 1, data = d, dist = "poisson")
+m2 <- pscl::zeroinfl(y ~ x | 1,
+  data = d,
+  offset = logOff,
+  dist = "poisson"
+)
 
-  # Fit zeroinfl model without offset data
-  m3 <- zeroinfl(y ~ x | 1, data = d, dist = "poisson")
+# Fit zeroinfl model without offset data
+m3 <- pscl::zeroinfl(y ~ x | 1, data = d, dist = "poisson")
 
-  test_that("offset in get_data()", {
-    expect_equal(colnames(get_data(m1)), c("y", "logOff", "x"))
-    expect_equal(colnames(get_data(m2)), c("y", "x", "logOff"))
-    expect_equal(colnames(get_data(m3)), c("y", "x"))
-  })
+test_that("offset in get_data()", {
+  expect_equal(colnames(get_data(m1)), c("y", "logOff", "x"))
+  expect_equal(colnames(get_data(m2)), c("y", "x", "logOff"))
+  expect_equal(colnames(get_data(m3)), c("y", "x"))
+})
 
-  test_that("offset in get_data()", {
-    expect_equal(find_offset(m1), "logOff")
-    expect_equal(find_offset(m2), "logOff")
-    expect_null(find_offset(m3))
-  })
+test_that("offset in get_data()", {
+  expect_equal(find_offset(m1), "logOff")
+  expect_equal(find_offset(m2), "logOff")
+  expect_null(find_offset(m3))
+})
 
-  # test_that("offset in null_model()", {
-  #   nm1 <- null_model(m1)
-  #   nm2 <- null_model(m2)
-  #   expect_equal(coef(nm1), coef(nm2), tolerance = 1e-4)
-  # })
-}
+# test_that("offset in null_model()", {
+#   nm1 <- null_model(m1)
+#   nm2 <- null_model(m2)
+#   expect_equal(coef(nm1), coef(nm2), tolerance = 1e-4)
+# })
