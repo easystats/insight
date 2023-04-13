@@ -48,8 +48,11 @@ test_that("get_weights, with missing", { #754
   set.seed(123)
   mtcars2 <- mtcars
   mtcars2$hp[sample(seq_len(nrow(mtcars)), 5)] <- NA
-  m <- glm(am ~ hp, na.action = na.exclude, data = mtcars2, family = binomial())
-  expect_null(get_weights(m))
+  mtcars2$w <- abs(rnorm(nrow(mtcars), sd = 0.5))
+  m_w1 <- glm(am ~ hp, na.action = na.exclude, data = mtcars2, family = binomial())
+  expect_null(get_weights(m_w1))
+  m_w2 <- suppressWarnings(glm(am ~ hp, na.action = na.exclude, data = mtcars2, weights = w, family = binomial()))
+  expect_equal(weights(m_w2), get_weights(m_w2), tolerance = 1e-4, ignore_attr = TRUE)
 })
 
 
