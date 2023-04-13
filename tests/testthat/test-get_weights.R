@@ -43,6 +43,16 @@ test_that("get_weights", {
   )
 })
 
+
+test_that("get_weights, with missing", { #754
+  set.seed(123)
+  mtcars2 <- mtcars
+  mtcars2$hp[sample(seq_len(nrow(mtcars)), 5)] <- NA
+  m <- glm(am ~ hp, na.action = na.exclude, data = mtcars2, family = binomial())
+  expect_null(get_weights(m))
+})
+
+
 skip_if_not_installed("nlme")
 data("Orthodont", package = "nlme")
 m <- nlme::lme( # a model of variance only
