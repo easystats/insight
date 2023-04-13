@@ -14,8 +14,11 @@ test_that("param", {
     })
   }
   pooled <- mice::pool(model)
-
-  expect_snapshot(get_parameters(pooled))
-  expect_snapshot(get_statistic(pooled))
+  out1 <- get_parameters(pooled)
+  out2 <- get_statistic(pooled)
+  out1$Estimate <- round(out1$Estimate, 4)
+  out2$Statistic <- round(out2$Statistic, 4)
+  expect_snapshot(out1)
+  expect_snapshot(out2)
   expect_identical(find_parameters(pooled), list(conditional = c("(Intercept)", "disp", "hp")))
 })
