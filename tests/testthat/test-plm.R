@@ -1,14 +1,17 @@
-skip_if_not(getRversion() > "3.5")
 skip_if_not_installed("plm")
 
 data(Crime, package = "plm")
-m1 <- suppressWarnings(plm::plm(lcrmrte ~ lprbarr + factor(year) | . - lprbarr + lmix, data = Crime, model = "random"))
+m1 <- suppressWarnings(
+  plm::plm(
+    lcrmrte ~ lprbarr + factor(year) | . - lprbarr + lmix,
+    data = Crime,
+    model = "random"
+  )
+)
 
-# data
 set.seed(123)
 data("Produc", package = "plm")
 
-# model
 m2 <- suppressWarnings(plm::plm(
   formula = log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp,
   data = Produc,
