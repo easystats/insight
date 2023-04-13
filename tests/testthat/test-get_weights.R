@@ -13,17 +13,33 @@ mtcars$w <- abs(rnorm(nrow(mtcars), sd = 0.5))
 
 m1 <- lme4::lmer(mpg ~ am + (1 | cyl), data = mtcars, weights = w)
 m2 <- lm(mpg ~ am, data = mtcars, weights = w)
+m3 <- suppressWarnings(glm(am ~ mpg + as.factor(vs), data = mtcars, weights = w, family = binomial()))
+m4 <- glm(am ~ mpg + as.factor(vs), data = mtcars, weights = w, family = quasibinomial())
 
 test_that("get_weights", {
   expect_equal(
     get_weights(m1),
     mtcars$w,
-    tolerance = 1e-2
+    tolerance = 1e-2,
+    ignore_attr = TRUE
   )
   expect_equal(
     get_weights(m2),
     mtcars$w,
-    tolerance = 1e-2
+    tolerance = 1e-2,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    get_weights(m3),
+    mtcars$w,
+    tolerance = 1e-2,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    get_weights(m4),
+    mtcars$w,
+    tolerance = 1e-2,
+    ignore_attr = TRUE
   )
 })
 
