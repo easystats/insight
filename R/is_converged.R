@@ -32,8 +32,7 @@
 #'   how to resolve convergence issues. Another clue might be large parameter
 #'   values, e.g. estimates (on the scale of the linear predictor) larger than
 #'   10 in (non-identity link) generalized linear model *might* indicate
-#'   [complete separation](https://stats.oarc.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/).
-#'   Complete separation can be addressed by regularization, e.g. penalized
+#'   complete separation, which can be addressed by regularization, e.g. penalized
 #'   regression or Bayesian regression with appropriate priors on the fixed effects.
 #'   }
 #'   \subsection{Convergence versus Singularity}{
@@ -93,7 +92,6 @@ is_converged.merMod <- function(x, tolerance = 0.001, ...) {
   # copy convergence value
   attr(retval, "gradient") <- max(abs(relgrad))
 
-  # return result
   retval
 }
 

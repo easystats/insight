@@ -44,7 +44,7 @@ test_that("get_weights", {
 })
 
 
-test_that("get_weights, with missing", { #754
+test_that("get_weights, with missing", { # 754
   set.seed(123)
   mtcars2 <- mtcars
   mtcars2$hp[sample(seq_len(nrow(mtcars)), 5)] <- NA
