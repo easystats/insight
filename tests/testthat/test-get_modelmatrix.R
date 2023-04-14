@@ -59,7 +59,8 @@ test_that("get_modelmatrix - iv_robust", {
 test_that("get_modelmatrix - ivreg", {
   skip_if(getRversion() < "4.2.0")
   skip_if_not_installed("ivreg")
-  d_kmenta <<- data(Kmenta, package = "ivreg")
+  data(Kmenta, package = "ivreg")
+  d_kmenta <<- Kmenta
 
   set.seed(15)
   x <- ivreg::ivreg(Q ~ P + D | D + F + A, data = d_kmenta)
