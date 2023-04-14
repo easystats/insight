@@ -6,7 +6,7 @@ skip_if_not_installed("interp")
 ##      "tripack", which has a non-standard license.
 
 suppressPackageStartupMessages({
-  library(quantreg)
+  suppressWarnings(suppressMessages(library(quantreg, quietly = TRUE, warn.conflicts = FALSE)))
 })
 
 data("CobarOre", package = "quantreg")

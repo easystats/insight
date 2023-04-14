@@ -1,7 +1,9 @@
 skip_if_not_installed("cplm")
 
 # cplm::cpglmm doesn't work
-suppressPackageStartupMessages(library(cplm))
+suppressPackageStartupMessages({
+  suppressWarnings(suppressMessages(library(cplm, quietly = TRUE, warn.conflicts = FALSE)))
+})
 
 data("FineRoot", package = "cplm")
 m1 <- cpglmm(RLD ~ Stock + Spacing + (1 | Plant), data = FineRoot)

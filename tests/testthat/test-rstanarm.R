@@ -5,7 +5,7 @@ skip_if_not_installed("BayesFactor")
 skip_if_not_installed("rstanarm")
 
 suppressPackageStartupMessages({
-  library(rstanarm)
+  suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE)))
 })
 
 data(sleepstudy, package = "lme4")

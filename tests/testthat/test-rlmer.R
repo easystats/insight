@@ -18,7 +18,9 @@ for (i in 1:5) {
 
 dat <<- sleepstudy
 
-library(lme4)
+suppressPackageStartupMessages({
+  suppressWarnings(suppressMessages(library(lme4, quietly = TRUE, warn.conflicts = FALSE)))
+})
 
 suppressMessages({
   m1 <- robustlmm::rlmer(

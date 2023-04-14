@@ -133,7 +133,10 @@ test_that("get_statistic", {
 })
 
 test_that("get_varcov", {
-  library(sandwich) # needs to be loaded
+  # needs to be loaded
+  suppressPackageStartupMessages({
+    suppressWarnings(suppressMessages(library(sandwich, quietly = TRUE, warn.conflicts = FALSE)))
+  })
 
   set.seed(123)
   vc1 <- get_varcov(m1, component = "all", vcov = "BS", vcov_args = list(R = 50))
