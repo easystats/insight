@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.4</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,12 +95,17 @@
 </ul></div>
 <div class="section level3">
 <h3 id="general-0-19-2">General<a class="anchor" aria-label="anchor" href="#general-0-19-2"></a></h3>
-<ul><li>Improved support for <code>mclogit</code> models (package <em>mclogit</em>).</li>
+<ul><li>Improved support for <code>mclogit</code> models (package <em>mclogit</em>) and <code>mipo</code> objects (package <em>mice</em>) for models with ordinal or categorical response.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-supported-models-0-19-2">New supported models<a class="anchor" aria-label="anchor" href="#new-supported-models-0-19-2"></a></h3>
 <ul><li>
 <code>phylolm</code> and <code>phyloglm</code> (package <em>phylolm</em>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-19-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-19-2"></a></h3>
+<ul><li><p>Fixed issues in <code><a href="../reference/get_weights.html">get_weights()</a></code> for <code>glm</code> models without weights and <code>na.action</code> not set to default in the model call.</p></li>
+<li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes the <code><a href="https://rdrr.io/r/stats/relevel.html" class="external-link">relevel()</a></code> pattern.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -793,7 +798,7 @@
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> now also returns <code>NULL</code> when all weights were 1.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>BFBayesFactor</em> objects gets a <code>verbose</code> argument.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>emmGrid</em> and <em>emm_list</em> objects gets a <code>summary</code> argument, to either return the full posterior samples or the summarized centrality indices for Bayesian models.</p></li>
-<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code><a href="https://rdrr.io/pkg/MuMIn/man/model.avg.html" class="external-link">MuMIn::model.avg()</a></code> now tries to retrieve the random effects part of a formula, when present.</p></li>
+<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code>MuMIn::model.avg()</code> now tries to retrieve the random effects part of a formula, when present.</p></li>
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> gains a <code>na_rm</code> argument to remove possible missing values.</p></li>
 </ul></div>
 <div class="section level3">
@@ -882,7 +887,7 @@
 <li><p>Fixed issue with <code><a href="../reference/get_variance.html">get_variance()</a></code> for <code>lme</code>-models with categorical random slope.</p></li>
 <li><p>Fixed issue that occurred since R 4.0.0 in <code><a href="../reference/find_weights.html">find_weights()</a></code> when function call had no <code>weights</code>-argument.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>-response variables and matrix-like variables in the model frame (e.g. when using <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly()</a></code>).</p></li>
-<li><p>Fixed issues with <code><a href="https://rdrr.io/pkg/PROreg/man/BBmm.html" class="external-link">PROreg::BBmm()</a></code>, due to changes in latest package update.</p></li>
+<li><p>Fixed issues with <code>PROreg::BBmm()</code>, due to changes in latest package update.</p></li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -890,7 +895,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -12,7 +12,7 @@ test for merMod-objects."><meta property="og:image" content="https://easystats.g
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.4</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,8 +146,7 @@ alternative convergence test for <code>merMod</code>-objects.</p>
 how to resolve convergence issues. Another clue might be large parameter
 values, e.g. estimates (on the scale of the linear predictor) larger than
 10 in (non-identity link) generalized linear model <em>might</em> indicate
-<a href="https://stats.oarc.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/" class="external-link">complete separation</a>.
-Complete separation can be addressed by regularization, e.g. penalized
+complete separation, which can be addressed by regularization, e.g. penalized
 regression or Bayesian regression with appropriate priors on the fixed effects.</p>
 </div>
 <div class="section">
@@ -191,10 +190,6 @@ or not.</p>
 <span class="r-in"><span>  <span class="fu">is_converged</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: glmmTMB</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Package version inconsistency detected.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> TMB was built with Matrix version 1.5.3</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Current Matrix version is 1.5.4</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Please re-install 'TMB' from source using install.packages('TMB', type = 'source') or ask CRAN for a binary version of 'TMB' matching CRAN's 'Matrix' package</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model convergence problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model convergence problem; false convergence (8). See vignette('troubleshooting')</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
@@ -206,7 +201,7 @@ or not.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
