@@ -189,7 +189,10 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
       }
     }
     # for coxme-models, remove random-effect things...
-    trim_ws(sub("^(.*)\\|(.*)", "\\2", x[i]))
+    if (grepl("|", x[i], fixed = TRUE)) {
+      x[i] <- sub("^(.*)\\|(.*)", "\\2", x[i])
+    }
+    trim_ws(x[i])
   })
 
   # remove for random intercept only models
