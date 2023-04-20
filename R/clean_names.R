@@ -122,7 +122,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
     "asis", "matrx", "pol", "strata", "strat", "scale", "scored", "interaction",
     "sqrt", "sin", "cos", "tan", "acos", "asin", "atan", "atan2", "exp", "lsp",
     "rcs", "pb", "lo", "bs", "ns", "mSpline", "bSpline", "t2", "te", "ti", "tt", # need to be fixed first "mmc", "mm",
-    "mi", "mo", "gp", "s", "I"
+    "mi", "mo", "gp", "s", "I", "relevel(as.factor", "relevel"
   )
 
   # sometimes needed for panelr models, where we need to preserve "lag()"
@@ -153,6 +153,8 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           if (!ignore_asis) x[i] <- trim_ws(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", x[i])))
         } else if (pattern[j] == "log(log") {
           x[i] <- trim_ws(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
+        } else if (pattern[j] == "relevel(as.factor") {
+          x[i] <- trim_ws(unique(sub("^relevel\\(as.factor\\(((\\w|\\.)*).*", "\\1", x[i])))
         } else if (pattern[j] == "scale(log") {
           x[i] <- trim_ws(unique(sub("^scale\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
           x[i] <- trim_ws(unique(sub("^scale\\(log1p\\(((\\w|\\.)*).*", "\\1", x[i])))
