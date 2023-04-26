@@ -1248,9 +1248,17 @@ model_info.svyolr <- function(x, ...) {
 #' @export
 model_info.gamlss <- function(x, ...) {
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
+  # for ZIBNB family, we have only one value, so next line returns NA
+  fitfam <- faminfo$family[2]
+  if (is.na(fitfam)) {
+    fitfam <- faminfo$family
+    if (is.null(fitfam)) {
+      fitfam <- "unknown"
+    }
+  }
   .make_family(
     x = x,
-    fitfam = faminfo$family[2],
+    fitfam = fitfam,
     logit.link = faminfo$mu.link == "logit",
     link.fun = faminfo$mu.link,
     ...

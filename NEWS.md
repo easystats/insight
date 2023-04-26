@@ -27,6 +27,8 @@
 
 * `clean_names()` now also removes the `relevel()` pattern.
 
+* Fixed issue in `model_info()` for models of class `gamlss`.
+
 # insight 0.19.1
 
 ## New supported models
