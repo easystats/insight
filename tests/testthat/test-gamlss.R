@@ -21,7 +21,7 @@ void <- capture.output({
     sigma.formula = ~ x4 + x5 + x6 + x4:x5,
     nu.formula = ~ x2 + x5,
     tau.formula = ~ x1 + x4 + x5 + x6 + x1:x4,
-    family = ZIBNB, data = usair
+    family = "ZIBNB", data = usair
   )
 })
 
