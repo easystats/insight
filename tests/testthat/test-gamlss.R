@@ -17,7 +17,7 @@ void <- capture.output({
 })
 
 void <- capture.output({
-  m_gamlss2 <- gamlss(y ~ x1 + x2 + x3,
+  m_gamlss2 <- gamlss::gamlss(y ~ x1 + x2 + x3,
     sigma.formula = ~ x4 + x5 + x6 + x4:x5,
     nu.formula = ~ x2 + x5,
     tau.formula = ~ x1 + x4 + x5 + x6 + x1:x4,
