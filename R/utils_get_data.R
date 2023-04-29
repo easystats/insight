@@ -681,7 +681,7 @@
     all = find_variables(x, flatten = TRUE),
     random = find_random(x, split_nested = TRUE, flatten = TRUE)
   )
-  remain <- intersect(c(ft, find_weights(x)), cn)
+  remain <- intersect(c(ft, find_weights(x), find_offset(x)), cn)
 
   mf <- .safe(dat[, remain, drop = FALSE], dat)
   .prepare_get_data(x, mf, effects, verbose = verbose)
