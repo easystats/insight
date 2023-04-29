@@ -27,7 +27,7 @@ void <- capture.output({
 
 test_that("model_info", {
   expect_true(model_info(m_gamlss1)$is_linear)
-  expect_true(model_info(m_gamlss2)$is_zero_inflated)  
+  expect_true(model_info(m_gamlss2)$is_zero_inflated)
 })
 
 test_that("find_predictors", {
@@ -53,12 +53,12 @@ test_that("get_response", {
 })
 
 test_that("get_predictors", {
-  expect_equal(colnames(get_predictors(m_gamlss1)), "x")
+  expect_identical(colnames(get_predictors(m_gamlss1)), "x")
 })
 
 test_that("get_data", {
   expect_equal(nrow(get_data(m_gamlss1)), 610)
-  expect_equal(colnames(get_data(m_gamlss1)), c("y", "x"))
+  expect_identical(colnames(get_data(m_gamlss1)), c("y", "x"))
 })
 
 test_that("find_formula", {
@@ -76,7 +76,7 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_equal(
+  expect_identical(
     find_variables(m_gamlss1),
     list(
       response = "y",
@@ -84,11 +84,11 @@ test_that("find_variables", {
       sigma = "x"
     )
   )
-  expect_equal(find_variables(m_gamlss1, flatten = TRUE), c("y", "x"))
+  expect_identical(find_variables(m_gamlss1, flatten = TRUE), c("y", "x"))
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m_gamlss1),
     list(
       response = "y",
@@ -113,7 +113,7 @@ test_that("link_inverse", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m_gamlss1),
     list(
       conditional = c("(Intercept)", "pb(x)"),
@@ -130,7 +130,7 @@ test_that("is_multivariate", {
 })
 
 test_that("find_algorithm", {
-  expect_equal(find_algorithm(m_gamlss1), list(algorithm = "mixed"))
+  expect_identical(find_algorithm(m_gamlss1), list(algorithm = "mixed"))
 })
 
 test_that("find_statistic", {
