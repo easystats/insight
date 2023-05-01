@@ -388,10 +388,10 @@ get_df.mediate <- function(x, ...) {
 # Model approach (model-based / logLik df) ------------------------------
 
 .model_df <- function(x) {
-  dof <- tryCatch(attr(stats::logLik(x), "df"), error = function(e) NULL)
+  dof <- .safe(attr(stats::logLik(x), "df"))
 
   if (is.null(dof) || all(is.infinite(dof)) || all(is.na(dof))) {
-    r <- tryCatch(x$rank, error = function(e) NULL)
+    r <- .safe(x$rank)
     if (!is.null(r)) {
       dof <- r + 1
     } else {
