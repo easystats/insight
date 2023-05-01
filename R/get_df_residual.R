@@ -10,13 +10,11 @@
 .degrees_of_freedom_residual.default <- function(x, verbose = TRUE, ...) {
   if (.is_bayesian_model(x) && !inherits(x, c("bayesx", "blmerMod", "bglmerMod"))) {
     if (check_if_installed("bayestestR", quietly = TRUE)) {
-      x <- tryCatch(bayestestR::bayesian_as_frequentist(x),
-        error = function(e) NULL
-      )
-      if (is.null(x)) {
+      x <- .safe(bayestestR::bayesian_as_frequentist(x))
+      if (is.null(x) && isTRUE(verbose)) {
         format_warning("Can't extract degrees of freedom from Bayesian model.")
+        return(NULL)
       }
-      return(NULL)
     } else {
       if (isTRUE(verbose)) {
         format_warning("Can't extract degrees of freedom from Bayesian model.")
