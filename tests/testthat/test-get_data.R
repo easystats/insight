@@ -39,6 +39,23 @@ test_that("fetch from local, not global, environment", {
                   c("mpg", "disp", "cylinders"))
 })
 
+test_that("retrieve from call formula environment", {
+  skip_if_not_installed("AER")
+
+  foo <- function() {
+    d <- data.frame(y = rnorm(100),
+                    x = rnorm(100))
+
+    # find_formula(fit)$conditional happens to not have an environment for tobit
+    # models, so get_data() should check environment(get_call(fit)$formula). See
+    # #666
+    return(AER::tobit(y ~ x, data = d, right = 1.5))
+  }
+
+  expect_setequal(names(get_data(foo())),
+                  c("x", "y"))
+})
+
 test_that("lme", {
   skip_if_not_installed("nlme")
   data("Orthodont", package = "nlme")
