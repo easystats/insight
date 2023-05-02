@@ -1,5 +1,44 @@
 skip_on_os("mac")
 
+test_that("retrieve from same environment", {
+  foo <- data.frame(x = 1:10, y = 2:11)
+
+  fit <- lm(y ~ x, data = foo)
+
+  expect_no_warning(cols <- names(get_data(fit)))
+
+  expect_setequal(cols, c("x", "y"))
+})
+
+test_that("retrieve from correct environment", {
+  foo <- function() {
+    foo <- data.frame(x = 1:10, y = 2:11)
+
+    return(lm(y ~ x, data = foo))
+  }
+
+  # There should be no warning about "Could not recover model data from
+  # environment"
+  expect_no_warning(cols <- names(get_data(foo())))
+
+  expect_setequal(cols, c("x", "y"))
+})
+
+test_that("fetch from local, not global, environment", {
+  # See #760. If the local environment has a modified version of data also in
+  # the global environment, we should find the local version first, not the
+  # global version.
+
+  foo <- function() {
+    mtcars$cylinders <- factor(mtcars$cyl)
+
+    return(lm(mpg ~ cylinders + disp, data = mtcars))
+  }
+
+  expect_setequal(names(get_data(foo())),
+                  c("mpg", "disp", "cylinders"))
+})
+
 test_that("lme", {
   skip_if_not_installed("nlme")
   data("Orthodont", package = "nlme")
@@ -28,7 +67,7 @@ test_that("lme4", {
 test_that("additional_variables = TRUE", {
   k <- mtcars
   k$qsec[1:10] <- NA
-  k <<- k
+  k <- k
   mod <- lm(mpg ~ hp, k)
   n1 <- nrow(k)
   n2 <- nrow(insight::get_data(mod))
@@ -42,8 +81,8 @@ test_that("lm", {
   set.seed(1023)
   x <- rnorm(1000, sd = 4)
   y <- cos(x) + rnorm(1000)
-  # fails if we assign this locally
-  dat <<- data.frame(x, y)
+
+  dat <- data.frame(x, y)
   mod1 <- lm(y ~ x, data = dat)
   mod2 <- lm(y ~ cos(x), data = dat)
   expect_equal(get_data(mod1), get_data(mod2), ignore_attr = TRUE)
@@ -104,7 +143,7 @@ test_that("get_data include weights, even if ones", {
 
 
 test_that("lm with transformations", {
-  d <<- data.frame(
+  d <- data.frame(
     time = as.factor(c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)),
     group = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     sum = c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50)
@@ -117,7 +156,7 @@ test_that("lm with transformations", {
 test_that("lm with poly and NA in response", {
   d <- iris
   d[1:25, "Sepal.Length"] <- NA
-  d2 <<- d
+  d2 <- d
   m <- lm(Sepal.Length ~ Species / poly(Petal.Width, 2), data = d2)
   expect_equal(get_data(m), iris[26:150, c("Sepal.Length", "Species", "Petal.Width")], ignore_attr = TRUE)
 })
@@ -185,7 +224,7 @@ test_that("get_data() log transform", {
   set.seed(123)
   x <- abs(rnorm(100, sd = 5)) + 5
   y <- exp(2 + 0.3 * x + rnorm(100, sd = 0.4))
-  dat <<- data.frame(y, x)
+  dat <- data.frame(y, x)
 
   mod <- lm(log(y) ~ log(x), data = dat)
   expect_equal(
