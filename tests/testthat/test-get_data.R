@@ -180,14 +180,20 @@ test_that("lm with poly and NA in response", {
 
 
 test_that("mgcv", {
-  ## NOTE check back every now and then and see if tests still work
-  skip("works interactively")
   skip_if_not_installed("mgcv")
+
+  # mgcv::gam() deliberately does not keep its environment, so get_data() has to
+  # fall back to the parent frame. See
+  # https://github.com/cran/mgcv/blob/a4e69cf44a49c84a41a42e90c86995a843733968/R/mgcv.r#L2156-L2159
   d <- iris
   d$NewFac <- rep(c(1, 2), length.out = 150)
   model <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
+
+  # There should be two warnings: One for failing to get the data from the
+  # environment, and one for not recovering interaction() accurately
+  expect_warning(expect_warning(model_data <- get_data(model)))
   expect_equal(
-    head(insight::get_data(model)),
+    head(model_data),
     head(d[c("Sepal.Length", "Petal.Length", "Species", "NewFac")]),
     ignore_attr = TRUE
   )
