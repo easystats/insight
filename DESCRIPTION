@@ -59,7 +59,7 @@ Authors@R:
              email = "remi.theriault@mail.mcgill.ca",
              comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
       person(given = "Alex",
-             fammily = "Reinhart",
+             family = "Reinhart",
              role = "ctb",
              email = "areinhar@stat.cmu.edu",
              comment = c(ORCID = "0000-0002-6658-514X")))
