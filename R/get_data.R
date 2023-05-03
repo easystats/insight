@@ -221,11 +221,6 @@ get_data <- function(x, ...) {
                       enclos = NULL))
   }
 
-  # next try, parent frame
-  if (is.null(dat)) {
-    dat <- .safe(eval(model_call$data, envir = parent.frame()))
-  }
-
   # sanity check- if data frame is named like a function, e.g.
   # rep <- data.frame(...), we now have a function instead of the data
   # we then need to reset "dat" to NULL and search in the global env
