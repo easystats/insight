@@ -183,7 +183,7 @@ test_that("mgcv", {
   skip_if_not_installed("mgcv")
 
   # mgcv::gam() deliberately does not keep its environment, so get_data() has to
-  # fall back to the parent frame. See
+  # fall back to the model frame. See
   # https://github.com/cran/mgcv/blob/a4e69cf44a49c84a41a42e90c86995a843733968/R/mgcv.r#L2156-L2159
   d <- iris
   d$NewFac <- rep(c(1, 2), length.out = 150)
