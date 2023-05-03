@@ -57,7 +57,12 @@ Authors@R:
              family = "Thériault",
              role = "ctb",
              email = "remi.theriault@mail.mcgill.ca",
-             comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")))
+             comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
+      person(given = "Alex",
+             fammily = "Reinhart",
+             role = "ctb",
+             email = "areinhar@stat.cmu.edu",
+             comment = c(ORCID = "0000-0002-6658-514X")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: A tool to provide an easy, intuitive and consistent
     access to information contained in various R models, like model
