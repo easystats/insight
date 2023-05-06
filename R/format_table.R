@@ -164,16 +164,16 @@ format_table <- function(x,
 
 
   # Main CI and Prediction Intervals ----
-  x <- .format_main_ci_columns(x, att, ci_digits, ci_width, ci_brackets, zap_small)
-  x <- .format_main_ci_columns(x, att, ci_digits, ci_width, ci_brackets, zap_small, ci_name = "PI")
-  x <- .format_broom_ci_columns(x, ci_digits, ci_width, ci_brackets, zap_small)
+  x <- .format_main_ci_columns(x, att, ci_digits, zap_small, ci_width, ci_brackets)
+  x <- .format_main_ci_columns(x, att, ci_digits, zap_small, ci_width, ci_brackets, ci_name = "PI")
+  x <- .format_broom_ci_columns(x, ci_digits, zap_small, ci_width, ci_brackets)
 
 
   # Misc / Effect Sizes
   x <- .format_effectsize_columns(x, use_symbols)
 
   # Other CIs ----
-  out <- .format_other_ci_columns(x, att, ci_digits, ci_width, ci_brackets, zap_small)
+  out <- .format_other_ci_columns(x, att, ci_digits, zap_small, ci_width, ci_brackets)
   x <- out$x
   other_ci_colname <- out$other_ci_colname
 
