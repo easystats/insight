@@ -637,4 +637,3 @@ test_that("zero-inflation stuff works", {
   expect_equal(p2, p4, tolerance = 1e-1, ignore_attr = TRUE)
   expect_equal(p3, p4, tolerance = 1e-1, ignore_attr = TRUE)
 })
-

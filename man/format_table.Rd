@@ -111,6 +111,7 @@ if (require("rstanarm", warn.conflicts = FALSE) &&
 }
 }
 \seealso{
-Vignettes \href{https://easystats.github.io/insight/articles/display.html}{Formatting, printing and exporting tables}
+Vignettes
+\href{https://easystats.github.io/insight/articles/display.html}{Formatting, printing and exporting tables}
 and \href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{Formatting model parameters}.
 }
