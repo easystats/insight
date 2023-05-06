@@ -168,6 +168,9 @@ format_table <- function(x,
   x <- .format_broom_ci_columns(x, ci_digits, ci_width, ci_brackets, zap_small)
 
 
+  # Misc / Effect Sizes
+  x <- .format_effectsize_columns(x, use_symbols)
+
   # Other CIs ----
   out <- .format_other_ci_columns(x, att, ci_digits, ci_width, ci_brackets, zap_small)
   x <- out$x
@@ -189,8 +192,6 @@ format_table <- function(x,
   )
 
 
-  # Misc / Effect Sizes
-  x <- .format_effectsize_columns(x, use_symbols)
 
 
   # metafor ----
@@ -337,6 +338,8 @@ format_table <- function(x,
 
 .format_effectsize_columns <- function(x, use_symbols) {
   names(x)[names(x) == "Cohens_d"] <- "Cohen's d"
+  names(x)[names(x) == "Cohens_d_CI_low"] <- "Cohen's d_CI_low"
+  names(x)[names(x) == "Cohens_d_CI_high"] <- "Cohen's d_CI_high"
   names(x)[names(x) == "Cohens_w"] <- "Cohen's w"
   names(x)[names(x) == "Cohens_h"] <- "Cohen's h"
   names(x)[names(x) == "Cohens_g"] <- "Cohen's g"
