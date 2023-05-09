@@ -209,17 +209,16 @@ get_data <- function(x, ...) {
     model_call[["data"]] <- as.name(data_name)
   }
 
-  # first, try environment of formula, see #666
-  dat <- .safe(eval(model_call$data, envir = environment(model_call$formula)))
+  # first, try environment of formula, see #666. set enclos = NULL so eval()
+  # does not fall back to parent frame when the environment is NULL, since we
+  # want to try that after checking the formula
+  dat <- .safe(eval(model_call$data, envir = environment(model_call$formula),
+                    enclos = NULL))
 
   # second, try to extract formula directly
   if (is.null(dat)) {
-    dat <- .safe(eval(model_call$data, envir = environment(find_formula(x))))
-  }
-
-  # next try, parent frame
-  if (is.null(dat)) {
-    dat <- .safe(eval(model_call$data, envir = parent.frame()))
+    dat <- .safe(eval(model_call$data, envir = environment(find_formula(x)$conditional),
+                      enclos = NULL))
   }
 
   # sanity check- if data frame is named like a function, e.g.

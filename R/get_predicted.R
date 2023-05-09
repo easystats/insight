@@ -317,14 +317,16 @@ get_predicted.lm <- function(x,
     )
   }
 
-  # 0. step: convert matrix variable types attributes to numeric, if necessary
-  dataClasses <- attributes(x[["terms"]])$dataClasses
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+
+  # 0. step: convert matrix variable types attributes to numeric, if necessary.
   # see https://github.com/easystats/insight/pull/671
+  dataClasses <- attributes(x[["terms"]])$dataClasses
   if ("nmatrix.1" %in% dataClasses) {
     dataClasses[dataClasses == "nmatrix.1"] <- "numeric"
     attributes(x$terms)$dataClasses <- dataClasses
     attributes(attributes(x$model)$terms)$dataClasses <- dataClasses
-    x$model[] <- lapply(x$model, function(x) {
+    args$data[] <- lapply(args$data, function(x) {
       if (all(class(x) == c("matrix", "array"))) { # nolint
         as.numeric(x)
       } else {
@@ -332,8 +334,6 @@ get_predicted.lm <- function(x,
       }
     })
   }
-
-  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   # 1. step: predictions
   if (is.null(iterations)) {
