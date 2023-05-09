@@ -377,7 +377,7 @@
 
   # fix rank deficiency
   rankdef <- is.na(vals$beta)
-  if(any(rankdef)) {
+  if (any(rankdef)) {
     rankdef_names <- names(vals$beta)[rankdef]
     vals$beta <- vals$beta[setdiff(names(vals$beta), rankdef_names)]
   }
