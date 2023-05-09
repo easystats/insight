@@ -29,6 +29,13 @@
 
 * Fixed issue in `model_info()` for models of class `gamlss`.
 
+* Fixed problems preventing `get_data()` from locating data defined in
+  non-global environments.
+
+* Fixed issue in `get_predicted()` for variables of class numeric matrix created
+  by `scale()`, which were correctly handled only when `get_data()` failed to
+  find the data in the appropriate environment.
+
 # insight 0.19.1
 
 ## New supported models
