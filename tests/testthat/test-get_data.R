@@ -2,11 +2,11 @@ skip_on_os("mac")
 
 test_that("retrieve from same environment", {
   foo <- data.frame(x = 1:10, y = 2:11)
-
   fit <- lm(y ~ x, data = foo)
 
-  expect_no_warning(cols <- names(get_data(fit)))
-
+  expect_no_warning({
+    cols <- names(get_data(fit))
+  })
   expect_setequal(cols, c("x", "y"))
 })
 
@@ -19,8 +19,9 @@ test_that("retrieve from correct environment", {
 
   # There should be no warning about "Could not recover model data from
   # environment"
-  expect_no_warning(cols <- names(get_data(foo())))
-
+  expect_no_warning({
+    cols <- names(get_data(foo()))
+  })
   expect_setequal(cols, c("x", "y"))
 })
 
@@ -191,7 +192,9 @@ test_that("mgcv", {
 
   # There should be two warnings: One for failing to get the data from the
   # environment, and one for not recovering interaction() accurately
-  expect_warning(expect_warning(model_data <- get_data(model)))
+  expect_warning(expect_warning({
+    model_data <- get_data(model)
+  }))
   expect_equal(
     head(model_data),
     head(d[c("Sepal.Length", "Petal.Length", "Species", "NewFac")]),
