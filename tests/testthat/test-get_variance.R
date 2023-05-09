@@ -291,10 +291,9 @@ test_that("fixed effects variance for rank-deficient models, #765", {
     x1 = 1:1000, x2 = runif(1000, 0, 10),
     re = rep(1:20, each = 50)
   )
-  dd <- dd |>
-    transform(x3 = as.factor(ifelse(x1 <= 500, "Low", sample(c("Middle", "High"), 1000, replace = TRUE)))) |>
-    transform(x4 = as.factor(ifelse(x1 > 500, "High", sample(c("Absent", "Low"), 1000, replace = TRUE)))) |>
-    transform(z = z + re * 5)
+  dd <- transform(dd, x3 = as.factor(ifelse(x1 <= 500, "Low", sample(c("Middle", "High"), 1000, replace = TRUE))))
+  dd <- transform(dd, x4 = as.factor(ifelse(x1 > 500, "High", sample(c("Absent", "Low"), 1000, replace = TRUE))))
+  dd <- transform(dd, z = z + re * 5)
 
   expect_message({
     mod_TMB <- glmmTMB(z ~ x1 + x2 + x3 + x4 + (1 | re),
@@ -302,6 +301,6 @@ test_that("fixed effects variance for rank-deficient models, #765", {
       control = glmmTMBControl(rank_check = "adjust")
     )
   })
-  out <- insight::get_variance_fixed(mod_TMB)
+  out <- get_variance_fixed(mod_TMB)
   expect_equal(c(var.fixed = 627.03661), tolerance = 1e-4)
 })
