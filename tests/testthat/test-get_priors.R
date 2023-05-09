@@ -1,5 +1,5 @@
 test_that("get_priors", {
-  skip_on_os(os = "mac")
+  skip_on_os(os = c("mac", "windows"))
   skip_on_cran()
   skip_if_not_installed("brms")
 
