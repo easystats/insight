@@ -241,8 +241,8 @@ m5 <- lme4::lmer(Reaction ~ Days + (0 + Days + Months | Subject), data = study_d
 
 test_that("random effects CIs, simple slope", {
   vc <- suppressWarnings(get_variance(m2))
-  expect_identical(
-    names(vc),
+  expect_named(
+    vc,
     c(
       "var.fixed", "var.random", "var.residual", "var.distribution",
       "var.dispersion", "var.slope"
@@ -286,7 +286,7 @@ test_that("random effects CIs, poly slope", {
 
 
 test_that("fixed effects variance for rank-deficient models, #765", {
-  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.7.9000")
   set.seed(101)
   dd <- data.frame(
     z = rnorm(1000),
