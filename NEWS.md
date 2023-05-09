@@ -22,6 +22,9 @@
 
 ## Bug fixes
 
+* Fixed issue in `get_variance()` for *glmmTMB* models with rank deficient
+  coefficients.
+
 * Fixed issues in `get_weights()` for `glm` models without weights and `na.action`
   not set to default in the model call.
 
