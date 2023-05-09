@@ -49,7 +49,8 @@
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
-#' @seealso Vignettes [Formatting, printing and exporting tables](https://easystats.github.io/insight/articles/display.html)
+#' @seealso Vignettes
+#' [Formatting, printing and exporting tables](https://easystats.github.io/insight/articles/display.html)
 #' and [Formatting model parameters](https://easystats.github.io/parameters/articles/model_parameters_formatting.html).
 #'
 #' @note `options(insight_use_symbols = TRUE)` override the `use_symbols` argument
@@ -163,13 +164,16 @@ format_table <- function(x,
 
 
   # Main CI and Prediction Intervals ----
-  x <- .format_main_ci_columns(x, att, ci_digits, ci_width, ci_brackets, zap_small)
-  x <- .format_main_ci_columns(x, att, ci_digits, ci_width, ci_brackets, zap_small, ci_name = "PI")
-  x <- .format_broom_ci_columns(x, ci_digits, ci_width, ci_brackets, zap_small)
+  x <- .format_main_ci_columns(x, att, ci_digits, zap_small, ci_width, ci_brackets)
+  x <- .format_main_ci_columns(x, att, ci_digits, zap_small, ci_width, ci_brackets, ci_name = "PI")
+  x <- .format_broom_ci_columns(x, ci_digits, zap_small, ci_width, ci_brackets)
 
+
+  # Misc / Effect Sizes
+  x <- .format_effectsize_columns(x, use_symbols)
 
   # Other CIs ----
-  out <- .format_other_ci_columns(x, att, ci_digits, ci_width, ci_brackets, zap_small)
+  out <- .format_other_ci_columns(x, att, ci_digits, zap_small, ci_width, ci_brackets)
   x <- out$x
   other_ci_colname <- out$other_ci_colname
 
@@ -189,8 +193,6 @@ format_table <- function(x,
   )
 
 
-  # Misc / Effect Sizes
-  x <- .format_effectsize_columns(x, use_symbols)
 
 
   # metafor ----
@@ -254,7 +256,7 @@ format_table <- function(x,
 # Format various p-values, coming from different easystats-packages
 # like bayestestR (p_ROPE, p_MAP) or performance (p_Chi2)
 
-.format_p_values <- function(x, stars = FALSE, p_digits) {
+.format_p_values <- function(x, p_digits, stars = FALSE) {
   # Specify stars for which column (#656)
   if (is.character(stars)) {
     starlist <- list("p" = FALSE)
@@ -337,6 +339,8 @@ format_table <- function(x,
 
 .format_effectsize_columns <- function(x, use_symbols) {
   names(x)[names(x) == "Cohens_d"] <- "Cohen's d"
+  names(x)[names(x) == "Cohens_d_CI_low"] <- "Cohen's d_CI_low"
+  names(x)[names(x) == "Cohens_d_CI_high"] <- "Cohen's d_CI_high"
   names(x)[names(x) == "Cohens_w"] <- "Cohen's w"
   names(x)[names(x) == "Cohens_h"] <- "Cohen's h"
   names(x)[names(x) == "Cohens_g"] <- "Cohen's g"
@@ -454,9 +458,9 @@ format_table <- function(x,
 .format_main_ci_columns <- function(x,
                                     att,
                                     ci_digits,
+                                    zap_small,
                                     ci_width = "auto",
                                     ci_brackets = TRUE,
-                                    zap_small,
                                     ci_name = "CI") {
   # Main CI
   ci_low <- names(x)[grep(paste0("^", ci_name, "_low"), names(x))]
@@ -525,7 +529,7 @@ format_table <- function(x,
 
 
 
-.format_other_ci_columns <- function(x, att, ci_digits, ci_width = "auto", ci_brackets = TRUE, zap_small) {
+.format_other_ci_columns <- function(x, att, ci_digits, zap_small, ci_width = "auto", ci_brackets = TRUE) {
   other_ci_low <- names(x)[endsWith(names(x), "_CI_low")]
   other_ci_high <- names(x)[endsWith(names(x), "_CI_high")]
   if (length(other_ci_low) >= 1 && length(other_ci_low) == length(other_ci_high)) {
@@ -575,9 +579,9 @@ format_table <- function(x,
 
 .format_broom_ci_columns <- function(x,
                                      ci_digits,
+                                     zap_small,
                                      ci_width = "auto",
-                                     ci_brackets = TRUE,
-                                     zap_small) {
+                                     ci_brackets = TRUE) {
   if (!any(grepl("conf.low", names(x), fixed = TRUE))) {
     return(x)
   }
@@ -609,7 +613,7 @@ format_table <- function(x,
 
 
 
-.format_rope_columns <- function(x, ci_width = "auto", ci_brackets = TRUE, zap_small) {
+.format_rope_columns <- function(x, zap_small, ci_width = "auto", ci_brackets = TRUE) {
   if (all(c("ROPE_low", "ROPE_high") %in% names(x))) {
     x$ROPE_low <- format_ci(
       x$ROPE_low,
@@ -659,9 +663,9 @@ format_table <- function(x,
 
 
 .format_bayes_columns <- function(x,
+                                  zap_small,
                                   stars = FALSE,
                                   rope_digits = 2,
-                                  zap_small,
                                   ci_width = "auto",
                                   ci_brackets = TRUE,
                                   exact = TRUE) {
@@ -694,11 +698,17 @@ format_table <- function(x,
   # Priors
   if ("Prior_Location" %in% names(x)) x$Prior_Location <- format_value(x$Prior_Location, protect_integers = TRUE)
   if ("Prior_Scale" %in% names(x)) x$Prior_Scale <- format_value(x$Prior_Scale, protect_integers = TRUE)
-  if ("Prior_Distribution" %in% names(x)) x$Prior_Distribution <- ifelse(is.na(x$Prior_Distribution), "", x$Prior_Distribution)
+  if ("Prior_Distribution" %in% names(x)) {
+    x$Prior_Distribution <- ifelse(
+      is.na(x$Prior_Distribution), "", x$Prior_Distribution
+    )
+  }
   if ("Prior_df" %in% names(x)) x$Prior_df <- format_value(x$Prior_df, protect_integers = TRUE)
   if (all(c("Prior_Distribution", "Prior_df") %in% names(x))) {
     missing_df <- is.na(x$Prior_df) | x$Prior_df == ""
-    x$Prior_Distribution[!missing_df] <- paste0(x$Prior_Distribution[!missing_df], " (df=", x$Prior_df[!missing_df], ")")
+    x$Prior_Distribution[!missing_df] <- paste0(
+      x$Prior_Distribution[!missing_df], " (df=", x$Prior_df[!missing_df], ")"
+    )
   }
   if (all(c("Prior_Distribution", "Prior_Location", "Prior_Scale") %in% names(x))) {
     x$Prior <- paste0(

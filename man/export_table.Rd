@@ -163,6 +163,7 @@ export_table(d, width = c(x = 5, z = 10))
 export_table(d, width = c(x = 5, y = 5, z = 10), align = "lcr")
 }
 \seealso{
-Vignettes \href{https://easystats.github.io/insight/articles/display.html}{Formatting, printing and exporting tables}
+Vignettes
+\href{https://easystats.github.io/insight/articles/display.html}{Formatting, printing and exporting tables}
 and \href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{Formatting model parameters}.
 }
