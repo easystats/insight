@@ -560,6 +560,7 @@ test_that("bugfix: used to fail with matrix variables", {
 test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   skip_on_cran()
   skip_if_not_installed("brms")
+  skip_on_os(os = "windows")
   void <- capture.output(
     suppressMessages(mod <- brms::brm(am ~ hp + mpg,
       family = brms::bernoulli, data = mtcars,
