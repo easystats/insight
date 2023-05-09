@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.8</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,7 +104,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-19-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-19-2"></a></h3>
-<ul><li><p>Fixed issues in <code><a href="../reference/get_weights.html">get_weights()</a></code> for <code>glm</code> models without weights and <code>na.action</code> not set to default in the model call.</p></li>
+<ul><li><p>Fixed issue in <code><a href="../reference/get_variance.html">get_variance()</a></code> for <em>glmmTMB</em> models with rank deficient coefficients.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/get_weights.html">get_weights()</a></code> for <code>glm</code> models without weights and <code>na.action</code> not set to default in the model call.</p></li>
 <li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> now also removes the <code><a href="https://rdrr.io/r/stats/relevel.html" class="external-link">relevel()</a></code> pattern.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/model_info.html">model_info()</a></code> for models of class <code>gamlss</code>.</p></li>
 <li><p>Fixed problems preventing <code><a href="../reference/get_data.html">get_data()</a></code> from locating data defined in non-global environments.</p></li>
