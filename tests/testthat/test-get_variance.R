@@ -283,8 +283,6 @@ test_that("random effects CIs, poly slope", {
   )
 })
 
-
-
 test_that("fixed effects variance for rank-deficient models, #765", {
   skip_if_not_installed("glmmTMB", minimum_version = "1.1.8")
   set.seed(101)
