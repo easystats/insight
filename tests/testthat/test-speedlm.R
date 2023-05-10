@@ -34,11 +34,11 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), iris$Sepal.Length)
+  expect_equal(get_response(m1), iris$Sepal.Length, ignore_attr = TRUE)
 })
 
 test_that("get_predictors", {
-  expect_equal(colnames(get_predictors(m1)), c("Petal.Width", "Species"))
+  expect_identical(colnames(get_predictors(m1)), c("Petal.Width", "Species"))
 })
 
 test_that("link_inverse", {
@@ -51,11 +51,11 @@ test_that("linkfun", {
 
 test_that("get_data", {
   expect_equal(nrow(get_data(m1)), 150)
-  expect_equal(
+  expect_identical(
     colnames(get_data(m1)),
     c("Sepal.Length", "Petal.Width", "Species")
   )
-  expect_equal(colnames(get_data(m2)), c("mpg", "hp", "cyl", "wt"))
+  expect_identical(colnames(get_data(m2)), c("mpg", "hp", "cyl", "wt"))
 })
 
 test_that("find_formula", {
@@ -77,18 +77,18 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_equal(
+  expect_identical(
     find_variables(m1),
     list(
       response = "Sepal.Length",
       conditional = c("Petal.Width", "Species")
     )
   )
-  expect_equal(
+  expect_identical(
     find_variables(m1, flatten = TRUE),
     c("Sepal.Length", "Petal.Width", "Species")
   )
-  expect_equal(
+  expect_identical(
     find_variables(m2, flatten = TRUE),
     c("mpg", "hp", "cyl", "wt")
   )
@@ -100,7 +100,7 @@ test_that("n_obs", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c(
@@ -111,7 +111,7 @@ test_that("find_parameters", {
       )
     )
   )
-  expect_equal(
+  expect_identical(
     find_parameters(m2),
     list(
       conditional = c(
@@ -125,7 +125,7 @@ test_that("find_parameters", {
     )
   )
   expect_equal(nrow(get_parameters(m1)), 4)
-  expect_equal(
+  expect_identical(
     get_parameters(m1)$Parameter,
     c(
       "(Intercept)",
@@ -141,14 +141,14 @@ test_that("is_multivariate", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(
       response = "Sepal.Length",
       conditional = c("Petal.Width", "Species")
     )
   )
-  expect_equal(
+  expect_identical(
     find_terms(m2),
     list(
       response = "log(mpg)",
@@ -163,7 +163,7 @@ test_that("find_terms", {
 })
 
 test_that("find_algorithm", {
-  expect_equal(find_algorithm(m1), list(algorithm = "eigen"))
+  expect_identical(find_algorithm(m1), list(algorithm = "eigen"))
 })
 
 test_that("find_statistic", {
