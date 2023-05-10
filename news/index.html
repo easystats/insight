@@ -90,7 +90,6 @@
 <div class="section level3">
 <h3 id="breaking-changes-0-19-2">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-19-2"></a></h3>
 <ul><li><p>The minimum needed R version has been bumped to <code>3.6</code>.</p></li>
-<li><p>Tests for package <em>speedglm</em> were removed, because <em>speedglm</em> was archived on CRAN.</p></li>
 <li><p><code><a href="../reference/download_model.html">download_model()</a></code> no longer errors when a model object could not be downloaded, but instead returns <code>NULL</code>. This prevents test failures, and allows to skip tests when the return value of <code><a href="../reference/download_model.html">download_model()</a></code> is <code>NULL</code>.</p></li>
 </ul></div>
 <div class="section level3">
@@ -802,7 +801,7 @@
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> now also returns <code>NULL</code> when all weights were 1.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>BFBayesFactor</em> objects gets a <code>verbose</code> argument.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>emmGrid</em> and <em>emm_list</em> objects gets a <code>summary</code> argument, to either return the full posterior samples or the summarized centrality indices for Bayesian models.</p></li>
-<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code>MuMIn::model.avg()</code> now tries to retrieve the random effects part of a formula, when present.</p></li>
+<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code><a href="https://rdrr.io/pkg/MuMIn/man/model.avg.html" class="external-link">MuMIn::model.avg()</a></code> now tries to retrieve the random effects part of a formula, when present.</p></li>
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> gains a <code>na_rm</code> argument to remove possible missing values.</p></li>
 </ul></div>
 <div class="section level3">
@@ -891,7 +890,7 @@
 <li><p>Fixed issue with <code><a href="../reference/get_variance.html">get_variance()</a></code> for <code>lme</code>-models with categorical random slope.</p></li>
 <li><p>Fixed issue that occurred since R 4.0.0 in <code><a href="../reference/find_weights.html">find_weights()</a></code> when function call had no <code>weights</code>-argument.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>-response variables and matrix-like variables in the model frame (e.g. when using <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly()</a></code>).</p></li>
-<li><p>Fixed issues with <code>PROreg::BBmm()</code>, due to changes in latest package update.</p></li>
+<li><p>Fixed issues with <code><a href="https://rdrr.io/pkg/PROreg/man/BBmm.html" class="external-link">PROreg::BBmm()</a></code>, due to changes in latest package update.</p></li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
