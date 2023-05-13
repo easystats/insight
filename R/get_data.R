@@ -246,7 +246,7 @@ get_data <- function(x, ...) {
     dat_fixest <- .safe(eval(model_call$data, envir = parent.env(x$call_env)))
     # sanity check - does data from parent env. differ from current extracted
     # data? If so, use data from parent env.
-    if ((dim(dat_fixest)[1] == dim(dat)[1]) && (dim(dat_fixest)[2] != dim(dat)[2])) {
+    if (!is.null(dat_fixest) && (dim(dat_fixest)[1] == dim(dat)[1]) && (dim(dat_fixest)[2] != dim(dat)[2])) {
       dat <- dat_fixest
     }
   }
