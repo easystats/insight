@@ -413,7 +413,7 @@ test_that("get_data works for fixest inside functions", {
   }
   global_fixest <- fixest_wrapper(data = mtcars)
   data <- mtcars[, c("mpg", "disp")]
-  expect_names(
+  expect_named(
     get_data(global_fixest),
     c("mpg", "cylinders", "disp", "hp")
   )
@@ -422,7 +422,7 @@ test_that("get_data works for fixest inside functions", {
   d_cyl <- mtcars
   d_cyl$cylinders <- factor(d_cyl$cyl)
   global_fixest <- fixest::feglm(mpg ~ cylinders * disp + hp, data = d_cyl)
-  expect_names(
+  expect_named(
     get_data(global_fixest),
     c("mpg", "cylinders", "disp", "hp")
   )
