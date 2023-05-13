@@ -239,6 +239,18 @@ get_data <- function(x, ...) {
     dat <- .safe(eval(model_call$data, envir = parent.env(x$call_env)))
   }
 
+  # special handling for fixest, see #767
+  if (inherits(x, "fixest") && !is.null(dat)) {
+    # when called from inside function, fixest seems to have a different
+    # environment that requires recovering from parent-environment
+    dat_fixest <- .safe(eval(model_call$data, envir = parent.env(x$call_env)))
+    # sanity check - does data from parent env. differ from current extracted
+    # data? If so, use data from parent env.
+    if (!is.null(dat_fixest) && (dim(dat_fixest)[1] == dim(dat)[1]) && (dim(dat_fixest)[2] != dim(dat)[2])) {
+      dat <- dat_fixest
+    }
+  }
+
   if (!is.null(dat) && object_has_names(model_call, "subset")) {
     dat <- subset(dat, subset = eval(model_call$subset))
   }
