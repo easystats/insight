@@ -400,3 +400,30 @@ test_that("get_data colnames", {
   out <- get_data(m, additional_variables = TRUE)
   expect_true("qsec" %in% colnames(out))
 })
+
+
+test_that("get_data works for fixest inside functions", {
+  skip_if_not_installed("fixest")
+  data(mtcars)
+  # fit within function
+  fixest_wrapper <- function(data) {
+    data$cylinders <- factor(data$cyl)
+    fit <- fixest::feglm(mpg ~ cylinders * disp + hp, data = data)
+    return(fit)
+  }
+  global_fixest <- fixest_wrapper(data = mtcars)
+  data <- mtcars[, c("mpg", "disp")]
+  expect_names(
+    get_data(global_fixest),
+    c("mpg", "cylinders", "disp", "hp")
+  )
+
+  data(mtcars)
+  d_cyl <- mtcars
+  d_cyl$cylinders <- factor(d_cyl$cyl)
+  global_fixest <- fixest::feglm(mpg ~ cylinders * disp + hp, data = d_cyl)
+  expect_names(
+    get_data(global_fixest),
+    c("mpg", "cylinders", "disp", "hp")
+  )
+})
