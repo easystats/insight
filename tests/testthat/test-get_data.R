@@ -444,7 +444,7 @@ test_that("get_data works for fixest inside functions", {
 
   # regular example
   data(iris)
-  res <- feglm(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris, "poisson")
+  res <- fixest::feglm(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris, "poisson")
   expect_named(
     get_data(res),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species")
