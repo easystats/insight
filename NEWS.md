@@ -36,6 +36,8 @@
   by `scale()`, which were correctly handled only when `get_data()` failed to
   find the data in the appropriate environment.
 
+* Fixed issue in `model_info()` for `gee` models from `binomial` families.
+
 # insight 0.19.1
 
 ## New supported models
