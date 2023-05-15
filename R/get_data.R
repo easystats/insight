@@ -209,16 +209,27 @@ get_data <- function(x, ...) {
     model_call[["data"]] <- as.name(data_name)
   }
 
-  # first, try environment of formula, see #666. set enclos = NULL so eval()
-  # does not fall back to parent frame when the environment is NULL, since we
-  # want to try that after checking the formula
-  dat <- .safe(eval(model_call$data, envir = environment(model_call$formula),
-                    enclos = NULL))
+  # special handling for fixest, see #767
+  if (inherits(x, "fixest")) {
+    # when called from inside function, fixest seems to have a different
+    # environment that requires recovering from parent-environment
+    dat <- .safe(eval(model_call$data, envir = parent.env(x$call_env)))
+  } else {
+    # first, try environment of formula, see #666. set enclos = NULL so eval()
+    # does not fall back to parent frame when the environment is NULL, since we
+    # want to try that after checking the formula
+    dat <- .safe(eval(model_call$data,
+      envir = environment(model_call$formula),
+      enclos = NULL
+    ))
+  }
 
   # second, try to extract formula directly
   if (is.null(dat)) {
-    dat <- .safe(eval(model_call$data, envir = environment(find_formula(x)$conditional),
-                      enclos = NULL))
+    dat <- .safe(eval(model_call$data,
+      envir = environment(find_formula(x)$conditional),
+      enclos = NULL
+    ))
   }
 
   # sanity check- if data frame is named like a function, e.g.
@@ -237,18 +248,6 @@ get_data <- function(x, ...) {
   # last try, internal env
   if (is.null(dat)) {
     dat <- .safe(eval(model_call$data, envir = parent.env(x$call_env)))
-  }
-
-  # special handling for fixest, see #767
-  if (inherits(x, "fixest") && !is.null(dat)) {
-    # when called from inside function, fixest seems to have a different
-    # environment that requires recovering from parent-environment
-    dat_fixest <- .safe(eval(model_call$data, envir = parent.env(x$call_env)))
-    # sanity check - does data from parent env. differ from current extracted
-    # data? If so, use data from parent env.
-    if (!is.null(dat_fixest) && (dim(dat_fixest)[1] == dim(dat)[1]) && (dim(dat_fixest)[2] != dim(dat)[2])) {
-      dat <- dat_fixest
-    }
   }
 
   if (!is.null(dat) && object_has_names(model_call, "subset")) {
