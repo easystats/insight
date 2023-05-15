@@ -405,25 +405,48 @@ test_that("get_data colnames", {
 test_that("get_data works for fixest inside functions", {
   skip_if_not_installed("fixest")
   data(mtcars)
+
   # fit within function
-  fixest_wrapper <- function(data) {
+  fixest_wrapper1 <- function(data) {
     data$cylinders <- factor(data$cyl)
     fit <- fixest::feglm(mpg ~ cylinders * disp + hp, data = data)
     return(fit)
   }
-  global_fixest <- fixest_wrapper(data = mtcars)
+  global_fixest1 <- fixest_wrapper1(data = mtcars)
   data <- mtcars[, c("mpg", "disp")]
   expect_named(
-    get_data(global_fixest),
+    get_data(global_fixest1),
+    c("mpg", "cylinders", "disp", "hp")
+  )
+
+  # fit within function, subset
+  fixest_wrapper2 <- function(data) {
+    data$cylinders <- factor(data$cyl)
+    fit <- fixest::feglm(mpg ~ cylinders * disp + hp, data = data)
+    return(fit)
+  }
+  data <- mtcars
+  global_fixest2 <- fixest_wrapper2(data = data[1:20, ])
+  expect_identical(nrow(get_data(global_fixest2)), 20L)
+  expect_named(
+    get_data(global_fixest2),
     c("mpg", "cylinders", "disp", "hp")
   )
 
   data(mtcars)
   d_cyl <- mtcars
   d_cyl$cylinders <- factor(d_cyl$cyl)
-  global_fixest <- fixest::feglm(mpg ~ cylinders * disp + hp, data = d_cyl)
+  global_fixest3 <- fixest::feglm(mpg ~ cylinders * disp + hp, data = d_cyl)
   expect_named(
-    get_data(global_fixest),
+    get_data(global_fixest3),
     c("mpg", "cylinders", "disp", "hp")
+  )
+
+  # regular example
+  data(iris)
+  res <- fixest::feglm(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris, "poisson")
+  expect_named(
+    get_data(res),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species")
   )
 })
