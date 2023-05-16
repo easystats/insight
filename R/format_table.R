@@ -692,7 +692,12 @@ format_table <- function(x,
     x$ROPE_Percentage <- format_rope(x$ROPE_Percentage, name = NULL, digits = rope_digits)
     names(x)[names(x) == "ROPE_Percentage"] <- "% in ROPE"
   }
-  x <- .format_rope_columns(x, ci_width, ci_brackets, zap_small)
+  x <- .format_rope_columns(
+    x,
+    zap_small = zap_small,
+    ci_width = ci_width,
+    ci_brackets = ci_brackets
+  )
 
 
   # Priors
