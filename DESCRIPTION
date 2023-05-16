@@ -177,6 +177,7 @@ Suggests:
     rstantools,
     rstudioapi,
     sandwich,
+    speedglm,
     splines,
     statmod,
     survey,
