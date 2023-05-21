@@ -38,6 +38,15 @@ get_parameters.betareg <- function(x,
 }
 
 
+#' @export
+get_parameters.nestedLogit <- function(x, ...) {
+  cf <- as.data.frame(stats::coef(x))
+  params <- .gather(cf, names_to = "Response", values_to = "Estimate")
+  params$Parameter <- rep(row.names(cf), times = ncol(cf))
+
+  text_remove_backticks(params[c("Parameter", "Estimate", "Response")])
+}
+
 
 #' @rdname get_parameters.betareg
 #' @export

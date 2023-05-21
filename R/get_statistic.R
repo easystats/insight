@@ -1119,6 +1119,18 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.nestedLogit <- function(x, ...) {
+  out <- do.call(rbind, lapply(x$models, function(i) stats::coef(summary(i))))
+  out$Response <- rep(names(x$models), each = length(x$models))
+  colnames(out)[3] <- "Statistic"
+
+  out <- text_remove_backticks(out[c("Parameter", "Statistic", "Response")])
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.pgmm <- function(x,
                                component = c("conditional", "all"),
                                verbose = TRUE,
