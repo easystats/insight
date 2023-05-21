@@ -3,6 +3,7 @@
 \name{get_varcov}
 \alias{get_varcov}
 \alias{get_varcov.default}
+\alias{get_varcov.nestedLogit}
 \alias{get_varcov.betareg}
 \alias{get_varcov.clm2}
 \alias{get_varcov.truncreg}
@@ -18,6 +19,15 @@
 get_varcov(x, ...)
 
 \method{get_varcov}{default}(x, verbose = TRUE, vcov = NULL, vcov_args = NULL, ...)
+
+\method{get_varcov}{nestedLogit}(
+  x,
+  component = "all",
+  verbose = TRUE,
+  vcov = NULL,
+  vcov_args = NULL,
+  ...
+)
 
 \method{get_varcov}{betareg}(
   x,
