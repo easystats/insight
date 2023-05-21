@@ -186,6 +186,11 @@ link_function.brglm <- link_function.default
 #' @export
 link_function.cgam <- link_function.default
 
+#' @export
+link_function.nestedLogit <- function(x, ...) {
+  stats::make.link(link = "logit")$linkfun
+}
+
 
 # Logit link ------------------------
 
