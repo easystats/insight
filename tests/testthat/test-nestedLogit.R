@@ -1,7 +1,6 @@
 skip_if_not_installed("nestedLogit")
-skip_if_not_installed("car")
 skip_if_not_installed("broom")
-skip_if_not_installed("dplyr")
+skip_if_not_installed("car")
 skip_if_not_installed("carData")
 
 data(Womenlf, package = "carData")

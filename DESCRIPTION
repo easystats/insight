@@ -108,7 +108,6 @@ Suggests:
     crch,
     curl,
     datawizard,
-    dplyr,
     effectsize,
     emmeans,
     epiR,
