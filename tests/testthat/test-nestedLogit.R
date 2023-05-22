@@ -116,6 +116,11 @@ test_that("get_parameters", {
     unname(c(coef(mnl1)[, 1], coef(mnl1)[, 2])),
     ignore_attr = TRUE
   )
+  expect_equal(
+    get_parameters(mnl1, component = "full")$Estimate,
+    c(3.47777, -0.10727, -2.65146),
+    tolerance = 1e-3
+  )
 })
 
 test_that("is_multivariate", {
@@ -144,6 +149,12 @@ test_that("get_statistic", {
     colnames(get_statistic(mnl1)),
     c("Parameter", "Statistic", "Response", "Component")
   )
+  expect_equal(
+    get_statistic(mnl1, component = "full")$Statistic,
+    c(4.53361, -2.73976, -4.90035),
+    tolerance = 1e-3
+  )
+  expect_message(get_statistic(mnl1, component = "msg"))
 })
 
 test_that("get_varcov", {

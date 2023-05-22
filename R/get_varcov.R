@@ -189,7 +189,7 @@ get_varcov.nestedLogit <- function(x,
       format_alert(
         paste0(
           "No matching model found. Possible values for `component` are ",
-          toString(paste0("'", names(vcovs), "'")),
+          toString(paste0("\"", names(vcovs), "\"")),
           "."
         )
       )
