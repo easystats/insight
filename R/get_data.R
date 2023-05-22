@@ -1759,6 +1759,15 @@ get_data.mle2 <- function(x, ...) {
 get_data.mle <- get_data.mle2
 
 
+#' @export
+get_data.nestedLogit <- function(x, ...) {
+  d <- x$data
+  if (!is.null(x$subset)) {
+    d <- subset(d, eval(parse(text = x$subset), envir = d))
+  }
+  d
+}
+
 
 #' @export
 get_data.glht <- function(x, source = "environment", verbose = TRUE, ...) {

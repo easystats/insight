@@ -15,7 +15,7 @@
 
 ## New supported models
 
-* `phylolm` and `phyloglm` (package *phylolm*).
+* `phylolm` and `phyloglm` (package *phylolm*), `nestedLogit` (package *nestedLogit*).
 
 ## Bug fixes
 

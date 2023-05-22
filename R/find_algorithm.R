@@ -222,6 +222,12 @@ find_algorithm.glm <- function(x, ...) {
 
 
 #' @export
+find_algorithm.nestedLogit <- function(x, ...) {
+  list("algorithm" = "ML")
+}
+
+
+#' @export
 find_algorithm.LORgee <- function(x, ...) {
   list("algorithm" = "Fisher's scoring ML")
 }
