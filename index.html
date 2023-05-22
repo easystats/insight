@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.12</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.1.13</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -311,7 +311,7 @@
 <div class="section level2">
 <h2 id="list-of-supported-models-by-class">List of Supported Models by Class<a class="anchor" aria-label="anchor" href="#list-of-supported-models-by-class"></a>
 </h2>
-<p>Currently, 224 model classes are supported.</p>
+<p>Currently, 225 model classes are supported.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/is_model_supported.html">supported_models</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   [1] "aareg"                   "afex_aov"               </span></span>
@@ -394,38 +394,39 @@
 <span><span class="co">#&gt; [155] "mmrm_fit"                "mmrm_tmb"               </span></span>
 <span><span class="co">#&gt; [157] "model_fit"               "multinom"               </span></span>
 <span><span class="co">#&gt; [159] "mvord"                   "negbinirr"              </span></span>
-<span><span class="co">#&gt; [161] "negbinmfx"               "ols"                    </span></span>
-<span><span class="co">#&gt; [163] "onesampb"                "orm"                    </span></span>
-<span><span class="co">#&gt; [165] "pgmm"                    "phyloglm"               </span></span>
-<span><span class="co">#&gt; [167] "phylolm"                 "plm"                    </span></span>
-<span><span class="co">#&gt; [169] "PMCMR"                   "poissonirr"             </span></span>
-<span><span class="co">#&gt; [171] "poissonmfx"              "polr"                   </span></span>
-<span><span class="co">#&gt; [173] "probitmfx"               "psm"                    </span></span>
-<span><span class="co">#&gt; [175] "Rchoice"                 "ridgelm"                </span></span>
-<span><span class="co">#&gt; [177] "riskRegression"          "rjags"                  </span></span>
-<span><span class="co">#&gt; [179] "rlm"                     "rlmerMod"               </span></span>
-<span><span class="co">#&gt; [181] "RM"                      "rma"                    </span></span>
-<span><span class="co">#&gt; [183] "rma.uni"                 "robmixglm"              </span></span>
-<span><span class="co">#&gt; [185] "robtab"                  "rq"                     </span></span>
-<span><span class="co">#&gt; [187] "rqs"                     "rqss"                   </span></span>
-<span><span class="co">#&gt; [189] "rvar"                    "Sarlm"                  </span></span>
-<span><span class="co">#&gt; [191] "scam"                    "selection"              </span></span>
-<span><span class="co">#&gt; [193] "sem"                     "SemiParBIV"             </span></span>
-<span><span class="co">#&gt; [195] "semLm"                   "semLme"                 </span></span>
-<span><span class="co">#&gt; [197] "slm"                     "speedglm"               </span></span>
-<span><span class="co">#&gt; [199] "speedlm"                 "stanfit"                </span></span>
-<span><span class="co">#&gt; [201] "stanmvreg"               "stanreg"                </span></span>
-<span><span class="co">#&gt; [203] "summary.lm"              "survfit"                </span></span>
-<span><span class="co">#&gt; [205] "survreg"                 "svy_vglm"               </span></span>
-<span><span class="co">#&gt; [207] "svychisq"                "svyglm"                 </span></span>
-<span><span class="co">#&gt; [209] "svyolr"                  "t1way"                  </span></span>
-<span><span class="co">#&gt; [211] "tobit"                   "trimcibt"               </span></span>
-<span><span class="co">#&gt; [213] "truncreg"                "vgam"                   </span></span>
-<span><span class="co">#&gt; [215] "vglm"                    "wbgee"                  </span></span>
-<span><span class="co">#&gt; [217] "wblm"                    "wbm"                    </span></span>
-<span><span class="co">#&gt; [219] "wmcpAKP"                 "yuen"                   </span></span>
-<span><span class="co">#&gt; [221] "yuend"                   "zcpglm"                 </span></span>
-<span><span class="co">#&gt; [223] "zeroinfl"                "zerotrunc"</span></span></code></pre></div>
+<span><span class="co">#&gt; [161] "negbinmfx"               "nestedLogit"            </span></span>
+<span><span class="co">#&gt; [163] "ols"                     "onesampb"               </span></span>
+<span><span class="co">#&gt; [165] "orm"                     "pgmm"                   </span></span>
+<span><span class="co">#&gt; [167] "phyloglm"                "phylolm"                </span></span>
+<span><span class="co">#&gt; [169] "plm"                     "PMCMR"                  </span></span>
+<span><span class="co">#&gt; [171] "poissonirr"              "poissonmfx"             </span></span>
+<span><span class="co">#&gt; [173] "polr"                    "probitmfx"              </span></span>
+<span><span class="co">#&gt; [175] "psm"                     "Rchoice"                </span></span>
+<span><span class="co">#&gt; [177] "ridgelm"                 "riskRegression"         </span></span>
+<span><span class="co">#&gt; [179] "rjags"                   "rlm"                    </span></span>
+<span><span class="co">#&gt; [181] "rlmerMod"                "RM"                     </span></span>
+<span><span class="co">#&gt; [183] "rma"                     "rma.uni"                </span></span>
+<span><span class="co">#&gt; [185] "robmixglm"               "robtab"                 </span></span>
+<span><span class="co">#&gt; [187] "rq"                      "rqs"                    </span></span>
+<span><span class="co">#&gt; [189] "rqss"                    "rvar"                   </span></span>
+<span><span class="co">#&gt; [191] "Sarlm"                   "scam"                   </span></span>
+<span><span class="co">#&gt; [193] "selection"               "sem"                    </span></span>
+<span><span class="co">#&gt; [195] "SemiParBIV"              "semLm"                  </span></span>
+<span><span class="co">#&gt; [197] "semLme"                  "slm"                    </span></span>
+<span><span class="co">#&gt; [199] "speedglm"                "speedlm"                </span></span>
+<span><span class="co">#&gt; [201] "stanfit"                 "stanmvreg"              </span></span>
+<span><span class="co">#&gt; [203] "stanreg"                 "summary.lm"             </span></span>
+<span><span class="co">#&gt; [205] "survfit"                 "survreg"                </span></span>
+<span><span class="co">#&gt; [207] "svy_vglm"                "svychisq"               </span></span>
+<span><span class="co">#&gt; [209] "svyglm"                  "svyolr"                 </span></span>
+<span><span class="co">#&gt; [211] "t1way"                   "tobit"                  </span></span>
+<span><span class="co">#&gt; [213] "trimcibt"                "truncreg"               </span></span>
+<span><span class="co">#&gt; [215] "vgam"                    "vglm"                   </span></span>
+<span><span class="co">#&gt; [217] "wbgee"                   "wblm"                   </span></span>
+<span><span class="co">#&gt; [219] "wbm"                     "wmcpAKP"                </span></span>
+<span><span class="co">#&gt; [221] "yuen"                    "yuend"                  </span></span>
+<span><span class="co">#&gt; [223] "zcpglm"                  "zeroinfl"               </span></span>
+<span><span class="co">#&gt; [225] "zerotrunc"</span></span></code></pre></div>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues" class="external-link">File an issue</a> and request additional model-support in <em>insight</em>!</li>
