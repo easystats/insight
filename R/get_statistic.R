@@ -1128,7 +1128,7 @@ get_statistic.nestedLogit <- function(x, ...) {
   out$Response <- rep(response_levels, each = length(x$dichotomies))
   colnames(out)[3] <- "Statistic"
 
-  out <- text_remove_backticks(out[c("Parameter", "Statistic", "Response")])
+  out <- text_remove_backticks(out[c("Parameter", "Statistic", "Response", "Component")])
   attr(out, "statistic") <- find_statistic(x)
   out
 }

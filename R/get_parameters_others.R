@@ -48,7 +48,7 @@ get_parameters.nestedLogit <- function(x, ...) {
   params$Response <- rep(response_levels, each = length(x$dichotomies))
   params$Parameter <- rep(row.names(cf), times = ncol(cf))
 
-  text_remove_backticks(params[c("Parameter", "Estimate", "Response")])
+  text_remove_backticks(params[c("Parameter", "Estimate", "Response", "Component")])
 }
 
 
