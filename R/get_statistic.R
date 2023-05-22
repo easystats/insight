@@ -1120,15 +1120,18 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 #' @export
 get_statistic.nestedLogit <- function(x, ...) {
-  out <- do.call(rbind, lapply(x$models, function(i) stats::coef(summary(i))))
-  out$Component <- rep(names(x$models), each = length(x$models))
+  cf <- as.data.frame(stats::coef(x))
+  out <- as.data.frame(do.call(rbind, lapply(x$models, function(i) stats::coef(summary(i)))))
+  colnames(out)[3] <- "Statistic"
   response_levels <- unlist(lapply(x$dichotomies, function(i) {
     paste0("{", toString(i[[1]]), "} vs. {", toString(i[[2]]), "}")
   }))
-  out$Response <- rep(response_levels, each = length(x$dichotomies))
-  colnames(out)[3] <- "Statistic"
+  out$Response <- rep(response_levels, each = nrow(cf))
+  out$Component <- rep(names(x$models), each = nrow(cf))
+  out$Parameter <- rep(row.names(cf), times = ncol(cf))
 
   out <- text_remove_backticks(out[c("Parameter", "Statistic", "Response", "Component")])
+  row.names(out) <- NULL
   attr(out, "statistic") <- find_statistic(x)
   out
 }
