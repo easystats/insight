@@ -4,6 +4,7 @@ skip_if_not_installed("rstanarm")
 
 data("pbcLong", package = "rstanarm")
 m1 <- download_model("stanmvreg_1")
+skip_if(is.null(m1))
 
 test_that("clean_names", {
   expect_identical(
