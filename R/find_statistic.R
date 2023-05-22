@@ -127,7 +127,7 @@ find_statistic <- function(x, ...) {
     "margins", "marginaleffects", "marginaleffects.summary", "metaplus", "mixor",
     "MixMod", "mjoint", "mle", "mle2", "mlogit", "mblogit", "mclogit", "mmclogit",
     "mvmeta", "mvord",
-    "negbin", "negbinmfx", "negbinirr", "nlreg",
+    "negbin", "negbinmfx", "negbinirr", "nlreg", "nestedLogit",
     "objectiveML", "orm",
     "poissonmfx", "poissonirr", "psm", "probitmfx", "pgmm", "phyloglm",
     "qr", "QRNLMM", "QRLMM",

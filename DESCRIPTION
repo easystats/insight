@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.19.1.12
+Version: 0.19.1.13
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -97,6 +97,9 @@ Suggests:
     blme,
     boot,
     brms,
+    broom,
+    car,
+    carData,
     censReg,
     cgam,
     clubSandwich,
@@ -123,6 +126,7 @@ Suggests:
     GLMMadaptive,
     glmmTMB,
     gmnl,
+    grDevices,
     gt,
     httr,
     interp,
@@ -154,6 +158,7 @@ Suggests:
     mhurdle,
     mmrm,
     multgee,
+    nestedLogit,
     nlme,
     nnet,
     nonnest2,

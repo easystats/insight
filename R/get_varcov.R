@@ -164,6 +164,45 @@ get_varcov.mlm <- function(x,
 
 #' @rdname get_varcov
 #' @export
+get_varcov.nestedLogit <- function(x,
+                                   component = "all",
+                                   verbose = TRUE,
+                                   vcov = NULL,
+                                   vcov_args = NULL,
+                                   ...) {
+  vcovs <- lapply(
+    x$models,
+    get_varcov,
+    verbose = verbose,
+    vcov = vcov,
+    vcov_args = vcov_args,
+    ...
+  )
+
+  if (identical(component, "all") || is.null(component)) {
+    return(vcovs)
+  }
+
+  comp <- intersect(names(vcovs), component)
+  if (!length(comp)) {
+    if (verbose) {
+      format_alert(
+        paste0(
+          "No matching model found. Possible values for `component` are ",
+          toString(paste0("\"", names(vcovs), "\"")),
+          "."
+        )
+      )
+    }
+    return(NULL)
+  }
+
+  vcovs[comp]
+}
+
+
+#' @rdname get_varcov
+#' @export
 get_varcov.betareg <- function(x,
                                component = c("conditional", "precision", "all"),
                                verbose = TRUE,

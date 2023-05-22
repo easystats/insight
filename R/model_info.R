@@ -1192,6 +1192,20 @@ model_info.polr <- function(x, ...) {
 
 
 #' @export
+model_info.nestedLogit <- function(x, ...) {
+  faminfo <- stats::binomial(link = "logit")
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = TRUE,
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+
+#' @export
 model_info.hglm <- function(x, ...) {
   faminfo <- .safe({
     mc <- get_call(x)$family
