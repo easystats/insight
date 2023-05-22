@@ -145,3 +145,17 @@ test_that("get_statistic", {
     c("Parameter", "Statistic", "Response", "Component")
   )
 })
+
+test_that("get_varcov", {
+  skip_if_not_installed("sandwich")
+  expect_equal(
+    diag(get_varcov(mnl1)$work),
+    c(`(Intercept)` = 0.14727, hincome = 0.00039, childrenpresent = 0.08542),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    diag(get_varcov(mnl1, vcov = "HC3")$work),
+    c(`(Intercept)` = 0.17421, hincome = 0.00051, childrenpresent = 0.08741),
+    tolerance = 1e-3
+  )
+})
