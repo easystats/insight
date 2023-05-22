@@ -6,6 +6,9 @@ data("hunua", package = "VGAM")
 m1 <- download_model("vgam_1")
 m2 <- download_model("vgam_2")
 
+skip_if(is.null(m1))
+skip_if(is.null(m2))
+
 test_that("model_info", {
   expect_true(model_info(m1)$is_binomial)
   expect_true(model_info(m2)$is_binomial)

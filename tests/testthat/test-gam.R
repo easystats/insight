@@ -28,6 +28,9 @@ m1 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat2)
 m2 <- download_model("gam_zi_1")
 m3 <- download_model("gam_mv_1")
 
+skip_if(is.null(m2))
+skip_if(is.null(m3))
+
 test_that("model_info", {
   expect_true(model_info(m1)$is_linear)
   expect_true(model_info(m2)$is_count)

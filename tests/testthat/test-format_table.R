@@ -4,6 +4,8 @@ skip_if_not_installed("bayestestR")
 
 # test for bayesian models -----------------
 m1 <- insight::download_model("stanreg_glm_1")
+skip_if(is.null(m1))
+
 set.seed(123)
 x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf"))))
 
