@@ -2,11 +2,10 @@ skip_if_not_installed("speedglm")
 data(iris)
 data(mtcars)
 
-m1 <- speedlm(Sepal.Length ~ Petal.Width + Species, data = iris)
-m2 <-
-  speedlm(log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE),
-    data = mtcars
-  )
+m1 <- speedglm::speedlm(Sepal.Length ~ Petal.Width + Species, data = iris)
+m2 <- speedglm::speedlm(log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE),
+  data = mtcars
+)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_linear)
