@@ -94,7 +94,7 @@ formula_ok <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.default <- function(x, verbose = TRUE, ...) {
-  f <- tryCatch(list(conditional = stats::formula(x)), error = function(x) NULL)
+  f <- .safe(list(conditional = stats::formula(x)))
   .find_formula_return(f, verbose = verbose)
 }
 
@@ -470,7 +470,7 @@ find_formula.betareg <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.logitr <- function(x, verbose = TRUE, ...) {
-  f <- tryCatch(list(conditional = stats::formula(x)), error = function(x) NULL)
+  f <- .safe(list(conditional = stats::formula(x)))
   # formula() for logitr does not include outcome
   # need to paste "outcome" value from call manually to the formula
   f_cond <- trim_ws(safe_deparse(f$conditional))

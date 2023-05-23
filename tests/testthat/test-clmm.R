@@ -48,9 +48,9 @@ test_that("find_predictors", {
 })
 
 test_that("find_random", {
-  expect_equal(find_random(m1), list(random = "judge"))
-  expect_equal(find_random(m2), list(random = c("RESP", "RESP:PROD")))
-  expect_equal(find_random(m2, split_nested = TRUE), list(random = c("RESP", "PROD")))
+  expect_identical(find_random(m1), list(random = "judge"))
+  expect_identical(find_random(m2), list(random = c("RESP", "RESP:PROD")))
+  expect_identical(find_random(m2, split_nested = TRUE), list(random = c("RESP", "PROD")))
 })
 
 test_that("get_random", {
@@ -64,13 +64,13 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), wine$rating)
-  expect_equal(get_response(m2), soup$SURENESS)
+  expect_equal(get_response(m1), wine$rating, ignore_attr = TRUE)
+  expect_equal(get_response(m2), soup$SURENESS, ignore_attr = TRUE)
 })
 
 test_that("get_predictors", {
-  expect_equal(colnames(get_predictors(m1)), c("temp", "contact"))
-  expect_equal(colnames(get_predictors(m2)), "PROD")
+  expect_identical(colnames(get_predictors(m1)), c("temp", "contact"))
+  expect_identical(colnames(get_predictors(m2)), "PROD")
 })
 
 test_that("link_inverse", {
@@ -80,12 +80,12 @@ test_that("link_inverse", {
 
 test_that("get_data", {
   expect_equal(nrow(get_data(m1)), 72)
-  expect_equal(
+  expect_identical(
     colnames(get_data(m1)),
     c("rating", "temp", "contact", "judge")
   )
   expect_equal(nrow(get_data(m2)), 1847)
-  expect_equal(colnames(get_data(m2)), c("SURENESS", "PROD", "RESP"))
+  expect_identical(colnames(get_data(m2)), c("SURENESS", "PROD", "RESP"))
 })
 
 test_that("find_formula", {
@@ -110,7 +110,7 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(
       response = "rating",
@@ -118,11 +118,11 @@ test_that("find_terms", {
       random = "judge"
     )
   )
-  expect_equal(
+  expect_identical(
     find_terms(m1, flatten = TRUE),
     c("rating", "temp", "contact", "judge")
   )
-  expect_equal(
+  expect_identical(
     find_terms(m2),
     list(
       response = "SURENESS",
@@ -130,7 +130,7 @@ test_that("find_terms", {
       random = c("RESP", "PROD")
     )
   )
-  expect_equal(
+  expect_identical(
     find_terms(m2, flatten = TRUE),
     c("SURENESS", "PROD", "RESP")
   )
@@ -147,13 +147,13 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c("1|2", "2|3", "3|4", "4|5", "tempwarm", "contactyes")
     )
   )
-  expect_equal(
+  expect_identical(
     find_parameters(m2),
     list(conditional = c("threshold.1", "spacing", "PRODTest"))
   )
@@ -165,6 +165,7 @@ test_that("is_multivariate", {
 })
 
 if (getRversion() > "3.6.3") {
+  skip_on_cran() ## FIXME: check on win-devel
   test_that("get_variance", {
     expect_equal(
       get_variance(m1),

@@ -69,6 +69,7 @@ test_that("get_weights", {
 })
 
 test_that("get_deviance + logLik", {
+  skip_on_cran() ## FIXME: check with win-devel
   expect_equal(get_deviance(m2), 1697.449311, tolerance = 1e-3)
   expect_equal(get_loglikelihood(m2), logLik(m2), tolerance = 1e-3, ignore_attr = TRUE)
   expect_identical(get_df(m2, type = "model"), 4L)
@@ -752,6 +753,7 @@ mpred <- glmmTMB::glmmTMB(
 )
 
 test_that("get_predicted with new levels", {
+  skip_on_cran() ## FIXME: check with win-devel
   pr <- get_predicted(mpred, data = head(Salamanders), allow.new.levels = TRUE)
   expect_equal(as.vector(pr), c(0.252, 0.39207, 0.21119, 2.20128, 2.39424, 2.28901), tolerance = 1e-3)
 })

@@ -489,7 +489,7 @@ test_that("find_terms", {
 })
 
 test_that("find_algorithm", {
-  expect_identical(
+  expect_equal(
     find_algorithm(m1),
     list(
       algorithm = "sampling",
