@@ -221,7 +221,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   if (info$is_binomial) {
     resp <- .factor_to_numeric(resp, lowest = 0)
     if (!is.null(ncol(resp))) {
-      n <- apply(resp, 1, sum)
+      n <- rowSums(resp)
       resp <- ifelse(n == 0, 0, resp[, 1] / n)
     } else {
       n <- rep.int(1, length(resp))
