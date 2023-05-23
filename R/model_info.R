@@ -171,7 +171,19 @@ model_info.logitr <- model_info.mclogit
 
 #' @export
 model_info.maxLik <- function(x, verbose = TRUE, ...) {
-  .make_family(x, verbose = verbose, ...)
+  fitfam <- .safe(eval(get_call(x)$family))
+  if (is.null(fitfam)) {
+    .make_family(x, verbose = verbose, ...)
+  } else {
+    .make_family(
+      x,
+      fitfam = fitfam$family,
+      logit.link = fitfam$link == "logit",
+      link.fun = fitfam$link,
+      verbose = verbose,
+      ...
+    )
+  }
 }
 
 #' @export
