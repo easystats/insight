@@ -153,9 +153,6 @@ export_table <- function(x,
     }))
   }
 
-  ## TODO: check if we need to move this code before the above if-statement?
-  ## attributes might get lost after do.call()
-
   # check for indention
   indent_groups <- attributes(x)$indent_groups
   indent_rows <- attributes(x)$indent_rows
