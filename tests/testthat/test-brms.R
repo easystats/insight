@@ -1,5 +1,6 @@
 skip_on_cran()
 skip_if_offline()
+skip_on_os("mac")
 skip_if_not_installed("brms")
 
 # Model fitting -----------------------------------------------------------
