@@ -1,3 +1,10 @@
+# insight 0.19.3
+
+## Changes to functions
+
+* `standardize_names()` and `standardize_column_order()` now also recognize the
+  `"response.level"` column name.
+
 # insight 0.19.2
 
 ## Breaking changes
