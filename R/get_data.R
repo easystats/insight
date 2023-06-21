@@ -1190,18 +1190,17 @@ get_data.glimML <- function(x, effects = "all", source = "environment", verbose 
 #' @export
 get_data.lavaan <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
+  if (identical(source, "environment")) {
+    model_data <- .safe(.recover_data_from_environment(x), NULL)
 
-  if (!is.null(model_data)) {
-    return(model_data)
+    if (!is.null(model_data)) {
+      return(model_data)
+    }
   }
 
   # fall back to extract data from model frame
-  mf <- tryCatch(.recover_data_from_environment(x),
-    error = function(x) NULL
-  )
-
-  .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
+  check_if_installed("lavaan")
+  as.data.frame(lavaan::lavInspect(x, what = "data"))
 }
 
 #' @export

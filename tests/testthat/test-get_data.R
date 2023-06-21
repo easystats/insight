@@ -138,6 +138,34 @@ test_that("get_data lavaan", {
   m <- lavaan::sem(model, data = PoliticalDemocracy)
   expect_s3_class(get_data(m, verbose = FALSE), "data.frame")
   expect_equal(head(get_data(m, verbose = FALSE)), head(PoliticalDemocracy), ignore_attr = TRUE, tolerance = 1e-3)
+
+  # works when data not in environment
+  holz_data <- lavaan::HolzingerSwineford1939
+  HS.model <- " visual  =~ x1 + x2 + x3
+                textual =~ x4 + x5 + x6
+                speed   =~ x7 + x8 + x9 "
+  m_holz <- lavaan::lavaan(HS.model,
+    data = holz_data, auto.var = TRUE, auto.fix.first = TRUE,
+    auto.cov.lv.x = TRUE
+  )
+
+  out1 <- get_data(m_holz)
+  expect_named(
+    out1,
+    c(
+      "id", "sex", "ageyr", "agemo", "school", "grade", "x1", "x2",
+      "x3", "x4", "x5", "x6", "x7", "x8", "x9"
+    )
+  )
+  expect_identical(nrow(out1), 301L)
+
+  # rm(holz_data)
+  # out2 <- get_data(m_holz)
+  # expect_named(
+  #   out2,
+  #   c("x1", "x2","x3", "x4", "x5", "x6", "x7", "x8", "x9")
+  # )
+  # expect_identical(nrow(out2), 301L)
 })
 
 

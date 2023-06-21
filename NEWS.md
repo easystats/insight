@@ -5,11 +5,19 @@
 * `standardize_names()` and `standardize_column_order()` now also recognize the
   `"response.level"` column name.
 
+* `get_data()` for _lavaan_ models is now more stable at retrieving model data
+  when this is not avaible in the environment.
+
+## Bug fixes
+
 * `get_random()` now returns the same observations as `get_data()` and correctly
   removes missing values from the data before returning it.
 
 * `find_parameters()` for marginal effects ignores the `"s.value"` column (which
   was added in a recent update).
+
+* Fixed issue in `get_response()` for _brms_ models with `trunc()` function in
+  the response variable.
 
 # insight 0.19.2
 
