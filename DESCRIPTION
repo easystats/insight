@@ -163,7 +163,6 @@ Suggests:
     nnet,
     nonnest2,
     ordinal,
-    panelr,
     parameters,
     parsnip,
     pbkrtest,
