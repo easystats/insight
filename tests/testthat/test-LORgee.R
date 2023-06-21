@@ -34,19 +34,23 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), na.omit(arthritis)$y)
+  expect_equal(get_response(m1), na.omit(arthritis)$y, ignore_attr = TRUE)
 })
 
 test_that("find_random", {
-  expect_equal(find_random(m1), list(random = "id"))
+  expect_identical(find_random(m1), list(random = "id"))
 })
 
 test_that("get_random", {
-  expect_equal(get_random(m1), arthritis[, "id", drop = FALSE], ignore_attr = TRUE)
+  expect_equal(get_random(m1), arthritis[!is.na(arthritis$y), "id", drop = FALSE], ignore_attr = TRUE)
 })
 
 test_that("get_predictors", {
-  expect_equal(get_predictors(m1), na.omit(arthritis)[, c("time", "trt", "baseline"), drop = FALSE])
+  expect_equal(
+    get_predictors(m1),
+    na.omit(arthritis)[, c("time", "trt", "baseline"), drop = FALSE],
+    ignore_attr = TRUE
+  )
 })
 
 test_that("link_inverse", {
@@ -54,8 +58,8 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 888)
-  expect_equal(
+  expect_identical(nrow(get_data(m1)), 888L)
+  expect_identical(
     colnames(get_data(m1)),
     c("y", "time", "trt", "baseline", "id")
   )
@@ -75,7 +79,7 @@ test_that("find_formula", {
 
 test_that("find_terms", {
   expect_length(find_terms(m1), 3)
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(
       response = "y",
@@ -86,7 +90,7 @@ test_that("find_terms", {
 })
 
 test_that("find_variables", {
-  expect_equal(
+  expect_identical(
     find_variables(m1),
     list(
       response = "y",
@@ -94,14 +98,14 @@ test_that("find_variables", {
       random = "id"
     )
   )
-  expect_equal(
+  expect_identical(
     find_variables(m1, flatten = TRUE),
     c("y", "time", "trt", "baseline", "id")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 888)
+  expect_identical(n_obs(m1), 888L)
 })
 
 test_that("linkfun", {
@@ -109,7 +113,7 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c(
@@ -127,8 +131,8 @@ test_that("find_parameters", {
       )
     )
   )
-  expect_equal(nrow(get_parameters(m1)), 11)
-  expect_equal(
+  expect_identical(nrow(get_parameters(m1)), 11L)
+  expect_identical(
     get_parameters(m1)$Parameter,
     c(
       "beta10",
@@ -151,7 +155,7 @@ test_that("is_multivariate", {
 })
 
 test_that("find_algorithm", {
-  expect_equal(find_algorithm(m1), list(algorithm = "Fisher's scoring ML"))
+  expect_identical(find_algorithm(m1), list(algorithm = "Fisher's scoring ML"))
 })
 
 test_that("find_statistic", {
