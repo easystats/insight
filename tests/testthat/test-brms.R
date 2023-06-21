@@ -19,7 +19,7 @@ all_loaded <- !vapply(list(m1, m2, m3, m4, m5, m6, m7, m8, brms_trunc_1), is.nul
 skip_if(!all(all_loaded))
 
 # Tests -------------------------------------------------------------------
-test_that("get_predicted.brmsfit: ordinal dv", {
+test_that("get_response.brmsfit: trunc", {
   expect_identical(find_response(brms_trunc_1), "count")
   expect_length(get_response(brms_trunc_1, source = "env"), 236)
   expect_length(get_response(brms_trunc_1, source = "mf"), 236)

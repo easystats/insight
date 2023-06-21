@@ -168,14 +168,16 @@ check_cbind <- function(resp, combine, model) {
     r_resp <- trim_ws(unlist(strsplit(resp, "|", fixed = TRUE))[2])
     if (grepl("^(resp_thres|thres|resp_weights|weights|resp_se|se|resp_cens|cens)", r_resp)) {
       r3 <- trim_ws(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp), fixed = TRUE))
-      names(r3) <- r3
       numeric_values <- suppressWarnings(as.numeric(r2))
       r2 <- r2[is.na(numeric_values)]
-      if (length(r2)) {
-        r2 <- c(r2, r3)
-      } else {
-        r2 <- r3
+      if (is.na(suppressWarnings(as.numeric(r3)))) {
+        if (length(r2)) {
+          r2 <- c(r2, r3)
+        } else {
+          r2 <- r3
+        }
       }
+      resp <- compact_character(c(r1, r2))
     } else if (grepl("^(resp_trunc|trunc|resp_mi|mi)", r_resp)) {
       # for models with "trunc()", "mi()" etc. in response, which cannot have
       # variables, omit that part (see #779)
