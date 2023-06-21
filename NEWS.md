@@ -5,6 +5,9 @@
 * `standardize_names()` and `standardize_column_order()` now also recognize the
   `"response.level"` column name.
 
+* `get_data()` for _lavaan_ models is now more stable at retrieving model data
+  when this is not avaible in the environment.
+
 ## Bug fixes
 
 * `get_random()` now returns the same observations as `get_data()` and correctly
