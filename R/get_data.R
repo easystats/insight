@@ -74,9 +74,21 @@ get_data <- function(x, ...) {
   # we want to add the variable for subsettig, too
   model_call <- get_call(x)
 
+  # for random effects, we still need all variables to be extracted
+  # in case we have missing data. E.g., if random effects variables have
+  # no missing data, but response or other fixed effects has, "get_random()"
+  # should only return non-missing data for the model - thus, missing cases
+  # in any fixed effects variable should be removed, even if non-missing in
+  # random effects variables (see #777)
+  if (effects == "random") {
+    selected_vars <- "all"
+  } else {
+    selected_vars <- effects
+  }
+
   # extract model variables, if possible
   vars <- try(
-    find_variables(x, effects = effects, component = component, flatten = TRUE, verbose = FALSE),
+    find_variables(x, effects = selected_vars, component = component, flatten = TRUE, verbose = FALSE),
     silent = TRUE
   )
 
@@ -116,7 +128,7 @@ get_data <- function(x, ...) {
       }
       # add response, only required if "find_variables()" does not already
       # return it (which is the case when component is "all" or "conditional")
-      if (effects %in% c("all", "fixed") && !component %in% c("all", "conditional")) {
+      if (!component %in% c("all", "conditional")) {
         vars <- c(vars, find_response(x, combine = FALSE))
       }
 
@@ -144,18 +156,17 @@ get_data <- function(x, ...) {
         }
       }
 
-      # remove response for random effects
-      if (effects == "random") {
-        resp <- find_response(x, combine = FALSE)
-        dat <- dat[, setdiff(colnames(dat), resp), drop = FALSE]
-      }
-
       # complete cases only, as in model frames, need to filter attributes
       # only use model variables in complete.cases()
       if (!is.null(vars)) {
         cc <- stats::complete.cases(dat[, intersect(vars, colnames(dat))])
       } else {
         cc <- stats::complete.cases(dat)
+      }
+
+      # only preserve random effects
+      if (effects == "random") {
+        dat <- dat[find_random(x, split_nested = TRUE, flatten = TRUE)]
       }
 
       if (!all(cc)) {
