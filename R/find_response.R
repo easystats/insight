@@ -185,7 +185,7 @@ check_cbind <- function(resp, combine, model) {
     } else if (grepl("^(resp_trials|trials|resp_cat|cat|resp_dec|dec)", r_resp)) {
       if (is.na(suppressWarnings(as.numeric(r2)))) {
         # if we have a variable, add it
-        resp <- c(r1, r2)
+        resp <- compact_character(c(r1, r2))
       } else {
         # else, if we have a constant (like "trials(1)"), omit it
         resp <- r1
