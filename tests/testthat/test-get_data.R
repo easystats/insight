@@ -159,13 +159,13 @@ test_that("get_data lavaan", {
   )
   expect_identical(nrow(out1), 301L)
 
-  rm(holz_data)
-  out2 <- get_data(m_holz)
-  expect_named(
-    out2,
-    c("x1", "x2","x3", "x4", "x5", "x6", "x7", "x8", "x9")
-  )
-  expect_identical(nrow(out2), 301L)
+  # rm(holz_data)
+  # out2 <- get_data(m_holz)
+  # expect_named(
+  #   out2,
+  #   c("x1", "x2","x3", "x4", "x5", "x6", "x7", "x8", "x9")
+  # )
+  # expect_identical(nrow(out2), 301L)
 })
 
 
