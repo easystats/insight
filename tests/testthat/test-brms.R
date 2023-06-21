@@ -553,20 +553,18 @@ test_that("Issue #645", {
   # sink() writing permission fail on some Windows CI machines
   skip_on_os("windows")
 
-  void <- suppressMessages(suppressWarnings(capture.output(
-    {
-      mod <- brms::brm(
-        silent = 2,
-        data = mtcars,
-        family = brms::cumulative(probit),
-        formula = brms::bf(
-          cyl ~ 1 + mpg + drat + gearnl,
-          gearnl ~ 0 + (1 | gear),
-          nl = TRUE
-        )
+  void <- suppressMessages(suppressWarnings(capture.output({
+    mod <- brms::brm(
+      silent = 2,
+      data = mtcars,
+      family = brms::cumulative(probit),
+      formula = brms::bf(
+        cyl ~ 1 + mpg + drat + gearnl,
+        gearnl ~ 0 + (1 | gear),
+        nl = TRUE
       )
-    }
-  )))
+    )
+  })))
 
   p <- find_predictors(mod, flatten = TRUE)
   d <- get_data(mod)
