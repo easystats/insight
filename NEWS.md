@@ -5,6 +5,9 @@
 * `standardize_names()` and `standardize_column_order()` now also recognize the
   `"response.level"` column name.
 
+* `find_parameters()` for marginal effects ignores the `"s.value"` column (which
+  was added in a recent update).
+
 # insight 0.19.2
 
 ## Breaking changes
