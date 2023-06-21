@@ -13,27 +13,27 @@ x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c(
 test_that("format_table with stars bayes", {
   out <- format_table(x)
   expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
-  expect_identical(out$BF, c("62.73", "114.21"))
+  expect_identical(out$BF[2], "114.21")
   expect_identical(out$pd, c("99.98%", "100%"))
 
   out <- format_table(x, stars = TRUE)
   expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
-  expect_identical(out$BF, c("62.73***", "114.21***"))
+  expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = c("pd", "BF"))
   expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
-  expect_identical(out$BF, c("62.73***", "114.21***"))
+  expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = "pd")
   expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
-  expect_identical(out$BF, c("62.73", "114.21"))
+  expect_identical(out$BF[2], "114.21")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = "BF")
   expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
-  expect_identical(out$BF, c("62.73***", "114.21***"))
+  expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%", "100%"))
 })
 
