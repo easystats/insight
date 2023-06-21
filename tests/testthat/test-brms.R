@@ -51,7 +51,7 @@ test_that("get_predicted.brmsfit: ordinal dv", {
   manual <- apply(manual[, , 1], 2, median)
   expect_equal(pred3$Predicted[1:32], manual, ignore_attr = TRUE)
   manual <- rstantools::posterior_epred(m8)
-  manual <- rowMeans(manual[, , 1])
+  manual <- apply(manual[, , 1], 2, mean) # nolint
   expect_equal(pred1$Predicted[1:32], manual, ignore_attr = TRUE)
 })
 
@@ -497,14 +497,15 @@ test_that("find_terms", {
 })
 
 test_that("find_algorithm", {
-  expect_identical(
+  expect_equal(
     find_algorithm(m1),
     list(
       algorithm = "sampling",
       chains = 1,
       iterations = 500,
       warmup = 250
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 

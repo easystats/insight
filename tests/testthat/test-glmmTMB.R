@@ -583,8 +583,8 @@ test_that("get_data", {
       "xb"
     )
   )
-  expect_identical(
-    colnames(get_data(m4, effects = "fixed")),
+  expect_named(
+    get_data(m4, effects = "fixed"),
     c("count", "child", "camper", "livebait", "xb")
   )
   expect_identical(colnames(get_data(m4, effects = "random")), c("persons", "ID"))
@@ -593,22 +593,22 @@ test_that("get_data", {
     m4,
     component = "zi", effects = "fixed"
   )), c("child", "livebait", "count"))
-  expect_identical(colnames(get_data(
-    m4,
-    component = "zi", effects = "random"
-  )), "ID")
-  expect_identical(
-    colnames(get_data(m4, component = "cond")),
+  expect_named(
+    get_data(m4, component = "zi", effects = "random", verbose = FALSE),
+    "ID"
+  )
+  expect_named(
+    get_data(m4, component = "cond", verbose = FALSE),
     c("count", "child", "camper", "persons")
   )
-  expect_identical(colnames(get_data(
-    m4,
-    component = "cond", effects = "fixed"
-  )), c("count", "child", "camper"))
-  expect_identical(colnames(get_data(
-    m4,
-    component = "cond", effects = "random"
-  )), "persons")
+  expect_named(
+    get_data(m4, component = "cond", effects = "fixed", verbose = FALSE),
+    c("count", "child", "camper")
+  )
+  expect_named(
+    get_data(m4, component = "cond", effects = "random", verbose = FALSE),
+    "persons"
+  )
   expect_identical(colnames(get_data(m4, component = "disp")), c("xb", "count"))
   expect_identical(colnames(get_data(
     m4,
