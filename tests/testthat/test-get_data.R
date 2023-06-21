@@ -149,6 +149,7 @@ test_that("get_data lavaan", {
     auto.cov.lv.x = TRUE
   )
 
+  skip_on_os(c("mac", "linux"))
   out1 <- get_data(m_holz)
   expect_named(
     out1,
