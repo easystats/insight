@@ -384,7 +384,10 @@ test_that("find_paramaters", {
           ),
           random = c(sprintf("r_persons__count2[%i,Intercept]", 1:4), "sd_persons__count2_Intercept"),
           zero_inflated = c("b_zi_count2_Intercept", "b_zi_count2_child"),
-          zero_inflated_random = c(sprintf("r_persons__zi_count2[%i,Intercept]", 1:4), "sd_persons__zi_count2_Intercept")
+          zero_inflated_random = c(
+            sprintf("r_persons__zi_count2[%i,Intercept]", 1:4),
+            "sd_persons__zi_count2_Intercept"
+          )
         )
       ),
       "is_mv" = "1"
