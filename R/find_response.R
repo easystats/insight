@@ -177,7 +177,12 @@ check_cbind <- function(resp, combine, model) {
         r2 <- r3
       }
     }
-    resp <- c(r1, r2)
+    # for models with "trunc()" in response, omit that part (see #779)
+    if (startsWith(r_resp, "trunc")) {
+      resp <- r1
+    } else {
+      resp <- c(r1, r2)
+    }
   } else if (inherits(model, "DirichletRegModel")) {
     resp <- model$varnames
   } else {
