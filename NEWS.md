@@ -5,6 +5,9 @@
 * `standardize_names()` and `standardize_column_order()` now also recognize the
   `"response.level"` column name.
 
+* `get_random()` now returns the same observations as `get_data()` and correctly
+  removes missing values from the data before returning it.
+
 * `find_parameters()` for marginal effects ignores the `"s.value"` column (which
   was added in a recent update).
 
