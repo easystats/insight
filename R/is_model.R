@@ -122,7 +122,7 @@ is_regression_model <- function(x) {
 
     # n --------------------
     "negbin", "negbinmfx", "negbinirr", "nlreg", "nlrq", "nls",
-    "nparLD",
+    "nparLD", "nestedLogit",
 
     # o --------------------
     "objectiveML", "ols", "osrt", "orcutt",

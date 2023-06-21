@@ -5,6 +5,9 @@ skip_if_not_installed("lme4")
 m <- download_model("GLMMadaptive_zi_2")
 m2 <- download_model("GLMMadaptive_zi_1")
 
+skip_if(is.null(m))
+skip_if(is.null(m2))
+
 data(cbpp, package = "lme4")
 tmp <<- cbpp
 m3 <- GLMMadaptive::mixed_model(
@@ -68,7 +71,7 @@ test_that("find_predictors", {
   )
   expect_identical(
     find_predictors(m, effects = "all")$zero_inflated_random,
-    c("persons")
+    "persons"
   )
   expect_identical(find_predictors(m, effects = "random")$random, "persons")
   expect_identical(
@@ -167,15 +170,14 @@ test_that("clean_names", {
 
 test_that("find_formula", {
   expect_length(find_formula(m), 4)
-  expect_identical(
-    names(find_formula(m)),
+  expect_named(
+    find_formula(m),
     c(
       "conditional",
       "random",
       "zero_inflated",
       "zero_inflated_random"
-    ),
-    ignore_attr = TRUE
+    )
   )
 })
 

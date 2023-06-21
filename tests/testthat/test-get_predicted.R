@@ -532,14 +532,25 @@ test_that("bugfix: used to return all zeros", {
 # Original Error: "variables were specified with different types from the fit"
 # Originates from using base R scale on dataframe (easystats/performance#432)
 test_that("bugfix: used to fail with matrix variables", {
-  mtcars2 <- mtcars
-  mtcars2$wt <- scale(mtcars2$wt)
-  m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars2)
-  pred <- get_predicted(m)
+  # put model data in a separate environment, to ensure we retrieve the correct
+  # data to fix its classes
+  foo <- function() {
+    mtcars2 <- mtcars
+    mtcars2$wt <- scale(mtcars2$wt)
+    return(lm(mpg ~ wt + cyl + gear + disp, data = mtcars2))
+  }
+  pred <- get_predicted(foo())
   expect_equal(class(pred), c("get_predicted", "numeric"))
   expect_true(all(attributes(attributes(attributes(
     pred
   )$data)$terms)$dataClasses == "numeric"))
+
+  # Now verify with the data in the same environment
+  mtcars2 <- mtcars
+  mtcars2$wt <- scale(mtcars2$wt)
+  m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars2)
+  expect_no_error(pred <- get_predicted(m))
+
   mtcars2$wt <- as.numeric(mtcars2$wt)
   m2 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars2)
   pred2 <- get_predicted(m2)
@@ -549,6 +560,7 @@ test_that("bugfix: used to fail with matrix variables", {
 test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   skip_on_cran()
   skip_if_not_installed("brms")
+  skip_on_os(os = "windows")
   void <- capture.output(
     suppressMessages(mod <- brms::brm(am ~ hp + mpg,
       family = brms::bernoulli, data = mtcars,

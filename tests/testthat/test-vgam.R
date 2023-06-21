@@ -6,6 +6,9 @@ data("hunua", package = "VGAM")
 m1 <- download_model("vgam_1")
 m2 <- download_model("vgam_2")
 
+skip_if(is.null(m1))
+skip_if(is.null(m2))
+
 test_that("model_info", {
   expect_true(model_info(m1)$is_binomial)
   expect_true(model_info(m2)$is_binomial)
@@ -53,8 +56,8 @@ test_that("get_response", {
 })
 
 test_that("get_predictors", {
-  expect_equal(colnames(get_predictors(m1)), c("vitluc", "altitude"))
-  expect_equal(colnames(get_predictors(m2)), c("vitluc", "altitude"))
+  expect_identical(colnames(get_predictors(m1)), c("vitluc", "altitude"))
+  expect_identical(colnames(get_predictors(m2)), c("vitluc", "altitude"))
 })
 
 test_that("link_inverse", {
@@ -63,10 +66,10 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 392)
-  expect_equal(nrow(get_data(m2)), 392)
-  expect_equal(colnames(get_data(m1)), c("agaaus", "vitluc", "altitude"))
-  expect_equal(
+  expect_identical(nrow(get_data(m1)), 392L)
+  expect_identical(nrow(get_data(m2)), 392L)
+  expect_identical(colnames(get_data(m1)), c("agaaus", "vitluc", "altitude"))
+  expect_identical(
     colnames(get_data(m2)),
     c("agaaus", "kniexc", "vitluc", "altitude")
   )
@@ -90,25 +93,25 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(
       response = "agaaus",
       conditional = c("vitluc", "s(altitude, df = 2)")
     )
   )
-  expect_equal(
+  expect_identical(
     find_terms(m1, flatten = TRUE),
     c("agaaus", "vitluc", "s(altitude, df = 2)")
   )
-  expect_equal(
+  expect_identical(
     find_terms(m2),
     list(
       response = "cbind(agaaus, kniexc)",
       conditional = c("vitluc", "s(altitude, df = c(2, 3))")
     )
   )
-  expect_equal(
+  expect_identical(
     find_terms(m2, flatten = TRUE),
     c(
       "cbind(agaaus, kniexc)",
@@ -119,30 +122,30 @@ test_that("find_terms", {
 })
 
 test_that("find_variables", {
-  expect_equal(
+  expect_identical(
     find_variables(m1),
     list(
       response = "agaaus",
       conditional = c("vitluc", "altitude")
     )
   )
-  expect_equal(
+  expect_identical(
     find_variables(m1, flatten = TRUE),
     c("agaaus", "vitluc", "altitude")
   )
-  expect_equal(find_variables(m2), list(
+  expect_identical(find_variables(m2), list(
     response = c("agaaus", "kniexc"),
     conditional = c("vitluc", "altitude")
   ))
-  expect_equal(
+  expect_identical(
     find_variables(m2, flatten = TRUE),
     c("agaaus", "kniexc", "vitluc", "altitude")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 392)
-  expect_equal(n_obs(m2), 392)
+  expect_identical(n_obs(m1), 392L)
+  expect_identical(n_obs(m2), 392L)
 })
 
 test_that("linkfun", {
@@ -151,20 +154,20 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c("(Intercept)", "vitluc"),
       smooth_terms = "s(altitude, df = 2)"
     )
   )
-  expect_equal(nrow(get_parameters(m1)), 3)
-  expect_equal(
+  expect_identical(nrow(get_parameters(m1)), 3L)
+  expect_identical(
     get_parameters(m1)$Parameter,
     c("(Intercept)", "vitluc", "s(altitude, df = 2)")
   )
 
-  expect_equal(
+  expect_identical(
     find_parameters(m2),
     list(
       conditional = c(
@@ -176,8 +179,8 @@ test_that("find_parameters", {
       smooth_terms = c("s(altitude, df = c(2, 3)):1", "s(altitude, df = c(2, 3)):2")
     )
   )
-  expect_equal(nrow(get_parameters(m2)), 6)
-  expect_equal(
+  expect_identical(nrow(get_parameters(m2)), 6L)
+  expect_identical(
     get_parameters(m2)$Parameter,
     c(
       "(Intercept):1",

@@ -51,7 +51,7 @@ format_ci <- function(CI_low,
     ci_brackets <- brackets
   }
 
-  if (!is.null(width) && width == "auto") {
+  if (!is.null(width) && all(width == "auto")) {
     # set default numeric value for digits
     sig_digits <- digits
 

@@ -1,4 +1,6 @@
+skip_on_cran()
 skip_if_offline()
+skip_on_os("mac")
 skip_if_not_installed("brms")
 
 # Model fitting -----------------------------------------------------------
@@ -11,24 +13,35 @@ m5 <- insight::download_model("brms_mv_5")
 m6 <- insight::download_model("brms_corr_re1")
 m7 <- suppressWarnings(insight::download_model("brms_mixed_8"))
 m8 <- insight::download_model("brms_ordinal_1")
+brms_trunc_1 <- download_model("brms_trunc_1")
+
+all_loaded <- !vapply(list(m1, m2, m3, m4, m5, m6, m7, m8, brms_trunc_1), is.null, TRUE)
+skip_if(!all(all_loaded))
 
 # Tests -------------------------------------------------------------------
 test_that("get_predicted.brmsfit: ordinal dv", {
+  expect_identical(find_response(brms_trunc_1), "count")
+  expect_length(get_response(brms_trunc_1, source = "env"), 236)
+  expect_length(get_response(brms_trunc_1, source = "mf"), 236)
+})
+
+test_that("get_predicted.brmsfit: ordinal dv", {
   skip_if_not_installed("bayestestR")
+  skip_if_not_installed("rstantools")
 
   pred1 <- get_predicted(m8, ci = 0.95)
   pred2 <- get_predicted(m8, ci_method = "hdi", ci = 0.95)
-  expect_true(inherits(pred1, "get_predicted"))
-  expect_true(inherits(pred1, "data.frame"))
+  expect_s3_class(pred1, "get_predicted")
+  expect_s3_class(pred1, "data.frame")
   expect_true(all(c("Row", "Response") %in% colnames(pred1)))
 
   # ci_method changes intervals but not se or predicted
   pred1 <- data.frame(pred1)
   pred2 <- data.frame(pred2)
-  expect_equal(pred1$Row, pred2$Row)
-  expect_equal(pred1$Response, pred2$Response)
-  expect_equal(pred1$Predicted, pred2$Predicted)
-  expect_equal(pred1$SE, pred2$SE)
+  expect_equal(pred1$Row, pred2$Row, ignore_attr = TRUE)
+  expect_equal(pred1$Response, pred2$Response, ignore_attr = TRUE)
+  expect_equal(pred1$Predicted, pred2$Predicted, ignore_attr = TRUE)
+  expect_equal(pred1$SE, pred2$SE, ignore_attr = TRUE)
   expect_false(mean(pred1$CI_low == pred2$CI_low) > 0.1) # most CI bounds are different
   expect_false(mean(pred1$CI_high == pred2$CI_high) > 0.1) # most CI bounds are different
 
@@ -36,10 +49,10 @@ test_that("get_predicted.brmsfit: ordinal dv", {
   pred3 <- get_predicted(m8, centrality_function = stats::median, ci = 0.95)
   manual <- rstantools::posterior_epred(m8)
   manual <- apply(manual[, , 1], 2, median)
-  expect_equal(pred3$Predicted[1:32], manual)
+  expect_equal(pred3$Predicted[1:32], manual, ignore_attr = TRUE)
   manual <- rstantools::posterior_epred(m8)
-  manual <- apply(manual[, , 1], 2, mean)
-  expect_equal(pred1$Predicted[1:32], manual)
+  manual <- apply(manual[, , 1], 2, mean) # nolint
+  expect_equal(pred1$Predicted[1:32], manual, ignore_attr = TRUE)
 })
 
 test_that("find_statistic", {
@@ -51,8 +64,8 @@ test_that("find_statistic", {
 })
 
 test_that("n_parameters", {
-  expect_equal(n_parameters(m1), 65)
-  expect_equal(n_parameters(m1, effects = "fixed"), 5)
+  expect_identical(n_parameters(m1), 65L)
+  expect_identical(n_parameters(m1, effects = "fixed"), 5L)
 })
 
 test_that("model_info", {
@@ -161,20 +174,20 @@ test_that("find_predictors", {
 })
 
 test_that("find_response", {
-  expect_equal(find_response(m1, combine = TRUE), "count")
-  expect_equal(
+  expect_identical(find_response(m1, combine = TRUE), "count")
+  expect_identical(
     find_response(m2, combine = TRUE),
     c(SepalLength = "Sepal.Length", SepalWidth = "Sepal.Width")
   )
-  expect_equal(find_response(m3, combine = TRUE), c("r", "n"))
-  expect_equal(find_response(m1, combine = FALSE), "count")
-  expect_equal(
+  expect_identical(find_response(m3, combine = TRUE), c("r", "n"))
+  expect_identical(find_response(m1, combine = FALSE), "count")
+  expect_identical(
     find_response(m2, combine = FALSE),
     c(SepalLength = "Sepal.Length", SepalWidth = "Sepal.Width")
   )
-  expect_equal(find_response(m3, combine = FALSE), c("r", "n"))
-  expect_equal(find_response(m4, combine = FALSE), "count")
-  expect_equal(
+  expect_identical(find_response(m3, combine = FALSE), c("r", "n"))
+  expect_identical(find_response(m4, combine = FALSE), "count")
+  expect_identical(
     find_response(m5, combine = TRUE),
     c(count = "count", count2 = "count2")
   )
@@ -182,15 +195,15 @@ test_that("find_response", {
 
 test_that("get_response", {
   expect_length(get_response(m1), 236)
-  expect_equal(ncol(get_response(m2)), 2)
-  expect_equal(
+  expect_identical(ncol(get_response(m2)), 2L)
+  expect_identical(
     colnames(get_response(m2)),
     c("Sepal.Length", "Sepal.Width")
   )
-  expect_equal(ncol(get_response(m3)), 2)
-  expect_equal(colnames(get_response(m3)), c("r", "n"))
+  expect_identical(ncol(get_response(m3)), 2L)
+  expect_identical(colnames(get_response(m3)), c("r", "n"))
   expect_length(get_response(m4), 250)
-  expect_equal(colnames(get_response(m5)), c("count", "count2"))
+  expect_identical(colnames(get_response(m5)), c("count", "count2"))
 })
 
 test_that("find_variables", {
@@ -264,16 +277,16 @@ test_that("find_variables", {
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 236)
-  expect_equal(n_obs(m2), 150)
-  expect_equal(n_obs(m3), 10)
-  expect_equal(n_obs(m4), 250)
-  expect_equal(n_obs(m5), 250)
+  expect_identical(n_obs(m1), 236L)
+  expect_identical(n_obs(m2), 150L)
+  expect_identical(n_obs(m3), 10L)
+  expect_identical(n_obs(m4), 250L)
+  expect_identical(n_obs(m5), 250L)
 })
 
 
 test_that("find_random", {
-  expect_equal(find_random(m5), list(
+  expect_identical(find_random(m5), list(
     count = list(
       random = "persons",
       zero_inflated_random = "persons"
@@ -283,26 +296,26 @@ test_that("find_random", {
       zero_inflated_random = "persons"
     )
   ))
-  expect_equal(find_random(m5, flatten = TRUE), "persons")
-  expect_equal(find_random(m6, flatten = TRUE), "id")
+  expect_identical(find_random(m5, flatten = TRUE), "persons")
+  expect_identical(find_random(m6, flatten = TRUE), "id")
 })
 
 
 test_that("get_random", {
   zinb <- get_data(m4)
-  expect_equal(get_random(m4), zinb[, "persons", drop = FALSE])
+  expect_identical(get_random(m4), zinb[, "persons", drop = FALSE])
 })
 
 
 test_that("get_data", {
   d <- get_data(m6)
-  expect_equal(nrow(d), 200)
-  expect_equal(ncol(d), 3)
+  expect_identical(nrow(d), 200L)
+  expect_identical(ncol(d), 3L)
 })
 
 
 test_that("find_paramaters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c(
@@ -316,7 +329,7 @@ test_that("find_paramaters", {
     )
   )
 
-  expect_equal(
+  expect_identical(
     find_parameters(m2),
     structure(
       list(
@@ -343,7 +356,7 @@ test_that("find_paramaters", {
     )
   )
 
-  expect_equal(
+  expect_identical(
     find_parameters(m4),
     list(
       conditional = c("b_Intercept", "b_child", "b_camper"),
@@ -353,7 +366,7 @@ test_that("find_paramaters", {
     )
   )
 
-  expect_equal(
+  expect_identical(
     find_parameters(m5, effects = "all"),
     structure(
       list(
@@ -380,7 +393,7 @@ test_that("find_paramaters", {
 })
 
 test_that("find_paramaters", {
-  expect_equal(
+  expect_identical(
     colnames(get_parameters(m4)),
     c(
       "b_Intercept",
@@ -391,11 +404,11 @@ test_that("find_paramaters", {
       "b_zi_camper"
     )
   )
-  expect_equal(
+  expect_identical(
     colnames(get_parameters(m4, component = "zi")),
     c("b_zi_Intercept", "b_zi_child", "b_zi_camper")
   )
-  expect_equal(
+  expect_identical(
     colnames(get_parameters(m4, effects = "all")),
     c(
       "b_Intercept", "b_child", "b_camper", "r_persons[1,Intercept]",
@@ -405,14 +418,14 @@ test_that("find_paramaters", {
       "r_persons__zi[4,Intercept]", "sd_persons__zi_Intercept"
     )
   )
-  expect_equal(
+  expect_identical(
     colnames(get_parameters(m4, effects = "random", component = "conditional")),
     c(
       "r_persons[1,Intercept]", "r_persons[2,Intercept]", "r_persons[3,Intercept]",
       "r_persons[4,Intercept]", "sd_persons__Intercept"
     )
   )
-  expect_equal(
+  expect_identical(
     colnames(get_parameters(m5, effects = "random", component = "conditional")),
     c(
       "r_persons__count[1,Intercept]", "r_persons__count[2,Intercept]",
@@ -423,7 +436,7 @@ test_that("find_paramaters", {
     )
   )
 
-  expect_equal(
+  expect_identical(
     colnames(get_parameters(m5, effects = "all", component = "all")),
     c(
       "b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count[1,Intercept]",
@@ -468,7 +481,7 @@ test_that("is_multivariate", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m2),
     list(
       SepalLength = list(
@@ -491,7 +504,8 @@ test_that("find_algorithm", {
       chains = 1,
       iterations = 500,
       warmup = 250
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
@@ -537,16 +551,18 @@ test_that("Issue #645", {
   skip_on_os("windows")
 
   void <- suppressMessages(suppressWarnings(capture.output(
-    mod <- brms::brm(
-      silent = 2,
-      data = mtcars,
-      family = brms::cumulative(probit),
-      formula = brms::bf(
-        cyl ~ 1 + mpg + drat + gearnl,
-        gearnl ~ 0 + (1 | gear),
-        nl = TRUE
+    {
+      mod <- brms::brm(
+        silent = 2,
+        data = mtcars,
+        family = brms::cumulative(probit),
+        formula = brms::bf(
+          cyl ~ 1 + mpg + drat + gearnl,
+          gearnl ~ 0 + (1 | gear),
+          nl = TRUE
+        )
       )
-    )
+    }
   )))
 
   p <- find_predictors(mod, flatten = TRUE)

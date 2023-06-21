@@ -64,7 +64,7 @@ standardize_column_order.parameters_model <- function(data,
       "Median", "Mean", "MAP", "MAD", "Dxy", "Difference", "Predicted", "Psihat",
       "Trimmed_Mean", "R2", "Mu",
       # type of estimate
-      "Group", "Component", "Response", "Effects", "Weight",
+      "Group", "Component", "Response", "Response_Level", "Effects", "Weight",
       # uncertainty
       "SE", "Std. Error", "SD", "Deviance_error",
       "CI", "CI_low", "CI_high", "Difference_CI_low", "Difference_CI_high",
@@ -107,7 +107,7 @@ standardize_column_order.parameters_model <- function(data,
       # estimate
       "estimate", "mean.group1", "mean.group2", "predicted",
       # type of estimate
-      "group", "component", "response", "effects", "weight",
+      "group", "component", "response", "response.level", "effects", "weight",
       # uncertainty
       "std.error", "std.dev",
       "conf.level", "conf.low", "conf.high", "conf.method", "conf.distribution", "conf.iterations",

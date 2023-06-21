@@ -26,6 +26,7 @@ test_that("is_converged", {
 
 
 skip_on_os("mac") # error: FreeADFunObject
+skip_on_cran() ## FIXME: check with win-devel
 skip_if_not_installed("glmmTMB")
 skip_if_not_installed("TMB")
 

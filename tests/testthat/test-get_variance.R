@@ -241,14 +241,12 @@ m5 <- lme4::lmer(Reaction ~ Days + (0 + Days + Months | Subject), data = study_d
 
 test_that("random effects CIs, simple slope", {
   vc <- suppressWarnings(get_variance(m2))
-  expect_equal(
-    names(vc),
+  expect_named(
+    vc,
     c(
       "var.fixed", "var.random", "var.residual", "var.distribution",
       "var.dispersion", "var.slope"
-    ),
-    tolerance = 1e-3,
-    ignore_attr = TRUE
+    )
   )
 })
 
@@ -283,4 +281,26 @@ test_that("random effects CIs, poly slope", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
+})
+
+test_that("fixed effects variance for rank-deficient models, #765", {
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.8")
+  set.seed(101)
+  dd <- data.frame(
+    z = rnorm(1000),
+    x1 = 1:1000, x2 = runif(1000, 0, 10),
+    re = rep(1:20, each = 50)
+  )
+  dd <- transform(dd, x3 = as.factor(ifelse(x1 <= 500, "Low", sample(c("Middle", "High"), 1000, replace = TRUE))))
+  dd <- transform(dd, x4 = as.factor(ifelse(x1 > 500, "High", sample(c("Absent", "Low"), 1000, replace = TRUE))))
+  dd <- transform(dd, z = z + re * 5)
+
+  expect_message({
+    mod_TMB <- glmmTMB(z ~ x1 + x2 + x3 + x4 + (1 | re),
+      data = dd,
+      control = glmmTMBControl(rank_check = "adjust")
+    )
+  })
+  out <- get_variance_fixed(mod_TMB)
+  expect_equal(c(var.fixed = 627.03661), tolerance = 1e-4)
 })

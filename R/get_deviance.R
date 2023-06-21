@@ -83,14 +83,7 @@ get_deviance.lrm <- function(x, ...) {
 
 #' @export
 get_deviance.glmmTMB <- function(x, ...) {
-  tryCatch(
-    {
-      -2 * as.numeric(get_loglikelihood(x, ...))
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  .safe(-2 * as.numeric(get_loglikelihood(x, ...)))
 }
 
 #' @export

@@ -1119,6 +1119,40 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.nestedLogit <- function(x, component = "all", verbose = TRUE, ...) {
+  cf <- as.data.frame(stats::coef(x))
+  out <- as.data.frame(do.call(rbind, lapply(x$models, function(i) stats::coef(summary(i)))))
+  colnames(out)[3] <- "Statistic"
+  response_levels <- unlist(lapply(x$dichotomies, function(i) {
+    paste0("{", toString(i[[1]]), "} vs. {", toString(i[[2]]), "}")
+  }))
+  out$Response <- rep(response_levels, each = nrow(cf))
+  out$Component <- rep(names(x$models), each = nrow(cf))
+  out$Parameter <- rep(row.names(cf), times = ncol(cf))
+
+  if (!is.null(component) && !identical(component, "all")) {
+    comp <- intersect(names(x$models), component)
+    if (!length(comp) && verbose) {
+      format_alert(
+        paste0(
+          "No matching model found. Possible values for `component` are ",
+          toString(paste0("\"", names(x$models), "\"")),
+          "."
+        )
+      )
+    } else {
+      out <- out[out$Component %in% component, ]
+    }
+  }
+
+  out <- text_remove_backticks(out[c("Parameter", "Statistic", "Response", "Component")])
+  row.names(out) <- NULL
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.pgmm <- function(x,
                                component = c("conditional", "all"),
                                verbose = TRUE,

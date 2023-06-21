@@ -108,7 +108,7 @@
   # backward compatibility
   if (identical(predict, "relation")) {
     if (isTRUE(verbose)) {
-      format_alert(
+      format_warning(
         '`predict = "relation" is deprecated.',
         'Please use `predict = "expectation" instead.'
       )

@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.19.1.6
+Version: 0.19.2.5
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -57,7 +57,12 @@ Authors@R:
              family = "Thériault",
              role = "ctb",
              email = "remi.theriault@mail.mcgill.ca",
-             comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")))
+             comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
+      person(given = "Alex",
+             family = "Reinhart",
+             role = "ctb",
+             email = "areinhar@stat.cmu.edu",
+             comment = c(ORCID = "0000-0002-6658-514X")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: A tool to provide an easy, intuitive and consistent
     access to information contained in various R models, like model
@@ -92,6 +97,9 @@ Suggests:
     blme,
     boot,
     brms,
+    broom,
+    car,
+    carData,
     censReg,
     cgam,
     clubSandwich,
@@ -118,6 +126,7 @@ Suggests:
     GLMMadaptive,
     glmmTMB,
     gmnl,
+    grDevices,
     gt,
     httr,
     interp,
@@ -149,11 +158,11 @@ Suggests:
     mhurdle,
     mmrm,
     multgee,
+    nestedLogit,
     nlme,
     nnet,
     nonnest2,
     ordinal,
-    panelr,
     parameters,
     parsnip,
     pbkrtest,
@@ -172,6 +181,7 @@ Suggests:
     rstantools,
     rstudioapi,
     sandwich,
+    speedglm,
     splines,
     statmod,
     survey,
@@ -185,7 +195,7 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.3.9000
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Config/testthat/parallel: true

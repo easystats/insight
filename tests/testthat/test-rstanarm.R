@@ -16,6 +16,10 @@ m1 <- insight::download_model("stanreg_merMod_5")
 m2 <- insight::download_model("stanreg_glm_6")
 m3 <- insight::download_model("stanreg_glm_1")
 
+skip_if(is.null(m1))
+skip_if(is.null(m2))
+skip_if(is.null(m3))
+
 data("puzzles", package = "BayesFactor")
 m4 <- suppressWarnings(
   stan_glm(
@@ -38,6 +42,7 @@ m5 <- suppressWarnings(
   )
 )
 m6 <- insight::download_model("stanreg_gamm4_1")
+skip_if(is.null(m6))
 
 m7 <- suppressWarnings(
   stan_lm(mpg ~ wt + qsec + am,

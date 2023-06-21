@@ -16,6 +16,7 @@ d <- data.frame(
 dat <<- d
 
 m1 <- download_model("glmmTMB_spatial_1")
+skip_if(is.null(m1))
 
 test_that("find_weights", {
   expect_null(find_weights(m1))

@@ -3,7 +3,7 @@ skip_if_not_installed("glmmTMB")
 data(Salamanders, package = "glmmTMB")
 Salamanders$cover <- abs(Salamanders$cover)
 
-m1 <- speedglm(
+m1 <- speedglm::speedglm(
   count ~ mined + log(cover) + sample,
   family = poisson(),
   data = Salamanders

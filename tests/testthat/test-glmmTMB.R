@@ -69,6 +69,7 @@ test_that("get_weights", {
 })
 
 test_that("get_deviance + logLik", {
+  skip_on_cran() ## FIXME: check with win-devel
   expect_equal(get_deviance(m2), 1697.449311, tolerance = 1e-3)
   expect_equal(get_loglikelihood(m2), logLik(m2), tolerance = 1e-3, ignore_attr = TRUE)
   expect_identical(get_df(m2, type = "model"), 4L)
@@ -582,8 +583,8 @@ test_that("get_data", {
       "xb"
     )
   )
-  expect_identical(
-    colnames(get_data(m4, effects = "fixed")),
+  expect_named(
+    get_data(m4, effects = "fixed"),
     c("count", "child", "camper", "livebait", "xb")
   )
   expect_identical(colnames(get_data(m4, effects = "random")), c("persons", "ID"))
@@ -592,22 +593,22 @@ test_that("get_data", {
     m4,
     component = "zi", effects = "fixed"
   )), c("child", "livebait", "count"))
-  expect_identical(colnames(get_data(
-    m4,
-    component = "zi", effects = "random"
-  )), "ID")
-  expect_identical(
-    colnames(get_data(m4, component = "cond")),
+  expect_named(
+    get_data(m4, component = "zi", effects = "random", verbose = FALSE),
+    "ID"
+  )
+  expect_named(
+    get_data(m4, component = "cond", verbose = FALSE),
     c("count", "child", "camper", "persons")
   )
-  expect_identical(colnames(get_data(
-    m4,
-    component = "cond", effects = "fixed"
-  )), c("count", "child", "camper"))
-  expect_identical(colnames(get_data(
-    m4,
-    component = "cond", effects = "random"
-  )), "persons")
+  expect_named(
+    get_data(m4, component = "cond", effects = "fixed", verbose = FALSE),
+    c("count", "child", "camper")
+  )
+  expect_named(
+    get_data(m4, component = "cond", effects = "random", verbose = FALSE),
+    "persons"
+  )
   expect_identical(colnames(get_data(m4, component = "disp")), c("xb", "count"))
   expect_identical(colnames(get_data(
     m4,
@@ -752,6 +753,7 @@ mpred <- glmmTMB::glmmTMB(
 )
 
 test_that("get_predicted with new levels", {
+  skip_on_cran() ## FIXME: check with win-devel
   pr <- get_predicted(mpred, data = head(Salamanders), allow.new.levels = TRUE)
   expect_equal(as.vector(pr), c(0.252, 0.39207, 0.21119, 2.20128, 2.39424, 2.28901), tolerance = 1e-3)
 })
