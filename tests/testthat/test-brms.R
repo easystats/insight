@@ -19,7 +19,7 @@ all_loaded <- !vapply(list(m1, m2, m3, m4, m5, m6, m7, m8, brms_trunc_1), is.nul
 skip_if(!all(all_loaded))
 
 # Tests -------------------------------------------------------------------
-test_that("get_predicted.brmsfit: ordinal dv", {
+test_that("get_response.brmsfit: trunc", {
   expect_identical(find_response(brms_trunc_1), "count")
   expect_length(get_response(brms_trunc_1, source = "env"), 236)
   expect_length(get_response(brms_trunc_1, source = "mf"), 236)
@@ -384,7 +384,10 @@ test_that("find_paramaters", {
           ),
           random = c(sprintf("r_persons__count2[%i,Intercept]", 1:4), "sd_persons__count2_Intercept"),
           zero_inflated = c("b_zi_count2_Intercept", "b_zi_count2_child"),
-          zero_inflated_random = c(sprintf("r_persons__zi_count2[%i,Intercept]", 1:4), "sd_persons__zi_count2_Intercept")
+          zero_inflated_random = c(
+            sprintf("r_persons__zi_count2[%i,Intercept]", 1:4),
+            "sd_persons__zi_count2_Intercept"
+          )
         )
       ),
       "is_mv" = "1"
@@ -550,20 +553,18 @@ test_that("Issue #645", {
   # sink() writing permission fail on some Windows CI machines
   skip_on_os("windows")
 
-  void <- suppressMessages(suppressWarnings(capture.output(
-    {
-      mod <- brms::brm(
-        silent = 2,
-        data = mtcars,
-        family = brms::cumulative(probit),
-        formula = brms::bf(
-          cyl ~ 1 + mpg + drat + gearnl,
-          gearnl ~ 0 + (1 | gear),
-          nl = TRUE
-        )
+  void <- suppressMessages(suppressWarnings(capture.output({
+    mod <- brms::brm(
+      silent = 2,
+      data = mtcars,
+      family = brms::cumulative(probit),
+      formula = brms::bf(
+        cyl ~ 1 + mpg + drat + gearnl,
+        gearnl ~ 0 + (1 | gear),
+        nl = TRUE
       )
-    }
-  )))
+    )
+  })))
 
   p <- find_predictors(mod, flatten = TRUE)
   d <- get_data(mod)

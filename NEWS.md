@@ -6,7 +6,7 @@
   `"response.level"` column name.
 
 * `get_data()` for _lavaan_ models is now more stable at retrieving model data
-  when this is not avaible in the environment.
+  when this is not available in the environment.
 
 ## Bug fixes
 
