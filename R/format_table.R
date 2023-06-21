@@ -110,37 +110,11 @@ format_table <- function(x,
 
 
   # Format parameters names ----
-
-  ## TODO: check if this simplification works
-  # I'm not sure, but I think the following three code lines should work, too
-  #
-  # shared <- intersect(x$Parameter, names(att$pretty_names))
-  # index <- match(shared, x$Parameter)
-  # x$Parameter[index] <- as.vector(att$pretty_names[x$Parameter[index]])
-
   if (pretty_names && !is.null(att$pretty_names)) {
-    # remove strings with NA names
-    att$pretty_names <- att$pretty_names[!is.na(names(att$pretty_names))]
-    if (length(att$pretty_names) != length(x$Parameter)) {
-      match_pretty_names <- match(names(att$pretty_names), x$Parameter)
-      match_pretty_names <- match_pretty_names[!is.na(match_pretty_names)]
-      if (length(match_pretty_names)) {
-        x$Parameter[match_pretty_names] <- att$pretty_names[x$Parameter[match_pretty_names]]
-      }
-    } else {
-      match_pretty_names <- att$pretty_names[x$Parameter]
-      if (!anyNA(match_pretty_names)) {
-        x$Parameter <- att$pretty_names[x$Parameter]
-      } else {
-        match_pretty_names <- match(names(att$pretty_names), x$Parameter)
-        match_pretty_names <- match_pretty_names[!is.na(match_pretty_names)]
-        if (length(match_pretty_names)) {
-          x$Parameter[match_pretty_names] <- att$pretty_names[x$Parameter[match_pretty_names]]
-        }
-      }
-    }
+    shared <- intersect(x$Parameter, names(att$pretty_names))
+    index <- match(shared, x$Parameter)
+    x$Parameter[index] <- as.vector(att$pretty_names[x$Parameter[index]])
   }
-
 
   # Format specific columns ----
   if ("n_Obs" %in% names(x)) x$n_Obs <- format_value(x$n_Obs, protect_integers = TRUE)
