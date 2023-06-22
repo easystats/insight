@@ -5,10 +5,10 @@ skip_if_not_installed("brms")
 
 # Model fitting -----------------------------------------------------------
 
-aterm_1 <- download_model("brms_aterm_1")
-aterm_2 <- download_model("brms_aterm_2")
-aterm_3 <- download_model("brms_aterm_3")
-aterm_4 <- download_model("brms_aterm_4")
+aterm_1 <- suppressWarnings(download_model("brms_aterm_1"))
+aterm_2 <- suppressWarnings(download_model("brms_aterm_2"))
+aterm_3 <- suppressWarnings(download_model("brms_aterm_3"))
+aterm_4 <- suppressWarnings(download_model("brms_aterm_4"))
 
 all_loaded <- !vapply(list(aterm_1, aterm_2, aterm_3, aterm_4), is.null, TRUE)
 skip_if(!all(all_loaded))
