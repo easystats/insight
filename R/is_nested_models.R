@@ -10,6 +10,11 @@
 #' are nested, also returns two attributes that indicate whether nesting of
 #' models is in decreasing or increasing order.
 #'
+#' @details The term "nested" here means that all the fixed predictors of a
+#' model are contained within the fixed predictors of a larger model (sometimes
+#' referred to as the encompassing model). Currently, `is_nested_models()` ignores
+#' random effects parameters.
+#'
 #' @examples
 #' m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
 #' m2 <- lm(Sepal.Length ~ Species, data = iris)
@@ -24,7 +29,7 @@ is_nested_models <- function(...) {
   objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
 
-  if (!all(sapply(objects, is_regression_model))) {
+  if (!all(vapply(objects, is_regression_model, TRUE))) {
     format_error("All models must be valid regression model objects.")
   }
   names(objects) <- object_names

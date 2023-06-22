@@ -18,6 +18,12 @@ models is in decreasing or increasing order.
 Checks whether a list of models are nested models, strictly
 following the order they were passed to the function.
 }
+\details{
+The term "nested" here means that all the fixed predictors of a
+model are contained within the fixed predictors of a larger model (sometimes
+referred to as the encompassing model). Currently, \code{is_nested_models()} ignores
+random effects parameters.
+}
 \examples{
 m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
 m2 <- lm(Sepal.Length ~ Species, data = iris)
