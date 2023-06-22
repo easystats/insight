@@ -29,13 +29,15 @@ A list with (depending on the model) following elements (character
 vectors):
 \itemize{
 \item \code{response}, the name of the response variable
-\item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
+\item \code{conditional}, the names of the predictor variables from the \emph{conditional}
+model (as opposed to the zero-inflated part of a model)
 \item \code{random}, the names of the random effects (grouping factors)
 \item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
 \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
 \item \code{dispersion}, the name of the dispersion terms
 \item \code{instruments}, the names of instrumental variables
 }
+
 Returns \code{NULL} if no terms could be found (for instance, due to
 problems in accessing the formula).
 }
@@ -61,4 +63,8 @@ if (require("lme4")) {
 
   find_terms(m)
 }
+
+# sometimes, it is necessary to retrieve terms from "term.labels" attribute
+m <- lm(mpg ~ hp * (am + cyl), data = mtcars)
+find_terms(m, as_term_labels = TRUE)
 }

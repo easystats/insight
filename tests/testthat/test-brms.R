@@ -13,7 +13,7 @@ m5 <- insight::download_model("brms_mv_5")
 m6 <- insight::download_model("brms_corr_re1")
 m7 <- suppressWarnings(insight::download_model("brms_mixed_8"))
 m8 <- insight::download_model("brms_ordinal_1")
-brms_trunc_1 <- download_model("brms_trunc_1")
+brms_trunc_1 <- suppressWarnings(download_model("brms_trunc_1"))
 
 all_loaded <- !vapply(list(m1, m2, m3, m4, m5, m6, m7, m8, brms_trunc_1), is.null, TRUE)
 skip_if(!all(all_loaded))
