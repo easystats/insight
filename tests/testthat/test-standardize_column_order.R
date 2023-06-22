@@ -11,8 +11,8 @@ test_that("get_predicted", {
     Method      = "Student's t-test"
   )
 
-  expect_equal(
-    names(standardize_column_order(df1, style = "easystats")),
+  expect_named(
+    standardize_column_order(df1, style = "easystats"),
     c("Parameter", "CI", "CI_low", "CI_high", "Method", "t", "df", "p")
   )
 
@@ -28,8 +28,8 @@ test_that("get_predicted", {
     method     = "Student's t-test"
   )
 
-  expect_equal(
-    names(standardize_column_order(df2, style = "broom")),
+  expect_named(
+    standardize_column_order(df2, style = "broom"),
     c(
       "estimate", "conf.level", "conf.low", "conf.high", "method",
       "statistic", "df", "p.value"
@@ -49,8 +49,8 @@ test_that("get_predicted", {
     Method      = "Student's t-test"
   )
 
-  expect_equal(
-    names(standardize_column_order(df3, style = "easystats")),
+  expect_named(
+    standardize_column_order(df3, style = "easystats"),
     c("Parameter", "CI", "Method", "t", "df", "p", "CI_Low", "CI_High")
   )
 })
