@@ -12,7 +12,7 @@ following the order they were passed to the function."><meta property="og:image"
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.2.5</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.2.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,6 +111,13 @@ following the order they were passed to the function.</p>
 <p><code>TRUE</code> if models are nested, <code>FALSE</code> otherwise. If models
 are nested, also returns two attributes that indicate whether nesting of
 models is in decreasing or increasing order.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>The term "nested" here means that all the fixed predictors of a
+model are contained within the fixed predictors of a larger model (sometimes
+referred to as the encompassing model). Currently, <code>is_nested_models()</code> ignores
+random effects parameters.</p>
     </div>
 
     <div class="section level2">

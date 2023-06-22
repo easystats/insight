@@ -16,7 +16,7 @@ preserved.'><meta property="og:image" content="https://easystats.github.io/insig
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.2.5</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.2.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +101,10 @@ preserved.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_terms</span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_terms</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">find_terms</span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, as_term_labels <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -110,17 +113,24 @@ preserved.</p>
 <dd><p>A fitted model.</p></dd>
 
 
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+
+
 <dt>flatten</dt>
 <dd><p>Logical, if <code>TRUE</code>, the values are returned
 as character vector, not as list. Duplicated values are removed.</p></dd>
 
 
+<dt>as_term_labels</dt>
+<dd><p>Logical, if <code>TRUE</code>, extracts model formula and tries to
+access the <code>"term.labels"</code> attribute. This should better mimic the <code><a href="https://rdrr.io/r/stats/terms.html" class="external-link">terms()</a></code>
+behaviour even for those models that do not have such a method, but may be
+insufficient, e.g. for mixed models.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
-
-
-<dt>...</dt>
-<dd><p>Currently not used.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -129,7 +139,8 @@ as character vector, not as list. Duplicated values are removed.</p></dd>
 
 <p>A list with (depending on the model) following elements (character
 vectors):</p><ul><li><p><code>response</code>, the name of the response variable</p></li>
-<li><p><code>conditional</code>, the names of the predictor variables from the <em>conditional</em> model (as opposed to the zero-inflated part of a model)</p></li>
+<li><p><code>conditional</code>, the names of the predictor variables from the <em>conditional</em>
+model (as opposed to the zero-inflated part of a model)</p></li>
 <li><p><code>random</code>, the names of the random effects (grouping factors)</p></li>
 <li><p><code>zero_inflated</code>, the names of the predictor variables from the <em>zero-inflated</em> part of the model</p></li>
 <li><p><code>zero_inflated_random</code>, the names of the random effects (grouping factors)</p></li>
@@ -165,6 +176,13 @@ name only once.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $random</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Days"      "exp(Days)" "Subject"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># sometimes, it is necessary to retrieve terms from "term.labels" attribute</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="op">(</span><span class="va">am</span> <span class="op">+</span> <span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">find_terms</span><span class="op">(</span><span class="va">m</span>, as_term_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hp"     "am"     "cyl"    "hp:am"  "hp:cyl"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
