@@ -6,6 +6,9 @@
 #'   or arithmetic expressions like `log()`, `I()`, `as.factor()` etc. are
 #'   preserved.
 #'
+#' @param from_formula Logical, if `TRUE`, extracts model formula and tries to
+#'   access the `"term.labels"` attribute. This should mimic the `terms()`
+#'   behaviour even for those models that do not have such a method.
 #' @inheritParams find_formula
 #' @inheritParams find_predictors
 #'
@@ -23,7 +26,7 @@
 #'    Returns `NULL` if no terms could be found (for instance, due to
 #'    problems in accessing the formula).
 #'
-#' @note The difference to [find_variables()] is that `find_terms()`
+#' @note The difference to [`find_variables()`] is that `find_terms()`
 #'   may return a variable multiple times in case of multiple transformations
 #'   (see examples below), while `find_variables()` returns each variable
 #'   name only once.
@@ -39,16 +42,22 @@
 #'   find_terms(m)
 #' }
 #' @export
-find_terms <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+find_terms <- function(x, ...) {
   UseMethod("find_terms")
 }
 
+#' @rdname find_terms
 #' @export
-find_terms.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+find_terms.default <- function(x, flatten = FALSE, from_formula = FALSE, verbose = TRUE, ...) {
   f <- find_formula(x, verbose = verbose)
 
   if (is.null(f)) {
     return(NULL)
+  }
+
+  # mimics original "terms()" behaviour, leads to slightly different results
+  if (isTRUE(from_formula)) {
+    return(lapply(f, function(i) attr(stats::terms(i), "term.labels")))
   }
 
   resp <- find_response(x, verbose = FALSE)

@@ -2,19 +2,26 @@
 % Please edit documentation in R/find_terms.R
 \name{find_terms}
 \alias{find_terms}
+\alias{find_terms.default}
 \title{Find all model terms}
 \usage{
-find_terms(x, flatten = FALSE, verbose = TRUE, ...)
+find_terms(x, ...)
+
+\method{find_terms}{default}(x, flatten = FALSE, from_formula = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
+\item{...}{Currently not used.}
+
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}
 
-\item{verbose}{Toggle warnings.}
+\item{from_formula}{Logical, if \code{TRUE}, extracts model formula and tries to
+access the \code{"term.labels"} attribute. This should mimic the \code{terms()}
+behaviour even for those models that do not have such a method.}
 
-\item{...}{Currently not used.}
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A list with (depending on the model) following elements (character
