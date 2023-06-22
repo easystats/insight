@@ -6,9 +6,10 @@
 #'   or arithmetic expressions like `log()`, `I()`, `as.factor()` etc. are
 #'   preserved.
 #'
-#' @param from_formula Logical, if `TRUE`, extracts model formula and tries to
-#'   access the `"term.labels"` attribute. This should mimic the `terms()`
-#'   behaviour even for those models that do not have such a method.
+#' @param as_term_labels Logical, if `TRUE`, extracts model formula and tries to
+#'   access the `"term.labels"` attribute. This should better mimic the `terms()`
+#'   behaviour even for those models that do not have such a method, but may be
+#'   insufficient, e.g. for mixed models.
 #' @inheritParams find_formula
 #' @inheritParams find_predictors
 #'
@@ -48,7 +49,7 @@ find_terms <- function(x, ...) {
 
 #' @rdname find_terms
 #' @export
-find_terms.default <- function(x, flatten = FALSE, from_formula = FALSE, verbose = TRUE, ...) {
+find_terms.default <- function(x, flatten = FALSE, as_term_labels = FALSE, verbose = TRUE, ...) {
   f <- find_formula(x, verbose = verbose)
 
   if (is.null(f)) {
@@ -56,7 +57,7 @@ find_terms.default <- function(x, flatten = FALSE, from_formula = FALSE, verbose
   }
 
   # mimics original "terms()" behaviour, leads to slightly different results
-  if (isTRUE(from_formula)) {
+  if (isTRUE(as_term_labels)) {
     return(lapply(f, function(i) attr(stats::terms(i), "term.labels")))
   }
 

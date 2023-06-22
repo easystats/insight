@@ -8,6 +8,10 @@
 * `get_data()` for _lavaan_ models is now more stable at retrieving model data
   when this is not available in the environment.
 
+* `find_terms()` gets an `as_term_labels` argument, to extract model terms
+  from the formula's `"term.labels"` attribute. This is closer to the behaviour
+  of `stats::terms()`, but may be insufficient, e.g. for mixed models.
+
 ## Bug fixes
 
 * `get_random()` now returns the same observations as `get_data()` and correctly

@@ -7,7 +7,7 @@
 \usage{
 find_terms(x, ...)
 
-\method{find_terms}{default}(x, flatten = FALSE, from_formula = FALSE, verbose = TRUE, ...)
+\method{find_terms}{default}(x, flatten = FALSE, as_term_labels = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -17,9 +17,10 @@ find_terms(x, ...)
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}
 
-\item{from_formula}{Logical, if \code{TRUE}, extracts model formula and tries to
-access the \code{"term.labels"} attribute. This should mimic the \code{terms()}
-behaviour even for those models that do not have such a method.}
+\item{as_term_labels}{Logical, if \code{TRUE}, extracts model formula and tries to
+access the \code{"term.labels"} attribute. This should better mimic the \code{terms()}
+behaviour even for those models that do not have such a method, but may be
+insufficient, e.g. for mixed models.}
 
 \item{verbose}{Toggle warnings.}
 }

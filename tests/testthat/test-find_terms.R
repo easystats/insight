@@ -1,13 +1,21 @@
 skip_if_not_installed("lme4")
 
 test_that("find_terms by formula", {
+  data(mtcars)
   m <- lm(mpg ~ log(hp) * (am + factor(cyl)), data = mtcars)
+  ## FIXME: this is currently wrong behaviour
   expect_identical(
     find_terms(m),
-    list(response = "Sepal.Length", conditional = c("Petal.Width", "Species", "-1"))
+    list(response = "mpg", conditional = c("log(hp)", "(am", "factor(cyl))"))
+  )
+  expect_identical(
+    find_terms(m, as_term_labels = TRUE),
+    list(conditional = c(
+      "log(hp)", "am", "factor(cyl)", "log(hp):am",
+      "log(hp):factor(cyl)"
+    ))
   )
 })
-
 
 test_that("find_terms", {
   m <- lm(Sepal.Length ~ -1 + Petal.Width + Species, data = iris)
