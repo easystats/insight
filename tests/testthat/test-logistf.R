@@ -77,7 +77,7 @@ test_that("find_terms", {
 })
 
 test_that("n_obs", {
-  expect_identical(n_obs(m1), 239L)
+  expect_identical(n_obs(m1), 239)
 })
 
 test_that("linkfun", {
