@@ -652,10 +652,13 @@ format_table <- function(x,
   }
 
   # Indices
-  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = starlist[["BF"]], exact = exact)
+  if ("BF" %in% names(x)) {
+    x$BF <- format_bf(x$BF, name = NULL, stars = starlist[["BF"]], exact = exact)
+  }
   if ("log_BF" %in% names(x)) {
-    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = starlist[["BF"]], exact = exact)
-    x$log_BF <- NULL
+    x$log_BF <- format_bf(exp(x$log_BF), name = NULL, stars = starlist[["BF"]], exact = exact)
+    x$BF <- NULL
+    colnames(x)[colnames(x) == "log_BF"] <- "BF"
   }
   if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = starlist[["pd"]])
   if ("Rhat" %in% names(x)) x$Rhat <- format_value(x$Rhat, digits = 3)
