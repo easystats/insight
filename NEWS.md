@@ -108,7 +108,7 @@
 * `get_data()` was revised and now always tries to recover the data that was
   used to fit a model from the environment. If this fails, it falls back to
   recovering data from the model frame (the former default behaviour).
-  Futrhermore, the `source` argument can be used to explicitly force the old
+  Furthermore, the `source` argument can be used to explicitly force the old
   behaviour: `source = "mf"` will try to recover data from the model frame first,
   then possibly falling back to look in the environment.
 
