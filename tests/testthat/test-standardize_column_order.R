@@ -11,8 +11,8 @@ test_that("get_predicted", {
     Method      = "Student's t-test"
   )
 
-  expect_equal(
-    names(standardize_column_order(df1, style = "easystats")),
+  expect_named(
+    standardize_column_order(df1, style = "easystats"),
     c("Parameter", "CI", "CI_low", "CI_high", "Method", "t", "df", "p")
   )
 
@@ -28,8 +28,8 @@ test_that("get_predicted", {
     method     = "Student's t-test"
   )
 
-  expect_equal(
-    names(standardize_column_order(df2, style = "broom")),
+  expect_named(
+    standardize_column_order(df2, style = "broom"),
     c(
       "estimate", "conf.level", "conf.low", "conf.high", "method",
       "statistic", "df", "p.value"
@@ -49,8 +49,29 @@ test_that("get_predicted", {
     Method      = "Student's t-test"
   )
 
-  expect_equal(
-    names(standardize_column_order(df3, style = "easystats")),
+  expect_named(
+    standardize_column_order(df3, style = "easystats"),
     c("Parameter", "CI", "Method", "t", "df", "p", "CI_Low", "CI_High")
   )
 })
+
+
+## FIXME: requires "cmdstanr" package?
+
+# test_that("reorder columns BF", {
+#   skip_on_cran()
+#   skip_on_os(c("mac", "linux"))
+#   brms_bf <- suppressWarnings(download_model("brms_bf_1"))
+#   skip_if(is.null(brms_bf))
+#   skip_if_not_installed("parameters")
+#   skip_if_not_installed("bayestestR")
+#   out <- suppressWarnings(parameters::model_parameters(brms_bf, test = c("pd", "BF", "rope")))
+
+#   expect_named(
+#     standardize_column_order(out),
+#     c(
+#       "Parameter", "Median", "Component", "CI", "CI_low", "CI_high",
+#       "pd", "ROPE_Percentage", "log_BF", "Rhat", "ESS"
+#     )
+#   )
+# })

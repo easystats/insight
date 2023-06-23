@@ -1,5 +1,10 @@
 # insight 0.19.3
 
+## Breaking changes
+
+* `standardize_column_order()` has changed the position when re-ordering Bayes
+  factors, ROPEs and ESS / Rhat (mainly relevant for Bayesian models).
+
 ## Changes to functions
 
 * `standardize_names()` and `standardize_column_order()` now also recognize the

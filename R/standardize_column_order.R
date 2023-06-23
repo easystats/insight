@@ -70,7 +70,6 @@ standardize_column_order.parameters_model <- function(data,
       "CI", "CI_low", "CI_high", "Difference_CI_low", "Difference_CI_high",
       "CI_Method", "CI_Distribution", "CI_Iterations",
       "Sum_Squares", "Mean_Square",
-      "pd", "ROPE_CI", "ROPE_low", "ROPE_high", "ROPE_Percentage", "Rhat", "ESS",
       # prior details
       "Prior_Distribution", "Prior_Location", "Prior_Scale",
       # test details
@@ -82,9 +81,9 @@ standardize_column_order.parameters_model <- function(data,
       # degrees of freedom
       "df", "df_error", "df_residual",
       # p-value
-      "p", "BF", "log_BF",
+      "p", "pd", "ROPE_CI", "ROPE_low", "ROPE_high", "ROPE_Percentage", "BF", "log_BF",
       # other details
-      "Alternative", "n_Obs",
+      "Alternative", "n_Obs", "Rhat", "ESS",
       # effectsize details
       "Effectsize",
       "d", "Cohens_d", "d_CI_low", "d_CI_high",
@@ -112,7 +111,6 @@ standardize_column_order.parameters_model <- function(data,
       "std.error", "std.dev",
       "conf.level", "conf.low", "conf.high", "conf.method", "conf.distribution", "conf.iterations",
       "sum.squares", "mean.square",
-      "pd", "rope.percentage", "rhat", "ess",
       # prior details
       "prior.distribution", "prior.location", "prior.scale",
       # test details
@@ -122,9 +120,9 @@ standardize_column_order.parameters_model <- function(data,
       # degrees of freedom
       "df", "df.error", "df.residual",
       # p-value
-      "p.value", "bayes.factor", "log(bayes.factor)",
+      "p.value", "pd", "rope.percentage", "bayes.factor", "log(bayes.factor)",
       # other details
-      "alternative", "n.obs",
+      "alternative", "n.obs", "rhat", "ess",
       # effectsize details
       "effectsize",
       "d", "cohens.d", "d.conf.low", "d.conf.high",
