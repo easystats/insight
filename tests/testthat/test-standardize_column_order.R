@@ -54,3 +54,22 @@ test_that("get_predicted", {
     c("Parameter", "CI", "Method", "t", "df", "p", "CI_Low", "CI_High")
   )
 })
+
+
+test_that("reorder columns BF", {
+  skip_on_cran()
+  skip_on_os(c("mac", "linux"))
+  brms_bf <- suppressWarnings(download_model("brms_bf_1"))
+  skip_if(is.null(brms_bf))
+  skip_if_not_installed("parameters")
+  skip_if_not_installed("bayestestR")
+  out <- suppressWarnings(parameters::model_parameters(brms_bf, test = c("pd", "BF", "rope")))
+
+  expect_named(
+    standardize_column_order(out),
+    c(
+      "Parameter", "Median", "Component", "CI", "CI_low", "CI_high",
+      "pd", "ROPE_Percentage", "log_BF", "Rhat", "ESS"
+    )
+  )
+})
