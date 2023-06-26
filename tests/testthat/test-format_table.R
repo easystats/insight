@@ -12,29 +12,52 @@ x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c(
 
 test_that("format_table with stars bayes", {
   out <- format_table(x)
-  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
+  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
   expect_identical(out$BF[2], "114.21")
   expect_identical(out$pd, c("99.98%", "100%"))
 
   out <- format_table(x, stars = TRUE)
-  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
+  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = c("pd", "BF"))
-  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
+  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = "pd")
-  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
+  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
   expect_identical(out$BF[2], "114.21")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = "BF")
-  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "Rhat", "ESS", "BF"))
+  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%", "100%"))
+})
+
+
+set.seed(123)
+x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf", "rope"))))
+
+test_that("format_table with column order", {
+  out <- format_table(x)
+  expect_named(
+    out,
+    c(
+      "Parameter", "Median", "95% CI", "pd", "ROPE", "% in ROPE",
+      "BF", "Rhat", "ESS"
+    )
+  )
+  expect_named(
+    standardize_column_order(x),
+    c(
+      "Parameter", "Median", "CI", "CI_low", "CI_high", "pd", "ROPE_CI",
+      "ROPE_low", "ROPE_high", "ROPE_Percentage", "log_BF", "Rhat",
+      "ESS"
+    )
+  )
 })
 
 
