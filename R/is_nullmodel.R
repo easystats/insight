@@ -30,9 +30,12 @@ is_nullmodel <- function(x) {
 #' @export
 is_nullmodel.default <- function(x) {
   if (is_multivariate(x)) {
-    unlist(lapply(find_predictors(x, effects = "fixed", component = "conditional"), .check_for_nullmodel))
+    unlist(lapply(
+      find_predictors(x, effects = "fixed", component = "conditional", verbose = FALSE),
+      .check_for_nullmodel
+    ))
   } else {
-    .check_for_nullmodel(find_predictors(x, effects = "fixed", component = "conditional"))
+    .check_for_nullmodel(find_predictors(x, effects = "fixed", component = "conditional", verbose = FALSE))
   }
 }
 
