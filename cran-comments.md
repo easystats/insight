@@ -1,3 +1,5 @@
+Maintainance release.
+
 ## revdepcheck results
 
 We checked 35 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.

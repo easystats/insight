@@ -15,3 +15,7 @@ test_that("is_nullmodel", {
   expect_false(is_nullmodel(m4))
   expect_true(is_nullmodel(m5))
 })
+
+test_that("is_nullmodel, don't be verbose", {
+  expect_silent(is_nullmodel(lm(mtcars$mpg ~ 1)))
+})
