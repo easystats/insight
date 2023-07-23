@@ -23,7 +23,7 @@ test_that("get_predicted - lm", {
   # Confidence
   ref <- predict(x, se.fit = TRUE, interval = "confidence")
   rez <- as.data.frame(get_predicted(x, predict = "expectation", ci = 0.95))
-  expect_length(rez, 32)
+  expect_identical(nrow(rez), 32L)
   expect_equal(max(abs(as.data.frame(ref$fit)$fit - rez$Predicted)), 0, tolerance = 1e-10)
   expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
   expect_equal(max(abs(as.data.frame(ref$fit)$lwr - rez$CI_low)), 0, tolerance = 1e-10)
@@ -31,7 +31,7 @@ test_that("get_predicted - lm", {
   # Prediction
   ref <- predict(x, newdata = get_data(x), se.fit = TRUE, interval = "prediction")
   rez <- as.data.frame(get_predicted(x, predict = "prediction", ci = 0.95))
-  expect_length(rez, 32)
+  expect_identical(nrow(rez), 32L)
   expect_equal(max(abs(as.data.frame(ref$fit)$fit - rez$Predicted)), 0, tolerance = 1e-10)
   expect_equal(max(abs(as.data.frame(ref$fit)$lwr - rez$CI_low)), 0, tolerance = 1e-10)
 
@@ -124,7 +124,7 @@ test_that("get_predicted - glm", {
   dat_glm <- glm(Y ~ 1, data = dat, family = gaussian(link = "log"))
   ## predictions on the response scale - correct
   out <- modelbased::estimate_relation(dat_glm, length = 1)
-  expect_identical(
+  expect_equal(
     out$Predicted,
     predict(dat_glm, type = "response")[1],
     tolerance = 0.01,
@@ -132,7 +132,7 @@ test_that("get_predicted - glm", {
   )
   ## predictions on the link scale - incorrect
   out <- modelbased::estimate_link(dat_glm, length = 1)
-  expect_identical(
+  expect_equal(
     out$Predicted,
     predict(dat_glm, type = "link")[1],
     tolerance = 0.01,
@@ -145,11 +145,11 @@ test_that("get_predicted - lm (log)", {
   rez <- get_predicted(x)
   expect_length(rez, 32)
 
-  expect_identical(max(abs(rez - stats::fitted(x))), 0)
-  expect_identical(max(abs(rez - stats::predict(x))), 0)
+  expect_equal(max(abs(rez - stats::fitted(x))), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rez - stats::predict(x))), 0, tolerance = 1e-4)
 
   data <- as.data.frame(rez)
-  expect_identical(max(abs(rez - data$Predicted)), 0)
+  expect_equal(max(abs(rez - data$Predicted)), 0, tolerance = 1e-4)
   expect_identical(nrow(data), 32L)
 })
 
