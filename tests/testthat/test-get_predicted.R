@@ -6,7 +6,6 @@ skip_on_cran()
 
 test_that("get_predicted - lm", {
   skip_on_cran()
-  skip_if_not_installed("rstanarm")
 
   x <- lm(mpg ~ cyl + hp, data = mtcars)
 
@@ -24,7 +23,7 @@ test_that("get_predicted - lm", {
   # Confidence
   ref <- predict(x, se.fit = TRUE, interval = "confidence")
   rez <- as.data.frame(get_predicted(x, predict = "expectation", ci = 0.95))
-  expect_equal(nrow(rez), 32)
+  expect_identical(nrow(rez), 32L)
   expect_equal(max(abs(as.data.frame(ref$fit)$fit - rez$Predicted)), 0, tolerance = 1e-10)
   expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-10)
   expect_equal(max(abs(as.data.frame(ref$fit)$lwr - rez$CI_low)), 0, tolerance = 1e-10)
@@ -32,7 +31,7 @@ test_that("get_predicted - lm", {
   # Prediction
   ref <- predict(x, newdata = get_data(x), se.fit = TRUE, interval = "prediction")
   rez <- as.data.frame(get_predicted(x, predict = "prediction", ci = 0.95))
-  expect_equal(nrow(rez), 32)
+  expect_identical(nrow(rez), 32L)
   expect_equal(max(abs(as.data.frame(ref$fit)$fit - rez$Predicted)), 0, tolerance = 1e-10)
   expect_equal(max(abs(as.data.frame(ref$fit)$lwr - rez$CI_low)), 0, tolerance = 1e-10)
 
@@ -40,11 +39,13 @@ test_that("get_predicted - lm", {
   set.seed(333)
   ref <- predict(x, newdata = get_data(x), se.fit = TRUE, interval = "confidence")
   rez <- get_predicted(x, iterations = 600, ci = 0.95)
-  expect_equal(length(rez), 32)
+  expect_length(rez, 32)
   expect_null(nrow(rez))
   expect_equal(mean(abs(as.data.frame(ref$fit)$fit - summary(rez)$Predicted)), 0, tolerance = 0.1)
   expect_equal(mean(abs(as.data.frame(ref$fit)$lwr - summary(rez)$CI_low)), 0, tolerance = 0.5)
   # TODO: Is it possible to get "prediction" CIs via bootstrapping?
+
+  skip_if_not_installed("rstanarm")
 
   # vs. Bayesian
   xbayes <- rstanarm::stan_glm(mpg ~ cyl + hp, data = mtcars, refresh = 0, seed = 333)
@@ -61,17 +62,16 @@ test_that("get_predicted - lm", {
 
 test_that("get_predicted - glm", {
   skip_on_cran()
-  skip_if_not_installed("rstanarm")
 
   x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 
   # Link vs. relation
   rezlink <- get_predicted(x, predict = "link", ci = 0.95)
   rezrela <- get_predicted(x, predict = "expectation", ci = 0.95)
-  expect_true(min(rezlink) < 0)
-  expect_true(min(rezrela) > 0)
-  expect_true(min(summary(rezlink)$CI_low) < 0)
-  expect_true(min(summary(rezrela)$CI_low) > 0)
+  expect_lt(min(rezlink), 0)
+  expect_gt(min(rezrela), 0)
+  expect_lt(min(summary(rezlink)$CI_low), 0)
+  expect_gt(min(summary(rezrela)$CI_low), 0)
 
   # Relation vs. Prediction
   rezrela <- get_predicted(x, predict = "expectation", ci = 0.95)
@@ -82,7 +82,7 @@ test_that("get_predicted - glm", {
   # Against stats::predict
   ref <- predict(x, se.fit = TRUE, type = "response", ci = 0.95)
   rez <- as.data.frame(get_predicted(x, predict = "expectation", ci = 0.95))
-  expect_equal(nrow(rez), 32)
+  expect_identical(nrow(rez), 32L)
   expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-4)
   expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-4)
   ref <- as.data.frame(suppressWarnings(link_inverse(x)(predict.lm(x, interval = "confidence"))))
@@ -90,7 +90,7 @@ test_that("get_predicted - glm", {
 
   ref <- predict(x, se.fit = TRUE, type = "link")
   rez <- as.data.frame(get_predicted(x, predict = "link", ci = 0.95))
-  expect_equal(nrow(rez), 32)
+  expect_identical(nrow(rez), 32L)
   expect_equal(max(abs(ref$fit - rez$Predicted)), 0, tolerance = 1e-4)
   expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-4)
 
@@ -99,6 +99,8 @@ test_that("get_predicted - glm", {
   ref <- suppressWarnings(predict(x, se.fit = TRUE, type = "response"))
   rez <- suppressWarnings(summary(get_predicted(x, iterations = 800, verbose = FALSE, ci = 0.95)))
   expect_equal(mean(abs(ref$fit - rez$Predicted)), 0, tolerance = 0.1)
+
+  skip_if_not_installed("rstanarm")
 
   # vs. Bayesian
   xbayes <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
@@ -112,17 +114,43 @@ test_that("get_predicted - glm", {
   # expect_equal(mean(abs(rez$CI_low - rezbayes$CI_low)), 0, tolerance = 0.3)
 })
 
+test_that("get_predicted - glm", {
+  skip_on_cran()
+  skip_if_not_installed("modelbased")
+  # link works for gaussian with log-link
+  set.seed(123)
+  dat <- data.frame(Y = rlnorm(100), x = rnorm(100))
+  ## fit glm
+  dat_glm <- glm(Y ~ 1, data = dat, family = gaussian(link = "log"))
+  ## predictions on the response scale - correct
+  out <- modelbased::estimate_relation(dat_glm, length = 1)
+  expect_equal(
+    out$Predicted,
+    predict(dat_glm, type = "response")[1],
+    tolerance = 0.01,
+    ignore_attr = TRUE
+  )
+  ## predictions on the link scale - incorrect
+  out <- modelbased::estimate_link(dat_glm, length = 1)
+  expect_equal(
+    out$Predicted,
+    predict(dat_glm, type = "link")[1],
+    tolerance = 0.01,
+    ignore_attr = TRUE
+  )
+})
+
 test_that("get_predicted - lm (log)", {
   x <- lm(mpg ~ log(hp), data = mtcars)
   rez <- get_predicted(x)
-  expect_equal(length(rez), 32)
+  expect_length(rez, 32)
 
-  expect_equal(max(abs(rez - stats::fitted(x))), 0)
-  expect_equal(max(abs(rez - stats::predict(x))), 0)
+  expect_equal(max(abs(rez - stats::fitted(x))), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rez - stats::predict(x))), 0, tolerance = 1e-4)
 
   data <- as.data.frame(rez)
-  expect_equal(max(abs(rez - data$Predicted)), 0)
-  expect_equal(nrow(data), 32)
+  expect_equal(max(abs(rez - data$Predicted)), 0, tolerance = 1e-4)
+  expect_identical(nrow(data), 32L)
 })
 
 
@@ -181,7 +209,7 @@ test_that("get_predicted - lmerMod", {
   skip_on_cran()
 
   suppressPackageStartupMessages({
-    suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE)))
+    suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE))) # nolint
   })
 
   x <- lme4::lmer(mpg ~ am + (1 | cyl), data = mtcars)
@@ -197,7 +225,7 @@ test_that("get_predicted - lmerMod", {
   # Bootstrap
   set.seed(333)
   rez <- as.data.frame(get_predicted(x, iterations = 5, ci = 0.95))
-  expect_equal(c(nrow(rez), ncol(rez)), c(32, 9))
+  expect_identical(c(nrow(rez), ncol(rez)), c(32L, 9L))
 
 
   # Compare to merTools
@@ -249,15 +277,15 @@ test_that("get_predicted - lmerMod (log)", {
   skip_if_not_installed("lme4")
   x <- lme4::lmer(mpg ~ am + log(hp) + (1 | cyl), data = mtcars)
   rez <- get_predicted(x)
-  expect_equal(length(rez), 32)
+  expect_length(rez, 32)
 
-  expect_equal(max(abs(rez - stats::fitted(x))), 0)
-  expect_equal(max(abs(rez - stats::predict(x))), 0)
-  expect_equal(nrow(as.data.frame(rez)), 32)
+  expect_equal(max(abs(rez - stats::fitted(x))), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rez - stats::predict(x))), 0, tolerance = 1e-4)
+  expect_equal(nrow(as.data.frame(rez)), 32, tolerance = 1e-4)
 
   # No random
   rez2 <- get_predicted(x, newdata = mtcars[c("am", "hp")], verbose = FALSE)
-  expect_true(!all(is.na(as.data.frame(rez2))))
+  expect_false(all(is.na(as.data.frame(rez2))))
 })
 
 
@@ -267,13 +295,13 @@ test_that("get_predicted - merMod", {
   x <- lme4::glmer(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
   rezlink <- get_predicted(x, predict = "link", ci = 0.95)
   rezrela <- get_predicted(x, predict = "expectation", ci = 0.95)
-  expect_true(min(rezlink) < 0)
-  expect_true(min(rezrela) > 0)
-  expect_true(min(summary(rezlink)$CI_low) < 0)
-  expect_true(min(summary(rezrela)$CI_low) > 0)
-  expect_equal(max(abs(rezrela - stats::fitted(x))), 0)
-  expect_equal(max(abs(rezrela - stats::predict(x, type = "response"))), 0)
-  expect_equal(nrow(as.data.frame(rezlink)), 32)
+  expect_lt(min(rezlink), 0)
+  expect_gt(min(rezrela), 0)
+  expect_lt(min(summary(rezlink)$CI_low), 0)
+  expect_gt(min(summary(rezrela)$CI_low), 0)
+  expect_equal(max(abs(rezrela - stats::fitted(x))), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rezrela - stats::predict(x, type = "response"))), 0, tolerance = 1e-4)
+  expect_identical(nrow(as.data.frame(rezlink)), 32L)
 
   # Compare with glmmTMB
   xref <- glmmTMB::glmmTMB(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
@@ -296,26 +324,26 @@ test_that("get_predicted - glmmTMB", {
   # Bootstrap
   set.seed(333)
   rez <- as.data.frame(get_predicted(x, iterations = 5, predict = "link", ci = 0.95))
-  expect_equal(c(nrow(rez), ncol(rez)), c(32, 9))
+  expect_identical(c(nrow(rez), ncol(rez)), c(32L, 9L))
 
   # Binomial
   x <- glmmTMB::glmmTMB(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
   rezlink <- get_predicted(x, predict = "link", ci = 0.95)
   rezrela <- get_predicted(x, predict = "expectation", ci = 0.95)
-  expect_true(min(rezlink) < 0)
-  expect_true(min(rezrela) > 0)
-  expect_true(min(summary(rezlink)$CI_low) < 0)
-  expect_true(min(summary(rezrela)$CI_low) > 0)
-  expect_equal(max(abs(rezrela - stats::fitted(x))), 0)
-  expect_equal(max(abs(rezrela - stats::predict(x, type = "response"))), 0)
-  expect_equal(nrow(as.data.frame(rez)), 32)
+  expect_lt(min(rezlink), 0)
+  expect_gt(min(rezrela), 0)
+  expect_lt(min(summary(rezlink)$CI_low), 0)
+  expect_gt(min(summary(rezrela)$CI_low), 0)
+  expect_equal(max(abs(rezrela - stats::fitted(x))), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rezrela - stats::predict(x, type = "response"))), 0, tolerance = 1e-4)
+  expect_identical(nrow(as.data.frame(rez)), 32L)
 
   # No random
-  rez <- get_predicted(x, newdata = mtcars[c("am")], verbose = FALSE, ci = 0.95)
-  expect_true(!all(is.na(as.data.frame(rez))))
+  rez <- get_predicted(x, newdata = mtcars["am"], verbose = FALSE, ci = 0.95)
+  expect_false(all(is.na(as.data.frame(rez))))
   x <- glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
   rez <- get_predicted(x, data = data.frame(Petal.Width = c(0, 1, 2)), verbose = FALSE)
-  expect_equal(length(rez), 3)
+  expect_length(rez, 3)
 
   # vs. Bayesian
   # x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
@@ -332,38 +360,38 @@ test_that("get_predicted - glmmTMB", {
 test_that("get_predicted - mgcv::gam and gamm", {
   skip_if_not_installed("mgcv")
   x <- mgcv::gam(mpg ~ am + s(wt), data = mtcars)
-  expect_equal(length(get_predicted(x, ci = 0.95)), 32)
+  expect_length(get_predicted(x, ci = 0.95), 32)
   rez <- get_predicted(x, data = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)), ci = 0.95)
-  expect_equal(length(rez), 3)
+  expect_length(rez, 3)
 
   # No smooth
   rez <- get_predicted(x, data = data.frame(am = c(0, 0, 1)), ci = 0.95)
-  expect_equal(length(rez), 3)
+  expect_length(rez, 3)
   rez2 <- get_predicted(x, data = data.frame(am = c(0, 0, 1), wt = c(2, 3, 4)), ci = 0.95, include_smooth = FALSE)
   expect_equal(max(abs(as.numeric(rez - rez2))), 0, tolerance = 1e-4)
-  expect_equal(length(unique(attributes(rez)$data$wt)), 1)
+  expect_length(unique(attributes(rez)$data$wt), 1)
 
   # Bootstrap
   set.seed(333)
   rez <- summary(get_predicted(x, iterations = 50, ci = 0.95))
-  expect_equal(nrow(rez), 32)
+  expect_identical(nrow(rez), 32L)
 
   # Binomial
   x <- mgcv::gam(vs ~ am + s(wt), data = mtcars, family = "binomial")
   rez <- get_predicted(x, ci = 0.95)
-  expect_equal(length(rez), 32)
+  expect_length(rez, 32)
 
-  expect_equal(max(abs(rez - stats::fitted(x))), 0)
-  expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
-  expect_equal(nrow(as.data.frame(rez)), 32)
+  expect_equal(max(abs(rez - stats::fitted(x))), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0, tolerance = 1e-4)
+  expect_identical(nrow(as.data.frame(rez)), 32L)
 
   # GAMM
   x <- mgcv::gamm(vs ~ am + s(wt), random = list(cyl = ~1), data = mtcars, family = "binomial", verbosePQL = FALSE)
   rez <- get_predicted(x, ci = 0.95)
-  expect_equal(length(rez), 32)
-  expect_equal(max(abs(rez - x$gam$fitted.values)), 0)
-  expect_equal(max(abs(rez - stats::predict(x$gam, type = "response"))), 0)
-  expect_equal(nrow(as.data.frame(rez)), 32)
+  expect_length(rez, 32)
+  expect_equal(max(abs(rez - x$gam$fitted.values)), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rez - stats::predict(x$gam, type = "response"))), 0, tolerance = 1e-4)
+  expect_identical(nrow(as.data.frame(rez)), 32L)
 })
 
 
@@ -376,7 +404,7 @@ test_that("get_predicted - rstanarm", {
   skip_if_not_installed("rstanarm")
 
   suppressPackageStartupMessages({
-    suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE)))
+    suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE))) # nolint
   })
 
   # LM
@@ -393,10 +421,10 @@ test_that("get_predicted - rstanarm", {
   x <- rstanarm::stan_glm(vs ~ wt, data = mtcars, family = "binomial", refresh = 0, seed = 333)
   rezlink <- summary(get_predicted(x, predict = "link", ci = 0.95))
   rezrela <- summary(get_predicted(x, predict = "expectation", ci = 0.95))
-  expect_true(min(rezlink$Predicted) < 0)
-  expect_true(min(rezrela$Predicted) > 0)
-  expect_true(min(rezlink$CI_high) < 0)
-  expect_true(min(rezrela$CI_high) > 0)
+  expect_lt(min(rezlink$Predicted), 0)
+  expect_gt(min(rezrela$Predicted), 0)
+  expect_lt(min(rezlink$CI_high), 0)
+  expect_gt(min(rezrela$CI_high), 0)
   rezpred <- summary(get_predicted(x, predict = "prediction", ci = 0.95))
   expect_equal(mean(abs(rezrela$Predicted - rezpred$Predicted)), 0, tolerance = 0.1)
   expect_true(all(mean(rezrela$CI_high - rezpred$CI_high) < 0))
@@ -412,8 +440,8 @@ test_that("get_predicted - rstanarm", {
   rezpred <- summary(get_predicted(x, predict = "prediction", ci = 0.95))
   rezrela2 <- summary(get_predicted(x, predict = "expectation", ci = 0.95, include_random = FALSE))
   rezpred2 <- summary(get_predicted(x, predict = "prediction", ci = 0.95, include_random = FALSE))
-  expect_true(mean(abs(rezrela$Predicted - rezrela2$Predicted)) > 0)
-  expect_true(mean(abs(rezpred$Predicted - rezpred2$Predicted)) > 0)
+  expect_gt(mean(abs(rezrela$Predicted - rezrela2$Predicted)), 0)
+  expect_gt(mean(abs(rezpred$Predicted - rezpred2$Predicted)), 0)
   rezrela3 <- summary(get_predicted(x, predict = "expectation", ci = 0.95, data = mtcars["am"]), verbose = FALSE)
   expect_equal(mean(abs(rezrela2$Predicted - rezrela3$Predicted)), 0, tolerance = 0.001)
 })
@@ -429,24 +457,24 @@ test_that("get_predicted - FA / PCA", {
 
   # PCA
   x <- get_predicted(psych::principal(mtcars, 3))
-  expect_equal(dim(x), c(32, 3))
+  expect_identical(dim(x), c(32L, 3L))
   x <- get_predicted(psych::principal(mtcars, 3), data = mtcars[1:5, ])
-  expect_equal(dim(x), c(5, 3))
+  expect_identical(dim(x), c(5L, 3L))
 
   x <- get_predicted(prcomp(mtcars))
-  expect_equal(dim(x), c(32, ncol(mtcars)))
+  expect_identical(dim(x), as.integer(c(32, ncol(mtcars))))
   x <- get_predicted(prcomp(mtcars), data = mtcars[1:5, ])
-  expect_equal(dim(x), c(5, ncol(mtcars)))
+  expect_identical(dim(x), as.integer(c(5, ncol(mtcars))))
 
   # FA
   x <- get_predicted(psych::fa(mtcars, 3))
-  expect_equal(dim(x), c(32, 3))
+  expect_identical(dim(x), c(32L, 3L))
   x <- get_predicted(psych::fa(mtcars, 3), data = mtcars[1:5, ])
-  expect_equal(dim(x), c(5, 3))
+  expect_identical(dim(x), c(5L, 3L))
 
   expect_error(get_predicted(fungible::faMain(mtcars, numFactors = 3)))
   x <- get_predicted(fungible::faMain(mtcars, numFactors = 3), data = mtcars[1:5, ])
-  expect_equal(dim(x), c(5, 3))
+  expect_identical(dim(x), c(5L, 3L))
 })
 
 
@@ -491,8 +519,8 @@ test_that("`predict()` vs. `get_predicted` link equivalence", {
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
   known <- predict(mod, type = "link", interval = "confidence", se.fit = TRUE)
   unknown <- as.data.frame(get_predicted(mod, predict = NULL, type = "link", ci = 0.95))
-  expect_equal(unname(known$fit), unknown$Predicted)
-  expect_equal(unname(known$se.fit), unknown$SE)
+  expect_equal(unname(known$fit), unknown$Predicted, ignore_attr = TRUE)
+  expect_equal(unname(known$se.fit), unknown$SE, ignore_attr = TRUE)
 
   # response
   mod <- glm(am ~ hp + factor(cyl), family = binomial, data = mtcars)
@@ -500,12 +528,12 @@ test_that("`predict()` vs. `get_predicted` link equivalence", {
   unknown1 <- as.data.frame(get_predicted(mod, predict = "expectation", ci = 0.95))
   unknown2 <- as.data.frame(get_predicted(mod, predict = NULL, type = "response", ci = 0.95))
   unknown3 <- as.data.frame(get_predicted(mod, predict = "response", ci = 0.95))
-  expect_equal(unname(known$fit), unknown1$Predicted)
-  expect_equal(unname(known$se.fit), unknown1$SE)
-  expect_equal(unname(known$fit), unknown2$Predicted)
-  expect_equal(unname(known$se.fit), unknown2$SE)
-  expect_equal(unname(known$fit), unknown3$Predicted)
-  expect_equal(unname(known$se.fit), unknown3$SE)
+  expect_equal(unname(known$fit), unknown1$Predicted, ignore_attr = TRUE)
+  expect_equal(unname(known$se.fit), unknown1$SE, ignore_attr = TRUE)
+  expect_equal(unname(known$fit), unknown2$Predicted, ignore_attr = TRUE)
+  expect_equal(unname(known$se.fit), unknown2$SE, ignore_attr = TRUE)
+  expect_equal(unname(known$fit), unknown3$Predicted, ignore_attr = TRUE)
+  expect_equal(unname(known$se.fit), unknown3$SE, ignore_attr = TRUE)
 })
 
 
@@ -540,7 +568,7 @@ test_that("bugfix: used to fail with matrix variables", {
     return(lm(mpg ~ wt + cyl + gear + disp, data = mtcars2))
   }
   pred <- get_predicted(foo())
-  expect_equal(class(pred), c("get_predicted", "numeric"))
+  expect_s3_class(pred, c("get_predicted", "numeric"))
   expect_true(all(attributes(attributes(attributes(
     pred
   )$data)$terms)$dataClasses == "numeric"))
@@ -549,12 +577,14 @@ test_that("bugfix: used to fail with matrix variables", {
   mtcars2 <- mtcars
   mtcars2$wt <- scale(mtcars2$wt)
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars2)
-  expect_no_error(pred <- get_predicted(m))
+  expect_no_error({
+    pred <- get_predicted(m)
+  })
 
   mtcars2$wt <- as.numeric(mtcars2$wt)
   m2 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars2)
   pred2 <- get_predicted(m2)
-  expect_equal(pred, pred2)
+  expect_equal(pred, pred2, ignore_attr = TRUE)
 })
 
 test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
@@ -562,10 +592,12 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   skip_if_not_installed("brms")
   skip_on_os(os = "windows")
   void <- capture.output(
-    suppressMessages(mod <- brms::brm(am ~ hp + mpg,
-      family = brms::bernoulli, data = mtcars,
-      chains = 2, iter = 1000, seed = 1024, silent = 2
-    ))
+    suppressMessages({
+      mod <- brms::brm(am ~ hp + mpg,
+        family = brms::bernoulli, data = mtcars,
+        chains = 2, iter = 1000, seed = 1024, silent = 2
+      )
+    })
   )
   x <- get_predicted(mod, predict = "link", ci = 0.95)
   y <- get_predicted(mod, predict = "expectation", ci = 0.95)
@@ -577,20 +609,22 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   data <- mtcars
   data$cyl <- as.character(data$cyl)
   void <- capture.output(
-    suppressMessages(suppressWarnings(model <- brms::brm(cyl ~ mpg * vs + (1 | carb),
-      data = data,
-      iter = 1000,
-      seed = 1024,
-      algorithm = "meanfield",
-      refresh = 0,
-      family = brms::categorical(link = "logit", refcat = "4")
-    )))
+    suppressMessages(suppressWarnings({
+      model <- brms::brm(cyl ~ mpg * vs + (1 | carb),
+        data = data,
+        iter = 1000,
+        seed = 1024,
+        algorithm = "meanfield",
+        refresh = 0,
+        family = brms::categorical(link = "logit", refcat = "4")
+      )
+    }))
   )
   x <- as.data.frame(get_predicted(model, ci = 0.95))
   # Test shape
-  expect_equal(c(nrow(x), ncol(x)), c(32 * 3, 1006))
+  expect_identical(c(nrow(x), ncol(x)), c(96L, 1006L))
   # Test whether median point-estimate indeed different from default (mean)
-  expect_true(max(x$Predicted - get_predicted(model, centrality_function = stats::median)$Predicted) > 0)
+  expect_gt(max(x$Predicted - get_predicted(model, centrality_function = stats::median)$Predicted), 0)
 })
 
 

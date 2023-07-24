@@ -1,3 +1,11 @@
+# insight 0.19.3.1
+
+## Changes to functions
+
+* `get_predicted()` now accepts `predict = "link"` for gaussian models with
+  log-link (i.e. `glm(..., family = gaussian("log"))`), to return predictions
+  on the link scale.
+
 # insight 0.19.3
 
 ## Breaking changes
