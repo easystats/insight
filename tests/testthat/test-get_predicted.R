@@ -404,7 +404,7 @@ test_that("get_predicted - rstanarm", {
   skip_if_not_installed("rstanarm")
 
   suppressPackageStartupMessages({
-    suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE))) #nolint
+    suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE))) # nolint
   })
 
   # LM
