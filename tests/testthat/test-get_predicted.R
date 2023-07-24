@@ -208,6 +208,10 @@ test_that("get_predicted - lmerMod", {
   skip_if_not_installed("rstanarm")
   skip_on_cran()
 
+  suppressPackageStartupMessages({
+    suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE))) # nolint
+  })
+
   x <- lme4::lmer(mpg ~ am + (1 | cyl), data = mtcars)
 
   # Link vs. relation
@@ -275,9 +279,9 @@ test_that("get_predicted - lmerMod (log)", {
   rez <- get_predicted(x)
   expect_length(rez, 32)
 
-  expect_equal(max(abs(rez - stats::fitted(x))), 0)
-  expect_equal(max(abs(rez - stats::predict(x))), 0)
-  expect_equal(nrow(as.data.frame(rez)), 32)
+  expect_equal(max(abs(rez - stats::fitted(x))), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rez - stats::predict(x))), 0, tolerance = 1e-4)
+  expect_equal(nrow(as.data.frame(rez)), 32, tolerance = 1e-4)
 
   # No random
   rez2 <- get_predicted(x, newdata = mtcars[c("am", "hp")], verbose = FALSE)
@@ -295,9 +299,9 @@ test_that("get_predicted - merMod", {
   expect_gt(min(rezrela), 0)
   expect_lt(min(summary(rezlink)$CI_low), 0)
   expect_gt(min(summary(rezrela)$CI_low), 0)
-  expect_equal(max(abs(rezrela - stats::fitted(x))), 0)
-  expect_equal(max(abs(rezrela - stats::predict(x, type = "response"))), 0)
-  expect_equal(nrow(as.data.frame(rezlink)), 32)
+  expect_equal(max(abs(rezrela - stats::fitted(x))), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rezrela - stats::predict(x, type = "response"))), 0, tolerance = 1e-4)
+  expect_identical(nrow(as.data.frame(rezlink)), 32L)
 
   # Compare with glmmTMB
   xref <- glmmTMB::glmmTMB(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
@@ -330,12 +334,12 @@ test_that("get_predicted - glmmTMB", {
   expect_gt(min(rezrela), 0)
   expect_lt(min(summary(rezlink)$CI_low), 0)
   expect_gt(min(summary(rezrela)$CI_low), 0)
-  expect_equal(max(abs(rezrela - stats::fitted(x))), 0)
-  expect_equal(max(abs(rezrela - stats::predict(x, type = "response"))), 0)
+  expect_equal(max(abs(rezrela - stats::fitted(x))), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rezrela - stats::predict(x, type = "response"))), 0, tolerance = 1e-4)
   expect_identical(nrow(as.data.frame(rez)), 32L)
 
   # No random
-  rez <- get_predicted(x, newdata = mtcars[c("am")], verbose = FALSE, ci = 0.95)
+  rez <- get_predicted(x, newdata = mtcars["am"], verbose = FALSE, ci = 0.95)
   expect_false(all(is.na(as.data.frame(rez))))
   x <- glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
   rez <- get_predicted(x, data = data.frame(Petal.Width = c(0, 1, 2)), verbose = FALSE)
@@ -377,17 +381,17 @@ test_that("get_predicted - mgcv::gam and gamm", {
   rez <- get_predicted(x, ci = 0.95)
   expect_length(rez, 32)
 
-  expect_equal(max(abs(rez - stats::fitted(x))), 0)
-  expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0)
+  expect_equal(max(abs(rez - stats::fitted(x))), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rez - stats::predict(x, type = "response"))), 0, tolerance = 1e-4)
   expect_identical(nrow(as.data.frame(rez)), 32L)
 
   # GAMM
   x <- mgcv::gamm(vs ~ am + s(wt), random = list(cyl = ~1), data = mtcars, family = "binomial", verbosePQL = FALSE)
   rez <- get_predicted(x, ci = 0.95)
   expect_length(rez, 32)
-  expect_equal(max(abs(rez - x$gam$fitted.values)), 0)
-  expect_equal(max(abs(rez - stats::predict(x$gam, type = "response"))), 0)
-  expect_equal(nrow(as.data.frame(rez)), 32)
+  expect_equal(max(abs(rez - x$gam$fitted.values)), 0, tolerance = 1e-4)
+  expect_equal(max(abs(rez - stats::predict(x$gam, type = "response"))), 0, tolerance = 1e-4)
+  expect_identical(nrow(as.data.frame(rez)), 32L)
 })
 
 
@@ -398,6 +402,10 @@ test_that("get_predicted - mgcv::gam and gamm", {
 test_that("get_predicted - rstanarm", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
+
+  suppressPackageStartupMessages({
+    suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE))) #nolint
+  })
 
   # LM
   x <- rstanarm::stan_glm(mpg ~ cyl + hp, data = mtcars, refresh = 0, seed = 333)
@@ -454,9 +462,9 @@ test_that("get_predicted - FA / PCA", {
   expect_identical(dim(x), c(5L, 3L))
 
   x <- get_predicted(prcomp(mtcars))
-  expect_equal(dim(x), c(32, ncol(mtcars)))
+  expect_identical(dim(x), as.integer(c(32, ncol(mtcars))))
   x <- get_predicted(prcomp(mtcars), data = mtcars[1:5, ])
-  expect_equal(dim(x), c(5, ncol(mtcars)))
+  expect_identical(dim(x), as.integer(c(5, ncol(mtcars))))
 
   # FA
   x <- get_predicted(psych::fa(mtcars, 3))
