@@ -14,7 +14,7 @@ get_predicted.stanreg <- function(x,
                                   include_smooth = TRUE,
                                   verbose = TRUE,
                                   ...) {
-  check_if_installed("rstantools", minimum_version = "2.1.0")
+  check_if_installed("rstantools")
 
   if (is.null(ci_method)) {
     ci_method <- "quantile"

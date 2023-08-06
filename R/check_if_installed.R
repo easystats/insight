@@ -15,7 +15,10 @@
 #'   Ignored if `quietly = TRUE`.
 #' @param minimum_version A character vector, representing the minimum package
 #'   version that is required for each package. Should be of same length as
-#'   `package`. If `NULL`, no check for minimum version is done.
+#'   `package`. If `NULL`, will automatically check the DESCRIPTION file for
+#'   the correct minimum version. If using `minimum_version` with more than one
+#'   package, `NA` should be used instead of `NULL` for packages where a
+#'   specific version is not necessary.
 #' @param ... Currently ignored
 #'
 #' @return If `stop = TRUE`, and `package` is not yet installed, the
@@ -25,9 +28,15 @@
 #' @examplesIf interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' \dontrun{
 #' check_if_installed("insight")
-#' try(check_if_installed("nonexistent_package"))
+#' try(check_if_installed("datawizard", stop = FALSE))
+#' try(check_if_installed("rstanarm", stop = FALSE))
+#' try(check_if_installed("nonexistent_package", stop = FALSE))
 #' try(check_if_installed("insight", minimum_version = "99.8.7"))
 #' try(check_if_installed(c("nonexistent", "also_not_here"), stop = FALSE))
+#' try(check_if_installed(c("datawizard", "rstanarm"), stop = FALSE))
+#' try(check_if_installed(c("datawizard", "rstanarm"),
+#'   minimum_version = c(NA, "2.21.1"), stop = FALSE
+#' ))
 #' }
 #' @export
 check_if_installed <- function(package,
@@ -39,6 +48,10 @@ check_if_installed <- function(package,
                                ...) {
   is_installed <- sapply(package, requireNamespace, quietly = TRUE)
   what_is_wrong <- what_you_can_do <- NULL
+
+  if (is.null(minimum_version)) {
+    minimum_version <- get_dep_version(dep = package)
+  }
 
   ## Test
   if (!all(is_installed)) {
@@ -58,7 +71,19 @@ check_if_installed <- function(package,
       toString(sprintf("`%s`", package))
     )
   } else if (!is.null(minimum_version)) {
-    needs_update <- utils::packageVersion(package) < package_version(minimum_version)
+    current_versions <- unlist(lapply(package, function(x) {
+      as.character(utils::packageVersion(x))
+    }))
+
+    desired_versions <- unlist(lapply(minimum_version, function(x) {
+      if (is.na(x)) {
+        0
+      } else {
+        as.character(package_version(x))
+      }
+    }))
+
+    needs_update <- current_versions < desired_versions
 
     if (any(needs_update)) {
       # only keep not-up-to-date packages
@@ -127,4 +152,20 @@ print.check_if_installed <- function(x, ...) {
     cat("Following packages are not installed:\n")
     print_color(paste0("- ", names(x)[!x], collapse = "\n"), "red")
   }
+}
+
+get_dep_version <- function(dep, pkg = utils::packageName()) {
+  suggests.field <- utils::packageDescription(pkg, fields = "Suggests")
+  suggests.list <- unlist(strsplit(suggests.field, ",", fixed = TRUE))
+  out <- lapply(dep, function(x) {
+    dep.string <- grep(paste0("\n", x), suggests.list, value = TRUE, fixed = TRUE)
+    dep.string <- unlist(strsplit(dep.string, ">", fixed = TRUE))
+    out <- gsub("[^0-9.]+", "", dep.string[2])
+    out
+  })
+  out <- unlist(out)
+  if (all(is.na(out))) {
+    out <- NULL
+  }
+  out
 }
