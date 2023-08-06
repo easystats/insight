@@ -46,7 +46,7 @@ check_if_installed <- function(package,
                                quietly = FALSE,
                                prompt = interactive(),
                                ...) {
-  is_installed <- sapply(package, requireNamespace, quietly = TRUE)
+  is_installed <- vapply(package, requireNamespace, quietly = TRUE, FUN.VALUE = TRUE)
   what_is_wrong <- what_you_can_do <- NULL
 
   if (is.null(minimum_version)) {
@@ -155,12 +155,12 @@ print.check_if_installed <- function(x, ...) {
 }
 
 get_dep_version <- function(dep, pkg = utils::packageName()) {
-  suggests.field <- utils::packageDescription(pkg, fields = "Suggests")
-  suggests.list <- unlist(strsplit(suggests.field, ",", fixed = TRUE))
+  suggests_field <- utils::packageDescription(pkg, fields = "Suggests")
+  suggests_list <- unlist(strsplit(suggests_field, ",", fixed = TRUE))
   out <- lapply(dep, function(x) {
-    dep.string <- grep(paste0("\n", x), suggests.list, value = TRUE, fixed = TRUE)
-    dep.string <- unlist(strsplit(dep.string, ">", fixed = TRUE))
-    gsub("[^0-9.]+", "", dep.string[2])
+    dep_string <- grep(paste0("\n", x), suggests_list, value = TRUE, fixed = TRUE)
+    dep_string <- unlist(strsplit(dep_string, ">", fixed = TRUE))
+    gsub("[^0-9.]+", "", dep_string[2])
   })
   out <- unlist(out)
   if (all(is.na(out))) {
