@@ -50,7 +50,7 @@ check_if_installed <- function(package,
   what_is_wrong <- what_you_can_do <- NULL
 
   if (is.null(minimum_version)) {
-    minimum_version <- get_dep_version(dep = package)
+    minimum_version <- .get_dep_version(dep = package)
   }
 
   ## Test
@@ -154,7 +154,7 @@ print.check_if_installed <- function(x, ...) {
   }
 }
 
-get_dep_version <- function(dep, pkg = utils::packageName()) {
+.get_dep_version <- function(dep, pkg = utils::packageName()) {
   suggests_field <- utils::packageDescription(pkg, fields = "Suggests")
   suggests_list <- unlist(strsplit(suggests_field, ",", fixed = TRUE))
   out <- lapply(dep, function(x) {
