@@ -160,8 +160,7 @@ get_dep_version <- function(dep, pkg = utils::packageName()) {
   out <- lapply(dep, function(x) {
     dep.string <- grep(paste0("\n", x), suggests.list, value = TRUE, fixed = TRUE)
     dep.string <- unlist(strsplit(dep.string, ">", fixed = TRUE))
-    out <- gsub("[^0-9.]+", "", dep.string[2])
-    out
+    gsub("[^0-9.]+", "", dep.string[2])
   })
   out <- unlist(out)
   if (all(is.na(out))) {
