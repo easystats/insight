@@ -5,6 +5,9 @@
 * `get_predicted()` now accepts `predict = "link"` for gaussian models with
   log-link (i.e. `glm(..., family = gaussian("log"))`), to return predictions
   on the link scale.
+  
+* `check_if_installed()` now automatically checks the package DESCRIPTION file to 
+  determine the correct minimum version required.
 
 # insight 0.19.3
 
@@ -1271,4 +1274,3 @@
   matrix-like variables in the model frame (e.g. when using `poly()`).
 
 * Fixed issues with `PROreg::BBmm()`, due to changes in latest package update.
-
