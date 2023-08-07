@@ -123,7 +123,10 @@ needed package is not installed.</p></dd>
 <dt>minimum_version</dt>
 <dd><p>A character vector, representing the minimum package
 version that is required for each package. Should be of same length as
-<code>package</code>. If <code>NULL</code>, no check for minimum version is done.</p></dd>
+<code>package</code>. If <code>NULL</code>, will automatically check the DESCRIPTION file for
+the correct minimum version. If using <code>minimum_version</code> with more than one
+package, <code>NA</code> should be used instead of <code>NULL</code> for packages where a
+specific version is not necessary.</p></dd>
 
 
 <dt>quietly</dt>
@@ -156,9 +159,11 @@ returned, indicating which of the packages are installed, and which not.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu">check_if_installed</span><span class="op">(</span><span class="st">"insight"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">check_if_installed</span><span class="op">(</span><span class="st">"nonexistent_package"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error : Package `nonexistent_package` required for this function to work.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Please install it by running `install.packages(`nonexistent_package`)`.</span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">check_if_installed</span><span class="op">(</span><span class="st">"datawizard"</span>, stop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">check_if_installed</span><span class="op">(</span><span class="st">"rstanarm"</span>, stop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">check_if_installed</span><span class="op">(</span><span class="st">"nonexistent_package"</span>, stop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Package `nonexistent_package` required for this function to work.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   Please install it by running `install.packages(`nonexistent_package`)`.</span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">check_if_installed</span><span class="op">(</span><span class="st">"insight"</span>, minimum_version <span class="op">=</span> <span class="st">"99.8.7"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error : Package `insight` is installed, but package version `99.8.7` is</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   required.</span>
@@ -168,6 +173,10 @@ returned, indicating which of the packages are installed, and which not.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   work.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   Please install them by running `install.packages(`nonexistent`,</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   `also_not_here`)`.</span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">check_if_installed</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"datawizard"</span>, <span class="st">"rstanarm"</span><span class="op">)</span>, stop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">check_if_installed</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"datawizard"</span>, <span class="st">"rstanarm"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  minimum_version <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"2.21.1"</span><span class="op">)</span>, stop <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
