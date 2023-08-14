@@ -158,13 +158,13 @@ print.check_if_installed <- function(x, ...) {
   suggests_field <- utils::packageDescription(pkg, fields = "Suggests")
   suggests_list <- unlist(strsplit(suggests_field, ",", fixed = TRUE))
   out <- lapply(dep, function(x) {
-    dep_string <- grep(paste0("\n", x), suggests_list, value = TRUE, fixed = TRUE)
+    dep_string <- grep(x, suggests_list, value = TRUE, fixed = TRUE)
+    dep_string <- dep_string[which.min(nchar(dep_string))]
     dep_string <- unlist(strsplit(dep_string, ">", fixed = TRUE))
     gsub("[^0-9.]+", "", dep_string[2])
   })
-  out <- unlist(out)
   if (all(is.na(out))) {
     out <- NULL
   }
-  out
+  unlist(out)
 }
