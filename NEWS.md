@@ -1,4 +1,4 @@
-# insight 0.19.3.1
+# insight 0.19.4
 
 ## Changes to functions
 
@@ -8,6 +8,10 @@
   
 * `check_if_installed()` now automatically checks the package DESCRIPTION file to 
   determine the correct minimum version required.
+
+## Bug fixes
+
+* Fixed issue with invalid multibyte strings in `trim_ws()`.
 
 # insight 0.19.3
 
