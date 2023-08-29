@@ -136,7 +136,7 @@ test_that("find_terms", {
     ),
     ignore_attr = TRUE
   )
-  expect_identicak(nrow(get_parameters(mod_aer_ivreg)), 3)
+  expect_identical(nrow(get_parameters(mod_aer_ivreg)), 3L)
   expect_identical(
     get_parameters(mod_aer_ivreg)$Parameter,
     c("(Intercept)", "log(rprice)", "log(rincome)")
