@@ -42,7 +42,7 @@ test_that("find_random", {
 
 test_that("get_random", {
   expect_warning(expect_null(get_random(m1)))
-  expect_equal(get_random(m2)[[1]], model.frame(m2)$id)
+  expect_identical(get_random(m2)[[1]], model.frame(m2)$id)
 })
 
 test_that("find_response", {
@@ -50,15 +50,15 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), model.frame(m1)$lwage)
+  expect_identical(get_response(m1), model.frame(m1)$lwage)
 })
 
 test_that("get_predictors", {
-  expect_equal(
+  expect_identical(
     colnames(get_predictors(m1)),
     c("lag(union)", "wks", "blk", "fem")
   )
-  expect_equal(
+  expect_identical(
     colnames(get_predictors(m2)),
     c("lag(union)", "wks", "blk", "t")
   )
@@ -70,14 +70,14 @@ test_that("link_inverse", {
 
 test_that("clean_parameters", {
   cp <- clean_parameters(m1)
-  expect_equal(
+  expect_identical(
     cp$Cleaned_Parameter,
     c(
       "union", "wks", "(Intercept)", "imean(lag(union))", "imean(wks)",
       "blk", "fem", "union:blk"
     )
   )
-  expect_equal(
+  expect_identical(
     cp$Component,
     c(
       "conditional", "conditional", "instruments", "instruments",
@@ -87,8 +87,8 @@ test_that("clean_parameters", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 3570)
-  expect_equal(
+  expect_identical(nrow(get_data(m1)), 3570L)
+  expect_identical(
     colnames(get_data(m1)),
     c(
       "lwage",
@@ -104,7 +104,7 @@ test_that("get_data", {
       "lag(union):blk"
     )
   )
-  expect_equal(
+  expect_identical(
     colnames(get_data(m2)),
     c(
       "lwage",
@@ -143,7 +143,7 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_equal(
+  expect_identical(
     find_variables(m1),
     list(
       response = "lwage",
@@ -152,12 +152,12 @@ test_that("find_variables", {
       interactions = c("blk", "union")
     )
   )
-  expect_equal(
+  expect_identical(
     find_variables(m1, flatten = TRUE),
     c("lwage", "union", "wks", "blk", "fem")
   )
 
-  expect_equal(
+  expect_identical(
     find_variables(m2),
     list(
       response = "lwage",
@@ -166,15 +166,15 @@ test_that("find_variables", {
       random = "id"
     )
   )
-  expect_equal(
+  expect_identical(
     find_variables(m2, flatten = TRUE),
     c("lwage", "union", "wks", "blk", "t", "id")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 3570)
-  expect_equal(n_obs(m2), 3570)
+  expect_identical(n_obs(m1), 3570L)
+  expect_identical(n_obs(m2), 3570L)
 })
 
 test_that("linkfun", {
@@ -182,7 +182,7 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c("lag(union)", "wks"),
@@ -191,9 +191,9 @@ test_that("find_parameters", {
     )
   )
 
-  expect_equal(nrow(get_parameters(m1)), 8)
+  expect_identical(nrow(get_parameters(m1)), 8L)
 
-  expect_equal(
+  expect_identical(
     find_parameters(m2),
     list(
       conditional = c("lag(union)", "wks"),
@@ -234,7 +234,7 @@ test_that("get_parameters", {
 
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(
       response = "lwage",
@@ -243,7 +243,7 @@ test_that("find_terms", {
       interactions = c("blk", "lag(union)")
     )
   )
-  expect_equal(
+  expect_identical(
     find_terms(m2),
     list(
       response = "lwage",
