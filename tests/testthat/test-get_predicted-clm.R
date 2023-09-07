@@ -1,11 +1,9 @@
-pkgs <- c("testthat", "insight", "ordinal")
-invisible(sapply(pkgs, skip_if_not_or_load_if_installed))
-
 test_that("get_predicted.default - ordinal - match CI", {
+  skip_if_not_installed("ordinal")
   skip_if(getRversion() < "4.2.0")
 
   data(wine, package = "ordinal")
-  m <- clm(rating ~ temp * contact, data = wine)
+  m <- ordinal::clm(rating ~ temp * contact, data = wine)
   dg <- get_datagrid(m, "temp", verbose = FALSE)
 
   out <- get_predicted(m, ci = 0.95, data = dg, verbose = FALSE)

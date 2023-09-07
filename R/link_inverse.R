@@ -62,6 +62,10 @@ link_inverse.speedglm <- link_inverse.glm
 #' @export
 link_inverse.bigglm <- link_inverse.glm
 
+#' @export
+link_inverse.nestedLogit <- function(x, ...) {
+  stats::make.link(link = "logit")$linkinv
+}
 
 
 # Tobit Family ---------------------------------
@@ -94,6 +98,9 @@ link_inverse.flexsurvreg <- function(x, ...) {
 link_inverse.lm <- function(x, ...) {
   stats::gaussian(link = "identity")$linkinv
 }
+
+#' @export
+link_inverse.phylolm <- link_inverse.lm
 
 #' @export
 link_inverse.bayesx <- link_inverse.lm
@@ -588,6 +595,16 @@ link_inverse.gbm <- function(x, ...) {
     coxph = ,
     bernoulli = stats::make.link("logit")$linkinv
   )
+}
+
+
+#' @export
+link_inverse.phyloglm <- function(x, ...) {
+  if (startsWith(x$method, "logistic")) {
+    stats::make.link("logit")$linkinv
+  } else {
+    stats::poisson(link = "log")$linkinv
+  }
 }
 
 

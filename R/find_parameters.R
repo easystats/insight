@@ -311,6 +311,25 @@ find_parameters.tobit <- find_parameters.default
 
 
 #' @export
+find_parameters.nestedLogit <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  pars <- tryCatch(
+    {
+      p <- text_remove_backticks(row.names(stats::coef(x)))
+      list(conditional = p)
+    },
+    error = function(x) {
+      NULL
+    }
+  )
+  if (flatten) {
+    unique(unlist(pars, use.names = FALSE))
+  } else {
+    pars
+  }
+}
+
+
+#' @export
 find_parameters.Rchoice <- function(x, flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
   if (cf[1] == "constant") {
@@ -778,7 +797,7 @@ find_parameters.metaplus <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.mipo <- function(x, flatten = FALSE, ...) {
-  pars <- list(conditional = as.vector(summary(x)$term))
+  pars <- list(conditional = unique(as.vector(summary(x)$term)))
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {

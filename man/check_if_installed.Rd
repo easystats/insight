@@ -26,7 +26,10 @@ needed package is not installed.}
 
 \item{minimum_version}{A character vector, representing the minimum package
 version that is required for each package. Should be of same length as
-\code{package}. If \code{NULL}, no check for minimum version is done.}
+\code{package}. If \code{NULL}, will automatically check the DESCRIPTION file for
+the correct minimum version. If using \code{minimum_version} with more than one
+package, \code{NA} should be used instead of \code{NULL} for packages where a
+specific version is not necessary.}
 
 \item{quietly}{Logical, if \code{TRUE}, invisibly returns a vector of logicals
 (\code{TRUE} for each installed package, \code{FALSE} otherwise), and does not stop
@@ -51,9 +54,15 @@ Checking if needed package is installed
 \dontshow{if (interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 check_if_installed("insight")
-try(check_if_installed("nonexistent_package"))
+try(check_if_installed("datawizard", stop = FALSE))
+try(check_if_installed("rstanarm", stop = FALSE))
+try(check_if_installed("nonexistent_package", stop = FALSE))
 try(check_if_installed("insight", minimum_version = "99.8.7"))
 try(check_if_installed(c("nonexistent", "also_not_here"), stop = FALSE))
+try(check_if_installed(c("datawizard", "rstanarm"), stop = FALSE))
+try(check_if_installed(c("datawizard", "rstanarm"),
+  minimum_version = c(NA, "2.21.1"), stop = FALSE
+))
 }
 \dontshow{\}) # examplesIf}
 }

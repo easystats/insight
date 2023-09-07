@@ -41,8 +41,9 @@ Authors:
   \item Indrajeet Patil \email{patilindrajeet.science@gmail.com} (\href{https://orcid.org/0000-0003-1995-6531}{ORCID}) (@patilindrajeets) [contributor]
   \item Philip Waggoner \email{philip.waggoner@gmail.com} (\href{https://orcid.org/0000-0002-7825-7573}{ORCID}) [contributor]
   \item Mattan S. Ben-Shachar \email{matanshm@post.bgu.ac.il} (\href{https://orcid.org/0000-0002-4287-4801}{ORCID}) [contributor]
-  \item Brenton M. Wiernik \email{brenton@wiernik.org} (\href{https://orcid.org/0000-0001-9560-6336}{ORCID}) (@bmwiernik)
+  \item Brenton M. Wiernik \email{brenton@wiernik.org} (\href{https://orcid.org/0000-0001-9560-6336}{ORCID}) (@bmwiernik) [contributor]
   \item Vincent Arel-Bundock \email{vincent.arel-bundock@umontreal.ca} (\href{https://orcid.org/0000-0003-2042-7063}{ORCID}) [contributor]
+  \item Etienne Bacher \email{etienne.bacher@protonmail.com} (\href{https://orcid.org/0000-0002-9271-5075}{ORCID}) [contributor]
 }
 
 Other contributors:
@@ -50,6 +51,7 @@ Other contributors:
   \item Alex Hayes \email{alexpghayes@gmail.com} (\href{https://orcid.org/0000-0002-4985-5160}{ORCID}) [reviewer]
   \item Grant McDermott \email{grantmcd@uoregon.edu} (\href{https://orcid.org/0000-0001-7883-8573}{ORCID}) [contributor]
   \item Rémi Thériault \email{remi.theriault@mail.mcgill.ca} (\href{https://orcid.org/0000-0003-4315-6788}{ORCID}) (@rempsyc) [contributor]
+  \item Alex Reinhart \email{areinhar@stat.cmu.edu} (\href{https://orcid.org/0000-0002-6658-514X}{ORCID}) [contributor]
 }
 
 }

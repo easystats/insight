@@ -66,19 +66,11 @@
 #' dat <- data.frame(ldose, sex, SF, stringsAsFactors = FALSE)
 #' m <- glm(SF ~ sex * ldose, family = binomial)
 #'
+#' # logistic regression
 #' model_info(m)
-#' \dontrun{
-#' library(glmmTMB)
-#' data("Salamanders")
-#' m <- glmmTMB(
-#'   count ~ spp + cover + mined + (1 | site),
-#'   ziformula = ~ spp + mined,
-#'   dispformula = ~DOY,
-#'   data = Salamanders,
-#'   family = nbinom2
-#' )
-#' }
 #'
+#' # t-test
+#' m <- t.test(1:10, y = c(7:20))
 #' model_info(m)
 #' @export
 model_info <- function(x, ...) {
@@ -171,7 +163,19 @@ model_info.logitr <- model_info.mclogit
 
 #' @export
 model_info.maxLik <- function(x, verbose = TRUE, ...) {
-  .make_family(x, verbose = verbose, ...)
+  fitfam <- .safe(eval(get_call(x)$family))
+  if (is.null(fitfam)) {
+    .make_family(x, verbose = verbose, ...)
+  } else {
+    .make_family(
+      x,
+      fitfam = fitfam$family,
+      logit.link = fitfam$link == "logit",
+      link.fun = fitfam$link,
+      verbose = verbose,
+      ...
+    )
+  }
 }
 
 #' @export
@@ -342,6 +346,32 @@ model_info.mlogit <- model_info.logistf
 
 #' @export
 model_info.gmnl <- model_info.logistf
+
+
+
+# Phylo logit and poisson family ------------------------------------
+
+#' @export
+model_info.phylolm <- function(x, verbose = TRUE, ...) {
+  .make_family(x, verbose = verbose, ...)
+}
+
+#' @export
+model_info.phyloglm <- function(x, verbose = TRUE, ...) {
+  if (startsWith(x$method, "logistic")) {
+    faminfo <- stats::binomial(link = "logit")
+  } else {
+    faminfo <- stats::poisson()
+  }
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    verbose = verbose,
+    ...
+  )
+}
 
 
 
@@ -1171,6 +1201,20 @@ model_info.polr <- function(x, ...) {
 
 
 #' @export
+model_info.nestedLogit <- function(x, ...) {
+  faminfo <- stats::binomial(link = "logit")
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = TRUE,
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+
+#' @export
 model_info.hglm <- function(x, ...) {
   faminfo <- .safe({
     mc <- get_call(x)$family
@@ -1227,9 +1271,17 @@ model_info.svyolr <- function(x, ...) {
 #' @export
 model_info.gamlss <- function(x, ...) {
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
+  # for ZIBNB family, we have only one value, so next line returns NA
+  fitfam <- faminfo$family[2]
+  if (is.na(fitfam)) {
+    fitfam <- faminfo$family
+    if (is.null(fitfam)) {
+      fitfam <- "unknown"
+    }
+  }
   .make_family(
     x = x,
-    fitfam = faminfo$family[2],
+    fitfam = fitfam,
     logit.link = faminfo$mu.link == "logit",
     link.fun = faminfo$mu.link,
     ...

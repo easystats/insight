@@ -99,6 +99,10 @@ n_obs.glm <- function(x, disaggregate = FALSE, ...) {
 #' @export
 n_obs.censReg <- n_obs.default
 
+#' @export
+n_obs.nestedLogit <- function(x, disaggregate = FALSE, ...) {
+  lapply(x$models, n_obs)
+}
 
 #' @rdname n_obs
 #' @export
@@ -351,6 +355,15 @@ n_obs.cglm <- n_obs.cgam
 n_obs.gbm <- function(x, ...) {
   length(x$fit)
 }
+
+
+#' @export
+n_obs.phylolm <- function(x, ...) {
+  x$n
+}
+
+#' @export
+n_obs.phyloglm <- n_obs.phylolm
 
 
 #' @export

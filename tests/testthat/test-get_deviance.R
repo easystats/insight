@@ -1,34 +1,13 @@
-osx <- tryCatch(
-  {
-    si <- Sys.info()
-    if (!is.null(si["sysname"])) {
-      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-    } else {
-      FALSE
-    }
-  },
-  error = function(e) {
-    FALSE
-  }
-)
+skip_if_not_installed("rstanarm")
 
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-.runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
+test_that("get_deviance - Bayesian lm", {
+  m1 <- lm(mpg ~ disp, data = mtcars)
+  m2 <- rstanarm::stan_glm(mpg ~ disp, data = mtcars, refresh = 0)
+  expect_equal(get_deviance(m1), get_deviance(m2, verbose = FALSE), tolerance = 1e-1)
+})
 
-if (.runThisTest && .runStanTest && !osx) {
-  skip_if_not_or_load_if_installed("lme4")
-  skip_if_not_or_load_if_installed("rstanarm")
-  data(mtcars)
-
-  test_that("get_deviance - Bayesian lm", {
-    m1 <- lm(mpg ~ disp, data = mtcars)
-    m2 <- rstanarm::stan_glm(mpg ~ disp, data = mtcars, refresh = 0)
-    expect_equal(get_deviance(m1), get_deviance(m2, verbose = FALSE), tolerance = 1e-1)
-  })
-
-  test_that("get_deviance - Bayesian glm", {
-    m1 <- glm(vs ~ disp, data = mtcars, family = "binomial")
-    m2 <- rstanarm::stan_glm(vs ~ disp, data = mtcars, family = "binomial", refresh = 0)
-    expect_equal(get_deviance(m1), get_deviance(m2, verbose = FALSE), tolerance = 1e-1)
-  })
-}
+test_that("get_deviance - Bayesian glm", {
+  m1 <- glm(vs ~ disp, data = mtcars, family = "binomial")
+  m2 <- rstanarm::stan_glm(vs ~ disp, data = mtcars, family = "binomial", refresh = 0)
+  expect_equal(get_deviance(m1), get_deviance(m2, verbose = FALSE), tolerance = 1e-1)
+})

@@ -1,8 +1,14 @@
 skip_on_os(c("mac", "linux"))
-skip_if_not_or_load_if_installed("MCMCglmm")
+skip_if_not_installed("MCMCglmm")
 
-data(PlodiaPO)
-mod_mcmcglmm <- MCMCglmm(
+# see https://github.com/georgheinze/logistf/pull/54
+skip_if(
+  "as.character.formula" %in% methods(as.character),
+  "Package `logistf` is loaded and breaks `MCMCglmm::MCMCglmm()`"
+)
+
+data(PlodiaPO, package = "MCMCglmm")
+mod_mcmcglmm <- MCMCglmm::MCMCglmm(
   PO ~ plate,
   random = ~FSfamily,
   data = PlodiaPO,

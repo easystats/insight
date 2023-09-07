@@ -1,8 +1,7 @@
 skip_if_not_installed("bife")
-skip_if_not_or_load_if_installed("bife")
 
 dataset <- bife::psid
-mod <- bife(LFP ~ AGE + I(INCH / 1000) + KID1 + KID2 + KID3 | ID, data = dataset)
+mod <- bife::bife(LFP ~ AGE + I(INCH / 1000) + KID1 + KID2 + KID3 | ID, data = dataset)
 
 test_that("get_predicted", {
   # link

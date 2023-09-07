@@ -1,8 +1,14 @@
-skip_if_not_or_load_if_installed("mmrm")
+skip_if_not_installed("mmrm")
 skip_if(getRversion() < "4.0.0")
 
-data(fev_data)
-mod_mmrm <- mmrm(
+# see https://github.com/georgheinze/logistf/pull/54
+skip_if(
+  "as.character.formula" %in% methods(as.character),
+  "Package `logistf` is loaded and breaks `mmrm::mmrm()`"
+)
+
+data(fev_data, package = "mmrm")
+mod_mmrm <- mmrm::mmrm(
   formula = FEV1 ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID),
   data = fev_data
 )
@@ -30,7 +36,7 @@ test_that("n_parameters", {
 })
 
 test_that("find_offset", {
-  model_off <- mmrm(
+  model_off <- mmrm::mmrm(
     log(FEV1) ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID) + offset(log(FEV1_BL)),
     data = fev_data
   )

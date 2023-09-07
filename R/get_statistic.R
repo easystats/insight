@@ -972,6 +972,47 @@ get_statistic.mlogit <- function(x, ...) {
   }
 }
 
+#' @export
+get_statistic.mclogit <- function(x, ...) {
+  if (requireNamespace("mclogit", quietly = TRUE)) {
+    cs <- stats::coef(summary(x))
+
+    out <- data.frame(
+      Parameter = rownames(cs),
+      Statistic = as.vector(cs[, 3]),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+
+    out <- text_remove_backticks(out)
+    attr(out, "statistic") <- find_statistic(x)
+    out
+  } else {
+    NULL
+  }
+}
+
+#' @export
+get_statistic.mblogit <- function(x, ...) {
+  if (requireNamespace("mclogit", quietly = TRUE)) {
+    cs <- stats::coef(summary(x))
+
+    out <- data.frame(
+      Parameter = gsub("(.*)~(.*)", "\\2", rownames(cs)),
+      Statistic = as.vector(cs[, 3]),
+      Response = gsub("(.*)~(.*)", "\\1", rownames(cs)),
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+
+    out <- text_remove_backticks(out)
+    attr(out, "statistic") <- find_statistic(x)
+    out
+  } else {
+    NULL
+  }
+}
+
 
 
 # mfx models -------------------------------------------------------
@@ -1075,6 +1116,40 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 # Other models -------------------------------------------------------
+
+
+#' @export
+get_statistic.nestedLogit <- function(x, component = "all", verbose = TRUE, ...) {
+  cf <- as.data.frame(stats::coef(x))
+  out <- as.data.frame(do.call(rbind, lapply(x$models, function(i) stats::coef(summary(i)))))
+  colnames(out)[3] <- "Statistic"
+  response_levels <- unlist(lapply(x$dichotomies, function(i) {
+    paste0("{", toString(i[[1]]), "} vs. {", toString(i[[2]]), "}")
+  }))
+  out$Response <- rep(response_levels, each = nrow(cf))
+  out$Component <- rep(names(x$models), each = nrow(cf))
+  out$Parameter <- rep(row.names(cf), times = ncol(cf))
+
+  if (!is.null(component) && !identical(component, "all")) {
+    comp <- intersect(names(x$models), component)
+    if (!length(comp) && verbose) {
+      format_alert(
+        paste0(
+          "No matching model found. Possible values for `component` are ",
+          toString(paste0("\"", names(x$models), "\"")),
+          "."
+        )
+      )
+    } else {
+      out <- out[out$Component %in% component, ]
+    }
+  }
+
+  out <- text_remove_backticks(out[c("Parameter", "Statistic", "Response", "Component")])
+  row.names(out) <- NULL
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
 
 
 #' @export
@@ -1386,11 +1461,16 @@ get_statistic.lqm <- get_statistic.lqmm
 
 #' @export
 get_statistic.mipo <- function(x, ...) {
+  s <- summary(x)
   params <- data.frame(
-    Parameter = as.vector(summary(x)$term),
-    Statistic = as.vector(summary(x)$statistic),
+    Parameter = as.vector(s$term),
+    Statistic = as.vector(s$statistic),
     stringsAsFactors = FALSE
   )
+  # check for ordinal-alike models
+  if ("y.level" %in% colnames(s)) {
+    params$Response <- as.vector(s$y.level)
+  }
   out <- text_remove_backticks(params)
   attr(out, "statistic") <- find_statistic(x)
   out

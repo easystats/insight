@@ -1,5 +1,5 @@
-pkgs <- c("insight", "estimatr", "ivreg")
-invisible(sapply(pkgs, skip_if_not_or_load_if_installed))
+skip_if_not_installed("estimatr")
+skip_if_not_installed("ivreg")
 
 
 # iv_robust --------------------------------------------------------------
@@ -7,7 +7,7 @@ invisible(sapply(pkgs, skip_if_not_or_load_if_installed))
 
 test_that("get_predicted.default - iv_robust", {
   data(Kmenta, package = "ivreg")
-  x <- iv_robust(Q ~ P + D | D + F + A, se_type = "stata", data = Kmenta)
+  x <- estimatr::iv_robust(Q ~ P + D | D + F + A, se_type = "stata", data = Kmenta)
 
   out <- get_predicted(x)
   expect_equal(
@@ -47,7 +47,7 @@ test_that("get_predicted.default - iv_robust", {
 
 test_that("get_predicted.default - ivreg", {
   data(Kmenta, package = "ivreg")
-  x <- ivreg(Q ~ P + D | D + F + A, data = Kmenta)
+  x <- ivreg::ivreg(Q ~ P + D | D + F + A, data = Kmenta)
 
   out <- get_predicted(x)
   expect_equal(

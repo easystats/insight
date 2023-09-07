@@ -122,7 +122,7 @@ is_regression_model <- function(x) {
 
     # n --------------------
     "negbin", "negbinmfx", "negbinirr", "nlreg", "nlrq", "nls",
-    "nparLD",
+    "nparLD", "nestedLogit",
 
     # o --------------------
     "objectiveML", "ols", "osrt", "orcutt",
@@ -130,6 +130,7 @@ is_regression_model <- function(x) {
     # p --------------------
     "pairwise.htest", "pb1", "pb2", "pgmm", "plm", "plmm", "PMCMR",
     "poissonmfx", "poissonirr", "polr", "pseudoglm", "psm", "probitmfx",
+    "phyloglm", "phylolm",
 
     # q --------------------
     "qr", "QRNLMM", "QRLMM",

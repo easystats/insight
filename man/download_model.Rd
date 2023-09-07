@@ -15,7 +15,8 @@ changing. By default, models are downloaded from
 \verb{https://raw.github.com/easystats/circus/master/data/}.}
 }
 \value{
-A model from the \emph{circus}-repository.
+A model from the \emph{circus}-repository, or \code{NULL} if model could
+not be downloaded (e.g., due to server problems).
 }
 \description{
 Downloads pre-compiled models from the \emph{circus}-repository.

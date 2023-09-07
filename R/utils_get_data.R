@@ -681,7 +681,7 @@
     all = find_variables(x, flatten = TRUE),
     random = find_random(x, split_nested = TRUE, flatten = TRUE)
   )
-  remain <- intersect(c(ft, find_weights(x)), cn)
+  remain <- intersect(c(ft, find_weights(x), find_offset(x)), cn)
 
   mf <- .safe(dat[, remain, drop = FALSE], dat)
   .prepare_get_data(x, mf, effects, verbose = verbose)
@@ -857,12 +857,12 @@
         # exeception: list for kruskal-wallis
         if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) &&
           (length(data_name) == 1 && startsWith(data_name, "list("))) {
-          l <- eval(.str2lang(x$data.name))
+          l <- eval(str2lang(x$data.name))
           names(l) <- paste0("x", seq_along(l))
           return(l)
         }
 
-        data_call <- lapply(data_name, .str2lang)
+        data_call <- lapply(data_name, str2lang)
         columns <- lapply(data_call, eval)
 
         # detect which kind of tests we have -----------------

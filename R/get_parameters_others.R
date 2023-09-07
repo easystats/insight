@@ -38,6 +38,35 @@ get_parameters.betareg <- function(x,
 }
 
 
+#' @export
+get_parameters.nestedLogit <- function(x, component = "all", verbose = TRUE, ...) {
+  cf <- as.data.frame(stats::coef(x))
+  params <- .gather(cf, names_to = "Component", values_to = "Estimate")
+  response_levels <- unlist(lapply(x$dichotomies, function(i) {
+    paste0("{", toString(i[[1]]), "} vs. {", toString(i[[2]]), "}")
+  }))
+  params$Response <- rep(response_levels, each = nrow(cf))
+  params$Parameter <- rep(row.names(cf), times = ncol(cf))
+  row.names(params) <- NULL
+
+  if (!is.null(component) && !identical(component, "all")) {
+    comp <- intersect(names(x$models), component)
+    if (!length(comp) && verbose) {
+      format_alert(
+        paste0(
+          "No matching model found. Possible values for `component` are ",
+          toString(paste0("\"", names(x$models), "\"")),
+          "."
+        )
+      )
+    } else {
+      params <- params[params$Component %in% component, ]
+    }
+  }
+
+  text_remove_backticks(params[c("Parameter", "Estimate", "Response", "Component")])
+}
+
 
 #' @rdname get_parameters.betareg
 #' @export

@@ -44,7 +44,6 @@ test_that("find_transformation - unknown", {
 })
 
 test_that("find_transformation - strange bayestestR example", {
-  data(mtcars)
   mod <- lm(log(mpg) ~ gear + hp, data = mtcars)
   expect_identical(find_transformation(mod), "log")
 })

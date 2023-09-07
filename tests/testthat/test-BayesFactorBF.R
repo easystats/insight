@@ -1,6 +1,6 @@
-skip_if_not_or_load_if_installed("BayesFactor")
+skip_if_not_installed("BayesFactor")
 
-x <- correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
+x <- BayesFactor::correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
 test_that("get_data", {
   expect_true(is.data.frame(get_data(x)))
 })
@@ -23,9 +23,9 @@ set.seed(123)
 x <- rnorm(1000, 0, 1)
 y <- rnorm(1000, 0, 1)
 
-t1 <- suppressMessages(ttestBF(x = x, mu = 60))
-t2 <- ttestBF(x = x, y = y)
-t2d <- suppressMessages(ttestBF(x = x, y = y, paired = TRUE, mu = 60))
+t1 <- suppressMessages(BayesFactor::ttestBF(x = x, mu = 60))
+t2 <- BayesFactor::ttestBF(x = x, y = y)
+t2d <- suppressMessages(BayesFactor::ttestBF(x = x, y = y, paired = TRUE, mu = 60))
 
 test_that("get_data", {
   expect_true(is.data.frame(get_data(t1)))
@@ -68,7 +68,7 @@ test_that("find_parameters", {
 
 t <- c(-0.15, 2.39, 2.42, 2.43)
 N <- c(100, 150, 97, 99)
-x <- meta.ttestBF(t = t, n1 = N, rscale = 1)
+x <- BayesFactor::meta.ttestBF(t = t, n1 = N, rscale = 1)
 test_that("get_data", {
   expect_true(is.data.frame(get_data(x)))
 })
@@ -84,7 +84,7 @@ test_that("get_parameters", {
 data(ToothGrowth)
 ToothGrowth$dose <- factor(ToothGrowth$dose)
 levels(ToothGrowth$dose) <- c("Low", "Medium", "High")
-x <- anovaBF(len ~ supp * dose, data = ToothGrowth, progress = FALSE)
+x <- BayesFactor::anovaBF(len ~ supp * dose, data = ToothGrowth, progress = FALSE)
 
 test_that("get_data", {
   expect_true(is.data.frame(get_data(x)))
@@ -120,8 +120,8 @@ test_that("clean_parameters", {
 })
 
 
-data(puzzles)
-x <- anovaBF(RT ~ shape * color + ID, data = puzzles, whichRandom = "ID", progress = FALSE)
+data(puzzles, package = "BayesFactor")
+x <- BayesFactor::anovaBF(RT ~ shape * color + ID, data = puzzles, whichRandom = "ID", progress = FALSE)
 
 test_that("get_data", {
   expect_true(is.data.frame(get_data(x)))
@@ -229,7 +229,7 @@ test_that("get_priors", {
 })
 
 
-x <- lmBF(len ~ supp + dose, data = ToothGrowth, progress = FALSE)
+x <- BayesFactor::lmBF(len ~ supp + dose, data = ToothGrowth, progress = FALSE)
 test_that("get_data", {
   expect_true(is.data.frame(get_data(x)))
 })
@@ -248,7 +248,7 @@ test_that("get_parameters", {
 
 
 
-x2 <- lmBF(len ~ supp + dose + supp:dose, data = ToothGrowth, progress = FALSE)
+x2 <- BayesFactor::lmBF(len ~ supp + dose + supp:dose, data = ToothGrowth, progress = FALSE)
 x <- x / x2
 test_that("get_data", {
   expect_true(is.data.frame(get_data(x)))
@@ -288,29 +288,29 @@ test_that("find_statistic", {
 
 
 
-corr_BF1 <- correlationBF(iris$Sepal.Length, iris$Sepal.Width, progress = FALSE)
-corr_BFk <- correlationBF(iris$Sepal.Length, iris$Sepal.Width,
+corr_BF1 <- BayesFactor::correlationBF(iris$Sepal.Length, iris$Sepal.Width, progress = FALSE)
+corr_BFk <- BayesFactor::correlationBF(iris$Sepal.Length, iris$Sepal.Width,
   progress = FALSE,
   nullInterval = c(-1, 0)
 )
 
-data(raceDolls)
-xtab_BF1 <- contingencyTableBF(raceDolls, sampleType = "indepMulti", fixedMargin = "cols", priorConcentration = 2)
+data(raceDolls, package = "BayesFactor")
+xtab_BF1 <- BayesFactor::contingencyTableBF(raceDolls, sampleType = "indepMulti", fixedMargin = "cols", priorConcentration = 2)
 
-ttest_BF1 <- ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2], progress = FALSE)
-ttest_BFk <- ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2],
+ttest_BF1 <- BayesFactor::ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2], progress = FALSE)
+ttest_BFk <- BayesFactor::ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2],
   progress = FALSE,
   nullInterval = c(-3, 0)
 )
 
-prop_BF1 <- proportionBF(y = 15, N = 25, p = 0.5, progress = FALSE)
-prop_BFk <- proportionBF(
+prop_BF1 <- BayesFactor::proportionBF(y = 15, N = 25, p = 0.5, progress = FALSE)
+prop_BFk <- BayesFactor::proportionBF(
   y = 15, N = 25, p = 0.5, progress = FALSE,
   nullInterval = c(0, 0.3)
 )
 
 
-lm_BFk <- generalTestBF(Sepal.Width ~ Sepal.Length + Species, data = iris, progress = FALSE)
+lm_BFk <- BayesFactor::generalTestBF(Sepal.Width ~ Sepal.Length + Species, data = iris, progress = FALSE)
 lm_BFd <- lm_BFk[3] / lm_BFk[2]
 lm_BF1 <- lm_BFk[2]
 
@@ -381,7 +381,7 @@ test_that("get_priors for t-test", {
 
 mtcars$cyl <- factor(mtcars$cyl)
 mtcars$gear <- factor(mtcars$gear)
-model <- lmBF(mpg ~ cyl + gear + cyl:gear, mtcars,
+model <- BayesFactor::lmBF(mpg ~ cyl + gear + cyl:gear, mtcars,
   progress = FALSE, whichRandom = c("gear", "cyl:gear")
 )
 

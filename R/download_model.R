@@ -11,7 +11,8 @@
 #'   changing. By default, models are downloaded from
 #'   `https://raw.github.com/easystats/circus/master/data/`.
 #'
-#' @return A model from the *circus*-repository.
+#' @return A model from the *circus*-repository, or `NULL` if model could
+#' not be downloaded (e.g., due to server problems).
 #'
 #' @details The code that generated the model is available at the
 #'   <https://easystats.github.io/circus/reference/index.html>.
@@ -37,10 +38,24 @@ download_model <- function(name, url = NULL) {
   temp_file <- tempfile()
   on.exit(unlink(temp_file))
 
-  request <- httr::GET(url)
-  httr::stop_for_status(request)
-  writeBin(httr::content(request, type = "raw"), temp_file)
+  result <- tryCatch(
+    {
+      request <- httr::GET(url)
+      httr::stop_for_status(request)
+    },
+    error = function(e) {
+      format_alert(
+        "Could not download model. Request failed with following error:",
+        e$message
+      )
+      NULL
+    }
+  )
+  if (is.null(result)) {
+    return(NULL)
+  }
 
+  writeBin(httr::content(request, type = "raw"), temp_file)
 
   x <- load(temp_file)
   model <- get(x)

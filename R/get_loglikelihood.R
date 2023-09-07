@@ -221,7 +221,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   if (info$is_binomial) {
     resp <- .factor_to_numeric(resp, lowest = 0)
     if (!is.null(ncol(resp))) {
-      n <- apply(resp, 1, sum)
+      n <- rowSums(resp)
       resp <- ifelse(n == 0, 0, resp[, 1] / n)
     } else {
       n <- rep.int(1, length(resp))
@@ -385,6 +385,20 @@ get_loglikelihood.plm <- function(x, check_response = FALSE, verbose = TRUE, ...
 #' @export
 get_loglikelihood.cpglm <- get_loglikelihood.plm
 
+
+#' @export
+get_loglikelihood.phylolm <- function(x, check_response = FALSE, verbose = TRUE, ...) {
+  .loglikelihood_prep_output(
+    x,
+    lls = stats::logLik(x)$logLik,
+    df = get_df(x, type = "model"),
+    check_response = check_response,
+    verbose = verbose
+  )
+}
+
+#' @export
+get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
 
 
 # Helpers -----------------------------------------------------------------

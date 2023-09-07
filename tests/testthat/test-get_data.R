@@ -1,12 +1,75 @@
 skip_on_os("mac")
 
+test_that("retrieve from same environment", {
+  foo <- data.frame(x = 1:10, y = 2:11)
+  fit <- lm(y ~ x, data = foo)
+
+  expect_no_warning({
+    cols <- names(get_data(fit))
+  })
+  expect_setequal(cols, c("x", "y"))
+})
+
+test_that("retrieve from correct environment", {
+  foo <- function() {
+    foo <- data.frame(x = 1:10, y = 2:11)
+
+    return(lm(y ~ x, data = foo))
+  }
+
+  # There should be no warning about "Could not recover model data from
+  # environment"
+  expect_no_warning({
+    cols <- names(get_data(foo()))
+  })
+  expect_setequal(cols, c("x", "y"))
+})
+
+test_that("fetch from local, not global, environment", {
+  # See #760. If the local environment has a modified version of data also in
+  # the global environment, we should find the local version first, not the
+  # global version.
+
+  foo <- function() {
+    mtcars$cylinders <- factor(mtcars$cyl)
+
+    return(lm(mpg ~ cylinders + disp, data = mtcars))
+  }
+
+  expect_setequal(
+    names(get_data(foo())),
+    c("mpg", "disp", "cylinders")
+  )
+})
+
+test_that("retrieve from call formula environment", {
+  skip_if_not_installed("AER")
+
+  foo <- function() {
+    d <- data.frame(
+      y = rnorm(100),
+      x = rnorm(100)
+    )
+
+    # find_formula(fit)$conditional happens to not have an environment for tobit
+    # models, so get_data() should check environment(get_call(fit)$formula). See
+    # #666
+    return(AER::tobit(y ~ x, data = d, right = 1.5))
+  }
+
+  expect_setequal(
+    names(get_data(foo())),
+    c("x", "y")
+  )
+})
+
 test_that("lme", {
-  skip_if_not_or_load_if_installed("nlme")
+  skip_if_not_installed("nlme")
   data("Orthodont", package = "nlme")
-  m <- lme( # a model of variance only
+  m <- nlme::lme( # a model of variance only
     distance ~ 1,
     data = Orthodont, # grand mean
-    weights = varConstPower(form = ~ age | Sex)
+    weights = nlme::varConstPower(form = ~ age | Sex)
   )
   expect_identical(dim(get_data(m, source = "mf")), c(108L, 3L))
   expect_identical(colnames(get_data(m, source = "mf")), c("distance", "age", "Sex"))
@@ -14,11 +77,11 @@ test_that("lme", {
 
 
 test_that("lme4", {
-  skip_if_not_or_load_if_installed("lme4")
+  skip_if_not_installed("lme4")
   data("cbpp", package = "lme4")
   set.seed(123)
   cbpp$cont <- rnorm(nrow(cbpp))
-  m <- glmer(cbind(incidence, size - incidence) ~ poly(cont, 2) + (1 | herd),
+  m <- lme4::glmer(cbind(incidence, size - incidence) ~ poly(cont, 2) + (1 | herd),
     data = cbpp, family = binomial
   )
   expect_s3_class(get_data(m), "data.frame")
@@ -28,7 +91,7 @@ test_that("lme4", {
 test_that("additional_variables = TRUE", {
   k <- mtcars
   k$qsec[1:10] <- NA
-  k <<- k
+  k <- k
   mod <- lm(mpg ~ hp, k)
   n1 <- nrow(k)
   n2 <- nrow(insight::get_data(mod))
@@ -42,8 +105,8 @@ test_that("lm", {
   set.seed(1023)
   x <- rnorm(1000, sd = 4)
   y <- cos(x) + rnorm(1000)
-  # fails if we assign this locally
-  dat <<- data.frame(x, y)
+
+  dat <- data.frame(x, y)
   mod1 <- lm(y ~ x, data = dat)
   mod2 <- lm(y ~ cos(x), data = dat)
   expect_equal(get_data(mod1), get_data(mod2), ignore_attr = TRUE)
@@ -53,8 +116,8 @@ test_that("lm", {
 
 
 test_that("get_data lavaan", {
-  skip_if_not_or_load_if_installed("lavaan")
-  data(PoliticalDemocracy)
+  skip_if_not_installed("lavaan")
+  data(PoliticalDemocracy, package = "lavaan")
   model <- "
     # latent variable definitions
       ind60 =~ x1 + x2 + x3
@@ -72,9 +135,38 @@ test_that("get_data lavaan", {
       y4 ~~ y8
       y6 ~~ y8
   "
-  m <- sem(model, data = PoliticalDemocracy)
+  m <- lavaan::sem(model, data = PoliticalDemocracy)
   expect_s3_class(get_data(m, verbose = FALSE), "data.frame")
   expect_equal(head(get_data(m, verbose = FALSE)), head(PoliticalDemocracy), ignore_attr = TRUE, tolerance = 1e-3)
+
+  # works when data not in environment
+  holz_data <<- lavaan::HolzingerSwineford1939
+  HS.model <- " visual  =~ x1 + x2 + x3
+                textual =~ x4 + x5 + x6
+                speed   =~ x7 + x8 + x9 "
+  m_holz <- lavaan::lavaan(HS.model,
+    data = holz_data, auto.var = TRUE, auto.fix.first = TRUE,
+    auto.cov.lv.x = TRUE
+  )
+
+  skip_on_os(c("mac", "linux"))
+  out1 <- get_data(m_holz)
+  expect_named(
+    out1,
+    c(
+      "id", "sex", "ageyr", "agemo", "school", "grade", "x1", "x2",
+      "x3", "x4", "x5", "x6", "x7", "x8", "x9"
+    )
+  )
+  expect_identical(nrow(out1), 301L)
+
+  # rm(holz_data)
+  # out2 <- get_data(m_holz)
+  # expect_named(
+  #   out2,
+  #   c("x1", "x2","x3", "x4", "x5", "x6", "x7", "x8", "x9")
+  # )
+  # expect_identical(nrow(out2), 301L)
 })
 
 
@@ -104,7 +196,7 @@ test_that("get_data include weights, even if ones", {
 
 
 test_that("lm with transformations", {
-  d <<- data.frame(
+  d <- data.frame(
     time = as.factor(c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)),
     group = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     sum = c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50)
@@ -115,24 +207,31 @@ test_that("lm with transformations", {
 
 
 test_that("lm with poly and NA in response", {
-  data(iris)
   d <- iris
   d[1:25, "Sepal.Length"] <- NA
-  d2 <<- d
+  d2 <- d
   m <- lm(Sepal.Length ~ Species / poly(Petal.Width, 2), data = d2)
   expect_equal(get_data(m), iris[26:150, c("Sepal.Length", "Species", "Petal.Width")], ignore_attr = TRUE)
 })
 
 
 test_that("mgcv", {
-  ## NOTE check back every now and then and see if tests still work
-  skip("works interactively")
-  skip_if_not_or_load_if_installed("mgcv")
+  skip_if_not_installed("mgcv")
+
+  # mgcv::gam() deliberately does not keep its environment, so get_data() has to
+  # fall back to the model frame. See
+  # https://github.com/cran/mgcv/blob/a4e69cf44a49c84a41a42e90c86995a843733968/R/mgcv.r#L2156-L2159
   d <- iris
   d$NewFac <- rep(c(1, 2), length.out = 150)
-  model <- gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
+  model <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
+
+  # There should be two warnings: One for failing to get the data from the
+  # environment, and one for not recovering interaction() accurately
+  expect_warning(expect_warning({
+    model_data <- get_data(model)
+  }))
   expect_equal(
-    head(insight::get_data(model)),
+    head(model_data),
     head(d[c("Sepal.Length", "Petal.Length", "Species", "NewFac")]),
     ignore_attr = TRUE
   )
@@ -174,80 +273,6 @@ test_that("lm with poly and NA in response", {
 })
 
 
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
-.runStanTest <- Sys.getenv("RunAllinsightStanTests") == "yes"
-
-if (.runThisTest) {
-  data(iris)
-  m <- lm(Sepal.Length ~ Sepal.Width, data = iris)
-  out <- get_data(m)
-  test_that("subsets", {
-    expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width"))
-    expect_identical(nrow(out), 150L)
-  })
-
-  m <- lm(Sepal.Length ~ Sepal.Width, data = iris, subset = Species == "versicolor")
-  out <- get_data(m)
-  test_that("subsets", {
-    expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
-    expect_identical(nrow(out), 50L)
-  })
-
-  # d <- iris
-  # m <- lm(Petal.Length ~ poly(Sepal.Length), data = d)
-  # d <<- mtcars
-  # expect_warning(expect_warning(out <- get_data(m)))
-  # expect_equal(colnames(out), c("Petal.Length", "Sepal.Length"))
-
-  test_that("log", {
-    data(iris)
-    m <- lm(log(Sepal.Length) ~ sqrt(Sepal.Width), data = iris)
-    out <- get_data(m)
-    expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
-  })
-
-  test_that("log II", {
-    m <- lm(log(Sepal.Length) ~ scale(Sepal.Width), data = iris)
-    out <- get_data(m)
-    expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
-  })
-
-
-  test_that("workaround bug in estimatr", {
-    skip_if_not_or_load_if_installed("ivreg")
-    skip_if_not_or_load_if_installed("estimatr")
-    data("CigaretteDemand")
-    m <- estimatr::iv_robust(
-      log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
-      data = CigaretteDemand
-    )
-    out <- get_data(m)
-    expect_equal(
-      head(out$packs),
-      c(101.08543, 111.04297, 71.95417, 56.85931, 82.58292, 79.47219),
-      tolerance = 1e-3
-    )
-    expect_equal(
-      colnames(out),
-      c("packs", "rprice", "rincome", "salestax"),
-      tolerance = 1e-3
-    )
-  })
-
-
-  test_that("get_data colnames", {
-    skip_if_not(.runStanTest)
-    skip_if_not(packageVersion("base") >= "4.0.0")
-    skip_if_not_or_load_if_installed("brms")
-    m <- suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1))
-    out <- get_data(m)
-    expect_type(out$cyl, "double")
-    expect_true(all(colnames(out) %in% c("mpg", "hp", "cyl")))
-    out <- get_data(m, additional_variables = TRUE)
-    expect_true("qsec" %in% colnames(out))
-  })
-}
-
 mod <- lm(mpg ~ as.logical(am) + factor(cyl) + as.factor(gear), mtcars)
 out <- get_data(mod)
 test_that("logicals", {
@@ -260,7 +285,7 @@ test_that("get_data() log transform", {
   set.seed(123)
   x <- abs(rnorm(100, sd = 5)) + 5
   y <- exp(2 + 0.3 * x + rnorm(100, sd = 0.4))
-  dat <<- data.frame(y, x)
+  dat <- data.frame(y, x)
 
   mod <- lm(log(y) ~ log(x), data = dat)
   expect_equal(
@@ -339,5 +364,124 @@ test_that("get_data() log transform", {
     head(dat),
     tolerance = 1e-3,
     ignore_attr = TRUE
+  )
+})
+
+skip_on_cran()
+
+m <- lm(Sepal.Length ~ Sepal.Width, data = iris)
+out <- get_data(m)
+test_that("subsets", {
+  expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width"))
+  expect_identical(nrow(out), 150L)
+})
+
+m <- lm(Sepal.Length ~ Sepal.Width, data = iris, subset = Species == "versicolor")
+out <- get_data(m)
+test_that("subsets", {
+  expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width", "Species"))
+  expect_identical(nrow(out), 50L)
+})
+
+# d <- iris
+# m <- lm(Petal.Length ~ poly(Sepal.Length), data = d)
+# d <<- mtcars
+# expect_warning(expect_warning(out <- get_data(m)))
+# expect_equal(colnames(out), c("Petal.Length", "Sepal.Length"))
+
+test_that("log", {
+  m <- lm(log(Sepal.Length) ~ sqrt(Sepal.Width), data = iris)
+  out <- get_data(m)
+  expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
+})
+
+test_that("log II", {
+  m <- lm(log(Sepal.Length) ~ scale(Sepal.Width), data = iris)
+  out <- get_data(m)
+  expect_equal(out, iris[c("Sepal.Length", "Sepal.Width")], ignore_attr = TRUE)
+})
+
+
+test_that("workaround bug in estimatr", {
+  skip_if_not_installed("ivreg")
+  skip_if_not_installed("estimatr")
+  data("CigaretteDemand", package = "ivreg")
+  m <- estimatr::iv_robust(
+    log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
+    data = CigaretteDemand
+  )
+  out <- get_data(m)
+  expect_equal(
+    head(out$packs),
+    c(101.08543, 111.04297, 71.95417, 56.85931, 82.58292, 79.47219),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    colnames(out),
+    c("packs", "rprice", "rincome", "salestax"),
+    tolerance = 1e-3
+  )
+})
+
+
+test_that("get_data colnames", {
+  skip_on_os("windows")
+  skip_if_not(getRversion() >= "4.0.0")
+  skip_if_not_installed("brms")
+  m <- suppressMessages(suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1)))
+  out <- get_data(m)
+  expect_type(out$cyl, "double")
+  expect_true(all(colnames(out) %in% c("mpg", "hp", "cyl")))
+  out <- get_data(m, additional_variables = TRUE)
+  expect_true("qsec" %in% colnames(out))
+})
+
+
+test_that("get_data works for fixest inside functions", {
+  skip_if_not_installed("fixest")
+  data(mtcars)
+
+  # fit within function
+  fixest_wrapper1 <- function(data) {
+    data$cylinders <- factor(data$cyl)
+    fit <- fixest::feglm(mpg ~ cylinders * disp + hp, data = data)
+    return(fit)
+  }
+  global_fixest1 <- fixest_wrapper1(data = mtcars)
+  data <- mtcars[, c("mpg", "disp")]
+  expect_named(
+    get_data(global_fixest1),
+    c("mpg", "cylinders", "disp", "hp")
+  )
+
+  # fit within function, subset
+  fixest_wrapper2 <- function(data) {
+    data$cylinders <- factor(data$cyl)
+    fit <- fixest::feglm(mpg ~ cylinders * disp + hp, data = data)
+    return(fit)
+  }
+  data <- mtcars
+  global_fixest2 <- fixest_wrapper2(data = data[1:20, ])
+  expect_identical(nrow(get_data(global_fixest2)), 20L)
+  expect_named(
+    get_data(global_fixest2),
+    c("mpg", "cylinders", "disp", "hp")
+  )
+
+  data(mtcars)
+  d_cyl <- mtcars
+  d_cyl$cylinders <- factor(d_cyl$cyl)
+  global_fixest3 <- fixest::feglm(mpg ~ cylinders * disp + hp, data = d_cyl)
+  expect_named(
+    get_data(global_fixest3),
+    c("mpg", "cylinders", "disp", "hp")
+  )
+
+  # regular example
+  data(iris)
+  res <- fixest::feglm(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris, "poisson")
+  expect_named(
+    get_data(res),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species")
   )
 })

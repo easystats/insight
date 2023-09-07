@@ -108,7 +108,7 @@
   # backward compatibility
   if (identical(predict, "relation")) {
     if (isTRUE(verbose)) {
-      format_alert(
+      format_warning(
         '`predict = "relation" is deprecated.',
         'Please use `predict = "expectation" instead.'
       )
@@ -147,8 +147,8 @@
     scale_arg <- "terms"
     transform <- FALSE
 
-    # linear models are always on response scale (there is no other)
-  } else if (info$is_linear && !info$is_gam) {
+    # linear models are always on response scale (there is no other, unless gaussian("log"))
+  } else if (info$is_linear && !info$is_gam && !identical(info$link_function, "log")) {
     type_arg <- "response"
     scale_arg <- "response"
     transform <- FALSE

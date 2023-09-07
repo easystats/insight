@@ -1,12 +1,16 @@
-skip_if_not_or_load_if_installed("survival")
-skip_if_not_or_load_if_installed("insight")
-skip_if_not_or_load_if_installed("JM")
+skip_if_not_installed("survival")
+skip_if_not_installed("insight")
+skip_if_not_installed("JM")
 
 lung <- subset(survival::lung, subset = ph.ecog %in% 0:2)
 lung$sex <- factor(lung$sex, labels = c("male", "female"))
 lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
 
-m1 <- coxph(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
+Surv <- survival::Surv
+strata <- survival::strata
+bladder <- survival::bladder
+
+m1 <- survival::coxph(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
 
 
 test_that("model_info", {
@@ -44,7 +48,7 @@ test_that("get_data: regression test for previous bug", {
     x = c(0, 2, 1, 1, 1, 0, 0),
     sex = c(0, 0, 0, 0, 1, 1, 1)
   )
-  mod <- coxph(Surv(time, status) ~ x + strata(sex),
+  mod <- survival::coxph(Surv(time, status) ~ x + strata(sex),
     data = dat_regression_test,
     ties = "breslow"
   )
@@ -133,7 +137,7 @@ test_that("find_statistic", {
 
 test_that("JM", {
   data("aids", package = "JM")
-  m <- coxph(Surv(start, stop, event) ~ CD4, data = aids)
+  m <- survival::coxph(Surv(start, stop, event) ~ CD4, data = aids)
   d <- get_data(m)
   expect_equal(dim(d), c(1405, 4))
   expect_equal(colnames(d), c("start", "stop", "event", "CD4"))
@@ -141,9 +145,9 @@ test_that("JM", {
 })
 
 test_that("get_statistic", {
-  skip_if_not_or_load_if_installed("survival")
+  skip_if_not_installed("survival")
   bladder1 <- bladder[bladder$enum < 5, ]
-  mod <- coxph(
+  mod <- survival::coxph(
     Surv(stop, event) ~ (rx + size + number) * strata(enum),
     cluster = id, bladder1, robust = TRUE
   )
@@ -153,7 +157,7 @@ test_that("get_statistic", {
 
   lung <- survival::lung
   mod <- survival::coxph(
-    formula = Surv(time, status) ~ age + sex + frailty(inst),
+    formula = Surv(time, status) ~ age + sex + survival::frailty(inst),
     data = lung
   )
   z1 <- get_statistic(mod)$Statistic

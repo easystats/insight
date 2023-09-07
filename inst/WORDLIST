@@ -12,7 +12,7 @@ Coloured
 DOI
 Dom
 Elff
-Futrhermore
+ESS
 GJRM
 GLMM
 GLMMadaptive
@@ -31,6 +31,8 @@ Nakagawa
 Newburgh
 ORCID
 PIs
+Rhat
+ROPEs
 RStudio
 Rchoice
 Satterthwaite
@@ -111,6 +113,9 @@ logitr
 logloss
 lqmm
 marginaleffects
+mblogit
+mclogit
+mlogit
 md
 merMod
 merTools
@@ -124,9 +129,11 @@ modelling
 multcomp
 mvord
 nd
+nestedLogit
 occurence
 optimizers
 patilindrajeets
+phylolm
 plm
 poisson
 pre
@@ -166,3 +173,4 @@ visualisation
 warmup
 warmups
 ’s
+speedglm

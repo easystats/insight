@@ -222,6 +222,22 @@ get_df.coeftest <- function(x, ...) {
 
 
 #' @export
+get_df.phylolm <- function(x, type = "residual", ...) {
+  type <- match.arg(
+    tolower(type),
+    choices = c("wald", "residual", "normal", "model")
+  )
+  type <- switch(type,
+    "model" = stats::logLik(x)$df,
+    get_df.default(x, type = "residual")
+  )
+}
+
+#' @export
+get_df.phyloglm <- get_df.phylolm
+
+
+#' @export
 get_df.fixest <- function(x, type = "residual", ...) {
   # fixest degrees of freedom can be tricky. best to use the function by the
   # package.
@@ -377,10 +393,10 @@ get_df.mediate <- function(x, ...) {
 # Model approach (model-based / logLik df) ------------------------------
 
 .model_df <- function(x) {
-  dof <- tryCatch(attr(stats::logLik(x), "df"), error = function(e) NULL)
+  dof <- .safe(attr(stats::logLik(x), "df"))
 
   if (is.null(dof) || all(is.infinite(dof)) || all(is.na(dof))) {
-    r <- tryCatch(x$rank, error = function(e) NULL)
+    r <- .safe(x$rank)
     if (!is.null(r)) {
       dof <- r + 1
     } else {

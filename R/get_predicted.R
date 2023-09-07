@@ -317,14 +317,16 @@ get_predicted.lm <- function(x,
     )
   }
 
-  # 0. step: convert matrix variable types attributes to numeric, if necessary
-  dataClasses <- attributes(x[["terms"]])$dataClasses
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+
+  # 0. step: convert matrix variable types attributes to numeric, if necessary.
   # see https://github.com/easystats/insight/pull/671
+  dataClasses <- attributes(x[["terms"]])$dataClasses
   if ("nmatrix.1" %in% dataClasses) {
     dataClasses[dataClasses == "nmatrix.1"] <- "numeric"
     attributes(x$terms)$dataClasses <- dataClasses
     attributes(attributes(x$model)$terms)$dataClasses <- dataClasses
-    x$model[] <- lapply(x$model, function(x) {
+    args$data[] <- lapply(args$data, function(x) {
       if (all(class(x) == c("matrix", "array"))) { # nolint
         as.numeric(x)
       } else {
@@ -332,8 +334,6 @@ get_predicted.lm <- function(x,
       }
     })
   }
-
-  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   # 1. step: predictions
   if (is.null(iterations)) {
@@ -604,6 +604,56 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
   out
 }
 
+
+
+
+# phylolm ---------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.phylolm <- function(x,
+                                  data = NULL,
+                                  predict = "expectation",
+                                  verbose = TRUE,
+                                  ...) {
+  # evaluate arguments
+  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+
+  # evaluate dots, remove some arguments that might be duplicated else
+  dot_args <- list(...)
+  dot_args[["newdata"]] <- NULL
+  dot_args[["type"]] <- NULL
+
+
+  # 1. step: predictions
+  predict_args <- compact_list(list(x, newdata = args$data, type = args$type, dot_args))
+  predictions <- .safe(do.call("predict", predict_args))
+
+  # may fail due to invalid "dot_args", so try shorter argument list
+  if (is.null(predictions)) {
+    predictions <- .safe(
+      do.call("predict", compact_list(list(x, newdata = args$data, type = args$type)))
+    )
+  }
+
+  # stop here if we have no predictions
+  if (is.null(predictions) && isTRUE(verbose)) {
+    format_warning(
+      paste0("Could not compute predictions for model of class `", class(x)[1], "`.")
+    )
+  }
+
+  # sometimes, a mtrix is returned
+  if (is.matrix(predictions)) {
+    predictions <- predictions[, 1]
+  }
+  # 2. step: final preparation
+  if (!is.null(out)) {
+    out <- .get_predicted_out(predictions, args = args, ci_data = NULL)
+  }
+
+  out
+}
 
 
 

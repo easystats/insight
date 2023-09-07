@@ -173,20 +173,35 @@ check_cbind <- function(resp, combine, model) {
     # check for brms Additional Response Information
     r1 <- trim_ws(sub("(.*)\\|(.*)", "\\1", resp))
     r2 <- trim_ws(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
-    # check for "resp_thres" pattern
+    # check for "resp_thres" and similar patterns
     r_resp <- trim_ws(unlist(strsplit(resp, "|", fixed = TRUE))[2])
-    if (startsWith(r_resp, "resp_thres")) {
+    if (grepl("^(resp_thres|thres|resp_weights|weights|resp_se|se|resp_cens|cens)", r_resp)) {
       r3 <- trim_ws(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp), fixed = TRUE))
-      names(r3) <- r3
       numeric_values <- suppressWarnings(as.numeric(r2))
       r2 <- r2[is.na(numeric_values)]
-      if (length(r2)) {
-        r2 <- c(r2, r3)
-      } else {
-        r2 <- r3
+      if (is.na(suppressWarnings(as.numeric(r3)))) {
+        if (length(r2)) {
+          r2 <- c(r2, r3)
+        } else {
+          r2 <- r3
+        }
       }
+      resp <- compact_character(c(r1, r2))
+    } else if (grepl("^(resp_trunc|trunc|resp_mi|mi)", r_resp)) {
+      # for models with "trunc()", "mi()" etc. in response, which cannot have
+      # variables, omit that part (see #779)
+      resp <- r1
+    } else if (grepl("^(resp_trials|trials|resp_cat|cat|resp_dec|dec)", r_resp)) {
+      if (is.na(suppressWarnings(as.numeric(r2)))) {
+        # if we have a variable, add it
+        resp <- compact_character(c(r1, r2))
+      } else {
+        # else, if we have a constant (like "trials(1)"), omit it
+        resp <- r1
+      }
+    } else {
+      resp <- c(r1, r2)
     }
-    resp <- c(r1, r2)
   } else if (inherits(model, "DirichletRegModel")) {
     resp <- model$varnames
   } else {
@@ -194,7 +209,7 @@ check_cbind <- function(resp, combine, model) {
     # "all.vars()" will take care of extracting the correct variables.
     resp_combined_string <- paste(resp, collapse = "+")
     # create an expression, so all.vars() works similar like for formulas
-    resp_combined <- tryCatch(all.vars(.str2lang(resp_combined_string)),
+    resp_combined <- tryCatch(all.vars(str2lang(resp_combined_string)),
       error = function(e) resp_combined_string
     )
     # if we do not want to combine, or if we just have one variable as
