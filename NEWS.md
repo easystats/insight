@@ -13,6 +13,8 @@
 
 * Fixed issue with invalid multibyte strings in `trim_ws()`.
 
+* Fixed issue in `find_statistic()` for models from packag *fixest*.
+
 # insight 0.19.3
 
 ## Breaking changes
