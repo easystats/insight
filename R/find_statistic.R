@@ -174,7 +174,6 @@ find_statistic <- function(x, ...) {
       "bam", "bigglm",
       "cgam", "cgamm",
       "eglm", "emmGrid", "emm_list",
-      "fixest",
       "gam", "glm", "Glm", "glmc", "glmerMod", "glmRob", "glmrob",
       "pseudoglm",
       "scam",
@@ -191,7 +190,7 @@ find_statistic <- function(x, ...) {
 
   # pattern finding ----------------------------------------------------------
 
-  unclear.mods <- "plm"
+  unclear.mods <- c("plm", "fixest")
 
   if (inherits(x, "glht")) {
     if (x$df == 0) {
@@ -290,7 +289,11 @@ find_statistic <- function(x, ...) {
   # ambiguous cases -----------------------------------------------------------
 
   if (model_class %in% unclear.mods) {
-    col_names <- colnames(as.data.frame(summary(x)$coefficients))
+    if (model_class == "fixest") {
+      col_names <- colnames(as.data.frame(summary(x)$coeftable))
+    } else {
+      col_names <- colnames(as.data.frame(summary(x)$coefficients))
+    }
 
     t_names <- c(
       "t",
