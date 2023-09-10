@@ -71,19 +71,13 @@ check_if_installed <- function(package,
       toString(sprintf("`%s`", package))
     )
   } else if (!is.null(minimum_version)) {
-    current_versions <- unlist(lapply(package, function(x) {
-      as.character(utils::packageVersion(x))
-    }))
-
-    desired_versions <- unlist(lapply(minimum_version, function(x) {
-      if (is.na(x)) {
-        0
+    needs_update <- unlist(Map(function(p, m) {
+      if (is.na(m)) {
+        FALSE
       } else {
-        as.character(package_version(x))
+        utils::packageVersion(p) < package_version(m)
       }
-    }))
-
-    needs_update <- current_versions < desired_versions
+    }, package, minimum_version))
 
     if (any(needs_update)) {
       # only keep not-up-to-date packages

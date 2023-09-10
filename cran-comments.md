@@ -1,4 +1,4 @@
-Maintainance release.
+Maintainance release. Also required in preparation of the next version of the `performance` package, where an update was requested by the CRAN team.
 
 ## revdepcheck results
 
