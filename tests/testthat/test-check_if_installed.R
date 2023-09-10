@@ -21,4 +21,27 @@ test_that("check_if_installed", {
   ), minimum_version = c("0.8.0", NA)))
 
   expect_no_error(check_if_installed("marginaleffects", minimum_version = "0.9.0"))
+
+  out <- check_if_installed(
+    c("insight", "datawizard"),
+    minimum_version = c("999.30.0", NA),
+    prompt = FALSE,
+    quiet = TRUE
+  )
+  expect_equal(out, c(FALSE, TRUE), ignore_attr = TRUE)
+
+  out <- check_if_installed(
+    c("insight", "datawizard"),
+    prompt = FALSE,
+    quiet = TRUE
+  )
+  expect_equal(out, c(TRUE, TRUE), ignore_attr = TRUE)
+
+  out <- check_if_installed(
+    c("insight", "datawizard"),
+    minimum_version = c("0.1.0", "0.1.0"),
+    prompt = FALSE,
+    quiet = TRUE
+  )
+  expect_equal(out, c(TRUE, TRUE), ignore_attr = TRUE)
 })

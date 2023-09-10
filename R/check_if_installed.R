@@ -68,7 +68,7 @@ check_if_installed <- function(package,
     what_you_can_do <- sprintf(
       "Please install %s by running `install.packages(%s)`.",
       if (length(package) > 1L) "them" else "it",
-      toString(sprintf("`%s`", package))
+      toString(sprintf("\"%s\"", package))
     )
   } else if (!is.null(minimum_version)) {
     needs_update <- unlist(Map(function(p, m) {
@@ -80,6 +80,9 @@ check_if_installed <- function(package,
     }, package, minimum_version))
 
     if (any(needs_update)) {
+      # set is_installed to FALSE for packages that fail minimum version check
+      is_installed[needs_update] <- FALSE
+
       # only keep not-up-to-date packages
       package <- package[needs_update]
       minimum_version <- minimum_version[needs_update]
@@ -97,7 +100,7 @@ check_if_installed <- function(package,
       what_you_can_do <- sprintf(
         "Please update %s by running `install.packages(%s)`.",
         if (length(package) > 1L) "them" else "it",
-        toString(sprintf("`%s`", package))
+        toString(sprintf("\"%s\"", package))
       )
     }
   }
