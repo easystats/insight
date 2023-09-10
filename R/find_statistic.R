@@ -289,11 +289,18 @@ find_statistic <- function(x, ...) {
   # ambiguous cases -----------------------------------------------------------
 
   if (model_class %in% unclear.mods) {
+    # special handling for fixest, see
+    # https://github.com/easystats/parameters/issues/892#issuecomment-1712645841
+    # and https://github.com/lrberge/fixest/blob/c14c55917897478d996f80bd3392d2e7355b1f29/R/ESTIMATION_FUNS.R#L2903
     if (model_class == "fixest") {
-      col_names <- colnames(as.data.frame(summary(x)$coeftable))
-    } else {
-      col_names <- colnames(as.data.frame(summary(x)$coefficients))
+      if (m_info$family %in% c("binomial", "poisson")) {
+        return("z-statistic")
+      } else {
+        return("t-statistic")
+      }
     }
+
+    col_names <- colnames(as.data.frame(summary(x)$coefficients))
 
     t_names <- c(
       "t",

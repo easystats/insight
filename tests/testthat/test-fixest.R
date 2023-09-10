@@ -1,11 +1,14 @@
 skip_on_os("mac")
 skip_if(getRversion() < "3.6.0")
 skip_if_not_installed("fixest")
+skip_if_not_installed("carData")
 
 # avoid warnings
 fixest::setFixest_nthreads(1)
 
 data(trade, package = "fixest")
+data(Greene, package = "carData")
+
 m1 <- fixest::femlm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
 m2 <- fixest::femlm(log1p(Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")
 m3 <- fixest::feglm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "poisson")
@@ -13,7 +16,6 @@ m4 <- fixest::feols(
   Sepal.Width ~ Petal.Length | Species | Sepal.Length ~ Petal.Width,
   data = iris
 )
-
 
 test_that("robust variance-covariance", {
   mod <- fixest::feols(mpg ~ hp + drat | cyl, data = mtcars)
@@ -254,30 +256,19 @@ test_that("is_multivariate", {
 })
 
 test_that("find_statistic", {
-  out <- capture.output(summary(m1))
-  if (any(grepl("t value", out, fixed = TRUE))) {
-    expect_identical(find_statistic(m1), "t-statistic")
-  } else {
-    expect_identical(find_statistic(m1), "z-statistic")
-  }
-  out <- capture.output(summary(m2))
-  if (any(grepl("t value", out, fixed = TRUE))) {
-    expect_identical(find_statistic(m2), "t-statistic")
-  } else {
-    expect_identical(find_statistic(m2), "z-statistic")
-  }
-  out <- capture.output(summary(m3))
-  if (any(grepl("t value", out, fixed = TRUE))) {
-    expect_identical(find_statistic(m3), "t-statistic")
-  } else {
-    expect_identical(find_statistic(m3), "z-statistic")
-  }
-  out <- capture.output(summary(m4))
-  if (any(grepl("t value", out, fixed = TRUE))) {
-    expect_identical(find_statistic(m4), "t-statistic")
-  } else {
-    expect_identical(find_statistic(m4), "z-statistic")
-  }
+  # see https://github.com/easystats/parameters/issues/892#issuecomment-1712645841
+  # and https://github.com/lrberge/fixest/blob/c14c55917897478d996f80bd3392d2e7355b1f29/R/ESTIMATION_FUNS.R#L2903
+  d <- Greene
+  d$dv <- as.numeric(Greene$decision == "yes")
+  m5 <- feglm(dv ~ language | judge,
+    data = d,
+    cluster = "judge", family = "logit"
+  )
+  expect_identical(find_statistic(m1), "z-statistic")
+  expect_identical(find_statistic(m2), "t-statistic")
+  expect_identical(find_statistic(m3), "z-statistic")
+  expect_identical(find_statistic(m4), "t-statistic")
+  expect_identical(find_statistic(m5), "z-statistic")
 })
 
 test_that("get_statistic", {
