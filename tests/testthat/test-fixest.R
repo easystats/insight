@@ -260,7 +260,7 @@ test_that("find_statistic", {
   # and https://github.com/lrberge/fixest/blob/c14c55917897478d996f80bd3392d2e7355b1f29/R/ESTIMATION_FUNS.R#L2903
   d <- Greene
   d$dv <- as.numeric(Greene$decision == "yes")
-  m5 <- feglm(dv ~ language | judge,
+  m5 <- fixest::feglm(dv ~ language | judge,
     data = d,
     cluster = "judge", family = "logit"
   )
