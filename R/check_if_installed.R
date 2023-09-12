@@ -50,7 +50,12 @@ check_if_installed <- function(package,
   what_is_wrong <- what_you_can_do <- NULL
 
   if (is.null(minimum_version)) {
-    minimum_version <- .get_dep_version(dep = package)
+    minimum_version <- .safe(.get_dep_version(dep = package))
+  }
+
+  # we may have values for minimum_version that cannot be tested on R old-release
+  if (getRversion() <= "4.1.0") {
+    minimum_version <- NULL
   }
 
   ## Test
