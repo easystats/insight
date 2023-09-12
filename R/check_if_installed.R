@@ -53,11 +53,6 @@ check_if_installed <- function(package,
     minimum_version <- .safe(.get_dep_version(dep = package))
   }
 
-  # we may have values for minimum_version that cannot be tested on R old-release
-  if (getRversion() <= "4.1.0") {
-    minimum_version <- NULL
-  }
-
   ## Test
   if (!all(is_installed)) {
     # only keep not-installed packages
@@ -168,5 +163,9 @@ print.check_if_installed <- function(x, ...) {
   if (all(is.na(out))) {
     out <- NULL
   }
-  unlist(out)
+  out <- unlist(out)
+  if (!length(out)) {
+    out <- NULL
+  }
+  out
 }
