@@ -160,11 +160,8 @@ print.check_if_installed <- function(x, ...) {
     dep_string <- unlist(strsplit(dep_string, ">", fixed = TRUE))
     gsub("[^0-9.]+", "", dep_string[2])
   })
-  if (all(is.na(out))) {
-    out <- NULL
-  }
   out <- unlist(out)
-  if (!length(out)) {
+  if (all(is.na(out)) || !length(out)) {
     out <- NULL
   }
   out
