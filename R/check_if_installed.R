@@ -53,6 +53,11 @@ check_if_installed <- function(package,
     minimum_version <- .safe(.get_dep_version(dep = package))
   }
 
+  # sanity check for equal length of package and minimum_version
+  if (!is.null(minimum_version) && length(package) != length(minimum_version)) {
+    minimum_version <- NULL
+  }
+
   ## Test
   if (!all(is_installed)) {
     # only keep not-installed packages
@@ -160,7 +165,7 @@ print.check_if_installed <- function(x, ...) {
     dep_string <- unlist(strsplit(dep_string, ">", fixed = TRUE))
     gsub("[^0-9.]+", "", dep_string[2])
   })
-  out <- unlist(out)
+  out <- unlist(compact_list(out))
   if (all(is.na(out)) || !length(out)) {
     out <- NULL
   }
