@@ -2,7 +2,7 @@
 
 ## Bug fixes
 
-* Fixed issue with `check_if_installed()` for old R releases.
+* Fixed critical issue with `check_if_installed()` for old R releases.
 
 # insight 0.19.4
 
