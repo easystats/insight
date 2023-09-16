@@ -447,7 +447,7 @@ format_table <- function(x,
   if (length(ci_low) >= 1 && length(ci_low) == length(ci_high)) {
     if (!is.null(ci_value)) {
       ci_value <- ci_value[!is.na(ci_value)]
-      if (n_unique(ci_value) > 1) {
+      if (n_unique(ci_value) > 1L) {
         ci_value <- unique(ci_value)
       } else {
         ci_value <- unique(ci_value)[1]

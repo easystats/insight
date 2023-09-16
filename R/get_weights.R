@@ -60,7 +60,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   if (is.null(w)) {
     w <- tryCatch(
       {
-        if (length(weight_vars) > 1) {
+        if (length(weight_vars) > 1L) {
           .recover_data_from_environment(x)[weight_vars]
         } else {
           .recover_data_from_environment(x)[[weight_vars]]
@@ -99,7 +99,7 @@ get_weights.brmsfit <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
   w <- unique(find_weights(x))
 
   if (!is.null(w)) {
-    if (length(w) > 1) {
+    if (length(w) > 1L) {
       return(get_data(x, verbose = FALSE)[w])
     } else {
       w <- get_data(x, verbose = FALSE)[[w]]

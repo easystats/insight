@@ -63,7 +63,7 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
     .x
   })
 
-  if (length(l) > 1) {
+  if (length(l) > 1L) {
     prior_info <- do.call(rbind, l)
   } else {
     cn <- colnames(l[[1]])
@@ -132,7 +132,7 @@ get_priors.stanmvreg <- function(x, ...) {
   }))
 
   prior_info <- do.call(rbind, lapply(l, function(.x) {
-    if (length(.x) > 1) {
+    if (length(.x) > 1L) {
       out <- lapply(names(.x), function(.i) {
         if (!("adjusted_scale" %in% colnames(.x[[.i]]))) .x[[.i]] <- cbind(.x[[.i]], adjusted_scale = NA)
         data.frame(.x[[.i]], response = .i, stringsAsFactors = FALSE)

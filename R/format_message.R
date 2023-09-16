@@ -73,7 +73,7 @@ format_message <- function(string,
                            ...,
                            line_length = 0.9 * getOption("width", 80),
                            indent = "  ") {
-  if (is.null(line_length) || is.infinite(line_length) || line_length < 1) {
+  if (is.null(line_length) || is.infinite(line_length) || line_length < 1L) {
     line_length <- 70
   }
 

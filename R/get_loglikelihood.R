@@ -226,7 +226,7 @@ get_loglikelihood.afex_aov <- function(x, ...) {
     } else {
       n <- rep.int(1, length(resp))
     }
-    n <- if (any(n > 1)) n else w
+    n <- if (any(n > 1L)) n else w
     w <- ifelse(n > 0, (w / n), 0)
   }
 

@@ -780,14 +780,14 @@ get_predicted.phylolm <- function(x,
   }
 
   # multidimensional or "grouped" predictions (e.g., nnet::multinom with `predict(type="probs")`)
-  if (is.matrix(predictions) && ncol(predictions) > 1) {
+  if (is.matrix(predictions) && ncol(predictions) > 1L) {
     predictions <- as.data.frame(predictions)
     vary <- colnames(predictions)
     predictions$Row <- seq_len(nrow(predictions))
     # if we have any focal predictors, add those as well, so we have
     # the associated levels/values for "Row"
     if (!is.null(args$data)) {
-      focal_predictors <- .safe(names(which(n_unique(args$data) > 1)))
+      focal_predictors <- .safe(names(which(n_unique(args$data) > 1L)))
       if (!is.null(focal_predictors)) {
         predictions <- cbind(predictions, args$data[focal_predictors])
       }

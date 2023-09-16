@@ -247,7 +247,7 @@ find_formula.gamm <- function(x, verbose = TRUE, ...) {
 
   if (length(random) == 0) {
     f.random <- NULL
-  } else if (length(random) > 1) {
+  } else if (length(random) > 1L) {
     f.random <- lapply(random, function(r) stats::as.formula(paste0("~1|", r)))
   } else {
     f.random <- stats::as.formula(paste0("~1|", random))
@@ -328,7 +328,7 @@ find_formula.systemfit <- function(x, verbose = TRUE, ...) {
   })
   f <- compact_list(l)
 
-  if (length(f) > 1) {
+  if (length(f) > 1L) {
     attr(f, "is_mv") <- "1"
   }
   .find_formula_return(f)
@@ -794,13 +794,13 @@ find_formula.mhurdle <- function(x, verbose = TRUE, ...) {
 
   f.zi <- paste0("~", f_parts[1])
 
-  if (length(f_parts) > 1) {
+  if (length(f_parts) > 1L) {
     f.cond <- paste0(safe_deparse(stats::formula(x)[[2]]), "~", f_parts[2])
   } else {
     f.cond <- NULL
   }
 
-  if (length(f_parts) > 2) {
+  if (length(f_parts) > 2L) {
     f.ip <- paste0("~", f_parts[3])
   } else {
     f.ip <- NULL
@@ -831,13 +831,13 @@ find_formula.feglm <- function(x, verbose = TRUE, ...) {
 
   f.cond <- trim_ws(f_parts[1])
 
-  if (length(f_parts) > 1) {
+  if (length(f_parts) > 1L) {
     f.instr <- paste0("~", trim_ws(f_parts[2]))
   } else {
     f.instr <- NULL
   }
 
-  if (length(f_parts) > 2) {
+  if (length(f_parts) > 2L) {
     f.clus <- paste0("~", trim_ws(f_parts[3]))
   } else {
     f.clus <- NULL
@@ -860,7 +860,7 @@ find_formula.fixest <- function(x, verbose = TRUE, ...) {
 
   f.cond <- trim_ws(f_parts[1])
 
-  if (length(f_parts) > 1) {
+  if (length(f_parts) > 1L) {
     f.clus <- paste0("~", trim_ws(f_parts[2]))
   } else {
     f.clus <- parse(text = deparse(x$call))[[1]]$fixef
@@ -890,7 +890,7 @@ find_formula.feis <- function(x, verbose = TRUE, ...) {
   # sub(".*id ?= ?(.*?),.*", "\\1", safe_deparse(x$call), perl = TRUE)
   # sub(".*\\bid\\s*=\\s*([^,]+).*", "\\1", safe_deparse(x$call), perl = TRUE)
 
-  if (length(f_parts) > 1) {
+  if (length(f_parts) > 1L) {
     f.slopes <- paste0("~", trim_ws(f_parts[2]))
   } else {
     f.slopes <- NULL
@@ -913,7 +913,7 @@ find_formula.bife <- function(x, verbose = TRUE, ...) {
 
   f.cond <- trim_ws(f_parts[1])
 
-  if (length(f_parts) > 1) {
+  if (length(f_parts) > 1L) {
     f.rand <- paste0("~", trim_ws(f_parts[2]))
   } else {
     f.rand <- NULL
@@ -942,18 +942,18 @@ find_formula.wbm <- function(x, verbose = TRUE, ...) {
 
   f.cond <- trim_ws(f_parts[1])
 
-  if (length(f_parts) > 1) {
+  if (length(f_parts) > 1L) {
     f.instr <- paste0("~", trim_ws(f_parts[2]))
   } else {
     f.instr <- NULL
   }
 
-  if (length(f_parts) > 2) {
+  if (length(f_parts) > 2L) {
     f_parts[3] <- trim_ws(f_parts[3])
     if (grepl("\\((.+)\\|(.+)\\)", f_parts[3])) {
       # we have multiple random effects, which we can better extract
       # via ".findbars()"
-      if (length(gregexpr("|", f_parts[3], fixed = TRUE)[[1]]) > 1) {
+      if (length(gregexpr("|", f_parts[3], fixed = TRUE)[[1]]) > 1L) {
         f.rand <- .findbars(stats::as.formula(paste("~", f_parts[3])))
       } else {
         f.rand <- gsub("(\\(|\\))", "", f_parts[3])
@@ -1069,13 +1069,13 @@ find_formula.DirichletRegModel <- function(x, verbose = TRUE, ...) {
 
   f.cond <- trim_ws(f_parts[1])
 
-  if (length(f_parts) > 1) {
+  if (length(f_parts) > 1L) {
     f.cond2 <- paste0("~", trim_ws(f_parts[2]))
   } else {
     f.cond2 <- NULL
   }
 
-  if (length(f_parts) > 2) {
+  if (length(f_parts) > 2L) {
     f.cond3 <- paste0("~", trim_ws(f_parts[3]))
   } else {
     f.cond3 <- NULL
@@ -1759,7 +1759,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   }, TRUE)
   f <- compact_list(f[keep])
   # exceptions, if random effect is named Xr
-  if (!length(f) && len > 1) {
+  if (!length(f) && len > 1L) {
     f <- list(stats::as.formula("~1 | Xr"))
   }
   f
@@ -1847,7 +1847,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   parts <- trim_ws(unlist(strsplit(split = pattern, x = RHS, perl = TRUE), use.names = FALSE))
   d_RHS <- unique(gsub("(.*)\\$(.*)", "\\1", grep("(.*)\\$(.*)", parts, value = TRUE)))
 
-  if (n_unique(c(d_LHS, d_RHS)) > 1) {
+  if (n_unique(c(d_LHS, d_RHS)) > 1L) {
     format_error("Multiple data objects present in formula. Specify your model using the `data` argument instead.")
   } else {
     d <- unique(d_RHS)

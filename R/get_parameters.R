@@ -321,7 +321,7 @@ get_parameters.margins <- function(x, ...) {
   param <- as.vector(s$factor)
   estimate_pos <- which(colnames(s) == "AME")
 
-  if (estimate_pos > 2) {
+  if (estimate_pos > 2L) {
     out <- s[1:(estimate_pos - 1)]
     r <- apply(out, 1, function(i) paste0(colnames(out), " [", i, "]"))
     param <- unname(sapply(as.data.frame(r), paste, collapse = ", "))
@@ -610,7 +610,7 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
 
   coef_labels <- names(lavaan::coef(x))
 
-  if ("group" %in% colnames(param_tab) && n_unique(param_tab$group) > 1) {
+  if ("group" %in% colnames(param_tab) && n_unique(param_tab$group) > 1L) {
     params <- paste0(params, " (group ", param_tab$group, ")")
     groups <- grepl("(.*)\\.g(.*)", coef_labels)
     coef_labels[!groups] <- paste0(coef_labels[!groups], " (group 1)")
