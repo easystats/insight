@@ -33,7 +33,7 @@ format_number <- function(x, textual = TRUE, ...) {
   opts <- options(scipen = 100)
   on.exit(options(opts))
 
-  if (length(x) > 1) {
+  if (length(x) > 1L) {
     return(.trim_ws_and(sapply(x, .format_character_number)))
   }
   .format_character_number(x)

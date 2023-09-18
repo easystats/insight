@@ -689,7 +689,7 @@ get_datagrid.logical <- get_datagrid.character
         } else if (length(parts) == 2) {
           expression <- paste0("seq(", parts[1], ", ", parts[2], ", length.out = length)")
           # If more, it's probably the vector
-        } else if (length(parts) > 2) {
+        } else if (length(parts) > 2L) {
           parts <- as.numeric(parts)
           expression <- paste0("c(", toString(parts), ")")
         }
@@ -762,7 +762,7 @@ get_datagrid.default <- function(x,
   # Deal with intercept-only models
   if (isFALSE(include_response)) {
     data <- data[!colnames(data) %in% response]
-    if (ncol(data) < 1) {
+    if (ncol(data) < 1L) {
       format_error("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid.")
     }
   }

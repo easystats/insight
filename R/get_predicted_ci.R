@@ -433,7 +433,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
     # installed?
     check_if_installed(c("bayestestR", "datawizard"))
     out <- as.data.frame(bayestestR::ci(as.data.frame(t(iter)), ci = ci, method = ci_method))
-    if (length(ci) > 1) out <- datawizard::reshape_ci(out)
+    if (length(ci) > 1L) out <- datawizard::reshape_ci(out)
   }
   out$Parameter <- out$CI <- NULL
   row.names(out) <- NULL

@@ -35,7 +35,7 @@
     predict <- dots$type
   }
 
-  if (length(predict) > 1) {
+  if (length(predict) > 1L) {
     predict <- predict[1]
     if (isTRUE(verbose)) {
       format_warning(
