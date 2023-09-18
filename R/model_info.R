@@ -66,19 +66,11 @@
 #' dat <- data.frame(ldose, sex, SF, stringsAsFactors = FALSE)
 #' m <- glm(SF ~ sex * ldose, family = binomial)
 #'
+#' # logistic regression
 #' model_info(m)
-#' \dontrun{
-#' library(glmmTMB)
-#' data("Salamanders")
-#' m <- glmmTMB(
-#'   count ~ spp + cover + mined + (1 | site),
-#'   ziformula = ~ spp + mined,
-#'   dispformula = ~DOY,
-#'   data = Salamanders,
-#'   family = nbinom2
-#' )
-#' }
 #'
+#' # t-test
+#' m <- t.test(1:10, y = c(7:20))
 #' model_info(m)
 #' @export
 model_info <- function(x, ...) {

@@ -74,3 +74,10 @@ test_that("safe_deparse_symbol() works", {
   expect_identical(safe_deparse(as.name("test")), "test")
   expect_identical(safe_deparse("test"), "\"test\"")
 })
+
+test_that("trim_ws() works with non-ascii chars", {
+  expect_identical(
+    trim_ws(c("test ", " Se\x96ora ", "works \x97fine ", "this too", "yeah")),
+    c("test", "Se\x96ora", "works \x97fine", "this too", "yeah")
+  )
+})

@@ -1290,7 +1290,7 @@ get_data.gamlss <- function(x, source = "environment", verbose = TRUE, ...) {
 
       mf_data <- mf_list[[1]]
 
-      if (length(mf_list) > 1) {
+      if (length(mf_list) > 1L) {
         for (i in 2:length(mf_list)) {
           cn <- setdiff(colnames(mf_list[[i]]), colnames(mf_data))
           if (length(cn)) mf_data <- cbind(mf_data, mf_list[[i]][, cn, drop = FALSE])

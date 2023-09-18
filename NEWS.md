@@ -1,4 +1,32 @@
+# insight 0.19.5
+
+## Bug fixes
+
+* Fixed critical issue with `check_if_installed()` for old R releases.
+
+# insight 0.19.4
+
+## Changes to functions
+
+* `get_predicted()` now accepts `predict = "link"` for gaussian models with
+  log-link (i.e. `glm(..., family = gaussian("log"))`), to return predictions
+  on the link scale.
+  
+* `check_if_installed()` now automatically checks the package DESCRIPTION file to 
+  determine the correct minimum version required.
+
+## Bug fixes
+
+* Fixed issue with invalid multibyte strings in `trim_ws()`.
+
+* Fixed issue in `find_statistic()` for models from package *fixest*.
+
 # insight 0.19.3
+
+## Breaking changes
+
+* `standardize_column_order()` has changed the position when re-ordering Bayes
+  factors, ROPEs and ESS / Rhat (mainly relevant for Bayesian models).
 
 ## Changes to functions
 
@@ -6,7 +34,11 @@
   `"response.level"` column name.
 
 * `get_data()` for _lavaan_ models is now more stable at retrieving model data
-  when this is not avaible in the environment.
+  when this is not available in the environment.
+
+* `find_terms()` gets an `as_term_labels` argument, to extract model terms
+  from the formula's `"term.labels"` attribute. This is closer to the behaviour
+  of `stats::terms()`, but may be insufficient, e.g. for mixed models.
 
 ## Bug fixes
 
@@ -99,7 +131,7 @@
 * `get_data()` was revised and now always tries to recover the data that was
   used to fit a model from the environment. If this fails, it falls back to
   recovering data from the model frame (the former default behaviour).
-  Futrhermore, the `source` argument can be used to explicitly force the old
+  Furthermore, the `source` argument can be used to explicitly force the old
   behaviour: `source = "mf"` will try to recover data from the model frame first,
   then possibly falling back to look in the environment.
 
@@ -1254,4 +1286,3 @@
   matrix-like variables in the model frame (e.g. when using `poly()`).
 
 * Fixed issues with `PROreg::BBmm()`, due to changes in latest package update.
-

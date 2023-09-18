@@ -110,37 +110,11 @@ format_table <- function(x,
 
 
   # Format parameters names ----
-
-  ## TODO: check if this simplification works
-  # I'm not sure, but I think the following three code lines should work, too
-  #
-  # shared <- intersect(x$Parameter, names(att$pretty_names))
-  # index <- match(shared, x$Parameter)
-  # x$Parameter[index] <- as.vector(att$pretty_names[x$Parameter[index]])
-
   if (pretty_names && !is.null(att$pretty_names)) {
-    # remove strings with NA names
-    att$pretty_names <- att$pretty_names[!is.na(names(att$pretty_names))]
-    if (length(att$pretty_names) != length(x$Parameter)) {
-      match_pretty_names <- match(names(att$pretty_names), x$Parameter)
-      match_pretty_names <- match_pretty_names[!is.na(match_pretty_names)]
-      if (length(match_pretty_names)) {
-        x$Parameter[match_pretty_names] <- att$pretty_names[x$Parameter[match_pretty_names]]
-      }
-    } else {
-      match_pretty_names <- att$pretty_names[x$Parameter]
-      if (!anyNA(match_pretty_names)) {
-        x$Parameter <- att$pretty_names[x$Parameter]
-      } else {
-        match_pretty_names <- match(names(att$pretty_names), x$Parameter)
-        match_pretty_names <- match_pretty_names[!is.na(match_pretty_names)]
-        if (length(match_pretty_names)) {
-          x$Parameter[match_pretty_names] <- att$pretty_names[x$Parameter[match_pretty_names]]
-        }
-      }
-    }
+    shared <- intersect(x$Parameter, names(att$pretty_names))
+    index <- match(shared, x$Parameter)
+    x$Parameter[index] <- as.vector(att$pretty_names[x$Parameter[index]])
   }
-
 
   # Format specific columns ----
   if ("n_Obs" %in% names(x)) x$n_Obs <- format_value(x$n_Obs, protect_integers = TRUE)
@@ -473,7 +447,7 @@ format_table <- function(x,
   if (length(ci_low) >= 1 && length(ci_low) == length(ci_high)) {
     if (!is.null(ci_value)) {
       ci_value <- ci_value[!is.na(ci_value)]
-      if (n_unique(ci_value) > 1) {
+      if (n_unique(ci_value) > 1L) {
         ci_value <- unique(ci_value)
       } else {
         ci_value <- unique(ci_value)[1]
@@ -592,7 +566,7 @@ format_table <- function(x,
     {
       ci_low <- names(x)[which(names(x) == "conf.low")]
       ci_high <- names(x)[which(names(x) == "conf.high")]
-      x$conf.int <- format_ci(
+      x$conf.low <- format_ci(
         x[[ci_low]],
         x[[ci_high]],
         ci = NULL,
@@ -601,7 +575,7 @@ format_table <- function(x,
         brackets = ci_brackets,
         zap_small = zap_small
       )
-      x$conf.low <- NULL
+      names(x)[names(x) == "conf.low"] <- "conf.int"
       x$conf.high <- NULL
       x
     },
@@ -678,10 +652,13 @@ format_table <- function(x,
   }
 
   # Indices
-  if ("BF" %in% names(x)) x$BF <- format_bf(x$BF, name = NULL, stars = starlist[["BF"]], exact = exact)
+  if ("BF" %in% names(x)) {
+    x$BF <- format_bf(x$BF, name = NULL, stars = starlist[["BF"]], exact = exact)
+  }
   if ("log_BF" %in% names(x)) {
-    x$BF <- format_bf(exp(x$log_BF), name = NULL, stars = starlist[["BF"]], exact = exact)
-    x$log_BF <- NULL
+    x$log_BF <- format_bf(exp(x$log_BF), name = NULL, stars = starlist[["BF"]], exact = exact)
+    x$BF <- NULL
+    colnames(x)[colnames(x) == "log_BF"] <- "BF"
   }
   if ("pd" %in% names(x)) x$pd <- format_pd(x$pd, name = NULL, stars = starlist[["pd"]])
   if ("Rhat" %in% names(x)) x$Rhat <- format_value(x$Rhat, digits = 3)

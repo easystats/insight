@@ -34,12 +34,12 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), sex2$case)
+  expect_equal(get_response(m1), sex2$case, ignore_attr = TRUE)
 })
 
 test_that("get_predictors", {
-  expect_equal(
-    colnames(get_predictors(m1)),
+  expect_named(
+    get_predictors(m1),
     c("age", "oc", "vic", "vicl", "vis", "dia")
   )
 })
@@ -49,8 +49,8 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 239)
-  expect_equal(
+  expect_identical(nrow(get_data(m1)), 239L)
+  expect_identical(
     colnames(get_data(m1)),
     c("case", "age", "oc", "vic", "vicl", "vis", "dia")
   )
@@ -66,18 +66,18 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(
+  expect_identical(find_terms(m1), list(
     response = "case",
     conditional = c("age", "oc", "vic", "vicl", "vis", "dia")
   ))
-  expect_equal(
+  expect_identical(
     find_terms(m1, flatten = TRUE),
     c("case", "age", "oc", "vic", "vicl", "vis", "dia")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 239)
+  expect_identical(n_obs(m1), 239)
 })
 
 test_that("linkfun", {
@@ -89,14 +89,14 @@ test_that("linkinverse", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c("(Intercept)", "age", "oc", "vic", "vicl", "vis", "dia")
     )
   )
-  expect_equal(nrow(get_parameters(m1)), 7)
-  expect_equal(
+  expect_identical(nrow(get_parameters(m1)), 7L)
+  expect_identical(
     get_parameters(m1)$Parameter,
     c("(Intercept)", "age", "oc", "vic", "vicl", "vis", "dia")
   )
@@ -107,9 +107,11 @@ test_that("is_multivariate", {
 })
 
 test_that("find_algorithm", {
-  expect_equal(find_algorithm(m1), list(algorithm = "Penalized ML"))
+  expect_identical(find_algorithm(m1), list(algorithm = "Penalized ML"))
 })
 
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "chi-squared statistic")
 })
+
+unloadNamespace("logistf")

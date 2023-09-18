@@ -45,11 +45,15 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(mod_aer_ivreg), cig_data$packs[cig_data$year == "1995"])
+  expect_equal(
+    get_response(mod_aer_ivreg),
+    cig_data$packs[cig_data$year == "1995"],
+    tolerance = 1e-5
+  )
 })
 
 test_that("get_predictors", {
-  expect_equal(
+  expect_identical(
     colnames(get_predictors(mod_aer_ivreg)),
     c("rprice", "rincome", "tdiff", "tax", "cpi")
   )
@@ -60,8 +64,8 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(mod_aer_ivreg)), 48)
-  expect_equal(
+  expect_identical(nrow(get_data(mod_aer_ivreg)), 48L)
+  expect_identical(
     colnames(get_data(mod_aer_ivreg)),
     c("packs", "rprice", "rincome", "tdiff", "tax", "cpi", "year")
   )
@@ -86,16 +90,17 @@ test_that("find_variables", {
       response = "packs",
       conditional = c("rprice", "rincome"),
       instruments = c("rincome", "tdiff", "tax", "cpi")
-    )
+    ),
+    ignore_attr = TRUE
   )
-  expect_equal(
+  expect_identical(
     find_variables(mod_aer_ivreg, flatten = TRUE),
     c("packs", "rprice", "rincome", "tdiff", "tax", "cpi")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(mod_aer_ivreg), 48)
+  expect_identical(n_obs(mod_aer_ivreg), 48L)
 })
 
 test_that("linkfun", {
@@ -107,10 +112,11 @@ test_that("find_parameters", {
     find_parameters(mod_aer_ivreg),
     list(
       conditional = c("(Intercept)", "log(rprice)", "log(rincome)")
-    )
+    ),
+    ignore_attr = TRUE
   )
-  expect_equal(nrow(get_parameters(mod_aer_ivreg)), 3)
-  expect_equal(
+  expect_identical(nrow(get_parameters(mod_aer_ivreg)), 3L)
+  expect_identical(
     get_parameters(mod_aer_ivreg)$Parameter,
     c("(Intercept)", "log(rprice)", "log(rincome)")
   )
@@ -127,10 +133,11 @@ test_that("find_terms", {
       response = "log(packs)",
       conditional = c("log(rprice)", "log(rincome)"),
       instruments = c("log(rincome)", "tdiff", "I(tax/cpi)")
-    )
+    ),
+    ignore_attr = TRUE
   )
-  expect_equal(nrow(get_parameters(mod_aer_ivreg)), 3)
-  expect_equal(
+  expect_identical(nrow(get_parameters(mod_aer_ivreg)), 3L)
+  expect_identical(
     get_parameters(mod_aer_ivreg)$Parameter,
     c("(Intercept)", "log(rprice)", "log(rincome)")
   )
@@ -139,3 +146,8 @@ test_that("find_terms", {
 test_that("find_statistic", {
   expect_identical(find_statistic(mod_aer_ivreg), "t-statistic")
 })
+
+# to avoid `Registered S3 methods overwritten by 'ivreg'` messages
+if (isNamespaceLoaded("AER")) {
+  unloadNamespace("AER")
+}

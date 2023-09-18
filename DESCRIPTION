@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.19.2.5
+Version: 0.19.5
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -157,12 +157,14 @@ Suggests:
     mlogit,
     mhurdle,
     mmrm,
+    modelbased,
     multgee,
     nestedLogit,
     nlme,
     nnet,
     nonnest2,
     ordinal,
+    panelr,
     parameters,
     parsnip,
     pbkrtest,
@@ -178,7 +180,7 @@ Suggests:
     robustbase,
     robustlmm,
     rstanarm (>= 2.21.1),
-    rstantools,
+    rstantools (>= 2.1.0),
     rstudioapi,
     sandwich,
     speedglm,

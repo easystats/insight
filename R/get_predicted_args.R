@@ -35,7 +35,7 @@
     predict <- dots$type
   }
 
-  if (length(predict) > 1) {
+  if (length(predict) > 1L) {
     predict <- predict[1]
     if (isTRUE(verbose)) {
       format_warning(
@@ -147,8 +147,8 @@
     scale_arg <- "terms"
     transform <- FALSE
 
-    # linear models are always on response scale (there is no other)
-  } else if (info$is_linear && !info$is_gam) {
+    # linear models are always on response scale (there is no other, unless gaussian("log"))
+  } else if (info$is_linear && !info$is_gam && !identical(info$link_function, "log")) {
     type_arg <- "response"
     scale_arg <- "response"
     transform <- FALSE

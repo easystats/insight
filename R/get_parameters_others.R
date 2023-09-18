@@ -311,7 +311,7 @@ get_parameters.marginaleffects <- function(x, summary = FALSE, merge_parameters 
     s <- summary(x)
     estimate_pos <- which(colnames(s) == "estimate")
     params <- s[, seq_len(estimate_pos - 1), drop = FALSE]
-    if (isTRUE(merge_parameters) && ncol(params) > 1) {
+    if (isTRUE(merge_parameters) && ncol(params) > 1L) {
       r <- apply(params, 1, function(i) paste0(colnames(params), " [", i, "]"))
       out <- data.frame(
         Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),

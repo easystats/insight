@@ -1,8 +1,25 @@
 skip_if_not_installed("lme4")
 
+test_that("find_terms by formula", {
+  data(mtcars)
+  m <- lm(mpg ~ log(hp) * (am + factor(cyl)), data = mtcars)
+  ## FIXME: this is currently wrong behaviour
+  expect_identical(
+    find_terms(m),
+    list(response = "mpg", conditional = c("log(hp)", "(am", "factor(cyl))"))
+  )
+  expect_identical(
+    find_terms(m, as_term_labels = TRUE),
+    list(conditional = c(
+      "log(hp)", "am", "factor(cyl)", "log(hp):am",
+      "log(hp):factor(cyl)"
+    ))
+  )
+})
+
 test_that("find_terms", {
   m <- lm(Sepal.Length ~ -1 + Petal.Width + Species, data = iris)
-  expect_equal(
+  expect_identical(
     find_terms(m),
     list(response = "Sepal.Length", conditional = c("Petal.Width", "Species", "-1"))
   )
@@ -11,7 +28,7 @@ test_that("find_terms", {
 
 test_that("find_terms", {
   m <- lm(Sepal.Length ~ 0 + Petal.Width + Species, data = iris)
-  expect_equal(
+  expect_identical(
     find_terms(m),
     list(response = "Sepal.Length", conditional = c("0", "Petal.Width", "Species"))
   )
@@ -20,7 +37,7 @@ test_that("find_terms", {
 
 test_that("find_terms", {
   m <- lm(Sepal.Length ~ Petal.Width + Species - 1, data = iris)
-  expect_equal(
+  expect_identical(
     find_terms(m),
     list(response = "Sepal.Length", conditional = c("Petal.Width", "Species", "-1"))
   )
@@ -41,7 +58,7 @@ dat$post[dat$time >= 8] <- 1
 m <- suppressMessages(lme4::lmer(y ~ post + time1 + (post + time1 - 1 | g2), data = dat))
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m),
     list(response = "y", conditional = c("post", "time1"), random = c("post", "time1", "g2"))
   )

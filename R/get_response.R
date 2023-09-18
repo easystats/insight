@@ -61,7 +61,7 @@ get_response <- function(x, select = NULL, as_proportion = TRUE, source = "envir
       response <- response[, select, drop = TRUE]
     }
     # check if more than one column, else coerce to vector
-    if ((is.data.frame(response) || is.matrix(response)) && ncol(response) > 1) {
+    if ((is.data.frame(response) || is.matrix(response)) && ncol(response) > 1L) {
       # preserve response proportion?
       if (as_proportion && glm_proportion) {
         response <- response[[1]] / response[[2]]

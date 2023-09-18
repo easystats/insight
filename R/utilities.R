@@ -46,7 +46,7 @@ trim_ws <- function(x, ...) {
 
 #' @export
 trim_ws.default <- function(x, ...) {
-  gsub("^\\s+|\\s+$", "", x, perl = TRUE)
+  gsub("^\\s+|\\s+$", "", x, perl = TRUE, useBytes = TRUE)
 }
 
 #' @rdname trim_ws

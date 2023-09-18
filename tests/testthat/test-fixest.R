@@ -1,12 +1,14 @@
 skip_on_os("mac")
 skip_if(getRversion() < "3.6.0")
 skip_if_not_installed("fixest")
-skip_if_not_installed("fixest")
+skip_if_not_installed("carData")
 
 # avoid warnings
 fixest::setFixest_nthreads(1)
 
 data(trade, package = "fixest")
+data(Greene, package = "carData")
+
 m1 <- fixest::femlm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
 m2 <- fixest::femlm(log1p(Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")
 m3 <- fixest::feglm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "poisson")
@@ -14,7 +16,6 @@ m4 <- fixest::feols(
   Sepal.Width ~ Petal.Length | Species | Sepal.Length ~ Petal.Width,
   data = iris
 )
-
 
 test_that("robust variance-covariance", {
   mod <- fixest::feols(mpg ~ hp + drat | cyl, data = mtcars)
@@ -147,12 +148,11 @@ test_that("get_data", {
 
 skip_if_not_installed("parameters")
 test_that("get_df", {
-  expect_equal(get_df(m1, type = "residual"), 38290, ignore_attr = TRUE)
+  expect_equal(get_df(m1, type = "residual"), fixest::degrees_freedom(m1, type = "resid"), ignore_attr = TRUE)
   expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
-  ## TODO: check if statistic is z or t for this model
-  expect_equal(get_df(m1, type = "wald"), 14, ignore_attr = TRUE)
+  ## statistic is t for this model
+  expect_equal(get_df(m1, type = "wald"), fixest::degrees_freedom(m1, type = "t"), ignore_attr = TRUE)
 })
-
 
 test_that("find_formula", {
   expect_length(find_formula(m1), 2)
@@ -256,15 +256,31 @@ test_that("is_multivariate", {
 })
 
 test_that("find_statistic", {
+  # see https://github.com/easystats/parameters/issues/892#issuecomment-1712645841
+  # and https://github.com/lrberge/fixest/blob/c14c55917897478d996f80bd3392d2e7355b1f29/R/ESTIMATION_FUNS.R#L2903
+  d <- Greene
+  d$dv <- as.numeric(Greene$decision == "yes")
+  m5 <- fixest::feglm(dv ~ language | judge,
+    data = d,
+    cluster = "judge", family = "logit"
+  )
   expect_identical(find_statistic(m1), "z-statistic")
   expect_identical(find_statistic(m2), "t-statistic")
+  expect_identical(find_statistic(m3), "z-statistic")
+  expect_identical(find_statistic(m4), "t-statistic")
+  expect_identical(find_statistic(m5), "z-statistic")
 })
 
 test_that("get_statistic", {
   stat <- get_statistic(m1)
-  expect_equal(stat$Statistic, -13.212695, tolerance = 1e-3)
+  out <- as.data.frame(summary(m1)$coeftable)
+  expect_equal(stat$Statistic, out[, "t value"], tolerance = 1e-3, ignore_attr = TRUE)
   stat <- get_statistic(m2)
-  expect_equal(stat$Statistic, -14.065336, tolerance = 1e-3)
+  out <- as.data.frame(summary(m2)$coeftable)
+  expect_equal(stat$Statistic, out[, "t value"], tolerance = 1e-3, ignore_attr = TRUE)
+  stat <- get_statistic(m3)
+  out <- as.data.frame(summary(m3)$coeftable)
+  expect_equal(stat$Statistic, out[, "t value"], tolerance = 1e-3, ignore_attr = TRUE)
 })
 
 test_that("get_predicted", {

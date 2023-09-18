@@ -2,32 +2,42 @@
 % Please edit documentation in R/find_terms.R
 \name{find_terms}
 \alias{find_terms}
+\alias{find_terms.default}
 \title{Find all model terms}
 \usage{
-find_terms(x, flatten = FALSE, verbose = TRUE, ...)
+find_terms(x, ...)
+
+\method{find_terms}{default}(x, flatten = FALSE, as_term_labels = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
+\item{...}{Currently not used.}
+
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}
 
-\item{verbose}{Toggle warnings.}
+\item{as_term_labels}{Logical, if \code{TRUE}, extracts model formula and tries to
+access the \code{"term.labels"} attribute. This should better mimic the \code{terms()}
+behaviour even for those models that do not have such a method, but may be
+insufficient, e.g. for mixed models.}
 
-\item{...}{Currently not used.}
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A list with (depending on the model) following elements (character
 vectors):
 \itemize{
 \item \code{response}, the name of the response variable
-\item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
+\item \code{conditional}, the names of the predictor variables from the \emph{conditional}
+model (as opposed to the zero-inflated part of a model)
 \item \code{random}, the names of the random effects (grouping factors)
 \item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
 \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
 \item \code{dispersion}, the name of the dispersion terms
 \item \code{instruments}, the names of instrumental variables
 }
+
 Returns \code{NULL} if no terms could be found (for instance, due to
 problems in accessing the formula).
 }
@@ -53,4 +63,8 @@ if (require("lme4")) {
 
   find_terms(m)
 }
+
+# sometimes, it is necessary to retrieve terms from "term.labels" attribute
+m <- lm(mpg ~ hp * (am + cyl), data = mtcars)
+find_terms(m, as_term_labels = TRUE)
 }

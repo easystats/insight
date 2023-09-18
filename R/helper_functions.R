@@ -126,7 +126,7 @@
 
   if (is_special && is_empty_object(re)) {
     re <- all.vars(f[[2L]])
-    if (length(re) > 1) {
+    if (length(re) > 1L) {
       re <- as.list(re)
       split_nested <- FALSE
     }
@@ -404,7 +404,7 @@
 
 
 # .split_formula <- function(f) {
-#   rhs <- if (length(f) > 2)
+#   rhs <- if (length(f) > 2L)
 #     f[[3L]]
 #   else
 #     f[[2L]]
@@ -609,7 +609,7 @@
 
   expandSlash <- function(bb) {
     makeInteraction <- function(x) {
-      if (length(x) < 2) {
+      if (length(x) < 2L) {
         return(x)
       }
       trm1 <- makeInteraction(x[[1]])

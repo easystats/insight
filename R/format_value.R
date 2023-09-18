@@ -228,6 +228,11 @@ format_percent <- function(x, ...) {
   # proper character NA
   if (is.na(.missing)) .missing <- NA_character_
 
+  # sometimes, digits can be `NULL` - sanity check
+  if (is.null(digits)) {
+    digits <- 2
+  }
+
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
       need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0

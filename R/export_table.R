@@ -667,7 +667,7 @@ print.insight_table <- function(x, ...) {
     final_row <- paste0(final[row, ], collapse = sep)
     # check if we have an empty row, and if so, fill with an
     # "empty line separator", if requested by user
-    if (!is.null(empty_line) && all(nchar(trim_ws(final[row, ]), type = "width") == 0)) {
+    if (!is.null(empty_line) && !any(nzchar(trim_ws(final[row, ])))) {
       # check whether user wants to have a "cross" char where vertical and
       # horizontal lines (from empty line separator) cross. But don't add
       # a "cross" when the empty line is the last row in the table...

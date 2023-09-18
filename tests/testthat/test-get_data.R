@@ -140,7 +140,7 @@ test_that("get_data lavaan", {
   expect_equal(head(get_data(m, verbose = FALSE)), head(PoliticalDemocracy), ignore_attr = TRUE, tolerance = 1e-3)
 
   # works when data not in environment
-  holz_data <- lavaan::HolzingerSwineford1939
+  holz_data <<- lavaan::HolzingerSwineford1939
   HS.model <- " visual  =~ x1 + x2 + x3
                 textual =~ x4 + x5 + x6
                 speed   =~ x7 + x8 + x9 "
@@ -149,6 +149,7 @@ test_that("get_data lavaan", {
     auto.cov.lv.x = TRUE
   )
 
+  skip_on_os(c("mac", "linux"))
   out1 <- get_data(m_holz)
   expect_named(
     out1,

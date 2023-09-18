@@ -40,7 +40,7 @@ get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE,
     s <- summary(x)
     estimate_pos <- which(colnames(s) == attr(s, "estName"))
     params <- s[, seq_len(estimate_pos - 1), drop = FALSE]
-    if (isTRUE(merge_parameters) && ncol(params) > 1) {
+    if (isTRUE(merge_parameters) && ncol(params) > 1L) {
       r <- apply(params, 1, function(i) paste0(colnames(params), " [", i, "]"))
       out <- data.frame(
         Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),
@@ -72,7 +72,7 @@ get_parameters.emm_list <- function(x, summary = FALSE, ...) {
   if (!.is_baysian_emmeans(x) || isTRUE(summary)) {
     do.call(rbind, lapply(names(x), function(i) {
       out <- get_parameters(x[[i]], summary = summary)
-      if (ncol(out) > 2) {
+      if (ncol(out) > 2L) {
         est <- out$Estimate
         out$Estimate <- NULL
         r <- apply(out, 1, function(i) paste0(colnames(out), " [", i, "]"))

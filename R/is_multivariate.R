@@ -51,7 +51,7 @@ is_multivariate <- function(x) {
   }
 
   if (inherits(x, "lm_robust")) {
-    return(isTRUE(ncol(x$coefficients) > 1))
+    return(isTRUE(ncol(x$coefficients) > 1L))
   }
 
   return(FALSE)
