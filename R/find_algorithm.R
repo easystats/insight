@@ -8,35 +8,35 @@
 #' @inheritParams find_parameters
 #'
 #' @return A list with elements depending on the model.
-#'   \cr
-#'   For frequentist models:
-#'    \itemize{
-#'      \item `algorithm`, for instance `"OLS"` or `"ML"`
-#'      \item `optimizer`, name of optimizing function, only applies to
-#'      specific models (like `gam`)
-#'    }
-#'   For frequentist mixed models:
-#'    \itemize{
-#'      \item `algorithm`, for instance `"REML"` or `"ML"`
-#'      \item `optimizer`, name of optimizing function
-#'    }
-#'   For Bayesian models:
-#'    \itemize{
-#'      \item `algorithm`, the algorithm
-#'      \item `chains`, number of chains
-#'      \item `iterations`, number of iterations per chain
-#'      \item `warmup`, number of warmups per chain
-#'    }
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(sleepstudy)
-#'   m <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-#'   find_algorithm(m)
-#' }
+#'   For frequentist models:
+#'   - `algorithm`, for instance `"OLS"` or `"ML"`
+#'   - `optimizer`, name of optimizing function, only applies to
+#'      specific models (like `gam`)
+#'
+#'   For frequentist mixed models:
+#'   - `algorithm`, for instance `"REML"` or `"ML"`
+#'   - `optimizer`, name of optimizing function
+#'
+#'   For Bayesian models:
+#'   - `algorithm`, the algorithm
+#'   - `chains`, number of chains
+#'   - `iterations`, number of iterations per chain
+#'   - `warmup`, number of warmups per chain
+#'
+#' @examplesIf require("lme4")
+#' data(sleepstudy, package = "lme4")
+#' m <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+#' find_algorithm(m)
+#'
+#' @examplesIf require("rstanarm") && require("lme4")
 #' \dontrun{
-#' library(rstanarm)
-#' m <- stan_lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+#' data(sleepstudy, package = "lme4")
+#' m <- suppressWarnings(rstanarm::stan_lmer(
+#'   Reaction ~ Days + (1 | Subject),
+#'   data = sleepstudy,
+#'   refresh = 0
+#' ))
 #' find_algorithm(m)
 #' }
 #' @export

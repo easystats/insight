@@ -13,18 +13,20 @@ find_algorithm(x, ...)
 }
 \value{
 A list with elements depending on the model.
-\cr
+
 For frequentist models:
 \itemize{
 \item \code{algorithm}, for instance \code{"OLS"} or \code{"ML"}
 \item \code{optimizer}, name of optimizing function, only applies to
 specific models (like \code{gam})
 }
+
 For frequentist mixed models:
 \itemize{
 \item \code{algorithm}, for instance \code{"REML"} or \code{"ML"}
 \item \code{optimizer}, name of optimizing function
 }
+
 For Bayesian models:
 \itemize{
 \item \code{algorithm}, the algorithm
@@ -39,14 +41,20 @@ as well as optimization functions, or for Bayesian model information on
 chains, iterations and warmup-samples.
 }
 \examples{
-if (require("lme4")) {
-  data(sleepstudy)
-  m <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-  find_algorithm(m)
-}
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(sleepstudy, package = "lme4")
+m <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+find_algorithm(m)
+\dontshow{\}) # examplesIf}
+\dontshow{if (require("rstanarm") && require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
-library(rstanarm)
-m <- stan_lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+data(sleepstudy, package = "lme4")
+m <- suppressWarnings(rstanarm::stan_lmer(
+  Reaction ~ Days + (1 | Subject),
+  data = sleepstudy,
+  refresh = 0
+))
 find_algorithm(m)
 }
+\dontshow{\}) # examplesIf}
 }
