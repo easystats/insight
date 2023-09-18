@@ -60,12 +60,13 @@ test_that("get_modelmatrix - ivreg", {
   skip_if(getRversion() < "4.2.0")
   skip_if_not_installed("ivreg")
   data(Kmenta, package = "ivreg")
+  d_kmenta <<- Kmenta
 
   set.seed(15)
-  x <- ivreg::ivreg(Q ~ P + D | D + F + A, data = Kmenta)
+  x <- ivreg::ivreg(Q ~ P + D | D + F + A, data = d_kmenta)
 
   out1 <- get_modelmatrix(x)
-  out2 <- model.matrix(x, data = Kmenta)
+  out2 <- model.matrix(x, data = d_kmenta)
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
 
   out1 <- get_modelmatrix(x, data = get_datagrid(x, at = "P"))
