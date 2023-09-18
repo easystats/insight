@@ -296,9 +296,9 @@ test_that("fixed effects variance for rank-deficient models, #765", {
   dd <- transform(dd, z = z + re * 5)
 
   expect_message({
-    mod_TMB <- glmmTMB(z ~ x1 + x2 + x3 + x4 + (1 | re),
+    mod_TMB <- glmmTMB::glmmTMB(z ~ x1 + x2 + x3 + x4 + (1 | re),
       data = dd,
-      control = glmmTMBControl(rank_check = "adjust")
+      control = glmmTMB::glmmTMBControl(rank_check = "adjust")
     )
   })
   out <- get_variance_fixed(mod_TMB)
