@@ -26,7 +26,7 @@
 #'   returned, indicating which of the packages are installed, and which not.
 #'
 #' @examplesIf interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")
-#' \dontrun{
+#' \donttest{
 #' check_if_installed("insight")
 #' try(check_if_installed("datawizard", stop = FALSE))
 #' try(check_if_installed("rstanarm", stop = FALSE))

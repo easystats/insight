@@ -25,7 +25,7 @@ Provides a summary of the prior distributions used
 for the parameters in a given model.
 }
 \examples{
-\dontrun{
+\donttest{
 library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 get_priors(model)

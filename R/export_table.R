@@ -68,7 +68,7 @@
 #' # split longer tables
 #' export_table(head(iris), table_width = 30)
 #'
-#' \dontrun{
+#' \donttest{
 #' # colored footers
 #' data(iris)
 #' x <- as.data.frame(iris[1:5, ])

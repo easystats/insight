@@ -148,7 +148,7 @@ from \pkg{blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB},
 is experimental and may not work for all models.
 }
 \examples{
-\dontrun{
+\donttest{
 library(lme4)
 data(sleepstudy)
 m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)

@@ -30,7 +30,7 @@
 #' find_algorithm(m)
 #'
 #' @examplesIf require("rstanarm") && require("lme4")
-#' \dontrun{
+#' \donttest{
 #' data(sleepstudy, package = "lme4")
 #' m <- suppressWarnings(rstanarm::stan_lmer(
 #'   Reaction ~ Days + (1 | Subject),

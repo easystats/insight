@@ -47,7 +47,7 @@ m <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
 find_algorithm(m)
 \dontshow{\}) # examplesIf}
 \dontshow{if (require("rstanarm") && require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontrun{
+\donttest{
 data(sleepstudy, package = "lme4")
 m <- suppressWarnings(rstanarm::stan_lmer(
   Reaction ~ Days + (1 | Subject),

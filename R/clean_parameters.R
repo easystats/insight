@@ -36,7 +36,7 @@
 #' or spline-terms).
 #'
 #' @examplesIf require("curl", quietly = TRUE) && curl::has_internet()
-#' \dontrun{
+#' \donttest{
 #' library(brms)
 #' model <- download_model("brms_zi_2")
 #' clean_parameters(model)

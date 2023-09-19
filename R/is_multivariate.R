@@ -13,7 +13,7 @@
 #' is from a multivariate response model.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(rstanarm)
 #' data("pbcLong")
 #' model <- suppressWarnings(stan_mvmer(

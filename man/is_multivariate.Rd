@@ -20,7 +20,7 @@ Small helper that checks if a model is a multivariate response
 model, i.e. a model with multiple outcomes.
 }
 \examples{
-\dontrun{
+\donttest{
 library(rstanarm)
 data("pbcLong")
 model <- suppressWarnings(stan_mvmer(

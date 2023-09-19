@@ -118,7 +118,7 @@
 #'  Highland Statistics.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(lme4)
 #' data(sleepstudy)
 #' m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)

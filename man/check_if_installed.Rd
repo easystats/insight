@@ -52,7 +52,7 @@ Checking if needed package is installed
 }
 \examples{
 \dontshow{if (interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontrun{
+\donttest{
 check_if_installed("insight")
 try(check_if_installed("datawizard", stop = FALSE))
 try(check_if_installed("rstanarm", stop = FALSE))

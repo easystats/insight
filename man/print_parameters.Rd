@@ -104,7 +104,7 @@ necessary, also for a cleaner print. See also 'Examples'.
 }
 \examples{
 \dontshow{if (require("curl", quietly = TRUE) && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontrun{
+\donttest{
 library(bayestestR)
 model <- download_model("brms_zi_2")
 x <- hdi(model, effects = "all", component = "all")
