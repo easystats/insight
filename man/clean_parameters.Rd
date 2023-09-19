@@ -22,7 +22,7 @@ This function "cleans" names of model parameters by removing
 patterns like \code{"r_"} or \code{"b[]"} (mostly applicable to Stan models)
 and adding columns with information to which group or component parameters
 belong (i.e. fixed or random, count or zero-inflated...)
-\cr \cr
+
 The main purpose of this function is to easily filter and select model parameters,
 in particular of - but not limited to - posterior samples from Stan models,
 depending on certain characteristics. This might be useful when only selective
@@ -33,16 +33,16 @@ to return only certain results (see \code{\link[=print_parameters]{print_paramet
 The \code{Effects} column indicate if a parameter is a \emph{fixed} or \emph{random} effect.
 The \code{Component} can either be \emph{conditional} or \emph{zero_inflated}. For models
 with random effects, the \code{Group} column indicates the grouping factor of the
-random effects. For multivariate response models from \pkg{brms} or
-\pkg{rstanarm}, an additional \emph{Response} column is included, to indicate
+random effects. For multivariate response models from \strong{brms} or
+\strong{rstanarm}, an additional \emph{Response} column is included, to indicate
 which parameters belong to which response formula. Furthermore,
 \emph{Cleaned_Parameter} column is returned that contains "human readable"
 parameter names (which are mostly identical to \code{Parameter}, except for for
-models from \pkg{brms} or \pkg{rstanarm}, or for specific terms like smooth-
+models from \strong{brms} or \strong{rstanarm}, or for specific terms like smooth-
 or spline-terms).
 }
 \examples{
-\dontshow{if (require("curl", quietly = TRUE) && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("curl", quietly = TRUE) && curl::has_internet() && require("brms")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 library(brms)
 model <- download_model("brms_zi_2")

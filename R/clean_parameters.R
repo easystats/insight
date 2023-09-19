@@ -5,12 +5,12 @@
 #' patterns like `"r_"` or `"b[]"` (mostly applicable to Stan models)
 #' and adding columns with information to which group or component parameters
 #' belong (i.e. fixed or random, count or zero-inflated...)
-#' \cr \cr
+#'
 #' The main purpose of this function is to easily filter and select model parameters,
 #' in particular of - but not limited to - posterior samples from Stan models,
 #' depending on certain characteristics. This might be useful when only selective
 #' results should be reported or results from all parameters should be filtered
-#' to return only certain results (see [print_parameters()]).
+#' to return only certain results (see [`print_parameters()`]).
 #'
 #' @param x A fitted model.
 #' @inheritParams find_parameters
@@ -27,17 +27,16 @@
 #' The `Effects` column indicate if a parameter is a *fixed* or *random* effect.
 #' The `Component` can either be *conditional* or *zero_inflated*. For models
 #' with random effects, the `Group` column indicates the grouping factor of the
-#' random effects. For multivariate response models from \pkg{brms} or
-#' \pkg{rstanarm}, an additional *Response* column is included, to indicate
+#' random effects. For multivariate response models from **brms** or
+#' **rstanarm**, an additional *Response* column is included, to indicate
 #' which parameters belong to which response formula. Furthermore,
 #' *Cleaned_Parameter* column is returned that contains "human readable"
 #' parameter names (which are mostly identical to `Parameter`, except for for
-#' models from \pkg{brms} or \pkg{rstanarm}, or for specific terms like smooth-
+#' models from **brms** or **rstanarm**, or for specific terms like smooth-
 #' or spline-terms).
 #'
-#' @examplesIf require("curl", quietly = TRUE) && curl::has_internet()
+#' @examplesIf require("curl", quietly = TRUE) && curl::has_internet() && require("brms")
 #' \donttest{
-#' library(brms)
 #' model <- download_model("brms_zi_2")
 #' clean_parameters(model)
 #' }
