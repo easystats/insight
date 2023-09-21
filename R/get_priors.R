@@ -11,7 +11,7 @@
 #' @return A data frame with a summary of the prior distributions used
 #'   for the parameters in a given model.
 #'
-#' @examples
+#' @examplesIf require("rstanarm", quietly = TRUE)
 #' \donttest{
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)

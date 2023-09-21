@@ -44,7 +44,6 @@ or spline-terms).
 \examples{
 \dontshow{if (require("curl", quietly = TRUE) && curl::has_internet() && require("brms")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
-library(brms)
 model <- download_model("brms_zi_2")
 clean_parameters(model)
 }
