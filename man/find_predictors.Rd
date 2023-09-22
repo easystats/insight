@@ -3,11 +3,22 @@
 \name{find_predictors}
 \alias{find_predictors}
 \alias{find_predictors.default}
+\alias{find_predictors.afex_aov}
 \title{Find names of model predictors}
 \usage{
 find_predictors(x, ...)
 
 \method{find_predictors}{default}(
+  x,
+  effects = c("fixed", "random", "all"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
+    "correlation", "smooth_terms"),
+  flatten = FALSE,
+  verbose = TRUE,
+  ...
+)
+
+\method{find_predictors}{afex_aov}(
   x,
   effects = c("fixed", "random", "all"),
   component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
@@ -41,16 +52,19 @@ as character vector, not as list. Duplicated values are removed.}
 \value{
 A list of character vectors that represent the name(s) of the
 predictor variables. Depending on the combination of the arguments
-\code{effects} and \code{component}, the returned list has following
-elements:
+\code{effects} and \code{component}, the returned list has following elements:
 \itemize{
 \item \code{conditional}, the "fixed effects" terms from the model
 \item \code{random}, the "random effects" terms from the model
-\item \code{zero_inflated}, the "fixed effects" terms from the zero-inflation component of the model
-\item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation component of the model
+\item \code{zero_inflated}, the "fixed effects" terms from the zero-inflation
+component of the model
+\item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation
+component of the model
 \item \code{dispersion}, the dispersion terms
-\item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm}, the instrumental variables
-\item \code{correlation}, for models with correlation-component like \code{gls}, the variables used to describe the correlation structure
+\item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm},
+the instrumental variables
+\item \code{correlation}, for models with correlation-component like \code{gls}, the
+variables used to describe the correlation structure
 }
 }
 \description{

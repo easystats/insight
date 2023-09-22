@@ -14,7 +14,7 @@
 
   faminfo <- model_info(x, verbose = FALSE)
 
-  if (faminfo$family %in% c("truncated_nbinom1")) {
+  if (any(faminfo$family == "truncated_nbinom1")) {
     if (verbose) {
       format_warning(sprintf(
         "Truncated negative binomial families are currently not supported by `%s`.",

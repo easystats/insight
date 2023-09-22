@@ -27,10 +27,10 @@ A list of parameter names. For simple models, only one list-element,
 Returns the parameter names from a model.
 }
 \examples{
+\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(mtcars)
 model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
-if (require("emmeans", quietly = TRUE)) {
-  emm <- emmeans(model, c("wt", "cyl"))
-  find_parameters(emm)
-}
+emm <- emmeans(model, c("wt", "cyl"))
+find_parameters(emm)
+\dontshow{\}) # examplesIf}
 }

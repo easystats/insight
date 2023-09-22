@@ -47,7 +47,6 @@ text_remove_backticks <- function(x, ...) {
 }
 
 
-
 #' @export
 text_remove_backticks.default <- function(x, verbose = FALSE, ...) {
   if (isTRUE(verbose)) {
@@ -63,7 +62,7 @@ text_remove_backticks.default <- function(x, verbose = FALSE, ...) {
 #' @export
 text_remove_backticks.data.frame <- function(x, column = "Parameter", verbose = FALSE, ...) {
   if (is.null(column)) {
-    column <- colnames(x)[sapply(x, is.character)]
+    column <- colnames(x)[vapply(x, is.character, logical(1))]
   }
   not_found <- vector("character")
   for (i in column) {
@@ -76,16 +75,18 @@ text_remove_backticks.data.frame <- function(x, column = "Parameter", verbose = 
   if (verbose && length(not_found)) {
     format_warning(
       "Following columns were not found or were no character vectors:",
-      paste0(not_found, collapse = ", ")
+      toString(not_found)
     )
   }
   x
 }
 
+
 #' @export
 text_remove_backticks.list <- function(x, verbose = FALSE, ...) {
   lapply(x, text_remove_backticks, verbose = verbose)
 }
+
 
 #' @export
 text_remove_backticks.character <- function(x, ...) {
@@ -95,10 +96,12 @@ text_remove_backticks.character <- function(x, ...) {
   x
 }
 
+
 #' @export
 text_remove_backticks.factor <- function(x, ...) {
   text_remove_backticks(as.character(x))
 }
+
 
 #' @export
 text_remove_backticks.matrix <- function(x, ...) {

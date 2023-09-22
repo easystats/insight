@@ -16,6 +16,7 @@ A character vector with the name(s) of offset terms.
 Returns a character vector with the name(s) of offset terms.
 }
 \examples{
+\dontshow{if (require("pscl")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Generate some zero-inflated data
 set.seed(123)
 N <- 100 # Samples
@@ -26,11 +27,10 @@ dat <- data.frame(y = NA, x, logOff = log(off))
 dat$y <- rpois(N, exp(yhat)) # Poisson process
 dat$y <- ifelse(rbinom(N, 1, 0.3), 0, dat$y) # Zero-inflation process
 
-if (require("pscl")) {
-  m1 <- zeroinfl(y ~ offset(logOff) + x | 1, data = dat, dist = "poisson")
-  find_offset(m1)
+m1 <- zeroinfl(y ~ offset(logOff) + x | 1, data = dat, dist = "poisson")
+find_offset(m1)
 
-  m2 <- zeroinfl(y ~ x | 1, data = dat, offset = logOff, dist = "poisson")
-  find_offset(m2)
-}
+m2 <- zeroinfl(y ~ x | 1, data = dat, offset = logOff, dist = "poisson")
+find_offset(m2)
+\dontshow{\}) # examplesIf}
 }

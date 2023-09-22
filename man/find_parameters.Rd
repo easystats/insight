@@ -3,11 +3,22 @@
 \name{find_parameters}
 \alias{find_parameters}
 \alias{find_parameters.default}
+\alias{find_parameters.pgmm}
+\alias{find_parameters.nls}
 \title{Find names of model parameters}
 \usage{
 find_parameters(x, ...)
 
 \method{find_parameters}{default}(x, flatten = FALSE, verbose = TRUE, ...)
+
+\method{find_parameters}{pgmm}(x, component = c("conditional", "all"), flatten = FALSE, ...)
+
+\method{find_parameters}{nls}(
+  x,
+  component = c("all", "conditional", "nonlinear"),
+  flatten = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -18,6 +29,14 @@ find_parameters(x, ...)
 as character vector, not as list. Duplicated values are removed.}
 
 \item{verbose}{Toggle messages and warnings.}
+
+\item{component}{Should all predictor variables, predictor variables for the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
+\emph{conditional} component is also called \emph{count} or \emph{mean}
+component, depending on the model.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,

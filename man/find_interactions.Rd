@@ -31,10 +31,8 @@ elements (or \code{NULL}, if model has no interaction term):
 \itemize{
 \item \code{conditional}, interaction terms that belong to the "fixed
 effects" terms from the model
-
 \item \code{zero_inflated}, interaction terms that belong to the "fixed
 effects" terms from the zero-inflation component of the model
-
 \item \code{instruments}, for fixed-effects regressions like \code{ivreg},
 \code{felm} or \code{plm}, interaction terms that belong to the
 instrumental variables

@@ -9,15 +9,13 @@
 #' @inheritParams get_parameters.emmGrid
 #'
 #' @return A list of parameter names. For simple models, only one list-element,
-#'    `conditional`, is returned.
+#' `conditional`, is returned.
 #'
-#' @examples
+#' @examplesIf require("emmeans", quietly = TRUE)
 #' data(mtcars)
 #' model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
-#' if (require("emmeans", quietly = TRUE)) {
-#'   emm <- emmeans(model, c("wt", "cyl"))
-#'   find_parameters(emm)
-#' }
+#' emm <- emmeans(model, c("wt", "cyl"))
+#' find_parameters(emm)
 #' @export
 find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE, ...) {
   out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)
