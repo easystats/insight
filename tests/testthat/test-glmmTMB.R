@@ -968,5 +968,5 @@ test_that("model_info, ordered beta", {
   )
   out <- model_info(m)
   expect_true(out$is_orderedbeta)
-  expect_identicl(out$family, "ordbeta")
+  expect_identical(out$family, "ordbeta")
 })
