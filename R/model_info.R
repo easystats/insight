@@ -49,7 +49,7 @@
 #' * `is_ranktest`: model is an an object of class `htest`, returned by `cor.test()`
 #'   (if Spearman's rank correlation), `wilcox.text()` or `kruskal.test()`.
 #' * `is_variancetest`: model is an an object of class `htest`, returned by
-#'   bartlett.test()`, `shapiro.test()` or `car::leveneTest()`.
+#'   `bartlett.test()`, `shapiro.test()` or `car::leveneTest()`.
 #' * `is_levenetest`: model is an an object of class `anova`, returned by `car::leveneTest()`.
 #' * `is_onewaytest`: model is an an object of class `htest`, returned by `oneway.test()`
 #' * `is_proptest`: model is an an object of class `htest`, returned by `prop.test()`
