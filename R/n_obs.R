@@ -91,6 +91,7 @@ n_obs.glm <- function(x, disaggregate = FALSE, ...) {
     } else if (!is.data.frame(resp_data) && .is.fraction(resp_data)) {
       .nobs <- sum(get_weights(x))
     }
+    .nobs <- as.integer(.nobs)
   }
 
   .nobs

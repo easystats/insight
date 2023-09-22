@@ -233,8 +233,8 @@ test_that("model_info-stanreg-glm", {
 })
 
 test_that("n_parameters", {
-  expect_identical(n_parameters(m1), 21)
-  expect_identical(n_parameters(m1, effects = "fixed"), 5)
+  expect_identical(n_parameters(m1), 21L)
+  expect_identical(n_parameters(m1, effects = "fixed"), 5L)
 })
 
 test_that("get_priors", {

@@ -964,7 +964,7 @@ test_that("model_info, ordered beta", {
   m <- glmmTMB::glmmTMB(
     y ~ Days + (Days | Subject),
     data = sleepstudy,
-    family = ordbeta()
+    family = glmmTMB::ordbeta()
   )
   out <- model_info(m)
   expect_true(out$is_orderedbeta)
