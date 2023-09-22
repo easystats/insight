@@ -16,12 +16,12 @@ A function call.
 Returns the model's function call when available.
 }
 \examples{
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 get_call(m)
 
-if (require("lme4")) {
-  m <- lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
-  get_call(m)
-}
+m <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
+get_call(m)
+\dontshow{\}) # examplesIf}
 }

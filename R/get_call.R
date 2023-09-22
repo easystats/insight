@@ -7,15 +7,13 @@
 #'
 #' @return A function call.
 #'
-#' @examples
+#' @examplesIf require("lme4", quietly = TRUE)
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_call(m)
 #'
-#' if (require("lme4")) {
-#'   m <- lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
-#'   get_call(m)
-#' }
+#' m <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
+#' get_call(m)
 #' @export
 get_call <- function(x) {
   UseMethod("get_call")
@@ -25,18 +23,13 @@ get_call <- function(x) {
 #' @export
 get_call.default <- function(x) {
   cl <- .safe(getElement(x, "call"))
-
   # For GAMM4
   if (is.null(cl) && "gam" %in% names(x)) {
     # Where's the call here?
     cl <- .safe(x$gam$formula)
   }
-
   cl
 }
-
-
-
 
 #' @export
 get_call.lm <- function(x) {
