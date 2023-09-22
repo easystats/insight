@@ -134,10 +134,10 @@ find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   resp <- find_response(x, verbose = FALSE)
   f <- find_formula(x, verbose = verbose)
 
-  if (!is.null(f)) {
-    fx <- f[[1]][[3]]
-  } else {
+  if (is.null(f)) {
     fx <- "x"
+  } else {
+    fx <- f[[1]][[3]]
   }
   l <- list(conditional = c(resp, fx))
 

@@ -3,6 +3,7 @@
 \name{get_statistic}
 \alias{get_statistic}
 \alias{get_statistic.default}
+\alias{get_statistic.glmmTMB}
 \alias{get_statistic.emmGrid}
 \alias{get_statistic.gee}
 \title{Get statistic associated with estimates}
@@ -10,6 +11,8 @@
 get_statistic(x, ...)
 
 \method{get_statistic}{default}(x, column_index = 3, verbose = TRUE, ...)
+
+\method{get_statistic}{glmmTMB}(x, component = "all", ...)
 
 \method{get_statistic}{emmGrid}(x, ci = 0.95, adjust = "none", merge_parameters = FALSE, ...)
 
@@ -28,20 +31,6 @@ Defaults to 3, which is the default statistic column for most models'
 summary-output.}
 
 \item{verbose}{Toggle messages and warnings.}
-
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).
-Currently only applies to objects of class \code{emmGrid}.}
-
-\item{adjust}{Character value naming the method used to adjust p-values or
-confidence intervals. See \code{?emmeans::summary.emmGrid} for details.}
-
-\item{merge_parameters}{Logical, if \code{TRUE} and \code{x} has multiple
-columns for parameter names (like \code{emmGrid} objects may have), these
-are merged into a single parameter column, with parameters names and values
-as values.}
-
-\item{robust}{Logical, if \code{TRUE}, test statistic based on robust
-standard errors is returned.}
 
 \item{component}{String, indicating the model component for which parameters
 should be returned. The default for all models is \code{"all"}, which returns
@@ -67,6 +56,20 @@ or \code{"auxiliary"}.
 \item For models of class \code{glmx}, may also be \code{"extra"}.
 \item For models of class \code{averaging}, may also be \code{"full"}.
 }}
+
+\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).
+Currently only applies to objects of class \code{emmGrid}.}
+
+\item{adjust}{Character value naming the method used to adjust p-values or
+confidence intervals. See \code{?emmeans::summary.emmGrid} for details.}
+
+\item{merge_parameters}{Logical, if \code{TRUE} and \code{x} has multiple
+columns for parameter names (like \code{emmGrid} objects may have), these
+are merged into a single parameter column, with parameters names and values
+as values.}
+
+\item{robust}{Logical, if \code{TRUE}, test statistic based on robust
+standard errors is returned.}
 }
 \value{
 A data frame with the model's parameter names and the related test

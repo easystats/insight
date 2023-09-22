@@ -197,7 +197,7 @@ get_statistic.merModList <- function(x, ...) {
 get_statistic.afex_aov <- function(x, ...) {
   out <- data.frame(
     Parameter = rownames(x$anova_table),
-    Statistic = x$anova_table$"F",
+    Statistic = x$anova_table$`F`,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -294,6 +294,7 @@ get_statistic.mhurdle <- function(x, component = "all", ...) {
 }
 
 
+#' @rdname get_statistic
 #' @export
 get_statistic.glmmTMB <- function(x, component = "all", ...) {
   component <- match.arg(
@@ -1251,10 +1252,10 @@ get_statistic.model_fit <- function(x, ...) {
 get_statistic.Sarlm <- function(x, ...) {
   s <- summary(x)
   # add rho, if present
-  if (!is.null(s$rho)) {
-    rho <- as.numeric(s$rho) / as.numeric(s$rho.se)
-  } else {
+  if (is.null(s$rho)) {
     rho <- NULL
+  } else {
+    rho <- as.numeric(s$rho) / as.numeric(s$rho.se)
   }
   stat <- data.frame(
     Parameter = find_parameters(x, flatten = TRUE),
@@ -1343,10 +1344,10 @@ get_statistic.btergm <- function(x, verbose = TRUE, ...) {
   bootstraps <- x@boot$t
 
   # standard error
-  sdev <- sapply(seq_len(ncol(bootstraps)), function(i) {
+  sdev <- vapply(seq_len(ncol(bootstraps)), function(i) {
     cur <- (bootstraps[, i] - params[i])^2
     sqrt(sum(cur) / length(cur))
-  })
+  }, numeric(1))
   stat <- (0 - colMeans(bootstraps)) / sdev
 
   out <- data.frame(
@@ -2301,10 +2302,10 @@ get_statistic.DirichletRegModel <- function(x, component = "all", ...) {
     row.names = NULL
   )
 
-  if (!is.null(parms$Component)) {
-    out$Component <- parms$Component
-  } else {
+  if (is.null(parms$Component)) {
     component <- "all"
+  } else {
+    out$Component <- parms$Component
   }
 
   if (component != "all") {

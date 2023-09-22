@@ -48,7 +48,7 @@
 #' * `is_correlation`: model is an an object of class `htest`, returned by `cor.test()`
 #' * `is_ranktest`: model is an an object of class `htest`, returned by `cor.test()`
 #'   (if Spearman's rank correlation), `wilcox.text()` or `kruskal.test()`.
-#' * `is_variancetest`: model is an an object of class `htest`, returned by 
+#' * `is_variancetest`: model is an an object of class `htest`, returned by
 #'   bartlett.test()`, `shapiro.test()` or `car::leveneTest()`.
 #' * `is_levenetest`: model is an an object of class `anova`, returned by `car::leveneTest()`.
 #' * `is_onewaytest`: model is an an object of class `htest`, returned by `oneway.test()`
@@ -108,7 +108,12 @@ model_info.default <- function(x, verbose = TRUE, ...) {
     }
   })
 
-  if (!is.null(faminfo)) {
+  if (is.null(faminfo)) {
+    if (isTRUE(verbose)) {
+      format_warning("Could not access model information.")
+    }
+    NULL
+  } else {
     .make_family(
       x = x,
       fitfam = faminfo$family,
@@ -117,11 +122,6 @@ model_info.default <- function(x, verbose = TRUE, ...) {
       verbose = verbose,
       ...
     )
-  } else {
-    if (isTRUE(verbose)) {
-      format_warning("Could not access model information.")
-    }
-    NULL
   }
 }
 
@@ -310,10 +310,10 @@ model_info.mlm <- function(x, ...) {
 
 #' @export
 model_info.afex_aov <- function(x, verbose = TRUE, ...) {
-  if (!is.null(x$aov)) {
-    .make_family(x$aov, verbose = verbose, ...)
-  } else {
+  if (is.null(x$aov)) {
     .make_family(x$lm, verbose = verbose, ...)
+  } else {
+    .make_family(x$aov, verbose = verbose, ...)
   }
 }
 
@@ -884,15 +884,15 @@ model_info.cglm <- function(x, ...) {
 
   if (!is.null(method) && method == "clm") {
     .make_family(x, ...)
-  } else if (!is.null(link)) {
+  } else if (is.null(link)) {
+    .make_family(x, ...)
+  } else {
     .make_family(
       x,
       logit.link = link == "logit",
       link.fun = link,
       ...
     )
-  } else {
-    .make_family(x, ...)
   }
 }
 
@@ -949,7 +949,6 @@ model_info.LORgee <- function(x, ...) {
 }
 
 
-
 #' @export
 model_info.BBreg <- function(x, ...) {
   .make_family(
@@ -965,7 +964,6 @@ model_info.BBreg <- function(x, ...) {
 
 #' @export
 model_info.BBmm <- model_info.BBreg
-
 
 
 #' @export
@@ -1012,6 +1010,7 @@ model_info.cpglmm <- function(x, ...) {
   )
 }
 
+
 #' @export
 model_info.zcpglm <- function(x, ...) {
   link <- parse(text = safe_deparse(x@call))[[1]]$link
@@ -1053,7 +1052,6 @@ model_info.glimML <- function(x, ...) {
 }
 
 
-
 #' @export
 model_info.gam <- function(x, ...) {
   if (!inherits(x, c("glm", "lm"))) {
@@ -1077,7 +1075,6 @@ model_info.gam <- function(x, ...) {
     ...
   )
 }
-
 
 
 #' @export
