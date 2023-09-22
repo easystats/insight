@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,6 +130,7 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <li><p><code>is_count</code>: model is a count model (i.e. family is either poisson or negative binomial)</p></li>
 <li><p><code>is_beta</code>: family is beta</p></li>
 <li><p><code>is_betabinomial</code>: family is beta-binomial</p></li>
+<li><p><code>is_orderedbeta</code>: family is ordered beta</p></li>
 <li><p><code>is_dirichlet</code>: family is dirichlet</p></li>
 <li><p><code>is_exponential</code>: family is exponential (e.g. Gamma or Weibull)</p></li>
 <li><p><code>is_logit</code>: model has logit link</p></li>
@@ -198,6 +199,9 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_betabinomial</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_orderedbeta</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_dirichlet</span>
@@ -343,6 +347,9 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_betabinomial</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_orderedbeta</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_dirichlet</span>
