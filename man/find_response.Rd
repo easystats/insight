@@ -31,6 +31,10 @@ instance also contain patterns like \code{"cbind(...)"}. Else, the original
 variable names from the matrix-column are returned. See 'Examples'.}
 
 \item{...}{Currently not used.}
+
+\item{component}{Character, if \code{x} is a joint model, this argument can be
+used to specify which component to return. Possible values are
+\code{"conditional"}, \code{"survival"} or \code{"all"}.}
 }
 \value{
 The name(s) of the response variable(s) from \code{x} as character

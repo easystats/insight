@@ -5,9 +5,12 @@
 #'
 #' @param x A fitted model.
 #' @param combine Logical, if `TRUE` and the response is a matrix-column,
-#'    the name of the response matches the notation in formula, and would for
-#'    instance also contain patterns like `"cbind(...)"`. Else, the original
-#'    variable names from the matrix-column are returned. See 'Examples'.
+#'   the name of the response matches the notation in formula, and would for
+#'   instance also contain patterns like `"cbind(...)"`. Else, the original
+#'   variable names from the matrix-column are returned. See 'Examples'.
+#' @param component Character, if `x` is a joint model, this argument can be
+#'   used to specify which component to return. Possible values are
+#'  `"conditional"`, `"survival"` or `"all"`.
 #' @param ... Currently not used.
 #'
 #' @return The name(s) of the response variable(s) from `x` as character
