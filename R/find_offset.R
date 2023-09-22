@@ -27,6 +27,11 @@
 #' }
 #' @export
 find_offset <- function(x) {
+  UseMethod("find_offset")
+}
+
+#' @export
+find_offset.default <- function(x) {
   terms <- .safe(
     as.character(attributes(stats::terms(find_formula(x)[[1]]))$variables),
     find_terms(x)
@@ -61,4 +66,9 @@ find_offset <- function(x) {
   } else {
     return(NULL)
   }
+}
+
+#' @export
+find_offset.fixest_multi <- function(x) {
+  lapply(x, find_offset.default)
 }

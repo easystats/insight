@@ -832,6 +832,16 @@ find_parameters.nls <- function(x,
   }
 }
 
+#' @export
+find_parameters.fixest_multi <- function(x,
+                                         component = c("all", "conditional", "nonlinear"),
+                                         flatten = FALSE,
+                                         ...) {
+  lapply(x, find_parameters.default, component = component, flatten = flatten, ...)
+}
+
+
+
 # helper ----------------------------
 
 .filter_parameters <- function(l, effects, component = "all", flatten, recursive = TRUE) {

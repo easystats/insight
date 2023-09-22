@@ -573,6 +573,11 @@ model_info.fixest <- function(x, verbose = TRUE, ...) {
 #' @export
 model_info.feglm <- model_info.fixest
 
+#' @export
+model_info.fixest_multi <- function(x, verbose = TRUE, ...) {
+  lapply(x, model_info.fixest, verbose, ...)
+}
+
 
 # Survival-models ----------------------------------------
 

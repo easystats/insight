@@ -19,6 +19,11 @@
 #' find_statistic(m)
 #' @export
 find_statistic <- function(x, ...) {
+  UseMethod("find_statistic")
+}
+
+#' @export
+find_statistic.default <- function(x, ...) {
   # model object check --------------------------------------------------------
 
   # check if the object is a model object; if not, quit early
@@ -349,7 +354,10 @@ find_statistic <- function(x, ...) {
   }
 }
 
-
+#' @export
+find_statistic.fixest_multi <- function(x, ...) {
+  lapply(x, find_statistic.default, ...)
+}
 
 
 

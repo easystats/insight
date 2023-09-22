@@ -36,3 +36,25 @@ get_predicted.fixest <- function(x, predict = "expectation", data = NULL, ...) {
 
   .get_predicted_out(predictions, args = args, ci_data = NULL)
 }
+
+#' @export
+get_predicted.fixest_multi <- function(x, predict = "expectation", data = NULL, ...) {
+  out <- lapply(x, function(y) {
+    as.data.frame(
+      get_predicted.fixest(y, predict, data, ...)
+    )
+  })
+
+  resp <- find_response(x)
+  for (i in seq_along(out)) {
+    out[[i]]$Response <- resp[[i]]
+  }
+
+  # bind lists together to one data frame, save attributes
+  att <- attributes(out[[1]])
+  params <- do.call(rbind, out)
+  row.names(params) <- NULL
+
+  attributes(params) <- utils::modifyList(att, attributes(params))
+  params
+}

@@ -150,6 +150,11 @@ find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   }
 }
 
+#' @export
+find_terms.fixest_multi <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  lapply(x, find_terms.default, flatten, verbose)
+}
+
 
 # unsupported ------------------
 

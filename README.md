@@ -400,6 +400,7 @@ supported_models()
 #> [221] "yuen"                    "yuend"                  
 #> [223] "zcpglm"                  "zeroinfl"               
 #> [225] "zerotrunc"
+>>>>>>> main
 ```
 
   - **Didn’t find a model?** [File an

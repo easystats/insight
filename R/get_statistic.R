@@ -2110,6 +2110,11 @@ get_statistic.fixest <- function(x, ...) {
   out
 }
 
+#' @export
+get_statistic.fixest_multi <- function(x, ...) {
+  lapply(x, get_statistic.fixest, ...)
+}
+
 
 
 #' @export

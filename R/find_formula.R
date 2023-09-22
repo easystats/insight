@@ -876,6 +876,11 @@ find_formula.fixest <- function(x, verbose = TRUE, ...) {
   .find_formula_return(f, verbose = verbose)
 }
 
+#' @export
+find_formula.fixest_multi <- function(x, verbose = TRUE, ...) {
+  lapply(x, find_formula.fixest, verbose, ...)
+}
+
 
 
 #' @export

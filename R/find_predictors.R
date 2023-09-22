@@ -196,6 +196,12 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
+find_predictors.fixest_multi <- function(x, flatten = FALSE, ...) {
+  lapply(x, find_predictors.fixest, flatten, ...)
+}
+
+
+#' @export
 find_predictors.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   l <- list(conditional = "x")
   if (flatten) {

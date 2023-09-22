@@ -353,3 +353,354 @@ test_that("find_predictors with i(f1, i.f2) interaction", {
     ignore_attr = TRUE
   )
 })
+
+
+
+# fixest_multi -------------------------------
+
+
+m1 <- femlm(c(dist_km, Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade)
+m2 <- femlm(c(log1p(dist_km), log1p(Euros)) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")
+m3 <- feglm(c(dist_km, Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "poisson")
+m4 <- feols(
+  c(Sepal.Width, Petal.Length) ~ 1 | Species | Sepal.Length ~ Petal.Width,
+  data = iris
+)
+
+test_that("fixest_multi: robust variance-covariance", {
+  mod <- feols(c(mpg, am) ~ hp + drat | cyl, data = mtcars)
+  # default is clustered
+  expect_equal(
+    sqrt(diag(vcov(mod[[1]]))),
+    sqrt(diag(get_varcov(mod, vcov = ~cyl)[[1]])),
+    tolerance = 1e-5,
+    ignore_attr = TRUE
+  )
+
+  # HC1
+  expect_equal(
+    sqrt(diag(vcov(mod[[1]], vcov = "HC1"))),
+    sqrt(diag(get_varcov(mod, vcov = "HC1")[[1]])),
+    tolerance = 1e-5,
+    ignore_attr = TRUE
+  )
+
+  expect_true(all(
+    sqrt(diag(vcov(mod[[1]]))) !=
+      sqrt(diag(get_varcov(mod, vcov = "HC1")[[1]]))
+  ))
+})
+
+
+test_that("fixest_multi: offset", {
+  # need fix in fixest first: https://github.com/lrberge/fixest/issues/405
+
+  # tmp <- feols(c(mpg, am) ~ hp, offset = ~ log(qsec), data = mtcars)
+  # expect_identical(find_offset(tmp)[[1]], "qsec")
+  # tmp <- feols(c(mpg, am) ~ hp, offset = ~qsec, data = mtcars)
+  # expect_identical(find_offset(tmp)[[1]], "qsec")
+})
+
+
+test_that("fixest_multi: model_info", {
+  expect_true(model_info(m1)[[2]]$is_count)
+  expect_true(model_info(m2)[[2]]$is_linear)
+  expect_true(model_info(m3)[[2]]$is_count)
+})
+
+test_that("fixest_multi: find_predictors", {
+  expect_identical(
+    find_predictors(m1)[[2]],
+    list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_predictors(m2)[[2]],
+    list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_predictors(m3)[[2]],
+    list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_predictors(m4)[[1]],
+    list(
+      conditional = c("Sepal.Length"), cluster = "Species",
+      instruments = "Petal.Width", endogenous = "Sepal.Length"
+    )
+  )
+  expect_identical(
+    find_predictors(m1, component = "all")[[2]],
+    list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_predictors(m2, component = "all")[[2]],
+    list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_predictors(m3, component = "all")[[2]],
+    list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_predictors(m4, component = "all")[[2]],
+    list(
+      conditional = c("Sepal.Length"),
+      cluster = "Species",
+      instruments = "Petal.Width",
+      endogenous = "Sepal.Length"
+    )
+  )
+})
+
+test_that("fixest_multi: find_random", {
+  expect_null(find_random(m1))
+  expect_null(find_random(m2))
+  expect_null(find_random(m3))
+})
+
+test_that("fixest_multi: get_varcov", {
+  expect_equal(vcov(m1[[1]]), get_varcov(m1)[[1]], tolerance = 1e-3)
+  expect_equal(vcov(m4[[1]]), get_varcov(m4)[[1]], tolerance = 1e-3)
+})
+
+test_that("fixest_multi: get_random", {
+  expect_warning(expect_null(get_random(m1)))
+})
+
+test_that("fixest_multi: find_response", {
+  expect_identical(find_response(m1)[[2]], "Euros")
+  expect_identical(find_response(m2)[[2]], "Euros")
+  expect_identical(find_response(m3)[[2]], "Euros")
+})
+
+test_that("fixest_multi: get_response", {
+  # expect_equal(get_response(m1)[[2]], trade$Euros, ignore_attr = TRUE)
+  # expect_equal(get_response(m2)[[2]], trade$Euros, ignore_attr = TRUE)
+  # expect_equal(get_response(m3)[[2]], trade$Euros, ignore_attr = TRUE)
+})
+
+test_that("fixest_multi: get_predictors", {
+  # expect_identical(colnames(get_predictors(m1)), c("dist_km", "Origin", "Destination", "Product"))
+  # expect_identical(colnames(get_predictors(m2)), c("dist_km", "Origin", "Destination", "Product"))
+  # expect_identical(colnames(get_predictors(m3)), c("dist_km", "Origin", "Destination", "Product"))
+})
+
+test_that("fixest_multi: link_inverse", {
+  expect_equal(link_inverse(m1[[1]])(0.2), exp(0.2), tolerance = 1e-4)
+  expect_equal(link_inverse(m2[[1]])(0.2), 0.2, tolerance = 1e-4)
+  expect_equal(link_inverse(m3[[1]])(0.2), exp(0.2), tolerance = 1e-4)
+})
+
+test_that("fixest_multi: link_function", {
+  expect_equal(link_function(m1[[1]])(0.2), log(0.2), tolerance = 1e-4)
+  expect_equal(link_function(m2[[1]])(0.2), 0.2, tolerance = 1e-4)
+  expect_equal(link_function(m3[[1]])(0.2), log(0.2), tolerance = 1e-4)
+})
+
+test_that("fixest_multi: get_data", {
+  # expect_identical(nrow(get_data(m1, verbose = FALSE)), 38325L)
+  # expect_identical(colnames(get_data(m1, verbose = FALSE)), c("Euros", "dist_km", "Origin", "Destination", "Product"))
+  # expect_identical(nrow(get_data(m2, verbose = FALSE)), 38325L)
+  # expect_identical(colnames(get_data(m2, verbose = FALSE)), c("Euros", "dist_km", "Origin", "Destination", "Product"))
+  #
+  # # old bug: m4 uses a complex formula and we need to extract all relevant
+  # # variables in order to compute predictions.
+  # nd <- get_data(m4, verbose = FALSE)
+  # tmp <- predict(m4, newdata = nd)
+  # expect_type(tmp, "double")
+  # expect_length(tmp, nrow(iris))
+})
+
+if (skip_if_not_or_load_if_installed("parameters")) {
+  # test_that("fixest_multi: get_df", {
+  #   expect_equal(get_df(m1, type = "residual"), 38290, ignore_attr = TRUE)
+  #   expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
+  #   ## TODO: check if statistic is z or t for this model
+  #   expect_equal(get_df(m1, type = "wald"), 14, ignore_attr = TRUE)
+  # })
+}
+
+test_that("fixest_multi: find_formula", {
+  expect_length(find_formula(m1)[[1]], 2)
+  expect_equal(
+    find_formula(m1)[[2]],
+    list(
+      conditional = as.formula("Euros ~ log(dist_km)"),
+      cluster = as.formula("~Origin + Destination + Product")
+    ),
+    ignore_attr = TRUE
+  )
+  expect_length(find_formula(m2)[[2]], 2)
+  expect_equal(
+    find_formula(m2)[[2]],
+    list(
+      conditional = as.formula("log1p(Euros) ~ log(dist_km)"),
+      cluster = as.formula("~Origin + Destination + Product")
+    ),
+    ignore_attr = TRUE
+  )
+})
+
+test_that("fixest_multi: find_terms", {
+  expect_identical(
+    find_terms(m1)[[2]],
+    list(response = "Euros", conditional = "log(dist_km)", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_terms(m1, flatten = TRUE)[[2]],
+    c("Euros", "log(dist_km)", "Origin", "Destination", "Product")
+  )
+  expect_identical(
+    find_terms(m2)[[2]],
+    list(response = "log1p(Euros)", conditional = "log(dist_km)", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_terms(m2, flatten = TRUE)[[2]],
+    c("log1p(Euros)", "log(dist_km)", "Origin", "Destination", "Product")
+  )
+})
+
+
+test_that("fixest_multi: find_variables", {
+  expect_identical(
+    find_variables(m1)[[2]],
+    list(response = "Euros", conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_variables(m1, flatten = TRUE)[[2]],
+    c("Euros", "dist_km", "Origin", "Destination", "Product")
+  )
+  expect_identical(
+    find_variables(m2)[[2]],
+    list(response = "Euros", conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_variables(m1, flatten = TRUE)[[2]],
+    c("Euros", "dist_km", "Origin", "Destination", "Product")
+  )
+})
+
+
+test_that("fixest_multi: n_obs", {
+  expect_identical(n_obs(m1)[[1]], 38325L)
+  expect_identical(n_obs(m2)[[1]], 38325L)
+})
+
+test_that("fixest_multi: find_parameters", {
+  expect_identical(
+    find_parameters(m1)[[1]],
+    list(conditional = "log(dist_km)")
+  )
+  expect_equal(
+    get_parameters(m1)[[2]],
+    data.frame(
+      Parameter = "log(dist_km)",
+      Estimate = -1.52774702640008,
+      row.names = NULL,
+      stringsAsFactors = FALSE
+    ),
+    tolerance = 1e-4
+  )
+  expect_identical(
+    find_parameters(m2)[[1]],
+    list(conditional = "log(dist_km)")
+  )
+  expect_equal(
+    get_parameters(m2)[[2]],
+    data.frame(
+      Parameter = "log(dist_km)",
+      Estimate = -2.16843021944503,
+      row.names = NULL,
+      stringsAsFactors = FALSE
+    ),
+    tolerance = 1e-4
+  )
+})
+
+test_that("fixest_multi: is_multivariate", {
+  expect_false(is_multivariate(m1)[[1]])
+})
+
+test_that("fixest_multi: find_statistic", {
+  expect_identical(find_statistic(m1)[[1]], "z-statistic")
+  expect_identical(find_statistic(m2)[[1]], "t-statistic")
+})
+
+test_that("fixest_multi: get_statistic", {
+  stat <- get_statistic(m1)[[2]]
+  expect_equal(stat$Statistic, -13.212695, tolerance = 1e-3)
+  stat <- get_statistic(m2)[[2]]
+  expect_equal(stat$Statistic, -14.065336, tolerance = 1e-3)
+})
+
+test_that("fixest_multi: get_predicted", {
+  # pred <- get_predicted(m1)
+  # expect_s3_class(pred, "get_predicted")
+  # expect_length(pred, nrow(trade))
+  # a <- get_predicted(m1)
+  # b <- get_predicted(m1, type = "response", predict = NULL)
+  # expect_equal(a, b, tolerance = 1e-5)
+  # a <- get_predicted(m1, predict = "link")
+  # b <- get_predicted(m1, type = "link", predict = NULL)
+  # expect_equal(a, b, tolerance = 1e-5)
+  # # these used to raise warnings
+  # expect_warning(get_predicted(m1, ci = 0.4), NA)
+  # expect_warning(get_predicted(m1, predict = NULL, type = "link"), NA)
+})
+
+test_that("fixest_multi: get_data works when model data has name of  reserved words", {
+  ## NOTE check back every now and then and see if tests still work
+  # skip("works interactively")
+  # rep <- data.frame(Y = runif(100) > 0.5, X = rnorm(100))
+  # m <- feglm(Y ~ X, data = rep, family = binomial)
+  # out <- get_data(m)
+  # expect_s3_class(out, "data.frame")
+  # expect_equal(
+  #   head(out),
+  #   structure(
+  #     list(
+  #       Y = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),
+  #       X = c(
+  #         -1.37601434046896, -0.0340090992175856, 0.418083058388383,
+  #         -0.51688491498936, -1.30634551903768, -0.858343109785566
+  #       )
+  #     ),
+  #     is_subset = FALSE, row.names = c(NA, 6L), class = "data.frame"
+  #   ),
+  #   ignore_attr = TRUE,
+  #   tolerance = 1e-3
+  # )
+})
+
+
+test_that("fixest_multi: find_variables with interaction", {
+  mod <- suppressMessages(feols(c(mpg, drat) ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars))
+  expect_equal(
+    find_variables(mod)[[1]],
+    list(
+      response = "mpg", conditional = "vs", cluster = "carb",
+      instruments = c("am", "cyl"), endogenous = c("vs", "cyl")
+    ),
+    ignore_attr = TRUE
+  )
+
+  # used to produce a warning
+  mod <- feols(c(mpg, drat) ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars)
+  expect_warning(find_variables(mod)[[1]], NA)
+})
+
+
+test_that("fixest_multi: find_predictors with i(f1, i.f2) interaction", {
+  aq <- airquality
+  aq$week <- aq$Day %/% 7 + 1
+
+  mod <- feols(c(Ozone, Temp) ~ i(Month, i.week), aq, notes = FALSE)
+  expect_equal(
+    find_predictors(mod)[[1]],
+    list(
+      conditional = c("Month", "week")
+    ),
+    ignore_attr = TRUE
+  )
+})
+
+
