@@ -564,14 +564,14 @@ find_formula.RM <- find_formula.MANOVA
 find_formula.gls <- function(x, verbose = TRUE, ...) {
   ## TODO this is an intermediate fix to return the correlation variables from gls-objects
   fcorr <- x$call$correlation
-  if (!is.null(fcorr)) {
+  if (is.null(fcorr)) {
+    f_corr <- NULL
+  } else {
     if (inherits(fcorr, "name")) {
       f_corr <- attributes(eval(fcorr))$formula
     } else {
       f_corr <- parse(text = safe_deparse(fcorr))[[1]]
     }
-  } else {
-    f_corr <- NULL
   }
   if (is.symbol(f_corr)) {
     f_corr <- paste("~", safe_deparse(f_corr))
@@ -1272,14 +1272,14 @@ find_formula.lme <- function(x, verbose = TRUE, ...) {
   }
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
-  if (!is.null(fcorr)) {
+  if (is.null(fcorr)) {
+    fc <- NULL
+  } else {
     if (inherits(fcorr, "name")) {
       fc <- attributes(eval(fcorr))$formula
     } else {
       fc <- parse(text = safe_deparse(fcorr))[[1]]$form
     }
-  } else {
-    fc <- NULL
   }
 
   f <- compact_list(list(
@@ -1313,11 +1313,11 @@ find_formula.mixor <- function(x, verbose = TRUE, ...) {
   f_id <- deparse(x$call$id)
   f_rs <- x$call$which.random.slope
 
-  if (!is.null(f_rs)) {
+  if (is.null(f_rs)) {
+    fmr <- f_id
+  } else {
     f_rs <- trim_ws(unlist(strsplit(safe_deparse(x$call$formula[[3]]), "+", fixed = TRUE), use.names = FALSE))[f_rs]
     fmr <- paste(f_rs, "|", f_id)
-  } else {
-    fmr <- f_id
   }
 
   fmr <- stats::as.formula(paste("~", fmr))
@@ -1489,7 +1489,10 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
     dt <- utils::tail(x@numerator, 1)[[1]]@dataTypes
     frand <- names(dt)[which(dt == "random")]
 
-    if (!is_empty_object(frand)) {
+    if (is_empty_object(frand)) {
+      f.random <- NULL
+      f.cond <- stats::as.formula(fcond)
+    } else {
       f.random <- stats::as.formula(paste0("~", paste(frand, collapse = " + ")))
       for (i in frand) {
         fcond <- sub(i, "", fcond, fixed = TRUE)
@@ -1505,9 +1508,6 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
         fcond <- paste(fcond, "1")
       }
       f.cond <- stats::as.formula(trim_ws(fcond))
-    } else {
-      f.random <- NULL
-      f.cond <- stats::as.formula(fcond)
     }
   } else if (.classify_BFBayesFactor(x) %in% c("ttest1", "ttest2")) {
     f.cond <- .safe(stats::as.formula(x@numerator[[1]]@identifier$formula))

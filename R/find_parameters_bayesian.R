@@ -48,10 +48,10 @@ find_parameters.BGGM <- function(x,
                                  ...) {
   component <- match.arg(component)
   l <- switch(component,
-    "correlation" = list(correlation = colnames(get_parameters(x, component = "correlation"))),
-    "conditional" = list(conditional = colnames(get_parameters(x, component = "conditional"))),
-    "intercept" = list(intercept = colnames(x$Y)),
-    "all" = list(
+    correlation = list(correlation = colnames(get_parameters(x, component = "correlation"))),
+    conditional = list(conditional = colnames(get_parameters(x, component = "conditional"))),
+    intercept = list(intercept = colnames(x$Y)),
+    all = list(
       intercept = colnames(x$Y),
       correlation = colnames(get_parameters(x, component = "correlation")),
       conditional = colnames(get_parameters(x, component = "conditional"))
@@ -549,7 +549,7 @@ find_parameters.stanmvreg <- function(x,
   }
 
 
-  l <- mapply(c, l.cond, l.random, l.sigma, SIMPLIFY = FALSE)
+  l <- Map(c, l.cond, l.random, l.sigma)
   l <- .filter_pars(l, parameters, is_mv = TRUE)
 
   effects <- match.arg(effects)

@@ -516,7 +516,7 @@ format_table <- function(x,
       other_ci_colname <- sprintf("%s %g%% CI", other, unique(stats::na.omit(att[[paste0("ci_", other)]])) * 100)
     } else if (!is.null(att[["ci"]])) {
       other_ci_colname <- sprintf("%s %g%% CI", other, unique(stats::na.omit(att[["ci"]])) * 100)
-    } else if (length(other == 1) && paste0(other, "_CI") %in% colnames(x)) {
+    } else if (length(other) == 1 && paste0(other, "_CI") %in% colnames(x)) {
       other_ci_colname <- sprintf("%s %g%% CI", other, unique(stats::na.omit(x[[paste0(other, "_CI")]])) * 100)
     } else {
       other_ci_colname <- paste(other, " CI")
