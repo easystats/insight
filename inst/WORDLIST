@@ -58,6 +58,7 @@ behaviour
 bfsl
 bife
 blavaan
+blme
 bmwiernik
 brms
 brmsfit
@@ -130,6 +131,7 @@ multcomp
 mvord
 nd
 nestedLogit
+nlme
 occurence
 optimizers
 patilindrajeets

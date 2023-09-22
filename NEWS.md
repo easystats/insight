@@ -2,7 +2,7 @@
 
 ## Changes to functions
 
-* `model_info()` now recognized orderd beta families.
+* `model_info()` now recognized ordered beta families.
 
 # insight 0.19.5
 

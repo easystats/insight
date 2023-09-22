@@ -80,7 +80,7 @@
 #' component for a better overview. Further, parameter names are "cleaned", if
 #' necessary, also for a cleaner print. See also 'Examples'.
 #'
-#' @examplesIf require("curl", quietly = TRUE) && curl::has_internet()
+#' @examplesIf require("curl", quietly = TRUE) && curl::has_internet() && require("bayestestR", quietly = TRUE)
 #' \donttest{
 #' library(bayestestR)
 #' model <- download_model("brms_zi_2")
