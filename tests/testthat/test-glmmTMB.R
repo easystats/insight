@@ -952,3 +952,21 @@ test_that("get_predicted", {
   expect_warning(get_predicted(m1, predict = "prediction"))
   expect_warning(get_predicted(m1, predict = "classification"))
 })
+
+
+test_that("model_info, ordered beta", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("datawizard")
+  skip_if_not_installed("lme4")
+  skip_if_not(packageVersion("glmmTMB") >= "1.1.5")
+  data(sleepstudy, package = "lme4")
+  sleepstudy$y <- datawizard::normalize(sleepstudy$Reaction)
+  m <- glmmTMB::glmmTMB(
+    y ~ Days + (Days | Subject),
+    data = sleepstudy,
+    family = ordbeta()
+  )
+  out <- model_info(m)
+  expect_true(out$is_orderedbeta)
+  expect_identicl(out$family, "ordbeta")
+})

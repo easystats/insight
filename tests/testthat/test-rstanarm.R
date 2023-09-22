@@ -161,7 +161,7 @@ test_that("model_info-stanreg-glm", {
     list(
       is_binomial = TRUE, is_bernoulli = FALSE, is_count = FALSE,
       is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
-      is_dirichlet = FALSE, is_exponential = FALSE, is_logit = TRUE,
+      is_orderedbeta = FALSE, is_dirichlet = FALSE, is_exponential = FALSE, is_logit = TRUE,
       is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
       is_survival = FALSE, is_linear = FALSE, is_tweedie = FALSE,
       is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
@@ -183,7 +183,7 @@ test_that("model_info-stanreg-glm", {
     list(
       is_binomial = FALSE, is_bernoulli = FALSE, is_count = FALSE,
       is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
-      is_dirichlet = FALSE, is_exponential = FALSE, is_logit = FALSE,
+      is_orderedbeta = FALSE, is_dirichlet = FALSE, is_exponential = FALSE, is_logit = FALSE,
       is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
       is_survival = FALSE, is_linear = TRUE, is_tweedie = FALSE,
       is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
@@ -205,7 +205,7 @@ test_that("model_info-stanreg-glm", {
     list(
       is_binomial = TRUE, is_bernoulli = TRUE, is_count = FALSE,
       is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
-      is_dirichlet = FALSE, is_exponential = FALSE, is_logit = TRUE,
+      is_orderedbeta = FALSE, is_dirichlet = FALSE, is_exponential = FALSE, is_logit = TRUE,
       is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
       is_survival = FALSE, is_linear = FALSE, is_tweedie = FALSE,
       is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
