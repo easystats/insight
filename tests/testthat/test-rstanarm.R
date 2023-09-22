@@ -108,23 +108,21 @@ m12 <- suppressWarnings(
 test_that("stan_jm", {
   skip_on_os("windows")
   skip_on_os(c("mac", "linux", "solaris"), arch = "i386")
-  void <- capture.output(
-    {
-      m13 <- suppressMessages(
-        suppressWarnings(
-          stan_jm(
-            formulaLong = logBili ~ year + (1 | id),
-            dataLong = pbcLong,
-            formulaEvent = Surv(futimeYears, death) ~ sex + trt,
-            dataEvent = pbcSurv,
-            time_var = "year",
-            # this next line is only to keep the example small in size!
-            chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
-          )
+  void <- capture.output({
+    m13 <- suppressMessages(
+      suppressWarnings(
+        stan_jm(
+          formulaLong = logBili ~ year + (1 | id),
+          dataLong = pbcLong,
+          formulaEvent = Surv(futimeYears, death) ~ sex + trt,
+          dataEvent = pbcSurv,
+          time_var = "year",
+          # this next line is only to keep the example small in size!
+          chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
         )
       )
-    }
-  )
+    )
+  })
   # expect_snapshot(model_info(m13))
 })
 
@@ -143,21 +141,19 @@ Orange$age <- Orange$age / 100
 #   iter = 1000
 # )
 
-invisible(capture.output(
-  {
-    m15 <- suppressWarnings(
-      stan_mvmer(
-        formula = list(
-          logBili ~ year + (1 | id),
-          albumin ~ sex + year + (year | id)
-        ),
-        data = pbcLong,
-        # this next line is only to keep the example small in size!
-        chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
-      )
+invisible(capture.output({
+  m15 <- suppressWarnings(
+    stan_mvmer(
+      formula = list(
+        logBili ~ year + (1 | id),
+        albumin ~ sex + year + (year | id)
+      ),
+      data = pbcLong,
+      # this next line is only to keep the example small in size!
+      chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
     )
-  }
-))
+  )
+}))
 
 test_that("model_info-stanreg-glm", {
   expect_equal(
