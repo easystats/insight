@@ -22,17 +22,16 @@
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:
-#'    \itemize{
-#'      \item `var.fixed`, variance attributable to the fixed effects
-#'      \item `var.random`, (mean) variance of random effects
-#'      \item `var.residual`, residual variance (sum of dispersion and distribution)
-#'      \item `var.distribution`, distribution-specific variance
-#'      \item `var.dispersion`, variance due to additive dispersion
-#'      \item `var.intercept`, the random-intercept-variance, or between-subject-variance (\ifelse{html}{\out{&tau;<sub>00</sub>}}{\eqn{\tau_{00}}})
-#'      \item `var.slope`, the random-slope-variance (\ifelse{html}{\out{&tau;<sub>11</sub>}}{\eqn{\tau_{11}}})
-#'      \item `cor.slope_intercept`, the random-slope-intercept-correlation (\ifelse{html}{\out{&rho;<sub>01</sub>}}{\eqn{\rho_{01}}})
-#'      \item `cor.slopes`, the correlation between random slopes (\ifelse{html}{\out{&rho;<sub>00</sub>}}{\eqn{\rho_{00}}})
-#'    }
+#'
+#' - `var.fixed`, variance attributable to the fixed effects
+#' - `var.random`, (mean) variance of random effects
+#' - `var.residual`, residual variance (sum of dispersion and distribution)
+#' - `var.distribution`, distribution-specific variance
+#' - `var.dispersion`, variance due to additive dispersion
+#' - `var.intercept`, the random-intercept-variance, or between-subject-variance (\ifelse{html}{\out{&tau;<sub>00</sub>}}{\eqn{\tau_{00}}})
+#' - `var.slope`, the random-slope-variance (\ifelse{html}{\out{&tau;<sub>11</sub>}}{\eqn{\tau_{11}}})
+#' - `cor.slope_intercept`, the random-slope-intercept-correlation (\ifelse{html}{\out{&rho;<sub>01</sub>}}{\eqn{\rho_{01}}})
+#' - `cor.slopes`, the correlation between random slopes (\ifelse{html}{\out{&rho;<sub>00</sub>}}{\eqn{\rho_{00}}})
 #'
 #' @details This function returns different variance components from mixed models,
 #'   which are needed, for instance, to calculate r-squared measures or the
@@ -97,10 +96,10 @@
 #'   }
 #'
 #' @note This function supports models of class `merMod` (including models
-#'   from \pkg{blme}), `clmm`, `cpglmm`, `glmmadmb`, `glmmTMB`,
+#'   from **blme**), `clmm`, `cpglmm`, `glmmadmb`, `glmmTMB`,
 #'   `MixMod`, `lme`, `mixed`, `rlmerMod`, `stanreg`,
 #'   `brmsfit` or `wbm`. Support for objects of class `MixMod`
-#'   (\pkg{GLMMadaptive}), `lme` (\pkg{nlme}) or `brmsfit` (\pkg{brms})
+#'   (**GLMMadaptive**), `lme` (**nlme**) or `brmsfit` (**brms**)
 #'   is experimental and may not work for all models.
 #'
 #' @references
@@ -117,7 +116,7 @@
 #'  and generalized linear mixed models with R. Newburgh, United Kingdom:
 #'  Highland Statistics.
 #'
-#' @examples
+#' @examplesIf require("lme4", quietly = TRUE)
 #' \donttest{
 #' library(lme4)
 #' data(sleepstudy)

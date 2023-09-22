@@ -141,13 +141,14 @@ for mixed models with random intercepts and slopes.
 }
 \note{
 This function supports models of class \code{merMod} (including models
-from \pkg{blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB},
+from \strong{blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB},
 \code{MixMod}, \code{lme}, \code{mixed}, \code{rlmerMod}, \code{stanreg},
 \code{brmsfit} or \code{wbm}. Support for objects of class \code{MixMod}
-(\pkg{GLMMadaptive}), \code{lme} (\pkg{nlme}) or \code{brmsfit} (\pkg{brms})
+(\strong{GLMMadaptive}), \code{lme} (\strong{nlme}) or \code{brmsfit} (\strong{brms})
 is experimental and may not work for all models.
 }
 \examples{
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 library(lme4)
 data(sleepstudy)
@@ -157,6 +158,7 @@ get_variance(m)
 get_variance_fixed(m)
 get_variance_residual(m)
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
