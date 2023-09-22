@@ -13,20 +13,17 @@
 #' @return The name(s) of the response variable(s) from `x` as character
 #'   vector, or `NULL` if response variable could not be found.
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(cbpp)
-#'   cbpp$trials <- cbpp$size - cbpp$incidence
-#'   m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+#' @examplesIf require("lme4")
+#' data(cbpp, package = "lme4")
+#' cbpp$trials <- cbpp$size - cbpp$incidence
+#' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #'
-#'   find_response(m, combine = TRUE)
-#'   find_response(m, combine = FALSE)
-#' }
+#' find_response(m, combine = TRUE)
+#' find_response(m, combine = FALSE)
 #' @export
 find_response <- function(x, combine = TRUE, ...) {
   UseMethod("find_response")
 }
-
 
 
 #' @export
@@ -55,13 +52,10 @@ find_response.logitr <- function(x, ...) {
 }
 
 
-
 #' @export
 find_response.model_fit <- function(x, combine = TRUE, ...) {
   find_response(x$fit, combine = combine, ...)
 }
-
-
 
 
 #' @export
@@ -74,8 +68,6 @@ find_response.bfsl <- function(x, combine = TRUE, ...) {
 }
 
 
-
-
 #' @export
 find_response.selection <- function(x, combine = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
@@ -85,8 +77,6 @@ find_response.selection <- function(x, combine = TRUE, ...) {
   )
   check_cbind(resp, combine, model = x)
 }
-
-
 
 
 #' @export
@@ -102,8 +92,7 @@ find_response.mediate <- function(x, combine = TRUE, ...) {
 }
 
 
-
-
+#' @rdname find_response
 #' @export
 find_response.mjoint <- function(x, combine = TRUE, component = c("conditional", "survival", "all"), ...) {
   component <- match.arg(component)
@@ -126,8 +115,7 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
 }
 
 
-
-
+#' @rdname find_response
 #' @export
 find_response.joint <- function(x,
                                 combine = TRUE,
