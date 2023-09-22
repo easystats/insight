@@ -21,6 +21,7 @@
 #' * `is_count`: model is a count model (i.e. family is either poisson or negative binomial)
 #' * `is_beta`: family is beta
 #' * `is_betabinomial`: family is beta-binomial
+#' * `is_orderedbeta`: family is ordered beta
 #' * `is_dirichlet`: family is dirichlet
 #' * `is_exponential`: family is exponential (e.g. Gamma or Weibull)
 #' * `is_logit`: model has logit link

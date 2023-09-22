@@ -12,7 +12,7 @@
 #' response model, or `TRUE` if a return value from a function of \pkg{insight}
 #' is from a multivariate response model.
 #'
-#' @examples
+#' @examplesIf require("rstanarm", quietly = TRUE)
 #' \donttest{
 #' library(rstanarm)
 #' data("pbcLong")

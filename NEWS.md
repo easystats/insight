@@ -1,3 +1,9 @@
+# insight 0.19.6
+
+## Changes to functions
+
+* `model_info()` now recognized orderd beta families.
+
 # insight 0.19.5
 
 ## Bug fixes

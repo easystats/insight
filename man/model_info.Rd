@@ -35,6 +35,7 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{is_count}: model is a count model (i.e. family is either poisson or negative binomial)
 \item \code{is_beta}: family is beta
 \item \code{is_betabinomial}: family is beta-binomial
+\item \code{is_orderedbeta}: family is ordered beta
 \item \code{is_dirichlet}: family is dirichlet
 \item \code{is_exponential}: family is exponential (e.g. Gamma or Weibull)
 \item \code{is_logit}: model has logit link

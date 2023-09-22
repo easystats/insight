@@ -65,7 +65,7 @@
     } else {
       is_bernoulli <- TRUE
     }
-  } else if (fitfam %in% "bernoulli") {
+  } else if (fitfam == "bernoulli") {
     is_bernoulli <- TRUE
   }
 
@@ -73,7 +73,7 @@
   # beta family --------
 
   beta_fam <-
-    inherits(x, c("betareg", "betamfx")) |
+    inherits(x, c("betareg", "betamfx", "ordbetareg")) |
       fitfam %in% c(
         "beta",
         "Beta",
@@ -81,14 +81,16 @@
         "Beta Inflated",
         "Zero Inflated Beta",
         "Beta Inflated zero",
-        "Beta Inflated one"
+        "Beta Inflated one",
+        "ordbeta"
       )
 
 
-  # special families (beta-binomial, dirichlet) --------
+  # special families (beta-binomial, dirichlet, ordered beta) --------
 
-  betabin_fam <- inherits(x, "BBreg") | fitfam %in% "betabinomial"
-  dirichlet_fam <- inherits(x, "DirichletRegModel") | fitfam %in% "dirichlet"
+  betabin_fam <- inherits(x, "BBreg") | any(fitfam == "betabinomial")
+  orderedbeta_fam <- any(fitfam == "ordbeta") | inherits(x, "ordbetareg")
+  dirichlet_fam <- inherits(x, "DirichletRegModel") | any(fitfam == "dirichlet")
 
   ## TODO beta-binomial = binomial?
   if (betabin_fam) binom_fam <- TRUE
@@ -393,6 +395,7 @@
     is_negbin = neg_bin_fam,
     is_beta = beta_fam,
     is_betabinomial = betabin_fam,
+    is_orderedbeta = orderedbeta_fam,
     is_dirichlet = dirichlet_fam,
     is_exponential = exponential_fam,
     is_logit = logit.link,

@@ -20,6 +20,7 @@ Small helper that checks if a model is a multivariate response
 model, i.e. a model with multiple outcomes.
 }
 \examples{
+\dontshow{if (require("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 library(rstanarm)
 data("pbcLong")
@@ -37,4 +38,5 @@ f <- find_formula(model)
 is_multivariate(model)
 is_multivariate(f)
 }
+\dontshow{\}) # examplesIf}
 }
