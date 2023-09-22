@@ -55,21 +55,23 @@
 #'
 #' @note `options(insight_use_symbols = TRUE)` override the `use_symbols` argument
 #'   and always displays symbols, if possible.
-#' @examples
+#' @examplesIf require("rstanarm", warn.conflicts = FALSE) && require("parameters", , warn.conflicts = FALSE)
 #' format_table(head(iris), digits = 1)
 #'
-#' if (require("parameters")) {
-#'   x <- model_parameters(lm(Sepal.Length ~ Species * Sepal.Width, data = iris))
-#'   as.data.frame(format_table(x))
-#'   as.data.frame(format_table(x, p_digits = "scientific"))
-#' }
+#' m <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+#' x <- parameters::model_parameters(m)
+#' as.data.frame(format_table(x))
+#' as.data.frame(format_table(x, p_digits = "scientific"))
+#'
 #' \donttest{
-#' if (require("rstanarm", warn.conflicts = FALSE) &&
-#'   require("parameters", , warn.conflicts = FALSE)) {
-#'   model <- stan_glm(Sepal.Length ~ Species, data = iris, refresh = 0, seed = 123)
-#'   x <- model_parameters(model, ci = c(0.69, 0.89, 0.95))
-#'   as.data.frame(format_table(x))
-#' }
+#' model <- rstanarm::stan_glm(
+#'   Sepal.Length ~ Species,
+#'   data = iris,
+#'   refresh = 0,
+#'   seed = 123
+#' )
+#' x <- parameters::model_parameters(model, ci = c(0.69, 0.89, 0.95))
+#' as.data.frame(format_table(x))
 #' }
 #' @return A data frame. Note that `format_table()` converts all columns
 #' into character vectors!

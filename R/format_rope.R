@@ -12,7 +12,7 @@
 #' @export
 format_rope <- function(rope_percentage, name = "in ROPE", digits = 2) {
   text <- ifelse(rope_percentage == 0, "0%",
-    ifelse(rope_percentage == 1, "100%",
+    ifelse(rope_percentage == 1, "100%", # nolint
       format_value(rope_percentage, digits = digits, as_percent = TRUE)
     )
   )
