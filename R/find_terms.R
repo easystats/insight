@@ -33,16 +33,14 @@
 #'   (see examples below), while `find_variables()` returns each variable
 #'   name only once.
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(sleepstudy)
-#'   m <- suppressWarnings(lmer(
-#'     log(Reaction) ~ Days + I(Days^2) + (1 + Days + exp(Days) | Subject),
-#'     data = sleepstudy
-#'   ))
+#' @examplesIf require("lme4", quietly = TRUE)
+#' data(sleepstudy, package = "lme4")
+#' m <- suppressWarnings(lme4::lmer(
+#'   log(Reaction) ~ Days + I(Days^2) + (1 + Days + exp(Days) | Subject),
+#'   data = sleepstudy
+#' ))
 #'
-#'   find_terms(m)
-#' }
+#' find_terms(m)
 #'
 #' # sometimes, it is necessary to retrieve terms from "term.labels" attribute
 #' m <- lm(mpg ~ hp * (am + cyl), data = mtcars)
@@ -230,6 +228,7 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
   # reorder, so response is first
   compact_list(f[c(length(f), 1:(length(f) - 1))])
 }
+
 
 .get_variables_list_aovlist <- function(f, resp = NULL) {
   i <- vapply(f[[3]], function(x) {

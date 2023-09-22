@@ -54,17 +54,17 @@ may return a variable multiple times in case of multiple transformations
 name only once.
 }
 \examples{
-if (require("lme4")) {
-  data(sleepstudy)
-  m <- suppressWarnings(lmer(
-    log(Reaction) ~ Days + I(Days^2) + (1 + Days + exp(Days) | Subject),
-    data = sleepstudy
-  ))
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(sleepstudy, package = "lme4")
+m <- suppressWarnings(lme4::lmer(
+  log(Reaction) ~ Days + I(Days^2) + (1 + Days + exp(Days) | Subject),
+  data = sleepstudy
+))
 
-  find_terms(m)
-}
+find_terms(m)
 
 # sometimes, it is necessary to retrieve terms from "term.labels" attribute
 m <- lm(mpg ~ hp * (am + cyl), data = mtcars)
 find_terms(m, as_term_labels = TRUE)
+\dontshow{\}) # examplesIf}
 }
