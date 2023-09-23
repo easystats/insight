@@ -211,8 +211,8 @@ get_varcov.betareg <- function(x,
   component <- match.arg(component)
 
   vc <- switch(component,
-    "conditional" = stats::vcov(object = x, model = "mean"),
-    "precision" = stats::vcov(object = x, model = "precision"),
+    conditional = stats::vcov(object = x, model = "mean"),
+    precision = stats::vcov(object = x, model = "precision"),
     stats::vcov(object = x)
   )
   .process_vcov(vc, verbose, ...)
@@ -264,9 +264,9 @@ get_varcov.clm2 <- function(x,
   }
 
   range <- switch(component,
-    "all" = 1:(n_scale + n_intercepts + n_location),
-    "conditional" = 1:(n_intercepts + n_location),
-    "scale" = (1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)
+    all = 1:(n_scale + n_intercepts + n_location),
+    conditional = 1:(n_intercepts + n_location),
+    scale = (1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)
   )
 
   vc <- vc[range, range, drop = FALSE]
@@ -540,11 +540,11 @@ get_varcov.MixMod <- function(x,
     vc <- random_vc
   } else {
     vc <- switch(component,
-      "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
-      "zero_inflated" = ,
-      "zi" = stats::vcov(x, parm = "all", sandwich = robust),
-      "auxiliary" = ,
-      "dispersion" = stats::vcov(x, parm = "extra", sandwich = robust),
+      conditional = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
+      zero_inflated = ,
+      zi = stats::vcov(x, parm = "all", sandwich = robust),
+      auxiliary = ,
+      dispersion = stats::vcov(x, parm = "extra", sandwich = robust),
       stats::vcov(x, parm = "all", sandwich = robust)
     )
 

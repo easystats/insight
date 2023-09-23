@@ -199,7 +199,7 @@ print_parameters <- function(x,
         # here we have the "subtitles" of a subcomponent
         # (like "Intercept: Group-Level 1")
         tmp <- switch(parts[j],
-          "simplex" = "(monotonic effects)",
+          simplex = "(monotonic effects)",
           parts[j]
         )
         title2 <- paste0(title2, " ", tmp)

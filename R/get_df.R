@@ -250,8 +250,8 @@ get_df.fixest <- function(x, type = "residual", ...) {
     choices = c("wald", "residual", "normal")
   )
   type <- switch(type,
-    "wald" = "t",
-    "residual" = "resid",
+    wald = "t",
+    residual = "resid",
     type
   )
   if (type == "normal") {

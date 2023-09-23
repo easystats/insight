@@ -571,7 +571,7 @@ get_predicted.rma <- function(x,
     if (nrow(out) == 1) {
       out <- do.call(rbind, lapply(seq_along(x$slab), function(i) out))
     }
-    out <- .get_predicted_out(out, args = list("data" = data))
+    out <- .get_predicted_out(out, args = list(data = data))
   }
 
   out

@@ -307,9 +307,9 @@ get_parameters.bayesx <- function(x,
   )
 
   params <- switch(component,
-    "all" = rbind(fixed_dat, smooth_dat),
-    "conditional" = fixed_dat,
-    "smooth_terms" = smooth_dat
+    all = rbind(fixed_dat, smooth_dat),
+    conditional = fixed_dat,
+    smooth_terms = smooth_dat
   )
 
   out <- text_remove_backticks(params)

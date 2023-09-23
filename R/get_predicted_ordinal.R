@@ -189,7 +189,7 @@ get_predicted.rlm <- function(x, predict = "expectation", ...) {
     }
     dots[["type"]] <- match.arg(dots$type, choices = "response")
     dots[["x"]] <- x
-    dots <- c(dots, list("predict" = NULL))
+    dots <- c(dots, list(predict = NULL))
     do.call("get_predicted.lm", dots)
   }
 }
