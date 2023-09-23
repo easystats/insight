@@ -18,7 +18,7 @@ that was used to fit the model."><meta property="og:image" content="https://easy
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,6 +115,17 @@ that was used to fit the model.</p>
 <span>  flatten <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for afex_aov</span></span>
+<span><span class="fu">find_predictors</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
+<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"dispersion"</span>, <span class="st">"instruments"</span>,</span>
+<span>    <span class="st">"correlation"</span>, <span class="st">"smooth_terms"</span><span class="op">)</span>,</span>
+<span>  flatten <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -158,14 +169,17 @@ as character vector, not as list. Duplicated values are removed.</p></dd>
 
 <p>A list of character vectors that represent the name(s) of the
 predictor variables. Depending on the combination of the arguments
-<code>effects</code> and <code>component</code>, the returned list has following
-elements:</p><ul><li><p><code>conditional</code>, the "fixed effects" terms from the model</p></li>
+<code>effects</code> and <code>component</code>, the returned list has following elements:</p><ul><li><p><code>conditional</code>, the "fixed effects" terms from the model</p></li>
 <li><p><code>random</code>, the "random effects" terms from the model</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" terms from the zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" terms from the zero-inflation component of the model</p></li>
+<li><p><code>zero_inflated</code>, the "fixed effects" terms from the zero-inflation
+component of the model</p></li>
+<li><p><code>zero_inflated_random</code>, the "random effects" terms from the zero-inflation
+component of the model</p></li>
 <li><p><code>dispersion</code>, the dispersion terms</p></li>
-<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables</p></li>
-<li><p><code>correlation</code>, for models with correlation-component like <code>gls</code>, the variables used to describe the correlation structure</p></li>
+<li><p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>,
+the instrumental variables</p></li>
+<li><p><code>correlation</code>, for models with correlation-component like <code>gls</code>, the
+variables used to describe the correlation structure</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="model-components">Model components<a class="anchor" aria-label="anchor" href="#model-components"></a></h2>

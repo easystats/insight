@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +92,23 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_response</span><span class="op">(</span><span class="va">x</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_response</span><span class="op">(</span><span class="va">x</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for mjoint</span></span>
+<span><span class="fu">find_response</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  combine <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"survival"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for joint</span></span>
+<span><span class="fu">find_response</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  combine <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"survival"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -111,6 +127,12 @@ variable names from the matrix-column are returned. See 'Examples'.</p></dd>
 <dt>...</dt>
 <dd><p>Currently not used.</p></dd>
 
+
+<dt>component</dt>
+<dd><p>Character, if <code>x</code> is a joint model, this argument can be
+used to specify which component to return. Possible values are
+<code>"conditional"</code>, <code>"survival"</code> or <code>"all"</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -122,14 +144,13 @@ vector, or <code>NULL</code> if response variable could not be found.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">cbpp</span><span class="op">$</span><span class="va">trials</span> <span class="op">&lt;-</span> <span class="va">cbpp</span><span class="op">$</span><span class="va">size</span> <span class="op">-</span> <span class="va">cbpp</span><span class="op">$</span><span class="va">incidence</span></span></span>
-<span class="r-in"><span>  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">incidence</span>, <span class="va">trials</span><span class="op">)</span> <span class="op">~</span> <span class="va">period</span>, data <span class="op">=</span> <span class="va">cbpp</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cbpp</span>, package <span class="op">=</span> <span class="st">"lme4"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cbpp</span><span class="op">$</span><span class="va">trials</span> <span class="op">&lt;-</span> <span class="va">cbpp</span><span class="op">$</span><span class="va">size</span> <span class="op">-</span> <span class="va">cbpp</span><span class="op">$</span><span class="va">incidence</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">incidence</span>, <span class="va">trials</span><span class="op">)</span> <span class="op">~</span> <span class="va">period</span>, data <span class="op">=</span> <span class="va">cbpp</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="fu">find_response</span><span class="op">(</span><span class="va">m</span>, combine <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">find_response</span><span class="op">(</span><span class="va">m</span>, combine <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="fu">find_response</span><span class="op">(</span><span class="va">m</span>, combine <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "cbind(incidence, trials)"</span>
+<span class="r-in"><span><span class="fu">find_response</span><span class="op">(</span><span class="va">m</span>, combine <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "incidence" "trials"   </span>
 </code></pre></div>
     </div>

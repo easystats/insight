@@ -12,7 +12,7 @@ appear in the summary() output."><meta property="og:image" content="https://easy
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -140,21 +140,13 @@ appear in the <code><a href="https://rdrr.io/r/base/summary.html" class="externa
 
 
 <dt>component</dt>
-<dd><p>Which type of parameters to return, such as parameters for the
+<dd><p>Should all predictor variables, predictor variables for the
 conditional model, the zero-inflated part of the model, the dispersion
-term, the instrumental variables or marginal effects be returned? Applies
-to models with zero-inflated and/or dispersion formula, or to models with
-instrumental variables (so called fixed-effects regressions), or models
-with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model. There are three convenient shortcuts:
-<code>component = "all"</code> returns all possible parameters.
-If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
-<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned
-(everything that are fixed or random effects - depending on the <code>effects</code>
-argument - but no auxiliary parameters). For <code>component = "distributional"</code>
-(or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
-<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></dd>
+component, depending on the model.</p></dd>
 
 
 <dt>flatten</dt>

@@ -26,7 +26,7 @@ to return only certain results (see print_parameters()).'><meta property="og:ima
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,12 +143,12 @@ different models, the returned data frame always has at least four columns
     <p>The <code>Effects</code> column indicate if a parameter is a <em>fixed</em> or <em>random</em> effect.
 The <code>Component</code> can either be <em>conditional</em> or <em>zero_inflated</em>. For models
 with random effects, the <code>Group</code> column indicates the grouping factor of the
-random effects. For multivariate response models from <strong>brms</strong> or
-<strong>rstanarm</strong>, an additional <em>Response</em> column is included, to indicate
+random effects. For multivariate response models from brms or
+rstanarm, an additional <em>Response</em> column is included, to indicate
 which parameters belong to which response formula. Furthermore,
 <em>Cleaned_Parameter</em> column is returned that contains "human readable"
 parameter names (which are mostly identical to <code>Parameter</code>, except for for
-models from <strong>brms</strong> or <strong>rstanarm</strong>, or for specific terms like smooth-
+models from brms or rstanarm, or for specific terms like smooth-
 or spline-terms).</p>
     </div>
 

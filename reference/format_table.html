@@ -18,7 +18,7 @@ converts all columns into character vectors!"><meta property="og:image" content=
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,7 +128,7 @@ converts all columns into character vectors!</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
 <dd><p>A data frame of model's parameters, as returned by various functions
-of the <strong>easystats</strong>-packages. May also be a result from
+of the easystats-packages. May also be a result from
 <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code>.</p></dd>
 
 
@@ -234,17 +234,24 @@ and <a href="https://easystats.github.io/parameters/articles/model_parameters_fo
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6          1.4         0.2  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6          5.4         3.9          1.7         0.4  setosa</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/parameters/" class="external-link">"parameters"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">format_table</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">format_table</span><span class="op">(</span><span class="va">x</span>, p_digits <span class="op">=</span> <span class="st">"scientific"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: parameters</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘parameters’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:rstanarm’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     compare_models</span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">format_table</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            Parameter Coefficient   SE        95% CI t(144)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                        (Intercept)        2.64 0.57 [ 1.51, 3.77]   4.62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2               Species [versicolor]        0.90 0.80 [-0.68, 2.48]   1.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                Species [virginica]        1.27 0.82 [-0.35, 2.88]   1.55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                        Sepal Width        0.69 0.17 [ 0.36, 1.02]   4.17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Species [versicolor] × Sepal Width        0.17 0.26 [-0.34, 0.69]   0.67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Species [virginica] × Sepal Width        0.21 0.26 [-0.29, 0.72]   0.83</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.261 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.123 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.503 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.411 </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">format_table</span><span class="op">(</span><span class="va">x</span>, p_digits <span class="op">=</span> <span class="st">"scientific"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                            Parameter Coefficient   SE        95% CI t(144)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                        (Intercept)        2.64 0.57 [ 1.51, 3.77]   4.62</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2               Species [versicolor]        0.90 0.80 [-0.68, 2.48]   1.13</span>
@@ -259,13 +266,16 @@ and <a href="https://easystats.github.io/parameters/articles/model_parameters_fo
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 5.31104e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 5.02805e-01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 4.10634e-01</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://mc-stan.org/rstanarm/" class="external-link">"rstanarm"</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">&amp;&amp;</span></span></span>
-<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/parameters/" class="external-link">"parameters"</a></span>, , warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span>, refresh <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.69</span>, <span class="fl">0.89</span>, <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">format_table</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">rstanarm</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">iris</span>,</span></span>
+<span class="r-in"><span>  refresh <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">123</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.69</span>, <span class="fl">0.89</span>, <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">format_table</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Parameter Median       69% CI       89% CI       95% CI   pd  Rhat</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       (Intercept)   5.01 [4.93, 5.08] [4.86, 5.15] [4.88, 5.12] 100% 1.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 Speciesversicolor   0.93 [0.82, 1.04] [0.73, 1.14] [0.76, 1.11] 100% 1.000</span>

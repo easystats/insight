@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,10 +131,10 @@
 <div class="section level2">
 <h2 id="the-difference-between-a-dataframe-and-its-render">The difference between a dataframe and its render<a class="anchor" aria-label="anchor" href="#the-difference-between-a-dataframe-and-its-render"></a>
 </h2>
-<p>Most of objects encountered throughout the <strong>easystats</strong>
-packages are “tables”, i.e., a 2D matrix with columns and rows. In R,
-these objects are often, at their core, <em>data frames</em>. Let’s
-create one to use as an example:</p>
+<p>Most of objects encountered throughout the {easystats} packages are
+“tables”, i.e., a 2D matrix with columns and rows. In R, these objects
+are often, at their core, <em>data frames</em>. Let’s create one to use
+as an example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/">insight</a></span><span class="op">)</span></span>
 <span></span>
@@ -157,9 +157,9 @@ create one to use as an example:</p>
 <p>When I display in in the console (calling an object -
 e.g. <code>df</code> - is actually equivalent to calling
 <code>print(df)</code>), the output looks alright, but it could be
-improved. Some packages, such as <strong>knitr</strong>, have functions
-to create a nicer output. For instance, in markdown, so that it can be
-nicely rendered in markdown documents when copied:</p>
+improved. Some packages, such as {knitr}, have functions to create a
+nicer output. For instance, in markdown, so that it can be nicely
+rendered in markdown documents when copied:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">df</span>, format <span class="op">=</span> <span class="st">"markdown"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>| Variable|Group |   CI| CI_low| CI_high|      p|
@@ -301,10 +301,9 @@ B
 <div class="section level2">
 <h2 id="the-insight-workflow">The <em>insight</em> workflow<a class="anchor" aria-label="anchor" href="#the-insight-workflow"></a>
 </h2>
-<p>The <strong>insight</strong> package also contains function to
-improve the “printing”, or rendering, of tables. Its design dissociates
-two separate and independent steps: <em>formatting</em> and
-<em>exporting</em>.</p>
+<p>The {insight} package also contains function to improve the
+“printing”, or rendering, of tables. Its design dissociates two separate
+and independent steps: <em>formatting</em> and <em>exporting</em>.</p>
 <div class="section level3">
 <h3 id="formatting">Formatting<a class="anchor" aria-label="anchor" href="#formatting"></a>
 </h3>
@@ -433,23 +432,23 @@ to markdown (“md”)…</p>
 <p>…or HTML format.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">df</span>, format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></span></code></pre></div>
-<div id="vrpfcjsrsh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vrpfcjsrsh table {
+<div id="tifjurfmtg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tifjurfmtg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vrpfcjsrsh thead, #vrpfcjsrsh tbody, #vrpfcjsrsh tfoot, #vrpfcjsrsh tr, #vrpfcjsrsh td, #vrpfcjsrsh th {
+#tifjurfmtg thead, #tifjurfmtg tbody, #tifjurfmtg tfoot, #tifjurfmtg tr, #tifjurfmtg td, #tifjurfmtg th {
   border-style: none;
 }
 
-#vrpfcjsrsh p {
+#tifjurfmtg p {
   margin: 0;
   padding: 0;
 }
 
-#vrpfcjsrsh .gt_table {
+#tifjurfmtg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -475,12 +474,12 @@ to markdown (“md”)…</p>
   border-left-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_caption {
+#tifjurfmtg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vrpfcjsrsh .gt_title {
+#tifjurfmtg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -492,7 +491,7 @@ to markdown (“md”)…</p>
   border-bottom-width: 0;
 }
 
-#vrpfcjsrsh .gt_subtitle {
+#tifjurfmtg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -504,7 +503,7 @@ to markdown (“md”)…</p>
   border-top-width: 0;
 }
 
-#vrpfcjsrsh .gt_heading {
+#tifjurfmtg .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -516,13 +515,13 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_bottom_border {
+#tifjurfmtg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_col_headings {
+#tifjurfmtg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -537,7 +536,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_col_heading {
+#tifjurfmtg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -557,7 +556,7 @@ to markdown (“md”)…</p>
   overflow-x: hidden;
 }
 
-#vrpfcjsrsh .gt_column_spanner_outer {
+#tifjurfmtg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -569,15 +568,15 @@ to markdown (“md”)…</p>
   padding-right: 4px;
 }
 
-#vrpfcjsrsh .gt_column_spanner_outer:first-child {
+#tifjurfmtg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vrpfcjsrsh .gt_column_spanner_outer:last-child {
+#tifjurfmtg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vrpfcjsrsh .gt_column_spanner {
+#tifjurfmtg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -589,11 +588,11 @@ to markdown (“md”)…</p>
   width: 100%;
 }
 
-#vrpfcjsrsh .gt_spanner_row {
+#tifjurfmtg .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vrpfcjsrsh .gt_group_heading {
+#tifjurfmtg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -619,7 +618,7 @@ to markdown (“md”)…</p>
   text-align: left;
 }
 
-#vrpfcjsrsh .gt_empty_group_heading {
+#tifjurfmtg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -634,15 +633,15 @@ to markdown (“md”)…</p>
   vertical-align: middle;
 }
 
-#vrpfcjsrsh .gt_from_md > :first-child {
+#tifjurfmtg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vrpfcjsrsh .gt_from_md > :last-child {
+#tifjurfmtg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vrpfcjsrsh .gt_row {
+#tifjurfmtg .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -661,7 +660,7 @@ to markdown (“md”)…</p>
   overflow-x: hidden;
 }
 
-#vrpfcjsrsh .gt_stub {
+#tifjurfmtg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -674,7 +673,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#vrpfcjsrsh .gt_stub_row_group {
+#tifjurfmtg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -688,15 +687,15 @@ to markdown (“md”)…</p>
   vertical-align: top;
 }
 
-#vrpfcjsrsh .gt_row_group_first td {
+#tifjurfmtg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vrpfcjsrsh .gt_row_group_first th {
+#tifjurfmtg .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vrpfcjsrsh .gt_summary_row {
+#tifjurfmtg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -706,16 +705,16 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#vrpfcjsrsh .gt_first_summary_row {
+#tifjurfmtg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_first_summary_row.thick {
+#tifjurfmtg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vrpfcjsrsh .gt_last_summary_row {
+#tifjurfmtg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -725,7 +724,7 @@ to markdown (“md”)…</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_grand_summary_row {
+#tifjurfmtg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -735,7 +734,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#vrpfcjsrsh .gt_first_grand_summary_row {
+#tifjurfmtg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -745,7 +744,7 @@ to markdown (“md”)…</p>
   border-top-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_last_grand_summary_row_top {
+#tifjurfmtg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -755,11 +754,11 @@ to markdown (“md”)…</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_striped {
+#tifjurfmtg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vrpfcjsrsh .gt_table_body {
+#tifjurfmtg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -768,7 +767,7 @@ to markdown (“md”)…</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_footnotes {
+#tifjurfmtg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -782,7 +781,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_footnote {
+#tifjurfmtg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -791,7 +790,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#vrpfcjsrsh .gt_sourcenotes {
+#tifjurfmtg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -805,7 +804,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#vrpfcjsrsh .gt_sourcenote {
+#tifjurfmtg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -813,63 +812,63 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#vrpfcjsrsh .gt_left {
+#tifjurfmtg .gt_left {
   text-align: left;
 }
 
-#vrpfcjsrsh .gt_center {
+#tifjurfmtg .gt_center {
   text-align: center;
 }
 
-#vrpfcjsrsh .gt_right {
+#tifjurfmtg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vrpfcjsrsh .gt_font_normal {
+#tifjurfmtg .gt_font_normal {
   font-weight: normal;
 }
 
-#vrpfcjsrsh .gt_font_bold {
+#tifjurfmtg .gt_font_bold {
   font-weight: bold;
 }
 
-#vrpfcjsrsh .gt_font_italic {
+#tifjurfmtg .gt_font_italic {
   font-style: italic;
 }
 
-#vrpfcjsrsh .gt_super {
+#tifjurfmtg .gt_super {
   font-size: 65%;
 }
 
-#vrpfcjsrsh .gt_footnote_marks {
+#tifjurfmtg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vrpfcjsrsh .gt_asterisk {
+#tifjurfmtg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vrpfcjsrsh .gt_indent_1 {
+#tifjurfmtg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vrpfcjsrsh .gt_indent_2 {
+#tifjurfmtg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vrpfcjsrsh .gt_indent_3 {
+#tifjurfmtg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vrpfcjsrsh .gt_indent_4 {
+#tifjurfmtg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vrpfcjsrsh .gt_indent_5 {
+#tifjurfmtg .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -934,23 +933,23 @@ to markdown (“md”)…</p>
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span>ci_brackets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"("</span>, <span class="st">")"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></span></code></pre></div>
-<div id="phfapdalhw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#phfapdalhw table {
+<div id="jbyvrhfmnk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jbyvrhfmnk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#phfapdalhw thead, #phfapdalhw tbody, #phfapdalhw tfoot, #phfapdalhw tr, #phfapdalhw td, #phfapdalhw th {
+#jbyvrhfmnk thead, #jbyvrhfmnk tbody, #jbyvrhfmnk tfoot, #jbyvrhfmnk tr, #jbyvrhfmnk td, #jbyvrhfmnk th {
   border-style: none;
 }
 
-#phfapdalhw p {
+#jbyvrhfmnk p {
   margin: 0;
   padding: 0;
 }
 
-#phfapdalhw .gt_table {
+#jbyvrhfmnk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -976,12 +975,12 @@ to markdown (“md”)…</p>
   border-left-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_caption {
+#jbyvrhfmnk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#phfapdalhw .gt_title {
+#jbyvrhfmnk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -993,7 +992,7 @@ to markdown (“md”)…</p>
   border-bottom-width: 0;
 }
 
-#phfapdalhw .gt_subtitle {
+#jbyvrhfmnk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1005,7 +1004,7 @@ to markdown (“md”)…</p>
   border-top-width: 0;
 }
 
-#phfapdalhw .gt_heading {
+#jbyvrhfmnk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1017,13 +1016,13 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_bottom_border {
+#jbyvrhfmnk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_col_headings {
+#jbyvrhfmnk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1038,7 +1037,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_col_heading {
+#jbyvrhfmnk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1058,7 +1057,7 @@ to markdown (“md”)…</p>
   overflow-x: hidden;
 }
 
-#phfapdalhw .gt_column_spanner_outer {
+#jbyvrhfmnk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1070,15 +1069,15 @@ to markdown (“md”)…</p>
   padding-right: 4px;
 }
 
-#phfapdalhw .gt_column_spanner_outer:first-child {
+#jbyvrhfmnk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#phfapdalhw .gt_column_spanner_outer:last-child {
+#jbyvrhfmnk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#phfapdalhw .gt_column_spanner {
+#jbyvrhfmnk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1090,11 +1089,11 @@ to markdown (“md”)…</p>
   width: 100%;
 }
 
-#phfapdalhw .gt_spanner_row {
+#jbyvrhfmnk .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#phfapdalhw .gt_group_heading {
+#jbyvrhfmnk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1120,7 +1119,7 @@ to markdown (“md”)…</p>
   text-align: left;
 }
 
-#phfapdalhw .gt_empty_group_heading {
+#jbyvrhfmnk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1135,15 +1134,15 @@ to markdown (“md”)…</p>
   vertical-align: middle;
 }
 
-#phfapdalhw .gt_from_md > :first-child {
+#jbyvrhfmnk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#phfapdalhw .gt_from_md > :last-child {
+#jbyvrhfmnk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#phfapdalhw .gt_row {
+#jbyvrhfmnk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1162,7 +1161,7 @@ to markdown (“md”)…</p>
   overflow-x: hidden;
 }
 
-#phfapdalhw .gt_stub {
+#jbyvrhfmnk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1175,7 +1174,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#phfapdalhw .gt_stub_row_group {
+#jbyvrhfmnk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1189,15 +1188,15 @@ to markdown (“md”)…</p>
   vertical-align: top;
 }
 
-#phfapdalhw .gt_row_group_first td {
+#jbyvrhfmnk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#phfapdalhw .gt_row_group_first th {
+#jbyvrhfmnk .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#phfapdalhw .gt_summary_row {
+#jbyvrhfmnk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1207,16 +1206,16 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#phfapdalhw .gt_first_summary_row {
+#jbyvrhfmnk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_first_summary_row.thick {
+#jbyvrhfmnk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#phfapdalhw .gt_last_summary_row {
+#jbyvrhfmnk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1226,7 +1225,7 @@ to markdown (“md”)…</p>
   border-bottom-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_grand_summary_row {
+#jbyvrhfmnk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1236,7 +1235,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#phfapdalhw .gt_first_grand_summary_row {
+#jbyvrhfmnk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1246,7 +1245,7 @@ to markdown (“md”)…</p>
   border-top-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_last_grand_summary_row_top {
+#jbyvrhfmnk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1256,11 +1255,11 @@ to markdown (“md”)…</p>
   border-bottom-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_striped {
+#jbyvrhfmnk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#phfapdalhw .gt_table_body {
+#jbyvrhfmnk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1269,7 +1268,7 @@ to markdown (“md”)…</p>
   border-bottom-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_footnotes {
+#jbyvrhfmnk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1283,7 +1282,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_footnote {
+#jbyvrhfmnk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1292,7 +1291,7 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#phfapdalhw .gt_sourcenotes {
+#jbyvrhfmnk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1306,7 +1305,7 @@ to markdown (“md”)…</p>
   border-right-color: #D3D3D3;
 }
 
-#phfapdalhw .gt_sourcenote {
+#jbyvrhfmnk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1314,63 +1313,63 @@ to markdown (“md”)…</p>
   padding-right: 5px;
 }
 
-#phfapdalhw .gt_left {
+#jbyvrhfmnk .gt_left {
   text-align: left;
 }
 
-#phfapdalhw .gt_center {
+#jbyvrhfmnk .gt_center {
   text-align: center;
 }
 
-#phfapdalhw .gt_right {
+#jbyvrhfmnk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#phfapdalhw .gt_font_normal {
+#jbyvrhfmnk .gt_font_normal {
   font-weight: normal;
 }
 
-#phfapdalhw .gt_font_bold {
+#jbyvrhfmnk .gt_font_bold {
   font-weight: bold;
 }
 
-#phfapdalhw .gt_font_italic {
+#jbyvrhfmnk .gt_font_italic {
   font-style: italic;
 }
 
-#phfapdalhw .gt_super {
+#jbyvrhfmnk .gt_super {
   font-size: 65%;
 }
 
-#phfapdalhw .gt_footnote_marks {
+#jbyvrhfmnk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#phfapdalhw .gt_asterisk {
+#jbyvrhfmnk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#phfapdalhw .gt_indent_1 {
+#jbyvrhfmnk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#phfapdalhw .gt_indent_2 {
+#jbyvrhfmnk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#phfapdalhw .gt_indent_3 {
+#jbyvrhfmnk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#phfapdalhw .gt_indent_4 {
+#jbyvrhfmnk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#phfapdalhw .gt_indent_5 {
+#jbyvrhfmnk .gt_indent_5 {
   text-indent: 25px;
 }
 </style>

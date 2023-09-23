@@ -14,7 +14,7 @@ coef(summary())."><meta property="og:image" content="https://easystats.github.io
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,39 +104,13 @@ estimates. In most cases, this is the related column from
 <span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, column_index <span class="op">=</span> <span class="fl">3</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for glmmTMB</span></span>
-<span><span class="fu">get_statistic</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"dispersion"</span><span class="op">)</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for clm2</span></span>
-<span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"scale"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for betamfx</span></span>
-<span><span class="fu">get_statistic</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"precision"</span>, <span class="st">"marginal"</span><span class="op">)</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for logitmfx</span></span>
-<span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"marginal"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for mjoint</span></span>
-<span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"survival"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="st">"all"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for emmGrid</span></span>
 <span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, adjust <span class="op">=</span> <span class="st">"none"</span>, merge_parameters <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for gee</span></span>
-<span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, robust <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for betareg</span></span>
-<span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"precision"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for DirichletRegModel</span></span>
-<span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"precision"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, robust <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -163,14 +137,29 @@ summary-output.</p></dd>
 
 
 <dt>component</dt>
-<dd><p>Should all parameters, parameters for the conditional model,
-or for the zero-inflated part of the model be returned? Applies to models
-with zero-inflated component. <code>component</code> may be one of
-<code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code> or <code>"all"</code>
-(default). For models with smooth terms, <code>component = "smooth_terms"</code>
-is also possible. May be abbreviated. Note that the <em>conditional</em>
-component is also called <em>count</em> or <em>mean</em> component, depending
-on the model.</p></dd>
+<dd><p>String, indicating the model component for which parameters
+should be returned. The default for all models is <code>"all"</code>, which returns
+the requested information for all available model components. Furthermore,
+there are specific options depending on the model class. <code>component</code> then
+may be one of:</p><ul><li><p>For zero-inflated models (<code>gmmTMB</code>, <code>hurdle</code>, <code>zeroinfl</code>, ...) can also
+be <code>"conditional"</code> or <code>"zero-inflated"</code>. Note that the <em>conditional</em>
+component is also called <em>count</em> or <em>mean</em> component, depending on the
+model. <code>glmmTMB</code> also has a <code>"dispersion"</code> component.</p></li>
+<li><p>For models with smooth terms, <code>component = "smooth_terms"</code> returns the
+test statistic for the smooth terms.</p></li>
+<li><p>For models of class <code>mhurdle</code>, may also be one of  <code>"conditional"</code>,
+<code>"zero_inflated"</code>, <code>"infrequent_purchase"</code> or <code>"auxiliary"</code>.</p></li>
+<li><p>For models of class <code>clm2</code> or <code>clmm2</code>, may also be <code>"scale"</code>.</p></li>
+<li><p>For models of class <code>betareg</code>, <code>betaor</code> or <code>betamfx</code>, may also be
+<code>"precision"</code>. For other <code>*mfx</code> models (<code>logitmfx</code>, <code>betamfx</code>, ...),
+may also be <code>"marginal"</code>.</p></li>
+<li><p>For models of class <code>mvord</code>, may also be <code>"thresholds"</code> or
+<code>"correlation"</code>.</p></li>
+<li><p>For models of class <code>selection</code>, may also be <code>"selection"</code>, <code>"outcome"</code>
+or <code>"auxiliary"</code>.</p></li>
+<li><p>For models of class <code>glmx</code>, may also be <code>"extra"</code>.</p></li>
+<li><p>For models of class <code>averaging</code>, may also be <code>"full"</code>.</p></li>
+</ul></dd>
 
 
 <dt>ci</dt>

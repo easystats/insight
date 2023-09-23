@@ -18,7 +18,7 @@ below."><meta property="og:image" content="https://easystats.github.io/insight/r
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -192,23 +192,20 @@ from the zero-inflated model component.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function prepares data frames that contain information
-about model parameters for clear printing.
-<br><br>
-First, <code>x</code> is required, which should either be a model object or a
+about model parameters for clear printing.</p>
+<p>First, <code>x</code> is required, which should either be a model object or a
 prepared data frame as returned by <code><a href="clean_parameters.html">clean_parameters()</a></code>. If
 <code>x</code> is a model, <code><a href="clean_parameters.html">clean_parameters()</a></code> is called on that model
 object to get information with which model components the parameters
-are associated.
-<br><br>
-Then, <code>...</code> take one or more data frames that also contain information
+are associated.</p>
+<p>Then, <code>...</code> take one or more data frames that also contain information
 about parameters from the same model, but also have additional information
 provided by other methods. For instance, a data frame in <code>...</code> might
 be the result of, for instance, <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>,
 or <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>, where we have a) a
 <code>Parameter</code> column and b) columns with other parameter values (like
-CI, HDI, test statistic, etc.).
-<br><br>
-Now we have a data frame with model parameters and information about the
+CI, HDI, test statistic, etc.).</p>
+<p>Now we have a data frame with model parameters and information about the
 association to the different model components, a data frame with model
 parameters, and some summary statistics. <code>print_parameters()</code> then merges
 these data frames, so the parameters or statistics of interest are also

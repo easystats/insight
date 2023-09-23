@@ -16,7 +16,7 @@ from as.data.frame()."><meta property="og:image" content="https://easystats.gith
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -160,6 +160,17 @@ from <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-l
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for stanmvreg</span></span>
+<span><span class="fu"><a href="find_parameters.html">find_parameters</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,</span>
+<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"smooth_terms"</span>, <span class="st">"sigma"</span>,</span>
+<span>    <span class="st">"distributional"</span>, <span class="st">"auxiliary"</span><span class="op">)</span>,</span>
+<span>  flatten <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  parameters <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for sim.merMod</span></span>
 <span><span class="fu"><a href="find_parameters.html">find_parameters</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
@@ -177,21 +188,13 @@ from <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-l
 
 
 <dt>component</dt>
-<dd><p>Which type of parameters to return, such as parameters for the
+<dd><p>Should all predictor variables, predictor variables for the
 conditional model, the zero-inflated part of the model, the dispersion
-term, the instrumental variables or marginal effects be returned? Applies
-to models with zero-inflated and/or dispersion formula, or to models with
-instrumental variables (so called fixed-effects regressions), or models
-with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model. There are three convenient shortcuts:
-<code>component = "all"</code> returns all possible parameters.
-If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
-<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned
-(everything that are fixed or random effects - depending on the <code>effects</code>
-argument - but no auxiliary parameters). For <code>component = "distributional"</code>
-(or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
-<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></dd>
+component, depending on the model.</p></dd>
 
 
 <dt>flatten</dt>
@@ -218,16 +221,16 @@ should be returned.</p></dd>
     
 
 <p>A list of parameter names. For simple models, only one list-element,
-<code>conditional</code>, is returned. For more complex models, the returned
-list may have following elements:</p><ul><li><p><code>conditional</code>, the "fixed effects" part from the model</p></li>
+<code>conditional</code>, is returned. For more complex models, the returned list may
+have following elements:</p><ul><li><p><code>conditional</code>, the "fixed effects" part from the model</p></li>
 <li><p><code>random</code>, the "random effects" part from the model</p></li>
-<li><p><code>zero_inflated</code>, the "fixed effects" part from the
-zero-inflation component of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the "random effects" part from the
-zero-inflation component of the model</p></li>
+<li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component
+of the model</p></li>
+<li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation
+component of the model</p></li>
 <li><p><code>smooth_terms</code>, the smooth parameters</p></li>
-</ul><p>Furthermore, some models, especially from <span class="pkg">brms</span>, can also return
-auxiliary parameters. These may be one of the following:</p><ul><li><p><code>sigma</code>, the residual standard deviation (auxiliary parameter)</p></li>
+</ul><p>Furthermore, some models, especially from brms, can also return auxiliary
+parameters. These may be one of the following:</p><ul><li><p><code>sigma</code>, the residual standard deviation (auxiliary parameter)</p></li>
 <li><p><code>dispersion</code>, the dispersion parameters (auxiliary parameter)</p></li>
 <li><p><code>beta</code>, the beta parameter (auxiliary parameter)</p></li>
 <li><p><code>simplex</code>, simplex parameters of monotonic effects (<span class="pkg">brms</span> only)</p></li>

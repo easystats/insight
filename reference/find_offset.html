@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,20 +120,12 @@
 <span class="r-in"><span><span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="va">N</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">yhat</span><span class="op">)</span><span class="op">)</span> <span class="co"># Poisson process</span></span></span>
 <span class="r-in"><span><span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">N</span>, <span class="fl">1</span>, <span class="fl">0.3</span><span class="op">)</span>, <span class="fl">0</span>, <span class="va">dat</span><span class="op">$</span><span class="va">y</span><span class="op">)</span> <span class="co"># Zero-inflation process</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="http://github.com/atahk/pscl" class="external-link">"pscl"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/zeroinfl.html" class="external-link">zeroinfl</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html" class="external-link">offset</a></span><span class="op">(</span><span class="va">logOff</span><span class="op">)</span> <span class="op">+</span> <span class="va">x</span> <span class="op">|</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">dat</span>, dist <span class="op">=</span> <span class="st">"poisson"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">find_offset</span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">zeroinfl</span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html" class="external-link">offset</a></span><span class="op">(</span><span class="va">logOff</span><span class="op">)</span> <span class="op">+</span> <span class="va">x</span> <span class="op">|</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">dat</span>, dist <span class="op">=</span> <span class="st">"poisson"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">find_offset</span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "logOff"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/zeroinfl.html" class="external-link">zeroinfl</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">|</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">dat</span>, offset <span class="op">=</span> <span class="va">logOff</span>, dist <span class="op">=</span> <span class="st">"poisson"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">find_offset</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: pscl</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Classes and Methods for R developed in the</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Political Science Computational Laboratory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Department of Political Science</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Stanford University</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Simon Jackman</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> hurdle and zeroinfl functions by Achim Zeileis</span>
+<span class="r-in"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">zeroinfl</span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">|</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">dat</span>, offset <span class="op">=</span> <span class="va">logOff</span>, dist <span class="op">=</span> <span class="st">"poisson"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">find_offset</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "logOff"</span>
 </code></pre></div>
     </div>

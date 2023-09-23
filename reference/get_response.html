@@ -14,7 +14,7 @@ from all response variables is returned."><meta property="og:image" content="htt
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -157,15 +157,20 @@ that have no missing data in the variables used for model fitting.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">cbpp</span><span class="op">$</span><span class="va">trials</span> <span class="op">&lt;-</span> <span class="va">cbpp</span><span class="op">$</span><span class="va">size</span> <span class="op">-</span> <span class="va">cbpp</span><span class="op">$</span><span class="va">incidence</span></span></span>
-<span class="r-in"><span>  <span class="va">dat</span> <span class="op">&lt;&lt;-</span> <span class="va">cbpp</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cbpp</span><span class="op">$</span><span class="va">trials</span> <span class="op">&lt;-</span> <span class="va">cbpp</span><span class="op">$</span><span class="va">size</span> <span class="op">-</span> <span class="va">cbpp</span><span class="op">$</span><span class="va">incidence</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;&lt;-</span> <span class="va">cbpp</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">incidence</span>, <span class="va">trials</span><span class="op">)</span> <span class="op">~</span> <span class="va">period</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">get_response</span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_response</span><span class="op">(</span><span class="va">m</span>, select <span class="op">=</span> <span class="st">"incidence"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">incidence</span>, <span class="va">trials</span><span class="op">)</span> <span class="op">~</span> <span class="va">period</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">get_response</span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   incidence trials</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         2     12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         3      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         4      5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         0      5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         3     19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         1     17</span>
+<span class="r-in"><span><span class="fu">get_response</span><span class="op">(</span><span class="va">m</span>, select <span class="op">=</span> <span class="st">"incidence"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
