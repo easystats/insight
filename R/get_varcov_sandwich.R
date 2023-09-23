@@ -106,7 +106,7 @@
       PC = "vcovPC",
       CL = "vcovCL",
       PL = "vcovPL",
-      kenward-roger = "vcovAdj"
+      `kenward-roger` = "vcovAdj"
     )
   }
 
