@@ -30,7 +30,7 @@ in unreliable and overly complex (or non-estimable) estimates and standard
 errors.
 }
 \subsection{Inspect model convergence}{
-\strong{lme4} performs a convergence-check (see \code{?lme4::convergence}),
+{lme4} performs a convergence-check (see \code{?lme4::convergence}),
 however, as as discussed \href{https://github.com/lme4/lme4/issues/120}{here}
 and suggested by one of the lme4-authors in
 \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment},

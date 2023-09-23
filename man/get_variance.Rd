@@ -141,10 +141,10 @@ for mixed models with random intercepts and slopes.
 }
 \note{
 This function supports models of class \code{merMod} (including models
-from \strong{blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB},
+from {blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB},
 \code{MixMod}, \code{lme}, \code{mixed}, \code{rlmerMod}, \code{stanreg},
 \code{brmsfit} or \code{wbm}. Support for objects of class \code{MixMod}
-(\strong{GLMMadaptive}), \code{lme} (\strong{nlme}) or \code{brmsfit} (\strong{brms})
+({GLMMadaptive}), \code{lme} ({nlme}) or \code{brmsfit} ({brms})
 is experimental and may not work for all models.
 }
 \examples{

@@ -118,7 +118,7 @@ component of the model
 \item \code{smooth_terms}, the smooth parameters
 }
 
-Furthermore, some models, especially from \strong{brms}, can also return auxiliary
+Furthermore, some models, especially from {brms}, can also return auxiliary
 parameters. These may be one of the following:
 \itemize{
 \item \code{sigma}, the residual standard deviation (auxiliary parameter)

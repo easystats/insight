@@ -27,7 +27,7 @@
 #'   component of the model
 #' - `smooth_terms`, the smooth parameters
 #'
-#' Furthermore, some models, especially from **brms**, can also return auxiliary
+#' Furthermore, some models, especially from {brms}, can also return auxiliary
 #' parameters. These may be one of the following:
 #'
 #' - `sigma`, the residual standard deviation (auxiliary parameter)

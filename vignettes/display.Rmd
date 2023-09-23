@@ -26,7 +26,7 @@ if (!requireNamespace("poorman", quietly = TRUE) ||
 
 ## The difference between a dataframe and its render
 
-Most of objects encountered throughout the **easystats** packages are "tables", i.e., a 2D matrix with columns and rows. In R, these objects are often, at their core, *data frames*. Let's create one to use as an example:
+Most of objects encountered throughout the {easystats} packages are "tables", i.e., a 2D matrix with columns and rows. In R, these objects are often, at their core, *data frames*. Let's create one to use as an example:
 
 ```{r, warning=FALSE, message=FALSE}
 library(insight)
@@ -43,7 +43,7 @@ df <- data.frame(
 df
 ```
 
-When I display in in the console (calling an object - e.g. `df` - is actually equivalent to calling `print(df)`), the output looks alright, but it could be improved. Some packages, such as **knitr**, have functions to create a nicer output. For instance, in markdown, so that it can be nicely rendered in markdown documents when copied:
+When I display in in the console (calling an object - e.g. `df` - is actually equivalent to calling `print(df)`), the output looks alright, but it could be improved. Some packages, such as {knitr}, have functions to create a nicer output. For instance, in markdown, so that it can be nicely rendered in markdown documents when copied:
 
 ```{r, eval=FALSE}
 knitr::kable(df, format = "markdown")
@@ -67,7 +67,7 @@ knitr::kable(df, format = "html")
 
 ## The *insight* workflow
 
-The **insight** package also contains function to improve the "printing", or rendering, of tables. Its design dissociates two separate and independent steps: *formatting* and *exporting*.
+The {insight} package also contains function to improve the "printing", or rendering, of tables. Its design dissociates two separate and independent steps: *formatting* and *exporting*.
 
 ### Formatting
 
