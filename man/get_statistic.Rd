@@ -34,8 +34,9 @@ summary-output.}
 
 \item{component}{String, indicating the model component for which parameters
 should be returned. The default for all models is \code{"all"}, which returns
-all available model components. Furthermore, there are specific options
-depending on the model class. \code{component} then may be one of:
+the requested information for all available model components. Furthermore,
+there are specific options depending on the model class. \code{component} then
+may be one of:
 \itemize{
 \item For zero-inflated models (\code{gmmTMB}, \code{hurdle}, \code{zeroinfl}, ...) can also
 be \code{"conditional"} or \code{"zero-inflated"}. Note that the \emph{conditional}

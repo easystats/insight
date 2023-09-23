@@ -13,8 +13,9 @@
 #'   summary-output.
 #' @param component String, indicating the model component for which parameters
 #'   should be returned. The default for all models is `"all"`, which returns
-#'   all available model components. Furthermore, there are specific options
-#'   depending on the model class. `component` then may be one of:
+#'   the requested information for all available model components. Furthermore,
+#'   there are specific options depending on the model class. `component` then
+#'   may be one of:
 #'
 #'   - For zero-inflated models (`gmmTMB`, `hurdle`, `zeroinfl`, ...) can also
 #'     be `"conditional"` or `"zero-inflated"`. Note that the *conditional*
