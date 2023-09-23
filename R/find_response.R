@@ -109,9 +109,9 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
   survial <- safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
-    "conditional" = conditional,
-    "survial" = survial,
-    "all" = c(conditional, survial)
+    conditional = conditional,
+    survial = survial,
+    all = c(conditional, survial)
   )
 
   unlist(lapply(resp, check_cbind, combine = combine, model = x))
@@ -135,9 +135,9 @@ find_response.joint <- function(x,
   survial <- safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
-    "conditional" = conditional,
-    "survial" = survial,
-    "all" = c(conditional, survial)
+    conditional = conditional,
+    survial = survial,
+    all = c(conditional, survial)
   )
 
   unlist(lapply(resp, check_cbind, combine = combine, model = x))
@@ -206,7 +206,7 @@ check_cbind <- function(resp, combine, model) {
   }
 
   # exception
-  if (inherits(model, "clogit") && startsWith(resp[1], "rep(") && length(resp) == 3) {
+  if (inherits(model, "clogit") && startsWith(resp[1], "rep(") && length(resp) == 3L) {
     resp <- c(paste0(resp[1], resp[2]), resp[3])
   }
 

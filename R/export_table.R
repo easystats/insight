@@ -1008,9 +1008,9 @@ print.insight_table <- function(x, ...) {
         col_align <- c(
           col_align,
           switch(substr(align, i, i),
-            "l" = "left",
-            "r" = "right",
-            "center"
+            l = "left",
+            r = "right",
+            center
           )
         )
       }

@@ -563,8 +563,8 @@ get_parameters.hglm <- function(x,
 
   if (effects == "fixed") {
     out <- switch(component,
-      "conditional" = fixed,
-      "dispersion" = dispersion,
+      conditional = fixed,
+      dispersion = dispersion,
       rbind(fixed, dispersion)
     )
     text_remove_backticks(out)
@@ -572,8 +572,8 @@ get_parameters.hglm <- function(x,
     text_remove_backticks(random)
   } else if (effects == "all") {
     out <- switch(component,
-      "conditional" = rbind(fixed, random),
-      "dispersion" = dispersion,
+      conditional = rbind(fixed, random),
+      dispersion = dispersion,
       rbind(fixed, random, dispersion)
     )
     text_remove_backticks(out)
@@ -608,9 +608,9 @@ get_parameters.mixor <- function(x, effects = c("all", "fixed", "random"), ...) 
   }
 
   switch(effects,
-    "all" = rbind(fixed, random),
-    "fixed" = fixed,
-    "random" = random
+    all = rbind(fixed, random),
+    fixed = fixed,
+    random = random
   )
 }
 

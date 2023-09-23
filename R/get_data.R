@@ -641,10 +641,10 @@ get_data.zcpglm <- function(x,
   }
 
   mf <- switch(component,
-    "all" = do.call(cbind, compact_list(list(mf_tweedie, mf_zero))),
-    "conditional" = mf_tweedie,
-    "zi" = ,
-    "zero_inflated" = mf_zero
+    all = do.call(cbind, compact_list(list(mf_tweedie, mf_zero))),
+    conditional = mf_tweedie,
+    zi = ,
+    zero_inflated = mf_zero
   )
   .prepare_get_data(x, stats::na.omit(mf), verbose = verbose)
 }

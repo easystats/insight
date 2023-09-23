@@ -183,10 +183,10 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
   }
 
   l <- compact_list(list(
-    "conditional" = conditional,
-    "cluster" = cluster,
-    "instruments" = instruments,
-    "endogenous" = endo
+    conditional = conditional,
+    cluster = cluster,
+    instruments = instruments,
+    endogenous = endo
   ))
   if (flatten) {
     unique(unlist(l, use.names = FALSE))

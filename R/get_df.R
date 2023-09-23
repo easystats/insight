@@ -228,7 +228,7 @@ get_df.phylolm <- function(x, type = "residual", ...) {
     choices = c("wald", "residual", "normal", "model")
   )
   type <- switch(type,
-    "model" = stats::logLik(x)$df,
+    model = stats::logLik(x)$df,
     get_df.default(x, type = "residual")
   )
 }
