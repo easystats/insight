@@ -8,17 +8,14 @@
 #' @return A list of character vectors that represent the interaction terms.
 #'  Depending on `component`, the returned list has following
 #'  elements (or `NULL`, if model has no interaction term):
-#'  \itemize{
-#'    \item `conditional`, interaction terms that belong to the "fixed
-#'    effects" terms from the model
 #'
-#'    \item `zero_inflated`, interaction terms that belong to the "fixed
-#'    effects" terms from the zero-inflation component of the model
-#'
-#'    \item `instruments`, for fixed-effects regressions like `ivreg`,
-#'    `felm` or `plm`, interaction terms that belong to the
+#' - `conditional`, interaction terms that belong to the "fixed
+#'   effects" terms from the model
+#' - `zero_inflated`, interaction terms that belong to the "fixed
+#'   effects" terms from the zero-inflation component of the model
+#' - `instruments`, for fixed-effects regressions like `ivreg`,
+#'   `felm` or `plm`, interaction terms that belong to the
 #'    instrumental variables
-#'  }
 #'
 #' @examples
 #' data(mtcars)

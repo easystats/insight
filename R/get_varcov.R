@@ -37,11 +37,11 @@
 #'    - Other `sandwich` package functions: `"vcovHAC"`, `"vcovPC"`, `"vcovCL"`,
 #'      `"vcovPL"`.
 #' @param vcov_args List of arguments to be passed to the function identified by
-#'   the `vcov` argument. This function is typically supplied by the **sandwich**
-#'   or **clubSandwich** packages. Please refer to their documentation (e.g.,
+#'   the `vcov` argument. This function is typically supplied by the {sandwich}
+#'   or {clubSandwich} packages. Please refer to their documentation (e.g.,
 #'   `?sandwich::vcovHAC`) to see the list of available arguments. If no estimation
 #'   type (argument `type`) is given, the default type for `"HC"` (or `"vcovHC"`)
-#'   equals the default from the **sandwich** package; for type `"CR"` (or
+#'   equals the default from the {sandwich} package; for type `"CR"` (or
 #'   `"vcoCR"`), the default is set to `"CR3"`.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
@@ -211,8 +211,8 @@ get_varcov.betareg <- function(x,
   component <- match.arg(component)
 
   vc <- switch(component,
-    "conditional" = stats::vcov(object = x, model = "mean"),
-    "precision" = stats::vcov(object = x, model = "precision"),
+    conditional = stats::vcov(object = x, model = "mean"),
+    precision = stats::vcov(object = x, model = "precision"),
     stats::vcov(object = x)
   )
   .process_vcov(vc, verbose, ...)
@@ -264,9 +264,9 @@ get_varcov.clm2 <- function(x,
   }
 
   range <- switch(component,
-    "all" = 1:(n_scale + n_intercepts + n_location),
-    "conditional" = 1:(n_intercepts + n_location),
-    "scale" = (1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)
+    all = 1:(n_scale + n_intercepts + n_location),
+    conditional = 1:(n_intercepts + n_location),
+    scale = (1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)
   )
 
   vc <- vc[range, range, drop = FALSE]
@@ -438,9 +438,9 @@ get_varcov.hurdle <- function(x,
 
   if (is.null(vcov)) {
     vc <- switch(component,
-      "conditional" = stats::vcov(object = x, model = "count"),
-      "zi" = ,
-      "zero_inflated" = stats::vcov(object = x, model = "zero"),
+      conditional = stats::vcov(object = x, model = "count"),
+      zi = ,
+      zero_inflated = stats::vcov(object = x, model = "zero"),
       stats::vcov(object = x)
     )
   } else {
@@ -451,9 +451,9 @@ get_varcov.hurdle <- function(x,
       ...
     )
     keep <- switch(component,
-      "conditional" = startsWith(colnames(vc), "count_"),
-      "zi" = ,
-      "zero_inflated" = startsWith(colnames(vc), "zero_"),
+      conditional = startsWith(colnames(vc), "count_"),
+      zi = ,
+      zero_inflated = startsWith(colnames(vc), "zero_"),
       seq_len(ncol(vc))
     )
     vc <- vc[keep, keep, drop = FALSE]
@@ -484,9 +484,9 @@ get_varcov.zcpglm <- function(x,
   zero <- which(startsWith(rownames(vc), "zero_"))
 
   vc <- switch(component,
-    "conditional" = vc[tweedie, tweedie, drop = FALSE],
-    "zi" = ,
-    "zero_inflated" = vc[zero, zero, drop = FALSE],
+    conditional = vc[tweedie, tweedie, drop = FALSE],
+    zi = ,
+    zero_inflated = vc[zero, zero, drop = FALSE],
     vc[c(tweedie, zero), c(tweedie, zero), drop = FALSE]
   )
   .process_vcov(vc, verbose, ...)
@@ -507,10 +507,10 @@ get_varcov.glmmTMB <- function(x,
   component <- match.arg(component)
 
   vc <- switch(component,
-    "conditional" = stats::vcov(x)[["cond"]],
-    "zi" = ,
-    "zero_inflated" = stats::vcov(x)[["zi"]],
-    "dispersion" = stats::vcov(x)[["disp"]],
+    conditional = stats::vcov(x)[["cond"]],
+    zi = ,
+    zero_inflated = stats::vcov(x)[["zi"]],
+    dispersion = stats::vcov(x)[["disp"]],
     stats::vcov(x, full = TRUE)
   )
   .process_vcov(vc, verbose, ...)
@@ -540,11 +540,11 @@ get_varcov.MixMod <- function(x,
     vc <- random_vc
   } else {
     vc <- switch(component,
-      "conditional" = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
-      "zero_inflated" = ,
-      "zi" = stats::vcov(x, parm = "all", sandwich = robust),
-      "auxiliary" = ,
-      "dispersion" = stats::vcov(x, parm = "extra", sandwich = robust),
+      conditional = stats::vcov(x, parm = "fixed-effects", sandwich = robust),
+      zero_inflated = ,
+      zi = stats::vcov(x, parm = "all", sandwich = robust),
+      auxiliary = ,
+      dispersion = stats::vcov(x, parm = "extra", sandwich = robust),
       stats::vcov(x, parm = "all", sandwich = robust)
     )
 

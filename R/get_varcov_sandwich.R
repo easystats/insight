@@ -64,7 +64,7 @@
     } else if (is.null(vcov_fun)) {
       # set defaults
       vcov_args[["type"]] <- switch(vcov_fun,
-        "CR" = "CR3",
+        CR = "CR3",
         NULL
       )
     }
@@ -80,33 +80,33 @@
 
   if (!grepl("^(vcov|kernHAC|NeweyWest)", vcov_fun)) {
     vcov_fun <- switch(vcov_fun,
-      "HC0" = ,
-      "HC1" = ,
-      "HC2" = ,
-      "HC3" = ,
-      "HC4" = ,
-      "HC4m" = ,
-      "HC5" = ,
-      "HC" = "vcovHC",
-      "CR0" = ,
-      "CR1" = ,
-      "CR1p" = ,
-      "CR1S" = ,
-      "CR2" = ,
-      "CR3" = ,
-      "CR" = "vcovCR",
-      "xy" = ,
-      "residual" = ,
-      "wild" = ,
-      "mammen" = ,
-      "webb" = ,
-      "BS" = "vcovBS",
-      "OPG" = "vcovOPG",
-      "HAC" = "vcovHAC",
-      "PC" = "vcovPC",
-      "CL" = "vcovCL",
-      "PL" = "vcovPL",
-      "kenward-roger" = "vcovAdj"
+      HC0 = ,
+      HC1 = ,
+      HC2 = ,
+      HC3 = ,
+      HC4 = ,
+      HC4m = ,
+      HC5 = ,
+      HC = "vcovHC",
+      CR0 = ,
+      CR1 = ,
+      CR1p = ,
+      CR1S = ,
+      CR2 = ,
+      CR3 = ,
+      CR = "vcovCR",
+      xy = ,
+      residual = ,
+      wild = ,
+      mammen = ,
+      webb = ,
+      BS = "vcovBS",
+      OPG = "vcovOPG",
+      HAC = "vcovHAC",
+      PC = "vcovPC",
+      CL = "vcovCL",
+      PL = "vcovPL",
+      `kenward-roger` = "vcovAdj"
     )
   }
 

@@ -2,69 +2,67 @@
 #' @name find_formula
 #'
 #' @description Returns the formula(s) for the different parts of a model
-#'    (like fixed or random effects, zero-inflated component, ...).
-#'    `formula_ok()` checks if a model formula has valid syntax
-#'    regarding writing `TRUE` instead of `T` inside `poly()`
-#'    and that no data names are used (i.e. no `data$variable`, but rather
-#'    `variable`).
+#'  (like fixed or random effects, zero-inflated component, ...).
+#'  `formula_ok()` checks if a model formula has valid syntax
+#'  regarding writing `TRUE` instead of `T` inside `poly()`
+#'  and that no data names are used (i.e. no `data$variable`, but rather
+#'  `variable`).
 #'
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
 #' @return A list of formulas that describe the model. For simple models,
-#'    only one list-element, `conditional`, is returned. For more complex
-#'    models, the returned list may have following elements:
+#'  only one list-element, `conditional`, is returned. For more complex
+#'  models, the returned list may have following elements:
 #'
-#'    - `conditional`, the "fixed effects" part from the model (in the
-#'      context of fixed-effects or instrumental variable regression, also
-#'      called *regressors*) . One exception are `DirichletRegModel` models
-#'      from \pkg{DirichletReg}, which has two or three components,
-#'      depending on `model`.
+#'  - `conditional`, the "fixed effects" part from the model (in the
+#'    context of fixed-effects or instrumental variable regression, also
+#'    called *regressors*) . One exception are `DirichletRegModel` models
+#'    from {DirichletReg}, which has two or three components,
+#'    depending on `model`.
 #'
-#'    - `random`, the "random effects" part from the model (or the
-#'      `id` for gee-models and similar)
+#'  - `random`, the "random effects" part from the model (or the
+#'    `id` for gee-models and similar)
 #'
-#'    - `zero_inflated`, the "fixed effects" part from the
-#'      zero-inflation component of the model
+#'  - `zero_inflated`, the "fixed effects" part from the
+#'    zero-inflation component of the model
 #'
-#'    - `zero_inflated_random`, the "random effects" part from the
-#'      zero-inflation component of the model
+#'  - `zero_inflated_random`, the "random effects" part from the
+#'    zero-inflation component of the model
 #'
-#'    - `dispersion`, the dispersion formula
+#'  - `dispersion`, the dispersion formula
 #'
-#'    - `instruments`, for fixed-effects or instrumental variable
-#'      regressions like `ivreg::ivreg()`, `lfe::felm()` or `plm::plm()`,
-#'      the instrumental variables
+#'  - `instruments`, for fixed-effects or instrumental variable
+#'    regressions like `ivreg::ivreg()`, `lfe::felm()` or `plm::plm()`,
+#'    the instrumental variables
 #'
-#'    - `cluster`, for fixed-effects regressions like
-#'      `lfe::felm()`, the cluster specification
+#'  - `cluster`, for fixed-effects regressions like
+#'    `lfe::felm()`, the cluster specification
 #'
-#'    - `correlation`, for models with correlation-component like
-#'      `nlme::gls()`, the formula that describes the correlation structure
+#'  - `correlation`, for models with correlation-component like
+#'    `nlme::gls()`, the formula that describes the correlation structure
 #'
-#'    - `slopes`, for fixed-effects individual-slope models like
-#'      `feisr::feis()`, the formula for the slope parameters
+#'  - `slopes`, for fixed-effects individual-slope models like
+#'    `feisr::feis()`, the formula for the slope parameters
 #'
-#'    - `precision`, for `DirichletRegModel` models from
-#'      \pkg{DirichletReg}, when parametrization (i.e. `model`) is
-#'      `"alternative"`.
+#'  - `precision`, for `DirichletRegModel` models from
+#'    {DirichletReg}, when parametrization (i.e. `model`) is
+#'    `"alternative"`.
 #'
 #' @note For models of class `lme` or `gls` the correlation-component
 #'   is only returned, when it is explicitly defined as named argument
 #'   (`form`), e.g. `corAR1(form = ~1 | Mare)`
 #'
-#' @examples
+#' @examplesIf require("lme4", quietly = TRUE)
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_formula(m)
 #'
-#' if (require("lme4")) {
-#'   m <- lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
-#'   f <- find_formula(m)
-#'   f
-#'   format(f)
-#' }
+#' m <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)
+#' f <- find_formula(m)
+#' f
+#' format(f)
 #' @export
 find_formula <- function(x, verbose = TRUE, ...) {
   UseMethod("find_formula")
@@ -566,14 +564,14 @@ find_formula.RM <- find_formula.MANOVA
 find_formula.gls <- function(x, verbose = TRUE, ...) {
   ## TODO this is an intermediate fix to return the correlation variables from gls-objects
   fcorr <- x$call$correlation
-  if (!is.null(fcorr)) {
+  if (is.null(fcorr)) {
+    f_corr <- NULL
+  } else {
     if (inherits(fcorr, "name")) {
       f_corr <- attributes(eval(fcorr))$formula
     } else {
       f_corr <- parse(text = safe_deparse(fcorr))[[1]]
     }
-  } else {
-    f_corr <- NULL
   }
   if (is.symbol(f_corr)) {
     f_corr <- paste("~", safe_deparse(f_corr))
@@ -1274,14 +1272,14 @@ find_formula.lme <- function(x, verbose = TRUE, ...) {
   }
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
-  if (!is.null(fcorr)) {
+  if (is.null(fcorr)) {
+    fc <- NULL
+  } else {
     if (inherits(fcorr, "name")) {
       fc <- attributes(eval(fcorr))$formula
     } else {
       fc <- parse(text = safe_deparse(fcorr))[[1]]$form
     }
-  } else {
-    fc <- NULL
   }
 
   f <- compact_list(list(
@@ -1315,11 +1313,11 @@ find_formula.mixor <- function(x, verbose = TRUE, ...) {
   f_id <- deparse(x$call$id)
   f_rs <- x$call$which.random.slope
 
-  if (!is.null(f_rs)) {
+  if (is.null(f_rs)) {
+    fmr <- f_id
+  } else {
     f_rs <- trim_ws(unlist(strsplit(safe_deparse(x$call$formula[[3]]), "+", fixed = TRUE), use.names = FALSE))[f_rs]
     fmr <- paste(f_rs, "|", f_id)
-  } else {
-    fmr <- f_id
   }
 
   fmr <- stats::as.formula(paste("~", fmr))
@@ -1491,7 +1489,10 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
     dt <- utils::tail(x@numerator, 1)[[1]]@dataTypes
     frand <- names(dt)[which(dt == "random")]
 
-    if (!is_empty_object(frand)) {
+    if (is_empty_object(frand)) {
+      f.random <- NULL
+      f.cond <- stats::as.formula(fcond)
+    } else {
       f.random <- stats::as.formula(paste0("~", paste(frand, collapse = " + ")))
       for (i in frand) {
         fcond <- sub(i, "", fcond, fixed = TRUE)
@@ -1507,9 +1508,6 @@ find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
         fcond <- paste(fcond, "1")
       }
       f.cond <- stats::as.formula(trim_ws(fcond))
-    } else {
-      f.random <- NULL
-      f.cond <- stats::as.formula(fcond)
     }
   } else if (.classify_BFBayesFactor(x) %in% c("ttest1", "ttest2")) {
     f.cond <- .safe(stats::as.formula(x@numerator[[1]]@identifier$formula))

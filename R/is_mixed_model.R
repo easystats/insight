@@ -8,16 +8,14 @@
 #'
 #' @return A logical, `TRUE` if `x` is a mixed model.
 #'
-#' @examples
+#' @examplesIf require("lme4")
 #' data(mtcars)
 #' model <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' is_mixed_model(model)
 #'
-#' if (require("lme4")) {
-#'   data(sleepstudy)
-#'   model <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-#'   is_mixed_model(model)
-#' }
+#' data(sleepstudy, package = "lme4")
+#' model <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+#' is_mixed_model(model)
 #' @export
 is_mixed_model <- function(x) {
   UseMethod("is_mixed_model")

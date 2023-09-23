@@ -9,6 +9,7 @@ Biometrics
 Bundock
 CMD
 Coloured
+DirichletReg
 DOI
 Dom
 Elff
@@ -27,6 +28,7 @@ Kenward
 MCMCglmm
 MCSE
 Mattan
+MuMIn
 Nakagawa
 Newburgh
 ORCID
@@ -55,6 +57,7 @@ bayesGARCH
 bayestestR
 bbmle
 behaviour
+betareg
 bfsl
 bife
 blavaan
@@ -122,6 +125,8 @@ merMod
 merTools
 metaBMA
 metaplus
+mfx
+mgcv
 mhurdle
 mira
 mmrm

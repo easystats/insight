@@ -376,5 +376,5 @@ test_that("fixed effects variance for rank-deficient models, #765", {
     )
   })
   out <- get_variance_fixed(mod_TMB)
-  expect_equal(c(var.fixed = 627.03661), tolerance = 1e-4)
+  expect_equal(out, var.fixed = 627.03661, tolerance = 1e-4)
 })

@@ -14,7 +14,7 @@
 
   faminfo <- model_info(x, verbose = FALSE)
 
-  if (faminfo$family %in% c("truncated_nbinom1")) {
+  if (any(faminfo$family == "truncated_nbinom1")) {
     if (verbose) {
       format_warning(sprintf(
         "Truncated negative binomial families are currently not supported by `%s`.",
@@ -140,15 +140,15 @@
 
 
   compact_list(list(
-    "var.fixed" = var.fixed,
-    "var.random" = var.random,
-    "var.residual" = var.residual,
-    "var.distribution" = var.distribution,
-    "var.dispersion" = var.dispersion,
-    "var.intercept" = var.intercept,
-    "var.slope" = var.slope,
-    "cor.slope_intercept" = cor.slope_intercept,
-    "cor.slopes" = cor.slopes
+    var.fixed = var.fixed,
+    var.random = var.random,
+    var.residual = var.residual,
+    var.distribution = var.distribution,
+    var.dispersion = var.dispersion,
+    var.intercept = var.intercept,
+    var.slope = var.slope,
+    cor.slope_intercept = cor.slope_intercept,
+    cor.slopes = cor.slopes
   ))
 }
 
@@ -308,12 +308,12 @@
     vc <- lapply(names(lme4::VarCorr(x)), function(i) {
       element <- lme4::VarCorr(x)[[i]]
       if (i != "residual__") {
-        if (!is.null(element$cov)) {
-          out <- as.matrix(drop(element$cov[, 1, ]))
-          colnames(out) <- rownames(out) <- gsub("Intercept", "(Intercept)", rownames(element$cov), fixed = TRUE)
-        } else {
+        if (is.null(element$cov)) {
           out <- as.matrix(drop(element$sd[, 1])^2)
           colnames(out) <- rownames(out) <- gsub("Intercept", "(Intercept)", rownames(element$sd), fixed = TRUE)
+        } else {
+          out <- as.matrix(drop(element$cov[, 1, ]))
+          colnames(out) <- rownames(out) <- gsub("Intercept", "(Intercept)", rownames(element$cov), fixed = TRUE)
         }
         attr(out, "sttdev") <- element$sd[, 1]
       } else {
@@ -600,7 +600,9 @@
   .null_model <- null_model(x, verbose = verbose)
 
   # check if null-model could be computed
-  if (!is.null(.null_model)) {
+  if (is.null(.null_model)) {
+    mu <- NA
+  } else {
     if (inherits(.null_model, "cpglmm")) {
       # installed?
       check_if_installed("cplm")
@@ -609,8 +611,6 @@
       null_fixef <- unname(.collapse_cond(lme4::fixef(.null_model)))
     }
     mu <- exp(null_fixef)
-  } else {
-    mu <- NA
   }
 
   if (is.na(mu)) {

@@ -51,17 +51,17 @@ If the model is a multivariate response model, a data frame with values
 from all response variables is returned.
 }
 \examples{
-if (require("lme4")) {
-  data(cbpp)
-  cbpp$trials <- cbpp$size - cbpp$incidence
-  dat <<- cbpp
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(cbpp)
+cbpp$trials <- cbpp$size - cbpp$incidence
+dat <<- cbpp
 
-  m <- glm(cbind(incidence, trials) ~ period, data = dat, family = binomial)
-  head(get_response(m))
-  get_response(m, select = "incidence")
-}
+m <- glm(cbind(incidence, trials) ~ period, data = dat, family = binomial)
+head(get_response(m))
+get_response(m, select = "incidence")
 
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 get_response(m)
+\dontshow{\}) # examplesIf}
 }

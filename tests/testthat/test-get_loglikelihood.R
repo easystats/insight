@@ -154,7 +154,7 @@ test_that("get_loglikelihood - mgcv", {
   # TODO: I'm not sure why this differes :/
   # expect_equal(as.numeric(ll), as.numeric(ll2))
 
-  x <- mgcv::gamm(Sepal.Length ~ s(Petal.Width), random = list("Species" = ~1), data = iris)
+  x <- mgcv::gamm(Sepal.Length ~ s(Petal.Width), random = list(Species = ~1), data = iris)
   # Which one to get?
 })
 

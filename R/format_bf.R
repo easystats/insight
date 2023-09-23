@@ -25,10 +25,10 @@ format_bf <- function(bf,
                       protect_ratio = FALSE,
                       na_reference = NA,
                       exact = FALSE) {
-  if (!is.na(na_reference)) {
-    bf[is.na(bf)] <- na_reference
-  } else {
+  if (is.na(na_reference)) {
     bf[bad_bf <- is.na(bf)] <- 1
+  } else {
+    bf[is.na(bf)] <- na_reference
   }
 
   bf_orig <- bf
@@ -40,7 +40,7 @@ format_bf <- function(bf,
     is_small <- logical(length(bf))
   }
 
-  digits <- ifelse(is.na(bf), 0, ifelse(bf < 1, 3, 2))
+  digits <- ifelse(is.na(bf), 0, ifelse(bf < 1, 3, 2)) # nolint
 
   text <- paste0(
     "= ",
@@ -57,7 +57,7 @@ format_bf <- function(bf,
         text[is_extreme]
       )
       text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
-        ifelse(is_small[is_extreme],
+        ifelse(is_small[is_extreme], # nolint
           sprintf("= 1/%.2e", bf[is_extreme]),
           sprintf("= %.2e", bf_orig[is_extreme])
         ),
@@ -69,7 +69,7 @@ format_bf <- function(bf,
         text[is_extreme]
       )
       text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
-        ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"),
+        ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"), # nolint
         text[is_extreme]
       )
     }
@@ -77,8 +77,8 @@ format_bf <- function(bf,
 
   ## Add stars
   text <- ifelse(bf_orig > 30, paste0(text, "***"),
-    ifelse(bf_orig > 10, paste0(text, "**"),
-      ifelse(bf_orig > 3, paste0(text, "*"), text)
+    ifelse(bf_orig > 10, paste0(text, "**"), # nolint
+      ifelse(bf_orig > 3, paste0(text, "*"), text) # nolint
     )
   )
 

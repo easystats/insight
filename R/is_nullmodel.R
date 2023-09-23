@@ -8,20 +8,19 @@
 #'
 #' @return `TRUE` if `x` is a null-model, `FALSE` otherwise.
 #'
-#' @examples
+#' @examplesIf require("lme4")
 #' model <- lm(mpg ~ 1, data = mtcars)
 #' is_nullmodel(model)
 #'
 #' model <- lm(mpg ~ gear, data = mtcars)
 #' is_nullmodel(model)
 #'
-#' if (require("lme4")) {
-#'   model <- lmer(Reaction ~ 1 + (Days | Subject), data = sleepstudy)
-#'   is_nullmodel(model)
+#' data(sleepstudy, package = "lme4")
+#' model <- lme4::lmer(Reaction ~ 1 + (Days | Subject), data = sleepstudy)
+#' is_nullmodel(model)
 #'
-#'   model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
-#'   is_nullmodel(model)
-#' }
+#' model <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+#' is_nullmodel(model)
 #' @export
 is_nullmodel <- function(x) {
   UseMethod("is_nullmodel")

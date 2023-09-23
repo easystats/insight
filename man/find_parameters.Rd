@@ -3,11 +3,22 @@
 \name{find_parameters}
 \alias{find_parameters}
 \alias{find_parameters.default}
+\alias{find_parameters.pgmm}
+\alias{find_parameters.nls}
 \title{Find names of model parameters}
 \usage{
 find_parameters(x, ...)
 
 \method{find_parameters}{default}(x, flatten = FALSE, verbose = TRUE, ...)
+
+\method{find_parameters}{pgmm}(x, component = c("conditional", "all"), flatten = FALSE, ...)
+
+\method{find_parameters}{nls}(
+  x,
+  component = c("all", "conditional", "nonlinear"),
+  flatten = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -18,6 +29,14 @@ find_parameters(x, ...)
 as character vector, not as list. Duplicated values are removed.}
 
 \item{verbose}{Toggle messages and warnings.}
+
+\item{component}{Should all predictor variables, predictor variables for the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
+\emph{conditional} component is also called \emph{count} or \emph{mean}
+component, depending on the model.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,
@@ -29,13 +48,13 @@ appear in the \code{summary()} output. For Bayesian models, the parameter
 names equal the column names of the posterior samples after coercion
 from \code{as.data.frame()}. See the documentation for your object's class:
 \itemize{
-\item{\link[=find_parameters.BGGM]{Bayesian models} (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
-\item{\link[=find_parameters.gamlss]{Generalized additive models} (\pkg{mgcv}, \pkg{VGAM}, ...)}
-\item{\link[=find_parameters.betamfx]{Marginal effects models} (\pkg{mfx})}
-\item{\link[=find_parameters.emmGrid]{Estimated marginal means} (\pkg{emmeans})}
-\item{\link[=find_parameters.glmmTMB]{Mixed models} (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
-\item{\link[=find_parameters.zeroinfl]{Zero-inflated and hurdle models} (\pkg{pscl}, ...)}
-\item{\link[=find_parameters.averaging]{Models with special components} (\pkg{betareg}, \pkg{MuMIn}, ...)}
+\item \link[=find_parameters.BGGM]{Bayesian models} ({rstanarm}, {brms}, {MCMCglmm}, ...)
+\item \link[=find_parameters.gamlss]{Generalized additive models} ({mgcv}, {VGAM}, ...)
+\item \link[=find_parameters.betamfx]{Marginal effects models} ({mfx})
+\item \link[=find_parameters.emmGrid]{Estimated marginal means} ({emmeans})
+\item \link[=find_parameters.glmmTMB]{Mixed models} ({lme4}, {glmmTMB}, {GLMMadaptive}, ...)
+\item \link[=find_parameters.zeroinfl]{Zero-inflated and hurdle models} ({pscl}, ...)
+\item \link[=find_parameters.averaging]{Models with special components} ({betareg}, {MuMIn}, ...)
 }
 }
 \section{Model components}{

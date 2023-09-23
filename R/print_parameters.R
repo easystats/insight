@@ -56,13 +56,13 @@
 #'
 #' @details This function prepares data frames that contain information
 #' about model parameters for clear printing.
-#' \cr \cr
+#'
 #' First, `x` is required, which should either be a model object or a
 #' prepared data frame as returned by [clean_parameters()]. If
 #' `x` is a model, `clean_parameters()` is called on that model
 #' object to get information with which model components the parameters
 #' are associated.
-#' \cr \cr
+#'
 #' Then, `...` take one or more data frames that also contain information
 #' about parameters from the same model, but also have additional information
 #' provided by other methods. For instance, a data frame in `...` might
@@ -70,7 +70,7 @@
 #' or [parameters::model_parameters()], where we have a) a
 #' `Parameter` column and b) columns with other parameter values (like
 #' CI, HDI, test statistic, etc.).
-#' \cr \cr
+#'
 #' Now we have a data frame with model parameters and information about the
 #' association to the different model components, a data frame with model
 #' parameters, and some summary statistics. `print_parameters()` then merges
@@ -188,18 +188,18 @@ print_parameters <- function(x,
       # "Main title" of a subcomponent (like "Random effects")
       if (parts[j] %in% c("fixed", "random") || (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
         tmp <- switch(parts[j],
-          "fixed" = "Fixed effects",
-          "random" = "Random effects",
-          "dispersion" = "Dispersion",
-          "conditional" = "(conditional)",
-          "zero_inflated" = "(zero-inflated)"
+          fixed = "Fixed effects",
+          random = "Random effects",
+          dispersion = "Dispersion",
+          conditional = "(conditional)",
+          zero_inflated = "(zero-inflated)"
         )
         title1 <- paste0(title1, " ", tmp)
       } else if (!parts[j] %in% c("conditional", "zero_inflated")) {
         # here we have the "subtitles" of a subcomponent
         # (like "Intercept: Group-Level 1")
         tmp <- switch(parts[j],
-          "simplex" = "(monotonic effects)",
+          simplex = "(monotonic effects)",
           parts[j]
         )
         title2 <- paste0(title2, " ", tmp)

@@ -4,45 +4,19 @@
 \alias{get_statistic}
 \alias{get_statistic.default}
 \alias{get_statistic.glmmTMB}
-\alias{get_statistic.clm2}
-\alias{get_statistic.betamfx}
-\alias{get_statistic.logitmfx}
-\alias{get_statistic.mjoint}
 \alias{get_statistic.emmGrid}
 \alias{get_statistic.gee}
-\alias{get_statistic.betareg}
-\alias{get_statistic.DirichletRegModel}
 \title{Get statistic associated with estimates}
 \usage{
 get_statistic(x, ...)
 
 \method{get_statistic}{default}(x, column_index = 3, verbose = TRUE, ...)
 
-\method{get_statistic}{glmmTMB}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-  ...
-)
-
-\method{get_statistic}{clm2}(x, component = c("all", "conditional", "scale"), ...)
-
-\method{get_statistic}{betamfx}(
-  x,
-  component = c("all", "conditional", "precision", "marginal"),
-  ...
-)
-
-\method{get_statistic}{logitmfx}(x, component = c("all", "conditional", "marginal"), ...)
-
-\method{get_statistic}{mjoint}(x, component = c("all", "conditional", "survival"), ...)
+\method{get_statistic}{glmmTMB}(x, component = "all", ...)
 
 \method{get_statistic}{emmGrid}(x, ci = 0.95, adjust = "none", merge_parameters = FALSE, ...)
 
 \method{get_statistic}{gee}(x, robust = FALSE, ...)
-
-\method{get_statistic}{betareg}(x, component = c("all", "conditional", "precision"), ...)
-
-\method{get_statistic}{DirichletRegModel}(x, component = c("all", "conditional", "precision"), ...)
 }
 \arguments{
 \item{x}{A model.}
@@ -58,14 +32,31 @@ summary-output.}
 
 \item{verbose}{Toggle messages and warnings.}
 
-\item{component}{Should all parameters, parameters for the conditional model,
-or for the zero-inflated part of the model be returned? Applies to models
-with zero-inflated component. \code{component} may be one of
-\code{"conditional"}, \code{"zi"}, \code{"zero-inflated"} or \code{"all"}
-(default). For models with smooth terms, \code{component = "smooth_terms"}
-is also possible. May be abbreviated. Note that the \emph{conditional}
-component is also called \emph{count} or \emph{mean} component, depending
-on the model.}
+\item{component}{String, indicating the model component for which parameters
+should be returned. The default for all models is \code{"all"}, which returns
+the requested information for all available model components. Furthermore,
+there are specific options depending on the model class. \code{component} then
+may be one of:
+\itemize{
+\item For zero-inflated models (\code{gmmTMB}, \code{hurdle}, \code{zeroinfl}, ...) can also
+be \code{"conditional"} or \code{"zero-inflated"}. Note that the \emph{conditional}
+component is also called \emph{count} or \emph{mean} component, depending on the
+model. \code{glmmTMB} also has a \code{"dispersion"} component.
+\item For models with smooth terms, \code{component = "smooth_terms"} returns the
+test statistic for the smooth terms.
+\item For models of class \code{mhurdle}, may also be one of  \code{"conditional"},
+\code{"zero_inflated"}, \code{"infrequent_purchase"} or \code{"auxiliary"}.
+\item For models of class \code{clm2} or \code{clmm2}, may also be \code{"scale"}.
+\item For models of class \code{betareg}, \code{betaor} or \code{betamfx}, may also be
+\code{"precision"}. For other \verb{*mfx} models (\code{logitmfx}, \code{betamfx}, ...),
+may also be \code{"marginal"}.
+\item For models of class \code{mvord}, may also be \code{"thresholds"} or
+\code{"correlation"}.
+\item For models of class \code{selection}, may also be \code{"selection"}, \code{"outcome"}
+or \code{"auxiliary"}.
+\item For models of class \code{glmx}, may also be \code{"extra"}.
+\item For models of class \code{averaging}, may also be \code{"full"}.
+}}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).
 Currently only applies to objects of class \code{emmGrid}.}

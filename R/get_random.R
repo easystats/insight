@@ -8,25 +8,24 @@
 #' @return The data from all random effects terms, as data frame. Or `NULL`
 #'    if model has no random effects.
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(sleepstudy)
-#'   # prepare some data...
-#'   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
-#'   sleepstudy$mysubgrp <- NA
-#'   for (i in 1:5) {
-#'     filter_group <- sleepstudy$mygrp == i
-#'     sleepstudy$mysubgrp[filter_group] <-
-#'       sample(1:30, size = sum(filter_group), replace = TRUE)
-#'   }
-#'
-#'   m <- lmer(
-#'     Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-#'     data = sleepstudy
-#'   )
-#'
-#'   head(get_random(m))
+#' @examplesIf require("lme4", quietly = TRUE)
+#' data(sleepstudy)
+#' # prepare some data...
+#' sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+#' sleepstudy$mysubgrp <- NA
+#' for (i in 1:5) {
+#'   filter_group <- sleepstudy$mygrp == i
+#'   sleepstudy$mysubgrp[filter_group] <-
+#'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
+#'
+#' m <- lmer(
+#'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+#'   data = sleepstudy
+#' )
+#'
+#' head(get_random(m))
+#'
 #' @export
 get_random <- function(x) {
   UseMethod("get_random")

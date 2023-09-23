@@ -68,10 +68,10 @@ format_p <- function(p,
       digits <- 5
     }
     text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, sprintf("= %.*e***", digits, p),
-        ifelse(p < 0.01, sprintf("= %.*e**", digits, p),
-          ifelse(p < 0.05, sprintf("= %.*e*", digits, p),
-            ifelse(p > 0.999, sprintf("= %.*e", digits, p),
+      ifelse(p < 0.001, sprintf("= %.*e***", digits, p), # nolint
+        ifelse(p < 0.01, sprintf("= %.*e**", digits, p), # nolint
+          ifelse(p < 0.05, sprintf("= %.*e*", digits, p), # nolint
+            ifelse(p > 0.999, sprintf("= %.*e", digits, p), # nolint
               sprintf("= %.*e", digits, p)
             )
           )
@@ -80,10 +80,10 @@ format_p <- function(p,
     )
   } else if (digits <= 3) {
     text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, "< .001***",
-        ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"),
-          ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"),
-            ifelse(p > 0.999, "> .999",
+      ifelse(p < 0.001, "< .001***", # nolint
+        ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"), # nolint
+          ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"), # nolint
+            ifelse(p > 0.999, "> .999", # nolint
               paste0("= ", format_value(p, digits))
             )
           )
@@ -92,9 +92,9 @@ format_p <- function(p,
     )
   } else {
     text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, paste0("= ", format_value(p, digits), "***"),
-        ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"),
-          ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"),
+      ifelse(p < 0.001, paste0("= ", format_value(p, digits), "***"), # nolint
+        ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"), # nolint
+          ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"), # nolint
             paste0("= ", format_value(p, digits))
           )
         )

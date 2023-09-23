@@ -11,21 +11,21 @@ find_random_slopes(x)
 }
 \value{
 A list of character vectors with the name(s) of the random slopes, or
-\code{NULL} if model has no random slopes. Depending on the model, the
-returned list has following elements:
+\code{NULL} if model has no random slopes. Depending on the model, the returned
+list has following elements:
 \itemize{
 \item \code{random}, the random slopes from the conditional part of model
-\item \code{zero_inflated_random}, the random slopes from the
-zero-inflation component of the model
+\item \code{zero_inflated_random}, the random slopes from the zero-inflation
+component of the model
 }
 }
 \description{
 Return the name of the random slopes from mixed effects models.
 }
 \examples{
-if (require("lme4")) {
-  data(sleepstudy)
-  m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-  find_random_slopes(m)
-}
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(sleepstudy, package = "lme4")
+m <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+find_random_slopes(m)
+\dontshow{\}) # examplesIf}
 }

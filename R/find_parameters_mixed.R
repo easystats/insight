@@ -78,7 +78,6 @@ find_parameters.glmmTMB <- function(x,
 }
 
 
-
 #' @export
 find_parameters.MixMod <- function(x,
                                    effects = c("all", "fixed", "random"),
@@ -122,7 +121,6 @@ find_parameters.MixMod <- function(x,
 }
 
 
-
 #' @rdname find_parameters.glmmTMB
 #' @export
 find_parameters.nlmerMod <- function(x,
@@ -154,6 +152,7 @@ find_parameters.nlmerMod <- function(x,
 }
 
 
+#' @rdname find_parameters.glmmTMB
 #' @export
 find_parameters.hglm <- function(x,
                                  effects = c("all", "fixed", "random"),
@@ -165,11 +164,11 @@ find_parameters.hglm <- function(x,
   re <- x$ranef
 
   f <- find_formula(x)
-  if (!is.null(f$dispersion)) {
+  if (is.null(f$dispersion)) {
+    disp_name <- NULL
+  } else {
     disp <- summary(x)$SummVC1
     disp_name <- rownames(disp)
-  } else {
-    disp_name <- NULL
   }
 
   l <- compact_list(list(
@@ -224,6 +223,7 @@ find_parameters.merModList <- function(x,
   find_parameters(x[[1]], effects = effects, flatten = flatten, ...)
 }
 
+
 #' @export
 find_parameters.HLfit <- function(x,
                                   effects = c("all", "fixed", "random"),
@@ -272,7 +272,6 @@ find_parameters.sem <- function(x,
 }
 
 
-
 #' @export
 find_parameters.cpglmm <- function(x,
                                    effects = c("all", "fixed", "random"),
@@ -298,7 +297,6 @@ find_parameters.cpglmm <- function(x,
 
   .filter_parameters(l, effects = effects, flatten = flatten)
 }
-
 
 
 #' @export
@@ -328,7 +326,6 @@ find_parameters.coxme <- function(x,
 }
 
 
-
 #' @export
 find_parameters.mixed <- function(x,
                                   effects = c("all", "fixed", "random"),
@@ -350,7 +347,6 @@ find_parameters.mixed <- function(x,
 
   .filter_parameters(l, effects = effects, flatten = flatten)
 }
-
 
 
 #' @export
@@ -383,7 +379,6 @@ find_parameters.lme <- function(x,
 }
 
 
-
 #' @export
 find_parameters.glmm <- function(x,
                                  effects = c("all", "fixed", "random"),
@@ -401,7 +396,6 @@ find_parameters.glmm <- function(x,
 
   .filter_parameters(l, effects = effects, flatten = flatten)
 }
-
 
 
 #' @export
@@ -423,7 +417,6 @@ find_parameters.BBmm <- function(x,
 }
 
 
-
 #' @export
 find_parameters.glimML <- function(x,
                                    effects = c("all", "fixed", "random"),
@@ -441,7 +434,6 @@ find_parameters.glimML <- function(x,
     recursive = FALSE
   )
 }
-
 
 
 #' @export

@@ -206,8 +206,8 @@ link_inverse.afex_aov <- link_inverse.lm
 link_inverse.betareg <- function(x, what = c("mean", "precision"), ...) {
   what <- match.arg(what)
   switch(what,
-    "mean" = x$link$mean$linkinv,
-    "precision" = x$link$precision$linkinv
+    mean = x$link$mean$linkinv,
+    precision = x$link$precision$linkinv
   )
 }
 
@@ -221,8 +221,8 @@ link_inverse.DirichletRegModel <- function(x, what = c("mean", "precision"), ...
     stats::make.link("logit")$linkinv
   } else {
     switch(what,
-      "mean" = stats::make.link("logit")$linkinv,
-      "precision" = stats::make.link("log")$linkinv
+      mean = stats::make.link("logit")$linkinv,
+      precision = stats::make.link("log")$linkinv
     )
   }
 }
@@ -449,10 +449,10 @@ link_inverse.fixest <- function(x, ...) {
     x$family$linkinv
   } else {
     link <- switch(x$family,
-      "poisson" = ,
-      "negbin" = "log",
-      "logit" = "logit",
-      "gaussian" = "identity"
+      poisson = ,
+      negbin = "log",
+      logit = "logit",
+      gaussian = "identity"
     )
     stats::make.link(link)$linkinv
   }
@@ -537,18 +537,18 @@ link_inverse.glmmTMB <- function(x, ...) {
 #' @export
 link_inverse.MCMCglmm <- function(x, ...) {
   switch(x$Residual$original.family,
-    "cengaussian" = ,
-    "gaussian" = stats::gaussian(link = "identity")$linkinv,
-    "categorical" = ,
-    "multinomial" = ,
-    "zibinomial" = ,
-    "ordinal" = stats::make.link("logit")$linkinv,
-    "poisson" = ,
-    "cenpoisson" = ,
-    "zipoisson" = ,
-    "zapoisson" = ,
-    "ztpoisson" = ,
-    "hupoisson" = stats::make.link("log")$linkinv
+    cengaussian = ,
+    gaussian = stats::gaussian(link = "identity")$linkinv,
+    categorical = ,
+    multinomial = ,
+    zibinomial = ,
+    ordinal = stats::make.link("logit")$linkinv,
+    poisson = ,
+    cenpoisson = ,
+    zipoisson = ,
+    zapoisson = ,
+    ztpoisson = ,
+    hupoisson = stats::make.link("log")$linkinv
   )
 }
 
@@ -556,9 +556,9 @@ link_inverse.MCMCglmm <- function(x, ...) {
 #' @export
 link_inverse.glmm <- function(x, ...) {
   switch(tolower(x$family.glmm$family.glmm),
-    "bernoulli.glmm" = ,
-    "binomial.glmm" = stats::make.link("logit")$linkinv,
-    "poisson.glmm" = stats::make.link("log")$linkinv,
+    bernoulli.glmm = ,
+    binomial.glmm = stats::make.link("logit")$linkinv,
+    poisson.glmm = stats::make.link("log")$linkinv,
     stats::gaussian(link = "identity")$linkinv
   )
 }
@@ -621,10 +621,10 @@ link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
   what <- match.arg(what)
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
   switch(what,
-    "mu" = faminfo$mu.linkinv,
-    "sigma" = faminfo$sigma.linkinv,
-    "nu" = faminfo$nu.linkinv,
-    "tau" = faminfo$tau.linkinv,
+    mu = faminfo$mu.linkinv,
+    sigma = faminfo$sigma.linkinv,
+    nu = faminfo$nu.linkinv,
+    tau = faminfo$tau.linkinv,
     faminfo$mu.linkinv
   )
 }

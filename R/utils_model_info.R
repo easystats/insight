@@ -55,17 +55,17 @@
     } else {
       resp <- .safe(stats::model.response(stats::model.frame(x)))
     }
-    if (!is.null(resp)) {
+    if (is.null(resp)) {
+      is_bernoulli <- TRUE
+    } else {
       if ((is.data.frame(resp) || is.matrix(resp)) && ncol(resp) == 1) {
         resp <- as.vector(resp[[1]])
       }
       if (!is.data.frame(resp) && !is.matrix(resp) && all(.is.int(.factor_to_numeric(resp[[1]])))) {
         is_bernoulli <- TRUE
       }
-    } else {
-      is_bernoulli <- TRUE
     }
-  } else if (fitfam == "bernoulli") {
+  } else if (all(fitfam == "bernoulli")) {
     is_bernoulli <- TRUE
   }
 
@@ -439,6 +439,7 @@
   )
 }
 
+
 .get_ordinal_link <- function(x) {
   switch(x$link,
     logistic = "logit",
@@ -500,7 +501,6 @@
     class(x@denominator)
   }
 }
-
 
 
 .is_semLme <- function(x) {

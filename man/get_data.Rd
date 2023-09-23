@@ -119,10 +119,10 @@ auxiliary parameters).
 }
 
 \examples{
-if (require("lme4")) {
-  data(cbpp, package = "lme4")
-  cbpp$trials <- cbpp$size - cbpp$incidence
-  m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
-  head(get_data(m))
-}
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(cbpp, package = "lme4")
+cbpp$trials <- cbpp$size - cbpp$incidence
+m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+head(get_data(m))
+\dontshow{\}) # examplesIf}
 }

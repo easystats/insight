@@ -10,11 +10,10 @@
 #' @inheritParams find_predictors
 #'
 #' @return A list of parameter names. The returned list may have following
-#'   elements:
-#'    \itemize{
-#'      \item `conditional`, the "fixed effects" part from the model.
-#'      \item `smooth_terms`, the smooth parameters.
-#'    }
+#' elements:
+#'
+#' - `conditional`, the "fixed effects" part from the model.
+#' - `smooth_terms`, the smooth parameters.
 #'
 #' @examples
 #' data(mtcars)
@@ -37,7 +36,6 @@ find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
-
 
 
 #' @rdname find_parameters.gamlss
@@ -67,10 +65,8 @@ find_parameters.gam <- function(x,
   }
 }
 
-
 #' @export
 find_parameters.scam <- find_parameters.gam
-
 
 
 #' @export
@@ -95,10 +91,8 @@ find_parameters.Gam <- function(x,
   )
 }
 
-
 #' @export
 find_parameters.vgam <- find_parameters.Gam
-
 
 
 #' @export
@@ -150,7 +144,6 @@ find_parameters.cgam <- function(x,
 }
 
 
-
 #' @export
 find_parameters.SemiParBIV <- function(x, flatten = FALSE, ...) {
   pars <- get_parameters(x)
@@ -165,7 +158,6 @@ find_parameters.SemiParBIV <- function(x, flatten = FALSE, ...) {
     l
   }
 }
-
 
 #' @export
 find_parameters.selection <- find_parameters.SemiParBIV

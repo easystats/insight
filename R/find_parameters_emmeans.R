@@ -9,34 +9,32 @@
 #' @inheritParams get_parameters.emmGrid
 #'
 #' @return A list of parameter names. For simple models, only one list-element,
-#'    `conditional`, is returned.
+#' `conditional`, is returned.
 #'
-#' @examples
+#' @examplesIf require("emmeans", quietly = TRUE)
 #' data(mtcars)
 #' model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
-#' if (require("emmeans", quietly = TRUE)) {
-#'   emm <- emmeans(model, c("wt", "cyl"))
-#'   find_parameters(emm)
-#' }
+#' emm <- emmeans(model, c("wt", "cyl"))
+#' find_parameters(emm)
 #' @export
 find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE, ...) {
   out <- params <- get_parameters(x, summary = TRUE, merge_parameters = merge_parameters)
   if ("Component" %in% colnames(params)) {
     params$Component <- factor(params$Component, levels = unique(params$Component))
   }
-  if (!.is_baysian_emmeans(x)) {
-    if ("Component" %in% colnames(params)) {
-      out <- lapply(split(params, params$Component), function(i) i[[1]])
-    } else {
-      out <- stats::setNames(list(params[[1]]), unique(.classify_emmeans(x)))
-    }
-  } else {
+  if (.is_baysian_emmeans(x)) {
     col_names <- colnames(get_parameters(x, summary = FALSE, merge_parameters = merge_parameters))
     if ("Component" %in% colnames(params)) {
       params$Parameter <- col_names
       out <- lapply(split(params, params$Component), function(i) i[[1]])
     } else {
       out <- stats::setNames(list(col_names), unique(.classify_emmeans(x)))
+    }
+  } else {
+    if ("Component" %in% colnames(params)) {
+      out <- lapply(split(params, params$Component), function(i) i[[1]])
+    } else {
+      out <- stats::setNames(list(params[[1]]), unique(.classify_emmeans(x)))
     }
   }
 

@@ -3,6 +3,7 @@
 \name{find_parameters.glmmTMB}
 \alias{find_parameters.glmmTMB}
 \alias{find_parameters.nlmerMod}
+\alias{find_parameters.hglm}
 \alias{find_parameters.merMod}
 \title{Find names of model parameters from mixed models}
 \usage{
@@ -18,6 +19,14 @@
   x,
   effects = c("all", "fixed", "random"),
   component = c("all", "conditional", "nonlinear"),
+  flatten = FALSE,
+  ...
+)
+
+\method{find_parameters}{hglm}(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "dispersion"),
   flatten = FALSE,
   ...
 )

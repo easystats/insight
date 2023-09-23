@@ -5,28 +5,28 @@
 #'
 #' @param x A fitted model.
 #' @param combine Logical, if `TRUE` and the response is a matrix-column,
-#'    the name of the response matches the notation in formula, and would for
-#'    instance also contain patterns like `"cbind(...)"`. Else, the original
-#'    variable names from the matrix-column are returned. See 'Examples'.
+#'   the name of the response matches the notation in formula, and would for
+#'   instance also contain patterns like `"cbind(...)"`. Else, the original
+#'   variable names from the matrix-column are returned. See 'Examples'.
+#' @param component Character, if `x` is a joint model, this argument can be
+#'   used to specify which component to return. Possible values are
+#'  `"conditional"`, `"survival"` or `"all"`.
 #' @param ... Currently not used.
 #'
 #' @return The name(s) of the response variable(s) from `x` as character
 #'   vector, or `NULL` if response variable could not be found.
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(cbpp)
-#'   cbpp$trials <- cbpp$size - cbpp$incidence
-#'   m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+#' @examplesIf require("lme4", quietly = TRUE)
+#' data(cbpp, package = "lme4")
+#' cbpp$trials <- cbpp$size - cbpp$incidence
+#' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 #'
-#'   find_response(m, combine = TRUE)
-#'   find_response(m, combine = FALSE)
-#' }
+#' find_response(m, combine = TRUE)
+#' find_response(m, combine = FALSE)
 #' @export
 find_response <- function(x, combine = TRUE, ...) {
   UseMethod("find_response")
 }
-
 
 
 #' @export
@@ -55,13 +55,10 @@ find_response.logitr <- function(x, ...) {
 }
 
 
-
 #' @export
 find_response.model_fit <- function(x, combine = TRUE, ...) {
   find_response(x$fit, combine = combine, ...)
 }
-
-
 
 
 #' @export
@@ -74,8 +71,6 @@ find_response.bfsl <- function(x, combine = TRUE, ...) {
 }
 
 
-
-
 #' @export
 find_response.selection <- function(x, combine = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
@@ -85,8 +80,6 @@ find_response.selection <- function(x, combine = TRUE, ...) {
   )
   check_cbind(resp, combine, model = x)
 }
-
-
 
 
 #' @export
@@ -102,8 +95,7 @@ find_response.mediate <- function(x, combine = TRUE, ...) {
 }
 
 
-
-
+#' @rdname find_response
 #' @export
 find_response.mjoint <- function(x, combine = TRUE, component = c("conditional", "survival", "all"), ...) {
   component <- match.arg(component)
@@ -117,17 +109,16 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
   survial <- safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
-    "conditional" = conditional,
-    "survial" = survial,
-    "all" = c(conditional, survial)
+    conditional = conditional,
+    survial = survial,
+    all = c(conditional, survial)
   )
 
   unlist(lapply(resp, check_cbind, combine = combine, model = x))
 }
 
 
-
-
+#' @rdname find_response
 #' @export
 find_response.joint <- function(x,
                                 combine = TRUE,
@@ -144,9 +135,9 @@ find_response.joint <- function(x,
   survial <- safe_deparse(f$survival[[2L]])
 
   resp <- switch(component,
-    "conditional" = conditional,
-    "survial" = survial,
-    "all" = c(conditional, survial)
+    conditional = conditional,
+    survial = survial,
+    all = c(conditional, survial)
   )
 
   unlist(lapply(resp, check_cbind, combine = combine, model = x))
@@ -215,7 +206,7 @@ check_cbind <- function(resp, combine, model) {
   }
 
   # exception
-  if (inherits(model, "clogit") && startsWith(resp[1], "rep(") && length(resp) == 3) {
+  if (inherits(model, "clogit") && startsWith(resp[1], "rep(") && length(resp) == 3L) {
     resp <- c(paste0(resp[1], resp[2]), resp[3])
   }
 

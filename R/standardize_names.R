@@ -36,15 +36,14 @@
 #'   `broom::tidy()`, column names are converted from "broom"-style into
 #'   "easystats"-style.
 #'
-#' @examples
-#' if (require("parameters")) {
-#'   model <- lm(mpg ~ wt + cyl, data = mtcars)
-#'   mp <- model_parameters(model)
+#' @examplesIf require("parameters")
+#' model <- lm(mpg ~ wt + cyl, data = mtcars)
+#' mp <- model_parameters(model)
 #'
-#'   as.data.frame(mp)
-#'   standardize_names(mp)
-#'   standardize_names(mp, style = "broom")
-#' }
+#' as.data.frame(mp)
+#' standardize_names(mp)
+#' standardize_names(mp, style = "broom")
+#'
 #' @export
 standardize_names <- function(data, ...) {
   UseMethod("standardize_names")

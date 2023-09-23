@@ -8,12 +8,10 @@
 #'
 #' @return A character vector with the name(s) of the smooth terms.
 #'
-#' @examples
-#' if (require("mgcv")) {
-#'   data(iris)
-#'   model <- gam(Petal.Length ~ Petal.Width + s(Sepal.Length), data = iris)
-#'   find_smooth(model)
-#' }
+#' @examplesIf require("mgcv")
+#' data(iris)
+#' model <- mgcv::gam(Petal.Length ~ Petal.Width + s(Sepal.Length), data = iris)
+#' find_smooth(model)
 #' @export
 find_smooth <- function(x, flatten = FALSE) {
   all_terms <- find_terms(x, flatten = TRUE, verbose = FALSE)

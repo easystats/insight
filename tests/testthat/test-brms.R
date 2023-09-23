@@ -352,7 +352,7 @@ test_that("find_paramaters", {
           sigma = "sigma_SepalWidth"
         )
       ),
-      "is_mv" = "1"
+      is_mv = "1"
     )
   )
 
@@ -390,7 +390,7 @@ test_that("find_paramaters", {
           )
         )
       ),
-      "is_mv" = "1"
+      is_mv = "1"
     )
   )
 })

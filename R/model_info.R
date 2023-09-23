@@ -46,16 +46,21 @@
 #' * `is_anova`: model is an Anova object
 #' * `is_ttest`: model is an an object of class `htest`, returned by `t.test()`
 #' * `is_correlation`: model is an an object of class `htest`, returned by `cor.test()`
-#' * `is_ranktest`: model is an an object of class `htest`, returned by `cor.test()` (if Spearman's rank correlation), `wilcox.text()` or `kruskal.test()`.
-#' * `is_variancetest`: model is an an object of class `htest`, returned by `bartlett.test()`, `shapiro.test()` or `car::leveneTest()`.
+#' * `is_ranktest`: model is an an object of class `htest`, returned by `cor.test()`
+#'   (if Spearman's rank correlation), `wilcox.text()` or `kruskal.test()`.
+#' * `is_variancetest`: model is an an object of class `htest`, returned by
+#'   `bartlett.test()`, `shapiro.test()` or `car::leveneTest()`.
 #' * `is_levenetest`: model is an an object of class `anova`, returned by `car::leveneTest()`.
 #' * `is_onewaytest`: model is an an object of class `htest`, returned by `oneway.test()`
 #' * `is_proptest`: model is an an object of class `htest`, returned by `prop.test()`
 #' * `is_binomtest`: model is an an object of class `htest`, returned by `binom.test()`
 #' * `is_chi2test`: model is an an object of class `htest`, returned by `chisq.test()`
-#' * `is_xtab`: model is an an object of class `htest` or `BFBayesFactor`, and test-statistic stems from a contingency table (i.e. `chisq.test()` or `BayesFactor::contingencyTableBF()`).
+#' * `is_xtab`: model is an an object of class `htest` or `BFBayesFactor`, and
+#'   test-statistic stems from a contingency table (i.e. `chisq.test()` or
+#'   `BayesFactor::contingencyTableBF()`).
 #' * `link_function`: the link-function
-#' * `family`: name of the distributional family of the model. For some exceptions (like some `htest` objects), can also be the name of the test.
+#' * `family`: name of the distributional family of the model. For some
+#'   exceptions (like some `htest` objects), can also be the name of the test.
 #' * `n_obs`: number of observations
 #' * `n_grouplevels`: for mixed models, returns names and numbers of random effect groups
 #'
@@ -103,7 +108,12 @@ model_info.default <- function(x, verbose = TRUE, ...) {
     }
   })
 
-  if (!is.null(faminfo)) {
+  if (is.null(faminfo)) {
+    if (isTRUE(verbose)) {
+      format_warning("Could not access model information.")
+    }
+    NULL
+  } else {
     .make_family(
       x = x,
       fitfam = faminfo$family,
@@ -112,11 +122,6 @@ model_info.default <- function(x, verbose = TRUE, ...) {
       verbose = verbose,
       ...
     )
-  } else {
-    if (isTRUE(verbose)) {
-      format_warning("Could not access model information.")
-    }
-    NULL
   }
 }
 
@@ -302,17 +307,19 @@ model_info.mlm <- function(x, ...) {
   .make_family(x, multi.var = TRUE, ...)
 }
 
+
 #' @export
 model_info.afex_aov <- function(x, verbose = TRUE, ...) {
-  if (!is.null(x$aov)) {
-    .make_family(x$aov, verbose = verbose, ...)
-  } else {
+  if (is.null(x$aov)) {
     .make_family(x$lm, verbose = verbose, ...)
+  } else {
+    .make_family(x$aov, verbose = verbose, ...)
   }
 }
 
 
 # Models with logit-link --------------------------------
+
 
 #' @export
 model_info.logistf <- function(x, verbose = TRUE, ...) {
@@ -356,6 +363,7 @@ model_info.gmnl <- model_info.logistf
 model_info.phylolm <- function(x, verbose = TRUE, ...) {
   .make_family(x, verbose = verbose, ...)
 }
+
 
 #' @export
 model_info.phyloglm <- function(x, verbose = TRUE, ...) {
@@ -401,6 +409,7 @@ model_info.clmm <- model_info.clm
 #' @export
 model_info.mixor <- model_info.clm
 
+
 #' @export
 model_info.mvord <- function(x, verbose = verbose, ...) {
   link_name <- x$rho$link$name
@@ -417,8 +426,8 @@ model_info.mvord <- function(x, verbose = verbose, ...) {
 }
 
 
-
 # Models with family-function  ----------------------------------
+
 
 #' @export
 model_info.bamlss <- function(x, verbose = TRUE, ...) {
@@ -451,8 +460,8 @@ model_info.speedglm <- function(x, verbose = TRUE, ...) {
 model_info.brmultinom <- model_info.speedglm
 
 
-
 # Models with tobit family ----------------------------------
+
 
 #' @export
 model_info.flexsurvreg <- function(x, verbose = TRUE, ...) {
@@ -547,16 +556,16 @@ model_info.fixest <- function(x, verbose = TRUE, ...) {
     )
   } else {
     fitfam <- switch(faminfo,
-      "negbin" = "negative binomial",
-      "logit" = "binomial",
+      negbin = "negative binomial",
+      logit = "binomial",
       faminfo
     )
 
     link <- switch(faminfo,
-      "poisson" = ,
-      "negbin" = "log",
-      "logit" = "logit",
-      "gaussian" = "identity"
+      poisson = ,
+      negbin = "log",
+      logit = "logit",
+      gaussian = "identity"
     )
 
     .make_family(
@@ -732,13 +741,13 @@ model_info.stanmvreg <- function(x, ...) {
 #' @export
 model_info.BGGM <- function(x, ...) {
   link <- switch(x$type,
-    "continuous" = stats::gaussian(),
+    continuous = stats::gaussian(),
     stats::binomial()
   )
 
   family <- switch(x$type,
-    "continuous" = "gaussian",
-    "binary" = "binomial",
+    continuous = "gaussian",
+    binary = "binomial",
     "ordinal"
   )
 
@@ -803,9 +812,9 @@ model_info.coeftest <- function(x, ...) {
 #' @export
 model_info.glmm <- function(x, ...) {
   f <- switch(tolower(x$family.glmm$family.glmm),
-    "bernoulli.glmm" = ,
-    "binomial.glmm" = stats::binomial("logit"),
-    "poisson.glmm" = stats::poisson("log"),
+    bernoulli.glmm = ,
+    binomial.glmm = stats::binomial("logit"),
+    poisson.glmm = stats::poisson("log"),
     stats::gaussian("identity")
   )
   .make_family(
@@ -875,15 +884,15 @@ model_info.cglm <- function(x, ...) {
 
   if (!is.null(method) && method == "clm") {
     .make_family(x, ...)
-  } else if (!is.null(link)) {
+  } else if (is.null(link)) {
+    .make_family(x, ...)
+  } else {
     .make_family(
       x,
       logit.link = link == "logit",
       link.fun = link,
       ...
     )
-  } else {
-    .make_family(x, ...)
   }
 }
 
@@ -940,7 +949,6 @@ model_info.LORgee <- function(x, ...) {
 }
 
 
-
 #' @export
 model_info.BBreg <- function(x, ...) {
   .make_family(
@@ -956,7 +964,6 @@ model_info.BBreg <- function(x, ...) {
 
 #' @export
 model_info.BBmm <- model_info.BBreg
-
 
 
 #' @export
@@ -1003,6 +1010,7 @@ model_info.cpglmm <- function(x, ...) {
   )
 }
 
+
 #' @export
 model_info.zcpglm <- function(x, ...) {
   link <- parse(text = safe_deparse(x@call))[[1]]$link
@@ -1044,7 +1052,6 @@ model_info.glimML <- function(x, ...) {
 }
 
 
-
 #' @export
 model_info.gam <- function(x, ...) {
   if (!inherits(x, c("glm", "lm"))) {
@@ -1052,11 +1059,12 @@ model_info.gam <- function(x, ...) {
   }
 
   faminfo <- .gam_family(x)
-
   link <- faminfo$link[1]
   is.mv <- faminfo$family == "Multivariate normal"
 
-  if (is.mv) link <- "identity"
+  if (is.mv) {
+    link <- "identity"
+  }
 
   .make_family(
     x = x,
@@ -1069,12 +1077,13 @@ model_info.gam <- function(x, ...) {
 }
 
 
-
 #' @export
 model_info.vgam <- function(x, ...) {
   faminfo <- x@family
   link.fun <- faminfo@blurb[3]
-  if (grepl("^(l|L)ogit", link.fun)) link.fun <- "logit"
+  if (grepl("^(l|L)ogit", link.fun)) {
+    link.fun <- "logit"
+  }
   .make_family(
     x = x,
     fitfam = faminfo@vfamily[1],
@@ -1116,7 +1125,6 @@ model_info.glmmTMB <- function(x, ...) {
 }
 
 
-
 #' @export
 model_info.betareg <- function(x, ...) {
   .make_family(
@@ -1129,7 +1137,6 @@ model_info.betareg <- function(x, ...) {
 }
 
 
-
 #' @export
 model_info.DirichletRegModel <- function(x, ...) {
   .make_family(
@@ -1140,7 +1147,6 @@ model_info.DirichletRegModel <- function(x, ...) {
     ...
   )
 }
-
 
 
 #' @export
@@ -1166,7 +1172,6 @@ model_info.gbm <- function(x, ...) {
 }
 
 
-
 #' @export
 model_info.MCMCglmm <- function(x, ...) {
   .make_family(
@@ -1177,7 +1182,6 @@ model_info.MCMCglmm <- function(x, ...) {
     ...
   )
 }
-
 
 
 #' @export
@@ -1195,7 +1199,6 @@ model_info.polr <- function(x, ...) {
 }
 
 
-
 #' @export
 model_info.nestedLogit <- function(x, ...) {
   faminfo <- stats::binomial(link = "logit")
@@ -1207,7 +1210,6 @@ model_info.nestedLogit <- function(x, ...) {
     ...
   )
 }
-
 
 
 #' @export
@@ -1231,7 +1233,6 @@ model_info.hglm <- function(x, ...) {
 }
 
 
-
 #' @export
 model_info.orm <- function(x, ...) {
   faminfo <- stats::binomial(link = "logit")
@@ -1243,7 +1244,6 @@ model_info.orm <- function(x, ...) {
     ...
   )
 }
-
 
 
 #' @export
@@ -1261,7 +1261,6 @@ model_info.svyolr <- function(x, ...) {
     ...
   )
 }
-
 
 
 #' @export

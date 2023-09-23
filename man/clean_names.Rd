@@ -38,6 +38,7 @@ vector, while \code{find_variables()} returns a list of character
 vectors, unless \code{flatten = TRUE}. See 'Examples'.
 }
 \examples{
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # example from ?stats::glm
 counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
 outcome <- as.numeric(gl(3, 1, 9))
@@ -46,15 +47,15 @@ m <- glm(counts ~ log(outcome) + as.factor(treatment), family = poisson())
 clean_names(m)
 
 # difference "clean_names()" and "find_variables()"
-if (require("lme4")) {
-  m <- glmer(
-    cbind(incidence, size - incidence) ~ period + (1 | herd),
-    data = cbpp,
-    family = binomial
-  )
+data(cbpp, package = "lme4")
+m <- lme4::glmer(
+  cbind(incidence, size - incidence) ~ period + (1 | herd),
+  data = cbpp,
+  family = binomial
+)
 
-  clean_names(m)
-  find_variables(m)
-  find_variables(m, flatten = TRUE)
-}
+clean_names(m)
+find_variables(m)
+find_variables(m, flatten = TRUE)
+\dontshow{\}) # examplesIf}
 }

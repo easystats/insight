@@ -58,9 +58,9 @@ get_parameters.BGGM <- function(x,
 
   component <- match.arg(component)
   out <- switch(component,
-    "conditional" = out[, conditional, drop = FALSE],
-    "correlation" = out[, correlations, drop = FALSE],
-    "intercept" = out[, intercepts, drop = FALSE],
+    conditional = out[, conditional, drop = FALSE],
+    correlation = out[, correlations, drop = FALSE],
+    intercept = out[, intercepts, drop = FALSE],
     out
   )
   if (isTRUE(summary)) {
@@ -140,11 +140,11 @@ get_parameters.BFBayesFactor <- function(x,
       ))
 
     out <- switch(bf_type,
-      "correlation" = data.frame("rho" = as.numeric(posteriors$rho)),
-      "ttest1" = data.frame("Difference" = as.numeric(posteriors[, 1]) - x@numerator[[1]]@prior$mu),
-      "ttest2" = data.frame("Difference" = as.numeric(posteriors[, 2]) - x@numerator[[1]]@prior$mu),
-      "meta" = data.frame("Effect" = as.numeric(posteriors$delta)),
-      "linear" = .get_bf_posteriors(posteriors, params),
+      correlation = data.frame(rho = as.numeric(posteriors$rho)),
+      ttest1 = data.frame(Difference = as.numeric(posteriors[, 1]) - x@numerator[[1]]@prior$mu),
+      ttest2 = data.frame(Difference = as.numeric(posteriors[, 2]) - x@numerator[[1]]@prior$mu),
+      meta = data.frame(Effect = as.numeric(posteriors$delta)),
+      linear = .get_bf_posteriors(posteriors, params),
       NULL
     )
   } else if (bf_type == "proptest") {
@@ -307,9 +307,9 @@ get_parameters.bayesx <- function(x,
   )
 
   params <- switch(component,
-    "all" = rbind(fixed_dat, smooth_dat),
-    "conditional" = fixed_dat,
-    "smooth_terms" = smooth_dat
+    all = rbind(fixed_dat, smooth_dat),
+    conditional = fixed_dat,
+    smooth_terms = smooth_dat
   )
 
   out <- text_remove_backticks(params)
@@ -458,8 +458,8 @@ get_parameters.sim <- function(x,
 
 .summary_of_posteriors <- function(out, centrality = "mean", ...) {
   s <- switch(centrality,
-    "mean" = vapply(out, mean, numeric(1), na.rm = TRUE),
-    "median" = vapply(out, stats::median, numeric(1), na.rm = TRUE),
+    mean = vapply(out, mean, numeric(1), na.rm = TRUE),
+    median = vapply(out, stats::median, numeric(1), na.rm = TRUE),
     vapply(out, mean, numeric(1), na.rm = TRUE)
   )
   data.frame(

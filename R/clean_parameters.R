@@ -27,12 +27,12 @@
 #' The `Effects` column indicate if a parameter is a *fixed* or *random* effect.
 #' The `Component` can either be *conditional* or *zero_inflated*. For models
 #' with random effects, the `Group` column indicates the grouping factor of the
-#' random effects. For multivariate response models from **brms** or
-#' **rstanarm**, an additional *Response* column is included, to indicate
+#' random effects. For multivariate response models from {brms} or
+#' {rstanarm}, an additional *Response* column is included, to indicate
 #' which parameters belong to which response formula. Furthermore,
 #' *Cleaned_Parameter* column is returned that contains "human readable"
 #' parameter names (which are mostly identical to `Parameter`, except for for
-#' models from **brms** or **rstanarm**, or for specific terms like smooth-
+#' models from {brms} or {rstanarm}, or for specific terms like smooth-
 #' or spline-terms).
 #'
 #' @examplesIf require("curl", quietly = TRUE) && curl::has_internet() && require("brms")

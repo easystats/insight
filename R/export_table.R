@@ -602,7 +602,7 @@ print.insight_table <- function(x, ...) {
   }
 
   # Transform table matrix into a string value that can be printed
-  rows <- .table_parts(c(), final, header, sep, cross, empty_line)
+  rows <- .table_parts(NULL, final, header, sep, cross, empty_line)
 
   # if we have over-lengthy tables that are split into two parts,
   # print second table here
@@ -622,13 +622,13 @@ print.insight_table <- function(x, ...) {
     if (length(caption) == 2 && .is_valid_colour(caption[2])) {
       caption <- .colour(caption[2], caption[1])
     }
-    if (!is.null(subtitle)) {
+    if (is.null(subtitle)) {
+      subtitle <- ""
+    } else {
       # if we have a colour value, make coloured ansi-string
       if (length(subtitle) == 2 && .is_valid_colour(subtitle[2])) {
         subtitle <- .colour(subtitle[2], subtitle[1])
       }
-    } else {
-      subtitle <- ""
     }
 
     # paste everything together and remove unnecessary double spaces
@@ -1008,8 +1008,8 @@ print.insight_table <- function(x, ...) {
         col_align <- c(
           col_align,
           switch(substr(align, i, i),
-            "l" = "left",
-            "r" = "right",
+            l = "left",
+            r = "right",
             "center"
           )
         )

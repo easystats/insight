@@ -6,20 +6,17 @@
 #' @param x A fitted mixed model.
 #'
 #' @return A list of character vectors with the name(s) of the random slopes, or
-#'    `NULL` if model has no random slopes. Depending on the model, the
-#'    returned list has following elements:
-#'    \itemize{
-#'      \item `random`, the random slopes from the conditional part of model
-#'      \item `zero_inflated_random`, the random slopes from the
-#'      zero-inflation component of the model
-#'    }
+#' `NULL` if model has no random slopes. Depending on the model, the returned
+#' list has following elements:
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(sleepstudy)
-#'   m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-#'   find_random_slopes(m)
-#' }
+#' - `random`, the random slopes from the conditional part of model
+#' - `zero_inflated_random`, the random slopes from the zero-inflation
+#'   component of the model
+#'
+#' @examplesIf require("lme4", quietly = TRUE)
+#' data(sleepstudy, package = "lme4")
+#' m <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+#' find_random_slopes(m)
 #' @export
 find_random_slopes <- function(x) {
   random_slopes <- vector(mode = "list")

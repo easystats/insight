@@ -16,16 +16,14 @@
 #' @return The values of the response variable, as vector, or a data frame if
 #'   `x` has more than one defined response variable.
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(cbpp)
-#'   cbpp$trials <- cbpp$size - cbpp$incidence
-#'   dat <<- cbpp
+#' @examplesIf require("lme4", quietly = TRUE)
+#' data(cbpp)
+#' cbpp$trials <- cbpp$size - cbpp$incidence
+#' dat <<- cbpp
 #'
-#'   m <- glm(cbind(incidence, trials) ~ period, data = dat, family = binomial)
-#'   head(get_response(m))
-#'   get_response(m, select = "incidence")
-#' }
+#' m <- glm(cbind(incidence, trials) ~ period, data = dat, family = binomial)
+#' head(get_response(m))
+#' get_response(m, select = "incidence")
 #'
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)

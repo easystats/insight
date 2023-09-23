@@ -2,9 +2,25 @@
 % Please edit documentation in R/find_response.R
 \name{find_response}
 \alias{find_response}
+\alias{find_response.mjoint}
+\alias{find_response.joint}
 \title{Find name of the response variable}
 \usage{
 find_response(x, combine = TRUE, ...)
+
+\method{find_response}{mjoint}(
+  x,
+  combine = TRUE,
+  component = c("conditional", "survival", "all"),
+  ...
+)
+
+\method{find_response}{joint}(
+  x,
+  combine = TRUE,
+  component = c("conditional", "survival", "all"),
+  ...
+)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -15,6 +31,10 @@ instance also contain patterns like \code{"cbind(...)"}. Else, the original
 variable names from the matrix-column are returned. See 'Examples'.}
 
 \item{...}{Currently not used.}
+
+\item{component}{Character, if \code{x} is a joint model, this argument can be
+used to specify which component to return. Possible values are
+\code{"conditional"}, \code{"survival"} or \code{"all"}.}
 }
 \value{
 The name(s) of the response variable(s) from \code{x} as character
@@ -24,12 +44,12 @@ vector, or \code{NULL} if response variable could not be found.
 Returns the name(s) of the response variable(s) from a model object.
 }
 \examples{
-if (require("lme4")) {
-  data(cbpp)
-  cbpp$trials <- cbpp$size - cbpp$incidence
-  m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(cbpp, package = "lme4")
+cbpp$trials <- cbpp$size - cbpp$incidence
+m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
 
-  find_response(m, combine = TRUE)
-  find_response(m, combine = FALSE)
-}
+find_response(m, combine = TRUE)
+find_response(m, combine = FALSE)
+\dontshow{\}) # examplesIf}
 }

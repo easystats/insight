@@ -16,28 +16,26 @@
 #' @inheritParams find_predictors
 #'
 #' @return A list of parameter names. For simple models, only one list-element,
-#'    `conditional`, is returned. For more complex models, the returned
-#'    list may have following elements:
-#'    \itemize{
-#'      \item `conditional`, the "fixed effects" part from the model
-#'      \item `random`, the "random effects" part from the model
-#'      \item `zero_inflated`, the "fixed effects" part from the
-#'      zero-inflation component of the model
-#'      \item `zero_inflated_random`, the "random effects" part from the
-#'      zero-inflation component of the model
-#'      \item `smooth_terms`, the smooth parameters
-#'    }
+#' `conditional`, is returned. For more complex models, the returned list may
+#' have following elements:
 #'
-#'    Furthermore, some models, especially from \pkg{brms}, can also return
-#'    auxiliary parameters. These may be one of the following:
-#'    \itemize{
-#'      \item `sigma`, the residual standard deviation (auxiliary parameter)
-#'      \item `dispersion`, the dispersion parameters (auxiliary parameter)
-#'      \item `beta`, the beta parameter (auxiliary parameter)
-#'      \item `simplex`, simplex parameters of monotonic effects (\pkg{brms} only)
-#'      \item `mix`, mixture parameters (\pkg{brms} only)
-#'      \item `shiftprop`, shifted proportion parameters (\pkg{brms} only)
-#'    }
+#' - `conditional`, the "fixed effects" part from the model
+#' - `random`, the "random effects" part from the model
+#' - `zero_inflated`, the "fixed effects" part from the zero-inflation component
+#'   of the model
+#' - `zero_inflated_random`, the "random effects" part from the zero-inflation
+#'   component of the model
+#' - `smooth_terms`, the smooth parameters
+#'
+#' Furthermore, some models, especially from {brms}, can also return auxiliary
+#' parameters. These may be one of the following:
+#'
+#' - `sigma`, the residual standard deviation (auxiliary parameter)
+#' - `dispersion`, the dispersion parameters (auxiliary parameter)
+#' - `beta`, the beta parameter (auxiliary parameter)
+#' - `simplex`, simplex parameters of monotonic effects (\pkg{brms} only)
+#' - `mix`, mixture parameters (\pkg{brms} only)
+#' - `shiftprop`, shifted proportion parameters (\pkg{brms} only)
 #'
 #' @examples
 #' data(mtcars)
@@ -50,10 +48,10 @@ find_parameters.BGGM <- function(x,
                                  ...) {
   component <- match.arg(component)
   l <- switch(component,
-    "correlation" = list(correlation = colnames(get_parameters(x, component = "correlation"))),
-    "conditional" = list(conditional = colnames(get_parameters(x, component = "conditional"))),
-    "intercept" = list(intercept = colnames(x$Y)),
-    "all" = list(
+    correlation = list(correlation = colnames(get_parameters(x, component = "correlation"))),
+    conditional = list(conditional = colnames(get_parameters(x, component = "conditional"))),
+    intercept = list(intercept = colnames(x$Y)),
+    all = list(
       intercept = colnames(x$Y),
       correlation = colnames(get_parameters(x, component = "correlation")),
       conditional = colnames(get_parameters(x, component = "conditional"))
@@ -68,7 +66,6 @@ find_parameters.BGGM <- function(x,
     l
   }
 }
-
 
 
 #' @rdname find_parameters.BGGM
@@ -178,7 +175,6 @@ find_parameters.mcmc.list <- function(x, flatten = FALSE, ...) {
 }
 
 
-
 #' @rdname find_parameters.BGGM
 #' @export
 find_parameters.bamlss <- function(x,
@@ -211,7 +207,6 @@ find_parameters.bamlss <- function(x,
     l
   }
 }
-
 
 
 #' @rdname find_parameters.BGGM
@@ -401,7 +396,6 @@ find_parameters.brmsfit <- function(x,
 }
 
 
-
 #' @rdname find_parameters.BGGM
 #' @export
 find_parameters.bayesx <- function(x,
@@ -429,7 +423,6 @@ find_parameters.bayesx <- function(x,
     l
   }
 }
-
 
 
 #' @rdname find_parameters.BGGM
@@ -477,7 +470,6 @@ find_parameters.stanreg <- function(x,
 }
 
 
-
 #' @export
 find_parameters.bcplm <- function(x,
                                   flatten = FALSE,
@@ -492,7 +484,7 @@ find_parameters.bcplm <- function(x,
 }
 
 
-
+#' @rdname find_parameters.BGGM
 #' @export
 find_parameters.stanmvreg <- function(x,
                                       effects = c("all", "fixed", "random"),
@@ -557,7 +549,7 @@ find_parameters.stanmvreg <- function(x,
   }
 
 
-  l <- mapply(c, l.cond, l.random, l.sigma, SIMPLIFY = FALSE)
+  l <- Map(c, l.cond, l.random, l.sigma)
   l <- .filter_pars(l, parameters, is_mv = TRUE)
 
   effects <- match.arg(effects)
@@ -573,7 +565,6 @@ find_parameters.stanmvreg <- function(x,
     l
   }
 }
-
 
 
 
@@ -609,7 +600,6 @@ find_parameters.sim.merMod <- function(x,
 }
 
 
-
 #' @export
 find_parameters.sim <- function(x, flatten = FALSE, parameters = NULL, ...) {
   l <- .filter_pars(
@@ -625,7 +615,6 @@ find_parameters.sim <- function(x, flatten = FALSE, parameters = NULL, ...) {
 }
 
 
-
 #' @export
 find_parameters.mcmc <- function(x, flatten = FALSE, parameters = NULL, ...) {
   l <- .filter_pars(list(conditional = colnames(x)), parameters)
@@ -638,7 +627,6 @@ find_parameters.mcmc <- function(x, flatten = FALSE, parameters = NULL, ...) {
 }
 
 
-
 #' @export
 find_parameters.bayesQR <- function(x, flatten = FALSE, parameters = NULL, ...) {
   l <- .filter_pars(list(conditional = x[[1]]$names), parameters)
@@ -649,7 +637,6 @@ find_parameters.bayesQR <- function(x, flatten = FALSE, parameters = NULL, ...) 
     l
   }
 }
-
 
 
 #' @export

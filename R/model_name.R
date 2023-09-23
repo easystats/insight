@@ -10,15 +10,13 @@
 #'
 #' @return A character string of a name (which usually equals the model's class attribute).
 #'
-#' @examples
+#' @examplesIf require("lme4")
 #' m <- lm(Sepal.Length ~ Petal.Width, data = iris)
 #' model_name(m)
 #' model_name(m, include_formula = TRUE)
 #' model_name(m, include_call = TRUE)
 #'
-#' if (require("lme4")) {
-#'   model_name(lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))
-#' }
+#' model_name(lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))
 #' @export
 model_name <- function(x, ...) {
   UseMethod("model_name")

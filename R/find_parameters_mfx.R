@@ -25,11 +25,10 @@
 #'
 #' @return A list of parameter names. The returned list may have following
 #' elements:
-#'    \itemize{
-#'      \item `conditional`, the "fixed effects" part from the model.
-#'      \item `marginal`, the marginal effects.
-#'      \item `precision`, the precision parameter.
-#'    }
+#'
+#' - `conditional`, the "fixed effects" part from the model.
+#' - `marginal`, the marginal effects.
+#' - `precision`, the precision parameter.
 #'
 #' @examples
 #' data(mtcars)
@@ -56,7 +55,6 @@ find_parameters.betamfx <- function(x,
     pars
   }
 }
-
 
 
 #' @export

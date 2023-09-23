@@ -12,33 +12,30 @@
 #' @inheritParams find_variables
 #'
 #' @return A list of character vectors that represent the name(s) of the
-#'    random effects (grouping factors). Depending on the model, the
-#'    returned list has following elements:
-#'    \itemize{
-#'      \item `random`, the "random effects" terms from the conditional part of model
-#'      \item `zero_inflated_random`, the "random effects" terms from the
-#'      zero-inflation component of the model
-#'    }
+#' random effects (grouping factors). Depending on the model, the
+#' returned list has following elements:
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(sleepstudy)
-#'   sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
-#'   sleepstudy$mysubgrp <- NA
-#'   for (i in 1:5) {
-#'     filter_group <- sleepstudy$mygrp == i
-#'     sleepstudy$mysubgrp[filter_group] <-
-#'       sample(1:30, size = sum(filter_group), replace = TRUE)
-#'   }
+#' - `random`, the "random effects" terms from the conditional part of model
+#' - `zero_inflated_random`, the "random effects" terms from the zero-inflation
+#'   component of the model
 #'
-#'   m <- lmer(
-#'     Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-#'     data = sleepstudy
-#'   )
-#'
-#'   find_random(m)
-#'   find_random(m, split_nested = TRUE)
+#' @examplesIf require("lme4", quietly = TRUE)
+#' data(sleepstudy, package = "lme4")
+#' sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+#' sleepstudy$mysubgrp <- NA
+#' for (i in 1:5) {
+#'   filter_group <- sleepstudy$mygrp == i
+#'   sleepstudy$mysubgrp[filter_group] <-
+#'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
+#'
+#' m <- lme4::lmer(
+#'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+#'   data = sleepstudy
+#' )
+#'
+#' find_random(m)
+#' find_random(m, split_nested = TRUE)
 #' @export
 find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   UseMethod("find_random")
@@ -87,9 +84,17 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
 
   if (object_has_names(f, "random")) {
     if (is.list(f$random)) {
-      r1 <- unique(unlist(lapply(f$random, .get_model_random, split_nested, model = x), use.names = FALSE))
+      r1 <- unique(unlist(lapply(
+        f$random,
+        .get_model_random,
+        split_nested,
+        model = x
+      ), use.names = FALSE))
     } else {
-      r1 <- unique(unlist(.get_model_random(f$random, split_nested, x), use.names = FALSE))
+      r1 <- unique(unlist(
+        .get_model_random(f$random, split_nested, x),
+        use.names = FALSE
+      ))
     }
   } else {
     r1 <- NULL

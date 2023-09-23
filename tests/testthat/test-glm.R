@@ -91,7 +91,7 @@ test_that("get_data", {
 })
 
 test_that("get_call", {
-  expect_identical(class(get_call(m1)), "call")
+  expect_true(inherits(get_call(m1), "call")) # nolint
 })
 
 test_that("find_formula", {
@@ -168,4 +168,33 @@ test_that("get_statistic", {
     ),
     tolerance = 1e-4
   )
+})
+
+test_that("model_info, bernoulli", {
+  skip_if_not_installed("lme4")
+  data(cbpp, package = "lme4")
+  m <- glm(
+    cbind(incidence, size - incidence) ~ size + period,
+    family = binomial(),
+    data = cbpp
+  )
+  info <- model_info(m)
+  expect_true(info$is_binomial)
+  expect_false(info$is_bernoulli)
+  expect_true(info$is_logit)
+  expect_true(info$is_trial)
+  expect_identical(info$family, "binomial")
+
+  data(mtcars)
+  m <- glm(
+    am ~ cyl,
+    family = binomial(),
+    data = mtcars
+  )
+  info <- model_info(m)
+  expect_true(info$is_binomial)
+  expect_true(info$is_bernoulli)
+  expect_true(info$is_logit)
+  expect_false(info$is_trial)
+  expect_identical(info$family, "binomial")
 })

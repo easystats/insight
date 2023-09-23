@@ -82,31 +82,31 @@ auxiliary parameters).
 }
 
 \examples{
-if (require("lme4")) {
-  data(cbpp)
-  data(sleepstudy)
-  # some data preparation...
-  cbpp$trials <- cbpp$size - cbpp$incidence
-  sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
-  sleepstudy$mysubgrp <- NA
-  for (i in 1:5) {
-    filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <-
-      sample(1:30, size = sum(filter_group), replace = TRUE)
-  }
-
-  m1 <- glmer(
-    cbind(incidence, size - incidence) ~ period + (1 | herd),
-    data = cbpp,
-    family = binomial
-  )
-  find_variables(m1)
-
-  m2 <- lmer(
-    Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-    data = sleepstudy
-  )
-  find_variables(m2)
-  find_variables(m2, flatten = TRUE)
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(cbpp, package = "lme4")
+data(sleepstudy, package = "lme4")
+# some data preparation...
+cbpp$trials <- cbpp$size - cbpp$incidence
+sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mysubgrp <- NA
+for (i in 1:5) {
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
 }
+
+m1 <- lme4::glmer(
+  cbind(incidence, size - incidence) ~ period + (1 | herd),
+  data = cbpp,
+  family = binomial
+)
+find_variables(m1)
+
+m2 <- lme4::lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = sleepstudy
+)
+find_variables(m2)
+find_variables(m2, flatten = TRUE)
+\dontshow{\}) # examplesIf}
 }

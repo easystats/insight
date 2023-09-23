@@ -45,18 +45,20 @@
 #'   `beta` or `precision` (and other auxiliary parameters) are returned.
 #'
 #' @return A list of character vectors that represent the name(s) of the
-#'    predictor variables. Depending on the combination of the arguments
-#'    `effects` and `component`, the returned list has following
-#'    elements:
-#'    \itemize{
-#'      \item `conditional`, the "fixed effects" terms from the model
-#'      \item `random`, the "random effects" terms from the model
-#'      \item `zero_inflated`, the "fixed effects" terms from the zero-inflation component of the model
-#'      \item `zero_inflated_random`, the "random effects" terms from the zero-inflation component of the model
-#'      \item `dispersion`, the dispersion terms
-#'      \item `instruments`, for fixed-effects regressions like `ivreg`, `felm` or `plm`, the instrumental variables
-#'      \item `correlation`, for models with correlation-component like `gls`, the variables used to describe the correlation structure
-#'    }
+#' predictor variables. Depending on the combination of the arguments
+#' `effects` and `component`, the returned list has following elements:
+#'
+#' - `conditional`, the "fixed effects" terms from the model
+#' - `random`, the "random effects" terms from the model
+#' - `zero_inflated`, the "fixed effects" terms from the zero-inflation
+#'   component of the model
+#' - `zero_inflated_random`, the "random effects" terms from the zero-inflation
+#'   component of the model
+#' - `dispersion`, the dispersion terms
+#' - `instruments`, for fixed-effects regressions like `ivreg`, `felm` or `plm`,
+#'   the instrumental variables
+#' - `correlation`, for models with correlation-component like `gls`, the
+#'   variables used to describe the correlation structure
 #'
 #' @examples
 #' data(mtcars)
@@ -122,7 +124,6 @@ find_predictors.default <- function(x,
 }
 
 
-
 #' @export
 find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   elements <- .get_elements("all", "all")
@@ -182,10 +183,10 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
   }
 
   l <- compact_list(list(
-    "conditional" = conditional,
-    "cluster" = cluster,
-    "instruments" = instruments,
-    "endogenous" = endo
+    conditional = conditional,
+    cluster = cluster,
+    instruments = instruments,
+    endogenous = endo
   ))
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
@@ -206,7 +207,7 @@ find_predictors.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 }
 
 
-
+#' @rdname find_predictors
 #' @export
 find_predictors.afex_aov <- function(x,
                                      effects = c("fixed", "random", "all"),

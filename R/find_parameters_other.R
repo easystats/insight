@@ -2,7 +2,7 @@
 #' @name find_parameters.averaging
 #'
 #' @description Returns the names of model parameters, like they typically
-#'     appear in the `summary()` output.
+#' appear in the `summary()` output.
 #'
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
@@ -10,11 +10,10 @@
 #' @inheritParams find_predictors
 #'
 #' @return A list of parameter names. The returned list may have following
-#'   elements:
-#'    \itemize{
-#'      \item `conditional`, the "fixed effects" part from the model.
-#'      \item `full`, parameters from the full model.
-#'    }
+#' elements:
+#'
+#' - `conditional`, the "fixed effects" part from the model.
+#' - `full`, parameters from the full model.
 #'
 #' @examples
 #' data(mtcars)
@@ -35,7 +34,6 @@ find_parameters.averaging <- function(x,
     out
   }
 }
-
 
 
 #' @rdname find_parameters.averaging
@@ -59,7 +57,6 @@ find_parameters.betareg <- function(x,
     recursive = FALSE
   )
 }
-
 
 
 #' @rdname find_parameters.averaging
@@ -91,7 +88,6 @@ find_parameters.DirichletRegModel <- function(x,
 }
 
 
-
 #' @rdname find_parameters.averaging
 #' @export
 find_parameters.mjoint <- function(x,
@@ -114,7 +110,6 @@ find_parameters.mjoint <- function(x,
     recursive = FALSE
   )
 }
-
 
 
 #' @rdname find_parameters.averaging
@@ -140,12 +135,10 @@ find_parameters.glmx <- function(x,
 }
 
 
-
 #' @export
 find_parameters.model_fit <- function(x, flatten = FALSE, ...) {
   find_parameters(x$fit, flatten = flatten, ...)
 }
-
 
 
 #' @export
@@ -169,7 +162,6 @@ find_parameters.systemfit <- function(x, flatten = FALSE, ...) {
     out
   }
 }
-
 
 
 #' @export

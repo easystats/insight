@@ -2,18 +2,17 @@
 #' @name find_parameters
 #'
 #' @description Returns the names of model parameters, like they typically
-#'     appear in the `summary()` output. For Bayesian models, the parameter
-#'     names equal the column names of the posterior samples after coercion
-#'     from `as.data.frame()`. See the documentation for your object's class:
-#'    \itemize{
-#'      \item{[Bayesian models][find_parameters.BGGM] (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
-#'      \item{[Generalized additive models][find_parameters.gamlss] (\pkg{mgcv}, \pkg{VGAM}, ...)}
-#'      \item{[Marginal effects models][find_parameters.betamfx] (\pkg{mfx})}
-#'      \item{[Estimated marginal means][find_parameters.emmGrid] (\pkg{emmeans})}
-#'      \item{[Mixed models][find_parameters.glmmTMB] (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
-#'      \item{[Zero-inflated and hurdle models][find_parameters.zeroinfl] (\pkg{pscl}, ...)}
-#'      \item{[Models with special components][find_parameters.averaging] (\pkg{betareg}, \pkg{MuMIn}, ...)}
-#'    }
+#' appear in the `summary()` output. For Bayesian models, the parameter
+#' names equal the column names of the posterior samples after coercion
+#' from `as.data.frame()`. See the documentation for your object's class:
+#'
+#' - [Bayesian models][find_parameters.BGGM] ({rstanarm}, {brms}, {MCMCglmm}, ...)
+#' - [Generalized additive models][find_parameters.gamlss] ({mgcv}, {VGAM}, ...)
+#' - [Marginal effects models][find_parameters.betamfx] ({mfx})
+#' - [Estimated marginal means][find_parameters.emmGrid] ({emmeans})
+#' - [Mixed models][find_parameters.glmmTMB] ({lme4}, {glmmTMB}, {GLMMadaptive}, ...)
+#' - [Zero-inflated and hurdle models][find_parameters.zeroinfl] ({pscl}, ...)
+#' - [Models with special components][find_parameters.averaging] ({betareg}, {MuMIn}, ...)
 #'
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
@@ -57,7 +56,6 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
     )
   }
 
-
   if (is.null(pars$conditional) || is.null(pars)) {
     if (isTRUE(verbose)) {
       format_warning(sprintf("Parameters can't be retrieved for objects of class `%s`.", class(x)[1]))
@@ -74,12 +72,10 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 find_parameters.data.frame <- function(x, flatten = FALSE, ...) {
   format_error("A data frame is no valid object for this function.")
 }
-
 
 
 #' @export
@@ -112,7 +108,6 @@ find_parameters.polr <- function(x, flatten = FALSE, ...) {
 }
 
 
-
 #' @export
 find_parameters.clm2 <- function(x, flatten = FALSE, ...) {
   cf <- stats::coef(x)
@@ -142,7 +137,6 @@ find_parameters.clm2 <- function(x, flatten = FALSE, ...) {
 find_parameters.clmm2 <- find_parameters.clm2
 
 
-
 #' @export
 find_parameters.bracl <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
@@ -154,7 +148,6 @@ find_parameters.bracl <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
-
 
 
 #' @export
@@ -176,7 +169,6 @@ find_parameters.multinom <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
-
 
 #' @export
 find_parameters.brmultinom <- find_parameters.multinom
@@ -254,6 +246,7 @@ find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
 
 # Panel models ----------------------------------------
 
+#' @rdname find_parameters
 #' @export
 find_parameters.pgmm <- function(x,
                                  component = c("conditional", "all"),
@@ -531,10 +524,10 @@ find_parameters.maov <- find_parameters.manova
 
 #' @export
 find_parameters.afex_aov <- function(x, flatten = FALSE, ...) {
-  if (!is.null(x$aov)) {
-    find_parameters(x$aov, flatten = flatten, ...)
-  } else {
+  if (is.null(x$aov)) {
     find_parameters(x$lm, flatten = flatten, ...)
+  } else {
+    find_parameters(x$aov, flatten = flatten, ...)
   }
 }
 
@@ -590,7 +583,6 @@ find_parameters.mvord <- function(x, flatten = FALSE, ...) {
 }
 
 
-
 #' @export
 find_parameters.gbm <- function(x, flatten = FALSE, ...) {
   s <- summary(x, plotit = FALSE)
@@ -605,7 +597,6 @@ find_parameters.gbm <- function(x, flatten = FALSE, ...) {
 }
 
 
-
 #' @export
 find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = rownames(stats::coef(x)))
@@ -617,7 +608,6 @@ find_parameters.BBreg <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
-
 
 
 #' @export
@@ -636,7 +626,6 @@ find_parameters.lrm <- function(x, flatten = FALSE, ...) {
 find_parameters.flexsurvreg <- find_parameters.lrm
 
 
-
 #' @export
 find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
   l <- list(conditional = text_remove_backticks(unlist(lapply(stats::coef(x), names), use.names = FALSE)))
@@ -647,7 +636,6 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
     l
   }
 }
-
 
 
 #' @export
@@ -691,7 +679,6 @@ find_parameters.crq <- function(x, flatten = FALSE, ...) {
 find_parameters.crqs <- find_parameters.crq
 
 
-
 #' @export
 find_parameters.lqmm <- function(x, flatten = FALSE, ...) {
   cs <- stats::coef(x)
@@ -714,8 +701,6 @@ find_parameters.lqmm <- function(x, flatten = FALSE, ...) {
 find_parameters.lqm <- find_parameters.lqmm
 
 
-
-
 #' @export
 find_parameters.aareg <- function(x, flatten = FALSE, ...) {
   sc <- summary(x)
@@ -729,7 +714,6 @@ find_parameters.aareg <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
-
 
 
 #' @export
@@ -748,7 +732,6 @@ find_parameters.rma <- function(x, flatten = FALSE, ...) {
     }
   })
 }
-
 
 
 #' @export
@@ -771,13 +754,11 @@ find_parameters.meta_random <- function(x, flatten = FALSE, ...) {
   )
 }
 
-
 #' @export
 find_parameters.meta_fixed <- find_parameters.meta_random
 
 #' @export
 find_parameters.meta_bma <- find_parameters.meta_random
-
 
 
 #' @export
@@ -792,7 +773,6 @@ find_parameters.metaplus <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
-
 
 
 #' @export
@@ -813,7 +793,9 @@ find_parameters.mira <- function(x, flatten = FALSE, ...) {
   find_parameters(x$analyses[[1]], flatten = flatten, ...)
 }
 
+
 ## For questions or problems with this ask Fernando Miguez (femiguez@iastate.edu)
+#' @rdname find_parameters
 #' @export
 find_parameters.nls <- function(x,
                                 component = c("all", "conditional", "nonlinear"),
@@ -831,6 +813,8 @@ find_parameters.nls <- function(x,
     pars
   }
 }
+
+
 
 # helper ----------------------------
 

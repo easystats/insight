@@ -22,30 +22,30 @@ random effects (grouping factors). Depending on the model, the
 returned list has following elements:
 \itemize{
 \item \code{random}, the "random effects" terms from the conditional part of model
-\item \code{zero_inflated_random}, the "random effects" terms from the
-zero-inflation component of the model
+\item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation
+component of the model
 }
 }
 \description{
 Return the name of the grouping factors from mixed effects models.
 }
 \examples{
-if (require("lme4")) {
-  data(sleepstudy)
-  sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
-  sleepstudy$mysubgrp <- NA
-  for (i in 1:5) {
-    filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <-
-      sample(1:30, size = sum(filter_group), replace = TRUE)
-  }
-
-  m <- lmer(
-    Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-    data = sleepstudy
-  )
-
-  find_random(m)
-  find_random(m, split_nested = TRUE)
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(sleepstudy, package = "lme4")
+sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mysubgrp <- NA
+for (i in 1:5) {
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
 }
+
+m <- lme4::lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = sleepstudy
+)
+
+find_random(m)
+find_random(m, split_nested = TRUE)
+\dontshow{\}) # examplesIf}
 }

@@ -10,12 +10,11 @@
 #' @inheritParams find_predictors
 #'
 #' @return A list of parameter names. The returned list may have following
-#'   elements:
-#'    \itemize{
-#'      \item `conditional`, the "fixed effects" part from the model.
-#'      \item `zero_inflated`, the "fixed effects" part from the
-#'      zero-inflation component of the model.
-#'    }
+#' elements:
+#'
+#' - `conditional`, the "fixed effects" part from the model.
+#' - `zero_inflated`, the "fixed effects" part from the zero-inflation
+#'   component of the model.
 #'
 #' @examples
 #' data(mtcars)
