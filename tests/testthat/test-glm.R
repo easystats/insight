@@ -182,6 +182,7 @@ test_that("model_info, bernoulli", {
   expect_true(info$is_binomial)
   expect_false(info$is_bernoulli)
   expect_true(info$is_logit)
+  expect_true(info$is_trial)
   expect_identical(info$family, "binomial")
 
   data(mtcars)
@@ -194,5 +195,6 @@ test_that("model_info, bernoulli", {
   expect_true(info$is_binomial)
   expect_true(info$is_bernoulli)
   expect_true(info$is_logit)
+  expect_false(info$is_trial)
   expect_identical(info$family, "binomial")
 })
