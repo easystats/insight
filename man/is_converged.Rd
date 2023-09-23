@@ -73,7 +73,8 @@ is_converged(model)
 \dontshow{if (getOption("warn") < 2L && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 model <- glmmTMB(
-  Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) + (1 + poly(Petal.Width, 4) | Species),
+  Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
+  (1 + poly(Petal.Width, 4) | Species),
   data = iris
 )
 
