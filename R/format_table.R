@@ -472,7 +472,7 @@ format_table <- function(x,
 
     if (is.null(ci_value)) {
       ci_colname <- ci_name
-    } else if (isTRUE(tolower(ci_method) %in% "si")) {
+    } else if (isTRUE(tolower(ci_method) == "si")) {
       ci_colname <- sprintf("BF = %.5g SI", ci_value)
     } else {
       ci_colname <- sprintf("%g%% %s", ci_value * 100, ci_name)
