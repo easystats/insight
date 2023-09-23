@@ -489,12 +489,12 @@ get_priors.BFBayesFactor <- function(x, ...) {
   bf_type <- .classify_BFBayesFactor(x)
 
   prior_names <- switch(bf_type,
-    "correlation" = "rho",
-    "ttest1" = ,
-    "ttest2" = "Difference",
-    "meta" = "Effect",
-    "proptest" = "Proportion",
-    "xtable" = "Ratio",
+    correlation = "rho",
+    ttest1 = ,
+    ttest2 = "Difference",
+    meta = "Effect",
+    proptest = "Proportion",
+    xtable = "Ratio",
     names(prior)
   )
 

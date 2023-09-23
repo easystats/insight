@@ -647,10 +647,10 @@ format_table <- function(x,
                                   exact = TRUE) {
   # Specify stars for which column
   if (is.character(stars)) {
-    starlist <- list("BF" = FALSE, "pd" = FALSE)
+    starlist <- list(BF = FALSE, pd = FALSE)
     starlist[stars] <- TRUE
   } else {
-    starlist <- list("BF" = stars, "pd" = stars)
+    starlist <- list(BF = stars, pd = stars)
   }
 
   # Indices

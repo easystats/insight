@@ -480,7 +480,7 @@ get_predicted.bife <- function(x,
   out <- .safe(stats::predict(x, type = args$scale, X_new = args$data))
 
   if (!is.null(out)) {
-    out <- .get_predicted_out(out, args = list("data" = data))
+    out <- .get_predicted_out(out, args = list(data = data))
   }
 
   out
@@ -571,7 +571,7 @@ get_predicted.rma <- function(x,
     if (nrow(out) == 1) {
       out <- do.call(rbind, lapply(seq_along(x$slab), function(i) out))
     }
-    out <- .get_predicted_out(out, args = list("data" = data))
+    out <- .get_predicted_out(out, args = list(data = data))
   }
 
   out
@@ -588,7 +588,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
   if (is.null(data)) {
     args <- c(list(x), list(...))
   } else {
-    args <- c(list(x, "newdata" = data), list(...))
+    args <- c(list(x, newdata = data), list(...))
   }
 
   out <- .safe(do.call("predict", args))
@@ -598,7 +598,7 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
   }
 
   if (!is.null(out)) {
-    out <- .get_predicted_out(out, args = list("data" = data))
+    out <- .get_predicted_out(out, args = list(data = data))
   }
 
   out

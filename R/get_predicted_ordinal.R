@@ -143,7 +143,7 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci =
     format_error("The `predict` argument must be either \"expectation\" or \"classification\".")
   }
 
-  args <- c(list(x, "data" = data, ci = ci, predict = type_arg), list(...))
+  args <- c(list(x, data = data, ci = ci, predict = type_arg), list(...))
 
   # predict.multinom doesn't work when `newdata` is explicitly set to NULL (weird)
   if (is.null(data)) {
@@ -189,7 +189,7 @@ get_predicted.rlm <- function(x, predict = "expectation", ...) {
     }
     dots[["type"]] <- match.arg(dots$type, choices = "response")
     dots[["x"]] <- x
-    dots <- c(dots, list("predict" = NULL))
+    dots <- c(dots, list(predict = NULL))
     do.call("get_predicted.lm", dots)
   }
 }

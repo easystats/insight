@@ -140,10 +140,10 @@ get_parameters.BFBayesFactor <- function(x,
       ))
 
     out <- switch(bf_type,
-      correlation = data.frame("rho" = as.numeric(posteriors$rho)),
-      ttest1 = data.frame("Difference" = as.numeric(posteriors[, 1]) - x@numerator[[1]]@prior$mu),
-      ttest2 = data.frame("Difference" = as.numeric(posteriors[, 2]) - x@numerator[[1]]@prior$mu),
-      meta = data.frame("Effect" = as.numeric(posteriors$delta)),
+      correlation = data.frame(rho = as.numeric(posteriors$rho)),
+      ttest1 = data.frame(Difference = as.numeric(posteriors[, 1]) - x@numerator[[1]]@prior$mu),
+      ttest2 = data.frame(Difference = as.numeric(posteriors[, 2]) - x@numerator[[1]]@prior$mu),
+      meta = data.frame(Effect = as.numeric(posteriors$delta)),
       linear = .get_bf_posteriors(posteriors, params),
       NULL
     )
@@ -307,9 +307,9 @@ get_parameters.bayesx <- function(x,
   )
 
   params <- switch(component,
-    "all" = rbind(fixed_dat, smooth_dat),
-    "conditional" = fixed_dat,
-    "smooth_terms" = smooth_dat
+    all = rbind(fixed_dat, smooth_dat),
+    conditional = fixed_dat,
+    smooth_terms = smooth_dat
   )
 
   out <- text_remove_backticks(params)
