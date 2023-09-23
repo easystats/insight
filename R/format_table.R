@@ -290,10 +290,10 @@ format_table <- function(x,
   # df for errors
   if ("df_error" %in% names(x)) {
     x$df_error <- format_value(x$df_error, protect_integers = TRUE)
-    if (!("df" %in% names(x))) {
-      names(x)[names(x) == "df_error"] <- "df"
-    } else {
+    if ("df" %in% names(x)) {
       names(x)[names(x) == "df_error"] <- "df (error)"
+    } else {
+      names(x)[names(x) == "df_error"] <- "df"
     }
   }
   # denominator and numerator df
