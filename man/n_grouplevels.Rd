@@ -20,20 +20,20 @@ The number of group levels in the model.
 Returns the number of group levels of random effects from mixed models.
 }
 \examples{
-if (require("lme4")) {
-  data(sleepstudy)
-  set.seed(12345)
-  sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
-  sleepstudy$subgrp <- NA
-  for (i in 1:5) {
-    filter_group <- sleepstudy$grp == i
-    sleepstudy$subgrp[filter_group] <-
-      sample(1:30, size = sum(filter_group), replace = TRUE)
-  }
-  model <- lmer(
-    Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
-    data = sleepstudy
-  )
-  n_grouplevels(model)
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(sleepstudy, package = "lme4")
+set.seed(12345)
+sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$subgrp <- NA
+for (i in 1:5) {
+  filter_group <- sleepstudy$grp == i
+  sleepstudy$subgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
 }
+model <- lme4::lmer(
+  Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
+  data = sleepstudy
+)
+n_grouplevels(model)
+\dontshow{\}) # examplesIf}
 }

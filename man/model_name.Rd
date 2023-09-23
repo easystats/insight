@@ -25,12 +25,12 @@ A character string of a name (which usually equals the model's class attribute).
 Returns the "name" (class attribute) of a model, possibly including further information.
 }
 \examples{
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 m <- lm(Sepal.Length ~ Petal.Width, data = iris)
 model_name(m)
 model_name(m, include_formula = TRUE)
 model_name(m, include_call = TRUE)
 
-if (require("lme4")) {
-  model_name(lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))
-}
+model_name(lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))
+\dontshow{\}) # examplesIf}
 }

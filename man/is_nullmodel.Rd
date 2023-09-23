@@ -17,17 +17,18 @@ Checks if model is a null-model (intercept-only), i.e. if
 the conditional part of the model has no predictors.
 }
 \examples{
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- lm(mpg ~ 1, data = mtcars)
 is_nullmodel(model)
 
 model <- lm(mpg ~ gear, data = mtcars)
 is_nullmodel(model)
 
-if (require("lme4")) {
-  model <- lmer(Reaction ~ 1 + (Days | Subject), data = sleepstudy)
-  is_nullmodel(model)
+data(sleepstudy, package = "lme4")
+model <- lme4::lmer(Reaction ~ 1 + (Days | Subject), data = sleepstudy)
+is_nullmodel(model)
 
-  model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
-  is_nullmodel(model)
-}
+model <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+is_nullmodel(model)
+\dontshow{\}) # examplesIf}
 }
