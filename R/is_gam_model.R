@@ -17,7 +17,7 @@
 #' @examplesIf require("mgcv")
 #' data(iris)
 #' model1 <- lm(Petal.Length ~ Petal.Width + Sepal.Length, data = iris)
-#' model2 <- mgcv::gam(Petal.Length ~ Petal.Width + mgcv::s(Sepal.Length), data = iris)
+#' model2 <- mgcv::gam(Petal.Length ~ Petal.Width + s(Sepal.Length), data = iris)
 #' is_gam_model(model1)
 #' is_gam_model(model2)
 #' @export
