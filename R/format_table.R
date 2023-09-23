@@ -235,10 +235,10 @@ format_table <- function(x,
 .format_p_values <- function(x, p_digits, stars = FALSE) {
   # Specify stars for which column (#656)
   if (is.character(stars)) {
-    starlist <- list("p" = FALSE)
+    starlist <- list(p = FALSE)
     starlist[stars] <- TRUE
   } else {
-    starlist <- list("p" = stars)
+    starlist <- list(p = stars)
   }
 
   for (pv in c("p", "p.value", "SGPV")) {
