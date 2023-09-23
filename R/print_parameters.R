@@ -188,11 +188,11 @@ print_parameters <- function(x,
       # "Main title" of a subcomponent (like "Random effects")
       if (parts[j] %in% c("fixed", "random") || (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
         tmp <- switch(parts[j],
-          "fixed" = "Fixed effects",
-          "random" = "Random effects",
-          "dispersion" = "Dispersion",
-          "conditional" = "(conditional)",
-          "zero_inflated" = "(zero-inflated)"
+          fixed = "Fixed effects",
+          random = "Random effects",
+          dispersion = "Dispersion",
+          conditional = "(conditional)",
+          zero_inflated = "(zero-inflated)"
         )
         title1 <- paste0(title1, " ", tmp)
       } else if (!parts[j] %in% c("conditional", "zero_inflated")) {

@@ -50,7 +50,7 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
     }
   } else {
     # Then it must be predictions from a regression model
-    out <- data.frame("Predicted" = as.vector(x))
+    out <- data.frame(Predicted = as.vector(x))
     if ("ci_data" %in% names(attributes(x))) {
       out <- cbind(out, attributes(x)$ci_data)
     }

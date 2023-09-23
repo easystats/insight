@@ -390,7 +390,7 @@ test_that("find_paramaters", {
           )
         )
       ),
-      "is_mv" = "1"
+      is_mv = "1"
     )
   )
 })

@@ -165,8 +165,8 @@ n_obs.selection <- function(x, type = c("all", "observed", "censored"), ...) {
   type <- match.arg(type)
   s <- summary(x)
   switch(type,
-    "all" = s$param$nObs,
-    "observed" = s$param$N1,
+    all = s$param$nObs,
+    observed = s$param$N1,
     s$param$N0
   )
 }

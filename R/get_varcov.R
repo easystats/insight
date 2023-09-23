@@ -438,9 +438,9 @@ get_varcov.hurdle <- function(x,
 
   if (is.null(vcov)) {
     vc <- switch(component,
-      "conditional" = stats::vcov(object = x, model = "count"),
-      "zi" = ,
-      "zero_inflated" = stats::vcov(object = x, model = "zero"),
+      conditional = stats::vcov(object = x, model = "count"),
+      zi = ,
+      zero_inflated = stats::vcov(object = x, model = "zero"),
       stats::vcov(object = x)
     )
   } else {
@@ -451,9 +451,9 @@ get_varcov.hurdle <- function(x,
       ...
     )
     keep <- switch(component,
-      "conditional" = startsWith(colnames(vc), "count_"),
-      "zi" = ,
-      "zero_inflated" = startsWith(colnames(vc), "zero_"),
+      conditional = startsWith(colnames(vc), "count_"),
+      zi = ,
+      zero_inflated = startsWith(colnames(vc), "zero_"),
       seq_len(ncol(vc))
     )
     vc <- vc[keep, keep, drop = FALSE]
@@ -484,9 +484,9 @@ get_varcov.zcpglm <- function(x,
   zero <- which(startsWith(rownames(vc), "zero_"))
 
   vc <- switch(component,
-    "conditional" = vc[tweedie, tweedie, drop = FALSE],
-    "zi" = ,
-    "zero_inflated" = vc[zero, zero, drop = FALSE],
+    conditional = vc[tweedie, tweedie, drop = FALSE],
+    zi = ,
+    zero_inflated = vc[zero, zero, drop = FALSE],
     vc[c(tweedie, zero), c(tweedie, zero), drop = FALSE]
   )
   .process_vcov(vc, verbose, ...)
@@ -507,10 +507,10 @@ get_varcov.glmmTMB <- function(x,
   component <- match.arg(component)
 
   vc <- switch(component,
-    "conditional" = stats::vcov(x)[["cond"]],
-    "zi" = ,
-    "zero_inflated" = stats::vcov(x)[["zi"]],
-    "dispersion" = stats::vcov(x)[["disp"]],
+    conditional = stats::vcov(x)[["cond"]],
+    zi = ,
+    zero_inflated = stats::vcov(x)[["zi"]],
+    dispersion = stats::vcov(x)[["disp"]],
     stats::vcov(x, full = TRUE)
   )
   .process_vcov(vc, verbose, ...)
