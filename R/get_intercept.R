@@ -13,12 +13,11 @@
 #' get_intercept(lm(Sepal.Length ~ Petal.Width, data = iris))
 #' get_intercept(lm(Sepal.Length ~ 0 + Petal.Width, data = iris))
 #'
-#' if (require("lme4")) {
-#'   get_intercept(lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))
-#' }
-#' if (require("gamm4")) {
-#'   get_intercept(gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data = iris))
-#' }
+#' @examplesIf require("lme4", quietly = TRUE)
+#' get_intercept(lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris))
+#'
+#' @examplesIf require("gamm4")
+#' get_intercept(gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data = iris))
 #' @export
 get_intercept <- function(x, ...) {
   UseMethod("get_intercept")

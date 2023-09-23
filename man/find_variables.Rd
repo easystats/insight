@@ -82,7 +82,7 @@ auxiliary parameters).
 }
 
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(cbpp, package = "lme4")
 data(sleepstudy, package = "lme4")
 # some data preparation...

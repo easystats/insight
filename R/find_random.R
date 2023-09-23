@@ -19,7 +19,7 @@
 #' - `zero_inflated_random`, the "random effects" terms from the zero-inflation
 #'   component of the model
 #'
-#' @examplesIf require("lme4")
+#' @examplesIf require("lme4", quietly = TRUE)
 #' data(sleepstudy, package = "lme4")
 #' sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 #' sleepstudy$mysubgrp <- NA

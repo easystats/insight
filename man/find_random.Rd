@@ -30,7 +30,7 @@ component of the model
 Return the name of the grouping factors from mixed effects models.
 }
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(sleepstudy, package = "lme4")
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA

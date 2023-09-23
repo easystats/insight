@@ -40,7 +40,7 @@ format_bf <- function(bf,
     is_small <- logical(length(bf))
   }
 
-  digits <- ifelse(is.na(bf), 0, ifelse(bf < 1, 3, 2))          # nolint
+  digits <- ifelse(is.na(bf), 0, ifelse(bf < 1, 3, 2)) # nolint
 
   text <- paste0(
     "= ",
@@ -69,7 +69,7 @@ format_bf <- function(bf,
         text[is_extreme]
       )
       text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
-        ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"),    # nolint
+        ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"), # nolint
         text[is_extreme]
       )
     }
@@ -77,8 +77,8 @@ format_bf <- function(bf,
 
   ## Add stars
   text <- ifelse(bf_orig > 30, paste0(text, "***"),
-    ifelse(bf_orig > 10, paste0(text, "**"),                    # nolint
-      ifelse(bf_orig > 3, paste0(text, "*"), text)              # nolint
+    ifelse(bf_orig > 10, paste0(text, "**"), # nolint
+      ifelse(bf_orig > 3, paste0(text, "*"), text) # nolint
     )
   )
 

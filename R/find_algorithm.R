@@ -24,7 +24,7 @@
 #'   - `iterations`, number of iterations per chain
 #'   - `warmup`, number of warmups per chain
 #'
-#' @examplesIf require("lme4")
+#' @examplesIf require("lme4", quietly = TRUE)
 #' data(sleepstudy, package = "lme4")
 #' m <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
 #' find_algorithm(m)

@@ -261,8 +261,10 @@ get_statistic.feis <- get_statistic.default
 get_statistic.mhurdle <- function(x, component = "all", ...) {
   component <- match.arg(
     component,
-    choices = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase",
-                "ip", "auxiliary")
+    choices = c(
+      "all", "conditional", "zi", "zero_inflated", "infrequent_purchase",
+      "ip", "auxiliary"
+    )
   )
 
   s <- summary(x)

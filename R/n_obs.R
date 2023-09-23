@@ -23,16 +23,16 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' n_obs(m)
 #'
-#' if (require("lme4")) {
-#'   data(cbpp, package = "lme4")
-#'   m <- glm(
-#'     cbind(incidence, size - incidence) ~ period,
-#'     data = cbpp,
-#'     family = binomial(link = "logit")
-#'   )
-#'   n_obs(m)
-#'   n_obs(m, disaggregate = TRUE)
-#' }
+#' @examplesIf require("lme4", quietly = TRUE)
+#' data(cbpp, package = "lme4")
+#' m <- glm(
+#'   cbind(incidence, size - incidence) ~ period,
+#'   data = cbpp,
+#'   family = binomial(link = "logit")
+#' )
+#' n_obs(m)
+#' n_obs(m, disaggregate = TRUE)
+#'
 #' @export
 n_obs <- function(x, ...) {
   UseMethod("n_obs")

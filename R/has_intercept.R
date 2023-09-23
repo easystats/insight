@@ -15,13 +15,12 @@
 #' model <- lm(mpg ~ gear, data = mtcars)
 #' has_intercept(model)
 #'
-#' if (require("lme4")) {
-#'   model <- lmer(Reaction ~ 0 + Days + (Days | Subject), data = sleepstudy)
-#'   has_intercept(model)
+#' @examplesIf require("lme4", quietly = TRUE)
+#' model <- lmer(Reaction ~ 0 + Days + (Days | Subject), data = sleepstudy)
+#' has_intercept(model)
 #'
-#'   model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
-#'   has_intercept(model)
-#' }
+#' model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+#' has_intercept(model)
 #' @export
 has_intercept <- function(x, verbose = TRUE) {
   f <- find_formula(x)

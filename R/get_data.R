@@ -32,13 +32,11 @@
 #'
 #' @return The data that was used to fit the model.
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(cbpp, package = "lme4")
-#'   cbpp$trials <- cbpp$size - cbpp$incidence
-#'   m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
-#'   head(get_data(m))
-#' }
+#' @examplesIf require("lme4", quietly = TRUE)
+#' data(cbpp, package = "lme4")
+#' cbpp$trials <- cbpp$size - cbpp$incidence
+#' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+#' head(get_data(m))
 #' @export
 get_data <- function(x, ...) {
   UseMethod("get_data")

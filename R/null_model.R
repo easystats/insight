@@ -10,13 +10,12 @@
 #'
 #' @return The null-model of `x`
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(sleepstudy)
-#'   m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-#'   summary(m)
-#'   summary(null_model(m))
-#' }
+#' @examplesIf require("lme4", quietly = TRUE)
+#' data(sleepstudy)
+#' m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+#' summary(m)
+#' summary(null_model(m))
+#'
 #' @export
 null_model <- function(model, verbose = TRUE, ...) {
   offset_term <- tryCatch(

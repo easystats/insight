@@ -10,7 +10,7 @@
 #' @return A logical, `TRUE` if `x` are all supported model objects
 #'   of same class.
 #'
-#' @examplesIf require("lme4")
+#' @examplesIf require("lme4", quietly = TRUE)
 #' data(mtcars)
 #' data(sleepstudy, package = "lme4")
 #'

@@ -25,7 +25,7 @@
 #' - `zero_inflated`, the names of the predictor variables from the *zero-inflated* part of the model
 #' - `zero_inflated_random`, the names of the random effects (grouping factors)
 #'
-#' @examplesIf require("lme4")
+#' @examplesIf require("lme4", quietly = TRUE)
 #' data(cbpp, package = "lme4")
 #' data(sleepstudy, package = "lme4")
 #' # some data preparation...

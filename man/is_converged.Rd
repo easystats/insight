@@ -56,29 +56,28 @@ or not.
 }
 }
 \examples{
-if (require("lme4")) {
-  data(cbpp)
-  set.seed(1)
-  cbpp$x <- rnorm(nrow(cbpp))
-  cbpp$x2 <- runif(nrow(cbpp))
+\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(cbpp)
+set.seed(1)
+cbpp$x <- rnorm(nrow(cbpp))
+cbpp$x2 <- runif(nrow(cbpp))
 
-  model <- glmer(
-    cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
-    data = cbpp,
-    family = binomial()
-  )
+model <- glmer(
+  cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
+  data = cbpp,
+  family = binomial()
+)
 
-  is_converged(model)
-}
-
-\dontshow{if (getOption("warn") < 2L) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+is_converged(model)
+\dontshow{\}) # examplesIf}
+\dontshow{if (getOption("warn") < 2L && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
-if (require("glmmTMB")) {
-  model <- glmmTMB(Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
-    (1 + poly(Petal.Width, 4) | Species), data = iris)
+model <- glmmTMB(
+  Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) + (1 + poly(Petal.Width, 4) | Species),
+  data = iris
+)
 
-  is_converged(model)
-}
+is_converged(model)
 }
 \dontshow{\}) # examplesIf}
 }

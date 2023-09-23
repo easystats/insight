@@ -58,12 +58,12 @@ For \code{style = "easystats"}, when \code{data} is an object from
 "easystats"-style.
 }
 \examples{
-if (require("parameters")) {
-  model <- lm(mpg ~ wt + cyl, data = mtcars)
-  mp <- model_parameters(model)
+\dontshow{if (require("parameters")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+model <- lm(mpg ~ wt + cyl, data = mtcars)
+mp <- model_parameters(model)
 
-  as.data.frame(mp)
-  standardize_names(mp)
-  standardize_names(mp, style = "broom")
-}
+as.data.frame(mp)
+standardize_names(mp)
+standardize_names(mp, style = "broom")
+\dontshow{\}) # examplesIf}
 }

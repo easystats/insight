@@ -16,7 +16,7 @@
 #' @return The name(s) of the response variable(s) from `x` as character
 #'   vector, or `NULL` if response variable could not be found.
 #'
-#' @examplesIf require("lme4")
+#' @examplesIf require("lme4", quietly = TRUE)
 #' data(cbpp, package = "lme4")
 #' cbpp$trials <- cbpp$size - cbpp$incidence
 #' m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)

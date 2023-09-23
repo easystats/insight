@@ -13,7 +13,7 @@
 #' - `zero_inflated_random`, the random slopes from the zero-inflation
 #'   component of the model
 #'
-#' @examplesIf require("lme4")
+#' @examplesIf require("lme4", quietly = TRUE)
 #' data(sleepstudy, package = "lme4")
 #' m <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 #' find_random_slopes(m)
