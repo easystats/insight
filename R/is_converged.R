@@ -61,7 +61,8 @@
 #' @examplesIf getOption("warn") < 2L && require("glmmTMB")
 #' \donttest{
 #' model <- glmmTMB(
-#'   Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) + (1 + poly(Petal.Width, 4) | Species),
+#'   Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
+#'     (1 + poly(Petal.Width, 4) | Species),
 #'   data = iris
 #' )
 #'

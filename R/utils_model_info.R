@@ -55,7 +55,7 @@
     } else {
       resp <- .safe(stats::model.response(stats::model.frame(x)))
     }
-    if (!is.null(resp)) {
+    if (is.null(resp)) {
       is_bernoulli <- TRUE
     } else {
       if ((is.data.frame(resp) || is.matrix(resp)) && ncol(resp) == 1) {

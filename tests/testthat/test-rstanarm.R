@@ -61,7 +61,6 @@ z <- rnorm(N, 2, 1)
 mu <- binomial(link = "logit")$linkinv(1 + 0.2 * x)
 phi <- exp(1.5 + 0.4 * z)
 y <- rbeta(N, mu * phi, (1 - mu) * phi)
-hist(y, col = "dark grey", border = FALSE, xlim = c(0, 1))
 fake_dat <- data.frame(y, x, z)
 m10 <- stan_betareg(
   y ~ x | z,
