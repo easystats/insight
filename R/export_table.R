@@ -1010,7 +1010,7 @@ print.insight_table <- function(x, ...) {
           switch(substr(align, i, i),
             l = "left",
             r = "right",
-            center
+            "center"
           )
         )
       }
