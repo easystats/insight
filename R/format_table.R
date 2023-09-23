@@ -454,9 +454,7 @@ format_table <- function(x,
       } else {
         ci_value <- unique(ci_value)[1]
       }
-    } else if (!is.null(x$CI)) {
-      ci_value <- unique(x$CI[!is.na(x$CI)])[1]
-    } else {
+    } else if (is.null(x$CI)) {
       # all these edge cases... for some objects in "parameters::model_parameters()",
       # when we have multiple ci-levels, column names can be "CI_low_0.8" or
       # "CI_low_0.95" etc. - this is handled here, if we have no ci-attribute
@@ -467,6 +465,8 @@ format_table <- function(x,
       } else {
         ci_value <- NULL
       }
+    } else {
+      ci_value <- unique(x$CI[!is.na(x$CI)])[1]
     }
     x$CI <- NULL
 
@@ -853,10 +853,10 @@ format_table <- function(x,
   win_os <- tryCatch(
     {
       si <- Sys.info()
-      if (!is.null(si["sysname"])) {
-        si["sysname"] == "Windows" || startsWith(R.version$os, "mingw")
-      } else {
+      if (is.null(si["sysname"])) {
         FALSE
+      } else {
+        si["sysname"] == "Windows" || startsWith(R.version$os, "mingw")
       }
     },
     error = function(e) {

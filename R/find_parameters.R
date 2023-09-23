@@ -524,10 +524,10 @@ find_parameters.maov <- find_parameters.manova
 
 #' @export
 find_parameters.afex_aov <- function(x, flatten = FALSE, ...) {
-  if (!is.null(x$aov)) {
-    find_parameters(x$aov, flatten = flatten, ...)
-  } else {
+  if (is.null(x$aov)) {
     find_parameters(x$lm, flatten = flatten, ...)
+  } else {
+    find_parameters(x$aov, flatten = flatten, ...)
   }
 }
 

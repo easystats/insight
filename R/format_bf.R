@@ -25,10 +25,10 @@ format_bf <- function(bf,
                       protect_ratio = FALSE,
                       na_reference = NA,
                       exact = FALSE) {
-  if (!is.na(na_reference)) {
-    bf[is.na(bf)] <- na_reference
-  } else {
+  if (is.na(na_reference)) {
     bf[bad_bf <- is.na(bf)] <- 1
+  } else {
+    bf[is.na(bf)] <- na_reference
   }
 
   bf_orig <- bf

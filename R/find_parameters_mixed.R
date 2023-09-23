@@ -164,11 +164,11 @@ find_parameters.hglm <- function(x,
   re <- x$ranef
 
   f <- find_formula(x)
-  if (!is.null(f$dispersion)) {
+  if (is.null(f$dispersion)) {
+    disp_name <- NULL
+  } else {
     disp <- summary(x)$SummVC1
     disp_name <- rownames(disp)
-  } else {
-    disp_name <- NULL
   }
 
   l <- compact_list(list(
