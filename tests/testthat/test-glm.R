@@ -91,7 +91,7 @@ test_that("get_data", {
 })
 
 test_that("get_call", {
-  expect_s3_class(get_call(m1), "call")
+  expect_true(inherits(get_call(m1), "call")) # nolint
 })
 
 test_that("find_formula", {
