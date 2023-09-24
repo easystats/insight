@@ -220,11 +220,11 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   # Make adjustment for binomial models with matrix as input
   if (info$is_binomial) {
     resp <- .factor_to_numeric(resp, lowest = 0)
-    if (!is.null(ncol(resp))) {
+    if (is.null(ncol(resp))) {
+      n <- rep.int(1, length(resp))
+    } else {
       n <- rowSums(resp)
       resp <- ifelse(n == 0, 0, resp[, 1] / n)
-    } else {
-      n <- rep.int(1, length(resp))
     }
     n <- if (any(n > 1L)) n else w
     w <- ifelse(n > 0, (w / n), 0)
@@ -316,7 +316,7 @@ get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
   # Get posterior distribution of logliks
   mat <- rstanarm::log_lik(x)
   # Point estimate using the function passed as the centrality argument
-  lls <- sapply(as.data.frame(mat), centrality)
+  lls <- vapply(as.data.frame(mat), centrality, numeric(1))
 
   .loglikelihood_prep_output(x, lls)
 }

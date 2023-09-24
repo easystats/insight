@@ -264,10 +264,10 @@ get_predicted.default <- function(x,
   })
 
   # 3. step: back-transform
-  if (!is.null(predictions)) {
-    out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
-  } else {
+  if (is.null(predictions)) {
     out <- NULL
+  } else {
+    out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
   }
 
   # 4. step: final preparation
