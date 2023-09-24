@@ -22,15 +22,16 @@
 #'
 #' @inheritSection find_predictors Model components
 #'
-#' @return \itemize{
-#'   \item for non-Bayesian models, a data frame with two columns: the parameter names and the related point estimates.
-#'   \item for Anova (`aov()`) with error term, a list of parameters for the conditional and the random effects parameters
-#' }
+#' @return
+#' - for non-Bayesian models, a data frame with two columns: the parameter names
+#'   and the related point estimates.
+#' - for Anova (`aov()`) with error term, a list of parameters for the
+#'   conditional and the random effects parameters
 #'
 #' @details In most cases when models either return different "effects" (fixed,
 #' random) or "components" (conditional, zero-inflated, ...), the arguments
 #' `effects` and `component` can be used.
-#' \cr \cr
+#'
 #' `get_parameters()` is comparable to `coef()`, however, the coefficients
 #' are returned as data frame (with columns for names and point estimates of
 #' coefficients). For Bayesian models, the posterior samples of parameters are

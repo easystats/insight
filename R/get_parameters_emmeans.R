@@ -14,7 +14,7 @@
 #' @inheritParams get_parameters.BGGM
 #'
 #' @note Note that `emmGrid` or `emm_list` objects returned by
-#'   functions from \pkg{emmeans} have a different structure compared to
+#'   functions from {emmeans} have a different structure compared to
 #'   usual regression models. Hence, the `Parameter` column does not
 #'   always contain names of *variables*, but may rather contain
 #'   *values*, e.g. for contrasts. See an example for pairwise
@@ -23,16 +23,15 @@
 #' @return A data frame with two columns: the parameter names and the related
 #'   point estimates.
 #'
-#' @examples
+#' @examplesIf require("emmeans", quietly = TRUE)
 #' data(mtcars)
 #' model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
-#' if (require("emmeans", quietly = TRUE)) {
-#'   emm <- emmeans(model, "cyl")
-#'   get_parameters(emm)
 #'
-#'   emm <- emmeans(model, pairwise ~ cyl)
-#'   get_parameters(emm)
-#' }
+#' emm <- emmeans(model, "cyl")
+#' get_parameters(emm)
+#'
+#' emm <- emmeans(model, pairwise ~ cyl)
+#' get_parameters(emm)
 #' @export
 get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE, ...) {
   # check if we have a Bayesian model here
