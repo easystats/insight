@@ -143,26 +143,24 @@ errors of model parameters. A message is shown when the matrix is negative
 definite and a corrected matrix is returned.
 }
 \examples{
+\dontshow{if (require("pscl") && require("sandwich")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 get_varcov(m)
 
 # vcov of zero-inflation component from hurdle-model
-if (require("pscl")) {
-  data("bioChemists", package = "pscl")
-  mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
-  get_varcov(mod, component = "zero_inflated")
-}
+data("bioChemists", package = "pscl")
+mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+get_varcov(mod, component = "zero_inflated")
 
 # robust vcov of, count component from hurdle-model
-if (require("pscl") && require("sandwich")) {
-  data("bioChemists", package = "pscl")
-  mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
-  get_varcov(
-    mod,
-    component = "conditional",
-    vcov = "BS",
-    vcov_args = list(R = 50)
-  )
-}
+data("bioChemists", package = "pscl")
+mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+get_varcov(
+  mod,
+  component = "conditional",
+  vcov = "BS",
+  vcov_args = list(R = 50)
+)
+\dontshow{\}) # examplesIf}
 }

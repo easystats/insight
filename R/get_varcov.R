@@ -54,29 +54,25 @@
 #'
 #' @return The variance-covariance matrix, as `matrix`-object.
 #'
-#' @examples
+#' @examplesIf require("pscl") && require("sandwich")
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_varcov(m)
 #'
 #' # vcov of zero-inflation component from hurdle-model
-#' if (require("pscl")) {
-#'   data("bioChemists", package = "pscl")
-#'   mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
-#'   get_varcov(mod, component = "zero_inflated")
-#' }
+#' data("bioChemists", package = "pscl")
+#' mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+#' get_varcov(mod, component = "zero_inflated")
 #'
 #' # robust vcov of, count component from hurdle-model
-#' if (require("pscl") && require("sandwich")) {
-#'   data("bioChemists", package = "pscl")
-#'   mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
-#'   get_varcov(
-#'     mod,
-#'     component = "conditional",
-#'     vcov = "BS",
-#'     vcov_args = list(R = 50)
-#'   )
-#' }
+#' data("bioChemists", package = "pscl")
+#' mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+#' get_varcov(
+#'   mod,
+#'   component = "conditional",
+#'   vcov = "BS",
+#'   vcov_args = list(R = 50)
+#' )
 #' @export
 get_varcov <- function(x, ...) {
   UseMethod("get_varcov")

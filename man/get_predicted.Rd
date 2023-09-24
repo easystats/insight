@@ -213,7 +213,7 @@ important to read the documentation of the arguments. This is because making
 "predictions" (a lose term for a variety of things) is a non-trivial process,
 with lots of caveats and complications. Read the 'Details' section for more
 information.
-\cr \cr
+
 \code{get_predicted_ci()} returns the confidence (or prediction) interval (CI)
 associated with predictions made by a model. This function can be called
 separately on a vector of predicted values. \code{get_predicted()} usually

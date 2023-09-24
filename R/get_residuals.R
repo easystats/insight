@@ -13,10 +13,10 @@
 #'   accessed.
 #'
 #' @note This function returns the default type of residuals, i.e. for the
-#'   response from linear models, the deviance residuals for models of class
-#'   `glm` etc. To access different types, pass down the `type`
-#'   argument (see 'Examples').
-#' \cr \cr
+#' response from linear models, the deviance residuals for models of class
+#' `glm` etc. To access different types, pass down the `type` argument (see
+#' 'Examples').
+#'
 #' This function is a robust alternative to `residuals()`, as it works for
 #' some special model objects that otherwise do not respond properly to calling
 #' `residuals()`.
