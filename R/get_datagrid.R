@@ -617,12 +617,12 @@ get_datagrid.logical <- get_datagrid.character
     }
 
     if (is.na(expression) && is.data.frame(x)) {
-      if (!is.na(varname)) {
-        x <- x[[varname]]
-      } else {
+      if (is.na(varname)) {
         format_error(
           "Couldn't find which variable were selected in `at`. Check spelling and specification."
         )
+      } else {
+        x <- x[[varname]]
       }
     }
 

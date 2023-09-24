@@ -766,10 +766,10 @@ get_parameters.maov <- get_parameters.manova
 
 #' @export
 get_parameters.afex_aov <- function(x, ...) {
-  if (!is.null(x$aov)) {
-    get_parameters(x$aov, ...)
-  } else {
+  if (is.null(x$aov)) {
     get_parameters(x$lm, ...)
+  } else {
+    get_parameters(x$aov, ...)
   }
 }
 
