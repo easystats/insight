@@ -38,7 +38,7 @@ approximately \verb{68\%} of the data points (\emph{Gelman, Hill & Vehtari 2020,
 In other words, the residual standard deviation indicates the accuracy for a
 model to predict scores, thus it can be thought of as "a measure of the
 average distance each observation falls from its prediction from the model"
-(\emph{cite{Gelman, Hill & Vehtari 2020, p.168}).
+(\emph{Gelman, Hill & Vehtari 2020, p.168}).
 \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}} can be considered as a measure of
 the unexplained variation in the data, or of the precision of inferences
 about regression coefficients.

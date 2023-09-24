@@ -28,7 +28,7 @@
 #' In other words, the residual standard deviation indicates the accuracy for a
 #' model to predict scores, thus it can be thought of as "a measure of the
 #' average distance each observation falls from its prediction from the model"
-#' (_cite{Gelman, Hill & Vehtari 2020, p.168_).
+#' (_Gelman, Hill & Vehtari 2020, p.168_).
 #' \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}} can be considered as a measure of
 #' the unexplained variation in the data, or of the precision of inferences
 #' about regression coefficients.
