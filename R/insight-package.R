@@ -22,5 +22,6 @@
 #' @docType package
 #' @aliases insight insight-package
 #' @name insight-package
+#' @useDynLib insight, .registration = TRUE
 #' @keywords internal
 "_PACKAGE"
