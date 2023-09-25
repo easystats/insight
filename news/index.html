@@ -363,7 +363,7 @@
 <li><p>The <code>component</code> argument in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for <code>stanmvreg</code> models did not accept the <code>"location"</code> value.</p></li>
 <li><p><code><a href="../reference/null_model.html">null_model()</a></code> did not consider offset-terms if these were specified inside formulas.</p></li>
 <li><p>Argument <code>allow.new.levels</code> was not passed to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> for <code>get_predicted.glmmTMB()</code>.</p></li>
-<li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> now works correctly when several variables are specified in <code><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s()</a></code> (<a href="https://github.com/easystats/insight/issues/573" class="external-link">#573</a>, <a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>).</p></li>
+<li><p><code><a href="../reference/clean_names.html">clean_names()</a></code> now works correctly when several variables are specified in <code>s()</code> (<a href="https://github.com/easystats/insight/issues/573" class="external-link">#573</a>, <a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>).</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -423,7 +423,7 @@
 <ul><li><p>Fixed incorrect column name conversion in <code><a href="../reference/standardize_names.html">standardize_names()</a></code> for certain columns returned by <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">broom::glance()</a></code>.</p></li>
 <li><p>Fixed issue with correctly detecting Tweedie-models in <code><a href="../reference/model_info.html">model_info()</a></code>.</p></li>
 <li><p>Fixed issue with <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> for <em>brms</em> models with monotonic factors.</p></li>
-<li><p>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> when argument <code>correlation</code> was defined outside of <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">lme()</a></code> and <code><a href="https://rdrr.io/pkg/nlme/man/gls.html" class="external-link">gls()</a></code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/insight/issues/525" class="external-link">#525</a>).</p></li>
+<li><p>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> when argument <code>correlation</code> was defined outside of <code>lme()</code> and <code>gls()</code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/insight/issues/525" class="external-link">#525</a>).</p></li>
 <li><p>Fixed issue with <code><a href="../reference/get_data.html">get_data()</a></code> when back-transforming data from predictors that used <code><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos()</a></code>, <code><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin()</a></code> or <code><a href="https://rdrr.io/r/base/Trig.html" class="external-link">tan()</a></code> transformations.</p></li>
 </ul></div>
 </div>
@@ -469,7 +469,7 @@
 <h2 class="pkg-version" data-toc-text="0.15.0" id="insight-0150">insight 0.15.0<a class="anchor" aria-label="anchor" href="#insight-0150"></a></h2><p class="text-muted">CRAN release: 2022-01-07</p>
 <div class="section level3">
 <h3 id="breaking-changes-0-15-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-15-0"></a></h3>
-<ul><li><p>Data management functions (like <code><a href="https://easystats.github.io/datawizard/reference/data_to_long.html" class="external-link">reshape_longer()</a></code>, or <code><a href="https://easystats.github.io/datawizard/reference/data_match.html" class="external-link">data_match()</a></code>) have been moved to the <em>datawizard</em> package.</p></li>
+<ul><li><p>Data management functions (like <code>reshape_longer()</code>, or <code>data_match()</code>) have been moved to the <em>datawizard</em> package.</p></li>
 <li><p><code><a href="../reference/get_data.html">get_data()</a></code> no longer returns factor types for numeric variables that have been converted to factors on-the-fly within formulas (like <code>y ~ as.factor(x)</code>). Instead, for each numeric variable that was coerced to factor within a formula gets a <code>factor</code> attribute (set to <code>TRUE</code>), and the returned data frame gets a <code>factors</code> attribute including all names of affected variables.</p></li>
 </ul></div>
 <div class="section level3">
@@ -580,7 +580,7 @@
 <h2 class="pkg-version" data-toc-text="0.14.1" id="insight-0141">insight 0.14.1<a class="anchor" aria-label="anchor" href="#insight-0141"></a></h2><p class="text-muted">CRAN release: 2021-05-28</p>
 <div class="section level3">
 <h3 id="new-functions-0-14-1">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-14-1"></a></h3>
-<ul><li>Added several data management and preparation functions: <code><a href="https://easystats.github.io/datawizard/reference/data_to_long.html" class="external-link">data_to_long()</a></code>, <code><a href="https://easystats.github.io/datawizard/reference/data_match.html" class="external-link">data_match()</a></code>, <code><a href="https://easystats.github.io/datawizard/reference/data_relocate.html" class="external-link">data_relocate()</a></code>, <code><a href="https://easystats.github.io/datawizard/reference/data_restoretype.html" class="external-link">data_restoretype()</a></code>, <code>force_numeric()</code>.</li>
+<ul><li>Added several data management and preparation functions: <code>data_to_long()</code>, <code>data_match()</code>, <code>data_relocate()</code>, <code>data_restoretype()</code>, <code>force_numeric()</code>.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-supported-model-classes-0-14-1">New supported model classes<a class="anchor" aria-label="anchor" href="#new-supported-model-classes-0-14-1"></a></h3>
@@ -850,7 +850,7 @@
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> now also returns <code>NULL</code> when all weights were 1.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>BFBayesFactor</em> objects gets a <code>verbose</code> argument.</p></li>
 <li><p><code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>emmGrid</em> and <em>emm_list</em> objects gets a <code>summary</code> argument, to either return the full posterior samples or the summarized centrality indices for Bayesian models.</p></li>
-<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code>MuMIn::model.avg()</code> now tries to retrieve the random effects part of a formula, when present.</p></li>
+<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code><a href="https://rdrr.io/pkg/MuMIn/man/model.avg.html" class="external-link">MuMIn::model.avg()</a></code> now tries to retrieve the random effects part of a formula, when present.</p></li>
 <li><p><code><a href="../reference/get_weights.html">get_weights()</a></code> gains a <code>na_rm</code> argument to remove possible missing values.</p></li>
 </ul></div>
 <div class="section level3">
@@ -939,7 +939,7 @@
 <li><p>Fixed issue with <code><a href="../reference/get_variance.html">get_variance()</a></code> for <code>lme</code>-models with categorical random slope.</p></li>
 <li><p>Fixed issue that occurred since R 4.0.0 in <code><a href="../reference/find_weights.html">find_weights()</a></code> when function call had no <code>weights</code>-argument.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for models with <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>-response variables and matrix-like variables in the model frame (e.g. when using <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly()</a></code>).</p></li>
-<li><p>Fixed issues with <code>PROreg::BBmm()</code>, due to changes in latest package update.</p></li>
+<li><p>Fixed issues with <code><a href="https://rdrr.io/pkg/PROreg/man/BBmm.html" class="external-link">PROreg::BBmm()</a></code>, due to changes in latest package update.</p></li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

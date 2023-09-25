@@ -141,33 +141,31 @@ information about its interpretation and calculation.</p>
 information could not be accessed.</p>
     </div>
     <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <h2 id="interpretation-of-sigma">Interpretation of Sigma<a class="anchor" aria-label="anchor" href="#interpretation-of-sigma"></a></h2>
     
-<div class="section">
-<h3 id="interpretation-of-sigma">Interpretation of Sigma<a class="anchor" aria-label="anchor" href="#interpretation-of-sigma"></a></h3>
-<p>The residual standard deviation,
-σ, indicates that the predicted
-outcome will be within +/- σ units
-of the linear predictor for approximately <code>68%</code> of the data points
-(<cite>Gelman, Hill &amp; Vehtari 2020, p.84</cite>). In other words, the residual
-standard deviation indicates the accuracy for a model to predict scores,
-thus it can be thought of as “a measure of the average distance each
-observation falls from its prediction from the model” (<cite>Gelman, Hill &amp;
-Vehtari 2020, p.168</cite>). σ can be
-considered as a measure of the unexplained variation in the data, or of the
-precision of inferences about regression coefficients.</p>
-</div>
 
-<div class="section">
-<h3 id="calculation-of-sigma">Calculation of Sigma<a class="anchor" aria-label="anchor" href="#calculation-of-sigma"></a></h3>
-<p>By default, <code>get_sigma()</code> tries to extract sigma by calling
-<code><a href="https://rdrr.io/r/stats/sigma.html" class="external-link">stats::sigma()</a></code>. If the model-object has no <code><a href="https://rdrr.io/r/stats/sigma.html" class="external-link">sigma()</a></code> method,
-the next step is calculating sigma as square-root of the model-deviance
-divided by the residual degrees of freedom. Finally, if even this approach
-fails, and <code>x</code> is a mixed model, the residual standard deviation is
-accessed using the square-root from <code><a href="get_variance.html">get_variance_residual()</a></code>.</p>
-</div>
+<p>The residual standard deviation, σ,
+indicates that the predicted outcome will be within +/-
+σ units of the linear predictor for
+approximately <code>68%</code> of the data points (<em>Gelman, Hill &amp; Vehtari 2020, p.84</em>).
+In other words, the residual standard deviation indicates the accuracy for a
+model to predict scores, thus it can be thought of as "a measure of the
+average distance each observation falls from its prediction from the model"
+(<em>Gelman, Hill &amp; Vehtari 2020, p.168</em>).
+σ can be considered as a measure of
+the unexplained variation in the data, or of the precision of inferences
+about regression coefficients.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="calculation-of-sigma">Calculation of Sigma<a class="anchor" aria-label="anchor" href="#calculation-of-sigma"></a></h2>
+    
 
+<p>By default, <code>get_sigma()</code> tries to extract sigma by calling <code><a href="https://rdrr.io/r/stats/sigma.html" class="external-link">stats::sigma()</a></code>.
+If the model-object has no <code><a href="https://rdrr.io/r/stats/sigma.html" class="external-link">sigma()</a></code> method, the next step is calculating
+sigma as square-root of the model-deviance divided by the residual degrees of
+freedom. Finally, if even this approach fails, and <code>x</code> is a mixed model, the
+residual standard deviation is accessed using the square-root from
+<code><a href="get_variance.html">get_variance_residual()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

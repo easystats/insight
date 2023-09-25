@@ -295,54 +295,258 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Datagrids of variables and dataframes =====================================</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/bayestestR/" class="external-link">"bayestestR"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/datawizard/" class="external-link">"datawizard"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="co"># Single variable is of interest; all others are "fixed" ------------------</span></span></span>
-<span class="r-in"><span>  <span class="co"># Factors</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span> <span class="co"># Returns all the levels</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Species = c('setosa', 'versicolor')"</span><span class="op">)</span> <span class="co"># Specify an expression</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># Numeric variables</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span> <span class="co"># default spread length = 10</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="co"># change length</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span>,</span></span>
-<span class="r-in"><span>    at <span class="op">=</span> <span class="st">"Sepal.Length"</span>,</span></span>
-<span class="r-in"><span>    factors <span class="op">=</span> <span class="st">"mode"</span>, numerics <span class="op">=</span> <span class="st">"median"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span> <span class="co"># change non-targets fixing</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"ci"</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span> <span class="co"># change min/max of target</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [0, 1]"</span><span class="op">)</span> <span class="co"># Manually change min/max</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [sd]"</span><span class="op">)</span> <span class="co"># -1 SD, mean and +1 SD</span></span></span>
-<span class="r-in"><span>  <span class="co"># identical to previous line: -1 SD, mean and +1 SD</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"sd"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [quartiles]"</span><span class="op">)</span> <span class="co"># quartiles</span></span></span>
+<span class="r-in"><span><span class="co"># Single variable is of interest; all others are "fixed" ------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Factors</span></span></span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span> <span class="co"># Returns all the levels</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     setosa     5.843333    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 versicolor     5.843333    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  virginica     5.843333    3.057333        3.758    1.199333</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Species = c('setosa', 'versicolor')"</span><span class="op">)</span> <span class="co"># Specify an expression</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     setosa     5.843333    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 versicolor     5.843333    3.057333        3.758    1.199333</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># Numeric and categorical variables, generating a grid for plots</span></span></span>
-<span class="r-in"><span>  <span class="co"># default spread length = 10</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="co"># default spread length = 3 (-1 SD, mean and +1 SD)</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Length"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Numeric variables</span></span></span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span> <span class="co"># default spread length = 10</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           4.3    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           4.7    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           5.1    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           5.5    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           5.9    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           6.3    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           6.7    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           7.1    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           7.5    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          7.9    3.057333        3.758    1.199333  setosa</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="co"># change length</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          4.3    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          6.1    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          7.9    3.057333        3.758    1.199333  setosa</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">150</span>, <span class="op">]</span>,</span></span>
+<span class="r-in"><span>  at <span class="op">=</span> <span class="st">"Sepal.Length"</span>,</span></span>
+<span class="r-in"><span>  factors <span class="op">=</span> <span class="st">"mode"</span>, numerics <span class="op">=</span> <span class="st">"median"</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="co"># change non-targets fixing</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length Sepal.Width Petal.Length Petal.Width    Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           4.3           3          4.4         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           4.7           3          4.4         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           5.1           3          4.4         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           5.5           3          4.4         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           5.9           3          4.4         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           6.3           3          4.4         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           6.7           3          4.4         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           7.1           3          4.4         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           7.5           3          4.4         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          7.9           3          4.4         1.3 versicolor</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"ci"</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span> <span class="co"># change min/max of target</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         4.600    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         4.895    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         5.190    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         5.485    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         5.780    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         6.075    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         6.370    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         6.665    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9         6.960    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10        7.255    3.057333        3.758    1.199333  setosa</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [0, 1]"</span><span class="op">)</span> <span class="co"># Manually change min/max</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     0.0000000    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     0.1111111    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     0.2222222    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     0.3333333    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     0.4444444    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     0.5555556    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     0.6666667    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     0.7777778    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     0.8888889    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    1.0000000    3.057333        3.758    1.199333  setosa</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [sd]"</span><span class="op">)</span> <span class="co"># -1 SD, mean and +1 SD</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     5.015267    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     5.843333    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     6.671399    3.057333        3.758    1.199333  setosa</span>
+<span class="r-in"><span><span class="co"># identical to previous line: -1 SD, mean and +1 SD</span></span></span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"sd"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     5.015267    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     5.843333    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     6.671399    3.057333        3.758    1.199333  setosa</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = [quartiles]"</span><span class="op">)</span> <span class="co"># quartiles</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          4.3    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          5.1    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          5.8    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          6.4    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          7.9    3.057333        3.758    1.199333  setosa</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Numeric and categorical variables, generating a grid for plots</span></span></span>
+<span class="r-in"><span><span class="co"># default spread length = 10</span></span></span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length    Species Sepal.Width Petal.Length Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      2.531069     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      3.359135     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      4.187201     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      5.015267     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5.843333     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6.671399     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7.499466     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8.327532     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9.155598     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     9.983664     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     2.531069 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     3.359135 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     4.187201 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14     5.015267 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15     5.843333 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16     6.671399 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17     7.499466 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18     8.327532 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19     9.155598 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20     9.983664 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21     2.531069  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22     3.359135  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23     4.187201  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24     5.015267  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25     5.843333  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26     6.671399  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27     7.499466  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28     8.327532  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29     9.155598  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30     9.983664  virginica    3.057333        3.758    1.199333</span>
+<span class="r-in"><span><span class="co"># default spread length = 3 (-1 SD, mean and +1 SD)</span></span></span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Length"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     setosa     5.015267    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     setosa     5.843333    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     setosa     6.671399    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 versicolor     5.015267    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 versicolor     5.843333    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 versicolor     6.671399    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  virginica     5.015267    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  virginica     5.843333    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  virginica     6.671399    3.057333        3.758    1.199333</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># Standardization and unstandardization</span></span></span>
-<span class="r-in"><span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"sd"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span> <span class="co"># It is a named vector (extract names with `names(out$Sepal.Length)`)</span></span></span>
-<span class="r-in"><span>  <span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = c(-2, 0, 2)"</span><span class="op">)</span> <span class="co"># Manually specify values</span></span></span>
-<span class="r-in"><span>  <span class="va">data</span></span></span>
-<span class="r-in"><span>  <span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">unstandardize</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Standardization and unstandardization</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"sd"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span> <span class="co"># It is a named vector (extract names with `names(out$Sepal.Length)`)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    -1 SD     Mean    +1 SD </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.015267 5.843333 6.671399 </span>
+<span class="r-in"><span><span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           -1    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            0    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            1    3.057333        3.758    1.199333  setosa</span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length = c(-2, 0, 2)"</span><span class="op">)</span> <span class="co"># Manually specify values</span></span></span>
+<span class="r-in"><span><span class="va">data</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           -2    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            0    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            2    3.057333        3.758    1.199333  setosa</span>
+<span class="r-in"><span><span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">unstandardize</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     4.187201    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     5.843333    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     7.499466    3.057333        3.758    1.199333  setosa</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Multiple variables are of interest, creating a combination --------------</span></span></span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length    Species Sepal.Width Petal.Length Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          4.3     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          6.1     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          7.9     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.3 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          6.1 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          7.9 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          4.3  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          6.1  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          7.9  virginica    3.057333        3.758    1.199333</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Petal.Length Sepal.Width Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          4.3          1.0    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          6.1          1.0    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          7.9          1.0    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.3          6.9    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          6.1          6.9    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          7.9          6.9    3.057333    1.199333  setosa</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Petal.Length Sepal.Width Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          4.3         1.00    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          6.1         1.00    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          7.9         1.00    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.3         3.95    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          6.1         3.95    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          7.9         3.95    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          4.3         6.90    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          6.1         6.90    3.057333    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          7.9         6.90    3.057333    1.199333  setosa</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, preserve_range <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length    Species Sepal.Width Petal.Length Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           4.3     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           4.7     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           5.1     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           5.5     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           5.1 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           5.5 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           5.9 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           6.3 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           6.7 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          5.1  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          5.5  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          5.9  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13          6.3  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14          6.7  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15          7.1  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16          7.5  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          7.9  virginica    3.057333        3.758    1.199333</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, numerics <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length    Species Sepal.Width Petal.Length Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           4.3     setosa           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           4.7     setosa           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           5.1     setosa           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           5.5     setosa           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           5.9     setosa           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           6.3     setosa           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           6.7     setosa           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           7.1     setosa           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           7.5     setosa           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          7.9     setosa           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          4.3 versicolor           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          4.7 versicolor           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13          5.1 versicolor           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14          5.5 versicolor           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15          5.9 versicolor           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16          6.3 versicolor           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          6.7 versicolor           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18          7.1 versicolor           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19          7.5 versicolor           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20          7.9 versicolor           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21          4.3  virginica           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22          4.7  virginica           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23          5.1  virginica           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24          5.5  virginica           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25          5.9  virginica           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26          6.3  virginica           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27          6.7  virginica           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28          7.1  virginica           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29          7.5  virginica           0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30          7.9  virginica           0            0           0</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length = 3"</span>, <span class="st">"Species"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length    Species Sepal.Width Petal.Length Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            3     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            3 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            3  virginica    3.057333        3.758    1.199333</span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length = c(3, 1)"</span>, <span class="st">"Species = 'setosa'"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Species Sepal.Width Petal.Length Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            3  setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            1  setosa    3.057333        3.758    1.199333</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># Multiple variables are of interest, creating a combination --------------</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, preserve_range <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, numerics <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length = 3"</span>, <span class="st">"Species"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length = c(3, 1)"</span>, <span class="st">"Species = 'setosa'"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># With list-style at-argument</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, Species <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># With list-style at-argument</span></span></span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, Species <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Species Sepal.Width Petal.Length Petal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1            1  setosa    3.057333        3.758    1.199333</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2            3  setosa    3.057333        3.758    1.199333</span>
