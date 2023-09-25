@@ -339,7 +339,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
         # for multiple length, SE and predictions may match, could be intended?
         # could there be any cases where we have twice or x times the length of
         # predictions as standard errors?
-        format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.")
+        format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.") # nolint
       } else {
         format_error("Predictions and standard errors are not of the same length. Please specify the `data` argument.")
       }

@@ -445,11 +445,11 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
       # }
 
       if (is.null(ll_adjustment) && isTRUE(verbose)) {
-        format_warning("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate.")
+        format_warning("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate.") # nolint
       } else {
         out[1] <- out[1] + ll_adjustment
         if (isTRUE(list(...)$REML) && isTRUE(verbose)) {
-          format_warning("Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate.")
+          format_warning("Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate.") # nolint
         }
       }
     }
@@ -458,7 +458,7 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
   # Some attributes present in stats::logLik (not sure what nall does)
   attr(out, "nall") <- attr(out, "nobs") <- n_obs(x)
 
-  # See https://stats.stackexchange.com/questions/393016/what-does-the-degree-of-freedom-df-mean-in-the-results-of-log-likelihood-logl
+  # See https://stats.stackexchange.com/q/393016/54740
   if (is.null(df)) df <- get_df(x, type = "model")
   attr(out, "df") <- df
 

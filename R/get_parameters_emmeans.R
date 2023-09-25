@@ -42,7 +42,7 @@ get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE,
     if (isTRUE(merge_parameters) && ncol(params) > 1L) {
       r <- apply(params, 1, function(i) paste0(colnames(params), " [", i, "]"))
       out <- data.frame(
-        Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),
+        Parameter = unname(vapply(as.data.frame(r), toString, character(1))),
         Estimate = s[[estimate_pos]],
         stringsAsFactors = FALSE,
         row.names = NULL
@@ -76,7 +76,7 @@ get_parameters.emm_list <- function(x, summary = FALSE, ...) {
         out$Estimate <- NULL
         r <- apply(out, 1, function(i) paste0(colnames(out), " [", i, "]"))
         out <- data.frame(
-          Parameter = unname(sapply(as.data.frame(r), paste, collapse = ", ")),
+          Parameter = unname(vapply(as.data.frame(r), toString, character(1))),
           Estimate = unname(est),
           stringsAsFactors = FALSE
         )

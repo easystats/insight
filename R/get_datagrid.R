@@ -339,7 +339,7 @@ get_datagrid.data.frame <- function(x,
       }
 
       if (nrow(targets) == 0) {
-        format_error("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to `FALSE`.")
+        format_error("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to `FALSE`.") # nolint
       }
     }
   }
@@ -668,9 +668,9 @@ get_datagrid.logical <- get_datagrid.character
             } else if (parts == "quartiles2") {
               expression <- paste0("c(", paste0(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], collapse = ","), ")")
             } else if (parts == "terciles") {
-              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")")
+              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
             } else if (parts == "terciles2") {
-              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")")
+              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
             } else if (parts == "fivenum") {
               expression <- paste0("c(", paste0(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
             } else if (parts == "zeromax") {
@@ -683,7 +683,7 @@ get_datagrid.logical <- get_datagrid.character
           } else {
             format_error(
               paste0(
-                "The `at` argument (", at, ") should either indicate the minimum and the maximum, or one of the following options: ",
+                "The `at` argument (", at, ") should either indicate the minimum and the maximum, or one of the following options: ", # nolint
                 toString(shortcuts),
                 "."
               )
@@ -759,7 +759,7 @@ get_datagrid.default <- function(x,
   minfo <- model_info(x)
   if (minfo$is_binomial && minfo$is_logit && is.factor(data[[response]]) && !include_response && verbose) {
     format_warning(
-      "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions."
+      "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions." # nolint
     )
   }
 
@@ -767,7 +767,7 @@ get_datagrid.default <- function(x,
   if (isFALSE(include_response)) {
     data <- data[!colnames(data) %in% response]
     if (ncol(data) < 1L) {
-      format_error("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid.")
+      format_error("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid.") # nolint
     }
   }
 

@@ -196,7 +196,7 @@ as.data.frame.insight_residuals <- function(x, ...) {
 print.insight_residuals <- function(x, ...) {
   print_colour("Residuals:\n\n", "blue")
   print.default(as.vector(x))
-  print_colour("\nNOTE: Credible intervals are stored as attributes and can be accessed using `as.data.frame()` on this output.\n", "yellow")
+  print_colour("\nNOTE: Credible intervals are stored as attributes and can be accessed using `as.data.frame()` on this output.\n", "yellow") # nolint
 }
 
 
