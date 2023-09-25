@@ -17,9 +17,9 @@
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ outcome + treatment, family = poisson())
 #'
-#' link_function(m)(.3)
+#' link_function(m)(0.3)
 #' # same as
-#' log(.3)
+#' log(0.3)
 #' @export
 link_function <- function(x, ...) {
   UseMethod("link_function")

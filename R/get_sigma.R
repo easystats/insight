@@ -1,9 +1,9 @@
 #' @title Get residual standard deviation from models
 #'
 #' @description Returns `sigma`, which corresponds the estimated standard
-#'   deviation of the residuals. This function extends the `sigma()` base R
-#'   generic for models that don't have implemented it. It also computes the
-#'   confidence interval (CI), which is stored as an attribute.
+#' deviation of the residuals. This function extends the `sigma()` base R
+#' generic for models that don't have implemented it. It also computes the
+#' confidence interval (CI), which is stored as an attribute.
 #'
 #' Sigma is a key-component of regression models, and part of the so-called
 #' auxiliary parameters that are estimated. Indeed, linear models for instance
@@ -18,33 +18,31 @@
 #' @inheritParams find_parameters
 #'
 #' @return The residual standard deviation (sigma), or `NULL` if this
-#'   information could not be accessed.
+#' information could not be accessed.
 #'
-#' @details
-#'   \subsection{Interpretation of Sigma}{
-#'   The residual standard deviation,
-#'   \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}}, indicates that the predicted
-#'   outcome will be within +/- \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}} units
-#'   of the linear predictor for approximately `68%` of the data points
-#'   (\cite{Gelman, Hill & Vehtari 2020, p.84}). In other words, the residual
-#'   standard deviation indicates the accuracy for a model to predict scores,
-#'   thus it can be thought of as \dQuote{a measure of the average distance each
-#'   observation falls from its prediction from the model} (\cite{Gelman, Hill &
-#'   Vehtari 2020, p.168}). \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}} can be
-#'   considered as a measure of the unexplained variation in the data, or of the
-#'   precision of inferences about regression coefficients. }
+#' @section Interpretation of Sigma:
+#' The residual standard deviation, \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}},
+#' indicates that the predicted outcome will be within +/-
+#' \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}} units of the linear predictor for
+#' approximately `68%` of the data points (_Gelman, Hill & Vehtari 2020, p.84_).
+#' In other words, the residual standard deviation indicates the accuracy for a
+#' model to predict scores, thus it can be thought of as "a measure of the
+#' average distance each observation falls from its prediction from the model"
+#' (_Gelman, Hill & Vehtari 2020, p.168_).
+#' \ifelse{html}{\out{&sigma;}}{\eqn{\sigma}} can be considered as a measure of
+#' the unexplained variation in the data, or of the precision of inferences
+#' about regression coefficients.
 #'
-#'   \subsection{Calculation of Sigma}{
-#'   By default, `get_sigma()` tries to extract sigma by calling
-#'   `stats::sigma()`. If the model-object has no `sigma()` method,
-#'   the next step is calculating sigma as square-root of the model-deviance
-#'   divided by the residual degrees of freedom. Finally, if even this approach
-#'   fails, and `x` is a mixed model, the residual standard deviation is
-#'   accessed using the square-root from `get_variance_residual()`.
-#'   }
+#' @section Calculation of Sigma:
+#' By default, `get_sigma()` tries to extract sigma by calling `stats::sigma()`.
+#' If the model-object has no `sigma()` method, the next step is calculating
+#' sigma as square-root of the model-deviance divided by the residual degrees of
+#' freedom. Finally, if even this approach fails, and `x` is a mixed model, the
+#' residual standard deviation is accessed using the square-root from
+#' `get_variance_residual()`.
 #'
 #' @references Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other
-#'   Stories. Cambridge University Press.
+#' Stories. Cambridge University Press.
 #'
 #' @examples
 #' data(mtcars)

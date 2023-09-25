@@ -20,9 +20,9 @@
 #' treatment <- gl(3, 3)
 #' m <- glm(counts ~ outcome + treatment, family = poisson())
 #'
-#' link_inverse(m)(.3)
+#' link_inverse(m)(0.3)
 #' # same as
-#' exp(.3)
+#' exp(0.3)
 #' @export
 link_inverse <- function(x, ...) {
   UseMethod("link_inverse")
@@ -734,11 +734,11 @@ link_inverse.mira <- function(x, ...) {
 
   if (is.null(link)) link <- "log"
 
-  if (!is.numeric(link)) {
-    stats::poisson(link = link)
-  } else {
+  if (is.numeric(link)) {
     # installed?
     check_if_installed("statmod")
     statmod::tweedie(link.power = link)
+  } else {
+    stats::poisson(link = link)
   }
 }

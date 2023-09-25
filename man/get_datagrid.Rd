@@ -177,55 +177,53 @@ See this \href{https://easystats.github.io/modelbased/articles/visualisation_mat
 for a tutorial on how to create a visualisation matrix using this function.
 }
 \examples{
+\dontshow{if (require("bayestestR", quietly = TRUE) && require("datawizard", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Datagrids of variables and dataframes =====================================
-if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE)) {
-  # Single variable is of interest; all others are "fixed" ------------------
-  # Factors
-  get_datagrid(iris, at = "Species") # Returns all the levels
-  get_datagrid(iris, at = "Species = c('setosa', 'versicolor')") # Specify an expression
 
-  # Numeric variables
-  get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
-  get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
-  get_datagrid(iris[2:150, ],
-    at = "Sepal.Length",
-    factors = "mode", numerics = "median"
-  ) # change non-targets fixing
-  get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
-  get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
-  get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
-  # identical to previous line: -1 SD, mean and +1 SD
-  get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
-  get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
+# Single variable is of interest; all others are "fixed" ------------------
+# Factors
+get_datagrid(iris, at = "Species") # Returns all the levels
+get_datagrid(iris, at = "Species = c('setosa', 'versicolor')") # Specify an expression
 
-  # Numeric and categorical variables, generating a grid for plots
-  # default spread length = 10
-  get_datagrid(iris, at = c("Sepal.Length", "Species"), range = "grid")
-  # default spread length = 3 (-1 SD, mean and +1 SD)
-  get_datagrid(iris, at = c("Species", "Sepal.Length"), range = "grid")
+# Numeric variables
+get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
+get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
+get_datagrid(iris[2:150, ],
+  at = "Sepal.Length",
+  factors = "mode", numerics = "median"
+) # change non-targets fixing
+get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
+get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
+get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+# identical to previous line: -1 SD, mean and +1 SD
+get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
+get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
 
+# Numeric and categorical variables, generating a grid for plots
+# default spread length = 10
+get_datagrid(iris, at = c("Sepal.Length", "Species"), range = "grid")
+# default spread length = 3 (-1 SD, mean and +1 SD)
+get_datagrid(iris, at = c("Species", "Sepal.Length"), range = "grid")
 
-  # Standardization and unstandardization
-  data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
-  data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
-  datawizard::standardize(data, select = "Sepal.Length")
-  data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
-  data
-  datawizard::unstandardize(data, select = "Sepal.Length")
+# Standardization and unstandardization
+data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
+data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
+datawizard::standardize(data, select = "Sepal.Length")
+data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+data
+datawizard::unstandardize(data, select = "Sepal.Length")
 
+# Multiple variables are of interest, creating a combination --------------
+get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
+get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
+get_datagrid(iris, at = c(1, 3), length = 3)
+get_datagrid(iris, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
+get_datagrid(iris, at = c("Sepal.Length", "Species"), numerics = 0)
+get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
+get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 
-  # Multiple variables are of interest, creating a combination --------------
-  get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
-  get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
-  get_datagrid(iris, at = c(1, 3), length = 3)
-  get_datagrid(iris, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
-  get_datagrid(iris, at = c("Sepal.Length", "Species"), numerics = 0)
-  get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
-  get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
-
-  # With list-style at-argument
-  get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
-}
+# With list-style at-argument
+get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 
 # With models ===============================================================
 # Fit a linear regression
@@ -240,6 +238,7 @@ plot(data$Sepal.Width, data$Sepal.Length,
   col = data$Petal.Length,
   main = "Relationship at -1 SD, Mean, and + 1 SD of Petal.Length"
 )
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=get_predicted]{get_predicted()}}

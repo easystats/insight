@@ -40,7 +40,7 @@
   theta_unadjusted_vcov <- theta %*% unadjusted_vcov
   n.ggamma <- length(P)
   for (ii in 1:n.ggamma) {
-    for (jj in c(ii:n.ggamma)) {
+    for (jj in ii:n.ggamma) {
       if (ii == jj) {
         e <- 1
       } else {
@@ -201,7 +201,7 @@
   IE2 <- matrix(NA, nrow = n.ggamma, ncol = n.ggamma)
   for (ii in 1:n.ggamma) {
     Phi.P.ii <- Phi %*% PP[[ii]]
-    for (jj in c(ii:n.ggamma)) {
+    for (jj in ii:n.ggamma) {
       www <- .indexSymmat2vec(ii, jj, n.ggamma)
       IE2[ii, jj] <- IE2[jj, ii] <- Ktrace[ii, jj] -
         2 * sum(Phi * QQ[[www]]) + sum(Phi.P.ii * (PP[[jj]] %*% Phi))
@@ -219,7 +219,7 @@
 
   UU <- matrix(0, nrow = ncol(X), ncol = ncol(X))
   for (ii in 1:(n.ggamma - 1)) {
-    for (jj in c((ii + 1):n.ggamma)) {
+    for (jj in (ii + 1):n.ggamma) {
       www <- .indexSymmat2vec(ii, jj, n.ggamma)
       UU <- UU + WW[ii, jj] * (QQ[[www]] - PP[[ii]] %*% Phi %*% PP[[jj]])
     }
@@ -259,7 +259,7 @@
 
   Gp <- lme4::getME(model, "Gp")
   n.RT <- length(Gp) - 1 ## Number of random terms (i.e. of (|)'s)
-  n.lev.by.RT <- sapply(lme4::getME(model, "flist"), function(x) length(levels(x)))
+  n.lev.by.RT <- vapply(lme4::getME(model, "flist"), nlevels, numeric(1))
   n.comp.by.RT <- .get.RT.dim.by.RT(model)
   n.parm.by.RT <- (n.comp.by.RT + 1) * n.comp.by.RT / 2
   n.RE.by.RT <- diff(Gp)
@@ -291,8 +291,8 @@
 
   ## output: dimension (no of columns) of covariance matrix for random term ii
   if (inherits(model, "mer")) {
-    sapply(model@ST, function(X) nrow(X))
+    vapply(model@ST, nrow, numeric(1))
   } else {
-    sapply(lme4::getME(model, "cnms"), length)
+    lengths(lme4::getME(model, "cnms"))
   }
 }

@@ -2,17 +2,16 @@
 #' @name get_parameters
 #'
 #' @description Returns the coefficients (or posterior samples for Bayesian
-#'    models) from a model. See the documentation for your object's class:
-#'    \itemize{
-#'      \item{[Bayesian models][get_parameters.BGGM] (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
-#'      \item{[Estimated marginal means][get_parameters.emmGrid] (\pkg{emmeans})}
-#'      \item{[Generalized additive models][get_parameters.gamm] (\pkg{mgcv}, \pkg{VGAM}, ...)}
-#'      \item{[Marginal effects models][get_parameters.betamfx] (\pkg{mfx})}
-#'      \item{[Mixed models][get_parameters.glmm] (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
-#'      \item{[Zero-inflated and hurdle models][get_parameters.zeroinfl] (\pkg{pscl}, ...)}
-#'      \item{[Models with special components][get_parameters.betareg] (\pkg{betareg}, \pkg{MuMIn}, ...)}
-#'      \item{[Hypothesis tests][get_parameters.htest] (`htest`)}
-#'    }
+#' models) from a model. See the documentation for your object's class:
+#'
+#' - [Bayesian models][get_parameters.BGGM] ({rstanarm}, {brms}, {MCMCglmm}, ...)
+#' - [Estimated marginal means][get_parameters.emmGrid] ({emmeans})
+#' - [Generalized additive models][get_parameters.gamm] ({mgcv}, {VGAM}, ...)
+#' - [Marginal effects models][get_parameters.betamfx] ({mfx})
+#' - [Mixed models][get_parameters.glmm] ({lme4}, {glmmTMB}, {GLMMadaptive}, ...)
+#' - [Zero-inflated and hurdle models][get_parameters.zeroinfl] ({pscl}, ...)
+#' - [Models with special components][get_parameters.betareg] ({betareg}, {MuMIn}, ...)
+#' - [Hypothesis tests][get_parameters.htest] (`htest`)
 #'
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
@@ -22,15 +21,16 @@
 #'
 #' @inheritSection find_predictors Model components
 #'
-#' @return \itemize{
-#'   \item for non-Bayesian models, a data frame with two columns: the parameter names and the related point estimates.
-#'   \item for Anova (`aov()`) with error term, a list of parameters for the conditional and the random effects parameters
-#' }
+#' @return
+#' - for non-Bayesian models, a data frame with two columns: the parameter names
+#'   and the related point estimates.
+#' - for Anova (`aov()`) with error term, a list of parameters for the
+#'   conditional and the random effects parameters
 #'
 #' @details In most cases when models either return different "effects" (fixed,
 #' random) or "components" (conditional, zero-inflated, ...), the arguments
 #' `effects` and `component` can be used.
-#' \cr \cr
+#'
 #' `get_parameters()` is comparable to `coef()`, however, the coefficients
 #' are returned as data frame (with columns for names and point estimates of
 #' coefficients). For Bayesian models, the posterior samples of parameters are
@@ -765,10 +765,10 @@ get_parameters.maov <- get_parameters.manova
 
 #' @export
 get_parameters.afex_aov <- function(x, ...) {
-  if (!is.null(x$aov)) {
-    get_parameters(x$aov, ...)
-  } else {
+  if (is.null(x$aov)) {
     get_parameters(x$lm, ...)
+  } else {
+    get_parameters(x$aov, ...)
   }
 }
 

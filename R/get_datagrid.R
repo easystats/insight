@@ -113,56 +113,53 @@
 #'
 #' @seealso [get_predicted()]
 #'
-#' @examples
+#' @examplesIf require("bayestestR", quietly = TRUE) && require("datawizard", quietly = TRUE)
 #' # Datagrids of variables and dataframes =====================================
-#' if (require("bayestestR", quietly = TRUE) & require("datawizard", quietly = TRUE)) {
-#'   # Single variable is of interest; all others are "fixed" ------------------
-#'   # Factors
-#'   get_datagrid(iris, at = "Species") # Returns all the levels
-#'   get_datagrid(iris, at = "Species = c('setosa', 'versicolor')") # Specify an expression
 #'
-#'   # Numeric variables
-#'   get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
-#'   get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
-#'   get_datagrid(iris[2:150, ],
-#'     at = "Sepal.Length",
-#'     factors = "mode", numerics = "median"
-#'   ) # change non-targets fixing
-#'   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
-#'   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
-#'   get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
-#'   # identical to previous line: -1 SD, mean and +1 SD
-#'   get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
-#'   get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
+#' # Single variable is of interest; all others are "fixed" ------------------
+#' # Factors
+#' get_datagrid(iris, at = "Species") # Returns all the levels
+#' get_datagrid(iris, at = "Species = c('setosa', 'versicolor')") # Specify an expression
 #'
-#'   # Numeric and categorical variables, generating a grid for plots
-#'   # default spread length = 10
-#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), range = "grid")
-#'   # default spread length = 3 (-1 SD, mean and +1 SD)
-#'   get_datagrid(iris, at = c("Species", "Sepal.Length"), range = "grid")
+#' # Numeric variables
+#' get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
+#' get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
+#' get_datagrid(iris[2:150, ],
+#'   at = "Sepal.Length",
+#'   factors = "mode", numerics = "median"
+#' ) # change non-targets fixing
+#' get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
+#' get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
+#' get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+#' # identical to previous line: -1 SD, mean and +1 SD
+#' get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
+#' get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
 #'
+#' # Numeric and categorical variables, generating a grid for plots
+#' # default spread length = 10
+#' get_datagrid(iris, at = c("Sepal.Length", "Species"), range = "grid")
+#' # default spread length = 3 (-1 SD, mean and +1 SD)
+#' get_datagrid(iris, at = c("Species", "Sepal.Length"), range = "grid")
 #'
-#'   # Standardization and unstandardization
-#'   data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
-#'   data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
-#'   datawizard::standardize(data, select = "Sepal.Length")
-#'   data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
-#'   data
-#'   datawizard::unstandardize(data, select = "Sepal.Length")
+#' # Standardization and unstandardization
+#' data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
+#' data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
+#' datawizard::standardize(data, select = "Sepal.Length")
+#' data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+#' data
+#' datawizard::unstandardize(data, select = "Sepal.Length")
 #'
+#' # Multiple variables are of interest, creating a combination --------------
+#' get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
+#' get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
+#' get_datagrid(iris, at = c(1, 3), length = 3)
+#' get_datagrid(iris, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
+#' get_datagrid(iris, at = c("Sepal.Length", "Species"), numerics = 0)
+#' get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
+#' get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #'
-#'   # Multiple variables are of interest, creating a combination --------------
-#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
-#'   get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
-#'   get_datagrid(iris, at = c(1, 3), length = 3)
-#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
-#'   get_datagrid(iris, at = c("Sepal.Length", "Species"), numerics = 0)
-#'   get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
-#'   get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
-#'
-#'   # With list-style at-argument
-#'   get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
-#' }
+#' # With list-style at-argument
+#' get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 #'
 #' # With models ===============================================================
 #' # Fit a linear regression
@@ -342,7 +339,7 @@ get_datagrid.data.frame <- function(x,
       }
 
       if (nrow(targets) == 0) {
-        format_error("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE.")
+        format_error("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to `FALSE`.") # nolint
       }
     }
   }
@@ -620,12 +617,12 @@ get_datagrid.logical <- get_datagrid.character
     }
 
     if (is.na(expression) && is.data.frame(x)) {
-      if (!is.na(varname)) {
-        x <- x[[varname]]
-      } else {
+      if (is.na(varname)) {
         format_error(
           "Couldn't find which variable were selected in `at`. Check spelling and specification."
         )
+      } else {
+        x <- x[[varname]]
       }
     }
 
@@ -653,7 +650,10 @@ get_datagrid.logical <- get_datagrid.character
         # Numeric
         # If one, might be a shortcut
         if (length(parts) == 1) {
-          shortcuts <- c("meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax", "minmax", "terciles", "terciles2", "fivenum")
+          shortcuts <- c(
+            "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
+            "minmax", "terciles", "terciles2", "fivenum"
+          )
           if (parts %in% shortcuts) {
             if (parts %in% c("meansd", "sd")) {
               center <- mean(x, na.rm = TRUE)
@@ -668,9 +668,9 @@ get_datagrid.logical <- get_datagrid.character
             } else if (parts == "quartiles2") {
               expression <- paste0("c(", paste0(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], collapse = ","), ")")
             } else if (parts == "terciles") {
-              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")")
+              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
             } else if (parts == "terciles2") {
-              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")")
+              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
             } else if (parts == "fivenum") {
               expression <- paste0("c(", paste0(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
             } else if (parts == "zeromax") {
@@ -682,7 +682,11 @@ get_datagrid.logical <- get_datagrid.character
             expression <- parts
           } else {
             format_error(
-              paste0("The `at` argument (", at, ") should either indicate the minimum and the maximum, or one of the following options: ", paste0(shortcuts, collapse = ", ", "."))
+              paste0(
+                "The `at` argument (", at, ") should either indicate the minimum and the maximum, or one of the following options: ", # nolint
+                toString(shortcuts),
+                "."
+              )
             )
           }
           # If only two, it's probably the range
@@ -755,7 +759,7 @@ get_datagrid.default <- function(x,
   minfo <- model_info(x)
   if (minfo$is_binomial && minfo$is_logit && is.factor(data[[response]]) && !include_response && verbose) {
     format_warning(
-      "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions."
+      "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions." # nolint
     )
   }
 
@@ -763,7 +767,7 @@ get_datagrid.default <- function(x,
   if (isFALSE(include_response)) {
     data <- data[!colnames(data) %in% response]
     if (ncol(data) < 1L) {
-      format_error("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid.")
+      format_error("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid.") # nolint
     }
   }
 

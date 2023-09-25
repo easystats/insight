@@ -28,7 +28,7 @@
 #' @return An object of class `"logLik"`, also containing the
 #'   log-likelihoods for each observation as a `per_observation` attribute
 #'   (`attributes(get_loglikelihood(x))$per_observation`) when possible.
-#'   The code was partly inspired from the \CRANpkg{nonnest2} package.
+#'   The code was partly inspired from the {nonnest2} package.
 #'
 #' @examples
 #' x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
@@ -220,11 +220,11 @@ get_loglikelihood.afex_aov <- function(x, ...) {
   # Make adjustment for binomial models with matrix as input
   if (info$is_binomial) {
     resp <- .factor_to_numeric(resp, lowest = 0)
-    if (!is.null(ncol(resp))) {
+    if (is.null(ncol(resp))) {
+      n <- rep.int(1, length(resp))
+    } else {
       n <- rowSums(resp)
       resp <- ifelse(n == 0, 0, resp[, 1] / n)
-    } else {
-      n <- rep.int(1, length(resp))
     }
     n <- if (any(n > 1L)) n else w
     w <- ifelse(n > 0, (w / n), 0)
@@ -316,7 +316,7 @@ get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
   # Get posterior distribution of logliks
   mat <- rstanarm::log_lik(x)
   # Point estimate using the function passed as the centrality argument
-  lls <- sapply(as.data.frame(mat), centrality)
+  lls <- vapply(as.data.frame(mat), centrality, numeric(1))
 
   .loglikelihood_prep_output(x, lls)
 }
@@ -445,11 +445,11 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
       # }
 
       if (is.null(ll_adjustment) && isTRUE(verbose)) {
-        format_warning("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate.")
+        format_warning("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate.") # nolint
       } else {
         out[1] <- out[1] + ll_adjustment
         if (isTRUE(list(...)$REML) && isTRUE(verbose)) {
-          format_warning("Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate.")
+          format_warning("Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate.") # nolint
         }
       }
     }
@@ -458,7 +458,7 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
   # Some attributes present in stats::logLik (not sure what nall does)
   attr(out, "nall") <- attr(out, "nobs") <- n_obs(x)
 
-  # See https://stats.stackexchange.com/questions/393016/what-does-the-degree-of-freedom-df-mean-in-the-results-of-log-likelihood-logl
+  # See https://stats.stackexchange.com/q/393016/54740
   if (is.null(df)) df <- get_df(x, type = "model")
   attr(out, "df") <- df
 

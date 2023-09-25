@@ -107,6 +107,7 @@ equals the default from the {sandwich} package; for type \code{"CR"} (or
 Confidence intervals around predicted values
 }
 \examples{
+\dontshow{if (require("boot") && require("datawizard") && require("bayestestR")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Confidence Intervals for Model Predictions
 # ------------------------------------------
 
@@ -125,23 +126,19 @@ head(ci_vals)
 
 # Bootstrapped
 # ------------
-if (require("boot")) {
-  predictions <- get_predicted(x, iterations = 500)
-  get_predicted_ci(x, predictions)
-}
+predictions <- get_predicted(x, iterations = 500)
+get_predicted_ci(x, predictions)
 
-if (require("datawizard") && require("bayestestR")) {
-  ci_vals <- get_predicted_ci(x, predictions, ci = c(0.80, 0.95))
-  head(ci_vals)
-  datawizard::reshape_ci(ci_vals)
+ci_vals <- get_predicted_ci(x, predictions, ci = c(0.80, 0.95))
+head(ci_vals)
+datawizard::reshape_ci(ci_vals)
 
-  ci_vals <- get_predicted_ci(x,
-    predictions,
-    dispersion_method = "MAD",
-    ci_method = "HDI"
-  )
-  head(ci_vals)
-}
+ci_vals <- get_predicted_ci(x,
+  predictions,
+  dispersion_method = "MAD",
+  ci_method = "HDI"
+)
+head(ci_vals)
 
 
 # Logistic model
@@ -152,4 +149,5 @@ ci_vals <- get_predicted_ci(x, predictions, ci_type = "prediction")
 head(ci_vals)
 ci_vals <- get_predicted_ci(x, predictions, ci_type = "confidence")
 head(ci_vals)
+\dontshow{\}) # examplesIf}
 }

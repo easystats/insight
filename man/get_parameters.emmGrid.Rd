@@ -17,10 +17,9 @@
 the posterior samples (\code{summary = TRUE})) should be returned as
 estimates.}
 
-\item{merge_parameters}{Logical, if \code{TRUE} and \code{x} has multiple
-columns for parameter names (like \code{emmGrid} objects may have), these
-are merged into a single parameter column, with parameters names and values
-as values.}
+\item{merge_parameters}{Logical, if \code{TRUE} and \code{x} has multiple columns for
+parameter names (like \code{emmGrid} objects may have), these are merged into a
+single parameter column, with parameters names and values as values.}
 
 \item{...}{Currently not used.}
 }
@@ -32,21 +31,21 @@ point estimates.
 Returns the coefficients from a model.
 }
 \note{
-Note that \code{emmGrid} or \code{emm_list} objects returned by
-functions from \pkg{emmeans} have a different structure compared to
-usual regression models. Hence, the \code{Parameter} column does not
-always contain names of \emph{variables}, but may rather contain
-\emph{values}, e.g. for contrasts. See an example for pairwise
-comparisons below.
+Note that \code{emmGrid} or \code{emm_list} objects returned by functions from
+{emmeans} have a different structure compared to usual regression models.
+Hence, the \code{Parameter} column does not always contain names of \emph{variables},
+but may rather contain \emph{values}, e.g. for contrasts. See an example for
+pairwise comparisons below.
 }
 \examples{
+\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(mtcars)
 model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
-if (require("emmeans", quietly = TRUE)) {
-  emm <- emmeans(model, "cyl")
-  get_parameters(emm)
 
-  emm <- emmeans(model, pairwise ~ cyl)
-  get_parameters(emm)
-}
+emm <- emmeans(model, "cyl")
+get_parameters(emm)
+
+emm <- emmeans(model, pairwise ~ cyl)
+get_parameters(emm)
+\dontshow{\}) # examplesIf}
 }

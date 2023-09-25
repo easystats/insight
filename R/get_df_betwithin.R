@@ -37,5 +37,9 @@
 
 
 .n_randomeffects <- function(x) {
-  sapply(get_data(x, verbose = FALSE)[find_random(x, split_nested = TRUE, flatten = TRUE)], function(i) n_unique(i))
+  vapply(
+    get_data(x, verbose = FALSE)[find_random(x, split_nested = TRUE, flatten = TRUE)],
+    n_unique,
+    numeric(1)
+  )
 }

@@ -8,7 +8,7 @@
 #'   standard errors are calculated based on the variance-covariance matrix.
 #' @inheritParams get_predicted
 #'
-#' @examples
+#' @examplesIf require("boot") && require("datawizard") && require("bayestestR")
 #' # Confidence Intervals for Model Predictions
 #' # ------------------------------------------
 #'
@@ -27,23 +27,19 @@
 #'
 #' # Bootstrapped
 #' # ------------
-#' if (require("boot")) {
-#'   predictions <- get_predicted(x, iterations = 500)
-#'   get_predicted_ci(x, predictions)
-#' }
+#' predictions <- get_predicted(x, iterations = 500)
+#' get_predicted_ci(x, predictions)
 #'
-#' if (require("datawizard") && require("bayestestR")) {
-#'   ci_vals <- get_predicted_ci(x, predictions, ci = c(0.80, 0.95))
-#'   head(ci_vals)
-#'   datawizard::reshape_ci(ci_vals)
+#' ci_vals <- get_predicted_ci(x, predictions, ci = c(0.80, 0.95))
+#' head(ci_vals)
+#' datawizard::reshape_ci(ci_vals)
 #'
-#'   ci_vals <- get_predicted_ci(x,
-#'     predictions,
-#'     dispersion_method = "MAD",
-#'     ci_method = "HDI"
-#'   )
-#'   head(ci_vals)
-#' }
+#' ci_vals <- get_predicted_ci(x,
+#'   predictions,
+#'   dispersion_method = "MAD",
+#'   ci_method = "HDI"
+#' )
+#' head(ci_vals)
 #'
 #'
 #' # Logistic model
@@ -343,7 +339,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
         # for multiple length, SE and predictions may match, could be intended?
         # could there be any cases where we have twice or x times the length of
         # predictions as standard errors?
-        format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.")
+        format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.") # nolint
       } else {
         format_error("Predictions and standard errors are not of the same length. Please specify the `data` argument.")
       }

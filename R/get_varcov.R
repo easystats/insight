@@ -54,29 +54,25 @@
 #'
 #' @return The variance-covariance matrix, as `matrix`-object.
 #'
-#' @examples
+#' @examplesIf require("pscl") && require("sandwich")
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_varcov(m)
 #'
 #' # vcov of zero-inflation component from hurdle-model
-#' if (require("pscl")) {
-#'   data("bioChemists", package = "pscl")
-#'   mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
-#'   get_varcov(mod, component = "zero_inflated")
-#' }
+#' data("bioChemists", package = "pscl")
+#' mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+#' get_varcov(mod, component = "zero_inflated")
 #'
 #' # robust vcov of, count component from hurdle-model
-#' if (require("pscl") && require("sandwich")) {
-#'   data("bioChemists", package = "pscl")
-#'   mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
-#'   get_varcov(
-#'     mod,
-#'     component = "conditional",
-#'     vcov = "BS",
-#'     vcov_args = list(R = 50)
-#'   )
-#' }
+#' data("bioChemists", package = "pscl")
+#' mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+#' get_varcov(
+#'   mod,
+#'   component = "conditional",
+#'   vcov = "BS",
+#'   vcov_args = list(R = 50)
+#' )
 #' @export
 get_varcov <- function(x, ...) {
   UseMethod("get_varcov")
@@ -146,14 +142,14 @@ get_varcov.mlm <- function(x,
                            vcov_args = NULL,
                            ...) {
   .check_get_varcov_dots(x, ...)
-  if (!is.null(x$weights)) {
+  if (is.null(x$weights)) {
+    get_varcov.default(x, vcov = vcov, vcov_args = vcov_args, ...)
+  } else {
     if (!is.null(vcov)) {
       format_error("The `vcov` argument is not supported with weights in a `mlm` model.")
     }
     s <- summary(x)[[1L]]
     .get_weighted_varcov(x, s$cov.unscaled)
-  } else {
-    get_varcov.default(x, vcov = vcov, vcov_args = vcov_args, ...)
   }
 }
 
@@ -371,7 +367,7 @@ get_varcov.mjoint <- function(x,
 
 #' @export
 get_varcov.mhurdle <- function(x,
-                               component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"),
+                               component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"), # nolint
                                verbose = TRUE,
                                ...) {
   .check_get_varcov_dots(x, ...)
@@ -1054,7 +1050,7 @@ get_varcov.LORgee <- get_varcov.gee
   if (requireNamespace("Matrix", quietly = TRUE)) {
     format_alert(
       "The variance-covariance matrix is not positive definite. Returning the nearest positive definite matrix now.",
-      "This ensures that eigenvalues are all positive real numbers, and thereby, for instance, it is possible to calculate standard errors for all relevant parameters."
+      "This ensures that eigenvalues are all positive real numbers, and thereby, for instance, it is possible to calculate standard errors for all relevant parameters." # nolint
     )
     as.matrix(Matrix::nearPD(m)$mat)
   } else {
@@ -1127,7 +1123,7 @@ get_varcov.LORgee <- get_varcov.gee
   # warning here.
   if ("vcov" %in% names(dots) && !is.null(dots[["vcov"]])) {
     format_warning(
-      sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/"))
+      sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/")) # nolint
     )
   }
 }

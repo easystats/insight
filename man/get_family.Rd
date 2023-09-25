@@ -16,17 +16,17 @@ A robust and resilient alternative to \code{stats::family}. To avoid issues
 with models like \code{gamm4}.
 }
 \examples{
+\dontshow{if (require("mgcv")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(mtcars)
 x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 get_family(x)
 
-if (require("mgcv")) {
-  x <- mgcv::gamm(
-    vs ~ am + s(wt),
-    random = list(cyl = ~1),
-    data = mtcars,
-    family = "binomial"
-  )
-  get_family(x)
-}
+x <- mgcv::gamm(
+  vs ~ am + s(wt),
+  random = list(cyl = ~1),
+  data = mtcars,
+  family = "binomial"
+)
+get_family(x)
+\dontshow{\}) # examplesIf}
 }

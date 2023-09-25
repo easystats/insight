@@ -12,10 +12,9 @@
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}
 
-\item{merge_parameters}{Logical, if \code{TRUE} and \code{x} has multiple
-columns for parameter names (like \code{emmGrid} objects may have), these
-are merged into a single parameter column, with parameters names and values
-as values.}
+\item{merge_parameters}{Logical, if \code{TRUE} and \code{x} has multiple columns for
+parameter names (like \code{emmGrid} objects may have), these are merged into a
+single parameter column, with parameters names and values as values.}
 
 \item{...}{Currently not used.}
 }

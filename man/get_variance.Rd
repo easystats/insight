@@ -80,73 +80,86 @@ returns the result as list. Functions like \code{get_variance_residual(x)} or
 This function returns different variance components from mixed models,
 which are needed, for instance, to calculate r-squared measures or the
 intraclass-correlation coefficient (ICC).
-\subsection{Fixed effects variance}{
+}
+\note{
+This function supports models of class \code{merMod} (including models
+from {blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB}, \code{MixMod}, \code{lme},
+\code{mixed}, \code{rlmerMod}, \code{stanreg}, \code{brmsfit} or \code{wbm}. Support for objects of
+class \code{MixMod} ({GLMMadaptive}), \code{lme} ({nlme}) or \code{brmsfit} ({brms}) is
+experimental and may not work for all models.
+}
+\section{Fixed effects variance}{
+
 The fixed effects variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>f</sub>}}{\eqn{\sigma^2_f}},
 is the variance of the matrix-multiplication \ifelse{html}{\out{&beta;&lowast;X}}{\eqn{\beta*X}}
 (parameter vector by model matrix).
 }
-\subsection{Random effects variance}{
+
+\section{Random effects variance}{
+
 The random effect variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>i</sub>}}{\eqn{\sigma^2_i}},
-represents the \emph{mean} random effect variance of the model. Since
-this variance reflect the "average" random effects variance for mixed
-models, it is also appropriate for models with more complex random
-effects structures, like random slopes or nested random effects.
-Details can be found in \cite{Johnson 2014}, in particular equation 10.
-For simple random-intercept models, the random effects variance equals
-the random-intercept variance.
+represents the \emph{mean} random effect variance of the model. Since this
+variance reflects the "average" random effects variance for mixed models, it
+is also appropriate for models with more complex random effects structures,
+like random slopes or nested random effects. Details can be found in
+\emph{Johnson 2014}, in particular equation 10. For simple random-intercept models,
+the random effects variance equals the random-intercept variance.
 }
-\subsection{Distribution-specific variance}{
+
+\section{Distribution-specific variance}{
+
 The distribution-specific variance,
 \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub>}}{\eqn{\sigma^2_d}},
 depends on the model family. For Gaussian models, it is
-\ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}} (i.e.
-\code{sigma(model)^2}). For models with binary outcome, it is
+\ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}} (i.e. \code{sigma(model)^2}).
+For models with binary outcome, it is
 \eqn{\pi^2 / 3} for logit-link, \code{1} for probit-link, and \eqn{\pi^2 / 6}
 for cloglog-links. Models from Gamma-families use \eqn{\mu^2} (as obtained
 from \code{family$variance()}). For all other models, the distribution-specific
 variance is based on lognormal approximation, \eqn{log(1 + var(x) / \mu^2)}
 (see \cite{Nakagawa et al. 2017}). The expected variance of a zero-inflated
-model is computed according to \cite{Zuur et al. 2012, p277}.
+model is computed according to \emph{Zuur et al. 2012, p277}.
 }
-\subsection{Variance for the additive overdispersion term}{
+
+\section{Variance for the additive overdispersion term}{
+
 The variance for the additive overdispersion term,
 \ifelse{html}{\out{&sigma;<sup>2</sup><sub><em>e</em></sub>}}{\eqn{\sigma^2_e}},
-represents \dQuote{the excess variation relative to what is expected
-from a certain distribution} (Nakagawa et al. 2017). In (most? many?)
-cases, this will be \code{0}.
+represents "the excess variation relative to what is expected from a certain
+distribution" (\emph{Nakagawa et al. 2017}). In (most? many?) cases, this will be
+\code{0}.
 }
-\subsection{Residual variance}{
+
+\section{Residual variance}{
+
 The residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}},
 is simply \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub> + &sigma;<sup>2</sup><sub><em>e</em></sub>}}{\eqn{\sigma^2_d + \sigma^2_e}}.
 }
-\subsection{Random intercept variance}{
+
+\section{Random intercept variance}{
+
 The random intercept variance, or \emph{between-subject} variance
-(\ifelse{html}{\out{&tau;<sub>00</sub>}}{\eqn{\tau_{00}}}),
-is obtained from \code{VarCorr()}. It indicates how much groups
-or subjects differ from each other, while the residual variance
-\ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}
+(\ifelse{html}{\out{&tau;<sub>00</sub>}}{\eqn{\tau_{00}}}), is obtained from
+\code{VarCorr()}. It indicates how much groups or subjects differ from each other,
+while the residual variance \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}
 indicates the \emph{within-subject variance}.
 }
-\subsection{Random slope variance}{
+
+\section{Random slope variance}{
+
 The random slope variance (\ifelse{html}{\out{&tau;<sub>11</sub>}}{\eqn{\tau_{11}}})
-is obtained from \code{VarCorr()}. This measure is only available
-for mixed models with random slopes.
+is obtained from \code{VarCorr()}. This measure is only available for mixed models
+with random slopes.
 }
-\subsection{Random slope-intercept correlation}{
+
+\section{Random slope-intercept correlation}{
+
 The random slope-intercept correlation
-(\ifelse{html}{\out{&rho;<sub>01</sub>}}{\eqn{\rho_{01}}})
-is obtained from \code{VarCorr()}. This measure is only available
-for mixed models with random intercepts and slopes.
+(\ifelse{html}{\out{&rho;<sub>01</sub>}}{\eqn{\rho_{01}}}) is obtained from
+\code{VarCorr()}. This measure is only available for mixed models with random
+intercepts and slopes.
 }
-}
-\note{
-This function supports models of class \code{merMod} (including models
-from {blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB},
-\code{MixMod}, \code{lme}, \code{mixed}, \code{rlmerMod}, \code{stanreg},
-\code{brmsfit} or \code{wbm}. Support for objects of class \code{MixMod}
-({GLMMadaptive}), \code{lme} ({nlme}) or \code{brmsfit} ({brms})
-is experimental and may not work for all models.
-}
+
 \examples{
 \dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{

@@ -213,7 +213,7 @@ important to read the documentation of the arguments. This is because making
 "predictions" (a lose term for a variety of things) is a non-trivial process,
 with lots of caveats and complications. Read the 'Details' section for more
 information.
-\cr \cr
+
 \code{get_predicted_ci()} returns the confidence (or prediction) interval (CI)
 associated with predictions made by a model. This function can be called
 separately on a vector of predicted values. \code{get_predicted()} usually
@@ -223,10 +223,11 @@ returns confidence intervals (included as attribute, and accessible via the
 \details{
 In \code{insight::get_predicted()}, the \code{predict} argument jointly
 modulates two separate concepts, the \strong{scale} and the \strong{uncertainty interval}.
+}
+\section{Confidence Interval (CI) vs. Prediction Interval (PI))}{
 
-\subsection{Confidence Interval (CI) vs. Prediction Interval (PI))}{
 \itemize{
-\item \strong{Linear models} - \code{lm()}: For linear models, Prediction
+\item \strong{Linear models} - \code{lm()}: For linear models, prediction
 intervals (\code{predict="prediction"}) show the range that likely
 contains the value of a new observation (in what range it is likely to
 fall), whereas confidence intervals (\code{predict="expectation"} or
@@ -242,9 +243,11 @@ but also the variability within the data).
 prediction intervals are somewhat useless (for instance, for a binomial
 (Bernoulli) model for which the dependent variable is a vector of 1s and
 0s, the prediction interval is... \verb{[0, 1]}).
-}}
+}
+}
 
-\subsection{Link scale vs. Response scale}{
+\section{Link scale vs. Response scale}{
+
 When users set the \code{predict} argument to \code{"expectation"}, the predictions
 are returned on the response scale, which is arguably the most convenient
 way to understand and visualize relationships of interest. When users set
@@ -259,7 +262,8 @@ function will first calculate predictions as if the user had selected
 return the most likely outcome.
 }
 
-\subsection{Heteroscedasticity consistent standard errors}{
+\section{Heteroscedasticity consistent standard errors}{
+
 The arguments \code{vcov} and \code{vcov_args} can be used to calculate robust
 standard errors for confidence intervals of predictions. These arguments,
 when provided in \code{get_predicted()}, are passed down to \code{get_predicted_ci()},
@@ -267,7 +271,8 @@ thus, see the related documentation there for more
 details.
 }
 
-\subsection{Bayesian and Bootstrapped models and iterations}{
+\section{Bayesian and Bootstrapped models and iterations}{
+
 For predictions based on multiple iterations, for instance in the case of Bayesian
 models and bootstrapped predictions, the function used to compute the centrality
 (point-estimate predictions) can be modified via the \code{centrality_function}
@@ -276,8 +281,9 @@ The default is \code{mean}. Individual draws can be accessed by running
 \code{iter <- as.data.frame(get_predicted(model))}, and their iterations can be
 reshaped into a long format by \code{bayestestR::reshape_iterations(iter)}.
 }
-}
+
 \examples{
+\dontshow{if (require("boot")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(mtcars)
 x <- lm(mpg ~ cyl + hp, data = mtcars)
 
@@ -290,12 +296,10 @@ get_predicted(x, predict = "prediction")
 # Get CI
 as.data.frame(predictions)
 
-if (require("boot")) {
-  # Bootstrapped
-  as.data.frame(get_predicted(x, iterations = 4))
-  # Same as as.data.frame(..., keep_iterations = FALSE)
-  summary(get_predicted(x, iterations = 4))
-}
+# Bootstrapped
+as.data.frame(get_predicted(x, iterations = 4))
+# Same as as.data.frame(..., keep_iterations = FALSE)
+summary(get_predicted(x, iterations = 4))
 
 # Different prediction types ------------------------
 data(iris)
@@ -319,7 +323,7 @@ head(as.data.frame(pred))
 # Classification: classification "type" + PI
 pred <- get_predicted(x, predict = "classification", ci = 0.95)
 head(as.data.frame(pred))
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=get_datagrid]{get_datagrid()}}

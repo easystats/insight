@@ -18,29 +18,31 @@ get_parameters(x, ...)
 }
 \value{
 \itemize{
-\item for non-Bayesian models, a data frame with two columns: the parameter names and the related point estimates.
-\item for Anova (\code{aov()}) with error term, a list of parameters for the conditional and the random effects parameters
+\item for non-Bayesian models, a data frame with two columns: the parameter names
+and the related point estimates.
+\item for Anova (\code{aov()}) with error term, a list of parameters for the
+conditional and the random effects parameters
 }
 }
 \description{
 Returns the coefficients (or posterior samples for Bayesian
 models) from a model. See the documentation for your object's class:
 \itemize{
-\item{\link[=get_parameters.BGGM]{Bayesian models} (\pkg{rstanarm}, \pkg{brms}, \pkg{MCMCglmm}, ...)}
-\item{\link[=get_parameters.emmGrid]{Estimated marginal means} (\pkg{emmeans})}
-\item{\link[=get_parameters.gamm]{Generalized additive models} (\pkg{mgcv}, \pkg{VGAM}, ...)}
-\item{\link[=get_parameters.betamfx]{Marginal effects models} (\pkg{mfx})}
-\item{\link[=get_parameters.glmm]{Mixed models} (\pkg{lme4}, \pkg{glmmTMB}, \pkg{GLMMadaptive}, ...)}
-\item{\link[=get_parameters.zeroinfl]{Zero-inflated and hurdle models} (\pkg{pscl}, ...)}
-\item{\link[=get_parameters.betareg]{Models with special components} (\pkg{betareg}, \pkg{MuMIn}, ...)}
-\item{\link[=get_parameters.htest]{Hypothesis tests} (\code{htest})}
+\item \link[=get_parameters.BGGM]{Bayesian models} ({rstanarm}, {brms}, {MCMCglmm}, ...)
+\item \link[=get_parameters.emmGrid]{Estimated marginal means} ({emmeans})
+\item \link[=get_parameters.gamm]{Generalized additive models} ({mgcv}, {VGAM}, ...)
+\item \link[=get_parameters.betamfx]{Marginal effects models} ({mfx})
+\item \link[=get_parameters.glmm]{Mixed models} ({lme4}, {glmmTMB}, {GLMMadaptive}, ...)
+\item \link[=get_parameters.zeroinfl]{Zero-inflated and hurdle models} ({pscl}, ...)
+\item \link[=get_parameters.betareg]{Models with special components} ({betareg}, {MuMIn}, ...)
+\item \link[=get_parameters.htest]{Hypothesis tests} (\code{htest})
 }
 }
 \details{
 In most cases when models either return different "effects" (fixed,
 random) or "components" (conditional, zero-inflated, ...), the arguments
 \code{effects} and \code{component} can be used.
-\cr \cr
+
 \code{get_parameters()} is comparable to \code{coef()}, however, the coefficients
 are returned as data frame (with columns for names and point estimates of
 coefficients). For Bayesian models, the posterior samples of parameters are

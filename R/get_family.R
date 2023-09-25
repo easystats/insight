@@ -6,20 +6,18 @@
 #' @param x A statistical model.
 #' @param ... Further arguments passed to methods.
 #'
-#' @examples
+#' @examplesIf require("mgcv")
 #' data(mtcars)
 #' x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 #' get_family(x)
 #'
-#' if (require("mgcv")) {
-#'   x <- mgcv::gamm(
-#'     vs ~ am + s(wt),
-#'     random = list(cyl = ~1),
-#'     data = mtcars,
-#'     family = "binomial"
-#'   )
-#'   get_family(x)
-#' }
+#' x <- mgcv::gamm(
+#'   vs ~ am + s(wt),
+#'   random = list(cyl = ~1),
+#'   data = mtcars,
+#'   family = "binomial"
+#' )
+#' get_family(x)
 #' @export
 get_family <- function(x, ...) {
   UseMethod("get_family")
