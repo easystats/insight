@@ -3,25 +3,24 @@
 #'
 #' @description Returns the coefficients from a model.
 #'
-#' @param merge_parameters Logical, if `TRUE` and `x` has multiple
-#'   columns for parameter names (like `emmGrid` objects may have), these
-#'   are merged into a single parameter column, with parameters names and values
-#'   as values.
+#' @param merge_parameters Logical, if `TRUE` and `x` has multiple columns for
+#' parameter names (like `emmGrid` objects may have), these are merged into a
+#' single parameter column, with parameters names and values as values.
 #' @param ... Currently not used.
 #'
 #' @inheritParams find_parameters
 #' @inheritParams find_predictors
 #' @inheritParams get_parameters.BGGM
 #'
-#' @note Note that `emmGrid` or `emm_list` objects returned by
-#'   functions from {emmeans} have a different structure compared to
-#'   usual regression models. Hence, the `Parameter` column does not
-#'   always contain names of *variables*, but may rather contain
-#'   *values*, e.g. for contrasts. See an example for pairwise
-#'   comparisons below.
+#' @note
+#' Note that `emmGrid` or `emm_list` objects returned by functions from
+#' {emmeans} have a different structure compared to usual regression models.
+#' Hence, the `Parameter` column does not always contain names of *variables*,
+#' but may rather contain *values*, e.g. for contrasts. See an example for
+#' pairwise comparisons below.
 #'
 #' @return A data frame with two columns: the parameter names and the related
-#'   point estimates.
+#' point estimates.
 #'
 #' @examplesIf require("emmeans", quietly = TRUE)
 #' data(mtcars)
