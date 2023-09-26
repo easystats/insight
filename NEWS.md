@@ -1,8 +1,17 @@
 # insight 0.19.6
 
+## General
+
+* Improved documentation for `get_predicted_ci()`.
+
 ## Changes to functions
 
 * `model_info()` now recognized ordered beta families.
+
+## Bug fixes
+
+* `find_transformation()` better detects power-transformation of the response
+  variable.
 
 # insight 0.19.5
 
