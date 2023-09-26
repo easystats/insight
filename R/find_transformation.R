@@ -115,7 +115,7 @@ find_transformation <- function(x) {
 
   # power-transformation
 
-  if (any(grepl("I\\((.*)\\^\\s*2\\)", rv))) {
+  if (any(grepl("(.*)(\\^|\\*\\*)\\s?-?(\\d+|[()])", rv))) {
     transform_fun <- "power"
   }
 

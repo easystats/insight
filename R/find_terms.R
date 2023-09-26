@@ -188,8 +188,10 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
   # protect "-1"
   f$conditional <- gsub("(-1|- 1)(?![^(]*\\))", "#1", f$conditional, perl = TRUE)
 
+  # This regular expression matches any of the characters *, +, :, |, -, or /,
+  # unless they are preceded by a ^ and followed by a closing parenthesis ).
   f <- lapply(f, function(.x) {
-    pattern <- "[*+:|\\-\\/](?![^(]*\\))" # was: "[\\*\\+:\\-\\|/](?![^(]*\\))"
+    pattern <- "(?<!\\^)[*+:|\\-\\/](?![^(]*\\))" # was: "[\\*\\+:\\-\\|/](?![^(]*\\))"
     f_parts <- gsub("~", "", trim_ws(unlist(
       strsplit(split = pattern, x = .x, perl = TRUE),
       use.names = FALSE
