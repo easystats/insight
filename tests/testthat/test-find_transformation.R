@@ -47,3 +47,20 @@ test_that("find_transformation - strange bayestestR example", {
   mod <- lm(log(mpg) ~ gear + hp, data = mtcars)
   expect_identical(find_transformation(mod), "log")
 })
+
+test_that("find_transformation - detect powers", {
+  data(iris)
+  m1 <- lm(Sepal.Length^(1 / 2) ~ Species, data = iris)
+  m2 <- lm(Sepal.Length^2 ~ Species, data = iris)
+  m3 <- lm(I(Sepal.Length^(1 / 2)) ~ Species, data = iris)
+  m4 <- lm(I(Sepal.Length^3) ~ Species, data = iris)
+  m5 <- lm(I(Sepal.Length^2) ~ Species, data = iris)
+
+  ## FIXME
+  # expect_identical(insight::find_transformation(m1), "power")
+  expect_identical(insight::find_transformation(m2), "power")
+  ## FIXME
+  # expect_identical(insight::find_transformation(m3), "power")
+  expect_identical(insight::find_transformation(m4), "power")
+  expect_identical(insight::find_transformation(m5), "power")
+})
