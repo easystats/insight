@@ -64,3 +64,14 @@ test_that("find_terms", {
   )
   expect_true(has_intercept(m))
 })
+
+test_that("find_terms, - in response", {
+  m <- lm(Sepal.Length - Sepal.Width ~ Species, data = iris)
+  expect_identical(find_terms(m)$response, c("Sepal.Length", "Sepal.Width"))
+  m <- lm(cbind(Sepal.Length - Sepal.Width) ~ Species, data = iris)
+  expect_identical(find_terms(m)$response, "cbind(Sepal.Length - Sepal.Width)")
+  m <- lm(Sepal.Length^-0.5 ~ Species, data = iris)
+  expect_identical(find_terms(m)$response, "Sepal.Length^-0.5")
+  m <- lm(I(Sepal.Length^-0.5) ~ Species, data = iris)
+  expect_identical(find_terms(m)$response, "I(Sepal.Length^-0.5)")
+})
