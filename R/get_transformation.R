@@ -29,12 +29,12 @@
 #' get_transformation(model)
 #'
 #' # log-function
-#' get_transformation(model)$transformation(.3)
-#' log(.3)
+#' get_transformation(model)$transformation(0.3)
+#' log(0.3)
 #'
 #' # inverse function is exp()
-#' get_transformation(model)$inverse(.3)
-#' exp(.3)
+#' get_transformation(model)$inverse(0.3)
+#' exp(0.3)
 #' @export
 get_transformation <- function(x) {
   transform_fun <- find_transformation(x)
@@ -59,6 +59,11 @@ get_transformation <- function(x) {
   } else if (transform_fun == "sqrt") {
     out <- list(transformation = sqrt, inverse = function(x) x^2)
   } else if (transform_fun == "power") {
+    ## TODO: detect power - can we turn this into a function?
+    # power <- .safe(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", find_terms(x)[["response"]])))
+    # if (is.null(power)) {
+    #   power <- 2
+    # }
     out <- list(transformation = function(x) x^2, inverse = sqrt)
   } else if (transform_fun == "expm1") {
     out <- list(transformation = expm1, inverse = log1p)

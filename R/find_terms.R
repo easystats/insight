@@ -188,6 +188,11 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
   # protect "-1"
   f$conditional <- gsub("(-1|- 1)(?![^(]*\\))", "#1", f$conditional, perl = TRUE)
 
+  ## TODO: this pattern currently fails for this response example:
+  # lm(Sepal.Length^-0.5 ~ Species, data = iris)
+  # "Sepal.Length^-0.5" is considered as subtraction, thus it is split into
+  # "Sepal.Length^" and "0.5".
+
   f <- lapply(f, function(.x) {
     pattern <- "[*+:|\\-\\/](?![^(]*\\))" # was: "[\\*\\+:\\-\\|/](?![^(]*\\))"
     f_parts <- gsub("~", "", trim_ws(unlist(
