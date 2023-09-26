@@ -64,7 +64,7 @@ test_that("find_transformation - detect powers", {
   expect_identical(insight::find_transformation(m4), "power")
   expect_identical(insight::find_transformation(m5), "power")
   expect_identical(insight::find_transformation(m6), "power")
-  # expect_identical(insight::find_transformation(m7), "power")
+  expect_identical(insight::find_transformation(m7), "power")
 
   # power **
 
