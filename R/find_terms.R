@@ -194,7 +194,7 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
   # "Sepal.Length^" and "0.5".
 
   f <- lapply(f, function(.x) {
-    pattern <- "[*+:|\\-\\/](?![^(]*\\))" # was: "[\\*\\+:\\-\\|/](?![^(]*\\))"
+    pattern <- "(?<!\\^)[*+:|\\-\\/](?![^(]*\\))" # was: "[\\*\\+:\\-\\|/](?![^(]*\\))"
     f_parts <- gsub("~", "", trim_ws(unlist(
       strsplit(split = pattern, x = .x, perl = TRUE),
       use.names = FALSE
