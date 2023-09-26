@@ -106,6 +106,9 @@ equals the default from the {sandwich} package; for type \code{"CR"} (or
 \description{
 Confidence intervals around predicted values
 }
+\details{
+TBD.
+}
 \examples{
 \dontshow{if (require("boot") && require("datawizard") && require("bayestestR")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Confidence Intervals for Model Predictions

@@ -8,6 +8,9 @@
 #'   standard errors are calculated based on the variance-covariance matrix.
 #' @inheritParams get_predicted
 #'
+#' @details
+#' TBD.
+#'
 #' @examplesIf require("boot") && require("datawizard") && require("bayestestR")
 #' # Confidence Intervals for Model Predictions
 #' # ------------------------------------------
