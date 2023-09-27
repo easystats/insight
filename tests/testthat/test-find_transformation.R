@@ -49,6 +49,7 @@ test_that("find_transformation - strange bayestestR example", {
 })
 
 test_that("find_transformation - detect powers", {
+  # styler: off
   data(iris)
   m1 <- lm(Sepal.Length^(1 / 2) ~ Species, data = iris)
   m2 <- lm(Sepal.Length^2 ~ Species, data = iris)
@@ -81,4 +82,5 @@ test_that("find_transformation - detect powers", {
   expect_identical(insight::find_transformation(m4), "power")
   expect_identical(insight::find_transformation(m5), "power")
   expect_identical(insight::find_transformation(m6), "power")
+  # styler: on
 })
