@@ -388,7 +388,13 @@ get_df.mediate <- function(x, ...) {
 # Model approach (model-based / logLik df) ------------------------------
 
 .model_df <- function(x) {
-  dof <- .safe(attr(stats::logLik(x), "df"))
+  # logLik() for plm calls get_df(), so we would have a recursion here.
+  # therefore, we need to check for plm first
+  if (inherits(x, "plm")) {
+    dof <- NULL
+  } else {
+    dof <- .safe(attr(stats::logLik(x), "df"))
+  }
 
   if (is.null(dof) || all(is.infinite(dof)) || all(is.na(dof))) {
     r <- .safe(x$rank)
