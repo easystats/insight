@@ -10,7 +10,7 @@
 #' @details
 #' Typically, `get_predicted()` returns confidence intervals based on the standard
 #' errors as returned by the `predict()`-function, assuming normal distribution
-#' (`+/- 1.96 * SE`) resp. a Student's t-distribuion (if degrees of freedom are
+#' (`+/- 1.96 * SE`) resp. a Student's t-distribution (if degrees of freedom are
 #' available). If `predict()` for a certain class does _not_ return standard
 #' errors (for example, *merMod*-objects), these are calculated manually, based
 #' on following steps: matrix-multiply `X` by the parameter vector `B` to get the
@@ -18,7 +18,7 @@
 #' and compute `XVX'` to get the variance-covariance matrix of the predictions.
 #' The square-root of the diagonal of this matrix represent the standard errors
 #' of the predictions, which are then multiplied by the critical test-statistic
-#' value (e.g., ~1.96 for normal distribuion) for the confidence intervals.
+#' value (e.g., ~1.96 for normal distribution) for the confidence intervals.
 #'
 #' If `ci_type = "prediction"`, prediction intervals are calculated. These are
 #' wider than confidence intervals, because they also take into account the
@@ -301,7 +301,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
         # for multiple length, SE and predictions may match, could be intended?
         # could there be any cases where we have twice or x times the length of
         # predictions as standard errors?
-        format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.")
+        format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.") # nolint
       } else {
         format_error("Predictions and standard errors are not of the same length. Please specify the `data` argument.")
       }
@@ -325,7 +325,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
     format_error("The `data` argument should be a data frame.")
   }
   mm <- get_modelmatrix(x, data = data)
-  out <- sapply(
+  out <- sapply( # nolint
     seq_len(nrow(mm)), function(i) {
       suppressMessages(
         lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]

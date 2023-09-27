@@ -737,7 +737,7 @@ get_predicted.phylolm <- function(x,
 
     # Transform iterations
     if ("iterations" %in% names(attributes(predictions))) {
-      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv))
+      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv)) # nolint
     }
 
     # Transform to response "type"
@@ -747,7 +747,7 @@ get_predicted.phylolm <- function(x,
       predictions <- .get_predict_transform_response(predictions, response = response)
       if ("iterations" %in% names(attributes(predictions))) {
         attr(predictions, "iterations") <- as.data.frame(
-          sapply(
+          sapply( # nolint
             attributes(predictions)$iterations,
             .get_predict_transform_response,
             response = response

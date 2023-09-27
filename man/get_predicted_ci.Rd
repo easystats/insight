@@ -108,7 +108,7 @@ Confidence intervals around predicted values
 \details{
 Typically, \code{get_predicted()} returns confidence intervals based on the standard
 errors as returned by the \code{predict()}-function, assuming normal distribution
-(\verb{+/- 1.96 * SE}) resp. a Student's t-distribuion (if degrees of freedom are
+(\verb{+/- 1.96 * SE}) resp. a Student's t-distribution (if degrees of freedom are
 available). If \code{predict()} for a certain class does \emph{not} return standard
 errors (for example, \emph{merMod}-objects), these are calculated manually, based
 on following steps: matrix-multiply \code{X} by the parameter vector \code{B} to get the
@@ -116,7 +116,7 @@ predictions, then extract the variance-covariance matrix \code{V} of the paramet
 and compute \verb{XVX'} to get the variance-covariance matrix of the predictions.
 The square-root of the diagonal of this matrix represent the standard errors
 of the predictions, which are then multiplied by the critical test-statistic
-value (e.g., ~1.96 for normal distribuion) for the confidence intervals.
+value (e.g., ~1.96 for normal distribution) for the confidence intervals.
 
 If \code{ci_type = "prediction"}, prediction intervals are calculated. These are
 wider than confidence intervals, because they also take into account the
