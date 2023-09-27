@@ -214,11 +214,14 @@ important to read the documentation of the arguments. This is because making
 with lots of caveats and complications. Read the 'Details' section for more
 information.
 
-\code{get_predicted_ci()} returns the confidence (or prediction) interval (CI)
+\code{\link[=get_predicted_ci]{get_predicted_ci()}} returns the confidence (or prediction) interval (CI)
 associated with predictions made by a model. This function can be called
 separately on a vector of predicted values. \code{get_predicted()} usually
 returns confidence intervals (included as attribute, and accessible via the
-\code{as.data.frame()} method) by default.
+\code{as.data.frame()} method) by default. It is preferred to rely on the
+\code{get_predicted()} function for standard errors and confidence intervals -
+use \code{get_predicted_ci()} only if standard errors and confidence intervals
+are not available otherwise.
 }
 \details{
 In \code{insight::get_predicted()}, the \code{predict} argument jointly

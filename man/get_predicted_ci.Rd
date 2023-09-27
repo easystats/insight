@@ -29,8 +29,7 @@ second argument has to be a model).}
 \item{...}{Other argument to be passed, for instance to \code{get_predicted_ci()}.}
 
 \item{predictions}{A vector of predicted values (as obtained by
-\code{stats::fitted()}, \code{stats::predict()} or
-\code{\link[=get_predicted]{get_predicted()}}).}
+\code{stats::fitted()}, \code{stats::predict()} or \code{\link[=get_predicted]{get_predicted()}}).}
 
 \item{data}{An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used. Visualization
@@ -105,6 +104,34 @@ equals the default from the {sandwich} package; for type \code{"CR"} (or
 }
 \description{
 Confidence intervals around predicted values
+}
+\details{
+Typically, \code{get_predicted()} returns confidence intervals based on the standard
+errors as returned by the \code{predict()}-function, assuming normal distribution
+(\verb{+/- 1.96 * SE}) resp. a Student's t-distribution (if degrees of freedom are
+available). If \code{predict()} for a certain class does \emph{not} return standard
+errors (for example, \emph{merMod}-objects), these are calculated manually, based
+on following steps: matrix-multiply \code{X} by the parameter vector \code{B} to get the
+predictions, then extract the variance-covariance matrix \code{V} of the parameters
+and compute \verb{XVX'} to get the variance-covariance matrix of the predictions.
+The square-root of the diagonal of this matrix represent the standard errors
+of the predictions, which are then multiplied by the critical test-statistic
+value (e.g., ~1.96 for normal distribution) for the confidence intervals.
+
+If \code{ci_type = "prediction"}, prediction intervals are calculated. These are
+wider than confidence intervals, because they also take into account the
+uncertainty of the model itself. Before taking the square-root of the
+diagonal of the variance-covariance matrix, \code{get_predicted_ci()} adds the
+residual variance to these values. For mixed models, \code{get_variance_residual()}
+is used, while \code{get_sigma()^2} is used for non-mixed models.
+
+It is preferred to rely on standard errors returned by \code{get_predicted()} (i.e.
+returned by the \code{predict()}-function), because these are more accurate than
+manually calculated standard errors. Use \code{get_predicted_ci()} only if standard
+errors are not available otherwise. An exception are Bayesian models or
+bootstrapped predictions, where \code{get_predicted_ci()} returns quantiles of the
+posterior distribution or bootstrapped samples of the predictions. These are
+actually accurate standard errors resp. confidence (or uncertainty) intervals.
 }
 \examples{
 \dontshow{if (require("boot") && require("datawizard") && require("bayestestR")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

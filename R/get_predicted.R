@@ -12,11 +12,14 @@
 #' with lots of caveats and complications. Read the 'Details' section for more
 #' information.
 #'
-#' `get_predicted_ci()` returns the confidence (or prediction) interval (CI)
+#' [`get_predicted_ci()`] returns the confidence (or prediction) interval (CI)
 #' associated with predictions made by a model. This function can be called
 #' separately on a vector of predicted values. `get_predicted()` usually
 #' returns confidence intervals (included as attribute, and accessible via the
-#' `as.data.frame()` method) by default.
+#' `as.data.frame()` method) by default. It is preferred to rely on the
+#' `get_predicted()` function for standard errors and confidence intervals -
+#' use `get_predicted_ci()` only if standard errors and confidence intervals
+#' are not available otherwise.
 #'
 #' @param x A statistical model (can also be a data.frame, in which case the
 #'   second argument has to be a model).
@@ -734,7 +737,7 @@ get_predicted.phylolm <- function(x,
 
     # Transform iterations
     if ("iterations" %in% names(attributes(predictions))) {
-      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv))
+      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv)) # nolint
     }
 
     # Transform to response "type"
@@ -744,7 +747,7 @@ get_predicted.phylolm <- function(x,
       predictions <- .get_predict_transform_response(predictions, response = response)
       if ("iterations" %in% names(attributes(predictions))) {
         attr(predictions, "iterations") <- as.data.frame(
-          sapply(
+          sapply( # nolint
             attributes(predictions)$iterations,
             .get_predict_transform_response,
             response = response

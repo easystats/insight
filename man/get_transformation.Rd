@@ -33,10 +33,10 @@ model <- lm(log(Sepal.Length) ~ Species, data = iris)
 get_transformation(model)
 
 # log-function
-get_transformation(model)$transformation(.3)
-log(.3)
+get_transformation(model)$transformation(0.3)
+log(0.3)
 
 # inverse function is exp()
-get_transformation(model)$inverse(.3)
-exp(.3)
+get_transformation(model)$inverse(0.3)
+exp(0.3)
 }
