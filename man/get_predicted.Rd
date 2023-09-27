@@ -219,7 +219,7 @@ associated with predictions made by a model. This function can be called
 separately on a vector of predicted values. \code{get_predicted()} usually
 returns confidence intervals (included as attribute, and accessible via the
 \code{as.data.frame()} method) by default. It is preferred to rely on the
-\code{get_predicted()} function for standard errrors and confidence intervals -
+\code{get_predicted()} function for standard errors and confidence intervals -
 use \code{get_predicted_ci()} only if standard errors and confidence intervals
 are not available otherwise.
 }

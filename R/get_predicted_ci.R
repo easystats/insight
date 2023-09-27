@@ -2,14 +2,38 @@
 #'
 #' @inheritParams get_predicted
 #' @param predictions A vector of predicted values (as obtained by
-#'   `stats::fitted()`, `stats::predict()` or
-#'   [get_predicted()]).
+#'   `stats::fitted()`, `stats::predict()` or [get_predicted()]).
 #' @param se Numeric vector of standard error of predicted values. If `NULL`,
 #'   standard errors are calculated based on the variance-covariance matrix.
 #' @inheritParams get_predicted
 #'
 #' @details
-#' TBD.
+#' Typically, `get_predicted()` returns confidence intervals based on the standard
+#' errors as returned by the `predict()`-function, assuming normal distribution
+#' (`+/- 1.96 * SE`) resp. a Student's t-distribuion (if degrees of freedom are
+#' available). If `predict()` for a certain class does _not_ return standard
+#' errors (for example, *merMod*-objects), these are calculated manually, based
+#' on following steps: matrix-multiply `X` by the parameter vector `B` to get the
+#' predictions, then extract the variance-covariance matrix `V` of the parameters
+#' and compute `XVX'` to get the variance-covariance matrix of the predictions.
+#' The square-root of the diagonal of this matrix represent the standard errors
+#' of the predictions, which are then multiplied by the critical test-statistic
+#' value (e.g., ~1.96 for normal distribuion) for the confidence intervals.
+#'
+#' If `ci_type = "prediction"`, prediction intervals are calculated. These are
+#' wider than confidence intervals, because they also take into account the
+#' uncertainty of the model itself. Before taking the square-root of the
+#' diagonal of the variance-covariance matrix, `get_predicted_ci()` adds the
+#' residual variance to these values. For mixed models, `get_variance_residual()`
+#' is used, while `get_sigma()^2` is used for non-mixed models.
+#'
+#' It is preferred to rely on standard errors returned by `get_predicted()` (i.e.
+#' returned by the `predict()`-function), because these are more accurate than
+#' manually calculated standard errors. Use `get_predicted_ci()` only if standard
+#' errors are not available otherwise. An exception are Bayesian models or
+#' bootstrapped predictions, where `get_predicted_ci()` returns quantiles of the
+#' posterior distribution or bootstrapped samples of the predictions. These are
+#' actually accurate standard errors resp. confidence (or uncertainty) intervals.
 #'
 #' @examplesIf require("boot") && require("datawizard") && require("bayestestR")
 #' # Confidence Intervals for Model Predictions

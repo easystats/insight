@@ -17,7 +17,7 @@
 #' separately on a vector of predicted values. `get_predicted()` usually
 #' returns confidence intervals (included as attribute, and accessible via the
 #' `as.data.frame()` method) by default. It is preferred to rely on the
-#' `get_predicted()` function for standard errrors and confidence intervals -
+#' `get_predicted()` function for standard errors and confidence intervals -
 #' use `get_predicted_ci()` only if standard errors and confidence intervals
 #' are not available otherwise.
 #'
