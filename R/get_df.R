@@ -398,9 +398,7 @@ get_df.mediate <- function(x, ...) {
 
   if (is.null(dof) || all(is.infinite(dof)) || all(is.na(dof))) {
     r <- .safe(x$rank)
-    if (!is.null(r)) {
-      dof <- r + 1
-    } else {
+    if (is.null(r)) {
       n <- n_parameters(x)
       extra <- 0
       mi <- model_info(x, verbose = FALSE)
@@ -410,6 +408,8 @@ get_df.mediate <- function(x, ...) {
       }
 
       dof <- n + extra
+    } else {
+      dof <- r + 1
     }
   }
 
