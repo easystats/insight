@@ -121,6 +121,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "effect"]         <- "Effects"
   cn[cn == "predicted"]      <- "Predicted"
   cn[cn == "response"]       <- "Response"
+  cn[cn == "y.level"]        <- "Response"
   cn[cn == "response.level"] <- "Response_Level"
   cn[cn == "statistic"]      <- "Statistic"
   cn[cn == "conf.low"]       <- "CI_low"
