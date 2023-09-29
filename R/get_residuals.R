@@ -95,6 +95,11 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
     ))
   }
 
+  # fix for haven_labelled
+  if (inherits(res, "haven_labelled")) {
+    res <- as.numeric(res)
+  }
+
   res
 }
 
