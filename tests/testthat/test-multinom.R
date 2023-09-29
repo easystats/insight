@@ -12,7 +12,7 @@ test_that("model_info", {
 })
 
 test_that("n_parameters", {
-  expect_equal(n_parameters(m1), 5)
+  expect_identical(n_parameters(m1), 5L)
 })
 
 test_that("find_predictors", {
@@ -33,8 +33,8 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 189)
-  expect_equal(
+  expect_identical(nrow(get_data(m1)), 189L)
+  expect_identical(
     colnames(get_data(m1)),
     c("low", "age", "lwt", "race", "smoke")
   )
@@ -50,18 +50,18 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(
+  expect_identical(find_terms(m1), list(
     response = "low",
     conditional = c("age", "lwt", "race", "smoke")
   ))
-  expect_equal(
+  expect_identical(
     find_terms(m1, flatten = TRUE),
     c("low", "age", "lwt", "race", "smoke")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 189)
+  expect_identical(n_obs(m1), 189L)
 })
 
 test_that("linkfun", {
@@ -69,21 +69,21 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(conditional = c(
       "(Intercept)", "age", "lwt", "race", "smoke"
     ))
   )
-  expect_equal(nrow(get_parameters(m1)), 5)
-  expect_equal(
+  expect_identical(nrow(get_parameters(m1)), 5L)
+  expect_identical(
     get_parameters(m1)$Parameter,
     c("(Intercept)", "age", "lwt", "race", "smoke")
   )
 })
 
 test_that("find_statistic", {
-  expect_identical(find_statistic(m1), "t-statistic")
+  expect_identical(find_statistic(m1), "z-statistic")
 })
 
 test_that("get_predicted", {
@@ -96,25 +96,37 @@ test_that("get_predicted", {
 
   # binary outcomes produces an atomic vector
   x <- get_predicted(m1, predict = "classification")
-  expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+  expect_true(is.atomic(x))
+  expect_false(is.null(x))
+  expect_null(dim(x))
   expect_true(all(levels(x) %in% c("0", "1")))
   x <- get_predicted(m1, predict = "expectation")
-  expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+  expect_true(is.atomic(x))
+  expect_false(is.null(x))
+  expect_null(dim(x))
   x <- get_predicted(m1, predict = NULL, type = "class")
-  expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+  expect_true(is.atomic(x))
+  expect_false(is.null(x))
+  expect_null(dim(x))
   expect_true(all(levels(x) %in% c("0", "1")))
   x <- get_predicted(m1, predict = NULL, type = "probs")
-  expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+  expect_true(is.atomic(x))
+  expect_false(is.null(x))
+  expect_null(dim(x))
 
   # multinomial outcomes depends on predict type
   x <- get_predicted(m2, predict = "classification")
-  expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+  expect_true(is.atomic(x))
+  expect_false(is.null(x))
+  expect_null(dim(x))
   expect_true(all(levels(x) %in% as.character(0:6)))
   x <- get_predicted(m2, predict = "expectation")
   expect_s3_class(x, "data.frame")
   expect_true(all(c("Row", "Response", "Predicted") %in% colnames(x)))
   x <- get_predicted(m2, predict = NULL, type = "class")
-  expect_true(is.atomic(x) && !is.null(x) && is.null(dim(x)))
+  expect_true(is.atomic(x))
+  expect_false(is.null(x))
+  expect_null(dim(x))
   expect_true(all(levels(x) %in% as.character(0:6)))
   x <- get_predicted(m2, predict = NULL, type = "probs")
   expect_s3_class(x, "data.frame")
