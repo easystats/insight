@@ -13,6 +13,8 @@
 * `find_transformation()` better detects power-transformation of the response
   variable.
 
+* Corrected return value from `find_statistic` for `nnet::multinom()` models.
+
 # insight 0.19.5
 
 ## Bug fixes
