@@ -15,6 +15,9 @@
 
 * Corrected return value from `find_statistic` for `nnet::multinom()` models.
 
+* `clean_parameters()` did not return the `"clean_parameters"` class attributes
+  for some object. This caused issued in upstream packages.
+
 # insight 0.19.5
 
 ## Bug fixes

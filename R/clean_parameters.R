@@ -141,6 +141,7 @@ clean_parameters.emmGrid <- function(x, ...) {
 
   out <- text_remove_backticks(do.call(rbind, l))
   out <- .remove_empty_columns_from_pars(out)
+  class(out) <- c("clean_parameters", class(out))
   out
 }
 
@@ -266,7 +267,9 @@ clean_parameters.glmm <- function(x, ...) {
   })
 
   out <- text_remove_backticks(do.call(rbind, l))
-  .remove_empty_columns_from_pars(out)
+  out <- .remove_empty_columns_from_pars(out)
+  class(out) <- c("clean_parameters", class(out))
+  out
 }
 
 
@@ -278,7 +281,7 @@ clean_parameters.MCMCglmm <- clean_parameters.glmm
 clean_parameters.lavaan <- function(x, ...) {
   params <- get_parameters(x)
 
-  data.frame(
+  out <- data.frame(
     Parameter = params$Parameter,
     Component = params$Component,
     Group = "",
@@ -287,6 +290,8 @@ clean_parameters.lavaan <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+  class(out) <- c("clean_parameters", class(out))
+  out
 }
 
 
@@ -298,6 +303,7 @@ clean_parameters.blavaan <- function(x, ...) {
   params$Group <- ""
   params$Function <- ""
   params$Cleaned_Parameter <- params$Parameter
+  class(params) <- c("clean_parameters", class(params))
   params
 }
 
