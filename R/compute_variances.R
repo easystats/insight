@@ -556,6 +556,14 @@
         log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
         .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
       )
+    } else if (faminfo$is_orderedbeta) {
+      # Ordered Beta  ----
+      # ------------------
+
+      dist.variance <- switch(faminfo$link_function,
+        logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+      )
     } else {
       dist.variance <- sig
     }
@@ -610,7 +618,7 @@
     } else {
       null_fixef <- unname(.collapse_cond(lme4::fixef(.null_model)))
     }
-    mu <- exp(null_fixef)
+    mu <- null_fixef
   }
 
   if (is.na(mu)) {
@@ -633,7 +641,7 @@
         # (zero-inflated) poisson ----
         # ----------------------------
         `zero-inflated poisson` = ,
-        poisson = .variance_family_poisson(x, mu, faminfo),
+        poisson = .variance_family_poisson(x, exp(mu), faminfo),
 
         # hurdle-poisson ----
         # -------------------
@@ -650,19 +658,20 @@
         `negative binomial` = ,
         genpois = ,
         nbinom1 = ,
-        nbinom2 = .variance_family_nbinom(x, mu, sig, faminfo),
-        truncated_nbinom2 = stats::family(x)$variance(mu, sig),
+        nbinom2 = .variance_family_nbinom(x, exp(mu), sig, faminfo),
+        truncated_nbinom2 = stats::family(x)$variance(exp(mu), sig),
 
         # other distributions ----
         # ------------------------
-        tweedie = .variance_family_tweedie(x, mu, sig),
+        tweedie = .variance_family_tweedie(x, exp(mu), sig),
         beta = .variance_family_beta(x, mu, sig),
+        ordbeta =  .variance_family_orderedbeta(x, stats::plogis(mu)),
         # betabinomial = stats::family(x)$variance(mu, sig),
         # betabinomial = .variance_family_betabinom(x, mu, sig),
 
         # default variance for non-captured distributions ----
         # ----------------------------------------------------
-        .variance_family_default(x, mu, verbose)
+        .variance_family_default(x, exp(mu), verbose)
       )
 
       if (vv < 0 && isTRUE(verbose)) {
@@ -716,6 +725,20 @@
     stats::family(x)$variance(mu)
   } else {
     mu * (1 - mu) / (1 + phi)
+  }
+}
+
+
+
+
+
+# Get distributional variance for ordered beta-family
+# ----------------------------------------------
+.variance_family_orderedbeta <- function(x, mu) {
+  if (inherits(x, "MixMod")) {
+    stats::family(x)$variance(mu)
+  } else {
+    mu * (1 - mu)
   }
 }
 
