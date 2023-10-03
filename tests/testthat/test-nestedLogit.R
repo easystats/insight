@@ -100,7 +100,7 @@ test_that("get_response, as dichotomies", {
         1L, 1L, 0L, 0L, 0L, 1L, 1L, 1L, 0L, 0L, 0L, 1L, 1L, 0L, 0L, 1L,
         1L, 1L, 1L, 1L, 1L, 0L, 1L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 0L,
         1L, 1L, 0L, 0L, 1L, 0L, 0L, 1L, 1L, 1L, 0L, 1L, 1L, 1L, 0L, 0L
-      ), 
+      ),
       full = c(
         1L, 1L, 0L, 1L, 1L, 0L, 0L, 0L, 1L, 1L, 0L, 0L, 0L,
         1L, 0L, 1L, 1L, 0L, 1L, 0L, 0L, 0L, 1L, 1L, 0L, 1L, 1L, 0L, 0L,
