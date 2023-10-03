@@ -108,9 +108,7 @@ test_that("get_variance-6", {
 
 # further examples
 
-model <-
-  lme4::lmer(Reaction ~ Days + (1 + Days ||
-    Subject), data = sleepstudy)
+model <- lme4::lmer(Reaction ~ Days + (1 + Days || Subject), data = sleepstudy)
 vmodel <- get_variance(model)
 
 test_that("get_variance-7", {
@@ -129,9 +127,7 @@ test_that("get_variance-7", {
   )
 })
 
-model <-
-  lme4::lmer(Reaction ~ Days + (0 + Days ||
-    Subject), data = study_data)
+model <- lme4::lmer(Reaction ~ Days + (0 + Days || Subject), data = study_data)
 vmodel <- get_variance(model)
 
 test_that("get_variance-8", {
@@ -293,12 +289,8 @@ set.seed(123)
 sleepstudy$Months <- sample(1:4, nrow(sleepstudy), TRUE)
 study_data3 <<- sleepstudy
 
-m2 <-
-  lme4::lmer(Reaction ~ Days + (0 + Days |
-    Subject), data = study_data3)
-m5 <-
-  lme4::lmer(Reaction ~ Days + (0 + Days + Months |
-    Subject), data = study_data3)
+m2 <- lme4::lmer(Reaction ~ Days + (0 + Days | Subject), data = study_data3)
+m5 <- lme4::lmer(Reaction ~ Days + (0 + Days + Months | Subject), data = study_data3)
 
 test_that("random effects CIs, simple slope", {
   vc <- suppressWarnings(get_variance(m2))
