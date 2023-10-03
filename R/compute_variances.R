@@ -634,6 +634,13 @@
     )
   }
 
+  # transform mu
+  mu <- switch(faminfo$family,
+    beta = mu,
+    ordbeta = stats::qlogis(mu),
+    exp(mu)
+  )
+
   cvsquared <- tryCatch(
     {
       vv <- switch(faminfo$family,
@@ -641,7 +648,7 @@
         # (zero-inflated) poisson ----
         # ----------------------------
         `zero-inflated poisson` = ,
-        poisson = .variance_family_poisson(x, exp(mu), faminfo),
+        poisson = .variance_family_poisson(x, mu, faminfo),
 
         # hurdle-poisson ----
         # -------------------
@@ -658,20 +665,20 @@
         `negative binomial` = ,
         genpois = ,
         nbinom1 = ,
-        nbinom2 = .variance_family_nbinom(x, exp(mu), sig, faminfo),
-        truncated_nbinom2 = stats::family(x)$variance(exp(mu), sig),
+        nbinom2 = .variance_family_nbinom(x, mu, sig, faminfo),
+        truncated_nbinom2 = stats::family(x)$variance(mu, sig),
 
         # other distributions ----
         # ------------------------
-        tweedie = .variance_family_tweedie(x, exp(mu), sig),
+        tweedie = .variance_family_tweedie(x, mu, sig),
         beta = .variance_family_beta(x, mu, sig),
-        ordbeta = .variance_family_orderedbeta(x, stats::plogis(mu)),
+        ordbeta = .variance_family_orderedbeta(x, mu),
         # betabinomial = stats::family(x)$variance(mu, sig),
         # betabinomial = .variance_family_betabinom(x, mu, sig),
 
         # default variance for non-captured distributions ----
         # ----------------------------------------------------
-        .variance_family_default(x, exp(mu), verbose)
+        .variance_family_default(x, mu, verbose)
       )
 
       if (vv < 0 && isTRUE(verbose)) {
@@ -679,7 +686,7 @@
           "Model's distribution-specific variance is negative. Results are not reliable."
         )
       }
-      vv / exp(mu)^2
+      vv / mu^2
     },
     error = function(x) {
       if (verbose) {
