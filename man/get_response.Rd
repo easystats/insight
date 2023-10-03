@@ -2,18 +2,27 @@
 % Please edit documentation in R/get_response.R
 \name{get_response}
 \alias{get_response}
+\alias{get_response.default}
+\alias{get_response.nestedLogit}
 \title{Get the values from the response variable}
 \usage{
-get_response(
+get_response(x, ...)
+
+\method{get_response}{default}(
   x,
   select = NULL,
   as_proportion = TRUE,
   source = "environment",
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
+
+\method{get_response}{nestedLogit}(x, dichotomies = FALSE, source = "environment", ...)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{...}{Currently not used.}
 
 \item{select}{Optional name(s) of response variables for which to extract values.
 Can be used in case of regression models with multiple response variables.}
@@ -40,6 +49,9 @@ will be recovered from the environment. Both ways only returns observations
 that have no missing data in the variables used for model fitting.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{dichotomies}{Logical, if model is a \code{nestedLogit} objects, returns
+the response values for the dichotomies.}
 }
 \value{
 The values of the response variable, as vector, or a data frame if

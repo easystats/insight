@@ -53,6 +53,64 @@ test_that("get_response", {
   expect_equal(get_response(mnl2), Womenlf$partic[Womenlf$region == "Ontario"], ignore_attr = TRUE)
 })
 
+test_that("get_response, as dichotomies", {
+  expect_equal(
+    get_response(mnl1, dichotomies = TRUE),
+    list(
+      work = c(
+        0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 1L,
+        0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 1L, 1L, 0L, 0L, 0L, 0L,
+        0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 1L, 0L, 1L, 1L, 0L,
+        1L, 0L, 0L, 0L, 0L, 1L, 1L, 1L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 0L,
+        1L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L,
+        1L, 0L, 0L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 1L,
+        1L, 1L, 0L, 0L, 0L, 1L, 1L, 0L, 1L, 0L, 0L, 0L, 1L, 1L, 0L, 0L,
+        0L, 0L, 0L, 1L, 0L, 0L, 1L, 0L, 0L, 0L, 1L, 1L, 0L, 0L, 1L, 1L,
+        0L, 1L, 0L, 1L, 1L, 1L, 1L, 0L, 1L, 1L, 1L, 1L, 1L, 0L, 0L, 0L,
+        0L, 0L, 0L, 0L, 0L, 1L, 1L, 0L, 1L, 0L, 1L, 1L, 0L, 1L, 1L, 0L,
+        1L, 0L, 1L, 1L, 0L, 0L, 1L, 1L, 1L, 0L, 0L, 1L, 0L, 1L, 1L, 0L,
+        0L, 1L, 1L, 1L, 0L, 1L, 0L, 1L, 1L, 1L, 1L, 1L, 0L, 1L, 0L, 0L,
+        1L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 1L, 0L, 1L, 1L, 1L, 0L, 0L, 0L,
+        1L, 0L, 0L, 1L, 0L, 1L, 0L, 0L, 1L, 0L, 0L, 1L, 0L, 1L, 0L, 1L,
+        0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 1L, 1L, 0L, 0L, 1L, 1L, 0L, 1L,
+        1L, 1L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 1L, 1L, 0L, 0L, 1L, 0L, 0L,
+        0L, 1L, 1L, 0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L
+      ),
+      full = c(
+        1L, 1L,
+        0L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 1L, 1L, 0L,
+        0L, 0L, 0L, 0L, 1L, 0L, 1L, 1L, 0L, 1L, 1L, 1L, 0L, 0L, 0L, 1L,
+        1L, 1L, 0L, 0L, 1L, 0L, 1L, 0L, 1L, 1L, 0L, 0L, 0L, 0L, 0L, 1L,
+        1L, 1L, 1L, 0L, 0L, 0L, 1L, 1L, 1L, 0L, 0L, 0L, 1L, 1L, 1L, 1L,
+        1L, 1L, 0L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 0L, 1L, 1L,
+        1L, 1L, 1L, 1L, 0L, 1L, 1L, 1L, 0L, 0L, 1L, 1L, 0L, 0L, 1L, 1L,
+        1L, 1L, 1L, 1L, 0L, 1L, 1L, 0L, 1L, 1L
+      )
+    ),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    dput(get_response(mnl2, dichotomies = TRUE)),
+    list(
+      work = c(
+        0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 1L,
+        0L, 0L, 0L, 0L, 1L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L,
+        0L, 1L, 1L, 1L, 0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 1L, 1L,
+        0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 1L, 1L, 1L, 1L, 1L,
+        1L, 1L, 0L, 0L, 0L, 1L, 1L, 1L, 0L, 0L, 0L, 1L, 1L, 0L, 0L, 1L,
+        1L, 1L, 1L, 1L, 1L, 0L, 1L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 0L,
+        1L, 1L, 0L, 0L, 1L, 0L, 0L, 1L, 1L, 1L, 0L, 1L, 1L, 1L, 0L, 0L
+      ), 
+      full = c(
+        1L, 1L, 0L, 1L, 1L, 0L, 0L, 0L, 1L, 1L, 0L, 0L, 0L,
+        1L, 0L, 1L, 1L, 0L, 1L, 0L, 0L, 0L, 1L, 1L, 0L, 1L, 1L, 0L, 0L,
+        0L, 1L, 1L, 1L, 1L, 0L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L
+      )
+    ),
+    ignore_attr = TRUE
+  )
+})
+
 test_that("get_predictors", {
   expect_identical(colnames(get_predictors(mnl1)), c("hincome", "children"))
   expect_identical(colnames(get_predictors(mnl2)), c("hincome", "children"))
@@ -70,6 +128,18 @@ test_that("find_formula", {
   expect_equal(
     find_formula(mnl1),
     list(conditional = as.formula("partic ~ hincome + children")),
+    ignore_attr = TRUE
+  )
+})
+
+test_that("find_formula, as dichotomies", {
+  expect_length(find_formula(mnl1, dichotomies = TRUE), 2)
+  expect_equal(
+    find_formula(mnl1, dichotomies = TRUE),
+    list(
+      work = list(conditional = as.formula("work ~ hincome + children")),
+      full = list(conditional = as.formula("full ~ hincome + children"))
+    ),
     ignore_attr = TRUE
   )
 })

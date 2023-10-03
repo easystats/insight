@@ -9,6 +9,8 @@
 #'  `variable`).
 #'
 #' @param verbose Toggle warnings.
+#' @param dichotomies Logical, if model is a `nestedLogit` objects, returns
+#' the formulas for the dichotomies.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -316,6 +318,23 @@ find_formula.maxLik <- find_formula.default
 
 #' @export
 find_formula.maxim <- find_formula.default
+
+
+#' @rdname find_formula
+#' @export
+find_formula.nestedLogit <- function(x, dichotomies = FALSE, verbose = TRUE, ...) {
+  if (isTRUE(dichotomies)) {
+    stats::setNames(
+      lapply(x$models, function(m) {
+        f <- list(conditional = get_call(m)$formula)
+        .find_formula_return(f, verbose = verbose)
+      }),
+      names(x$models)
+    )
+  } else {
+    find_formula.default(x, verbose = verbose, ...)
+  }
+}
 
 
 #' @export
