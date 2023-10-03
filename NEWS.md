@@ -8,6 +8,9 @@
 
 * `model_info()` now recognized ordered beta families.
 
+* `find_formula` and `get_response` for `nestedLogit` models gain a `dichotomies`
+  argument, to return values for the dichotomies used to fit the model.
+
 ## Bug fixes
 
 * `find_transformation()` better detects power-transformation of the response
