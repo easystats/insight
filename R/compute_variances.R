@@ -628,18 +628,21 @@
       )
     }
     return(0)
-  } else if (exp(mu) < 6 && verbose) {
+  } else {
+    # transform mu
+    mu <- switch(faminfo$family,
+      beta = mu,
+      ordbeta = stats::qlogis(mu),
+      exp(mu)
+    )
+  }
+
+  # check if mu is too close to zero, but not for beta-distribution
+  if (mu < 6 && verbose && !faminfo$family %in% c("beta", "ordbeta")) {
     format_warning(
       sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)
     )
   }
-
-  # transform mu
-  mu <- switch(faminfo$family,
-    beta = mu,
-    ordbeta = stats::qlogis(mu),
-    exp(mu)
-  )
 
   cvsquared <- tryCatch(
     {
