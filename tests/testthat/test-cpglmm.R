@@ -14,35 +14,35 @@ test_that("model_info", {
 })
 
 test_that("find_predictors", {
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "all"),
     list(conditional = c("Stock", "Spacing"), random = "Plant")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "all", flatten = TRUE),
     c("Stock", "Spacing", "Plant")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "fixed"),
     list(conditional = c("Stock", "Spacing"))
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "fixed", flatten = TRUE),
     c("Stock", "Spacing")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "random"),
     list(random = "Plant")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "random", flatten = TRUE),
     "Plant"
   )
 })
 
 test_that("find_random", {
-  expect_equal(find_random(m1), list(random = "Plant"))
-  expect_equal(find_random(m1, flatten = TRUE), "Plant")
+  expect_identical(find_random(m1), list(random = "Plant"))
+  expect_identical(find_random(m1, flatten = TRUE), "Plant")
 })
 
 test_that("find_response", {
@@ -50,14 +50,14 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), FineRoot$RLD)
+  expect_equal(get_response(m1), FineRoot$RLD, ignore_attr = TRUE)
 })
 
 
 test_that("get_data", {
-  expect_equal(colnames(get_data(m1)), c("RLD", "Stock", "Spacing", "Plant"))
-  expect_equal(colnames(get_data(m1, effects = "all")), c("RLD", "Stock", "Spacing", "Plant"))
-  expect_equal(colnames(get_data(m1, effects = "random")), "Plant")
+  expect_named(get_data(m1), c("RLD", "Stock", "Spacing", "Plant"))
+  expect_named(get_data(m1, effects = "all"), c("RLD", "Stock", "Spacing", "Plant"))
+  expect_named(get_data(m1, effects = "random"), "Plant")
 })
 
 test_that("find_formula", {
@@ -125,15 +125,15 @@ test_that("clean_names", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c("(Intercept)", "StockMM106", "StockMark", "Spacing5x3"),
-      random = list(Plant = c("(Intercept)"))
+      random = list(Plant = "(Intercept)")
     )
   )
-  expect_equal(nrow(get_parameters(m1)), 4)
-  expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "StockMM106", "StockMark", "Spacing5x3"))
+  expect_identical(nrow(get_parameters(m1)), 4L)
+  expect_identical(get_parameters(m1)$Parameter, c("(Intercept)", "StockMM106", "StockMark", "Spacing5x3"))
 })
 
 test_that("is_multivariate", {

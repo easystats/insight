@@ -628,7 +628,7 @@
       )
     }
     return(0)
-  } else if (mu < 6 && verbose) {
+  } else if (exp(mu) < 6 && verbose) {
     format_warning(
       sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)
     )
@@ -679,7 +679,7 @@
           "Model's distribution-specific variance is negative. Results are not reliable."
         )
       }
-      vv / mu^2
+      vv / exp(mu)^2
     },
     error = function(x) {
       if (verbose) {
