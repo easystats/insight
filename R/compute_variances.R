@@ -665,7 +665,7 @@
         # ------------------------
         tweedie = .variance_family_tweedie(x, exp(mu), sig),
         beta = .variance_family_beta(x, mu, sig),
-        ordbeta =  .variance_family_orderedbeta(x, stats::plogis(mu)),
+        ordbeta = .variance_family_orderedbeta(x, stats::plogis(mu)),
         # betabinomial = stats::family(x)$variance(mu, sig),
         # betabinomial = .variance_family_betabinom(x, mu, sig),
 
