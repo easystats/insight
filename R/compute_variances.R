@@ -628,6 +628,8 @@
       )
     }
     return(0)
+  } else if (is.null(faminfo$family)) {
+    mu <- exp(mu)
   } else {
     # transform mu
     mu <- switch(faminfo$family,
@@ -638,7 +640,7 @@
   }
 
   # check if mu is too close to zero, but not for beta-distribution
-  if (mu < 6 && verbose && !faminfo$family %in% c("beta", "ordbeta")) {
+  if (mu < 6 && verbose && isFALSE(faminfo$family %in% c("beta", "ordbeta"))) {
     format_warning(
       sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)
     )
