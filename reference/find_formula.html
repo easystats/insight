@@ -107,9 +107,12 @@ and that no data names are used (i.e. no <code>data$variable</code>, but rather
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_formula</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_formula</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">formula_ok</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">find_formula</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for nestedLogit</span></span>
 <span><span class="fu">find_formula</span><span class="op">(</span><span class="va">x</span>, dichotomies <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -121,12 +124,12 @@ and that no data names are used (i.e. no <code>data$variable</code>, but rather
 <dd><p>A fitted model.</p></dd>
 
 
-<dt>verbose</dt>
-<dd><p>Toggle warnings.</p></dd>
-
-
 <dt>...</dt>
 <dd><p>Currently not used.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Toggle warnings.</p></dd>
 
 
 <dt>dichotomies</dt>
@@ -179,7 +182,7 @@ is only returned, when it is explicitly defined as named argument
 <span class="r-in"><span><span class="fu">find_formula</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mpg ~ wt + cyl + vs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558a10579e20&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x564fdb50a8b0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_formula" "list"           </span>
@@ -189,11 +192,11 @@ is only returned, when it is explicitly defined as named argument
 <span class="r-in"><span><span class="va">f</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length ~ Sepal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558a10579e20&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x564fdb50a8b0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $random</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~1 | Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558a10d4ef08&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x564fdc976b10&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_formula" "list"           </span>
