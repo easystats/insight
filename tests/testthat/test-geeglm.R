@@ -33,7 +33,7 @@ test_that("find_response", {
 
 test_that("get_varcov", {
   out <- get_varcov(m1)
-  expect_named(out, names(coef(m1)))
+  expect_identical(colnames(out), names(coef(m1)))
 })
 
 test_that("get_response", {

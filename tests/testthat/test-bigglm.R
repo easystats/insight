@@ -1,4 +1,4 @@
-skip_if_not_installed("glmmTMB")
+suppressWarnings(skip_if_not_installed("glmmTMB"))
 skip_if_not_installed("biglm")
 
 data(Salamanders, package = "glmmTMB")
@@ -83,7 +83,7 @@ test_that("find_variables", {
 })
 
 test_that("n_obs", {
-  expect_identical(n_obs(m1), 644L)
+  expect_identical(n_obs(m1), 644)
 })
 
 test_that("linkfun", {

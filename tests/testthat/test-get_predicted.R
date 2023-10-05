@@ -202,7 +202,7 @@ test_that("MASS::rlm", {
 # =========================================================================
 
 test_that("get_predicted - lmerMod", {
-  skip_if_not_installed("glmmTMB")
+  suppressWarnings(skip_if_not_installed("glmmTMB"))
   skip_if_not_installed("lme4")
   skip_if_not_installed("merTools")
   skip_if_not_installed("rstanarm")
