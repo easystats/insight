@@ -1,14 +1,13 @@
 skip_if_not_installed("geepack")
 
 data(warpbreaks)
-m1 <-
-  geepack::geeglm(
-    breaks ~ tension,
-    id = wool,
-    data = warpbreaks,
-    family = poisson,
-    corstr = "ar1"
-  )
+m1 <- geepack::geeglm(
+  breaks ~ tension,
+  id = wool,
+  data = warpbreaks,
+  family = poisson,
+  corstr = "ar1"
+)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_count)
@@ -34,15 +33,15 @@ test_that("find_response", {
 
 test_that("get_varcov", {
   out <- get_varcov(m1)
-  expect_equal(colnames(out), names(coef(m1)))
+  expect_identical(colnames(out), names(coef(m1)))
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), warpbreaks$breaks)
+  expect_identical(get_response(m1), warpbreaks$breaks)
 })
 
 test_that("find_random", {
-  expect_equal(find_random(m1), list(random = "wool"))
+  expect_identical(find_random(m1), list(random = "wool"))
 })
 
 test_that("get_random", {
@@ -50,7 +49,7 @@ test_that("get_random", {
 })
 
 test_that("get_predictors", {
-  expect_equal(get_predictors(m1), warpbreaks[, "tension", drop = FALSE])
+  expect_equal(get_predictors(m1), warpbreaks[, "tension", drop = FALSE], ignore_attr = TRUE)
 })
 
 test_that("link_inverse", {
@@ -58,8 +57,8 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 54)
-  expect_equal(colnames(get_data(m1)), c("breaks", "tension", "wool"))
+  expect_identical(nrow(get_data(m1)), 54L)
+  expect_named(get_data(m1), c("breaks", "tension", "wool"))
 })
 
 test_that("find_formula", {
@@ -75,7 +74,7 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(
       response = "breaks",
@@ -83,14 +82,14 @@ test_that("find_terms", {
       random = "wool"
     )
   )
-  expect_equal(
+  expect_identical(
     find_terms(m1, flatten = TRUE),
     c("breaks", "tension", "wool")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 54)
+  expect_identical(n_obs(m1), 54L)
 })
 
 test_that("linkfun", {
@@ -98,14 +97,14 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(conditional = c(
       "(Intercept)", "tensionM", "tensionH"
     ))
   )
-  expect_equal(nrow(get_parameters(m1)), 3)
-  expect_equal(
+  expect_identical(nrow(get_parameters(m1)), 3L)
+  expect_identical(
     get_parameters(m1)$Parameter,
     c("(Intercept)", "tensionM", "tensionH")
   )
@@ -116,7 +115,7 @@ test_that("is_multivariate", {
 })
 
 test_that("find_algorithm", {
-  expect_equal(find_algorithm(m1), list(algorithm = "ML"))
+  expect_identical(find_algorithm(m1), list(algorithm = "ML"))
 })
 
 test_that("find_statistic", {

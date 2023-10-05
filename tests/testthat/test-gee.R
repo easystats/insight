@@ -27,6 +27,7 @@ junk <- capture.output({
 test_that("model_info", {
   expect_true(model_info(m1)$is_linear)
   expect_true(model_info(dep_gee)$is_binomial)
+  expect_true(model_info(dep_gee)$is_bernoulli)
 })
 
 test_that("find_predictors", {

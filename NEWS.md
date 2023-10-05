@@ -21,6 +21,9 @@
 * `clean_parameters()` did not return the `"clean_parameters"` class attributes
   for some object. This caused issued in upstream packages.
 
+* Fixed issue in `model_info()`, which did not correctly detect "Bernoulli"
+  property for some models classes (like `glmmTMB` or `glmerMod`).
+
 # insight 0.19.5
 
 ## Bug fixes

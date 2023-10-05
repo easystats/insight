@@ -6,6 +6,7 @@ m1 <- logistf::logistf(case ~ age + oc + vic + vicl + vis + dia, data = sex2)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_binomial)
+  expect_true(model_info(m1)$is_bernoulli)
   expect_true(model_info(m1)$is_logit)
   expect_false(model_info(m1)$is_linear)
 })

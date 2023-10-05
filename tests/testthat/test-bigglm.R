@@ -1,4 +1,4 @@
-skip_if_not_installed("glmmTMB")
+suppressWarnings(skip_if_not_installed("glmmTMB"))
 skip_if_not_installed("biglm")
 
 data(Salamanders, package = "glmmTMB")
@@ -43,14 +43,11 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), Salamanders$count)
+  expect_identical(get_response(m1), Salamanders$count)
 })
 
 test_that("get_predictors", {
-  expect_equal(
-    colnames(get_predictors(m1)),
-    c("mined", "cover", "sample")
-  )
+  expect_named(get_predictors(m1), c("mined", "cover", "sample"))
 })
 
 test_that("link_inverse", {
@@ -58,11 +55,8 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 644)
-  expect_equal(
-    colnames(get_data(m1)),
-    c("count", "mined", "cover", "sample")
-  )
+  expect_identical(nrow(get_data(m1)), 644L)
+  expect_named(get_data(m1), c("count", "mined", "cover", "sample"))
 })
 
 test_that("find_formula", {
@@ -75,21 +69,21 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_equal(
+  expect_identical(
     find_variables(m1),
     list(
       response = "count",
       conditional = c("mined", "cover", "sample")
     )
   )
-  expect_equal(
+  expect_identical(
     find_variables(m1, flatten = TRUE),
     c("count", "mined", "cover", "sample")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 644)
+  expect_identical(n_obs(m1), 644)
 })
 
 test_that("linkfun", {
@@ -97,14 +91,14 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c("(Intercept)", "minedno", "log(cover)", "sample")
     )
   )
-  expect_equal(nrow(get_parameters(m1)), 4)
-  expect_equal(
+  expect_identical(nrow(get_parameters(m1)), 4L)
+  expect_identical(
     get_parameters(m1)$Parameter,
     c("(Intercept)", "minedno", "log(cover)", "sample")
   )
@@ -115,7 +109,7 @@ test_that("is_multivariate", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(
       response = "count",
@@ -125,7 +119,7 @@ test_that("find_terms", {
 })
 
 test_that("find_algorithm", {
-  expect_equal(find_algorithm(m1), list(algorithm = "ML"))
+  expect_identical(find_algorithm(m1), list(algorithm = "ML"))
 })
 
 test_that("find_statistic", {
