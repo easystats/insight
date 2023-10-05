@@ -49,7 +49,18 @@
 
   is_bernoulli <- FALSE
 
-  if (binom_fam && inherits(x, "glm") && !neg_bin_fam && !poisson_fam) {
+  # These models can be logistic regresion models with bernoulli outcome
+  potential_bernoulli <- inherits(
+    x,
+    c(
+      "glm", "gee", "glmmTMB", "glmerMod", "merMod", "stanreg", "MixMod",
+      "logistf", "bigglm", "brglm", "feglm", "geeglm", "glmm", "glmmadmb",
+      "glmmPQL", "glmrob", "glmRob", "logitmfx", "logitor", "logitr",
+      "mixed", "mixor", "svyglm"
+    )
+  )
+
+  if (binom_fam && potential_bernoulli && !neg_bin_fam && !poisson_fam) {
     if (inherits(x, "gee")) {
       resp <- .safe(get_response(x))
     } else {
