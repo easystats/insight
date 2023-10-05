@@ -6,7 +6,7 @@ test_that("glm bernoulli", {
   expect_true(mi$is_bernoulli)
 })
 
-test_that("glm bernoulli", {
+test_that("geeglm bernoulli", {
   skip_if_not_installed("geepack")
   data(mtcars)
   model <- geepack::geeglm(
@@ -14,6 +14,19 @@ test_that("glm bernoulli", {
     data = mtcars,
     id = cyl,
     family = binomial()
+  )
+  mi <- model_info(model)
+  expect_true(mi$is_binomial)
+  expect_true(mi$is_bernoulli)
+})
+
+test_that("bigglm bernoulli", {
+  skip_if_not_installed("bigglm")
+  data(mtcars)
+  model <- biglm::bigglm(
+    vs ~ disp,
+    family = binomial(),
+    data = mtcars
   )
   mi <- model_info(model)
   expect_true(mi$is_binomial)
