@@ -1,6 +1,6 @@
 skip_if_offline()
-skip_if_not_installed("glmmTMB")
-skip_if_not_installed("geoR")
+suppressWarnings(skip_if_not_installed("glmmTMB"))
+suppressWarnings(skip_if_not_installed("geoR"))
 skip_if_not_installed("TMB")
 
 data(ca20, package = "geoR")
