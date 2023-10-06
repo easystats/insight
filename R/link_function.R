@@ -390,6 +390,12 @@ link_function.model_fit <- link_function.logitmfx
 
 
 #' @export
+link_function.dbchoice <- function(x, ...) {
+  x$f.stage$family$linkfun
+}
+
+
+#' @export
 link_function.Rchoice <- function(x, ...) {
   stats::make.link(link = x$link)$linkfun
 }
