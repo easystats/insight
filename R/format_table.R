@@ -92,7 +92,7 @@ format_table <- function(x,
                          use_symbols = getOption("insight_use_symbols", FALSE),
                          verbose = TRUE,
                          ...) {
-  # sanity check
+  # validation check
   if (is.null(x) || (is.data.frame(x) && nrow(x) == 0)) {
     if (isTRUE(verbose)) {
       format_alert("Can't format table, data frame is empty.")

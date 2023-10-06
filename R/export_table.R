@@ -131,7 +131,7 @@ export_table <- function(x,
     format <- "markdown"
   }
 
-  # sanity check
+  # validation check
   if (is.null(x) || (is.data.frame(x) && nrow(x) == 0) || is_empty_object(x)) {
     if (isTRUE(verbose)) {
       format_alert("Can't export table to ", format, ", data frame is empty.")
@@ -956,7 +956,7 @@ print.insight_table <- function(x, ...) {
   }
 
 
-  # sanity check - clean caption, subtitle and footer from ansi-colour codes,
+  # validation check - clean caption, subtitle and footer from ansi-colour codes,
   # which only work for text format... But if user occidentally provides colours
   # for HTML format as well, remove those colour codes, so they don't appear as
   # text in the table header and footer. Furthermore, in footers, we need to

@@ -71,7 +71,7 @@ get_weights.default <- function(x, na_rm = FALSE, null_as_ones = FALSE, ...) {
     )
   }
 
-  # sanity check - if weights is empty, set to NULL
+  # validation check - if weights is empty, set to NULL
   if (!length(w)) {
     w <- NULL
   }

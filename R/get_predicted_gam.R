@@ -18,7 +18,7 @@ get_predicted.gam <- function(x,
       choices = c("expectation", "expected", "link", "prediction", "predicted", "classification")
     )
 
-    # Sanity checks
+    # validation checks
     if (predict %in% c("prediction", "predicted")) {
       if (verbose) {
         format_warning(

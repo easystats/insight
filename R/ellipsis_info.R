@@ -67,7 +67,7 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
       }
       # unlist model objects, so "objects" contains the list of models
       objects <- objects[[1]]
-      # sanity check
+      # validation check
       if (is.null(object_names)) {
         object_names <- paste("Model", seq_along(objects), sep = " ")
       }

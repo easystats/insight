@@ -986,7 +986,7 @@
       # anything missing? (i.e. correlated slope-intercept slopes)
       missig_rnd_slope <- setdiff(names(out), names(rndslopes))
       if (length(missig_rnd_slope)) {
-        # sanity check
+        # validation check
         to_remove <- NULL
         for (j in seq_along(out)) {
           # identical random slopes might have different names, so

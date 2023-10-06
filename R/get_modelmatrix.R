@@ -56,7 +56,7 @@ get_modelmatrix.iv_robust <- function(x, ...) {
   dots <- list(...)
   model_terms <- stats::terms(x)
   if ("data" %in% names(dots)) {
-    # sanity check - model matrix needs response vector!
+    # validation check - model matrix needs response vector!
     resp <- find_response(x)
     d <- dots$data
     dots$data <- NULL
@@ -76,7 +76,7 @@ get_modelmatrix.iv_robust <- function(x, ...) {
 get_modelmatrix.lm_robust <- function(x, ...) {
   dots <- list(...)
   if ("data" %in% names(dots)) {
-    # sanity check - model matrix needs response vector!
+    # validation check - model matrix needs response vector!
     resp <- find_response(x)
     d <- dots$data
     dots$data <- NULL

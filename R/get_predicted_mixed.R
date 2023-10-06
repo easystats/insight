@@ -90,7 +90,7 @@ get_predicted.glmmTMB <- function(x,
                                   iterations = NULL,
                                   verbose = TRUE,
                                   ...) {
-  # Sanity checks
+  # validation checks
   if (!is.null(predict) && predict %in% c("prediction", "predicted", "classification")) {
     predict <- "expectation"
     if (verbose) {
@@ -205,7 +205,7 @@ get_predicted.MixMod <- function(x,
                                  iterations = NULL,
                                  verbose = TRUE,
                                  ...) {
-  # Sanity checks
+  # validation checks
   if (!is.null(predict) && predict %in% c("prediction", "predicted", "classification")) {
     predict <- "expectation"
     if (verbose) {

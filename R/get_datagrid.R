@@ -484,7 +484,7 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
     return(sort(unique(x)))
   }
 
-  # Sanity check
+  # validation check
   if (!is.numeric(length)) {
     format_error("`length` argument should be an number.")
   }
@@ -741,7 +741,7 @@ get_datagrid.default <- function(x,
                                  data = NULL,
                                  verbose = TRUE,
                                  ...) {
-  # sanity check
+  # validation check
   if (!is_model(x)) {
     format_error("`x` must be a statistical model.")
   }

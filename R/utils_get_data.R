@@ -810,7 +810,7 @@
   }
   pattern <- sprintf("%s\\(([^,\\+)]*).*", type)
   out <- trim_ws(gsub(pattern, "\\1", grep(pattern, x, value = TRUE)))
-  # sanity check - when we have something like "log(1+x)" instead "log(x+1)",
+  # validation check - when we have something like "log(1+x)" instead "log(x+1)",
   # the regex pattern returns "1" instead of "x3"
   if (!is.na(suppressWarnings(as.numeric(out)))) {
     out <- trim_ws(gsub(pattern, "\\2", grep(pattern, x, value = TRUE)))

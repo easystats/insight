@@ -41,7 +41,7 @@ n_grouplevels <- function(x, ...) {
     re_data <- .safe(get_data(x, verbose = FALSE))
   }
 
-  # sanity check - did we successfully retrieve data and random effects?
+  # validation check - did we successfully retrieve data and random effects?
   if (is.null(re_data) || is.null(ran_eff)) {
     return(NULL)
   }
@@ -66,7 +66,7 @@ n_grouplevels <- function(x, ...) {
     )
   )
 
-  # sanity check
+  # validation check
   if (is.null(out)) {
     return(NULL)
   }

@@ -101,7 +101,7 @@ get_predicted_ci.default <- function(x,
                                      vcov_args = NULL,
                                      verbose = TRUE,
                                      ...) {
-  # sanity check, if CI should be skipped
+  # validation check, if CI should be skipped
   if (is.null(ci)) {
     return(ci)
   }
@@ -259,7 +259,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 
   dots <- list(...)
 
-  # Sanity checks
+  # validation checks
   if (!is.null(se)) {
     se <- as.numeric(se)
   }
@@ -342,7 +342,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
                                              ci = 0.95,
                                              link_inv = NULL,
                                              ...) {
-  # Sanity checks
+  # validation checks
   if (is.null(predictions)) {
     return(data.frame(SE = se))
   }

@@ -241,7 +241,7 @@ get_data <- function(x, ...) {
     ))
   }
 
-  # sanity check- if data frame is named like a function, e.g.
+  # validation check- if data frame is named like a function, e.g.
   # rep <- data.frame(...), we now have a function instead of the data
   # we then need to reset "dat" to NULL and search in the global env
 

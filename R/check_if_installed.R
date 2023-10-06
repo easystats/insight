@@ -53,7 +53,7 @@ check_if_installed <- function(package,
     minimum_version <- .safe(.get_dep_version(dep = package))
   }
 
-  # sanity check for equal length of package and minimum_version
+  # validation check for equal length of package and minimum_version
   if (!is.null(minimum_version) && length(package) != length(minimum_version)) {
     minimum_version <- NULL
   }
