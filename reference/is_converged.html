@@ -12,7 +12,7 @@ test for merMod-objects."><meta property="og:image" content="https://easystats.g
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.12</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,7 +133,7 @@ errors.</p>
     <h2 id="inspect-model-convergence">Inspect model convergence<a class="anchor" aria-label="anchor" href="#inspect-model-convergence"></a></h2>
     
 
-<p>lme4 performs a convergence-check (see <code><a href="https://rdrr.io/pkg/lme4/man/convergence.html" class="external-link">?lme4::convergence</a></code>), however, as
+<p><strong>lme4</strong> performs a convergence-check (see <code><a href="https://rdrr.io/pkg/lme4/man/convergence.html" class="external-link">?lme4::convergence</a></code>), however, as
 discussed <a href="https://github.com/lme4/lme4/issues/120" class="external-link">here</a> and suggested by
 one of the lme4-authors in <a href="https://github.com/lme4/lme4/issues/120#issuecomment-39920269" class="external-link">this comment</a>,
 this check can be too strict. <code>is_converged()</code> thus provides an alternative
@@ -188,7 +188,7 @@ or not.</p>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">iris</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model convergence problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model convergence problem; false convergence (8). See vignette('troubleshooting')</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model convergence problem; false convergence (8). See vignette('troubleshooting'), help('diagnose')</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">is_converged</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>

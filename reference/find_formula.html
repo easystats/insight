@@ -20,7 +20,7 @@ variable)."><meta property="og:image" content="https://easystats.github.io/insig
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.12</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,7 +146,7 @@ only one list-element, <code>conditional</code>, is returned. For more complex
 models, the returned list may have following elements:</p><ul><li><p><code>conditional</code>, the "fixed effects" part from the model (in the
 context of fixed-effects or instrumental variable regression, also
 called <em>regressors</em>) . One exception are <code>DirichletRegModel</code> models
-from DirichletReg, which has two or three components,
+from <strong>DirichletReg</strong>, which has two or three components,
 depending on <code>model</code>.</p></li>
 <li><p><code>random</code>, the "random effects" part from the model (or the
 <code>id</code> for gee-models and similar)</p></li>
@@ -165,7 +165,7 @@ the instrumental variables</p></li>
 <li><p><code>slopes</code>, for fixed-effects individual-slope models like
 <code><a href="https://rdrr.io/pkg/feisr/man/feis.html" class="external-link">feisr::feis()</a></code>, the formula for the slope parameters</p></li>
 <li><p><code>precision</code>, for <code>DirichletRegModel</code> models from
-DirichletReg, when parametrization (i.e. <code>model</code>) is
+<strong>DirichletReg</strong>, when parametrization (i.e. <code>model</code>) is
 <code>"alternative"</code>.</p></li>
 </ul></div>
     <div class="section level2">
@@ -182,7 +182,7 @@ is only returned, when it is explicitly defined as named argument
 <span class="r-in"><span><span class="fu">find_formula</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mpg ~ wt + cyl + vs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x561064432200&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558386182f88&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_formula" "list"           </span>
@@ -192,11 +192,11 @@ is only returned, when it is explicitly defined as named argument
 <span class="r-in"><span><span class="va">f</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length ~ Sepal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x561064432200&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558386182f88&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $random</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~1 | Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x56105d3e1df0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55837e4b7930&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_formula" "list"           </span>

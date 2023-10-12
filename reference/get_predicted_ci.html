@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.5.12</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -166,7 +166,7 @@ vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd
 Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the default method, which varies based on the model type.</p></li>
 <li><p>Most frequentist models: <code>"wald"</code> (default), <code>"residual"</code> or <code>"normal"</code>.</p></li>
 <li><p>Bayesian models:  <code>"quantile"</code>  (default), <code>"hdi"</code>, <code>"eti"</code>, and <code>"spi"</code>.</p></li>
-<li><p>Mixed effects lme4 models: <code>"wald"</code> (default), <code>"residual"</code>, <code>"normal"</code>,
+<li><p>Mixed effects <strong>lme4</strong> models: <code>"wald"</code> (default), <code>"residual"</code>, <code>"normal"</code>,
 <code>"satterthwaite"</code>, and <code>"kenward-roger"</code>.</p></li>
 </ul><p>See <code><a href="get_df.html">get_df()</a></code> for details.</p></dd>
 
@@ -196,11 +196,11 @@ identifies the function to be used to compute the covariance matrix.</p><ul><li>
 
 <dt>vcov_args</dt>
 <dd><p>List of arguments to be passed to the function identified by
-the <code>vcov</code> argument. This function is typically supplied by the sandwich
-or clubSandwich packages. Please refer to their documentation (e.g.,
+the <code>vcov</code> argument. This function is typically supplied by the <strong>sandwich</strong>
+or <strong>clubSandwich</strong> packages. Please refer to their documentation (e.g.,
 <code><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHAC.html" class="external-link">?sandwich::vcovHAC</a></code>) to see the list of available arguments. If no estimation
 type (argument <code>type</code>) is given, the default type for <code>"HC"</code> (or <code>"vcovHC"</code>)
-equals the default from the sandwich package; for type <code>"CR"</code> (or
+equals the default from the <strong>sandwich</strong> package; for type <code>"CR"</code> (or
 <code>"vcoCR"</code>), the default is set to <code>"CR3"</code>.</p></dd>
 
 
