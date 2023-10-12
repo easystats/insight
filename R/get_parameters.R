@@ -4,13 +4,13 @@
 #' @description Returns the coefficients (or posterior samples for Bayesian
 #' models) from a model. See the documentation for your object's class:
 #'
-#' - [Bayesian models][get_parameters.BGGM] ({rstanarm}, {brms}, {MCMCglmm}, ...)
-#' - [Estimated marginal means][get_parameters.emmGrid] ({emmeans})
-#' - [Generalized additive models][get_parameters.gamm] ({mgcv}, {VGAM}, ...)
-#' - [Marginal effects models][get_parameters.betamfx] ({mfx})
-#' - [Mixed models][get_parameters.glmm] ({lme4}, {glmmTMB}, {GLMMadaptive}, ...)
-#' - [Zero-inflated and hurdle models][get_parameters.zeroinfl] ({pscl}, ...)
-#' - [Models with special components][get_parameters.betareg] ({betareg}, {MuMIn}, ...)
+#' - [Bayesian models][get_parameters.BGGM] (**rstanarm**, **brms**, **MCMCglmm**, ...)
+#' - [Estimated marginal means][get_parameters.emmGrid] (**emmeans**)
+#' - [Generalized additive models][get_parameters.gamm] (**mgcv**, **VGAM**, ...)
+#' - [Marginal effects models][get_parameters.betamfx] (**mfx**)
+#' - [Mixed models][get_parameters.glmm] (**lme4**, **glmmTMB**, **GLMMadaptive**, ...)
+#' - [Zero-inflated and hurdle models][get_parameters.zeroinfl] (**pscl**, ...)
+#' - [Models with special components][get_parameters.betareg] (**betareg**, **MuMIn**, ...)
 #' - [Hypothesis tests][get_parameters.htest] (`htest`)
 #'
 #' @param verbose Toggle messages and warnings.

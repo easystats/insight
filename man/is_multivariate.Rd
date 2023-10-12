@@ -12,7 +12,7 @@ package.}
 }
 \value{
 A logical, \code{TRUE} if either \code{x} is a model object and is a multivariate
-response model, or \code{TRUE} if a return value from a function of \pkg{insight}
+response model, or \code{TRUE} if a return value from a function of \strong{insight}
 is from a multivariate response model.
 }
 \description{

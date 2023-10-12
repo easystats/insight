@@ -1,4 +1,4 @@
-#' @title Checks if a regression model object is supported in \pkg{insight} package
+#' @title Checks if a regression model object is supported by the insight package
 #' @name is_model_supported
 #'
 #' @description Small helper that checks if a model is a *supported*

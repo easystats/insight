@@ -33,7 +33,7 @@ models, the returned list may have following elements:
 \item \code{conditional}, the "fixed effects" part from the model (in the
 context of fixed-effects or instrumental variable regression, also
 called \emph{regressors}) . One exception are \code{DirichletRegModel} models
-from {DirichletReg}, which has two or three components,
+from \strong{DirichletReg}, which has two or three components,
 depending on \code{model}.
 \item \code{random}, the "random effects" part from the model (or the
 \code{id} for gee-models and similar)
@@ -52,7 +52,7 @@ the instrumental variables
 \item \code{slopes}, for fixed-effects individual-slope models like
 \code{feisr::feis()}, the formula for the slope parameters
 \item \code{precision}, for \code{DirichletRegModel} models from
-{DirichletReg}, when parametrization (i.e. \code{model}) is
+\strong{DirichletReg}, when parametrization (i.e. \code{model}) is
 \code{"alternative"}.
 }
 }

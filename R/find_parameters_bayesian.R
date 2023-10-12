@@ -27,15 +27,15 @@
 #'   component of the model
 #' - `smooth_terms`, the smooth parameters
 #'
-#' Furthermore, some models, especially from {brms}, can also return auxiliary
+#' Furthermore, some models, especially from **brms**, can also return auxiliary
 #' parameters. These may be one of the following:
 #'
 #' - `sigma`, the residual standard deviation (auxiliary parameter)
 #' - `dispersion`, the dispersion parameters (auxiliary parameter)
 #' - `beta`, the beta parameter (auxiliary parameter)
-#' - `simplex`, simplex parameters of monotonic effects (\pkg{brms} only)
-#' - `mix`, mixture parameters (\pkg{brms} only)
-#' - `shiftprop`, shifted proportion parameters (\pkg{brms} only)
+#' - `simplex`, simplex parameters of monotonic effects (**brms** only)
+#' - `mix`, mixture parameters (**brms** only)
+#' - `shiftprop`, shifted proportion parameters (**brms** only)
 #'
 #' @examples
 #' data(mtcars)

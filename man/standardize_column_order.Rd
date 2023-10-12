@@ -20,7 +20,7 @@ data frames returned by \code{broom::tidy()} are valid objects.}
 
 \item{style}{Standardization can either be based on the naming conventions
 from the \href{https://easystats.github.io/easystats/}{easystats-project},
-or on \pkg{broom}'s naming scheme.}
+or on \strong{broom}'s naming scheme.}
 }
 \value{
 A data frame, with standardized column order.

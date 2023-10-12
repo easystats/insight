@@ -63,7 +63,7 @@ Possible values depend on model type.
 \item \code{NULL} uses the default method, which varies based on the model type.
 \item Most frequentist models: \code{"wald"} (default), \code{"residual"} or \code{"normal"}.
 \item Bayesian models:  \code{"quantile"}  (default), \code{"hdi"}, \code{"eti"}, and \code{"spi"}.
-\item Mixed effects {lme4} models: \code{"wald"} (default), \code{"residual"}, \code{"normal"},
+\item Mixed effects \strong{lme4} models: \code{"wald"} (default), \code{"residual"}, \code{"normal"},
 \code{"satterthwaite"}, and \code{"kenward-roger"}.
 }
 
@@ -93,11 +93,11 @@ identifies the function to be used to compute the covariance matrix.
 }}
 
 \item{vcov_args}{List of arguments to be passed to the function identified by
-the \code{vcov} argument. This function is typically supplied by the {sandwich}
-or {clubSandwich} packages. Please refer to their documentation (e.g.,
+the \code{vcov} argument. This function is typically supplied by the \strong{sandwich}
+or \strong{clubSandwich} packages. Please refer to their documentation (e.g.,
 \code{?sandwich::vcovHAC}) to see the list of available arguments. If no estimation
 type (argument \code{type}) is given, the default type for \code{"HC"} (or \code{"vcovHC"})
-equals the default from the {sandwich} package; for type \code{"CR"} (or
+equals the default from the \strong{sandwich} package; for type \code{"CR"} (or
 \code{"vcoCR"}), the default is set to \code{"CR3"}.}
 
 \item{verbose}{Toggle warnings.}

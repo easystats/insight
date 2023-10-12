@@ -33,12 +33,12 @@ to return only certain results (see \code{\link[=print_parameters]{print_paramet
 The \code{Effects} column indicate if a parameter is a \emph{fixed} or \emph{random} effect.
 The \code{Component} can either be \emph{conditional} or \emph{zero_inflated}. For models
 with random effects, the \code{Group} column indicates the grouping factor of the
-random effects. For multivariate response models from {brms} or
-{rstanarm}, an additional \emph{Response} column is included, to indicate
+random effects. For multivariate response models from \strong{brms} or
+\strong{rstanarm}, an additional \emph{Response} column is included, to indicate
 which parameters belong to which response formula. Furthermore,
 \emph{Cleaned_Parameter} column is returned that contains "human readable"
 parameter names (which are mostly identical to \code{Parameter}, except for for
-models from {brms} or {rstanarm}, or for specific terms like smooth-
+models from \strong{brms} or \strong{rstanarm}, or for specific terms like smooth-
 or spline-terms).
 }
 \examples{

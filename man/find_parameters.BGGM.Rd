@@ -118,15 +118,15 @@ component of the model
 \item \code{smooth_terms}, the smooth parameters
 }
 
-Furthermore, some models, especially from {brms}, can also return auxiliary
+Furthermore, some models, especially from \strong{brms}, can also return auxiliary
 parameters. These may be one of the following:
 \itemize{
 \item \code{sigma}, the residual standard deviation (auxiliary parameter)
 \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
 \item \code{beta}, the beta parameter (auxiliary parameter)
-\item \code{simplex}, simplex parameters of monotonic effects (\pkg{brms} only)
-\item \code{mix}, mixture parameters (\pkg{brms} only)
-\item \code{shiftprop}, shifted proportion parameters (\pkg{brms} only)
+\item \code{simplex}, simplex parameters of monotonic effects (\strong{brms} only)
+\item \code{mix}, mixture parameters (\strong{brms} only)
+\item \code{shiftprop}, shifted proportion parameters (\strong{brms} only)
 }
 }
 \description{

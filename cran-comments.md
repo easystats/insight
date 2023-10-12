@@ -1,1 +1,8 @@
-This is a hotfix release, fixing a critical bug in the `check_if_installed()` function for R version < 4.1
+This release fixes CRAN check errors related to the latest glmmTMB-update.
+
+## revdepcheck results
+
+We checked 38 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages

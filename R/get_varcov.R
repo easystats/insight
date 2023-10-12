@@ -37,11 +37,11 @@
 #'    - Other `sandwich` package functions: `"vcovHAC"`, `"vcovPC"`, `"vcovCL"`,
 #'      `"vcovPL"`.
 #' @param vcov_args List of arguments to be passed to the function identified by
-#'   the `vcov` argument. This function is typically supplied by the {sandwich}
-#'   or {clubSandwich} packages. Please refer to their documentation (e.g.,
+#'   the `vcov` argument. This function is typically supplied by the **sandwich**
+#'   or **clubSandwich** packages. Please refer to their documentation (e.g.,
 #'   `?sandwich::vcovHAC`) to see the list of available arguments. If no estimation
 #'   type (argument `type`) is given, the default type for `"HC"` (or `"vcovHC"`)
-#'   equals the default from the {sandwich} package; for type `"CR"` (or
+#'   equals the default from the **sandwich** package; for type `"CR"` (or
 #'   `"vcoCR"`), the default is set to `"CR3"`.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
