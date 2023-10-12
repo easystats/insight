@@ -11,7 +11,7 @@
 #'   data frames returned by `broom::tidy()` are valid objects.
 #' @param style Standardization can either be based on the naming conventions
 #'   from the [easystats-project](https://easystats.github.io/easystats/),
-#'   or on \pkg{broom}'s naming scheme.
+#'   or on **broom**'s naming scheme.
 #' @param ignore_estimate Logical, if `TRUE`, column names like
 #'   `"mean"` or `"median"` will *not* be converted to
 #'   `"Coefficient"` resp. `"estimate"`.
@@ -28,7 +28,7 @@
 #'   used to get consistent, i.e. always the same column names, no matter what
 #'   kind of model was used in `model_parameters()`.
 #'
-#'   For `style = "broom"`, column names are renamed to match \pkg{broom}'s
+#'   For `style = "broom"`, column names are renamed to match **broom**'s
 #'   naming scheme, i.e. `Parameter` is renamed to `term`,
 #'   `Coefficient` becomes `estimate` and so on.
 #'

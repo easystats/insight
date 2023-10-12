@@ -65,7 +65,7 @@ and is the ratio of the sum of the squared Pearson-residuals and the residual
 degrees of freedom. For models of class \code{glmmTMB}, dispersion is
 \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
 }
-\subsection{\pkg{brms} models}{
+\subsection{\strong{brms} models}{
 For models of class \code{brmsfit}, there are different options for the
 \code{type} argument. See a list of supported auxiliary parameters here:
 \code{\link[=find_parameters.BGGM]{find_parameters.BGGM()}}.

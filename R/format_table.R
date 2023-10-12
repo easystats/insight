@@ -8,7 +8,7 @@
 #'   converts all columns into character vectors!
 #'
 #' @param x A data frame of model's parameters, as returned by various functions
-#'   of the {easystats}-packages. May also be a result from
+#'   of the **easystats**-packages. May also be a result from
 #'   `broom::tidy()`.
 #' @param pretty_names Return "pretty" (i.e. more human readable) parameter
 #'   names.

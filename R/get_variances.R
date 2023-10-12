@@ -94,9 +94,9 @@
 #' intercepts and slopes.
 #'
 #' @note This function supports models of class `merMod` (including models
-#' from {blme}), `clmm`, `cpglmm`, `glmmadmb`, `glmmTMB`, `MixMod`, `lme`,
+#' from **blme**), `clmm`, `cpglmm`, `glmmadmb`, `glmmTMB`, `MixMod`, `lme`,
 #' `mixed`, `rlmerMod`, `stanreg`, `brmsfit` or `wbm`. Support for objects of
-#' class `MixMod` ({GLMMadaptive}), `lme` ({nlme}) or `brmsfit` ({brms}) is
+#' class `MixMod` (**GLMMadaptive**), `lme` (**nlme**) or `brmsfit` (**brms**) is
 #' experimental and may not work for all models.
 #'
 #' @references

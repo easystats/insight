@@ -19,7 +19,7 @@
 #' errors.
 #'
 #' @section Inspect model convergence:
-#' {lme4} performs a convergence-check (see `?lme4::convergence`), however, as
+#' **lme4** performs a convergence-check (see `?lme4::convergence`), however, as
 #' discussed [here](https://github.com/lme4/lme4/issues/120) and suggested by
 #' one of the lme4-authors in [this comment](https://github.com/lme4/lme4/issues/120#issuecomment-39920269),
 #' this check can be too strict. `is_converged()` thus provides an alternative

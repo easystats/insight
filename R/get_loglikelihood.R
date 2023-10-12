@@ -28,7 +28,7 @@
 #' @return An object of class `"logLik"`, also containing the
 #'   log-likelihoods for each observation as a `per_observation` attribute
 #'   (`attributes(get_loglikelihood(x))$per_observation`) when possible.
-#'   The code was partly inspired from the {nonnest2} package.
+#'   The code was partly inspired from the **nonnest2** package.
 #'
 #' @examples
 #' x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)

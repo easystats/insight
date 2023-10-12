@@ -6,13 +6,13 @@
 #' names equal the column names of the posterior samples after coercion
 #' from `as.data.frame()`. See the documentation for your object's class:
 #'
-#' - [Bayesian models][find_parameters.BGGM] ({rstanarm}, {brms}, {MCMCglmm}, ...)
-#' - [Generalized additive models][find_parameters.gamlss] ({mgcv}, {VGAM}, ...)
-#' - [Marginal effects models][find_parameters.betamfx] ({mfx})
-#' - [Estimated marginal means][find_parameters.emmGrid] ({emmeans})
-#' - [Mixed models][find_parameters.glmmTMB] ({lme4}, {glmmTMB}, {GLMMadaptive}, ...)
-#' - [Zero-inflated and hurdle models][find_parameters.zeroinfl] ({pscl}, ...)
-#' - [Models with special components][find_parameters.averaging] ({betareg}, {MuMIn}, ...)
+#' - [Bayesian models][find_parameters.BGGM] (**rstanarm**, **brms**, **MCMCglmm**, ...)
+#' - [Generalized additive models][find_parameters.gamlss] (**mgcv**, **VGAM**, ...)
+#' - [Marginal effects models][find_parameters.betamfx] (**mfx**)
+#' - [Estimated marginal means][find_parameters.emmGrid] (**emmeans**)
+#' - [Mixed models][find_parameters.glmmTMB] (**lme4**, **glmmTMB**, **GLMMadaptive**, ...)
+#' - [Zero-inflated and hurdle models][find_parameters.zeroinfl] (**pscl**, ...)
+#' - [Models with special components][find_parameters.averaging] (**betareg**, **MuMIn**, ...)
 #'
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.

@@ -13,10 +13,10 @@ and general model fit statistics. Although there exist some generic functions
 to obtain model information and data, many package-specific modelling functions
 do not provide such methods to allow users to access such valuable information.
 
-{insight} is an R-package that fills this important gap by providing a
+\strong{insight} is an R-package that fills this important gap by providing a
 suite of functions to support almost any model (see a list of the many models
 supported below in the \strong{List of Supported Packages and Models} section).
-The goal of {insight}, then, is to provide tools to provide \emph{easy},
+The goal of \strong{insight}, then, is to provide tools to provide \emph{easy},
 \emph{intuitive}, and \emph{consistent} access to information contained in model
 objects. These tools aid applied research in virtually any field who fit,
 diagnose, and present statistical models by streamlining access to every

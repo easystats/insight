@@ -90,7 +90,7 @@
 #'   + `NULL` uses the default method, which varies based on the model type.
 #'   + Most frequentist models: `"wald"` (default), `"residual"` or `"normal"`.
 #'   + Bayesian models:  `"quantile"`  (default), `"hdi"`, `"eti"`, and `"spi"`.
-#'   + Mixed effects {lme4} models: `"wald"` (default), `"residual"`, `"normal"`,
+#'   + Mixed effects **lme4** models: `"wald"` (default), `"residual"`, `"normal"`,
 #'   `"satterthwaite"`, and `"kenward-roger"`.
 #'
 #'   See [`get_df()`] for details.

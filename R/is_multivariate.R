@@ -9,7 +9,7 @@
 #'
 #' @return
 #' A logical, `TRUE` if either `x` is a model object and is a multivariate
-#' response model, or `TRUE` if a return value from a function of \pkg{insight}
+#' response model, or `TRUE` if a return value from a function of **insight**
 #' is from a multivariate response model.
 #'
 #' @examplesIf require("rstanarm", quietly = TRUE)

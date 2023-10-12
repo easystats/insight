@@ -14,7 +14,7 @@
 #'
 #' @note
 #' Note that `emmGrid` or `emm_list` objects returned by functions from
-#' {emmeans} have a different structure compared to usual regression models.
+#' **emmeans** have a different structure compared to usual regression models.
 #' Hence, the `Parameter` column does not always contain names of *variables*,
 #' but may rather contain *values*, e.g. for contrasts. See an example for
 #' pairwise comparisons below.
