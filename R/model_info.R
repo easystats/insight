@@ -1366,3 +1366,8 @@ model_info.earth <- function(x, ...) {
 model_info.deltaMethod <- function(x, ...) {
   NULL
 }
+
+#' @export
+model_info.ggcomparisons <- function(x, ...) {
+  NULL
+}
