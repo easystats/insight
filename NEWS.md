@@ -1,3 +1,9 @@
+# insight 0.19.7
+
+## General
+
+* Support for objects of class `ggcomparisons` from `ggeffects::hypothesis_test()`.
+
 # insight 0.19.6
 
 ## General
