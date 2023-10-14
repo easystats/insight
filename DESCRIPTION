@@ -123,6 +123,7 @@ Suggests:
     gee,
     geepack,
     geoR,
+    ggeffects,
     GLMMadaptive,
     glmmTMB,
     gmnl,
