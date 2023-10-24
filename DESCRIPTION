@@ -123,6 +123,7 @@ Suggests:
     gee,
     geepack,
     geoR,
+    ggeffects,
     GLMMadaptive,
     glmmTMB,
     gmnl,
@@ -206,3 +207,4 @@ Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,
     easystats/easystatstemplate
+Remotes: strengejacke/ggeffects
