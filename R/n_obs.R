@@ -100,10 +100,18 @@ n_obs.glm <- function(x, disaggregate = FALSE, ...) {
 #' @export
 n_obs.censReg <- n_obs.default
 
+
 #' @export
 n_obs.nestedLogit <- function(x, disaggregate = FALSE, ...) {
   lapply(x$models, n_obs)
 }
+
+
+#' @export
+n_obs.dbchoice <- function(x, ...) {
+  stats::nobs(x)
+}
+
 
 #' @rdname n_obs
 #' @export

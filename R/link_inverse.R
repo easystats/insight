@@ -387,6 +387,12 @@ link_inverse.negbinirr <- link_inverse.logitmfx
 # Other models ----------------------------
 
 #' @export
+link_inverse.dbchoice <- function(x, ...) {
+  x$f.stage$family$linkinv
+}
+
+
+#' @export
 link_inverse.Rchoice <- function(x, ...) {
   stats::make.link(link = x$link)$linkinv
 }

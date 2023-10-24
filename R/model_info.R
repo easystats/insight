@@ -786,6 +786,20 @@ model_info.Rchoice <- function(x, ...) {
 
 
 #' @export
+model_info.dbchoice <- function(x, ...) {
+  faminfo <- x$f.stage$family
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    multi.var = FALSE,
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.ivprobit <- function(x, ...) {
   .make_family(
     x = x,
