@@ -89,7 +89,7 @@ is_regression_model <- function(x) {
     "glmaag", "glmbb", "glmboostLSS", "glmc", "glmdm", "glmdisc",
     "glmerMod", "glmlep", "glmm", "glmmadmb", "glmmEP", "glmmFit",
     "glmmfields", "glmmLasso", "glmmPQL", "glmmTMB", "glmnet", "glmrob",
-    "glmRob", "glmx", "gls", "gmnl", "gmm", "gnls", "gsm",
+    "glmRob", "glmx", "gls", "gmnl", "gmm", "gnls", "gsm", "ggcomparisons",
 
     # h --------------------
     "heavyLme", "HLfit", "htest", "hurdle", "hglm",

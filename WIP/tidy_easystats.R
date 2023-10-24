@@ -14,7 +14,7 @@
 #'   a generic \code{tidy()}-method, the lifecycle of this function is still
 #'   experimental, and there might be a chance that it will become defunct and
 #'   removed in a future update. If possible, the preferred and stable alternative
-#'   to \code{tidy()} for \emph{easystats}-objects is \code{\link{standardize_names}}.
+#'   to \code{tidy()} for \emph**easystats**-objects is \code{\link{standardize_names}}.
 #'
 #' @examples
 #' if (require("parameters")) {

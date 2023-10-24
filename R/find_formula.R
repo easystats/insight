@@ -21,7 +21,7 @@
 #'  - `conditional`, the "fixed effects" part from the model (in the
 #'    context of fixed-effects or instrumental variable regression, also
 #'    called *regressors*) . One exception are `DirichletRegModel` models
-#'    from {DirichletReg}, which has two or three components,
+#'    from **DirichletReg**, which has two or three components,
 #'    depending on `model`.
 #'
 #'  - `random`, the "random effects" part from the model (or the
@@ -49,7 +49,7 @@
 #'    `feisr::feis()`, the formula for the slope parameters
 #'
 #'  - `precision`, for `DirichletRegModel` models from
-#'    {DirichletReg}, when parametrization (i.e. `model`) is
+#'    **DirichletReg**, when parametrization (i.e. `model`) is
 #'    `"alternative"`.
 #'
 #' @note For models of class `lme` or `gls` the correlation-component

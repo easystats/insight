@@ -37,7 +37,7 @@
 #' degrees of freedom. For models of class `glmmTMB`, dispersion is
 #' \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
 #' }
-#' \subsection{\pkg{brms} models}{
+#' \subsection{**brms** models}{
 #' For models of class `brmsfit`, there are different options for the
 #' `type` argument. See a list of supported auxiliary parameters here:
 #' [find_parameters.BGGM()].

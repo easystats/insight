@@ -48,13 +48,13 @@ appear in the \code{summary()} output. For Bayesian models, the parameter
 names equal the column names of the posterior samples after coercion
 from \code{as.data.frame()}. See the documentation for your object's class:
 \itemize{
-\item \link[=find_parameters.BGGM]{Bayesian models} ({rstanarm}, {brms}, {MCMCglmm}, ...)
-\item \link[=find_parameters.gamlss]{Generalized additive models} ({mgcv}, {VGAM}, ...)
-\item \link[=find_parameters.betamfx]{Marginal effects models} ({mfx})
-\item \link[=find_parameters.emmGrid]{Estimated marginal means} ({emmeans})
-\item \link[=find_parameters.glmmTMB]{Mixed models} ({lme4}, {glmmTMB}, {GLMMadaptive}, ...)
-\item \link[=find_parameters.zeroinfl]{Zero-inflated and hurdle models} ({pscl}, ...)
-\item \link[=find_parameters.averaging]{Models with special components} ({betareg}, {MuMIn}, ...)
+\item \link[=find_parameters.BGGM]{Bayesian models} (\strong{rstanarm}, \strong{brms}, \strong{MCMCglmm}, ...)
+\item \link[=find_parameters.gamlss]{Generalized additive models} (\strong{mgcv}, \strong{VGAM}, ...)
+\item \link[=find_parameters.betamfx]{Marginal effects models} (\strong{mfx})
+\item \link[=find_parameters.emmGrid]{Estimated marginal means} (\strong{emmeans})
+\item \link[=find_parameters.glmmTMB]{Mixed models} (\strong{lme4}, \strong{glmmTMB}, \strong{GLMMadaptive}, ...)
+\item \link[=find_parameters.zeroinfl]{Zero-inflated and hurdle models} (\strong{pscl}, ...)
+\item \link[=find_parameters.averaging]{Models with special components} (\strong{betareg}, \strong{MuMIn}, ...)
 }
 }
 \section{Model components}{

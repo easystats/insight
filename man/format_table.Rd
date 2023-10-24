@@ -25,7 +25,7 @@ format_table(
 }
 \arguments{
 \item{x}{A data frame of model's parameters, as returned by various functions
-of the {easystats}-packages. May also be a result from
+of the \strong{easystats}-packages. May also be a result from
 \code{broom::tidy()}.}
 
 \item{pretty_names}{Return "pretty" (i.e. more human readable) parameter

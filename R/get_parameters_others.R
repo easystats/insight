@@ -364,3 +364,31 @@ get_parameters.deltaMethod <- function(x, ...) {
     row.names = NULL
   )
 }
+
+
+#' @export
+get_parameters.ggcomparisons <- function(x, merge_parameters = FALSE, ...) {
+  estimate_pos <- which(colnames(x) == attr(x, "estimate_name"))
+  params <- x[, seq_len(estimate_pos - 1), drop = FALSE]
+
+  if (isTRUE(merge_parameters) && ncol(params) > 1L) {
+    r <- apply(params, 1, function(i) paste0(colnames(params), " [", i, "]"))
+    out <- data.frame(
+      Parameter = unname(vapply(as.data.frame(r), toString, character(1))),
+      Estimate = x[[estimate_pos]],
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  } else {
+    out <- data.frame(
+      params,
+      Estimate = x[[estimate_pos]],
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+    if (isTRUE(merge_parameters)) {
+      colnames(out)[1] <- "Parameter"
+    }
+  }
+  text_remove_backticks(out)
+}

@@ -2,13 +2,13 @@ skip_if_not_installed("BayesFactor")
 
 x <- BayesFactor::correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
 test_that("get_data", {
-  expect_true(is.data.frame(get_data(x)))
+  expect_s3_class(get_data(x), "data.frame")
 })
 test_that("find_formula", {
   expect_null(find_formula(x))
 })
 test_that("get_parameters", {
-  expect_equal(nrow(get_parameters(x)), 4000)
+  expect_identical(nrow(get_parameters(x)), 4000L)
 })
 mi <- insight::model_info(x)
 test_that("model_info-BF", {
@@ -28,9 +28,9 @@ t2 <- BayesFactor::ttestBF(x = x, y = y)
 t2d <- suppressMessages(BayesFactor::ttestBF(x = x, y = y, paired = TRUE, mu = 60))
 
 test_that("get_data", {
-  expect_true(is.data.frame(get_data(t1)))
-  expect_true(is.data.frame(get_data(t2)))
-  expect_true(is.data.frame(get_data(t2d)))
+  expect_s3_class(get_data(t1), "data.frame")
+  expect_s3_class(get_data(t2), "data.frame")
+  expect_s3_class(get_data(t2d), "data.frame")
 })
 test_that("find_formula", {
   expect_equal(find_formula(t1), list(conditional = y ~ 1), ignore_attr = TRUE)
@@ -38,9 +38,9 @@ test_that("find_formula", {
   expect_equal(find_formula(t2d), list(conditional = y ~ 1), ignore_attr = TRUE)
 })
 test_that("get_parameters", {
-  expect_equal(nrow(get_parameters(t1)), 4000)
-  expect_equal(nrow(get_parameters(t2)), 4000)
-  expect_equal(nrow(get_parameters(t2d)), 4000)
+  expect_identical(nrow(get_parameters(t1)), 4000L)
+  expect_identical(nrow(get_parameters(t2)), 4000L)
+  expect_identical(nrow(get_parameters(t2d)), 4000L)
 
   expect_equal(median(get_parameters(t1)[["Difference"]]), -60, tolerance = 0.05)
   expect_equal(median(get_parameters(t2)[["Difference"]]), 0, tolerance = 0.05)
@@ -52,31 +52,31 @@ test_that("model_info", {
   expect_true(model_info(t2d)$is_ttest)
 })
 test_that("get_priors", {
-  expect_equal(nrow(get_priors(t1)), 1)
-  expect_equal(nrow(get_priors(t2)), 1)
-  expect_equal(nrow(get_priors(t2d)), 1)
+  expect_identical(nrow(get_priors(t1)), 1L)
+  expect_identical(nrow(get_priors(t2)), 1L)
+  expect_identical(nrow(get_priors(t2d)), 1L)
 })
 test_that("find_parameters", {
-  expect_equal(nrow(get_parameters(t1)), 4000)
-  expect_equal(nrow(get_parameters(t2)), 4000)
-  expect_equal(nrow(get_parameters(t2d)), 4000)
+  expect_identical(nrow(get_parameters(t1)), 4000L)
+  expect_identical(nrow(get_parameters(t2)), 4000L)
+  expect_identical(nrow(get_parameters(t2d)), 4000L)
 
-  expect_equal(find_parameters(t1)[[1]], "Difference")
-  expect_equal(find_parameters(t2)[[1]], "Difference")
-  expect_equal(find_parameters(t2d)[[1]], "Difference")
+  expect_identical(find_parameters(t1)[[1]], "Difference")
+  expect_identical(find_parameters(t2)[[1]], "Difference")
+  expect_identical(find_parameters(t2d)[[1]], "Difference")
 })
 
 t <- c(-0.15, 2.39, 2.42, 2.43)
 N <- c(100, 150, 97, 99)
 x <- BayesFactor::meta.ttestBF(t = t, n1 = N, rscale = 1)
 test_that("get_data", {
-  expect_true(is.data.frame(get_data(x)))
+  expect_s3_class(get_data(x), "data.frame")
 })
 test_that("find_formula", {
   expect_null(find_formula(x))
 })
 test_that("get_parameters", {
-  expect_equal(nrow(get_parameters(x)), 4000)
+  expect_identical(nrow(get_parameters(x)), 4000L)
 })
 
 
@@ -87,7 +87,7 @@ levels(ToothGrowth$dose) <- c("Low", "Medium", "High")
 x <- BayesFactor::anovaBF(len ~ supp * dose, data = ToothGrowth, progress = FALSE)
 
 test_that("get_data", {
-  expect_true(is.data.frame(get_data(x)))
+  expect_s3_class(get_data(x), "data.frame")
 })
 
 test_that("find_formula", {
@@ -98,19 +98,22 @@ test_that("find_formula", {
 })
 
 test_that("get_parameters", {
-  expect_equal(colnames(get_parameters(x, verbose = FALSE)), c("mu", "supp-OJ", "supp-VC", "sig2", "g_supp"))
+  expect_named(
+    get_parameters(x, verbose = FALSE),
+    c("mu", "supp-OJ", "supp-VC", "sig2", "g_supp")
+  )
 })
 
 test_that("clean_parameters", {
   cp <- clean_parameters(x)
-  expect_equal(
+  expect_identical(
     cp$Cleaned_Parameter,
     c(
       "supp [OJ]", "supp [VC]", "dose [Low]", "dose [Medium]",
       "dose [High]", "mu", "sig2", "g_supp"
     )
   )
-  expect_equal(
+  expect_identical(
     cp$Component,
     c(
       "conditional", "conditional", "conditional", "conditional",
@@ -124,7 +127,7 @@ data(puzzles, package = "BayesFactor")
 x <- BayesFactor::anovaBF(RT ~ shape * color + ID, data = puzzles, whichRandom = "ID", progress = FALSE)
 
 test_that("get_data", {
-  expect_true(is.data.frame(get_data(x)))
+  expect_s3_class(get_data(x), "data.frame")
 })
 
 test_that("find_formula", {
@@ -139,8 +142,8 @@ test_that("find_formula", {
 })
 
 test_that("get_parameters", {
-  expect_equal(
-    colnames(get_parameters(x, verbose = FALSE)),
+  expect_named(
+    get_parameters(x, verbose = FALSE),
     c(
       "mu", "shape-round", "shape-square", "ID-1", "ID-2", "ID-3",
       "ID-4", "ID-5", "ID-6", "ID-7", "ID-8", "ID-9", "ID-10", "ID-11",
@@ -150,7 +153,7 @@ test_that("get_parameters", {
 })
 
 test_that("get_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(x[4]),
     list(
       conditional = c(
@@ -168,15 +171,15 @@ test_that("get_parameters", {
 })
 
 test_that("find_response", {
-  expect_equal(find_response(x), "RT")
+  expect_identical(find_response(x), "RT")
 })
 
 test_that("find_random", {
-  expect_equal(find_random(x), list(random = "ID"))
+  expect_identical(find_random(x), list(random = "ID"))
 })
 
 test_that("find_variables", {
-  expect_equal(
+  expect_identical(
     find_variables(x),
     list(
       response = "RT",
@@ -187,7 +190,7 @@ test_that("find_variables", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(x),
     list(
       response = "RT",
@@ -231,14 +234,14 @@ test_that("get_priors", {
 
 x <- BayesFactor::lmBF(len ~ supp + dose, data = ToothGrowth, progress = FALSE)
 test_that("get_data", {
-  expect_true(is.data.frame(get_data(x)))
+  expect_s3_class(get_data(x), "data.frame")
 })
 test_that("find_formula", {
   expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")), ignore_attr = TRUE)
 })
 test_that("get_parameters", {
-  expect_equal(
-    colnames(get_parameters(x)),
+  expect_named(
+    get_parameters(x),
     c(
       "mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
       "sig2", "g_supp", "g_dose"
@@ -251,14 +254,14 @@ test_that("get_parameters", {
 x2 <- BayesFactor::lmBF(len ~ supp + dose + supp:dose, data = ToothGrowth, progress = FALSE)
 x <- x / x2
 test_that("get_data", {
-  expect_true(is.data.frame(get_data(x)))
+  expect_s3_class(get_data(x), "data.frame")
 })
 test_that("find_formula", {
   expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")), ignore_attr = TRUE)
 })
 test_that("get_parameters", {
-  expect_equal(
-    colnames(get_parameters(x, verbose = FALSE)),
+  expect_named(
+    get_parameters(x, verbose = FALSE),
     c(
       "mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
       "sig2", "g_supp", "g_dose"

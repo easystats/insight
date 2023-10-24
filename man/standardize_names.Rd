@@ -25,7 +25,7 @@ data frames returned by \code{broom::tidy()} are valid objects.}
 
 \item{style}{Standardization can either be based on the naming conventions
 from the \href{https://easystats.github.io/easystats/}{easystats-project},
-or on \pkg{broom}'s naming scheme.}
+or on \strong{broom}'s naming scheme.}
 
 \item{ignore_estimate}{Logical, if \code{TRUE}, column names like
 \code{"mean"} or \code{"median"} will \emph{not} be converted to
@@ -49,7 +49,7 @@ not quite straightforward. In such cases, \code{standardize_names()} can be
 used to get consistent, i.e. always the same column names, no matter what
 kind of model was used in \code{model_parameters()}.
 
-For \code{style = "broom"}, column names are renamed to match \pkg{broom}'s
+For \code{style = "broom"}, column names are renamed to match \strong{broom}'s
 naming scheme, i.e. \code{Parameter} is renamed to \code{term},
 \code{Coefficient} becomes \code{estimate} and so on.
 

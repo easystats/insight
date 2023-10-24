@@ -31,8 +31,8 @@
 #' `effects` and `component` can be used.
 #'
 #' @section BFBayesFactor Models:
-#' Note that for `BFBayesFactor` models (from the \pkg{BayesFactor}
-#' package), posteriors are only extracted from the first numerator model (i.e.,
+#' Note that for `BFBayesFactor` models (from the **BayesFactor** package),
+#' posteriors are only extracted from the first numerator model (i.e.,
 #' `model[1]`). If you want to apply some function `foo()` to another
 #' model stored in the `BFBayesFactor` object, index it directly, e.g.
 #' `foo(model[2])`, `foo(1/model[5])`, etc.

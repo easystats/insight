@@ -83,9 +83,9 @@ intraclass-correlation coefficient (ICC).
 }
 \note{
 This function supports models of class \code{merMod} (including models
-from {blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB}, \code{MixMod}, \code{lme},
+from \strong{blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB}, \code{MixMod}, \code{lme},
 \code{mixed}, \code{rlmerMod}, \code{stanreg}, \code{brmsfit} or \code{wbm}. Support for objects of
-class \code{MixMod} ({GLMMadaptive}), \code{lme} ({nlme}) or \code{brmsfit} ({brms}) is
+class \code{MixMod} (\strong{GLMMadaptive}), \code{lme} (\strong{nlme}) or \code{brmsfit} (\strong{brms}) is
 experimental and may not work for all models.
 }
 \section{Fixed effects variance}{

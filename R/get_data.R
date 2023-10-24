@@ -2168,10 +2168,10 @@ get_data.rma <- function(x,
     mf_attr[c("yi.names", "vi.names", "digits", "class")]
   )
   if (isTRUE(include_interval)) {
-    model_response <- tryCatch(mf[[find_response(x)]], error = function(x) NULL)
-    sei <- tryCatch(mf[[model_call$sei]], error = function(x) NULL)
+    model_response <- .safe(mf[[find_response(x)]])
+    sei <- .safe(mf[[model_call$sei]])
     if (is.null(sei)) {
-      sei <- tryCatch(sqrt(mf[[model_call$vi]]), error = function(x) NULL)
+      sei <- .safe(sqrt(mf[[model_call$vi]]))
     }
     if (is.null(sei)) {
       format_error("Could not find `sei` or `vi` for this model.")

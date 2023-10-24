@@ -13,7 +13,7 @@
 #'   parameter names and the related point estimates. If `effects =
 #'   "random"`, a list of data frames with the random effects (as returned by
 #'   `ranef()`), unless the random effects have the same simplified
-#'   structure as fixed effects (e.g. for models from {MCMCglmm}).
+#'   structure as fixed effects (e.g. for models from **MCMCglmm**).
 #'
 #' @details In most cases when models either return different "effects" (fixed,
 #' random) or "components" (conditional, zero-inflated, ...), the arguments
