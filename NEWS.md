@@ -1,3 +1,10 @@
+# insight 0.19.7
+
+## Changes to functions
+
+* `get_varcov()` for models of class `pgmm` (package *plm*) now also supported
+  robust variance-covariance matrices (i.e. argument `vcov`).
+
 # insight 0.19.6
 
 ## General

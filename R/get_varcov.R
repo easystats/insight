@@ -295,10 +295,27 @@ get_varcov.glmx <- function(x,
 
 
 #' @export
-get_varcov.pgmm <- function(x, component = c("conditional", "all"), verbose = TRUE, ...) {
+get_varcov.pgmm <- function(x,
+                            component = c("conditional", "all"),
+                            vcov = NULL,
+                            vcov_args = NULL,
+                            verbose = TRUE,
+                            ...) {
   .check_get_varcov_dots(x, ...)
+  # process vcov-argument
+  vcov <- .check_vcov_args(x, vcov = vcov, verbose = verbose, ...)
   component <- match.arg(component)
-  vc <- stats::vcov(x)
+
+  if (is.null(vcov)) {
+    vc <- suppressWarnings(stats::vcov(x))
+  } else {
+    vc <- .get_varcov_sandwich(x,
+      vcov_fun = vcov,
+      vcov_args = vcov_args,
+      verbose = FALSE,
+      ...
+    )
+  }
 
   if (component != "all") {
     keep <- match(find_parameters(x)[[component]], rownames(vc))

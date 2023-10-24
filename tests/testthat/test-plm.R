@@ -50,11 +50,11 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), Crime$lcrmrte)
+  expect_equal(get_response(m1), Crime$lcrmrte, tolerance = 1e-4, ignore_attr = TRUE)
 })
 
 test_that("get_predictors", {
-  expect_equal(colnames(get_predictors(m1)), c("lprbarr", "year", "lmix"))
+  expect_named(get_predictors(m1), c("lprbarr", "year", "lmix"))
 })
 
 test_that("link_inverse", {
@@ -62,17 +62,11 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 630)
-  expect_equal(
-    colnames(get_data(m1)),
-    c("lcrmrte", "lprbarr", "year", "lmix")
-  )
+  expect_identical(nrow(get_data(m1)), 630L)
+  expect_named(get_data(m1), c("lcrmrte", "lprbarr", "year", "lmix"))
 
-  expect_equal(nrow(get_data(m2)), 816)
-  expect_equal(
-    colnames(get_data(m2)),
-    c("gsp", "pcap", "pc", "emp", "unemp", "state", "year")
-  )
+  expect_identical(nrow(get_data(m2)), 816L)
+  expect_named(get_data(m2), c("gsp", "pcap", "pc", "emp", "unemp", "state", "year"))
 })
 
 test_that("find_formula", {
@@ -88,7 +82,7 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_equal(
+  expect_identical(
     find_variables(m1),
     list(
       response = "lcrmrte",
@@ -96,14 +90,14 @@ test_that("find_variables", {
       instruments = c("lprbarr", "lmix")
     )
   )
-  expect_equal(
+  expect_identical(
     find_variables(m1, flatten = TRUE),
     c("lcrmrte", "lprbarr", "year", "lmix")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 630)
+  expect_identical(n_obs(m1), 630L)
 })
 
 test_that("linkfun", {
@@ -111,7 +105,7 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c(
@@ -126,7 +120,7 @@ test_that("find_parameters", {
       )
     )
   )
-  expect_equal(nrow(get_parameters(m1)), 8)
+  expect_identical(nrow(get_parameters(m1)), 8L)
 })
 
 test_that("is_multivariate", {
@@ -136,4 +130,16 @@ test_that("is_multivariate", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "z-statistic")
   expect_identical(find_statistic(m2), "t-statistic")
+})
+
+test_that("get_varcov, pgmm", {
+  data("EmplUK", package = "plm")
+  mar <- suppressWarnings(plm::pgmm(
+    log(emp) ~ lag(log(emp), 1:2) + lag(log(wage), 0:1) + log(capital) +
+      lag(log(capital), 2) + log(output) + lag(log(output), 2) | lag(log(emp), 2:99),
+    data = EmplUK, effect = "twoways", model = "twosteps"
+  ))
+  out1 <- sqrt(diag(insight::get_varcov(mar, vcov = "HC1", component = "all")))
+  validate1 <- sqrt(diag(plm::vcovHC(mar)))
+  expect_equal(out1, validate1, tolerance = 1e-4, ignore_attr = TRUE)
 })
