@@ -28,7 +28,7 @@
 #' @details The predicate-function simply works like this:
 #' `which(predicate(x[, columns], value))`
 #'
-#' @return The .
+#' @return `x`, where columns matched by `predicate` are wrapped into color codes.
 #'
 #' @examples
 #' # all values in Sepal.Length larger than 5 in green, all remaining in red
