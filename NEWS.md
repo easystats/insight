@@ -9,6 +9,11 @@
 * `get_varcov()` for models of class `pgmm` (package *plm*) now also supported
   robust variance-covariance matrices (i.e. argument `vcov`).
 
+## Bug fixes
+
+* Fixed issue in `find_predictors()` for survival models with `strata()`,
+  containing more that one variable.
+
 # insight 0.19.6
 
 ## General
