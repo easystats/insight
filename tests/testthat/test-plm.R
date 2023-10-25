@@ -132,14 +132,18 @@ test_that("find_statistic", {
   expect_identical(find_statistic(m2), "t-statistic")
 })
 
-test_that("get_varcov, pgmm", {
-  data("EmplUK", package = "plm")
-  mar <- suppressWarnings(plm::pgmm(
-    log(emp) ~ lag(log(emp), 1:2) + lag(log(wage), 0:1) + log(capital) +
-      lag(log(capital), 2) + log(output) + lag(log(output), 2) | lag(log(emp), 2:99),
-    data = EmplUK, effect = "twoways", model = "twosteps"
-  ))
-  out1 <- sqrt(diag(insight::get_varcov(mar, vcov = "HC1", component = "all")))
-  validate1 <- sqrt(diag(plm::vcovHC(mar)))
-  expect_equal(out1, validate1, tolerance = 1e-4, ignore_attr = TRUE)
-})
+skip_if_not_installed("withr")
+withr::with_package(
+  "plm",
+  test_that("get_varcov, pgmm", {
+    data("EmplUK", package = "plm")
+    mar <- suppressWarnings(plm::pgmm(
+      log(emp) ~ lag(log(emp), 1:2) + lag(log(wage), 0:1) + log(capital) +
+        lag(log(capital), 2) + log(output) + lag(log(output), 2) | lag(log(emp), 2:99),
+      data = EmplUK, effect = "twoways", model = "twosteps"
+    ))
+    out1 <- sqrt(diag(insight::get_varcov(mar, vcov = "HC1", component = "all")))
+    validate1 <- sqrt(diag(plm::vcovHC(mar)))
+    expect_equal(out1, validate1, tolerance = 1e-4, ignore_attr = TRUE)
+  })
+)

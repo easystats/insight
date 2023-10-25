@@ -74,22 +74,24 @@ test_that("find_statistic", {
   expect_null(find_statistic(m1))
 })
 
-test_that("find_predictors works with strata", {
-  library(survival)
-  data(mtcars)
-  mod <- suppressWarnings(survival::clogit(
-    am ~ mpg + cyl + mpg:cyl + survival::strata(carb, gear),
-    data = mtcars
-  ))
-  out <- find_predictors(mod)
-  expect_identical(out, list(conditional = c("mpg", "cyl"), strata = c("carb", "gear")))
+skip_if_not_installed("withr")
+withr::with_package(
+  "survival",
+  test_that("find_predictors works with strata", {
+    data(mtcars)
+    mod <- suppressWarnings(survival::clogit(
+      am ~ mpg + cyl + mpg:cyl + survival::strata(carb, gear),
+      data = mtcars
+    ))
+    out <- find_predictors(mod)
+    expect_identical(out, list(conditional = c("mpg", "cyl"), strata = c("carb", "gear")))
 
-  # works with reserved arguments inside "strata()"
-  mod <- suppressWarnings(survival::clogit(
-    am ~ mpg + cyl + mpg:cyl + survival::strata(carb, gear, shortlabel = TRUE),
-    data = mtcars
-  ))
-  out <- find_predictors(mod)
-  expect_identical(out, list(conditional = c("mpg", "cyl"), strata = c("carb", "gear")))
-  unloadNamespace("survival")
-})
+    # works with reserved arguments inside "strata()"
+    mod <- suppressWarnings(survival::clogit(
+      am ~ mpg + cyl + mpg:cyl + survival::strata(carb, gear, shortlabel = TRUE),
+      data = mtcars
+    ))
+    out <- find_predictors(mod)
+    expect_identical(out, list(conditional = c("mpg", "cyl"), strata = c("carb", "gear")))
+  })
+)

@@ -194,7 +194,8 @@ Suggests:
     truncreg,
     tweedie,
     TMB,
-    VGAM
+    VGAM,
+    withr
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
