@@ -73,7 +73,7 @@ find_predictors <- function(x, ...) {
 #' @export
 find_predictors.default <- function(x,
                                     effects = c("fixed", "random", "all"),
-                                    component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
+                                    component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"), # nolint
                                     flatten = FALSE,
                                     verbose = TRUE,
                                     ...) {
@@ -211,7 +211,7 @@ find_predictors.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 #' @export
 find_predictors.afex_aov <- function(x,
                                      effects = c("fixed", "random", "all"),
-                                     component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
+                                     component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"), # nolint
                                      flatten = FALSE,
                                      verbose = TRUE,
                                      ...) {
