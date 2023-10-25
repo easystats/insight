@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.19.6.2
+Version: 0.19.6.3
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -194,7 +194,8 @@ Suggests:
     truncreg,
     tweedie,
     TMB,
-    VGAM
+    VGAM,
+    withr
 VignetteBuilder: 
     knitr
 Encoding: UTF-8

@@ -22,11 +22,8 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 227)
-  expect_equal(
-    colnames(get_data(m1)),
-    c("time", "status", "sex", "age", "ph.ecog")
-  )
+  expect_identical(nrow(get_data(m1)), 227L)
+  expect_named(get_data(m1), c("time", "status", "sex", "age", "ph.ecog"))
 })
 
 test_that("find_formula", {
@@ -41,18 +38,18 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_equal(find_variables(m1), list(
+  expect_identical(find_variables(m1), list(
     response = c("time", "status"),
     conditional = c("sex", "age", "ph.ecog")
   ))
-  expect_equal(
+  expect_identical(
     find_variables(m1, flatten = TRUE),
     c("time", "status", "sex", "age", "ph.ecog")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 227)
+  expect_identical(n_obs(m1), 227L)
 })
 
 test_that("linkfun", {
@@ -64,7 +61,7 @@ test_that("is_multivariate", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(
       response = "Surv(time, status)",
@@ -76,3 +73,25 @@ test_that("find_terms", {
 test_that("find_statistic", {
   expect_null(find_statistic(m1))
 })
+
+skip_if_not_installed("withr")
+withr::with_package(
+  "survival",
+  test_that("find_predictors works with strata", {
+    data(mtcars)
+    mod <- suppressWarnings(survival::clogit(
+      am ~ mpg + cyl + mpg:cyl + survival::strata(carb, gear),
+      data = mtcars
+    ))
+    out <- find_predictors(mod)
+    expect_identical(out, list(conditional = c("mpg", "cyl"), strata = c("carb", "gear")))
+
+    # works with reserved arguments inside "strata()"
+    mod <- suppressWarnings(survival::clogit(
+      am ~ mpg + cyl + mpg:cyl + survival::strata(carb, gear, shortlabel = TRUE),
+      data = mtcars
+    ))
+    out <- find_predictors(mod)
+    expect_identical(out, list(conditional = c("mpg", "cyl"), strata = c("carb", "gear")))
+  })
+)

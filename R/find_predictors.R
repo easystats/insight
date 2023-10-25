@@ -73,7 +73,7 @@ find_predictors <- function(x, ...) {
 #' @export
 find_predictors.default <- function(x,
                                     effects = c("fixed", "random", "all"),
-                                    component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
+                                    component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"), # nolint
                                     flatten = FALSE,
                                     verbose = TRUE,
                                     ...) {
@@ -211,7 +211,7 @@ find_predictors.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 #' @export
 find_predictors.afex_aov <- function(x,
                                      effects = c("fixed", "random", "all"),
-                                     component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"),
+                                     component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"), # nolint
                                      flatten = FALSE,
                                      verbose = TRUE,
                                      ...) {
@@ -297,11 +297,53 @@ find_predictors.afex_aov <- function(x,
     if (inherits(x, "coxph")) {
       f_cond <- safe_deparse(f[["conditional"]])
 
+      # remove namespace prefixes
+      if (grepl("::", f_cond, fixed = TRUE)) {
+        # Here's a regular expression pattern in R that removes any word
+        # followed by two colons from a string: This pattern matches a word
+        # boundary (\\b), followed by one or more word characters (\\w+),
+        # followed by two colons (::)
+        f_cond <- gsub("\\b\\w+::", "\\2", f_cond)
+      }
+
       if (grepl("strata(", f_cond, fixed = TRUE)) {
+        # create regular expressions to find strata terms
         yes_strata <- ".*strata\\((.*)\\).*"
+        # This regular expression pattern in R matches any occurrence of the
+        # string "strata" followed by parentheses containing any characters (.*),
+        # optionally followed by any amount of whitespace (\\s*), and then followed
+        # by any number of +, |, or * characters ([\\+|\\*]*). It also matches
+        # any occurrence of +, |, or * characters followed by any amount of
+        # whitespace (\\s*), and then followed by the string "strata" followed
+        # by parentheses containing any characters (strata\\(.*\\)).
+        # Here's a breakdown of the regular expression:
+        # strata: Matches the string "strata".
+        # \\(: Matches an opening parenthesis.
+        # .*: Matches any character zero or more times.
+        # \\): Matches a closing parenthesis.
+        # \\s*: Matches any amount of whitespace zero or more times.
+        # [\\+|\\*]*: Matches any number of +, |, or * characters zero or more times.
+        # |: Alternation operator to match either the first or second pattern.
+        # [\\+|\\*]: Matches a +, |, or * character.
+        # \\s*: Matches any amount of whitespace zero or more times.
+        # strata: Matches the string "strata".
+        # \\(: Matches an opening parenthesis.
+        # .*: Matches any character zero or more times.
+        # \\): Matches a closing parenthesis.
         no_strata <- "strata\\(.*\\)\\s*[\\+|\\*]*|[\\+|\\*]\\s*strata\\(.*\\)"
-        strata <- gsub(yes_strata, "\\1", f_cond)
+
+        # find predictors used inside "strata()"
+        strata <- gsub(",", "+", gsub(yes_strata, "\\1", f_cond), fixed = TRUE)
+        # remove reserved terms from strata formula
+        pattern <- "\\b(na\\.group|shortlabel)\\b\\s*=\\s*[^\\(]*"
+        strata <- gsub(pattern, "", strata)
+        # remove trailing "+"
+        strata <- gsub("(.*)\\+$", "\\1", trim_ws(strata))
+
+        # find predictors used outside "strata()"
         non_strata <- trim_ws(gsub("~", "", gsub(no_strata, "\\1", f_cond), fixed = TRUE))
+
+        # create formula parts
         f$strata <- stats::reformulate(strata)
         f$conditional <- stats::reformulate(non_strata)
       }

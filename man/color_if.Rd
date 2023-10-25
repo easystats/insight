@@ -52,7 +52,7 @@ that are \emph{not} met.}
 \item{digits}{Digits for rounded values.}
 }
 \value{
-The .
+\code{x}, where columns matched by \code{predicate} are wrapped into color codes.
 }
 \description{
 Convenient function that formats columns in data frames with color codes,
