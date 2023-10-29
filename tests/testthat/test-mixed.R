@@ -24,61 +24,64 @@ test_that("model_info", {
 })
 
 test_that("find_predictors", {
-  expect_equal(
+  expect_identical(
     find_predictors(m1_mixed, effects = "all"),
     list(conditional = "Days", random = "Subject")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1_mixed, effects = "all", flatten = TRUE),
     c("Days", "Subject")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1_mixed, effects = "fixed"),
     list(conditional = "Days")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1_mixed, effects = "fixed", flatten = TRUE),
     "Days"
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1_mixed, effects = "random"),
     list(random = "Subject")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1_mixed, effects = "random", flatten = TRUE),
     "Subject"
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m2_mixed, effects = "all"),
     list(
       conditional = "Days",
       random = c("mysubgrp", "mygrp", "Subject")
     )
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m2_mixed, effects = "all", flatten = TRUE),
     c("Days", "mysubgrp", "mygrp", "Subject")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m2_mixed, effects = "fixed"),
     list(conditional = "Days")
   )
-  expect_equal(find_predictors(m2_mixed, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_identical(
+    find_predictors(m2_mixed, effects = "random"),
+    list(random = c("mysubgrp", "mygrp", "Subject"))
+  )
   expect_null(find_predictors(m2_mixed, effects = "all", component = "zi"))
   expect_null(find_predictors(m2_mixed, effects = "fixed", component = "zi"))
   expect_null(find_predictors(m2_mixed, effects = "random", component = "zi"))
 })
 
 test_that("find_random", {
-  expect_equal(find_random(m1_mixed), list(random = "Subject"))
-  expect_equal(find_random(m1_mixed, flatten = TRUE), "Subject")
-  expect_equal(find_random(m2_mixed), list(random = c("mysubgrp:mygrp", "mygrp", "Subject")))
-  expect_equal(find_random(m2_mixed, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
-  expect_equal(
+  expect_identical(find_random(m1_mixed), list(random = "Subject"))
+  expect_identical(find_random(m1_mixed, flatten = TRUE), "Subject")
+  expect_identical(find_random(m2_mixed), list(random = c("mysubgrp:mygrp", "mygrp", "Subject")))
+  expect_identical(find_random(m2_mixed, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_identical(
     find_random(m2_mixed, flatten = TRUE),
     c("mysubgrp:mygrp", "mygrp", "Subject")
   )
-  expect_equal(
+  expect_identical(
     find_random(m2_mixed, split_nested = TRUE, flatten = TRUE),
     c("mysubgrp", "mygrp", "Subject")
   )
@@ -90,7 +93,7 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1_mixed), df_sleepstudy$Reaction)
+  expect_identical(get_response(m1_mixed), df_sleepstudy$Reaction)
 })
 
 test_that("link_inverse", {
@@ -99,18 +102,18 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(colnames(get_data(m1_mixed)), c("Reaction", "Days", "Subject"))
-  expect_equal(colnames(get_data(m1_mixed, effects = "all")), c("Reaction", "Days", "Subject"))
-  expect_equal(colnames(get_data(m1_mixed, effects = "random")), "Subject")
-  expect_equal(
-    colnames(get_data(m2_mixed)),
+  expect_named(get_data(m1_mixed), c("Reaction", "Days", "Subject"))
+  expect_named(get_data(m1_mixed, effects = "all"), c("Reaction", "Days", "Subject"))
+  expect_named(get_data(m1_mixed, effects = "random"), "Subject")
+  expect_named(
+    get_data(m2_mixed),
     c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
   )
-  expect_equal(
-    colnames(get_data(m2_mixed, effects = "all")),
+  expect_named(
+    get_data(m2_mixed, effects = "all"),
     c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
   )
-  expect_equal(colnames(get_data(m2_mixed, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
+  expect_named(get_data(m2_mixed, effects = "random"), c("mysubgrp", "mygrp", "Subject"))
 })
 
 test_that("get_df", {
@@ -211,17 +214,17 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1_mixed),
     list(
       conditional = c("(Intercept)", "Days"),
       random = list(Subject = c("(Intercept)", "Days"))
     )
   )
-  expect_equal(nrow(get_parameters(m1_mixed)), 2)
-  expect_equal(get_parameters(m1_mixed)$Parameter, c("(Intercept)", "Days"))
+  expect_identical(nrow(get_parameters(m1_mixed)), 2L)
+  expect_identical(get_parameters(m1_mixed)$Parameter, c("(Intercept)", "Days"))
 
-  expect_equal(
+  expect_identical(
     find_parameters(m2_mixed),
     list(
       conditional = c("(Intercept)", "Days"),
@@ -233,10 +236,10 @@ test_that("find_parameters", {
     )
   )
 
-  expect_equal(nrow(get_parameters(m2_mixed)), 2)
-  expect_equal(get_parameters(m2_mixed)$Parameter, c("(Intercept)", "Days"))
-  expect_equal(
-    names(get_parameters(m2_mixed, effects = "random")),
+  expect_identical(nrow(get_parameters(m2_mixed)), 2L)
+  expect_identical(get_parameters(m2_mixed)$Parameter, c("(Intercept)", "Days"))
+  expect_named(
+    get_parameters(m2_mixed, effects = "random"),
     c("mysubgrp:mygrp", "Subject", "mygrp")
   )
 })
@@ -315,19 +318,19 @@ test_that("get_variance", {
         mygrp = 24.4064
       )
     ),
-    tolerance = 1e-1,
+    tolerance = 1e-1
   ))
 })
 
 test_that("find_algorithm", {
-  expect_equal(
+  expect_identical(
     find_algorithm(m1_mixed),
     list(algorithm = "REML", optimizer = "nloptwrap")
   )
 })
 
 test_that("find_random_slopes", {
-  expect_equal(find_random_slopes(m1_mixed), list(random = "Days"))
+  expect_identical(find_random_slopes(m1_mixed), list(random = "Days"))
   expect_null(find_random_slopes(m2_mixed))
 })
 
