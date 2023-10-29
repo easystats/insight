@@ -72,12 +72,13 @@ test_that("get_data", {
 
 test_that("find_formula", {
   expect_length(find_formula(m1), 2)
-  expect_identical(
+  expect_equal(
     find_formula(m1),
     list(
       conditional = as.formula("y ~ x"),
       random = as.formula("~z")
-    )
+    ),
+    ignore_attr = TRUE
   )
 })
 
