@@ -14,6 +14,9 @@
 * Fixed issue in `find_predictors()` for survival models with `strata()`,
   containing more that one variable.
 
+* Fixed issue in `model_info()`, where in some cases logistic regression models
+  were erroneously considered as `"bernoulli"` models.
+
 # insight 0.19.6
 
 ## General

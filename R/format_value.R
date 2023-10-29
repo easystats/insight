@@ -204,7 +204,7 @@ format_percent <- function(x, ...) {
                                          .as_percent = FALSE,
                                          .zap_small = FALSE, ...) {
   x_nonmiss <- x[!is.na(x)]
-  if (is.numeric(x) && !all(.is.int(x_nonmiss))) {
+  if (is.numeric(x) && !all(.is_integer(x_nonmiss))) {
     .format_value(
       x,
       digits = digits,
@@ -215,7 +215,7 @@ format_percent <- function(x, ...) {
     )
   } else if (anyNA(x)) {
     .convert_missing(x, .missing)
-  } else if (is.numeric(x) && all(.is.int(x_nonmiss)) && !is.null(.width)) {
+  } else if (is.numeric(x) && all(.is_integer(x_nonmiss)) && !is.null(.width)) {
     format(x, justify = "right", width = .width)
   } else {
     as.character(x)
@@ -313,7 +313,7 @@ format_percent <- function(x, ...) {
 }
 
 
-.is.int <- function(x) {
+.is_integer <- function(x) {
   tryCatch(
     expr = {
       ifelse(is.infinite(x), FALSE, x %% 1 == 0)
@@ -328,6 +328,6 @@ format_percent <- function(x, ...) {
 }
 
 
-.is.fraction <- function(x) {
-  !all(.is.int(x)) && is.numeric(x) && n_unique(x) > 2
+.is_fraction <- function(x) {
+  !all(.is_integer(x)) && is.numeric(x) && n_unique(x) > 2
 }
