@@ -134,10 +134,10 @@ n_obs.HLfit <- function(x, ...) {
 
 #' @export
 n_obs.gam <- function(x, ...) {
-  if (!is.null(dim(x$y))) {
-    dim(x$y)[1]
-  } else {
+  if (is.null(dim(x$y))) {
     length(x$y)
+  } else {
+    dim(x$y)[1]
   }
 }
 
