@@ -20,8 +20,7 @@ u <- rnorm(5, 0, sigma)
 eta <- beta[1] + beta[2] * x + crossprod(t(Z), u)
 p <- 1 / (1 + exp(-eta))
 y <- PROreg::rBB(k, m, p, phi)
-dat <- data.frame(cbind(y, x, z))
-dat$z <- as.factor(dat$z)
+dat <<- data.frame(cbind(y, x, z = as.factor(z)))
 
 # apply the model
 m1 <- PROreg::BBmm(
