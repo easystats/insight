@@ -72,8 +72,11 @@
       if ((is.data.frame(resp) || is.matrix(resp)) && ncol(resp) == 1) {
         resp <- as.vector(resp[[1]])
       }
-      if (!is.data.frame(resp) && !is.matrix(resp) && all(.is.int(.factor_to_numeric(resp[[1]])))) {
-        is_bernoulli <- TRUE
+      if (!is.data.frame(resp) && !is.matrix(resp)) {
+        if (is.list(resp)) {
+          resp <- resp[[1]]
+        }
+        is_bernoulli <- all(.is_integer(.factor_to_numeric(resp)))
       }
     }
   } else if (all(fitfam == "bernoulli")) {

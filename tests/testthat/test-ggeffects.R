@@ -1,4 +1,4 @@
-skip_if_not_installed("ggeffects")
+skip_if_not_installed("ggeffects", minimum_version = "1.3.2")
 
 test_that("get_parameters, hypothesis_test", {
   data(iris)

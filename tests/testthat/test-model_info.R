@@ -83,3 +83,25 @@ test_that("model_info-tweedie", {
   expect_false(mi$is_poisson)
   expect_identical(mi$family, "Tweedie")
 })
+
+test_that("model_info, glm bernoulli", {
+  set.seed(1)
+  tot <- rep(10, 100)
+  suc <- rbinom(100, prob = 0.9, size = tot)
+  dat <- data.frame(tot, suc)
+  dat$prop <- suc / tot
+
+  mod <- glm(prop ~ 1,
+    family = binomial,
+    data = dat,
+    weights = tot
+  )
+
+  expect_true(model_info(mod)$is_binomial)
+  expect_false(model_info(mod)$is_bernoulli)
+
+  data(mtcars)
+  mod <- glm(am ~ 1, family = binomial, data = mtcars)
+  expect_true(model_info(mod)$is_binomial)
+  expect_true(model_info(mod)$is_bernoulli)
+})
