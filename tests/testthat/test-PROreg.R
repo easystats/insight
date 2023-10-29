@@ -12,14 +12,14 @@ sigma <- 0.5
 # simulating the covariate and random effects
 x <- runif(k, 0, 10)
 X <- model.matrix(~x)
-z <- as.factor(rBI(k, 4, 0.5, 2))
+z <- as.factor(PROreg::rBI(k, 4, 0.5, 2))
 Z <- model.matrix(~ z - 1)
 u <- rnorm(5, 0, sigma)
 
 # the linear predictor and simulated response variable
 eta <- beta[1] + beta[2] * x + crossprod(t(Z), u)
 p <- 1 / (1 + exp(-eta))
-y <- rBB(k, m, p, phi)
+y <- PROreg::rBB(k, m, p, phi)
 dat <- data.frame(cbind(y, x, z))
 dat$z <- as.factor(dat$z)
 
