@@ -49,7 +49,7 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m_gamlss1), abdom$y)
+  expect_identical(get_response(m_gamlss1), abdom$y)
 })
 
 test_that("get_predictors", {
@@ -57,7 +57,7 @@ test_that("get_predictors", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m_gamlss1)), 610)
+  expect_identical(nrow(get_data(m_gamlss1)), 610L)
   expect_identical(colnames(get_data(m_gamlss1)), c("y", "x"))
 })
 
@@ -101,7 +101,7 @@ test_that("find_terms", {
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m_gamlss1), 610)
+  expect_identical(n_obs(m_gamlss1), 610L)
 })
 
 test_that("link_function", {
@@ -122,7 +122,7 @@ test_that("find_parameters", {
       tau = "(Intercept)"
     )
   )
-  expect_equal(nrow(get_parameters(m_gamlss1)), 6)
+  expect_identical(nrow(get_parameters(m_gamlss1)), 6L)
 })
 
 test_that("is_multivariate", {
@@ -135,4 +135,22 @@ test_that("find_algorithm", {
 
 test_that("find_statistic", {
   expect_identical(find_statistic(m_gamlss1), "t-statistic")
+})
+
+test_that("find_formula works with namespace colons", {
+  data(iris)
+  m <- gamlss::gamlss(
+    Sepal.Length ~ Sepal.Width + gamlss::random(Species),
+    sigma.formula = ~Sepal.Width,
+    data = iris
+  )
+  expect_equal(
+    find_formula(m),
+    list(
+      conditional = Sepal.Length ~ Sepal.Width,
+      random = ~ 1 | Species,
+      sigma = ~Sepal.Width
+    ),
+    ignore_attr = TRUE
+  )
 })
