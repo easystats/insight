@@ -17,6 +17,9 @@
 * Fixed issue in `model_info()`, where in some cases logistic regression models
   were erroneously considered as `"bernoulli"` models.
 
+* Fixed issue in `find_formula()` for models of class `gamlss` when the `random()`
+  function was used with namespace in the formula (i.e. `... + gamlss::random()`).
+
 # insight 0.19.6
 
 ## General
