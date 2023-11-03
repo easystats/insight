@@ -8,7 +8,7 @@ skip_if_not_installed("glmmTMB")
 # fish$livebait <- as.factor(fish$livebait)
 # fish$camper <- as.factor(fish$camper)
 
-data("fish")
+data("fish", package = "insight")
 m1 <- glmmTMB::glmmTMB(
   count ~ child + camper + (1 | persons),
   ziformula = ~ child + camper + (1 | persons),
@@ -969,4 +969,19 @@ test_that("model_info, ordered beta", {
   out <- model_info(m)
   expect_true(out$is_orderedbeta)
   expect_identical(out$family, "ordbeta")
+})
+
+
+test_that("model_info, recognize ZI even without ziformula", {
+  skip_if_not_installed("glmmTMB")
+  data("fish", package = "insight")
+  fish$count <- fish$count + 1
+  m1 <- glmmTMB::glmmTMB(
+    count ~ child + camper + (1 | persons),
+    data = fish,
+    family = glmmTMB::truncated_nbinom1()
+  )
+  out <- model_info(m1)
+  expect_true(out$is_zero_inflated)
+  expect_true(out$is_hurdle)
 })

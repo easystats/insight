@@ -1109,7 +1109,7 @@ model_info.glmmTMB <- function(x, ...) {
   check_if_installed("lme4")
 
   faminfo <- stats::family(x)
-  zero_inflated <- !is_empty_object(lme4::fixef(x)$zi)
+  zero_inflated <- !is_empty_object(lme4::fixef(x)$zi) || startsWith(faminfo$family, "truncated")
 
   .make_family(
     x = x,
