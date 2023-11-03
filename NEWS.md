@@ -20,6 +20,9 @@
 * Fixed issue in `find_formula()` for models of class `gamlss` when the `random()`
   function was used with namespace in the formula (i.e. `... + gamlss::random()`).
 
+* `model_info()` now detects models with zero-inflation part from package
+  *glmmTMB* when models have truncated-families but no `ziformula`.
+
 # insight 0.19.6
 
 ## General
