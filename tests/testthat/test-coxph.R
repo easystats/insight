@@ -143,7 +143,7 @@ test_that("JM", {
   data("aids", package = "JM")
   m <- survival::coxph(Surv(start, stop, event) ~ CD4, data = aids)
   d <- get_data(m)
-  expect_equal(dim(d), c(1405, 4))
+  expect_identical(dim(d), c(1405L, 4L))
   expect_named(d, c("start", "stop", "event", "CD4"))
   expect_identical(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
 })

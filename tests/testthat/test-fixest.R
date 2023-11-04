@@ -2,6 +2,7 @@ skip_on_os("mac")
 skip_if(getRversion() < "3.6.0")
 skip_if_not_installed("fixest")
 skip_if_not_installed("carData")
+skip_if_not_installed("withr")
 
 # avoid warnings
 fixest::setFixest_nthreads(1)
@@ -298,29 +299,31 @@ test_that("get_predicted", {
   expect_warning(get_predicted(m1, predict = NULL, type = "link"), NA)
 })
 
-test_that("get_data works when model data has name of  reserved words", {
-  ## NOTE check back every now and then and see if tests still work
-  skip("works interactively")
-  rep <- data.frame(Y = runif(100) > 0.5, X = rnorm(100))
-  m <- fixest::feglm(Y ~ X, data = rep, family = binomial)
-  out <- get_data(m)
-  expect_s3_class(out, "data.frame")
-  expect_equal(
-    head(out),
-    structure(
-      list(
-        Y = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),
-        X = c(
-          -1.37601434046896, -0.0340090992175856, 0.418083058388383,
-          -0.51688491498936, -1.30634551903768, -0.858343109785566
-        )
+
+withr::with_environment(
+  new.env(),
+  test_that("get_data works when model data has name of reserved words", {
+    rep <- data.frame(Y = runif(100) > 0.5, X = rnorm(100))
+    m <- fixest::feglm(Y ~ X, data = rep, family = binomial)
+    out <- get_data(m)
+    expect_s3_class(out, "data.frame")
+    expect_equal(
+      head(out),
+      structure(
+        list(
+          Y = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),
+          X = c(
+            -1.37601434046896, -0.0340090992175856, 0.418083058388383,
+            -0.51688491498936, -1.30634551903768, -0.858343109785566
+          )
+        ),
+        is_subset = FALSE, row.names = c(NA, 6L), class = "data.frame"
       ),
-      is_subset = FALSE, row.names = c(NA, 6L), class = "data.frame"
-    ),
-    ignore_attr = TRUE,
-    tolerance = 1e-3
-  )
-})
+      ignore_attr = TRUE,
+      tolerance = 1e-3
+    )
+  })
+)
 
 
 test_that("find_variables with interaction", {
