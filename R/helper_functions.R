@@ -21,7 +21,6 @@
 }
 
 
-
 # is string empty?
 .is_empty_string <- function(x) {
   x <- x[!is.na(x)]
@@ -36,6 +35,19 @@
   # grepl(pattern, x, perl = TRUE)
 
   grepl(pattern, x, fixed = TRUE)
+}
+
+
+.remove_namespace_from_string <- function(x) {
+  # remove namespace prefixes
+  if (grepl("::", x, fixed = TRUE)) {
+    # Here's a regular expression pattern in R that removes any word
+    # followed by two colons from a string: This pattern matches a word
+    # boundary (\\b), followed by one or more word characters (\\w+),
+    # followed by two colons (::)
+    x <- gsub("\\b\\w+::", "\\2", x)
+  }
+  x
 }
 
 
@@ -135,8 +147,16 @@
   }
 
   # check for multi-membership models
-  if (inherits(model, "brmsfit") && grepl("mm\\((.*)\\)", re)) {
-    re <- trim_ws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",", fixed = TRUE)))
+  if (inherits(model, "brmsfit")) {
+    if (grepl("mm\\((.*)\\)", re)) {
+      re <- trim_ws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",", fixed = TRUE)))
+    }
+    if (grepl("gr\\((.*)\\)", re)) {
+      # remove namespace prefixes
+      re <- .remove_namespace_from_string(re)
+      # extract random effects term
+      re <- trim_ws(gsub("gr\\((\\w+)(,.*|)\\)", "\\1", re))
+    }
   }
 
   if (split_nested) {

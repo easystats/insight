@@ -296,15 +296,8 @@ find_predictors.afex_aov <- function(x,
     # for survival models, separate out strata element
     if (inherits(x, "coxph")) {
       f_cond <- safe_deparse(f[["conditional"]])
-
       # remove namespace prefixes
-      if (grepl("::", f_cond, fixed = TRUE)) {
-        # Here's a regular expression pattern in R that removes any word
-        # followed by two colons from a string: This pattern matches a word
-        # boundary (\\b), followed by one or more word characters (\\w+),
-        # followed by two colons (::)
-        f_cond <- gsub("\\b\\w+::", "\\2", f_cond)
-      }
+      f_cond <- .remove_namespace_from_string(f_cond)
 
       if (grepl("strata(", f_cond, fixed = TRUE)) {
         # create regular expressions to find strata terms

@@ -4,6 +4,9 @@
 
 * Support for objects of class `ggcomparisons` from `ggeffects::hypothesis_test()`.
 
+* `brms::gr()` is now supported, meaning that functions like `get_data()` or
+  `find_predictors()` now also work for models with group-specific random effects.
+
 ## Changes to functions
 
 * `get_varcov()` for models of class `pgmm` (package *plm*) now also supported
