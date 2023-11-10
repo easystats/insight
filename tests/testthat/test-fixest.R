@@ -303,21 +303,19 @@ test_that("get_predicted", {
 withr::with_environment(
   new.env(),
   test_that("get_data works when model data has name of reserved words", {
+    set.seed(1234)
     rep <- data.frame(Y = runif(100) > 0.5, X = rnorm(100))
     m <- fixest::feglm(Y ~ X, data = rep, family = binomial)
     out <- get_data(m)
     expect_s3_class(out, "data.frame")
     expect_equal(
       head(out),
-      structure(
-        list(
-          Y = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),
-          X = c(
-            -1.37601434046896, -0.0340090992175856, 0.418083058388383,
-            -0.51688491498936, -1.30634551903768, -0.858343109785566
-          )
-        ),
-        is_subset = FALSE, row.names = c(NA, 6L), class = "data.frame"
+      data.frame(
+        Y = c(FALSE, TRUE, TRUE, TRUE, TRUE, TRUE),
+        X = c(
+          -1.80603125680195, -0.582075924689333, -1.10888962442678,
+          -1.01496200949201, -0.162309523556819, 0.563055818994517
+        )
       ),
       ignore_attr = TRUE,
       tolerance = 1e-3
@@ -327,6 +325,7 @@ withr::with_environment(
 
 
 test_that("find_variables with interaction", {
+  data(mtcars)
   mod <- suppressMessages(fixest::feols(mpg ~ 0 | carb | vs:cyl ~ am:cyl, data = mtcars))
   expect_equal(
     find_variables(mod),
@@ -344,15 +343,14 @@ test_that("find_variables with interaction", {
 
 
 test_that("find_predictors with i(f1, i.f2) interaction", {
+  data(airquality)
   aq <- airquality
   aq$week <- aq$Day %/% 7 + 1
 
   mod <- fixest::feols(Ozone ~ i(Month, i.week), aq, notes = FALSE)
   expect_equal(
     find_predictors(mod),
-    list(
-      conditional = c("Month", "week")
-    ),
+    list(conditional = c("Month", "week")),
     ignore_attr = TRUE
   )
 })
