@@ -21,7 +21,6 @@
 }
 
 
-
 # is string empty?
 .is_empty_string <- function(x) {
   x <- x[!is.na(x)]
@@ -36,6 +35,19 @@
   # grepl(pattern, x, perl = TRUE)
 
   grepl(pattern, x, fixed = TRUE)
+}
+
+
+.remove_namespace_from_string <- function(x) {
+  # remove namespace prefixes
+  if (grepl("::", x, fixed = TRUE)) {
+    # Here's a regular expression pattern in R that removes any word
+    # followed by two colons from a string: This pattern matches a word
+    # boundary (\\b), followed by one or more word characters (\\w+),
+    # followed by two colons (::)
+    x <- gsub("\\b\\w+::", "\\2", x)
+  }
+  x
 }
 
 
@@ -109,7 +121,7 @@
 
 
 # extract random effects from formula
-.get_model_random <- function(f, split_nested = FALSE, model) {
+.get_model_random <- function(f, model, split_nested = FALSE) {
   is_special <- inherits(
     model,
     c(
@@ -135,8 +147,16 @@
   }
 
   # check for multi-membership models
-  if (inherits(model, "brmsfit") && grepl("mm\\((.*)\\)", re)) {
-    re <- trim_ws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",", fixed = TRUE)))
+  if (inherits(model, "brmsfit")) {
+    if (grepl("mm\\((.*)\\)", re)) {
+      re <- trim_ws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",", fixed = TRUE)))
+    }
+    if (grepl("gr\\((.*)\\)", re)) {
+      # remove namespace prefixes
+      re <- .remove_namespace_from_string(re)
+      # extract random effects term
+      re <- trim_ws(gsub("gr\\((\\w+)(,.*|)\\)", "\\1", re))
+    }
   }
 
   if (split_nested) {
@@ -177,9 +197,9 @@
 # .get_model_random()
 .get_group_factor <- function(x, f) {
   if (is.list(f)) {
-    f <- lapply(f, .get_model_random, split_nested = TRUE, model = x)
+    f <- lapply(f, .get_model_random, model = x, split_nested = TRUE)
   } else {
-    f <- .get_model_random(f, split_nested = TRUE, x)
+    f <- .get_model_random(f, model = x, split_nested = TRUE)
   }
 
   if (is.null(f)) {
@@ -629,9 +649,7 @@
       }
       list(slashTerms(x[[2]]), slashTerms(x[[3]]))
     }
-    if (!is.list(bb)) {
-      expandSlash(list(bb))
-    } else {
+    if (is.list(bb)) {
       unlist(lapply(bb, function(x) {
         trms <- slashTerms(x[[3]])
         if (length(x) > 2 && is.list(trms)) {
@@ -642,6 +660,8 @@
           x
         }
       }))
+    } else {
+      expandSlash(list(bb))
     }
   }
   modterm <- .expandDoubleVerts(if (methods::is(term, "formula")) {

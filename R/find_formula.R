@@ -194,13 +194,7 @@ find_formula.gamlss <- function(x, verbose = TRUE, ...) {
       } else if (grepl("random\\((.*)\\)", safe_deparse(f.cond))) {
         f.cond <- safe_deparse(f.cond)
         # remove namespace prefixes
-        if (grepl("::", f.cond, fixed = TRUE)) {
-          # Here's a regular expression pattern in R that removes any word
-          # followed by two colons from a string: This pattern matches a word
-          # boundary (\\b), followed by one or more word characters (\\w+),
-          # followed by two colons (::)
-          f.cond <- gsub("\\b\\w+::", "\\2", f.cond)
-        }
+        f.cond <- .remove_namespace_from_string(f.cond)
         re <- gsub("(.*)random\\((.*)\\)", "\\2", f.cond)
         f.random <- stats::as.formula(paste0("~1|", re))
         f.cond <- stats::update.formula(
