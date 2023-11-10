@@ -6,8 +6,10 @@ skip_if_not_installed("withr")
 withr::with_environment(
   new.env(),
   test_that("correctly handle brms::gr()", {
+    # assign function, without loading the package
+    gr <- brms::gr
     m <- suppressWarnings(suppressMessages(
-      brms::brm(count ~ Trt + (1 | brms::gr(patient, by = Trt)), data = epilepsy, refresh = 0)
+      brms::brm(count ~ Trt + (1 | gr(patient, by = Trt)), data = epilepsy, refresh = 0)
     ))
     expect_equal(
       find_formula(m),
