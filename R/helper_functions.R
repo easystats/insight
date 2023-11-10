@@ -121,7 +121,7 @@
 
 
 # extract random effects from formula
-.get_model_random <- function(f, split_nested = FALSE, model) {
+.get_model_random <- function(f, model, split_nested = FALSE) {
   is_special <- inherits(
     model,
     c(
@@ -197,9 +197,9 @@
 # .get_model_random()
 .get_group_factor <- function(x, f) {
   if (is.list(f)) {
-    f <- lapply(f, .get_model_random, split_nested = TRUE, model = x)
+    f <- lapply(f, .get_model_random, model = x, split_nested = TRUE)
   } else {
-    f <- .get_model_random(f, split_nested = TRUE, x)
+    f <- .get_model_random(f, model = x, split_nested = TRUE)
   }
 
   if (is.null(f)) {
@@ -649,9 +649,7 @@
       }
       list(slashTerms(x[[2]]), slashTerms(x[[3]]))
     }
-    if (!is.list(bb)) {
-      expandSlash(list(bb))
-    } else {
+    if (is.list(bb)) {
       unlist(lapply(bb, function(x) {
         trms <- slashTerms(x[[3]])
         if (length(x) > 2 && is.list(trms)) {
@@ -662,6 +660,8 @@
           x
         }
       }))
+    } else {
+      expandSlash(list(bb))
     }
   }
   modterm <- .expandDoubleVerts(if (methods::is(term, "formula")) {
