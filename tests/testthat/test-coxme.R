@@ -129,8 +129,8 @@ withr::with_environment(
     })
 
     test_that("n_obs", {
-      expect_identical(n_obs(m1), 225L)
-      expect_identical(n_obs(m2), 225L)
+      expect_identical(n_obs(m1), 225)
+      expect_identical(n_obs(m2), 225)
     })
 
     test_that("get_response", {
