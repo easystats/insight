@@ -6,6 +6,7 @@ skip_if_not_installed("withr")
 withr::with_environment(
   new.env(),
   test_that("correctly handle brms::gr()", {
+    data(epilepsy, package = "brms")
     # assign function, without loading the package
     gr <- brms::gr
     m <- suppressWarnings(suppressMessages(
