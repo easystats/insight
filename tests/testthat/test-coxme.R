@@ -16,7 +16,7 @@ withr::with_environment(
     lung <- subset(lung, subset = ph.ecog %in% 0:2)
     lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
 
-    d <- lung
+    d <<- lung
 
     m1 <- coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), d)
     m2 <- coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst) + (1 | inst2), d)
