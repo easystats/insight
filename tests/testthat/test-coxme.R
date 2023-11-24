@@ -183,6 +183,5 @@ withr::with_environment(
       expect_identical(find_statistic(m1), "z-statistic")
       expect_identical(find_statistic(m2), "z-statistic")
     })
-
   }
 )

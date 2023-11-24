@@ -198,7 +198,7 @@ get_statistic.merModList <- function(x, ...) {
 get_statistic.afex_aov <- function(x, ...) {
   out <- data.frame(
     Parameter = rownames(x$anova_table),
-    Statistic = x$anova_table$`F`,
+    Statistic = x$anova_table[["F"]],
     stringsAsFactors = FALSE,
     row.names = NULL
   )
