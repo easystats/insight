@@ -1,6 +1,6 @@
 skip_on_os("mac")
 skip_if(getRversion() < "3.6.0")
-skip_if_not_installed("fixest")
+skip_if_not_installed("fixest", minimum_version = "0.11.2")
 skip_if_not_installed("carData")
 skip_if_not_installed("withr")
 
@@ -275,13 +275,13 @@ test_that("find_statistic", {
 test_that("get_statistic", {
   stat <- get_statistic(m1)
   out <- as.data.frame(summary(m1)$coeftable)
-  expect_equal(stat$Statistic, out[, "t value"], tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(stat$Statistic, out[, "z value"], tolerance = 1e-3, ignore_attr = TRUE)
   stat <- get_statistic(m2)
   out <- as.data.frame(summary(m2)$coeftable)
-  expect_equal(stat$Statistic, out[, "t value"], tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(stat$Statistic, out[, "z value"], tolerance = 1e-3, ignore_attr = TRUE)
   stat <- get_statistic(m3)
   out <- as.data.frame(summary(m3)$coeftable)
-  expect_equal(stat$Statistic, out[, "t value"], tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(stat$Statistic, out[, "z value"], tolerance = 1e-3, ignore_attr = TRUE)
 })
 
 test_that("get_predicted", {
