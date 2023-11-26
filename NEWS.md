@@ -7,6 +7,8 @@
 * `brms::gr()` is now supported, meaning that functions like `get_data()` or
   `find_predictors()` now also work for models with group-specific random effects.
 
+* Fix CRAN check issues due to the last *fixest* update.
+
 ## Changes to functions
 
 * `get_varcov()` for models of class `pgmm` (package *plm*) now also supported
