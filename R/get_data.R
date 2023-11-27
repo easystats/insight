@@ -67,7 +67,10 @@ get_data <- function(x, ...) {
 
   # handle arguments
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  component <- match.arg(component, choices = c("all", "conditional", "zero_inflated", "zi", "smooth_terms", "dispersion"))
+  component <- match.arg(
+    component,
+    choices = c("all", "conditional", "zero_inflated", "zi", "smooth_terms", "dispersion")
+  )
 
   # we want to add the variable for subsettig, too
   model_call <- get_call(x)
@@ -156,10 +159,10 @@ get_data <- function(x, ...) {
 
       # complete cases only, as in model frames, need to filter attributes
       # only use model variables in complete.cases()
-      if (!is.null(vars)) {
-        cc <- stats::complete.cases(dat[, intersect(vars, colnames(dat))])
-      } else {
+      if (is.null(vars)) {
         cc <- stats::complete.cases(dat)
+      } else {
+        cc <- stats::complete.cases(dat[, intersect(vars, colnames(dat))])
       }
 
       # only preserve random effects
@@ -284,16 +287,12 @@ get_data.default <- function(x, source = "environment", verbose = TRUE, ...) {
   # fall back to extract data from model frame
   if (is.null(model_data)) {
     mf <- tryCatch(
-      {
-        if (inherits(x, "Zelig-relogit")) {
-          .get_zelig_relogit_frame(x)
-        } else {
-          stats::model.frame(x)
-        }
+      if (inherits(x, "Zelig-relogit")) {
+        .get_zelig_relogit_frame(x)
+      } else {
+        stats::model.frame(x)
       },
-      error = function(x) {
-        NULL
-      }
+      error = function(x) NULL
     )
     # process arguments, check whether data should be recovered from
     # environment or model frame
@@ -725,7 +724,7 @@ get_data.merMod <- function(x,
     switch(effects,
       fixed = stats::model.frame(x, fixed.only = TRUE),
       all = stats::model.frame(x, fixed.only = FALSE),
-      random = stats::model.frame(x, fixed.only = FALSE)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
+      random = stats::model.frame(x, fixed.only = FALSE)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE] # nolint
     )
   })
   .prepare_get_data(x, mf, effects, verbose = verbose)
@@ -745,16 +744,12 @@ get_data.mmrm <- function(x,
   # data from model frame
   mf <- .prepare_get_data(x, stats::model.frame(x, full = TRUE), effects, verbose = verbose)
   tryCatch(
-    {
-      switch(effects,
-        fixed = mf[intersect(colnames(mf), fixed_vars)],
-        all = mf[intersect(colnames(mf), unique(c(fixed_vars, random_vars)))],
-        random = mf[intersect(colnames(mf), random_vars)]
-      )
-    },
-    error = function(x) {
-      NULL
-    }
+    switch(effects,
+      fixed = mf[intersect(colnames(mf), fixed_vars)],
+      all = mf[intersect(colnames(mf), unique(c(fixed_vars, random_vars)))],
+      random = mf[intersect(colnames(mf), random_vars)]
+    ),
+    error = function(x) NULL
   )
 }
 
@@ -820,16 +815,12 @@ get_data.cpglmm <- function(x,
   dat <- stats::model.frame(x)
 
   mf <- tryCatch(
-    {
-      switch(effects,
-        fixed = dat[, find_predictors(x, effects = "fixed", flatten = TRUE, verbose = FALSE), drop = FALSE],
-        all = dat,
-        random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
-      )
-    },
-    error = function(x) {
-      NULL
-    }
+    switch(effects,
+      fixed = dat[, find_predictors(x, effects = "fixed", flatten = TRUE, verbose = FALSE), drop = FALSE],
+      all = dat,
+      random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
+    ),
+    error = function(x) NULL
   )
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
@@ -899,16 +890,12 @@ get_data.mixor <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
   mf <- tryCatch(
-    {
-      switch(effects,
-        fixed = stats::model.frame(x),
-        all = cbind(stats::model.frame(x), x$id),
-        random = data.frame(x$id)
-      )
-    },
-    error = function(x) {
-      NULL
-    }
+    switch(effects,
+      fixed = stats::model.frame(x),
+      all = cbind(stats::model.frame(x), x$id),
+      random = data.frame(x$id)
+    ),
+    error = function(x) NULL
   )
   fix_cn <- which(colnames(mf) %in% c("x.id", "x$id"))
   colnames(mf)[fix_cn] <- safe_deparse(x$call$id)
@@ -999,10 +986,10 @@ get_data.mixed <- function(x,
 #' @param shape Return long or wide data? Only applicable in repeated measures
 #'   designs.
 get_data.afex_aov <- function(x, shape = c("long", "wide"), ...) {
-  if (!length(attr(x, "within"))) {
-    shape <- "long"
-  } else {
+  if (length(attr(x, "within"))) {
     shape <- match.arg(shape)
+  } else {
+    shape <- "long"
   }
   x$data[[shape]]
 }
@@ -1484,7 +1471,12 @@ get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
   mf <- .safe(stats::model.frame(x))
   ft <- find_variables(x, flatten = TRUE)
 
-  if (!insight::is_empty_object(mf)) {
+  if (is_empty_object(mf)) {
+    final_mf <- .safe({
+      dat <- .recover_data_from_environment(x)
+      dat[, ft, drop = FALSE]
+    })
+  } else {
     cn <- clean_names(colnames(mf))
     remain <- setdiff(ft, cn)
     if (is_empty_object(remain)) {
@@ -1495,11 +1487,6 @@ get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
         cbind(mf, dat[, remain, drop = FALSE])
       })
     }
-  } else {
-    final_mf <- .safe({
-      dat <- .recover_data_from_environment(x)
-      dat[, ft, drop = FALSE]
-    })
   }
 
   .prepare_get_data(x, stats::na.omit(final_mf), verbose = verbose)
@@ -1559,7 +1546,15 @@ get_data.brmsfit <- function(x, effects = "all", component = "all", source = "en
   # verbose is FALSE by default because `get_call()` often does not work on
   # `brmsfit` objects, so we typically default to the `data` held in the object.
   data_name <- attr(x$data, "data_name")
-  model_data <- .get_data_from_environment(x, effects = effects, component = component, source = source, verbose = verbose, data_name = data_name, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    component = component,
+    source = source,
+    verbose = verbose,
+    data_name = data_name,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1651,15 +1646,15 @@ get_data.MCMCglmm <- function(x, effects = "all", source = "environment", verbos
         all(pv %in% colnames(dat))
       }))
       mf <- env_dataframes[matchframe][1]
-      if (!is.na(mf)) {
+      if (is.na(mf)) {
+        NULL
+      } else {
         dat <- get(mf)
         switch(effects,
           fixed = dat[, setdiff(colnames(dat), find_random(x, flatten = TRUE)), drop = FALSE],
           all = dat,
           random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
         )
-      } else {
-        NULL
       }
     },
     error = function(x) {
@@ -1889,21 +1884,17 @@ get_data.vglm <- function(x, source = "environment", verbose = TRUE, ...) {
 
   # fall back to extract data from model frame
   mf <- tryCatch(
-    {
-      if (!length(x@model)) {
-        env <- environment(x@terms$terms)
-        if (is.null(env)) env <- parent.frame()
-        fcall <- x@call
-        fcall$method <- "model.frame"
-        fcall$smart <- FALSE
-        eval(fcall, env, parent.frame())
-      } else {
-        x@model
-      }
+    if (length(x@model)) {
+      x@model
+    } else {
+      env <- environment(x@terms$terms)
+      if (is.null(env)) env <- parent.frame()
+      fcall <- x@call
+      fcall$method <- "model.frame"
+      fcall$smart <- FALSE
+      eval(fcall, env, parent.frame())
     },
-    error = function(x) {
-      NULL
-    }
+    error = function(x) NULL
   )
 
   .prepare_get_data(x, mf)
@@ -2030,7 +2021,7 @@ get_data.clmm2 <- function(x, source = "environment", verbose = TRUE, ...) {
       }
 
       data_complete <- cbind(data_complete, x$grFac)
-      colnames(data_complete)[ncol(data_complete)] <- unlist(.find_random_effects(x, f = find_formula(x, verbose = FALSE), split_nested = TRUE))
+      colnames(data_complete)[ncol(data_complete)] <- unlist(.find_random_effects(x, f = find_formula(x, verbose = FALSE), split_nested = TRUE)) # nolint
 
       data_complete
     },
@@ -2183,14 +2174,14 @@ get_data.rma <- function(x,
       if (!is.function(transf)) {
         format_error("`transf` must be a function.")
       }
-      if (!is.null(transf_args)) {
-        mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf, transf_args)
-        mf$CI_low <- sapply(mf$CI_low, transf, transf_args)
-        mf$CI_high <- sapply(mf$CI_high, transf, transf_args)
-      } else {
+      if (is.null(transf_args)) {
         mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf)
         mf$CI_low <- sapply(mf$CI_low, transf)
         mf$CI_high <- sapply(mf$CI_high, transf)
+      } else {
+        mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf, transf_args)
+        mf$CI_low <- sapply(mf$CI_low, transf, transf_args)
+        mf$CI_high <- sapply(mf$CI_high, transf, transf_args)
       }
     }
   }
@@ -2283,7 +2274,7 @@ get_data.htest <- function(x, ...) {
 .check_data_source_arg <- function(source) {
   source <- match.arg(source, choices = c("environment", "mf", "modelframe", "frame"))
   switch(source,
-    "environment" = "environment",
+    environment = "environment",
     "frame"
   )
 }

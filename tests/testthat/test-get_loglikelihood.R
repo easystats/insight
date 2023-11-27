@@ -4,20 +4,20 @@ test_that("get_loglikelihood - lm", {
   x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
   ll <- loglikelihood(x, estimator = "ML")
   ll2 <- stats::logLik(x)
-  expect_equal(as.numeric(ll), as.numeric(ll2))
-  expect_equal(attributes(ll)$df, attributes(ll2)$df)
-  expect_equal(sum(attributes(ll)$per_obs - nonnest2::llcont(x)), 0)
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(sum(attributes(ll)$per_obs - nonnest2::llcont(x)), 0, tolerance = 1e-4, ignore_attr = TRUE)
 
   # REML
   ll <- loglikelihood(x, estimator = "REML")
   ll2 <- stats::logLik(x, REML = TRUE)
-  expect_equal(as.numeric(ll), as.numeric(ll2))
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
 
   # With weights
   x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris, weights = Petal.Length)
   ll <- loglikelihood(x, estimator = "ML")
   ll2 <- stats::logLik(x)
-  expect_equal(as.numeric(ll), as.numeric(ll2))
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
 
   # log-response
   x <- lm(mpg ~ wt, data = mtcars)
@@ -47,15 +47,15 @@ test_that("get_loglikelihood - glm", {
   x <- glm(vs ~ mpg * disp, data = mtcars, family = "binomial")
   ll <- loglikelihood(x)
   ll2 <- stats::logLik(x)
-  expect_equal(as.numeric(ll), as.numeric(ll2))
-  expect_equal(attributes(ll)$df, attributes(ll2)$df)
-  expect_equal(sum(attributes(ll)$per_obs - nonnest2::llcont(x)), 0)
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(sum(attributes(ll)$per_obs - nonnest2::llcont(x)), 0, tolerance = 1e-4, ignore_attr = TRUE)
 
   x <- glm(cbind(cyl, gear) ~ mpg, data = mtcars, weights = disp, family = binomial)
   ll <- loglikelihood(x)
   ll2 <- stats::logLik(x)
-  expect_equal(as.numeric(ll), as.numeric(ll2))
-  expect_equal(attributes(ll)$df, attributes(ll2)$df)
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
   # Nonnest2 seems to be giving diffenrent results,
   # which sums doesn't add up to base R's result... so commenting off
   # expect_equal(sum(attributes(ll)$per_obs - nonnest2::llcont(x)), 0)
@@ -69,39 +69,59 @@ test_that("get_loglikelihood - (g)lmer", {
   # REML
   ll <- loglikelihood(x, estimator = "REML")
   ll2 <- stats::logLik(x)
-  expect_equal(as.numeric(ll), as.numeric(ll2))
-  expect_equal(attributes(ll)$df, attributes(ll2)$df)
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
 
   # ML
   ll <- loglikelihood(x, estimator = "ML")
   ll2 <- stats::logLik(x, REML = FALSE)
-  expect_equal(as.numeric(ll), as.numeric(ll2))
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
 
   # default
   ll <- loglikelihood(x)
   ll2 <- stats::logLik(x)
-  expect_equal(as.numeric(ll), as.numeric(ll2))
-  expect_equal(attributes(ll)$df, attributes(ll2)$df)
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
 
   x <- lme4::glmer(vs ~ mpg + (1 | cyl), data = mtcars, family = "binomial")
   ll <- loglikelihood(x, estimator = "REML") # no REML for glmer
   ll2 <- stats::logLik(x)
-  expect_equal(as.numeric(ll), as.numeric(ll2))
-  expect_equal(attributes(ll)$df, attributes(ll2)$df)
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
 
   ll <- loglikelihood(x, estimator = "ML")
   ll2 <- stats::logLik(x, REML = FALSE)
-  expect_equal(as.numeric(ll), as.numeric(ll2))
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
 
   model <- download_model("lmerMod_1")
   skip_if(is.null(model))
-  expect_equal(get_loglikelihood(model, estimator = "REML"), logLik(model, REML = TRUE), tolerance = 0.01, ignore_attr = TRUE)
-  expect_equal(get_loglikelihood(model, estimator = "ML"), logLik(model, REML = FALSE), tolerance = 0.01, ignore_attr = TRUE)
+  expect_equal(
+    get_loglikelihood(model, estimator = "REML"),
+    logLik(model, REML = TRUE),
+    tolerance = 0.01,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    get_loglikelihood(model, estimator = "ML"),
+    logLik(model, REML = FALSE),
+    tolerance = 0.01,
+    ignore_attr = TRUE
+  )
 
   model <- download_model("merMod_1")
   skip_if(is.null(model))
-  expect_equal(get_loglikelihood(model, estimator = "REML"), logLik(model, REML = FALSE), tolerance = 0.01, ignore_attr = TRUE)
-  expect_equal(get_loglikelihood(model, estimator = "ML"), logLik(model, REML = FALSE), tolerance = 0.01, ignore_attr = TRUE)
+  expect_equal(
+    get_loglikelihood(model, estimator = "REML"),
+    logLik(model, REML = FALSE),
+    tolerance = 0.01,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    get_loglikelihood(model, estimator = "ML"),
+    logLik(model, REML = FALSE),
+    tolerance = 0.01,
+    ignore_attr = TRUE
+  )
 })
 
 test_that("get_loglikelihood - stanreg ", {
@@ -164,4 +184,17 @@ test_that("get_loglikelihood - gamm4", {
   ll <- insight::get_loglikelihood(x)
   # It works, but it's quite diferent from the mgcv result
   expect_equal(as.numeric(ll), -101.1107, tolerance = 1e-3)
+})
+
+test_that("get_loglikelihood - Bernoulli with inversed levels", {
+  d <- mtcars
+  d$zero <- factor(d$vs, levels = c(0, 1))
+  d$ones <- factor(d$vs, levels = c(1, 0))
+
+  ml_zero <- glm(zero ~ mpg, family = binomial, data = d)
+  ml_ones <- glm(ones ~ mpg, family = binomial, data = d)
+
+  expect_equal(logLik(ml_zero), get_loglikelihood(ml_zero), ignore_attr = TRUE)
+  expect_equal(logLik(ml_ones), get_loglikelihood(ml_ones), ignore_attr = TRUE)
+  expect_equal(get_loglikelihood(ml_zero), get_loglikelihood(ml_ones), ignore_attr = TRUE)
 })

@@ -6,9 +6,9 @@
 
 # remove values from vector
 .remove_values <- function(x, values) {
-  remove <- x %in% values
-  if (any(remove)) {
-    x <- x[!remove]
+  to_remove <- x %in% values
+  if (any(to_remove)) {
+    x <- x[!to_remove]
   }
   x
 }
@@ -24,7 +24,7 @@
 # is string empty?
 .is_empty_string <- function(x) {
   x <- x[!is.na(x)]
-  length(x) == 0 || all(nchar(x) == 0)
+  length(x) == 0 || all(nchar(x) == 0) # nolint
 }
 
 
@@ -53,12 +53,11 @@
 
 # checks if a brms-models is a multi-membership-model
 .is_multi_membership <- function(x) {
-  if (inherits(x, "brmsfit")) {
-    re <- find_random(x, split_nested = TRUE, flatten = TRUE)
-    any(grepl("^(mmc|mm)\\(", re))
-  } else {
+  if (!inherits(x, "brmsfit")) {
     return(FALSE)
   }
+  re <- find_random(x, split_nested = TRUE, flatten = TRUE)
+  any(grepl("^(mmc|mm)\\(", re))
 }
 
 
@@ -115,7 +114,7 @@
 # if there are any chars left, these come from further terms that come after
 # random effects...
 .formula_empty_after_random_effect <- function(f) {
-  nchar(gsub("(~|\\+|\\*|-|/|:)", "", gsub(" ", "", gsub("\\((.*)\\)", "", f), fixed = TRUE))) == 0
+  nchar(gsub("(~|\\+|\\*|-|/|:)", "", gsub(" ", "", gsub("\\((.*)\\)", "", f), fixed = TRUE))) == 0 # nolint
 }
 
 
@@ -558,6 +557,13 @@
     }
     x <- droplevels(x)
     levels(x) <- 1:nlevels(x)
+  } else if (is.unsorted(levels(x))) {
+    # for numeric factors, we need to check the order of levels
+    x_inverse <- rep(NA_real_, length(x))
+    for (i in 1:nlevels(x)) {
+      x_inverse[x == levels(x)[i]] <- as.numeric(levels(x)[nlevels(x) - i + 1])
+    }
+    x <- factor(x_inverse)
   }
 
   out <- as.numeric(as.character(x))

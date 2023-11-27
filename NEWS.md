@@ -1,3 +1,10 @@
+# insight 0.19.8
+
+## Bug fixes
+
+* Fixed issue in `get_loglikelihood()` for glm-models with binary outcome, where
+  levels were defined in reversed order.
+
 # insight 0.19.7
 
 ## General
