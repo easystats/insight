@@ -24,7 +24,7 @@
 # is string empty?
 .is_empty_string <- function(x) {
   x <- x[!is.na(x)]
-  length(x) == 0 || all(nchar(x) == 0)
+  length(x) == 0 || all(nchar(x) == 0) # nolint
 }
 
 
@@ -114,7 +114,7 @@
 # if there are any chars left, these come from further terms that come after
 # random effects...
 .formula_empty_after_random_effect <- function(f) {
-  nchar(gsub("(~|\\+|\\*|-|/|:)", "", gsub(" ", "", gsub("\\((.*)\\)", "", f), fixed = TRUE))) == 0
+  nchar(gsub("(~|\\+|\\*|-|/|:)", "", gsub(" ", "", gsub("\\((.*)\\)", "", f), fixed = TRUE))) == 0 # nolint
 }
 
 
