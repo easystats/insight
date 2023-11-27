@@ -558,6 +558,13 @@
     }
     x <- droplevels(x)
     levels(x) <- 1:nlevels(x)
+  } else if (is.unsorted(levels(x))) {
+    # for numeric factors, we need to check the order of levels
+    x_inverse <- rep(NA_real_, length(x))
+    for (i in 1:nlevels(x)) {
+      x_inverse[x == levels(x)[i]] <- as.numeric(levels(x)[nlevels(x) - i + 1])
+    }
+    x <- factor(x_inverse)
   }
 
   out <- as.numeric(as.character(x))
