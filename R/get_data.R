@@ -1647,14 +1647,14 @@ get_data.MCMCglmm <- function(x, effects = "all", source = "environment", verbos
       }))
       mf <- env_dataframes[matchframe][1]
       if (is.na(mf)) {
+        NULL
+      } else {
         dat <- get(mf)
         switch(effects,
           fixed = dat[, setdiff(colnames(dat), find_random(x, flatten = TRUE)), drop = FALSE],
           all = dat,
           random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
         )
-      } else {
-        NULL
       }
     },
     error = function(x) {
