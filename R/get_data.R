@@ -999,10 +999,10 @@ get_data.mixed <- function(x,
 #' @param shape Return long or wide data? Only applicable in repeated measures
 #'   designs.
 get_data.afex_aov <- function(x, shape = c("long", "wide"), ...) {
-  if (!length(attr(x, "within"))) {
-    shape <- "long"
-  } else {
+  if (length(attr(x, "within"))) {
     shape <- match.arg(shape)
+  } else {
+    shape <- "long"
   }
   x$data[[shape]]
 }
@@ -1484,7 +1484,12 @@ get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
   mf <- .safe(stats::model.frame(x))
   ft <- find_variables(x, flatten = TRUE)
 
-  if (!insight::is_empty_object(mf)) {
+  if (is_empty_object(mf)) {
+    final_mf <- .safe({
+      dat <- .recover_data_from_environment(x)
+      dat[, ft, drop = FALSE]
+    })
+  } else {
     cn <- clean_names(colnames(mf))
     remain <- setdiff(ft, cn)
     if (is_empty_object(remain)) {
@@ -1495,11 +1500,6 @@ get_data.ivreg <- function(x, source = "environment", verbose = TRUE, ...) {
         cbind(mf, dat[, remain, drop = FALSE])
       })
     }
-  } else {
-    final_mf <- .safe({
-      dat <- .recover_data_from_environment(x)
-      dat[, ft, drop = FALSE]
-    })
   }
 
   .prepare_get_data(x, stats::na.omit(final_mf), verbose = verbose)
@@ -1890,15 +1890,15 @@ get_data.vglm <- function(x, source = "environment", verbose = TRUE, ...) {
   # fall back to extract data from model frame
   mf <- tryCatch(
     {
-      if (!length(x@model)) {
+      if (length(x@model)) {
+        x@model
+      } else {
         env <- environment(x@terms$terms)
         if (is.null(env)) env <- parent.frame()
         fcall <- x@call
         fcall$method <- "model.frame"
         fcall$smart <- FALSE
         eval(fcall, env, parent.frame())
-      } else {
-        x@model
       }
     },
     error = function(x) {
@@ -2283,7 +2283,7 @@ get_data.htest <- function(x, ...) {
 .check_data_source_arg <- function(source) {
   source <- match.arg(source, choices = c("environment", "mf", "modelframe", "frame"))
   switch(source,
-    "environment" = "environment",
+    environment = "environment",
     "frame"
   )
 }
