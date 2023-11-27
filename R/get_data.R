@@ -1646,15 +1646,15 @@ get_data.MCMCglmm <- function(x, effects = "all", source = "environment", verbos
         all(pv %in% colnames(dat))
       }))
       mf <- env_dataframes[matchframe][1]
-      if (!is.na(mf)) {
-        NULL
-      } else {
+      if (is.na(mf)) {
         dat <- get(mf)
         switch(effects,
           fixed = dat[, setdiff(colnames(dat), find_random(x, flatten = TRUE)), drop = FALSE],
           all = dat,
           random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
         )
+      } else {
+        NULL
       }
     },
     error = function(x) {
@@ -2174,14 +2174,14 @@ get_data.rma <- function(x,
       if (!is.function(transf)) {
         format_error("`transf` must be a function.")
       }
-      if (!is.null(transf_args)) {
-        mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf, transf_args)
-        mf$CI_low <- sapply(mf$CI_low, transf, transf_args)
-        mf$CI_high <- sapply(mf$CI_high, transf, transf_args)
-      } else {
+      if (is.null(transf_args)) {
         mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf)
         mf$CI_low <- sapply(mf$CI_low, transf)
         mf$CI_high <- sapply(mf$CI_high, transf)
+      } else {
+        mf[[find_response(x)]] <- sapply(mf[[find_response(x)]], transf, transf_args)
+        mf$CI_low <- sapply(mf$CI_low, transf, transf_args)
+        mf$CI_high <- sapply(mf$CI_high, transf, transf_args)
       }
     }
   }
