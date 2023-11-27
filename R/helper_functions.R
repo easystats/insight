@@ -24,7 +24,7 @@
 # is string empty?
 .is_empty_string <- function(x) {
   x <- x[!is.na(x)]
-  length(x) == 0 || all(nzchar(x, keepNA = TRUE))
+  length(x) == 0 || all(nzchar(as.character(x), keepNA = TRUE))
 }
 
 
