@@ -600,12 +600,10 @@ find_formula.gls <- function(x, verbose = TRUE, ...) {
   }
 
   l <- tryCatch(
-    {
-      list(
-        conditional = stats::formula(x),
-        correlation = stats::as.formula(f_corr)
-      )
-    },
+    list(
+      conditional = stats::formula(x),
+      correlation = stats::as.formula(f_corr)
+    ),
     error = function(x) {
       NULL
     }
@@ -1267,6 +1265,16 @@ find_formula.sem <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.lme <- function(x, verbose = TRUE, ...) {
   fm <- stats::formula(x$terms)
+  .find_formula_nlme(x, fm, verbose = verbose, ...)
+}
+
+#' @export
+find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
+  fm <- stats::formula(x)
+  .find_formula_nlme(x, fm, verbose = verbose, ...)
+}
+
+.find_formula_nlme <- function(x, fm, verbose = TRUE, ...) {
   fmr <- eval(x$call$random)
   if (!is.null(fmr) && safe_deparse(fmr)[1] == "~1") {
     check_if_installed("nlme")
