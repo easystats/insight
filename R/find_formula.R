@@ -517,10 +517,10 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
     dv <- attr(x, "dv")
     id <- attr(x, "id")
 
-    within <- names(attr(x, "within"))
-    within <- paste0(within, collapse = "*")
-    within <- paste0("(", within, ")")
-    e <- paste0("Error(", id, "/", within, ")")
+    within_variables <- names(attr(x, "within"))
+    within_variables <- paste0(within_variables, collapse = "*")
+    within_variables <- paste0("(", within_variables, ")")
+    e <- paste0("Error(", id, "/", within_variables, ")")
 
     between <- names(attr(x, "between"))
     if (length(between) > 0L) {
@@ -528,10 +528,10 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
       between <- as.character(tempf)[3]
       between <- paste0("(", between, ")")
 
-      within <- paste0(c(within, between), collapse = "*")
+      within_variables <- paste0(c(within_variables, between), collapse = "*")
     }
 
-    out <- list(conditional = stats::formula(paste0(dv, "~", within, "+", e)))
+    out <- list(conditional = stats::formula(paste0(dv, "~", within_variables, "+", e)))
     class(out) <- c("insight_formula", "list")
     out
   }
@@ -600,12 +600,10 @@ find_formula.gls <- function(x, verbose = TRUE, ...) {
   }
 
   l <- tryCatch(
-    {
-      list(
-        conditional = stats::formula(x),
-        correlation = stats::as.formula(f_corr)
-      )
-    },
+    list(
+      conditional = stats::formula(x),
+      correlation = stats::as.formula(f_corr)
+    ),
     error = function(x) {
       NULL
     }
@@ -1267,6 +1265,16 @@ find_formula.sem <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.lme <- function(x, verbose = TRUE, ...) {
   fm <- stats::formula(x$terms)
+  .find_formula_nlme(x, fm, verbose = verbose, ...)
+}
+
+#' @export
+find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
+  fm <- stats::formula(x)
+  .find_formula_nlme(x, fm, verbose = verbose, ...)
+}
+
+.find_formula_nlme <- function(x, fm, verbose = TRUE, ...) {
   fmr <- eval(x$call$random)
   if (!is.null(fmr) && safe_deparse(fmr)[1] == "~1") {
     check_if_installed("nlme")
@@ -1364,12 +1372,10 @@ find_formula.BBmm <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.mmclogit <- function(x, verbose = TRUE, ...) {
   f <- tryCatch(
-    {
-      list(
-        conditional = stats::formula(x),
-        random = stats::as.formula(parse(text = safe_deparse(x$call))[[1]]$random)
-      )
-    },
+    list(
+      conditional = stats::formula(x),
+      random = stats::as.formula(parse(text = safe_deparse(x$call))[[1]]$random)
+    ),
     error = function(x) {
       NULL
     }
@@ -1418,12 +1424,10 @@ find_formula.stanreg <- function(x, verbose = TRUE, ...) {
     # special handling for stan_gamm4
     if (inherits(x, "gamm4")) {
       f.random <- tryCatch(
-        {
-          lapply(.findbars(stats::formula(x$glmod)), function(.x) {
-            f <- safe_deparse(.x)
-            stats::as.formula(paste0("~", f))
-          })
-        },
+        lapply(.findbars(stats::formula(x$glmod)), function(.x) {
+          f <- safe_deparse(.x)
+          stats::as.formula(paste0("~", f))
+        }),
         error = function(e) {
           NULL
         }
@@ -1484,8 +1488,8 @@ find_formula.MCMCglmm <- function(x, verbose = TRUE, ...) {
 find_formula.BFBayesFactor <- function(x, verbose = TRUE, ...) {
   if (.classify_BFBayesFactor(x) == "linear") {
     fcond <- utils::tail(x@numerator, 1)[[1]]@identifier$formula
-    dt <- utils::tail(x@numerator, 1)[[1]]@dataTypes
-    frand <- names(dt)[which(dt == "random")]
+    dat_types <- utils::tail(x@numerator, 1)[[1]]@dataTypes
+    frand <- names(dat_types)[which(dat_types == "random")]
 
     if (is_empty_object(frand)) {
       f.random <- NULL
@@ -1816,15 +1820,14 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     fc <- try(.formula_clean(f[[1]]), silent = TRUE)
     if (inherits(fc, "try-error")) {
       format_error(attributes(fc)$condition$message)
-    } else {
-      if (verbose) {
-        format_warning(paste0(
-          "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.", # nolint
-          "\n  Try: ", fc$formula, ", data = ", fc$data
-        ))
-      }
-      return(FALSE)
     }
+    if (verbose) {
+      format_warning(paste0(
+        "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.", # nolint
+        "\n  Try: ", fc$formula, ", data = ", fc$data
+      ))
+    }
+    return(FALSE)
   }
   return(TRUE)
 }

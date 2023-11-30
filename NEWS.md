@@ -5,6 +5,8 @@
 * Fixed issue in `get_loglikelihood()` for glm-models with binary outcome, where
   levels were defined in reversed order.
 
+* Fixed issue in `find_formula()` for models of class `glmmPQL` (package *MASS*).
+
 # insight 0.19.7
 
 ## General
