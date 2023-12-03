@@ -969,6 +969,9 @@ test_that("model_info, ordered beta", {
   out <- model_info(m)
   expect_true(out$is_orderedbeta)
   expect_identical(out$family, "ordbeta")
+  skip_on_cran()
+  out <- get_variance(m)
+  expect_equal(out$var.distribution, 1.44250604187634, tolerance = 1e-4)
 })
 
 

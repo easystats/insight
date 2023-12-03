@@ -634,7 +634,7 @@
     # transform mu
     mu <- switch(faminfo$family,
       beta = mu,
-      ordbeta = stats::qlogis(mu),
+      ordbeta = stats::plogis(mu),
       exp(mu)
     )
   }
