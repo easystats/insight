@@ -42,9 +42,7 @@ null_model <- function(model, verbose = TRUE, ...) {
   } else {
     if (!is.null(offset_term)) {
       tryCatch(
-        {
-          do.call(stats::update, list(model, ~1, offset = str2lang(offset_term)))
-        },
+        do.call(stats::update, list(model, ~1, offset = str2lang(offset_term))),
         error = function(e) {
           if (verbose) {
             format_warning(
@@ -77,12 +75,10 @@ null_model <- function(model, verbose = TRUE, ...) {
     re.terms <- paste0("(", sapply(.findbars(f), safe_deparse), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
     null.model <- tryCatch(
-      {
-        if (!is.null(offset_term)) {
-          do.call(stats::update, list(model, formula = nullform, offset = str2lang(offset_term)))
-        } else {
-          stats::update(model, nullform)
-        }
+      if (!is.null(offset_term)) {
+        do.call(stats::update, list(model, formula = nullform, offset = str2lang(offset_term)))
+      } else {
+        stats::update(model, nullform)
       },
       error = function(e) {
         msg <- e$message
