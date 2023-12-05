@@ -742,7 +742,7 @@ get_data.mmrm <- function(x,
   fixed_vars <- find_variables(x, effects = "fixed", flatten = TRUE)
   random_vars <- find_random(x, split_nested = TRUE, flatten = TRUE)
   # data from model frame
-  mf <- .prepare_get_data(x, stats::model.frame(x, full = TRUE), effects, verbose = verbose)
+  mf <- .prepare_get_data(x, stats::model.frame(x), effects, verbose = verbose)
   tryCatch(
     switch(effects,
       fixed = mf[intersect(colnames(mf), fixed_vars)],
