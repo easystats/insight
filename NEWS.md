@@ -1,5 +1,9 @@
 # insight 0.19.8
 
+## General
+
+* Removed deprecated arguments in `get_data.mmrm()`.
+
 ## Bug fixes
 
 * Fixed issue in `get_loglikelihood()` for glm-models with binary outcome, where
