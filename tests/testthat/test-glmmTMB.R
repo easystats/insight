@@ -955,10 +955,9 @@ test_that("get_predicted", {
 
 
 test_that("model_info, ordered beta", {
-  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.8")
   skip_if_not_installed("datawizard")
   skip_if_not_installed("lme4")
-  skip_if_not(packageVersion("glmmTMB") >= "1.1.5")
   data(sleepstudy, package = "lme4")
   sleepstudy$y <- datawizard::normalize(sleepstudy$Reaction)
   m <- glmmTMB::glmmTMB(
