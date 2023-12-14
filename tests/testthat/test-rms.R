@@ -4,6 +4,7 @@ data(mtcars)
 m1 <- rms::lrm(am ~ mpg + gear, data = mtcars)
 
 test_that("model_info", {
+  expect_true(model_info(fit)$is_bernoulli)
   expect_true(model_info(m1)$is_binomial)
   expect_true(model_info(m1)$is_logit)
   expect_false(model_info(m1)$is_linear)
@@ -63,7 +64,7 @@ test_that("find_terms", {
 })
 
 test_that("n_obs", {
-  expect_identical(n_obs(m1), 32L)
+  expect_identical(n_obs(m1), 32)
 })
 
 test_that("linkfun", {
@@ -125,6 +126,6 @@ test_that("model_info for ordinal outcome", {
   mtcars$cyl_ord <- ordered(mtcars$cyl)
   # fit olr
   fit <- rms::lrm(cyl_ord ~ hp, data = mtcars, tol = 1e-22)
-  expect_false(model_info(fit)$is_binomial)
+  expect_false(model_info(fit)$is_bernoulli)
   expect_true(model_info(fit)$is_ordinal)
 })
