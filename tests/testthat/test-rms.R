@@ -4,7 +4,7 @@ data(mtcars)
 m1 <- rms::lrm(am ~ mpg + gear, data = mtcars)
 
 test_that("model_info", {
-  expect_true(model_info(fit)$is_bernoulli)
+  expect_true(model_info(m1)$is_bernoulli)
   expect_true(model_info(m1)$is_binomial)
   expect_true(model_info(m1)$is_logit)
   expect_false(model_info(m1)$is_linear)
