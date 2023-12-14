@@ -126,5 +126,5 @@ test_that("model_info for ordinal outcome", {
   # fit olr
   fit <- rms::lrm(cyl_ord ~ hp, data = mtcars, tol = 1e-22)
   expect_false(model_info(fit)$is_binomial)
-  expect_true(model_info(fit)$is_ordinak)
+  expect_true(model_info(fit)$is_ordinal)
 })
