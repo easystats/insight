@@ -25,8 +25,8 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), GasolineYield$yield)
-  expect_equal(get_response(m2), FoodExpenditure[, c("food", "income")])
+  expect_identical(get_response(m1), GasolineYield$yield)
+  expect_identical(get_response(m2), FoodExpenditure[, c("food", "income")])
 })
 
 test_that("get_varcov", {
@@ -39,13 +39,10 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 32)
-  expect_equal(colnames(get_data(m1)), c("yield", "batch", "temp"))
-  expect_equal(nrow(get_data(m2)), 38)
-  expect_equal(
-    colnames(get_data(m2)),
-    c("food", "income", "persons")
-  )
+  expect_identical(nrow(get_data(m1)), 32L)
+  expect_named(get_data(m1), c("yield", "batch", "temp"))
+  expect_identical(nrow(get_data(m2)), 38L)
+  expect_named(get_data(m2), c("food", "income", "persons"))
 })
 
 test_that("find_formula", {
@@ -63,25 +60,25 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_equal(
+  expect_identical(
     find_variables(m1),
     list(
       response = "yield",
       conditional = c("batch", "temp")
     )
   )
-  expect_equal(
+  expect_identical(
     find_variables(m1, flatten = TRUE),
     c("yield", "batch", "temp")
   )
-  expect_equal(
+  expect_identical(
     find_variables(m2, flatten = TRUE),
     c("food", "income", "persons")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 32)
+  expect_equal(n_obs(m1), 32, ignore_attr = TRUE)
 })
 
 test_that("is_multivariate", {
@@ -93,7 +90,7 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c(
@@ -112,8 +109,8 @@ test_that("find_parameters", {
       precision = "(phi)"
     )
   )
-  expect_equal(nrow(get_parameters(m1)), 12)
-  expect_equal(
+  expect_identical(nrow(get_parameters(m1)), 12L)
+  expect_identical(
     get_parameters(m1)$Parameter,
     c(
       "(Intercept)",
@@ -133,7 +130,7 @@ test_that("find_parameters", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m2),
     list(
       response = "I(food/income)",
@@ -150,19 +147,19 @@ test_that("find_statistic", {
 test_that("get_modelmatrix", {
   mm <- get_modelmatrix(m1)
   expect_true(is.matrix(mm))
-  expect_equal(dim(mm), c(32, 11))
+  expect_identical(dim(mm), c(32L, 11L))
   mm <- get_modelmatrix(m1, data = head(GasolineYield))
   expect_true(is.matrix(mm))
-  expect_equal(dim(mm), c(6, 11))
+  expect_identical(dim(mm), c(6L, 11L))
 })
 
 test_that("get_predicted", {
   p <- suppressWarnings(get_predicted(m1))
   expect_s3_class(p, "get_predicted")
-  expect_equal(length(p), 32)
+  expect_length(p, 32)
   p <- suppressWarnings(get_predicted(m1, data = head(GasolineYield)))
   expect_s3_class(p, "get_predicted")
-  expect_equal(length(p), 6)
+  expect_length(p, 6)
 
   # delta method does not work, so we omit SE and issue warning
   expect_warning(get_predicted(m2, predict = "expectation"))
@@ -171,6 +168,6 @@ test_that("get_predicted", {
   p2 <- get_predicted(m2, predict = "link", ci = 0.95)
   p1 <- data.frame(p1)
   p2 <- data.frame(p2)
-  expect_true(!"SE" %in% colnames(p1))
+  expect_false("SE" %in% colnames(p1))
   expect_true("SE" %in% colnames(p2))
 })

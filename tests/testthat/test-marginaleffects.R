@@ -5,7 +5,7 @@ skip_if_not_installed("emmeans")
 test_that("marginaleffects", {
   m <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-  x <- marginaleffects::marginaleffects(m,
+  x <- marginaleffects::slopes(m,
     variables = "Petal.Length",
     newdata = insight::get_datagrid(m, at = "Species")
   )

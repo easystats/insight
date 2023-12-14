@@ -392,10 +392,10 @@ clean_parameters.aovlist <- function(x, ...) {
 
 #' @export
 clean_parameters.afex_aov <- function(x, ...) {
-  if (!is.null(x$aov)) {
-    clean_parameters(x$aov, ...)
-  } else {
+  if (is.null(x$aov)) {
     clean_parameters(x$lm, ...)
+  } else {
+    clean_parameters(x$aov, ...)
   }
 }
 
@@ -552,9 +552,7 @@ clean_parameters.mlm <- function(x, ...) {
     # for backwards compatibility, we keep the old behaviour. But generally,
     # when we have the argument "version = 2", Stan models have the same
     # labelling as frequentist models
-    if (!identical(dots$version, 2)) {
-      r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
-    } else {
+    if (identical(dots$version, 2)) {
       out$Level <- ""
       r_levels <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\2", out$Cleaned_Parameter[rand_eff])
       r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\1", out$Cleaned_Parameter[rand_eff])
@@ -567,6 +565,8 @@ clean_parameters.mlm <- function(x, ...) {
       if (any(sd_cor)) {
         out$Group[sd_cor] <- gsub("SD/Cor: (.*)", "\\1", out$Group[sd_cor])
       }
+    } else {
+      r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
     }
     r_pars <- gsub("__zi", "", r_pars, fixed = TRUE)
     r_grps <- gsub("__zi", "", r_grps, fixed = TRUE)
@@ -589,11 +589,11 @@ clean_parameters.mlm <- function(x, ...) {
     out$Component[simplex] <- "simplex"
   }
 
-  smooth <- startsWith(out$Cleaned_Parameter, "sds_")
-  if (length(smooth)) {
+  smooth_parameters <- startsWith(out$Cleaned_Parameter, "sds_")
+  if (length(smooth_parameters)) {
     out$Cleaned_Parameter <- gsub("^sds_", "", out$Cleaned_Parameter)
-    out$Component[smooth] <- "smooth_sd"
-    out$Function[smooth] <- "smooth"
+    out$Component[smooth_parameters] <- "smooth_sd"
+    out$Function[smooth_parameters] <- "smooth"
   }
 
   # fix intercept names
@@ -604,7 +604,7 @@ clean_parameters.mlm <- function(x, ...) {
     out$Cleaned_Parameter[intercepts] <- "(Intercept)"
   }
 
-  interaction_terms <- which(grepl(".", out$Cleaned_Parameter, fixed = TRUE))
+  interaction_terms <- grep(".", out$Cleaned_Parameter, fixed = TRUE)
 
   if (length(interaction_terms)) {
     for (i in interaction_terms) {
@@ -662,11 +662,7 @@ clean_parameters.mlm <- function(x, ...) {
 
   if (any(rand_effects)) {
     r_pars <- gsub("b\\[(.*) (.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
-    if (!identical(dots$version, 2)) {
-      re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
-      r_grps <- gsub("b\\[(.*) (.*)\\]", "\\1", out$Cleaned_Parameter[rand_effects])
-      out$Group[rand_effects] <- sprintf("%s: %s", r_grps, re_grp_level)
-    } else {
+    if (identical(dots$version, 2)) {
       out$Level <- ""
       r_levels <- gsub("b\\[(.*) (.*):(.*)\\]", "\\3", out$Cleaned_Parameter[rand_effects])
       r_grps <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
@@ -677,6 +673,10 @@ clean_parameters.mlm <- function(x, ...) {
       if (any(sd_cor)) {
         out$Group[sd_cor] <- gsub("SD/Cor: (.*)", "\\1", out$Group[sd_cor])
       }
+    } else {
+      re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
+      r_grps <- gsub("b\\[(.*) (.*)\\]", "\\1", out$Cleaned_Parameter[rand_effects])
+      out$Group[rand_effects] <- sprintf("%s: %s", r_grps, re_grp_level)
     }
 
     out$Cleaned_Parameter[rand_effects] <- r_pars
@@ -684,12 +684,12 @@ clean_parameters.mlm <- function(x, ...) {
 
   # clean remaining parameters
 
-  smooth <- startsWith(out$Cleaned_Parameter, "smooth_sd[")
+  smooth_parameters <- startsWith(out$Cleaned_Parameter, "smooth_sd[")
 
-  if (length(smooth)) {
+  if (length(smooth_parameters)) {
     out$Cleaned_Parameter <- gsub("^smooth_sd\\[(.*)\\]", "\\1", out$Cleaned_Parameter)
-    out$Component[smooth] <- "smooth_sd"
-    out$Function[smooth] <- "smooth"
+    out$Component[smooth_parameters] <- "smooth_sd"
+    out$Function[smooth_parameters] <- "smooth"
   }
 
   out
@@ -705,25 +705,23 @@ clean_parameters.mlm <- function(x, ...) {
   }
 
   out$Cleaned_Parameter <- tryCatch(
-    {
-      apply(pars, 1, function(i) {
-        if (i[1] == i[2]) {
-          i[2] <- ""
-        } else if (i[1] != i[2] && !grepl(":", i[1], fixed = TRUE)) {
-          i[1] <- paste0(i[1], " [", i[2], "]")
-          i[2] <- ""
-        } else if (grepl(":", i[1], fixed = TRUE)) {
-          f <- unlist(strsplit(i[1], ":", fixed = TRUE), use.names = FALSE)
-          l <- unlist(strsplit(i[2], ".&.", fixed = TRUE), use.names = FALSE)
-          m <- match(f, l)
-          matches <- m[!is.na(m)]
-          l[matches] <- ""
-          l[-matches] <- paste0("[", l[-matches], "]")
-          i[1] <- paste0(f, l, collapse = " * ")
-        }
-        as.vector(i[1])
-      })
-    },
+    apply(pars, 1, function(i) {
+      if (i[1] == i[2]) {
+        i[2] <- ""
+      } else if (i[1] != i[2] && !grepl(":", i[1], fixed = TRUE)) {
+        i[1] <- paste0(i[1], " [", i[2], "]")
+        i[2] <- ""
+      } else if (grepl(":", i[1], fixed = TRUE)) {
+        f <- unlist(strsplit(i[1], ":", fixed = TRUE), use.names = FALSE)
+        l <- unlist(strsplit(i[2], ".&.", fixed = TRUE), use.names = FALSE)
+        m <- match(f, l)
+        matches <- m[!is.na(m)]
+        l[matches] <- ""
+        l[-matches] <- paste0("[", l[-matches], "]")
+        i[1] <- paste0(f, l, collapse = " * ")
+      }
+      as.vector(i[1])
+    }),
     error = function(e) {
       out$Cleaned_Parameter
     }

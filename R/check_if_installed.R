@@ -129,8 +129,8 @@ check_if_installed <- function(package,
         return(invisible(is_installed))
       }
     } else {
-      message <- format_message(what_is_wrong, what_you_can_do)
-      if (stop) stop(message, call. = FALSE) else warning(message, call. = FALSE)
+      msg <- format_message(what_is_wrong, what_you_can_do)
+      if (stop) stop(msg, call. = FALSE) else warning(msg, call. = FALSE)
     }
   }
 

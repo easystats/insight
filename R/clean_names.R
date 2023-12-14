@@ -172,7 +172,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           if (grepl("=|[[:digit:]]", x[i])) {
             new_x <- trim_ws(unlist(strsplit(x[i], ",", fixed = TRUE), use.names = FALSE))
             to_remove <- which(!grepl("\\D", new_x))
-            to_remove <- c(to_remove, which(grepl("=", new_x, fixed = TRUE)))
+            to_remove <- c(to_remove, grep("=", new_x, fixed = TRUE))
             if (length(to_remove) == 0) {
               x[i] <- toString(new_x)
             } else {

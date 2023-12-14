@@ -87,8 +87,8 @@ link_inverse.psm <- link_inverse.tobit
 
 #' @export
 link_inverse.flexsurvreg <- function(x, ...) {
-  dist <- parse(text = safe_deparse(x$call))[[1]]$dist
-  .make_tobit_family(x, dist)$linkinv
+  distribution <- parse(text = safe_deparse(x$call))[[1]]$dist
+  .make_tobit_family(x, distribution)$linkinv
 }
 
 
@@ -497,6 +497,17 @@ link_inverse.svyolr <- function(x, ...) {
 
 
 #' @export
+link_inverse.averaging <- function(x, ...) {
+  ml <- attributes(x)$modelList
+  if (is.null(ml)) {
+    format_warning("Can't retrieve data. Please use `fit = TRUE` in `model.avg()`.")
+    return(NULL)
+  }
+  link_inverse(ml[[1]])
+}
+
+
+#' @export
 link_inverse.LORgee <- function(x, ...) {
   if (grepl(pattern = "logit", x = x$link, fixed = TRUE)) {
     link <- "logit"
@@ -634,9 +645,7 @@ link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
 link_inverse.bamlss <- function(x, ...) {
   flink <- stats::family(x)$links[1]
   tryCatch(
-    {
-      stats::make.link(flink)$linkinv
-    },
+    stats::make.link(flink)$linkinv,
     error = function(e) {
       print_colour("\nCould not find appropriate link-inverse-function.\n", "red")
     }

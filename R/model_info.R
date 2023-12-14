@@ -465,8 +465,8 @@ model_info.brmultinom <- model_info.speedglm
 
 #' @export
 model_info.flexsurvreg <- function(x, verbose = TRUE, ...) {
-  dist <- parse(text = safe_deparse(x$call))[[1]]$dist
-  faminfo <- .make_tobit_family(x, dist)
+  distribution <- parse(text = safe_deparse(x$call))[[1]]$dist
+  faminfo <- .make_tobit_family(x, distribution)
 
   .make_family(
     x = x,
@@ -622,11 +622,11 @@ model_info.comprisk <- model_info.coxph
 #' @export
 model_info.zeroinfl <- function(x, ...) {
   if (is.list(x$dist)) {
-    dist <- x$dist[[1]]
+    distribution <- x$dist[[1]]
   } else {
-    dist <- x$dist
+    distribution <- x$dist
   }
-  fitfam <- switch(dist,
+  fitfam <- switch(distribution,
     poisson = "poisson",
     negbin = "negative binomial",
     "poisson"
@@ -647,11 +647,11 @@ model_info.zerotrunc <- model_info.zeroinfl
 #' @export
 model_info.hurdle <- function(x, ...) {
   if (is.list(x$dist)) {
-    dist <- x$dist[[1]]
+    distribution <- x$dist[[1]]
   } else {
-    dist <- x$dist
+    distribution <- x$dist
   }
-  fitfam <- switch(dist,
+  fitfam <- switch(distribution,
     poisson = "poisson",
     negbin = "negative binomial",
     "poisson"
@@ -745,7 +745,7 @@ model_info.BGGM <- function(x, ...) {
     stats::binomial()
   )
 
-  family <- switch(x$type,
+  fam <- switch(x$type,
     continuous = "gaussian",
     binary = "binomial",
     "ordinal"
@@ -753,7 +753,7 @@ model_info.BGGM <- function(x, ...) {
 
   .make_family(
     x = x,
-    fitfam = family,
+    fitfam = fam,
     zero.inf = FALSE,
     logit.link = link$link == "logit",
     link.fun = link$link,
@@ -934,14 +934,14 @@ model_info.LORgee <- function(x, ...) {
   }
 
   if (x$link == "Cumulative logit") {
-    family <- "ordinal"
+    fam <- "ordinal"
   } else {
-    family <- "multinomial"
+    fam <- "multinomial"
   }
 
   .make_family(
     x = x,
-    fitfam = family,
+    fitfam = fam,
     logit.link = link == "logit",
     link.fun = link,
     ...

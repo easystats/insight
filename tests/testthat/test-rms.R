@@ -1,11 +1,14 @@
 skip_if_not_installed("rms")
 
+data(mtcars)
 m1 <- rms::lrm(am ~ mpg + gear, data = mtcars)
 
 test_that("model_info", {
+  expect_true(model_info(m1)$is_bernoulli)
   expect_true(model_info(m1)$is_binomial)
   expect_true(model_info(m1)$is_logit)
   expect_false(model_info(m1)$is_linear)
+  expect_false(model_info(m1)$is_ordinal)
 })
 
 test_that("find_predictors", {
@@ -27,11 +30,11 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), mtcars$am)
+  expect_identical(get_response(m1), mtcars$am)
 })
 
 test_that("get_predictors", {
-  expect_equal(colnames(get_predictors(m1)), c("mpg", "gear"))
+  expect_named(get_predictors(m1), c("mpg", "gear"))
 })
 
 test_that("link_inverse", {
@@ -39,8 +42,8 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 32)
-  expect_equal(colnames(get_data(m1)), c("am", "mpg", "gear"))
+  expect_identical(nrow(get_data(m1)), 32L)
+  expect_named(get_data(m1), c("am", "mpg", "gear"))
 })
 
 test_that("find_formula", {
@@ -53,15 +56,15 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(
+  expect_identical(find_terms(m1), list(
     response = "am",
     conditional = c("mpg", "gear")
   ))
-  expect_equal(find_terms(m1, flatten = TRUE), c("am", "mpg", "gear"))
+  expect_identical(find_terms(m1, flatten = TRUE), c("am", "mpg", "gear"))
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 32)
+  expect_identical(n_obs(m1), 32)
 })
 
 test_that("linkfun", {
@@ -73,12 +76,12 @@ test_that("linkinverse", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(conditional = c("Intercept", "mpg", "gear"))
   )
-  expect_equal(nrow(get_parameters(m1)), 3)
-  expect_equal(
+  expect_identical(nrow(get_parameters(m1)), 3L)
+  expect_identical(
     get_parameters(m1)$Parameter,
     c("Intercept", "mpg", "gear")
   )
@@ -89,7 +92,7 @@ test_that("is_multivariate", {
 })
 
 test_that("find_algorithm", {
-  expect_equal(find_algorithm(m1), list(algorithm = "ML"))
+  expect_identical(find_algorithm(m1), list(algorithm = "ML"))
 })
 
 test_that("find_statistic", {
@@ -114,4 +117,15 @@ test_that("get_statistic anova", {
     ignore_attr = TRUE,
     tolerance = 1e-3
   )
+})
+
+# correctly identify ordinal models
+
+test_that("model_info for ordinal outcome", {
+  data(mtcars)
+  mtcars$cyl_ord <- ordered(mtcars$cyl)
+  # fit olr
+  fit <- rms::lrm(cyl_ord ~ hp, data = mtcars, tol = 1e-22)
+  expect_false(model_info(fit)$is_bernoulli)
+  expect_true(model_info(fit)$is_ordinal)
 })

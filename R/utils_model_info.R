@@ -168,6 +168,7 @@
       binom_fam <- TRUE
     } else {
       is.ordinal <- TRUE
+      is_bernoulli <- FALSE
     }
   }
 
@@ -226,35 +227,6 @@
       }
     )
   }
-
-
-  # save model terms --------
-
-  # drop this for now...
-
-  # if (isTRUE(dots$no_terms)) {
-  #   model_terms <- NULL
-  # } else {
-  #   if (inherits(x, "mcmc")) {
-  #     model_terms <- find_parameters(x)
-  #   } else {
-  #     model_terms <- tryCatch(
-  #       {
-  #         find_variables(
-  #           x,
-  #           effects = "all",
-  #           component = "all",
-  #           flatten = FALSE,
-  #           verbose = FALSE
-  #         )
-  #       },
-  #       error = function(x) {
-  #         NULL
-  #       }
-  #     )
-  #   }
-  # }
-
 
   # significance tests --------
 
@@ -463,15 +435,15 @@
 }
 
 
-.make_tobit_family <- function(x, dist = NULL) {
-  if (is.null(dist)) {
+.make_tobit_family <- function(x, distribution = NULL) {
+  if (is.null(distribution)) {
     if (inherits(x, "flexsurvreg")) {
-      dist <- parse(text = safe_deparse(x$call))[[1]]$dist
+      distribution <- parse(text = safe_deparse(x$call))[[1]]$dist
     } else {
-      dist <- x$dist
+      distribution <- x$dist
     }
   }
-  f <- switch(dist,
+  f <- switch(distribution,
     gaussian = stats::gaussian("identity"),
     logistic = stats::binomial("logit"),
     llogis = ,
@@ -488,7 +460,7 @@
     stats::gaussian("identity")
   )
 
-  if (dist == "weibull") f$family <- "weibull"
+  if (distribution == "weibull") f$family <- "weibull"
   f
 }
 
