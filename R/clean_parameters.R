@@ -604,7 +604,7 @@ clean_parameters.mlm <- function(x, ...) {
     out$Cleaned_Parameter[intercepts] <- "(Intercept)"
   }
 
-  interaction_terms <- which(grepl(".", out$Cleaned_Parameter, fixed = TRUE))
+  interaction_terms <- grep(".", out$Cleaned_Parameter, fixed = TRUE)
 
   if (length(interaction_terms)) {
     for (i in interaction_terms) {
@@ -684,12 +684,12 @@ clean_parameters.mlm <- function(x, ...) {
 
   # clean remaining parameters
 
-  smooth <- startsWith(out$Cleaned_Parameter, "smooth_sd[")
+  smooth_parameters <- startsWith(out$Cleaned_Parameter, "smooth_sd[")
 
-  if (length(smooth)) {
+  if (length(smooth_parameters)) {
     out$Cleaned_Parameter <- gsub("^smooth_sd\\[(.*)\\]", "\\1", out$Cleaned_Parameter)
-    out$Component[smooth] <- "smooth_sd"
-    out$Function[smooth] <- "smooth"
+    out$Component[smooth_parameters] <- "smooth_sd"
+    out$Function[smooth_parameters] <- "smooth"
   }
 
   out
