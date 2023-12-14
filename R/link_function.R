@@ -417,6 +417,17 @@ link_function.mira <- function(x, ...) {
 
 
 #' @export
+link_function.averaging <- function(x, ...) {
+  ml <- attributes(x)$modelList
+  if (is.null(ml)) {
+    format_warning("Can't retrieve data. Please use `fit = TRUE` in `model.avg()`.")
+    return(NULL)
+  }
+  link_function(ml[[1]])
+}
+
+
+#' @export
 link_function.robmixglm <- function(x, ...) {
   switch(tolower(x$family),
     gaussian = stats::make.link(link = "identity")$linkfun,

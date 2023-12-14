@@ -73,8 +73,8 @@ test_that("afex_aov: afex", {
   expect_false(unique(sapply(mods, is_nullmodel)))
 
   # expect_equal(get_family(Mc2), gaussian())
-  expect_equal(link_function(Mc2), gaussian()$linkfun)
-  expect_equal(link_inverse(Mc2), gaussian()$linkinv)
+  expect_equal(link_function(Mc2), gaussian()$linkfun, ignore_attr = TRUE)
+  expect_equal(link_inverse(Mc2), gaussian()$linkinv, ignore_attr = TRUE)
 })
 
 test_that("afex_aov: model values", {

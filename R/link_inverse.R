@@ -497,6 +497,17 @@ link_inverse.svyolr <- function(x, ...) {
 
 
 #' @export
+link_inverse.averaging <- function(x, ...) {
+  ml <- attributes(x)$modelList
+  if (is.null(ml)) {
+    format_warning("Can't retrieve data. Please use `fit = TRUE` in `model.avg()`.")
+    return(NULL)
+  }
+  link_inverse(ml[[1]])
+}
+
+
+#' @export
 link_inverse.LORgee <- function(x, ...) {
   if (grepl(pattern = "logit", x = x$link, fixed = TRUE)) {
     link <- "logit"
