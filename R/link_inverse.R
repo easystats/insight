@@ -87,8 +87,8 @@ link_inverse.psm <- link_inverse.tobit
 
 #' @export
 link_inverse.flexsurvreg <- function(x, ...) {
-  dist <- parse(text = safe_deparse(x$call))[[1]]$dist
-  .make_tobit_family(x, dist)$linkinv
+  distribution <- parse(text = safe_deparse(x$call))[[1]]$dist
+  .make_tobit_family(x, distribution)$linkinv
 }
 
 

@@ -463,15 +463,15 @@
 }
 
 
-.make_tobit_family <- function(x, dist = NULL) {
-  if (is.null(dist)) {
+.make_tobit_family <- function(x, distribution = NULL) {
+  if (is.null(distribution)) {
     if (inherits(x, "flexsurvreg")) {
-      dist <- parse(text = safe_deparse(x$call))[[1]]$dist
+      distribution <- parse(text = safe_deparse(x$call))[[1]]$dist
     } else {
-      dist <- x$dist
+      distribution <- x$dist
     }
   }
-  f <- switch(dist,
+  f <- switch(distribution,
     gaussian = stats::gaussian("identity"),
     logistic = stats::binomial("logit"),
     llogis = ,
@@ -488,7 +488,7 @@
     stats::gaussian("identity")
   )
 
-  if (dist == "weibull") f$family <- "weibull"
+  if (distribution == "weibull") f$family <- "weibull"
   f
 }
 

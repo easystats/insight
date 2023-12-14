@@ -465,8 +465,8 @@ model_info.brmultinom <- model_info.speedglm
 
 #' @export
 model_info.flexsurvreg <- function(x, verbose = TRUE, ...) {
-  dist <- parse(text = safe_deparse(x$call))[[1]]$dist
-  faminfo <- .make_tobit_family(x, dist)
+  distribution <- parse(text = safe_deparse(x$call))[[1]]$dist
+  faminfo <- .make_tobit_family(x, distribution)
 
   .make_family(
     x = x,
