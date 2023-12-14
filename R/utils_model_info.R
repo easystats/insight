@@ -168,6 +168,7 @@
       binom_fam <- TRUE
     } else {
       is.ordinal <- TRUE
+      is_bernoulli <- FALSE
     }
   }
 
