@@ -228,35 +228,6 @@
     )
   }
 
-
-  # save model terms --------
-
-  # drop this for now...
-
-  # if (isTRUE(dots$no_terms)) {
-  #   model_terms <- NULL
-  # } else {
-  #   if (inherits(x, "mcmc")) {
-  #     model_terms <- find_parameters(x)
-  #   } else {
-  #     model_terms <- tryCatch(
-  #       {
-  #         find_variables(
-  #           x,
-  #           effects = "all",
-  #           component = "all",
-  #           flatten = FALSE,
-  #           verbose = FALSE
-  #         )
-  #       },
-  #       error = function(x) {
-  #         NULL
-  #       }
-  #     )
-  #   }
-  # }
-
-
   # significance tests --------
 
   is_ftest <- FALSE

@@ -589,11 +589,11 @@ clean_parameters.mlm <- function(x, ...) {
     out$Component[simplex] <- "simplex"
   }
 
-  smooth <- startsWith(out$Cleaned_Parameter, "sds_")
-  if (length(smooth)) {
+  smooth_parameters <- startsWith(out$Cleaned_Parameter, "sds_")
+  if (length(smooth_parameters)) {
     out$Cleaned_Parameter <- gsub("^sds_", "", out$Cleaned_Parameter)
-    out$Component[smooth] <- "smooth_sd"
-    out$Function[smooth] <- "smooth"
+    out$Component[smooth_parameters] <- "smooth_sd"
+    out$Function[smooth_parameters] <- "smooth"
   }
 
   # fix intercept names
@@ -705,25 +705,23 @@ clean_parameters.mlm <- function(x, ...) {
   }
 
   out$Cleaned_Parameter <- tryCatch(
-    {
-      apply(pars, 1, function(i) {
-        if (i[1] == i[2]) {
-          i[2] <- ""
-        } else if (i[1] != i[2] && !grepl(":", i[1], fixed = TRUE)) {
-          i[1] <- paste0(i[1], " [", i[2], "]")
-          i[2] <- ""
-        } else if (grepl(":", i[1], fixed = TRUE)) {
-          f <- unlist(strsplit(i[1], ":", fixed = TRUE), use.names = FALSE)
-          l <- unlist(strsplit(i[2], ".&.", fixed = TRUE), use.names = FALSE)
-          m <- match(f, l)
-          matches <- m[!is.na(m)]
-          l[matches] <- ""
-          l[-matches] <- paste0("[", l[-matches], "]")
-          i[1] <- paste0(f, l, collapse = " * ")
-        }
-        as.vector(i[1])
-      })
-    },
+    apply(pars, 1, function(i) {
+      if (i[1] == i[2]) {
+        i[2] <- ""
+      } else if (i[1] != i[2] && !grepl(":", i[1], fixed = TRUE)) {
+        i[1] <- paste0(i[1], " [", i[2], "]")
+        i[2] <- ""
+      } else if (grepl(":", i[1], fixed = TRUE)) {
+        f <- unlist(strsplit(i[1], ":", fixed = TRUE), use.names = FALSE)
+        l <- unlist(strsplit(i[2], ".&.", fixed = TRUE), use.names = FALSE)
+        m <- match(f, l)
+        matches <- m[!is.na(m)]
+        l[matches] <- ""
+        l[-matches] <- paste0("[", l[-matches], "]")
+        i[1] <- paste0(f, l, collapse = " * ")
+      }
+      as.vector(i[1])
+    }),
     error = function(e) {
       out$Cleaned_Parameter
     }
