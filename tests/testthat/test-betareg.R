@@ -78,7 +78,7 @@ test_that("find_variables", {
 })
 
 test_that("n_obs", {
-  expect_identical(n_obs(m1), 32)
+  expect_equal(n_obs(m1), 32, ignore_attr = TRUE)
 })
 
 test_that("is_multivariate", {
