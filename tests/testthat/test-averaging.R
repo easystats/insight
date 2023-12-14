@@ -4,6 +4,7 @@ skip_on_cran()
 withr::with_options(
   list(na.action = "na.fail"),
   test_that("MuMIn link functions", {
+    library(MuMIn) # nolint
     set.seed(1234)
     dat <- data.frame(
       outcome = rbinom(n = 100, size = 1, prob = 0.35),
@@ -23,3 +24,5 @@ withr::with_options(
     expect_equal(link_inverse(out), link_inverse(m1), ignore_attr = TRUE)
   })
 )
+
+unloadNamespace("MuMIn")
