@@ -392,10 +392,10 @@ clean_parameters.aovlist <- function(x, ...) {
 
 #' @export
 clean_parameters.afex_aov <- function(x, ...) {
-  if (!is.null(x$aov)) {
-    clean_parameters(x$aov, ...)
-  } else {
+  if (is.null(x$aov)) {
     clean_parameters(x$lm, ...)
+  } else {
+    clean_parameters(x$aov, ...)
   }
 }
 
@@ -552,9 +552,7 @@ clean_parameters.mlm <- function(x, ...) {
     # for backwards compatibility, we keep the old behaviour. But generally,
     # when we have the argument "version = 2", Stan models have the same
     # labelling as frequentist models
-    if (!identical(dots$version, 2)) {
-      r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
-    } else {
+    if (identical(dots$version, 2)) {
       out$Level <- ""
       r_levels <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\2", out$Cleaned_Parameter[rand_eff])
       r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\1", out$Cleaned_Parameter[rand_eff])
@@ -567,6 +565,8 @@ clean_parameters.mlm <- function(x, ...) {
       if (any(sd_cor)) {
         out$Group[sd_cor] <- gsub("SD/Cor: (.*)", "\\1", out$Group[sd_cor])
       }
+    } else {
+      r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
     }
     r_pars <- gsub("__zi", "", r_pars, fixed = TRUE)
     r_grps <- gsub("__zi", "", r_grps, fixed = TRUE)
@@ -662,11 +662,7 @@ clean_parameters.mlm <- function(x, ...) {
 
   if (any(rand_effects)) {
     r_pars <- gsub("b\\[(.*) (.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
-    if (!identical(dots$version, 2)) {
-      re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
-      r_grps <- gsub("b\\[(.*) (.*)\\]", "\\1", out$Cleaned_Parameter[rand_effects])
-      out$Group[rand_effects] <- sprintf("%s: %s", r_grps, re_grp_level)
-    } else {
+    if (identical(dots$version, 2)) {
       out$Level <- ""
       r_levels <- gsub("b\\[(.*) (.*):(.*)\\]", "\\3", out$Cleaned_Parameter[rand_effects])
       r_grps <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
@@ -677,6 +673,10 @@ clean_parameters.mlm <- function(x, ...) {
       if (any(sd_cor)) {
         out$Group[sd_cor] <- gsub("SD/Cor: (.*)", "\\1", out$Group[sd_cor])
       }
+    } else {
+      re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
+      r_grps <- gsub("b\\[(.*) (.*)\\]", "\\1", out$Cleaned_Parameter[rand_effects])
+      out$Group[rand_effects] <- sprintf("%s: %s", r_grps, re_grp_level)
     }
 
     out$Cleaned_Parameter[rand_effects] <- r_pars

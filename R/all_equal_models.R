@@ -25,11 +25,11 @@
 #' all_models_same_class(m1, m4, mtcars, m2, m3, verbose = TRUE)
 #' @export
 all_models_equal <- function(..., verbose = FALSE) {
-  objects <- list(...)
-  object_names <- match.call(expand.dots = FALSE)$`...`
+  model_objects <- list(...)
+  object_names <- match.call(expand.dots = FALSE)[["..."]]
 
-  all_supported <- vapply(objects, is_model_supported, FUN.VALUE = logical(1))
-  all_classes <- sapply(objects, class)
+  all_supported <- vapply(model_objects, is_model_supported, FUN.VALUE = logical(1))
+  all_classes <- sapply(model_objects, class)
 
   if (is.matrix(all_classes)) {
     all_classes <- as.vector(all_classes[1, ])

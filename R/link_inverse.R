@@ -645,9 +645,7 @@ link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
 link_inverse.bamlss <- function(x, ...) {
   flink <- stats::family(x)$links[1]
   tryCatch(
-    {
-      stats::make.link(flink)$linkinv
-    },
+    stats::make.link(flink)$linkinv,
     error = function(e) {
       print_colour("\nCould not find appropriate link-inverse-function.\n", "red")
     }
