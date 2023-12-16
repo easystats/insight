@@ -4,6 +4,8 @@
 
 * Removed deprecated arguments in `get_data.mmrm()`.
 
+* Improved support for models of class `rqs` (package *quantreg*).
+
 ## Bug fixes
 
 * Fixed issue in `get_loglikelihood()` for glm-models with binary outcome, where

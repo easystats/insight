@@ -100,10 +100,12 @@ n_obs.glm <- function(x, disaggregate = FALSE, ...) {
 #' @export
 n_obs.censReg <- n_obs.default
 
+
 #' @export
 n_obs.nestedLogit <- function(x, disaggregate = FALSE, ...) {
   lapply(x$models, n_obs)
 }
+
 
 #' @rdname n_obs
 #' @export
@@ -120,7 +122,6 @@ n_obs.svyolr <- function(x, weighted = FALSE, ...) {
 n_obs.svy_vglm <- function(x, ...) {
   n_obs(x$fit)
 }
-
 
 #' @export
 n_obs.model_fit <- n_obs.svy_vglm
@@ -140,6 +141,7 @@ n_obs.gam <- function(x, ...) {
     dim(x$y)[1]
   }
 }
+
 
 #' @export
 n_obs.gamm <- function(x, ...) {
@@ -190,12 +192,10 @@ n_obs.merModList <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.summary.lm <- function(x, ...) {
   length(x$residuals)
 }
-
 
 
 #' @export
@@ -216,12 +216,10 @@ n_obs.garch <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.bayesx <- function(x, ...) {
   length(x$response)
 }
-
 
 
 #' @export
@@ -230,12 +228,10 @@ n_obs.flexsurvreg <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.SemiParBIV <- function(x, ...) {
   x$n
 }
-
 
 
 #' @export
@@ -244,12 +240,10 @@ n_obs.ivprobit <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.mvord <- function(x, ...) {
   x$rho$n
 }
-
 
 
 #' @export
@@ -258,19 +252,16 @@ n_obs.bamlss <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.coeftest <- function(x, ...) {
   attributes(x)$nobs
 }
 
 
-
 #' @export
 n_obs.lmRob <- function(x, ...) {
   length(x$fitted.values)
 }
-
 
 
 #' @export
@@ -282,8 +273,6 @@ n_obs.lqmm <- function(x, ...) {
 n_obs.lqm <- n_obs.lqmm
 
 
-
-
 #' @export
 n_obs.sem <- function(x, ...) {
   if (!.is_semLme(x)) {
@@ -293,12 +282,10 @@ n_obs.sem <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.LORgee <- function(x, ...) {
   x$nobs
 }
-
 
 
 #' @export
@@ -307,12 +294,10 @@ n_obs.crr <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.mcmc <- function(x, ...) {
   nrow(as.data.frame(x))
 }
-
 
 
 #' @export
@@ -339,7 +324,10 @@ n_obs.zerotrunc <- n_obs.biglm
 n_obs.zeroinfl <- n_obs.biglm
 
 
-
+#' @export
+n_obs.rqs <- function(x, ...) {
+  length(x$y)
+}
 
 
 #' @export
@@ -349,7 +337,6 @@ n_obs.cgam <- function(x, ...) {
 
 #' @export
 n_obs.cglm <- n_obs.cgam
-
 
 
 #' @export
@@ -382,7 +369,6 @@ n_obs.glimML <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.mle2 <- function(x, ...) {
   n <- .safe(x@nobs)
@@ -396,12 +382,10 @@ n_obs.mle2 <- function(x, ...) {
 n_obs.mle <- n_obs.mle2
 
 
-
 #' @export
 n_obs.glmRob <- function(x, ...) {
   length(x$fitted.values)
 }
-
 
 
 #' @export
@@ -410,12 +394,10 @@ n_obs.gmnl <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.multinom <- function(x, ...) {
   nrow(x$fitted.values)
 }
-
 
 
 #' @export
@@ -424,12 +406,10 @@ n_obs.cpglmm <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.lmodel2 <- function(x, ...) {
   nrow(get_data(x, verbose = FALSE))
 }
-
 
 
 #' @export
@@ -459,7 +439,6 @@ n_obs.BBreg <- function(x, ...) {
 
 #' @export
 n_obs.BBmm <- n_obs.BBreg
-
 
 
 #' @export
@@ -502,12 +481,10 @@ n_obs.MANOVA <- function(x, ...) {
 n_obs.RM <- n_obs.MANOVA
 
 
-
 #' @export
 n_obs.nlrq <- function(x, ...) {
   length(stats::fitted(x))
 }
-
 
 
 #' @export
@@ -516,19 +493,16 @@ n_obs.survfit <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.mhurdle <- function(x, ...) {
   nrow(x$model)
 }
 
 
-
 #' @export
 n_obs.survreg <- function(x, ...) {
   length(x$linear.predictors)
 }
-
 
 
 #' @export
@@ -556,12 +530,10 @@ n_obs.felm <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.feis <- function(x, ...) {
   length(x$fitted.values)
 }
-
 
 
 #' @export
@@ -570,12 +542,10 @@ n_obs.averaging <- function(x, ...) {
 }
 
 
-
 #' @export
 n_obs.fixest <- function(x, ...) {
   x$nobs
 }
-
 
 
 #' @export
@@ -594,7 +564,6 @@ n_obs.complmrob <- n_obs.cgam
 n_obs.aovlist <- function(x, ...) {
   nrow(stats::model.frame(x))
 }
-
 
 
 #' @rdname n_obs
@@ -621,7 +590,6 @@ n_obs.stanmvreg <- function(x, select = NULL, ...) {
 }
 
 
-
 #' @export
 n_obs.blrm <- function(x, ...) {
   x$N
@@ -633,10 +601,8 @@ n_obs.mlogit <- function(x, ...) {
   nrow(x$model)
 }
 
-
 #' @export
 n_obs.Glm <- n_obs.mlogit
-
 
 #' @export
 n_obs.maxLik <- n_obs.mlogit
@@ -646,7 +612,6 @@ n_obs.maxLik <- n_obs.mlogit
 n_obs.wbm <- function(x, ...) {
   nrow(x@frame)
 }
-
 
 
 #' @export

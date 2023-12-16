@@ -112,6 +112,9 @@ link_function.gls <- link_function.lm
 link_function.rq <- link_function.lm
 
 #' @export
+link_function.rqs <- link_function.lm
+
+#' @export
 link_function.rqss <- link_function.lm
 
 #' @export

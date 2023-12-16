@@ -206,6 +206,9 @@ model_info.bayesx <- model_info.maxLik
 model_info.rq <- model_info.maxLik
 
 #' @export
+model_info.rqs <- model_info.maxLik
+
+#' @export
 model_info.crq <- model_info.maxLik
 
 #' @export
