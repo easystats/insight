@@ -172,7 +172,7 @@ find_formula.gam <- function(x, verbose = TRUE, ...) {
           f <- lapply(f, function(.i) list(conditional = .i))
           names(f) <- r
           attr(f, "is_mv") <- "1"
-        } else if (mi$family %in% c("gaulss")) {
+        } else if (mi$family == "gaulss") {
           # handle formula for location-scale models
           f <- list(conditional = f[[1]], scale = f[[2]])
         }
@@ -594,12 +594,10 @@ find_formula.gls <- function(x, verbose = TRUE, ...) {
   fcorr <- x$call$correlation
   if (is.null(fcorr)) {
     f_corr <- NULL
+  } else if (inherits(fcorr, "name")) {
+    f_corr <- attributes(eval(fcorr))$formula
   } else {
-    if (inherits(fcorr, "name")) {
-      f_corr <- attributes(eval(fcorr))$formula
-    } else {
-      f_corr <- parse(text = safe_deparse(fcorr))[[1]]
-    }
+    f_corr <- parse(text = safe_deparse(fcorr))[[1]]
   }
   if (is.symbol(f_corr)) {
     f_corr <- paste("~", safe_deparse(f_corr))
@@ -1292,12 +1290,10 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
   fcorr <- x$call$correlation
   if (is.null(fcorr)) {
     fc <- NULL
+  } else if (inherits(fcorr, "name")) {
+    fc <- attributes(eval(fcorr))$formula
   } else {
-    if (inherits(fcorr, "name")) {
-      fc <- attributes(eval(fcorr))$formula
-    } else {
-      fc <- parse(text = safe_deparse(fcorr))[[1]]$form
-    }
+    fc <- parse(text = safe_deparse(fcorr))[[1]]$form
   }
 
   f <- compact_list(list(

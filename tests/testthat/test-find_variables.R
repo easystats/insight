@@ -1,6 +1,7 @@
 test_that("`find_variables` works with `mgcv::gam`", {
+  skip_if_not_installed("mgcv")
   set.seed(2) ## simulate some data...
-  dat <- mgcv::gamSim(1, n = 50, dist = "normal", scale = 2, verbose = F)
+  dat <- mgcv::gamSim(1, n = 50, dist = "normal", scale = 2, verbose = FALSE)
 
   b1 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2), family = stats::gaussian(), data = dat)
   b2 <- mgcv::gam(list(y ~ s(x0) + s(x1) + s(x2), ~ s(x3)), family = mgcv::gaulss(), data = dat)
@@ -10,6 +11,6 @@ test_that("`find_variables` works with `mgcv::gam`", {
 
   results <- list(response = "y", conditional = c("x0", "x1", "x2"))
 
-  expect_equal(f_b1, results)
-  expect_equal(f_b2, c(results, list(scale = "x3")))
+  expect_identical(f_b1, results)
+  expect_identical(f_b2, c(results, list(scale = "x3")))
 })
