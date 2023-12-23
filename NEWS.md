@@ -13,6 +13,9 @@
 
 * Fixed issue in `find_formula()` for models of class `glmmPQL` (package *MASS*).
 
+* Fixed issue in `find_formula()` for models of class `gam` (package *mgcv*) for
+  the `"gaulss"` family.
+
 * Fixed issue in `get_variance()` for *glmmTMB* models with `family = "ordbeta"`.
 
 # insight 0.19.7
