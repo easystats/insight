@@ -163,19 +163,19 @@ find_formula.gam <- function(x, verbose = TRUE, ...) {
     if (is.list(f)) {
       mi <- .gam_family(x)
       if (!is.null(mi)) {
-        if (mi$family == "ziplss") {
-          # handle formula for zero-inflated models
-          f <- list(conditional = f[[1]], zero_inflated = f[[2]])
-        } else if (mi$family == "Multivariate normal") {
-          # handle formula for multivariate models
-          r <- lapply(f, function(.i) deparse(.i[[2]]))
-          f <- lapply(f, function(.i) list(conditional = .i))
-          names(f) <- r
-          attr(f, "is_mv") <- "1"
-        } else if (mi$family == "gaulss") {
+        f <- switch(mi$family,
+          ziplss = list(conditional = f[[1]], zero_inflated = f[[2]]),
+          `Multivariate normal` = {
+            # handle formula for multivariate models
+            r <- lapply(f, function(.i) deparse(.i[[2]]))
+            f <- lapply(f, function(.i) list(conditional = .i))
+            names(f) <- r
+            attr(f, "is_mv") <- "1"
+            f
+          },
           # handle formula for location-scale models
-          f <- list(conditional = f[[1]], scale = f[[2]])
-        }
+          gaulss = list(conditional = f[[1]], scale = f[[2]])
+        )
       }
     } else {
       f <- list(conditional = f)
