@@ -165,16 +165,16 @@ find_formula.gam <- function(x, verbose = TRUE, ...) {
       if (!is.null(mi)) {
         f <- switch(mi$family,
           ziplss = list(conditional = f[[1]], zero_inflated = f[[2]]),
+          # handle formula for location-scale models
+          gaulss = list(conditional = f[[1]], scale = f[[2]]),
+          # handle formula for multivariate models
           `Multivariate normal` = {
-            # handle formula for multivariate models
             r <- lapply(f, function(.i) deparse(.i[[2]]))
             f <- lapply(f, function(.i) list(conditional = .i))
             names(f) <- r
             attr(f, "is_mv") <- "1"
             f
-          },
-          # handle formula for location-scale models
-          gaulss = list(conditional = f[[1]], scale = f[[2]])
+          }
         )
       }
     } else {
