@@ -148,6 +148,9 @@ link_inverse.lme <- link_inverse.lm
 link_inverse.rq <- link_inverse.lm
 
 #' @export
+link_inverse.rqs <- link_inverse.lm
+
+#' @export
 link_inverse.rqss <- link_inverse.lm
 
 #' @export

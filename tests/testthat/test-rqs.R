@@ -2,11 +2,11 @@ skip_if_not(getRversion() >= "4.2.0")
 skip_if_not_installed("quantreg")
 
 data(stackloss)
-m1 <-
-  quantreg::rq(stack.loss ~ Air.Flow + Water.Temp,
-    data = stackloss,
-    tau = 0.25
-  )
+m1 <- quantreg::rq(
+  stack.loss ~ Air.Flow + Water.Temp,
+  data = stackloss,
+  tau = c(0.25, 0.5, 0.75)
+)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_linear)
@@ -91,10 +91,15 @@ test_that("find_parameters", {
       "(Intercept)", "Air.Flow", "Water.Temp"
     ))
   )
-  expect_identical(nrow(get_parameters(m1)), 3L)
+  expect_identical(nrow(get_parameters(m1)), 9L)
   expect_identical(
     get_parameters(m1)$Parameter,
-    c("(Intercept)", "Air.Flow", "Water.Temp")
+    rep(c("(Intercept)", "Air.Flow", "Water.Temp"), 3)
+  )
+  expect_equal(
+    get_parameters(m1)$Estimate,
+    c(-36, 0.5, 1, -44.08065, 0.79032, 0.66129, -54.18966, 0.87069, 0.98276),
+    tolerance = 1e-3
   )
 })
 

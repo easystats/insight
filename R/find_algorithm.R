@@ -192,6 +192,12 @@ find_algorithm.rq <- function(x, ...) {
   list(algorithm = x$method)
 }
 
+#' @export
+find_algorithm.rqs <- find_algorithm.rq
+
+#' @export
+find_algorithm.rqss <- find_algorithm.rq
+
 
 #' @export
 find_algorithm.bayesx <- function(x, ...) {
@@ -205,12 +211,6 @@ find_algorithm.bayesx <- function(x, ...) {
 
 #' @export
 find_algorithm.crq <- function(x, ...) {
-  list(algorithm = x$method)
-}
-
-
-#' @export
-find_algorithm.rqss <- function(x, ...) {
   list(algorithm = x$method)
 }
 
