@@ -45,6 +45,9 @@
 #'  - `correlation`, for models with correlation-component like
 #'    `nlme::gls()`, the formula that describes the correlation structure
 #'
+#'  - `scale`, for distributional models such as `mgcv::gaulss()` family fitted
+#'    with `mgcv::gam()`, the formula that describes the scale parameter
+#'
 #'  - `slopes`, for fixed-effects individual-slope models like
 #'    `feisr::feis()`, the formula for the slope parameters
 #'
@@ -159,15 +162,20 @@ find_formula.gam <- function(x, verbose = TRUE, ...) {
   if (!is.null(f)) {
     if (is.list(f)) {
       mi <- .gam_family(x)
-      if (!is.null(mi) && mi$family == "ziplss") {
-        # handle formula for zero-inflated models
-        f <- list(conditional = f[[1]], zero_inflated = f[[2]])
-      } else if (mi$family == "Multivariate normal") {
-        # handle formula for multivariate models
-        r <- lapply(f, function(.i) deparse(.i[[2]]))
-        f <- lapply(f, function(.i) list(conditional = .i))
-        names(f) <- r
-        attr(f, "is_mv") <- "1"
+      if (!is.null(mi)) {
+        if (mi$family == "ziplss") {
+          # handle formula for zero-inflated models
+          f <- list(conditional = f[[1]], zero_inflated = f[[2]])
+        } else if (mi$family == "Multivariate normal") {
+          # handle formula for multivariate models
+          r <- lapply(f, function(.i) deparse(.i[[2]]))
+          f <- lapply(f, function(.i) list(conditional = .i))
+          names(f) <- r
+          attr(f, "is_mv") <- "1"
+        } else if (mi$family %in% c("gaulss")) {
+          # handle formula for location-scale models
+          f <- list(conditional = f[[1]], scale = f[[2]])
+        }
       }
     } else {
       f <- list(conditional = f)
