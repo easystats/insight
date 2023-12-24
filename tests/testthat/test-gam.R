@@ -39,7 +39,7 @@ test_that("model_info", {
 })
 
 test_that("n_parameters", {
-  expect_identical(n_parameters(m1), 5)
+  expect_identical(n_parameters(m1), 5L)
   expect_identical(n_parameters(m1, component = "conditional"), 1)
 })
 
@@ -338,28 +338,25 @@ withr::with_environment(
   })
 )
 
-withr::with_environment(
-  new.env(),
-  test_that("get_predicted, gam-2", {
-    void <- capture.output({
-      dat <- mgcv::gamSim(1, n = 400, dist = "poisson", scale = 0.25)
-    })
-    b4 <- mgcv::gam(
-      y ~ s(x0) + s(x1) + s(x2) + s(x3),
-      family = poisson,
-      data = dat,
-      method = "GACV.Cp",
-      scale = -1
-    )
-    # exclude argument should be pushed through ...
-    p1 <- predict(b4, type = "response", exclude = "s(x1)")
-    p2 <- get_predicted(b4, predict = "expectation", exclude = "s(x1)", ci = 0.95)
-    expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
-    p1 <- predict(b4, type = "link", exclude = "s(x1)")
-    p2 <- get_predicted(b4, predict = "link", exclude = "s(x1)", ci = 0.95)
-    expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+test_that("get_predicted, gam-2", {
+  void <- capture.output({
+    dat <<- mgcv::gamSim(1, n = 400, dist = "poisson", scale = 0.25)
   })
-)
+  b4 <- mgcv::gam(
+    y ~ s(x0) + s(x1) + s(x2) + s(x3),
+    family = poisson,
+    data = dat,
+    method = "GACV.Cp",
+    scale = -1
+  )
+  # exclude argument should be pushed through ...
+  p1 <- predict(b4, type = "response", exclude = "s(x1)")
+  p2 <- get_predicted(b4, predict = "expectation", exclude = "s(x1)", ci = 0.95)
+  expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+  p1 <- predict(b4, type = "link", exclude = "s(x1)")
+  p2 <- get_predicted(b4, predict = "link", exclude = "s(x1)", ci = 0.95)
+  expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+})
 
 test_that("stats::predict.Gam matches get_predicted.Gam", {
   skip_if_not_installed("gam")
