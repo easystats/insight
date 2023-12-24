@@ -1,11 +1,12 @@
 skip_if_offline()
 skip_if_not_installed("mgcv")
 skip_if_not_installed("httr")
+skip_if_not_installed("withr")
 
 set.seed(123)
-void <- capture.output(
+void <- capture.output({
   dat2 <<- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
-)
+})
 
 # data for model m3
 V <- matrix(c(2, 1, 1, 2), 2, 2)
@@ -38,14 +39,14 @@ test_that("model_info", {
 })
 
 test_that("n_parameters", {
-  expect_equal(n_parameters(m1), 5)
-  expect_equal(n_parameters(m1, component = "conditional"), 1)
+  expect_identical(n_parameters(m1), 5L)
+  expect_identical(n_parameters(m1, component = "conditional"), 1)
 })
 
 test_that("clean_names", {
-  expect_equal(clean_names(m1), c("y", "x0", "x1", "x2", "x3"))
-  expect_equal(clean_names(m2), c("y", "x2", "x3", "x0", "x1"))
-  expect_equal(clean_names(m3), c("y0", "y1", "x0", "x1", "x2", "x3"))
+  expect_identical(clean_names(m1), c("y", "x0", "x1", "x2", "x3"))
+  expect_identical(clean_names(m2), c("y", "x2", "x3", "x0", "x1"))
+  expect_identical(clean_names(m3), c("y0", "y1", "x0", "x1", "x2", "x3"))
 })
 
 test_that("get_df", {
@@ -274,43 +275,73 @@ test_that("get_parameters works for gams without smooth or smooth only", {
   expect_null(out)
 })
 
+withr::with_environment(
+  new.env(),
+  test_that("get_predicted, gam-1", {
+    # dat3 <- head(dat, 30)
+    # tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = dat3)
+    # pred <- get_predicted(tmp, verbose = FALSE, ci = 0.95)
+    # expect_s3_class(pred, "get_predicted")
+    # expect_equal(
+    #   as.vector(pred),
+    #   c(
+    #     11.99341, 5.58098, 10.89252, 7.10335, 5.94836, 6.5724, 8.5054,
+    #     5.47147, 5.9343, 8.27001, 5.71199, 9.94999, 5.69979, 6.63532,
+    #     6.00475, 5.58633, 11.54848, 6.1083, 6.6151, 5.37164, 6.86236,
+    #     7.80726, 7.38088, 5.70664, 10.60654, 7.62847, 5.8596, 6.06744,
+    #     5.81571, 10.4606
+    #   ),
+    #   tolerance = 1e-3
+    # )
 
+    # x <- get_predicted(tmp, predict = NULL, type = "link", ci = 0.95)
+    # y <- get_predicted(tmp, predict = "link", ci = 0.95)
+    # z <- predict(tmp, type = "link", se.fit = TRUE)
+    # expect_equal(x, y)
+    # expect_equal(x, z$fit, ignore_attr = TRUE)
+    # expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
 
-test_that("get_predicted", {
-  # dat3 <- head(dat, 30)
-  # tmp <- mgcv::gam(y ~ s(x0) + s(x1), data = dat3)
-  # pred <- get_predicted(tmp, verbose = FALSE, ci = 0.95)
-  # expect_s3_class(pred, "get_predicted")
-  # expect_equal(
-  #   as.vector(pred),
-  #   c(
-  #     11.99341, 5.58098, 10.89252, 7.10335, 5.94836, 6.5724, 8.5054,
-  #     5.47147, 5.9343, 8.27001, 5.71199, 9.94999, 5.69979, 6.63532,
-  #     6.00475, 5.58633, 11.54848, 6.1083, 6.6151, 5.37164, 6.86236,
-  #     7.80726, 7.38088, 5.70664, 10.60654, 7.62847, 5.8596, 6.06744,
-  #     5.81571, 10.4606
-  #   ),
-  #   tolerance = 1e-3
-  # )
+    # x <- get_predicted(tmp, predict = NULL, type = "response", verbose = FALSE, ci = 0.95)
+    # y <- get_predicted(tmp, predict = "expectation", ci = 0.95)
+    # z <- predict(tmp, type = "response", se.fit = TRUE)
+    # expect_equal(x, y, ignore_attr = TRUE)
+    # expect_equal(x, z$fit, ignore_attr = TRUE)
+    # expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
 
-  # x <- get_predicted(tmp, predict = NULL, type = "link", ci = 0.95)
-  # y <- get_predicted(tmp, predict = "link", ci = 0.95)
-  # z <- predict(tmp, type = "link", se.fit = TRUE)
-  # expect_equal(x, y)
-  # expect_equal(x, z$fit, ignore_attr = TRUE)
-  # expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
+    # poisson
+    void <- capture.output({
+      dat <- mgcv::gamSim(1, n = 400, dist = "poisson", scale = 0.25)
+    })
+    b4 <- mgcv::gam(
+      y ~ s(x0) + s(x1) + s(x2) + s(x3),
+      family = poisson,
+      data = dat,
+      method = "GACV.Cp",
+      scale = -1
+    )
+    d <- get_datagrid(b4, at = "x1")
+    p1 <- get_predicted(b4, data = d, predict = "expectation", ci = 0.95)
+    p2 <- predict(b4, newdata = d, type = "response")
+    expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
 
-  # x <- get_predicted(tmp, predict = NULL, type = "response", verbose = FALSE, ci = 0.95)
-  # y <- get_predicted(tmp, predict = "expectation", ci = 0.95)
-  # z <- predict(tmp, type = "response", se.fit = TRUE)
-  # expect_equal(x, y, ignore_attr = TRUE)
-  # expect_equal(x, z$fit, ignore_attr = TRUE)
-  # expect_equal(as.data.frame(x)$SE, z$se.fit, ignore_attr = TRUE)
+    p1 <- get_predicted(b4, data = d, predict = "link", ci = 0.95)
+    p2 <- predict(b4, newdata = d, type = "link")
+    expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
 
-  # poisson
-  void <- capture.output(
+    p1 <- get_predicted(b4, data = d, type = "link", predict = NULL, ci = 0.95)
+    p2 <- predict(b4, newdata = d, type = "link")
+    expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+
+    p1 <- get_predicted(b4, data = d, type = "response", predict = NULL, ci = 0.95)
+    p2 <- predict(b4, newdata = d, type = "response")
+    expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
+  })
+)
+
+test_that("get_predicted, gam-2", {
+  void <- capture.output({
     dat <<- mgcv::gamSim(1, n = 400, dist = "poisson", scale = 0.25)
-  )
+  })
   b4 <- mgcv::gam(
     y ~ s(x0) + s(x1) + s(x2) + s(x3),
     family = poisson,
@@ -318,34 +349,6 @@ test_that("get_predicted", {
     method = "GACV.Cp",
     scale = -1
   )
-  d <- get_datagrid(b4, at = "x1")
-  p1 <- get_predicted(b4, data = d, predict = "expectation", ci = 0.95)
-  p2 <- predict(b4, newdata = d, type = "response")
-  expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
-
-  p1 <- get_predicted(b4, data = d, predict = "link", ci = 0.95)
-  p2 <- predict(b4, newdata = d, type = "link")
-  expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
-
-  p1 <- get_predicted(b4, data = d, type = "link", predict = NULL, ci = 0.95)
-  p2 <- predict(b4, newdata = d, type = "link")
-  expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
-
-  p1 <- get_predicted(b4, data = d, type = "response", predict = NULL, ci = 0.95)
-  p2 <- predict(b4, newdata = d, type = "response")
-  expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
-
-  void <- capture.output(
-    dat <<- mgcv::gamSim(1, n = 400, dist = "poisson", scale = 0.25)
-  )
-  b4 <- mgcv::gam(
-    y ~ s(x0) + s(x1) + s(x2) + s(x3),
-    family = poisson,
-    data = dat,
-    method = "GACV.Cp",
-    scale = -1
-  )
-
   # exclude argument should be pushed through ...
   p1 <- predict(b4, type = "response", exclude = "s(x1)")
   p2 <- get_predicted(b4, predict = "expectation", exclude = "s(x1)", ci = 0.95)
@@ -354,7 +357,6 @@ test_that("get_predicted", {
   p2 <- get_predicted(b4, predict = "link", exclude = "s(x1)", ci = 0.95)
   expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)
 })
-
 
 test_that("stats::predict.Gam matches get_predicted.Gam", {
   skip_if_not_installed("gam")

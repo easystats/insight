@@ -45,6 +45,9 @@
 #'  - `correlation`, for models with correlation-component like
 #'    `nlme::gls()`, the formula that describes the correlation structure
 #'
+#'  - `scale`, for distributional models such as `mgcv::gaulss()` family fitted
+#'    with `mgcv::gam()`, the formula that describes the scale parameter
+#'
 #'  - `slopes`, for fixed-effects individual-slope models like
 #'    `feisr::feis()`, the formula for the slope parameters
 #'
@@ -159,15 +162,20 @@ find_formula.gam <- function(x, verbose = TRUE, ...) {
   if (!is.null(f)) {
     if (is.list(f)) {
       mi <- .gam_family(x)
-      if (!is.null(mi) && mi$family == "ziplss") {
-        # handle formula for zero-inflated models
-        f <- list(conditional = f[[1]], zero_inflated = f[[2]])
-      } else if (mi$family == "Multivariate normal") {
-        # handle formula for multivariate models
-        r <- lapply(f, function(.i) deparse(.i[[2]]))
-        f <- lapply(f, function(.i) list(conditional = .i))
-        names(f) <- r
-        attr(f, "is_mv") <- "1"
+      if (!is.null(mi)) {
+        f <- switch(mi$family,
+          ziplss = list(conditional = f[[1]], zero_inflated = f[[2]]),
+          # handle formula for location-scale models
+          gaulss = list(conditional = f[[1]], scale = f[[2]]),
+          # handle formula for multivariate models
+          `Multivariate normal` = {
+            r <- lapply(f, function(.i) deparse(.i[[2]]))
+            f <- lapply(f, function(.i) list(conditional = .i))
+            names(f) <- r
+            attr(f, "is_mv") <- "1"
+            f
+          }
+        )
       }
     } else {
       f <- list(conditional = f)
@@ -586,12 +594,10 @@ find_formula.gls <- function(x, verbose = TRUE, ...) {
   fcorr <- x$call$correlation
   if (is.null(fcorr)) {
     f_corr <- NULL
+  } else if (inherits(fcorr, "name")) {
+    f_corr <- attributes(eval(fcorr))$formula
   } else {
-    if (inherits(fcorr, "name")) {
-      f_corr <- attributes(eval(fcorr))$formula
-    } else {
-      f_corr <- parse(text = safe_deparse(fcorr))[[1]]
-    }
+    f_corr <- parse(text = safe_deparse(fcorr))[[1]]
   }
   if (is.symbol(f_corr)) {
     f_corr <- paste("~", safe_deparse(f_corr))
@@ -1284,12 +1290,10 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
   fcorr <- x$call$correlation
   if (is.null(fcorr)) {
     fc <- NULL
+  } else if (inherits(fcorr, "name")) {
+    fc <- attributes(eval(fcorr))$formula
   } else {
-    if (inherits(fcorr, "name")) {
-      fc <- attributes(eval(fcorr))$formula
-    } else {
-      fc <- parse(text = safe_deparse(fcorr))[[1]]$form
-    }
+    fc <- parse(text = safe_deparse(fcorr))[[1]]$form
   }
 
   f <- compact_list(list(

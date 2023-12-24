@@ -58,7 +58,7 @@ find_variables <- function(x,
                            flatten = FALSE,
                            verbose = TRUE) {
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "smooth_terms"))
+  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "smooth_terms", "scale"))
 
   if (component %in% c("all", "conditional")) {
     resp <- find_response(x, combine = FALSE)

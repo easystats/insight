@@ -49,6 +49,8 @@ the instrumental variables
 \code{lfe::felm()}, the cluster specification
 \item \code{correlation}, for models with correlation-component like
 \code{nlme::gls()}, the formula that describes the correlation structure
+\item \code{scale}, for distributional models such as \code{mgcv::gaulss()} family fitted
+with \code{mgcv::gam()}, the formula that describes the scale parameter
 \item \code{slopes}, for fixed-effects individual-slope models like
 \code{feisr::feis()}, the formula for the slope parameters
 \item \code{precision}, for \code{DirichletRegModel} models from
