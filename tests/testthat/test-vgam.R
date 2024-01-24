@@ -195,10 +195,11 @@ test_that("find_parameters", {
 
 test_that("is_multivariate", {
   expect_false(is_multivariate(m1))
-  expect_false(is_multivariate(m2))
+  expect_true(is_multivariate(m2))
 })
 
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "chi-squared statistic")
   expect_identical(find_statistic(m2), "chi-squared statistic")
 })
+
