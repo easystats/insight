@@ -59,5 +59,5 @@ is_multivariate <- function(x) {
     return(isTRUE(x@extra$multiple.responses))
   }
 
-  return(FALSE)
+  FALSE
 }
