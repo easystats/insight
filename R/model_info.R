@@ -1092,6 +1092,7 @@ model_info.vgam <- function(x, ...) {
     fitfam = faminfo@vfamily[1],
     logit.link = any(.string_contains("logit", faminfo@blurb)),
     link.fun = link.fun,
+    multi.var = is_multivariate(x),
     ...
   )
 }
