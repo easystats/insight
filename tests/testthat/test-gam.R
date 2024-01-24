@@ -40,7 +40,7 @@ test_that("model_info", {
 
 test_that("n_parameters", {
   expect_identical(n_parameters(m1), 5L)
-  expect_identical(n_parameters(m1, component = "conditional"), 1)
+  expect_identical(n_parameters(m1, component = "conditional"), 1L)
 })
 
 test_that("clean_names", {
