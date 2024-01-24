@@ -39,7 +39,7 @@
 #' * `is_hurdle`: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 #' * `is_dispersion`: model has dispersion component (not only dispersion _parameter_)
 #' * `is_mixed`: model is a mixed effects model (with random effects)
-#' * `is_multivariate`: model is a multivariate response model (currently only works for _brmsfit_ objects)
+#' * `is_multivariate`: model is a multivariate response model (currently only works for _brmsfit_ and _vglm/vgam_ objects)
 #' * `is_trial`: model response contains additional information about the trials
 #' * `is_bayesian`: model is a Bayesian model
 #' * `is_gam`: model is a generalized additive model

@@ -53,7 +53,7 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 \item \code{is_dispersion}: model has dispersion component (not only dispersion \emph{parameter})
 \item \code{is_mixed}: model is a mixed effects model (with random effects)
-\item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} objects)
+\item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} and \emph{vglm/vgam} objects)
 \item \code{is_trial}: model response contains additional information about the trials
 \item \code{is_bayesian}: model is a Bayesian model
 \item \code{is_gam}: model is a generalized additive model
