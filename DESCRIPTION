@@ -192,6 +192,7 @@ Suggests:
     survey,
     survival,
     testthat,
+    tinytable,
     truncreg,
     tweedie,
     TMB,
