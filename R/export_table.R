@@ -51,11 +51,11 @@
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
-#' @note The values for `caption`, `subtitle` and `footer`
-#'   can also be provided as attributes of `x`, e.g. if `caption = NULL`
-#'   and `x` has attribute `table_caption`, the value for this
-#'   attribute will be used as table caption. `table_subtitle` is the
-#'   attribute for `subtitle`, and `table_footer` for `footer`.
+#' @note The values for `caption`, `subtitle` and `footer` can also be provided
+#' as attributes of `x`, e.g. if `caption = NULL` and `x` has attribute
+#' `table_caption`, the value for this attribute will be used as table caption.
+#' `table_subtitle` is the attribute for `subtitle`, and `table_footer` for
+#' `footer`.
 #'
 #' @inherit format_table seealso
 #'
@@ -350,7 +350,7 @@ print.insight_table <- function(x, ...) {
                           indent_groups = NULL,
                           indent_rows = NULL,
                           table_width = NULL) {
-  df <- as.data.frame(x)
+  tabledata <- as.data.frame(x)
 
   # check width argument, for format value. cannot have
   # named vector of length > 1 here
@@ -361,8 +361,8 @@ print.insight_table <- function(x, ...) {
   }
 
   # round all numerics
-  col_names <- names(df)
-  df <- as.data.frame(sapply(df, function(i) {
+  col_names <- names(tabledata)
+  tabledata <- as.data.frame(sapply(tabledata, function(i) {
     if (is.numeric(i)) {
       format_value(i,
         digits = digits, protect_integers = protect_integers,
@@ -375,15 +375,15 @@ print.insight_table <- function(x, ...) {
 
 
   # Convert to character.
-  df <- as.data.frame(sapply(df, as.character, simplify = FALSE), stringsAsFactors = FALSE)
-  names(df) <- col_names
-  df[is.na(df)] <- as.character(missing)
+  tabledata <- as.data.frame(sapply(tabledata, as.character, simplify = FALSE), stringsAsFactors = FALSE)
+  names(tabledata) <- col_names
+  tabledata[is.na(tabledata)] <- as.character(missing)
 
 
   if (identical(format, "html")) {
     # html formatting starts here, needs less preparation of table matrix
     out <- .format_html_table(
-      df,
+      tabledata,
       caption = caption,
       subtitle = subtitle,
       footer = footer,
@@ -396,13 +396,13 @@ print.insight_table <- function(x, ...) {
     # text and markdown go here...
   } else {
     # Add colnames as first row to the data frame
-    df <- rbind(colnames(df), df)
+    tabledata <- rbind(colnames(tabledata), tabledata)
 
     # Initial alignment for complete data frame is right-alignment
-    aligned <- format(df, justify = "right")
+    aligned <- format(tabledata, justify = "right")
 
     # default alignment
-    col_align <- rep("right", ncol(df))
+    col_align <- rep("right", ncol(tabledata))
 
     # first column definitely right alignment, fixed width
     first_row <- as.character(aligned[1, ])
@@ -624,11 +624,9 @@ print.insight_table <- function(x, ...) {
     }
     if (is.null(subtitle)) {
       subtitle <- ""
-    } else {
+    } else if (length(subtitle) == 2 && .is_valid_colour(subtitle[2])) {
       # if we have a colour value, make coloured ansi-string
-      if (length(subtitle) == 2 && .is_valid_colour(subtitle[2])) {
-        subtitle <- .colour(subtitle[2], subtitle[1])
-      }
+      subtitle <- .colour(subtitle[2], subtitle[1])
     }
 
     # paste everything together and remove unnecessary double spaces
@@ -830,7 +828,7 @@ print.insight_table <- function(x, ...) {
   # go through all columns of the data frame
   for (i in 1:n_columns) {
     # create separator line for current column
-    line <- paste0(rep_len("-", column_width[i]), collapse = "")
+    tablecol <- paste0(rep_len("-", column_width[i]), collapse = "")
 
     # check if user-defined alignment is requested, and if so, extract
     # alignment direction and save to "align_char"
@@ -848,31 +846,31 @@ print.insight_table <- function(x, ...) {
       # if so, check if string in column starts with
       # whitespace (indicating right-alignment) or not.
       if (grepl("^\\s", final[2, i])) {
-        line <- paste0(line, ":")
+        tablecol <- paste0(tablecol, ":")
         final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
       } else {
-        line <- paste0(":", line)
+        tablecol <- paste0(":", tablecol)
         final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
       }
 
-      # left alignment, or at least first line only left?
+      # left alignment, or at least first tablecol only left?
     } else if (align == "left" || (first_row_leftalign && i == 1) || align_char == "l") {
-      line <- paste0(":", line)
+      tablecol <- paste0(":", tablecol)
       final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "left")
 
       # right-alignment
     } else if (align == "right" || align_char == "r") {
-      line <- paste0(line, ":")
+      tablecol <- paste0(tablecol, ":")
       final[, i] <- format(final[, i], width = column_width[i] + 1, justify = "right")
 
       # else, center
     } else {
-      line <- paste0(":", line, ":")
+      tablecol <- paste0(":", tablecol, ":")
       final[, i] <- format(final[, i], width = column_width[i] + 2, justify = "centre")
     }
 
     # finally, we have our header-line that indicates column alignments
-    header <- paste0(header, line, "|")
+    header <- paste0(header, tablecol, "|")
   }
 
   # indent groups?
@@ -937,17 +935,16 @@ print.insight_table <- function(x, ...) {
   }
 
   group_by_columns <- c(intersect(c("Group", "Response", "Effects", "Component"), names(final)), group_by)
-  if (!length(group_by_columns)) {
-    group_by_columns <- NULL
-  } else {
+  if (length(group_by_columns)) {
     # remove columns with only 1 unique value - this *should* be safe to
     # remove, but we may check if all printed sub titles look like intended
-
     for (i in group_by_columns) {
       if (n_unique(final[[i]]) <= 1) {
         final[[i]] <- NULL
       }
     }
+  } else {
+    group_by_columns <- NULL
   }
 
   # indent groups?

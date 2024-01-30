@@ -3,7 +3,6 @@
 \docType{package}
 \name{insight-package}
 \alias{insight-package}
-\alias{_PACKAGE}
 \alias{insight}
 \title{insight: A Unified Interface to Access Information from Model Objects in R.}
 \description{
