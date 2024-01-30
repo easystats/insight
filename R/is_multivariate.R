@@ -54,5 +54,10 @@ is_multivariate <- function(x) {
     return(isTRUE(ncol(x$coefficients) > 1L))
   }
 
-  return(FALSE)
+  vgam_classes <- c("vglm", "vgam")
+  if (inherits(x, vgam_classes)) {
+    return(isTRUE(x@extra$multiple.responses))
+  }
+
+  FALSE
 }

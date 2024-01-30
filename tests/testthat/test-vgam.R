@@ -48,10 +48,11 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), hunua$agaaus)
+  expect_identical(get_response(m1), hunua$agaaus)
   expect_equal(
     get_response(m2),
-    data.frame(agaaus = hunua$agaaus, kniexc = hunua$kniexc)
+    data.frame(agaaus = hunua$agaaus, kniexc = hunua$kniexc),
+    ignore_attr = TRUE
   )
 })
 
@@ -195,7 +196,7 @@ test_that("find_parameters", {
 
 test_that("is_multivariate", {
   expect_false(is_multivariate(m1))
-  expect_false(is_multivariate(m2))
+  expect_true(is_multivariate(m2))
 })
 
 test_that("find_statistic", {
