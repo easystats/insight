@@ -971,6 +971,23 @@ test_that("model_info, ordered beta", {
 })
 
 
+test_that("model_info, recognize ZI even without ziformula", {
+  skip_if_not_installed("glmmTMB")
+  data("fish", package = "insight")
+  fish$count <- fish$count + 1
+  m1 <- glmmTMB::glmmTMB(
+    count ~ child + camper + (1 | persons),
+    data = fish,
+    family = glmmTMB::truncated_nbinom1()
+  )
+  out <- model_info(m1)
+  expect_true(out$is_zero_inflated)
+  expect_true(out$is_hurdle)
+})
+
+
+skip_if_not_installed("withr")
+
 withr::with_environment(
   new.env(),
   test_that("get_variance, ordered beta", {
@@ -989,18 +1006,3 @@ withr::with_environment(
     expect_equal(out$var.distribution, 1.44250604187634, tolerance = 1e-4)
   })
 )
-
-
-test_that("model_info, recognize ZI even without ziformula", {
-  skip_if_not_installed("glmmTMB")
-  data("fish", package = "insight")
-  fish$count <- fish$count + 1
-  m1 <- glmmTMB::glmmTMB(
-    count ~ child + camper + (1 | persons),
-    data = fish,
-    family = glmmTMB::truncated_nbinom1()
-  )
-  out <- model_info(m1)
-  expect_true(out$is_zero_inflated)
-  expect_true(out$is_hurdle)
-})
