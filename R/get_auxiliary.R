@@ -78,17 +78,17 @@ get_auxiliary <- function(x,
 
 # dispersion parameter -----------------------
 
-
+#' @keywords internal
 get_dispersion <- function(x, ...) {
   UseMethod("get_dispersion")
 }
 
-
+#' @keywords internal
 get_dispersion.model_fit <- function(x, ...) {
   get_dispersion(x$fit, ...)
 }
 
-
+#' @keywords internal
 get_dispersion.glm <- function(x, verbose = TRUE, ...) {
   info <- model_info(x, verbose = verbose)
   disp <- NULL
@@ -103,7 +103,7 @@ get_dispersion.glm <- function(x, verbose = TRUE, ...) {
   disp
 }
 
-
+#' @keywords internal
 get_dispersion.glmerMod <- function(x, verbose = TRUE, ...) {
   info <- model_info(x, verbose = verbose)
   disp <- NULL
@@ -122,7 +122,7 @@ get_dispersion.glmerMod <- function(x, verbose = TRUE, ...) {
   disp
 }
 
-
+#' @keywords internal
 get_dispersion.glmmTMB <- function(x, verbose = TRUE, ...) {
   info <- model_info(x, verbose = verbose)
   disp <- NULL
@@ -135,13 +135,14 @@ get_dispersion.glmmTMB <- function(x, verbose = TRUE, ...) {
   disp
 }
 
-
+#' @keywords internal
 get_dispersion.brmsfit <- get_dispersion.glmmTMB
 
 
 
 # special ------------------
 
+#' @keywords internal
 .get_generic_aux <- function(x,
                              param,
                              summary = TRUE,

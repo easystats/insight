@@ -1,3 +1,9 @@
+#' @param out A `tinytable` object.
+#' @param x The underlying data frame, used to create `out`.
+#' @param theme The theme to apply to the table. One of `"default"`, `"grid"`,
+#' `"striped"`, `"bootstrap"`, or `"darklines"`.
+#' @param sub_header_positions A vector of row positions to apply a border to.
+#' Currently particular for internal use of other _easystats_ packages.
 #' @rdname export_table
 #' @export
 apply_table_theme <- function(out, x, theme = "default", sub_header_positions = NULL) {

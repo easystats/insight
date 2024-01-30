@@ -31,8 +31,16 @@ export_table(
 )
 }
 \arguments{
+\item{out}{A \code{tinytable} object.}
+
 \item{x}{A data frame. May also be a list of data frames, to export multiple
 data frames into multiple tables.}
+
+\item{theme}{The theme to apply to the table. One of \code{"default"}, \code{"grid"},
+\code{"striped"}, \code{"bootstrap"}, or \code{"darklines"}.}
+
+\item{sub_header_positions}{A vector of row positions to apply a border to.
+Currently particular for internal use of other \emph{easystats} packages.}
 
 \item{sep}{Column separator.}
 
