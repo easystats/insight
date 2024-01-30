@@ -18,6 +18,9 @@
 
 * Fixed issue in `get_variance()` for *glmmTMB* models with `family = "ordbeta"`.
 
+* Fixed issue in `model_info()` with correctly detecting multivariate vgam/vglm
+  models.
+
 # insight 0.19.7
 
 ## General
