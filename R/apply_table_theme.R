@@ -7,6 +7,12 @@
 #' @rdname export_table
 #' @export
 apply_table_theme <- function(out, x, theme = "default", sub_header_positions = NULL) {
+  # if no theme, do nothing
+  if (is.null(theme)) {
+    return(out)
+  }
+
+  # packages available?
   check_if_installed("tinytable")
 
   switch(theme,
