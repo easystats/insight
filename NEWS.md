@@ -6,6 +6,8 @@
 
 * Improved support for models of class `rqs` (package *quantreg*).
 
+* Revised test to address forthcoming changes in the *pscl* package.
+
 ## Bug fixes
 
 * Fixed issue in `get_loglikelihood()` for glm-models with binary outcome, where
