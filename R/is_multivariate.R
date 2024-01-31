@@ -54,13 +54,10 @@ is_multivariate <- function(x) {
     return(isTRUE(ncol(x$coefficients) > 1L))
   }
 
-  ## TODO: Enable code once insight 0.19.8 is on CRAN!
-  ## This code breaks several packages, so we need to wait until insight 0.19.8
-
-  # vgam_classes <- c("vglm", "vgam")
-  # if (inherits(x, vgam_classes)) {
-  #   return(isTRUE(x@extra$multiple.responses))
-  # }
+  vgam_classes <- c("vglm", "vgam")
+  if (inherits(x, vgam_classes)) {
+    return(isTRUE(x@extra$multiple.responses))
+  }
 
   FALSE
 }

@@ -196,9 +196,7 @@ test_that("find_parameters", {
 
 test_that("is_multivariate", {
   expect_false(is_multivariate(m1))
-  ## TODO: Enable code once insight 0.19.8 is on CRAN!
-  ## This code breaks several packages, so we need to wait until insight 0.19.8
-  # expect_true(is_multivariate(m2))
+  expect_true(is_multivariate(m2))
 })
 
 test_that("find_statistic", {
