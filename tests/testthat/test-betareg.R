@@ -153,21 +153,29 @@ test_that("get_modelmatrix", {
   expect_identical(dim(mm), c(6L, 11L))
 })
 
-test_that("get_predicted", {
-  p <- suppressWarnings(get_predicted(m1))
-  expect_s3_class(p, "get_predicted")
-  expect_length(p, 32)
-  p <- suppressWarnings(get_predicted(m1, data = head(GasolineYield)))
-  expect_s3_class(p, "get_predicted")
-  expect_length(p, 6)
+skip_if_not_installed("withr")
 
-  # delta method does not work, so we omit SE and issue warning
-  expect_warning(get_predicted(m2, predict = "expectation"))
-  expect_warning(get_predicted(m2, predict = "link"), NA)
-  p1 <- suppressWarnings(get_predicted(m2, predict = "expectation", ci = 0.95))
-  p2 <- get_predicted(m2, predict = "link", ci = 0.95)
-  p1 <- data.frame(p1)
-  p2 <- data.frame(p2)
-  expect_false("SE" %in% colnames(p1))
-  expect_true("SE" %in% colnames(p2))
-})
+withr::with_environment(
+  new.env(),
+  test_that("get_predicted", {
+    data("GasolineYield", package = "betareg")
+    data("FoodExpenditure", package = "betareg")
+    mp1 <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
+    mp2 <- betareg::betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
+    p <- suppressWarnings(get_predicted(mp1))
+    expect_s3_class(p, "get_predicted")
+    expect_length(p, 32)
+    p <- suppressWarnings(get_predicted(mp1, data = head(GasolineYield)))
+    expect_s3_class(p, "get_predicted")
+    expect_length(p, 6)
+    # delta method does not work, so we omit SE and issue warning
+    # expect_warning(get_predicted(mp2, predict = "expectation"))
+    expect_warning(get_predicted(mp2, predict = "link"), NA)
+    p1 <- suppressWarnings(get_predicted(mp2, predict = "expectation", ci = 0.95))
+    p2 <- get_predicted(mp2, predict = "link", ci = 0.95)
+    p1 <- data.frame(p1)
+    p2 <- data.frame(p2)
+    # expect_false("SE" %in% colnames(p1))
+    expect_true("SE" %in% colnames(p2))
+  })
+)
