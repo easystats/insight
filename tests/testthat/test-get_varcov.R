@@ -75,3 +75,10 @@ test_that("verbose and deprecated arguments", {
   expect_warning(get_varcov(mod, robust = TRUE), regexp = "deprecated")
   expect_warning(get_varcov(mod, robust = TRUE, verbose = FALSE), NA)
 })
+
+
+test_that("error: ill-defined model", {
+  dd <- data.frame(y = as.difftime(0:5, units = "days"))
+  m1 <- lm(y ~ 1, data = dd)
+  expect_error(get_varcov(m1), regex = "Can't extract variance-covariance")
+})

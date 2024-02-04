@@ -94,7 +94,7 @@ get_varcov.default <- function(x,
   vcov <- .check_vcov_args(x, vcov = vcov, verbose = verbose, ...)
 
   if (is.null(vcov)) {
-    vc <- suppressWarnings(stats::vcov(x))
+    vc <- .safe_vcov(x)
   } else {
     vc <- .get_varcov_sandwich(x,
       vcov_fun = vcov,
@@ -127,9 +127,9 @@ get_varcov.fixest <- function(x,
   # fixest supplies its own mechanism. Vincent thinks it might not be wise to
   # try `sandwich`, because there may be inconsistencies.
   check_if_installed("fixest")
-  args <- c(list(x, vcov = vcov), vcov_args)
+  my_args <- c(list(x, vcov = vcov), vcov_args)
   FUN <- stats::vcov
-  do.call("FUN", args)
+  do.call("FUN", my_args)
 }
 
 
@@ -223,19 +223,17 @@ get_varcov.DirichletRegModel <- function(x,
   .check_get_varcov_dots(x, ...)
   component <- match.arg(component)
   if (x$parametrization == "common") {
-    vc <- stats::vcov(x)
+    vc <- .safe_vcov(x)
+  } else if (component == "conditional") {
+    vc <- .safe_vcov(x)
+    keep <- grepl("^(?!\\(phi\\))", rownames(vc), perl = TRUE)
+    vc <- vc[keep, keep, drop = FALSE]
+  } else if (component == "precision") {
+    vc <- .safe_vcov(x)
+    keep <- startsWith(rownames(vc), "(phi)")
+    vc <- vc[keep, keep, drop = FALSE]
   } else {
-    if (component == "conditional") {
-      vc <- stats::vcov(x)
-      keep <- grepl("^(?!\\(phi\\))", rownames(vc), perl = TRUE)
-      vc <- vc[keep, keep, drop = FALSE]
-    } else if (component == "precision") {
-      vc <- stats::vcov(x)
-      keep <- startsWith(rownames(vc), "(phi)")
-      vc <- vc[keep, keep, drop = FALSE]
-    } else {
-      vc <- stats::vcov(x)
-    }
+    vc <- .safe_vcov(x)
   }
   .process_vcov(vc, verbose, ...)
 }
@@ -253,19 +251,19 @@ get_varcov.clm2 <- function(x,
   n_location <- length(x$beta)
   n_scale <- length(x$zeta)
 
-  vc <- stats::vcov(x)
+  vc <- .safe_vcov(x)
 
   if (.is_negativ_matrix(vc, ...)) {
     vc <- .fix_negative_matrix(vc)
   }
 
-  range <- switch(component,
+  col_range <- switch(component,
     all = 1:(n_scale + n_intercepts + n_location),
     conditional = 1:(n_intercepts + n_location),
     scale = (1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)
   )
 
-  vc <- vc[range, range, drop = FALSE]
+  vc <- vc[col_range, col_range, drop = FALSE]
 
   # fix possible missings due to rank deficient model matrix
   vc <- .fix_rank_deficiency(vc)
@@ -307,7 +305,7 @@ get_varcov.pgmm <- function(x,
   component <- match.arg(component)
 
   if (is.null(vcov)) {
-    vc <- suppressWarnings(stats::vcov(x))
+    vc <- .safe_vcov(x)
   } else {
     vc <- .get_varcov_sandwich(x,
       vcov_fun = vcov,
@@ -353,7 +351,7 @@ get_varcov.mvord <- function(x,
                              ...) {
   .check_get_varcov_dots(x, ...)
   component <- match.arg(component)
-  vc <- stats::vcov(x)
+  vc <- .safe_vcov(x)
 
   if (component != "all") {
     fp <- find_parameters(x)[[component]]
@@ -374,7 +372,7 @@ get_varcov.mjoint <- function(x,
                               ...) {
   .check_get_varcov_dots(x, ...)
   component <- match.arg(component)
-  vc <- stats::vcov(x)
+  vc <- .safe_vcov(x)
 
   keep <- match(find_parameters(x, flatten = TRUE, component = component), rownames(vc))
   vc <- vc[keep, keep, drop = FALSE]
@@ -389,7 +387,7 @@ get_varcov.mhurdle <- function(x,
                                ...) {
   .check_get_varcov_dots(x, ...)
   component <- match.arg(component)
-  vc <- stats::vcov(x)
+  vc <- .safe_vcov(x)
 
   # rownames(vc) <- gsub("^(h1|h2|h3)\\.(.*)", "\\2", rownames(vc))
   # colnames(vc) <- rownames(vc)
@@ -405,7 +403,7 @@ get_varcov.mhurdle <- function(x,
 get_varcov.truncreg <- function(x, component = c("conditional", "all"), verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   component <- match.arg(component)
-  vc <- stats::vcov(x)
+  vc <- .safe_vcov(x)
 
   if (component == "conditional") {
     vc <- vc[1:(nrow(vc) - 1), 1:(ncol(vc) - 1), drop = FALSE]
@@ -418,7 +416,7 @@ get_varcov.truncreg <- function(x, component = c("conditional", "all"), verbose 
 get_varcov.gamlss <- function(x, component = c("conditional", "all"), verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   component <- match.arg(component)
-  vc <- suppressWarnings(stats::vcov(x))
+  vc <- .safe_vcov(x)
 
   if (component == "conditional") {
     cond_pars <- length(find_parameters(x)$conditional)
@@ -520,10 +518,10 @@ get_varcov.glmmTMB <- function(x,
   component <- match.arg(component)
 
   vc <- switch(component,
-    conditional = stats::vcov(x)[["cond"]],
+    conditional = .safe_vcov(x)[["cond"]],
     zi = ,
-    zero_inflated = stats::vcov(x)[["zi"]],
-    dispersion = stats::vcov(x)[["disp"]],
+    zero_inflated = .safe_vcov(x)[["zi"]],
+    dispersion = .safe_vcov(x)[["disp"]],
     stats::vcov(x, full = TRUE)
   )
   .process_vcov(vc, verbose, ...)
@@ -592,7 +590,7 @@ get_varcov.brmsfit <- function(x, component = "conditional", verbose = TRUE, ...
   params <- find_parameters(x, effects = "fixed", component = component, flatten = TRUE)
   params <- gsub("^b_", "", params)
 
-  vc <- stats::vcov(x)[params, params, drop = FALSE]
+  vc <- .safe_vcov(x)[params, params, drop = FALSE]
   .process_vcov(vc, verbose, ...)
 }
 
@@ -659,7 +657,7 @@ get_varcov.flac <- get_varcov.flic
 get_varcov.merModList <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
   format_warning("Can't access variance-covariance matrix for 'merModList' objects.")
-  return(NULL)
+  NULL
 }
 
 
@@ -667,7 +665,7 @@ get_varcov.merModList <- function(x, ...) {
 get_varcov.mediate <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
   format_warning("Can't access variance-covariance matrix for 'mediate' objects.")
-  return(NULL)
+  NULL
 }
 
 
@@ -715,7 +713,7 @@ get_varcov.bife <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   params <- find_parameters(x, flatten = TRUE)
   np <- length(params)
-  vc <- stats::vcov(x)[1:np, 1:np, drop = FALSE]
+  vc <- .safe_vcov(x)[1:np, 1:np, drop = FALSE]
 
   dimnames(vc) <- list(params, params)
   .process_vcov(vc, verbose, ...)
@@ -725,7 +723,7 @@ get_varcov.bife <- function(x, verbose = TRUE, ...) {
 #' @export
 get_varcov.Rchoice <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
-  vc <- stats::vcov(x)
+  vc <- .safe_vcov(x)
   params <- find_parameters(x, flatten = TRUE)
   dimnames(vc) <- list(params, params)
   .process_vcov(vc, verbose, ...)
@@ -803,7 +801,7 @@ get_varcov.rqs <- get_varcov.crq
 get_varcov.flexsurvreg <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   pars <- find_parameters(x, flatten = TRUE)
-  vc <- as.matrix(stats::vcov(x))[pars, pars, drop = FALSE]
+  vc <- as.matrix(.safe_vcov(x))[pars, pars, drop = FALSE]
   .process_vcov(vc, verbose, ...)
 }
 
@@ -863,7 +861,7 @@ get_varcov.mixor <- function(x, effects = c("all", "fixed", "random"), verbose =
   .check_get_varcov_dots(x, ...)
   effects <- match.arg(effects)
   params <- find_parameters(x, effects = effects, flatten = TRUE)
-  vc <- as.matrix(stats::vcov(x))[params, params, drop = FALSE]
+  vc <- as.matrix(.safe_vcov(x))[params, params, drop = FALSE]
   .process_vcov(vc, verbose, ...)
 }
 
@@ -973,7 +971,7 @@ get_varcov.vgam <- get_varcov.vglm
 get_varcov.tobit <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   coef_names <- find_parameters(x, flatten = TRUE)
-  vc <- stats::vcov(x)[coef_names, coef_names, drop = FALSE]
+  vc <- .safe_vcov(x)[coef_names, coef_names, drop = FALSE]
   .process_vcov(vc, verbose, ...)
 }
 
@@ -1030,6 +1028,27 @@ get_varcov.LORgee <- get_varcov.gee
 
 # helper-functions -----------------------------------------------------
 
+
+.safe_vcov <- function(x) {
+  vc <- tryCatch(
+    suppressWarnings(stats::vcov(x)),
+    error = function(e) e
+  )
+  if (inherits(vc, "error")) {
+    # check for dates or times, which can cause the error
+    my_data <- get_data(x, verbose = FALSE)
+    if (!is.null(my_data) && any(vapply(my_data, inherits, FUN.VALUE = logical(1), what = c("Date", "POSIXt", "difftime")))) { # nolint
+      msg <- "A reason might be that your model includes dates or times. Please convert them to numeric values before fitting the model." # nolint
+    } else {
+      msg <- NULL
+    }
+    format_error(paste(
+      "Can't extract variance-covariance matrix. `get_varcov()` returned following error:",
+      vc$message
+    ), msg)
+  }
+  vc
+}
 
 .process_vcov <- function(vc, verbose = TRUE, ...) {
   if (.is_negativ_matrix(vc, ...)) {
@@ -1100,8 +1119,8 @@ get_varcov.LORgee <- get_varcov.gee
 
 .get_weighted_varcov <- function(x, cov_unscaled) {
   ssd <- .weighted_crossprod(stats::residuals(x), w = x$weights)
-  df <- sum(x$weights)
-  out <- structure(list(SSD = ssd, call = x$call, df = df), class = "SSD")
+  weight_df <- sum(x$weights)
+  out <- structure(list(SSD = ssd, call = x$call, df = weight_df), class = "SSD")
   kronecker(stats::estVar(out), cov_unscaled, make.dimnames = TRUE)
 }
 
@@ -1116,19 +1135,17 @@ get_varcov.LORgee <- get_varcov.gee
   }
 
   if (length(w) == 1 || (is.vector(w) && stats::sd(w) < sqrt(.Machine$double.eps))) {
-    return(w[1] * crossprod(x))
-  } else {
-    if (is.vector(w)) {
-      if (length(w) != nrow(x)) {
-        format_error("`w` is the wrong length.")
-      }
-      return(crossprod(x, w * x))
-    } else {
-      if (nrow(w) != ncol(w) || nrow(w) != nrow(x)) {
-        format_error("`w` is the wrong dimension.")
-      }
-      return(crossprod(x, w %*% x))
+    w[1] * crossprod(x)
+  } else if (is.vector(w)) {
+    if (length(w) != nrow(x)) {
+      format_error("`w` is the wrong length.")
     }
+    crossprod(x, w * x)
+  } else {
+    if (nrow(w) != ncol(w) || nrow(w) != nrow(x)) {
+      format_error("`w` is the wrong dimension.")
+    }
+    crossprod(x, w %*% x)
   }
 }
 
