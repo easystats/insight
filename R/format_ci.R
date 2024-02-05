@@ -33,8 +33,6 @@
 #'
 #' x <- format_ci(c(1.205, 23.4, 100.43), c(3.57, -13.35, 9.4), width = "auto")
 #' cat(x, sep = "\n")
-#'
-#' # insight::format_ci(bayestestR::ci(rnorm(1000)))
 #' @export
 format_ci <- function(CI_low, ...) {
   UseMethod("format_ci")
