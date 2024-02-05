@@ -61,6 +61,27 @@ test_that("format_ci", {
   expect_identical(format_ci(1.24, 0.0000054, zap_small = TRUE, digits = 0), "95% CI [1, 0]")
 })
 
+test_that("format_ci, bayestestR", {
+  skip_if_not_installed("bayestestR")
+  set.seed(123)
+  x <- rnorm(1000)
+  expect_identical(format_ci(bayestestR::ci(x)), "95% ETI [-1.94, 2.04]")
+  expect_identical(format_ci(bayestestR::ci(x, method = "HDI")), "95% HDI [-1.97, 1.98]")
+  expect_identical(format_ci(bayestestR::ci(x), ci_string = "CI"), "95% CI [-1.94, 2.04]")
+})
+
+test_that("format_ci, parameters", {
+  skip_if_not_installed("parameters")
+  mm <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
+  expect_identical(
+    format_ci(parameters::ci(mm)),
+    c(
+      "95% CI [4.62, 4.94]", "95% CI [0.53, 1.30]", "95% CI [-0.52, 0.40]",
+      "95% CI [-0.76, 0.66]"
+    )
+  )
+})
+
 test_that("format others", {
   expect_type(insight::format_pd(0.02), "character")
   expect_identical(nchar(format_bf(4)), 9L)

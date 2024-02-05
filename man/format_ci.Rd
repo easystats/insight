@@ -2,9 +2,12 @@
 % Please edit documentation in R/format_ci.R
 \name{format_ci}
 \alias{format_ci}
+\alias{format_ci.numeric}
 \title{Confidence/Credible Interval (CI) Formatting}
 \usage{
-format_ci(
+format_ci(CI_low, ...)
+
+\method{format_ci}{numeric}(
   CI_low,
   CI_high,
   ci = 0.95,
@@ -14,11 +17,17 @@ format_ci(
   width_low = width,
   width_high = width,
   missing = "",
-  zap_small = FALSE
+  zap_small = FALSE,
+  ci_string = "CI",
+  ...
 )
 }
 \arguments{
-\item{CI_low}{Lower CI bound.}
+\item{CI_low}{Lower CI bound. Usually a numeric value, but can also be a
+CI output returned \code{bayestestR}, in which case the remaining arguments
+are unnecessary.}
+
+\item{...}{Arguments passed to or from other methods.}
 
 \item{CI_high}{Upper CI bound.}
 
@@ -51,6 +60,10 @@ empty string (i.e. \code{""}) is returned for \code{NA}.}
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
 places than \code{digits} are printed in scientific notation.}
+
+\item{ci_string}{String to be used in the output to indicate the type of
+interval. Default is \code{"CI"}, but can be changed to \code{"HDI"} or anything else,
+if necessary.}
 }
 \value{
 A formatted string.
