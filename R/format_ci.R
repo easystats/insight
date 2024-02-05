@@ -39,19 +39,19 @@ format_ci <- function(CI_low, ...) {
 }
 
 
-
+#' @rdname format_ci
 #' @export
 format_ci.numeric <- function(CI_low,
-                      CI_high,
-                      ci = 0.95,
-                      digits = 2,
-                      brackets = TRUE,
-                      width = NULL,
-                      width_low = width,
-                      width_high = width,
-                      missing = "",
-                      zap_small = FALSE,
-                      ...) {
+                              CI_high,
+                              ci = 0.95,
+                              digits = 2,
+                              brackets = TRUE,
+                              width = NULL,
+                              width_low = width,
+                              width_high = width,
+                              missing = "",
+                              zap_small = FALSE,
+                              ...) {
   # check proper defaults
   if (isTRUE(brackets)) {
     ci_brackets <- c("[", "]")
@@ -115,7 +115,22 @@ format_ci.numeric <- function(CI_low,
 
   if (is.na(missing)) missing <- NA_character_
 
-  if (!is.null(ci)) {
+  if (is.null(ci)) {
+    ifelse(
+      is.na(CI_low) & is.na(CI_high),
+      missing,
+      .format_ci(
+        CI_low,
+        CI_high,
+        digits = digits,
+        ci_brackets = ci_brackets,
+        width_low = width_low,
+        width_high = width_high,
+        missing = missing,
+        zap_small = zap_small
+      )
+    )
+  } else {
     ifelse(is.na(CI_low) & is.na(CI_high),
       missing,
       paste0(
@@ -133,21 +148,6 @@ format_ci.numeric <- function(CI_low,
         )
       )
     )
-  } else {
-    ifelse(
-      is.na(CI_low) & is.na(CI_high),
-      missing,
-      .format_ci(
-        CI_low,
-        CI_high,
-        digits = digits,
-        ci_brackets = ci_brackets,
-        width_low = width_low,
-        width_high = width_high,
-        missing = missing,
-        zap_small = zap_small
-      )
-    )
   }
 }
 
@@ -159,9 +159,9 @@ format_ci.numeric <- function(CI_low,
 format_ci.bayestestR_ci <- function(CI_low, ...) {
   x <- as.data.frame(CI_low)
   format_ci(
-    CI_low=x$CI_low,
-    CI_high=x$CI_high,
-    ci=x$CI,
+    CI_low = x$CI_low,
+    CI_high = x$CI_high,
+    ci = x$CI,
     ...
   )
 }

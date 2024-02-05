@@ -2,18 +2,42 @@
 % Please edit documentation in R/format_ci.R
 \name{format_ci}
 \alias{format_ci}
+\alias{format_ci.numeric}
 \title{Confidence/Credible Interval (CI) Formatting}
 \usage{
 format_ci(CI_low, ...)
+
+\method{format_ci}{numeric}(
+  CI_low,
+  CI_high,
+  ci = 0.95,
+  digits = 2,
+  brackets = TRUE,
+  width = NULL,
+  width_low = width,
+  width_high = width,
+  missing = "",
+  zap_small = FALSE,
+  ...
+)
 }
 \arguments{
-\item{CI_low}{Lower CI bound.}
+\item{CI_low}{Lower CI bound. Usually a numeric value, but can also be a
+CI output returned \code{bayestestR}, in which case the remaining arguments
+are unnecessary.}
 
 \item{...}{Arguments passed to or from other methods.}
 
 \item{CI_high}{Upper CI bound.}
 
 \item{ci}{CI level in percentage.}
+
+\item{digits}{Number of digits for rounding or significant figures. May also
+be \code{"signif"} to return significant figures or \code{"scientific"}
+to return scientific notation. Control the number of digits by adding the
+value as suffix, e.g. \code{digits = "scientific4"} to have scientific
+notation with 4 decimal places, or \code{digits = "signif5"} for 5
+significant figures (see also \code{\link[=signif]{signif()}}).}
 
 \item{brackets}{Either a logical, and if \code{TRUE} (default), values are
 encompassed in square brackets. If \code{FALSE} or \code{NULL}, no brackets
@@ -28,6 +52,13 @@ length of the longest string.}
 \item{width_low, width_high}{Like \code{width}, but only applies to the lower
 or higher confidence interval value. This can be used when the values for
 the lower and upper CI are of very different length.}
+
+\item{missing}{Value by which \code{NA} values are replaced. By default, an
+empty string (i.e. \code{""}) is returned for \code{NA}.}
+
+\item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
+\code{digits} decimal places. If \code{FALSE}, values with more decimal
+places than \code{digits} are printed in scientific notation.}
 }
 \value{
 A formatted string.
@@ -49,6 +80,4 @@ cat(x, sep = "\n")
 
 x <- format_ci(c(1.205, 23.4, 100.43), c(3.57, -13.35, 9.4), width = "auto")
 cat(x, sep = "\n")
-
-# format_ci(bayestestR::ci(rnorm(1000)))
 }
