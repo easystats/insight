@@ -16,6 +16,9 @@
 #' @param width_low,width_high Like `width`, but only applies to the lower
 #'   or higher confidence interval value. This can be used when the values for
 #'   the lower and upper CI are of very different length.
+#' @param ci_string String to be used in the output to indicate the type of
+#' interval. Default is `"CI"`, but can be changed to `"HDI"` or anything else,
+#' if necessary.
 #' @inheritParams format_value
 #'
 #' @return A formatted string.
@@ -51,6 +54,7 @@ format_ci.numeric <- function(CI_low,
                               width_high = width,
                               missing = "",
                               zap_small = FALSE,
+                              ci_string = "CI",
                               ...) {
   # check proper defaults
   if (isTRUE(brackets)) {
@@ -135,7 +139,9 @@ format_ci.numeric <- function(CI_low,
       missing,
       paste0(
         ci * 100,
-        "% CI ",
+        "% ",
+        ci_string,
+        " ",
         .format_ci(
           CI_low,
           CI_high,
@@ -162,6 +168,7 @@ format_ci.bayestestR_ci <- function(CI_low, ...) {
     CI_low = x$CI_low,
     CI_high = x$CI_high,
     ci = x$CI,
+    ci_string = ifelse(inherits(CI_low, "bayestestR_hdi"), "HDI", "ETI"),
     ...
   )
 }

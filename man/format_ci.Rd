@@ -18,6 +18,7 @@ format_ci(CI_low, ...)
   width_high = width,
   missing = "",
   zap_small = FALSE,
+  ci_string = "CI",
   ...
 )
 }
@@ -59,6 +60,10 @@ empty string (i.e. \code{""}) is returned for \code{NA}.}
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
 places than \code{digits} are printed in scientific notation.}
+
+\item{ci_string}{String to be used in the output to indicate the type of
+interval. Default is \code{"CI"}, but can be changed to \code{"HDI"} or anything else,
+if necessary.}
 }
 \value{
 A formatted string.
