@@ -162,13 +162,17 @@ format_ci.numeric <- function(CI_low,
 # bayestestR objects ------------------------------------------------------
 
 #' @export
-format_ci.bayestestR_ci <- function(CI_low, ...) {
+format_ci.bayestestR_ci <- function(CI_low, ci_string = NULL, ...) {
+  # find default for ci_string
+  if (is.null(ci_string)) {
+    ci_string <- ifelse(inherits(CI_low, "bayestestR_hdi"), "HDI", "ETI")
+  }
   x <- as.data.frame(CI_low)
   format_ci(
     CI_low = x$CI_low,
     CI_high = x$CI_high,
     ci = x$CI,
-    ci_string = ifelse(inherits(CI_low, "bayestestR_hdi"), "HDI", "ETI"),
+    ci_string = ci_string,
     ...
   )
 }
