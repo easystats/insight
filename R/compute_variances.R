@@ -618,6 +618,11 @@
     } else {
       null_fixef <- unname(.collapse_cond(lme4::fixef(.null_model)))
     }
+    # brmsfit also returns SE and CI, so we just need the first value
+    if (inherits(.null_model, "brmsfit")) {
+      null_fixef <- as.vector(null_fixef)[1]
+    }
+
     mu <- null_fixef
   }
 

@@ -72,6 +72,10 @@ null_model <- function(model, verbose = TRUE, ...) {
   } else {
     f <- stats::formula(model)
     resp <- find_response(model)
+    # fix for brms models
+    if (inherits(model, "brmsfit")) {
+      f <- f$formula
+    }
     re.terms <- paste0("(", sapply(.findbars(f), safe_deparse), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
     null.model <- tryCatch(
