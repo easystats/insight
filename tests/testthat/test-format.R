@@ -73,7 +73,7 @@ test_that("format_ci, bayestestR", {
 test_that("format_ci, parameters", {
   skip_if_not_installed("parameters")
   mm <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
-  expect_identicl(
+  expect_identical(
     format_ci(parameters::ci(mm)),
     c(
       "95% CI [4.62, 4.94]", "95% CI [0.53, 1.30]", "95% CI [-0.52, 0.40]",
