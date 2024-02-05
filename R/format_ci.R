@@ -178,6 +178,20 @@ format_ci.bayestestR_ci <- function(CI_low, ci_string = NULL, ...) {
 }
 
 
+# data frames ------------------------------------------------------
+
+#' @export
+format_ci.data.frame <- function(CI_low, ci_string = "CI", ...) {
+  # find default for ci_string
+  format_ci(
+    CI_low = x$CI_low,
+    CI_high = x$CI_high,
+    ci = x$CI,
+    ci_string = ci_string,
+    ...
+  )
+}
+
 
 
 
