@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.8.3</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,10 +92,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_ci</span><span class="op">(</span><span class="va">CI_low</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for numeric</span></span>
-<span><span class="fu">format_ci</span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_ci</span><span class="op">(</span></span>
 <span>  <span class="va">CI_low</span>,</span>
 <span>  <span class="va">CI_high</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
@@ -105,22 +102,14 @@
 <span>  width_low <span class="op">=</span> <span class="va">width</span>,</span>
 <span>  width_high <span class="op">=</span> <span class="va">width</span>,</span>
 <span>  missing <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  ci_string <span class="op">=</span> <span class="st">"CI"</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>CI_low</dt>
-<dd><p>Lower CI bound. Usually a numeric value, but can also be a
-CI output returned <code>bayestestR</code>, in which case the remaining arguments
-are unnecessary.</p></dd>
-
-
-<dt>...</dt>
-<dd><p>Arguments passed to or from other methods.</p></dd>
+<dd><p>Lower CI bound.</p></dd>
 
 
 <dt>CI_high</dt>
@@ -169,12 +158,6 @@ empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p></dd>
 <dd><p>Logical, if <code>TRUE</code>, small values are rounded after
 <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal
 places than <code>digits</code> are printed in scientific notation.</p></dd>
-
-
-<dt>ci_string</dt>
-<dd><p>String to be used in the output to indicate the type of
-interval. Default is <code>"CI"</code>, but can be changed to <code>"HDI"</code> or anything else,
-if necessary.</p></dd>
 
 </dl></div>
     <div class="section level2">
