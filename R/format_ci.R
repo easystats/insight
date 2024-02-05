@@ -1,6 +1,8 @@
 #' Confidence/Credible Interval (CI) Formatting
 #'
-#' @param CI_low Lower CI bound.
+#' @param CI_low Lower CI bound. Usually a numeric value, but can also be a
+#'    CI output returned `bayestestR`, in which case the remaining arguments
+#'    are unnecessary.
 #' @param CI_high Upper CI bound.
 #' @param ci CI level in percentage.
 #' @param brackets Either a logical, and if `TRUE` (default), values are
@@ -31,8 +33,17 @@
 #'
 #' x <- format_ci(c(1.205, 23.4, 100.43), c(3.57, -13.35, 9.4), width = "auto")
 #' cat(x, sep = "\n")
+#'
+#' # insight::format_ci(bayestestR::ci(rnorm(1000)))
 #' @export
-format_ci <- function(CI_low,
+format_ci <- function(CI_low, ...) {
+  UseMethod("format_ci")
+}
+
+
+
+#' @export
+format_ci.numeric <- function(CI_low,
                       CI_high,
                       ci = 0.95,
                       digits = 2,
@@ -41,7 +52,8 @@ format_ci <- function(CI_low,
                       width_low = width,
                       width_high = width,
                       missing = "",
-                      zap_small = FALSE) {
+                      zap_small = FALSE,
+                      ...) {
   # check proper defaults
   if (isTRUE(brackets)) {
     ci_brackets <- c("[", "]")
@@ -140,6 +152,28 @@ format_ci <- function(CI_low,
     )
   }
 }
+
+
+
+# bayestestR objects ------------------------------------------------------
+
+#' @export
+format_ci.bayestestR_ci <- function(CI_low, ...) {
+  x <- as.data.frame(CI_low)
+  format_ci(
+    CI_low=x$CI_low,
+    CI_high=x$CI_high,
+    ci=x$CI,
+    ...
+  )
+}
+
+
+
+
+
+# Convenience function ----------------------------------------------------
+
 
 #' @keywords internal
 .format_ci <- function(CI_low,
