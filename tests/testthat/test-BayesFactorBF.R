@@ -1,3 +1,4 @@
+skip_on_os("linux")
 skip_if_not_installed("BayesFactor")
 
 x <- BayesFactor::correlationBF(y = iris$Sepal.Length, x = iris$Sepal.Width)
