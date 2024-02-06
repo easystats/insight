@@ -496,77 +496,75 @@
     # ----------------------
 
     dist.variance <- sig^2
+  } else if (faminfo$is_betabinomial) {
+    # beta-binomial ----
+    # ------------------
+
+    dist.variance <- switch(faminfo$link_function,
+      logit = ,
+      probit = ,
+      cloglog = ,
+      clogloglink = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+    )
+  } else if (faminfo$is_binomial) {
+    # binomial / bernoulli  ----
+    # --------------------------
+
+    dist.variance <- switch(faminfo$link_function,
+      logit = pi^2 / 3,
+      probit = 1,
+      cloglog = ,
+      clogloglink = pi^2 / 6,
+      .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+    )
+  } else if (faminfo$is_count) {
+    # count  ----
+    # -----------
+
+    dist.variance <- switch(faminfo$link_function,
+      log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      sqrt = 0.25,
+      .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+    )
+  } else if (faminfo$family %in% c("Gamma", "gamma")) {
+    # Gamma  ----
+    # -----------
+
+    ## TODO needs some more checking - should now be in line with other packages
+    dist.variance <- switch(faminfo$link_function,
+      inverse = ,
+      identity = ,
+      log = stats::family(x)$variance(sig),
+      # log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+    )
+  } else if (faminfo$family == "beta") {
+    # Beta  ----
+    # ----------
+
+    dist.variance <- switch(faminfo$link_function,
+      logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+    )
+  } else if (faminfo$is_tweedie) {
+    # Tweedie  ----
+    # -------------
+
+    dist.variance <- switch(faminfo$link_function,
+      log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+    )
+  } else if (faminfo$is_orderedbeta) {
+    # Ordered Beta  ----
+    # ------------------
+
+    dist.variance <- switch(faminfo$link_function,
+      logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
+    )
   } else {
-    if (faminfo$is_betabinomial) {
-      # beta-binomial ----
-      # ------------------
-
-      dist.variance <- switch(faminfo$link_function,
-        logit = ,
-        probit = ,
-        cloglog = ,
-        clogloglink = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
-        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
-      )
-    } else if (faminfo$is_binomial) {
-      # binomial / bernoulli  ----
-      # --------------------------
-
-      dist.variance <- switch(faminfo$link_function,
-        logit = pi^2 / 3,
-        probit = 1,
-        cloglog = ,
-        clogloglink = pi^2 / 6,
-        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
-      )
-    } else if (faminfo$is_count) {
-      # count  ----
-      # -----------
-
-      dist.variance <- switch(faminfo$link_function,
-        log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
-        sqrt = 0.25,
-        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
-      )
-    } else if (faminfo$family %in% c("Gamma", "gamma")) {
-      # Gamma  ----
-      # -----------
-
-      ## TODO needs some more checking - should now be in line with other packages
-      dist.variance <- switch(faminfo$link_function,
-        inverse = ,
-        identity = ,
-        log = stats::family(x)$variance(sig),
-        # log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
-        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
-      )
-    } else if (faminfo$family == "beta") {
-      # Beta  ----
-      # ----------
-
-      dist.variance <- switch(faminfo$link_function,
-        logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
-        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
-      )
-    } else if (faminfo$is_tweedie) {
-      # Tweedie  ----
-      # -------------
-
-      dist.variance <- switch(faminfo$link_function,
-        log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
-        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
-      )
-    } else if (faminfo$is_orderedbeta) {
-      # Ordered Beta  ----
-      # ------------------
-
-      dist.variance <- switch(faminfo$link_function,
-        logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
-        .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
-      )
-    } else {
-      dist.variance <- sig
-    }
+    dist.variance <- sig
   }
 
   dist.variance
@@ -581,12 +579,10 @@
 .compute_variance_dispersion <- function(x, vals, faminfo, obs.terms) {
   if (faminfo$is_linear) {
     0
+  } else if (length(obs.terms) == 0) {
+    0
   } else {
-    if (length(obs.terms) == 0) {
-      0
-    } else {
-      .compute_variance_random(obs.terms, x = x, vals = vals)
-    }
+    .compute_variance_random(obs.terms, x = x, vals = vals)
   }
 }
 
@@ -720,14 +716,12 @@
 .variance_family_poisson <- function(x, mu, faminfo) {
   if (faminfo$is_zero_inflated) {
     .variance_zip(x, faminfo, family_var = mu)
+  } else if (inherits(x, "MixMod")) {
+    return(mu)
+  } else if (inherits(x, "cpglmm")) {
+    .get_cplm_family(x)$variance(mu)
   } else {
-    if (inherits(x, "MixMod")) {
-      return(mu)
-    } else if (inherits(x, "cpglmm")) {
-      .get_cplm_family(x)$variance(mu)
-    } else {
-      stats::family(x)$variance(mu)
-    }
+    stats::family(x)$variance(mu)
   }
 }
 
@@ -800,15 +794,13 @@
   if (faminfo$is_zero_inflated) {
     if (missing(sig)) sig <- 0
     .variance_zinb(x, sig, faminfo, family_var = mu * (1 + sig))
-  } else {
-    if (inherits(x, "MixMod")) {
-      if (missing(sig)) {
-        return(rep(1e-16, length(mu)))
-      }
-      mu * (1 + sig)
-    } else {
-      stats::family(x)$variance(mu, sig)
+  } else if (inherits(x, "MixMod")) {
+    if (missing(sig)) {
+      return(rep(1e-16, length(mu)))
     }
+    mu * (1 + sig)
+  } else {
+    stats::family(x)$variance(mu, sig)
   }
 }
 
@@ -887,21 +879,19 @@
   check_if_installed("lme4")
 
   tryCatch(
-    {
-      if (inherits(x, "merMod")) {
-        mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
-      } else if (inherits(x, "MixMod")) {
-        stats::family(x)$variance(mu)
-      } else if (inherits(x, "glmmTMB")) {
-        if (is.null(x$theta)) {
-          theta <- lme4::getME(x, "theta")
-        } else {
-          theta <- x$theta
-        }
-        mu * (1 + mu / theta)
+    if (inherits(x, "merMod")) {
+      mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
+    } else if (inherits(x, "MixMod")) {
+      stats::family(x)$variance(mu)
+    } else if (inherits(x, "glmmTMB")) {
+      if (is.null(x$theta)) {
+        theta <- lme4::getME(x, "theta")
       } else {
-        mu * (1 + mu / x$theta)
+        theta <- x$theta
       }
+      mu * (1 + mu / theta)
+    } else {
+      mu * (1 + mu / x$theta)
     },
     error = function(x) {
       if (verbose) {
@@ -1081,24 +1071,22 @@
   }
 
   rho00 <- tryCatch(
-    {
-      compact_list(lapply(corrs, function(d) {
-        d[upper.tri(d, diag = TRUE)] <- NA
-        d <- as.data.frame(d)
+    compact_list(lapply(corrs, function(d) {
+      d[upper.tri(d, diag = TRUE)] <- NA
+      d <- as.data.frame(d)
 
-        d <- .reshape_longer(d, colnames_to = "Parameter1", rows_to = "Parameter2")
-        d <- d[stats::complete.cases(d), ]
-        d <- d[!d$Parameter1 %in% c("Intercept", "(Intercept)"), ]
+      d <- .reshape_longer(d, colnames_to = "Parameter1", rows_to = "Parameter2")
+      d <- d[stats::complete.cases(d), ]
+      d <- d[!d$Parameter1 %in% c("Intercept", "(Intercept)"), ]
 
-        if (nrow(d) == 0) {
-          return(NULL)
-        }
+      if (nrow(d) == 0) {
+        return(NULL)
+      }
 
-        d$Parameter <- paste0(d$Parameter1, "-", d$Parameter2)
-        d$Parameter1 <- d$Parameter2 <- NULL
-        stats::setNames(d$Value, d$Parameter)
-      }))
-    },
+      d$Parameter <- paste0(d$Parameter1, "-", d$Parameter2)
+      d$Parameter1 <- d$Parameter2 <- NULL
+      stats::setNames(d$Value, d$Parameter)
+    })),
     error = function(e) {
       NULL
     }
