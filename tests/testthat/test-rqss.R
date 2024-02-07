@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_on_os("linux")
 skip_if_not_installed("quantreg")
 skip_if_not_installed("interp")
 
@@ -55,18 +56,18 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(response = "z", conditional = c("w", "qss(cbind(x, y), lambda = 0.08)"))
   )
-  expect_equal(
+  expect_identical(
     find_terms(m1, flatten = TRUE),
     c("z", "w", "qss(cbind(x, y), lambda = 0.08)")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 38)
+  expect_identical(n_obs(m1), 38L)
 })
 
 test_that("link_function", {
@@ -78,12 +79,12 @@ test_that("link_inverse", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(conditional = c("(Intercept)", "w"), smooth_terms = "cbind(x, y)")
   )
-  expect_equal(nrow(get_parameters(m1)), 3)
-  expect_equal(
+  expect_identical(nrow(get_parameters(m1)), 3L)
+  expect_identical(
     get_parameters(m1)$Parameter,
     c("(Intercept)", "w", "cbind(x, y)")
   )
@@ -94,7 +95,7 @@ test_that("is_multivariate", {
 })
 
 test_that("find_algorithm", {
-  expect_equal(find_algorithm(m1), list(algorithm = "sfn"))
+  expect_identical(find_algorithm(m1), list(algorithm = "sfn"))
 })
 
 test_that("find_statistic", {

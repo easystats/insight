@@ -12,14 +12,14 @@ withr::with_environment(
     Surv <- survival::Surv
 
     set.seed(1234)
-    lung$inst2 <- sample(1:10, size = nrow(lung), replace = TRUE)
+    lung$inst2 <- sample.int(10, size = nrow(lung), replace = TRUE)
     lung <- subset(lung, subset = ph.ecog %in% 0:2)
     lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
 
     d <<- lung
 
-    m1 <- coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), d)
-    m2 <- coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst) + (1 | inst2), d)
+    m1 <- suppressWarnings(coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), d))
+    m2 <- suppressWarnings(coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst) + (1 | inst2), d))
 
     test_that("model_info", {
       expect_true(model_info(m1)$is_logit)
