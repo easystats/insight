@@ -413,20 +413,20 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 # Interval helpers --------------------------------------------------------
 
 .get_predicted_se_from_iter <- function(iter, dispersion_method = "SD") {
-  data <- as.data.frame(t(iter)) # Reshape
+  reshaped_data <- as.data.frame(t(iter)) # Reshape
 
   # Dispersion
   if (is.character(dispersion_method)) {
     dispersion_method <- match.arg(tolower(dispersion_method), c("sd", "mad"))
     if (dispersion_method == "sd") {
-      se <- apply(data, 2, stats::sd)
+      se <- apply(reshaped_data, 2, stats::sd)
     } else if (dispersion_method == "mad") {
-      se <- apply(data, 2, stats::mad)
+      se <- apply(reshaped_data, 2, stats::mad)
     } else {
       format_error("`dispersion_method` argument not recognized.")
     }
   } else {
-    se <- apply(data, 2, dispersion_method)
+    se <- apply(reshaped_data, 2, dispersion_method)
   }
   data.frame(SE = se, row.names = seq_along(se))
 }
