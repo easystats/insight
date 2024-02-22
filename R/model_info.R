@@ -1204,7 +1204,7 @@ model_info.polr <- function(x, ...) {
 
 
 #' @export
-model_info.polr <- function(x, ...) {
+model_info.serp <- function(x, ...) {
   link <- x$link
   faminfo <- stats::binomial(link = link)
   .make_family(
