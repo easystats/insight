@@ -42,7 +42,7 @@ test_that("get_random", {
 })
 
 test_that("find_response", {
-  expect_identical(find_response(m1), "count")
+  expect_identical(find_response(m1), "rating")
 })
 
 test_that("get_response", {
