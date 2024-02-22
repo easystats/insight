@@ -345,6 +345,9 @@ link_inverse.clmm <- link_inverse.clm
 link_inverse.clm2 <- link_inverse.clm
 
 #' @export
+link_inverse.serp <- link_inverse.clm
+
+#' @export
 link_inverse.mixor <- link_inverse.clm
 
 

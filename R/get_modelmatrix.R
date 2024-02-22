@@ -57,7 +57,7 @@ get_modelmatrix.serp <- function(x, ...) {
   if ("data" %in% names(dots)) {
     mm <- stats::model.matrix(object = x$Terms, data = dots$data, ...)
   } else {
-    mm <- stats::model.matrix(object = x$Terms, data = get_data(m), ...)
+    mm <- stats::model.matrix(object = x$Terms, data = get_data(x), ...)
   }
 
   mm

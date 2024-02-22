@@ -410,6 +410,9 @@ model_info.clm2 <- model_info.clm
 model_info.clmm <- model_info.clm
 
 #' @export
+model_info.serp <- model_info.clm
+
+#' @export
 model_info.mixor <- model_info.clm
 
 
@@ -1192,20 +1195,6 @@ model_info.MCMCglmm <- function(x, ...) {
 model_info.polr <- function(x, ...) {
   link <- x$method
   if (link == "logistic") link <- "logit"
-  faminfo <- stats::binomial(link = link)
-  .make_family(
-    x = x,
-    fitfam = faminfo$family,
-    logit.link = faminfo$link == "logit",
-    link.fun = faminfo$link,
-    ...
-  )
-}
-
-
-#' @export
-model_info.serp <- function(x, ...) {
-  link <- x$link
   faminfo <- stats::binomial(link = link)
   .make_family(
     x = x,
