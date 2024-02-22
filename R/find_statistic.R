@@ -229,13 +229,11 @@ find_statistic <- function(x, ...) {
   # family, so this exception needs to be caught before checking for g.mods
 
   tryCatch(
-    {
-      suppressWarnings(
-        if (!is_multivariate(x) && .is_tweedie(x, m_info)) {
-          return("t-statistic")
-        }
-      )
-    },
+    suppressWarnings(
+      if (!is_multivariate(x) && .is_tweedie(x, m_info)) {
+        return("t-statistic")
+      }
+    ),
     error = function(e) {}
   )
 
@@ -267,8 +265,8 @@ find_statistic <- function(x, ...) {
     if (model_class %in% c("emmGrid", "emm_list")) {
       stat <- tryCatch(
         {
-          df <- get_df(x)
-          if (all(is.na(df)) || all(is.infinite(df))) {
+          dof <- get_df(x)
+          if (all(is.na(dof)) || all(is.infinite(dof))) {
             "z-statistic"
           } else {
             "t-statistic"

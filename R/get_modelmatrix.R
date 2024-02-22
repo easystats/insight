@@ -130,7 +130,7 @@ get_modelmatrix.clmm <- function(x, ...) {
 get_modelmatrix.svyglm <- function(x, ...) {
   dots <- list(...)
   if ("data" %in% names(dots)) {
-    data <- tryCatch(
+    model_data <- tryCatch(
       {
         d <- as.data.frame(dots$data)
         response_name <- find_response(x)
@@ -147,7 +147,7 @@ get_modelmatrix.svyglm <- function(x, ...) {
       }
     )
     model_terms <- stats::terms(x)
-    mm <- stats::model.matrix(model_terms, data = data)
+    mm <- stats::model.matrix(model_terms, data = model_data)
   } else {
     mm <- stats::model.matrix(object = x, ...)
   }
@@ -183,7 +183,7 @@ get_modelmatrix.rlm <- function(x, ...) {
     data = mf,
     contrasts.arg = x$contrasts
   )
-  return(mm)
+  mm
 }
 
 
@@ -203,7 +203,7 @@ get_modelmatrix.betareg <- function(x, ...) {
     ))
     mm <- stats::model.matrix(stats::delete.response(x$terms$mean), mf)
   }
-  return(mm)
+  mm
 }
 
 
@@ -271,7 +271,7 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
   out <- rbind(pad, data)
   row.names(out) <- NULL
   attr(out, "pad") <- nrow(pad)
-  return(out)
+  out
 }
 
 
