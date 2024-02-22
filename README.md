@@ -7,7 +7,7 @@
 [![status](https://tinyverse.netlify.com/badge/insight)](https://CRAN.R-project.org/package=insight)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 
-**Gain insight into your models\!**
+**Gain insight into your models!**
 
 When fitting any statistical model, there are many useful pieces of
 information that are simultaneously calculated and stored beyond
@@ -27,7 +27,7 @@ to every aspect of many model objects via consistent syntax and output.
 
 ## Installation
 
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
 [![insight status
 badge](https://easystats.r-universe.dev/badges/insight)](https://easystats.r-universe.dev)
 [![R-CMD-check](https://github.com/easystats/insight/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/insight/actions)
@@ -36,7 +36,7 @@ The *insight* package is available on CRAN, while its latest development
 version is available on R-universe (from *rOpenSci*) or GitHub.
 
 | Type        | Source     | Command                                                                   |
-| ----------- | ---------- | ------------------------------------------------------------------------- |
+|-------------|------------|---------------------------------------------------------------------------|
 | Release     | CRAN       | `install.packages("insight")`                                             |
 | Development | r-universe | `install.packages("insight", repos = "https://easystats.r-universe.dev")` |
 | Development | GitHub     | `remotes::install_github("easystats/insight")`                            |
@@ -48,10 +48,10 @@ library("insight")
 ```
 
 > **Tip**
-> 
+>
 > Instead of `library(insight)`, use `library(easystats)`. This will
 > make all features of the easystats-ecosystem available.
-> 
+>
 > To stay updated, use `easystats::install_latest()`.
 
 ## Documentation
@@ -91,15 +91,15 @@ as *coefficients*.
 
 #### Response and Predictors
 
-  - **response**: the outcome or response variable (dependent variable)
-    of a regression model.
-  - **predictor**: independent variables of (the *fixed* part of) a
-    regression model. For mixed models, variables that are only in the
-    *random effects* part (i.e. grouping factors) of the model are not
-    returned as predictors by default. However, these can be included
-    using additional arguments in the function call, treating predictors
-    are “unique”. As such, if a variable appears as a fixed effect and a
-    random slope, it is treated as one (the same) predictor.
+- **response**: the outcome or response variable (dependent variable) of
+  a regression model.
+- **predictor**: independent variables of (the *fixed* part of) a
+  regression model. For mixed models, variables that are only in the
+  *random effects* part (i.e. grouping factors) of the model are not
+  returned as predictors by default. However, these can be included
+  using additional arguments in the function call, treating predictors
+  are “unique”. As such, if a variable appears as a fixed effect and a
+  random slope, it is treated as one (the same) predictor.
 
 #### Variables
 
@@ -117,10 +117,10 @@ and `poly(x, 2)`.
 
 #### Random Effects
 
-  - **random slopes**: variables that are specified as random slopes in
-    a mixed effects model.
-  - **random or grouping factors**: variables that are specified as
-    grouping variables in a mixed effects model.
+- **random slopes**: variables that are specified as random slopes in a
+  mixed effects model.
+- **random or grouping factors**: variables that are specified as
+  grouping variables in a mixed effects model.
 
 *Aren’t the predictors, terms and parameters the same thing?*
 
@@ -141,23 +141,23 @@ narrower level of statistical inspection and reporting (`get_*`).
 ![](https://raw.githubusercontent.com/easystats/insight/master/paper/figure1_small.png)
 
 In total, the **insight** package includes 16 core functions:
-[get\_data()](https://easystats.github.io/insight/reference/get_data.html),
-[get\_priors()](https://easystats.github.io/insight/reference/get_priors.html),
-[get\_variance()](https://easystats.github.io/insight/reference/get_variance.html),
-[get\_parameters()](https://easystats.github.io/insight/reference/get_parameters.html),
-[get\_predictors()](https://easystats.github.io/insight/reference/get_predictors.html),
-[get\_random()](https://easystats.github.io/insight/reference/get_random.html),
-[get\_response()](https://easystats.github.io/insight/reference/get_response.html),
-[find\_algorithm()](https://easystats.github.io/insight/reference/find_algorithm.html),
-[find\_formula()](https://easystats.github.io/insight/reference/find_formula.html),
-[find\_variables()](https://easystats.github.io/insight/reference/find_variables.html),
-[find\_terms()](https://easystats.github.io/insight/reference/find_terms.html),
-[find\_parameters()](https://easystats.github.io/insight/reference/find_parameters.html),
-[find\_predictors()](https://easystats.github.io/insight/reference/find_predictors.html),
-[find\_random()](https://easystats.github.io/insight/reference/find_random.html),
-[find\_response()](https://easystats.github.io/insight/reference/find_response.html),
+[get_data()](https://easystats.github.io/insight/reference/get_data.html),
+[get_priors()](https://easystats.github.io/insight/reference/get_priors.html),
+[get_variance()](https://easystats.github.io/insight/reference/get_variance.html),
+[get_parameters()](https://easystats.github.io/insight/reference/get_parameters.html),
+[get_predictors()](https://easystats.github.io/insight/reference/get_predictors.html),
+[get_random()](https://easystats.github.io/insight/reference/get_random.html),
+[get_response()](https://easystats.github.io/insight/reference/get_response.html),
+[find_algorithm()](https://easystats.github.io/insight/reference/find_algorithm.html),
+[find_formula()](https://easystats.github.io/insight/reference/find_formula.html),
+[find_variables()](https://easystats.github.io/insight/reference/find_variables.html),
+[find_terms()](https://easystats.github.io/insight/reference/find_terms.html),
+[find_parameters()](https://easystats.github.io/insight/reference/find_parameters.html),
+[find_predictors()](https://easystats.github.io/insight/reference/find_predictors.html),
+[find_random()](https://easystats.github.io/insight/reference/find_random.html),
+[find_response()](https://easystats.github.io/insight/reference/find_response.html),
 and
-[model\_info()](https://easystats.github.io/insight/reference/model_info.html).
+[model_info()](https://easystats.github.io/insight/reference/model_info.html).
 In all cases, users must supply at a minimum, the name of the model fit
 object. In several functions, there are additional arguments that allow
 for more targeted returns of model information. For example, the
@@ -283,7 +283,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, 225 model classes are supported.
+Currently, 226 model classes are supported.
 
 ``` r
 supported_models()
@@ -385,26 +385,26 @@ supported_models()
 #> [191] "Sarlm"                   "scam"                   
 #> [193] "selection"               "sem"                    
 #> [195] "SemiParBIV"              "semLm"                  
-#> [197] "semLme"                  "slm"                    
-#> [199] "speedglm"                "speedlm"                
-#> [201] "stanfit"                 "stanmvreg"              
-#> [203] "stanreg"                 "summary.lm"             
-#> [205] "survfit"                 "survreg"                
-#> [207] "svy_vglm"                "svychisq"               
-#> [209] "svyglm"                  "svyolr"                 
-#> [211] "t1way"                   "tobit"                  
-#> [213] "trimcibt"                "truncreg"               
-#> [215] "vgam"                    "vglm"                   
-#> [217] "wbgee"                   "wblm"                   
-#> [219] "wbm"                     "wmcpAKP"                
-#> [221] "yuen"                    "yuend"                  
-#> [223] "zcpglm"                  "zeroinfl"               
-#> [225] "zerotrunc"
+#> [197] "semLme"                  "serp"                   
+#> [199] "slm"                     "speedglm"               
+#> [201] "speedlm"                 "stanfit"                
+#> [203] "stanmvreg"               "stanreg"                
+#> [205] "summary.lm"              "survfit"                
+#> [207] "survreg"                 "svy_vglm"               
+#> [209] "svychisq"                "svyglm"                 
+#> [211] "svyolr"                  "t1way"                  
+#> [213] "tobit"                   "trimcibt"               
+#> [215] "truncreg"                "vgam"                   
+#> [217] "vglm"                    "wbgee"                  
+#> [219] "wblm"                    "wbm"                    
+#> [221] "wmcpAKP"                 "yuen"                   
+#> [223] "yuend"                   "zcpglm"                 
+#> [225] "zeroinfl"                "zerotrunc"
 ```
 
-  - **Didn’t find a model?** [File an
-    issue](https://github.com/easystats/insight/issues) and request
-    additional model-support in *insight*\!
+- **Didn’t find a model?** [File an
+  issue](https://github.com/easystats/insight/issues) and request
+  additional model-support in *insight*!
 
 ## Citation
 
