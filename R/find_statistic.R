@@ -37,7 +37,7 @@ find_statistic <- function(x, ...) {
         t = "t-statistic",
         Z = "z-statistic",
         `Quade F` = ,
-        `F` = "F-statistic",
+        `F` = "F-statistic", # nolint
         `Bartlett's K-squared` = ,
         `Fligner-Killeen:med chi-squared` = ,
         `Friedman chi-squared` = ,
@@ -132,7 +132,7 @@ find_statistic <- function(x, ...) {
     "poissonmfx", "poissonirr", "psm", "probitmfx", "pgmm", "phyloglm",
     "qr", "QRNLMM", "QRLMM",
     "Rchoice", "riskRegression", "robmixglm", "rma", "rma.mv", "rma.uni", "rrvglm",
-    "Sarlm", "sem", "SemiParBIV", "slm", "slopes", "survreg", "svy_vglm",
+    "Sarlm", "sem", "SemiParBIV", "serp", "slm", "slopes", "survreg", "svy_vglm",
     "test_mediation", "tobit",
     "vglm",
     "wbgee",

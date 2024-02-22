@@ -1204,6 +1204,20 @@ model_info.polr <- function(x, ...) {
 
 
 #' @export
+model_info.polr <- function(x, ...) {
+  link <- x$link
+  faminfo <- stats::binomial(link = link)
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.nestedLogit <- function(x, ...) {
   faminfo <- stats::binomial(link = "logit")
   .make_family(

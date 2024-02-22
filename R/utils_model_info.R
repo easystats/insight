@@ -144,7 +144,7 @@
   # ordinal family --------
 
   is.ordinal <-
-    inherits(x, c("svyolr", "polr", "clm", "clm2", "clmm", "mixor", "LORgee", "mvord")) |
+    inherits(x, c("svyolr", "polr", "serp", "clm", "clm2", "clmm", "mixor", "LORgee", "mvord")) |
       fitfam %in% c("cumulative", "ordinal")
 
 

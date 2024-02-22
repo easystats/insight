@@ -141,7 +141,7 @@ is_regression_model <- function(x) {
     "rma.uni", "rms", "robmixglm", "robtab", "rq", "rqs", "rqss",
 
     # s --------------------
-    "Sarlm", "scam", "selection", "sem", "SemiParBIV", "slm", "speedlm",
+    "Sarlm", "scam", "selection", "sem", "SemiParBIV", "serp", "slm", "speedlm",
     "speedglm", "splmm", "spml", "stanmvreg", "stanreg", "summary.lm",
     "survfit", "survreg", "survPresmooth", "svychisq", "svyglm", "svy_vglm",
     "svyolr", "svytable", "systemfit",

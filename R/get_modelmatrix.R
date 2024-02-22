@@ -52,6 +52,18 @@ get_modelmatrix.bracl <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.serp <- function(x, ...) {
+  dots <- list(...)
+  if ("data" %in% names(dots)) {
+    mm <- stats::model.matrix(object = x$Terms, data = dots$data, ...)
+  } else {
+    mm <- stats::model.matrix(object = x$Terms, data = get_data(m), ...)
+  }
+
+  mm
+}
+
+#' @export
 get_modelmatrix.iv_robust <- function(x, ...) {
   dots <- list(...)
   model_terms <- stats::terms(x)
@@ -220,7 +232,7 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
 
 
 .data_in_dots <- function(..., object = NULL, default_data = NULL) {
-  dot.arguments <- lapply(match.call(expand.dots = FALSE)$`...`, function(x) x)
+  dot.arguments <- lapply(match.call(expand.dots = FALSE)[["..."]], function(x) x)
   data_arg <- if ("data" %in% names(dot.arguments)) {
     eval(dot.arguments[["data"]])
   } else {

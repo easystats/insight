@@ -1,3 +1,7 @@
+# insight 0.19.9
+
+* Support for models of class `serp` (package *serp*).
+
 # insight 0.19.8
 
 ## General
