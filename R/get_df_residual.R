@@ -136,6 +136,11 @@
   x$df
 }
 
+#' @keywords internal
+.degrees_of_freedom_residual.serp <- function(x, verbose = TRUE, ...) {
+  x$rdf
+}
+
 #' @export
 .degrees_of_freedom_residual.BBmm <- .degrees_of_freedom_residual.glht
 
