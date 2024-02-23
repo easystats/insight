@@ -2,7 +2,8 @@ skip_if_not_installed("serp")
 
 data(wine, package = "serp")
 m1 <- serp::serp(
-  rating ~ temp + contact, slope = "penalize",
+  rating ~ temp + contact,
+  slope = "penalize",
   link = "logit", reverse = TRUE, tuneMethod = "user",
   lambda = 1e1, data = wine
 )
