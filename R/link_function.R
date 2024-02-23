@@ -345,6 +345,9 @@ link_function.clm2 <- link_function.clm
 link_function.clmm <- link_function.clm
 
 #' @export
+link_function.serp <- link_function.clm
+
+#' @export
 link_function.mixor <- link_function.clm
 
 
@@ -760,16 +763,13 @@ link_function.brmsfit <- function(x, ...) {
   # do we have custom families?
   if (!is.null(fam$family) && (is.character(fam$family) && fam$family == "custom")) {
     il <- stats::make.link(fam$link)$linkfun
+  } else if ("linkfun" %in% names(fam)) {
+    il <- fam$linkfun
+  } else if ("link" %in% names(fam) && is.character(fam$link)) {
+    il <- stats::make.link(fam$link)$linkfun
   } else {
-    if ("linkfun" %in% names(fam)) {
-      il <- fam$linkfun
-    } else if ("link" %in% names(fam) && is.character(fam$link)) {
-      il <- stats::make.link(fam$link)$linkfun
-    } else {
-      ff <- get(fam$family, asNamespace("stats"))
-      il <- ff(fam$link)$linkfun
-    }
+    ff <- get(fam$family, asNamespace("stats"))
+    il <- ff(fam$link)$linkfun
   }
-
   il
 }

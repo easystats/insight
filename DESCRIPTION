@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.19.8.3
+Version: 0.19.8.4
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -186,6 +186,7 @@ Suggests:
     rstantools (>= 2.1.0),
     rstudioapi,
     sandwich,
+    serp,
     speedglm,
     splines,
     statmod,

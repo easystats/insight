@@ -410,6 +410,9 @@ model_info.clm2 <- model_info.clm
 model_info.clmm <- model_info.clm
 
 #' @export
+model_info.serp <- model_info.clm
+
+#' @export
 model_info.mixor <- model_info.clm
 
 

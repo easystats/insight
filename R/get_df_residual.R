@@ -98,12 +98,10 @@
 .degrees_of_freedom_residual.lqmm <- function(x, verbose = TRUE, ...) {
   cs <- summary(x)
   tryCatch(
-    {
-      if (!is.null(cs$rdf)) {
-        cs$rdf
-      } else {
-        attr(cs$B, "R") - 1
-      }
+    if (is.null(cs$rdf)) {
+      attr(cs$B, "R") - 1
+    } else {
+      cs$rdf
     },
     error = function(e) {
       NULL
@@ -134,6 +132,11 @@
 #' @keywords internal
 .degrees_of_freedom_residual.glht <- function(x, verbose = TRUE, ...) {
   x$df
+}
+
+#' @keywords internal
+.degrees_of_freedom_residual.serp <- function(x, verbose = TRUE, ...) {
+  x$rdf
 }
 
 #' @export
@@ -207,7 +210,7 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.systemfit <- function(x, verbose = TRUE, ...) {
-  df <- NULL
+  dof <- NULL
   s <- summary(x)$eq
   params <- find_parameters(x)
   f <- find_formula(x)
@@ -216,8 +219,8 @@
   for (i in seq_along(system_names)) {
     dfs <- rep(s[[i]]$df[2], length(params[[i]]))
     df_names <- rep(names(params[i]), length(params[[i]]))
-    df <- c(df, stats::setNames(dfs, df_names))
+    dof <- c(dof, stats::setNames(dfs, df_names))
   }
 
-  df
+  dof
 }

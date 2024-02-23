@@ -345,6 +345,9 @@ link_inverse.clmm <- link_inverse.clm
 link_inverse.clm2 <- link_inverse.clm
 
 #' @export
+link_inverse.serp <- link_inverse.clm
+
+#' @export
 link_inverse.mixor <- link_inverse.clm
 
 
@@ -726,17 +729,14 @@ link_inverse.mira <- function(x, ...) {
   # do we have custom families?
   if (!is.null(fam$family) && (is.character(fam$family) && fam$family == "custom")) {
     il <- stats::make.link(fam$link)$linkinv
+  } else if ("linkinv" %in% names(fam)) {
+    il <- fam$linkinv
+  } else if ("link" %in% names(fam) && is.character(fam$link)) {
+    il <- stats::make.link(fam$link)$linkinv
   } else {
-    if ("linkinv" %in% names(fam)) {
-      il <- fam$linkinv
-    } else if ("link" %in% names(fam) && is.character(fam$link)) {
-      il <- stats::make.link(fam$link)$linkinv
-    } else {
-      ff <- get(fam$family, asNamespace("stats"))
-      il <- ff(fam$link)$linkinv
-    }
+    ff <- get(fam$family, asNamespace("stats"))
+    il <- ff(fam$link)$linkinv
   }
-
   il
 }
 

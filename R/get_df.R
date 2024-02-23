@@ -120,16 +120,15 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   }
 
 
-  # Wald normal approximation - always Inf -----
   if (type == "normal") {
+    # Wald normal approximation - always Inf -----
     return(Inf)
-
-    # residual/analytical df, falls back to Inf if we have no residual df method -----
   } else if (type == "residual") {
+    # residual/analytical df, falls back to Inf if we have no residual df method -----
     dof <- .get_residual_df(x, verbose)
-
-    # Wald df - always Inf for z-statistic, 1 for Chi2-statistic, else residual df -----
   } else if (type == "wald") {
+    # Wald df - always Inf for z-statistic, 1 for Chi2-statistic, else residual df -----
+
     # z-statistic always Inf, *unless* we have residual df (which we have for some models)
     if (identical(statistic, "z-statistic")) {
       return(Inf)

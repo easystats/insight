@@ -37,7 +37,7 @@ find_statistic <- function(x, ...) {
         t = "t-statistic",
         Z = "z-statistic",
         `Quade F` = ,
-        `F` = "F-statistic",
+        `F` = "F-statistic", # nolint
         `Bartlett's K-squared` = ,
         `Fligner-Killeen:med chi-squared` = ,
         `Friedman chi-squared` = ,
@@ -132,7 +132,7 @@ find_statistic <- function(x, ...) {
     "poissonmfx", "poissonirr", "psm", "probitmfx", "pgmm", "phyloglm",
     "qr", "QRNLMM", "QRLMM",
     "Rchoice", "riskRegression", "robmixglm", "rma", "rma.mv", "rma.uni", "rrvglm",
-    "Sarlm", "sem", "SemiParBIV", "slm", "slopes", "survreg", "svy_vglm",
+    "Sarlm", "sem", "SemiParBIV", "serp", "slm", "slopes", "survreg", "svy_vglm",
     "test_mediation", "tobit",
     "vglm",
     "wbgee",
@@ -229,13 +229,11 @@ find_statistic <- function(x, ...) {
   # family, so this exception needs to be caught before checking for g.mods
 
   tryCatch(
-    {
-      suppressWarnings(
-        if (!is_multivariate(x) && .is_tweedie(x, m_info)) {
-          return("t-statistic")
-        }
-      )
-    },
+    suppressWarnings(
+      if (!is_multivariate(x) && .is_tweedie(x, m_info)) {
+        return("t-statistic")
+      }
+    ),
     error = function(e) {}
   )
 
@@ -267,8 +265,8 @@ find_statistic <- function(x, ...) {
     if (model_class %in% c("emmGrid", "emm_list")) {
       stat <- tryCatch(
         {
-          df <- get_df(x)
-          if (all(is.na(df)) || all(is.infinite(df))) {
+          dof <- get_df(x)
+          if (all(is.na(dof)) || all(is.infinite(dof))) {
             "z-statistic"
           } else {
             "t-statistic"
