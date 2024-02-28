@@ -15,7 +15,7 @@ test_that("find_predictors", {
   data <- data.frame(x, y, z)
 
   w <- 3
-  m1 <- try(mgcv::gam(y ~ s(z, by = x, k = 3) + x, data = data), silent = TRUE)
+  m1 <- mgcv::gam(y ~ s(z, by = x, k = 3) + x, data = data)
   m2 <- mgcv::gam(y ~ s(z, by = x, k = w) + x, data = data)
   expect_identical(find_predictors(m1), find_predictors(m2))
   expect_identical(find_predictors(m2)$conditional, c("z", "x"))
