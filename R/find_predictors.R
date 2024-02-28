@@ -250,7 +250,7 @@ find_predictors.afex_aov <- function(x,
         # see #851
         # check if we have splines in the formula
         fs <- paste(as.character(f[[i]]), collapse = " ")
-        if (grepl("mgcv::s(", fs, fixed = TRUE) || grepl(" s(", fs, fixed = TRUE) || grepl("+s(", fs, fixed = TRUE)) {
+        if (grepl(" s(", fs, fixed = TRUE) || grepl("+s(", fs, fixed = TRUE)) {
           pattern <- "(.*)s\\((.*)k\\s?=(.*)\\)(.*)"
           k_value <- trim_ws(gsub(pattern, "\\3", fs))
           vars <- setdiff(vars, k_value)
