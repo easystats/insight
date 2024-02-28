@@ -244,7 +244,18 @@ find_predictors.afex_aov <- function(x,
         # we have a list of formulas
         lapply(f[[i]], function(j) unique(all.vars(j)))
       } else {
-        unique(all.vars(f[[i]]))
+        vars <- unique(all.vars(f[[i]]))
+        # when we have splines, the number of dimensions (argument "k") can be
+        # stored in a variable. This variable name is no predictor, so we remove it
+        # see #851
+        # check if we have splines in the formula
+        fs <- paste(as.character(f[[i]]), collapse = " ")
+        if (grepl("mgcv::s(", fs, fixed = TRUE) || grepl(" s(", fs, fixed = TRUE) || grepl("+s(", fs, fixed = TRUE)) {
+          pattern <- "(.*)s\\((.*)k\\s?=(.*)\\)(.*)"
+          k_value <- trim_ws(gsub(pattern, "\\3", fs))
+          vars <- setdiff(vars, k_value)
+        }
+        vars
       }
     }
   })
