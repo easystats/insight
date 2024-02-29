@@ -1,6 +1,13 @@
 # insight 0.19.9
 
+## New supported models
+
 * Support for models of class `serp` (package *serp*).
+
+## Bug fixes
+
+* Fixed issue in `find_predictors()` for models with splines (`s()`), where
+  number of dimensions was indicated with a variable, not a number.
 
 # insight 0.19.8
 
