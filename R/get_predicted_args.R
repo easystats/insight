@@ -132,7 +132,7 @@
   # Third step, prepare arguments that define the type/scale of predictions --
   ############################################################################
 
-  transform <- FALSE
+  my_transform <- FALSE
 
   # type_arg  = what we pass down to type
   # scale_arg = the scale of the predictions (link, response, terms, ...)
@@ -145,13 +145,13 @@
   if (predict == "terms") {
     type_arg <- "terms"
     scale_arg <- "terms"
-    transform <- FALSE
+    my_transform <- FALSE
 
     # linear models are always on response scale (there is no other, unless gaussian("log"))
   } else if (info$is_linear && !info$is_gam && !identical(info$link_function, "log")) {
     type_arg <- "response"
     scale_arg <- "response"
-    transform <- FALSE
+    my_transform <- FALSE
 
     # type = "response" always on link-scale - for later back-transformation
   } else if (predict %in% c("expectation", "response", "prediction", "classification")) {
@@ -161,7 +161,7 @@
     if (inherits(x, "glmmTMB") && isTRUE(info$is_hurdle)) {
       type_arg <- "response"
       scale_arg <- "response"
-      transform <- FALSE
+      my_transform <- FALSE
     } else {
       if (inherits(x, c("hurdle", "zeroinfl", "zerotrunc"))) {
         # pscl: hurdle/zeroinfl and countreg
@@ -174,7 +174,7 @@
         type_arg <- "link"
       }
       scale_arg <- "response"
-      transform <- TRUE
+      my_transform <- TRUE
     }
 
     # link-scale
@@ -186,7 +186,7 @@
       type_arg <- "link"
     }
     scale_arg <- "link"
-    transform <- FALSE
+    my_transform <- FALSE
 
     # user provided a valid "type" value, which is not one of our "predict" values
   } else if (predict %in% type_methods) {
@@ -194,32 +194,32 @@
       # pscl
       type_arg <- "count"
       scale_arg <- "link"
-      transform <- FALSE
+      my_transform <- FALSE
     } else if (predict == "zero") {
       # pscl
       type_arg <- "zero"
       scale_arg <- "link"
-      transform <- FALSE
+      my_transform <- FALSE
     } else if (predict %in% c("risk", "lp")) {
       # cosph
       type_arg <- "lp"
       scale_arg <- "link"
-      transform <- predict == "risk"
+      my_transform <- predict == "risk"
     } else if (predict == "lp") {
       # coxph
       type_arg <- "lp"
       scale_arg <- "link"
-      transform <- FALSE
+      my_transform <- FALSE
     } else {
       # unknown / default
       type_arg <- scale_arg <- predict
-      transform <- FALSE
+      my_transform <- FALSE
     }
 
     # unknown
   } else {
     type_arg <- scale_arg <- predict
-    transform <- FALSE
+    my_transform <- FALSE
   }
 
 
@@ -279,7 +279,10 @@
         )
       }
       include_random <- FALSE
-    } else if (!allow_new_levels) {
+    } else if (allow_new_levels) {
+      # include_random still might be "default" - change to TRUE here
+      include_random <- TRUE
+    } else {
       # we have random effects in data, but do we also have new levels?
       # get data of random effects from the model, and compare random effect
       # variables with data provided by the user - all values/levels need to
@@ -291,7 +294,10 @@
         all(unique(data[[i]]) %in% re_data[[i]])
       }, TRUE)
 
-      if (!all(all_levels_found)) {
+      if (all(all_levels_found)) {
+        # include_random still might be "default" - change to TRUE here
+        include_random <- TRUE
+      } else {
         if (isTRUE(verbose) && isTRUE(include_random)) {
           format_warning(
             "`include_random` was set to `TRUE`, but grouping factor(s) in `data` has new levels not in the original data.",
@@ -300,13 +306,7 @@
           )
         }
         include_random <- FALSE
-      } else {
-        # include_random still might be "default" - change to TRUE here
-        include_random <- TRUE
       }
-    } else {
-      # include_random still might be "default" - change to TRUE here
-      include_random <- TRUE
     }
 
     # else, we might have a formula. if so, do not change include_random.
@@ -347,7 +347,7 @@
     type = type_arg,
     predict = predict,
     scale = scale_arg,
-    transform = transform,
+    transform = my_transform,
     info = info,
     allow_new_levels = allow_new_levels
   )
