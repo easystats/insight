@@ -1,7 +1,7 @@
 skip_on_cran()
 skip_if_not_installed("mgcv")
 
-test_that("find_predictors", {
+test_that("finds_*", {
   set.seed(123)
   n <- 500
   xn <- rep(c(1, 2, 3), n)
@@ -17,6 +17,26 @@ test_that("find_predictors", {
   w <- 3
   m1 <- mgcv::gam(y ~ s(z, by = x, k = 3) + x, data = data)
   m2 <- mgcv::gam(y ~ s(z, by = x, k = w) + x, data = data)
+
+  # find_predictors()
   expect_identical(find_predictors(m1), find_predictors(m2))
   expect_identical(find_predictors(m2)$conditional, c("z", "x"))
+
+  # find_variables()
+  expect_identical(find_variables(m1), find_variables(m2))
+  expect_identical(find_variables(m2)$conditional, c("z", "x"))
+
+  # find_terms()
+  expect_identical(
+    find_terms(m1),
+    list(response = "y", conditional = c("s(z, by = x, k = 3)", "x"))
+  )
+  expect_identical(
+    find_terms(m2),
+    list(response = "y", conditional = c("s(z, by = x, k = w)", "x"))
+  )
+
+  # get_predictors()
+  out <- head(get_predictors(m1))
+  expect_named(out, c("z", "x"))
 })
