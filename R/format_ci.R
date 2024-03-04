@@ -157,6 +157,11 @@ format_ci.numeric <- function(CI_low,
   }
 }
 
+#' @export
+format_ci.factor <- format_ci.numeric
+
+#' @export
+format_ci.character <- format_ci.numeric
 
 
 # bayestestR objects ------------------------------------------------------

@@ -82,6 +82,21 @@ test_that("format_ci, parameters", {
   )
 })
 
+test_that("format_ci, factor", {
+  data(iris)
+  expect_identical(
+    format_ci(iris$Species[1], iris$Species[100]),
+    "95% CI [setosa, versicolor]"
+  )
+})
+
+test_that("format_ci, character", {
+  expect_identical(
+    format_ci("a", "c"),
+    "95% CI [a, c]"
+  )
+})
+
 test_that("format others", {
   expect_type(insight::format_pd(0.02), "character")
   expect_identical(nchar(format_bf(4)), 9L)
