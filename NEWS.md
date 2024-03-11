@@ -4,6 +4,11 @@
 
 * Support for models of class `serp` (package *serp*).
 
+## General
+
+* `standardize_names()` now also recognizes column `s.value` from objects of
+  package *marginaleffects*.
+
 ## Bug fixes
 
 * Fixed issue in `find_predictors()` for models with splines (`s()`), where
