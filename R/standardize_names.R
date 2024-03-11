@@ -116,6 +116,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "std.error"]      <- "SE"
   cn[cn == "std.dev"]        <- "SD"
   cn[cn == "p.value"]        <- "p"
+  cn[cn == "s.value"]        <- "S"
   cn[cn == "bayes.factor"]   <- "BF"
   cn[cn == "component"]      <- "Component"
   cn[cn == "effect"]         <- "Effects"
