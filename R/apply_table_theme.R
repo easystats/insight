@@ -16,14 +16,12 @@ apply_table_theme <- function(out, x, theme = "default", sub_header_positions = 
   check_if_installed("tinytable", minimum_version = "0.1.0")
 
   switch(theme,
-    grid = {
-      out <- tinytable::tt(out, theme = "grid")
-    },
-    striped = {
-      out <- tinytable::tt(out, theme = "striped")
-    },
+    grid = ,
+    striped = ,
+    tabular = ,
+    void = ,
     bootstrap = {
-      out <- tinytable::tt(out, theme = "bootstrap")
+      out <- tinytable::theme_tt(out, theme = theme)
     },
     darklines = {
       # borders for sub headings
