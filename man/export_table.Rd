@@ -37,7 +37,7 @@ export_table(
 data frames into multiple tables.}
 
 \item{theme}{The theme to apply to the table. One of \code{"default"}, \code{"grid"},
-\code{"striped"}, \code{"bootstrap"}, or \code{"darklines"}.}
+\code{"striped"}, \code{"bootstrap"}, \code{"void"}, \code{"tabular"}, or \code{"darklines"}.}
 
 \item{sub_header_positions}{A vector of row positions to apply a border to.
 Currently particular for internal use of other \emph{easystats} packages.}
