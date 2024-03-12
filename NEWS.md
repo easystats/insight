@@ -16,6 +16,8 @@
 
 * `format_ci()` now works for factors and character vectors again.
 
+* Fixed issues with latest release of _tinytable_.
+
 # insight 0.19.8
 
 ## General

@@ -13,7 +13,7 @@ apply_table_theme <- function(out, x, theme = "default", sub_header_positions = 
   }
 
   # packages available?
-  check_if_installed("tinytable")
+  check_if_installed("tinytable", minimum_version = "0.1.0")
 
   switch(theme,
     grid = {
