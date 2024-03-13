@@ -42,4 +42,16 @@ test_that("PROreg.BBrm", {
   out <- find_parameters(model)
   expect_identical(out$conditional, c("Intercept", "x"))
   expect_identical(out$random, "z")
+
+  out <- get_statistic(model)
+  expect_equal(out$Statistic, c(2.64613, -5.22177), tolerance = 1e-4)
+
+  out <- find_formula(model)
+  expect_equal(out, list(conditional = y ~ x, random = ~z), ignore_attr = TRUE)
+
+  out <- n_obs(model)
+  expect_identical(out, 100L)
+
+  out <- model_info(model)
+  expect_true(out$is_betabinomial)
 })
