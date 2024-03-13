@@ -18,6 +18,8 @@
 
 * Fixed issues with latest release of _tinytable_.
 
+* Fixed issues with latest release of _PROreg_.
+
 # insight 0.19.8
 
 ## General

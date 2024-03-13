@@ -84,7 +84,7 @@ get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
   if (effects == "fixed") {
     s <- summary(x)
 
-    terms <- c(
+    wbm_params <- c(
       rownames(s$within_table),
       rownames(s$between_table),
       rownames(s$ints_table)
@@ -107,7 +107,7 @@ get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
     params <- rbind(wt, bt, it)
 
     out <- data.frame(
-      Parameter = terms,
+      Parameter = wbm_params,
       Estimate = params[[1]],
       Component = params[["component"]],
       stringsAsFactors = FALSE
@@ -535,7 +535,9 @@ get_parameters.hglm <- function(x,
   re <- x$ranef
 
   f <- find_formula(x)
-  if (!is.null(f$dispersion)) {
+  if (is.null(f$dispersion)) {
+    dispersion <- NULL
+  } else {
     disp <- summary(x)$SummVC1
     dispersion <- data.frame(
       Parameter = rownames(disp),
@@ -543,8 +545,6 @@ get_parameters.hglm <- function(x,
       Component = "dispersion",
       stringsAsFactors = FALSE
     )
-  } else {
-    dispersion <- NULL
   }
 
   fixed <- data.frame(
@@ -561,23 +561,20 @@ get_parameters.hglm <- function(x,
     stringsAsFactors = FALSE
   )
 
-  if (effects == "fixed") {
-    out <- switch(component,
+  out <- switch(effects,
+    fixed = switch(component,
       conditional = fixed,
       dispersion = dispersion,
       rbind(fixed, dispersion)
-    )
-    text_remove_backticks(out)
-  } else if (effects == "random") {
-    text_remove_backticks(random)
-  } else if (effects == "all") {
-    out <- switch(component,
+    ),
+    all = switch(component,
       conditional = rbind(fixed, random),
       dispersion = dispersion,
       rbind(fixed, random, dispersion)
-    )
-    text_remove_backticks(out)
-  }
+    ),
+    random
+  )
+  text_remove_backticks(out)
 }
 
 
@@ -626,7 +623,7 @@ get_parameters.BBmm <- function(x, effects = c("fixed", "random"), ...) {
   ))
 
   fixed <- data.frame(
-    Parameter = names(l$conditional),
+    Parameter = rownames(l$conditional),
     Estimate = l$conditional,
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -669,7 +666,7 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
 
   random <- text_remove_backticks(random)
 
-  all <- rbind(
+  all_effects <- rbind(
     cbind(fixed, data.frame(Effects = "fixed", stringsAsFactors = FALSE)),
     cbind(random, data.frame(Effects = "random", stringsAsFactors = FALSE))
   )
@@ -679,6 +676,6 @@ get_parameters.glimML <- function(x, effects = c("fixed", "random", "all"), ...)
   } else if (effects == "random") {
     random
   } else {
-    all
+    all_effects
   }
 }
