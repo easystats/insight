@@ -105,7 +105,7 @@ get_parameters.summary.lm <- function(x, ...) {
 
 #' @export
 get_parameters.data.frame <- function(x, ...) {
-  stop("A data frame is no valid object for this function")
+  format_error("A data frame is no valid object for this function.")
 }
 
 

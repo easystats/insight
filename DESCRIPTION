@@ -173,6 +173,7 @@ Suggests:
     performance,
     plm,
     poorman,
+    PROreg (>= 1.3.0),
     pscl,
     psych,
     quantreg,
