@@ -535,7 +535,9 @@ get_parameters.hglm <- function(x,
   re <- x$ranef
 
   f <- find_formula(x)
-  if (!is.null(f$dispersion)) {
+  if (is.null(f$dispersion)) {
+    dispersion <- NULL
+  } else {
     disp <- summary(x)$SummVC1
     dispersion <- data.frame(
       Parameter = rownames(disp),
@@ -543,8 +545,6 @@ get_parameters.hglm <- function(x,
       Component = "dispersion",
       stringsAsFactors = FALSE
     )
-  } else {
-    dispersion <- NULL
   }
 
   fixed <- data.frame(
