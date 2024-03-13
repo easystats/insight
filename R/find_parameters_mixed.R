@@ -404,7 +404,7 @@ find_parameters.BBmm <- function(x,
                                  flatten = FALSE,
                                  ...) {
   l <- compact_list(list(
-    conditional = names(x$fixed.coef),
+    conditional = rownames(x$fixed.coef),
     random = x$namesRand
   ))
 

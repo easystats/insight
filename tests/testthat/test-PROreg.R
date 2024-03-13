@@ -36,6 +36,10 @@ test_that("PROreg.BBrm", {
   }))
 
   out <- get_parameters(model)
+  expect_identical(out$Parameter, c("Intercept", "x"))
+  expect_equal(out$Estimate, c(1.05328, -1.06242), tolerance = 1e-4)
 
-  expect_true(model_info(m1)$is_linear)
+  out <- find_parameters(model)
+  expect_identical(out$conditional, c("Intercept", "x"))
+  expect_identical(out$random, "z")
 })
