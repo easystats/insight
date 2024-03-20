@@ -873,13 +873,11 @@
           (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           # McNemar: preserve table data for McNemar ----
           return(as.table(columns[[1]]))
-
         } else if (startsWith(x$method, "Kruskal-Wallis") && length(columns) == 1 && is.list(columns[[1]])) {
           # Kruskal-Wallis: check if data is a list for kruskal-wallis ----
           l <- columns[[1]]
           names(l) <- paste0("x", seq_along(l))
           return(l)
-
         } else if (grepl("t-test", x$method, fixed = TRUE)) {
           # t-Test: (Welch) Two Sample t-test ----
           if (grepl("Two", x$method, fixed = TRUE)) {
@@ -906,7 +904,6 @@
           } else {
             d <- .htest_other_format(columns)
           }
-
         } else if (startsWith(x$method, "Wilcoxon rank sum")) {
           # Wilcoxon ========================================================
           if (grepl(" by ", x$data.name, fixed = TRUE)) {
