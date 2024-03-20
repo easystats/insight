@@ -86,10 +86,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
         collapse = ":"
       )
     } else {
-      .remove_pattern_from_names(
-        .x,
-        is_emmeans = is_emmeans
-      )
+      .remove_pattern_from_names(.x, is_emmeans = is_emmeans)
     }
   }), use.names = FALSE)
 
