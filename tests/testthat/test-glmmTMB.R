@@ -617,7 +617,7 @@ test_that("get_data", {
   expect_null(get_data(m4, component = "disp", effects = "random", verbose = FALSE))
 })
 
-test_that("find_paramaters", {
+test_that("find_parameters", {
   expect_identical(
     find_parameters(m4),
     list(
@@ -685,7 +685,7 @@ test_that("find_paramaters", {
 })
 
 
-test_that("get_paramaters", {
+test_that("get_parameters", {
   expect_identical(nrow(get_parameters(m4)), 6L)
   expect_identical(
     colnames(get_parameters(m4)),
@@ -880,7 +880,9 @@ d2$sd <- "five"
 dat <- rbind(d1, d2)
 m0 <- glmmTMB::glmmTMB(x ~ sd + (1 | t), dispformula = ~sd, data = dat)
 
-test_that("get_paramaters", {
+
+test_that("get_parameters", {
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.9")
   expect_identical(nrow(get_parameters(m0)), 4L)
   expect_identical(
     colnames(get_parameters(m0)),
@@ -897,7 +899,7 @@ test_that("get_paramaters", {
   )
   expect_equal(
     get_parameters(m0)$Estimate,
-    c(200.03431, -99.71491, 3.20287, 1.38648),
+    c(200.03431, -99.71491, 1.6014, 0.69323),
     tolerance = 1e-3
   )
   expect_identical(
