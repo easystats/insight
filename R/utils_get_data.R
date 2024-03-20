@@ -874,14 +874,12 @@
           # McNemar: preserve table data for McNemar ----
           return(as.table(columns[[1]]))
 
-          # Kruskal Wallis ====================================================
         } else if (startsWith(x$method, "Kruskal-Wallis") && length(columns) == 1 && is.list(columns[[1]])) {
           # Kruskal-Wallis: check if data is a list for kruskal-wallis ----
           l <- columns[[1]]
           names(l) <- paste0("x", seq_along(l))
           return(l)
 
-          # t-tests ===========================================================
         } else if (grepl("t-test", x$method, fixed = TRUE)) {
           # t-Test: (Welch) Two Sample t-test ----
           if (grepl("Two", x$method, fixed = TRUE)) {
@@ -909,8 +907,8 @@
             d <- .htest_other_format(columns)
           }
 
-          # Wilcoxon ========================================================
         } else if (startsWith(x$method, "Wilcoxon rank sum")) {
+          # Wilcoxon ========================================================
           if (grepl(" by ", x$data.name, fixed = TRUE)) {
             # Wilcoxon: Paired Wilcoxon, formula (no reshape required) ----
             return(.htest_no_reshape(columns))
@@ -932,7 +930,6 @@
           }
         } else {
           # Other htests ======================================================
-
           d <- .htest_other_format(columns)
         }
 
