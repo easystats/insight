@@ -25,8 +25,7 @@ suppressMessages({
     Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
     data = study_data
   )
-  fm6 <-
-    lme4::lmer(diameter ~ 0 + sample + (1 | plate), data = Penicillin)
+  fm6 <- lme4::lmer(diameter ~ 0 + sample + (1 | plate), data = Penicillin)
 })
 
 v1 <- suppressWarnings(get_variance(fm1))
@@ -108,10 +107,10 @@ test_that("get_variance-6", {
 
 # further examples
 
-model <- lme4::lmer(Reaction ~ Days + (1 + Days || Subject), data = sleepstudy)
-vmodel <- get_variance(model)
-
 test_that("get_variance-7", {
+  model <- lme4::lmer(Reaction ~ Days + (1 + Days || Subject), data = sleepstudy)
+  vmodel <- get_variance(model)
+
   expect_equal(
     vmodel,
     list(
@@ -127,10 +126,11 @@ test_that("get_variance-7", {
   )
 })
 
-model <- lme4::lmer(Reaction ~ Days + (0 + Days || Subject), data = study_data)
-vmodel <- get_variance(model)
 
 test_that("get_variance-8", {
+  model <- lme4::lmer(Reaction ~ Days + (0 + Days || Subject), data = study_data)
+  vmodel <- get_variance(model)
+
   expect_equal(
     vmodel,
     list(
@@ -148,14 +148,14 @@ test_that("get_variance-8", {
 
 # categorical rnd slope
 
-data(sleepstudy, package = "lme4")
-sleepstudy$Days2 <- cut(sleepstudy$Days, breaks = c(-1, 3, 6, 10))
-study_data2 <<- sleepstudy
-
-model <- lme4::lmer(Reaction ~ Days2 + (1 + Days2 | Subject), data = study_data2)
-vmodel <- get_variance(model)
-
 test_that("get_variance-9", {
+  data(sleepstudy, package = "lme4")
+  sleepstudy$Days2 <- cut(sleepstudy$Days, breaks = c(-1, 3, 6, 10))
+  study_data2 <<- sleepstudy
+
+  model <- lme4::lmer(Reaction ~ Days2 + (1 + Days2 | Subject), data = study_data2)
+  vmodel <- get_variance(model)
+
   expect_equal(
     vmodel,
     list(
@@ -180,10 +180,11 @@ test_that("get_variance-9", {
   )
 })
 
-model <- suppressMessages(lme4::lmer(Reaction ~ Days2 + (1 + Days2 || Subject), data = study_data2))
-vmodel <- suppressWarnings(get_variance(model))
 
 test_that("get_variance-10", {
+  model <- suppressMessages(lme4::lmer(Reaction ~ Days2 + (1 + Days2 || Subject), data = study_data2))
+  vmodel <- suppressWarnings(get_variance(model))
+
   expect_equal(
     vmodel,
     list(
@@ -203,10 +204,11 @@ test_that("get_variance-10", {
   )
 })
 
-model <- lme4::lmer(Reaction ~ Days2 + (0 + Days2 | Subject), data = study_data2)
-vmodel <- get_variance(model)
 
 test_that("get_variance-11", {
+  model <- lme4::lmer(Reaction ~ Days2 + (0 + Days2 | Subject), data = study_data2)
+  vmodel <- get_variance(model)
+
   expect_equal(
     vmodel,
     list(
@@ -230,10 +232,11 @@ test_that("get_variance-11", {
   )
 })
 
-model <- lme4::lmer(Reaction ~ Days2 + (0 + Days2 || Subject), data = study_data2)
-vmodel <- get_variance(model)
 
 test_that("get_variance-12", {
+  model <- lme4::lmer(Reaction ~ Days2 + (0 + Days2 || Subject), data = study_data2)
+  vmodel <- get_variance(model)
+
   expect_equal(
     vmodel,
     list(
@@ -260,12 +263,13 @@ test_that("get_variance-12", {
 
 # test random slope correlation for categorical random slope
 
-data(cake, package = "lme4")
-suppressMessages({
-  m <- lme4::lmer(angle ~ temperature + (temperature | recipe), data = cake)
-})
 test_that("get_variance-cat_random_slope", {
+  data(cake, package = "lme4")
+  suppressMessages({
+    m <- lme4::lmer(angle ~ temperature + (temperature | recipe), data = cake)
+  })
   vc <- suppressWarnings(get_variance(m))
+
   expect_equal(
     vc$cor.slopes,
     c(
@@ -328,13 +332,14 @@ test_that("random effects CIs, simple slope", {
   )
 })
 
-data(cake, package = "lme4")
-suppressMessages({
-  m <- lme4::lmer(angle ~ poly(temp, 2) + (poly(temp, 2) | replicate) + (1 | recipe), data = cake)
-})
 
 test_that("random effects CIs, poly slope", {
+  data(cake, package = "lme4")
+  suppressMessages({
+    m <- lme4::lmer(angle ~ poly(temp, 2) + (poly(temp, 2) | replicate) + (1 | recipe), data = cake)
+  })
   vc <- suppressWarnings(get_variance(m))
+
   expect_equal(
     vc$cor.slopes,
     c(`replicate.poly(temp, 2)1-poly(temp, 2)2` = 0.940016422944175),
