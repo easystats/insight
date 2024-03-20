@@ -85,13 +85,13 @@ test_that("clean_names, multimembership", {
   expect_identical(
     find_variables(m1),
     list(
-      response = "x",
-      conditional = "y",
+      response = "y",
+      conditional = "x",
       random = c("t1id", "t2id")
     )
   )
 
-  m3 <- insight::download_model("brms_mm_3")
+  m3 <- suppressWarnings(insight::download_model("brms_mm_3"))
   skip_if(is.null(m3))
   out <- clean_names(m3)
   expect_identical(out, c("mpg", "hp", "cyl", "carb", "am", "w"))
