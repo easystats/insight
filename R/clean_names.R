@@ -73,25 +73,24 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
     return(x)
   }
   out <- unlist(lapply(x, function(.x) {
-    .remove_pattern_from_names(.x, is_emmeans = is_emmeans)
     # in case we have ranges, like [2:5], remove those first, so it's not
     # treated as "interaction"
-    # .x <- sub("\\[(\\d+):(\\d+)\\]", "", .x)
-    # if (grepl(":", .x, fixed = TRUE) && !grepl("::", .x, fixed = TRUE)) {
-    #   paste(
-    #     sapply(
-    #       strsplit(.x, ":", fixed = TRUE),
-    #       .remove_pattern_from_names,
-    #       is_emmeans = is_emmeans
-    #     ),
-    #     collapse = ":"
-    #   )
-    # } else {
-    #   .remove_pattern_from_names(
-    #     .x,
-    #     is_emmeans = is_emmeans
-    #   )
-    # }
+    .x <- sub("\\[(\\d+):(\\d+)\\]", "", .x)
+    if (grepl(":", .x, fixed = TRUE) && !grepl("::", .x, fixed = TRUE) && !startsWith(.x, "mm(")) {
+      paste(
+        sapply(
+          strsplit(.x, ":", fixed = TRUE),
+          .remove_pattern_from_names,
+          is_emmeans = is_emmeans
+        ),
+        collapse = ":"
+      )
+    } else {
+      .remove_pattern_from_names(
+        .x,
+        is_emmeans = is_emmeans
+      )
+    }
   }), use.names = FALSE)
 
   if (isTRUE(include_names)) {
@@ -115,11 +114,6 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
   if (.is_empty_string(x)) {
     return("")
   }
-
-  cleaned <- unlist(lapply(seq_along(x), function(i) {
-    all.vars(stats::as.formula(paste("~", x[i])))
-  }), use.names = FALSE)
-  return(cleaned)
 
   # for gam-smoothers/loess, remove s()- and lo()-function in column name
   # for survival, remove strata(), and so on...
