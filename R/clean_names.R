@@ -165,6 +165,25 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
         } else if (pattern[j] == "scale(poly") {
           x[i] <- trim_ws(unique(sub("^scale\\(poly\\(((\\w|\\.)*).*", "\\1", x[i])))
         } else if (pattern[j] %in% c("mmc", "mm")) {
+          # # detect mm-pattern
+          # p <- paste0("^", pattern[j], "\\((.*)\\).*")
+          # # extract terms from mm() / mmc() functions
+          # g <- trim_ws(sub(p, "\\1", x[i]))
+          # # split terms, but not if comma inside parentheses
+          # g <- trim_ws(unlist(strsplit(g, ",(?![^()]*\\))", perl = TRUE), use.names = FALSE))
+          # # we might have additional arguments, like scale or weights. handle these here
+          # g <- g[!startsWith(g, "scale")]
+          # # clean weights
+          # gweights <- g[startsWith(g, "weights")]
+          # if (length(gweights)) {
+          #   g <- g[!startsWith(g, "weights")]
+          #   # this regular pattern finds "weights=" or "weights =", possibly followed
+          #   # by "cbind()", e.g. "weights = cbind(w, w)". We extract the variable names,
+          #   # create a formula, so "all.vars()" will only extract variable names if
+          #   # we really have "cbind()" in the weights argument
+          #   g <- c(g, .safe(all.vars(as.formula(paste0("~", trim_ws(gsub("weights\\s?=(.*)", "\\1", "weights = cbind(w, w)"))))))) # nolint
+          # }
+          # multimembership <- as.vector(trim_ws(g))
           multimembership <- all.vars(stats::as.formula(paste("~", x[i])))
         } else if (pattern[j] == "s" && startsWith(x[i], "s(")) {
           x[i] <- gsub("^s\\(", "", x[i])

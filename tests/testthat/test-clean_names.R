@@ -78,7 +78,7 @@ skip_on_cran()
 skip_if_offline()
 
 test_that("clean_names, multimembership", {
-  m1 <- insight::download_model("brms_mm_1")
+  m1 <- suppressWarnings(insight::download_model("brms_mm_1"))
   skip_if(is.null(m1))
   out <- clean_names(m1)
   expect_identical(out, c("y", "x", "t1id", "t2id"))
