@@ -2,7 +2,7 @@
 
 ## Bug fixes
 
-* Function like `find_variables()` or `clean_names()` now support multi-membership
+* Functions like `find_variables()` or `clean_names()` now support multi-membership
   formulas for models from *brms*.
 
 * Updated tests to work with the latest changes in *glmmTMB 1.1.9*.
