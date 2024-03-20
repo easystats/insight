@@ -29,7 +29,7 @@ test_that("model_info", {
 test_that("get_deviance + logLik", {
   expect_equal(get_deviance(m3), 183.96674, tolerance = 1e-3)
   expect_equal(get_loglikelihood(m3), logLik(m3), tolerance = 1e-3, ignore_attr = TRUE)
-  expect_identical(get_df(m3, type = "model"), 5)
+  expect_identical(get_df(m3, type = "model"), 5L)
 })
 
 test_that("get_df", {
