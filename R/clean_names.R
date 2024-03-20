@@ -234,7 +234,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 
   # extract terms from mm() / mmc() functions, i.e. get
   # multimembership-terms
-  compact_character(unlist(sapply(c("mmc", "mm"), function(j) {
+  compact_character(unlist(lapply(c("mmc", "mm"), function(j) {
     if (grepl(paste0("^", j, "\\("), x = x)) {
       # detect mm-pattern
       p <- paste0("^", j, "\\((.*)\\).*")
