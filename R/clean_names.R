@@ -72,7 +72,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
   if (is.null(x)) {
     return(x)
   }
-  out <- sapply(x, function(.x) {
+  out <- unlist(lapply(x, function(.x) {
     # in case we have ranges, like [2:5], remove those first, so it's not
     # treated as "interaction"
     .x <- sub("\\[(\\d+):(\\d+)\\]", "", .x)
@@ -91,7 +91,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
         is_emmeans = is_emmeans
       )
     }
-  })
+  }), use.names = FALSE)
 
   if (isTRUE(include_names)) {
     stats::setNames(out, x)
@@ -187,7 +187,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
             # we really have "cbind()" in the weights argument
             g <- c(g, .safe(all.vars(as.formula(paste0("~", trim_ws(gsub("weights\\s?=(.*)", "\\1", "weights = cbind(w, w)"))))))) # nolint
           }
-          multimembership <- trim_ws(g)
+          multimembership <- as.vector(trim_ws(g))
         } else if (pattern[j] == "s" && startsWith(x[i], "s(")) {
           x[i] <- gsub("^s\\(", "", x[i])
           x[i] <- gsub("\\)$", "", x[i])
@@ -217,7 +217,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
     if (is.null(multimembership)) {
       trim_ws(x[i])
     } else {
-      trim_ws(multimembership)
+      multimembership
     }
   }), use.names = FALSE)
 
