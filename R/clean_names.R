@@ -72,7 +72,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
   if (is.null(x)) {
     return(x)
   }
-  out <- sapply(x, function(.x) {
+  out <- unlist(lapply(x, function(.x) {
     # in case we have ranges, like [2:5], remove those first, so it's not
     # treated as "interaction"
     .x <- sub("\\[(\\d+):(\\d+)\\]", "", .x)
@@ -88,7 +88,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
     } else {
       .remove_pattern_from_names(.x, is_emmeans = is_emmeans)
     }
-  })
+  }), use.names = FALSE)
 
   if (isTRUE(include_names)) {
     out
