@@ -3,12 +3,12 @@ skip_if_not_installed("lme4")
 data(sleepstudy, package = "lme4")
 data("Penicillin", package = "lme4")
 set.seed(12345)
-sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$grp <- sample.int(5, size = 180, replace = TRUE)
 sleepstudy$subgrp <- NA
 for (i in 1:5) {
   filter_group <- sleepstudy$grp == i
   sleepstudy$subgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+    sample.int(30, size = sum(filter_group), replace = TRUE)
 }
 
 study_data <<- sleepstudy
@@ -286,7 +286,7 @@ test_that("get_variance-cat_random_slope", {
 
 data(sleepstudy, package = "lme4")
 set.seed(123)
-sleepstudy$Months <- sample(1:4, nrow(sleepstudy), TRUE)
+sleepstudy$Months <- sample.int(4, nrow(sleepstudy), TRUE)
 study_data3 <<- sleepstudy
 
 m2 <- lme4::lmer(Reaction ~ Days + (0 + Days | Subject), data = study_data3)
@@ -369,5 +369,5 @@ test_that("fixed effects variance for rank-deficient models, #765", {
     )
   })
   out <- get_variance_fixed(mod_TMB)
-  expect_equal(out, 627.03661, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out, 627.04511567, tolerance = 1e-4, ignore_attr = TRUE)
 })
