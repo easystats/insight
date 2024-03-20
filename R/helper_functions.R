@@ -148,9 +148,9 @@
   # check for multi-membership models
   if (inherits(model, "brmsfit")) {
     if (grepl("mm\\((.*)\\)", re)) {
-      re <- trim_ws(unlist(strsplit(gsub("mm\\((.*)\\)", "\\1", re), ",", fixed = TRUE)))
-    }
-    if (grepl("gr\\((.*)\\)", re)) {
+      # extract variables
+      re <- clean_names(re)
+    } else if (grepl("gr\\((.*)\\)", re)) {
       # remove namespace prefixes
       re <- .remove_namespace_from_string(re)
       # extract random effects term
