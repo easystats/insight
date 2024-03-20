@@ -93,6 +93,8 @@ test_that("get_loglikelihood - (g)lmer", {
   ll2 <- stats::logLik(x, REML = FALSE)
   expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
 
+  skip_if_not_installed("httr")
+
   model <- download_model("lmerMod_1")
   skip_if(is.null(model))
   expect_equal(
