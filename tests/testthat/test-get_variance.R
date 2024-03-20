@@ -364,7 +364,7 @@ test_that("fixed effects variance for rank-deficient models, #765", {
     mod_TMB <- glmmTMB::glmmTMB(
       z ~ x1 + x2 + x3 + x4 + (1 | re),
       data = dd,
-      start  = list(theta = 3),
+      start = list(theta = 3),
       control = glmmTMB::glmmTMBControl(rank_check = "adjust")
     )
   })
