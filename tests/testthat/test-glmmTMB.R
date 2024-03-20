@@ -882,6 +882,7 @@ m0 <- glmmTMB::glmmTMB(x ~ sd + (1 | t), dispformula = ~sd, data = dat)
 
 
 test_that("get_parameters", {
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.9")
   expect_identical(nrow(get_parameters(m0)), 4L)
   expect_identical(
     colnames(get_parameters(m0)),
