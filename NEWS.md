@@ -5,7 +5,7 @@
 * Function like `find_variables()` or `clean_names()` now support multi-membership
   formulas for models from *brms*.
 
-* Updated tests to work with the latest changes in *glmmTMBM 1.1.9*.
+* Updated tests to work with the latest changes in *glmmTMB 1.1.9*.
 
 # insight 0.19.9
 
