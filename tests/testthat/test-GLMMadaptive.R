@@ -1,6 +1,7 @@
 skip_if_offline()
 skip_if_not_installed("GLMMadaptive")
 skip_if_not_installed("lme4")
+skip_if_not_installed("httr")
 
 m <- download_model("GLMMadaptive_zi_2")
 m2 <- download_model("GLMMadaptive_zi_1")
@@ -28,7 +29,7 @@ test_that("model_info", {
 test_that("get_deviance + logLik", {
   expect_equal(get_deviance(m3), 183.96674, tolerance = 1e-3)
   expect_equal(get_loglikelihood(m3), logLik(m3), tolerance = 1e-3, ignore_attr = TRUE)
-  expect_equal(get_df(m3, type = "model"), 5)
+  expect_identical(get_df(m3, type = "model"), 5L)
 })
 
 test_that("get_df", {
@@ -50,10 +51,10 @@ test_that("get_df", {
 })
 
 test_that("n_parameters", {
-  expect_equal(n_parameters(m), 6)
-  expect_equal(n_parameters(m2), 6)
-  expect_equal(n_parameters(m, effects = "random"), 2)
-  expect_equal(n_parameters(m2, effects = "random"), 1)
+  expect_identical(n_parameters(m), 6L)
+  expect_identical(n_parameters(m2), 6L)
+  expect_identical(n_parameters(m, effects = "random"), 2L)
+  expect_identical(n_parameters(m2, effects = "random"), 1L)
 })
 
 test_that("find_predictors", {
@@ -273,7 +274,7 @@ test_that("get_data", {
 })
 
 test_that("find_parameter", {
-  expect_equal(
+  expect_identical(
     find_parameters(m),
     list(
       conditional = c("(Intercept)", "child", "camper1"),
@@ -282,7 +283,7 @@ test_that("find_parameter", {
       zero_inflated_random = "zi_(Intercept)"
     )
   )
-  expect_equal(
+  expect_identical(
     find_parameters(m2),
     list(
       conditional = c("(Intercept)", "child", "camper1"),
@@ -290,7 +291,7 @@ test_that("find_parameter", {
       zero_inflated = c("(Intercept)", "child", "livebait1")
     )
   )
-  expect_equal(
+  expect_identical(
     find_parameters(m3),
     list(
       conditional = c("(Intercept)", "period2", "period3", "period4"),
@@ -298,7 +299,7 @@ test_that("find_parameter", {
     )
   )
 
-  expect_equal(nrow(get_parameters(m)), 6)
+  expect_identical(nrow(get_parameters(m)), 6L)
   expect_equal(
     get_parameters(m, effects = "random"),
     list(
@@ -307,14 +308,14 @@ test_that("find_parameter", {
     ),
     tolerance = 1e-5
   )
-  expect_equal(nrow(get_parameters(m2)), 6)
+  expect_identical(nrow(get_parameters(m2)), 6L)
   expect_equal(get_parameters(m2, effects = "random"),
     list(random = c(
       -1.3262364, -0.2048055, 1.3852572, 0.5282277
     )),
     tolerance = 1e-5
   )
-  expect_equal(
+  expect_identical(
     get_parameters(m3)$Component,
     c(
       "conditional",
@@ -337,7 +338,7 @@ test_that("is_multivariate", {
 })
 
 test_that("find_algorithm", {
-  expect_equal(
+  expect_identical(
     find_algorithm(m),
     list(algorithm = "quasi-Newton", optimizer = "optim")
   )

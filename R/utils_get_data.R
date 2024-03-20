@@ -398,10 +398,10 @@
                                              verbose = TRUE) {
   # check if data argument was used
   model_call <- get_call(model)
-  if (!is.null(model_call)) {
-    data_arg <- .safe(parse(text = safe_deparse(model_call))[[1]]$data)
-  } else {
+  if (is.null(model_call)) {
     data_arg <- NULL
+  } else {
+    data_arg <- .safe(parse(text = safe_deparse(model_call))[[1]]$data)
   }
 
   # do we have variable names like "mtcars$mpg"?
@@ -564,14 +564,14 @@
     random.component.data <- .remove_values(random.component.data, c(1, 0))
   }
 
-  weights <- find_weights(x)
-  # if (!is.null(weights) && "(weights)" %in% colnames(mf)) {
-  #   weights <- c(weights, "(weights)")
+  model_weights <- find_weights(x)
+  # if (!is.null(model_weights) && "(weights)" %in% colnames(mf)) {
+  #   model_weights <- c(model_weights, "(weights)")
   # }
 
   vars <- switch(effects,
-    all = unique(c(response, fixed.component.data, random.component.data, weights)),
-    fixed = unique(c(response, fixed.component.data, weights)),
+    all = unique(c(response, fixed.component.data, random.component.data, model_weights)),
+    fixed = unique(c(response, fixed.component.data, model_weights)),
     random = unique(random.component.data)
   )
 
@@ -739,47 +739,42 @@
   cn <- .get_transformed_names(colnames(mf), type)
   if (!.is_empty_string(cn)) {
     for (i in cn) {
-      if (type == "scale\\(log") {
-        mf[[i]] <- exp(.unscale(mf[[i]]))
-      } else if (type == "exp\\(scale") {
-        mf[[i]] <- .unscale(log(mf[[i]]))
-      } else if (type == "log\\(log") {
-        mf[[i]] <- exp(exp(mf[[i]]))
-      } else if (type == "log") {
-        # exceptions: log(x+1) or log(1+x)
-        plus_minus <- NULL
-        # no plus-minus?
-        if (grepl("log\\((.*)\\+(.*)\\)", i)) {
-          # 1. try: log(x + number)
-          plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\2", i))))
-          # 2. try: log(number + x)
-          if (is.null(plus_minus)) {
-            plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\1", i))))
+      # styler: off
+      mf[[i]] <- switch(type,
+        "scale\\(log" = exp(.unscale(mf[[i]])),
+        "exp\\(scale" = .unscale(log(mf[[i]])),
+        "log\\(log"   = exp(exp(mf[[i]])),
+        log1p         = expm1(mf[[i]]),
+        log10         = 10^(mf[[i]]),
+        log2          = 2^(mf[[i]]),
+        sqrt          = (mf[[i]])^2,
+        exp           = log(mf[[i]]),
+        expm1         = log1p(mf[[i]]),
+        scale         = .unscale(mf[[i]]),
+        cos           = ,
+        sin           = ,
+        tan           = ,
+        acos          = ,
+        asin          = ,
+        atan          = .recover_data_from_environment(model)[[i]],
+        log = {
+          if (grepl("log\\((.*)\\+(.*)\\)", i)) {
+            plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\2", i))))
+            if (is.null(plus_minus)) {
+              plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\1", i))))
+            }
           }
-        }
-        if (is.null(plus_minus)) {
-          mf[[i]] <- exp(mf[[i]])
-        } else {
-          mf[[i]] <- exp(mf[[i]]) - plus_minus
-        }
-      } else if (type == "log1p") {
-        mf[[i]] <- expm1(mf[[i]])
-      } else if (type == "log10") {
-        mf[[i]] <- 10^(mf[[i]])
-      } else if (type == "log2") {
-        mf[[i]] <- 2^(mf[[i]])
-      } else if (type == "sqrt") {
-        mf[[i]] <- (mf[[i]])^2
-      } else if (type == "exp") {
-        mf[[i]] <- log(mf[[i]])
-      } else if (type == "expm1") {
-        mf[[i]] <- log1p(mf[[i]])
-      } else if (type == "scale") {
-        mf[[i]] <- .unscale(mf[[i]])
-      } else if (type %in% c("cos", "sin", "tan", "acos", "asin", "atan")) {
-        mf[[i]] <- .recover_data_from_environment(model)[[i]]
-      }
+          if (is.null(plus_minus)) {
+            exp(mf[[i]])
+          } else {
+            exp(mf[[i]]) - plus_minus
+          }
+        },
+        # default
+        mf[[i]]
+      )
       colnames(mf)[colnames(mf) == i] <- .get_transformed_terms(i, type)
+      # styler: on
     }
   }
   mf
@@ -873,15 +868,11 @@
           (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
           # McNemar: preserve table data for McNemar ----
           return(as.table(columns[[1]]))
-
-          # Kruskal Wallis ====================================================
         } else if (startsWith(x$method, "Kruskal-Wallis") && length(columns) == 1 && is.list(columns[[1]])) {
           # Kruskal-Wallis: check if data is a list for kruskal-wallis ----
           l <- columns[[1]]
           names(l) <- paste0("x", seq_along(l))
           return(l)
-
-          # t-tests ===========================================================
         } else if (grepl("t-test", x$method, fixed = TRUE)) {
           # t-Test: (Welch) Two Sample t-test ----
           if (grepl("Two", x$method, fixed = TRUE)) {
@@ -908,9 +899,8 @@
           } else {
             d <- .htest_other_format(columns)
           }
-
-          # Wilcoxon ========================================================
         } else if (startsWith(x$method, "Wilcoxon rank sum")) {
+          # Wilcoxon ========================================================
           if (grepl(" by ", x$data.name, fixed = TRUE)) {
             # Wilcoxon: Paired Wilcoxon, formula (no reshape required) ----
             return(.htest_no_reshape(columns))
@@ -932,7 +922,6 @@
           }
         } else {
           # Other htests ======================================================
-
           d <- .htest_other_format(columns)
         }
 

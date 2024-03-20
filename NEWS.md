@@ -1,3 +1,10 @@
+# insight 0.19.10
+
+## Bug fixes
+
+* Function like `find_variables()` or `clean_names()` now support multi-membership
+  formulas for models from *brms*.
+
 # insight 0.19.9
 
 ## New supported models

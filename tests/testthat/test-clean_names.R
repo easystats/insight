@@ -73,3 +73,35 @@ test_that("clean_names, model", {
   m_rel2 <- lm(mpg ~ relevel(cyl, "8") + gear, data = mtcars2)
   expect_identical(insight::clean_names(m_rel2), c("mpg", "cyl", "gear"))
 })
+
+skip_on_cran()
+skip_if_offline()
+skip_if_not_installed("httr")
+
+test_that("clean_names, multimembership", {
+  m1 <- suppressWarnings(insight::download_model("brms_mm_1"))
+  skip_if(is.null(m1))
+  out <- clean_names(m1)
+  expect_identical(out, c("y", "x", "t1id", "t2id"))
+  expect_identical(
+    find_variables(m1),
+    list(
+      response = "y",
+      conditional = "x",
+      random = c("t1id", "t2id")
+    )
+  )
+
+  m3 <- suppressWarnings(insight::download_model("brms_mm_3"))
+  skip_if(is.null(m3))
+  out <- clean_names(m3)
+  expect_identical(out, c("mpg", "hp", "cyl", "carb", "am", "w"))
+  expect_identical(
+    find_variables(m3),
+    list(
+      response = "mpg",
+      conditional = "hp",
+      random = c("cyl", "carb", "am", "hp", "w")
+    )
+  )
+})
