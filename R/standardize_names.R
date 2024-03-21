@@ -5,36 +5,33 @@
 #' the same for any model object.
 #'
 #' @param data A data frame. In particular, objects from *easystats*
-#'   package functions like
-#'   [parameters::model_parameters()] or
-#'   [effectsize::effectsize()] are accepted, but also
-#'   data frames returned by `broom::tidy()` are valid objects.
+#' package functions like [parameters::model_parameters()] or
+#' [effectsize::effectsize()] are accepted, but also data frames returned by
+#' `broom::tidy()` are valid objects.
 #' @param style Standardization can either be based on the naming conventions
-#'   from the [easystats-project](https://easystats.github.io/easystats/),
-#'   or on **broom**'s naming scheme.
-#' @param ignore_estimate Logical, if `TRUE`, column names like
-#'   `"mean"` or `"median"` will *not* be converted to
-#'   `"Coefficient"` resp. `"estimate"`.
+#' from the [easystats-project](https://easystats.github.io/easystats/), or on
+#' **broom**'s naming scheme.
+#' @param ignore_estimate Logical, if `TRUE`, column names like `"mean"` or
+#' `"median"` will *not* be converted to `"Coefficient"` resp. `"estimate"`.
 #' @param ... Currently not used.
 #'
 #' @return A data frame, with standardized column names.
 #'
 #' @details This method is in particular useful for package developers or users
-#'   who use, e.g., [`parameters::model_parameters()`] in their own
-#'   code or functions to retrieve model parameters for further processing. As
-#'   `model_parameters()` returns a data frame with varying column names
-#'   (depending on the input), accessing the required information is probably
-#'   not quite straightforward. In such cases, `standardize_names()` can be
-#'   used to get consistent, i.e. always the same column names, no matter what
-#'   kind of model was used in `model_parameters()`.
+#' who use, e.g., [`parameters::model_parameters()`] in their own code or
+#' functions to retrieve model parameters for further processing. As
+#' `model_parameters()` returns a data frame with varying column names
+#' (depending on the input), accessing the required information is probably
+#' not quite straightforward. In such cases, `standardize_names()` can be
+#' used to get consistent, i.e. always the same column names, no matter what
+#' kind of model was used in `model_parameters()`.
 #'
-#'   For `style = "broom"`, column names are renamed to match **broom**'s
-#'   naming scheme, i.e. `Parameter` is renamed to `term`,
-#'   `Coefficient` becomes `estimate` and so on.
+#' For `style = "broom"`, column names are renamed to match **broom**'s
+#' naming scheme, i.e. `Parameter` is renamed to `term`, `Coefficient` becomes
+#' `estimate` and so on.
 #'
-#'   For `style = "easystats"`, when `data` is an object from
-#'   `broom::tidy()`, column names are converted from "broom"-style into
-#'   "easystats"-style.
+#' For `style = "easystats"`, when `data` is an object from `broom::tidy()`,
+#' column names are converted from "broom"-style into "easystats"-style.
 #'
 #' @examplesIf require("parameters")
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)

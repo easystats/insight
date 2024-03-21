@@ -11,16 +11,15 @@ standardize_column_order(data, ...)
 }
 \arguments{
 \item{data}{A data frame. In particular, objects from \emph{easystats}
-package functions like
-\code{\link[parameters:model_parameters]{parameters::model_parameters()}} or
-\code{\link[effectsize:effectsize]{effectsize::effectsize()}} are accepted, but also
-data frames returned by \code{broom::tidy()} are valid objects.}
+package functions like \code{\link[parameters:model_parameters]{parameters::model_parameters()}} or
+\code{\link[effectsize:effectsize]{effectsize::effectsize()}} are accepted, but also data frames returned by
+\code{broom::tidy()} are valid objects.}
 
 \item{...}{Currently not used.}
 
 \item{style}{Standardization can either be based on the naming conventions
-from the \href{https://easystats.github.io/easystats/}{easystats-project},
-or on \strong{broom}'s naming scheme.}
+from the \href{https://easystats.github.io/easystats/}{easystats-project}, or on
+\strong{broom}'s naming scheme.}
 }
 \value{
 A data frame, with standardized column order.
