@@ -367,6 +367,23 @@ test_that("get_data() log transform", {
   )
 })
 
+test_that("log-offset", {
+  skip_if_not_installed("MASS")
+  newdata <- data.frame(
+    y = c(602, 38, 616, 256, 21, 723, 245, 176, 89, 1614, 31, 27, 313, 251, 345),
+    x = c(31, 35, 21, 30, 37, 26, 45, 21, 74, 27, 37, 37, 31, 37, 25),
+    offset_1 = c(72, 50, 31, 30, 16, 25, 75, 16, 78, 40, 68, 25, 71, 52, 17)
+  )
+  moff <- MASS::glm.nb(y ~ x + offset(log(offset_1)), data = newdata)
+  out <- get_data(moff, source = "frame")
+  expect_equal(
+    out$offset_1,
+    c(72, 50, 31, 30, 16, 25, 75, 16, 78, 40, 68, 25, 71, 52, 17),
+    tolerance = 1e-3
+  )
+})
+
+
 skip_on_cran()
 
 m <- lm(Sepal.Length ~ Sepal.Width, data = iris)

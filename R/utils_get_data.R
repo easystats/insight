@@ -739,42 +739,47 @@
   cn <- .get_transformed_names(colnames(mf), type)
   if (!.is_empty_string(cn)) {
     for (i in cn) {
-      # styler: off
-      mf[[i]] <- switch(type,
-        "scale\\(log" = exp(.unscale(mf[[i]])),
-        "exp\\(scale" = .unscale(log(mf[[i]])),
-        "log\\(log"   = exp(exp(mf[[i]])),
-        log1p         = expm1(mf[[i]]),
-        log10         = 10^(mf[[i]]),
-        log2          = 2^(mf[[i]]),
-        sqrt          = (mf[[i]])^2,
-        exp           = log(mf[[i]]),
-        expm1         = log1p(mf[[i]]),
-        scale         = .unscale(mf[[i]]),
-        cos           = ,
-        sin           = ,
-        tan           = ,
-        acos          = ,
-        asin          = ,
-        atan          = .recover_data_from_environment(model)[[i]],
-        log = {
-          if (grepl("log\\((.*)\\+(.*)\\)", i)) {
-            plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\2", i))))
-            if (is.null(plus_minus)) {
-              plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\1", i))))
-            }
-          }
+      if (type == "scale\\(log") {
+        mf[[i]] <- exp(.unscale(mf[[i]]))
+      } else if (type == "exp\\(scale") {
+        mf[[i]] <- .unscale(log(mf[[i]]))
+      } else if (type == "log\\(log") {
+        mf[[i]] <- exp(exp(mf[[i]]))
+      } else if (type == "log") {
+        # exceptions: log(x+1) or log(1+x)
+        plus_minus <- NULL
+        # no plus-minus?
+        if (grepl("log\\((.*)\\+(.*)\\)", i)) {
+          # 1. try: log(x + number)
+          plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\2", i))))
+          # 2. try: log(number + x)
           if (is.null(plus_minus)) {
-            exp(mf[[i]])
-          } else {
-            exp(mf[[i]]) - plus_minus
+            plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\1", i))))
           }
-        },
-        # default
-        mf[[i]]
-      )
+        }
+        if (is.null(plus_minus)) {
+          mf[[i]] <- exp(mf[[i]])
+        } else {
+          mf[[i]] <- exp(mf[[i]]) - plus_minus
+        }
+      } else if (type == "log1p") {
+        mf[[i]] <- expm1(mf[[i]])
+      } else if (type == "log10") {
+        mf[[i]] <- 10^(mf[[i]])
+      } else if (type == "log2") {
+        mf[[i]] <- 2^(mf[[i]])
+      } else if (type == "sqrt") {
+        mf[[i]] <- (mf[[i]])^2
+      } else if (type == "exp") {
+        mf[[i]] <- log(mf[[i]])
+      } else if (type == "expm1") {
+        mf[[i]] <- log1p(mf[[i]])
+      } else if (type == "scale") {
+        mf[[i]] <- .unscale(mf[[i]])
+      } else if (type %in% c("cos", "sin", "tan", "acos", "asin", "atan")) {
+        mf[[i]] <- .recover_data_from_environment(model)[[i]]
+      }
       colnames(mf)[colnames(mf) == i] <- .get_transformed_terms(i, type)
-      # styler: on
     }
   }
   mf
