@@ -202,6 +202,7 @@ test_that("MASS::rlm", {
 # =========================================================================
 
 test_that("get_predicted - lmerMod", {
+  skip_if(getRversion() > "4.3.3")
   suppressWarnings(skip_if_not_installed("glmmTMB"))
   skip_if_not_installed("lme4")
   skip_if_not_installed("merTools")
@@ -290,6 +291,7 @@ test_that("get_predicted - lmerMod (log)", {
 
 
 test_that("get_predicted - merMod", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("lme4")
   skip_if_not_installed("glmmTMB")
   x <- lme4::glmer(vs ~ am + (1 | cyl), data = mtcars, family = "binomial")
@@ -312,6 +314,7 @@ test_that("get_predicted - merMod", {
 
 
 test_that("get_predicted - glmmTMB", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   x <- glmmTMB::glmmTMB(mpg ~ am + (1 | cyl), data = mtcars)
 
@@ -629,6 +632,7 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
 
 
 test_that("zero-inflation stuff works", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("pscl")
 

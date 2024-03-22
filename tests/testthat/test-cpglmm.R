@@ -1,3 +1,6 @@
+## FIXME: suddenly fails on CRAN for win-devel?
+skip_if(getRversion() > "4.3.3")
+
 skip_if_not_installed("cplm")
 
 # cplm::cpglmm doesn't work

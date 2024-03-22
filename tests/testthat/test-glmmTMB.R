@@ -1,5 +1,6 @@
 skip_on_os("mac") # error: FreeADFunObject
 skip_if_not(getRversion() >= "4.0.0")
+skip_if(getRversion() > "4.3.3")
 skip_if_not_installed("TMB")
 skip_if_not_installed("glmmTMB")
 

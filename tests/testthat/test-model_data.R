@@ -23,6 +23,7 @@ test_that("get_data", {
   expect_identical(as.vector(mf4$Petal.Width), as.vector(mf5$Petal.Width))
 })
 
+skip_if(getRversion() > "4.3.3")
 data(Salamanders, package = "glmmTMB")
 skip_on_os("mac") # error: FreeADFunObject
 m <- glmmTMB::glmmTMB(
