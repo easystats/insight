@@ -14,7 +14,7 @@ the same for any model object."><meta property="og:image" content="https://easys
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.9.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.10</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -113,10 +113,9 @@ the same for any model object.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>A data frame. In particular, objects from <em>easystats</em>
-package functions like
-<code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code> or
-<code><a href="https://easystats.github.io/effectsize/reference/effectsize.html" class="external-link">effectsize::effectsize()</a></code> are accepted, but also
-data frames returned by <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code> are valid objects.</p></dd>
+package functions like <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code> or
+<code><a href="https://easystats.github.io/effectsize/reference/effectsize.html" class="external-link">effectsize::effectsize()</a></code> are accepted, but also data frames returned by
+<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code> are valid objects.</p></dd>
 
 
 <dt>...</dt>
@@ -125,14 +124,13 @@ data frames returned by <code><a href="https://generics.r-lib.org/reference/tidy
 
 <dt>style</dt>
 <dd><p>Standardization can either be based on the naming conventions
-from the <a href="https://easystats.github.io/easystats/" class="external-link">easystats-project</a>,
-or on <strong>broom</strong>'s naming scheme.</p></dd>
+from the <a href="https://easystats.github.io/easystats/" class="external-link">easystats-project</a>, or on
+<strong>broom</strong>'s naming scheme.</p></dd>
 
 
 <dt>ignore_estimate</dt>
-<dd><p>Logical, if <code>TRUE</code>, column names like
-<code>"mean"</code> or <code>"median"</code> will <em>not</em> be converted to
-<code>"Coefficient"</code> resp. <code>"estimate"</code>.</p></dd>
+<dd><p>Logical, if <code>TRUE</code>, column names like <code>"mean"</code> or
+<code>"median"</code> will <em>not</em> be converted to <code>"Coefficient"</code> resp. <code>"estimate"</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -144,19 +142,18 @@ or on <strong>broom</strong>'s naming scheme.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This method is in particular useful for package developers or users
-who use, e.g., <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code> in their own
-code or functions to retrieve model parameters for further processing. As
+who use, e.g., <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code> in their own code or
+functions to retrieve model parameters for further processing. As
 <code>model_parameters()</code> returns a data frame with varying column names
 (depending on the input), accessing the required information is probably
 not quite straightforward. In such cases, <code>standardize_names()</code> can be
 used to get consistent, i.e. always the same column names, no matter what
 kind of model was used in <code>model_parameters()</code>.</p>
 <p>For <code>style = "broom"</code>, column names are renamed to match <strong>broom</strong>'s
-naming scheme, i.e. <code>Parameter</code> is renamed to <code>term</code>,
-<code>Coefficient</code> becomes <code>estimate</code> and so on.</p>
-<p>For <code>style = "easystats"</code>, when <code>data</code> is an object from
-<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code>, column names are converted from "broom"-style into
-"easystats"-style.</p>
+naming scheme, i.e. <code>Parameter</code> is renamed to <code>term</code>, <code>Coefficient</code> becomes
+<code>estimate</code> and so on.</p>
+<p>For <code>style = "easystats"</code>, when <code>data</code> is an object from <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code>,
+column names are converted from "broom"-style into "easystats"-style.</p>
     </div>
 
     <div class="section level2">
