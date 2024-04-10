@@ -108,6 +108,8 @@
       PL = "vcovPL",
       `kenward-roger` = "vcovAdj"
     )
+  } else {
+    vcov_fun_clean <- vcov_fun
   }
 
   # check if required package is available
