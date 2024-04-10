@@ -79,7 +79,7 @@
   ## TODO: what about Sattherthwaite? @vincentarelbundock
 
   if (!grepl("^(vcov|kernHAC|NeweyWest)", vcov_fun)) {
-    vcov_fun <- switch(vcov_fun,
+    vcov_fun_clean <- switch(vcov_fun,
       HC0 = ,
       HC1 = ,
       HC2 = ,
@@ -108,22 +108,28 @@
       PL = "vcovPL",
       `kenward-roger` = "vcovAdj"
     )
+  } else {
+    vcov_fun_clean <- vcov_fun
   }
 
   # check if required package is available
-  if (isTRUE(vcov_fun == "vcovAdj")) {
+  if (is.character(vcov_fun) && is.null(vcov_fun_clean)) {
+    format_error(sprintf("`%s` is not a recognized value for the `vcov` argument.", vcov_fun[1]))
+  } else if (isTRUE(vcov_fun_clean == "vcovAdj")) {
     check_if_installed("pbkrtest")
-    fun <- try(get(vcov_fun, asNamespace("pbkrtest")), silent = TRUE)
-  } else if (isTRUE(vcov_fun == "vcovCR")) {
+    fun <- try(get(vcov_fun_clean, asNamespace("pbkrtest")), silent = TRUE)
+  } else if (isTRUE(vcov_fun_clean == "vcovCR")) {
     check_if_installed("clubSandwich", reason = "to get cluster-robust standard errors")
-    fun <- try(get(vcov_fun, asNamespace("clubSandwich")), silent = TRUE)
+    fun <- try(get(vcov_fun_clean, asNamespace("clubSandwich")), silent = TRUE)
   } else {
     check_if_installed("sandwich", reason = "to get robust standard errors")
-    fun <- try(get(vcov_fun, asNamespace("sandwich")), silent = TRUE)
-    if (!is.function(fun)) {
-      format_error(sprintf("`%s` is not a function exported by the `sandwich` package.", vcov_fun))
+    fun <- try(get(vcov_fun_clean, asNamespace("sandwich")), silent = TRUE)
+    if (!is.function(fun) && is.character(vcov_fun)) {
+      format_error(sprintf("`%s` is not a function exported by the `sandwich` package.", vcov_fun[1]))
     }
   }
+
+  vcov_fun <- vcov_fun_clean
 
   # try with arguments
   .vcov <- try(do.call(fun, c(list(x), vcov_args)), silent = TRUE)
