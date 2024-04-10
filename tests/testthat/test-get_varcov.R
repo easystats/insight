@@ -82,3 +82,9 @@ test_that("error: ill-defined model", {
   m1 <- lm(y ~ 1, data = dd)
   expect_error(get_varcov(m1), regex = "Can't extract variance-covariance")
 })
+
+
+test_that("error: bad string", {
+  m <- lm(mpg ~ hp + factor(carb), data = mtcars)
+  expect_error(get_varcov(m, vcov = "bootstrap"), regexp = "not a recognized")
+})
