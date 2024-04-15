@@ -11,8 +11,10 @@
   if (.is_bayesian_model(x) && !inherits(x, c("bayesx", "blmerMod", "bglmerMod"))) {
     if (check_if_installed("bayestestR", quietly = TRUE)) {
       x <- .safe(bayestestR::bayesian_as_frequentist(x))
-      if (is.null(x) && isTRUE(verbose)) {
-        format_warning("Can't extract degrees of freedom from Bayesian model.")
+      if (is.null(x)) {
+        if (isTRUE(verbose)) {
+          format_warning("Can't extract degrees of freedom from Bayesian model.")
+        }
         return(NULL)
       }
     } else {
