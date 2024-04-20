@@ -156,7 +156,6 @@ Suggests:
     mgcv,
     mice,
     mlogit,
-    mhurdle,
     mmrm,
     modelbased,
     multgee,
