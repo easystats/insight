@@ -1,3 +1,10 @@
+# insight 0.19.11
+
+## General
+
+* More informative error message for `get_varcov()` when the requested
+  vcov-function failed.
+
 # insight 0.19.10
 
 ## Bug fixes

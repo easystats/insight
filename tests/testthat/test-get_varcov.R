@@ -88,3 +88,13 @@ test_that("error: bad string", {
   m <- lm(mpg ~ hp + factor(carb), data = mtcars)
   expect_error(get_varcov(m, vcov = "bootstrap"), regexp = "not a recognized")
 })
+
+
+test_that("error: from vcov", {
+  data(iris)
+  mod <- lm(Sepal.Width ~ Sepal.Length, data = iris)
+  expect_error(
+    get_varcov(mod, vcov = "vcovBS", vcov_args = list(cluster = "Species")),
+    regex = "number of observations"
+  )
+})
