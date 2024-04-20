@@ -3,7 +3,7 @@
 ## General
 
 * More informative error message for `get_varcov()` when the requested
-  vcov-function failed.
+  `vcov`-function failed.
 
 # insight 0.19.10
 
