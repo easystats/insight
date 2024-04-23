@@ -245,13 +245,15 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     format_alert(msg)
   }
 
+  # Get other info
+  model_infos <- lapply(objects, model_info)
+
+  # Bayesian
+  attr(objects, "all_bayesian") <- all(sapply(model_infos, function(i) {i$is_bayesian}))
+
   # determine which is linear or binomial model
-  model_infos <- lapply(objects, function(i) {
-    mi <- model_info(i)
-    c(isTRUE(mi$is_linear), isTRUE(mi$is_binomial))
-  })
-  attr(objects, "is_linear") <- vapply(model_infos, function(i) i[1], logical(1))
-  attr(objects, "is_binomial") <- vapply(model_infos, function(i) i[2], logical(1))
+  attr(objects, "is_linear") <- sapply(model_infos, function(i) {i$is_linear})
+  attr(objects, "is_binomial") <- sapply(model_infos, function(i) {i$is_binomial})
 
   objects
 }
