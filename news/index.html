@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.10.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.10.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,9 @@
     News
   </a>
 </li>
-      </ul><ul class="navbar-nav"><li class="nav-item dropdown">
+      </ul><ul class="navbar-nav"><li><form class="form-inline" role="search">
+<input type="search" class="form-control" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
+<li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--easystats" aria-label="easystats">
     <span class="fab fa fab fa-r-project"></span>
      
@@ -87,6 +89,10 @@
 <div class="section level3">
 <h3 id="general-0-19-11">General<a class="anchor" aria-label="anchor" href="#general-0-19-11"></a></h3>
 <ul><li>More informative error message for <code><a href="../reference/get_varcov.html">get_varcov()</a></code> when the requested <code>vcov</code>-function failed.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-19-11">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-19-11"></a></h3>
+<ul><li>Fixed issue with <code><a href="../reference/get_data.html">get_data()</a></code> for <code>coxme</code> models when <code>source</code>was set to <code>"modelframe"</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
