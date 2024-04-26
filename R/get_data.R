@@ -1844,6 +1844,9 @@ get_data.coxph <- function(x, source = "environment", verbose = TRUE, ...) {
   dat
 }
 
+#' @export
+get_data.coxme <- get_data.coxph
+
 
 #' @export
 get_data.BGGM <- function(x, ...) {

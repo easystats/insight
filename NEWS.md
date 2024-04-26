@@ -5,6 +5,11 @@
 * More informative error message for `get_varcov()` when the requested
   `vcov`-function failed.
 
+## Bug fixes
+
+* Fixed issue with `get_data()` for `coxme` models when `source`was set to
+  `"modelframe"`.
+
 # insight 0.19.10
 
 ## Bug fixes
