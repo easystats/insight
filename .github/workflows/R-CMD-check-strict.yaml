@@ -3,8 +3,6 @@
 #
 # R CMD Check will fail on a `NOTE`.
 on:
-  push:
-    branches: [main, master]
   pull_request:
     branches: [main, master]
 
