@@ -390,22 +390,22 @@ format_table <- function(x,
   for (stats in c("t", "Chi2")) {
     if (stats %in% names(x) && "df" %in% names(x)) {
       if (is.character(x$df)) {
-        x$df[x$df == ""] <- NA_character_
+        x$df[x$df == ""] <- NA_character_ # nolint
       }
-      df <- unique(x$df)
-      df <- df[!is.na(df)]
-      if (length(df) == 1 && !all(is.infinite(df))) {
-        names(x)[names(x) == stats] <- paste0(stats, "(", df, ")")
+      dof <- unique(x$df)
+      dof <- dof[!is.na(dof)]
+      if (length(dof) == 1 && !all(is.infinite(dof))) {
+        names(x)[names(x) == stats] <- paste0(stats, "(", dof, ")")
         x$df <- NULL
       }
     } else if (stats %in% names(x) && "df_error" %in% names(x)) {
       if (is.character(x$df_error)) {
-        x$df_error[x$df_error == ""] <- NA_character_
+        x$df_error[x$df_error == ""] <- NA_character_ # nolint
       }
-      df <- unique(x$df_error)
-      df <- df[!is.na(df)]
-      if (length(df) == 1 && !all(is.infinite(df))) {
-        names(x)[names(x) == stats] <- paste0(stats, "(", df, ")")
+      dof <- unique(x$df_error)
+      dof <- dof[!is.na(dof)]
+      if (length(dof) == 1 && !all(is.infinite(dof))) {
+        names(x)[names(x) == stats] <- paste0(stats, "(", dof, ")")
         x$df_error <- NULL
       }
     }
@@ -414,10 +414,10 @@ format_table <- function(x,
   for (stats in c("Baseline", "Chi2")) {
     df_col <- paste0(stats, "_df")
     if (stats %in% names(x) && df_col %in% names(x)) {
-      df <- unique(x[[df_col]])
-      df <- df[!is.na(df)]
-      if (length(df) == 1 && !all(is.infinite(df))) {
-        names(x)[names(x) == stats] <- paste0(stats, "(", df, ")")
+      dof <- unique(x[[df_col]])
+      dof <- dof[!is.na(dof)]
+      if (length(dof) == 1 && !all(is.infinite(dof))) {
+        names(x)[names(x) == stats] <- paste0(stats, "(", dof, ")")
         x[[df_col]] <- NULL
       }
     }
@@ -831,10 +831,10 @@ format_table <- function(x,
 
 
 .additional_arguments <- function(x, value, default) {
-  args <- attributes(x)$additional_arguments
+  my_args <- attributes(x)$additional_arguments
 
-  if (length(args) > 0 && value %in% names(args)) {
-    out <- args[[value]]
+  if (length(my_args) > 0 && value %in% names(my_args)) {
+    out <- my_args[[value]]
   } else {
     out <- attributes(x)[[value]]
   }
