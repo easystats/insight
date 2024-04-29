@@ -127,15 +127,15 @@ model and returns it as data frame.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A fitted model.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
 
 
-<dt>source</dt>
+<dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
 <dd><p>String, indicating from where data should be recovered. If
 <code>source = "environment"</code> (default), data is recovered from the environment
 (e.g. if the data is in the workspace). This option is usually the fastest
@@ -154,17 +154,17 @@ will be recovered from the environment. Both ways only returns observations
 that have no missing data in the variables used for model fitting.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle messages and warnings.</p></dd>
 
 
-<dt>effects</dt>
+<dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
 <dd><p>Should model data for fixed effects (<code>"fixed"</code>), random
 effects (<code>"random"</code>) or both (<code>"all"</code>) be returned? Only applies to mixed
 or gee models.</p></dd>
 
 
-<dt>component</dt>
+<dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
 <dd><p>Should all predictor variables, predictor variables for the
 conditional model, the zero-inflated part of the model, the dispersion
 term or the instrumental variables be returned? Applies to models
@@ -174,27 +174,27 @@ variable (so called fixed-effects regressions). May be abbreviated. Note that th
 component, depending on the model.</p></dd>
 
 
-<dt>shape</dt>
+<dt id="arg-shape">shape<a class="anchor" aria-label="anchor" href="#arg-shape"></a></dt>
 <dd><p>Return long or wide data? Only applicable in repeated measures
 designs.</p></dd>
 
 
-<dt>include_interval</dt>
+<dt id="arg-include-interval">include_interval<a class="anchor" aria-label="anchor" href="#arg-include-interval"></a></dt>
 <dd><p>For meta-analysis models, should normal-approximation
 confidence intervals be added for each response effect size?</p></dd>
 
 
-<dt>transf</dt>
+<dt id="arg-transf">transf<a class="anchor" aria-label="anchor" href="#arg-transf"></a></dt>
 <dd><p>For meta-analysis models, if intervals are included, a function
 applied to each response effect size and its interval.</p></dd>
 
 
-<dt>transf_args</dt>
+<dt id="arg-transf-args">transf_args<a class="anchor" aria-label="anchor" href="#arg-transf-args"></a></dt>
 <dd><p>For meta-analysis models, an optional list of arguments
 passed to the <code>transf</code> function.</p></dd>
 
 
-<dt>ci</dt>
+<dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>For meta-analysis models, the Confidence Interval (CI) level if
 <code>include_interval = TRUE</code>. Default to 0.95 (95%).</p></dd>
 

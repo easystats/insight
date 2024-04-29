@@ -170,19 +170,19 @@ for more model objects that probably don't provide a <code><a href="https://rdrr
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A model.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
 
 
-<dt>vcov</dt>
+<dt id="arg-vcov">vcov<a class="anchor" aria-label="anchor" href="#arg-vcov"></a></dt>
 <dd><p>Variance-covariance matrix used to compute uncertainty estimates
 (e.g., for robust standard errors). This argument accepts a covariance
 matrix, a function which returns a covariance matrix, or a string which
@@ -200,7 +200,7 @@ identifies the function to be used to compute the covariance matrix.</p><ul><li>
 </ul></dd>
 
 
-<dt>vcov_args</dt>
+<dt id="arg-vcov-args">vcov_args<a class="anchor" aria-label="anchor" href="#arg-vcov-args"></a></dt>
 <dd><p>List of arguments to be passed to the function identified by
 the <code>vcov</code> argument. This function is typically supplied by the <strong>sandwich</strong>
 or <strong>clubSandwich</strong> packages. Please refer to their documentation (e.g.,
@@ -210,7 +210,7 @@ equals the default from the <strong>sandwich</strong> package; for type <code>"C
 <code>"vcoCR"</code>), the default is set to <code>"CR3"</code>.</p></dd>
 
 
-<dt>component</dt>
+<dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
 <dd><p>Should the complete variance-covariance matrix of the model
 be returned, or only for specific model components only (like count or
 zero-inflated model parts)? Applies to models with zero-inflated component,
@@ -221,13 +221,13 @@ component is also called <em>count</em> or <em>mean</em> component, depending on
 model.</p></dd>
 
 
-<dt>effects</dt>
+<dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
 <dd><p>Should the complete variance-covariance matrix of the model
 be returned, or only for specific model parameters only? Currently only
 applies to models of class <code>mixor</code>.</p></dd>
 
 
-<dt>complete</dt>
+<dt id="arg-complete">complete<a class="anchor" aria-label="anchor" href="#arg-complete"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, for <code>aov</code>, returns the full
 variance-covariance matrix.</p></dd>
 

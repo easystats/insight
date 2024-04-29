@@ -106,11 +106,11 @@ dispersion, sigma, or beta...</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A model.</p></dd>
 
 
-<dt>type</dt>
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>The name of the auxiliary parameter that should be retrieved.
 <code>"sigma"</code> is available for most models, <code>"dispersion"</code> for models
 of class <code>glm</code>, <code>glmerMod</code> or <code>glmmTMB</code> as well as <code>brmsfit</code>.
@@ -118,14 +118,14 @@ of class <code>glm</code>, <code>glmerMod</code> or <code>glmmTMB</code> as well
 models. See 'Details'.</p></dd>
 
 
-<dt>summary</dt>
+<dt id="arg-summary">summary<a class="anchor" aria-label="anchor" href="#arg-summary"></a></dt>
 <dd><p>Logical, indicates whether the full posterior samples
 (<code>summary = FALSE</code>)) or the summarized centrality indices of
 the posterior samples (<code>summary = TRUE</code>)) should be returned as
 estimates.</p></dd>
 
 
-<dt>centrality</dt>
+<dt id="arg-centrality">centrality<a class="anchor" aria-label="anchor" href="#arg-centrality"></a></dt>
 <dd><p>Only for models with posterior samples, and when
 <code>summary = TRUE</code>. In this case, <code>centrality = "mean"</code> would
 calculate means of posterior samples for each parameter, while
@@ -133,11 +133,11 @@ calculate means of posterior samples for each parameter, while
 measure of central tendency.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
 
 </dl></div>

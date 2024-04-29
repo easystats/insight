@@ -111,15 +111,15 @@ to fit the model, as numeric value.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A fitted model.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
 
 
-<dt>disaggregate</dt>
+<dt id="arg-disaggregate">disaggregate<a class="anchor" aria-label="anchor" href="#arg-disaggregate"></a></dt>
 <dd><p>For binomial models with aggregated data, <code>n_obs()</code>
 returns the number of data rows by default. If <code>disaggregate = TRUE</code>,
 the total number of trials is returned instead (determined by summing the
@@ -128,16 +128,16 @@ weights input for proportion success response or the row sums of the
 response matrix if matrix response, see 'Examples').</p></dd>
 
 
-<dt>weighted</dt>
+<dt id="arg-weighted">weighted<a class="anchor" aria-label="anchor" href="#arg-weighted"></a></dt>
 <dd><p>For survey designs, returns the weighted sample size.</p></dd>
 
 
-<dt>shape</dt>
+<dt id="arg-shape">shape<a class="anchor" aria-label="anchor" href="#arg-shape"></a></dt>
 <dd><p>Return long or wide data? Only applicable in repeated measures
 designs.</p></dd>
 
 
-<dt>select</dt>
+<dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
 <dd><p>Optional name(s) of response variables for which to extract values.
 Can be used in case of regression models with multiple response variables.</p></dd>
 

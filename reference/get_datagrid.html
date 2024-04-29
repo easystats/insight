@@ -140,16 +140,16 @@ for a tutorial on how to create a visualisation matrix using this function.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>An object from which to construct the reference grid.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to or from other methods (for instance, <code>length</code>
 or <code>range</code> to control the spread of numeric variables.).</p></dd>
 
 
-<dt>at</dt>
+<dt id="arg-at">at<a class="anchor" aria-label="anchor" href="#arg-at"></a></dt>
 <dd><p>Indicates the <em>focal predictors</em> (variables) for the reference grid
 and at which values focal predictors should be represented. If not specified
 otherwise, representative values for numeric variables or predictors are
@@ -190,19 +190,19 @@ one or more factor levels, like <code>at = "Species = [setosa, versicolor]"</cod
 <code>factors</code> and <code>numerics</code>).</p></dd>
 
 
-<dt>factors</dt>
+<dt id="arg-factors">factors<a class="anchor" aria-label="anchor" href="#arg-factors"></a></dt>
 <dd><p>Type of summary for factors. Can be <code>"reference"</code> (set at the
 reference level), <code>"mode"</code> (set at the most common level) or <code>"all"</code> to
 keep all levels.</p></dd>
 
 
-<dt>numerics</dt>
+<dt id="arg-numerics">numerics<a class="anchor" aria-label="anchor" href="#arg-numerics"></a></dt>
 <dd><p>Type of summary for numeric values. Can be <code>"all"</code> (will
 duplicate the grid for all unique values), any function (<code>"mean"</code>,
 <code>"median"</code>, ...) or a value (e.g., <code>numerics = 0</code>).</p></dd>
 
 
-<dt>preserve_range</dt>
+<dt id="arg-preserve-range">preserve_range<a class="anchor" aria-label="anchor" href="#arg-preserve-range"></a></dt>
 <dd><p>In the case of combinations between numeric variables
 and factors, setting <code>preserve_range = TRUE</code> will drop the observations
 where the value of the numeric variable is originally not present in the
@@ -211,12 +211,12 @@ want the minimum and the maximum to closely match the actual ranges, you
 should increase the <code>length</code> argument.</p></dd>
 
 
-<dt>reference</dt>
+<dt id="arg-reference">reference<a class="anchor" aria-label="anchor" href="#arg-reference"></a></dt>
 <dd><p>The reference vector from which to compute the mean and SD.
 Used when standardizing or unstandardizing the grid using <code><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">effectsize::standardize</a></code>.</p></dd>
 
 
-<dt>length</dt>
+<dt id="arg-length">length<a class="anchor" aria-label="anchor" href="#arg-length"></a></dt>
 <dd><p>Length of numeric target variables selected in <code>"at"</code>. This arguments
 controls the number of (equally spread) values that will be taken to represent the
 continuous variables. A longer length will increase precision, but can also
@@ -225,7 +225,7 @@ If <code>NA</code>, will return all the unique values. In case of multiple conti
 variables, <code>length</code> can also be a vector of different values (see examples).</p></dd>
 
 
-<dt>range</dt>
+<dt id="arg-range">range<a class="anchor" aria-label="anchor" href="#arg-range"></a></dt>
 <dd><p>Option to control the representative values given in <code>at</code>, if
 no specific values were provided. Use in combination with the <code>length</code> argument
 to control the number of values within the specified range. <code>range</code> can be
@@ -251,12 +251,12 @@ all levels are returned.</p></li>
 </ul></dd>
 
 
-<dt>include_smooth</dt>
+<dt id="arg-include-smooth">include_smooth<a class="anchor" aria-label="anchor" href="#arg-include-smooth"></a></dt>
 <dd><p>If <code>x</code> is a model object, decide whether smooth terms
 should be included in the data grid or not.</p></dd>
 
 
-<dt>include_random</dt>
+<dt id="arg-include-random">include_random<a class="anchor" aria-label="anchor" href="#arg-include-random"></a></dt>
 <dd><p>If <code>x</code> is a mixed model object, decide whether random
 effect terms should be included in the data grid or not. If
 <code>include_random</code> is <code>FALSE</code>, but <code>x</code> is a mixed model with random effects,
@@ -266,17 +266,17 @@ This ensures that common <code><a href="https://rdrr.io/r/stats/predict.html" cl
 usually need data with all variables in the model included.</p></dd>
 
 
-<dt>include_response</dt>
+<dt id="arg-include-response">include_response<a class="anchor" aria-label="anchor" href="#arg-include-response"></a></dt>
 <dd><p>If <code>x</code> is a model object, decide whether the response
 variable should be included in the data grid or not.</p></dd>
 
 
-<dt>data</dt>
+<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>Optional, the data frame that was used to fit the model. Usually,
 the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
 
 </dl></div>

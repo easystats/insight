@@ -125,18 +125,18 @@ converts all columns into character vectors!</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A data frame of model's parameters, as returned by various functions
 of the <strong>easystats</strong>-packages. May also be a result from
 <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code>.</p></dd>
 
 
-<dt>pretty_names</dt>
+<dt id="arg-pretty-names">pretty_names<a class="anchor" aria-label="anchor" href="#arg-pretty-names"></a></dt>
 <dd><p>Return "pretty" (i.e. more human readable) parameter
 names.</p></dd>
 
 
-<dt>stars</dt>
+<dt id="arg-stars">stars<a class="anchor" aria-label="anchor" href="#arg-stars"></a></dt>
 <dd><p>If <code>TRUE</code>, add significance stars (e.g., <code>p &lt; .001***</code>). Can
 also be a character vector, naming the columns that should include stars
 for significant values. This is especially useful for Bayesian models,
@@ -147,7 +147,7 @@ cases, use <code>stars = c("pd", "BF")</code> to add stars to both columns, or
 column. Currently, following columns are recognized: <code>"BF"</code>, <code>"pd"</code> and <code>"p"</code>.</p></dd>
 
 
-<dt>digits, ci_digits, p_digits, rope_digits, ic_digits</dt>
+<dt id="arg-digits-ci-digits-p-digits-rope-digits-ic-digits">digits, ci_digits, p_digits, rope_digits, ic_digits<a class="anchor" aria-label="anchor" href="#arg-digits-ci-digits-p-digits-rope-digits-ic-digits"></a></dt>
 <dd><p>Number of digits for
 rounding or significant figures. May also be <code>"signif"</code> to return significant
 figures or <code>"scientific"</code> to return scientific notation. Control the
@@ -156,30 +156,30 @@ to have scientific notation with 4 decimal places, or <code>digits = "signif5"</
 for 5 significant figures (see also <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code>).</p></dd>
 
 
-<dt>ci_width</dt>
+<dt id="arg-ci-width">ci_width<a class="anchor" aria-label="anchor" href="#arg-ci-width"></a></dt>
 <dd><p>Minimum width of the returned string for confidence
 intervals. If not <code>NULL</code> and width is larger than the string's length,
 leading whitespaces are added to the string. If <code>width="auto"</code>, width
 will be set to the length of the longest string.</p></dd>
 
 
-<dt>ci_brackets</dt>
+<dt id="arg-ci-brackets">ci_brackets<a class="anchor" aria-label="anchor" href="#arg-ci-brackets"></a></dt>
 <dd><p>Logical, if <code>TRUE</code> (default), CI-values are
 encompassed in square brackets (else in parentheses).</p></dd>
 
 
-<dt>zap_small</dt>
+<dt id="arg-zap-small">zap_small<a class="anchor" aria-label="anchor" href="#arg-zap-small"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, small values are rounded after
 <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal
 places than <code>digits</code> are printed in scientific notation.</p></dd>
 
 
-<dt>preserve_attributes</dt>
+<dt id="arg-preserve-attributes">preserve_attributes<a class="anchor" aria-label="anchor" href="#arg-preserve-attributes"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, preserves all attributes
 from the input data frame.</p></dd>
 
 
-<dt>exact</dt>
+<dt id="arg-exact">exact<a class="anchor" aria-label="anchor" href="#arg-exact"></a></dt>
 <dd><p>Formatting for Bayes factor columns, in case the provided data
 frame contains such a column (i.e. columns named <code>"BF"</code> or <code>"log_BF"</code>).
 For <code>exact = TRUE</code>, very large or very small values are then either reported
@@ -187,7 +187,7 @@ with a scientific format (e.g., 4.24e5), else as truncated values (as "&gt; 1000
 and "&lt; 1/1000").</p></dd>
 
 
-<dt>use_symbols</dt>
+<dt id="arg-use-symbols">use_symbols<a class="anchor" aria-label="anchor" href="#arg-use-symbols"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, column names that refer to particular
 effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
 instead of the written name. This only works on Windows for R &gt;= 4.2, and on
@@ -195,11 +195,11 @@ OS X or Linux for R &gt;= 4.0. It is possible to define a global option for this
 setting, see 'Note'.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle messages and warnings.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
 
 </dl></div>

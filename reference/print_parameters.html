@@ -118,17 +118,17 @@ below.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A fitted model, or a data frame returned by <code><a href="clean_parameters.html">clean_parameters()</a></code>.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>One or more objects (data frames), which contain information about
 the model parameters and related statistics (like confidence intervals, HDI,
 ROPE, ...).</p></dd>
 
 
-<dt>split_by</dt>
+<dt id="arg-split-by">split_by<a class="anchor" aria-label="anchor" href="#arg-split-by"></a></dt>
 <dd><p><code>split_by</code> should be a character vector with one or
 more of the following elements: <code>"Effects"</code>, <code>"Component"</code>,
 <code>"Response"</code> and <code>"Group"</code>. These are the column names returned
@@ -138,20 +138,20 @@ merged data frame is returned. Else, the data frame is split into a list,
 split by the values from those columns defined in <code>split_by</code>.</p></dd>
 
 
-<dt>format</dt>
+<dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
 <dd><p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
 assumed use for output is basic printing. If <code>"markdown"</code>, markdown-format
 is assumed. This only affects the style of title- and table-caption
 attributes, which are used in <code><a href="export_table.html">export_table()</a></code>.</p></dd>
 
 
-<dt>parameter_column</dt>
+<dt id="arg-parameter-column">parameter_column<a class="anchor" aria-label="anchor" href="#arg-parameter-column"></a></dt>
 <dd><p>String, name of the column that contains the
 parameter names. Usually, for data frames returned by functions the
 easystats-packages, this will be <code>"Parameter"</code>.</p></dd>
 
 
-<dt>keep_parameter_column</dt>
+<dt id="arg-keep-parameter-column">keep_parameter_column<a class="anchor" aria-label="anchor" href="#arg-keep-parameter-column"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the data frames in the
 returned list have both a <code>"Cleaned_Parameter"</code> and <code>"Parameter"</code>
 column. If <code>FALSE</code>, the (unformatted) <code>"Parameter"</code> is removed,
@@ -159,12 +159,12 @@ and the column with cleaned parameter names (<code>"Cleaned_Parameter"</code>) i
 renamed into <code>"Parameter"</code>.</p></dd>
 
 
-<dt>remove_empty_column</dt>
+<dt id="arg-remove-empty-column">remove_empty_column<a class="anchor" aria-label="anchor" href="#arg-remove-empty-column"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, columns with completely
 empty character values will be removed.</p></dd>
 
 
-<dt>titles, subtitles</dt>
+<dt id="arg-titles-subtitles">titles, subtitles<a class="anchor" aria-label="anchor" href="#arg-titles-subtitles"></a></dt>
 <dd><p>By default, the names of the model components (like
 fixed or random effects, count or zero-inflated model part) are added as
 attributes <code>"table_title"</code> and <code>"table_subtitle"</code> to each list

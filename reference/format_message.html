@@ -132,33 +132,33 @@ default type of exception to <code><a href="https://rdrr.io/r/base/warning.html"
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>string</dt>
+    <dl><dt id="arg-string">string<a class="anchor" aria-label="anchor" href="#arg-string"></a></dt>
 <dd><p>A string.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Further strings that will be concatenated as indented new lines.</p></dd>
 
 
-<dt>line_length</dt>
+<dt id="arg-line-length">line_length<a class="anchor" aria-label="anchor" href="#arg-line-length"></a></dt>
 <dd><p>Numeric, the maximum length of a line.
 The default is 90% of the width of the console window.</p></dd>
 
 
-<dt>indent</dt>
+<dt id="arg-indent">indent<a class="anchor" aria-label="anchor" href="#arg-indent"></a></dt>
 <dd><p>Character vector. If further lines are specified in <code>...</code>, a
 user-defined string can be specified to indent subsequent lines. Defaults to
 <code>"  "</code> (two white spaces), hence for each start of the line after the first
 line, two white space characters are inserted.</p></dd>
 
 
-<dt>type</dt>
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>Type of exception alert to raise.
 Can be <code>"message"</code> for <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code>, <code>"warning"</code> for <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>,
 or <code>"error"</code> for <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>.</p></dd>
 
 
-<dt>call.</dt>
+<dt id="arg-call-">call.<a class="anchor" aria-label="anchor" href="#arg-call-"></a></dt>
 <dd><p>Logical. Indicating if the call should be included in the the
 error message. This is usually confusing for users when the function
 producing the warning or error is deep within another function, so the

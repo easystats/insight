@@ -119,43 +119,43 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>out</dt>
+    <dl><dt id="arg-out">out<a class="anchor" aria-label="anchor" href="#arg-out"></a></dt>
 <dd><p>A <code>tinytable</code> object.</p></dd>
 
 
-<dt>x</dt>
+<dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A data frame. May also be a list of data frames, to export multiple
 data frames into multiple tables.</p></dd>
 
 
-<dt>theme</dt>
+<dt id="arg-theme">theme<a class="anchor" aria-label="anchor" href="#arg-theme"></a></dt>
 <dd><p>The theme to apply to the table. One of <code>"default"</code>, <code>"grid"</code>,
 <code>"striped"</code>, <code>"bootstrap"</code>, <code>"void"</code>, <code>"tabular"</code>, or <code>"darklines"</code>.</p></dd>
 
 
-<dt>sub_header_positions</dt>
+<dt id="arg-sub-header-positions">sub_header_positions<a class="anchor" aria-label="anchor" href="#arg-sub-header-positions"></a></dt>
 <dd><p>A vector of row positions to apply a border to.
 Currently particular for internal use of other <em>easystats</em> packages.</p></dd>
 
 
-<dt>sep</dt>
+<dt id="arg-sep">sep<a class="anchor" aria-label="anchor" href="#arg-sep"></a></dt>
 <dd><p>Column separator.</p></dd>
 
 
-<dt>header</dt>
+<dt id="arg-header">header<a class="anchor" aria-label="anchor" href="#arg-header"></a></dt>
 <dd><p>Header separator. Can be <code>NULL</code>.</p></dd>
 
 
-<dt>cross</dt>
+<dt id="arg-cross">cross<a class="anchor" aria-label="anchor" href="#arg-cross"></a></dt>
 <dd><p>Character that is used where separator and header lines cross.</p></dd>
 
 
-<dt>empty_line</dt>
+<dt id="arg-empty-line">empty_line<a class="anchor" aria-label="anchor" href="#arg-empty-line"></a></dt>
 <dd><p>Separator used for empty lines. If <code>NULL</code>, line remains
 empty (i.e. filled with whitespaces).</p></dd>
 
 
-<dt>digits</dt>
+<dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
 <dd><p>Number of digits for rounding or significant figures. May also
 be <code>"signif"</code> to return significant figures or <code>"scientific"</code>
 to return scientific notation. Control the number of digits by adding the
@@ -164,17 +164,17 @@ notation with 4 decimal places, or <code>digits = "signif5"</code> for 5
 significant figures (see also <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code>).</p></dd>
 
 
-<dt>protect_integers</dt>
+<dt id="arg-protect-integers">protect_integers<a class="anchor" aria-label="anchor" href="#arg-protect-integers"></a></dt>
 <dd><p>Should integers be kept as integers (i.e., without
 decimals)?</p></dd>
 
 
-<dt>missing</dt>
+<dt id="arg-missing">missing<a class="anchor" aria-label="anchor" href="#arg-missing"></a></dt>
 <dd><p>Value by which <code>NA</code> values are replaced. By default, an
 empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p></dd>
 
 
-<dt>width</dt>
+<dt id="arg-width">width<a class="anchor" aria-label="anchor" href="#arg-width"></a></dt>
 <dd><p>Refers to the width of columns (with numeric values). Can be
 either <code>NULL</code>, a number or a named numeric vector. If <code>NULL</code>, the width for
 each column is adjusted to the minimum required width. If a number, columns
@@ -184,28 +184,28 @@ for each match, the specified width is used (see 'Examples'). Only applies
 to text-format (see <code>format</code>).</p></dd>
 
 
-<dt>format</dt>
+<dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
 <dd><p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
 returned output is used for basic printing. Can be one of <code>NULL</code> (the
 default) resp. <code>"text"</code> for plain text, <code>"markdown"</code> (or
 <code>"md"</code>) for markdown and <code>"html"</code> for HTML output.</p></dd>
 
 
-<dt>title, caption, subtitle</dt>
+<dt id="arg-title-caption-subtitle">title, caption, subtitle<a class="anchor" aria-label="anchor" href="#arg-title-caption-subtitle"></a></dt>
 <dd><p>Table title (same as caption) and subtitle, as strings. If <code>NULL</code>,
 no title or subtitle is printed, unless it is stored as attributes (<code>table_title</code>,
 or its alias <code>table_caption</code>, and <code>table_subtitle</code>). If <code>x</code> is a list of
 data frames, <code>caption</code> may be a list of table captions, one for each table.</p></dd>
 
 
-<dt>footer</dt>
+<dt id="arg-footer">footer<a class="anchor" aria-label="anchor" href="#arg-footer"></a></dt>
 <dd><p>Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a
 new text line under the table. If <code>x</code> is a list of data frames, <code>footer</code>
 may be a list of table captions, one for each table.</p></dd>
 
 
-<dt>align</dt>
+<dt id="arg-align">align<a class="anchor" aria-label="anchor" href="#arg-align"></a></dt>
 <dd><p>Column alignment. For markdown-formatted tables, the default
 <code>align = NULL</code> will right-align numeric columns, while all other
 columns will be left-aligned. If <code>format = "html"</code>, the default is
@@ -220,19 +220,19 @@ column. For HTML-tables, may be one of <code>"center"</code>, <code>"left"</code
 <code>"right"</code>.</p></dd>
 
 
-<dt>group_by</dt>
+<dt id="arg-group-by">group_by<a class="anchor" aria-label="anchor" href="#arg-group-by"></a></dt>
 <dd><p>Name of column in <code>x</code> that indicates grouping for tables.
 Only applies when <code>format = "html"</code>. <code>group_by</code> is passed down
 to <code>gt::gt(groupname_col = group_by)</code>.</p></dd>
 
 
-<dt>zap_small</dt>
+<dt id="arg-zap-small">zap_small<a class="anchor" aria-label="anchor" href="#arg-zap-small"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, small values are rounded after
 <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal
 places than <code>digits</code> are printed in scientific notation.</p></dd>
 
 
-<dt>table_width</dt>
+<dt id="arg-table-width">table_width<a class="anchor" aria-label="anchor" href="#arg-table-width"></a></dt>
 <dd><p>Numeric, or <code>"auto"</code>, indicating the width of the complete
 table. If <code>table_width = "auto"</code> and the table is wider than the current
 width (i.e. line length) of the console (or any other source for textual
@@ -241,11 +241,11 @@ if <code>table_width</code> is numeric and table rows are larger than <code>tabl
 the table is split into two parts.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle messages and warnings.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
 
 </dl></div>

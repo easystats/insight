@@ -112,38 +112,38 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Other argument to be passed, for instance to <code>get_predicted_ci()</code>.</p></dd>
 
 
-<dt>predictions</dt>
+<dt id="arg-predictions">predictions<a class="anchor" aria-label="anchor" href="#arg-predictions"></a></dt>
 <dd><p>A vector of predicted values (as obtained by
 <code><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">stats::fitted()</a></code>, <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">stats::predict()</a></code> or <code><a href="get_predicted.html">get_predicted()</a></code>).</p></dd>
 
 
-<dt>data</dt>
+<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used. Visualization
 matrices can be generated using <code><a href="get_datagrid.html">get_datagrid()</a></code>.</p></dd>
 
 
-<dt>se</dt>
+<dt id="arg-se">se<a class="anchor" aria-label="anchor" href="#arg-se"></a></dt>
 <dd><p>Numeric vector of standard error of predicted values. If <code>NULL</code>,
 standard errors are calculated based on the variance-covariance matrix.</p></dd>
 
 
-<dt>ci</dt>
+<dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>The interval level. Default is <code>NULL</code>, to be fast even for larger
 models. Set the interval level to an explicit value, e.g. <code>0.95</code>, for <code>95%</code>
 CI).</p></dd>
 
 
-<dt>ci_type</dt>
+<dt id="arg-ci-type">ci_type<a class="anchor" aria-label="anchor" href="#arg-ci-type"></a></dt>
 <dd><p>Can be <code>"prediction"</code> or <code>"confidence"</code>. Prediction
 intervals show the range that likely contains the value of a new
 observation (in what range it would fall), whereas confidence intervals
@@ -160,7 +160,7 @@ other models (e.g., <code>glm</code>), prediction intervals are somewhat useless
 vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd>
 
 
-<dt>ci_method</dt>
+<dt id="arg-ci-method">ci_method<a class="anchor" aria-label="anchor" href="#arg-ci-method"></a></dt>
 <dd><p>The method for computing p values and confidence intervals.
 Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the default method, which varies based on the model type.</p></li>
 <li><p>Most frequentist models: <code>"wald"</code> (default), <code>"residual"</code> or <code>"normal"</code>.</p></li>
@@ -170,12 +170,12 @@ Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the d
 </ul><p>See <code><a href="get_df.html">get_df()</a></code> for details.</p></dd>
 
 
-<dt>dispersion_method</dt>
+<dt id="arg-dispersion-method">dispersion_method<a class="anchor" aria-label="anchor" href="#arg-dispersion-method"></a></dt>
 <dd><p>Bootstrap dispersion and Bayesian posterior summary:
 <code>"sd"</code> or <code>"mad"</code>.</p></dd>
 
 
-<dt>vcov</dt>
+<dt id="arg-vcov">vcov<a class="anchor" aria-label="anchor" href="#arg-vcov"></a></dt>
 <dd><p>Variance-covariance matrix used to compute uncertainty estimates
 (e.g., for robust standard errors). This argument accepts a covariance
 matrix, a function which returns a covariance matrix, or a string which
@@ -193,7 +193,7 @@ identifies the function to be used to compute the covariance matrix.</p><ul><li>
 </ul></dd>
 
 
-<dt>vcov_args</dt>
+<dt id="arg-vcov-args">vcov_args<a class="anchor" aria-label="anchor" href="#arg-vcov-args"></a></dt>
 <dd><p>List of arguments to be passed to the function identified by
 the <code>vcov</code> argument. This function is typically supplied by the <strong>sandwich</strong>
 or <strong>clubSandwich</strong> packages. Please refer to their documentation (e.g.,
@@ -203,7 +203,7 @@ equals the default from the <strong>sandwich</strong> package; for type <code>"C
 <code>"vcoCR"</code>), the default is set to <code>"CR3"</code>.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
 
 </dl></div>
