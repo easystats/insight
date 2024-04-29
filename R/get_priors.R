@@ -56,9 +56,9 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   # find all column names, add missing columns manually, so merge() works
   cn <- unique(unlist(lapply(l, colnames)))
   l <- lapply(l, function(.x) {
-    missing <- setdiff(cn, colnames(.x))
-    if (length(missing)) {
-      .x[missing] <- NA
+    missing_cols <- setdiff(cn, colnames(.x))
+    if (length(missing_cols)) {
+      .x[missing_cols] <- NA
     }
     .x
   })
@@ -96,7 +96,7 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   } else {
     prior_info$parameter <- params
   }
-  prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))]
+  prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))] # nolint
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info), fixed = TRUE)
   colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info), fixed = TRUE)
@@ -150,7 +150,7 @@ get_priors.stanmvreg <- function(x, ...) {
   params <- params[c(which(params == "(Intercept)"), which(params != "(Intercept)"))]
   prior_info$parameter <- params
 
-  prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale", "response"), colnames(prior_info))]
+  prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale", "response"), colnames(prior_info))] # nolint
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info), fixed = TRUE)
   colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info), fixed = TRUE)
@@ -231,22 +231,25 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   # Loop through all parameters and try to retrieve its correct prior
   out <- data.frame()
   for (p in params) {
-    subset <- priors[priors$Parameter == p, ]
+    subset_priors <- priors[priors$Parameter == p, ]
 
     # If nothing corresponding directly to the parameter...
-    if (nrow(subset) == 0) {
+    if (nrow(subset_priors) == 0) {
       # Special treatment for cor_*
-      subset <- priors[sapply(priors$Parameter, grepl, x = p), ]
+      subset_priors <- priors[sapply(priors$Parameter, grepl, x = p), ]
 
       # If still empty, make empty df
-      if (nrow(subset) == 0) {
-        subset <- stats::setNames(data.frame(t(rep(NA, 5))), c("Parameter", "Distribution", "Location", "Scale", "df"))
+      if (nrow(subset_priors) == 0) {
+        subset_priors <- stats::setNames(
+          data.frame(t(rep(NA, 5))),
+          c("Parameter", "Distribution", "Location", "Scale", "df")
+        )
       }
     }
 
     # Rbind the stuff
-    subset$Parameter <- p
-    out <- rbind(out, subset)
+    subset_priors$Parameter <- p
+    out <- rbind(out, subset_priors)
   }
 
   row.names(out) <- NULL
@@ -281,21 +284,21 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
     prior$prior
   }
 
-  .find_rows <- function(x, ..., ls = list(), fun = "%in%") {
+  .find_rows <- function(x, ..., my_args = list(), fun = "%in%") {
     x <- as.data.frame(x)
     if (!nrow(x)) {
       return(logical(0))
     }
     out <- rep(TRUE, nrow(x))
-    ls <- c(ls, list(...))
-    if (!length(ls)) {
+    my_args <- c(my_args, list(...))
+    if (!length(my_args)) {
       return(out)
     }
-    if (is.null(names(ls))) {
-      format_error("Argument `ls` must be named.")
+    if (is.null(names(my_args))) {
+      format_error("Argument `my_args` must be named.")
     }
-    for (name in names(ls)) {
-      out <- out & brms::do_call(fun, list(x[[name]], ls[[name]]))
+    for (name in names(my_args)) {
+      out <- out & brms::do_call(fun, list(x[[name]], my_args[[name]]))
     }
     out
   }
@@ -310,11 +313,10 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   cols <- c("group", "nlpar", "dpar", "resp", "class")
   empty_strings <- rep("", 4)
   for (i in which(!nzchar(x$prior))) {
-    ls <- x[i, cols]
-    ls <- rbind(ls, c(empty_strings, ls$class))
-    ls <- as.list(ls)
-    # sub_prior <- subset2(x, ls = ls)
-    sub_prior <- x[.find_rows(x, ls = ls, fun = "%in%"), , drop = FALSE]
+    my_args <- x[i, cols]
+    my_args <- rbind(my_args, c(empty_strings, my_args$class))
+    my_args <- as.list(my_args)
+    sub_prior <- x[.find_rows(x, my_args = my_args, fun = "%in%"), , drop = FALSE]
     base_prior <- .stan_base_prior(sub_prior)
     if (nzchar(base_prior)) {
       x$prior[i] <- base_prior
@@ -338,7 +340,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   p <- ifelse(pr$class == "Intercept",
     paste0(
       "b",
-      ifelse(pr$dpar != "", paste0("_", pr$dpar), ""),
+      ifelse(pr$dpar != "", paste0("_", pr$dpar), ""), # nolint
       "_Intercept"
     ),
     p
@@ -350,7 +352,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
     pr$class == "b",
     paste0(
       "b_",
-      ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
+      ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""), # nolint
       pr$coef
     ),
     p
@@ -371,7 +373,7 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
       "sd_",
       pr$group,
       "__",
-      ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""),
+      ifelse(pr$dpar != "", paste0(pr$dpar, "_"), ""), # nolint
       pr$coef
     ),
     p
@@ -399,14 +401,16 @@ get_priors.bcplm <- function(x, ...) {
   location <- eval(parse(text = safe_deparse(x@call))[[1]]$prior.beta.mean)
   if (is.null(location)) location <- 0
 
-  scale <- eval(parse(text = safe_deparse(x@call))[[1]]$prior.beta.var)
-  if (is.null(scale)) scale <- 10000
+  prior_scale <- eval(parse(text = safe_deparse(x@call))[[1]]$prior.beta.var)
+  if (is.null(prior_scale)) {
+    prior_scale <- 10000
+  }
 
   data.frame(
     Parameter = params,
     Distribution = "normal",
     Location = location,
-    Scale = scale,
+    Scale = prior_scale,
     stringsAsFactors = FALSE
   )
 }
@@ -456,13 +460,13 @@ get_priors.meta_fixed <- function(x, ...) {
   fam <- attr(x$prior_d, "family")
 
   loc <- which(names(prior_info) %in% c("mean", "location", "shape"))[1]
-  scale <- which(names(prior_info) %in% c("scale", "sd"))[1]
+  prior_scale <- which(names(prior_info) %in% c("scale", "sd"))[1]
 
   out <- data.frame(
     Parameter = params,
     Distribution = fam,
     Location = prior_info[loc],
-    Scale = prior_info[scale],
+    Scale = prior_info[prior_scale],
     stringsAsFactors = FALSE
   )
 
@@ -630,6 +634,6 @@ get_priors.mcmc.list <- function(x, ...) {
 
 
 .is_numeric_character <- function(x) {
-  (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x[nchar(x) > 0]))))) ||
+  (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x[nzchar(x, keepNA = TRUE)]))))) ||
     (is.factor(x) && !anyNA(suppressWarnings(as.numeric(levels(x)))))
 }

@@ -60,7 +60,7 @@ get_loglikelihood.lmerMod <- function(x,
                                       verbose = TRUE,
                                       ...) {
   # use defaults for REML?
-  if ((missing(estimator) || is.null(estimator)) && missing(REML)) {
+  if ((missing_cols(estimator) || is.null(estimator)) && missing_cols(REML)) {
     lls <- stats::logLik(x)
   } else {
     # else, explicitly set REML for lme4 models

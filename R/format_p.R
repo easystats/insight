@@ -43,11 +43,10 @@ format_p <- function(p,
   # only convert p if it's a valid numeric, or at least coercible to
   # valid numeric values...
   if (!is.numeric(p)) {
-    if (.is_numeric_character(p)) {
-      p <- .factor_to_numeric(p)
-    } else {
+    if (!.is_numeric_character(p)) {
       return(p)
     }
+    p <- .factor_to_numeric(p)
   }
 
 
@@ -67,7 +66,7 @@ format_p <- function(p,
     if (is.na(digits)) {
       digits <- 5
     }
-    text <- ifelse(is.na(p), NA,
+    p_text <- ifelse(is.na(p), NA,
       ifelse(p < 0.001, sprintf("= %.*e***", digits, p), # nolint
         ifelse(p < 0.01, sprintf("= %.*e**", digits, p), # nolint
           ifelse(p < 0.05, sprintf("= %.*e*", digits, p), # nolint
@@ -79,7 +78,7 @@ format_p <- function(p,
       )
     )
   } else if (digits <= 3) {
-    text <- ifelse(is.na(p), NA,
+    p_text <- ifelse(is.na(p), NA,
       ifelse(p < 0.001, "< .001***", # nolint
         ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"), # nolint
           ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"), # nolint
@@ -91,7 +90,7 @@ format_p <- function(p,
       )
     )
   } else {
-    text <- ifelse(is.na(p), NA,
+    p_text <- ifelse(is.na(p), NA,
       ifelse(p < 0.001, paste0("= ", format_value(p, digits), "***"), # nolint
         ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"), # nolint
           ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"), # nolint
@@ -102,12 +101,18 @@ format_p <- function(p,
     )
   }
 
-  .add_prefix_and_remove_stars(text, stars, stars_only, name, missing, whitespace, decimal_separator)
+  .add_prefix_and_remove_stars(text = p_text, stars, stars_only, name, missing, whitespace, decimal_separator)
 }
 
 
 #' @keywords internal
-.add_prefix_and_remove_stars <- function(text, stars, stars_only, name, missing = "", whitespace = TRUE, decimal_separator = NULL) {
+.add_prefix_and_remove_stars <- function(text,
+                                         stars,
+                                         stars_only,
+                                         name,
+                                         missing = "",
+                                         whitespace = TRUE,
+                                         decimal_separator = NULL) {
   missing_index <- is.na(text)
 
   if (is.null(name)) {

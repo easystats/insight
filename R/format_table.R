@@ -101,11 +101,11 @@ format_table <- function(x,
   }
 
   # check if user supplied digits attributes
-  if (missing(digits)) digits <- .additional_arguments(x, "digits", 2)
-  if (missing(ci_digits)) ci_digits <- .additional_arguments(x, "ci_digits", 2)
-  if (missing(p_digits)) p_digits <- .additional_arguments(x, "p_digits", 3)
-  if (missing(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", 2)
-  if (missing(ic_digits)) ic_digits <- .additional_arguments(x, "ic_digits", 1)
+  if (missing_cols(digits)) digits <- .additional_arguments(x, "digits", 2)
+  if (missing_cols(ci_digits)) ci_digits <- .additional_arguments(x, "ci_digits", 2)
+  if (missing_cols(p_digits)) p_digits <- .additional_arguments(x, "p_digits", 3)
+  if (missing_cols(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", 2)
+  if (missing_cols(ic_digits)) ic_digits <- .additional_arguments(x, "ic_digits", 1)
 
   att <- attributes(x)
   x <- as.data.frame(x, stringsAsFactors = FALSE)

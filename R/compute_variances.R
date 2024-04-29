@@ -792,10 +792,10 @@
 # ----------------------------------------------
 .variance_family_nbinom <- function(x, mu, sig, faminfo) {
   if (faminfo$is_zero_inflated) {
-    if (missing(sig)) sig <- 0
+    if (missing_cols(sig)) sig <- 0
     .variance_zinb(x, sig, faminfo, family_var = mu * (1 + sig))
   } else if (inherits(x, "MixMod")) {
-    if (missing(sig)) {
+    if (missing_cols(sig)) {
       return(rep(1e-16, length(mu)))
     }
     mu * (1 + sig)
