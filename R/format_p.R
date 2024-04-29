@@ -43,13 +43,11 @@ format_p <- function(p,
   # only convert p if it's a valid numeric, or at least coercible to
   # valid numeric values...
   if (!is.numeric(p)) {
-    if (.is_numeric_character(p)) {
-      p <- .factor_to_numeric(p)
-    } else {
+    if (!.is_numeric_character(p)) {
       return(p)
     }
+    p <- .factor_to_numeric(p)
   }
-
 
   if (identical(stars, "only")) {
     stars <- TRUE
@@ -67,7 +65,7 @@ format_p <- function(p,
     if (is.na(digits)) {
       digits <- 5
     }
-    text <- ifelse(is.na(p), NA,
+    p_text <- ifelse(is.na(p), NA,
       ifelse(p < 0.001, sprintf("= %.*e***", digits, p), # nolint
         ifelse(p < 0.01, sprintf("= %.*e**", digits, p), # nolint
           ifelse(p < 0.05, sprintf("= %.*e*", digits, p), # nolint
@@ -79,7 +77,7 @@ format_p <- function(p,
       )
     )
   } else if (digits <= 3) {
-    text <- ifelse(is.na(p), NA,
+    p_text <- ifelse(is.na(p), NA,
       ifelse(p < 0.001, "< .001***", # nolint
         ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"), # nolint
           ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"), # nolint
@@ -91,7 +89,7 @@ format_p <- function(p,
       )
     )
   } else {
-    text <- ifelse(is.na(p), NA,
+    p_text <- ifelse(is.na(p), NA,
       ifelse(p < 0.001, paste0("= ", format_value(p, digits), "***"), # nolint
         ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"), # nolint
           ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"), # nolint
@@ -102,38 +100,44 @@ format_p <- function(p,
     )
   }
 
-  .add_prefix_and_remove_stars(text, stars, stars_only, name, missing, whitespace, decimal_separator)
+  .add_prefix_and_remove_stars(p_text, stars, stars_only, name, missing, whitespace, decimal_separator)
 }
 
 
 #' @keywords internal
-.add_prefix_and_remove_stars <- function(text, stars, stars_only, name, missing = "", whitespace = TRUE, decimal_separator = NULL) {
-  missing_index <- is.na(text)
+.add_prefix_and_remove_stars <- function(p_text,
+                                         stars,
+                                         stars_only,
+                                         name,
+                                         missing = "",
+                                         whitespace = TRUE,
+                                         decimal_separator = NULL) {
+  missing_index <- is.na(p_text)
 
   if (is.null(name)) {
-    text <- gsub("= ", "", text, fixed = TRUE)
+    p_text <- gsub("= ", "", p_text, fixed = TRUE)
   } else {
-    text <- paste(name, text)
+    p_text <- paste(name, p_text)
   }
 
   if (stars_only) {
-    text <- gsub("[^\\*]", "", text)
+    p_text <- gsub("[^\\*]", "", p_text)
   } else if (!stars) {
-    text <- gsub("*", "", text, fixed = TRUE)
+    p_text <- gsub("*", "", p_text, fixed = TRUE)
   }
 
   # replace missing with related string
-  text[missing_index] <- missing
+  p_text[missing_index] <- missing
 
   # remove whitespace around < and >
   if (isFALSE(whitespace)) {
-    text <- gsub(" ", "", text, fixed = TRUE)
+    p_text <- gsub(" ", "", p_text, fixed = TRUE)
   }
 
   # replace decimal separator
   if (!is.null(decimal_separator)) {
-    text <- gsub(".", decimal_separator, text, fixed = TRUE)
+    p_text <- gsub(".", decimal_separator, p_text, fixed = TRUE)
   }
 
-  text
+  p_text
 }
