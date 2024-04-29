@@ -183,13 +183,20 @@ withr::with_environment(
       expect_identical(find_statistic(m1), "z-statistic")
       expect_identical(find_statistic(m2), "z-statistic")
     })
+  }
+)
+
+
+withr::with_environment(
+  new.env(),
+  {
+    data(eortc, package = "coxme")
+    d <- eortc
+    d$surv <- survival::Surv(d$y, d$uncens)
+    mcoxme <- coxme::coxme(surv ~ trt + (1 | center), data = d)
 
     # get_data() works with this example
     test_that("get_data works with mf", {
-      data(eortc, package = "coxme")
-      d <- eortc
-      d$surv <- survival::Surv(d$y, d$uncens)
-      mcoxme <- coxme::coxme(surv ~ trt + (1 | center), data = d)
       # environment
       out <- get_data(mcoxme)
       expect_identical(nrow(out), 2323L)
