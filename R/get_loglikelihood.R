@@ -248,8 +248,8 @@ get_loglikelihood.afex_aov <- function(x, ...) {
       NA
     },
     gaussian = {
-      nobs <- length(resp)
-      -((log(dev / nobs * 2 * pi) + 1) - log(w)) / 2
+      model_nobs <- length(resp)
+      -((log(dev / model_nobs * 2 * pi) + 1) - log(w)) / 2
     },
     inverse.gaussian = {
       -((log(disp * 2 * pi) + 1) + 3 * log(resp)) / 2
@@ -475,7 +475,7 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
     {
       trans <- find_transformation(x)
 
-      if (trans == "identity") {
+      if (trans == "identity") { # nolint
         .weighted_sum(log(get_response(x, as_proportion = TRUE)), w = model_weights)
       } else if (trans == "log") {
         .weighted_sum(log(1 / get_response(x, as_proportion = TRUE)), w = model_weights)

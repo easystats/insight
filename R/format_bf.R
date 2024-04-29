@@ -42,7 +42,7 @@ format_bf <- function(bf,
 
   digits <- ifelse(is.na(bf), 0, ifelse(bf < 1, 3, 2)) # nolint
 
-  text <- paste0(
+  bf_text <- paste0(
     "= ",
     ifelse(is_small, "1/", ""),
     format_value(bf, digits = digits)
@@ -52,37 +52,37 @@ format_bf <- function(bf,
   is_extreme <- bf_orig > 1000 | bf_orig < 1 / 1000
   if (any(is_extreme)) {
     if (exact) {
-      text[is_extreme] <- ifelse(bf_orig[is_extreme] > 1000,
+      bf_text[is_extreme] <- ifelse(bf_orig[is_extreme] > 1000,
         sprintf("= %.2e", bf_orig[is_extreme]),
-        text[is_extreme]
+        bf_text[is_extreme]
       )
-      text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
+      bf_text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
         ifelse(is_small[is_extreme], # nolint
           sprintf("= 1/%.2e", bf[is_extreme]),
           sprintf("= %.2e", bf_orig[is_extreme])
         ),
-        text[is_extreme]
+        bf_text[is_extreme]
       )
     } else {
-      text[is_extreme] <- ifelse(bf_orig[is_extreme] > 1000,
+      bf_text[is_extreme] <- ifelse(bf_orig[is_extreme] > 1000,
         "> 1000",
-        text[is_extreme]
+        bf_text[is_extreme]
       )
-      text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
+      bf_text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
         ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"), # nolint
-        text[is_extreme]
+        bf_text[is_extreme]
       )
     }
   }
 
   ## Add stars
-  text <- ifelse(bf_orig > 30, paste0(text, "***"),
-    ifelse(bf_orig > 10, paste0(text, "**"), # nolint
-      ifelse(bf_orig > 3, paste0(text, "*"), text) # nolint
+  bf_text <- ifelse(bf_orig > 30, paste0(bf_text, "***"),
+    ifelse(bf_orig > 10, paste0(bf_text, "**"), # nolint
+      ifelse(bf_orig > 3, paste0(bf_text, "*"), bf_text) # nolint
     )
   )
 
-  out <- .add_prefix_and_remove_stars(text, stars, stars_only, name)
+  out <- .add_prefix_and_remove_stars(p_text = bf_text, stars, stars_only, name)
   if (is.na(na_reference)) out[bad_bf] <- ""
   out
 }

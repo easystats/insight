@@ -187,24 +187,24 @@ withr::with_environment(
 )
 
 
-withr::with_environment(
-  new.env(),
-  {
-    data(eortc, package = "coxme")
-    d <- eortc
-    d$surv <- survival::Surv(d$y, d$uncens)
-    mcoxme <- coxme::coxme(surv ~ trt + (1 | center), data = d)
+# get_data() works with this example
+test_that("get_data works with mf", {
+  withr::with_environment(
+    new.env(),
+    {
+      data(eortc, package = "coxme")
+      Surv <- survival::Surv
+      d <- as.data.frame(eortc)
+      mcoxme <- coxme::coxme(Surv(y, uncens) ~ trt + (1 | center), data = d)
 
-    # get_data() works with this example
-    test_that("get_data works with mf", {
       # environment
       out <- get_data(mcoxme)
       expect_identical(nrow(out), 2323L)
-      expect_named(out, c("surv", "trt", "center"))
+      expect_named(out, c("y", "uncens", "trt", "center"))
       # modelframe
       out <- get_data(mcoxme, source = "mf")
       expect_identical(nrow(out), 2323L)
-      expect_named(out, c("y", "uncens", "center", "trt", "surv"))
-    })
-  }
-)
+      expect_named(out, c("y", "uncens", "center", "trt"))
+    }
+  )
+})

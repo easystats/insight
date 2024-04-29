@@ -739,7 +739,7 @@
   cn <- .get_transformed_names(colnames(mf), type)
   if (!.is_empty_string(cn)) {
     for (i in cn) {
-      if (type == "scale\\(log") {
+      if (type == "scale\\(log") { # nolint
         mf[[i]] <- exp(.unscale(mf[[i]]))
       } else if (type == "exp\\(scale") {
         mf[[i]] <- .unscale(log(mf[[i]]))
