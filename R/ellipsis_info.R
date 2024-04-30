@@ -36,49 +36,48 @@ ellipsis_info <- function(objects, ...) {
 #' @export
 ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
   # Create list with names
-  objects <- list(...)
-  object_names <- match.call(expand.dots = FALSE)$`...`
-  names(objects) <- object_names
+  model_objects <- list(...)
+  object_names <- match.call(expand.dots = FALSE)[["..."]]
+  names(model_objects) <- object_names
 
   # If only one object was provided, check if it is a list of models, like "list(m1, m2)"
-  if (length(objects) == 1) {
+  if (length(model_objects) == 1) {
     # single model?
-    if (is_model(objects[[1]])) {
-      return(objects[[1]])
+    if (is_model(model_objects[[1]])) {
+      return(model_objects[[1]])
     }
     # only proceed if we have at least one valid model object in that list
-    if (any(sapply(objects[[1]], insight::is_model))) {
-      # unlist
-      object_names <- object_names[[1]]
-      # make sure objects-names is a character vector
-      if (!is.character(object_names)) {
-        object_names <- safe_deparse(object_names)
-      }
-      if (all(startsWith(object_names, "list("))) {
-        # we now should have something like "list(m1, m2)" ...
-        object_names <- trim_ws(unlist(
-          strsplit(gsub("list\\((.*)\\)", "\\1", object_names), ",", fixed = TRUE),
-          use.names = FALSE
-        ))
-      } else {
-        # ... or a variable/object name, in which case we can use the names
-        # of the list-elements directly
-        object_names <- names(objects[[1]])
-      }
-      # unlist model objects, so "objects" contains the list of models
-      objects <- objects[[1]]
-      # validation check
-      if (is.null(object_names)) {
-        object_names <- paste("Model", seq_along(objects), sep = " ")
-      }
-      names(objects) <- object_names
-    } else {
-      return(objects[[1]])
+    if (!any(sapply(model_objects[[1]], insight::is_model))) {
+      return(model_objects[[1]])
     }
+    # unlist
+    object_names <- object_names[[1]]
+    # make sure objects-names is a character vector
+    if (!is.character(object_names)) {
+      object_names <- safe_deparse(object_names)
+    }
+    if (all(startsWith(object_names, "list("))) {
+      # we now should have something like "list(m1, m2)" ...
+      object_names <- trim_ws(unlist(
+        strsplit(gsub("list\\((.*)\\)", "\\1", object_names), ",", fixed = TRUE),
+        use.names = FALSE
+      ))
+    } else {
+      # ... or a variable/object name, in which case we can use the names
+      # of the list-elements directly
+      object_names <- names(model_objects[[1]])
+    }
+    # unlist model objects, so "objects" contains the list of models
+    model_objects <- model_objects[[1]]
+    # validation check
+    if (is.null(object_names)) {
+      object_names <- paste("Model", seq_along(model_objects), sep = " ")
+    }
+    names(model_objects) <- object_names
   }
 
   # Check whether all are models
-  is_model <- vapply(objects, is_model, logical(1))
+  is_model <- vapply(model_objects, is_model, logical(1))
 
   # Drop non-models if need be
   if (only_models && !all(is_model)) {
@@ -88,20 +87,20 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
         "are not supported models and have been dropped."
       ))
     }
-    objects <- objects[is_model]
+    model_objects <- model_objects[is_model]
     object_names <- object_names[is_model]
     is_model <- is_model[is_model]
   }
 
   # Add class
   if (all(is_model)) {
-    class(objects) <- c("ListModels", class(objects))
+    class(model_objects) <- c("ListModels", class(model_objects))
   } else {
-    class(objects) <- c("ListObjects", class(objects))
+    class(model_objects) <- c("ListObjects", class(model_objects))
   }
 
   # Now objects is of class ListObjects or ListModels, so dispatching on the appropriate method
-  ellipsis_info(objects, verbose = verbose)
+  ellipsis_info(objects = model_objects, verbose = verbose)
 }
 
 
@@ -245,13 +244,19 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     format_alert(msg)
   }
 
+  # Get other info
+  model_infos <- lapply(objects, model_info)
+
+  # Bayesian
+  attr(objects, "all_bayesian") <- all(vapply(
+    model_infos,
+    function(i) i$is_bayesian,
+    logical(1)
+  ))
+
   # determine which is linear or binomial model
-  model_infos <- lapply(objects, function(i) {
-    mi <- model_info(i)
-    c(isTRUE(mi$is_linear), isTRUE(mi$is_binomial))
-  })
-  attr(objects, "is_linear") <- vapply(model_infos, function(i) i[1], logical(1))
-  attr(objects, "is_binomial") <- vapply(model_infos, function(i) i[2], logical(1))
+  attr(objects, "is_linear") <- vapply(model_infos, function(i) i$is_linear, logical(1))
+  attr(objects, "is_binomial") <- vapply(model_infos, function(i) i$is_binomial, logical(1))
 
   objects
 }
