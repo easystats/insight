@@ -194,7 +194,7 @@ test_that("get_data works with mf", {
     {
       data(eortc, package = "coxme")
       Surv <- survival::Surv
-      d2 <- as.data.frame(eortc)
+      d2 <<- as.data.frame(eortc)
       mcoxme <- coxme::coxme(Surv(y, uncens) ~ trt + (1 | center), data = d2)
 
       # environment
@@ -206,9 +206,10 @@ test_that("get_data works with mf", {
       expect_identical(nrow(out), 2323L)
       expect_named(out, c("y", "uncens", "center", "trt"))
 
-      d2 <- as.data.frame(eortc)
-      d2$surv <- survival::Surv(d2$y, d2$uncens)
-      mcoxme <- coxme::coxme(surv ~ trt + (1 | center), data = d2)
+      d <- as.data.frame(eortc)
+      d$surv <- survival::Surv(d$y, d$uncens)
+      d3 <<- d
+      mcoxme <- coxme::coxme(surv ~ trt + (1 | center), data = d3)
 
       # environment
       out <- get_data(mcoxme)
