@@ -1,11 +1,11 @@
 pandoc: 3.1.13
 pkgdown: 2.0.9.9000
-pkgdown_sha: 5f9606b54aedbb36ade5a1f9db4c2780ceaf4e56
+pkgdown_sha: 9a6bbfc6ecf3aaf94406783beb0154fec0f3e87c
 articles:
   display: display.html
   export: export.html
   insight: insight.html
-last_built: 2024-04-30T11:53Z
+last_built: 2024-05-02T13:48Z
 urls:
   reference: https://easystats.github.io/insight/reference
   article: https://easystats.github.io/insight/articles
