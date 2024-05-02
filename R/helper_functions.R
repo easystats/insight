@@ -308,7 +308,15 @@
 
   tryCatch(
     {
-      if (inherits(x, c("glmmTMB", "clmm", "cpglmm"))) {
+      if (inherits(x, "glmmTMB")) {
+        eigen_values <- list()
+        for (component in c("cond", "zi")) {
+          for (i in seq_along(vals$vc[[component]])) {
+            eigen_values <- c(eigen_values, list(eigen(vals$vc[[component]][[i]], only.values = TRUE)$values))
+          }
+        }
+        is_si <- any(vapply(eigen_values, min, numeric(1), na.rm = TRUE) < tolerance)
+      } else if (inherits(x, c("clmm", "cpglmm"))) {
         is_si <- any(sapply(vals$vc, function(.x) any(abs(diag(.x)) < tolerance)))
       } else if (inherits(x, "merMod")) {
         theta <- lme4::getME(x, "theta")
