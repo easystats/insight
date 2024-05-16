@@ -199,6 +199,7 @@ get_datagrid.data.frame <- function(x,
                                     ...) {
   ## TODO: deprecate later
   if (!is.null(at)) {
+    format_warning("Argument `at` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
     by <- at
   }
 
@@ -746,6 +747,7 @@ get_datagrid.default <- function(x,
                                  ...) {
   ## TODO: deprecate later
   if (!is.null(at)) {
+    format_warning("Argument `at` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
     by <- at
   }
 

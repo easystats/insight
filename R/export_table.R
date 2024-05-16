@@ -118,7 +118,7 @@ export_table <- function(x,
                          footer = NULL,
                          align = NULL,
                          by = NULL,
-                         group_by = NULL, ## TODO: deprecate later
+                         group_by = NULL,
                          zap_small = FALSE,
                          table_width = NULL,
                          verbose = TRUE,
@@ -135,6 +135,7 @@ export_table <- function(x,
 
   ## TODO: deprecate later
   if (!is.null(group_by)) {
+    format_warning("Argument `group_by` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
     by <- group_by
   }
 

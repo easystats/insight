@@ -114,6 +114,7 @@ print_parameters <- function(x,
                              split_by = NULL) {
   ## TODO: deprecte later
   if (!is.null(split_by)) {
+    format_warning("Argument `split_by` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
     by <- split_by
   }
 
