@@ -1,3 +1,10 @@
+# insight 0.19.12
+
+## Breaking
+
+* Arguments named `group_by` will be deprecated in a future release. Please use
+  `by` instead. This affects `export_table()` in *insight*.
+
 # insight 0.19.11
 
 ## General
