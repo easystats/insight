@@ -29,6 +29,8 @@ test_that("marginaleffects", {
 
   # standardize names - "s.value" becomes "S"
   skip_if_not_installed("parameters")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.20.1")
+
   expect_named(
     parameters::model_parameters(x),
     c(
