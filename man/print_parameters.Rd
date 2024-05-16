@@ -7,13 +7,14 @@
 print_parameters(
   x,
   ...,
-  split_by = c("Effects", "Component", "Group", "Response"),
+  by = c("Effects", "Component", "Group", "Response"),
   format = "text",
   parameter_column = "Parameter",
   keep_parameter_column = TRUE,
   remove_empty_column = FALSE,
   titles = NULL,
-  subtitles = NULL
+  subtitles = NULL,
+  split_by = NULL
 )
 }
 \arguments{
@@ -23,13 +24,12 @@ print_parameters(
 the model parameters and related statistics (like confidence intervals, HDI,
 ROPE, ...).}
 
-\item{split_by}{\code{split_by} should be a character vector with one or
-more of the following elements: \code{"Effects"}, \code{"Component"},
-\code{"Response"} and \code{"Group"}. These are the column names returned
-by \code{\link[=clean_parameters]{clean_parameters()}}, which is used to extract the information
-from which the group or component model parameters belong. If \code{NULL}, the
-merged data frame is returned. Else, the data frame is split into a list,
-split by the values from those columns defined in \code{split_by}.}
+\item{by}{\code{by} should be a character vector with one or more of the following
+elements: \code{"Effects"}, \code{"Component"}, \code{"Response"} and \code{"Group"}. These are
+the column names returned by \code{\link[=clean_parameters]{clean_parameters()}}, which is used to extract
+the information from which the group or component model parameters belong.
+If \code{NULL}, the merged data frame is returned. Else, the data frame is split
+into a list, split by the values from those columns defined in \code{by}.}
 
 \item{format}{Name of output-format, as string. If \code{NULL} (or \code{"text"}),
 assumed use for output is basic printing. If \code{"markdown"}, markdown-format
@@ -59,9 +59,11 @@ values for \code{"table_title"} and \code{"table_subtitle"}. \code{titles}
 and \code{subtitles} may be any length from 1 to same length as returned
 list elements. If \code{titles} and \code{subtitles} are shorter than
 existing elements, only the first default attributes are overwritten.}
+
+\item{split_by}{Deprecated, please use \code{by} instead.}
 }
 \value{
-A data frame or a list of data frames (if \code{split_by} is not \code{NULL}). If a
+A data frame or a list of data frames (if \code{by} is not \code{NULL}). If a
 list is returned, the element names reflect the model components where the
 extracted information in the data frames belong to, e.g.
 \code{random.zero_inflated.Intercept: persons}. This is the data frame that
@@ -114,7 +116,7 @@ x <- hdi(model, effects = "all", component = "all")
 tmp <- as.data.frame(x)[, 1:4]
 tmp
 
-# Based on the "split_by" argument, we get a list of data frames that
+# Based on the "by" argument, we get a list of data frames that
 # is split into several parts that reflect the model components.
 print_parameters(model, tmp)
 

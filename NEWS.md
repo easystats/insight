@@ -2,12 +2,13 @@
 
 ## Breaking
 
-* Arguments named `group`, `at` and `group_by` will be deprecated in future
-  releases. of _easystats_ packages. Please use `by` instead. This affects
-  following functions in *insight*:
+* Arguments named `group`, `at`, `group_by` and `split_by` will be deprecated
+  in future releases of _easystats_ packages. Please use `by` instead. This
+  affects following functions in *insight*:
 
   * `export_table()`
   * `get_datagrid()`
+  * `print_parameters()`
 
 # insight 0.19.11
 
