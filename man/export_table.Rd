@@ -103,7 +103,7 @@ column. For HTML-tables, may be one of \code{"center"}, \code{"left"} or
 
 \item{by}{Name of column in \code{x} that indicates grouping for tables.
 Only applies when \code{format = "html"}. \code{by} is passed down to
-\code{gt::gt(groupname_col = group_by)}.}
+\code{gt::gt(groupname_col = by)}.}
 
 \item{group_by}{Deprecated, please use \code{by} instead.}
 

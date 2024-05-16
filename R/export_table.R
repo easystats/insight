@@ -33,7 +33,7 @@
 #'   `"right"`.
 #' @param by Name of column in `x` that indicates grouping for tables.
 #'   Only applies when `format = "html"`. `by` is passed down to
-#'   `gt::gt(groupname_col = group_by)`.
+#'   `gt::gt(groupname_col = by)`.
 #' @param width Refers to the width of columns (with numeric values). Can be
 #'   either `NULL`, a number or a named numeric vector. If `NULL`, the width for
 #'   each column is adjusted to the minimum required width. If a number, columns

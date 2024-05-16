@@ -104,18 +104,6 @@
     predict <- "prediction"
   }
 
-  ## TODO remove in a later update
-  # backward compatibility
-  if (identical(predict, "relation")) {
-    if (isTRUE(verbose)) {
-      format_warning(
-        '`predict = "relation" is deprecated.',
-        'Please use `predict = "expectation" instead.'
-      )
-    }
-    predict <- "expectation"
-  }
-
   # Warn if get_predicted() is not called with an easystats- or
   # model-supported predicted type
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {

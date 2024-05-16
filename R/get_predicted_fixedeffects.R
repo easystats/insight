@@ -12,27 +12,25 @@ get_predicted.fixest <- function(x, predict = "expectation", data = NULL, ...) {
   if (!is.null(predict)) {
     predict <- match.arg(predict, choices = c("expectation", "link"))
     type_arg <- ifelse(predict == "expectation", "response", "link")
+  } else if ("type" %in% names(dots)) {
+    type_arg <- match.arg(dots$type, choices = c("response", "link"))
   } else {
-    if (!"type" %in% names(dots)) {
-      format_error("Please specify the `predict` argument.")
-    } else {
-      type_arg <- match.arg(dots$type, choices = c("response", "link"))
-    }
+    format_error("Please specify the `predict` argument.")
   }
 
   # predict.fixest supports: object, newdata, type, na.rm
-  args <- list()
-  args[["type"]] <- type_arg
-  args[["object"]] <- x
+  my_args <- list()
+  my_args[["type"]] <- type_arg
+  my_args[["object"]] <- x
   if ("na.rm" %in% names(dots)) {
-    args[["na.rm"]] <- dots[["na.rm"]]
+    my_args[["na.rm"]] <- dots[["na.rm"]]
   }
   # newdata=NULL raises error
   if (!is.null(data)) {
-    args[["newdata"]] <- data
+    my_args[["newdata"]] <- data
   }
 
-  predictions <- do.call("predict", args)
+  predictions <- do.call("predict", my_args)
 
-  .get_predicted_out(predictions, args = args, ci_data = NULL)
+  .get_predicted_out(predictions, my_args = my_args, ci_data = NULL)
 }

@@ -18,9 +18,9 @@ print.get_predicted <- function(x, ...) {
   out <- x[1:nrows, 1:ncols]
 
   # Add row
-  row <- out[1, ]
-  row[1, ] <- "..."
-  out <- rbind(out, row)
+  big_row <- out[1, ]
+  big_row[1, ] <- "..."
+  out <- rbind(out, big_row)
 
   # Add col
   out[[paste0("...x", ncol(x) - ncols)]] <- "..."
@@ -42,8 +42,8 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
     !"iterations" %in% names(attributes(x)) &&
     !"Response" %in% colnames(x)) {
     return(as.data.frame.data.frame(x))
-    # grouped response level (e.g., polr or multinom)
   } else if (inherits(x, "data.frame") && "Response" %in% colnames(x)) {
+    # grouped response level (e.g., polr or multinom)
     out <- as.data.frame.data.frame(x)
     if ("ci_data" %in% names(attributes(x))) {
       out <- merge(out, attributes(x)$ci_data, by = c("Row", "Response"), sort = FALSE)

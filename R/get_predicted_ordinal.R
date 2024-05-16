@@ -21,12 +21,10 @@ get_predicted.clm <- function(x,
     valid <- c("expectation", "classification")
     predict <- match.arg(predict, choices = valid)
     type_arg <- c("prob", "class")[match(predict, valid)]
+  } else if ("type" %in% names(dots)) {
+    type_arg <- match.arg(dots$type, choices = c("prob", "class"))
   } else {
-    if (!"type" %in% names(dots)) {
-      format_error("Please specify the `predict` argument.")
-    } else {
-      type_arg <- match.arg(dots$type, choices = c("prob", "class"))
-    }
+    format_error("Please specify the `predict` argument.")
   }
 
   # hack to get predictions for all response levels
@@ -55,7 +53,7 @@ get_predicted.clm <- function(x,
   }
 
   # compute predictions
-  args <- list(
+  my_args <- list(
     object = x,
     newdata = data,
     type = type_arg,
@@ -63,10 +61,10 @@ get_predicted.clm <- function(x,
     interval = !is.null(ci),
     level = ifelse(is.null(ci), 0.95, ci)
   )
-  pred <- do.call("predict", args)
+  pred <- do.call("predict", my_args)
 
-  args$data <- args$newdata
-  out <- .get_predicted_out(pred$fit, args = args)
+  my_args$data <- my_args$newdata
+  out <- .get_predicted_out(pred$fit, my_args = my_args)
 
   # standard error and confidence intervals matrix to long format
   if (type_arg == "prob") {
@@ -143,7 +141,7 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci =
     format_error("The `predict` argument must be either \"expectation\" or \"classification\".")
   }
 
-  args <- c(list(x, data = data, ci = ci, predict = type_arg), list(...))
+  my_args <- c(list(x, data = data, ci = ci, predict = type_arg), list(...))
 
   # predict.multinom doesn't work when `newdata` is explicitly set to NULL (weird)
   if (is.null(data)) {
@@ -153,7 +151,7 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci =
   }
 
   # reshape
-  out <- .get_predicted_out(out, args = args)
+  out <- .get_predicted_out(out, my_args = my_args)
 
   # add CI
   if (!is.null(ci)) {

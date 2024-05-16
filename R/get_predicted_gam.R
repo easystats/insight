@@ -35,7 +35,7 @@ get_predicted.gam <- function(x,
   }
 
   # Sanitize input
-  args <- .get_predicted_args(
+  my_args <- .get_predicted_args(
     x,
     data = data,
     predict = predict,
@@ -54,7 +54,7 @@ get_predicted.gam <- function(x,
     dot_args <- list(...)
     dot_args[["type"]] <- NULL
     predict_args <- list(x,
-      newdata = data, type = args$type, re.form = args$re.form,
+      newdata = data, type = my_args$type, re.form = my_args$re.form,
       unconditional = FALSE, se.fit = se.fit
     )
     predict_args <- c(predict_args, dot_args)
@@ -67,10 +67,10 @@ get_predicted.gam <- function(x,
 
   # Get prediction
   if (is.null(ci)) {
-    rez <- predict_function(x, data = args$data, se.fit = FALSE, ...)
+    rez <- predict_function(x, data = my_args$data, se.fit = FALSE, ...)
     rez <- list(fit = rez)
   } else {
-    rez <- predict_function(x, data = args$data, se.fit = TRUE, ...)
+    rez <- predict_function(x, data = my_args$data, se.fit = TRUE, ...)
   }
 
   if (is.null(iterations)) {
@@ -78,7 +78,7 @@ get_predicted.gam <- function(x,
   } else {
     predictions <- .get_predicted_boot(
       x,
-      data = args$data,
+      data = my_args$data,
       predict_function = boot_function,
       iterations = iterations,
       verbose = verbose,
@@ -92,8 +92,8 @@ get_predicted.gam <- function(x,
   } else {
     ci_data <- NULL
   }
-  out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
-  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose)
+  .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
 }
 
 #' @export

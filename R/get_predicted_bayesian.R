@@ -24,7 +24,7 @@ get_predicted.stanreg <- function(x,
     choices = c("quantile", "eti", "hdi")
   )
 
-  args <- .get_predicted_args(
+  my_args <- .get_predicted_args(
     x,
     data = data,
     predict = predict,
@@ -36,24 +36,24 @@ get_predicted.stanreg <- function(x,
   )
 
   # we have now a validated "predict"...
-  predict <- args$predict
+  predict <- my_args$predict
 
   # when the `type` argument is passed through ellipsis, we need to manually set
-  # the `args$predict` value, because this is what determines which `rstantools`
+  # the `my_args$predict` value, because this is what determines which `rstantools`
   # function we will use to draw from the posterior predictions.
   # dots <- list(...)
   # if (is.null(predict) && "type" %in% names(dots)) {
   #   if (dots$type == "link") {
-  #     args$predict <- "link"
+  #     my_args$predict <- "link"
   #   } else if (dots$type == "response") {
-  #     args$predict <- "expectation"
+  #     my_args$predict <- "expectation"
   #   }
   # }
 
   # prepare arguments, avoid possible matching by multiple actual arguments
   fun_args <- list(x,
-    newdata = args$data,
-    re.form = args$re.form,
+    newdata = my_args$data,
+    re.form = my_args$re.form,
     draws = iterations
   )
 
@@ -77,9 +77,9 @@ get_predicted.stanreg <- function(x,
   fun_args <- c(fun_args, dots)
 
   # Get draws
-  if (args$predict == "link") {
+  if (my_args$predict == "link") {
     draws <- do.call(rstantools::posterior_linpred, fun_args)
-  } else if (args$predict %in% c("expectation", "response")) {
+  } else if (my_args$predict %in% c("expectation", "response")) {
     draws <- do.call(rstantools::posterior_epred, fun_args)
   } else {
     draws <- do.call(rstantools::posterior_predict, fun_args)
@@ -92,14 +92,14 @@ get_predicted.stanreg <- function(x,
   ci_data <- get_predicted_ci(
     x,
     predictions = predictions,
-    data = args$data,
-    ci_type = args$ci_type,
+    data = my_args$data,
+    ci_type = my_args$ci_type,
     ci = ci,
     ci_method = ci_method,
     ...
   )
 
-  .get_predicted_out(predictions, args = args, ci_data = ci_data)
+  .get_predicted_out(predictions, my_args = my_args, ci_data = ci_data)
 }
 
 

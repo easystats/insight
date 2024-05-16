@@ -18,7 +18,7 @@ get_predicted.hurdle <- function(x,
   dots <- list(...)
 
   # Sanitize input
-  args <- .get_predicted_args(
+  my_args <- .get_predicted_args(
     x,
     data = data,
     predict = predict,
@@ -28,27 +28,27 @@ get_predicted.hurdle <- function(x,
   )
 
   # we have now a validated "predict"...
-  predict <- args$predict
+  predict <- my_args$predict
 
   # Prediction function
   predict_function <- function(x, data, ...) {
     stats::predict(
       x,
       newdata = data,
-      type = args$type,
+      type = my_args$type,
       ...
     )
   }
 
   # 1. step: predictions
-  predictions <- as.vector(predict_function(x, data = args$data))
+  predictions <- as.vector(predict_function(x, data = my_args$data))
 
   # on the response scale, we simulate predictions for CIs...
-  if (args$scale == "response") {
+  if (my_args$scale == "response") {
     # intermediate step: predictions for ZI model
     zi_predictions <- stats::predict(
       x,
-      newdata = args$data,
+      newdata = my_args$data,
       type = "zero",
       ...
     )
@@ -69,10 +69,10 @@ get_predicted.hurdle <- function(x,
     )
     out <- list(predictions = predictions, ci_data = ci_data)
   } else {
-    if (inherits(x, "hurdle") && args$scale == "zero") {
+    if (inherits(x, "hurdle") && my_args$scale == "zero") {
       # nothing...
       linv <- function(x) x
-    } else if (args$scale == "zero") {
+    } else if (my_args$scale == "zero") {
       linv <- stats::plogis
     } else {
       linv <- exp
@@ -82,18 +82,18 @@ get_predicted.hurdle <- function(x,
     ci_data <- get_predicted_ci(
       x,
       predictions = predictions,
-      data = args$data,
+      data = my_args$data,
       ci = ci,
-      ci_type = args$ci_type,
+      ci_type = my_args$ci_type,
       predict_arg = predict
     )
 
     # 3. step: back-transform
-    out <- .get_predicted_transform(x, predictions, args, ci_data, link_inv = linv, verbose = verbose)
+    out <- .get_predicted_transform(x, predictions, my_args, ci_data, link_inv = linv, verbose = verbose)
   }
 
   # 4. step: final preparation
-  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+  .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
 }
 
 #' @export
