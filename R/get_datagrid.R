@@ -6,12 +6,12 @@
 #' for a tutorial on how to create a visualisation matrix using this function.
 #'
 #' @param x An object from which to construct the reference grid.
-#' @param at Indicates the _focal predictors_ (variables) for the reference grid
+#' @param by Indicates the _focal predictors_ (variables) for the reference grid
 #'   and at which values focal predictors should be represented. If not specified
 #'   otherwise, representative values for numeric variables or predictors are
 #'   evenly distributed from the minimum to the maximum, with a total number of
 #'   `length` values covering that range (see 'Examples'). Possible options for
-#'   `at` are:
+#'   `by` are:
 #'   - `"all"`, which will include all variables or predictors.
 #'   - a character vector of one or more variable or predictor names, like
 #'   `c("Species", "Sepal.Width")`, which will create a grid of all combinations
@@ -19,18 +19,18 @@
 #'   will use a range of length `length` (evenly spread from minimum to maximum)
 #'   and for character vectors, will use all unique values.
 #'   - a list of named elements, indicating focal predictors and their representative
-#'   values, e.g. `at = list(Sepal.Length = c(2, 4), Species = "setosa")`.
-#'   - a string with assignments, e.g. `at = "Sepal.Length = 2"` or
-#'   `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
+#'   values, e.g. `by = list(Sepal.Length = c(2, 4), Species = "setosa")`.
+#'   - a string with assignments, e.g. `by = "Sepal.Length = 2"` or
+#'   `by = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
 #'   and double quotes to assign strings within strings.
 #'
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
 #'   the brackets should either be
-#'   - two values, indicating minimum and maximum (e.g. `at = "Sepal.Length = [0, 5]"`),
+#'   - two values, indicating minimum and maximum (e.g. `by = "Sepal.Length = [0, 5]"`),
 #'   for which a range of length `length` (evenly spread from given minimum to
 #'   maximum) is created.
-#'   - more than two numeric values `at = "Sepal.Length = [2,3,4,5]"`, in which
+#'   - more than two numeric values `by = "Sepal.Length = [2,3,4,5]"`, in which
 #'   case these values are used as representative values.
 #'   - a "token" that creates pre-defined representative values:
 #'     - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
@@ -44,18 +44,18 @@
 #'     - for 0 and the maximum value: `"x = [zeromax]"`
 #'
 #'   For **factor** variables, the value(s) inside the brackets should indicate
-#'   one or more factor levels, like `at = "Species = [setosa, versicolor]"`.
+#'   one or more factor levels, like `by = "Species = [setosa, versicolor]"`.
 #'   **Note**: the `length` argument will be ignored when using brackets-tokens.
 #'
-#'   The remaining variables not specified in `at` will be fixed (see also arguments
+#'   The remaining variables not specified in `by` will be fixed (see also arguments
 #'   `factors` and `numerics`).
-#' @param length Length of numeric target variables selected in `"at"`. This arguments
+#' @param length Length of numeric target variables selected in `by`. This arguments
 #'   controls the number of (equally spread) values that will be taken to represent the
 #'   continuous variables. A longer length will increase precision, but can also
 #'   substantially increase the size of the datagrid (especially in case of interactions).
 #'   If `NA`, will return all the unique values. In case of multiple continuous target
 #'   variables, `length` can also be a vector of different values (see examples).
-#' @param range Option to control the representative values given in `at`, if
+#' @param range Option to control the representative values given in `by`, if
 #'   no specific values were provided. Use in combination with the `length` argument
 #'   to control the number of values within the specified range. `range` can be
 #'   one of the following:
@@ -74,9 +74,9 @@
 #'   - `"grid"` will create a reference grid that is useful when plotting
 #'   predictions, by choosing representative values for numeric variables based
 #'   on their position in the reference grid. If a numeric variable is the first
-#'   predictor in `at`, values from minimum to maximum of the same length as
+#'   predictor in `by`, values from minimum to maximum of the same length as
 #'   indicated in `length` are generated. For numeric predictors not specified at
-#'   first in `at`, mean and -1/+1 SD around the mean are returned. For factors,
+#'   first in `by`, mean and -1/+1 SD around the mean are returned. For factors,
 #'   all levels are returned.
 #' @param factors Type of summary for factors. Can be `"reference"` (set at the
 #'   reference level), `"mode"` (set at the most common level) or `"all"` to
@@ -108,6 +108,7 @@
 #' @param verbose Toggle warnings.
 #' @param ... Arguments passed to or from other methods (for instance, `length`
 #'   or `range` to control the spread of numeric variables.).
+#' @param at Deprecated. Use `by` instead.
 #'
 #' @return Reference grid data frame.
 #'
@@ -118,48 +119,48 @@
 #'
 #' # Single variable is of interest; all others are "fixed" ------------------
 #' # Factors
-#' get_datagrid(iris, at = "Species") # Returns all the levels
-#' get_datagrid(iris, at = "Species = c('setosa', 'versicolor')") # Specify an expression
+#' get_datagrid(iris, by = "Species") # Returns all the levels
+#' get_datagrid(iris, by = "Species = c('setosa', 'versicolor')") # Specify an expression
 #'
 #' # Numeric variables
-#' get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
-#' get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
+#' get_datagrid(iris, by = "Sepal.Length") # default spread length = 10
+#' get_datagrid(iris, by = "Sepal.Length", length = 3) # change length
 #' get_datagrid(iris[2:150, ],
-#'   at = "Sepal.Length",
+#'   by = "Sepal.Length",
 #'   factors = "mode", numerics = "median"
 #' ) # change non-targets fixing
-#' get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
-#' get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
-#' get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+#' get_datagrid(iris, by = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
+#' get_datagrid(iris, by = "Sepal.Length = [0, 1]") # Manually change min/max
+#' get_datagrid(iris, by = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
 #' # identical to previous line: -1 SD, mean and +1 SD
-#' get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
-#' get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
+#' get_datagrid(iris, by = "Sepal.Length", range = "sd", length = 3)
+#' get_datagrid(iris, by = "Sepal.Length = [quartiles]") # quartiles
 #'
 #' # Numeric and categorical variables, generating a grid for plots
 #' # default spread length = 10
-#' get_datagrid(iris, at = c("Sepal.Length", "Species"), range = "grid")
+#' get_datagrid(iris, by = c("Sepal.Length", "Species"), range = "grid")
 #' # default spread length = 3 (-1 SD, mean and +1 SD)
-#' get_datagrid(iris, at = c("Species", "Sepal.Length"), range = "grid")
+#' get_datagrid(iris, by = c("Species", "Sepal.Length"), range = "grid")
 #'
 #' # Standardization and unstandardization
-#' data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
+#' data <- get_datagrid(iris, by = "Sepal.Length", range = "sd", length = 3)
 #' data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
 #' datawizard::standardize(data, select = "Sepal.Length")
-#' data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+#' data <- get_datagrid(iris, by = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
 #' data
 #' datawizard::unstandardize(data, select = "Sepal.Length")
 #'
 #' # Multiple variables are of interest, creating a combination --------------
-#' get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
-#' get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
-#' get_datagrid(iris, at = c(1, 3), length = 3)
-#' get_datagrid(iris, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
-#' get_datagrid(iris, at = c("Sepal.Length", "Species"), numerics = 0)
-#' get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
-#' get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+#' get_datagrid(iris, by = c("Sepal.Length", "Species"), length = 3)
+#' get_datagrid(iris, by = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
+#' get_datagrid(iris, by = c(1, 3), length = 3)
+#' get_datagrid(iris, by = c("Sepal.Length", "Species"), preserve_range = TRUE)
+#' get_datagrid(iris, by = c("Sepal.Length", "Species"), numerics = 0)
+#' get_datagrid(iris, by = c("Sepal.Length = 3", "Species"))
+#' get_datagrid(iris, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #'
-#' # With list-style at-argument
-#' get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+#' # With list-style by-argument
+#' get_datagrid(iris, by = list(Sepal.Length = c(1, 3), Species = "setosa"))
 #'
 #' # With models ===============================================================
 #' # Fit a linear regression
@@ -187,44 +188,50 @@ get_datagrid <- function(x, ...) {
 #' @rdname get_datagrid
 #' @export
 get_datagrid.data.frame <- function(x,
-                                    at = "all",
+                                    by = "all",
                                     factors = "reference",
                                     numerics = "mean",
                                     preserve_range = FALSE,
                                     reference = x,
                                     length = 10,
                                     range = "range",
+                                    at = NULL,
                                     ...) {
+  ## TODO: deprecate later
+  if (!is.null(at)) {
+    by <- at
+  }
+
   # find numerics that were coerced to factor in-formula
   numeric_factors <- colnames(x)[vapply(x, function(i) isTRUE(attributes(i)$factor), logical(1))]
 
   specs <- NULL
 
-  if (is.null(at)) {
+  if (is.null(by)) {
     targets <- data.frame()
   } else {
-    # check for interactions in "at"
-    at <- .extract_at_interactions(at)
+    # check for interactions in "by"
+    by <- .extract_at_interactions(by)
 
-    # Validate at argument ============================
+    # Validate by argument ============================
 
     # if list, convert to character
-    if (is.list(at)) {
-      at <- unname(vapply(names(at), function(i) {
-        if (is.numeric(at[[i]])) {
-          paste0(i, " = c(", toString(at[[i]]), ")")
+    if (is.list(by)) {
+      by <- unname(vapply(names(by), function(i) {
+        if (is.numeric(by[[i]])) {
+          paste0(i, " = c(", toString(by[[i]]), ")")
         } else {
-          paste0(i, " = c(", toString(sprintf("'%s'", at[[i]])), ")")
+          paste0(i, " = c(", toString(sprintf("'%s'", by[[i]])), ")")
         }
       }, character(1)))
     }
 
-    if (all(at == "all")) {
-      at <- colnames(x)
+    if (all(by == "all")) {
+      by <- colnames(x)
     }
 
-    if (is.numeric(at) || is.logical(at)) {
-      at <- colnames(x)[at]
+    if (is.numeric(by) || is.logical(by)) {
+      by <- colnames(x)[by]
     }
 
     # Deal with factor in-formula transformations ============================
@@ -250,7 +257,7 @@ get_datagrid.data.frame <- function(x,
     # Deal with targets =======================================================
 
     # Find eventual user-defined specifications for each target
-    specs <- do.call(rbind, lapply(at, .get_datagrid_clean_target, x = x))
+    specs <- do.call(rbind, lapply(by, .get_datagrid_clean_target, x = x))
     specs$varname <- as.character(specs$varname) # make sure it's a string not fac
     specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
@@ -261,7 +268,7 @@ get_datagrid.data.frame <- function(x,
     for (fac in specs[specs$is_factor, "varname"]) {
       facs[[fac]] <- get_datagrid(
         x[[fac]],
-        at = specs[specs$varname == fac, "expression"]
+        by = specs[specs$varname == fac, "expression"]
       )
     }
 
@@ -292,7 +299,7 @@ get_datagrid.data.frame <- function(x,
       for (i in seq_along(numvars)) {
         num <- numvars[i]
         nums[[num]] <- get_datagrid(x[[num]],
-          at = specs[specs$varname == num, "expression"],
+          by = specs[specs$varname == num, "expression"],
           reference = reference[[num]],
           length = length[i],
           range = range[i],
@@ -307,7 +314,7 @@ get_datagrid.data.frame <- function(x,
     # numeric variables, the other one factors.
     targets <- expand.grid(c(nums, facs))
 
-    # sort targets data frame according to order specified in "at"
+    # sort targets data frame according to order specified in "by"
     targets <- .safe(targets[specs$varname], targets)
 
     # Preserve range ---------------------------------------------------------
@@ -316,11 +323,11 @@ get_datagrid.data.frame <- function(x,
       facs_combinations <- expand.grid(facs)
       for (i in seq_len(nrow(facs_combinations))) {
         # Query subset of original dataset
-        subset <- x[.data_match(x, to = facs_combinations[i, , drop = FALSE]), , drop = FALSE]
+        data_subset <- x[.data_match(x, to = facs_combinations[i, , drop = FALSE]), , drop = FALSE]
         idx <- .data_match(targets, to = facs_combinations[i, , drop = FALSE])
 
         # Skip if no instance of factor combination, drop the chunk
-        if (nrow(subset) == 0) {
+        if (nrow(data_subset) == 0) {
           targets <- targets[-idx, ]
           break
         }
@@ -328,8 +335,8 @@ get_datagrid.data.frame <- function(x,
         # Else, filter given the range of numerics
         rows_to_remove <- NULL
         for (num in names(nums)) {
-          mini <- min(subset[[num]], na.rm = TRUE)
-          maxi <- max(subset[[num]], na.rm = TRUE)
+          mini <- min(data_subset[[num]], na.rm = TRUE)
+          maxi <- max(data_subset[[num]], na.rm = TRUE)
           rows_to_remove <- c(rows_to_remove, which(targets[[num]] < mini | targets[[num]] > maxi))
         }
         if (length(rows_to_remove) > 0) {
@@ -352,7 +359,7 @@ get_datagrid.data.frame <- function(x,
     rest_df <- lapply(x[rest_vars], .get_datagrid_summary, numerics = numerics, factors = factors, ...)
     rest_df <- expand.grid(rest_df, stringsAsFactors = FALSE)
     if (nrow(targets) == 0) {
-      targets <- rest_df # If at = NULL
+      targets <- rest_df # If by = NULL
     } else {
       targets <- merge(targets, rest_df, sort = FALSE)
     }
@@ -375,7 +382,8 @@ get_datagrid.data.frame <- function(x,
   # Attributes
   attr(targets, "adjusted_for") <- rest_vars
   attr(targets, "at_specs") <- specs
-  attr(targets, "at") <- at
+  attr(targets, "at") <- by
+  attr(targets, "by") <- by
   attr(targets, "preserve_range") <- preserve_range
   attr(targets, "reference") <- reference
   attr(targets, "data") <- x
@@ -413,43 +421,39 @@ get_datagrid.data.frame <- function(x,
   if (is.numeric(x)) {
     if (is.numeric(numerics)) {
       out <- numerics
-    } else {
-      if (numerics %in% c("all", "combination")) {
-        out <- unique(x)
-      } else {
-        out <- eval(parse(text = paste0(numerics, "(x)")))
-      }
-    }
-  } else {
-    if (factors %in% c("all", "combination")) {
+    } else if (numerics %in% c("all", "combination")) {
       out <- unique(x)
-    } else if (factors == "mode") {
-      # Get mode
-      out <- names(sort(table(x), decreasing = TRUE)[1])
     } else {
-      # Get reference
-      if (is.factor(x)) {
-        all_levels <- levels(x)
-      } else if (is.character(x) || is.logical(x)) {
-        all_levels <- unique(x)
-      } else {
-        format_error(paste0(
-          "Argument is not numeric nor factor but ", class(x), ".",
-          "Please report the bug at https://github.com/easystats/insight/issues"
-        ))
-      }
-      # see "get_modelmatrix()" and #626. Reference level is currently
-      # a character vector, which causes the error
-      # > Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]) :
-      # > contrasts can be applied only to factors with 2 or more levels
-      # this is usually avoided by calling ".pad_modelmatrix()", but this
-      # function ignores character vectors. so we need to make sure that this
-      # factor level is also of class factor.
-      out <- factor(all_levels[1])
-      # although we have reference level only, we still need information
-      # about all levels, see #695
-      levels(out) <- all_levels
+      out <- eval(parse(text = paste0(numerics, "(x)")))
     }
+  } else if (factors %in% c("all", "combination")) {
+    out <- unique(x)
+  } else if (factors == "mode") {
+    # Get mode
+    out <- names(sort(table(x), decreasing = TRUE)[1])
+  } else {
+    # Get reference
+    if (is.factor(x)) {
+      all_levels <- levels(x)
+    } else if (is.character(x) || is.logical(x)) {
+      all_levels <- unique(x)
+    } else {
+      format_error(paste0(
+        "Argument is not numeric nor factor but ", class(x), ".",
+        "Please report the bug at https://github.com/easystats/insight/issues"
+      ))
+    }
+    # see "get_modelmatrix()" and #626. Reference level is currently
+    # a character vector, which causes the error
+    # > Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]) :
+    # > contrasts can be applied only to factors with 2 or more levels
+    # this is usually avoided by calling ".pad_modelmatrix()", but this
+    # function ignores character vectors. so we need to make sure that this
+    # factor level is also of class factor.
+    out <- factor(all_levels[1])
+    # although we have reference level only, we still need information
+    # about all levels, see #695
+    levels(out) <- all_levels
   }
   out
 }
@@ -539,7 +543,7 @@ get_datagrid.double <- get_datagrid.numeric
   }
 
   # If Range is an interval
-  if (range == "iqr") {
+  if (range == "iqr") { # nolint
     mini <- stats::quantile(x, (1 - ci) / 2, ...)
     maxi <- stats::quantile(x, (1 + ci) / 2, ...)
   } else if (range == "ci") {
@@ -597,29 +601,29 @@ get_datagrid.logical <- get_datagrid.character
 # Utilities -----------------------------------------------------------------
 
 #' @keywords internal
-.get_datagrid_clean_target <- function(x, at = NULL, ...) {
-  expression <- NA
+.get_datagrid_clean_target <- function(x, by = NULL, ...) {
+  by_expression <- NA
   varname <- NA
-  original_target <- at
+  original_target <- by
 
-  if (!is.null(at)) {
-    if (is.data.frame(x) && at %in% names(x)) {
-      return(data.frame(varname = at, expression = NA))
+  if (!is.null(by)) {
+    if (is.data.frame(x) && by %in% names(x)) {
+      return(data.frame(varname = by, expression = NA))
     }
 
     # If there is an equal sign
-    if (grepl("length.out =", at, fixed = TRUE)) {
-      expression <- at # This is an edgecase
-    } else if (grepl("=", at, fixed = TRUE)) {
-      parts <- trim_ws(unlist(strsplit(at, "=", fixed = TRUE), use.names = FALSE)) # Split and clean
+    if (grepl("length.out =", by, fixed = TRUE)) {
+      by_expression <- by # This is an edgecase
+    } else if (grepl("=", by, fixed = TRUE)) {
+      parts <- trim_ws(unlist(strsplit(by, "=", fixed = TRUE), use.names = FALSE)) # Split and clean
       varname <- parts[1] # left-hand part is probably the name of the variable
-      at <- parts[2] # right-hand part is the real target
+      by <- parts[2] # right-hand part is the real target
     }
 
-    if (is.na(expression) && is.data.frame(x)) {
+    if (is.na(by_expression) && is.data.frame(x)) {
       if (is.na(varname)) {
         format_error(
-          "Couldn't find which variable were selected in `at`. Check spelling and specification."
+          "Couldn't find which variable were selected in `by`. Check spelling and specification."
         )
       } else {
         x <- x[[varname]]
@@ -627,10 +631,10 @@ get_datagrid.logical <- get_datagrid.character
     }
 
     # If brackets are detected [a, b]
-    if (is.na(expression) && grepl("\\[.*\\]", at)) {
+    if (is.na(by_expression) && grepl("\\[.*\\]", by)) {
       # Clean --------------------
       # Keep the content
-      parts <- trim_ws(unlist(regmatches(at, gregexpr("\\[.+?\\]", at)), use.names = FALSE))
+      parts <- trim_ws(unlist(regmatches(by, gregexpr("\\[.+?\\]", by)), use.names = FALSE))
       # Drop the brackets
       parts <- gsub("\\[|\\]", "", parts)
       # Split by a separator like ','
@@ -645,79 +649,77 @@ get_datagrid.logical <- get_datagrid.character
         # Add quotes around them
         parts <- paste0("'", parts, "'")
         # Convert to character
-        expression <- paste0("as.factor(c(", toString(parts), "))")
-      } else {
+        by_expression <- paste0("as.factor(c(", toString(parts), "))")
+      } else if (length(parts) == 1) {
         # Numeric
         # If one, might be a shortcut
-        if (length(parts) == 1) {
-          shortcuts <- c(
-            "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
-            "minmax", "terciles", "terciles2", "fivenum"
-          )
-          if (parts %in% shortcuts) {
-            if (parts %in% c("meansd", "sd")) {
-              center <- mean(x, na.rm = TRUE)
-              spread <- stats::sd(x, na.rm = TRUE)
-              expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
-            } else if (parts == "mad") {
-              center <- stats::median(x, na.rm = TRUE)
-              spread <- stats::mad(x, na.rm = TRUE)
-              expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
-            } else if (parts == "quartiles") {
-              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, na.rm = TRUE)), collapse = ","), ")")
-            } else if (parts == "quartiles2") {
-              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], collapse = ","), ")")
-            } else if (parts == "terciles") {
-              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
-            } else if (parts == "terciles2") {
-              expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
-            } else if (parts == "fivenum") {
-              expression <- paste0("c(", paste0(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
-            } else if (parts == "zeromax") {
-              expression <- paste0("c(0,", max(x, na.rm = TRUE), ")")
-            } else if (parts == "minmax") {
-              expression <- paste0("c(", min(x, na.rm = TRUE), ",", max(x, na.rm = TRUE), ")")
-            }
-          } else if (is.numeric(parts)) {
-            expression <- parts
-          } else {
-            format_error(
-              paste0(
-                "The `at` argument (", at, ") should either indicate the minimum and the maximum, or one of the following options: ", # nolint
-                toString(shortcuts),
-                "."
-              )
-            )
+        shortcuts <- c(
+          "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
+          "minmax", "terciles", "terciles2", "fivenum"
+        )
+        if (parts %in% shortcuts) {
+          if (parts %in% c("meansd", "sd")) {
+            center <- mean(x, na.rm = TRUE)
+            spread <- stats::sd(x, na.rm = TRUE)
+            by_expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
+          } else if (parts == "mad") {
+            center <- stats::median(x, na.rm = TRUE)
+            spread <- stats::mad(x, na.rm = TRUE)
+            by_expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
+          } else if (parts == "quartiles") {
+            by_expression <- paste0("c(", paste0(as.vector(stats::quantile(x, na.rm = TRUE)), collapse = ","), ")")
+          } else if (parts == "quartiles2") {
+            by_expression <- paste0("c(", paste0(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], collapse = ","), ")")
+          } else if (parts == "terciles") {
+            by_expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
+          } else if (parts == "terciles2") {
+            by_expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
+          } else if (parts == "fivenum") {
+            by_expression <- paste0("c(", paste0(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
+          } else if (parts == "zeromax") {
+            by_expression <- paste0("c(0,", max(x, na.rm = TRUE), ")")
+          } else if (parts == "minmax") {
+            by_expression <- paste0("c(", min(x, na.rm = TRUE), ",", max(x, na.rm = TRUE), ")")
           }
-          # If only two, it's probably the range
-        } else if (length(parts) == 2) {
-          expression <- paste0("seq(", parts[1], ", ", parts[2], ", length.out = length)")
-          # If more, it's probably the vector
-        } else if (length(parts) > 2L) {
-          parts <- as.numeric(parts)
-          expression <- paste0("c(", toString(parts), ")")
+        } else if (is.numeric(parts)) {
+          by_expression <- parts
+        } else {
+          format_error(
+            paste0(
+              "The `by` argument (", by, ") should either indicate the minimum and the maximum, or one of the following options: ", # nolint
+              toString(shortcuts),
+              "."
+            )
+          )
         }
+        # If only two, it's probably the range
+      } else if (length(parts) == 2) {
+        by_expression <- paste0("seq(", parts[1], ", ", parts[2], ", length.out = length)")
+        # If more, it's probably the vector
+      } else if (length(parts) > 2L) {
+        parts <- as.numeric(parts)
+        by_expression <- paste0("c(", toString(parts), ")")
       }
       # Else, try to directly eval the content
     } else {
-      expression <- at
+      by_expression <- by
       # Try to eval and make sure it works
       tryCatch(
         {
           # This is just to make sure that an expression with `length` in
           # it doesn't fail because of this undefined var
-          length <- 10
-          eval(parse(text = at))
+          length <- 10 # nolint
+          eval(parse(text = by))
         },
         error = function(r) {
           format_error(
-            paste0("The `at` argument (`", original_target, "`) cannot be read and could be mispecified.")
+            paste0("The `by` argument (`", original_target, "`) cannot be read and could be mispecified.")
           )
         }
       )
     }
   }
-  data.frame(varname = varname, expression = expression, stringsAsFactors = FALSE)
+  data.frame(varname = varname, expression = by_expression, stringsAsFactors = FALSE)
 }
 
 
@@ -730,7 +732,7 @@ get_datagrid.logical <- get_datagrid.character
 #' @rdname get_datagrid
 #' @export
 get_datagrid.default <- function(x,
-                                 at = "all",
+                                 by = "all",
                                  factors = "reference",
                                  numerics = "mean",
                                  preserve_range = TRUE,
@@ -740,7 +742,13 @@ get_datagrid.default <- function(x,
                                  include_response = FALSE,
                                  data = NULL,
                                  verbose = TRUE,
+                                 at = NULL,
                                  ...) {
+  ## TODO: deprecate later
+  if (!is.null(at)) {
+    by <- at
+  }
+
   # validation check
   if (!is_model(x)) {
     format_error("`x` must be a statistical model.")
@@ -771,30 +779,30 @@ get_datagrid.default <- function(x,
     }
   }
 
-  # check for interactions in "at"
-  at <- .extract_at_interactions(at)
+  # check for interactions in "by"
+  by <- .extract_at_interactions(by)
 
   # Drop random factors
   random_factors <- find_random(x, flatten = TRUE)
   if (isFALSE(include_random) && !is.null(random_factors)) {
     keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
     if (!is.null(keep)) {
-      if (all(at != "all")) {
-        keep <- c(keep, at[at %in% random_factors])
-        random_factors <- setdiff(random_factors, at)
+      if (all(by != "all")) {
+        keep <- c(keep, by[by %in% random_factors])
+        random_factors <- setdiff(random_factors, by)
       }
       data <- data[colnames(data) %in% keep]
     }
   }
 
   # user wants to include all predictors?
-  if (all(at == "all")) at <- colnames(data)
+  if (all(by == "all")) by <- colnames(data)
 
   # exluce smooth terms?
   if (isFALSE(include_smooth) || identical(include_smooth, "fixed")) {
     s <- find_smooth(x, flatten = TRUE)
     if (!is.null(s)) {
-      at <- colnames(data)[!colnames(data) %in% clean_names(s)]
+      by <- colnames(data)[!colnames(data) %in% clean_names(s)]
     }
   }
 
@@ -803,7 +811,7 @@ get_datagrid.default <- function(x,
 
   vm <- get_datagrid(
     data,
-    at = at,
+    by = by,
     factors = factors,
     numerics = numerics,
     preserve_range = preserve_range,
@@ -812,7 +820,7 @@ get_datagrid.default <- function(x,
   )
 
   # we still need random factors in data grid. we set these to
-  # "population level" if not conditioned on via "at"
+  # "population level" if not conditioned on via "by"
   if (isFALSE(include_random) && !is.null(random_factors)) {
     if (inherits(x, c("glmmTMB", "brmsfit", "MixMod"))) {
       vm[random_factors] <- NA
@@ -841,7 +849,7 @@ get_datagrid.logitr <- function(x, ...) {
 
 #' @export
 get_datagrid.wbm <- function(x,
-                             at = "all",
+                             by = "all",
                              factors = "reference",
                              numerics = "mean",
                              preserve_range = TRUE,
@@ -866,7 +874,7 @@ get_datagrid.wbm <- function(x,
   colnames(data) <- clean_names(colnames(data))
 
   get_datagrid.default(
-    x = x, at = at, factors = factors, numerics = numerics,
+    x = x, by = by, factors = factors, numerics = numerics,
     preserve_range = preserve_range, reference = reference,
     include_smooth = include_smooth, include_random = include_random,
     include_response = TRUE, data = data, ...
@@ -882,13 +890,13 @@ get_datagrid.wbm <- function(x,
 
 #' @export
 get_datagrid.visualisation_matrix <- function(x, reference = attributes(x)$reference, ...) {
-  grid <- get_datagrid(as.data.frame(x), reference = reference, ...)
+  datagrid <- get_datagrid(as.data.frame(x), reference = reference, ...)
 
   if ("model" %in% names(attributes(x))) {
-    attr(grid, "model") <- attributes(x)$model
+    attr(datagrid, "model") <- attributes(x)$model
   }
 
-  grid
+  datagrid
 }
 
 
@@ -935,10 +943,10 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
   }
 
   # find variables that were coerced on-the-fly
-  terms <- find_terms(x, flatten = TRUE)
-  factors <- grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", terms)
+  model_terms <- find_terms(x, flatten = TRUE)
+  factors <- grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", model_terms)
   if (any(factors)) {
-    factor_expressions <- lapply(terms[factors], str2lang)
+    factor_expressions <- lapply(model_terms[factors], str2lang)
     cleaned_terms <- vapply(factor_expressions, all.vars, character(1))
     for (i in cleaned_terms) {
       if (is.numeric(data[[i]])) {
@@ -947,9 +955,9 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
     }
     attr(data, "factors") <- cleaned_terms
   }
-  logicals <- grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", terms)
+  logicals <- grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", model_terms)
   if (any(logicals)) {
-    logical_expressions <- lapply(terms[logicals], str2lang)
+    logical_expressions <- lapply(model_terms[logicals], str2lang)
     cleaned_terms <- vapply(logical_expressions, all.vars, character(1))
     for (i in cleaned_terms) {
       if (is.numeric(data[[i]])) {
@@ -964,16 +972,16 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 
 
 
-.extract_at_interactions <- function(at) {
+.extract_at_interactions <- function(by) {
   # get interaction terms, but only if these are not inside brackets (like "[4:8]")
-  interaction_terms <- grepl("(:|\\*)(?![^\\[]*\\])", at, perl = TRUE)
+  interaction_terms <- grepl("(:|\\*)(?![^\\[]*\\])", by, perl = TRUE)
   if (any(interaction_terms)) {
-    at <- unique(clean_names(trim_ws(compact_character(c(
-      at[!interaction_terms],
-      unlist(strsplit(at[interaction_terms], "(:|\\*)"))
+    by <- unique(clean_names(trim_ws(compact_character(c(
+      by[!interaction_terms],
+      unlist(strsplit(by[interaction_terms], "(:|\\*)"))
     )))))
   }
-  at
+  by
 }
 
 

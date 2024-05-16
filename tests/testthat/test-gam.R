@@ -319,7 +319,7 @@ withr::with_environment(
       method = "GACV.Cp",
       scale = -1
     )
-    d <- get_datagrid(b4, at = "x1")
+    d <- get_datagrid(b4, by = "x1")
     p1 <- get_predicted(b4, data = d, predict = "expectation", ci = 0.95)
     p2 <- predict(b4, newdata = d, type = "response")
     expect_equal(as.vector(p1), as.vector(p2), tolerance = 1e-4, ignore_attr = TRUE)

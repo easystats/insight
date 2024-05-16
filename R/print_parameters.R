@@ -13,13 +13,12 @@
 #' @param ... One or more objects (data frames), which contain information about
 #'   the model parameters and related statistics (like confidence intervals, HDI,
 #'   ROPE, ...).
-#' @param split_by `split_by` should be a character vector with one or
-#'   more of the following elements: `"Effects"`, `"Component"`,
-#'   `"Response"` and `"Group"`. These are the column names returned
-#'   by [clean_parameters()], which is used to extract the information
-#'   from which the group or component model parameters belong. If `NULL`, the
-#'   merged data frame is returned. Else, the data frame is split into a list,
-#'   split by the values from those columns defined in `split_by`.
+#' @param by `by` should be a character vector with one or more of the following
+#' elements: `"Effects"`, `"Component"`, `"Response"` and `"Group"`. These are
+#' the column names returned by [clean_parameters()], which is used to extract
+#' the information from which the group or component model parameters belong.
+#' If `NULL`, the merged data frame is returned. Else, the data frame is split
+#' into a list, split by the values from those columns defined in `by`.
 #' @param format Name of output-format, as string. If `NULL` (or `"text"`),
 #'   assumed use for output is basic printing. If `"markdown"`, markdown-format
 #'   is assumed. This only affects the style of title- and table-caption
@@ -44,10 +43,11 @@
 #'   and `subtitles` may be any length from 1 to same length as returned
 #'   list elements. If `titles` and `subtitles` are shorter than
 #'   existing elements, only the first default attributes are overwritten.
+#' @param split_by Deprecated, please use `by` instead.
 #'
 #' @return
 #'
-#' A data frame or a list of data frames (if `split_by` is not `NULL`). If a
+#' A data frame or a list of data frames (if `by` is not `NULL`). If a
 #' list is returned, the element names reflect the model components where the
 #' extracted information in the data frames belong to, e.g.
 #' `random.zero_inflated.Intercept: persons`. This is the data frame that
@@ -91,7 +91,7 @@
 #' tmp <- as.data.frame(x)[, 1:4]
 #' tmp
 #'
-#' # Based on the "split_by" argument, we get a list of data frames that
+#' # Based on the "by" argument, we get a list of data frames that
 #' # is split into several parts that reflect the model components.
 #' print_parameters(model, tmp)
 #'
@@ -104,13 +104,19 @@
 #' @export
 print_parameters <- function(x,
                              ...,
-                             split_by = c("Effects", "Component", "Group", "Response"),
+                             by = c("Effects", "Component", "Group", "Response"),
                              format = "text",
                              parameter_column = "Parameter",
                              keep_parameter_column = TRUE,
                              remove_empty_column = FALSE,
                              titles = NULL,
-                             subtitles = NULL) {
+                             subtitles = NULL,
+                             split_by = NULL) {
+  ## TODO: deprecte later
+  if (!is.null(split_by)) {
+    by <- split_by
+  }
+
   obj <- list(...)
 
   # save attributes of original object
@@ -122,10 +128,10 @@ print_parameters <- function(x,
   att <- att[!duplicated(names(att))]
 
   # get cleaned parameters
-  cp <- if (!inherits(x, "clean_parameters")) {
-    clean_parameters(x)
+  if (inherits(x, "clean_parameters")) {
+    cp <- x
   } else {
-    x
+    cp <- clean_parameters(x)
   }
 
   # merge all objects together
@@ -147,16 +153,16 @@ print_parameters <- function(x,
   )
 
   # return merged data frame if no splitting requested
-  if (is_empty_object(split_by)) {
+  if (is_empty_object(by)) {
     return(obj)
   }
 
   # determine where to split data frames
-  split_by <- split_by[split_by %in% colnames(obj)]
-  f <- lapply(split_by, function(i) {
+  by <- by[by %in% colnames(obj)]
+  f <- lapply(by, function(i) {
     if (i %in% colnames(obj)) obj[[i]]
   })
-  names(f) <- split_by
+  names(f) <- by
 
   # split into groups, remove empty elements
   out <- split(obj, f)
@@ -237,7 +243,7 @@ print_parameters <- function(x,
     # remove empty columns
     if (isTRUE(remove_empty_column)) {
       for (j in colnames(element)) {
-        if (all(is.na(element[[j]])) || (is.character(element[[j]]) && all(element[[j]] == ""))) {
+        if (all(is.na(element[[j]])) || (is.character(element[[j]]) && all(element[[j]] == ""))) { # nolint
           element[[j]] <- NULL
         }
       }

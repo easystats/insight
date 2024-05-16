@@ -7,7 +7,7 @@ test_that("marginaleffects", {
 
   x <- marginaleffects::slopes(m,
     variables = "Petal.Length",
-    newdata = insight::get_datagrid(m, at = "Species")
+    newdata = insight::get_datagrid(m, by = "Species")
   )
   # Equivalent in emmeans
   x2 <- emmeans::emtrends(m, var = "Petal.Length", specs = ~ Species + Petal.Length)
@@ -28,13 +28,15 @@ test_that("marginaleffects", {
   expect_identical(insight::find_statistic(x), "z-statistic")
 
   # standardize names - "s.value" becomes "S"
-  skip_if_not_installed("parameters")
+  skip_if_not_installed("parameters", minimum_version = "0.21.7")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.20.1")
+
   expect_named(
     parameters::model_parameters(x),
     c(
       "rowid", "Parameter", "Coefficient", "SE", "Statistic", "p",
-      "S", "CI", "CI_low", "CI_high", "predicted_lo", "predicted_hi",
-      "Predicted", "Species", "Petal.Length", "Sepal.Width"
+      "S", "CI", "CI_low", "CI_high", "Predicted", "Species",
+      "Petal.Length", "Sepal.Width"
     )
   )
 })

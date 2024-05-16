@@ -23,6 +23,7 @@ export_table(
   subtitle = NULL,
   footer = NULL,
   align = NULL,
+  by = NULL,
   group_by = NULL,
   zap_small = FALSE,
   table_width = NULL,
@@ -100,9 +101,11 @@ the second and third, right-align column four and left-align the fifth
 column. For HTML-tables, may be one of \code{"center"}, \code{"left"} or
 \code{"right"}.}
 
-\item{group_by}{Name of column in \code{x} that indicates grouping for tables.
-Only applies when \code{format = "html"}. \code{group_by} is passed down
-to \code{gt::gt(groupname_col = group_by)}.}
+\item{by}{Name of column in \code{x} that indicates grouping for tables.
+Only applies when \code{format = "html"}. \code{by} is passed down to
+\code{gt::gt(groupname_col = by)}.}
+
+\item{group_by}{Deprecated, please use \code{by} instead.}
 
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal

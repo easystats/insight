@@ -221,7 +221,7 @@ get_predicted.default <- function(x,
                                   verbose = TRUE,
                                   ...) {
   # evaluate arguments
-  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   # evaluate dots, remove some arguments that might be duplicated else
   dot_args <- list(...)
@@ -230,13 +230,13 @@ get_predicted.default <- function(x,
 
 
   # 1. step: predictions
-  predict_args <- compact_list(list(x, newdata = args$data, type = args$type, dot_args))
+  predict_args <- compact_list(list(x, newdata = my_args$data, type = my_args$type, dot_args))
   predictions <- .safe(do.call("predict", predict_args))
 
   # may fail due to invalid "dot_args", so try shorter argument list
   if (is.null(predictions)) {
     predictions <- .safe(
-      do.call("predict", compact_list(list(x, newdata = args$data, type = args$type)))
+      do.call("predict", compact_list(list(x, newdata = my_args$data, type = my_args$type)))
     )
   }
 
@@ -257,8 +257,8 @@ get_predicted.default <- function(x,
     get_predicted_ci(
       x,
       predictions,
-      data = args$data,
-      ci_type = args$ci_type,
+      data = my_args$data,
+      ci_type = my_args$ci_type,
       ci_method = ci_method,
       vcov = vcov,
       vcov_args = vcov_args,
@@ -270,12 +270,12 @@ get_predicted.default <- function(x,
   if (is.null(predictions)) {
     out <- NULL
   } else {
-    out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
+    out <- .get_predicted_transform(x, predictions, my_args = my_args, ci_data, verbose = verbose)
   }
 
   # 4. step: final preparation
   if (!is.null(out)) {
-    out <- .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+    out <- .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
   }
 
   out
@@ -309,11 +309,11 @@ get_predicted.lm <- function(x,
   predict_function <- function(x, data, ...) {
     stats::predict(x,
       newdata = data, interval = "none",
-      type = args$type, se.fit = FALSE, ...
+      type = my_args$type, se.fit = FALSE, ...
     )
   }
 
-  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   # 0. step: convert matrix variable types attributes to numeric, if necessary.
   # see https://github.com/easystats/insight/pull/671
@@ -322,7 +322,7 @@ get_predicted.lm <- function(x,
     dataClasses[dataClasses == "nmatrix.1"] <- "numeric"
     attributes(x$terms)$dataClasses <- dataClasses
     attributes(attributes(x$model)$terms)$dataClasses <- dataClasses
-    args$data[] <- lapply(args$data, function(x) {
+    my_args$data[] <- lapply(my_args$data, function(x) {
       if (all(class(x) == c("matrix", "array"))) { # nolint
         as.numeric(x)
       } else {
@@ -333,11 +333,11 @@ get_predicted.lm <- function(x,
 
   # 1. step: predictions
   if (is.null(iterations)) {
-    predictions <- predict_function(x, data = args$data)
+    predictions <- predict_function(x, data = my_args$data)
   } else {
     predictions <- .get_predicted_boot(
       x,
-      data = args$data,
+      data = my_args$data,
       predict_function = predict_function,
       iterations = iterations,
       verbose = verbose,
@@ -349,18 +349,18 @@ get_predicted.lm <- function(x,
   ci_data <- get_predicted_ci(
     x,
     predictions,
-    data = args$data,
+    data = my_args$data,
     ci = ci,
-    ci_type = args$ci_type,
+    ci_type = my_args$ci_type,
     verbose = verbose,
     ...
   )
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(x, predictions, args, ci_data, verbose = verbose)
+  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose)
 
   # 4. step: final preparation
-  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+  .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
 }
 
 #' @export
@@ -411,16 +411,16 @@ get_predicted.coxph <- function(x,
                                 iterations = NULL,
                                 verbose = TRUE,
                                 ...) {
-  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
   se <- NULL
 
   predict_function <- function(x, data, ...) {
-    stats::predict(x, newdata = data, type = args$type, ...)
+    stats::predict(x, newdata = data, type = my_args$type, ...)
   }
 
   # 1. step: predictions
   if (is.null(iterations)) {
-    predictions <- predict_function(x, data = args$data, se.fit = TRUE)
+    predictions <- predict_function(x, data = my_args$data, se.fit = TRUE)
     if (is.list(predictions)) {
       se <- as.vector(predictions$se.fit)
       predictions <- as.vector(predictions$fit)
@@ -428,7 +428,7 @@ get_predicted.coxph <- function(x,
   } else {
     predictions <- .get_predicted_boot(
       x,
-      data = args$data,
+      data = my_args$data,
       predict_function = predict_function,
       iterations = iterations,
       verbose = verbose,
@@ -440,18 +440,18 @@ get_predicted.coxph <- function(x,
   ci_data <- get_predicted_ci(
     x,
     predictions,
-    data = args$data,
+    data = my_args$data,
     ci = ci,
-    ci_type = args$ci_type,
+    ci_type = my_args$ci_type,
     se = se,
     ...
   )
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(x, predictions, args, ci_data, link_inv = exp, verbose = verbose)
+  out <- .get_predicted_transform(x, predictions, my_args, ci_data, link_inv = exp, verbose = verbose)
 
   # 4. step: final preparation
-  .get_predicted_out(out$predictions, args = args, ci_data = out$ci_data)
+  .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
 }
 
 
@@ -466,17 +466,17 @@ get_predicted.bife <- function(x,
                                data = NULL,
                                verbose = TRUE,
                                ...) {
-  args <- .get_predicted_args(x,
+  my_args <- .get_predicted_args(x,
     data = data,
     predict = predict,
     verbose = TRUE,
     ...
   )
 
-  out <- .safe(stats::predict(x, type = args$scale, X_new = args$data))
+  out <- .safe(stats::predict(x, type = my_args$scale, X_new = my_args$data))
 
   if (!is.null(out)) {
-    out <- .get_predicted_out(out, args = list(data = data))
+    out <- .get_predicted_out(out, my_args = list(data = data))
   }
 
   out
@@ -494,7 +494,7 @@ get_predicted.rma <- function(x,
                               transf = NULL,
                               transf_args = NULL,
                               ...) {
-  args <- .get_predicted_args(x,
+  my_args <- .get_predicted_args(x,
     data = data,
     predict = predict,
     verbose = TRUE,
@@ -567,7 +567,7 @@ get_predicted.rma <- function(x,
     if (nrow(out) == 1) {
       out <- do.call(rbind, lapply(seq_along(x$slab), function(i) out))
     }
-    out <- .get_predicted_out(out, args = list(data = data))
+    out <- .get_predicted_out(out, my_args = list(data = data))
   }
 
   out
@@ -582,19 +582,19 @@ get_predicted.rma <- function(x,
 #' @export
 get_predicted.afex_aov <- function(x, data = NULL, ...) {
   if (is.null(data)) {
-    args <- c(list(x), list(...))
+    my_args <- c(list(x), list(...))
   } else {
-    args <- c(list(x, newdata = data), list(...))
+    my_args <- c(list(x, newdata = data), list(...))
   }
 
-  out <- .safe(do.call("predict", args))
+  out <- .safe(do.call("predict", my_args))
 
   if (is.null(out)) {
-    out <- .safe(do.call("fitted", args))
+    out <- .safe(do.call("fitted", my_args))
   }
 
   if (!is.null(out)) {
-    out <- .get_predicted_out(out, args = list(data = data))
+    out <- .get_predicted_out(out, my_args = list(data = data))
   }
 
   out
@@ -613,7 +613,7 @@ get_predicted.phylolm <- function(x,
                                   verbose = TRUE,
                                   ...) {
   # evaluate arguments
-  args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
 
   # evaluate dots, remove some arguments that might be duplicated else
   dot_args <- list(...)
@@ -622,13 +622,13 @@ get_predicted.phylolm <- function(x,
 
 
   # 1. step: predictions
-  predict_args <- compact_list(list(x, newdata = args$data, type = args$type, dot_args))
+  predict_args <- compact_list(list(x, newdata = my_args$data, type = my_args$type, dot_args))
   predictions <- .safe(do.call("predict", predict_args))
 
   # may fail due to invalid "dot_args", so try shorter argument list
   if (is.null(predictions)) {
     predictions <- .safe(
-      do.call("predict", compact_list(list(x, newdata = args$data, type = args$type)))
+      do.call("predict", compact_list(list(x, newdata = my_args$data, type = my_args$type)))
     )
   }
 
@@ -645,7 +645,7 @@ get_predicted.phylolm <- function(x,
   }
   # 2. step: final preparation
   if (!is.null(out)) {
-    out <- .get_predicted_out(predictions, args = args, ci_data = NULL)
+    out <- .get_predicted_out(predictions, my_args = my_args, ci_data = NULL)
   }
 
   out
@@ -694,13 +694,13 @@ get_predicted.phylolm <- function(x,
 
 .get_predicted_transform <- function(x,
                                      predictions,
-                                     args = NULL,
+                                     my_args = NULL,
                                      ci_data = NULL,
                                      link_inv = NULL,
                                      verbose = FALSE,
                                      ...) {
   # Transform to response scale
-  if (isTRUE(args$transform)) {
+  if (isTRUE(my_args$transform)) {
     # retrieve link-inverse, for back transformation...
     if (is.null(link_inv)) {
       link_inv <- link_inverse(x)
@@ -741,7 +741,7 @@ get_predicted.phylolm <- function(x,
     }
 
     # Transform to response "type"
-    if (args$predict == "classification" && model_info(x, verbose = FALSE)$is_binomial) {
+    if (my_args$predict == "classification" && model_info(x, verbose = FALSE)$is_binomial) {
       response <- get_response(x, as_proportion = TRUE)
       ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
       predictions <- .get_predict_transform_response(predictions, response = response)
@@ -765,14 +765,14 @@ get_predicted.phylolm <- function(x,
 
 # -------------------------------------------------------------------------
 
-.get_predicted_out <- function(predictions, args = NULL, ci_data = NULL, ...) {
+.get_predicted_out <- function(predictions, my_args = NULL, ci_data = NULL, ...) {
   if (!is.null(ci_data)) {
     attr(predictions, "ci_data") <- ci_data
   }
-  if (!is.null(args)) {
-    attr(predictions, "data") <- args$data
-    attr(predictions, "ci") <- args$ci
-    attr(predictions, "predict") <- args$predict
+  if (!is.null(my_args)) {
+    attr(predictions, "data") <- my_args$data
+    attr(predictions, "ci") <- my_args$ci
+    attr(predictions, "predict") <- my_args$predict
   }
 
   # multidimensional or "grouped" predictions (e.g., nnet::multinom with `predict(type="probs")`)
@@ -782,10 +782,10 @@ get_predicted.phylolm <- function(x,
     predictions$Row <- seq_len(nrow(predictions))
     # if we have any focal predictors, add those as well, so we have
     # the associated levels/values for "Row"
-    if (!is.null(args$data)) {
-      focal_predictors <- .safe(names(which(n_unique(args$data) > 1L)))
+    if (!is.null(my_args$data)) {
+      focal_predictors <- .safe(names(which(n_unique(my_args$data) > 1L)))
       if (!is.null(focal_predictors)) {
-        predictions <- cbind(predictions, args$data[focal_predictors])
+        predictions <- cbind(predictions, my_args$data[focal_predictors])
       }
     }
     predictions <- stats::reshape(predictions,
