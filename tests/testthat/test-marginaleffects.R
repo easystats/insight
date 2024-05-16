@@ -28,7 +28,7 @@ test_that("marginaleffects", {
   expect_identical(insight::find_statistic(x), "z-statistic")
 
   # standardize names - "s.value" becomes "S"
-  skip_if_not_installed("parameters")
+  skip_if_not_installed("parameters", minimum_version = "0.21.7")
   skip_if_not_installed("marginaleffects", minimum_version = "0.20.1")
 
   expect_named(
