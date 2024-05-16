@@ -12,13 +12,14 @@ get_datagrid(x, ...)
 
 \method{get_datagrid}{data.frame}(
   x,
-  at = "all",
+  by = "all",
   factors = "reference",
   numerics = "mean",
   preserve_range = FALSE,
   reference = x,
   length = 10,
   range = "range",
+  at = NULL,
   ...
 )
 
@@ -28,7 +29,7 @@ get_datagrid(x, ...)
 
 \method{get_datagrid}{default}(
   x,
-  at = "all",
+  by = "all",
   factors = "reference",
   numerics = "mean",
   preserve_range = TRUE,
@@ -38,6 +39,7 @@ get_datagrid(x, ...)
   include_response = FALSE,
   data = NULL,
   verbose = TRUE,
+  at = NULL,
   ...
 )
 }
@@ -47,12 +49,12 @@ get_datagrid(x, ...)
 \item{...}{Arguments passed to or from other methods (for instance, \code{length}
 or \code{range} to control the spread of numeric variables.).}
 
-\item{at}{Indicates the \emph{focal predictors} (variables) for the reference grid
+\item{by}{Indicates the \emph{focal predictors} (variables) for the reference grid
 and at which values focal predictors should be represented. If not specified
 otherwise, representative values for numeric variables or predictors are
 evenly distributed from the minimum to the maximum, with a total number of
 \code{length} values covering that range (see 'Examples'). Possible options for
-\code{at} are:
+\code{by} are:
 \itemize{
 \item \code{"all"}, which will include all variables or predictors.
 \item a character vector of one or more variable or predictor names, like
@@ -61,9 +63,9 @@ of unique values. For factors, will use all levels, for numeric variables,
 will use a range of length \code{length} (evenly spread from minimum to maximum)
 and for character vectors, will use all unique values.
 \item a list of named elements, indicating focal predictors and their representative
-values, e.g. \code{at = list(Sepal.Length = c(2, 4), Species = "setosa")}.
-\item a string with assignments, e.g. \code{at = "Sepal.Length = 2"} or
-\code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
+values, e.g. \code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}.
+\item a string with assignments, e.g. \code{by = "Sepal.Length = 2"} or
+\code{by = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
 and double quotes to assign strings within strings.
 }
 
@@ -71,10 +73,10 @@ There is a special handling of assignments with \emph{brackets}, i.e. values
 defined inside \code{[} and \verb{]}.For \strong{numeric} variables, the value(s) inside
 the brackets should either be
 \itemize{
-\item two values, indicating minimum and maximum (e.g. \code{at = "Sepal.Length = [0, 5]"}),
+\item two values, indicating minimum and maximum (e.g. \code{by = "Sepal.Length = [0, 5]"}),
 for which a range of length \code{length} (evenly spread from given minimum to
 maximum) is created.
-\item more than two numeric values \code{at = "Sepal.Length = [2,3,4,5]"}, in which
+\item more than two numeric values \code{by = "Sepal.Length = [2,3,4,5]"}, in which
 case these values are used as representative values.
 \item a "token" that creates pre-defined representative values:
 \itemize{
@@ -91,10 +93,10 @@ case these values are used as representative values.
 }
 
 For \strong{factor} variables, the value(s) inside the brackets should indicate
-one or more factor levels, like \code{at = "Species = [setosa, versicolor]"}.
+one or more factor levels, like \code{by = "Species = [setosa, versicolor]"}.
 \strong{Note}: the \code{length} argument will be ignored when using brackets-tokens.
 
-The remaining variables not specified in \code{at} will be fixed (see also arguments
+The remaining variables not specified in \code{by} will be fixed (see also arguments
 \code{factors} and \code{numerics}).}
 
 \item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the
@@ -115,14 +117,14 @@ should increase the \code{length} argument.}
 \item{reference}{The reference vector from which to compute the mean and SD.
 Used when standardizing or unstandardizing the grid using \code{effectsize::standardize}.}
 
-\item{length}{Length of numeric target variables selected in \code{"at"}. This arguments
+\item{length}{Length of numeric target variables selected in \code{by}. This arguments
 controls the number of (equally spread) values that will be taken to represent the
 continuous variables. A longer length will increase precision, but can also
 substantially increase the size of the datagrid (especially in case of interactions).
 If \code{NA}, will return all the unique values. In case of multiple continuous target
 variables, \code{length} can also be a vector of different values (see examples).}
 
-\item{range}{Option to control the representative values given in \code{at}, if
+\item{range}{Option to control the representative values given in \code{by}, if
 no specific values were provided. Use in combination with the \code{length} argument
 to control the number of values within the specified range. \code{range} can be
 one of the following:
@@ -142,11 +144,13 @@ side (i.e., \verb{-1, 0, +1, +2}). The result is a named vector. See 'Examples.'
 \item \code{"grid"} will create a reference grid that is useful when plotting
 predictions, by choosing representative values for numeric variables based
 on their position in the reference grid. If a numeric variable is the first
-predictor in \code{at}, values from minimum to maximum of the same length as
+predictor in \code{by}, values from minimum to maximum of the same length as
 indicated in \code{length} are generated. For numeric predictors not specified at
-first in \code{at}, mean and -1/+1 SD around the mean are returned. For factors,
+first in \code{by}, mean and -1/+1 SD around the mean are returned. For factors,
 all levels are returned.
 }}
+
+\item{at}{Deprecated. Use \code{by} instead.}
 
 \item{include_smooth}{If \code{x} is a model object, decide whether smooth terms
 should be included in the data grid or not.}
@@ -182,48 +186,48 @@ for a tutorial on how to create a visualisation matrix using this function.
 
 # Single variable is of interest; all others are "fixed" ------------------
 # Factors
-get_datagrid(iris, at = "Species") # Returns all the levels
-get_datagrid(iris, at = "Species = c('setosa', 'versicolor')") # Specify an expression
+get_datagrid(iris, by = "Species") # Returns all the levels
+get_datagrid(iris, by = "Species = c('setosa', 'versicolor')") # Specify an expression
 
 # Numeric variables
-get_datagrid(iris, at = "Sepal.Length") # default spread length = 10
-get_datagrid(iris, at = "Sepal.Length", length = 3) # change length
+get_datagrid(iris, by = "Sepal.Length") # default spread length = 10
+get_datagrid(iris, by = "Sepal.Length", length = 3) # change length
 get_datagrid(iris[2:150, ],
-  at = "Sepal.Length",
+  by = "Sepal.Length",
   factors = "mode", numerics = "median"
 ) # change non-targets fixing
-get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
-get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
-get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+get_datagrid(iris, by = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
+get_datagrid(iris, by = "Sepal.Length = [0, 1]") # Manually change min/max
+get_datagrid(iris, by = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
 # identical to previous line: -1 SD, mean and +1 SD
-get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
-get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
+get_datagrid(iris, by = "Sepal.Length", range = "sd", length = 3)
+get_datagrid(iris, by = "Sepal.Length = [quartiles]") # quartiles
 
 # Numeric and categorical variables, generating a grid for plots
 # default spread length = 10
-get_datagrid(iris, at = c("Sepal.Length", "Species"), range = "grid")
+get_datagrid(iris, by = c("Sepal.Length", "Species"), range = "grid")
 # default spread length = 3 (-1 SD, mean and +1 SD)
-get_datagrid(iris, at = c("Species", "Sepal.Length"), range = "grid")
+get_datagrid(iris, by = c("Species", "Sepal.Length"), range = "grid")
 
 # Standardization and unstandardization
-data <- get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
+data <- get_datagrid(iris, by = "Sepal.Length", range = "sd", length = 3)
 data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
 datawizard::standardize(data, select = "Sepal.Length")
-data <- get_datagrid(iris, at = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+data <- get_datagrid(iris, by = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
 data
 datawizard::unstandardize(data, select = "Sepal.Length")
 
 # Multiple variables are of interest, creating a combination --------------
-get_datagrid(iris, at = c("Sepal.Length", "Species"), length = 3)
-get_datagrid(iris, at = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
-get_datagrid(iris, at = c(1, 3), length = 3)
-get_datagrid(iris, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
-get_datagrid(iris, at = c("Sepal.Length", "Species"), numerics = 0)
-get_datagrid(iris, at = c("Sepal.Length = 3", "Species"))
-get_datagrid(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+get_datagrid(iris, by = c("Sepal.Length", "Species"), length = 3)
+get_datagrid(iris, by = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
+get_datagrid(iris, by = c(1, 3), length = 3)
+get_datagrid(iris, by = c("Sepal.Length", "Species"), preserve_range = TRUE)
+get_datagrid(iris, by = c("Sepal.Length", "Species"), numerics = 0)
+get_datagrid(iris, by = c("Sepal.Length = 3", "Species"))
+get_datagrid(iris, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 
-# With list-style at-argument
-get_datagrid(iris, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+# With list-style by-argument
+get_datagrid(iris, by = list(Sepal.Length = c(1, 3), Species = "setosa"))
 
 # With models ===============================================================
 # Fit a linear regression
