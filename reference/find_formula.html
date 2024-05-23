@@ -9,87 +9,41 @@ variable)."><title>Find model formula — find_formula • insight</title><!-- f
 formula_ok() checks if a model formula has valid syntax
 regarding writing TRUE instead of T inside poly()
 and that no data names are used (i.e. no data$variable, but rather
-variable)."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--></head><body>
+variable)."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
-
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">insight</a>
-
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.11</small>
-
-    
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.11.2</small>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html" aria-label="Reference">
-    <span class="fa fa fa fa-file-code"></span>
-     
-    Reference
-  </a>
-</li>
+      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--articles" aria-label="Articles">
-    <span class="fa fa fa fa-book-reader"></span>
-     
-    Articles
-  </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--articles">
-    <a class="dropdown-item" href="../articles/display.html">Formatting, printing and exporting tables</a>
-    <a class="dropdown-item" href="../articles/export.html">Exporting tables with captions and footers</a>
-  </div>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html" aria-label="News">
-    <span class="fa fa fa fa-newspaper"></span>
-     
-    News
-  </a>
-</li>
-      </ul><ul class="navbar-nav"><li><form class="form-inline" role="search">
-<input type="search" class="form-control" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Articles"><span class="fa fa-book-reader"></span> Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/display.html">Formatting, printing and exporting tables</a></li>
+    <li><a class="dropdown-item" href="../articles/export.html">Exporting tables with captions and footers</a></li>
+  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html" aria-label="News"><span class="fa fa-newspaper"></span> News</a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--easystats" aria-label="easystats">
-    <span class="fab fa fab fa-r-project"></span>
-     
-    easystats
-  </a>
-  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
-    <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a>
-    <a class="dropdown-item" href="https://easystats.github.io/insight/">insight</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/performance/">performance</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a>
-  </div>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter">
-    <span class="fa fa-twitter"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/insight/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-easystats" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="easystats"><span class="fa fab fa-r-project"></span> easystats</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-easystats"><li><a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a></li>
+    <li><a class="dropdown-item" href="https://easystats.github.io/insight/">insight</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/performance/">performance</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a></li>
+  </ul></li>
+<li class="nav-item"><a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/easystats/insight/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
-
-    
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -98,7 +52,6 @@ variable)."><meta property="og:image" content="https://easystats.github.io/insig
       <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/find_formula.R" class="external-link"><code>R/find_formula.R</code></a></small>
       <div class="d-none name"><code>find_formula.Rd</code></div>
     </div>
-
     <div class="ref-description section level2">
     <p>Returns the formula(s) for the different parts of a model
 (like fixed or random effects, zero-inflated component, ...).
@@ -107,7 +60,6 @@ regarding writing <code>TRUE</code> instead of <code>T</code> inside <code><a hr
 and that no data names are used (i.e. no <code>data$variable</code>, but rather
 <code>variable</code>).</p>
     </div>
-
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_formula</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -120,30 +72,20 @@ and that no data names are used (i.e. no <code>data$variable</code>, but rather
 <span><span class="co"># S3 method for class 'nestedLogit'</span></span>
 <span><span class="fu">find_formula</span><span class="op">(</span><span class="va">x</span>, dichotomies <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
-
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A fitted model.</p></dd>
-
-
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
-
-
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
-
-
 <dt id="arg-dichotomies">dichotomies<a class="anchor" aria-label="anchor" href="#arg-dichotomies"></a></dt>
 <dd><p>Logical, if model is a <code>nestedLogit</code> objects, returns
 the formulas for the dichotomies.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    
-
 <p>A list of formulas that describe the model. For simple models,
 only one list-element, <code>conditional</code>, is returned. For more complex
 models, the returned list may have following elements:</p><ul><li><p><code>conditional</code>, the "fixed effects" part from the model (in the
@@ -179,7 +121,6 @@ with <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link"
 is only returned, when it is explicitly defined as named argument
 (<code>form</code>), e.g. <code>corAR1(form = ~1 | Mare)</code></p>
     </div>
-
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
@@ -187,7 +128,7 @@ is only returned, when it is explicitly defined as named argument
 <span class="r-in"><span><span class="fu">find_formula</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mpg ~ wt + cyl + vs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c6bbac97f0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55ff96d6b2e8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_formula" "list"           </span>
@@ -197,11 +138,11 @@ is only returned, when it is explicitly defined as named argument
 <span class="r-in"><span><span class="va">f</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length ~ Sepal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c6bbac97f0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55ff96d6b2e8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $random</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~1 | Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c6bc359748&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55ff976d76d0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_formula" "list"           </span>
@@ -209,23 +150,14 @@ is only returned, when it is explicitly defined as named argument
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length ~ Sepal.Width + (~1 | Species)"</span>
 </code></pre></div>
     </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
-
-
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
-
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
     </footer></div>
-
-  
-
-  
-
   </body></html>
 

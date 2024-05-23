@@ -31,87 +31,41 @@ returns confidence intervals (included as attribute, and accessible via the
 as.data.frame() method) by default. It is preferred to rely on the
 get_predicted() function for standard errors and confidence intervals -
 use get_predicted_ci() only if standard errors and confidence intervals
-are not available otherwise."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--></head><body>
+are not available otherwise."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
-
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">insight</a>
-
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.11</small>
-
-    
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.11.2</small>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html" aria-label="Reference">
-    <span class="fa fa fa fa-file-code"></span>
-     
-    Reference
-  </a>
-</li>
+      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--articles" aria-label="Articles">
-    <span class="fa fa fa fa-book-reader"></span>
-     
-    Articles
-  </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--articles">
-    <a class="dropdown-item" href="../articles/display.html">Formatting, printing and exporting tables</a>
-    <a class="dropdown-item" href="../articles/export.html">Exporting tables with captions and footers</a>
-  </div>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html" aria-label="News">
-    <span class="fa fa fa fa-newspaper"></span>
-     
-    News
-  </a>
-</li>
-      </ul><ul class="navbar-nav"><li><form class="form-inline" role="search">
-<input type="search" class="form-control" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Articles"><span class="fa fa-book-reader"></span> Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/display.html">Formatting, printing and exporting tables</a></li>
+    <li><a class="dropdown-item" href="../articles/export.html">Exporting tables with captions and footers</a></li>
+  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html" aria-label="News"><span class="fa fa-newspaper"></span> News</a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--easystats" aria-label="easystats">
-    <span class="fab fa fab fa-r-project"></span>
-     
-    easystats
-  </a>
-  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
-    <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a>
-    <a class="dropdown-item" href="https://easystats.github.io/insight/">insight</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/performance/">performance</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a>
-  </div>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter">
-    <span class="fa fa-twitter"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/insight/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-easystats" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="easystats"><span class="fa fab fa-r-project"></span> easystats</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-easystats"><li><a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a></li>
+    <li><a class="dropdown-item" href="https://easystats.github.io/insight/">insight</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/performance/">performance</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a></li>
+  </ul></li>
+<li class="nav-item"><a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/easystats/insight/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
-
-    
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -120,7 +74,6 @@ are not available otherwise."><meta property="og:image" content="https://easysta
       <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/R/get_predicted.R" class="external-link"><code>R/get_predicted.R</code></a>, <a href="https://github.com/easystats/insight/blob/HEAD/R/get_predicted_bayesian.R" class="external-link"><code>R/get_predicted_bayesian.R</code></a>, <a href="https://github.com/easystats/insight/blob/HEAD/R/get_predicted_gam.R" class="external-link"><code>R/get_predicted_gam.R</code></a>, and 2 more</small>
       <div class="d-none name"><code>get_predicted.Rd</code></div>
     </div>
-
     <div class="ref-description section level2">
     <p>The <code>get_predicted()</code> function is a robust, flexible and user-friendly
 alternative to base R <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> function. Additional features and
@@ -140,7 +93,6 @@ returns confidence intervals (included as attribute, and accessible via the
 use <code><a href="get_predicted_ci.html">get_predicted_ci()</a></code> only if standard errors and confidence intervals
 are not available otherwise.</p>
     </div>
-
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -214,24 +166,17 @@ are not available otherwise.</p>
 <span><span class="co"># S3 method for class 'principal'</span></span>
 <span><span class="fu">get_predicted</span><span class="op">(</span><span class="va">x</span>, data <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
-
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).</p></dd>
-
-
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Other argument to be passed, for instance to <code><a href="get_predicted_ci.html">get_predicted_ci()</a></code>.</p></dd>
-
-
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>An optional data frame in which to look for variables with which
 to predict. If omitted, the data used to fit the model is used. Visualization
 matrices can be generated using <code><a href="get_datagrid.html">get_datagrid()</a></code>.</p></dd>
-
-
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
 <dd><p>string or <code>NULL</code></p><ul><li><p><code>"link"</code> returns predictions on the model's link-scale (for logistic models,
 that means the log-odds scale) with a confidence interval (CI).</p></li>
@@ -257,14 +202,10 @@ multiple matching <code>type</code> arguments - thus, the recommendation is to u
 the scale of the output and the type of certainty interval. Read more about
 in the <strong>Details</strong> section below.</p></li>
 </ul></dd>
-
-
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>The interval level. Default is <code>NULL</code>, to be fast even for larger
 models. Set the interval level to an explicit value, e.g. <code>0.95</code>, for <code>95%</code>
 CI).</p></dd>
-
-
 <dt id="arg-ci-type">ci_type<a class="anchor" aria-label="anchor" href="#arg-ci-type"></a></dt>
 <dd><p>Can be <code>"prediction"</code> or <code>"confidence"</code>. Prediction
 intervals show the range that likely contains the value of a new
@@ -280,8 +221,6 @@ This applies mostly for "simple" linear models (like <code>lm</code>), as for
 other models (e.g., <code>glm</code>), prediction intervals are somewhat useless
 (for instance, for a binomial model for which the dependent variable is a
 vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd>
-
-
 <dt id="arg-ci-method">ci_method<a class="anchor" aria-label="anchor" href="#arg-ci-method"></a></dt>
 <dd><p>The method for computing p values and confidence intervals.
 Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the default method, which varies based on the model type.</p></li>
@@ -290,13 +229,9 @@ Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the d
 <li><p>Mixed effects <strong>lme4</strong> models: <code>"wald"</code> (default), <code>"residual"</code>, <code>"normal"</code>,
 <code>"satterthwaite"</code>, and <code>"kenward-roger"</code>.</p></li>
 </ul><p>See <code><a href="get_df.html">get_df()</a></code> for details.</p></dd>
-
-
 <dt id="arg-dispersion-method">dispersion_method<a class="anchor" aria-label="anchor" href="#arg-dispersion-method"></a></dt>
 <dd><p>Bootstrap dispersion and Bayesian posterior summary:
 <code>"sd"</code> or <code>"mad"</code>.</p></dd>
-
-
 <dt id="arg-vcov">vcov<a class="anchor" aria-label="anchor" href="#arg-vcov"></a></dt>
 <dd><p>Variance-covariance matrix used to compute uncertainty estimates
 (e.g., for robust standard errors). This argument accepts a covariance
@@ -313,8 +248,6 @@ identifies the function to be used to compute the covariance matrix.</p><ul><li>
 <code>"vcovPL"</code>.</p></li>
 </ul></li>
 </ul></dd>
-
-
 <dt id="arg-vcov-args">vcov_args<a class="anchor" aria-label="anchor" href="#arg-vcov-args"></a></dt>
 <dd><p>List of arguments to be passed to the function identified by
 the <code>vcov</code> argument. This function is typically supplied by the <strong>sandwich</strong>
@@ -323,12 +256,8 @@ or <strong>clubSandwich</strong> packages. Please refer to their documentation (
 type (argument <code>type</code>) is given, the default type for <code>"HC"</code> (or <code>"vcovHC"</code>)
 equals the default from the <strong>sandwich</strong> package; for type <code>"CR"</code> (or
 <code>"vcoCR"</code>), the default is set to <code>"CR3"</code>.</p></dd>
-
-
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
-
-
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>For Bayesian models, this corresponds to the number of
 posterior draws. If <code>NULL</code>, will return all the draws (one for each
@@ -336,8 +265,6 @@ iteration of the model). For frequentist models, if not <code>NULL</code>, will
 generate bootstrapped draws, from which bootstrapped CIs will be computed.
 Iterations can be accessed by running <code>as.data.frame(..., keep_iterations = TRUE)</code>
 on the output.</p></dd>
-
-
 <dt id="arg-include-random">include_random<a class="anchor" aria-label="anchor" href="#arg-include-random"></a></dt>
 <dd><p>If <code>"default"</code>, include all random effects in the
 prediction, unless random effect variables are not in the data.  If <code>TRUE</code>,
@@ -347,19 +274,14 @@ don't take them into account. Can also be a formula to specify which random
 effects to condition on when predicting (passed to the <code>re.form</code> argument).
 If <code>include_random = TRUE</code> and <code>data</code> is provided, make sure to include
 the random effect variables in <code>data</code> as well.</p></dd>
-
-
 <dt id="arg-include-smooth">include_smooth<a class="anchor" aria-label="anchor" href="#arg-include-smooth"></a></dt>
 <dd><p>For General Additive Models (GAMs). If <code>FALSE</code>,
 will fix the value of the smooth to its average, so that the predictions
 are not depending on it. (default), <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>, or
 <code><a href="https://easystats.github.io/bayestestR/reference/map_estimate.html" class="external-link">bayestestR::map_estimate()</a></code>.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    
-
 <p>The fitted values (i.e. predictions for the response). For Bayesian
 or bootstrapped models (when <code>iterations != NULL</code>), iterations (as
 columns and observations are rows) can be accessed via <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code>.</p>
@@ -371,8 +293,6 @@ modulates two separate concepts, the <strong>scale</strong> and the <strong>unce
     </div>
     <div class="section level2">
     <h2 id="confidence-interval-ci-vs-prediction-interval-pi-">Confidence Interval (CI) vs. Prediction Interval (PI))<a class="anchor" aria-label="anchor" href="#confidence-interval-ci-vs-prediction-interval-pi-"></a></h2>
-    
-
 <ul><li><p><strong>Linear models</strong> - <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>: For linear models, prediction
 intervals (<code>predict="prediction"</code>) show the range that likely
 contains the value of a new observation (in what range it is likely to
@@ -392,8 +312,6 @@ prediction intervals are somewhat useless (for instance, for a binomial
 </ul></div>
     <div class="section level2">
     <h2 id="link-scale-vs-response-scale">Link scale vs. Response scale<a class="anchor" aria-label="anchor" href="#link-scale-vs-response-scale"></a></h2>
-    
-
 <p>When users set the <code>predict</code> argument to <code>"expectation"</code>, the predictions
 are returned on the response scale, which is arguably the most convenient
 way to understand and visualize relationships of interest. When users set
@@ -409,8 +327,6 @@ return the most likely outcome.</p>
     </div>
     <div class="section level2">
     <h2 id="heteroscedasticity-consistent-standard-errors">Heteroscedasticity consistent standard errors<a class="anchor" aria-label="anchor" href="#heteroscedasticity-consistent-standard-errors"></a></h2>
-    
-
 <p>The arguments <code>vcov</code> and <code>vcov_args</code> can be used to calculate robust
 standard errors for confidence intervals of predictions. These arguments,
 when provided in <code>get_predicted()</code>, are passed down to <code><a href="get_predicted_ci.html">get_predicted_ci()</a></code>,
@@ -419,8 +335,6 @@ details.</p>
     </div>
     <div class="section level2">
     <h2 id="bayesian-and-bootstrapped-models-and-iterations">Bayesian and Bootstrapped models and iterations<a class="anchor" aria-label="anchor" href="#bayesian-and-bootstrapped-models-and-iterations"></a></h2>
-    
-
 <p>For predictions based on multiple iterations, for instance in the case of Bayesian
 models and bootstrapped predictions, the function used to compute the centrality
 (point-estimate predictions) can be modified via the <code>centrality_function</code>
@@ -433,7 +347,6 @@ reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="get_datagrid.html">get_datagrid()</a></code></p></div>
     </div>
-
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
@@ -622,23 +535,14 @@ reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6    setosa setosa versicolor</span>
 </code></pre></div>
     </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
-
-
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
-
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
     </footer></div>
-
-  
-
-  
-
   </body></html>
 

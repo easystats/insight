@@ -26,112 +26,64 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@easystats4u">
 <meta name="twitter:site" content="@easystats4u">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
-
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">insight</a>
-
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.11</small>
-
-    
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.11.2</small>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html" aria-label="Reference">
-    <span class="fa fa fa fa-file-code"></span>
-     
-    Reference
-  </a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--articles" aria-label="Articles">
-    <span class="fa fa fa fa-book-reader"></span>
-     
-    Articles
-  </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--articles">
-    <a class="dropdown-item" href="../articles/display.html">Formatting, printing and exporting tables</a>
-    <a class="dropdown-item" href="../articles/export.html">Exporting tables with captions and footers</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Articles"><span class="fa fa-book-reader"></span> Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/display.html">Formatting, printing and exporting tables</a></li>
+    <li><a class="dropdown-item" href="../articles/export.html">Exporting tables with captions and footers</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html" aria-label="News">
-    <span class="fa fa fa fa-newspaper"></span>
-     
-    News
-  </a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html" aria-label="News"><span class="fa fa-newspaper"></span> News</a></li>
       </ul>
 <ul class="navbar-nav">
-<li><form class="form-inline" role="search">
-<input type="search" class="form-control" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--easystats" aria-label="easystats">
-    <span class="fab fa fab fa-r-project"></span>
-     
-    easystats
-  </a>
-  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
-    <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a>
-    <a class="dropdown-item" href="https://easystats.github.io/insight/">insight</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/performance/">performance</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-easystats" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="easystats"><span class="fa fab fa-r-project"></span> easystats</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-easystats">
+<li><a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a></li>
+    <li><a class="dropdown-item" href="https://easystats.github.io/insight/">insight</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/performance/">performance</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter">
-    <span class="fa fa-twitter"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/insight/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<li class="nav-item"><a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/easystats/insight/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
-
-    
   </div>
 </nav><div class="container template-article">
-
 
 
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Exporting tables with captions and footers</h1>
-            
-      
-      <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/vignettes/export.Rmd" class="external-link"><code>vignettes/export.Rmd</code></a></small>
+                        <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/HEAD/vignettes/export.Rmd" class="external-link"><code>vignettes/export.Rmd</code></a></small>
       <div class="d-none name"><code>export.Rmd</code></div>
     </div>
-
-    
-    
-<div class="section level2">
+        <div class="section level2">
 <h2 id="exporting-data-frames-into-nice-tables">Exporting data frames into nice tables<a class="anchor" aria-label="anchor" href="#exporting-data-frames-into-nice-tables"></a>
 </h2>
 <p>The <code><a href="../reference/export_table.html">export_table()</a></code> functions creates nicely formatted
@@ -156,8 +108,9 @@ console!</p>
 <span><span class="co">#&gt; ------------------------------------</span></span>
 <span><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
 <span><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
-<span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
-<span></span>
+<span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># see the underlying string</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">unclass</a></span><span class="op">(</span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Sepal.Length | Sepal.Width | Species\n------------------------------------\n        5.10 |        3.50 |  setosa\n        4.90 |        3.00 |  setosa\n        4.70 |        3.20 |  setosa\n"</span></span></code></pre></div>
@@ -168,7 +121,7 @@ console!</p>
 <p>A title can be added by either using the <code>caption</code>
 argument, or by adding a string as <code>table_caption</code>
 attribute.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># a simple caption</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="st">"Title"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Title</span></span>
@@ -177,8 +130,9 @@ attribute.</p>
 <span><span class="co">#&gt; ------------------------------------</span></span>
 <span><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
 <span><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
-<span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
-<span></span>
+<span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># we use a new object, so "x" has no attributes yet</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Another title"</span></span>
@@ -194,7 +148,7 @@ attribute.</p>
 the first element being the caption, and the second being the name of a
 colour (see <code><a href="../reference/print_color.html">?print_colour</a></code> for available options). This is
 helpful for printing coloured table captions.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># A red caption</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Title"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Title</span></span>
@@ -203,8 +157,9 @@ helpful for printing coloured table captions.</p>
 <span><span class="co">#&gt; ------------------------------------</span></span>
 <span><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
 <span><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
-<span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
-<span></span>
+<span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># same for attribute</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*A green title*"</span>, <span class="st">"green"</span><span class="op">)</span></span>
@@ -226,7 +181,7 @@ example here:</p>
 <p>Use the <code>footer</code> argument to add a footer line to the
 table. It is also possible to add a string as <code>table_footer</code>
 attribute.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># colored caption, simple footer</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
@@ -240,8 +195,9 @@ attribute.</p>
 <span><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
 <span><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
 <span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
-<span><span class="co">#&gt; Footer line</span></span>
-<span></span>
+<span><span class="co">#&gt; Footer line</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># as attribute</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*A green title*"</span>, <span class="st">"green"</span><span class="op">)</span></span>
@@ -256,7 +212,7 @@ attribute.</p>
 <span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
 <span><span class="co">#&gt; A simple footer</span></span></code></pre></div>
 <p>Coloured footers can be added in the same way as for captions.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># colored caption and footer</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
@@ -270,8 +226,9 @@ attribute.</p>
 <span><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
 <span><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
 <span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
-<span><span class="co">#&gt; Footer line in blue</span></span>
-<span></span>
+<span><span class="co">#&gt; Footer line in blue</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># as attribute</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*A green title*"</span>, <span class="st">"green"</span><span class="op">)</span></span>
@@ -292,7 +249,7 @@ attribute.</p>
 <p>Subtitles can be added using the <code>subtitle</code> argument, or
 the <code>table_subtitle</code> attribute. Note that you must take care
 of adding new-line characters.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># colored caption, subtitle and footer</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
@@ -308,8 +265,9 @@ of adding new-line characters.</p>
 <span><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
 <span><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
 <span><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
-<span><span class="co">#&gt; Footer line in blue</span></span>
-<span></span>
+<span><span class="co">#&gt; Footer line in blue</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># as attribute</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"*A green title*"</span>, <span class="st">"green"</span><span class="op">)</span></span>
@@ -331,7 +289,7 @@ of adding new-line characters.</p>
 </h2>
 <p>Multiple data frames saved in a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> can be used to
 create multiple tables at once.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">51</span><span class="op">:</span><span class="fl">53</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
@@ -365,7 +323,7 @@ create multiple tables at once.</p>
 table. Simply use a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of strings for the
 <code>caption</code> argument, or add a <code>table_caption</code>
 attribute. to <em>each</em> data frame in the list.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># one caption for each table</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span><span class="va">x</span>, caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Table 1"</span>, <span class="st">"Table 2"</span>, <span class="st">"Table 3"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Table 1</span></span>
@@ -390,8 +348,9 @@ attribute. to <em>each</em> data frame in the list.</p>
 <span><span class="co">#&gt; --------------------------------------</span></span>
 <span><span class="co">#&gt;         6.50 |        2.00 | virginica</span></span>
 <span><span class="co">#&gt;         6.40 |        1.90 | virginica</span></span>
-<span><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span>
-<span></span>
+<span><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># add attribute to *each* data frame</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -423,7 +382,7 @@ attribute. to <em>each</em> data frame in the list.</p>
 <span><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span></code></pre></div>
 <p>In the same way you can add multiple footers. Note, however, that you
 have to take care about adding new-line characters.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add captions and footers for each table</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
@@ -457,8 +416,9 @@ have to take care about adding new-line characters.</p>
 <span><span class="co">#&gt;         6.50 |        2.00 | virginica</span></span>
 <span><span class="co">#&gt;         6.40 |        1.90 | virginica</span></span>
 <span><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span>
-<span><span class="co">#&gt; Footer 3</span></span>
-<span></span>
+<span><span class="co">#&gt; Footer 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">x</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">out</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="st">"table_caption"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Table"</span>, <span class="va">i</span><span class="op">)</span></span>
@@ -497,7 +457,7 @@ have to take care about adding new-line characters.</p>
 each a different color. In this case, each list element has to be a
 character vector of length 2 (the first element being the caption, and
 the second being the name of a colour).</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Colored table captions and multiple footers per table</span></span>
 <span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
@@ -544,26 +504,16 @@ the second being the name of a colour).</p>
 <span><span class="co">#&gt; Footer line I</span></span>
 <span><span class="co">#&gt; Second line</span></span></code></pre></div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
-
-
-
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
-
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
     </footer>
 </div>
-
-  
-
-  
-
   </body>
 </html>
