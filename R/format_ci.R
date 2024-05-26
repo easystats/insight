@@ -42,6 +42,12 @@ format_ci <- function(CI_low, ...) {
 }
 
 
+#' @export
+format_ci.logical <- function(CI_low, ...) {
+  ""
+}
+
+
 #' @rdname format_ci
 #' @export
 format_ci.numeric <- function(CI_low,

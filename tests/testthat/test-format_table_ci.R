@@ -51,6 +51,18 @@ test_that("format_table with multiple si-levels", {
 })
 
 
+test_that("format_table with NA values", {
+  d <- data.frame(
+    a = 1,
+    CI = 0.95,
+    CI_low = NA,
+    CI_high = NA
+  )
+  ft <- insight::format_table(d)
+  expect_identical(ft[["95% CI"]], "")
+})
+
+
 skip_if_not_installed("bayestestR")
 set.seed(1234)
 test_that("format_table with multiple si-levels", {
