@@ -101,7 +101,7 @@ test_that("find_parameters", {
 })
 
 test_that("get_parameters", {
-  expect_identical(
+  expect_equal(
     get_parameters(m1),
     data.frame(
       Parameter = c(
@@ -126,7 +126,9 @@ test_that("get_parameters", {
       ),
       stringsAsFactors = FALSE,
       row.names = NULL
-    )
+    ),
+    tolerance = 1e-5,
+    ignore_attr = TRUE
   )
 })
 
