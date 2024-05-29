@@ -45,10 +45,10 @@ test_that("get_modelmatrix - iv_robust", {
   out2 <- model.matrix(terms(x), data = Kmenta)
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
 
-  out1 <- get_modelmatrix(x, data = get_datagrid(x, at = "P"))
-  out2 <- model.matrix(terms(x), data = get_datagrid(x, at = "P", include_response = TRUE))
+  out1 <- get_modelmatrix(x, data = get_datagrid(x, by = "P"))
+  out2 <- model.matrix(terms(x), data = get_datagrid(x, by = "P", include_response = TRUE))
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
-  expect_identical(nrow(get_datagrid(x, at = "P")), nrow(out2))
+  expect_identical(nrow(get_datagrid(x, by = "P")), nrow(out2))
 })
 
 
@@ -69,10 +69,10 @@ test_that("get_modelmatrix - ivreg", {
   out2 <- model.matrix(x, data = d_kmenta)
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
 
-  out1 <- get_modelmatrix(x, data = get_datagrid(x, at = "P"))
-  out2 <- model.matrix(terms(x), data = get_datagrid(x, at = "P", include_response = TRUE))
+  out1 <- get_modelmatrix(x, data = get_datagrid(x, by = "P"))
+  out2 <- model.matrix(terms(x), data = get_datagrid(x, by = "P", include_response = TRUE))
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
-  expect_identical(nrow(get_datagrid(x, at = "P")), nrow(out2))
+  expect_identical(nrow(get_datagrid(x, by = "P")), nrow(out2))
 })
 
 
@@ -98,10 +98,10 @@ test_that("get_modelmatrix - lm_robust", {
   out2 <- model.matrix(x, data = dat)
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
 
-  out1 <- get_modelmatrix(x, data = get_datagrid(x, at = "x"))
-  out2 <- model.matrix(x, data = get_datagrid(x, at = "x", include_response = TRUE))
+  out1 <- get_modelmatrix(x, data = get_datagrid(x, by = "x"))
+  out2 <- model.matrix(x, data = get_datagrid(x, by = "x", include_response = TRUE))
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
-  expect_identical(nrow(get_datagrid(x, at = "x")), nrow(out2))
+  expect_identical(nrow(get_datagrid(x, by = "x")), nrow(out2))
 })
 
 
