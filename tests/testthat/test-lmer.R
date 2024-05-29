@@ -521,8 +521,10 @@ test_that("find_statistic", {
 })
 
 test_that("get_call", {
-  expect_s3_class(get_call(m1), "call")
-  expect_s3_class(get_call(m2), "call")
+  expect_true(inherits(get_call(m1), "call")) # nolint
+  expect_true(inherits(get_call(m2), "call")) # nolint
+  expect_type(get_call(m1), "language")
+  expect_type(get_call(m2), "language")
 })
 
 test_that("get_predicted_ci: warning when model matrix and varcovmat do not match", {
