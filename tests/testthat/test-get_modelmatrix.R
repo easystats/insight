@@ -109,8 +109,8 @@ test_that("get_modelmatrix - lm_robust", {
 test_that("Issue #693", {
   set.seed(12345)
   n <- 500
-  x <- sample(1:3, n, replace = TRUE)
-  w <- sample(1:4, n, replace = TRUE)
+  x <- sample.int(3, n, replace = TRUE)
+  w <- sample.int(4, n, replace = TRUE)
   y <- rnorm(n)
   z <- as.numeric(x + y + rlogis(n) > 1.5)
   dat <<- data.frame(x = factor(x), w = factor(w), y = y, z = z)
