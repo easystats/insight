@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-if (!requireNamespace("lme4", quietly = TRUE) && !getRversion() >= "4.4.0") {
+if (!requireNamespace("lme4", quietly = TRUE) || getRversion() < "4.4.0") {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```
