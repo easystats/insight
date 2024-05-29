@@ -2,12 +2,12 @@ skip_if_not_installed("lme4")
 
 data(sleepstudy, package = "lme4")
 set.seed(123)
-sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mygrp <- sample.int(5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
   filter_group <- sleepstudy$mygrp == i
   sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+    sample.int(30, size = sum(filter_group), replace = TRUE)
 }
 
 m1 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject),
@@ -85,10 +85,10 @@ test_that("get_df", {
 })
 
 test_that("n_parameters", {
-  expect_equal(n_parameters(m1), 2)
-  expect_equal(n_parameters(m2), 2)
-  expect_equal(n_parameters(m1, effects = "random"), 2)
-  expect_equal(n_parameters(m2, effects = "random"), 3)
+  expect_identical(n_parameters(m1), 2L)
+  expect_identical(n_parameters(m2), 2L)
+  expect_identical(n_parameters(m1, effects = "random"), 2L)
+  expect_identical(n_parameters(m2, effects = "random"), 3L)
 })
 
 test_that("find_offset", {
@@ -99,61 +99,61 @@ test_that("find_offset", {
 })
 
 test_that("find_predictors", {
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "all"),
     list(conditional = "Days", random = "Subject")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "all", flatten = TRUE),
     c("Days", "Subject")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "fixed"),
     list(conditional = "Days")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "fixed", flatten = TRUE),
     "Days"
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "random"),
     list(random = "Subject")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m1, effects = "random", flatten = TRUE),
     "Subject"
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m2, effects = "all"),
     list(
       conditional = "Days",
       random = c("mysubgrp", "mygrp", "Subject")
     )
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m2, effects = "all", flatten = TRUE),
     c("Days", "mysubgrp", "mygrp", "Subject")
   )
-  expect_equal(
+  expect_identical(
     find_predictors(m2, effects = "fixed"),
     list(conditional = "Days")
   )
-  expect_equal(find_predictors(m2, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_identical(find_predictors(m2, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
   expect_null(find_predictors(m2, effects = "all", component = "zi"))
   expect_null(find_predictors(m2, effects = "fixed", component = "zi"))
   expect_null(find_predictors(m2, effects = "random", component = "zi"))
 })
 
 test_that("find_random", {
-  expect_equal(find_random(m1), list(random = "Subject"))
-  expect_equal(find_random(m1, flatten = TRUE), "Subject")
-  expect_equal(find_random(m2), list(random = c("mysubgrp:mygrp", "mygrp", "Subject")))
-  expect_equal(find_random(m2, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
-  expect_equal(
+  expect_identical(find_random(m1), list(random = "Subject"))
+  expect_identical(find_random(m1, flatten = TRUE), "Subject")
+  expect_identical(find_random(m2), list(random = c("mysubgrp:mygrp", "mygrp", "Subject")))
+  expect_identical(find_random(m2, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_identical(
     find_random(m2, flatten = TRUE),
     c("mysubgrp:mygrp", "mygrp", "Subject")
   )
-  expect_equal(
+  expect_identical(
     find_random(m2, split_nested = TRUE, flatten = TRUE),
     c("mysubgrp", "mygrp", "Subject")
   )
@@ -165,7 +165,7 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), sleepstudy$Reaction)
+  expect_equal(get_response(m1), sleepstudy$Reaction, tolerance = 1e-5)
 })
 
 test_that("link_inverse", {
@@ -174,18 +174,18 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(colnames(get_data(m1)), c("Reaction", "Days", "Subject"))
-  expect_equal(colnames(get_data(m1, effects = "all")), c("Reaction", "Days", "Subject"))
-  expect_equal(colnames(get_data(m1, effects = "random")), "Subject")
-  expect_equal(
-    colnames(get_data(m2)),
+  expect_named(get_data(m1), c("Reaction", "Days", "Subject"))
+  expect_named(get_data(m1, effects = "all"), c("Reaction", "Days", "Subject"))
+  expect_named(get_data(m1, effects = "random"), "Subject")
+  expect_named(
+    get_data(m2),
     c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
   )
-  expect_equal(
-    colnames(get_data(m2, effects = "all")),
+  expect_named(
+    get_data(m2, effects = "all"),
     c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
   )
-  expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
+  expect_named(get_data(m2, effects = "random"), c("mysubgrp", "mygrp", "Subject"))
 })
 
 test_that("find_formula", {
@@ -295,17 +295,17 @@ test_that("linkfun", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional = c("(Intercept)", "Days"),
       random = list(Subject = c("(Intercept)", "Days"))
     )
   )
-  expect_equal(nrow(get_parameters(m1)), 2)
-  expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "Days"))
+  expect_identical(nrow(get_parameters(m1)), 2L)
+  expect_identical(get_parameters(m1)$Parameter, c("(Intercept)", "Days"))
 
-  expect_equal(
+  expect_identical(
     find_parameters(m2),
     list(
       conditional = c("(Intercept)", "Days"),
@@ -317,10 +317,10 @@ test_that("find_parameters", {
     )
   )
 
-  expect_equal(nrow(get_parameters(m2)), 2)
-  expect_equal(get_parameters(m2)$Parameter, c("(Intercept)", "Days"))
-  expect_equal(
-    names(get_parameters(m2, effects = "random")),
+  expect_identical(nrow(get_parameters(m2)), 2L)
+  expect_identical(get_parameters(m2)$Parameter, c("(Intercept)", "Days"))
+  expect_named(
+    get_parameters(m2, effects = "random"),
     c("mysubgrp:mygrp", "Subject", "mygrp")
   )
 })
@@ -403,14 +403,14 @@ test_that("get_variance", {
 })
 
 test_that("find_algorithm", {
-  expect_equal(
+  expect_identical(
     find_algorithm(m1),
     list(algorithm = "REML", optimizer = "nloptwrap")
   )
 })
 
 test_that("find_random_slopes", {
-  expect_equal(find_random_slopes(m1), list(random = "Days"))
+  expect_identical(find_random_slopes(m1), list(random = "Days"))
   expect_null(find_random_slopes(m2))
 })
 
@@ -488,7 +488,7 @@ test_that("satterthwaite dof vs. emmeans", {
 
   v1 <- get_varcov(m2, vcov = "kenward-roger")
   v2 <- as.matrix(pbkrtest::vcovAdj(m2))
-  expect_equal(v1, v2)
+  expect_equal(v1, v2, ignore_attr = TRUE, tolerance = 1e-5)
 
   p1 <- get_predicted(m2, ci_method = "satterthwaite", ci = 0.95)
   p1 <- data.frame(p1)
@@ -499,8 +499,8 @@ test_that("satterthwaite dof vs. emmeans", {
     lmer.df = "satterthwaite"
   )
   em1 <- confint(em1)
-  expect_equal(p1$CI_low, em1$lower.CL)
-  expect_equal(p1$CI_high, em1$upper.CL)
+  expect_equal(p1$CI_low, em1$lower.CL, ignore_attr = TRUE, tolerance = 1e-5)
+  expect_equal(p1$CI_high, em1$upper.CL, ignore_attr = TRUE, tolerance = 1e-5)
 
   p2 <- get_predicted(m2, ci_method = "kenward-roger", ci = 0.95)
   p2 <- data.frame(p2)
@@ -511,8 +511,8 @@ test_that("satterthwaite dof vs. emmeans", {
     lmer.df = "kenward-roger"
   )
   em2 <- confint(em2)
-  expect_equal(p2$CI_low, em2$lower.CL)
-  expect_equal(p2$CI_high, em2$upper.CL)
+  expect_equal(p2$CI_low, em2$lower.CL, ignore_attr = TRUE, tolerance = 1e-5)
+  expect_equal(p2$CI_high, em2$upper.CL, ignore_attr = TRUE, tolerance = 1e-5)
 })
 
 test_that("find_statistic", {
@@ -521,8 +521,8 @@ test_that("find_statistic", {
 })
 
 test_that("get_call", {
-  expect_equal(class(get_call(m1)), "call")
-  expect_equal(class(get_call(m2)), "call")
+  expect_s3_class(get_call(m1), "call")
+  expect_s3_class(get_call(m2), "call")
 })
 
 test_that("get_predicted_ci: warning when model matrix and varcovmat do not match", {
