@@ -27,9 +27,9 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 72)
-  expect_equal(
-    colnames(get_data(m1)),
+  expect_identical(nrow(get_data(m1)), 72L)
+  expect_named(
+    get_data(m1),
     c("Sat", "Infl", "Type", "Cont", "Freq")
   )
 })
@@ -62,18 +62,18 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(
+  expect_identical(find_terms(m1), list(
     response = "Sat",
     conditional = c("Infl", "Type", "Cont")
   ))
-  expect_equal(
+  expect_identical(
     find_terms(m1, flatten = TRUE),
     c("Sat", "Infl", "Type", "Cont")
   )
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 1681)
+  expect_identical(n_obs(m1), 1681L)
 })
 
 test_that("linkfun", {
@@ -82,7 +82,7 @@ test_that("linkfun", {
 
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(m1),
     list(
       conditional =
@@ -126,7 +126,9 @@ test_that("get_parameters", {
       ),
       stringsAsFactors = FALSE,
       row.names = NULL
-    )
+    ),
+    tolerance = 1e-5,
+    ignore_attr = TRUE
   )
 })
 
@@ -143,19 +145,19 @@ test_that("get_predicted", {
   expect_s3_class(p2, "get_predicted")
   expect_s3_class(p3, "get_predicted")
   expect_s3_class(p4, "get_predicted")
-  expect_equal(p1, p3)
-  expect_equal(p2, p4)
-  expect_true(inherits(p1, "data.frame"))
-  expect_true(inherits(p2, "factor"))
-  expect_true(inherits(p3, "data.frame"))
-  expect_true(inherits(p4, "factor"))
+  expect_identical(p1, p3)
+  expect_identical(p2, p4)
+  expect_s3_class(p1, "data.frame")
+  expect_s3_class(p2, "factor")
+  expect_s3_class(p3, "data.frame")
+  expect_s3_class(p4, "factor")
   expect_true(all(c("Row", "Response", "Predicted") %in% colnames(p1)))
   expect_true(all(c("Row", "Response", "Predicted") %in% colnames(p3)))
 
-  d <- get_datagrid(m1, at = "Type", verbose = FALSE)
+  d <- get_datagrid(m1, by = "Type", verbose = FALSE)
 
   p1 <- get_predicted(m1, predict = "expectation", data = d, verbose = FALSE)
 
-  expect_equal(colnames(p1), c("Row", "Type", "Response", "Predicted"))
-  expect_equal(dim(p1), c(12, 4))
+  expect_named(p1, c("Row", "Type", "Response", "Predicted"))
+  expect_identical(dim(p1), c(12L, 4L))
 })

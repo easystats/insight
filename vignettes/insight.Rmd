@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-if (!requireNamespace("lme4", quietly = TRUE)) {
+if (!requireNamespace("lme4", quietly = TRUE) || getRversion() < "4.4.0") {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```
@@ -92,7 +92,7 @@ Here are some examples that demonstrate the differences of each function:
 library(insight)
 library(lme4)
 data(sleepstudy)
-sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mygrp <- sample.int(5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 sleepstudy$Weeks <- sleepstudy$Days / 7
 sleepstudy$cat <- as.factor(sample(letters[1:4], nrow(sleepstudy), replace = TRUE))
@@ -100,7 +100,7 @@ sleepstudy$cat <- as.factor(sample(letters[1:4], nrow(sleepstudy), replace = TRU
 for (i in 1:5) {
   filter_group <- sleepstudy$mygrp == i
   sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+    sample.int(30, size = sum(filter_group), replace = TRUE)
 }
 
 model <- suppressWarnings(lmer(
