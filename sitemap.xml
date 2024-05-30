@@ -1,354 +1,120 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://easystats.github.io/insight/404.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/SUPPORT.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/articles/display.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/articles/export.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/articles/insight.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/index.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/all_models_equal.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/check_if_installed.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/clean_names.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/clean_parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/color_if.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/compact_character.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/compact_list.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/display.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/dot-colour_detect.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/download_model.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/ellipsis_info.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/export_table.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_algorithm.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_formula.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_interactions.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_offset.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_parameters.BGGM.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_parameters.averaging.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_parameters.betamfx.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_parameters.emmGrid.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_parameters.gamlss.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_parameters.glmmTMB.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_parameters.zeroinfl.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_predictors.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_random.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_random_slopes.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_response.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_smooth.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_statistic.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_terms.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_transformation.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_variables.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/find_weights.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/fish.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_bf.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_capitalize.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_ci.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_message.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_number.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_p.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_pd.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_rope.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_string.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_table.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/format_value.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_auxiliary.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_call.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_data.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_datagrid.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_deviance.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_df.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_family.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_intercept.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_loglikelihood.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_modelmatrix.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_parameters.BGGM.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_parameters.betamfx.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_parameters.betareg.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_parameters.emmGrid.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_parameters.gamm.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_parameters.glmm.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_parameters.htest.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_parameters.zeroinfl.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_predicted.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_predicted_ci.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_predictors.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_priors.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_random.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_residuals.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_response.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_sigma.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_statistic.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_transformation.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_varcov.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_variance.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/get_weights.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/has_intercept.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/insight-package.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/is_converged.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/is_empty_object.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/is_gam_model.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/is_mixed_model.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/is_model.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/is_model_supported.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/is_multivariate.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/is_nested_models.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/is_nullmodel.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/link_function.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/link_inverse.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/model_info.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/model_name.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/n_grouplevels.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/n_obs.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/n_parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/null_model.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/object_has_names.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/print_color.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/print_parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/standardize_column_order.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/standardize_names.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/text_remove_backticks.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/insight/reference/trim_ws.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://easystats.github.io/insight/404.html</loc></url>
+<url><loc>https://easystats.github.io/insight/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://easystats.github.io/insight/CONTRIBUTING.html</loc></url>
+<url><loc>https://easystats.github.io/insight/LICENSE-text.html</loc></url>
+<url><loc>https://easystats.github.io/insight/SUPPORT.html</loc></url>
+<url><loc>https://easystats.github.io/insight/articles/display.html</loc></url>
+<url><loc>https://easystats.github.io/insight/articles/export.html</loc></url>
+<url><loc>https://easystats.github.io/insight/articles/index.html</loc></url>
+<url><loc>https://easystats.github.io/insight/articles/insight.html</loc></url>
+<url><loc>https://easystats.github.io/insight/authors.html</loc></url>
+<url><loc>https://easystats.github.io/insight/index.html</loc></url>
+<url><loc>https://easystats.github.io/insight/news/index.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/all_models_equal.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/check_if_installed.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/clean_names.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/clean_parameters.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/color_if.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/compact_character.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/compact_list.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/display.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/dot-colour_detect.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/download_model.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/ellipsis_info.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/export_table.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_algorithm.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_formula.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_interactions.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_offset.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_parameters.BGGM.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_parameters.averaging.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_parameters.betamfx.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_parameters.emmGrid.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_parameters.gamlss.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_parameters.glmmTMB.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_parameters.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_parameters.zeroinfl.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_predictors.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_random.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_random_slopes.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_response.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_smooth.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_statistic.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_terms.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_transformation.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_variables.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/find_weights.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/fish.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_bf.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_capitalize.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_ci.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_message.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_number.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_p.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_pd.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_rope.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_string.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_table.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/format_value.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_auxiliary.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_call.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_data.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_datagrid.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_deviance.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_df.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_family.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_intercept.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_loglikelihood.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_modelmatrix.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_parameters.BGGM.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_parameters.betamfx.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_parameters.betareg.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_parameters.emmGrid.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_parameters.gamm.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_parameters.glmm.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_parameters.htest.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_parameters.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_parameters.zeroinfl.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_predicted.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_predicted_ci.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_predictors.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_priors.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_random.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_residuals.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_response.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_sigma.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_statistic.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_transformation.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_varcov.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_variance.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_weights.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/has_intercept.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/index.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/insight-package.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/is_converged.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/is_empty_object.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/is_gam_model.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/is_mixed_model.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/is_model.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/is_model_supported.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/is_multivariate.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/is_nested_models.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/is_nullmodel.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/link_function.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/link_inverse.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/model_info.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/model_name.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/n_grouplevels.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/n_obs.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/n_parameters.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/null_model.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/object_has_names.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/print_color.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/print_parameters.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/standardize_column_order.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/standardize_names.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/text_remove_backticks.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/trim_ws.html</loc></url>
 </urlset>
+
