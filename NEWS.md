@@ -1,4 +1,4 @@
-# insight 0.19.12
+# insight 0.20.0
 
 ## Breaking
 
@@ -9,6 +9,10 @@
   * `export_table()`
   * `get_datagrid()`
   * `print_parameters()`
+
+## Bug fixes
+
+* Fixed errors in CRAN checks.
 
 # insight 0.19.11
 
