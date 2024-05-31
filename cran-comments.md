@@ -2,8 +2,8 @@ This release fixes errors in CRAN checks.
 
 Additionally, in the process of stabilizing the API/user interface for packages
 from the 'easystats' project, some argument names were renamed and old names
-deprecated. This will *not* break downstream dependent packages, however,
+have been deprecated. This will *not break* downstream dependent packages, however,
 reverse-dependency checks will raise warnings. We have already patched all
 affected downstream packages and will submit them to CRAN in the next few days,
 after the release of 'insight'. Once this release-cycle is complete, all
-warnings due to deprecated argument names will be resolved.
+warnings due to deprecated argument names should be resolved.
