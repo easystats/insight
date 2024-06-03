@@ -20,8 +20,11 @@ test_that("compact_list, logical > 1", {
 
 test_that("compact_list, vctrs", {
   data(mtcars)
+  data(iris)
   class(mtcars$mpg) <- c("haven_labelled", "vctrs_vctr", "double")
   attr(mtcars$mpg, "labels") <- c(`21` = 21)
-  out <- compact_list(mtcars)
-  expect_true(all(vapply(out, class, character(1)) == "numeric"))
+  out <- compact_list(list(mtcars))
+  expect_true(all(vapply(out[[1]], class, character(1)) == "numeric"))
+  out <- compact_list(list(iris, mtcars))
+  expect_true(all(vapply(out[[2]], class, character(1)) == "numeric"))
 })
