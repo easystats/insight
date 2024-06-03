@@ -26,7 +26,7 @@
 
 ## Bug fixes
 
-* Fixed issue with `get_data()` for `coxme` models when `source`was set to
+* Fixed issue with `get_data()` for `coxme` models when `source` was set to
   `"modelframe"`.
 
 # insight 0.19.10
