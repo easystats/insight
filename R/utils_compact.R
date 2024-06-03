@@ -10,9 +10,9 @@
 #' @export
 compact_list <- function(x, remove_na = FALSE) {
   if (remove_na) {
-    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1L && is.na(i)) || all(is.na(i)) || any(is.character(i) && i == "NULL", na.rm = TRUE)))]
+    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1L && is.na(i)) || all(is.na(i)) || all(sapply(i, is.null)) || any(sapply(i, \(j) length(j) == 1 && is.character(j) && j == "NULL"), na.rm = TRUE)))]
   } else {
-    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || any(is.character(i) && i == "NULL", na.rm = TRUE)))]
+    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || all(sapply(i, is.null)) || any(sapply(i, \(j) length(j) == 1 && is.character(j) && j == "NULL"), na.rm = TRUE)))]
   }
 }
 
