@@ -1,3 +1,4 @@
+# Currently doesn't work on devel - potential fixest issue?
 skip_if(TRUE)
 
 skip_on_os("mac")

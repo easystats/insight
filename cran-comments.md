@@ -1,1 +1,9 @@
-This release is required for the planned update of the 'parameters' package, which will be released once 'insight' is on CRAN. The 'parameters' update fixes errors in CRAN checks.
+This release fixes errors in CRAN checks.
+
+Additionally, in the process of stabilizing the API/user interface for packages
+from the 'easystats' project, some argument names were renamed and old names
+have been deprecated. This will *not break* downstream dependent packages, however,
+reverse-dependency checks will raise warnings. We have already patched all
+affected downstream packages and will submit them to CRAN in the next few days,
+after the release of 'insight'. Once this release-cycle is complete, all
+warnings due to deprecated argument names should be resolved.
