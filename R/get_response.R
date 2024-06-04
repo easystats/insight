@@ -75,6 +75,11 @@ get_response.default <- function(x, select = NULL, as_proportion = TRUE, source 
     !is.matrix(response)) {
     response <- as.vector(response)
   }
+
+  # clear vctr-class attributes
+  if (inherits(response, "vctrs_vctr")) {
+    class(response) <- setdiff(class(response), c("haven_labelled", "vctrs_vctr"))
+  }
   response
 }
 
