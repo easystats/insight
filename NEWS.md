@@ -1,3 +1,8 @@
+# insight 0.20.1
+
+* Fixed issues in `compact_list()` for objects that contained variables of
+  class `vctrs`.
+
 # insight 0.20.0
 
 ## Breaking
