@@ -11,7 +11,7 @@
 compact_list <- function(x, remove_na = FALSE) {
   # iterate over elements of the list. we need to check
   # whether we have data frames
-  if (!is.null(x) && length(x)) {
+  if (!is.null(x) && length(x) && is.list(x)) {
     x <- lapply(x, function(element) {
       # for data frames, check if columns are vctrs.
       # if so, remove the vctrs-class attributes
