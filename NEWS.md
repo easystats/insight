@@ -1,3 +1,14 @@
+# insight 0.20.1
+
+## General
+
+* Improved accuracy of singularity-checks in `get_variance()`.
+
+## Bug fixes
+
+* Fixed issues in `compact_list()` for objects that contained variables of
+  class `vctrs`.
+
 # insight 0.20.0
 
 ## Breaking
@@ -13,9 +24,6 @@
 ## Bug fixes
 
 * Fixed errors in CRAN checks.
-
-* Fixed issues in `compact_list()` for objects that contained variables of
-  class `vctrs`.
 
 # insight 0.19.11
 
