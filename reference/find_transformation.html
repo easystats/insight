@@ -53,7 +53,7 @@ log(x+&amp;lt;number&amp;gt;), log-log and power (to 2nd power, like I(x^2))."><
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Find possible transformation of response variables</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/v0.20.0/R/find_transformation.R" class="external-link"><code>R/find_transformation.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/main/R/find_transformation.R" class="external-link"><code>R/find_transformation.R</code></a></small>
       <div class="d-none name"><code>find_transformation.Rd</code></div>
     </div>
     <div class="ref-description section level2">
@@ -69,12 +69,12 @@ detected: <code>log</code>, <code>log1p</code>, <code>log2</code>, <code>log10</
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
+<dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A regression model.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-<p>A string, with the name of the function of the applied transformation.
+    <p>A string, with the name of the function of the applied transformation.
 Returns <code>"identity"</code> for no transformation, and e.g. <code>"log(x+3)"</code> when
 a specific values was added to the response variables before
 log-transforming. For unknown transformations, returns <code>NULL</code>.</p>

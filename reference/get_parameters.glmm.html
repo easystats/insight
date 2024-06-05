@@ -45,7 +45,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Get model parameters from mixed models</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/v0.20.0/R/get_parameters_mixed.R" class="external-link"><code>R/get_parameters_mixed.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/main/R/get_parameters_mixed.R" class="external-link"><code>R/get_parameters_mixed.R</code></a></small>
       <div class="d-none name"><code>get_parameters.glmm.Rd</code></div>
     </div>
     <div class="ref-description section level2">
@@ -83,7 +83,7 @@
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
+<dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A fitted model.</p></dd>
 <dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
 <dd><p>Should parameters for fixed effects, random effects
@@ -106,7 +106,7 @@ other auxiliary parameters) are returned.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-<p>If <code>effects = "fixed"</code>, a data frame with two columns: the
+    <p>If <code>effects = "fixed"</code>, a data frame with two columns: the
 parameter names and the related point estimates. If <code>effects = "random"</code>, a list of data frames with the random effects (as returned by
 <code>ranef()</code>), unless the random effects have the same simplified
 structure as fixed effects (e.g. for models from <strong>MCMCglmm</strong>).</p>
