@@ -27,4 +27,8 @@ test_that("compact_list, vctrs", {
   expect_true(all(vapply(out[[1]], class, character(1)) == "numeric"))
   out <- compact_list(list(iris, mtcars))
   expect_true(all(vapply(out[[2]], class, character(1)) == "numeric"))
+  out <- compact_list(mtcars)
+  expect_s3_class(out, "data.frame")
+  expect_identical(colnames(out), colnames(mtcars))
+  expect_identical(dim(out), dim(mtcars))
 })
