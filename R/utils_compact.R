@@ -9,13 +9,6 @@
 #' compact_list(c(1, NA, NA), remove_na = TRUE)
 #' @export
 compact_list <- function(x, remove_na = FALSE) {
-  # remove vctr-class attributes
-  if (is.data.frame(x)) {
-    x[] <- lapply(x, function(i) {
-      class(i) <- setdiff(class(i), c("haven_labelled", "vctrs_vctr"))
-      i
-    })
-  }
   if (remove_na) {
     x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1L && is.na(i)) || all(is.na(i)) || any(i == "NULL", na.rm = TRUE)))]
   } else {
