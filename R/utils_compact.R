@@ -13,11 +13,11 @@ compact_list <- function(x, remove_na = FALSE) {
   # x <- .clean_from_vctrs(x)
   # finally, we can compact the list...
   if (remove_na) {
-    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1L && is.na(i)) || all(is.na(i)) || all(vapply(i, is.null, logical(1))) || any(vapply(i, function(j) length(j) == 1 && is.character(j) && j == "NULL", logical(1)), na.rm = TRUE)))]
-    # x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1L && is.na(i)) || all(is.na(i)) || any(i == "NULL", na.rm = TRUE)))]
+    # x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1L && is.na(i)) || all(is.na(i)) || all(sapply(i, is.null)) || any(sapply(i, function(j) length(j) == 1 && is.character(j) && j == "NULL"), na.rm = TRUE)))]
+    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || (length(i) == 1L && is.na(i)) || all(is.na(i)) || any(i == "NULL", na.rm = TRUE)))]
   } else {
-    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || all(vapply(i, is.null, logical(1))) || any(vapply(i, function(j) length(j) == 1 && is.character(j) && j == "NULL", logical(1)), na.rm = TRUE)))]
-    # x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || any(i == "NULL", na.rm = TRUE)))]
+    # x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || all(sapply(i, is.null)) || any(sapply(i, function(j) length(j) == 1 && is.character(j) && j == "NULL"), na.rm = TRUE)))]
+    x[!sapply(x, function(i) !is_model(i) && !inherits(i, c("Formula", "gFormula")) && (length(i) == 0L || is.null(i) || any(i == "NULL", na.rm = TRUE)))]
   }
 }
 
