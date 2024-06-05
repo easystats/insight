@@ -25,3 +25,27 @@ test_that("compact_list, vctrs", {
   out <- compact_list(mtcars)
   expect_true(all(vapply(out, class, character(1)) == "numeric"))
 })
+
+test_that("compact_list, this must work!", {
+  skip_if_not_installed("bayestestR")
+  out <- lapply(
+    mtcars[, 1:3, drop = FALSE],
+    bayestestR::ci,
+    ci = c(0.9, 0.8),
+    verbose = FALSE
+  )
+  result <- compact_list(out)
+  expect_identical(
+    lapply(result, class),
+    list(mpg = c(
+      "bayestestR_eti", "see_eti", "bayestestR_ci", "see_ci",
+      "data.frame"
+    ), cyl = c(
+      "bayestestR_eti", "see_eti", "bayestestR_ci",
+      "see_ci", "data.frame"
+    ), disp = c(
+      "bayestestR_eti", "see_eti",
+      "bayestestR_ci", "see_ci", "data.frame"
+    ))
+  )
+})
