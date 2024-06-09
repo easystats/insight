@@ -7,7 +7,8 @@
 download_model(
   name,
   url = "https://raw.github.com/easystats/circus/master/data/",
-  extension = ".rda"
+  extension = ".rda",
+  verbose = TRUE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ changing. By default, models are downloaded from
 \verb{https://raw.github.com/easystats/circus/master/data/}.}
 
 \item{extension}{File extension. Default is \code{.rda}.}
+
+\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 A model from the \emph{circus}-repository, or \code{NULL} if model could
@@ -34,12 +37,11 @@ The code that generated the model is available at the
 \url{https://easystats.github.io/circus/reference/index.html}.
 }
 \examples{
-\dontshow{if (require("httr2", quietly = TRUE) && interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("httr2", quietly = TRUE) && curl::has_internet() && interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 download_model("aov_1")
 try(download_model("non_existent_model"))
 }
-
 \dontshow{\}) # examplesIf}
 }
 \references{
