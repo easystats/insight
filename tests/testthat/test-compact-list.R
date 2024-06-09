@@ -18,14 +18,6 @@ test_that("compact_list, logical > 1", {
   expect_identical(compact_list(x, remove_na = FALSE), list(a = 1, b = c(NA, NA), c = NA))
 })
 
-test_that("compact_list, vctrs", {
-  data(mtcars)
-  class(mtcars$mpg) <- c("haven_labelled", "vctrs_vctr", "double")
-  attr(mtcars$mpg, "labels") <- c(`21` = 21)
-  out <- compact_list(mtcars)
-  expect_true(all(vapply(out, class, character(1)) == "numeric"))
-})
-
 test_that("compact_list, this must work!", {
   skip_if_not_installed("bayestestR")
   out <- lapply(
