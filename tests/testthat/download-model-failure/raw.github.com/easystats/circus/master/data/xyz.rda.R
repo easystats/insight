@@ -1,4 +1,4 @@
-# nolint: start
+# nolint start
 # styler: off
 structure(list(
   method = "GET", url = "https://raw.githubusercontent.com/easystats/circus/master/data/xyz.rda",
@@ -18,4 +18,4 @@ structure(list(
   cache = new.env(parent = emptyenv())
 ), class = "httr2_response")
 # styler: on
-# nolint: end
+# nolint end
