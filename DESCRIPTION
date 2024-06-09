@@ -70,7 +70,7 @@ Description: A tool to provide an easy, intuitive and consistent
     used to fit the model or data from response variables. 'insight'
     mainly revolves around two types of functions: Functions that find
     (the names of) information, starting with 'find_', and functions that
-    get the underlying data, starting with 'get_'.  The package has a
+    get the underlying data, starting with 'get_'. The package has a
     consistent syntax and works with many different model objects, where
     otherwise functions to access these information are missing.
 License: GPL-3
@@ -129,7 +129,7 @@ Suggests:
     gmnl,
     grDevices,
     gt,
-    httr,
+    httr2,
     interp,
     ivreg,
     JM,
