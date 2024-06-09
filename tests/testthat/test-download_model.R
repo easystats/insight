@@ -1,12 +1,14 @@
 httptest2::with_mock_dir("download-model-success", {
   test_that("we can successfully get existing model", {
-    expect_s3_class(download_model("lm_0", verbose = FALSE), "lm")
+    model <- download_model("lm_0", verbose = FALSE)
+    expect_s3_class(model, "lm")
   })
 })
 
 httptest2::with_mock_dir("download-model-failure", {
   test_that("we fail gracefully while getting non-existing model", {
-    expect_null(download_model("xyz", verbose = FALSE))
+    model <- download_model("xyz", verbose = FALSE)
+    expect_null(model)
   })
 })
 
