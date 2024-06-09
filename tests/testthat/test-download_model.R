@@ -1,3 +1,5 @@
+skip_if_not_installed("httptest2")
+
 httptest2::with_mock_dir("download-model-success", {
   test_that("we can successfully get existing model", {
     model <- download_model("lm_0", verbose = FALSE)

@@ -1,1 +1,3 @@
-library(httptest2)
+if (requireNamespace("httptest2")) {
+  library(httptest2)
+}
