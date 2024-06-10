@@ -70,19 +70,19 @@ Description: A tool to provide an easy, intuitive and consistent
     used to fit the model or data from response variables. 'insight'
     mainly revolves around two types of functions: Functions that find
     (the names of) information, starting with 'find_', and functions that
-    get the underlying data, starting with 'get_'.  The package has a
+    get the underlying data, starting with 'get_'. The package has a
     consistent syntax and works with many different model objects, where
     otherwise functions to access these information are missing.
 License: GPL-3
 URL: https://easystats.github.io/insight/
 BugReports: https://github.com/easystats/insight/issues
-Depends:
+Depends: 
     R (>= 3.6)
-Imports:
+Imports: 
     methods,
     stats,
     utils
-Suggests:
+Suggests: 
     AER,
     afex,
     aod,
@@ -129,7 +129,8 @@ Suggests:
     gmnl,
     grDevices,
     gt,
-    httr,
+    httptest2,
+    httr2,
     interp,
     ivreg,
     JM,
@@ -142,8 +143,8 @@ Suggests:
     lmtest,
     logistf,
     logitr,
-    MASS,
     marginaleffects,
+    MASS,
     Matrix,
     mclogit,
     mclust,
@@ -179,9 +180,9 @@ Suggests:
     Rcpp,
     rmarkdown,
     rms,
-    rpart,
     robustbase,
     robustlmm,
+    rpart,
     rstanarm (>= 2.21.1),
     rstantools (>= 2.1.0),
     rstudioapi,
@@ -194,9 +195,9 @@ Suggests:
     survival,
     testthat,
     tinytable (>= 0.1.0),
+    TMB,
     truncreg,
     tweedie,
-    TMB,
     VGAM,
     withr
 VignetteBuilder: 
@@ -207,7 +208,4 @@ RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-Config/Needs/website:
-    rstudio/bslib,
-    r-lib/pkgdown,
-    easystats/easystatstemplate
+Config/Needs/website: easystats/easystatstemplate
