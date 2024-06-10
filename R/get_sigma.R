@@ -74,6 +74,45 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 # special handling ---------------
 
 
+.get_sigma.glmerMod <- function(x, ...) {
+  check_if_installed("lme4")
+  if (startsWith(family(x)$family, "Negative Binomial(")) {
+    lme4::getME(x, "glmer.nb.theta")
+  } else {
+    stats::sigma(x)
+  }
+}
+
+
+.get_sigma.glmmadmb <- function(x, ...) {
+  check_if_installed("lme4")
+  vc <- lme4::VarCorr(x)
+  attr(vc, "sc")
+}
+
+
+.get_sigma.glmmTMB <- function(x, ...) {
+  if (family(x)$family == "nbinom1") {
+    add_value <- 1
+  } else {
+    add_value <- 0
+  }
+  stats::sigma(x) + add_value
+}
+
+
+.get_sigma.merMod <- function(x, ...) {
+  stats::sigma(x)
+}
+
+
+.get_sigma.clmm <- function(x, ...) {
+  check_if_installed("ordinal")
+  vc <- ordinal::VarCorr(x)
+  attr(vc, "sc")
+}
+
+
 .get_sigma.model_fit <- function(x, verbose = TRUE, ...) {
   .get_sigma(x$fit, verbose = verbose)
 }
@@ -144,6 +183,26 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
+.get_sigma.lme <- function(x, ...) {
+  .safe(x$sigma)
+}
+
+
+.get_sigma.mjoint <- function(x, ...) {
+  .safe(x$coef$sigma2[[1]])
+}
+
+
+.get_sigma.glmmPQL <- function(x, ...) {
+  switch(
+    stats::family(x)$family,
+    gaussian = ,
+    Gamma = x$sigma,
+    x$sigma^2
+  )
+}
+
+
 .get_sigma.brmsfit <- function(x, verbose = TRUE, ...) {
   s <- tryCatch(
     {
@@ -207,15 +266,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   }
 
   if (is_empty_object(s)) {
-    if (is.null(info)) {
-      info <- model_info(x, verbose = FALSE)
-    }
-    if (!is.null(info) && info$is_mixed) {
-      s <- .safe(sqrt(get_variance_residual(x, verbose = FALSE)))
-    }
-  }
-
-  if (is_empty_object(s)) {
     s <- .safe(
       sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
     )
@@ -254,7 +304,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 as.numeric.insight_aux <- function(x, ...) {
   if (is.null(x) || is.na(x) || is.infinite(x)) {
     return(NULL)
-  } else {
-    mean(x, na.rm = TRUE)
   }
+  mean(x, na.rm = TRUE)
 }

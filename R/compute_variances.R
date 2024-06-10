@@ -416,6 +416,7 @@
 }
 
 
+# same as above, but for the zero-inflation component
 .collapse_zi <- function(x) {
   if (is.list(x) && "zi" %in% names(x)) {
     x[["zi"]]
@@ -480,13 +481,11 @@
 # distribution-specific variance (Nakagawa et al. 2017) ----
 # ----------------------------------------------------------
 .compute_variance_distribution <- function(x, var.cor, faminfo, name, verbose = TRUE) {
-  if (inherits(x, "lme")) {
-    sig <- x$sigma
-  } else {
-    sig <- attr(var.cor, "sc")
-  }
+  sig <- .safe(get_sigma(x))
 
-  if (is.null(sig)) sig <- 1
+  if (is.null(sig)) {
+    sig <- 1
+  }
 
   # Distribution-specific variance depends on the model-family
   # and the related link-function
@@ -531,12 +530,10 @@
     # Gamma  ----
     # -----------
 
-    ## TODO needs some more checking - should now be in line with other packages
     dist.variance <- switch(faminfo$link_function,
       inverse = ,
-      identity = ,
-      log = stats::family(x)$variance(sig),
-      # log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      identity = stats::family(x)$variance(sig),
+      log = log1p(1 / sig^-2),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else if (faminfo$family == "beta") {
