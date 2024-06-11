@@ -93,7 +93,7 @@ Suggests:
     betareg,
     bife,
     biglm,
-    blavaan,
+    blavaan (>= 0.5-5),
     blme,
     boot,
     brms,
