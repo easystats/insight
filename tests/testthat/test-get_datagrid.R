@@ -294,7 +294,6 @@ test_that("factor levels as reference / non-focal terms works", {
 })
 
 
-
 test_that("get_datagrid - multiple weight variables", {
   skip_if_not_installed("nlme")
   data("Orthodont", package = "nlme")
@@ -312,4 +311,16 @@ test_that("get_datagrid - multiple weight variables", {
     ),
     tolerance = 1e-3
   )
+})
+
+
+test_that("get_datagrid - deprecated arg doesn't cause memory allocation issues", {
+  data(iris)
+  expect_warning(
+    {
+      out <- get_datagrid(iris, at = NULL)
+    },
+    regex = "Argument `at` is deprecated"
+  )
+  expect_identical(nrow(out), 1L)
 })

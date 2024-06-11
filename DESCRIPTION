@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.20.0
+Version: 0.20.1
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -93,7 +93,7 @@ Suggests:
     betareg,
     bife,
     biglm,
-    blavaan,
+    blavaan (>= 0.5-5),
     blme,
     boot,
     brms,
@@ -130,6 +130,7 @@ Suggests:
     grDevices,
     gt,
     httptest2,
+    httr,
     httr2,
     interp,
     ivreg,
