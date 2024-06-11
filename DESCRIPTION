@@ -130,6 +130,7 @@ Suggests:
     grDevices,
     gt,
     httptest2,
+    httr,
     httr2,
     interp,
     ivreg,
