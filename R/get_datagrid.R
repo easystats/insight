@@ -668,15 +668,15 @@ get_datagrid.logical <- get_datagrid.character
             spread <- stats::mad(x, na.rm = TRUE)
             by_expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
           } else if (parts == "quartiles") {
-            by_expression <- paste0("c(", paste0(as.vector(stats::quantile(x, na.rm = TRUE)), collapse = ","), ")")
+            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, na.rm = TRUE)), collapse = ","), ")")
           } else if (parts == "quartiles2") {
-            by_expression <- paste0("c(", paste0(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], collapse = ","), ")")
+            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], collapse = ","), ")")
           } else if (parts == "terciles") {
-            by_expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
+            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
           } else if (parts == "terciles2") {
-            by_expression <- paste0("c(", paste0(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
+            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
           } else if (parts == "fivenum") {
-            by_expression <- paste0("c(", paste0(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
+            by_expression <- paste0("c(", paste(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
           } else if (parts == "zeromax") {
             by_expression <- paste0("c(0,", max(x, na.rm = TRUE), ")")
           } else if (parts == "minmax") {
