@@ -19,7 +19,7 @@ get_datagrid(x, ...)
   reference = x,
   length = 10,
   range = "range",
-  at = NULL,
+  at,
   ...
 )
 
@@ -39,7 +39,7 @@ get_datagrid(x, ...)
   include_response = FALSE,
   data = NULL,
   verbose = TRUE,
-  at = NULL,
+  at,
   ...
 )
 }

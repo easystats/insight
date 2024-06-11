@@ -1,3 +1,10 @@
+# insight 0.20.1
+
+## Bug fixes
+
+* Fixed possible memory allocation issues when the deprecated argument `at` was
+  used in `get_datagrid()`.
+
 # insight 0.20.0
 
 ## Breaking
