@@ -556,7 +556,11 @@
     # --------------------------
 
     # we need this to adjust for "cbind()" outcomes
-    resp_value <- .safe(get_data(x, source = "frame")[, find_response(x)])
+    resp_value <- .safe(stats::model.frame(x)[, find_response(x)])
+    # sanity check
+    if (is.null(resp_value)) {
+      resp_value <- .safe(get_data(x, source = "frame")[, find_response(x)])
+    }
     if (!is.null(resp_value) && !is.null(ncol(resp_value)) && ncol(resp_value) > 1) {
       y_factor <- mean(rowSums(resp_value, na.rm = TRUE))
     } else {
