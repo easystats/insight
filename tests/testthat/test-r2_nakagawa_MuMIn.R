@@ -385,7 +385,7 @@ test_that("lme4, Poisson", {
 
 
 # ==============================================================================
-# Poisson mixed models, glmmTMB
+# neg-binomial1 mixed models, glmmTMB
 # ==============================================================================
 
 test_that("glmmTMB, Nbinom1", {
@@ -427,4 +427,38 @@ test_that("glmmTMB, Nbinom1", {
   # matches delta values
   expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+})
+
+
+# ==============================================================================
+# neg-binomial2 mixed models, glmmTMB
+# ==============================================================================
+
+test_that("glmmTMB, Nbinom2", {
+  # dataset ---------------------------------
+  data(Salamanders, package = "glmmTMB")
+
+  # no random slopes
+  m <- glmmTMB::glmmTMB(
+    count ~ mined + spp + (1 | site),
+    family = glmmTMB::nbinom2(),
+    data = Salamanders
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+
+  # with random slopes
+  m <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ mined + spp + cover + (1 + cover | site),
+    family = glmmTMB::nbinom2(),
+    data = Salamanders
+  ))
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m, tolerance = 1e-8)
+  # matches theoretical values
+  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-1)
+  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-1)
 })

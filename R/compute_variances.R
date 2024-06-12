@@ -675,7 +675,8 @@
       beta = mu,
       ordbeta = stats::plogis(mu),
       poisson = ,
-      nbinom1 = sqrt(exp(mu + 0.5 * as.vector(revar_null))),
+      nbinom1 = ,
+      nbinom2 = exp(mu + 0.5 * as.vector(revar_null)),
       exp(mu)
     )
   }
@@ -701,11 +702,11 @@
 
         # (zero-inflated) negative binomial ----
         # --------------------------------------
-        nbinom1 = sig,
+        nbinom1 = ,
+        nbinom2 = sig,
         `zero-inflated negative binomial` = ,
         `negative binomial` = ,
-        genpois = ,
-        nbinom2 = .variance_family_nbinom(x, mu, sig, faminfo),
+        genpois = .variance_family_nbinom(x, mu, sig, faminfo),
         truncated_nbinom2 = stats::family(x)$variance(mu, sig),
 
         # other distributions ----
@@ -726,7 +727,14 @@
           "Model's distribution-specific variance is negative. Results are not reliable."
         )
       }
-      vv / mu^2
+
+      # now compute cvsquared
+      switch(faminfo$family,
+        nbinom2 = (1 / mu) + (1 / sig),
+        poisson = ,
+        nbinom1 = vv / mu,
+        vv / mu^2
+      )
     },
     error = function(x) {
       if (verbose) {
