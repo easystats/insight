@@ -581,7 +581,7 @@
     # ----------
 
     resid.variance <- switch(faminfo$link_function,
-      logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      logit = .variance_distributional(x, faminfo, sig, model_null, name = name, verbose = verbose),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else if (faminfo$is_tweedie) {
@@ -589,7 +589,7 @@
     # -------------
 
     resid.variance <- switch(faminfo$link_function,
-      log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      log = .variance_distributional(x, faminfo, sig, model_null, name = name, verbose = verbose),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else if (faminfo$is_orderedbeta) {
@@ -597,7 +597,7 @@
     # ------------------
 
     resid.variance <- switch(faminfo$link_function,
-      logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      logit = .variance_distributional(x, faminfo, sig, model_null, name = name, verbose = verbose),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else {
