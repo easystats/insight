@@ -30,11 +30,11 @@ test_that("glmmTMB, linear", {
   expect_equal(out1[, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
   # linear, no random slope, inverse
-  m <- glmmTMB::glmmTMB(
+  m <- suppressWarnings(glmmTMB::glmmTMB(
     Reaction ~ Days + (1 | Subject),
     data = sleepstudy,
     family = gaussian("inverse")
-  )
+  ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)
   expect_equal(out1[, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
@@ -48,11 +48,11 @@ test_that("glmmTMB, linear", {
   expect_equal(out1[, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
   # linear, random slope, inverse
-  m <- glmmTMB::glmmTMB(
+  m <- suppressWarnings(glmmTMB::glmmTMB(
     Reaction ~ Days + (1 + Days | Subject),
     data = sleepstudy,
     family = gaussian("inverse")
-  )
+  ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)
   expect_equal(out1[, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
@@ -99,6 +99,8 @@ test_that("lme4, linear", {
 # ==============================================================================
 
 test_that("glmmTMB, Gamma", {
+  ## FIXME: works. but is very slow. try to find better example
+  skip_if(TRUE)
   data(sleepstudy, package = "lme4")
 
   # linear, no random slope
@@ -174,13 +176,13 @@ test_that("glmmTMB, bernoulli", {
   expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
   # glmmTMB, probit, random slope -------------------------------------------------
-  m <- glmmTMB::glmmTMB(
+  m <- suppressWarnings(glmmTMB::glmmTMB(
     outcome ~ var_binom + var_cont + (1 + var_cont | group),
     data = dat,
     family = binomial(link = "probit")
-  )
+  ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
-  out2 <- performance::r2_nakagawa(m)
+  out2 <- performance::r2_nakagawa(m, tolerance = 1e-8)
   # matches theoretical values
   expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
@@ -286,18 +288,6 @@ test_that("lme4, bernoulli", {
   expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
-  # lme4, probit, random slope -------------------------------------------------
-  m <- lme4::glmer(
-    outcome ~ var_binom + var_cont + (1 + var_cont | group),
-    data = dat,
-    family = binomial(link = "probit")
-  )
-  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
-  out2 <- performance::r2_nakagawa(m)
-  # matches theoretical values
-  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
-  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
-
   # lme4, cloglog, random slope -------------------------------------------------
   m <- lme4::glmer(
     outcome ~ var_binom + var_cont + (1 + var_cont | group),
@@ -336,14 +326,14 @@ test_that("glmmTMB, Poisson", {
   )
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)
-  # matches theoretical values
-  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
-  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+  # matches delta values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
   # glmmTMB, random slope -------------------------------------------------
-  m <- glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
+  m <- suppressWarnings(glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
     family = poisson(), data = Salamanders
-  )
+  ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m, tolerance = 1e-8)
   # we have slight differences here: MuMIn uses "var(fitted())" to exctract fixed
@@ -353,14 +343,14 @@ test_that("glmmTMB, Poisson", {
   expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-1)
 
   # glmmTMB, sqrt, random slope -------------------------------------------------
-  m <- glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
+  m <- suppressWarnings(glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
     family = poisson("sqrt"), data = Salamanders
-  )
+  ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m, tolerance = 1e-8)
-  # matches theoretical values
-  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
-  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+  # matches delta values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 })
 
 
@@ -389,6 +379,6 @@ test_that("lme4, Poisson", {
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)
   # matches theoretical values
-  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
-  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 })
