@@ -1,13 +1,15 @@
-# insight 0.20.1
+# insight 0.20.2
 
 ## General
 
 * Improved accuracy of singularity-checks in `get_variance()`.
 
+# insight 0.20.1
+
 ## Bug fixes
 
-* Fixed issues in `compact_list()` for objects that contained variables of
-  class `vctrs`.
+* Fixed possible memory allocation issues when the deprecated argument `at` was
+  used in `get_datagrid()`.
 
 # insight 0.20.0
 
