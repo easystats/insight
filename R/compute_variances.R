@@ -759,7 +759,7 @@
   if (faminfo$is_zero_inflated) {
     .variance_zip(x, faminfo, family_var = mu)
   } else if (inherits(x, "MixMod")) {
-    return(mu)
+    mu
   } else if (inherits(x, "cpglmm")) {
     .get_cplm_family(x)$variance(mu)
   } else {
