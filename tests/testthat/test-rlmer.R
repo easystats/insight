@@ -267,7 +267,8 @@ test_that("get_variance", {
       var.slope = c(Subject.Days = 41.8070895953001),
       cor.slope_intercept = c(Subject = -0.0387835013909591)
     ),
-    tolerance = 1e-3
+    tolerance = 1e-3,
+    ignore_attr = TRUE
   )
 
   expect_warning(
@@ -287,7 +288,8 @@ test_that("get_variance", {
         mygrp = 16.1137111496375
       )
     ),
-    tolerance = 1e-3
+    tolerance = 1e-3,
+    ignore_attr = TRUE
   )
 })
 

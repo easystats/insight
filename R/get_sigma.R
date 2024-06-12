@@ -76,7 +76,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 .get_sigma.glmerMod <- function(x, ...) {
   check_if_installed("lme4")
-  if (startsWith(family(x)$family, "Negative Binomial(")) {
+  if (startsWith(stats::family(x)$family, "Negative Binomial(")) {
     lme4::getME(x, "glmer.nb.theta")
   } else {
     stats::sigma(x)
@@ -92,7 +92,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 
 .get_sigma.glmmTMB <- function(x, ...) {
-  if (family(x)$family == "nbinom1") {
+  if (stats::family(x)$family == "nbinom1") {
     add_value <- 1
   } else {
     add_value <- 0
