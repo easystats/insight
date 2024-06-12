@@ -700,7 +700,8 @@
       nbinom1 = ,
       nbinom2 = ,
       `negative binomial` = exp(mu + 0.5 * as.vector(revar_null)),
-      exp(mu)
+      link_inverse(x)(mu) ## TODO: check if this is better than "exp(mu)"
+      # exp(mu)
     )
   }
 
