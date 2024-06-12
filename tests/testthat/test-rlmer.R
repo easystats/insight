@@ -5,12 +5,12 @@ skip_if_not(getRversion() >= "4.1.0")
 data(sleepstudy, package = "lme4")
 
 set.seed(123)
-sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mygrp <- sample.int(5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
   filter_group <- sleepstudy$mygrp == i
   sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30,
+    sample.int(30,
       size = sum(filter_group),
       replace = TRUE
     )
@@ -121,18 +121,12 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_identical(colnames(get_data(m1)), c("Reaction", "Days", "Subject"))
-  expect_identical(colnames(get_data(m1, effects = "all")), c("Reaction", "Days", "Subject"))
-  expect_identical(colnames(get_data(m1, effects = "random")), "Subject")
-  expect_identical(
-    colnames(get_data(m2)),
-    c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
-  )
-  expect_identical(
-    colnames(get_data(m2, effects = "all")),
-    c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
-  )
-  expect_identical(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
+  expect_named(get_data(m1), c("Reaction", "Days", "Subject"))
+  expect_named(get_data(m1, effects = "all"), c("Reaction", "Days", "Subject"))
+  expect_named(get_data(m1, effects = "random"), "Subject")
+  expect_named(get_data(m2), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
+  expect_named(get_data(m2, effects = "all"), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
+  expect_named(get_data(m2, effects = "random"), c("mysubgrp", "mygrp", "Subject"))
 })
 
 test_that("find_formula", {
@@ -203,16 +197,13 @@ test_that("get_response", {
 })
 
 test_that("get_predictors", {
-  expect_identical(colnames(get_predictors(m1)), "Days")
-  expect_identical(colnames(get_predictors(m2)), "Days")
+  expect_named(get_predictors(m1), "Days")
+  expect_named(get_predictors(m2), "Days")
 })
 
 test_that("get_random", {
-  expect_identical(colnames(get_random(m1)), "Subject")
-  expect_identical(
-    colnames(get_random(m2)),
-    c("mysubgrp", "mygrp", "Subject")
-  )
+  expect_named(get_random(m1), "Subject")
+  expect_named(get_random(m2), c("mysubgrp", "mygrp", "Subject"))
 })
 
 test_that("clean_names", {
@@ -279,13 +270,22 @@ test_that("get_variance", {
     tolerance = 1e-3
   )
 
+  expect_warning(
+    {
+      out <- get_variance(m2)
+    },
+    regex = "Can't compute random effect"
+  )
   expect_equal(
-    get_variance(m2),
+    out,
     list(
-      var.fixed = 914.841369705921, var.random = 1406.78220075798,
-      var.residual = 809.318117542254, var.distribution = 809.318117542254,
-      var.dispersion = 0,
-      var.intercept = c(`mysubgrp:mygrp` = 0, Subject = 1390.66848960835, mygrp = 16.1137111496379)
+      var.fixed = 914.841369705924, var.residual = 809.318117542254,
+      var.distribution = 809.318117542254, var.dispersion = 0,
+      var.intercept = c(
+        `mysubgrp:mygrp` = 0,
+        Subject = 1390.66848960834,
+        mygrp = 16.1137111496375
+      )
     ),
     tolerance = 1e-3
   )
