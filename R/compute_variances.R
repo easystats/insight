@@ -37,7 +37,8 @@
     model_component = model_component
   )
 
-  # we need also the RE variance for the NULL model
+  # we also need necessary model information, like fixed and random effects,
+  # variance-covariance matrix etc. for the null model
   .null_model <- null_model(x, verbose = FALSE)
   vals_null <- .get_variance_information(
     .null_model,
@@ -521,12 +522,12 @@
     # linear / Gaussian ----
     # ----------------------
 
-    dist.variance <- sig^2
+    resid.variance <- sig^2
   } else if (faminfo$is_betabinomial) {
     # beta-binomial ----
     # ------------------
 
-    dist.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(faminfo$link_function,
       logit = ,
       probit = ,
       cloglog = ,
@@ -537,7 +538,7 @@
     # binomial / bernoulli  ----
     # --------------------------
 
-    dist.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(faminfo$link_function,
       logit = pi^2 / 3,
       probit = 1,
       cloglog = ,
@@ -548,7 +549,7 @@
     # count  ----
     # -----------
 
-    dist.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(faminfo$link_function,
       log = .variance_distributional(x, faminfo, sig, revar_null, name = name, verbose = verbose),
       sqrt = 0.25,
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
@@ -557,7 +558,7 @@
     # Gamma  ----
     # -----------
 
-    dist.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(faminfo$link_function,
       inverse = ,
       identity = stats::family(x)$variance(sig),
       log = log1p(1 / sig^-2),
@@ -567,7 +568,7 @@
     # Beta  ----
     # ----------
 
-    dist.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(faminfo$link_function,
       logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
@@ -575,7 +576,7 @@
     # Tweedie  ----
     # -------------
 
-    dist.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(faminfo$link_function,
       log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
@@ -583,15 +584,15 @@
     # Ordered Beta  ----
     # ------------------
 
-    dist.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(faminfo$link_function,
       logit = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else {
-    dist.variance <- sig
+    resid.variance <- sig
   }
 
-  dist.variance
+  resid.variance
 }
 
 
