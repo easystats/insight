@@ -6,6 +6,7 @@ skip_if_not_installed("lme4")
 skip_if_not_installed("performance")
 skip_if_not_installed("datawizard")
 
+
 test_that("glmmTMB, linear", {
   data(sleepstudy, package = "lme4")
 
@@ -52,7 +53,7 @@ test_that("lme4, linear", {
 })
 
 
-test_that("glmmTMB, logistic", {
+test_that("glmmTMB, bernoulli", {
   # dataset ---------------------------------
   set.seed(123)
   dat <- data.frame(
@@ -101,7 +102,7 @@ test_that("glmmTMB, logistic", {
 })
 
 
-test_that("lme4, logistic", {
+test_that("lme4, bernoulli", {
   # dataset ---------------------------------
   set.seed(123)
   dat <- data.frame(
