@@ -465,6 +465,111 @@ test_that("glmmTMB, Nbinom2", {
 
 
 # ==============================================================================
+# Poisson zero-inflated mixed models, glmmTMB
+# ==============================================================================
+
+test_that("glmmTMB, Poisson zero-inflated", {
+  # dataset ---------------------------------
+  data(Salamanders, package = "glmmTMB")
+
+  # glmmTMB, no random slope -------------------------------------------------
+  m <- glmmTMB::glmmTMB(count ~ mined + (1 | site),
+    ziformula = ~ mined,
+    family = poisson(), data = Salamanders
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+
+  # glmmTMB, sqrt, no random slope -------------------------------------------------
+  m <- glmmTMB::glmmTMB(count ~ mined + (1 | site),
+    ziformula = ~ mined,
+    family = poisson("sqrt"), data = Salamanders
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches delta values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+
+  # glmmTMB, random slope -------------------------------------------------
+  m <- suppressWarnings(glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
+    ziformula = ~ mined,
+    family = poisson(), data = Salamanders
+  ))
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m, tolerance = 1e-8)
+  # we have slight differences here: MuMIn uses "var(fitted())" to exctract fixed
+  # effects variances, while insight uses "var(beta %*% t(mm))". The latter gives
+  # different values when random slopes are involved
+  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-1)
+  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-1)
+
+  # glmmTMB, sqrt, random slope -------------------------------------------------
+  m <- suppressWarnings(glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
+    ziformula = ~ mined,
+    family = poisson("sqrt"), data = Salamanders
+  ))
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m, tolerance = 1e-8)
+  # matches delta values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+})
+
+
+# ==============================================================================
+# neg-binomial1 zero-inflated mixed models, glmmTMB
+# ==============================================================================
+
+test_that("glmmTMB, Nbinom1 zero-inflated", {
+  # dataset ---------------------------------
+  data(Salamanders, package = "glmmTMB")
+
+  # no random slopes
+  m <- glmmTMB::glmmTMB(
+    count ~ mined + spp + (1 | site),
+    ziformula = ~ mined,
+    family = glmmTMB::nbinom1(),
+    data = Salamanders
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+
+  # with random slopes
+  m <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ mined + spp + cover + (1 + cover | site),
+    ziformula = ~ mined,
+    family = glmmTMB::nbinom1(),
+    data = Salamanders
+  ))
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m, tolerance = 1e-8)
+  # matches theoretical values
+  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-1)
+  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-1)
+
+  # no random slopes, sqrt
+  m <- glmmTMB::glmmTMB(
+    count ~ mined + spp + (1 | site),
+    ziformula = ~ mined,
+    family = glmmTMB::nbinom1("sqrt"),
+    data = Salamanders
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches delta values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+})
+
+
+# ==============================================================================
 # beta mixed models, glmmTMB
 # ==============================================================================
 
