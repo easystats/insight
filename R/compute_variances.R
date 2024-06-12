@@ -558,7 +558,7 @@
 
     resid.variance <- switch(faminfo$link_function,
       log = .variance_distributional(x, faminfo, sig, model_null, revar_null, name = name, verbose = verbose),
-      sqrt = 0.25,
+      sqrt = 0.25 * sig,
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else if (faminfo$family %in% c("Gamma", "gamma")) {
@@ -674,7 +674,8 @@
     mu <- switch(faminfo$family,
       beta = mu,
       ordbeta = stats::plogis(mu),
-      poisson = sqrt(exp(mu + 0.5 * as.vector(revar_null))),
+      poisson = ,
+      nbinom1 = sqrt(exp(mu + 0.5 * as.vector(revar_null))),
       exp(mu)
     )
   }
@@ -700,10 +701,10 @@
 
         # (zero-inflated) negative binomial ----
         # --------------------------------------
+        nbinom1 = sig,
         `zero-inflated negative binomial` = ,
         `negative binomial` = ,
         genpois = ,
-        nbinom1 = ,
         nbinom2 = .variance_family_nbinom(x, mu, sig, faminfo),
         truncated_nbinom2 = stats::family(x)$variance(mu, sig),
 
