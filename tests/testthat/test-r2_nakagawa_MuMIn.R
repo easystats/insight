@@ -36,7 +36,7 @@ test_that("glmmTMB, linear", {
     family = gaussian("inverse")
   ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
-  out2 <- performance::r2_nakagawa(m)
+  out2 <- suppressWarnings(performance::r2_nakagawa(m))
   expect_equal(out1[, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out1[, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
@@ -54,7 +54,7 @@ test_that("glmmTMB, linear", {
     family = gaussian("inverse")
   ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
-  out2 <- performance::r2_nakagawa(m)
+  out2 <- suppressWarnings(performance::r2_nakagawa(m))
   expect_equal(out1[, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out1[, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
