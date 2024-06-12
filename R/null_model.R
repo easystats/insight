@@ -39,7 +39,11 @@ null_model <- function(model, verbose = TRUE, ...) {
     stats::update(model, location = ~1, scale = ~1)
   } else if (inherits(model, "multinom")) {
     stats::update(model, ~1, trace = FALSE)
-  } else if (!is.null(offset_term)) {
+  } else if (is.null(offset_term)) {
+    # stats::update(model, ~1)
+    out <- stats::update(model, ~1, evaluate = FALSE)
+    eval(out, envir = parent.frame())
+  } else {
     tryCatch(
       do.call(stats::update, list(model, ~1, offset = str2lang(offset_term))),
       error = function(e) {
@@ -52,10 +56,6 @@ null_model <- function(model, verbose = TRUE, ...) {
         stats::update(model, ~1)
       }
     )
-  } else {
-    # stats::update(model, ~1)
-    out <- stats::update(model, ~1, evaluate = FALSE)
-    eval(out, envir = parent.frame())
   }
 }
 
@@ -77,10 +77,10 @@ null_model <- function(model, verbose = TRUE, ...) {
     re.terms <- paste0("(", sapply(.findbars(f), safe_deparse), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
     null.model <- tryCatch(
-      if (!is.null(offset_term)) {
-        suppressWarnings(do.call(stats::update, list(model, formula = nullform, offset = str2lang(offset_term))))
-      } else {
+      if (is.null(offset_term)) {
         suppressWarnings(stats::update(model, nullform))
+      } else {
+        suppressWarnings(do.call(stats::update, list(model, formula = nullform, offset = str2lang(offset_term))))
       },
       error = function(e) {
         msg <- e$message
