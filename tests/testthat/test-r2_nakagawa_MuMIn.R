@@ -88,6 +88,30 @@ test_that("glmmTMB, bernoulli", {
   expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
+  # glmmTMB, probit, no random slope -----------------------------------------
+  m <- glmmTMB::glmmTMB(
+    outcome ~ var_binom + var_cont + (1 | group),
+    data = dat,
+    family = binomial(link = "probit")
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+
+  # glmmTMB, probit, random slope -------------------------------------------------
+  m <- glmmTMB::glmmTMB(
+    outcome ~ var_binom + var_cont + (1 + var_cont | group),
+    data = dat,
+    family = binomial(link = "probit")
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+
   # glmmTMB, random slope -------------------------------------------------
   m <- glmmTMB::glmmTMB(
     outcome ~ var_binom + var_cont + (1 + var_cont | group),
@@ -137,6 +161,18 @@ test_that("lme4, bernoulli", {
   expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
+  # lme4, probit, no random slope ---------------------------------------------
+  m <- lme4::glmer(
+    outcome ~ var_binom + var_cont + (1 | group),
+    data = dat,
+    family = binomial(link = "probit")
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+
   # lme4, random slope -------------------------------------------------
   m <- lme4::glmer(
     outcome ~ var_binom + var_cont + (1 + var_cont | group),
@@ -148,4 +184,48 @@ test_that("lme4, bernoulli", {
   # matches theoretical values
   expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+
+  # lme4, probit, random slope -------------------------------------------------
+  m <- lme4::glmer(
+    outcome ~ var_binom + var_cont + (1 + var_cont | group),
+    data = dat,
+    family = binomial(link = "probit")
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+})
+
+
+test_that("glmmTMB, Poisson", {
+  # dataset ---------------------------------
+  data(Salamanders, package = "glmmTMB")
+
+  # glmmTMB, no random slope -------------------------------------------------
+  m <- glmmTMB(count ~ mined + (1 | site),
+    family = poisson(), data = Salamanders
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+})
+
+
+test_that("lme4, Poisson", {
+  # dataset ---------------------------------
+  data(Salamanders, package = "glmmTMB")
+
+  # glmmTMB, no random slope -------------------------------------------------
+  m <- lme4::glmer(count ~ mined + (1 | site),
+    family = poisson(), data = Salamanders
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 })

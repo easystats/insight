@@ -37,13 +37,23 @@
     model_component = model_component
   )
 
+  # we need also the RE variance for the NULL model
+  .null_model <- null_model(x, verbose = FALSE)
+  vals_null <- .get_variance_information(
+    .null_model,
+    faminfo = faminfo,
+    name_fun = name_fun,
+    verbose = verbose,
+    model_component = model_component
+  )
+
   # Test for non-zero random effects ((near) singularity)
   no_random_variance <- FALSE
   if (performance::check_singularity(x, tolerance = tolerance) && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
       format_warning(
-        sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).", name_full),
-        "Solution: Respecify random structure! You may also decrease the `tolerance` level to enforce the calculation of random effect variances."
+        sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).", name_full), # nolint
+        "Solution: Respecify random structure! You may also decrease the `tolerance` level to enforce the calculation of random effect variances." # nolint
       )
     }
     no_random_variance <- TRUE
@@ -52,6 +62,7 @@
   # initialize return values, if not all components are requested
   var.fixed <- NULL
   var.random <- NULL
+  var.random_null <- NULL
   var.residual <- NULL
   var.distribution <- NULL
   var.dispersion <- NULL
@@ -83,6 +94,18 @@
     var.random <- .compute_variance_random(not.obs.terms, x = x, vals = vals)
   }
 
+  # Variance of random effects for NULL model
+  if (!performance::check_singularity(.null_model, tolerance = tolerance)) {
+    # Separate observation variance from variance of random effects
+    nr <- vapply(vals_null$re, nrow, numeric(1))
+    not.obs.terms_null <- names(nr[nr != n_obs(.null_model)])
+    var.random_null <- .compute_variance_random(
+      not.obs.terms_null,
+      x = .null_model,
+      vals = vals_null
+    )
+  }
+
   # Residual variance, which is defined as the variance due to
   # additive dispersion and the distribution-specific variance (Johnson et al. 2014)
 
@@ -91,6 +114,7 @@
       x = x,
       var.cor = vals$vc,
       faminfo,
+      revar_null = var.random_null,
       name = name_full,
       verbose = verbose
     )
@@ -483,7 +507,7 @@
 
 # distribution-specific variance (Nakagawa et al. 2017) ----
 # ----------------------------------------------------------
-.compute_variance_distribution <- function(x, var.cor, faminfo, name, verbose = TRUE) {
+.compute_variance_distribution <- function(x, var.cor, faminfo, revar_null = NULL, name, verbose = TRUE) {
   sig <- .safe(get_sigma(x))
 
   if (is.null(sig)) {
@@ -525,7 +549,7 @@
     # -----------
 
     dist.variance <- switch(faminfo$link_function,
-      log = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      log = .variance_distributional(x, faminfo, sig, revar_null, name = name, verbose = verbose),
       sqrt = 0.25,
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
@@ -594,7 +618,7 @@
 # Nakagawa et al. 2017 propose three different methods, here we only rely
 # on the lognormal-approximation.
 #
-.variance_distributional <- function(x, faminfo, sig, name, verbose = TRUE) {
+.variance_distributional <- function(x, faminfo, sig, revar_null = NULL, name, verbose = TRUE) {
   check_if_installed("lme4", "to compute variances for mixed models")
 
   # lognormal-approximation of distributional variance,
@@ -618,7 +642,6 @@
     if (inherits(.null_model, "brmsfit")) {
       null_fixef <- as.vector(null_fixef)[1]
     }
-
     mu <- null_fixef
   }
 
@@ -629,21 +652,17 @@
       )
     }
     return(0)
-  } else if (is.null(faminfo$family)) {
+  }
+
+  if (is.null(faminfo$family)) {
     mu <- exp(mu)
   } else {
     # transform mu
     mu <- switch(faminfo$family,
       beta = mu,
       ordbeta = stats::plogis(mu),
+      poisson = sqrt(exp(mu + 0.5 * as.vector(revar_null))),
       exp(mu)
-    )
-  }
-
-  # check if mu is too close to zero, but not for beta-distribution
-  if (mu < 6 && verbose && isFALSE(faminfo$family %in% c("beta", "ordbeta"))) {
-    format_warning(
-      sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.", mu, name)
     )
   }
 
@@ -653,8 +672,9 @@
 
         # (zero-inflated) poisson ----
         # ----------------------------
-        `zero-inflated poisson` = ,
-        poisson = .variance_family_poisson(x, mu, faminfo),
+        `zero-inflated poisson` = .variance_family_poisson(x, mu, faminfo),
+        poisson = 1,
+        # delta = 1 / sqrt(mu)
 
         # hurdle-poisson ----
         # -------------------
