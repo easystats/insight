@@ -39,9 +39,9 @@
 
   # we also need necessary model information, like fixed and random effects,
   # variance-covariance matrix etc. for the null model
-  .null_model <- null_model(x, verbose = FALSE)
+  model_null <- null_model(x, verbose = FALSE)
   vals_null <- .get_variance_information(
-    .null_model,
+    model_null,
     faminfo = faminfo,
     name_fun = name_fun,
     verbose = verbose,
@@ -96,13 +96,13 @@
   }
 
   # Variance of random effects for NULL model
-  if (!performance::check_singularity(.null_model, tolerance = tolerance)) {
+  if (!performance::check_singularity(model_null, tolerance = tolerance)) {
     # Separate observation variance from variance of random effects
     nr <- vapply(vals_null$re, nrow, numeric(1))
-    not.obs.terms_null <- names(nr[nr != n_obs(.null_model)])
+    not.obs.terms_null <- names(nr[nr != n_obs(model_null)])
     var.random_null <- .compute_variance_random(
       not.obs.terms_null,
-      x = .null_model,
+      x = model_null,
       vals = vals_null
     )
   }
@@ -115,6 +115,7 @@
       x = x,
       var.cor = vals$vc,
       faminfo,
+      model_null = model_null,
       revar_null = var.random_null,
       name = name_full,
       verbose = verbose
@@ -508,7 +509,13 @@
 
 # distribution-specific variance (Nakagawa et al. 2017) ----
 # ----------------------------------------------------------
-.compute_variance_distribution <- function(x, var.cor, faminfo, revar_null = NULL, name, verbose = TRUE) {
+.compute_variance_distribution <- function(x,
+                                           var.cor,
+                                           faminfo,
+                                           model_null = NULL,
+                                           revar_null = NULL,
+                                           name,
+                                           verbose = TRUE) {
   sig <- .safe(get_sigma(x))
 
   if (is.null(sig)) {
@@ -550,7 +557,7 @@
     # -----------
 
     resid.variance <- switch(faminfo$link_function,
-      log = .variance_distributional(x, faminfo, sig, revar_null, name = name, verbose = verbose),
+      log = .variance_distributional(x, faminfo, sig, model_null, revar_null, name = name, verbose = verbose),
       sqrt = 0.25,
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
@@ -619,28 +626,32 @@
 # Nakagawa et al. 2017 propose three different methods, here we only rely
 # on the lognormal-approximation.
 #
-.variance_distributional <- function(x, faminfo, sig, revar_null = NULL, name, verbose = TRUE) {
+.variance_distributional <- function(x,
+                                     faminfo,
+                                     sig,
+                                     model_null = NULL,
+                                     revar_null = NULL,
+                                     name,
+                                     verbose = TRUE) {
   check_if_installed("lme4", "to compute variances for mixed models")
 
   # lognormal-approximation of distributional variance,
   # see Nakagawa et al. 2017
-
   # in general want log(1+var(x)/mu^2)
-  .null_model <- null_model(x, verbose = verbose)
 
   # check if null-model could be computed
-  if (is.null(.null_model)) {
+  if (is.null(model_null)) {
     mu <- NA
   } else {
-    if (inherits(.null_model, "cpglmm")) {
+    if (inherits(model_null, "cpglmm")) {
       # installed?
       check_if_installed("cplm")
-      null_fixef <- unname(cplm::fixef(.null_model))
+      null_fixef <- unname(cplm::fixef(model_null))
     } else {
-      null_fixef <- unname(.collapse_cond(lme4::fixef(.null_model)))
+      null_fixef <- unname(.collapse_cond(lme4::fixef(model_null)))
     }
     # brmsfit also returns SE and CI, so we just need the first value
-    if (inherits(.null_model, "brmsfit")) {
+    if (inherits(model_null, "brmsfit")) {
       null_fixef <- as.vector(null_fixef)[1]
     }
     mu <- null_fixef
@@ -655,6 +666,7 @@
     return(0)
   }
 
+  # transform expected mean of the null model
   if (is.null(faminfo$family)) {
     mu <- exp(mu)
   } else {
