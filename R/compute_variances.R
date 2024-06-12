@@ -12,6 +12,9 @@
   ## Major revisions and adaption to more complex models and other packages
   ## by Daniel Lüdecke
 
+  # needed for singularity check
+  check_if_installed("performance", reason = "to check for singularity")
+
   faminfo <- model_info(x, verbose = FALSE)
 
   if (any(faminfo$family == "truncated_nbinom1")) {
@@ -36,7 +39,7 @@
 
   # Test for non-zero random effects ((near) singularity)
   no_random_variance <- FALSE
-  if (.is_singular(x, vals, tolerance = tolerance) && !(component %in% c("slope", "intercept"))) {
+  if (performance::check_singularity(x, tolerance = tolerance) && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
       format_warning(
         sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).", name_full),
