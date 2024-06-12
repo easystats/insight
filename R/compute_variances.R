@@ -44,7 +44,7 @@
 
   # we also need necessary model information, like fixed and random effects,
   # variance-covariance matrix etc. for the null model
-  model_null <- null_model(x, verbose = FALSE)
+  model_null <- .safe(null_model(x, verbose = FALSE))
   vals_null <- .get_variance_information(
     model_null,
     faminfo = faminfo,
@@ -101,7 +101,7 @@
   }
 
   # Variance of random effects for NULL model
-  if (!performance::check_singularity(model_null, tolerance = tolerance)) {
+  if (!performance::check_singularity(model_null, tolerance = tolerance) && !is.null(vals_null)) {
     # Separate observation variance from variance of random effects
     nr <- vapply(vals_null$re, nrow, numeric(1))
     not.obs.terms_null <- names(nr[nr != n_obs(model_null)])
@@ -206,6 +206,11 @@
                                       name_fun = "get_variances",
                                       verbose = TRUE,
                                       model_component = "conditional") {
+  # sanity check
+  if (is.null(x)) {
+    return(NULL)
+  }
+
   # installed?
   check_if_installed("lme4", reason = "to compute variances for mixed models")
 
