@@ -495,7 +495,7 @@ test_that("glmmTMB, Poisson zero-inflated", {
 
   # glmmTMB, no random slope -------------------------------------------------
   m <- glmmTMB::glmmTMB(count ~ mined + (1 | site),
-    ziformula = ~ mined,
+    ziformula = ~mined,
     family = poisson(), data = Salamanders
   )
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
@@ -506,7 +506,7 @@ test_that("glmmTMB, Poisson zero-inflated", {
 
   # glmmTMB, sqrt, no random slope -------------------------------------------------
   m <- glmmTMB::glmmTMB(count ~ mined + (1 | site),
-    ziformula = ~ mined,
+    ziformula = ~mined,
     family = poisson("sqrt"), data = Salamanders
   )
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
@@ -517,7 +517,7 @@ test_that("glmmTMB, Poisson zero-inflated", {
 
   # glmmTMB, random slope -------------------------------------------------
   m <- suppressWarnings(glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
-    ziformula = ~ mined,
+    ziformula = ~mined,
     family = poisson(), data = Salamanders
   ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
@@ -530,7 +530,7 @@ test_that("glmmTMB, Poisson zero-inflated", {
 
   # glmmTMB, sqrt, random slope -------------------------------------------------
   m <- suppressWarnings(glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
-    ziformula = ~ mined,
+    ziformula = ~mined,
     family = poisson("sqrt"), data = Salamanders
   ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
@@ -552,7 +552,7 @@ test_that("glmmTMB, Nbinom1 zero-inflated", {
   # no random slopes
   m <- glmmTMB::glmmTMB(
     count ~ mined + spp + (1 | site),
-    ziformula = ~ mined,
+    ziformula = ~mined,
     family = glmmTMB::nbinom1(),
     data = Salamanders
   )
@@ -565,7 +565,7 @@ test_that("glmmTMB, Nbinom1 zero-inflated", {
   # with random slopes
   m <- suppressWarnings(glmmTMB::glmmTMB(
     count ~ mined + spp + cover + (1 + cover | site),
-    ziformula = ~ mined,
+    ziformula = ~mined,
     family = glmmTMB::nbinom1(),
     data = Salamanders
   ))
@@ -578,7 +578,7 @@ test_that("glmmTMB, Nbinom1 zero-inflated", {
   # no random slopes, sqrt
   m <- glmmTMB::glmmTMB(
     count ~ mined + spp + (1 | site),
-    ziformula = ~ mined,
+    ziformula = ~mined,
     family = glmmTMB::nbinom1("sqrt"),
     data = Salamanders
   )
