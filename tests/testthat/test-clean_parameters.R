@@ -1,6 +1,5 @@
 test_that("clean_parameters blavaan", {
   skip_on_cran()
-  skip_if(TRUE) ## FIXME: blavaan is currently broken
   skip_if_not_installed("blavaan")
   skip_if_not_installed("lavaan")
   skip_if_not_installed("Rcpp")
