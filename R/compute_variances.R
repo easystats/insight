@@ -27,6 +27,11 @@
     return(NA)
   }
 
+  # rename lme4 neg-binom family
+  if (startsWith(faminfo$family, "Negative Binomial")) {
+    faminfo$family <- "negative binomial"
+  }
+
   # get necessary model information, like fixed and random effects,
   # variance-covariance matrix etc.
   vals <- .get_variance_information(
@@ -676,7 +681,8 @@
       ordbeta = stats::plogis(mu),
       poisson = ,
       nbinom1 = ,
-      nbinom2 = exp(mu + 0.5 * as.vector(revar_null)),
+      nbinom2 = ,
+      `negative binomial` = exp(mu + 0.5 * as.vector(revar_null)),
       exp(mu)
     )
   }
@@ -703,9 +709,9 @@
         # (zero-inflated) negative binomial ----
         # --------------------------------------
         nbinom1 = ,
-        nbinom2 = sig,
+        nbinom2 = ,
+        `negative binomial` = sig,
         `zero-inflated negative binomial` = ,
-        `negative binomial` = ,
         genpois = .variance_family_nbinom(x, mu, sig, faminfo),
         truncated_nbinom2 = stats::family(x)$variance(mu, sig),
 
@@ -730,7 +736,8 @@
 
       # now compute cvsquared
       switch(faminfo$family,
-        nbinom2 = (1 / mu) + (1 / sig),
+        nbinom2 = ,
+        `negative binomial` = (1 / mu) + (1 / sig),
         poisson = ,
         nbinom1 = vv / mu,
         vv / mu^2

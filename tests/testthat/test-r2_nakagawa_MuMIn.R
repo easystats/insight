@@ -385,6 +385,27 @@ test_that("lme4, Poisson", {
 
 
 # ==============================================================================
+# neg-binomial mixed models, lme4
+# ==============================================================================
+
+test_that("glmer, negbin", {
+  # dataset ---------------------------------
+  data(Salamanders, package = "glmmTMB")
+
+  # no random slopes
+  m <- lme4::glmer.nb(
+    count ~ mined + spp + (1 | site),
+    data = Salamanders
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[2, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+})
+
+
+# ==============================================================================
 # neg-binomial1 mixed models, glmmTMB
 # ==============================================================================
 
