@@ -556,7 +556,7 @@
     # --------------------------
 
     # we need this to adjust for "cbind()" outcomes
-    resp_value <- get_response(x)
+    resp_value <- get_data(x, source = "frame")[, find_response(x)]
     if (!is.null(ncol(resp_value)) && ncol(resp_value) > 1) {
       y_factor <- mean(rowSums(resp_value, na.rm = TRUE))
     } else {

@@ -319,8 +319,8 @@ test_that("lme4, binomial", {
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)
   # matches theoretical values
-  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-1)
-  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-1)
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-3)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-3)
 })
 
 
@@ -341,8 +341,8 @@ test_that("glmmTMB, binomial", {
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)
   # matches theoretical values
-  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-1)
-  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-1)
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-3)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-3)
 })
 
 
