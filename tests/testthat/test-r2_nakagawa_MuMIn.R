@@ -7,6 +7,10 @@ skip_if_not_installed("performance")
 skip_if_not_installed("datawizard")
 
 
+# ==============================================================================
+# linear mixed models, glmmTMB
+# ==============================================================================
+
 test_that("glmmTMB, linear", {
   data(sleepstudy, package = "lme4")
 
@@ -67,17 +71,9 @@ test_that("glmmTMB, linear", {
 })
 
 
-test_that("glmmTMB, Gamma", {
-  data(sleepstudy, package = "lme4")
-
-  # linear, no random slope
-  m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = sleepstudy, family = Gamma())
-  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
-  out2 <- performance::r2_nakagawa(m)
-  expect_equal(out1[, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
-  expect_equal(out1[, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
-})
-
+# ==============================================================================
+# linear mixed models, lme4
+# ==============================================================================
 
 test_that("lme4, linear", {
   data(sleepstudy, package = "lme4")
@@ -97,6 +93,26 @@ test_that("lme4, linear", {
   expect_equal(out1[, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 })
 
+
+# ==============================================================================
+# Gamma mixed models, glmmTMB
+# ==============================================================================
+
+test_that("glmmTMB, Gamma", {
+  data(sleepstudy, package = "lme4")
+
+  # linear, no random slope
+  m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = sleepstudy, family = Gamma())
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  expect_equal(out1[, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out1[, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+})
+
+
+# ==============================================================================
+# Bernoulli mixed models, glmmTMB
+# ==============================================================================
 
 test_that("glmmTMB, bernoulli", {
   # dataset ---------------------------------
@@ -195,6 +211,10 @@ test_that("glmmTMB, bernoulli", {
 })
 
 
+# ==============================================================================
+# Bernoulli mixed models, lme4
+# ==============================================================================
+
 test_that("lme4, bernoulli", {
   # dataset ---------------------------------
   set.seed(123)
@@ -292,6 +312,10 @@ test_that("lme4, bernoulli", {
 })
 
 
+# ==============================================================================
+# Poisson mixed models, glmmTMB
+# ==============================================================================
+
 test_that("glmmTMB, Poisson", {
   # dataset ---------------------------------
   data(Salamanders, package = "glmmTMB")
@@ -339,6 +363,10 @@ test_that("glmmTMB, Poisson", {
   expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 })
 
+
+# ==============================================================================
+# Poisson mixed models, glmmTMB
+# ==============================================================================
 
 test_that("lme4, Poisson", {
   # dataset ---------------------------------
