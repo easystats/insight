@@ -4,7 +4,7 @@
 
 * Massive overhaul of `get_variance()`. The function should be now more
   accurate for different distributional families, in particular for
-  mixed regressiom models with Beta family.
+  mixed regression models with Beta family.
 
 * Improved accuracy of singularity-checks in `get_variance()`.
 
