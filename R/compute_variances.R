@@ -677,7 +677,7 @@
   } else {
     # transform mu
     mu <- switch(faminfo$family,
-      beta = mu,
+      beta = ,
       ordbeta = stats::plogis(mu),
       poisson = ,
       nbinom1 = ,
@@ -781,11 +781,15 @@
 # Get distributional variance for beta-family
 # ----------------------------------------------
 .variance_family_beta <- function(x, mu, phi) {
-  if (inherits(x, "MixMod")) {
-    stats::family(x)$variance(mu)
-  } else {
-    mu * (1 - mu) / (1 + phi)
-  }
+  stats::family(x)$variance(mu)
+  # if (inherits(x, "MixMod")) {
+  #   stats::family(x)$variance(mu)
+  # } else {
+  #   # was:
+  #   # mu * (1 - mu) / (1 + phi)
+  #   # but that code is not what "glmmTMB" uses for the beta family
+  #   mu * (1 - mu)
+  # }
 }
 
 
