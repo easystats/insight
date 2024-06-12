@@ -8,7 +8,7 @@ skip_if_not_installed("datawizard")
 
 
 # ==============================================================================
-# linear mixed models, glmmTMB
+# linear mixed models, glmmTMB ----
 # ==============================================================================
 
 test_that("glmmTMB, linear", {
@@ -72,7 +72,7 @@ test_that("glmmTMB, linear", {
 
 
 # ==============================================================================
-# linear mixed models, lme4
+# linear mixed models, lme4 ----
 # ==============================================================================
 
 test_that("lme4, linear", {
@@ -95,7 +95,7 @@ test_that("lme4, linear", {
 
 
 # ==============================================================================
-# Gamma mixed models, glmmTMB
+# Gamma mixed models, glmmTMB ----
 # ==============================================================================
 
 test_that("glmmTMB, Gamma", {
@@ -113,7 +113,7 @@ test_that("glmmTMB, Gamma", {
 
 
 # ==============================================================================
-# Bernoulli mixed models, glmmTMB
+# Bernoulli mixed models, glmmTMB ----
 # ==============================================================================
 
 test_that("glmmTMB, bernoulli", {
@@ -214,7 +214,7 @@ test_that("glmmTMB, bernoulli", {
 
 
 # ==============================================================================
-# Bernoulli mixed models, lme4
+# Bernoulli mixed models, lme4 ----
 # ==============================================================================
 
 test_that("lme4, bernoulli", {
@@ -303,7 +303,51 @@ test_that("lme4, bernoulli", {
 
 
 # ==============================================================================
-# Poisson mixed models, glmmTMB
+# Binomial mixed models, lme4 ----
+# ==============================================================================
+
+test_that("lme4, binomial", {
+  # dataset
+  data(cbpp, package = "lme4")
+
+  # lme4, no random slope ----------------------------------------------------
+  m <- lme4::glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    data = cbpp,
+    family = binomial()
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-1)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-1)
+})
+
+
+# ==============================================================================
+# Binomial mixed models, glmmTMB ----
+# ==============================================================================
+
+test_that("glmmTMB, binomial", {
+  # dataset
+  data(cbpp, package = "lme4")
+
+  # lme4, no random slope ----------------------------------------------------
+  m <- glmmTMB::glmmTMB(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    data = cbpp,
+    family = binomial()
+  )
+  out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
+  out2 <- performance::r2_nakagawa(m)
+  # matches theoretical values
+  expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-1)
+  expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-1)
+})
+
+
+# ==============================================================================
+# Poisson mixed models, glmmTMB ----
 # ==============================================================================
 
 test_that("glmmTMB, Poisson", {
@@ -355,7 +399,7 @@ test_that("glmmTMB, Poisson", {
 
 
 # ==============================================================================
-# Poisson mixed models, lme4
+# Poisson mixed models, lme4 ----
 # ==============================================================================
 
 test_that("lme4, Poisson", {
@@ -385,7 +429,7 @@ test_that("lme4, Poisson", {
 
 
 # ==============================================================================
-# neg-binomial mixed models, lme4
+# neg-binomial mixed models, lme4 ----
 # ==============================================================================
 
 test_that("glmer, negbin", {
@@ -406,7 +450,7 @@ test_that("glmer, negbin", {
 
 
 # ==============================================================================
-# neg-binomial1 mixed models, glmmTMB
+# neg-binomial1 mixed models, glmmTMB ----
 # ==============================================================================
 
 test_that("glmmTMB, Nbinom1", {

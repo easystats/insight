@@ -555,11 +555,19 @@
     # binomial / bernoulli  ----
     # --------------------------
 
+    # we need this to adjust for "cbind()" outcomes
+    resp_value <- get_response(x)
+    if (!is.null(ncol(resp_value)) && ncol(resp_value) > 1) {
+      y_factor <- mean(rowSums(resp_value, na.rm = TRUE))
+    } else {
+      y_factor <- 1
+    }
+
     resid.variance <- switch(faminfo$link_function,
-      logit = pi^2 / 3,
-      probit = 1,
+      logit = pi^2 / (3 * y_factor),
+      probit = 1 / y_factor,
       cloglog = ,
-      clogloglink = pi^2 / 6,
+      clogloglink = pi^2 / (6 * y_factor),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else if (faminfo$is_count) {
