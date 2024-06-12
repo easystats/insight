@@ -3,7 +3,7 @@
                                name_fun = NULL,
                                name_full = NULL,
                                verbose = TRUE,
-                               tolerance = 1e-5,
+                               tolerance = 1e-8,
                                model_component = "conditional") {
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
