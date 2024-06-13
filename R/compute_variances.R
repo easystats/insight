@@ -627,6 +627,7 @@
       faminfo = faminfo,
       sig = sig,
       model_null = model_null,
+      revar_null = revar_null,
       approx_method = approx_method,
       name = name,
       verbose = verbose
@@ -673,6 +674,7 @@
         faminfo = faminfo,
         sig = sig,
         model_null = model_null,
+        revar_null = revar_null,
         name = name,
         approx_method = approx_method,
         verbose = verbose
@@ -689,6 +691,7 @@
         faminfo = faminfo,
         sig = sig,
         model_null = model_null,
+        revar_null = revar_null,
         approx_method = approx_method,
         name = name,
         verbose = verbose
