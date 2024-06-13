@@ -1,6 +1,7 @@
 skip_on_cran()
 
 skip_if_not_installed("cplm")
+skip_if_not_installed("glmmTMB")
 skip_if_not_installed("performance")
 
 # cplm::cpglmm doesn't work
@@ -76,7 +77,17 @@ test_that("cplm, tweedie", {
   # delta
   R2glmmM <- VarF / (VarF + sum(as.numeric(cplm::VarCorr(parmodCPf))) + VarOdF)
   R2glmmC <- (VarF + sum(as.numeric(cplm::VarCorr(parmodCPf)))) / (VarF + sum(as.numeric(cplm::VarCorr(parmodCPf))) + VarOdF)
-  out <- performance::r2_nakagawa(parmodCPf, null_model = parmodCPr, approximation = "delta")
-  expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
-  expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+  out2 <- performance::r2_nakagawa(parmodCPf, null_model = parmodCPr, approximation = "delta")
+  expect_equal(out2$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out2$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # results for glmmTMB are very close to cplm
+  m <- glmmTMB::glmmTMB(
+    Parasite ~ Sex + Treatment + Habitat + (1 | Population) + (1 | Container),
+    family = glmmTMB::tweedie(1),
+    data = DataAll
+  )
+  out3 <- performance::r2_nakagawa(m)
+  expect_equal(out$R2_conditional, out3$R2_conditional, tolerance = 1e-2, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, out3$R2_marginal, tolerance = 1e-2, ignore_attr = TRUE)
 })
