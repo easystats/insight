@@ -590,20 +590,12 @@
     # --------------------------
 
     # we need this to adjust for "cbind()" outcomes
-    resp_value <- .safe(stats::model.frame(x)[, find_response(x)])
-    # sanity check
-    if (is.null(resp_value)) {
-      resp_value <- .safe(get_data(x, source = "frame")[, find_response(x)])
-    }
-    if (!is.null(resp_value) && !is.null(ncol(resp_value)) && ncol(resp_value) > 1) {
-      y_factor <- mean(rowSums(resp_value, na.rm = TRUE))
-    } else {
-      y_factor <- 1
-    }
+    y_factor <- .binomial_response_weight(x)
 
-    # for observation level approximation
-    fe_null <- .safe(as.numeric(.collapse_cond(lme4::fixef(model_null))))
-    pmean <- .safe(as.numeric(stats::plogis(fe_null - 0.5 * sum(revar_null) * tanh(fe_null * (1 + 2 * exp(-0.5 * sum(revar_null))) / 6)))) # nolint
+    # for observation level approximation, when we don't want the "fixed"
+    # residual variance, pi^2/3, but the variance based on the distribution
+    # of the response
+    pmean <- .obs_level_variance(model_null, revar_null)
 
     # sanity check - clmm-models are "binomial" but have no pmean
     if (is.null(pmean) && identical(approx_method, "observation_level")) {
@@ -713,6 +705,35 @@
   resid.variance
 }
 
+
+# helper for .compute_variance_distribution()
+#
+# calculate weight if we have a "cbind()" response for binomial models
+# needed to weight the residual variance
+.binomial_response_weight <- function(x) {
+  # we need this to adjust for "cbind()" outcomes
+  resp_value <- .safe(stats::model.frame(x)[, find_response(x)])
+  # sanity check
+  if (is.null(resp_value)) {
+    resp_value <- .safe(get_data(x, source = "frame")[, find_response(x)])
+  }
+  if (!is.null(resp_value) && !is.null(ncol(resp_value)) && ncol(resp_value) > 1) {
+    mean(rowSums(resp_value, na.rm = TRUE))
+  } else {
+    1
+  }
+}
+
+
+# helper for .compute_variance_distribution()
+#
+# for observation level approximation, when we don't want the "fixed"
+# residual variance, pi^2/3, but the variance based on the distribution
+# of the response
+.obs_level_variance <- function(model_null, revar_null) {
+  fe_null <- .safe(as.numeric(.collapse_cond(lme4::fixef(model_null))))
+  .safe(as.numeric(stats::plogis(fe_null - 0.5 * sum(revar_null) * tanh(fe_null * (1 + 2 * exp(-0.5 * sum(revar_null))) / 6)))) # nolint
+}
 
 
 
