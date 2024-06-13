@@ -6,6 +6,7 @@ library(glmmADMB)
 library(lme4)
 library(MASS)
 library(performance)
+library(insight)
 
 
 # 12 different populations n = 960
@@ -38,8 +39,7 @@ PopulationE <- rnorm(12, 0, sqrt(0.4))
 ContainerE <- rnorm(120, 0, sqrt(0.05))
 # generation of response values on latent scale (!) based on fixed effects,
 # random effects and residual errors
-EggL <- with(DataFemale, 1.1 + 0.5 * (as.numeric(Treatment) - 1) + 0.1 * (as.numeric(Habitat) -
-  1) + PopulationE[Population] + ContainerE[Container] + rnorm(480, 0, sqrt(0.1)))
+EggL <- with(DataFemale, 1.1 + 0.5 * (as.numeric(Treatment) - 1) + 0.1 * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container] + rnorm(480, 0, sqrt(0.1)))
 # data generation (on data scale!) based on Poisson distribution
 DataFemale$Egg <- rpois(length(EggL), exp(EggL))
 
@@ -51,9 +51,7 @@ PopulationE <- rnorm(12, 0, sqrt(0.5))
 ContainerE <- rnorm(120, 0, sqrt(0.8))
 # generation of response values on latent scale (!) based on fixed effects
 # and random effects
-ParasiteL <- with(DataAll, 1.8 + 2 * (-1) * (as.numeric(Sex) - 1) + 0.8 * (-1) *
-  (as.numeric(Treatment) - 1) + 0.7 * (as.numeric(Habitat) - 1) + PopulationE[Population] +
-  ContainerE[Container])
+ParasiteL <- with(DataAll, 1.8 + 2 * (-1) * (as.numeric(Sex) - 1) + 0.8 * (-1) * (as.numeric(Treatment) - 1) + 0.7 * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container])
 # data generation (on data scale!) based on negative binomial distributions;
 # size = theta
 DataAll$Parasite <- rnbinom(length(ParasiteL), size = 5, mu = exp(ParasiteL))
@@ -64,22 +62,16 @@ PopulationE <- rnorm(12, 0, sqrt(1.3))
 ContainerE <- rnorm(120, 0, sqrt(0.3))
 # data generation based on fixed effects, random effects and random
 # residuals errors
-DataAll$BodyL <- 15 + 3 * (-1) * (as.numeric(Sex) - 1) + 0.4 * (as.numeric(Treatment) -
-  1) + 0.15 * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container] +
-  rnorm(960, 0, sqrt(1.2))
-
+DataAll$BodyL <- 15 + 3 * (-1) * (as.numeric(Sex) - 1) + 0.4 * (as.numeric(Treatment) - 1) + 0.15 * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container] + rnorm(960, 0, sqrt(1.2))
 # simulation of the underlying random effects (Population and Container with
 # variance of 0.2 and 0.2, respectively)
 PopulationE <- rnorm(12, 0, sqrt(0.2))
 ContainerE <- rnorm(120, 0, sqrt(0.2))
 # generation of response values on latent scale (!) based on fixed effects
 # and random effects
-ExplorationL <- with(DataAll, 4 + 1 * (-1) * (as.numeric(Sex) - 1) + 2 * (as.numeric(Treatment) -
-  1) + 0.5 * (-1) * (as.numeric(Habitat) - 1) + PopulationE[Population] +
-  ContainerE[Container])
+ExplorationL <- with(DataAll, 4 + 1 * (-1) * (as.numeric(Sex) - 1) + 2 * (as.numeric(Treatment) - 1) + 0.5 * (-1) * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container])
 # data generation (on data scale!) based on gamma distribution; size = theta
-DataAll$Exploration <- rgamma(length(ExplorationL), shape = exp(ExplorationL) *
-  0.3, rate = 0.3)
+DataAll$Exploration <- rgamma(length(ExplorationL), shape = exp(ExplorationL) * 0.3, rate = 0.3)
 
 # Subset the design matrix (only males express colour morphs)
 DataMale <- subset(Data, Sex == "Male")
@@ -89,8 +81,7 @@ PopulationE <- rnorm(12, 0, sqrt(1.2))
 ContainerE <- rnorm(120, 0, sqrt(0.2))
 # generation of response values on latent scale (!) based on fixed effects
 # and random effects
-ColourL <- with(DataMale, 0.8 * (-1) + 0.8 * (as.numeric(Treatment) - 1) + 0.5 *
-  (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container])
+ColourL <- with(DataMale, 0.8 * (-1) + 0.8 * (as.numeric(Treatment) - 1) + 0.5 * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container])
 # data generation (on data scale!) based on binomial distribution
 DataMale$Colour <- rbinom(length(ColourL), 1, plogis(ColourL))
 
@@ -119,7 +110,7 @@ VarOdN <- omegaN / lambda # the delta method
 VarOlN <- log(1 + omegaN / lambda) # log-normal approximation
 VarOtN <- trigamma(lambda / omegaN) # trigamma function
 # comparing the three
-c(VarOdN = VarOdN, VarOlN = VarOlN, VarOlN = VarOtN)
+c(VarOdN = VarOdN, VarOlN = VarOlN, VarOtN = VarOtN)
 
 # Full model
 omegaF <- fecmodADMBf$alpha # overdispersion omega is alpha in glmmadmb
@@ -127,10 +118,10 @@ VarOdF <- omegaF / lambda # the delta method
 VarOlF <- log(1 + omegaF / lambda) # log-normal approximation
 VarOtF <- trigamma(lambda / omegaF) # trigamma function
 # comparing the three
-c(VarOdF = VarOdF, VarOlF = VarOlF, VarOlF = VarOtF)
+c(VarOdF = VarOdF, VarOlF = VarOlF, VarOtF = VarOtF)
 
 # R2[GLMM(m)] - marginal R2[GLMM]
-R2glmmM <- VarF/(VarF + sum(as.numeric(VarCorr(fecmodADMBf))) + VarOlF)
+R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(fecmodADMBf))) + VarOlF)
 # R2[GLMM(c)] - conditional R2[GLMM] for full model
 R2glmmC <- (VarF + sum(as.numeric(VarCorr(fecmodADMBf)))) / (VarF + sum(as.numeric(VarCorr(fecmodADMBf))) + VarOlF)
 # Raw unadjusted ICC[Population]
@@ -148,7 +139,7 @@ performance::r2_nakagawa(fecmodADMBf)
 
 
 # ==============================================================
-# Quasi-Poisson with log link (page 5) -------------------------
+# Quasi-Poisson with log link (page 7) -------------------------
 # glmmPQL- -----------------------------------------------------
 # ==============================================================
 
@@ -202,4 +193,51 @@ c(
 )
 
 performance::r2_nakagawa(fecmodPQLf, null_model = fecmodPQLr)
-get_variance(fecmodPQLf, null_model = fecmodPQLr)
+
+
+# ==============================================================
+# Neg bin with log link (page 9) -------------------------
+# glmmadmb- -----------------------------------------------------
+# ==============================================================
+
+# Fit null model without fixed effects (but including all random effects)
+parmodADMBr <- glmmadmb(Parasite ~ 1 + (1 | Population) + (1 | Container), family = "nbinom2", data = DataAll)
+# Fit alternative model including fixed and all random effects
+parmodADMBf <- glmmadmb(Parasite ~ Sex + Treatment + Habitat + (1 | Population) +  (1 | Container), family = "nbinom2", data = DataAll)
+
+# Calculation of the variance in fitted values
+VarF <- var(as.vector(model.matrix(parmodADMBf) %*% fixef(parmodADMBf)))
+# getting the observation-level variance Null model
+thetaN <- parmodADMBr$alpha # note that theta is called alpha in glmmadmb
+lambda <- as.numeric(exp(fixef(parmodADMBr) + 0.5 * (as.numeric(VarCorr(parmodADMBr)[1]) + as.numeric(VarCorr(parmodADMBr)[2]))))
+# lambda2 <- mean(DataAll$Parasite)
+VarOdN <- 1 / lambda + 1 / thetaN # the delta method
+VarOlN <- log(1 + (1 / lambda) + (1 / thetaN)) # log-normal approximation
+VarOtN <- trigamma((1 / lambda + 1 / thetaN)^(-1)) # trigamma function
+# comparing the three
+c(VarOdN = VarOdN, VarOlN = VarOlN, VarOtN = VarOtN)
+
+thetaF <- parmodADMBf$alpha # note that theta is called alpha in glmmadmb
+VarOdF <- 1 / lambda + 1 / thetaF # the delta method
+VarOlF <- log(1 + (1 / lambda) + (1 / thetaF)) # log-normal approximation
+VarOtF <- trigamma((1 / lambda + 1 / thetaF)^(-1)) # trigamma function
+# comparing the three
+c(VarOdF = VarOdF, VarOlF = VarOlF, VarOtF = VarOtF)
+
+# R2[GLMM(m)] - marginal R2[GLMM]
+R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
+# R2[GLMM(c)] - conditional R2[GLMM] for full model
+R2glmmC <- (VarF + sum(as.numeric(VarCorr(parmodADMBf)))) / (VarF + sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
+# Raw unadjusted ICC[Population]
+ICCrawPop <- VarCorr(parmodADMBr)$Population[1]/(sum(as.numeric(VarCorr(parmodADMBr))) + VarOlN)
+# adjusted ICC[Population]
+ICCadjPop <- VarCorr(parmodADMBf)$Population[1]/(sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
+# Raw unadjusted ICC[Container]
+ICCrawCont <- VarCorr(parmodADMBr)$Container[1]/(sum(as.numeric(VarCorr(parmodADMBr))) + VarOlN)
+# adjusted ICC[Container]
+ICCadjCont <- VarCorr(parmodADMBf)$Container[1]/(sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
+# comparing the results
+c(R2glmmM = R2glmmM, R2glmmC = R2glmmC, ICCrawPop = ICCrawPop, ICCadjPop = ICCadjPop, ICCrawCont = ICCrawCont, ICCadjCont = ICCadjCont)
+
+
+performance::r2_nakagawa(parmodADMBf)
