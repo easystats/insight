@@ -10,6 +10,7 @@ library(insight)
 library(glmmTMB)
 
 
+set.seed(1234)
 # 12 different populations n = 960
 Population <- gl(12, 80, 960)
 # 120 containers (8 individuals in each container)
@@ -429,3 +430,45 @@ c(R2glmmM = R2glmmM, R2glmmC = R2glmmC)
 performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr)
 MuMIn::r.squaredGLMM(glmmTMBf)
 get_variance(glmmTMBf, null_model = glmmTMBr)
+
+
+
+
+
+sizemodeGLMERr <- glmer(
+  BodyL ~ 1 + (1 | Population) + (1 | Container),
+  family = Gamma(link = log),
+  data = DataAll
+)
+# Fit alternative model including fixed and all random effects
+sizemodeGLMERf <- glmer(
+  BodyL ~ Sex + Treatment + Habitat + (1 | Population) + (1 | Container),
+  family = Gamma(link = log), data = DataAll
+)
+
+
+VarF <- var(as.vector(model.matrix(sizemodeGLMERf) %*% fixef(sizemodeGLMERf)))
+# getting the observation-level variance Null model
+nuN <- 1 / attr(VarCorr(sizemodeGLMERr), "sc")^2 # note that glmer report 1/nu not nu as resiudal varian
+VarOdN <- 1 / nuN # the delta method
+VarOlN <- log(1 + 1 / nuN) # log-normal approximation
+VarOtN <- trigamma(nuN) # trigamma function
+# comparing the three
+c(VarOdN = VarOdN, VarOlN = VarOlN, VarOtN = VarOtN)
+## VarOdN VarOlN VarOtN
+## 0.008370998 0.008336156 0.008406133
+# Full model
+nuF <- 1 / attr(VarCorr(sizemodeGLMERf), "sc")^2 # note that glmer report 1/nu not nu as resiudal varian
+VarOdF <- 1 / nuF # the delta method
+VarOlF <- log(1 + 1 / nuF) # log-normal approximation
+VarOtF <- trigamma(nuF) # trigamma function
+# comparing the three
+c(VarOdF = VarOdF, VarOlF = VarOlF, VarOtF = VarOtF)
+## VarOdF VarOlF VarOtF
+## 0.006750704 0.006728020 0.006773541
+# R2[GLMM(m)] - marginal R2[GLMM]
+R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(sizemodeGLMERf))) + VarOlF)
+# R2[GLMM(c)] - conditional R2[GLMM] for full model
+R2glmmC <- (VarF + sum(as.numeric(VarCorr(sizemodeGLMERf)))) / (VarF + sum(as.numeric(VarCorr(sizemodeGLMERf))) + VarOlF)
+c(R2glmmM = R2glmmM, R2glmmC = R2glmmC)
+performance::r2_nakagawa(sizemodeGLMERf, null_model = sizemodeGLMERr)

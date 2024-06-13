@@ -633,7 +633,11 @@
     resid.variance <- switch(faminfo$link_function,
       inverse = ,
       identity = stats::family(x)$variance(sig),
-      log = log1p(1 / sig^-2),
+      log = switch(approx_method,
+        delta = 1 / sig^-2,
+        trigamm = trigamma(sig^-2),
+        log1p(1 / sig^-2)
+      ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else if (faminfo$family == "beta") {
