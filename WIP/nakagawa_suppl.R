@@ -4,7 +4,7 @@ vsCodeSnippets::load_debug_pkg()
 library(R2admb)
 library(glmmADMB)
 library(lme4)
-library(MASS)
+library(cplm)
 library(performance)
 library(insight)
 library(glmmTMB)
@@ -472,3 +472,38 @@ R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(sizemodeGLMERf))) + VarOlF)
 R2glmmC <- (VarF + sum(as.numeric(VarCorr(sizemodeGLMERf)))) / (VarF + sum(as.numeric(VarCorr(sizemodeGLMERf))) + VarOlF)
 c(R2glmmM = R2glmmM, R2glmmC = R2glmmC)
 performance::r2_nakagawa(sizemodeGLMERf, null_model = sizemodeGLMERr)
+
+
+
+
+# Fit null model without fixed effects (but including all random effects)
+parmodCPr <- cpglmm(
+  Parasite ~ 1 + (1 | Population) + (1 | Container),
+  link = 0,
+  data = DataAll
+)
+# Fit alternative model including fixed and all random effects
+parmodCPf <- cpglmm(
+  Parasite ~ Sex + Treatment + Habitat + (1 | Population) + (1 | Container),
+  link = 0,
+  data = DataAll
+)
+
+# Calculation of the variance in fitted values
+VarF <- var(as.vector(model.matrix(parmodCPf) %*% fixef(parmodCPf)))
+phiF <- parmodCPf@phi # the dispersion parameter
+pF <- parmodCPf@p # the index parameter
+VarOdF <- phiF * mu^(pF - 2) # the delta method
+VarOlF <- log(1 + (phiF * mu^(pF - 2)))
+
+R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(parmodCPf))) + VarOlF)
+# R2[GLMM(c)] - conditional R2[GLMM] for full model
+R2glmmC <- (VarF + sum(as.numeric(VarCorr(parmodCPf)))) / (VarF + sum(as.numeric(VarCorr(parmodCPf))) + VarOlF)
+
+performance::r2_nakagawa(parmodCPf, null_model = parmodCPr)
+
+model_info(parmodCPf)
+get_sigma(parmodCPf)
+parse(text = safe_deparse(parmodCPf@call))[[1]]$link
+x <- parmodCPf
+x

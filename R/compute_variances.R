@@ -618,6 +618,19 @@
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
+  } else if (faminfo$is_tweedie) {
+    # Tweedie  ----
+    # -------------
+
+    resid.variance <- .variance_distributional(
+      x,
+      faminfo = faminfo,
+      sig = sig,
+      model_null = model_null,
+      approx_method = approx_method,
+      name = name,
+      verbose = verbose
+    )
   } else if (faminfo$is_count) {
     # count  ----
     # -----------
@@ -662,22 +675,6 @@
         model_null = model_null,
         name = name,
         approx_method = approx_method,
-        verbose = verbose
-      ),
-      .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
-    )
-  } else if (faminfo$is_tweedie) {
-    # Tweedie  ----
-    # -------------
-
-    resid.variance <- switch(faminfo$link_function,
-      log = .variance_distributional(
-        x,
-        faminfo = faminfo,
-        sig = sig,
-        model_null = model_null,
-        approx_method = approx_method,
-        name = name,
         verbose = verbose
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
@@ -834,45 +831,49 @@
 
   cvsquared <- tryCatch(
     {
-      vv <- switch(faminfo$family,
+      if (faminfo$link_function == "tweedie") {
+        vv <- .variance_family_tweedie(x, mu, sig)
+      } else {
+        vv <- switch(faminfo$family,
 
-        # (zero-inflated) poisson ----
-        # ----------------------------
-        `zero-inflated poisson` = .variance_family_poisson(x, mu, faminfo),
-        poisson = 1,
+          # (zero-inflated) poisson ----
+          # ----------------------------
+          `zero-inflated poisson` = .variance_family_poisson(x, mu, faminfo),
+          poisson = 1,
 
-        # hurdle-poisson ----
-        # -------------------
-        `hurdle poisson` = ,
-        truncated_poisson = stats::family(x)$variance(sig),
+          # hurdle-poisson ----
+          # -------------------
+          `hurdle poisson` = ,
+          truncated_poisson = stats::family(x)$variance(sig),
 
-        # Gamma, exponential ----
-        # -----------------------
-        Gamma = stats::family(x)$variance(sig),
+          # Gamma, exponential ----
+          # -----------------------
+          Gamma = stats::family(x)$variance(sig),
 
-        # (zero-inflated) negative binomial ----
-        # --------------------------------------
-        nbinom = ,
-        nbinom1 = ,
-        nbinom2 = ,
-        quasipoisson = ,
-        `negative binomial` = sig,
-        `zero-inflated negative binomial` = ,
-        genpois = .variance_family_nbinom(x, mu, sig, faminfo),
-        truncated_nbinom2 = stats::family(x)$variance(mu, sig),
+          # (zero-inflated) negative binomial ----
+          # --------------------------------------
+          nbinom = ,
+          nbinom1 = ,
+          nbinom2 = ,
+          quasipoisson = ,
+          `negative binomial` = sig,
+          `zero-inflated negative binomial` = ,
+          genpois = .variance_family_nbinom(x, mu, sig, faminfo),
+          truncated_nbinom2 = stats::family(x)$variance(mu, sig),
 
-        # other distributions ----
-        # ------------------------
-        tweedie = .variance_family_tweedie(x, mu, sig),
-        beta = .variance_family_beta(x, mu, sig),
-        ordbeta = .variance_family_orderedbeta(x, mu),
-        # betabinomial = stats::family(x)$variance(mu, sig),
-        # betabinomial = .variance_family_betabinom(x, mu, sig),
+          # other distributions ----
+          # ------------------------
+          tweedie = .variance_family_tweedie(x, mu, sig),
+          beta = .variance_family_beta(x, mu, sig),
+          ordbeta = .variance_family_orderedbeta(x, mu),
+          # betabinomial = stats::family(x)$variance(mu, sig),
+          # betabinomial = .variance_family_betabinom(x, mu, sig),
 
-        # default variance for non-captured distributions ----
-        # ----------------------------------------------------
-        .variance_family_default(x, mu, verbose)
-      )
+          # default variance for non-captured distributions ----
+          # ----------------------------------------------------
+          .variance_family_default(x, mu, verbose)
+        )
+      }
 
       if (vv < 0 && isTRUE(verbose)) {
         format_warning(
@@ -880,8 +881,13 @@
         )
       }
 
-      # now compute cvsquared
-      if (identical(approx_method, "trigamma")) {
+      # now compute cvsquared -------------------------------------------
+
+      # for cpglmm with tweedie link, the model is not of tweedie family,
+      # only the link function is tweedie
+      if (faminfo$link_function == "tweedie") {
+        vv
+      } else if (identical(approx_method, "trigamma")) {
         switch(faminfo$family,
           nbinom = ,
           nbinom1 = ,
@@ -982,12 +988,17 @@
 # Get distributional variance for tweedie-family
 # ----------------------------------------------
 .variance_family_tweedie <- function(x, mu, phi) {
-  if ("psi" %in% names(x$fit$par)) {
-    psi <- x$fit$par["psi"] # glmmmTMB >= 1.1.5
+  if (inherits(x, "cpglmm")) {
+    phi <- x@phi
+    p <- x@p - 2
   } else {
-    psi <- x$fit$par["thetaf"]
+    if ("psi" %in% names(x$fit$par)) {
+      psi <- x$fit$par["psi"] # glmmmTMB >= 1.1.5
+    } else {
+      psi <- x$fit$par["thetaf"]
+    }
+    p <- unname(stats::plogis(psi) + 1)
   }
-  p <- unname(stats::plogis(psi) + 1)
   phi * mu^p
 }
 
