@@ -602,7 +602,7 @@
     }
 
     # for observation level approximation
-    fe_null <- .safe(as.numeric(lme4::fixef(model_null)))
+    fe_null <- .safe(as.numeric(.collapse_cond(lme4::fixef(model_null))))
     pmean <- .safe(as.numeric(stats::plogis(fe_null - 0.5 * sum(revar_null) * tanh(fe_null * (1 + 2 * exp(-0.5 * sum(revar_null))) / 6)))) # nolint
 
     # sanity check - clmm-models are "binomial" but have no pmean
