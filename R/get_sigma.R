@@ -198,7 +198,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 
 .get_sigma.glmmPQL <- function(x, ...) {
-  switch(stats::family(x)$family,
+  switch(x$family$family,
     gaussian = ,
     Gamma = x$sigma,
     x$sigma^2

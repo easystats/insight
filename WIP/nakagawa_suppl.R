@@ -1,3 +1,5 @@
+vsCodeSnippets::load_debug_pkg()
+
 # installing glmmADMB
 library(R2admb)
 library(glmmADMB)
@@ -93,7 +95,11 @@ ColourL <- with(DataMale, 0.8 * (-1) + 0.8 * (as.numeric(Treatment) - 1) + 0.5 *
 DataMale$Colour <- rbinom(length(ColourL), 1, plogis(ColourL))
 
 
+
+# ==============================================================
 # Quasi-Poisson with log link (page 5) -------------------------
+# glmmadmb -----------------------------------------------------
+# ==============================================================
 
 # Fit null model without fixed effects (but including all random effects)
 fecmodADMBr <- glmmadmb(Egg ~ 1 + (1 | Population) + (1 | Container), family = "nbinom1",
@@ -139,3 +145,61 @@ ICCadjCont <- VarCorr(fecmodADMBf)$Container[1]/(sum(as.numeric(VarCorr(fecmodAD
 c(R2glmmM = R2glmmM, R2glmmC = R2glmmC, ICCrawPop = ICCrawPop, ICCadjPop = ICCadjPop, ICCrawCont = ICCrawCont, ICCadjCont = ICCadjCont)
 
 performance::r2_nakagawa(fecmodADMBf)
+
+
+# ==============================================================
+# Quasi-Poisson with log link (page 5) -------------------------
+# glmmPQL- -----------------------------------------------------
+# ==============================================================
+
+# Fit null model without fixed effects (but including all random effects)
+fecmodPQLr <- glmmPQL(Egg ~ 1,
+  random = list(~ 1 | Population, ~ 1 | Container),
+  family = "quasipoisson", data = DataFemale
+)
+# Fit alternative model including fixed and all random effects
+fecmodPQLf <- glmmPQL(Egg ~ Treatment + Habitat, random = list(
+  ~ 1 | Population,
+  ~ 1 | Container
+), family = "quasipoisson", data = DataFemale)
+
+# Calculation of the variance in fitted values
+VarF <- var(as.vector(model.matrix(~ Treatment + Habitat, data = DataFemale) %*% fixef(fecmodPQLf)))
+# getting the observation-level variance Null model
+omegaN <- as.numeric(VarCorr(fecmodPQLr)[5, 1]) # overdispersion omega is residual variance in glmmPQL
+lambda <- as.numeric(exp(fixef(fecmodPQLr) + 0.5 * (as.numeric(VarCorr(fecmodPQLr)[2, 1]) + as.numeric(VarCorr(fecmodPQLr)[4, 1]))))
+# lambda2 <- mean(DataFemale$Egg)
+VarOdN <- omegaN / lambda
+
+VarOlN <- log(1 + omegaN / lambda)
+VarOtN <- trigamma(lambda / omegaN)
+# comparing the three
+c(VarOdN = VarOdN, VarOlN = VarOlN, VarOtN = VarOtN)
+
+omegaF <- as.numeric(VarCorr(fecmodPQLf)[5, 1]) # overdispersion omega is residual variance in glmmPQL
+VarOdF <- omegaF / lambda
+VarOlF <- log(1 + omegaF / lambda)
+VarOtF <- trigamma(lambda / omegaF)
+# comparing the three
+c(VarOdF = VarOdF, VarOlF = VarOlF, VarOtF = VarOtF)
+
+# R2[GLMM(m)] - marginal R2[GLMM]
+R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(fecmodPQLf)[c(2, 4), 1])) + VarOlF)
+# R2[GLMM(c)] - conditional R2[GLMM] for full model
+R2glmmC <- (VarF + sum(as.numeric(VarCorr(fecmodPQLf)[c(2, 4), 1]))) / (VarF + sum(as.numeric(VarCorr(fecmodPQLf)[c(2, 4), 1])) + VarOlF)
+# Raw unadjusted ICC[Population]
+ICCrawPop <- as.numeric(VarCorr(fecmodPQLr)[2, 1]) / (sum(as.numeric(VarCorr(fecmodPQLr)[c(2, 4), 1])) + VarOlN)
+# adjusted ICC[Population]
+ICCadjPop <- as.numeric(VarCorr(fecmodPQLf)[2, 1]) / (sum(as.numeric(VarCorr(fecmodPQLf)[c(2, 4), 1])) + VarOlF)
+# Raw unadjusted ICC[Container]
+ICCrawCont <- as.numeric(VarCorr(fecmodPQLr)[4, 1]) / (sum(as.numeric(VarCorr(fecmodPQLr)[c(2, 4), 1])) + VarOlN)
+# adjusted ICC[Container]
+ICCadjCont <- as.numeric(VarCorr(fecmodPQLf)[4, 1]) / (sum(as.numeric(VarCorr(fecmodPQLf)[c(2, 4), 1])) + VarOlF)
+# comparing the results
+c(
+  R2glmmM = R2glmmM, R2glmmC = R2glmmC, ICCrawPop = ICCrawPop, ICCadjPop = ICCadjPop,
+  ICCrawCont = ICCrawCont, ICCadjCont = ICCadjCont
+)
+
+performance::r2_nakagawa(fecmodPQLf, null_model = fecmodPQLr)
+get_sigma(fecmodPQLf)

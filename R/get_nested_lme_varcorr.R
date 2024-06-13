@@ -49,5 +49,9 @@
 
 
 .is_nested_lme <- function(x) {
-  sapply(find_random(x), function(i) any(grepl(":", i, fixed = TRUE)))
+  if (inherits(x, "glmmPQL")) {
+    length(find_random(x, flatten = TRUE)) > 1
+  } else {
+    sapply(find_random(x), function(i) any(grepl(":", i, fixed = TRUE)))
+  }
 }

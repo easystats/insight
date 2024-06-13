@@ -4,7 +4,8 @@
                                name_full = NULL,
                                verbose = TRUE,
                                tolerance = 1e-8,
-                               model_component = "conditional") {
+                               model_component = "conditional",
+                               model_null = NULL) {
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
   ## version of Jon Lefcheck's code from SEMfit
@@ -44,7 +45,9 @@
 
   # we also need necessary model information, like fixed and random effects,
   # variance-covariance matrix etc. for the null model
-  model_null <- .safe(null_model(x, verbose = FALSE))
+  if (is.null(model_null)) {
+    model_null <- .safe(null_model(x, verbose = FALSE))
+  }
   vals_null <- .get_variance_information(
     model_null,
     faminfo = faminfo,
@@ -55,7 +58,9 @@
 
   # Test for non-zero random effects ((near) singularity)
   no_random_variance <- FALSE
-  if (performance::check_singularity(x, tolerance = tolerance) && !(component %in% c("slope", "intercept"))) {
+  singular_fit <- isTRUE(.safe(performance::check_singularity(x, tolerance = tolerance)))
+
+  if (singular_fit && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
       format_warning(
         sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).", name_full), # nolint
@@ -101,7 +106,7 @@
   }
 
   # Variance of random effects for NULL model
-  if (!performance::check_singularity(model_null, tolerance = tolerance) && !is.null(vals_null)) {
+  if (!singular_fit && !is.null(vals_null)) {
     # Separate observation variance from variance of random effects
     nr <- vapply(vals_null$re, nrow, numeric(1))
     not.obs.terms_null <- names(nr[nr != n_obs(model_null)])
@@ -294,7 +299,7 @@
     )
     names(vals$re) <- re_names[seq_along(vals$re)]
 
-    # nlme
+    # nlme / glmmPQL
     # ---------------------------
   } else if (inherits(x, "lme")) {
     re_names <- find_random(x, split_nested = TRUE, flatten = TRUE)
@@ -697,6 +702,7 @@
       beta = ,
       ordbeta = stats::plogis(mu),
       poisson = ,
+      quasipoisson = ,
       nbinom = ,
       nbinom1 = ,
       nbinom2 = ,
@@ -730,6 +736,7 @@
         nbinom = ,
         nbinom1 = ,
         nbinom2 = ,
+        quasipoisson = ,
         `negative binomial` = sig,
         `zero-inflated negative binomial` = ,
         genpois = .variance_family_nbinom(x, mu, sig, faminfo),
@@ -760,6 +767,7 @@
         `negative binomial` = (1 / mu) + (1 / sig),
         nbinom = ,
         poisson = ,
+        quasipoisson = ,
         nbinom1 = vv / mu,
         vv / mu^2
       )

@@ -2,6 +2,8 @@
 % Please edit documentation in R/get_variances.R
 \name{get_variance}
 \alias{get_variance}
+\alias{get_variance.merMod}
+\alias{get_variance.glmmTMB}
 \alias{get_variance_residual}
 \alias{get_variance_fixed}
 \alias{get_variance_random}
@@ -18,6 +20,27 @@ get_variance(
   component = c("all", "fixed", "random", "residual", "distribution", "dispersion",
     "intercept", "slope", "rho01", "rho00"),
   verbose = TRUE,
+  ...
+)
+
+\method{get_variance}{merMod}(
+  x,
+  component = c("all", "fixed", "random", "residual", "distribution", "dispersion",
+    "intercept", "slope", "rho01", "rho00"),
+  verbose = TRUE,
+  tolerance = 1e-05,
+  null_model = NULL,
+  ...
+)
+
+\method{get_variance}{glmmTMB}(
+  x,
+  component = c("all", "fixed", "random", "residual", "distribution", "dispersion",
+    "intercept", "slope", "rho01", "rho00"),
+  verbose = TRUE,
+  tolerance = 1e-05,
+  null_model = NULL,
+  model_component = NULL,
   ...
 )
 
@@ -56,6 +79,9 @@ take a few seconds to calculate.}
 whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
 stricter the test will be. See \code{\link[performance:check_singularity]{performance::check_singularity()}}.}
+
+\item{null_model}{Optional, a null-model to be used for the calculation of
+random effect variances. If \code{NULL}, the null-model is computed internally.}
 }
 \value{
 A list with following elements:
