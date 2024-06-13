@@ -767,7 +767,7 @@
 
   # transform expected mean of the null model
   if (is.null(faminfo$family)) {
-    mu <- exp(mu)
+    mu <- link_inverse(x)(mu)
   } else {
     # transform mu
     mu <- switch(faminfo$family,
@@ -868,7 +868,7 @@
 
   switch(approx_method,
     delta = cvsquared,
-    trimamma = trigamma(cvsquared),
+    trigamma = trigamma(cvsquared),
     log1p(cvsquared)
   )
 }
