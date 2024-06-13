@@ -826,6 +826,7 @@
       nbinom = ,
       nbinom1 = ,
       nbinom2 = ,
+      tweedie = ,
       `negative binomial` = exp(mu + 0.5 * as.vector(revar_null)),
       link_inverse(x)(mu) ## TODO: check if this is better than "exp(mu)"
       # exp(mu)
