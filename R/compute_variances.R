@@ -5,7 +5,8 @@
                                verbose = TRUE,
                                tolerance = 1e-8,
                                model_component = "conditional",
-                               model_null = NULL) {
+                               model_null = NULL,
+                               approximation = "lognormal") {
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
   ## version of Jon Lefcheck's code from SEMfit
@@ -127,6 +128,7 @@
       faminfo,
       model_null = model_null,
       revar_null = var.random_null,
+      approx_method = approximation,
       name = name_full,
       verbose = verbose
     )
@@ -473,8 +475,14 @@
 
 
 
-# fixed effects variance ----
-# ---------------------------
+# fixed effects variance ------------------------------------------------------
+#
+# This is in line with Nakagawa et al. 2017, Suppl. 2
+# see https://royalsocietypublishing.org/action/downloadSupplement?doi=10.1098%2Frsif.2017.0213&file=rsif20170213supp2.pdf
+#
+# However, package MuMIn differs and uses "fitted()" instead, leading to minor
+# deviations
+# -----------------------------------------------------------------------------
 .compute_variance_fixed <- function(vals) {
   with(vals, stats::var(as.vector(beta %*% t(X))))
 }
@@ -483,8 +491,11 @@
 
 
 
-# variance associated with a random-effects term (Johnson 2014) ----
-# ------------------------------------------------------------------
+# variance associated with a random-effects term (Johnson 2014) --------------
+#
+# This is in line with Nakagawa et al. 2017, Suppl. 2, and package MuMIm
+# see https://royalsocietypublishing.org/action/downloadSupplement?doi=10.1098%2Frsif.2017.0213&file=rsif20170213supp2.pdf
+# ----------------------------------------------------------------------------
 .compute_variance_random <- function(terms, x, vals) {
   if (is.null(terms)) {
     return(NULL)
@@ -522,14 +533,22 @@
 
 
 
-# distribution-specific variance (Nakagawa et al. 2017) ----
-# ----------------------------------------------------------
+# distribution-specific (residual) variance (Nakagawa et al. 2017) ------------
+#
+# This is in line with Nakagawa et al. 2017, Suppl. 2, and package MuMIm
+# see https://royalsocietypublishing.org/action/downloadSupplement?doi=10.1098%2Frsif.2017.0213&file=rsif20170213supp2.pdf
+#
+# There may be small deviations to Nakagawa et al. for the null-model, which
+# despite being correctly re-formulated in "null_model()", returns slightly
+# different values for the log/delta/trigamma approximation.
+# -----------------------------------------------------------------------------
 .compute_variance_distribution <- function(x,
                                            var.cor,
                                            faminfo,
                                            model_null = NULL,
                                            revar_null = NULL,
                                            name,
+                                           approx_method = "lognormal",
                                            verbose = TRUE) {
   sig <- .safe(get_sigma(x))
 
@@ -553,7 +572,14 @@
       logit = ,
       probit = ,
       cloglog = ,
-      clogloglink = .variance_distributional(x, faminfo, sig, name = name, verbose = verbose),
+      clogloglink = .variance_distributional(
+        x,
+        faminfo = faminfo,
+        sig = sig,
+        approx_method = approx_method,
+        name = name,
+        verbose = verbose
+      ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else if (faminfo$is_binomial) {
@@ -584,7 +610,16 @@
     # -----------
 
     resid.variance <- switch(faminfo$link_function,
-      log = .variance_distributional(x, faminfo, sig, model_null, revar_null, name = name, verbose = verbose),
+      log = .variance_distributional(
+        x,
+        faminfo = faminfo,
+        sig = sig,
+        model_null = model_null,
+        revar_null = revar_null,
+        approx_method = approx_method,
+        name = name,
+        verbose = verbose
+      ),
       sqrt = 0.25 * sig,
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
@@ -603,7 +638,15 @@
     # ----------
 
     resid.variance <- switch(faminfo$link_function,
-      logit = .variance_distributional(x, faminfo, sig, model_null, name = name, verbose = verbose),
+      logit = .variance_distributional(
+        x,
+        faminfo = faminfo,
+        sig = sig,
+        model_null = model_null,
+        name = name,
+        approx_method = approx_method,
+        verbose = verbose
+      ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else if (faminfo$is_tweedie) {
@@ -611,7 +654,15 @@
     # -------------
 
     resid.variance <- switch(faminfo$link_function,
-      log = .variance_distributional(x, faminfo, sig, model_null, name = name, verbose = verbose),
+      log = .variance_distributional(
+        x,
+        faminfo = faminfo,
+        sig = sig,
+        model_null = model_null,
+        approx_method = approx_method,
+        name = name,
+        verbose = verbose
+      ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else if (faminfo$is_orderedbeta) {
@@ -619,7 +670,15 @@
     # ------------------
 
     resid.variance <- switch(faminfo$link_function,
-      logit = .variance_distributional(x, faminfo, sig, model_null, name = name, verbose = verbose),
+      logit = .variance_distributional(
+        x,
+        faminfo = faminfo,
+        sig = sig,
+        model_null = model_null,
+        approx_method = approx_method,
+        name = name,
+        verbose = verbose
+      ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else {
@@ -650,15 +709,28 @@
 
 
 # This is the core-function to calculate the distribution-specific variance
-# Nakagawa et al. 2017 propose three different methods, here we only rely
-# on the lognormal-approximation.
+# Nakagawa et al. 2017 propose three different methods, which are now also
+# implemented here.
 #
+# This is in line with Nakagawa et al. 2017, Suppl. 2, and package MuMIm
+# see https://royalsocietypublishing.org/action/downloadSupplement?doi=10.1098%2Frsif.2017.0213&file=rsif20170213supp2.pdf
+#
+# There may be small deviations to Nakagawa et al. for the null-model, which
+# despite being correctly re-formulated in "null_model()", returns slightly
+# different values for the log/delta/trigamma approximation.
+#
+# what we get here is the following rom the Nakagawa et al. Supplement:
+# VarOdF <- 1 / lambda + 1 / thetaF # the delta method
+# VarOlF <- log(1 + (1 / lambda) + (1 / thetaF)) # log-normal approximation
+# VarOtF <- trigamma((1 / lambda + 1 / thetaF)^(-1)) # trigamma function
+# -----------------------------------------------------------------------------
 .variance_distributional <- function(x,
                                      faminfo,
                                      sig,
                                      model_null = NULL,
                                      revar_null = NULL,
                                      name,
+                                     approx_method = "lognormal",
                                      verbose = TRUE) {
   check_if_installed("lme4", "to compute variances for mixed models")
 
@@ -762,15 +834,27 @@
       }
 
       # now compute cvsquared
-      switch(faminfo$family,
-        nbinom2 = ,
-        `negative binomial` = (1 / mu) + (1 / sig),
-        nbinom = ,
-        nbinom1 = ,
-        poisson = ,
-        quasipoisson = vv / mu,
-        vv / mu^2
-      )
+      if (identical(approx_method, "trigamma")) {
+        switch(faminfo$family,
+          nbinom = ,
+          nbinom1 = ,
+          nbinom2 = ,
+          `negative binomial` = ((1 / mu) + (1 / sig))^-1,
+          poisson = ,
+          quasipoisson = mu / vv,
+          vv / mu^2
+        )
+      } else {
+        switch(faminfo$family,
+          nbinom = ,
+          nbinom1 = ,
+          nbinom2 = ,
+          `negative binomial` = (1 / mu) + (1 / sig),
+          poisson = ,
+          quasipoisson = vv / mu,
+          vv / mu^2
+        )
+      }
     },
     error = function(x) {
       if (verbose) {
@@ -782,7 +866,11 @@
     }
   )
 
-  log1p(cvsquared)
+  switch(approx_method,
+    delta = cvsquared,
+    trimamma = trigamma(cvsquared),
+    log1p(cvsquared)
+  )
 }
 
 

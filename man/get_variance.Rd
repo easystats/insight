@@ -15,21 +15,16 @@
 \alias{get_correlation_slopes}
 \title{Get variance components from random effects models}
 \usage{
-get_variance(
-  x,
-  component = c("all", "fixed", "random", "residual", "distribution", "dispersion",
-    "intercept", "slope", "rho01", "rho00"),
-  verbose = TRUE,
-  ...
-)
+get_variance(x, ...)
 
 \method{get_variance}{merMod}(
   x,
   component = c("all", "fixed", "random", "residual", "distribution", "dispersion",
     "intercept", "slope", "rho01", "rho00"),
-  verbose = TRUE,
-  tolerance = 1e-05,
+  tolerance = 1e-08,
   null_model = NULL,
+  approximation = "lognormal",
+  verbose = TRUE,
   ...
 )
 
@@ -37,10 +32,11 @@ get_variance(
   x,
   component = c("all", "fixed", "random", "residual", "distribution", "dispersion",
     "intercept", "slope", "rho01", "rho00"),
-  verbose = TRUE,
-  tolerance = 1e-05,
-  null_model = NULL,
   model_component = NULL,
+  tolerance = 1e-08,
+  null_model = NULL,
+  approximation = "lognormal",
+  verbose = TRUE,
   ...
 )
 
@@ -48,7 +44,7 @@ get_variance_residual(x, verbose = TRUE, ...)
 
 get_variance_fixed(x, verbose = TRUE, ...)
 
-get_variance_random(x, verbose = TRUE, tolerance = 1e-05, ...)
+get_variance_random(x, verbose = TRUE, tolerance = 1e-08, ...)
 
 get_variance_distribution(x, verbose = TRUE, ...)
 
@@ -65,15 +61,13 @@ get_correlation_slopes(x, verbose = TRUE, ...)
 \arguments{
 \item{x}{A mixed effects model.}
 
+\item{...}{Currently not used.}
+
 \item{component}{Character value, indicating the variance component that should
 be returned. By default, all variance components are returned. The
 distribution-specific (\code{"distribution"}) and residual (\code{"residual"})
 variance are the most computational intensive components, and hence may
 take a few seconds to calculate.}
-
-\item{verbose}{Toggle off warnings.}
-
-\item{...}{Currently not used.}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
@@ -82,6 +76,12 @@ stricter the test will be. See \code{\link[performance:check_singularity]{perfor
 
 \item{null_model}{Optional, a null-model to be used for the calculation of
 random effect variances. If \code{NULL}, the null-model is computed internally.}
+
+\item{approximation}{Character string, indicating the approximation method
+for the distribution-specific (residual) variance. Can be \code{"lognormal"}
+(default), \code{"delta"} or \code{"trigamma"}. See \emph{Nakagawa et al. 2017} for details.}
+
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 A list with following elements:

@@ -342,3 +342,45 @@ R2glmmC <- (VarF + sum(as.numeric(VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.num
 c(R2glmmM = R2glmmM, R2glmmC = R2glmmC)
 
 performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr)
+
+
+# ==============================================================
+# Neg bin with log link (page 12) -------------------------
+# glmer.nb ------------------------------------------------------
+# ==============================================================
+
+# Fit null model without fixed effects (but including all random effects)
+parmodGLMERr <- glmer.nb(Parasite ~ (1 | Population) + (1 | Container),
+  data = DataAll
+)
+# Fit alternative model including fixed and all random effects
+parmodGLMERf <- glmer.nb(
+  Parasite ~ Sex + Treatment + Habitat + (1 | Population) + (1 | Container),
+  data = DataAll
+)
+
+# Calculation of the variance in fitted values
+VarF <- var(as.vector(model.matrix(parmodGLMERf) %*% fixef(parmodGLMERf)))
+# getting the observation-level variance Null model
+thetaN <- getME(parmodGLMERr, "glmer.nb.theta")
+lambda <- as.numeric(exp(fixef(parmodGLMERr) + 0.5 * (as.numeric(VarCorr(parmodGLMERr)$Population) + as.numeric(VarCorr(parmodGLMERr)$Container))))
+# lambda2 <- mean(DataAll$Parasite)
+VarOdN <- 1 / lambda + 1 / thetaN # the delta method
+VarOlN <- log(1 + (1 / lambda) + (1 / thetaN)) # log-normal approximation
+VarOtN <- trigamma((1 / lambda + 1 / thetaN)^(-1)) # trigamma function
+# comparing the three
+c(VarOdN = VarOdN, VarOlN = VarOlN, VarOtN = VarOtN)
+# Full model
+thetaF <- getME(parmodGLMERf, "glmer.nb.theta")
+VarOdF <- 1 / lambda + 1 / thetaF # the delta method
+VarOlF <- log(1 + (1 / lambda) + (1 / thetaF)) # log-normal approximation
+VarOtF <- trigamma((1 / lambda + 1 / thetaF)^-1) # trigamma function
+# comparing the three
+c(VarOdF = VarOdF, VarOlF = VarOlF, VarOtF = VarOtF)
+
+R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(parmodGLMERf))) + VarOlF)
+R2glmmC <- (VarF + sum(as.numeric(VarCorr(parmodGLMERf)))) / (VarF + sum(as.numeric(VarCorr(parmodGLMERf)) + VarOlF))
+c(R2glmmM = R2glmmM, R2glmmC = R2glmmC)
+
+performance::r2_nakagawa(parmodGLMERf)
+MuMIn::r.squaredGLMM(parmodGLMERf)
