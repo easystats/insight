@@ -87,7 +87,11 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 .get_sigma.glmmadmb <- function(x, ...) {
   check_if_installed("lme4")
   vc <- lme4::VarCorr(x)
-  attr(vc, "sc")
+  out <- attr(vc, "sc")
+  # sanity check
+  if (is.null(out)) {
+    out <- .safe(x$alpha)
+  }
 }
 
 

@@ -697,6 +697,7 @@
       beta = ,
       ordbeta = stats::plogis(mu),
       poisson = ,
+      nbinom = ,
       nbinom1 = ,
       nbinom2 = ,
       `negative binomial` = exp(mu + 0.5 * as.vector(revar_null)),
@@ -726,6 +727,7 @@
 
         # (zero-inflated) negative binomial ----
         # --------------------------------------
+        nbinom = ,
         nbinom1 = ,
         nbinom2 = ,
         `negative binomial` = sig,
@@ -756,6 +758,7 @@
       switch(faminfo$family,
         nbinom2 = ,
         `negative binomial` = (1 / mu) + (1 / sig),
+        nbinom = ,
         poisson = ,
         nbinom1 = vv / mu,
         vv / mu^2
