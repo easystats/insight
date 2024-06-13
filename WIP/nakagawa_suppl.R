@@ -98,8 +98,10 @@ fecmodADMBr <- glmmadmb(
   family = "nbinom1", data = DataFemale
 )
 # Fit alternative model including fixed and all random effects
-fecmodADMBf <- glmmadmb(Egg ~ Treatment + Habitat + (1 | Population) + (1 |
-Container), family = "nbinom1",data = DataFemale)
+fecmodADMBf <- glmmadmb(
+  Egg ~ Treatment + Habitat + (1 | Population) + (1 | Container),
+  family = "nbinom1", data = DataFemale
+)
 
 # Calculation of the variance in fitted values
 VarF <- var(as.vector(model.matrix(fecmodADMBf) %*% fixef(fecmodADMBf)))
@@ -127,13 +129,13 @@ R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(fecmodADMBf))) + VarOlF)
 # R2[GLMM(c)] - conditional R2[GLMM] for full model
 R2glmmC <- (VarF + sum(as.numeric(VarCorr(fecmodADMBf)))) / (VarF + sum(as.numeric(VarCorr(fecmodADMBf))) + VarOlF)
 # Raw unadjusted ICC[Population]
-ICCrawPop <- VarCorr(fecmodADMBr)$Population[1]/(sum(as.numeric(VarCorr(fecmodADMBr))) + VarOlN)
+ICCrawPop <- VarCorr(fecmodADMBr)$Population[1] / (sum(as.numeric(VarCorr(fecmodADMBr))) + VarOlN)
 # adjusted ICC[Population]
-ICCadjPop <- VarCorr(fecmodADMBf)$Population[1]/(sum(as.numeric(VarCorr(fecmodADMBf))) + VarOlF)
+ICCadjPop <- VarCorr(fecmodADMBf)$Population[1] / (sum(as.numeric(VarCorr(fecmodADMBf))) + VarOlF)
 # Raw unadjusted ICC[Container]
-ICCrawCont <- VarCorr(fecmodADMBr)$Container[1]/(sum(as.numeric(VarCorr(fecmodADMBr))) + VarOlN)
+ICCrawCont <- VarCorr(fecmodADMBr)$Container[1] / (sum(as.numeric(VarCorr(fecmodADMBr))) + VarOlN)
 # adjusted ICC[Container]
-ICCadjCont <- VarCorr(fecmodADMBf)$Container[1]/(sum(as.numeric(VarCorr(fecmodADMBf))) + VarOlF)
+ICCadjCont <- VarCorr(fecmodADMBf)$Container[1] / (sum(as.numeric(VarCorr(fecmodADMBf))) + VarOlF)
 # comparing the results
 c(R2glmmM = R2glmmM, R2glmmC = R2glmmC, ICCrawPop = ICCrawPop, ICCadjPop = ICCadjPop, ICCrawCont = ICCrawCont, ICCadjCont = ICCadjCont)
 
@@ -237,13 +239,13 @@ R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
 # R2[GLMM(c)] - conditional R2[GLMM] for full model
 R2glmmC <- (VarF + sum(as.numeric(VarCorr(parmodADMBf)))) / (VarF + sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
 # Raw unadjusted ICC[Population]
-ICCrawPop <- VarCorr(parmodADMBr)$Population[1]/(sum(as.numeric(VarCorr(parmodADMBr))) + VarOlN)
+ICCrawPop <- VarCorr(parmodADMBr)$Population[1] / (sum(as.numeric(VarCorr(parmodADMBr))) + VarOlN)
 # adjusted ICC[Population]
-ICCadjPop <- VarCorr(parmodADMBf)$Population[1]/(sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
+ICCadjPop <- VarCorr(parmodADMBf)$Population[1] / (sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
 # Raw unadjusted ICC[Container]
-ICCrawCont <- VarCorr(parmodADMBr)$Container[1]/(sum(as.numeric(VarCorr(parmodADMBr))) + VarOlN)
+ICCrawCont <- VarCorr(parmodADMBr)$Container[1] / (sum(as.numeric(VarCorr(parmodADMBr))) + VarOlN)
 # adjusted ICC[Container]
-ICCadjCont <- VarCorr(parmodADMBf)$Container[1]/(sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
+ICCadjCont <- VarCorr(parmodADMBf)$Container[1] / (sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
 # comparing the results
 c(R2glmmM = R2glmmM, R2glmmC = R2glmmC, ICCrawPop = ICCrawPop, ICCadjPop = ICCadjPop, ICCrawCont = ICCrawCont, ICCadjCont = ICCadjCont)
 
