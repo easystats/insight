@@ -457,8 +457,8 @@ test_that("glmmTMB, Nbinom1", {
 
   # we skip this test for now, because MuMIn might use a wrong computation
   # of the approximation here. See discussion in #877 for details
-
   skip_if(TRUE)
+
   # dataset ---------------------------------
   data(Salamanders, package = "glmmTMB")
 
@@ -500,6 +500,8 @@ test_that("glmmTMB, Nbinom1", {
 })
 
 
+# ==============================================================================
+# Validate against Nakagawa et al. 2017 paper!
 test_that("glmmTMB, Nbinom1", {
   data(Salamanders, package = "glmmTMB")
   glmmTMBr <- glmmTMB::glmmTMB(
@@ -513,20 +515,36 @@ test_that("glmmTMB, Nbinom1", {
     data = Salamanders, REML = TRUE
   )
   # Calculation based on Supplement 2 of Nakagawa et al. 2017
-  VarF <- var(as.vector(get_modelmatrix(glmmTMBf) %*% fixef(glmmTMBf)$cond))
+  VarF <- var(as.vector(get_modelmatrix(glmmTMBf) %*% glmmTMB::fixef(glmmTMBf)$cond))
   # this is "mu" in insight
-  lambda <- as.numeric(exp(fixef(glmmTMBr)$cond + 0.5 * (as.numeric(VarCorr(glmmTMBr)$cond[1]))))
+  lambda <- as.numeric(exp(glmmTMB::fixef(glmmTMBr)$cond + 0.5 * (as.numeric(glmmTMB::VarCorr(glmmTMBr)$cond[1]))))
   # this is "sig" in insight
   thetaF <- sigma(glmmTMBf) # note that theta is called alpha in glmmadmb
   # this is what ".variance_distributional()" returns
   VarOdF <- 1 / lambda + 1 / thetaF # the delta method
   VarOlF <- log(1 + (1 / lambda) + (1 / thetaF)) # log-normal approximation
-  VarOtF <- trigamma((1 / lambda + 1 / thetaF)^(-1)) # trigamma function
-  R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(glmmTMBf)$cond)) + VarOlF)
-  R2glmmC <- (VarF + sum(as.numeric(VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(VarCorr(glmmTMBf)$cond)) + VarOlF)
+  VarOtF <- trigamma((1 / lambda + 1 / thetaF)^-1) # trigamma function
 
+  # lognormal
+  R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOlF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOlF)
   out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr)
-  expect_equal
+  expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # delta
+  R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOdF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOdF)
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, approximation = "delta")
+  expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # trigamma
+  R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOtF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOtF)
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, approximation = "trigamma")
+  expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
 })
 
 
@@ -626,6 +644,11 @@ test_that("glmmTMB, Poisson zero-inflated", {
 # ==============================================================================
 
 test_that("glmmTMB, Nbinom1 zero-inflated", {
+
+  # we skip this test for now, because MuMIn might use a wrong computation
+  # of the approximation here. See discussion in #877 for details
+  skip_if(TRUE)
+
   # dataset ---------------------------------
   data(Salamanders, package = "glmmTMB")
 
@@ -667,6 +690,56 @@ test_that("glmmTMB, Nbinom1 zero-inflated", {
   # matches delta values
   expect_equal(out1[1, "R2m"], out2$R2_marginal, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
+})
+
+
+# ==============================================================================
+# Validate against Nakagawa et al. 2017 paper!
+test_that("glmmTMB, Nbinom1 zero-inflated", {
+  data(Salamanders, package = "glmmTMB")
+  glmmTMBr <- glmmTMB::glmmTMB(
+    count ~ (1 | site),
+    ziformula = ~ 1,
+    family = glmmTMB::nbinom1(),
+    data = Salamanders, REML = TRUE
+  )
+  glmmTMBf <- glmmTMB::glmmTMB(
+    count ~ mined + spp + (1 | site),
+    ziformula = ~ mined,
+    family = glmmTMB::nbinom1(),
+    data = Salamanders, REML = TRUE
+  )
+  # Calculation based on Supplement 2 of Nakagawa et al. 2017
+  VarF <- var(as.vector(get_modelmatrix(glmmTMBf) %*% glmmTMB::fixef(glmmTMBf)$cond))
+  # this is "mu" in insight
+  lambda <- as.numeric(exp(glmmTMB::fixef(glmmTMBr)$cond + 0.5 * (as.numeric(glmmTMB::VarCorr(glmmTMBr)$cond[1]))))
+  # this is "sig" in insight
+  thetaF <- sigma(glmmTMBf) # note that theta is called alpha in glmmadmb
+  # this is what ".variance_distributional()" returns
+  VarOdF <- 1 / lambda + 1 / thetaF # the delta method
+  VarOlF <- log(1 + (1 / lambda) + (1 / thetaF)) # log-normal approximation
+  VarOtF <- trigamma((1 / lambda + 1 / thetaF)^-1) # trigamma function
+
+  # lognormal
+  R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOlF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOlF)
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr)
+  expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # delta
+  R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOdF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOdF)
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, approximation = "delta")
+  expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # trigamma
+  R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOtF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOtF)
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, approximation = "trigamma")
+  expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
 })
 
 

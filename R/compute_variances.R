@@ -19,6 +19,9 @@
 
   faminfo <- model_info(x, verbose = FALSE)
 
+  # check argument
+  approx_method <- match.arg(approximation, c("lognormal", "delta", "trigamma"))
+
   if (any(faminfo$family == "truncated_nbinom1")) {
     if (verbose) {
       format_warning(sprintf(
