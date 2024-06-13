@@ -20,7 +20,7 @@
   faminfo <- model_info(x, verbose = FALSE)
 
   # check argument
-  approx_method <- match.arg(approximation, c("lognormal", "delta", "trigamma"))
+  approx_method <- match.arg(approximation, c("lognormal", "delta", "trigamma", "observation_level"))
 
   if (any(faminfo$family == "truncated_nbinom1")) {
     if (verbose) {
@@ -601,11 +601,24 @@
       y_factor <- 1
     }
 
+    # for observation level approximation
+    fe_null <- as.numeric(lme4::fixef(model_null))
+    pmean <- as.numeric(stats::plogis(fe_null - 0.5 * sum(revar_null) * tanh(fe_null * (1 + 2 * exp(-0.5 * sum(revar_null))) / 6))) # nolint
+
     resid.variance <- switch(faminfo$link_function,
-      logit = pi^2 / (3 * y_factor),
-      probit = 1 / y_factor,
+      logit = switch(approx_method,
+        observation_level = 1 / (y_factor * pmean * (1 - pmean)),
+        pi^2 / (3 * y_factor)
+      ),
+      probit = switch(approx_method,
+        observation_level = 2 * pi / y_factor * pmean * (1 - pmean) * exp((stats::qnorm(pmean) / sqrt(2))^2)^2, # nolint
+        1 / y_factor
+      ),
       cloglog = ,
-      clogloglink = pi^2 / (6 * y_factor),
+      clogloglink = switch(approx_method,
+        observation_level = pmean / y_factor / log(1 - pmean)^2 / (1 - pmean),
+        pi^2 / (6 * y_factor)
+      ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
   } else if (faminfo$is_count) {
