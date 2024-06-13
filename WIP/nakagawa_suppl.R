@@ -7,6 +7,7 @@ library(lme4)
 library(MASS)
 library(performance)
 library(insight)
+library(glmmTMB)
 
 
 # 12 different populations n = 960
@@ -247,7 +248,53 @@ ICCrawCont <- VarCorr(parmodADMBr)$Container[1] / (sum(as.numeric(VarCorr(parmod
 # adjusted ICC[Container]
 ICCadjCont <- VarCorr(parmodADMBf)$Container[1] / (sum(as.numeric(VarCorr(parmodADMBf))) + VarOlF)
 # comparing the results
-c(R2glmmM = R2glmmM, R2glmmC = R2glmmC, ICCrawPop = ICCrawPop, ICCadjPop = ICCadjPop, ICCrawCont = ICCrawCont, ICCadjCont = ICCadjCont)
+c(
+  R2glmmM = R2glmmM, R2glmmC = R2glmmC, ICCrawPop = ICCrawPop,
+  ICCadjPop = ICCadjPop, ICCrawCont = ICCrawCont, ICCadjCont = ICCadjCont
+)
+
+performance::r2_nakagawa(parmodADMBf, null_model = parmodADMBr)
 
 
-performance::r2_nakagawa(parmodADMBf)
+# ==============================================================
+# Neg bin with log link (page 9) -------------------------
+# glmmTMB ------------------------------------------------------
+# ==============================================================
+
+# Fit null model without fixed effects (but including all random effects)
+glmmTMBr <- glmmTMB(
+  Parasite ~ 1 + (1 | Population) + (1 | Container),
+  family = "nbinom2", data = DataAll, REML = TRUE
+)
+# Fit alternative model including fixed and all random effects
+glmmTMBf <- glmmTMB(
+  Parasite ~ Sex + Treatment + Habitat + (1 | Population) + (1 | Container),
+  family = "nbinom2", data = DataAll, REML = TRUE
+)
+
+# Calculation of the variance in fitted values
+VarF <- var(as.vector(get_modelmatrix(glmmTMBf) %*% fixef(glmmTMBf)$cond))
+# getting the observation-level variance Null model
+thetaN <- sigma(glmmTMBr)
+lambda <- as.numeric(exp(fixef(glmmTMBr)$cond + 0.5 * (as.numeric(VarCorr(glmmTMBr)$cond[1]) + as.numeric(VarCorr(glmmTMBr)$cond[2]))))
+# lambda2 <- mean(DataAll$Parasite)
+VarOdN <- 1 / lambda + 1 / thetaN # the delta method
+VarOlN <- log(1 + (1 / lambda) + (1 / thetaN)) # log-normal approximation
+VarOtN <- trigamma((1 / lambda + 1 / thetaN)^(-1)) # trigamma function
+# comparing the three
+c(VarOdN = VarOdN, VarOlN = VarOlN, VarOtN = VarOtN)
+
+thetaF <- sigma(glmmTMBf) # note that theta is called alpha in glmmadmb
+VarOdF <- 1 / lambda + 1 / thetaF # the delta method
+VarOlF <- log(1 + (1 / lambda) + (1 / thetaF)) # log-normal approximation
+VarOtF <- trigamma((1 / lambda + 1 / thetaF)^(-1)) # trigamma function
+# comparing the three
+c(VarOdF = VarOdF, VarOlF = VarOlF, VarOtF = VarOtF)
+
+# R2[GLMM(m)] - marginal R2[GLMM]
+R2glmmM <- VarF / (VarF + sum(as.numeric(VarCorr(glmmTMBf)$cond)) + VarOlF)
+# R2[GLMM(c)] - conditional R2[GLMM] for full model
+R2glmmC <- (VarF + sum(as.numeric(VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(VarCorr(glmmTMBf)$cond)) + VarOlF)
+c(R2glmmM = R2glmmM, R2glmmC = R2glmmC)
+
+performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr)
