@@ -87,11 +87,12 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 .get_sigma.glmmadmb <- function(x, ...) {
   check_if_installed("lme4")
   vc <- lme4::VarCorr(x)
-  out <- attr(vc, "sc")
+  s <- attr(vc, "sc")
   # sanity check
-  if (is.null(out)) {
-    out <- .safe(x$alpha)
+  if (is.null(s)) {
+    s <- .safe(x$alpha)
   }
+  s
 }
 
 
@@ -120,7 +121,12 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 .get_sigma.clmm <- function(x, ...) {
   check_if_installed("ordinal")
   vc <- ordinal::VarCorr(x)
-  attr(vc, "sc")
+  safe_deparse() <- attr(vc, "sc")
+  # sanity check
+  if (is.null(s)) {
+    s <- .safe(x$alpha)
+  }
+  s
 }
 
 
