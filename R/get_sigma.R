@@ -96,12 +96,19 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 
 .get_sigma.glmmTMB <- function(x, ...) {
-  if (stats::family(x)$family == "nbinom1") {
-    add_value <- 1
-  } else {
-    add_value <- 0
-  }
-  stats::sigma(x) + add_value
+  # The commented code is what MuMIn returns for sigma for nbinom1 models.
+  # However, I think this is wrong. Nakagawa et al. (2017) used this in their
+  # code because glmmadmb models with nbinom1 family are actually Quasi-Poisson
+  # models (see also Supplement 2). Thus, we revert and just use "sigma()" again.
+  # This will return results for `get_variance()` that are in line with the code
+  # in the Supplement 2 from Nakaawa et al. (2017).
+  # if (stats::family(x)$family == "nbinom1") {
+  #   add_value <- 1
+  # } else {
+  #   add_value <- 0
+  # }
+  # stats::sigma(x) + add_value
+  stats::sigma(x)
 }
 
 
