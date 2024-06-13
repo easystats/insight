@@ -22,8 +22,10 @@
 #' @param null_model Optional, a null-model to be used for the calculation of
 #' random effect variances. If `NULL`, the null-model is computed internally.
 #' @param approximation Character string, indicating the approximation method
-#' for the distribution-specific (residual) variance. Can be `"lognormal"`
-#' (default), `"delta"` or `"trigamma"`. See _Nakagawa et al. 2017_ for details.
+#' for the distribution-specific (residual) variance. Only applies to non-Gaussian
+#' models. Can be `"lognormal"` (default), `"delta"` or `"trigamma"`. For binomial
+#' models, can also be `"observation_level"`. See _Nakagawa et al. 2017_ for
+#' details.
 #' @param model_component For models that can have a zero-inflation component,
 #' specify for which component variances should be returned.
 #' @param ... Currently not used.

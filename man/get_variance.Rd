@@ -78,8 +78,10 @@ stricter the test will be. See \code{\link[performance:check_singularity]{perfor
 random effect variances. If \code{NULL}, the null-model is computed internally.}
 
 \item{approximation}{Character string, indicating the approximation method
-for the distribution-specific (residual) variance. Can be \code{"lognormal"}
-(default), \code{"delta"} or \code{"trigamma"}. See \emph{Nakagawa et al. 2017} for details.}
+for the distribution-specific (residual) variance. Only applies to non-Gaussian
+models. Can be \code{"lognormal"} (default), \code{"delta"} or \code{"trigamma"}. For binomial
+models, can also be \code{"observation_level"}. See \emph{Nakagawa et al. 2017} for
+details.}
 
 \item{verbose}{Toggle off warnings.}
 
