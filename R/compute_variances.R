@@ -766,9 +766,9 @@
         nbinom2 = ,
         `negative binomial` = (1 / mu) + (1 / sig),
         nbinom = ,
+        nbinom1 = ,
         poisson = ,
-        quasipoisson = ,
-        nbinom1 = vv / mu,
+        quasipoisson = vv / mu,
         vv / mu^2
       )
     },
