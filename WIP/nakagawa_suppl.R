@@ -93,8 +93,10 @@ DataMale$Colour <- rbinom(length(ColourL), 1, plogis(ColourL))
 # ==============================================================
 
 # Fit null model without fixed effects (but including all random effects)
-fecmodADMBr <- glmmadmb(Egg ~ 1 + (1 | Population) + (1 | Container), family = "nbinom1",
-data = DataFemale)
+fecmodADMBr <- glmmadmb(
+  Egg ~ 1 + (1 | Population) + (1 | Container),
+  family = "nbinom1", data = DataFemale
+)
 # Fit alternative model including fixed and all random effects
 fecmodADMBf <- glmmadmb(Egg ~ Treatment + Habitat + (1 | Population) + (1 |
 Container), family = "nbinom1",data = DataFemale)
@@ -201,9 +203,15 @@ performance::r2_nakagawa(fecmodPQLf, null_model = fecmodPQLr)
 # ==============================================================
 
 # Fit null model without fixed effects (but including all random effects)
-parmodADMBr <- glmmadmb(Parasite ~ 1 + (1 | Population) + (1 | Container), family = "nbinom2", data = DataAll)
+parmodADMBr <- glmmadmb(
+  Parasite ~ 1 + (1 | Population) + (1 | Container),
+  family = "nbinom2", data = DataAll
+)
 # Fit alternative model including fixed and all random effects
-parmodADMBf <- glmmadmb(Parasite ~ Sex + Treatment + Habitat + (1 | Population) +  (1 | Container), family = "nbinom2", data = DataAll)
+parmodADMBf <- glmmadmb(
+  Parasite ~ Sex + Treatment + Habitat + (1 | Population) + (1 | Container),
+  family = "nbinom2", data = DataAll
+)
 
 # Calculation of the variance in fitted values
 VarF <- var(as.vector(model.matrix(parmodADMBf) %*% fixef(parmodADMBf)))
