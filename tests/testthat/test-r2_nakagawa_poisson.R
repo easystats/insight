@@ -59,6 +59,49 @@ test_that("glmmTMB, Poisson", {
 
 
 # ==============================================================================
+# Validate against Nakagawa et al. 2017 paper!
+test_that("glmmTMB, Poisson, Nakagawa", {
+  # dataset ---------------------------------
+  data(Salamanders, package = "glmmTMB")
+
+  # glmmTMB, no random slope -------------------------------------------------
+  fecmodADMBr <- glmmTMB::glmmTMB(count ~ (1 | site),
+    family = poisson(), data = Salamanders
+  )
+  fecmodADMBf <- glmmTMB::glmmTMB(count ~ mined + (1 | site),
+    family = poisson(), data = Salamanders
+  )
+  VarF <- var(as.vector(model.matrix(fecmodADMBf) %*% glmmTMB::fixef(fecmodADMBf)$cond))
+  lambda <- as.numeric(exp(glmmTMB::fixef(fecmodADMBr)$cond + 0.5 * (as.numeric(glmmTMB::VarCorr(fecmodADMBr)$cond))))
+  omegaF <- sigma(fecmodADMBf) # overdispersion omega is alpha in glmmadmb
+  VarOdF <- omegaF / lambda # the delta method
+  VarOlF <- log(1 + omegaF / lambda) # log-normal approximation
+  VarOtF <- trigamma(lambda / omegaF) # trigamma function
+
+  # lognormal
+  R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOlF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOlF)
+  out <- performance::r2_nakagawa(fecmodADMBf)
+  expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # delta
+  R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOdF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOdF)
+  out <- performance::r2_nakagawa(fecmodADMBf, approximation = "delta")
+  expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # trigamma
+  R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOtF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOtF)
+  out <- performance::r2_nakagawa(fecmodADMBf, approximation = "trigamma")
+  expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+})
+
+
+# ==============================================================================
 # Poisson mixed models, lme4 ----
 # ==============================================================================
 

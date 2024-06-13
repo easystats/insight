@@ -635,7 +635,7 @@
       identity = stats::family(x)$variance(sig),
       log = switch(approx_method,
         delta = 1 / sig^-2,
-        trigamm = trigamma(sig^-2),
+        trigamma = trigamma(sig^-2),
         log1p(1 / sig^-2)
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)

@@ -32,7 +32,6 @@ test_that("glmer, negbin", {
 # ==============================================================================
 
 test_that("glmmTMB, Nbinom1", {
-
   # we skip this test for now, because MuMIn might use a wrong computation
   # of the approximation here. See discussion in #877 for details
   skip_if(TRUE)

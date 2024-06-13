@@ -10,7 +10,6 @@ skip_if_not_installed("performance")
 # ==============================================================================
 
 test_that("glmmTMB, Nbinom1 zero-inflated", {
-
   # we skip this test for now, because MuMIn might use a wrong computation
   # of the approximation here. See discussion in #877 for details
   skip_if(TRUE)
@@ -65,13 +64,13 @@ test_that("glmmTMB, Nbinom1 zero-inflated", {
   data(Salamanders, package = "glmmTMB")
   glmmTMBr <- glmmTMB::glmmTMB(
     count ~ (1 | site),
-    ziformula = ~ 1,
+    ziformula = ~1,
     family = glmmTMB::nbinom1(),
     data = Salamanders, REML = TRUE
   )
   glmmTMBf <- glmmTMB::glmmTMB(
     count ~ mined + spp + (1 | site),
-    ziformula = ~ mined,
+    ziformula = ~mined,
     family = glmmTMB::nbinom1(),
     data = Salamanders, REML = TRUE
   )
