@@ -202,4 +202,4 @@ c(
 )
 
 performance::r2_nakagawa(fecmodPQLf, null_model = fecmodPQLr)
-get_sigma(fecmodPQLf)
+get_variance(fecmodPQLf, null_model = fecmodPQLr)
