@@ -24,6 +24,8 @@
 #' @param approximation Character string, indicating the approximation method
 #' for the distribution-specific (residual) variance. Can be `"lognormal"`
 #' (default), `"delta"` or `"trigamma"`. See _Nakagawa et al. 2017_ for details.
+#' @param model_component For models that can have a zero-inflation component,
+#' specify for which component variances should be returned.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:

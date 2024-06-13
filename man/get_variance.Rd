@@ -82,6 +82,9 @@ for the distribution-specific (residual) variance. Can be \code{"lognormal"}
 (default), \code{"delta"} or \code{"trigamma"}. See \emph{Nakagawa et al. 2017} for details.}
 
 \item{verbose}{Toggle off warnings.}
+
+\item{model_component}{For models that can have a zero-inflation component,
+specify for which component variances should be returned.}
 }
 \value{
 A list with following elements:
