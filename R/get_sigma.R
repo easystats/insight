@@ -118,18 +118,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
-.get_sigma.clmm <- function(x, ...) {
-  check_if_installed("ordinal")
-  vc <- ordinal::VarCorr(x)
-  s <- attr(vc, "sc")
-  # sanity check
-  if (is.null(s)) {
-    s <- .safe(x$alpha)
-  }
-  s
-}
-
-
 .get_sigma.model_fit <- function(x, verbose = TRUE, ...) {
   .get_sigma(x$fit, verbose = verbose)
 }

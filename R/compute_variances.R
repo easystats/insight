@@ -602,8 +602,13 @@
     }
 
     # for observation level approximation
-    fe_null <- as.numeric(lme4::fixef(model_null))
-    pmean <- as.numeric(stats::plogis(fe_null - 0.5 * sum(revar_null) * tanh(fe_null * (1 + 2 * exp(-0.5 * sum(revar_null))) / 6))) # nolint
+    fe_null <- .safe(as.numeric(lme4::fixef(model_null)))
+    pmean <- .safe(as.numeric(stats::plogis(fe_null - 0.5 * sum(revar_null) * tanh(fe_null * (1 + 2 * exp(-0.5 * sum(revar_null))) / 6)))) # nolint
+
+    # sanity check - clmm-models are "binomial" but have no pmean
+    if (is.null(pmean) && identical(approx_method, "observation_level")) {
+      approx_method <- "lognormal"
+    }
 
     resid.variance <- switch(faminfo$link_function,
       logit = switch(approx_method,
