@@ -121,7 +121,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 .get_sigma.clmm <- function(x, ...) {
   check_if_installed("ordinal")
   vc <- ordinal::VarCorr(x)
-  safe_deparse() <- attr(vc, "sc")
+  s <- attr(vc, "sc")
   # sanity check
   if (is.null(s)) {
     s <- .safe(x$alpha)

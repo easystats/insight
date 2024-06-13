@@ -734,9 +734,11 @@
                                      verbose = TRUE) {
   check_if_installed("lme4", "to compute variances for mixed models")
 
-  # lognormal-approximation of distributional variance,
-  # see Nakagawa et al. 2017
-  # in general want log(1+var(x)/mu^2)
+  # ------------------------------------------------------------------
+  # approximation of distributional variance, see Nakagawa et al. 2017
+  # in general want somethinh lije log(1+var(x)/mu^2) for log-approximation,
+  # and for the other approximations accordingly
+  # ------------------------------------------------------------------
 
   # check if null-model could be computed
   if (is.null(model_null)) {
@@ -792,7 +794,6 @@
         # ----------------------------
         `zero-inflated poisson` = .variance_family_poisson(x, mu, faminfo),
         poisson = 1,
-        # delta = 1 / sqrt(mu)
 
         # hurdle-poisson ----
         # -------------------
@@ -875,8 +876,6 @@
 
 
 
-
-
 # Get distributional variance for poisson-family
 # ----------------------------------------------
 .variance_family_poisson <- function(x, mu, faminfo) {
@@ -890,8 +889,6 @@
     stats::family(x)$variance(mu)
   }
 }
-
-
 
 
 
@@ -911,8 +908,6 @@
 
 
 
-
-
 # Get distributional variance for ordered beta-family
 # ----------------------------------------------
 .variance_family_orderedbeta <- function(x, mu) {
@@ -922,8 +917,6 @@
     mu * (1 - mu)
   }
 }
-
-
 
 
 
@@ -940,8 +933,6 @@
 
 
 
-
-
 # Get distributional variance for tweedie-family
 # ----------------------------------------------
 .variance_family_tweedie <- function(x, mu, phi) {
@@ -953,8 +944,6 @@
   p <- unname(stats::plogis(psi) + 1)
   phi * mu^p
 }
-
-
 
 
 
@@ -973,8 +962,6 @@
     stats::family(x)$variance(mu, sig)
   }
 }
-
-
 
 
 
@@ -1016,8 +1003,6 @@
 
 
 
-
-
 # For zero-inflated poisson models, the
 # distributional variance is based on Zuur et al. 2012
 # ----------------------------------------------
@@ -1036,8 +1021,6 @@
 
   mean(pvar)
 }
-
-
 
 
 
