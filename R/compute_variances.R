@@ -831,7 +831,28 @@
   cvsquared <- tryCatch(
     {
       if (faminfo$link_function == "tweedie") {
+        # Tweedie models ------------------------------------------------------
+        # ---------------------------------------------------------------------
         dispersion_param <- .variance_family_tweedie(x, mu, sig)
+
+      } else if (faminfo$is_zero_inflated) {
+        # Zero Inflated models ------------------------------------------------
+        # ---------------------------------------------------------------------
+        dispersion_param <- switch(faminfo$family,
+          # (zero-inflated) poisson ----
+          # ----------------------------
+          poisson = .variance_family_poisson(x, mu, faminfo),
+
+          # hurdle-poisson ----
+          # -------------------
+          `hurdle poisson` = ,
+          truncated_poisson = stats::family(x)$variance(sig),
+
+          # others ----
+          # -----------
+          sig
+        )
+
       } else {
         dispersion_param <- switch(faminfo$family,
 
