@@ -585,6 +585,8 @@
         x,
         faminfo = faminfo,
         sig = sig,
+        model_null = model_null,
+        revar_null = revar_null,
         approx_method = approx_method,
         name = name,
         verbose = verbose
@@ -859,14 +861,17 @@
           genpois = .variance_family_nbinom(x, mu, sig, faminfo),
           truncated_nbinom2 = stats::family(x)$variance(mu, sig),
 
+          # beta-alike ----
+          # ---------------
+          beta = .variance_family_beta(x, mu, sig),
+          ordbeta = .variance_family_orderedbeta(x, mu),
+          # betabinomial = .variance_family_beta(x, mu, sig),
+          # betabinomial = stats::family(x)$variance(mu, sig),
+          betabinomial = .variance_family_betabinom(x, mu, sig),
+
           # other distributions ----
           # ------------------------
           tweedie = .variance_family_tweedie(x, mu, sig),
-          beta = ,
-          betabinomial = .variance_family_beta(x, mu, sig),
-          ordbeta = .variance_family_orderedbeta(x, mu),
-          # betabinomial = stats::family(x)$variance(mu, sig),
-          # betabinomial = .variance_family_betabinom(x, mu, sig),
 
           # default variance for non-captured distributions ----
           # ----------------------------------------------------
@@ -980,8 +985,9 @@
   if (inherits(x, "MixMod")) {
     stats::family(x)$variance(mu)
   } else {
-    n <- n_obs(x)
-    mu * (1 - mu) * (n * (phi + n) / (1 + phi))
+    mu * (1 - mu) / (1 + phi)
+    # n <- .binomial_response_weight(x)
+    # mu * (1 - mu) * (n * (phi + n) / (1 + phi))
   }
 }
 
