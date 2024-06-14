@@ -4,25 +4,61 @@ skip_if_not_installed("lme4")
 skip_if_not_installed("TMB")
 skip_if_not(getRversion() >= "4.0.0")
 
-m1 <- suppressWarnings(lme4::glmer.nb(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
-m2 <- suppressWarnings(lme4::glmer.nb(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
 
 test_that("null_model with offset", {
+  m1 <- suppressWarnings(lme4::glmer.nb(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
+  m2 <- suppressWarnings(lme4::glmer.nb(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
   nm1 <- null_model(m1)
   nm2 <- null_model(m2)
   expect_equal(glmmTMB::fixef(nm1), glmmTMB::fixef(nm2), tolerance = 1e-4)
 })
 
 skip_on_os("mac") # error: FreeADFunObject
-m1 <- suppressWarnings(glmmTMB::glmmTMB(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
-m2 <- suppressWarnings(glmmTMB::glmmTMB(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
 
 test_that("null_model with offset", {
+  m1 <- suppressWarnings(glmmTMB::glmmTMB(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
+  m2 <- suppressWarnings(glmmTMB::glmmTMB(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
   nm1 <- null_model(m1)
   nm2 <- null_model(m2)
   expect_equal(glmmTMB::fixef(nm1), glmmTMB::fixef(nm2), tolerance = 1e-4)
 })
 
+test_that("null_model zero-inflated", {
+  data(fish, package = "insight")
+  m0 <- glmmTMB::glmmTMB(
+    count ~ (1 | persons),
+    ziformula = ~ (1 | persons),
+    offset = log(ID),
+    data = fish,
+    family = poisson()
+  )
+  m1 <- glmmTMB::glmmTMB(
+    count ~ child + camper + (1 | persons),
+    ziformula = ~ child + camper + (1 | persons),
+    offset = log(ID),
+    data = fish,
+    family = poisson()
+  )
+  out <- null_model(m1)
+  expect_equal(glmmTMB::fixef(out), glmmTMB::fixef(m0), tolerance = 1e-4)
+
+  m0 <- glmmTMB::glmmTMB(
+    count ~ (1 | persons),
+    ziformula = ~ 1,
+    offset = log(ID),
+    data = fish,
+    family = poisson()
+  )
+  m1 <- glmmTMB::glmmTMB(
+    count ~ child + camper + (1 | persons),
+    ziformula = ~ child + camper,
+    offset = log(ID),
+    data = fish,
+    family = poisson()
+  )
+  out <- null_model(m1)
+  expect_equal(glmmTMB::fixef(out), glmmTMB::fixef(m0), tolerance = 1e-4)
+})
 
 # set.seed(123)
 # N <- 100 # Samples

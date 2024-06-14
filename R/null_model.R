@@ -67,6 +67,31 @@ null_model <- function(model, verbose = TRUE, ...) {
   } else if (inherits(model, "cpglmm")) {
     nullform <- find_formula(model, verbose = FALSE)[["random"]]
     null.model <- suppressWarnings(stats::update(model, nullform))
+  } else if (inherits(model, "glmmTMB") && !is.null(find_formula(model)$zero_inflated)) {
+    insight::check_if_installed("glmmTMB")
+    # for zero-inflated models, we need to create the NULL model for the
+    # zero-inflation part as well. Since "update()" won't work here, we need
+    # to extract all elements from the call and modify the formulas there
+    model_args <- lapply(get_call(model), safe_deparse)[-1]
+    formula_args <- endsWith(names(model_args), "formula")
+    resp <- find_response(model)
+    model_args[formula_args] <- lapply(names(model_args[formula_args]), function(f_names) {
+      f <- model_args[[f_names]]
+      re_string <- sapply(.findbars(stats::as.formula(f)), safe_deparse)
+      if (is_empty_object(re_string)) {
+        stats::as.formula("~1")
+      } else if (startsWith(f_names, "zi")) {
+        stats::reformulate(paste0("(", re_string, ")"), response = NULL)
+      } else {
+        stats::reformulate(paste0("(", re_string, ")"), response = resp)
+      }
+    })
+    model_args[!formula_args] <- lapply(model_args[!formula_args], str2lang)
+    # add offset back
+    if (!is.null(offset_term)) {
+      model_args$offset <- str2lang(offset_term)
+    }
+    null.model <- do.call(glmmTMB::glmmTMB, model_args)
   } else {
     f <- stats::formula(model)
     resp <- find_response(model)

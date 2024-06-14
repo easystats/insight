@@ -8,6 +8,11 @@
 
 * Improved accuracy of singularity-checks in `get_variance()`.
 
+## Bug fixes
+
+* `null_model()` now correctly handles zero-inflated models from package
+  *glmmTMB*.
+
 # insight 0.20.1
 
 ## Bug fixes
