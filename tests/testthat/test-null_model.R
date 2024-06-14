@@ -41,6 +41,23 @@ test_that("null_model zero-inflated", {
   )
   out <- null_model(m1)
   expect_equal(glmmTMB::fixef(out), glmmTMB::fixef(m0), tolerance = 1e-4)
+
+  m0 <- glmmTMB::glmmTMB(
+    count ~ (1 | persons),
+    ziformula = ~ 1,
+    offset = log(ID),
+    data = fish,
+    family = poisson()
+  )
+  m1 <- glmmTMB::glmmTMB(
+    count ~ child + camper + (1 | persons),
+    ziformula = ~ child + camper,
+    offset = log(ID),
+    data = fish,
+    family = poisson()
+  )
+  out <- null_model(m1)
+  expect_equal(glmmTMB::fixef(out), glmmTMB::fixef(m0), tolerance = 1e-4)
 })
 
 # set.seed(123)

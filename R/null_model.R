@@ -79,7 +79,7 @@ null_model <- function(model, verbose = TRUE, ...) {
       f <- model_args[[f_names]]
       re_string <- sapply(.findbars(stats::as.formula(f)), safe_deparse)
       if (is_empty_object(re_string)) {
-        stats::as.formula(f)
+        stats::as.formula("~1")
       } else if (startsWith(f_names, "zi")) {
         stats::reformulate(paste0("(", re_string, ")"), response = NULL)
       } else {
