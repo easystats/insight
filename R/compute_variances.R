@@ -820,6 +820,7 @@
     # transform mu
     mu <- switch(faminfo$family,
       beta = ,
+      betabinomial = ,
       ordbeta = stats::plogis(mu),
       poisson = ,
       quasipoisson = ,
@@ -868,7 +869,8 @@
           # other distributions ----
           # ------------------------
           tweedie = .variance_family_tweedie(x, mu, sig),
-          beta = .variance_family_beta(x, mu, sig),
+          beta = ,
+          betabinomial = .variance_family_beta(x, mu, sig),
           ordbeta = .variance_family_orderedbeta(x, mu),
           # betabinomial = stats::family(x)$variance(mu, sig),
           # betabinomial = .variance_family_betabinom(x, mu, sig),
