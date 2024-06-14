@@ -74,6 +74,50 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 # special handling ---------------
 
 
+.get_sigma.glmerMod <- function(x, ...) {
+  check_if_installed("lme4")
+  if (startsWith(stats::family(x)$family, "Negative Binomial(")) {
+    lme4::getME(x, "glmer.nb.theta")
+  } else {
+    stats::sigma(x)
+  }
+}
+
+
+.get_sigma.glmmadmb <- function(x, ...) {
+  check_if_installed("lme4")
+  vc <- lme4::VarCorr(x)
+  s <- attr(vc, "sc")
+  # sanity check
+  if (is.null(s)) {
+    s <- .safe(x$alpha)
+  }
+  s
+}
+
+
+.get_sigma.glmmTMB <- function(x, ...) {
+  # The commented code is what MuMIn returns for sigma for nbinom1 models.
+  # However, I think this is wrong. Nakagawa et al. (2017) used this in their
+  # code because glmmadmb models with nbinom1 family are actually Quasi-Poisson
+  # models (see also Supplement 2). Thus, we revert and just use "sigma()" again.
+  # This will return results for `get_variance()` that are in line with the code
+  # in the Supplement 2 from Nakaawa et al. (2017).
+  # if (stats::family(x)$family == "nbinom1") {
+  #   add_value <- 1
+  # } else {
+  #   add_value <- 0
+  # }
+  # stats::sigma(x) + add_value
+  stats::sigma(x)
+}
+
+
+.get_sigma.merMod <- function(x, ...) {
+  stats::sigma(x)
+}
+
+
 .get_sigma.model_fit <- function(x, verbose = TRUE, ...) {
   .get_sigma(x$fit, verbose = verbose)
 }
@@ -144,6 +188,25 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
+.get_sigma.lme <- function(x, ...) {
+  .safe(x$sigma)
+}
+
+
+.get_sigma.mjoint <- function(x, ...) {
+  .safe(x$coef$sigma2[[1]])
+}
+
+
+.get_sigma.glmmPQL <- function(x, ...) {
+  switch(x$family$family,
+    gaussian = ,
+    Gamma = x$sigma,
+    x$sigma^2
+  )
+}
+
+
 .get_sigma.brmsfit <- function(x, verbose = TRUE, ...) {
   s <- tryCatch(
     {
@@ -207,15 +270,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   }
 
   if (is_empty_object(s)) {
-    if (is.null(info)) {
-      info <- model_info(x, verbose = FALSE)
-    }
-    if (!is.null(info) && info$is_mixed) {
-      s <- .safe(sqrt(get_variance_residual(x, verbose = FALSE)))
-    }
-  }
-
-  if (is_empty_object(s)) {
     s <- .safe(
       sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
     )
@@ -254,7 +308,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 as.numeric.insight_aux <- function(x, ...) {
   if (is.null(x) || is.na(x) || is.infinite(x)) {
     return(NULL)
-  } else {
-    mean(x, na.rm = TRUE)
   }
+  mean(x, na.rm = TRUE)
 }

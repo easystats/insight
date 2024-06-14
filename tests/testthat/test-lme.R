@@ -13,12 +13,12 @@ m1 <- nlme::lme(Reaction ~ Days,
 m2 <- nlme::lme(distance ~ age + Sex, data = Orthodont, random = ~1)
 
 set.seed(123)
-sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mygrp <- sample.int(5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
   filter_group <- sleepstudy$mygrp == i
   sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+    sample.int(30, size = sum(filter_group), replace = TRUE)
 }
 
 m3 <- nlme::lme(Reaction ~ Days,

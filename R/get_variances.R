@@ -10,15 +10,24 @@
 #'
 #' @param x A mixed effects model.
 #' @param component Character value, indicating the variance component that should
-#'   be returned. By default, all variance components are returned. The
-#'   distribution-specific (`"distribution"`) and residual (`"residual"`)
-#'   variance are the most computational intensive components, and hence may
-#'   take a few seconds to calculate.
+#' be returned. By default, all variance components are returned. The
+#' distribution-specific (`"distribution"`) and residual (`"residual"`)
+#' variance are the most computational intensive components, and hence may
+#' take a few seconds to calculate.
 #' @param verbose Toggle off warnings.
 #' @param tolerance Tolerance for singularity check of random effects, to decide
-#'   whether to compute random effect variances or not. Indicates up to which
-#'   value the convergence result is accepted. The larger tolerance is, the
-#'   stricter the test will be. See [performance::check_singularity()].
+#' whether to compute random effect variances or not. Indicates up to which
+#' value the convergence result is accepted. The larger tolerance is, the
+#' stricter the test will be. See [performance::check_singularity()].
+#' @param null_model Optional, a null-model to be used for the calculation of
+#' random effect variances. If `NULL`, the null-model is computed internally.
+#' @param approximation Character string, indicating the approximation method
+#' for the distribution-specific (residual) variance. Only applies to non-Gaussian
+#' models. Can be `"lognormal"` (default), `"delta"` or `"trigamma"`. For binomial
+#' models, can also be `"observation_level"`. See _Nakagawa et al. 2017_ for
+#' details.
+#' @param model_component For models that can have a zero-inflation component,
+#' specify for which component variances should be returned.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:
@@ -124,17 +133,9 @@
 #' get_variance_residual(m)
 #' }
 #' @export
-get_variance <- function(x,
-                         component = c(
-                           "all", "fixed", "random", "residual",
-                           "distribution", "dispersion", "intercept",
-                           "slope", "rho01", "rho00"
-                         ),
-                         verbose = TRUE,
-                         ...) {
+get_variance <- function(x, ...) {
   UseMethod("get_variance")
 }
-
 
 #' @export
 get_variance.default <- function(x,
@@ -152,6 +153,7 @@ get_variance.default <- function(x,
 }
 
 
+#' @rdname get_variance
 #' @export
 get_variance.merMod <- function(x,
                                 component = c(
@@ -159,8 +161,10 @@ get_variance.merMod <- function(x,
                                   "distribution", "dispersion", "intercept",
                                   "slope", "rho01", "rho00"
                                 ),
+                                tolerance = 1e-8,
+                                null_model = NULL,
+                                approximation = "lognormal",
                                 verbose = TRUE,
-                                tolerance = 1e-5,
                                 ...) {
   component <- match.arg(component)
   .safe(.compute_variances(
@@ -169,7 +173,9 @@ get_variance.merMod <- function(x,
     name_fun = "get_variance",
     name_full = "random effect variances",
     verbose = verbose,
-    tolerance = tolerance
+    tolerance = tolerance,
+    model_null = null_model,
+    approximation = approximation
   ))
 }
 
@@ -205,6 +211,7 @@ get_variance.lme <- get_variance.merMod
 get_variance.brmsfit <- get_variance.merMod
 
 
+#' @rdname get_variance
 #' @export
 get_variance.glmmTMB <- function(x,
                                  component = c(
@@ -212,9 +219,11 @@ get_variance.glmmTMB <- function(x,
                                    "distribution", "dispersion", "intercept",
                                    "slope", "rho01", "rho00"
                                  ),
-                                 verbose = TRUE,
-                                 tolerance = 1e-5,
                                  model_component = NULL,
+                                 tolerance = 1e-8,
+                                 null_model = NULL,
+                                 approximation = "lognormal",
+                                 verbose = TRUE,
                                  ...) {
   component <- match.arg(component)
   .safe(.compute_variances(
@@ -224,7 +233,9 @@ get_variance.glmmTMB <- function(x,
     name_full = "random effect variances",
     verbose = verbose,
     tolerance = tolerance,
-    model_component = model_component
+    model_component = model_component,
+    model_null = null_model,
+    approximation = approximation
   ))
 }
 
@@ -239,8 +250,10 @@ get_variance.mixed <- function(x,
                                  "distribution", "dispersion", "intercept",
                                  "slope", "rho01", "rho00"
                                ),
+                               tolerance = 1e-8,
+                               null_model = NULL,
+                               approximation = "lognormal",
                                verbose = TRUE,
-                               tolerance = 1e-5,
                                ...) {
   component <- match.arg(component)
   .safe(.compute_variances(
@@ -249,7 +262,9 @@ get_variance.mixed <- function(x,
     name_fun = "get_variance",
     name_full = "random effect variances",
     verbose = verbose,
-    tolerance = tolerance
+    tolerance = tolerance,
+    model_null = null_model,
+    approximation = approximation
   ))
 }
 
@@ -268,7 +283,7 @@ get_variance_fixed <- function(x, verbose = TRUE, ...) {
 
 #' @rdname get_variance
 #' @export
-get_variance_random <- function(x, verbose = TRUE, tolerance = 1e-5, ...) {
+get_variance_random <- function(x, verbose = TRUE, tolerance = 1e-8, ...) {
   unlist(get_variance(x, component = "random", verbose = verbose, tolerance = tolerance, ...))
 }
 

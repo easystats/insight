@@ -3,6 +3,7 @@ skip_if_offline()
 skip_if_not_installed("lme4")
 skip_if_not_installed("BayesFactor")
 skip_if_not_installed("rstanarm")
+skip_if_not_installed("httr2")
 
 suppressPackageStartupMessages({
   suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE)))
@@ -431,8 +432,8 @@ test_that("get_variance", {
     list(
       var.fixed = 0.36274,
       var.random = 0.5988885,
-      var.residual = 3.28987,
-      var.distribution = 3.28987,
+      var.residual = 0.2188036,
+      var.distribution = 0.2188036,
       var.dispersion = 0,
       var.intercept = c(herd = 0.59889)
     ),
@@ -448,11 +449,11 @@ test_that("get_variance", {
     tolerance = 1e-4
   )
   expect_equal(get_variance_residual(m1),
-    c(var.residual = 3.289868),
+    c(var.residual = 0.2188036),
     tolerance = 1e-4
   )
   expect_equal(get_variance_distribution(m1),
-    c(var.distribution = 3.289868),
+    c(var.distribution = 0.2188036),
     tolerance = 1e-4
   )
   expect_equal(get_variance_dispersion(m1),

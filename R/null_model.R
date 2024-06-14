@@ -39,25 +39,23 @@ null_model <- function(model, verbose = TRUE, ...) {
     stats::update(model, location = ~1, scale = ~1)
   } else if (inherits(model, "multinom")) {
     stats::update(model, ~1, trace = FALSE)
+  } else if (is.null(offset_term)) {
+    # stats::update(model, ~1)
+    out <- stats::update(model, ~1, evaluate = FALSE)
+    eval(out, envir = parent.frame())
   } else {
-    if (!is.null(offset_term)) {
-      tryCatch(
-        do.call(stats::update, list(model, ~1, offset = str2lang(offset_term))),
-        error = function(e) {
-          if (verbose) {
-            format_warning(
-              "Model contains offset-terms, which could not be considered in the returned null-model.",
-              "Coefficients might be inaccurate."
-            )
-          }
-          stats::update(model, ~1)
+    tryCatch(
+      do.call(stats::update, list(model, ~1, offset = str2lang(offset_term))),
+      error = function(e) {
+        if (verbose) {
+          format_warning(
+            "Model contains offset-terms, which could not be considered in the returned null-model.",
+            "Coefficients might be inaccurate."
+          )
         }
-      )
-    } else {
-      # stats::update(model, ~1)
-      out <- stats::update(model, ~1, evaluate = FALSE)
-      eval(out, envir = parent.frame())
-    }
+        stats::update(model, ~1)
+      }
+    )
   }
 }
 
@@ -65,10 +63,10 @@ null_model <- function(model, verbose = TRUE, ...) {
 .null_model_mixed <- function(model, offset_term = NULL, verbose = TRUE) {
   if (inherits(model, "MixMod")) {
     nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
-    null.model <- stats::update(model, fixed = nullform)
+    null.model <- suppressWarnings(stats::update(model, fixed = nullform))
   } else if (inherits(model, "cpglmm")) {
     nullform <- find_formula(model, verbose = FALSE)[["random"]]
-    null.model <- stats::update(model, nullform)
+    null.model <- suppressWarnings(stats::update(model, nullform))
   } else {
     f <- stats::formula(model)
     resp <- find_response(model)
@@ -79,21 +77,21 @@ null_model <- function(model, verbose = TRUE, ...) {
     re.terms <- paste0("(", sapply(.findbars(f), safe_deparse), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
     null.model <- tryCatch(
-      if (!is.null(offset_term)) {
-        do.call(stats::update, list(model, formula = nullform, offset = str2lang(offset_term)))
+      if (is.null(offset_term)) {
+        suppressWarnings(stats::update(model, nullform))
       } else {
-        stats::update(model, nullform)
+        suppressWarnings(do.call(stats::update, list(model, formula = nullform, offset = str2lang(offset_term))))
       },
       error = function(e) {
         msg <- e$message
         if (verbose) {
           if (grepl("(^object)(.*)(not found$)", msg)) {
-            print_color("Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n", "red")
+            print_color("Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n", "red") # nolint
           } else if (startsWith(msg, "could not find function")) {
-            print_color("Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n", "red")
+            print_color("Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n", "red") # nolint
           }
         }
-        return(NULL)
+        NULL
       }
     )
   }

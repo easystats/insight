@@ -79,12 +79,9 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 72)
-  expect_identical(
-    colnames(get_data(m1)),
-    c("rating", "temp", "contact", "judge")
-  )
-  expect_equal(nrow(get_data(m2)), 1847)
+  expect_identical(nrow(get_data(m1)), 72L)
+  expect_named(get_data(m1), c("rating", "temp", "contact", "judge"))
+  expect_identical(nrow(get_data(m2)), 1847L)
   expect_identical(colnames(get_data(m2)), c("SURENESS", "PROD", "RESP"))
 })
 
@@ -137,8 +134,8 @@ test_that("find_terms", {
 })
 
 test_that("n_obs", {
-  expect_equal(n_obs(m1), 72)
-  expect_equal(n_obs(m2), 1847)
+  expect_identical(n_obs(m1), 72)
+  expect_identical(n_obs(m2), 1847)
 })
 
 test_that("linkfun", {

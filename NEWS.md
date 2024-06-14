@@ -2,6 +2,10 @@
 
 ## General
 
+* Massive overhaul of `get_variance()`. The function should be now more
+  accurate for different distributional families, in particular for
+  mixed regression models with Beta family.
+
 * Improved accuracy of singularity-checks in `get_variance()`.
 
 # insight 0.20.1

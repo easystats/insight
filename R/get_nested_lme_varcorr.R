@@ -8,6 +8,7 @@
   vcor <- lme4::VarCorr(x)
   class(vcor) <- "matrix"
 
+  ## FIXME: doesn't work for nested RE from MASS::glmmPQL, see Nakagawa example
   re_index <- (which(rownames(vcor) == "(Intercept)") - 1)[-1]
   vc_list <- split(data.frame(vcor, stringsAsFactors = FALSE), findInterval(seq_len(nrow(vcor)), re_index))
   vc_rownames <- split(rownames(vcor), findInterval(seq_len(nrow(vcor)), re_index))
@@ -49,5 +50,9 @@
 
 
 .is_nested_lme <- function(x) {
-  sapply(find_random(x), function(i) any(grepl(":", i, fixed = TRUE)))
+  if (inherits(x, "glmmPQL")) {
+    length(find_random(x, flatten = TRUE)) > 1
+  } else {
+    sapply(find_random(x), function(i) any(grepl(":", i, fixed = TRUE)))
+  }
 }
