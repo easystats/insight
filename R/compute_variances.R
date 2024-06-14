@@ -807,7 +807,8 @@
   if (is.na(mu)) {
     if (verbose) {
       format_warning(
-        "Can't calculate model's distribution-specific variance. Results are not reliable."
+        "Can't calculate model's distribution-specific variance. Results are not reliable.",
+        "A reason can be that the null model could not be computed manually. Try to fit the null model manually and pass it to `null_model`." # nolint
       )
     }
     return(0)
@@ -918,7 +919,8 @@
     error = function(x) {
       if (verbose) {
         format_warning(
-          "Can't calculate model's distribution-specific variance. Results are not reliable."
+          "Can't calculate model's distribution-specific variance. Results are not reliable.",
+          paste("The following error occured: ", x$message)
         )
       }
       0
