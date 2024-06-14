@@ -9,12 +9,19 @@ bayestestR::hdi() or parameters::model_parameters(), as input and splits
 this information into several parts, depending on the model. See details
 below."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">insight</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.1</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.2</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -48,6 +55,8 @@ below."><meta property="og:image" content="https://easystats.github.io/insight/r
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -56,6 +65,7 @@ below."><meta property="og:image" content="https://easystats.github.io/insight/r
       <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/main/R/print_parameters.R" class="external-link"><code>R/print_parameters.R</code></a></small>
       <div class="d-none name"><code>print_parameters.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>This function takes a data frame, typically a data frame with information on
 summaries of model parameters like <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>,
@@ -63,6 +73,7 @@ summaries of model parameters like <code><a href="https://easystats.github.io/ba
 this information into several parts, depending on the model. See details
 below.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">print_parameters</span><span class="op">(</span></span>
@@ -78,14 +89,21 @@ below.</p>
 <span>  split_by <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A fitted model, or a data frame returned by <code><a href="clean_parameters.html">clean_parameters()</a></code>.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>One or more objects (data frames), which contain information about
 the model parameters and related statistics (like confidence intervals, HDI,
 ROPE, ...).</p></dd>
+
+
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p><code>by</code> should be a character vector with one or more of the following
 elements: <code>"Effects"</code>, <code>"Component"</code>, <code>"Response"</code> and <code>"Group"</code>. These are
@@ -93,24 +111,34 @@ the column names returned by <code><a href="clean_parameters.html">clean_paramet
 the information from which the group or component model parameters belong.
 If <code>NULL</code>, the merged data frame is returned. Else, the data frame is split
 into a list, split by the values from those columns defined in <code>by</code>.</p></dd>
+
+
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
 <dd><p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
 assumed use for output is basic printing. If <code>"markdown"</code>, markdown-format
 is assumed. This only affects the style of title- and table-caption
 attributes, which are used in <code><a href="export_table.html">export_table()</a></code>.</p></dd>
+
+
 <dt id="arg-parameter-column">parameter_column<a class="anchor" aria-label="anchor" href="#arg-parameter-column"></a></dt>
 <dd><p>String, name of the column that contains the
 parameter names. Usually, for data frames returned by functions the
 easystats-packages, this will be <code>"Parameter"</code>.</p></dd>
+
+
 <dt id="arg-keep-parameter-column">keep_parameter_column<a class="anchor" aria-label="anchor" href="#arg-keep-parameter-column"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the data frames in the
 returned list have both a <code>"Cleaned_Parameter"</code> and <code>"Parameter"</code>
 column. If <code>FALSE</code>, the (unformatted) <code>"Parameter"</code> is removed,
 and the column with cleaned parameter names (<code>"Cleaned_Parameter"</code>) is
 renamed into <code>"Parameter"</code>.</p></dd>
+
+
 <dt id="arg-remove-empty-column">remove_empty_column<a class="anchor" aria-label="anchor" href="#arg-remove-empty-column"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, columns with completely
 empty character values will be removed.</p></dd>
+
+
 <dt id="arg-titles-subtitles">titles, subtitles<a class="anchor" aria-label="anchor" href="#arg-titles-subtitles"></a></dt>
 <dd><p>By default, the names of the model components (like
 fixed or random effects, count or zero-inflated model part) are added as
@@ -122,8 +150,11 @@ values for <code>"table_title"</code> and <code>"table_subtitle"</code>. <code>t
 and <code>subtitles</code> may be any length from 1 to same length as returned
 list elements. If <code>titles</code> and <code>subtitles</code> are shorter than
 existing elements, only the first default attributes are overwritten.</p></dd>
+
+
 <dt id="arg-split-by">split_by<a class="anchor" aria-label="anchor" href="#arg-split-by"></a></dt>
 <dd><p>Deprecated, please use <code>by</code> instead.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -159,6 +190,7 @@ a list, so for a clear printing. Users can loop over this list and print each
 component for a better overview. Further, parameter names are "cleaned", if
 necessary, also for a cleaner print. See also 'Examples'.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
@@ -284,12 +316,21 @@ necessary, also for a cleaner print. See also 'Examples'.</p>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

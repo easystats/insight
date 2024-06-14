@@ -3,12 +3,19 @@
 for more model objects that probably don't provide a vcov()-method."><meta property="og:description" content="Returns the variance-covariance, as retrieved by stats::vcov(), but works
 for more model objects that probably don't provide a vcov()-method."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">insight</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.1</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.2</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -42,6 +49,8 @@ for more model objects that probably don't provide a vcov()-method."><meta prope
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -50,10 +59,12 @@ for more model objects that probably don't provide a vcov()-method."><meta prope
       <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/main/R/get_varcov.R" class="external-link"><code>R/get_varcov.R</code></a></small>
       <div class="d-none name"><code>get_varcov.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Returns the variance-covariance, as retrieved by <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">stats::vcov()</a></code>, but works
 for more model objects that probably don't provide a <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code>-method.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -129,14 +140,23 @@ for more model objects that probably don't provide a <code><a href="https://rdrr
 <span><span class="co"># S3 method for class 'mixor'</span></span>
 <span><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A model.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
+
+
 <dt id="arg-vcov">vcov<a class="anchor" aria-label="anchor" href="#arg-vcov"></a></dt>
 <dd><p>Variance-covariance matrix used to compute uncertainty estimates
 (e.g., for robust standard errors). This argument accepts a covariance
@@ -153,6 +173,8 @@ identifies the function to be used to compute the covariance matrix.</p><ul><li>
 <code>"vcovPL"</code>.</p></li>
 </ul></li>
 </ul></dd>
+
+
 <dt id="arg-vcov-args">vcov_args<a class="anchor" aria-label="anchor" href="#arg-vcov-args"></a></dt>
 <dd><p>List of arguments to be passed to the function identified by
 the <code>vcov</code> argument. This function is typically supplied by the <strong>sandwich</strong>
@@ -161,6 +183,8 @@ or <strong>clubSandwich</strong> packages. Please refer to their documentation (
 type (argument <code>type</code>) is given, the default type for <code>"HC"</code> (or <code>"vcovHC"</code>)
 equals the default from the <strong>sandwich</strong> package; for type <code>"CR"</code> (or
 <code>"vcoCR"</code>), the default is set to <code>"CR3"</code>.</p></dd>
+
+
 <dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
 <dd><p>Should the complete variance-covariance matrix of the model
 be returned, or only for specific model components only (like count or
@@ -170,13 +194,18 @@ of <code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code>, 
 <code>"precision"</code>, or <code>"all"</code>. May be abbreviated. Note that the <em>conditional</em>
 component is also called <em>count</em> or <em>mean</em> component, depending on the
 model.</p></dd>
+
+
 <dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
 <dd><p>Should the complete variance-covariance matrix of the model
 be returned, or only for specific model parameters only? Currently only
 applies to models of class <code>mixor</code>.</p></dd>
+
+
 <dt id="arg-complete">complete<a class="anchor" aria-label="anchor" href="#arg-complete"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, for <code>aov</code>, returns the full
 variance-covariance matrix.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -190,6 +219,7 @@ ensures that it is still possible, for instance, to calculate standard
 errors of model parameters. A message is shown when the matrix is negative
 definite and a corrected matrix is returned.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
@@ -226,12 +256,21 @@ definite and a corrected matrix is returned.</p>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

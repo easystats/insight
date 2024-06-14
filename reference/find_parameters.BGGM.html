@@ -7,12 +7,19 @@ appear in the summary() output. For Bayesian models, the parameter
 names equal the column names of the posterior samples after coercion
 from as.data.frame()."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">insight</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.1</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.2</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -46,6 +53,8 @@ from as.data.frame()."><meta property="og:image" content="https://easystats.gith
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -54,12 +63,14 @@ from as.data.frame()."><meta property="og:image" content="https://easystats.gith
       <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/main/R/find_parameters_bayesian.R" class="external-link"><code>R/find_parameters_bayesian.R</code></a></small>
       <div class="d-none name"><code>find_parameters.BGGM.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Returns the names of model parameters, like they typically
 appear in the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> output. For Bayesian models, the parameter
 names equal the column names of the posterior samples after coercion
 from <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code>.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'BGGM'</span></span>
@@ -141,10 +152,15 @@ from <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-l
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A fitted model.</p></dd>
+
+
 <dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
 <dd><p>Should all predictor variables, predictor variables for the
 conditional model, the zero-inflated part of the model, the dispersion
@@ -153,17 +169,26 @@ with zero-inflated and/or dispersion formula, or to models with instrumental
 variable (so called fixed-effects regressions). May be abbreviated. Note that the
 <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
 component, depending on the model.</p></dd>
+
+
 <dt id="arg-flatten">flatten<a class="anchor" aria-label="anchor" href="#arg-flatten"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the values are returned
 as character vector, not as list. Duplicated values are removed.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
+
+
 <dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
 <dd><p>Should parameters for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
+
+
 <dt id="arg-parameters">parameters<a class="anchor" aria-label="anchor" href="#arg-parameters"></a></dt>
 <dd><p>Regular expression pattern that describes the parameters that
 should be returned.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -184,6 +209,7 @@ parameters. These may be one of the following:</p><ul><li><p><code>sigma</code>,
 <li><p><code>mix</code>, mixture parameters (<strong>brms</strong> only)</p></li>
 <li><p><code>shiftprop</code>, shifted proportion parameters (<strong>brms</strong> only)</p></li>
 </ul></div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
@@ -196,12 +222,21 @@ parameters. These may be one of the following:</p><ul><li><p><code>sigma</code>,
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

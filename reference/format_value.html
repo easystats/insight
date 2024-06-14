@@ -5,12 +5,19 @@ format_percent() is a short-cut for format_value(as_percent = TRUE)."><meta prop
 formatting can be something like rounding digits, scientific notation etc.
 format_percent() is a short-cut for format_value(as_percent = TRUE)."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">insight</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.1</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.2</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -44,6 +51,8 @@ format_percent() is a short-cut for format_value(as_percent = TRUE)."><meta prop
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -52,11 +61,13 @@ format_percent() is a short-cut for format_value(as_percent = TRUE)."><meta prop
       <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/main/R/format_value.R" class="external-link"><code>R/format_value.R</code></a></small>
       <div class="d-none name"><code>format_value.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p><code>format_value()</code> converts numeric values into formatted string values, where
 formatting can be something like rounding digits, scientific notation etc.
 <code>format_percent()</code> is a short-cut for <code>format_value(as_percent = TRUE)</code>.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_value</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -93,12 +104,19 @@ formatting can be something like rounding digits, scientific notation etc.
 <span></span>
 <span><span class="fu">format_percent</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>Numeric value.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
+
+
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
 <dd><p>Number of digits for rounding or significant figures. May also
 be <code>"signif"</code> to return significant figures or <code>"scientific"</code>
@@ -106,40 +124,58 @@ to return scientific notation. Control the number of digits by adding the
 value as suffix, e.g. <code>digits = "scientific4"</code> to have scientific
 notation with 4 decimal places, or <code>digits = "signif5"</code> for 5
 significant figures (see also <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif()</a></code>).</p></dd>
+
+
 <dt id="arg-protect-integers">protect_integers<a class="anchor" aria-label="anchor" href="#arg-protect-integers"></a></dt>
 <dd><p>Should integers be kept as integers (i.e., without
 decimals)?</p></dd>
+
+
 <dt id="arg-missing">missing<a class="anchor" aria-label="anchor" href="#arg-missing"></a></dt>
 <dd><p>Value by which <code>NA</code> values are replaced. By default, an
 empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p></dd>
+
+
 <dt id="arg-width">width<a class="anchor" aria-label="anchor" href="#arg-width"></a></dt>
 <dd><p>Minimum width of the returned string. If not <code>NULL</code> and
 <code>width</code> is larger than the string's length, leading whitespaces are
 added to the string.</p></dd>
+
+
 <dt id="arg-as-percent">as_percent<a class="anchor" aria-label="anchor" href="#arg-as-percent"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, value is formatted as percentage
 value.</p></dd>
+
+
 <dt id="arg-zap-small">zap_small<a class="anchor" aria-label="anchor" href="#arg-zap-small"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, small values are rounded after
 <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal
 places than <code>digits</code> are printed in scientific notation.</p></dd>
+
+
 <dt id="arg-lead-zero">lead_zero<a class="anchor" aria-label="anchor" href="#arg-lead-zero"></a></dt>
 <dd><p>Logical, if <code>TRUE</code> (default), includes leading zeros, else
 leading zeros are dropped.</p></dd>
+
+
 <dt id="arg-style-positive">style_positive<a class="anchor" aria-label="anchor" href="#arg-style-positive"></a></dt>
 <dd><p>A string that determines the style of positive numbers.
 May be <code>"none"</code> (default), <code>"plus"</code> to add a plus-sign or <code>"space"</code> to
 precede the string by a Unicode "figure space", i.e., a space equally as
 wide as a number or <code>+</code>.</p></dd>
+
+
 <dt id="arg-style-negative">style_negative<a class="anchor" aria-label="anchor" href="#arg-style-negative"></a></dt>
 <dd><p>A string that determines the style of negative numbers.
 May be <code>"hyphen"</code> (default), <code>"minus"</code> for a proper Unicode minus symbol or
 <code>"parens"</code> to wrap the number in parentheses.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A formatted string.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_value</span><span class="op">(</span><span class="fl">1.20</span><span class="op">)</span></span></span>
@@ -216,12 +252,21 @@ May be <code>"hyphen"</code> (default), <code>"minus"</code> for a proper Unicod
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

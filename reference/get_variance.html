@@ -5,12 +5,19 @@ get_variance_fixed(x) are shortcuts for get_variance(x, component = "residual") 
 returns the result as list. Functions like get_variance_residual(x) or
 get_variance_fixed(x) are shortcuts for get_variance(x, component = "residual") etc.'><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">insight</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.1</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.2</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -44,6 +51,8 @@ get_variance_fixed(x) are shortcuts for get_variance(x, component = "residual") 
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -52,17 +61,38 @@ get_variance_fixed(x) are shortcuts for get_variance(x, component = "residual") 
       <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/main/R/get_variances.R" class="external-link"><code>R/get_variances.R</code></a></small>
       <div class="d-none name"><code>get_variance.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>This function extracts the different variance components of a mixed model and
 returns the result as list. Functions like <code>get_variance_residual(x)</code> or
 <code>get_variance_fixed(x)</code> are shortcuts for <code>get_variance(x, component = "residual")</code> etc.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_variance</span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_variance</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'merMod'</span></span>
+<span><span class="fu">get_variance</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span>, <span class="st">"residual"</span>, <span class="st">"distribution"</span>, <span class="st">"dispersion"</span>,</span>
 <span>    <span class="st">"intercept"</span>, <span class="st">"slope"</span>, <span class="st">"rho01"</span>, <span class="st">"rho00"</span><span class="op">)</span>,</span>
+<span>  tolerance <span class="op">=</span> <span class="fl">1e-08</span>,</span>
+<span>  null_model <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  approximation <span class="op">=</span> <span class="st">"lognormal"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'glmmTMB'</span></span>
+<span><span class="fu">get_variance</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span>, <span class="st">"residual"</span>, <span class="st">"distribution"</span>, <span class="st">"dispersion"</span>,</span>
+<span>    <span class="st">"intercept"</span>, <span class="st">"slope"</span>, <span class="st">"rho01"</span>, <span class="st">"rho00"</span><span class="op">)</span>,</span>
+<span>  model_component <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tolerance <span class="op">=</span> <span class="fl">1e-08</span>,</span>
+<span>  null_model <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  approximation <span class="op">=</span> <span class="st">"lognormal"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -71,7 +101,7 @@ returns the result as list. Functions like <code>get_variance_residual(x)</code>
 <span></span>
 <span><span class="fu">get_variance_fixed</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">get_variance_random</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, tolerance <span class="op">=</span> <span class="fl">1e-05</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">get_variance_random</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, tolerance <span class="op">=</span> <span class="fl">1e-08</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">get_variance_distribution</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
@@ -85,25 +115,55 @@ returns the result as list. Functions like <code>get_variance_residual(x)</code>
 <span></span>
 <span><span class="fu">get_correlation_slopes</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A mixed effects model.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Currently not used.</p></dd>
+
+
 <dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
 <dd><p>Character value, indicating the variance component that should
 be returned. By default, all variance components are returned. The
 distribution-specific (<code>"distribution"</code>) and residual (<code>"residual"</code>)
 variance are the most computational intensive components, and hence may
 take a few seconds to calculate.</p></dd>
-<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Toggle off warnings.</p></dd>
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Currently not used.</p></dd>
+
+
 <dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
 <dd><p>Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
 stricter the test will be. See <code><a href="https://easystats.github.io/performance/reference/check_singularity.html" class="external-link">performance::check_singularity()</a></code>.</p></dd>
+
+
+<dt id="arg-null-model">null_model<a class="anchor" aria-label="anchor" href="#arg-null-model"></a></dt>
+<dd><p>Optional, a null-model to be used for the calculation of
+random effect variances. If <code>NULL</code>, the null-model is computed internally.</p></dd>
+
+
+<dt id="arg-approximation">approximation<a class="anchor" aria-label="anchor" href="#arg-approximation"></a></dt>
+<dd><p>Character string, indicating the approximation method
+for the distribution-specific (residual) variance. Only applies to non-Gaussian
+models. Can be <code>"lognormal"</code> (default), <code>"delta"</code> or <code>"trigamma"</code>. For binomial
+models, can also be <code>"observation_level"</code>. See <em>Nakagawa et al. 2017</em> for
+details.</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>Toggle off warnings.</p></dd>
+
+
+<dt id="arg-model-component">model_component<a class="anchor" aria-label="anchor" href="#arg-model-component"></a></dt>
+<dd><p>For models that can have a zero-inflation component,
+specify for which component variances should be returned.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -133,12 +193,16 @@ experimental and may not work for all models.</p>
     </div>
     <div class="section level2">
     <h2 id="fixed-effects-variance">Fixed effects variance<a class="anchor" aria-label="anchor" href="#fixed-effects-variance"></a></h2>
+
+
 <p>The fixed effects variance, σ<sup>2</sup><sub>f</sub>,
 is the variance of the matrix-multiplication β∗X
 (parameter vector by model matrix).</p>
     </div>
     <div class="section level2">
     <h2 id="random-effects-variance">Random effects variance<a class="anchor" aria-label="anchor" href="#random-effects-variance"></a></h2>
+
+
 <p>The random effect variance, σ<sup>2</sup><sub>i</sub>,
 represents the <em>mean</em> random effect variance of the model. Since this
 variance reflects the "average" random effects variance for mixed models, it
@@ -149,6 +213,8 @@ the random effects variance equals the random-intercept variance.</p>
     </div>
     <div class="section level2">
     <h2 id="distribution-specific-variance">Distribution-specific variance<a class="anchor" aria-label="anchor" href="#distribution-specific-variance"></a></h2>
+
+
 <p>The distribution-specific variance,
 σ<sup>2</sup><sub>d</sub>,
 depends on the model family. For Gaussian models, it is
@@ -163,6 +229,8 @@ model is computed according to <em>Zuur et al. 2012, p277</em>.</p>
     </div>
     <div class="section level2">
     <h2 id="variance-for-the-additive-overdispersion-term">Variance for the additive overdispersion term<a class="anchor" aria-label="anchor" href="#variance-for-the-additive-overdispersion-term"></a></h2>
+
+
 <p>The variance for the additive overdispersion term,
 σ<sup>2</sup><sub><em>e</em></sub>,
 represents "the excess variation relative to what is expected from a certain
@@ -171,11 +239,15 @@ distribution" (<em>Nakagawa et al. 2017</em>). In (most? many?) cases, this will
     </div>
     <div class="section level2">
     <h2 id="residual-variance">Residual variance<a class="anchor" aria-label="anchor" href="#residual-variance"></a></h2>
+
+
 <p>The residual variance, σ<sup>2</sup><sub>ε</sub>,
 is simply σ<sup>2</sup><sub>d</sub> + σ<sup>2</sup><sub><em>e</em></sub>.</p>
     </div>
     <div class="section level2">
     <h2 id="random-intercept-variance">Random intercept variance<a class="anchor" aria-label="anchor" href="#random-intercept-variance"></a></h2>
+
+
 <p>The random intercept variance, or <em>between-subject</em> variance
 (τ<sub>00</sub>), is obtained from
 <code><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr()</a></code>. It indicates how much groups or subjects differ from each other,
@@ -184,12 +256,16 @@ indicates the <em>within-subject variance</em>.</p>
     </div>
     <div class="section level2">
     <h2 id="random-slope-variance">Random slope variance<a class="anchor" aria-label="anchor" href="#random-slope-variance"></a></h2>
+
+
 <p>The random slope variance (τ<sub>11</sub>)
 is obtained from <code><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr()</a></code>. This measure is only available for mixed models
 with random slopes.</p>
     </div>
     <div class="section level2">
     <h2 id="random-slope-intercept-correlation">Random slope-intercept correlation<a class="anchor" aria-label="anchor" href="#random-slope-intercept-correlation"></a></h2>
+
+
 <p>The random slope-intercept correlation
 (ρ<sub>01</sub>) is obtained from
 <code><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr()</a></code>. This measure is only available for mixed models with random
@@ -197,6 +273,7 @@ intercepts and slopes.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Johnson, P. C. D. (2014). Extension of Nakagawa &amp; Schielzeth’s R2 GLMM to
 random slopes models. Methods in Ecology and Evolution, 5(9), 944–946.
 <a href="https://doi.org/10.1111/2041-210X.12225" class="external-link">doi:10.1111/2041-210X.12225</a></p></li>
@@ -208,6 +285,7 @@ Society Interface, 14(134), 20170213. <a href="https://doi.org/10.1098/rsif.2017
 and generalized linear mixed models with R. Newburgh, United Kingdom:
 Highland Statistics.</p></li>
 </ul></div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
@@ -254,12 +332,21 @@ Highland Statistics.</p></li>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

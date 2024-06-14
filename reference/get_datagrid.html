@@ -7,12 +7,19 @@ combined values. Usually used to make generate predictions using get_predicted()
 See this vignette
 for a tutorial on how to create a visualisation matrix using this function."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">insight</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.1</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.2</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -46,6 +53,8 @@ for a tutorial on how to create a visualisation matrix using this function."><me
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -54,12 +63,14 @@ for a tutorial on how to create a visualisation matrix using this function."><me
       <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/main/R/get_datagrid.R" class="external-link"><code>R/get_datagrid.R</code></a></small>
       <div class="d-none name"><code>get_datagrid.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Create a reference matrix, useful for visualisation, with evenly spread and
 combined values. Usually used to make generate predictions using <code><a href="get_predicted.html">get_predicted()</a></code>.
 See this <a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html" class="external-link">vignette</a>
 for a tutorial on how to create a visualisation matrix using this function.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -101,13 +112,20 @@ for a tutorial on how to create a visualisation matrix using this function.</p>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>An object from which to construct the reference grid.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to or from other methods (for instance, <code>length</code>
 or <code>range</code> to control the spread of numeric variables.).</p></dd>
+
+
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>Indicates the <em>focal predictors</em> (variables) for the reference grid
 and at which values focal predictors should be represented. If not specified
@@ -147,14 +165,20 @@ one or more factor levels, like <code>by = "Species = [setosa, versicolor]"</cod
 <strong>Note</strong>: the <code>length</code> argument will be ignored when using brackets-tokens.</p>
 <p>The remaining variables not specified in <code>by</code> will be fixed (see also arguments
 <code>factors</code> and <code>numerics</code>).</p></dd>
+
+
 <dt id="arg-factors">factors<a class="anchor" aria-label="anchor" href="#arg-factors"></a></dt>
 <dd><p>Type of summary for factors. Can be <code>"reference"</code> (set at the
 reference level), <code>"mode"</code> (set at the most common level) or <code>"all"</code> to
 keep all levels.</p></dd>
+
+
 <dt id="arg-numerics">numerics<a class="anchor" aria-label="anchor" href="#arg-numerics"></a></dt>
 <dd><p>Type of summary for numeric values. Can be <code>"all"</code> (will
 duplicate the grid for all unique values), any function (<code>"mean"</code>,
 <code>"median"</code>, ...) or a value (e.g., <code>numerics = 0</code>).</p></dd>
+
+
 <dt id="arg-preserve-range">preserve_range<a class="anchor" aria-label="anchor" href="#arg-preserve-range"></a></dt>
 <dd><p>In the case of combinations between numeric variables
 and factors, setting <code>preserve_range = TRUE</code> will drop the observations
@@ -162,9 +186,13 @@ where the value of the numeric variable is originally not present in the
 range of its factor level. This leads to an unbalanced grid. Also, if you
 want the minimum and the maximum to closely match the actual ranges, you
 should increase the <code>length</code> argument.</p></dd>
+
+
 <dt id="arg-reference">reference<a class="anchor" aria-label="anchor" href="#arg-reference"></a></dt>
 <dd><p>The reference vector from which to compute the mean and SD.
 Used when standardizing or unstandardizing the grid using <code><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">effectsize::standardize</a></code>.</p></dd>
+
+
 <dt id="arg-length">length<a class="anchor" aria-label="anchor" href="#arg-length"></a></dt>
 <dd><p>Length of numeric target variables selected in <code>by</code>. This arguments
 controls the number of (equally spread) values that will be taken to represent the
@@ -172,6 +200,8 @@ continuous variables. A longer length will increase precision, but can also
 substantially increase the size of the datagrid (especially in case of interactions).
 If <code>NA</code>, will return all the unique values. In case of multiple continuous target
 variables, <code>length</code> can also be a vector of different values (see examples).</p></dd>
+
+
 <dt id="arg-range">range<a class="anchor" aria-label="anchor" href="#arg-range"></a></dt>
 <dd><p>Option to control the representative values given in <code>by</code>, if
 no specific values were provided. Use in combination with the <code>length</code> argument
@@ -196,11 +226,17 @@ indicated in <code>length</code> are generated. For numeric predictors not speci
 first in <code>by</code>, mean and -1/+1 SD around the mean are returned. For factors,
 all levels are returned.</p></li>
 </ul></dd>
+
+
 <dt id="arg-at">at<a class="anchor" aria-label="anchor" href="#arg-at"></a></dt>
 <dd><p>Deprecated. Use <code>by</code> instead.</p></dd>
+
+
 <dt id="arg-include-smooth">include_smooth<a class="anchor" aria-label="anchor" href="#arg-include-smooth"></a></dt>
 <dd><p>If <code>x</code> is a model object, decide whether smooth terms
 should be included in the data grid or not.</p></dd>
+
+
 <dt id="arg-include-random">include_random<a class="anchor" aria-label="anchor" href="#arg-include-random"></a></dt>
 <dd><p>If <code>x</code> is a mixed model object, decide whether random
 effect terms should be included in the data grid or not. If
@@ -209,14 +245,21 @@ these will still be included in the returned grid, but set to their
 "population level" value (e.g., <code>NA</code> for <em>glmmTMB</em> or <code>0</code> for <em>merMod</em>).
 This ensures that common <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> methods work properly, as these
 usually need data with all variables in the model included.</p></dd>
+
+
 <dt id="arg-include-response">include_response<a class="anchor" aria-label="anchor" href="#arg-include-response"></a></dt>
 <dd><p>If <code>x</code> is a model object, decide whether the response
 variable should be included in the data grid or not.</p></dd>
+
+
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>Optional, the data frame that was used to fit the model. Usually,
 the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -226,6 +269,7 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="get_predicted.html">get_predicted()</a></code></p></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Datagrids of variables and dataframes =====================================</span></span></span>
@@ -503,12 +547,21 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://arelbundock.com/" class="external-link">Vincent Arel-Bundock</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 
