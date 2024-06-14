@@ -198,8 +198,6 @@
 
 
 
-
-
 # store essential information on coefficients, model matrix and so on
 # as list, since we need these information throughout the functions to
 # calculate the variance components...
@@ -435,9 +433,6 @@
 }
 
 
-
-
-
 # helper-function, telling user if family / distribution
 # is supported or not
 .badlink <- function(link, family, verbose = TRUE) {
@@ -448,9 +443,6 @@
   }
   return(NA)
 }
-
-
-
 
 
 # glmmTMB returns a list of model information, one for conditional
@@ -476,8 +468,6 @@
 
 
 
-
-
 # fixed effects variance ------------------------------------------------------
 #
 # This is in line with Nakagawa et al. 2017, Suppl. 2
@@ -491,6 +481,18 @@
 }
 
 
+
+# dispersion-specific variance ----
+# ---------------------------------
+.compute_variance_dispersion <- function(x, vals, faminfo, obs.terms) {
+  if (faminfo$is_linear) {
+    0
+  } else if (length(obs.terms) == 0) {
+    0
+  } else {
+    .compute_variance_random(obs.terms, x = x, vals = vals)
+  }
+}
 
 
 
@@ -534,12 +536,15 @@
 
 
 
-
-
 # distribution-specific (residual) variance (Nakagawa et al. 2017) ------------
+# (also call obersvation level variance).
 #
 # This is in line with Nakagawa et al. 2017, Suppl. 2, and package MuMIm
 # see https://royalsocietypublishing.org/action/downloadSupplement?doi=10.1098%2Frsif.2017.0213&file=rsif20170213supp2.pdf
+#
+# We need:
+# - the overdispersion parameter / sigma
+# - the null model for the conditional mean (for the observation level variance)
 #
 # There may be small deviations to Nakagawa et al. for the null-model, which
 # despite being correctly re-formulated in "null_model()", returns slightly
@@ -553,6 +558,7 @@
                                            name,
                                            approx_method = "lognormal",
                                            verbose = TRUE) {
+  # get overdispersion parameter / sigma
   sig <- .safe(get_sigma(x))
 
   if (is.null(sig)) {
@@ -599,7 +605,7 @@
 
     # sanity check - clmm-models are "binomial" but have no pmean
     if (is.null(pmean) && identical(approx_method, "observation_level")) {
-      approx_method <- "lognormal"
+      approx_method <- "lognormal" # we don't have lognormal, it's just the default
     }
 
     resid.variance <- switch(faminfo$link_function,
@@ -736,27 +742,9 @@
 }
 
 
-
-
-# dispersion-specific variance ----
-# ---------------------------------
-.compute_variance_dispersion <- function(x, vals, faminfo, obs.terms) {
-  if (faminfo$is_linear) {
-    0
-  } else if (length(obs.terms) == 0) {
-    0
-  } else {
-    .compute_variance_random(obs.terms, x = x, vals = vals)
-  }
-}
-
-
-
-
-
 # This is the core-function to calculate the distribution-specific variance
-# Nakagawa et al. 2017 propose three different methods, which are now also
-# implemented here.
+# (also call obersvation level variance). Nakagawa et al. 2017 propose three
+# different methods, which are now also implemented here.
 #
 # This is in line with Nakagawa et al. 2017, Suppl. 2, and package MuMIm
 # see https://royalsocietypublishing.org/action/downloadSupplement?doi=10.1098%2Frsif.2017.0213&file=rsif20170213supp2.pdf
@@ -782,8 +770,10 @@
 
   # ------------------------------------------------------------------
   # approximation of distributional variance, see Nakagawa et al. 2017
-  # in general want somethinh lije log(1+var(x)/mu^2) for log-approximation,
-  # and for the other approximations accordingly
+  # in general want something like log(1+var(x)/mu^2) for log-approximation,
+  # and for the other approximations accordingly. Therefore, we need
+  # "mu" (the conditional mean of the null model - that's why we need
+  # the null model here) and the overdispersion / sigma parameter
   # ------------------------------------------------------------------
 
   # check if null-model could be computed
@@ -791,8 +781,7 @@
     mu <- NA
   } else {
     if (inherits(model_null, "cpglmm")) {
-      # installed?
-      check_if_installed("cplm")
+      check_if_installed("cplm") # installed?
       null_fixef <- unname(cplm::fixef(model_null))
     } else {
       null_fixef <- unname(.collapse_cond(lme4::fixef(model_null)))
@@ -823,11 +812,13 @@
       beta = ,
       betabinomial = ,
       ordbeta = stats::plogis(mu),
+      # for count models, Nakagawa et al. suggest this transformation
       poisson = ,
       quasipoisson = ,
       nbinom = ,
       nbinom1 = ,
       nbinom2 = ,
+      negbinomial = ,
       tweedie = ,
       `negative binomial` = exp(mu + 0.5 * as.vector(revar_null)),
       link_inverse(x)(mu) ## TODO: check if this is better than "exp(mu)"
@@ -838,9 +829,9 @@
   cvsquared <- tryCatch(
     {
       if (faminfo$link_function == "tweedie") {
-        vv <- .variance_family_tweedie(x, mu, sig)
+        dispersion_param <- .variance_family_tweedie(x, mu, sig)
       } else {
-        vv <- switch(faminfo$family,
+        dispersion_param <- switch(faminfo$family,
 
           # (zero-inflated) poisson ----
           # ----------------------------
@@ -862,6 +853,7 @@
           nbinom1 = ,
           nbinom2 = ,
           quasipoisson = ,
+          negbinomial = ,
           `negative binomial` = sig,
           `zero-inflated negative binomial` = ,
           genpois = .variance_family_nbinom(x, mu, sig, faminfo),
@@ -882,7 +874,7 @@
         )
       }
 
-      if (vv < 0 && isTRUE(verbose)) {
+      if (dispersion_param < 0 && isTRUE(verbose)) {
         format_warning(
           "Model's distribution-specific variance is negative. Results are not reliable."
         )
@@ -893,26 +885,28 @@
       # for cpglmm with tweedie link, the model is not of tweedie family,
       # only the link function is tweedie
       if (faminfo$link_function == "tweedie") {
-        vv
+        dispersion_param
       } else if (identical(approx_method, "trigamma")) {
         switch(faminfo$family,
           nbinom = ,
           nbinom1 = ,
           nbinom2 = ,
-          `negative binomial` = ((1 / mu) + (1 / sig))^-1,
+          negbinomial = ,
+          `negative binomial` = ((1 / mu) + (1 / dispersion_param))^-1,
           poisson = ,
-          quasipoisson = mu / vv,
-          vv / mu^2
+          quasipoisson = mu / dispersion_param,
+          dispersion_param / mu^2
         )
       } else {
         switch(faminfo$family,
           nbinom = ,
           nbinom1 = ,
           nbinom2 = ,
-          `negative binomial` = (1 / mu) + (1 / sig),
+          negbinomial = ,
+          `negative binomial` = (1 / mu) + (1 / dispersion_param),
           poisson = ,
-          quasipoisson = vv / mu,
-          vv / mu^2
+          quasipoisson = dispersion_param / mu,
+          dispersion_param / mu^2
         )
       }
     },
