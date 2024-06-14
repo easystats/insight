@@ -78,10 +78,11 @@ stricter the test will be. See \code{\link[performance:check_singularity]{perfor
 random effect variances. If \code{NULL}, the null-model is computed internally.}
 
 \item{approximation}{Character string, indicating the approximation method
-for the distribution-specific (residual) variance. Only applies to non-Gaussian
-models. Can be \code{"lognormal"} (default), \code{"delta"} or \code{"trigamma"}. For binomial
-models, can also be \code{"observation_level"}. See \emph{Nakagawa et al. 2017} for
-details.}
+for the distribution-specific (observation level, or residual) variance. Only
+applies to non-Gaussian models. Can be \code{"lognormal"} (default), \code{"delta"} or
+\code{"trigamma"}. For binomial models, the default is the \emph{theoretical} distribution
+specific variance, however, it can also be \code{"observation_level"}. See
+\emph{Nakagawa et al. 2017}, in particular supplement 2, for details.}
 
 \item{verbose}{Toggle off warnings.}
 
@@ -93,8 +94,8 @@ A list with following elements:
 \itemize{
 \item \code{var.fixed}, variance attributable to the fixed effects
 \item \code{var.random}, (mean) variance of random effects
-\item \code{var.residual}, residual variance (sum of dispersion and distribution)
-\item \code{var.distribution}, distribution-specific variance
+\item \code{var.residual}, residual variance (sum of dispersion and distribution-specific/observation level variance)
+\item \code{var.distribution}, distribution-specific (or observation level) variance
 \item \code{var.dispersion}, variance due to additive dispersion
 \item \code{var.intercept}, the random-intercept-variance, or between-subject-variance (\ifelse{html}{\out{&tau;<sub>00</sub>}}{\eqn{\tau_{00}}})
 \item \code{var.slope}, the random-slope-variance (\ifelse{html}{\out{&tau;<sub>11</sub>}}{\eqn{\tau_{11}}})
@@ -137,7 +138,7 @@ like random slopes or nested random effects. Details can be found in
 the random effects variance equals the random-intercept variance.
 }
 
-\section{Distribution-specific variance}{
+\section{Distribution-specific (observation level) variance}{
 
 The distribution-specific variance,
 \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub>}}{\eqn{\sigma^2_d}},
@@ -147,9 +148,11 @@ For models with binary outcome, it is
 \eqn{\pi^2 / 3} for logit-link, \code{1} for probit-link, and \eqn{\pi^2 / 6}
 for cloglog-links. Models from Gamma-families use \eqn{\mu^2} (as obtained
 from \code{family$variance()}). For all other models, the distribution-specific
-variance is based on lognormal approximation, \eqn{log(1 + var(x) / \mu^2)}
-(see \cite{Nakagawa et al. 2017}). The expected variance of a zero-inflated
-model is computed according to \emph{Zuur et al. 2012, p277}.
+variance is by default based on lognormal approximation,
+\eqn{log(1 + var(x) / \mu^2)} (see \cite{Nakagawa et al. 2017}). Other
+approximation methods can be specified with the \code{approximation} argument.
+The expected variance of a zero-inflated model is computed according to
+\emph{Zuur et al. 2012, p277}.
 }
 
 \section{Variance for the additive overdispersion term}{
