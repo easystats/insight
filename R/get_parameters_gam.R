@@ -170,7 +170,9 @@ get_parameters.SemiParBIV <- function(x, ...) {
 
 
 .return_smooth_parms <- function(conditional, smooth_terms, component) {
-  if (!is_empty_object(conditional)) {
+  if (is_empty_object(conditional)) {
+    cond <- NULL
+  } else {
     cond <- data.frame(
       Parameter = names(conditional),
       Estimate = conditional,
@@ -178,27 +180,25 @@ get_parameters.SemiParBIV <- function(x, ...) {
       stringsAsFactors = FALSE,
       row.names = NULL
     )
-  } else {
-    cond <- NULL
   }
 
-  if (!is_empty_object(smooth_terms)) {
-    smooth <- data.frame(
+  if (is_empty_object(smooth_terms)) {
+    smooth_pars <- NULL
+  } else {
+    smooth_pars <- data.frame(
       Parameter = names(smooth_terms),
       Estimate = smooth_terms,
       Component = "smooth_terms",
       stringsAsFactors = FALSE,
       row.names = NULL
     )
-  } else {
-    smooth <- NULL
   }
 
   pars <- switch(component,
     all = ,
-    location = rbind(cond, smooth),
+    location = rbind(cond, smooth_pars),
     conditional = cond,
-    smooth_terms = smooth
+    smooth_terms = smooth_pars
   )
 
   if (!component %in% c("all", "location")) {

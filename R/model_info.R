@@ -1002,6 +1002,19 @@ model_info.glmmadmb <- function(x, ...) {
 
 
 #' @export
+model_info.glmgee <- function(x, ...) {
+  faminfo <- x$family
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.cpglmm <- function(x, ...) {
   link <- parse(text = safe_deparse(x@call))[[1]]$link
   if (is.null(link)) link <- "log"

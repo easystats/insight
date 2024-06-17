@@ -1129,6 +1129,26 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 
 #' @export
+get_statistic.glmgee <- function(x, ...) {
+  junk <- utils::capture.output({
+    cs <- suppressWarnings(stats::coef(summary(x, corr = FALSE)))
+  })
+  stat <- stats::na.omit(cs[, "z-value"])
+
+  out <- data.frame(
+    Parameter = names(stat),
+    Statistic = as.vector(stat),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.nestedLogit <- function(x, component = "all", verbose = TRUE, ...) {
   cf <- as.data.frame(stats::coef(x))
   out <- as.data.frame(do.call(rbind, lapply(x$models, function(i) stats::coef(summary(i)))))

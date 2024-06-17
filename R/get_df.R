@@ -120,7 +120,7 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   }
 
 
-  if (type == "normal") {
+  if (type == "normal") { # nolint
     # Wald normal approximation - always Inf -----
     return(Inf)
   } else if (type == "residual") {

@@ -2,6 +2,7 @@
 % Please edit documentation in R/find_parameters_other.R
 \name{find_parameters.averaging}
 \alias{find_parameters.averaging}
+\alias{find_parameters.glmgee}
 \alias{find_parameters.betareg}
 \alias{find_parameters.DirichletRegModel}
 \alias{find_parameters.mjoint}
@@ -9,6 +10,13 @@
 \title{Find model parameters from models with special components}
 \usage{
 \method{find_parameters}{averaging}(x, component = c("conditional", "full"), flatten = FALSE, ...)
+
+\method{find_parameters}{glmgee}(
+  x,
+  component = c("all", "conditional", "dispersion"),
+  flatten = FALSE,
+  ...
+)
 
 \method{find_parameters}{betareg}(
   x,

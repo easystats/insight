@@ -425,6 +425,9 @@ get_data.geeglm <- function(x,
   .prepare_get_data(x, mf, effects = effects, verbose = verbose)
 }
 
+#' @export
+get_data.glmgee <- get_data.geeglm
+
 
 #' @export
 get_data.gee <- function(x,

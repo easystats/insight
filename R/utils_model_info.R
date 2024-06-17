@@ -56,7 +56,7 @@
       "glm", "gee", "glmmTMB", "glmerMod", "merMod", "stanreg", "MixMod",
       "logistf", "bigglm", "brglm", "feglm", "geeglm", "glmm", "glmmadmb",
       "glmmPQL", "glmrob", "glmRob", "logitmfx", "logitor", "logitr",
-      "mixed", "mixor", "svyglm"
+      "mixed", "mixor", "svyglm", "glmgee"
     )
   )
 

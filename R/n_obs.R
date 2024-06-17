@@ -621,6 +621,12 @@ n_obs.wbgee <- function(x, ...) {
 
 
 #' @export
+n_obs.glmgee <- function(x, ...) {
+  length(x$fitted.values)
+}
+
+
+#' @export
 n_obs.Rchoice <- function(x, ...) {
   nrow(x$mf)
 }

@@ -1,5 +1,9 @@
 # insight 0.20.2
 
+## New supported models
+
+* Support for models of class `glmgee` (package *glmtoolbox*).
+
 ## General
 
 * Massive overhaul of `get_variance()`. The function should be now more

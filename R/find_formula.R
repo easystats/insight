@@ -574,6 +574,9 @@ find_formula.gee <- function(x, verbose = TRUE, ...) {
   .find_formula_return(f, verbose = verbose)
 }
 
+#' @export
+find_formula.glmgee <- find_formula.gee
+
 
 #' @export
 find_formula.MANOVA <- function(x, verbose = TRUE, ...) {
