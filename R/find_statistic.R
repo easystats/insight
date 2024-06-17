@@ -342,7 +342,7 @@ find_statistic <- function(x, ...) {
     }
 
     if (any(chi_names %in% col_names)) {
-      return("chi-squared statistic")
+      "chi-squared statistic"
     }
   }
 }

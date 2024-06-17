@@ -379,7 +379,7 @@ get_df.mediate <- function(x, ...) {
     return(Inf)
   }
 
-  return(n - nparam)
+  n - nparam
 }
 
 
