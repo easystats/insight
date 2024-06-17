@@ -160,6 +160,18 @@ get_varcov.mlm <- function(x,
 
 #' @rdname get_varcov
 #' @export
+get_varcov.glmgee <- function(x,
+                              verbose = TRUE,
+                              vcov = c("robust", "df-adjusted", "model", "bias-corrected", "jackknife"),
+                              ...) {
+  vcov <- match.arg(vcov)
+  vc <- suppressWarnings(stats::vcov(x, type = vcov))
+  .process_vcov(vc, verbose, ...)
+}
+
+
+#' @rdname get_varcov
+#' @export
 get_varcov.nestedLogit <- function(x,
                                    component = "all",
                                    verbose = TRUE,

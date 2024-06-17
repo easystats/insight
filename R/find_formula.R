@@ -536,7 +536,7 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
       between <- as.character(tempf)[3]
       between <- paste0("(", between, ")")
 
-      within_variables <- paste0(c(within_variables, between), collapse = "*")
+      within_variables <- paste(c(within_variables, between), collapse = "*")
     }
 
     out <- list(conditional = stats::formula(paste0(dv, "~", within_variables, "+", e)))
@@ -573,6 +573,9 @@ find_formula.gee <- function(x, verbose = TRUE, ...) {
   )
   .find_formula_return(f, verbose = verbose)
 }
+
+#' @export
+find_formula.glmgee <- find_formula.gee
 
 
 #' @export
@@ -1701,7 +1704,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       if (as.character(zi.form[2]) == ".") {
         resp <- safe_deparse(c.form[2])
         pred <- setdiff(colnames(.recover_data_from_environment(x)), resp)
-        zi.form <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
+        zi.form <- stats::as.formula(paste(resp, "~", paste(pred, collapse = " + ")))
       }
       zi.form
     },
@@ -1726,7 +1729,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       if (as.character(f[[3]])[1] == ".") {
         resp <- safe_deparse(f[[2]])
         pred <- setdiff(colnames(.recover_data_from_environment(model)), resp)
-        f <- stats::as.formula(paste(resp, "~", paste0(pred, collapse = " + ")))
+        f <- stats::as.formula(paste(resp, "~", paste(pred, collapse = " + ")))
       }
       f
     },

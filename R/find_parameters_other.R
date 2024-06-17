@@ -38,6 +38,34 @@ find_parameters.averaging <- function(x,
 
 #' @rdname find_parameters.averaging
 #' @export
+find_parameters.glmgee <- function(x,
+                                   component = c("all", "conditional", "dispersion"),
+                                   flatten = FALSE,
+                                   ...) {
+  component <- match.arg(component)
+
+  junk <- utils::capture.output({
+    cs <- suppressWarnings(stats::coef(summary(x, corr = FALSE)))
+  })
+  params <- compact_character(rownames(cs))
+
+  out <- list(
+    conditional = text_remove_backticks(params[params != "Dispersion"]),
+    dispersion = text_remove_backticks(params[params == "Dispersion"])
+  )
+
+  .filter_parameters(
+    out,
+    effects = "all",
+    component = component,
+    flatten = flatten,
+    recursive = FALSE
+  )
+}
+
+
+#' @rdname find_parameters.averaging
+#' @export
 find_parameters.betareg <- function(x,
                                     component = c("all", "conditional", "precision", "location", "distributional", "auxiliary"),
                                     flatten = FALSE,

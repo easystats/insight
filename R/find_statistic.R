@@ -121,7 +121,7 @@ find_statistic <- function(x, ...) {
     "ergm",
     "feglm", "flexsurvreg",
     "gee", "ggcomparisons", "glimML", "glmm", "glmmadmb", "glmmFit", "glmmLasso",
-    "glmmTMB", "glmx", "gmnl",
+    "glmmTMB", "glmx", "gmnl", "glmgee",
     "hurdle",
     "lavaan", "loggammacenslmrob", "logitmfx", "logitor", "logitr", "LORgee", "lrm",
     "margins", "marginaleffects", "marginaleffects.summary", "metaplus", "mixor",
@@ -342,7 +342,7 @@ find_statistic <- function(x, ...) {
     }
 
     if (any(chi_names %in% col_names)) {
-      return("chi-squared statistic")
+      "chi-squared statistic"
     }
   }
 }

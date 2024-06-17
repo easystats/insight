@@ -479,6 +479,9 @@ link_inverse.bife <- function(x, ...) {
   x$family$linkinv
 }
 
+#' @export
+link_inverse.glmgee <- link_inverse.bife
+
 
 #' @export
 link_inverse.glmmadmb <- function(x, ...) {

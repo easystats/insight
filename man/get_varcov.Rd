@@ -3,6 +3,7 @@
 \name{get_varcov}
 \alias{get_varcov}
 \alias{get_varcov.default}
+\alias{get_varcov.glmgee}
 \alias{get_varcov.nestedLogit}
 \alias{get_varcov.betareg}
 \alias{get_varcov.clm2}
@@ -19,6 +20,13 @@
 get_varcov(x, ...)
 
 \method{get_varcov}{default}(x, verbose = TRUE, vcov = NULL, vcov_args = NULL, ...)
+
+\method{get_varcov}{glmgee}(
+  x,
+  verbose = TRUE,
+  vcov = c("robust", "df-adjusted", "model", "bias-corrected", "jackknife"),
+  ...
+)
 
 \method{get_varcov}{nestedLogit}(
   x,
