@@ -512,6 +512,9 @@ link_function.bife <- function(x, ...) {
   x$family$linkfun
 }
 
+#' @export
+link_function.glmgee <- link_function.bife
+
 
 #' @export
 link_function.cpglmm <- function(x, ...) {

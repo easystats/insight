@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_parameters_others.R
 \name{get_parameters.betareg}
 \alias{get_parameters.betareg}
+\alias{get_parameters.glmgee}
 \alias{get_parameters.DirichletRegModel}
 \alias{get_parameters.averaging}
 \alias{get_parameters.glmx}
@@ -16,6 +17,8 @@
     "auxiliary"),
   ...
 )
+
+\method{get_parameters}{glmgee}(x, component = c("all", "conditional", "dispersion"), ...)
 
 \method{get_parameters}{DirichletRegModel}(
   x,

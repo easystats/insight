@@ -38,6 +38,35 @@ get_parameters.betareg <- function(x,
 }
 
 
+#' @rdname get_parameters.betareg
+#' @export
+get_parameters.glmgee <- function(x, component = c("all", "conditional", "dispersion"), ...) {
+  component <- match.arg(component)
+
+  junk <- utils::capture.output({
+    cs <- suppressWarnings(stats::coef(summary(x, corr = FALSE)))
+  })
+  est <- stats::na.omit(cs[, "Estimate"])
+
+  out <- data.frame(
+    Parameter = names(est),
+    Estimate = as.vector(est),
+    Component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  # mark dispersion parameter
+  out$Component[out$Parameter == "Dispersion"] <- "dispersion"
+
+  if (component != "all") {
+    out <- out[out$Component == component, , drop = FALSE]
+  }
+
+  text_remove_backticks(out)
+}
+
+
 #' @export
 get_parameters.nestedLogit <- function(x, component = "all", verbose = TRUE, ...) {
   cf <- as.data.frame(stats::coef(x))
@@ -204,22 +233,22 @@ get_parameters.mvord <- function(x,
   thresholds$Parameter <- rownames(thresholds)
   thresholds$Response <- gsub("(.*)\\s(.*)", "\\1", thresholds$Parameter)
   # coefficients
-  coefficients <- as.data.frame(s$coefficients)
-  coefficients$Parameter <- rownames(coefficients)
-  coefficients$Response <- gsub("(.*)\\s(.*)", "\\2", coefficients$Parameter)
+  model_coef <- as.data.frame(s$coefficients)
+  model_coef$Parameter <- rownames(model_coef)
+  model_coef$Response <- gsub("(.*)\\s(.*)", "\\2", model_coef$Parameter)
 
-  if (!all(coefficients$Response %in% thresholds$Response)) {
+  if (!all(model_coef$Response %in% thresholds$Response)) {
     resp <- unique(thresholds$Response)
-    for (i in coefficients$Response) {
-      coefficients$Response[coefficients$Response == i] <- resp[grepl(paste0(i, "$"), resp)]
+    for (i in model_coef$Response) {
+      model_coef$Response[model_coef$Response == i] <- resp[grepl(paste0(i, "$"), resp)]
     }
   }
 
   params <- data.frame(
-    Parameter = c(thresholds$Parameter, coefficients$Parameter),
-    Estimate = c(unname(thresholds[, "Estimate"]), unname(coefficients[, "Estimate"])),
-    Component = c(rep("thresholds", nrow(thresholds)), rep("conditional", nrow(coefficients))),
-    Response = c(thresholds$Response, coefficients$Response),
+    Parameter = c(thresholds$Parameter, model_coef$Parameter),
+    Estimate = c(unname(thresholds[, "Estimate"]), unname(model_coef[, "Estimate"])),
+    Component = c(rep("thresholds", nrow(thresholds)), rep("conditional", nrow(model_coef))),
+    Response = c(thresholds$Response, model_coef$Response),
     stringsAsFactors = FALSE,
     row.names = NULL
   )

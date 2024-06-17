@@ -44,7 +44,7 @@ test_that("null_model zero-inflated", {
 
   m0 <- glmmTMB::glmmTMB(
     count ~ (1 | persons),
-    ziformula = ~ 1,
+    ziformula = ~1,
     offset = log(ID),
     data = fish,
     family = poisson()
