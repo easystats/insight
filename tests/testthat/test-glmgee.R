@@ -105,3 +105,10 @@ test_that("is_multivariate", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "z-statistic")
 })
+
+test_that("get_varcov", {
+  out <- get_varcov(m1)
+  expect_equal(out[, 1], c(0.01222, 0, -0.011), tolerance = 1e-4, ignore_attr = TRUE)
+  out <- get_varcov(m1, vcov = "model")
+  expect_equal(out[, 1], c(0.02236, -1e-05, -0.0201), tolerance = 1e-4, ignore_attr = TRUE)
+})
