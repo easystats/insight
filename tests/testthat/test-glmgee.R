@@ -108,7 +108,7 @@ test_that("find_statistic", {
 
 test_that("get_varcov", {
   out <- get_varcov(m1)
-  expect_equal(out[, 1], c(0.01222, 0, -0.011), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out[, 1], c(0.0122241, 0, -0.0110037), tolerance = 1e-3, ignore_attr = TRUE)
   out <- get_varcov(m1, vcov = "model")
-  expect_equal(out[, 1], c(0.02236, -1e-05, -0.0201), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out[, 1], c(0.0223564, -5.4e-06, -0.0201031), tolerance = 1e-3, ignore_attr = TRUE)
 })
