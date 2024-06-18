@@ -30,12 +30,10 @@ find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE
     } else {
       out <- stats::setNames(list(col_names), unique(.classify_emmeans(x)))
     }
+  } else if ("Component" %in% colnames(params)) {
+    out <- lapply(split(params, params$Component), function(i) i[[1]])
   } else {
-    if ("Component" %in% colnames(params)) {
-      out <- lapply(split(params, params$Component), function(i) i[[1]])
-    } else {
-      out <- stats::setNames(list(params[[1]]), unique(.classify_emmeans(x)))
-    }
+    out <- stats::setNames(list(params[[1]]), unique(.classify_emmeans(x)))
   }
 
   if (flatten) {
