@@ -27,7 +27,7 @@
     the conditional and the zero-inflation component are taken into account.
 
 * `format_alert()` and `format_warning()` get an `immediate` argument, to
-  ouput warnings immediately.
+  output warnings immediately.
 
 ## Bug fixes
 
