@@ -115,7 +115,7 @@
 #' of the aforementioned classes.
 #'
 #' Extracting variance components for models with zero-inflation part is not
-#' straightforward, because it is not definitly clear how the distribution-specific
+#' straightforward, because it is not definitely clear how the distribution-specific
 #' variance should be calculated. Therefore, it is recommended to carefully
 #' inspect the results, and probably validate against other models, e.g. Bayesian
 #' models (although results may be only roughly comparable).
