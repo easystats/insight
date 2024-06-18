@@ -53,7 +53,7 @@
 
   # get necessary model information, like fixed and random effects,
   # variance-covariance matrix etc.
-  vals <- .get_variance_information(
+  mixed_effects_info <- .get_variance_information(
     model,
     faminfo = faminfo,
     name_fun = name_fun,
@@ -65,7 +65,7 @@
   if (is.null(model_null)) {
     model_null <- .safe(null_model(model, verbose = FALSE))
   }
-  vals_null <- .get_variance_information(
+  me_info_null <- .get_variance_information(
     model_null,
     faminfo = faminfo,
     name_fun = name_fun,
@@ -100,7 +100,7 @@
 
   # Get variance of fixed effects: multiply coefs by design matrix
   if (component %in% c("fixed", "all")) {
-    var.fixed <- .compute_variance_fixed(vals)
+    var.fixed <- .compute_variance_fixed(mixed_effects_info)
   }
 
   # Are random slopes present as fixed effects? Warn.
@@ -115,24 +115,24 @@
   # if we have a random effects term that has one observation per group
   # (i.e. number of random effects "groups" is the same as number of
   # observations in the model)
-  nr <- vapply(vals$re, nrow, numeric(1))
+  nr <- vapply(mixed_effects_info$re, nrow, numeric(1))
   not.obs.terms <- names(nr[nr != n_obs(model)])
   obs.terms <- names(nr[nr == n_obs(model)])
 
   # Variance of random effects
   if (component %in% c("random", "all") && isFALSE(no_random_variance)) {
-    var.random <- .compute_variance_random(model, not.obs.terms, vals = vals)
+    var.random <- .compute_variance_random(model, not.obs.terms, mixed_effects_info)
   }
 
   # Variance of random effects for NULL model
-  if (!singular_fit && !is.null(vals_null)) {
+  if (!singular_fit && !is.null(me_info_null)) {
     # Separate observation variance from variance of random effects
-    nr <- vapply(vals_null$re, nrow, numeric(1))
+    nr <- vapply(me_info_null$re, nrow, numeric(1))
     not.obs.terms_null <- names(nr[nr != n_obs(model_null)])
     var.random_null <- .compute_variance_random(
       model = model_null,
       not.obs.terms_null,
-      vals = vals_null
+      mixed_effects_info = me_info_null
     )
   }
 
@@ -142,7 +142,7 @@
   if (component %in% c("residual", "distribution", "all")) {
     var.distribution <- .compute_variance_distribution(
       model,
-      var.cor = vals$vc,
+      var.cor = mixed_effects_info$vc,
       faminfo,
       model_null = model_null,
       revar_null = var.random_null,
@@ -156,7 +156,7 @@
   if (component %in% c("residual", "dispersion", "all")) {
     var.dispersion <- .compute_variance_dispersion(
       model,
-      vals = vals,
+      mixed_effects_info = mixed_effects_info,
       faminfo = faminfo,
       obs.terms = obs.terms
     )
@@ -168,19 +168,19 @@
 
   if (isTRUE(faminfo$is_mixed) || inherits(model, c("wblm", "wbgee"))) {
     if (component %in% c("intercept", "all")) {
-      var.intercept <- .between_subject_variance(vals)
+      var.intercept <- .between_subject_variance(mixed_effects_info)
     }
 
     if (component %in% c("slope", "all")) {
-      var.slope <- .random_slope_variance(model, vals)
+      var.slope <- .random_slope_variance(model, mixed_effects_info)
     }
 
     if (component %in% c("rho01", "all")) {
-      cor.slope_intercept <- .random_slope_intercept_corr(model, vals)
+      cor.slope_intercept <- .random_slope_intercept_corr(model, mixed_effects_info)
     }
 
     if (component %in% c("rho00", "all")) {
-      cor.slopes <- .random_slopes_corr(model, vals)
+      cor.slopes <- .random_slopes_corr(model, mixed_effects_info)
     }
   } else {
     var.intercept <- NULL
@@ -249,7 +249,7 @@
   # stanreg
   # ---------------------------
   if (inherits(model, "stanreg")) {
-    vals <- list(
+    mixed_effects_info <- list(
       beta = lme4::fixef(model),
       X = rstanarm::get_x(model),
       vc = lme4::VarCorr(model),
@@ -291,13 +291,13 @@
     vcorr <- compact_list(list(vc1, vc2))
     names(vcorr) <- c("cond", "zi")[seq_along(vcorr)]
 
-    vals <- list(
+    mixed_effects_info <- list(
       beta = lme4::fixef(model),
       X = get_modelmatrix(model),
       vc = vcorr,
       re = list(lme4::ranef(model))
     )
-    names(vals$re) <- model$id_name
+    names(mixed_effects_info$re) <- model$id_name
 
     # joineRML
     # ---------------------------
@@ -310,13 +310,13 @@
     names(vcorr) <- re_names[1]
     attr(vcorr, "sc") <- model$coef$sigma2[[1]]
 
-    vals <- list(
+    mixed_effects_info <- list(
       beta = lme4::fixef(model),
       X = matrix(1, nrow = n_obs(model), dimnames = list(NULL, "(Intercept)_1")),
       vc = vcorr,
       re = list(lme4::ranef(model))
     )
-    names(vals$re) <- re_names[seq_along(vals$re)]
+    names(mixed_effects_info$re) <- re_names[seq_along(mixed_effects_info$re)]
 
     # nlme / glmmPQL
     # ---------------------------
@@ -331,21 +331,21 @@
       vals_vc <- list(nlme::getVarCov(model))
       vals_re <- list(lme4::ranef(model))
     }
-    vals <- list(
+    mixed_effects_info <- list(
       beta = lme4::fixef(model),
       X = comp_x,
       vc = vals_vc,
       re = vals_re
     )
-    names(vals$re) <- re_names
-    names(vals$vc) <- re_names
+    names(mixed_effects_info$re) <- re_names
+    names(mixed_effects_info$vc) <- re_names
 
     # ordinal
     # ---------------------------
   } else if (inherits(model, "clmm")) {
     if (requireNamespace("ordinal", quietly = TRUE)) {
       mm <- get_modelmatrix(model)
-      vals <- list(
+      mixed_effects_info <- list(
         beta = c("(Intercept)" = 1, stats::coef(model)[intersect(names(stats::coef(model)), colnames(mm))]),
         X = mm,
         vc = ordinal::VarCorr(model),
@@ -356,7 +356,7 @@
     # glmmadmb
     # ---------------------------
   } else if (inherits(model, "glmmadmb")) {
-    vals <- list(
+    mixed_effects_info <- list(
       beta = lme4::fixef(model),
       X = get_modelmatrix(model),
       vc = lme4::VarCorr(model),
@@ -387,7 +387,7 @@
     vc <- compact_list(vc)
     names(vc) <- setdiff(names(lme4::VarCorr(model)), "residual__")
     attr(vc, "sc") <- lme4::VarCorr(model)$residual__$sd[1, 1]
-    vals <- list(
+    mixed_effects_info <- list(
       beta = lme4::fixef(model)[, 1],
       X = comp_x,
       vc = vc,
@@ -397,7 +397,7 @@
         reval
       })
     )
-    names(vals$beta) <- gsub("Intercept", "(Intercept)", names(vals$beta), fixed = TRUE)
+    names(mixed_effects_info$beta) <- gsub("Intercept", "(Intercept)", names(mixed_effects_info$beta), fixed = TRUE)
 
     # cpglmm
     # ---------------------------
@@ -405,7 +405,7 @@
     # installed?
     check_if_installed("cplm")
 
-    vals <- list(
+    mixed_effects_info <- list(
       beta = cplm::fixef(model),
       X = cplm::model.matrix(model),
       vc = cplm::VarCorr(model),
@@ -415,7 +415,7 @@
     # lme4 / glmmTMB
     # ---------------------------
   } else {
-    vals <- list(
+    mixed_effects_info <- list(
       beta = lme4::fixef(model),
       X = lme4::getME(model, "X"),
       vc = lme4::VarCorr(model),
@@ -428,9 +428,9 @@
 
   if (inherits(model, c("glmmTMB", "MixMod"))) {
     if (is.null(model_component) || model_component == "conditional") {
-      vals <- lapply(vals, .collapse_cond)
+      mixed_effects_info <- lapply(mixed_effects_info, .collapse_cond)
     } else {
-      vals <- lapply(vals, .collapse_zi)
+      mixed_effects_info <- lapply(mixed_effects_info, .collapse_zi)
     }
   }
 
@@ -439,13 +439,13 @@
   }
 
   # fix rank deficiency
-  rankdef <- is.na(vals$beta)
+  rankdef <- is.na(mixed_effects_info$beta)
   if (any(rankdef)) {
-    rankdef_names <- names(vals$beta)[rankdef]
-    vals$beta <- vals$beta[setdiff(names(vals$beta), rankdef_names)]
+    rankdef_names <- names(mixed_effects_info$beta)[rankdef]
+    mixed_effects_info$beta <- mixed_effects_info$beta[setdiff(names(mixed_effects_info$beta), rankdef_names)]
   }
 
-  vals
+  mixed_effects_info
 }
 
 
@@ -492,21 +492,21 @@
 # However, package MuMIn differs and uses "fitted()" instead, leading to minor
 # deviations
 # -----------------------------------------------------------------------------
-.compute_variance_fixed <- function(vals) {
-  with(vals, stats::var(as.vector(beta %*% t(X))))
+.compute_variance_fixed <- function(mixed_effects_info) {
+  with(mixed_effects_info, stats::var(as.vector(beta %*% t(X))))
 }
 
 
 
 # dispersion-specific variance ----
 # ---------------------------------
-.compute_variance_dispersion <- function(model, vals, faminfo, obs.terms) {
+.compute_variance_dispersion <- function(model, mixed_effects_info, faminfo, obs.terms) {
   if (faminfo$is_linear) {
     0
   } else if (length(obs.terms) == 0) {
     0
   } else {
-    .compute_variance_random(model = model, obs.terms, vals = vals)
+    .compute_variance_random(model, obs.terms, mixed_effects_info)
   }
 }
 
@@ -517,7 +517,7 @@
 # This is in line with Nakagawa et al. 2017, Suppl. 2, and package MuMIm
 # see https://royalsocietypublishing.org/action/downloadSupplement?doi=10.1098%2Frsif.2017.0213&file=rsif20170213supp2.pdf
 # ----------------------------------------------------------------------------
-.compute_variance_random <- function(model, terms, vals) {
+.compute_variance_random <- function(model, terms, mixed_effects_info) {
   if (is.null(terms)) {
     return(NULL)
   }
@@ -525,29 +525,29 @@
     rn <- rownames(Sigma)
 
     # fix for models w/o intercept
-    if (!any(startsWith(colnames(vals$X), "(Intercept)"))) {
-      vals$X <- cbind("(Intercept)" = 1, vals$X)
+    if (!any(startsWith(colnames(mixed_effects_info$X), "(Intercept)"))) {
+      mixed_effects_info$X <- cbind("(Intercept)" = 1, mixed_effects_info$X)
     }
 
     if (!is.null(rn)) {
-      valid <- rownames(Sigma) %in% colnames(vals$X)
+      valid <- rownames(Sigma) %in% colnames(mixed_effects_info$X)
       if (!all(valid)) {
         rn <- rn[valid]
         Sigma <- Sigma[valid, valid, drop = FALSE]
       }
     }
 
-    Z <- vals$X[, rn, drop = FALSE]
+    Z <- mixed_effects_info$X[, rn, drop = FALSE]
     Z.m <- Z %*% Sigma
     sum(diag(crossprod(Z.m, Z))) / n_obs(model)
   }
 
   # if (inherits(x, "MixMod")) {
-  #   .sigma_sum(vals$vc)
+  #   .sigma_sum(mixed_effects_info$vc)
   # } else {
-  #   sum(sapply(vals$vc[terms], .sigma_sum))
+  #   sum(sapply(mixed_effects_info$vc[terms], .sigma_sum))
   # }
-  sum(sapply(vals$vc[terms], .sigma_sum))
+  sum(sapply(mixed_effects_info$vc[terms], .sigma_sum))
 }
 
 
@@ -1219,10 +1219,12 @@
 # random intercept-variances, i.e.
 # between-subject-variance (tau 00) ----
 # ----------------------------------------------
-.between_subject_variance <- function(vals) {
-  vars <- lapply(vals$vc, function(i) i[1])
+.between_subject_variance <- function(mixed_effects_info) {
+  vars <- lapply(mixed_effects_info$vc, function(i) i[1])
   # check for uncorrelated random slopes-intercept
-  non_intercepts <- which(sapply(vals$vc, function(i) !startsWith(dimnames(i)[[1]][1], "(Intercept)")))
+  non_intercepts <- which(sapply(mixed_effects_info$vc, function(i) {
+    !startsWith(dimnames(i)[[1]][1], "(Intercept)")
+  }))
   if (length(non_intercepts)) {
     vars <- vars[-non_intercepts]
   }
@@ -1236,19 +1238,21 @@
 
 # random slope-variances (tau 11) ----
 # ----------------------------------------------
-.random_slope_variance <- function(model, vals) {
+.random_slope_variance <- function(model, mixed_effects_info) {
   if (inherits(model, "lme")) {
-    unlist(lapply(vals$vc, function(i) diag(i)[-1]))
+    unlist(lapply(mixed_effects_info$vc, function(i) diag(i)[-1]))
   } else {
     # random slopes for correlated slope-intercept
-    out <- unlist(lapply(vals$vc, function(i) diag(i)[-1]))
+    out <- unlist(lapply(mixed_effects_info$vc, function(i) diag(i)[-1]))
     # check for uncorrelated random slopes-intercept
-    non_intercepts <- which(sapply(vals$vc, function(i) !startsWith(dimnames(i)[[1]][1], "(Intercept)")))
-    if (length(non_intercepts) == length(vals$vc)) {
-      out <- unlist(lapply(vals$vc, diag))
+    non_intercepts <- which(sapply(mixed_effects_info$vc, function(i) {
+      !startsWith(dimnames(i)[[1]][1], "(Intercept)")
+    }))
+    if (length(non_intercepts) == length(mixed_effects_info$vc)) {
+      out <- unlist(lapply(mixed_effects_info$vc, diag))
     } else if (length(non_intercepts)) {
-      dn <- unlist(lapply(vals$vc, function(i) dimnames(i)[1])[non_intercepts])
-      rndslopes <- unlist(lapply(vals$vc, function(i) {
+      dn <- unlist(lapply(mixed_effects_info$vc, function(i) dimnames(i)[1])[non_intercepts])
+      rndslopes <- unlist(lapply(mixed_effects_info$vc, function(i) {
         if (is.null(dim(i)) || identical(dim(i), c(1, 1))) {
           as.vector(i)
         } else {
@@ -1291,9 +1295,9 @@
 
 # slope-intercept-correlations (rho 01) ----
 # ----------------------------------------------
-.random_slope_intercept_corr <- function(model, vals) {
+.random_slope_intercept_corr <- function(model, mixed_effects_info) {
   if (inherits(model, "lme")) {
-    rho01 <- unlist(sapply(vals$vc, attr, which = "cor_slope_intercept"))
+    rho01 <- unlist(sapply(mixed_effects_info$vc, attr, which = "cor_slope_intercept"))
     if (is.null(rho01)) {
       vc <- lme4::VarCorr(model)
       if ("Corr" %in% colnames(vc)) {
@@ -1306,7 +1310,7 @@
     }
     rho01
   } else {
-    corrs <- lapply(vals$vc, attr, "correlation")
+    corrs <- lapply(mixed_effects_info$vc, attr, "correlation")
     rho01 <- sapply(corrs, function(i) {
       if (!is.null(i) && colnames(i)[1] == "(Intercept)") {
         i[-1, 1]
@@ -1324,8 +1328,8 @@
 
 # slope-slope-correlations (rho 01) ----
 # ----------------------------------------------
-.random_slopes_corr <- function(model, vals) {
-  corrs <- lapply(vals$vc, attr, "correlation")
+.random_slopes_corr <- function(model, mixed_effects_info) {
+  corrs <- lapply(mixed_effects_info$vc, attr, "correlation")
   rnd_slopes <- unlist(find_random_slopes(model))
 
   # check if any categorical random slopes. we then have
@@ -1333,7 +1337,7 @@
   cat_random_slopes <- tryCatch(
     {
       d <- get_data(model, verbose = FALSE)[rnd_slopes]
-      any(sapply(d, is.factor))
+      any(vapply(d, is.factor, logical(1)))
     },
     error = function(e) {
       NULL
