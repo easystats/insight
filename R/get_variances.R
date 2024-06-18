@@ -173,7 +173,7 @@ get_variance.merMod <- function(x,
                                 ...) {
   component <- match.arg(component)
   .safe(.compute_variances(
-    x,
+    model = x,
     component = component,
     name_fun = "get_variance",
     name_full = "random effect variances",
@@ -232,7 +232,7 @@ get_variance.glmmTMB <- function(x,
                                  ...) {
   component <- match.arg(component)
   .safe(.compute_variances(
-    x,
+    model = x,
     component = component,
     name_fun = "get_variance",
     name_full = "random effect variances",
@@ -262,7 +262,7 @@ get_variance.mixed <- function(x,
                                ...) {
   component <- match.arg(component)
   .safe(.compute_variances(
-    x$full_model,
+    model = x$full_model,
     component = component,
     name_fun = "get_variance",
     name_full = "random effect variances",
