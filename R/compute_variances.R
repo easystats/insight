@@ -698,9 +698,9 @@
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
-  } else if (faminfo$family == "beta") {
-    # Beta  ----
-    # ----------
+  } else if (faminfo$family == "beta" || faminfo$is_orderedbeta) {
+    # (Ordered) Beta  ----
+    # --------------------
 
     resid.variance <- switch(faminfo$link_function,
       logit = .variance_distributional(
@@ -711,24 +711,6 @@
         revar_null = revar_null,
         name = name,
         approx_method = approx_method,
-        model_component = model_component,
-        verbose = verbose
-      ),
-      .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
-    )
-  } else if (faminfo$is_orderedbeta) {
-    # Ordered Beta  ----
-    # ------------------
-
-    resid.variance <- switch(faminfo$link_function,
-      logit = .variance_distributional(
-        model,
-        faminfo = faminfo,
-        sig = sig,
-        model_null = model_null,
-        revar_null = revar_null,
-        approx_method = approx_method,
-        name = name,
         model_component = model_component,
         verbose = verbose
       ),
@@ -883,8 +865,10 @@
           poisson = ,
           `zero-inflated poisson` = .variance_family_poisson(model, mu, faminfo),
 
-          # hurdle-poisson ----
-          # -------------------
+          # hurdle-poisson/Gamma ----
+          # -------------------------
+          gamma = ,
+          Gamma = ,
           `hurdle poisson` = ,
           truncated_poisson = stats::family(model)$variance(mu),
 
@@ -918,6 +902,7 @@
 
           # Gamma, exponential ----
           # -----------------------
+          gamma = ,
           Gamma = stats::family(model)$variance(sig),
 
           # negative binomial ----
