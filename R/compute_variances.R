@@ -11,7 +11,7 @@
   ## Author: Ben Bolker, who used an cleaned-up/adapted
   ## version of Jon Lefcheck's code from SEMfit
 
-  ## Major revisions and adaption to more complex models and other packages
+  ## Revisions and adaption to more complex models and other packages
   ## by Daniel Lüdecke
 
   # needed for singularity check
@@ -116,22 +116,22 @@
   # (i.e. number of random effects "groups" is the same as number of
   # observations in the model)
   nr <- vapply(mixed_effects_info$re, nrow, numeric(1))
-  not.obs.terms <- names(nr[nr != n_obs(model)])
-  obs.terms <- names(nr[nr == n_obs(model)])
+  not_obs_terms <- names(nr[nr != n_obs(model)])
+  obs_terms <- names(nr[nr == n_obs(model)])
 
   # Variance of random effects
   if (component %in% c("random", "all") && isFALSE(no_random_variance)) {
-    var.random <- .compute_variance_random(model, not.obs.terms, mixed_effects_info)
+    var.random <- .compute_variance_random(model, not_obs_terms, mixed_effects_info)
   }
 
   # Variance of random effects for NULL model
   if (!singular_fit && !is.null(me_info_null)) {
     # Separate observation variance from variance of random effects
     nr <- vapply(me_info_null$re, nrow, numeric(1))
-    not.obs.terms_null <- names(nr[nr != n_obs(model_null)])
+    not_obs_terms_null <- names(nr[nr != n_obs(model_null)])
     var.random_null <- .compute_variance_random(
       model = model_null,
-      not.obs.terms_null,
+      not_obs_terms_null,
       mixed_effects_info = me_info_null
     )
   }
@@ -142,7 +142,7 @@
   if (component %in% c("residual", "distribution", "all")) {
     var.distribution <- .compute_variance_distribution(
       model,
-      var.cor = mixed_effects_info$vc,
+      var_cor = mixed_effects_info$vc,
       faminfo,
       model_null = model_null,
       revar_null = var.random_null,
@@ -158,7 +158,7 @@
       model,
       mixed_effects_info = mixed_effects_info,
       faminfo = faminfo,
-      obs.terms = obs.terms
+      obs_terms = obs_terms
     )
   }
 
@@ -228,8 +228,7 @@
 .get_variance_information <- function(model,
                                       faminfo,
                                       name_fun = "get_variances",
-                                      verbose = TRUE,
-                                      model_component = "conditional") {
+                                      verbose = TRUE) {
   # sanity check
   if (is.null(model)) {
     return(NULL)
@@ -424,16 +423,16 @@
   }
 
 
-  # for glmmTMB, tell user that dispersion model is ignored
-
+  # for models with zero-inflation, we only want the conditional part
   if (inherits(model, c("glmmTMB", "MixMod"))) {
-    if (is.null(model_component) || model_component == "conditional") {
-      mixed_effects_info <- lapply(mixed_effects_info, .collapse_cond)
-    } else {
-      mixed_effects_info <- lapply(mixed_effects_info, .collapse_zi)
-    }
+    mixed_effects_info <- lapply(mixed_effects_info, .collapse_cond)
   }
 
+  # currently, we don't support calculating all variance components
+  # for the zero-inflated part of the model only. This is not fully implemented
+  # mixed_effects_info <- lapply(mixed_effects_info, .collapse_zi)
+
+  # for glmmTMB, tell user that dispersion model is ignored
   if (!is.null(find_formula(model)[["dispersion"]]) && verbose) {
     format_warning(sprintf("%s ignores effects of dispersion model.", name_fun))
   }
@@ -464,21 +463,21 @@
 # glmmTMB returns a list of model information, one for conditional
 # and one for zero-inflated part, so here we "unlist" it, returning
 # only the conditional part.
-.collapse_cond <- function(model) {
-  if (is.list(model) && "cond" %in% names(model)) {
-    model[["cond"]]
+.collapse_cond <- function(x) {
+  if (is.list(x) && "cond" %in% names(x)) {
+    x[["cond"]]
   } else {
-    model
+    x
   }
 }
 
 
 # same as above, but for the zero-inflation component
-.collapse_zi <- function(model) {
-  if (is.list(model) && "zi" %in% names(model)) {
-    model[["zi"]]
+.collapse_zi <- function(x) {
+  if (is.list(x) && "zi" %in% names(x)) {
+    x[["zi"]]
   } else {
-    model
+    x
   }
 }
 
@@ -500,13 +499,13 @@
 
 # dispersion-specific variance ----
 # ---------------------------------
-.compute_variance_dispersion <- function(model, mixed_effects_info, faminfo, obs.terms) {
+.compute_variance_dispersion <- function(model, mixed_effects_info, faminfo, obs_terms) {
   if (faminfo$is_linear) {
     0
-  } else if (length(obs.terms) == 0) {
+  } else if (length(obs_terms) == 0) {
     0
   } else {
-    .compute_variance_random(model, obs.terms, mixed_effects_info)
+    .compute_variance_random(model, obs_terms, mixed_effects_info)
   }
 }
 
@@ -567,7 +566,7 @@
 # different values for the log/delta/trigamma approximation.
 # -----------------------------------------------------------------------------
 .compute_variance_distribution <- function(model,
-                                           var.cor,
+                                           var_cor,
                                            faminfo,
                                            model_null = NULL,
                                            revar_null = NULL,
