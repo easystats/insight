@@ -85,24 +85,45 @@ test_that("glmmTMB, Nbinom1 zero-inflated", {
   VarOlF <- log(1 + (1 / lambda) + (1 / thetaF)) # log-normal approximation
   VarOtF <- trigamma((1 / lambda + 1 / thetaF)^-1) # trigamma function
 
+  # test message
+  expect_message(
+    performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, model_component = "conditional"),
+    regex = "Zero-inflation part of"
+  )
+
   # lognormal
   R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOlF)
   R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOlF)
-  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr)
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, model_component = "conditional", verbose = FALSE)
   expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # full model
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr)
+  expect_equal(out$R2_conditional, 0.7543869, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, 0.6448776, tolerance = 1e-4, ignore_attr = TRUE)
 
   # delta
   R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOdF)
   R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOdF)
-  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, approximation = "delta")
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, approximation = "delta", verbose = FALSE, model_component = "conditional")
   expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # full model
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, approximation = "delta")
+  expect_equal(out$R2_conditional, 0.6942946, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, 0.5935086, tolerance = 1e-4, ignore_attr = TRUE)
 
   # trigamma
   R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOtF)
   R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(glmmTMBf)$cond)) + VarOtF)
-  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, approximation = "trigamma")
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, approximation = "trigamma", verbose = FALSE, model_component = "conditional")
   expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # full model
+  out <- performance::r2_nakagawa(glmmTMBf, null_model = glmmTMBr, approximation = "trigamma")
+  expect_equal(out$R2_conditional, 0.6051817, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, 0.5173316, tolerance = 1e-4, ignore_attr = TRUE)
 })
