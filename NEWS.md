@@ -26,6 +26,9 @@
     specify for which component variances should be returned. By default, both
     the conditional and the zero-inflation component are taken into account.
 
+* `format_alert()` and `format_warning()` get an `immediate` argument, to
+  ouput warnings immediately.
+
 ## Bug fixes
 
 * `null_model()` now correctly handles zero-inflated models from package
