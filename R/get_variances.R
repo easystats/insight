@@ -28,7 +28,9 @@
 #' specific variance, however, it can also be `"observation_level"`. See
 #' _Nakagawa et al. 2017_, in particular supplement 2, for details.
 #' @param model_component For models that can have a zero-inflation component,
-#' specify for which component variances should be returned.
+#' specify for which component variances should be returned. If `NULL` or `"full"`
+#' (the default), both the conditional and the zero-inflation component are taken
+#' into account. If `"conditional"`, only the conditional component is considered.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:

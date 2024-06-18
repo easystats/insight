@@ -87,7 +87,9 @@ specific variance, however, it can also be \code{"observation_level"}. See
 \item{verbose}{Toggle off warnings.}
 
 \item{model_component}{For models that can have a zero-inflation component,
-specify for which component variances should be returned.}
+specify for which component variances should be returned. If \code{NULL} or \code{"full"}
+(the default), both the conditional and the zero-inflation component are taken
+into account. If \code{"conditional"}, only the conditional component is considered.}
 }
 \value{
 A list with following elements:

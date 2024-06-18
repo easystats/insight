@@ -4,7 +4,7 @@
                                name_full = NULL,
                                verbose = TRUE,
                                tolerance = 1e-8,
-                               model_component = "conditional",
+                               model_component = "full",
                                model_null = NULL,
                                approximation = "lognormal") {
   ## Original code taken from GitGub-Repo of package glmmTMB
@@ -22,6 +22,7 @@
   # check argument
   approx_method <- match.arg(approximation, c("lognormal", "delta", "trigamma", "observation_level"))
 
+  # sanity checks - distribution supported?
   if (any(faminfo$family == "truncated_nbinom1")) {
     if (verbose) {
       format_warning(sprintf(
@@ -30,6 +31,19 @@
       ))
     }
     return(NA)
+  }
+
+  # check whether R2 should be calculated for the full model, or the
+  # conditional model only
+  if (is.null(model_component) || model_component %in% c("zi", "zero_inflated")) {
+    model_component <- "full"
+  }
+
+  # zero-inflated model, but not conditioning on full model?
+  if (!identical(model_component, "full") && (faminfo$is_zero_inflated || faminfo$is_hurdle) && verbose) {
+    format_alert(
+      "Zero-inflation part of the model is not considered for variance decomposition. Use `model_component = \"full\"` to take both the conditional and the zero-inflation model into account.", # nolint
+    )
   }
 
   # rename lme4 neg-binom family
@@ -43,8 +57,7 @@
     x,
     faminfo = faminfo,
     name_fun = name_fun,
-    verbose = verbose,
-    model_component = model_component
+    verbose = verbose
   )
 
   # we also need necessary model information, like fixed and random effects,
@@ -56,8 +69,7 @@
     model_null,
     faminfo = faminfo,
     name_fun = name_fun,
-    verbose = verbose,
-    model_component = model_component
+    verbose = verbose
   )
 
   # Test for non-zero random effects ((near) singularity)
@@ -133,6 +145,7 @@
       revar_null = var.random_null,
       approx_method = approximation,
       name = name_full,
+      model_component = model_component,
       verbose = verbose
     )
   }
@@ -557,6 +570,7 @@
                                            revar_null = NULL,
                                            name,
                                            approx_method = "lognormal",
+                                           model_component = NULL,
                                            verbose = TRUE) {
   # get overdispersion parameter / sigma
   sig <- .safe(get_sigma(x))
@@ -589,6 +603,7 @@
         revar_null = revar_null,
         approx_method = approx_method,
         name = name,
+        model_component = model_component,
         verbose = verbose
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
@@ -653,6 +668,7 @@
         revar_null = revar_null,
         approx_method = approx_method,
         name = name,
+        model_component = model_component,
         verbose = verbose
       ),
       sqrt = 0.25 * sig,
@@ -685,6 +701,7 @@
         revar_null = revar_null,
         name = name,
         approx_method = approx_method,
+        model_component = model_component,
         verbose = verbose
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
@@ -702,6 +719,7 @@
         revar_null = revar_null,
         approx_method = approx_method,
         name = name,
+        model_component = model_component,
         verbose = verbose
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
@@ -767,6 +785,7 @@
                                      revar_null = NULL,
                                      name,
                                      approx_method = "lognormal",
+                                     model_component = NULL,
                                      verbose = TRUE) {
   check_if_installed("lme4", "to compute variances for mixed models")
 
@@ -828,6 +847,14 @@
     )
   }
 
+  # ------------------------------------------------------------------
+  # we have to make exception and check for tweedie-link_function here.
+  # Some models from tweedie family have saved this information in
+  # "faminfo$family", but some also in "faminfo$link_function" (with a different
+  # family). So we have to check for both.
+  # Same applies to zero-inflated models, that's why we better double-check here.
+  # ------------------------------------------------------------------
+
   cvsquared <- tryCatch(
     {
       if (faminfo$link_function == "tweedie") {
@@ -835,18 +862,33 @@
         # ---------------------------------------------------------------------
         dispersion_param <- .variance_family_tweedie(x, mu, sig)
 
-      } else if (faminfo$is_zero_inflated) {
+      } else if (identical(model_component, "full") && (faminfo$is_zero_inflated || faminfo$is_hurdle)) {
         # Zero Inflated models ------------------------------------------------
         # ---------------------------------------------------------------------
         dispersion_param <- switch(faminfo$family,
+
           # (zero-inflated) poisson ----
           # ----------------------------
-          poisson = .variance_family_poisson(x, mu, faminfo),
+          poisson = ,
+          `zero-inflated poisson` = .variance_family_poisson(x, mu, faminfo),
 
           # hurdle-poisson ----
           # -------------------
           `hurdle poisson` = ,
           truncated_poisson = stats::family(x)$variance(sig),
+
+          # (zero-inflated) negative binomial ----
+          # --------------------------------------
+          nbinom = ,
+          nbinom1 = ,
+          nbinom2 = ,
+          negbinomial = ,
+          `negative binomial` = ,
+          `zero-inflated negative binomial` = .variance_family_nbinom(model, mu, sig, faminfo),
+
+          # hurdle negative binomial ----
+          # -----------------------------
+          truncated_nbinom2 = stats::family(x)$variance(mu, sig),
 
           # others ----
           # -----------
@@ -854,23 +896,20 @@
         )
 
       } else {
+        # All other models ------------------------------------------------
+        # -----------------------------------------------------------------
         dispersion_param <- switch(faminfo$family,
 
-          # (zero-inflated) poisson ----
+          # (generalized, compoised) poisson ----
           # ----------------------------
-          `zero-inflated poisson` = .variance_family_poisson(x, mu, faminfo),
           poisson = 1,
-
-          # hurdle-poisson ----
-          # -------------------
-          `hurdle poisson` = ,
-          truncated_poisson = stats::family(x)$variance(sig),
+          genpois = .variance_family_nbinom(x, mu, sig, faminfo),
 
           # Gamma, exponential ----
           # -----------------------
           Gamma = stats::family(x)$variance(sig),
 
-          # (zero-inflated) negative binomial ----
+          # negative binomial ----
           # --------------------------------------
           nbinom = ,
           nbinom1 = ,
@@ -878,17 +917,16 @@
           quasipoisson = ,
           negbinomial = ,
           `negative binomial` = sig,
-          `zero-inflated negative binomial` = ,
-          genpois = .variance_family_nbinom(x, mu, sig, faminfo),
-          truncated_nbinom2 = stats::family(x)$variance(mu, sig),
 
           # beta-alike ----
           # ---------------
           beta = .variance_family_beta(x, mu, sig),
           ordbeta = .variance_family_orderedbeta(x, mu),
+          betabinomial = .variance_family_betabinom(x, mu, sig),
+
+          ## TODO: check alternatives, but probably less accurate
           # betabinomial = .variance_family_beta(x, mu, sig),
           # betabinomial = stats::family(x)$variance(mu, sig),
-          betabinomial = .variance_family_betabinom(x, mu, sig),
 
           # other distributions ----
           # ------------------------
