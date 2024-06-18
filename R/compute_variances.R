@@ -22,6 +22,12 @@
   # check argument
   approx_method <- match.arg(approximation, c("lognormal", "delta", "trigamma", "observation_level"))
 
+  # check whether R2 should be calculated for the full model, or the
+  # conditional model only
+  if (is.null(model_component) || model_component %in% c("zi", "zero_inflated")) {
+    model_component <- "full"
+  }
+
   # sanity checks - distribution supported?
   if (any(faminfo$family == "truncated_nbinom1")) {
     if (verbose) {
@@ -33,10 +39,12 @@
     return(NA)
   }
 
-  # check whether R2 should be calculated for the full model, or the
-  # conditional model only
-  if (is.null(model_component) || model_component %in% c("zi", "zero_inflated")) {
-    model_component <- "full"
+  # sanity checks - distribution supported with requested component?
+  if ((any(startsWith(faminfo$family, "truncated_")) || any(startsWith(faminfo$family, "hurdle"))) && model_component != "full") { # nolint
+    if (verbose) {
+      format_warning("Truncated or hurdle families are only supported for `model_component = \"full\"`.")
+    }
+    return(NA)
   }
 
   # zero-inflated model, but not conditioning on full model?
@@ -855,6 +863,8 @@
   # "faminfo$family", but some also in "faminfo$link_function" (with a different
   # family). So we have to check for both.
   # Same applies to zero-inflated models, that's why we better double-check here.
+  # If variances for conditional model only are requested, we check the same
+  # families below again.
   # ------------------------------------------------------------------
 
   cvsquared <- tryCatch(
@@ -876,7 +886,7 @@
           # hurdle-poisson ----
           # -------------------
           `hurdle poisson` = ,
-          truncated_poisson = stats::family(model)$variance(sig),
+          truncated_poisson = stats::family(model)$variance(mu),
 
           # (zero-inflated) negative binomial ----
           # --------------------------------------
@@ -896,13 +906,14 @@
           sig
         )
       } else {
-        # All other models ------------------------------------------------
+        # All other families (or conditional model only) ------------------
         # -----------------------------------------------------------------
         dispersion_param <- switch(faminfo$family,
 
           # (generalized, compoised) poisson ----
           # ----------------------------
           poisson = 1,
+          `zero-inflated poisson` = 1,
           genpois = .variance_family_nbinom(model, mu, sig, faminfo),
 
           # Gamma, exponential ----
@@ -916,7 +927,8 @@
           nbinom2 = ,
           quasipoisson = ,
           negbinomial = ,
-          `negative binomial` = sig,
+          `negative binomial` = ,
+          `zero-inflated negative binomial` = sig,
 
           # beta-alike ----
           # ---------------
