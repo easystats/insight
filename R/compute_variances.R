@@ -42,7 +42,7 @@
   # zero-inflated model, but not conditioning on full model?
   if (!identical(model_component, "full") && (faminfo$is_zero_inflated || faminfo$is_hurdle) && verbose) {
     format_alert(
-      "Zero-inflation part of the model is not considered for variance decomposition. Use `model_component = \"full\"` to take both the conditional and the zero-inflation model into account.", # nolint
+      "Zero-inflation part of the model is not considered for variance decomposition. Use `model_component = \"full\"` to take both the conditional and the zero-inflation model into account." # nolint
     )
   }
 
