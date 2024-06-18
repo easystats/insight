@@ -1159,7 +1159,7 @@
 
   tryCatch(
     if (inherits(model, "merMod")) {
-      mu * (1 + mu / lme4::getME(xmodel, "glmer.nb.theta"))
+      mu * (1 + mu / lme4::getME(model, "glmer.nb.theta"))
     } else if (inherits(model, "MixMod")) {
       stats::family(model)$variance(mu)
     } else if (inherits(model, "glmmTMB")) {
