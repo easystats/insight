@@ -822,20 +822,22 @@
   } else {
     # transform mu
     mu <- switch(faminfo$family,
+      # beta-alike
       beta = ,
       betabinomial = ,
       ordbeta = stats::plogis(mu),
       # for count models, Nakagawa et al. suggest this transformation
       poisson = ,
       quasipoisson = ,
+      genpois = ,
       nbinom = ,
       nbinom1 = ,
       nbinom2 = ,
       negbinomial = ,
       tweedie = ,
       `negative binomial` = exp(mu + 0.5 * as.vector(revar_null)),
-      link_inverse(model)(mu) ## TODO: check if this is better than "exp(mu)"
-      # exp(mu)
+      # all other models
+      link_inverse(model)(mu)
     )
   }
 
@@ -865,15 +867,9 @@
           poisson = ,
           `zero-inflated poisson` = .variance_family_poisson(model, mu, faminfo),
 
-          # hurdle-poisson/Gamma ----
-          # -------------------------
-          gamma = ,
-          Gamma = ,
-          `hurdle poisson` = ,
-          truncated_poisson = stats::family(model)$variance(mu),
-
           # (zero-inflated) negative binomial ----
           # --------------------------------------
+          genpois = ,
           nbinom = ,
           nbinom1 = ,
           nbinom2 = ,
@@ -881,8 +877,12 @@
           `negative binomial` = ,
           `zero-inflated negative binomial` = .variance_family_nbinom(model, mu, sig, faminfo),
 
-          # hurdle negative binomial ----
-          # -----------------------------
+          # hurdle and Gamma ----
+          # -------------------------
+          gamma = ,
+          Gamma = ,
+          `hurdle poisson` = ,
+          truncated_poisson = stats::family(model)$variance(mu),
           truncated_nbinom2 = stats::family(model)$variance(mu, sig),
 
           # others ----
@@ -894,11 +894,10 @@
         # -----------------------------------------------------------------
         dispersion_param <- switch(faminfo$family,
 
-          # (generalized, compoised) poisson ----
-          # ----------------------------
+          # (compoised) poisson ----
+          # ------------------------
           poisson = 1,
           `zero-inflated poisson` = 1,
-          genpois = .variance_family_nbinom(model, mu, sig, faminfo),
 
           # Gamma, exponential ----
           # -----------------------
@@ -913,6 +912,7 @@
           quasipoisson = ,
           negbinomial = ,
           `negative binomial` = ,
+          genpois = ,
           `zero-inflated negative binomial` = sig,
 
           # beta-alike ----
@@ -925,7 +925,7 @@
           # betabinomial = .variance_family_beta(model, mu, sig),
           # betabinomial = stats::family(model)$variance(mu, sig),
 
-          # other distributions ----
+          # tweed distributions ----
           # ------------------------
           tweedie = .variance_family_tweedie(model, mu, sig),
 
@@ -953,6 +953,7 @@
           nbinom1 = ,
           nbinom2 = ,
           negbinomial = ,
+          genpois = ,
           `negative binomial` = ((1 / mu) + (1 / dispersion_param))^-1,
           poisson = ,
           quasipoisson = mu / dispersion_param,
@@ -964,6 +965,7 @@
           nbinom1 = ,
           nbinom2 = ,
           negbinomial = ,
+          genpois = ,
           `negative binomial` = (1 / mu) + (1 / dispersion_param),
           poisson = ,
           quasipoisson = dispersion_param / mu,
