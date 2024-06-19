@@ -345,7 +345,7 @@
     dirichlet_fam || is.ordinal || zero.inf || is.censored || is.survival || is_binomtest ||
     is.categorical || hurdle || is.multinomial || is_chi2test || is_proptest || is_xtab) {
     linear_model <- FALSE
-  } else if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian")) && !grepl("(\\st)$", fitfam)) {
+  } else if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian", "lognormal")) && !grepl("(\\st)$", fitfam)) {
     linear_model <- FALSE
   }
   if (!linear_model && is.survival && fitfam == "gaussian") {
