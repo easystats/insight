@@ -26,14 +26,14 @@
 #' is_nested_models(m1, m2, m3)
 #' @export
 is_nested_models <- function(...) {
-  objects <- list(...)
-  object_names <- match.call(expand.dots = FALSE)$`...`
+  model_objects <- list(...)
+  object_names <- match.call(expand.dots = FALSE)[["..."]]
 
-  if (!all(vapply(objects, is_regression_model, TRUE))) {
+  if (!all(vapply(model_objects, is_regression_model, TRUE))) {
     format_error("All models must be valid regression model objects.")
   }
-  names(objects) <- object_names
-  info <- ellipsis_info.ListRegressions(objects)
+  names(model_objects) <- object_names
+  info <- ellipsis_info.ListRegressions(model_objects)
 
   out <- isTRUE(attributes(info)$is_nested)
   attr(out, "is_nested_increasing") <- attributes(info)$is_nested_increasing

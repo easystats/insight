@@ -12,6 +12,23 @@
 
 * Improved accuracy of singularity-checks in `get_variance()`.
 
+* `get_variance()` gets a few new arguments:
+  
+  * `null_model`, to provide a null-model to be used for the calculation of
+    random effect variances. If `NULL`, the null-model is computed internally.
+    This argument is optional, but may be useful to save time, or when the
+    null-model cannot be calculated internally.
+
+  * `approximation`, indicating the approximation method for the distribution-specific
+    (observation level, or residual) variance.
+
+  * `model_component`, for models that can have a zero-inflation component,
+    specify for which component variances should be returned. By default, both
+    the conditional and the zero-inflation component are taken into account.
+
+* `format_alert()` and `format_warning()` get an `immediate` argument, to
+  output warnings immediately.
+
 ## Bug fixes
 
 * `null_model()` now correctly handles zero-inflated models from package

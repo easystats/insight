@@ -3,7 +3,8 @@
     return(FALSE)
   }
 
-  if ((cols <- Sys.getenv("RSTUDIO_CONSOLE_COLOR", "")) != "" && !is.na(as.numeric(cols))) {
+  cols <- Sys.getenv("RSTUDIO_CONSOLE_COLOR", "")
+  if (cols != "" && !is.na(as.numeric(cols))) {
     return(TRUE)
   }
 

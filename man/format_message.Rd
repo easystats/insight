@@ -20,10 +20,11 @@ format_alert(
   line_length = 0.9 * getOption("width", 80),
   indent = "  ",
   type = "message",
-  call. = FALSE
+  call = FALSE,
+  immediate = FALSE
 )
 
-format_warning(...)
+format_warning(..., immediate = FALSE)
 
 format_error(...)
 }
@@ -44,10 +45,14 @@ line, two white space characters are inserted.}
 Can be \code{"message"} for \code{message()}, \code{"warning"} for \code{warning()},
 or \code{"error"} for \code{stop()}.}
 
-\item{call.}{Logical. Indicating if the call should be included in the the
+\item{call}{Logical. Indicating if the call should be included in the the
 error message. This is usually confusing for users when the function
 producing the warning or error is deep within another function, so the
 default is \code{FALSE}.}
+
+\item{immediate}{Logical. Indicating if the \emph{warning} should be printed
+immediately. Only applies to \code{format_warning()} or \code{format_alert()} with
+\code{type = "warning"}. The default is \code{FALSE}.}
 }
 \value{
 For \code{format_message()}, a formatted string.

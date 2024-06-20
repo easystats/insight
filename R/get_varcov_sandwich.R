@@ -45,11 +45,11 @@
   # vcov_fun is a function
   if (is.function(vcov_fun)) {
     if (is.null(vcov_args) || !is.list(vcov_args)) {
-      args <- list(x)
+      my_args <- list(x)
     } else {
-      args <- c(list(x), vcov_args)
+      my_args <- c(list(x), vcov_args)
     }
-    .vcov <- do.call("vcov_fun", args)
+    .vcov <- do.call("vcov_fun", my_args)
     return(.vcov)
   }
 

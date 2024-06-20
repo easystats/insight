@@ -1,27 +1,34 @@
-.compute_variances <- function(x,
+.compute_variances <- function(model,
                                component,
                                name_fun = NULL,
                                name_full = NULL,
                                verbose = TRUE,
                                tolerance = 1e-8,
-                               model_component = "conditional",
+                               model_component = "full",
                                model_null = NULL,
                                approximation = "lognormal") {
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
   ## version of Jon Lefcheck's code from SEMfit
 
-  ## Major revisions and adaption to more complex models and other packages
+  ## Revisions and adaption to more complex models and other packages
   ## by Daniel Lüdecke
 
   # needed for singularity check
   check_if_installed("performance", reason = "to check for singularity")
 
-  faminfo <- model_info(x, verbose = FALSE)
+  faminfo <- model_info(model, verbose = FALSE)
 
   # check argument
   approx_method <- match.arg(approximation, c("lognormal", "delta", "trigamma", "observation_level"))
 
+  # check whether R2 should be calculated for the full model, or the
+  # conditional model only
+  if (is.null(model_component) || model_component %in% c("zi", "zero_inflated")) {
+    model_component <- "full"
+  }
+
+  # sanity checks - distribution supported?
   if (any(faminfo$family == "truncated_nbinom1")) {
     if (verbose) {
       format_warning(sprintf(
@@ -32,6 +39,21 @@
     return(NA)
   }
 
+  # sanity checks - distribution supported with requested component?
+  if ((any(startsWith(faminfo$family, "truncated_")) || any(startsWith(faminfo$family, "hurdle"))) && model_component != "full") { # nolint
+    if (verbose) {
+      format_warning("Truncated or hurdle families are only supported for `model_component = \"full\"`.")
+    }
+    return(NA)
+  }
+
+  # zero-inflated model, but not conditioning on full model?
+  if (!identical(model_component, "full") && (faminfo$is_zero_inflated || faminfo$is_hurdle) && verbose) {
+    format_alert(
+      "Zero-inflation part of the model is not considered for variance decomposition. Use `model_component = \"full\"` to take both the conditional and the zero-inflation model into account." # nolint
+    )
+  }
+
   # rename lme4 neg-binom family
   if (startsWith(faminfo$family, "Negative Binomial")) {
     faminfo$family <- "negative binomial"
@@ -39,30 +61,28 @@
 
   # get necessary model information, like fixed and random effects,
   # variance-covariance matrix etc.
-  vals <- .get_variance_information(
-    x,
+  mixed_effects_info <- .get_variance_information(
+    model,
     faminfo = faminfo,
     name_fun = name_fun,
-    verbose = verbose,
-    model_component = model_component
+    verbose = verbose
   )
 
   # we also need necessary model information, like fixed and random effects,
   # variance-covariance matrix etc. for the null model
   if (is.null(model_null)) {
-    model_null <- .safe(null_model(x, verbose = FALSE))
+    model_null <- .safe(null_model(model, verbose = FALSE))
   }
-  vals_null <- .get_variance_information(
+  me_info_null <- .get_variance_information(
     model_null,
     faminfo = faminfo,
     name_fun = name_fun,
-    verbose = verbose,
-    model_component = model_component
+    verbose = verbose
   )
 
   # Test for non-zero random effects ((near) singularity)
   no_random_variance <- FALSE
-  singular_fit <- isTRUE(.safe(performance::check_singularity(x, tolerance = tolerance)))
+  singular_fit <- isTRUE(.safe(performance::check_singularity(model, tolerance = tolerance)))
 
   if (singular_fit && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
@@ -88,36 +108,39 @@
 
   # Get variance of fixed effects: multiply coefs by design matrix
   if (component %in% c("fixed", "all")) {
-    var.fixed <- .compute_variance_fixed(vals)
+    var.fixed <- .compute_variance_fixed(mixed_effects_info)
   }
 
   # Are random slopes present as fixed effects? Warn.
-  if (!.random_slopes_in_fixed(x) && verbose) {
+  if (!.random_slopes_in_fixed(model) && verbose) {
     format_warning(
       sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.", name_full),
       "Solution: Respecify fixed structure!"
     )
   }
 
-  # Separate observation variance from variance of random effects
-  nr <- vapply(vals$re, nrow, numeric(1))
-  not.obs.terms <- names(nr[nr != n_obs(x)])
-  obs.terms <- names(nr[nr == n_obs(x)])
+  # Separate observation variance from variance of random effects, e.g.
+  # if we have a random effects term that has one observation per group
+  # (i.e. number of random effects "groups" is the same as number of
+  # observations in the model)
+  nr <- vapply(mixed_effects_info$re, nrow, numeric(1))
+  not_obs_terms <- names(nr[nr != n_obs(model)])
+  obs_terms <- names(nr[nr == n_obs(model)])
 
   # Variance of random effects
   if (component %in% c("random", "all") && isFALSE(no_random_variance)) {
-    var.random <- .compute_variance_random(not.obs.terms, x = x, vals = vals)
+    var.random <- .compute_variance_random(model, not_obs_terms, mixed_effects_info)
   }
 
   # Variance of random effects for NULL model
-  if (!singular_fit && !is.null(vals_null)) {
+  if (!singular_fit && !is.null(me_info_null)) {
     # Separate observation variance from variance of random effects
-    nr <- vapply(vals_null$re, nrow, numeric(1))
-    not.obs.terms_null <- names(nr[nr != n_obs(model_null)])
+    nr <- vapply(me_info_null$re, nrow, numeric(1))
+    not_obs_terms_null <- names(nr[nr != n_obs(model_null)])
     var.random_null <- .compute_variance_random(
-      not.obs.terms_null,
-      x = model_null,
-      vals = vals_null
+      model = model_null,
+      not_obs_terms_null,
+      mixed_effects_info = me_info_null
     )
   }
 
@@ -126,23 +149,24 @@
 
   if (component %in% c("residual", "distribution", "all")) {
     var.distribution <- .compute_variance_distribution(
-      x = x,
-      var.cor = vals$vc,
+      model,
+      var_cor = mixed_effects_info$vc,
       faminfo,
       model_null = model_null,
       revar_null = var.random_null,
       approx_method = approximation,
       name = name_full,
+      model_component = model_component,
       verbose = verbose
     )
   }
 
   if (component %in% c("residual", "dispersion", "all")) {
     var.dispersion <- .compute_variance_dispersion(
-      x = x,
-      vals = vals,
+      model,
+      mixed_effects_info = mixed_effects_info,
       faminfo = faminfo,
-      obs.terms = obs.terms
+      obs_terms = obs_terms
     )
   }
 
@@ -150,21 +174,21 @@
     var.residual <- var.distribution + var.dispersion
   }
 
-  if (isTRUE(faminfo$is_mixed) || inherits(x, c("wblm", "wbgee"))) {
+  if (isTRUE(faminfo$is_mixed) || inherits(model, c("wblm", "wbgee"))) {
     if (component %in% c("intercept", "all")) {
-      var.intercept <- .between_subject_variance(vals, x)
+      var.intercept <- .between_subject_variance(mixed_effects_info)
     }
 
     if (component %in% c("slope", "all")) {
-      var.slope <- .random_slope_variance(vals, x)
+      var.slope <- .random_slope_variance(model, mixed_effects_info)
     }
 
     if (component %in% c("rho01", "all")) {
-      cor.slope_intercept <- .random_slope_intercept_corr(vals, x)
+      cor.slope_intercept <- .random_slope_intercept_corr(model, mixed_effects_info)
     }
 
     if (component %in% c("rho00", "all")) {
-      cor.slopes <- .random_slopes_corr(vals, x)
+      cor.slopes <- .random_slopes_corr(model, mixed_effects_info)
     }
   } else {
     var.intercept <- NULL
@@ -204,156 +228,155 @@
 #
 # basically, this function should return a list that has the same
 # structure for any mixed models like this code for lme4:
-# beta = lme4::fixef(x),
-# X = lme4::getME(x, "X"),
-# vc = lme4::VarCorr(x),
-# re = lme4::ranef(x)
+# beta = lme4::fixef(model),
+# X = lme4::getME(model, "X"),
+# vc = lme4::VarCorr(model),
+# re = lme4::ranef(model)
 #
-.get_variance_information <- function(x,
+.get_variance_information <- function(model,
                                       faminfo,
                                       name_fun = "get_variances",
-                                      verbose = TRUE,
-                                      model_component = "conditional") {
+                                      verbose = TRUE) {
   # sanity check
-  if (is.null(x)) {
+  if (is.null(model)) {
     return(NULL)
   }
 
   # installed?
   check_if_installed("lme4", reason = "to compute variances for mixed models")
 
-  if (inherits(x, "lme")) {
+  if (inherits(model, "lme")) {
     check_if_installed("nlme", reason = "to compute variances for mixed models")
   }
 
-  if (inherits(x, "rstanarm")) {
+  if (inherits(model, "rstanarm")) {
     check_if_installed("rstanarm", reason = "to compute variances for mixed models")
   }
 
   # stanreg
   # ---------------------------
-  if (inherits(x, "stanreg")) {
-    vals <- list(
-      beta = lme4::fixef(x),
-      X = rstanarm::get_x(x),
-      vc = lme4::VarCorr(x),
-      re = lme4::ranef(x)
+  if (inherits(model, "stanreg")) {
+    mixed_effects_info <- list(
+      beta = lme4::fixef(model),
+      X = rstanarm::get_x(model),
+      vc = lme4::VarCorr(model),
+      re = lme4::ranef(model)
     )
 
     # GLMMapdative
     # ---------------------------
-  } else if (inherits(x, "MixMod")) {
+  } else if (inherits(model, "MixMod")) {
     vc1 <- vc2 <- NULL
-    re_names <- find_random(x)
+    re_names <- find_random(model)
 
-    vc_cond <- !startsWith(colnames(x$D), "zi_")
+    vc_cond <- !startsWith(colnames(model$D), "zi_")
     if (any(vc_cond)) {
-      vc1 <- x$D[vc_cond, vc_cond, drop = FALSE]
+      vc1 <- model$D[vc_cond, vc_cond, drop = FALSE]
       attr(vc1, "stddev") <- sqrt(diag(vc1))
-      attr(vc1, "correlation") <- stats::cov2cor(x$D[vc_cond, vc_cond, drop = FALSE])
+      attr(vc1, "correlation") <- stats::cov2cor(model$D[vc_cond, vc_cond, drop = FALSE])
     }
 
-    vc_zi <- startsWith(colnames(x$D), "zi_")
+    vc_zi <- startsWith(colnames(model$D), "zi_")
     if (any(vc_zi)) {
-      colnames(x$D) <- gsub("^zi_(.*)", "\\1", colnames(x$D))
-      rownames(x$D) <- colnames(x$D)
-      vc2 <- x$D[vc_zi, vc_zi, drop = FALSE]
+      colnames(model$D) <- gsub("^zi_(.*)", "\\1", colnames(model$D))
+      rownames(model$D) <- colnames(model$D)
+      vc2 <- model$D[vc_zi, vc_zi, drop = FALSE]
       attr(vc2, "stddev") <- sqrt(diag(vc2))
-      attr(vc2, "correlation") <- stats::cov2cor(x$D[vc_zi, vc_zi, drop = FALSE])
+      attr(vc2, "correlation") <- stats::cov2cor(model$D[vc_zi, vc_zi, drop = FALSE])
     }
 
     vc1 <- list(vc1)
     names(vc1) <- re_names[[1]]
-    attr(vc1, "sc") <- sqrt(get_deviance(x, verbose = FALSE) / get_df(x, type = "residual", verbose = FALSE))
+    attr(vc1, "sc") <- sqrt(get_deviance(model, verbose = FALSE) / get_df(model, type = "residual", verbose = FALSE))
 
     if (!is.null(vc2)) {
       vc2 <- list(vc2)
       names(vc2) <- re_names[[2]]
-      attr(vc2, "sc") <- sqrt(get_deviance(x, verbose = FALSE) / get_df(x, type = "residual", verbose = FALSE))
+      attr(vc2, "sc") <- sqrt(get_deviance(model, verbose = FALSE) / get_df(model, type = "residual", verbose = FALSE))
     }
 
     vcorr <- compact_list(list(vc1, vc2))
     names(vcorr) <- c("cond", "zi")[seq_along(vcorr)]
 
-    vals <- list(
-      beta = lme4::fixef(x),
-      X = get_modelmatrix(x),
+    mixed_effects_info <- list(
+      beta = lme4::fixef(model),
+      X = get_modelmatrix(model),
       vc = vcorr,
-      re = list(lme4::ranef(x))
+      re = list(lme4::ranef(model))
     )
-    names(vals$re) <- x$id_name
+    names(mixed_effects_info$re) <- model$id_name
 
     # joineRML
     # ---------------------------
-  } else if (inherits(x, "mjoint")) {
-    re_names <- find_random(x, flatten = TRUE)
-    vcorr <- summary(x)$D
+  } else if (inherits(model, "mjoint")) {
+    re_names <- find_random(model, flatten = TRUE)
+    vcorr <- summary(model)$D
     attr(vcorr, "stddev") <- sqrt(diag(vcorr))
     attr(vcorr, "correlation") <- stats::cov2cor(vcorr)
     vcorr <- list(vcorr)
     names(vcorr) <- re_names[1]
-    attr(vcorr, "sc") <- x$coef$sigma2[[1]]
+    attr(vcorr, "sc") <- model$coef$sigma2[[1]]
 
-    vals <- list(
-      beta = lme4::fixef(x),
-      X = matrix(1, nrow = n_obs(x), dimnames = list(NULL, "(Intercept)_1")),
+    mixed_effects_info <- list(
+      beta = lme4::fixef(model),
+      X = matrix(1, nrow = n_obs(model), dimnames = list(NULL, "(Intercept)_1")),
       vc = vcorr,
-      re = list(lme4::ranef(x))
+      re = list(lme4::ranef(model))
     )
-    names(vals$re) <- re_names[seq_along(vals$re)]
+    names(mixed_effects_info$re) <- re_names[seq_along(mixed_effects_info$re)]
 
     # nlme / glmmPQL
     # ---------------------------
-  } else if (inherits(x, "lme")) {
-    re_names <- find_random(x, split_nested = TRUE, flatten = TRUE)
-    comp_x <- get_modelmatrix(x)
+  } else if (inherits(model, "lme")) {
+    re_names <- find_random(model, split_nested = TRUE, flatten = TRUE)
+    comp_x <- get_modelmatrix(model)
     rownames(comp_x) <- seq_len(nrow(comp_x))
-    if (.is_nested_lme(x)) {
-      vals_vc <- .get_nested_lme_varcorr(x)
-      vals_re <- lme4::ranef(x)
+    if (.is_nested_lme(model)) {
+      vals_vc <- .get_nested_lme_varcorr(model)
+      vals_re <- lme4::ranef(model)
     } else {
-      vals_vc <- list(nlme::getVarCov(x))
-      vals_re <- list(lme4::ranef(x))
+      vals_vc <- list(nlme::getVarCov(model))
+      vals_re <- list(lme4::ranef(model))
     }
-    vals <- list(
-      beta = lme4::fixef(x),
+    mixed_effects_info <- list(
+      beta = lme4::fixef(model),
       X = comp_x,
       vc = vals_vc,
       re = vals_re
     )
-    names(vals$re) <- re_names
-    names(vals$vc) <- re_names
+    names(mixed_effects_info$re) <- re_names
+    names(mixed_effects_info$vc) <- re_names
 
     # ordinal
     # ---------------------------
-  } else if (inherits(x, "clmm")) {
+  } else if (inherits(model, "clmm")) {
     if (requireNamespace("ordinal", quietly = TRUE)) {
-      mm <- get_modelmatrix(x)
-      vals <- list(
-        beta = c("(Intercept)" = 1, stats::coef(x)[intersect(names(stats::coef(x)), colnames(mm))]),
+      mm <- get_modelmatrix(model)
+      mixed_effects_info <- list(
+        beta = c("(Intercept)" = 1, stats::coef(model)[intersect(names(stats::coef(model)), colnames(mm))]),
         X = mm,
-        vc = ordinal::VarCorr(x),
-        re = ordinal::ranef(x)
+        vc = ordinal::VarCorr(model),
+        re = ordinal::ranef(model)
       )
     }
 
     # glmmadmb
     # ---------------------------
-  } else if (inherits(x, "glmmadmb")) {
-    vals <- list(
-      beta = lme4::fixef(x),
-      X = get_modelmatrix(x),
-      vc = lme4::VarCorr(x),
-      re = lme4::ranef(x)
+  } else if (inherits(model, "glmmadmb")) {
+    mixed_effects_info <- list(
+      beta = lme4::fixef(model),
+      X = get_modelmatrix(model),
+      vc = lme4::VarCorr(model),
+      re = lme4::ranef(model)
     )
 
     # brms
     # ---------------------------
-  } else if (inherits(x, "brmsfit")) {
-    comp_x <- get_modelmatrix(x)
+  } else if (inherits(model, "brmsfit")) {
+    comp_x <- get_modelmatrix(model)
     rownames(comp_x) <- seq_len(nrow(comp_x))
-    vc <- lapply(names(lme4::VarCorr(x)), function(i) {
-      element <- lme4::VarCorr(x)[[i]]
+    vc <- lapply(names(lme4::VarCorr(model)), function(i) {
+      element <- lme4::VarCorr(model)[[i]]
       if (i != "residual__") {
         if (is.null(element$cov)) {
           out <- as.matrix(drop(element$sd[, 1])^2)
@@ -369,67 +392,67 @@
       out
     })
     vc <- compact_list(vc)
-    names(vc) <- setdiff(names(lme4::VarCorr(x)), "residual__")
-    attr(vc, "sc") <- lme4::VarCorr(x)$residual__$sd[1, 1]
-    vals <- list(
-      beta = lme4::fixef(x)[, 1],
+    names(vc) <- setdiff(names(lme4::VarCorr(model)), "residual__")
+    attr(vc, "sc") <- lme4::VarCorr(model)$residual__$sd[1, 1]
+    mixed_effects_info <- list(
+      beta = lme4::fixef(model)[, 1],
       X = comp_x,
       vc = vc,
-      re = lapply(lme4::ranef(x), function(re) {
+      re = lapply(lme4::ranef(model), function(re) {
         reval <- as.data.frame(drop(re[, 1, ]))
         colnames(reval) <- gsub("Intercept", "(Intercept)", dimnames(re)[[3]], fixed = TRUE)
         reval
       })
     )
-    names(vals$beta) <- gsub("Intercept", "(Intercept)", names(vals$beta), fixed = TRUE)
+    names(mixed_effects_info$beta) <- gsub("Intercept", "(Intercept)", names(mixed_effects_info$beta), fixed = TRUE)
 
     # cpglmm
     # ---------------------------
-  } else if (inherits(x, "cpglmm")) {
+  } else if (inherits(model, "cpglmm")) {
     # installed?
     check_if_installed("cplm")
 
-    vals <- list(
-      beta = cplm::fixef(x),
-      X = cplm::model.matrix(x),
-      vc = cplm::VarCorr(x),
-      re = cplm::ranef(x)
+    mixed_effects_info <- list(
+      beta = cplm::fixef(model),
+      X = cplm::model.matrix(model),
+      vc = cplm::VarCorr(model),
+      re = cplm::ranef(model)
     )
 
     # lme4 / glmmTMB
     # ---------------------------
   } else {
-    vals <- list(
-      beta = lme4::fixef(x),
-      X = lme4::getME(x, "X"),
-      vc = lme4::VarCorr(x),
-      re = lme4::ranef(x)
+    mixed_effects_info <- list(
+      beta = lme4::fixef(model),
+      X = lme4::getME(model, "X"),
+      vc = lme4::VarCorr(model),
+      re = lme4::ranef(model)
     )
   }
 
 
-  # for glmmTMB, tell user that dispersion model is ignored
-
-  if (inherits(x, c("glmmTMB", "MixMod"))) {
-    if (is.null(model_component) || model_component == "conditional") {
-      vals <- lapply(vals, .collapse_cond)
-    } else {
-      vals <- lapply(vals, .collapse_zi)
-    }
+  # for models with zero-inflation, we only want the conditional part
+  if (inherits(model, c("glmmTMB", "MixMod"))) {
+    mixed_effects_info <- lapply(mixed_effects_info, .collapse_cond)
   }
 
-  if (!is.null(find_formula(x)[["dispersion"]]) && verbose) {
+  # currently, we don't support calculating all variance components
+  # for the zero-inflated part of the model only. This is not fully implemented
+  # mixed_effects_info <- lapply(mixed_effects_info, .collapse_zi)
+
+  # for glmmTMB, tell user that dispersion model is ignored
+  if (!is.null(find_formula(model)[["dispersion"]]) && verbose) {
     format_warning(sprintf("%s ignores effects of dispersion model.", name_fun))
   }
 
   # fix rank deficiency
-  rankdef <- is.na(vals$beta)
+  rankdef <- is.na(mixed_effects_info$beta)
   if (any(rankdef)) {
-    rankdef_names <- names(vals$beta)[rankdef]
-    vals$beta <- vals$beta[setdiff(names(vals$beta), rankdef_names)]
+    rankdef_names <- names(mixed_effects_info$beta)[rankdef]
+    mixed_effects_info$beta <- mixed_effects_info$beta[setdiff(names(mixed_effects_info$beta), rankdef_names)]
   }
 
-  vals
+  mixed_effects_info
 }
 
 
@@ -476,21 +499,21 @@
 # However, package MuMIn differs and uses "fitted()" instead, leading to minor
 # deviations
 # -----------------------------------------------------------------------------
-.compute_variance_fixed <- function(vals) {
-  with(vals, stats::var(as.vector(beta %*% t(X))))
+.compute_variance_fixed <- function(mixed_effects_info) {
+  with(mixed_effects_info, stats::var(as.vector(beta %*% t(X))))
 }
 
 
 
 # dispersion-specific variance ----
 # ---------------------------------
-.compute_variance_dispersion <- function(x, vals, faminfo, obs.terms) {
+.compute_variance_dispersion <- function(model, mixed_effects_info, faminfo, obs_terms) {
   if (faminfo$is_linear) {
     0
-  } else if (length(obs.terms) == 0) {
+  } else if (length(obs_terms) == 0) {
     0
   } else {
-    .compute_variance_random(obs.terms, x = x, vals = vals)
+    .compute_variance_random(model, obs_terms, mixed_effects_info)
   }
 }
 
@@ -501,7 +524,7 @@
 # This is in line with Nakagawa et al. 2017, Suppl. 2, and package MuMIm
 # see https://royalsocietypublishing.org/action/downloadSupplement?doi=10.1098%2Frsif.2017.0213&file=rsif20170213supp2.pdf
 # ----------------------------------------------------------------------------
-.compute_variance_random <- function(terms, x, vals) {
+.compute_variance_random <- function(model, terms, mixed_effects_info) {
   if (is.null(terms)) {
     return(NULL)
   }
@@ -509,29 +532,29 @@
     rn <- rownames(Sigma)
 
     # fix for models w/o intercept
-    if (!any(startsWith(colnames(vals$X), "(Intercept)"))) {
-      vals$X <- cbind("(Intercept)" = 1, vals$X)
+    if (!any(startsWith(colnames(mixed_effects_info$X), "(Intercept)"))) {
+      mixed_effects_info$X <- cbind("(Intercept)" = 1, mixed_effects_info$X)
     }
 
     if (!is.null(rn)) {
-      valid <- rownames(Sigma) %in% colnames(vals$X)
+      valid <- rownames(Sigma) %in% colnames(mixed_effects_info$X)
       if (!all(valid)) {
         rn <- rn[valid]
         Sigma <- Sigma[valid, valid, drop = FALSE]
       }
     }
 
-    Z <- vals$X[, rn, drop = FALSE]
+    Z <- mixed_effects_info$X[, rn, drop = FALSE]
     Z.m <- Z %*% Sigma
-    sum(diag(crossprod(Z.m, Z))) / n_obs(x)
+    sum(diag(crossprod(Z.m, Z))) / n_obs(model)
   }
 
   # if (inherits(x, "MixMod")) {
-  #   .sigma_sum(vals$vc)
+  #   .sigma_sum(mixed_effects_info$vc)
   # } else {
-  #   sum(sapply(vals$vc[terms], .sigma_sum))
+  #   sum(sapply(mixed_effects_info$vc[terms], .sigma_sum))
   # }
-  sum(sapply(vals$vc[terms], .sigma_sum))
+  sum(sapply(mixed_effects_info$vc[terms], .sigma_sum))
 }
 
 
@@ -550,16 +573,17 @@
 # despite being correctly re-formulated in "null_model()", returns slightly
 # different values for the log/delta/trigamma approximation.
 # -----------------------------------------------------------------------------
-.compute_variance_distribution <- function(x,
-                                           var.cor,
+.compute_variance_distribution <- function(model,
+                                           var_cor,
                                            faminfo,
                                            model_null = NULL,
                                            revar_null = NULL,
                                            name,
                                            approx_method = "lognormal",
+                                           model_component = NULL,
                                            verbose = TRUE) {
   # get overdispersion parameter / sigma
-  sig <- .safe(get_sigma(x))
+  sig <- .safe(get_sigma(model))
 
   if (is.null(sig)) {
     sig <- 1
@@ -582,13 +606,14 @@
       probit = ,
       cloglog = ,
       clogloglink = .variance_distributional(
-        x,
+        model,
         faminfo = faminfo,
         sig = sig,
         model_null = model_null,
         revar_null = revar_null,
         approx_method = approx_method,
         name = name,
+        model_component = model_component,
         verbose = verbose
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
@@ -598,7 +623,7 @@
     # --------------------------
 
     # we need this to adjust for "cbind()" outcomes
-    y_factor <- .binomial_response_weight(x)
+    y_factor <- .binomial_response_weight(model)
 
     # for observation level approximation, when we don't want the "fixed"
     # residual variance, pi^2/3, but the variance based on the distribution
@@ -631,7 +656,7 @@
     # -------------
 
     resid.variance <- .variance_distributional(
-      x,
+      model,
       faminfo = faminfo,
       sig = sig,
       model_null = model_null,
@@ -646,13 +671,14 @@
 
     resid.variance <- switch(faminfo$link_function,
       log = .variance_distributional(
-        x,
+        model,
         faminfo = faminfo,
         sig = sig,
         model_null = model_null,
         revar_null = revar_null,
         approx_method = approx_method,
         name = name,
+        model_component = model_component,
         verbose = verbose
       ),
       sqrt = 0.25 * sig,
@@ -664,7 +690,7 @@
 
     resid.variance <- switch(faminfo$link_function,
       inverse = ,
-      identity = stats::family(x)$variance(sig),
+      identity = stats::family(model)$variance(sig),
       log = switch(approx_method,
         delta = 1 / sig^-2,
         trigamma = trigamma(sig^-2),
@@ -672,36 +698,20 @@
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
-  } else if (faminfo$family == "beta") {
-    # Beta  ----
-    # ----------
+  } else if (faminfo$family == "beta" || faminfo$is_orderedbeta) {
+    # (Ordered) Beta  ----
+    # --------------------
 
     resid.variance <- switch(faminfo$link_function,
       logit = .variance_distributional(
-        x,
+        model,
         faminfo = faminfo,
         sig = sig,
         model_null = model_null,
         revar_null = revar_null,
         name = name,
         approx_method = approx_method,
-        verbose = verbose
-      ),
-      .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
-    )
-  } else if (faminfo$is_orderedbeta) {
-    # Ordered Beta  ----
-    # ------------------
-
-    resid.variance <- switch(faminfo$link_function,
-      logit = .variance_distributional(
-        x,
-        faminfo = faminfo,
-        sig = sig,
-        model_null = model_null,
-        revar_null = revar_null,
-        approx_method = approx_method,
-        name = name,
+        model_component = model_component,
         verbose = verbose
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
@@ -718,12 +728,12 @@
 #
 # calculate weight if we have a "cbind()" response for binomial models
 # needed to weight the residual variance
-.binomial_response_weight <- function(x) {
+.binomial_response_weight <- function(model) {
   # we need this to adjust for "cbind()" outcomes
-  resp_value <- .safe(stats::model.frame(x)[, find_response(x)])
+  resp_value <- .safe(stats::model.frame(model)[, find_response(model)])
   # sanity check
   if (is.null(resp_value)) {
-    resp_value <- .safe(get_data(x, source = "frame")[, find_response(x)])
+    resp_value <- .safe(get_data(model, source = "frame")[, find_response(model)])
   }
   if (!is.null(resp_value) && !is.null(ncol(resp_value)) && ncol(resp_value) > 1) {
     mean(rowSums(resp_value, na.rm = TRUE))
@@ -760,13 +770,14 @@
 # VarOlF <- log(1 + (1 / lambda) + (1 / thetaF)) # log-normal approximation
 # VarOtF <- trigamma((1 / lambda + 1 / thetaF)^(-1)) # trigamma function
 # -----------------------------------------------------------------------------
-.variance_distributional <- function(x,
+.variance_distributional <- function(model,
                                      faminfo,
                                      sig,
                                      model_null = NULL,
                                      revar_null = NULL,
                                      name,
                                      approx_method = "lognormal",
+                                     model_component = NULL,
                                      verbose = TRUE) {
   check_if_installed("lme4", "to compute variances for mixed models")
 
@@ -807,75 +818,120 @@
 
   # transform expected mean of the null model
   if (is.null(faminfo$family)) {
-    mu <- link_inverse(x)(mu)
+    mu <- link_inverse(model)(mu)
   } else {
     # transform mu
     mu <- switch(faminfo$family,
+      # beta-alike
       beta = ,
       betabinomial = ,
       ordbeta = stats::plogis(mu),
       # for count models, Nakagawa et al. suggest this transformation
       poisson = ,
       quasipoisson = ,
+      genpois = ,
       nbinom = ,
       nbinom1 = ,
       nbinom2 = ,
       negbinomial = ,
       tweedie = ,
       `negative binomial` = exp(mu + 0.5 * as.vector(revar_null)),
-      link_inverse(x)(mu) ## TODO: check if this is better than "exp(mu)"
-      # exp(mu)
+      # all other models
+      link_inverse(model)(mu)
     )
   }
+
+  # ------------------------------------------------------------------
+  # we have to make exception and check for tweedie-link_function here.
+  # Some models from tweedie family have saved this information in
+  # "faminfo$family", but some also in "faminfo$link_function" (with a different
+  # family). So we have to check for both.
+  # Same applies to zero-inflated models, that's why we better double-check here.
+  # If variances for conditional model only are requested, we check the same
+  # families below again.
+  # ------------------------------------------------------------------
 
   cvsquared <- tryCatch(
     {
       if (faminfo$link_function == "tweedie") {
-        dispersion_param <- .variance_family_tweedie(x, mu, sig)
-      } else {
+        # Tweedie models ------------------------------------------------------
+        # ---------------------------------------------------------------------
+        dispersion_param <- .variance_family_tweedie(model, mu, sig)
+      } else if (identical(model_component, "full") && (faminfo$is_zero_inflated || faminfo$is_hurdle)) {
+        # Zero Inflated models ------------------------------------------------
+        # ---------------------------------------------------------------------
         dispersion_param <- switch(faminfo$family,
 
           # (zero-inflated) poisson ----
           # ----------------------------
-          `zero-inflated poisson` = .variance_family_poisson(x, mu, faminfo),
-          poisson = 1,
+          poisson = ,
+          `zero-inflated poisson` = .variance_family_poisson(model, mu, faminfo),
 
-          # hurdle-poisson ----
-          # -------------------
+          # (zero-inflated) negative binomial ----
+          # --------------------------------------
+          genpois = ,
+          nbinom = ,
+          nbinom1 = ,
+          nbinom2 = ,
+          negbinomial = ,
+          `negative binomial` = ,
+          `zero-inflated negative binomial` = .variance_family_nbinom(model, mu, sig, faminfo),
+
+          # hurdle and Gamma ----
+          # -------------------------
+          gamma = ,
+          Gamma = ,
           `hurdle poisson` = ,
-          truncated_poisson = stats::family(x)$variance(sig),
+          truncated_poisson = stats::family(model)$variance(mu),
+          truncated_nbinom2 = stats::family(model)$variance(mu, sig),
+
+          # others ----
+          # -----------
+          sig
+        )
+      } else {
+        # All other families (or conditional model only) ------------------
+        # -----------------------------------------------------------------
+        dispersion_param <- switch(faminfo$family,
+
+          # (compoised) poisson ----
+          # ------------------------
+          poisson = 1,
+          `zero-inflated poisson` = 1,
 
           # Gamma, exponential ----
           # -----------------------
-          Gamma = stats::family(x)$variance(sig),
+          gamma = ,
+          Gamma = stats::family(model)$variance(sig),
 
-          # (zero-inflated) negative binomial ----
+          # negative binomial ----
           # --------------------------------------
           nbinom = ,
           nbinom1 = ,
           nbinom2 = ,
           quasipoisson = ,
           negbinomial = ,
-          `negative binomial` = sig,
-          `zero-inflated negative binomial` = ,
-          genpois = .variance_family_nbinom(x, mu, sig, faminfo),
-          truncated_nbinom2 = stats::family(x)$variance(mu, sig),
+          `negative binomial` = ,
+          genpois = ,
+          `zero-inflated negative binomial` = sig,
 
           # beta-alike ----
           # ---------------
-          beta = .variance_family_beta(x, mu, sig),
-          ordbeta = .variance_family_orderedbeta(x, mu),
-          # betabinomial = .variance_family_beta(x, mu, sig),
-          # betabinomial = stats::family(x)$variance(mu, sig),
-          betabinomial = .variance_family_betabinom(x, mu, sig),
+          beta = .variance_family_beta(model, mu, sig),
+          ordbeta = .variance_family_orderedbeta(model, mu),
+          betabinomial = .variance_family_betabinom(model, mu, sig),
 
-          # other distributions ----
+          ## TODO: check alternatives, but probably less accurate
+          # betabinomial = .variance_family_beta(model, mu, sig),
+          # betabinomial = stats::family(model)$variance(mu, sig),
+
+          # tweed distributions ----
           # ------------------------
-          tweedie = .variance_family_tweedie(x, mu, sig),
+          tweedie = .variance_family_tweedie(model, mu, sig),
 
           # default variance for non-captured distributions ----
           # ----------------------------------------------------
-          .variance_family_default(x, mu, verbose)
+          .variance_family_default(model, mu, verbose)
         )
       }
 
@@ -897,6 +953,7 @@
           nbinom1 = ,
           nbinom2 = ,
           negbinomial = ,
+          genpois = ,
           `negative binomial` = ((1 / mu) + (1 / dispersion_param))^-1,
           poisson = ,
           quasipoisson = mu / dispersion_param,
@@ -908,6 +965,7 @@
           nbinom1 = ,
           nbinom2 = ,
           negbinomial = ,
+          genpois = ,
           `negative binomial` = (1 / mu) + (1 / dispersion_param),
           poisson = ,
           quasipoisson = dispersion_param / mu,
@@ -915,11 +973,11 @@
         )
       }
     },
-    error = function(x) {
+    error = function(e) {
       if (verbose) {
         format_warning(
           "Can't calculate model's distribution-specific variance. Results are not reliable.",
-          paste("The following error occured: ", x$message)
+          paste("The following error occured: ", e$message)
         )
       }
       0
@@ -937,15 +995,15 @@
 
 # Get distributional variance for poisson-family
 # ----------------------------------------------
-.variance_family_poisson <- function(x, mu, faminfo) {
+.variance_family_poisson <- function(model, mu, faminfo) {
   if (faminfo$is_zero_inflated) {
-    .variance_zip(x, faminfo, family_var = mu)
-  } else if (inherits(x, "MixMod")) {
+    .variance_zip(model, faminfo, family_var = mu)
+  } else if (inherits(model, "MixMod")) {
     mu
-  } else if (inherits(x, "cpglmm")) {
-    .get_cplm_family(x)$variance(mu)
+  } else if (inherits(model, "cpglmm")) {
+    .get_cplm_family(model)$variance(mu)
   } else {
-    stats::family(x)$variance(mu)
+    stats::family(model)$variance(mu)
   }
 }
 
@@ -953,10 +1011,10 @@
 
 # Get distributional variance for beta-family
 # ----------------------------------------------
-.variance_family_beta <- function(x, mu, phi) {
-  stats::family(x)$variance(mu)
-  # if (inherits(x, "MixMod")) {
-  #   stats::family(x)$variance(mu)
+.variance_family_beta <- function(model, mu, phi) {
+  stats::family(model)$variance(mu)
+  # if (inherits(model, "MixMod")) {
+  #   stats::family(model)$variance(mu)
   # } else {
   #   # was:
   #   # mu * (1 - mu) / (1 + phi)
@@ -969,9 +1027,9 @@
 
 # Get distributional variance for ordered beta-family
 # ----------------------------------------------
-.variance_family_orderedbeta <- function(x, mu) {
-  if (inherits(x, "MixMod")) {
-    stats::family(x)$variance(mu)
+.variance_family_orderedbeta <- function(model, mu) {
+  if (inherits(model, "MixMod")) {
+    stats::family(model)$variance(mu)
   } else {
     mu * (1 - mu)
   }
@@ -981,9 +1039,9 @@
 
 # Get distributional variance for beta-family
 # ----------------------------------------------
-.variance_family_betabinom <- function(x, mu, phi) {
-  if (inherits(x, "MixMod")) {
-    stats::family(x)$variance(mu)
+.variance_family_betabinom <- function(model, mu, phi) {
+  if (inherits(model, "MixMod")) {
+    stats::family(model)$variance(mu)
   } else {
     mu * (1 - mu) / (1 + phi)
     # n <- .binomial_response_weight(x)
@@ -995,15 +1053,15 @@
 
 # Get distributional variance for tweedie-family
 # ----------------------------------------------
-.variance_family_tweedie <- function(x, mu, phi) {
-  if (inherits(x, "cpglmm")) {
-    phi <- x@phi
-    p <- x@p - 2
+.variance_family_tweedie <- function(model, mu, phi) {
+  if (inherits(model, "cpglmm")) {
+    phi <- model@phi
+    p <- model@p - 2
   } else {
-    if ("psi" %in% names(x$fit$par)) {
-      psi <- x$fit$par["psi"] # glmmmTMB >= 1.1.5
+    if ("psi" %in% names(model$fit$par)) {
+      psi <- model$fit$par["psi"] # glmmmTMB >= 1.1.5
     } else {
-      psi <- x$fit$par["thetaf"]
+      psi <- model$fit$par["thetaf"]
     }
     p <- unname(stats::plogis(psi) + 1)
   }
@@ -1014,17 +1072,17 @@
 
 # Get distributional variance for nbinom-family
 # ----------------------------------------------
-.variance_family_nbinom <- function(x, mu, sig, faminfo) {
+.variance_family_nbinom <- function(model, mu, sig, faminfo) {
   if (faminfo$is_zero_inflated) {
     if (missing(sig)) sig <- 0
-    .variance_zinb(x, sig, faminfo, family_var = mu * (1 + sig))
-  } else if (inherits(x, "MixMod")) {
+    .variance_zinb(model, sig, faminfo, family_var = mu * (1 + sig))
+  } else if (inherits(model, "MixMod")) {
     if (missing(sig)) {
       return(rep(1e-16, length(mu)))
     }
     mu * (1 + sig)
   } else {
-    stats::family(x)$variance(mu, sig)
+    stats::family(model)$variance(mu, sig)
   }
 }
 
@@ -1092,26 +1150,26 @@
 # Get distribution-specific variance for general and
 # undefined families / link-functions
 # ----------------------------------------------
-.variance_family_default <- function(x, mu, verbose) {
+.variance_family_default <- function(model, mu, verbose) {
   # installed?
   check_if_installed("lme4")
 
   tryCatch(
-    if (inherits(x, "merMod")) {
-      mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
-    } else if (inherits(x, "MixMod")) {
-      stats::family(x)$variance(mu)
-    } else if (inherits(x, "glmmTMB")) {
-      if (is.null(x$theta)) {
-        theta <- lme4::getME(x, "theta")
+    if (inherits(model, "merMod")) {
+      mu * (1 + mu / lme4::getME(model, "glmer.nb.theta"))
+    } else if (inherits(model, "MixMod")) {
+      stats::family(model)$variance(mu)
+    } else if (inherits(model, "glmmTMB")) {
+      if (is.null(model$theta)) {
+        theta <- lme4::getME(model, "theta")
       } else {
-        theta <- x$theta
+        theta <- model$theta
       }
       mu * (1 + mu / theta)
     } else {
-      mu * (1 + mu / x$theta)
+      mu * (1 + mu / model$theta)
     },
-    error = function(x) {
+    error = function(e) {
       if (verbose) {
         format_warning("Can't calculate model's distribution-specific variance. Results are not reliable.")
       }
@@ -1157,10 +1215,12 @@
 # random intercept-variances, i.e.
 # between-subject-variance (tau 00) ----
 # ----------------------------------------------
-.between_subject_variance <- function(vals, x) {
-  vars <- lapply(vals$vc, function(i) i[1])
+.between_subject_variance <- function(mixed_effects_info) {
+  vars <- lapply(mixed_effects_info$vc, function(i) i[1])
   # check for uncorrelated random slopes-intercept
-  non_intercepts <- which(sapply(vals$vc, function(i) !startsWith(dimnames(i)[[1]][1], "(Intercept)")))
+  non_intercepts <- which(sapply(mixed_effects_info$vc, function(i) {
+    !startsWith(dimnames(i)[[1]][1], "(Intercept)")
+  }))
   if (length(non_intercepts)) {
     vars <- vars[-non_intercepts]
   }
@@ -1174,19 +1234,21 @@
 
 # random slope-variances (tau 11) ----
 # ----------------------------------------------
-.random_slope_variance <- function(vals, x) {
-  if (inherits(x, "lme")) {
-    unlist(lapply(vals$vc, function(x) diag(x)[-1]))
+.random_slope_variance <- function(model, mixed_effects_info) {
+  if (inherits(model, "lme")) {
+    unlist(lapply(mixed_effects_info$vc, function(i) diag(i)[-1]))
   } else {
     # random slopes for correlated slope-intercept
-    out <- unlist(lapply(vals$vc, function(x) diag(x)[-1]))
+    out <- unlist(lapply(mixed_effects_info$vc, function(i) diag(i)[-1]))
     # check for uncorrelated random slopes-intercept
-    non_intercepts <- which(sapply(vals$vc, function(i) !startsWith(dimnames(i)[[1]][1], "(Intercept)")))
-    if (length(non_intercepts) == length(vals$vc)) {
-      out <- unlist(lapply(vals$vc, diag))
+    non_intercepts <- which(sapply(mixed_effects_info$vc, function(i) {
+      !startsWith(dimnames(i)[[1]][1], "(Intercept)")
+    }))
+    if (length(non_intercepts) == length(mixed_effects_info$vc)) {
+      out <- unlist(lapply(mixed_effects_info$vc, diag))
     } else if (length(non_intercepts)) {
-      dn <- unlist(lapply(vals$vc, function(i) dimnames(i)[1])[non_intercepts])
-      rndslopes <- unlist(lapply(vals$vc, function(i) {
+      dn <- unlist(lapply(mixed_effects_info$vc, function(i) dimnames(i)[1])[non_intercepts])
+      rndslopes <- unlist(lapply(mixed_effects_info$vc, function(i) {
         if (is.null(dim(i)) || identical(dim(i), c(1, 1))) {
           as.vector(i)
         } else {
@@ -1229,13 +1291,13 @@
 
 # slope-intercept-correlations (rho 01) ----
 # ----------------------------------------------
-.random_slope_intercept_corr <- function(vals, x) {
-  if (inherits(x, "lme")) {
-    rho01 <- unlist(sapply(vals$vc, attr, which = "cor_slope_intercept"))
+.random_slope_intercept_corr <- function(model, mixed_effects_info) {
+  if (inherits(model, "lme")) {
+    rho01 <- unlist(sapply(mixed_effects_info$vc, attr, which = "cor_slope_intercept"))
     if (is.null(rho01)) {
-      vc <- lme4::VarCorr(x)
+      vc <- lme4::VarCorr(model)
       if ("Corr" %in% colnames(vc)) {
-        re_name <- find_random(x, split_nested = FALSE, flatten = TRUE)
+        re_name <- find_random(model, split_nested = FALSE, flatten = TRUE)
         rho01 <- as.vector(suppressWarnings(stats::na.omit(as.numeric(vc[, "Corr"]))))
         if (length(re_name) == length(rho01)) {
           names(rho01) <- re_name
@@ -1244,7 +1306,7 @@
     }
     rho01
   } else {
-    corrs <- lapply(vals$vc, attr, "correlation")
+    corrs <- lapply(mixed_effects_info$vc, attr, "correlation")
     rho01 <- sapply(corrs, function(i) {
       if (!is.null(i) && colnames(i)[1] == "(Intercept)") {
         i[-1, 1]
@@ -1262,16 +1324,16 @@
 
 # slope-slope-correlations (rho 01) ----
 # ----------------------------------------------
-.random_slopes_corr <- function(vals, x) {
-  corrs <- lapply(vals$vc, attr, "correlation")
-  rnd_slopes <- unlist(find_random_slopes(x))
+.random_slopes_corr <- function(model, mixed_effects_info) {
+  corrs <- lapply(mixed_effects_info$vc, attr, "correlation")
+  rnd_slopes <- unlist(find_random_slopes(model))
 
   # check if any categorical random slopes. we then have
   # correlation among factor levels
   cat_random_slopes <- tryCatch(
     {
-      d <- get_data(x, verbose = FALSE)[rnd_slopes]
-      any(sapply(d, is.factor))
+      d <- get_data(model, verbose = FALSE)[rnd_slopes]
+      any(vapply(d, is.factor, logical(1)))
     },
     error = function(e) {
       NULL
@@ -1314,7 +1376,7 @@
   #   {
   #     sapply(corrs, function(i) {
   #       if (!is.null(i)) {
-  #         slope_pairs <- utils::combn(x = rnd_slopes, m = 2, simplify = FALSE)
+  #         slope_pairs <- utils::combn(model = rnd_slopes, m = 2, simplify = FALSE)
   #         lapply(slope_pairs, function(j) {
   #           stats::setNames(i[j[1], j[2]], paste0("..", paste0(j, collapse = "-")))
   #         })

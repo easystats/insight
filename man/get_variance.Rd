@@ -87,7 +87,9 @@ specific variance, however, it can also be \code{"observation_level"}. See
 \item{verbose}{Toggle off warnings.}
 
 \item{model_component}{For models that can have a zero-inflation component,
-specify for which component variances should be returned.}
+specify for which component variances should be returned. If \code{NULL} or \code{"full"}
+(the default), both the conditional and the zero-inflation component are taken
+into account. If \code{"conditional"}, only the conditional component is considered.}
 }
 \value{
 A list with following elements:
@@ -118,7 +120,14 @@ This function supports models of class \code{merMod} (including models
 from \strong{blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB}, \code{MixMod}, \code{lme},
 \code{mixed}, \code{rlmerMod}, \code{stanreg}, \code{brmsfit} or \code{wbm}. Support for objects of
 class \code{MixMod} (\strong{GLMMadaptive}), \code{lme} (\strong{nlme}) or \code{brmsfit} (\strong{brms}) is
-experimental and may not work for all models.
+not fully implemented or tested, and therefore may not work for all models
+of the aforementioned classes.
+
+Extracting variance components for models with zero-inflation part is not
+straightforward, because it is not definitely clear how the distribution-specific
+variance should be calculated. Therefore, it is recommended to carefully
+inspect the results, and probably validate against other models, e.g. Bayesian
+models (although results may be only roughly comparable).
 }
 \section{Fixed effects variance}{
 

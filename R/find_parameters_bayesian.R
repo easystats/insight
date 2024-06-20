@@ -187,7 +187,7 @@ find_parameters.bamlss <- function(x,
 
   ignore <- grepl("(\\.alpha|logLik|\\.accepted|\\.edf)$", cn)
   cond <- cn[grepl("^(mu\\.p\\.|pi\\.p\\.)", cn) & !ignore]
-  sigma <- cn[startsWith(cn, "sigma.p.") & !ignore]
+  aux <- cn[startsWith(cn, "sigma.p.") & !ignore]
   smooth_terms <- cn[grepl("^mu\\.s\\.(.*)(\\.tau\\d+|\\.edf)$", cn)]
   alpha <- cn[endsWith(cn, ".alpha")]
 
@@ -195,7 +195,7 @@ find_parameters.bamlss <- function(x,
   l <- compact_list(list(
     conditional = cond,
     smooth_terms = smooth_terms,
-    sigma = sigma,
+    sigma = aux,
     alpha = alpha
   )[elements])
 
@@ -244,10 +244,10 @@ find_parameters.brmsfit <- function(x,
   car_struc <- fe[fe %in% c("car", "sdcar")]
   smooth_terms <- fe[startsWith(fe, "sds_")]
   priors <- fe[startsWith(fe, "prior_")]
-  sigma <- fe[startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE)]
+  sigma_param <- fe[startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE)]
   randsigma <- fe[grepl("^r_(.*__sigma)", fe, perl = TRUE)]
-  beta <- fe[grepl("beta", fe, fixed = TRUE)]
-  randbeta <- fe[grepl("^r_(.*__beta)", fe, perl = TRUE)]
+  fixed_beta <- fe[grepl("beta", fe, fixed = TRUE)]
+  rand_beta <- fe[grepl("^r_(.*__beta)", fe, perl = TRUE)]
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
   shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
   dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
@@ -256,8 +256,8 @@ find_parameters.brmsfit <- function(x,
   # if auxiliary is modelled directly, we need to remove duplicates here
   # e.g. "b_sigma..." is in "cond" and in "sigma" now, we just need it in "cond".
 
-  sigma <- setdiff(sigma, c(cond, rand, rand_sd, rand_cor, randsigma, car_struc, "prior_sigma"))
-  beta <- setdiff(beta, c(cond, rand, rand_sd, randbeta, rand_cor, car_struc))
+  sigma_param <- setdiff(sigma_param, c(cond, rand, rand_sd, rand_cor, randsigma, car_struc, "prior_sigma"))
+  fixed_beta <- setdiff(fixed_beta, c(cond, rand, rand_sd, rand_beta, rand_cor, car_struc))
   auxiliary <- setdiff(auxiliary, c(cond, rand, rand_sd, rand_cor, car_struc))
 
   l <- compact_list(list(
@@ -267,10 +267,10 @@ find_parameters.brmsfit <- function(x,
     zero_inflated_random = c(randzi, randzi_sd, randzi_cor),
     simplex = simo,
     smooth_terms = smooth_terms,
-    sigma = sigma,
+    sigma = sigma_param,
     sigma_random = randsigma,
-    beta = beta,
-    beta_random = randbeta,
+    beta = fixed_beta,
+    beta_random = rand_beta,
     dispersion = dispersion,
     mix = mix,
     shiftprop = shiftprop,
@@ -320,15 +320,15 @@ find_parameters.brmsfit <- function(x,
       }
 
       if (object_has_names(l, "sigma")) {
-        sigma <- l$sigma[grepl(sprintf("^sigma_\\Q%s\\E$", i), l$sigma)]
+        sigma_param <- l$sigma[grepl(sprintf("^sigma_\\Q%s\\E$", i), l$sigma)]
       } else {
-        sigma <- NULL
+        sigma_param <- NULL
       }
 
       if (object_has_names(l, "beta")) {
-        beta <- l$beta[grepl(sprintf("^beta_\\Q%s\\E$", i), l$sigma)]
+        fixed_beta <- l$beta[grepl(sprintf("^beta_\\Q%s\\E$", i), l$beta)]
       } else {
-        beta <- NULL
+        fixed_beta <- NULL
       }
 
       if (object_has_names(l, "dispersion")) {
@@ -368,8 +368,8 @@ find_parameters.brmsfit <- function(x,
         zero_inflated_random = zero_inflated_random,
         simplex = simplex,
         smooth_terms = smooth_terms,
-        sigma = sigma,
-        beta = beta,
+        sigma = sigma_param,
+        beta = fixed_beta,
         dispersion = dispersion,
         mix = mix,
         priors = priors,
@@ -441,7 +441,7 @@ find_parameters.stanreg <- function(x,
   rand <- fe[startsWith(fe, "b[")]
   rand_sd <- fe[startsWith(fe, "Sigma[")]
   smooth_terms <- fe[startsWith(fe, "smooth_sd")]
-  sigma <- fe[grepl("sigma", fe, fixed = TRUE)]
+  sigma_param <- fe[grepl("sigma", fe, fixed = TRUE)]
   auxiliary <- fe[grepl("(shape|phi|precision)", fe)]
 
   # remove auxiliary from conditional
@@ -451,7 +451,7 @@ find_parameters.stanreg <- function(x,
     conditional = cond,
     random = c(rand, rand_sd),
     smooth_terms = smooth_terms,
-    sigma = sigma,
+    sigma = sigma_param,
     auxiliary = auxiliary
   ))
 
@@ -499,7 +499,7 @@ find_parameters.stanmvreg <- function(x,
   rand <- fe[startsWith(fe, "b[")]
   rand_sd <- fe[startsWith(fe, "Sigma[")]
   smooth_terms <- fe[startsWith(fe, "smooth_sd")]
-  sigma <- fe[endsWith(fe, "|sigma") & .grep_non_smoothers(fe)]
+  sigma_param <- fe[endsWith(fe, "|sigma") & .grep_non_smoothers(fe)]
   auxiliary <- fe[grepl("(shape|phi|precision)", fe)]
 
   # remove auxiliary from conditional
@@ -509,7 +509,7 @@ find_parameters.stanmvreg <- function(x,
     conditional = cond,
     random = c(rand, rand_sd),
     smooth_terms = smooth_terms,
-    sigma = sigma,
+    sigma = sigma_param,
     auxiliary = auxiliary
   ))
 

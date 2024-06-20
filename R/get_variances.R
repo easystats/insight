@@ -28,7 +28,9 @@
 #' specific variance, however, it can also be `"observation_level"`. See
 #' _Nakagawa et al. 2017_, in particular supplement 2, for details.
 #' @param model_component For models that can have a zero-inflation component,
-#' specify for which component variances should be returned.
+#' specify for which component variances should be returned. If `NULL` or `"full"`
+#' (the default), both the conditional and the zero-inflation component are taken
+#' into account. If `"conditional"`, only the conditional component is considered.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:
@@ -109,7 +111,14 @@
 #' from **blme**), `clmm`, `cpglmm`, `glmmadmb`, `glmmTMB`, `MixMod`, `lme`,
 #' `mixed`, `rlmerMod`, `stanreg`, `brmsfit` or `wbm`. Support for objects of
 #' class `MixMod` (**GLMMadaptive**), `lme` (**nlme**) or `brmsfit` (**brms**) is
-#' experimental and may not work for all models.
+#' not fully implemented or tested, and therefore may not work for all models
+#' of the aforementioned classes.
+#'
+#' Extracting variance components for models with zero-inflation part is not
+#' straightforward, because it is not definitely clear how the distribution-specific
+#' variance should be calculated. Therefore, it is recommended to carefully
+#' inspect the results, and probably validate against other models, e.g. Bayesian
+#' models (although results may be only roughly comparable).
 #'
 #' @references
 #'  - Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to
@@ -171,7 +180,7 @@ get_variance.merMod <- function(x,
                                 ...) {
   component <- match.arg(component)
   .safe(.compute_variances(
-    x,
+    model = x,
     component = component,
     name_fun = "get_variance",
     name_full = "random effect variances",
@@ -230,7 +239,7 @@ get_variance.glmmTMB <- function(x,
                                  ...) {
   component <- match.arg(component)
   .safe(.compute_variances(
-    x,
+    model = x,
     component = component,
     name_fun = "get_variance",
     name_full = "random effect variances",
@@ -260,7 +269,7 @@ get_variance.mixed <- function(x,
                                ...) {
   component <- match.arg(component)
   .safe(.compute_variances(
-    x$full_model,
+    model = x$full_model,
     component = component,
     name_fun = "get_variance",
     name_full = "random effect variances",

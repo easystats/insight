@@ -25,38 +25,38 @@
 #' find_offset(m2)
 #' @export
 find_offset <- function(x) {
-  terms <- .safe(
+  model_terms <- .safe(
     as.character(attributes(stats::terms(find_formula(x)[[1]]))$variables),
     find_terms(x)
   )
-  offset <- NULL
+  model_offset <- NULL
 
-  offcol <- grep("offset(", terms, fixed = TRUE)
+  offcol <- grep("offset(", model_terms, fixed = TRUE)
   if (length(offcol)) {
-    offset <- terms[offcol]
+    model_offset <- model_terms[offcol]
   }
 
   model_call <- get_call(x)
-  if (is.null(offset) && object_has_names(model_call, "offset")) {
-    offset <- safe_deparse(model_call$offset)
+  if (is.null(model_offset) && object_has_names(model_call, "offset")) {
+    model_offset <- safe_deparse(model_call$offset)
   }
 
   # fixest sometimes returns a weird macro syntax instead of the real offset
   # if we have to implement too many model-specific workarounds, it may eventually be worth it to do S3
   # VAB: no test because I can only replicate in a weird {etwfe} example
   if (inherits(x, "fixest")) {
-    if (is.null(offset) || startsWith(offset, "..")) {
-      offset <- x[["model_info"]][["offset"]]
+    if (is.null(model_offset) || startsWith(model_offset, "..")) {
+      model_offset <- x[["model_info"]][["offset"]]
     }
-    offset <- sub("^~", "", offset)
+    model_offset <- sub("^~", "", model_offset)
   }
 
-  offset <- clean_names(offset)
+  model_offset <- clean_names(model_offset)
 
   # sometimes we get an empty list (e.g., fixest with iris dataset)
-  if (length(offset)) {
-    return(offset)
+  if (length(model_offset)) {
+    model_offset
   } else {
-    return(NULL)
+    NULL
   }
 }

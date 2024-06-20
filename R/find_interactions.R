@@ -71,13 +71,13 @@ find_interactions <- function(x,
   if (is.null(f)) {
     return(NULL)
   }
-  terms <- labels(stats::terms(f))
+  model_terms <- labels(stats::terms(f))
   if (main_effects) {
-    terms
+    model_terms
   } else {
-    interaction_terms <- grepl(":", terms, fixed = TRUE)
+    interaction_terms <- grepl(":", model_terms, fixed = TRUE)
     if (any(interaction_terms)) {
-      terms[interaction_terms]
+      model_terms[interaction_terms]
     } else {
       NULL
     }
