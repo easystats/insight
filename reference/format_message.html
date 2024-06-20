@@ -19,7 +19,7 @@ default type of exception to warning() and stop(), respectively."><meta property
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,10 +95,11 @@ default type of exception to <code><a href="https://rdrr.io/r/base/warning.html"
 <span>  line_length <span class="op">=</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"width"</span>, <span class="fl">80</span><span class="op">)</span>,</span>
 <span>  indent <span class="op">=</span> <span class="st">"  "</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"message"</span>,</span>
-<span>  call. <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  call <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  immediate <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">format_warning</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">format_warning</span><span class="op">(</span><span class="va">...</span>, immediate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">format_error</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -133,11 +134,17 @@ Can be <code>"message"</code> for <code><a href="https://rdrr.io/r/base/message.
 or <code>"error"</code> for <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>.</p></dd>
 
 
-<dt id="arg-call-">call.<a class="anchor" aria-label="anchor" href="#arg-call-"></a></dt>
+<dt id="arg-call">call<a class="anchor" aria-label="anchor" href="#arg-call"></a></dt>
 <dd><p>Logical. Indicating if the call should be included in the the
 error message. This is usually confusing for users when the function
 producing the warning or error is deep within another function, so the
 default is <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-immediate">immediate<a class="anchor" aria-label="anchor" href="#arg-immediate"></a></dt>
+<dd><p>Logical. Indicating if the <em>warning</em> should be printed
+immediately. Only applies to <code>format_warning()</code> or <code>format_alert()</code> with
+<code>type = "warning"</code>. The default is <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -221,6 +228,7 @@ and the formatting no longer works (messing up the message-string).</p>
 <span class="r-in"><span><span class="co"># warning</span></span></span>
 <span class="r-in"><span><span class="fu">format_warning</span><span class="op">(</span><span class="st">"This is a warning."</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>This is a warning.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   FALSE</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -11,7 +11,7 @@ get_variance_fixed(x) are shortcuts for get_variance(x, component = "residual") 
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -163,7 +163,9 @@ specific variance, however, it can also be <code>"observation_level"</code>. See
 
 <dt id="arg-model-component">model_component<a class="anchor" aria-label="anchor" href="#arg-model-component"></a></dt>
 <dd><p>For models that can have a zero-inflation component,
-specify for which component variances should be returned.</p></dd>
+specify for which component variances should be returned. If <code>NULL</code> or <code>"full"</code>
+(the default), both the conditional and the zero-inflation component are taken
+into account. If <code>"conditional"</code>, only the conditional component is considered.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -190,7 +192,13 @@ intraclass-correlation coefficient (ICC).</p>
 from <strong>blme</strong>), <code>clmm</code>, <code>cpglmm</code>, <code>glmmadmb</code>, <code>glmmTMB</code>, <code>MixMod</code>, <code>lme</code>,
 <code>mixed</code>, <code>rlmerMod</code>, <code>stanreg</code>, <code>brmsfit</code> or <code>wbm</code>. Support for objects of
 class <code>MixMod</code> (<strong>GLMMadaptive</strong>), <code>lme</code> (<strong>nlme</strong>) or <code>brmsfit</code> (<strong>brms</strong>) is
-experimental and may not work for all models.</p>
+not fully implemented or tested, and therefore may not work for all models
+of the aforementioned classes.</p>
+<p>Extracting variance components for models with zero-inflation part is not
+straightforward, because it is not definitely clear how the distribution-specific
+variance should be calculated. Therefore, it is recommended to carefully
+inspect the results, and probably validate against other models, e.g. Bayesian
+models (although results may be only roughly comparable).</p>
     </div>
     <div class="section level2">
     <h2 id="fixed-effects-variance">Fixed effects variance<a class="anchor" aria-label="anchor" href="#fixed-effects-variance"></a></h2>

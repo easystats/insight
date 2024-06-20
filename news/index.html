@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,13 @@
 <h3 id="general-0-20-2">General<a class="anchor" aria-label="anchor" href="#general-0-20-2"></a></h3>
 <ul><li><p>Massive overhaul of <code><a href="../reference/get_variance.html">get_variance()</a></code>. The function should be now more accurate for different distributional families, in particular for mixed regression models with Beta family.</p></li>
 <li><p>Improved accuracy of singularity-checks in <code><a href="../reference/get_variance.html">get_variance()</a></code>.</p></li>
+<li>
+<p><code><a href="../reference/get_variance.html">get_variance()</a></code> gets a few new arguments:</p>
+<ul><li><p><code>null_model</code>, to provide a null-model to be used for the calculation of random effect variances. If <code>NULL</code>, the null-model is computed internally. This argument is optional, but may be useful to save time, or when the null-model cannot be calculated internally.</p></li>
+<li><p><code>approximation</code>, indicating the approximation method for the distribution-specific (observation level, or residual) variance.</p></li>
+<li><p><code>model_component</code>, for models that can have a zero-inflation component, specify for which component variances should be returned. By default, both the conditional and the zero-inflation component are taken into account.</p></li>
+</ul></li>
+<li><p><code><a href="../reference/format_message.html">format_alert()</a></code> and <code><a href="../reference/format_message.html">format_warning()</a></code> get an <code>immediate</code> argument, to output warnings immediately.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-20-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-20-2"></a></h3>
