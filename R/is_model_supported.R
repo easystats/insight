@@ -62,7 +62,7 @@ supported_models <- function() {
     "dep.effect", "DirichletRegModel", "draws", "drc",
 
     # e ----------------------------
-    "eglm", "elm", "epi.2by2", "ergm",
+    "eglm", "elm", "epi.2by2", "ergm", "emmGrid",
 
     # f ----------------------------
     "feis", "felm", "feglm", "fitdistr", "fixest", "flexsurvreg", "flac", "flic",
@@ -70,7 +70,8 @@ supported_models <- function() {
     # g ----------------------------
     "gam", "Gam", "gamlss", "gamm", "gamm4", "garch", "gbm", "gee", "geeglm",
     "glht", "glimML", "glmm", "glm", "Glm", "glmmadmb", "glmmPQL", "glmmTMB",
-    "glmrob", "glmRob", "glmx", "gls", "gmnl",
+    "glmrob", "glmRob", "glmx", "gls", "gmnl", "glmgee", "ggcomparisons",
+    "glmerMod",
 
     # h ----------------------------
     "HLfit", "htest", "hurdle", "hglm",
