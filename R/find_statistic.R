@@ -103,6 +103,7 @@ find_statistic <- function(x, ...) {
     "pb1", "pb2", "polr", "phylolm",
     "rlm", "rms", "rlmerMod", "rq", "rqs", "rqss",
     "selection", "speedlm", "spml", "summary.lm", "svyglm", "svyolr", "systemfit",
+    "svy2lme",
     "truncreg",
     "varest",
     "wbm", "wblm",

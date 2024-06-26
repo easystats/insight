@@ -4,6 +4,8 @@
 
 * Support for models of class `glmgee` (package *glmtoolbox*).
 
+* Support for models of class `svy2lme` (package *svylme*).
+
 ## General
 
 * Massive overhaul of `get_variance()`. The function should be now more

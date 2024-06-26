@@ -1415,6 +1415,19 @@ get_statistic.ivprobit <- function(x, ...) {
 
 
 #' @export
+get_statistic.svy2lme <- function(x, ...) {
+  out <- data.frame(
+    Parameter = rownames(x$beta),
+    Statistic = as.vector(x$beta / sqrt(diag(x$Vbeta))),
+    stringsAsFactors = FALSE
+  )
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.HLfit <- function(x, ...) {
   utils::capture.output(s <- summary(x)) # nolint
 
