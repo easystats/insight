@@ -4,10 +4,12 @@
 \alias{find_transformation}
 \title{Find possible transformation of response variables}
 \usage{
-find_transformation(x)
+find_transformation(x, ...)
 }
 \arguments{
-\item{x}{A regression model.}
+\item{x}{A regression model or a character string of the response value.}
+
+\item{...}{Currently not used.}
 }
 \value{
 A string, with the name of the function of the applied transformation.
@@ -35,4 +37,7 @@ find_transformation(model)
 # log+2
 model <- lm(log(Sepal.Length + 2) ~ Species, data = iris)
 find_transformation(model)
+
+# inverse, response provided as character string
+find_transformation("1 / y")
 }

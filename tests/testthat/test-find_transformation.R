@@ -6,6 +6,7 @@ test_that("find_transformation - identity", {
 test_that("find_transformation - log", {
   model <- lm(log(Sepal.Length) ~ Species, data = iris)
   expect_identical(find_transformation(model), "log")
+  expect_identical(find_transformation("log(Sepal.Length)"), "log")
 })
 
 test_that("find_transformation - log+x", {
@@ -16,6 +17,7 @@ test_that("find_transformation - log+x", {
 test_that("find_transformation - log+x 2", {
   model <- lm(log(2 + Sepal.Length) ~ Species, data = iris)
   expect_identical(find_transformation(model), "log(x+2)")
+  expect_identical(find_transformation("log(2 + Sepal.Length)"), "log(x+2)")
 })
 
 test_that("find_transformation - log-log", {
@@ -52,6 +54,7 @@ test_that("find_transformation - inverse", {
   data(iris)
   model <- lm(1 / Sepal.Length ~ Species, data = iris)
   expect_identical(find_transformation(model), "inverse")
+  expect_identical(find_transformation("1 / Sepal.Length"), "inverse")
 })
 
 test_that("find_transformation - detect powers", {
@@ -72,6 +75,7 @@ test_that("find_transformation - detect powers", {
   expect_identical(insight::find_transformation(m5), "power")
   expect_identical(insight::find_transformation(m6), "power")
   expect_identical(insight::find_transformation(m7), "power")
+  expect_identical(insight::find_transformation("Sepal.Length^-0.5"), "power")
 
   # power **
 
