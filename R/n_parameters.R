@@ -106,6 +106,8 @@ n_parameters.sim.merMod <- n_parameters.merMod
 #' @export
 n_parameters.wbm <- n_parameters.merMod
 
+#' @export
+n_parameters.svy2lme <- n_parameters.merMod
 
 
 

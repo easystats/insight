@@ -240,7 +240,7 @@ find_parameters.svy2lme <- function(x,
   } else {
     l <- compact_list(list(
       conditional = names(stats::coef(x)),
-      random = stats::setNames(list(unname(x$znames)), names(x$znames))
+      random = stats::setNames(as.list(unname(x$znames)), names(x$znames))
     ))
   }
 
