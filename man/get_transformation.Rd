@@ -4,10 +4,13 @@
 \alias{get_transformation}
 \title{Return function of transformed response variables}
 \usage{
-get_transformation(x)
+get_transformation(x, verbose = TRUE)
 }
 \arguments{
 \item{x}{A regression model.}
+
+\item{verbose}{Logical, if \code{TRUE}, prints a warning if the transformation
+could not be determined.}
 }
 \value{
 A list of two functions: \verb{$transformation}, the function that was used to
