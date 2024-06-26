@@ -48,6 +48,12 @@ test_that("find_transformation - strange bayestestR example", {
   expect_identical(find_transformation(mod), "log")
 })
 
+test_that("find_transformation - inverse", {
+  data(iris)
+  model <- lm(1 / Sepal.Length ~ Species, data = iris)
+  expect_identical(find_transformation(model), "inverse")
+})
+
 test_that("find_transformation - detect powers", {
   # styler: off
   data(iris)

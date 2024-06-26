@@ -5,7 +5,8 @@
 #'   or exp-transforming, was applied to the response variable (dependent
 #'   variable) in a regression formula. Currently, following patterns are
 #'   detected: `log`, `log1p`, `log2`, `log10`, `exp`, `expm1`, `sqrt`,
-#'   `log(x+<number>)`, `log-log` and `power` (to 2nd power, like `I(x^2)`).
+#'   `log(x+<number>)`, `log-log`, `power` (to 2nd power, like `I(x^2)`), and
+#'   `inverse` (like `1/y`).
 #'
 #' @param x A regression model.
 #' @return A string, with the name of the function of the applied transformation.
@@ -103,6 +104,13 @@ find_transformation <- function(x) {
     } else {
       transform_fun <- paste0("sqrt(x+", plus_minus, ")")
     }
+  }
+
+
+  # inverse-transformation
+
+  if (any(startsWith(rv, "1/"))) {
+    transform_fun <- "inverse"
   }
 
 

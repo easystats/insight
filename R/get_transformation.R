@@ -58,6 +58,8 @@ get_transformation <- function(x) {
     out <- list(transformation = exp, inverse = log)
   } else if (transform_fun == "sqrt") {
     out <- list(transformation = sqrt, inverse = function(x) x^2)
+  } else if (transform_fun == "inverse") {
+    out <- list(transformation = function(x) 1 / x, inverse = function(x) x^-1)
   } else if (transform_fun == "power") {
     ## TODO: detect power - can we turn this into a function?
     # power <- .safe(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", find_terms(x)[["response"]])))
