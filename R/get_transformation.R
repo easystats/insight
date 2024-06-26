@@ -79,7 +79,7 @@ get_transformation <- function(x, verbose = TRUE) {
   } else {
     if (verbose) {
       insight::format_alert(
-        paste0("The transformation and inverse-transformation functions for ", transform_fun, " could not be determined.") # nolint
+        paste0("The transformation and inverse-transformation functions for `", transform_fun, "` could not be determined.") # nolint
       )
     }
     out <- NULL
