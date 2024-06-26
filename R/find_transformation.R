@@ -71,7 +71,7 @@ find_transformation.character <- function(x, ...) {
           eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", x)))
         )
       }
-      if (is.null(plus_minus)) {
+      if (is.null(plus_minus) || is.function(plus_minus)) {
         transform_fun <- "log"
       } else {
         transform_fun <- paste0("log(x+", plus_minus, ")")
@@ -94,7 +94,7 @@ find_transformation.character <- function(x, ...) {
   } else if (any(grepl("sqrt\\((.*)\\)", x))) {
     # sqrt-transformation
     plus_minus <- eval(parse(text = gsub("sqrt\\(([^,\\+)]*)(.*)\\)", "\\2", x)))
-    if (is.null(plus_minus)) {
+    if (is.null(plus_minus) || is.function(plus_minus)) {
       transform_fun <- "sqrt"
     } else {
       transform_fun <- paste0("sqrt(x+", plus_minus, ")")

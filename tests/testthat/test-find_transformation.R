@@ -9,6 +9,14 @@ test_that("find_transformation - log", {
   expect_identical(find_transformation("log(Sepal.Length)"), "log")
 })
 
+test_that("find_transformation - log for function names", {
+  # "time" is a function name - make sure this works correctly
+  iris$time <- iris$Sepal.Length
+  model <- lm(log(time) ~ Species, data = iris)
+  expect_identical(find_transformation(model), "log")
+  expect_identical(find_transformation("log(time)"), "log")
+})
+
 test_that("find_transformation - log+x", {
   model <- lm(log(Sepal.Length + 3) ~ Species, data = iris)
   expect_identical(find_transformation(model), "log(x+3)")
