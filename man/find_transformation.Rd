@@ -4,10 +4,12 @@
 \alias{find_transformation}
 \title{Find possible transformation of response variables}
 \usage{
-find_transformation(x)
+find_transformation(x, ...)
 }
 \arguments{
-\item{x}{A regression model.}
+\item{x}{A regression model or a character string of the response value.}
+
+\item{...}{Currently not used.}
 }
 \value{
 A string, with the name of the function of the applied transformation.
@@ -20,7 +22,8 @@ This functions checks whether any transformation, such as log-
 or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula. Currently, following patterns are
 detected: \code{log}, \code{log1p}, \code{log2}, \code{log10}, \code{exp}, \code{expm1}, \code{sqrt},
-\verb{log(x+<number>)}, \code{log-log} and \code{power} (to 2nd power, like \code{I(x^2)}).
+\verb{log(x+<number>)}, \code{log-log}, \code{power} (to 2nd power, like \code{I(x^2)}), and
+\code{inverse} (like \code{1/y}).
 }
 \examples{
 # identity, no transformation
@@ -34,4 +37,7 @@ find_transformation(model)
 # log+2
 model <- lm(log(Sepal.Length + 2) ~ Species, data = iris)
 find_transformation(model)
+
+# inverse, response provided as character string
+find_transformation("1 / y")
 }

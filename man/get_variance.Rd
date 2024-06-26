@@ -115,20 +115,6 @@ This function returns different variance components from mixed models,
 which are needed, for instance, to calculate r-squared measures or the
 intraclass-correlation coefficient (ICC).
 }
-\note{
-This function supports models of class \code{merMod} (including models
-from \strong{blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB}, \code{MixMod}, \code{lme},
-\code{mixed}, \code{rlmerMod}, \code{stanreg}, \code{brmsfit} or \code{wbm}. Support for objects of
-class \code{MixMod} (\strong{GLMMadaptive}), \code{lme} (\strong{nlme}) or \code{brmsfit} (\strong{brms}) is
-not fully implemented or tested, and therefore may not work for all models
-of the aforementioned classes.
-
-Extracting variance components for models with zero-inflation part is not
-straightforward, because it is not definitely clear how the distribution-specific
-variance should be calculated. Therefore, it is recommended to carefully
-inspect the results, and probably validate against other models, e.g. Bayesian
-models (although results may be only roughly comparable).
-}
 \section{Fixed effects variance}{
 
 The fixed effects variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>f</sub>}}{\eqn{\sigma^2_f}},
@@ -201,6 +187,54 @@ The random slope-intercept correlation
 (\ifelse{html}{\out{&rho;<sub>01</sub>}}{\eqn{\rho_{01}}}) is obtained from
 \code{VarCorr()}. This measure is only available for mixed models with random
 intercepts and slopes.
+}
+
+\section{Supported models and model families}{
+
+This function supports models of class \code{merMod} (including models from
+\strong{blme}), \code{clmm}, \code{cpglmm}, \code{glmmadmb}, \code{glmmTMB}, \code{MixMod}, \code{lme}, \code{mixed},
+\code{rlmerMod}, \code{stanreg}, \code{brmsfit} or \code{wbm}. Support for objects of class
+\code{MixMod} (\strong{GLMMadaptive}), \code{lme} (\strong{nlme}) or \code{brmsfit} (\strong{brms}) is
+not fully implemented or tested, and therefore may not work for all models
+of the aforementioned classes.
+
+The results are validated against the solutions provided by \emph{Nakagawa et al. (2017)},
+in particular examples shown in the Supplement 2 of the paper. Other model
+families are validated against results from the \strong{MuMIn} package. This means
+that the returned variance components should be accurate and reliable for
+following mixed models or model families:
+\itemize{
+\item Bernoulli (logistic) regression
+\item Binomial regression (with other than binary outcomes)
+\item Poisson and Quasi-Poisson regression
+\item Negative binomial regression (including nbinom1 and nbinom2 families)
+\item Gaussian regression (linear models)
+\item Gamma regression
+\item Tweedie regression
+\item Beta regression
+\item Ordered beta regression
+}
+
+Following model families are not yet validated, but should work:
+\itemize{
+\item Zero-inflated and hurdle models
+\item Beta-binomial regression
+\item Compound Poisson regression
+\item Generalized Poisson regression
+\item Log-normal regression
+}
+
+Extracting variance components for models with zero-inflation part is not
+straightforward, because it is not definitely clear how the distribution-specific
+variance should be calculated. Therefore, it is recommended to carefully
+inspect the results, and probably validate against other models, e.g. Bayesian
+models (although results may be only roughly comparable).
+
+Log-normal regressions (e.g. \code{lognormal()} family in \strong{glmmTMB} or \code{gaussian("log")})
+often have a very low fixed effects variance (if they were calculated as
+suggested by \emph{Nakagawa et al. 2017}). This results in very low ICC or
+r-squared values, which may not be meaningful (see \code{\link[performance:icc]{performance::icc()}} or
+\code{\link[performance:r2_nakagawa]{performance::r2_nakagawa()}}).
 }
 
 \examples{

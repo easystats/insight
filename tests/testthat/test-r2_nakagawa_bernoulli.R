@@ -12,6 +12,7 @@ skip_if_not_installed("datawizard")
 # ==============================================================================
 
 test_that("glmmTMB, bernoulli", {
+  skip_if(packageVersion("MuMIn") == "1.48.4")
   # dataset ---------------------------------
   set.seed(123)
   dat <- data.frame(

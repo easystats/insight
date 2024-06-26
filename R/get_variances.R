@@ -107,18 +107,49 @@
 #' `VarCorr()`. This measure is only available for mixed models with random
 #' intercepts and slopes.
 #'
-#' @note This function supports models of class `merMod` (including models
-#' from **blme**), `clmm`, `cpglmm`, `glmmadmb`, `glmmTMB`, `MixMod`, `lme`,
-#' `mixed`, `rlmerMod`, `stanreg`, `brmsfit` or `wbm`. Support for objects of
-#' class `MixMod` (**GLMMadaptive**), `lme` (**nlme**) or `brmsfit` (**brms**) is
+#' @section Supported models and model families:
+#' This function supports models of class `merMod` (including models from
+#' **blme**), `clmm`, `cpglmm`, `glmmadmb`, `glmmTMB`, `MixMod`, `lme`, `mixed`,
+#' `rlmerMod`, `stanreg`, `brmsfit` or `wbm`. Support for objects of class
+#' `MixMod` (**GLMMadaptive**), `lme` (**nlme**) or `brmsfit` (**brms**) is
 #' not fully implemented or tested, and therefore may not work for all models
 #' of the aforementioned classes.
+#'
+#' The results are validated against the solutions provided by _Nakagawa et al. (2017)_,
+#' in particular examples shown in the Supplement 2 of the paper. Other model
+#' families are validated against results from the **MuMIn** package. This means
+#' that the returned variance components should be accurate and reliable for
+#' following mixed models or model families:
+#'
+#' - Bernoulli (logistic) regression
+#' - Binomial regression (with other than binary outcomes)
+#' - Poisson and Quasi-Poisson regression
+#' - Negative binomial regression (including nbinom1 and nbinom2 families)
+#' - Gaussian regression (linear models)
+#' - Gamma regression
+#' - Tweedie regression
+#' - Beta regression
+#' - Ordered beta regression
+#'
+#' Following model families are not yet validated, but should work:
+#'
+#' - Zero-inflated and hurdle models
+#' - Beta-binomial regression
+#' - Compound Poisson regression
+#' - Generalized Poisson regression
+#' - Log-normal regression
 #'
 #' Extracting variance components for models with zero-inflation part is not
 #' straightforward, because it is not definitely clear how the distribution-specific
 #' variance should be calculated. Therefore, it is recommended to carefully
 #' inspect the results, and probably validate against other models, e.g. Bayesian
 #' models (although results may be only roughly comparable).
+#'
+#' Log-normal regressions (e.g. `lognormal()` family in **glmmTMB** or `gaussian("log")`)
+#' often have a very low fixed effects variance (if they were calculated as
+#' suggested by _Nakagawa et al. 2017_). This results in very low ICC or
+#' r-squared values, which may not be meaningful (see [`performance::icc()`] or
+#' [`performance::r2_nakagawa()`]).
 #'
 #' @references
 #'  - Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to

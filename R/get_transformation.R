@@ -9,6 +9,8 @@
 #' transformation.
 #'
 #' @param x A regression model.
+#' @param verbose Logical, if `TRUE`, prints a warning if the transformation
+#' could not be determined.
 #'
 #' @return
 #'
@@ -36,7 +38,7 @@
 #' get_transformation(model)$inverse(0.3)
 #' exp(0.3)
 #' @export
-get_transformation <- function(x) {
+get_transformation <- function(x, verbose = TRUE) {
   transform_fun <- find_transformation(x)
 
   # unknown
@@ -58,6 +60,8 @@ get_transformation <- function(x) {
     out <- list(transformation = exp, inverse = log)
   } else if (transform_fun == "sqrt") {
     out <- list(transformation = sqrt, inverse = function(x) x^2)
+  } else if (transform_fun == "inverse") {
+    out <- list(transformation = function(x) 1 / x, inverse = function(x) x^-1)
   } else if (transform_fun == "power") {
     ## TODO: detect power - can we turn this into a function?
     # power <- .safe(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", find_terms(x)[["response"]])))
@@ -72,6 +76,13 @@ get_transformation <- function(x) {
       transformation = function(x) log(log(x)),
       inverse = function(x) exp(exp(x))
     )
+  } else {
+    if (verbose) {
+      insight::format_alert(
+        paste0("The transformation and inverse-transformation functions for `", transform_fun, "` could not be determined.") # nolint
+      )
+    }
+    out <- NULL
   }
 
   out

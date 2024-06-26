@@ -75,3 +75,9 @@ test_that("find_terms, - in response", {
   m <- lm(I(Sepal.Length^-0.5) ~ Species, data = iris)
   expect_identical(find_terms(m)$response, "I(Sepal.Length^-0.5)")
 })
+
+test_that("find_terms, - response as is", {
+  data(iris)
+  m <- lm(1 / Sepal.Length ~ Species, data = iris)
+  expect_identical(find_terms(m)$response, "1/Sepal.Length")
+})

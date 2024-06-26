@@ -52,7 +52,11 @@ find_terms <- function(x, ...) {
 
 #' @rdname find_terms
 #' @export
-find_terms.default <- function(x, flatten = FALSE, as_term_labels = FALSE, verbose = TRUE, ...) {
+find_terms.default <- function(x,
+                               flatten = FALSE,
+                               as_term_labels = FALSE,
+                               verbose = TRUE,
+                               ...) {
   f <- find_formula(x, verbose = verbose)
 
   if (is.null(f)) {
@@ -179,11 +183,14 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
   f <- lapply(f, function(.x) {
     if (is.list(.x)) {
       .x <- vapply(.x, .formula_to_string, character(1))
-    } else {
-      if (!is.character(.x)) .x <- safe_deparse(.x)
+    } else if (!is.character(.x)) {
+      .x <- safe_deparse(.x)
     }
     .x
   })
+
+  # save original response
+  original_response <- f$response
 
   # protect "-1"
   f$conditional <- gsub("(-1|- 1)(?![^(]*\\))", "#1", f$conditional, perl = TRUE)
@@ -198,12 +205,17 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
     )), fixed = TRUE)
     # if user has used namespace in formula-functions, these are returned
     # as empty elements. remove those here
-    if (any(nchar(f_parts) == 0)) {
-      f_parts <- f_parts[-which(nchar(f_parts) == 0)]
+    if (!all(nzchar(f_parts, keepNA = TRUE))) {
+      f_parts <- f_parts[-which(!nzchar(f_parts, keepNA = TRUE))]
     }
     text_remove_backticks(unique(f_parts))
   })
 
+  # exceptions where we want to preserve the response value come here
+  # - lm(1 / Sepal.Length ~ Species, data = iris)
+  if (!is.null(original_response) && !is_empty_object(original_response) && startsWith(original_response, "1/")) { # nolint
+    f$response <- original_response
+  }
 
   # remove "1" and "0" from variables in random effects
 
