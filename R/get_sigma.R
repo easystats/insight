@@ -118,6 +118,11 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
+.get_sigma.svy2lme <- function(x, ...) {
+  sqrt(as.vector(x$s2))
+}
+
+
 .get_sigma.model_fit <- function(x, verbose = TRUE, ...) {
   .get_sigma(x$fit, verbose = verbose)
 }
