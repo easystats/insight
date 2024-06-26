@@ -1241,6 +1241,9 @@ find_formula.cgamm <- find_formula.merMod
 find_formula.coxme <- find_formula.merMod
 
 #' @export
+find_formula.svy2lme <- find_formula.merMod
+
+#' @export
 find_formula.HLfit <- find_formula.merMod
 
 #' @export
