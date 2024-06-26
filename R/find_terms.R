@@ -213,7 +213,7 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 
   # exceptions where we want to preserve the response value come here
   # - lm(1 / Sepal.Length ~ Species, data = iris)
-  if (startsWith(original_response, "1/")) {
+  if (!is.null(original_response) && startsWith(original_response, "1/")) {
     f$response <- original_response
   }
 
