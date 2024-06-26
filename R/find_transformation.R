@@ -102,12 +102,12 @@ find_transformation.character <- function(x, ...) {
   } else if (any(startsWith(x, "1/"))) {
     # inverse-transformation
     transform_fun <- "inverse"
-  } else if (any(grepl("I\\((.*)\\)", x))) {
-    # (unknown) I-transformation
-    transform_fun <- NULL
   } else if (any(grepl("(.*)(\\^|\\*\\*)\\s?-?(\\d+|[()])", x))) {
     # power-transformation
     transform_fun <- "power"
+  } else if (any(grepl("I\\((.*)\\)", x))) {
+    # (unknown) I-transformation
+    transform_fun <- NULL
   }
 
   transform_fun
