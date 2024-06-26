@@ -56,7 +56,6 @@ find_transformation.character <- function(x, ...) {
   x <- gsub(" ", "", x, fixed = TRUE)
 
   # log-transformation
-
   if (any(grepl("log\\((.*)\\)", x))) {
     # do we have log-log models?
     if (grepl("log\\(log\\((.*)\\)\\)", x)) {
@@ -78,70 +77,36 @@ find_transformation.character <- function(x, ...) {
         transform_fun <- paste0("log(x+", plus_minus, ")")
       }
     }
-  }
-
-
-  # log1p-transformation
-
-  if (any(grepl("log1p\\((.*)\\)", x))) {
+  } else if (any(grepl("log1p\\((.*)\\)", x))) {
+    # log1p-transformation
     transform_fun <- "log1p"
-  }
-
-
-  # expm1-transformation
-
-  if (any(grepl("expm1\\((.*)\\)", x))) {
+  } else if (any(grepl("expm1\\((.*)\\)", x))) {
+    # expm1-transformation
     transform_fun <- "expm1"
-  }
-
-
-  # log2/log10-transformation
-
-  if (any(grepl("log2\\((.*)\\)", x))) {
+  } else if (any(grepl("log2\\((.*)\\)", x))) {
+    # log2/log10-transformation
     transform_fun <- "log2"
-  }
-
-  if (any(grepl("log10\\((.*)\\)", x))) {
+  } else if (any(grepl("log10\\((.*)\\)", x))) {
     transform_fun <- "log10"
-  }
-
-
-  # exp-transformation
-
-  if (any(grepl("exp\\((.*)\\)", x))) {
+  } else if (any(grepl("exp\\((.*)\\)", x))) {
+    # exp-transformation
     transform_fun <- "exp"
-  }
-
-
-  # sqrt-transformation
-
-  if (any(grepl("sqrt\\((.*)\\)", x))) {
+  } else if (any(grepl("sqrt\\((.*)\\)", x))) {
+    # sqrt-transformation
     plus_minus <- eval(parse(text = gsub("sqrt\\(([^,\\+)]*)(.*)\\)", "\\2", x)))
     if (is.null(plus_minus)) {
       transform_fun <- "sqrt"
     } else {
       transform_fun <- paste0("sqrt(x+", plus_minus, ")")
     }
-  }
-
-
-  # inverse-transformation
-
-  if (any(startsWith(x, "1/"))) {
+  } else if (any(startsWith(x, "1/"))) {
+    # inverse-transformation
     transform_fun <- "inverse"
-  }
-
-
-  # (unknown) I-transformation
-
-  if (any(grepl("I\\((.*)\\)", x))) {
+  } else if (any(grepl("I\\((.*)\\)", x))) {
+    # (unknown) I-transformation
     transform_fun <- NULL
-  }
-
-
-  # power-transformation
-
-  if (any(grepl("(.*)(\\^|\\*\\*)\\s?-?(\\d+|[()])", x))) {
+  } else if (any(grepl("(.*)(\\^|\\*\\*)\\s?-?(\\d+|[()])", x))) {
+    # power-transformation
     transform_fun <- "power"
   }
 
