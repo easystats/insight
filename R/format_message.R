@@ -149,7 +149,7 @@ format_alert <- function(string,
 #' @rdname format_message
 #' @export
 format_warning <- function(..., immediate = FALSE) {
-  format_alert(..., type = "warning", immediate. = immediate)
+  format_alert(..., type = "warning", immediate = immediate)
 }
 
 #' @name format_error
