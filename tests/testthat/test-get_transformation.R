@@ -1,0 +1,11 @@
+test_that("get_transformation - detect powers", {
+  data(iris)
+  m <- lm(Sepal.Length^2 ~ Species, data = iris)
+  fun <- get_transformation(m)
+  expect_identical(fun$transformation(2), 4)
+  expect_identical(fun$inverse(4), 2)
+  m <- lm(I(Sepal.Length^3) ~ Species, data = iris)
+  fun <- get_transformation(m)
+  expect_identical(fun$transformation(2), 8)
+  expect_identical(fun$inverse(8), 2)
+})

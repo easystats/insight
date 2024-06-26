@@ -63,12 +63,18 @@ get_transformation <- function(x, verbose = TRUE) {
   } else if (transform_fun == "inverse") {
     out <- list(transformation = function(x) 1 / x, inverse = function(x) x^-1)
   } else if (transform_fun == "power") {
-    ## TODO: detect power - can we turn this into a function?
-    # power <- .safe(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", find_terms(x)[["response"]])))
-    # if (is.null(power)) {
-    #   power <- 2
-    # }
-    out <- list(transformation = function(x) x^2, inverse = sqrt)
+    ## TODO: detect power - can we turn this into a generic function?
+    trans_power <- .safe(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", find_terms(x)[["response"]]))) # nolint
+    if (is.null(trans_power)) {
+      trans_power <- "2"
+    }
+    out <- switch(trans_power,
+      `0.5` = list(transformation = function(x) x^0.5, inverse = function(x) x^2),
+      `3` = list(transformation = function(x) x^3, inverse = function(x) x^(1 / 3)),
+      `4` = list(transformation = function(x) x^4, inverse = function(x) x^0.25),
+      `5` = list(transformation = function(x) x^5, inverse = function(x) x^0.2),
+      list(transformation = function(x) x^2, inverse = sqrt)
+    )
   } else if (transform_fun == "expm1") {
     out <- list(transformation = expm1, inverse = log1p)
   } else if (transform_fun == "log-log") {
