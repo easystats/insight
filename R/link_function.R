@@ -171,6 +171,9 @@ link_function.RM <- link_function.lm
 #' @export
 link_function.afex_aov <- link_function.lm
 
+#' @export
+link_function.svy2lme <- link_function.lm
+
 
 # General family ---------------------------------
 

@@ -137,6 +137,7 @@ modelled
 modelling
 multcomp
 mvord
+nbinom
 nd
 nestedLogit
 nlme
@@ -167,6 +168,7 @@ specificities
 stanreg
 strengejacke
 svyVGAM
+svylme
 systemfit
 terciles
 th

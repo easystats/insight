@@ -224,6 +224,19 @@ get_parameters.glmmadmb <- get_parameters.merMod
 #' @export
 get_parameters.lme <- get_parameters.merMod
 
+
+#' @export
+get_parameters.svy2lme <- function(x, ...) {
+  l <- list(conditional = stats::coef(x))
+  fixed <- data.frame(
+    Parameter = names(l$conditional),
+    Estimate = unname(l$conditional),
+    stringsAsFactors = FALSE
+  )
+  text_remove_backticks(fixed)
+}
+
+
 #' @export
 get_parameters.merModList <- function(x, ...) {
   s <- suppressWarnings(summary(x))

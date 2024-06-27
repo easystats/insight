@@ -225,6 +225,30 @@ find_parameters.merModList <- function(x,
 
 
 #' @export
+find_parameters.svy2lme <- function(x,
+                                    effects = c("all", "fixed", "random"),
+                                    flatten = FALSE,
+                                    ...) {
+  effects <- match.arg(effects)
+
+  # we extract random effects only when really necessary, to save
+  # computational time. In particular model with large sample and
+  # many random effects groups may take some time to return random effects
+
+  if (effects == "fixed") {
+    l <- list(conditional = names(stats::coef(x)))
+  } else {
+    l <- compact_list(list(
+      conditional = names(stats::coef(x)),
+      random = stats::setNames(as.list(unname(x$znames)), names(x$znames))
+    ))
+  }
+
+  .filter_parameters(l, effects = effects, flatten = flatten)
+}
+
+
+#' @export
 find_parameters.HLfit <- function(x,
                                   effects = c("all", "fixed", "random"),
                                   flatten = FALSE,

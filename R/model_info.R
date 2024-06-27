@@ -1124,6 +1124,12 @@ model_info.svy_vglm <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+model_info.svy2lme <- function(x, verbose = TRUE, ...) {
+  .make_family(x = x, verbose = verbose, ...)
+}
+
+
+#' @export
 model_info.glmmTMB <- function(x, ...) {
   # installed?
   check_if_installed("lme4")

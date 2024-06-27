@@ -109,7 +109,7 @@ supported_models <- function() {
     # s ----------------------------
     "Sarlm", "scam", "selection", "sem", "semLm", "semLme", "SemiParBIV", "serp",
     "slm", "speedlm", "speedglm", "stanfit", "stanmvreg", "stanreg", "summary.lm",
-    "survfit", "survreg", "svy_vglm", "svychisq", "svyglm", "svyolr",
+    "survfit", "survreg", "svy_vglm", "svychisq", "svyglm", "svyolr", "svy2lme",
 
     # t ----------------------------
     "t1way", "tobit", "trimcibt", "truncreg",

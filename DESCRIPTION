@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.20.1.9
+Version: 0.20.1.10
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -195,6 +195,7 @@ Suggests:
     statmod,
     survey,
     survival,
+    svylme,
     testthat,
     tinytable (>= 0.1.0),
     TMB,

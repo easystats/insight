@@ -642,11 +642,11 @@ find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
 find_parameters.rqs <- function(x, flatten = FALSE, ...) {
   sc <- suppressWarnings(summary(x))
 
-  if (all(unlist(lapply(sc, is.list), use.names = FALSE))) {
-    pars <- list(conditional = rownames(stats::coef(sc[[1]])))
-  } else {
+  if (!all(unlist(lapply(sc, is.list), use.names = FALSE))) {
     return(find_parameters.default(x, flatten = flatten, ...))
   }
+
+  pars <- list(conditional = rownames(stats::coef(sc[[1]])))
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {

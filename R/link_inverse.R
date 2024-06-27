@@ -201,6 +201,9 @@ link_inverse.speedlm <- link_inverse.lm
 #' @export
 link_inverse.afex_aov <- link_inverse.lm
 
+#' @export
+link_inverse.svy2lme <- link_inverse.lm
+
 
 
 
