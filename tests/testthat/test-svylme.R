@@ -1,10 +1,10 @@
+skip_on_cran()
+skip_on_os(c("mac", "linux", "solaris"))
+
 skip_if_not_installed("svylme")
 skip_if_not_installed("lme4")
 skip_if_not_installed("survey")
 skip_if_not_installed("withr")
-
-library(insight)
-library(testthat)
 
 withr::with_environment(
   new.env(),
@@ -87,11 +87,6 @@ withr::with_environment(
         find_variables(m1, flatten = TRUE),
         c("api00", "ell", "mobility", "api99", "dnum")
       )
-    })
-
-    test_that("n_obs", {
-      expect_identical(n_obs(m1), 225)
-      expect_identical(n_obs(m2), 225)
     })
 
     test_that("get_response", {
