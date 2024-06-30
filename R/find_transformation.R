@@ -43,8 +43,17 @@ find_transformation.default <- function(x, ...) {
   if (is.null(x) || is.data.frame(x) || !is_model(x)) {
     return(NULL)
   }
-  rv <- find_terms(x)[["response"]]
-  find_transformation(rv)
+
+  # sanity check for multivariate models
+  if (is_multivariate(x)) {
+    result <- lapply(find_terms(x), function(i) {
+      find_transformation(i[["response"]])
+    })
+    unlist(result)
+  } else {
+    rv <- find_terms(x)[["response"]]
+    find_transformation(rv)
+  }
 }
 
 
