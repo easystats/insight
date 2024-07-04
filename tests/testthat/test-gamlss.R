@@ -157,7 +157,7 @@ test_that("find_formula works with namespace colons", {
 
 test_that("link_inv for LOGNO", {
   data(abdom, package = "gamlss.data")
-  m1 <- gamlss::gamlss(y ~ x, family = "LOGNO", data = gamlss::abdom)
+  m1 <- gamlss::gamlss(y ~ x, family = "LOGNO", data = abdom)
   expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-4)
   expect_equal(link_function(m1)(0.2), log(0.2), tolerance = 1e-4)
 })
