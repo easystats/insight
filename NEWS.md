@@ -42,6 +42,9 @@
 * `null_model()` now correctly handles zero-inflated models from package
   *glmmTMB*.
 
+* Fixed issues in `link_inverse()` and `link_function()` for models of class
+  `gamlss` from `LOGNO()` family.
+
 # insight 0.20.1
 
 ## Bug fixes
