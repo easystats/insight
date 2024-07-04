@@ -643,13 +643,18 @@ link_inverse.brmsfit <- function(x, ...) {
 link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
   what <- match.arg(what)
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
-  switch(what,
-    mu = faminfo$mu.linkinv,
-    sigma = faminfo$sigma.linkinv,
-    nu = faminfo$nu.linkinv,
-    tau = faminfo$tau.linkinv,
-    faminfo$mu.linkinv
-  )
+  # exceptions
+  if (faminfo$family[1] == "LOGNO") {
+    function(eta) pmax(exp(eta), .Machine$double.eps)
+  } else {
+    switch(what,
+      mu = faminfo$mu.linkinv,
+      sigma = faminfo$sigma.linkinv,
+      nu = faminfo$nu.linkinv,
+      tau = faminfo$tau.linkinv,
+      faminfo$mu.linkinv
+    )
+  }
 }
 
 

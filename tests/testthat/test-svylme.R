@@ -53,7 +53,7 @@ withr::with_environment(
         find_formula(m1),
         list(
           conditional = api00 ~ ell + mobility + api99,
-          random = ~1 + api99 | dnum
+          random = ~ 1 + api99 | dnum
         ),
         ignore_attr = TRUE
       )
