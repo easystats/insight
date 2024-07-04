@@ -645,7 +645,7 @@ link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
   faminfo <- get(x$family[1], asNamespace("gamlss"))()
   # exceptions
   if (faminfo$family[1] == "LOGNO") {
-    function(eta) pmax(exp(eta), .Machine$double.eps),
+    function(eta) pmax(exp(eta), .Machine$double.eps)
   } else {
     switch(what,
       mu = faminfo$mu.linkinv,
