@@ -64,6 +64,8 @@ null_model <- function(model, verbose = TRUE, ...) {
   if (inherits(model, "MixMod")) {
     nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
     null.model <- suppressWarnings(stats::update(model, fixed = nullform))
+    # fix fixed effects formula
+    null.model$call$fixed <- nullform
   } else if (inherits(model, "cpglmm")) {
     nullform <- find_formula(model, verbose = FALSE)[["random"]]
     null.model <- suppressWarnings(stats::update(model, nullform))

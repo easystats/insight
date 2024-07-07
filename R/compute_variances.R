@@ -285,14 +285,17 @@
       attr(vc2, "correlation") <- stats::cov2cor(model$D[vc_zi, vc_zi, drop = FALSE])
     }
 
+    model_deviance <- get_deviance(model, verbose = FALSE)
+    residual_df <- get_df(model, type = "residual", verbose = FALSE)
+
     vc1 <- list(vc1)
     names(vc1) <- re_names[[1]]
-    attr(vc1, "sc") <- sqrt(get_deviance(model, verbose = FALSE) / get_df(model, type = "residual", verbose = FALSE))
+    attr(vc1, "sc") <- sqrt(abs(model_deviance) / residual_df)
 
     if (!is.null(vc2)) {
       vc2 <- list(vc2)
       names(vc2) <- re_names[[2]]
-      attr(vc2, "sc") <- sqrt(get_deviance(model, verbose = FALSE) / get_df(model, type = "residual", verbose = FALSE))
+      attr(vc2, "sc") <- sqrt(abs(model_deviance) / residual_df)
     }
 
     vcorr <- compact_list(list(vc1, vc2))

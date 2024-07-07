@@ -275,9 +275,11 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   }
 
   if (is_empty_object(s)) {
-    s <- .safe(
-      sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
-    )
+    s <- .safe({
+      model_deviance <- get_deviance(x, verbose = verbose)
+      residual_df <- get_df(x, type = "residual", verbose = verbose)
+      sqrt(abs(model_deviance) / residual_df)
+    })
   }
 
   if (is_empty_object(s)) {
