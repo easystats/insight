@@ -63,11 +63,11 @@ get_correlation_slopes(x, verbose = TRUE, ...)
 
 \item{...}{Currently not used.}
 
-\item{component}{Character value, indicating the variance component that should
-be returned. By default, all variance components are returned. The
-distribution-specific (\code{"distribution"}) and residual (\code{"residual"})
-variance are the most computational intensive components, and hence may
-take a few seconds to calculate.}
+\item{component}{Character value, indicating the variance component that
+should be returned. By default, all variance components are returned. The
+distribution-specific (\code{"distribution"}) and residual (\code{"residual"}) variance
+are the most computational intensive components, and hence may take a few
+seconds to calculate.}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
@@ -80,16 +80,18 @@ random effect variances. If \code{NULL}, the null-model is computed internally.}
 \item{approximation}{Character string, indicating the approximation method
 for the distribution-specific (observation level, or residual) variance. Only
 applies to non-Gaussian models. Can be \code{"lognormal"} (default), \code{"delta"} or
-\code{"trigamma"}. For binomial models, the default is the \emph{theoretical} distribution
-specific variance, however, it can also be \code{"observation_level"}. See
-\emph{Nakagawa et al. 2017}, in particular supplement 2, for details.}
+\code{"trigamma"}. For binomial models, the default is the \emph{theoretical}
+distribution specific variance, however, it can also be
+\code{"observation_level"}. See \emph{Nakagawa et al. 2017}, in particular supplement
+2, for details.}
 
 \item{verbose}{Toggle off warnings.}
 
 \item{model_component}{For models that can have a zero-inflation component,
-specify for which component variances should be returned. If \code{NULL} or \code{"full"}
-(the default), both the conditional and the zero-inflation component are taken
-into account. If \code{"conditional"}, only the conditional component is considered.}
+specify for which component variances should be returned. If \code{NULL} or
+\code{"full"} (the default), both the conditional and the zero-inflation component
+are taken into account. If \code{"conditional"}, only the conditional component is
+considered.}
 }
 \value{
 A list with following elements:
@@ -108,7 +110,8 @@ A list with following elements:
 \description{
 This function extracts the different variance components of a mixed model and
 returns the result as list. Functions like \code{get_variance_residual(x)} or
-\code{get_variance_fixed(x)} are shortcuts for \code{get_variance(x, component = "residual")} etc.
+\code{get_variance_fixed(x)} are shortcuts for \code{get_variance(x, component = "residual")}
+etc.
 }
 \details{
 This function returns different variance components from mixed models,
@@ -230,11 +233,11 @@ variance should be calculated. Therefore, it is recommended to carefully
 inspect the results, and probably validate against other models, e.g. Bayesian
 models (although results may be only roughly comparable).
 
-Log-normal regressions (e.g. \code{lognormal()} family in \strong{glmmTMB} or \code{gaussian("log")})
-often have a very low fixed effects variance (if they were calculated as
-suggested by \emph{Nakagawa et al. 2017}). This results in very low ICC or
-r-squared values, which may not be meaningful (see \code{\link[performance:icc]{performance::icc()}} or
-\code{\link[performance:r2_nakagawa]{performance::r2_nakagawa()}}).
+Log-normal regressions (e.g. \code{lognormal()} family in \strong{glmmTMB} or
+\code{gaussian("log")}) often have a very low fixed effects variance (if they were
+calculated as suggested by \emph{Nakagawa et al. 2017}). This results in very low
+ICC or r-squared values, which may not be meaningful (see
+\code{\link[performance:icc]{performance::icc()}} or \code{\link[performance:r2_nakagawa]{performance::r2_nakagawa()}}).
 }
 
 \examples{

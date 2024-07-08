@@ -5,32 +5,34 @@
 #'
 #' This function extracts the different variance components of a mixed model and
 #' returns the result as list. Functions like `get_variance_residual(x)` or
-#' `get_variance_fixed(x)` are shortcuts for `get_variance(x, component =
-#' "residual")` etc.
+#' `get_variance_fixed(x)` are shortcuts for `get_variance(x, component = "residual")`
+#' etc.
 #'
 #' @param x A mixed effects model.
-#' @param component Character value, indicating the variance component that should
-#' be returned. By default, all variance components are returned. The
-#' distribution-specific (`"distribution"`) and residual (`"residual"`)
-#' variance are the most computational intensive components, and hence may
-#' take a few seconds to calculate.
+#' @param component Character value, indicating the variance component that
+#' should be returned. By default, all variance components are returned. The
+#' distribution-specific (`"distribution"`) and residual (`"residual"`) variance
+#' are the most computational intensive components, and hence may take a few
+#' seconds to calculate.
 #' @param verbose Toggle off warnings.
 #' @param tolerance Tolerance for singularity check of random effects, to decide
 #' whether to compute random effect variances or not. Indicates up to which
 #' value the convergence result is accepted. The larger tolerance is, the
-#' stricter the test will be. See [performance::check_singularity()].
+#' stricter the test will be. See [`performance::check_singularity()`].
 #' @param null_model Optional, a null-model to be used for the calculation of
 #' random effect variances. If `NULL`, the null-model is computed internally.
 #' @param approximation Character string, indicating the approximation method
 #' for the distribution-specific (observation level, or residual) variance. Only
 #' applies to non-Gaussian models. Can be `"lognormal"` (default), `"delta"` or
-#' `"trigamma"`. For binomial models, the default is the _theoretical_ distribution
-#' specific variance, however, it can also be `"observation_level"`. See
-#' _Nakagawa et al. 2017_, in particular supplement 2, for details.
+#' `"trigamma"`. For binomial models, the default is the _theoretical_
+#' distribution specific variance, however, it can also be
+#' `"observation_level"`. See _Nakagawa et al. 2017_, in particular supplement
+#' 2, for details.
 #' @param model_component For models that can have a zero-inflation component,
-#' specify for which component variances should be returned. If `NULL` or `"full"`
-#' (the default), both the conditional and the zero-inflation component are taken
-#' into account. If `"conditional"`, only the conditional component is considered.
+#' specify for which component variances should be returned. If `NULL` or
+#' `"full"` (the default), both the conditional and the zero-inflation component
+#' are taken into account. If `"conditional"`, only the conditional component is
+#' considered.
 #' @param ... Currently not used.
 #'
 #' @return A list with following elements:
@@ -145,11 +147,11 @@
 #' inspect the results, and probably validate against other models, e.g. Bayesian
 #' models (although results may be only roughly comparable).
 #'
-#' Log-normal regressions (e.g. `lognormal()` family in **glmmTMB** or `gaussian("log")`)
-#' often have a very low fixed effects variance (if they were calculated as
-#' suggested by _Nakagawa et al. 2017_). This results in very low ICC or
-#' r-squared values, which may not be meaningful (see [`performance::icc()`] or
-#' [`performance::r2_nakagawa()`]).
+#' Log-normal regressions (e.g. `lognormal()` family in **glmmTMB** or
+#' `gaussian("log")`) often have a very low fixed effects variance (if they were
+#' calculated as suggested by _Nakagawa et al. 2017_). This results in very low
+#' ICC or r-squared values, which may not be meaningful (see
+#' [`performance::icc()`] or [`performance::r2_nakagawa()`]).
 #'
 #' @references
 #'  - Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to
