@@ -229,9 +229,10 @@ Following model families are not yet validated, but should work:
 
 Extracting variance components for models with zero-inflation part is not
 straightforward, because it is not definitely clear how the distribution-specific
-variance should be calculated. Therefore, it is recommended to carefully
-inspect the results, and probably validate against other models, e.g. Bayesian
-models (although results may be only roughly comparable).
+(i.e. conditional) variance should be calculated. Therefore, it is
+recommended to carefully inspect the results, and probably validate against
+other models, e.g. Bayesian models (although results may be only roughly
+comparable).
 
 Log-normal regressions (e.g. \code{lognormal()} family in \strong{glmmTMB} or
 \code{gaussian("log")}) often have a very low fixed effects variance (if they were
