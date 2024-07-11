@@ -140,16 +140,25 @@ the random effects variance equals the random-intercept variance.
 
 The distribution-specific variance,
 \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub>}}{\eqn{\sigma^2_d}},
-is the conditional variance the response given the predictors , \code{Var[y|x]},
-which depends on the model family. For Gaussian models, it is
+is the conditional variance of the response given the predictors , \code{Var[y|x]},
+which depends on the model family.
+\itemize{
+\item \strong{Gaussian:} For Gaussian models, it is
 \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}} (i.e. \code{sigma(model)^2}).
-For models with binary outcome, it is \eqn{\pi^2 / 3} for logit-link, \code{1} for
-probit-link, and \eqn{\pi^2 / 6} for cloglog-links. Models from Gamma-families
-use \eqn{\mu^2} (as obtained from \code{family$variance()}). For all other models,
-the distribution-specific variance is by default based on lognormal approximation,
-\eqn{log(1 + var(x) / \mu^2)} (see \emph{Nakagawa et al. 2017}). Other approximation
-methods can be specified with the \code{approximation} argument. The expected
-variance of a zero-inflated model is computed according to \emph{Zuur et al. 2012, p277}.
+\item \strong{Bernoulli:} For models with binary outcome, it is \eqn{\pi^2 / 3} for
+logit-link, \code{1} for probit-link, and \eqn{\pi^2 / 6} for cloglog-links.
+\item \strong{Binomial:} For other binomial models, the distribution-specific variance
+for Bernoulli models is used, divided by a weighting factor based on the
+number of trials and successes.
+\item \strong{Gamma:} Models from Gamma-families use \eqn{\mu^2} (as obtained from
+\code{family$variance()}).
+\item For all other models, the distribution-specific variance is by default
+based on lognormal approximation, \eqn{log(1 + var(x) / \mu^2)} (see
+\emph{Nakagawa et al. 2017}). Other approximation methods can be specified with
+the \code{approximation} argument.
+\item \strong{Zero-inflation models:} The expected variance of a zero-inflated model
+is computed according to \emph{Zuur et al. 2012, p277}.
+}
 }
 
 \section{Variance for the additive overdispersion term}{
