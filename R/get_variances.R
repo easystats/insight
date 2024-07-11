@@ -68,17 +68,16 @@
 #' @section Distribution-specific (observation level) variance:
 #' The distribution-specific variance,
 #' \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub>}}{\eqn{\sigma^2_d}},
-#' depends on the model family. For Gaussian models, it is
+#' is the conditional variance the response given the predictors , `Var[y|x]`,
+#' which depends on the model family. For Gaussian models, it is
 #' \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}} (i.e. `sigma(model)^2`).
-#' For models with binary outcome, it is
-#' \eqn{\pi^2 / 3} for logit-link, `1` for probit-link, and \eqn{\pi^2 / 6}
-#' for cloglog-links. Models from Gamma-families use \eqn{\mu^2} (as obtained
-#' from `family$variance()`). For all other models, the distribution-specific
-#' variance is by default based on lognormal approximation,
-#' \eqn{log(1 + var(x) / \mu^2)} (see \cite{Nakagawa et al. 2017}). Other
-#' approximation methods can be specified with the `approximation` argument.
-#' The expected variance of a zero-inflated model is computed according to
-#' _Zuur et al. 2012, p277_.
+#' For models with binary outcome, it is \eqn{\pi^2 / 3} for logit-link, `1` for
+#' probit-link, and \eqn{\pi^2 / 6} for cloglog-links. Models from Gamma-families
+#' use \eqn{\mu^2} (as obtained from `family$variance()`). For all other models,
+#' the distribution-specific variance is by default based on lognormal approximation,
+#' \eqn{log(1 + var(x) / \mu^2)} (see _Nakagawa et al. 2017_). Other approximation
+#' methods can be specified with the `approximation` argument. The expected
+#' variance of a zero-inflated model is computed according to _Zuur et al. 2012, p277_.
 #'
 #' @section Variance for the additive overdispersion term:
 #' The variance for the additive overdispersion term,
@@ -143,7 +142,7 @@
 #'
 #' Extracting variance components for models with zero-inflation part is not
 #' straightforward, because it is not definitely clear how the distribution-specific
-#' (i.e. conditional) variance should be calculated. Therefore, it is
+#' variance should be calculated. Therefore, it is
 #' recommended to carefully inspect the results, and probably validate against
 #' other models, e.g. Bayesian models (although results may be only roughly
 #' comparable).
