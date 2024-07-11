@@ -515,6 +515,7 @@ model_info.MixMod <- function(x, verbose = TRUE, ...) {
   .make_family(
     x = x,
     fitfam = faminfo$family,
+    zero.inf = !is.null(stats::formula(x, type = "zi_fixed")),
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
     verbose = verbose,

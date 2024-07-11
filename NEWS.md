@@ -37,6 +37,9 @@
 * `get_transformation()` now returns more transformations for power-transformed
   response variables.
 
+* `model_info()` for `MixMod` objects from package *GLMMadaptive* now recognize
+  zero-inflation and hurdle models for custom families.
+
 ## Bug fixes
 
 * `null_model()` now correctly handles zero-inflated models from package

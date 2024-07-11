@@ -1,8 +1,8 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.20.1.13
-Authors@R: 
+Version: 0.20.1.14
+Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
              role = c("aut", "cre"),
@@ -33,14 +33,14 @@ Authors@R:
              role = c("aut", "ctb"),
              email = "brenton@wiernik.org",
              comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")),
-      person(given = "Vincent", 
-             family = "Arel-Bundock", 
-             email = "vincent.arel-bundock@umontreal.ca", 
+      person(given = "Vincent",
+             family = "Arel-Bundock",
+             email = "vincent.arel-bundock@umontreal.ca",
              role = c("aut", "ctb"),
              comment = c(ORCID = "0000-0003-2042-7063")),
-      person(given = "Etienne", 
+      person(given = "Etienne",
              family = "Bacher",
-             email = "etienne.bacher@protonmail.com", 
+             email = "etienne.bacher@protonmail.com",
              role = c("aut", "ctb"),
              comment = c(ORCID = "0000-0002-9271-5075")),
       person(given = "Alex",
@@ -76,13 +76,13 @@ Description: A tool to provide an easy, intuitive and consistent
 License: GPL-3
 URL: https://easystats.github.io/insight/
 BugReports: https://github.com/easystats/insight/issues
-Depends: 
+Depends:
     R (>= 3.6)
-Imports: 
+Imports:
     methods,
     stats,
     utils
-Suggests: 
+Suggests:
     AER,
     afex,
     aod,
@@ -203,7 +203,7 @@ Suggests:
     tweedie,
     VGAM,
     withr
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
