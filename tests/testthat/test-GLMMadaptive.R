@@ -445,7 +445,7 @@ test_that("detect custom families", {
       class = "family"
     )
   }
-  km1 <- mixed_model(y ~ sex * time,
+  km1 <- GLMMadaptive::mixed_model(y ~ sex * time,
     random = ~ 1 | id, data = DF,
     family = hurdle.lognormal(), n_phis = 1,
     zi_fixed = ~sex
