@@ -22,7 +22,12 @@ withr::with_environment(
       data = sleepstudy,
       family = glmmTMB::ordbeta()
     )
-    out <- suppressWarnings(performance::r2_nakagawa(m, verbose = FALSE))
+    mnull <- glmmTMB::glmmTMB(
+      y ~ 1 + (Days | Subject),
+      data = sleepstudy,
+      family = glmmTMB::ordbeta()
+    )
+    out <- suppressWarnings(performance::r2_nakagawa(m, null_model = mnull, verbose = FALSE))
     expect_equal(out$R2_marginal, 0.2799715, ignore_attr = TRUE, tolerance = 1e-4)
     expect_equal(out$R2_conditional, 0.8504158, ignore_attr = TRUE, tolerance = 1e-4)
   })

@@ -4,8 +4,6 @@
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.01412/status.svg)](https://doi.org/10.21105/joss.01412)
 [![downloads](https://cranlogs.r-pkg.org/badges/insight)](https://cranlogs.r-pkg.org/)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/insight)](https://cranlogs.r-pkg.org/)
-[![status](https://tinyverse.netlify.com/badge/insight)](https://CRAN.R-project.org/package=insight)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 
 **Gain insight into your models!**
 
@@ -242,9 +240,6 @@ print_params <- function(model) {
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 print_params(m1)
 #> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
-```
-
-``` r
 
 # obviously, something is missing in the output
 m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
@@ -270,9 +265,6 @@ print_params <- function(model) {
 m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 print_params(m1)
 #> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
-```
-
-``` r
 
 m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
 print_params(m2)

@@ -343,3 +343,113 @@ test_that("find_algorithm", {
     list(algorithm = "quasi-Newton", optimizer = "optim")
   )
 })
+
+test_that("detect custom families", {
+  skip_on_cran()
+  set.seed(1234)
+  n <- 100 # number of subjects
+  K <- 8 # number of measurements per subject
+  t_max <- 5 # maximum follow-up time
+
+  # we construct a data frame with the design:
+  # everyone has a baseline measurement, and then measurements at random follow-up times
+  DF <- data.frame(
+    id = rep(seq_len(n), each = K),
+    time = c(replicate(n, c(0, sort(runif(K - 1, 0, t_max))))),
+    sex = rep(gl(2, n / 2, labels = c("male", "female")), each = K)
+  )
+
+  # design matrices for the fixed and random effects non-zero part
+  X <- model.matrix(~ sex * time, data = DF)
+  Z <- model.matrix(~time, data = DF)
+  # design matrices for the fixed and random effects zero part
+  X_zi <- model.matrix(~sex, data = DF)
+  Z_zi <- model.matrix(~1, data = DF)
+
+  betas <- c(-2.13, -0.25, 0.24, -0.05) # fixed effects coefficients non-zero part
+  sigma <- 0.5 # standard deviation error terms non-zero part
+  gammas <- c(-1.5, 0.5) # fixed effects coefficients zero part
+  D11 <- 0.5 # variance of random intercepts non-zero part
+  D22 <- 0.1 # variance of random slopes non-zero part
+  D33 <- 0.4 # variance of random intercepts zero part
+
+  # we simulate random effects
+  b <- cbind(rnorm(n, sd = sqrt(D11)), rnorm(n, sd = sqrt(D22)), rnorm(n, sd = sqrt(D33)))
+  # linear predictor non-zero part
+  eta_y <- as.vector(X %*% betas + rowSums(Z * b[DF$id, 1:2, drop = FALSE]))
+  # linear predictor zero part
+  eta_zi <- as.vector(X_zi %*% gammas + rowSums(Z_zi * b[DF$id, 3, drop = FALSE]))
+  # we simulate log-normal longitudinal data
+  DF$y <- exp(rnorm(n * K, mean = eta_y, sd = sigma))
+  # we set the zeros from the logistic regression
+  DF$y[as.logical(rbinom(n * K, size = 1, prob = plogis(eta_zi)))] <- 0
+
+    hurdle.lognormal <- function() {
+    stats <- make.link("identity")
+    log_dens <- function(y, eta, mu_fun, phis, eta_zi) {
+      sigma <- exp(phis)
+      # binary indicator for y > 0
+      ind <- y > 0
+      # non-zero part
+      eta <- as.matrix(eta)
+      eta_zi <- as.matrix(eta_zi)
+      out <- eta
+      out[ind, ] <- plogis(eta_zi[ind, ], lower.tail = FALSE, log.p = TRUE) +
+        dnorm(x = log(y[ind]), mean = eta[ind, ], sd = sigma, log = TRUE)
+      # zero part
+      out[!ind, ] <- plogis(eta_zi[!ind, ], log.p = TRUE)
+      attr(out, "mu_y") <- eta
+      out
+    }
+    score_eta_fun <- function(y, mu, phis, eta_zi) {
+      sigma <- exp(phis)
+      # binary indicator for y > 0
+      ind <- y > 0
+      # non-zero part
+      eta <- as.matrix(mu)
+      out <- eta
+      out[!ind, ] <- 0
+      out[ind, ] <- (log(y[ind]) - eta[ind, ]) / sigma^2
+      out
+    }
+    score_eta_zi_fun <- function(y, mu, phis, eta_zi) {
+      ind <- y > 0
+      probs <- plogis(as.matrix(eta_zi))
+      out <- 1 - probs
+      out[ind, ] <- -probs[ind, ]
+      out
+    }
+    score_phis_fun <- function(y, mu, phis, eta_zi) {
+      sigma <- exp(phis)
+      # binary indicator for y > 0
+      ind <- y > 0
+      # non-zero part
+      eta <- as.matrix(mu)
+      out <- eta
+      out[!ind, ] <- 0
+      out[ind, ] <- -1 + (log(y[ind]) - eta[ind, ])^2 / sigma^2
+      out
+    }
+    simulate <- function(n, mu, phis, eta_zi) {
+      y <- rlnorm(n = n, meanlog = mu, sdlog = exp(phis))
+      y[as.logical(rbinom(n, 1, plogis(eta_zi)))] <- 0
+      y
+    }
+    structure(
+      list(
+        family = "two-part log-normal", link = stats$name,
+        linkfun = stats$linkfun, linkinv = stats$linkinv, log_dens = log_dens,
+        score_eta_fun = score_eta_fun, score_eta_zi_fun = score_eta_zi_fun,
+        score_phis_fun = score_phis_fun, simulate = simulate
+      ),
+      class = "family"
+    )
+  }
+  km1 <- GLMMadaptive::mixed_model(y ~ sex * time,
+    random = ~ 1 | id, data = DF,
+    family = hurdle.lognormal(), n_phis = 1,
+    zi_fixed = ~sex
+  )
+  out <- model_info(km1)
+  expect_true(out$is_zero_inflated)
+})
