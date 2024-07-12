@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.1.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@
 <img src="logo.png" class="logo" alt=""><h1 id="insight-">insight <a class="anchor" aria-label="anchor" href="#insight-"></a>
 </h1>
 </div>
-<p><a href="https://doi.org/10.21105/joss.01412" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.01412/status.svg" alt="DOI"></a> <a href="https://cranlogs.r-pkg.org/" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/insight" alt="downloads"></a> <a href="https://cranlogs.r-pkg.org/" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/insight" alt="total"></a> <a href="https://CRAN.R-project.org/package=insight" class="external-link"><img src="https://tinyverse.netlify.com/badge/insight" alt="status"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="lifecycle"></a></p>
+<p><a href="https://doi.org/10.21105/joss.01412" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.01412/status.svg" alt="DOI"></a> <a href="https://cranlogs.r-pkg.org/" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/insight" alt="downloads"></a> <a href="https://cranlogs.r-pkg.org/" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/insight" alt="total"></a></p>
 <p><strong>Gain insight into your models!</strong></p>
 <p>When fitting any statistical model, there are many useful pieces of information that are simultaneously calculated and stored beyond coefficient estimates and general model fit statistics. Although there exist some generic functions to obtain model information and data, many package-specific modelling functions do not provide such methods to allow users to access such valuable information.</p>
 <p><strong>insight</strong> is an R-package that fills this important gap by providing a suite of functions to support almost any model (see a list of the many models supported below in the <strong>List of Supported Packages and Models</strong> section). The goal of <strong>insight</strong>, then, is to provide tools to provide <em>easy</em>, <em>intuitive</em>, and <em>consistent</em> access to information contained in model objects. These tools aid applied research in virtually any field who fit, diagnose, and present statistical models by streamlining access to every aspect of many model objects via consistent syntax and output.</p>
@@ -248,15 +248,14 @@
 <span></span>
 <span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span><span class="fu">print_params</span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></span>
+<span></span>
 <span><span class="co"># obviously, something is missing in the output</span></span>
 <span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="fu">s</span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span><span class="fu">print_params</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "My parameters are , thank you for your attention!"</span></span></code></pre></div>
 <p>As we can see, the function fails for <em>gam</em>-models. As the access to models depends on the type of the model in the R ecosystem, we would need to create specific functions for all models types. With <strong>insight</strong>, users can write a function without having to worry about the model type.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">print_params</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
 <span>    <span class="st">"My parameters are "</span>,</span>
@@ -267,9 +266,8 @@
 <span></span>
 <span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span><span class="fu">print_params</span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"</span></span>
+<span></span>
 <span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="fu">s</span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span><span class="fu">print_params</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"</span></span></code></pre></div>
@@ -285,7 +283,7 @@
 <h2 id="list-of-supported-models-by-class">List of Supported Models by Class<a class="anchor" aria-label="anchor" href="#list-of-supported-models-by-class"></a>
 </h2>
 <p>Currently, 231 model classes are supported.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/is_model_supported.html">supported_models</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   [1] "aareg"                   "afex_aov"               </span></span>
 <span><span class="co">#&gt;   [3] "AKP"                     "Anova.mlm"              </span></span>
