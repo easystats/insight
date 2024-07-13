@@ -1,3 +1,10 @@
+# insight 0.20.3
+
+## Bug fixes
+
+* Fixed issues in `find_response()` for *brms* models with `mi()` function in
+  the response variable.
+
 # insight 0.20.2
 
 ## New supported models
