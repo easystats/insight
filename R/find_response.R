@@ -50,6 +50,35 @@ find_response.default <- function(x, combine = TRUE, ...) {
 
 
 #' @export
+find_response.brmsfit <- function(x, combine = TRUE, ...) {
+  f <- find_formula(x, verbose = FALSE)
+
+  if (is.null(f)) {
+    return(NULL)
+  }
+
+  # this is for multivariate response models,
+  # where we have a list of formulas
+  if (is_multivariate(f)) {
+    resp <- unlist(lapply(f, function(i) {
+      resp_formula <- safe_deparse(i$conditional[[2L]])
+      if (grepl("|", resp_formula, fixed = TRUE)) {
+        resp_formula <- all.vars(i$conditional[[2L]])
+      }
+      resp_formula
+    }))
+  } else {
+    resp <- safe_deparse(f$conditional[[2L]])
+    if (grepl("|", resp, fixed = TRUE)) {
+      resp <- all.vars(f$conditional[[2L]])
+    }
+  }
+
+  check_cbind(resp, combine, model = x)
+}
+
+
+#' @export
 find_response.logitr <- function(x, ...) {
   get_call(x)$outcome
 }
