@@ -70,7 +70,7 @@ find_response.brmsfit <- function(x, combine = TRUE, ...) {
   } else {
     resp <- safe_deparse(f$conditional[[2L]])
     if (grepl("|", resp, fixed = TRUE)) {
-      resp <- all.vars(i$conditional[[2L]])
+      resp <- all.vars(f$conditional[[2L]])
     }
   }
 
