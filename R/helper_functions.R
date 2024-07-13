@@ -1,6 +1,6 @@
 # small wrapper around this commonly used try-catch
 .safe <- function(code, on_error = NULL) {
-  if (isTRUE(getOption("easystats_erros", FALSE)) && is.null(on_error)) {
+  if (isTRUE(getOption("easystats_errors", FALSE)) && is.null(on_error)) {
     code
   } else {
     tryCatch(code, error = function(e) on_error)
@@ -122,7 +122,6 @@
 }
 
 
-
 # extract random effects from formula
 .get_model_random <- function(f, model, split_nested = FALSE) {
   is_special <- inherits(
@@ -195,7 +194,6 @@
 }
 
 
-
 # in case we need the random effects terms as formula (symbol),
 # not as character string, then call this functions instead of
 # .get_model_random()
@@ -220,9 +218,7 @@
 }
 
 
-
 # helper to access model components ----------------
-
 
 .all_elements <- function() {
   c(
@@ -284,7 +280,6 @@
     return(auxiliary_parameters)
   }
 
-
   elements <- switch(effects,
     all = elements,
     fixed = elements[!elements %in% random_parameters],
@@ -302,7 +297,6 @@
 
   elements
 }
-
 
 
 # Filter parameters from Stan-model fits
@@ -325,7 +319,6 @@
 }
 
 
-
 .filter_pars_univariate <- function(l, parameters) {
   lapply(l, function(component) {
     unlist(sapply(
@@ -339,12 +332,10 @@
 }
 
 
-
 # remove column
 .remove_column <- function(data, variables) {
   data[, -which(colnames(data) %in% variables), drop = FALSE]
 }
-
 
 
 .grep_smoothers <- function(x) {
@@ -364,13 +355,11 @@
 }
 
 
-
 .grep_zi_smoothers <- function(x) {
   grepl("^(s\\.\\d\\()", x, perl = TRUE) |
     grepl("^(gam::s\\.\\d\\()", x, perl = TRUE) |
     grepl("^(mgcv::s\\.\\d\\()", x, perl = TRUE)
 }
-
 
 
 .grep_non_smoothers <- function(x) {
@@ -391,7 +380,6 @@
     grepl("^(?!(brms::t2\\())", x, perl = TRUE) &
     grepl("^(?!(smooth_sd\\[))", x, perl = TRUE)
 }
-
 
 
 # .split_formula <- function(f) {
@@ -418,7 +406,6 @@
 # }
 
 
-
 .gam_family <- function(x) {
   faminfo <- .safe(stats::family(x))
 
@@ -429,7 +416,6 @@
 
   faminfo
 }
-
 
 
 # for models with zero-inflation component, return
@@ -450,8 +436,6 @@
     dat
   )
 }
-
-
 
 
 #' @keywords internal
@@ -480,7 +464,6 @@
 }
 
 
-
 .is_baysian_emmeans <- function(x) {
   if (inherits(x, "emm_list")) {
     x <- x[[1]]
@@ -488,7 +471,6 @@
   post.beta <- methods::slot(x, "post.beta")
   !(all(dim(post.beta) == 1) && is.na(post.beta))
 }
-
 
 
 .is_bayesian_model <- function(x) {
@@ -500,7 +482,6 @@
     "blrm"
   ))
 }
-
 
 
 # safe conversion from factor to numeric
@@ -549,9 +530,6 @@
 }
 
 
-
-
-
 ## copied from lme4::findbars() -----------------------
 
 
@@ -565,7 +543,6 @@
     paste0(trm, "|", deparse(term[[3]]))
   }, ""), collapse = ")+("), ")"))[[2]]
 }
-
 
 
 .expandDoubleVerts <- function(term) {
@@ -584,7 +561,6 @@
   }
   term
 }
-
 
 
 .findbars <- function(term) {
@@ -651,8 +627,6 @@
 }
 
 
-
-
 ## copied from lme4::nobars() -----------------------
 
 
@@ -670,7 +644,6 @@
   }
   nb
 }
-
 
 
 .nobars_ <- function(term) {
@@ -712,7 +685,6 @@
 }
 
 
-
 .isBar <- function(term) {
   if (is.call(term) && ((term[[1]] == as.name("|") || term[[1]] == as.name("||")))) {
     return(TRUE)
@@ -731,7 +703,6 @@
   }
   FALSE
 }
-
 
 
 # classify emmeans objects -------------

@@ -131,7 +131,7 @@ safe_deparse_symbol <- function(x) {
   } else {
     out <- NULL
   }
-  return(out)
+  out
 }
 
 

@@ -3,7 +3,7 @@ skip_on_cran()
 skip_if_not_installed("glmmTMB")
 skip_if_not_installed("MuMIn")
 skip_if_not_installed("lme4")
-skip_if_not_installed("performance")
+skip_if_not_installed("performance", minimum_version = "0.12.1")
 skip_if_not_installed("datawizard")
 
 

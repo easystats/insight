@@ -1,7 +1,7 @@
 skip_on_cran()
 
 skip_if_not_installed("glmmTMB", minimum_version = "1.1.8")
-skip_if_not_installed("performance")
+skip_if_not_installed("performance", minimum_version = "0.12.1")
 skip_if_not_installed("withr")
 
 
