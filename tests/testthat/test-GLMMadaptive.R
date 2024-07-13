@@ -384,7 +384,7 @@ test_that("detect custom families", {
   # we set the zeros from the logistic regression
   DF$y[as.logical(rbinom(n * K, size = 1, prob = plogis(eta_zi)))] <- 0
 
-    hurdle.lognormal <- function() {
+  hurdle.lognormal <- function() {
     stats <- make.link("identity")
     log_dens <- function(y, eta, mu_fun, phis, eta_zi) {
       sigma <- exp(phis)
