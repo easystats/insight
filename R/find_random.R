@@ -54,7 +54,6 @@ find_random.default <- function(x, split_nested = FALSE, flatten = FALSE) {
     l <- .find_random_effects(x, f, split_nested)
   }
 
-
   if (is_empty_object(l)) {
     return(NULL)
   }
@@ -74,7 +73,6 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
     list(random = attr(x, "id"))
   }
 }
-
 
 
 .find_random_effects <- function(x, f, split_nested) {
@@ -100,7 +98,6 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
     r1 <- NULL
   }
 
-
   if (object_has_names(f, "zero_inflated_random")) {
     if (is.list(f$zero_inflated_random)) {
       r2 <- unique(unlist(
@@ -113,7 +110,6 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
   } else {
     r2 <- NULL
   }
-
 
   compact_list(list(random = r1, zero_inflated_random = r2))
 }
