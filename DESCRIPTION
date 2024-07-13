@@ -181,6 +181,7 @@ Suggests:
     psych,
     quantreg,
     Rcpp,
+    RcppEigen,
     rmarkdown,
     rms,
     robustbase,
