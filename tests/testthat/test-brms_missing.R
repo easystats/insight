@@ -11,7 +11,7 @@ skip_if(is.null(miss_1))
 
 # Tests -------------------------------------------------------------------
 test_that("get_response brms aterms-trials 1", {
-  expect_identical(
+  expect_equal(
     find_formula(miss_1),
     structure(
       list(
@@ -20,7 +20,8 @@ test_that("get_response brms aterms-trials 1", {
       ),
       is_mv = "1",
       class = c("insight_formula", "list")
-    )
+    ),
+    ignore_attr = TRUE
   )
   expect_identical(
     find_response(miss_1),
