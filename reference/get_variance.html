@@ -216,17 +216,20 @@ the random effects variance equals the random-intercept variance.</p>
 is the conditional variance of the response given the predictors , <code>Var[y|x]</code>,
 which depends on the model family.</p><ul><li><p><strong>Gaussian:</strong> For Gaussian models, it is
 σ<sup>2</sup> (i.e. <code>sigma(model)^2</code>).</p></li>
-<li><p><strong>Bernoulli:</strong> For models with binary outcome, it is \(\pi^2 / 3\) for
-logit-link, <code>1</code> for probit-link, and \(\pi^2 / 6\) for cloglog-links.</p></li>
+<li><p><strong>Bernoulli:</strong> For models with binary outcome, it is
+π<sup>2</sup> / 3 for logit-link,
+<code>1</code> for probit-link, and π<sup>2</sup> / 6
+for cloglog-links.</p></li>
 <li><p><strong>Binomial:</strong> For other binomial models, the distribution-specific variance
 for Bernoulli models is used, divided by a weighting factor based on the
 number of trials and successes.</p></li>
 <li><p><strong>Gamma:</strong> Models from Gamma-families use \(\mu^2\) (as obtained from
 <code>family$variance()</code>).</p></li>
 <li><p>For all other models, the distribution-specific variance is by default
-based on lognormal approximation, \(log(1 + var(x) / \mu^2)\) (see
-<em>Nakagawa et al. 2017</em>). Other approximation methods can be specified with
-the <code>approximation</code> argument.</p></li>
+based on lognormal approximation,
+log(1 + var(x) / μ<sup>2</sup>)
+(see <em>Nakagawa et al. 2017</em>). Other approximation methods can be specified
+with the <code>approximation</code> argument.</p></li>
 <li><p><strong>Zero-inflation models:</strong> The expected variance of a zero-inflated model
 is computed according to <em>Zuur et al. 2012, p277</em>.</p></li>
 </ul></div>
