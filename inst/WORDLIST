@@ -9,11 +9,11 @@ Biometrics
 Bundock
 CMD
 Coloured
-DirichletReg
 DOI
+DirichletReg
 Dom
-Elff
 ESS
+Elff
 GJRM
 GLMM
 GLMMadaptive
@@ -34,10 +34,10 @@ Newburgh
 ORCID
 PIs
 PROreg
-Rhat
 ROPEs
 RStudio
 Rchoice
+Rhat
 Satterthwaite
 Savel'ev
 Schaeffer
@@ -103,7 +103,6 @@ htest
 https
 intra
 intraclass
-io
 ivFixed
 ivprobit
 joineRML
@@ -111,7 +110,6 @@ joss
 knitr
 labelling
 lavaan
-lifecycle
 lme
 lmodel
 lmtest
@@ -120,9 +118,7 @@ logitr
 logloss
 lqmm
 marginaleffects
-mblogit
 mclogit
-mlogit
 md
 merMod
 merTools
@@ -151,7 +147,6 @@ poisson
 pre
 pscl
 quantreg
-quartiles
 rOpenSci
 recoded
 rempsyc
@@ -182,7 +177,6 @@ unformatted
 unicode
 unstandardizing
 variates
-vcov
 vectorized
 vgam
 vglm
@@ -190,4 +184,3 @@ visualisation
 warmup
 warmups
 ’s
-speedglm
