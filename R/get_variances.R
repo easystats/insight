@@ -73,14 +73,14 @@
 #' - **Gaussian:** For Gaussian models, it is
 #'   \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}} (i.e. `sigma(model)^2`).
 #' - **Bernoulli:** For models with binary outcome, it is
-#'   \ifelse{html}{\out{&pi;<sup>2</sup> / 3}}{\eqn{\pi^2 / 3}} for logit-link,
-#'   `1` for probit-link, and \ifelse{html}{\out{&pi;<sup>2</sup> / 6}}{\eqn{\pi^2 / 6}}
+#'   \ifelse{html}{\out{&pi;<sup>2</sup>/3}}{\eqn{\pi^2 / 3}} for logit-link,
+#'   `1` for probit-link, and \ifelse{html}{\out{&pi;<sup>2</sup>/6}}{\eqn{\pi^2 / 6}}
 #'   for cloglog-links.
 #' - **Binomial:** For other binomial models, the distribution-specific variance
 #'   for Bernoulli models is used, divided by a weighting factor based on the
 #'   number of trials and successes.
-#' - **Gamma:** Models from Gamma-families use \eqn{\mu^2} (as obtained from
-#'   `family$variance()`).
+#' - **Gamma:** Models from Gamma-families use \ifelse{html}{\out{&mu;<sup>2</sup>}}{\eqn{\mu^2}}
+#'   (as obtained from `family$variance()`).
 #' - For all other models, the distribution-specific variance is by default
 #'   based on lognormal approximation,
 #'   \ifelse{html}{\out{log(1 + var(x) / &mu;<sup>2</sup>)}}{\eqn{log(1 + var(x) / \mu^2)}}
