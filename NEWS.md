@@ -5,6 +5,9 @@
 * Fixed issues in `find_response()` for *brms* models with `mi()` function in
   the response variable.
 
+* Fixed issue in `get_variance()` that could lead to recursive calls for
+  *brms* models, resulting in "infinite" resampling of the model.
+
 # insight 0.20.2
 
 ## New supported models
