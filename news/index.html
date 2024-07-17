@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,8 @@
 <h2 class="pkg-version" data-toc-text="0.20.3" id="insight-0203">insight 0.20.3<a class="anchor" aria-label="anchor" href="#insight-0203"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-20-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-20-3"></a></h3>
-<ul><li>Fixed issues in <code><a href="../reference/find_response.html">find_response()</a></code> for <em>brms</em> models with <code>mi()</code> function in the response variable.</li>
+<ul><li><p>Fixed issues in <code><a href="../reference/find_response.html">find_response()</a></code> for <em>brms</em> models with <code>mi()</code> function in the response variable.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_variance.html">get_variance()</a></code> that could lead to recursive calls for <em>brms</em> models, resulting in “infinite” resampling of the model.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
