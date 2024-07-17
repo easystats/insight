@@ -586,7 +586,7 @@
                                            model_component = NULL,
                                            verbose = TRUE) {
   # get overdispersion parameter / sigma
-  sig <- .safe(get_sigma(model))
+  sig <- .safe(.get_sigma(model, no_recursion = TRUE))
 
   if (is.null(sig)) {
     sig <- 1

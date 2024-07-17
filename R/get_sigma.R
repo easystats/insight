@@ -232,7 +232,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
     }
   )
 
-
   # compute sigma manually ---------------
   if (is_empty_object(s)) {
     # default sigma ---------------
@@ -242,7 +241,12 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   if (is_empty_object(s)) {
     info <- model_info(x, verbose = FALSE)
     if (!is.null(info) && info$is_mixed) {
-      s <- .safe(sqrt(get_variance_residual(x, verbose = FALSE)))
+      dots <- list(...)
+      # in "get_variance()", we call "get_sigma()" - make sure we avoid
+      # recursion and infinite loops
+      if (!isTRUE(dots$no_recursion)) {
+        s <- .safe(sqrt(get_variance_residual(x, verbose = FALSE)))
+      }
     }
   }
 
