@@ -128,7 +128,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
-.get_sigma.lrm <- function(x, verbose = TRUE, ...) {
+.get_sigma.lrm <- function(x, ...) {
   s <- stats::sigma(x)
   s <- s[length(s)]
   class(s) <- c("insight_aux", class(s))
@@ -136,14 +136,14 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
-.get_sigma.VGAM <- function(x, verbose = TRUE, ...) {
+.get_sigma.VGAM <- function(x, ...) {
   s <- .safe(exp(stats::coef(x)[["(Intercept):2"]]))
   class(s) <- c("insight_aux", class(s))
   s
 }
 
 
-.get_sigma.merModList <- function(x, verbose = TRUE, ...) {
+.get_sigma.merModList <- function(x, ...) {
   s <- suppressWarnings(summary(x))
   s <- s$residError
   class(s) <- c("insight_aux", class(s))
@@ -151,14 +151,14 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
-.get_sigma.summary.lm <- function(x, verbose = TRUE, ...) {
+.get_sigma.summary.lm <- function(x, ...) {
   s <- x$sigma
   class(s) <- c("insight_aux", class(s))
   s
 }
 
 
-.get_sigma.selection <- function(x, verbose = TRUE, ...) {
+.get_sigma.selection <- function(x, ...) {
   s <- unname(stats::coef(x)["sigma"])
   class(s) <- c("insight_aux", class(s))
   s
@@ -166,13 +166,8 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 
 .get_sigma.cgam <- function(x, verbose = TRUE, ...) {
-  s <- tryCatch(
-    {
-      sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
-    },
-    error = function(e) {
-      NULL
-    }
+  s <- .safe(
+    sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
   )
 
   if (is_empty_object(s)) {
@@ -184,7 +179,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
-.get_sigma.cpglmm <- function(x, verbose = TRUE, ...) {
+.get_sigma.cpglmm <- function(x, ...) {
   s <- .safe(stats::deviance(x)[["sigmaML"]])
   if (!is.null(s)) {
     class(s) <- c("insight_aux", class(s))
@@ -212,7 +207,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
-.get_sigma.brmsfit <- function(x, verbose = TRUE, ...) {
+.get_sigma.brmsfit <- function(x, ...) {
   s <- tryCatch(
     {
       dat <- as.data.frame(x)
@@ -232,7 +227,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
     }
   )
 
-
   # compute sigma manually ---------------
   if (is_empty_object(s)) {
     # default sigma ---------------
@@ -242,7 +236,12 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   if (is_empty_object(s)) {
     info <- model_info(x, verbose = FALSE)
     if (!is.null(info) && info$is_mixed) {
-      s <- .safe(sqrt(get_variance_residual(x, verbose = FALSE)))
+      dots <- list(...)
+      # in "get_variance()", we call "get_sigma()" - make sure we avoid
+      # recursion and infinite loops
+      if (!isTRUE(dots$no_recursion)) {
+        s <- .safe(sqrt(get_variance_residual(x, verbose = FALSE)))
+      }
     }
   }
 
