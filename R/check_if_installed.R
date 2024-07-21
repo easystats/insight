@@ -49,9 +49,13 @@ check_if_installed <- function(package,
   is_installed <- vapply(package, requireNamespace, quietly = TRUE, FUN.VALUE = TRUE)
   what_is_wrong <- what_you_can_do <- NULL
 
-  if (is.null(minimum_version)) {
-    minimum_version <- .safe(.get_dep_version(dep = package))
-  }
+  # This function is currently not reliable, as it reads the suggests field
+  # from "insight", even when called from other functions. See when running
+  # this example: https://github.com/easystats/bayestestR/issues/627
+
+  # if (is.null(minimum_version)) {
+  #   minimum_version <- .safe(.get_dep_version(dep = package))
+  # }
 
   # validation check for equal length of package and minimum_version
   if (!is.null(minimum_version) && length(package) != length(minimum_version)) {
@@ -156,7 +160,22 @@ print.check_if_installed <- function(x, ...) {
   }
 }
 
-.get_dep_version <- function(dep, pkg = utils::packageName()) {
+## BUG This function is currently not reliable, as it reads the suggests field
+## from "insight", even when called from other functions. See when running
+## this example: https://github.com/easystats/bayestestR/issues/627
+
+.get_dep_version <- function(dep) {
+  # iterate environments, to find the correct package
+  minframe <- 1L
+  n <- sys.nframe()
+  pkg <- NULL
+  while(n > minframe && is.null(pkg)) {
+    pkg <- utils::packageName(env = sys.frame(n))
+  }
+  # if still NULL, or if "insight", return
+  if (is.null(pkg) || pkg == "insight") {
+    return(NULL)
+  }
   suggests_field <- utils::packageDescription(pkg, fields = "Suggests")
   suggests_list <- unlist(strsplit(suggests_field, ",", fixed = TRUE))
   out <- lapply(dep, function(x) {
