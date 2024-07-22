@@ -363,6 +363,36 @@ get_df.betamfx <- get_df.logitor
 
 
 #' @export
+get_df.nestedLogit <- function(x, type = NULL, component = "all", verbose = TRUE, ...) {
+  if (is.null(type)) {
+    type <- "wald"
+  }
+  if (tolower(type) == "residual") {
+    cf <- as.data.frame(stats::coef(model))
+    dof <- rep(vapply(model$models, stats::df.residual, numeric(1)), each = nrow(cf))
+    if (!is.null(component) && !identical(component, "all")) {
+      comp <- intersect(names(dof), component)
+      if (length(comp)) {
+        dof <- dof[comp]
+      } else {
+        if (verbose) {
+          format_alert(paste0(
+            "No matching model found. Possible values for `component` are ",
+            toString(paste0("'", names(model$models), "'")),
+            "."
+          ))
+        }
+        dof <- Inf
+      }
+    }
+  } else {
+    dof <- Inf
+  }
+  dof
+}
+
+
+#' @export
 get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
   # installed?
   check_if_installed("mice")
