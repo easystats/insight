@@ -1,5 +1,9 @@
 # insight 0.20.3
 
+## Changes
+
+* `get_df()` now supports more model classes.
+
 ## Bug fixes
 
 * Fixed issues in `find_response()` for *brms* models with `mi()` function in
