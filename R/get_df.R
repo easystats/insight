@@ -110,7 +110,10 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   # check valid options
   type <- match.arg(
     tolower(type),
-    choices = c("residual", "model", "analytical", "wald", "normal", "ml1", "betwithin")
+    choices = c(
+      "residual", "model", "analytical", "wald", "normal", "ml1", "betwithin",
+      "profile", "boot", "uniroot", "likelihood"
+    )
   )
 
   # check if user already passed "statistic" argument, to
@@ -389,7 +392,7 @@ get_df.mediate <- function(x, ...) {
 
 
 #' @keywords internal
-.degrees_of_freedom_analytical <- function(model) {
+.degrees_of_freedom_analytical <- function(model, kenward = TRUE) {
   nparam <- .model_df(model)
   n <- n_obs(model)
 
@@ -397,9 +400,14 @@ get_df.mediate <- function(x, ...) {
     return(Inf)
   }
 
-  n - nparam
-}
+  if (isTRUE(kenward) && inherits(model, "lmerMod")) {
+    dof <- as.numeric(.degrees_of_freedom_kr(model))
+  } else {
+    dof <- n - nparam
+  }
 
+  dof
+}
 
 
 # Model approach (model-based / logLik df) ------------------------------
@@ -449,4 +457,73 @@ get_df.mediate <- function(x, ...) {
     type <- "residual"
   }
   type
+}
+
+
+# Helper, check args ------------------------------
+
+.df_method_ok <- function(model, method = NULL, verbose = TRUE, ...) {
+  if (is.null(method)) {
+    return(TRUE)
+  }
+
+  method <- tolower(method)
+
+  # exceptions 1
+  if (inherits(model, c("polr", "glm", "svyglm"))) {
+    if (method %in% c("analytical", "profile", "residual", "wald", "likelihood", "normal")) {
+      return(TRUE)
+    } else {
+      if (verbose) {
+        format_alert("Type of degrees-of-freedom must be one of \"wald\", \"residual\" or \"profile\". Using \"wald\" now.") # nolint
+      }
+      return(FALSE)
+    }
+  }
+
+  # exceptions 2
+  if (inherits(model, c("phylolm", "phyloglm"))) {
+    if (method %in% c("analytical", "residual", "wald", "nokr", "normal", "boot")) {
+      return(TRUE)
+    } else {
+      if (verbose) {
+        format_alert("Type of degrees-of-freedom must be one of \"wald\", \"normal\" or \"boot\". Using \"wald\" now.") # nolint
+      }
+      return(FALSE)
+    }
+  }
+
+  info <- model_info(model, verbose = FALSE)
+  if (!is.null(info) && isFALSE(info$is_mixed) && method == "boot") {
+    if (verbose) {
+      format_alert("Type `boot` only works for mixed models of class `merMod`. To bootstrap this model, use `bootstrap=TRUE, ci_method=\"bcai\"`.") # nolint
+    }
+    return(TRUE)
+  }
+
+  if (is.null(info) || !info$is_mixed) {
+    if (!(method %in% c("analytical", "betwithin", "nokr", "wald", "ml1", "profile", "boot", "uniroot", "residual", "normal"))) { # nolint
+      if (verbose) {
+        format_alert("Type of degrees-of-freedom must be one of \"residual\", \"wald\", \"normal\", \"profile\", \"boot\", \"uniroot\", \"betwithin\" or \"ml1\". Using \"wald\" now.") # nolint
+      }
+      return(FALSE)
+    }
+    return(TRUE)
+  }
+
+  if (!(method %in% c("analytical", "satterthwaite", "betwithin", "kenward", "kr", "nokr", "wald", "ml1", "profile", "boot", "uniroot", "residual", "normal"))) { # nolint
+    if (verbose) {
+      format_alert("Type of degrees-of-freedom must be one of \"residual\", \"wald\", \"normal\", \"profile\", \"boot\", \"uniroot\", \"kenward\", \"satterthwaite\", \"betwithin\" or \"ml1\". Using \"wald\" now.") # nolint
+    }
+    return(FALSE)
+  }
+
+  if (!info$is_linear && method %in% c("satterthwaite", "kenward", "kr")) {
+    if (verbose) {
+      format_alert(sprintf("`%s`-degrees of freedoms are only available for linear mixed models.", method))
+    }
+    return(FALSE)
+  }
+
+  TRUE
 }
