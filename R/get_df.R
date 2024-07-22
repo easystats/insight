@@ -497,79 +497,10 @@ get_df.mediate <- function(x, ...) {
 
 .check_df_type <- function(type) {
   # handle mixing of ci_method and type arguments
-  if (tolower(type) %in% c("profile", "uniroot", "quantile", "likelihood", "eti", "hdi", "bci", "boot", "spi", "analytical")) {
+  if (tolower(type) %in% c("profile", "uniroot", "quantile", "likelihood", "eti", "hdi", "bci", "boot", "spi", "analytical", "nokr")) {
     type <- "residual"
   }
   type
-}
-
-
-# Helper, check args ------------------------------
-
-.df_method_ok <- function(model, method = NULL, verbose = TRUE, ...) {
-  if (is.null(method)) {
-    return(TRUE)
-  }
-
-  method <- tolower(method)
-
-  # exceptions 1
-  if (inherits(model, c("polr", "glm", "svyglm"))) {
-    if (method %in% c("analytical", "profile", "residual", "wald", "likelihood", "normal")) {
-      return(TRUE)
-    } else {
-      if (verbose) {
-        format_alert("Type of degrees-of-freedom must be one of \"wald\", \"residual\" or \"profile\". Using \"wald\" now.") # nolint
-      }
-      return(FALSE)
-    }
-  }
-
-  # exceptions 2
-  if (inherits(model, c("phylolm", "phyloglm"))) {
-    if (method %in% c("analytical", "residual", "wald", "nokr", "normal", "boot")) {
-      return(TRUE)
-    } else {
-      if (verbose) {
-        format_alert("Type of degrees-of-freedom must be one of \"wald\", \"normal\" or \"boot\". Using \"wald\" now.") # nolint
-      }
-      return(FALSE)
-    }
-  }
-
-  info <- model_info(model, verbose = FALSE)
-  if (!is.null(info) && isFALSE(info$is_mixed) && method == "boot") {
-    if (verbose) {
-      format_alert("Type `boot` only works for mixed models of class `merMod`. To bootstrap this model, use `bootstrap=TRUE, ci_method=\"bcai\"`.") # nolint
-    }
-    return(TRUE)
-  }
-
-  if (is.null(info) || !info$is_mixed) {
-    if (!(method %in% c("analytical", "betwithin", "nokr", "wald", "ml1", "profile", "boot", "uniroot", "residual", "normal"))) { # nolint
-      if (verbose) {
-        format_alert("Type of degrees-of-freedom must be one of \"residual\", \"wald\", \"normal\", \"profile\", \"boot\", \"uniroot\", \"betwithin\" or \"ml1\". Using \"wald\" now.") # nolint
-      }
-      return(FALSE)
-    }
-    return(TRUE)
-  }
-
-  if (!(method %in% c("analytical", "satterthwaite", "betwithin", "kenward", "kr", "nokr", "wald", "ml1", "profile", "boot", "uniroot", "residual", "normal"))) { # nolint
-    if (verbose) {
-      format_alert("Type of degrees-of-freedom must be one of \"residual\", \"wald\", \"normal\", \"profile\", \"boot\", \"uniroot\", \"kenward\", \"satterthwaite\", \"betwithin\" or \"ml1\". Using \"wald\" now.") # nolint
-    }
-    return(FALSE)
-  }
-
-  if (!info$is_linear && method %in% c("satterthwaite", "kenward", "kr")) {
-    if (verbose) {
-      format_alert(sprintf("`%s`-degrees of freedoms are only available for linear mixed models.", method))
-    }
-    return(FALSE)
-  }
-
-  TRUE
 }
 
 
