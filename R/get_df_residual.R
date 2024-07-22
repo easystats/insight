@@ -60,7 +60,7 @@
     return(Inf)
   }
 
-  return(n - nparam)
+  n - nparam
 }
 
 #' @keywords internal
