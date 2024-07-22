@@ -124,11 +124,8 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     statistic <- find_statistic(x)
   }
 
-  # handle aliases
-  if (type == "analytical") {
-    type <- "residual"
-  }
-
+  # handle aliases, resp. mixing type and ci_method
+  type <- .check_df_type(type)
 
   if (type == "normal") { # nolint
     # Wald normal approximation - always Inf -----
@@ -294,6 +291,7 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     )
   )
 
+  # hidden gem - required for get_predicted_ci(), where we have per-observation DF
   dots <- list(...)
 
   if (type %in% c("satterthwaite", "kr", "kenward", "kenward-roger") && isTRUE(dots$df_per_obs)) {
@@ -453,7 +451,7 @@ get_df.mediate <- function(x, ...) {
 
 .check_df_type <- function(type) {
   # handle mixing of ci_method and type arguments
-  if (tolower(type) %in% c("profile", "uniroot", "quantile", "eti", "hdi", "bci", "boot", "spi")) {
+  if (tolower(type) %in% c("profile", "uniroot", "quantile", "likelihood", "eti", "hdi", "bci", "boot", "spi", "analytical")) {
     type <- "residual"
   }
   type
