@@ -226,3 +226,18 @@
 
   dof
 }
+
+
+# helper ----------------------
+
+.dof_fit_gam <- function(model, dof) {
+  params <- find_parameters(model)
+  if (!is.null(params$conditional)) {
+    dof <- rep(dof, length(params$conditional))
+  }
+  if (!is.null(params$smooth_terms)) {
+    s <- summary(model)
+    dof <- c(dof, s$s.table[, "Ref.df"])
+  }
+  dof
+}
