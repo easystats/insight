@@ -278,6 +278,22 @@ get_df.fixest <- function(x, type = "residual", ...) {
 }
 
 
+#' @export
+get_df.fixest_multi <- function(x, ...) {
+  out <- do.call(rbind, lapply(x, get_df, ...))
+
+  # add response and group columns
+  id_columns <- .get_fixest_multi_columns(x)
+
+  # add response column
+  out$Response <- id_columns$Response
+  out$Group <- id_columns$Group
+
+  row.names(out) <- NULL
+  out
+}
+
+
 
 # Mixed models - special treatment --------------
 
@@ -524,4 +540,34 @@ get_df.mediate <- function(x, ...) {
   }
 
   TRUE
+}
+
+
+.get_fixest_multi_columns <- function(model) {
+  # add response and group columns
+  s <- summary(model)
+  l <- lengths(lapply(s, stats::coef))
+  parts <- strsplit(names(l), ";", fixed = TRUE)
+
+  id_columns <- Map(function(i, j) {
+    if (length(j) == 1 && startsWith(j, "rhs")) {
+      data.frame(
+        Group = rep(trim_ws(sub("rhs:", "", j, fixed = TRUE)), i),
+        stringsAsFactors = FALSE
+      )
+    } else if (length(j) == 1 && startsWith(j, "lhs")) {
+      data.frame(
+        Response = rep(trim_ws(sub("lhs:", "", j, fixed = TRUE)), i),
+        stringsAsFactors = FALSE
+      )
+    } else {
+      data.frame(
+        Response = rep(trim_ws(sub("lhs:", "", j[1], fixed = TRUE)), i),
+        Group = rep(trim_ws(sub("rhs:", "", j[2], fixed = TRUE)), i),
+        stringsAsFactors = FALSE
+      )
+    }
+  }, unname(l), parts)
+
+  do.call(rbind, id_columns)
 }
