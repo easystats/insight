@@ -100,6 +100,13 @@ get_df <- function(x, ...) {
 #' @rdname get_df
 #' @export
 get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
+  # check for valid model-object
+  if (missing(x) || is.null(x)) {
+    format_error(
+      "You must provide a model-object. Argument cannot be missing or `NULL`."
+    )
+  }
+
   # check valid options
   type <- match.arg(
     tolower(type),
