@@ -21,10 +21,11 @@
 #'   + `"normal"` always returns `Inf`.
 #'   + `"model"` returns model-based degrees of freedom, i.e. the number of
 #'     (estimated) parameters.
-#'   + For mixed models, can also be `"ml1"` (approximation of degrees of freedom
-#'     based on a "m-l-1" heuristic as suggested by _Elff et al. 2019_) or
-#'     `"betwithin"`, and for models of class `merMod`, `type` can also be
-#'     `"satterthwaite"` or `"kenward-roger"`. See 'Details'.
+#'   + For mixed models, can also be `"ml1"` (or `"m-l-1"`, approximation of
+#'     degrees of freedom based on a "m-l-1" heuristic as suggested by _Elff et
+#'     al. 2019_) or `"between-within"` (or `"betwithin"`).
+#'   + For mixed models of class `merMod`, `type` can also be `"satterthwaite"`
+#'     or `"kenward-roger"` (or `"kenward"`). See 'Details'.
 #'
 #' Usually, when degrees of freedom are required to calculate p-values or
 #' confidence intervals, `type = "wald"` is likely to be the best choice in
@@ -112,7 +113,7 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     tolower(type),
     choices = c(
       "residual", "model", "analytical", "wald", "normal", "ml1", "betwithin",
-      "profile", "boot", "uniroot", "likelihood"
+      "between-within", "profile", "boot", "uniroot", "likelihood", "m-l-1"
     )
   )
 
@@ -148,11 +149,11 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     dof <- .get_residual_df(x, verbose)
 
     # ml1 - only for certain mixed models -----
-  } else if (type == "ml1") {
+  } else if (type %in% c("ml1", "m-l-1")) {
     dof <- .degrees_of_freedom_ml1(x)
 
     # between-within - only for certain mixed models -----
-  } else if (type == "betwithin") {
+  } else if (type %in% c("betwithin", "between-within")) {
     dof <- .degrees_of_freedom_betwithin(x)
 
     # remaining option is model-based df, i.e. number of estimated parameters
@@ -303,7 +304,8 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     tolower(type),
     choices = c(
       "residual", "model", "analytical", "satterthwaite", "kenward",
-      "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin"
+      "kenward-roger", "kr", "normal", "wald", "ml1", "m-l-1", "betwithin",
+      "between-within"
     )
   )
 
