@@ -181,8 +181,7 @@ get_df.model_fit <- function(x, type = "residual", verbose = TRUE, ...) {
 
 #' @export
 get_df.svy2lme <- function(x, type = "residual", verbose = TRUE, ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "model") {
+  if (identical(type, "model")) {
     .model_df(x)
   } else {
     Inf
@@ -192,8 +191,7 @@ get_df.svy2lme <- function(x, type = "residual", verbose = TRUE, ...) {
 
 #' @export
 get_df.mmrm <- function(x, type = "residual", verbose = TRUE, ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
-  if (type == "model") {
+  if (identical(type, "model")) {
     .model_df(x)
   } else {
     summary_table <- stats::coef(summary(x))
@@ -241,14 +239,11 @@ get_df.coeftest <- function(x, ...) {
 
 #' @export
 get_df.phylolm <- function(x, type = "residual", ...) {
-  type <- match.arg(
-    tolower(type),
-    choices = c("wald", "residual", "normal", "model")
-  )
-  type <- switch(type,
-    model = stats::logLik(x)$df,
-    get_df.default(x, type = "residual")
-  )
+  if (identical(type, "model")) {
+    stats::logLik(x)$df
+  } else {
+    get_df.default(x, type = type)
+  }
 }
 
 #' @export
@@ -265,10 +260,12 @@ get_df.fixest <- function(x, type = "residual", ...) {
   }
   type <- match.arg(
     tolower(type),
-    choices = c("wald", "residual", "normal")
+    choices = c("wald", "residual", "normal", "any", "analytical")
   )
   type <- switch(type,
+    any = ,
     wald = "t",
+    analytical = ,
     residual = "resid",
     type
   )
@@ -305,7 +302,7 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     choices = c(
       "residual", "model", "analytical", "satterthwaite", "kenward",
       "kenward-roger", "kr", "normal", "wald", "ml1", "m-l-1", "betwithin",
-      "between-within"
+      "between-within", "any"
     )
   )
 
@@ -335,7 +332,7 @@ get_df.lme <- get_df.lmerMod
 
 #' @export
 get_df.logitor <- function(x, type = "residual", verbose = TRUE, ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical", "any"))
   get_df.default(x$fit, type = type, verbose = verbose, ...)
 }
 
@@ -398,17 +395,16 @@ get_df.nestedLogit <- function(x, type = NULL, component = "all", verbose = TRUE
 get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
   # installed?
   check_if_installed("mice")
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "any", "analytical"))
   get_df(mice::pool(x), type, verbose = verbose, ...)
 }
 
 
 #' @export
 get_df.mipo <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
-  if (type == "model") {
+  if (identical(type, "model")) {
     .model_df(x)
-  } else if (type == "normal") {
+  } else if (identical(type, "normal")) {
     return(Inf)
   } else {
     as.vector(summary(x)$df)
