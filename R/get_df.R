@@ -227,7 +227,13 @@ get_df.rlm <- function(x, type = "residual", verbose = TRUE, ...) {
 }
 
 #' @export
+get_df.mipo <- get_df.rlm
+
+#' @export
 get_df.mhurdle <- get_df.rlm
+
+#' @export
+get_df.nlrq <- get_df.rlm
 
 #' @export
 get_df.complmrob <- get_df.rlm
@@ -237,6 +243,18 @@ get_df.plm <- get_df.rlm
 
 #' @export
 get_df.multinom <- get_df.rlm
+
+#' @export
+get_df.garch <- get_df.rlm
+
+#' @export
+get_df.vgam <- get_df.rlm
+
+#' @export
+get_df.truncreg <- get_df.rlm
+
+#' @export
+get_df.systemfit <- get_df.rlm
 
 
 # models, where we only have one type of residuals ---------
@@ -303,19 +321,19 @@ get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
 }
 
 #' @export
-get_df.mipo <- function(x, type = "residual", ...) {
-  if (identical(type, "model")) {
-    .model_df(x)
-  } else if (identical(type, "normal")) {
-    return(Inf)
-  } else {
-    as.vector(summary(x)$df)
-  }
+get_df.coeftest <- function(x, ...) {
+  attributes(x)$df
 }
 
 #' @export
-get_df.coeftest <- function(x, ...) {
-  attributes(x)$df
+get_df.glht <- function(x, ...) {
+  x$df
+}
+
+#' @export
+get_df.selection <- function(x, ...) {
+  s <- summary(x)
+  s$param$df
 }
 
 

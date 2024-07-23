@@ -66,6 +66,9 @@
 .degrees_of_freedom_residual.mhurdle <- .degrees_of_freedom_residual.gls
 
 #' @keywords internal
+.degrees_of_freedom_residual.garch <- .degrees_of_freedom_residual.gls
+
+#' @keywords internal
 .degrees_of_freedom_residual.complmrob <- .degrees_of_freedom_residual.gls
 
 #' @keywords internal
@@ -101,6 +104,9 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.nnet <- .degrees_of_freedom_residual.multinom
+
+#' @keywords internal
+.degrees_of_freedom_residual.rqss <- .degrees_of_freedom_residual.multinom
 
 #' @keywords internal
 .degrees_of_freedom_residual.fixest <- function(x, verbose = TRUE, ...) {
@@ -144,18 +150,23 @@
 }
 
 #' @keywords internal
+.degrees_of_freedom_residual.mipo <- function(x, verbose = TRUE, ...) {
+  as.vector(summary(x)$df)
+}
+
+#' @keywords internal
 .degrees_of_freedom_residual.hglm <- function(x, verbose = TRUE, ...) {
   x$dfReFe
 }
 
 #' @keywords internal
-.degrees_of_freedom_residual.glht <- function(x, verbose = TRUE, ...) {
-  x$df
+.degrees_of_freedom_residual.serp <- function(x, verbose = TRUE, ...) {
+  x$rdf
 }
 
 #' @keywords internal
-.degrees_of_freedom_residual.serp <- function(x, verbose = TRUE, ...) {
-  x$rdf
+.degrees_of_freedom_residual.glht <- function(x, verbose = TRUE, ...) {
+  x$df
 }
 
 #' @keywords internal
@@ -182,11 +193,6 @@
 .degrees_of_freedom_residual.rqs <- .degrees_of_freedom_residual.rq
 
 #' @keywords internal
-.degrees_of_freedom_residual.rqss <- function(x, verbose = TRUE, ...) {
-  n_obs(x) - x$edf
-}
-
-#' @keywords internal
 .degrees_of_freedom_residual.bfsl <- function(x, verbose = TRUE, ...) {
   x$df.residual
 }
@@ -194,12 +200,6 @@
 #' @keywords internal
 .degrees_of_freedom_residual.plm <- function(x, verbose = TRUE, ...) {
   x$df.residual
-}
-
-#' @keywords internal
-.degrees_of_freedom_residual.selection <- function(x, verbose = TRUE, ...) {
-  s <- summary(x)
-  s$param$df
 }
 
 #' @keywords internal
