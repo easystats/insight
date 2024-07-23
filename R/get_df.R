@@ -21,10 +21,11 @@
 #'   + `"normal"` always returns `Inf`.
 #'   + `"model"` returns model-based degrees of freedom, i.e. the number of
 #'     (estimated) parameters.
-#'   + For mixed models, can also be `"ml1"` (approximation of degrees of freedom
-#'     based on a "m-l-1" heuristic as suggested by _Elff et al. 2019_) or
-#'     `"betwithin"`, and for models of class `merMod`, `type` can also be
-#'     `"satterthwaite"` or `"kenward-roger"`. See 'Details'.
+#'   + For mixed models, can also be `"ml1"` (or `"m-l-1"`, approximation of
+#'     degrees of freedom based on a "m-l-1" heuristic as suggested by _Elff et
+#'     al. 2019_) or `"between-within"` (or `"betwithin"`).
+#'   + For mixed models of class `merMod`, `type` can also be `"satterthwaite"`
+#'     or `"kenward-roger"` (or `"kenward"`). See 'Details'.
 #'
 #' Usually, when degrees of freedom are required to calculate p-values or
 #' confidence intervals, `type = "wald"` is likely to be the best choice in
@@ -100,10 +101,20 @@ get_df <- function(x, ...) {
 #' @rdname get_df
 #' @export
 get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
+  # check for valid model-object
+  if (missing(x) || is.null(x)) {
+    format_error(
+      "You must provide a model-object. Argument cannot be missing or `NULL`."
+    )
+  }
+
   # check valid options
   type <- match.arg(
     tolower(type),
-    choices = c("residual", "model", "analytical", "wald", "normal", "ml1", "betwithin")
+    choices = c(
+      "residual", "model", "analytical", "wald", "normal", "ml1", "betwithin",
+      "between-within", "profile", "boot", "uniroot", "likelihood", "m-l-1"
+    )
   )
 
   # check if user already passed "statistic" argument, to
@@ -114,11 +125,8 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     statistic <- find_statistic(x)
   }
 
-  # handle aliases
-  if (type == "analytical") {
-    type <- "residual"
-  }
-
+  # handle aliases, resp. mixing type and ci_method
+  type <- .check_df_type(type)
 
   if (type == "normal") { # nolint
     # Wald normal approximation - always Inf -----
@@ -141,11 +149,11 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     dof <- .get_residual_df(x, verbose)
 
     # ml1 - only for certain mixed models -----
-  } else if (type == "ml1") {
+  } else if (type %in% c("ml1", "m-l-1")) {
     dof <- .degrees_of_freedom_ml1(x)
 
     # between-within - only for certain mixed models -----
-  } else if (type == "betwithin") {
+  } else if (type %in% c("betwithin", "between-within")) {
     dof <- .degrees_of_freedom_betwithin(x)
 
     # remaining option is model-based df, i.e. number of estimated parameters
@@ -271,6 +279,22 @@ get_df.fixest <- function(x, type = "residual", ...) {
 }
 
 
+#' @export
+get_df.fixest_multi <- function(x, ...) {
+  out <- do.call(rbind, lapply(x, get_df, ...))
+
+  # add response and group columns
+  id_columns <- .get_fixest_multi_columns(x)
+
+  # add response column
+  out$Response <- id_columns$Response
+  out$Group <- id_columns$Group
+
+  row.names(out) <- NULL
+  out
+}
+
+
 
 # Mixed models - special treatment --------------
 
@@ -280,10 +304,12 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
     tolower(type),
     choices = c(
       "residual", "model", "analytical", "satterthwaite", "kenward",
-      "kenward-roger", "kr", "normal", "wald", "ml1", "betwithin"
+      "kenward-roger", "kr", "normal", "wald", "ml1", "m-l-1", "betwithin",
+      "between-within"
     )
   )
 
+  # hidden gem - required for get_predicted_ci(), where we have per-observation DF
   dots <- list(...)
 
   if (type %in% c("satterthwaite", "kr", "kenward", "kenward-roger") && isTRUE(dots$df_per_obs)) {
@@ -339,6 +365,36 @@ get_df.betamfx <- get_df.logitor
 
 
 #' @export
+get_df.nestedLogit <- function(x, type = NULL, component = "all", verbose = TRUE, ...) {
+  if (is.null(type)) {
+    type <- "wald"
+  }
+  if (tolower(type) == "residual") {
+    cf <- as.data.frame(stats::coef(x))
+    dof <- rep(vapply(x$models, stats::df.residual, numeric(1)), each = nrow(cf))
+    if (!is.null(component) && !identical(component, "all")) {
+      comp <- intersect(names(dof), component)
+      if (length(comp)) {
+        dof <- dof[comp]
+      } else {
+        if (verbose) {
+          format_alert(paste0(
+            "No matching model found. Possible values for `component` are ",
+            toString(paste0("'", names(x$models), "'")),
+            "."
+          ))
+        }
+        dof <- Inf
+      }
+    }
+  } else {
+    dof <- Inf
+  }
+  dof
+}
+
+
+#' @export
 get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
   # installed?
   check_if_installed("mice")
@@ -382,7 +438,7 @@ get_df.mediate <- function(x, ...) {
 
 
 #' @keywords internal
-.degrees_of_freedom_analytical <- function(model) {
+.degrees_of_freedom_analytical <- function(model, kenward = TRUE) {
   nparam <- .model_df(model)
   n <- n_obs(model)
 
@@ -390,9 +446,14 @@ get_df.mediate <- function(x, ...) {
     return(Inf)
   }
 
-  n - nparam
-}
+  if (isTRUE(kenward) && inherits(model, "lmerMod")) {
+    dof <- as.numeric(.degrees_of_freedom_kr(model))
+  } else {
+    dof <- n - nparam
+  }
 
+  dof
+}
 
 
 # Model approach (model-based / logLik df) ------------------------------
@@ -438,8 +499,38 @@ get_df.mediate <- function(x, ...) {
 
 .check_df_type <- function(type) {
   # handle mixing of ci_method and type arguments
-  if (tolower(type) %in% c("profile", "uniroot", "quantile", "eti", "hdi", "bci", "boot", "spi")) {
+  if (tolower(type) %in% c("profile", "uniroot", "quantile", "likelihood", "eti", "hdi", "bci", "boot", "spi", "analytical", "nokr")) {
     type <- "residual"
   }
   type
+}
+
+
+.get_fixest_multi_columns <- function(model) {
+  # add response and group columns
+  s <- summary(model)
+  l <- lengths(lapply(s, stats::coef))
+  parts <- strsplit(names(l), ";", fixed = TRUE)
+
+  id_columns <- Map(function(i, j) {
+    if (length(j) == 1 && startsWith(j, "rhs")) {
+      data.frame(
+        Group = rep(trim_ws(sub("rhs:", "", j, fixed = TRUE)), i),
+        stringsAsFactors = FALSE
+      )
+    } else if (length(j) == 1 && startsWith(j, "lhs")) {
+      data.frame(
+        Response = rep(trim_ws(sub("lhs:", "", j, fixed = TRUE)), i),
+        stringsAsFactors = FALSE
+      )
+    } else {
+      data.frame(
+        Response = rep(trim_ws(sub("lhs:", "", j[1], fixed = TRUE)), i),
+        Group = rep(trim_ws(sub("rhs:", "", j[2], fixed = TRUE)), i),
+        stringsAsFactors = FALSE
+      )
+    }
+  }, unname(l), parts)
+
+  do.call(rbind, id_columns)
 }

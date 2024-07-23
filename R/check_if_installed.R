@@ -169,7 +169,7 @@ print.check_if_installed <- function(x, ...) {
   minframe <- 1L
   n <- sys.nframe()
   pkg <- NULL
-  while(n > minframe && is.null(pkg)) {
+  while (n > minframe && is.null(pkg)) {
     pkg <- utils::packageName(env = sys.frame(n))
   }
   # if still NULL, or if "insight", return
