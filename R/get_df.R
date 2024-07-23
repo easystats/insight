@@ -461,20 +461,20 @@ get_df.mediate <- function(x, ...) {
 }
 
 #' @keywords internal
-.degrees_of_freedom_analytical <- function(model, kenward = TRUE, model_n_params = TRUE) {
+.degrees_of_freedom_analytical <- function(x, kenward = TRUE, model_n_params = TRUE) {
   if (isTRUE(model_n_params)) {
-    nparam <- .model_df(model)
+    nparam <- .model_df(x)
   } else {
     nparam <- n_parameters(x)
   }
 
-  n <- n_obs(model)
+  n <- n_obs(x)
   if (is.null(n)) {
     return(Inf)
   }
 
-  if (isTRUE(kenward) && inherits(model, "lmerMod")) {
-    dof <- as.numeric(.degrees_of_freedom_kr(model))
+  if (isTRUE(kenward) && inherits(x, "lmerMod")) {
+    dof <- as.numeric(.degrees_of_freedom_kr(x))
   } else {
     dof <- n - nparam
   }
