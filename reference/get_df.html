@@ -82,8 +82,8 @@ from regression models.</p>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>Can be <code>"residual"</code>, <code>"wald"</code>, <code>"normal"</code>, or
-<code>"model"</code>. <code>"analytical"</code> is an alias for <code>"residual"</code>.</p><ul><li><p><code>"residual"</code> (aka <code>"analytical"</code>) returns the residual degrees of
+<dd><p>Type of approximation for the degrees of freedom. Can be one of
+the following:</p><ul><li><p><code>"residual"</code> (aka <code>"analytical"</code>) returns the residual degrees of
 freedom, which usually is what <code><a href="https://rdrr.io/r/stats/df.residual.html" class="external-link">stats::df.residual()</a></code> returns. If a
 model object has no method to extract residual degrees of freedom, these
 are calculated as <code>n-p</code>, i.e. the number of observations minus the number
