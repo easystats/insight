@@ -304,6 +304,18 @@ get_df.fixest_multi <- function(x, ...) {
 }
 
 
+#' @export
+get_df.multinom <- function(x, type = "residual", ...) {
+  if (identical(type, "model")) {
+    .model_df(x)
+  } else if (identical(type, "normal")) {
+    Inf
+  } else {
+    n_obs(x) - x$edf
+  }
+}
+
+
 
 # Mixed models - special treatment --------------
 
