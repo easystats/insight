@@ -499,8 +499,10 @@ get_df.mediate <- function(x, ...) {
 
 .check_df_type <- function(type) {
   # handle mixing of ci_method and type arguments
-  if (tolower(type) %in% c("profile", "uniroot", "quantile", "likelihood", "eti", "hdi", "bci", "boot", "spi", "analytical", "nokr")) {
+  if (tolower(type) %in% c("profile", "uniroot", "quantile", "likelihood", "eti", "hdi", "bci", "boot", "spi", "nokr")) {
     type <- "wald"
+  } else if (tolower(type) == "analytical") {
+    type <- "residual"
   }
   type
 }
