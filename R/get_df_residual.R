@@ -56,22 +56,23 @@
   # we don't call ".degrees_of_freedom_analytical()" here, because that
   # function relies on `.model_df()` to estimate the number of parameters,
   # which returns results that are not in line with the "summary()" for gls
-  nparam <- n_parameters(x)
-  n <- n_obs(x)
-  if (is.null(n) || is.null(nparam)) {
-    return(Inf)
-  }
-  n - nparam
+  .degrees_of_freedom_analytical(x, kenward = FALSE, model_n_params = FALSE)
 }
 
 #' @keywords internal
 .degrees_of_freedom_residual.rlm <- .degrees_of_freedom_residual.gls
 
 #' @keywords internal
-.degrees_of_freedom_residual.biglm <- .degrees_of_freedom_residual.gls
+.degrees_of_freedom_residual.biglm <- function(x, verbose = TRUE, ...) {
+  if (!is.null(x$df.resid)) {
+    x$df.resid
+  } else {
+    .degrees_of_freedom_analytical(x, kenward = FALSE, model_n_params = FALSE)
+  }
+}
 
 #' @keywords internal
-.degrees_of_freedom_residual.bigglm <- .degrees_of_freedom_residual.gls
+.degrees_of_freedom_residual.bigglm <- .degrees_of_freedom_residual.biglm
 
 #' @keywords internal
 .degrees_of_freedom_residual.glimML <- function(x, verbose = TRUE, ...) {

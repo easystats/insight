@@ -470,10 +470,14 @@ get_df.mediate <- function(x, ...) {
 
 
 #' @keywords internal
-.degrees_of_freedom_analytical <- function(model, kenward = TRUE) {
-  nparam <- .model_df(model)
-  n <- n_obs(model)
+.degrees_of_freedom_analytical <- function(model, kenward = TRUE, model_n_params = TRUE) {
+  if (isTRUE(model_n_params)) {
+    nparam <- .model_df(model)
+  } else {
+    nparam <- n_parameters(x)
+  }
 
+  n <- n_obs(model)
   if (is.null(n)) {
     return(Inf)
   }
