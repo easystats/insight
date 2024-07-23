@@ -5,8 +5,8 @@
 #'   from regression models.
 #'
 #' @param x A statistical model.
-#' @param type Can be `"residual"`, `"wald"`, `"normal"`, or
-#'   `"model"`. `"analytical"` is an alias for `"residual"`.
+#' @param type Type of approximation for the degrees of freedom. Can be one of
+#' the following:
 #'
 #'   + `"residual"` (aka `"analytical"`) returns the residual degrees of
 #'     freedom, which usually is what [`stats::df.residual()`] returns. If a

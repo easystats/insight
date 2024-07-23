@@ -14,8 +14,8 @@ get_df(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{type}{Can be \code{"residual"}, \code{"wald"}, \code{"normal"}, or
-\code{"model"}. \code{"analytical"} is an alias for \code{"residual"}.
+\item{type}{Type of approximation for the degrees of freedom. Can be one of
+the following:
 \itemize{
 \item \code{"residual"} (aka \code{"analytical"}) returns the residual degrees of
 freedom, which usually is what \code{\link[stats:df.residual]{stats::df.residual()}} returns. If a
