@@ -8,7 +8,7 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.default <- function(x, verbose = TRUE, ...) {
-  if (.is_bayesian_model(x) && !inherits(x, c("bayesx", "blmerMod", "bglmerMod"))) {
+  if (.is_bayesian_model(x, exclude = c("bmerMod", "bayesx", "blmerMod", "bglmerMod"))) {
     if (check_if_installed("bayestestR", quietly = TRUE)) {
       x <- .safe(bayestestR::bayesian_as_frequentist(x))
       if (is.null(x)) {
@@ -53,14 +53,15 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.gls <- function(x, verbose = TRUE, ...) {
+  # we don't call ".degrees_of_freedom_analytical()" here, because that
+  # function relies on `.model_df()` to estimate the number of parameters,
+  # which returns results that are not in line with the "summary()" for gls
   nparam <- n_parameters(x)
   n <- n_obs(x)
-
   if (is.null(n) || is.null(nparam)) {
     return(Inf)
   }
-
-  return(n - nparam)
+  n - nparam
 }
 
 #' @keywords internal
@@ -141,10 +142,10 @@
   x$rdf
 }
 
-#' @export
+#' @keywords internal
 .degrees_of_freedom_residual.BBmm <- .degrees_of_freedom_residual.glht
 
-#' @export
+#' @keywords internal
 .degrees_of_freedom_residual.BBreg <- .degrees_of_freedom_residual.glht
 
 #' @keywords internal
@@ -162,18 +163,7 @@
 }
 
 #' @keywords internal
-.degrees_of_freedom_residual.rqs <- function(x, verbose = TRUE, ...) {
-  tryCatch(
-    {
-      s <- suppressWarnings(summary(x, covariance = TRUE))
-      cs <- lapply(s, function(i) i$rdf)
-      unique(unlist(cs, use.names = FALSE))
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-}
+.degrees_of_freedom_residual.rqs <- .degrees_of_freedom_residual.rq
 
 #' @keywords internal
 .degrees_of_freedom_residual.rqss <- function(x, verbose = TRUE, ...) {
@@ -224,5 +214,20 @@
     dof <- c(dof, stats::setNames(dfs, df_names))
   }
 
+  dof
+}
+
+
+# helper ----------------------
+
+.dof_fit_gam <- function(model, dof) {
+  params <- find_parameters(model)
+  if (!is.null(params$conditional)) {
+    dof <- rep(dof, length(params$conditional))
+  }
+  if (!is.null(params$smooth_terms)) {
+    s <- summary(model)
+    dof <- c(dof, s$s.table[, "Ref.df"])
+  }
   dof
 }
