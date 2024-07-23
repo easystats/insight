@@ -190,6 +190,18 @@ get_df.svy2lme <- function(x, type = "residual", verbose = TRUE, ...) {
 
 
 #' @export
+get_df.rlm <- function(x, type = "residual", verbose = TRUE, ...) {
+  if (identical(type, "model")) {
+    .model_df(x)
+  } else if (identical(type, "normal")) {
+    Inf
+  } else {
+    .degrees_of_freedom_residual(x)
+  }
+}
+
+
+#' @export
 get_df.mmrm <- function(x, type = "residual", verbose = TRUE, ...) {
   if (identical(type, "model")) {
     .model_df(x)
