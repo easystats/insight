@@ -21,9 +21,9 @@ test_that("loglik", {
 })
 
 test_that("get_df", {
-  expect_equal(get_df(m1), m1$rdf, ignore_attr = TRUE)
+  expect_equal(get_df(m1), Inf, ignore_attr = TRUE)
   expect_equal(get_df(m1, type = "model"), 12, ignore_attr = TRUE)
-  expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
+  expect_equal(get_df(m1, type = "residual"), m1$rdf, ignore_attr = TRUE)
   expect_equal(get_df(m1, type = "wald"), Inf, ignore_attr = TRUE)
 })
 

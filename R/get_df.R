@@ -338,7 +338,9 @@ get_df.selection <- function(x, ...) {
 
 #' @export
 get_df.serp <- function(x, type = "normal", ...) {
-  if (identical(type, "residual")) {
+  if (identical(type, "model")) {
+    .model_df(x)
+  } else if (identical(type, "residual")) {
     x$rdf
   } else {
     Inf
