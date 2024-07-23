@@ -63,6 +63,12 @@
 .degrees_of_freedom_residual.rlm <- .degrees_of_freedom_residual.gls
 
 #' @keywords internal
+.degrees_of_freedom_residual.mhurdle <- .degrees_of_freedom_residual.gls
+
+#' @keywords internal
+.degrees_of_freedom_residual.complmrob <- .degrees_of_freedom_residual.gls
+
+#' @keywords internal
 .degrees_of_freedom_residual.biglm <- function(x, verbose = TRUE, ...) {
   if (!is.null(x$df.resid)) {
     x$df.resid

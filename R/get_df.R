@@ -173,21 +173,47 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
 }
 
 
+# models that rely on the default method ---------------
+# ------------------------------------------------------
+
 #' @export
 get_df.model_fit <- function(x, type = "residual", verbose = TRUE, ...) {
   get_df(x$fit, type = type, verbose = verbose, ...)
 }
 
-
 #' @export
-get_df.svy2lme <- function(x, type = "residual", verbose = TRUE, ...) {
-  if (identical(type, "model")) {
-    .model_df(x)
-  } else {
-    Inf
-  }
+get_df.logitor <- function(x, type = "residual", verbose = TRUE, ...) {
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical", "any"))
+  get_df.default(x$fit, type = type, verbose = verbose, ...)
 }
 
+#' @export
+get_df.poissonirr <- get_df.logitor
+
+#' @export
+get_df.negbinirr <- get_df.logitor
+
+#' @export
+get_df.poissonmfx <- get_df.logitor
+
+#' @export
+get_df.logitmfx <- get_df.logitor
+
+#' @export
+get_df.negbinmfx <- get_df.logitor
+
+#' @export
+get_df.probitmfx <- get_df.logitor
+
+#' @export
+get_df.betaor <- get_df.logitor
+
+#' @export
+get_df.betamfx <- get_df.logitor
+
+
+# models, where we want residual df, even for "wald" and "z-statistic" ---------
+# ------------------------------------------------------------------------------
 
 #' @export
 get_df.rlm <- function(x, type = "residual", verbose = TRUE, ...) {
@@ -200,6 +226,30 @@ get_df.rlm <- function(x, type = "residual", verbose = TRUE, ...) {
   }
 }
 
+#' @export
+get_df.mhurdle <- get_df.rlm
+
+#' @export
+get_df.complmrob <- get_df.rlm
+
+#' @export
+get_df.plm <- get_df.rlm
+
+#' @export
+get_df.multinom <- get_df.rlm
+
+
+# models, where we only have one type of residuals ---------
+# ----------------------------------------------------------
+
+#' @export
+get_df.svy2lme <- function(x, type = "residual", verbose = TRUE, ...) {
+  if (identical(type, "model")) {
+    .model_df(x)
+  } else {
+    Inf
+  }
+}
 
 #' @export
 get_df.mmrm <- function(x, type = "residual", verbose = TRUE, ...) {
@@ -218,6 +268,9 @@ get_df.mmrm_fit <- get_df.mmrm
 get_df.mmrm_tmb <- get_df.mmrm
 
 
+# special "model" classes ---------
+# ---------------------------------
+
 #' @export
 get_df.emmGrid <- function(x, ...) {
   if (!is.null(x@misc$is_boot) && x@misc$is_boot) {
@@ -225,7 +278,6 @@ get_df.emmGrid <- function(x, ...) {
   }
   unique(summary(x)$df)
 }
-
 
 #' @export
 get_df.emm_list <- function(x, ...) {
@@ -242,6 +294,24 @@ get_df.emm_list <- function(x, ...) {
   }), use.names = FALSE)
 }
 
+#' @export
+get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
+  # installed?
+  check_if_installed("mice")
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "any", "analytical"))
+  get_df(mice::pool(x), type, verbose = verbose, ...)
+}
+
+#' @export
+get_df.mipo <- function(x, type = "residual", ...) {
+  if (identical(type, "model")) {
+    .model_df(x)
+  } else if (identical(type, "normal")) {
+    return(Inf)
+  } else {
+    as.vector(summary(x)$df)
+  }
+}
 
 #' @export
 get_df.coeftest <- function(x, ...) {
@@ -249,87 +319,8 @@ get_df.coeftest <- function(x, ...) {
 }
 
 
-#' @export
-get_df.phylolm <- function(x, type = "residual", ...) {
-  if (identical(type, "model")) {
-    stats::logLik(x)$df
-  } else {
-    get_df.default(x, type = type)
-  }
-}
-
-#' @export
-get_df.phyloglm <- get_df.phylolm
-
-
-#' @export
-get_df.fixest <- function(x, type = "residual", ...) {
-  # fixest degrees of freedom can be tricky. best to use the function by the
-  # package.
-  check_if_installed("fixest")
-  if (is.null(type)) {
-    type <- "residual"
-  }
-  type <- match.arg(
-    tolower(type),
-    choices = c("wald", "residual", "normal", "any", "analytical")
-  )
-  type <- switch(type,
-    any = ,
-    wald = "t",
-    analytical = ,
-    residual = "resid",
-    type
-  )
-  if (type == "normal") {
-    return(Inf)
-  }
-  fixest::degrees_freedom(x, type = type)
-}
-
-
-#' @export
-get_df.fixest_multi <- function(x, ...) {
-  out <- do.call(rbind, lapply(x, get_df, ...))
-
-  # add response and group columns
-  id_columns <- .get_fixest_multi_columns(x)
-
-  # add response column
-  out$Response <- id_columns$Response
-  out$Group <- id_columns$Group
-
-  row.names(out) <- NULL
-  out
-}
-
-
-#' @export
-get_df.multinom <- function(x, type = "residual", ...) {
-  if (identical(type, "model")) {
-    .model_df(x)
-  } else if (identical(type, "normal")) {
-    Inf
-  } else {
-    n_obs(x) - x$edf
-  }
-}
-
-
-#' @export
-get_df.plm <- function(x, type = "residual", ...) {
-  if (identical(type, "model")) {
-    .model_df(x)
-  } else if (identical(type, "normal")) {
-    Inf
-  } else {
-    x$df.residual
-  }
-}
-
-
-
 # Mixed models - special treatment --------------
+# -----------------------------------------------
 
 #' @export
 get_df.lmerMod <- function(x, type = "residual", ...) {
@@ -365,37 +356,59 @@ get_df.lme <- get_df.lmerMod
 
 
 # Other models ------------------
+# -------------------------------
 
 #' @export
-get_df.logitor <- function(x, type = "residual", verbose = TRUE, ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical", "any"))
-  get_df.default(x$fit, type = type, verbose = verbose, ...)
+get_df.phylolm <- function(x, type = "residual", ...) {
+  if (identical(type, "model")) {
+    stats::logLik(x)$df
+  } else {
+    get_df.default(x, type = type)
+  }
 }
 
 #' @export
-get_df.poissonirr <- get_df.logitor
+get_df.phyloglm <- get_df.phylolm
 
 #' @export
-get_df.negbinirr <- get_df.logitor
+get_df.fixest <- function(x, type = "residual", ...) {
+  # fixest degrees of freedom can be tricky. best to use the function by the
+  # package.
+  check_if_installed("fixest")
+  if (is.null(type)) {
+    type <- "residual"
+  }
+  type <- match.arg(
+    tolower(type),
+    choices = c("wald", "residual", "normal", "any", "analytical")
+  )
+  type <- switch(type,
+    any = ,
+    wald = "t",
+    analytical = ,
+    residual = "resid",
+    type
+  )
+  if (type == "normal") {
+    return(Inf)
+  }
+  fixest::degrees_freedom(x, type = type)
+}
 
 #' @export
-get_df.poissonmfx <- get_df.logitor
+get_df.fixest_multi <- function(x, ...) {
+  out <- do.call(rbind, lapply(x, get_df, ...))
 
-#' @export
-get_df.logitmfx <- get_df.logitor
+  # add response and group columns
+  id_columns <- .get_fixest_multi_columns(x)
 
-#' @export
-get_df.negbinmfx <- get_df.logitor
+  # add response column
+  out$Response <- id_columns$Response
+  out$Group <- id_columns$Group
 
-#' @export
-get_df.probitmfx <- get_df.logitor
-
-#' @export
-get_df.betaor <- get_df.logitor
-
-#' @export
-get_df.betamfx <- get_df.logitor
-
+  row.names(out) <- NULL
+  out
+}
 
 #' @export
 get_df.nestedLogit <- function(x, type = NULL, component = "all", verbose = TRUE, ...) {
@@ -427,29 +440,8 @@ get_df.nestedLogit <- function(x, type = NULL, component = "all", verbose = TRUE
 }
 
 
-#' @export
-get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
-  # installed?
-  check_if_installed("mice")
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "any", "analytical"))
-  get_df(mice::pool(x), type, verbose = verbose, ...)
-}
-
-
-#' @export
-get_df.mipo <- function(x, type = "residual", ...) {
-  if (identical(type, "model")) {
-    .model_df(x)
-  } else if (identical(type, "normal")) {
-    return(Inf)
-  } else {
-    as.vector(summary(x)$df)
-  }
-}
-
-
-
 # not yet supported --------------------
+# --------------------------------------
 
 #' @export
 get_df.mediate <- function(x, ...) {
@@ -457,8 +449,8 @@ get_df.mediate <- function(x, ...) {
 }
 
 
-
 # Analytical approach ------------------------------
+# --------------------------------------------------
 
 .get_residual_df <- function(x, verbose = TRUE) {
   dof <- .degrees_of_freedom_residual(x, verbose = verbose)
@@ -467,7 +459,6 @@ get_df.mediate <- function(x, ...) {
   }
   dof
 }
-
 
 #' @keywords internal
 .degrees_of_freedom_analytical <- function(model, kenward = TRUE, model_n_params = TRUE) {
@@ -493,6 +484,7 @@ get_df.mediate <- function(x, ...) {
 
 
 # Model approach (model-based / logLik df) ------------------------------
+# -----------------------------------------------------------------------
 
 .model_df <- function(x) {
   # logLik() for plm calls get_df(), so we would have a recursion here.
@@ -524,14 +516,13 @@ get_df.mediate <- function(x, ...) {
 }
 
 
+# tools ----------------
+# ----------------------
+
 .boot_em_df <- function(model) {
   est <- get_parameters(model, summary = FALSE)
   rep(NA, ncol(est))
 }
-
-
-
-# tools ----------------
 
 .check_df_type <- function(type) {
   # handle mixing of ci_method and type arguments
@@ -542,7 +533,6 @@ get_df.mediate <- function(x, ...) {
   }
   type
 }
-
 
 .get_fixest_multi_columns <- function(model) {
   # add response and group columns
