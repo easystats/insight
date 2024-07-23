@@ -370,8 +370,8 @@ get_df.nestedLogit <- function(x, type = NULL, component = "all", verbose = TRUE
     type <- "wald"
   }
   if (tolower(type) == "residual") {
-    cf <- as.data.frame(stats::coef(model))
-    dof <- rep(vapply(model$models, stats::df.residual, numeric(1)), each = nrow(cf))
+    cf <- as.data.frame(stats::coef(x))
+    dof <- rep(vapply(x$models, stats::df.residual, numeric(1)), each = nrow(cf))
     if (!is.null(component) && !identical(component, "all")) {
       comp <- intersect(names(dof), component)
       if (length(comp)) {
@@ -380,7 +380,7 @@ get_df.nestedLogit <- function(x, type = NULL, component = "all", verbose = TRUE
         if (verbose) {
           format_alert(paste0(
             "No matching model found. Possible values for `component` are ",
-            toString(paste0("'", names(model$models), "'")),
+            toString(paste0("'", names(x$models), "'")),
             "."
           ))
         }
