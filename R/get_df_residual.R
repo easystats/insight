@@ -53,7 +53,15 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.gls <- function(x, verbose = TRUE, ...) {
-  .degrees_of_freedom_analytical(x, kenward = FALSE)
+  # we don't call ".degrees_of_freedom_analytical()" here, because that
+  # function relies on `.model_df()` to estimate the number of parameters,
+  # which returns results that are not in line with the "summary()" for gls
+  nparam <- n_parameters(x)
+  n <- n_obs(x)
+  if (is.null(n) || is.null(nparam)) {
+    return(Inf)
+  }
+  n - nparam
 }
 
 #' @keywords internal
