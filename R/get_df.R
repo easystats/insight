@@ -113,7 +113,7 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
     tolower(type),
     choices = c(
       "residual", "model", "analytical", "wald", "normal", "ml1", "betwithin",
-      "between-within", "profile", "boot", "uniroot", "likelihood", "m-l-1"
+      "between-within", "profile", "boot", "uniroot", "likelihood", "m-l-1", "any"
     )
   )
 
@@ -499,7 +499,7 @@ get_df.mediate <- function(x, ...) {
 
 .check_df_type <- function(type) {
   # handle mixing of ci_method and type arguments
-  if (tolower(type) %in% c("profile", "uniroot", "quantile", "likelihood", "eti", "hdi", "bci", "boot", "spi", "nokr")) {
+  if (tolower(type) %in% c("profile", "uniroot", "quantile", "likelihood", "eti", "hdi", "bci", "boot", "spi", "nokr", "any")) {
     type <- "wald"
   } else if (tolower(type) == "analytical") {
     type <- "residual"
