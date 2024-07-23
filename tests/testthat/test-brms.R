@@ -2,7 +2,7 @@ skip_on_cran()
 skip_if_offline()
 skip_on_os("mac")
 skip_if_not_installed("brms")
-skip_if_not_installed("httr")
+skip_if_not_installed("httr2")
 
 # Model fitting -----------------------------------------------------------
 
@@ -513,7 +513,6 @@ test_that("find_algorithm", {
   )
 })
 
-
 test_that("get_priors", {
   expect_equal(
     get_priors(m7),
@@ -880,4 +879,13 @@ test_that("clean_parameters", {
     ),
     ignore_attr = TRUE
   )
+})
+
+test_that("get_modelmatrix", {
+  out <- get_modelmatrix(m1)
+  expect_identical(dim(out), c(236L, 4L))
+  m9 <- insight::download_model("brms_mo2")
+  skip_if(is.null(m9))
+  out <- get_modelmatrix(m9)
+  expect_identical(dim(out), c(32L, 2L))
 })

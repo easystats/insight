@@ -16,6 +16,9 @@
   minimum required package version based on the SUGGEST field of the _insight_
   package, instead of the package that was calling the function.
 
+* Fixed issue in `get_modelmatrix()` for models from package *brms* with
+  special functions in the formula (like `mo()`).
+
 # insight 0.20.2
 
 ## New supported models

@@ -159,7 +159,14 @@ get_modelmatrix.svyglm <- function(x, ...) {
 get_modelmatrix.brmsfit <- function(x, ...) {
   formula_rhs <- safe_deparse(find_formula(x)$conditional[[3]])
   formula_rhs <- stats::as.formula(paste0("~", formula_rhs))
-  .data_in_dots(..., object = formula_rhs, default_data = get_data(x, verbose = FALSE))
+  # the formula used in model.matrix() is not allowed to have special functions,
+  # like brms::mo() and similar. Thus, we reformulate after using "all.vars()",
+  # which will only keep the variable names.
+  .data_in_dots(
+    ...,
+    object = stats::reformulate(all.vars(formula_rhs)),
+    default_data = get_data(x, verbose = FALSE)
+  )
 }
 
 #' @export
