@@ -12,8 +12,8 @@
 * Fixed issue in `get_variance()` that could lead to recursive calls for
   *brms* models, resulting in "infinite" resampling of the model.
 
-* Fixed issue in `check_if_installed()` that errornously tried to guess the
-  minimum reqired package version based on the SUGGEST field of the _insight_
+* Fixed issue in `check_if_installed()` that errorneously tried to guess the
+  minimum required package version based on the SUGGEST field of the _insight_
   package, instead of the package that was calling the function.
 
 # insight 0.20.2
