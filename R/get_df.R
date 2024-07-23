@@ -398,14 +398,14 @@ get_df.nestedLogit <- function(x, type = NULL, component = "all", verbose = TRUE
 get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
   # installed?
   check_if_installed("mice")
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
   get_df(mice::pool(x), type, verbose = verbose, ...)
 }
 
 
 #' @export
 get_df.mipo <- function(x, type = "residual", ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal"))
+  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald"))
   if (type == "model") {
     .model_df(x)
   } else if (type == "normal") {
