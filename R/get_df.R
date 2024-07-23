@@ -316,6 +316,18 @@ get_df.multinom <- function(x, type = "residual", ...) {
 }
 
 
+#' @export
+get_df.plm <- function(x, type = "residual", ...) {
+  if (identical(type, "model")) {
+    .model_df(x)
+  } else if (identical(type, "normal")) {
+    Inf
+  } else {
+    x$df.residual
+  }
+}
+
+
 
 # Mixed models - special treatment --------------
 
