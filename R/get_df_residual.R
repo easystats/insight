@@ -51,6 +51,10 @@
   dof
 }
 
+
+# residual DF based on n-k -----------
+# ------------------------------------
+
 #' @keywords internal
 .degrees_of_freedom_residual.gls <- function(x, verbose = TRUE, ...) {
   # we don't call ".degrees_of_freedom_analytical()" here, because that
@@ -85,6 +89,10 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.bigglm <- .degrees_of_freedom_residual.biglm
+
+
+# residual DF taken from model objects -----------
+# ------------------------------------------------
 
 #' @keywords internal
 .degrees_of_freedom_residual.glimML <- function(x, verbose = TRUE, ...) {
