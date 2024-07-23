@@ -66,6 +66,9 @@
 .degrees_of_freedom_residual.mhurdle <- .degrees_of_freedom_residual.gls
 
 #' @keywords internal
+.degrees_of_freedom_residual.truncreg <- .degrees_of_freedom_residual.gls
+
+#' @keywords internal
 .degrees_of_freedom_residual.garch <- .degrees_of_freedom_residual.gls
 
 #' @keywords internal

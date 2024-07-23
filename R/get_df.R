@@ -336,6 +336,15 @@ get_df.selection <- function(x, ...) {
   s$param$df
 }
 
+#' @export
+get_df.serp <- function(x, type = "normal", ...) {
+  if (identical(type, "residual")) {
+    x$rdf
+  } else {
+    get_df.default(x, type = type, ...)
+  }
+}
+
 
 # Mixed models - special treatment --------------
 # -----------------------------------------------
