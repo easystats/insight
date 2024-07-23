@@ -1,6 +1,6 @@
 #' @keywords internal
 .degrees_of_freedom_betwithin <- function(x, ...) {
-  UseMethod(".degrees_of_freedom_ml1")
+  UseMethod("degrees_of_freedom_betwithin")
 }
 
 #' @keywords internal
