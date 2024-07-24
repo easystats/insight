@@ -38,7 +38,7 @@ v6 <- suppressWarnings(get_variance(fm6))
 test_that("error for non-mixed", {
   skip_if_not_installed("glmmTMB")
   data(mtcars)
-  expect_error(
+  expect_warning(
     get_variance(glmmTMB::glmmTMB(mpg ~ gear, data = mtcars)),
     regex = "This function only works for mixed models"
   )

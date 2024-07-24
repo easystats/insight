@@ -16,7 +16,8 @@
 
   # sanity check - only proceed for mixed models
   if (!is_mixed_model(model)) {
-    format_error("This function only works for mixed models, i.e. models with random effects.")
+    format_warning("This function only works for mixed models, i.e. models with random effects.")
+    return(NULL)
   }
 
   # needed for singularity check
