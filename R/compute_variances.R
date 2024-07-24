@@ -14,6 +14,11 @@
   ## Revisions and adaption to more complex models and other packages
   ## by Daniel Lüdecke
 
+  # sanity check - only proceed for mixed models
+  if (!is_mixed_model(model)) {
+    format_error("This function only works for mixed models, i.e. models with random effects.")
+  }
+
   # needed for singularity check
   check_if_installed("performance", reason = "to check for singularity")
 
