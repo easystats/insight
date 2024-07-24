@@ -368,22 +368,21 @@ print.insight_table <- function(x, ...) {
     col_width <- NULL
   }
 
-  # round all numerics
+  # round all numerics, and convert to character
   col_names <- names(tabledata)
-  tabledata <- as.data.frame(sapply(tabledata, function(i) {
+  tabledata[] <- lapply(tabledata, function(i) {
     if (is.numeric(i)) {
-      format_value(i,
+      out <- format_value(i,
         digits = digits, protect_integers = protect_integers,
         missing = missing, width = col_width, zap_small = zap_small
       )
     } else {
-      i
+      out <- i
     }
-  }, simplify = FALSE), stringsAsFactors = FALSE)
+    as.character(out)
+  })
 
-
-  # Convert to character.
-  tabledata <- as.data.frame(sapply(tabledata, as.character, simplify = FALSE), stringsAsFactors = FALSE)
+  # add back column names
   names(tabledata) <- col_names
   tabledata[is.na(tabledata)] <- as.character(missing)
 
@@ -412,7 +411,7 @@ print.insight_table <- function(x, ...) {
     # default alignment
     col_align <- rep("right", ncol(tabledata))
 
-    # first column definitely right alignment, fixed width
+    # first row definitely right alignment, fixed width
     first_row <- as.character(aligned[1, ])
     for (i in seq_along(first_row)) {
       aligned[1, i] <- format(
@@ -490,15 +489,16 @@ print.insight_table <- function(x, ...) {
                                 col_width = NULL,
                                 col_align = NULL,
                                 table_width = NULL) {
-  # align table, if requested. unlike the generic aligments that have
-  # been done previously, we now look for column-specific alignments
+  # align table, if requested. unlike the generic aligments that have been done
+  # previously, we now look for column-specific alignments. we furthermore save
+  # the alignments in "col_align", which we may need later when we set a fixed
+  # column width for specific columns across multiple tables, and have to
+  # re-align the columns again.
 
   if (!is.null(align) && length(align) == 1) {
     for (i in seq_len(ncol(final))) {
       align_char <- ""
-      if (align %in% c("left", "right", "center", "firstleft")) {
-        align_char <- ""
-      } else {
+      if (!align %in% c("left", "right", "center", "firstleft")) {
         align_char <- substr(align, i, i)
       }
 
@@ -533,7 +533,7 @@ print.insight_table <- function(x, ...) {
   }
 
 
-  # check for fixed column widths. usually, column widht is aligned to the
+  # check for fixed column widths. usually, column width is aligned to the
   # widest element in that column. for multiple tables, this may result in
   # columns which do not have the the same width across tables, despite
   # having the same "meaning" (e.g., zero-inflated models that have a table
@@ -583,9 +583,12 @@ print.insight_table <- function(x, ...) {
     # (i.e. first table row) go into a second string
     if (row_width > line_width) {
       i <- 1
+      # determine how many columns fit into the first line
       while (nchar(paste0(final[1, 1:i], collapse = sep), type = "width") < line_width) {
         i <- i + 1
       }
+      # copy first column, and all columns that did not fit into the first line
+      # into the second table matrix
       if (i > 2 && i < ncol(final)) {
         final2 <- final[, c(1, i:ncol(final))]
         final <- final[, 1:(i - 1)]
@@ -596,7 +599,8 @@ print.insight_table <- function(x, ...) {
     row_width <- nchar(paste0(final2[1, ], collapse = sep), type = "width")
 
     # possibly second split - all table columns longer than "line_width"
-    # (i.e. first table row) go into a third string
+    # (i.e. first table row) go into a third string - we repeat the same
+    # procedure as above
     if (row_width > line_width) {
       i <- 1
       while (nchar(paste0(final2[1, 1:i], collapse = sep), type = "width") < line_width) {
@@ -841,12 +845,8 @@ print.insight_table <- function(x, ...) {
     # check if user-defined alignment is requested, and if so, extract
     # alignment direction and save to "align_char"
     align_char <- ""
-    if (!is.null(align)) {
-      if (align %in% c("left", "right", "center", "firstleft")) {
-        align_char <- ""
-      } else {
-        align_char <- substr(align, i, i)
-      }
+    if (!is.null(align) && !align %in% c("left", "right", "center", "firstleft")) {
+      align_char <- substr(align, i, i)
     }
 
     # auto-alignment?
