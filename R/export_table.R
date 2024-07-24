@@ -577,14 +577,14 @@ print.insight_table <- function(x, ...) {
 
     # width of first table row of complete table. Currently, "final" is still
     # a matrix, so we need to paste the columns of the first row into a string
-    row_width <- nchar(paste(final[1, ], collapse = sep), type = "width")
+    row_width <- nchar(paste0(final[1, ], collapse = sep), type = "width")
 
     # possibly first split - all table columns longer than "line_width"
     # (i.e. first table row) go into a second string
     if (row_width > line_width) {
       i <- 1
       # determine how many columns fit into the first line
-      while (nchar(paste(final[1, 1:i], collapse = sep), type = "width") < line_width) {
+      while (nchar(paste0(final[1, 1:i], collapse = sep), type = "width") < line_width) {
         i <- i + 1
       }
       # copy first column, and all columns that did not fit into the first line
@@ -596,14 +596,14 @@ print.insight_table <- function(x, ...) {
     }
 
     # width of first table row of remaing second table part
-    row_width <- nchar(paste(final2[1, ], collapse = sep), type = "width")
+    row_width <- nchar(paste0(final2[1, ], collapse = sep), type = "width")
 
     # possibly second split - all table columns longer than "line_width"
     # (i.e. first table row) go into a third string - we repeat the same
     # procedure as above
     if (row_width > line_width) {
       i <- 1
-      while (nchar(paste(final2[1, 1:i], collapse = sep), type = "width") < line_width) {
+      while (nchar(paste0(final2[1, 1:i], collapse = sep), type = "width") < line_width) {
         i <- i + 1
       }
       if (i > 2 && i < ncol(final2)) {
@@ -674,7 +674,7 @@ print.insight_table <- function(x, ...) {
   for (row in seq_len(nrow(final))) {
     # create a string for each row, where cells from original matrix are
     # separated by the separator char
-    final_row <- paste(final[row, ], collapse = sep)
+    final_row <- paste0(final[row, ], collapse = sep)
     # check if we have an empty row, and if so, fill with an
     # "empty line separator", if requested by user
     if (!is.null(empty_line) && !any(nzchar(trim_ws(final[row, ])))) {
@@ -685,7 +685,7 @@ print.insight_table <- function(x, ...) {
         # the empty line, which is just empty cells with separator char,
         # will now be replaced by the "empty line char", so we have a
         # clean separator line
-        paste(rep_len(empty_line, nchar(final_row, type = "width")), collapse = ""),
+        paste0(rep_len(empty_line, nchar(final_row, type = "width")), collapse = ""),
         cross, sep, final_row,
         is_last_row = row == nrow(final)
       )
@@ -699,7 +699,7 @@ print.insight_table <- function(x, ...) {
       # check whether user wants to have a "cross" char where vertical and
       # horizontal lines (from header line) cross.
       header_line <- .insert_cross(
-        paste(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
+        paste0(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
         cross, sep, final_row,
         is_last_row = row == nrow(final)
       )
@@ -840,7 +840,7 @@ print.insight_table <- function(x, ...) {
   # go through all columns of the data frame
   for (i in 1:n_columns) {
     # create separator line for current column
-    tablecol <- paste(rep_len("-", column_width[i]), collapse = "")
+    tablecol <- paste0(rep_len("-", column_width[i]), collapse = "")
 
     # check if user-defined alignment is requested, and if so, extract
     # alignment direction and save to "align_char"
@@ -891,7 +891,7 @@ print.insight_table <- function(x, ...) {
   # Transform to character
   rows <- NULL
   for (row in seq_len(nrow(final))) {
-    final_row <- paste("|", paste0(final[row, ], collapse = "|"), "|", collapse = "")
+    final_row <- paste0("|", paste0(final[row, ], collapse = "|"), "|", collapse = "")
     rows <- c(rows, final_row)
 
     # First row separation
