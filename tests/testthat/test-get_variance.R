@@ -35,6 +35,14 @@ v4 <- suppressWarnings(get_variance(fm4))
 v5 <- suppressWarnings(get_variance(fm5))
 v6 <- suppressWarnings(get_variance(fm6))
 
+test_that("error for non-mixed", {
+  data(mtcars)
+  expect_error(
+    get_vaiance(lm(mpg ~ gear, data = mtcars)),
+    regex = "This function only works for mixed models"
+  )
+})
+
 test_that("get_variance-1", {
   expect_equal(v1$var.intercept,
     c(Subject = 612.10016),
