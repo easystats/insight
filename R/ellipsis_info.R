@@ -38,6 +38,25 @@ ellipsis_info.default <- function(..., only_models = TRUE, verbose = TRUE) {
   # Create list with names
   model_objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)[["..."]]
+  # fix names - if "..." is a list of models, the name is of type "language"
+  # and we coerce to character here
+  object_names <- lapply(object_names, function(i) {
+    if (is.language(i)) {
+      safe_deparse(i)
+    } else {
+      # all other classes are unchanged
+      i
+    }
+  })
+  # now check if we have character names. If `ellipses_info()` is called
+  # via `do.call()`, we have the model objects instead of their names (see #778)
+  # and we then use fixed names
+  if (!all(vapply(object_names, is.character, logical(1)))) {
+    object_names <- paste0("model", seq_along(model_objects))
+  } else if (is.list(object_names)) {
+    # convert list of characters into regular character vector
+    object_names <- unlist(object_names, use.names = FALSE)
+  }
   names(model_objects) <- object_names
 
   # If only one object was provided, check if it is a list of models, like "list(m1, m2)"

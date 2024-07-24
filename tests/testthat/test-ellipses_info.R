@@ -102,3 +102,22 @@ test_that("ellipses_info, random effects", {
   expect_true(attributes(info)$re_nested_increasing)
   expect_true(attributes(info)$re_nested_decreasing)
 })
+
+test_that("ellipses_info, do.call", {
+  data(iris)
+  lm1 <- lm(Sepal.Length ~ Species, data = iris)
+  lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+  lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
+
+  out <- do.call(ellipsis_info, list(lm1, lm2, lm3, only_models = TRUE))
+  expect_length(out, 3)
+  expect_named(out, c("model1", "model2", "model3"))
+
+  out <- ellipsis_info(list(lm1, lm2, lm3), only_models = TRUE)
+  expect_length(out, 3)
+  expect_named(out, c("lm1", "lm2", "lm3"))
+
+  out <- ellipsis_info(lm1, lm2, lm3, only_models = TRUE)
+  expect_length(out, 3)
+  expect_named(out, c("lm1", "lm2", "lm3"))
+})

@@ -21,6 +21,8 @@
 * Fixed issue in `get_modelmatrix()` for models from package *brms* with
   special functions in the formula (like `mo()`).
 
+* Fixed issue in `ellipses_info()` when this function was called from `do.call()`.
+
 # insight 0.20.2
 
 ## New supported models
