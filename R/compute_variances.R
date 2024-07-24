@@ -16,7 +16,9 @@
 
   # sanity check - only proceed for mixed models
   if (!is_mixed_model(model)) {
-    format_warning("This function only works for mixed models, i.e. models with random effects.")
+    if (verbose) {
+      format_warning("This function only works for mixed models, i.e. models with random effects.")
+    }
     return(NULL)
   }
 

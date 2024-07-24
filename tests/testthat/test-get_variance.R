@@ -42,6 +42,7 @@ test_that("error for non-mixed", {
     get_variance(glmmTMB::glmmTMB(mpg ~ gear, data = mtcars)),
     regex = "This function only works for mixed models"
   )
+  expect_silent(get_variance(glmmTMB::glmmTMB(mpg ~ gear, data = mtcars), verbose = FALSE))
 })
 
 test_that("get_variance-1", {
