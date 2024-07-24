@@ -35,3 +35,11 @@ is_mixed_model.afex_aov <- function(x) {
 is_mixed_model.marginaleffects <- function(x) {
   is_mixed_model(attributes(x)$model)
 }
+
+#' @export
+is_mixed_model.wbm <- function(x) {
+  TRUE
+}
+
+#' @export
+is_mixed_model.wbgee <- is_mixed_model.wbm
