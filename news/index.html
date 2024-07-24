@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.2.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.2.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,6 +66,7 @@
 <li><p>Fixed issue in <code><a href="../reference/get_variance.html">get_variance()</a></code> that could lead to recursive calls for <em>brms</em> models, resulting in “infinite” resampling of the model.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> that erroneously tried to guess the minimum required package version based on the SUGGEST field of the <em>insight</em> package, instead of the package that was calling the function.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> for models from package <em>brms</em> with special functions in the formula (like <code>mo()</code>).</p></li>
+<li><p>Fixed issue in <code>ellipses_info()</code> when this function was called from <code><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call()</a></code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
