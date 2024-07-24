@@ -10,6 +10,11 @@ test_that("model_info", {
   expect_true(model_info(m2)$is_linear)
 })
 
+test_that("id_mixed", {
+  expect_true(is_mixed_model(m1))
+  expect_true(is_mixed_model(m2))
+})
+
 test_that("find_predictors", {
   expect_identical(
     find_predictors(m1),

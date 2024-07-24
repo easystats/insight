@@ -4,6 +4,8 @@
 
 * `get_df()` now supports more model classes.
 
+* `get_variance()` gives an informative error if no mixed model is provided.
+
 ## Bug fixes
 
 * Fixed issues in `find_response()` for *brms* models with `mi()` function in
