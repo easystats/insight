@@ -90,7 +90,7 @@ column names are formatted as well. Note that \code{format_table()}
 converts all columns into character vectors!
 }
 \note{
-\code{options(insight_use_symbols = TRUE)} override the \code{use_symbols} argument
+\code{options(insight_use_symbols = TRUE)} overrides the \code{use_symbols} argument
 and always displays symbols, if possible.
 }
 \examples{

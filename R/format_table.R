@@ -53,7 +53,7 @@
 #' [Formatting, printing and exporting tables](https://easystats.github.io/insight/articles/display.html)
 #' and [Formatting model parameters](https://easystats.github.io/parameters/articles/model_parameters_formatting.html).
 #'
-#' @note `options(insight_use_symbols = TRUE)` override the `use_symbols` argument
+#' @note `options(insight_use_symbols = TRUE)` overrides the `use_symbols` argument
 #'   and always displays symbols, if possible.
 #' @examplesIf require("rstanarm", warn.conflicts = FALSE) && require("parameters", , warn.conflicts = FALSE)
 #' format_table(head(iris), digits = 1)
