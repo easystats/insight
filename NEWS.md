@@ -23,6 +23,9 @@
 
 * Fixed issue in `ellipses_info()` when this function was called from `do.call()`.
 
+* Fixed issue with formatting unicode-symbols, where a wrong unicode-character
+  was used for "Omega". Furthermore, Omega2 and Eta2 were correctly converted.
+
 # insight 0.20.2
 
 ## New supported models

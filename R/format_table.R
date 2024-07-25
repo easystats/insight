@@ -800,9 +800,11 @@ format_table <- function(x,
   if (isTRUE(use_symbols) && .unicode_symbols()) {
     colnames(x) <- gsub("Delta", "\u0394", colnames(x), ignore.case = TRUE)
     colnames(x) <- gsub("Phi", "\u03D5", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Eta2", "\u03B7\u00b2", colnames(x), ignore.case = TRUE)
     colnames(x) <- gsub("Eta", "\u03B7", colnames(x), ignore.case = TRUE)
     colnames(x) <- gsub("Epsilon", "\u03b5", colnames(x), ignore.case = TRUE)
-    colnames(x) <- gsub("Omega", "\u03b5", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Omega2", "\u03C9\u00b2", colnames(x), ignore.case = TRUE)
+    colnames(x) <- gsub("Omega", "\u03C9", colnames(x), ignore.case = TRUE)
     colnames(x) <- gsub("R2", "R\u00b2", colnames(x), ignore.case = TRUE)
     colnames(x) <- gsub("Chi2", "\u03C7\u00b2", colnames(x), ignore.case = TRUE)
     colnames(x) <- gsub("Chi", "\u03C7", colnames(x), ignore.case = TRUE)
