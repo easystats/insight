@@ -1239,7 +1239,6 @@ get_statistic.selection <- function(x, component = "all", ...) {
 
 #' @export
 get_statistic.lavaan <- function(x, ...) {
-  # installed?
   check_if_installed("lavaan")
 
   params <- lavaan::parameterEstimates(x)
@@ -1790,7 +1789,6 @@ get_statistic.wbgee <- get_statistic.wbm
 
 #' @export
 get_statistic.cpglmm <- function(x, ...) {
-  # installed?
   check_if_installed("cplm")
 
   stats <- cplm::summary(x)$coefs
@@ -1835,7 +1833,6 @@ get_statistic.sem <- function(x, ...) {
 
 #' @export
 get_statistic.cpglm <- function(x, ...) {
-  # installed?
   check_if_installed("cplm")
 
   junk <- utils::capture.output(stats <- cplm::summary(x)$coefficients) # nolint
@@ -1856,7 +1853,6 @@ get_statistic.cpglm <- function(x, ...) {
 
 #' @export
 get_statistic.zcpglm <- function(x, component = "all", ...) {
-  # installed?
   check_if_installed("cplm")
 
   component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated"))
@@ -2382,7 +2378,6 @@ get_statistic.DirichletRegModel <- function(x, component = "all", ...) {
 
 #' @export
 get_statistic.glimML <- function(x, ...) {
-  # installed?
   check_if_installed("aod")
 
   parms <- get_parameters(x)

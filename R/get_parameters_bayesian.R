@@ -47,7 +47,6 @@ get_parameters.BGGM <- function(x,
                                 component = c("correlation", "conditional", "intercept", "all"),
                                 summary = FALSE, centrality = "mean",
                                 ...) {
-  # installed?
   # check_if_installed("BGGM")
   #
   # out <- as.data.frame(BGGM::posterior_samples(x))
@@ -110,7 +109,6 @@ get_parameters.BFBayesFactor <- function(x,
                                          summary = FALSE,
                                          centrality = "mean",
                                          ...) {
-  # installed?
   check_if_installed("BayesFactor")
 
   effects <- match.arg(effects)

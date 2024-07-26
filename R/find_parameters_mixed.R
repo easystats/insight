@@ -328,7 +328,6 @@ find_parameters.coxme <- function(x,
                                   effects = c("all", "fixed", "random"),
                                   flatten = FALSE,
                                   ...) {
-  # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)
@@ -378,7 +377,6 @@ find_parameters.lme <- function(x,
                                 effects = c("all", "fixed", "random"),
                                 flatten = FALSE,
                                 ...) {
-  # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)

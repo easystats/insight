@@ -258,7 +258,7 @@ n_parameters.logitr <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @export
 n_parameters.lavaan <- function(x, ...) {
   # TODO
-  # installed?
+
   # check_if_installed("lavaan")
   # lavaan::fitmeasures(x)[["npar"]]
 }

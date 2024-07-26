@@ -314,7 +314,6 @@ get_df.emm_list <- function(x, ...) {
 
 #' @export
 get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
-  # installed?
   check_if_installed("mice")
   type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "any", "analytical"))
   get_df(mice::pool(x), type, verbose = verbose, ...)

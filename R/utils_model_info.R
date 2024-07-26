@@ -466,7 +466,6 @@
 
 
 .classify_BFBayesFactor <- function(x) {
-  # installed?
   check_if_installed("BayesFactor")
 
   if (inherits(x@denominator, "BFcorrelation")) {

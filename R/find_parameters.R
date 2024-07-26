@@ -178,7 +178,6 @@ find_parameters.brmultinom <- find_parameters.multinom
 
 #' @export
 find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
-  # installed?
   check_if_installed("lavaan")
 
   param_tab <- lavaan::parameterEstimates(x)
@@ -227,7 +226,6 @@ find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
-  # installed?
   check_if_installed("lavaan")
 
   pars <- get_parameters(x)
@@ -470,7 +468,6 @@ find_parameters.survreg <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.mle2 <- function(x, flatten = FALSE, ...) {
-  # installed?
   check_if_installed("bbmle")
 
   s <- bbmle::summary(x)

@@ -310,7 +310,6 @@ get_loglikelihood.list <- get_loglikelihood.lm
 
 #' @export
 get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
-  # installed?
   check_if_installed("rstanarm")
 
   # Get posterior distribution of logliks

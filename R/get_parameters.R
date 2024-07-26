@@ -309,7 +309,6 @@ get_parameters.mipo <- function(x, ...) {
 
 #' @export
 get_parameters.mira <- function(x, ...) {
-  # installed?
   check_if_installed("mice")
   get_parameters(mice::pool(x), ...)
 }
@@ -355,7 +354,6 @@ get_parameters.glht <- function(x, ...) {
 
 #' @export
 get_parameters.mle2 <- function(x, ...) {
-  # installed?
   check_if_installed("bbmle")
   s <- bbmle::summary(x)
 
@@ -594,7 +592,7 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
   if (isTRUE(summary)) {
     return(get_parameters.lavaan(x, standardize = standardize, ...))
   }
-  # installed?
+
   check_if_installed("lavaan")
   check_if_installed("blavaan")
 
@@ -635,7 +633,6 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
 
 #' @export
 get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
-  # installed?
   check_if_installed("lavaan")
 
   if (standardize) {

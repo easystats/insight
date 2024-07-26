@@ -1132,7 +1132,6 @@ model_info.svy2lme <- function(x, verbose = TRUE, ...) {
 
 #' @export
 model_info.glmmTMB <- function(x, ...) {
-  # installed?
   check_if_installed("lme4")
 
   faminfo <- stats::family(x)

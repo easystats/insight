@@ -170,7 +170,6 @@ find_algorithm.speedlm <- function(x, ...) {
 
 #' @export
 find_algorithm.blavaan <- function(x, ...) {
-  # installed?
   check_if_installed("blavaan")
 
   list(

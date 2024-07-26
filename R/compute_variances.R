@@ -250,7 +250,7 @@
     return(NULL)
   }
 
-  # installed?
+
   check_if_installed("lme4", reason = "to compute variances for mixed models")
 
   if (inherits(model, "lme")) {
@@ -420,7 +420,6 @@
     # cpglmm
     # ---------------------------
   } else if (inherits(model, "cpglmm")) {
-    # installed?
     check_if_installed("cplm")
 
     mixed_effects_info <- list(
@@ -805,7 +804,7 @@
     mu <- NA
   } else {
     if (inherits(model_null, "cpglmm")) {
-      check_if_installed("cplm") # installed?
+      check_if_installed("cplm")
       null_fixef <- unname(cplm::fixef(model_null))
     } else {
       null_fixef <- unname(.collapse_cond(lme4::fixef(model_null)))
@@ -1158,7 +1157,6 @@
 # undefined families / link-functions
 # ----------------------------------------------
 .variance_family_default <- function(model, mu, verbose) {
-  # installed?
   check_if_installed("lme4")
 
   tryCatch(

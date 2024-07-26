@@ -935,7 +935,6 @@ print.insight_table <- function(x, ...) {
                                group_by = NULL,
                                indent_groups = NULL,
                                indent_rows = NULL) {
-  # installed?
   check_if_installed("gt")
 
   if (is.null(align)) {

@@ -727,7 +727,6 @@ link_inverse.mipo <- function(x, ...) {
 
 #' @export
 link_inverse.mira <- function(x, ...) {
-  # installed?
   check_if_installed("mice")
   link_inverse(mice::pool(x), ...)
 }
@@ -758,7 +757,6 @@ link_inverse.mira <- function(x, ...) {
   if (is.null(link)) link <- "log"
 
   if (is.numeric(link)) {
-    # installed?
     check_if_installed("statmod")
     statmod::tweedie(link.power = link)
   } else {

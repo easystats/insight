@@ -48,7 +48,6 @@ get_parameters.glmm <- function(x, effects = c("all", "fixed", "random"), ...) {
 #' @rdname get_parameters.glmm
 #' @export
 get_parameters.coxme <- function(x, effects = c("fixed", "random"), ...) {
-  # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)
@@ -115,7 +114,6 @@ get_parameters.wbm <- function(x, effects = c("fixed", "random"), ...) {
 
     text_remove_backticks(out)
   } else {
-    # installed?
     check_if_installed("lme4")
     lme4::ranef(x)
   }
@@ -135,7 +133,6 @@ get_parameters.nlmerMod <- function(x,
                                     effects = c("fixed", "random"),
                                     component = c("all", "conditional", "nonlinear"),
                                     ...) {
-  # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)
@@ -188,7 +185,6 @@ get_parameters.nlmerMod <- function(x,
 #' @rdname get_parameters.glmm
 #' @export
 get_parameters.merMod <- function(x, effects = c("fixed", "random"), ...) {
-  # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)
@@ -251,7 +247,6 @@ get_parameters.merModList <- function(x, ...) {
 
 #' @export
 get_parameters.HLfit <- function(x, effects = c("fixed", "random"), ...) {
-  # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)
@@ -315,7 +310,6 @@ get_parameters.sem <- function(x, effects = c("fixed", "random"), ...) {
 
 #' @export
 get_parameters.cpglmm <- function(x, effects = c("fixed", "random"), ...) {
-  # installed?
   check_if_installed("cplm")
 
   effects <- match.arg(effects)
@@ -346,7 +340,6 @@ get_parameters.cpglmm <- function(x, effects = c("fixed", "random"), ...) {
 
 #' @export
 get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
-  # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)
@@ -379,7 +372,6 @@ get_parameters.mixed <- function(x, effects = c("fixed", "random"), ...) {
 get_parameters.MixMod <- function(x,
                                   effects = c("fixed", "random"),
                                   component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)
@@ -456,7 +448,6 @@ get_parameters.MixMod <- function(x,
 get_parameters.glmmTMB <- function(x,
                                    effects = c("fixed", "random"),
                                    component = c("all", "conditional", "zi", "zero_inflated", "dispersion"), ...) {
-  # installed?
   check_if_installed("lme4")
 
   effects <- match.arg(effects)

@@ -98,7 +98,6 @@ get_parameters.emm_list <- function(x, summary = FALSE, ...) {
 
 
 .clean_emmeans_draws <- function(x, ...) {
-  # installed?
   check_if_installed("emmeans")
 
   if (!is.null(attributes(x)$misc$predict.type) && attributes(x)$misc$predict.type != "none") {

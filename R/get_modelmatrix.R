@@ -216,7 +216,6 @@ get_modelmatrix.betareg <- function(x, ...) {
 
 #' @export
 get_modelmatrix.cpglmm <- function(x, ...) {
-  # installed?
   check_if_installed("cplm")
   cplm::model.matrix(x, ...)
 }

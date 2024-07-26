@@ -33,7 +33,6 @@ get_priors <- function(x, ...) {
 
 #' @export
 get_priors.stanreg <- function(x, verbose = TRUE, ...) {
-  # installed?
   check_if_installed("rstanarm")
 
   ps <- rstanarm::prior_summary(x)
@@ -119,7 +118,6 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_priors.stanmvreg <- function(x, ...) {
-  # installed?
   check_if_installed("rstanarm")
 
 
@@ -581,7 +579,6 @@ get_priors.BFBayesFactor <- function(x, ...) {
 
 #' @export
 get_priors.blavaan <- function(x, ...) {
-  # installed?
   check_if_installed("lavaan")
 
 

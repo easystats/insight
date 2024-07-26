@@ -499,7 +499,7 @@ get_varcov.zcpglm <- function(x,
   .check_get_varcov_dots(x, ...)
   component <- match.arg(component)
 
-  # installed?
+
   check_if_installed("cplm")
 
   vc <- cplm::vcov(x)
@@ -957,7 +957,7 @@ get_varcov.feis <- function(x, verbose = TRUE, ...) {
 #' @export
 get_varcov.glimML <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
-  # installed?
+
   check_if_installed("aod")
 
   vc <- aod::vcov(x)
@@ -968,7 +968,7 @@ get_varcov.glimML <- function(x, verbose = TRUE, ...) {
 #' @export
 get_varcov.vglm <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
-  # installed?
+
   check_if_installed("VGAM")
   vc <- VGAM::vcov(x)
   .process_vcov(vc, verbose, ...)

@@ -419,7 +419,6 @@ link_function.mipo <- function(x, ...) {
 
 #' @export
 link_function.mira <- function(x, ...) {
-  # installed?
   check_if_installed("mice")
   link_function(mice::pool(x), ...)
 }
