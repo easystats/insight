@@ -31,7 +31,7 @@ test_that("ellipses_info - single model", {
 test_that("ellipses_info - list of models", {
   expect_message(out <- ellipsis_info(list(m1, m2, m3)))
   expect_true(attributes(out)$is_nested)
-  expect_equal(names(out), c("m1", "m2", "m3"))
+  expect_named(out, c("m1", "m2", "m3"))
   expect_equal(length(out), 3L)
 })
 
@@ -39,7 +39,7 @@ test_that("ellipses_info - names of models for lists", {
   models <- list(m1, m2, m3)
   out <- ellipsis_info(models, verbose = FALSE)
   expect_true(attributes(out)$is_nested)
-  expect_equal(names(out), c("Model 1", "Model 2", "Model 3"))
+  expect_named(out, c("Model 1", "Model 2", "Model 3"))
   expect_equal(length(out), 3L)
 })
 

@@ -12,7 +12,7 @@ sex <- factor(sample(c("Female", "Male"), n, TRUE))
 h <- 0.02 * exp(0.06 * (age - 50) + 0.8 * (sex == "Female"))
 d.time <- -log(runif(n)) / h
 cens <- 15 * runif(n)
-death <- ifelse(d.time <= cens, 1, 0)
+death <- as.integer(d.time <= cens)
 d.time <- pmin(d.time, cens)
 
 dat <<- data.frame(d.time, death, sex, age, stringsAsFactors = FALSE)

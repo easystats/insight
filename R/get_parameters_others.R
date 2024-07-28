@@ -107,7 +107,7 @@ get_parameters.DirichletRegModel <- function(x,
 
   if (x$parametrization == "common") {
     component <- "all"
-    n_comp <- lapply(cf, length)
+    n_comp <- lengths(cf)
     pattern <- paste0("(", paste(x$varnames, collapse = "|"), ")\\.(.*)")
     p_names <- gsub(pattern, "\\2", names(unlist(cf)))
 

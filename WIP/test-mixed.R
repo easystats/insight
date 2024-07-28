@@ -235,10 +235,7 @@ test_that("find_parameters", {
 
   expect_equal(nrow(get_parameters(m2_mixed)), 2)
   expect_equal(get_parameters(m2_mixed)$Parameter, c("(Intercept)", "Days"))
-  expect_equal(
-    names(get_parameters(m2_mixed, effects = "random")),
-    c("mysubgrp:mygrp", "Subject", "mygrp")
-  )
+  expect_named(get_parameters(m2_mixed, effects = "random"), c("mysubgrp:mygrp", "Subject", "mygrp"))
 })
 
 test_that("is_multivariate", {
