@@ -82,14 +82,14 @@ find_predictors.default <- function(x,
 
   f <- find_formula(x, verbose = verbose)
   is_mv <- is_multivariate(f)
-  elements <- .get_elements(effects, component)
+  elements <- .get_elements(effects, component, model = x)
 
 
   # filter formulas, depending on requested effects and components
   if (is_mv) {
-    f <- lapply(f, function(.x) .prepare_predictors(x, .x, elements, component))
+    f <- lapply(f, function(.x) .prepare_predictors(x, .x, elements))
   } else {
-    f <- .prepare_predictors(x, f, elements, component)
+    f <- .prepare_predictors(x, f, elements)
   }
 
   # random effects are returned as list, so we need to unlist here
@@ -292,13 +292,8 @@ find_predictors.afex_aov <- function(x,
 }
 
 
-.prepare_predictors <- function(x, f, elements, component = "all") {
-  # if we have brms-models with custom formulas, we have element-names
-  # that are not covered by the standard elements. We then just do not
-  # filter elements.
-  if (!inherits(x, "brmsfit") || (inherits(x, "brmsfit") && component != "all")) {
-    f <- f[names(f) %in% elements]
-  }
+.prepare_predictors <- function(x, f, elements) {
+  f <- f[names(f) %in% elements]
 
   # from conditional model, remove response
   if (object_has_names(f, "conditional")) {
