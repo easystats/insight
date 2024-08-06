@@ -8,6 +8,9 @@
 
 ## Bug fixes
 
+* Fixed issue in `find_formula()`, `find_predictors()` and `find_variables()`
+  for models from package *brms* with custom formulas.
+
 * Fixed issues in `find_response()` for *brms* models with `mi()` function in
   the response variable.
 

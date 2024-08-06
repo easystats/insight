@@ -1578,6 +1578,33 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   f_bias <- f$pforms$bias
   f_bs <- f$pforms$bs
 
+  # brms formulas can also have custom names, based on variable names, e.g.:
+  # brm(
+  #   bf(carb ~ gear * vs) + lf(disc ~ 0 + mo(cyl)),
+  #   data = mtcars,
+  #   family = cumulative("probit"),
+  # )
+  # the lf() part is in "f$pforms" with name "disc".
+  #
+  # we therefore need to check whether we have additional names not yet covered
+  # by the above exceptions.
+
+  # auxiliary names
+  auxiliary_names <- c(
+    "sigma", "mu", "nu", "shape", "beta", "phi", "hu", "ndt", "zoi", "coi",
+    "kappa", "bias", "bs", "zi"
+  )
+
+  # check if any further pforms exist
+  if (!all(names(f$pforms) %in% auxiliary_names)) {
+    custom_names <- setdiff(names(f$pforms), auxiliary_names)
+    if (length(custom_names)) {
+      f_custom <- f$pforms[custom_names]
+    }
+  } else {
+    f_custom <- NULL
+  }
+
   f_sigmarandom <- NULL
   f_betarandom <- NULL
 
@@ -1633,7 +1660,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   }
 
 
-  compact_list(list(
+  compact_list(c(list(
     conditional = f_cond,
     random = f_random,
     zero_inflated = f_zi,
@@ -1653,7 +1680,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     zero_one_inflated = f_zoi,
     conditional_one_inflated = f_coi,
     kappa = f_kappa
-  ))
+  ), f_custom))
 }
 
 

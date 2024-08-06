@@ -87,9 +87,9 @@ find_predictors.default <- function(x,
 
   # filter formulas, depending on requested effects and components
   if (is_mv) {
-    f <- lapply(f, function(.x) .prepare_predictors(x, .x, elements))
+    f <- lapply(f, function(.x) .prepare_predictors(x, .x, elements, component))
   } else {
-    f <- .prepare_predictors(x, f, elements)
+    f <- .prepare_predictors(x, f, elements, component)
   }
 
   # random effects are returned as list, so we need to unlist here
@@ -292,8 +292,10 @@ find_predictors.afex_aov <- function(x,
 }
 
 
-.prepare_predictors <- function(x, f, elements) {
-  f <- f[names(f) %in% elements]
+.prepare_predictors <- function(x, f, elements, component = "all") {
+  if (!inherits(x, "brmsfit") && component != "all") {
+    f <- f[names(f) %in% elements]
+  }
 
   # from conditional model, remove response
   if (object_has_names(f, "conditional")) {
