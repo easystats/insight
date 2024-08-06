@@ -296,7 +296,7 @@ find_predictors.afex_aov <- function(x,
   # if we have brms-models with custom formulas, we have element-names
   # that are not covered by the standard elements. We then just do not
   # filter elements.
-  if (!inherits(x, "brmsfit") && component != "all") {
+  if (!inherits(x, "brmsfit") || (inherits(x, "brmsfit") && component != "all")) {
     f <- f[names(f) %in% elements]
   }
 
