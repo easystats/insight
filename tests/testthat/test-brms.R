@@ -893,7 +893,7 @@ test_that("get_modelmatrix", {
 test_that("get_modelmatrix", {
   m10 <- insight::download_model("brms_lf_1")
   expect_identical(
-    find_predictors(m10),
+    find_variables(m10),
     list(
       response = "carb",
       conditional = c("gear", "vs"),disc = c("disc", "cyl")
