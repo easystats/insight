@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.2.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.2.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-20-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-20-3"></a></h3>
-<ul><li><p>Fixed issues in <code><a href="../reference/find_response.html">find_response()</a></code> for <em>brms</em> models with <code>mi()</code> function in the response variable.</p></li>
+<ul><li><p>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code>, <code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/find_variables.html">find_variables()</a></code> for models from package <em>brms</em> with custom formulas.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/find_response.html">find_response()</a></code> for <em>brms</em> models with <code>mi()</code> function in the response variable.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_variance.html">get_variance()</a></code> that could lead to recursive calls for <em>brms</em> models, resulting in “infinite” resampling of the model.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/check_if_installed.html">check_if_installed()</a></code> that erroneously tried to guess the minimum required package version based on the SUGGEST field of the <em>insight</em> package, instead of the package that was calling the function.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> for models from package <em>brms</em> with special functions in the formula (like <code>mo()</code>).</p></li>
