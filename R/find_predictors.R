@@ -82,7 +82,7 @@ find_predictors.default <- function(x,
 
   f <- find_formula(x, verbose = verbose)
   is_mv <- is_multivariate(f)
-  elements <- .get_elements(effects, component)
+  elements <- .get_elements(effects, component, model = x)
 
 
   # filter formulas, depending on requested effects and components

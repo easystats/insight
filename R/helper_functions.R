@@ -244,7 +244,7 @@
   )
 }
 
-.get_elements <- function(effects, component) {
+.get_elements <- function(effects, component, model = NULL) {
   # all elements of a model
   elements <- .all_elements()
 
@@ -278,6 +278,14 @@
   # fixed pattern?
   if (all(component %in% c("aux", "dist", "distributional", "auxiliary"))) {
     return(auxiliary_parameters)
+  }
+
+  # if we have brms-models with custom formulas, we have element-names
+  # that are not covered by the standard elements. We then just do not
+  # filter elements.
+  if (inherits(model, "brmsfit") && component == "all") {
+    f <- insight::find_formula(model)
+    elements <- unique(c(elements, names(f)))
   }
 
   elements <- switch(effects,
