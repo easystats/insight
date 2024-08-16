@@ -896,7 +896,7 @@ test_that("get_modelmatrix", {
     find_variables(m10),
     list(
       response = "carb",
-      conditional = c("gear", "vs"),disc = c("disc", "cyl")
+      conditional = c("gear", "vs"), disc = c("disc", "cyl")
     )
   )
 })
