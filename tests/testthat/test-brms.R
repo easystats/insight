@@ -900,3 +900,22 @@ test_that("get_modelmatrix", {
     )
   )
 })
+
+# get variance
+test_that("get_variance works", {
+  mdl <- brms::brm(mpg ~ hp + (1 | cyl), data = mtcars)
+  out <- get_variance(mdl)
+  expect_equal(
+    out,
+    list(
+      var.fixed = 5.0734440813087,
+      var.random = 22.887162197839,
+      var.residual = 14.9024565369,
+      var.distribution = 14.9024565369,
+      var.dispersion = 0,
+      var.intercept = c(cyl = 22.8871621978389)
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})

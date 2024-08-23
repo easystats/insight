@@ -78,15 +78,20 @@
 
   # we also need necessary model information, like fixed and random effects,
   # variance-covariance matrix etc. for the null model
-  if (is.null(model_null)) {
-    model_null <- .safe(null_model(model, verbose = FALSE))
+  if (faminfo$is_linear && !faminfo$is_tweedie) {
+    # we don't need these for linear models
+    me_info_null <- NULL
+  } else {
+    if (is.null(model_null)) {
+      model_null <- .safe(null_model(model, verbose = FALSE))
+    }
+    me_info_null <- .get_variance_information(
+      model_null,
+      faminfo = faminfo,
+      name_fun = name_fun,
+      verbose = verbose
+    )
   }
-  me_info_null <- .get_variance_information(
-    model_null,
-    faminfo = faminfo,
-    name_fun = name_fun,
-    verbose = verbose
-  )
 
   # Test for non-zero random effects ((near) singularity)
   no_random_variance <- FALSE

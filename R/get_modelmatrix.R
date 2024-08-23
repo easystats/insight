@@ -158,15 +158,24 @@ get_modelmatrix.svyglm <- function(x, ...) {
 #' @export
 get_modelmatrix.brmsfit <- function(x, ...) {
   formula_rhs <- safe_deparse(find_formula(x)$conditional[[3]])
-  formula_rhs <- stats::as.formula(paste0("~", formula_rhs))
-  # the formula used in model.matrix() is not allowed to have special functions,
-  # like brms::mo() and similar. Thus, we reformulate after using "all.vars()",
-  # which will only keep the variable names.
-  .data_in_dots(
-    ...,
-    object = stats::reformulate(all.vars(formula_rhs)),
-    default_data = get_data(x, verbose = FALSE)
-  )
+  # exception: for null-models, we need different handling, else `reformulate()`
+  # will not work.
+  if (identical(formula_rhs, "1")) {
+    mm <- get_data(x, verbose = FALSE)
+    mm[[1]] <- 1
+    colnames(mm)[1] <- "(Intercept)"
+    mm[1]
+  } else {
+    formula_rhs <- stats::as.formula(paste0("~", formula_rhs))
+    # the formula used in model.matrix() is not allowed to have special functions,
+    # like brms::mo() and similar. Thus, we reformulate after using "all.vars()",
+    # which will only keep the variable names.
+    .data_in_dots(
+      ...,
+      object = stats::reformulate(all.vars(formula_rhs)),
+      default_data = get_data(x, verbose = FALSE)
+    )
+  }
 }
 
 #' @export
