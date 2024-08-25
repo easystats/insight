@@ -1,3 +1,9 @@
+# insight 0.20.4
+
+## Bug fixes
+
+* Fixed regression from latest fix related to `get_variance()` for *brms* models.
+
 # insight 0.20.3
 
 ## Changes
