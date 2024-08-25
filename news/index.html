@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,13 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.20.4" id="insight-0204">insight 0.20.4<a class="anchor" aria-label="anchor" href="#insight-0204"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-20-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-20-4"></a></h3>
+<ul><li>Fixed regression from latest fix related to <code><a href="../reference/get_variance.html">get_variance()</a></code> for <em>brms</em> models.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.20.3" id="insight-0203">insight 0.20.3<a class="anchor" aria-label="anchor" href="#insight-0203"></a></h2><p class="text-muted">CRAN release: 2024-08-16</p>
 <div class="section level3">
@@ -694,7 +701,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-14-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-14-2"></a></h3>
-<ul><li><p>Fixed issue in <code><a href="../reference/model_info.html">model_info()</a></code> with <code><a href="https://rdrr.io/pkg/rstanarm/man/stan_polr.html" class="external-link">stan_polr()</a></code> models.</p></li>
+<ul><li><p>Fixed issue in <code><a href="../reference/model_info.html">model_info()</a></code> with <code><a href="https://mc-stan.org/rstanarm/reference/stan_polr.html" class="external-link">stan_polr()</a></code> models.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for <em>brms</em> when model contained parameters for the priors on sigma.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/n_obs.html">n_obs()</a></code> for <code><a href="https://rdrr.io/r/stats4/mle.html" class="external-link">stats4::mle()</a></code> models.</p></li>
 <li><p>Fixed failing tests due to latest <em>fixest</em> update.</p></li>
@@ -796,7 +803,7 @@
 <li><p>Fixed labelling issue in <code><a href="../reference/get_parameters.html">get_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <code>blavaan</code> models.</p></li>
 <li><p><code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for <em>MCMCglmm</em> objects did not include random parameters.</p></li>
 <li><p>Fixed minor issue with unintended sub-titles for <code><a href="../reference/display.html">print_html()</a></code>.</p></li>
-<li><p>Fixed issue in <code>get_prior()</code> for <code><a href="https://rdrr.io/pkg/rstanarm/man/priors.html" class="external-link">rstanarm::R2()</a></code> priors.</p></li>
+<li><p>Fixed issue in <code>get_prior()</code> for <code><a href="https://mc-stan.org/rstanarm/reference/priors.html" class="external-link">rstanarm::R2()</a></code> priors.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -907,7 +914,7 @@
 <div class="section level3">
 <h3 id="bug-fixes-0-11-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-11-1"></a></h3>
 <ul><li><p>Fix CRAN check issues.</p></li>
-<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code><a href="https://rdrr.io/pkg/rstanarm/man/stan_gamm4.html" class="external-link">stan_gamm4()</a></code> now correctly includes random effects.</p></li>
+<li><p><code><a href="../reference/find_formula.html">find_formula()</a></code> for <code><a href="https://mc-stan.org/rstanarm/reference/stan_gamm4.html" class="external-link">stan_gamm4()</a></code> now correctly includes random effects.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -1032,7 +1039,7 @@
 <div class="section level3">
 <h3 id="bug-fixes-0-9-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-1"></a></h3>
 <ul><li><p>Fixed issue with correctly detecting sigma-parameters in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for multiple-response <code>brmsfit</code>-models.</p></li>
-<li><p>Fixed issue with <code><a href="../reference/find_formula.html">find_formula()</a></code> for models from <code><a href="https://rdrr.io/pkg/rstanarm/man/stan_nlmer.html" class="external-link">stan_nlmer()</a></code>.</p></li>
+<li><p>Fixed issue with <code><a href="../reference/find_formula.html">find_formula()</a></code> for models from <code><a href="https://mc-stan.org/rstanarm/reference/stan_nlmer.html" class="external-link">stan_nlmer()</a></code>.</p></li>
 <li><p>Fixed issues with <code><a href="../reference/find_terms.html">find_terms()</a></code> when response variable included a namespace, like <code><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">survival::Surv()</a></code>.</p></li>
 <li><p>Fixed issues with <code><a href="../reference/get_priors.html">get_priors()</a></code> for <em>stanreg</em> models, probably caused by the latest update to <em>rstanarm 2.21.2</em>.</p></li>
 <li><p>Fixed issues in <code><a href="../reference/get_variance.html">get_variance()</a></code> for <em>brmsfit</em> models.</p></li>
