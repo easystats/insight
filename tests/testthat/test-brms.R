@@ -903,8 +903,7 @@ test_that("get_modelmatrix", {
 
 # get variance
 test_that("get_variance works", {
-  set.seed(123)
-  mdl <- brms::brm(mpg ~ hp + (1 | cyl), data = mtcars, seed = 123)
+  mdl <- insight::download_model("brms_mixed_9")
   out <- get_variance(mdl)
   expect_equal(
     out,
