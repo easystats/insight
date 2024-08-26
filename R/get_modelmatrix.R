@@ -164,7 +164,7 @@ get_modelmatrix.brmsfit <- function(x, ...) {
     mm <- get_data(x, verbose = FALSE)
     mm[[1]] <- 1
     colnames(mm)[1] <- "(Intercept)"
-    mm[1]
+    as.matrix(mm[1])
   } else {
     formula_rhs <- stats::as.formula(paste0("~", formula_rhs))
     # the formula used in model.matrix() is not allowed to have special functions,
