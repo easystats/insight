@@ -918,4 +918,6 @@ test_that("get_variance works", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
+  # make sure it's a matrix
+  # expect_true(is.matrix(get_modelmatrix(null_model(mdl))))
 })
