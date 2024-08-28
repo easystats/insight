@@ -60,6 +60,14 @@ test_that("null_model zero-inflated", {
   expect_equal(glmmTMB::fixef(out), glmmTMB::fixef(m0), tolerance = 1e-4)
 })
 
+
+test_that("null_model warns for badly formulated response", {
+  data(iris)
+  model <- lm(iris[, 2] ~ Species, data = iris)
+  expect_warning(null_model(model), regex = "Using indexed")
+})
+
+
 # set.seed(123)
 # N <- 100 # Samples
 # x <- runif(N, 0, 10) # Predictor

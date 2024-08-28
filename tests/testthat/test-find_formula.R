@@ -9,3 +9,10 @@ test_that("`find_formula` works with `mgcv::gam()`", {
   expect_identical(f$conditional, formula("y ~ s(x0) + s(x1) + s(x2)"))
   expect_identical(f$scale, formula("~s(x3)"))
 })
+
+
+test_that("formula warns for badly formulated response", {
+  data(iris)
+  model <- lm(iris[, 2] ~ Species, data = iris)
+  expect_warning(formula_ok(model), regex = "Using indexed")
+})

@@ -1,5 +1,11 @@
 # insight 0.20.4
 
+## Changes
+
+* `null_model()` and `formula_ok()` now warn when indexed data frames, such as
+  `df[, 5]`, are used as response variable in the formula, as this can lead to
+  unexpected results.
+
 ## Bug fixes
 
 * Fixed regression from latest fix related to `get_variance()` for *brms* models.
