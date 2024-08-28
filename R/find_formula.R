@@ -530,7 +530,7 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
     id <- attr(x, "id")
 
     within_variables <- names(attr(x, "within"))
-    within_variables <- paste0(within_variables, collapse = "*")
+    within_variables <- paste(within_variables, collapse = "*")
     within_variables <- paste0("(", within_variables, ")")
     e <- paste0("Error(", id, "/", within_variables, ")")
 
