@@ -18,9 +18,13 @@
 #'
 #' @export
 null_model <- function(model, verbose = TRUE, ...) {
+  # check if model formula is ok
+  formula_ok(model)
+
+  model_formula <- find_formula(model, verbose = FALSE)
   offset_term <- tryCatch(
     {
-      f <- safe_deparse(find_formula(model)$conditional)
+      f <- safe_deparse(model_formula$conditional)
       if (grepl("offset(", f, fixed = TRUE)) {
         out <- gsub("(.*)offset\\((.*)\\)(.*)", "\\2", f)
       } else {
@@ -34,7 +38,7 @@ null_model <- function(model, verbose = TRUE, ...) {
   )
 
   if (is_mixed_model(model)) {
-    .null_model_mixed(model, offset_term, verbose)
+    .null_model_mixed(model, offset_term, model_formula, verbose)
   } else if (inherits(model, "clm2")) {
     stats::update(model, location = ~1, scale = ~1)
   } else if (inherits(model, "multinom")) {
@@ -60,16 +64,16 @@ null_model <- function(model, verbose = TRUE, ...) {
 }
 
 
-.null_model_mixed <- function(model, offset_term = NULL, verbose = TRUE) {
+.null_model_mixed <- function(model, offset_term = NULL, model_formula = NULL, verbose = TRUE) {
   if (inherits(model, "MixMod")) {
     nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
     null.model <- suppressWarnings(stats::update(model, fixed = nullform))
     # fix fixed effects formula
     null.model$call$fixed <- nullform
   } else if (inherits(model, "cpglmm")) {
-    nullform <- find_formula(model, verbose = FALSE)[["random"]]
+    nullform <- model_formula[["random"]]
     null.model <- suppressWarnings(stats::update(model, nullform))
-  } else if (inherits(model, "glmmTMB") && !is.null(find_formula(model)$zero_inflated)) {
+  } else if (inherits(model, "glmmTMB") && !is.null(model_formula$zero_inflated)) {
     insight::check_if_installed("glmmTMB")
     # for zero-inflated models, we need to create the NULL model for the
     # zero-inflation part as well. Since "update()" won't work here, we need

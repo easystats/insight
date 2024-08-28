@@ -88,7 +88,11 @@ formula_ok <- function(x, verbose = TRUE, ...) {
   # all.vars() returns "T" as variable, which is not intended
   check_2 <- .check_formula_for_T(f, verbose = verbose)
 
-  all(check_1 && check_2)
+  # check if formula contains index data frames as response variable
+  # this may result in unexpected behaviour, and we should warn users
+  check_3 <- .check_formula_index_df(f, x, verbose = verbose)
+
+  all(check_1 && check_2 && check_3)
 }
 
 
@@ -526,7 +530,7 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
     id <- attr(x, "id")
 
     within_variables <- names(attr(x, "within"))
-    within_variables <- paste0(within_variables, collapse = "*")
+    within_variables <- paste(within_variables, collapse = "*")
     within_variables <- paste0("(", within_variables, ")")
     e <- paste0("Error(", id, "/", within_variables, ")")
 
@@ -1596,13 +1600,13 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   )
 
   # check if any further pforms exist
-  if (!all(names(f$pforms) %in% auxiliary_names)) {
+  if (all(names(f$pforms) %in% auxiliary_names)) {
+    f_custom <- NULL
+  } else {
     custom_names <- setdiff(names(f$pforms), auxiliary_names)
     if (length(custom_names)) {
       f_custom <- f$pforms[custom_names]
     }
-  } else {
-    f_custom <- NULL
   }
 
   f_sigmarandom <- NULL
@@ -1863,6 +1867,27 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
         "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.", # nolint
         "\n  Try: ", fc$formula, ", data = ", fc$data
       ))
+    }
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+
+# formulas with an index data frame, like "lm(mtcars[, "mpg"] ~ mtcars$hp), may
+# cause problems in various functions throughout the easystats packages. We
+# warn the user here...
+
+.check_formula_index_df <- function(f, x, verbose = TRUE) {
+  if (is_empty_object(f)) {
+    return(TRUE)
+  }
+  resp <- .safe(safe_deparse(f$conditional[[2]]))
+  if (!is.null(resp) && any(grepl("\\b\\w+\\[.*?,.*?\\]", resp))) {
+    if (verbose) {
+      format_warning(
+        "Using indexed data frames, such as `df[, 5]`, as model response can produce unexpected results. Specify your model using the literal name of the response variable instead." # nolint
+      )
     }
     return(FALSE)
   }
