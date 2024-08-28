@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.20.4" id="insight-0204">insight 0.20.4<a class="anchor" aria-label="anchor" href="#insight-0204"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-20-4">Changes<a class="anchor" aria-label="anchor" href="#changes-0-20-4"></a></h3>
+<ul><li>
+<code><a href="../reference/null_model.html">null_model()</a></code> and <code><a href="../reference/find_formula.html">formula_ok()</a></code> now warn when indexed data frames, such as <code>df[, 5]</code>, are used as response variable in the formula, as this can lead to unexpected results.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-20-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-20-4"></a></h3>
 <ul><li>Fixed regression from latest fix related to <code><a href="../reference/get_variance.html">get_variance()</a></code> for <em>brms</em> models.</li>
