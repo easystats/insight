@@ -924,6 +924,26 @@ get_statistic.multinom <- function(x, ...) {
 #' @export
 get_statistic.brmultinom <- get_statistic.multinom
 
+#' @export
+get_statistic.multinom_weightit <- function(x, ...) {
+  parms <- get_parameters(x)
+  cs <- suppressWarnings(stats::coef(summary(x)))
+
+  out <- data.frame(
+    Parameter = parms$Parameter,
+    Statistic = as.vector(cs[, 3]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if ("Response" %in% colnames(parms)) {
+    out$Response <- parms$Response
+  }
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
 
 #' @export
 get_statistic.bracl <- function(x, ...) {
