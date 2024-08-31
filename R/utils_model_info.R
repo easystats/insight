@@ -144,14 +144,14 @@
   # ordinal family --------
 
   is.ordinal <-
-    inherits(x, c("svyolr", "polr", "serp", "clm", "clm2", "clmm", "mixor", "LORgee", "mvord")) |
+    inherits(x, c("svyolr", "polr", "serp", "clm", "clm2", "clmm", "mixor", "LORgee", "mvord", "ordinal_weightit")) |
       fitfam %in% c("cumulative", "ordinal")
 
 
   # multinomial family --------
 
   is.multinomial <-
-    inherits(x, c("gmnl", "mclogit", "mblogit", "mmclogit", "mlogit", "DirichletRegModel", "multinom", "brmultinom")) |
+    inherits(x, c("gmnl", "mclogit", "mblogit", "mmclogit", "mlogit", "DirichletRegModel", "multinom", "brmultinom", "multinom_weightit")) |
       fitfam %in% c("cratio", "sratio", "acat", "multinom", "multinomial", "multinomial2", "dirichlet")
 
 

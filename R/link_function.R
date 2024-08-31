@@ -265,6 +265,14 @@ link_function.riskRegression <- link_function.multinom
 #' @export
 link_function.comprisk <- link_function.multinom
 
+#' @export
+link_function.multinom_weightit <- function(x, ...) {
+  stats::make.link(link = x$family$link)$linkfun
+}
+
+#' @export
+link_function.ordinal_weightit <- link_function.multinom_weightit
+
 
 # Phylo glm ------------------------
 

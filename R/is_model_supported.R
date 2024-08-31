@@ -71,7 +71,7 @@ supported_models <- function() {
     "gam", "Gam", "gamlss", "gamm", "gamm4", "garch", "gbm", "gee", "geeglm",
     "glht", "glimML", "glmm", "glm", "Glm", "glmmadmb", "glmmPQL", "glmmTMB",
     "glmrob", "glmRob", "glmx", "gls", "gmnl", "glmgee", "ggcomparisons",
-    "glmerMod",
+    "glmerMod", "glm_weighit",
 
     # h ----------------------------
     "HLfit", "htest", "hurdle", "hglm",
@@ -90,13 +90,13 @@ supported_models <- function() {
     "metaplus", "merMod", "merModList", "mipo", "mira", "mixed", "mixor", "MixMod",
     "mhurdle", "mjoint", "mle", "mle2", "mlm", "mblogit", "mclogit", "mcmc.list",
     "meta_bma", "meta_fixed", "meta_random", "mlogit", "mmlogit", "model_fit",
-    "multinom", "mvord", "mmclogit", "mmrm", "mmrm_fit", "mmrm_tmb",
+    "multinom", "mvord", "mmclogit", "mmrm", "mmrm_fit", "mmrm_tmb", "multinom_weightit",
 
     # n ----------------------------
     "negbinmfx", "negbinirr", "nestedLogit",
 
     # o ----------------------------
-    "ols", "onesampb", "orm",
+    "ols", "onesampb", "orm", "ordinal_weighit",
 
     # p ----------------------------
     "PMCMR", "poissonmfx", "poissonirr", "pgmm", "plm", "polr", "psm",

@@ -82,7 +82,7 @@ get_parameters.default <- function(x, verbose = TRUE, ...) {
           sprintf("Parameters can't be retrieved for objects of class `%s`.", class(x)[1])
         )
       }
-      return(NULL)
+      NULL
     }
   )
 }
@@ -125,6 +125,14 @@ get_parameters.tobit <- get_parameters.default
 #' @export
 get_parameters.model_fit <- function(x, ...) {
   get_parameters(x$fit, ...)
+}
+
+
+#' @export
+get_parameters.ordinal_weightit <- function(x, ...) {
+  out <- get_parameters.default(x, ...)
+  out$Component <- "conditional"
+  out
 }
 
 
@@ -421,6 +429,22 @@ get_parameters.multinom <- function(x, ...) {
       row.names = NULL
     )
   }
+
+  text_remove_backticks(out)
+}
+
+
+#' @export
+get_parameters.multinom_weightit <- function(x, ...) {
+  params <- stats::coef(x)
+
+  out <- data.frame(
+    Parameter = gsub("(.*)~(.*)", "\\2", names(params)),
+    Estimate = unname(params),
+    Response = gsub("(.*)~(.*)", "\\1", names(params)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
 
   text_remove_backticks(out)
 }
@@ -749,7 +773,7 @@ get_parameters.manova <- function(x, ...) {
   out <- out[c("Parameter", "Estimate", "Response")]
   rownames(out) <- NULL
 
-  pattern <- paste0("(", paste0(paste0(".", unique(out$Response)), collapse = "|"), ")$")
+  pattern <- paste0("(", paste(paste0(".", unique(out$Response)), collapse = "|"), ")$")
   out$Parameter <- gsub(pattern, "", out$Parameter)
 
   text_remove_backticks(out)

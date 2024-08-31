@@ -90,6 +90,7 @@ is_regression_model <- function(x) {
     "glmerMod", "glmlep", "glmm", "glmmadmb", "glmmEP", "glmmFit",
     "glmmfields", "glmmLasso", "glmmPQL", "glmmTMB", "glmnet", "glmrob",
     "glmRob", "glmx", "gls", "gmnl", "gmm", "gnls", "gsm", "ggcomparisons",
+    "glm_weighit",
 
     # h --------------------
     "heavyLme", "HLfit", "htest", "hurdle", "hglm",
@@ -118,14 +119,14 @@ is_regression_model <- function(x) {
     "mle", "mle2", "mlergm", "mlm", "mlma", "mlogit", "model_fit",
     "multinom", "mvmeta", "mvord", "mvr", "marginaleffects",
     "marginaleffects.summary", "mblogit", "mclogit", "mmrm", "mmrm_fit",
-    "mmrm_tmb",
+    "mmrm_tmb", "multinom_weightit",
 
     # n --------------------
     "negbin", "negbinmfx", "negbinirr", "nlreg", "nlrq", "nls",
     "nparLD", "nestedLogit",
 
     # o --------------------
-    "objectiveML", "ols", "osrt", "orcutt",
+    "objectiveML", "ols", "osrt", "orcutt", "ordinal_weightit",
 
     # p --------------------
     "pairwise.htest", "pb1", "pb2", "pgmm", "plm", "plmm", "PMCMR",
