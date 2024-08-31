@@ -36,7 +36,7 @@
 
     <a class="navbar-brand me-2" href="index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.3.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,9 +102,9 @@
 <p>The <em>insight</em> package is available on CRAN, while its latest development version is available on R-universe (from <em>rOpenSci</em>) or GitHub.</p>
 <table class="table">
 <colgroup>
-<col width="13%">
-<col width="12%">
-<col width="75%">
+<col width="33%">
+<col width="33%">
+<col width="33%">
 </colgroup>
 <thead><tr>
 <th>Type</th>
@@ -283,7 +283,7 @@
 <div class="section level2">
 <h2 id="list-of-supported-models-by-class">List of Supported Models by Class<a class="anchor" aria-label="anchor" href="#list-of-supported-models-by-class"></a>
 </h2>
-<p>Currently, 231 model classes are supported.</p>
+<p>Currently, 234 model classes are supported.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/is_model_supported.html">supported_models</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   [1] "aareg"                   "afex_aov"               </span></span>
@@ -329,79 +329,80 @@
 <span><span class="co">#&gt;  [81] "geeglm"                  "ggcomparisons"          </span></span>
 <span><span class="co">#&gt;  [83] "glht"                    "glimML"                 </span></span>
 <span><span class="co">#&gt;  [85] "glm"                     "Glm"                    </span></span>
-<span><span class="co">#&gt;  [87] "glmerMod"                "glmgee"                 </span></span>
-<span><span class="co">#&gt;  [89] "glmm"                    "glmmadmb"               </span></span>
-<span><span class="co">#&gt;  [91] "glmmPQL"                 "glmmTMB"                </span></span>
-<span><span class="co">#&gt;  [93] "glmrob"                  "glmRob"                 </span></span>
-<span><span class="co">#&gt;  [95] "glmx"                    "gls"                    </span></span>
-<span><span class="co">#&gt;  [97] "gmnl"                    "hglm"                   </span></span>
-<span><span class="co">#&gt;  [99] "HLfit"                   "htest"                  </span></span>
-<span><span class="co">#&gt; [101] "hurdle"                  "iv_robust"              </span></span>
-<span><span class="co">#&gt; [103] "ivFixed"                 "ivprobit"               </span></span>
-<span><span class="co">#&gt; [105] "ivreg"                   "lavaan"                 </span></span>
-<span><span class="co">#&gt; [107] "lm"                      "lm_robust"              </span></span>
-<span><span class="co">#&gt; [109] "lme"                     "lmerMod"                </span></span>
-<span><span class="co">#&gt; [111] "lmerModLmerTest"         "lmodel2"                </span></span>
-<span><span class="co">#&gt; [113] "lmrob"                   "lmRob"                  </span></span>
-<span><span class="co">#&gt; [115] "logistf"                 "logitmfx"               </span></span>
-<span><span class="co">#&gt; [117] "logitor"                 "logitr"                 </span></span>
-<span><span class="co">#&gt; [119] "LORgee"                  "lqm"                    </span></span>
-<span><span class="co">#&gt; [121] "lqmm"                    "lrm"                    </span></span>
-<span><span class="co">#&gt; [123] "manova"                  "MANOVA"                 </span></span>
-<span><span class="co">#&gt; [125] "marginaleffects"         "marginaleffects.summary"</span></span>
-<span><span class="co">#&gt; [127] "margins"                 "maxLik"                 </span></span>
-<span><span class="co">#&gt; [129] "mblogit"                 "mclogit"                </span></span>
-<span><span class="co">#&gt; [131] "mcmc"                    "mcmc.list"              </span></span>
-<span><span class="co">#&gt; [133] "MCMCglmm"                "mcp1"                   </span></span>
-<span><span class="co">#&gt; [135] "mcp12"                   "mcp2"                   </span></span>
-<span><span class="co">#&gt; [137] "med1way"                 "mediate"                </span></span>
-<span><span class="co">#&gt; [139] "merMod"                  "merModList"             </span></span>
-<span><span class="co">#&gt; [141] "meta_bma"                "meta_fixed"             </span></span>
-<span><span class="co">#&gt; [143] "meta_random"             "metaplus"               </span></span>
-<span><span class="co">#&gt; [145] "mhurdle"                 "mipo"                   </span></span>
-<span><span class="co">#&gt; [147] "mira"                    "mixed"                  </span></span>
-<span><span class="co">#&gt; [149] "MixMod"                  "mixor"                  </span></span>
-<span><span class="co">#&gt; [151] "mjoint"                  "mle"                    </span></span>
-<span><span class="co">#&gt; [153] "mle2"                    "mlm"                    </span></span>
-<span><span class="co">#&gt; [155] "mlogit"                  "mmclogit"               </span></span>
-<span><span class="co">#&gt; [157] "mmlogit"                 "mmrm"                   </span></span>
-<span><span class="co">#&gt; [159] "mmrm_fit"                "mmrm_tmb"               </span></span>
-<span><span class="co">#&gt; [161] "model_fit"               "multinom"               </span></span>
-<span><span class="co">#&gt; [163] "mvord"                   "negbinirr"              </span></span>
-<span><span class="co">#&gt; [165] "negbinmfx"               "nestedLogit"            </span></span>
-<span><span class="co">#&gt; [167] "ols"                     "onesampb"               </span></span>
-<span><span class="co">#&gt; [169] "orm"                     "pgmm"                   </span></span>
-<span><span class="co">#&gt; [171] "phyloglm"                "phylolm"                </span></span>
-<span><span class="co">#&gt; [173] "plm"                     "PMCMR"                  </span></span>
-<span><span class="co">#&gt; [175] "poissonirr"              "poissonmfx"             </span></span>
-<span><span class="co">#&gt; [177] "polr"                    "probitmfx"              </span></span>
-<span><span class="co">#&gt; [179] "psm"                     "Rchoice"                </span></span>
-<span><span class="co">#&gt; [181] "ridgelm"                 "riskRegression"         </span></span>
-<span><span class="co">#&gt; [183] "rjags"                   "rlm"                    </span></span>
-<span><span class="co">#&gt; [185] "rlmerMod"                "RM"                     </span></span>
-<span><span class="co">#&gt; [187] "rma"                     "rma.uni"                </span></span>
-<span><span class="co">#&gt; [189] "robmixglm"               "robtab"                 </span></span>
-<span><span class="co">#&gt; [191] "rq"                      "rqs"                    </span></span>
-<span><span class="co">#&gt; [193] "rqss"                    "rvar"                   </span></span>
-<span><span class="co">#&gt; [195] "Sarlm"                   "scam"                   </span></span>
-<span><span class="co">#&gt; [197] "selection"               "sem"                    </span></span>
-<span><span class="co">#&gt; [199] "SemiParBIV"              "semLm"                  </span></span>
-<span><span class="co">#&gt; [201] "semLme"                  "serp"                   </span></span>
-<span><span class="co">#&gt; [203] "slm"                     "speedglm"               </span></span>
-<span><span class="co">#&gt; [205] "speedlm"                 "stanfit"                </span></span>
-<span><span class="co">#&gt; [207] "stanmvreg"               "stanreg"                </span></span>
-<span><span class="co">#&gt; [209] "summary.lm"              "survfit"                </span></span>
-<span><span class="co">#&gt; [211] "survreg"                 "svy_vglm"               </span></span>
-<span><span class="co">#&gt; [213] "svy2lme"                 "svychisq"               </span></span>
-<span><span class="co">#&gt; [215] "svyglm"                  "svyolr"                 </span></span>
-<span><span class="co">#&gt; [217] "t1way"                   "tobit"                  </span></span>
-<span><span class="co">#&gt; [219] "trimcibt"                "truncreg"               </span></span>
-<span><span class="co">#&gt; [221] "vgam"                    "vglm"                   </span></span>
-<span><span class="co">#&gt; [223] "wbgee"                   "wblm"                   </span></span>
-<span><span class="co">#&gt; [225] "wbm"                     "wmcpAKP"                </span></span>
-<span><span class="co">#&gt; [227] "yuen"                    "yuend"                  </span></span>
-<span><span class="co">#&gt; [229] "zcpglm"                  "zeroinfl"               </span></span>
-<span><span class="co">#&gt; [231] "zerotrunc"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [87] "glm_weighit"             "glmerMod"               </span></span>
+<span><span class="co">#&gt;  [89] "glmgee"                  "glmm"                   </span></span>
+<span><span class="co">#&gt;  [91] "glmmadmb"                "glmmPQL"                </span></span>
+<span><span class="co">#&gt;  [93] "glmmTMB"                 "glmrob"                 </span></span>
+<span><span class="co">#&gt;  [95] "glmRob"                  "glmx"                   </span></span>
+<span><span class="co">#&gt;  [97] "gls"                     "gmnl"                   </span></span>
+<span><span class="co">#&gt;  [99] "hglm"                    "HLfit"                  </span></span>
+<span><span class="co">#&gt; [101] "htest"                   "hurdle"                 </span></span>
+<span><span class="co">#&gt; [103] "iv_robust"               "ivFixed"                </span></span>
+<span><span class="co">#&gt; [105] "ivprobit"                "ivreg"                  </span></span>
+<span><span class="co">#&gt; [107] "lavaan"                  "lm"                     </span></span>
+<span><span class="co">#&gt; [109] "lm_robust"               "lme"                    </span></span>
+<span><span class="co">#&gt; [111] "lmerMod"                 "lmerModLmerTest"        </span></span>
+<span><span class="co">#&gt; [113] "lmodel2"                 "lmrob"                  </span></span>
+<span><span class="co">#&gt; [115] "lmRob"                   "logistf"                </span></span>
+<span><span class="co">#&gt; [117] "logitmfx"                "logitor"                </span></span>
+<span><span class="co">#&gt; [119] "logitr"                  "LORgee"                 </span></span>
+<span><span class="co">#&gt; [121] "lqm"                     "lqmm"                   </span></span>
+<span><span class="co">#&gt; [123] "lrm"                     "manova"                 </span></span>
+<span><span class="co">#&gt; [125] "MANOVA"                  "marginaleffects"        </span></span>
+<span><span class="co">#&gt; [127] "marginaleffects.summary" "margins"                </span></span>
+<span><span class="co">#&gt; [129] "maxLik"                  "mblogit"                </span></span>
+<span><span class="co">#&gt; [131] "mclogit"                 "mcmc"                   </span></span>
+<span><span class="co">#&gt; [133] "mcmc.list"               "MCMCglmm"               </span></span>
+<span><span class="co">#&gt; [135] "mcp1"                    "mcp12"                  </span></span>
+<span><span class="co">#&gt; [137] "mcp2"                    "med1way"                </span></span>
+<span><span class="co">#&gt; [139] "mediate"                 "merMod"                 </span></span>
+<span><span class="co">#&gt; [141] "merModList"              "meta_bma"               </span></span>
+<span><span class="co">#&gt; [143] "meta_fixed"              "meta_random"            </span></span>
+<span><span class="co">#&gt; [145] "metaplus"                "mhurdle"                </span></span>
+<span><span class="co">#&gt; [147] "mipo"                    "mira"                   </span></span>
+<span><span class="co">#&gt; [149] "mixed"                   "MixMod"                 </span></span>
+<span><span class="co">#&gt; [151] "mixor"                   "mjoint"                 </span></span>
+<span><span class="co">#&gt; [153] "mle"                     "mle2"                   </span></span>
+<span><span class="co">#&gt; [155] "mlm"                     "mlogit"                 </span></span>
+<span><span class="co">#&gt; [157] "mmclogit"                "mmlogit"                </span></span>
+<span><span class="co">#&gt; [159] "mmrm"                    "mmrm_fit"               </span></span>
+<span><span class="co">#&gt; [161] "mmrm_tmb"                "model_fit"              </span></span>
+<span><span class="co">#&gt; [163] "multinom"                "multinom_weightit"      </span></span>
+<span><span class="co">#&gt; [165] "mvord"                   "negbinirr"              </span></span>
+<span><span class="co">#&gt; [167] "negbinmfx"               "nestedLogit"            </span></span>
+<span><span class="co">#&gt; [169] "ols"                     "onesampb"               </span></span>
+<span><span class="co">#&gt; [171] "ordinal_weighit"         "orm"                    </span></span>
+<span><span class="co">#&gt; [173] "pgmm"                    "phyloglm"               </span></span>
+<span><span class="co">#&gt; [175] "phylolm"                 "plm"                    </span></span>
+<span><span class="co">#&gt; [177] "PMCMR"                   "poissonirr"             </span></span>
+<span><span class="co">#&gt; [179] "poissonmfx"              "polr"                   </span></span>
+<span><span class="co">#&gt; [181] "probitmfx"               "psm"                    </span></span>
+<span><span class="co">#&gt; [183] "Rchoice"                 "ridgelm"                </span></span>
+<span><span class="co">#&gt; [185] "riskRegression"          "rjags"                  </span></span>
+<span><span class="co">#&gt; [187] "rlm"                     "rlmerMod"               </span></span>
+<span><span class="co">#&gt; [189] "RM"                      "rma"                    </span></span>
+<span><span class="co">#&gt; [191] "rma.uni"                 "robmixglm"              </span></span>
+<span><span class="co">#&gt; [193] "robtab"                  "rq"                     </span></span>
+<span><span class="co">#&gt; [195] "rqs"                     "rqss"                   </span></span>
+<span><span class="co">#&gt; [197] "rvar"                    "Sarlm"                  </span></span>
+<span><span class="co">#&gt; [199] "scam"                    "selection"              </span></span>
+<span><span class="co">#&gt; [201] "sem"                     "SemiParBIV"             </span></span>
+<span><span class="co">#&gt; [203] "semLm"                   "semLme"                 </span></span>
+<span><span class="co">#&gt; [205] "serp"                    "slm"                    </span></span>
+<span><span class="co">#&gt; [207] "speedglm"                "speedlm"                </span></span>
+<span><span class="co">#&gt; [209] "stanfit"                 "stanmvreg"              </span></span>
+<span><span class="co">#&gt; [211] "stanreg"                 "summary.lm"             </span></span>
+<span><span class="co">#&gt; [213] "survfit"                 "survreg"                </span></span>
+<span><span class="co">#&gt; [215] "svy_vglm"                "svy2lme"                </span></span>
+<span><span class="co">#&gt; [217] "svychisq"                "svyglm"                 </span></span>
+<span><span class="co">#&gt; [219] "svyolr"                  "t1way"                  </span></span>
+<span><span class="co">#&gt; [221] "tobit"                   "trimcibt"               </span></span>
+<span><span class="co">#&gt; [223] "truncreg"                "vgam"                   </span></span>
+<span><span class="co">#&gt; [225] "vglm"                    "wbgee"                  </span></span>
+<span><span class="co">#&gt; [227] "wblm"                    "wbm"                    </span></span>
+<span><span class="co">#&gt; [229] "wmcpAKP"                 "yuen"                   </span></span>
+<span><span class="co">#&gt; [231] "yuend"                   "zcpglm"                 </span></span>
+<span><span class="co">#&gt; [233] "zeroinfl"                "zerotrunc"</span></span></code></pre></div>
 <ul>
 <li>
 <strong>Didn’t find a model?</strong> <a href="https://github.com/easystats/insight/issues" class="external-link">File an issue</a> and request additional model-support in <em>insight</em>!</li>
