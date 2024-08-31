@@ -796,6 +796,14 @@ get_statistic.clmm2 <- get_statistic.clm2
 
 
 #' @export
+get_statistic.ordinal_weightit <- function(x, ...) {
+  out <- get_statistic.default(x, ...)
+  out$Component <- "conditional"
+  out
+}
+
+
+#' @export
 get_statistic.mvord <- function(x, component = "all", ...) {
   component <- match.arg(
     component,
