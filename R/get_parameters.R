@@ -129,6 +129,14 @@ get_parameters.model_fit <- function(x, ...) {
 
 
 #' @export
+get_parameters.ordinal_weightit <- function(x, ...) {
+  out <- get_parameters(x, ...)
+  out$Component <- "conditional"
+  out
+}
+
+
+#' @export
 get_parameters.bfsl <- function(x, ...) {
   cf <- stats::coef(x)
 
