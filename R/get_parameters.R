@@ -82,7 +82,7 @@ get_parameters.default <- function(x, verbose = TRUE, ...) {
           sprintf("Parameters can't be retrieved for objects of class `%s`.", class(x)[1])
         )
       }
-      return(NULL)
+      NULL
     }
   )
 }
@@ -773,7 +773,7 @@ get_parameters.manova <- function(x, ...) {
   out <- out[c("Parameter", "Estimate", "Response")]
   rownames(out) <- NULL
 
-  pattern <- paste0("(", paste0(paste0(".", unique(out$Response)), collapse = "|"), ")$")
+  pattern <- paste0("(", paste(paste0(".", unique(out$Response)), collapse = "|"), ")$")
   out$Parameter <- gsub(pattern, "", out$Parameter)
 
   text_remove_backticks(out)
