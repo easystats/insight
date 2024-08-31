@@ -130,7 +130,7 @@ get_parameters.model_fit <- function(x, ...) {
 
 #' @export
 get_parameters.ordinal_weightit <- function(x, ...) {
-  out <- get_parameters(x, ...)
+  out <- get_parameters.default(x, ...)
   out$Component <- "conditional"
   out
 }
