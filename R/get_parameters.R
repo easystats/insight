@@ -427,6 +427,22 @@ get_parameters.multinom <- function(x, ...) {
 
 
 #' @export
+get_parameters.multinom_weightit <- function(x, ...) {
+  params <- stats::coef(x)
+
+  out <- data.frame(
+    Parameter = gsub("(.*)~(.*)", "\\2", names(params)),
+    Estimate = unname(params),
+    Response = gsub("(.*)~(.*)", "\\1", names(params)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  text_remove_backticks(out)
+}
+
+
+#' @export
 get_parameters.brmultinom <- get_parameters.multinom
 
 

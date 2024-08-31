@@ -302,6 +302,14 @@ link_inverse.flic <- link_inverse.gmnl
 #' @export
 link_inverse.multinom <- link_inverse.gmnl
 
+#' @export
+link_inverse.multinom_weightit <- function(x, ...) {
+  stats::make.link(link = x$family$link)$linkinv
+}
+
+#' @export
+link_inverse.ordinal_weightit <- link_inverse.multinom_weightit
+
 
 # Probit link ------------------------
 

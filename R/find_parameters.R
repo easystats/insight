@@ -173,6 +173,19 @@ find_parameters.multinom <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.brmultinom <- find_parameters.multinom
 
+#' @export
+find_parameters.multinom_weightit <- function(x, flatten = FALSE, ...) {
+  params <- stats::coef(x)
+  resp <- gsub("(.*)~(.*)", "\\1", names(params))
+  pars <- gsub("(.*)~(.*)", "\\2", names(params))[resp == resp[1]]
+
+  if (flatten) {
+    unique(unlist(pars, use.names = FALSE))
+  } else {
+    pars
+  }
+}
+
 
 # SEM models ------------------------------------------------------
 

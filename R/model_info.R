@@ -415,6 +415,21 @@ model_info.serp <- model_info.clm
 #' @export
 model_info.mixor <- model_info.clm
 
+#' @export
+model_info.ordinal_weightit <- function(x, verbose = TRUE, ...) {
+  faminfo <- stats::binomial(link = .get_ordinal_link(x$family))
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    verbose = verbose,
+    ...
+  )
+}
+
+#' @export
+model_info.multinom_weightit <- model_info.ordinal_weightit
 
 #' @export
 model_info.mvord <- function(x, verbose = verbose, ...) {

@@ -1,5 +1,10 @@
 # insight 0.20.4
 
+## New supported models
+
+* Support for models of classes `glm_weighit`, `multinom_weightit` and
+  `ordinal_weightit` (package *WeightIt*).
+
 ## Changes
 
 * `null_model()` and `formula_ok()` now warn when indexed data frames, such as
