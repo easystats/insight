@@ -14,10 +14,11 @@ w.out <- WeightIt::weightit(
 )
 set.seed(123)
 fit3 <- WeightIt::lm_weightit(
-  re78 ~ treat + age + educ, data = lalonde,
+  re78 ~ treat + age + educ,
+  data = lalonde,
   weightit = w.out,
   vcov = "FWB",
-  R = 50, #should use way more
+  R = 50, # should use way more
   fwb.args = list(wtype = "mammen")
 )
 
