@@ -68,8 +68,7 @@ link_inverse.default <- function(x, ...) {
   }
   # if all fails, force default link
   if (is.null(out) && !is.null(default_link)) {
-    out <- switch(
-      default_link,
+    out <- switch(default_link,
       identity = .safe(stats::gaussian(link = "identity")$linkinv),
       .safe(stats::make.link(link = default_link)$linkinv)
     )
