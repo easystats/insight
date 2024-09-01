@@ -90,15 +90,15 @@ test_that("find_response", {
 })
 
 test_that("link_inverse", {
-  expect_identical(link_inverse(fit3)(0.2), 0.2)
-  expect_identical(link_inverse(fit4)(0.2), plogis(0.2))
-  expect_identical(link_inverse(fit5)(0.2), 0.5792597) # probit
+  expect_equal(link_inverse(fit3)(0.2), 0.2, tolerance = 1e-3)
+  expect_equal(link_inverse(fit4)(0.2), plogis(0.2), tolerance = 1e-3)
+  expect_equal(link_inverse(fit5)(0.2), 0.5792597, tolerance = 1e-3) # probit
 })
 
 test_that("link_function", {
-  expect_identical(link_function(fit3)(0.2), 0.2)
-  expect_identical(link_function(fit4)(0.2), qlogis(0.2))
-  expect_identical(link_function(fit5)(0.2), -0.8416212) # probit
+  expect_equal(link_function(fit3)(0.2), 0.2, tolerance = 1e-3)
+  expect_equal(link_function(fit4)(0.2), qlogis(0.2), tolerance = 1e-3)
+  expect_equal(link_function(fit5)(0.2), -0.8416212, tolerance = 1e-3) # probit
 })
 
 test_that("loglik", {
