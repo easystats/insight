@@ -86,7 +86,7 @@ test_that("find_predictors", {
 test_that("find_response", {
   expect_identical(find_response(fit3), "re78")
   expect_identical(find_response(fit4), "re78_3")
-  expect_identical(find_response(fit3), "re78_3")
+  expect_identical(find_response(fit5), "re78_3")
 })
 
 test_that("link_inverse", {
@@ -118,7 +118,7 @@ test_that("get_data", {
   expect_equal(nrow(get_data(fit3)), 614, ignore_attr = TRUE)
   expect_named(get_data(fit3), c("re78", "treat", "age", "educ"))
   expect_equal(nrow(get_data(fit4)), 614, ignore_attr = TRUE)
-  expect_named(get_data(fit3), c("re78_3", "treat", "age", "educ"))
+  expect_named(get_data(fit5), c("re78_3", "treat", "age", "educ"))
 })
 
 test_that("get_intercept", {
