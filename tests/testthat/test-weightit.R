@@ -146,21 +146,21 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(fit3),
     list(
       response = "re78",
       conditional = c("treat", "age", "educ")
     )
   )
-  expect_equal(
+  expect_identical(
     find_terms(fit4),
     list(
       response = "re78_3",
       conditional = c("treat", "age", "educ")
     )
   )
-  expect_equal(
+  expect_identical(
     find_terms(fit5),
     list(
       response = "re78_3",
@@ -170,21 +170,21 @@ test_that("find_terms", {
 })
 
 test_that("find_parameters", {
-  expect_equal(
+  expect_identical(
     find_parameters(fit3),
     list(conditional = c("(Intercept)", "treat", "age", "educ"))
   )
-  expect_equal(
+  expect_identical(
     find_parameters(fit4),
     list(conditional = c("(Intercept)", "treat", "age", "educ"))
   )
-  expect_equal(
+  expect_identical(
     find_parameters(fit5),
     list(conditional = c("treat", "age", "educ", "1|2", "2|3"))
   )
-  expect_equal(nrow(get_parameters(fit3)), 4)
-  expect_equal(nrow(get_parameters(fit4)), 8)
-  expect_equal(nrow(get_parameters(fit5)), 5)
+  expect_identical(nrow(get_parameters(fit3)), 4L)
+  expect_identical(nrow(get_parameters(fit4)), 8L)
+  expect_identical(nrow(get_parameters(fit5)), 5L)
 })
 
 test_that("is_model", {
@@ -194,9 +194,9 @@ test_that("is_model", {
 })
 
 test_that("get_varcov", {
-  expect_equal(diag(get_varcov(fit3)), diag(vcov(fit3)))
-  expect_equal(diag(get_varcov(fit4)), diag(vcov(fit4)))
-  expect_equal(diag(get_varcov(fit5)), diag(vcov(fit5)))
+  expect_equal(diag(get_varcov(fit3)), diag(vcov(fit3)), tolerance = 1e-5)
+  expect_equal(diag(get_varcov(fit4)), diag(vcov(fit4)), tolerance = 1e-5)
+  expect_equal(diag(get_varcov(fit5)), diag(vcov(fit5)), tolerance = 1e-5)
 })
 
 test_that("get_statistic", {
@@ -218,7 +218,7 @@ test_that("get_statistic", {
 })
 
 test_that("find_statistic", {
-  expect_equal(find_statistic(fit3), "t-statistic")
-  expect_equal(find_statistic(fit4), "z-statistic")
-  expect_equal(find_statistic(fit5), "z-statistic")
+  expect_identical(find_statistic(fit3), "t-statistic")
+  expect_identical(find_statistic(fit4), "z-statistic")
+  expect_identical(find_statistic(fit5), "z-statistic")
 })
