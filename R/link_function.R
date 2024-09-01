@@ -45,14 +45,15 @@ link_function.default <- function(x, ...) {
   out <- .safe(stats::family(x)$linkfun)
   # if it fails, try to retrieve from model information
   if (is.null(out)) {
-    # get model family
+    # get model family, consider special gam-case
     ff <- .gam_family(x)
     if ("linkfun" %in% names(ff)) {
-    # return link function, if exists
-    out <- ff$linkfun
+      # return link function, if exists
+      out <- ff$linkfun
     } else if ("link" %in% names(ff) && is.character(ff$link)) {
       # else, create link function from link-string
       out <- .safe(stats::make.link(ff$link)$linkinv)
+      # or match the function - for "exp()", make.link() won't work
       if (is.null(out)) {
         out <- .safe(match.fun(ff$link))
       }
@@ -64,7 +65,7 @@ link_function.default <- function(x, ...) {
       }
     }
   }
-  # if it fails, force default link
+  # if all fails, force default link
   if (is.null(out) && !is.null(default_link)) {
     out <- switch(
       default_link,
