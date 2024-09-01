@@ -57,6 +57,7 @@ supported_models <- function() {
     "censReg", "cgam", "cgamm", "cglm", "clm", "clm2", "clmm", "clmm2",
     "clogit", "coeftest", "complmrob", "confusionMatrix", "coxme", "coxph",
     "coxph.penal", "coxr", "cpglm", "cpglmm", "crch", "crq", "crqs", "crr",
+    "coxph_weightit",
 
     # d ----------------------------
     "dep.effect", "DirichletRegModel", "draws", "drc",
@@ -71,7 +72,7 @@ supported_models <- function() {
     "gam", "Gam", "gamlss", "gamm", "gamm4", "garch", "gbm", "gee", "geeglm",
     "glht", "glimML", "glmm", "glm", "Glm", "glmmadmb", "glmmPQL", "glmmTMB",
     "glmrob", "glmRob", "glmx", "gls", "gmnl", "glmgee", "ggcomparisons",
-    "glmerMod", "glm_weighit",
+    "glmerMod", "glm_weightit",
 
     # h ----------------------------
     "HLfit", "htest", "hurdle", "hglm",
@@ -96,7 +97,7 @@ supported_models <- function() {
     "negbinmfx", "negbinirr", "nestedLogit",
 
     # o ----------------------------
-    "ols", "onesampb", "orm", "ordinal_weighit",
+    "ols", "onesampb", "orm", "ordinal_weightit",
 
     # p ----------------------------
     "PMCMR", "poissonmfx", "poissonirr", "pgmm", "plm", "polr", "psm",

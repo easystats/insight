@@ -71,7 +71,8 @@ is_regression_model <- function(x) {
     "cch", "censReg", "cgam", "cgamm", "cglm", "clm", "clm2",
     "clmm", "clmm2", "clogit", "coeftest", "complmrob", "comprisk",
     "confusionMatrix", "coxme", "coxph", "coxph.penal", "coxr",
-    "cpglm", "cpglmm", "crch", "crq", "crqs", "crr", "dglm",
+    "cpglm", "cpglmm", "crch", "crq", "crqs", "crr", "cglm",
+    "coxph_weightit",
 
     # d --------------------
     "dep.effect", "deltaMethod", "DirichletRegModel", "drc",
@@ -90,7 +91,7 @@ is_regression_model <- function(x) {
     "glmerMod", "glmlep", "glmm", "glmmadmb", "glmmEP", "glmmFit",
     "glmmfields", "glmmLasso", "glmmPQL", "glmmTMB", "glmnet", "glmrob",
     "glmRob", "glmx", "gls", "gmnl", "gmm", "gnls", "gsm", "ggcomparisons",
-    "glm_weighit",
+    "glm_weightit",
 
     # h --------------------
     "heavyLme", "HLfit", "htest", "hurdle", "hglm",
