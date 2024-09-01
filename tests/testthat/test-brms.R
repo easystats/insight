@@ -884,14 +884,14 @@ test_that("clean_parameters", {
 test_that("get_modelmatrix", {
   out <- get_modelmatrix(m1)
   expect_identical(dim(out), c(236L, 4L))
-  m9 <- insight::download_model("brms_mo2")
+  m9 <- suppressWarnings(insight::download_model("brms_mo2"))
   skip_if(is.null(m9))
   out <- get_modelmatrix(m9)
   expect_identical(dim(out), c(32L, 2L))
 })
 
 test_that("get_modelmatrix", {
-  m10 <- insight::download_model("brms_lf_1")
+  m10 <- suppressWarnings(insight::download_model("brms_lf_1"))
   expect_identical(
     find_variables(m10),
     list(
@@ -903,7 +903,7 @@ test_that("get_modelmatrix", {
 
 # get variance
 test_that("get_variance works", {
-  mdl <- insight::download_model("brms_mixed_9")
+  mdl <- suppressWarnings(insight::download_model("brms_mixed_9"))
   out <- get_variance(mdl)
   expect_equal(
     out,

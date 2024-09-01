@@ -1,6 +1,7 @@
 skip_on_cran()
 skip_if_not_installed("WeightIt")
 skip_if_not_installed("cobalt")
+skip_if_not_installed("fwb")
 
 data("lalonde", package = "cobalt")
 
