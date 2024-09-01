@@ -141,7 +141,7 @@ test_that("find_formula", {
   )
   expect_equal(
     find_formula(fit5),
-    list(conditional = as.formula("re78_3 ~ treat + age + educ")),
+    list(conditional = as.formula("ordered(re78_3) ~ treat + age + educ")),
     ignore_attr = TRUE
   )
 })
@@ -164,7 +164,7 @@ test_that("find_terms", {
   expect_identical(
     find_terms(fit5),
     list(
-      response = "re78_3",
+      response = "ordered(re78_3)",
       conditional = c("treat", "age", "educ")
     )
   )
