@@ -11,9 +11,15 @@
   `df[, 5]`, are used as response variable in the formula, as this can lead to
   unexpected results.
 
+* Minor improvements to `link_function()` and `link_inverse()`.
+
 ## Bug fixes
 
 * Fixed regression from latest fix related to `get_variance()` for *brms* models.
+
+* Fixed issue in `link_function()` and `link_inverse()` for models of class
+  *cglm* with `"identity"` link, which was not correctly recognized due to a
+  typo.
 
 # insight 0.20.3
 

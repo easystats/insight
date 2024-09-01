@@ -122,7 +122,7 @@ find_statistic <- function(x, ...) {
     "ergm",
     "feglm", "flexsurvreg",
     "gee", "ggcomparisons", "glimML", "glmm", "glmmadmb", "glmmFit", "glmmLasso",
-    "glmmTMB", "glmx", "gmnl", "glmgee", "glm_weightit",
+    "glmmTMB", "glmx", "gmnl", "glmgee",
     "hurdle",
     "lavaan", "loggammacenslmrob", "logitmfx", "logitor", "logitr", "LORgee", "lrm",
     "margins", "marginaleffects", "marginaleffects.summary", "metaplus", "mixor",
@@ -175,7 +175,7 @@ find_statistic <- function(x, ...) {
       "bam", "bigglm",
       "cgam", "cgamm",
       "eglm", "emmGrid", "emm_list",
-      "gam", "glm", "Glm", "glmc", "glmerMod", "glmRob", "glmrob",
+      "gam", "glm", "Glm", "glmc", "glmerMod", "glmRob", "glmrob", "glm_weightit",
       "pseudoglm",
       "scam",
       "speedglm"

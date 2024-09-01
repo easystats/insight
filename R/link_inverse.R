@@ -43,17 +43,45 @@ link_inverse.default <- function(x, ...) {
   if (inherits(x, "Zelig-relogit")) {
     stats::make.link(link = "logit")$linkinv
   } else {
-    .safe(stats::family(x)$linkinv)
+    .extract_generic_linkinv(x)
   }
 }
 
+.extract_generic_linkinv <- function(x, default_link = NULL) {
+  # general approach
+  out <- .safe(stats::family(x)$linkinv)
+  # if it fails, try to retrieve from model information
+  if (is.null(out)) {
+    # get model family, consider special gam-case
+    ff <- .gam_family(x)
+    if ("linkfun" %in% names(ff)) {
+      # return link function, if exists
+      out <- ff$linkinv
+    } else if ("link" %in% names(ff) && is.character(ff$link)) {
+      # else, create link function from link-string
+      out <- .safe(stats::make.link(link = ff$link)$linkinv)
+      # or match the function - for "exp()", make.link() won't work
+      if (is.null(out)) {
+        out <- .safe(match.fun(ff$link))
+      }
+    }
+  }
+  # if all fails, force default link
+  if (is.null(out) && !is.null(default_link)) {
+    out <- switch(default_link,
+      identity = .safe(stats::gaussian(link = "identity")$linkinv),
+      .safe(stats::make.link(link = default_link)$linkinv)
+    )
+  }
+  out
+}
 
 
 # GLM families ---------------------------------------------------
 
 #' @export
 link_inverse.glm <- function(x, ...) {
-  tryCatch(stats::family(x)$linkinv, error = function(x) NULL)
+  .extract_generic_linkinv(x, "logit")
 }
 
 #' @export
@@ -96,7 +124,7 @@ link_inverse.flexsurvreg <- function(x, ...) {
 
 #' @export
 link_inverse.lm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
+  .extract_generic_linkinv(x, "identity")
 }
 
 #' @export
@@ -239,7 +267,7 @@ link_inverse.DirichletRegModel <- function(x, what = c("mean", "precision"), ...
 
 #' @export
 link_inverse.gmnl <- function(x, ...) {
-  stats::make.link("logit")$linkinv
+  .extract_generic_linkinv(x, "logit")
 }
 
 #' @export
@@ -434,7 +462,7 @@ link_inverse.cglm <- function(x, ...) {
   method <- parse(text = safe_deparse(x$call))[[1]]$method
 
   if (!is.null(method) && method == "clm") {
-    link <- "identiy"
+    link <- "identity"
   }
   stats::make.link(link = link)$linkinv
 }
