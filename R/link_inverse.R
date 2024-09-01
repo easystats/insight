@@ -43,17 +43,37 @@ link_inverse.default <- function(x, ...) {
   if (inherits(x, "Zelig-relogit")) {
     stats::make.link(link = "logit")$linkinv
   } else {
-    .safe(stats::family(x)$linkinv)
+    .extract_generic_linkinv(x)
   }
 }
 
+.extract_generic_linkinv <- function(x, default_link = NULL) {
+  # general approach
+  out <- .safe(stats::family(x)$linkinv)
+  # if it fails, try to retrieve from model information
+  if (is.null(out)) {
+    link <- .safe(x$family$link)
+    if (!is.null(link)) {
+      out <- .safe(stats::make.link(link = link)$linkinv)
+    }
+  }
+  # if it fails, force identity link
+  if (is.null(out) && !is.null(default_link)) {
+    out <- switch(
+      default_link,
+      identiy = .safe(stats::gaussian(link = "identity")$linkinv),
+      .safe(stats::make.link(link = default_link)$linkinv)
+    )
+  }
+  out
+}
 
 
 # GLM families ---------------------------------------------------
 
 #' @export
 link_inverse.glm <- function(x, ...) {
-  tryCatch(stats::family(x)$linkinv, error = function(x) NULL)
+  .extract_generic_linkinv(x, "logit")
 }
 
 #' @export
@@ -96,7 +116,7 @@ link_inverse.flexsurvreg <- function(x, ...) {
 
 #' @export
 link_inverse.lm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkinv
+  .extract_generic_linkinv(x)
 }
 
 #' @export
@@ -239,7 +259,7 @@ link_inverse.DirichletRegModel <- function(x, what = c("mean", "precision"), ...
 
 #' @export
 link_inverse.gmnl <- function(x, ...) {
-  stats::make.link("logit")$linkinv
+  .extract_generic_linkinv(x, "logit")
 }
 
 #' @export

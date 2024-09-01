@@ -36,28 +36,43 @@ link_function.default <- function(x, ...) {
     x <- x$gam
     class(x) <- c(class(x), c("glm", "lm"))
   }
+  .extract_generic_linkfun(x)
+}
 
-  tryCatch(
-    {
-      # get model family
-      ff <- .gam_family(x)
 
-      # return link function, if exists
-      if ("linkfun" %in% names(ff)) {
-        return(ff$linkfun)
-      }
-
+.extract_generic_linkfun <- function(x, default_link = NULL) {
+  # general approach
+  out <- .safe(stats::family(x)$linkfun)
+  # if it fails, try to retrieve from model information
+  if (is.null(out)) {
+    # get model family
+    ff <- .gam_family(x)
+    if ("linkfun" %in% names(ff)) {
+    # return link function, if exists
+    out <- ff$linkfun
+    } else if ("link" %in% names(ff) && is.character(ff$link)) {
       # else, create link function from link-string
-      if ("link" %in% names(ff)) {
-        return(match.fun(ff$link))
+      out <- .safe(stats::make.link(ff$link)$linkinv)
+      if (is.null(out)) {
+        out <- .safe(match.fun(ff$link))
       }
-
-      NULL
-    },
-    error = function(x) {
-      NULL
     }
-  )
+    if (is.null(out)) {
+      link <- .safe(x$family$link)
+      if (!is.null(link)) {
+        out <- .safe(stats::make.link(link = link)$linkfun)
+      }
+    }
+  }
+  # if it fails, force default link
+  if (is.null(out) && !is.null(default_link)) {
+    out <- switch(
+      default_link,
+      identiy = .safe(stats::gaussian(link = "identity")$linkfun),
+      .safe(stats::make.link(link = default_link)$linkfun)
+    )
+  }
+  out
 }
 
 
@@ -66,7 +81,7 @@ link_function.default <- function(x, ...) {
 
 #' @export
 link_function.lm <- function(x, ...) {
-  stats::gaussian(link = "identity")$linkfun
+  .extract_generic_linkfun(x, "identity")
 }
 
 #' @export
@@ -202,7 +217,7 @@ link_function.nestedLogit <- function(x, ...) {
 
 #' @export
 link_function.multinom <- function(x, ...) {
-  stats::make.link(link = "logit")$linkfun
+  .extract_generic_linkfun(x, "logit")
 }
 
 #' @export
@@ -544,28 +559,7 @@ link_function.bcplm <- link_function.cpglmm
 
 #' @export
 link_function.gam <- function(x, ...) {
-  lf <- tryCatch(
-    {
-      # get model family
-      ff <- .gam_family(x)
-
-      # return link function, if exists
-      if ("linkfun" %in% names(ff)) {
-        return(ff$linkfun)
-      }
-
-      # else, create link function from link-string
-      if ("link" %in% names(ff)) {
-        return(match.fun(ff$link))
-      }
-
-      NULL
-    },
-    error = function(x) {
-      NULL
-    }
-  )
-
+  lf <- .extract_generic_linkfun(x)
   if (is.null(lf)) {
     mi <- .gam_family(x)
     if (object_has_names(mi, "linfo")) {
