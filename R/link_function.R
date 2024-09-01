@@ -491,7 +491,7 @@ link_function.cglm <- function(x, ...) {
   method <- parse(text = safe_deparse(x$call))[[1]]$method
 
   if (!is.null(method) && method == "clm") {
-    link <- "identiy"
+    link <- "identity"
   }
   stats::make.link(link = link)$linkfun
 }
