@@ -63,7 +63,7 @@ link_function.default <- function(x, ...) {
   if (is.null(out) && !is.null(default_link)) {
     out <- switch(
       default_link,
-      identiy = .safe(stats::gaussian(link = "identity")$linkfun),
+      identity = .safe(stats::gaussian(link = "identity")$linkfun),
       .safe(stats::make.link(link = default_link)$linkfun)
     )
   }

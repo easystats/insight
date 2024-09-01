@@ -70,7 +70,7 @@ link_inverse.default <- function(x, ...) {
   if (is.null(out) && !is.null(default_link)) {
     out <- switch(
       default_link,
-      identiy = .safe(stats::gaussian(link = "identity")$linkinv),
+      identity = .safe(stats::gaussian(link = "identity")$linkinv),
       .safe(stats::make.link(link = default_link)$linkinv)
     )
   }
