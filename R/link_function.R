@@ -52,16 +52,10 @@ link_function.default <- function(x, ...) {
       out <- ff$linkfun
     } else if ("link" %in% names(ff) && is.character(ff$link)) {
       # else, create link function from link-string
-      out <- .safe(stats::make.link(ff$link)$linkinv)
+      out <- .safe(stats::make.link(link = ff$link)$linkfun)
       # or match the function - for "exp()", make.link() won't work
       if (is.null(out)) {
         out <- .safe(match.fun(ff$link))
-      }
-    }
-    if (is.null(out)) {
-      link <- .safe(x$family$link)
-      if (!is.null(link)) {
-        out <- .safe(stats::make.link(link = link)$linkfun)
       }
     }
   }

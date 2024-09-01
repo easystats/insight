@@ -114,12 +114,12 @@ test_that("get_df", {
 })
 
 test_that("get_data", {
-  expect_equal(nrow(get_data(fit3)), 614)
+  expect_equal(nrow(get_data(fit3)), 614, ignore_attr = TRUE)
   expect_equal(
     colnames(get_data(fit3)),
     c("re78", "treat", "age", "educ")
   )
-  expect_equal(nrow(get_data(fit4)), 614)
+  expect_equal(nrow(get_data(fit4)), 614, ignore_attr = TRUE)
   expect_equal(
     colnames(get_data(fit4)),
     c("re78_3", "treat", "age", "educ")

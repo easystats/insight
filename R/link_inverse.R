@@ -52,12 +52,21 @@ link_inverse.default <- function(x, ...) {
   out <- .safe(stats::family(x)$linkinv)
   # if it fails, try to retrieve from model information
   if (is.null(out)) {
-    link <- .safe(x$family$link)
-    if (!is.null(link)) {
-      out <- .safe(stats::make.link(link = link)$linkinv)
+    # get model family, consider special gam-case
+    ff <- .gam_family(x)
+    if ("linkfun" %in% names(ff)) {
+      # return link function, if exists
+      out <- ff$linkinv
+    } else if ("link" %in% names(ff) && is.character(ff$link)) {
+      # else, create link function from link-string
+      out <- .safe(stats::make.link(link = ff$link)$linkinv)
+      # or match the function - for "exp()", make.link() won't work
+      if (is.null(out)) {
+        out <- .safe(match.fun(ff$link))
+      }
     }
   }
-  # if it fails, force identity link
+  # if all fails, force default link
   if (is.null(out) && !is.null(default_link)) {
     out <- switch(
       default_link,
@@ -116,7 +125,7 @@ link_inverse.flexsurvreg <- function(x, ...) {
 
 #' @export
 link_inverse.lm <- function(x, ...) {
-  .extract_generic_linkinv(x)
+  .extract_generic_linkinv(x, "identity")
 }
 
 #' @export
