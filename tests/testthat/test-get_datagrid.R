@@ -213,8 +213,92 @@ test_that("get_datagrid - models", {
   expect_identical(dim(get_datagrid(mod, include_random = FALSE, include_smooth = FALSE)), as.integer(c(10, 1)))
 })
 
+test_that("get_datagrid - emmeans", {
+  skip_if_not_installed("emmeans")
+  skip_on_cran()
 
-test_that("factor levels as reference / non-focal terms works", {
+  data("mtcars")
+
+  mod1 <- glm(am ~ hp + factor(cyl), family = binomial("logit"), data = mtcars)
+  mod2 <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+
+  hp_vals <- c(50, 100)
+
+  em1 <- emmeans::emmeans(mod1, ~ cyl | hp, at = list(hp = hp_vals))
+  em2 <- emmeans::regrid(em1)
+  em3 <- emmeans::emmeans(mod2, ~ cyl | hp, at = list(hp = hp_vals))
+
+  res <- get_datagrid(em1)
+  expect_identical(res, get_datagrid(em2))
+  expect_identical(res, get_datagrid(em3))
+  expect_s3_class(res, "data.frame")
+  expect_identical(dim(res), c(6L, 2L))
+  expect_true(all(c(4, 6, 8) %in% res[[1]]))
+  expect_true(all(hp_vals %in% res[[2]]))
+
+  res <- get_datagrid(emmeans::contrast(em1, method = "poly", max.degree = 2))
+  expect_s3_class(res, "data.frame")
+  expect_identical(dim(res), c(4L, 2L))
+  expect_true("contrast" %in% colnames(res))
+  expect_true(all(c("linear", "quadratic") %in% res[["contrast"]]))
+  expect_true(all(hp_vals %in% res[["hp"]]))
+
+  # emm_list
+  em1 <- emmeans::emmeans(mod1, pairwise ~ cyl | hp, at = list(hp = hp_vals))
+  em2 <- emmeans::emmeans(mod1, pairwise ~ cyl | hp, at = list(hp = hp_vals), regrid = TRUE)
+  em3 <- emmeans::emmeans(mod2, pairwise  ~ cyl | hp, at = list(hp = hp_vals))
+
+  res <- get_datagrid(em1)
+  expect_identical(res, get_datagrid(em2))
+  expect_identical(res, get_datagrid(em3))
+  expect_s3_class(res, "data.frame")
+  expect_identical(dim(res), c(12L, 3L))
+  expect_true("contrast" %in% colnames(res))
+  expect_true(anyNA(res[["contrast"]]))
+  expect_true(all(c(4, 6, 8, NA) %in% res[["cyl"]]))
+  expect_true(all(hp_vals %in% res[["hp"]]))
+})
+
+test_that("get_datagrid - marginaleffects", {
+  skip_if_not_installed("marginaleffects")
+  skip_on_cran()
+
+  data("mtcars")
+
+  mod1 <- glm(am ~ hp + factor(cyl), family = binomial("logit"), data = mtcars)
+  mod2 <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+
+  mp1 <- marginaleffects::avg_predictions(mod1, variables = list("hp" = c(50, 100)),
+                                          by = c("cyl", "hp"))
+  mp2 <- marginaleffects::avg_predictions(mod2, variables = list("hp" = c(50, 100),
+                                                                 cyl = unique))
+
+  res <- get_datagrid(mp1)
+  expect_s3_class(res, "data.frame")
+  expect_identical(dim(res), c(6L, 2L))
+  expect_true(all(c(4, 6, 8) %in% res[[1]]))
+  expect_true(all(c(50, 100) %in% res[[2]]))
+
+  res2 <- get_datagrid(mp2)
+  expect_s3_class(res2, "data.frame")
+  expect_identical(dim(res2), c(6L, 2L))
+  expect_true(all(c(4, 6, 8) %in% res2[[2]]))
+  expect_true(all(c(50, 100) %in% res2[[1]]))
+
+
+
+
+  mod <- lm(mpg ~ wt + hp + qsec, data = mtcars)
+  myme <- marginaleffects::comparisons(mod,
+                                       variables = c("wt", "hp"),
+                                       cross = TRUE,
+                                       newdata = marginaleffects::datagrid(qsec = range))
+  res <- get_datagrid(myme)
+  expect_true(all(c("wt", "mpg", "hp", "qsec") %in% colnames(res)))
+  expect_true(all(c("contrast_hp", "contrast_wt") %in% colnames(res)))
+})
+
+test_that("get_datagrid - factor levels as reference / non-focal terms works", {
   d <- structure(list(
     lfp = structure(c(
       2L, 2L, 2L, 2L, 2L, 2L, 2L,
