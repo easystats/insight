@@ -1,3 +1,10 @@
+# insight 0.20.xxx
+
+## General
+
+* `get_datagrid()` can now be used to extract the "grid" information from 
+  `{emmeans}` and `{marginaleffects}` outputs.
+
 # insight 0.20.4
 
 ## New supported models
