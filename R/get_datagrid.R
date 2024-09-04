@@ -693,7 +693,7 @@ get_datagrid.emm_list <- function(x, ...) {
 get_datagrid.slopes <- function(x, ...) {
   cols_newdata <- colnames(attr(x, "newdata"))
   cols_contrast <- colnames(x)[grep("^contrast_?", colnames(x))]
-  cols_misc <- c("by", "hypothesis")
+  cols_misc <- c("term", "by", "hypothesis")
   cols_grid <- union(union(cols_newdata, cols_contrast), cols_misc)
 
   data.frame(x)[, intersect(colnames(x), cols_grid), drop = FALSE]
