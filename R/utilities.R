@@ -12,10 +12,11 @@
 #' valid object name.
 #'
 #' @param x A (character) vector, or for some functions may also be a data frame.
-#' @param na.rm Logical, if missing values should be removed from the input.
+#' @param remove_na Logical, if missing values should be removed from the input.
 #' @param character_only Logical, if `TRUE` and `x` is a data frame or list,
 #' only processes character vectors.
 #' @param ... Currently not used.
+#' @param na.rm Deprecated. Use `remove_na` instead.
 #'
 #' @return
 #' - `n_unique()`: For a vector, `n_unique` always returns an integer value,
@@ -88,22 +89,37 @@ n_unique <- function(x, ...) {
 
 #' @rdname trim_ws
 #' @export
-n_unique.default <- function(x, na.rm = TRUE, ...) {
+n_unique.default <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
   if (is.null(x)) {
     return(0)
   }
-  if (isTRUE(na.rm)) x <- x[!is.na(x)]
+  ## TODO:: remove deprecation warning later
+  if (!missing(na.rm)) {
+    format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
+    remove_na <- na.rm
+  }
+  if (isTRUE(remove_na)) x <- x[!is.na(x)]
   length(unique(x))
 }
 
 #' @export
-n_unique.data.frame <- function(x, na.rm = TRUE, ...) {
-  vapply(x, n_unique, na.rm = na.rm, FUN.VALUE = numeric(1L))
+n_unique.data.frame <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
+  ## TODO:: remove deprecation warning later
+  if (!missing(na.rm)) {
+    format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
+    remove_na <- na.rm
+  }
+  vapply(x, n_unique, na.rm = remove_na, FUN.VALUE = numeric(1L))
 }
 
 #' @export
-n_unique.list <- function(x, na.rm = TRUE, ...) {
-  lapply(x, n_unique, na.rm = na.rm)
+n_unique.list <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
+  ## TODO:: remove deprecation warning later
+  if (!missing(na.rm)) {
+    format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
+    remove_na <- na.rm
+  }
+  lapply(x, n_unique, na.rm = remove_na)
 }
 
 
@@ -139,7 +155,12 @@ safe_deparse_symbol <- function(x) {
 
 #' @rdname trim_ws
 #' @export
-has_single_value <- function(x, na.rm = FALSE) {
-  if (na.rm) x <- x[!is.na(x)]
+has_single_value <- function(x, remove_na = FALSE, na.rm = remove_na, ...) {
+  ## TODO:: remove deprecation warning later
+  if (!missing(na.rm)) {
+    format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
+    remove_na <- na.rm
+  }
+  if (remove_na) x <- x[!is.na(x)]
   !is.null(x) && length(x) > 0L && isTRUE(all(x == x[1]))
 }

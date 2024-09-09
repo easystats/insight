@@ -430,7 +430,7 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
     response_transform <- find_transformation(x)
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
       # we only use the jacobian adjustment, because it can handle weights
-      model_weights <- get_weights(x, na_rm = TRUE)
+      model_weights <- get_weights(x, remove_na = TRUE)
       ll_adjustment <- .ll_analytic_adjustment(x, model_weights)
 
       # for debugging

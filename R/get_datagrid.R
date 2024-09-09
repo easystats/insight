@@ -662,7 +662,9 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 #' @rdname get_datagrid
 #' @export
 get_datagrid.emmGrid <- function(x, ...) {
-  suppressWarnings({s <- as.data.frame(x)})
+  suppressWarnings({
+    s <- as.data.frame(x)
+  })
   # We want all the columns *before* the estimate column
   est_col_idx <- which(colnames(s) == attr(s, "estName"))
   which_cols <- seq_len(est_col_idx - 1)
@@ -899,13 +901,13 @@ get_datagrid.comparisons <- get_datagrid.slopes
       disp <- stats::sd(x, na.rm = TRUE)
       center <- mean(x, na.rm = TRUE)
       labs <- ifelse(sign(spread) == -1, paste(spread, "SD"),
-                     ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean") # nolint
+        ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean") # nolint
       )
     } else {
       disp <- stats::mad(x, na.rm = TRUE)
       center <- stats::median(x, na.rm = TRUE)
       labs <- ifelse(sign(spread) == -1, paste(spread, "MAD"),
-                     ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median") # nolint
+        ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median") # nolint
       )
     }
     out <- center + spread * disp
