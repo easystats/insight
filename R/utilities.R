@@ -94,7 +94,7 @@ n_unique.default <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
     return(0)
   }
   ## TODO:: remove deprecation warning later
-  if (!missin(na.rm)) {
+  if (!missing(na.rm)) {
     format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
     remove_na <- na.rm
   }
@@ -105,7 +105,7 @@ n_unique.default <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
 #' @export
 n_unique.data.frame <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
   ## TODO:: remove deprecation warning later
-  if (!missin(na.rm)) {
+  if (!missing(na.rm)) {
     format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
     remove_na <- na.rm
   }
@@ -115,7 +115,7 @@ n_unique.data.frame <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
 #' @export
 n_unique.list <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
   ## TODO:: remove deprecation warning later
-  if (!missin(na.rm)) {
+  if (!missing(na.rm)) {
     format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
     remove_na <- na.rm
   }
