@@ -16,13 +16,13 @@ trim_ws(x, ...)
 
 n_unique(x, ...)
 
-\method{n_unique}{default}(x, na.rm = TRUE, ...)
+\method{n_unique}{default}(x, remove_na = TRUE, na.rm = remove_na, ...)
 
 safe_deparse(x, ...)
 
 safe_deparse_symbol(x)
 
-has_single_value(x, na.rm = FALSE)
+has_single_value(x, remove_na = FALSE, na.rm = remove_na, ...)
 }
 \arguments{
 \item{x}{A (character) vector, or for some functions may also be a data frame.}
@@ -32,7 +32,9 @@ has_single_value(x, na.rm = FALSE)
 \item{character_only}{Logical, if \code{TRUE} and \code{x} is a data frame or list,
 only processes character vectors.}
 
-\item{na.rm}{Logical, if missing values should be removed from the input.}
+\item{remove_na}{Logical, if missing values should be removed from the input.}
+
+\item{na.rm}{Deprecated. Use \code{remove_na} instead.}
 }
 \value{
 \itemize{

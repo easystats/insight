@@ -2,8 +2,11 @@
 
 ## General
 
-* `get_datagrid()` can now be used to extract the "grid" information from 
+* `get_datagrid()` can now be used to extract the "grid" information from
   `{emmeans}` and `{marginaleffects}` outputs.
+
+* Argument `na.rm` is deprecated throughout the package's functions. Instead,
+  use `remove_na`.
 
 # insight 0.20.4
 
