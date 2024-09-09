@@ -24,7 +24,6 @@ export_table(
   footer = NULL,
   align = NULL,
   by = NULL,
-  group_by = NULL,
   zap_small = FALSE,
   table_width = NULL,
   verbose = TRUE,
@@ -104,8 +103,6 @@ column. For HTML-tables, may be one of \code{"center"}, \code{"left"} or
 \item{by}{Name of column in \code{x} that indicates grouping for tables.
 Only applies when \code{format = "html"}. \code{by} is passed down to
 \code{gt::gt(groupname_col = by)}.}
-
-\item{group_by}{Deprecated, please use \code{by} instead.}
 
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal

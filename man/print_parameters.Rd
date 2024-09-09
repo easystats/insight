@@ -13,8 +13,7 @@ print_parameters(
   keep_parameter_column = TRUE,
   remove_empty_column = FALSE,
   titles = NULL,
-  subtitles = NULL,
-  split_by = NULL
+  subtitles = NULL
 )
 }
 \arguments{
@@ -59,8 +58,6 @@ values for \code{"table_title"} and \code{"table_subtitle"}. \code{titles}
 and \code{subtitles} may be any length from 1 to same length as returned
 list elements. If \code{titles} and \code{subtitles} are shorter than
 existing elements, only the first default attributes are overwritten.}
-
-\item{split_by}{Deprecated, please use \code{by} instead.}
 }
 \value{
 A data frame or a list of data frames (if \code{by} is not \code{NULL}). If a

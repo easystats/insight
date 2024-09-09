@@ -112,7 +112,6 @@
 #' @param verbose Toggle warnings.
 #' @param ... Arguments passed to or from other methods (for instance, `length`
 #'   or `range` to control the spread of numeric variables.).
-#' @param at Deprecated. Use `by` instead.
 #'
 #' @return Reference grid data frame.
 #'
@@ -197,14 +196,7 @@ get_datagrid.data.frame <- function(x,
                                     reference = x,
                                     length = 10,
                                     range = "range",
-                                    at,
                                     ...) {
-  ## TODO: deprecate later
-  if (!missing(at)) {
-    format_warning("Argument `at` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
-    by <- at
-  }
-
   # find numerics that were coerced to factor in-formula
   numeric_factors <- colnames(x)[vapply(x, function(i) isTRUE(attributes(i)$factor), logical(1))]
 
@@ -494,14 +486,7 @@ get_datagrid.default <- function(x,
                                  include_response = FALSE,
                                  data = NULL,
                                  verbose = TRUE,
-                                 at,
                                  ...) {
-  ## TODO: deprecate later
-  if (!missing(at)) {
-    format_warning("Argument `at` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
-    by <- at
-  }
-
   # validation check
   if (!is_model(x)) {
     format_error("`x` must be a statistical model.")

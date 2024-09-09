@@ -48,7 +48,6 @@
 #'   if `table_width` is numeric and table rows are larger than `table_width`,
 #'   the table is split into two parts.
 #' @param ... Currently not used.
-#' @param group_by Deprecated, please use `by` instead.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
@@ -118,7 +117,6 @@ export_table <- function(x,
                          footer = NULL,
                          align = NULL,
                          by = NULL,
-                         group_by = NULL,
                          zap_small = FALSE,
                          table_width = NULL,
                          verbose = TRUE,
@@ -131,12 +129,6 @@ export_table <- function(x,
   # handle alias
   if (format == "md") {
     format <- "markdown"
-  }
-
-  ## TODO: deprecate later
-  if (!is.null(group_by)) {
-    format_warning("Argument `group_by` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
-    by <- group_by
   }
 
   # validation check

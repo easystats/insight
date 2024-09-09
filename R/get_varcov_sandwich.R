@@ -7,34 +7,8 @@
                                  ...) {
   dots <- list(...)
 
-  ## TODO: remove deprecated warnings in a future update
-
-  # deprecated
-  if (isTRUE(verbose) && "vcov_type" %in% names(dots)) {
-    format_warning("The `vcov_type` argument is superseded by the `vcov_args` argument.")
-  }
-  if (isTRUE(verbose) && "robust" %in% names(dots)) {
-    format_warning("The `robust` argument is superseded by the `vcov` argument.")
-  }
-
   if (is.null(vcov_args)) {
     vcov_args <- list()
-  }
-
-  # deprecated: `vcov_estimation`
-  if (is.null(vcov_fun) && "vcov_estimation" %in% names(dots)) {
-    vcov_fun <- dots[["vcov_estimation"]]
-  }
-
-  # deprecated: `robust`
-  if (isTRUE(dots[["robust"]]) && is.null(vcov_fun)) {
-    dots[["robust"]] <- NULL
-    vcov_fun <- "HC3"
-  }
-
-  # deprecated: `vcov_type`
-  if ("vcov_type" %in% names(dots) && !"type" %in% names(vcov_args)) {
-    vcov_args[["type"]] <- dots[["vcov_type"]]
   }
 
   # vcov_fun is a matrix

@@ -21,7 +21,6 @@ get_datagrid(x, ...)
   reference = x,
   length = 10,
   range = "range",
-  at,
   ...
 )
 
@@ -41,7 +40,6 @@ get_datagrid(x, ...)
   include_response = FALSE,
   data = NULL,
   verbose = TRUE,
-  at,
   ...
 )
 
@@ -155,8 +153,6 @@ indicated in \code{length} are generated. For numeric predictors not specified a
 first in \code{by}, mean and -1/+1 SD around the mean are returned. For factors,
 all levels are returned.
 }}
-
-\item{at}{Deprecated. Use \code{by} instead.}
 
 \item{include_smooth}{If \code{x} is a model object, decide whether smooth terms
 should be included in the data grid or not.}
