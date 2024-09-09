@@ -157,7 +157,7 @@ safe_deparse_symbol <- function(x) {
 #' @export
 has_single_value <- function(x, remove_na = FALSE, na.rm = remove_na, ...) {
   ## TODO:: remove deprecation warning later
-  if (!missin(na.rm)) {
+  if (!missing(na.rm)) {
     format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
     remove_na <- na.rm
   }
