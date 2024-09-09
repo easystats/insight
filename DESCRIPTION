@@ -218,3 +218,4 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/Needs/website: easystats/easystatstemplate
 Config/Needs/check: stan-dev/cmdstanr
+Remotes: easystats/bayestestR, easystats/parameters
