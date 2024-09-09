@@ -23,7 +23,7 @@ valid object name."><meta property="og:image" content="https://easystats.github.
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,13 +92,13 @@ valid object name.</p>
 <span><span class="fu">n_unique</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">n_unique</span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">n_unique</span><span class="op">(</span><span class="va">x</span>, remove_na <span class="op">=</span> <span class="cn">TRUE</span>, na.rm <span class="op">=</span> <span class="va">remove_na</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">safe_deparse</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">safe_deparse_symbol</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">has_single_value</span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">has_single_value</span><span class="op">(</span><span class="va">x</span>, remove_na <span class="op">=</span> <span class="cn">FALSE</span>, na.rm <span class="op">=</span> <span class="va">remove_na</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -118,8 +118,12 @@ valid object name.</p>
 only processes character vectors.</p></dd>
 
 
-<dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
+<dt id="arg-remove-na">remove_na<a class="anchor" aria-label="anchor" href="#arg-remove-na"></a></dt>
 <dd><p>Logical, if missing values should be removed from the input.</p></dd>
+
+
+<dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
+<dd><p>Deprecated. Use <code>remove_na</code> instead.</p></dd>
 
 </dl></div>
     <div class="section level2">

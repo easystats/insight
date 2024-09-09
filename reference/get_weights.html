@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_weights</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">get_weights</span><span class="op">(</span><span class="va">x</span>, na_rm <span class="op">=</span> <span class="cn">FALSE</span>, null_as_ones <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">get_weights</span><span class="op">(</span><span class="va">x</span>, remove_na <span class="op">=</span> <span class="cn">FALSE</span>, null_as_ones <span class="op">=</span> <span class="cn">FALSE</span>, na_rm <span class="op">=</span> <span class="va">remove_na</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -78,7 +78,7 @@
 <dd><p>Currently not used.</p></dd>
 
 
-<dt id="arg-na-rm">na_rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
+<dt id="arg-remove-na">remove_na<a class="anchor" aria-label="anchor" href="#arg-remove-na"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, removes possible missing values.</p></dd>
 
 
@@ -86,6 +86,10 @@
 <dd><p>Logical, if <code>TRUE</code>, will return a vector of <code>1</code>
 if no weights were specified in the model (as if the weights were all set
 to 1).</p></dd>
+
+
+<dt id="arg-na-rm">na_rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
+<dd><p>Deprecated, use <code>remove_na</code> instead.</p></dd>
 
 </dl></div>
     <div class="section level2">
