@@ -100,7 +100,7 @@ get_weights.default <- function(x, remove_na = FALSE, null_as_ones = FALSE, na_r
 
 
 #' @export
-get_weights.brmsfit <- function(x, remove_na = FALSE, null_as_ones = FALSE, ...) {
+get_weights.brmsfit <- function(x, remove_na = FALSE, null_as_ones = FALSE, na_rm = remove_na, ...) {
   ## TODO: remove deprecated later
   if (!missing(na_rm)) {
     remove_na <- na_rm
@@ -139,7 +139,7 @@ get_weights.btergm <- function(x, null_as_ones = FALSE, ...) {
 
 
 #' @export
-get_weights.list <- function(x, remove_na = FALSE, null_as_ones = FALSE, ...) {
+get_weights.list <- function(x, remove_na = FALSE, null_as_ones = FALSE, na_rm = remove_na, ...) {
   ## TODO: remove deprecated later
   if (!missing(na_rm)) {
     remove_na <- na_rm
