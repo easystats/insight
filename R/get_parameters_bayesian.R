@@ -81,14 +81,14 @@ get_parameters.MCMCglmm <- function(x,
   nF <- x$Fixed$nfl
   fixed <- as.data.frame(x$Sol[, 1:nF, drop = FALSE])
   random <- as.data.frame(x$VCV[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE])
-  all <- cbind(fixed, random)
+  all_params <- cbind(fixed, random)
 
   out <- if (effects == "fixed") {
     fixed
   } else if (effects == "random") {
     random
   } else {
-    all
+    all_params
   }
 
   if (isTRUE(summary)) {
@@ -152,9 +152,9 @@ get_parameters.BFBayesFactor <- function(x,
     colnames(posteriors) <- "p"
     out <- posteriors
   } else if (bf_type == "xtable") {
-    data <- get_data(x, verbose = verbose)
-    N <- sum(data)
-    cells <- prod(dim(data))
+    model_data <- get_data(x, verbose = verbose)
+    N <- sum(model_data)
+    cells <- prod(dim(model_data))
     posts <- as.data.frame(as.matrix(suppressMessages(
       BayesFactor::posterior(x, iterations = iterations, progress = progress)
     )))

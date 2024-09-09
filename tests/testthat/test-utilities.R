@@ -55,7 +55,7 @@ test_that("has_single_value() works", {
 
   x <- c(NA, 1)
   expect_false(has_single_value(x))
-  expect_true(has_single_value(x, na.rm = TRUE))
+  expect_true(has_single_value(x, remove_na = TRUE))
 
   x <- c(2, 1)
   expect_false(has_single_value(x))
@@ -65,7 +65,7 @@ test_that("has_single_value() works", {
 
   x <- c(NA, NA)
   expect_false(has_single_value(x))
-  expect_false(has_single_value(x, na.rm = TRUE))
+  expect_false(has_single_value(x, remove_na = TRUE))
 })
 
 test_that("safe_deparse_symbol() works", {
