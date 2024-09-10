@@ -89,7 +89,7 @@ n_unique <- function(x, ...) {
 
 #' @rdname trim_ws
 #' @export
-n_unique.default <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
+n_unique.default <- function(x, remove_na = TRUE, na.rm = TRUE, ...) {
   if (is.null(x)) {
     return(0)
   }
@@ -103,23 +103,23 @@ n_unique.default <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
 }
 
 #' @export
-n_unique.data.frame <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
+n_unique.data.frame <- function(x, remove_na = TRUE, na.rm = TRUE, ...) {
   ## TODO:: remove deprecation warning later
   if (!missing(na.rm)) {
     format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
     remove_na <- na.rm
   }
-  vapply(x, n_unique, na.rm = remove_na, FUN.VALUE = numeric(1L))
+  vapply(x, n_unique, remove_na = remove_na, FUN.VALUE = numeric(1L))
 }
 
 #' @export
-n_unique.list <- function(x, remove_na = TRUE, na.rm = remove_na, ...) {
+n_unique.list <- function(x, remove_na = TRUE, na.rm = TRUE, ...) {
   ## TODO:: remove deprecation warning later
   if (!missing(na.rm)) {
     format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
     remove_na <- na.rm
   }
-  lapply(x, n_unique, na.rm = remove_na)
+  lapply(x, n_unique, remove_na = remove_na)
 }
 
 
@@ -155,7 +155,7 @@ safe_deparse_symbol <- function(x) {
 
 #' @rdname trim_ws
 #' @export
-has_single_value <- function(x, remove_na = FALSE, na.rm = remove_na, ...) {
+has_single_value <- function(x, remove_na = FALSE, na.rm = TRUE, ...) {
   ## TODO:: remove deprecation warning later
   if (!missing(na.rm)) {
     format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")

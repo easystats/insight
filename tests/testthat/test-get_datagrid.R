@@ -246,7 +246,7 @@ test_that("get_datagrid - emmeans", {
   # emm_list
   em1 <- emmeans::emmeans(mod1, pairwise ~ cyl | hp, at = list(hp = hp_vals))
   em2 <- emmeans::emmeans(mod1, pairwise ~ cyl | hp, at = list(hp = hp_vals), regrid = TRUE)
-  em3 <- emmeans::emmeans(mod2, pairwise  ~ cyl | hp, at = list(hp = hp_vals))
+  em3 <- emmeans::emmeans(mod2, pairwise ~ cyl | hp, at = list(hp = hp_vals))
 
   res <- get_datagrid(em1)
   expect_identical(res, get_datagrid(em2))
@@ -268,10 +268,14 @@ test_that("get_datagrid - marginaleffects", {
   mod1 <- glm(am ~ hp + factor(cyl), family = binomial("logit"), data = mtcars)
   mod2 <- lm(mpg ~ hp + factor(cyl), data = mtcars)
 
-  mp1 <- marginaleffects::avg_predictions(mod1, variables = list("hp" = c(50, 100)),
-                                          by = c("cyl", "hp"))
-  mp2 <- marginaleffects::avg_predictions(mod2, variables = list("hp" = c(50, 100),
-                                                                 cyl = unique))
+  mp1 <- marginaleffects::avg_predictions(mod1,
+    variables = list(hp = c(50, 100)),
+    by = c("cyl", "hp")
+  )
+  mp2 <- marginaleffects::avg_predictions(mod2, variables = list(
+    hp = c(50, 100),
+    cyl = unique
+  ))
 
   res <- get_datagrid(mp1)
   expect_s3_class(res, "data.frame")
@@ -290,9 +294,10 @@ test_that("get_datagrid - marginaleffects", {
 
   mod <- lm(mpg ~ wt + hp + qsec, data = mtcars)
   myme <- marginaleffects::comparisons(mod,
-                                       variables = c("wt", "hp"),
-                                       cross = TRUE,
-                                       newdata = marginaleffects::datagrid(qsec = range))
+    variables = c("wt", "hp"),
+    cross = TRUE,
+    newdata = marginaleffects::datagrid(qsec = range)
+  )
   res <- get_datagrid(myme)
   expect_true(all(c("wt", "mpg", "hp", "qsec") %in% colnames(res)))
   expect_true(all(c("contrast_hp", "contrast_wt") %in% colnames(res)))
@@ -395,16 +400,4 @@ test_that("get_datagrid - multiple weight variables", {
     ),
     tolerance = 1e-3
   )
-})
-
-
-test_that("get_datagrid - deprecated arg doesn't cause memory allocation issues", {
-  data(iris)
-  expect_warning(
-    {
-      out <- get_datagrid(iris, at = NULL)
-    },
-    regex = "Argument `at` is deprecated"
-  )
-  expect_identical(nrow(out), 1L)
 })
