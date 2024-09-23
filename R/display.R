@@ -15,7 +15,7 @@
 #'   or a character vector of class `knitr_kable`.
 #'
 #' @examples
-#' display(iris[1:5, ])
+#' display(iris[1:5, ], format = "html")
 #' @export
 display <- function(object, ...) {
   UseMethod("display")

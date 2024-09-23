@@ -40,5 +40,5 @@ Similar, \code{print_html()} is a shortcut for \code{display(format = "html")}.
 See the documentation for the specific objects' classes.
 }
 \examples{
-display(iris[1:5, ])
+display(iris[1:5, ], format = "html")
 }
