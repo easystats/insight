@@ -14,8 +14,8 @@
 #' @return Depending on `format`, either an object of class `gt_tbl`
 #'   or a character vector of class `knitr_kable`.
 #'
-#' @examples
-#' display(iris[1:5, ])
+#' @examplesIf requireNamespace("gt")
+#' display(iris[1:5, ], format = "html")
 #' @export
 display <- function(object, ...) {
   UseMethod("display")

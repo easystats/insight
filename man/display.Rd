@@ -40,5 +40,7 @@ Similar, \code{print_html()} is a shortcut for \code{display(format = "html")}.
 See the documentation for the specific objects' classes.
 }
 \examples{
-display(iris[1:5, ])
+\dontshow{if (requireNamespace("gt")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+display(iris[1:5, ], format = "html")
+\dontshow{\}) # examplesIf}
 }

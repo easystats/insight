@@ -16,13 +16,13 @@ trim_ws(x, ...)
 
 n_unique(x, ...)
 
-\method{n_unique}{default}(x, remove_na = TRUE, na.rm, ...)
+\method{n_unique}{default}(x, remove_na = TRUE, na.rm = TRUE, ...)
 
 safe_deparse(x, ...)
 
 safe_deparse_symbol(x)
 
-has_single_value(x, remove_na = FALSE, na.rm, ...)
+has_single_value(x, remove_na = FALSE, na.rm = TRUE, ...)
 }
 \arguments{
 \item{x}{A (character) vector, or for some functions may also be a data frame.}
