@@ -1110,11 +1110,11 @@
     # mean of conditional distribution
     mu <- stats::predict(model, type = "conditional")
     # sigma
-    betad <- model$fit$par["betad"]
+    betadisp <- model$fit$par["betadisp"]
     k <- switch(faminfo$family,
-      gaussian = exp(0.5 * betad),
-      Gamma = exp(-0.5 * betad),
-      exp(betad)
+      gaussian = exp(0.5 * betadisp),
+      Gamma = exp(-0.5 * betadisp),
+      exp(betadisp)
     )
     pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
   } else if (inherits(model, "MixMod")) {
