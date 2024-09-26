@@ -28,7 +28,7 @@
   # poisson family --------
 
   poisson_fam <-
-    fitfam %in% c("poisson", "quasipoisson", "genpois", "ziplss") |
+    fitfam %in% c("poisson", "quasipoisson", "genpois", "ziplss", "bell") |
       grepl("poisson", fitfam_lower, fixed = TRUE)
 
 
