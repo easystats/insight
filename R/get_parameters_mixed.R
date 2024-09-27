@@ -465,7 +465,8 @@ get_parameters.glmmTMB <- function(x,
       random = lme4::ranef(x)$cond,
       zero_inflated = lme4::fixef(x)$zi,
       zero_inflated_random = lme4::ranef(x)$zi,
-      dispersion = lme4::fixef(x)$disp
+      dispersion = lme4::fixef(x)$disp,
+      dispersion_random = lme4::ranef(x)$disp
     ))
   }
 
@@ -517,10 +518,15 @@ get_parameters.glmmTMB <- function(x,
     text_remove_backticks(out)
   } else if (effects == "random") {
     switch(component,
-      all = compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
+      all = compact_list(list(
+        random = l$random,
+        zero_inflated_random = l$zero_inflated_random,
+        dispersion_random = l$dispersion_random
+      )),
       conditional = l$random,
       zi = ,
-      zero_inflated = l$zero_inflated_random
+      zero_inflated = l$zero_inflated_random,
+      dispersion_random = l$dispersion_random
     )
   }
 }

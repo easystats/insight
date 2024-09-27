@@ -1,6 +1,6 @@
 skip_on_os("mac") # error: FreeADFunObject
 skip_if_not(getRversion() >= "4.0.0")
-skip_if(getRversion() > "4.3.3")
+# skip_if(getRversion() > "4.3.3")
 skip_if_not_installed("TMB")
 skip_if_not_installed("glmmTMB")
 
@@ -975,7 +975,6 @@ test_that("model_info, ordered beta", {
 
 
 test_that("model_info, recognize ZI even without ziformula", {
-  skip_if_not_installed("glmmTMB")
   data("fish", package = "insight")
   fish$count <- fish$count + 1
   m1 <- glmmTMB::glmmTMB(
@@ -1010,3 +1009,20 @@ test_that("model_info, recognize ZI even without ziformula", {
 #     expect_equal(out$var.distribution, 1.44250604187634, tolerance = 1e-4)
 #   })
 # )
+
+test_that("model_info, recognize ZI even without ziformula", {
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.10")
+  data(Salamanders, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(
+    count ~ spp + cover + mined + (1 | site),
+    ziformula = ~ spp + mined,
+    dispformula = ~ DOY + (1 | site),
+    data = Salamanders,
+    family = glmmTMB::nbinom2
+  )
+  out <- get_parameters(m)
+  expect_identical(nrow(out), 19L)
+  out <- get_parameters(m, effects = "random")
+  expect_length(out, 2)
+  expect_named(out, c("random", "dispersion_random"))
+})
