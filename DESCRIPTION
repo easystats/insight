@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.20.4.4
+Version: 0.20.4.5
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -128,7 +128,7 @@ Suggests:
     geoR,
     ggeffects,
     GLMMadaptive,
-    glmmTMB,
+    glmmTMB (>= 1.1.10),
     glmtoolbox,
     gmnl,
     grDevices,
