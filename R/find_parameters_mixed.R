@@ -32,6 +32,8 @@
 #' - `zero_inflated_random`, the "random effects" part from the zero-inflation
 #'   component of the model.
 #' - `dispersion`, the dispersion parameters (auxiliary parameter)
+#' - `dispersion_random`, the "random effects" part from the dispersion
+#'   parameters (auxiliary parameter)
 #' - `nonlinear`, the parameters from the nonlinear formula.
 #'
 #' @examples
@@ -66,7 +68,8 @@ find_parameters.glmmTMB <- function(x,
       random = lapply(lme4::ranef(x)$cond, colnames),
       zero_inflated = names(lme4::fixef(x)$zi),
       zero_inflated_random = lapply(lme4::ranef(x)$zi, colnames),
-      dispersion = names(lme4::fixef(x)$disp)
+      dispersion = names(lme4::fixef(x)$disp),
+      dispersion_random = names(lme4::ranef(x)$disp)
     ))
   }
 

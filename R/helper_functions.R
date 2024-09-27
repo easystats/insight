@@ -224,12 +224,12 @@
   c(
     "conditional", "conditional1", "conditional2", "conditional3", "precision",
     "nonlinear", "random", "zi", "zero_inflated", "zero_inflated_random", "shape",
-    "dispersion", "instruments", "interactions", "simplex", "smooth_terms",
-    "sigma", "nu", "tau", "correlation", "slopes", "cluster", "extra", "scale",
-    "marginal", "alpha", "beta", "survival", "infrequent_purchase", "auxiliary",
-    "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi", "aux", "dist",
-    "selection", "outcome", "time_dummies", "sigma_random", "beta_random", "car",
-    "nominal"
+    "dispersion", "dispersion_random", "instruments", "interactions", "simplex",
+    "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes", "cluster",
+    "extra", "scale", "marginal", "alpha", "beta", "survival", "infrequent_purchase",
+    "auxiliary", "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi",
+    "aux", "dist", "selection", "outcome", "time_dummies", "sigma_random",
+    "beta_random", "car", "nominal"
   )
 }
 
@@ -240,7 +240,7 @@
     "aux", "dist",
 
     # random parameters
-    "sigma_random", "beta_random"
+    "dispersion_random", "sigma_random", "beta_random"
   )
 }
 
@@ -255,7 +255,7 @@
   auxiliary_parameters <- .aux_elements()
 
   # random parameters
-  random_parameters <- c("random", "zero_inflated_random", "sigma_random", "beta_random", "car")
+  random_parameters <- c("random", "zero_inflated_random", "dispersion_random", "sigma_random", "beta_random", "car")
 
   # conditional component
   conditional_component <- setdiff(

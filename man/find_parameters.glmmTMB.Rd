@@ -68,6 +68,8 @@ of the model.
 \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation
 component of the model.
 \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
+\item \code{dispersion_random}, the "random effects" part from the dispersion
+parameters (auxiliary parameter)
 \item \code{nonlinear}, the parameters from the nonlinear formula.
 }
 }
