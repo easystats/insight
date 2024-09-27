@@ -37,12 +37,10 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  skip_if_not(getRversion() >= "3.6.0")
   expect_identical(get_response(m1), as.vector(Fish$mode))
 })
 
 test_that("get_data", {
-  skip_if_not(getRversion() >= "3.6.0")
   expect_identical(nrow(get_data(m1, verbose = FALSE)), 4728L)
   expect_identical(nrow(get_data(m2, verbose = FALSE)), 4728L)
 

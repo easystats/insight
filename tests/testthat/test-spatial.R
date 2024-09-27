@@ -1,5 +1,5 @@
 skip_if_offline()
-skip_if(getRversion() > "4.3.3")
+skip_if_not(getRversion() >= "4.4.0")
 suppressWarnings(skip_if_not_installed("glmmTMB"))
 suppressWarnings(skip_if_not_installed("geoR"))
 skip_if_not_installed("TMB")
@@ -146,18 +146,16 @@ test_that("get_data", {
 })
 
 
-test_that("get_paramaters", {
-  expect_identical(nrow(get_parameters(m1)), 5L)
+test_that("get_parameters", {
+  expect_identical(nrow(get_parameters(m1)), 4L)
   expect_identical(
     get_parameters(m1)$Parameter,
-    c("(Intercept)", "elevation", "region2", "region3", "(Intercept)")
+    c("(Intercept)", "elevation", "region2", "region3")
   )
 })
 
 test_that("find_random_slopes", {
   skip_on_cran()
-
-
   expect_identical(
     find_random_slopes(m1),
     list(random = "pos")

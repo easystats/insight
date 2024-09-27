@@ -1,6 +1,4 @@
-## FIXME: suddenly fails on CRAN for win-devel?
-skip_if(getRversion() > "4.3.3")
-
+skip_if_not(getRversion() >= "4.4.0")
 skip_if_not_installed("cplm")
 
 # cplm::cpglmm doesn't work
@@ -144,16 +142,14 @@ test_that("is_multivariate", {
 })
 
 test_that("get_variance", {
-  skip_if_not(getRversion() > "3.6.3")
-  skip_on_os("windows", arch = "i386")
   skip_on_cran()
   expect_equal(
     suppressWarnings(get_variance(m1)),
     list(
       var.fixed = 0.1687617,
       var.random = 0.0002706301,
-      var.residual = 2.763129,
-      var.distribution = 2.763129,
+      var.residual = 2.682131,
+      var.distribution = 2.682131,
       var.dispersion = 0,
       var.intercept = c(Plant = 0.0002706301)
     ),

@@ -1,8 +1,6 @@
 skip_if_not_installed("glmmTMB")
 skip_if_not_installed("lme4")
 skip_if_not_installed("TMB")
-skip_if_not(getRversion() >= "4.0.0")
-
 
 test_that("null_model with offset", {
   m1 <- suppressWarnings(lme4::glmer.nb(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))

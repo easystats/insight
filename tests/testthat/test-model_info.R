@@ -34,7 +34,6 @@ test_that("bigglm bernoulli", {
 })
 
 test_that("glmmTMB bernoulli", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   data(mtcars)
   model <- glmmTMB::glmmTMB(vs ~ disp, data = mtcars, family = binomial())

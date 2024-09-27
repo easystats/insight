@@ -1,5 +1,3 @@
-skip_if_not(getRversion() >= "4.0.0")
-
 m1 <- lm(hp ~ ordered(cyl), data = mtcars)
 m2 <- lm(hp ~ as.ordered(cyl), data = mtcars)
 m3 <- lm(hp ~ as.factor(cyl), data = mtcars)
@@ -155,7 +153,6 @@ test_that("get_datagrid - models", {
     "Some package uses `formula.tools::as.character.formula()` which breaks `find_formula()`."
   )
 
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("gamm4")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("mgcv")

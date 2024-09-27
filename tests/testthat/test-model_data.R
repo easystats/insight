@@ -1,7 +1,6 @@
 skip_if_not_installed("splines")
 skip_if_not_installed("TMB")
 skip_if_not_installed("glmmTMB")
-skip_if_not(getRversion() >= "4.0.0")
 
 m1 <- lm(Sepal.Length ~ Species + splines::ns(Petal.Width), data = iris)
 m2 <- lm(Sepal.Length ~ Species + splines::ns(Petal.Width, knots = 2), data = iris)
@@ -23,7 +22,6 @@ test_that("get_data", {
   expect_identical(as.vector(mf4$Petal.Width), as.vector(mf5$Petal.Width))
 })
 
-skip_if(getRversion() > "4.3.3")
 data(Salamanders, package = "glmmTMB")
 skip_on_os("mac") # error: FreeADFunObject
 m <- glmmTMB::glmmTMB(
