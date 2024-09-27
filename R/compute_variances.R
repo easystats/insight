@@ -1077,7 +1077,7 @@
     if ("psi" %in% names(model$fit$par)) {
       psi <- model$fit$par["psi"] # glmmmTMB >= 1.1.5
     } else {
-      psi <- model$fit$par["thetaf"]
+      psi <- model$fit$par["theta"]
     }
     p <- unname(stats::plogis(psi) + 1)
   }
