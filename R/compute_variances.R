@@ -1076,8 +1076,10 @@
   } else {
     if ("psi" %in% names(model$fit$par)) {
       psi <- model$fit$par["psi"] # glmmmTMB >= 1.1.5
-    } else {
+    } else if ("theta" %in% names(model$fit$par)) {
       psi <- model$fit$par["theta"]
+    } else {
+      format_error("Could not extract psi-parameter for the distributional variance for tweedie-family.")
     }
     p <- unname(stats::plogis(psi) + 1)
   }
