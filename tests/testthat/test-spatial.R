@@ -1,5 +1,4 @@
 skip_if_offline()
-skip_if(getRversion() > "4.3.3")
 suppressWarnings(skip_if_not_installed("glmmTMB"))
 suppressWarnings(skip_if_not_installed("geoR"))
 skip_if_not_installed("TMB")

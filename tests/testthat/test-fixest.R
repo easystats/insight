@@ -2,7 +2,6 @@
 skip_if(TRUE)
 
 skip_on_os("mac")
-skip_if(getRversion() < "3.6.0")
 skip_if_not_installed("fixest", minimum_version = "0.11.2")
 skip_if_not_installed("carData")
 skip_if_not_installed("withr")
