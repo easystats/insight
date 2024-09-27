@@ -1074,14 +1074,8 @@
     phi <- model@phi
     p <- model@p - 2
   } else {
-    if ("psi" %in% names(model$fit$par)) {
-      psi <- model$fit$par["psi"] # glmmmTMB >= 1.1.5
-    } else if ("theta" %in% names(model$fit$par)) {
-      psi <- model$fit$par["theta"]
-    } else {
-      format_error("Could not extract psi-parameter for the distributional variance for tweedie-family.")
-    }
-    p <- unname(stats::plogis(psi) + 1)
+    check_if_installed("glmmTMB")
+    p <- unname(unlist(glmmTMB::family_params(model)))
   }
   phi * mu^p
 }
@@ -1104,7 +1098,7 @@
     if ("psi" %in% names(model$fit$par)) {
       psi <- model$fit$par["psi"]
     } else {
-      format_error("Could not extract psi-parameter for the distributional variance for tweedie-family.")
+      format_error("Could not extract psi-parameter for the distributional variance for nbinom12-family.")
     }
     stats::family(model)$variance(mu, sig, psi)
   } else {
@@ -1124,7 +1118,7 @@
       if ("psi" %in% names(model$fit$par)) {
         psi <- model$fit$par["psi"]
       } else {
-        format_error("Could not extract psi-parameter for the distributional variance for tweedie-family.")
+        format_error("Could not extract psi-parameter for the distributional variance for nbinom12-family.")
       }
     }
     v <- stats::family(model)$variance
