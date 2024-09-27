@@ -147,7 +147,7 @@ test_that("get_data", {
 
 
 test_that("get_parameters", {
-  expect_identical(nrow(get_parameters(m1)), 5L)
+  expect_identical(nrow(get_parameters(m1)), 4L)
   expect_identical(
     get_parameters(m1)$Parameter,
     c("(Intercept)", "elevation", "region2", "region3")
