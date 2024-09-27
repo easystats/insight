@@ -55,7 +55,7 @@
 #'
 #' @note `options(insight_use_symbols = TRUE)` overrides the `use_symbols` argument
 #'   and always displays symbols, if possible.
-#' @examplesIf require("rstanarm", warn.conflicts = FALSE) && require("parameters", , warn.conflicts = FALSE)
+#' @examplesIf require("rstanarm", warn.conflicts = FALSE) && require("parameters", warn.conflicts = FALSE) && packageVersion("parameters") > "0.22.2"
 #' format_table(head(iris), digits = 1)
 #'
 #' m <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)

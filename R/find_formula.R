@@ -1117,6 +1117,7 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
   f.zi <- stats::formula(x, component = "zi")
   f.disp <- stats::formula(x, component = "disp")
 
+  # check for "empty" formulas
   if (identical(safe_deparse(f.zi), "~0") || identical(safe_deparse(f.zi), "~1")) {
     f.zi <- NULL
   }
@@ -1125,7 +1126,7 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
     f.disp <- NULL
   }
 
-
+  # extract random parts of formula
   f.random <- lapply(.findbars(f.cond), function(.x) {
     f <- safe_deparse(.x)
     stats::as.formula(paste0("~", f))
@@ -1147,16 +1148,30 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
     f.zirandom <- f.zirandom[[1]]
   }
 
+  f.disprandom <- lapply(.findbars(f.disp), function(.x) {
+    f <- safe_deparse(.x)
+    if (f == "NULL") {
+      return(NULL)
+    }
+    stats::as.formula(paste0("~", f))
+  })
 
+  if (length(f.disprandom) == 1L) {
+    f.disprandom <- f.disprandom[[1]]
+  }
+
+  # extract fixed effects parts
   f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
   if (!is.null(f.zi)) f.zi <- stats::as.formula(.get_fixed_effects(f.zi))
+  if (!is.null(f.disp)) f.disp <- stats::as.formula(.get_fixed_effects(f.disp))
 
   f <- compact_list(list(
     conditional = f.cond,
     random = f.random,
     zero_inflated = f.zi,
     zero_inflated_random = f.zirandom,
-    dispersion = f.disp
+    dispersion = f.disp,
+    dispersion_random = f.disprandom
   ))
   .find_formula_return(f, verbose = verbose)
 }

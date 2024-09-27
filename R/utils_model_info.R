@@ -28,7 +28,7 @@
   # poisson family --------
 
   poisson_fam <-
-    fitfam %in% c("poisson", "quasipoisson", "genpois", "ziplss") |
+    fitfam %in% c("poisson", "quasipoisson", "genpois", "ziplss", "bell") |
       grepl("poisson", fitfam_lower, fixed = TRUE)
 
 
@@ -345,7 +345,7 @@
     dirichlet_fam || is.ordinal || zero.inf || is.censored || is.survival || is_binomtest ||
     is.categorical || hurdle || is.multinomial || is_chi2test || is_proptest || is_xtab) {
     linear_model <- FALSE
-  } else if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian", "lognormal")) && !grepl("(\\st)$", fitfam)) {
+  } else if (!(fitfam %in% c("Student's-t", "t Family", "gaussian", "Gaussian", "lognormal", "skewnormal")) && !grepl("(\\st)$", fitfam)) {
     linear_model <- FALSE
   }
   if (!linear_model && is.survival && fitfam == "gaussian") {

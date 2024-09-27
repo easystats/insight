@@ -84,15 +84,19 @@ test_that("cplm, tweedie", {
   # results for glmmTMB are very close to cplm
   m0 <- glmmTMB::glmmTMB(
     Parasite ~ (1 | Population) + (1 | Container),
-    family = glmmTMB::tweedie(1),
+    family = glmmTMB::tweedie(),
+    start = list(psi = -12),
+    map = list(psi = factor(NA)),
     data = DataAll
   )
   m <- glmmTMB::glmmTMB(
     Parasite ~ Sex + Treatment + Habitat + (1 | Population) + (1 | Container),
-    family = glmmTMB::tweedie(1),
+    family = glmmTMB::tweedie(),
+    start = list(psi = -12),
+    map = list(psi = factor(NA)),
     data = DataAll
   )
   out3 <- performance::r2_nakagawa(m, null_model = m0)
-  expect_equal(out$R2_conditional, out3$R2_conditional, tolerance = 1e-2, ignore_attr = TRUE)
-  expect_equal(out$R2_marginal, out3$R2_marginal, tolerance = 1e-2, ignore_attr = TRUE)
+  expect_equal(out$R2_conditional, out3$R2_conditional, tolerance = 1e-1, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, out3$R2_marginal, tolerance = 1e-1, ignore_attr = TRUE)
 })

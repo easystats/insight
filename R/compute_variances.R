@@ -848,6 +848,7 @@
       nbinom = ,
       nbinom1 = ,
       nbinom2 = ,
+      nbinom12 = ,
       negbinomial = ,
       tweedie = ,
       `negative binomial` = exp(mu + 0.5 * as.vector(revar_null)),
@@ -888,6 +889,7 @@
           nbinom = ,
           nbinom1 = ,
           nbinom2 = ,
+          nbinom12 = ,
           negbinomial = ,
           `negative binomial` = ,
           `zero-inflated negative binomial` = .variance_family_nbinom(model, mu, sig, faminfo),
@@ -924,6 +926,7 @@
           nbinom = ,
           nbinom1 = ,
           nbinom2 = ,
+          nbinom12 = ,
           quasipoisson = ,
           negbinomial = ,
           `negative binomial` = ,
@@ -967,6 +970,7 @@
           nbinom = ,
           nbinom1 = ,
           nbinom2 = ,
+          nbinom12 = ,
           negbinomial = ,
           genpois = ,
           `negative binomial` = ((1 / mu) + (1 / dispersion_param))^-1,
@@ -979,6 +983,7 @@
           nbinom = ,
           nbinom1 = ,
           nbinom2 = ,
+          nbinom12 = ,
           negbinomial = ,
           genpois = ,
           `negative binomial` = (1 / mu) + (1 / dispersion_param),
@@ -1069,12 +1074,8 @@
     phi <- model@phi
     p <- model@p - 2
   } else {
-    if ("psi" %in% names(model$fit$par)) {
-      psi <- model$fit$par["psi"] # glmmmTMB >= 1.1.5
-    } else {
-      psi <- model$fit$par["thetaf"]
-    }
-    p <- unname(stats::plogis(psi) + 1)
+    check_if_installed("glmmTMB")
+    p <- unname(unlist(glmmTMB::family_params(model)))
   }
   phi * mu^p
 }
@@ -1092,6 +1093,14 @@
       return(rep(1e-16, length(mu)))
     }
     mu * (1 + sig)
+  } else if (identical(faminfo$family, "nbinom12")) {
+    # nbinom12-family from glmmTMB requires psi-parameter
+    if ("psi" %in% names(model$fit$par)) {
+      psi <- model$fit$par["psi"]
+    } else {
+      format_error("Could not extract psi-parameter for the distributional variance for nbinom12-family.")
+    }
+    stats::family(model)$variance(mu, sig, psi)
   } else {
     stats::family(model)$variance(mu, sig)
   }
@@ -1104,19 +1113,31 @@
 # ----------------------------------------------
 .variance_zinb <- function(model, sig, faminfo, family_var) {
   if (inherits(model, "glmmTMB")) {
+    if (identical(faminfo$family, "nbinom12")) {
+      # nbinom12-family from glmmTMB requires psi-parameter
+      if ("psi" %in% names(model$fit$par)) {
+        psi <- model$fit$par["psi"]
+      } else {
+        format_error("Could not extract psi-parameter for the distributional variance for nbinom12-family.")
+      }
+    }
     v <- stats::family(model)$variance
     # zi probability
     p <- stats::predict(model, type = "zprob")
     # mean of conditional distribution
     mu <- stats::predict(model, type = "conditional")
     # sigma
-    betad <- model$fit$par["betad"]
+    betadisp <- model$fit$par["betadisp"]
     k <- switch(faminfo$family,
-      gaussian = exp(0.5 * betad),
-      Gamma = exp(-0.5 * betad),
-      exp(betad)
+      gaussian = exp(0.5 * betadisp),
+      Gamma = exp(-0.5 * betadisp),
+      exp(betadisp)
     )
-    pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
+    if (identical(faminfo$family, "nbinom12")) {
+      pvar <- (1 - p) * v(mu, k, psi) + mu^2 * (p^2 + p)
+    } else {
+      pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
+    }
   } else if (inherits(model, "MixMod")) {
     v <- family_var
     p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))

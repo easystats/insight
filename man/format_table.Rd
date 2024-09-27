@@ -94,7 +94,7 @@ converts all columns into character vectors!
 and always displays symbols, if possible.
 }
 \examples{
-\dontshow{if (require("rstanarm", warn.conflicts = FALSE) && require("parameters", , warn.conflicts = FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("rstanarm", warn.conflicts = FALSE) && require("parameters", warn.conflicts = FALSE) && packageVersion("parameters") > "0.22.2") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 format_table(head(iris), digits = 1)
 
 m <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
