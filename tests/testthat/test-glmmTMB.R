@@ -1010,7 +1010,7 @@ test_that("model_info, recognize ZI even without ziformula", {
 #   })
 # )
 
-test_that("model_info, recognize ZI even without ziformula", {
+test_that("get/find_parameters with dispersion-random", {
   skip_if_not_installed("glmmTMB", minimum_version = "1.1.10")
   data(Salamanders, package = "glmmTMB")
   m <- glmmTMB::glmmTMB(
@@ -1025,4 +1025,56 @@ test_that("model_info, recognize ZI even without ziformula", {
   out <- get_parameters(m, effects = "random")
   expect_length(out, 2)
   expect_named(out, c("random", "dispersion_random"))
+
+  expect_equal(
+    find_parameters(m),
+    list(
+      conditional = c(
+        "(Intercept)", "sppPR", "sppDM", "sppEC-A",
+        "sppEC-L", "sppDES-L", "sppDF", "cover", "minedno"
+      ),
+      random = list(site = "(Intercept)"),
+      zero_inflated = c(
+        "(Intercept)", "sppPR",
+        "sppDM", "sppEC-A", "sppEC-L", "sppDES-L", "sppDF", "minedno"
+      ),
+      dispersion = c("(Intercept)", "DOY"),
+      dispersion_random = "site"
+    ),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    find_parameters(m, effects = "fixed"),
+    list(
+      conditional = c(
+        "(Intercept)", "sppPR", "sppDM", "sppEC-A",
+        "sppEC-L", "sppDES-L", "sppDF", "cover", "minedno"
+      ),
+      zero_inflated = c(
+        "(Intercept)", "sppPR",
+        "sppDM", "sppEC-A", "sppEC-L", "sppDES-L", "sppDF", "minedno"
+      ),
+      dispersion = c("(Intercept)", "DOY")
+    ),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    find_parameters(m, effects = "random"),
+    list(
+      random = list(site = "(Intercept)"),
+      dispersion_random = "site"
+    ),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    find_parameters(m, component = "conditional"),
+    list(
+      conditional = c(
+        "(Intercept)", "sppPR", "sppDM", "sppEC-A",
+        "sppEC-L", "sppDES-L", "sppDF", "cover", "minedno"
+      ),
+      random = list(site = "(Intercept)")
+    ),
+    ignore_attr = TRUE
+  )
 })
