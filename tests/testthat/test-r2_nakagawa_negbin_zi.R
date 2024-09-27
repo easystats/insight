@@ -127,3 +127,19 @@ test_that("glmmTMB, Nbinom1 zero-inflated", {
   expect_equal(out$R2_conditional, 0.6051817, tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$R2_marginal, 0.5173316, tolerance = 1e-4, ignore_attr = TRUE)
 })
+
+
+test_that("glmmTMB, Nbinom12, zero-inflated", {
+  # results are in line with other nbinom families
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.10")
+  data(Salamanders, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(
+    count ~ mined + spp + (1 | site),
+    ziformula = ~mined,
+    family = glmmTMB::nbinom12(),
+    data = Salamanders, REML = TRUE
+  )
+  out <- performance::r2_nakagawa(m)
+  expect_equal(out$R2_conditional, 0.7857598, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2_marginal, 0.6742057, tolerance = 1e-4, ignore_attr = TRUE)
+})
