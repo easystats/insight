@@ -1,5 +1,4 @@
 skip_if_not_installed("cgam")
-skip_if_not(getRversion() >= "4.0.0")
 
 data(cubic, package = "cgam")
 incr.conv <- cgam::incr.conv

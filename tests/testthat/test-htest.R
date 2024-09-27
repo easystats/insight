@@ -21,7 +21,6 @@ test_that("model_info.t-test", {
 
 # One sample
 test_that("get_data.t-test, one-sample", {
-  skip_if(getRversion() < "4.0.0")
   tt1 <- t.test(mtcars$mpg)
   tt2 <- t.test(mtcars$mpg ~ 1)
   expect_equal(

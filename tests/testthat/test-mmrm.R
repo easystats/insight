@@ -1,5 +1,4 @@
 skip_if_not_installed("mmrm")
-skip_if(getRversion() < "4.0.0")
 
 # see https://github.com/georgheinze/logistf/pull/54
 skip_if(

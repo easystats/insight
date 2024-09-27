@@ -443,7 +443,6 @@ test_that("workaround bug in estimatr", {
 
 test_that("get_data colnames", {
   skip_on_os("windows")
-  skip_if_not(getRversion() >= "4.0.0")
   skip_if_not_installed("brms")
   m <- suppressMessages(suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1)))
   out <- get_data(m)

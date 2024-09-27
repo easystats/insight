@@ -1,7 +1,6 @@
 skip_if_not_installed("splines")
 skip_if_not_installed("TMB")
 skip_if_not_installed("glmmTMB")
-skip_if_not(getRversion() >= "4.0.0")
 
 m1 <- lm(Sepal.Length ~ Species + splines::ns(Petal.Width), data = iris)
 m2 <- lm(Sepal.Length ~ Species + splines::ns(Petal.Width, knots = 2), data = iris)
