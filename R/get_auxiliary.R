@@ -20,10 +20,13 @@
 #'
 #' @details Currently, only sigma and the dispersion parameter are returned, and
 #' only for a limited set of models.
-#' \subsection{Sigma Parameter}{
-#' See [get_sigma()].
-#' }
-#' \subsection{Dispersion Parameter}{
+#'
+#' @section Sigma Parameter:
+#'
+#' See [`get_sigma()`].
+#'
+#' @section  Dispersion Parameter:
+#'
 #' There are many different definitions of "dispersion", depending on the context.
 #' `get_auxiliary()` returns the dispersion parameters that usually can
 #' be considered as variance-to-mean ratio for generalized (linear) mixed
@@ -36,12 +39,12 @@
 #' and is the ratio of the sum of the squared Pearson-residuals and the residual
 #' degrees of freedom. For models of class `glmmTMB`, dispersion is
 #' \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
-#' }
-#' \subsection{**brms** models}{
+#'
+#' @section  brms-models:
+#'
 #' For models of class `brmsfit`, there are different options for the
 #' `type` argument. See a list of supported auxiliary parameters here:
-#' [find_parameters.BGGM()].
-#' }
+#' [`find_parameters.BGGM()`].
 #'
 #' @examples
 #' # from ?glm
