@@ -9,7 +9,6 @@
 #'   if no weights were specified in the model (as if the weights were all set
 #'   to 1).
 #' @param ... Currently not used.
-#' @param na_rm Deprecated, use `remove_na` instead.
 #'
 #' @return The weighting variable, or `NULL` if no weights were specified.
 #' If the weighting variable should also be returned (instead of `NULL`)
@@ -42,11 +41,7 @@ get_weights <- function(x, ...) {
 
 #' @rdname get_weights
 #' @export
-get_weights.default <- function(x, remove_na = FALSE, null_as_ones = FALSE, na_rm = remove_na, ...) {
-  ## TODO: remove deprecated later
-  if (!missing(na_rm)) {
-    remove_na <- na_rm
-  }
+get_weights.default <- function(x, remove_na = FALSE, null_as_ones = FALSE, ...) {
   weight_vars <- find_weights(x)
   w <- tryCatch(
     stats::weights(x, ...),
@@ -100,12 +95,7 @@ get_weights.default <- function(x, remove_na = FALSE, null_as_ones = FALSE, na_r
 
 
 #' @export
-get_weights.brmsfit <- function(x, remove_na = FALSE, null_as_ones = FALSE, na_rm = remove_na, ...) {
-  ## TODO: remove deprecated later
-  if (!missing(na_rm)) {
-    remove_na <- na_rm
-  }
-
+get_weights.brmsfit <- function(x, remove_na = FALSE, null_as_ones = FALSE, ...) {
   w <- unique(find_weights(x))
 
   if (!is.null(w)) {
@@ -139,12 +129,7 @@ get_weights.btergm <- function(x, null_as_ones = FALSE, ...) {
 
 
 #' @export
-get_weights.list <- function(x, remove_na = FALSE, null_as_ones = FALSE, na_rm = remove_na, ...) {
-  ## TODO: remove deprecated later
-  if (!missing(na_rm)) {
-    remove_na <- na_rm
-  }
-
+get_weights.list <- function(x, remove_na = FALSE, null_as_ones = FALSE, ...) {
   # For GAMMs
   if ("gam" %in% names(x)) {
     get_weights(x$gam, remove_na = remove_na, null_as_ones = null_as_ones, ...)

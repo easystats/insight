@@ -1172,6 +1172,9 @@ get_varcov.LORgee <- get_varcov.gee
       sprintf("The `vcov` argument of the `insight::get_varcov()` function is not yet supported for models of class `%s`.", paste(class(x), collapse = "/")) # nolint
     )
   }
+  if ("robust" %in% names(dots) && !is.null(dots[["robust"]])) {
+    format_warning("The `robust` argument is no longer supported. Please use the `vcov` and `vcov_args` instead.") # nolint
+  }
 }
 
 
@@ -1182,16 +1185,5 @@ get_varcov.LORgee <- get_varcov.gee
   if (is.null(vcov) && "vcov_estimation" %in% names(dots)) {
     vcov <- dots[["vcov_estimation"]]
   }
-
-  if ("robust" %in% names(dots)) {
-    # default robust covariance
-    if (is.null(vcov)) {
-      vcov <- "HC3"
-    }
-    if (isTRUE(verbose)) {
-      format_warning("The `robust` argument is deprecated. Please use `vcov` instead.")
-    }
-  }
-
   vcov
 }
