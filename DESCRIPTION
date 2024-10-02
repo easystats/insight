@@ -1,23 +1,23 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.20.4.6
+Version: 0.20.5
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
              role = c("aut", "cre"),
              email = "d.luedecke@uke.de",
-             comment = c(ORCID = "0000-0002-8895-3206", Twitter = "@strengejacke")),
+             comment = c(ORCID = "0000-0002-8895-3206")),
       person(given = "Dominique",
              family = "Makowski",
              role = c("aut", "ctb"),
              email = "dom.makowski@gmail.com",
-             comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
+             comment = c(ORCID = "0000-0001-5375-9967")),
       person(given = "Indrajeet",
              family = "Patil",
              role = c("aut", "ctb"),
              email = "patilindrajeet.science@gmail.com",
-             comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
+             comment = c(ORCID = "0000-0003-1995-6531")),
       person(given = "Philip",
              family = "Waggoner",
              role = c("aut", "ctb"),
@@ -32,7 +32,7 @@ Authors@R:
              family = "Wiernik",
              role = c("aut", "ctb"),
              email = "brenton@wiernik.org",
-             comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")),
+             comment = c(ORCID = "0000-0001-9560-6336")),
       person(given = "Vincent",
              family = "Arel-Bundock",
              email = "vincent.arel-bundock@umontreal.ca",
@@ -57,7 +57,7 @@ Authors@R:
              family = "Thériault",
              role = "ctb",
              email = "remi.theriault@mail.mcgill.ca",
-             comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
+             comment = c(ORCID = "0000-0003-4315-6788")),
       person(given = "Alex",
              family = "Reinhart",
              role = "ctb",
