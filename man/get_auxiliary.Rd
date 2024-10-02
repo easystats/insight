@@ -2,6 +2,8 @@
 % Please edit documentation in R/get_auxiliary.R
 \name{get_auxiliary}
 \alias{get_auxiliary}
+\alias{get_dispersion}
+\alias{get_dispersion.default}
 \title{Get auxiliary parameters from models}
 \usage{
 get_auxiliary(
@@ -12,6 +14,10 @@ get_auxiliary(
   verbose = TRUE,
   ...
 )
+
+get_dispersion(x, ...)
+
+\method{get_dispersion}{default}(x, ...)
 }
 \arguments{
 \item{x}{A model.}

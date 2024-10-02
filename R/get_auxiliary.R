@@ -74,21 +74,26 @@ get_auxiliary <- function(x,
 
 
 
-
-
 # dispersion parameter -----------------------
 
-#' @keywords internal
+#' @rdname get_auxiliary
+#' @export
 get_dispersion <- function(x, ...) {
   UseMethod("get_dispersion")
 }
 
-#' @keywords internal
+#' @rdname get_auxiliary
+#' @export
+get_dispersion.default <- function(x, ...) {
+  format_error(sprintf("`get_dispersion()` does not yet support models of class \"%s\".", class(x)[1])) # nolint
+}
+
+#' @export
 get_dispersion.model_fit <- function(x, ...) {
   get_dispersion(x$fit, ...)
 }
 
-#' @keywords internal
+#' @export
 get_dispersion.glm <- function(x, verbose = TRUE, ...) {
   info <- model_info(x, verbose = verbose)
   disp <- NULL
@@ -103,7 +108,7 @@ get_dispersion.glm <- function(x, verbose = TRUE, ...) {
   disp
 }
 
-#' @keywords internal
+#' @export
 get_dispersion.glmerMod <- function(x, verbose = TRUE, ...) {
   info <- model_info(x, verbose = verbose)
   disp <- NULL
@@ -122,7 +127,7 @@ get_dispersion.glmerMod <- function(x, verbose = TRUE, ...) {
   disp
 }
 
-#' @keywords internal
+#' @export
 get_dispersion.glmmTMB <- function(x, verbose = TRUE, ...) {
   info <- model_info(x, verbose = verbose)
   disp <- NULL
@@ -135,7 +140,7 @@ get_dispersion.glmmTMB <- function(x, verbose = TRUE, ...) {
   disp
 }
 
-#' @keywords internal
+#' @export
 get_dispersion.brmsfit <- get_dispersion.glmmTMB
 
 

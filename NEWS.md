@@ -1,4 +1,14 @@
-# insight 0.20.xxx
+# insight 1.0.0
+
+## Breaking changes
+
+* All deprecated arguments have been removed.
+
+## General
+
+* `get_dispersion()` is now an exported function.
+
+# insight 0.20.5
 
 ## General
 
