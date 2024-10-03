@@ -116,7 +116,7 @@ safe_deparse <- function(x, ...) {
   if (is.null(x)) {
     return(NULL)
   }
-  paste0(sapply(deparse(x, width.cutoff = 500), trim_ws, simplify = TRUE), collapse = " ")
+  paste(sapply(deparse(x, width.cutoff = 500), trim_ws, simplify = TRUE), collapse = " ")
 }
 
 
