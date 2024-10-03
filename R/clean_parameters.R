@@ -652,7 +652,7 @@ clean_parameters.mlm <- function(x, ...) {
     if (any(rand_cor)) {
       out$Cleaned_Parameter[which(cor_sd)[rand_cor]] <- paste0(parm1[rand_cor], " ~ ", parm2[rand_cor])
     }
-    out$Group[cor_sd] <- paste("SD/Cor:", gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\1", out$Parameter[cor_sd], perl = TRUE))
+    out$Group[cor_sd] <- paste("Var/Cov:", gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\1", out$Parameter[cor_sd], perl = TRUE))
   }
 
 
@@ -669,9 +669,9 @@ clean_parameters.mlm <- function(x, ...) {
       out$Group[rand_effects] <- r_grps
       out$Level[rand_effects] <- r_levels
       # fix labelling of SD and correlation component
-      sd_cor <- grepl("SD/Cor:", out$Group, fixed = TRUE)
+      sd_cor <- grepl("Var/Cov:", out$Group, fixed = TRUE)
       if (any(sd_cor)) {
-        out$Group[sd_cor] <- gsub("SD/Cor: (.*)", "\\1", out$Group[sd_cor])
+        out$Group[sd_cor] <- gsub("Var/Cov: (.*)", "\\1", out$Group[sd_cor])
       }
     } else {
       re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])

@@ -8,6 +8,11 @@
 
 * `get_dispersion()` is now an exported function.
 
+## Bug fix
+
+* `clean_parameters()` now uses the correct labels for the random effects
+  variances (`"SD/Cor"` has changed to `"Var/Cov"`).
+
 # insight 0.20.5
 
 ## General
