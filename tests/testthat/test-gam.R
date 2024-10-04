@@ -1,6 +1,6 @@
 skip_if_offline()
 skip_if_not_installed("mgcv")
-skip_if_not_installed("httr")
+skip_if_not_installed("httr2")
 skip_if_not_installed("withr")
 
 set.seed(123)

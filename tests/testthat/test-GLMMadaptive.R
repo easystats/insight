@@ -1,7 +1,7 @@
 skip_if_offline()
 skip_if_not_installed("GLMMadaptive")
 skip_if_not_installed("lme4")
-skip_if_not_installed("httr")
+skip_if_not_installed("httr2")
 
 m <- download_model("GLMMadaptive_zi_2")
 m2 <- download_model("GLMMadaptive_zi_1")
