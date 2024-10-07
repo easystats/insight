@@ -1,3 +1,18 @@
+# insight 1.0.0
+
+## Breaking changes
+
+* All deprecated arguments have been removed.
+
+## General
+
+* `get_dispersion()` is now an exported function.
+
+## Bug fix
+
+* `clean_parameters()` now uses the correct labels for the random effects
+  variances (`"SD/Cor"` has changed to `"Var/Cov"`).
+
 # insight 0.20.5
 
 ## General

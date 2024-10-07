@@ -32,54 +32,6 @@ download_model <- function(name,
                            url = "https://raw.github.com/easystats/circus/master/data/",
                            extension = ".rda",
                            verbose = TRUE) {
-  if (check_if_installed("httr2", quietly = TRUE)) {
-    .download_data_httr2(name, url, extension, verbose)
-  } else {
-    .download_data_httr(name, url, extension, verbose)
-  }
-}
-
-
-# Download rda files from github, using httr
-.download_data_httr <- function(name, url, extension, verbose) {
-  check_if_installed("httr", "to download models from the circus-repo")
-
-  url <- paste0(url, name, extension)
-
-  temp_file <- tempfile()
-  on.exit(unlink(temp_file))
-
-  result <- tryCatch(
-    {
-      request <- httr::GET(url)
-      httr::stop_for_status(request)
-    },
-    error = function(e) {
-      if (verbose) {
-        format_alert(
-          "Could not download model. Request failed with following error:",
-          e$message
-        )
-      }
-      NULL
-    }
-  )
-  if (is.null(result)) {
-    return(NULL)
-  }
-
-  writeBin(httr::content(request, type = "raw"), temp_file)
-
-  x <- load(temp_file)
-  model <- get(x)
-  rm(x)
-
-  model
-}
-
-
-# Download rda files from github, using httr2
-.download_data_httr2 <- function(name, url, extension = ".rda", verbose = TRUE) {
   check_if_installed("httr2", "to download models from the circus-repo")
 
   url <- paste0(url, name, extension)

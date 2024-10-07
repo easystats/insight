@@ -2,6 +2,8 @@
 % Please edit documentation in R/get_auxiliary.R
 \name{get_auxiliary}
 \alias{get_auxiliary}
+\alias{get_dispersion}
+\alias{get_dispersion.default}
 \title{Get auxiliary parameters from models}
 \usage{
 get_auxiliary(
@@ -12,6 +14,10 @@ get_auxiliary(
   verbose = TRUE,
   ...
 )
+
+get_dispersion(x, ...)
+
+\method{get_dispersion}{default}(x, ...)
 }
 \arguments{
 \item{x}{A model.}
@@ -48,10 +54,16 @@ dispersion, sigma, or beta...
 \details{
 Currently, only sigma and the dispersion parameter are returned, and
 only for a limited set of models.
-\subsection{Sigma Parameter}{
+}
+\section{Sigma Parameter}{
+
+
 See \code{\link[=get_sigma]{get_sigma()}}.
 }
-\subsection{Dispersion Parameter}{
+
+\section{Dispersion Parameter}{
+
+
 There are many different definitions of "dispersion", depending on the context.
 \code{get_auxiliary()} returns the dispersion parameters that usually can
 be considered as variance-to-mean ratio for generalized (linear) mixed
@@ -65,12 +77,15 @@ and is the ratio of the sum of the squared Pearson-residuals and the residual
 degrees of freedom. For models of class \code{glmmTMB}, dispersion is
 \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
 }
-\subsection{\strong{brms} models}{
+
+\section{brms-models}{
+
+
 For models of class \code{brmsfit}, there are different options for the
 \code{type} argument. See a list of supported auxiliary parameters here:
 \code{\link[=find_parameters.BGGM]{find_parameters.BGGM()}}.
 }
-}
+
 \examples{
 # from ?glm
 clotting <- data.frame(
