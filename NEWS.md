@@ -1,3 +1,10 @@
+# insight 0.20.x
+
+## General
+
+* Updates `get_varcov()` (and related documentation) to support new covariance
+  matrix estimation methods from the **sandwich** package.
+
 # insight 0.20.5
 
 ## General
