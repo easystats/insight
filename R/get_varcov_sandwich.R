@@ -27,13 +27,15 @@
     return(.vcov)
   }
 
+  vcov_type_shortcuts <- c(
+    "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "CR0", "CR1",
+    "CR1p", "CR1S", "CR2", "CR3", "xy", "residual", "wild", "mammen",
+    "webb", "fractional", "jackknife", "norm"
+  )
+
   # type shortcuts: overwrite only if not supplied explicitly by the user
   if (!"type" %in% names(vcov_args)) {
-    if (isTRUE(vcov_fun %in% c(
-      "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5",
-      "CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3", "xy",
-      "residual", "wild", "mammen", "webb"
-    ))) {
+    if (isTRUE(vcov_fun %in% vcov_type_shortcuts)) {
       vcov_args[["type"]] <- vcov_fun
     } else if (is.null(vcov_fun)) {
       # set defaults
@@ -73,6 +75,9 @@
       CR = "vcovCR",
       xy = ,
       residual = ,
+      norm = ,
+      jackknife = ,
+      fractional = ,
       wild = ,
       mammen = ,
       webb = ,
