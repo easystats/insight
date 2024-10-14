@@ -35,6 +35,21 @@ test_that("lm: sandwich", {
     sandwich::vcovOPG(mod),
     tolerance = 1e-5
   )
+
+  # examples from ?vcovBS
+  data("PetersenCL", package = "sandwich")
+  m <- lm(y ~ x, data = PetersenCL)
+
+  expect_equal(
+    get_varcov(mod, vcov = "jackknife", vcov_args = list(cluster = ~firm)),
+    sandwich::vcovBS(m, cluster = ~firm, type = "jackknife"),
+    tolerance = 1e-5
+  )
+  expect_equal(
+    get_varcov(mod, vcov = "fractional", vcov_args = list(cluster = ~firm)),
+    sandwich::vcovBS(m, cluster = ~firm, type = "fractional"),
+    tolerance = 1e-5
+  )
 })
 
 test_that("lm: clubSandwich", {
