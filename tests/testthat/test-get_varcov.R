@@ -82,10 +82,9 @@ test_that("warning: not yet supported", {
 test_that("verbose and deprecated arguments", {
   mod <- lm(mpg ~ hp, data = mtcars)
   v1 <- suppressWarnings(get_varcov(mod, robust = TRUE))
-  v2 <- suppressWarnings(get_varcov(mod, robust = TRUE))
+  v2 <- suppressWarnings(get_varcov(mod))
   expect_equal(v1, v2, tolerance = 1e-4, ignore_attr = TRUE)
-  expect_warning(get_varcov(mod, robust = TRUE), regexp = "deprecated")
-  expect_warning(get_varcov(mod, robust = TRUE, verbose = FALSE), NA)
+  expect_warning(get_varcov(mod, robust = TRUE), regexp = "no longer supported")
 })
 
 

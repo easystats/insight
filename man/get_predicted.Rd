@@ -156,14 +156,14 @@ identifies the function to be used to compute the covariance matrix.
 \item A function which returns a covariance matrix (e.g., \code{stats::vcov()})
 \item A string which indicates the kind of uncertainty estimates to return.
 \itemize{
-\item Heteroskedasticity-consistent: \code{"vcovHC"}, \code{"HC"}, \code{"HC0"}, \code{"HC1"},
-\code{"HC2"}, \code{"HC3"}, \code{"HC4"}, \code{"HC4m"}, \code{"HC5"}. See \code{?sandwich::vcovHC}
+\item Heteroskedasticity-consistent: \code{"HC"}, \code{"HC0"}, \code{"HC1"}, \code{"HC2"},
+\code{"HC3"}, \code{"HC4"}, \code{"HC4m"}, \code{"HC5"}. See \code{?sandwich::vcovHC}
 \item Cluster-robust: \code{"vcovCR"}, \code{"CR0"}, \code{"CR1"}, \code{"CR1p"}, \code{"CR1S"},
-\code{"CR2"}, \code{"CR3"}. See \code{?clubSandwich::vcovCR()}
+\code{"CR2"}, \code{"CR3"}. See \code{?clubSandwich::vcovCR}
 \item Bootstrap: \code{"vcovBS"}, \code{"xy"}, \code{"residual"}, \code{"wild"}, \code{"mammen"},
-\code{"webb"}. See \code{?sandwich::vcovBS}
-\item Other \code{sandwich} package functions: \code{"vcovHAC"}, \code{"vcovPC"}, \code{"vcovCL"},
-\code{"vcovPL"}.
+\code{"fractional"}, \code{"jackknife"}, \code{"norm"}, \code{"webb"}.
+See \code{?sandwich::vcovBS}
+\item Other \code{sandwich} package functions: \code{"HAC"}, \code{"PC"}, \code{"vCL"}, \code{"PL"}.
 }
 }}
 

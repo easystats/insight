@@ -7,7 +7,7 @@
 \usage{
 get_weights(x, ...)
 
-\method{get_weights}{default}(x, remove_na = FALSE, null_as_ones = FALSE, na_rm = remove_na, ...)
+\method{get_weights}{default}(x, remove_na = FALSE, null_as_ones = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -19,8 +19,6 @@ get_weights(x, ...)
 \item{null_as_ones}{Logical, if \code{TRUE}, will return a vector of \code{1}
 if no weights were specified in the model (as if the weights were all set
 to 1).}
-
-\item{na_rm}{Deprecated, use \code{remove_na} instead.}
 }
 \value{
 The weighting variable, or \code{NULL} if no weights were specified.
