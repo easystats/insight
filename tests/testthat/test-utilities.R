@@ -81,3 +81,58 @@ test_that("trim_ws() works with non-ascii chars", {
     c("test", "Se\x96ora", "works \x97fine", "this too", "yeah")
   )
 })
+
+skip_if_not_installed("withr")
+
+withr::with_environment(
+  new.env(),
+  test_that("validate_argument", {
+    foo1 <- function(test = "short_distance") {
+      validate_argument(test, c("short_distance", "long_distance", "medium_distance"))
+    }
+    # match
+    expect_identical(foo1("medium_distance"), "medium_distance")
+    # typo
+    expect_error(
+      foo1("medium_ditsance"),
+      regex = "Otherwise, use one"
+    )
+    # no match
+    expect_error(
+      foo1("abcabcabc"),
+      regex = "Please use one"
+    )
+
+    foo2 <- function(test = "short_distance") {
+      validate_argument(test, "short_distance")
+    }
+    # match
+    expect_identical(foo2("short_distance"), "short_distance")
+    # typo
+    expect_error(
+      foo2("short_ditsance"),
+      regex = "Did you mean \"short"
+    )
+    # no match
+    expect_error(
+      foo2("abcabcabcabc"),
+      regex = "Please use one"
+    )
+
+    foo3 <- function(test = "short_distance") {
+      validate_argument(test, c("short_distance", "shorter_distance", "shortest_distance"))
+    }
+    # match
+    expect_identical(foo3("short_distance"), "short_distance")
+    # typo
+    expect_error(
+      foo3("short_ditsance"),
+      regex = "Did you mean one"
+    )
+    # no match
+    expect_error(
+      foo3("aaaaaaaaaaaaaaaaaaaa"),
+      regex = "Please use one"
+    )
+  })
+)

@@ -2,7 +2,7 @@ skip_if_offline()
 skip_on_os(c("mac", "linux", "solaris"))
 skip_if_not_installed("bayestestR")
 skip_if_not_installed("rstanarm")
-skip_if_not_installed("httr")
+skip_if_not_installed("httr2")
 
 # test for bayesian models -----------------
 m1 <- insight::download_model("stanreg_glm_1")

@@ -16,7 +16,6 @@
 #' @param character_only Logical, if `TRUE` and `x` is a data frame or list,
 #' only processes character vectors.
 #' @param ... Currently not used.
-#' @param na.rm Deprecated. Use `remove_na` instead.
 #'
 #' @return
 #' - `n_unique()`: For a vector, `n_unique` always returns an integer value,
@@ -89,36 +88,21 @@ n_unique <- function(x, ...) {
 
 #' @rdname trim_ws
 #' @export
-n_unique.default <- function(x, remove_na = TRUE, na.rm = TRUE, ...) {
+n_unique.default <- function(x, remove_na = TRUE, ...) {
   if (is.null(x)) {
     return(0)
-  }
-  ## TODO:: remove deprecation warning later
-  if (!missing(na.rm)) {
-    format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
-    remove_na <- na.rm
   }
   if (isTRUE(remove_na)) x <- x[!is.na(x)]
   length(unique(x))
 }
 
 #' @export
-n_unique.data.frame <- function(x, remove_na = TRUE, na.rm = TRUE, ...) {
-  ## TODO:: remove deprecation warning later
-  if (!missing(na.rm)) {
-    format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
-    remove_na <- na.rm
-  }
+n_unique.data.frame <- function(x, remove_na = TRUE, ...) {
   vapply(x, n_unique, remove_na = remove_na, FUN.VALUE = numeric(1L))
 }
 
 #' @export
-n_unique.list <- function(x, remove_na = TRUE, na.rm = TRUE, ...) {
-  ## TODO:: remove deprecation warning later
-  if (!missing(na.rm)) {
-    format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
-    remove_na <- na.rm
-  }
+n_unique.list <- function(x, remove_na = TRUE, ...) {
   lapply(x, n_unique, remove_na = remove_na)
 }
 
@@ -132,7 +116,7 @@ safe_deparse <- function(x, ...) {
   if (is.null(x)) {
     return(NULL)
   }
-  paste0(sapply(deparse(x, width.cutoff = 500), trim_ws, simplify = TRUE), collapse = " ")
+  paste(sapply(deparse(x, width.cutoff = 500), trim_ws, simplify = TRUE), collapse = " ")
 }
 
 
@@ -155,12 +139,7 @@ safe_deparse_symbol <- function(x) {
 
 #' @rdname trim_ws
 #' @export
-has_single_value <- function(x, remove_na = FALSE, na.rm = TRUE, ...) {
-  ## TODO:: remove deprecation warning later
-  if (!missing(na.rm)) {
-    format_warning("The `na.rm` argument is deprecated. Use `remove_na` instead.")
-    remove_na <- na.rm
-  }
+has_single_value <- function(x, remove_na = FALSE, ...) {
   if (remove_na) x <- x[!is.na(x)]
   !is.null(x) && length(x) > 0L && isTRUE(all(x == x[1]))
 }

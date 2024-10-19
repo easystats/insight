@@ -29,3 +29,30 @@ test_that("clean_parameters blavaan", {
   out <- clean_parameters(bfit)
   expect_true(inherits(out, "clean_parameters")) # nolint
 })
+
+
+test_that("clean_parameters stanrag", {
+  skip_on_cran()
+  skip_if_not_installed("rstanarm")
+  skip_if_not_installed("lme4")
+
+  data(sleepstudy, package = "lme4")
+  m <- insight::download_model("stanreg_merMod_6")
+  out <- clean_parameters(m)
+
+  expect_identical(
+    out$Group,
+    c(
+      "", "", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
+      "Days: Subject", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
+      "Days: Subject", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
+      "Days: Subject", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
+      "Days: Subject", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
+      "Days: Subject", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
+      "Days: Subject", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
+      "Days: Subject", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
+      "Days: Subject", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
+      "Days: Subject", "Var/Cov: Subject", "Var/Cov: Subject", "Var/Cov: Subject", ""
+    )
+  )
+})
