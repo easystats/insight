@@ -11,6 +11,9 @@
 * Updates `get_varcov()` (and related documentation) to support new covariance
   matrix estimation methods from the **sandwich** package.
 
+* New function `validate_argument()` as a replacement for `match.arg()` with
+  more informative error message.
+
 ## Bug fix
 
 * `clean_parameters()` now uses the correct labels for the random effects
