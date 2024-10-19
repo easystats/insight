@@ -24,7 +24,6 @@ foo <- function(test = "small") {
   validate_argument(test, c("small", "medium", "large"))
 }
 foo("small")
-\dontrun{
-foo("masll")
-}
+# errors:
+# foo("masll")
 }

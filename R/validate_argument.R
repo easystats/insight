@@ -15,9 +15,8 @@
 #'   validate_argument(test, c("small", "medium", "large"))
 #' }
 #' foo("small")
-#' \dontrun{
-#' foo("masll")
-#' }
+#' # errors:
+#' # foo("masll")
 #' @export
 validate_argument <- function(argument, options) {
   # save this information for printin
