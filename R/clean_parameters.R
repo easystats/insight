@@ -528,7 +528,7 @@ clean_parameters.mlm <- function(x, ...) {
   out$Cleaned_Parameter <- gsub(pattern = "^b_(?!zi_)(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter, perl = TRUE)
   out$Cleaned_Parameter <- gsub(pattern = "^b_zi_(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter, perl = TRUE)
   out$Cleaned_Parameter <- gsub(pattern = "^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", "\\2", out$Cleaned_Parameter, perl = TRUE)
-  out$Cleaned_Parameter <- gsub(pattern = "^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)(.*)", "\\2", out$Cleaned_Parameter, perl = TRUE)
+  out$Cleaned_Parameter <- gsub(pattern = "^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)(.*)", "\\2", out$Cleaned_Parameter, perl = TRUE) # nolint
 
   # correlation and sd
 
@@ -539,7 +539,7 @@ clean_parameters.mlm <- function(x, ...) {
     # replace "__" by "~"
     cor_only <- startsWith(out$Parameter[cor_sd], "cor_")
     if (any(cor_only)) {
-      out$Cleaned_Parameter[which(cor_sd)[cor_only]] <- sub("__", " ~ ", out$Cleaned_Parameter[which(cor_sd)[cor_only]], fixed = TRUE)
+      out$Cleaned_Parameter[which(cor_sd)[cor_only]] <- sub("__", " ~ ", out$Cleaned_Parameter[which(cor_sd)[cor_only]], fixed = TRUE) # nolint
     }
   }
 
@@ -585,7 +585,7 @@ clean_parameters.mlm <- function(x, ...) {
 
   simplex <- startsWith(out$Cleaned_Parameter, "simo_")
   if (length(simplex)) {
-    out$Cleaned_Parameter[simplex] <- gsub("^(simo_|simo_mo)(.*)\\[(\\d)\\]$", "\\2[\\3]", out$Cleaned_Parameter[simplex])
+    out$Cleaned_Parameter[simplex] <- gsub("^(simo_|simo_mo)(.*)\\[(\\d)\\]$", "\\2[\\3]", out$Cleaned_Parameter[simplex]) # nolint
     out$Component[simplex] <- "simplex"
   }
 

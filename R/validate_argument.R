@@ -96,11 +96,11 @@ validate_argument <- function(argument, options) {
 }
 
 
-.to_string <- function (text, sep = ", ", last = " or ", enclose = "\"") {
+.to_string <- function(text, sep = ", ", last = " or ", enclose = "\"") {
   if (length(text) == 1 && !nzchar(text, keepNA = TRUE)) {
     return(text)
   }
-  text <- text[text != ""]
+  text <- text[text != ""] # nolint
   if (length(text) && !is.null(enclose)) {
     text <- paste0(enclose, text, enclose)
   }
