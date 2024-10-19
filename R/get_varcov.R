@@ -30,19 +30,21 @@
 #'  * A string which indicates the kind of uncertainty estimates to return.
 #'    - Heteroskedasticity-consistent: `"HC"`, `"HC0"`, `"HC1"`, `"HC2"`,
 #'      `"HC3"`, `"HC4"`, `"HC4m"`, `"HC5"`. See `?sandwich::vcovHC`
-#'    - Cluster-robust: `"vcovCR"`, `"CR0"`, `"CR1"`, `"CR1p"`, `"CR1S"`,
-#'      `"CR2"`, `"CR3"`. See `?clubSandwich::vcovCR`
-#'    - Bootstrap: `"vcovBS"`, `"xy"`, `"residual"`, `"wild"`, `"mammen"`,
-#'      `"fractional"`, `"jackknife"`, `"norm"`, `"webb"`.
-#'      See `?sandwich::vcovBS`
-#'    - Other `sandwich` package functions: `"HAC"`, `"PC"`, `"vCL"`, `"PL"`.
+#'    - Cluster-robust: `"CR"`, `"CR0"`, `"CR1"`, `"CR1p"`, `"CR1S"`, `"CR2"`,
+#'      `"CR3"`. See `?clubSandwich::vcovCR`
+#'    - Bootstrap: `"BS"`, `"xy"`, `"residual"`, `"wild"`, `"mammen"`,
+#'      `"fractional"`, `"jackknife"`, `"norm"`, `"webb"`. See
+#'      `?sandwich::vcovBS`
+#'    - Other `sandwich` package functions: `"HAC"`, `"PC"`, `"CL"`, `"OPG"`,
+#'      `"PL"`.
+#'    - Kenward-Roger approximation: `kenward-roger`. See `?pbkrtest::vcovAdj`.
 #' @param vcov_args List of arguments to be passed to the function identified by
-#'   the `vcov` argument. This function is typically supplied by the **sandwich**
-#'   or **clubSandwich** packages. Please refer to their documentation (e.g.,
-#'   `?sandwich::vcovHAC`) to see the list of available arguments. If no estimation
-#'   type (argument `type`) is given, the default type for `"HC"` (or `"vcovHC"`)
-#'   equals the default from the **sandwich** package; for type `"CR"` (or
-#'   `"vcoCR"`), the default is set to `"CR3"`.
+#'   the `vcov` argument. This function is typically supplied by the
+#'   **sandwich** or **clubSandwich** packages. Please refer to their
+#'   documentation (e.g., `?sandwich::vcovHAC`) to see the list of available
+#'   arguments. If no estimation type (argument `type`) is given, the default
+#'   type for `"HC"` equals the default from the **sandwich** package; for type
+#'   `"CR"`, the default is set to `"CR3"`.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
