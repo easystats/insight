@@ -2,7 +2,8 @@
 #' @name validate_argument
 #'
 #' @description This is a replacement for `match.arg()`, however, the error
-#' string should be more informative for users.
+#' string should be more informative for users. The name of the affected argument
+#' is shown, and possible typos as well as remaining valid options.
 #'
 #' @param argument The bare name of the argument to be validated.
 #' @param options Valid options, usually a character vector.
@@ -14,20 +15,30 @@
 #'   validate_argument(test, c("small", "medium", "large"))
 #' }
 #' foo("small")
+#' \dontrun{
 #' foo("masll")
+#' }
 #' @export
 validate_argument <- function(argument, options) {
+  # save this information for printin
   argument_name <- deparse(substitute(argument))
+  original_argument <- argument
+  # catch error, we want our own message
   argument <- .safe(match.arg(argument, options))
+  # proceed here if argument option was invalid
   if (is.null(argument)) {
-    suggestion <- .misspelled_string(options, argument_name)
+    # check whether we find a typo
+    suggestion <- .misspelled_string(options, original_argument)
     msg <- sprintf("Invalid option for argument `%s`.", argument_name)
-    if (is.null(suggestion) || !length(suggestion) || !nzchar(suggestion)) {
-      msg <- paste(msg, "Please use one of the following options:")
+    if (is.null(suggestion$msg) || !length(suggestion$msg) || !nzchar(suggestion$msg)) {
+      msg <- paste(msg, "Please use one of the following options:", .to_string(options))
     } else {
-      msg <- paste(msg, suggestion, "Else, use one of the following options:")
+      options <- setdiff(options, suggestion$possible_strings)
+      msg <- paste(msg, suggestion$msg)
+      if (length(options)) {
+        msg <- paste(msg, "Otherwise, use one of the following options:", .to_string(options))
+      }
     }
-    msg <- paste(msg, .to_string(options))
     format_error(msg)
   }
   argument
@@ -70,7 +81,7 @@ validate_argument <- function(argument, options) {
     msg <- default_message
   }
   # no double white space
-  trim_ws(msg)
+  list(msg = trim_ws(msg), possible_strings = possible_strings)
 }
 
 

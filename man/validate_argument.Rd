@@ -16,12 +16,15 @@ validate_argument(argument, options)
 }
 \description{
 This is a replacement for \code{match.arg()}, however, the error
-string should be more informative for users.
+string should be more informative for users. The name of the affected argument
+is shown, and possible typos as well as remaining valid options.
 }
 \examples{
 foo <- function(test = "small") {
   validate_argument(test, c("small", "medium", "large"))
 }
 foo("small")
+\dontrun{
 foo("masll")
+}
 }
