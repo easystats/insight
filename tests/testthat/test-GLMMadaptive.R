@@ -355,7 +355,7 @@ test_that("detect custom families", {
   # everyone has a baseline measurement, and then measurements at random follow-up times
   DF <- data.frame(
     id = rep(seq_len(n), each = K),
-    time = replicate(n, c(0, sort(runif(K - 1, 0, t_max)))),
+    time = as.vector(replicate(n, c(0, sort(runif(K - 1, 0, t_max))))),
     sex = rep(gl(2, n / 2, labels = c("male", "female")), each = K)
   )
 
