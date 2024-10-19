@@ -111,7 +111,7 @@ withr::with_environment(
     # typo
     expect_error(
       foo2("short_ditsance"),
-      regex = "Did you mean \"2short"
+      regex = "Did you mean \"short"
     )
     # no match
     expect_error(
