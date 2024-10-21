@@ -62,6 +62,12 @@ get_transformation <- function(x, verbose = TRUE) {
     out <- list(transformation = sqrt, inverse = function(x) x^2)
   } else if (transform_fun == "inverse") {
     out <- list(transformation = function(x) 1 / x, inverse = function(x) x^-1)
+  } else if (transform_fun == "quotient") {
+    denominator <- as.numeric(find_terms(x)[["response"]][2])
+    out <- list(
+      transformation = eval(parse(text = paste0("function(x) x / ", as.character(denominator)))), # nolint
+      inverse = eval(parse(text = paste0("function(x) x * ", as.character(denominator))))
+    )
   } else if (transform_fun == "power") {
     trans_power <- .safe(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", find_terms(x)[["response"]]))) # nolint
     if (is.null(trans_power)) {

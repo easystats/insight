@@ -5,8 +5,8 @@
 #'   or exp-transforming, was applied to the response variable (dependent
 #'   variable) in a regression formula. Currently, following patterns are
 #'   detected: `log`, `log1p`, `log2`, `log10`, `exp`, `expm1`, `sqrt`,
-#'   `log(x+<number>)`, `log-log`, `power` (to 2nd power, like `I(x^2)`), and
-#'   `inverse` (like `1/y`).
+#'   `log(x+<number>)`, `log-log`, `power` (to 2nd power, like `I(x^2)`),
+#'   `inverse` (like `1/y`), and `quotient` (e.g., `x/3`).
 #'
 #' @param x A regression model or a character string of the response value.
 #' @param ... Currently not used.
@@ -51,7 +51,22 @@ find_transformation.default <- function(x, ...) {
     })
     unlist(result)
   } else {
+    # "raw" response
     rv <- find_terms(x)[["response"]]
+    # for quotients, like x/3, `find_response()` returns a character vector
+    # of length 2, one with the nominator and the denominator. In this case,
+    # check against original response
+    original_response <- safe_deparse(find_formula(x)$conditional[[2]])
+    # check if we have the pattern x/<number)
+    if (any(grepl("(.*)/(\\d)", original_response))) {
+      # if so, check if the pattern really match
+      nominator <- gsub("/.*", "\\1", original_response)
+      denominator <- gsub(".*\\/(.*)", "\\1", original_response)
+      # and if so again, then reconstruct quotient string
+      if (all(rv == c(nominator, denominator))) {
+        rv <- paste(nominator, denominator, sep = "/")
+      }
+    }
     find_transformation(rv)
   }
 }
@@ -111,6 +126,9 @@ find_transformation.character <- function(x, ...) {
   } else if (any(startsWith(x, "1/"))) {
     # inverse-transformation
     transform_fun <- "inverse"
+  } else if (any(grepl("(.*)/(\\d)", x))) {
+    # quotient
+    transform_fun <- "quotient"
   } else if (any(grepl("(.*)(\\^|\\*\\*)\\s?-?(\\d+|[()])", x))) {
     # power-transformation
     transform_fun <- "power"
