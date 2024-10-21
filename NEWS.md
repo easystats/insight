@@ -2,6 +2,8 @@
 
 ## General
 
+* `get_transformation()` can now deal with any power-transformation.
+
 * Updates `get_varcov()` (and related documentation) to support new covariance
   matrix estimation methods from the **sandwich** package.
 
