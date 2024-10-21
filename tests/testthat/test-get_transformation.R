@@ -8,4 +8,8 @@ test_that("get_transformation - detect powers", {
   fun <- get_transformation(m)
   expect_identical(fun$transformation(2), 8)
   expect_identical(fun$inverse(8), 2)
+  m <- lm(Sepal.Length^4.7 ~ Species, data = iris)
+  fun <- get_transformation(m)
+  expect_equal(fun$transformation(2), 25.99208, tolerance = 1e-3)
+  expect_equal(fun$inverse(25.99208), 2, tolerance = 1e-3)
 })
