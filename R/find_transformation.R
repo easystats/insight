@@ -58,7 +58,7 @@ find_transformation.default <- function(x, ...) {
     # check against original response
     original_response <- safe_deparse(find_formula(x)$conditional[[2]])
     # check if we have the pattern x/<number)
-    if (any(grepl("(.*)/(\\d)", original_response))) {
+    if (any(grepl("(\\w)/(\\d)", original_response))) {
       # if so, check if the pattern really match
       nominator <- gsub("/.*", "\\1", original_response)
       denominator <- gsub(".*\\/(.*)", "\\1", original_response)
@@ -126,7 +126,7 @@ find_transformation.character <- function(x, ...) {
   } else if (any(startsWith(x, "1/"))) {
     # inverse-transformation
     transform_fun <- "inverse"
-  } else if (any(grepl("(.*)/(\\d)", x))) {
+  } else if (any(grepl("(\\w)/(\\d)", x))) {
     # division
     transform_fun <- "division"
   } else if (any(grepl("(.*)(\\^|\\*\\*)\\s?-?(\\d+|[()])", x))) {
