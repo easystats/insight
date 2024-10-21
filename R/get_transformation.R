@@ -62,8 +62,8 @@ get_transformation <- function(x, verbose = TRUE) {
     out <- list(transformation = sqrt, inverse = function(x) x^2)
   } else if (transform_fun == "inverse") {
     out <- list(transformation = function(x) 1 / x, inverse = function(x) x^-1)
-  } else if (transform_fun == "quotient") {
-    # more complicated case: quotient is inside `I()`
+  } else if (transform_fun == "division") {
+    # more complicated case: division is inside `I()`
     if (startsWith(x, "I(")) {
       denominator <- as.numeric(gsub("(.*)/(.*)\\)", "\\2", find_terms(x)[["response"]]))
     } else {
