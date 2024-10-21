@@ -6,7 +6,8 @@
 #' This functions checks whether any transformation, such as log- or
 #' exp-transforming, was applied to the response variable (dependent variable)
 #' in a regression formula, and returns the related function that was used for
-#' transformation.
+#' transformation. See [`find_transformation()`] for an overview of supported
+#' transformations that are detected.
 #'
 #' @param x A regression model.
 #' @param verbose Logical, if `TRUE`, prints a warning if the transformation
@@ -62,8 +63,8 @@ get_transformation <- function(x, verbose = TRUE) {
     out <- list(transformation = sqrt, inverse = function(x) x^2)
   } else if (transform_fun == "inverse") {
     out <- list(transformation = function(x) 1 / x, inverse = function(x) x^-1)
-  } else if (transform_fun == "division") {
-    # more complicated case: division is inside `I()`
+  } else if (transform_fun == "scale") {
+    # more complicated case: scale is inside `I()`
     if (startsWith(x, "I(")) {
       denominator <- as.numeric(gsub("(.*)/(.*)\\)", "\\2", find_terms(x)[["response"]]))
     } else {

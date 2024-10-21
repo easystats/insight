@@ -6,7 +6,7 @@
 #'   variable) in a regression formula. Currently, following patterns are
 #'   detected: `log`, `log1p`, `log2`, `log10`, `exp`, `expm1`, `sqrt`,
 #'   `log(x+<number>)`, `log-log`, `power` (to 2nd power, like `I(x^2)`),
-#'   `inverse` (like `1/y`), and `division` (e.g., `x/3`).
+#'   `inverse` (like `1/y`), and `scale` (e.g., `x/3`).
 #'
 #' @param x A regression model or a character string of the response value.
 #' @param ... Currently not used.
@@ -127,8 +127,8 @@ find_transformation.character <- function(x, ...) {
     # inverse-transformation
     transform_fun <- "inverse"
   } else if (.is_division(x)) {
-    # division
-    transform_fun <- "division"
+    # scale
+    transform_fun <- "scale"
   } else if (any(grepl("(.*)(\\^|\\*\\*)\\s?-?(\\d+|[()])", x))) {
     # power-transformation
     transform_fun <- "power"

@@ -24,7 +24,8 @@ transformation was applied, both list-elements \verb{$transformation} and
 This functions checks whether any transformation, such as log- or
 exp-transforming, was applied to the response variable (dependent variable)
 in a regression formula, and returns the related function that was used for
-transformation.
+transformation. See \code{\link[=find_transformation]{find_transformation()}} for an overview of supported
+transformations that are detected.
 }
 \examples{
 # identity, no transformation

@@ -48,11 +48,11 @@ test_that("find_transformation - power-2", {
   expect_identical(find_transformation(model), "power")
 })
 
-test_that("find_transformation - division", {
+test_that("find_transformation - scale", {
   model <- lm(mpg / 0.7 ~ hp, data = mtcars)
-  expect_identical(find_transformation(model), "division")
+  expect_identical(find_transformation(model), "scale")
   model <- lm(I(mpg / 0.7) ~ hp, data = mtcars)
-  expect_identical(find_transformation(model), "division")
+  expect_identical(find_transformation(model), "scale")
 })
 
 test_that("find_transformation - unknown", {
