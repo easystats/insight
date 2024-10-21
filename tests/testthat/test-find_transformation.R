@@ -44,7 +44,7 @@ test_that("find_transformation - power-1", {
 })
 
 test_that("find_transformation - power-2", {
-  model <- lm(I(Sepal.Length^2) ~ Species, data = iris)
+  model <- lm(I(Sepal.Length^2.5) ~ Species, data = iris)
   expect_identical(find_transformation(model), "power")
 })
 
