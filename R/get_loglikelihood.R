@@ -494,6 +494,9 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
         # first derivative of 1/x is -1/x^2 - we cannot take the log from negative
         # values, so this won't work here, and we return NULL
         NULL
+      } else if (trans == "scale") {
+        scale_denominator <- .extract_scale_denominator(x)
+        .weighted_sum(log(1 / scale_denominator), w = model_weights)
       } else if (trans == "power") {
         trans_power <- .extract_power_transformation(x)
         .weighted_sum(log(trans_power * (get_response(x, as_proportion = TRUE)^(trans_power - 1))), w = model_weights) # nolint

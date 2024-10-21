@@ -107,7 +107,7 @@ get_transformation <- function(x, verbose = TRUE) {
 
 
 .extract_scale_denominator <- function(model) {
-  resp_term <- find_terms(x)[["response"]]
+  resp_term <- find_terms(model)[["response"]]
   # more complicated case: scale is inside `I()`
   if (startsWith(resp_term[1], "I(")) {
     as.numeric(gsub("(.*)/(.*)\\)", "\\2", resp_term[1]))

@@ -13,3 +13,16 @@ test_that("get_transformation - detect powers", {
   expect_equal(fun$transformation(2), 25.99208, tolerance = 1e-3)
   expect_equal(fun$inverse(25.99208), 2, tolerance = 1e-3)
 })
+
+
+test_that("get_transformation - detect scale", {
+  data(mtcars)
+  m <- lm(mpg / 0.7 ~ hp, data = mtcars)
+  fun <- get_transformation(m)
+  expect_equal(fun$transformation(2), 2 / 7, tolerance = 1e-3)
+  expect_equal(fun$inverse(2.857143), 2, tolerance = 1e-3)
+  m <- lm(I(mpg / 0.7) ~ hp, data = mtcars)
+  fun <- get_transformation(m)
+  expect_equal(fun$transformation(2), 2 / 7, tolerance = 1e-3)
+  expect_equal(fun$inverse(2.857143), 2, tolerance = 1e-3)
+})
