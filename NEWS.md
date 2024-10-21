@@ -8,6 +8,11 @@
 
 * `get_dispersion()` is now an exported function.
 
+* `get_transformation()` can now deal with any power-transformation.
+
+* `find_transformation()` and `get_transformation()` now also detects use of
+  divisions, like `x/3`.
+
 * Updates `get_varcov()` (and related documentation) to support new covariance
   matrix estimation methods from the **sandwich** package.
 

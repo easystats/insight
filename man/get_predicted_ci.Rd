@@ -83,14 +83,6 @@ identifies the function to be used to compute the covariance matrix.
 \itemize{
 \item Heteroskedasticity-consistent: \code{"HC"}, \code{"HC0"}, \code{"HC1"}, \code{"HC2"},
 \code{"HC3"}, \code{"HC4"}, \code{"HC4m"}, \code{"HC5"}. See \code{?sandwich::vcovHC}
-\item Cluster-robust: \code{"CR"}, \code{"CR0"}, \code{"CR1"}, \code{"CR1p"}, \code{"CR1S"}, \code{"CR2"},
-\code{"CR3"}. See \code{?clubSandwich::vcovCR}
-\item Bootstrap: \code{"BS"}, \code{"xy"}, \code{"residual"}, \code{"wild"}, \code{"mammen"},
-\code{"fractional"}, \code{"jackknife"}, \code{"norm"}, \code{"webb"}. See
-\code{?sandwich::vcovBS}
-\item Other \code{sandwich} package functions: \code{"HAC"}, \code{"PC"}, \code{"CL"}, \code{"OPG"},
-\code{"PL"}.
-\item Kenward-Roger approximation: \code{kenward-roger}. See \code{?pbkrtest::vcovAdj}.
 }
 }}
 
