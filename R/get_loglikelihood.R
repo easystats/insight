@@ -513,7 +513,6 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
 }
 
 
-
 .ll_log_adjustment <- function(x) {
   tryCatch(
     {
