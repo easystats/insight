@@ -68,13 +68,17 @@ get_transformation <- function(x, verbose = TRUE) {
     if (is.null(trans_power)) {
       trans_power <- "2"
     }
-    out <- switch(trans_power,
-      `0.5` = list(transformation = function(x) x^0.5, inverse = function(x) x^2),
-      `3` = list(transformation = function(x) x^3, inverse = function(x) x^(1 / 3)),
-      `4` = list(transformation = function(x) x^4, inverse = function(x) x^0.25),
-      `5` = list(transformation = function(x) x^5, inverse = function(x) x^0.2),
-      list(transformation = function(x) x^2, inverse = sqrt)
+    out <- list(
+      transformation = eval(parse(text = paste0("function(x) x^", as.character(as.numeric(trans_power))))), # nolint
+      inverse = eval(parse(text = paste0("function(x) x^(", as.character(as.numeric(trans_power)), "^-1)")))
     )
+    # out <- switch(trans_power,
+    #   `0.5` = list(transformation = function(x) x^0.5, inverse = function(x) x^2),
+    #   `3` = list(transformation = function(x) x^3, inverse = function(x) x^(1 / 3)),
+    #   `4` = list(transformation = function(x) x^4, inverse = function(x) x^0.25),
+    #   `5` = list(transformation = function(x) x^5, inverse = function(x) x^0.2),
+    #   list(transformation = function(x) x^2, inverse = sqrt)
+    # )
   } else if (transform_fun == "expm1") {
     out <- list(transformation = expm1, inverse = log1p)
   } else if (transform_fun == "log-log") {
