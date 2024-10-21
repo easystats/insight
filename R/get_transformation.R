@@ -63,7 +63,12 @@ get_transformation <- function(x, verbose = TRUE) {
   } else if (transform_fun == "inverse") {
     out <- list(transformation = function(x) 1 / x, inverse = function(x) x^-1)
   } else if (transform_fun == "quotient") {
-    denominator <- as.numeric(find_terms(x)[["response"]][2])
+    # more complicated case: quotient is inside `I()`
+    if (startsWith(x, "I(")) {
+      denominator <- as.numeric(gsub("(.*)/(.*)\\)", "\\2", find_terms(x)[["response"]]))
+    } else {
+      denominator <- as.numeric(find_terms(x)[["response"]][2])
+    }
     out <- list(
       transformation = eval(parse(text = paste0("function(x) x / ", as.character(denominator)))), # nolint
       inverse = eval(parse(text = paste0("function(x) x * ", as.character(denominator))))
