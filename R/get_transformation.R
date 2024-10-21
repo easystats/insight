@@ -64,24 +64,19 @@ get_transformation <- function(x, verbose = TRUE) {
   } else if (transform_fun == "inverse") {
     out <- list(transformation = function(x) 1 / x, inverse = function(x) x^-1)
   } else if (transform_fun == "scale") {
-    # more complicated case: scale is inside `I()`
-    if (startsWith(x, "I(")) {
-      denominator <- as.numeric(gsub("(.*)/(.*)\\)", "\\2", find_terms(x)[["response"]]))
-    } else {
-      denominator <- as.numeric(find_terms(x)[["response"]][2])
-    }
+    denominator <- .extract_scale_denominator(x)
     out <- list(
       transformation = eval(parse(text = paste0("function(x) x / ", as.character(denominator)))), # nolint
       inverse = eval(parse(text = paste0("function(x) x * ", as.character(denominator))))
     )
   } else if (transform_fun == "power") {
-    trans_power <- .safe(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", find_terms(x)[["response"]]))) # nolint
+    trans_power <- .extract_power_transformation(x)
     if (is.null(trans_power)) {
-      trans_power <- "2"
+      trans_power <- 2
     }
     out <- list(
-      transformation = eval(parse(text = paste0("function(x) x^", as.character(as.numeric(trans_power))))), # nolint
-      inverse = eval(parse(text = paste0("function(x) x^(", as.character(as.numeric(trans_power)), "^-1)")))
+      transformation = eval(parse(text = paste0("function(x) x^", as.character(trans_power)))), # nolint
+      inverse = eval(parse(text = paste0("function(x) x^(", as.character(trans_power), "^-1)")))
     )
   } else if (transform_fun == "expm1") {
     out <- list(transformation = expm1, inverse = log1p)
@@ -100,4 +95,23 @@ get_transformation <- function(x, verbose = TRUE) {
   }
 
   out
+}
+
+
+# helper ------------------------------
+
+
+.extract_power_transformation <- function(model) {
+  .safe(as.numeric(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", find_terms(model)[["response"]])))) # nolint
+}
+
+
+.extract_scale_denominator <- function(model) {
+  resp_term <- find_terms(x)[["response"]]
+  # more complicated case: scale is inside `I()`
+  if (startsWith(resp_term[1], "I(")) {
+    as.numeric(gsub("(.*)/(.*)\\)", "\\2", resp_term[1]))
+  } else {
+    as.numeric(resp_term[2])
+  }
 }
