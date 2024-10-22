@@ -5,8 +5,9 @@
 #'   or exp-transforming, was applied to the response variable (dependent
 #'   variable) in a regression formula. Currently, following patterns are
 #'   detected: `log`, `log1p`, `log2`, `log10`, `exp`, `expm1`, `sqrt`,
-#'   `log(x+<number>)`, `log-log`, `power` (to 2nd power, like `I(x^2)`),
-#'   `inverse` (like `1/y`), and `scale` (e.g., `x/3`).
+#'   `log(x+<number>)`, `log-log`, `power` (e.g. to 2nd power, like `I(x^2)`),
+#'   `inverse` (like `1/y`), `scale` (e.g., `x/3`), and `box-cox` (e-g-,
+#'   `(y^lambda - 1) / lambda`).
 #'
 #' @param x A regression model or a character string of the response value.
 #' @param ... Currently not used.
@@ -58,7 +59,7 @@ find_transformation.default <- function(x, ...) {
     # check against original response
     original_response <- safe_deparse(find_formula(x)$conditional[[2]])
     # check if we have the pattern (x/<number)
-    if (.is_division(original_response)) { # nolint
+    if (.is_division(original_response)) {
       # if so, check if the pattern really match
       nominator <- gsub("/.*", "\\1", original_response)
       denominator <- gsub(".*\\/(.*)", "\\1", original_response)
@@ -127,8 +128,12 @@ find_transformation.character <- function(x, ...) {
     # inverse-transformation
     transform_fun <- "inverse"
   } else if (.is_division(x)) {
-    # scale
-    transform_fun <- "scale"
+    # scale or Box-Cox transformation
+    if (.is_box_cox(x)) {
+      transform_fun <- "box-cox"
+    } else {
+      transform_fun <- "scale"
+    }
   } else if (any(grepl("(.*)(\\^|\\*\\*)\\s?-?(\\d+|[()])", x))) {
     # power-transformation
     transform_fun <- "power"
@@ -144,5 +149,9 @@ find_transformation.character <- function(x, ...) {
 # helper -----------------------------
 
 .is_division <- function(x) {
-  any(grepl("(.*)/([0-9\\.]+)$", x)) && !any(grepl("(.*)(\\^|\\*\\*)\\((.*)/(.*)\\)", x))
+  any(grepl("(.*)/([0-9\\.]+)(\\)*)$", x)) && !any(grepl("(.*)(\\^|\\*\\*)\\((.*)/(.*)\\)", x))
+}
+
+.is_box_cox <- function(x) {
+  any(grepl("\\((.*)\\^[0-9\\.]+-1\\)", x))
 }
