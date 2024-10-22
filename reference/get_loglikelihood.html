@@ -88,7 +88,7 @@ automatically in <code>get_loglikelihood()</code> if <code>check_response = TRUE
 <span></span>
 <span><span class="fu">loglikelihood</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">get_loglikelihood_adjustment</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu">get_loglikelihood_adjustment</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'lm'</span></span>
 <span><span class="fu">get_loglikelihood</span><span class="op">(</span></span>
@@ -111,11 +111,6 @@ automatically in <code>get_loglikelihood()</code> if <code>check_response = TRUE
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Passed down to <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code>, if possible.</p></dd>
-
-
-<dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
-<dd><p>Optional numeric vector of weights. Must be of the same length
-as lengths of model obversations.</p></dd>
 
 
 <dt id="arg-estimator">estimator<a class="anchor" aria-label="anchor" href="#arg-estimator"></a></dt>
