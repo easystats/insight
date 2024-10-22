@@ -3,7 +3,7 @@
 ## General
 
 * `get_transformation()` can now deal with any power-transformation, and also
-  returns results for divisions (scaled reponse) and Box-Cox transformations.
+  returns results for divisions (scaled response) and Box-Cox transformations.
 
 * `find_transformation()` and `get_transformation()` now also detects use of
   divisions, like `x/3` or Box-Cox transformations (like `(x^lambda - 1) / lambda`).
