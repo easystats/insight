@@ -28,7 +28,7 @@ get_loglikelihood_adjustment(x, weights = NULL)
 \item{...}{Passed down to \code{logLik()}, if possible.}
 
 \item{weights}{Optional numeric vector of weights. Must be of the same length
-as lengths of model obversations.}
+as lengths of model observations.}
 
 \item{estimator}{Corresponds to the different estimators for the standard
 deviation of the errors. If \code{estimator="ML"} (default), the scaling is

@@ -31,7 +31,7 @@
 #' model is multiplied by the Jacobian/derivative of the transformation.
 #' @param ... Passed down to `logLik()`, if possible.
 #' @param weights Optional numeric vector of weights. Must be of the same length
-#' as lengths of model obversations.
+#' as lengths of model observations.
 #' @inheritParams get_residuals
 #'
 #' @return `get_loglikelihood()` returns an object of class `"logLik"`, also
