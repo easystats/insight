@@ -108,6 +108,8 @@ get_loglikelihood_adjustment <- function(x, weights = NULL) {
         .ll_jacobian_adjustment(x, weights)
       }
     },
+    # for negative log-values, we get a warning and NaN is returned
+    # capture this here and return NULL instead
     warning = function(e) {
       NULL
     },
