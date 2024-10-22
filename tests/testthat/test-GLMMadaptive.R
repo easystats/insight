@@ -1,7 +1,7 @@
 skip_if_offline()
 skip_if_not_installed("GLMMadaptive")
 skip_if_not_installed("lme4")
-skip_if_not_installed("httr")
+skip_if_not_installed("httr2")
 
 m <- download_model("GLMMadaptive_zi_2")
 m2 <- download_model("GLMMadaptive_zi_1")
@@ -355,7 +355,7 @@ test_that("detect custom families", {
   # everyone has a baseline measurement, and then measurements at random follow-up times
   DF <- data.frame(
     id = rep(seq_len(n), each = K),
-    time = c(replicate(n, c(0, sort(runif(K - 1, 0, t_max))))),
+    time = as.vector(replicate(n, c(0, sort(runif(K - 1, 0, t_max))))),
     sex = rep(gl(2, n / 2, labels = c("male", "female")), each = K)
   )
 
@@ -387,7 +387,7 @@ test_that("detect custom families", {
   hurdle.lognormal <- function() {
     stats <- make.link("identity")
     log_dens <- function(y, eta, mu_fun, phis, eta_zi) {
-      sigma <- exp(phis)
+      scaleParameter <- exp(phis)
       # binary indicator for y > 0
       ind <- y > 0
       # non-zero part
@@ -395,21 +395,21 @@ test_that("detect custom families", {
       eta_zi <- as.matrix(eta_zi)
       out <- eta
       out[ind, ] <- plogis(eta_zi[ind, ], lower.tail = FALSE, log.p = TRUE) +
-        dnorm(x = log(y[ind]), mean = eta[ind, ], sd = sigma, log = TRUE)
+        dnorm(x = log(y[ind]), mean = eta[ind, ], sd = scaleParameter, log = TRUE)
       # zero part
       out[!ind, ] <- plogis(eta_zi[!ind, ], log.p = TRUE)
       attr(out, "mu_y") <- eta
       out
     }
     score_eta_fun <- function(y, mu, phis, eta_zi) {
-      sigma <- exp(phis)
+      scaleParameter <- exp(phis)
       # binary indicator for y > 0
       ind <- y > 0
       # non-zero part
       eta <- as.matrix(mu)
       out <- eta
       out[!ind, ] <- 0
-      out[ind, ] <- (log(y[ind]) - eta[ind, ]) / sigma^2
+      out[ind, ] <- (log(y[ind]) - eta[ind, ]) / scaleParameter^2
       out
     }
     score_eta_zi_fun <- function(y, mu, phis, eta_zi) {
@@ -420,17 +420,17 @@ test_that("detect custom families", {
       out
     }
     score_phis_fun <- function(y, mu, phis, eta_zi) {
-      sigma <- exp(phis)
+      scaleParameter <- exp(phis)
       # binary indicator for y > 0
       ind <- y > 0
       # non-zero part
       eta <- as.matrix(mu)
       out <- eta
       out[!ind, ] <- 0
-      out[ind, ] <- -1 + (log(y[ind]) - eta[ind, ])^2 / sigma^2
+      out[ind, ] <- -1 + (log(y[ind]) - eta[ind, ])^2 / scaleParameter^2
       out
     }
-    simulate <- function(n, mu, phis, eta_zi) {
+    simulateResponses <- function(n, mu, phis, eta_zi) {
       y <- rlnorm(n = n, meanlog = mu, sdlog = exp(phis))
       y[as.logical(rbinom(n, 1, plogis(eta_zi)))] <- 0
       y
@@ -440,7 +440,7 @@ test_that("detect custom families", {
         family = "two-part log-normal", link = stats$name,
         linkfun = stats$linkfun, linkinv = stats$linkinv, log_dens = log_dens,
         score_eta_fun = score_eta_fun, score_eta_zi_fun = score_eta_zi_fun,
-        score_phis_fun = score_phis_fun, simulate = simulate
+        score_phis_fun = score_phis_fun, simulate = simulateResponses
       ),
       class = "family"
     )

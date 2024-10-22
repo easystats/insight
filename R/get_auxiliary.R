@@ -20,10 +20,13 @@
 #'
 #' @details Currently, only sigma and the dispersion parameter are returned, and
 #' only for a limited set of models.
-#' \subsection{Sigma Parameter}{
-#' See [get_sigma()].
-#' }
-#' \subsection{Dispersion Parameter}{
+#'
+#' @section Sigma Parameter:
+#'
+#' See [`get_sigma()`].
+#'
+#' @section  Dispersion Parameter:
+#'
 #' There are many different definitions of "dispersion", depending on the context.
 #' `get_auxiliary()` returns the dispersion parameters that usually can
 #' be considered as variance-to-mean ratio for generalized (linear) mixed
@@ -36,12 +39,12 @@
 #' and is the ratio of the sum of the squared Pearson-residuals and the residual
 #' degrees of freedom. For models of class `glmmTMB`, dispersion is
 #' \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}.
-#' }
-#' \subsection{**brms** models}{
+#'
+#' @section  brms-models:
+#'
 #' For models of class `brmsfit`, there are different options for the
 #' `type` argument. See a list of supported auxiliary parameters here:
-#' [find_parameters.BGGM()].
-#' }
+#' [`find_parameters.BGGM()`].
 #'
 #' @examples
 #' # from ?glm
@@ -74,21 +77,26 @@ get_auxiliary <- function(x,
 
 
 
-
-
 # dispersion parameter -----------------------
 
-#' @keywords internal
+#' @rdname get_auxiliary
+#' @export
 get_dispersion <- function(x, ...) {
   UseMethod("get_dispersion")
 }
 
-#' @keywords internal
+#' @rdname get_auxiliary
+#' @export
+get_dispersion.default <- function(x, ...) {
+  format_error(sprintf("`get_dispersion()` does not yet support models of class \"%s\".", class(x)[1])) # nolint
+}
+
+#' @export
 get_dispersion.model_fit <- function(x, ...) {
   get_dispersion(x$fit, ...)
 }
 
-#' @keywords internal
+#' @export
 get_dispersion.glm <- function(x, verbose = TRUE, ...) {
   info <- model_info(x, verbose = verbose)
   disp <- NULL
@@ -103,7 +111,7 @@ get_dispersion.glm <- function(x, verbose = TRUE, ...) {
   disp
 }
 
-#' @keywords internal
+#' @export
 get_dispersion.glmerMod <- function(x, verbose = TRUE, ...) {
   info <- model_info(x, verbose = verbose)
   disp <- NULL
@@ -122,7 +130,7 @@ get_dispersion.glmerMod <- function(x, verbose = TRUE, ...) {
   disp
 }
 
-#' @keywords internal
+#' @export
 get_dispersion.glmmTMB <- function(x, verbose = TRUE, ...) {
   info <- model_info(x, verbose = verbose)
   disp <- NULL
@@ -135,7 +143,7 @@ get_dispersion.glmmTMB <- function(x, verbose = TRUE, ...) {
   disp
 }
 
-#' @keywords internal
+#' @export
 get_dispersion.brmsfit <- get_dispersion.glmmTMB
 
 

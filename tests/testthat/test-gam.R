@@ -1,6 +1,6 @@
 skip_if_offline()
 skip_if_not_installed("mgcv")
-skip_if_not_installed("httr")
+skip_if_not_installed("httr2")
 skip_if_not_installed("withr")
 
 set.seed(123)
@@ -80,7 +80,13 @@ test_that("find_predictors", {
   expect_identical(find_predictors(m2, flatten = TRUE), c("x2", "x3", "x0", "x1"))
   expect_null(find_predictors(m2, effects = "random"))
 
-  expect_identical(find_predictors(m3), list(y0 = list(conditional = c("x0", "x1")), y1 = list(conditional = c("x2", "x3"))))
+  expect_identical(
+    find_predictors(m3),
+    list(
+      y0 = list(conditional = c("x0", "x1")),
+      y1 = list(conditional = c("x2", "x3"))
+    )
+  )
   expect_identical(find_predictors(m3, flatten = TRUE), c("x0", "x1", "x2", "x3"))
   expect_null(find_predictors(m3, effects = "random"))
 })
@@ -157,9 +163,23 @@ test_that("find_formula", {
 test_that("find_variables", {
   expect_identical(find_variables(m1), list(response = "y", conditional = c("x0", "x1", "x2", "x3")))
   expect_identical(find_variables(m1, flatten = TRUE), c("y", "x0", "x1", "x2", "x3"))
-  expect_identical(find_variables(m2), list(response = "y", conditional = c("x2", "x3"), zero_inflated = c("x0", "x1")))
+  expect_identical(
+    find_variables(m2),
+    list(
+      response = "y",
+      conditional = c("x2", "x3"),
+      zero_inflated = c("x0", "x1")
+    )
+  )
   expect_identical(find_variables(m2, flatten = TRUE), c("y", "x2", "x3", "x0", "x1"))
-  expect_identical(find_variables(m3), list(response = c(y0 = "y0", y1 = "y1"), y0 = list(conditional = c("x0", "x1")), y1 = list(conditional = c("x2", "x3"))))
+  expect_identical(
+    find_variables(m3),
+    list(
+      response = c(y0 = "y0", y1 = "y1"),
+      y0 = list(conditional = c("x0", "x1")),
+      y1 = list(conditional = c("x2", "x3"))
+    )
+  )
   expect_identical(find_variables(m3, flatten = TRUE), c("y0", "y1", "x0", "x1", "x2", "x3"))
 })
 

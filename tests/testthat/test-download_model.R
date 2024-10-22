@@ -1,4 +1,5 @@
 skip_if_not_installed("httptest2")
+skip_if_not_installed("httr2")
 
 httptest2::with_mock_dir("download-model-success", {
   test_that("we can successfully get existing model", {

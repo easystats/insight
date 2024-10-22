@@ -1,6 +1,12 @@
-# insight 0.20.x
+# insight 1.0.0
+
+## Breaking changes
+
+* All deprecated arguments have been removed.
 
 ## General
+
+* `get_dispersion()` is now an exported function.
 
 * `get_transformation()` can now deal with any power-transformation, and also
   returns results for divisions (scaled response) and Box-Cox transformations.
@@ -10,6 +16,14 @@
 
 * Updated `get_varcov()` (and related documentation) to support new covariance
   matrix estimation methods from the **sandwich** package.
+
+* New function `validate_argument()` as a replacement for `match.arg()` with
+  more informative error message.
+
+## Bug fix
+
+* `clean_parameters()` now uses the correct labels for the random effects
+  variances (`"SD/Cor"` has changed to `"Var/Cov"`).
 
 * The function to calculate the corrections for likelihood-values when the
   response-variable is transformed is now exported as `get_likelihood_adjustment()`.

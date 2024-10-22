@@ -76,7 +76,7 @@ test_that("clean_names, model", {
 
 skip_on_cran()
 skip_if_offline()
-skip_if_not_installed("httr")
+skip_if_not_installed("httr2")
 
 test_that("clean_names, multimembership", {
   m1 <- suppressWarnings(insight::download_model("brms_mm_1"))
