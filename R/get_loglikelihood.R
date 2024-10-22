@@ -1,34 +1,47 @@
-#' Log-Likelihood
+#' @title Log-Likelihood and Log-Likelihood correction
+#' @name get_loglikelihood
 #'
+#' @description
 #' A robust function to compute the log-likelihood of a model, as well as
 #' individual log-likelihoods (for each observation) whenever possible. Can be
 #' used as a replacement for `stats::logLik()` out of the box, as the
 #' returned object is of the same class (and it gives the same results by
 #' default).
 #'
+#' `get_loglikelihood_adjustment()` can be used to correct the log-likelihood
+#' for models with transformed response variables. The adjustment value can
+#' be added to the log-likelihood to get the corrected value. This is done
+#' automatically in `get_loglikelihood()` if `check_response = TRUE`.
+#'
 #' @param estimator Corresponds to the different estimators for the standard
-#'   deviation of the errors. If `estimator="ML"` (default), the scaling is
-#'   done by n (the biased ML estimator), which is then equivalent to using
-#'   `stats::logLik()`. If `estimator="OLS"`, it returns the unbiased
-#'   OLS estimator. `estimator="REML"` will give same results as
-#'   `logLik(..., REML=TRUE)`.
+#' deviation of the errors. If `estimator="ML"` (default), the scaling is
+#' done by n (the biased ML estimator), which is then equivalent to using
+#' `stats::logLik()`. If `estimator="OLS"`, it returns the unbiased
+#' OLS estimator. `estimator="REML"` will give same results as
+#' `logLik(..., REML=TRUE)`.
 #' @param REML Only for linear models. This argument is present for
-#'   compatibility with `stats::logLik()`. Setting it to `TRUE` will
-#'   overwrite the `estimator` argument and is thus equivalent to setting
-#'   `estimator="REML"`. It will give the same results as
-#'   `stats::logLik(..., REML=TRUE)`. Note that individual log-likelihoods
-#'   are not available under REML.
+#' compatibility with `stats::logLik()`. Setting it to `TRUE` will
+#' overwrite the `estimator` argument and is thus equivalent to setting
+#' `estimator="REML"`. It will give the same results as
+#' `stats::logLik(..., REML=TRUE)`. Note that individual log-likelihoods
+#' are not available under REML.
 #' @param check_response Logical, if `TRUE`, checks if the response variable
-#'   is transformed (like `log()` or `sqrt()`), and if so, returns a corrected
-#'   log-likelihood. To get back to the original scale, the likelihood of the
-#'   model is multiplied by the Jacobian/derivative of the transformation.
+#' is transformed (like `log()` or `sqrt()`), and if so, returns a corrected
+#' log-likelihood. To get back to the original scale, the likelihood of the
+#' model is multiplied by the Jacobian/derivative of the transformation.
 #' @param ... Passed down to `logLik()`, if possible.
+#' @param weights Optional numeric vector of weights. Must be of the same length
+#' as lengths of model obversations.
 #' @inheritParams get_residuals
 #'
-#' @return An object of class `"logLik"`, also containing the
-#'   log-likelihoods for each observation as a `per_observation` attribute
-#'   (`attributes(get_loglikelihood(x))$per_observation`) when possible.
-#'   The code was partly inspired from the **nonnest2** package.
+#' @return `get_loglikelihood()` returns an object of class `"logLik"`, also
+#' containing the log-likelihoods for each observation as a `per_observation`
+#' attribute (`attributes(get_loglikelihood(x))$per_observation`) when
+#' possible. The code was partly inspired from the **nonnest2** package.
+#'
+#' `get_loglikelihood_adjustment()` returns the adjustment value to be added to
+#' the log-likelihood to correct for transformed response variables, or `NULL`
+#' if the adjustment could not be computed.
 #'
 #' @examples
 #' x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
@@ -51,6 +64,102 @@ loglikelihood <- get_loglikelihood
 get_loglikelihood.default <- function(x, ...) {
   .loglikelihood_prep_output(x, lls = NA, ...)
 }
+
+
+#' @rdname get_loglikelihood
+#' @export
+get_loglikelihood_adjustment <- function(x, weights = NULL) {
+  tryCatch(
+    {
+      trans <- find_transformation(x)
+
+      if (trans == "identity") { # nolint
+        .weighted_sum(log(get_response(x, as_proportion = TRUE)), w = weights)
+      } else if (trans == "log") {
+        .weighted_sum(log(1 / get_response(x, as_proportion = TRUE)), w = weights)
+      } else if (trans == "log1p") {
+        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) + 1)), w = weights)
+      } else if (trans == "log2") {
+        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) * log(2))), w = weights)
+      } else if (trans == "log10") {
+        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) * log(10))), w = weights)
+      } else if (trans == "exp") {
+        .weighted_sum(get_response(x, as_proportion = TRUE), w = weights)
+      } else if (trans == "expm1") {
+        .weighted_sum((get_response(x, as_proportion = TRUE) - 1), w = weights)
+      } else if (trans == "sqrt") {
+        .weighted_sum(log(0.5 / sqrt(get_response(x, as_proportion = TRUE))), w = weights)
+      } else if (trans == "inverse") {
+        # first derivative of 1/x is -1/x^2 - we cannot take the log from negative
+        # values, so this won't work here, and we return NULL
+        NULL
+      } else if (trans == "box-cox") {
+        # not yet supported
+        NULL
+      } else if (trans == "scale") {
+        scale_denominator <- .extract_scale_denominator(x)
+        .weighted_sum(log(1 / rep.int(scale_denominator, length(weights))), w = weights) # nolint
+      } else if (trans == "power") {
+        trans_power <- .extract_power_transformation(x)
+        .weighted_sum(log(trans_power * (get_response(x, as_proportion = TRUE)^(trans_power - 1))), w = weights) # nolint
+      } else if (is.null(weights)) {
+        .ll_log_adjustment(x)
+      } else {
+        .ll_jacobian_adjustment(x, weights)
+      }
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
+
+
+#' @rdname get_loglikelihood
+#' @export
+get_loglikelihood.lm <- function(x,
+                                 estimator = "ML",
+                                 REML = FALSE,
+                                 check_response = FALSE,
+                                 verbose = TRUE,
+                                 ...) {
+  if (inherits(x, "list") && object_has_names(x, "gam")) {
+    x <- x$gam
+  }
+
+  info <- model_info(x, verbose = FALSE)
+  if (info$is_tweedie) {
+    check_if_installed("tweedie")
+    ll <- .loglikelihood_prep_output(x, lls = tweedie::logLiktweedie(x))
+  } else if (info$is_linear) {
+    ll <- .get_loglikelihood_lm(x,
+      estimator = estimator,
+      REML = REML,
+      check_response = check_response,
+      verbose = verbose,
+      ...
+    )
+  } else {
+    ll <- .get_loglikelihood_glm(x, info = info, verbose = verbose, ...)
+  }
+  ll
+}
+
+#' @export
+get_loglikelihood.ivreg <- get_loglikelihood.lm
+
+#' @export
+get_loglikelihood.glm <- get_loglikelihood.lm
+
+#' @export
+get_loglikelihood.gam <- get_loglikelihood.lm
+
+#' @export
+get_loglikelihood.gamm <- get_loglikelihood.lm
+
+#' @export
+get_loglikelihood.list <- get_loglikelihood.lm
+
 
 #' @export
 get_loglikelihood.lmerMod <- function(x,
@@ -81,6 +190,7 @@ get_loglikelihood.lmerMod <- function(x,
   )
 }
 
+
 #' @export
 get_loglikelihood.glmerMod <- function(x, check_response = FALSE, verbose = TRUE, ...) {
   .loglikelihood_prep_output(
@@ -96,6 +206,7 @@ get_loglikelihood.glmerMod <- function(x, check_response = FALSE, verbose = TRUE
 
 #' @export
 get_loglikelihood.glmmTMB <- get_loglikelihood.lmerMod
+
 
 #' @export
 get_loglikelihood.hglm <- function(x,
@@ -113,6 +224,7 @@ get_loglikelihood.hglm <- function(x,
     ...
   )
 }
+
 
 #' @export
 get_loglikelihood.mblogit <- function(x, verbose = TRUE, ...) {
@@ -133,6 +245,7 @@ get_loglikelihood.mclogit <- get_loglikelihood.mblogit
 #' @export
 get_loglikelihood.mlogit <- get_loglikelihood.mblogit
 
+
 #' @export
 get_loglikelihood.model_fit <- function(x,
                                         estimator = "ML",
@@ -140,8 +253,16 @@ get_loglikelihood.model_fit <- function(x,
                                         check_response = FALSE,
                                         verbose = TRUE,
                                         ...) {
-  get_loglikelihood(x$fit, estimator = estimator, REML = REML, check_response = check_response, verbose = verbose, ...)
+  get_loglikelihood(
+    x$fit,
+    estimator = estimator,
+    REML = REML,
+    check_response = check_response,
+    verbose = verbose,
+    ...
+  )
 }
+
 
 #' @export
 get_loglikelihood.afex_aov <- function(x, ...) {
@@ -149,6 +270,95 @@ get_loglikelihood.afex_aov <- function(x, ...) {
 }
 
 
+#' @export
+get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
+  check_if_installed("rstanarm")
+
+  # Get posterior distribution of logliks
+  mat <- rstanarm::log_lik(x)
+  # Point estimate using the function passed as the centrality argument
+  lls <- vapply(as.data.frame(mat), centrality, numeric(1))
+
+  .loglikelihood_prep_output(x, lls)
+}
+
+
+# Methods WITHOUT individual LLs ---------------------------------------------
+
+
+#' @export
+get_loglikelihood.iv_robust <- function(x, verbose = TRUE, ...) {
+  res <- get_residuals(x)
+  w <- get_weights(x, null_as_ones = TRUE)
+
+  # drop weights that are exactly zero
+  excl <- w == 0
+  if (any(excl)) {
+    res <- res[!excl]
+    w <- w[!excl]
+  }
+
+  N <- length(res)
+  lls <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
+
+  .loglikelihood_prep_output(
+    x,
+    lls,
+    df = get_df(x, type = "model"),
+    verbose = verbose
+  )
+}
+
+#' @export
+get_loglikelihood.lm_robust <- get_loglikelihood.iv_robust
+
+
+#' @export
+get_loglikelihood.svycoxph <- function(x, ...) {
+  .loglikelihood_prep_output(x, lls = x$ll[2], df = x$degf.resid)
+}
+
+
+#' @export
+get_loglikelihood.crr <- function(x, ...) {
+  x$loglik
+}
+
+
+#' @export
+get_loglikelihood.plm <- function(x, check_response = FALSE, verbose = TRUE, ...) {
+  res <- get_residuals(x)
+  w <- get_weights(x, null_as_ones = TRUE)
+  N <- n_obs(x)
+
+  ll <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
+
+  .loglikelihood_prep_output(
+    x,
+    lls = ll,
+    df = get_df(x, type = "model"),
+    check_response = check_response,
+    verbose = verbose
+  )
+}
+
+#' @export
+get_loglikelihood.cpglm <- get_loglikelihood.plm
+
+
+#' @export
+get_loglikelihood.phylolm <- function(x, check_response = FALSE, verbose = TRUE, ...) {
+  .loglikelihood_prep_output(
+    x,
+    lls = stats::logLik(x)$logLik,
+    df = get_df(x, type = "model"),
+    check_response = check_response,
+    verbose = verbose
+  )
+}
+
+#' @export
+get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
 
 
 # Methods WITH individual LLs ---------------------------------------------
@@ -263,143 +473,6 @@ get_loglikelihood.afex_aov <- function(x, ...) {
 }
 
 
-#' @rdname get_loglikelihood
-#' @export
-get_loglikelihood.lm <- function(x,
-                                 estimator = "ML",
-                                 REML = FALSE,
-                                 check_response = FALSE,
-                                 verbose = TRUE,
-                                 ...) {
-  if (inherits(x, "list") && object_has_names(x, "gam")) {
-    x <- x$gam
-  }
-
-  info <- model_info(x, verbose = FALSE)
-  if (info$is_tweedie) {
-    check_if_installed("tweedie")
-    ll <- .loglikelihood_prep_output(x, lls = tweedie::logLiktweedie(x))
-  } else if (info$is_linear) {
-    ll <- .get_loglikelihood_lm(x,
-      estimator = estimator,
-      REML = REML,
-      check_response = check_response,
-      verbose = verbose,
-      ...
-    )
-  } else {
-    ll <- .get_loglikelihood_glm(x, info = info, verbose = verbose, ...)
-  }
-  ll
-}
-
-#' @export
-get_loglikelihood.ivreg <- get_loglikelihood.lm
-
-#' @export
-get_loglikelihood.glm <- get_loglikelihood.lm
-
-#' @export
-get_loglikelihood.gam <- get_loglikelihood.lm
-
-#' @export
-get_loglikelihood.gamm <- get_loglikelihood.lm
-
-#' @export
-get_loglikelihood.list <- get_loglikelihood.lm
-
-#' @export
-get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
-  check_if_installed("rstanarm")
-
-  # Get posterior distribution of logliks
-  mat <- rstanarm::log_lik(x)
-  # Point estimate using the function passed as the centrality argument
-  lls <- vapply(as.data.frame(mat), centrality, numeric(1))
-
-  .loglikelihood_prep_output(x, lls)
-}
-
-
-# Methods WITHOUT individual LLs ---------------------------------------------
-
-
-#' @export
-get_loglikelihood.iv_robust <- function(x, verbose = TRUE, ...) {
-  res <- get_residuals(x)
-  w <- get_weights(x, null_as_ones = TRUE)
-
-  # drop weights that are exactly zero
-  excl <- w == 0
-  if (any(excl)) {
-    res <- res[!excl]
-    w <- w[!excl]
-  }
-
-  N <- length(res)
-  lls <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
-
-  .loglikelihood_prep_output(
-    x,
-    lls,
-    df = get_df(x, type = "model"),
-    verbose = verbose
-  )
-}
-
-#' @export
-get_loglikelihood.lm_robust <- get_loglikelihood.iv_robust
-
-
-#' @export
-get_loglikelihood.svycoxph <- function(x, ...) {
-  .loglikelihood_prep_output(x, lls = x$ll[2], df = x$degf.resid)
-}
-
-
-#' @export
-get_loglikelihood.crr <- function(x, ...) {
-  x$loglik
-}
-
-
-#' @export
-get_loglikelihood.plm <- function(x, check_response = FALSE, verbose = TRUE, ...) {
-  res <- get_residuals(x)
-  w <- get_weights(x, null_as_ones = TRUE)
-  N <- n_obs(x)
-
-  ll <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
-
-  .loglikelihood_prep_output(
-    x,
-    lls = ll,
-    df = get_df(x, type = "model"),
-    check_response = check_response,
-    verbose = verbose
-  )
-}
-
-
-#' @export
-get_loglikelihood.cpglm <- get_loglikelihood.plm
-
-
-#' @export
-get_loglikelihood.phylolm <- function(x, check_response = FALSE, verbose = TRUE, ...) {
-  .loglikelihood_prep_output(
-    x,
-    lls = stats::logLik(x)$logLik,
-    df = get_df(x, type = "model"),
-    check_response = check_response,
-    verbose = verbose
-  )
-}
-
-#' @export
-get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
-
-
 # Helpers -----------------------------------------------------------------
 
 .loglikelihood_prep_output <- function(x,
@@ -431,14 +504,14 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
       # we only use the jacobian adjustment, because it can handle weights
       model_weights <- get_weights(x, remove_na = TRUE)
-      ll_adjustment <- .ll_analytic_adjustment(x, model_weights)
+      ll_adjustment <- get_loglikelihood_adjustment(x, weights = model_weights)
 
       # for debugging
 
       # if (is.null(list(...)$debug)) {
       #   ll_adjustment <- .ll_jacobian_adjustment(x, model_weights)
       # } else if (list(...)$debug == "analytic") {
-      #   ll_adjustment <- .ll_analytic_adjustment(x, model_weights)
+      #   ll_adjustment <- get_loglikelihood_adjustment(x, model_weights)
       # } else {
       #   ll_adjustment <- .ll_log_adjustment(x)
       # }
@@ -465,56 +538,6 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
   class(out) <- c("logLik", class(x))
   out
 }
-
-
-
-
-.ll_analytic_adjustment <- function(x, model_weights = NULL) {
-  tryCatch(
-    {
-      trans <- find_transformation(x)
-
-      if (trans == "identity") { # nolint
-        .weighted_sum(log(get_response(x, as_proportion = TRUE)), w = model_weights)
-      } else if (trans == "log") {
-        .weighted_sum(log(1 / get_response(x, as_proportion = TRUE)), w = model_weights)
-      } else if (trans == "log1p") {
-        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) + 1)), w = model_weights)
-      } else if (trans == "log2") {
-        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) * log(2))), w = model_weights)
-      } else if (trans == "log10") {
-        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) * log(10))), w = model_weights)
-      } else if (trans == "exp") {
-        .weighted_sum(get_response(x, as_proportion = TRUE), w = model_weights)
-      } else if (trans == "expm1") {
-        .weighted_sum((get_response(x, as_proportion = TRUE) - 1), w = model_weights)
-      } else if (trans == "sqrt") {
-        .weighted_sum(log(0.5 / sqrt(get_response(x, as_proportion = TRUE))), w = model_weights)
-      } else if (trans == "inverse") {
-        # first derivative of 1/x is -1/x^2 - we cannot take the log from negative
-        # values, so this won't work here, and we return NULL
-        NULL
-      } else if (trans == "box-cox") {
-        # not yet supported
-        NULL
-      } else if (trans == "scale") {
-        scale_denominator <- .extract_scale_denominator(x)
-        .weighted_sum(log(1 / rep.int(scale_denominator, length(model_weights))), w = model_weights) # nolint
-      } else if (trans == "power") {
-        trans_power <- .extract_power_transformation(x)
-        .weighted_sum(log(trans_power * (get_response(x, as_proportion = TRUE)^(trans_power - 1))), w = model_weights) # nolint
-      } else if (is.null(model_weights)) {
-        .ll_log_adjustment(x)
-      } else {
-        .ll_jacobian_adjustment(x, model_weights)
-      }
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-}
-
 
 
 .ll_log_adjustment <- function(x) {
@@ -555,6 +578,7 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
     }
   )
 }
+
 
 .weighted_sum <- function(x, w = NULL, ...) {
   if (is.null(w)) {
