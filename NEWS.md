@@ -20,13 +20,13 @@
 * New function `validate_argument()` as a replacement for `match.arg()` with
   more informative error message.
 
+* The function to calculate the corrections for likelihood-values when the
+  response-variable is transformed is now exported as `get_likelihood_adjustment()`.
+
 ## Bug fix
 
 * `clean_parameters()` now uses the correct labels for the random effects
   variances (`"SD/Cor"` has changed to `"Var/Cov"`).
-
-* The function to calculate the corrections for likelihood-values when the
-  response-variable is transformed is now exported as `get_likelihood_adjustment()`.
 
 # insight 0.20.5
 
