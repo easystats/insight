@@ -80,7 +80,9 @@ get_transformation <- function(x, verbose = TRUE) {
     )
   } else if (transform_fun == "power") {
     trans_power <- .extract_power_transformation(x)
-    if (!is.null(trans_power)) {
+    # trans_power == 0 is an invalid transformation - power to 0 *always*
+    # returns 1, independent from the input-values
+    if (!is.null(trans_power) && trans_power != 0) {
       out <- list(
         transformation = eval(parse(text = paste0("function(x) x^", as.character(trans_power)))), # nolint
         inverse = eval(parse(text = paste0("function(x) x^(", as.character(trans_power), "^-1)")))
