@@ -144,5 +144,5 @@ find_transformation.character <- function(x, ...) {
 # helper -----------------------------
 
 .is_division <- function(x) {
-  any(grepl("(\\w)/(\\d)", x)) && !any(grepl("(.*)(\\^|\\*\\*)\\((.*)/(.*)\\)", x))
+  any(grepl("(.*)/([0-9\\.]+)$", x)) && !any(grepl("(.*)(\\^|\\*\\*)\\((.*)/(.*)\\)", x))
 }
