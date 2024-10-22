@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.5.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,8 +57,8 @@
 <h2 class="pkg-version" data-toc-text="0.20" id="insight-020x">insight 0.20.x<a class="anchor" aria-label="anchor" href="#insight-020x"></a></h2>
 <div class="section level3">
 <h3 id="general-0-20">General<a class="anchor" aria-label="anchor" href="#general-0-20"></a></h3>
-<ul><li><p><code><a href="../reference/get_transformation.html">get_transformation()</a></code> can now deal with any power-transformation.</p></li>
-<li><p><code><a href="../reference/find_transformation.html">find_transformation()</a></code> and <code><a href="../reference/get_transformation.html">get_transformation()</a></code> now also detects use of divisions, like <code>x/3</code>.</p></li>
+<ul><li><p><code><a href="../reference/get_transformation.html">get_transformation()</a></code> can now deal with any power-transformation, and also returns results for divisions (scaled response) and Box-Cox transformations.</p></li>
+<li><p><code><a href="../reference/find_transformation.html">find_transformation()</a></code> and <code><a href="../reference/get_transformation.html">get_transformation()</a></code> now also detects use of divisions, like <code>x/3</code> or Box-Cox transformations (like <code>(x^lambda - 1) / lambda</code>).</p></li>
 <li><p>Updates <code><a href="../reference/get_varcov.html">get_varcov()</a></code> (and related documentation) to support new covariance matrix estimation methods from the <strong>sandwich</strong> package.</p></li>
 </ul></div>
 </div>
