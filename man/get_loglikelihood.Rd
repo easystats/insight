@@ -3,12 +3,15 @@
 \name{get_loglikelihood}
 \alias{get_loglikelihood}
 \alias{loglikelihood}
+\alias{get_loglikelihood_adjustment}
 \alias{get_loglikelihood.lm}
-\title{Log-Likelihood}
+\title{Log-Likelihood and Log-Likelihood correction}
 \usage{
 get_loglikelihood(x, ...)
 
 loglikelihood(x, ...)
+
+get_loglikelihood_adjustment(x, weights = NULL)
 
 \method{get_loglikelihood}{lm}(
   x,
@@ -23,6 +26,9 @@ loglikelihood(x, ...)
 \item{x}{A model.}
 
 \item{...}{Passed down to \code{logLik()}, if possible.}
+
+\item{weights}{Optional numeric vector of weights. Must be of the same length
+as lengths of model obversations.}
 
 \item{estimator}{Corresponds to the different estimators for the standard
 deviation of the errors. If \code{estimator="ML"} (default), the scaling is
@@ -46,10 +52,14 @@ model is multiplied by the Jacobian/derivative of the transformation.}
 \item{verbose}{Toggle warnings and messages.}
 }
 \value{
-An object of class \code{"logLik"}, also containing the
-log-likelihoods for each observation as a \code{per_observation} attribute
-(\code{attributes(get_loglikelihood(x))$per_observation}) when possible.
-The code was partly inspired from the \strong{nonnest2} package.
+\code{get_loglikelihood()} returns an object of class \code{"logLik"}, also
+containing the log-likelihoods for each observation as a \code{per_observation}
+attribute (\code{attributes(get_loglikelihood(x))$per_observation}) when
+possible. The code was partly inspired from the \strong{nonnest2} package.
+
+\code{get_loglikelihood_adjustment()} returns the adjustment value to be added to
+the log-likelihood to correct for transformed response variables, or \code{NULL}
+if the adjustment could not be computed.
 }
 \description{
 A robust function to compute the log-likelihood of a model, as well as
@@ -57,6 +67,11 @@ individual log-likelihoods (for each observation) whenever possible. Can be
 used as a replacement for \code{stats::logLik()} out of the box, as the
 returned object is of the same class (and it gives the same results by
 default).
+
+\code{get_loglikelihood_adjustment()} can be used to correct the log-likelihood
+for models with transformed response variables. The adjustment value can
+be added to the log-likelihood to get the corrected value. This is done
+automatically in \code{get_loglikelihood()} if \code{check_response = TRUE}.
 }
 \examples{
 x <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)

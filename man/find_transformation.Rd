@@ -7,7 +7,8 @@
 find_transformation(x, ...)
 }
 \arguments{
-\item{x}{A regression model or a character string of the response value.}
+\item{x}{A regression model or a character string of the formulation of the
+response variable.}
 
 \item{...}{Currently not used.}
 }
