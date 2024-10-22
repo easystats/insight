@@ -30,8 +30,6 @@
 #' log-likelihood. To get back to the original scale, the likelihood of the
 #' model is multiplied by the Jacobian/derivative of the transformation.
 #' @param ... Passed down to `logLik()`, if possible.
-#' @param weights Optional numeric vector of weights. Must be of the same length
-#' as lengths of model observations.
 #' @inheritParams get_residuals
 #'
 #' @return `get_loglikelihood()` returns an object of class `"logLik"`, also
@@ -68,7 +66,8 @@ get_loglikelihood.default <- function(x, ...) {
 
 #' @rdname get_loglikelihood
 #' @export
-get_loglikelihood_adjustment <- function(x, weights = NULL) {
+get_loglikelihood_adjustment <- function(x) {
+  weights <- get_weights(x, remove_na = TRUE)
   tryCatch(
     {
       trans <- find_transformation(x)
@@ -508,8 +507,7 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
     response_transform <- find_transformation(x)
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
       # we only use the jacobian adjustment, because it can handle weights
-      model_weights <- get_weights(x, remove_na = TRUE)
-      ll_adjustment <- get_loglikelihood_adjustment(x, weights = model_weights)
+      ll_adjustment <- get_loglikelihood_adjustment(x)
 
       # for debugging
 
