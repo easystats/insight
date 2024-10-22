@@ -65,7 +65,7 @@ find_transformation.default <- function(x, ...) {
       denominator <- gsub(".*\\/(.*)", "\\1", original_response)
       # and if so again, then reconstruct division string
       if (all(rv == c(nominator, denominator))) {
-        rv <- paste(nominator, denominator, sep = "/")
+        rv <- paste(nominator, denominator, sep = "/") # nolint
       }
     }
     find_transformation(rv)
