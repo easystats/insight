@@ -66,11 +66,12 @@
 <li><p><code><a href="../reference/find_transformation.html">find_transformation()</a></code> and <code><a href="../reference/get_transformation.html">get_transformation()</a></code> now also detects use of divisions, like <code>x/3</code> or Box-Cox transformations (like <code>(x^lambda - 1) / lambda</code>).</p></li>
 <li><p>Updated <code><a href="../reference/get_varcov.html">get_varcov()</a></code> (and related documentation) to support new covariance matrix estimation methods from the <strong>sandwich</strong> package.</p></li>
 <li><p>New function <code><a href="../reference/validate_argument.html">validate_argument()</a></code> as a replacement for <code><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg()</a></code> with more informative error message.</p></li>
+<li><p>The function to calculate the corrections for likelihood-values when the response-variable is transformed is now exported as <code>get_likelihood_adjustment()</code>.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fix-1-0-0">Bug fix<a class="anchor" aria-label="anchor" href="#bug-fix-1-0-0"></a></h3>
-<ul><li><p><code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> now uses the correct labels for the random effects variances (<code>"SD/Cor"</code> has changed to <code>"Var/Cov"</code>).</p></li>
-<li><p>The function to calculate the corrections for likelihood-values when the response-variable is transformed is now exported as <code>get_likelihood_adjustment()</code>.</p></li>
+<ul><li>
+<code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> now uses the correct labels for the random effects variances (<code>"SD/Cor"</code> has changed to <code>"Var/Cov"</code>).</li>
 </ul></div>
 </div>
     <div class="section level2">
