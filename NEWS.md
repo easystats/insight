@@ -2,10 +2,11 @@
 
 ## General
 
-* `get_transformation()` can now deal with any power-transformation.
+* `get_transformation()` can now deal with any power-transformation, and also
+  returns results for divisions (scaled response) and Box-Cox transformations.
 
 * `find_transformation()` and `get_transformation()` now also detects use of
-  divisions, like `x/3`.
+  divisions, like `x/3` or Box-Cox transformations (like `(x^lambda - 1) / lambda`).
 
 * Updates `get_varcov()` (and related documentation) to support new covariance
   matrix estimation methods from the **sandwich** package.

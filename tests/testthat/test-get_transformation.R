@@ -26,3 +26,16 @@ test_that("get_transformation - detect scale", {
   expect_equal(fun$transformation(2), 2 / 0.7, tolerance = 1e-3)
   expect_equal(fun$inverse(2 / 0.7), 2, tolerance = 1e-3)
 })
+
+
+test_that("get_transformation - box-cox", {
+  data(mtcars)
+  m <- lm((mpg^0.7 - 1) / 0.7 ~ hp, data = mtcars)
+  fun <- get_transformation(m)
+  expect_equal(fun$transformation(2), (2^0.7 - 1) / 0.7, tolerance = 1e-3)
+  expect_equal(fun$inverse((2^0.7 - 1) / 0.7), 2, tolerance = 1e-3)
+  m <- lm(I((mpg^0.7 - 1) / 0.7) ~ hp, data = mtcars)
+  fun <- get_transformation(m)
+  expect_equal(fun$transformation(2), (2^0.7 - 1) / 0.7, tolerance = 1e-3)
+  expect_equal(fun$inverse((2^0.7 - 1) / 0.7), 2, tolerance = 1e-3)
+})
