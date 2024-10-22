@@ -55,6 +55,11 @@ test_that("get_loglikelihood - lm", {
   x <- lm(mpg / 3.5 ~ wt, weights = wg, data = mtcars)
   expect_equal(as.numeric(get_loglikelihood(x)), -41.94534, tolerance = 1e-3)
   expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -82.03376, tolerance = 1e-3)
+
+  # scale, no weights
+  x <- lm(mpg / 3.5 ~ wt, data = mtcars)
+  expect_equal(as.numeric(get_loglikelihood(x)), -39.9263, tolerance = 1e-3)
+  expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -80.01471, tolerance = 1e-3)
 })
 
 test_that("get_loglikelihood - not supported", {

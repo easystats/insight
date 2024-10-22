@@ -98,7 +98,7 @@ get_loglikelihood_adjustment <- function(x, weights = NULL) {
         NULL
       } else if (trans == "scale") {
         scale_denominator <- .extract_scale_denominator(x)
-        .weighted_sum(log(1 / rep.int(scale_denominator, length(weights))), w = weights) # nolint
+        .weighted_sum(log(1 / rep.int(scale_denominator, n_obs(x))), w = weights) # nolint
       } else if (trans == "power") {
         trans_power <- .extract_power_transformation(x)
         .weighted_sum(log(trans_power * (get_response(x, as_proportion = TRUE)^(trans_power - 1))), w = weights) # nolint
