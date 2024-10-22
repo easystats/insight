@@ -12,6 +12,17 @@ test_that("get_transformation - detect powers", {
   fun <- get_transformation(m)
   expect_equal(fun$transformation(2), 25.99208, tolerance = 1e-3)
   expect_equal(fun$inverse(25.99208), 2, tolerance = 1e-3)
+
+  # fail for power to 0
+  data(mtcars)
+  mod <- lm(mpg^0 ~ hp, data = mtcars)
+  expect_message(
+    {
+      out <- get_transformation(mod)
+    },
+    regex = "The transformation"
+  )
+  expect_null(out)
 })
 
 

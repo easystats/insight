@@ -55,6 +55,11 @@ test_that("get_loglikelihood - lm", {
   x <- lm(mpg / 3.5 ~ wt, weights = wg, data = mtcars)
   expect_equal(as.numeric(get_loglikelihood(x)), -41.94534, tolerance = 1e-3)
   expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -82.03376, tolerance = 1e-3)
+
+  # scale, no weights
+  x <- lm(mpg / 3.5 ~ wt, data = mtcars)
+  expect_equal(as.numeric(get_loglikelihood(x)), -39.9263, tolerance = 1e-3)
+  expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -80.01471, tolerance = 1e-3)
 })
 
 test_that("get_loglikelihood - not supported", {
@@ -222,4 +227,17 @@ test_that("get_loglikelihood - Bernoulli with inversed levels", {
   expect_equal(logLik(ml_zero), get_loglikelihood(ml_zero), ignore_attr = TRUE)
   expect_equal(logLik(ml_ones), get_loglikelihood(ml_ones), ignore_attr = TRUE)
   expect_equal(get_loglikelihood(ml_zero), get_loglikelihood(ml_ones), ignore_attr = TRUE)
+})
+
+test_that("get_loglikelihood - fails for negative values for some transformation", {
+  data(mtcars)
+  dafr <- data.frame(y = mtcars$mpg * -1, x = mtcars$hp)
+  m <- lm(y^2 ~ x, data = dafr)
+  expect_warning(get_loglikelihood(m, check_response = TRUE), regex = "Could not")
+  expect_equal(
+    get_loglikelihood(m, check_response = TRUE, verbose = FALSE),
+    get_loglikelihood(m, verbose = FALSE),
+    tolerance = 1e-4
+  )
+  expect_null(get_loglikelihood_adjustment(m))
 })
