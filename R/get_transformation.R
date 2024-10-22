@@ -47,6 +47,9 @@ get_transformation <- function(x, verbose = TRUE) {
     return(NULL)
   }
 
+  # init
+  out <- NULL
+
   if (transform_fun == "identity") {
     out <- list(transformation = function(x) x, inverse = function(x) x)
   } else if (transform_fun == "log") {
@@ -77,13 +80,14 @@ get_transformation <- function(x, verbose = TRUE) {
     )
   } else if (transform_fun == "power") {
     trans_power <- .extract_power_transformation(x)
-    if (is.null(trans_power)) {
-      trans_power <- 2
+    # trans_power == 0 is an invalid transformation - power to 0 *always*
+    # returns 1, independent from the input-values
+    if (!is.null(trans_power) && trans_power != 0) {
+      out <- list(
+        transformation = eval(parse(text = paste0("function(x) x^", as.character(trans_power)))), # nolint
+        inverse = eval(parse(text = paste0("function(x) x^(", as.character(trans_power), "^-1)")))
+      )
     }
-    out <- list(
-      transformation = eval(parse(text = paste0("function(x) x^", as.character(trans_power)))), # nolint
-      inverse = eval(parse(text = paste0("function(x) x^(", as.character(trans_power), "^-1)")))
-    )
   } else if (transform_fun == "expm1") {
     out <- list(transformation = expm1, inverse = log1p)
   } else if (transform_fun == "log-log") {
@@ -91,13 +95,13 @@ get_transformation <- function(x, verbose = TRUE) {
       transformation = function(x) log(log(x)),
       inverse = function(x) exp(exp(x))
     )
-  } else {
-    if (verbose) {
-      insight::format_alert(
-        paste0("The transformation and inverse-transformation functions for `", transform_fun, "` could not be determined.") # nolint
-      )
-    }
-    out <- NULL
+  }
+
+  # warn if no transformation could be identified
+  if (verbose && is.null(out)) {
+    insight::format_alert(
+      paste0("The transformation and inverse-transformation functions for `", transform_fun, "` could not be determined.") # nolint
+    )
   }
 
   out

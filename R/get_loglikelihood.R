@@ -30,8 +30,6 @@
 #' log-likelihood. To get back to the original scale, the likelihood of the
 #' model is multiplied by the Jacobian/derivative of the transformation.
 #' @param ... Passed down to `logLik()`, if possible.
-#' @param weights Optional numeric vector of weights. Must be of the same length
-#' as lengths of model obversations.
 #' @inheritParams get_residuals
 #'
 #' @return `get_loglikelihood()` returns an object of class `"logLik"`, also
@@ -68,7 +66,8 @@ get_loglikelihood.default <- function(x, ...) {
 
 #' @rdname get_loglikelihood
 #' @export
-get_loglikelihood_adjustment <- function(x, weights = NULL) {
+get_loglikelihood_adjustment <- function(x) {
+  weights <- get_weights(x, remove_na = TRUE)
   tryCatch(
     {
       trans <- find_transformation(x)
@@ -98,7 +97,7 @@ get_loglikelihood_adjustment <- function(x, weights = NULL) {
         NULL
       } else if (trans == "scale") {
         scale_denominator <- .extract_scale_denominator(x)
-        .weighted_sum(log(1 / rep.int(scale_denominator, length(weights))), w = weights) # nolint
+        .weighted_sum(log(1 / rep.int(scale_denominator, n_obs(x))), w = weights) # nolint
       } else if (trans == "power") {
         trans_power <- .extract_power_transformation(x)
         .weighted_sum(log(trans_power * (get_response(x, as_proportion = TRUE)^(trans_power - 1))), w = weights) # nolint
@@ -107,6 +106,11 @@ get_loglikelihood_adjustment <- function(x, weights = NULL) {
       } else {
         .ll_jacobian_adjustment(x, weights)
       }
+    },
+    # for negative log-values, we get a warning and NaN is returned
+    # capture this here and return NULL instead
+    warning = function(e) {
+      NULL
     },
     error = function(e) {
       NULL
@@ -502,23 +506,11 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
     # check if we have transformed response, and if so, adjust LogLik
     response_transform <- find_transformation(x)
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-      # we only use the jacobian adjustment, because it can handle weights
-      model_weights <- get_weights(x, remove_na = TRUE)
-      ll_adjustment <- get_loglikelihood_adjustment(x, weights = model_weights)
-
-      # for debugging
-
-      # if (is.null(list(...)$debug)) {
-      #   ll_adjustment <- .ll_jacobian_adjustment(x, model_weights)
-      # } else if (list(...)$debug == "analytic") {
-      #   ll_adjustment <- get_loglikelihood_adjustment(x, model_weights)
-      # } else {
-      #   ll_adjustment <- .ll_log_adjustment(x)
-      # }
-
+      # get log-likelihood adjustment-value
+      ll_adjustment <- get_loglikelihood_adjustment(x)
       if (is.null(ll_adjustment) && isTRUE(verbose)) {
         format_warning("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate.") # nolint
-      } else {
+      } else if (!is.null(ll_adjustment)) {
         out[1] <- out[1] + ll_adjustment
         if (isTRUE(list(...)$REML) && isTRUE(verbose)) {
           format_warning("Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate.") # nolint
@@ -541,27 +533,32 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
 
 
 .ll_log_adjustment <- function(x) {
-  tryCatch(
+  out <- tryCatch(
     {
-      sum(stats::dlnorm(
+      suppressWarnings(sum(stats::dlnorm(
         x = get_response(x, as_proportion = TRUE),
         meanlog = stats::fitted(x),
         sdlog = get_sigma(x, ci = NULL, verbose = FALSE),
         log = TRUE
-      ))
+      )))
     },
     error = function(e) {
       NULL
     }
   )
+  # if adjustment failed, e.g. due to negative numbers for the log, return NULL instead
+  if (is.na(out) || is.infinite(out)) {
+    out <- NULL
+  }
+  out
 }
 
 
 .ll_jacobian_adjustment <- function(model, weights = NULL) {
-  tryCatch(
+  out <- tryCatch(
     {
       trans <- get_transformation(model)$transformation
-      .weighted_sum(log(
+      suppressWarnings(.weighted_sum(log(
         diag(attr(with(
           get_data(model, verbose = FALSE),
           stats::numericDeriv(
@@ -571,12 +568,17 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
             theta = find_response(model)
           )
         ), "gradient"))
-      ), weights)
+      ), weights))
     },
     error = function(e) {
       NULL
     }
   )
+  # if adjustment failed, e.g. due to negative numbers for the log, return NULL instead
+  if (is.na(out) || is.infinite(out)) {
+    out <- NULL
+  }
+  out
 }
 
 
