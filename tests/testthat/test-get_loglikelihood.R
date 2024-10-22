@@ -48,6 +48,15 @@ test_that("get_loglikelihood - lm", {
 
 })
 
+test_that("get_loglikelihood - not supported", {
+  # Box-Cox
+  m <- lm((mpg^0.7 - 1) / 0.7 ~ hp, data = mtcars)
+  expect_warning(get_loglikelihood(m, check_response = TRUE), regex = "Could not compute")
+  # Inverse
+  m <- lm(1 / mpg ~ hp, data = mtcars)
+  expect_warning(get_loglikelihood(m, check_response = TRUE), regex = "Could not compute")
+})
+
 test_that("get_loglikelihood - glm", {
   x <- glm(vs ~ mpg * disp, data = mtcars, family = "binomial")
   ll <- loglikelihood(x)
