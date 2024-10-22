@@ -3,14 +3,14 @@
 or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula. Currently, following patterns are
 detected: log, log1p, log2, log10, exp, expm1, sqrt,
-log(x+&amp;lt;number&amp;gt;), log-log, power (e.g. to 2nd power, like I(x^2)),
-inverse (like 1/y), scale (e.g., x/3), and box-cox (e-g-,
+log(y+&amp;lt;number&amp;gt;), log-log, power (e.g. to 2nd power, like I(y^2)),
+inverse (like 1/y), scale (e.g., y/3), and box-cox (e-g-,
 (y^lambda - 1) / lambda)."><meta property="og:description" content="This functions checks whether any transformation, such as log-
 or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula. Currently, following patterns are
 detected: log, log1p, log2, log10, exp, expm1, sqrt,
-log(x+&amp;lt;number&amp;gt;), log-log, power (e.g. to 2nd power, like I(x^2)),
-inverse (like 1/y), scale (e.g., x/3), and box-cox (e-g-,
+log(y+&amp;lt;number&amp;gt;), log-log, power (e.g. to 2nd power, like I(y^2)),
+inverse (like 1/y), scale (e.g., y/3), and box-cox (e-g-,
 (y^lambda - 1) / lambda)."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -71,8 +71,8 @@ inverse (like 1/y), scale (e.g., x/3), and box-cox (e-g-,
 or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula. Currently, following patterns are
 detected: <code>log</code>, <code>log1p</code>, <code>log2</code>, <code>log10</code>, <code>exp</code>, <code>expm1</code>, <code>sqrt</code>,
-<code>log(x+&lt;number&gt;)</code>, <code>log-log</code>, <code>power</code> (e.g. to 2nd power, like <code>I(x^2)</code>),
-<code>inverse</code> (like <code>1/y</code>), <code>scale</code> (e.g., <code>x/3</code>), and <code>box-cox</code> (e-g-,
+<code>log(y+&lt;number&gt;)</code>, <code>log-log</code>, <code>power</code> (e.g. to 2nd power, like <code>I(y^2)</code>),
+<code>inverse</code> (like <code>1/y</code>), <code>scale</code> (e.g., <code>y/3</code>), and <code>box-cox</code> (e-g-,
 <code>(y^lambda - 1) / lambda</code>).</p>
     </div>
 
@@ -96,7 +96,7 @@ detected: <code>log</code>, <code>log1p</code>, <code>log2</code>, <code>log10</
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A string, with the name of the function of the applied transformation.
-Returns <code>"identity"</code> for no transformation, and e.g. <code>"log(x+3)"</code> when
+Returns <code>"identity"</code> for no transformation, and e.g. <code>"log(y+3)"</code> when
 a specific values was added to the response variables before
 log-transforming. For unknown transformations, returns <code>NULL</code>.</p>
     </div>
