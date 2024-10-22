@@ -5,15 +5,16 @@
 #'   or exp-transforming, was applied to the response variable (dependent
 #'   variable) in a regression formula. Currently, following patterns are
 #'   detected: `log`, `log1p`, `log2`, `log10`, `exp`, `expm1`, `sqrt`,
-#'   `log(x+<number>)`, `log-log`, `power` (e.g. to 2nd power, like `I(x^2)`),
-#'   `inverse` (like `1/y`), `scale` (e.g., `x/3`), and `box-cox` (e-g-,
+#'   `log(y+<number>)`, `log-log`, `power` (e.g. to 2nd power, like `I(y^2)`),
+#'   `inverse` (like `1/y`), `scale` (e.g., `y/3`), and `box-cox` (e-g-,
 #'   `(y^lambda - 1) / lambda`).
 #'
-#' @param x A regression model or a character string of the response value.
+#' @param x A regression model or a character string of the formulation of the
+#' response variable.
 #' @param ... Currently not used.
 #'
 #' @return A string, with the name of the function of the applied transformation.
-#'   Returns `"identity"` for no transformation, and e.g. `"log(x+3)"` when
+#'   Returns `"identity"` for no transformation, and e.g. `"log(y+3)"` when
 #'   a specific values was added to the response variables before
 #'   log-transforming. For unknown transformations, returns `NULL`.
 #'
