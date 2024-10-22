@@ -69,6 +69,12 @@ get_transformation <- function(x, verbose = TRUE) {
       transformation = eval(parse(text = paste0("function(x) x / ", as.character(denominator)))), # nolint
       inverse = eval(parse(text = paste0("function(x) x * ", as.character(denominator))))
     )
+  } else if (transform_fun == "box-cox") {
+    denominator <- .extract_scale_denominator(x)
+    out <- list(
+      transformation = eval(parse(text = paste0("function(x) (x^", as.character(denominator), "-1) / ", as.character(denominator)))), # nolint
+      inverse = eval(parse(text = paste0("function(x) exp(log(1 + ", as.character(denominator), " * x) / ", as.character(denominator), ")"))) # nolint
+    )
   } else if (transform_fun == "power") {
     trans_power <- .extract_power_transformation(x)
     if (is.null(trans_power)) {
