@@ -9,7 +9,7 @@ dispersion, sigma, or beta..."><meta property="og:image" content="https://easyst
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,12 @@ dispersion, sigma, or beta...</p>
 <span>  centrality <span class="op">=</span> <span class="st">"mean"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_dispersion</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Default S3 method</span></span>
+<span><span class="fu">get_dispersion</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -120,12 +125,20 @@ could not be accessed.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Currently, only sigma and the dispersion parameter are returned, and
-only for a limited set of models.</p><div class="section">
-<h3 id="sigma-parameter">Sigma Parameter<a class="anchor" aria-label="anchor" href="#sigma-parameter"></a></h3>
+only for a limited set of models.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="sigma-parameter">Sigma Parameter<a class="anchor" aria-label="anchor" href="#sigma-parameter"></a></h2>
+
+
+
 <p>See <code><a href="get_sigma.html">get_sigma()</a></code>.</p>
-</div>
-<div class="section">
-<h3 id="dispersion-parameter">Dispersion Parameter<a class="anchor" aria-label="anchor" href="#dispersion-parameter"></a></h3>
+    </div>
+    <div class="section level2">
+    <h2 id="dispersion-parameter">Dispersion Parameter<a class="anchor" aria-label="anchor" href="#dispersion-parameter"></a></h2>
+
+
+
 <p>There are many different definitions of "dispersion", depending on the context.
 <code>get_auxiliary()</code> returns the dispersion parameters that usually can
 be considered as variance-to-mean ratio for generalized (linear) mixed
@@ -138,14 +151,15 @@ dispersion parameter is also called φ
 and is the ratio of the sum of the squared Pearson-residuals and the residual
 degrees of freedom. For models of class <code>glmmTMB</code>, dispersion is
 σ<sup>2</sup>.</p>
-</div>
-<div class="section">
-<h3 id="brms-models"><strong>brms</strong> models<a class="anchor" aria-label="anchor" href="#brms-models"></a></h3>
+    </div>
+    <div class="section level2">
+    <h2 id="brms-models">brms-models<a class="anchor" aria-label="anchor" href="#brms-models"></a></h2>
+
+
+
 <p>For models of class <code>brmsfit</code>, there are different options for the
 <code>type</code> argument. See a list of supported auxiliary parameters here:
 <code><a href="find_parameters.BGGM.html">find_parameters.BGGM()</a></code>.</p>
-</div>
-
     </div>
 
     <div class="section level2">
