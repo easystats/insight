@@ -108,6 +108,9 @@ get_loglikelihood_adjustment <- function(x, weights = NULL) {
         .ll_jacobian_adjustment(x, weights)
       }
     },
+    warning = function(e) {
+      NULL
+    },
     error = function(e) {
       NULL
     }
@@ -518,7 +521,7 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
 
       if (is.null(ll_adjustment) && isTRUE(verbose)) {
         format_warning("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate.") # nolint
-      } else {
+      } else if (!is.null(ll_adjustment)) {
         out[1] <- out[1] + ll_adjustment
         if (isTRUE(list(...)$REML) && isTRUE(verbose)) {
           format_warning("Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate.") # nolint

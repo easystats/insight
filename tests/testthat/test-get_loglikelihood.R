@@ -223,3 +223,16 @@ test_that("get_loglikelihood - Bernoulli with inversed levels", {
   expect_equal(logLik(ml_ones), get_loglikelihood(ml_ones), ignore_attr = TRUE)
   expect_equal(get_loglikelihood(ml_zero), get_loglikelihood(ml_ones), ignore_attr = TRUE)
 })
+
+test_that("get_loglikelihood - fails for negative values for some transformation", {
+  data(mtcars)
+  dafr <- data.frame(y = mtcars$mpg * -1, x = mtcars$hp)
+  m <- lm(y^2 ~ x, data = dafr)
+  expect_warning(get_loglikelihood(m, check_response = TRUE), regex = "Could not")
+  expect_equal(
+    get_loglikelihood(m, check_response = TRUE, verbose = FALSE),
+    get_loglikelihood(m, verbose = FALSE),
+    tolerance = 1e-4
+  )
+  expect_null(get_loglikelihood_adjustment(m))
+})
