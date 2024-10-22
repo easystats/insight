@@ -546,27 +546,32 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
 
 
 .ll_log_adjustment <- function(x) {
-  tryCatch(
+  out <- tryCatch(
     {
-      sum(stats::dlnorm(
+      suppressWarnings(sum(stats::dlnorm(
         x = get_response(x, as_proportion = TRUE),
         meanlog = stats::fitted(x),
         sdlog = get_sigma(x, ci = NULL, verbose = FALSE),
         log = TRUE
-      ))
+      )))
     },
     error = function(e) {
       NULL
     }
   )
+  # if adjustment failed, e.g. due to negative numbers for the log, return NULL instead
+  if (is.na(out) || is.infinite(out)) {
+    out <- NULL
+  }
+  out
 }
 
 
 .ll_jacobian_adjustment <- function(model, weights = NULL) {
-  tryCatch(
+  out <- tryCatch(
     {
       trans <- get_transformation(model)$transformation
-      .weighted_sum(log(
+      suppressWarnings(.weighted_sum(log(
         diag(attr(with(
           get_data(model, verbose = FALSE),
           stats::numericDeriv(
@@ -576,12 +581,17 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
             theta = find_response(model)
           )
         ), "gradient"))
-      ), weights)
+      ), weights))
     },
     error = function(e) {
       NULL
     }
   )
+  # if adjustment failed, e.g. due to negative numbers for the log, return NULL instead
+  if (is.na(out) || is.infinite(out)) {
+    out <- NULL
+  }
+  out
 }
 
 
