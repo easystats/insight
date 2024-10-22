@@ -18,7 +18,7 @@ test_that("get_transformation - detect powers", {
   mod <- lm(mpg^0 ~ hp, data = mtcars)
   expect_message(
     {
-      out <- get_transformation(m)
+      out <- get_transformation(mod)
     },
     regex = "The transformation"
   )
