@@ -499,7 +499,7 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
         NULL
       } else if (trans == "scale") {
         scale_denominator <- .extract_scale_denominator(x)
-        .weighted_sum(log(1 / scale_denominator), w = model_weights)
+        .weighted_sum(log(1 / rep.int(scale_denominator, length(model_weights))), w = model_weights) # nolint
       } else if (trans == "power") {
         trans_power <- .extract_power_transformation(x)
         .weighted_sum(log(trans_power * (get_response(x, as_proportion = TRUE)^(trans_power - 1))), w = model_weights) # nolint
