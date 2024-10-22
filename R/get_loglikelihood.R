@@ -506,19 +506,8 @@ get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
     # check if we have transformed response, and if so, adjust LogLik
     response_transform <- find_transformation(x)
     if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-      # we only use the jacobian adjustment, because it can handle weights
+      # get log-likelihood adjustment-value
       ll_adjustment <- get_loglikelihood_adjustment(x)
-
-      # for debugging
-
-      # if (is.null(list(...)$debug)) {
-      #   ll_adjustment <- .ll_jacobian_adjustment(x, model_weights)
-      # } else if (list(...)$debug == "analytic") {
-      #   ll_adjustment <- get_loglikelihood_adjustment(x, model_weights)
-      # } else {
-      #   ll_adjustment <- .ll_log_adjustment(x)
-      # }
-
       if (is.null(ll_adjustment) && isTRUE(verbose)) {
         format_warning("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate.") # nolint
       } else if (!is.null(ll_adjustment)) {
