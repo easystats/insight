@@ -14,6 +14,7 @@ test_that("get_transformation - detect powers", {
   expect_equal(fun$inverse(25.99208), 2, tolerance = 1e-3)
 
   # fail for power to 0
+  data(mtcars)
   mod <- lm(mpg^0 ~ hp, data = mtcars)
   expect_message(
     {
