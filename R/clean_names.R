@@ -150,12 +150,12 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
         if (pattern[j] == "offset") { # nolint
           x[i] <- trim_ws(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
         } else if (pattern[j] == "I") {
-          if (!ignore_asis) {
+          if (!ignore_asis && grepl("I\\((.*)\\)", x[i])) {
             # x[i] <- trim_ws(unique(sub("I\\(((\\w|\\.)*).*", "\\1", x[i])))
             x[i] <- all.vars(stats::as.formula(paste("~", x[i])))
           }
         } else if (pattern[j] == "asis") {
-          if (!ignore_asis) {
+          if (!ignore_asis && grepl("asis\\((.*)\\)", x[i])) {
             # x[i] <- trim_ws(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", x[i])))
             x[i] <- all.vars(stats::as.formula(paste("~", x[i])))
           }
