@@ -190,7 +190,9 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           #   g <- c(g, .safe(all.vars(as.formula(paste0("~", trim_ws(gsub("weights\\s?=(.*)", "\\1", "weights = cbind(w, w)"))))))) # nolint
           # }
           # multimembership <- as.vector(trim_ws(g))
-          multimembership <- all.vars(stats::as.formula(paste("~", x[i])))
+          if (grepl(paste0("^", pattern[j], "\\((.*)\\).*"), x[i])) {
+            multimembership <- all.vars(stats::as.formula(paste("~", x[i])))
+          }
         } else if (pattern[j] == "s" && startsWith(x[i], "s(")) {
           x[i] <- gsub("^s\\(", "", x[i])
           x[i] <- gsub("\\)$", "", x[i])
