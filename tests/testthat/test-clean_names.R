@@ -105,3 +105,26 @@ test_that("clean_names, multimembership", {
     )
   )
 })
+
+skip_if_not_installed("gamlss")
+
+test_that("clean_names, multimembership", {
+  set.seed(123)
+  dat <- data.frame(
+    Y = sample(20:50, 100, replace = TRUE),
+    date = sample(seq(as.Date("1999/01/01"), as.Date("2000/01/01"), by = "day"), 10),
+    cont1 = rchisq(100, df = 2),
+    cont2 = runif(100),
+    cat1 = sample(LETTERS[1:3], 100, replace = TRUE)
+  )
+  junk <- capture.output({
+    mod1 <- suppressWarnings(gamlss::gamlss(
+      Y ~ date + scale(cont1) + scale(cont2) + I(scale(cont2)^2) * cat1,
+      data = dat
+    ))
+  })
+  expect_identical(
+    clean_names(find_terms(mod1)$conditional),
+    c("date", "cont1", "cont2", "cont2", "cat1")
+  )
+})

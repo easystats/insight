@@ -150,9 +150,15 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
         if (pattern[j] == "offset") { # nolint
           x[i] <- trim_ws(unique(sub("^offset\\(([^-+ )]*).*", "\\1", x[i])))
         } else if (pattern[j] == "I") {
-          if (!ignore_asis) x[i] <- trim_ws(unique(sub("I\\(((\\w|\\.)*).*", "\\1", x[i])))
+          if (!ignore_asis && grepl("I\\((.*)\\)", x[i])) {
+            # x[i] <- trim_ws(unique(sub("I\\(((\\w|\\.)*).*", "\\1", x[i])))
+            x[i] <- all.vars(stats::as.formula(paste("~", x[i])))
+          }
         } else if (pattern[j] == "asis") {
-          if (!ignore_asis) x[i] <- trim_ws(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", x[i])))
+          if (!ignore_asis && grepl("asis\\((.*)\\)", x[i])) {
+            # x[i] <- trim_ws(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", x[i])))
+            x[i] <- all.vars(stats::as.formula(paste("~", x[i])))
+          }
         } else if (pattern[j] == "log(log") {
           x[i] <- trim_ws(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", x[i])))
         } else if (pattern[j] == "relevel(as.factor") {
@@ -184,7 +190,9 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           #   g <- c(g, .safe(all.vars(as.formula(paste0("~", trim_ws(gsub("weights\\s?=(.*)", "\\1", "weights = cbind(w, w)"))))))) # nolint
           # }
           # multimembership <- as.vector(trim_ws(g))
-          multimembership <- all.vars(stats::as.formula(paste("~", x[i])))
+          if (grepl(paste0("^", pattern[j], "\\((.*)\\).*"), x[i])) {
+            multimembership <- all.vars(stats::as.formula(paste("~", x[i])))
+          }
         } else if (pattern[j] == "s" && startsWith(x[i], "s(")) {
           x[i] <- gsub("^s\\(", "", x[i])
           x[i] <- gsub("\\)$", "", x[i])
