@@ -21,6 +21,15 @@ withr::with_environment(
     m1 <- suppressWarnings(coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), d))
     m2 <- suppressWarnings(coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst) + (1 | inst2), d))
 
+    expect_identical(clean_names(m1), c("time", "status", "ph.ecog", "age", "inst"))
+    expect_identical(clean_names(m2), c("time", "status", "ph.ecog", "age", "inst", "inst2"))
+
+    expect_identical(clean_names(find_terms(m1)$conditional), c("ph.ecog", "age"))
+    expect_identical(clean_names(find_terms(m1)$random), "inst")
+
+    expect_identical(clean_names(find_terms(m2)$conditional), c("ph.ecog", "age"))
+    expect_identical(clean_names(find_terms(m2)$random), c("inst", "inst2"))
+
     test_that("model_info", {
       expect_true(model_info(m1)$is_logit)
       expect_false(model_info(m1)$is_linear)
