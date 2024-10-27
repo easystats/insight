@@ -3,7 +3,7 @@
 #'
 #' @description Returns the names of the predictor variables for the
 #'    different parts of a model (like fixed or random effects, zero-inflated
-#'    component, ...). Unlike [find_parameters()], the names from
+#'    component, ...). Unlike [`find_parameters()`], the names from
 #'    `find_predictors()` match the original variable names from the data
 #'    that was used to fit the model.
 #'
@@ -43,6 +43,30 @@
 #'   auxiliary parameters).
 #' - `"distributional"` (or `"auxiliary"`): components like `sigma`, `dispersion`,
 #'   `beta` or `precision` (and other auxiliary parameters) are returned.
+#'
+#' @section Parameters, Variables, Predictors and Terms:
+#' There are four functions that return information about the variables in a
+#' model: `find_predictors()`, `find_variables()`, `find_terms()` and
+#' `find_parameters()`. There are some differences between those functions,
+#' which are explained using following model. Note that some, but not all of
+#' those functions return information about the *dependent* and *independent*
+#' variables. In this example, we only show the differences for the independent
+#' variables.
+#' ```
+#' model <- lm(mpg ~ factor(gear), data = mtcars)
+#' ```
+#' - `find_terms(model)` returns the model terms, i.e. how the variables were
+#'   used in the model, e.g. applying transformations like `factor()`, `poly()`
+#'   etc. `find_terms()` may return a variable name multiple times in case of
+#'   multiple transformations. The return value would be `"factor(gear)"`.
+#' - `find_parameters(model)` returns the names of the model parameters
+#'   (coefficients). The return value would be `"(Intercept)"`, `"factor(gear)4"`
+#'   and `"factor(gear)5"`.
+#' - `find_variables()` returns the original variable names. `find_variables()`
+#'   returns each variable name only once. The return value would be `"gear"`.
+#' - `find_predictors()` is comparable to `find_variables()` and also returns
+#'   the original variable names, but excluded the *dependent* (respinse)
+#'   variables. The return value would be `"gear"`.
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #' predictor variables. Depending on the combination of the arguments

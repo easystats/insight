@@ -28,6 +28,8 @@
 #' Returns `NULL` if no terms could be found (for instance, due to
 #' problems in accessing the formula).
 #'
+#' @inheritSection find_predictors Parameters, Variables, Predictors and Terms
+#'
 #' @note The difference to [`find_variables()`] is that `find_terms()`
 #'   may return a variable multiple times in case of multiple transformations
 #'   (see examples below), while `find_variables()` returns each variable

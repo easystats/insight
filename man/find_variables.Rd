@@ -36,12 +36,14 @@ A list with (depending on the model) following elements (character
 vectors):
 \itemize{
 \item \code{response}, the name of the response variable
-\item \code{conditional}, the names of the predictor variables from the \emph{conditional} model (as opposed to the zero-inflated part of a model)
+\item \code{conditional}, the names of the predictor variables from the \emph{conditional}
+model (as opposed to the zero-inflated part of a model)
 \item \code{cluster}, the names of cluster or grouping variables
 \item \code{dispersion}, the name of the dispersion terms
 \item \code{instruments}, the names of instrumental variables
 \item \code{random}, the names of the random effects (grouping factors)
-\item \code{zero_inflated}, the names of the predictor variables from the \emph{zero-inflated} part of the model
+\item \code{zero_inflated}, the names of the predictor variables from the
+\emph{zero-inflated} part of the model
 \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
 }
 }
@@ -50,10 +52,10 @@ Returns a list with the names of all variables, including
 response value and random effects.
 }
 \note{
-The difference to \code{\link[=find_terms]{find_terms()}} is that
-\code{find_variables()} returns each variable name only once, while
-\code{find_terms()} may return a variable multiple times in case of
-transformations or when arithmetic expressions were used in the formula.
+The difference to \code{\link[=find_terms]{find_terms()}} is that \code{find_variables()} returns
+each variable name only once, while \code{find_terms()} may return a variable
+multiple times in case of transformations or when arithmetic expressions
+were used in the formula.
 }
 \section{Model components}{
 
@@ -78,6 +80,34 @@ fixed or random effects - depending on the \code{effects} argument - but no
 auxiliary parameters).
 \item \code{"distributional"} (or \code{"auxiliary"}): components like \code{sigma}, \code{dispersion},
 \code{beta} or \code{precision} (and other auxiliary parameters) are returned.
+}
+}
+
+\section{Parameters, Variables, Predictors and Terms}{
+
+There are four functions that return information about the variables in a
+model: \code{find_predictors()}, \code{find_variables()}, \code{find_terms()} and
+\code{find_parameters()}. There are some differences between those functions,
+which are explained using following model. Note that some, but not all of
+those functions return information about the \emph{dependent} and \emph{independent}
+variables. In this example, we only show the differences for the independent
+variables.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{model <- lm(mpg ~ factor(gear), data = mtcars)
+}\if{html}{\out{</div>}}
+\itemize{
+\item \code{find_terms(model)} returns the model terms, i.e. how the variables were
+used in the model, e.g. applying transformations like \code{factor()}, \code{poly()}
+etc. \code{find_terms()} may return a variable name multiple times in case of
+multiple transformations. The return value would be \code{"factor(gear)"}.
+\item \code{find_parameters(model)} returns the names of the model parameters
+(coefficients). The return value would be \code{"(Intercept)"}, \code{"factor(gear)4"}
+and \code{"factor(gear)5"}.
+\item \code{find_variables()} returns the original variable names. \code{find_variables()}
+returns each variable name only once. The return value would be \code{"gear"}.
+\item \code{find_predictors()} is comparable to \code{find_variables()} and also returns
+the original variable names, but excluded the \emph{dependent} (respinse)
+variables. The return value would be \code{"gear"}.
 }
 }
 

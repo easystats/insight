@@ -334,7 +334,9 @@
 
   # do we have duplicated names?
   dupes <- which(duplicated(cvn))
-  if (!.is_empty_string(dupes)) cvn[dupes] <- sprintf("%s.%s", cvn[dupes], seq_along(dupes))
+  if (!.is_empty_string(dupes)) {
+    cvn[dupes] <- sprintf("%s.%s", cvn[dupes], seq_along(dupes))
+  }
 
   colnames(mf) <- cvn
 

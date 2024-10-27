@@ -7,22 +7,26 @@
 #' @inheritParams find_predictors
 #' @inheritParams find_formula
 #'
-#' @note The difference to [find_terms()] is that
-#'   `find_variables()` returns each variable name only once, while
-#'   `find_terms()` may return a variable multiple times in case of
-#'   transformations or when arithmetic expressions were used in the formula.
+#' @note The difference to [`find_terms()`] is that `find_variables()` returns
+#'   each variable name only once, while `find_terms()` may return a variable
+#'   multiple times in case of transformations or when arithmetic expressions
+#'   were used in the formula.
 #'
 #' @inheritSection find_predictors Model components
+#'
+#' @inheritSection find_predictors Parameters, Variables, Predictors and Terms
 #'
 #' @return A list with (depending on the model) following elements (character
 #'    vectors):
 #' - `response`, the name of the response variable
-#' - `conditional`, the names of the predictor variables from the *conditional* model (as opposed to the zero-inflated part of a model)
+#' - `conditional`, the names of the predictor variables from the *conditional*
+#'   model (as opposed to the zero-inflated part of a model)
 #' - `cluster`, the names of cluster or grouping variables
 #' - `dispersion`, the name of the dispersion terms
 #' - `instruments`, the names of instrumental variables
 #' - `random`, the names of the random effects (grouping factors)
-#' - `zero_inflated`, the names of the predictor variables from the *zero-inflated* part of the model
+#' - `zero_inflated`, the names of the predictor variables from the
+#'   *zero-inflated* part of the model
 #' - `zero_inflated_random`, the names of the random effects (grouping factors)
 #'
 #' @examplesIf require("lme4", quietly = TRUE)

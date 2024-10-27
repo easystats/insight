@@ -501,3 +501,14 @@ test_that("get_data works for fixest inside functions", {
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species")
   )
 })
+
+
+test_that("get_data, division in I()", {
+  skip_if_not_installed("betareg")
+  data("FoodExpenditure", package = "betareg")
+  m2 <- betareg::betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
+  expect_named(
+    get_data(m2, source = "mf"),
+    c("I(food/income)", "income", "persons", "food", "income.1")
+  )
+})
