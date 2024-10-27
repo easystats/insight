@@ -173,6 +173,30 @@ auxiliary parameters).</p></li>
 <li><p><code>"distributional"</code> (or <code>"auxiliary"</code>): components like <code>sigma</code>, <code>dispersion</code>,
 <code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="parameters-variables-predictors-and-terms">Parameters, Variables, Predictors and Terms<a class="anchor" aria-label="anchor" href="#parameters-variables-predictors-and-terms"></a></h2>
+
+
+<p>There are four functions that return information about the variables in a
+model: <code>find_predictors()</code>, <code><a href="find_variables.html">find_variables()</a></code>, <code><a href="find_terms.html">find_terms()</a></code> and
+<code><a href="find_parameters.html">find_parameters()</a></code>. There are some differences between those functions,
+which are explained using following model. Note that some, but not all of
+those functions return information about the <em>dependent</em> and <em>independent</em>
+variables. In this example, we only show the differences for the independent
+variables.</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="fu">factor</span>(gear), <span class="at">data =</span> mtcars)</span></code></pre><p></p></div><ul><li><p><code>find_terms(model)</code> returns the model terms, i.e. how the variables were
+used in the model, e.g. applying transformations like <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor()</a></code>, <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly()</a></code>
+etc. <code><a href="find_terms.html">find_terms()</a></code> may return a variable name multiple times in case of
+multiple transformations. The return value would be <code>"factor(gear)"</code>.</p></li>
+<li><p><code>find_parameters(model)</code> returns the names of the model parameters
+(coefficients). The return value would be <code>"(Intercept)"</code>, <code>"factor(gear)4"</code>
+and <code>"factor(gear)5"</code>.</p></li>
+<li><p><code><a href="find_variables.html">find_variables()</a></code> returns the original variable names. <code><a href="find_variables.html">find_variables()</a></code>
+returns each variable name only once. The return value would be <code>"gear"</code>.</p></li>
+<li><p><code>find_predictors()</code> is comparable to <code><a href="find_variables.html">find_variables()</a></code> and also returns
+the original variable names, but excluded the <em>dependent</em> (respinse)
+variables. The return value would be <code>"gear"</code>.</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

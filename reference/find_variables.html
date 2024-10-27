@@ -108,20 +108,22 @@ as character vector, not as list. Duplicated values are removed.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with (depending on the model) following elements (character
 vectors):</p><ul><li><p><code>response</code>, the name of the response variable</p></li>
-<li><p><code>conditional</code>, the names of the predictor variables from the <em>conditional</em> model (as opposed to the zero-inflated part of a model)</p></li>
+<li><p><code>conditional</code>, the names of the predictor variables from the <em>conditional</em>
+model (as opposed to the zero-inflated part of a model)</p></li>
 <li><p><code>cluster</code>, the names of cluster or grouping variables</p></li>
 <li><p><code>dispersion</code>, the name of the dispersion terms</p></li>
 <li><p><code>instruments</code>, the names of instrumental variables</p></li>
 <li><p><code>random</code>, the names of the random effects (grouping factors)</p></li>
-<li><p><code>zero_inflated</code>, the names of the predictor variables from the <em>zero-inflated</em> part of the model</p></li>
+<li><p><code>zero_inflated</code>, the names of the predictor variables from the
+<em>zero-inflated</em> part of the model</p></li>
 <li><p><code>zero_inflated_random</code>, the names of the random effects (grouping factors)</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>The difference to <code><a href="find_terms.html">find_terms()</a></code> is that
-<code>find_variables()</code> returns each variable name only once, while
-<code><a href="find_terms.html">find_terms()</a></code> may return a variable multiple times in case of
-transformations or when arithmetic expressions were used in the formula.</p>
+    <p>The difference to <code><a href="find_terms.html">find_terms()</a></code> is that <code>find_variables()</code> returns
+each variable name only once, while <code><a href="find_terms.html">find_terms()</a></code> may return a variable
+multiple times in case of transformations or when arithmetic expressions
+were used in the formula.</p>
     </div>
     <div class="section level2">
     <h2 id="model-components">Model components<a class="anchor" aria-label="anchor" href="#model-components"></a></h2>
@@ -146,6 +148,30 @@ fixed or random effects - depending on the <code>effects</code> argument - but n
 auxiliary parameters).</p></li>
 <li><p><code>"distributional"</code> (or <code>"auxiliary"</code>): components like <code>sigma</code>, <code>dispersion</code>,
 <code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></li>
+</ul></div>
+    <div class="section level2">
+    <h2 id="parameters-variables-predictors-and-terms">Parameters, Variables, Predictors and Terms<a class="anchor" aria-label="anchor" href="#parameters-variables-predictors-and-terms"></a></h2>
+
+
+<p>There are four functions that return information about the variables in a
+model: <code><a href="find_predictors.html">find_predictors()</a></code>, <code>find_variables()</code>, <code><a href="find_terms.html">find_terms()</a></code> and
+<code><a href="find_parameters.html">find_parameters()</a></code>. There are some differences between those functions,
+which are explained using following model. Note that some, but not all of
+those functions return information about the <em>dependent</em> and <em>independent</em>
+variables. In this example, we only show the differences for the independent
+variables.</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="fu">factor</span>(gear), <span class="at">data =</span> mtcars)</span></code></pre><p></p></div><ul><li><p><code>find_terms(model)</code> returns the model terms, i.e. how the variables were
+used in the model, e.g. applying transformations like <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor()</a></code>, <code><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly()</a></code>
+etc. <code><a href="find_terms.html">find_terms()</a></code> may return a variable name multiple times in case of
+multiple transformations. The return value would be <code>"factor(gear)"</code>.</p></li>
+<li><p><code>find_parameters(model)</code> returns the names of the model parameters
+(coefficients). The return value would be <code>"(Intercept)"</code>, <code>"factor(gear)4"</code>
+and <code>"factor(gear)5"</code>.</p></li>
+<li><p><code>find_variables()</code> returns the original variable names. <code>find_variables()</code>
+returns each variable name only once. The return value would be <code>"gear"</code>.</p></li>
+<li><p><code><a href="find_predictors.html">find_predictors()</a></code> is comparable to <code>find_variables()</code> and also returns
+the original variable names, but excluded the <em>dependent</em> (respinse)
+variables. The return value would be <code>"gear"</code>.</p></li>
 </ul></div>
 
     <div class="section level2">
