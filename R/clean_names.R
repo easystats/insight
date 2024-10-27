@@ -147,7 +147,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
         i <- all.vars(stats::as.formula(paste("~", i)))
       }
     }
-    if (grepl("|", i, fixed = TRUE)) {
+    if (any(grepl("|", i, fixed = TRUE))) {
       i <- sub("^(.*)\\|(.*)", "\\2", i)
     }
     trim_ws(i)
