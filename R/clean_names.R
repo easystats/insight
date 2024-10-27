@@ -151,12 +151,15 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
         } else if (pattern[j] == "I") {
           if (!ignore_asis && grepl("I\\((.*)\\)", out)) {
             # out <- trim_ws(unique(sub("I\\(((\\w|\\.)*).*", "\\1", out)))
-            out <- all.vars(stats::as.formula(paste("~", out)))
+            # for compatibility with `get_data(source = "mf")`, we return only
+            # the first value for "I()". But in some examples, like `I(food/income)`,
+            # we would actutually have two names - but this breaks get_data()
+            out <- all.vars(stats::as.formula(paste("~", out)))[1]
           }
         } else if (pattern[j] == "asis") {
           if (!ignore_asis && grepl("asis\\((.*)\\)", out)) {
             # out <- trim_ws(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", out)))
-            out <- all.vars(stats::as.formula(paste("~", out)))
+            out <- all.vars(stats::as.formula(paste("~", out)))[1]
           }
         } else if (pattern[j] == "log(log") {
           out <- trim_ws(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", out)))
