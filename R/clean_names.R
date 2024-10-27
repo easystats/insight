@@ -137,17 +137,20 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 
   # do we have a "log()" pattern here? if yes, get capture region
   # which matches the "cleaned" variable name
-  cleaned <- unlist(lapply(seq_along(x), function(i) {
-    if (!grepl("(Intercept)", x[i])) {
+  cleaned <- unlist(lapply(x, function(i) {
+    if (!grepl("(Intercept)", i)) {
       # check if we have special patterns like 100 * log(xy), and remove it
-      if (isFALSE(is_emmeans) && grepl("^([0-9]+)", x[i])) {
-        x[i] <- gsub("^([0-9]+)[^(\\.|[:alnum:])]+(.*)", "\\2", x[i])
+      if (isFALSE(is_emmeans) && grepl("^([0-9]+)", i)) {
+        i <- gsub("^([0-9]+)[^(\\.|[:alnum:])]+(.*)", "\\2", i)
       }
-      if (any(startsWith(x[i], pattern))) {
-        x[i] <- all.vars(stats::as.formula(paste("~", x[i])))
+      if (any(startsWith(i, pattern))) {
+        i <- all.vars(stats::as.formula(paste("~", i)))
       }
     }
-    trim_ws(x[i])
+    if (grepl("|", i, fixed = TRUE)) {
+      i <- sub("^(.*)\\|(.*)", "\\2", i)
+    }
+    trim_ws(i)
   }), use.names = FALSE)
 
   # remove for random intercept only models
