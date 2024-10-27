@@ -196,7 +196,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
       }
     }
     # for coxme-models, remove random-effect things...
-    if (grepl("|", i, fixed = TRUE)) {
+    if (any(grepl("|", i, fixed = TRUE))) {
       i <- sub("^(.*)\\|(.*)", "\\2", i)
     }
 
