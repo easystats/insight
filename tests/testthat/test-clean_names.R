@@ -65,6 +65,7 @@ test_that("clean_names", {
   expect_identical(clean_names("s(x1, x2, x3)"), "x1, x2, x3")
 })
 
+
 test_that("clean_names, model", {
   m_rel1 <- lm(mpg ~ relevel(as.factor(cyl), "8") + gear, data = mtcars)
   expect_identical(insight::clean_names(m_rel1), c("mpg", "cyl", "gear"))
@@ -74,11 +75,35 @@ test_that("clean_names, model", {
   expect_identical(insight::clean_names(m_rel2), c("mpg", "cyl", "gear"))
 })
 
-skip_on_cran()
-skip_if_offline()
-skip_if_not_installed("httr2")
 
 test_that("clean_names, multimembership", {
+  skip_if_not_installed("gamlss")
+  set.seed(123)
+  dat <- data.frame(
+    Y = sample(20:50, 100, replace = TRUE),
+    date = sample(seq(as.Date("1999/01/01"), as.Date("2000/01/01"), by = "day"), 10),
+    cont1 = rchisq(100, df = 2),
+    cont2 = runif(100),
+    cat1 = sample(LETTERS[1:3], 100, replace = TRUE)
+  )
+  junk <- capture.output({
+    mod1 <- suppressWarnings(gamlss::gamlss(
+      Y ~ date + scale(cont1) + scale(cont2) + I(scale(cont2)^2) * cat1,
+      data = dat
+    ))
+  })
+  expect_identical(
+    clean_names(find_terms(mod1)$conditional),
+    c("date", "cont1", "cont2", "cont2", "cat1")
+  )
+})
+
+
+test_that("clean_names, multimembership", {
+  skip_on_cran()
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+
   m1 <- suppressWarnings(insight::download_model("brms_mm_1"))
   skip_if(is.null(m1))
   out <- clean_names(m1)
@@ -106,25 +131,14 @@ test_that("clean_names, multimembership", {
   )
 })
 
-skip_if_not_installed("gamlss")
 
-test_that("clean_names, multimembership", {
-  set.seed(123)
-  dat <- data.frame(
-    Y = sample(20:50, 100, replace = TRUE),
-    date = sample(seq(as.Date("1999/01/01"), as.Date("2000/01/01"), by = "day"), 10),
-    cont1 = rchisq(100, df = 2),
-    cont2 = runif(100),
-    cat1 = sample(LETTERS[1:3], 100, replace = TRUE)
-  )
-  junk <- capture.output({
-    mod1 <- suppressWarnings(gamlss::gamlss(
-      Y ~ date + scale(cont1) + scale(cont2) + I(scale(cont2)^2) * cat1,
-      data = dat
-    ))
-  })
-  expect_identical(
-    clean_names(find_terms(mod1)$conditional),
-    c("date", "cont1", "cont2", "cont2", "cat1")
-  )
+test_that("clean_names, division in I()", {
+  skip_if_not_installed("betareg")
+  data("GasolineYield", package = "betareg")
+  data("FoodExpenditure", package = "betareg")
+
+  m1 <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
+  m2 <- betareg::betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
+  expect_identical(clean_names(m1), c("yield", "batch", "temp"))
+  expect_identical(clean_names(m1), c("food", "income", "persons"))
 })
