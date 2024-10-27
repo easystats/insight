@@ -132,75 +132,74 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 
   # do we have a "log()" pattern here? if yes, get capture region
   # which matches the "cleaned" variable name
-  cleaned <- unlist(lapply(x, function(i) {
+  cleaned <- unlist(lapply(seq_along(x), function(i) {
+    # copy value(s)
+    out <- x[i]
     # check if we have special patterns like 100 * log(xy), and remove it
-    if (isFALSE(is_emmeans) && grepl("^([0-9]+)", i)) {
-      i <- gsub("^([0-9]+)[^(\\.|[:alnum:])]+(.*)", "\\2", i)
+    if (isFALSE(is_emmeans) && grepl("^([0-9]+)", out)) {
+      out <- gsub("^([0-9]+)[^(\\.|[:alnum:])]+(.*)", "\\2", out)
     }
-    # for brms multimembership, multiple elements might be returned
-    # need extra handling
-    multimembership <- NULL
     for (j in seq_along(pattern)) {
       # check if we find pattern at all
-      if (grepl(pattern[j], i, fixed = TRUE)) {
+      if (any(grepl(pattern[j], out, fixed = TRUE))) {
         # remove possible namespace
-        if (grepl("::", i, fixed = TRUE)) {
-          i <- sub("(.*)::(.*)", "\\2", i)
+        if (grepl("::", out, fixed = TRUE)) {
+          out <- sub("(.*)::(.*)", "\\2", out)
         }
         if (pattern[j] == "offset") { # nolint
-          i <- trim_ws(unique(sub("^offset\\(([^-+ )]*).*", "\\1", i)))
+          out <- trim_ws(unique(sub("^offset\\(([^-+ )]*).*", "\\1", out)))
         } else if (pattern[j] == "I") {
-          if (!ignore_asis && grepl("I\\((.*)\\)", i)) {
-            # i <- trim_ws(unique(sub("I\\(((\\w|\\.)*).*", "\\1", i)))
-            i <- all.vars(stats::as.formula(paste("~", i)))
+          if (!ignore_asis && grepl("I\\((.*)\\)", out)) {
+            # out <- trim_ws(unique(sub("I\\(((\\w|\\.)*).*", "\\1", out)))
+            out <- all.vars(stats::as.formula(paste("~", out)))
           }
         } else if (pattern[j] == "asis") {
-          if (!ignore_asis && grepl("asis\\((.*)\\)", i)) {
-            # i <- trim_ws(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", i)))
-            i <- all.vars(stats::as.formula(paste("~", i)))
+          if (!ignore_asis && grepl("asis\\((.*)\\)", out)) {
+            # out <- trim_ws(unique(sub("asis\\(((\\w|\\.)*).*", "\\1", out)))
+            out <- all.vars(stats::as.formula(paste("~", out)))
           }
         } else if (pattern[j] == "log(log") {
-          i <- trim_ws(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", i)))
+          out <- trim_ws(unique(sub("^log\\(log\\(((\\w|\\.)*).*", "\\1", out)))
         } else if (pattern[j] == "relevel(as.factor") {
-          i <- trim_ws(unique(sub("^relevel\\(as.factor\\(((\\w|\\.)*).*", "\\1", i)))
+          out <- trim_ws(unique(sub("^relevel\\(as.factor\\(((\\w|\\.)*).*", "\\1", out)))
         } else if (pattern[j] == "scale(log") {
-          i <- trim_ws(unique(sub("^scale\\(log\\(((\\w|\\.)*).*", "\\1", i)))
-          i <- trim_ws(unique(sub("^scale\\(log1p\\(((\\w|\\.)*).*", "\\1", i)))
-          i <- trim_ws(unique(sub("^scale\\(log2\\(((\\w|\\.)*).*", "\\1", i)))
-          i <- trim_ws(unique(sub("^scale\\(log10\\(((\\w|\\.)*).*", "\\1", i)))
+          out <- trim_ws(unique(sub("^scale\\(log\\(((\\w|\\.)*).*", "\\1", out)))
+          out <- trim_ws(unique(sub("^scale\\(log1p\\(((\\w|\\.)*).*", "\\1", out)))
+          out <- trim_ws(unique(sub("^scale\\(log2\\(((\\w|\\.)*).*", "\\1", out)))
+          out <- trim_ws(unique(sub("^scale\\(log10\\(((\\w|\\.)*).*", "\\1", out)))
         } else if (pattern[j] == "scale(poly") {
-          i <- trim_ws(unique(sub("^scale\\(poly\\(((\\w|\\.)*).*", "\\1", i)))
+          out <- trim_ws(unique(sub("^scale\\(poly\\(((\\w|\\.)*).*", "\\1", out)))
         } else if (pattern[j] %in% c("mmc", "mm")) {
-          if (grepl(paste0("^", pattern[j], "\\((.*)\\).*"), i)) {
-            i <- all.vars(stats::as.formula(paste("~", i)))
+          if (grepl(paste0("^", pattern[j], "\\((.*)\\).*"), out)) {
+            out <- all.vars(stats::as.formula(paste("~", out)))
           }
-        } else if (pattern[j] == "s" && startsWith(i, "s(")) {
-          i <- gsub("^s\\(", "", i)
-          i <- gsub("\\)$", "", i)
-          if (grepl("=|[[:digit:]]", i)) {
-            new_x <- trim_ws(unlist(strsplit(i, ",", fixed = TRUE), use.names = FALSE))
+        } else if (pattern[j] == "s" && startsWith(out, "s(")) {
+          out <- gsub("^s\\(", "", out)
+          out <- gsub("\\)$", "", out)
+          if (grepl("=|[[:digit:]]", out)) {
+            new_x <- trim_ws(unlist(strsplit(out, ",", fixed = TRUE), use.names = FALSE))
             to_remove <- which(!grepl("\\D", new_x))
             to_remove <- c(to_remove, grep("=", new_x, fixed = TRUE))
             if (length(to_remove) == 0) {
-              i <- toString(new_x)
+              out <- toString(new_x)
             } else {
-              i <- toString(new_x[-to_remove])
+              out <- toString(new_x[-to_remove])
             }
           }
         } else {
           # p <- paste0("^", pattern[j], "\\(([^,/)]*).*")
           # this one should be more generic...
           p <- paste0("^", pattern[j], "\\(((\\w|\\.)*).*")
-          i <- unique(sub(p, "\\1", i))
+          out <- unique(sub(p, "\\1", out))
         }
       }
     }
     # for coxme-models, remove random-effect things...
-    if (any(grepl("|", i, fixed = TRUE))) {
-      i <- sub("^(.*)\\|(.*)", "\\2", i)
+    if (any(grepl("|", out, fixed = TRUE))) {
+      out <- sub("^(.*)\\|(.*)", "\\2", out)
     }
 
-    trim_ws(i)
+    trim_ws(out)
   }), use.names = FALSE)
 
   # remove for random intercept only models

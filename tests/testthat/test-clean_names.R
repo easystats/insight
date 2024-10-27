@@ -140,5 +140,5 @@ test_that("clean_names, division in I()", {
   m1 <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
   m2 <- betareg::betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
   expect_identical(clean_names(m1), c("yield", "batch", "temp"))
-  expect_identical(clean_names(m1), c("food", "income", "persons"))
+  expect_identical(clean_names(m2), c("food", "income", "persons"))
 })
