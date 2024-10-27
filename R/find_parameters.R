@@ -20,6 +20,8 @@
 #'
 #' @inheritSection find_predictors Model components
 #'
+#' @inheritSection find_predictors Parameters, Variables, Predictors and Terms
+#'
 #' @return A list of parameter names. For simple models, only one list-element,
 #'    `conditional`, is returned.
 #'
