@@ -565,20 +565,19 @@ print.insight_table <- function(x, ...) {
 
     # width of first table row of complete table. Currently, "final" is still
     # a matrix, so we need to paste the columns of the first row into a string
-    row_width <- nchar(paste0(final[1, ], collapse = sep), type = "width")
+    row_width <- nchar(paste(final[1, ], collapse = sep), type = "width")
 
     # possibly first split - all table columns longer than "line_width"
     # (i.e. first table row) go into a second string
     if (row_width > line_width) {
       final_extra <- list(final)
       e <- 1
-      while (nchar(paste0(tail(final_extra, 1)[[1]][1, ], collapse = sep), type = "width") > line_width &&
-             e <= length(final_extra)) {
+      while (nchar(paste(tail(final_extra, 1)[[1]][1, ], collapse = sep), type = "width") > line_width && e <= length(final_extra)) { # nolint
         .final_temp <- final_extra[[e]]
 
         i <- 1
         # determine how many columns fit into the first line
-        while (nchar(paste0(.final_temp[1, 1:i], collapse = sep), type = "width") < line_width) {
+        while (nchar(paste(.final_temp[1, 1:i], collapse = sep), type = "width") < line_width) {
           i <- i + 1
         }
         # copy first column, and all columns that did not fit into the first line
