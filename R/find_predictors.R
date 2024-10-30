@@ -65,7 +65,7 @@
 #' - `find_variables()` returns the original variable names. `find_variables()`
 #'   returns each variable name only once. The return value would be `"gear"`.
 #' - `find_predictors()` is comparable to `find_variables()` and also returns
-#'   the original variable names, but excluded the *dependent* (respinse)
+#'   the original variable names, but excluded the *dependent* (response)
 #'   variables. The return value would be `"gear"`.
 #'
 #' @return A list of character vectors that represent the name(s) of the
