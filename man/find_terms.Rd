@@ -76,7 +76,7 @@ and \code{"factor(gear)5"}.
 \item \code{find_variables()} returns the original variable names. \code{find_variables()}
 returns each variable name only once. The return value would be \code{"gear"}.
 \item \code{find_predictors()} is comparable to \code{find_variables()} and also returns
-the original variable names, but excluded the \emph{dependent} (respinse)
+the original variable names, but excluded the \emph{dependent} (response)
 variables. The return value would be \code{"gear"}.
 }
 }
