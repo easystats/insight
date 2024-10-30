@@ -584,7 +584,7 @@ print.insight_table <- function(x, ...) {
         # into the second table matrix
         if (i < ncol(.final_temp)) {
           final_extra[[e]] <- .final_temp[, 1:(i - 1), drop = FALSE]
-          final_extra[[e + 1]] <- .final_temp[, -(1:(i - 1)), drop = FALSE]
+          final_extra[[e + 1]] <- .final_temp[, c(1, i:ncol(.final_temp)), drop = FALSE]
         }
         e <- e + 1
       }
