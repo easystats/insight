@@ -572,7 +572,7 @@ print.insight_table <- function(x, ...) {
     if (row_width > line_width) {
       final_extra <- list(final)
       e <- 1
-      while (nchar(paste(tail(final_extra, 1)[[1]][1, ], collapse = sep), type = "width") > line_width && e <= length(final_extra)) { # nolint
+      while (nchar(paste(utils::tail(final_extra, 1)[[1]][1, ], collapse = sep), type = "width") > line_width && e <= length(final_extra)) { # nolint
         .final_temp <- final_extra[[e]]
 
         i <- 1
