@@ -545,12 +545,8 @@ print.insight_table <- function(x, ...) {
   }
 
 
-  # we can split very wide table into maximum three parts
-  # this is currently hardcoded, not flexible, so we cannot allow
-  # more than three parts of one wide table
-  final2 <- NULL
-  final3 <- NULL
-
+  # we can split very wide tables
+  final_extra <- NULL
 
   # check if user requested automatic width-adjustment of tables, or if a
   # given width is required
@@ -574,51 +570,46 @@ print.insight_table <- function(x, ...) {
     # possibly first split - all table columns longer than "line_width"
     # (i.e. first table row) go into a second string
     if (row_width > line_width) {
-      i <- 1
-      # determine how many columns fit into the first line
-      while (nchar(paste0(final[1, 1:i], collapse = sep), type = "width") < line_width) {
-        i <- i + 1
-      }
-      # copy first column, and all columns that did not fit into the first line
-      # into the second table matrix
-      if (i > 2 && i < ncol(final)) {
-        final2 <- final[, c(1, i:ncol(final))]
-        final <- final[, 1:(i - 1)]
+      final_extra <- list(final)
+      e <- 1
+      while (nchar(paste0(tail(final_extra, 1)[[1]][1, ], collapse = sep), type = "width") > line_width &&
+             e <= length(final_extra)) {
+        .final_temp <- final_extra[[e]]
+
+        i <- 1
+        # determine how many columns fit into the first line
+        while (nchar(paste0(.final_temp[1, 1:i], collapse = sep), type = "width") < line_width) {
+          i <- i + 1
+        }
+        # copy first column, and all columns that did not fit into the first line
+        # into the second table matrix
+        if (i < ncol(.final_temp)) {
+          final_extra[[e]] <- .final_temp[, 1:(i - 1), drop = FALSE]
+          final_extra[[e+1]] <- .final_temp[, -(1:(i - 1)), drop = FALSE]
+        }
+        e <- e + 1
       }
     }
 
-    # width of first table row of remaing second table part
-    row_width <- nchar(paste0(final2[1, ], collapse = sep), type = "width")
-
-    # possibly second split - all table columns longer than "line_width"
-    # (i.e. first table row) go into a third string - we repeat the same
-    # procedure as above
-    if (row_width > line_width) {
-      i <- 1
-      while (nchar(paste0(final2[1, 1:i], collapse = sep), type = "width") < line_width) {
-        i <- i + 1
-      }
-      if (i > 2 && i < ncol(final2)) {
-        final3 <- final2[, c(1, i:ncol(final2))]
-        final2 <- final2[, 1:(i - 1)]
-      }
+    final <- final_extra[[1]]
+    if (length(final_extra) > 1) {
+      final_extra <- final_extra[-1]
+    } else {
+      final_extra <- NULL
     }
   }
 
   # Transform table matrix into a string value that can be printed
   rows <- .table_parts(NULL, final, header, sep, cross, empty_line)
 
-  # if we have over-lengthy tables that are split into two parts,
-  # print second table here
-  if (!is.null(final2)) {
-    rows <- .table_parts(paste0(rows, "\n"), final2, header, sep, cross, empty_line)
+  # if we have over-lengthy tables that are split into parts,
+  # print extra table here
+  if (!is.null(final_extra)) {
+    for (fex in final_extra) {
+      rows <- .table_parts(paste0(rows, "\n"), fex, header, sep, cross, empty_line)
+    }
   }
 
-  # if we have over-lengthy tables that are split into two parts,
-  # print second table here
-  if (!is.null(final3)) {
-    rows <- .table_parts(paste0(rows, "\n"), final3, header, sep, cross, empty_line)
-  }
 
   # if caption is available, add a row with a headline
   if (!is.null(caption) && caption[1] != "") {
