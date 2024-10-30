@@ -681,7 +681,7 @@ print.insight_table <- function(x, ...) {
       # check whether user wants to have a "cross" char where vertical and
       # horizontal lines (from header line) cross.
       header_line <- .insert_cross(
-        paste0(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
+        paste(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
         cross, sep, final_row,
         is_last_row = row == nrow(final)
       )
