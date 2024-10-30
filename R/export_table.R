@@ -656,7 +656,7 @@ print.insight_table <- function(x, ...) {
   for (row in seq_len(nrow(final))) {
     # create a string for each row, where cells from original matrix are
     # separated by the separator char
-    final_row <- paste0(final[row, ], collapse = sep)
+    final_row <- paste(final[row, ], collapse = sep)
     # check if we have an empty row, and if so, fill with an
     # "empty line separator", if requested by user
     if (!is.null(empty_line) && !any(nzchar(trim_ws(final[row, ])))) {
@@ -667,7 +667,7 @@ print.insight_table <- function(x, ...) {
         # the empty line, which is just empty cells with separator char,
         # will now be replaced by the "empty line char", so we have a
         # clean separator line
-        paste0(rep_len(empty_line, nchar(final_row, type = "width")), collapse = ""),
+        paste(rep_len(empty_line, nchar(final_row, type = "width")), collapse = ""),
         cross, sep, final_row,
         is_last_row = row == nrow(final)
       )
