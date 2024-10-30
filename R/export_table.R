@@ -589,13 +589,13 @@ print.insight_table <- function(x, ...) {
         }
         e <- e + 1
       }
-    }
 
-    final <- final_extra[[1]]
-    if (length(final_extra) > 1) {
-      final_extra <- final_extra[-1]
-    } else {
-      final_extra <- NULL
+      final <- final_extra[[1]]
+      if (length(final_extra) > 1) {
+        final_extra <- final_extra[-1]
+      } else {
+        final_extra <- NULL
+      }
     }
   }
 
