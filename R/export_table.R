@@ -48,6 +48,8 @@
 #'   if `table_width` is numeric and table rows are larger than `table_width`,
 #'   the table is split into multiple parts. For each new table, the first
 #'   column is repeated for better orientation.
+#'   `options(easystats.table_width = <value>)` can be used to set a default
+#'   width for tables.
 #' @param ... Currently not used.
 #' @inheritParams format_value
 #' @inheritParams get_data
@@ -561,7 +563,7 @@ print.insight_table <- function(x, ...) {
     if (is.numeric(table_width)) {
       line_width <- table_width
     } else {
-      line_width <- options()$width
+      line_width <- getOption("easystats.table_width", getOption("width", 80))
     }
 
     # width of first table row of complete table. Currently, "final" is still
