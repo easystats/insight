@@ -100,3 +100,30 @@ test_that("export_table", {
     ignore_attr = TRUE
   )
 })
+
+
+test_that("export_table, table_width", {
+  skip_on_cran()
+  skip_if_not_installed("lavaan")
+  skip_if_not_installed("performance")
+  skip_if_not_installed("parameters")
+
+  data(HolzingerSwineford1939, package = "lavaan")
+  structure <- " visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9 "
+  model1 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+  model2 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+
+  out <- performance::compare_performance(model1, model2)
+  expect_snapshot(print(out, table_width = 50), variant = "windows")
+
+  data(iris)
+  lm1 <- lm(Sepal.Length ~ Species, data = iris)
+  lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+  lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
+  lm6 <- lm5 <- lm4 <- lm(Sepal.Length ~ Species * Petal.Length + Petal.Width, data = iris)
+
+  tab <- parameters::compare_parameters(lm1, lm2, lm3, lm4, lm5, lm6)
+  expect_snapshot(print(tab, table_width = 80), variant = "windows")
+})

@@ -44,9 +44,10 @@
 #' @param table_width Numeric, or `"auto"`, indicating the width of the complete
 #'   table. If `table_width = "auto"` and the table is wider than the current
 #'   width (i.e. line length) of the console (or any other source for textual
-#'   output, like markdown files), the table is split into two parts. Else,
+#'   output, like markdown files), the table is split into multiple parts. Else,
 #'   if `table_width` is numeric and table rows are larger than `table_width`,
-#'   the table is split into two parts.
+#'   the table is split into multiple parts. For each new table, the first
+#'   column is repeated for better orientation.
 #' @param ... Currently not used.
 #' @inheritParams format_value
 #' @inheritParams get_data
@@ -118,7 +119,7 @@ export_table <- function(x,
                          align = NULL,
                          by = NULL,
                          zap_small = FALSE,
-                         table_width = NULL,
+                         table_width = "auto",
                          verbose = TRUE,
                          ...) {
   # check args
@@ -545,12 +546,8 @@ print.insight_table <- function(x, ...) {
   }
 
 
-  # we can split very wide table into maximum three parts
-  # this is currently hardcoded, not flexible, so we cannot allow
-  # more than three parts of one wide table
-  final2 <- NULL
-  final3 <- NULL
-
+  # we can split very wide tables
+  final_extra <- NULL
 
   # check if user requested automatic width-adjustment of tables, or if a
   # given width is required
@@ -569,38 +566,35 @@ print.insight_table <- function(x, ...) {
 
     # width of first table row of complete table. Currently, "final" is still
     # a matrix, so we need to paste the columns of the first row into a string
-    row_width <- nchar(paste0(final[1, ], collapse = sep), type = "width")
+    row_width <- nchar(paste(final[1, ], collapse = sep), type = "width")
 
     # possibly first split - all table columns longer than "line_width"
     # (i.e. first table row) go into a second string
     if (row_width > line_width) {
-      i <- 1
-      # determine how many columns fit into the first line
-      while (nchar(paste0(final[1, 1:i], collapse = sep), type = "width") < line_width) {
-        i <- i + 1
-      }
-      # copy first column, and all columns that did not fit into the first line
-      # into the second table matrix
-      if (i > 2 && i < ncol(final)) {
-        final2 <- final[, c(1, i:ncol(final))]
-        final <- final[, 1:(i - 1)]
-      }
-    }
+      final_extra <- list(final)
+      e <- 1
+      while (nchar(paste(utils::tail(final_extra, 1)[[1]][1, ], collapse = sep), type = "width") > line_width && e <= length(final_extra)) { # nolint
+        .final_temp <- final_extra[[e]]
 
-    # width of first table row of remaing second table part
-    row_width <- nchar(paste0(final2[1, ], collapse = sep), type = "width")
-
-    # possibly second split - all table columns longer than "line_width"
-    # (i.e. first table row) go into a third string - we repeat the same
-    # procedure as above
-    if (row_width > line_width) {
-      i <- 1
-      while (nchar(paste0(final2[1, 1:i], collapse = sep), type = "width") < line_width) {
-        i <- i + 1
+        i <- 1
+        # determine how many columns fit into the first line
+        while (nchar(paste(.final_temp[1, 1:i], collapse = sep), type = "width") < line_width) {
+          i <- i + 1
+        }
+        # copy first column, and all columns that did not fit into the first line
+        # into the second table matrix
+        if (i < ncol(.final_temp)) {
+          final_extra[[e]] <- .final_temp[, 1:(i - 1), drop = FALSE]
+          final_extra[[e + 1]] <- .final_temp[, c(1, i:ncol(.final_temp)), drop = FALSE]
+        }
+        e <- e + 1
       }
-      if (i > 2 && i < ncol(final2)) {
-        final3 <- final2[, c(1, i:ncol(final2))]
-        final2 <- final2[, 1:(i - 1)]
+
+      final <- final_extra[[1]]
+      if (length(final_extra) > 1) {
+        final_extra <- final_extra[-1]
+      } else {
+        final_extra <- NULL
       }
     }
   }
@@ -608,17 +602,14 @@ print.insight_table <- function(x, ...) {
   # Transform table matrix into a string value that can be printed
   rows <- .table_parts(NULL, final, header, sep, cross, empty_line)
 
-  # if we have over-lengthy tables that are split into two parts,
-  # print second table here
-  if (!is.null(final2)) {
-    rows <- .table_parts(paste0(rows, "\n"), final2, header, sep, cross, empty_line)
+  # if we have over-lengthy tables that are split into parts,
+  # print extra table here
+  if (!is.null(final_extra)) {
+    for (fex in final_extra) {
+      rows <- .table_parts(paste0(rows, "\n"), fex, header, sep, cross, empty_line)
+    }
   }
 
-  # if we have over-lengthy tables that are split into two parts,
-  # print second table here
-  if (!is.null(final3)) {
-    rows <- .table_parts(paste0(rows, "\n"), final3, header, sep, cross, empty_line)
-  }
 
   # if caption is available, add a row with a headline
   if (!is.null(caption) && caption[1] != "") {
@@ -666,7 +657,7 @@ print.insight_table <- function(x, ...) {
   for (row in seq_len(nrow(final))) {
     # create a string for each row, where cells from original matrix are
     # separated by the separator char
-    final_row <- paste0(final[row, ], collapse = sep)
+    final_row <- paste(final[row, ], collapse = sep)
     # check if we have an empty row, and if so, fill with an
     # "empty line separator", if requested by user
     if (!is.null(empty_line) && !any(nzchar(trim_ws(final[row, ])))) {
@@ -677,7 +668,7 @@ print.insight_table <- function(x, ...) {
         # the empty line, which is just empty cells with separator char,
         # will now be replaced by the "empty line char", so we have a
         # clean separator line
-        paste0(rep_len(empty_line, nchar(final_row, type = "width")), collapse = ""),
+        paste(rep_len(empty_line, nchar(final_row, type = "width")), collapse = ""),
         cross, sep, final_row,
         is_last_row = row == nrow(final)
       )
@@ -691,7 +682,7 @@ print.insight_table <- function(x, ...) {
       # check whether user wants to have a "cross" char where vertical and
       # horizontal lines (from header line) cross.
       header_line <- .insert_cross(
-        paste0(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
+        paste(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
         cross, sep, final_row,
         is_last_row = row == nrow(final)
       )

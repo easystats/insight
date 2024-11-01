@@ -25,7 +25,7 @@ export_table(
   align = NULL,
   by = NULL,
   zap_small = FALSE,
-  table_width = NULL,
+  table_width = "auto",
   verbose = TRUE,
   ...
 )
@@ -111,9 +111,10 @@ places than \code{digits} are printed in scientific notation.}
 \item{table_width}{Numeric, or \code{"auto"}, indicating the width of the complete
 table. If \code{table_width = "auto"} and the table is wider than the current
 width (i.e. line length) of the console (or any other source for textual
-output, like markdown files), the table is split into two parts. Else,
+output, like markdown files), the table is split into multiple parts. Else,
 if \code{table_width} is numeric and table rows are larger than \code{table_width},
-the table is split into two parts.}
+the table is split into multiple parts. For each new table, the first
+column is repeated for better orientation.}
 
 \item{verbose}{Toggle messages and warnings.}
 
