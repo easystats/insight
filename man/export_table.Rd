@@ -25,7 +25,7 @@ export_table(
   align = NULL,
   by = NULL,
   zap_small = FALSE,
-  table_width = NULL,
+  table_width = "auto",
   verbose = TRUE,
   ...
 )

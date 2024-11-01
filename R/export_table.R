@@ -119,7 +119,7 @@ export_table <- function(x,
                          align = NULL,
                          by = NULL,
                          zap_small = FALSE,
-                         table_width = NULL,
+                         table_width = "auto",
                          verbose = TRUE,
                          ...) {
   # check args
