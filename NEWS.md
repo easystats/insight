@@ -23,6 +23,9 @@
 * The function to calculate the corrections for likelihood-values when the
   response-variable is transformed is now exported as `get_likelihood_adjustment()`.
 
+* `export_table()` can now split tables into more than three tables when
+  `table_width` is used (formerly, the maximum number of split tables was three).
+
 ## Bug fix
 
 * `clean_parameters()` now uses the correct labels for the random effects

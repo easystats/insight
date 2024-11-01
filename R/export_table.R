@@ -44,9 +44,10 @@
 #' @param table_width Numeric, or `"auto"`, indicating the width of the complete
 #'   table. If `table_width = "auto"` and the table is wider than the current
 #'   width (i.e. line length) of the console (or any other source for textual
-#'   output, like markdown files), the table is split into two parts. Else,
+#'   output, like markdown files), the table is split into multiple parts. Else,
 #'   if `table_width` is numeric and table rows are larger than `table_width`,
-#'   the table is split into two parts.
+#'   the table is split into multiple parts. For each new table, the first
+#'   column is repeated for better orientation.
 #' @param ... Currently not used.
 #' @inheritParams format_value
 #' @inheritParams get_data
