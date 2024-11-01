@@ -115,7 +115,7 @@ output, like markdown files), the table is split into multiple parts. Else,
 if \code{table_width} is numeric and table rows are larger than \code{table_width},
 the table is split into multiple parts. For each new table, the first
 column is repeated for better orientation.
-\verb{options(easystats.table_width = <value>)} can be used to set a default
+\verb{options(easystats_table_width = <value>)} can be used to set a default
 width for tables.}
 
 \item{verbose}{Toggle messages and warnings.}
