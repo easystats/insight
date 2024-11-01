@@ -823,7 +823,7 @@ print.insight_table <- function(x, ...) {
   # go through all columns of the data frame
   for (i in 1:n_columns) {
     # create separator line for current column
-    tablecol <- paste(rep_len("-", column_width[i]), collapse = "")
+    tablecol <- paste0(rep_len("-", column_width[i]), collapse = "")
 
     # check if user-defined alignment is requested, and if so, extract
     # alignment direction and save to "align_char"
@@ -874,7 +874,7 @@ print.insight_table <- function(x, ...) {
   # Transform to character
   rows <- NULL
   for (row in seq_len(nrow(final))) {
-    final_row <- paste("|", paste(final[row, ], collapse = "|"), "|", collapse = "")
+    final_row <- paste0("|", paste0(final[row, ], collapse = "|"), "|", collapse = "")
     rows <- c(rows, final_row)
 
     # First row separation
