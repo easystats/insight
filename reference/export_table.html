@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@
 <span>  align <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  table_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  table_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -207,9 +207,10 @@ places than <code>digits</code> are printed in scientific notation.</p></dd>
 <dd><p>Numeric, or <code>"auto"</code>, indicating the width of the complete
 table. If <code>table_width = "auto"</code> and the table is wider than the current
 width (i.e. line length) of the console (or any other source for textual
-output, like markdown files), the table is split into two parts. Else,
+output, like markdown files), the table is split into multiple parts. Else,
 if <code>table_width</code> is numeric and table rows are larger than <code>table_width</code>,
-the table is split into two parts.</p></dd>
+the table is split into multiple parts. For each new table, the first
+column is repeated for better orientation.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
