@@ -125,7 +125,7 @@ width for tables.
 }}
 
 \item{remove_duplicates}{Logical, if \code{TRUE} and table is split into multiple
-parts, duplicated ("empty") lines will be removed. If \code{FALSE}, empty lines
+parts, duplicated ("empty") rows will be removed. If \code{FALSE}, empty rows
 will be preserved. Only applies when \code{table_width} is \emph{not} \code{NULL} (or
 \code{Inf}) \emph{and} table is split into multiple parts.}
 

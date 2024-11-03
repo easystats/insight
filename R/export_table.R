@@ -54,7 +54,7 @@
 #'   - `options(easystats_table_width = <value>)` can be used to set a default
 #'   width for tables.
 #' @param remove_duplicates Logical, if `TRUE` and table is split into multiple
-#'   parts, duplicated ("empty") lines will be removed. If `FALSE`, empty lines
+#'   parts, duplicated ("empty") rows will be removed. If `FALSE`, empty rows
 #'   will be preserved. Only applies when `table_width` is *not* `NULL` (or
 #'   `Inf`) *and* table is split into multiple parts.
 #' @param ... Currently not used.
@@ -761,7 +761,14 @@ print.insight_table <- function(x, ...) {
       if (remove_duplicated_lines) {
         out <- out[-remove_dups]
       } else if (!is.null(empty_line) && nzchar(empty_line)) {
-        out[remove_dups] <- gsub(empty_line, " ", out[remove_dups])
+        # when consecutive duplicated rows are removed, the different table
+        # parts may have different height (number of rows). To avoid confusion,
+        # it is possible to preserve the height of each table part by setting
+        # remove_duplicates = FALSE
+        out[remove_dups] <- gsub(empty_line, " ", out[remove_dups], fixed = TRUE)
+        if (!is.null(sep) && nzchar(sep) && !is.null(cross) && nzchar(cross)) {
+          out[remove_dups] <- gsub(trim_ws(cross), trim_ws(sep), out[remove_dups], fixed = TRUE)
+        }
       }
       # collapse back into single string
       rows <- paste0(paste(out, collapse = "\n"), "\n")
