@@ -41,14 +41,17 @@
 #'   a named numeric vector, value names are matched against column names, and
 #'   for each match, the specified width is used (see 'Examples'). Only applies
 #'   to text-format (see `format`).
-#' @param table_width Numeric, or `"auto"`, indicating the width of the complete
-#'   table. If `table_width = "auto"` and the table is wider than the current
-#'   width (i.e. line length) of the console (or any other source for textual
-#'   output, like markdown files), the table is split into multiple parts. Else,
-#'   if `table_width` is numeric and table rows are larger than `table_width`,
-#'   the table is split into multiple parts. For each new table, the first
-#'   column is repeated for better orientation.
-#'   `options(easystats_table_width = <value>)` can be used to set a default
+#' @param table_width Numeric,`"auto"`, `NULL` or `Inf`, indicating the width of
+#'   the complete table.
+#'   - If `table_width = "auto"` (default) and the table is wider than the
+#'   current width (i.e. line length) of the console (or any other source for
+#'   textual output, like markdown files), the table is split into multiple
+#'   parts.
+#'   - Else, if `table_width` is numeric and table rows are larger than
+#'   `table_width`, the table is split into multiple parts. For each new table,
+#'   the first column is repeated for better orientation.
+#'   - Use `NULL` or `Inf` to turn off automatic splitting of the table.
+#'   - `options(easystats_table_width = <value>)` can be used to set a default
 #'   width for tables.
 #' @param ... Currently not used.
 #' @inheritParams format_value
@@ -554,7 +557,7 @@ print.insight_table <- function(x, ...) {
   # check if user requested automatic width-adjustment of tables, or if a
   # given width is required
 
-  if (identical(table_width, "auto") || (!is.null(table_width) && is.numeric(table_width))) {
+  if (identical(table_width, "auto") || (!is.null(table_width) && !is.infinite(table_witdh) && is.numeric(table_width))) { # nolint
     # define the length of a table line. if specific table width is defined
     # (i.e. table_width is numeric), use that to define length of table lines.
     # else, if "auto", check the current width of the user console and use that

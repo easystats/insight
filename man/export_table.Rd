@@ -108,15 +108,20 @@ Only applies when \code{format = "html"}. \code{by} is passed down to
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
 places than \code{digits} are printed in scientific notation.}
 
-\item{table_width}{Numeric, or \code{"auto"}, indicating the width of the complete
-table. If \code{table_width = "auto"} and the table is wider than the current
-width (i.e. line length) of the console (or any other source for textual
-output, like markdown files), the table is split into multiple parts. Else,
-if \code{table_width} is numeric and table rows are larger than \code{table_width},
-the table is split into multiple parts. For each new table, the first
-column is repeated for better orientation.
-\verb{options(easystats_table_width = <value>)} can be used to set a default
-width for tables.}
+\item{table_width}{Numeric,\code{"auto"}, \code{NULL} or \code{Inf}, indicating the width of
+the complete table.
+\itemize{
+\item If \code{table_width = "auto"} (default) and the table is wider than the
+current width (i.e. line length) of the console (or any other source for
+textual output, like markdown files), the table is split into multiple
+parts.
+\item Else, if \code{table_width} is numeric and table rows are larger than
+\code{table_width}, the table is split into multiple parts. For each new table,
+the first column is repeated for better orientation.
+\item Use \code{NULL} or \code{Inf} to turn off automatic splitting of the table.
+\item \verb{options(easystats_table_width = <value>)} can be used to set a default
+width for tables.
+}}
 
 \item{verbose}{Toggle messages and warnings.}
 
