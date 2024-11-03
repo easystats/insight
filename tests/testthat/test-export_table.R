@@ -182,3 +182,19 @@ test_that("export_table, table_width, remove duplicated empty lines", {
   expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = TRUE, empty_line = "-", cross = "+")))
   expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = FALSE, empty_line = "-", cross = "+")))
 })
+
+
+test_that("export_table, overlengthy lines", {
+  data(iris)
+  d <- iris
+  colnames(d)[1] <- paste0(letters[1:26], "no1", collapse = "_")
+  colnames(d)[2] <- paste0(letters[1:26], "no2", collapse = "_")
+  expect_warning(export_table(d[1:10, ]), regex = "The table contains")
+  expect_snapshot(print(export_table(d[1:10, ], verbose = FALSE)))
+
+  d <- iris
+  colnames(d)[2] <- paste0(letters[1:26], "no1", collapse = "_")
+  colnames(d)[5] <- paste0(letters[1:26], "no2", collapse = "_")
+  expect_warning(export_table(d[1:10, ]), regex = "The table contains")
+  expect_snapshot(print(export_table(d[1:10, ], verbose = FALSE)))
+})

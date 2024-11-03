@@ -720,3 +720,91 @@
          |                  female | 605 | 67.1%
       ------------------------------------------
 
+# export_table, overlengthy lines
+
+    Code
+      print(export_table(d[1:10, ], verbose = FALSE))
+    Output
+      ano1_bno1_cno1_dno1_eno1_fno1_gno1_hno1_ino1_jno1_kno1_lno1_mno1_nno1_ono1_pno1_qno1_rno1_sno1_tno1_uno1_vno1_wno1_xno1_yno1_zno1
+      ---------------------------------------------------------------------------------------------------------------------------------
+                                                                                                                                   5.10
+                                                                                                                                   4.90
+                                                                                                                                   4.70
+                                                                                                                                   4.60
+                                                                                                                                   5.00
+                                                                                                                                   5.40
+                                                                                                                                   4.60
+                                                                                                                                   5.00
+                                                                                                                                   4.40
+                                                                                                                                   4.90
+      
+      ano2_bno2_cno2_dno2_eno2_fno2_gno2_hno2_ino2_jno2_kno2_lno2_mno2_nno2_ono2_pno2_qno2_rno2_sno2_tno2_uno2_vno2_wno2_xno2_yno2_zno2
+      ---------------------------------------------------------------------------------------------------------------------------------
+                                                                                                                                   3.50
+                                                                                                                                   3.00
+                                                                                                                                   3.20
+                                                                                                                                   3.10
+                                                                                                                                   3.60
+                                                                                                                                   3.90
+                                                                                                                                   3.40
+                                                                                                                                   3.40
+                                                                                                                                   2.90
+                                                                                                                                   3.10
+      
+      Petal.Length | Petal.Width | Species
+      ------------------------------------
+              1.40 |        0.20 |  setosa
+              1.40 |        0.20 |  setosa
+              1.30 |        0.20 |  setosa
+              1.50 |        0.20 |  setosa
+              1.40 |        0.20 |  setosa
+              1.70 |        0.40 |  setosa
+              1.40 |        0.30 |  setosa
+              1.50 |        0.20 |  setosa
+              1.40 |        0.20 |  setosa
+              1.50 |        0.10 |  setosa
+
+---
+
+    Code
+      print(export_table(d[1:10, ], verbose = FALSE))
+    Output
+      Sepal.Length
+      ------------
+              5.10
+              4.90
+              4.70
+              4.60
+              5.00
+              5.40
+              4.60
+              5.00
+              4.40
+              4.90
+      
+      ano1_bno1_cno1_dno1_eno1_fno1_gno1_hno1_ino1_jno1_kno1_lno1_mno1_nno1_ono1_pno1_qno1_rno1_sno1_tno1_uno1_vno1_wno1_xno1_yno1_zno1
+      ---------------------------------------------------------------------------------------------------------------------------------
+                                                                                                                                   3.50
+                                                                                                                                   3.00
+                                                                                                                                   3.20
+                                                                                                                                   3.10
+                                                                                                                                   3.60
+                                                                                                                                   3.90
+                                                                                                                                   3.40
+                                                                                                                                   3.40
+                                                                                                                                   2.90
+                                                                                                                                   3.10
+      
+      Petal.Length | Petal.Width | ano2_bno2_cno2_dno2_eno2_fno2_gno2_hno2_ino2_jno2_kno2_lno2_mno2_nno2_ono2_pno2_qno2_rno2_sno2_tno2_uno2_vno2_wno2_xno2_yno2_zno2
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------
+              1.40 |        0.20 |                                                                                                                            setosa
+              1.40 |        0.20 |                                                                                                                            setosa
+              1.30 |        0.20 |                                                                                                                            setosa
+              1.50 |        0.20 |                                                                                                                            setosa
+              1.40 |        0.20 |                                                                                                                            setosa
+              1.70 |        0.40 |                                                                                                                            setosa
+              1.40 |        0.30 |                                                                                                                            setosa
+              1.50 |        0.20 |                                                                                                                            setosa
+              1.40 |        0.20 |                                                                                                                            setosa
+              1.50 |        0.10 |                                                                                                                            setosa
+
