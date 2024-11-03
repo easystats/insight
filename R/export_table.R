@@ -738,6 +738,11 @@ print.insight_table <- function(x, ...) {
     # find out where we have consecutive duplicated rows
     consecutive_dups <- which(out[-1] == out[-length(out)])
     if (length(consecutive_dups)) {
+      # if second to last line is a separator line, *and* we usually also have
+      # a final line, remove that one
+      if (.is_separator_line(out[length(out) - 1], empty_line, cross, sep)) {
+        consecutive_dups <- unique(c(consecutive_dups, length(out) - 1))
+      }
       # copy consecutive duplicated rows into temporary object
       tmp <- out[consecutive_dups]
       # remove separator and cross signs
@@ -776,6 +781,20 @@ print.insight_table <- function(x, ...) {
   }
 
   rows
+}
+
+
+.is_separator_line <- function(x, empty_line, cross, sep) {
+  if (!is.null(empty_line) && nzchar(empty_line)) {
+    x <- gsub(empty_line, "", x, fixed = TRUE)
+  }
+  if (!is.null(cross) && nzchar(cross)) {
+    x <- gsub(cross, "", x, fixed = TRUE)
+  }
+  if (!is.null(sep) && nzchar(sep)) {
+    x <- gsub(sep, "", x, fixed = TRUE)
+  }
+  !nzchar(x)
 }
 
 
