@@ -277,7 +277,32 @@ and <a href="https://easystats.github.io/parameters/articles/model_parameters_fo
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># split longer tables</span></span></span>
 <span class="r-in"><span><span class="fu">export_table</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, table_width <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .format_basic_table(final, header, sep, cross, caption = caption,     subtitle = subtitle, footer = footer, align = align, empty_line = empty_line,     indent_groups = indent_groups, indent_rows = indent_rows,     col_names = col_names, col_width = width, col_align = col_align,     table_width = table_width):</span> object 'table_witdh' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.10 |        3.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.90 |        3.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.70 |        3.20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.60 |        3.10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.00 |        3.60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.40 |        3.90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Petal.Length</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.10 |         1.40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.90 |         1.40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.70 |         1.30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.60 |         1.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.00 |         1.40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.40 |         1.70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Petal.Width | Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.10 |        0.20 |  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.90 |        0.20 |  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.70 |        0.20 |  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.60 |        0.20 |  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.00 |        0.20 |  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.40 |        0.40 |  setosa</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># colored footers</span></span></span>
