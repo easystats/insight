@@ -208,7 +208,8 @@ export_table <- function(x,
       indent_groups = indent_groups,
       indent_rows = indent_rows,
       table_width = table_width,
-      remove_duplicated_lines = remove_duplicates
+      remove_duplicated_lines = remove_duplicates,
+      verbose = verbose
     )
   } else if (is.list(x)) {
     # table from list of data frames -----------------------------------------
@@ -281,7 +282,8 @@ export_table <- function(x,
         indent_groups = indent_groups,
         indent_rows = indent_rows,
         table_width = table_width,
-        remove_duplicated_lines = remove_duplicates
+        remove_duplicated_lines = remove_duplicates,
+        verbose = verbose
       )
     })
 
@@ -363,7 +365,8 @@ print.insight_table <- function(x, ...) {
                           indent_groups = NULL,
                           indent_rows = NULL,
                           table_width = NULL,
-                          remove_duplicated_lines = FALSE) {
+                          remove_duplicated_lines = FALSE,
+                          verbose = TRUE) {
   tabledata <- as.data.frame(x)
 
   # check width argument, for format value. cannot have
@@ -453,7 +456,8 @@ print.insight_table <- function(x, ...) {
         col_width = width,
         col_align = col_align,
         table_width = table_width,
-        remove_duplicated_lines = remove_duplicated_lines
+        remove_duplicated_lines = remove_duplicated_lines,
+        verbose = verbose
       )
     } else if (format == "markdown") {
       # markdown is a bit different...
@@ -496,7 +500,8 @@ print.insight_table <- function(x, ...) {
                                 col_width = NULL,
                                 col_align = NULL,
                                 table_width = NULL,
-                                remove_duplicated_lines = FALSE) {
+                                remove_duplicated_lines = FALSE,
+                                verbose = TRUE) {
   # align table, if requested. unlike the generic aligments that have been done
   # previously, we now look for column-specific alignments. we furthermore save
   # the alignments in "col_align", which we may need later when we set a fixed
@@ -563,6 +568,7 @@ print.insight_table <- function(x, ...) {
 
   # we can split very wide tables
   final_extra <- NULL
+  overlength_warning <- FALSE
 
   # check if user requested automatic width-adjustment of tables,
   # or if a given width is required
@@ -600,8 +606,32 @@ print.insight_table <- function(x, ...) {
         # copy first column, and all columns that did not fit into the first line
         # into the second table matrix
         if (i < ncol(.final_temp)) {
-          final_extra[[e]] <- .final_temp[, 1:(i - 1), drop = FALSE]
-          final_extra[[e + 1]] <- .final_temp[, c(1, i:ncol(.final_temp)), drop = FALSE]
+          if (i > 1) {
+            final_extra[[e]] <- .final_temp[, 1:(i - 1), drop = FALSE]
+          } else {
+            # if first column is very long, i = 1, and then indexing 1:(i-1)
+            # doesn't work. Just copy first column, and give a warning about
+            # overlengthy columns
+            final_extra[[e]] <- .final_temp[, 1, drop = FALSE]
+            overlength_warning <- TRUE
+          }
+          # check if only the first column was copied, and no other columns -
+          # if so, we will repeatedly only copy column one and move all other
+          # columns in the next table part (where this happens again)
+          # in this case, *don't* copy first column again
+          if (i > 2) {
+            # repeat first column in each table, for better orientation
+            copy_range <- c(1, i:ncol(.final_temp))
+          } else if (i == 2) {
+            # here we have a very wide first column, so don't repeat it -
+            # else, subsequent columns won't fit into table
+            copy_range <- i:ncol(.final_temp)
+          } else {
+            # here we have an overlengthy first column - make sure we don't
+            # process this column multiple times, so skip it here
+            copy_range <- 2:ncol(.final_temp)
+          }
+          final_extra[[e + 1]] <- .final_temp[, copy_range, drop = FALSE]
         }
         e <- e + 1
       }
@@ -613,6 +643,10 @@ print.insight_table <- function(x, ...) {
         final_extra <- NULL
       }
     }
+  }
+
+  if (overlength_warning && verbose) {
+    format_warning("The table contains very wide columns that don't fit into the available display-width of the console. Splitting tables into multiple parts did not have the desired effect.") # nolint
   }
 
   # Transform table matrix into a string value that can be printed
