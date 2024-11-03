@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,6 +81,7 @@
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  table_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  remove_duplicates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -216,6 +217,13 @@ the first column is repeated for better orientation.</p></li>
 <li><p><code>options(easystats_table_width = &lt;value&gt;)</code> can be used to set a default
 width for tables.</p></li>
 </ul></dd>
+
+
+<dt id="arg-remove-duplicates">remove_duplicates<a class="anchor" aria-label="anchor" href="#arg-remove-duplicates"></a></dt>
+<dd><p>Logical, if <code>TRUE</code> and table is split into multiple
+parts, duplicated ("empty") rows will be removed. If <code>FALSE</code>, empty rows
+will be preserved. Only applies when <code>table_width</code> is <em>not</em> <code>NULL</code> (or
+<code>Inf</code>) <em>and</em> table is split into multiple parts.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
