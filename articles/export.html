@@ -507,6 +507,43 @@ the second being the name of a colour).</p>
 <span><span class="co">#&gt; Footer line I</span></span>
 <span><span class="co">#&gt; Second line</span></span></code></pre></div>
 </div>
+<div class="section level2">
+<h2 id="splitting-one-long-table-into-multiple-tables">Splitting one long table into multiple tables<a class="anchor" aria-label="anchor" href="#splitting-one-long-table-into-multiple-tables"></a>
+</h2>
+<p>When the table is wider than the current width (i.e. line length) of
+the console (or any other source for textual output, like markdown
+files), the table can be split into multiple parts to fit the width of
+the screen using the <code>table_width</code> argument. This is set to
+<code>"auto"</code> by default, i.e. by default tables are always
+adjusted to fit into the current display.</p>
+<p>We’ll demonstrate this using a codebook of a dataset from the
+<em>datawizard</em> package.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">efc</span>, package <span class="op">=</span> <span class="st">"datawizard"</span><span class="op">)</span></span>
+<span><span class="co"># prepare a data set, in this example a codebook of the EFC dataset</span></span>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_codebook.html" class="external-link">data_codebook</a></span><span class="op">(</span><span class="va">efc</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">out</span><span class="op">$</span><span class="va">.row_id</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
+<span>  <span class="va">out</span>,</span>
+<span>  table_width <span class="op">=</span> <span class="fl">70</span>, <span class="co"># fix width to 70 chars</span></span>
+<span>  empty_line <span class="op">=</span> <span class="st">"-"</span>, <span class="co"># empty lines (separator rows) indicated by "-"</span></span>
+<span>  cross <span class="op">=</span> <span class="st">"+"</span>       <span class="co"># use "+" where vertical and horizontal table lines cross</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>As you can see, the third row in the first table part contains some
+empty rows. This is because the height of the tables are always the same
+by default, to avoid confustion. However, it is also possible to remove
+redundant empty rows, using the <code>remove_duplicates</code>
+argument.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/export_table.html">export_table</a></span><span class="op">(</span></span>
+<span>  <span class="va">out</span>,</span>
+<span>  table_width <span class="op">=</span> <span class="fl">70</span>,</span>
+<span>  empty_line <span class="op">=</span> <span class="st">"-"</span>,</span>
+<span>  cross <span class="op">=</span> <span class="st">"+"</span>,</span>
+<span>  remove_duplicates <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
