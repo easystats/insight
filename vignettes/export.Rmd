@@ -5,7 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Exporting tables with captions and footers}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -16,6 +16,9 @@ knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE
 )
+if (!requireNamespace("datawizard", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
 ```
 
 ## Exporting data frames into nice tables
@@ -72,7 +75,7 @@ knitr::include_graphics("export_table.png", dpi = 72)
 
 ## Adding (coloured) table footers
 
-Use the `footer` argument to add a footer line to the table. It is also possible to add a string as `table_footer` attribute. 
+Use the `footer` argument to add a footer line to the table. It is also possible to add a string as `table_footer` attribute.
 
 ```{r}
 # colored caption, simple footer
@@ -192,5 +195,37 @@ export_table(
     list(c("Footer line A\n", "blue"), c("Second line\n\n", "green")),
     list(c("Footer line I\n", "yellow"), c("Second line\n\n", "blue"))
   )
+)
+```
+
+## Splitting one long table into multiple tables
+
+When the table is wider than the current width (i.e. line length) of the console (or any other source for textual output, like markdown files), the table can be split into multiple parts to fit the width of the screen using the `table_width` argument. This is set to `"auto"` by default, i.e. by default tables are always adjusted to fit into the current display.
+
+We'll demonstrate this using a codebook of a dataset from the *datawizard* package.
+
+```r
+data(efc, package = "datawizard")
+# prepare a data set, in this example a codebook of the EFC dataset
+out <- datawizard::data_codebook(efc[, 1:3])
+out$.row_id <- NULL
+
+export_table(
+  out,
+  table_width = 70, # fix width to 70 chars
+  empty_line = "-", # empty lines (separator rows) indicated by "-"
+  cross = "+"       # use "+" where vertical and horizontal table lines cross
+)
+```
+
+As you can see, the third row in the first table part contains some empty rows. This is because the height of the tables are always the same by default, to avoid confustion. However, it is also possible to remove redundant empty rows, using the `remove_duplicates` argument.
+
+```r
+export_table(
+  out,
+  table_width = 70,
+  empty_line = "-",
+  cross = "+",
+  remove_duplicates = TRUE
 )
 ```
