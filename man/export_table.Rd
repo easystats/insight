@@ -26,6 +26,7 @@ export_table(
   by = NULL,
   zap_small = FALSE,
   table_width = "auto",
+  remove_duplicates = FALSE,
   verbose = TRUE,
   ...
 )
@@ -122,6 +123,11 @@ the first column is repeated for better orientation.
 \item \verb{options(easystats_table_width = <value>)} can be used to set a default
 width for tables.
 }}
+
+\item{remove_duplicates}{Logical, if \code{TRUE} and table is split into multiple
+parts, duplicated ("empty") rows will be removed. If \code{FALSE}, empty rows
+will be preserved. Only applies when \code{table_width} is \emph{not} \code{NULL} (or
+\code{Inf}) \emph{and} table is split into multiple parts.}
 
 \item{verbose}{Toggle messages and warnings.}
 
