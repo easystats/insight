@@ -53,6 +53,10 @@
 #'   - Use `NULL` or `Inf` to turn off automatic splitting of the table.
 #'   - `options(easystats_table_width = <value>)` can be used to set a default
 #'   width for tables.
+#' @param remove_duplicates Logical, if `TRUE` and table is split into multiple
+#'   parts, duplicated ("empty") lines will be removed. If `FALSE`, empty lines
+#'   will be preserved. Only applies when `table_width` is *not* `NULL` (or
+#'   `Inf`) *and* table is split into multiple parts.
 #' @param ... Currently not used.
 #' @inheritParams format_value
 #' @inheritParams get_data
@@ -125,6 +129,7 @@ export_table <- function(x,
                          by = NULL,
                          zap_small = FALSE,
                          table_width = "auto",
+                         remove_duplicates = FALSE,
                          verbose = TRUE,
                          ...) {
   # check args
@@ -202,7 +207,8 @@ export_table <- function(x,
       empty_line = empty_line,
       indent_groups = indent_groups,
       indent_rows = indent_rows,
-      table_width = table_width
+      table_width = table_width,
+      remove_duplicated_lines = remove_duplicates
     )
   } else if (is.list(x)) {
     # table from list of data frames -----------------------------------------
@@ -274,7 +280,8 @@ export_table <- function(x,
         empty_line = empty_line,
         indent_groups = indent_groups,
         indent_rows = indent_rows,
-        table_width = table_width
+        table_width = table_width,
+        remove_duplicated_lines = remove_duplicates
       )
     })
 
@@ -355,7 +362,8 @@ print.insight_table <- function(x, ...) {
                           empty_line = NULL,
                           indent_groups = NULL,
                           indent_rows = NULL,
-                          table_width = NULL) {
+                          table_width = NULL,
+                          remove_duplicated_lines = FALSE) {
   tabledata <- as.data.frame(x)
 
   # check width argument, for format value. cannot have
@@ -444,7 +452,8 @@ print.insight_table <- function(x, ...) {
         col_names = col_names,
         col_width = width,
         col_align = col_align,
-        table_width = table_width
+        table_width = table_width,
+        remove_duplicated_lines = remove_duplicated_lines
       )
     } else if (format == "markdown") {
       # markdown is a bit different...
@@ -486,7 +495,8 @@ print.insight_table <- function(x, ...) {
                                 col_names = NULL,
                                 col_width = NULL,
                                 col_align = NULL,
-                                table_width = NULL) {
+                                table_width = NULL,
+                                remove_duplicated_lines = FALSE) {
   # align table, if requested. unlike the generic aligments that have been done
   # previously, we now look for column-specific alignments. we furthermore save
   # the alignments in "col_align", which we may need later when we set a fixed
@@ -554,10 +564,11 @@ print.insight_table <- function(x, ...) {
   # we can split very wide tables
   final_extra <- NULL
 
-  # check if user requested automatic width-adjustment of tables, or if a
-  # given width is required
+  # check if user requested automatic width-adjustment of tables,
+  # or if a given width is required
+  table_width_adjustment <- identical(table_width, "auto") || (!is.null(table_width) && !is.infinite(table_width) && is.numeric(table_width)) # nolint
 
-  if (identical(table_width, "auto") || (!is.null(table_width) && !is.infinite(table_width) && is.numeric(table_width))) { # nolint
+  if (table_width_adjustment) {
     # define the length of a table line. if specific table width is defined
     # (i.e. table_width is numeric), use that to define length of table lines.
     # else, if "auto", check the current width of the user console and use that
@@ -605,16 +616,33 @@ print.insight_table <- function(x, ...) {
   }
 
   # Transform table matrix into a string value that can be printed
-  rows <- .table_parts(NULL, final, header, sep, cross, empty_line)
+  rows <- .table_parts(
+    rows = NULL,
+    final = final,
+    header = header,
+    sep = sep,
+    cross = cross,
+    empty_line = empty_line,
+    table_width_adjustment = table_width_adjustment,
+    remove_duplicated_lines = remove_duplicated_lines
+  )
 
   # if we have over-lengthy tables that are split into parts,
   # print extra table here
   if (!is.null(final_extra)) {
     for (fex in final_extra) {
-      rows <- .table_parts(paste0(rows, "\n"), fex, header, sep, cross, empty_line)
+      rows <- .table_parts(
+        rows = paste0(rows, "\n"),
+        final = fex,
+        header = header,
+        sep = sep,
+        cross = cross,
+        empty_line = empty_line,
+        table_width_adjustment = table_width_adjustment,
+        remove_duplicated_lines = remove_duplicated_lines
+      )
     }
   }
-
 
   # if caption is available, add a row with a headline
   if (!is.null(caption) && caption[1] != "") {
@@ -656,7 +684,14 @@ print.insight_table <- function(x, ...) {
 
 # helper to prepare table body for text output ---------------------
 
-.table_parts <- function(rows, final, header, sep, cross, empty_line) {
+.table_parts <- function(rows,
+                         final,
+                         header,
+                         sep,
+                         cross,
+                         empty_line,
+                         table_width_adjustment,
+                         remove_duplicated_lines = FALSE) {
   # "final" is a matrix here. we now paste each row into a character string,
   # add separator chars etc.
   for (row in seq_len(nrow(final))) {
@@ -693,6 +728,43 @@ print.insight_table <- function(x, ...) {
       )
       # add separator row after header line
       rows <- paste0(rows, header_line, "\n")
+    }
+  }
+
+  # we table is split into multiple parts, we remove duplicated separator lines
+  if (table_width_adjustment) {
+    # split single character back into rows again
+    out <- unlist(strsplit(rows, "\\n"), use.names = FALSE)
+    # find out where we have consecutive duplicated rows
+    consecutive_dups <- which(out[-1] == out[-length(out)])
+    if (length(consecutive_dups)) {
+      # copy consecutive duplicated rows into temporary object
+      tmp <- out[consecutive_dups]
+      # remove separator and cross signs
+      if (!is.null(empty_line) && nzchar(empty_line)) {
+        tmp <- gsub(empty_line, "", tmp, fixed = TRUE)
+      }
+      if (!is.null(cross) && nzchar(cross)) {
+        tmp <- gsub(cross, "", tmp, fixed = TRUE)
+      }
+      if (!is.null(sep) && nzchar(sep)) {
+        tmp <- gsub(sep, "", tmp, fixed = TRUE)
+      }
+      # now check which rows are empty (lines) AND consecutive duplicated
+      # remove those from "out"
+      remove_dups <- consecutive_dups[-nzchar(tmp)]
+      # if all consecutive duplicates were empty
+      if (!length(remove_dups)) {
+        remove_dups <- consecutive_dups
+      }
+      # remove duplicated lines, or make them "empty"?
+      if (remove_duplicated_lines) {
+        out <- out[-remove_dups]
+      } else if (!is.null(empty_line) && nzchar(empty_line)) {
+        out[remove_dups] <- gsub(empty_line, " ", out[remove_dups])
+      }
+      # collapse back into single string
+      rows <- paste0(paste(out, collapse = "\n"), "\n")
     }
   }
 

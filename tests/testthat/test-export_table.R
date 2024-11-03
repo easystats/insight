@@ -154,3 +154,20 @@ test_that("export_table, table_width, no split", {
   tab <- parameters::compare_parameters(lm1, lm2, lm3, lm4, lm5, lm6)
   expect_snapshot(print(tab, table_width = NULL), variant = "windows")
 })
+
+
+test_that("export_table, table_width, remove duplicated empty lines", {
+  skip_if_not_installed("datawizard")
+  data(efc, package = "datawizard")
+  out <- datawizard::data_codebook(efc)
+  out$.row_id <- NULL
+  expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = FALSE)))
+  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", remove_duplicates = FALSE)))
+  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", sep = " | ", remove_duplicates = FALSE)))
+  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", cross = "+", remove_duplicates = FALSE)))
+  # don't remove duplicates
+  expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = TRUE)))
+  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", remove_duplicates = TRUE)))
+  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", sep = " | ", remove_duplicates = TRUE)))
+  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", cross = "+", remove_duplicates = TRUE)))
+})
