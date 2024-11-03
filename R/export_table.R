@@ -601,7 +601,16 @@ print.insight_table <- function(x, ...) {
         # into the second table matrix
         if (i < ncol(.final_temp)) {
           final_extra[[e]] <- .final_temp[, 1:(i - 1), drop = FALSE]
-          final_extra[[e + 1]] <- .final_temp[, c(1, i:ncol(.final_temp)), drop = FALSE]
+          # check if only the first column was copied, and no other columns -
+          # if so, we will repeatedly only copy column one and move all other
+          # columns in the next table part (where this happens again)
+          # in this case, *don't* copy first column again
+          if (i > 2) {
+            copy_range <- c(1, i:ncol(.final_temp))
+          } else {
+            copy_range <- c(i:ncol(.final_temp))
+          }
+          final_extra[[e + 1]] <- .final_temp[, copy_range, drop = FALSE]
         }
         e <- e + 1
       }
