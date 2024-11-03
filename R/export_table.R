@@ -557,7 +557,7 @@ print.insight_table <- function(x, ...) {
   # check if user requested automatic width-adjustment of tables, or if a
   # given width is required
 
-  if (identical(table_width, "auto") || (!is.null(table_width) && !is.infinite(table_witdh) && is.numeric(table_width))) { # nolint
+  if (identical(table_width, "auto") || (!is.null(table_width) && !is.infinite(table_width) && is.numeric(table_width))) { # nolint
     # define the length of a table line. if specific table width is defined
     # (i.e. table_width is numeric), use that to define length of table lines.
     # else, if "auto", check the current width of the user console and use that
