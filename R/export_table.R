@@ -608,7 +608,7 @@ print.insight_table <- function(x, ...) {
           if (i > 2) {
             copy_range <- c(1, i:ncol(.final_temp))
           } else {
-            copy_range <- c(i:ncol(.final_temp))
+            copy_range <- i:ncol(.final_temp)
           }
           final_extra[[e + 1]] <- .final_temp[, copy_range, drop = FALSE]
         }

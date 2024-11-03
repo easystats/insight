@@ -218,7 +218,7 @@ export_table(
 )
 ```
 
-As you can see, the third row in the first table part contains some empty rows. This is because the height of the tables are always the same by default, to avoid confustion. However, it is also possible to remove redundant empty rows, using the `remove_duplicates` argument.
+As you can see, the third row in the first table part contains some empty rows. This is because the height of the tables are always the same by default, to avoid confusion. However, it is also possible to remove redundant empty rows, using the `remove_duplicates` argument.
 
 ```r
 export_table(
