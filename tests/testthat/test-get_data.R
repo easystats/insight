@@ -523,7 +523,7 @@ test_that("get_data, can't parse subset", {
       subset = eval(parse(text = subset))
     )
   }
-  m <- fit_mod(formula = "mpg~gear", data = mtcars, subset = "gear != 8")
+  m <- fit_mod(formula = "mpg~gear", data = mtcars, subset = "cyl != 8")
   expect_warning(
     {
       out <- get_data(m)
@@ -532,4 +532,9 @@ test_that("get_data, can't parse subset", {
   )
   expect_named(out, c("mpg", "gear"))
   expect_identical(nrow(out), 32L)
+
+  m <- lm(mpg ~ gear, data = mtcars, subset = cyl != 8)
+  out <- get_data(m)
+  expect_named(out, c("mpg", "gear", "cyl"))
+  expect_identical(nrow(out), 18L)
 })
