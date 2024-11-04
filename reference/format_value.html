@@ -80,6 +80,7 @@ formatting can be something like rounding digits, scientific notation etc.
 <span>  lead_zero <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  style_positive <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  style_negative <span class="op">=</span> <span class="st">"hyphen"</span>,</span>
+<span>  decimal_point <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"OutDec"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -95,6 +96,7 @@ formatting can be something like rounding digits, scientific notation etc.
 <span>  lead_zero <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  style_positive <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  style_negative <span class="op">=</span> <span class="st">"hyphen"</span>,</span>
+<span>  decimal_point <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"OutDec"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -166,6 +168,11 @@ wide as a number or <code>+</code>.</p></dd>
 May be <code>"hyphen"</code> (default), <code>"minus"</code> for a proper Unicode minus symbol or
 <code>"parens"</code> to wrap the number in parentheses.</p></dd>
 
+
+<dt id="arg-decimal-point">decimal_point<a class="anchor" aria-label="anchor" href="#arg-decimal-point"></a></dt>
+<dd><p>Character string containing a single character that
+is used as decimal point in output conversions.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -192,6 +199,8 @@ May be <code>"hyphen"</code> (default), <code>"minus"</code> for a proper Unicod
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4.50e-03" "1.20e-01" "3.40e-01"</span>
 <span class="r-in"><span><span class="fu">format_value</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.045</span>, <span class="fl">0.12</span>, <span class="fl">0.34</span><span class="op">)</span>, lead_zero <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".04" ".12" ".34"</span>
+<span class="r-in"><span><span class="fu">format_value</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0045</span>, <span class="fl">0.12</span>, <span class="fl">0.34</span><span class="op">)</span>, decimal_point <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4,50e-03" "0,12"     "0,34"    </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># default</span></span></span>
 <span class="r-in"><span><span class="fu">format_value</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0045</span>, <span class="fl">0.123</span>, <span class="fl">0.345</span><span class="op">)</span><span class="op">)</span></span></span>
