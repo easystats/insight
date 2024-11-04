@@ -524,9 +524,12 @@ test_that("get_data, can't parse subset", {
     )
   }
   m <- fit_mod(formula = "mpg~gear", data = mtcars, subset = "gear != 8")
-  expect_warning({
-    out <- get_data(m)
-  })
+  expect_warning(
+    {
+      out <- get_data(m)
+    },
+    regex = "Looks like the original"
+  )
   expect_named(out, c("mpg", "gear"))
   expect_identical(nrow(out), 32L)
 })

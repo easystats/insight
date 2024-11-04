@@ -268,7 +268,7 @@ get_data <- function(x, ...) {
     if (!is.null(subset_data)) {
       dat <- subset_data
     } else if (verbose) {
-      format_warning("Looks like the original data was subset, however subsetting the data did not work.") # nolint
+      format_warning("Looks like the original data was subset, however `get_data()` could not retrieve the subset of the data. The full data set is returned.") # nolint
     }
   }
 
