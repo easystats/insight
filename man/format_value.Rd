@@ -20,6 +20,7 @@ format_value(x, ...)
   lead_zero = TRUE,
   style_positive = "none",
   style_negative = "hyphen",
+  decimal_point = getOption("OutDec"),
   ...
 )
 
@@ -34,6 +35,7 @@ format_value(x, ...)
   lead_zero = TRUE,
   style_positive = "none",
   style_negative = "hyphen",
+  decimal_point = getOption("OutDec"),
   ...
 )
 
@@ -79,6 +81,9 @@ wide as a number or \code{+}.}
 \item{style_negative}{A string that determines the style of negative numbers.
 May be \code{"hyphen"} (default), \code{"minus"} for a proper Unicode minus symbol or
 \code{"parens"} to wrap the number in parentheses.}
+
+\item{decimal_point}{Character string containing a single character that
+is used as decimal point in output conversions.}
 }
 \value{
 A formatted string.
@@ -93,16 +98,17 @@ format_value(1.20)
 format_value(1.2)
 format_value(1.2012313)
 format_value(c(0.0045, 234, -23))
-format_value(c(0.0045, .12, .34))
-format_value(c(0.0045, .12, .34), as_percent = TRUE)
-format_value(c(0.0045, .12, .34), digits = "scientific")
-format_value(c(0.0045, .12, .34), digits = "scientific2")
-format_value(c(0.045, .12, .34), lead_zero = FALSE)
+format_value(c(0.0045, 0.12, 0.34))
+format_value(c(0.0045, 0.12, 0.34), as_percent = TRUE)
+format_value(c(0.0045, 0.12, 0.34), digits = "scientific")
+format_value(c(0.0045, 0.12, 0.34), digits = "scientific2")
+format_value(c(0.045, 0.12, 0.34), lead_zero = FALSE)
+format_value(c(0.0045, 0.12, 0.34), decimal_point = ",")
 
 # default
-format_value(c(0.0045, .123, .345))
+format_value(c(0.0045, 0.123, 0.345))
 # significant figures
-format_value(c(0.0045, .123, .345), digits = "signif")
+format_value(c(0.0045, 0.123, 0.345), digits = "signif")
 
 format_value(as.factor(c("A", "B", "A")))
 format_value(iris$Species)

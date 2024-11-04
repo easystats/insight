@@ -13,8 +13,7 @@ test_that("retrieve from same environment", {
 test_that("retrieve from correct environment", {
   foo <- function() {
     foo <- data.frame(x = 1:10, y = 2:11)
-
-    return(lm(y ~ x, data = foo))
+    lm(y ~ x, data = foo)
   }
 
   # There should be no warning about "Could not recover model data from
@@ -32,8 +31,7 @@ test_that("fetch from local, not global, environment", {
 
   foo <- function() {
     mtcars$cylinders <- factor(mtcars$cyl)
-
-    return(lm(mpg ~ cylinders + disp, data = mtcars))
+    lm(mpg ~ cylinders + disp, data = mtcars)
   }
 
   expect_setequal(
@@ -54,7 +52,7 @@ test_that("retrieve from call formula environment", {
     # find_formula(fit)$conditional happens to not have an environment for tobit
     # models, so get_data() should check environment(get_call(fit)$formula). See
     # #666
-    return(AER::tobit(y ~ x, data = d, right = 1.5))
+    AER::tobit(y ~ x, data = d, right = 1.5)
   }
 
   expect_setequal(
@@ -222,7 +220,7 @@ test_that("mgcv", {
   # fall back to the model frame. See
   # https://github.com/cran/mgcv/blob/a4e69cf44a49c84a41a42e90c86995a843733968/R/mgcv.r#L2156-L2159
   d <- iris
-  d$NewFac <- rep(c(1, 2), length.out = 150)
+  d$NewFac <- rep_len(c(1, 2), 150)
   model <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
 
   # There should be two warnings: One for failing to get the data from the
@@ -461,7 +459,7 @@ test_that("get_data works for fixest inside functions", {
   fixest_wrapper1 <- function(data) {
     data$cylinders <- factor(data$cyl)
     fit <- fixest::feglm(mpg ~ cylinders * disp + hp, data = data)
-    return(fit)
+    fit
   }
   global_fixest1 <- fixest_wrapper1(data = mtcars)
   data <- mtcars[, c("mpg", "disp")]
@@ -474,7 +472,7 @@ test_that("get_data works for fixest inside functions", {
   fixest_wrapper2 <- function(data) {
     data$cylinders <- factor(data$cyl)
     fit <- fixest::feglm(mpg ~ cylinders * disp + hp, data = data)
-    return(fit)
+    fit
   }
   data <- mtcars
   global_fixest2 <- fixest_wrapper2(data = data[1:20, ])
@@ -511,4 +509,30 @@ test_that("get_data, division in I()", {
     get_data(m2, source = "mf"),
     c("I(food/income)", "income", "persons", "food", "income.1")
   )
+})
+
+
+test_that("get_data, can't parse subset", {
+  data(mtcars)
+  fit_mod <- function(formula, data, subset) {
+    lm(
+      as.formula(formula),
+      data = data,
+      subset = eval(parse(text = subset))
+    )
+  }
+  m <- fit_mod(formula = "mpg~gear", data = mtcars, subset = "cyl != 8")
+  expect_warning(
+    {
+      out <- get_data(m)
+    },
+    regex = "Looks like the original"
+  )
+  expect_named(out, c("mpg", "gear"))
+  expect_identical(nrow(out), 32L)
+
+  m <- lm(mpg ~ gear, data = mtcars, subset = cyl != 8)
+  out <- get_data(m)
+  expect_named(out, c("mpg", "gear", "cyl"))
+  expect_identical(nrow(out), 18L)
 })
