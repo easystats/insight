@@ -26,6 +26,9 @@
 * `export_table()` can now split tables into more than three tables when
   `table_width` is used (formerly, the maximum number of split tables was three).
 
+* `find_transformation()` gets a `full_model` argument, to check all model terms
+  for transformations.
+
 ## Bug fix
 
 * `clean_parameters()` now uses the correct labels for the random effects

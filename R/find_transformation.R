@@ -1,16 +1,18 @@
-#' @title Find possible transformation of response variables
+#' @title Find possible transformation of model variables
 #' @name find_transformation
 #'
 #' @description This functions checks whether any transformation, such as log-
 #'   or exp-transforming, was applied to the response variable (dependent
-#'   variable) in a regression formula. Currently, following patterns are
-#'   detected: `log`, `log1p`, `log2`, `log10`, `exp`, `expm1`, `sqrt`,
-#'   `log(y+<number>)`, `log-log`, `power` (e.g. to 2nd power, like `I(y^2)`),
-#'   `inverse` (like `1/y`), `scale` (e.g., `y/3`), and `box-cox` (e-g-,
-#'   `(y^lambda - 1) / lambda`).
+#'   variable) in a regression formula. Optionally, all model terms can also be
+#'   checked. Currently, following patterns are detected: `log`, `log1p`,
+#'   `log2`, `log10`, `exp`, `expm1`, `sqrt`, `log(y+<number>)`, `log-log`,
+#'   `power` (e.g. to 2nd power, like `I(y^2)`), `inverse` (like `1/y`), `scale`
+#'   (e.g., `y/3`), and `box-cox` (e-g-, `(y^lambda - 1) / lambda`).
 #'
 #' @param x A regression model or a character string of the formulation of the
 #' response variable.
+#' @param full_model Logical, if `TRUE`, does not only check the response
+#' variable, but all model terms.
 #' @param ... Currently not used.
 #'
 #' @return A string, with the name of the function of the applied transformation.
@@ -31,6 +33,10 @@
 #' model <- lm(log(Sepal.Length + 2) ~ Species, data = iris)
 #' find_transformation(model)
 #'
+#' # find transformation for all model terms
+#' model <- lm(mpg ~ log(wt) + I(gear^2) + exp(am), data = mtcars)
+#' find_transformation(model, full_model = TRUE)
+#'
 #' # inverse, response provided as character string
 #' find_transformation("1 / y")
 #' @export
@@ -40,7 +46,7 @@ find_transformation <- function(x, ...) {
 
 
 #' @export
-find_transformation.default <- function(x, ...) {
+find_transformation.default <- function(x, full_model = FALSE, ...) {
   # validation check
   if (is.null(x) || is.data.frame(x) || !is_model(x)) {
     return(NULL)
@@ -52,6 +58,13 @@ find_transformation.default <- function(x, ...) {
       find_transformation(i[["response"]])
     })
     unlist(result)
+  } else if (full_model) {
+    lapply(find_terms(x), function(i) {
+      stats::setNames(
+        unlist(lapply(i, find_transformation), use.names = FALSE),
+        clean_names(i)
+      )
+    })
   } else {
     # "raw" response
     rv <- find_terms(x)[["response"]]

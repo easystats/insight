@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_transformation.R
 \name{find_transformation}
 \alias{find_transformation}
-\title{Find possible transformation of response variables}
+\title{Find possible transformation of model variables}
 \usage{
 find_transformation(x, ...)
 }
@@ -11,6 +11,9 @@ find_transformation(x, ...)
 response variable.}
 
 \item{...}{Currently not used.}
+
+\item{full_model}{Logical, if \code{TRUE}, does not only check the response
+variable, but all model terms.}
 }
 \value{
 A string, with the name of the function of the applied transformation.
@@ -21,11 +24,11 @@ log-transforming. For unknown transformations, returns \code{NULL}.
 \description{
 This functions checks whether any transformation, such as log-
 or exp-transforming, was applied to the response variable (dependent
-variable) in a regression formula. Currently, following patterns are
-detected: \code{log}, \code{log1p}, \code{log2}, \code{log10}, \code{exp}, \code{expm1}, \code{sqrt},
-\verb{log(y+<number>)}, \code{log-log}, \code{power} (e.g. to 2nd power, like \code{I(y^2)}),
-\code{inverse} (like \code{1/y}), \code{scale} (e.g., \code{y/3}), and \code{box-cox} (e-g-,
-\code{(y^lambda - 1) / lambda}).
+variable) in a regression formula. Optionally, all model terms can also be
+checked. Currently, following patterns are detected: \code{log}, \code{log1p},
+\code{log2}, \code{log10}, \code{exp}, \code{expm1}, \code{sqrt}, \verb{log(y+<number>)}, \code{log-log},
+\code{power} (e.g. to 2nd power, like \code{I(y^2)}), \code{inverse} (like \code{1/y}), \code{scale}
+(e.g., \code{y/3}), and \code{box-cox} (e-g-, \code{(y^lambda - 1) / lambda}).
 }
 \examples{
 # identity, no transformation
@@ -39,6 +42,10 @@ find_transformation(model)
 # log+2
 model <- lm(log(Sepal.Length + 2) ~ Species, data = iris)
 find_transformation(model)
+
+# find transformation for all model terms
+model <- lm(mpg ~ log(wt) + I(gear^2) + exp(am), data = mtcars)
+find_transformation(model, full_model = TRUE)
 
 # inverse, response provided as character string
 find_transformation("1 / y")
