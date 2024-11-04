@@ -54,9 +54,9 @@
 #' format_value(c(0.0045, 0.12, 0.34), decimal_point = ",")
 #'
 #' # default
-#' format_value(c(0.0045, .123, .345))
+#' format_value(c(0.0045, 0.123, 0.345))
 #' # significant figures
-#' format_value(c(0.0045, .123, .345), digits = "signif")
+#' format_value(c(0.0045, 0.123, 0.345), digits = "signif")
 #'
 #' format_value(as.factor(c("A", "B", "A")))
 #' format_value(iris$Species)
@@ -118,8 +118,8 @@ format_value.numeric <- function(x,
                                  decimal_point = getOption("OutDec"),
                                  ...) {
   # check input
-  style_positive <- match.arg(style_positive, choices = c("none", "plus", "space"))
-  style_negative <- match.arg(style_negative, choices = c("hyphen", "minus", "parens"))
+  style_positive <- validate_argument(style_positive, c("none", "plus", "space"))
+  style_negative <- validate_argument(style_negative, c("hyphen", "minus", "parens"))
 
   if (protect_integers) {
     out <- .format_value_unless_integer(
@@ -235,7 +235,13 @@ format_percent <- function(x, ...) {
 
 
 
-.format_value <- function(x, digits = 2, .missing = "", .width = NULL, .as_percent = FALSE, .zap_small = FALSE, ...) {
+.format_value <- function(x,
+                          digits = 2,
+                          .missing = "",
+                          .width = NULL,
+                          .as_percent = FALSE,
+                          .zap_small = FALSE,
+                          ...) {
   # proper character NA
   if (is.na(.missing)) .missing <- NA_character_
 
@@ -259,9 +265,7 @@ format_percent <- function(x, ...) {
       }
     } else if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
       digits <- tryCatch(
-        expr = {
-          as.numeric(gsub("scientific", "", digits, fixed = TRUE))
-        },
+        as.numeric(gsub("scientific", "", digits, fixed = TRUE)),
         error = function(e) {
           5
         }
@@ -270,9 +274,7 @@ format_percent <- function(x, ...) {
       x <- sprintf("%.*e", digits, x)
     } else if (is.character(digits) && grepl("signif", digits, fixed = TRUE)) {
       digits <- tryCatch(
-        expr = {
-          as.numeric(gsub("signif", "", digits, fixed = TRUE))
-        },
+        as.numeric(gsub("signif", "", digits, fixed = TRUE)),
         error = function(e) {
           NA
         }

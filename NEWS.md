@@ -4,6 +4,8 @@
 
 * All deprecated arguments have been removed.
 
+* The `table_width` argument in `export_table()` now defaults to `"auto"`.
+
 ## General
 
 * `get_dispersion()` is now an exported function.
@@ -33,6 +35,9 @@
 
 * `clean_parameters()` now uses the correct labels for the random effects
   variances (`"SD/Cor"` has changed to `"Var/Cov"`).
+
+* When `get_data()` could not properly evaluate the subset of a data set, it
+  now returns an informative warning and no longer errors.
 
 # insight 0.20.5
 

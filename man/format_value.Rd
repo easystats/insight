@@ -106,9 +106,9 @@ format_value(c(0.045, 0.12, 0.34), lead_zero = FALSE)
 format_value(c(0.0045, 0.12, 0.34), decimal_point = ",")
 
 # default
-format_value(c(0.0045, .123, .345))
+format_value(c(0.0045, 0.123, 0.345))
 # significant figures
-format_value(c(0.0045, .123, .345), digits = "signif")
+format_value(c(0.0045, 0.123, 0.345), digits = "signif")
 
 format_value(as.factor(c("A", "B", "A")))
 format_value(iris$Species)
