@@ -28,6 +28,9 @@
 * `export_table()` can now split tables into more than three tables when
   `table_width` is used (formerly, the maximum number of split tables was three).
 
+* `format_value()` gains a `decimal_point` argument, to change the decimal point
+  in output conversion.
+
 ## Bug fix
 
 * `clean_parameters()` now uses the correct labels for the random effects

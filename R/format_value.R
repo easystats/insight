@@ -34,6 +34,8 @@
 #' @param style_negative  A string that determines the style of negative numbers.
 #'   May be `"hyphen"` (default), `"minus"` for a proper Unicode minus symbol or
 #'   `"parens"` to wrap the number in parentheses.
+#' @param decimal_point Character string containing a single character that
+#'   is used as decimal point in output conversions.
 #' @param ... Arguments passed to or from other methods.
 #'
 #'
@@ -49,6 +51,7 @@
 #' format_value(c(0.0045, 0.12, 0.34), digits = "scientific")
 #' format_value(c(0.0045, 0.12, 0.34), digits = "scientific2")
 #' format_value(c(0.045, 0.12, 0.34), lead_zero = FALSE)
+#' format_value(c(0.0045, 0.12, 0.34), decimal_point = ",")
 #'
 #' # default
 #' format_value(c(0.0045, 0.123, 0.345))
@@ -80,6 +83,7 @@ format_value.data.frame <- function(x,
                                     lead_zero = TRUE,
                                     style_positive = "none",
                                     style_negative = "hyphen",
+                                    decimal_point = getOption("OutDec"),
                                     ...) {
   as.data.frame(sapply(
     x,
@@ -93,6 +97,7 @@ format_value.data.frame <- function(x,
     lead_zero = lead_zero,
     style_positive = style_positive,
     style_negative = style_negative,
+    decimal_point = decimal_point,
     simplify = FALSE
   ))
 }
@@ -110,6 +115,7 @@ format_value.numeric <- function(x,
                                  lead_zero = TRUE,
                                  style_positive = "none",
                                  style_negative = "hyphen",
+                                 decimal_point = getOption("OutDec"),
                                  ...) {
   # check input
   style_positive <- validate_argument(style_positive, c("none", "plus", "space"))
@@ -166,6 +172,11 @@ format_value.numeric <- function(x,
       out[negatives] <- gsub("-", "\u2212", out[negatives], fixed = TRUE)
     } else if (style_negative == "parens") {
       out[negatives] <- gsub("-(.*)", "\\(\\1\\)", out[negatives])
+    }
+
+    # decimal points
+    if (!is.null(decimal_point) && !identical(decimal_point, ".")) {
+      out <- gsub(".", decimal_point, out, fixed = TRUE)
     }
   }
 
