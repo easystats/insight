@@ -512,3 +512,21 @@ test_that("get_data, division in I()", {
     c("I(food/income)", "income", "persons", "food", "income.1")
   )
 })
+
+
+test_that("get_data, can't parse subset", {
+  data(mtcars)
+  fit_mod <- function(formula, data, subset) {
+    lm(
+      as.formula(formula),
+      data = data,
+      subset = eval(parse(text = subset))
+    )
+  }
+  m <- fit_mod(formula = "mpg~gear", data = mtcars, subset = "gear != 8")
+  expect_warning({
+    out <- get_data(m)
+  })
+  expect_named(out, c("mpg", "gear"))
+  expect_identical(nrow(out), 32L)
+})
