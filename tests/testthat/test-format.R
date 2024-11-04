@@ -4,6 +4,7 @@ test_that("format_value", {
   expect_identical(format_value(4.0, protect_integers = TRUE), "4")
   expect_identical(format_value(0, protect_integers = TRUE), "0")
   expect_identical(format_value(0), "0.00")
+  expect_identical(format_value(0, decimal_point = ","), "0,00")
   expect_identical(format_value(1234565789101112), "1.23e+15")
   expect_identical(format_value(1234565789101112, protect_integers = TRUE), "1234565789101112")
   expect_identical(format_value(0.0000000123), "1.23e-08")
@@ -11,6 +12,7 @@ test_that("format_value", {
   expect_identical(format_value(0.0000000123, digits = 8), "0.00000001")
   expect_identical(format_value(c(0.012, 0.45, -0.03), lead_zero = FALSE), c(".01", ".45", "-.03"))
   expect_identical(format_value(c(1.012, 0.45, -0.03), lead_zero = FALSE), c("1.01", ".45", "-.03"))
+  expect_identical(format_value(c(1.012, 0.45, -0.03), lead_zero = FALSE, decimal_point = ","), c("1,01", ",45", "-,03"))
   expect_identical(format_value(c(0.45, -0.03), style_positive = "plus"), c("+0.45", "-0.03"))
   expect_identical(format_value(c(0.45, -0.03), style_positive = "plus", lead_zero = FALSE), c("+.45", "-.03"))
   expect_equal(
