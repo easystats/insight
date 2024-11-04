@@ -1802,7 +1802,7 @@ get_data.averaging <- function(x, ...) {
 
   if (is.null(mf)) {
     mf <- tryCatch(
-      .recover_data_from_environment(x, verbose = verbose)[, find_variables(x, flatten = TRUE), drop = FALSE],
+      .recover_data_from_environment(x)[, find_variables(x, flatten = TRUE), drop = FALSE],
       error = function(x) NULL
     )
   }
