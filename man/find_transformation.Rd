@@ -2,13 +2,16 @@
 % Please edit documentation in R/find_transformation.R
 \name{find_transformation}
 \alias{find_transformation}
+\alias{find_transformation.default}
 \title{Find possible transformation of model variables}
 \usage{
 find_transformation(x, ...)
+
+\method{find_transformation}{default}(x, full_model = FALSE, ...)
 }
 \arguments{
 \item{x}{A regression model or a character string of the formulation of the
-response variable.}
+(response) variable.}
 
 \item{...}{Currently not used.}
 

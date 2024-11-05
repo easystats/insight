@@ -28,8 +28,8 @@
 * `export_table()` can now split tables into more than three tables when
   `table_width` is used (formerly, the maximum number of split tables was three).
 
-* `find_transformation()` gets a `full_model` argument, to check all model terms
-  for transformations.
+* `find_transformation()` and `get_transformation()` gets  `full_model` argument,
+  to check all model terms for transformations.
 
 * `format_value()` gains a `decimal_point` argument, to change the decimal point
   in output conversion.

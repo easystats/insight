@@ -10,7 +10,7 @@
 #'   (e.g., `y/3`), and `box-cox` (e-g-, `(y^lambda - 1) / lambda`).
 #'
 #' @param x A regression model or a character string of the formulation of the
-#' response variable.
+#' (response) variable.
 #' @param full_model Logical, if `TRUE`, does not only check the response
 #' variable, but all model terms.
 #' @param ... Currently not used.
@@ -45,6 +45,7 @@ find_transformation <- function(x, ...) {
 }
 
 
+#' @rdname find_transformation
 #' @export
 find_transformation.default <- function(x, full_model = FALSE, ...) {
   # validation check

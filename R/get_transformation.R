@@ -9,9 +9,9 @@
 #' transformation. See [`find_transformation()`] for an overview of supported
 #' transformations that are detected.
 #'
-#' @param x A regression model.
 #' @param verbose Logical, if `TRUE`, prints a warning if the transformation
 #' could not be determined.
+#' @inheritParams find_transformation
 #'
 #' @return
 #'
@@ -38,9 +38,28 @@
 #' # inverse function is exp()
 #' get_transformation(model)$inverse(0.3)
 #' exp(0.3)
+#'
+#' # get transformations for all model terms
+#' model <- lm(mpg ~ log(wt) + I(gear^2) + exp(am), data = mtcars)
+#' get_transformation(model, full_model = TRUE)
 #' @export
-get_transformation <- function(x, verbose = TRUE) {
-  transform_fun <- find_transformation(x)
+get_transformation <- function(x, full_model = FALSE, verbose = TRUE) {
+  if (full_model) {
+    lapply(find_terms(x), function(i) {
+      stats::setNames(
+        lapply(i, .get_transformation, verbose = verbose),
+        clean_names(i)
+      )
+    })
+  } else {
+    .get_transformation(model = x, verbose)
+  }
+}
+
+
+.get_transformation <- function(model, verbose) {
+  # extract transformation
+  transform_fun <- find_transformation(model)
 
   # unknown
   if (is.null(transform_fun)) {
@@ -67,19 +86,19 @@ get_transformation <- function(x, verbose = TRUE) {
   } else if (transform_fun == "inverse") {
     out <- list(transformation = function(x) 1 / x, inverse = function(x) x^-1)
   } else if (transform_fun == "scale") {
-    denominator <- .extract_scale_denominator(x)
+    denominator <- .extract_scale_denominator(model)
     out <- list(
       transformation = eval(parse(text = paste0("function(x) x / ", as.character(denominator)))), # nolint
       inverse = eval(parse(text = paste0("function(x) x * ", as.character(denominator))))
     )
   } else if (transform_fun == "box-cox") {
-    denominator <- .extract_scale_denominator(x)
+    denominator <- .extract_scale_denominator(model)
     out <- list(
       transformation = eval(parse(text = paste0("function(x) (x^", as.character(denominator), "-1) / ", as.character(denominator)))), # nolint
       inverse = eval(parse(text = paste0("function(x) exp(log(1 + ", as.character(denominator), " * x) / ", as.character(denominator), ")"))) # nolint
     )
   } else if (transform_fun == "power") {
-    trans_power <- .extract_power_transformation(x)
+    trans_power <- .extract_power_transformation(model)
     # trans_power == 0 is an invalid transformation - power to 0 *always*
     # returns 1, independent from the input-values
     if (!is.null(trans_power) && trans_power != 0) {
@@ -112,12 +131,21 @@ get_transformation <- function(x, verbose = TRUE) {
 
 
 .extract_power_transformation <- function(model) {
-  .safe(as.numeric(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", find_terms(model)[["response"]])))) # nolint
+  if (is.character(model)) {
+    resp_term <- model
+  } else {
+    resp_term <- find_terms(model)[["response"]]
+  }
+  .safe(as.numeric(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", resp_term)))) # nolint
 }
 
 
 .extract_scale_denominator <- function(model) {
-  resp_term <- find_terms(model)[["response"]]
+  if (is.character(model)) {
+    resp_term <- model
+  } else {
+    resp_term <- find_terms(model)[["response"]]
+  }
   # more complicated case: scale is inside `I()`
   if (startsWith(resp_term[1], "I(")) {
     as.numeric(gsub("(.*)/(.*)\\)", "\\2", resp_term[1]))
