@@ -52,9 +52,9 @@ test_that("get_transformation - box-cox", {
 })
 
 
-test_that("get_transformation - full_model", {
+test_that("get_transformation - include_all", {
   model <- lm(mpg ~ log(wt) + I(gear^2) + exp(am), data = mtcars)
-  out <- get_transformation(model, full_model = TRUE)
+  out <- get_transformation(model, include_all = TRUE)
   expect_named(out, c("response", "conditional"))
   expect_named(out$conditional, c("wt", "gear", "am"))
   expect_equal(out$conditional$gear$transformation(2), 4, tolerance = 1e-3)

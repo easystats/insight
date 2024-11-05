@@ -7,7 +7,7 @@
 \usage{
 find_transformation(x, ...)
 
-\method{find_transformation}{default}(x, full_model = FALSE, ...)
+\method{find_transformation}{default}(x, include_all = FALSE, ...)
 }
 \arguments{
 \item{x}{A regression model or a character string of the formulation of the
@@ -15,7 +15,7 @@ find_transformation(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{full_model}{Logical, if \code{TRUE}, does not only check the response
+\item{include_all}{Logical, if \code{TRUE}, does not only check the response
 variable, but all model terms.}
 }
 \value{
@@ -49,7 +49,7 @@ find_transformation(model)
 
 # find transformation for all model terms
 model <- lm(mpg ~ log(wt) + I(gear^2) + exp(am), data = mtcars)
-find_transformation(model, full_model = TRUE)
+find_transformation(model, include_all = TRUE)
 
 # inverse, response provided as character string
 find_transformation("1 / y")

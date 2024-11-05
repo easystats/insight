@@ -12,7 +12,7 @@
 #'
 #' @param x A regression model or a character string of the formulation of the
 #' (response) variable.
-#' @param full_model Logical, if `TRUE`, does not only check the response
+#' @param include_all Logical, if `TRUE`, does not only check the response
 #' variable, but all model terms.
 #' @param ... Currently not used.
 #'
@@ -36,7 +36,7 @@
 #'
 #' # find transformation for all model terms
 #' model <- lm(mpg ~ log(wt) + I(gear^2) + exp(am), data = mtcars)
-#' find_transformation(model, full_model = TRUE)
+#' find_transformation(model, include_all = TRUE)
 #'
 #' # inverse, response provided as character string
 #' find_transformation("1 / y")
@@ -48,7 +48,7 @@ find_transformation <- function(x, ...) {
 
 #' @rdname find_transformation
 #' @export
-find_transformation.default <- function(x, full_model = FALSE, ...) {
+find_transformation.default <- function(x, include_all = FALSE, ...) {
   # validation check
   if (is.null(x) || is.data.frame(x) || !is_model(x)) {
     return(NULL)
@@ -60,7 +60,7 @@ find_transformation.default <- function(x, full_model = FALSE, ...) {
       find_transformation(i[["response"]])
     })
     unlist(result)
-  } else if (full_model) {
+  } else if (include_all) {
     lapply(find_terms(x), function(i) {
       stats::setNames(
         unlist(lapply(i, find_transformation), use.names = FALSE),

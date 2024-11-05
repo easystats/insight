@@ -14,7 +14,7 @@
 * `find_transformation()` and `get_transformation()` now also detects use of
   divisions, like `x/3` or Box-Cox transformations (like `(x^lambda - 1) / lambda`).
 
-* `find_transformation()` and `get_transformation()` get a `full_model` argument,
+* `find_transformation()` and `get_transformation()` get a `include_all` argument,
   to check all model terms for transformations.
 
 * `get_dispersion()` is now an exported function.

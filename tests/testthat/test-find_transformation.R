@@ -124,7 +124,7 @@ test_that("find_transformation - detect powers", {
   model <- lme4::lmer(mpg ~ log(wt) + I(gear^2) + exp(am) + vs + (1 | cyl), data = mtcars)
   expect_identical(find_transformation(model), "identity")
   expect_identical(
-    find_transformation(model, full_model = TRUE),
+    find_transformation(model, include_all = TRUE),
     list(
       response = c(mpg = "identity"),
       conditional = c(wt = "log", gear = "power", am = "exp", vs = "identity"),

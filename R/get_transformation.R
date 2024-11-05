@@ -41,10 +41,10 @@
 #'
 #' # get transformations for all model terms
 #' model <- lm(mpg ~ log(wt) + I(gear^2) + exp(am), data = mtcars)
-#' get_transformation(model, full_model = TRUE)
+#' get_transformation(model, include_all = TRUE)
 #' @export
-get_transformation <- function(x, full_model = FALSE, verbose = TRUE) {
-  if (full_model) {
+get_transformation <- function(x, include_all = FALSE, verbose = TRUE) {
+  if (include_all) {
     lapply(find_terms(x), function(i) {
       stats::setNames(
         lapply(i, .get_transformation, verbose = verbose),
