@@ -927,7 +927,7 @@ test_that("get_variance works", {
 test_that("get_variance aligns with get_sigma", {
   skip_if_not_installed("lme4")
   mdl <- brms::brm(mpg ~ hp + (1 | cyl), data = mtcars, seed = 123)
-  VC <- lme4 <- VarCorr(mdl)
+  VC <- lme4::VarCorr(mdl)
   out1 <- VC$residual__$sd[1, 1]^2 # Residual variance
   out2 <- get_variance(mdl)$var.residual
   out3 <- get_sigma(mdl)^2
