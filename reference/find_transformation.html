@@ -21,7 +21,7 @@ inverse (like 1/y), scale (e.g., y/3), and box-cox (e-g-,
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,7 @@ detected: <code>log</code>, <code>log1p</code>, <code>log2</code>, <code>log10</
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_transformation</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">find_transformation</span><span class="op">(</span><span class="va">x</span>, full_model <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">find_transformation</span><span class="op">(</span><span class="va">x</span>, include_all <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -100,7 +100,7 @@ detected: <code>log</code>, <code>log1p</code>, <code>log2</code>, <code>log10</
 <dd><p>Currently not used.</p></dd>
 
 
-<dt id="arg-full-model">full_model<a class="anchor" aria-label="anchor" href="#arg-full-model"></a></dt>
+<dt id="arg-include-all">include_all<a class="anchor" aria-label="anchor" href="#arg-include-all"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, does not only check the response
 variable, but all model terms.</p></dd>
 
@@ -132,7 +132,7 @@ log-transforming. For unknown transformations, returns <code>NULL</code>.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># find transformation for all model terms</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">gear</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">am</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">find_transformation</span><span class="op">(</span><span class="va">model</span>, full_model <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">find_transformation</span><span class="op">(</span><span class="va">model</span>, include_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $response</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        mpg </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "identity" </span>
