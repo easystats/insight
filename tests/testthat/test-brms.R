@@ -921,3 +921,17 @@ test_that("get_variance works", {
   # make sure it's a matrix
   # expect_true(is.matrix(get_modelmatrix(null_model(mdl))))
 })
+
+
+# get variance
+test_that("get_variance aligns with get_sigma", {
+  skip_if_not_installed("lme4")
+  mdl <- brms::brm(mpg ~ hp + (1 | cyl), data = mtcars, seed = 123)
+  VC <- lme4 <- VarCorr(mdl)
+  out1 <- VC$residual__$sd[1, 1]^2 # Residual variance
+  out2 <- get_variance(mdl)$var.residual
+  out3 <- get_sigma(mdl)^2
+  expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(out1, out3, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(out2, out3, tolerance = 1e-3, ignore_attr = TRUE)
+})
