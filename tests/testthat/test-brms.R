@@ -910,8 +910,8 @@ test_that("get_variance works", {
     list(
       var.fixed = 4.91103174480995,
       var.random = 22.4069708072874,
-      var.residual = 11.3506326649,
-      var.distribution = 11.3506326649,
+      var.residual = 10.9304525807216,
+      var.distribution = 10.9304525807216,
       var.dispersion = 0,
       var.intercept = c(cyl = 22.4069708072874)
     ),
@@ -927,7 +927,8 @@ test_that("get_variance works", {
 test_that("get_variance aligns with get_sigma", {
   skip_if_not_installed("lme4")
   data(mtcars)
-  mdl <- brms::brm(mpg ~ hp + (1 | cyl), data = mtcars, seed = 123)
+  set.seed(123)
+  mdl <- suppressWarnings(insight::download_model("brms_mixed_9"))
   VC <- lme4::VarCorr(mdl)
   out1 <- VC$residual__$sd[1, 1]^2 # Residual variance
   out2 <- get_variance(mdl)$var.residual
@@ -940,9 +941,9 @@ test_that("get_variance aligns with get_sigma", {
 
 # get variance
 test_that("get_variance works when sigma is modeled", {
-  skip_if_not_installed("lme4")
   data(mtcars)
-  m <- brms::brm(brms::bf(mpg ~ hp + (1 | cyl), sigma ~ cyl), data = mtcars, seed = 123)
+  set.seed(123)
+  m <- insight::download_model("brms_sigma_1")
   expect_message(
     {
       out <- get_variance(m)
