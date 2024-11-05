@@ -121,7 +121,7 @@ test_that("find_transformation - detect powers", {
 test_that("find_transformation - detect powers", {
   skip_if_not_installed("lme4")
   data(mtcars)
-  model <- lme4::lmer(mpg ~ log(wt) + I(gear^2) +exp(am) + vs + (1 | cyl), data = mtcars)
+  model <- lme4::lmer(mpg ~ log(wt) + I(gear^2) + exp(am) + vs + (1 | cyl), data = mtcars)
   expect_identical(find_transformation(model), "identity")
   expect_identical(
     find_transformation(model, full_model = TRUE),
