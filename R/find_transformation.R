@@ -4,10 +4,11 @@
 #' @description This functions checks whether any transformation, such as log-
 #'   or exp-transforming, was applied to the response variable (dependent
 #'   variable) in a regression formula. Optionally, all model terms can also be
-#'   checked. Currently, following patterns are detected: `log`, `log1p`,
-#'   `log2`, `log10`, `exp`, `expm1`, `sqrt`, `log(y+<number>)`, `log-log`,
-#'   `power` (e.g. to 2nd power, like `I(y^2)`), `inverse` (like `1/y`), `scale`
-#'   (e.g., `y/3`), and `box-cox` (e-g-, `(y^lambda - 1) / lambda`).
+#'   checked for any such transformation. Currently, following patterns are
+#'   detected: `log`, `log1p`, `log2`, `log10`, `exp`, `expm1`, `sqrt`,
+#'   `log(y+<number>)`, `log-log`, `power` (e.g. to 2nd power, like `I(y^2)`),
+#'   `inverse` (like `1/y`), `scale` (e.g., `y/3`), and `box-cox` (e-g-,
+#'   `(y^lambda - 1) / lambda`).
 #'
 #' @param x A regression model or a character string of the formulation of the
 #' (response) variable.
