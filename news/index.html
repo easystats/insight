@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,14 +62,14 @@
 </ul></div>
 <div class="section level3">
 <h3 id="general-1-0-0">General<a class="anchor" aria-label="anchor" href="#general-1-0-0"></a></h3>
-<ul><li><p><code><a href="../reference/get_auxiliary.html">get_dispersion()</a></code> is now an exported function.</p></li>
-<li><p><code><a href="../reference/get_transformation.html">get_transformation()</a></code> can now deal with any power-transformation, and also returns results for divisions (scaled response) and Box-Cox transformations.</p></li>
+<ul><li><p><code><a href="../reference/get_transformation.html">get_transformation()</a></code> can now deal with any power-transformation, and also returns results for divisions (scaled response) and Box-Cox transformations.</p></li>
 <li><p><code><a href="../reference/find_transformation.html">find_transformation()</a></code> and <code><a href="../reference/get_transformation.html">get_transformation()</a></code> now also detects use of divisions, like <code>x/3</code> or Box-Cox transformations (like <code>(x^lambda - 1) / lambda</code>).</p></li>
+<li><p><code><a href="../reference/find_transformation.html">find_transformation()</a></code> and <code><a href="../reference/get_transformation.html">get_transformation()</a></code> get a <code>full_model</code> argument, to check all model terms for transformations.</p></li>
+<li><p><code><a href="../reference/get_auxiliary.html">get_dispersion()</a></code> is now an exported function.</p></li>
 <li><p>Updated <code><a href="../reference/get_varcov.html">get_varcov()</a></code> (and related documentation) to support new covariance matrix estimation methods from the <strong>sandwich</strong> package.</p></li>
 <li><p>New function <code><a href="../reference/validate_argument.html">validate_argument()</a></code> as a replacement for <code><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg()</a></code> with more informative error message.</p></li>
 <li><p>The function to calculate the corrections for likelihood-values when the response-variable is transformed is now exported as <code>get_likelihood_adjustment()</code>.</p></li>
 <li><p><code><a href="../reference/export_table.html">export_table()</a></code> can now split tables into more than three tables when <code>table_width</code> is used (formerly, the maximum number of split tables was three).</p></li>
-<li><p><code><a href="../reference/find_transformation.html">find_transformation()</a></code> and <code><a href="../reference/get_transformation.html">get_transformation()</a></code> gets <code>full_model</code> argument, to check all model terms for transformations.</p></li>
 <li><p><code><a href="../reference/format_value.html">format_value()</a></code> gains a <code>decimal_point</code> argument, to change the decimal point in output conversion.</p></li>
 </ul></div>
 <div class="section level3">
