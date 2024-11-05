@@ -214,7 +214,7 @@ export_table(
   out,
   table_width = 70, # fix width to 70 chars
   empty_line = "-", # empty lines (separator rows) indicated by "-"
-  cross = "+"       # use "+" where vertical and horizontal table lines cross
+  cross = "+" # use "+" where vertical and horizontal table lines cross
 )
 ```
 

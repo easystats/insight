@@ -127,7 +127,7 @@ test_that("find_transformation - detect powers", {
     find_transformation(model, full_model = TRUE),
     list(
       response = c(mpg = "identity"),
-      conditional = c(wt = "log",  gear = "power", am = "exp", vs = "identity"),
+      conditional = c(wt = "log", gear = "power", am = "exp", vs = "identity"),
       random = c(cyl = "identity")
     )
   )
