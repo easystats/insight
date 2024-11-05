@@ -926,6 +926,7 @@ test_that("get_variance works", {
 # get variance
 test_that("get_variance aligns with get_sigma", {
   skip_if_not_installed("lme4")
+  data(mtcars)
   mdl <- brms::brm(mpg ~ hp + (1 | cyl), data = mtcars, seed = 123)
   VC <- lme4::VarCorr(mdl)
   out1 <- VC$residual__$sd[1, 1]^2 # Residual variance
@@ -934,4 +935,27 @@ test_that("get_variance aligns with get_sigma", {
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
   expect_equal(out1, out3, tolerance = 1e-3, ignore_attr = TRUE)
   expect_equal(out2, out3, tolerance = 1e-3, ignore_attr = TRUE)
+})
+
+
+# get variance
+test_that("get_variance works when sigma is modeled", {
+  skip_if_not_installed("lme4")
+  data(mtcars)
+  m <- brms::brm(brms::bf(mpg ~ hp + (1 | cyl), sigma ~ cyl), data = mtcars, seed = 123)
+  expect_message(
+    {
+      out <- get_variance(m)
+    },
+    regex = "modeled directly"
+  )
+  expect_equal(
+    out,
+    list(
+      var.fixed = 2.712739833628, var.random = 25.6254745619452,
+      var.dispersion = 0, var.intercept = c(cyl = 25.6254745619452)
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
 })

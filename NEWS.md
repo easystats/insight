@@ -44,6 +44,9 @@
 
 * Fixed inaccuracy in `get_sigma()` for models of class *brmsfit*.
 
+* Fixed issues in `get_variance()`  for models of class *brmsfit* when the
+  sigma-parameter was directly modeled.
+
 # insight 0.20.5
 
 ## General
