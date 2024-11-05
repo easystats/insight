@@ -371,7 +371,7 @@
 
 
 .grep_non_smoothers <- function(x) {
-  grepl("^(?!(s\\())", x, perl = TRUE) &
+  !startsWith(x, "s(") &
     # this one captures smoothers in zi- or mv-models from gam
     grepl("^(?!(s\\.\\d\\())", x, perl = TRUE) &
     !startsWith(x, "ti(") &
