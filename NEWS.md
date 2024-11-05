@@ -8,13 +8,16 @@
 
 ## General
 
-* `get_dispersion()` is now an exported function.
-
 * `get_transformation()` can now deal with any power-transformation, and also
   returns results for divisions (scaled response) and Box-Cox transformations.
 
 * `find_transformation()` and `get_transformation()` now also detects use of
   divisions, like `x/3` or Box-Cox transformations (like `(x^lambda - 1) / lambda`).
+
+* `find_transformation()` and `get_transformation()` get a `full_model` argument,
+  to check all model terms for transformations.
+
+* `get_dispersion()` is now an exported function.
 
 * Updated `get_varcov()` (and related documentation) to support new covariance
   matrix estimation methods from the **sandwich** package.
@@ -27,9 +30,6 @@
 
 * `export_table()` can now split tables into more than three tables when
   `table_width` is used (formerly, the maximum number of split tables was three).
-
-* `find_transformation()` and `get_transformation()` gets  `full_model` argument,
-  to check all model terms for transformations.
 
 * `format_value()` gains a `decimal_point` argument, to change the decimal point
   in output conversion.
