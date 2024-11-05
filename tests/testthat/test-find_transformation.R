@@ -116,3 +116,19 @@ test_that("find_transformation - detect powers", {
   expect_identical(insight::find_transformation(m6), "power")
   # styler: on
 })
+
+
+test_that("find_transformation - detect powers", {
+  skip_if_not_installed("lme4")
+  data(mtcars)
+  model <- lme4::lmer(mpg ~ log(wt) + I(gear^2) + exp(am) + vs + (1 | cyl), data = mtcars)
+  expect_identical(find_transformation(model), "identity")
+  expect_identical(
+    find_transformation(model, full_model = TRUE),
+    list(
+      response = c(mpg = "identity"),
+      conditional = c(wt = "log", gear = "power", am = "exp", vs = "identity"),
+      random = c(cyl = "identity")
+    )
+  )
+})

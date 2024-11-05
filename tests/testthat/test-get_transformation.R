@@ -50,3 +50,13 @@ test_that("get_transformation - box-cox", {
   expect_equal(fun$transformation(2), (2^0.7 - 1) / 0.7, tolerance = 1e-3)
   expect_equal(fun$inverse((2^0.7 - 1) / 0.7), 2, tolerance = 1e-3)
 })
+
+
+test_that("get_transformation - full_model", {
+  model <- lm(mpg ~ log(wt) + I(gear^2) + exp(am), data = mtcars)
+  out <- get_transformation(model, full_model = TRUE)
+  expect_named(out, c("response", "conditional"))
+  expect_named(out$conditional, c("wt", "gear", "am"))
+  expect_equal(out$conditional$gear$transformation(2), 4, tolerance = 1e-3)
+  expect_equal(out$conditional$gear$inverse(2), sqrt(2), tolerance = 1e-3)
+})

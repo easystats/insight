@@ -4,10 +4,14 @@
 \alias{get_transformation}
 \title{Return function of transformed response variables}
 \usage{
-get_transformation(x, verbose = TRUE)
+get_transformation(x, full_model = FALSE, verbose = TRUE)
 }
 \arguments{
-\item{x}{A regression model.}
+\item{x}{A regression model or a character string of the formulation of the
+(response) variable.}
+
+\item{full_model}{Logical, if \code{TRUE}, does not only check the response
+variable, but all model terms.}
 
 \item{verbose}{Logical, if \code{TRUE}, prints a warning if the transformation
 could not be determined.}
@@ -43,4 +47,8 @@ log(0.3)
 # inverse function is exp()
 get_transformation(model)$inverse(0.3)
 exp(0.3)
+
+# get transformations for all model terms
+model <- lm(mpg ~ log(wt) + I(gear^2) + exp(am), data = mtcars)
+get_transformation(model, full_model = TRUE)
 }
