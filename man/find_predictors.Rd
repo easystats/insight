@@ -24,13 +24,12 @@ find_predictors(x, ...)
 \item{effects}{Should variables for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
-\item{component}{Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated. Note that the
-\emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model.}
+\item{component}{Indicates which model component shoild be returned. E.g.,
+should all predictor variables, predictor variables for the conditional
+model, the zero-inflated part of the model, the dispersion term or the
+instrumental variables be returned? See section \emph{Model Components} for futher
+details. May be abbreviated. Note that the \emph{conditional} component is also
+called \emph{count} or \emph{mean} component, depending on the model.}
 
 \item{flatten}{Logical, if \code{TRUE}, the values are returned
 as character vector, not as list. Duplicated values are removed.}
@@ -40,7 +39,7 @@ as character vector, not as list. Duplicated values are removed.}
 \value{
 A list of character vectors that represent the name(s) of the
 predictor variables. Depending on the combination of the arguments
-\code{effects} and \code{component}, the returned list has following elements:
+\code{effects} and \code{component}, the returned list can have following elements:
 \itemize{
 \item \code{conditional}, the "fixed effects" terms from the model
 \item \code{random}, the "random effects" terms from the model
@@ -53,6 +52,10 @@ component of the model
 the instrumental variables
 \item \code{correlation}, for models with correlation-component like \code{gls}, the
 variables used to describe the correlation structure
+\item \code{nonlinear}, for non-linear models (like models of class \code{nlmerMod} or
+\code{nls}), the staring estimates for the nonlinear parameters
+\item \code{smooth_terms} returns smooth terms, only applies to GAMs (or similar
+models that may contain smooth terms)
 }
 }
 \description{
@@ -89,6 +92,8 @@ fixed or random effects - depending on the \code{effects} argument - but no
 auxiliary parameters).
 \item \code{"distributional"} (or \code{"auxiliary"}): components like \code{sigma}, \code{dispersion},
 \code{beta} or \code{precision} (and other auxiliary parameters) are returned.
+\item Special models are \code{mhurdle}, which also can have the components
+\code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}.
 }
 }
 

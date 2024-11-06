@@ -2,23 +2,9 @@
 % Please edit documentation in R/find_parameter_zi.R
 \name{find_parameters.zeroinfl}
 \alias{find_parameters.zeroinfl}
-\alias{find_parameters.mhurdle}
 \title{Find names of model parameters from zero-inflated models}
 \usage{
-\method{find_parameters}{zeroinfl}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{mhurdle}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip",
-    "auxiliary"),
-  flatten = FALSE,
-  ...
-)
+\method{find_parameters}{zeroinfl}(x, component = "all", flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -51,6 +37,8 @@ elements:
 \item \code{conditional}, the "fixed effects" part from the model.
 \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation
 component of the model.
+\item Special models are \code{mhurdle}, which also can have the components
+\code{infrequent_purchase}, \code{ip}, and \code{auxiliary}.
 }
 }
 \description{

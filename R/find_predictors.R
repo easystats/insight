@@ -10,13 +10,12 @@
 #' @param x A fitted model.
 #' @param effects Should variables for fixed effects, random effects
 #'    or both be returned? Only applies to mixed models. May be abbreviated.
-#' @param component Should all predictor variables, predictor variables for the
-#'   conditional model, the zero-inflated part of the model, the dispersion
-#'   term or the instrumental variables be returned? Applies to models
-#'   with zero-inflated and/or dispersion formula, or to models with instrumental
-#'   variable (so called fixed-effects regressions). May be abbreviated. Note that the
-#'   *conditional* component is also called *count* or *mean*
-#'   component, depending on the model.
+#' @param component Indicates which model component shoild be returned. E.g.,
+#' should all predictor variables, predictor variables for the conditional
+#' model, the zero-inflated part of the model, the dispersion term or the
+#' instrumental variables be returned? See section _Model Components_ for futher
+#' details. May be abbreviated. Note that the *conditional* component is also
+#' called *count* or *mean* component, depending on the model.
 #' @param flatten Logical, if `TRUE`, the values are returned
 #'    as character vector, not as list. Duplicated values are removed.
 #' @param verbose Toggle warnings.
@@ -47,6 +46,8 @@
 #'   auxiliary parameters).
 #' - `"distributional"` (or `"auxiliary"`): components like `sigma`, `dispersion`,
 #'   `beta` or `precision` (and other auxiliary parameters) are returned.
+#' - Special models are `mhurdle`, which also can have the components
+#'   `"infrequent_purchase"`, `"ip"`, and `"auxiliary"`.
 #'
 #' @section Parameters, Variables, Predictors and Terms:
 #' There are four functions that return information about the variables in a
@@ -74,7 +75,7 @@
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #' predictor variables. Depending on the combination of the arguments
-#' `effects` and `component`, the returned list has following elements:
+#' `effects` and `component`, the returned list can have following elements:
 #'
 #' - `conditional`, the "fixed effects" terms from the model
 #' - `random`, the "random effects" terms from the model
@@ -87,6 +88,10 @@
 #'   the instrumental variables
 #' - `correlation`, for models with correlation-component like `gls`, the
 #'   variables used to describe the correlation structure
+#' - `nonlinear`, for non-linear models (like models of class `nlmerMod` or
+#'   `nls`), the staring estimates for the nonlinear parameters
+#' - `smooth_terms` returns smooth terms, only applies to GAMs (or similar
+#'   models that may contain smooth terms)
 #'
 #' @examples
 #' data(mtcars)

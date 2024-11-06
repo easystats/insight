@@ -15,18 +15,17 @@
 #' - `conditional`, the "fixed effects" part from the model.
 #' - `zero_inflated`, the "fixed effects" part from the zero-inflation
 #'   component of the model.
+#' - Special models are `mhurdle`, which also can have the components
+#'   `infrequent_purchase`, `ip`, and `auxiliary`.
 #'
 #' @examples
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
 #' @export
-find_parameters.zeroinfl <- function(x,
-                                     component = c("all", "conditional", "zi", "zero_inflated"),
-                                     flatten = FALSE,
-                                     ...) {
+find_parameters.zeroinfl <- function(x, component = "all", flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
-  component <- match.arg(component)
+  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
 
   l <- compact_list(list(
     conditional = cf[startsWith(cf, "count_")],
@@ -50,12 +49,9 @@ find_parameters.zerotrunc <- find_parameters.zeroinfl
 
 
 #' @export
-find_parameters.zcpglm <- function(x,
-                                   component = c("all", "conditional", "zi", "zero_inflated"),
-                                   flatten = FALSE,
-                                   ...) {
+find_parameters.zcpglm <- function(x, component = "all", flatten = FALSE, ...) {
   cf <- stats::coef(x)
-  component <- match.arg(component)
+  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
 
   l <- compact_list(list(
     conditional = names(cf$tweedie),
@@ -72,14 +68,18 @@ find_parameters.zcpglm <- function(x,
 }
 
 
-#' @rdname find_parameters.zeroinfl
 #' @export
-find_parameters.mhurdle <- function(x,
-                                    component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"),
-                                    flatten = FALSE,
-                                    ...) {
-  component <- match.arg(component)
+find_parameters.mhurdle <- function(x, component = "all", flatten = FALSE, ...) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary", "distributional")
+  )
   cf <- stats::coef(x)
+
+  # handle alias
+  if (component == "distributional") {
+    component <- "auxiliary"
+  }
 
   cond_pars <- which(startsWith(names(cf), "h2."))
   zi_pars <- which(startsWith(names(cf), "h1."))

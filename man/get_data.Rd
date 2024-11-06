@@ -62,13 +62,12 @@ that have no missing data in the variables used for model fitting.}
 effects (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed
 or gee models.}
 
-\item{component}{Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated. Note that the
-\emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model.}
+\item{component}{Indicates which model component shoild be returned. E.g.,
+should all predictor variables, predictor variables for the conditional
+model, the zero-inflated part of the model, the dispersion term or the
+instrumental variables be returned? See section \emph{Model Components} for futher
+details. May be abbreviated. Note that the \emph{conditional} component is also
+called \emph{count} or \emph{mean} component, depending on the model.}
 
 \item{shape}{Return long or wide data? Only applicable in repeated measures
 designs.}
@@ -119,6 +118,8 @@ fixed or random effects - depending on the \code{effects} argument - but no
 auxiliary parameters).
 \item \code{"distributional"} (or \code{"auxiliary"}): components like \code{sigma}, \code{dispersion},
 \code{beta} or \code{precision} (and other auxiliary parameters) are returned.
+\item Special models are \code{mhurdle}, which also can have the components
+\code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}.
 }
 }
 
