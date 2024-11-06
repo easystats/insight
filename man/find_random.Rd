@@ -13,8 +13,8 @@ find_random(x, split_nested = FALSE, flatten = FALSE)
 effects will be returned as separated elements, not as single string
 with colon. See 'Examples'.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character
+vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list of character vectors that represent the name(s) of the

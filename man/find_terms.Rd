@@ -14,8 +14,8 @@ find_terms(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character
+vector, not as list. Duplicated values are removed.}
 
 \item{as_term_labels}{Logical, if \code{TRUE}, extracts model formula and tries to
 access the \code{"term.labels"} attribute. This should better mimic the \code{terms()}

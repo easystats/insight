@@ -14,8 +14,8 @@ find_parameters(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character
+vector, not as list. Duplicated values are removed.}
 
 \item{verbose}{Toggle messages and warnings.}
 }

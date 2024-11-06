@@ -67,8 +67,8 @@ argument - but no auxiliary parameters). For \code{component = "distributional"}
 (or \code{"auxiliary"}), components like \code{sigma}, \code{dispersion},
 \code{beta} or \code{precision} (and other auxiliary parameters) are returned.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character
+vector, not as list. Duplicated values are removed.}
 
 \item{...}{Currently not used.}
 }

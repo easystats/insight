@@ -1,23 +1,22 @@
 #' @title Find names of model predictors
 #' @name find_predictors
 #'
-#' @description Returns the names of the predictor variables for the
-#'    different parts of a model (like fixed or random effects, zero-inflated
-#'    component, ...). Unlike [`find_parameters()`], the names from
-#'    `find_predictors()` match the original variable names from the data
-#'    that was used to fit the model.
+#' @description Returns the names of the predictor variables for the different
+#' parts of a model (like fixed or random effects, zero-inflated component,
+#' ...). Unlike [`find_parameters()`], the names from `find_predictors()` match
+#' the original variable names from the data that was used to fit the model.
 #'
 #' @param x A fitted model.
 #' @param effects Should variables for fixed effects, random effects
-#'    or both be returned? Only applies to mixed models. May be abbreviated.
-#' @param component Indicates which model component shoild be returned. E.g.,
+#' or both be returned? Only applies to mixed models. May be abbreviated.
+#' @param component Indicates which model component should be returned. E.g.,
 #' should all predictor variables, predictor variables for the conditional
 #' model, the zero-inflated part of the model, the dispersion term or the
-#' instrumental variables be returned? See section _Model Components_ for futher
-#' details. May be abbreviated. Note that the *conditional* component is also
-#' called *count* or *mean* component, depending on the model.
-#' @param flatten Logical, if `TRUE`, the values are returned
-#'    as character vector, not as list. Duplicated values are removed.
+#' instrumental variables be returned? See section _Model Components_ for
+#' further details. May be abbreviated. Note that the *conditional* component is
+#' also called *count* or *mean* component, depending on the model.
+#' @param flatten Logical, if `TRUE`, the values are returned as character
+#' vector, not as list. Duplicated values are removed.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'

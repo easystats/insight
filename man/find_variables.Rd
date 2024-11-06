@@ -18,15 +18,15 @@ find_variables(
 \item{effects}{Should variables for fixed effects, random effects
 or both be returned? Only applies to mixed models. May be abbreviated.}
 
-\item{component}{Indicates which model component shoild be returned. E.g.,
+\item{component}{Indicates which model component should be returned. E.g.,
 should all predictor variables, predictor variables for the conditional
 model, the zero-inflated part of the model, the dispersion term or the
-instrumental variables be returned? See section \emph{Model Components} for futher
-details. May be abbreviated. Note that the \emph{conditional} component is also
-called \emph{count} or \emph{mean} component, depending on the model.}
+instrumental variables be returned? See section \emph{Model Components} for
+further details. May be abbreviated. Note that the \emph{conditional} component is
+also called \emph{count} or \emph{mean} component, depending on the model.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character
+vector, not as list. Duplicated values are removed.}
 
 \item{verbose}{Toggle warnings.}
 }
