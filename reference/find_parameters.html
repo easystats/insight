@@ -96,18 +96,7 @@ from <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-l
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_parameters</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">find_parameters</span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'pgmm'</span></span>
-<span><span class="fu">find_parameters</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"all"</span><span class="op">)</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'nls'</span></span>
-<span><span class="fu">find_parameters</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"nonlinear"</span><span class="op">)</span>,</span>
-<span>  flatten <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">find_parameters</span><span class="op">(</span><span class="va">x</span>, flatten <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -123,22 +112,12 @@ from <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-l
 
 
 <dt id="arg-flatten">flatten<a class="anchor" aria-label="anchor" href="#arg-flatten"></a></dt>
-<dd><p>Logical, if <code>TRUE</code>, the values are returned
-as character vector, not as list. Duplicated values are removed.</p></dd>
+<dd><p>Logical, if <code>TRUE</code>, the values are returned as character
+vector, not as list. Duplicated values are removed.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle messages and warnings.</p></dd>
-
-
-<dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
-<dd><p>Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated. Note that the
-<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -163,12 +142,22 @@ models that may contain smooth terms).</p></li>
 for models with zero-inflation or that can model the dispersion parameter.</p></li>
 <li><p><code>"instruments"</code>: for instrumental-variable or some fixed effects regression,
 returns the instruments.</p></li>
+<li><p><code>"nonlinear"</code>: for non-linear models (like models of class <code>nlmerMod</code> or
+<code>nls</code>), returns staring estimates for the nonlinear parameters.</p></li>
+<li><p><code>"correlation"</code>: for models with correlation-component, like <code>gls</code>, the
+variables used to describe the correlation structure are returned.</p></li>
 <li><p><code>"location"</code>: returns location parameters such as <code>conditional</code>,
 <code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> (everything that are
 fixed or random effects - depending on the <code>effects</code> argument - but no
 auxiliary parameters).</p></li>
 <li><p><code>"distributional"</code> (or <code>"auxiliary"</code>): components like <code>sigma</code>, <code>dispersion</code>,
 <code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></li>
+</ul><p><strong>Special models</strong></p>
+<p>Some model classes also allow rather uncommon options. These are:</p><ul><li><p><code>mhurdle</code>: <code>"infrequent_purchase"</code>, <code>"ip"</code>, and <code>"auxiliary"</code></p></li>
+<li><p><code>BGGM</code>: <code>"correlation"</code> and <code>"intercept"</code></p></li>
+<li><p><code>BFBayesFactor</code>, <code>glmx</code>: <code>"extra"</code></p></li>
+<li><p><code>averaging</code>:<code>"conditional"</code> and <code>"full"</code></p></li>
+<li><p><code>mjoint</code>: <code>"survival"</code></p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="parameters-variables-predictors-and-terms">Parameters, Variables, Predictors and Terms<a class="anchor" aria-label="anchor" href="#parameters-variables-predictors-and-terms"></a></h2>
