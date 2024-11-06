@@ -241,17 +241,17 @@ find_predictors.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 }
 
 
-#' @rdname find_predictors
 #' @export
 find_predictors.afex_aov <- function(x,
-                                     effects = c("fixed", "random", "all"),
-                                     component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"), # nolint
+                                     effects = "fixed",
                                      flatten = FALSE,
                                      verbose = TRUE,
                                      ...) {
-  effects <- match.arg(effects)
+  effects <- validate_argument(effects, c("fixed", "random", "all"))
 
-  if (effects == "all") effects <- c("fixed", "random")
+  if (effects == "all") {
+    effects <- c("fixed", "random")
+  }
 
   l <- list(
     fixed = c(names(attr(x, "between")), names(attr(x, "within"))),

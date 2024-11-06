@@ -3,7 +3,6 @@
 \name{find_predictors}
 \alias{find_predictors}
 \alias{find_predictors.default}
-\alias{find_predictors.afex_aov}
 \title{Find names of model predictors}
 \usage{
 find_predictors(x, ...)
@@ -12,16 +11,6 @@ find_predictors(x, ...)
   x,
   effects = "fixed",
   component = "all",
-  flatten = FALSE,
-  verbose = TRUE,
-  ...
-)
-
-\method{find_predictors}{afex_aov}(
-  x,
-  effects = c("fixed", "random", "all"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
-    "correlation", "smooth_terms"),
   flatten = FALSE,
   verbose = TRUE,
   ...
