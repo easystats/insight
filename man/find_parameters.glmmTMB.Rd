@@ -32,7 +32,8 @@ vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list of parameter names. The returned list may have following
-elements:
+elements, usually returned based on the combination of the \code{effects} and
+\code{component} arguments:
 \itemize{
 \item \code{conditional}, the "fixed effects" part from the model.
 \item \code{random}, the "random effects" part from the model.

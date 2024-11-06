@@ -23,7 +23,8 @@
 #' @inheritParams find_predictors
 #'
 #' @return A list of parameter names. The returned list may have following
-#' elements:
+#' elements, usually returned based on the combination of the `effects` and
+#' `component` arguments:
 #'
 #' - `conditional`, the "fixed effects" part from the model.
 #' - `random`, the "random effects" part from the model.
@@ -410,11 +411,8 @@ find_parameters.glimML <- function(x, effects = "all", flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.mixor <- function(x,
-                                  effects = c("all", "fixed", "random"),
-                                  flatten = FALSE,
-                                  ...) {
-  effects <- match.arg(effects)
+find_parameters.mixor <- function(x, effects = "all", flatten = FALSE, ...) {
+  effects <- validate_argument(effects, c("all", "fixed", "random"))
   coefs <- x$Model
   random_start <- grep("(\\(Intercept\\) \\(Intercept\\)|Random\\.\\(Intercept\\))", rownames(coefs))
   thresholds <- grep("Threshold\\d", rownames(coefs))

@@ -2,51 +2,9 @@
 % Please edit documentation in R/find_parameters_other.R
 \name{find_parameters.averaging}
 \alias{find_parameters.averaging}
-\alias{find_parameters.glmgee}
-\alias{find_parameters.betareg}
-\alias{find_parameters.DirichletRegModel}
-\alias{find_parameters.mjoint}
-\alias{find_parameters.glmx}
 \title{Find model parameters from models with special components}
 \usage{
-\method{find_parameters}{averaging}(x, component = c("conditional", "full"), flatten = FALSE, ...)
-
-\method{find_parameters}{glmgee}(
-  x,
-  component = c("all", "conditional", "dispersion"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{betareg}(
-  x,
-  component = c("all", "conditional", "precision", "location", "distributional",
-    "auxiliary"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{DirichletRegModel}(
-  x,
-  component = c("all", "conditional", "precision", "location", "distributional",
-    "auxiliary"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{mjoint}(
-  x,
-  component = c("all", "conditional", "survival"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{glmx}(
-  x,
-  component = c("all", "conditional", "extra"),
-  flatten = FALSE,
-  ...
-)
+\method{find_parameters}{averaging}(x, component = "conditional", flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -74,10 +32,13 @@ vector, not as list. Duplicated values are removed.}
 }
 \value{
 A list of parameter names. The returned list may have following
-elements:
+elements, usually requested via the \code{component} argument:
 \itemize{
 \item \code{conditional}, the "fixed effects" part from the model.
 \item \code{full}, parameters from the full model.
+\item \code{precision} for models of class \code{betareg}.
+\item \code{survival} for model of class \code{mjoint}.
+\item \code{extra} for models of class \code{glmx}.
 }
 }
 \description{

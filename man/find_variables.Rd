@@ -87,12 +87,13 @@ auxiliary parameters).
 
 \strong{Special models}
 
-Some model classes also allow rather uncommon options. These are:#'
+Some model classes also allow rather uncommon options. These are:
 \itemize{
-\item \code{mhurdle}, which also can have the components \code{"infrequent_purchase"},
-\code{"ip"}, and \code{"auxiliary"}.
-\item \code{BGGM}, which also allows options \code{"correlation"} and \code{"intercept"}.
-\item \code{BGBFBayesFactorGM}, which also allows the option \code{"extra"}.
+\item \code{mhurdle}: \code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}
+\item \code{BGGM}: \code{"correlation"} and \code{"intercept"}
+\item \code{BFBayesFactor}, \code{glmx}: \code{"extra"}
+\item \code{averaging}:\code{"conditional"} and \code{"full"}
+\item \code{mjoint}: \code{"survival"}
 }
 }
 

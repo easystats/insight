@@ -48,11 +48,12 @@
 #'
 #' **Special models**
 #'
-#' Some model classes also allow rather uncommon options. These are:#'
-#' - `mhurdle`, which also can have the components `"infrequent_purchase"`,
-#'   `"ip"`, and `"auxiliary"`.
-#' - `BGGM`, which also allows options `"correlation"` and `"intercept"`.
-#' - `BGBFBayesFactorGM`, which also allows the option `"extra"`.
+#' Some model classes also allow rather uncommon options. These are:
+#' - `mhurdle`: `"infrequent_purchase"`, `"ip"`, and `"auxiliary"`
+#' - `BGGM`: `"correlation"` and `"intercept"`
+#' - `BFBayesFactor`, `glmx`: `"extra"`
+#' - `averaging`:`"conditional"` and `"full"`
+#' - `mjoint`: `"survival"`
 #'
 #' @section Parameters, Variables, Predictors and Terms:
 #' There are four functions that return information about the variables in a
