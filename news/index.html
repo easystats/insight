@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,6 +76,8 @@
 <h3 id="bug-fix-1-0-0">Bug fix<a class="anchor" aria-label="anchor" href="#bug-fix-1-0-0"></a></h3>
 <ul><li><p><code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> now uses the correct labels for the random effects variances (<code>"SD/Cor"</code> has changed to <code>"Var/Cov"</code>).</p></li>
 <li><p>When <code><a href="../reference/get_data.html">get_data()</a></code> could not properly evaluate the subset of a data set, it now returns an informative warning and no longer errors.</p></li>
+<li><p>Fixed inaccuracy in <code><a href="../reference/get_sigma.html">get_sigma()</a></code> for models of class <em>brmsfit</em>.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/get_variance.html">get_variance()</a></code> for models of class <em>brmsfit</em> when the sigma-parameter was directly modeled.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
