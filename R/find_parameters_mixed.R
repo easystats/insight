@@ -41,13 +41,9 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
 #' @export
-find_parameters.glmmTMB <- function(x,
-                                    effects = c("all", "fixed", "random"),
-                                    component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-                                    flatten = FALSE,
-                                    ...) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+find_parameters.glmmTMB <- function(x, effects = "all", component = "all", flatten = FALSE, ...) {
+  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated", "dispersion"))
 
   # installed
   check_if_installed("lme4")
@@ -82,11 +78,7 @@ find_parameters.glmmTMB <- function(x,
 
 
 #' @export
-find_parameters.MixMod <- function(x,
-                                   effects = c("all", "fixed", "random"),
-                                   component = c("all", "conditional", "zi", "zero_inflated"),
-                                   flatten = FALSE,
-                                   ...) {
+find_parameters.MixMod <- function(x, effects = "all", component = "all", flatten = FALSE, ...) {
   # installed
   check_if_installed("lme4")
 
@@ -111,8 +103,9 @@ find_parameters.MixMod <- function(x,
 
   l <- lapply(l, text_remove_backticks)
 
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
+
   elements <- .get_elements(effects = effects, component = component)
   l <- compact_list(l[elements])
 
@@ -124,18 +117,14 @@ find_parameters.MixMod <- function(x,
 }
 
 
-#' @rdname find_parameters.glmmTMB
 #' @export
-find_parameters.nlmerMod <- function(x,
-                                     effects = c("all", "fixed", "random"),
-                                     component = c("all", "conditional", "nonlinear"),
-                                     flatten = FALSE,
-                                     ...) {
+find_parameters.nlmerMod <- function(x, effects = "all", component = "all", flatten = FALSE, ...) {
   # installed
   check_if_installed("lme4")
 
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  component <- validate_argument(component, c("all", "conditional", "nonlinear"))
+
   startvectors <- .get_startvector_from_env(x)
 
   if (effects == "fixed") {
