@@ -2,21 +2,9 @@
 % Please edit documentation in R/find_parameters_mixed.R
 \name{find_parameters.glmmTMB}
 \alias{find_parameters.glmmTMB}
-\alias{find_parameters.hglm}
-\alias{find_parameters.merMod}
 \title{Find names of model parameters from mixed models}
 \usage{
 \method{find_parameters}{glmmTMB}(x, effects = "all", component = "all", flatten = FALSE, ...)
-
-\method{find_parameters}{hglm}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "dispersion"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{merMod}(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
