@@ -12,20 +12,9 @@
 \alias{find_parameters.sim.merMod}
 \title{Find names of model parameters from Bayesian models}
 \usage{
-\method{find_parameters}{BGGM}(
-  x,
-  component = c("correlation", "conditional", "intercept", "all"),
-  flatten = FALSE,
-  ...
-)
+\method{find_parameters}{BGGM}(x, component = "correlation", flatten = FALSE, ...)
 
-\method{find_parameters}{BFBayesFactor}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "extra"),
-  flatten = FALSE,
-  ...
-)
+\method{find_parameters}{BFBayesFactor}(x, effects = "all", component = "all", flatten = FALSE, ...)
 
 \method{find_parameters}{MCMCglmm}(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...)
 
@@ -136,6 +125,12 @@ parameters. These may be one of the following:
 \item \code{mix}, mixture parameters (\strong{brms} only)
 \item \code{shiftprop}, shifted proportion parameters (\strong{brms} only)
 }
+
+Models of class \strong{BGGM} additionally can return the elements \code{correlation}
+and \code{intercept}.
+
+Models of class \strong{BFBayesFactor} additionally can return the element
+\code{extra}.
 }
 \description{
 Returns the names of model parameters, like they typically

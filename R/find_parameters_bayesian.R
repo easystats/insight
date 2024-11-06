@@ -37,16 +37,19 @@
 #' - `mix`, mixture parameters (**brms** only)
 #' - `shiftprop`, shifted proportion parameters (**brms** only)
 #'
+#' Models of class **BGGM** additionally can return the elements `correlation`
+#' and `intercept`.
+#'
+#' Models of class **BFBayesFactor** additionally can return the element
+#' `extra`.
+#'
 #' @examples
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
 #' @export
-find_parameters.BGGM <- function(x,
-                                 component = c("correlation", "conditional", "intercept", "all"),
-                                 flatten = FALSE,
-                                 ...) {
-  component <- match.arg(component)
+find_parameters.BGGM <- function(x, component = "correlation", flatten = FALSE, ...) {
+  component <- validate_argument(component, c("correlation", "conditional", "intercept", "all"))
   l <- switch(component,
     correlation = list(correlation = colnames(get_parameters(x, component = "correlation"))),
     conditional = list(conditional = colnames(get_parameters(x, component = "conditional"))),
@@ -71,16 +74,16 @@ find_parameters.BGGM <- function(x,
 #' @rdname find_parameters.BGGM
 #' @export
 find_parameters.BFBayesFactor <- function(x,
-                                          effects = c("all", "fixed", "random"),
-                                          component = c("all", "extra"),
+                                          effects = "all",
+                                          component = "all",
                                           flatten = FALSE,
                                           ...) {
   conditional <- NULL
   random <- NULL
   extra <- NULL
 
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  component <- validate_argument(component, c("all", "extra"))
 
   if (.classify_BFBayesFactor(x) == "correlation") {
     conditional <- "rho"

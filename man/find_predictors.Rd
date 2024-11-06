@@ -92,8 +92,16 @@ fixed or random effects - depending on the \code{effects} argument - but no
 auxiliary parameters).
 \item \code{"distributional"} (or \code{"auxiliary"}): components like \code{sigma}, \code{dispersion},
 \code{beta} or \code{precision} (and other auxiliary parameters) are returned.
-\item Special models are \code{mhurdle}, which also can have the components
-\code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}.
+}
+
+\strong{Special models}
+
+Some model classes also allow rather uncommon options. These are:#'
+\itemize{
+\item \code{mhurdle}, which also can have the components \code{"infrequent_purchase"},
+\code{"ip"}, and \code{"auxiliary"}.
+\item \code{BGGM}, which also allows options \code{"correlation"} and \code{"intercept"}.
+\item \code{BGBFBayesFactorGM}, which also allows the option \code{"extra"}.
 }
 }
 

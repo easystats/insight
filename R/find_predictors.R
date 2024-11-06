@@ -46,8 +46,14 @@
 #'   auxiliary parameters).
 #' - `"distributional"` (or `"auxiliary"`): components like `sigma`, `dispersion`,
 #'   `beta` or `precision` (and other auxiliary parameters) are returned.
-#' - Special models are `mhurdle`, which also can have the components
-#'   `"infrequent_purchase"`, `"ip"`, and `"auxiliary"`.
+#'
+#' **Special models**
+#'
+#' Some model classes also allow rather uncommon options. These are:#'
+#' - `mhurdle`, which also can have the components `"infrequent_purchase"`,
+#'   `"ip"`, and `"auxiliary"`.
+#' - `BGGM`, which also allows options `"correlation"` and `"intercept"`.
+#' - `BGBFBayesFactorGM`, which also allows the option `"extra"`.
 #'
 #' @section Parameters, Variables, Predictors and Terms:
 #' There are four functions that return information about the variables in a
