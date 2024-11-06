@@ -5,20 +5,9 @@
 \alias{find_parameters.logitmfx}
 \title{Find names of model parameters from marginal effects models}
 \usage{
-\method{find_parameters}{betamfx}(
-  x,
-  component = c("all", "conditional", "precision", "marginal", "location",
-    "distributional", "auxiliary"),
-  flatten = FALSE,
-  ...
-)
+\method{find_parameters}{betamfx}(x, component = "all", flatten = FALSE, ...)
 
-\method{find_parameters}{logitmfx}(
-  x,
-  component = c("all", "conditional", "marginal", "location"),
-  flatten = FALSE,
-  ...
-)
+\method{find_parameters}{logitmfx}(x, component = "all", flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
