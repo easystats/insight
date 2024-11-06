@@ -365,12 +365,12 @@
 
 .grep_zi_smoothers <- function(x) {
   # this one captures smoothers in zi- or mv-models from gam
-  grepl("^(s\\.\\d\\()", x) | grepl("^(gam::s\\.\\d\\()") | grepl("^(mgcv::s\\.\\d\\()")
+  grepl("^(s\\.\\d\\()", x) | grepl("^(gam::s\\.\\d\\()", x) | grepl("^(mgcv::s\\.\\d\\()", x)
 }
 
 
 .grep_non_smoothers <- function(x) {
-  !.grep_smoothers(x) && !.grep_zi_smoothers(x)
+  !.grep_smoothers(x) & !.grep_zi_smoothers(x)
 }
 
 

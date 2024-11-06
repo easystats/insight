@@ -490,8 +490,6 @@ clean_parameters.mlm <- function(x, ...) {
   dots <- list(...)
   out$Cleaned_Parameter <- out$Parameter
 
-browser()
-
   # for multivariate response models, remove responses from parameter names
 
   if (is_mv) {
