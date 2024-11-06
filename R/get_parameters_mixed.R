@@ -9,6 +9,8 @@
 #' @inheritParams find_parameters
 #' @inheritParams find_predictors
 #'
+#' @inheritSection find_predictors Model components
+#'
 #' @return If `effects = "fixed"`, a data frame with two columns: the
 #'   parameter names and the related point estimates. If `effects =
 #'   "random"`, a list of data frames with the random effects (as returned by

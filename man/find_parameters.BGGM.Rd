@@ -2,70 +2,15 @@
 % Please edit documentation in R/find_parameters_bayesian.R
 \name{find_parameters.BGGM}
 \alias{find_parameters.BGGM}
-\alias{find_parameters.BFBayesFactor}
-\alias{find_parameters.MCMCglmm}
-\alias{find_parameters.bamlss}
 \alias{find_parameters.brmsfit}
-\alias{find_parameters.bayesx}
-\alias{find_parameters.stanreg}
-\alias{find_parameters.stanmvreg}
-\alias{find_parameters.sim.merMod}
 \title{Find names of model parameters from Bayesian models}
 \usage{
 \method{find_parameters}{BGGM}(x, component = "correlation", flatten = FALSE, ...)
-
-\method{find_parameters}{BFBayesFactor}(x, effects = "all", component = "all", flatten = FALSE, ...)
-
-\method{find_parameters}{MCMCglmm}(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...)
-
-\method{find_parameters}{bamlss}(
-  x,
-  flatten = FALSE,
-  component = c("all", "conditional", "location", "distributional", "auxiliary"),
-  parameters = NULL,
-  ...
-)
 
 \method{find_parameters}{brmsfit}(
   x,
   effects = "all",
   component = "all",
-  flatten = FALSE,
-  parameters = NULL,
-  ...
-)
-
-\method{find_parameters}{bayesx}(
-  x,
-  component = c("all", "conditional", "smooth_terms"),
-  flatten = FALSE,
-  parameters = NULL,
-  ...
-)
-
-\method{find_parameters}{stanreg}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("location", "all", "conditional", "smooth_terms", "sigma",
-    "distributional", "auxiliary"),
-  flatten = FALSE,
-  parameters = NULL,
-  ...
-)
-
-\method{find_parameters}{stanmvreg}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("location", "all", "conditional", "smooth_terms", "sigma",
-    "distributional", "auxiliary"),
-  flatten = FALSE,
-  parameters = NULL,
-  ...
-)
-
-\method{find_parameters}{sim.merMod}(
-  x,
-  effects = c("all", "fixed", "random"),
   flatten = FALSE,
   parameters = NULL,
   ...

@@ -30,6 +30,8 @@
 #' random) or "components" (conditional, zero-inflated, ...), the arguments
 #' `effects` and `component` can be used.
 #'
+#' @inheritSection find_predictors Model components
+#'
 #' @section BFBayesFactor Models:
 #' Note that for `BFBayesFactor` models (from the **BayesFactor** package),
 #' posteriors are only extracted from the first numerator model (i.e.,

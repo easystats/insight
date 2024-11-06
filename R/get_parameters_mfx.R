@@ -8,6 +8,8 @@
 #' @inheritParams find_parameters
 #' @inheritParams find_predictors
 #'
+#' @inheritSection find_predictors Model components
+#'
 #' @return A data frame with three columns: the parameter names, the related
 #'   point estimates and the component.
 #'

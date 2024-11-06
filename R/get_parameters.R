@@ -152,8 +152,8 @@ get_parameters.bfsl <- function(x, ...) {
 
 
 #' @export
-get_parameters.selection <- function(x, component = c("all", "selection", "outcome", "auxiliary"), ...) {
-  component <- match.arg(component)
+get_parameters.selection <- function(x, component = "all", ...) {
+  component <- validate_argument(component, c("all", "selection", "outcome", "auxiliary"))
   s <- summary(x)
   rn <- row.names(s$estimate)
   estimates <- as.data.frame(s$estimate, row.names = FALSE)
