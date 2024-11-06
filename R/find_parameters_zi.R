@@ -18,9 +18,12 @@
 #' - Special models are `mhurdle`, which also can have the components
 #'   `infrequent_purchase`, `ip`, and `auxiliary`.
 #'
-#' @examples
-#' data(mtcars)
-#' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+#' @examplesIf requireNamespace("pscl", quietly = TRUE)
+#' data(bioChemists, package = "pscl")
+#' m <- pscl::zeroinfl(
+#'   art ~ fem + mar + kid5 + ment | kid5 + phd,
+#'   data = bioChemists
+#' )
 #' find_parameters(m)
 #' @export
 find_parameters.zeroinfl <- function(x, component = "all", flatten = FALSE, ...) {

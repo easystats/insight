@@ -52,7 +52,12 @@ Returns the names of model parameters, like they typically
 appear in the \code{summary()} output.
 }
 \examples{
-data(mtcars)
-m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(sleepstudy, package = "lme4")
+m <- lme4::lmer(
+  Reaction ~ Days + (1 + Days | Subject),
+  data = sleepstudy
+)
 find_parameters(m)
+\dontshow{\}) # examplesIf}
 }

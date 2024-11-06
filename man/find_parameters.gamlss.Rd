@@ -27,7 +27,9 @@ Returns the names of model parameters, like they typically
 appear in the \code{summary()} output.
 }
 \examples{
+\dontshow{if (requireNamespace("mgcv", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(mtcars)
-m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+m <- mgcv::gam(mpg ~ s(hp) + gear, data = mtcars)
 find_parameters(m)
+\dontshow{\}) # examplesIf}
 }

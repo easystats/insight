@@ -37,9 +37,12 @@
 #'   parameters (auxiliary parameter)
 #' - `nonlinear`, the parameters from the nonlinear formula.
 #'
-#' @examples
-#' data(mtcars)
-#' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+#' @examplesIf requireNamespace("lme4", quietly = TRUE)
+#' data(sleepstudy, package = "lme4")
+#' m <- lme4::lmer(
+#'   Reaction ~ Days + (1 + Days | Subject),
+#'   data = sleepstudy
+#' )
 #' find_parameters(m)
 #' @export
 find_parameters.glmmTMB <- function(x, effects = "all", component = "all", flatten = FALSE, ...) {

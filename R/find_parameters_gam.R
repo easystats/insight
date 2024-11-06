@@ -15,9 +15,9 @@
 #' - `conditional`, the "fixed effects" part from the model.
 #' - `smooth_terms`, the smooth parameters.
 #'
-#' @examples
+#' @examplesIf requireNamespace("mgcv", quietly = TRUE)
 #' data(mtcars)
-#' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+#' m <- mgcv::gam(mpg ~ s(hp) + gear, data = mtcars)
 #' find_parameters(m)
 #' @export
 find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
