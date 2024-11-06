@@ -225,7 +225,7 @@ find_parameters.brmsfit <- function(x,
 
   # remove redundant columns. These seem to be new since brms 2.16?
   pattern <- "^[A-z]_\\d\\.\\d\\.(.*)"
-  fe <- fe[!grepl(pattern, fe, perl = TRUE)]
+  fe <- fe[!grepl(pattern, fe)]
 
   is_mv <- NULL
 
@@ -233,21 +233,21 @@ find_parameters.brmsfit <- function(x,
   fe <- fe[!startsWith(fe, "Intercept")]
 
   cond <- fe[grepl("^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
-  zi <- fe[grepl("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe, perl = TRUE)]
+  zi <- fe[grepl("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe)]
   rand <- fe[grepl("(?!.*__(zi|sigma|beta))(?=.*^r_)", fe, perl = TRUE) & !startsWith(fe, "prior_")]
-  randzi <- fe[grepl("^r_(.*__zi)", fe, perl = TRUE)]
+  randzi <- fe[grepl("^r_(.*__zi)", fe)]
   rand_sd <- fe[grepl("(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
-  randzi_sd <- fe[grepl("^sd_(.*_zi)", fe, perl = TRUE)]
+  randzi_sd <- fe[grepl("^sd_(.*_zi)", fe)]
   rand_cor <- fe[grepl("(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
-  randzi_cor <- fe[grepl("^cor_(.*_zi)", fe, perl = TRUE)]
+  randzi_cor <- fe[grepl("^cor_(.*_zi)", fe)]
   simo <- fe[startsWith(fe, "simo_")]
   car_struc <- fe[fe %in% c("car", "sdcar")]
   smooth_terms <- fe[startsWith(fe, "sds_")]
   priors <- fe[startsWith(fe, "prior_")]
   sigma_param <- fe[startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE)]
-  randsigma <- fe[grepl("^r_(.*__sigma)", fe, perl = TRUE)]
+  randsigma <- fe[grepl("^r_(.*__sigma)", fe)]
   fixed_beta <- fe[grepl("beta", fe, fixed = TRUE)]
-  rand_beta <- fe[grepl("^r_(.*__beta)", fe, perl = TRUE)]
+  rand_beta <- fe[grepl("^r_(.*__beta)", fe)]
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
   shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
   dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
