@@ -113,7 +113,7 @@ format_p <- function(p,
                                          missing = "",
                                          whitespace = TRUE,
                                          decimal_separator = NULL,
-                                         inferiority_star = "°") {
+                                         inferiority_star = "\u00B0") {
   missing_index <- is.na(p_text)
 
   if (is.null(name)) {

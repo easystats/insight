@@ -25,7 +25,7 @@
 format_bf <- function(bf,
                       stars = FALSE,
                       stars_only = FALSE,
-                      inferiority_star = "°",
+                      inferiority_star = "\u00B0",
                       name = "BF",
                       protect_ratio = FALSE,
                       na_reference = NA,
