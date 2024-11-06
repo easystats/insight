@@ -121,9 +121,10 @@ format_p <- function(p,
   }
 
   if (stars_only) {
-    p_text <- gsub("[^\\*]", "", p_text)
+    p_text <- gsub("[^(\\*|°)]", "", p_text)
   } else if (!stars) {
     p_text <- gsub("*", "", p_text, fixed = TRUE)
+    p_text <- gsub("\u00B0", "", p_text, fixed = TRUE)
   }
 
   # replace missing with related string

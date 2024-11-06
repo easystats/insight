@@ -11,7 +11,8 @@
 #' @return A formatted string.
 #'
 #' @examples
-#' format_bf(bfs <- c(0.000045, 0.033, NA, 1557, 3.54))
+#' bfs <- c(0.000045, 0.033, NA, 1557, 3.54)
+#' format_bf(bfs)
 #' format_bf(bfs, exact = TRUE, name = NULL)
 #' format_bf(bfs, stars = TRUE)
 #' format_bf(bfs, protect_ratio = TRUE)
@@ -79,6 +80,13 @@ format_bf <- function(bf,
   bf_text <- ifelse(bf_orig > 30, paste0(bf_text, "***"),
     ifelse(bf_orig > 10, paste0(bf_text, "**"), # nolint
       ifelse(bf_orig > 3, paste0(bf_text, "*"), bf_text) # nolint
+    )
+  )
+
+  ## Add stars
+  bf_text <- ifelse(bf_orig < (1 / 30), paste0(bf_text, "\u00B0\u00B0\u00B0"),
+    ifelse(bf_orig < 0.1, paste0(bf_text, "\u00B0\u00B0"), # nolint
+      ifelse(bf_orig < (1 / 3), paste0(bf_text, "\u00B0"), bf_text) # nolint
     )
   )
 
