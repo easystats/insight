@@ -3,22 +3,11 @@
 \name{find_parameters}
 \alias{find_parameters}
 \alias{find_parameters.default}
-\alias{find_parameters.pgmm}
-\alias{find_parameters.nls}
 \title{Find names of model parameters}
 \usage{
 find_parameters(x, ...)
 
 \method{find_parameters}{default}(x, flatten = FALSE, verbose = TRUE, ...)
-
-\method{find_parameters}{pgmm}(x, component = c("conditional", "all"), flatten = FALSE, ...)
-
-\method{find_parameters}{nls}(
-  x,
-  component = c("all", "conditional", "nonlinear"),
-  flatten = FALSE,
-  ...
-)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -29,14 +18,6 @@ find_parameters(x, ...)
 as character vector, not as list. Duplicated values are removed.}
 
 \item{verbose}{Toggle messages and warnings.}
-
-\item{component}{Should all predictor variables, predictor variables for the
-conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated. Note that the
-\emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model.}
 }
 \value{
 A list of parameter names. For simple models, only one list-element,
@@ -74,6 +55,10 @@ models that may contain smooth terms).
 for models with zero-inflation or that can model the dispersion parameter.
 \item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
 returns the instruments.
+\item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod} or
+\code{nls}), returns staring estimates for the nonlinear parameters.
+\item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
+variables used to describe the correlation structure are returned.
 \item \code{"location"}: returns location parameters such as \code{conditional},
 \code{zero_inflated}, \code{smooth_terms}, or \code{instruments} (everything that are
 fixed or random effects - depending on the \code{effects} argument - but no

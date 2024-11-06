@@ -37,6 +37,10 @@
 #'   for models with zero-inflation or that can model the dispersion parameter.
 #' - `"instruments"`: for instrumental-variable or some fixed effects regression,
 #'   returns the instruments.
+#' - `"nonlinear"`: for non-linear models (like models of class `nlmerMod` or
+#'   `nls`), returns staring estimates for the nonlinear parameters.
+#' - `"correlation"`: for models with correlation-component, like `gls`, the
+#'   variables used to describe the correlation structure are returned.
 #' - `"location"`: returns location parameters such as `conditional`,
 #'   `zero_inflated`, `smooth_terms`, or `instruments` (everything that are
 #'   fixed or random effects - depending on the `effects` argument - but no
@@ -96,13 +100,19 @@ find_predictors <- function(x, ...) {
 #' @rdname find_predictors
 #' @export
 find_predictors.default <- function(x,
-                                    effects = c("fixed", "random", "all"),
-                                    component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments", "correlation", "smooth_terms"), # nolint
+                                    effects = "fixed",
+                                    component = "all",
                                     flatten = FALSE,
                                     verbose = TRUE,
                                     ...) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+  effects <- validate_argument(effects, c("fixed", "random", "all"))
+  component <- validate_argument(
+    component,
+    c(
+      "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
+      "correlation", "smooth_terms"
+    )
+  )
 
   f <- find_formula(x, verbose = verbose)
   is_mv <- is_multivariate(f)
