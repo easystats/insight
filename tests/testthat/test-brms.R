@@ -910,8 +910,8 @@ test_that("get_variance works", {
     list(
       var.fixed = 4.91103174480995,
       var.random = 22.4069708072874,
-      var.residual = 11.3506326649,
-      var.distribution = 11.3506326649,
+      var.residual = 10.9304525807216,
+      var.distribution = 10.9304525807216,
       var.dispersion = 0,
       var.intercept = c(cyl = 22.4069708072874)
     ),
@@ -920,4 +920,43 @@ test_that("get_variance works", {
   )
   # make sure it's a matrix
   # expect_true(is.matrix(get_modelmatrix(null_model(mdl))))
+})
+
+
+# get variance
+test_that("get_variance aligns with get_sigma", {
+  skip_if_not_installed("lme4")
+  data(mtcars)
+  set.seed(123)
+  mdl <- suppressWarnings(insight::download_model("brms_mixed_9"))
+  VC <- lme4::VarCorr(mdl)
+  out1 <- VC$residual__$sd[1, 1]^2 # Residual variance
+  out2 <- get_variance(mdl)$var.residual
+  out3 <- get_sigma(mdl)^2
+  expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(out1, out3, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(out2, out3, tolerance = 1e-3, ignore_attr = TRUE)
+})
+
+
+# get variance
+test_that("get_variance works when sigma is modeled", {
+  data(mtcars)
+  set.seed(123)
+  m <- insight::download_model("brms_sigma_1")
+  expect_message(
+    {
+      out <- get_variance(m)
+    },
+    regex = "modeled directly"
+  )
+  expect_equal(
+    out,
+    list(
+      var.fixed = 2.712739833628, var.random = 25.6254745619452,
+      var.dispersion = 0, var.intercept = c(cyl = 25.6254745619452)
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
 })

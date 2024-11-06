@@ -371,22 +371,21 @@
 
 
 .grep_non_smoothers <- function(x) {
-  grepl("^(?!(s\\())", x, perl = TRUE) &
+  !startsWith(x, "s(") &
     # this one captures smoothers in zi- or mv-models from gam
     grepl("^(?!(s\\.\\d\\())", x, perl = TRUE) &
-    grepl("^(?!(ti\\())", x, perl = TRUE) &
-    grepl("^(?!(te\\())", x, perl = TRUE) &
-    grepl("^(?!(t2\\())", x, perl = TRUE) &
-    grepl("^(?!(gam::s\\())", x, perl = TRUE) &
-    grepl("^(?!(gam::s\\.\\d\\())", x, perl = TRUE) &
-    grepl("^(?!(VGAM::s\\())", x, perl = TRUE) &
-    grepl("^(?!(mgcv::s\\())", x, perl = TRUE) &
-    grepl("^(?!(mgcv::s\\.\\d\\())", x, perl = TRUE) &
-    grepl("^(?!(mgcv::ti\\())", x, perl = TRUE) &
-    grepl("^(?!(mgcv::te\\())", x, perl = TRUE) &
-    grepl("^(?!(brms::s\\())", x, perl = TRUE) &
-    grepl("^(?!(brms::t2\\())", x, perl = TRUE) &
-    grepl("^(?!(smooth_sd\\[))", x, perl = TRUE)
+    !startsWith(x, "ti(") &
+    !startsWith(x, "te(") &
+    !startsWith(x, "t2(") &
+    !startsWith(x, "gam::s(") &
+    !startsWith(x, "VGAM::s(") &
+    !startsWith(x, "mgcv::s(") &
+    !startsWith(x, "mgcv::ti(") &
+    !startsWith(x, "mgcv::t2(") &
+    !startsWith(x, "mgcv::te(") &
+    !startsWith(x, "brms::s(") &
+    !startsWith(x, "brms::t2") &
+    !startsWith(x, "smooth_sd[")
 }
 
 

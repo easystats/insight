@@ -42,6 +42,11 @@
 * When `get_data()` could not properly evaluate the subset of a data set, it
   now returns an informative warning and no longer errors.
 
+* Fixed inaccuracy in `get_sigma()` for models of class *brmsfit*.
+
+* Fixed issues in `get_variance()`  for models of class *brmsfit* when the
+  sigma-parameter was directly modeled.
+
 # insight 0.20.5
 
 ## General

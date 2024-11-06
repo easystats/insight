@@ -2,14 +2,14 @@
 #' @name find_parameters.BGGM
 #'
 #' @description Returns the names of model parameters, like they typically
-#'     appear in the `summary()` output. For Bayesian models, the parameter
-#'     names equal the column names of the posterior samples after coercion
-#'     from `as.data.frame()`.
+#' appear in the `summary()` output. For Bayesian models, the parameter
+#' names equal the column names of the posterior samples after coercion
+#' from `as.data.frame()`.
 #'
 #' @param parameters Regular expression pattern that describes the parameters that
-#'   should be returned.
+#' should be returned.
 #' @param effects Should parameters for fixed effects, random effects
-#'    or both be returned? Only applies to mixed models. May be abbreviated.
+#' or both be returned? Only applies to mixed models. May be abbreviated.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
 #' @inheritParams find_parameters.betamfx

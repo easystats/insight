@@ -410,8 +410,11 @@
     vc <- compact_list(vc)
     names(vc) <- setdiff(names(lme4::VarCorr(model)), "residual__")
     attr(vc, "sc") <- lme4::VarCorr(model)$residual__$sd[1, 1]
+    fixef_params <- lme4::fixef(model)[, 1]
+    # remove sigma parameters
+    fixef_params <- fixef_params[!startsWith(names(fixef_params), "sigma_")]
     mixed_effects_info <- list(
-      beta = lme4::fixef(model)[, 1],
+      beta = fixef_params,
       X = comp_x,
       vc = vc,
       re = lapply(lme4::ranef(model), function(re) {
@@ -601,6 +604,19 @@
   sig <- .safe(.get_sigma(model, no_recursion = TRUE))
 
   if (is.null(sig)) {
+    # for brms-models, when sigma is modeled, there is no longer a
+    # single sigma parameter. in this case, we can't calculate residual
+    # variance and return NULL
+    if (inherits(model, "brmsfit")) {
+      params <- find_parameters(model)$conditional
+      sigma_params <- grepl("b_sigma", params, fixed = TRUE)
+      if (sum(sigma_params) > 1) {
+        if (verbose) {
+          format_alert("`sigma` is modeled directly, and hence there is no longer a single sigma parameter to calculate the residual variance. Returning `NULL` instead.") # nolint
+        }
+        return(NULL)
+      }
+    }
     sig <- 1
   }
 
