@@ -8,6 +8,7 @@ format_bf(
   bf,
   stars = FALSE,
   stars_only = FALSE,
+  inferiority_star = "°",
   name = "BF",
   protect_ratio = FALSE,
   na_reference = NA,
@@ -17,9 +18,14 @@ format_bf(
 \arguments{
 \item{bf}{Bayes Factor.}
 
-\item{stars}{Add significance stars (e.g., p < .001***).}
+\item{stars}{Add significance stars (e.g., p < .001***). For Bayes factors,
+the thresholds for "significant" results are values larger than 3, 10, and 30.}
 
 \item{stars_only}{Return only significance stars.}
+
+\item{inferiority_star}{String, indicating the symbol that is used to
+indicate inferiority, i.e. when the Bayes Factor is smaller than one third
+(the thresholds are smaller than one third, 1/10 and 1/30).}
 
 \item{name}{Name prefixing the text. Can be \code{NULL}.}
 
@@ -38,7 +44,8 @@ A formatted string.
 Bayes Factor formatting
 }
 \examples{
-format_bf(bfs <- c(0.000045, 0.033, NA, 1557, 3.54))
+bfs <- c(0.000045, 0.033, NA, 1557, 3.54)
+format_bf(bfs)
 format_bf(bfs, exact = TRUE, name = NULL)
 format_bf(bfs, stars = TRUE)
 format_bf(bfs, protect_ratio = TRUE)

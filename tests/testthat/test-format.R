@@ -111,11 +111,11 @@ test_that("format others", {
     c("< 0.001", "0.033", "", "> 1000", "3.54")
   )
   expect_identical(
-    format_bf(c(0.000045, 0.033, NA, 1557, 3.54), stars = TRUE),
+    format_bf(c(0.000045, 0.233, NA, 1557, 3.54), stars = TRUE),
     c("BF < 0.001°°°", "BF = 0.233°", "", "BF > 1000***", "BF = 3.54*")
   )
   expect_identical(
-    format_bf(c(0.000045, 0.033, NA, 1557, 3.54), stars = TRUE, stars_only = TRUE),
+    format_bf(c(0.000045, 0.233, NA, 1557, 3.54), stars = TRUE, stars_only = TRUE),
     c("°°°", "°", "", "***", "*")
   )
   expect_identical(

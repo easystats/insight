@@ -3,7 +3,8 @@
 #' Format p-values.
 #'
 #' @param p value or vector of p-values.
-#' @param stars Add significance stars (e.g., p < .001***).
+#' @param stars Add significance stars (e.g., p < .001***). For Bayes factors,
+#' the thresholds for "significant" results are values larger than 3, 10, and 30.
 #' @param stars_only Return only significance stars.
 #' @param whitespace Logical, if `TRUE` (default), preserves whitespaces. Else,
 #'   all whitespace characters are removed from the returned string.
@@ -111,7 +112,8 @@ format_p <- function(p,
                                          name,
                                          missing = "",
                                          whitespace = TRUE,
-                                         decimal_separator = NULL) {
+                                         decimal_separator = NULL,
+                                         inferiority_star = "°") {
   missing_index <- is.na(p_text)
 
   if (is.null(name)) {
@@ -121,10 +123,10 @@ format_p <- function(p,
   }
 
   if (stars_only) {
-    p_text <- gsub("[^(\\*|°)]", "", p_text)
+    p_text <- gsub(paste0("[^(\\*|", inferiority_star, ")]"), "", p_text)
   } else if (!stars) {
     p_text <- gsub("*", "", p_text, fixed = TRUE)
-    p_text <- gsub("\u00B0", "", p_text, fixed = TRUE)
+    p_text <- gsub(inferiority_star, "", p_text, fixed = TRUE)
   }
 
   # replace missing with related string
