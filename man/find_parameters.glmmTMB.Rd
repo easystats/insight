@@ -2,36 +2,9 @@
 % Please edit documentation in R/find_parameters_mixed.R
 \name{find_parameters.glmmTMB}
 \alias{find_parameters.glmmTMB}
-\alias{find_parameters.nlmerMod}
-\alias{find_parameters.hglm}
-\alias{find_parameters.merMod}
 \title{Find names of model parameters from mixed models}
 \usage{
-\method{find_parameters}{glmmTMB}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{nlmerMod}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "nonlinear"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{hglm}(
-  x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "conditional", "dispersion"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{merMod}(x, effects = c("all", "fixed", "random"), flatten = FALSE, ...)
+\method{find_parameters}{glmmTMB}(x, effects = "all", component = "all", flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -52,14 +25,15 @@ but no auxiliary parameters). For \code{component = "distributional"} (or
 \code{"auxiliary"}), components like \code{sigma} or \code{dispersion} (and
 other auxiliary parameters) are returned.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character
+vector, not as list. Duplicated values are removed.}
 
 \item{...}{Currently not used.}
 }
 \value{
 A list of parameter names. The returned list may have following
-elements:
+elements, usually returned based on the combination of the \code{effects} and
+\code{component} arguments:
 \itemize{
 \item \code{conditional}, the "fixed effects" part from the model.
 \item \code{random}, the "random effects" part from the model.

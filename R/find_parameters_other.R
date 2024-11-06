@@ -10,21 +10,21 @@
 #' @inheritParams find_predictors
 #'
 #' @return A list of parameter names. The returned list may have following
-#' elements:
+#' elements, usually requested via the `component` argument:
 #'
 #' - `conditional`, the "fixed effects" part from the model.
 #' - `full`, parameters from the full model.
+#' - `precision` for models of class `betareg`.
+#' - `survival` for model of class `mjoint`.
+#' - `extra` for models of class `glmx`.
 #'
 #' @examples
 #' data(mtcars)
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
 #' @export
-find_parameters.averaging <- function(x,
-                                      component = c("conditional", "full"),
-                                      flatten = FALSE,
-                                      ...) {
-  component <- match.arg(component)
+find_parameters.averaging <- function(x, component = "conditional", flatten = FALSE, ...) {
+  component <- validate_argument(component, c("conditional", "full"))
   cf <- stats::coef(x, full = component == "full")
   out <- list(conditional = text_remove_backticks(names(cf)))
 
@@ -36,13 +36,9 @@ find_parameters.averaging <- function(x,
 }
 
 
-#' @rdname find_parameters.averaging
 #' @export
-find_parameters.glmgee <- function(x,
-                                   component = c("all", "conditional", "dispersion"),
-                                   flatten = FALSE,
-                                   ...) {
-  component <- match.arg(component)
+find_parameters.glmgee <- function(x, component = "all", flatten = FALSE, ...) {
+  component <- validate_argument(component, c("all", "conditional", "dispersion"))
 
   junk <- utils::capture.output({
     cs <- suppressWarnings(stats::coef(summary(x, corr = FALSE)))
@@ -64,13 +60,13 @@ find_parameters.glmgee <- function(x,
 }
 
 
-#' @rdname find_parameters.averaging
 #' @export
-find_parameters.betareg <- function(x,
-                                    component = c("all", "conditional", "precision", "location", "distributional", "auxiliary"),
-                                    flatten = FALSE,
-                                    ...) {
-  component <- match.arg(component)
+find_parameters.betareg <- function(x, component = "all", flatten = FALSE, ...) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "precision", "location", "distributional", "auxiliary")
+  )
+
   pars <- list(
     conditional = names(x$coefficients$mean),
     precision = names(x$coefficients$precision)
@@ -87,13 +83,12 @@ find_parameters.betareg <- function(x,
 }
 
 
-#' @rdname find_parameters.averaging
 #' @export
-find_parameters.DirichletRegModel <- function(x,
-                                              component = c("all", "conditional", "precision", "location", "distributional", "auxiliary"),
-                                              flatten = FALSE,
-                                              ...) {
-  component <- match.arg(component)
+find_parameters.DirichletRegModel <- function(x, component = "all", flatten = FALSE, ...) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "precision", "location", "distributional", "auxiliary")
+  )
   if (x$parametrization == "common") {
     pars <- list(conditional = names(unlist(stats::coef(x))))
   } else {
@@ -116,13 +111,9 @@ find_parameters.DirichletRegModel <- function(x,
 }
 
 
-#' @rdname find_parameters.averaging
 #' @export
-find_parameters.mjoint <- function(x,
-                                   component = c("all", "conditional", "survival"),
-                                   flatten = FALSE,
-                                   ...) {
-  component <- match.arg(component)
+find_parameters.mjoint <- function(x, component = "all", flatten = FALSE, ...) {
+  component <- validate_argument(component, c("all", "conditional", "survival"))
   s <- summary(x)
 
   out <- list(
@@ -140,12 +131,9 @@ find_parameters.mjoint <- function(x,
 }
 
 
-#' @rdname find_parameters.averaging
 #' @export
-find_parameters.glmx <- function(x,
-                                 component = c("all", "conditional", "extra"),
-                                 flatten = FALSE,
-                                 ...) {
+find_parameters.glmx <- function(x, component = "all", flatten = FALSE, ...) {
+  component <- validate_argument(component, c("all", "conditional", "extra"))
   cf <- stats::coef(summary(x))
 
   out <- list(

@@ -35,17 +35,20 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' find_parameters(m)
 #' @export
-find_parameters.betamfx <- function(x,
-                                    component = c("all", "conditional", "precision", "marginal", "location", "distributional", "auxiliary"),
-                                    flatten = FALSE,
-                                    ...) {
+find_parameters.betamfx <- function(x, component = "all", flatten = FALSE, ...) {
   pars <- list(
     marginal = text_remove_backticks(rownames(x$mfxest)),
     conditional = text_remove_backticks(names(x$fit$coefficients$mean)),
     precision = text_remove_backticks(names(x$fit$coefficients$precision))
   )
 
-  component <- match.arg(component)
+  component <- validate_argument(
+    component,
+    c(
+      "all", "conditional", "precision", "marginal", "location",
+      "distributional", "auxiliary"
+    )
+  )
   elements <- .get_elements(effects = "all", component = component)
   pars <- compact_list(pars[elements])
 
@@ -58,16 +61,16 @@ find_parameters.betamfx <- function(x,
 
 
 #' @export
-find_parameters.betaor <- function(x,
-                                   component = c("all", "conditional", "precision", "location", "distributional", "auxiliary"),
-                                   flatten = FALSE,
-                                   ...) {
+find_parameters.betaor <- function(x, component = "all", flatten = FALSE, ...) {
   pars <- list(
     conditional = text_remove_backticks(names(x$fit$coefficients$mean)),
     precision = text_remove_backticks(names(x$fit$coefficients$precision))
   )
 
-  component <- match.arg(component)
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "precision", "location", "distributional", "auxiliary")
+  )
   elements <- .get_elements(effects = "all", component = component)
   pars <- compact_list(pars[elements])
 
@@ -81,14 +84,11 @@ find_parameters.betaor <- function(x,
 
 #' @rdname find_parameters.betamfx
 #' @export
-find_parameters.logitmfx <- function(x,
-                                     component = c("all", "conditional", "marginal", "location"),
-                                     flatten = FALSE,
-                                     ...) {
+find_parameters.logitmfx <- function(x, component = "all", flatten = FALSE, ...) {
   p <- text_remove_backticks(names(stats::coef(x$fit)))
   pars <- list(marginal = text_remove_backticks(rownames(x$mfxest)), conditional = p)
 
-  component <- match.arg(component)
+  component <- validate_argument(component, c("all", "conditional", "marginal", "location"))
   elements <- .get_elements(effects = "all", component = component)
   pars <- compact_list(pars[elements])
 

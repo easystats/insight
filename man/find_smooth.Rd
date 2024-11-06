@@ -9,8 +9,8 @@ find_smooth(x, flatten = FALSE)
 \arguments{
 \item{x}{A (gam) model.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character
+vector, not as list. Duplicated values are removed.}
 }
 \value{
 A character vector with the name(s) of the smooth terms.

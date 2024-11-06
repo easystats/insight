@@ -2,37 +2,31 @@
 % Please edit documentation in R/find_parameter_zi.R
 \name{find_parameters.zeroinfl}
 \alias{find_parameters.zeroinfl}
-\alias{find_parameters.mhurdle}
 \title{Find names of model parameters from zero-inflated models}
 \usage{
-\method{find_parameters}{zeroinfl}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{mhurdle}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip",
-    "auxiliary"),
-  flatten = FALSE,
-  ...
-)
+\method{find_parameters}{zeroinfl}(x, component = "all", flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
-\item{component}{Should all predictor variables, predictor variables for the
+\item{component}{Which type of parameters to return, such as parameters for the
 conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated. Note that the
+term, the instrumental variables or marginal effects be returned? Applies
+to models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models
+with marginal effects from \strong{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model.}
+component, depending on the model. There are three convenient shortcuts:
+\code{component = "all"} returns all possible parameters.
+If \code{component = "location"}, location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned
+(everything that are fixed or random effects - depending on the \code{effects}
+argument - but no auxiliary parameters). For \code{component = "distributional"}
+(or \code{"auxiliary"}), components like \code{sigma}, \code{dispersion},
+\code{beta} or \code{precision} (and other auxiliary parameters) are returned.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character
+vector, not as list. Duplicated values are removed.}
 
 \item{...}{Currently not used.}
 }
@@ -43,6 +37,8 @@ elements:
 \item \code{conditional}, the "fixed effects" part from the model.
 \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation
 component of the model.
+\item Special models are \code{mhurdle}, which also can have the components
+\code{infrequent_purchase}, \code{ip}, and \code{auxiliary}.
 }
 }
 \description{

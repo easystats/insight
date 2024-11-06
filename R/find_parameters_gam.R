@@ -38,12 +38,8 @@ find_parameters.gamlss <- function(x, flatten = FALSE, ...) {
 }
 
 
-#' @rdname find_parameters.gamlss
 #' @export
-find_parameters.gam <- function(x,
-                                component = c("all", "conditional", "smooth_terms", "location"),
-                                flatten = FALSE,
-                                ...) {
+find_parameters.gam <- function(x, component = "all", flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
   pars$conditional <- text_remove_backticks(pars$conditional)
 
@@ -54,7 +50,7 @@ find_parameters.gam <- function(x,
 
   pars <- compact_list(pars)
 
-  component <- match.arg(component)
+  component <- validate_argument(component, c("all", "conditional", "smooth_terms", "location"))
   elements <- .get_elements(effects = "all", component = component)
   pars <- compact_list(pars[elements])
 
@@ -70,12 +66,9 @@ find_parameters.scam <- find_parameters.gam
 
 
 #' @export
-find_parameters.Gam <- function(x,
-                                component = c("all", "conditional", "smooth_terms", "location"),
-                                flatten = FALSE,
-                                ...) {
+find_parameters.Gam <- function(x, component = "all", flatten = FALSE, ...) {
   pars <- names(stats::coef(x))
-  component <- match.arg(component)
+  component <- validate_argument(component, c("all", "conditional", "smooth_terms", "location"))
 
   l <- compact_list(list(
     conditional = pars[.grep_non_smoothers(pars)],
@@ -96,13 +89,10 @@ find_parameters.vgam <- find_parameters.Gam
 
 
 #' @export
-find_parameters.gamm <- function(x,
-                                 component = c("all", "conditional", "smooth_terms", "location"),
-                                 flatten = FALSE,
-                                 ...) {
+find_parameters.gamm <- function(x, component = "all", flatten = FALSE, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
-  component <- match.arg(component)
+  component <- validate_argument(component, c("all", "conditional", "smooth_terms", "location"))
 
   l <- find_parameters.gam(x, component = component)
 
@@ -115,11 +105,8 @@ find_parameters.gamm <- function(x,
 
 
 #' @export
-find_parameters.cgam <- function(x,
-                                 component = c("all", "conditional", "smooth_terms", "location"),
-                                 flatten = FALSE,
-                                 ...) {
-  component <- match.arg(component)
+find_parameters.cgam <- function(x, component = "all", flatten = FALSE, ...) {
+  component <- validate_argument(component, c("all", "conditional", "smooth_terms", "location"))
   sc <- summary(x)
 
   estimates <- sc$coefficients
@@ -164,10 +151,7 @@ find_parameters.selection <- find_parameters.SemiParBIV
 
 
 #' @export
-find_parameters.rqss <- function(x,
-                                 component = c("all", "conditional", "smooth_terms", "location"),
-                                 flatten = FALSE,
-                                 ...) {
+find_parameters.rqss <- function(x, component = "all", flatten = FALSE, ...) {
   sc <- summary(x)
 
   pars <- list(
@@ -178,7 +162,7 @@ find_parameters.rqss <- function(x,
   pars$conditional <- text_remove_backticks(pars$conditional)
   pars$smooth_terms <- text_remove_backticks(pars$smooth_terms)
 
-  component <- match.arg(component)
+  component <- validate_argument(component, c("all", "conditional", "smooth_terms", "location"))
   elements <- .get_elements(effects = "all", component)
   pars <- compact_list(pars[elements])
 

@@ -259,13 +259,9 @@ find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
 
 # Panel models ----------------------------------------
 
-#' @rdname find_parameters
 #' @export
-find_parameters.pgmm <- function(x,
-                                 component = c("conditional", "all"),
-                                 flatten = FALSE,
-                                 ...) {
-  component <- match.arg(component)
+find_parameters.pgmm <- function(x, component = "conditional", flatten = FALSE, ...) {
+  component <- validate_argument(component, c("conditional", "all"))
   s <- summary(x, robust = FALSE)
 
   l <- list(
@@ -807,13 +803,9 @@ find_parameters.mira <- function(x, flatten = FALSE, ...) {
 
 
 ## For questions or problems with this ask Fernando Miguez (femiguez@iastate.edu)
-#' @rdname find_parameters
 #' @export
-find_parameters.nls <- function(x,
-                                component = c("all", "conditional", "nonlinear"),
-                                flatten = FALSE,
-                                ...) {
-  component <- match.arg(component)
+find_parameters.nls <- function(x, component = "all", flatten = FALSE, ...) {
+  component <- validate_argument(component, c("all", "conditional", "nonlinear"))
   f <- find_formula(x)
   elements <- .get_elements(effects = "fixed", component = component)
   f <- .prepare_predictors(x, f, elements)

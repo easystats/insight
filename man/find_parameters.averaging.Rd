@@ -2,74 +2,43 @@
 % Please edit documentation in R/find_parameters_other.R
 \name{find_parameters.averaging}
 \alias{find_parameters.averaging}
-\alias{find_parameters.glmgee}
-\alias{find_parameters.betareg}
-\alias{find_parameters.DirichletRegModel}
-\alias{find_parameters.mjoint}
-\alias{find_parameters.glmx}
 \title{Find model parameters from models with special components}
 \usage{
-\method{find_parameters}{averaging}(x, component = c("conditional", "full"), flatten = FALSE, ...)
-
-\method{find_parameters}{glmgee}(
-  x,
-  component = c("all", "conditional", "dispersion"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{betareg}(
-  x,
-  component = c("all", "conditional", "precision", "location", "distributional",
-    "auxiliary"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{DirichletRegModel}(
-  x,
-  component = c("all", "conditional", "precision", "location", "distributional",
-    "auxiliary"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{mjoint}(
-  x,
-  component = c("all", "conditional", "survival"),
-  flatten = FALSE,
-  ...
-)
-
-\method{find_parameters}{glmx}(
-  x,
-  component = c("all", "conditional", "extra"),
-  flatten = FALSE,
-  ...
-)
+\method{find_parameters}{averaging}(x, component = "conditional", flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
-\item{component}{Should all predictor variables, predictor variables for the
+\item{component}{Which type of parameters to return, such as parameters for the
 conditional model, the zero-inflated part of the model, the dispersion
-term or the instrumental variables be returned? Applies to models
-with zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated. Note that the
+term, the instrumental variables or marginal effects be returned? Applies
+to models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models
+with marginal effects from \strong{mfx}. May be abbreviated. Note that the
 \emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model.}
+component, depending on the model. There are three convenient shortcuts:
+\code{component = "all"} returns all possible parameters.
+If \code{component = "location"}, location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned
+(everything that are fixed or random effects - depending on the \code{effects}
+argument - but no auxiliary parameters). For \code{component = "distributional"}
+(or \code{"auxiliary"}), components like \code{sigma}, \code{dispersion},
+\code{beta} or \code{precision} (and other auxiliary parameters) are returned.}
 
-\item{flatten}{Logical, if \code{TRUE}, the values are returned
-as character vector, not as list. Duplicated values are removed.}
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character
+vector, not as list. Duplicated values are removed.}
 
 \item{...}{Currently not used.}
 }
 \value{
 A list of parameter names. The returned list may have following
-elements:
+elements, usually requested via the \code{component} argument:
 \itemize{
 \item \code{conditional}, the "fixed effects" part from the model.
 \item \code{full}, parameters from the full model.
+\item \code{precision} for models of class \code{betareg}.
+\item \code{survival} for model of class \code{mjoint}.
+\item \code{extra} for models of class \code{glmx}.
 }
 }
 \description{
