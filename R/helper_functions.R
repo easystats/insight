@@ -364,28 +364,13 @@
 
 
 .grep_zi_smoothers <- function(x) {
-  grepl("^(s\\.\\d\\()", x, perl = TRUE) |
-    grepl("^(gam::s\\.\\d\\()", x, perl = TRUE) |
-    grepl("^(mgcv::s\\.\\d\\()", x, perl = TRUE)
+  # this one captures smoothers in zi- or mv-models from gam
+  grepl("^(s\\.\\d\\()", x) | grepl("^(gam::s\\.\\d\\()") | grepl("^(mgcv::s\\.\\d\\()")
 }
 
 
 .grep_non_smoothers <- function(x) {
-  !startsWith(x, "s(") &
-    # this one captures smoothers in zi- or mv-models from gam
-    grepl("^(?!(s\\.\\d\\())", x, perl = TRUE) &
-    !startsWith(x, "ti(") &
-    !startsWith(x, "te(") &
-    !startsWith(x, "t2(") &
-    !startsWith(x, "gam::s(") &
-    !startsWith(x, "VGAM::s(") &
-    !startsWith(x, "mgcv::s(") &
-    !startsWith(x, "mgcv::ti(") &
-    !startsWith(x, "mgcv::t2(") &
-    !startsWith(x, "mgcv::te(") &
-    !startsWith(x, "brms::s(") &
-    !startsWith(x, "brms::t2") &
-    !startsWith(x, "smooth_sd[")
+  !.grep_smoothers(x) && !.grep_zi_smoothers(x)
 }
 
 
