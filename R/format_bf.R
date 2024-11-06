@@ -87,14 +87,22 @@ format_bf <- function(bf,
     )
   )
 
-  ## Add stars
-  bf_text <- ifelse(bf_orig < (1 / 30), paste0(bf_text, paste(rep_len(inferiority_star, 3), collapse = "")), # nolint
+  ## Add inferiority stars
+  if (!is.null(inferiority_star)) {
+    bf_text <- ifelse(bf_orig < (1 / 30), paste0(bf_text, paste(rep_len(inferiority_star, 3), collapse = "")), # nolint
     ifelse(bf_orig < 0.1, paste0(bf_text, paste(rep_len(inferiority_star, 2), collapse = "")), # nolint
       ifelse(bf_orig < (1 / 3), paste0(bf_text, inferiority_star), bf_text) # nolint
     )
   )
+  }
 
-  out <- .add_prefix_and_remove_stars(p_text = bf_text, stars, stars_only, name, inferiority_star)
+  out <- .add_prefix_and_remove_stars(
+    p_text = bf_text,
+    stars = stars,
+    stars_only = stars_only,
+    name = name,
+    inferiority_star = inferiority_star
+  )
   if (is.na(na_reference)) out[bad_bf] <- ""
   out
 }

@@ -115,6 +115,10 @@ test_that("format others", {
     c("BF < 0.001°°°", "BF = 0.233°", "", "BF > 1000***", "BF = 3.54*")
   )
   expect_identical(
+    format_bf(c(0.000045, 0.233, NA, 1557, 3.54), stars = TRUE, inferiority_star = NULL),
+    c("BF < 0.001", "BF = 0.233", "", "BF > 1000***", "BF = 3.54*")
+  )
+  expect_identical(
     format_bf(c(0.000045, 0.233, NA, 1557, 3.54), stars = TRUE, stars_only = TRUE),
     c("°°°", "°", "", "***", "*")
   )

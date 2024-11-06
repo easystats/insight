@@ -123,10 +123,16 @@ format_p <- function(p,
   }
 
   if (stars_only) {
-    p_text <- gsub(paste0("[^(\\*|", inferiority_star, ")]"), "", p_text)
+    if (is.null(inferiority_star)) {
+      p_text <- gsub(paste0("[^(\\*)]"), "", p_text)
+    } else {
+      p_text <- gsub(paste0("[^(\\*|", inferiority_star, ")]"), "", p_text)
+    }
   } else if (!stars) {
     p_text <- gsub("*", "", p_text, fixed = TRUE)
-    p_text <- gsub(inferiority_star, "", p_text, fixed = TRUE)
+    if (!is.null(inferiority_star)) {
+      p_text <- gsub(inferiority_star, "", p_text, fixed = TRUE)
+    }
   }
 
   # replace missing with related string
