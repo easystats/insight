@@ -19,7 +19,8 @@ format_p(
 \arguments{
 \item{p}{value or vector of p-values.}
 
-\item{stars}{Add significance stars (e.g., p < .001***).}
+\item{stars}{Add significance stars (e.g., p < .001***). For Bayes factors,
+the thresholds for "significant" results are values larger than 3, 10, and 30.}
 
 \item{stars_only}{Return only significance stars.}
 

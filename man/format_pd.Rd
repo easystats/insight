@@ -9,7 +9,8 @@ format_pd(pd, stars = FALSE, stars_only = FALSE, name = "pd")
 \arguments{
 \item{pd}{Probability of direction (pd).}
 
-\item{stars}{Add significance stars (e.g., p < .001***).}
+\item{stars}{Add significance stars (e.g., p < .001***). For Bayes factors,
+the thresholds for "significant" results are values larger than 3, 10, and 30.}
 
 \item{stars_only}{Return only significance stars.}
 

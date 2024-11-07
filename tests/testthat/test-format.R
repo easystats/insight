@@ -102,6 +102,34 @@ test_that("format_ci, character", {
 test_that("format others", {
   expect_type(insight::format_pd(0.02), "character")
   expect_identical(nchar(format_bf(4)), 9L)
+  expect_identical(
+    format_bf(c(0.000045, 0.033, NA, 1557, 3.54)),
+    c("BF < 0.001", "BF = 0.033", "", "BF > 1000", "BF = 3.54")
+  )
+  expect_identical(
+    format_bf(c(0.000045, 0.033, NA, 1557, 3.54), name = NULL),
+    c("< 0.001", "0.033", "", "> 1000", "3.54")
+  )
+  expect_identical(
+    format_bf(c(0.000045, 0.233, NA, 1557, 3.54), stars = TRUE),
+    c("BF < 0.001°°°", "BF = 0.233°", "", "BF > 1000***", "BF = 3.54*")
+  )
+  expect_identical(
+    format_bf(c(0.000045, 0.233, NA, 1557, 3.54), stars = TRUE, inferiority_star = NULL),
+    c("BF < 0.001", "BF = 0.233", "", "BF > 1000***", "BF = 3.54*")
+  )
+  expect_identical(
+    format_bf(c(0.000045, 0.233, NA, 1557, 3.54), stars = TRUE, stars_only = TRUE),
+    c("°°°", "°", "", "***", "*")
+  )
+  expect_identical(
+    format_bf(c(0.000045, 0.033, NA, 1557, 3.54), protect_ratio = TRUE),
+    c("BF < 1/1000", "BF = 1/30.30", "", "BF > 1000", "BF = 3.54")
+  )
+  expect_identical(
+    format_bf(c(0.000045, 0.033, NA, 1557, 3.54), protect_ratio = TRUE, exact = TRUE),
+    c("BF = 1/2.22e+04", "BF = 1/30.30", "", "BF = 1.56e+03", "BF = 3.54")
+  )
   expect_type(format_rope(0.02), "character")
 })
 

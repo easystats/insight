@@ -6,12 +6,16 @@
 #' @param exact Should very large or very small values be reported with a
 #'   scientific format (e.g., 4.24e5), or as truncated values (as "> 1000" and
 #'   "< 1/1000").
+#' @param inferiority_star String, indicating the symbol that is used to
+#'   indicate inferiority, i.e. when the Bayes Factor is smaller than one third
+#'   (the thresholds are smaller than one third, 1/10 and 1/30).
 #' @inheritParams format_p
 #'
 #' @return A formatted string.
 #'
 #' @examples
-#' format_bf(bfs <- c(0.000045, 0.033, NA, 1557, 3.54))
+#' bfs <- c(0.000045, 0.033, NA, 1557, 3.54)
+#' format_bf(bfs)
 #' format_bf(bfs, exact = TRUE, name = NULL)
 #' format_bf(bfs, stars = TRUE)
 #' format_bf(bfs, protect_ratio = TRUE)
@@ -21,6 +25,7 @@
 format_bf <- function(bf,
                       stars = FALSE,
                       stars_only = FALSE,
+                      inferiority_star = "\u00B0",
                       name = "BF",
                       protect_ratio = FALSE,
                       na_reference = NA,
@@ -82,7 +87,22 @@ format_bf <- function(bf,
     )
   )
 
-  out <- .add_prefix_and_remove_stars(p_text = bf_text, stars, stars_only, name)
+  ## Add inferiority stars
+  if (!is.null(inferiority_star)) {
+    bf_text <- ifelse(bf_orig < (1 / 30), paste0(bf_text, paste(rep_len(inferiority_star, 3), collapse = "")), # nolint
+    ifelse(bf_orig < 0.1, paste0(bf_text, paste(rep_len(inferiority_star, 2), collapse = "")), # nolint
+      ifelse(bf_orig < (1 / 3), paste0(bf_text, inferiority_star), bf_text) # nolint
+    )
+  )
+  }
+
+  out <- .add_prefix_and_remove_stars(
+    p_text = bf_text,
+    stars = stars,
+    stars_only = stars_only,
+    name = name,
+    inferiority_star = inferiority_star
+  )
   if (is.na(na_reference)) out[bad_bf] <- ""
   out
 }
