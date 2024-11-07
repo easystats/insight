@@ -64,6 +64,7 @@
 <span>  <span class="va">bf</span>,</span>
 <span>  stars <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  stars_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  inferiority_star <span class="op">=</span> <span class="st">"°"</span>,</span>
 <span>  name <span class="op">=</span> <span class="st">"BF"</span>,</span>
 <span>  protect_ratio <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  na_reference <span class="op">=</span> <span class="cn">NA</span>,</span>
@@ -80,11 +81,18 @@
 
 
 <dt id="arg-stars">stars<a class="anchor" aria-label="anchor" href="#arg-stars"></a></dt>
-<dd><p>Add significance stars (e.g., p &lt; .001***).</p></dd>
+<dd><p>Add significance stars (e.g., p &lt; .001***). For Bayes factors,
+the thresholds for "significant" results are values larger than 3, 10, and 30.</p></dd>
 
 
 <dt id="arg-stars-only">stars_only<a class="anchor" aria-label="anchor" href="#arg-stars-only"></a></dt>
 <dd><p>Return only significance stars.</p></dd>
+
+
+<dt id="arg-inferiority-star">inferiority_star<a class="anchor" aria-label="anchor" href="#arg-inferiority-star"></a></dt>
+<dd><p>String, indicating the symbol that is used to
+indicate inferiority, i.e. when the Bayes Factor is smaller than one third
+(the thresholds are smaller than one third, 1/10 and 1/30).</p></dd>
 
 
 <dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
@@ -112,12 +120,14 @@ scientific format (e.g., 4.24e5), or as truncated values (as "&gt; 1000" and
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_bf</span><span class="op">(</span><span class="va">bfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.000045</span>, <span class="fl">0.033</span>, <span class="cn">NA</span>, <span class="fl">1557</span>, <span class="fl">3.54</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.000045</span>, <span class="fl">0.033</span>, <span class="cn">NA</span>, <span class="fl">1557</span>, <span class="fl">3.54</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">format_bf</span><span class="op">(</span><span class="va">bfs</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "BF &lt; 0.001" "BF = 0.033" ""           "BF &gt; 1000"  "BF = 3.54" </span>
 <span class="r-in"><span><span class="fu">format_bf</span><span class="op">(</span><span class="va">bfs</span>, exact <span class="op">=</span> <span class="cn">TRUE</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4.50e-05" "0.033"    ""         "1.56e+03" "3.54"    </span>
 <span class="r-in"><span><span class="fu">format_bf</span><span class="op">(</span><span class="va">bfs</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "BF &lt; 0.001"   "BF = 0.033"   ""             "BF &gt; 1000***" "BF = 3.54*"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "BF &lt; 0.001°°°" "BF = 0.033°°°" ""              "BF &gt; 1000***" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "BF = 3.54*"   </span>
 <span class="r-in"><span><span class="fu">format_bf</span><span class="op">(</span><span class="va">bfs</span>, protect_ratio <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "BF &lt; 1/1000"  "BF = 1/30.30" ""             "BF &gt; 1000"    "BF = 3.54"   </span>
 <span class="r-in"><span><span class="fu">format_bf</span><span class="op">(</span><span class="va">bfs</span>, protect_ratio <span class="op">=</span> <span class="cn">TRUE</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
