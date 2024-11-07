@@ -37,6 +37,8 @@
 * `format_bf()` with `stars = TRUE` used the `°` symbol for inferiority
   (evidence *against* the comparison).
 
+* Overhaul of documentation for the package-functions.
+
 ## Bug fix
 
 * `clean_parameters()` now uses the correct labels for the random effects

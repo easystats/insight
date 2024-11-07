@@ -2,12 +2,9 @@
 % Please edit documentation in R/find_parameters_mfx.R
 \name{find_parameters.betamfx}
 \alias{find_parameters.betamfx}
-\alias{find_parameters.logitmfx}
 \title{Find names of model parameters from marginal effects models}
 \usage{
 \method{find_parameters}{betamfx}(x, component = "all", flatten = FALSE, ...)
-
-\method{find_parameters}{logitmfx}(x, component = "all", flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -17,10 +14,11 @@ the conditional model, the zero-inflated part of the model, the dispersion
 term, the instrumental variables or marginal effects be returned? Applies to
 models with zero-inflated and/or dispersion formula, or to models with
 instrumental variables (so called fixed-effects regressions), or models with
-marginal effects from \strong{mfx}. See details in section \emph{Model Components} .May
-be abbreviated. Note that the \emph{conditional} component also refers to the
+marginal effects (from \strong{mfx}). See details in section \emph{Model Components}
+.May be abbreviated. Note that the \emph{conditional} component also refers to the
 \emph{count} or \emph{mean} component - names may differ, depending on the modeling
-package. There are three convenient shortcuts:
+package. There are three convenient shortcuts (not applicable to \emph{all} model
+classes):
 \itemize{
 \item \code{component = "all"} returns all possible parameters.
 \item If \code{component = "location"}, location parameters such as \code{conditional},
