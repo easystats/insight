@@ -116,11 +116,20 @@ elements, usually requested via the <code>component</code> argument:</p><ul><li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"GasolineYield"</span>, package <span class="op">=</span> <span class="st">"betareg"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">betareg</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/betareg/man/betareg.html" class="external-link">betareg</a></span><span class="op">(</span><span class="va">yield</span> <span class="op">~</span> <span class="va">batch</span> <span class="op">+</span> <span class="va">temp</span>, data <span class="op">=</span> <span class="va">GasolineYield</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "(Intercept)" "wt"          "cyl"         "vs"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "(Intercept)" "batch1"      "batch2"      "batch3"      "batch4"     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "batch5"      "batch6"      "batch7"      "batch8"      "batch9"     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "temp"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $precision</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "(phi)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="find_parameters.html">find_parameters</a></span><span class="op">(</span><span class="va">m</span>, component <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $precision</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "(phi)"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
