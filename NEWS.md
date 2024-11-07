@@ -34,6 +34,8 @@
 * `format_value()` gains a `decimal_point` argument, to change the decimal point
   in output conversion.
 
+* Overhaul of documentation for the package-functions.
+
 ## Bug fix
 
 * `clean_parameters()` now uses the correct labels for the random effects

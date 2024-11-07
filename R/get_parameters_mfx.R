@@ -18,10 +18,11 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
 #' @export
-get_parameters.betamfx <- function(x,
-                                   component = c("all", "conditional", "precision", "marginal"),
-                                   ...) {
-  component <- match.arg(component)
+get_parameters.betamfx <- function(x, component = "all", ...) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "precision", "marginal")
+  )
   params <- get_parameters.betareg(x$fit, component = "all", ...)
   mfx <- x$mfxest
 
@@ -45,20 +46,15 @@ get_parameters.betamfx <- function(x,
 
 
 #' @export
-get_parameters.betaor <- function(x,
-                                  component = c("all", "conditional", "precision"),
-                                  ...) {
-  component <- match.arg(component)
+get_parameters.betaor <- function(x, component = "all", ...) {
+  component <- validate_argument(component, c("all", "conditional", "precision"))
   get_parameters.betareg(x$fit, component = component, ...)
 }
 
 
 
-#' @rdname get_parameters.betamfx
 #' @export
-get_parameters.logitmfx <- function(x,
-                                    component = c("all", "conditional", "marginal"),
-                                    ...) {
+get_parameters.logitmfx <- function(x, component = "all", ...) {
   params <- get_parameters.default(x$fit, ...)
   params$Component <- "conditional"
   mfx <- x$mfxest
@@ -73,7 +69,7 @@ get_parameters.logitmfx <- function(x,
     params
   )
 
-  component <- match.arg(component)
+  component <- validate_argument(component, c("all", "conditional", "marginal"))
   if (component != "all") {
     params <- params[params$Component == component, , drop = FALSE]
   }

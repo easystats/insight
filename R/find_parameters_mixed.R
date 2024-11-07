@@ -4,24 +4,11 @@
 #' @description Returns the names of model parameters, like they typically
 #'     appear in the `summary()` output.
 #'
-#' @param component Which type of parameters to return, such as parameters for
-#'   the conditional model, the zero-inflated part of the model or the
-#'   dispersion term? Applies to models with zero-inflated and/or dispersion
-#'   formula. Note that the *conditional* component is also called
-#'   *count* or *mean* component, depending on the model. There are
-#'   three convenient shortcuts: `component = "all"` returns all possible
-#'   parameters. If `component = "location"`, location parameters such as
-#'   `conditional` or `zero_inflated` are returned (everything that
-#'   are fixed or random effects - depending on the `effects` argument -
-#'   but no auxiliary parameters). For `component = "distributional"` (or
-#'   `"auxiliary"`), components like `sigma` or `dispersion` (and
-#'   other auxiliary parameters) are returned. See section _Model Component_
-#'   for details.
 #' @param ... Currently not used.
+#' @inheritParams find_predictors
 #' @inheritParams find_parameters
 #' @inheritParams find_parameters.betamfx
 #' @inheritParams find_parameters.BGGM
-#' @inheritParams find_predictors
 #'
 #' @inheritSection find_predictors Model components
 #'

@@ -10,12 +10,24 @@
 #' @param effects Should variables for fixed effects (`"fixed"`), random effects
 #' (`"random"`) or both (`"all"`) be returned? Only applies to mixed models. May
 #' be abbreviated.
-#' @param component Indicates which model component should be returned. E.g.,
-#' should all predictor variables, predictor variables for the conditional
-#' model, the zero-inflated part of the model, the dispersion term or the
-#' instrumental variables be returned? See section _Model Components_ for
-#' further details. May be abbreviated. Note that the *conditional* component is
-#' also called *count* or *mean* component, depending on the model.
+#' @param component Which type of parameters to return, such as parameters for
+#' the conditional model, the zero-inflated part of the model, the dispersion
+#' term, the instrumental variables or marginal effects be returned? Applies to
+#' models with zero-inflated and/or dispersion formula, or to models with
+#' instrumental variables (so called fixed-effects regressions), or models with
+#' marginal effects (from **mfx**). See details in section _Model Components_
+#' .May be abbreviated. Note that the *conditional* component also refers to the
+#' *count* or *mean* component - names may differ, depending on the modeling
+#' package. There are three convenient shortcuts (not applicable to *all* model
+#' classes):
+#' - `component = "all"` returns all possible parameters.
+#' - If `component = "location"`, location parameters such as `conditional`,
+#'   `zero_inflated`, `smooth_terms`, or `instruments` are returned (everything
+#'   that are fixed or random effects - depending on the `effects` argument -
+#'   but no auxiliary parameters).
+#' - For `component = "distributional"` (or `"auxiliary"`), components like
+#'   `sigma`, `dispersion`, `beta` or `precision` (and other auxiliary
+#'   parameters) are returned.
 #' @param flatten Logical, if `TRUE`, the values are returned as character
 #' vector, not as list. Duplicated values are removed.
 #' @param verbose Toggle warnings.

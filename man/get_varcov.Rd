@@ -126,10 +126,10 @@ type for \code{"HC"} equals the default from the \strong{sandwich} package; for 
 be returned, or only for specific model components only (like count or
 zero-inflated model parts)? Applies to models with zero-inflated component,
 or models with precision (e.g. \code{betareg}) component. \code{component} may be one
-of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"}, \code{"dispersion"},
-\code{"precision"}, or \code{"all"}. May be abbreviated. Note that the \emph{conditional}
-component is also called \emph{count} or \emph{mean} component, depending on the
-model.}
+of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"}, \code{"dispersion"}, \code{"precision"},
+or \code{"all"}. May be abbreviated. Note that the \emph{conditional} component also
+refers to the \emph{count} or \emph{mean} component - names may differ, depending on
+the modeling package.}
 
 \item{effects}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model parameters only? Currently only
