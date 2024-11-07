@@ -3,8 +3,6 @@
 #' Returns the number of parameters (coefficients) of a model.
 #'
 #' @param x A statistical model.
-#' @param effects Should number of parameters for fixed effects, random effects
-#'    or both be returned? Only applies to mixed models. May be abbreviated.
 #' @param component Should total number of parameters, number parameters for the
 #'   conditional model, the zero-inflated part of the model, the dispersion term
 #'   or the instrumental variables be returned? Applies to models with
@@ -14,6 +12,7 @@
 #'   count) non-estimable parameters (which may occur for models with
 #'   rank-deficient model matrix).
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams find_predictors
 #'
 #' @return The number of parameters in the model.
 #'

@@ -54,8 +54,9 @@ n_parameters(x, ...)
 count) non-estimable parameters (which may occur for models with
 rank-deficient model matrix).}
 
-\item{effects}{Should number of parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.}
+\item{effects}{Should variables for fixed effects (\code{"fixed"}), random effects
+(\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
+be abbreviated.}
 
 \item{component}{Should total number of parameters, number parameters for the
 conditional model, the zero-inflated part of the model, the dispersion term

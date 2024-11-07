@@ -2,28 +2,9 @@
 % Please edit documentation in R/get_parameters_zi.R
 \name{get_parameters.zeroinfl}
 \alias{get_parameters.zeroinfl}
-\alias{get_parameters.zcpglm}
-\alias{get_parameters.mhurdle}
 \title{Get model parameters from zero-inflated and hurdle models}
 \usage{
-\method{get_parameters}{zeroinfl}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated"),
-  ...
-)
-
-\method{get_parameters}{zcpglm}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated"),
-  ...
-)
-
-\method{get_parameters}{mhurdle}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip",
-    "auxiliary"),
-  ...
-)
+\method{get_parameters}{zeroinfl}(x, component = "all", ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -78,12 +59,17 @@ auxiliary parameters).
 
 Some model classes also allow rather uncommon options. These are:
 \itemize{
-\item \code{mhurdle}: \code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}
-\item \code{BGGM}: \code{"correlation"} and \code{"intercept"}
-\item \code{BFBayesFactor}, \code{glmx}: \code{"extra"}
-\item \code{averaging}:\code{"conditional"} and \code{"full"}
-\item \code{mjoint}: \code{"survival"}
+\item \strong{mhurdle}: \code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}
+\item \strong{BGGM}: \code{"correlation"} and \code{"intercept"}
+\item \strong{BFBayesFactor}, \strong{glmx}: \code{"extra"}
+\item \strong{averaging}:\code{"conditional"} and \code{"full"}
+\item \strong{mjoint}: \code{"survival"}
+\item \strong{mfx}: \code{"precision"}, \code{"marginal"}
 }
+
+For models of class \code{brmsfit} (package \strong{brms}), \code{component}, even more
+options are possible for the \code{component} argument, which are not all
+documented in detail here.
 }
 
 \examples{

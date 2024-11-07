@@ -2,28 +2,13 @@
 % Please edit documentation in R/get_parameters_bayesian.R
 \name{get_parameters.BGGM}
 \alias{get_parameters.BGGM}
-\alias{get_parameters.MCMCglmm}
 \alias{get_parameters.BFBayesFactor}
-\alias{get_parameters.stanmvreg}
 \alias{get_parameters.brmsfit}
-\alias{get_parameters.stanreg}
-\alias{get_parameters.bayesx}
-\alias{get_parameters.bamlss}
-\alias{get_parameters.sim.merMod}
-\alias{get_parameters.sim}
 \title{Get model parameters from Bayesian models}
 \usage{
 \method{get_parameters}{BGGM}(
   x,
-  component = c("correlation", "conditional", "intercept", "all"),
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{MCMCglmm}(
-  x,
-  effects = c("fixed", "random", "all"),
+  component = "correlation",
   summary = FALSE,
   centrality = "mean",
   ...
@@ -31,20 +16,11 @@
 
 \method{get_parameters}{BFBayesFactor}(
   x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "extra"),
+  effects = "all",
+  component = "all",
   iterations = 4000,
   progress = FALSE,
   verbose = TRUE,
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{stanmvreg}(
-  x,
-  effects = c("fixed", "random", "all"),
-  parameters = NULL,
   summary = FALSE,
   centrality = "mean",
   ...
@@ -59,65 +35,29 @@
   centrality = "mean",
   ...
 )
-
-\method{get_parameters}{stanreg}(
-  x,
-  effects = c("fixed", "random", "all"),
-  component = c("location", "all", "conditional", "smooth_terms", "sigma",
-    "distributional", "auxiliary"),
-  parameters = NULL,
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{bayesx}(
-  x,
-  component = c("conditional", "smooth_terms", "all"),
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{bamlss}(
-  x,
-  component = c("all", "conditional", "smooth_terms", "location", "distributional",
-    "auxiliary"),
-  parameters = NULL,
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{sim.merMod}(
-  x,
-  effects = c("fixed", "random", "all"),
-  parameters = NULL,
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{sim}(x, parameters = NULL, summary = FALSE, centrality = "mean", ...)
 }
 \arguments{
 \item{x}{A fitted model.}
 
-\item{component}{Which type of parameters to return, such as parameters for the
-conditional model, the zero-inflated part of the model, the dispersion
-term, the instrumental variables or marginal effects be returned? Applies
-to models with zero-inflated and/or dispersion formula, or to models with
-instrumental variables (so called fixed-effects regressions), or models
-with marginal effects from \strong{mfx}. May be abbreviated. Note that the
-\emph{conditional} component is also called \emph{count} or \emph{mean}
-component, depending on the model. There are three convenient shortcuts:
-\code{component = "all"} returns all possible parameters.
-If \code{component = "location"}, location parameters such as \code{conditional},
-\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned
-(everything that are fixed or random effects - depending on the \code{effects}
-argument - but no auxiliary parameters). For \code{component = "distributional"}
-(or \code{"auxiliary"}), components like \code{sigma}, \code{dispersion},
-\code{beta} or \code{precision} (and other auxiliary parameters) are returned.}
+\item{component}{Which type of parameters to return, such as parameters for
+the conditional model, the zero-inflated part of the model, the dispersion
+term, the instrumental variables or marginal effects be returned? Applies to
+models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models with
+marginal effects from \strong{mfx}. See details in section \emph{Model Components} .May
+be abbreviated. Note that the \emph{conditional} component also refers to the
+\emph{count} or \emph{mean} component - names may differ, depending on the modeling
+package. There are three convenient shortcuts:
+\itemize{
+\item \code{component = "all"} returns all possible parameters.
+\item If \code{component = "location"}, location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned (everything
+that are fixed or random effects - depending on the \code{effects} argument -
+but no auxiliary parameters).
+\item For \code{component = "distributional"} (or \code{"auxiliary"}), components like
+\code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and other auxiliary
+parameters) are returned.
+}}
 
 \item{summary}{Logical, indicates whether the full posterior samples
 (\code{summary = FALSE})) or the summarized centrality indices of
@@ -132,8 +72,9 @@ measure of central tendency.}
 
 \item{...}{Currently not used.}
 
-\item{effects}{Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.}
+\item{effects}{Should variables for fixed effects (\code{"fixed"}), random effects
+(\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
+be abbreviated.}
 
 \item{iterations}{Number of posterior draws.}
 
@@ -201,12 +142,17 @@ auxiliary parameters).
 
 Some model classes also allow rather uncommon options. These are:
 \itemize{
-\item \code{mhurdle}: \code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}
-\item \code{BGGM}: \code{"correlation"} and \code{"intercept"}
-\item \code{BFBayesFactor}, \code{glmx}: \code{"extra"}
-\item \code{averaging}:\code{"conditional"} and \code{"full"}
-\item \code{mjoint}: \code{"survival"}
+\item \strong{mhurdle}: \code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}
+\item \strong{BGGM}: \code{"correlation"} and \code{"intercept"}
+\item \strong{BFBayesFactor}, \strong{glmx}: \code{"extra"}
+\item \strong{averaging}:\code{"conditional"} and \code{"full"}
+\item \strong{mjoint}: \code{"survival"}
+\item \strong{mfx}: \code{"precision"}, \code{"marginal"}
 }
+
+For models of class \code{brmsfit} (package \strong{brms}), \code{component}, even more
+options are possible for the \code{component} argument, which are not all
+documented in detail here.
 }
 
 \examples{

@@ -101,6 +101,7 @@ glm
 glmm
 glmmTMB
 glmtoolbox
+glmx
 hglm
 htest
 https
@@ -131,6 +132,7 @@ mfx
 mgcv
 mhurdle
 mira
+mjoint
 mmrm
 modelled
 modelling
