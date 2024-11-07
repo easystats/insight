@@ -19,10 +19,8 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
 #' @export
-get_parameters.zeroinfl <- function(x,
-                                    component = c("all", "conditional", "zi", "zero_inflated"),
-                                    ...) {
-  component <- match.arg(component)
+get_parameters.zeroinfl <- function(x, component = "all", ...) {
+  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
   .return_zeroinf_parms(x, component)
 }
 
@@ -33,12 +31,9 @@ get_parameters.hurdle <- get_parameters.zeroinfl
 get_parameters.zerotrunc <- get_parameters.default
 
 
-#' @rdname get_parameters.zeroinfl
 #' @export
-get_parameters.zcpglm <- function(x,
-                                  component = c("all", "conditional", "zi", "zero_inflated"),
-                                  ...) {
-  component <- match.arg(component)
+get_parameters.zcpglm <- function(x, component = "all", ...) {
+  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
   cf <- stats::coef(x)
 
   cond <- data.frame(
@@ -114,14 +109,15 @@ get_parameters.zcpglm <- function(x,
 }
 
 
-
-
-#' @rdname get_parameters.zeroinfl
 #' @export
-get_parameters.mhurdle <- function(x,
-                                   component = c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary"),
-                                   ...) {
-  component <- match.arg(component)
+get_parameters.mhurdle <- function(x, component = "all", ...) {
+  component <- validate_argument(
+    component,
+    c(
+      "all", "conditional", "zi", "zero_inflated",
+      "infrequent_purchase", "ip", "auxiliary"
+    )
+  )
   cf <- stats::coef(x)
 
   cond_pars <- which(startsWith(names(cf), "h2."))

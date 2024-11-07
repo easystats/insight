@@ -2,26 +2,30 @@
 #' @name find_parameters.betamfx
 #'
 #' @description Returns the names of model parameters, like they typically
-#'     appear in the `summary()` output.
+#' appear in the `summary()` output.
 #'
-#' @param component Which type of parameters to return, such as parameters for the
-#'   conditional model, the zero-inflated part of the model, the dispersion
-#'   term, the instrumental variables or marginal effects be returned? Applies
-#'   to models with zero-inflated and/or dispersion formula, or to models with
-#'   instrumental variables (so called fixed-effects regressions), or models
-#'   with marginal effects from **mfx**. May be abbreviated. Note that the
-#'   *conditional* component is also called *count* or *mean*
-#'   component, depending on the model. There are three convenient shortcuts:
-#'   `component = "all"` returns all possible parameters.
-#'   If `component = "location"`, location parameters such as `conditional`,
-#'   `zero_inflated`, `smooth_terms`, or `instruments` are returned
-#'   (everything that are fixed or random effects - depending on the `effects`
-#'   argument - but no auxiliary parameters). For `component = "distributional"`
-#'   (or `"auxiliary"`), components like `sigma`, `dispersion`,
-#'   `beta` or `precision` (and other auxiliary parameters) are returned.
+#' @param component Which type of parameters to return, such as parameters for
+#' the conditional model, the zero-inflated part of the model, the dispersion
+#' term, the instrumental variables or marginal effects be returned? Applies to
+#' models with zero-inflated and/or dispersion formula, or to models with
+#' instrumental variables (so called fixed-effects regressions), or models with
+#' marginal effects from **mfx**. See details in section _Model Components_ .May
+#' be abbreviated. Note that the *conditional* component also refers to the
+#' *count* or *mean* component - names may differ, depending on the modeling
+#' package. There are three convenient shortcuts:
+#' - `component = "all"` returns all possible parameters.
+#' - If `component = "location"`, location parameters such as `conditional`,
+#'   `zero_inflated`, `smooth_terms`, or `instruments` are returned (everything
+#'   that are fixed or random effects - depending on the `effects` argument -
+#'   but no auxiliary parameters).
+#' - For `component = "distributional"` (or `"auxiliary"`), components like
+#'   `sigma`, `dispersion`, `beta` or `precision` (and other auxiliary
+#'   parameters) are returned.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
 #' @inheritParams find_predictors
+#'
+#' @inheritSection find_predictors Model components
 #'
 #' @return A list of parameter names. The returned list may have following
 #' elements:

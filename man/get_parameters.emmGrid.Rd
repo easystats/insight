@@ -2,12 +2,9 @@
 % Please edit documentation in R/get_parameters_emmeans.R
 \name{get_parameters.emmGrid}
 \alias{get_parameters.emmGrid}
-\alias{get_parameters.emm_list}
 \title{Get model parameters from estimated marginal means objects}
 \usage{
 \method{get_parameters}{emmGrid}(x, summary = FALSE, merge_parameters = FALSE, ...)
-
-\method{get_parameters}{emm_list}(x, summary = FALSE, ...)
 }
 \arguments{
 \item{x}{A fitted model.}

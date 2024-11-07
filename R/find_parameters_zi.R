@@ -9,6 +9,8 @@
 #' @inheritParams find_parameters.betamfx
 #' @inheritParams find_predictors
 #'
+#' @inheritSection find_predictors Model components
+#'
 #' @return A list of parameter names. The returned list may have following
 #' elements:
 #'

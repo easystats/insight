@@ -131,7 +131,7 @@ reference:
       - get_parameters.emmGrid
       - get_parameters.gamm
       - get_parameters.betamfx
-      - get_parameters.glmm
+      - get_parameters.glmmTMB
       - get_parameters.zeroinfl
       - get_parameters.betareg
       - get_parameters.htest

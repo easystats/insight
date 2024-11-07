@@ -7,8 +7,9 @@
 #' the original variable names from the data that was used to fit the model.
 #'
 #' @param x A fitted model.
-#' @param effects Should variables for fixed effects, random effects
-#' or both be returned? Only applies to mixed models. May be abbreviated.
+#' @param effects Should variables for fixed effects (`"fixed"`), random effects
+#' (`"random"`) or both (`"all"`) be returned? Only applies to mixed models. May
+#' be abbreviated.
 #' @param component Indicates which model component should be returned. E.g.,
 #' should all predictor variables, predictor variables for the conditional
 #' model, the zero-inflated part of the model, the dispersion term or the
@@ -49,11 +50,16 @@
 #' **Special models**
 #'
 #' Some model classes also allow rather uncommon options. These are:
-#' - `mhurdle`: `"infrequent_purchase"`, `"ip"`, and `"auxiliary"`
-#' - `BGGM`: `"correlation"` and `"intercept"`
-#' - `BFBayesFactor`, `glmx`: `"extra"`
-#' - `averaging`:`"conditional"` and `"full"`
-#' - `mjoint`: `"survival"`
+#' - **mhurdle**: `"infrequent_purchase"`, `"ip"`, and `"auxiliary"`
+#' - **BGGM**: `"correlation"` and `"intercept"`
+#' - **BFBayesFactor**, **glmx**: `"extra"`
+#' - **averaging**:`"conditional"` and `"full"`
+#' - **mjoint**: `"survival"`
+#' - **mfx**: `"precision"`, `"marginal"`
+#'
+#' For models of class `brmsfit` (package **brms**), `component`, even more
+#' options are possible for the `component` argument, which are not all
+#' documented in detail here.
 #'
 #' @section Parameters, Variables, Predictors and Terms:
 #' There are four functions that return information about the variables in a
