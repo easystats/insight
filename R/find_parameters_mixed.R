@@ -15,12 +15,15 @@
 #'   are fixed or random effects - depending on the `effects` argument -
 #'   but no auxiliary parameters). For `component = "distributional"` (or
 #'   `"auxiliary"`), components like `sigma` or `dispersion` (and
-#'   other auxiliary parameters) are returned.
+#'   other auxiliary parameters) are returned. See section _Model Component_
+#'   for details.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
 #' @inheritParams find_parameters.betamfx
 #' @inheritParams find_parameters.BGGM
 #' @inheritParams find_predictors
+#'
+#' @inheritSection find_predictors Model components
 #'
 #' @return A list of parameter names. The returned list may have following
 #' elements, usually returned based on the combination of the `effects` and
@@ -47,7 +50,10 @@
 #' @export
 find_parameters.glmmTMB <- function(x, effects = "all", component = "all", flatten = FALSE, ...) {
   effects <- validate_argument(effects, c("all", "fixed", "random"))
-  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated", "dispersion"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated", "dispersion", "location", "distributional", "auxiliary")
+  )
 
   # installed
   check_if_installed("lme4")
@@ -151,7 +157,10 @@ find_parameters.nlmerMod <- function(x, effects = "all", component = "all", flat
 #' @export
 find_parameters.hglm <- function(x, effects = "all", component = "all", flatten = FALSE, ...) {
   effects <- validate_argument(effects, c("all", "fixed", "random"))
-  component <- validate_argument(component, c("all", "conditional", "dispersion"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "dispersion", "location", "distributional", "auxiliary")
+  )
 
   fe <- x$fixef
   re <- x$ranef

@@ -38,7 +38,7 @@ get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...)
   effects <- validate_argument(effects, c("fixed", "random"))
   component <- validate_argument(
     component,
-    c("all", "conditional", "zi", "zero_inflated", "dispersion")
+    c("all", "conditional", "zi", "zero_inflated", "dispersion", "location", "distributional", "auxiliary") # nolint
   )
 
   if (effects == "fixed") {
@@ -458,7 +458,7 @@ get_parameters.MixMod <- function(x, effects = "fixed", component = "all", ...) 
   effects <- validate_argument(effects, c("fixed", "random"))
   component <- validate_argument(
     component,
-    c("all", "conditional", "zi", "zero_inflated", "dispersion")
+    c("all", "conditional", "zi", "zero_inflated", "dispersion", "location", "distributional", "auxiliary") # nolint
   )
 
   has_zeroinf <- !is.null(find_formula(x, verbose = FALSE)[["zero_inflated"]])
@@ -527,7 +527,10 @@ get_parameters.MixMod <- function(x, effects = "fixed", component = "all", ...) 
 #' @export
 get_parameters.hglm <- function(x, effects = "fixed", component = "all", ...) {
   effects <- validate_argument(effects, c("fixed", "random"))
-  component <- validate_argument(component, c("all", "conditional", "dispersion"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "dispersion", "location", "distributional", "auxiliary")
+  )
 
   fe <- x$fixef
   re <- x$ranef

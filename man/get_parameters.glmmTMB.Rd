@@ -24,7 +24,8 @@ parameters. If \code{component = "location"}, location parameters such as
 are fixed or random effects - depending on the \code{effects} argument -
 but no auxiliary parameters). For \code{component = "distributional"} (or
 \code{"auxiliary"}), components like \code{sigma} or \code{dispersion} (and
-other auxiliary parameters) are returned.}
+other auxiliary parameters) are returned. See section \emph{Model Component}
+for details.}
 
 \item{...}{Currently not used.}
 }
