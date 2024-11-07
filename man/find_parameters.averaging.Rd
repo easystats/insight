@@ -49,8 +49,60 @@ elements, usually requested via the \code{component} argument:
 Returns the names of model parameters, like they typically
 appear in the \code{summary()} output.
 }
+\section{Model components}{
+
+Possible values for the \code{component} argument depend on the model class.
+Following are valid options:
+\itemize{
+\item \code{"all"}: returns all model components, applies to all models, but will only
+have an effect for models with more than just the conditional model component.
+\item \code{"conditional"}: only returns the conditional component, i.e. "fixed effects"
+terms from the model. Will only have an effect for models with more than
+just the conditional model component.
+\item \code{"smooth_terms"}: returns smooth terms, only applies to GAMs (or similar
+models that may contain smooth terms).
+\item \code{"zero_inflated"} (or \code{"zi"}): returns the zero-inflation component.
+\item \code{"dispersion"}: returns the dispersion model component. This is common
+for models with zero-inflation or that can model the dispersion parameter.
+\item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
+returns the instruments.
+\item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod} or
+\code{nls}), returns staring estimates for the nonlinear parameters.
+\item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
+variables used to describe the correlation structure are returned.
+\item \code{"location"}: returns location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} (everything that are
+fixed or random effects - depending on the \code{effects} argument - but no
+auxiliary parameters).
+\item \code{"distributional"} (or \code{"auxiliary"}): components like \code{sigma}, \code{dispersion},
+\code{beta} or \code{precision} (and other auxiliary parameters) are returned.
+}
+
+\strong{Special models}
+
+Some model classes also allow rather uncommon options. These are:
+\itemize{
+\item \strong{mhurdle}: \code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}
+\item \strong{BGGM}: \code{"correlation"} and \code{"intercept"}
+\item \strong{BFBayesFactor}, \strong{glmx}: \code{"extra"}
+\item \strong{averaging}:\code{"conditional"} and \code{"full"}
+\item \strong{mjoint}: \code{"survival"}
+\item \strong{mfx}: \code{"precision"}, \code{"marginal"}
+\item \strong{betareg}, \strong{DirichletRegModel}: \code{"precision"}
+\item \strong{mvord}: \code{"thresholds"} and \code{"correlation"}
+\item \strong{clm2}: \code{"scale"}
+}
+
+For models of class \code{brmsfit} (package \strong{brms}), \code{component}, even more
+options are possible for the \code{component} argument, which are not all
+documented in detail here.
+}
+
 \examples{
-data(mtcars)
-m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+\dontshow{if (requireNamespace("betareg", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data("GasolineYield", package = "betareg")
+m <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
 find_parameters(m)
+find_parameters(m, component = "precision")
+\dontshow{\}) # examplesIf}
 }
