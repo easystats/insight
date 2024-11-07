@@ -20,17 +20,15 @@
 #'   new text line under the table. If `x` is a list of data frames, `footer`
 #'   may be a list of table captions, one for each table.
 #' @param align Column alignment. For markdown-formatted tables, the default
-#'   `align = NULL` will right-align numeric columns, while all other
-#'   columns will be left-aligned. If `format = "html"`, the default is
-#'   left-align first column and center all remaining. May be a string to
-#'   indicate alignment rules for the complete table, like `"left"`,
-#'   `"right"`, `"center"` or `"firstleft"` (to left-align first
-#'   column, center remaining); or maybe a string with abbreviated alignment
-#'   characters, where the length of the string must equal the number of columns,
-#'   for instance, `align = "lccrl"` would left-align the first column, center
-#'   the second and third, right-align column four and left-align the fifth
-#'   column. For HTML-tables, may be one of `"center"`, `"left"` or
-#'   `"right"`.
+#'   `align = NULL` will right-align numeric columns, while all other columns
+#'   will be left-aligned. If `format = "html"`, the default is left-align first
+#'   column and center all remaining. May be a string to indicate alignment
+#'   rules for the complete table, like `"left"`, `"right"`, `"center"` or
+#'   `"firstleft"` (to left-align first column, center remaining); or a string
+#'   with abbreviated alignment characters, where the length of the string must
+#'   equal the number of columns. For instance, `align = "lccrl"` would
+#'   left-align the first column, center the second and third, right-align
+#'   column four and left-align the fifth column.
 #' @param by Name of column in `x` that indicates grouping for tables.
 #'   Only applies when `format = "html"`. `by` is passed down to
 #'   `gt::gt(groupname_col = by)`.
@@ -1123,22 +1121,16 @@ print.insight_table <- function(x, ...) {
   out <- gt::cols_align(footer, align = "center")
 
   # align columns
-  if (!is.null(out[["_boxhead"]]) && !is.null(out[["_boxhead"]]$column_align)) {
-    if (align == "firstleft") {
-      out[["_boxhead"]]$column_align[1] <- "left"
-    } else {
-      col_align <- NULL
-      for (i in 1:nchar(align)) {
-        col_align <- c(
-          col_align,
-          switch(substr(align, i, i),
-            l = "left",
-            r = "right",
-            "center"
-          )
-        )
-      }
-      out[["_boxhead"]]$column_align <- col_align
+  if (align == "firstleft") {
+    out <- gt::cols_align(out, "left", 1)
+  } else {
+    for (i in 1:nchar(align)) {
+      col_align <- switch(substr(align, i, i),
+        l = "left",
+        r = "right",
+        "center"
+      )
+      out <- gt::cols_align(out, col_align, i)
     }
   }
 
