@@ -24,7 +24,7 @@
 #'
 #' @examplesIf requireNamespace("glmmTMB", quietly = TRUE)
 #' data(Salamanders, package = "glmmTMB")
-#' m <- glmmTMB(
+#' m <- glmmTMB::glmmTMB(
 #'   count ~ mined + (1 | site),
 #'   ziformula = ~mined,
 #'   family = poisson(),

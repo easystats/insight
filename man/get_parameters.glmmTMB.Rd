@@ -93,7 +93,7 @@ documented in detail here.
 \examples{
 \dontshow{if (requireNamespace("glmmTMB", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(Salamanders, package = "glmmTMB")
-m <- glmmTMB(
+m <- glmmTMB::glmmTMB(
   count ~ mined + (1 | site),
   ziformula = ~mined,
   family = poisson(),
