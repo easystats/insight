@@ -64,7 +64,6 @@ get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE,
 }
 
 
-#' @rdname get_parameters.emmGrid
 #' @export
 get_parameters.emm_list <- function(x, summary = FALSE, ...) {
   if (!.is_baysian_emmeans(x) || isTRUE(summary)) {
