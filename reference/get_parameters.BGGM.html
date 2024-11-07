@@ -66,16 +66,7 @@ models) from a model.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'BGGM'</span></span>
 <span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"correlation"</span>, <span class="st">"conditional"</span>, <span class="st">"intercept"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
-<span>  summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  centrality <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'MCMCglmm'</span></span>
-<span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
+<span>  component <span class="op">=</span> <span class="st">"correlation"</span>,</span>
 <span>  summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  centrality <span class="op">=</span> <span class="st">"mean"</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -84,21 +75,11 @@ models) from a model.</p>
 <span><span class="co"># S3 method for class 'BFBayesFactor'</span></span>
 <span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"extra"</span><span class="op">)</span>,</span>
+<span>  effects <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  component <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  iterations <span class="op">=</span> <span class="fl">4000</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  centrality <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'stanmvreg'</span></span>
-<span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
-<span>  parameters <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  centrality <span class="op">=</span> <span class="st">"mean"</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -113,52 +94,7 @@ models) from a model.</p>
 <span>  summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  centrality <span class="op">=</span> <span class="st">"mean"</span>,</span>
 <span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'stanreg'</span></span>
-<span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"smooth_terms"</span>, <span class="st">"sigma"</span>,</span>
-<span>    <span class="st">"distributional"</span>, <span class="st">"auxiliary"</span><span class="op">)</span>,</span>
-<span>  parameters <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  centrality <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'bayesx'</span></span>
-<span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"smooth_terms"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
-<span>  summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  centrality <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'bamlss'</span></span>
-<span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"smooth_terms"</span>, <span class="st">"location"</span>, <span class="st">"distributional"</span>,</span>
-<span>    <span class="st">"auxiliary"</span><span class="op">)</span>,</span>
-<span>  parameters <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  centrality <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'sim.merMod'</span></span>
-<span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
-<span>  parameters <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  centrality <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'sim'</span></span>
-<span><span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">x</span>, parameters <span class="op">=</span> <span class="cn">NULL</span>, summary <span class="op">=</span> <span class="cn">FALSE</span>, centrality <span class="op">=</span> <span class="st">"mean"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -170,21 +106,23 @@ models) from a model.</p>
 
 
 <dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
-<dd><p>Which type of parameters to return, such as parameters for the
-conditional model, the zero-inflated part of the model, the dispersion
-term, the instrumental variables or marginal effects be returned? Applies
-to models with zero-inflated and/or dispersion formula, or to models with
-instrumental variables (so called fixed-effects regressions), or models
-with marginal effects from <strong>mfx</strong>. May be abbreviated. Note that the
-<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
-component, depending on the model. There are three convenient shortcuts:
-<code>component = "all"</code> returns all possible parameters.
-If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
-<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned
-(everything that are fixed or random effects - depending on the <code>effects</code>
-argument - but no auxiliary parameters). For <code>component = "distributional"</code>
-(or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
-<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></dd>
+<dd><p>Which type of parameters to return, such as parameters for
+the conditional model, the zero-inflated part of the model, the dispersion
+term, the instrumental variables or marginal effects be returned? Applies to
+models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models with
+marginal effects from <strong>mfx</strong>. See details in section <em>Model Components</em> .May
+be abbreviated. Note that the <em>conditional</em> component also refers to the
+<em>count</em> or <em>mean</em> component - names may differ, depending on the modeling
+package. There are three convenient shortcuts:</p><ul><li><p><code>component = "all"</code> returns all possible parameters.</p></li>
+<li><p>If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
+<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned (everything
+that are fixed or random effects - depending on the <code>effects</code> argument -
+but no auxiliary parameters).</p></li>
+<li><p>For <code>component = "distributional"</code> (or <code>"auxiliary"</code>), components like
+<code>sigma</code>, <code>dispersion</code>, <code>beta</code> or <code>precision</code> (and other auxiliary
+parameters) are returned.</p></li>
+</ul></dd>
 
 
 <dt id="arg-summary">summary<a class="anchor" aria-label="anchor" href="#arg-summary"></a></dt>
@@ -207,8 +145,9 @@ measure of central tendency.</p></dd>
 
 
 <dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
-<dd><p>Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
+<dd><p>Should variables for fixed effects (<code>"fixed"</code>), random effects
+(<code>"random"</code>) or both (<code>"all"</code>) be returned? Only applies to mixed models. May
+be abbreviated.</p></dd>
 
 
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
@@ -279,12 +218,16 @@ auxiliary parameters).</p></li>
 <li><p><code>"distributional"</code> (or <code>"auxiliary"</code>): components like <code>sigma</code>, <code>dispersion</code>,
 <code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></li>
 </ul><p><strong>Special models</strong></p>
-<p>Some model classes also allow rather uncommon options. These are:</p><ul><li><p><code>mhurdle</code>: <code>"infrequent_purchase"</code>, <code>"ip"</code>, and <code>"auxiliary"</code></p></li>
-<li><p><code>BGGM</code>: <code>"correlation"</code> and <code>"intercept"</code></p></li>
-<li><p><code>BFBayesFactor</code>, <code>glmx</code>: <code>"extra"</code></p></li>
-<li><p><code>averaging</code>:<code>"conditional"</code> and <code>"full"</code></p></li>
-<li><p><code>mjoint</code>: <code>"survival"</code></p></li>
-</ul></div>
+<p>Some model classes also allow rather uncommon options. These are:</p><ul><li><p><strong>mhurdle</strong>: <code>"infrequent_purchase"</code>, <code>"ip"</code>, and <code>"auxiliary"</code></p></li>
+<li><p><strong>BGGM</strong>: <code>"correlation"</code> and <code>"intercept"</code></p></li>
+<li><p><strong>BFBayesFactor</strong>, <strong>glmx</strong>: <code>"extra"</code></p></li>
+<li><p><strong>averaging</strong>:<code>"conditional"</code> and <code>"full"</code></p></li>
+<li><p><strong>mjoint</strong>: <code>"survival"</code></p></li>
+<li><p><strong>mfx</strong>: <code>"precision"</code>, <code>"marginal"</code></p></li>
+</ul><p>For models of class <code>brmsfit</code> (package <strong>brms</strong>), <code>component</code>, even more
+options are possible for the <code>component</code> argument, which are not all
+documented in detail here.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

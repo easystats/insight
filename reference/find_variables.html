@@ -81,8 +81,9 @@ response value and random effects.</p>
 
 
 <dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
-<dd><p>Should variables for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
+<dd><p>Should variables for fixed effects (<code>"fixed"</code>), random effects
+(<code>"random"</code>) or both (<code>"all"</code>) be returned? Only applies to mixed models. May
+be abbreviated.</p></dd>
 
 
 <dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
@@ -152,12 +153,16 @@ auxiliary parameters).</p></li>
 <li><p><code>"distributional"</code> (or <code>"auxiliary"</code>): components like <code>sigma</code>, <code>dispersion</code>,
 <code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></li>
 </ul><p><strong>Special models</strong></p>
-<p>Some model classes also allow rather uncommon options. These are:</p><ul><li><p><code>mhurdle</code>: <code>"infrequent_purchase"</code>, <code>"ip"</code>, and <code>"auxiliary"</code></p></li>
-<li><p><code>BGGM</code>: <code>"correlation"</code> and <code>"intercept"</code></p></li>
-<li><p><code>BFBayesFactor</code>, <code>glmx</code>: <code>"extra"</code></p></li>
-<li><p><code>averaging</code>:<code>"conditional"</code> and <code>"full"</code></p></li>
-<li><p><code>mjoint</code>: <code>"survival"</code></p></li>
-</ul></div>
+<p>Some model classes also allow rather uncommon options. These are:</p><ul><li><p><strong>mhurdle</strong>: <code>"infrequent_purchase"</code>, <code>"ip"</code>, and <code>"auxiliary"</code></p></li>
+<li><p><strong>BGGM</strong>: <code>"correlation"</code> and <code>"intercept"</code></p></li>
+<li><p><strong>BFBayesFactor</strong>, <strong>glmx</strong>: <code>"extra"</code></p></li>
+<li><p><strong>averaging</strong>:<code>"conditional"</code> and <code>"full"</code></p></li>
+<li><p><strong>mjoint</strong>: <code>"survival"</code></p></li>
+<li><p><strong>mfx</strong>: <code>"precision"</code>, <code>"marginal"</code></p></li>
+</ul><p>For models of class <code>brmsfit</code> (package <strong>brms</strong>), <code>component</code>, even more
+options are possible for the <code>component</code> argument, which are not all
+documented in detail here.</p>
+    </div>
     <div class="section level2">
     <h2 id="parameters-variables-predictors-and-terms">Parameters, Variables, Predictors and Terms<a class="anchor" aria-label="anchor" href="#parameters-variables-predictors-and-terms"></a></h2>
 

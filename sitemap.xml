@@ -72,7 +72,7 @@
 <url><loc>https://easystats.github.io/insight/reference/get_parameters.betareg.html</loc></url>
 <url><loc>https://easystats.github.io/insight/reference/get_parameters.emmGrid.html</loc></url>
 <url><loc>https://easystats.github.io/insight/reference/get_parameters.gamm.html</loc></url>
-<url><loc>https://easystats.github.io/insight/reference/get_parameters.glmm.html</loc></url>
+<url><loc>https://easystats.github.io/insight/reference/get_parameters.glmmTMB.html</loc></url>
 <url><loc>https://easystats.github.io/insight/reference/get_parameters.htest.html</loc></url>
 <url><loc>https://easystats.github.io/insight/reference/get_parameters.html</loc></url>
 <url><loc>https://easystats.github.io/insight/reference/get_parameters.zeroinfl.html</loc></url>

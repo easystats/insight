@@ -76,8 +76,9 @@ appear in the <code><a href="https://rdrr.io/r/base/summary.html" class="externa
 
 
 <dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
-<dd><p>Should parameters for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.</p></dd>
+<dd><p>Should variables for fixed effects (<code>"fixed"</code>), random effects
+(<code>"random"</code>) or both (<code>"all"</code>) be returned? Only applies to mixed models. May
+be abbreviated.</p></dd>
 
 
 <dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
@@ -92,7 +93,8 @@ parameters. If <code>component = "location"</code>, location parameters such as
 are fixed or random effects - depending on the <code>effects</code> argument -
 but no auxiliary parameters). For <code>component = "distributional"</code> (or
 <code>"auxiliary"</code>), components like <code>sigma</code> or <code>dispersion</code> (and
-other auxiliary parameters) are returned.</p></dd>
+other auxiliary parameters) are returned. See section <em>Model Component</em>
+for details.</p></dd>
 
 
 <dt id="arg-flatten">flatten<a class="anchor" aria-label="anchor" href="#arg-flatten"></a></dt>
@@ -119,6 +121,44 @@ component of the model.</p></li>
 parameters (auxiliary parameter)</p></li>
 <li><p><code>nonlinear</code>, the parameters from the nonlinear formula.</p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="model-components">Model components<a class="anchor" aria-label="anchor" href="#model-components"></a></h2>
+
+
+<p>Possible values for the <code>component</code> argument depend on the model class.
+Following are valid options:</p><ul><li><p><code>"all"</code>: returns all model components, applies to all models, but will only
+have an effect for models with more than just the conditional model component.</p></li>
+<li><p><code>"conditional"</code>: only returns the conditional component, i.e. "fixed effects"
+terms from the model. Will only have an effect for models with more than
+just the conditional model component.</p></li>
+<li><p><code>"smooth_terms"</code>: returns smooth terms, only applies to GAMs (or similar
+models that may contain smooth terms).</p></li>
+<li><p><code>"zero_inflated"</code> (or <code>"zi"</code>): returns the zero-inflation component.</p></li>
+<li><p><code>"dispersion"</code>: returns the dispersion model component. This is common
+for models with zero-inflation or that can model the dispersion parameter.</p></li>
+<li><p><code>"instruments"</code>: for instrumental-variable or some fixed effects regression,
+returns the instruments.</p></li>
+<li><p><code>"nonlinear"</code>: for non-linear models (like models of class <code>nlmerMod</code> or
+<code>nls</code>), returns staring estimates for the nonlinear parameters.</p></li>
+<li><p><code>"correlation"</code>: for models with correlation-component, like <code>gls</code>, the
+variables used to describe the correlation structure are returned.</p></li>
+<li><p><code>"location"</code>: returns location parameters such as <code>conditional</code>,
+<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> (everything that are
+fixed or random effects - depending on the <code>effects</code> argument - but no
+auxiliary parameters).</p></li>
+<li><p><code>"distributional"</code> (or <code>"auxiliary"</code>): components like <code>sigma</code>, <code>dispersion</code>,
+<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></li>
+</ul><p><strong>Special models</strong></p>
+<p>Some model classes also allow rather uncommon options. These are:</p><ul><li><p><strong>mhurdle</strong>: <code>"infrequent_purchase"</code>, <code>"ip"</code>, and <code>"auxiliary"</code></p></li>
+<li><p><strong>BGGM</strong>: <code>"correlation"</code> and <code>"intercept"</code></p></li>
+<li><p><strong>BFBayesFactor</strong>, <strong>glmx</strong>: <code>"extra"</code></p></li>
+<li><p><strong>averaging</strong>:<code>"conditional"</code> and <code>"full"</code></p></li>
+<li><p><strong>mjoint</strong>: <code>"survival"</code></p></li>
+<li><p><strong>mfx</strong>: <code>"precision"</code>, <code>"marginal"</code></p></li>
+</ul><p>For models of class <code>brmsfit</code> (package <strong>brms</strong>), <code>component</code>, even more
+options are possible for the <code>component</code> argument, which are not all
+documented in detail here.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

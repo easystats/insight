@@ -82,7 +82,7 @@ models) from a model. See the documentation for your object's class:</p><ul><li>
 <li><p><a href="get_parameters.emmGrid.html">Estimated marginal means</a> (<strong>emmeans</strong>)</p></li>
 <li><p><a href="get_parameters.gamm.html">Generalized additive models</a> (<strong>mgcv</strong>, <strong>VGAM</strong>, ...)</p></li>
 <li><p><a href="get_parameters.betamfx.html">Marginal effects models</a> (<strong>mfx</strong>)</p></li>
-<li><p><a href="get_parameters.glmm.html">Mixed models</a> (<strong>lme4</strong>, <strong>glmmTMB</strong>, <strong>GLMMadaptive</strong>, ...)</p></li>
+<li><p><a href="get_parameters.glmmTMB.html">Mixed models</a> (<strong>lme4</strong>, <strong>glmmTMB</strong>, <strong>GLMMadaptive</strong>, ...)</p></li>
 <li><p><a href="get_parameters.zeroinfl.html">Zero-inflated and hurdle models</a> (<strong>pscl</strong>, ...)</p></li>
 <li><p><a href="get_parameters.betareg.html">Models with special components</a> (<strong>betareg</strong>, <strong>MuMIn</strong>, ...)</p></li>
 <li><p><a href="get_parameters.htest.html">Hypothesis tests</a> (<code>htest</code>)</p></li>
@@ -158,12 +158,16 @@ auxiliary parameters).</p></li>
 <li><p><code>"distributional"</code> (or <code>"auxiliary"</code>): components like <code>sigma</code>, <code>dispersion</code>,
 <code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></li>
 </ul><p><strong>Special models</strong></p>
-<p>Some model classes also allow rather uncommon options. These are:</p><ul><li><p><code>mhurdle</code>: <code>"infrequent_purchase"</code>, <code>"ip"</code>, and <code>"auxiliary"</code></p></li>
-<li><p><code>BGGM</code>: <code>"correlation"</code> and <code>"intercept"</code></p></li>
-<li><p><code>BFBayesFactor</code>, <code>glmx</code>: <code>"extra"</code></p></li>
-<li><p><code>averaging</code>:<code>"conditional"</code> and <code>"full"</code></p></li>
-<li><p><code>mjoint</code>: <code>"survival"</code></p></li>
-</ul></div>
+<p>Some model classes also allow rather uncommon options. These are:</p><ul><li><p><strong>mhurdle</strong>: <code>"infrequent_purchase"</code>, <code>"ip"</code>, and <code>"auxiliary"</code></p></li>
+<li><p><strong>BGGM</strong>: <code>"correlation"</code> and <code>"intercept"</code></p></li>
+<li><p><strong>BFBayesFactor</strong>, <strong>glmx</strong>: <code>"extra"</code></p></li>
+<li><p><strong>averaging</strong>:<code>"conditional"</code> and <code>"full"</code></p></li>
+<li><p><strong>mjoint</strong>: <code>"survival"</code></p></li>
+<li><p><strong>mfx</strong>: <code>"precision"</code>, <code>"marginal"</code></p></li>
+</ul><p>For models of class <code>brmsfit</code> (package <strong>brms</strong>), <code>component</code>, even more
+options are possible for the <code>component</code> argument, which are not all
+documented in detail here.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
