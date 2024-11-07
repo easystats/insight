@@ -2,28 +2,13 @@
 % Please edit documentation in R/get_parameters_bayesian.R
 \name{get_parameters.BGGM}
 \alias{get_parameters.BGGM}
-\alias{get_parameters.MCMCglmm}
 \alias{get_parameters.BFBayesFactor}
-\alias{get_parameters.stanmvreg}
 \alias{get_parameters.brmsfit}
-\alias{get_parameters.stanreg}
-\alias{get_parameters.bayesx}
-\alias{get_parameters.bamlss}
-\alias{get_parameters.sim.merMod}
-\alias{get_parameters.sim}
 \title{Get model parameters from Bayesian models}
 \usage{
 \method{get_parameters}{BGGM}(
   x,
-  component = c("correlation", "conditional", "intercept", "all"),
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{MCMCglmm}(
-  x,
-  effects = c("fixed", "random", "all"),
+  component = "correlation",
   summary = FALSE,
   centrality = "mean",
   ...
@@ -31,20 +16,11 @@
 
 \method{get_parameters}{BFBayesFactor}(
   x,
-  effects = c("all", "fixed", "random"),
-  component = c("all", "extra"),
+  effects = "all",
+  component = "all",
   iterations = 4000,
   progress = FALSE,
   verbose = TRUE,
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{stanmvreg}(
-  x,
-  effects = c("fixed", "random", "all"),
-  parameters = NULL,
   summary = FALSE,
   centrality = "mean",
   ...
@@ -59,46 +35,6 @@
   centrality = "mean",
   ...
 )
-
-\method{get_parameters}{stanreg}(
-  x,
-  effects = c("fixed", "random", "all"),
-  component = c("location", "all", "conditional", "smooth_terms", "sigma",
-    "distributional", "auxiliary"),
-  parameters = NULL,
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{bayesx}(
-  x,
-  component = c("conditional", "smooth_terms", "all"),
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{bamlss}(
-  x,
-  component = c("all", "conditional", "smooth_terms", "location", "distributional",
-    "auxiliary"),
-  parameters = NULL,
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{sim.merMod}(
-  x,
-  effects = c("fixed", "random", "all"),
-  parameters = NULL,
-  summary = FALSE,
-  centrality = "mean",
-  ...
-)
-
-\method{get_parameters}{sim}(x, parameters = NULL, summary = FALSE, centrality = "mean", ...)
 }
 \arguments{
 \item{x}{A fitted model.}
