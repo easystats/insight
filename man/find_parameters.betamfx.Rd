@@ -18,14 +18,19 @@ term, the instrumental variables or marginal effects be returned? Applies to
 models with zero-inflated and/or dispersion formula, or to models with
 instrumental variables (so called fixed-effects regressions), or models with
 marginal effects from \strong{mfx}. See details in section \emph{Model Components} .May
-be abbreviated. Note that the \emph{conditional} component is also called \emph{count}
-or \emph{mean} component, depending on the model. There are three convenient
-shortcuts: \code{component = "all"} returns all possible parameters. If \code{component = "location"}, location parameters such as \code{conditional}, \code{zero_inflated},
-\code{smooth_terms}, or \code{instruments} are returned (everything that are fixed or
-random effects - depending on the \code{effects} argument - but no auxiliary
-parameters). For \code{component = "distributional"} (or \code{"auxiliary"}),
-components like \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and other
-auxiliary parameters) are returned.}
+be abbreviated. Note that the \emph{conditional} component also refers to the
+\emph{count} or \emph{mean} component - names may differ, depending on the modeling
+package. There are three convenient shortcuts:
+\itemize{
+\item \code{component = "all"} returns all possible parameters.
+\item If \code{component = "location"}, location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned (everything
+that are fixed or random effects - depending on the \code{effects} argument -
+but no auxiliary parameters).
+\item For \code{component = "distributional"} (or \code{"auxiliary"}), components like
+\code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and other auxiliary
+parameters) are returned.
+}}
 
 \item{flatten}{Logical, if \code{TRUE}, the values are returned as character
 vector, not as list. Duplicated values are removed.}
@@ -78,12 +83,17 @@ auxiliary parameters).
 
 Some model classes also allow rather uncommon options. These are:
 \itemize{
-\item \code{mhurdle}: \code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}
-\item \code{BGGM}: \code{"correlation"} and \code{"intercept"}
-\item \code{BFBayesFactor}, \code{glmx}: \code{"extra"}
-\item \code{averaging}:\code{"conditional"} and \code{"full"}
-\item \code{mjoint}: \code{"survival"}
+\item \strong{mhurdle}: \code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}
+\item \strong{BGGM}: \code{"correlation"} and \code{"intercept"}
+\item \strong{BFBayesFactor}, \strong{glmx}: \code{"extra"}
+\item \strong{averaging}:\code{"conditional"} and \code{"full"}
+\item \strong{mjoint}: \code{"survival"}
+\item \strong{mfx}: \code{"precision"}, \code{"marginal"}
 }
+
+For models of class \code{brmsfit} (package \strong{brms}), \code{component}, even more
+options are possible for the \code{component} argument, which are not all
+documented in detail here.
 }
 
 \examples{

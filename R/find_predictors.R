@@ -50,11 +50,16 @@
 #' **Special models**
 #'
 #' Some model classes also allow rather uncommon options. These are:
-#' - `mhurdle`: `"infrequent_purchase"`, `"ip"`, and `"auxiliary"`
-#' - `BGGM`: `"correlation"` and `"intercept"`
-#' - `BFBayesFactor`, `glmx`: `"extra"`
-#' - `averaging`:`"conditional"` and `"full"`
-#' - `mjoint`: `"survival"`
+#' - **mhurdle**: `"infrequent_purchase"`, `"ip"`, and `"auxiliary"`
+#' - **BGGM**: `"correlation"` and `"intercept"`
+#' - **BFBayesFactor**, **glmx**: `"extra"`
+#' - **averaging**:`"conditional"` and `"full"`
+#' - **mjoint**: `"survival"`
+#' - **mfx**: `"precision"`, `"marginal"`
+#'
+#' For models of class `brmsfit` (package **brms**), `component`, even more
+#' options are possible for the `component` argument, which are not all
+#' documented in detail here.
 #'
 #' @section Parameters, Variables, Predictors and Terms:
 #' There are four functions that return information about the variables in a
