@@ -56,6 +56,9 @@
 #' - **averaging**:`"conditional"` and `"full"`
 #' - **mjoint**: `"survival"`
 #' - **mfx**: `"precision"`, `"marginal"`
+#' - **betareg**, **DirichletRegModel**: `"precision"`
+#' - **mvord**: `"thresholds"` and `"correlation"`
+#' - **clm2**: `"scale"`
 #'
 #' For models of class `brmsfit` (package **brms**), `component`, even more
 #' options are possible for the `component` argument, which are not all

@@ -50,7 +50,10 @@ Returns the names of model parameters, like they typically
 appear in the \code{summary()} output.
 }
 \examples{
-data(mtcars)
-m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+\dontshow{if (requireNamespace("betareg", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data("GasolineYield", package = "betareg")
+m <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
 find_parameters(m)
+find_parameters(m, component = "precision")
+\dontshow{\}) # examplesIf}
 }

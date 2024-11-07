@@ -18,10 +18,11 @@
 #' - `survival` for model of class `mjoint`.
 #' - `extra` for models of class `glmx`.
 #'
-#' @examples
-#' data(mtcars)
-#' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+#' @examplesIf requireNamespace("betareg", quietly = TRUE)
+#' data("GasolineYield", package = "betareg")
+#' m <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
 #' find_parameters(m)
+#' find_parameters(m, component = "precision")
 #' @export
 find_parameters.averaging <- function(x, component = "conditional", flatten = FALSE, ...) {
   component <- validate_argument(component, c("conditional", "full"))

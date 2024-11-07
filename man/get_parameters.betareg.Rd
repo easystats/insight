@@ -2,48 +2,9 @@
 % Please edit documentation in R/get_parameters_others.R
 \name{get_parameters.betareg}
 \alias{get_parameters.betareg}
-\alias{get_parameters.glmgee}
-\alias{get_parameters.DirichletRegModel}
-\alias{get_parameters.averaging}
-\alias{get_parameters.glmx}
-\alias{get_parameters.clm2}
-\alias{get_parameters.mvord}
-\alias{get_parameters.mjoint}
 \title{Get model parameters from models with special components}
 \usage{
-\method{get_parameters}{betareg}(
-  x,
-  component = c("all", "conditional", "precision", "location", "distributional",
-    "auxiliary"),
-  ...
-)
-
-\method{get_parameters}{glmgee}(x, component = c("all", "conditional", "dispersion"), ...)
-
-\method{get_parameters}{DirichletRegModel}(
-  x,
-  component = c("all", "conditional", "precision", "location", "distributional",
-    "auxiliary"),
-  ...
-)
-
-\method{get_parameters}{averaging}(x, component = c("conditional", "full"), ...)
-
-\method{get_parameters}{glmx}(
-  x,
-  component = c("all", "conditional", "extra", "location", "distributional", "auxiliary"),
-  ...
-)
-
-\method{get_parameters}{clm2}(x, component = c("all", "conditional", "scale"), ...)
-
-\method{get_parameters}{mvord}(
-  x,
-  component = c("all", "conditional", "thresholds", "correlation"),
-  ...
-)
-
-\method{get_parameters}{mjoint}(x, component = c("all", "conditional", "survival"), ...)
+\method{get_parameters}{betareg}(x, component = "all", ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -103,6 +64,9 @@ Some model classes also allow rather uncommon options. These are:
 \item \strong{averaging}:\code{"conditional"} and \code{"full"}
 \item \strong{mjoint}: \code{"survival"}
 \item \strong{mfx}: \code{"precision"}, \code{"marginal"}
+\item \strong{betareg}, \strong{DirichletRegModel}: \code{"precision"}
+\item \strong{mvord}: \code{"thresholds"} and \code{"correlation"}
+\item \strong{clm2}: \code{"scale"}
 }
 
 For models of class \code{brmsfit} (package \strong{brms}), \code{component}, even more
@@ -111,7 +75,10 @@ documented in detail here.
 }
 
 \examples{
-data(mtcars)
-m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
+\dontshow{if (requireNamespace("betareg", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data("GasolineYield", package = "betareg")
+m <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
 get_parameters(m)
+get_parameters(m, component = "precision")
+\dontshow{\}) # examplesIf}
 }
