@@ -21,8 +21,9 @@ find_predictors(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{effects}{Should variables for fixed effects, random effects
-or both be returned? Only applies to mixed models. May be abbreviated.}
+\item{effects}{Should variables for fixed effects (\code{"fixed"}), random effects
+(\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
+be abbreviated.}
 
 \item{component}{Indicates which model component should be returned. E.g.,
 should all predictor variables, predictor variables for the conditional

@@ -7,8 +7,9 @@
 #' the original variable names from the data that was used to fit the model.
 #'
 #' @param x A fitted model.
-#' @param effects Should variables for fixed effects, random effects
-#' or both be returned? Only applies to mixed models. May be abbreviated.
+#' @param effects Should variables for fixed effects (`"fixed"`), random effects
+#' (`"random"`) or both (`"all"`) be returned? Only applies to mixed models. May
+#' be abbreviated.
 #' @param component Indicates which model component should be returned. E.g.,
 #' should all predictor variables, predictor variables for the conditional
 #' model, the zero-inflated part of the model, the dispersion term or the
