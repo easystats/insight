@@ -7,6 +7,13 @@ test_that("compact_list works as expected", {
   expect_identical(compact_list(""), "")
   expect_null(compact_list(NULL))
   expect_identical(compact_list(logical(0)), logical(0))
+  # date
+  x <- as.Date(c("1900-05-06", "", "1900-05-07", NA))
+  y <- c(NA, 1, 5)
+  expect_identical(
+    compact_list(list(x, NULL, y)),
+    list(structure(c(-25442, NA, -25441, NA), class = "Date"), c(NA, 1, 5))
+  )
 })
 
 test_that("compact_list, logical > 1", {
