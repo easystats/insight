@@ -200,7 +200,7 @@ test_that("export_table, overlengthy lines", {
 })
 
 
-test_that("export_table, overlengthy lines", {
+test_that("export_table, gt, simple", {
   skip_if_not_installed("gt")
   skip_on_cran()
   d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
