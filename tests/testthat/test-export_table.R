@@ -198,3 +198,30 @@ test_that("export_table, overlengthy lines", {
   expect_warning(export_table(d[1:10, ]), regex = "The table contains")
   expect_snapshot(print(export_table(d[1:10, ], verbose = FALSE)))
 })
+
+
+test_that("export_table, gt, simple", {
+  skip_if_not_installed("gt")
+  skip_on_cran()
+  d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
+  attr(d, "table_caption") <- "Table Title"
+  set.seed(123)
+  out <- gt::as_raw_html(export_table(d, format = "html"))
+  expect_snapshot(as.character(out))
+  set.seed(123)
+  out <- gt::as_raw_html(export_table(d, format = "html", align = "rl"))
+  expect_snapshot(as.character(out))
+
+  d <- data.frame(
+    a = c(1.3, 2, 543, 78),
+    b = c("ab", "cd", "abcde", "hj"),
+    g = c("g1", "g1", "g2", "g2"),
+    stringsAsFactors = FALSE
+  )
+  set.seed(123)
+  out <- gt::as_raw_html(export_table(d, format = "html", by = "g"))
+  expect_snapshot(as.character(out))
+  set.seed(123)
+  out <- gt::as_raw_html(export_table(d, format = "html", align = "rl", by = "g"))
+  expect_snapshot(as.character(out))
+})
