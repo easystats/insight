@@ -56,6 +56,8 @@
 * Fixed issues in `get_variance()`  for models of class *brmsfit* when the
   sigma-parameter was directly modeled.
 
+* Fixed issue in `compact_character()` and `compact_list()` for date-variables.
+
 # insight 0.20.5
 
 ## General
