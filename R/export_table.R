@@ -933,10 +933,6 @@ print.insight_table <- function(x, ...) {
   # indent
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
 
-  # find rows that should not be indented
-  non_grp_rows <- seq_len(nrow(final))
-  non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
-
   # remove indent token
   final[, 1] <- gsub("# ", "", final[, 1], fixed = TRUE)
 
@@ -1087,7 +1083,10 @@ print.insight_table <- function(x, ...) {
 
   # indent groups?
   if (!is.null(indent_rows) && any(grepl("# ", final[, 1], fixed = TRUE))) {
-    final <- .indent_rows_html(final, indent_rows)
+    highlight_rows <- grep("# ", final[, 1], fixed = TRUE)
+    final <- .indent_rows_html(final, indent_rows, "\U00A0\U00A0")
+  } else {
+    highlight_rows <- NULL
   }
 
 
@@ -1133,7 +1132,16 @@ print.insight_table <- function(x, ...) {
   footer <- gt::tab_source_note(header, source_note = gt::html(footer))
   out <- gt::cols_align(footer, align = "center")
 
-  # align columns
+  # emphasize header of row groups?
+  if (!is.null(highlight_rows) && length(highlight_rows)) {
+    out <- gt::tab_style(
+      out,
+      style = list(gt::cell_text(style = "oblique")),
+      locations = gt::cells_body(columns = 1, rows = highlight_rows)
+    )
+  }
+
+  # custom alignment of columns
   if (align == "firstleft") {
     out <- gt::cols_align(out, "left", 1)
   } else {

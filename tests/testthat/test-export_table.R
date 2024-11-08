@@ -225,3 +225,32 @@ test_that("export_table, gt, simple", {
   out <- gt::as_raw_html(export_table(d, format = "html", align = "rl", by = "g"))
   expect_snapshot(as.character(out))
 })
+
+
+test_that("export_table, gt, complex with group indention", {
+  skip_if_not_installed("gt")
+  skip_if_not_installed("parameters")
+  skip_on_cran()
+  data(iris)
+
+  lm1 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+  lm2 <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+
+  cp <- parameters::compare_parameters(lm1, lm2, drop = "^\\(Intercept")
+
+  set.seed(123)
+  out <- gt::as_raw_html(print_html(cp,
+    select = c("{estimate}{stars}|({se})"),
+    groups = list(
+    Species = c(
+      "Species [versicolor]",
+      "Species [virginica]"
+    ),
+    Interactions = c(
+      "Species [versicolor] × Petal Length", # note the unicode char!
+      "Species [virginica] × Petal Length"
+    ),
+    Controls = "Petal Length"
+  )))
+  expect_snapshot(as.character(out))
+})

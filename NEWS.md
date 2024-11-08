@@ -31,6 +31,10 @@
 * `export_table()` can now split tables into more than three tables when
   `table_width` is used (formerly, the maximum number of split tables was three).
 
+* Changed (improved) formatting for parameter tables in `export_table()`, when
+  `format = "html"`. Rows are indented, and group headers are emphasized in
+  italic.
+
 * `format_value()` gains a `decimal_point` argument, to change the decimal point
   in output conversion.
 
