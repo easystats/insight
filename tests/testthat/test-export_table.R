@@ -206,9 +206,9 @@ test_that("export_table, gt, simple", {
   d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
   attr(d, "table_caption") <- "Table Title"
   out <- gt::as_raw_html(export_table(d, format = "html"))
-  expect_snapshot(as.character(x))
+  expect_snapshot(as.character(out))
   out <- gt::as_raw_html(export_table(d, format = "html", align = "rl"))
-  expect_snapshot(as.character(x))
+  expect_snapshot(as.character(out))
 
   d <- data.frame(
     a = c(1.3, 2, 543, 78),
@@ -217,7 +217,7 @@ test_that("export_table, gt, simple", {
     stringsAsFactors = FALSE
   )
   out <- gt::as_raw_html(export_table(d, format = "html", by = "g"))
-  expect_snapshot(as.character(x))
+  expect_snapshot(as.character(out))
   out <- gt::as_raw_html(export_table(d, format = "html", align = "rl", by = "g"))
-  expect_snapshot(as.character(x))
+  expect_snapshot(as.character(out))
 })
