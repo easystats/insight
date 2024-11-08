@@ -191,7 +191,7 @@ get_parameters.glmx <- function(x, component = "all", ...) {
 
 #' @export
 get_parameters.clm2 <- function(x, component = "all", ...) {
-  component <- validate_argument(component,c("all", "conditional", "scale"))
+  component <- validate_argument(component, c("all", "conditional", "scale"))
 
   cf <- stats::coef(summary(x))
   n_intercepts <- length(x$xi)
