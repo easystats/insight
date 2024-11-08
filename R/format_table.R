@@ -1,11 +1,11 @@
 #' @title Parameter table formatting
 #' @name format_table
 #'
-#' @description This functions takes a data frame with model parameters as input
-#'   and formats certain columns into a more readable layout (like collapsing
-#'   separate columns for lower and upper confidence interval values). Furthermore,
-#'   column names are formatted as well. Note that `format_table()`
-#'   converts all columns into character vectors!
+#' @description This functions takes a data frame (usually with model
+#'   parameters) as input and formats certain columns into a more readable
+#'   layout (like collapsing separate columns for lower and upper confidence
+#'   interval values). Furthermore, column names are formatted as well. Note
+#'   that `format_table()` converts all columns into character vectors!
 #'
 #' @param x A data frame of model's parameters, as returned by various functions
 #'   of the **easystats**-packages. May also be a result from

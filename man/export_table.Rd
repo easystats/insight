@@ -132,10 +132,19 @@ will be preserved. Only applies when \code{table_width} is \emph{not} \code{NULL
 \item{...}{Currently not used.}
 }
 \value{
-A data frame in character format.
+If \code{format = "text"} (or \code{NULL}), a formatted character string is
+returned. \code{format = "markdown"} (or \code{"md"}) returns a character string of
+class \code{knitr_kable}, which renders nicely in markdown files. \code{format = "html"}
+returns an \code{gt} object (created by the \strong{gt} package), which - by default -
+is displayed in the IDE's viewer pane or default browser. This object can
+be further modified with the various gt-functions.
 }
 \description{
-Data frame and Tables Pretty Formatting
+Function to export data frames into tables, which can be printed
+to the console, or displayed in markdown or HTML format (and thereby, exported
+to other formats like Word or PDF). The table width is automatically adjusted
+to fit into the width of the display device (e.g., width of console). Use
+the \code{table_width} argument to control this behaviour.
 }
 \note{
 The values for \code{caption}, \code{subtitle} and \code{footer} can also be provided

@@ -83,11 +83,11 @@ A data frame. Note that \code{format_table()} converts all columns
 into character vectors!
 }
 \description{
-This functions takes a data frame with model parameters as input
-and formats certain columns into a more readable layout (like collapsing
-separate columns for lower and upper confidence interval values). Furthermore,
-column names are formatted as well. Note that \code{format_table()}
-converts all columns into character vectors!
+This functions takes a data frame (usually with model
+parameters) as input and formats certain columns into a more readable
+layout (like collapsing separate columns for lower and upper confidence
+interval values). Furthermore, column names are formatted as well. Note
+that \code{format_table()} converts all columns into character vectors!
 }
 \note{
 \code{options(insight_use_symbols = TRUE)} overrides the \code{use_symbols} argument
