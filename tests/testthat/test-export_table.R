@@ -209,4 +209,15 @@ test_that("export_table, gt, simple", {
   expect_snapshot(as.character(x))
   out <- gt::as_raw_html(export_table(d, format = "html", align = "rl"))
   expect_snapshot(as.character(x))
+
+  d <- data.frame(
+    a = c(1.3, 2, 543, 78),
+    b = c("ab", "cd", "abcde", "hj"),
+    g = c("g1", "g1", "g2", "g2"),
+    stringsAsFactors = FALSE
+  )
+  out <- gt::as_raw_html(export_table(d, format = "html", by = "g"))
+  expect_snapshot(as.character(x))
+  out <- gt::as_raw_html(export_table(d, format = "html", align = "rl", by = "g"))
+  expect_snapshot(as.character(x))
 })
