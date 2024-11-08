@@ -240,17 +240,18 @@ test_that("export_table, gt, complex with group indention", {
 
   set.seed(123)
   out <- gt::as_raw_html(print_html(cp,
-    select = c("{estimate}{stars}|({se})"),
+    select = "{estimate}{stars}|({se})",
     groups = list(
-    Species = c(
-      "Species [versicolor]",
-      "Species [virginica]"
-    ),
-    Interactions = c(
-      "Species [versicolor] × Petal Length", # note the unicode char!
-      "Species [virginica] × Petal Length"
-    ),
-    Controls = "Petal Length"
-  )))
+      Species = c(
+        "Species [versicolor]",
+        "Species [virginica]"
+      ),
+      Interactions = c(
+        "Species [versicolor] × Petal Length", # note the unicode char!
+        "Species [virginica] × Petal Length"
+      ),
+      Controls = "Petal Length"
+    )
+  ))
   expect_snapshot(as.character(out))
 })

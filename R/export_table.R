@@ -1136,8 +1136,17 @@ print.insight_table <- function(x, ...) {
   if (!is.null(highlight_rows) && length(highlight_rows)) {
     out <- gt::tab_style(
       out,
-      style = list(gt::cell_text(style = "oblique")),
+      style = gt::cell_text(style = "oblique"),
       locations = gt::cells_body(columns = 1, rows = highlight_rows)
+    )
+  }
+
+  # emphasize row groups labels? when we have group_by_columns
+  if (!is.null(group_by_columns)) {
+    out <- gt::tab_style(
+      out,
+      style = gt::cell_text(style = "oblique"),
+      locations = gt::cells_row_groups()
     )
   }
 
