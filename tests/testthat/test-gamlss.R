@@ -161,3 +161,27 @@ test_that("link_inv for LOGNO", {
   expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-4)
   expect_equal(link_function(m1)(0.2), log(0.2), tolerance = 1e-4)
 })
+
+test_that("find_parameters", {
+  set.seed(123)
+  dat <<- data.frame(
+    Y = sample(20:50, 100, replace = TRUE),
+    date = sample(seq(as.Date('1999/01/01'), as.Date('2000/01/01'), by = "day"), 10),
+    cont1 = rchisq(100, df = 2),
+    cont2 = runif(100),
+    cat1 = sample(LETTERS[1:3], 100, replace = TRUE),
+    stringsAsFactors = FALSE
+  )
+  m <- gamlss::gamlss(
+    Y ~ date + scale(cont1) + scale(cont2) + I(scale(cont2)^2) * cat1,
+    data = dat
+  )
+  expect_named(find_parameters(m), c("conditional", "sigma"))
+  expect_identical(
+    find_parameters(m)$conditional,
+    c(
+      "(Intercept)", "date", "scale(cont1)", "scale(cont2)", "I(scale(cont2)^2)",
+      "cat1B", "cat1C", "I(scale(cont2)^2):cat1B", "I(scale(cont2)^2):cat1C"
+    )
+  )
+})
