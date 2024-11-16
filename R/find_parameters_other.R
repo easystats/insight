@@ -243,3 +243,16 @@ find_parameters.deltaMethod <- function(x, flatten = FALSE, ...) {
     out
   }
 }
+
+
+#' @export
+find_parameters.coxph <- function(x, flatten = FALSE, ...) {
+  cf <- stats::coef(summary(x))
+  out <- list(conditional = rownames(cf))
+
+  if (flatten) {
+    unique(unlist(out, use.names = FALSE))
+  } else {
+    out
+  }
+}

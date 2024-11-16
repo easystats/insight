@@ -414,3 +414,22 @@ get_parameters.ggcomparisons <- function(x, merge_parameters = FALSE, ...) {
   }
   text_remove_backticks(out)
 }
+
+
+#' @export
+get_parameters.coxph <- function(x, verbose = TRUE, ...) {
+  cf <- stats::coef(summary(x))
+  params <- rownames(cf)
+  if (is.null(params)) {
+    params <- paste(seq_along(cf))
+  }
+
+  params <- data.frame(
+    Parameter = params,
+    Estimate = unname(cf[, 1]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  text_remove_backticks(params)
+}
