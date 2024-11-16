@@ -281,7 +281,7 @@ email or also file an issue.
 
 ## List of Supported Models by Class
 
-Currently, about 235 model classes are supported.
+Currently, about 236 model classes are supported.
 
 ``` r
 supported_models()
@@ -387,22 +387,22 @@ supported_models()
 #> [199] "Sarlm"                   "scam"                   
 #> [201] "selection"               "sem"                    
 #> [203] "SemiParBIV"              "semLm"                  
-#> [205] "semLme"                  "serp"                   
-#> [207] "slm"                     "speedglm"               
-#> [209] "speedlm"                 "stanfit"                
-#> [211] "stanmvreg"               "stanreg"                
-#> [213] "summary.lm"              "survfit"                
-#> [215] "survreg"                 "svy_vglm"               
-#> [217] "svy2lme"                 "svychisq"               
-#> [219] "svyglm"                  "svyolr"                 
-#> [221] "t1way"                   "tobit"                  
-#> [223] "trimcibt"                "truncreg"               
-#> [225] "vgam"                    "vglm"                   
-#> [227] "wbgee"                   "wblm"                   
-#> [229] "wbm"                     "wmcpAKP"                
-#> [231] "yuen"                    "yuend"                  
-#> [233] "zcpglm"                  "zeroinfl"               
-#> [235] "zerotrunc"
+#> [205] "semLme"                  "seqanova.svyglm"        
+#> [207] "serp"                    "slm"                    
+#> [209] "speedglm"                "speedlm"                
+#> [211] "stanfit"                 "stanmvreg"              
+#> [213] "stanreg"                 "summary.lm"             
+#> [215] "survfit"                 "survreg"                
+#> [217] "svy_vglm"                "svy2lme"                
+#> [219] "svychisq"                "svyglm"                 
+#> [221] "svyolr"                  "t1way"                  
+#> [223] "tobit"                   "trimcibt"               
+#> [225] "truncreg"                "vgam"                   
+#> [227] "vglm"                    "wbgee"                  
+#> [229] "wblm"                    "wbm"                    
+#> [231] "wmcpAKP"                 "yuen"                   
+#> [233] "yuend"                   "zcpglm"                 
+#> [235] "zeroinfl"                "zerotrunc"
 ```
 
 - **Didn’t find a model?** [File an
