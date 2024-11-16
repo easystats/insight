@@ -77,7 +77,7 @@ withr::with_package(
       find_parameters(mod),
       list(conditional = c("ph.ecog", "tt(age), linear", "tt(age), nonlin"))
     )
-    expect_identical(nrow(get_parameters(mod)), 4L)
+    expect_identical(nrow(get_parameters(mod)), 3L)
     expect_identical(
       get_parameters(mod)$Parameter,
       c("ph.ecog", "tt(age), linear", "tt(age), nonlin")
