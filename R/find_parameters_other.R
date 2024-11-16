@@ -246,7 +246,7 @@ find_parameters.deltaMethod <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.coxph <- function(x, verbose = TRUE, ...) {
+find_parameters.coxph <- function(x, flatten = FALSE, ...) {
   cf <- stats::coef(summary(x))
   out <- list(conditional = rownames(cf))
 
