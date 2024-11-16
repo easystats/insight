@@ -16,7 +16,7 @@ test_that("model_info", {
 })
 
 test_that("find_predictors", {
-  expect_identical(find_predictors(mod), list(conditional = c( "ph.ecog", "age")))
+  expect_identical(find_predictors(mod), list(conditional = c("ph.ecog", "age")))
   expect_null(find_predictors(mod, effects = "random"))
 })
 
@@ -49,7 +49,7 @@ test_that("find_formula", {
 test_that("find_variables", {
   expect_identical(find_variables(mod), list(
     response = c("time", "status"),
-    conditional = c( "ph.ecog", "age")
+    conditional = c("ph.ecog", "age")
   ))
 
   expect_identical(
