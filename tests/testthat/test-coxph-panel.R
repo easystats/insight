@@ -90,7 +90,7 @@ test_that("find_terms", {
     find_terms(mod),
     list(
       response = "Surv(time, status)",
-      conditional = c( "ph.ecog", "tt(age)")
+      conditional = c("ph.ecog", "tt(age)")
     )
   )
 })
