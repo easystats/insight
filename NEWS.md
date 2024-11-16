@@ -41,7 +41,7 @@
 * `format_bf()` with `stars = TRUE` used the `°` symbol for inferiority
   (evidence *against* the comparison).
 
-* Addes support for `coxph.panel` models.
+* Added support for `coxph.panel` models.
 
 * Overhaul of documentation for the package-functions.
 
