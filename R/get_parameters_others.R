@@ -433,3 +433,20 @@ get_parameters.coxph <- function(x, verbose = TRUE, ...) {
 
   text_remove_backticks(params)
 }
+
+
+#' @export
+get_parameters.asym <- function(x, verbose = TRUE, ...) {
+  cf <- stats::coef(x)
+  params <- data.frame(
+    Parameter = names(cf),
+    Estimate = unname(cf),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  params$Parameter <- gsub("^plus__", "+", params$Parameter)
+  params$Parameter <- gsub("^minus__", "-", params$Parameter)
+
+  text_remove_backticks(params)
+}

@@ -128,6 +128,9 @@ link_inverse.lm <- function(x, ...) {
 }
 
 #' @export
+link_inverse.asym <- link_inverse.lm
+
+#' @export
 link_inverse.phylolm <- link_inverse.lm
 
 #' @export

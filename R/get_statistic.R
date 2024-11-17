@@ -195,6 +195,22 @@ get_statistic.merModList <- function(x, ...) {
 
 
 #' @export
+get_statistic.asym <- function(x, ...) {
+  cftable <- summary(x)$coef_table
+  out <- data.frame(
+    Parameter = rownames(x$cftable),
+    Statistic = cftable[, "t val."],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.afex_aov <- function(x, ...) {
   out <- data.frame(
     Parameter = rownames(x$anova_table),

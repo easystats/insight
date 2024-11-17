@@ -146,6 +146,12 @@ model_info.anova <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+model_info.asym <- function(x, verbose = TRUE, ...) {
+  .make_family(x, verbose = verbose, ...)
+}
+
+
+#' @export
 model_info.mclogit <- function(x, verbose = TRUE, ...) {
   .make_family(
     x,

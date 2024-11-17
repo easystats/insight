@@ -91,6 +91,7 @@ find_statistic.default <- function(x, ...) {
   # t-value objects ----------------------------------------------------------
 
   t.mods <- c(
+    "asym",
     "bayesx", "BBreg", "BBmm", "bcplm", "biglm", "bfsl", "blmerMod",
     "cch", "censReg", "complmrob", "cpglm", "cpglmm", "crq", "crqs",
     "drc",

@@ -256,3 +256,21 @@ find_parameters.coxph <- function(x, flatten = FALSE, ...) {
     out
   }
 }
+
+
+#' @export
+find_parameters.asym <- function(x, flatten = FALSE, ...) {
+  cf <- stats::coef(x)
+
+  params <- names(cf)
+  params <- gsub("^plus__", "+", params)
+  params <- gsub("^minus__", "-", params)
+
+  out <- list(conditional = params)
+
+  if (flatten) {
+    unique(unlist(out, use.names = FALSE))
+  } else {
+    out
+  }
+}

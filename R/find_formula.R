@@ -108,6 +108,20 @@ find_formula.default <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+find_formula.asym <- function(x, verbose = TRUE, ...) {
+  modified_f <- safe_deparse(stats::formula(x))
+  while (grepl("minus__", modified_f)) {
+    modified_f <- gsub("(.*)minus__(\\S+)(.*)", "\\1\\3", modified_f)
+    modified_f <- gsub("+  ", "", modified_f, fixed = TRUE)
+    modified_f <- gsub("*  ", "*", modified_f, fixed = TRUE)
+  }
+  # modified_f <- gsub("(.*)lag_(.*)_(.*)", "\\1lag(\\2)\\3", modified_f)
+  f <- .safe(list(conditional = stats::as.formula(modified_f)))
+  .find_formula_return(f, verbose = verbose)
+}
+
+
+#' @export
 find_formula.list <- function(x, verbose = TRUE, ...) {
   if (object_has_names(x, "gam")) {
     if ("mer" %in% names(x)) {
