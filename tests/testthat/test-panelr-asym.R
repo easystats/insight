@@ -100,6 +100,26 @@ test_that("get_parameters", {
 })
 
 
+test_that("get_statistic", {
+  expect_equal(
+    get_statistic(m1),
+    data.frame(
+      Parameter = c(
+        "(Intercept)", "+lag_pov_", "-lag_pov_",
+        "+spouse", "-spouse", "wave"
+      ),
+      Statistic = c(
+        3.72593191668147, -0.946399537913606, 3.48400992278831,
+        -2.27338697388243, -0.160677061930687, -2.3766486580145
+      ),
+      stringsAsFactors = FALSE
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})
+
+
 test_that("find_terms", {
   expect_identical(
     find_terms(m1),
