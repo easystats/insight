@@ -134,6 +134,16 @@ get_varcov.fixest <- function(x,
 }
 
 
+#' @export
+get_varcov.asym <- function(x, ...) {
+  out <- get_varcov.default(x, ...)
+  colnames(out) <- gsub("^plus__", "+", colnames(out))
+  rownames(out) <- gsub("^plus__", "+", rownames(out))
+  colnames(out) <- gsub("^minus__", "-", colnames(out))
+  rownames(out) <- gsub("^minus__", "-", rownames(out))
+  out
+}
+
 
 # mlm ---------------------------------------------
 

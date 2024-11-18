@@ -44,8 +44,8 @@ supported_models <- function() {
 .supported_models_list <- function() {
   c(
     # a ----------------------------
-    "aareg", "afex_aov", "aov", "aovlist", "AKP", "Anova.mlm", "anova.rms",
-    "Arima", "averaging",
+    "asym", "aareg", "afex_aov", "aov", "aovlist", "AKP", "Anova.mlm",
+    "anova.rms", "Arima", "averaging",
 
     # b ----------------------------
     "bamlss", "bamlss.frame", "bayesx", "bayesQR", "BBmm", "BBreg", "bcplm",
@@ -66,7 +66,8 @@ supported_models <- function() {
     "eglm", "elm", "epi.2by2", "ergm", "emmGrid",
 
     # f ----------------------------
-    "feis", "felm", "feglm", "fitdistr", "fixest", "flexsurvreg", "flac", "flic",
+    "fdm", "feis", "felm", "feglm", "fitdistr", "fixest", "flexsurvreg",
+    "flac", "flic",
 
     # g ----------------------------
     "gam", "Gam", "gamlss", "gamm", "gamm4", "garch", "gbm", "gee", "geeglm",

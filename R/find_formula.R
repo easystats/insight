@@ -108,6 +108,33 @@ find_formula.default <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+find_formula.asym <- function(x, verbose = TRUE, ...) {
+  modified_f <- safe_deparse(stats::formula(x))
+  # limitation: we can't preserve "*" and ":"
+  modified_f <- gsub("*", "+", modified_f, fixed = TRUE)
+  modified_f <- gsub(":", "+", modified_f, fixed = TRUE)
+  # explanation:
+  # - gsub("\\+\\s*minus__[^\\+]+", "", input_string):
+  #   This regular expression matches and removes any term that starts with
+  #   + minus__ followed by any characters that are not a +.
+  # - gsub("\\s*\\+\\s*$", "", output_string):
+  #   This removes any trailing plus sign and whitespace that might be left
+  #   at the end of the string.
+  output_string <- gsub("\\+\\s*minus__[^\\+]+", "", modified_f)
+  output_string <- gsub("\\s*(\\+|\\*)\\s*$", "", output_string) # Remove trailing plus sign if any
+  # explanation:
+  # - gsub("lag_([a-zA-Z]+)_", "lag(\\1)", input_string):
+  #   This regular expression matches the pattern "lag_", followed by one or
+  #   more letters (captured in a group), followed by "_". It replaces this
+  #   pattern with "lag(", the captured group, and ")".
+  output_string <- gsub("lag_([a-zA-Z]+)_", "lag(\\1)", output_string)
+  output_string <- gsub("plus__", "", output_string, fixed = TRUE)
+  f <- .safe(list(conditional = stats::as.formula(output_string)))
+  .find_formula_return(f, verbose = verbose)
+}
+
+
+#' @export
 find_formula.list <- function(x, verbose = TRUE, ...) {
   if (object_has_names(x, "gam")) {
     if ("mer" %in% names(x)) {

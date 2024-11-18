@@ -57,7 +57,7 @@ is_regression_model <- function(x) {
 
     # a --------------------
     "aareg", "afex_aov", "AKP", "ancova", "anova", "Anova.mlm",
-    "anova.rms", "aov", "aovlist", "Arima", "averaging",
+    "anova.rms", "aov", "aovlist", "Arima", "averaging", "asym",
 
     # b --------------------
     "bamlss", "bamlss.frame", "bayesGAM", "bayesmeta", "bayesx",
@@ -81,7 +81,7 @@ is_regression_model <- function(x) {
     "eglm", "elm", "emmGrid", "emm_list", "epi.2by2", "ergm",
 
     # f --------------------
-    "feglm", "feis", "felm", "fitdistr", "fixest", "flexmix",
+    "fdm", "feglm", "feis", "felm", "fitdistr", "fixest", "flexmix",
     "flexsurvreg", "flac", "flic",
 
     # g --------------------

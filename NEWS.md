@@ -43,6 +43,8 @@
 
 * Added support for `coxph.panel` models.
 
+* Added support for models of class `asym` (package *panelr*).
+
 * Overhaul of documentation for the package-functions.
 
 ## Bug fix

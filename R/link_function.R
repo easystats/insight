@@ -79,6 +79,9 @@ link_function.lm <- function(x, ...) {
 }
 
 #' @export
+link_function.asym <- link_function.lm
+
+#' @export
 link_function.phylolm <- link_function.lm
 
 #' @export
