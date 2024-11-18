@@ -197,13 +197,8 @@ get_statistic.merModList <- function(x, ...) {
 #' @export
 get_statistic.asym <- function(x, ...) {
   cftable <- summary(x)$coef_table
-
-  params <- rownames(cftable)
-  params <- gsub("^plus__", "+", params)
-  params <- gsub("^minus__", "-", params)
-
   out <- data.frame(
-    Parameter = params,
+    Parameter = find_parameters(x)$conditional,
     Statistic = cftable[, "t val."],
     stringsAsFactors = FALSE,
     row.names = NULL
