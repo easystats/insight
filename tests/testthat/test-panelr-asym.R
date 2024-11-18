@@ -105,7 +105,7 @@ test_that("get_statistic", {
     get_statistic(m1),
     data.frame(
       Parameter = c(
-        "(Intercept)", "+lag_pov_", "-lag_pov_",
+        "(Intercept)", "+lag(pov)", "-lag(pov)",
         "+spouse", "-spouse", "wave"
       ),
       Statistic = c(
