@@ -63,7 +63,7 @@ test_that("find_transformation - box-cox", {
 })
 
 test_that("find_transformation - box-cox, minus", {
-  m <- lm((mpg ^ -1.3 - 1) / -1.3 ~ hp, data = mtcars)
+  m <- lm((mpg^-1.3 - 1) / -1.3 ~ hp, data = mtcars)
   expect_identical(find_transformation(m), "box-cox")
   expect_identical(
     get_transformation(m)$transformation(5),
