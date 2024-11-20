@@ -62,6 +62,21 @@ test_that("find_transformation - box-cox", {
   expect_identical(find_transformation(m), "box-cox")
 })
 
+test_that("find_transformation - box-cox, minus", {
+  m <- lm((mpg ^ -1.3 - 1) / -1.3 ~ hp, data = mtcars)
+  expect_identical(find_transformation(m), "box-cox")
+  expect_identical(
+    get_transformation(m)$transformation(5),
+    0.67430248265846,
+    tolerance = 1e-4
+  )
+  expect_identical(
+    get_transformation(m)$inverse(0.67430248265846),
+    5,
+    tolerance = 1e-4
+  )
+})
+
 test_that("find_transformation - unknown", {
   model <- lm(I(2 * mpg + 3) ~ hp, data = mtcars)
   expect_null(find_transformation(model))
