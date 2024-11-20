@@ -102,7 +102,7 @@ test_that("find_terms, - box cox", {
   model <- lm(I((mpg^0.7 - 1) / 0.7) ~ hp, data = mtcars)
   expect_identical(
     find_terms(model),
-    list(response = c("I((mpg^0.7 - 1)/0.7)", "0.7"), conditional = "hp")
+    list(response = "I((mpg^0.7 - 1)/0.7)", conditional = "hp")
   )
   model <- lm((mpg ^ -1.3 - 1) / -1.3 ~ hp, data = mtcars)
   expect_identical(
