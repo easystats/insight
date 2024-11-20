@@ -62,6 +62,9 @@
 
 * Fixed issue in `compact_character()` and `compact_list()` for date-variables.
 
+* Fixed edge case in `find_transformation()` for simple log-transformation of
+  the response variable.
+
 # insight 0.20.5
 
 ## General
