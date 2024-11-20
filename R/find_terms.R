@@ -196,6 +196,7 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 
   # protect "-1"
   f$conditional <- gsub("(-1|- 1)(?![^(]*\\))", "#1", f$conditional, perl = TRUE)
+  f$response <- gsub("(-1|- 1)(?![^(]*\\))", "#1", f$response, perl = TRUE)
 
   # This regular expression matches any of the characters *, +, :, |, -, or /,
   # unless they are preceded by a ^ and followed by a closing parenthesis ).
@@ -239,7 +240,9 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
       trim_ws(unlist(strsplit(f$conditional[need_split], " ", fixed = TRUE), use.names = FALSE))
     )
   }
+
   f$conditional <- gsub("#1", "-1", f$conditional, fixed = TRUE)
+  f$response <- gsub("#1", "-1", f$response, fixed = TRUE)
 
   # reorder, so response is first
   compact_list(f[c(length(f), 1:(length(f) - 1))])
@@ -254,7 +257,7 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
   error <- utils::capture.output(print(f[[3]][i][[1]]))
   f[[3]][i] <- NULL
   f[[3]] <- f[[3]][[2]]
-  f[[3]] <- as.name(paste0(attr(stats::terms.formula(f), "term.labels"), collapse = "+"))
+  f[[3]] <- as.name(paste(attr(stats::terms.formula(f), "term.labels"), collapse = "+"))
 
   l <- .get_variables_list(f, resp)
   names(l) <- c("response", "conditional")

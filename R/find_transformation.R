@@ -169,9 +169,9 @@ find_transformation.character <- function(x, ...) {
 # helper -----------------------------
 
 .is_division <- function(x) {
-  any(grepl("(.*)/([0-9\\.]+)(\\)*)$", x)) && !any(grepl("(.*)(\\^|\\*\\*)\\((.*)/(.*)\\)", x))
+  any(grepl("(.*)/([0-9\\.\\+\\-]+)(\\)*)$", x)) && !any(grepl("(.*)(\\^|\\*\\*)\\((.*)/(.*)\\)", x))
 }
 
 .is_box_cox <- function(x) {
-  any(grepl("\\((.*)\\^[0-9\\.]+-1\\)", x))
+  any(grepl("\\((.*)\\^[0-9\\.\\+\\-]+-1\\)", x))
 }

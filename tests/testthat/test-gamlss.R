@@ -166,7 +166,7 @@ test_that("find_parameters", {
   set.seed(123)
   dat <<- data.frame(
     Y = sample(20:50, 100, replace = TRUE),
-    date = sample(seq(as.Date('1999/01/01'), as.Date('2000/01/01'), by = "day"), 10),
+    date = sample(seq(as.Date("1999/01/01"), as.Date("2000/01/01"), by = "day"), 10),
     cont1 = rchisq(100, df = 2),
     cont2 = runif(100),
     cat1 = sample(LETTERS[1:3], 100, replace = TRUE),
