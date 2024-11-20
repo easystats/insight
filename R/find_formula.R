@@ -92,7 +92,11 @@ formula_ok <- function(x, verbose = TRUE, ...) {
   # this may result in unexpected behaviour, and we should warn users
   check_3 <- .check_formula_index_df(f, x, verbose = verbose)
 
-  all(check_1 && check_2 && check_3)
+  # check if formula contains non-syntactic variable names and uses backticks
+  # this may result in unexpected behaviour, and we should warn users
+  check_4 <- .check_formula_backticks(f, x, verbose = verbose)
+
+  all(check_1 && check_2 && check_3 && check_4)
 }
 
 
@@ -1930,6 +1934,33 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       format_warning(
         "Using indexed data frames, such as `df[, 5]`, as model response can produce unexpected results. Specify your model using the literal name of the response variable instead." # nolint
       )
+    }
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+
+# formulas with non-syntactic names, where backticks are used, may cause
+# problems. warn user here
+
+.check_formula_backticks <- function(f, x, verbose = TRUE) {
+  if (is_empty_object(f)) {
+    return(TRUE)
+  }
+  resp <- .safe(safe_deparse(f$conditional))
+  if (!is.null(resp) && any(grepl("`", resp, fixed = TRUE))) {
+    if (verbose) {
+      bad_name <- gsub("(.*)`(.*)`(.*)", "\\2", resp)
+      format_warning(paste0(
+        "Looks like you are using invalid syntactically variables names, enquoted in backticks: `",
+        bad_name,
+        "`. This may result in unexpected behaviour. Please rename your variables (e.g., `",
+        make.names(bad_name),
+        "` instead of `",
+        bad_name,
+        "`) and re-fit the model." # nolint
+      ))
     }
     return(FALSE)
   }

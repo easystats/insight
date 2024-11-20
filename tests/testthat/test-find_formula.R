@@ -16,3 +16,10 @@ test_that("formula warns for badly formulated response", {
   model <- lm(iris[, 2] ~ Species, data = iris)
   expect_warning(formula_ok(model), regex = "Using indexed")
 })
+
+test_that("formula warns when using backticks", {
+  data(mtcars)
+  colnames(mtcars)[1] <- "1_mpg"
+  m <- lm(`1_mpg` ~ gear, data = mtcars)
+  expect_false(expect_warning(formula_ok(m), regex = "syntactically"))
+})
