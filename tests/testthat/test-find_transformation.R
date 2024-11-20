@@ -132,3 +132,19 @@ test_that("find_transformation - detect powers", {
     )
   )
 })
+
+
+test_that("find_transformation - works with log-edge cases", {
+  set.seed(1)
+  n <- 30
+  x <- rlnorm(n = n, meanlog = 3, sdlog = 1)
+  y <- exp(2 + log(x) + rnorm(n, sd = 3))
+  d <- data.frame(x, y)
+  m <- lm(log(y) ~ log(x), data = d)
+
+  expect_identical(find_transformation(m), "log")
+  expect_identical(
+    find_transformation(m, include_all = TRUE),
+    list(response = c(y = "log"), conditional = c(x = "log"))
+  )
+})
