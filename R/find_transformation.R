@@ -102,15 +102,19 @@ find_transformation.character <- function(x, ...) {
     if (grepl("log\\(log\\((.*)\\)\\)", x)) {
       transform_fun <- "log-log"
     } else {
-      # 1. try: log(x + number)
-      plus_minus <- .safe(
-        eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", x)))
-      )
-      # 2. try: log(number + x)
-      if (is.null(plus_minus)) {
+      plus_minus <- NULL
+      # make sure we definitly have a "+" in the log-transformation
+      if (grepl("+", x, fixed = TRUE)) {
+        # 1. try: log(x + number)
         plus_minus <- .safe(
-          eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", x)))
+          eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", x)))
         )
+        # 2. try: log(number + x)
+        if (is.null(plus_minus)) {
+          plus_minus <- .safe(
+            eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", x)))
+          )
+        }
       }
       if (is.null(plus_minus) || is.function(plus_minus)) {
         transform_fun <- "log"
