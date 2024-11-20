@@ -257,7 +257,7 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
   error <- utils::capture.output(print(f[[3]][i][[1]]))
   f[[3]][i] <- NULL
   f[[3]] <- f[[3]][[2]]
-  f[[3]] <- as.name(paste0(attr(stats::terms.formula(f), "term.labels"), collapse = "+"))
+  f[[3]] <- as.name(paste(attr(stats::terms.formula(f), "term.labels"), collapse = "+"))
 
   l <- .get_variables_list(f, resp)
   names(l) <- c("response", "conditional")
