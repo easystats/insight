@@ -2001,7 +2001,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
         make.names(bad_name),
         "` instead of `",
         bad_name,
-        "`) and re-fit the model." # nolint
+        "`) and fit the model again." # nolint
       ))
     }
     return(FALSE)
