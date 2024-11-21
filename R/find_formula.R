@@ -22,7 +22,7 @@
 #'   which is not intended.
 #' - `"index"`: Check if formula contains indexed data frames as response
 #'   variable (e.g., `df[, 5] ~ x`).
-#' - `"name"`: Check if syntactically invalid variables names were used and
+#' - `"name"`: Check if syntactically invalid variable names were used and
 #'   quoted in backticks.
 #' - `"all"`: Checks all of the above mentioned options.
 #'
@@ -2017,7 +2017,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       msg <- c(
         prefix_msg,
         paste0(
-          "Looks like you are using syntactically invalid variables names, quoted in backticks: `",
+          "Looks like you are using syntactically invalid variable names, quoted in backticks: `",
           bad_name,
           "`. This may result in unexpected behaviour. Please rename your variables (e.g., `",
           make.names(bad_name),
