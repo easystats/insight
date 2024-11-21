@@ -17,7 +17,7 @@ variable)."><meta property="og:image" content="https://easystats.github.io/insig
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.19</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,7 +77,14 @@ and that no data names are used (i.e. no <code>data$variable</code>, but rather
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_formula</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">formula_ok</span><span class="op">(</span><span class="va">x</span>, checks <span class="op">=</span> <span class="st">"all"</span>, action <span class="op">=</span> <span class="st">"warning"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">formula_ok</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  checks <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  action <span class="op">=</span> <span class="st">"warning"</span>,</span>
+<span>  prefix_msg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
 <span><span class="fu">find_formula</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -117,6 +124,12 @@ quoted in backticks.</p></li>
 <dt id="arg-action">action<a class="anchor" aria-label="anchor" href="#arg-action"></a></dt>
 <dd><p>Should a message, warning or error be given for an invalid
 formula? Must be one of <code>"message"</code>, <code>"warning"</code> (default) or <code>"error"</code>.</p></dd>
+
+
+<dt id="arg-prefix-msg">prefix_msg<a class="anchor" aria-label="anchor" href="#arg-prefix-msg"></a></dt>
+<dd><p>Optional string that will be added to the warning/error
+message. This can be used to add additional information, e.g. about the
+specific function that was calling <code>formula_ok()</code> and failed.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -173,7 +186,7 @@ is only returned, when it is explicitly defined as named argument
 <span class="r-in"><span><span class="fu">find_formula</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mpg ~ wt + cyl + vs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x563f6d88f2b0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55becddcd3b8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_formula" "list"           </span>
@@ -183,11 +196,11 @@ is only returned, when it is explicitly defined as named argument
 <span class="r-in"><span><span class="va">f</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length ~ Sepal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x563f6d88f2b0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55becddcd3b8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $random</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~1 | Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x563f6dc48dd0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55becf2460d0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_formula" "list"           </span>
