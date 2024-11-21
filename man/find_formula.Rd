@@ -9,7 +9,14 @@
 \usage{
 find_formula(x, ...)
 
-formula_ok(x, checks = "all", action = "warning", verbose = TRUE, ...)
+formula_ok(
+  x,
+  checks = "all",
+  action = "warning",
+  prefix_msg = NULL,
+  verbose = TRUE,
+  ...
+)
 
 \method{find_formula}{default}(x, verbose = TRUE, ...)
 
@@ -38,6 +45,10 @@ quoted in backticks.
 
 \item{action}{Should a message, warning or error be given for an invalid
 formula? Must be one of \code{"message"}, \code{"warning"} (default) or \code{"error"}.}
+
+\item{prefix_msg}{Optional string that will be added to the warning/error
+message. This can be used to add additional information, e.g. about the
+specific function that was calling \code{formula_ok()} and failed.}
 
 \item{verbose}{Toggle warnings.}
 
