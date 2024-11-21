@@ -240,7 +240,7 @@ get_data <- function(x, ...) {
   # second, try to extract formula directly
   if (is.null(dat)) {
     dat <- .safe(eval(model_call$data,
-      envir = environment(find_formula(x)$conditional),
+      envir = environment(find_formula(x, verbose = FALSE)$conditional),
       enclos = NULL
     ))
   }

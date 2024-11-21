@@ -535,7 +535,7 @@ get_parameters.hglm <- function(x, effects = "fixed", component = "all", ...) {
   fe <- x$fixef
   re <- x$ranef
 
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
   if (is.null(f$dispersion)) {
     dispersion <- NULL
   } else {

@@ -284,7 +284,7 @@
   # that are not covered by the standard elements. We then just do not
   # filter elements.
   if (inherits(model, "brmsfit") && component == "all") {
-    f <- insight::find_formula(model)
+    f <- insight::find_formula(model, verbose = FALSE)
     elements <- unique(c(elements, names(f)))
   }
 

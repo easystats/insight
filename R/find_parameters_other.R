@@ -163,7 +163,7 @@ find_parameters.model_fit <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.systemfit <- function(x, flatten = FALSE, ...) {
   cf <- stats::coef(x)
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
 
   system_names <- names(f)
 

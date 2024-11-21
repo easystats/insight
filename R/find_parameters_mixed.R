@@ -81,7 +81,7 @@ find_parameters.MixMod <- function(x, effects = "all", component = "all", flatte
 
   re.names <- dimnames(lme4::ranef(x))[[2]]
 
-  has_zeroinf <- !is.null(find_formula(x)[["zero_inflated"]])
+  has_zeroinf <- !is.null(find_formula(x, verbose = FALSE)[["zero_inflated"]])
 
   if (has_zeroinf) {
     z_inflated <- names(lme4::fixef(x, sub_model = "zero_part"))
@@ -152,7 +152,7 @@ find_parameters.hglm <- function(x, effects = "all", component = "all", flatten 
   fe <- x$fixef
   re <- x$ranef
 
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
   if (is.null(f$dispersion)) {
     disp_name <- NULL
   } else {

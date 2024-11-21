@@ -157,7 +157,7 @@ get_modelmatrix.svyglm <- function(x, ...) {
 
 #' @export
 get_modelmatrix.brmsfit <- function(x, ...) {
-  formula_rhs <- safe_deparse(find_formula(x)$conditional[[3]])
+  formula_rhs <- safe_deparse(find_formula(x, verbose = FALSE)$conditional[[3]])
   # exception: for null-models, we need different handling, else `reformulate()`
   # will not work.
   if (identical(formula_rhs, "1")) {

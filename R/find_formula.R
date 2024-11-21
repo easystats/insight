@@ -11,6 +11,21 @@
 #' @param verbose Toggle warnings.
 #' @param dichotomies Logical, if model is a `nestedLogit` objects, returns
 #' the formulas for the dichotomies.
+#' @param checks Indicates what kind of checks are conducted when checking
+#' the formula notation. Currently, four different formula specification that
+#' can result in unexpected behaviour of downstream-functions are checked.
+#' `checks` can be one or more of:
+#'
+#' - `"dollar"`: Check if formula contains data name with "$", e.g. `mtcars$am`.
+#' - `"T"`: Check if formula contains poly-term with "raw=T", e.g.
+#'   `poly(x, 2, raw=T)`. In this case, `all.vars()` returns `T` as variable,
+#'   which is not intended.
+#' - `"index"`: Check if formula contains indexed data frames as response
+#'   variable (e.g., `df[, 5] ~ x`).
+#' - `"name"`: Check if invalid syntactically variables names were used and
+#'   quoted in backticks.
+#' - `"all"`: Checks all of the above mentioned options.
+#'
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -77,22 +92,57 @@ find_formula <- function(x, ...) {
 
 #' @rdname find_formula
 #' @export
-formula_ok <- function(x, verbose = TRUE, ...) {
-  f <- find_formula(x, verbose = FALSE)
+formula_ok <- function(x, checks = "all", verbose = TRUE, ...) {
+  # if a model, retrieve formula. else, treat x as formula
+  if (is_model(x)) {
+    f <- find_formula(x, verbose = FALSE)
+  } else {
+    f <- x
+  }
+
+  check_1 <- check_2 <- check_3 <- check_4 <- TRUE
+  valid_options <- c("all", "dollar", "T", "index", "name")
+
+  # validate args
+  if (is.null(checks)) {
+    checks <- "all"
+  }
+  if (!all(checks %in% valid_options)) {
+    invalid <- setdiff(checks, valid_options)
+    format_error(paste0(
+      "Argument `checks` contained invalid options: ",
+      toString(invalid),
+      ". Please use one or more of ",
+      toString(valid_options),
+      "."
+    ))
+  }
 
   # check if formula contains data name with "$". This may
   # result in unexpected behaviour, and we should warn users
-  check_1 <- .check_formula_for_dollar(f, verbose = verbose)
+  if (all(checks == "all") || "dollar" %in% checks) {
+    check_1 <- .check_formula_for_dollar(f, verbose = verbose)
+  }
 
   # check if formula contains poly-term with "raw=T". In this case,
   # all.vars() returns "T" as variable, which is not intended
-  check_2 <- .check_formula_for_T(f, verbose = verbose)
+  if (all(checks == "all") || "T" %in% checks) {
+    check_2 <- .check_formula_for_T(f, verbose = verbose)
+  }
 
   # check if formula contains index data frames as response variable
   # this may result in unexpected behaviour, and we should warn users
-  check_3 <- .check_formula_index_df(f, x, verbose = verbose)
+  if (all(checks == "all") || "index" %in% checks) {
+    check_3 <- .check_formula_index_df(f, x, verbose = verbose)
+  }
 
-  all(check_1 && check_2 && check_3)
+  # check if formula contains non-syntactic variable names and uses backticks
+  # this may result in unexpected behaviour, and we should warn users
+  if (all(checks == "all") || "name" %in% checks) {
+    check_4 <- .check_formula_backticks(f, x, verbose = verbose)
+  }
+
+  all(check_1 && check_2 && check_3 && check_4)
 }
 
 
@@ -165,7 +215,7 @@ find_formula.data.frame <- function(x, verbose = TRUE, ...) {
 find_formula.aovlist <- function(x, verbose = TRUE, ...) {
   f <- attr(x, "terms", exact = TRUE)
   attributes(f) <- NULL
-  .find_formula_return(list(conditional = f))
+  .find_formula_return(list(conditional = f), verbose = verbose)
 }
 
 
@@ -390,7 +440,7 @@ find_formula.systemfit <- function(x, verbose = TRUE, ...) {
   if (length(f) > 1L) {
     attr(f, "is_mv") <- "1"
   }
-  .find_formula_return(f)
+  .find_formula_return(f, verbose = verbose)
 }
 
 
@@ -498,14 +548,17 @@ find_formula.averaging <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.glht <- function(x, verbose = TRUE, ...) {
-  .find_formula_return(list(conditional = stats::formula(x$model)))
+  .find_formula_return(list(conditional = stats::formula(x$model)), verbose = verbose)
 }
 
 
 #' @export
 find_formula.joint <- function(x, verbose = TRUE, ...) {
   f <- stats::formula(x)
-  .find_formula_return(list(conditional = f$lformula, survival = f$sformula))
+  .find_formula_return(
+    list(conditional = f$lformula, survival = f$sformula),
+    verbose = verbose
+  )
 }
 
 
@@ -579,7 +632,7 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.mira <- function(x, verbose = TRUE, ...) {
-  .find_formula_return(find_formula(x$analyses[[1]]))
+  .find_formula_return(find_formula(x$analyses[[1]]), verbose = verbose)
 }
 
 
@@ -1131,7 +1184,7 @@ find_formula.DirichletRegModel <- function(x, verbose = TRUE, ...) {
     names(out)[2] <- "precision"
   }
 
-  .find_formula_return(out)
+  .find_formula_return(out, verbose = verbose)
 }
 
 
@@ -1526,7 +1579,7 @@ find_formula.stanmvreg <- function(x, verbose = TRUE, ...) {
   f <- stats::formula(x)
   mv_formula <- lapply(f, .get_stanmv_formula)
   attr(mv_formula, "is_mv") <- "1"
-  .find_formula_return(mv_formula)
+  .find_formula_return(mv_formula, verbose = verbose)
 }
 
 
@@ -1857,14 +1910,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  # check if formula contains data name with "$". This may
-  # result in unexpected behaviour, and we should warn users
-  .check_formula_for_dollar(f, verbose = verbose)
-
-  # check if formula contains poly-term with "raw=T". In this case,
-  # all.vars() returns "T" as variable, which is not intended
-  .check_formula_for_T(f, verbose = verbose)
-
+  formula_ok(f, verbose = verbose)
   class(f) <- c("insight_formula", class(f))
   f
 }
@@ -1930,6 +1976,33 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       format_warning(
         "Using indexed data frames, such as `df[, 5]`, as model response can produce unexpected results. Specify your model using the literal name of the response variable instead." # nolint
       )
+    }
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+
+# formulas with non-syntactic names, where backticks are used, may cause
+# problems. warn user here
+
+.check_formula_backticks <- function(f, x, verbose = TRUE) {
+  if (is_empty_object(f)) {
+    return(TRUE)
+  }
+  resp <- .safe(safe_deparse(f$conditional))
+  if (!is.null(resp) && any(grepl("`", resp, fixed = TRUE))) {
+    if (verbose) {
+      bad_name <- gsub("(.*)`(.*)`(.*)", "\\2", resp)
+      format_warning(paste0(
+        "Looks like you are using invalid syntactically variables names, quoted in backticks: `",
+        bad_name,
+        "`. This may result in unexpected behaviour. Please rename your variables (e.g., `",
+        make.names(bad_name),
+        "` instead of `",
+        bad_name,
+        "`) and fit the model again." # nolint
+      ))
     }
     return(FALSE)
   }

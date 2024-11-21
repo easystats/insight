@@ -459,7 +459,7 @@
   # mixed_effects_info <- lapply(mixed_effects_info, .collapse_zi)
 
   # for glmmTMB, tell user that dispersion model is ignored
-  if (!is.null(find_formula(model)[["dispersion"]]) && verbose) {
+  if (!is.null(find_formula(model, verbose = FALSE)[["dispersion"]]) && verbose) {
     format_warning(sprintf("%s ignores effects of dispersion model.", name_fun))
   }
 

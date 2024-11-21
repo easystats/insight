@@ -73,7 +73,7 @@ find_transformation.default <- function(x, include_all = FALSE, ...) {
     # for divisions, like x/3, `find_response()` returns a character vector
     # of length 2, one with the nominator and the denominator. In this case,
     # check against original response
-    original_response <- safe_deparse(find_formula(x)$conditional[[2]])
+    original_response <- safe_deparse(find_formula(x, verbose = FALSE)$conditional[[2]])
     # check if we have the pattern (x/<number)
     if (.is_division(original_response)) {
       # if so, check if the pattern really match

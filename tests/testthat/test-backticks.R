@@ -65,18 +65,18 @@ withr::with_environment(
       )
     )
     expect_identical(
-      find_predictors(m),
+      find_predictors(m, verbose = FALSE),
       list(conditional = c("Petal.Length", "a m", "Sepal.Length"))
     )
     expect_identical(
-      find_variables(m),
+      find_variables(m, verbose = FALSE),
       list(
         response = "Sepal Width",
         conditional = c("Petal.Length", "a m", "Sepal.Length")
       )
     )
     expect_identical(
-      find_terms(m),
+      find_terms(m, verbose = FALSE),
       list(
         response = "Sepal Width",
         conditional = c("Petal.Length", "a m", "log(Sepal.Length)")

@@ -306,7 +306,7 @@ get_parameters.mjoint <- function(x, component = "all", ...) {
 #' @export
 get_parameters.systemfit <- function(x, ...) {
   cf <- stats::coef(summary(x))
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
 
   system_names <- names(f)
   parameter_names <- row.names(cf)
