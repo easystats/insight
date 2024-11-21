@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,6 +71,7 @@
 <li><p>The function to calculate the corrections for likelihood-values when the response-variable is transformed is now exported as <code>get_likelihood_adjustment()</code>.</p></li>
 <li><p><code><a href="../reference/export_table.html">export_table()</a></code> can now split tables into more than three tables when <code>table_width</code> is used (formerly, the maximum number of split tables was three).</p></li>
 <li><p>Changed (improved) formatting for parameter tables in <code><a href="../reference/export_table.html">export_table()</a></code>, when <code>format = "html"</code>. Rows are indented, and group headers are emphasized in italic.</p></li>
+<li><p><code><a href="../reference/find_formula.html">formula_ok()</a></code> now also checks for invalid syntactically variable names. Furthermore, argument <code>checks</code> now allows to specify for which possibly problematic formula notation should be checked.</p></li>
 <li><p><code><a href="../reference/format_value.html">format_value()</a></code> gains a <code>decimal_point</code> argument, to change the decimal point in output conversion.</p></li>
 <li><p><code><a href="../reference/format_bf.html">format_bf()</a></code> with <code>stars = TRUE</code> used the <code>°</code> symbol for inferiority (evidence <em>against</em> the comparison).</p></li>
 <li><p>Added support for <code>coxph.panel</code> models.</p></li>
