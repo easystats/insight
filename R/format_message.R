@@ -126,7 +126,7 @@ format_alert <- function(string,
                          type = "message",
                          call = FALSE,
                          immediate = FALSE) {
-  type <- match.arg(type, choices = c("message", "warning", "error"))
+  type <- validate_argument(type, c("message", "warning", "error"))
   if (type == "message") {
     message(format_message(
       string = string, ...,

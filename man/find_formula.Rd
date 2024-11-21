@@ -9,7 +9,7 @@
 \usage{
 find_formula(x, ...)
 
-formula_ok(x, checks = "all", verbose = TRUE, ...)
+formula_ok(x, checks = "all", action = "warning", verbose = TRUE, ...)
 
 \method{find_formula}{default}(x, verbose = TRUE, ...)
 
@@ -31,10 +31,13 @@ can result in unexpected behaviour of downstream-functions are checked.
 which is not intended.
 \item \code{"index"}: Check if formula contains indexed data frames as response
 variable (e.g., \code{df[, 5] ~ x}).
-\item \code{"name"}: Check if invalid syntactically variables names were used and
+\item \code{"name"}: Check if syntactically invalid variables names were used and
 quoted in backticks.
 \item \code{"all"}: Checks all of the above mentioned options.
 }}
+
+\item{action}{Should a message, warning or error be given for an invalid
+formula? Must be one of \code{"message"}, \code{"warning"} (default) or \code{"error"}.}
 
 \item{verbose}{Toggle warnings.}
 

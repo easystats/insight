@@ -22,10 +22,12 @@
 #'   which is not intended.
 #' - `"index"`: Check if formula contains indexed data frames as response
 #'   variable (e.g., `df[, 5] ~ x`).
-#' - `"name"`: Check if invalid syntactically variables names were used and
+#' - `"name"`: Check if syntactically invalid variables names were used and
 #'   quoted in backticks.
 #' - `"all"`: Checks all of the above mentioned options.
 #'
+#' @param action Should a message, warning or error be given for an invalid
+#' formula? Must be one of `"message"`, `"warning"` (default) or `"error"`.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
@@ -92,7 +94,7 @@ find_formula <- function(x, ...) {
 
 #' @rdname find_formula
 #' @export
-formula_ok <- function(x, checks = "all", verbose = TRUE, ...) {
+formula_ok <- function(x, checks = "all", action = "warning", verbose = TRUE, ...) {
   # if a model, retrieve formula. else, treat x as formula
   if (is_model(x)) {
     f <- find_formula(x, verbose = FALSE)
@@ -104,6 +106,8 @@ formula_ok <- function(x, checks = "all", verbose = TRUE, ...) {
   valid_options <- c("all", "dollar", "T", "index", "name")
 
   # validate args
+  action <- validate_argument(action, c("message", "warning", "error"))
+
   if (is.null(checks)) {
     checks <- "all"
   }
@@ -121,25 +125,25 @@ formula_ok <- function(x, checks = "all", verbose = TRUE, ...) {
   # check if formula contains data name with "$". This may
   # result in unexpected behaviour, and we should warn users
   if (all(checks == "all") || "dollar" %in% checks) {
-    check_1 <- .check_formula_for_dollar(f, verbose = verbose)
+    check_1 <- .check_formula_for_dollar(f, action = action, verbose = verbose)
   }
 
   # check if formula contains poly-term with "raw=T". In this case,
   # all.vars() returns "T" as variable, which is not intended
   if (all(checks == "all") || "T" %in% checks) {
-    check_2 <- .check_formula_for_T(f, verbose = verbose)
+    check_2 <- .check_formula_for_T(f, action = action, verbose = verbose)
   }
 
   # check if formula contains index data frames as response variable
   # this may result in unexpected behaviour, and we should warn users
   if (all(checks == "all") || "index" %in% checks) {
-    check_3 <- .check_formula_index_df(f, x, verbose = verbose)
+    check_3 <- .check_formula_index_df(f, x, action = action, verbose = verbose)
   }
 
   # check if formula contains non-syntactic variable names and uses backticks
   # this may result in unexpected behaviour, and we should warn users
   if (all(checks == "all") || "name" %in% checks) {
-    check_4 <- .check_formula_backticks(f, x, verbose = verbose)
+    check_4 <- .check_formula_backticks(f, action = action, verbose = verbose)
   }
 
   all(check_1 && check_2 && check_3 && check_4)
@@ -1916,7 +1920,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 }
 
 
-.check_formula_for_T <- function(f, verbose = TRUE) {
+.check_formula_for_T <- function(f, action = "warning", verbose = TRUE) {
   f <- safe_deparse(f[[1]])
 
   if (is_empty_object(f)) {
@@ -1925,9 +1929,10 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   if (grepl("(.*)poly\\((.*),\\s*raw\\s*=\\s*T\\)", f)) {
     if (verbose) {
-      format_warning(
+      format_alert(
         "Looks like you are using `poly()` with \"raw = T\". This results in unexpected behaviour, because `all.vars()` considers `T` as variable.", # nolint
-        "Please use \"raw = TRUE\"."
+        "Please use \"raw = TRUE\".",
+        type = action
       )
     }
     return(FALSE)
@@ -1940,7 +1945,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 # in various functions throughout the easystats packages. We warn the user
 # here...
 
-.check_formula_for_dollar <- function(f, verbose = TRUE) {
+.check_formula_for_dollar <- function(f, action = "warning", verbose = TRUE) {
   if (is_empty_object(f)) {
     return(TRUE)
   }
@@ -1951,10 +1956,10 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       format_error(attributes(fc)$condition$message)
     }
     if (verbose) {
-      format_warning(paste0(
+      format_alert(paste0(
         "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.", # nolint
         "\n  Try: ", fc$formula, ", data = ", fc$data
-      ))
+      ), type = action)
     }
     return(FALSE)
   }
@@ -1966,15 +1971,16 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 # cause problems in various functions throughout the easystats packages. We
 # warn the user here...
 
-.check_formula_index_df <- function(f, x, verbose = TRUE) {
+.check_formula_index_df <- function(f, x, action = "warning", verbose = TRUE) {
   if (is_empty_object(f)) {
     return(TRUE)
   }
   resp <- .safe(safe_deparse(f$conditional[[2]]))
   if (!is.null(resp) && any(grepl("\\b\\w+\\[.*?,.*?\\]", resp))) {
     if (verbose) {
-      format_warning(
-        "Using indexed data frames, such as `df[, 5]`, as model response can produce unexpected results. Specify your model using the literal name of the response variable instead." # nolint
+      format_alert(
+        "Using indexed data frames, such as `df[, 5]`, as model response can produce unexpected results. Specify your model using the literal name of the response variable instead.", # nolint
+        type = action
       )
     }
     return(FALSE)
@@ -1986,7 +1992,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 # formulas with non-syntactic names, where backticks are used, may cause
 # problems. warn user here
 
-.check_formula_backticks <- function(f, x, verbose = TRUE) {
+.check_formula_backticks <- function(f, action = "warning", verbose = TRUE) {
   if (is_empty_object(f)) {
     return(TRUE)
   }
@@ -1994,15 +2000,15 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   if (!is.null(resp) && any(grepl("`", resp, fixed = TRUE))) {
     if (verbose) {
       bad_name <- gsub("(.*)`(.*)`(.*)", "\\2", resp)
-      format_warning(paste0(
-        "Looks like you are using invalid syntactically variables names, quoted in backticks: `",
+      format_alert(paste0(
+        "Looks like you are using syntactically invalid variables names, quoted in backticks: `",
         bad_name,
         "`. This may result in unexpected behaviour. Please rename your variables (e.g., `",
         make.names(bad_name),
         "` instead of `",
         bad_name,
         "`) and fit the model again." # nolint
-      ))
+      ), type = action)
     }
     return(FALSE)
   }

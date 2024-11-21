@@ -35,7 +35,7 @@
   `format = "html"`. Rows are indented, and group headers are emphasized in
   italic.
 
-* `formula_ok()` now also checks for invalid syntactically variable names.
+* `formula_ok()` now also checks for syntactically invalid variable names.
   Furthermore, argument `checks` now allows to specify for which possibly
   problematic formula notation should be checked.
 
