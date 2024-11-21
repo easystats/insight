@@ -215,7 +215,7 @@ find_formula.data.frame <- function(x, verbose = TRUE, ...) {
 find_formula.aovlist <- function(x, verbose = TRUE, ...) {
   f <- attr(x, "terms", exact = TRUE)
   attributes(f) <- NULL
-  .find_formula_return(list(conditional = f))
+  .find_formula_return(list(conditional = f), verbose = verbose)
 }
 
 
@@ -440,7 +440,7 @@ find_formula.systemfit <- function(x, verbose = TRUE, ...) {
   if (length(f) > 1L) {
     attr(f, "is_mv") <- "1"
   }
-  .find_formula_return(f)
+  .find_formula_return(f, verbose = verbose)
 }
 
 
@@ -548,14 +548,17 @@ find_formula.averaging <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.glht <- function(x, verbose = TRUE, ...) {
-  .find_formula_return(list(conditional = stats::formula(x$model)))
+  .find_formula_return(list(conditional = stats::formula(x$model)), verbose = verbose)
 }
 
 
 #' @export
 find_formula.joint <- function(x, verbose = TRUE, ...) {
   f <- stats::formula(x)
-  .find_formula_return(list(conditional = f$lformula, survival = f$sformula))
+  .find_formula_return(
+    list(conditional = f$lformula, survival = f$sformula),
+    verbose = verbose
+  )
 }
 
 
@@ -629,7 +632,7 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.mira <- function(x, verbose = TRUE, ...) {
-  .find_formula_return(find_formula(x$analyses[[1]]))
+  .find_formula_return(find_formula(x$analyses[[1]]), verbose = verbose)
 }
 
 
@@ -1181,7 +1184,7 @@ find_formula.DirichletRegModel <- function(x, verbose = TRUE, ...) {
     names(out)[2] <- "precision"
   }
 
-  .find_formula_return(out)
+  .find_formula_return(out, verbose = verbose)
 }
 
 
@@ -1576,7 +1579,7 @@ find_formula.stanmvreg <- function(x, verbose = TRUE, ...) {
   f <- stats::formula(x)
   mv_formula <- lapply(f, .get_stanmv_formula)
   attr(mv_formula, "is_mv") <- "1"
-  .find_formula_return(mv_formula)
+  .find_formula_return(mv_formula, verbose = verbose)
 }
 
 
@@ -1907,7 +1910,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  formula_ok(f)
+  formula_ok(f, verbose = verbose)
   class(f) <- c("insight_formula", class(f))
   f
 }

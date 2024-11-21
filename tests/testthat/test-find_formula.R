@@ -21,5 +21,7 @@ test_that("formula warns when using backticks", {
   data(mtcars)
   colnames(mtcars)[1] <- "1_mpg"
   m <- lm(`1_mpg` ~ gear, data = mtcars)
-  expect_false(expect_warning(formula_ok(m), regex = "syntactically"))
+  expect_warning(expect_false(formula_ok(m)), regex = "syntactically")
+  expect_silent(expect_true(formula_ok(m, checks = "dollar")))
+  expect_error(formula_ok(m, checks = c("dollar", "test")), regex = "invalid options")
 })
