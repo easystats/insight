@@ -76,7 +76,7 @@ withr::with_environment(
       )
     )
     expect_identical(
-      find_terms(m) verbose = FALSE),
+      find_terms(m, verbose = FALSE),
       list(
         response = "Sepal Width",
         conditional = c("Petal.Length", "a m", "log(Sepal.Length)")
