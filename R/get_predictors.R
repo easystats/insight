@@ -14,9 +14,17 @@
 #' @export
 get_predictors <- function(x, verbose = TRUE) {
   vars <- if (inherits(x, "wbm")) {
-    unlist(compact_list(find_terms(x, flatten = FALSE)[c("conditional", "instruments")]))
+    unlist(compact_list(
+      find_terms(x, flatten = FALSE, verbose = FALSE)[c("conditional", "instruments")]
+    ))
   } else {
-    find_predictors(x, effects = "fixed", component = "all", flatten = TRUE)
+    find_predictors(
+      x,
+      effects = "fixed",
+      component = "all",
+      flatten = TRUE,
+      verbose = FALSE
+    )
   }
 
   dat <- get_data(x, verbose = FALSE)

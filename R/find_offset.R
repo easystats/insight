@@ -26,7 +26,7 @@
 #' @export
 find_offset <- function(x) {
   model_terms <- .safe(
-    as.character(attributes(stats::terms(find_formula(x)[[1]]))$variables),
+    as.character(attributes(stats::terms(find_formula(x, verbose = FALSE)[[1]]))$variables),
     find_terms(x)
   )
   model_offset <- NULL

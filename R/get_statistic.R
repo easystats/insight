@@ -2108,7 +2108,7 @@ get_statistic.rqss <- function(x,
 #' @export
 get_statistic.systemfit <- function(x, ...) {
   cf <- stats::coef(summary(x))
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
 
   system_names <- names(f)
   parameter_names <- row.names(cf)

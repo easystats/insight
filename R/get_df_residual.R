@@ -232,7 +232,7 @@
   dof <- NULL
   s <- summary(x)$eq
   params <- find_parameters(x)
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
   system_names <- names(f)
 
   for (i in seq_along(system_names)) {

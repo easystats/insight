@@ -731,7 +731,7 @@ model_info.brmsfit <- function(x, ...) {
         logit.link = .x$link == "logit",
         multi.var = TRUE,
         link.fun = .x$link,
-        dispersion = !is_empty_object(insight::find_formula(x)$sigma),
+        dispersion = !is_empty_object(find_formula(x, verbose = FALSE)$sigma),
         ...
       )
     })
@@ -742,7 +742,7 @@ model_info.brmsfit <- function(x, ...) {
       logit.link = faminfo$link == "logit",
       multi.var = FALSE,
       link.fun = faminfo$link,
-      dispersion = !is_empty_object(insight::find_formula(x)$sigma),
+      dispersion = !is_empty_object(find_formula(x, verbose = FALSE)$sigma),
       ...
     )
   }
@@ -1165,7 +1165,7 @@ model_info.glmmTMB <- function(x, ...) {
     hurdle = grepl("truncated", faminfo$family, fixed = TRUE),
     logit.link = faminfo$link == "logit",
     link.fun = faminfo$link,
-    dispersion = !is.null(find_formula(x)$dispersion),
+    dispersion = !is.null(find_formula(x, verbose = FALSE)$dispersion),
     glmmtmb_zeroinf = zero_inflated,
     ...
   )

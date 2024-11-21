@@ -23,7 +23,7 @@
 #' has_intercept(model)
 #' @export
 has_intercept <- function(x, verbose = TRUE) {
-  f <- find_formula(x)
+  f <- find_formula(x, verbose = FALSE)
   if (is_multivariate(x)) {
     lapply(f, .check_for_intercept, verbose = verbose)
   } else {
