@@ -65,7 +65,7 @@ withr::with_environment(
       )
     )
     expect_identical(
-      find_predictors(m),
+      find_predictors(m, verbose = FALSE),
       list(conditional = c("Petal.Length", "a m", "Sepal.Length"))
     )
     expect_identical(

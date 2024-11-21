@@ -32,7 +32,7 @@ which is not intended.
 \item \code{"index"}: Check if formula contains indexed data frames as response
 variable (e.g., \code{df[, 5] ~ x}).
 \item \code{"name"}: Check if invalid syntactically variables names were used and
-enquoted in backticks.
+quoted in backticks.
 \item \code{"all"}: Checks all of the above mentioned options.
 }}
 
