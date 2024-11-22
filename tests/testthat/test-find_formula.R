@@ -24,6 +24,9 @@ test_that("formula warns when using backticks", {
   expect_warning(expect_false(formula_ok(m)), regex = "syntactically")
   expect_silent(expect_true(formula_ok(m, checks = "dollar")))
   expect_error(formula_ok(m, checks = c("dollar", "test")), regex = "invalid options")
+  # null model checks formula
+  expect_warning(null_model(m), regex = "Looks like")
+  expect_silent(null_model(m, verbose = FALSE))
   # message types
   expect_message(expect_false(formula_ok(m, action = "message")), regex = "syntactically")
   expect_error(expect_false(formula_ok(m, action = "error")), regex = "syntactically")
