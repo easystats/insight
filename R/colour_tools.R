@@ -22,6 +22,9 @@
   if (.rstudio_with_ansi_support() && sink.number() == 0) {
     return(TRUE)
   }
+  if (Sys.getenv("POSITRON", "") == "1" && sink.number() == 0) {
+    return(TRUE)
+  }
   if (!isatty(stdout())) {
     return(FALSE)
   }
