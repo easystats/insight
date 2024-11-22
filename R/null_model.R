@@ -18,9 +18,6 @@
 #'
 #' @export
 null_model <- function(model, verbose = TRUE, ...) {
-  # check if model formula is ok
-  formula_ok(model)
-
   model_formula <- find_formula(model, verbose = verbose)
   offset_term <- tryCatch(
     {

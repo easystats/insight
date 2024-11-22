@@ -56,12 +56,12 @@ find_transformation.default <- function(x, include_all = FALSE, ...) {
 
   # sanity check for multivariate models
   if (is_multivariate(x)) {
-    result <- lapply(find_terms(x), function(i) {
+    result <- lapply(find_terms(x, verbose = FALSE), function(i) {
       find_transformation(i[["response"]])
     })
     unlist(result)
   } else if (include_all) {
-    lapply(find_terms(x), function(i) {
+    lapply(find_terms(x, verbose = FALSE), function(i) {
       stats::setNames(
         unlist(lapply(i, find_transformation), use.names = FALSE),
         clean_names(i)
@@ -69,7 +69,7 @@ find_transformation.default <- function(x, include_all = FALSE, ...) {
     })
   } else {
     # "raw" response
-    rv <- find_terms(x)[["response"]]
+    rv <- find_terms(x, verbose = FALSE)[["response"]]
     # for divisions, like x/3, `find_response()` returns a character vector
     # of length 2, one with the nominator and the denominator. In this case,
     # check against original response
