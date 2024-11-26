@@ -42,7 +42,7 @@
 * `format_value()` gains a `decimal_point` argument, to change the decimal point
   in output conversion.
 
-* `format_bf()` with `stars = TRUE` used the `°` symbol for inferiority
+* `format_bf()` with `stars = TRUE` uses the `°` symbol for inferiority
   (evidence *against* the comparison).
 
 * Added support for `coxph.panel` models.
