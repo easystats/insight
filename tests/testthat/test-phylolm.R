@@ -8,10 +8,10 @@ withr::with_options(
   list(na.action = "na.fail"),
   test_that("phylolm modelinfo", {
     set.seed(123456)
-    tre = ape::rcoal(60)
-    taxa = sort(tre$tip.label)
-    b0 = 0
-    b1 = 1
+    tre <- ape::rcoal(60)
+    taxa <- sort(tre$tip.label)
+    b0 <- 0
+    b1 <- 1
 
     x <- phylolm::rTrait(
       n = 1,
