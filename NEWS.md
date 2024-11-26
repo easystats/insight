@@ -1,3 +1,10 @@
+# insight (devel)
+
+## Bug fixes
+
+* Fixed typo in `get_parameters.glmmadmb()`, which was erroneously renamed into
+  `get_parameters.glmmTMBadmb()`.
+
 # insight 1.0.0
 
 ## Breaking changes

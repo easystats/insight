@@ -301,7 +301,7 @@ get_parameters.merMod <- function(x, effects = "fixed", ...) {
 get_parameters.rlmerMod <- get_parameters.merMod
 
 #' @export
-get_parameters.glmmTMBadmb <- get_parameters.merMod
+get_parameters.glmmadmb <- get_parameters.merMod
 
 #' @export
 get_parameters.lme <- get_parameters.merMod
