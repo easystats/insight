@@ -892,10 +892,10 @@ model_info.summary.lm <- model_info.Arima
 #' @export
 model_info.averaging <- function(x, ...) {
   if (is.null(attributes(x)$modelList)) {
-    format_warning("Can't calculate covariance matrix. Please use 'fit = TRUE' in 'model.avg()'.")
+    format_warning("Can't access model information. Please use 'fit = TRUE' in 'model.avg()'.")
     return(NULL)
   }
-  model_info.default(x = attributes(x)$modelList[[1]])
+  model_info(x = attributes(x)$modelList[[1]])
 }
 
 

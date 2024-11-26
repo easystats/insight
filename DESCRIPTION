@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.99.0.22
+Version: 0.99.0.23
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -86,6 +86,7 @@ Suggests:
     AER,
     afex,
     aod,
+    ape,
     BayesFactor,
     bayestestR,
     bbmle,
@@ -175,6 +176,7 @@ Suggests:
     parsnip,
     pbkrtest,
     performance,
+    phylolm,
     plm,
     poorman,
     PROreg (>= 1.3.0),

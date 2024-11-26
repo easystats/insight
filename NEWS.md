@@ -69,6 +69,8 @@
 * Fixed edge case in `find_transformation()` for simple log-transformation of
   the response variable.
 
+* Fixed issue for `model_info.averaging()`.
+
 # insight 0.20.5
 
 ## General
