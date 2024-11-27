@@ -66,10 +66,10 @@ get_data <- function(x, ...) {
   }
 
   # handle arguments
-  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  component <- match.arg(
+  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  component <- validate_argument(
     component,
-    choices = c("all", "conditional", "zero_inflated", "zi", "smooth_terms", "dispersion")
+    c("all", "conditional", "zero_inflated", "zi", "smooth_terms", "dispersion")
   )
 
   # we want to add the variable for subsettig, too
