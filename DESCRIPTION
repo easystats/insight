@@ -160,7 +160,7 @@ Suggests:
     metafor,
     metaplus,
     mgcv,
-    mice,
+    mice (>= 3.17.0),
     mlogit,
     mmrm,
     modelbased,

@@ -1549,8 +1549,8 @@ get_statistic.mipo <- function(x, ...) {
     stringsAsFactors = FALSE
   )
   # check for ordinal-alike models
-  if ("y.level" %in% colnames(s)) {
-    params$Response <- as.vector(s$y.level)
+  if (!is.null(x$pooled) && "y.level" %in% colnames(x$pooled)) {
+    params$Response <- as.vector(x$pooled$y.level)
   }
   out <- text_remove_backticks(params)
   attr(out, "statistic") <- find_statistic(x)
