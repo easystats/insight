@@ -118,7 +118,9 @@
 #'
 #' @return Reference grid data frame.
 #'
-#' @seealso [get_predicted()]
+#' @seealso [get_predicted()] to extract predictions, for which the data grid
+#' is useful, and see the [methods][get_datagrid.emmGrid] for objects generated
+#' by **emmeans** and **marginaleffects** to extract the "grid" columns.
 #'
 #' @examplesIf require("bayestestR", quietly = TRUE) && require("datawizard", quietly = TRUE)
 #' # Datagrids of variables and dataframes =====================================
@@ -722,7 +724,6 @@ get_datagrid.emm_list <- function(x, ...) {
   out[, c(clear_cols, setdiff(colnames(out), clear_cols)), drop = FALSE]
 }
 
-#' @rdname get_datagrid.emmGrid
 #' @export
 get_datagrid.slopes <- function(x, ...) {
   cols_newdata <- colnames(attr(x, "newdata"))

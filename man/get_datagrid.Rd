@@ -246,5 +246,7 @@ plot(data$Sepal.Width, data$Sepal.Length,
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=get_predicted]{get_predicted()}}
+\code{\link[=get_predicted]{get_predicted()}} to extract predictions, for which the data grid
+is useful, and see the \link[=get_datagrid.emmGrid]{methods} for objects generated
+by \strong{emmeans} and \strong{marginaleffects} to extract the "grid" columns.
 }

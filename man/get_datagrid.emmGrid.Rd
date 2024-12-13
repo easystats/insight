@@ -2,12 +2,9 @@
 % Please edit documentation in R/get_datagrid.R
 \name{get_datagrid.emmGrid}
 \alias{get_datagrid.emmGrid}
-\alias{get_datagrid.slopes}
 \title{Extract a reference grid from objects created by \code{{emmeans}} and \code{{marginaleffects}}}
 \usage{
 \method{get_datagrid}{emmGrid}(x, ...)
-
-\method{get_datagrid}{slopes}(x, ...)
 }
 \arguments{
 \item{x}{An object created by a function such as \code{\link[emmeans:emmeans]{emmeans::emmeans()}},

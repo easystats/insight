@@ -127,6 +127,7 @@ reference:
       - find_parameters.glmmTMB
       - find_parameters.zeroinfl
       - find_parameters.averaging
+      - get_datagrid.emmGrid
       - get_parameters.BGGM
       - get_parameters.emmGrid
       - get_parameters.gamm
