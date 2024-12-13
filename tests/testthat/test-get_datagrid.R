@@ -212,7 +212,6 @@ test_that("get_datagrid - models", {
 
 test_that("get_datagrid - emmeans", {
   skip_if_not_installed("emmeans")
-  skip_on_cran()
 
   data("mtcars")
 
@@ -258,7 +257,6 @@ test_that("get_datagrid - emmeans", {
 
 test_that("get_datagrid - marginaleffects", {
   skip_if_not_installed("marginaleffects")
-  skip_on_cran()
 
   data("mtcars")
 
