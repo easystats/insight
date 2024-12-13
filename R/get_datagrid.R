@@ -669,8 +669,9 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 #' mtcars$cyl <- factor(mtcars$cyl)
 #'
 #' mod <- glm(am ~ cyl + hp + wt,
-#'            family = binomial("logit"),
-#'            data = mtcars)
+#'   family = binomial("logit"),
+#'   data = mtcars
+#' )
 #'
 #' @examplesIf insight::check_if_installed("emmeans", quietly = TRUE)
 #' em1 <- emmeans::emmeans(mod, ~ cyl + hp, at = list(hp = c(100, 150)))

@@ -35,8 +35,9 @@ data("mtcars")
 mtcars$cyl <- factor(mtcars$cyl)
 
 mod <- glm(am ~ cyl + hp + wt,
-           family = binomial("logit"),
-           data = mtcars)
+  family = binomial("logit"),
+  data = mtcars
+)
 
 \dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 em1 <- emmeans::emmeans(mod, ~ cyl + hp, at = list(hp = c(100, 150)))
