@@ -34,7 +34,7 @@ test_that("marginaleffects", {
   expect_named(
     parameters::model_parameters(x),
     c(
-      "rowid", "Parameter", "Coefficient", "SE", "Statistic", "p",
+      "rowid", "Parameter", "Comparison", "Coefficient", "SE", "Statistic", "p",
       "S", "CI", "CI_low", "CI_high", "Predicted", "Species",
       "Petal.Length", "Sepal.Width"
     )
