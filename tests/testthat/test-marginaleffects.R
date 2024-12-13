@@ -28,13 +28,13 @@ test_that("marginaleffects", {
   expect_identical(insight::find_statistic(x), "z-statistic")
 
   # standardize names - "s.value" becomes "S"
-  skip_if_not_installed("parameters", minimum_version = "0.21.7")
-  skip_if_not_installed("marginaleffects", minimum_version = "0.20.1")
+  skip_if_not_installed("parameters", minimum_version = "0.24.0")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.24.0.6")
 
   expect_named(
     parameters::model_parameters(x),
     c(
-      "rowid", "Parameter", "Coefficient", "SE", "Statistic", "p",
+      "rowid", "Parameter", "Comparison", "Coefficient", "SE", "Statistic", "p",
       "S", "CI", "CI_low", "CI_high", "Predicted", "Species",
       "Petal.Length", "Sepal.Width"
     )
