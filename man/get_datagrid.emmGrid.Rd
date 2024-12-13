@@ -26,7 +26,7 @@ Note that for \code{{emmeans}} inputs the results is a proper grid (all
 combinations of values are represented), except when a nesting structure is
 detected. Additionally, when the input is an \code{emm_list} object, the function
 will \code{rbind()} the data-grids of all the elements in the input.
-\cr\cr
+
 For \code{{marginaleffects}} inputs, the output may very well be a non-grid
 result. See examples.
 }
@@ -38,7 +38,7 @@ mod <- glm(am ~ cyl + hp + wt,
            family = binomial("logit"),
            data = mtcars)
 
-\dontshow{if (insight::check_if_installed("emmeans")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 em1 <- emmeans::emmeans(mod, ~ cyl + hp, at = list(hp = c(100, 150)))
 get_datagrid(em1)
 
@@ -48,7 +48,7 @@ get_datagrid(contr1)
 eml1 <- emmeans::emmeans(mod, pairwise ~ cyl | hp, at = list(hp = c(100, 150)))
 get_datagrid(eml1) # not a "true" grid
 \dontshow{\}) # examplesIf}
-\dontshow{if (insight::check_if_installed("marginaleffects", minimum_version = "0.24.0.6")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.24.0.6")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 mfx1 <- marginaleffects::slopes(mod, variables = "hp")
 get_datagrid(mfx1) # not a "true" grid
 
@@ -57,7 +57,5 @@ get_datagrid(mfx2)
 
 contr2 <- marginaleffects::avg_comparisons(mod)
 get_datagrid(contr2) # not a "true" grid
-
-
 \dontshow{\}) # examplesIf}
 }

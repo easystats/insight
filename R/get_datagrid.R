@@ -658,10 +658,9 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 #' combinations of values are represented), except when a nesting structure is
 #' detected. Additionally, when the input is an `emm_list` object, the function
 #' will `rbind()` the data-grids of all the elements in the input.
-#' \cr\cr
+#'
 #' For `{marginaleffects}` inputs, the output may very well be a non-grid
 #' result. See examples.
-#'
 #'
 #' @return A `data.frame` with key columns that identify the rows in `x`.
 #'
@@ -673,7 +672,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 #'            family = binomial("logit"),
 #'            data = mtcars)
 #'
-#' @examplesIf insight::check_if_installed("emmeans")
+#' @examplesIf insight::check_if_installed("emmeans", quietly = TRUE)
 #' em1 <- emmeans::emmeans(mod, ~ cyl + hp, at = list(hp = c(100, 150)))
 #' get_datagrid(em1)
 #'
@@ -683,7 +682,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 #' eml1 <- emmeans::emmeans(mod, pairwise ~ cyl | hp, at = list(hp = c(100, 150)))
 #' get_datagrid(eml1) # not a "true" grid
 #'
-#' @examplesIf insight::check_if_installed("marginaleffects", minimum_version = "0.24.0.6")
+#' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.24.0.6")
 #' mfx1 <- marginaleffects::slopes(mod, variables = "hp")
 #' get_datagrid(mfx1) # not a "true" grid
 #'
@@ -692,9 +691,6 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 #'
 #' contr2 <- marginaleffects::avg_comparisons(mod)
 #' get_datagrid(contr2) # not a "true" grid
-#'
-#'
-#'
 #' @export
 get_datagrid.emmGrid <- function(x, ...) {
   suppressWarnings({
