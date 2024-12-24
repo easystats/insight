@@ -353,6 +353,10 @@ find_predictors.afex_aov <- function(x,
   l <- lapply(l, .remove_values, c(".", "pi", "1", "0"))
   l <- lapply(l, .remove_values, c(0, 1))
   l <- lapply(l, function(i) gsub("`", "", i, fixed = TRUE))
+  # for brms-models, we need to remove "Intercept", which is a special notation
+  if (inherits(x, "brmsfit")) {
+    l <- lapply(l, .remove_values, "Intercept")
+  }
   names(l) <- names(f)[!empty_elements]
 
   l
@@ -453,13 +457,6 @@ find_predictors.afex_aov <- function(x,
   # same for beta-random effects
   if (object_has_names(f, "beta_random")) {
     f[["beta_random"]] <- .get_group_factor(x, f[["beta_random"]])
-  }
-
-  # for brms-models, we need to remove "Intercept", which is a special notation
-  if (inherits(x, "brmsfit")) {
-    f <- lapply(f, function(formula_part) {
-      setdiff(formula_part, "Intercept")
-    })
   }
 
   f

@@ -73,9 +73,9 @@ find_terms.default <- function(x,
   resp <- find_response(x, verbose = FALSE)
 
   if (is_multivariate(f) || isTRUE(attributes(f)$two_stage)) {
-    l <- lapply(f, .get_variables_list, resp = resp)
+    l <- lapply(f, .get_variables_list, resp = resp, model = x)
   } else {
-    l <- .get_variables_list(f, resp)
+    l <- .get_variables_list(f, resp, model = x)
   }
 
   if (flatten) {
@@ -173,7 +173,7 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 # helper -----------------------
 
 
-.get_variables_list <- function(f, resp = NULL) {
+.get_variables_list <- function(f, resp = NULL, model = NULL) {
   # exception for formula w/o response
   if (is.null(resp) || !is_empty_object(resp)) {
     f$response <- sub("(.*)::(.*)", "\\2", safe_deparse(f$conditional[[2L]]))
@@ -218,6 +218,13 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
   # - lm(1 / Sepal.Length ~ Species, data = iris)
   if (!is.null(original_response) && !is_empty_object(original_response) && startsWith(original_response, "1/")) { # nolint
     f$response <- original_response
+  }
+
+  # for brms-models, we need to remove "Intercept", which is a special notation
+  if (inherits(model, "brmsfit")) {
+    f <- lapply(f, function(i) {
+      compact_character(gsub("\\QIntercept\\E", "", i))
+    })
   }
 
   # remove "1" and "0" from variables in random effects
