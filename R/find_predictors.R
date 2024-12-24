@@ -455,5 +455,12 @@ find_predictors.afex_aov <- function(x,
     f[["beta_random"]] <- .get_group_factor(x, f[["beta_random"]])
   }
 
+  # for brms-models, we need to remove "Intercept", which is a special notation
+  if (inherits(x, "brmsfit")) {
+    f <- lapply(f, function(formula_part) {
+      setdiff(formula_part, "Intercept")
+    })
+  }
+
   f
 }
