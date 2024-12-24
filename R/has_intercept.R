@@ -25,16 +25,20 @@
 has_intercept <- function(x, verbose = TRUE) {
   f <- find_formula(x, verbose = FALSE)
   if (is_multivariate(x)) {
-    lapply(f, .check_for_intercept, verbose = verbose)
+    lapply(f, .check_for_intercept, x = x, verbose = verbose)
   } else {
-    .check_for_intercept(f, verbose)
+    .check_for_intercept(f, x, verbose)
   }
 }
 
-.check_for_intercept <- function(f, verbose = TRUE) {
+.check_for_intercept <- function(f, x, verbose = TRUE) {
   if (!is.null(f$conditional)) {
     f_terms <- stats::terms(f$conditional)
     intercept <- as.vector(attr(f_terms, "intercept"))
+    # brms-models may have "Intercept" as formula term
+    if (intercept != 1 && inherits(x, "brmsfit")) {
+      intercept <- as.numeric(grepl("\\QIntercept\\E", safe_deparse(f$conditional)))
+    }
     return(intercept == 1)
   } else if (verbose) {
     format_warning("Cannot extract terms from model formula.")

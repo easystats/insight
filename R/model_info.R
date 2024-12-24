@@ -734,7 +734,7 @@ model_info.brmsfit <- function(x, ...) {
         logit.link = .x$link == "logit",
         multi.var = TRUE,
         link.fun = .x$link,
-        dispersion = is_dispersion
+        dispersion = is_dispersion,
         ...
       )
     })
