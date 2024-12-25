@@ -18,6 +18,9 @@ test_that("brms-Intercept", {
   out <- find_variables(m)
   expect_identical(out, list(response = "y", conditional = "x", kappa = "kappa"))
 
+  out <- find_variables(m, component = "location")
+  expect_identical(out, list(conditional = "x"))
+
   out <- find_parameters(m)
   expect_identical(out, list(conditional = c("b_Intercept", "b_xb", "b_kappa_Intercept")))
 
