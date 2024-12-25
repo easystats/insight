@@ -143,7 +143,7 @@ find_predictors.default <- function(x,
     component,
     c(
       "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
-      "correlation", "smooth_terms"
+      "correlation", "smooth_terms", "location"
     )
   )
 
@@ -353,6 +353,10 @@ find_predictors.afex_aov <- function(x,
   l <- lapply(l, .remove_values, c(".", "pi", "1", "0"))
   l <- lapply(l, .remove_values, c(0, 1))
   l <- lapply(l, function(i) gsub("`", "", i, fixed = TRUE))
+  # for brms-models, we need to remove "Intercept", which is a special notation
+  if (inherits(x, "brmsfit")) {
+    l <- lapply(l, .remove_values, "Intercept")
+  }
   names(l) <- names(f)[!empty_elements]
 
   l

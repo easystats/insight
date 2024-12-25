@@ -66,7 +66,7 @@ find_variables <- function(x,
     component,
     c(
       "all", "conditional", "zi", "zero_inflated", "dispersion",
-      "instruments", "smooth_terms", "scale"
+      "instruments", "smooth_terms", "scale", "location"
     )
   )
 

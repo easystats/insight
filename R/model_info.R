@@ -724,6 +724,9 @@ model_info.brmsfit <- function(x, ...) {
   faminfo <- stats::family(x)
   if (is_multivariate(x)) {
     lapply(faminfo, function(.x) {
+      ## TODO: check for multivariate, if we need "x" or ".x"
+      form <- find_formula(x, verbose = FALSE)
+      is_dispersion <- !is_empty_object(form$sigma) || !is_empty_object(form$kappa)
       .make_family(
         x = x,
         fitfam = .x$family,
@@ -731,18 +734,20 @@ model_info.brmsfit <- function(x, ...) {
         logit.link = .x$link == "logit",
         multi.var = TRUE,
         link.fun = .x$link,
-        dispersion = !is_empty_object(find_formula(x, verbose = FALSE)$sigma),
+        dispersion = is_dispersion,
         ...
       )
     })
   } else {
+    form <- find_formula(x, verbose = FALSE)
+    is_dispersion <- !is_empty_object(form$sigma) || !is_empty_object(form$kappa)
     .make_family(
       x = x,
       fitfam = faminfo$family,
       logit.link = faminfo$link == "logit",
       multi.var = FALSE,
       link.fun = faminfo$link,
-      dispersion = !is_empty_object(find_formula(x, verbose = FALSE)$sigma),
+      dispersion = is_dispersion,
       ...
     )
   }
