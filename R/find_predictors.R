@@ -143,7 +143,7 @@ find_predictors.default <- function(x,
     component,
     c(
       "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
-      "correlation", "smooth_terms"
+      "correlation", "smooth_terms", "location"
     )
   )
 

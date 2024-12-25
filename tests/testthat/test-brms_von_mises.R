@@ -12,6 +12,9 @@ test_that("brms-Intercept", {
   out <- find_predictors(m)
   expect_identical(out, list(conditional = "x", kappa = "kappa"))
 
+  out <- find_predictors(m, component = "location")
+  expect_identical(out, list(conditional = "x"))
+
   out <- find_variables(m)
   expect_identical(out, list(response = "y", conditional = "x", kappa = "kappa"))
 
