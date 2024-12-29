@@ -316,3 +316,6 @@ as.numeric.insight_aux <- function(x, ...) {
   }
   mean(x, na.rm = TRUE)
 }
+
+#' @export
+as.double.insight_aux <- as.numeric.insight_aux
