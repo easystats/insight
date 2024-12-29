@@ -88,7 +88,7 @@ test_that("afex_aov: model values", {
   )
   expect_equal(
     sapply(mods, get_loglikelihood),
-    c(-411.04, -414.088, -431.688, -22.295, -517.397),
+    c(-405.34037, -408.37849, -420.51277, -22.29462, -508.05184),
     tolerance = 0.01
   )
   expect_equal(

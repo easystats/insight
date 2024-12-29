@@ -308,14 +308,10 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
-
 #' @export
-as.numeric.insight_aux <- function(x, ...) {
-  if (is.null(x) || is.na(x) || is.infinite(x)) {
+as.double.insight_aux <- function(x, ...) {
+  if (is.null(x) || all(is.na(x)) || all(is.infinite(x))) {
     return(NULL)
   }
   mean(x, na.rm = TRUE)
 }
-
-#' @export
-as.double.insight_aux <- as.numeric.insight_aux
