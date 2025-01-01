@@ -36,6 +36,12 @@ test_that("get_varcov", {
   expect_identical(colnames(out), names(coef(m1)))
 })
 
+test_that("geeglm: get_sigma", {
+  out <- get_sigma(m1)
+  expect_equal(out, 2.084632, tolerance = 1e-4)
+  expect_equal(as.numeric(out), 2.084632, tolerance = 1e-4)
+})
+
 test_that("get_response", {
   expect_identical(get_response(m1), warpbreaks$breaks)
 })

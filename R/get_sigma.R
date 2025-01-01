@@ -193,6 +193,15 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
+.get_sigma.geeglm <- function(x, ...) {
+  out <- .safe(stats::sigma(x))
+  if (is.data.frame(out)) {
+    out <- out$Estimate
+  }
+  out
+}
+
+
 .get_sigma.mjoint <- function(x, ...) {
   .safe(x$coef$sigma2[[1]])
 }
