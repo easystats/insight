@@ -13,6 +13,8 @@
 * Fixed issues in `get_statistic()` for models of class `fixest` from
   negative-binomial families.
 
+* Fixed issue with `as.numeric()` method for `get_sigma()`.
+
 # insight 1.0.0
 
 ## Breaking changes
