@@ -355,9 +355,6 @@ find_statistic.default <- function(x, ...) {
 }
 
 
-
-
-
 # helper ---------------
 
 .is_tweedie <- function(model, info) {

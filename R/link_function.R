@@ -26,7 +26,6 @@ link_function <- function(x, ...) {
 }
 
 
-
 # Default method ---------------------------
 
 
@@ -68,7 +67,6 @@ link_function.default <- function(x, ...) {
   }
   out
 }
-
 
 
 # Gaussian family ------------------------------------------
@@ -321,7 +319,6 @@ link_function.hurdle <- link_function.zeroinfl
 link_function.zerotrunc <- link_function.zeroinfl
 
 
-
 # Tobit links ---------------------------------
 
 #' @export
@@ -372,7 +369,6 @@ link_function.serp <- link_function.clm
 
 #' @export
 link_function.mixor <- link_function.clm
-
 
 
 # mfx models ------------------------------------------------------
@@ -499,7 +495,6 @@ link_function.cglm <- function(x, ...) {
 }
 
 
-
 #' @export
 link_function.fixest <- function(x, ...) {
   if (is.null(x$family)) {
@@ -572,19 +567,16 @@ link_function.gam <- function(x, ...) {
 }
 
 
-
 #' @export
 link_function.glimML <- function(x, ...) {
   stats::make.link(link = x@link)$linkfun
 }
 
 
-
 #' @export
 link_function.glmmadmb <- function(x, ...) {
   x$linkfun
 }
-
 
 
 #' @export
@@ -596,7 +588,6 @@ link_function.glmm <- function(x, ...) {
     stats::gaussian(link = "identity")$linkfun
   )
 }
-
 
 
 #' @rdname link_function
@@ -619,14 +610,12 @@ link_function.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
 }
 
 
-
 #' @export
 link_function.gamm <- function(x, ...) {
   x <- x$gam
   class(x) <- c(class(x), c("glm", "lm"))
   NextMethod()
 }
-
 
 
 #' @export
@@ -637,7 +626,6 @@ link_function.bamlss <- function(x, ...) {
     print_colour("\nCould not find appropriate link-function.\n", "red")
   )
 }
-
 
 
 #' @export
@@ -656,7 +644,6 @@ link_function.LORgee <- function(x, ...) {
 
   stats::make.link(link)$linkfun
 }
-
 
 
 #' @export
@@ -701,7 +688,6 @@ link_function.svyolr <- function(x, ...) {
 }
 
 
-
 #' @rdname link_function
 #' @export
 link_function.betareg <- function(x, what = c("mean", "precision"), ...) {
@@ -711,7 +697,6 @@ link_function.betareg <- function(x, what = c("mean", "precision"), ...) {
     precision = x$link$precision$linkfun
   )
 }
-
 
 
 #' @rdname link_function
@@ -729,7 +714,6 @@ link_function.DirichletRegModel <- function(x, what = c("mean", "precision"), ..
 }
 
 
-
 #' @export
 link_function.gbm <- function(x, ...) {
   switch(x$distribution$name,
@@ -745,13 +729,11 @@ link_function.gbm <- function(x, ...) {
 }
 
 
-
 #' @export
 link_function.stanmvreg <- function(x, ...) {
   fam <- stats::family(x)
   lapply(fam, function(.x) .x$linkfun)
 }
-
 
 
 #' @export

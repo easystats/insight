@@ -91,8 +91,6 @@ get_parameters.emm_list <- function(x, summary = FALSE, ...) {
 }
 
 
-
-
 # helper --------------------
 
 

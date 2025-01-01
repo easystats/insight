@@ -123,9 +123,6 @@ get_predicted_se <- function(x,
 }
 
 
-
-
-
 # Get Model matrix ------------------------------------------------------------
 
 .get_predicted_ci_modelmatrix <- function(x, data = NULL, vcovmat = NULL, verbose = TRUE, ...) {

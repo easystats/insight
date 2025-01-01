@@ -81,7 +81,6 @@ test_that("get_parameters", {
 })
 
 
-
 data(ToothGrowth)
 ToothGrowth$dose <- factor(ToothGrowth$dose)
 levels(ToothGrowth$dose) <- c("Low", "Medium", "High")
@@ -251,7 +250,6 @@ test_that("get_parameters", {
 })
 
 
-
 x2 <- BayesFactor::lmBF(len ~ supp + dose + supp:dose, data = ToothGrowth, progress = FALSE)
 x <- x / x2
 test_that("get_data", {
@@ -289,7 +287,6 @@ test_that("get_priors", {
 test_that("find_statistic", {
   expect_null(find_statistic(x))
 })
-
 
 
 corr_BF1 <- BayesFactor::correlationBF(iris$Sepal.Length, iris$Sepal.Width, progress = FALSE)

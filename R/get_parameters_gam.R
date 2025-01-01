@@ -158,8 +158,6 @@ get_parameters.SemiParBIV <- function(x, ...) {
 }
 
 
-
-
 # helper -------------------
 
 

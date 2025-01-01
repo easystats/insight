@@ -30,7 +30,6 @@ test_that("Issue #612: factor padding", {
 })
 
 
-
 # iv_robust --------------------------------------------------------------
 # =========================================================================
 
@@ -50,7 +49,6 @@ test_that("get_modelmatrix - iv_robust", {
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
   expect_identical(nrow(get_datagrid(x, by = "P")), nrow(out2))
 })
-
 
 
 # ivreg --------------------------------------------------------------
@@ -74,7 +72,6 @@ test_that("get_modelmatrix - ivreg", {
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
   expect_identical(nrow(get_datagrid(x, by = "P")), nrow(out2))
 })
-
 
 
 # ivreg --------------------------------------------------------------
@@ -103,7 +100,6 @@ test_that("get_modelmatrix - lm_robust", {
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
   expect_identical(nrow(get_datagrid(x, by = "x")), nrow(out2))
 })
-
 
 
 test_that("Issue #693", {

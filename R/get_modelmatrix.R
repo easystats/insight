@@ -242,7 +242,6 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
 }
 
 
-
 # helper ----------------
 
 

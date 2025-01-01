@@ -39,8 +39,6 @@ get_parameters.htest <- function(x, ...) {
 }
 
 
-
-
 # extract htest correlation ----------------------
 
 
@@ -57,8 +55,6 @@ get_parameters.htest <- function(x, ...) {
   }
   out
 }
-
-
 
 
 # extract htest ranktest ----------------------
@@ -105,7 +101,6 @@ get_parameters.htest <- function(x, ...) {
   }
   out
 }
-
 
 
 # extract htest oneway ----------------------

@@ -276,7 +276,6 @@ get_data <- function(x, ...) {
 }
 
 
-
 # default method ------------------------------------------------------
 
 #' @rdname get_data
@@ -358,7 +357,6 @@ get_data.model_fit <- function(x, verbose = TRUE, ...) {
 get_data.mhurdle <- function(x, verbose = TRUE, ...) {
   x[["model"]]
 }
-
 
 
 # classical and survival models -----------------------------------------------
@@ -876,7 +874,6 @@ get_data.glmm <- function(x,
 }
 
 
-
 #' @export
 get_data.mixor <- function(x,
                            effects = "all",
@@ -946,7 +943,6 @@ get_data.glmmadmb <- function(x,
   })
   .prepare_get_data(x, mf, effects, verbose = verbose)
 }
-
 
 
 #' @export
@@ -1543,9 +1539,6 @@ get_data.bife <- function(x, effects = "all", source = "environment", verbose = 
 }
 
 
-
-
-
 # Bayesian regression ---------------------------------------------------
 
 
@@ -1733,7 +1726,6 @@ get_data.probitmfx <- get_data.betamfx
 
 #' @export
 get_data.negbinmfx <- get_data.betamfx
-
 
 
 # other models ------------------------------------------------------

@@ -35,7 +35,6 @@ find_parameters <- function(x, ...) {
 }
 
 
-
 # Default methods -------------------------------------------
 
 
@@ -91,8 +90,6 @@ find_parameters.summary.lm <- function(x, flatten = FALSE, ...) {
     l
   }
 }
-
-
 
 
 # Ordinal -----------------------------------------------
@@ -253,8 +250,6 @@ find_parameters.lavaan <- function(x, flatten = FALSE, ...) {
     pars
   }
 }
-
-
 
 
 # Panel models ----------------------------------------
@@ -529,7 +524,6 @@ find_parameters.manova <- function(x, flatten = FALSE, ...) {
 find_parameters.maov <- find_parameters.manova
 
 
-
 #' @export
 find_parameters.afex_aov <- function(x, flatten = FALSE, ...) {
   if (is.null(x$aov)) {
@@ -569,7 +563,6 @@ find_parameters.mlm <- function(x, flatten = FALSE, ...) {
     out
   }
 }
-
 
 
 #' @export
@@ -817,7 +810,6 @@ find_parameters.nls <- function(x, component = "all", flatten = FALSE, ...) {
     pars
   }
 }
-
 
 
 # helper ----------------------------

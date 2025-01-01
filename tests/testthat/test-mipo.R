@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_on_os("mac")
 skip_if_not_installed("mice")
 skip_if_not_installed("nnet")
 

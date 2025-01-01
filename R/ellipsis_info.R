@@ -169,7 +169,6 @@ ellipsis_info.ListLavaan <- function(objects, ...) {
 }
 
 
-
 #' @export
 ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   object_names <- names(objects)
@@ -279,7 +278,6 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
   objects
 }
-
 
 
 # Helpers -----------------------------------------------------------------

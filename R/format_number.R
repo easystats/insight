@@ -23,7 +23,6 @@ format_number <- function(x, textual = TRUE, ...) {
 }
 
 
-
 #' @keywords internal
 .format_number <- function(x) {
   # https://github.com/ateucher/useful_code/blob/master/R/numbers2words.r
@@ -38,8 +37,6 @@ format_number <- function(x, textual = TRUE, ...) {
   }
   .format_character_number(x)
 }
-
-
 
 
 ## Function by John Fox found here:
@@ -90,11 +87,9 @@ format_number <- function(x, textual = TRUE, ...) {
 }
 
 
-
 .make_number <- function(...) {
   as.numeric(paste(..., collapse = ""))
 }
-
 
 
 .trim_ws_and <- function(text) {

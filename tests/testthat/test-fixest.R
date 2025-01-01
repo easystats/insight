@@ -284,6 +284,17 @@ test_that("get_statistic", {
   stat <- get_statistic(m3)
   out <- as.data.frame(summary(m3)$coeftable)
   expect_equal(stat$Statistic, out[, "z value"], tolerance = 1e-3, ignore_attr = TRUE)
+
+  skip_if_not_installed("glmmTMB")
+  data(Salamanders, package = "glmmTMB")
+  mod <- fixest::fenegbin(count ~ mined, data = Salamanders)
+  out <- get_statistic(mod)
+  expect_equal(
+    out$Statistic,
+    summary(mod)$coeftable[1:2, 3],
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
 })
 
 test_that("get_predicted", {

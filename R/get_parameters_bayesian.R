@@ -445,8 +445,6 @@ get_parameters.sim <- function(x,
 }
 
 
-
-
 # helper -----------------------
 
 
@@ -474,7 +472,6 @@ get_parameters.sim <- function(x,
   elements <- .get_elements(effects, component)
   unlist(find_parameters(x, effects = "all", component = "all", flatten = FALSE, parameters = parameters)[elements])
 }
-
 
 
 # use temporarily code from BGGM package, as long as that package is archived on CRAN

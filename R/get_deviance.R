@@ -40,7 +40,6 @@ get_deviance.default <- function(x, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 get_deviance.stanreg <- function(x, verbose = TRUE, ...) {
   info <- model_info(x)
@@ -65,7 +64,6 @@ get_deviance.stanreg <- function(x, verbose = TRUE, ...) {
   # extracts it via x@deviance
   dev
 }
-
 
 
 #' @export

@@ -13,7 +13,6 @@ print.get_predicted <- function(x, ...) {
 }
 
 
-
 .print_bigdata <- function(x, nrows = 3, ncols = 3, ...) {
   out <- x[1:nrows, 1:ncols]
 
@@ -30,7 +29,6 @@ print.get_predicted <- function(x, ...) {
   class(out) <- "data.frame"
   out
 }
-
 
 
 # As data frame -----------------------------------------------------------
@@ -67,12 +65,10 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
 }
 
 
-
 #' @export
 summary.get_predicted <- function(object, ...) {
   as.data.frame(object, keep_iterations = FALSE, ...)
 }
-
 
 
 #' @export

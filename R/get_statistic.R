@@ -58,7 +58,6 @@ get_statistic <- function(x, ...) {
 }
 
 
-
 # Default models ----------------------------------------------------------
 
 
@@ -268,7 +267,6 @@ get_statistic.negbin <- get_statistic.default
 
 #' @export
 get_statistic.feis <- get_statistic.default
-
 
 
 # Models with zero-inflation component --------------------------------------
@@ -610,7 +608,6 @@ get_statistic.cgam <- function(x, component = "all", ...) {
 }
 
 
-
 # Survival models ------------------------------------------
 
 
@@ -775,7 +772,6 @@ get_statistic.aareg <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
-
 
 
 # Ordinal models --------------------------------------------------
@@ -1070,7 +1066,6 @@ get_statistic.mblogit <- function(x, ...) {
     NULL
   }
 }
-
 
 
 # mfx models -------------------------------------------------------
@@ -1760,7 +1755,6 @@ get_statistic.averaging <- function(x, component = "conditional", ...) {
 }
 
 
-
 #' @export
 get_statistic.bayesx <- function(x, ...) {
   out <- data.frame(
@@ -1789,7 +1783,6 @@ get_statistic.Arima <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
-
 
 
 #' @export
@@ -1828,7 +1821,6 @@ get_statistic.wbm <- function(x, ...) {
 
 #' @export
 get_statistic.wbgee <- get_statistic.wbm
-
 
 
 #' @export
@@ -1894,7 +1886,6 @@ get_statistic.cpglm <- function(x, ...) {
 }
 
 
-
 #' @export
 get_statistic.zcpglm <- function(x, component = "all", ...) {
   check_if_installed("cplm")
@@ -1927,7 +1918,6 @@ get_statistic.zcpglm <- function(x, component = "all", ...) {
 }
 
 
-
 #' @export
 get_statistic.manova <- function(x, ...) {
   stats <- as.data.frame(summary(x)$stats)
@@ -1942,7 +1932,6 @@ get_statistic.manova <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
-
 
 
 #' @export
@@ -1965,7 +1954,6 @@ get_statistic.maov <- function(x, ...) {
 }
 
 
-
 #' @export
 get_statistic.MANOVA <- function(x, ...) {
   stats <- as.data.frame(x$WTS)
@@ -1983,7 +1971,6 @@ get_statistic.MANOVA <- function(x, ...) {
 
 #' @export
 get_statistic.RM <- get_statistic.MANOVA
-
 
 
 #' @export
@@ -2075,7 +2062,6 @@ get_statistic.crqs <- get_statistic.crq
 get_statistic.nlrq <- get_statistic.rq
 
 
-
 #' @export
 get_statistic.rqss <- function(x,
                                component = c("all", "conditional", "smooth_terms"),
@@ -2104,7 +2090,6 @@ get_statistic.rqss <- function(x,
 }
 
 
-
 #' @export
 get_statistic.systemfit <- function(x, ...) {
   cf <- stats::coef(summary(x))
@@ -2131,7 +2116,6 @@ get_statistic.systemfit <- function(x, ...) {
 }
 
 
-
 #' @export
 get_statistic.bigglm <- function(x, ...) {
   parms <- get_parameters(x)
@@ -2148,7 +2132,6 @@ get_statistic.bigglm <- function(x, ...) {
   attr(out, "statistic") <- find_statistic(x)
   out
 }
-
 
 
 #' @export
@@ -2198,6 +2181,15 @@ get_statistic.crch <- function(x, ...) {
 get_statistic.fixest <- function(x, ...) {
   cs <- summary(x)$coeftable
   params <- get_parameters(x)
+
+  # remove .theta row
+  rn <- rownames(cs)
+  if (!is.null(rn)) {
+    theta_row <- which(rn == ".theta")
+    if (length(theta_row)) {
+      cs <- cs[-theta_row, ]
+    }
+  }
 
   out <- data.frame(
     Parameter = params$Parameter,

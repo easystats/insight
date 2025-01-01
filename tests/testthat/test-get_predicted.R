@@ -184,7 +184,6 @@ test_that("robust vcov", {
 })
 
 
-
 test_that("MASS::rlm", {
   skip_if_not_installed("MASS")
   mod <- MASS::rlm(mpg ~ hp + am, data = mtcars)
@@ -193,7 +192,6 @@ test_that("MASS::rlm", {
   p <- data.frame(p)
   expect_true("CI_low" %in% colnames(p))
 })
-
 
 
 # Mixed --------------------------------------------------------------
@@ -443,7 +441,6 @@ test_that("get_predicted - rstanarm", {
   rezrela3 <- summary(get_predicted(x, predict = "expectation", ci = 0.95, data = mtcars["am"]), verbose = FALSE)
   expect_equal(mean(abs(rezrela2$Predicted - rezrela3$Predicted)), 0, tolerance = 0.001)
 })
-
 
 
 # FA / PCA ----------------------------------------------------------------

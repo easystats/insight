@@ -176,9 +176,6 @@ is_regression_model <- function(x) {
 }
 
 
-
-
-
 .get_gam_classes <- function() {
   out <- c(
     "bamlss", "bamlss.frame", "brmsfit",

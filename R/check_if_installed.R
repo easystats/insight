@@ -142,8 +142,6 @@ check_if_installed <- function(package,
 }
 
 
-
-
 #' @export
 print.check_if_installed <- function(x, ...) {
   if (any(x)) {

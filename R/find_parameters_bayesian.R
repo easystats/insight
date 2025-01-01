@@ -551,7 +551,6 @@ find_parameters.stanmvreg <- function(x,
 }
 
 
-
 # Simulation models -----------------------------
 
 

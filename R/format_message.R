@@ -160,7 +160,6 @@ format_error <- function(...) {
 }
 
 
-
 # helper -----------------------
 
 .wrap_message_line <- function(string, line_length, indent = NULL) {
@@ -249,7 +248,6 @@ format_error <- function(...) {
 
   string
 }
-
 
 
 # check whether a string line contains one of the supported format tags

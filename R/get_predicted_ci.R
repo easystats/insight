@@ -83,8 +83,6 @@ get_predicted_ci <- function(x, ...) {
 }
 
 
-
-
 # General method ----------------------------------------------------------
 
 #' @rdname get_predicted_ci
@@ -199,7 +197,6 @@ get_predicted_ci.mlm <- function(x, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 get_predicted_ci.polr <- function(x,
                                   predictions = NULL,
@@ -237,12 +234,6 @@ get_predicted_ci.multinom <- get_predicted_ci.mlm
 
 #' @export
 get_predicted_ci.bracl <- get_predicted_ci.mlm
-
-
-
-
-
-
 
 
 ## Convert to CI -----------
@@ -380,8 +371,6 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 }
 
 
-
-
 # Get PI ------------------------------------------------------------------
 
 .get_predicted_pi_glm <- function(x, predictions, ci = 0.95, ...) {
@@ -408,8 +397,6 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 }
 
 
-
-
 # Interval helpers --------------------------------------------------------
 
 .get_predicted_se_from_iter <- function(iter, dispersion_method = "SD") {
@@ -430,8 +417,6 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   }
   data.frame(SE = se, row.names = seq_along(se))
 }
-
-
 
 
 .get_predicted_ci_from_iter <- function(iter, ci = 0.95, ci_method = "quantile") {

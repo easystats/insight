@@ -117,7 +117,6 @@ get_varcov.HLfit <- get_varcov.default
 get_varcov.geeglm <- get_varcov.default
 
 
-
 # fixest ---------------------------------------------
 
 #' @export
@@ -163,7 +162,6 @@ get_varcov.mlm <- function(x,
     .get_weighted_varcov(x, s$cov.unscaled)
   }
 }
-
 
 
 # models with special components ---------------------------------------------
@@ -449,10 +447,6 @@ get_varcov.gamlss <- function(x, component = c("conditional", "all"), verbose = 
 }
 
 
-
-
-
-
 # Zero-Inflated models ----------------------------------------------------
 
 
@@ -527,7 +521,6 @@ get_varcov.zcpglm <- function(x,
 }
 
 
-
 # Zero-Inflated mixed models ------------------------------------------------
 
 
@@ -598,8 +591,6 @@ get_varcov.MixMod <- function(x,
 
   .process_vcov(vc, verbose, ...)
 }
-
-
 
 
 # Bayesian models ------------------------------------------------
@@ -855,14 +846,12 @@ get_varcov.cpglmm <- function(x, verbose = TRUE, ...) {
 get_varcov.cpglm <- get_varcov.cpglmm
 
 
-
 #' @export
 get_varcov.cglm <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   vc <- as.matrix(x$var)
   .process_vcov(vc, verbose, ...)
 }
-
 
 
 #' @export
@@ -875,7 +864,6 @@ get_varcov.mle2 <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_varcov.mle <- get_varcov.mle2
-
 
 
 #' @rdname get_varcov
@@ -1011,7 +999,6 @@ get_varcov.lmRob <- function(x, verbose = TRUE, ...) {
 get_varcov.glmRob <- get_varcov.lmRob
 
 
-
 #' @export
 get_varcov.coxr <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
@@ -1046,7 +1033,6 @@ get_varcov.gee <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_varcov.LORgee <- get_varcov.gee
-
 
 
 # helper-functions -----------------------------------------------------
@@ -1137,7 +1123,6 @@ get_varcov.LORgee <- get_varcov.gee
   }
   m
 }
-
 
 
 .get_weighted_varcov <- function(x, cov_unscaled) {
