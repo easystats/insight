@@ -287,7 +287,7 @@ test_that("get_statistic", {
 
   skip_if_not_installed("glmmTMB")
   data(Salamanders, package = "glmmTMB")
-  mod <- fixest::fenegbin(count ~ mined, data=Salamanders)
+  mod <- fixest::fenegbin(count ~ mined, data = Salamanders)
   out <- get_statistic(mod)
   expect_equal(
     out$Statistic,
