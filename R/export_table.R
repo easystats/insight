@@ -330,7 +330,6 @@ export_table <- function(x,
 }
 
 
-
 # methods -----------------------------------
 
 #' @export
@@ -338,7 +337,6 @@ print.insight_table <- function(x, ...) {
   cat(x)
   invisible(x)
 }
-
 
 
 # small helper ----------------------
@@ -351,8 +349,6 @@ print.insight_table <- function(x, ...) {
   }
   attr_name
 }
-
-
 
 
 # work horse: create matrix of raw table layout --------------------
@@ -487,10 +483,6 @@ print.insight_table <- function(x, ...) {
 
   out
 }
-
-
-
-
 
 
 # plain text formatting ------------------------
@@ -726,7 +718,6 @@ print.insight_table <- function(x, ...) {
 }
 
 
-
 # helper to prepare table body for text output ---------------------
 
 .table_parts <- function(rows,
@@ -857,7 +848,6 @@ print.insight_table <- function(x, ...) {
 }
 
 
-
 # helper ----------------
 
 .paste_footers <- function(footer, rows) {
@@ -870,7 +860,6 @@ print.insight_table <- function(x, ...) {
   }
   paste0(rows, footer[1])
 }
-
 
 
 .indent_groups <- function(final, indent_groups) {
@@ -899,7 +888,6 @@ print.insight_table <- function(x, ...) {
 }
 
 
-
 .indent_rows <- function(final, indent_rows, whitespace = "  ") {
   # create index for those rows that should be indented
   # for text format, first row is column names, so we need a +1 here
@@ -925,7 +913,6 @@ print.insight_table <- function(x, ...) {
 }
 
 
-
 .indent_rows_html <- function(final, indent_rows, whitespace = "") {
   # create index for those rows that should be indented
   grp_rows <- indent_rows
@@ -938,8 +925,6 @@ print.insight_table <- function(x, ...) {
 
   final
 }
-
-
 
 
 # markdown formatting -------------------
@@ -1048,8 +1033,6 @@ print.insight_table <- function(x, ...) {
 
   rows
 }
-
-
 
 
 # html formatting ---------------------------

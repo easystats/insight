@@ -384,10 +384,6 @@
 }
 
 
-
-
-
-
 # add remainng variables with special pattern -------------------------------
 
 .add_remaining_missing_variables <- function(model,
@@ -494,10 +490,6 @@
 
   mf
 }
-
-
-
-
 
 
 # combine data from different model components -------------------------------
@@ -608,9 +600,6 @@
 }
 
 
-
-
-
 # find zi-data -----------------------------------
 
 # this function tries to get the data from variables from the zero-inflated
@@ -630,16 +619,12 @@
 }
 
 
-
-
 # special model handling -----------------------------------
 
 .get_zelig_relogit_frame <- function(x) {
   vars <- find_variables(x, flatten = TRUE, verbose = FALSE)
   x$data[, vars, drop = FALSE]
 }
-
-
 
 
 # combine data from count and zi-component -----------------------------------
@@ -662,8 +647,6 @@
 
   mf[, unique(c(model.terms$response, fixed.data, find_weights(x))), drop = FALSE]
 }
-
-
 
 
 # "clean" model frame and get data -----------------------------------
@@ -689,8 +672,6 @@
 }
 
 
-
-
 # find start vector of nlmer-models from the environment -----------------------------------
 
 # return data from a data frame that is in the environment,
@@ -702,9 +683,6 @@
     names(sv)
   })
 }
-
-
-
 
 
 # backtransform variables -------------------------------
@@ -788,7 +766,6 @@
 }
 
 
-
 .unscale <- function(x) {
   m <- attr(x, "scaled:center")
   s <- attr(x, "scaled:scale")
@@ -798,7 +775,6 @@
 
   s * x + m
 }
-
 
 
 # find transformed terms, to convert back as raw data --------------------------------

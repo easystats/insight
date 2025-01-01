@@ -77,7 +77,6 @@ trim_ws.list <- function(x, character_only = TRUE, ...) {
 }
 
 
-
 # n_unique ---------------------------------------
 
 #' @rdname trim_ws
@@ -107,7 +106,6 @@ n_unique.list <- function(x, remove_na = TRUE, ...) {
 }
 
 
-
 # safe_deparse ---------------------------------------
 
 #' @rdname trim_ws
@@ -118,7 +116,6 @@ safe_deparse <- function(x, ...) {
   }
   paste(sapply(deparse(x, width.cutoff = 500), trim_ws, simplify = TRUE), collapse = " ")
 }
-
 
 
 # safe_substitute ---------------------------------------

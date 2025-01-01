@@ -196,7 +196,6 @@ format_value.factor <- format_value.numeric
 format_value.logical <- format_value.numeric
 
 
-
 # shortcut
 
 #' @rdname format_value
@@ -204,8 +203,6 @@ format_value.logical <- format_value.numeric
 format_percent <- function(x, ...) {
   format_value(x, ..., as_percent = TRUE)
 }
-
-
 
 
 .format_value_unless_integer <- function(x,
@@ -232,7 +229,6 @@ format_percent <- function(x, ...) {
     as.character(x)
   }
 }
-
 
 
 .format_value <- function(x,

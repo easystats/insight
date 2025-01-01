@@ -261,7 +261,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 }
 
 
-
 # default handling ---------------
 
 .get_sigma.default <- function(x, verbose = TRUE, ...) {
@@ -296,7 +295,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
   class(s) <- c("insight_aux", class(s))
   s
 }
-
 
 
 # Methods -----------------------------------------------------------------

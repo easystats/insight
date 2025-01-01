@@ -211,7 +211,6 @@
   }
 
 
-
   # if we only need residual variance, we can delete those
   # values again...
   if (component == "residual") {
@@ -232,7 +231,6 @@
     cor.slopes = cor.slopes
   ))
 }
-
 
 
 # store essential information on coefficients, model matrix and so on
@@ -508,7 +506,6 @@
 }
 
 
-
 # fixed effects variance ------------------------------------------------------
 #
 # This is in line with Nakagawa et al. 2017, Suppl. 2
@@ -522,7 +519,6 @@
 }
 
 
-
 # dispersion-specific variance ----
 # ---------------------------------
 .compute_variance_dispersion <- function(model, mixed_effects_info, faminfo, obs_terms) {
@@ -534,7 +530,6 @@
     .compute_variance_random(model, obs_terms, mixed_effects_info)
   }
 }
-
 
 
 # variance associated with a random-effects term (Johnson 2014) --------------
@@ -574,7 +569,6 @@
   # }
   sum(sapply(mixed_effects_info$vc[terms], .sigma_sum))
 }
-
 
 
 # distribution-specific (residual) variance (Nakagawa et al. 2017) ------------
@@ -1028,7 +1022,6 @@
 }
 
 
-
 # Get distributional variance for poisson-family
 # ----------------------------------------------
 .variance_family_poisson <- function(model, mu, faminfo) {
@@ -1044,7 +1037,6 @@
 }
 
 
-
 # Get distributional variance for beta-family
 # ----------------------------------------------
 .variance_family_beta <- function(model, mu, phi) {
@@ -1056,7 +1048,6 @@
 }
 
 
-
 # Get distributional variance for ordered beta-family
 # ----------------------------------------------
 .variance_family_orderedbeta <- function(model, mu, phi) {
@@ -1066,7 +1057,6 @@
     mu * (1 - mu) / (1 + phi)
   }
 }
-
 
 
 # Get distributional variance for beta-family
@@ -1082,7 +1072,6 @@
 }
 
 
-
 # Get distributional variance for tweedie-family
 # ----------------------------------------------
 .variance_family_tweedie <- function(model, mu, phi) {
@@ -1095,7 +1084,6 @@
   }
   phi * mu^p
 }
-
 
 
 # Get distributional variance for nbinom-family
@@ -1121,7 +1109,6 @@
     stats::family(model)$variance(mu, sig)
   }
 }
-
 
 
 # For zero-inflated negative-binomial models,
@@ -1173,7 +1160,6 @@
 }
 
 
-
 # For zero-inflated poisson models, the
 # distributional variance is based on Zuur et al. 2012
 # ----------------------------------------------
@@ -1192,7 +1178,6 @@
 
   mean(pvar)
 }
-
 
 
 # Get distribution-specific variance for general and
@@ -1226,9 +1211,6 @@
 }
 
 
-
-
-
 # return existence of random slopes ----
 # ----------------------------------------------
 .random_slopes_in_fixed <- function(model) {
@@ -1256,9 +1238,6 @@
 }
 
 
-
-
-
 # random intercept-variances, i.e.
 # between-subject-variance (tau 00) ----
 # ----------------------------------------------
@@ -1274,9 +1253,6 @@
 
   sapply(vars, function(i) i)
 }
-
-
-
 
 
 # random slope-variances (tau 11) ----
@@ -1333,9 +1309,6 @@
 }
 
 
-
-
-
 # slope-intercept-correlations (rho 01) ----
 # ----------------------------------------------
 .random_slope_intercept_corr <- function(model, mixed_effects_info) {
@@ -1364,9 +1337,6 @@
     unlist(rho01)
   }
 }
-
-
-
 
 
 # slope-slope-correlations (rho 01) ----
@@ -1439,10 +1409,6 @@
 
   unlist(rho00)
 }
-
-
-
-
 
 
 # helper --------------------------

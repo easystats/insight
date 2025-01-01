@@ -100,7 +100,6 @@ find_terms.default <- function(x,
 }
 
 
-
 #' @export
 find_terms.aovlist <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   resp <- find_response(x, verbose = FALSE)
@@ -167,7 +166,6 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
     l
   }
 }
-
 
 
 # helper -----------------------

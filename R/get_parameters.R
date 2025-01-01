@@ -46,7 +46,6 @@ get_parameters <- function(x, ...) {
 }
 
 
-
 # Default models ---------------------------------------------
 
 
@@ -107,8 +106,6 @@ get_parameters.summary.lm <- function(x, ...) {
 get_parameters.data.frame <- function(x, ...) {
   format_error("A data frame is no valid object for this function.")
 }
-
-
 
 
 # Special models ---------------------------------------------
@@ -379,7 +376,6 @@ get_parameters.mle2 <- function(x, ...) {
 get_parameters.mle <- get_parameters.mle2
 
 
-
 #' @export
 get_parameters.lrm <- function(x, ...) {
   tryCatch(
@@ -485,7 +481,6 @@ get_parameters.mclogit <- function(x, ...) {
 }
 
 
-
 #' @export
 get_parameters.mlm <- function(x, ...) {
   cs <- stats::coef(summary(x))
@@ -519,7 +514,6 @@ get_parameters.gbm <- function(x, ...) {
 
   text_remove_backticks(params)
 }
-
 
 
 #' @export
@@ -604,10 +598,6 @@ get_parameters.metaplus <- function(x, ...) {
 }
 
 
-
-
-
-
 # SEM models ---------------------------------------------
 
 
@@ -654,7 +644,6 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
 }
 
 
-
 #' @export
 get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   check_if_installed("lavaan")
@@ -682,8 +671,6 @@ get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
 
   text_remove_backticks(params)
 }
-
-
 
 
 # Ordinal models ---------------------------------------------
@@ -720,13 +707,6 @@ get_parameters.bracl <- function(x, ...) {
 }
 
 
-
-
-
-
-
-
-
 # Anova and Standard models --------------------------------------------------
 
 
@@ -743,7 +723,6 @@ get_parameters.aov <- function(x, ...) {
 
   text_remove_backticks(params)
 }
-
 
 
 #' @export
@@ -763,7 +742,6 @@ get_parameters.aovlist <- function(x, ...) {
 }
 
 
-
 #' @export
 get_parameters.manova <- function(x, ...) {
   params <- stats::na.omit(stats::coef(x))
@@ -781,7 +759,6 @@ get_parameters.manova <- function(x, ...) {
 
 #' @export
 get_parameters.maov <- get_parameters.manova
-
 
 
 #' @export
@@ -817,8 +794,6 @@ get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
 }
 
 
-
-
 # utility functions ---------------------------------
 
 
@@ -826,7 +801,6 @@ get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
   sn <- methods::slotNames(x)
   as.data.frame(methods::slot(x, sn[1]))
 }
-
 
 
 .get_armsim_ranef_parms <- function(x) {

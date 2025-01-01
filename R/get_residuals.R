@@ -104,7 +104,6 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 get_residuals.vgam <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   if (isTRUE(weighted)) {
@@ -115,7 +114,6 @@ get_residuals.vgam <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
 #' @export
 get_residuals.vglm <- get_residuals.vgam
-
 
 
 #' @export
@@ -148,7 +146,6 @@ get_residuals.crr <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   if (isTRUE(weighted)) {
@@ -172,12 +169,10 @@ get_residuals.slm <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 get_residuals.afex_aov <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   suppressMessages(stats::residuals(x, ...))
 }
-
 
 
 ## brms / stan - special handling -------------------------------------
@@ -203,7 +198,6 @@ print.insight_residuals <- function(x, ...) {
   print.default(as.vector(x))
   print_colour("\nNOTE: Credible intervals are stored as attributes and can be accessed using `as.data.frame()` on this output.\n", "yellow") # nolint
 }
-
 
 
 ## weighted residuals -----------------------------
@@ -249,7 +243,6 @@ print.insight_residuals <- function(x, ...) {
     }
   )
 }
-
 
 
 ## pearson residuals -------------------------------------------

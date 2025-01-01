@@ -67,9 +67,6 @@ get_parameters.zcpglm <- function(x, component = "all", ...) {
 }
 
 
-
-
-
 # helper -------------------
 
 .return_zeroinf_parms <- function(x, component) {

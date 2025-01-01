@@ -33,7 +33,6 @@ n_parameters <- function(x, ...) {
 }
 
 
-
 # Default models -------------------------------------
 
 #' @rdname n_parameters
@@ -55,7 +54,6 @@ n_parameters.default <- function(x, remove_nonestimable = FALSE, ...) {
 
   nrow(params)
 }
-
 
 
 # Models with random effects -------------------------------------
@@ -107,7 +105,6 @@ n_parameters.wbm <- n_parameters.merMod
 
 #' @export
 n_parameters.svy2lme <- n_parameters.merMod
-
 
 
 # Models with random effects and other components ----------------------------
@@ -163,7 +160,6 @@ n_parameters.hurdle <- n_parameters.zeroinfl
 n_parameters.zerotrunc <- n_parameters.default
 
 
-
 # GAMs ----------------------------
 
 #' @rdname n_parameters
@@ -181,7 +177,6 @@ n_parameters.Gam <- n_parameters.gam
 
 #' @export
 n_parameters.vgam <- n_parameters.gam
-
 
 
 # Bayesian Models ----------------------------

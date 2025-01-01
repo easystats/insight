@@ -65,7 +65,6 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 }
 
 
-
 # helper -----------------
 
 .clean_names <- function(x, include_names = FALSE, is_emmeans = FALSE, ...) {
@@ -96,8 +95,6 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
     unname(out)
   }
 }
-
-
 
 
 # utils ---------------------
@@ -208,7 +205,6 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
   # remove for random intercept only models
   .remove_values(cleaned, c("1", "0"))
 }
-
 
 
 ## TODO multimembership-models may also have weights, this does not work yet

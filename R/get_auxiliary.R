@@ -76,7 +76,6 @@ get_auxiliary <- function(x,
 }
 
 
-
 # dispersion parameter -----------------------
 
 #' @rdname get_auxiliary
@@ -145,7 +144,6 @@ get_dispersion.glmmTMB <- function(x, verbose = TRUE, ...) {
 
 #' @export
 get_dispersion.brmsfit <- get_dispersion.glmmTMB
-
 
 
 # special ------------------

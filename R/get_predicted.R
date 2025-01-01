@@ -292,7 +292,6 @@ get_predicted.data.frame <- function(x, data = NULL, verbose = TRUE, ...) {
 }
 
 
-
 # LM and GLM --------------------------------------------------------------
 # =========================================================================
 
@@ -367,8 +366,6 @@ get_predicted.lm <- function(x,
 get_predicted.glm <- get_predicted.lm
 
 
-
-
 # rms -------------------------------------------------------------------
 # =======================================================================
 
@@ -378,7 +375,6 @@ get_predicted.glm <- get_predicted.lm
 
 #' @export
 get_predicted.lrm <- get_predicted.default
-
 
 
 # MASS: rlm -----------------------------------------------------
@@ -396,8 +392,6 @@ get_predicted.rlm <- get_predicted.default
 
 #' @export
 get_predicted.survreg <- get_predicted.lm
-
-
 
 
 # survival: coxph -------------------------------------------------------
@@ -453,8 +447,6 @@ get_predicted.coxph <- function(x,
   # 4. step: final preparation
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
 }
-
-
 
 
 # bife ------------------------------------------------------------------
@@ -574,8 +566,6 @@ get_predicted.rma <- function(x,
 }
 
 
-
-
 # afex ------------------------------------------------------------------
 # =======================================================================
 
@@ -599,8 +589,6 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
 
   out
 }
-
-
 
 
 # phylolm ---------------------------------------------------------------
@@ -652,7 +640,6 @@ get_predicted.phylolm <- function(x,
 }
 
 
-
 # ====================================================================
 # Utils --------------------------------------------------------------
 # ====================================================================
@@ -671,8 +658,6 @@ get_predicted.phylolm <- function(x,
   }
   re.form
 }
-
-
 
 
 # back-transformation ------------------------------------------------------
@@ -761,8 +746,6 @@ get_predicted.phylolm <- function(x,
 }
 
 
-
-
 # -------------------------------------------------------------------------
 
 .get_predicted_out <- function(predictions, my_args = NULL, ci_data = NULL, ...) {
@@ -802,8 +785,6 @@ get_predicted.phylolm <- function(x,
   class(predictions) <- c("get_predicted", class(predictions))
   predictions
 }
-
-
 
 
 # Bootstrap ==============================================================
@@ -848,8 +829,6 @@ get_predicted.phylolm <- function(x,
 }
 
 
-
-
 # -------------------------------------------------------------------------
 
 .get_predicted_centrality_from_draws <- function(x,
@@ -887,16 +866,11 @@ get_predicted.phylolm <- function(x,
 }
 
 
-
 # -------------------------------------------------------------------------
 
-.create_newmods_rma <- function(x, data, ...) {
+.create_newmods_rma <- function(x, data, ...) {}
 
-}
-
-.create_newscale_rma <- function(x, data, ...) {
-
-}
+.create_newscale_rma <- function(x, data, ...) {}
 
 .get_blup_rma <- function(x, data, ci = NULL, ...) {
   if (is.element(x$test, c("knha", "adhoc", "t"))) {

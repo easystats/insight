@@ -46,7 +46,6 @@ clean_parameters <- function(x, ...) {
 }
 
 
-
 #' @export
 clean_parameters.default <- function(x, group = "", ...) {
   pars <- find_parameters(x,
@@ -124,7 +123,6 @@ clean_parameters.default <- function(x, group = "", ...) {
 }
 
 
-
 #' @export
 clean_parameters.emmGrid <- function(x, ...) {
   pars <- find_parameters(x, flatten = FALSE)
@@ -185,7 +183,6 @@ clean_parameters.BFBayesFactor <- function(x, ...) {
   out <- .remove_empty_columns_from_pars(.clean_bfbayesfactor_params(out))
   .fix_random_effect_smooth(x, out)
 }
-
 
 
 #' @export
@@ -295,7 +292,6 @@ clean_parameters.lavaan <- function(x, ...) {
 }
 
 
-
 #' @export
 clean_parameters.blavaan <- function(x, ...) {
   params <- get_parameters(x, summary = TRUE)
@@ -306,7 +302,6 @@ clean_parameters.blavaan <- function(x, ...) {
   class(params) <- c("clean_parameters", class(params))
   params
 }
-
 
 
 #' @export
@@ -350,7 +345,6 @@ clean_parameters.stanreg <- function(x, ...) {
 }
 
 
-
 #' @export
 clean_parameters.bamlss <- function(x, ...) {
   pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
@@ -361,7 +355,6 @@ clean_parameters.bamlss <- function(x, ...) {
   class(out) <- c("clean_parameters", class(out))
   out
 }
-
 
 
 #' @export
@@ -424,7 +417,6 @@ clean_parameters.mlm <- function(x, ...) {
 }
 
 
-
 # helper -------------------------
 
 
@@ -483,7 +475,6 @@ clean_parameters.mlm <- function(x, ...) {
     )
   })
 }
-
 
 
 .clean_brms_params <- function(out, is_mv, ...) {
@@ -620,7 +611,6 @@ clean_parameters.mlm <- function(x, ...) {
 }
 
 
-
 .clean_stanreg_params <- function(out, ...) {
   out$Cleaned_Parameter <- out$Parameter
   dots <- list(...)
@@ -696,7 +686,6 @@ clean_parameters.mlm <- function(x, ...) {
 }
 
 
-
 .clean_bfbayesfactor_params <- function(out) {
   pars <- do.call(rbind, strsplit(out$Parameter, "-", fixed = TRUE))
 
@@ -731,7 +720,6 @@ clean_parameters.mlm <- function(x, ...) {
 }
 
 
-
 .clean_bamlss_params <- function(out) {
   out$Cleaned_Parameter <- out$Parameter
   out$Cleaned_Parameter <- gsub("^(mu\\.p\\.|pi\\.p\\.)(.*)", "\\2", out$Cleaned_Parameter)
@@ -744,7 +732,6 @@ clean_parameters.mlm <- function(x, ...) {
   out$Cleaned_Parameter <- gsub("(\\.$)", "", out$Cleaned_Parameter)
   out
 }
-
 
 
 .remove_empty_columns_from_pars <- function(x) {

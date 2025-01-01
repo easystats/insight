@@ -44,13 +44,11 @@ get_parameters.betamfx <- function(x, component = "all", ...) {
 }
 
 
-
 #' @export
 get_parameters.betaor <- function(x, component = "all", ...) {
   component <- validate_argument(component, c("all", "conditional", "precision"))
   get_parameters.betareg(x$fit, component = component, ...)
 }
-
 
 
 #' @export

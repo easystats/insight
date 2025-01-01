@@ -29,7 +29,6 @@ link_inverse <- function(x, ...) {
 }
 
 
-
 # Default method ---------------------------------------
 
 
@@ -236,8 +235,6 @@ link_inverse.afex_aov <- link_inverse.lm
 link_inverse.svy2lme <- link_inverse.lm
 
 
-
-
 #' @rdname link_inverse
 #' @export
 link_inverse.betareg <- function(x, what = c("mean", "precision"), ...) {
@@ -247,7 +244,6 @@ link_inverse.betareg <- function(x, what = c("mean", "precision"), ...) {
     precision = x$link$precision$linkinv
   )
 }
-
 
 
 #' @rdname link_inverse
@@ -263,7 +259,6 @@ link_inverse.DirichletRegModel <- function(x, what = c("mean", "precision"), ...
     )
   }
 }
-
 
 
 # Logit links -----------------------------------
@@ -372,7 +367,6 @@ link_inverse.hurdle <- link_inverse.zeroinfl
 link_inverse.zerotrunc <- link_inverse.zeroinfl
 
 
-
 # Ordinal models -----------------------------------
 
 #' @export
@@ -391,7 +385,6 @@ link_inverse.serp <- link_inverse.clm
 
 #' @export
 link_inverse.mixor <- link_inverse.clm
-
 
 
 # mfx models ------------------------------------------------------
@@ -429,7 +422,6 @@ link_inverse.probitirr <- link_inverse.logitmfx
 
 #' @export
 link_inverse.negbinirr <- link_inverse.logitmfx
-
 
 
 # Other models ----------------------------
@@ -769,7 +761,6 @@ link_inverse.mira <- function(x, ...) {
   check_if_installed("mice")
   link_inverse(mice::pool(x), ...)
 }
-
 
 
 # helper --------------

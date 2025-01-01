@@ -382,7 +382,6 @@ get_df.lmerModTest <- get_df.lmerMod
 get_df.lme <- get_df.lmerMod
 
 
-
 # Other models ------------------
 # -------------------------------
 

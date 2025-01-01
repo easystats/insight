@@ -173,8 +173,6 @@ find_response.joint <- function(x,
 }
 
 
-
-
 # utils ---------------------
 
 

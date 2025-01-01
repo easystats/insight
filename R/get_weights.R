@@ -121,7 +121,6 @@ get_weights.brmsfit <- function(x, remove_na = FALSE, null_as_ones = FALSE, ...)
 }
 
 
-
 #' @export
 get_weights.btergm <- function(x, null_as_ones = FALSE, ...) {
   x@weights

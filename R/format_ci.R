@@ -205,8 +205,6 @@ format_ci.data.frame <- function(CI_low, ci_string = "CI", ...) {
 }
 
 
-
-
 # Convenience function ----------------------------------------------------
 
 

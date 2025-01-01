@@ -352,7 +352,6 @@ get_datagrid.data.frame <- function(x,
   }
 
 
-
   # Deal with the rest =========================================================
   rest_vars <- names(x)[!names(x) %in% names(targets)]
   if (length(rest_vars) >= 1) {
@@ -402,9 +401,6 @@ get_datagrid.data.frame <- function(x,
 }
 
 
-
-
-
 # Functions that work on a vector (a single column) ----------------------
 # See tests/test-get_datagrid.R for examples
 
@@ -441,9 +437,6 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
 get_datagrid.double <- get_datagrid.numeric
 
 
-
-
-
 ## Factors & Characters ----------------------------------------------------
 
 
@@ -472,8 +465,6 @@ get_datagrid.character <- get_datagrid.factor
 
 #' @export
 get_datagrid.logical <- get_datagrid.character
-
-
 
 
 # Functions that work on statistical models -------------------------------
@@ -625,8 +616,6 @@ get_datagrid.wbm <- function(x,
 }
 
 
-
-
 # Functions that work on get_datagrid -------------------------------------
 
 #' @export
@@ -643,8 +632,6 @@ get_datagrid.visualisation_matrix <- function(x, reference = attributes(x)$refer
 
 #' @export
 get_datagrid.datagrid <- get_datagrid.visualisation_matrix
-
-
 
 
 # Functions for emmeans/marginaleffects ---------------

@@ -76,8 +76,6 @@ get_predicted.lmerMod <- function(x,
 get_predicted.merMod <- get_predicted.lmerMod
 
 
-
-
 # glmmTMB ---------------------------------------------------------------
 # =======================================================================
 
@@ -191,8 +189,6 @@ get_predicted.glmmTMB <- function(x,
 }
 
 
-
-
 # GLMMadaptive: mixed_model (class MixMod) ------------------------------
 # =======================================================================
 
@@ -279,7 +275,6 @@ get_predicted.MixMod <- function(x,
   # 4. step: final preparation
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
 }
-
 
 
 # HGLM: mixed_model (class hglm) ------------------------------

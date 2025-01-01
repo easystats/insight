@@ -53,7 +53,6 @@ standardize_names.default <- function(data, ...) {
 }
 
 
-
 #' @rdname standardize_names
 #' @export
 standardize_names.parameters_model <- function(data,
@@ -74,8 +73,6 @@ standardize_names.data.frame <- standardize_names.parameters_model
 standardize_names.parameters_distribution <- standardize_names.parameters_model
 
 
-
-
 # helper -----
 
 
@@ -91,10 +88,6 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   colnames(data) <- cn
   as.data.frame(data)
 }
-
-
-
-
 
 
 .names_to_easystats <- function(cn, ignore_estimate) {
@@ -146,7 +139,6 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
 
   cn
 }
-
 
 
 .names_to_broom <- function(cn, ignore_estimate) {

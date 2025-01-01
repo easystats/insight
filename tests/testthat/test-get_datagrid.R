@@ -285,8 +285,6 @@ test_that("get_datagrid - marginaleffects", {
   expect_true(all(c(50, 100) %in% res2[[1]]))
 
 
-
-
   mod <- lm(mpg ~ wt + hp + qsec, data = mtcars)
   myme <- marginaleffects::comparisons(mod,
     variables = c("wt", "hp"),

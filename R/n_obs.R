@@ -632,9 +632,6 @@ n_obs.Rchoice <- function(x, ...) {
 }
 
 
-
-
-
 # mfx models --------------------------------------
 
 #' @export
@@ -665,9 +662,6 @@ n_obs.poissonirr <- n_obs.betamfx
 
 #' @export
 n_obs.logitor <- n_obs.betamfx
-
-
-
 
 
 # special models -----------

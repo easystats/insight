@@ -169,8 +169,6 @@ format_table <- function(x,
   )
 
 
-
-
   # metafor ----
   if ("Weight" %in% names(x)) x$Weight <- format_value(x$Weight, protect_integers = TRUE)
 
@@ -221,9 +219,6 @@ format_table <- function(x,
   }
   x
 }
-
-
-
 
 
 # sub-routines ---------------
@@ -372,7 +367,6 @@ format_table <- function(x,
 }
 
 
-
 .format_aov_columns <- function(x) {
   if ("Deviance_error" %in% names(x)) {
     x$Deviance_error <- format_value(x$Deviance_error, protect_integers = TRUE)
@@ -383,7 +377,6 @@ format_table <- function(x,
   }
   x
 }
-
 
 
 .format_freq_stats <- function(x) {
@@ -428,7 +421,6 @@ format_table <- function(x,
 
   x
 }
-
 
 
 .format_main_ci_columns <- function(x,
@@ -504,7 +496,6 @@ format_table <- function(x,
 }
 
 
-
 .format_other_ci_columns <- function(x, att, ci_digits, zap_small, ci_width = "auto", ci_brackets = TRUE) {
   other_ci_low <- names(x)[endsWith(names(x), "_CI_low")]
   other_ci_high <- names(x)[endsWith(names(x), "_CI_high")]
@@ -552,7 +543,6 @@ format_table <- function(x,
 }
 
 
-
 .format_broom_ci_columns <- function(x,
                                      ci_digits,
                                      zap_small,
@@ -588,7 +578,6 @@ format_table <- function(x,
 }
 
 
-
 .format_rope_columns <- function(x, zap_small, ci_width = "auto", ci_brackets = TRUE) {
   if (all(c("ROPE_low", "ROPE_high") %in% names(x))) {
     x$ROPE_low <- format_ci(
@@ -605,7 +594,6 @@ format_table <- function(x,
   }
   x
 }
-
 
 
 .format_std_columns <- function(x, other_ci_colname, digits, zap_small) {
@@ -635,7 +623,6 @@ format_table <- function(x,
 
   x
 }
-
 
 
 .format_bayes_columns <- function(x,
@@ -716,7 +703,6 @@ format_table <- function(x,
 }
 
 
-
 .format_performance_columns <- function(x, digits, ic_digits, zap_small, use_symbols) {
   if (isTRUE(use_symbols) && .unicode_symbols()) {
     if ("R2" %in% names(x)) names(x)[names(x) == "R2"] <- "R\u00b2"
@@ -795,7 +781,6 @@ format_table <- function(x,
 }
 
 
-
 .format_symbols <- function(x, use_symbols) {
   if (isTRUE(use_symbols) && .unicode_symbols()) {
     colnames(x) <- gsub("Delta", "\u0394", colnames(x), ignore.case = TRUE)
@@ -817,7 +802,6 @@ format_table <- function(x,
 }
 
 
-
 # helper ---------------------
 
 
@@ -829,7 +813,6 @@ format_table <- function(x,
   }
   x
 }
-
 
 
 .additional_arguments <- function(x, value, default) {
@@ -847,7 +830,6 @@ format_table <- function(x,
 
   out
 }
-
 
 
 .unicode_symbols <- function() {
