@@ -2199,6 +2199,15 @@ get_statistic.fixest <- function(x, ...) {
   cs <- summary(x)$coeftable
   params <- get_parameters(x)
 
+  # remove .theta row
+  rn <- rownames(cs)
+  if (!is.null(rn)) {
+    theta_row <- which(rn == ".theta")
+    if (length(theta_row)) {
+      cs <- cs[-theta_row, ]
+    }
+  }
+
   out <- data.frame(
     Parameter = params$Parameter,
     Statistic = as.vector(cs[, 3]),

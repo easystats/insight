@@ -10,6 +10,9 @@
 * Fixed issues in `find_predictors()` and `has_intercept()` for *brms* models
   with `0 + Intercept` formula notation.
 
+* Fixed issues in `get_statistic()` for models of class `fixest` from
+  negative-binomial families.
+
 # insight 1.0.0
 
 ## Breaking changes
