@@ -518,14 +518,20 @@ get_datagrid.default <- function(x,
 
   # Drop random factors
   random_factors <- find_random(x, flatten = TRUE)
-  if (isFALSE(include_random) && !is.null(random_factors)) {
-    keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
-    if (!is.null(keep)) {
-      if (all(by != "all")) {
-        keep <- c(keep, by[by %in% random_factors])
-        random_factors <- setdiff(random_factors, by)
+  if (!is.null(random_factors)) {
+    if (isFALSE(include_random)) {
+      # drop random factors, if these should not be included
+      keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
+      if (!is.null(keep)) {
+        if (all(by != "all")) {
+          keep <- c(keep, by[by %in% random_factors])
+          random_factors <- setdiff(random_factors, by)
+        }
+        data <- data[colnames(data) %in% keep]
       }
-      data <- data[colnames(data) %in% keep]
+    } else {
+      # make sure random factors are not numeric, else, wrong "levels" will be returned
+      data[random_factors] <- lapply(data[random_factors], as.factor)
     }
   }
 
