@@ -1,5 +1,9 @@
 # insight (devel)
 
+## General
+
+* Support for models of class `oohbchoice` (package *DCchoice*).
+
 ## Bug fixes
 
 * Fixed issued due to latest *mice* updates.

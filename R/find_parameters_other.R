@@ -274,3 +274,15 @@ find_parameters.asym <- function(x, flatten = FALSE, ...) {
     out
   }
 }
+
+
+#' @export
+find_parameters.oohbchoice <- function(x, flatten = FALSE, ...) {
+  out <- list(conditional = names(stats::coef(x)))
+
+  if (flatten) {
+    unique(unlist(out, use.names = FALSE))
+  } else {
+    out
+  }
+}

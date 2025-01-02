@@ -210,6 +210,22 @@ get_statistic.asym <- function(x, ...) {
 
 
 #' @export
+get_statistic.oohbchoice <- function(x, ...) {
+  cftable <- summary(x)$coef
+  out <- data.frame(
+    Parameter = find_parameters(x)$conditional,
+    Statistic = cftable[, "z value"],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.afex_aov <- function(x, ...) {
   out <- data.frame(
     Parameter = rownames(x$anova_table),

@@ -421,6 +421,20 @@ link_function.Rchoice <- function(x, ...) {
 
 
 #' @export
+link_function.oohbchoice <- function(x, ...) {
+  link <- switch(x$distribution,
+    normal = "identity",
+    weibull = ,
+    "log-normal" = "log",
+    logistic = ,
+    ## TODO: not sure about log-logistic link-inverse
+    "log-logistic" = "logit"
+  )
+  stats::make.link(link = link)$linkfun
+}
+
+
+#' @export
 link_function.merModList <- function(x, ...) {
   link_function.default(x[[1]], ...)
 }

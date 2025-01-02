@@ -75,6 +75,9 @@
 #'    **DirichletReg**, when parametrization (i.e. `model`) is
 #'    `"alternative"`.
 #'
+#'  - `bidrange`, for models of class `oohbchoice` (from package **DCchoice**),
+#'    which indicates the right-hand side of the bar (the bid-range).
+#'
 #' @note For models of class `lme` or `gls` the correlation-component
 #'   is only returned, when it is explicitly defined as named argument
 #'   (`form`), e.g. `corAR1(form = ~1 | Mare)`
@@ -976,6 +979,22 @@ find_formula.fixest <- function(x, verbose = TRUE, ...) {
   f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
     cluster = stats::as.formula(f.clus)
+  ))
+  .find_formula_return(f, verbose = verbose)
+}
+
+
+#' @export
+find_formula.oohbchoice <- function(x, verbose = TRUE, ...) {
+  f <- safe_deparse(stats::formula(x))
+  f_parts <- trim_ws(unlist(strsplit(f, "|", fixed = TRUE), use.names = FALSE))
+
+  f.cond <- f_parts[1]
+  f.bidrange <- f_parts[2]
+
+  f <- compact_list(list(
+    conditional = stats::as.formula(f.cond),
+    bidrange = stats::as.formula(paste("~", f.bidrange))
   ))
   .find_formula_return(f, verbose = verbose)
 }

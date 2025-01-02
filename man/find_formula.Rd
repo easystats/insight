@@ -86,6 +86,8 @@ with \code{mgcv::gam()}, the formula that describes the scale parameter
 \item \code{precision}, for \code{DirichletRegModel} models from
 \strong{DirichletReg}, when parametrization (i.e. \code{model}) is
 \code{"alternative"}.
+\item \code{bidrange}, for models of class \code{oohbchoice} (from package \strong{DCchoice}),
+which indicates the right-hand side of the bar (the bid-range).
 }
 }
 \description{
