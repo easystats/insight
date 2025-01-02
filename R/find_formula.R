@@ -994,7 +994,7 @@ find_formula.oohbchoice <- function(x, verbose = TRUE, ...) {
 
   f <- compact_list(list(
     conditional = stats::as.formula(f.cond),
-    bidrange = stats::as.formula(f.bidrange)
+    bidrange = stats::as.formula(paste("~", f.bidrange))
   ))
   .find_formula_return(f, verbose = verbose)
 }
