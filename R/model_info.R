@@ -768,6 +768,35 @@ model_info.stanmvreg <- function(x, ...) {
 
 
 #' @export
+model_info.oohbchoice <- function(x, ...) {
+  link <- switch(x$distribution,
+    normal = ,
+    "log-normal" = stats::gaussian()$link,
+    logistic = ,
+    "log-logistic" = stats::binomial()$link,
+    "log"
+  )
+
+  fam <- switch(x$distribution,
+    normal = ,
+    "log-normal" = "gaussian",
+    logistic = ,
+    "log-logistic" = "binomial",
+    "weibull"
+  )
+
+  .make_family(
+    x = x,
+    fitfam = fam,
+    zero.inf = FALSE,
+    logit.link = link == "logit",
+    link.fun = link,
+    ...
+  )
+}
+
+
+#' @export
 model_info.BGGM <- function(x, ...) {
   link <- switch(x$type,
     continuous = stats::gaussian(),
