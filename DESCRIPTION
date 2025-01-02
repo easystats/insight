@@ -148,7 +148,7 @@ Suggests:
     lmtest,
     logistf,
     logitr,
-    marginaleffects (>= 0.24.0.6),
+    marginaleffects (>= 0.24.0),
     MASS,
     Matrix,
     mclogit,
