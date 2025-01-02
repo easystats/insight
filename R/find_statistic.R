@@ -135,7 +135,7 @@ find_statistic.default <- function(x, ...) {
     "MixMod", "mjoint", "mle", "mle2", "mlogit", "mblogit", "mclogit", "mmclogit",
     "multinom", "mvmeta", "mvord", "multinom_weightit",
     "negbin", "negbinmfx", "negbinirr", "nlreg", "nestedLogit",
-    "objectiveML", "orm", "ordinal_weightit",
+    "objectiveML", "orm", "ordinal_weightit", "oohbchoice",
     "poissonmfx", "poissonirr", "psm", "probitmfx", "pgmm", "phyloglm",
     "qr", "QRNLMM", "QRLMM",
     "Rchoice", "riskRegression", "robmixglm", "rma", "rma.mv", "rma.uni", "rrvglm",

@@ -450,3 +450,17 @@ get_parameters.asym <- function(x, verbose = TRUE, ...) {
 
   text_remove_backticks(params)
 }
+
+
+#' @export
+get_parameters.oohbchoice <- function(x, verbose = TRUE, ...) {
+  cf <- stats::coef(x)
+  params <- data.frame(
+    Parameter = names(cf),
+    Estimate = unname(cf),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  text_remove_backticks(params)
+}
