@@ -19,6 +19,9 @@
 
 * Fixed issue with `as.numeric()` method for `get_sigma()`.
 
+* `get_datagrid()` now only returns valid levels when `include_random = TRUE`
+  and group-level factor in random effects is numeric.
+
 # insight 1.0.0
 
 ## Breaking changes
