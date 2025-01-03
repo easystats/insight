@@ -317,8 +317,11 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE) {
 
 #' @export
 as.double.insight_aux <- function(x, ...) {
-  if (is.null(x) || all(is.na(x)) || all(is.infinite(x))) {
+  if (is.null(x) || all(is.na(x)) || all(is.infinite(x)) || !is.numeric(x)) {
     return(NULL)
   }
   mean(x, na.rm = TRUE)
 }
+
+#' @export
+as.numeric.insight_aux <- as.double.insight_aux
