@@ -40,6 +40,10 @@
 #'   type (for instance, to a factor).
 #' * Other strings are passed directly to the `type` argument of the `predict()`
 #'   method supplied by the modelling package.
+#' * Specifically for models of class `brmsfit` (package *brms*), the `predict`
+#'   argument can be any valid option for the `dpar` argument, to predict
+#'   distributional parameters (such as `"sigma"`, `"beta"`, `"kappa"`, `"phi"`
+#'   and so on, see `?brms::brmsfamily`).
 #' * When `predict = NULL`, alternative arguments such as `type` will be captured
 #'   by the `...` ellipsis and passed directly to the `predict()` method supplied
 #'   by the modelling package. Note that this might result in conflicts with

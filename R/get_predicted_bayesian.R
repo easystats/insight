@@ -54,6 +54,7 @@ get_predicted.stanreg <- function(x,
   fun_args <- list(x,
     newdata = my_args$data,
     re.form = my_args$re.form,
+    dpar = my_args$distributional_parameter,
     draws = iterations
   )
 

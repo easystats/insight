@@ -14,6 +14,7 @@
 
   # check whether user possibly used the "type" instead of "predict" argument
   dots <- list(...)
+  dpar <- NULL
 
   # one of "type" or "predict" must be provided...
   if (is.null(dots$type) && is.null(predict)) {
@@ -94,7 +95,7 @@
   # retrieve model object's predict-method prediction-types (if any)
   type_methods <- suppressWarnings(eval(formals(predict_method)$type))
   # and together, these prediction-types are supported...
-  supported <- c(easystats_methods, type_methods)
+  supported <- c(easystats_methods, type_methods, .brms_aux_elements())
 
   # check aliases - ignore "expected" when this is a valid type-argument (e.g. coxph)
   if (predict %in% c("expected", "response") && !"expected" %in% supported) {
@@ -102,6 +103,12 @@
   }
   if (predict == "predicted") {
     predict <- "prediction"
+  }
+
+  # brms-exceptions: predict distributional parameters
+  if (predict %in% .brms_aux_elements()) {
+    dpar <- predict
+    predict <- "expectation"
   }
 
   # Warn if get_predicted() is not called with an easystats- or
@@ -337,6 +344,7 @@
     scale = scale_arg,
     transform = my_transform,
     info = info,
-    allow_new_levels = allow_new_levels
+    allow_new_levels = allow_new_levels,
+    distributional_parameter = dpar
   )
 }
