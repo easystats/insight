@@ -580,7 +580,7 @@ test_that("bugfix: used to fail with matrix variables", {
   foo <- function() {
     mtcars2 <- mtcars
     mtcars2$wt <- scale(mtcars2$wt)
-    return(lm(mpg ~ wt + cyl + gear + disp, data = mtcars2))
+    lm(mpg ~ wt + cyl + gear + disp, data = mtcars2)
   }
   pred <- get_predicted(foo())
   expect_s3_class(pred, c("get_predicted", "numeric"))
