@@ -229,7 +229,7 @@
     "extra", "scale", "marginal", "alpha", "beta", "survival", "infrequent_purchase",
     "auxiliary", "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi",
     "aux", "dist", "selection", "outcome", "time_dummies", "sigma_random",
-    "beta_random", "car", "nominal", "bidrange", "mu", "kappa", "bias", "disc"
+    "beta_random", "car", "nominal", "bidrange", "mu", "kappa", "bias"
   )
 }
 
@@ -237,7 +237,7 @@
   c(
     "sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape",
     "phi", "(phi)", "ndt", "hu", "xi", "coi", "zoi", "mix", "shiftprop", "auxiliary",
-    "aux", "dist", "mu", "kappa", "bias", "disc",
+    "aux", "dist", "mu", "kappa", "bias",
     # random parameters
     "dispersion_random", "sigma_random", "beta_random"
   )
@@ -246,7 +246,7 @@
 .brms_aux_elements <- function() {
   c(
     "sigma", "mu", "nu", "shape", "beta", "phi", "hu", "ndt", "zoi", "coi",
-    "kappa", "bias", "bs", "zi", "disc", "alpha", "xi"
+    "kappa", "bias", "bs", "zi", "alpha", "xi"
   )
 }
 

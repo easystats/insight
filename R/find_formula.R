@@ -1698,7 +1698,6 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   f_coi <- f$pforms$coi
   f_kappa <- f$pforms$kappa
   f_bias <- f$pforms$bias
-  f_disc <- f$pforms$disc
   f_bs <- f$pforms$bs
 
   # brms formulas can also have custom names, based on variable names, e.g.:
