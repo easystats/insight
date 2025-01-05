@@ -213,6 +213,10 @@ where it additionally transforms the predictions into the original response's
 type (for instance, to a factor).</p></li>
 <li><p>Other strings are passed directly to the <code>type</code> argument of the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>
 method supplied by the modelling package.</p></li>
+<li><p>Specifically for models of class <code>brmsfit</code> (package <em>brms</em>), the <code>predict</code>
+argument can be any valid option for the <code>dpar</code> argument, to predict
+distributional parameters (such as <code>"sigma"</code>, <code>"beta"</code>, <code>"kappa"</code>, <code>"phi"</code>
+and so on, see <code><a href="https://paulbuerkner.com/brms/reference/brmsfamily.html" class="external-link">?brms::brmsfamily</a></code>).</p></li>
 <li><p>When <code>predict = NULL</code>, alternative arguments such as <code>type</code> will be captured
 by the <code>...</code> ellipsis and passed directly to the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method supplied
 by the modelling package. Note that this might result in conflicts with
