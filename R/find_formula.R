@@ -1688,14 +1688,17 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   f_mu <- f$pforms$mu
   f_nu <- f$pforms$nu
   f_shape <- f$pforms$shape
+  f_alpha <- f$pforms$alpha
   f_beta <- f$pforms$beta
   f_phi <- f$pforms$phi
+  f_xi <- f$pforms$xi
   f_hu <- f$pforms$hu
   f_ndt <- f$pforms$ndt
   f_zoi <- f$pforms$zoi
   f_coi <- f$pforms$coi
   f_kappa <- f$pforms$kappa
   f_bias <- f$pforms$bias
+  f_disc <- f$pforms$disc
   f_bs <- f$pforms$bs
 
   # brms formulas can also have custom names, based on variable names, e.g.:
@@ -1710,10 +1713,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   # by the above exceptions.
 
   # auxiliary names
-  auxiliary_names <- c(
-    "sigma", "mu", "nu", "shape", "beta", "phi", "hu", "ndt", "zoi", "coi",
-    "kappa", "bias", "bs", "zi"
-  )
+  auxiliary_names <- .brms_aux_elements()
 
   # check if any further pforms exist
   if (all(names(f$pforms) %in% auxiliary_names)) {

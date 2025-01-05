@@ -101,6 +101,10 @@ where it additionally transforms the predictions into the original response's
 type (for instance, to a factor).
 \item Other strings are passed directly to the \code{type} argument of the \code{predict()}
 method supplied by the modelling package.
+\item Specifically for models of class \code{brmsfit} (package \emph{brms}), the \code{predict}
+argument can be any valid option for the \code{dpar} argument, to predict
+distributional parameters (such as \code{"sigma"}, \code{"beta"}, \code{"kappa"}, \code{"phi"}
+and so on, see \code{?brms::brmsfamily}).
 \item When \code{predict = NULL}, alternative arguments such as \code{type} will be captured
 by the \code{...} ellipsis and passed directly to the \code{predict()} method supplied
 by the modelling package. Note that this might result in conflicts with
