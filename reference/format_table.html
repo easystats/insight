@@ -15,7 +15,7 @@ that format_table() converts all columns into character vectors!"><meta property
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,6 +76,7 @@ that <code>format_table()</code> converts all columns into character vectors!</p
 <span>  <span class="va">x</span>,</span>
 <span>  pretty_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  stars <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  stars_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  ci_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  ci_brackets <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -116,6 +117,10 @@ for the Bayes factor or <code>pd</code> for the probability of direction. In suc
 cases, use <code>stars = c("pd", "BF")</code> to add stars to both columns, or
 <code>stars = "BF"</code> to only add stars to the Bayes factor and exclude the <code>pd</code>
 column. Currently, following columns are recognized: <code>"BF"</code>, <code>"pd"</code> and <code>"p"</code>.</p></dd>
+
+
+<dt id="arg-stars-only">stars_only<a class="anchor" aria-label="anchor" href="#arg-stars-only"></a></dt>
+<dd><p>If <code>TRUE</code>, return significant stars only (and no p-values).</p></dd>
 
 
 <dt id="arg-digits-ci-digits-p-digits-rope-digits-ic-digits">digits, ci_digits, p_digits, rope_digits, ic_digits<a class="anchor" aria-label="anchor" href="#arg-digits-ci-digits-p-digits-rope-digits-ic-digits"></a></dt>
