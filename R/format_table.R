@@ -44,6 +44,7 @@
 #'   cases, use `stars = c("pd", "BF")` to add stars to both columns, or
 #'   `stars = "BF"` to only add stars to the Bayes factor and exclude the `pd`
 #'   column. Currently, following columns are recognized: `"BF"`, `"pd"` and `"p"`.
+#' @param stars_only If `TRUE`, return significant stars only (and no p-values).
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
@@ -79,6 +80,7 @@
 format_table <- function(x,
                          pretty_names = TRUE,
                          stars = FALSE,
+                         stars_only = FALSE,
                          digits = 2,
                          ci_width = "auto",
                          ci_brackets = TRUE,
@@ -136,7 +138,7 @@ format_table <- function(x,
 
 
   # P values ----
-  x <- .format_p_values(x, stars = stars, p_digits = p_digits)
+  x <- .format_p_values(x, stars = stars, p_digits = p_digits, stars_only = stars_only)
 
 
   # Main CI and Prediction Intervals ----
@@ -227,7 +229,7 @@ format_table <- function(x,
 # Format various p-values, coming from different easystats-packages
 # like bayestestR (p_ROPE, p_MAP) or performance (p_Chi2)
 
-.format_p_values <- function(x, p_digits, stars = FALSE) {
+.format_p_values <- function(x, p_digits, stars = FALSE, stars_only = FALSE) {
   # Specify stars for which column (#656)
   if (is.character(stars)) {
     starlist <- list(p = FALSE)
@@ -241,6 +243,7 @@ format_table <- function(x,
       x[[pv]] <- format_p(
         x[[pv]],
         stars = starlist[["p"]],
+        stars_only = stars_only,
         name = NULL,
         missing = "",
         digits = p_digits
@@ -258,6 +261,7 @@ format_table <- function(x,
       x[[stats]] <- format_p(
         x[[stats]],
         stars = starlist[["p"]],
+        stars_only = stars_only,
         name = NULL,
         missing = "",
         digits = p_digits
