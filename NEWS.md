@@ -4,6 +4,9 @@
 
 * Support for models of class `oohbchoice` (package *DCchoice*).
 
+* `format_table()` gets a `stars_only` argument, to format p-value columns to
+  contain only significance stars.
+
 ## Bug fixes
 
 * Fixed issued due to latest *mice* updates.

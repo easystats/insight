@@ -8,6 +8,7 @@ format_table(
   x,
   pretty_names = TRUE,
   stars = FALSE,
+  stars_only = FALSE,
   digits = 2,
   ci_width = "auto",
   ci_brackets = TRUE,
@@ -39,6 +40,8 @@ for the Bayes factor or \code{pd} for the probability of direction. In such
 cases, use \code{stars = c("pd", "BF")} to add stars to both columns, or
 \code{stars = "BF"} to only add stars to the Bayes factor and exclude the \code{pd}
 column. Currently, following columns are recognized: \code{"BF"}, \code{"pd"} and \code{"p"}.}
+
+\item{stars_only}{If \code{TRUE}, return significant stars only (and no p-values).}
 
 \item{digits, ci_digits, p_digits, rope_digits, ic_digits}{Number of digits for
 rounding or significant figures. May also be \code{"signif"} to return significant
