@@ -463,6 +463,19 @@ test_that("get_predicted - brms, auxiliary", {
 })
 
 
+test_that("get_predicted - brms, categorical family", {
+  skip_on_cran()
+  skip_if_not_installed("brms")
+  skip_if_not_installed("httr2")
+
+  m <- insight::download_model("brms_categorical_1_fct")
+  out <- get_predicted(m, data = get_datagrid(m))
+  expect_identical(ncol(out), 4L)
+  expect_identical(nrow(out), 30L)
+  expect_named(out, c("Row", "Response", "mpg", "Predicted"))
+})
+
+
 # FA / PCA ----------------------------------------------------------------
 # =========================================================================
 
