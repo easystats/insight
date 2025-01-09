@@ -12,7 +12,7 @@
 
 ## Bug fixes
 
-* Fixed issued due to latest *mice* updates.
+* Fixed issues due to latest *mice* updates.
 
 * Fixed typo in `get_parameters.glmmadmb()`, which was erroneously renamed into
   `get_parameters.glmmTMBadmb()`.
