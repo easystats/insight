@@ -7,6 +7,9 @@
 * `format_table()` gets a `stars_only` argument, to format p-value columns to
   contain only significance stars.
 
+* `get_predicted()` for brms-models with categorical family now includes the
+  data of the data grid in the returned predictions, for better orientation.
+
 ## Bug fixes
 
 * Fixed issued due to latest *mice* updates.
