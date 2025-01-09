@@ -87,7 +87,12 @@ get_predicted.stanreg <- function(x,
   }
 
   # Get predictions (summarize)
-  predictions <- .get_predicted_centrality_from_draws(x, iter = draws, ...)
+  predictions <- .get_predicted_centrality_from_draws(
+    x,
+    iter = draws,
+    datagrid = my_args$data,
+    ...
+  )
 
   # Output
   ci_data <- get_predicted_ci(

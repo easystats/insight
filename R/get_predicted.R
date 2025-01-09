@@ -838,6 +838,7 @@ get_predicted.phylolm <- function(x,
 .get_predicted_centrality_from_draws <- function(x,
                                                  iter,
                                                  centrality_function = base::mean,
+                                                 datagrid = NULL,
                                                  ...) {
   # outcome: ordinal/multinomial/multivariate produce a 3D array of predictions,
   # which we stack in "long" format
@@ -853,6 +854,16 @@ get_predicted.phylolm <- function(x,
       Predicted = apply(iter_stacked, 1, centrality_function),
       stringsAsFactors = FALSE
     )
+    # for ordinal etc. outcomes, we need to include the data from the grid, too
+    if (!is.null(datagrid)) {
+      # due to reshaping predictions into long format, we to repeat the
+      # datagrid multiple times, to have same number of rows
+      times <- nrow(predictions) / nrow(datagrid)
+      if (nrow(predictions) %% times == 0) {
+        datagrid <- do.call(rbind, replicate(times, datagrid, simplify = FALSE))
+        predictions <- cbind(predictions[1:2], datagrid, predictions[3])
+      }
+    }
     iter <- as.data.frame(iter_stacked)
     # outcome with a single level
   } else {

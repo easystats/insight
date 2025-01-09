@@ -463,6 +463,19 @@ test_that("get_predicted - brms, auxiliary", {
 })
 
 
+test_that("get_predicted - brms, categorical family", {
+  skip_on_cran()
+  skip_if_not_installed("brms")
+  skip_if_not_installed("httr2")
+
+  m <- insight::download_model("brms_categorical_1_fct")
+  out <- get_predicted(m, data = get_datagrid(m))
+  expect_identical(ncol(out), 4L)
+  expect_identical(nrow(out), 30L)
+  expect_named(out, c("Row", "Response", "mpg", "Predicted"))
+})
+
+
 # FA / PCA ----------------------------------------------------------------
 # =========================================================================
 
@@ -638,9 +651,12 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   )
   x <- as.data.frame(get_predicted(model, ci = 0.95))
   # Test shape
-  expect_identical(c(nrow(x), ncol(x)), c(96L, 1006L))
+  expect_identical(c(nrow(x), ncol(x)), c(96L, 1010L))
   # Test whether median point-estimate indeed different from default (mean)
   expect_gt(max(x$Predicted - get_predicted(model, centrality_function = stats::median)$Predicted), 0)
+  # predictions include variables from data grid
+  x <- get_predicted(model, ci = 0.95)
+  expect_named(x, c("Row", "Response", "cyl", "mpg", "vs", "carb", "Predicted"))
 })
 
 
