@@ -117,7 +117,7 @@ test_that("reorder columns BF", {
 
 
 test_that("significance stars", {
-  m <- lm(mpg ~ wt, data=mtcars)
+  m <- lm(mpg ~ wt, data = mtcars)
   out <- parameters::parameters(m)
 
   expect_snapshot(print(out, stars = TRUE), variant = "windows")
