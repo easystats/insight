@@ -651,9 +651,12 @@ test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
   )
   x <- as.data.frame(get_predicted(model, ci = 0.95))
   # Test shape
-  expect_identical(c(nrow(x), ncol(x)), c(96L, 1006L))
+  expect_identical(c(nrow(x), ncol(x)), c(96L, 1010L))
   # Test whether median point-estimate indeed different from default (mean)
   expect_gt(max(x$Predicted - get_predicted(model, centrality_function = stats::median)$Predicted), 0)
+  # predictions include variables from data grid
+  x <- get_predicted(model, ci = 0.95)
+  expect_named(x, c("Row", "Response", "cyl", "mpg", "vs", "carb", "Predicted"))
 })
 
 
