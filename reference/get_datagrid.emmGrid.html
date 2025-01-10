@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -134,57 +134,16 @@ result. See examples.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10 150 &lt;NA&gt; cyl4 - cyl6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11 150 &lt;NA&gt; cyl4 - cyl8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 150 &lt;NA&gt; cyl6 - cyl8</span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.24.0.6")</span></span></span>
 <span class="r-in"><span><span class="va">mfx1</span> <span class="op">&lt;-</span> <span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://marginaleffects.com/man/r/slopes.html" class="external-link">slopes</a></span><span class="op">(</span><span class="va">mod</span>, variables <span class="op">=</span> <span class="st">"hp"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="get_datagrid.html">get_datagrid</a></span><span class="op">(</span><span class="va">mfx1</span><span class="op">)</span> <span class="co"># not a "true" grid</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    rowid term contrast am cyl  hp    wt</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1   hp    dY/dX  1   6 110 2.620</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2   hp    dY/dX  1   6 110 2.875</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      3   hp    dY/dX  1   4  93 2.320</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      4   hp    dY/dX  0   6 110 3.215</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5   hp    dY/dX  0   8 175 3.440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6   hp    dY/dX  0   6 105 3.460</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7   hp    dY/dX  0   8 245 3.570</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8   hp    dY/dX  0   4  62 3.190</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9   hp    dY/dX  0   4  95 3.150</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10    10   hp    dY/dX  0   6 123 3.440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11    11   hp    dY/dX  0   6 123 3.440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12    12   hp    dY/dX  0   8 180 4.070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13    13   hp    dY/dX  0   8 180 3.730</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14    14   hp    dY/dX  0   8 180 3.780</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15    15   hp    dY/dX  0   8 205 5.250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16    16   hp    dY/dX  0   8 215 5.424</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17    17   hp    dY/dX  0   8 230 5.345</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18    18   hp    dY/dX  1   4  66 2.200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19    19   hp    dY/dX  1   4  52 1.615</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20    20   hp    dY/dX  1   4  65 1.835</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21    21   hp    dY/dX  0   4  97 2.465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22    22   hp    dY/dX  0   8 150 3.520</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23    23   hp    dY/dX  0   8 150 3.435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24    24   hp    dY/dX  0   8 245 3.840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25    25   hp    dY/dX  0   8 175 3.845</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26    26   hp    dY/dX  1   4  66 1.935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27    27   hp    dY/dX  1   4  91 2.140</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28    28   hp    dY/dX  1   4 113 1.513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29    29   hp    dY/dX  1   8 264 3.170</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30    30   hp    dY/dX  1   6 175 2.770</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31    31   hp    dY/dX  1   8 335 3.570</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32    32   hp    dY/dX  1   4 109 2.780</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mfx2</span> <span class="op">&lt;-</span> <span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://marginaleffects.com/man/r/slopes.html" class="external-link">slopes</a></span><span class="op">(</span><span class="va">mod</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hp"</span>, <span class="st">"wt"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"am"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="get_datagrid.html">get_datagrid</a></span><span class="op">(</span><span class="va">mfx2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   term contrast am</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   hp    dY/dX  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   hp    dY/dX  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   wt    dY/dX  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   wt    dY/dX  1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">contr2</span> <span class="op">&lt;-</span> <span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">avg_comparisons</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="get_datagrid.html">get_datagrid</a></span><span class="op">(</span><span class="va">contr2</span><span class="op">)</span> <span class="co"># not a "true" grid</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   term contrast</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  cyl    6 - 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  cyl    8 - 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   hp       +1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   wt       +1</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

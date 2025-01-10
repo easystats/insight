@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,24 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.01" id="insight-101">insight 1.01<a class="anchor" aria-label="anchor" href="#insight-101"></a></h2>
+<div class="section level3">
+<h3 id="general-1-01">General<a class="anchor" aria-label="anchor" href="#general-1-01"></a></h3>
+<ul><li><p>Support for models of class <code>oohbchoice</code> (package <em>DCchoice</em>).</p></li>
+<li><p><code><a href="../reference/format_table.html">format_table()</a></code> gets a <code>stars_only</code> argument, to format p-value columns to contain only significance stars.</p></li>
+<li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> for brms-models with categorical family now includes the data of the data grid in the returned predictions, for better orientation.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-01">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-01"></a></h3>
+<ul><li><p>Fixed issues due to latest <em>mice</em> updates.</p></li>
+<li><p>Fixed typo in <code>get_parameters.glmmadmb()</code>, which was erroneously renamed into <code>get_parameters.glmmTMBadmb()</code>.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/has_intercept.html">has_intercept()</a></code> for <em>brms</em> models with <code>0 + Intercept</code> formula notation.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for models of class <code>fixest</code> from negative-binomial families.</p></li>
+<li><p>Fixed issue with <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric()</a></code> method for <code><a href="../reference/get_sigma.html">get_sigma()</a></code>.</p></li>
+<li><p><code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> now only returns valid levels when <code>include_random = TRUE</code> and group-level factor in random effects is numeric.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="insight-100">insight 1.0.0<a class="anchor" aria-label="anchor" href="#insight-100"></a></h2><p class="text-muted">CRAN release: 2024-11-26</p>
 <div class="section level3">
