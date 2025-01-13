@@ -45,8 +45,9 @@
 #'     - for Tukey's five number summary (minimum, lower-hinge, median, upper-hinge, maximum): `"x = [fivenum]"`
 #'     - for terciles, including minimum and maximum: `"x = [terciles]"`
 #'     - for terciles, excluding minimum and maximum: `"x = [terciles2]"`
-#'     - for quartiles, including minimum and maximum: `"x = [quartiles]"`
+#'     - for quartiles, including minimum and maximum: `"x = [quartiles]"` (same as `"x = [fivenum]"`)
 #'     - for quartiles, excluding minimum and maximum: `"x = [quartiles2]"`
+#'     - for a pretty value range: `"x = [pretty]"`
 #'     - for minimum and maximum value: `"x = [minmax]"`
 #'     - for 0 and the maximum value: `"x = [zeromax]"`
 #'
@@ -792,7 +793,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
         # If one, might be a shortcut
         shortcuts <- c(
           "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
-          "minmax", "terciles", "terciles2", "fivenum"
+          "minmax", "terciles", "terciles2", "fivenum", "pretty"
         )
         if (parts %in% shortcuts) {
           if (parts %in% c("meansd", "sd")) {
@@ -811,6 +812,8 @@ get_datagrid.comparisons <- get_datagrid.slopes
             by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
           } else if (parts == "terciles2") {
             by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
+          } else if (parts == "pretty") {
+            by_expression <- paste0("c(", paste(as.vector(pretty(x, na.rm = TRUE)), collapse = ","), ")")
           } else if (parts == "zeromax") {
             by_expression <- paste0("c(0,", max(x, na.rm = TRUE), ")")
           } else if (parts == "minmax") {

@@ -48,6 +48,14 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   dg <- insight::get_datagrid(m, "Petal.Width = [fivenum]")
   expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
+
+  skip_if_not_installed("ggeffects")
+  data(efc, package = "ggeffects")
+  efc$c161sex <- datawizard::to_factor(efc$c161sex)
+  efc$e16sex <- datawizard::to_factor(efc$e16sex)
+  model <- lm(neg_c_7 ~ barthtot + c160age * c161sex, data = efc)
+  out <- insight::get_datagrid(model, by = c("c160age=[pretty]", "c161sex"))
+  expect_identical(out$c160age, c(20, 40, 60, 80, 20, 40, 60, 80))
 })
 
 # bracket tokens
