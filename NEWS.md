@@ -1,3 +1,11 @@
+# insight 1.02
+
+## Bug fixes
+
+* Option `"terciles"` and `"terciles2"` in `get_datagrid()` were swapped, i.e.
+  `"terciles"` was doing what was documented for `"terciles2"` and vice versa.
+  This has been fixed.
+
 # insight 1.01
 
 ## General

@@ -635,7 +635,6 @@ get_datagrid.visualisation_matrix <- function(x, reference = attributes(x)$refer
   datagrid
 }
 
-
 #' @export
 get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 
@@ -699,6 +698,7 @@ get_datagrid.emmGrid <- function(x, ...) {
   data.frame(s)[, which_cols, drop = FALSE]
 }
 
+
 #' @export
 get_datagrid.emm_list <- function(x, ...) {
   k <- length(x)
@@ -716,6 +716,7 @@ get_datagrid.emm_list <- function(x, ...) {
   clear_cols <- colnames(out)[sapply(out, Negate(anyNA))] # these should be first
   out[, c(clear_cols, setdiff(colnames(out), clear_cols)), drop = FALSE]
 }
+
 
 #' @export
 get_datagrid.slopes <- function(x, ...) {
@@ -802,16 +803,14 @@ get_datagrid.comparisons <- get_datagrid.slopes
             center <- stats::median(x, na.rm = TRUE)
             spread <- stats::mad(x, na.rm = TRUE)
             by_expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
-          } else if (parts == "quartiles") {
-            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, na.rm = TRUE)), collapse = ","), ")")
+          } else if (parts %in% c("fivenum", "quartiles")) {
+            by_expression <- paste0("c(", paste(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
           } else if (parts == "quartiles2") {
             by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], collapse = ","), ")")
           } else if (parts == "terciles") {
-            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
-          } else if (parts == "terciles2") {
             by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
-          } else if (parts == "fivenum") {
-            by_expression <- paste0("c(", paste(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
+          } else if (parts == "terciles2") {
+            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
           } else if (parts == "zeromax") {
             by_expression <- paste0("c(0,", max(x, na.rm = TRUE), ")")
           } else if (parts == "minmax") {
@@ -858,6 +857,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
   data.frame(varname = varname, expression = by_expression, stringsAsFactors = FALSE)
 }
 
+
 #' @keywords internal
 .get_datagrid_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE, ...) {
   if (na.rm) x <- stats::na.omit(x)
@@ -901,6 +901,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
   }
   out
 }
+
 
 #' @keywords internal
 .create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
@@ -965,6 +966,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
   seq(mini, maxi, length.out = length)
 }
 
+
 #' @keywords internal
 .data_match <- function(x, to, ...) {
   if (!is.data.frame(to)) {
@@ -978,6 +980,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
   }
   .to_numeric(row.names(x)[idx])
 }
+
 
 #' @keywords internal
 .get_model_data_for_grid <- function(x, data) {
