@@ -428,3 +428,24 @@ test_that("get_datagrid - include_random works with numeric group factors", {
   out <- get_datagrid(model, include_random = FALSE)
   expect_identical(out$cyl, c(NA, NA))
 })
+
+
+test_that("get_datagrid - include_random works with interacting random effects", {
+  skip_if_not_installed("glmmTMB")
+  data(mtcars)
+  mtcars[c("cyl", "gear", "vs")] <- lapply(mtcars[c("cyl", "gear", "vs")], as.factor)
+  model <- glmmTMB::glmmTMB(mpg ~ hp + (1 | cyl:gear:vs), data = mtcars)
+  out <- insight::get_datagrid(model, by = c("cyl", "gear", "vs"))
+  expect_named(out, c("cyl", "gear", "vs", "hp"))
+  expect_identical(dim(out), c(18L, 4L))
+  out <- get_predicted(model, out, allow.new.levels = TRUE)
+  expect_identical(dim(out), c(18L, 3L))
+  expect_equal(
+    as.numeric(out),
+    c(
+      20.66442, 20.66442, 17.99213, 20.66442, 19.67974, 20.66442,
+      21.59251, 20.91067, 22.51425, 19.88026, 18.87143, 20.66442, 22.66211,
+      18.64211, 20.66442, 23.89897, 20.66442, 20.66442
+    )
+  )
+})

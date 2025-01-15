@@ -262,7 +262,7 @@
   # only check and yield warnings when random effects are requested.
   if ((isTRUE(include_random) || identical(include_random, "default")) && !is.null(data) && !is.null(x)) {
     # get random effect terms
-    re_terms <- find_random(x, flatten = TRUE)
+    re_terms <- find_random(x, flatten = TRUE, split_nested = TRUE)
 
     # In case include_random is TRUE, but there's actually no
     # or not all random factors in data, set include_random to FALSE
