@@ -6,6 +6,9 @@
   `"terciles"` was doing what was documented for `"terciles2"` and vice versa.
   This has been fixed.
 
+* `include_random` in `get_datagrid()` now works for nested random effects, i.e.
+  for more than one group level factor in the random effects.
+
 # insight 1.01
 
 ## General

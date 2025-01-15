@@ -490,7 +490,7 @@ test_that("satterthwaite dof vs. emmeans", {
   v2 <- as.matrix(pbkrtest::vcovAdj(m2))
   expect_equal(v1, v2, ignore_attr = TRUE, tolerance = 1e-5)
 
-  p1 <- get_predicted(m2, ci_method = "satterthwaite", ci = 0.95)
+  p1 <- get_predicted(m2, ci_method = "satterthwaite", ci = 0.95, include_random = FALSE)
   p1 <- data.frame(p1)
   em1 <- emmeans::ref_grid(
     object = m2,
@@ -502,7 +502,7 @@ test_that("satterthwaite dof vs. emmeans", {
   expect_equal(p1$CI_low, em1$lower.CL, ignore_attr = TRUE, tolerance = 1e-5)
   expect_equal(p1$CI_high, em1$upper.CL, ignore_attr = TRUE, tolerance = 1e-5)
 
-  p2 <- get_predicted(m2, ci_method = "kenward-roger", ci = 0.95)
+  p2 <- get_predicted(m2, ci_method = "kenward-roger", ci = 0.95, include_random = FALSE)
   p2 <- data.frame(p2)
   em2 <- emmeans::ref_grid(
     object = m2,

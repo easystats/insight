@@ -518,7 +518,7 @@ get_datagrid.default <- function(x,
   by <- .extract_at_interactions(by)
 
   # Drop random factors
-  random_factors <- find_random(x, flatten = TRUE)
+  random_factors <- find_random(x, flatten = TRUE, split_nested = TRUE)
   if (!is.null(random_factors)) {
     if (isFALSE(include_random)) {
       # drop random factors, if these should not be included
