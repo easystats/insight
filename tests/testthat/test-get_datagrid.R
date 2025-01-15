@@ -450,3 +450,13 @@ test_that("get_datagrid - include_random works with interacting random effects",
     tolerance = 1e-3
   )
 })
+
+
+test_that("get_datagrid - informative error when by not found", {
+  data(iris)
+  m <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+  expect_error(
+    insight::get_datagrid(m, by = list(Sepal.Something = c(10, 40, 50))),
+    regex = "was not found"
+  )
+})

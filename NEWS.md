@@ -1,5 +1,10 @@
 # insight 1.02
 
+## Changes
+
+* `get_datagrid()` gives a more informative error message when a variable
+  specified in `by` was not found in the data.
+
 ## Bug fixes
 
 * Option `"terciles"` and `"terciles2"` in `get_datagrid()` were swapped, i.e.
