@@ -262,6 +262,12 @@ get_datagrid.data.frame <- function(x,
     specs$varname <- as.character(specs$varname) # make sure it's a string not fac
     specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
+    # sanity check - target in data?
+    if (!all(specs$varname %in% colnames(x))) {
+      format_error(paste0(
+        "Variable `", setdiff(specs$varname, colnames(x))[1], "` was not found in the data. Please check the spelling." # nolint
+      ))
+    }
     specs$is_factor <- vapply(x[specs$varname], function(x) is.factor(x) || is.character(x), TRUE)
 
     # Create target list of factors -----------------------------------------
