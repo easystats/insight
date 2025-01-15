@@ -438,8 +438,8 @@ test_that("get_datagrid - include_random works with interacting random effects",
   out <- insight::get_datagrid(model, by = c("cyl", "gear", "vs"))
   expect_named(out, c("cyl", "gear", "vs", "hp"))
   expect_identical(dim(out), c(18L, 4L))
-  out <- get_predicted(model, out, allow.new.levels = TRUE)
-  expect_identical(dim(out), c(18L, 3L))
+  out <- get_predicted(model, data = out, allow.new.levels = TRUE)
+  expect_identical(dim(as.data.frame(out)), c(18L, 3L))
   expect_equal(
     as.numeric(out),
     c(
