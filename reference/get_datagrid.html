@@ -21,7 +21,7 @@ methods for more info).'><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -158,14 +158,18 @@ maximum) is created.</p></li>
 case these values are used as representative values.</p></li>
 <li><p>a "token" that creates pre-defined representative values:</p><ul><li><p>for mean and -/+ 1 SD around the mean: <code>"x = [sd]"</code></p></li>
 <li><p>for median and -/+ 1 MAD around the median: <code>"x = [mad]"</code></p></li>
-<li><p>for Tukey's five number summary (minimum, lower-hinge, median, upper-hinge, maximum): <code>"x = [fivenum]"</code></p></li>
+<li><p>for Tukey's five number summary (minimum, lower-hinge, median,
+upper-hinge, maximum): <code>"x = [fivenum]"</code></p></li>
 <li><p>for terciles, including minimum and maximum: <code>"x = [terciles]"</code></p></li>
 <li><p>for terciles, excluding minimum and maximum: <code>"x = [terciles2]"</code></p></li>
-<li><p>for quartiles, including minimum and maximum: <code>"x = [quartiles]"</code> (same as <code>"x = [fivenum]"</code>)</p></li>
+<li><p>for quartiles, including minimum and maximum: <code>"x = [quartiles]"</code> (same
+as <code>"x = [fivenum]"</code>)</p></li>
 <li><p>for quartiles, excluding minimum and maximum: <code>"x = [quartiles2]"</code></p></li>
 <li><p>for a pretty value range: <code>"x = [pretty]"</code></p></li>
 <li><p>for minimum and maximum value: <code>"x = [minmax]"</code></p></li>
 <li><p>for 0 and the maximum value: <code>"x = [zeromax]"</code></p></li>
+<li><p>for a random sample from all values: <code>"x = [sample &lt;number&gt;]"</code>, where
+<code>&lt;number&gt;</code> should be a positive integer, e.g. <code>"x = [sample 15]"</code>.</p></li>
 </ul></li>
 </ul><p>For <strong>factor</strong> variables, the value(s) inside the brackets should indicate
 one or more factor levels, like <code>by = "Species = [setosa, versicolor]"</code>.
