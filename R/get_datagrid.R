@@ -842,12 +842,14 @@ get_datagrid.comparisons <- get_datagrid.slopes
           by_expression <- NULL
         }
         # If only two, it's probably the range
-      } else if (length(parts) == 2) {
-        by_expression <- paste0("seq(", parts[1], ", ", parts[2], ", length.out = length)")
-        # If more, it's probably the vector
-      } else if (length(parts) > 2L) {
-        parts <- as.numeric(parts)
-        by_expression <- paste0("c(", toString(parts), ")")
+      } else if (is.numeric(x)) {
+        if (length(parts) == 2) {
+          by_expression <- paste0("seq(", parts[1], ", ", parts[2], ", length.out = length)")
+          # If more, it's probably the vector
+        } else if (length(parts) > 2L) {
+          parts <- as.numeric(parts)
+          by_expression <- paste0("c(", toString(parts), ")")
+        }
       } else {
         by_expression <- NULL
       }
