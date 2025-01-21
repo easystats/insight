@@ -792,7 +792,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
       if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts, fixed = TRUE)
 
       # Make expression ----------
-      if (is.factor(x) || is.character(x)) {
+      if ((is.factor(x) && parts %in% levels(x)) || (is.character(x) && parts %in% x))   {
         # Factor
         # Add quotes around them
         parts <- paste0("'", parts, "'")

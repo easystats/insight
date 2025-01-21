@@ -54,6 +54,9 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   set.seed(123)
   expect_equal(dg$Petal.Width, sample(iris$Petal.Width, 8), tolerance = 1e-4)
 
+  dg <- insight::get_datagrid(m, "Species=[setosa]")
+  expect_identical(dim(dg), c(1L, 3L))
+
   skip_if_not_installed("ggeffects")
   data(efc, package = "ggeffects")
   efc$c161sex <- datawizard::to_factor(efc$c161sex)
