@@ -792,62 +792,54 @@ get_datagrid.comparisons <- get_datagrid.slopes
       if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts, fixed = TRUE)
 
       # Make expression ----------
-      if (length(parts) == 1) {
-        if ((is.factor(x) && parts %in% levels(x)) || (is.character(x) && parts %in% x))   {
-          # Factor
-          # Add quotes around them
-          parts <- paste0("'", parts, "'")
-          # Convert to character
-          by_expression <- paste0("as.factor(c(", toString(parts), "))")
-        } else {
-          # Numeric
-          # If one, might be a shortcut. or a sampling request
-          shortcuts <- c(
-            "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
-            "minmax", "terciles", "terciles2", "fivenum", "pretty"
-          )
-          if (grepl("sample", parts, fixed = TRUE)) {
-            n_to_sample <- .safe(suppressWarning(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))) # nolint
-            # do we have a proper definition of the sample size? If not, error
-            if (is.null(n_to_sample) || is.na(n_to_sample) || !length(n_to_sample)) {
-              format_error("The token `sample` must be followed by the number of samples to be drawn, e.g. `[sample 15]`.") # nolint
-            }
-            by_expression <- paste0("c(", paste(sample(x, n_to_sample), collapse = ","), ")")
-          } else if (parts %in% shortcuts) {
-            if (parts %in% c("meansd", "sd")) {
-              center <- mean(x, na.rm = TRUE)
-              spread <- stats::sd(x, na.rm = TRUE)
-              by_expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
-            } else if (parts == "mad") {
-              center <- stats::median(x, na.rm = TRUE)
-              spread <- stats::mad(x, na.rm = TRUE)
-              by_expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
-            } else if (parts %in% c("fivenum", "quartiles")) {
-              by_expression <- paste0("c(", paste(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
-            } else if (parts == "quartiles2") {
-              by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], collapse = ","), ")") # nolint
-            } else if (parts == "terciles") {
-              by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
-            } else if (parts == "terciles2") {
-              by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
-            } else if (parts == "pretty") {
-              by_expression <- paste0("c(", paste(as.vector(pretty(x, na.rm = TRUE)), collapse = ","), ")")
-            } else if (parts == "zeromax") {
-              by_expression <- paste0("c(0,", max(x, na.rm = TRUE), ")")
-            } else if (parts == "minmax") {
-              by_expression <- paste0("c(", min(x, na.rm = TRUE), ",", max(x, na.rm = TRUE), ")")
-            }
-          } else if (is.numeric(parts)) {
-            by_expression <- parts
-          } else {
-            format_error(
-              paste0(
-                "The `by` argument (", by, ") should either indicate a valid factor level, the minimum and the maximum value of a vector, or one of the following options: ", # nolint
-                toString(shortcuts),
-                "."
-              )
-            )
+      if ((is.factor(x) && all(parts %in% levels(x))) || (is.character(x) && all(parts %in% x)))   {
+        # Factor
+        # Add quotes around them
+        parts <- paste0("'", parts, "'")
+        # Convert to character
+        by_expression <- paste0("as.factor(c(", toString(parts), "))")
+      } else if (length(parts) == 1) {
+        # Numeric
+        # If one, might be a shortcut. or a sampling request
+        shortcuts <- c(
+          "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
+          "minmax", "terciles", "terciles2", "fivenum", "pretty"
+        )
+        if (grepl("sample", parts, fixed = TRUE)) {
+          n_to_sample <- .safe(suppressWarning(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))) # nolint
+          # do we have a proper definition of the sample size? If not, error
+          if (is.null(n_to_sample) || is.na(n_to_sample) || !length(n_to_sample)) {
+            format_error("The token `sample` must be followed by the number of samples to be drawn, e.g. `[sample 15]`.") # nolint
           }
+          by_expression <- paste0("c(", paste(sample(x, n_to_sample), collapse = ","), ")")
+        } else if (parts %in% shortcuts) {
+          if (parts %in% c("meansd", "sd")) {
+            center <- mean(x, na.rm = TRUE)
+            spread <- stats::sd(x, na.rm = TRUE)
+            by_expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
+          } else if (parts == "mad") {
+            center <- stats::median(x, na.rm = TRUE)
+            spread <- stats::mad(x, na.rm = TRUE)
+            by_expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
+          } else if (parts %in% c("fivenum", "quartiles")) {
+            by_expression <- paste0("c(", paste(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
+          } else if (parts == "quartiles2") {
+            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], collapse = ","), ")") # nolint
+          } else if (parts == "terciles") {
+            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
+          } else if (parts == "terciles2") {
+            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
+          } else if (parts == "pretty") {
+            by_expression <- paste0("c(", paste(as.vector(pretty(x, na.rm = TRUE)), collapse = ","), ")")
+          } else if (parts == "zeromax") {
+            by_expression <- paste0("c(0,", max(x, na.rm = TRUE), ")")
+          } else if (parts == "minmax") {
+            by_expression <- paste0("c(", min(x, na.rm = TRUE), ",", max(x, na.rm = TRUE), ")")
+          }
+        } else if (is.numeric(parts)) {
+          by_expression <- parts
+        } else {
+          by_expression <- NULL
         }
         # If only two, it's probably the range
       } else if (length(parts) == 2) {
@@ -856,6 +848,17 @@ get_datagrid.comparisons <- get_datagrid.slopes
       } else if (length(parts) > 2L) {
         parts <- as.numeric(parts)
         by_expression <- paste0("c(", toString(parts), ")")
+      } else {
+        by_expression <- NULL
+      }
+      if (is.null(by_expression)) {
+        format_error(
+          paste0(
+            "The `by` argument (", by, ") should either indicate a valid factor level, the minimum and the maximum value of a vector, or one of the following options: ", # nolint
+            toString(shortcuts),
+            "."
+          )
+        )
       }
       # Else, try to directly eval the content
     } else {
