@@ -76,6 +76,7 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   )
 
   skip_if_not_installed("ggeffects")
+  skip_if_not_installed("datawizard")
   data(efc, package = "ggeffects")
   efc$c161sex <- datawizard::to_factor(efc$c161sex)
   efc$e16sex <- datawizard::to_factor(efc$e16sex)

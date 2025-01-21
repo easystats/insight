@@ -805,7 +805,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
       } else if (length(parts) == 1) {
         # If one, might be a shortcut. or a sampling request
         if (grepl("sample", parts, fixed = TRUE)) {
-          n_to_sample <- .safe(suppressWarning(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))) # nolint
+          n_to_sample <- .safe(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))
           # do we have a proper definition of the sample size? If not, error
           if (is.null(n_to_sample) || is.na(n_to_sample) || !length(n_to_sample)) {
             format_error("The token `sample` must be followed by the number of samples to be drawn, e.g. `[sample 15]`.") # nolint
