@@ -792,6 +792,10 @@ get_datagrid.comparisons <- get_datagrid.slopes
       if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts, fixed = TRUE)
 
       # Make expression ----------
+      shortcuts <- c(
+        "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
+        "minmax", "terciles", "terciles2", "fivenum", "pretty"
+      )
       if ((is.factor(x) && all(parts %in% levels(x))) || (is.character(x) && all(parts %in% x)))   {
         # Factor
         # Add quotes around them
@@ -799,12 +803,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
         # Convert to character
         by_expression <- paste0("as.factor(c(", toString(parts), "))")
       } else if (length(parts) == 1) {
-        # Numeric
         # If one, might be a shortcut. or a sampling request
-        shortcuts <- c(
-          "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
-          "minmax", "terciles", "terciles2", "fivenum", "pretty"
-        )
         if (grepl("sample", parts, fixed = TRUE)) {
           n_to_sample <- .safe(suppressWarning(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))) # nolint
           # do we have a proper definition of the sample size? If not, error

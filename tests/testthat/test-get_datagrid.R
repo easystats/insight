@@ -65,7 +65,10 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   dg <- insight::get_datagrid(m, "Species=[setosa,versicolor]")
   expect_identical(dim(dg), c(2L, 3L))
 
-  expect_error(insight::get_datagrid(m, "Species=[setosa,wersicolor]"))
+  expect_error(
+    insight::get_datagrid(m, "Species=[setosa,wersicolor]"),
+    regex = "should either indicate"
+  )
 
   expect_error(
     insight::get_datagrid(m, "Species=[petosa]"),
