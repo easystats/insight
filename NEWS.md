@@ -5,6 +5,9 @@
 * `get_datagrid()` gives a more informative error message when a variable
   specified in `by` was not found in the data.
 
+* The `by` argument in `get_datagrid()` gets a new token-option, `"[sample <number>]"`,
+  to draw a random sample of values.
+
 ## Bug fixes
 
 * Option `"terciles"` and `"terciles2"` in `get_datagrid()` were swapped, i.e.

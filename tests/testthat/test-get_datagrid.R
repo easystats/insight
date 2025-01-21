@@ -49,7 +49,34 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
+  set.seed(123)
+  dg <- insight::get_datagrid(m, "Petal.Width = [sample 8]")
+  set.seed(123)
+  expect_equal(dg$Petal.Width, sample(iris$Petal.Width, 8), tolerance = 1e-4)
+
+  expect_error(
+    insight::get_datagrid(m, "Petal.Width = [sample a]"),
+    regex = "must be followed"
+  )
+
+  dg <- insight::get_datagrid(m, "Species=[setosa]")
+  expect_identical(dim(dg), c(1L, 3L))
+
+  dg <- insight::get_datagrid(m, "Species=[setosa,versicolor]")
+  expect_identical(dim(dg), c(2L, 3L))
+
+  expect_error(
+    insight::get_datagrid(m, "Species=[setosa,wersicolor]"),
+    regex = "should either indicate"
+  )
+
+  expect_error(
+    insight::get_datagrid(m, "Species=[petosa]"),
+    regex = "should either indicate"
+  )
+
   skip_if_not_installed("ggeffects")
+  skip_if_not_installed("datawizard")
   data(efc, package = "ggeffects")
   efc$c161sex <- datawizard::to_factor(efc$c161sex)
   efc$e16sex <- datawizard::to_factor(efc$e16sex)
