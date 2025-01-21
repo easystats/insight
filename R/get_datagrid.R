@@ -42,14 +42,18 @@
 #'   - a "token" that creates pre-defined representative values:
 #'     - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
 #'     - for median and -/+ 1 MAD around the median: `"x = [mad]"`
-#'     - for Tukey's five number summary (minimum, lower-hinge, median, upper-hinge, maximum): `"x = [fivenum]"`
+#'     - for Tukey's five number summary (minimum, lower-hinge, median,
+#'       upper-hinge, maximum): `"x = [fivenum]"`
 #'     - for terciles, including minimum and maximum: `"x = [terciles]"`
 #'     - for terciles, excluding minimum and maximum: `"x = [terciles2]"`
-#'     - for quartiles, including minimum and maximum: `"x = [quartiles]"` (same as `"x = [fivenum]"`)
+#'     - for quartiles, including minimum and maximum: `"x = [quartiles]"` (same
+#'       as `"x = [fivenum]"`)
 #'     - for quartiles, excluding minimum and maximum: `"x = [quartiles2]"`
 #'     - for a pretty value range: `"x = [pretty]"`
 #'     - for minimum and maximum value: `"x = [minmax]"`
 #'     - for 0 and the maximum value: `"x = [zeromax]"`
+#'     - for a random sample from all values: `"x = [sample <number>]"`, where
+#'       `<number>` should be a positive integer, e.g. `"x = [sample 15]"`.
 #'
 #'   For **factor** variables, the value(s) inside the brackets should indicate
 #'   one or more factor levels, like `by = "Species = [setosa, versicolor]"`.
@@ -796,12 +800,19 @@ get_datagrid.comparisons <- get_datagrid.slopes
         by_expression <- paste0("as.factor(c(", toString(parts), "))")
       } else if (length(parts) == 1) {
         # Numeric
-        # If one, might be a shortcut
+        # If one, might be a shortcut. or a sampling request
         shortcuts <- c(
           "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
           "minmax", "terciles", "terciles2", "fivenum", "pretty"
         )
-        if (parts %in% shortcuts) {
+        if (grepl("sample", parts, fixed = TRUE)) {
+          n_to_sample <- .safe(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))
+          # do we have a proper definition of the sample size? If not, error
+          if (is.null(n_to_sample) || is.na(n_to_sample) || !length(n_to_sample)) {
+            format_error("The token `sample` must be followed by the number of samples to be drawn, e.g. `[sample 15]`.") # nolint
+          }
+          by_expression <- paste0("c(", paste(sample(x, n_to_sample), collapse = ","), ")")
+        } else if (parts %in% shortcuts) {
           if (parts %in% c("meansd", "sd")) {
             center <- mean(x, na.rm = TRUE)
             spread <- stats::sd(x, na.rm = TRUE)

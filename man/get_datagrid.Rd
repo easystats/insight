@@ -80,14 +80,18 @@ case these values are used as representative values.
 \itemize{
 \item for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
 \item for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
-\item for Tukey's five number summary (minimum, lower-hinge, median, upper-hinge, maximum): \code{"x = [fivenum]"}
+\item for Tukey's five number summary (minimum, lower-hinge, median,
+upper-hinge, maximum): \code{"x = [fivenum]"}
 \item for terciles, including minimum and maximum: \code{"x = [terciles]"}
 \item for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
-\item for quartiles, including minimum and maximum: \code{"x = [quartiles]"} (same as \code{"x = [fivenum]"})
+\item for quartiles, including minimum and maximum: \code{"x = [quartiles]"} (same
+as \code{"x = [fivenum]"})
 \item for quartiles, excluding minimum and maximum: \code{"x = [quartiles2]"}
 \item for a pretty value range: \code{"x = [pretty]"}
 \item for minimum and maximum value: \code{"x = [minmax]"}
 \item for 0 and the maximum value: \code{"x = [zeromax]"}
+\item for a random sample from all values: \code{"x = [sample <number>]"}, where
+\verb{<number>} should be a positive integer, e.g. \code{"x = [sample 15]"}.
 }
 }
 
