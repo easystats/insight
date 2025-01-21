@@ -841,7 +841,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
         } else {
           format_error(
             paste0(
-              "The `by` argument (", by, ") should either indicate the minimum and the maximum, or one of the following options: ", # nolint
+              "The `by` argument (", by, ") should either indicate a valid factor level, the minimum and the maximum value of a vector, or one of the following options: ", # nolint
               toString(shortcuts),
               "."
             )
