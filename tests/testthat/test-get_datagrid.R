@@ -54,6 +54,11 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   set.seed(123)
   expect_equal(dg$Petal.Width, sample(iris$Petal.Width, 8), tolerance = 1e-4)
 
+  expect_error(
+    insight::get_datagrid(m, "Petal.Width = [sample a]"),
+    regex = "must be followed"
+  )
+
   dg <- insight::get_datagrid(m, "Species=[setosa]")
   expect_identical(dim(dg), c(1L, 3L))
 
