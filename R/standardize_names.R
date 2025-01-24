@@ -123,6 +123,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "n"]              <- "n_Obs"
   cn[cn == "type"]           <- "Type"
   # marginaleffects
+  cn[cn == "hypothesis"]     <- "Parameter"
   cn[cn == "value"]          <- "Level"
   # anova
   cn[cn == "sumsq"]          <- "Sum_Squares"
