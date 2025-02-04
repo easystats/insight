@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,7 @@
 <h3 id="bug-fixes-1-02">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-02"></a></h3>
 <ul><li><p>Option <code>"terciles"</code> and <code>"terciles2"</code> in <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> were swapped, i.e. <code>"terciles"</code> was doing what was documented for <code>"terciles2"</code> and vice versa. This has been fixed.</p></li>
 <li><p><code>include_random</code> in <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> now works for nested random effects, i.e. for more than one group level factor in the random effects.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_varcov.html">get_varcov()</a></code> for models of class <code>brmsfit</code> that included monotonic effects.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
