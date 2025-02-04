@@ -17,6 +17,9 @@
 * `include_random` in `get_datagrid()` now works for nested random effects, i.e.
   for more than one group level factor in the random effects.
 
+* Fixed issue in `get_varcov()` for models of class `brmsfit` that included
+  monotonic effects.
+
 # insight 1.01
 
 ## General
