@@ -604,7 +604,15 @@ get_varcov.brmsfit <- function(x, component = "conditional", verbose = TRUE, ...
   params <- find_parameters(x, effects = "fixed", component = component, flatten = TRUE)
   params <- gsub("^b_", "", params)
 
-  vc <- .safe_vcov(x)[params, params, drop = FALSE]
+  # get full varcov
+  vc <- .safe_vcov(x)
+
+  # check if we can filter - for models with monotonic effects, we have
+  # different parameter names, this filtering will fail here
+  if (all(params %in% colnames(vc))) {
+    vc <- vc[params, params, drop = FALSE]
+  }
+
   .process_vcov(vc, verbose, ...)
 }
 
