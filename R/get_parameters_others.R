@@ -390,7 +390,8 @@ get_parameters.deltaMethod <- function(x, ...) {
 
 #' @export
 get_parameters.ggcomparisons <- function(x, merge_parameters = FALSE, ...) {
-  estimate_pos <- which(colnames(x) == attr(x, "estimate_name"))
+  estimate_name <- intersect(colnames(x), c(attr(x, "coef_name"), "Difference", "Mean", "Ratio"))[1]
+  estimate_pos <- which(colnames(x) == estimate_name)
   params <- x[, seq_len(estimate_pos - 1), drop = FALSE]
 
   if (isTRUE(merge_parameters) && ncol(params) > 1L) {

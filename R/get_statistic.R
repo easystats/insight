@@ -1687,14 +1687,14 @@ get_statistic.emm_list <- function(x, ci = 0.95, adjust = "none", ...) {
 
 #' @export
 get_statistic.ggcomparisons <- function(x, merge_parameters = FALSE, ...) {
-  estimate_pos <- which(colnames(x) == attr(x, "estimate_name"))
   if (isTRUE(merge_parameters)) {
     params <- get_parameters(x, merge_parameters = TRUE)["Parameter"]
   } else {
-    params <- x[, seq_len(estimate_pos - 1), drop = FALSE]
+    params <- get_parameters(x, merge_parameters = FALSE)[c("Level1", "Level2")]
   }
 
-  stat <- .safe(x[[estimate_pos]] / attributes(x)$standard_error)
+  stat_column <- intersect(colnames(x), c("t", "z", "Statistic"))[1]
+  stat <- x[[stat_column]]
   if (is.null(stat)) {
     return(NULL)
   }
