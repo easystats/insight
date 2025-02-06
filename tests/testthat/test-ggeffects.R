@@ -39,10 +39,7 @@ test_that("get_statistic, hypothesis_test", {
   data(iris)
   mgg <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
 
-  out <- ggeffects::hypothesis_test(
-    ggeffects::ggpredict(mgg, c("Sepal.Length", "Species")),
-    test = NULL
-  )
+  out <- ggeffects::hypothesis_test(mgg, "Sepal.Length", by = "Species")
 
   param <- get_statistic(out)
   expect_named(param, c("Level1", "Level2", "Statistic"))
