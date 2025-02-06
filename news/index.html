@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,33 +50,33 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/easystats/insight/blob/v1.0.2/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.02" id="insight-102">insight 1.02<a class="anchor" aria-label="anchor" href="#insight-102"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.0.2" id="insight-102">insight 1.0.2<a class="anchor" aria-label="anchor" href="#insight-102"></a></h2><p class="text-muted">CRAN release: 2025-02-06</p>
 <div class="section level3">
-<h3 id="changes-1-02">Changes<a class="anchor" aria-label="anchor" href="#changes-1-02"></a></h3>
+<h3 id="changes-1-0-2">Changes<a class="anchor" aria-label="anchor" href="#changes-1-0-2"></a></h3>
 <ul><li><p><code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> gives a more informative error message when a variable specified in <code>by</code> was not found in the data.</p></li>
 <li><p>The <code>by</code> argument in <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> gets a new token-option, <code>"[sample &lt;number&gt;]"</code>, to draw a random sample of values.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-1-02">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-02"></a></h3>
+<h3 id="bug-fixes-1-0-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-2"></a></h3>
 <ul><li><p>Option <code>"terciles"</code> and <code>"terciles2"</code> in <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> were swapped, i.e. <code>"terciles"</code> was doing what was documented for <code>"terciles2"</code> and vice versa. This has been fixed.</p></li>
 <li><p><code>include_random</code> in <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> now works for nested random effects, i.e. for more than one group level factor in the random effects.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/get_varcov.html">get_varcov()</a></code> for models of class <code>brmsfit</code> that included monotonic effects.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.01" id="insight-101">insight 1.01<a class="anchor" aria-label="anchor" href="#insight-101"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.0.1" id="insight-101">insight 1.0.1<a class="anchor" aria-label="anchor" href="#insight-101"></a></h2><p class="text-muted">CRAN release: 2025-01-10</p>
 <div class="section level3">
-<h3 id="general-1-01">General<a class="anchor" aria-label="anchor" href="#general-1-01"></a></h3>
+<h3 id="general-1-0-1">General<a class="anchor" aria-label="anchor" href="#general-1-0-1"></a></h3>
 <ul><li><p>Support for models of class <code>oohbchoice</code> (package <em>DCchoice</em>).</p></li>
 <li><p><code><a href="../reference/format_table.html">format_table()</a></code> gets a <code>stars_only</code> argument, to format p-value columns to contain only significance stars.</p></li>
 <li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> for brms-models with categorical family now includes the data of the data grid in the returned predictions, for better orientation.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-1-01">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-01"></a></h3>
+<h3 id="bug-fixes-1-0-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-1"></a></h3>
 <ul><li><p>Fixed issues due to latest <em>mice</em> updates.</p></li>
 <li><p>Fixed typo in <code>get_parameters.glmmadmb()</code>, which was erroneously renamed into <code>get_parameters.glmmTMBadmb()</code>.</p></li>
 <li><p>Fixed issues in <code><a href="../reference/find_predictors.html">find_predictors()</a></code> and <code><a href="../reference/has_intercept.html">has_intercept()</a></code> for <em>brms</em> models with <code>0 + Intercept</code> formula notation.</p></li>
