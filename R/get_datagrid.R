@@ -585,9 +585,9 @@ get_datagrid.default <- function(x,
   if (!inherits(x, "brmsfit") && !is.null(w)) {
     # for lme, can't be NA
     if (inherits(x, c("lme", "gls"))) {
-      vm[[w]] <- 1
+      vm[w] <- 1
     } else {
-      vm[[w]] <- NA_real_
+      vm[w] <- NA_real_
     }
   }
 
