@@ -20,3 +20,4 @@
 \.lintr$
 ^CRAN-SUBMISSION$
 ^Rplots.pdf$
+^tests/testthat/_snaps/.

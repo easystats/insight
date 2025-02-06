@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.0.1.7
+Version: 1.0.2
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -127,7 +127,7 @@ Suggests:
     gee,
     geepack,
     geoR,
-    ggeffects,
+    ggeffects (>= 2.2.0),
     GLMMadaptive,
     glmmTMB (>= 1.1.10),
     glmtoolbox,
@@ -148,7 +148,7 @@ Suggests:
     lmtest,
     logistf,
     logitr,
-    marginaleffects (>= 0.24.0),
+    marginaleffects (>= 0.25.0),
     MASS,
     Matrix,
     mclogit,
@@ -163,7 +163,7 @@ Suggests:
     mice (>= 3.17.0),
     mlogit,
     mmrm,
-    modelbased,
+    modelbased (>= 0.9.0),
     multgee,
     MuMIn,
     nestedLogit,
