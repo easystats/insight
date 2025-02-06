@@ -127,7 +127,7 @@ Suggests:
     gee,
     geepack,
     geoR,
-    ggeffects,
+    ggeffects (>= 2.2.0),
     GLMMadaptive,
     glmmTMB (>= 1.1.10),
     glmtoolbox,
@@ -219,4 +219,3 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/Needs/website: easystats/easystatstemplate
 Config/Needs/check: stan-dev/cmdstanr
-Remotes: strengejacke/ggeffects
