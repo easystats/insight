@@ -487,3 +487,21 @@ test_that("get_datagrid - informative error when by not found", {
     regex = "was not found"
   )
 })
+
+
+test_that("get_datagrid - include weights", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("lme4")
+
+  data(sleepstudy, package = "lme4")
+  set.seed(123)
+  sleepstudy$wei_factor <- abs(rnorm(nrow(sleepstudy), 1, 0.4))
+
+  m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = sleepstudy, weights = wei_factor)
+  d <- insight::get_datagrid(m, "Days")
+  expect_named(d, c("Days", "Subject", "wei_factor"))
+
+  m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+  d <- insight::get_datagrid(m, "Days")
+  expect_named(d, c("Days", "Subject"))
+})

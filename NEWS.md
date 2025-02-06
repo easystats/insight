@@ -1,4 +1,11 @@
-# insight 1.02
+# insight (devel)
+
+## Changes
+
+* `get_datagrid()` now includes a dummy column for model weights (values `NA`),
+  to work with models that used weights.
+
+# insight 1.0.2
 
 ## Changes
 
@@ -20,7 +27,7 @@
 * Fixed issue in `get_varcov()` for models of class `brmsfit` that included
   monotonic effects.
 
-# insight 1.01
+# insight 1.0.1
 
 ## General
 

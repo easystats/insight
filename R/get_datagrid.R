@@ -580,6 +580,17 @@ get_datagrid.default <- function(x,
     }
   }
 
+  # if model has weights, we need to add a dummy for certain classes, e.g. glmmTMB
+  w <- insight::find_weights(x)
+  if (!inherits(x, "brmsfit") && !is.null(w)) {
+    # for lme, can't be NA
+    if (inherits(x, c("lme", "gls"))) {
+      vm[w] <- 1
+    } else {
+      vm[w] <- NA_real_
+    }
+  }
+
   if (isFALSE(include_smooth)) {
     vm[colnames(vm) %in% clean_names(find_smooth(x, flatten = TRUE))] <- NULL
   }
