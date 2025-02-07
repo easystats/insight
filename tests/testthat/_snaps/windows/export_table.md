@@ -1,7 +1,7 @@
 # export_table, table_width
 
     Code
-      print(out, table_width = 50)
+      print(out, ci_digits = 2, table_width = 50)
     Output
       # Comparison of Model Performance Indices
       
@@ -43,7 +43,7 @@
 ---
 
     Code
-      print(tab, table_width = 80)
+      print(tab, ci_digits = 2, table_width = 80)
     Output
       Parameter                           |               lm1 |                  lm2
       ------------------------------------------------------------------------------
@@ -96,7 +96,7 @@
 # export_table, table_width, no split
 
     Code
-      print(out, table_width = Inf)
+      print(out, ci_digits = 2, table_width = Inf)
     Output
       # Comparison of Model Performance Indices
       
