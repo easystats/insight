@@ -298,7 +298,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
         format_error("Predictions and standard errors are not of the same length. Please specify the `data` argument.")
       }
     }
-browser()
+
     # add sigma to standard errors, i.e. confidence or prediction intervals
     ci_type <- validate_argument(ci_type, c("confidence", "prediction"))
     if (ci_type == "prediction") {
