@@ -31,11 +31,12 @@ get_predicted.lmerMod <- function(x,
     random.only <- FALSE
   }
 
-  # Prediction function
-  predict_function <- function(x, ...) {
+  # Prediction function - we need to pass some arguments, because these
+  # are also required for bootstrapping
+  predict_function <- function(x, newdata, ...) {
     stats::predict(
       x,
-      newdata = my_args$data,
+      newdata = newdata,
       type = my_args$type,
       re.form = my_args$re.form,
       random.only = random.only,
@@ -46,7 +47,8 @@ get_predicted.lmerMod <- function(x,
 
   # 1. step: predictions
   if (is.null(iterations)) {
-    predictions <- predict_function(x)
+    rez <- predict_function(x, newdata = my_args$data, se.fit = TRUE)
+    predictions <- as.numeric(rez$fit)
   } else {
     predictions <- .get_predicted_boot(
       x,
@@ -59,9 +61,14 @@ get_predicted.lmerMod <- function(x,
   }
 
   # 2. step: confidence intervals
-  ci_data <- get_predicted_ci(x, predictions,
-    data = my_args$data, ci = ci,
-    ci_method = ci_method, ci_type = my_args$ci_type,
+  ci_data <- .get_predicted_se_to_ci(
+    x,
+    predictions = predictions,
+    se = rez$se.fit,
+    ci = ci,
+    ci_method = ci_method,
+    ci_type = my_args$ci_type,
+    verbose = verbose,
     ...
   )
 
@@ -113,11 +120,12 @@ get_predicted.glmmTMB <- function(x,
     ...
   )
 
-  # Prediction function
-  predict_function <- function(x, data, ...) {
+  # Prediction function - we need to pass some arguments, because these
+  # are also required for bootstrapping
+  predict_function <- function(x, newdata, ...) {
     stats::predict(
       x,
-      newdata = data,
+      newdata = newdata,
       type = my_args$type,
       re.form = my_args$re.form,
       allow.new.levels = my_args$allow_new_levels,
@@ -126,9 +134,8 @@ get_predicted.glmmTMB <- function(x,
   }
 
   # 1. step: predictions
-  rez <- predict_function(x, data = my_args$data, se.fit = TRUE)
-
   if (is.null(iterations)) {
+    rez <- predict_function(x, newdata = my_args$data, se.fit = TRUE)
     predictions <- as.numeric(rez$fit)
   } else {
     predictions <- .get_predicted_boot(

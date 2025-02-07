@@ -243,6 +243,7 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
                                     se = NULL,
                                     ci = 0.95,
                                     ci_method = "wald",
+                                    ci_type = "confidence",
                                     data = NULL,
                                     ...) {
   # TODO: Prediction interval for binomial: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-i/
@@ -295,6 +296,16 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
         format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.") # nolint
       } else {
         format_error("Predictions and standard errors are not of the same length. Please specify the `data` argument.")
+      }
+    }
+browser()
+    # add sigma to standard errors, i.e. confidence or prediction intervals
+    ci_type <- validate_argument(ci_type, c("confidence", "prediction"))
+    if (ci_type == "prediction") {
+      if (is_mixed_model(x)) {
+        se <- sqrt(se^2 + get_variance_residual(x))
+      } else {
+        se <- sqrt(se^2 + get_sigma(x)^2)
       }
     }
 
