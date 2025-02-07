@@ -116,7 +116,7 @@ test_that("export_table, table_width", {
   model2 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 
   out <- performance::compare_performance(model1, model2)
-  expect_snapshot(print(out, table_width = 50), variant = "windows")
+  expect_snapshot(print(out, ci_digits = 2, table_width = 50), variant = "windows")
 
   data(iris)
   lm1 <- lm(Sepal.Length ~ Species, data = iris)
@@ -125,7 +125,7 @@ test_that("export_table, table_width", {
   lm6 <- lm5 <- lm4 <- lm(Sepal.Length ~ Species * Petal.Length + Petal.Width, data = iris)
 
   tab <- parameters::compare_parameters(lm1, lm2, lm3, lm4, lm5, lm6)
-  expect_snapshot(print(tab, table_width = 80), variant = "windows")
+  expect_snapshot(print(tab, ci_digits = 2, table_width = 80), variant = "windows")
 })
 
 
@@ -143,7 +143,7 @@ test_that("export_table, table_width, no split", {
   model2 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 
   out <- performance::compare_performance(model1, model2)
-  expect_snapshot(print(out, table_width = Inf), variant = "windows")
+  expect_snapshot(print(out, ci_digits = 2, table_width = Inf), variant = "windows")
 
   data(iris)
   lm1 <- lm(Sepal.Length ~ Species, data = iris)

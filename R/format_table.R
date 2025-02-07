@@ -84,9 +84,9 @@ format_table <- function(x,
                          digits = 2,
                          ci_width = "auto",
                          ci_brackets = TRUE,
-                         ci_digits = 2,
+                         ci_digits = digits,
                          p_digits = 3,
-                         rope_digits = 2,
+                         rope_digits = digits,
                          ic_digits = 1,
                          zap_small = FALSE,
                          preserve_attributes = FALSE,
@@ -104,9 +104,9 @@ format_table <- function(x,
 
   # check if user supplied digits attributes
   if (missing(digits)) digits <- .additional_arguments(x, "digits", 2)
-  if (missing(ci_digits)) ci_digits <- .additional_arguments(x, "ci_digits", 2)
+  if (missing(ci_digits)) ci_digits <- .additional_arguments(x, "ci_digits", digits)
   if (missing(p_digits)) p_digits <- .additional_arguments(x, "p_digits", 3)
-  if (missing(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", 2)
+  if (missing(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", digits)
   if (missing(ic_digits)) ic_digits <- .additional_arguments(x, "ic_digits", 1)
 
   att <- attributes(x)

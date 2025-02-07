@@ -92,6 +92,11 @@ test_that("formatting ROPE CI", {
   d$Sepal.Length10 <- 10 * d$Sepal.Length
   m10 <- lm(Sepal.Length10 ~ Sepal.Width + Species, data = d)
   expect_snapshot(print(parameters::equivalence_test(m10)))
+
+  # drop attributes
+  mp <- as.data.frame(parameters::model_parameters(m10))[c("Parameter", "Coefficient", "CI", "CI_low", "CI_high", "p")]
+  expect_snapshot(format_table(mp), variant = "windows")
+  expect_snapshot(format_table(mp, digits = 4), variant = "windows")
 })
 
 
