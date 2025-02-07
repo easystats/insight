@@ -33,10 +33,10 @@ get_predicted.lmerMod <- function(x,
 
   # Prediction function - we need to pass some arguments, because these
   # are also required for bootstrapping
-  predict_function <- function(x, newdata, ...) {
+  predict_function <- function(x, data, ...) {
     stats::predict(
       x,
-      newdata = newdata,
+      newdata = data,
       type = my_args$type,
       re.form = my_args$re.form,
       random.only = random.only,
@@ -47,7 +47,7 @@ get_predicted.lmerMod <- function(x,
 
   # 1. step: predictions
   if (is.null(iterations)) {
-    rez <- predict_function(x, newdata = my_args$data, se.fit = TRUE)
+    rez <- predict_function(x, data = my_args$data, se.fit = TRUE)
     predictions <- as.numeric(rez$fit)
   } else {
     predictions <- .get_predicted_boot(
@@ -122,10 +122,10 @@ get_predicted.glmmTMB <- function(x,
 
   # Prediction function - we need to pass some arguments, because these
   # are also required for bootstrapping
-  predict_function <- function(x, newdata, ...) {
+  predict_function <- function(x, data, ...) {
     stats::predict(
       x,
-      newdata = newdata,
+      newdata = data,
       type = my_args$type,
       re.form = my_args$re.form,
       allow.new.levels = my_args$allow_new_levels,
@@ -135,7 +135,7 @@ get_predicted.glmmTMB <- function(x,
 
   # 1. step: predictions
   if (is.null(iterations)) {
-    rez <- predict_function(x, newdata = my_args$data, se.fit = TRUE)
+    rez <- predict_function(x, data = my_args$data, se.fit = TRUE)
     predictions <- as.numeric(rez$fit)
   } else {
     predictions <- .get_predicted_boot(
