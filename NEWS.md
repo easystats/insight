@@ -5,6 +5,8 @@
 * `get_datagrid()` now includes a dummy column for model weights (values `NA`),
   to work with models that used weights.
 
+* Argument `ci_digits` defaults to `digits` in `format_table()`.
+
 # insight 1.0.2
 
 ## Changes
