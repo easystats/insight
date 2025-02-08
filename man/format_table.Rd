@@ -112,13 +112,18 @@ equivalent to \code{select = "{estimate}{stars} ({se})"}..
 }
 }
 
-\strong{Note 1:} glue-like syntax is still experimental in the case of more complex models
-(like mixed models) and may not return expected results.
+Using \code{select} to define columns will re-order columns and remove all columns
+related to uncertainty (standard errors, confidence intervals), test statistics,
+and p-values (and similar, like \code{pd} or \code{BF} for Bayesian models), because
+these are assumed to be included or intentionally excluded when using \code{select}.
+The new column order will be: Parameter columns first, followed by the "glue"
+columns, followed by all remaining columns. If further columns should also be
+placed first, add those as \code{focal_terms} attributes to \code{x}. I.e., following
+columns are considers as "parameter columns" and placed first:
+\code{c(easystats_columns("parameter"), attributes(x)$focal_terms)}.
 
-\strong{Note 2:} Using \code{select} to define columns will remove all columns related
-to uncertainty (standard errors, confidence intervals), test statistics, and
-p-values (and similar, like \code{pd} or \code{BF} for Bayesian models), because these
-are assumed to be included or intentionally excluded when using \code{select}.}
+\strong{Note:} glue-like syntax is still experimental in the case of more complex models
+(like mixed models) and may not return expected results.}
 
 \item{verbose}{Toggle messages and warnings.}
 

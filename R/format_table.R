@@ -78,13 +78,18 @@
 #'   - `"se_p"`: Estimates, standard errors and asterisks for p-values. This is
 #'     equivalent to `select = "{estimate}{stars} ({se})"`..
 #'
-#' **Note 1:** glue-like syntax is still experimental in the case of more complex models
-#' (like mixed models) and may not return expected results.
+#' Using `select` to define columns will re-order columns and remove all columns
+#' related to uncertainty (standard errors, confidence intervals), test statistics,
+#' and p-values (and similar, like `pd` or `BF` for Bayesian models), because
+#' these are assumed to be included or intentionally excluded when using `select`.
+#' The new column order will be: Parameter columns first, followed by the "glue"
+#' columns, followed by all remaining columns. If further columns should also be
+#' placed first, add those as `focal_terms` attributes to `x`. I.e., following
+#' columns are considers as "parameter columns" and placed first:
+#' `c(easystats_columns("parameter"), attributes(x)$focal_terms)`.
 #'
-#' **Note 2:** Using `select` to define columns will remove all columns related
-#' to uncertainty (standard errors, confidence intervals), test statistics, and
-#' p-values (and similar, like `pd` or `BF` for Bayesian models), because these
-#' are assumed to be included or intentionally excluded when using `select`.
+#' **Note:** glue-like syntax is still experimental in the case of more complex models
+#' (like mixed models) and may not return expected results.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
