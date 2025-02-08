@@ -158,4 +158,12 @@ test_that("modelbased", {
   model <- lm(Petal.Length ~ Species, data = iris)
   out <- modelbased::estimate_means(model, "Species")
   expect_named(format_table(out, select = "minimal"), c("Species", "Mean (CI)"))
+
+  data(mtcars)
+  model <- lm(wt ~ qsec + mpg, dat = mtcars)
+  out <- modelbased::estimate_relation(model, by = "qsec")
+  expect_named(
+    format(out, include_grid = TRUE, select = "{estimate} ({ci})|{stars}"),
+    c("qsec", "mpg", "Predicted (CI)")
+  )
 })

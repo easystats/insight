@@ -69,9 +69,15 @@
   }
 
   # paste glue together
-  formatted_columns <- lapply(seq_along(style), function(i) {
-    .format_glue_output(x, coef_column, ci_column, style[i], format, column_names[i])
-  })
+  formatted_columns <- compact_list(lapply(seq_along(style), function(i) {
+    result <- .format_glue_output(x, coef_column, ci_column, style[i], format, column_names[i])
+    # fix invalid columns
+    if (all(nzchar(colnames(result)))) {
+      result
+    } else {
+      NULL
+    }
+  }))
   out <- do.call(cbind, formatted_columns)
 
   # add new_column_name to column names; for single column layout per model, we just
