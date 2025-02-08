@@ -54,8 +54,8 @@
 #'   replaced by their associated columns, where the selected columns will be
 #'   collapsed into one column. Following tokens are replaced by the related
 #'   coefficients or statistics: `{estimate}`, `{se}`, `{ci}` (or `{ci_low}` and
-#'   `{ci_high}`), `{p}` and `{stars}`. The token `{ci}` will be replaced by
-#'   `{ci_low}, {ci_high}`. Example: `select = "{estimate}{stars} ({ci})"`
+#'   `{ci_high}`), `{p}`, `{pd}` and `{stars}`. The token `{ci}` will be replaced
+#'   by `{ci_low}, {ci_high}`. Example: `select = "{estimate}{stars} ({ci})"`
 #'
 #'   It is possible to create multiple columns as well. A `|` separates values
 #'   into new cells/columns. Example: `select = "{estimate} ({ci})|{p}"`.

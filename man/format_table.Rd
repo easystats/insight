@@ -87,8 +87,8 @@ There are two options for this argument:
 replaced by their associated columns, where the selected columns will be
 collapsed into one column. Following tokens are replaced by the related
 coefficients or statistics: \code{{estimate}}, \code{{se}}, \code{{ci}} (or \code{{ci_low}} and
-\code{{ci_high}}), \code{{p}} and \code{{stars}}. The token \code{{ci}} will be replaced by
-\verb{\{ci_low\}, \{ci_high\}}. Example: \code{select = "{estimate}{stars} ({ci})"}
+\code{{ci_high}}), \code{{p}}, \code{{pd}} and \code{{stars}}. The token \code{{ci}} will be replaced
+by \verb{\{ci_low\}, \{ci_high\}}. Example: \code{select = "{estimate}{stars} ({ci})"}
 
 It is possible to create multiple columns as well. A \code{|} separates values
 into new cells/columns. Example: \code{select = "{estimate} ({ci})|{p}"}.
