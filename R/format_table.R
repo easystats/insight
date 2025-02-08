@@ -105,6 +105,7 @@
 #' as.data.frame(format_table(x, p_digits = "scientific"))
 #' # "glue" columns
 #' as.data.frame(format_table(x, select = "minimal"))
+#' as.data.frame(format_table(x, select = "{estimate}{stars}|{p}"))
 #'
 #' \donttest{
 #' model <- rstanarm::stan_glm(
