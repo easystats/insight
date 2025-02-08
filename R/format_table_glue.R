@@ -92,8 +92,18 @@
     i
   })
 
+  # define p-alike columns
+  p_column <- c("p", "p.value")
+  # add other p-alikes
+  if (any(vapply(style, grepl, logical(1), pattern = "{pd}", fixed = TRUE))) {
+    p_column <- c(p_column, "pd")
+  }
+  if (any(vapply(style, grepl, logical(1), pattern = "{BF}", fixed = TRUE))) {
+    p_column <- c(p_column, "BF")
+  }
+
   # bind glue-columns to original data, but remove former columns first
-  original_x[c(coefficient_names, "SE", ci_column, stat_colum, "p", "p.value")] <- NULL
+  original_x[c(coefficient_names, "SE", ci_column, stat_colum, p_column)] <- NULL
 
   # reorder
   original_x <- standardize_column_order(original_x)
