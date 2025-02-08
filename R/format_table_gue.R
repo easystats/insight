@@ -263,8 +263,3 @@
   column_names <- gsub("<br>", "", column_names, fixed = TRUE)
   column_names
 }
-
-
-# global definition of valid "style" shortcuts
-.style_shortcuts <- c("ci_p2", "ci", "ci_p", "se", "se_p", "se_p2", "est", "coef")
-.select_shortcuts <- c("minimal", "short")
