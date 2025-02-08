@@ -54,7 +54,7 @@
   if (length(style) == 1 && !is.null(new_column_name)) {
     column_names <- new_column_name
   } else {
-    column_names <- .style_pattern_to_name(style)
+    column_names <- .style_pattern_to_name(style, coef_column)
   }
 
   # paste glue together
@@ -150,11 +150,13 @@
     ci_low <- insight::trim_ws(gsub("(\\(|\\[)(.*),(.*)(\\)|\\])", "\\2", ci))
     ci_high <- insight::trim_ws(gsub("(\\(|\\[)(.*),(.*)(\\)|\\])", "\\3", ci))
   }
+
   # fix p-layout
   if ("p" %in% colnames(x)) {
     x[["p"]] <- insight::trim_ws(x[["p"]])
     x[["p"]] <- gsub("< .", "<0.", x[["p"]], fixed = TRUE)
   }
+
   # handle aliases
   style <- tolower(style)
   style <- gsub("{coef}", "{estimate}", style, fixed = TRUE)
@@ -164,6 +166,7 @@
   style <- gsub("{pval}", "{p}", style, fixed = TRUE)
   style <- gsub("{p.value}", "{p}", style, fixed = TRUE)
   style <- gsub("{ci}", "{ci_low}, {ci_high}", style, fixed = TRUE)
+
   # align columns width for text format
   .align_values <- function(i) {
     if (!is.null(i)) {
@@ -172,6 +175,7 @@
     }
     i
   }
+
   # we put all elements (coefficient, SE, CI, p, ...) in one column.
   # for text format, where columns are not center aligned, this can result in
   # misaligned columns, which looks ugly. So we try to ensure that each element
@@ -188,6 +192,7 @@
     x$ESS <- .align_values(x$ESS)
     x$ROPE_Percentage <- .align_values(x$ROPE_Percentage)
   }
+
   # create new string
   table_row <- rep(style, times = nrow(x))
   for (r in seq_along(table_row)) {
@@ -218,21 +223,32 @@
       table_row[r] <- gsub("{rope}", x[["ROPE_Percentage"]][r], table_row[r], fixed = TRUE)
     }
   }
+
   # some cleaning: columns w/o coefficient are empty
   table_row[x[[coef_column]] == "" | is.na(x[[coef_column]])] <- "" # nolint
+
   # fix some p-value stuff, e.g. if pattern is "p={p]}",
   # we may have "p= <0.001", which we want to be "p<0.001"
   table_row <- gsub("=<", "<", table_row, fixed = TRUE)
   table_row <- gsub("= <", "<", table_row, fixed = TRUE)
   table_row <- gsub("= ", "=", table_row, fixed = TRUE)
+
   # final output
   x <- data.frame(table_row)
   colnames(x) <- column_names
+
+  # sanity check - does column exist?
+  non_existent <- vapply(x, function(i) all(i == style), logical(1))
+  x[non_existent] <- NULL
+
   x
 }
 
 
-.style_pattern_to_name <- function(style) {
+.style_pattern_to_name <- function(style, coef_column) {
+  if (is.null(coef_column)) {
+    coef_column <- "Estimate"
+  }
   column_names <- tolower(style)
   # completely remove these patterns
   column_names <- gsub("{stars}", "", column_names, fixed = TRUE)
@@ -241,8 +257,9 @@
   column_names <- gsub("}", "", column_names, fixed = TRUE)
   # manual renaming
   column_names <- gsub("\\Qrope\\E", "% in ROPE", column_names)
-  column_names <- gsub("(estimate|coefficient|coef)", "Estimate", column_names)
+  column_names <- gsub("(estimate|coefficient|coef)", coef_column, column_names)
   column_names <- gsub("\\Qse\\E", "SE", column_names)
+  column_names <- gsub("\\Qci\\E", "CI", column_names)
   column_names <- gsub("<br>", "", column_names, fixed = TRUE)
   column_names
 }
