@@ -7,6 +7,9 @@
 
 * Argument `ci_digits` defaults to `digits` in `format_table()`.
 
+* `format_table()` gets a `select` argument, which can be used to select columns
+  and column layout in a glue-like style.
+
 # insight 1.0.2
 
 ## Changes

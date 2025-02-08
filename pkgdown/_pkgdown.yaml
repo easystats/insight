@@ -103,6 +103,7 @@ reference:
       - null_model
       - print_parameters
       - starts_with("standardize_")
+      - ends_with("_columns")
       - is_empty_object
       - starts_with("object_has_")
       - starts_with("compact_")

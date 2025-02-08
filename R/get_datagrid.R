@@ -807,7 +807,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
         "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
         "minmax", "terciles", "terciles2", "fivenum", "pretty"
       )
-      if ((is.factor(x) && all(parts %in% levels(x))) || (is.character(x) && all(parts %in% x)))   {
+      if ((is.factor(x) && all(parts %in% levels(x))) || (is.character(x) && all(parts %in% x))) {
         # Factor
         # Add quotes around them
         parts <- paste0("'", parts, "'")

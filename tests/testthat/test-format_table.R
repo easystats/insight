@@ -13,29 +13,35 @@ test_that("format_table with stars bayes", {
   x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf"))))
 
   out <- format_table(x)
-  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
   expect_identical(out$BF[2], "114.21")
   expect_identical(out$pd, c("99.98%", "100%"))
 
   out <- format_table(x, stars = TRUE)
-  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = c("pd", "BF"))
-  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = "pd")
-  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
   expect_identical(out$BF[2], "114.21")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = "BF")
-  expect_identical(colnames(out), c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%", "100%"))
+
+  # glue
+  out <- format_table(x, select = "minimal")
+  expect_named(out, c("Parameter", "Median (CI)", "Rhat", "ESS"))
+  out <- format_table(x, select = "{estimate} ({pd})")
+  expect_named(out, c("Parameter", "Median (pd)", "Rhat", "ESS"))
 })
 
 
@@ -65,10 +71,11 @@ test_that("format_table with column order", {
 # test for freq models -----------------
 test_that("format_table with stars freq", {
   skip_if_not_installed("parameters")
+  data(iris)
   x <- as.data.frame(parameters::model_parameters(lm(Sepal.Length ~ Species + Sepal.Width, data = iris)))
 
   out <- format_table(x)
-  expect_identical(colnames(out), c("Parameter", "Coefficient", "SE", "95% CI", "t(146)", "p"))
+  expect_named(out, c("Parameter", "Coefficient", "SE", "95% CI", "t(146)", "p"))
   expect_identical(out$p, c("< .001", "< .001", "< .001", "< .001"))
 
   out <- format_table(x, stars = TRUE)
@@ -82,7 +89,22 @@ test_that("format_table with stars freq", {
 
   out <- format_table(x, stars = c("BF", "p"))
   expect_identical(out$p, c("< .001***", "< .001***", "< .001***", "< .001***"))
+
+  # glue
+  out <- format_table(x, select = "minimal")
+  expect_named(out, c("Parameter", "Coefficient (CI)", "p"))
+  out <- format_table(x, select = "se_p")
+  expect_named(out, c("Parameter", "Coefficient (SE)"))
+  expect_identical(
+    out$`Coefficient (SE)`,
+    c("2.25*** (0.37)", "1.46*** (0.11)", "1.95*** (0.10)", "0.80*** (0.11)")
+  )
+  out <- format_table(x, select = "se_p", new_column_name = "Testname")
+  expect_named(out, c("Parameter", "Testname"))
+  out <- format_table(x, select = "minimal", , new_column_name = "Test")
+  expect_named(out, c("Parameter", "Coefficient (CI) (Test)", "p (Test)"))
 })
+
 
 # test for freq models -----------------
 test_that("formatting ROPE CI", {
@@ -127,4 +149,13 @@ test_that("significance stars", {
 
   expect_snapshot(print(out, stars = TRUE), variant = "windows")
   expect_snapshot(print(out, stars = TRUE, stars_only = TRUE), variant = "windows")
+})
+
+
+test_that("modelbased", {
+  skip_if_not_installed("modelbased")
+  data(iris)
+  model <- lm(Petal.Length ~ Species, data = iris)
+  out <- modelbased::estimate_means(model, "Species")
+  expect_named(format_table(out, select = "minimal"), c("Species", "Mean (CI)"))
 })
