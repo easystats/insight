@@ -85,11 +85,6 @@ printed. There are three options for this argument:
 
 \code{select} can be a character vector (or numeric index) of column names that
 should be printed, where columns are extracted from the data frame.
-
-There are two pre-defined options for selecting columns:
-\code{select = "minimal"} prints coefficients, confidence intervals and
-p-values, while \code{select = "short"} prints coefficients, standard errors and
-p-values.
 \item \strong{A string expression with layout pattern}
 
 \code{select} is a string with "tokens" enclosed in braces. These tokens will be
@@ -108,6 +103,10 @@ If \code{format = "html"}, a \verb{<br>} inserts a line break inside a cell.
 \code{select} can be one of the following string values, to create one of the
 following pre-defined column layouts:
 \itemize{
+\item \code{"minimal"}: Estimates, confidence intervals and numeric p-values, in two
+columns. This is equivalent to \code{select = "{estimate} ({ci})|{p}"}.
+\item \code{"short"}: Estimate, standard errors and numeric p-values, in two columns.
+This is equivalent to \code{select = "{estimate} ({se})|{p}"}.
 \item \code{"ci"}: Estimates and confidence intervals, no asterisks for p-values.
 This is equivalent to \code{select = "{estimate} ({ci})"}.
 \item \code{"se"}: Estimates and standard errors, no asterisks for p-values. This is
@@ -116,10 +115,6 @@ equivalent to \code{select = "{estimate} ({se})"}.
 is equivalent to \code{select = "{estimate}{stars} ({ci})"}.
 \item \code{"se_p"}: Estimates, standard errors and asterisks for p-values. This is
 equivalent to \code{select = "{estimate}{stars} ({se})"}..
-\item \code{"ci_p2"}: Estimates, confidence intervals and numeric p-values, in two
-columns. This is equivalent to \code{select = "{estimate} ({ci})|{p}"}.
-\item \code{"se_p2"}: Estimate, standard errors and numeric p-values, in two columns.
-This is equivalent to \code{select = "{estimate} ({se})|{p}"}.
 }
 }
 

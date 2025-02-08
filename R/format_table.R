@@ -53,11 +53,6 @@
 #'   `select` can be a character vector (or numeric index) of column names that
 #'   should be printed, where columns are extracted from the data frame.
 #'
-#'   There are two pre-defined options for selecting columns:
-#'   `select = "minimal"` prints coefficients, confidence intervals and
-#'   p-values, while `select = "short"` prints coefficients, standard errors and
-#'   p-values.
-#'
 #' * **A string expression with layout pattern**
 #'
 #'   `select` is a string with "tokens" enclosed in braces. These tokens will be
@@ -77,6 +72,10 @@
 #'   `select` can be one of the following string values, to create one of the
 #'   following pre-defined column layouts:
 #'
+#'   - `"minimal"`: Estimates, confidence intervals and numeric p-values, in two
+#'     columns. This is equivalent to `select = "{estimate} ({ci})|{p}"`.
+#'   - `"short"`: Estimate, standard errors and numeric p-values, in two columns.
+#'     This is equivalent to `select = "{estimate} ({se})|{p}"`.
 #'   - `"ci"`: Estimates and confidence intervals, no asterisks for p-values.
 #'     This is equivalent to `select = "{estimate} ({ci})"`.
 #'   - `"se"`: Estimates and standard errors, no asterisks for p-values. This is
@@ -85,10 +84,6 @@
 #'     is equivalent to `select = "{estimate}{stars} ({ci})"`.
 #'   - `"se_p"`: Estimates, standard errors and asterisks for p-values. This is
 #'     equivalent to `select = "{estimate}{stars} ({se})"`..
-#'   - `"ci_p2"`: Estimates, confidence intervals and numeric p-values, in two
-#'     columns. This is equivalent to `select = "{estimate} ({ci})|{p}"`.
-#'   - `"se_p2"`: Estimate, standard errors and numeric p-values, in two columns.
-#'     This is equivalent to `select = "{estimate} ({se})|{p}"`.
 #'
 #' **Note:** glue-like syntax is still experimental in the case of more complex models
 #' (like mixed models) and may not return expected results.
