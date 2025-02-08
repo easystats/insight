@@ -39,9 +39,9 @@ test_that("format_table with stars bayes", {
 
   # glue
   out <- format_table(x, select = "minimal")
-  expect_named(out, c("Parameter", "Median (CI)", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median (CI)", "Rhat", "ESS"))
   out <- format_table(x, select = "{estimate} ({pd})")
-  expect_named(out, c("Parameter", "Median (pd)", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median (pd)", "Rhat", "ESS"))
 })
 
 

@@ -98,7 +98,7 @@
   })
 
   # define p-alike columns
-  p_column <- easystats_columns("p")
+  p_column <- unique(c(easystats_columns("p"), broom_columns("p")))
   uncertainty_column <- unique(c(
     easystats_columns("uncertainty"),
     broom_columns("uncertainty"),
