@@ -56,7 +56,7 @@ standardize_column_order.parameters_model <- function(data,
 
   col_order <- switch(style,
     easystats = easystats_columns(),
-    .broom_columns()
+    broom_columns()
   )
 
   data[union(intersect(col_order, names(data)), names(data))]
