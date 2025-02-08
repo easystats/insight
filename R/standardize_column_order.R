@@ -85,7 +85,7 @@ standardize_column_order.parameters_distribution <- standardize_column_order.par
 #' @param select String, indicating which columns to return.
 #'
 #' @return A character vector with all (or selected) column names that are
-#' in use across the easystats eco-system.
+#' in use across the easystats-ecosystem.
 #'
 #' @examples
 #' easystats_columns("uncertainty")

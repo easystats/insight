@@ -11,7 +11,7 @@ easystats_columns(select = "all")
 }
 \value{
 A character vector with all (or selected) column names that are
-in use across the easystats eco-system.
+in use across the easystats-ecosystem.
 }
 \description{
 Returns all valid column names that are used or defined across easystats
