@@ -2,16 +2,20 @@
 % Please edit documentation in R/standardize_column_order.R
 \name{easystats_columns}
 \alias{easystats_columns}
+\alias{broom_columns}
 \title{Easystats columns}
 \usage{
 easystats_columns(select = "all")
+
+broom_columns(select = "all")
 }
 \arguments{
 \item{select}{String, indicating which columns to return.}
 }
 \value{
 A character vector with all (or selected) column names that are
-in use across the easystats-ecosystem.
+in use across the easystats-ecosystem, or broom-alike column names for
+\code{broom_columns()}.
 }
 \description{
 Returns all valid column names that are used or defined across easystats

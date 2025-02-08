@@ -37,7 +37,10 @@
   }
 
   # potential names for the coefficient column
-  coefficient_names <- easystats_columns("estimate")
+  coefficient_names <- unique(c(
+    easystats_columns("estimate"),
+    broom_columns("estimate")
+  ))
 
   # find columns
   if (is.null(coef_column) || !coef_column %in% colnames(x)) {
@@ -96,7 +99,11 @@
 
   # define p-alike columns
   p_column <- easystats_columns("p")
-  uncertainty_column <- c(easystats_columns("uncertainty"), ci_column)
+  uncertainty_column <- unique(c(
+    easystats_columns("uncertainty"),
+    broom_columns("uncertainty"),
+    ci_column
+  ))
 
   # bind glue-columns to original data, but remove former columns first
   original_x[c(coefficient_names, uncertainty_column, stat_colum, p_column)] <- NULL
@@ -105,7 +112,10 @@
   original_x <- standardize_column_order(original_x)
 
   # we want: first parameter, then glue-columns, then remaining columns
-  parameter_column <- intersect(easystats_columns("parameter"), colnames(original_x))
+  parameter_column <- intersect(
+    c(easystats_columns("parameter"), broom_columns("parameter")),
+    colnames(original_x)
+  )
   non_parameter_column <- setdiff(colnames(original_x), parameter_column)
 
   cbind(original_x[parameter_column], out, original_x[non_parameter_column])

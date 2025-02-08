@@ -85,7 +85,8 @@ standardize_column_order.parameters_distribution <- standardize_column_order.par
 #' @param select String, indicating which columns to return.
 #'
 #' @return A character vector with all (or selected) column names that are
-#' in use across the easystats-ecosystem.
+#' in use across the easystats-ecosystem, or broom-alike column names for
+#' `broom_columns()`.
 #'
 #' @examples
 #' easystats_columns("uncertainty")
@@ -188,33 +189,45 @@ easystats_columns <- function(select = "all") {
   out
 }
 
-
 # here we should have all valid column names that are used or defined across
 # easystats packages, in broom-style
 
-.broom_columns <- function() {
-  c(
-    # estimate
-    "estimate", "mean.group1", "mean.group2", "predicted",
-    # type of estimate
-    "group", "component", "response", "response.level", "effects", "weight",
-    # uncertainty
+#' @rdname easystats_columns
+#' @export
+broom_columns <- function(select = "all") {
+  select <- validate_argument(
+    select,
+    c(
+      "all", "parameter", "estimate", "type", "uncertainty", "prior", "method",
+      "statistic", "df", "p", "other", "effectsize"
+    )
+  )
+  # Parameter names or levels
+  cols_parameter <- "term"
+  # estimate
+  cols_estimate <- c("estimate", "mean.group1", "mean.group2", "predicted")
+  # type of estimate
+  cols_esttype <- c("group", "component", "response", "response.level", "effects", "weight")
+  # uncertainty
+  cols_uncertainty <- c(
     "std.error", "std.dev",
     "conf.level", "conf.low", "conf.high", "conf.method", "conf.distribution", "conf.iterations",
-    "sum.squares", "mean.square",
-    # prior details
-    "prior.distribution", "prior.location", "prior.scale",
-    # test details
-    "method",
-    # statistic
-    "statistic",
-    # degrees of freedom
-    "df", "df.error", "df.residual",
-    # p-value
-    "p.value", "pd", "rope.percentage", "bayes.factor", "log(bayes.factor)",
-    # other details
-    "alternative", "n.obs", "rhat", "ess",
-    # effectsize details
+    "sum.squares", "mean.square"
+  )
+  # prior details
+  cols_prior <- c("prior.distribution", "prior.location", "prior.scale")
+  # test details
+  cols_method <- "method"
+  # statistic
+  cols_statistic <- "statistic"
+  # degrees of freedom
+  cols_df <- c("df", "df.error", "df.residual")
+  # p-value
+  cols_p <- c("p.value", "pd", "rope.percentage", "bayes.factor", "log(bayes.factor)")
+  # other details
+  cols_other <- c("alternative", "n.obs", "rhat", "ess")
+  # effectsize details
+  cols_effsize <- c(
     "effectsize",
     "d", "cohens.d", "d.conf.low", "d.conf.high",
     "g", "Hedges.g", "g.conf.low", "g.conf.high",
@@ -227,4 +240,41 @@ easystats_columns <- function(select = "all") {
     "rank.epsilon.squared", "rank.epsilon.squared.conf.low", "rank.epsilon.squared.conf.high",
     "kendalls.w", "kendalls.w.conf.low", "kendalls.w.conf.high"
   )
+
+  out <- NULL
+
+  if (select %in% c("all", "parameter")) {
+    out <- c(out, cols_parameter)
+  }
+  if (select %in% c("all", "estimate")) {
+    out <- c(out, cols_estimate)
+  }
+  if (select %in% c("all", "type")) {
+    out <- c(out, cols_esttype)
+  }
+  if (select %in% c("all", "uncertainty")) {
+    out <- c(out, cols_uncertainty)
+  }
+  if (select %in% c("all", "prior")) {
+    out <- c(out, cols_prior)
+  }
+  if (select %in% c("all", "method")) {
+    out <- c(out, cols_method)
+  }
+  if (select %in% c("all", "statistic")) {
+    out <- c(out, cols_statistic)
+  }
+  if (select %in% c("all", "df")) {
+    out <- c(out, cols_df)
+  }
+  if (select %in% c("all", "p")) {
+    out <- c(out, cols_p)
+  }
+  if (select %in% c("all", "other")) {
+    out <- c(out, cols_other)
+  }
+  if (select %in% c("all", "effectsize")) {
+    out <- c(out, cols_effsize)
+  }
+  out
 }
