@@ -1,6 +1,26 @@
 # this function does the main composition of columns for the output.
 
-.format_glue_table <- function(x, style, format, modelname) {
+.format_glue_table <- function(x,
+                               style,
+                               coef_column = NULL,
+                               ...) {
+  # evaluate dots
+  dots <- list(...)
+
+  # default format
+  if (!is.null(dots$format)) {
+    format <- dots$format
+  } else {
+    format <- "text"
+  }
+
+  # column name for "pasted" columns
+  if (!is.null(dots$new_column_name)) {
+    new_column_name <- dots$new_column_name
+  } else {
+    new_column_name <- NULL
+  }
+
   if (identical(format, "html")) {
     linesep <- "<br>"
   } else {
@@ -10,8 +30,16 @@
     x$p_stars <- ""
   }
 
+  # potential names for the coefficient column
+  coefficient_names <- c(
+    "Estimate", "Coefficient", "Mean", "Median", "MAP", "Difference", "Ratio",
+    "Predicted", "Probability", "Slope"
+  )
+
   # find columns
-  coef_column <- colnames(x)[1]
+  if (is.null(coef_column) || !coef_column %in% colnames(x)) {
+    coef_column <- intersect(colnames(x), coefficient_names)[1]
+  }
   ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI"]
 
   # make sure we have a glue-like syntax
@@ -21,8 +49,8 @@
   style <- unlist(strsplit(style, split = "|", fixed = TRUE))
 
   # define column names
-  if (length(style) == 1) {
-    column_names <- modelname
+  if (length(style) == 1 && !is.null(new_column_name)) {
+    column_names <- new_column_name
   } else {
     column_names <- .style_pattern_to_name(style)
   }
@@ -33,14 +61,14 @@
   })
   out <- do.call(cbind, formatted_columns)
 
-  # add modelname to column names; for single column layout per model, we just
+  # add new_column_name to column names; for single column layout per model, we just
   # need the column name. If the layout contains more than one column per model,
-  # add modelname in parenthesis.
-  if (!is.null(modelname) && nzchar(modelname, keepNA = TRUE)) {
+  # add new_column_name in parenthesis.
+  if (!is.null(new_column_name) && nzchar(new_column_name, keepNA = TRUE)) {
     if (ncol(out) > 1) {
-      colnames(out) <- paste0(colnames(out), " (", modelname, ")")
+      colnames(out) <- paste0(colnames(out), " (", new_column_name, ")")
     } else {
-      colnames(out) <- modelname
+      colnames(out) <- new_column_name
     }
   }
 

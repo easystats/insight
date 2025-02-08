@@ -20,6 +20,7 @@ format_table(
   preserve_attributes = FALSE,
   exact = TRUE,
   use_symbols = getOption("insight_use_symbols", FALSE),
+  select = NULL,
   verbose = TRUE,
   ...
 )
@@ -76,6 +77,54 @@ effectsizes (like Phi, Omega or Epsilon) include the related unicode-character
 instead of the written name. This only works on Windows for R >= 4.2, and on
 OS X or Linux for R >= 4.0. It is possible to define a global option for this
 setting, see 'Note'.}
+
+\item{select}{Determines which columns and and which layout columns are
+printed. There are three options for this argument:
+\itemize{
+\item \strong{Selecting columns by name or index}
+
+\code{select} can be a character vector (or numeric index) of column names that
+should be printed, where columns are extracted from the data frame.
+
+There are two pre-defined options for selecting columns:
+\code{select = "minimal"} prints coefficients, confidence intervals and
+p-values, while \code{select = "short"} prints coefficients, standard errors and
+p-values.
+\item \strong{A string expression with layout pattern}
+
+\code{select} is a string with "tokens" enclosed in braces. These tokens will be
+replaced by their associated columns, where the selected columns will be
+collapsed into one column. Following tokens are replaced by the related
+coefficients or statistics: \code{{estimate}}, \code{{se}}, \code{{ci}} (or \code{{ci_low}} and
+\code{{ci_high}}), \code{{p}} and \code{{stars}}. The token \code{{ci}} will be replaced by
+\verb{\{ci_low\}, \{ci_high\}}. Example: \code{select = "{estimate}{stars} ({ci})"}
+
+It is possible to create multiple columns as well. A \code{|} separates values
+into new cells/columns. Example: \code{select = "{estimate} ({ci})|{p}"}.
+
+If \code{format = "html"}, a \verb{<br>} inserts a line break inside a cell.
+\item \strong{A string indicating a pre-defined layout}
+
+\code{select} can be one of the following string values, to create one of the
+following pre-defined column layouts:
+\itemize{
+\item \code{"ci"}: Estimates and confidence intervals, no asterisks for p-values.
+This is equivalent to \code{select = "{estimate} ({ci})"}.
+\item \code{"se"}: Estimates and standard errors, no asterisks for p-values. This is
+equivalent to \code{select = "{estimate} ({se})"}.
+\item \code{"ci_p"}: Estimates, confidence intervals and asterisks for p-values. This
+is equivalent to \code{select = "{estimate}{stars} ({ci})"}.
+\item \code{"se_p"}: Estimates, standard errors and asterisks for p-values. This is
+equivalent to \code{select = "{estimate}{stars} ({se})"}..
+\item \code{"ci_p2"}: Estimates, confidence intervals and numeric p-values, in two
+columns. This is equivalent to \code{select = "{estimate} ({ci})|{p}"}.
+\item \code{"se_p2"}: Estimate, standard errors and numeric p-values, in two columns.
+This is equivalent to \code{select = "{estimate} ({se})|{p}"}.
+}
+}
+
+\strong{Note:} glue-like syntax is still experimental in the case of more complex models
+(like mixed models) and may not return expected results.}
 
 \item{verbose}{Toggle messages and warnings.}
 
