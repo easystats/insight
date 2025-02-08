@@ -153,7 +153,7 @@ test_that("significance stars", {
 
 
 test_that("modelbased", {
-  skip_if_not_installed("modelbased")
+  skip_if_not_installed("modelbased", minimum_version = "0.9.0.6")
   data(iris)
   model <- lm(Petal.Length ~ Species, data = iris)
   out <- modelbased::estimate_means(model, "Species")
