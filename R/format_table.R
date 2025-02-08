@@ -78,8 +78,13 @@
 #'   - `"se_p"`: Estimates, standard errors and asterisks for p-values. This is
 #'     equivalent to `select = "{estimate}{stars} ({se})"`..
 #'
-#' **Note:** glue-like syntax is still experimental in the case of more complex models
+#' **Note 1:** glue-like syntax is still experimental in the case of more complex models
 #' (like mixed models) and may not return expected results.
+#'
+#' **Note 2:** Using `select` to define columns will remove all columns related
+#' to uncertainty (standard errors, confidence intervals), test statistics, and
+#' p-values (and similar, like `pd` or `BF` for Bayesian models), because these
+#' are assumed to be included or intentionally excluded when using `select`.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
@@ -149,6 +154,12 @@ format_table <- function(x,
 
   # find name of coefficient, if present
   coef_column_name <- attributes(x)$coef_name
+  # create p_stars, needed for glue
+  if ("p" %in% colnames(x)) {
+    p_stars <- format_p(x[["p"]], stars = TRUE, stars_only = TRUE)
+  } else {
+    p_stars <- NULL
+  }
 
   att <- attributes(x)
   x <- as.data.frame(x, stringsAsFactors = FALSE)
@@ -262,6 +273,7 @@ format_table <- function(x,
       x,
       style = select,
       coef_column = coef_column_name,
+      p_stars = p_stars,
       ...
     )
   }

@@ -71,10 +71,11 @@ test_that("format_table with column order", {
 # test for freq models -----------------
 test_that("format_table with stars freq", {
   skip_if_not_installed("parameters")
+  data(iris)
   x <- as.data.frame(parameters::model_parameters(lm(Sepal.Length ~ Species + Sepal.Width, data = iris)))
 
   out <- format_table(x)
-  expect_identical(colnames(out), c("Parameter", "Coefficient", "SE", "95% CI", "t(146)", "p"))
+  expect_named(out, c("Parameter", "Coefficient", "SE", "95% CI", "t(146)", "p"))
   expect_identical(out$p, c("< .001", "< .001", "< .001", "< .001"))
 
   out <- format_table(x, stars = TRUE)
@@ -88,7 +89,18 @@ test_that("format_table with stars freq", {
 
   out <- format_table(x, stars = c("BF", "p"))
   expect_identical(out$p, c("< .001***", "< .001***", "< .001***", "< .001***"))
+
+  # glue
+  out <- format_table(x, select = "minimal")
+  expect_named(out, c("Parameter", "Coefficient (CI)", "p"))
+  out <- format_table(x, select = "se_p")
+  expect_named(out, c("Parameter", "Coefficient (SE)"))
+  expect_identical(
+    out$`Coefficient (SE)`,
+    c("2.25*** (0.37)", "1.46*** (0.11)", "1.95*** (0.10)", "0.80*** (0.11)")
+  )
 })
+
 
 # test for freq models -----------------
 test_that("formatting ROPE CI", {

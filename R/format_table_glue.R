@@ -3,6 +3,7 @@
 .format_glue_table <- function(x,
                                style,
                                coef_column = NULL,
+                               p_stars = NULL,
                                ...) {
   # evaluate dots
   dots <- list(...)
@@ -27,15 +28,16 @@
   } else {
     linesep <- " "
   }
-  if (!is.null(style) && style %in% c("se", "ci")) {
+
+  # init significant stars
+  if ((!is.null(style) && style %in% c("se", "ci")) || is.null(p_stars)) {
     x$p_stars <- ""
+  } else {
+    x$p_stars <- p_stars
   }
 
   # potential names for the coefficient column
-  coefficient_names <- c(
-    "Estimate", "Coefficient", "Mean", "Median", "MAP", "Difference", "Ratio",
-    "Predicted", "Probability", "Slope"
-  )
+  coefficient_names <- easystats_columns("estimate")
 
   # find columns
   if (is.null(coef_column) || !coef_column %in% colnames(x)) {
@@ -93,26 +95,20 @@
   })
 
   # define p-alike columns
-  p_column <- c("p", "p.value")
-  # add other p-alikes
-  if (any(vapply(style, grepl, logical(1), pattern = "{pd}", fixed = TRUE))) {
-    p_column <- c(p_column, "pd")
-  }
-  if (any(vapply(style, grepl, logical(1), pattern = "{BF}", fixed = TRUE))) {
-    p_column <- c(p_column, "BF")
-  }
+  p_column <- easystats_columns("p")
+  uncertainty_column <- c(easystats_columns("uncertainty"), ci_column)
 
   # bind glue-columns to original data, but remove former columns first
-  original_x[c(coefficient_names, "SE", ci_column, stat_colum, p_column)] <- NULL
+  original_x[c(coefficient_names, uncertainty_column, stat_colum, p_column)] <- NULL
 
   # reorder
   original_x <- standardize_column_order(original_x)
 
   # we want: first parameter, then glue-columns, then remaining columns
-  parameter_columns <- intersect(easystats_columns("parameter"), colnames(original_x))
-  non_parameter_columns <- setdiff(colnames(original_x), parameter_columns)
+  parameter_column <- intersect(easystats_columns("parameter"), colnames(original_x))
+  non_parameter_column <- setdiff(colnames(original_x), parameter_column)
 
-  cbind(original_x[parameter_columns], out, original_x[non_parameter_columns])
+  cbind(original_x[parameter_column], out, original_x[non_parameter_column])
 }
 
 
@@ -277,7 +273,7 @@
   column_names <- gsub("\\Qrope\\E", "% in ROPE", column_names)
   column_names <- gsub("(estimate|coefficient|coef)", coef_column, column_names)
   column_names <- gsub("\\Qse\\E", "SE", column_names)
-  column_names <- gsub("\\Qci\\E", "CI", column_names)
+  column_names <- gsub("\\<ci\\>", "CI", column_names)
   column_names <- gsub("<br>", "", column_names, fixed = TRUE)
   column_names
 }
