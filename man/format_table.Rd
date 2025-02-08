@@ -142,6 +142,8 @@ m <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 x <- parameters::model_parameters(m)
 as.data.frame(format_table(x))
 as.data.frame(format_table(x, p_digits = "scientific"))
+# "glue" columns
+as.data.frame(format_table(x, select = "minimal"))
 
 \donttest{
 model <- rstanarm::stan_glm(

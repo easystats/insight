@@ -93,7 +93,7 @@
   })
 
   # bind glue-columns to original data, but remove former columns first
-  original_x[c(coefficient_names, "SE", ci_column, stat_colum)] <- NULL
+  original_x[c(coefficient_names, "SE", ci_column, stat_colum, "p", "p.value")] <- NULL
   cbind(original_x, out)
 }
 
