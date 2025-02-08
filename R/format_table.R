@@ -45,13 +45,8 @@
 #'   `stars = "BF"` to only add stars to the Bayes factor and exclude the `pd`
 #'   column. Currently, following columns are recognized: `"BF"`, `"pd"` and `"p"`.
 #' @param stars_only If `TRUE`, return significant stars only (and no p-values).
-#' @param select Determines which columns and and which layout columns are
-#' printed. There are three options for this argument:
-#'
-#' * **Selecting columns by name or index**
-#'
-#'   `select` can be a character vector (or numeric index) of column names that
-#'   should be printed, where columns are extracted from the data frame.
+#' @param select Determines which columns are printed and the table layout.
+#' There are two options for this argument:
 #'
 #' * **A string expression with layout pattern**
 #'
@@ -261,7 +256,7 @@ format_table <- function(x,
 
   # apply glue-styled formatting
   if (!is.null(select)) {
-    .format_glue_output(
+    .format_glue_table(
       x,
       style = select,
       coef_column = coef_column_name,

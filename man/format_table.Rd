@@ -78,13 +78,9 @@ instead of the written name. This only works on Windows for R >= 4.2, and on
 OS X or Linux for R >= 4.0. It is possible to define a global option for this
 setting, see 'Note'.}
 
-\item{select}{Determines which columns and and which layout columns are
-printed. There are three options for this argument:
+\item{select}{Determines which columns are printed and the table layout.
+There are two options for this argument:
 \itemize{
-\item \strong{Selecting columns by name or index}
-
-\code{select} can be a character vector (or numeric index) of column names that
-should be printed, where columns are extracted from the data frame.
 \item \strong{A string expression with layout pattern}
 
 \code{select} is a string with "tokens" enclosed in braces. These tokens will be
