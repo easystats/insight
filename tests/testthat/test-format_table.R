@@ -150,3 +150,12 @@ test_that("significance stars", {
   expect_snapshot(print(out, stars = TRUE), variant = "windows")
   expect_snapshot(print(out, stars = TRUE, stars_only = TRUE), variant = "windows")
 })
+
+
+test_that("modelbased", {
+  skip_if_not_installed("modelbased")
+  data(iris)
+  model <- lm(Petal.Length ~ Species, data = iris)
+  out <- modelbased::estimate_means(model, "Species")
+  expect_named(format_table(out, select = "minimal"), c("Species", "Mean (CI)"))
+})

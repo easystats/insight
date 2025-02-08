@@ -48,6 +48,12 @@
   }
   ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI"]
   stat_colum <- colnames(x)[colnames(x) %in% c("t", "z", "Chi2", "Statistic") | grepl("^(t\\(|Chi2\\()", colnames(x))]
+  # modelbased
+  focal_term_column <- c(
+    attributes(original_x)$focal_terms,
+    attributes(original_x)$trend,
+    attributes(original_x)$contrast
+  )
 
   # make sure we have a glue-like syntax
   style <- .convert_to_glue_syntax(style, linesep)
@@ -113,7 +119,11 @@
 
   # we want: first parameter, then glue-columns, then remaining columns
   parameter_column <- intersect(
-    c(easystats_columns("parameter"), broom_columns("parameter")),
+    c(
+      easystats_columns("parameter"),
+      broom_columns("parameter"),
+      focal_term_column
+    ),
     colnames(original_x)
   )
   non_parameter_column <- setdiff(colnames(original_x), parameter_column)
