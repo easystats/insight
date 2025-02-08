@@ -82,6 +82,7 @@ test_that("reorder columns BF", {
   )
 })
 
+
 test_that("easystats_columns", {
   expect_identical(
     easystats_columns("uncertainty"),
