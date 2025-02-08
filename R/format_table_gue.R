@@ -94,7 +94,15 @@
 
   # bind glue-columns to original data, but remove former columns first
   original_x[c(coefficient_names, "SE", ci_column, stat_colum, "p", "p.value")] <- NULL
-  cbind(original_x, out)
+
+  # reorder
+  original_x <- standardize_column_order(original_x)
+
+  # we want: first parameter, then glue-columns, then remaining columns
+  parameter_columns <- intersect(easystats_columns("parameter"), colnames(original_x))
+  non_parameter_columns <- setdiff(colnames(original_x), parameter_columns)
+
+  cbind(original_x[parameter_columns], out, original_x[non_parameter_columns])
 }
 
 
