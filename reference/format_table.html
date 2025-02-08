@@ -15,7 +15,7 @@ that format_table() converts all columns into character vectors!"><meta property
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +88,7 @@ that <code>format_table()</code> converts all columns into character vectors!</p
 <span>  preserve_attributes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  exact <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  use_symbols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"insight_use_symbols"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -171,6 +172,45 @@ OS X or Linux for R &gt;= 4.0. It is possible to define a global option for this
 setting, see 'Note'.</p></dd>
 
 
+<dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
+<dd><p>Determines which columns are printed and the table layout.
+There are two options for this argument:</p><ul><li><p><strong>A string expression with layout pattern</strong></p>
+<p><code>select</code> is a string with "tokens" enclosed in braces. These tokens will be
+replaced by their associated columns, where the selected columns will be
+collapsed into one column. Following tokens are replaced by the related
+coefficients or statistics: <code>{estimate}</code>, <code>{se}</code>, <code>{ci}</code> (or <code>{ci_low}</code> and
+<code>{ci_high}</code>), <code>{p}</code>, <code>{pd}</code> and <code>{stars}</code>. The token <code>{ci}</code> will be replaced
+by <code>{ci_low}, {ci_high}</code>. Example: <code>select = "{estimate}{stars} ({ci})"</code></p>
+<p>It is possible to create multiple columns as well. A <code>|</code> separates values
+into new cells/columns. Example: <code>select = "{estimate} ({ci})|{p}"</code>.</p></li>
+<li><p><strong>A string indicating a pre-defined layout</strong></p>
+<p><code>select</code> can be one of the following string values, to create one of the
+following pre-defined column layouts:</p><ul><li><p><code>"minimal"</code>: Estimates, confidence intervals and numeric p-values, in two
+columns. This is equivalent to <code>select = "{estimate} ({ci})|{p}"</code>.</p></li>
+<li><p><code>"short"</code>: Estimate, standard errors and numeric p-values, in two columns.
+This is equivalent to <code>select = "{estimate} ({se})|{p}"</code>.</p></li>
+<li><p><code>"ci"</code>: Estimates and confidence intervals, no asterisks for p-values.
+This is equivalent to <code>select = "{estimate} ({ci})"</code>.</p></li>
+<li><p><code>"se"</code>: Estimates and standard errors, no asterisks for p-values. This is
+equivalent to <code>select = "{estimate} ({se})"</code>.</p></li>
+<li><p><code>"ci_p"</code>: Estimates, confidence intervals and asterisks for p-values. This
+is equivalent to <code>select = "{estimate}{stars} ({ci})"</code>.</p></li>
+<li><p><code>"se_p"</code>: Estimates, standard errors and asterisks for p-values. This is
+equivalent to <code>select = "{estimate}{stars} ({se})"</code>..</p></li>
+</ul></li>
+</ul><p>Using <code>select</code> to define columns will re-order columns and remove all columns
+related to uncertainty (standard errors, confidence intervals), test statistics,
+and p-values (and similar, like <code>pd</code> or <code>BF</code> for Bayesian models), because
+these are assumed to be included or intentionally excluded when using <code>select</code>.
+The new column order will be: Parameter columns first, followed by the "glue"
+columns, followed by all remaining columns. If further columns should also be
+placed first, add those as <code>focal_terms</code> attributes to <code>x</code>. I.e., following
+columns are considers as "parameter columns" and placed first:
+<code>c(easystats_columns("parameter"), attributes(x)$focal_terms)</code>.</p>
+<p><strong>Note:</strong> glue-like syntax is still experimental in the case of more complex models
+(like mixed models) and may not return expected results.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle messages and warnings.</p></dd>
 
@@ -239,6 +279,23 @@ and <a href="https://easystats.github.io/parameters/articles/model_parameters_fo
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 5.31104e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 5.02805e-01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 4.10634e-01</span>
+<span class="r-in"><span><span class="co"># "glue" columns</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">format_table</span><span class="op">(</span><span class="va">x</span>, select <span class="op">=</span> <span class="st">"minimal"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            Parameter   Coefficient (CI)      p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                        (Intercept) 2.64 ( 1.51, 3.77) &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2               Species [versicolor] 0.90 (-0.68, 2.48)  0.261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                Species [virginica] 1.27 (-0.35, 2.88)  0.123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                        Sepal Width 0.69 ( 0.36, 1.02) &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Species [versicolor] × Sepal Width 0.17 (-0.34, 0.69)  0.503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Species [virginica] × Sepal Width 0.21 (-0.29, 0.72)  0.411</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">format_table</span><span class="op">(</span><span class="va">x</span>, select <span class="op">=</span> <span class="st">"{estimate}{stars}|{p}"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            Parameter Coefficient      p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                        (Intercept)     2.64*** &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2               Species [versicolor]        0.90  0.261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                Species [virginica]        1.27  0.123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                        Sepal Width     0.69*** &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Species [versicolor] × Sepal Width        0.17  0.503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Species [virginica] × Sepal Width        0.21  0.411</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">rstanarm</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span></span></span>
