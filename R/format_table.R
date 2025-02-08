@@ -256,7 +256,7 @@ format_table <- function(x,
 
   # apply glue-styled formatting
   if (!is.null(select)) {
-    .format_glue_table(
+    x <- .format_glue_table(
       x,
       style = select,
       coef_column = coef_column_name,

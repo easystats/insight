@@ -6,6 +6,7 @@
                                ...) {
   # evaluate dots
   dots <- list(...)
+  original_x <- x
 
   # default format
   if (!is.null(dots$format)) {
@@ -41,6 +42,7 @@
     coef_column <- intersect(colnames(x), coefficient_names)[1]
   }
   ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI"]
+  stat_colum <- colnames(x)[colnames(x) %in% c("t", "z", "Chi2", "Statistic") | grepl("^(t\\(|Chi2\\()", colnames(x))]
 
   # make sure we have a glue-like syntax
   style <- .convert_to_glue_syntax(style, linesep)
@@ -89,7 +91,10 @@
     i <- gsub("{rope}", "", i, fixed = TRUE)
     i
   })
-  out
+
+  # bind glue-columns to original data, but remove former columns first
+  original_x[c(coefficient_names, "SE", ci_column, stat_colum)] <- NULL
+  cbind(original_x, out)
 }
 
 
