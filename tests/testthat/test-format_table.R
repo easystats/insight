@@ -99,6 +99,10 @@ test_that("format_table with stars freq", {
     out$`Coefficient (SE)`,
     c("2.25*** (0.37)", "1.46*** (0.11)", "1.95*** (0.10)", "0.80*** (0.11)")
   )
+  out <- format_table(x, select = "se_p", new_column_name = "Testname")
+  expect_named(out, c("Parameter", "Testname"))
+  out <- format_table(x, select = "minimal", , new_column_name = "Test")
+  expect_named(out, c("Parameter", "Coefficient (CI) (Test)", "p (Test)"))
 })
 
 
