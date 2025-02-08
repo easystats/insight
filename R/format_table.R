@@ -109,6 +109,9 @@ format_table <- function(x,
   if (missing(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", digits)
   if (missing(ic_digits)) ic_digits <- .additional_arguments(x, "ic_digits", 1)
 
+  # find name of coefficient, if present
+  coef_column_name <- attributes(x)$coef_name
+
   att <- attributes(x)
   x <- as.data.frame(x, stringsAsFactors = FALSE)
 
