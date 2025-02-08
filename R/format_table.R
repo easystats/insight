@@ -65,8 +65,6 @@
 #'   It is possible to create multiple columns as well. A `|` separates values
 #'   into new cells/columns. Example: `select = "{estimate} ({ci})|{p}"`.
 #'
-#'   If `format = "html"`, a `<br>` inserts a line break inside a cell.
-#'
 #' * **A string indicating a pre-defined layout**
 #'
 #'   `select` can be one of the following string values, to create one of the

@@ -96,8 +96,6 @@ coefficients or statistics: \code{{estimate}}, \code{{se}}, \code{{ci}} (or \cod
 
 It is possible to create multiple columns as well. A \code{|} separates values
 into new cells/columns. Example: \code{select = "{estimate} ({ci})|{p}"}.
-
-If \code{format = "html"}, a \verb{<br>} inserts a line break inside a cell.
 \item \strong{A string indicating a pre-defined layout}
 
 \code{select} can be one of the following string values, to create one of the
