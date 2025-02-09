@@ -45,8 +45,8 @@
   if (is.null(coef_column) || !coef_column %in% colnames(x)) {
     coef_column <- intersect(colnames(x), coefficient_names)[1]
   }
-  ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI"]
-  stat_colum <- colnames(x)[colnames(x) %in% c("t", "z", "Chi2", "Statistic") | grepl("^(t\\(|Chi2\\()", colnames(x))]
+  ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI" | colnames(x) == "conf.int"] # nolint
+  stat_colum <- colnames(x)[colnames(x) %in% c("t", "z", "Chi2", "Statistic", "statistic") | grepl("^(t\\(|Chi2\\()", colnames(x))] # nolint
   # modelbased
   focal_term_column <- c(
     attributes(original_x)$focal_terms,
@@ -108,8 +108,9 @@
     i
   })
 
-  # define p-alike columns
+  # define columns that should be removed
   p_column <- unique(c(easystats_columns("p"), broom_columns("p")))
+  df_column <- unique(c(easystats_columns("df"), broom_columns("df")))
   uncertainty_column <- unique(c(
     easystats_columns("uncertainty"),
     broom_columns("uncertainty"),
@@ -117,7 +118,7 @@
   ))
 
   # bind glue-columns to original data, but remove former columns first
-  original_x[c(coefficient_names, uncertainty_column, stat_colum, p_column)] <- NULL
+  original_x[c(coefficient_names, uncertainty_column, stat_colum, p_column, df_column)] <- NULL # nolint
 
   # reorder
   original_x <- standardize_column_order(original_x)

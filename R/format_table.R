@@ -161,8 +161,9 @@ format_table <- function(x,
   # find name of coefficient, if present
   coef_column_name <- attributes(x)$coef_name
   # create p_stars, needed for glue
-  if ("p" %in% colnames(x)) {
-    p_stars <- format_p(x[["p"]], stars = TRUE, stars_only = TRUE)
+  if (any(c("p", "p.value") %in% colnames(x))) {
+    p_col <- ifelse("p" %in% colnames(x), "p", "p.value")
+    p_stars <- format_p(x[[p_col]], stars = TRUE, stars_only = TRUE)
   } else {
     p_stars <- NULL
   }
