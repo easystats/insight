@@ -236,6 +236,8 @@
   style <- .clean_style_pattern(
     x,
     style,
+    ci_low,
+    ci_high,
     se_column,
     p_column,
     rhat_column,
@@ -247,6 +249,8 @@
   final <- .replace_style_with_column(
     x,
     style,
+    ci_low,
+    ci_high,
     coef_column,
     se_column,
     p_column,
@@ -282,6 +286,8 @@
 # this to avoid columns that contain glue-tokens instead of values
 .clean_style_pattern <- function(x,
                                  style,
+                                 ci_low,
+                                 ci_high,
                                  se_column,
                                  p_column,
                                  rhat_column,
@@ -318,6 +324,8 @@
 # with the related content from the original data frame.
 .replace_style_with_column <- function(x,
                                        style,
+                                       ci_low,
+                                       ci_high,
                                        coef_column,
                                        se_column,
                                        p_column,
