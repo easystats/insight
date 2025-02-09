@@ -101,8 +101,23 @@ test_that("format_table with stars freq", {
   )
   out <- format_table(x, select = "se_p", new_column_name = "Testname")
   expect_named(out, c("Parameter", "Testname"))
-  out <- format_table(x, select = "minimal", , new_column_name = "Test")
+  out <- format_table(x, select = "minimal", new_column_name = "Test")
   expect_named(out, c("Parameter", "Coefficient (CI) (Test)", "p (Test)"))
+
+  # glue, broom
+  x_broom <- standardize_names(x, style = "broom")
+  out <- format_table(x_broom, select = "minimal")
+  expect_named(out, c("term", "estimate (CI)", "p"))
+  out <- format_table(x_broom, select = "se_p")
+  expect_named(out, c("term", "estimate (SE)"))
+  expect_identical(
+    out$`estimate (SE)`,
+    c("2.25*** (0.37)", "1.46*** (0.11)", "1.95*** (0.10)", "0.80*** (0.11)")
+  )
+  out <- format_table(x_broom, select = "se_p", new_column_name = "Testname")
+  expect_named(out, c("term", "Testname"))
+  out <- format_table(x_broom, select = "minimal", new_column_name = "Test")
+  expect_named(out, c("term", "estimate (CI) (Test)", "p (Test)"))
 })
 
 

@@ -1,5 +1,4 @@
 # this function does the main composition of columns for the output.
-
 .format_glue_table <- function(x,
                                style,
                                coef_column = NULL,
@@ -46,8 +45,8 @@
   if (is.null(coef_column) || !coef_column %in% colnames(x)) {
     coef_column <- intersect(colnames(x), coefficient_names)[1]
   }
-  ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI"]
-  stat_colum <- colnames(x)[colnames(x) %in% c("t", "z", "Chi2", "Statistic") | grepl("^(t\\(|Chi2\\()", colnames(x))]
+  ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI" | colnames(x) == "conf.int"] # nolint
+  stat_colum <- colnames(x)[colnames(x) %in% c("t", "z", "Chi2", "Statistic", "statistic") | grepl("^(t\\(|Chi2\\()", colnames(x))] # nolint
   # modelbased
   focal_term_column <- c(
     attributes(original_x)$focal_terms,
@@ -109,8 +108,9 @@
     i
   })
 
-  # define p-alike columns
+  # define columns that should be removed
   p_column <- unique(c(easystats_columns("p"), broom_columns("p")))
+  df_column <- unique(c(easystats_columns("df"), broom_columns("df")))
   uncertainty_column <- unique(c(
     easystats_columns("uncertainty"),
     broom_columns("uncertainty"),
@@ -118,7 +118,7 @@
   ))
 
   # bind glue-columns to original data, but remove former columns first
-  original_x[c(coefficient_names, uncertainty_column, stat_colum, p_column)] <- NULL
+  original_x[c(coefficient_names, uncertainty_column, stat_colum, p_column, df_column)] <- NULL # nolint
 
   # reorder
   original_x <- standardize_column_order(original_x)
@@ -138,6 +138,8 @@
 }
 
 
+# this function handles short cuts for "select" and creates the related
+# glue patterns
 .convert_to_glue_syntax <- function(style, linesep = NULL) {
   # set default
   if (is.null(linesep)) {
@@ -183,6 +185,13 @@
 
 
 .format_glue_output <- function(x, coef_column, ci_column, style, format, column_names) {
+  # check whether we have broom styled or easystats styled columns
+  se_column <- ifelse("SE" %in% colnames(x), "SE", "std.error")
+  p_column <- ifelse("p" %in% colnames(x), "p", "p.value")
+  rope_column <- ifelse("ROPE_Percentage" %in% colnames(x), "ROPE_Percentage", "rope.percentage")
+  ess_column <- ifelse("ESS" %in% colnames(x), "ESS", "ess")
+  rhat_column <- ifelse("Rhat" %in% colnames(x), "Rhat", "rhat")
+
   # separate CI columns, for custom layout
   ci <- ci_low <- ci_high <- NULL
   if (!insight::is_empty_object(ci_column)) {
@@ -192,9 +201,9 @@
   }
 
   # fix p-layout
-  if ("p" %in% colnames(x)) {
-    x[["p"]] <- insight::trim_ws(x[["p"]])
-    x[["p"]] <- gsub("< .", "<0.", x[["p"]], fixed = TRUE)
+  if (p_column %in% colnames(x)) {
+    x[[p_column]] <- insight::trim_ws(x[[p_column]])
+    x[[p_column]] <- gsub("< .", "<0.", x[[p_column]], fixed = TRUE)
   }
 
   # handle aliases
@@ -207,32 +216,123 @@
   style <- gsub("{p.value}", "{p}", style, fixed = TRUE)
   style <- gsub("{ci}", "{ci_low}, {ci_high}", style, fixed = TRUE)
 
-  # align columns width for text format
-  .align_values <- function(i) {
-    if (!is.null(i)) {
-      non_empty <- !is.na(i) & nzchar(i, keepNA = TRUE)
-      i[non_empty] <- format(insight::trim_ws(i[non_empty]), justify = "right")
-    }
-    i
-  }
-
   # we put all elements (coefficient, SE, CI, p, ...) in one column.
   # for text format, where columns are not center aligned, this can result in
   # misaligned columns, which looks ugly. So we try to ensure that each element
   # is formatted and justified to the same width
   if (identical(format, "text") || is.null(format)) {
     x[[coef_column]] <- .align_values(x[[coef_column]])
-    x$SE <- .align_values(x$SE)
-    x[["p"]] <- .align_values(x[["p"]])
+    x[[se_column]] <- .align_values(x[[se_column]])
+    x[[p_column]] <- .align_values(x[[p_column]])
     x$p_stars <- .align_values(x$p_stars)
     ci_low <- .align_values(ci_low)
     ci_high <- .align_values(ci_high)
     x$pd <- .align_values(x$pd)
-    x$Rhat <- .align_values(x$Rhat)
-    x$ESS <- .align_values(x$ESS)
-    x$ROPE_Percentage <- .align_values(x$ROPE_Percentage)
+    x[[rhat_column]] <- .align_values(x[[rhat_column]])
+    x[[ess_column]] <- .align_values(x[[ess_column]])
+    x[[rope_column]] <- .align_values(x[[rope_column]])
   }
 
+  # remove non-existent patterns from style
+  style <- .clean_style_pattern(
+    x,
+    style,
+    ci_low,
+    ci_high,
+    se_column,
+    p_column,
+    rhat_column,
+    ess_column,
+    rope_column
+  )
+
+  # replace glue-tokens with columns
+  final <- .replace_style_with_column(
+    x,
+    style,
+    ci_low,
+    ci_high,
+    coef_column,
+    se_column,
+    p_column,
+    rhat_column,
+    ess_column,
+    rope_column
+  )
+
+  # final output
+  x <- data.frame(final)
+  colnames(x) <- column_names
+
+  # sanity check - does column exist?
+  non_existent <- vapply(x, function(i) all(i == style), logical(1))
+  x[non_existent] <- NULL
+
+  x
+}
+
+
+# align columns width for text format
+.align_values <- function(i) {
+  if (!is.null(i)) {
+    non_empty <- !is.na(i) & nzchar(i, keepNA = TRUE)
+    i[non_empty] <- format(insight::trim_ws(i[non_empty]), justify = "right")
+  }
+  i
+}
+
+
+# this function checks if the glue-columns actually exist in the data
+# and if not, these are being removed from the glue-pattern. we need
+# this to avoid columns that contain glue-tokens instead of values
+.clean_style_pattern <- function(x,
+                                 style,
+                                 ci_low,
+                                 ci_high,
+                                 se_column,
+                                 p_column,
+                                 rhat_column,
+                                 ess_column,
+                                 rope_column) {
+  if (!p_column %in% colnames(x) && any(grepl("(\\{p\\}|\\{stars\\})", style))) {
+    style <- gsub("(\\{p\\}|\\{stars\\})", "", style)
+  }
+  if (!se_column %in% colnames(x) && any(grepl("{se}", style, fixed = TRUE))) {
+    style <- gsub("{se}", "", style, fixed = TRUE)
+  }
+  if (!rhat_column %in% colnames(x) && any(grepl("{rhat}", style, fixed = TRUE))) {
+    style <- gsub("{rhat}", "", style, fixed = TRUE)
+  }
+  if (!rope_column %in% colnames(x) && any(grepl("{rope}", style, fixed = TRUE))) {
+    style <- gsub("{rope}", "", style, fixed = TRUE)
+  }
+  if (!ess_column %in% colnames(x) && any(grepl("{ess}", style, fixed = TRUE))) {
+    style <- gsub("{ess}", "", style, fixed = TRUE)
+  }
+  if (!"pd" %in% colnames(x) && any(grepl("{pd}", style, fixed = TRUE))) {
+    style <- gsub("{pd}", "", style, fixed = TRUE)
+  }
+  if (!all(c(ci_low, ci_high) %in% colnames(x)) && any(grepl("{ci_low}, {ci_high}", style, fixed = TRUE))) {
+    style <- gsub("{ci_low}, {ci_high}", "", style, fixed = TRUE)
+  }
+
+  compact_character(style)
+}
+
+
+# we create a data frame with dummy-content, where each column
+# contains the style pattern. here, we replace the style pattern
+# with the related content from the original data frame.
+.replace_style_with_column <- function(x,
+                                       style,
+                                       ci_low,
+                                       ci_high,
+                                       coef_column,
+                                       se_column,
+                                       p_column,
+                                       rhat_column,
+                                       ess_column,
+                                       rope_column) {
   # create new string
   table_row <- rep(style, times = nrow(x))
   for (r in seq_along(table_row)) {
@@ -241,11 +341,11 @@
       table_row[r] <- gsub("{ci_low}", ci_low[r], table_row[r], fixed = TRUE)
       table_row[r] <- gsub("{ci_high}", ci_high[r], table_row[r], fixed = TRUE)
     }
-    if ("SE" %in% colnames(x)) {
-      table_row[r] <- gsub("{se}", x[["SE"]][r], table_row[r], fixed = TRUE)
+    if (se_column %in% colnames(x)) {
+      table_row[r] <- gsub("{se}", x[[se_column]][r], table_row[r], fixed = TRUE)
     }
-    if ("p" %in% colnames(x)) {
-      table_row[r] <- gsub("{p}", x[["p"]][r], table_row[r], fixed = TRUE)
+    if (p_column %in% colnames(x)) {
+      table_row[r] <- gsub("{p}", x[[p_column]][r], table_row[r], fixed = TRUE)
     }
     if ("p_stars" %in% colnames(x)) {
       table_row[r] <- gsub("{stars}", x[["p_stars"]][r], table_row[r], fixed = TRUE)
@@ -253,14 +353,14 @@
     if ("pd" %in% colnames(x)) {
       table_row[r] <- gsub("{pd}", x[["pd"]][r], table_row[r], fixed = TRUE)
     }
-    if ("Rhat" %in% colnames(x)) {
-      table_row[r] <- gsub("{rhat}", x[["Rhat"]][r], table_row[r], fixed = TRUE)
+    if (rhat_column %in% colnames(x)) {
+      table_row[r] <- gsub("{rhat}", x[[rhat_column]][r], table_row[r], fixed = TRUE)
     }
-    if ("ESS" %in% colnames(x)) {
-      table_row[r] <- gsub("{ess}", x[["ESS"]][r], table_row[r], fixed = TRUE)
+    if (ess_column %in% colnames(x)) {
+      table_row[r] <- gsub("{ess}", x[[ess_column]][r], table_row[r], fixed = TRUE)
     }
-    if ("ROPE_Percentage" %in% colnames(x)) {
-      table_row[r] <- gsub("{rope}", x[["ROPE_Percentage"]][r], table_row[r], fixed = TRUE)
+    if (rope_column %in% colnames(x)) {
+      table_row[r] <- gsub("{rope}", x[[rope_column]][r], table_row[r], fixed = TRUE)
     }
   }
 
@@ -273,15 +373,7 @@
   table_row <- gsub("= <", "<", table_row, fixed = TRUE)
   table_row <- gsub("= ", "=", table_row, fixed = TRUE)
 
-  # final output
-  x <- data.frame(table_row)
-  colnames(x) <- column_names
-
-  # sanity check - does column exist?
-  non_existent <- vapply(x, function(i) all(i == style), logical(1))
-  x[non_existent] <- NULL
-
-  x
+  table_row
 }
 
 
