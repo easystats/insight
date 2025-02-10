@@ -15,7 +15,7 @@ that format_table() converts all columns into character vectors!"><meta property
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -281,13 +281,13 @@ and <a href="https://easystats.github.io/parameters/articles/model_parameters_fo
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 4.10634e-01</span>
 <span class="r-in"><span><span class="co"># "glue" columns</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">format_table</span><span class="op">(</span><span class="va">x</span>, select <span class="op">=</span> <span class="st">"minimal"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            Parameter Coefficient (CI)      p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                        (Intercept)             2.64 &lt;0.001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2               Species [versicolor]             0.90  0.261</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                Species [virginica]             1.27  0.123</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                        Sepal Width             0.69 &lt;0.001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Species [versicolor] × Sepal Width             0.17  0.503</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Species [virginica] × Sepal Width             0.21  0.411</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            Parameter   Coefficient (CI)      p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                        (Intercept) 2.64 ( 1.51, 3.77) &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2               Species [versicolor] 0.90 (-0.68, 2.48)  0.261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                Species [virginica] 1.27 (-0.35, 2.88)  0.123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                        Sepal Width 0.69 ( 0.36, 1.02) &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Species [versicolor] × Sepal Width 0.17 (-0.34, 0.69)  0.503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  Species [virginica] × Sepal Width 0.21 (-0.29, 0.72)  0.411</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">format_table</span><span class="op">(</span><span class="va">x</span>, select <span class="op">=</span> <span class="st">"{estimate}{stars}|{p}"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                            Parameter Coefficient      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                        (Intercept)     2.64*** &lt;0.001</span>
