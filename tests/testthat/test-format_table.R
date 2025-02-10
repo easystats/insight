@@ -173,6 +173,7 @@ test_that("modelbased", {
   model <- lm(Petal.Length ~ Species, data = iris)
   out <- modelbased::estimate_means(model, "Species")
   expect_named(format_table(out, select = "minimal"), c("Species", "Mean (CI)"))
+  expect_identical(format_table(out, select = "minimal")[2, 2], "4.26 (4.14, 4.38)")
 
   data(mtcars)
   model <- lm(wt ~ qsec + mpg, dat = mtcars)

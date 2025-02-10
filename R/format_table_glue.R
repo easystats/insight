@@ -312,7 +312,7 @@
   if (!"pd" %in% colnames(x) && any(grepl("{pd}", style, fixed = TRUE))) {
     style <- gsub("{pd}", "", style, fixed = TRUE)
   }
-  if (!all(c(ci_low, ci_high) %in% colnames(x)) && any(grepl("{ci_low}, {ci_high}", style, fixed = TRUE))) {
+  if (is.null(ci_low) && is.null(ci_high) && any(grepl("{ci_low}, {ci_high}", style, fixed = TRUE))) {
     style <- gsub("{ci_low}, {ci_high}", "", style, fixed = TRUE)
   }
 
