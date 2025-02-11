@@ -185,7 +185,7 @@ test_that("get_datagrid - data", {
     stringsAsFactors = FALSE
   ), by = "Y", factors = "mode", length = 5)), 5L)
 
-    expect_identical(nrow(get_datagrid(iris, by = c("Sepal.Length = 3", "Species"))), 3L)
+  expect_identical(nrow(get_datagrid(iris, by = c("Sepal.Length = 3", "Species"))), 3L)
   expect_identical(nrow(get_datagrid(iris, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))), 2L)
 
   x1 <- get_datagrid(iris, by = c("Species", "Sepal.Length"), length = 30, preserve_range = TRUE)
