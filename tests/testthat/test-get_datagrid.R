@@ -511,3 +511,24 @@ test_that("get_datagrid - include weights", {
   d <- insight::get_datagrid(m, "Days")
   expect_named(d, c("Days", "Subject"))
 })
+
+
+test_that("get_datagrid - handle integers", {
+  d <- data.frame(
+    x = 1:8,
+    y = letters[1:8]
+  )
+  expect_identical(dim(get_datagrid(d)), c(64L, 2L)) # 8^2
+  expect_identical(dim(get_datagrid(d, range = "grid")), c(64L, 2L))
+  expect_identical(dim(get_datagrid(d, length = 5)), c(40L, 2L))
+
+  d <- data.frame(
+    x = 1:8,
+    y = 21:28,
+    z = letters[1:8]
+  )
+  expect_identical(dim(get_datagrid(d)), c(512L, 3L)) # 8^3
+  expect_identical(dim(get_datagrid(d, range = "grid")), c(192L, 3L)) # 8 * 3 * 8
+  expect_identical(dim(get_datagrid(d, length = 5)), c(200L, 3L))
+  expect_identical(dim(get_datagrid(d, length = 5, range = "grid")), c(120L, 3L))
+})

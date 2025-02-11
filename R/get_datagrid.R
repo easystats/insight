@@ -819,7 +819,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
       } else if (length(parts) == 1) {
         # If one, might be a shortcut. or a sampling request
         if (grepl("sample", parts, fixed = TRUE)) {
-          n_to_sample <- .safe(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))
+          n_to_sample <- suppressWarnings(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))
           # do we have a proper definition of the sample size? If not, error
           if (is.null(n_to_sample) || is.na(n_to_sample) || !length(n_to_sample)) {
             format_error("The token `sample` must be followed by the number of samples to be drawn, e.g. `[sample 15]`.") # nolint
@@ -958,9 +958,17 @@ get_datagrid.comparisons <- get_datagrid.slopes
   # check if range = "grid" - then use mean/sd for every numeric that
   # is not first predictor...
   if (range == "grid") {
-    range <- "sd"
+    # if not first predictor, we want range = "sd" and length 3, i.e. numerics
+    # at 2nd or 3rd position should represent 3 value (mean +/- 1 SD). we set
+    # range to "sd" later, because we do *not* want SD when the first predictor
+    # is of type intefer
     if (isFALSE(list(...)$is_first_predictor)) {
       length <- 3
+    }
+    if (isTRUE(list(...)$is_first_predictor) && all(.is_integer(x)) && n_unique(x) < length) {
+      length <- n_unique(x)
+    } else {
+      range <- "sd"
     }
   }
 
