@@ -120,12 +120,15 @@ should increase the \code{length} argument.}
 \item{reference}{The reference vector from which to compute the mean and SD.
 Used when standardizing or unstandardizing the grid using \code{effectsize::standardize}.}
 
-\item{length}{Length of numeric target variables selected in \code{by}. This arguments
-controls the number of (equally spread) values that will be taken to represent the
-continuous variables. A longer length will increase precision, but can also
-substantially increase the size of the datagrid (especially in case of interactions).
-If \code{NA}, will return all the unique values. In case of multiple continuous target
-variables, \code{length} can also be a vector of different values (see examples).}
+\item{length}{Length of numeric target variables selected in \code{by}. This
+arguments controls the number of (equally spread) values that will be taken
+to represent the continuous (non-integer alike!) variables. A longer length
+will increase precision, but can also substantially increase the size of
+the datagrid (especially in case of interactions). If \code{NA}, will return all
+the unique values. In case of multiple continuous target variables,
+\code{length} can also be a vector of different values (see 'Examples'). \code{length}
+is ignored for integer type variables only when \code{length} is larger than the
+number of unique values \emph{and} when \code{range = "range"}.}
 
 \item{range}{Option to control the representative values given in \code{by}, if
 no specific values were provided. Use in combination with the \code{length} argument

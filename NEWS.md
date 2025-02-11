@@ -1,5 +1,10 @@
 # insight (devel)
 
+## Breaking Changes
+
+* `get_datagrid()` no longer creates fractional parts when creating a range of
+  values for numeric variables that are integers.
+
 ## Changes
 
 * `get_datagrid()` now includes a dummy column for model weights (values `NA`),

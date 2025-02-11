@@ -61,12 +61,15 @@
 #'
 #'   The remaining variables not specified in `by` will be fixed (see also arguments
 #'   `factors` and `numerics`).
-#' @param length Length of numeric target variables selected in `by`. This arguments
-#'   controls the number of (equally spread) values that will be taken to represent the
-#'   continuous variables. A longer length will increase precision, but can also
-#'   substantially increase the size of the datagrid (especially in case of interactions).
-#'   If `NA`, will return all the unique values. In case of multiple continuous target
-#'   variables, `length` can also be a vector of different values (see examples).
+#' @param length Length of numeric target variables selected in `by`. This
+#'   arguments controls the number of (equally spread) values that will be taken
+#'   to represent the continuous (non-integer alike!) variables. A longer length
+#'   will increase precision, but can also substantially increase the size of
+#'   the datagrid (especially in case of interactions). If `NA`, will return all
+#'   the unique values. In case of multiple continuous target variables,
+#'   `length` can also be a vector of different values (see 'Examples'). `length`
+#'   is ignored for integer type variables only when `length` is larger than the
+#'   number of unique values *and* when `range = "range"`.
 #' @param range Option to control the representative values given in `by`, if
 #'   no specific values were provided. Use in combination with the `length` argument
 #'   to control the number of values within the specified range. `range` can be
@@ -942,7 +945,10 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 #' @keywords internal
 .create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
-  range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid"))
+  range <- validate_argument(
+    tolower(range),
+    c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid")
+  )
 
   # bayestestR only for some options
   if (range %in% c("ci", "hdi", "eti")) {
@@ -956,6 +962,13 @@ get_datagrid.comparisons <- get_datagrid.slopes
     if (isFALSE(list(...)$is_first_predictor)) {
       length <- 3
     }
+  }
+
+  # for integer values, we don't want a range with fractions, so we shorten
+  # length if necessary. This means, for numerics with, say, two or three values,
+  # we still have these two or three values after creating the spread
+  if (all(.is_integer(x)) && n_unique(x) < length && range == "range") {
+    length <- n_unique(x)
   }
 
   # If Range is a dispersion (e.g., SD or MAD)
