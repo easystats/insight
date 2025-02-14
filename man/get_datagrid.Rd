@@ -19,10 +19,11 @@ get_datagrid(x, ...)
   reference = x,
   length = 10,
   range = "range",
+  digits = 3,
   ...
 )
 
-\method{get_datagrid}{numeric}(x, length = 10, range = "range", ...)
+\method{get_datagrid}{numeric}(x, length = 10, range = "range", digits = 3, ...)
 
 \method{get_datagrid}{factor}(x, ...)
 
@@ -37,6 +38,7 @@ get_datagrid(x, ...)
   include_random = FALSE,
   include_response = FALSE,
   data = NULL,
+  digits = 3,
   verbose = TRUE,
   ...
 )
@@ -155,6 +157,10 @@ indicated in \code{length} are generated. For numeric predictors not specified a
 first in \code{by}, mean and -1/+1 SD around the mean are returned. For factors,
 all levels are returned.
 }}
+
+\item{digits}{Number of digits used for rounding numneric values when \code{by} is
+a token. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to
+\code{digits}.}
 
 \item{include_smooth}{If \code{x} is a model object, decide whether smooth terms
 should be included in the data grid or not.}
