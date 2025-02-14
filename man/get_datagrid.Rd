@@ -158,8 +158,8 @@ first in \code{by}, mean and -1/+1 SD around the mean are returned. For factors,
 all levels are returned.
 }}
 
-\item{digits}{Number of digits used for rounding numeric values when \code{by} is
-a token. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to
+\item{digits}{Number of digits used for rounding numeric values specified in
+\code{by}. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to
 \code{digits}.}
 
 \item{include_smooth}{If \code{x} is a model object, decide whether smooth terms
@@ -186,8 +186,8 @@ Reference grid data frame.
 }
 \description{
 Create a reference matrix, useful for visualisation, with evenly spread and
-combined values. Usually used to make generate predictions using
-\code{\link[=get_predicted]{get_predicted()}}. See this
+combined values. Usually used to generate predictions using \code{\link[=get_predicted]{get_predicted()}}.
+See this
 \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{vignette}
 for a tutorial on how to create a visualisation matrix using this function.
 
