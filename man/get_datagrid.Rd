@@ -158,7 +158,7 @@ first in \code{by}, mean and -1/+1 SD around the mean are returned. For factors,
 all levels are returned.
 }}
 
-\item{digits}{Number of digits used for rounding numneric values when \code{by} is
+\item{digits}{Number of digits used for rounding numeric values when \code{by} is
 a token. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to
 \code{digits}.}
 
@@ -214,6 +214,7 @@ get_datagrid(iris[2:150, ],
 get_datagrid(iris, by = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
 get_datagrid(iris, by = "Sepal.Length = [0, 1]") # Manually change min/max
 get_datagrid(iris, by = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+get_datagrid(iris, by = "Sepal.Length = [sd]", digits = 1) # rounded to 1 digit
 # identical to previous line: -1 SD, mean and +1 SD
 get_datagrid(iris, by = "Sepal.Length", range = "sd", length = 3)
 get_datagrid(iris, by = "Sepal.Length = [quartiles]") # quartiles

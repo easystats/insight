@@ -120,7 +120,7 @@
 #'   variable should be included in the data grid or not.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
-#' @param digits Number of digits used for rounding numneric values when `by` is
+#' @param digits Number of digits used for rounding numeric values when `by` is
 #' a token. E.g., `x = [sd]` will round the mean and +-/1 SD in the data grid to
 #' `digits`.
 #' @param verbose Toggle warnings.
