@@ -21,7 +21,7 @@ methods for more info).'><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -376,9 +376,9 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-in"><span><span class="co"># identical to previous line: -1 SD, mean and +1 SD</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"sd"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     5.015267    3.057333        3.758    1.199333  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     5.843333    3.057333        3.758    1.199333  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     6.671399    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        5.015    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        5.843    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        6.671    3.057333        3.758    1.199333  setosa</span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length = [quartiles]"</span><span class="op">)</span> <span class="co"># quartiles</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          4.3    3.057333        3.758    1.199333  setosa</span>
@@ -391,59 +391,59 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-in"><span><span class="co"># default spread length = 10</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length    Species Sepal.Width Petal.Length Petal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      2.531069     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      3.359135     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      4.187201     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      5.015267     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5.843333     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6.671399     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7.499466     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8.327532     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9.155598     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     9.983664     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11     2.531069 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12     3.359135 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13     4.187201 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14     5.015267 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15     5.843333 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16     6.671399 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17     7.499466 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18     8.327532 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19     9.155598 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20     9.983664 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21     2.531069  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22     3.359135  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23     4.187201  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24     5.015267  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25     5.843333  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26     6.671399  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27     7.499466  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28     8.327532  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29     9.155598  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30     9.983664  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         2.531     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         3.359     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         4.187     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         5.015     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         5.843     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         6.671     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         7.499     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         8.328     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9         9.156     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10        9.984     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11        2.531 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12        3.359 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13        4.187 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        5.015 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15        5.843 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16        6.671 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17        7.499 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18        8.328 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19        9.156 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20        9.984 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21        2.531  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22        3.359  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23        4.187  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24        5.015  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25        5.843  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26        6.671  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27        7.499  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28        8.328  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29        9.156  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30        9.984  virginica    3.057333        3.758    1.199333</span>
 <span class="r-in"><span><span class="co"># default spread length = 3 (-1 SD, mean and +1 SD)</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Length"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     setosa     5.015267    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     setosa     5.843333    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     setosa     6.671399    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 versicolor     5.015267    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 versicolor     5.843333    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 versicolor     6.671399    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  virginica     5.015267    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  virginica     5.843333    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  virginica     6.671399    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     setosa        5.015    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     setosa        5.843    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     setosa        6.671    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 versicolor        5.015    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 versicolor        5.843    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 versicolor        6.671    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  virginica        5.015    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  virginica        5.843    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  virginica        6.671    3.057333        3.758    1.199333</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Standardization and unstandardization</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"sd"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">Sepal.Length</span> <span class="co"># It is a named vector (extract names with `names(out$Sepal.Length)`)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    -1 SD     Mean    +1 SD </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.015267 5.843333 6.671399 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -1 SD  Mean +1 SD </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.015 5.843 6.671 </span>
 <span class="r-in"><span><span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           -1    3.057333        3.758    1.199333  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2            0    3.057333        3.758    1.199333  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3            1    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.0003226860    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.0004025443    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.9995175973    3.057333        3.758    1.199333  setosa</span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length = c(-2, 0, 2)"</span><span class="op">)</span> <span class="co"># Manually specify values</span></span></span>
 <span class="r-in"><span><span class="va">data</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
