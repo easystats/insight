@@ -10,6 +10,9 @@
 * `get_datagrid()` now includes a dummy column for model weights (values `NA`),
   to work with models that used weights.
 
+* `get_datagrid()` gets a `digits` argument, to round numeric representative
+  values.
+
 * Argument `ci_digits` defaults to `digits` in `format_table()`.
 
 * `format_table()` gets a `select` argument, which can be used to select columns

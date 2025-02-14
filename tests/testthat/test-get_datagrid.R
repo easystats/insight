@@ -34,20 +34,25 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   dg <- insight::get_datagrid(m, "Petal.Width = [meansd]")
   .center <- mean(iris$Petal.Width)
   .spread <- sd(iris$Petal.Width)
-  expect_equal(dg$Petal.Width, .center + c(-1, 0, 1) * .spread, tolerance = 1e-4)
+  expect_equal(dg$Petal.Width, round(.center + c(-1, 0, 1) * .spread, 3), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [terciles]")
-  expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width, probs = (0:3) / 3)), tolerance = 1e-4)
+  expect_equal(dg$Petal.Width, unname(round(quantile(iris$Petal.Width, probs = (0:3) / 3), 3)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [terciles2]")
-  expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width, probs = (1:2) / 3)), tolerance = 1e-4)
+  expect_equal(dg$Petal.Width, unname(round(quantile(iris$Petal.Width, probs = (1:2) / 3), 3)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [fivenum]")
   expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
+
+  dg <- insight::get_datagrid(iris, by = "Petal.Width = [meansd]")
+  expect_equal(dg$Petal.Width, c(0.437, 1.199, 1.962), tolerance = 1e-5)
+  dg <- insight::get_datagrid(iris, by = "Petal.Width = [meansd]", digits = 1)
+  expect_equal(dg$Petal.Width, c(0.4, 1.2, 2.0), tolerance = 1e-5)
 
   set.seed(123)
   dg <- insight::get_datagrid(m, "Petal.Width = [sample 8]")
