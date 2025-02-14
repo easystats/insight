@@ -49,6 +49,11 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
+  dg <- insight::get_datagrid(iris, by = "Petal.Width = [meansd]")
+  expect_equal(dg$Petal.Width, c(0.437, 1.199, 1.962), tolerance = 1e-5)
+  dg <- insight::get_datagrid(iris, by = "Petal.Width = [meansd]", digits = 1)
+  expect_equal(dg$Petal.Width, c(0.4, 1.2, 2.0), tolerance = 1e-5)
+
   set.seed(123)
   dg <- insight::get_datagrid(m, "Petal.Width = [sample 8]")
   set.seed(123)
