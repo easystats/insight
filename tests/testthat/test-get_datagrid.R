@@ -42,7 +42,7 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [terciles2]")
-  expect_equal(dg$Petal.Width, unname(round(quantile(iris$Petal.Width, probs = (1:2) / 3, 3))), tolerance = 1e-4)
+  expect_equal(dg$Petal.Width, unname(round(quantile(iris$Petal.Width, probs = (1:2) / 3), 3)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [fivenum]")
