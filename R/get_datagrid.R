@@ -449,8 +449,7 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", digits = 3, ..
   }
 
   # Create a spread
-  out <- .create_spread(x, length = length, range = range, ...)
-  out
+  .create_spread(x, length = length, range = range, digits = digits, ...)
 }
 
 #' @export
@@ -952,7 +951,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 
 #' @keywords internal
-.create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
+.create_spread <- function(x, length = 10, range = "range", ci = 0.95, digits = 3, ...) {
   range <- validate_argument(
     tolower(range),
     c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid")
@@ -1003,7 +1002,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
         ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median") # nolint
       )
     }
-    out <- center + spread * disp
+    out <- round(center + spread * disp, digits)
     names(out) <- labs
 
     return(out)
@@ -1029,7 +1028,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
     mini <- min(x, na.rm = TRUE)
     maxi <- max(x, na.rm = TRUE)
   }
-  seq(mini, maxi, length.out = length)
+  round(seq(mini, maxi, length.out = length), digits)
 }
 
 
