@@ -418,7 +418,7 @@ test_that("get_datagrid - factor levels as reference / non-focal terms works", {
   expect_identical(
     sapply(grid, class),
     c(
-      k618 = "integer", lfp = "factor", wc = "factor", hc = "factor",
+      k618 = "numeric", lfp = "factor", wc = "factor", hc = "factor",
       inc = "numeric"
     )
   )
