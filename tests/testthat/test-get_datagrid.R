@@ -155,15 +155,15 @@ test_that("get_datagrid - data", {
   expect_length(get_datagrid(x = iris$Sepal.Length), 10)
   expect_length(get_datagrid(x = iris$Sepal.Length, length = 5), 5)
   expect_length(get_datagrid(x = iris$Sepal.Length, length = NA), length(unique(iris$Sepal.Length)))
-  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "iqr")), as.numeric(quantile(iris$Sepal.Length, 0.025))) # nolint
-  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "hdi")), as.numeric(bayestestR::hdi(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2]) # nolint
-  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "eti")), as.numeric(bayestestR::eti(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2]) # nolint
+  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "iqr", digits = 15)), as.numeric(quantile(iris$Sepal.Length, 0.025))) # nolint
+  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "hdi", digits = 15)), as.numeric(bayestestR::hdi(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2]) # nolint
+  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "eti", digits = 15)), as.numeric(bayestestR::eti(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2]) # nolint
   expect_length(get_datagrid(iris$Sepal.Length, by = "c(1, 3, 4)"), 3)
   expect_length(get_datagrid(iris$Sepal.Length, by = "A = c(1, 3, 4)"), 3)
   expect_length(get_datagrid(iris$Sepal.Length, by = "[1, 3, 4]"), 3)
   expect_length(get_datagrid(iris$Sepal.Length, by = "[1, 4]"), 10)
   expect_length(get_datagrid(iris$Sepal.Length, range = "sd", length = 10), 10)
-  expect_identical(as.numeric(get_datagrid(iris$Sepal.Length, range = "sd", length = 3)[2]), mean(iris$Sepal.Length))
+  expect_identical(as.numeric(get_datagrid(iris$Sepal.Length, range = "sd", length = 3)[2]), round(mean(iris$Sepal.Length), 3))
   expect_identical(as.numeric(get_datagrid(iris$Sepal.Length, range = "mad", length = 4)[2]), median(iris$Sepal.Length))
 
   # Dataframes
