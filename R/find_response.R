@@ -124,6 +124,26 @@ find_response.mediate <- function(x, combine = TRUE, ...) {
 }
 
 
+#' @export
+find_response.tune_results <- function(x, combine = TRUE, ...) {
+  att <- attributes(x)
+  if (any(names(att) == "outcomes")) {
+    resp <- att$outcomes
+  } else {
+    return(NULL)
+  }
+  check_cbind(resp, combine, model = x)
+}
+
+
+#' @export
+find_response.workflow <- function(x, combine = TRUE, ...) {
+  insight::check_if_installed("tune")
+  resp <- tune::outcome_names(x)
+  check_cbind(resp, combine, model = x)
+}
+
+
 #' @rdname find_response
 #' @export
 find_response.mjoint <- function(x, combine = TRUE, component = c("conditional", "survival", "all"), ...) {

@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.0.2.11
+Version: 1.0.2.12
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -205,6 +205,7 @@ Suggests:
     tinytable (>= 0.1.0),
     TMB,
     truncreg,
+    tune,
     tweedie,
     VGAM,
     WeightIt,
