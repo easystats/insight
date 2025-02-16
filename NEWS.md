@@ -18,6 +18,8 @@
 * `format_table()` gets a `select` argument, which can be used to select columns
   and column layout in a glue-like style.
 
+* `find_response()` now also works for _tidymodels_ workflows.
+
 # insight 1.0.2
 
 ## Changes
