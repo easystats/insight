@@ -274,7 +274,7 @@ get_predicted.default <- function(x,
   if (is.null(predictions)) {
     out <- NULL
   } else {
-    out <- .get_predicted_transform(x, predictions, my_args = my_args, ci_data, verbose = verbose)
+    out <- .get_predicted_transform(x, predictions, my_args = my_args, ci_data, verbose = verbose, ...)
   }
 
   # 4. step: final preparation
@@ -360,7 +360,7 @@ get_predicted.lm <- function(x,
   )
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose)
+  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
 
   # 4. step: final preparation
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
@@ -692,7 +692,7 @@ get_predicted.phylolm <- function(x,
   if (isTRUE(my_args$transform)) {
     # retrieve link-inverse, for back transformation...
     if (is.null(link_inv)) {
-      link_inv <- link_inverse(x)
+      link_inv <- .link_inverse(model = x, verbose = verbose, ...)
     }
 
     if (!is.null(ci_data)) {
@@ -747,6 +747,89 @@ get_predicted.phylolm <- function(x,
   }
 
   list(predictions = predictions, ci_data = ci_data)
+}
+
+
+# internal to return possibly bias correct link-function
+.link_inverse <- function(model = NULL,
+                          bias_correction = FALSE,
+                          sigma = NULL,
+                          verbose = TRUE,
+                          ...) {
+  if (isTRUE(bias_correction)) {
+    dots <- list(...)
+    if (!is.null(sigma) && !is.na(sigma)) {
+      residual_variance <- sigma^2
+    } else {
+      residual_variance <- NULL
+    }
+    l <- .bias_correction(model, residual_variance, verbose)$linkinv
+    if (is.null(l)) {
+      l <- link_inverse(model)
+    }
+  } else {
+    l <- link_inverse(model)
+  }
+  l
+}
+
+
+# apply bias-correction for back-transformation of predictions on the link-scale
+# we want sigma^2 (residual_variance) here to calculate the correction
+.bias_correction <- function(model = NULL, residual_variance = NULL, verbose = TRUE) {
+  # we need a model object
+  if (is.null(model)) {
+    return(NULL)
+  }
+  # extract residual variance, if not provided
+  if (is.null(residual_variance)) {
+    residual_variance <- .get_residual_variance(model) # returns sigma^2
+  }
+  # we need residual variance
+  if (is.null(residual_variance)) {
+    if (verbose) {
+      format_alert("Could not extract residual variance to apply bias correction. No bias adjustment carried out.") # nolint
+    }
+    return(NULL)
+  }
+
+  # extract current link function
+  link <- .safe(get_family(model))
+  # we need a link function
+  if (is.null(link)) {
+    if (verbose) {
+      format_alert("Could not extract information about the model's link-function to apply bias correction. No bias adjustment carried out.") # nolint
+    }
+    return(NULL)
+  }
+
+  link$inv <- link$linkinv
+  link$der <- link$mu.eta
+  link$residual_variance <- residual_variance / 2
+
+  link$der2 <- function(eta) {
+    with(link, 1000 * (der(eta + 5e-4) - der(eta - 5e-4)))
+  }
+  link$linkinv <- function(eta) {
+    with(link, inv(eta) + residual_variance * der2(eta))
+  }
+  link$mu.eta <- function(eta) {
+    with(link, der(eta) + 1000 * residual_variance * (der2(eta + 5e-4) - der2(eta - 5e-4)))
+  }
+  link
+}
+
+
+.get_residual_variance <- function(x) {
+  if (is_mixed_model(x)) {
+    out <- .safe(get_variance_residual(x))
+  } else {
+    out <- .safe(.get_sigma(x, no_recursion = TRUE, verbose = FALSE)^2, 0)
+    if (!length(out)) {
+      out <- 0
+    }
+  }
+  out
 }
 
 

@@ -4,7 +4,7 @@
 \alias{get_sigma}
 \title{Get residual standard deviation from models}
 \usage{
-get_sigma(x, ci = NULL, verbose = TRUE)
+get_sigma(x, ci = NULL, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}
@@ -12,6 +12,8 @@ get_sigma(x, ci = NULL, verbose = TRUE)
 \item{ci}{Scalar, the CI level. The default (\code{NULL}) returns no CI.}
 
 \item{verbose}{Toggle messages and warnings.}
+
+\item{...}{For internal use.}
 }
 \value{
 The residual standard deviation (sigma), or \code{NULL} if this
