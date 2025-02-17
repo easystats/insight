@@ -7,7 +7,7 @@
 \usage{
 standardize_column_order(data, ...)
 
-\method{standardize_column_order}{parameters_model}(data, style = c("easystats", "broom"), ...)
+\method{standardize_column_order}{parameters_model}(data, style = "easystats", ...)
 }
 \arguments{
 \item{data}{A data frame. In particular, objects from \emph{easystats}

@@ -45,6 +45,51 @@
 #'   `stars = "BF"` to only add stars to the Bayes factor and exclude the `pd`
 #'   column. Currently, following columns are recognized: `"BF"`, `"pd"` and `"p"`.
 #' @param stars_only If `TRUE`, return significant stars only (and no p-values).
+#' @param select Determines which columns are printed and the table layout.
+#' There are two options for this argument:
+#'
+#' * **A string expression with layout pattern**
+#'
+#'   `select` is a string with "tokens" enclosed in braces. These tokens will be
+#'   replaced by their associated columns, where the selected columns will be
+#'   collapsed into one column. Following tokens are replaced by the related
+#'   coefficients or statistics: `{estimate}`, `{se}`, `{ci}` (or `{ci_low}` and
+#'   `{ci_high}`), `{p}`, `{pd}` and `{stars}`. The token `{ci}` will be replaced
+#'   by `{ci_low}, {ci_high}`. Example: `select = "{estimate}{stars} ({ci})"`
+#'
+#'   It is possible to create multiple columns as well. A `|` separates values
+#'   into new cells/columns. Example: `select = "{estimate} ({ci})|{p}"`.
+#'
+#' * **A string indicating a pre-defined layout**
+#'
+#'   `select` can be one of the following string values, to create one of the
+#'   following pre-defined column layouts:
+#'
+#'   - `"minimal"`: Estimates, confidence intervals and numeric p-values, in two
+#'     columns. This is equivalent to `select = "{estimate} ({ci})|{p}"`.
+#'   - `"short"`: Estimate, standard errors and numeric p-values, in two columns.
+#'     This is equivalent to `select = "{estimate} ({se})|{p}"`.
+#'   - `"ci"`: Estimates and confidence intervals, no asterisks for p-values.
+#'     This is equivalent to `select = "{estimate} ({ci})"`.
+#'   - `"se"`: Estimates and standard errors, no asterisks for p-values. This is
+#'     equivalent to `select = "{estimate} ({se})"`.
+#'   - `"ci_p"`: Estimates, confidence intervals and asterisks for p-values. This
+#'     is equivalent to `select = "{estimate}{stars} ({ci})"`.
+#'   - `"se_p"`: Estimates, standard errors and asterisks for p-values. This is
+#'     equivalent to `select = "{estimate}{stars} ({se})"`..
+#'
+#' Using `select` to define columns will re-order columns and remove all columns
+#' related to uncertainty (standard errors, confidence intervals), test statistics,
+#' and p-values (and similar, like `pd` or `BF` for Bayesian models), because
+#' these are assumed to be included or intentionally excluded when using `select`.
+#' The new column order will be: Parameter columns first, followed by the "glue"
+#' columns, followed by all remaining columns. If further columns should also be
+#' placed first, add those as `focal_terms` attributes to `x`. I.e., following
+#' columns are considers as "parameter columns" and placed first:
+#' `c(easystats_columns("parameter"), attributes(x)$focal_terms)`.
+#'
+#' **Note:** glue-like syntax is still experimental in the case of more complex models
+#' (like mixed models) and may not return expected results.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams format_p
 #' @inheritParams format_value
@@ -63,6 +108,9 @@
 #' x <- parameters::model_parameters(m)
 #' as.data.frame(format_table(x))
 #' as.data.frame(format_table(x, p_digits = "scientific"))
+#' # "glue" columns
+#' as.data.frame(format_table(x, select = "minimal"))
+#' as.data.frame(format_table(x, select = "{estimate}{stars}|{p}"))
 #'
 #' \donttest{
 #' model <- rstanarm::stan_glm(
@@ -84,14 +132,15 @@ format_table <- function(x,
                          digits = 2,
                          ci_width = "auto",
                          ci_brackets = TRUE,
-                         ci_digits = 2,
+                         ci_digits = digits,
                          p_digits = 3,
-                         rope_digits = 2,
+                         rope_digits = digits,
                          ic_digits = 1,
                          zap_small = FALSE,
                          preserve_attributes = FALSE,
                          exact = TRUE,
                          use_symbols = getOption("insight_use_symbols", FALSE),
+                         select = NULL,
                          verbose = TRUE,
                          ...) {
   # validation check
@@ -104,10 +153,20 @@ format_table <- function(x,
 
   # check if user supplied digits attributes
   if (missing(digits)) digits <- .additional_arguments(x, "digits", 2)
-  if (missing(ci_digits)) ci_digits <- .additional_arguments(x, "ci_digits", 2)
+  if (missing(ci_digits)) ci_digits <- .additional_arguments(x, "ci_digits", digits)
   if (missing(p_digits)) p_digits <- .additional_arguments(x, "p_digits", 3)
-  if (missing(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", 2)
+  if (missing(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", digits)
   if (missing(ic_digits)) ic_digits <- .additional_arguments(x, "ic_digits", 1)
+
+  # find name of coefficient, if present
+  coef_column_name <- attributes(x)$coef_name
+  # create p_stars, needed for glue
+  if (any(c("p", "p.value") %in% colnames(x))) {
+    p_col <- ifelse("p" %in% colnames(x), "p", "p.value")
+    p_stars <- format_p(x[[p_col]], stars = TRUE, stars_only = TRUE)
+  } else {
+    p_stars <- NULL
+  }
 
   att <- attributes(x)
   x <- as.data.frame(x, stringsAsFactors = FALSE)
@@ -214,6 +273,17 @@ format_table <- function(x,
   }
 
   x[] <- lapply(x, as.character)
+
+  # apply glue-styled formatting
+  if (!is.null(select)) {
+    x <- .format_glue_table(
+      x,
+      style = select,
+      coef_column = coef_column_name,
+      p_stars = p_stars,
+      ...
+    )
+  }
 
   # restore attributes
   if (isTRUE(preserve_attributes)) {

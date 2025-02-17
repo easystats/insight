@@ -73,7 +73,7 @@ get_predicted.lmerMod <- function(x,
   )
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose)
+  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
 
   # 4. step: final preparation
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
@@ -188,7 +188,7 @@ get_predicted.glmmTMB <- function(x,
     )
 
     # 3. step: back-transform
-    out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose)
+    out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
   }
 
   # 4. step: final preparation
@@ -276,7 +276,7 @@ get_predicted.MixMod <- function(x,
     )
 
     # 3. step: back-transform
-    out <- .get_predicted_transform(x, predictions, my_args, ci_data)
+    out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
   }
 
   # 4. step: final preparation

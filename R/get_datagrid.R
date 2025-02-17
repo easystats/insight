@@ -3,8 +3,8 @@
 #'
 #' @description
 #' Create a reference matrix, useful for visualisation, with evenly spread and
-#' combined values. Usually used to make generate predictions using
-#' [get_predicted()]. See this
+#' combined values. Usually used to generate predictions using [get_predicted()].
+#' See this
 #' [vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
 #' for a tutorial on how to create a visualisation matrix using this function.
 #'
@@ -61,12 +61,15 @@
 #'
 #'   The remaining variables not specified in `by` will be fixed (see also arguments
 #'   `factors` and `numerics`).
-#' @param length Length of numeric target variables selected in `by`. This arguments
-#'   controls the number of (equally spread) values that will be taken to represent the
-#'   continuous variables. A longer length will increase precision, but can also
-#'   substantially increase the size of the datagrid (especially in case of interactions).
-#'   If `NA`, will return all the unique values. In case of multiple continuous target
-#'   variables, `length` can also be a vector of different values (see examples).
+#' @param length Length of numeric target variables selected in `by`. This
+#'   arguments controls the number of (equally spread) values that will be taken
+#'   to represent the continuous (non-integer alike!) variables. A longer length
+#'   will increase precision, but can also substantially increase the size of
+#'   the datagrid (especially in case of interactions). If `NA`, will return all
+#'   the unique values. In case of multiple continuous target variables,
+#'   `length` can also be a vector of different values (see 'Examples'). `length`
+#'   is ignored for integer type variables only when `length` is larger than the
+#'   number of unique values *and* when `range = "range"`.
 #' @param range Option to control the representative values given in `by`, if
 #'   no specific values were provided. Use in combination with the `length` argument
 #'   to control the number of values within the specified range. `range` can be
@@ -117,6 +120,9 @@
 #'   variable should be included in the data grid or not.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
+#' @param digits Number of digits used for rounding numeric values specified in
+#' `by`. E.g., `x = [sd]` will round the mean and +-/1 SD in the data grid to
+#' `digits`.
 #' @param verbose Toggle warnings.
 #' @param ... Arguments passed to or from other methods (for instance, `length`
 #'   or `range` to control the spread of numeric variables.).
@@ -145,6 +151,7 @@
 #' get_datagrid(iris, by = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
 #' get_datagrid(iris, by = "Sepal.Length = [0, 1]") # Manually change min/max
 #' get_datagrid(iris, by = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
+#' get_datagrid(iris, by = "Sepal.Length = [sd]", digits = 1) # rounded to 1 digit
 #' # identical to previous line: -1 SD, mean and +1 SD
 #' get_datagrid(iris, by = "Sepal.Length", range = "sd", length = 3)
 #' get_datagrid(iris, by = "Sepal.Length = [quartiles]") # quartiles
@@ -206,6 +213,7 @@ get_datagrid.data.frame <- function(x,
                                     reference = x,
                                     length = 10,
                                     range = "range",
+                                    digits = 3,
                                     ...) {
   # find numerics that were coerced to factor in-formula
   numeric_factors <- colnames(x)[vapply(x, function(i) isTRUE(attributes(i)$factor), logical(1))]
@@ -262,7 +270,7 @@ get_datagrid.data.frame <- function(x,
     # Deal with targets =======================================================
 
     # Find eventual user-defined specifications for each target
-    specs <- do.call(rbind, lapply(by, .get_datagrid_clean_target, x = x))
+    specs <- do.call(rbind, lapply(by, .get_datagrid_clean_target, x = x, digits = digits))
     specs$varname <- as.character(specs$varname) # make sure it's a string not fac
     specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
@@ -314,6 +322,7 @@ get_datagrid.data.frame <- function(x,
           reference = reference[[num]],
           length = length[i],
           range = range[i],
+          digits = digits,
           is_first_predictor = specs$varname[1] == num,
           ...
         )
@@ -419,9 +428,9 @@ get_datagrid.data.frame <- function(x,
 
 #' @rdname get_datagrid
 #' @export
-get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
+get_datagrid.numeric <- function(x, length = 10, range = "range", digits = 3, ...) {
   # Check and clean the target argument
-  specs <- .get_datagrid_clean_target(x, ...)
+  specs <- .get_datagrid_clean_target(x, digits = digits, ...)
 
   # If an expression is detected, run it and return it - we don't need
   # to create any spread of values to cover the range; spread is user-defined
@@ -440,8 +449,7 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", ...) {
   }
 
   # Create a spread
-  out <- .create_spread(x, length = length, range = range, ...)
-  out
+  .create_spread(x, length = length, range = range, digits = digits, ...)
 }
 
 #' @export
@@ -492,6 +500,7 @@ get_datagrid.default <- function(x,
                                  include_random = FALSE,
                                  include_response = FALSE,
                                  data = NULL,
+                                 digits = 3,
                                  verbose = TRUE,
                                  ...) {
   # validation check
@@ -567,6 +576,7 @@ get_datagrid.default <- function(x,
     numerics = numerics,
     preserve_range = preserve_range,
     reference = data,
+    digits = digits,
     ...
   )
 
@@ -760,7 +770,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
 # Utilities -----------------------------------------------------------------
 
 #' @keywords internal
-.get_datagrid_clean_target <- function(x, by = NULL, ...) {
+.get_datagrid_clean_target <- function(x, by = NULL, digits = 3, ...) {
   by_expression <- NA
   varname <- NA
   original_target <- by
@@ -807,7 +817,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
         "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
         "minmax", "terciles", "terciles2", "fivenum", "pretty"
       )
-      if ((is.factor(x) && all(parts %in% levels(x))) || (is.character(x) && all(parts %in% x)))   {
+      if ((is.factor(x) && all(parts %in% levels(x))) || (is.character(x) && all(parts %in% x))) {
         # Factor
         # Add quotes around them
         parts <- paste0("'", parts, "'")
@@ -816,7 +826,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
       } else if (length(parts) == 1) {
         # If one, might be a shortcut. or a sampling request
         if (grepl("sample", parts, fixed = TRUE)) {
-          n_to_sample <- .safe(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))
+          n_to_sample <- suppressWarnings(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))
           # do we have a proper definition of the sample size? If not, error
           if (is.null(n_to_sample) || is.na(n_to_sample) || !length(n_to_sample)) {
             format_error("The token `sample` must be followed by the number of samples to be drawn, e.g. `[sample 15]`.") # nolint
@@ -826,25 +836,25 @@ get_datagrid.comparisons <- get_datagrid.slopes
           if (parts %in% c("meansd", "sd")) {
             center <- mean(x, na.rm = TRUE)
             spread <- stats::sd(x, na.rm = TRUE)
-            by_expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
+            by_expression <- paste0("c(", round(center - spread, digits), ",", round(center, digits), ",", round(center + spread, digits), ")") # nolint
           } else if (parts == "mad") {
             center <- stats::median(x, na.rm = TRUE)
             spread <- stats::mad(x, na.rm = TRUE)
-            by_expression <- paste0("c(", center - spread, ",", center, ",", center + spread, ")")
+            by_expression <- paste0("c(", round(center - spread, digits), ",", round(center, digits), ",", round(center + spread, digits), ")") # nolint
           } else if (parts %in% c("fivenum", "quartiles")) {
-            by_expression <- paste0("c(", paste(as.vector(stats::fivenum(x, na.rm = TRUE)), collapse = ","), ")")
+            by_expression <- paste0("c(", paste(round(as.vector(stats::fivenum(x, na.rm = TRUE)), digits), collapse = ","), ")") # nolint
           } else if (parts == "quartiles2") {
-            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], collapse = ","), ")") # nolint
+            by_expression <- paste0("c(", paste(round(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], digits), collapse = ","), ")") # nolint
           } else if (parts == "terciles") {
-            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
+            by_expression <- paste0("c(", paste(round(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), digits), collapse = ","), ")") # nolint
           } else if (parts == "terciles2") {
-            by_expression <- paste0("c(", paste(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), collapse = ","), ")") # nolint
+            by_expression <- paste0("c(", paste(round(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), digits), collapse = ","), ")") # nolint
           } else if (parts == "pretty") {
             by_expression <- paste0("c(", paste(as.vector(pretty(x, na.rm = TRUE)), collapse = ","), ")")
           } else if (parts == "zeromax") {
-            by_expression <- paste0("c(0,", max(x, na.rm = TRUE), ")")
+            by_expression <- paste0("c(0,", round(max(x, na.rm = TRUE), digits), ")")
           } else if (parts == "minmax") {
-            by_expression <- paste0("c(", min(x, na.rm = TRUE), ",", max(x, na.rm = TRUE), ")")
+            by_expression <- paste0("c(", round(min(x, na.rm = TRUE), digits), ",", round(max(x, na.rm = TRUE), digits), ")")
           }
         } else if (is.numeric(parts)) {
           by_expression <- parts
@@ -941,8 +951,11 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 
 #' @keywords internal
-.create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
-  range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid"))
+.create_spread <- function(x, length = 10, range = "range", ci = 0.95, digits = 3, ...) {
+  range <- validate_argument(
+    tolower(range),
+    c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid")
+  )
 
   # bayestestR only for some options
   if (range %in% c("ci", "hdi", "eti")) {
@@ -952,10 +965,25 @@ get_datagrid.comparisons <- get_datagrid.slopes
   # check if range = "grid" - then use mean/sd for every numeric that
   # is not first predictor...
   if (range == "grid") {
-    range <- "sd"
+    # if not first predictor, we want range = "sd" and length 3, i.e. numerics
+    # at 2nd or 3rd position should represent 3 value (mean +/- 1 SD). we set
+    # range to "sd" later, because we do *not* want SD when the first predictor
+    # is of type intefer
     if (isFALSE(list(...)$is_first_predictor)) {
       length <- 3
     }
+    if (isTRUE(list(...)$is_first_predictor) && all(.is_integer(x)) && n_unique(x) < length) {
+      length <- n_unique(x)
+    } else {
+      range <- "sd"
+    }
+  }
+
+  # for integer values, we don't want a range with fractions, so we shorten
+  # length if necessary. This means, for numerics with, say, two or three values,
+  # we still have these two or three values after creating the spread
+  if (all(.is_integer(x)) && n_unique(x) < length && range == "range") {
+    length <- n_unique(x)
   }
 
   # If Range is a dispersion (e.g., SD or MAD)
@@ -974,7 +1002,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
         ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median") # nolint
       )
     }
-    out <- center + spread * disp
+    out <- round(center + spread * disp, digits)
     names(out) <- labs
 
     return(out)
@@ -1000,7 +1028,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
     mini <- min(x, na.rm = TRUE)
     maxi <- max(x, na.rm = TRUE)
   }
-  seq(mini, maxi, length.out = length)
+  round(seq(mini, maxi, length.out = length), digits)
 }
 
 

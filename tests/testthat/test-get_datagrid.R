@@ -34,20 +34,25 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   dg <- insight::get_datagrid(m, "Petal.Width = [meansd]")
   .center <- mean(iris$Petal.Width)
   .spread <- sd(iris$Petal.Width)
-  expect_equal(dg$Petal.Width, .center + c(-1, 0, 1) * .spread, tolerance = 1e-4)
+  expect_equal(dg$Petal.Width, round(.center + c(-1, 0, 1) * .spread, 3), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [terciles]")
-  expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width, probs = (0:3) / 3)), tolerance = 1e-4)
+  expect_equal(dg$Petal.Width, unname(round(quantile(iris$Petal.Width, probs = (0:3) / 3), 3)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [terciles2]")
-  expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width, probs = (1:2) / 3)), tolerance = 1e-4)
+  expect_equal(dg$Petal.Width, unname(round(quantile(iris$Petal.Width, probs = (1:2) / 3), 3)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [fivenum]")
   expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
+
+  dg <- insight::get_datagrid(iris, by = "Petal.Width = [meansd]")
+  expect_equal(dg$Petal.Width, c(0.437, 1.199, 1.962), tolerance = 1e-5)
+  dg <- insight::get_datagrid(iris, by = "Petal.Width = [meansd]", digits = 1)
+  expect_equal(dg$Petal.Width, c(0.4, 1.2, 2.0), tolerance = 1e-5)
 
   set.seed(123)
   dg <- insight::get_datagrid(m, "Petal.Width = [sample 8]")
@@ -150,15 +155,15 @@ test_that("get_datagrid - data", {
   expect_length(get_datagrid(x = iris$Sepal.Length), 10)
   expect_length(get_datagrid(x = iris$Sepal.Length, length = 5), 5)
   expect_length(get_datagrid(x = iris$Sepal.Length, length = NA), length(unique(iris$Sepal.Length)))
-  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "iqr")), as.numeric(quantile(iris$Sepal.Length, 0.025))) # nolint
-  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "hdi")), as.numeric(bayestestR::hdi(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2]) # nolint
-  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "eti")), as.numeric(bayestestR::eti(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2]) # nolint
+  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "iqr", digits = 15)), as.numeric(quantile(iris$Sepal.Length, 0.025))) # nolint
+  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "hdi", digits = 15)), as.numeric(bayestestR::hdi(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2]) # nolint
+  expect_identical(min(get_datagrid(x = iris$Sepal.Length, range = "eti", digits = 15)), as.numeric(bayestestR::eti(iris$Sepal.Length, ci = 0.95, verbose = FALSE))[2]) # nolint
   expect_length(get_datagrid(iris$Sepal.Length, by = "c(1, 3, 4)"), 3)
   expect_length(get_datagrid(iris$Sepal.Length, by = "A = c(1, 3, 4)"), 3)
   expect_length(get_datagrid(iris$Sepal.Length, by = "[1, 3, 4]"), 3)
   expect_length(get_datagrid(iris$Sepal.Length, by = "[1, 4]"), 10)
   expect_length(get_datagrid(iris$Sepal.Length, range = "sd", length = 10), 10)
-  expect_identical(as.numeric(get_datagrid(iris$Sepal.Length, range = "sd", length = 3)[2]), mean(iris$Sepal.Length))
+  expect_identical(as.numeric(get_datagrid(iris$Sepal.Length, range = "sd", length = 3)[2]), round(mean(iris$Sepal.Length), 3))
   expect_identical(as.numeric(get_datagrid(iris$Sepal.Length, range = "mad", length = 4)[2]), median(iris$Sepal.Length))
 
   # Dataframes
@@ -176,6 +181,12 @@ test_that("get_datagrid - data", {
   expect_identical(nrow(get_datagrid(data.frame(
     X = c("A", "A", "B"),
     Y = c(1, 5, 2),
+    stringsAsFactors = FALSE
+  ), by = "Y", factors = "mode", length = 5)), 3L)
+
+  expect_identical(nrow(get_datagrid(data.frame(
+    X = c("A", "A", "B"),
+    Y = c(1.2, 5.5, 2),
     stringsAsFactors = FALSE
   ), by = "Y", factors = "mode", length = 5)), 5L)
 
@@ -403,6 +414,7 @@ test_that("get_datagrid - factor levels as reference / non-focal terms works", {
     by = "k618", range = "grid", preserve_range = FALSE,
     verbose = FALSE, include_response = TRUE
   )
+  expect_identical(dim(grid), c(4L, 5L))
   expect_identical(
     sapply(grid, class),
     c(
@@ -504,4 +516,25 @@ test_that("get_datagrid - include weights", {
   m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = sleepstudy)
   d <- insight::get_datagrid(m, "Days")
   expect_named(d, c("Days", "Subject"))
+})
+
+
+test_that("get_datagrid - handle integers", {
+  d <- data.frame(
+    x = 1:8,
+    y = letters[1:8]
+  )
+  expect_identical(dim(get_datagrid(d)), c(64L, 2L)) # 8^2
+  expect_identical(dim(get_datagrid(d, range = "grid")), c(64L, 2L))
+  expect_identical(dim(get_datagrid(d, length = 5)), c(40L, 2L))
+
+  d <- data.frame(
+    x = 1:8,
+    y = 21:28,
+    z = letters[1:8]
+  )
+  expect_identical(dim(get_datagrid(d)), c(512L, 3L)) # 8^3
+  expect_identical(dim(get_datagrid(d, range = "grid")), c(192L, 3L)) # 8 * 3 * 8
+  expect_identical(dim(get_datagrid(d, length = 5)), c(200L, 3L))
+  expect_identical(dim(get_datagrid(d, length = 5, range = "grid")), c(120L, 3L))
 })

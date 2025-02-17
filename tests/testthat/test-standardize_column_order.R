@@ -81,3 +81,22 @@ test_that("reorder columns BF", {
     )
   )
 })
+
+
+test_that("easystats_columns", {
+  expect_identical(
+    easystats_columns("uncertainty"),
+    c(
+      "SE", "Std. Error", "SD", "Deviance_error", "CI", "CI_low",
+      "CI_high", "Difference_CI_low", "Difference_CI_high", "CI_Method",
+      "CI_Distribution", "CI_Iterations", "Sum_Squares", "Mean_Square"
+    )
+  )
+  expect_identical(
+    easystats_columns("p"),
+    c(
+      "p", "pd", "ROPE_CI", "ROPE_low", "ROPE_high", "ROPE_Percentage",
+      "BF", "log_BF"
+    )
+  )
+})

@@ -1,9 +1,24 @@
 # insight (devel)
 
+## Breaking Changes
+
+* `get_datagrid()` no longer creates fractional parts when creating a range of
+  values for numeric variables that are integers.
+
 ## Changes
 
 * `get_datagrid()` now includes a dummy column for model weights (values `NA`),
   to work with models that used weights.
+
+* `get_datagrid()` gets a `digits` argument, to round numeric representative
+  values.
+
+* Argument `ci_digits` defaults to `digits` in `format_table()`.
+
+* `format_table()` gets a `select` argument, which can be used to select columns
+  and column layout in a glue-like style.
+
+* `find_response()` now also works for _tidymodels_ workflows.
 
 # insight 1.0.2
 
