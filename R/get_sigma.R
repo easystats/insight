@@ -15,6 +15,7 @@
 #'
 #' @param x A model.
 #' @param ci Scalar, the CI level. The default (`NULL`) returns no CI.
+#' @param ... For internal use.
 #' @inheritParams find_parameters
 #'
 #' @return The residual standard deviation (sigma), or `NULL` if this
@@ -49,8 +50,8 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_sigma(m)
 #' @export
-get_sigma <- function(x, ci = NULL, verbose = TRUE) {
-  s <- .get_sigma(x, verbose = verbose)
+get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
+  s <- .get_sigma(x, verbose = verbose, ...)
 
   # Confidence interval for sigma
   ci <- .safe(.get_sigma_ci(x, ci = ci))

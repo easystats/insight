@@ -824,7 +824,7 @@ get_predicted.phylolm <- function(x,
   if (is_mixed_model(x)) {
     out <- .safe(get_variance_residual(x))
   } else {
-    out <- .safe(get_sigma(x, ci = NULL, no_recursion = TRUE, verbose = FALSE)^2, 0)
+    out <- .safe(.get_sigma(x, no_recursion = TRUE, verbose = FALSE)^2, 0)
     if (!length(out)) {
       out <- 0
     }
