@@ -79,6 +79,12 @@ get_transformation <- function(x, include_all = FALSE, verbose = TRUE) {
     out <- list(transformation = log10, inverse = function(x) 10^x)
   } else if (transform_fun == "log2") {
     out <- list(transformation = log2, inverse = function(x) 2^x)
+  } else if (startsWith(transform_fun, "log(x,base=")) {
+    base_value <- gsub("log\\(x,base=(\\d+)\\)", "\\1", transform_fun)
+    out <- list(
+      transformation = eval(parse(text = paste0("function(x) log(x,base=", base_value, ")"))),
+      inverse = eval(parse(text = paste0("function(x) ", base_value, "^x")))
+    )
   } else if (transform_fun == "exp") {
     out <- list(transformation = exp, inverse = log)
   } else if (transform_fun == "sqrt") {

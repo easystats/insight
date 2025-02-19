@@ -30,9 +30,9 @@ or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula. Optionally, all model terms can also be
 checked for any such transformation. Currently, following patterns are
 detected: \code{log}, \code{log1p}, \code{log2}, \code{log10}, \code{exp}, \code{expm1}, \code{sqrt},
-\verb{log(y+<number>)}, \code{log-log}, \code{power} (e.g. to 2nd power, like \code{I(y^2)}),
-\code{inverse} (like \code{1/y}), \code{scale} (e.g., \code{y/3}), and \code{box-cox} (e-g-,
-\code{(y^lambda - 1) / lambda}).
+\verb{log(y+<number>)}, \code{log-log}, \verb{log(y,base=<number>)}, \code{power} (e.g. to 2nd
+power, like \code{I(y^2)}), \code{inverse} (like \code{1/y}), \code{scale} (e.g., \code{y/3}), and
+\code{box-cox} (e.g., \code{(y^lambda - 1) / lambda}).
 }
 \examples{
 # identity, no transformation
