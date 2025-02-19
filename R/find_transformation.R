@@ -103,7 +103,7 @@ find_transformation.character <- function(x, ...) {
       transform_fun <- "log-log"
     } else {
       plus_minus <- NULL
-      base <- NULL
+      base_value <- NULL
       # make sure we definitly have a "+" in the log-transformation
       if (grepl("+", x, fixed = TRUE)) {
         # 1. try: log(x + number)
