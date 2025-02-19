@@ -20,6 +20,11 @@
 
 * `find_response()` now also works for _tidymodels_ workflows.
 
+## Bug fixes
+
+* Fixed issue in `find_formula()`, `find_response()` and `find_predictors()` for
+  multinomial `gam` models from package *mgcv*.
+
 # insight 1.0.2
 
 ## Changes

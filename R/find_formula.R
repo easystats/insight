@@ -261,9 +261,23 @@ find_formula.gam <- function(x, verbose = TRUE, ...) {
           ziplss = list(conditional = f[[1]], zero_inflated = f[[2]]),
           # handle formula for location-scale models
           gaulss = list(conditional = f[[1]], scale = f[[2]]),
-          # handle formula for multivariate models
+          # handle formula for multivariate models, or for multinomial models,
+          # which also contain a list of formulas
+          multinom = {
+            y <- safe_deparse(f[[1]][[2]])
+            f <- lapply(f, function(.i) {
+              f_cond <- .i
+              if (length(f_cond) < 3) {
+                f_cond <- stats::as.formula(paste(y, safe_deparse(f_cond)))
+              }
+              list(conditional = f_cond)
+            })
+            names(f) <- rep_len(y, length(f))
+            attr(f, "is_mv") <- "1"
+            f
+            },
           `Multivariate normal` = {
-            r <- lapply(f, function(.i) deparse(.i[[2]]))
+            r <- lapply(f, function(.i) safe_deparse(.i[[2]]))
             f <- lapply(f, function(.i) list(conditional = .i))
             names(f) <- r
             attr(f, "is_mv") <- "1"
