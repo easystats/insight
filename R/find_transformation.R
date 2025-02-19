@@ -103,6 +103,7 @@ find_transformation.character <- function(x, ...) {
       transform_fun <- "log-log"
     } else {
       plus_minus <- NULL
+      base <- NULL
       # make sure we definitly have a "+" in the log-transformation
       if (grepl("+", x, fixed = TRUE)) {
         # 1. try: log(x + number)
@@ -115,9 +116,19 @@ find_transformation.character <- function(x, ...) {
             eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", x)))
           )
         }
+      } else if (grepl(",", x, fixed = TRUE)) {
+        # check if we have log() with base-definition (e.g. `log(x, base = 5)`)
+        base_value <- trim_ws(gsub(",", "", gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", x), fixed = TRUE))
+        if (startsWith(base_value, "base")) {
+          base_value <- suppressWarnings(as.numeric(trim_ws(
+            gsub("base", "", gsub("=", "", base_value, fixed = TRUE), fixed = TRUE)
+          )))
+        }
       }
-      if (is.null(plus_minus) || is.function(plus_minus)) {
+      if ((is.null(plus_minus) || is.function(plus_minus)) && (is.null(base_value) || is.na(base_value))) {
         transform_fun <- "log"
+      } else if (!is.null(base_value) && !is.na(base_value)) {
+        transform_fun <- paste0("log(x,base=", base_value, ")")
       } else {
         transform_fun <- paste0("log(x+", plus_minus, ")")
       }

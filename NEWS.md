@@ -20,6 +20,9 @@
 
 * `find_response()` now also works for _tidymodels_ workflows.
 
+* `get_transformation()` and `find_transformation()` now also detect
+  log-transformation with logarithmic base.
+
 ## Bug fixes
 
 * Fixed issue in `find_formula()`, `find_response()` and `find_predictors()` for
