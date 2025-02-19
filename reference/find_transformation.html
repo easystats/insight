@@ -4,16 +4,16 @@ or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula. Optionally, all model terms can also be
 checked for any such transformation. Currently, following patterns are
 detected: log, log1p, log2, log10, exp, expm1, sqrt,
-log(y+&amp;lt;number&amp;gt;), log-log, power (e.g. to 2nd power, like I(y^2)),
-inverse (like 1/y), scale (e.g., y/3), and box-cox (e-g-,
-(y^lambda - 1) / lambda)."><meta property="og:description" content="This functions checks whether any transformation, such as log-
+log(y+&amp;lt;number&amp;gt;), log-log, log(y,base=&amp;lt;number&amp;gt;), power (e.g. to 2nd
+power, like I(y^2)), inverse (like 1/y), scale (e.g., y/3), and
+box-cox (e.g., (y^lambda - 1) / lambda)."><meta property="og:description" content="This functions checks whether any transformation, such as log-
 or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula. Optionally, all model terms can also be
 checked for any such transformation. Currently, following patterns are
 detected: log, log1p, log2, log10, exp, expm1, sqrt,
-log(y+&amp;lt;number&amp;gt;), log-log, power (e.g. to 2nd power, like I(y^2)),
-inverse (like 1/y), scale (e.g., y/3), and box-cox (e-g-,
-(y^lambda - 1) / lambda)."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
+log(y+&amp;lt;number&amp;gt;), log-log, log(y,base=&amp;lt;number&amp;gt;), power (e.g. to 2nd
+power, like I(y^2)), inverse (like 1/y), scale (e.g., y/3), and
+box-cox (e.g., (y^lambda - 1) / lambda)."><meta property="og:image" content="https://easystats.github.io/insight/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -21,7 +21,7 @@ inverse (like 1/y), scale (e.g., y/3), and box-cox (e-g-,
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,9 +74,9 @@ or exp-transforming, was applied to the response variable (dependent
 variable) in a regression formula. Optionally, all model terms can also be
 checked for any such transformation. Currently, following patterns are
 detected: <code>log</code>, <code>log1p</code>, <code>log2</code>, <code>log10</code>, <code>exp</code>, <code>expm1</code>, <code>sqrt</code>,
-<code>log(y+&lt;number&gt;)</code>, <code>log-log</code>, <code>power</code> (e.g. to 2nd power, like <code>I(y^2)</code>),
-<code>inverse</code> (like <code>1/y</code>), <code>scale</code> (e.g., <code>y/3</code>), and <code>box-cox</code> (e-g-,
-<code>(y^lambda - 1) / lambda</code>).</p>
+<code>log(y+&lt;number&gt;)</code>, <code>log-log</code>, <code>log(y,base=&lt;number&gt;)</code>, <code>power</code> (e.g. to 2nd
+power, like <code>I(y^2)</code>), <code>inverse</code> (like <code>1/y</code>), <code>scale</code> (e.g., <code>y/3</code>), and
+<code>box-cox</code> (e.g., <code>(y^lambda - 1) / lambda</code>).</p>
     </div>
 
     <div class="section level2">
