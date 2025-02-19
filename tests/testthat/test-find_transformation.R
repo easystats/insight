@@ -22,6 +22,11 @@ test_that("find_transformation - log+x", {
   expect_identical(find_transformation(model), "log(x+3)")
 })
 
+test_that("find_transformation - log, base", {
+  mdl <- lm(log(dist, base = 10) ~ speed, data = cars)
+  expect_identical(find_transformation(mdl), "log(x,base=10)")
+})
+
 test_that("find_transformation - log+x 2", {
   model <- lm(log(2 + Sepal.Length) ~ Species, data = iris)
   expect_identical(find_transformation(model), "log(x+2)")
