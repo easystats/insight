@@ -1072,6 +1072,8 @@ print.insight_table <- function(x, ...) {
     highlight_rows <- NULL
   }
 
+  # do we need to render <br>?
+  any_br <- any(vapply(final, grepl, logical(1), pattern = "<br>", fixed = TRUE))
 
   # validation check - clean caption, subtitle and footer from ansi-colour codes,
   # which only work for text format... But if user occidentally provides colours
@@ -1145,6 +1147,11 @@ print.insight_table <- function(x, ...) {
       )
       out <- gt::cols_align(out, col_align, i)
     }
+  }
+
+  # correctly render line breaks like <br>
+  if (any_br) {
+    out <- gt::fmt_markdown(out)
   }
 
   out
