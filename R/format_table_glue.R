@@ -22,10 +22,11 @@
     new_column_name <- NULL
   }
 
-  if (identical(format, "html")) {
-    linesep <- "<br>"
-  } else {
+  # line separator
+  if (is.null(dots$line_separator)) {
     linesep <- " "
+  } else {
+    linesep <- dots$line_separator
   }
 
   # init significant stars
