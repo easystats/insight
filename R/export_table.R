@@ -1073,7 +1073,7 @@ print.insight_table <- function(x, ...) {
   }
 
   # do we need to render <br>?
-  any_br <- any(vapply(final, grepl, logical(1), pattern = "<br>", fixed = TRUE))
+  any_br <- any(vapply(final, function(i) any(grepl("<br>", i, fixed = TRUE)), logical(1)))
 
   # validation check - clean caption, subtitle and footer from ansi-colour codes,
   # which only work for text format... But if user occidentally provides colours
