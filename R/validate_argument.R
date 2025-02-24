@@ -44,7 +44,7 @@ validate_argument <- function(argument, options) {
 }
 
 
-.misspelled_string <- function(source, searchterm, default_message = NULL) {
+.misspelled_string <- function(valid_strings, searchterm, default_message = NULL) {
   if (is.null(searchterm) || length(searchterm) < 1) {
     return(default_message)
   }
@@ -53,12 +53,12 @@ validate_argument <- function(argument, options) {
   # init default
   msg <- ""
   # remove matching strings
-  same <- intersect(source, searchterm)
+  same <- intersect(valid_strings, searchterm)
   searchterm <- setdiff(searchterm, same)
-  source <- setdiff(source, same)
+  valid_strings <- setdiff(valid_strings, same)
   # guess the misspelled string
   possible_strings <- unlist(lapply(searchterm, function(s) {
-    source[.fuzzy_grep(source, s)] # nolint
+    valid_strings[.fuzzy_grep(valid_strings, s)] # nolint
   }), use.names = FALSE)
   if (length(possible_strings)) {
     msg <- "Did you mean "

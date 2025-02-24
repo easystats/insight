@@ -276,8 +276,14 @@ get_datagrid.data.frame <- function(x,
 
     # sanity check - target in data?
     if (!all(specs$varname %in% colnames(x))) {
+      suggestion <- .misspelled_string(
+        colnames(x),
+        setdiff(specs$varname, colnames(x))[1],
+        default_message = "Please check the spelling."
+      )
       format_error(paste0(
-        "Variable `", setdiff(specs$varname, colnames(x))[1], "` was not found in the data. Please check the spelling." # nolint
+        "Variable `", setdiff(specs$varname, colnames(x))[1], "` was not found in the data. ", # nolint
+        suggestion$msg
       ))
     }
     specs$is_factor <- vapply(x[specs$varname], function(x) is.factor(x) || is.character(x), TRUE)
@@ -791,9 +797,8 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
     if (is.na(by_expression) && is.data.frame(x)) {
       if (is.na(varname)) {
-        format_error(
-          "Couldn't find which variables were selected in `by`. Check spelling and specification."
-        )
+        suggestion <- .misspelled_string(colnames(x), by, default_message = "Check spelling and specification.") # nolint
+        format_error(paste("Couldn't find which variables were selected in `by`.", suggestion$msg)) # nolint
       } else {
         x <- x[[varname]]
       }
