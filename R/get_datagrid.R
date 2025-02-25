@@ -606,7 +606,7 @@ get_datagrid.default <- function(x,
   w <- insight::find_weights(x)
   if (!is.null(w)) {
     if (include_weights) {
-      vm[w] <- mean(get_weights(m, remove_na = TRUE, null_as_ones = TRUE))
+      vm[w] <- mean(get_weights(x, remove_na = TRUE, null_as_ones = TRUE))
     } else if (!inherits(x, "brmsfit")) {
       # for lme, can't be NA
       if (inherits(x, c("lme", "gls"))) {
