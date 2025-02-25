@@ -8,6 +8,9 @@
   dots <- list(...)
   original_x <- x
 
+  # save model information
+  info <- attributes(x)$model_info
+
   # default format
   if (!is.null(dots$format)) {
     format <- dots$format
@@ -56,7 +59,12 @@
   )
 
   # make sure we have a glue-like syntax
-  style <- .convert_to_glue_syntax(style, linesep)
+  style <- .convert_to_glue_syntax(style, linesep, info)
+
+  # we need special handling for ROPE columns. These are sometimes pre-formatted,
+  # have the name "% in ROPE" and then won't be removed at the end. So we check
+  # if we have a {rope} token, and if not, we also remove "% in ROPE" column later
+  special_rope <- any(grepl("{rope}", style, fixed = TRUE))
 
   # "|" indicates cell split
   style <- unlist(strsplit(style, split = "|", fixed = TRUE))
@@ -117,6 +125,10 @@
     broom_columns("uncertainty"),
     ci_column
   ))
+  # add special rope column?
+  if (!special_rope) {
+    p_column <- unique(c(p_column, "ROPE", "% in ROPE"))
+  }
 
   # bind glue-columns to original data, but remove former columns first
   original_x[c(coefficient_names, uncertainty_column, stat_colum, p_column, df_column)] <- NULL # nolint
@@ -141,19 +153,22 @@
 
 # this function handles short cuts for "select" and creates the related
 # glue patterns
-.convert_to_glue_syntax <- function(style, linesep = NULL) {
+.convert_to_glue_syntax <- function(style, linesep = NULL, info = NULL) {
   # set default
   if (is.null(linesep)) {
     linesep <- " "
   }
 
+  # for Bayesian models, we have pd instead p
+  p_column <- ifelse(isTRUE(info$is_bayesian), "{pd}", "{p}")
+
   # default
   if (is.null(style)) {
-    style <- paste0("{estimate}", linesep, "({ci})|{p}")
+    style <- paste0("{estimate}", linesep, "({ci})|", p_column)
 
     # style: estimate and CI, p-value in separate column (currently identical to "ci_p2")
   } else if (style %in% c("minimal", "ci_p2")) {
-    style <- paste0("{estimate}", linesep, "({ci})|{p}")
+    style <- paste0("{estimate}", linesep, "({ci})|", p_column)
 
     # style: estimate and CI, no p
   } else if (style == "ci") {
@@ -173,7 +188,7 @@
 
     # style: estimate and SE, p-value in separate column
   } else if (style %in% c("short", "se_p2")) {
-    style <- paste0("{estimate}", linesep, "({se})|{p}")
+    style <- paste0("{estimate}", linesep, "({se})|", p_column)
 
     # style: only estimate
   } else if (style %in% c("est", "coef")) {
