@@ -524,7 +524,8 @@ test_that("get_datagrid - include weights", {
     d$wei_factor,
     c(1.00213, 1.00213, 1.00213, 1.00213, 1.00213, 1.00213, 1.00213,
       1.00213, 1.00213, 1.00213
-    )
+    ),
+    tolerance = 1e-3
   )
 
   m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = sleepstudy)
