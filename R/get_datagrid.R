@@ -118,6 +118,11 @@
 #'   usually need data with all variables in the model included.
 #' @param include_response If `x` is a model object, decide whether the response
 #'   variable should be included in the data grid or not.
+#' @param include_weights If `x` is a model object, which contains weights, the
+#'   weight-variable is usually set to `NA` in the returned data grid. Sometimes,
+#'   it is required to have an explicit valid value for the weight variable in
+#'   the grid. If so, set `include_weights = TRUE`, and the mean value of the
+#'   weight variable (instead of `NA`) is included in the returned grid.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
 #' @param digits Number of digits used for rounding numeric values specified in
@@ -505,6 +510,7 @@ get_datagrid.default <- function(x,
                                  include_smooth = TRUE,
                                  include_random = FALSE,
                                  include_response = FALSE,
+                                 include_weights = FALSE,
                                  data = NULL,
                                  digits = 3,
                                  verbose = TRUE,
@@ -598,12 +604,16 @@ get_datagrid.default <- function(x,
 
   # if model has weights, we need to add a dummy for certain classes, e.g. glmmTMB
   w <- insight::find_weights(x)
-  if (!inherits(x, "brmsfit") && !is.null(w)) {
-    # for lme, can't be NA
-    if (inherits(x, c("lme", "gls"))) {
-      vm[w] <- 1
-    } else {
-      vm[w] <- NA_real_
+  if (!is.null(w)) {
+    if (include_weights) {
+      vm[w] <- mean(get_weights(m, remove_na = TRUE, null_as_ones = TRUE))
+    } else if (!inherits(x, "brmsfit")) {
+      # for lme, can't be NA
+      if (inherits(x, c("lme", "gls"))) {
+        vm[w] <- 1
+      } else {
+        vm[w] <- NA_real_
+      }
     }
   }
 
@@ -634,6 +644,7 @@ get_datagrid.wbm <- function(x,
                              reference = x,
                              include_smooth = TRUE,
                              include_random = FALSE,
+                             include_weights = FALSE,
                              data = NULL,
                              ...) {
   # Retrieve data from model
@@ -655,7 +666,7 @@ get_datagrid.wbm <- function(x,
     x = x, by = by, factors = factors, numerics = numerics,
     preserve_range = preserve_range, reference = reference,
     include_smooth = include_smooth, include_random = include_random,
-    include_response = TRUE, data = data, ...
+    include_response = TRUE, include_weights = include_weights, data = data, ...
   )
 }
 

@@ -13,6 +13,9 @@
 * `get_datagrid()` gets a `digits` argument, to round numeric representative
   values.
 
+* `get_datagrid()` gets an `include_weights` argument, to include numeric values
+  for weights in `get_datagrid()` (instead of setting them to `NA`).
+
 * Argument `ci_digits` defaults to `digits` in `format_table()`.
 
 * `format_table()` gets a `select` argument, which can be used to select columns

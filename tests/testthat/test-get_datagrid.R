@@ -512,6 +512,20 @@ test_that("get_datagrid - include weights", {
   m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = sleepstudy, weights = wei_factor)
   d <- insight::get_datagrid(m, "Days")
   expect_named(d, c("Days", "Subject", "wei_factor"))
+  expect_identical(
+    d$wei_factor,
+    c(NA_real_, NA_real_, NA_real_, NA_real_, NA_real_, NA_real_,
+      NA_real_, NA_real_, NA_real_, NA_real_
+    )
+  )
+  d <- insight::get_datagrid(m, "Days", include_weights = TRUE)
+  expect_named(d, c("Days", "Subject", "wei_factor"))
+  expect_equal(
+    d$wei_factor,
+    c(1.00213, 1.00213, 1.00213, 1.00213, 1.00213, 1.00213, 1.00213,
+      1.00213, 1.00213, 1.00213
+    )
+  )
 
   m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = sleepstudy)
   d <- insight::get_datagrid(m, "Days")

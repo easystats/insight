@@ -37,6 +37,7 @@ get_datagrid(x, ...)
   include_smooth = TRUE,
   include_random = FALSE,
   include_response = FALSE,
+  include_weights = FALSE,
   data = NULL,
   digits = 3,
   verbose = TRUE,
@@ -175,6 +176,12 @@ usually need data with all variables in the model included.}
 
 \item{include_response}{If \code{x} is a model object, decide whether the response
 variable should be included in the data grid or not.}
+
+\item{include_weights}{If \code{x} is a model object, which contains weights, the
+weight-variable is usually set to \code{NA} in the returned data grid. Sometimes,
+it is required to have an explicit valid value for the weight variable in
+the grid. If so, set \code{include_weights = TRUE}, and the mean value of the
+weight variable (instead of \code{NA}) is included in the returned grid.}
 
 \item{data}{Optional, the data frame that was used to fit the model. Usually,
 the data is retrieved via \code{get_data()}.}
