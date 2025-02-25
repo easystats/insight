@@ -43,7 +43,7 @@
   ))
 
   # find columns
-  if (is.null(coef_column) || !coef_column %in% colnames(x)) {
+  if (is.null(coef_column) || !length(coef_column) || !coef_column %in% colnames(x)) {
     coef_column <- intersect(colnames(x), coefficient_names)[1]
   }
   ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI" | colnames(x) == "conf.int"] # nolint
