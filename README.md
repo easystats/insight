@@ -28,7 +28,7 @@ to every aspect of many model objects via consistent syntax and output.
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/insight)](https://cran.r-project.org/package=insight)
 [![insight status
 badge](https://easystats.r-universe.dev/badges/insight)](https://easystats.r-universe.dev)
-[![R-CMD-check](https://github.com/easystats/insight/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/insight/actions)
+[![codecov](https://codecov.io/gh/easystats/insight/branch/main/graph/badge.svg)](https://app.codecov.io/gh/easystats/insight)
 
 The *insight* package is available on CRAN, while its latest development
 version is available on R-universe (from *rOpenSci*) or GitHub.
