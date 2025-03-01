@@ -10,6 +10,7 @@
 ^appveyor\.yml$
 ^pkgdown$
 ^README.Rmd
+^air.toml
 ^paper$
 ^Meta$
 ^WIP$
