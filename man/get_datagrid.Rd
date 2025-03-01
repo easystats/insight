@@ -66,7 +66,9 @@ and for character vectors, will use all unique values.
 values, e.g. \code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}.
 \item a string with assignments, e.g. \code{by = "Sepal.Length = 2"} or
 \code{by = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
-and double quotes to assign strings within strings.
+and double quotes to assign strings within strings. String assignments can
+also indicate more than one value, using regular R syntax, e.g.
+\code{by = "Sepal.Length = c(3, 4)"}.
 }
 
 There is a special handling of assignments with \emph{brackets}, i.e. values
