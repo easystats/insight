@@ -21,7 +21,7 @@ methods for more info).'><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -150,7 +150,9 @@ and for character vectors, will use all unique values.</p></li>
 values, e.g. <code>by = list(Sepal.Length = c(2, 4), Species = "setosa")</code>.</p></li>
 <li><p>a string with assignments, e.g. <code>by = "Sepal.Length = 2"</code> or
 <code>by = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single
-and double quotes to assign strings within strings.</p></li>
+and double quotes to assign strings within strings. String assignments can
+also indicate more than one value, using regular R syntax, e.g.
+<code>by = "Sepal.Length = c(3, 4)"</code>.</p></li>
 </ul><p>There is a special handling of assignments with <em>brackets</em>, i.e. values
 defined inside <code>[</code> and <code>]</code>.For <strong>numeric</strong> variables, the value(s) inside
 the brackets should either be</p><ul><li><p>two values, indicating minimum and maximum (e.g. <code>by = "Sepal.Length = [0, 5]"</code>),

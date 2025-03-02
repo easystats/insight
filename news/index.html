@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,27 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0" id="insight-110">insight 1.1.0<a class="anchor" aria-label="anchor" href="#insight-110"></a></h2><p class="text-muted">CRAN release: 2025-03-01</p>
+<div class="section level3">
+<h3 id="breaking-changes-1-1-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-1-0"></a></h3>
+<ul><li>
+<code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> no longer creates fractional parts when creating a range of values for numeric variables that are integers.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-1-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-1-0"></a></h3>
+<ul><li><p><code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> now includes a dummy column for model weights (values <code>NA</code>), to work with models that used weights.</p></li>
+<li><p><code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> gets a <code>digits</code> argument, to round numeric representative values.</p></li>
+<li><p>Argument <code>ci_digits</code> defaults to <code>digits</code> in <code><a href="../reference/format_table.html">format_table()</a></code>.</p></li>
+<li><p><code><a href="../reference/format_table.html">format_table()</a></code> gets a <code>select</code> argument, which can be used to select columns and column layout in a glue-like style.</p></li>
+<li><p><code><a href="../reference/find_response.html">find_response()</a></code> now also works for <em>tidymodels</em> workflows.</p></li>
+<li><p><code><a href="../reference/get_transformation.html">get_transformation()</a></code> and <code><a href="../reference/find_transformation.html">find_transformation()</a></code> now also detect log-transformation with logarithmic base.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-1-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-0"></a></h3>
+<ul><li>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code>, <code><a href="../reference/find_response.html">find_response()</a></code> and <code><a href="../reference/find_predictors.html">find_predictors()</a></code> for multinomial <code>gam</code> models from package <em>mgcv</em>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.2" id="insight-102">insight 1.0.2<a class="anchor" aria-label="anchor" href="#insight-102"></a></h2><p class="text-muted">CRAN release: 2025-02-06</p>
 <div class="section level3">
