@@ -275,7 +275,7 @@ find_formula.gam <- function(x, verbose = TRUE, ...) {
             names(f) <- rep_len(y, length(f))
             attr(f, "is_mv") <- "1"
             f
-            },
+          },
           `Multivariate normal` = {
             r <- lapply(f, function(.i) safe_deparse(.i[[2]]))
             f <- lapply(f, function(.i) list(conditional = .i))

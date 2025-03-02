@@ -29,7 +29,9 @@
 #'   values, e.g. `by = list(Sepal.Length = c(2, 4), Species = "setosa")`.
 #'   - a string with assignments, e.g. `by = "Sepal.Length = 2"` or
 #'   `by = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
-#'   and double quotes to assign strings within strings.
+#'   and double quotes to assign strings within strings. String assignments can
+#'   also indicate more than one value, using regular R syntax, e.g.
+#'   `by = "Sepal.Length = c(3, 4)"`.
 #'
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside

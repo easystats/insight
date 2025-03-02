@@ -68,7 +68,7 @@ test_that("finds_*, multinom", {
     out,
     list(
       y = list(conditional = c("x1", "x2")),
-      y = list(conditional = c("x1",  "x2"))
+      y = list(conditional = c("x1", "x2"))
     )
   )
   out <- find_formula(b)
