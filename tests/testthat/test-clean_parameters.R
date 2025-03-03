@@ -33,6 +33,9 @@ test_that("clean_parameters blavaan", {
 
 test_that("clean_parameters stanrag", {
   skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
 
@@ -53,6 +56,28 @@ test_that("clean_parameters stanrag", {
       "Days: Subject", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
       "Days: Subject", "Intercept: Subject", "Days: Subject", "Intercept: Subject",
       "Days: Subject", "Var/Cov: Subject", "Var/Cov: Subject", "Var/Cov: Subject", ""
+    )
+  )
+})
+
+
+test_that("clean_parameters brms", {
+  skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("brms")
+
+  m <- insight::download_model("brms_sigma_3")
+  out <- clean_parameters(m)
+
+  expect_identical(
+    out$Component,
+    c(
+      "conditional", "sigma", "conditional", "sigma", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "sigma", "sigma", "sigma", "sigma", "sigma", "sigma"
     )
   )
 })
