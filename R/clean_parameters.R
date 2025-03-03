@@ -507,6 +507,11 @@ clean_parameters.mlm <- function(x, ...) {
     }
   }
 
+  # handle auxiliary components
+  for (i in .brms_aux_elements()) {
+    aux_params <- startsWith(out$Cleaned_Parameter, paste0("b_", i, "_"))
+    out$Component[aux_params & out$Component[aux_params] == "conditional"] <- i
+  }
 
   smooth_function <- grepl(pattern = "(bs_|bs_zi_)", out$Cleaned_Parameter)
   if (any(smooth_function)) {
@@ -514,8 +519,9 @@ clean_parameters.mlm <- function(x, ...) {
   }
 
 
+  # clean auxiliary
+  out$Cleaned_Parameter <- gsub(pattern = paste0("^(", paste0("b_", .brms_aux_elements(), "_", collapse = "|"), ")"), "", out$Cleaned_Parameter)
   # clean fixed effects, conditional and zero-inflated
-
   out$Cleaned_Parameter <- gsub(pattern = "^b_(?!zi_)(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter, perl = TRUE)
   out$Cleaned_Parameter <- gsub(pattern = "^b_zi_(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter)
   out$Cleaned_Parameter <- gsub(pattern = "^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", "\\2", out$Cleaned_Parameter, perl = TRUE)
@@ -550,6 +556,9 @@ clean_parameters.mlm <- function(x, ...) {
       # we want to have same behaviour as for frequentist models,
       # including levels of grouop factors
       r_levels <- gsub("__zi", "", r_levels, fixed = TRUE)
+      for (i in .brms_aux_elements()) {
+        r_levels <- gsub(paste0("__", i), "", r_levels, fixed = TRUE)
+      }
       out$Level[rand_eff] <- r_levels
       # fix labelling of SD and correlation component
       sd_cor <- grepl("SD/Cor:", out$Group, fixed = TRUE)
@@ -559,8 +568,14 @@ clean_parameters.mlm <- function(x, ...) {
     } else {
       r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
     }
+
     r_pars <- gsub("__zi", "", r_pars, fixed = TRUE)
     r_grps <- gsub("__zi", "", r_grps, fixed = TRUE)
+
+    for (i in .brms_aux_elements()) {
+      r_pars <- gsub(paste0("__", i), "", r_pars, fixed = TRUE)
+      r_grps <- gsub(paste0("__", i), "", r_grps, fixed = TRUE)
+    }
 
     out$Cleaned_Parameter[rand_eff] <- r_pars
     out$Group[rand_eff] <- r_grps

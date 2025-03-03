@@ -3,6 +3,9 @@
 * `find_random()` and `find_random_slopes()` now also extract random effects
   names from auxiliary components.
 
+* `clean_parameters()` for brms-models now assigns auxiliary parameters to their
+  related `Component` and overwrites former assignments to `"conditional"`.
+
 # insight 1.1.0
 
 ## Breaking Changes
