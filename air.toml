@@ -1,5 +1,5 @@
 [format]
-line-width = 140
+line-width = 100
 indent-width = 2
 indent-style = "space"
 line-ending = "auto"
