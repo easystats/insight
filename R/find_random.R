@@ -76,40 +76,38 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
 
 
 .find_random_effects <- function(x, f, split_nested) {
-  if (!object_has_names(f, "random") && !object_has_names(f, "zero_inflated_random")) {
+  # potential components that can have random effects
+  components <- c("random", "zero_inflated_random")
+
+  # for brms, we can have random effects for auxilliary elements, too
+  if (inherits(x, "brmsfit")) {
+    components <- c(components, paste0(.brms_aux_elements(), "_random"))
+  }
+
+  # check which components we have
+  components <- components[vapply(components, function(i) object_has_names(f, i), logical(1))]
+
+  # if nothing, return null
+  if (!length(components)) {
     return(NULL)
   }
 
-  if (object_has_names(f, "random")) {
-    if (is.list(f$random)) {
-      r1 <- unique(unlist(lapply(
-        f$random,
+  out <- lapply(components, function(comp) {
+    if (is.list(f[[comp]])) {
+      unique(unlist(lapply(
+        f[[comp]],
         .get_model_random,
         model = x,
         split_nested = split_nested
       ), use.names = FALSE))
     } else {
-      r1 <- unique(unlist(
-        .get_model_random(f$random, model = x, split_nested),
+      unique(unlist(
+        .get_model_random(f[[comp]], model = x, split_nested),
         use.names = FALSE
       ))
     }
-  } else {
-    r1 <- NULL
-  }
+  })
 
-  if (object_has_names(f, "zero_inflated_random")) {
-    if (is.list(f$zero_inflated_random)) {
-      r2 <- unique(unlist(
-        lapply(f$zero_inflated_random, .get_model_random, model = x, split_nested = split_nested),
-        use.names = FALSE
-      ))
-    } else {
-      r2 <- unique(.get_model_random(f$zero_inflated_random, model = x, split_nested))
-    }
-  } else {
-    r2 <- NULL
-  }
-
-  compact_list(list(random = r1, zero_inflated_random = r2))
+  names(out) <- components
+  compact_list(out)
 }
