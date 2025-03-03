@@ -1,3 +1,8 @@
+# insight (devel)
+
+* `find_random()` and `find_random_slopes()` now also extract random effects
+  names from auxiliary components.
+
 # insight 1.1.0
 
 ## Breaking Changes
