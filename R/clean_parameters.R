@@ -510,7 +510,7 @@ clean_parameters.mlm <- function(x, ...) {
   # handle auxiliary components
   for (i in .brms_aux_elements()) {
     aux_params <- startsWith(out$Cleaned_Parameter, paste0("b_", i, "_"))
-    out$Component[aux_params & out$Component[aux_params] == "conditional"] <- i
+    out$Component[aux_params & out$Component == "conditional"] <- i
   }
 
   smooth_function <- grepl(pattern = "(bs_|bs_zi_)", out$Cleaned_Parameter)
