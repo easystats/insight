@@ -391,6 +391,7 @@ format_table <- function(x,
   names(x)[names(x) == "Cohens_g"] <- "Cohen's g"
   names(x)[names(x) == "Cohens_f"] <- "Cohen's f"
   names(x)[names(x) == "Cohens_f_partial"] <- "Cohen's f (partial)"
+  names(x)[names(x) == "d_partial"] <- "d (partial)"
   names(x)[names(x) == "Cramers_v"] <- "Cramer's V"
   names(x)[names(x) == "Cramers_v_adjusted"] <- "Cramer's V (adj.)"
   names(x)[names(x) == "r_rank_biserial"] <- "r (rank biserial)"
