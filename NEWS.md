@@ -6,6 +6,8 @@
 * `clean_parameters()` for brms-models now assigns auxiliary parameters to their
   related `Component` and overwrites former assignments to `"conditional"`.
 
+* `format_table()` now includes more effect sizes when formatting column names.
+
 # insight 1.1.0
 
 ## Breaking Changes
