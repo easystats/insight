@@ -400,6 +400,8 @@ format_table <- function(x,
   names(x)[names(x) == "Cramers_v_adjusted"] <- "Cramer's V (adj.)"
   names(x)[names(x) == "r_rank_biserial"] <- "r (rank biserial)"
   names(x)[names(x) == "Hedges_g"] <- "Hedges' g"
+  names(x)[names(x) == "Hedges_g_CI_low"] <- "Hedges' g_CI_low"
+  names(x)[names(x) == "Hedges_g_CI_high"] <- "Hedges' g_CI_high"
   names(x)[names(x) == "Mahalanobis_D"] <- "Mahalanobis' D"
   names(x)[names(x) == "Pearsons_c"] <- "Pearson's C"
   names(x)[names(x) == "Kendalls_W"] <- "Kendall's W"
