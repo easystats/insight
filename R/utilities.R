@@ -4,12 +4,13 @@
 #' @description Collection of small helper functions. `trim_ws()` is an
 #' efficient function to trim leading and trailing whitespaces from character
 #' vectors or strings. `n_unique()` returns the number of unique values in a
-#' vector. `has_single_value()` is equivalent to `n_unique() == 1` but is faster.
-#' `safe_deparse()` is comparable to `deparse1()`, i.e. it can safely
-#' deparse very long expressions into a single string. `safe_deparse_symbol()`
-#' only deparses a substituted expressions when possible, which can be much faster
-#' than `deparse(substitute())` for those cases where `substitute()` returns no
-#' valid object name.
+#' vector. `has_single_value()` is equivalent to `n_unique() == 1` but is faster
+#' (note the different default for the `remove_na` argument). `safe_deparse()`
+#' is comparable to `deparse1()`, i.e. it can safely deparse very long
+#' expressions into a single string. `safe_deparse_symbol()` only deparses a
+#' substituted expressions when possible, which can be much faster than
+#' `deparse(substitute())` for those cases where `substitute()` returns no valid
+#' object name.
 #'
 #' @param x A (character) vector, or for some functions may also be a data frame.
 #' @param remove_na Logical, if missing values should be removed from the input.
