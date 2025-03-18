@@ -1075,4 +1075,20 @@ test_that("get/find_parameters with dispersion-random", {
     ),
     ignore_attr = TRUE
   )
+
+  # formula and find random works
+  out <- find_formula(m)
+  expect_equal(
+    out,
+    list(
+      conditional = count ~ spp + cover + mined,
+      random = ~1 | site,
+      zero_inflated = ~spp + mined,
+      dispersion = ~DOY,
+      dispersion_random = ~1 | site
+    ),
+    ignore_attr = TRUE
+  )
+  out <- find_random(m)
+  expect_identical(out, list(random = "site", dispersion_random = "site"))
 })
