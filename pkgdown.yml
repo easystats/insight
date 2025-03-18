@@ -6,7 +6,7 @@ articles:
   export: export.html
   insight: insight.html
   newmodels: newmodels.html
-last_built: 2025-03-18T13:18Z
+last_built: 2025-03-18T13:23Z
 urls:
   reference: https://easystats.github.io/insight/reference
   article: https://easystats.github.io/insight/articles
