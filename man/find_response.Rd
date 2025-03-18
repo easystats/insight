@@ -2,25 +2,12 @@
 % Please edit documentation in R/find_response.R
 \name{find_response}
 \alias{find_response}
-\alias{find_response.mjoint}
 \alias{find_response.joint}
 \title{Find name of the response variable}
 \usage{
 find_response(x, combine = TRUE, ...)
 
-\method{find_response}{mjoint}(
-  x,
-  combine = TRUE,
-  component = c("conditional", "survival", "all"),
-  ...
-)
-
-\method{find_response}{joint}(
-  x,
-  combine = TRUE,
-  component = c("conditional", "survival", "all"),
-  ...
-)
+\method{find_response}{joint}(x, combine = TRUE, component = "conditional", ...)
 }
 \arguments{
 \item{x}{A fitted model.}

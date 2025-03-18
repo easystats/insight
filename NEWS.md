@@ -1,12 +1,19 @@
 # insight (devel)
 
+## Changes
+
 * `find_random()` and `find_random_slopes()` now also extract random effects
   names from auxiliary components.
+
+* `find_random()` and `find_random_slopes()` now include random effects from the
+  dispersion component for models from package *glmmTMB*.
 
 * `clean_parameters()` for brms-models now assigns auxiliary parameters to their
   related `Component` and overwrites former assignments to `"conditional"`.
 
 * `format_table()` now includes more effect sizes when formatting column names.
+
+* Cleaning / revising package documentation.
 
 # insight 1.1.0
 

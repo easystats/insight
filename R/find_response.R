@@ -144,10 +144,9 @@ find_response.workflow <- function(x, combine = TRUE, ...) {
 }
 
 
-#' @rdname find_response
 #' @export
-find_response.mjoint <- function(x, combine = TRUE, component = c("conditional", "survival", "all"), ...) {
-  component <- match.arg(component)
+find_response.mjoint <- function(x, combine = TRUE, component = "conditional", ...) {
+  component <- validate_argument(component, c("conditional", "survival", "all"))
   f <- find_formula(x, verbose = FALSE)
 
   if (is.null(f)) {
@@ -169,11 +168,8 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
 
 #' @rdname find_response
 #' @export
-find_response.joint <- function(x,
-                                combine = TRUE,
-                                component = c("conditional", "survival", "all"),
-                                ...) {
-  component <- match.arg(component)
+find_response.joint <- function(x, combine = TRUE, component = "conditional", ...) {
+  component <- validate_argument(component, c("conditional", "survival", "all"))
   f <- find_formula(x, verbose = FALSE)
 
   if (is.null(f)) {

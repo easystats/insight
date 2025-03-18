@@ -92,7 +92,12 @@ identifies the function to be used to compute the covariance matrix.
 \code{"PL"}.
 \item Kenward-Roger approximation: \code{kenward-roger}. See \code{?pbkrtest::vcovAdj}.
 }
-}}
+}
+
+One exception are models of class \code{glmgee}, which have pre-defined options
+for the variance-covariance matrix calculation. These are \code{"robust"},
+\code{"df-adjusted"}, \code{"model"}, \code{"bias-corrected"}, and \code{"jackknife"}. See
+\code{?glmtoolbox::vcov.glmgee} for details.}
 
 \item{vcov_args}{List of arguments to be passed to the function identified by
 the \code{vcov} argument. This function is typically supplied by the

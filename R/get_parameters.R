@@ -772,8 +772,8 @@ get_parameters.afex_aov <- function(x, ...) {
 
 
 #' @export
-get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
-  component <- match.arg(component)
+get_parameters.pgmm <- function(x, component = "conditional", ...) {
+  component <- validate_argument(component, c("conditional", "all"))
   cs <- stats::coef(summary(x, time.dummies = TRUE, robust = FALSE))
   params <- data.frame(
     Parameter = rownames(cs),

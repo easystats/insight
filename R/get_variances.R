@@ -10,10 +10,13 @@
 #'
 #' @param x A mixed effects model.
 #' @param component Character value, indicating the variance component that
-#' should be returned. By default, all variance components are returned. The
-#' distribution-specific (`"distribution"`) and residual (`"residual"`) variance
-#' are the most computational intensive components, and hence may take a few
-#' seconds to calculate.
+#' should be returned. By default, all variance components are returned. Valid
+#' options are `"all"`, `"fixed"`, `"random"`, `"residual"`, `"distribution"`,
+#' `"dispersion"`, `"intercept"`, `"slope"`, `"rho01"`, and `"rho00"`, which are
+#' equivalent to calling the dedicated functions like `get_variance_residual()`
+#' etc. The distribution-specific (`"distribution"`) and residual (`"residual"`)
+#' variance are the most computational intensive components, and hence may take
+#' a few seconds to calculate.
 #' @param verbose Toggle off warnings.
 #' @param tolerance Tolerance for singularity check of random effects, to decide
 #' whether to compute random effect variances or not. Indicates up to which
@@ -99,6 +102,7 @@
 #' @section Residual variance:
 #' The residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}},
 #' is simply \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub> + &sigma;<sup>2</sup><sub><em>e</em></sub>}}{\eqn{\sigma^2_d + \sigma^2_e}}.
+#' It is also called *within-subject variance*.
 #'
 #' @section Random intercept variance:
 #' The random intercept variance, or *between-subject* variance
@@ -195,11 +199,7 @@ get_variance <- function(x, ...) {
 
 #' @export
 get_variance.default <- function(x,
-                                 component = c(
-                                   "all", "fixed", "random", "residual",
-                                   "distribution", "dispersion", "intercept",
-                                   "slope", "rho01", "rho00"
-                                 ),
+                                 component = "all",
                                  verbose = TRUE,
                                  ...) {
   if (isTRUE(verbose)) {
@@ -212,17 +212,19 @@ get_variance.default <- function(x,
 #' @rdname get_variance
 #' @export
 get_variance.merMod <- function(x,
-                                component = c(
-                                  "all", "fixed", "random", "residual",
-                                  "distribution", "dispersion", "intercept",
-                                  "slope", "rho01", "rho00"
-                                ),
+                                component = "all",
                                 tolerance = 1e-8,
                                 null_model = NULL,
                                 approximation = "lognormal",
                                 verbose = TRUE,
                                 ...) {
-  component <- match.arg(component)
+  component <- validate_argument(
+    component,
+    c(
+      "all", "fixed", "random", "residual", "distribution", "dispersion",
+      "intercept", "slope", "rho01", "rho00"
+    )
+  )
   .safe(.compute_variances(
     model = x,
     component = component,
@@ -270,18 +272,20 @@ get_variance.brmsfit <- get_variance.merMod
 #' @rdname get_variance
 #' @export
 get_variance.glmmTMB <- function(x,
-                                 component = c(
-                                   "all", "fixed", "random", "residual",
-                                   "distribution", "dispersion", "intercept",
-                                   "slope", "rho01", "rho00"
-                                 ),
+                                 component = "all",
                                  model_component = NULL,
                                  tolerance = 1e-8,
                                  null_model = NULL,
                                  approximation = "lognormal",
                                  verbose = TRUE,
                                  ...) {
-  component <- match.arg(component)
+  component <- validate_argument(
+    component,
+    c(
+      "all", "fixed", "random", "residual", "distribution", "dispersion",
+      "intercept", "slope", "rho01", "rho00"
+    )
+  )
   .safe(.compute_variances(
     model = x,
     component = component,
@@ -301,17 +305,19 @@ get_variance.MixMod <- get_variance.glmmTMB
 
 #' @export
 get_variance.mixed <- function(x,
-                               component = c(
-                                 "all", "fixed", "random", "residual",
-                                 "distribution", "dispersion", "intercept",
-                                 "slope", "rho01", "rho00"
-                               ),
+                               component = "all",
                                tolerance = 1e-8,
                                null_model = NULL,
                                approximation = "lognormal",
                                verbose = TRUE,
                                ...) {
-  component <- match.arg(component)
+  component <- validate_argument(
+    component,
+    c(
+      "all", "fixed", "random", "residual", "distribution", "dispersion",
+      "intercept", "slope", "rho01", "rho00"
+    )
+  )
   .safe(.compute_variances(
     model = x$full_model,
     component = component,

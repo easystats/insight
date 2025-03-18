@@ -3,8 +3,9 @@
 \docType{data}
 \name{fish}
 \alias{fish}
-\title{Sample data set}
+\title{Sample data set for count models}
 \description{
-A sample data set, used in tests and some examples.
+A sample data set, used in tests and some examples. Useful for
+testing count models.
 }
 \keyword{data}

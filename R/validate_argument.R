@@ -3,7 +3,10 @@
 #'
 #' @description This is a replacement for `match.arg()`, however, the error
 #' string should be more informative for users. The name of the affected argument
-#' is shown, and possible typos as well as remaining valid options.
+#' is shown, and possible typos as well as remaining valid options. Not that
+#' the argument `several.ok` is always `FALSE` in `validate_argument()`, i.e.
+#' this function - unlike `match.arg()` - does *not* allow evaluating several
+#' valid options at once.
 #'
 #' @param argument The bare name of the argument to be validated.
 #' @param options Valid options, usually a character vector.
