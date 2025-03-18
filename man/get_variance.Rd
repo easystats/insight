@@ -3,7 +3,6 @@
 \name{get_variance}
 \alias{get_variance}
 \alias{get_variance.merMod}
-\alias{get_variance.glmmTMB}
 \alias{get_variance_residual}
 \alias{get_variance_fixed}
 \alias{get_variance_random}
@@ -19,20 +18,7 @@ get_variance(x, ...)
 
 \method{get_variance}{merMod}(
   x,
-  component = c("all", "fixed", "random", "residual", "distribution", "dispersion",
-    "intercept", "slope", "rho01", "rho00"),
-  tolerance = 1e-08,
-  null_model = NULL,
-  approximation = "lognormal",
-  verbose = TRUE,
-  ...
-)
-
-\method{get_variance}{glmmTMB}(
-  x,
-  component = c("all", "fixed", "random", "residual", "distribution", "dispersion",
-    "intercept", "slope", "rho01", "rho00"),
-  model_component = NULL,
+  component = "all",
   tolerance = 1e-08,
   null_model = NULL,
   approximation = "lognormal",
@@ -64,10 +50,13 @@ get_correlation_slopes(x, verbose = TRUE, ...)
 \item{...}{Currently not used.}
 
 \item{component}{Character value, indicating the variance component that
-should be returned. By default, all variance components are returned. The
-distribution-specific (\code{"distribution"}) and residual (\code{"residual"}) variance
-are the most computational intensive components, and hence may take a few
-seconds to calculate.}
+should be returned. By default, all variance components are returned. Valid
+options are \code{"all"}, \code{"fixed"}, \code{"random"}, \code{"residual"}, \code{"distribution"},
+\code{"dispersion"}, \code{"intercept"}, \code{"slope"}, \code{"rho01"}, and \code{"rho00"}, which are
+equivalent to calling the dedicated functions like \code{get_variance_residual()}
+etc. The distribution-specific (\code{"distribution"}) and residual (\code{"residual"})
+variance are the most computational intensive components, and hence may take
+a few seconds to calculate.}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
@@ -177,6 +166,7 @@ distribution" (\emph{Nakagawa et al. 2017}). In (most? many?) cases, this will b
 
 The residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}},
 is simply \ifelse{html}{\out{&sigma;<sup>2</sup><sub>d</sub> + &sigma;<sup>2</sup><sub><em>e</em></sub>}}{\eqn{\sigma^2_d + \sigma^2_e}}.
+It is also called \emph{within-subject variance}.
 }
 
 \section{Random intercept variance}{

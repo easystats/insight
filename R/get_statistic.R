@@ -2079,10 +2079,8 @@ get_statistic.nlrq <- get_statistic.rq
 
 
 #' @export
-get_statistic.rqss <- function(x,
-                               component = c("all", "conditional", "smooth_terms"),
-                               ...) {
-  component <- match.arg(component)
+get_statistic.rqss <- function(x, component = "all", ...) {
+  component <- validate_argument(component, c("all", "conditional", "smooth_terms"))
 
   cs <- summary(x)
   stat <- c(as.vector(cs$coef[, "t value"]), as.vector(cs$qsstab[, "F value"]))

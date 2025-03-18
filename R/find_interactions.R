@@ -4,6 +4,7 @@
 #' @description Returns all lowest to highest order interaction terms from a model.
 #'
 #' @inheritParams find_predictors
+#' @inheritSection find_predictors Model components
 #'
 #' @return A list of character vectors that represent the interaction terms.
 #'  Depending on `component`, the returned list has following
@@ -26,10 +27,11 @@
 #' m <- lm(mpg ~ wt * cyl + vs * hp * gear + carb, data = mtcars)
 #' find_interactions(m)
 #' @export
-find_interactions <- function(x,
-                              component = c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments"),
-                              flatten = FALSE) {
-  component <- match.arg(component)
+find_interactions <- function(x, component = "all", flatten = FALSE) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments")
+  )
 
   .find_interactions(x,
     effects = "fixed",

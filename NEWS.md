@@ -1,5 +1,7 @@
 # insight (devel)
 
+## Changes
+
 * `find_random()` and `find_random_slopes()` now also extract random effects
   names from auxiliary components.
 
@@ -7,6 +9,8 @@
   related `Component` and overwrites former assignments to `"conditional"`.
 
 * `format_table()` now includes more effect sizes when formatting column names.
+
+* Cleaning / revising docstrings.
 
 # insight 1.1.0
 
