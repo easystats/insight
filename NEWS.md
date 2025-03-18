@@ -10,7 +10,7 @@
 
 * `format_table()` now includes more effect sizes when formatting column names.
 
-* Cleaning / revising docstrings.
+* Cleaning / revising package documentation.
 
 # insight 1.1.0
 
