@@ -80,12 +80,11 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
     regex = "should either indicate"
   )
 
-  skip_if_not_installed("ggeffects")
   skip_if_not_installed("datawizard")
-  data(efc, package = "ggeffects")
-  efc$c161sex <- datawizard::to_factor(efc$c161sex)
-  efc$e16sex <- datawizard::to_factor(efc$e16sex)
-  model <- lm(neg_c_7 ~ barthtot + c160age * c161sex, data = efc)
+  data(efc_insight, package = "insight")
+  efc_insight$c161sex <- datawizard::to_factor(efc_insight$c161sex)
+  efc_insight$e16sex <- datawizard::to_factor(efc_insight$e16sex)
+  model <- lm(neg_c_7 ~ barthtot + c160age * c161sex, data = efc_insight)
   out <- insight::get_datagrid(model, by = c("c160age=[pretty]", "c161sex"))
   expect_identical(out$c160age, c(20, 40, 60, 80, 20, 40, 60, 80))
 })

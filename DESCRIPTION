@@ -127,7 +127,6 @@ Suggests:
     gee,
     geepack,
     geoR,
-    ggeffects (>= 2.2.0),
     GLMMadaptive,
     glmmTMB (>= 1.1.10),
     glmtoolbox,
