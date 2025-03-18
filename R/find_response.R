@@ -166,6 +166,7 @@ find_response.mjoint <- function(x, combine = TRUE, component = "conditional", .
 }
 
 
+#' @rdname find_response
 #' @export
 find_response.joint <- function(x, combine = TRUE, component = "conditional", ...) {
   component <- validate_argument(component, c("conditional", "survival", "all"))
