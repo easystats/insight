@@ -14,7 +14,9 @@ DOI
 DirichletReg
 DirichletRegModel
 Dom
+EFC
 ESS
+EUROFAMCARE
 Elff
 GJRM
 GLMM
@@ -71,6 +73,7 @@ bmwiernik
 brms
 brmsfit
 btergm
+caregiving
 ci
 cglm
 clm
