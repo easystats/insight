@@ -1082,10 +1082,10 @@ test_that("get/find_parameters with dispersion-random", {
     out,
     list(
       conditional = count ~ spp + cover + mined,
-      random = ~1 | site,
-      zero_inflated = ~spp + mined,
+      random = ~ 1 | site,
+      zero_inflated = ~ spp + mined,
       dispersion = ~DOY,
-      dispersion_random = ~1 | site
+      dispersion_random = ~ 1 | site
     ),
     ignore_attr = TRUE
   )
