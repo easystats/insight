@@ -1091,4 +1091,17 @@ test_that("get/find_parameters with dispersion-random", {
   )
   out <- find_random(m)
   expect_identical(out, list(random = "site", dispersion_random = "site"))
+
+  skip_on_cran()
+
+  data(Salamanders, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(
+    count ~ spp + cover + mined + (1 | site),
+    ziformula = ~ spp + mined,
+    dispformula = ~ DOY + (1 + Wtemp | site),
+    data = Salamanders,
+    family = poisson()
+  )
+  out <- find_random_slopes(m)
+  expect_identical(out, list(dispersion_random = "Wtemp"))
 })
