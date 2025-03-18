@@ -39,7 +39,7 @@ are not available otherwise."><meta property="og:image" content="https://easysta
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -285,7 +285,10 @@ identifies the function to be used to compute the covariance matrix.</p><ul><li>
 <code>"PL"</code>.</p></li>
 <li><p>Kenward-Roger approximation: <code>kenward-roger</code>. See <code><a href="https://rdrr.io/pkg/pbkrtest/man/kr-vcovAdj.html" class="external-link">?pbkrtest::vcovAdj</a></code>.</p></li>
 </ul></li>
-</ul></dd>
+</ul><p>One exception are models of class <code>glmgee</code>, which have pre-defined options
+for the variance-covariance matrix calculation. These are <code>"robust"</code>,
+<code>"df-adjusted"</code>, <code>"model"</code>, <code>"bias-corrected"</code>, and <code>"jackknife"</code>. See
+<code><a href="https://rdrr.io/pkg/glmtoolbox/man/vcov.glmgee.html" class="external-link">?glmtoolbox::vcov.glmgee</a></code> for details.</p></dd>
 
 
 <dt id="arg-vcov-args">vcov_args<a class="anchor" aria-label="anchor" href="#arg-vcov-args"></a></dt>

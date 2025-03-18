@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,40 +66,16 @@
 <span><span class="fu">n_parameters</span><span class="op">(</span><span class="va">x</span>, remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'merMod'</span></span>
-<span><span class="fu">n_parameters</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,</span>
-<span>  remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
+<span><span class="fu">n_parameters</span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="st">"fixed"</span>, remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'glmmTMB'</span></span>
 <span><span class="fu">n_parameters</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span><span class="op">)</span>,</span>
+<span>  effects <span class="op">=</span> <span class="st">"fixed"</span>,</span>
+<span>  component <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'zeroinfl'</span></span>
-<span><span class="fu">n_parameters</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span><span class="op">)</span>,</span>
-<span>  remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'gam'</span></span>
-<span><span class="fu">n_parameters</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"smooth_terms"</span><span class="op">)</span>,</span>
-<span>  remove_nonestimable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'brmsfit'</span></span>
-<span><span class="fu">n_parameters</span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="st">"all"</span>, component <span class="op">=</span> <span class="st">"all"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -127,11 +103,24 @@ be abbreviated.</p></dd>
 
 
 <dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
-<dd><p>Should total number of parameters, number parameters for the
-conditional model, the zero-inflated part of the model, the dispersion term
-or the instrumental variables be returned? Applies to models with
-zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated.</p></dd>
+<dd><p>Which type of parameters to return, such as parameters for
+the conditional model, the zero-inflated part of the model, the dispersion
+term, the instrumental variables or marginal effects be returned? Applies to
+models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models with
+marginal effects (from <strong>mfx</strong>). See details in section <em>Model Components</em>
+.May be abbreviated. Note that the <em>conditional</em> component also refers to the
+<em>count</em> or <em>mean</em> component - names may differ, depending on the modeling
+package. There are three convenient shortcuts (not applicable to <em>all</em> model
+classes):</p><ul><li><p><code>component = "all"</code> returns all possible parameters.</p></li>
+<li><p>If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
+<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned (everything
+that are fixed or random effects - depending on the <code>effects</code> argument -
+but no auxiliary parameters).</p></li>
+<li><p>For <code>component = "distributional"</code> (or <code>"auxiliary"</code>), components like
+<code>sigma</code>, <code>dispersion</code>, <code>beta</code> or <code>precision</code> (and other auxiliary
+parameters) are returned.</p></li>
+</ul></dd>
 
 </dl></div>
     <div class="section level2">

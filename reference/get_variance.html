@@ -13,7 +13,7 @@ etc.'><meta property="og:image" content="https://easystats.github.io/insight/ref
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,8 +74,7 @@ etc.</p>
 <span><span class="co"># S3 method for class 'merMod'</span></span>
 <span><span class="fu">get_variance</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span>, <span class="st">"residual"</span>, <span class="st">"distribution"</span>, <span class="st">"dispersion"</span>,</span>
-<span>    <span class="st">"intercept"</span>, <span class="st">"slope"</span>, <span class="st">"rho01"</span>, <span class="st">"rho00"</span><span class="op">)</span>,</span>
+<span>  component <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  tolerance <span class="op">=</span> <span class="fl">1e-08</span>,</span>
 <span>  null_model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  approximation <span class="op">=</span> <span class="st">"lognormal"</span>,</span>
@@ -86,8 +85,7 @@ etc.</p>
 <span><span class="co"># S3 method for class 'glmmTMB'</span></span>
 <span><span class="fu">get_variance</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span>, <span class="st">"residual"</span>, <span class="st">"distribution"</span>, <span class="st">"dispersion"</span>,</span>
-<span>    <span class="st">"intercept"</span>, <span class="st">"slope"</span>, <span class="st">"rho01"</span>, <span class="st">"rho00"</span><span class="op">)</span>,</span>
+<span>  component <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  model_component <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tolerance <span class="op">=</span> <span class="fl">1e-08</span>,</span>
 <span>  null_model <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -129,10 +127,13 @@ etc.</p>
 
 <dt id="arg-component">component<a class="anchor" aria-label="anchor" href="#arg-component"></a></dt>
 <dd><p>Character value, indicating the variance component that
-should be returned. By default, all variance components are returned. The
-distribution-specific (<code>"distribution"</code>) and residual (<code>"residual"</code>) variance
-are the most computational intensive components, and hence may take a few
-seconds to calculate.</p></dd>
+should be returned. By default, all variance components are returned. Valid
+options are <code>"all"</code>, <code>"fixed"</code>, <code>"random"</code>, <code>"residual"</code>, <code>"distribution"</code>,
+<code>"dispersion"</code>, <code>"intercept"</code>, <code>"slope"</code>, <code>"rho01"</code>, and <code>"rho00"</code>, which are
+equivalent to calling the dedicated functions like <code>get_variance_residual()</code>
+etc. The distribution-specific (<code>"distribution"</code>) and residual (<code>"residual"</code>)
+variance are the most computational intensive components, and hence may take
+a few seconds to calculate.</p></dd>
 
 
 <dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
@@ -248,7 +249,8 @@ distribution" (<em>Nakagawa et al. 2017</em>). In (most? many?) cases, this will
 
 
 <p>The residual variance, σ<sup>2</sup><sub>ε</sub>,
-is simply σ<sup>2</sup><sub>d</sub> + σ<sup>2</sup><sub><em>e</em></sub>.</p>
+is simply σ<sup>2</sup><sub>d</sub> + σ<sup>2</sup><sub><em>e</em></sub>.
+It is also called <em>within-subject variance</em>.</p>
     </div>
     <div class="section level2">
     <h2 id="random-intercept-variance">Random intercept variance<a class="anchor" aria-label="anchor" href="#random-intercept-variance"></a></h2>

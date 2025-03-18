@@ -9,7 +9,7 @@ for more model objects that probably don't provide a vcov()-method."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,71 +69,14 @@ for more model objects that probably don't provide a <code><a href="https://rdrr
 <span><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, vcov <span class="op">=</span> <span class="cn">NULL</span>, vcov_args <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'glmgee'</span></span>
-<span><span class="fu">get_varcov</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"robust"</span>, <span class="st">"df-adjusted"</span>, <span class="st">"model"</span>, <span class="st">"bias-corrected"</span>, <span class="st">"jackknife"</span><span class="op">)</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'nestedLogit'</span></span>
-<span><span class="fu">get_varcov</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  vcov <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  vcov_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'betareg'</span></span>
-<span><span class="fu">get_varcov</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"precision"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'clm2'</span></span>
-<span><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"scale"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'truncreg'</span></span>
-<span><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"all"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, vcov <span class="op">=</span> <span class="st">"robust"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'hurdle'</span></span>
 <span><span class="fu">get_varcov</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
+<span>  component <span class="op">=</span> <span class="st">"conditional"</span>,</span>
 <span>  vcov <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vcov_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'glmmTMB'</span></span>
-<span><span class="fu">get_varcov</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"dispersion"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'MixMod'</span></span>
-<span><span class="fu">get_varcov</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"zero_inflated"</span>, <span class="st">"zi"</span>, <span class="st">"dispersion"</span>, <span class="st">"auxiliary"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'brmsfit'</span></span>
-<span><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="st">"conditional"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'betamfx'</span></span>
-<span><span class="fu">get_varcov</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conditional"</span>, <span class="st">"precision"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -142,7 +85,7 @@ for more model objects that probably don't provide a <code><a href="https://rdrr
 <span><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, complete <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'mixor'</span></span>
-<span><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">get_varcov</span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="st">"all"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -178,7 +121,10 @@ identifies the function to be used to compute the covariance matrix.</p><ul><li>
 <code>"PL"</code>.</p></li>
 <li><p>Kenward-Roger approximation: <code>kenward-roger</code>. See <code><a href="https://rdrr.io/pkg/pbkrtest/man/kr-vcovAdj.html" class="external-link">?pbkrtest::vcovAdj</a></code>.</p></li>
 </ul></li>
-</ul></dd>
+</ul><p>One exception are models of class <code>glmgee</code>, which have pre-defined options
+for the variance-covariance matrix calculation. These are <code>"robust"</code>,
+<code>"df-adjusted"</code>, <code>"model"</code>, <code>"bias-corrected"</code>, and <code>"jackknife"</code>. See
+<code><a href="https://rdrr.io/pkg/glmtoolbox/man/vcov.glmgee.html" class="external-link">?glmtoolbox::vcov.glmgee</a></code> for details.</p></dd>
 
 
 <dt id="arg-vcov-args">vcov_args<a class="anchor" aria-label="anchor" href="#arg-vcov-args"></a></dt>
@@ -199,18 +145,18 @@ or models with precision (e.g. <code>betareg</code>) component. <code>component<
 of <code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code>, <code>"dispersion"</code>, <code>"precision"</code>,
 or <code>"all"</code>. May be abbreviated. Note that the <em>conditional</em> component also
 refers to the <em>count</em> or <em>mean</em> component - names may differ, depending on
-the modeling package.</p></dd>
-
-
-<dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
-<dd><p>Should the complete variance-covariance matrix of the model
-be returned, or only for specific model parameters only? Currently only
-applies to models of class <code>mixor</code>.</p></dd>
+the modeling package. See section <em>Model components</em> for details.</p></dd>
 
 
 <dt id="arg-complete">complete<a class="anchor" aria-label="anchor" href="#arg-complete"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, for <code>aov</code>, returns the full
 variance-covariance matrix.</p></dd>
+
+
+<dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
+<dd><p>Should the complete variance-covariance matrix of the model
+be returned, or only for specific model parameters only? Currently only
+applies to models of class <code>mixor</code> and <code>MixMod</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -224,6 +170,48 @@ in case of negative eigenvalues of the variance-covariance matrix. This
 ensures that it is still possible, for instance, to calculate standard
 errors of model parameters. A message is shown when the matrix is negative
 definite and a corrected matrix is returned.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="model-components">Model components<a class="anchor" aria-label="anchor" href="#model-components"></a></h2>
+
+
+<p>Possible values for the <code>component</code> argument depend on the model class.
+Following are valid options:</p><ul><li><p><code>"all"</code>: returns all model components, applies to all models, but will only
+have an effect for models with more than just the conditional model component.</p></li>
+<li><p><code>"conditional"</code>: only returns the conditional component, i.e. "fixed effects"
+terms from the model. Will only have an effect for models with more than
+just the conditional model component.</p></li>
+<li><p><code>"smooth_terms"</code>: returns smooth terms, only applies to GAMs (or similar
+models that may contain smooth terms).</p></li>
+<li><p><code>"zero_inflated"</code> (or <code>"zi"</code>): returns the zero-inflation component.</p></li>
+<li><p><code>"dispersion"</code>: returns the dispersion model component. This is common
+for models with zero-inflation or that can model the dispersion parameter.</p></li>
+<li><p><code>"instruments"</code>: for instrumental-variable or some fixed effects regression,
+returns the instruments.</p></li>
+<li><p><code>"nonlinear"</code>: for non-linear models (like models of class <code>nlmerMod</code> or
+<code>nls</code>), returns staring estimates for the nonlinear parameters.</p></li>
+<li><p><code>"correlation"</code>: for models with correlation-component, like <code>gls</code>, the
+variables used to describe the correlation structure are returned.</p></li>
+<li><p><code>"location"</code>: returns location parameters such as <code>conditional</code>,
+<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> (everything that are
+fixed or random effects - depending on the <code>effects</code> argument - but no
+auxiliary parameters).</p></li>
+<li><p><code>"distributional"</code> (or <code>"auxiliary"</code>): components like <code>sigma</code>, <code>dispersion</code>,
+<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p></li>
+</ul><p><strong>Special models</strong></p>
+<p>Some model classes also allow rather uncommon options. These are:</p><ul><li><p><strong>mhurdle</strong>: <code>"infrequent_purchase"</code>, <code>"ip"</code>, and <code>"auxiliary"</code></p></li>
+<li><p><strong>BGGM</strong>: <code>"correlation"</code> and <code>"intercept"</code></p></li>
+<li><p><strong>BFBayesFactor</strong>, <strong>glmx</strong>: <code>"extra"</code></p></li>
+<li><p><strong>averaging</strong>:<code>"conditional"</code> and <code>"full"</code></p></li>
+<li><p><strong>mjoint</strong>: <code>"survival"</code></p></li>
+<li><p><strong>mfx</strong>: <code>"precision"</code>, <code>"marginal"</code></p></li>
+<li><p><strong>betareg</strong>, <strong>DirichletRegModel</strong>: <code>"precision"</code></p></li>
+<li><p><strong>mvord</strong>: <code>"thresholds"</code> and <code>"correlation"</code></p></li>
+<li><p><strong>clm2</strong>: <code>"scale"</code></p></li>
+<li><p><strong>selection</strong>: <code>"selection"</code>, <code>"outcome"</code>, and <code>"auxiliary"</code></p></li>
+</ul><p>For models of class <code>brmsfit</code> (package <strong>brms</strong>), even more options are
+possible for the <code>component</code> argument, which are not all documented in detail
+here.</p>
     </div>
 
     <div class="section level2">
