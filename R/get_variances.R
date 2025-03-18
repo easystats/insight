@@ -269,6 +269,7 @@ get_variance.lme <- get_variance.merMod
 get_variance.brmsfit <- get_variance.merMod
 
 
+#' @rdname get_variance
 #' @export
 get_variance.glmmTMB <- function(x,
                                  component = "all",

@@ -3,6 +3,7 @@
 \name{get_variance}
 \alias{get_variance}
 \alias{get_variance.merMod}
+\alias{get_variance.glmmTMB}
 \alias{get_variance_residual}
 \alias{get_variance_fixed}
 \alias{get_variance_random}
@@ -19,6 +20,17 @@ get_variance(x, ...)
 \method{get_variance}{merMod}(
   x,
   component = "all",
+  tolerance = 1e-08,
+  null_model = NULL,
+  approximation = "lognormal",
+  verbose = TRUE,
+  ...
+)
+
+\method{get_variance}{glmmTMB}(
+  x,
+  component = "all",
+  model_component = NULL,
   tolerance = 1e-08,
   null_model = NULL,
   approximation = "lognormal",
