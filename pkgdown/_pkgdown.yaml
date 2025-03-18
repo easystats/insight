@@ -117,6 +117,7 @@ reference:
     desc: >
       Used in examples or for testing
     contents:
+      - efc_insight
       - fish
 
   - title: "Documentation of Specific Class Objects"
