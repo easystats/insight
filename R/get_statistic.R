@@ -11,30 +11,6 @@
 #'   where the index of the column that is being pulled is `column_index`.
 #'   Defaults to 3, which is the default statistic column for most models'
 #'   summary-output.
-#' @param component String, indicating the model component for which parameters
-#'   should be returned. The default for all models is `"all"`, which returns
-#'   the requested information for all available model components. Furthermore,
-#'   there are specific options depending on the model class. `component` then
-#'   may be one of:
-#'
-#'   - For zero-inflated models (`gmmTMB`, `hurdle`, `zeroinfl`, ...) can also
-#'     be `"conditional"` or `"zero-inflated"`. Note that the *conditional*
-#'     component is also called *count* or *mean* component, depending on the
-#'     model. `glmmTMB` also has a `"dispersion"` component.
-#'   - For models with smooth terms, `component = "smooth_terms"` returns the
-#'     test statistic for the smooth terms.
-#'   - For models of class `mhurdle`, may also be one of  `"conditional"`,
-#'     `"zero_inflated"`, `"infrequent_purchase"` or `"auxiliary"`.
-#'   - For models of class `clm2` or `clmm2`, may also be `"scale"`.
-#'   - For models of class `betareg`, `betaor` or `betamfx`, may also be
-#'     `"precision"`. For other `*mfx` models (`logitmfx`, `betamfx`, ...),
-#'     may also be `"marginal"`.
-#'   - For models of class `mvord`, may also be `"thresholds"` or
-#'     `"correlation"`.
-#'   - For models of class `selection`, may also be `"selection"`, `"outcome"`
-#'     or `"auxiliary"`.
-#'   - For models of class `glmx`, may also be `"extra"`.
-#'   - For models of class `averaging`, may also be `"full"`.
 #' @param robust Logical, if `TRUE`, test statistic based on robust
 #'   standard errors is returned.
 #' @param adjust Character value naming the method used to adjust p-values or
@@ -42,8 +18,11 @@
 #' @param ci Confidence Interval (CI) level. Default to `0.95` (`95%`).
 #'   Currently only applies to objects of class `emmGrid`.
 #' @param ... Currently not used.
+#' @inheritParams find_predictors
 #' @inheritParams get_parameters
 #' @inheritParams get_parameters.emmGrid
+#'
+#' @inheritSection find_predictors Model components
 #'
 #' @return A data frame with the model's parameter names and the related test
 #'   statistic.

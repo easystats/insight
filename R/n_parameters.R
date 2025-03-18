@@ -3,11 +3,6 @@
 #' Returns the number of parameters (coefficients) of a model.
 #'
 #' @param x A statistical model.
-#' @param component Should total number of parameters, number parameters for the
-#'   conditional model, the zero-inflated part of the model, the dispersion term
-#'   or the instrumental variables be returned? Applies to models with
-#'   zero-inflated and/or dispersion formula, or to models with instrumental
-#'   variable (so called fixed-effects regressions). May be abbreviated.
 #' @param remove_nonestimable Logical, if `TRUE`, removes (i.e. does not
 #'   count) non-estimable parameters (which may occur for models with
 #'   rank-deficient model matrix).
@@ -61,10 +56,10 @@ n_parameters.default <- function(x, remove_nonestimable = FALSE, ...) {
 #' @rdname n_parameters
 #' @export
 n_parameters.merMod <- function(x,
-                                effects = c("fixed", "random"),
+                                effects = "fixed",
                                 remove_nonestimable = FALSE,
                                 ...) {
-  effects <- match.arg(effects)
+  effects <- validate_argument(effects, c("fixed", "random"))
 
   .n_parameters_effects(x,
     effects = effects,
@@ -111,12 +106,12 @@ n_parameters.svy2lme <- n_parameters.merMod
 
 #' @export
 n_parameters.MixMod <- function(x,
-                                effects = c("fixed", "random"),
-                                component = c("all", "conditional", "zi", "zero_inflated"),
+                                effects = "fixed",
+                                component = "all",
                                 remove_nonestimable = FALSE,
                                 ...) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+  effects <- validate_argument(effects, c("fixed", "random"))
+  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
 
   if (effects == "random" || isFALSE(remove_nonestimable)) {
     length(unlist(
@@ -143,13 +138,12 @@ n_parameters.glmmTMB <- n_parameters.MixMod
 
 # Models with (zero-inflation) components ----------------------------
 
-#' @rdname n_parameters
 #' @export
 n_parameters.zeroinfl <- function(x,
-                                  component = c("all", "conditional", "zi", "zero_inflated"),
+                                  component = "all",
                                   remove_nonestimable = FALSE,
                                   ...) {
-  component <- match.arg(component)
+  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
   .n_parameters_component(x, component, remove_nonestimable, ...)
 }
 
@@ -162,13 +156,12 @@ n_parameters.zerotrunc <- n_parameters.default
 
 # GAMs ----------------------------
 
-#' @rdname n_parameters
 #' @export
 n_parameters.gam <- function(x,
-                             component = c("all", "conditional", "smooth_terms"),
+                             component = "all",
                              remove_nonestimable = FALSE,
                              ...) {
-  component <- match.arg(component)
+  component <- validate_argument(component, c("all", "conditional", "smooth_terms"))
   .n_parameters_component(x, component, remove_nonestimable, ...)
 }
 
@@ -181,14 +174,13 @@ n_parameters.vgam <- n_parameters.gam
 
 # Bayesian Models ----------------------------
 
-#' @rdname n_parameters
 #' @export
 n_parameters.brmsfit <- function(x,
                                  effects = "all",
                                  component = "all",
                                  ...) {
-  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  component <- match.arg(component, choices = c("all", .all_elements()))
+  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  component <- validate_argument(component, c("all", .all_elements()))
 
   length(unlist(
     find_parameters(
@@ -206,11 +198,11 @@ n_parameters.brmsfit <- function(x,
 
 #' @export
 n_parameters.stanreg <- function(x,
-                                 effects = c("all", "fixed", "random"),
-                                 component = c("all", "conditional", "smooth_terms"),
+                                 effects = "all",
+                                 component = "all",
                                  ...) {
-  effects <- match.arg(effects)
-  component <- match.arg(component)
+  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  component <- validate_argument(component, c("all", "conditional", "smooth_terms"))
 
   length(unlist(
     find_parameters(
@@ -239,8 +231,8 @@ n_parameters.gls <- function(x, ...) {
 
 
 #' @export
-n_parameters.logitr <- function(x, effects = c("all", "fixed", "random"), ...) {
-  effects <- match.arg(effects)
+n_parameters.logitr <- function(x, effects = "all", ...) {
+  effects <- validate_argument(effects, c("all", "fixed", "random"))
   switch(effects,
     fixed = x$n$parsFixed,
     random = x$n$parsRandom,
