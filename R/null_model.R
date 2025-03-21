@@ -54,7 +54,7 @@ null_model.default <- function(model, verbose = TRUE, ...) {
   } else {
     out <- tryCatch(
       {
-        base_args$offset <- offset = str2lang(offset_term)
+        base_args$offset <- str2lang(offset_term)
         suppressWarnings(do.call(stats::update, base_args))
       },
       error = function(e) {
