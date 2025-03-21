@@ -3,6 +3,7 @@ skip_if_not_installed("lme4")
 skip_if_not_installed("TMB")
 
 test_that("null_model with offset", {
+  data(mtcars)
   m1 <- suppressWarnings(lme4::glmer.nb(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
   m2 <- suppressWarnings(lme4::glmer.nb(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
   nm1 <- null_model(m1)
@@ -13,6 +14,7 @@ test_that("null_model with offset", {
 skip_on_os("mac") # error: FreeADFunObject
 
 test_that("null_model with offset", {
+  data(mtcars)
   m1 <- suppressWarnings(glmmTMB::glmmTMB(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
   m2 <- suppressWarnings(glmmTMB::glmmTMB(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
   nm1 <- null_model(m1)
