@@ -34,19 +34,30 @@ null_model <- function(model, verbose = TRUE, ...) {
     }
   )
 
+  # get model data and variables
+  model_data <- get_data(model)
+  model_vars <- find_variables(model, effects = "all", component = "all", flatten = TRUE)
+
+  # columns in model and data - we need to pass the filtered data set
+  cols <- intersect(model_vars, colnames(model_data))
+  update_data <- model_data[stats::complete.cases(model_data[cols]), cols, drop = FALSE]
+
   if (is_mixed_model(model)) {
-    .null_model_mixed(model, offset_term, model_formula, verbose)
+    .null_model_mixed(model, offset_term, model_formula, update_data, verbose)
   } else if (inherits(model, "clm2")) {
-    stats::update(model, location = ~1, scale = ~1)
+    stats::update(model, location = ~1, scale = ~1, data = update_data)
   } else if (inherits(model, "multinom")) {
-    stats::update(model, ~1, trace = FALSE)
+    stats::update(model, ~1, trace = FALSE, data = update_data)
   } else if (is.null(offset_term)) {
     # stats::update(model, ~1)
-    out <- stats::update(model, ~1, evaluate = FALSE)
+    out <- stats::update(model, ~1, evaluate = FALSE, data = update_data)
     eval(out, envir = parent.frame())
   } else {
     tryCatch(
-      do.call(stats::update, list(model, ~1, offset = str2lang(offset_term))),
+      do.call(
+        stats::update,
+        list(model, ~1, offset = str2lang(offset_term), data = update_data)
+      ),
       error = function(e) {
         if (verbose) {
           format_warning(
@@ -54,22 +65,26 @@ null_model <- function(model, verbose = TRUE, ...) {
             "Coefficients might be inaccurate."
           )
         }
-        stats::update(model, ~1)
+        stats::update(model, ~1, data = update_data)
       }
     )
   }
 }
 
 
-.null_model_mixed <- function(model, offset_term = NULL, model_formula = NULL, verbose = TRUE) {
+.null_model_mixed <- function(model,
+                              offset_term = NULL,
+                              model_formula = NULL,
+                              update_data = NULL,
+                              verbose = TRUE) {
   if (inherits(model, "MixMod")) {
     nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
-    null.model <- suppressWarnings(stats::update(model, fixed = nullform))
+    null.model <- suppressWarnings(stats::update(model, fixed = nullform, data = update_data))
     # fix fixed effects formula
     null.model$call$fixed <- nullform
   } else if (inherits(model, "cpglmm")) {
     nullform <- model_formula[["random"]]
-    null.model <- suppressWarnings(stats::update(model, nullform))
+    null.model <- suppressWarnings(stats::update(model, nullform, data = update_data))
   } else if (inherits(model, "glmmTMB") && !is.null(model_formula$zero_inflated)) {
     insight::check_if_installed("glmmTMB")
     # for zero-inflated models, we need to create the NULL model for the
@@ -94,6 +109,7 @@ null_model <- function(model, verbose = TRUE, ...) {
     if (!is.null(offset_term)) {
       model_args$offset <- str2lang(offset_term)
     }
+    modelargs$data = update_data
     null.model <- do.call(glmmTMB::glmmTMB, model_args)
   } else {
     f <- stats::formula(model)
@@ -106,9 +122,17 @@ null_model <- function(model, verbose = TRUE, ...) {
     nullform <- stats::reformulate(re.terms, response = resp)
     null.model <- tryCatch(
       if (is.null(offset_term)) {
-        suppressWarnings(stats::update(model, nullform))
+        suppressWarnings(stats::update(model, nullform, data = update_data))
       } else {
-        suppressWarnings(do.call(stats::update, list(model, formula = nullform, offset = str2lang(offset_term))))
+        suppressWarnings(do.call(
+          stats::update,
+          list(
+            model,
+            formula = nullform,
+            data = update_data,
+            offset = str2lang(offset_term)
+          )
+        ))
       },
       error = function(e) {
         msg <- e$message
