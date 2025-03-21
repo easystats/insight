@@ -41,8 +41,8 @@ null_model.default <- function(model, verbose = TRUE, ...) {
   if (is.null(offset_term)) {
     out <- suppressWarnings(stats::update(model, ~1, evaluate = FALSE, data = update_data))
   } else {
-    tryCatch(
-      out <- do.call(
+    out <- tryCatch(
+      do.call(
         stats::update,
         list(
           model,
@@ -59,7 +59,7 @@ null_model.default <- function(model, verbose = TRUE, ...) {
             "Coefficients might be inaccurate."
           )
         }
-        out <- stats::update(model, ~1, data = update_data, evaluate = FALSE)
+        stats::update(model, ~1, data = update_data, evaluate = FALSE)
       }
     )
   }
