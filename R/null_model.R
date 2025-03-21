@@ -316,7 +316,8 @@ null_model.glmmadmb <- null_model.glmmTMB
         model,
         effects = "all",
         component = "all",
-        flatten = TRUE
+        flatten = TRUE,
+        verbose = FALSE
       )
       # columns in model and data - we need to pass the filtered data set
       cols <- intersect(model_vars, colnames(model_data))
