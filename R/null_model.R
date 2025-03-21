@@ -321,6 +321,8 @@ null_model.glmmadmb <- null_model.glmmTMB
       )
       # offset?
       model_vars <- c(model_vars, find_offset(model))
+      # weights?
+      model_vars <- c(model_vars, find_weights(model))
       # columns in model and data - we need to pass the filtered data set
       cols <- intersect(model_vars, colnames(model_data))
       model_data[stats::complete.cases(model_data[cols]), cols, drop = FALSE]
