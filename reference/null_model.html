@@ -9,7 +9,7 @@ a model. For mixed models, the null-model takes random effects into account."><m
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,10 @@ a model. For mixed models, the null-model takes random effects into account.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">null_model</span><span class="op">(</span><span class="va">model</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">null_model</span><span class="op">(</span><span class="va">model</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Default S3 method</span></span>
+<span><span class="fu">null_model</span><span class="op">(</span><span class="va">model</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,12 +77,12 @@ a model. For mixed models, the null-model takes random effects into account.</p>
 <dd><p>A (mixed effects) model.</p></dd>
 
 
-<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Toggle off warnings.</p></dd>
-
-
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>Toggle off warnings.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -120,7 +123,57 @@ a model. For mixed models, the null-model takes random effects into account.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">null_model</span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Linear mixed model fit by REML ['lmerMod']</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Formula: Reaction ~ (1 + Days | Subject)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Data: sleepstudy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Data: structure(list(Reaction = c(249.56, 258.7047, 250.8006, 321.4398,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 356.8519, 414.6901, 382.2038, 290.1486, 430.5853, 466.3535, 222.7339,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 205.2658, 202.9778, 204.707, 207.7161, 215.9618, 213.6303, 217.7272,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 224.2957, 237.3142, 199.0539, 194.3322, 234.32, 232.8416, 229.3074,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220.4579, 235.4208, 255.7511, 261.0125, 247.5153, 321.5426, 300.4002,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 283.8565, 285.133, 285.7973, 297.5855, 280.2396, 318.2613, 305.3495,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 354.0487, 287.6079, 285, 301.8206, 320.1153, 316.2773, 293.3187,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 290.075, 334.8177, 293.7469, 371.5811, 234.8606, 242.8118, 272.9613,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 309.7688, 317.4629, 309.9976, 454.1619, 346.8311, 330.3003, 253.8644,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 283.8424, 289.555, 276.7693, 299.8097, 297.171, 338.1665, 332.0265,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 348.8399, 333.36, 362.0428, 265.4731, 276.2012, 243.3647, 254.6723,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 279.0244, 284.1912, 305.5248, 331.5229, 335.7469, 377.299, 241.6083,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 273.9472, 254.4907, 270.8021, 251.4519, 254.6362, 245.4523, 235.311,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 235.7541, 237.2466, 312.3666, 313.8058, 291.6112, 346.1222, 365.7324,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 391.8385, 404.2601, 416.6923, 455.8643, 458.9167, 236.1032, 230.3167,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 238.9256, 254.922, 250.7103, 269.7744, 281.5648, 308.102, 336.2806,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 351.6451, 256.2968, 243.4543, 256.2046, 255.5271, 268.9165, 329.7247,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 379.4445, 362.9184, 394.4872, 389.0527, 250.5265, 300.0576, 269.8939,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 280.5891, 271.8274, 304.6336, 287.7466, 266.5955, 321.5418, 347.5655,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221.6771, 298.1939, 326.8785, 346.8555, 348.7402, 352.8287, 354.4266,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 360.4326, 375.6406, 388.5417, 271.9235, 268.4369, 257.2424, 277.6566,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 314.8222, 317.2135, 298.1353, 348.1229, 340.28, 366.5131, 225.264,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 234.5235, 238.9008, 240.473, 267.5373, 344.1937, 281.1481, 347.5855,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 365.163, 372.2288, 269.8804, 272.4428, 277.8989, 281.7895, 279.1705,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 284.512, 259.2658, 304.6306, 350.7807, 369.4692, 269.4117, 273.474,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 297.5968, 310.6316, 287.1726, 329.6076, 334.4818, 343.2199, 369.1417,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 364.1236), Days = c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9), Subject = structure(c(1L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 2L, 2L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2L, 2L, 2L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 3L, 4L, 4L, 4L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4L, 4L, 4L, 4L, 4L, 4L, 4L, 5L, 5L, 5L, 5L, 5L, 5L, 5L, 5L, 5L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5L, 6L, 6L, 6L, 6L, 6L, 6L, 6L, 6L, 6L, 6L, 7L, 7L, 7L, 7L, 7L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7L, 7L, 7L, 7L, 7L, 8L, 8L, 8L, 8L, 8L, 8L, 8L, 8L, 8L, 8L, 9L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9L, 9L, 9L, 9L, 9L, 9L, 9L, 9L, 9L, 10L, 10L, 10L, 10L, 10L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10L, 10L, 10L, 10L, 10L, 11L, 11L, 11L, 11L, 11L, 11L, 11L, 11L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11L, 11L, 12L, 12L, 12L, 12L, 12L, 12L, 12L, 12L, 12L, 12L, 13L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L, 14L, 14L, 14L, 14L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14L, 14L, 14L, 14L, 14L, 14L, 15L, 15L, 15L, 15L, 15L, 15L, 15L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15L, 15L, 15L, 16L, 16L, 16L, 16L, 16L, 16L, 16L, 16L, 16L, 16L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17L, 17L, 17L, 17L, 17L, 17L, 17L, 17L, 17L, 17L, 18L, 18L, 18L,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18L, 18L, 18L, 18L, 18L, 18L, 18L), levels = c("308", "309",  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "310", "330", "331", "332", "333", "334", "335", "337", "349",  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "350", "351", "352", "369", "370", "371", "372"), class = "factor")), row.names = c(NA,  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 180L), class = "data.frame")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> REML criterion at convergence: 1769.8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
