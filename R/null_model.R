@@ -17,45 +17,27 @@
 #' summary(null_model(m))
 #'
 #' @export
-null_model <- function(model, verbose = TRUE, ...) {
+null_model <- function(model, ...) {
+  UseMethod("null_model")
+}
+
+
+#' @export
+null_model.default <- function(model, verbose = TRUE, ...) {
+  # sanity check, if we missed adding a method. rstanarm and brms can both
+  # have mixed and non-mixed models, these are captured here as well
+  if (is_mixed_model(model)) {
+    return(null_model.glmmTMB(model, verbose, ...))
+  }
+
   model_formula <- find_formula(model, verbose = verbose)
-  offset_term <- tryCatch(
-    {
-      f <- safe_deparse(model_formula$conditional)
-      if (grepl("offset(", f, fixed = TRUE)) {
-        out <- gsub("(.*)offset\\((.*)\\)(.*)", "\\2", f)
-      } else {
-        out <- NULL
-      }
-      out
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  offset_term <- .grep_offset_term(model_formula)
 
   # get model data and variables
   model_data <- get_data(model)
-  model_vars <- find_variables(model, effects = "all", component = "all", flatten = TRUE)
+  update_data <- .prepare_update_data(model, model_data)
 
-  # columns in model and data - we need to pass the filtered data set
-  cols <- intersect(model_vars, colnames(model_data))
-  update_data <- model_data[stats::complete.cases(model_data[cols]), cols, drop = FALSE]
-
-  if (is_mixed_model(model)) {
-    .null_model_mixed(model, offset_term, model_formula, update_data, verbose)
-  } else if (inherits(model, "clm2")) {
-    out <- stats::update(
-      model,
-      location = ~1,
-      scale = ~1,
-      data = update_data,
-      evaluate = FALSE
-    )
-  } else if (inherits(model, "multinom")) {
-    out <- stats::update(model, ~1, trace = FALSE, data = update_data, evaluate = FALSE)
-  } else if (is.null(offset_term)) {
-    # stats::update(model, ~1)
+  if (is.null(offset_term)) {
     out <- stats::update(model, ~1, evaluate = FALSE, data = update_data)
   } else {
     tryCatch(
@@ -84,26 +66,95 @@ null_model <- function(model, verbose = TRUE, ...) {
 }
 
 
-.null_model_mixed <- function(model,
-                              offset_term = NULL,
-                              model_formula = NULL,
-                              update_data = NULL,
-                              verbose = TRUE) {
-  if (inherits(model, "MixMod")) {
-    nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
-    null.model <- suppressWarnings(stats::update(model, fixed = nullform, data = update_data))
-    # fix fixed effects formula
-    null.model$call$fixed <- nullform
-  } else if (inherits(model, "cpglmm")) {
-    nullform <- model_formula[["random"]]
-    out <- suppressWarnings(stats::update(
-      model,
-      nullform,
-      data = update_data,
-      evaluate = FALSE
-    ))
-    null.model <- suppressWarnings(eval(out, envir = NULL))
-  } else if (inherits(model, "glmmTMB") && !is.null(model_formula$zero_inflated)) {
+#' @export
+null_model.multinom <- function(model, verbose = TRUE, ...) {
+  model_formula <- find_formula(model, verbose = verbose)
+  offset_term <- .grep_offset_term(model_formula)
+
+  # get model data and variables
+  model_data <- get_data(model)
+  update_data <- .prepare_update_data(model, model_data)
+
+  out <- stats::update(model, ~1, trace = FALSE, data = update_data, evaluate = FALSE)
+  eval(out, envir = NULL)
+}
+
+
+#' @export
+null_model.clm2 <- function(model, verbose = TRUE, ...) {
+  model_formula <- find_formula(model, verbose = verbose)
+  offset_term <- .grep_offset_term(model_formula)
+
+  # get model data and variables
+  model_data <- get_data(model)
+  update_data <- .prepare_update_data(model, model_data)
+
+  out <- stats::update(
+    model,
+    location = ~1,
+    scale = ~1,
+    data = update_data,
+    evaluate = FALSE
+  )
+  eval(out, envir = NULL)
+}
+
+
+#' @export
+null_model.MixMod <- function(model, verbose = TRUE, ...) {
+  model_formula <- find_formula(model, verbose = verbose)
+  offset_term <- .grep_offset_term(model_formula)
+
+  # get model data and variables
+  model_data <- get_data(model)
+  update_data <- .prepare_update_data(model, model_data)
+
+  nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
+  out <- suppressWarnings(stats::update(
+    model,
+    fixed = nullform,
+    data = update_data,
+    evaluate = FALSE
+  ))
+
+  null.model <- eval(out, envir = NULL)
+  # fix fixed effects formula
+  null.model$call$fixed <- nullform
+
+  null.model
+}
+
+
+#' @export
+null_model.cpglmm <- function(model, verbose = TRUE, ...) {
+  model_formula <- find_formula(model, verbose = verbose)
+  offset_term <- .grep_offset_term(model_formula)
+
+  # get model data and variables
+  model_data <- get_data(model)
+  update_data <- .prepare_update_data(model, model_data)
+
+  nullform <- model_formula[["random"]]
+  out <- suppressWarnings(stats::update(
+    model,
+    nullform,
+    data = update_data,
+    evaluate = FALSE
+  ))
+  suppressWarnings(eval(out, envir = NULL))
+}
+
+
+#' @export
+null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
+  model_formula <- find_formula(model, verbose = verbose)
+  offset_term <- .grep_offset_term(model_formula)
+
+  # get model data and variables
+  model_data <- get_data(model)
+  update_data <- .prepare_update_data(model, model_data)
+
+  if (inherits(model, "glmmTMB") && !is.null(model_formula$zero_inflated)) {
     insight::check_if_installed("glmmTMB")
     # for zero-inflated models, we need to create the NULL model for the
     # zero-inflation part as well. Since "update()" won't work here, we need
@@ -138,6 +189,7 @@ null_model <- function(model, verbose = TRUE, ...) {
     }
     re.terms <- paste0("(", sapply(.findbars(f), safe_deparse), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
+
     null.model <- tryCatch(
       if (is.null(offset_term)) {
         out <- suppressWarnings(stats::update(
@@ -175,4 +227,61 @@ null_model <- function(model, verbose = TRUE, ...) {
   }
 
   null.model
+}
+
+#' @export
+null_model.merMod <- null_model.glmmTMB
+
+#' @export
+null_model.lmerMod <- null_model.glmmTMB
+
+#' @export
+null_model.glmerMod <- null_model.glmmTMB
+
+#' @export
+null_model.rlmerMod <- null_model.glmmTMB
+
+#' @export
+null_model.nlmerMod <- null_model.glmmTMB
+
+#' @export
+null_model.cpglmm <- null_model.glmmTMB
+
+#' @export
+null_model.mixed <- null_model.glmmTMB
+
+#' @export
+null_model.coxme <- null_model.glmmTMB
+
+#' @export
+null_model.glmmadmb <- null_model.glmmTMB
+
+
+# helper -------------------------------
+
+
+.grep_offset_term <- function(model_formula) {
+  tryCatch(
+    {
+      f <- safe_deparse(model_formula$conditional)
+      if (grepl("offset(", f, fixed = TRUE)) {
+        out <- gsub("(.*)offset\\((.*)\\)(.*)", "\\2", f)
+      } else {
+        out <- NULL
+      }
+      out
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
+
+
+.prepare_update_data <- function(model, model_data) {
+  model_vars <- find_variables(model, effects = "all", component = "all", flatten = TRUE)
+
+  # columns in model and data - we need to pass the filtered data set
+  cols <- intersect(model_vars, colnames(model_data))
+  model_data[stats::complete.cases(model_data[cols]), cols, drop = FALSE]
 }

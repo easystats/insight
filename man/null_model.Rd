@@ -4,14 +4,14 @@
 \alias{null_model}
 \title{Compute intercept-only model for regression models}
 \usage{
-null_model(model, verbose = TRUE, ...)
+null_model(model, ...)
 }
 \arguments{
 \item{model}{A (mixed effects) model.}
 
-\item{verbose}{Toggle off warnings.}
-
 \item{...}{Arguments passed to or from other methods.}
+
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 The null-model of \code{x}
