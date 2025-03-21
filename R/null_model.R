@@ -49,26 +49,25 @@ null_model.default <- function(model, verbose = TRUE, ...) {
     env <- NULL
   }
 
-  if (is.null(offset_term)) {
-    out <- suppressWarnings(do.call(stats::update, base_args))
-  } else {
-    out <- tryCatch(
-      {
-        base_args$offset <- str2lang(offset_term)
-        suppressWarnings(do.call(stats::update, base_args))
-      },
-      error = function(e) {
-        if (verbose) {
-          format_warning(
-            "Model contains offset-terms, which could not be considered in the returned null-model.",
-            "Coefficients might be inaccurate."
-          )
-        }
-        base_args$offset <- NULL
-        suppressWarnings(do.call(stats::update, base_args))
-      }
-    )
+  # add offset, if any
+  if (!is.null(offset_term)) {
+    base_args$offset <- str2lang(offset_term)
   }
+
+  out <- tryCatch(
+    suppressWarnings(do.call(stats::update, base_args)),
+    error = function(e) {
+      if (verbose && !is.null(offset_term)) {
+        format_warning(
+          "Model contains offset-terms, which could not be considered in the returned null-model.",
+          "Coefficients might be inaccurate."
+        )
+      }
+      base_args$offset <- NULL
+      suppressWarnings(do.call(stats::update, base_args))
+    }
+  )
+
   suppressWarnings(eval(out, envir = env))
 }
 
