@@ -38,20 +38,25 @@ null_model.default <- function(model, verbose = TRUE, ...) {
   model_data <- get_data(model, verbose = FALSE)
   update_data <- .prepare_update_data(model, model_data)
 
+  # base arguments for call to `update()`
+  base_args <- list(model, ~1, evaluate = FALSE)
+
+  # add data, if any, and select appropriate environment for "eval()"
+  if (is.null(update_data)) {
+    env <- parent.frame()
+  } else {
+    base_args$data <- update_data
+    env <- NULL
+  }
+
   if (is.null(offset_term)) {
-    out <- suppressWarnings(stats::update(model, ~1, evaluate = FALSE, data = update_data))
+    out <- suppressWarnings(do.call(stats::update, base_args))
   } else {
     out <- tryCatch(
-      do.call(
-        stats::update,
-        list(
-          model,
-          ~1,
-          offset = str2lang(offset_term),
-          data = update_data,
-          evaluate = FALSE
-        )
-      ),
+      {
+        base_args$offset <- offset = str2lang(offset_term)
+        suppressWarnings(do.call(stats::update, base_args))
+      },
       error = function(e) {
         if (verbose) {
           format_warning(
@@ -59,11 +64,12 @@ null_model.default <- function(model, verbose = TRUE, ...) {
             "Coefficients might be inaccurate."
           )
         }
-        stats::update(model, ~1, data = update_data, evaluate = FALSE)
+        base_args$offset <- NULL
+        suppressWarnings(do.call(stats::update, base_args))
       }
     )
   }
-  suppressWarnings(eval(out, envir = NULL))
+  suppressWarnings(eval(out, envir = env))
 }
 
 
@@ -76,8 +82,19 @@ null_model.multinom <- function(model, verbose = TRUE, ...) {
   model_data <- get_data(model, verbose = FALSE)
   update_data <- .prepare_update_data(model, model_data)
 
-  out <- stats::update(model, ~1, trace = FALSE, data = update_data, evaluate = FALSE)
-  eval(out, envir = NULL)
+  # base arguments for call to `update()`
+  base_args <- list(model, ~1, evaluate = FALSE, trace = FALSE)
+
+  # add data, if any, and select appropriate environment for "eval()"
+  if (is.null(update_data)) {
+    env <- parent.frame()
+  } else {
+    base_args$data <- update_data
+    env <- NULL
+  }
+
+  out <- suppressWarnings(do.call(stats::update, base_args))
+  suppressWarnings(eval(out, envir = NULL))
 }
 
 
@@ -90,14 +107,19 @@ null_model.clm2 <- function(model, verbose = TRUE, ...) {
   model_data <- get_data(model, verbose = FALSE)
   update_data <- .prepare_update_data(model, model_data)
 
-  out <- stats::update(
-    model,
-    location = ~1,
-    scale = ~1,
-    data = update_data,
-    evaluate = FALSE
-  )
-  eval(out, envir = NULL)
+  # base arguments for call to `update()`
+  base_args <- list(model, ~1, evaluate = FALSE, location = ~1, scale = ~1)
+
+  # add data, if any, and select appropriate environment for "eval()"
+  if (is.null(update_data)) {
+    env <- parent.frame()
+  } else {
+    base_args$data <- update_data
+    env <- NULL
+  }
+
+  out <- suppressWarnings(do.call(stats::update, base_args))
+  suppressWarnings(eval(out, envir = NULL))
 }
 
 
@@ -111,14 +133,20 @@ null_model.MixMod <- function(model, verbose = TRUE, ...) {
   update_data <- .prepare_update_data(model, model_data)
 
   nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
-  out <- suppressWarnings(stats::update(
-    model,
-    fixed = nullform,
-    data = update_data,
-    evaluate = FALSE
-  ))
 
-  null.model <- eval(out, envir = NULL)
+  # base arguments for call to `update()`
+  base_args <- list(model, fixed = nullform, evaluate = FALSE)
+
+  # add data, if any, and select appropriate environment for "eval()"
+  if (is.null(update_data)) {
+    env <- parent.frame()
+  } else {
+    base_args$data <- update_data
+    env <- NULL
+  }
+
+  out <- suppressWarnings(do.call(stats::update, base_args))
+  null.model <- suppressWarnings(eval(out, envir = NULL))
   # fix fixed effects formula
   null.model$call$fixed <- nullform
 
@@ -136,12 +164,19 @@ null_model.cpglmm <- function(model, verbose = TRUE, ...) {
   update_data <- .prepare_update_data(model, model_data)
 
   nullform <- model_formula[["random"]]
-  out <- suppressWarnings(stats::update(
-    model,
-    nullform,
-    data = update_data,
-    evaluate = FALSE
-  ))
+
+  # base arguments for call to `update()`
+  base_args <- list(model, nullform, evaluate = FALSE)
+
+  # add data, if any, and select appropriate environment for "eval()"
+  if (is.null(update_data)) {
+    env <- parent.frame()
+  } else {
+    base_args$data <- update_data
+    env <- NULL
+  }
+
+  out <- suppressWarnings(do.call(stats::update, base_args))
   suppressWarnings(eval(out, envir = NULL))
 }
 
@@ -179,7 +214,10 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
     if (!is.null(offset_term)) {
       model_args$offset <- str2lang(offset_term)
     }
-    model_args$data <- update_data
+    # add corrected data from model frame
+    if (!is.null(update_data)) {
+      model_args$data <- update_data
+    }
     null.model <- do.call(glmmTMB::glmmTMB, model_args)
   } else {
     f <- stats::formula(model)
@@ -193,12 +231,18 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
 
     null.model <- tryCatch(
       {
-        fun_args <- list(model, formula = nullform, data = update_data, evaluate = FALSE)
+        fun_args <- list(model, formula = nullform, evaluate = FALSE)
         if (!is.null(offset_term)) {
           fun_args$offset <- str2lang(offset_term)
         }
+        if (is.null(update_data)) {
+          env <- parent.frame()
+        } else {
+          fun_args$data <- update_data
+          env <- NULL
+        }
         out <- suppressWarnings(do.call(stats::update, fun_args))
-        suppressWarnings(eval(out, envir = NULL))
+        suppressWarnings(eval(out, envir = env))
       },
       error = function(e) {
         msg <- e$message
@@ -267,9 +311,16 @@ null_model.glmmadmb <- null_model.glmmTMB
 
 
 .prepare_update_data <- function(model, model_data) {
-  model_vars <- find_variables(model, effects = "all", component = "all", flatten = TRUE)
+  tryCatch(
+    {
+      model_vars <- find_variables(model, effects = "all", component = "all", flatten = TRUE)
 
-  # columns in model and data - we need to pass the filtered data set
-  cols <- intersect(model_vars, colnames(model_data))
-  model_data[stats::complete.cases(model_data[cols]), cols, drop = FALSE]
+      # columns in model and data - we need to pass the filtered data set
+      cols <- intersect(model_vars, colnames(model_data))
+      model_data[stats::complete.cases(model_data[cols]), cols, drop = FALSE]
+    },
+    error = function(e) {
+      NULL
+    }
+  )
 }
