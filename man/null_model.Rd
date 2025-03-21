@@ -2,9 +2,12 @@
 % Please edit documentation in R/null_model.R
 \name{null_model}
 \alias{null_model}
+\alias{null_model.default}
 \title{Compute intercept-only model for regression models}
 \usage{
 null_model(model, ...)
+
+\method{null_model}{default}(model, verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{A (mixed effects) model.}

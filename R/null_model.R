@@ -22,6 +22,7 @@ null_model <- function(model, ...) {
 }
 
 
+#' @rdname null_model
 #' @export
 null_model.default <- function(model, verbose = TRUE, ...) {
   # sanity check, if we missed adding a method. rstanarm and brms can both
