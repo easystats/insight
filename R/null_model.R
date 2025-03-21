@@ -193,12 +193,7 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
 
     null.model <- tryCatch(
       {
-        fun_args <- list(
-          model,
-          formula = nullform,
-          data = update_data,
-          evaluate = FALSE
-        )
+        fun_args <- list(model, formula = nullform, data = update_data, evaluate = FALSE)
         if (!is.null(offset_term)) {
           fun_args$offset <- str2lang(offset_term)
         }
