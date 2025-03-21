@@ -39,7 +39,7 @@ null_model.default <- function(model, verbose = TRUE, ...) {
   update_data <- .prepare_update_data(model, model_data)
 
   if (is.null(offset_term)) {
-    out <- stats::update(model, ~1, evaluate = FALSE, data = update_data)
+    out <- suppressWarnings(stats::update(model, ~1, evaluate = FALSE, data = update_data))
   } else {
     tryCatch(
       out <- do.call(
@@ -63,7 +63,7 @@ null_model.default <- function(model, verbose = TRUE, ...) {
       }
     )
   }
-  eval(out, envir = NULL)
+  suppressWarnings(eval(out, envir = NULL))
 }
 
 
