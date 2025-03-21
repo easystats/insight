@@ -45,18 +45,29 @@ null_model <- function(model, verbose = TRUE, ...) {
   if (is_mixed_model(model)) {
     .null_model_mixed(model, offset_term, model_formula, update_data, verbose)
   } else if (inherits(model, "clm2")) {
-    stats::update(model, location = ~1, scale = ~1, data = update_data)
+    out <- stats::update(
+      model,
+      location = ~1,
+      scale = ~1,
+      data = update_data,
+      evaluate = FALSE
+    )
   } else if (inherits(model, "multinom")) {
-    stats::update(model, ~1, trace = FALSE, data = update_data)
+    out <- stats::update(model, ~1, trace = FALSE, data = update_data, evaluate = FALSE)
   } else if (is.null(offset_term)) {
     # stats::update(model, ~1)
     out <- stats::update(model, ~1, evaluate = FALSE, data = update_data)
-    eval(out, envir = parent.frame())
   } else {
     tryCatch(
-      do.call(
+      out <- do.call(
         stats::update,
-        list(model, ~1, offset = str2lang(offset_term), data = update_data)
+        list(
+          model,
+          ~1,
+          offset = str2lang(offset_term),
+          data = update_data,
+          evaluate = FALSE
+        )
       ),
       error = function(e) {
         if (verbose) {
@@ -65,10 +76,11 @@ null_model <- function(model, verbose = TRUE, ...) {
             "Coefficients might be inaccurate."
           )
         }
-        stats::update(model, ~1, data = update_data)
+        out <- stats::update(model, ~1, data = update_data, evaluate = FALSE)
       }
     )
   }
+  eval(out, envir = NULL)
 }
 
 
@@ -84,7 +96,13 @@ null_model <- function(model, verbose = TRUE, ...) {
     null.model$call$fixed <- nullform
   } else if (inherits(model, "cpglmm")) {
     nullform <- model_formula[["random"]]
-    null.model <- suppressWarnings(stats::update(model, nullform, data = update_data))
+    out <- suppressWarnings(stats::update(
+      model,
+      nullform,
+      data = update_data,
+      evaluate = FALSE
+    ))
+    null.model <- suppressWarnings(eval(out, envir = NULL))
   } else if (inherits(model, "glmmTMB") && !is.null(model_formula$zero_inflated)) {
     insight::check_if_installed("glmmTMB")
     # for zero-inflated models, we need to create the NULL model for the
@@ -109,7 +127,7 @@ null_model <- function(model, verbose = TRUE, ...) {
     if (!is.null(offset_term)) {
       model_args$offset <- str2lang(offset_term)
     }
-    modelargs$data = update_data
+    model_args$data <- update_data
     null.model <- do.call(glmmTMB::glmmTMB, model_args)
   } else {
     f <- stats::formula(model)
@@ -122,17 +140,25 @@ null_model <- function(model, verbose = TRUE, ...) {
     nullform <- stats::reformulate(re.terms, response = resp)
     null.model <- tryCatch(
       if (is.null(offset_term)) {
-        suppressWarnings(stats::update(model, nullform, data = update_data))
+        out <- suppressWarnings(stats::update(
+          model,
+          nullform,
+          data = update_data,
+          evaluate = FALSE
+        ))
+        suppressWarnings(eval(out, envir = NULL))
       } else {
-        suppressWarnings(do.call(
+        out <- suppressWarnings(do.call(
           stats::update,
           list(
             model,
             formula = nullform,
             data = update_data,
-            offset = str2lang(offset_term)
+            offset = str2lang(offset_term),
+            evaluate = FALSE
           )
         ))
+        suppressWarnings(eval(out, envir = NULL))
       },
       error = function(e) {
         msg <- e$message
