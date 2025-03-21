@@ -192,15 +192,16 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
     nullform <- stats::reformulate(re.terms, response = resp)
 
     null.model <- tryCatch(
-      if (is.null(offset_term)) {
-        out <- suppressWarnings(stats::update(
+      {
+        fun_args <- list(
           model,
-          nullform,
+          formula = nullform,
           data = update_data,
           evaluate = FALSE
-        ))
-        suppressWarnings(eval(out, envir = NULL))
-      } else {
+        )
+        if (!is.null(offset_term)) {
+          fun_args$offset <- str2lang(offset_term)
+        }
         out <- suppressWarnings(do.call(
           stats::update,
           list(
