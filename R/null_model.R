@@ -93,7 +93,7 @@ null_model.multinom <- function(model, verbose = TRUE, ...) {
   }
 
   out <- suppressWarnings(do.call(stats::update, base_args))
-  suppressWarnings(eval(out, envir = NULL))
+  suppressWarnings(eval(out, envir = env))
 }
 
 
