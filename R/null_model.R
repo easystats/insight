@@ -118,7 +118,7 @@ null_model.clm2 <- function(model, verbose = TRUE, ...) {
   }
 
   out <- suppressWarnings(do.call(stats::update, base_args))
-  suppressWarnings(eval(out, envir = NULL))
+  suppressWarnings(eval(out, envir = env))
 }
 
 
@@ -145,7 +145,7 @@ null_model.MixMod <- function(model, verbose = TRUE, ...) {
   }
 
   out <- suppressWarnings(do.call(stats::update, base_args))
-  null.model <- suppressWarnings(eval(out, envir = NULL))
+  null.model <- suppressWarnings(eval(out, envir = env))
   # fix fixed effects formula
   null.model$call$fixed <- nullform
 
@@ -176,7 +176,7 @@ null_model.cpglmm <- function(model, verbose = TRUE, ...) {
   }
 
   out <- suppressWarnings(do.call(stats::update, base_args))
-  suppressWarnings(eval(out, envir = NULL))
+  suppressWarnings(eval(out, envir = env))
 }
 
 
