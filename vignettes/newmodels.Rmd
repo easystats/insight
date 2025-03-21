@@ -18,9 +18,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Adding (almost) full support to the easystats eco-system
+## Adding (almost) full support to the easystats ecosystem
 
-To add support for models in the _easystats_ eco-system, especially for the packages [_parameters_](https://easystats.github.io/parameters/), or to support most / all features from _easystats_, following methods should be added to the _insight_ package:
+To add support for models in the _easystats_ ecosystem, especially for the packages [_parameters_](https://easystats.github.io/parameters/), or to support most / all features from _easystats_, following methods should be added to the _insight_ package:
 
 - `insight::find_formula()`
 - `insight::model_info()`
@@ -46,6 +46,6 @@ If the purpose is just "tidy" output, it is enough to add following methods to t
 - `parameters::p_value()`
 - `parameters::standard_error()` **or** `insight::get_varcov()`
 
-The _simplest_ way is just adding a method for `parameters::model_parameters()`, however, than this model-class is not supported by _all_ functions we offer in the _easystats_ eco-system.
+The _simplest_ way is just adding a method for `parameters::model_parameters()`, however, than this model-class is not supported by _all_ functions we offer in the _easystats_ ecosystem.
 
 See also https://easystats.github.io/effectsize/articles/effectsize_API.html
