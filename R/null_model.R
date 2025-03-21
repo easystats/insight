@@ -35,7 +35,7 @@ null_model.default <- function(model, verbose = TRUE, ...) {
   offset_term <- .grep_offset_term(model_formula)
 
   # get model data and variables
-  model_data <- get_data(model)
+  model_data <- get_data(model, verbose = FALSE)
   update_data <- .prepare_update_data(model, model_data)
 
   if (is.null(offset_term)) {
@@ -73,7 +73,7 @@ null_model.multinom <- function(model, verbose = TRUE, ...) {
   offset_term <- .grep_offset_term(model_formula)
 
   # get model data and variables
-  model_data <- get_data(model)
+  model_data <- get_data(model, verbose = FALSE)
   update_data <- .prepare_update_data(model, model_data)
 
   out <- stats::update(model, ~1, trace = FALSE, data = update_data, evaluate = FALSE)
@@ -87,7 +87,7 @@ null_model.clm2 <- function(model, verbose = TRUE, ...) {
   offset_term <- .grep_offset_term(model_formula)
 
   # get model data and variables
-  model_data <- get_data(model)
+  model_data <- get_data(model, verbose = FALSE)
   update_data <- .prepare_update_data(model, model_data)
 
   out <- stats::update(
@@ -107,7 +107,7 @@ null_model.MixMod <- function(model, verbose = TRUE, ...) {
   offset_term <- .grep_offset_term(model_formula)
 
   # get model data and variables
-  model_data <- get_data(model)
+  model_data <- get_data(model, verbose = FALSE)
   update_data <- .prepare_update_data(model, model_data)
 
   nullform <- stats::as.formula(paste(find_response(model), "~ 1"))
@@ -132,7 +132,7 @@ null_model.cpglmm <- function(model, verbose = TRUE, ...) {
   offset_term <- .grep_offset_term(model_formula)
 
   # get model data and variables
-  model_data <- get_data(model)
+  model_data <- get_data(model, verbose = FALSE)
   update_data <- .prepare_update_data(model, model_data)
 
   nullform <- model_formula[["random"]]
@@ -152,7 +152,7 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
   offset_term <- .grep_offset_term(model_formula)
 
   # get model data and variables
-  model_data <- get_data(model)
+  model_data <- get_data(model, verbose = FALSE)
   update_data <- .prepare_update_data(model, model_data)
 
   if (inherits(model, "glmmTMB") && !is.null(model_formula$zero_inflated)) {
