@@ -3,6 +3,7 @@ skip_if_not_installed("lme4")
 skip_if_not_installed("TMB")
 
 test_that("null_model with offset", {
+  data(mtcars)
   m1 <- suppressWarnings(lme4::glmer.nb(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
   m2 <- suppressWarnings(lme4::glmer.nb(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
   nm1 <- null_model(m1)
@@ -13,6 +14,7 @@ test_that("null_model with offset", {
 skip_on_os("mac") # error: FreeADFunObject
 
 test_that("null_model with offset", {
+  data(mtcars)
   m1 <- suppressWarnings(glmmTMB::glmmTMB(mpg ~ disp + (1 | cyl) + offset(log(wt)), data = mtcars))
   m2 <- suppressWarnings(glmmTMB::glmmTMB(mpg ~ disp + (1 | cyl), offset = log(wt), data = mtcars))
   nm1 <- null_model(m1)
@@ -64,6 +66,35 @@ test_that("null_model warns for badly formulated response", {
   expect_warning(null_model(model), regex = "Using indexed")
 })
 
+
+test_that("null_model, multinom, correct base-model with NA", {
+  skip_on_cran()
+  skip_if_not_installed("nnet")
+
+  n_obs <- 1000
+  softmax <- function(x) {
+    exp(x - max(x)) / sum(exp(x - max(x)))
+  }
+  sample_y <- function(x) {
+    sample(1:3, size = 1, prob = softmax(c(0.25 * x, -0.1 * x, 0 * x)))
+  }
+  set.seed(123)
+  sim_df <- data.frame(x = rnorm(n_obs, 0, 1), y = NA)
+
+  for (i in 1:nrow(sim_df)) {
+    sim_df$y[i] <- sample_y(sim_df$x[i])
+  }
+
+  sim_df$x[1:500] <- NA
+  sim_df2 <- sim_df[!is.na(sim_df$x), ]
+
+  m1 <- nnet::multinom(y ~ x, data = sim_df, trace = FALSE)
+  m2 <- nnet::multinom(y ~ x, data = sim_df2, trace = FALSE)
+
+  out1 <- get_loglikelihood(null_model(m1))
+  out2 <- get_loglikelihood(null_model(m1))
+  expect_equal(out1, out2, tolerance = 1e-4, ignore_attr = TRUE)
+})
 
 # set.seed(123)
 # N <- 100 # Samples

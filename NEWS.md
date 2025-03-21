@@ -15,6 +15,12 @@
 
 * Cleaning / revising package documentation.
 
+## Bug fixes
+
+* `null_model()` now correctly calculates the null-model based on the data that
+  was used to fit the model (model frame), which can lead to different results
+  when the original data contained missing values.
+
 # insight 1.1.0
 
 ## Breaking Changes

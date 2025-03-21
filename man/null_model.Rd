@@ -2,16 +2,19 @@
 % Please edit documentation in R/null_model.R
 \name{null_model}
 \alias{null_model}
+\alias{null_model.default}
 \title{Compute intercept-only model for regression models}
 \usage{
-null_model(model, verbose = TRUE, ...)
+null_model(model, ...)
+
+\method{null_model}{default}(model, verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{A (mixed effects) model.}
 
-\item{verbose}{Toggle off warnings.}
-
 \item{...}{Arguments passed to or from other methods.}
+
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 The null-model of \code{x}
