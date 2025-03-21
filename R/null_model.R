@@ -182,6 +182,11 @@ null_model.cpglmm <- function(model, verbose = TRUE, ...) {
 
 #' @export
 null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
+  # sanity check, some moodels of class glmmTMB may not be mixed models
+  if (!is_mixed_model(model)) {
+    return(null_model.default(model, verbose, ...))
+  }
+
   model_formula <- find_formula(model, verbose = verbose)
   offset_term <- .grep_offset_term(model_formula)
 

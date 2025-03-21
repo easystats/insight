@@ -97,6 +97,31 @@ test_that("null_model, multinom, correct base-model with NA", {
 })
 
 
+test_that("null_model with non-mixed glmmTMB", {
+  skip_if_not_installed("glmmTMB")
+  set.seed(101)
+  dd <- data.frame(x = rnorm(200))
+  dd$y <- glmmTMB::simulate_new(
+    ~ 1 + x,
+    newdata = dd,
+    newparams = list(beta = c(0, 1), betadisp = -1),
+    weights = rep(10, nrow(dd)),
+    family = glmmTMB::betabinomial()
+  )[[1]]
+  dd$success <- round(runif(nrow(dd), 0, dd$y))
+  d <<- dd
+
+  m <- glmmTMB::glmmTMB(
+    y / 10 ~ 1 + x,
+    data = d,
+    weights = rep(10, nrow(d)),
+    family = glmmTMB::betabinomial()
+  )
+  out <- get_loglikelihood(null_model(m))
+  expect_equal(as.numeric(out), -328.5402, tolerance = 1e-4, ignore_attr = TRUE)
+})
+
+
 test_that("null_model with offset", {
   set.seed(123)
   N <- 100 # Samples
