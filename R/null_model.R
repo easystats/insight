@@ -202,16 +202,7 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
         if (!is.null(offset_term)) {
           fun_args$offset <- str2lang(offset_term)
         }
-        out <- suppressWarnings(do.call(
-          stats::update,
-          list(
-            model,
-            formula = nullform,
-            data = update_data,
-            offset = str2lang(offset_term),
-            evaluate = FALSE
-          )
-        ))
+        out <- suppressWarnings(do.call(stats::update, fun_args))
         suppressWarnings(eval(out, envir = NULL))
       },
       error = function(e) {
