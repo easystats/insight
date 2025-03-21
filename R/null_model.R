@@ -202,7 +202,7 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
       re_string <- sapply(.findbars(stats::as.formula(f)), safe_deparse)
       if (is_empty_object(re_string)) {
         stats::as.formula("~1")
-      } else if (startsWith(f_names, "zi")) {
+      } else if (any(startsWith(f_names, c("zi", "disp")))) {
         stats::reformulate(paste0("(", re_string, ")"), response = NULL)
       } else {
         stats::reformulate(paste0("(", re_string, ")"), response = resp)
