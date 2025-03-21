@@ -313,8 +313,12 @@ null_model.glmmadmb <- null_model.glmmTMB
 .prepare_update_data <- function(model, model_data) {
   tryCatch(
     {
-      model_vars <- find_variables(model, effects = "all", component = "all", flatten = TRUE)
-
+      model_vars <- find_variables(
+        model,
+        effects = "all",
+        component = "all",
+        flatten = TRUE
+      )
       # columns in model and data - we need to pass the filtered data set
       cols <- intersect(model_vars, colnames(model_data))
       model_data[stats::complete.cases(model_data[cols]), cols, drop = FALSE]
