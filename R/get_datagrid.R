@@ -74,13 +74,19 @@
 #'   `length` is a named vector, values are matched against the names of the
 #'   target variables. `length` is ignored for integer type variables only when
 #'   `length` is larger than the number of unique values *and* when
-#'   `range = "range"`.
+#'   `range = "range"`. Use `range = "span"` to create a spread of `length`
+#'   number of values from minimum to maximum for integers, including fractions.
 #' @param range Option to control the representative values given in `by`, if no
 #'   specific values were provided. Use in combination with the `length`
 #'   argument to control the number of values within the specified range.
 #'   `range` can be one of the following:
 #'   - `"range"` (default), will use the minimum and maximum of the original
-#'     data vector as end-points (min and max).
+#'     data vector as end-points (min and max). For integer variables, the
+#'     `length` argument will be ignored, and `"range"` will only use values
+#'     that appear in the data.
+#'   - `"span"`, same as `"range"`, but will also create a spread of `length`
+#'     number of values from minimum to maximum also for integers, including
+#'     fractions.
 #'   - if an interval type is specified, such as [`"iqr"`][IQR()],
 #'     [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or
 #'     [`"eti"`][bayestestR::eti()], it will spread the values within that range
@@ -1037,7 +1043,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
 .create_spread <- function(x, length = 10, range = "range", ci = 0.95, digits = 3, ...) {
   range <- validate_argument(
     tolower(range),
-    c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid")
+    c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid", "span")
   )
 
   # bayestestR only for some options

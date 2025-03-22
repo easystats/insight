@@ -524,6 +524,7 @@ test_that("get_datagrid - handle integers", {
     y = letters[1:8]
   )
   expect_identical(dim(get_datagrid(d)), c(64L, 2L)) # 8^2
+  expect_identical(dim(get_datagrid(d, range = "span")), c(80L, 2L)) # 8 * length
   expect_identical(dim(get_datagrid(d, range = "grid")), c(64L, 2L))
   expect_identical(dim(get_datagrid(d, length = 5)), c(40L, 2L))
 
