@@ -524,6 +524,7 @@ test_that("get_datagrid - handle integers", {
     y = letters[1:8]
   )
   expect_identical(dim(get_datagrid(d)), c(64L, 2L)) # 8^2
+  expect_identical(dim(get_datagrid(d, protect_integers = FALSE)), c(80L, 2L)) # 8 * length
   expect_identical(dim(get_datagrid(d, range = "grid")), c(64L, 2L))
   expect_identical(dim(get_datagrid(d, length = 5)), c(40L, 2L))
 
@@ -536,4 +537,36 @@ test_that("get_datagrid - handle integers", {
   expect_identical(dim(get_datagrid(d, range = "grid")), c(192L, 3L)) # 8 * 3 * 8
   expect_identical(dim(get_datagrid(d, length = 5)), c(200L, 3L))
   expect_identical(dim(get_datagrid(d, length = 5, range = "grid")), c(120L, 3L))
+})
+
+
+test_that("get_datagrid - names for length and range", {
+  data(mtcars)
+  out <- get_datagrid(mtcars[1:4], by = c("hp", "mpg"))
+  expect_identical(dim(out), c(100L, 4L)) # 10x10 = 100, length is 10 by default
+  out <- get_datagrid(mtcars[1:4], by = c("hp", "mpg"), length = 2)
+  expect_identical(dim(out), c(4L, 4L))
+  out <- get_datagrid(mtcars[1:4], by = c("hp", "mpg"), length = c(mpg = 2, hp = 3))
+  expect_identical(dim(out), c(6L, 4L))
+  expect_identical(n_unique(out$hp), 3L)
+  out <- get_datagrid(mtcars[1:4], by = c("hp", "mpg"), length = c(mpg = 3, hp = 2))
+  expect_identical(dim(out), c(6L, 4L))
+  expect_identical(n_unique(out$hp), 2L)
+  out <- get_datagrid(
+    mtcars[1:4],
+    by = c("hp", "mpg"),
+    range = c(mpg = "iqr", hp = "sd"),
+    length = c(mpg = 5, hp = 4)
+  )
+  expect_identical(dim(out), c(20L, 4L))
+  expect_identical(n_unique(out$hp), 4L)
+  # errors
+  expect_error(
+    get_datagrid(mtcars[1:4], by = c("hp", "mpg"), length = c(mpa = 3, hp = 2)),
+    regex = "Names of"
+  )
+  expect_error(
+    get_datagrid(mtcars[1:4], by = c("hp", "mpg"), range = c(mpa = "iqr", hp = "sd")),
+    regex = "Names of"
+  )
 })
