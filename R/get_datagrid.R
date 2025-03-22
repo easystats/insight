@@ -362,7 +362,7 @@ get_datagrid.data.frame <- function(x,
 
       # sanity check - do we have a named vector for `length`, and do all names
       # match the numeric variables? If yes, match order
-      if (length(length) > 1 && all(nzchar(names(length)))) {
+      if (length(length) > 1 && !is.null(names(length)) && all(nzchar(names(length)))) {
         if (!all(names(length) %in% numvars)) {
           suggestion <- .misspelled_string(
             numvars,
@@ -379,7 +379,7 @@ get_datagrid.data.frame <- function(x,
 
       # sanity check - do we have a named vector for `range`, and do all names
       # match the numeric variables? If yes, match order
-      if (length(range) > 1 && all(nzchar(names(range)))) {
+      if (length(range) > 1 && !is.null(names(range)) && all(nzchar(names(range)))) {
         if (!all(names(range) %in% numvars)) {
           suggestion <- .misspelled_string(
             numvars,
