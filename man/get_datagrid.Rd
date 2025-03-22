@@ -106,13 +106,13 @@ one or more factor levels, like \code{by = "Species = [setosa, versicolor]"}.
 The remaining variables not specified in \code{by} will be fixed (see also arguments
 \code{factors} and \code{numerics}).}
 
-\item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the
-reference level), \code{"mode"} (set at the most common level) or \code{"all"} to
-keep all levels.}
+\item{factors}{Type of summary for factors \emph{not} specified in \code{by}. Can be
+\code{"reference"} (set at the reference level), \code{"mode"} (set at the most
+common level) or \code{"all"} to keep all levels.}
 
-\item{numerics}{Type of summary for numeric values. Can be \code{"all"} (will
-duplicate the grid for all unique values), any function (\code{"mean"},
-\code{"median"}, ...) or a value (e.g., \code{numerics = 0}).}
+\item{numerics}{Type of summary for numeric values \emph{not} specified in \code{by}.
+Can be \code{"all"} (will duplicate the grid for all unique values), any
+function (\code{"mean"}, \code{"median"}, ...) or a value (e.g., \code{numerics = 0}).}
 
 \item{preserve_range}{In the case of combinations between numeric variables
 and factors, setting \code{preserve_range = TRUE} will drop the observations

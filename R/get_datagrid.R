@@ -104,12 +104,12 @@
 #'   case, `range` must be of same length as numeric target variables. If
 #'   `range` is a named vector, values are matched against the names of the
 #'   target variables.
-#' @param factors Type of summary for factors. Can be `"reference"` (set at the
-#'   reference level), `"mode"` (set at the most common level) or `"all"` to
-#'   keep all levels.
-#' @param numerics Type of summary for numeric values. Can be `"all"` (will
-#'   duplicate the grid for all unique values), any function (`"mean"`,
-#'   `"median"`, ...) or a value (e.g., `numerics = 0`).
+#' @param factors Type of summary for factors *not* specified in `by`. Can be
+#'   `"reference"` (set at the reference level), `"mode"` (set at the most
+#'   common level) or `"all"` to keep all levels.
+#' @param numerics Type of summary for numeric values *not* specified in `by`.
+#'   Can be `"all"` (will duplicate the grid for all unique values), any
+#'   function (`"mean"`, `"median"`, ...) or a value (e.g., `numerics = 0`).
 #' @param preserve_range In the case of combinations between numeric variables
 #'   and factors, setting `preserve_range = TRUE` will drop the observations
 #'   where the value of the numeric variable is originally not present in the
