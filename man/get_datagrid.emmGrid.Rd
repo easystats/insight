@@ -46,7 +46,7 @@ get_datagrid(contr1)
 eml1 <- emmeans::emmeans(mod, pairwise ~ cyl | hp, at = list(hp = c(100, 150)))
 get_datagrid(eml1) # not a "true" grid
 \dontshow{\}) # examplesIf}
-\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.24.0.6")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.25.0")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 mfx1 <- marginaleffects::slopes(mod, variables = "hp")
 get_datagrid(mfx1) # not a "true" grid
 
