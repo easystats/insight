@@ -68,14 +68,18 @@
 #'   to represent the continuous (non-integer alike!) variables. A longer length
 #'   will increase precision, but can also substantially increase the size of
 #'   the datagrid (especially in case of interactions). If `NA`, will return all
-#'   the unique values. In case of multiple continuous target variables,
-#'   `length` can also be a vector of different values (see 'Examples'). In this
-#'   case, `length` must be of same length as numeric target variables. If
-#'   `length` is a named vector, values are matched against the names of the
-#'   target variables. `length` is ignored for integer type variables only when
-#'   `length` is larger than the number of unique values *and* when
-#'   `range = "range"`. Use `range = "span"` to create a spread of `length`
-#'   number of values from minimum to maximum for integers, including fractions.
+#'   the unique values.
+#'
+#'   In case of multiple continuous target variables, `length` can also be a
+#'   vector of different values (see 'Examples'). In this case, `length` must be
+#'   of same length as numeric target variables. If `length` is a named vector,
+#'   values are matched against the names of the target variables.
+#'
+#'   `length` is ignored for integer type variables only when `length` is larger
+#'   than the number of unique values *and* when `range = "range"`. Use
+#'   `range = "span"` to create a spread of `length` number of values from
+#'   minimum to maximum for integers, including fractions (i.e., to treat integer
+#'   variables as regular "numeric" variables).
 #' @param range Option to control the representative values given in `by`, if no
 #'   specific values were provided. Use in combination with the `length`
 #'   argument to control the number of values within the specified range.
@@ -84,9 +88,9 @@
 #'     data vector as end-points (min and max). For integer variables, the
 #'     `length` argument will be ignored, and `"range"` will only use values
 #'     that appear in the data.
-#'   - `"span"`, same as `"range"`, but will also create a spread of `length`
-#'     number of values from minimum to maximum also for integers, including
-#'     fractions.
+#'   - `"span"`, same as `"range"`, but can be used for special handling of
+#'     integers. Thus, `"span"` will also create a spread of `length` number of
+#'     values from minimum to maximum for integers, including fractions.
 #'   - if an interval type is specified, such as [`"iqr"`][IQR()],
 #'     [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or
 #'     [`"eti"`][bayestestR::eti()], it will spread the values within that range
