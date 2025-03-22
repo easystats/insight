@@ -21,26 +21,26 @@
 #'   `by` are:
 #'   - `"all"`, which will include all variables or predictors.
 #'   - a character vector of one or more variable or predictor names, like
-#'   `c("Species", "Sepal.Width")`, which will create a grid of all combinations
-#'   of unique values. For factors, will use all levels, for numeric variables,
-#'   will use a range of length `length` (evenly spread from minimum to maximum)
-#'   and for character vectors, will use all unique values.
+#'     `c("Species", "Sepal.Width")`, which will create a grid of all combinations
+#'     of unique values. For factors, will use all levels, for numeric variables,
+#'     will use a range of length `length` (evenly spread from minimum to maximum)
+#'     and for character vectors, will use all unique values.
 #'   - a list of named elements, indicating focal predictors and their representative
-#'   values, e.g. `by = list(Sepal.Length = c(2, 4), Species = "setosa")`.
+#'     values, e.g. `by = list(Sepal.Length = c(2, 4), Species = "setosa")`.
 #'   - a string with assignments, e.g. `by = "Sepal.Length = 2"` or
-#'   `by = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
-#'   and double quotes to assign strings within strings. String assignments can
-#'   also indicate more than one value, using regular R syntax, e.g.
-#'   `by = "Sepal.Length = c(3, 4)"`.
+#'     `by = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
+#'     and double quotes to assign strings within strings. String assignments can
+#'     also indicate more than one value, using regular R syntax, e.g.
+#'     `by = "Sepal.Length = c(3, 4)"`.
 #'
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
 #'   the brackets should either be
 #'   - two values, indicating minimum and maximum (e.g. `by = "Sepal.Length = [0, 5]"`),
-#'   for which a range of length `length` (evenly spread from given minimum to
-#'   maximum) is created.
+#'     for which a range of length `length` (evenly spread from given minimum to
+#'     maximum) is created.
 #'   - more than two numeric values `by = "Sepal.Length = [2,3,4,5]"`, in which
-#'   case these values are used as representative values.
+#'     case these values are used as representative values.
 #'   - a "token" that creates pre-defined representative values:
 #'     - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
 #'     - for median and -/+ 1 MAD around the median: `"x = [mad]"`
