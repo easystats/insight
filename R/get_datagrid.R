@@ -797,7 +797,11 @@ get_datagrid.comparisons <- get_datagrid.slopes
       by <- parts[2] # right-hand part is the real target
     }
 
+    # we have no edge case (by_expression = NA), thus we expect to have a variable
+    # name in `varname` and the values in `by`
     if (is.na(by_expression) && is.data.frame(x)) {
+      # if data grid should be made for a data frame (and not a model object),
+      # check if the specified variables names are in the data frame.
       if (is.na(varname)) {
         suggestion <- .misspelled_string(colnames(x), by, default_message = "Check spelling and specification.") # nolint
         format_error(paste("Couldn't find which variables were selected in `by`.", suggestion$msg)) # nolint
