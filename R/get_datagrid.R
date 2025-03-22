@@ -139,6 +139,9 @@
 #'   usually need data with all variables in the model included.
 #' @param include_response If `x` is a model object, decide whether the response
 #'   variable should be included in the data grid or not.
+#' @param protect_integers Defaults to `TRUE`. Indicates whether integers should
+#'   be treated as integers, or - if `FALSE` - as numeric variables where
+#'   fractions are possible being creating in the data grid.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
 #' @param digits Number of digits used for rounding numeric values specified in
@@ -263,6 +266,7 @@ get_datagrid.data.frame <- function(x,
                                     length = 10,
                                     range = "range",
                                     digits = 3,
+                                    protect_integers = TRUE,
                                     ...) {
   # find numerics that were coerced to factor in-formula
   numeric_factors <- colnames(x)[vapply(x, function(i) isTRUE(attributes(i)$factor), logical(1))]
@@ -413,6 +417,7 @@ get_datagrid.data.frame <- function(x,
           length = length[i],
           range = range[i],
           digits = digits,
+          protect_integers = protect_integers,
           is_first_predictor = specs$varname[1] == num,
           ...
         )
@@ -518,7 +523,12 @@ get_datagrid.data.frame <- function(x,
 
 #' @rdname get_datagrid
 #' @export
-get_datagrid.numeric <- function(x, length = 10, range = "range", digits = 3, ...) {
+get_datagrid.numeric <- function(x,
+                                 length = 10,
+                                 range = "range",
+                                 digits = 3,
+                                 protect_integers = TRUE,
+                                 ...) {
   # Check and clean the target argument
   specs <- .get_datagrid_clean_target(x, digits = digits, ...)
 
@@ -539,7 +549,14 @@ get_datagrid.numeric <- function(x, length = 10, range = "range", digits = 3, ..
   }
 
   # Create a spread
-  .create_spread(x, length = length, range = range, digits = digits, ...)
+  .create_spread(
+    x,
+    length = length,
+    range = range,
+    digits = digits,
+    protect_integers = protect_integers,
+    ...
+  )
 }
 
 #' @export
@@ -1044,11 +1061,22 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 
 #' @keywords internal
-.create_spread <- function(x, length = 10, range = "range", ci = 0.95, digits = 3, ...) {
+.create_spread <- function(x,
+                           length = 10,
+                           range = "range",
+                           ci = 0.95,
+                           digits = 3,
+                           protect_integers = TRUE,
+                           ...) {
   range <- validate_argument(
     tolower(range),
     c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid", "span")
   )
+
+  # if "span" is explicitly requested, don't protect integers
+  if (range == "span") {
+    protect_integers <- FALSE
+  }
 
   # bayestestR only for some options
   if (range %in% c("ci", "hdi", "eti")) {
@@ -1078,7 +1106,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
   # for integer values, we don't want a range with fractions, so we shorten
   # length if necessary. This means, for numerics with, say, two or three values,
   # we still have these two or three values after creating the spread
-  if (all(.is_integer(x)) && n_unique(x) < length && range == "range") {
+  if (all(.is_integer(x)) && ((n_unique(x) < length && range == "range") || protect_integers)) {
     length <- n_unique(x)
   }
 

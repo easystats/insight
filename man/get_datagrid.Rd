@@ -20,10 +20,18 @@ get_datagrid(x, ...)
   length = 10,
   range = "range",
   digits = 3,
+  protect_integers = TRUE,
   ...
 )
 
-\method{get_datagrid}{numeric}(x, length = 10, range = "range", digits = 3, ...)
+\method{get_datagrid}{numeric}(
+  x,
+  length = 10,
+  range = "range",
+  digits = 3,
+  protect_integers = TRUE,
+  ...
+)
 
 \method{get_datagrid}{factor}(x, ...)
 
@@ -182,6 +190,10 @@ target variables.}
 \item{digits}{Number of digits used for rounding numeric values specified in
 \code{by}. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to
 \code{digits}.}
+
+\item{protect_integers}{Defaults to \code{TRUE}. Indicates whether integers should
+be treated as integers, or - if \code{FALSE} - as numeric variables where
+fractions are possible being creating in the data grid.}
 
 \item{include_smooth}{If \code{x} is a model object, decide whether smooth terms
 should be included in the data grid or not.}
