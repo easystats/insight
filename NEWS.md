@@ -13,6 +13,9 @@
 
 * `format_table()` now includes more effect sizes when formatting column names.
 
+* `get_datagrid()` now allows named vectors for arguments `length` and `range`,
+  to match values with target variables defined in `by`.
+
 * Cleaning / revising package documentation.
 
 ## Bug fixes
