@@ -1096,7 +1096,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
     # if we want a representative grid, and have integers as first focal
     # # predictors, we want at maximum all valid / unique values, but *not*
     # a spread with fractions.
-    if (isTRUE(list(...)$is_first_predictor) && all(.is_integer(x)) && n_unique(x) < length) {
+    if (isTRUE(list(...)$is_first_predictor) && all(.is_integer(x)) && n_unique(x) < length && protect_integers) {
       length <- n_unique(x)
     } else {
       range <- "sd"
