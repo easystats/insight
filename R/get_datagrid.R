@@ -979,7 +979,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
     # if not first predictor, we want range = "sd" and length 3, i.e. numerics
     # at 2nd or 3rd position should represent 3 value (mean +/- 1 SD). we set
     # range to "sd" later, because we do *not* want SD when the first predictor
-    # is of type intefer
+    # is of type integer
     if (isFALSE(list(...)$is_first_predictor)) {
       length <- 3
     }
