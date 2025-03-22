@@ -1068,13 +1068,8 @@ get_datagrid.comparisons <- get_datagrid.slopes
                            ...) {
   range <- validate_argument(
     tolower(range),
-    c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid", "span")
+    c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid")
   )
-
-  # if "span" is explicitly requested, don't protect integers
-  if (range == "span") {
-    protect_integers <- FALSE
-  }
 
   # bayestestR only for some options
   if (range %in% c("ci", "hdi", "eti")) {
@@ -1092,8 +1087,9 @@ get_datagrid.comparisons <- get_datagrid.slopes
       length <- 3
     }
     # if we want a representative grid, and have integers as first focal
-    # # predictors, we want at maximum all valid / unique values, but *not*
-    # a spread with fractions.
+    # predictors, we want at maximum all valid / unique values, but *not* a
+    # spread with fractions. This behaviour can only be overriden by setting
+    # protect_integers = FALSE
     if (isTRUE(list(...)$is_first_predictor) && all(.is_integer(x)) && n_unique(x) < length && protect_integers) {
       length <- n_unique(x)
     } else {
@@ -1103,8 +1099,9 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
   # for integer values, we don't want a range with fractions, so we shorten
   # length if necessary. This means, for numerics with, say, two or three values,
-  # we still have these two or three values after creating the spread
-  if (all(.is_integer(x)) && ((n_unique(x) < length && range == "range") || protect_integers)) {
+  # we still have these two or three values after creating the spread. This
+  # behaviour can only be overriden by setting protect_integers = FALSE
+  if (all(.is_integer(x)) && n_unique(x) < length && range == "range" && protect_integers) {
     length <- n_unique(x)
   }
 
