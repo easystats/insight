@@ -144,11 +144,11 @@ vector of different values (see 'Examples'). In this case, \code{length} must be
 of same length as numeric target variables. If \code{length} is a named vector,
 values are matched against the names of the target variables.
 
-\code{length} is ignored for integer type variables only when \code{length} is larger
-than the number of unique values \emph{and} when \code{range = "range"}. Use
-\code{range = "span"} to create a spread of \code{length} number of values from
-minimum to maximum for integers, including fractions (i.e., to treat integer
-variables as regular "numeric" variables).}
+\code{length} is ignored for integer type variables when \code{length} is larger than
+the number of unique values \emph{and} \code{protect_integers} is \code{TRUE} (default).
+Set \code{protect_integers = FALSE} to create a spread of \code{length} number of
+values from minimum to maximum for integers, including fractions (i.e., to
+treat integer variables as regular "numeric" variables).}
 
 \item{range}{Option to control the representative values given in \code{by}, if no
 specific values were provided. Use in combination with the \code{length}
@@ -158,10 +158,8 @@ argument to control the number of values within the specified range.
 \item \code{"range"} (default), will use the minimum and maximum of the original
 data vector as end-points (min and max). For integer variables, the
 \code{length} argument will be ignored, and \code{"range"} will only use values
-that appear in the data.
-\item \code{"span"}, same as \code{"range"}, but can be used for special handling of
-integers. Thus, \code{"span"} will also create a spread of \code{length} number of
-values from minimum to maximum for integers, including fractions.
+that appear in the data. Set \code{protect_integers = FALSE} to override this
+behaviour for integer variables.
 \item if an interval type is specified, such as \code{\link[=IQR]{"iqr"}},
 \code{\link[bayestestR:ci]{"ci"}}, \code{\link[bayestestR:hdi]{"hdi"}} or
 \code{\link[bayestestR:eti]{"eti"}}, it will spread the values within that range

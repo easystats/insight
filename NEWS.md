@@ -16,9 +16,8 @@
 * `get_datagrid()` now allows named vectors for arguments `length` and `range`,
   to match values with target variables defined in `by`.
 
-* The `range` argument in `get_datagrid()` gets a `"span"` option, to allow
-  a spread of values from minimum to maximum of length `length`, also for integer
-  values.
+* `get_datagrid()` gets a `protect_integer` aergument, to allow a spread of
+  values from minimum to maximum of length `length`, also for integer values.
 
 * Cleaning / revising package documentation.
 
