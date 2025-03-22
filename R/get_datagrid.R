@@ -789,7 +789,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 #' eml1 <- emmeans::emmeans(mod, pairwise ~ cyl | hp, at = list(hp = c(100, 150)))
 #' get_datagrid(eml1) # not a "true" grid
 #'
-#' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.24.0.6")
+#' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.25.0")
 #' mfx1 <- marginaleffects::slopes(mod, variables = "hp")
 #' get_datagrid(mfx1) # not a "true" grid
 #'
