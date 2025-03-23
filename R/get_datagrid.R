@@ -1075,7 +1075,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
           # This is just to make sure that an expression with `length` in
           # it doesn't fail because of this undefined var
           length <- 10 # nolint
-          eval(parse(text = by))
+          .dynEval(by)
         },
         error = function(r) {
           format_error(
@@ -1338,4 +1338,20 @@ get_datagrid.comparisons <- get_datagrid.slopes
     attr(data, which = nm) <- custom_attr[[nm]]
   }
   data
+}
+
+
+#' @keywords internal
+.dynEval <- function(x, minframe = 1L, remove_n_top_env = 0) {
+  n <- sys.nframe() - remove_n_top_env
+  x <- safe_deparse(x)
+  while (n > minframe) {
+    n <- n - 1L
+    env <- sys.frame(n)
+    r <- try(eval(str2lang(x), envir = env), silent = TRUE)
+    if (!inherits(r, "try-error") && !is.null(r)) {
+      return(r)
+    }
+  }
+  stop()
 }
