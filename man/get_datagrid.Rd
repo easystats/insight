@@ -15,12 +15,12 @@ get_datagrid(x, ...)
   by = "all",
   factors = "reference",
   numerics = "mean",
-  preserve_range = FALSE,
-  reference = x,
   length = 10,
   range = "range",
-  digits = 3,
+  preserve_range = FALSE,
   protect_integers = TRUE,
+  digits = 3,
+  reference = x,
   ...
 )
 
@@ -28,8 +28,8 @@ get_datagrid(x, ...)
   x,
   length = 10,
   range = "range",
-  digits = 3,
   protect_integers = TRUE,
+  digits = 3,
   ...
 )
 
@@ -83,11 +83,11 @@ There is a special handling of assignments with \emph{brackets}, i.e. values
 defined inside \code{[} and \verb{]}.For \strong{numeric} variables, the value(s) inside
 the brackets should either be
 \itemize{
-\item two values, indicating minimum and maximum (e.g. \code{by = "Sepal.Length = [0, 5]"}),
-for which a range of length \code{length} (evenly spread from given minimum to
-maximum) is created.
-\item more than two numeric values \code{by = "Sepal.Length = [2,3,4,5]"}, in which
-case these values are used as representative values.
+\item two values separated by a colon \code{:}, indicating minimum and maximum (e.g.
+\code{by = "Sepal.Length = [0:5]"}), for which a range of length \code{length}
+(evenly spread from given minimum to maximum) is created.
+\item comma-separated numeric values \code{by = "Sepal.Length = [2,3,4,5]"}, in
+which case these values are used as representative values.
 \item a "token" that creates pre-defined representative values:
 \itemize{
 \item for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
@@ -121,16 +121,6 @@ common level) or \code{"all"} to keep all levels.}
 \item{numerics}{Type of summary for numeric values \emph{not} specified in \code{by}.
 Can be \code{"all"} (will duplicate the grid for all unique values), any
 function (\code{"mean"}, \code{"median"}, ...) or a value (e.g., \code{numerics = 0}).}
-
-\item{preserve_range}{In the case of combinations between numeric variables
-and factors, setting \code{preserve_range = TRUE} will drop the observations
-where the value of the numeric variable is originally not present in the
-range of its factor level. This leads to an unbalanced grid. Also, if you
-want the minimum and the maximum to closely match the actual ranges, you
-should increase the \code{length} argument.}
-
-\item{reference}{The reference vector from which to compute the mean and SD.
-Used when standardizing or unstandardizing the grid using \code{effectsize::standardize}.}
 
 \item{length}{Length of numeric target variables selected in \code{by}. This
 arguments controls the number of (equally spread) values that will be taken
@@ -185,13 +175,23 @@ case, \code{range} must be of same length as numeric target variables. If
 \code{range} is a named vector, values are matched against the names of the
 target variables.}
 
-\item{digits}{Number of digits used for rounding numeric values specified in
-\code{by}. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to
-\code{digits}.}
+\item{preserve_range}{In the case of combinations between numeric variables
+and factors, setting \code{preserve_range = TRUE} will drop the observations
+where the value of the numeric variable is originally not present in the
+range of its factor level. This leads to an unbalanced grid. Also, if you
+want the minimum and the maximum to closely match the actual ranges, you
+should increase the \code{length} argument.}
 
 \item{protect_integers}{Defaults to \code{TRUE}. Indicates whether integers should
 be treated as integers, or - if \code{FALSE} - as numeric variables where
 fractions are possible being creating in the data grid.}
+
+\item{digits}{Number of digits used for rounding numeric values specified in
+\code{by}. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to
+\code{digits}.}
+
+\item{reference}{The reference vector from which to compute the mean and SD.
+Used when standardizing or unstandardizing the grid using \code{effectsize::standardize}.}
 
 \item{include_smooth}{If \code{x} is a model object, decide whether smooth terms
 should be included in the data grid or not.}
@@ -296,6 +296,13 @@ get_datagrid(iris, by = c("Sepal.Length", "Species"), preserve_range = TRUE)
 get_datagrid(iris, by = c("Sepal.Length", "Species"), numerics = 0)
 get_datagrid(iris, by = c("Sepal.Length = 3", "Species"))
 get_datagrid(iris, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+
+# create range of values, with different lengths of ranges
+get_datagrid(
+  iris,
+  by = c("Sepal.Width=[1:5]", "Petal.Width=[1:3]"),
+  length = c(Petal.Width = 3, Sepal.Width = 4)
+)
 
 # With list-style by-argument
 get_datagrid(iris, by = list(Sepal.Length = c(1, 3), Species = "setosa"))

@@ -160,7 +160,8 @@ test_that("get_datagrid - data", {
   expect_length(get_datagrid(iris$Sepal.Length, by = "c(1, 3, 4)"), 3)
   expect_length(get_datagrid(iris$Sepal.Length, by = "A = c(1, 3, 4)"), 3)
   expect_length(get_datagrid(iris$Sepal.Length, by = "[1, 3, 4]"), 3)
-  expect_length(get_datagrid(iris$Sepal.Length, by = "[1, 4]"), 10)
+  expect_length(get_datagrid(iris$Sepal.Length, by = "[1:4]"), 10)
+  expect_length(get_datagrid(iris$Sepal.Length, by = "[1,4]"), 2)
   expect_length(get_datagrid(iris$Sepal.Length, range = "sd", length = 10), 10)
   expect_identical(as.numeric(get_datagrid(iris$Sepal.Length, range = "sd", length = 3)[2]), round(mean(iris$Sepal.Length), 3))
   expect_identical(as.numeric(get_datagrid(iris$Sepal.Length, range = "mad", length = 4)[2]), median(iris$Sepal.Length))
@@ -497,6 +498,10 @@ test_that("get_datagrid - informative error when by not found", {
     insight::get_datagrid(m, by = list(Sepal.Something = c(10, 40, 50))),
     regex = "was not found"
   )
+  expect_error(
+    insight::get_datagrid(m, by = "Sepal.Something"),
+    regex = "was not found"
+  )
 })
 
 
@@ -569,4 +574,26 @@ test_that("get_datagrid - names for length and range", {
     get_datagrid(mtcars[1:4], by = c("hp", "mpg"), range = c(mpa = "iqr", hp = "sd")),
     regex = "Names of"
   )
+})
+
+
+test_that("get_datagrid - colon for ranges, in combination with length", {
+  data(iris)
+  expect_error(
+    get_datagrid(
+      iris,
+      by = c("Sepal.Width=[1:5]", "Petal.Widht=[1:3]"),
+      length = c(Petal.Width = 3, Sepal.Width = 4)
+    ),
+    regex = "was not found in"
+  )
+
+  out <- get_datagrid(
+    iris,
+    by = c("Sepal.Width=[1:5]", "Petal.Width=[1:3]"),
+    length = c(Petal.Width = 3, Sepal.Width = 4)
+  )
+  expect_identical(dim(out), c(12L, 5L))
+  expect_identical(n_unique(out$Sepal.Width), 4L)
+  expect_identical(n_unique(out$Petal.Width), 3L)
 })
