@@ -297,6 +297,13 @@ get_datagrid(iris, by = c("Sepal.Length", "Species"), numerics = 0)
 get_datagrid(iris, by = c("Sepal.Length = 3", "Species"))
 get_datagrid(iris, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 
+# create range of values, with different lengths of ranges
+get_datagrid(
+  iris,
+  by = c("Sepal.Width=[1:5]", "Petal.Width=[1:3]"),
+  length = c(Petal.Width = 3, Sepal.Width = 4)
+)
+
 # With list-style by-argument
 get_datagrid(iris, by = list(Sepal.Length = c(1, 3), Species = "setosa"))
 
