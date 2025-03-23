@@ -36,11 +36,11 @@
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
 #'   the brackets should either be
-#'   - two values, indicating minimum and maximum (e.g. `by = "Sepal.Length = [0, 5]"`),
-#'     for which a range of length `length` (evenly spread from given minimum to
-#'     maximum) is created.
-#'   - more than two numeric values `by = "Sepal.Length = [2,3,4,5]"`, in which
-#'     case these values are used as representative values.
+#'   - two values separated by a colon `:`, indicating minimum and maximum (e.g.
+#'     `by = "Sepal.Length = [0:5]"`), for which a range of length `length`
+#'     (evenly spread from given minimum to maximum) is created.
+#'   - comma-separated numeric values `by = "Sepal.Length = [2,3,4,5]"`, in
+#'     which case these values are used as representative values.
 #'   - a "token" that creates pre-defined representative values:
 #'     - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
 #'     - for median and -/+ 1 MAD around the median: `"x = [mad]"`
@@ -259,12 +259,12 @@ get_datagrid.data.frame <- function(x,
                                     by = "all",
                                     factors = "reference",
                                     numerics = "mean",
-                                    preserve_range = FALSE,
-                                    reference = x,
                                     length = 10,
                                     range = "range",
-                                    digits = 3,
+                                    preserve_range = FALSE,
                                     protect_integers = TRUE,
+                                    digits = 3,
+                                    reference = x,
                                     ...) {
   # find numerics that were coerced to factor in-formula
   numeric_factors <- colnames(x)[vapply(x, function(i) isTRUE(attributes(i)$factor), logical(1))]
@@ -290,6 +290,8 @@ get_datagrid.data.frame <- function(x,
       }, character(1)))
     }
 
+    # if by is "all" or numeric or logical indices, extract related
+    # column names from data frame and use these as by-variables
     if (all(by == "all")) {
       by <- colnames(x)
     }
@@ -300,6 +302,8 @@ get_datagrid.data.frame <- function(x,
 
     # Deal with factor in-formula transformations ============================
 
+    # something like `y ~ as.factor(x)`. These attributes are available
+    # when data from fitted models is retrieved using `get_data()`
     x[] <- lapply(x, function(i) {
       if (isTRUE(attributes(i)$factor)) {
         as.factor(i)
@@ -310,6 +314,7 @@ get_datagrid.data.frame <- function(x,
 
     # Deal with logical in-formula transformations ============================
 
+    # something like `y ~ as.logical(x)`
     x[] <- lapply(x, function(i) {
       if (isTRUE(attributes(i)$logical)) {
         as.logical(i)
@@ -320,8 +325,14 @@ get_datagrid.data.frame <- function(x,
 
     # Deal with targets =======================================================
 
-    # Find eventual user-defined specifications for each target
-    specs <- do.call(rbind, lapply(by, .get_datagrid_clean_target, x = x, digits = digits))
+    # Find eventual user-defined specifications for each target. Here we parse
+    # the `by` variable for user specified values or token, e.g. `by="mpg=c(40,50)"`
+    # or `by="mpg=[sd]"`.
+    specs <- do.call(
+      rbind,
+      lapply(by, .get_datagrid_clean_target, x = x, digits = digits)
+    )
+    # information about specification in our data frame should be a string
     specs$varname <- as.character(specs$varname) # make sure it's a string not fac
     specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
@@ -337,7 +348,12 @@ get_datagrid.data.frame <- function(x,
         suggestion$msg
       ))
     }
-    specs$is_factor <- vapply(x[specs$varname], function(x) is.factor(x) || is.character(x), TRUE)
+    # check and mark which focal predictors are factors/characters
+    specs$is_factor <- vapply(
+      x[specs$varname],
+      function(x) is.factor(x) || is.character(x),
+      TRUE
+    )
 
     # Create target list of factors -----------------------------------------
     facs <- list()
@@ -351,6 +367,12 @@ get_datagrid.data.frame <- function(x,
     # Create target list of numerics ----------------------------------------
     nums <- list()
     numvars <- specs[!specs$is_factor, "varname"]
+
+    # dealing with numeric targets is a bit more complex than for factors. We
+    # may have a range of representative values, or certain meaningful values
+    # like mean/sd. Furthermore, the range of numeric representative values can
+    # be controlled with `length` and `range`, which we don't have/need for
+    # factors. thus, we must process these arguments, too.
 
     if (length(numvars)) {
       # Sanitize 'length' argument
@@ -445,7 +467,7 @@ get_datagrid.data.frame <- function(x,
           break
         }
 
-        # Else, filter given the range of numerics
+        # Else, filter given the range of numerics as they appear in the data
         rows_to_remove <- NULL
         for (num in names(nums)) {
           mini <- min(data_subset[[num]], na.rm = TRUE)
@@ -468,7 +490,14 @@ get_datagrid.data.frame <- function(x,
   # Deal with the rest =========================================================
   rest_vars <- names(x)[!names(x) %in% names(targets)]
   if (length(rest_vars) >= 1) {
-    rest_df <- lapply(x[rest_vars], .get_datagrid_summary, numerics = numerics, factors = factors, ...)
+    # set non-focal terms to mean/reference/...
+    rest_df <- lapply(
+      x[rest_vars],
+      .get_datagrid_summary,
+      numerics = numerics,
+      factors = factors,
+      ...
+    )
     rest_df <- expand.grid(rest_df, stringsAsFactors = FALSE)
     if (nrow(targets) == 0) {
       targets <- rest_df # If by = NULL
@@ -524,8 +553,8 @@ get_datagrid.data.frame <- function(x,
 get_datagrid.numeric <- function(x,
                                  length = 10,
                                  range = "range",
-                                 digits = 3,
                                  protect_integers = TRUE,
+                                 digits = 3,
                                  ...) {
   # Check and clean the target argument
   specs <- .get_datagrid_clean_target(x, digits = digits, ...)
@@ -762,7 +791,9 @@ get_datagrid.wbm <- function(x,
 # Functions that work on get_datagrid -------------------------------------
 
 #' @export
-get_datagrid.visualisation_matrix <- function(x, reference = attributes(x)$reference, ...) {
+get_datagrid.visualisation_matrix <- function(x,
+                                              reference = attributes(x)$reference,
+                                              ...) {
   datagrid <- get_datagrid(as.data.frame(x), reference = reference, ...)
 
   if ("model" %in% names(attributes(x))) {
@@ -874,6 +905,9 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 # Utilities -----------------------------------------------------------------
 
+# This function extract representative values specified in the `by` argument,
+# e.g. `by="mpg=c(20,30,40)"` or `by="mpg=[sd]"`
+
 #' @keywords internal
 .get_datagrid_clean_target <- function(x, by = NULL, digits = 3, ...) {
   by_expression <- NA
@@ -907,13 +941,22 @@ get_datagrid.comparisons <- get_datagrid.slopes
       }
     }
 
-    # If brackets are detected [a, b]
+    # Tokens: If brackets are detected [a, b] --------------------
+    # ------------------------------------------------------------
     if (is.na(by_expression) && grepl("\\[.*\\]", by)) {
       # Clean --------------------
       # Keep the content
       parts <- trim_ws(unlist(regmatches(by, gregexpr("\\[.+?\\]", by)), use.names = FALSE))
       # Drop the brackets
       parts <- gsub("\\[|\\]", "", parts)
+      # do we have a range, indicated by colon? If yes, we just want these two
+      # values (i.e. we replace : by ,) and set the range-indicator to TRUE
+      if (grepl(":", parts, fixed = TRUE)) {
+        parts <- gsub(":", ",", parts, fixed = TRUE)
+        is_range <- TRUE
+      } else {
+        is_range <- FALSE
+      }
       # Split by a separator like ','
       parts <- trim_ws(unlist(strsplit(parts, ",", fixed = TRUE), use.names = FALSE))
       # If the elements have quotes around them, drop them
@@ -926,13 +969,15 @@ get_datagrid.comparisons <- get_datagrid.slopes
         "minmax", "terciles", "terciles2", "fivenum", "pretty"
       )
       if ((is.factor(x) && all(parts %in% levels(x))) || (is.character(x) && all(parts %in% x))) {
-        # Factor
+        # Factor ----------------
+        # -----------------------
         # Add quotes around them
         parts <- paste0("'", parts, "'")
         # Convert to character
         by_expression <- paste0("as.factor(c(", toString(parts), "))")
       } else if (length(parts) == 1) {
-        # If one, might be a shortcut. or a sampling request
+        # If only one value, might be a shortcut. or a sampling request ----
+        # ------------------------------------------------------------------
         if (grepl("sample", parts, fixed = TRUE)) {
           n_to_sample <- suppressWarnings(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))
           # do we have a proper definition of the sample size? If not, error
@@ -965,16 +1010,20 @@ get_datagrid.comparisons <- get_datagrid.slopes
             by_expression <- paste0("c(", round(min(x, na.rm = TRUE), digits), ",", round(max(x, na.rm = TRUE), digits), ")")
           }
         } else if (is.numeric(parts)) {
+          # if value in brackets is not a character, it must be numeric ---
+          # ---------------------------------------------------------------
           by_expression <- parts
         } else {
           by_expression <- NULL
         }
-        # If only two, it's probably the range
       } else if (is.numeric(x)) {
-        if (length(parts) == 2) {
+        # Target variable is a numeric ------------
+        # -----------------------------------------
+        if (is_range && length(parts) == 2) {
+          # If we have a two values and range-indictor is TRUE, we have a range
           by_expression <- paste0("seq(", parts[1], ", ", parts[2], ", length.out = length)")
-          # If more, it's probably the vector
-        } else if (length(parts) > 2L) {
+        } else {
+          # Else we have single values
           parts <- as.numeric(parts)
           by_expression <- paste0("c(", toString(parts), ")")
         }
@@ -990,7 +1039,8 @@ get_datagrid.comparisons <- get_datagrid.slopes
           )
         )
       }
-      # Else, try to directly eval the content
+      # Else, try to directly eval the content --------
+      # -----------------------------------------------
     } else {
       by_expression <- by
       # Try to eval and make sure it works
@@ -1012,24 +1062,33 @@ get_datagrid.comparisons <- get_datagrid.slopes
   data.frame(varname = varname, expression = by_expression, stringsAsFactors = FALSE)
 }
 
+# This functions deals with the non-focal predictors, i.e. sets numerics
+# to their mean (or other value), factors to reference etc.
 
 #' @keywords internal
-.get_datagrid_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE, ...) {
-  if (na.rm) x <- stats::na.omit(x)
+.get_datagrid_summary <- function(x,
+                                  numerics = "mean",
+                                  factors = "reference",
+                                  remove_na = TRUE,
+                                  ...) {
+  if (remove_na) x <- stats::na.omit(x)
 
   if (is.numeric(x)) {
     if (is.numeric(numerics)) {
+      # numerics set to a specific value
       out <- numerics
     } else if (numerics %in% c("all", "combination")) {
+      # all values in the variable are preserved
       out <- unique(x)
     } else {
+      # we have a function in "numerics", which is applied here
       out <- eval(parse(text = paste0(numerics, "(x)")))
     }
   } else if (factors %in% c("all", "combination")) {
     out <- unique(x)
   } else if (factors == "mode") {
     # Get mode
-    out <- names(sort(table(x), decreasing = TRUE)[1])
+    out <- as.character(.mode_value(x))
   } else {
     # Get reference
     if (is.factor(x)) {
@@ -1055,6 +1114,15 @@ get_datagrid.comparisons <- get_datagrid.slopes
     levels(out) <- all_levels
   }
   out
+}
+
+
+#' @keywords internal
+.mode_value <- function(x) {
+  uniqv <- unique(x)
+  tab <- tabulate(match(x, uniqv))
+  idx <- which.max(tab)
+  uniqv[idx]
 }
 
 
@@ -1188,6 +1256,11 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
   # find variables that were coerced on-the-fly
   model_terms <- find_terms(x, flatten = TRUE)
+
+  # something like `y ~ as.factor(x)`. These attributes are available when data
+  # from fitted models is retrieved using `get_data(source = "mf")`. Since we
+  # do not retrieve data from the model frame, we do this step here manually
+
   factors <- grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", model_terms)
   if (any(factors)) {
     factor_expressions <- lapply(model_terms[factors], str2lang)
