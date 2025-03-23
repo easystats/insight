@@ -83,27 +83,29 @@ regular R syntax, e.g. \code{by = "Sepal.Length = c(3, 4)"}, in which case
 these values are used as representative values.
 \item \emph{select variables and value ranges as string} (or character vector), e.g.
 \code{by = "Sepal.Length = 2:5"}, for which a range of length \code{length} (evenly
-spread from given minimum to maximum) is created
+spread from given minimum to maximum) is created.
 }
 
 There is a special handling of assignments with \emph{brackets}, i.e. values
 defined inside \code{[} and \verb{]}.For \strong{numeric} variables, the value(s) inside
 the brackets should be a "token" that creates pre-defined representative
 values:
-- for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
-- for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
-- for Tukey's five number summary (minimum, lower-hinge, median,
+\itemize{
+\item for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
+\item for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
+\item for Tukey's five number summary (minimum, lower-hinge, median,
 upper-hinge, maximum): \code{"x = [fivenum]"}
-- for terciles, including minimum and maximum: \code{"x = [terciles]"}
-- for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
-- for quartiles, including minimum and maximum: \code{"x = [quartiles]"} (same
+\item for terciles, including minimum and maximum: \code{"x = [terciles]"}
+\item for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
+\item for quartiles, including minimum and maximum: \code{"x = [quartiles]"} (same
 as \code{"x = [fivenum]"})
-- for quartiles, excluding minimum and maximum: \code{"x = [quartiles2]"}
-- for a pretty value range: \code{"x = [pretty]"}
-- for minimum and maximum value: \code{"x = [minmax]"}
-- for 0 and the maximum value: \code{"x = [zeromax]"}
-- for a random sample from all values: \code{"x = [sample <number>]"}, where
+\item for quartiles, excluding minimum and maximum: \code{"x = [quartiles2]"}
+\item for a pretty value range: \code{"x = [pretty]"}
+\item for minimum and maximum value: \code{"x = [minmax]"}
+\item for 0 and the maximum value: \code{"x = [zeromax]"}
+\item for a random sample from all values: \code{"x = [sample <number>]"}, where
 \verb{<number>} should be a positive integer, e.g. \code{"x = [sample 15]"}.
+}
 
 For \strong{factor} variables, the value(s) inside the brackets should indicate
 one or more factor levels, like \code{by = "Species = [setosa, versicolor]"}.

@@ -38,26 +38,27 @@
 #'     these values are used as representative values.
 #'   - *select variables and value ranges as string* (or character vector), e.g.
 #'     `by = "Sepal.Length = 2:5"`, for which a range of length `length` (evenly
-#'     spread from given minimum to maximum) is created
+#'     spread from given minimum to maximum) is created.
 #'
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
 #'   the brackets should be a "token" that creates pre-defined representative
 #'   values:
-#'     - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
-#'     - for median and -/+ 1 MAD around the median: `"x = [mad]"`
-#'     - for Tukey's five number summary (minimum, lower-hinge, median,
-#'       upper-hinge, maximum): `"x = [fivenum]"`
-#'     - for terciles, including minimum and maximum: `"x = [terciles]"`
-#'     - for terciles, excluding minimum and maximum: `"x = [terciles2]"`
-#'     - for quartiles, including minimum and maximum: `"x = [quartiles]"` (same
-#'       as `"x = [fivenum]"`)
-#'     - for quartiles, excluding minimum and maximum: `"x = [quartiles2]"`
-#'     - for a pretty value range: `"x = [pretty]"`
-#'     - for minimum and maximum value: `"x = [minmax]"`
-#'     - for 0 and the maximum value: `"x = [zeromax]"`
-#'     - for a random sample from all values: `"x = [sample <number>]"`, where
-#'       `<number>` should be a positive integer, e.g. `"x = [sample 15]"`.
+#'
+#'   - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
+#'   - for median and -/+ 1 MAD around the median: `"x = [mad]"`
+#'   - for Tukey's five number summary (minimum, lower-hinge, median,
+#'     upper-hinge, maximum): `"x = [fivenum]"`
+#'   - for terciles, including minimum and maximum: `"x = [terciles]"`
+#'   - for terciles, excluding minimum and maximum: `"x = [terciles2]"`
+#'   - for quartiles, including minimum and maximum: `"x = [quartiles]"` (same
+#'     as `"x = [fivenum]"`)
+#'   - for quartiles, excluding minimum and maximum: `"x = [quartiles2]"`
+#'   - for a pretty value range: `"x = [pretty]"`
+#'   - for minimum and maximum value: `"x = [minmax]"`
+#'   - for 0 and the maximum value: `"x = [zeromax]"`
+#'   - for a random sample from all values: `"x = [sample <number>]"`, where
+#'     `<number>` should be a positive integer, e.g. `"x = [sample 15]"`.
 #'
 #'   For **factor** variables, the value(s) inside the brackets should indicate
 #'   one or more factor levels, like `by = "Species = [setosa, versicolor]"`.
