@@ -1,9 +1,8 @@
-m1 <- lm(hp ~ ordered(cyl), data = mtcars)
-m2 <- lm(hp ~ as.ordered(cyl), data = mtcars)
-m3 <- lm(hp ~ as.factor(cyl), data = mtcars)
-m4 <- lm(hp ~ factor(cyl), data = mtcars)
-
 test_that("get_datagrid - data from models", {
+  m1 <- lm(hp ~ ordered(cyl), data = mtcars)
+  m2 <- lm(hp ~ as.ordered(cyl), data = mtcars)
+  m3 <- lm(hp ~ as.factor(cyl), data = mtcars)
+  m4 <- lm(hp ~ factor(cyl), data = mtcars)
   expect_identical(get_datagrid(m1)$cyl, c(4, 6, 8))
   expect_identical(get_datagrid(m2)$cyl, c(4, 6, 8))
   expect_identical(get_datagrid(m3)$cyl, c(4, 6, 8))
@@ -140,6 +139,7 @@ test_that("get_datagrid - list-argument", {
 
 test_that("get_datagrid - data", {
   skip_if_not_installed("bayestestR")
+  data(iris)
 
   # Factors
   expect_length(get_datagrid(iris$Species), 3)
@@ -165,6 +165,9 @@ test_that("get_datagrid - data", {
   expect_length(get_datagrid(iris$Sepal.Length, range = "sd", length = 10), 10)
   expect_identical(as.numeric(get_datagrid(iris$Sepal.Length, range = "sd", length = 3)[2]), round(mean(iris$Sepal.Length), 3))
   expect_identical(as.numeric(get_datagrid(iris$Sepal.Length, range = "mad", length = 4)[2]), median(iris$Sepal.Length))
+
+  # interaction of variables
+  expect_identical(dim(get_datagrid(iris, "Species*Petal.Length")), c(30L, 5L))
 
   # Dataframes
   expect_identical(nrow(get_datagrid(iris, length = 2)), 48L)
