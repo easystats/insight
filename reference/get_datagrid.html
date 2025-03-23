@@ -21,7 +21,7 @@ methods for more info).'><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -148,43 +148,54 @@ and at which values focal predictors should be represented. If not specified
 otherwise, representative values for numeric variables or predictors are
 evenly distributed from the minimum to the maximum, with a total number of
 <code>length</code> values covering that range (see 'Examples'). Possible options for
-<code>by</code> are:</p><ul><li><p><code>"all"</code>, which will include all variables or predictors.</p></li>
-<li><p>a character vector of one or more variable or predictor names, like
-<code>c("Species", "Sepal.Width")</code>, which will create a grid of all combinations
-of unique values. For factors, will use all levels, for numeric variables,
-will use a range of length <code>length</code> (evenly spread from minimum to maximum)
+<code>by</code> are:</p><ul><li><p><em>select all variables</em>: <code>"all"</code>, which will include all variables or
+predictors. For factors, will use all levels, for numeric variables, will
+use a range of length <code>length</code> (evenly spread from minimum to maximum)
 and for character vectors, will use all unique values.</p></li>
-<li><p>a list of named elements, indicating focal predictors and their representative
-values, e.g. <code>by = list(Sepal.Length = c(2, 4), Species = "setosa")</code>.</p></li>
-<li><p>a string with assignments, e.g. <code>by = "Sepal.Length = 2"</code> or
-<code>by = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single
-and double quotes to assign strings within strings. String assignments can
-also indicate more than one value, using regular R syntax, e.g.
-<code>by = "Sepal.Length = c(3, 4)"</code>.</p></li>
+<li><p><em>select specific variables</em>: a character vector of one or more variable
+or predictor names, like <code>c("Species", "Sepal.Width")</code>, which will create
+a grid of all combinations of unique values. For factors, will use all
+levels, for numeric variables, will use a range of length <code>length</code>
+(evenly spread from minimum to maximum) and for character vectors, will
+use all unique values.</p></li>
+<li><p><em>select variables and values as list of named elements</em>, indicating focal
+predictors and their representative values, e.g.
+<code>by = list(Sepal.Length = c(2, 4), Species = "setosa")</code>. Argument
+<code>length</code> is ignored.</p></li>
+<li><p><em>select variables and values as string</em> (or character vector), e.g.
+<code>by = "Sepal.Length = 2"</code> or <code>by = c("Sepal.Length = 2", "Species = 'setosa'")</code>.
+Note the usage of single and double quotes to assign strings within
+strings. String assignments can also indicate more than one value, using
+regular R syntax, e.g. <code>by = "Sepal.Length = c(3, 4)"</code>, in which case
+these values are used as representative values. Argument <code>length</code> is
+ignored.</p></li>
+<li><p><em>select variables and value ranges as string</em> (or character vector), e.g.
+<code>by = "Sepal.Length = 2:5"</code>, for which a range from given minimum to
+maximum is created. Argument <code>length</code> is ignored. Other ways to create
+ranges would be using <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq()</a></code>, e.g., <code>by = "Sepal.Length = seq(2, 5, 0.5)"</code>.</p></li>
+<li><p>In general, any expression after a <code>=</code> will be evaluated as R code, which
+allows using own functions, e.g.</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">get_datagrid</span>(iris, <span class="at">by =</span> <span class="st">"Sepal.Width = fun(2:5)"</span>)</span></code></pre><p></p></div></li>
 </ul><p>There is a special handling of assignments with <em>brackets</em>, i.e. values
 defined inside <code>[</code> and <code>]</code>.For <strong>numeric</strong> variables, the value(s) inside
-the brackets should either be</p><ul><li><p>two values separated by a colon <code>:</code>, indicating minimum and maximum (e.g.
-<code>by = "Sepal.Length = [0:5]"</code>), for which a range of length <code>length</code>
-(evenly spread from given minimum to maximum) is created.</p></li>
-<li><p>comma-separated numeric values <code>by = "Sepal.Length = [2,3,4,5]"</code>, in
-which case these values are used as representative values.</p></li>
-<li><p>a "token" that creates pre-defined representative values:</p><ul><li><p>for mean and -/+ 1 SD around the mean: <code>"x = [sd]"</code></p></li>
+the brackets should be a "token" that creates pre-defined representative
+values:</p><ul><li><p>for mean and -/+ 1 SD around the mean: <code>"x = [sd]"</code></p></li>
 <li><p>for median and -/+ 1 MAD around the median: <code>"x = [mad]"</code></p></li>
 <li><p>for Tukey's five number summary (minimum, lower-hinge, median,
 upper-hinge, maximum): <code>"x = [fivenum]"</code></p></li>
-<li><p>for terciles, including minimum and maximum: <code>"x = [terciles]"</code></p></li>
-<li><p>for terciles, excluding minimum and maximum: <code>"x = [terciles2]"</code></p></li>
-<li><p>for quartiles, including minimum and maximum: <code>"x = [quartiles]"</code> (same
-as <code>"x = [fivenum]"</code>)</p></li>
-<li><p>for quartiles, excluding minimum and maximum: <code>"x = [quartiles2]"</code></p></li>
+<li><p>for quartiles: <code>"x = [quartiles]"</code> (same as <code>"x = [fivenum]"</code>, but
+<em>excluding</em> minimum and maximum)</p></li>
+<li><p>for terciles: <code>"x = [terciles]"</code></p></li>
+<li><p>for terciles, <em>including</em> minimum and maximum: <code>"x = [terciles2]"</code></p></li>
 <li><p>for a pretty value range: <code>"x = [pretty]"</code></p></li>
 <li><p>for minimum and maximum value: <code>"x = [minmax]"</code></p></li>
 <li><p>for 0 and the maximum value: <code>"x = [zeromax]"</code></p></li>
 <li><p>for a random sample from all values: <code>"x = [sample &lt;number&gt;]"</code>, where
 <code>&lt;number&gt;</code> should be a positive integer, e.g. <code>"x = [sample 15]"</code>.</p></li>
-</ul></li>
 </ul><p>For <strong>factor</strong> variables, the value(s) inside the brackets should indicate
 one or more factor levels, like <code>by = "Species = [setosa, versicolor]"</code>.
+This would be identical to using <code>by = "Species = c('setosa', 'versicolor')"</code>.
 <strong>Note</strong>: the <code>length</code> argument will be ignored when using brackets-tokens.</p>
 <p>The remaining variables not specified in <code>by</code> will be fixed (see also arguments
 <code>factors</code> and <code>numerics</code>).</p></dd>
@@ -203,12 +214,13 @@ function (<code>"mean"</code>, <code>"median"</code>, ...) or a value (e.g., <co
 
 
 <dt id="arg-length">length<a class="anchor" aria-label="anchor" href="#arg-length"></a></dt>
-<dd><p>Length of numeric target variables selected in <code>by</code>. This
-arguments controls the number of (equally spread) values that will be taken
-to represent the continuous (non-integer alike!) variables. A longer length
-will increase precision, but can also substantially increase the size of
-the datagrid (especially in case of interactions). If <code>NA</code>, will return all
-the unique values.</p>
+<dd><p>Length of numeric target variables selected in <code>by</code> (if no
+representative values are additionally specified). This arguments controls
+the number of (equally spread) values that will be taken to represent the
+continuous (non-integer alike!) variables. A longer length will increase
+precision, but can also substantially increase the size of the datagrid
+(especially in case of interactions). If <code>NA</code>, will return all the unique
+values.</p>
 <p>In case of multiple continuous target variables, <code>length</code> can also be a
 vector of different values (see 'Examples'). In this case, <code>length</code> must be
 of same length as numeric target variables. If <code>length</code> is a named vector,
@@ -217,7 +229,10 @@ values are matched against the names of the target variables.</p>
 the number of unique values <em>and</em> <code>protect_integers</code> is <code>TRUE</code> (default).
 Set <code>protect_integers = FALSE</code> to create a spread of <code>length</code> number of
 values from minimum to maximum for integers, including fractions (i.e., to
-treat integer variables as regular "numeric" variables).</p></dd>
+treat integer variables as regular "numeric" variables).</p>
+<p><code>length</code> is furthermore ignored if "tokens" (in brackets <code>[</code> and <code>]</code>) are
+used in <code>by</code>, or if representative values are additionally specified in
+<code>by</code>.</p></dd>
 
 
 <dt id="arg-range">range<a class="anchor" aria-label="anchor" href="#arg-range"></a></dt>
@@ -389,7 +404,7 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10        7.255    3.057333        3.758    1.199333  setosa</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Manually change min/max</span></span></span>
-<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length = [0, 1]"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length = c(0, 1)"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1            0    3.057333        3.758    1.199333  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2            1    3.057333        3.758    1.199333  setosa</span>
@@ -416,11 +431,9 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-in"><span><span class="co"># quartiles</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length = [quartiles]"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          4.3    3.057333        3.758    1.199333  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          5.1    3.057333        3.758    1.199333  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          5.8    3.057333        3.758    1.199333  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          6.4    3.057333        3.758    1.199333  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          7.9    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          5.8    3.057333        3.758    1.199333  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          6.4    3.057333        3.758    1.199333  setosa</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># specify length individually for each focal predictor - values are</span></span></span>
 <span class="r-in"><span><span class="co"># matched by names</span></span></span>
@@ -603,22 +616,25 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-in"><span><span class="co"># create range of values, with different lengths of ranges</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">iris</span>,</span></span>
-<span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Width=[1:5]"</span>, <span class="st">"Petal.Width=[1:3]"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Width = 1:5"</span>, <span class="st">"Petal.Width = 1:3"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Petal.Width <span class="op">=</span> <span class="fl">3</span>, Sepal.Width <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Width Petal.Width Sepal.Length Petal.Length Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     1.000000           1     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     2.333333           1     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     3.666667           1     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     5.000000           1     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     1.000000           2     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     2.333333           2     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7     3.666667           2     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8     5.000000           2     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9     1.000000           3     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10    2.333333           3     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11    3.666667           3     5.843333        3.758  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12    5.000000           3     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            1           1     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            2           1     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            3           1     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4            4           1     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            5           1     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6            1           2     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7            2           2     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8            3           2     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9            4           2     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10           5           2     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11           1           3     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12           2           3     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13           3           3     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14           4           3     5.843333        3.758  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15           5           3     5.843333        3.758  setosa</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With list-style by-argument</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, Species <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span><span class="op">)</span></span></span>
