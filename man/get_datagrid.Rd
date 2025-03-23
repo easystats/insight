@@ -64,51 +64,50 @@ evenly distributed from the minimum to the maximum, with a total number of
 \code{length} values covering that range (see 'Examples'). Possible options for
 \code{by} are:
 \itemize{
-\item \code{"all"}, which will include all variables or predictors.
-\item a character vector of one or more variable or predictor names, like
-\code{c("Species", "Sepal.Width")}, which will create a grid of all combinations
-of unique values. For factors, will use all levels, for numeric variables,
-will use a range of length \code{length} (evenly spread from minimum to maximum)
-and for character vectors, will use all unique values.
-\item a list of named elements, indicating focal predictors and their representative
-values, e.g. \code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}.
-\item a string with assignments, e.g. \code{by = "Sepal.Length = 2"} or
-\code{by = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
-and double quotes to assign strings within strings. String assignments can
-also indicate more than one value, using regular R syntax, e.g.
-\code{by = "Sepal.Length = c(3, 4)"}.
+\item \emph{select all variables}: \code{"all"}, which will include all variables or
+predictors.
+\item \emph{select specific variables}: a character vector of one or more variable
+or predictor names, like \code{c("Species", "Sepal.Width")}, which will create
+a grid of all combinations of unique values. For factors, will use all
+levels, for numeric variables, will use a range of length \code{length}
+(evenly spread from minimum to maximum) and for character vectors, will
+use all unique values.
+\item \emph{select variables and values as list of named elements}, indicating focal
+predictors and their representative values, e.g.
+\code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}.
+\item \emph{select variables and values as string} (or character vector), e.g.
+\code{by = "Sepal.Length = 2"} or \code{by = c("Sepal.Length = 2", "Species = 'setosa'")}.
+Note the usage of single and double quotes to assign strings within
+strings. String assignments can also indicate more than one value, using
+regular R syntax, e.g. \code{by = "Sepal.Length = c(3, 4)"}, in which case
+these values are used as representative values.
+\item \emph{select variables and value ranges as string} (or character vector), e.g.
+\code{by = "Sepal.Length = 2:5"}, for which a range of length \code{length} (evenly
+spread from given minimum to maximum) is created
 }
 
 There is a special handling of assignments with \emph{brackets}, i.e. values
 defined inside \code{[} and \verb{]}.For \strong{numeric} variables, the value(s) inside
-the brackets should either be
-\itemize{
-\item two values separated by a colon \code{:}, indicating minimum and maximum (e.g.
-\code{by = "Sepal.Length = [0:5]"}), for which a range of length \code{length}
-(evenly spread from given minimum to maximum) is created.
-\item comma-separated numeric values \code{by = "Sepal.Length = [2,3,4,5]"}, in
-which case these values are used as representative values.
-\item a "token" that creates pre-defined representative values:
-\itemize{
-\item for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
-\item for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
-\item for Tukey's five number summary (minimum, lower-hinge, median,
+the brackets should be a "token" that creates pre-defined representative
+values:
+- for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
+- for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
+- for Tukey's five number summary (minimum, lower-hinge, median,
 upper-hinge, maximum): \code{"x = [fivenum]"}
-\item for terciles, including minimum and maximum: \code{"x = [terciles]"}
-\item for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
-\item for quartiles, including minimum and maximum: \code{"x = [quartiles]"} (same
+- for terciles, including minimum and maximum: \code{"x = [terciles]"}
+- for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
+- for quartiles, including minimum and maximum: \code{"x = [quartiles]"} (same
 as \code{"x = [fivenum]"})
-\item for quartiles, excluding minimum and maximum: \code{"x = [quartiles2]"}
-\item for a pretty value range: \code{"x = [pretty]"}
-\item for minimum and maximum value: \code{"x = [minmax]"}
-\item for 0 and the maximum value: \code{"x = [zeromax]"}
-\item for a random sample from all values: \code{"x = [sample <number>]"}, where
+- for quartiles, excluding minimum and maximum: \code{"x = [quartiles2]"}
+- for a pretty value range: \code{"x = [pretty]"}
+- for minimum and maximum value: \code{"x = [minmax]"}
+- for 0 and the maximum value: \code{"x = [zeromax]"}
+- for a random sample from all values: \code{"x = [sample <number>]"}, where
 \verb{<number>} should be a positive integer, e.g. \code{"x = [sample 15]"}.
-}
-}
 
 For \strong{factor} variables, the value(s) inside the brackets should indicate
 one or more factor levels, like \code{by = "Species = [setosa, versicolor]"}.
+This would be identical to using \code{by = "Species = c('setosa', 'versicolor')"}.
 \strong{Note}: the \code{length} argument will be ignored when using brackets-tokens.
 
 The remaining variables not specified in \code{by} will be fixed (see also arguments
@@ -252,7 +251,7 @@ get_datagrid(iris[2:150, ],
 get_datagrid(iris, by = "Sepal.Length", range = "ci", ci = 0.90)
 
 # Manually change min/max
-get_datagrid(iris, by = "Sepal.Length = [0, 1]")
+get_datagrid(iris, by = "Sepal.Length = c(0, 1)")
 # -1 SD, mean and +1 SD
 get_datagrid(iris, by = "Sepal.Length = [sd]")
 
@@ -300,7 +299,7 @@ get_datagrid(iris, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 # create range of values, with different lengths of ranges
 get_datagrid(
   iris,
-  by = c("Sepal.Width=[1:5]", "Petal.Width=[1:3]"),
+  by = c("Sepal.Width = 1:5", "Petal.Width = 1:3"),
   length = c(Petal.Width = 3, Sepal.Width = 4)
 )
 

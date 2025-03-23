@@ -264,6 +264,7 @@ test_that("get_datagrid - models", {
   expect_identical(dim(get_datagrid(mod, include_random = FALSE, include_smooth = FALSE)), as.integer(c(10, 1)))
 })
 
+
 test_that("get_datagrid - emmeans", {
   skip_if_not_installed("emmeans")
 
@@ -309,6 +310,7 @@ test_that("get_datagrid - emmeans", {
   expect_true(all(hp_vals %in% res[["hp"]]))
 })
 
+
 test_that("get_datagrid - marginaleffects", {
   skip_if_not_installed("marginaleffects")
 
@@ -349,6 +351,7 @@ test_that("get_datagrid - marginaleffects", {
   expect_true(all(c("wt", "mpg", "hp", "qsec") %in% colnames(res)))
   expect_true(all(c("contrast_hp", "contrast_wt") %in% colnames(res)))
 })
+
 
 test_that("get_datagrid - factor levels as reference / non-focal terms works", {
   d <- structure(list(
@@ -591,6 +594,15 @@ test_that("get_datagrid - colon for ranges, in combination with length", {
   out <- get_datagrid(
     iris,
     by = c("Sepal.Width=[1:5]", "Petal.Width=[1:3]"),
+    length = c(Petal.Width = 3, Sepal.Width = 4)
+  )
+  expect_identical(dim(out), c(12L, 5L))
+  expect_identical(n_unique(out$Sepal.Width), 4L)
+  expect_identical(n_unique(out$Petal.Width), 3L)
+
+  out <- get_datagrid(
+    iris,
+    by = c("Sepal.Width=1:5", "Petal.Width=1:3"),
     length = c(Petal.Width = 3, Sepal.Width = 4)
   )
   expect_identical(dim(out), c(12L, 5L))

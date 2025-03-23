@@ -19,29 +19,31 @@
 #'   evenly distributed from the minimum to the maximum, with a total number of
 #'   `length` values covering that range (see 'Examples'). Possible options for
 #'   `by` are:
-#'   - `"all"`, which will include all variables or predictors.
-#'   - a character vector of one or more variable or predictor names, like
-#'     `c("Species", "Sepal.Width")`, which will create a grid of all combinations
-#'     of unique values. For factors, will use all levels, for numeric variables,
-#'     will use a range of length `length` (evenly spread from minimum to maximum)
-#'     and for character vectors, will use all unique values.
-#'   - a list of named elements, indicating focal predictors and their representative
-#'     values, e.g. `by = list(Sepal.Length = c(2, 4), Species = "setosa")`.
-#'   - a string with assignments, e.g. `by = "Sepal.Length = 2"` or
-#'     `by = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
-#'     and double quotes to assign strings within strings. String assignments can
-#'     also indicate more than one value, using regular R syntax, e.g.
-#'     `by = "Sepal.Length = c(3, 4)"`.
+#'   - *select all variables*: `"all"`, which will include all variables or
+#'     predictors.
+#'   - *select specific variables*: a character vector of one or more variable
+#'     or predictor names, like `c("Species", "Sepal.Width")`, which will create
+#'     a grid of all combinations of unique values. For factors, will use all
+#'     levels, for numeric variables, will use a range of length `length`
+#'     (evenly spread from minimum to maximum) and for character vectors, will
+#'     use all unique values.
+#'   - *select variables and values as list of named elements*, indicating focal
+#'     predictors and their representative values, e.g.
+#'     `by = list(Sepal.Length = c(2, 4), Species = "setosa")`.
+#'   - *select variables and values as string* (or character vector), e.g.
+#'     `by = "Sepal.Length = 2"` or `by = c("Sepal.Length = 2", "Species = 'setosa'")`.
+#'     Note the usage of single and double quotes to assign strings within
+#'     strings. String assignments can also indicate more than one value, using
+#'     regular R syntax, e.g. `by = "Sepal.Length = c(3, 4)"`, in which case
+#'     these values are used as representative values.
+#'   - *select variables and value ranges as string* (or character vector), e.g.
+#'     `by = "Sepal.Length = 2:5"`, for which a range of length `length` (evenly
+#'     spread from given minimum to maximum) is created
 #'
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
-#'   the brackets should either be
-#'   - two values separated by a colon `:`, indicating minimum and maximum (e.g.
-#'     `by = "Sepal.Length = [0:5]"`), for which a range of length `length`
-#'     (evenly spread from given minimum to maximum) is created.
-#'   - comma-separated numeric values `by = "Sepal.Length = [2,3,4,5]"`, in
-#'     which case these values are used as representative values.
-#'   - a "token" that creates pre-defined representative values:
+#'   the brackets should be a "token" that creates pre-defined representative
+#'   values:
 #'     - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
 #'     - for median and -/+ 1 MAD around the median: `"x = [mad]"`
 #'     - for Tukey's five number summary (minimum, lower-hinge, median,
@@ -59,6 +61,7 @@
 #'
 #'   For **factor** variables, the value(s) inside the brackets should indicate
 #'   one or more factor levels, like `by = "Species = [setosa, versicolor]"`.
+#'   This would be identical to using `by = "Species = c('setosa', 'versicolor')"`.
 #'   **Note**: the `length` argument will be ignored when using brackets-tokens.
 #'
 #'   The remaining variables not specified in `by` will be fixed (see also arguments
@@ -180,7 +183,7 @@
 #' get_datagrid(iris, by = "Sepal.Length", range = "ci", ci = 0.90)
 #'
 #' # Manually change min/max
-#' get_datagrid(iris, by = "Sepal.Length = [0, 1]")
+#' get_datagrid(iris, by = "Sepal.Length = c(0, 1)")
 #' # -1 SD, mean and +1 SD
 #' get_datagrid(iris, by = "Sepal.Length = [sd]")
 #'
@@ -228,7 +231,7 @@
 #' # create range of values, with different lengths of ranges
 #' get_datagrid(
 #'   iris,
-#'   by = c("Sepal.Width=[1:5]", "Petal.Width=[1:3]"),
+#'   by = c("Sepal.Width = 1:5", "Petal.Width = 1:3"),
 #'   length = c(Petal.Width = 3, Sepal.Width = 4)
 #' )
 #'
@@ -1298,7 +1301,11 @@ get_datagrid.comparisons <- get_datagrid.slopes
 #' @keywords internal
 .extract_at_interactions <- function(by) {
   # get interaction terms, but only if these are not inside brackets (like "[4:8]")
-  interaction_terms <- grepl("(:|\\*)(?![^\\[]*\\])", by, perl = TRUE)
+  # or parenthesis (like "c(1:3)").Furthermore, "interaction terms" only refer
+  # to a value without equal-sign, i.e. `by = "a:b"` is an interaction, but
+  # `by = "mpg=10:20"` is not.
+  pattern <- "(:|\\*)(?![^\\[]*\\])(?![^\\(]*\\))"
+  interaction_terms <- grepl(pattern, by, perl = TRUE) & !grepl("=", by, fixed = TRUE)
   if (any(interaction_terms)) {
     by <- unique(clean_names(trim_ws(compact_character(c(
       by[!interaction_terms],
