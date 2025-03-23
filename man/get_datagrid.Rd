@@ -89,6 +89,12 @@ ignored.
 \code{by = "Sepal.Length = 2:5"}, for which a range from given minimum to
 maximum is created. Argument \code{length} is ignored. Other ways to create
 ranges would be using \code{seq()}, e.g., \code{by = "Sepal.Length = seq(2, 5, 0.5)"}.
+\item In general, any expression after a \code{=} will be evaluated as R code, which
+allows using own functions, e.g.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{fun <- function(x) x^2
+get_datagrid( iris, by = "Sepal.Width=fun(2:5)")
+}\if{html}{\out{</div>}}
 }
 
 There is a special handling of assignments with \emph{brackets}, i.e. values

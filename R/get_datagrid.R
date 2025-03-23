@@ -44,6 +44,12 @@
 #'     `by = "Sepal.Length = 2:5"`, for which a range from given minimum to
 #'     maximum is created. Argument `length` is ignored. Other ways to create
 #'     ranges would be using `seq()`, e.g., `by = "Sepal.Length = seq(2, 5, 0.5)"`.
+#'   - In general, any expression after a `=` will be evaluated as R code, which
+#'     allows using own functions, e.g.
+#'     ```
+#'     fun <- function(x) x^2
+#'     get_datagrid( iris, by = "Sepal.Width=fun(2:5)")
+#'     ```
 #'
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside

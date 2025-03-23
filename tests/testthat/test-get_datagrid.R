@@ -639,3 +639,11 @@ test_that("get_datagrid - colon for ranges, in combination with length", {
     c(1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 3L, 3L, 3L, 3L, 3L)
   )
 })
+
+
+test_that("get_datagrid - functions", {
+  data(iris)
+  fun <- function(x) x^2
+  out <- get_datagrid(iris, by = "Sepal.Width=fun(2:5)")
+  expect_identical(out$Sepal.Width, c(4, 9, 16, 25))
+})
