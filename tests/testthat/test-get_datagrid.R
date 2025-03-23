@@ -571,3 +571,25 @@ test_that("get_datagrid - names for length and range", {
     regex = "Names of"
   )
 })
+
+
+test_that("get_datagrid - colon for ranges, in combination with length", {
+  data(iris)
+  expect_error(
+    get_datagrid(
+      iris,
+      by = c("Sepal.Width=[1:5]", "Petal.Widht=[1:3]"),
+      length = c(Petal.Width = 3, Sepal.Width = 4)
+    ),
+    regex = "Couldn't find"
+  )
+
+  out <- get_datagrid(
+    iris,
+    by = c("Sepal.Width=[1:5]", "Petal.Width=[1:3]"),
+    length = c(Petal.Width = 3, Sepal.Width = 4)
+  )
+  expect_identical(dim(out), c(12L, 5L))
+  expect_identical(n_unique(out$Sepal.Width), 4L)
+  expect_identical(n_unique(out$Petal.Width), 3L)
+})
