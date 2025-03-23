@@ -19,8 +19,13 @@
 * `get_datagrid()` gets a `protect_integer` argument, to allow a spread of
   values from minimum to maximum of length `length`, also for integer values.
 
-* To create a range of values in a `get_datagrid()` using `by` with tokens now
-  works if indicated by a colon, e.g. `by="mpg=[20:50]"`.
+* Creating a range of values in a `get_datagrid()` using `by` was now simplified
+  and works like regular R syntax, e.g. `by = "mpg = 20:50"`.
+
+* Token-option `"quartiles2"` was removed and option `"quartiles"` now produces
+  the three quartile values (lower hinge, median, upper hinge). The former
+  option of `"quartiles"` that included minimum and maximum was identical to the
+  already existing `"fivenum"` option.
 
 * Cleaning / revising package documentation.
 

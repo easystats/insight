@@ -19,56 +19,71 @@
 #'   evenly distributed from the minimum to the maximum, with a total number of
 #'   `length` values covering that range (see 'Examples'). Possible options for
 #'   `by` are:
-#'   - `"all"`, which will include all variables or predictors.
-#'   - a character vector of one or more variable or predictor names, like
-#'     `c("Species", "Sepal.Width")`, which will create a grid of all combinations
-#'     of unique values. For factors, will use all levels, for numeric variables,
-#'     will use a range of length `length` (evenly spread from minimum to maximum)
+#'   - *select all variables*: `"all"`, which will include all variables or
+#'     predictors. For factors, will use all levels, for numeric variables, will
+#'     use a range of length `length` (evenly spread from minimum to maximum)
 #'     and for character vectors, will use all unique values.
-#'   - a list of named elements, indicating focal predictors and their representative
-#'     values, e.g. `by = list(Sepal.Length = c(2, 4), Species = "setosa")`.
-#'   - a string with assignments, e.g. `by = "Sepal.Length = 2"` or
-#'     `by = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single
-#'     and double quotes to assign strings within strings. String assignments can
-#'     also indicate more than one value, using regular R syntax, e.g.
-#'     `by = "Sepal.Length = c(3, 4)"`.
+#'   - *select specific variables*: a character vector of one or more variable
+#'     or predictor names, like `c("Species", "Sepal.Width")`, which will create
+#'     a grid of all combinations of unique values. For factors, will use all
+#'     levels, for numeric variables, will use a range of length `length`
+#'     (evenly spread from minimum to maximum) and for character vectors, will
+#'     use all unique values.
+#'   - *select variables and values as list of named elements*, indicating focal
+#'     predictors and their representative values, e.g.
+#'     `by = list(Sepal.Length = c(2, 4), Species = "setosa")`. Argument
+#'     `length` is ignored.
+#'   - *select variables and values as string* (or character vector), e.g.
+#'     `by = "Sepal.Length = 2"` or `by = c("Sepal.Length = 2", "Species = 'setosa'")`.
+#'     Note the usage of single and double quotes to assign strings within
+#'     strings. String assignments can also indicate more than one value, using
+#'     regular R syntax, e.g. `by = "Sepal.Length = c(3, 4)"`, in which case
+#'     these values are used as representative values. Argument `length` is
+#'     ignored.
+#'   - *select variables and value ranges as string* (or character vector), e.g.
+#'     `by = "Sepal.Length = 2:5"`, for which a range from given minimum to
+#'     maximum is created. Argument `length` is ignored. Other ways to create
+#'     ranges would be using `seq()`, e.g., `by = "Sepal.Length = seq(2, 5, 0.5)"`.
+#'   - In general, any expression after a `=` will be evaluated as R code, which
+#'     allows using own functions, e.g.
+#'     ```
+#'     fun <- function(x) x^2
+#'     get_datagrid(iris, by = "Sepal.Width = fun(2:5)")
+#'     ```
 #'
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
-#'   the brackets should either be
-#'   - two values separated by a colon `:`, indicating minimum and maximum (e.g.
-#'     `by = "Sepal.Length = [0:5]"`), for which a range of length `length`
-#'     (evenly spread from given minimum to maximum) is created.
-#'   - comma-separated numeric values `by = "Sepal.Length = [2,3,4,5]"`, in
-#'     which case these values are used as representative values.
-#'   - a "token" that creates pre-defined representative values:
-#'     - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
-#'     - for median and -/+ 1 MAD around the median: `"x = [mad]"`
-#'     - for Tukey's five number summary (minimum, lower-hinge, median,
-#'       upper-hinge, maximum): `"x = [fivenum]"`
-#'     - for terciles, including minimum and maximum: `"x = [terciles]"`
-#'     - for terciles, excluding minimum and maximum: `"x = [terciles2]"`
-#'     - for quartiles, including minimum and maximum: `"x = [quartiles]"` (same
-#'       as `"x = [fivenum]"`)
-#'     - for quartiles, excluding minimum and maximum: `"x = [quartiles2]"`
-#'     - for a pretty value range: `"x = [pretty]"`
-#'     - for minimum and maximum value: `"x = [minmax]"`
-#'     - for 0 and the maximum value: `"x = [zeromax]"`
-#'     - for a random sample from all values: `"x = [sample <number>]"`, where
-#'       `<number>` should be a positive integer, e.g. `"x = [sample 15]"`.
+#'   the brackets should be a "token" that creates pre-defined representative
+#'   values:
+#'
+#'   - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
+#'   - for median and -/+ 1 MAD around the median: `"x = [mad]"`
+#'   - for Tukey's five number summary (minimum, lower-hinge, median,
+#'     upper-hinge, maximum): `"x = [fivenum]"`
+#'   - for quartiles: `"x = [quartiles]"` (same as `"x = [fivenum]"`, but
+#'     *excluding* minimum and maximum)
+#'   - for terciles: `"x = [terciles]"`
+#'   - for terciles, *including* minimum and maximum: `"x = [terciles2]"`
+#'   - for a pretty value range: `"x = [pretty]"`
+#'   - for minimum and maximum value: `"x = [minmax]"`
+#'   - for 0 and the maximum value: `"x = [zeromax]"`
+#'   - for a random sample from all values: `"x = [sample <number>]"`, where
+#'     `<number>` should be a positive integer, e.g. `"x = [sample 15]"`.
 #'
 #'   For **factor** variables, the value(s) inside the brackets should indicate
 #'   one or more factor levels, like `by = "Species = [setosa, versicolor]"`.
+#'   This would be identical to using `by = "Species = c('setosa', 'versicolor')"`.
 #'   **Note**: the `length` argument will be ignored when using brackets-tokens.
 #'
 #'   The remaining variables not specified in `by` will be fixed (see also arguments
 #'   `factors` and `numerics`).
-#' @param length Length of numeric target variables selected in `by`. This
-#'   arguments controls the number of (equally spread) values that will be taken
-#'   to represent the continuous (non-integer alike!) variables. A longer length
-#'   will increase precision, but can also substantially increase the size of
-#'   the datagrid (especially in case of interactions). If `NA`, will return all
-#'   the unique values.
+#' @param length Length of numeric target variables selected in `by` (if no
+#'   representative values are additionally specified). This arguments controls
+#'   the number of (equally spread) values that will be taken to represent the
+#'   continuous (non-integer alike!) variables. A longer length will increase
+#'   precision, but can also substantially increase the size of the datagrid
+#'   (especially in case of interactions). If `NA`, will return all the unique
+#'   values.
 #'
 #'   In case of multiple continuous target variables, `length` can also be a
 #'   vector of different values (see 'Examples'). In this case, `length` must be
@@ -80,6 +95,10 @@
 #'   Set `protect_integers = FALSE` to create a spread of `length` number of
 #'   values from minimum to maximum for integers, including fractions (i.e., to
 #'   treat integer variables as regular "numeric" variables).
+#'
+#'   `length` is furthermore ignored if "tokens" (in brackets `[` and `]`) are
+#'   used in `by`, or if representative values are additionally specified in
+#'   `by`.
 #' @param range Option to control the representative values given in `by`, if no
 #'   specific values were provided. Use in combination with the `length`
 #'   argument to control the number of values within the specified range.
@@ -180,7 +199,7 @@
 #' get_datagrid(iris, by = "Sepal.Length", range = "ci", ci = 0.90)
 #'
 #' # Manually change min/max
-#' get_datagrid(iris, by = "Sepal.Length = [0, 1]")
+#' get_datagrid(iris, by = "Sepal.Length = c(0, 1)")
 #' # -1 SD, mean and +1 SD
 #' get_datagrid(iris, by = "Sepal.Length = [sd]")
 #'
@@ -228,7 +247,7 @@
 #' # create range of values, with different lengths of ranges
 #' get_datagrid(
 #'   iris,
-#'   by = c("Sepal.Width=[1:5]", "Petal.Width=[1:3]"),
+#'   by = c("Sepal.Width = 1:5", "Petal.Width = 1:3"),
 #'   length = c(Petal.Width = 3, Sepal.Width = 4)
 #' )
 #'
@@ -972,8 +991,8 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
       # Make expression ----------
       shortcuts <- c(
-        "meansd", "sd", "mad", "quartiles", "quartiles2", "zeromax",
-        "minmax", "terciles", "terciles2", "fivenum", "pretty"
+        "meansd", "sd", "mad", "quartiles", "zeromax", "minmax", "terciles",
+        "terciles2", "fivenum", "pretty"
       )
       if ((is.factor(x) && all(parts %in% levels(x))) || (is.character(x) && all(parts %in% x))) {
         # Factor ----------------
@@ -1001,14 +1020,14 @@ get_datagrid.comparisons <- get_datagrid.slopes
             center <- stats::median(x, na.rm = TRUE)
             spread <- stats::mad(x, na.rm = TRUE)
             by_expression <- paste0("c(", round(center - spread, digits), ",", round(center, digits), ",", round(center + spread, digits), ")") # nolint
-          } else if (parts %in% c("fivenum", "quartiles")) {
+          } else if (parts == "fivenum") {
             by_expression <- paste0("c(", paste(round(as.vector(stats::fivenum(x, na.rm = TRUE)), digits), collapse = ","), ")") # nolint
-          } else if (parts == "quartiles2") {
+          } else if (parts == "quartiles") {
             by_expression <- paste0("c(", paste(round(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], digits), collapse = ","), ")") # nolint
           } else if (parts == "terciles") {
-            by_expression <- paste0("c(", paste(round(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), digits), collapse = ","), ")") # nolint
-          } else if (parts == "terciles2") {
             by_expression <- paste0("c(", paste(round(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), digits), collapse = ","), ")") # nolint
+          } else if (parts == "terciles2") {
+            by_expression <- paste0("c(", paste(round(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), digits), collapse = ","), ")") # nolint
           } else if (parts == "pretty") {
             by_expression <- paste0("c(", paste(as.vector(pretty(x, na.rm = TRUE)), collapse = ","), ")")
           } else if (parts == "zeromax") {
@@ -1056,7 +1075,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
           # This is just to make sure that an expression with `length` in
           # it doesn't fail because of this undefined var
           length <- 10 # nolint
-          eval(parse(text = by))
+          .dynEval(by)
         },
         error = function(r) {
           format_error(
@@ -1298,7 +1317,11 @@ get_datagrid.comparisons <- get_datagrid.slopes
 #' @keywords internal
 .extract_at_interactions <- function(by) {
   # get interaction terms, but only if these are not inside brackets (like "[4:8]")
-  interaction_terms <- grepl("(:|\\*)(?![^\\[]*\\])", by, perl = TRUE)
+  # or parenthesis (like "c(1:3)").Furthermore, "interaction terms" only refer
+  # to a value without equal-sign, i.e. `by = "a:b"` is an interaction, but
+  # `by = "mpg=10:20"` is not.
+  pattern <- "(:|\\*)(?![^\\[]*\\])(?![^\\(]*\\))"
+  interaction_terms <- grepl(pattern, by, perl = TRUE) & !grepl("=", by, fixed = TRUE)
   if (any(interaction_terms)) {
     by <- unique(clean_names(trim_ws(compact_character(c(
       by[!interaction_terms],
@@ -1315,4 +1338,20 @@ get_datagrid.comparisons <- get_datagrid.slopes
     attr(data, which = nm) <- custom_attr[[nm]]
   }
   data
+}
+
+
+#' @keywords internal
+.dynEval <- function(x, minframe = 1L, remove_n_top_env = 0) {
+  n <- sys.nframe() - remove_n_top_env
+  x <- safe_deparse(x)
+  while (n > minframe) {
+    n <- n - 1L
+    env <- sys.frame(n)
+    r <- try(eval(str2lang(x), envir = env), silent = TRUE)
+    if (!inherits(r, "try-error") && !is.null(r)) {
+      return(r)
+    }
+  }
+  stop()
 }
