@@ -93,7 +93,7 @@ ranges would be using \code{seq()}, e.g., \code{by = "Sepal.Length = seq(2, 5, 0
 allows using own functions, e.g.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{fun <- function(x) x^2
-get_datagrid( iris, by = "Sepal.Width=fun(2:5)")
+get_datagrid(iris, by = "Sepal.Width = fun(2:5)")
 }\if{html}{\out{</div>}}
 }
 

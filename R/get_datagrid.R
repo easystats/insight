@@ -48,7 +48,7 @@
 #'     allows using own functions, e.g.
 #'     ```
 #'     fun <- function(x) x^2
-#'     get_datagrid( iris, by = "Sepal.Width=fun(2:5)")
+#'     get_datagrid(iris, by = "Sepal.Width = fun(2:5)")
 #'     ```
 #'
 #'   There is a special handling of assignments with _brackets_, i.e. values
