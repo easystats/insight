@@ -498,6 +498,10 @@ test_that("get_datagrid - informative error when by not found", {
     insight::get_datagrid(m, by = list(Sepal.Something = c(10, 40, 50))),
     regex = "was not found"
   )
+  expect_error(
+    insight::get_datagrid(m, by = "Sepal.Something"),
+    regex = "was not found"
+  )
 })
 
 
