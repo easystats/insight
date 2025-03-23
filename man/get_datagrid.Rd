@@ -152,7 +152,7 @@ Set \code{protect_integers = FALSE} to create a spread of \code{length} number o
 values from minimum to maximum for integers, including fractions (i.e., to
 treat integer variables as regular "numeric" variables).
 
-\code{length} is futhermore ignored if "tokens" (in brackets \code{[} and \verb{]}) are
+\code{length} is furthermore ignored if "tokens" (in brackets \code{[} and \verb{]}) are
 used in \code{by}, or if representative values are additionally specified in
 \code{by}.}
 

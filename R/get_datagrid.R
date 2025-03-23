@@ -96,7 +96,7 @@
 #'   values from minimum to maximum for integers, including fractions (i.e., to
 #'   treat integer variables as regular "numeric" variables).
 #'
-#'   `length` is futhermore ignored if "tokens" (in brackets `[` and `]`) are
+#'   `length` is furthermore ignored if "tokens" (in brackets `[` and `]`) are
 #'   used in `by`, or if representative values are additionally specified in
 #'   `by`.
 #' @param range Option to control the representative values given in `by`, if no
