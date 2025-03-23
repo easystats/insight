@@ -581,7 +581,7 @@ test_that("get_datagrid - colon for ranges, in combination with length", {
       by = c("Sepal.Width=[1:5]", "Petal.Widht=[1:3]"),
       length = c(Petal.Width = 3, Sepal.Width = 4)
     ),
-    regex = "Couldn't find"
+    regex = "was not found in"
   )
 
   out <- get_datagrid(

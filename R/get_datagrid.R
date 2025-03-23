@@ -343,18 +343,6 @@ get_datagrid.data.frame <- function(x,
     specs$varname <- as.character(specs$varname) # make sure it's a string not fac
     specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
-    # sanity check - target in data?
-    if (!all(specs$varname %in% colnames(x))) {
-      suggestion <- .misspelled_string(
-        colnames(x),
-        setdiff(specs$varname, colnames(x))[1],
-        default_message = "Please check the spelling."
-      )
-      format_error(paste0(
-        "Variable `", setdiff(specs$varname, colnames(x))[1], "` was not found in the data. ", # nolint
-        suggestion$msg
-      ))
-    }
     # check and mark which focal predictors are factors/characters
     specs$is_factor <- vapply(
       x[specs$varname],
@@ -946,8 +934,15 @@ get_datagrid.comparisons <- get_datagrid.slopes
         # `varname` - in this case, overwrite `by` with `varname` for informative
         # error message.
         if (!is.na(varname)) by <- varname
-        suggestion <- .misspelled_string(colnames(x), by, default_message = "Check spelling and specification.") # nolint
-        format_error(paste("Couldn't find which variables were selected in `by`.", suggestion$msg)) # nolint
+        suggestion <- .misspelled_string(
+          colnames(x),
+          by,
+          default_message = "Please check the spelling."
+        )
+        format_error(paste0(
+          "Variable `", by, "` was not found in the data. ", # nolint
+          suggestion$msg
+        ))
       } else {
         x <- x[[varname]]
       }
