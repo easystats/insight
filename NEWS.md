@@ -19,6 +19,9 @@
 * `get_datagrid()` gets a `protect_integer` argument, to allow a spread of
   values from minimum to maximum of length `length`, also for integer values.
 
+* To create a range of values in a `get_datagrid()` using `by` with tokens now
+  works if indicated by a colon, e.g. `by="mpg=[20:50]"`.
+
 * Cleaning / revising package documentation.
 
 ## Bug fixes
