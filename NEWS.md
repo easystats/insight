@@ -22,6 +22,11 @@
 * Creating a range of values in a `get_datagrid()` using `by` was now simplified
   and works like regular R syntax, e.g. `by = "mpg = 20:50"`.
 
+* Token-option `"quartiles2"` was removed and option `"quartiles"` now produces
+  the three quartile values (lower hinge, median, upper hinge). The former
+  option of `"quartiles"` that included minimum and maximum was identical to the
+  already existing `"fivenum"` option.
+
 * Cleaning / revising package documentation.
 
 ## Bug fixes

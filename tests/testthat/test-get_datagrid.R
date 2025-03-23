@@ -17,17 +17,20 @@ test_that("get_datagrid - preserve factor levels #695", {
   expect_identical(levels(grid$cyl), c("4", "6", "8"))
 })
 
-m <- lm(Sepal.Width ~ Petal.Length + Petal.Width + Species, data = iris)
 # adjusted for works
 test_that("get_datagrid - adjusted for works", {
+  data(iris)
+  m <- lm(Sepal.Width ~ Petal.Length + Petal.Width + Species, data = iris)
   dg <- insight::get_datagrid(m, "Species")
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Petal.Width"))
 })
 
 # bracket tokens
 test_that("get_datagrid - terciles, quartiles, mean-sd", {
+  data(iris)
+  m <- lm(Sepal.Width ~ Petal.Length + Petal.Width + Species, data = iris)
   dg <- insight::get_datagrid(m, "Petal.Width = [quartiles]")
-  expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width)), tolerance = 1e-4)
+  expect_equal(dg$Petal.Width, unname(quantile(iris$Petal.Width)[2:4]), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [meansd]")
@@ -37,11 +40,11 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [terciles]")
-  expect_equal(dg$Petal.Width, unname(round(quantile(iris$Petal.Width, probs = (0:3) / 3), 3)), tolerance = 1e-4)
+  expect_equal(dg$Petal.Width, unname(round(quantile(iris$Petal.Width, probs = (1:2) / 3), 3)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [terciles2]")
-  expect_equal(dg$Petal.Width, unname(round(quantile(iris$Petal.Width, probs = (1:2) / 3), 3)), tolerance = 1e-4)
+  expect_equal(dg$Petal.Width, unname(round(quantile(iris$Petal.Width, probs = (0:3) / 3), 3)), tolerance = 1e-4)
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
   dg <- insight::get_datagrid(m, "Petal.Width = [fivenum]")
@@ -90,6 +93,8 @@ test_that("get_datagrid - terciles, quartiles, mean-sd", {
 
 # bracket tokens
 test_that("get_datagrid - range = grid", {
+  data(iris)
+  m <- lm(Sepal.Width ~ Petal.Length + Petal.Width + Species, data = iris)
   dg <- insight::get_datagrid(m, "Petal.Width", range = "grid")
   expect_equal(
     dg$Petal.Width,
@@ -118,6 +123,7 @@ test_that("get_datagrid - range = grid", {
 
 # order of columns
 test_that("get_datagrid - column order", {
+  data(iris)
   m <- lm(Sepal.Width ~ Petal.Length + Petal.Width * Species, data = iris)
   dg <- insight::get_datagrid(m, c("Petal.Width", "Species"))
   expect_identical(colnames(dg), c("Petal.Width", "Species", "Petal.Length"))
@@ -128,6 +134,7 @@ test_that("get_datagrid - column order", {
 
 # list-argument
 test_that("get_datagrid - list-argument", {
+  data(iris)
   by <- list(Sepal.Length = c(3, 5), Species = c("versicolor", "virginica"))
   dg1 <- get_datagrid(iris, by = by)
   by <- c("Sepal.Length = c(3, 5)", "Species = c('versicolor', 'virginica')")
@@ -608,7 +615,27 @@ test_that("get_datagrid - colon for ranges, in combination with length", {
     by = c("Sepal.Width=1:5", "Petal.Width=1:3"),
     length = c(Petal.Width = 3, Sepal.Width = 4)
   )
-  expect_identical(dim(out), c(12L, 5L))
-  expect_identical(n_unique(out$Sepal.Width), 4L)
-  expect_identical(n_unique(out$Petal.Width), 3L)
+  expect_identical(dim(out), c(15L, 5L))
+  expect_identical(
+    out$Sepal.Width,
+    c(1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L)
+  )
+  expect_identical(
+    out$Petal.Width,
+    c(1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 3L, 3L, 3L, 3L, 3L)
+  )
+
+  out <- get_datagrid(
+    iris,
+    by = c("Sepal.Width=1:5", "Petal.Width=1:3")
+  )
+  expect_identical(dim(out), c(15L, 5L))
+  expect_identical(
+    out$Sepal.Width,
+    c(1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L)
+  )
+  expect_identical(
+    out$Petal.Width,
+    c(1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 3L, 3L, 3L, 3L, 3L)
+  )
 })

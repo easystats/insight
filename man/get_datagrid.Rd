@@ -65,7 +65,9 @@ evenly distributed from the minimum to the maximum, with a total number of
 \code{by} are:
 \itemize{
 \item \emph{select all variables}: \code{"all"}, which will include all variables or
-predictors.
+predictors. For factors, will use all levels, for numeric variables, will
+use a range of length \code{length} (evenly spread from minimum to maximum)
+and for character vectors, will use all unique values.
 \item \emph{select specific variables}: a character vector of one or more variable
 or predictor names, like \code{c("Species", "Sepal.Width")}, which will create
 a grid of all combinations of unique values. For factors, will use all
@@ -74,16 +76,19 @@ levels, for numeric variables, will use a range of length \code{length}
 use all unique values.
 \item \emph{select variables and values as list of named elements}, indicating focal
 predictors and their representative values, e.g.
-\code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}.
+\code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}. Argument
+\code{length} is ignored.
 \item \emph{select variables and values as string} (or character vector), e.g.
 \code{by = "Sepal.Length = 2"} or \code{by = c("Sepal.Length = 2", "Species = 'setosa'")}.
 Note the usage of single and double quotes to assign strings within
 strings. String assignments can also indicate more than one value, using
 regular R syntax, e.g. \code{by = "Sepal.Length = c(3, 4)"}, in which case
-these values are used as representative values.
+these values are used as representative values. Argument \code{length} is
+ignored.
 \item \emph{select variables and value ranges as string} (or character vector), e.g.
-\code{by = "Sepal.Length = 2:5"}, for which a range of length \code{length} (evenly
-spread from given minimum to maximum) is created.
+\code{by = "Sepal.Length = 2:5"}, for which a range from given minimum to
+maximum is created. Argument \code{length} is ignored. Other ways to create
+ranges would be using \code{seq()}, e.g., \code{by = "Sepal.Length = seq(2, 5, 0.5)"}.
 }
 
 There is a special handling of assignments with \emph{brackets}, i.e. values
@@ -95,11 +100,10 @@ values:
 \item for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
 \item for Tukey's five number summary (minimum, lower-hinge, median,
 upper-hinge, maximum): \code{"x = [fivenum]"}
-\item for terciles, including minimum and maximum: \code{"x = [terciles]"}
-\item for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
-\item for quartiles, including minimum and maximum: \code{"x = [quartiles]"} (same
-as \code{"x = [fivenum]"})
-\item for quartiles, excluding minimum and maximum: \code{"x = [quartiles2]"}
+\item for quartiles: \code{"x = [quartiles]"} (same as \code{"x = [fivenum]"}, but
+\emph{excluding} minimum and maximum)
+\item for terciles: \code{"x = [terciles]"}
+\item for terciles, \emph{including} minimum and maximum: \code{"x = [terciles2]"}
 \item for a pretty value range: \code{"x = [pretty]"}
 \item for minimum and maximum value: \code{"x = [minmax]"}
 \item for 0 and the maximum value: \code{"x = [zeromax]"}
@@ -123,12 +127,13 @@ common level) or \code{"all"} to keep all levels.}
 Can be \code{"all"} (will duplicate the grid for all unique values), any
 function (\code{"mean"}, \code{"median"}, ...) or a value (e.g., \code{numerics = 0}).}
 
-\item{length}{Length of numeric target variables selected in \code{by}. This
-arguments controls the number of (equally spread) values that will be taken
-to represent the continuous (non-integer alike!) variables. A longer length
-will increase precision, but can also substantially increase the size of
-the datagrid (especially in case of interactions). If \code{NA}, will return all
-the unique values.
+\item{length}{Length of numeric target variables selected in \code{by} (if no
+representative values are additionally specified). This arguments controls
+the number of (equally spread) values that will be taken to represent the
+continuous (non-integer alike!) variables. A longer length will increase
+precision, but can also substantially increase the size of the datagrid
+(especially in case of interactions). If \code{NA}, will return all the unique
+values.
 
 In case of multiple continuous target variables, \code{length} can also be a
 vector of different values (see 'Examples'). In this case, \code{length} must be
@@ -139,7 +144,11 @@ values are matched against the names of the target variables.
 the number of unique values \emph{and} \code{protect_integers} is \code{TRUE} (default).
 Set \code{protect_integers = FALSE} to create a spread of \code{length} number of
 values from minimum to maximum for integers, including fractions (i.e., to
-treat integer variables as regular "numeric" variables).}
+treat integer variables as regular "numeric" variables).
+
+\code{length} is futhermore ignored if "tokens" (in brackets \code{[} and \verb{]}) are
+used in \code{by}, or if representative values are additionally specified in
+\code{by}.}
 
 \item{range}{Option to control the representative values given in \code{by}, if no
 specific values were provided. Use in combination with the \code{length}
