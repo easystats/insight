@@ -21,7 +21,7 @@ methods for more info).'><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -148,39 +148,34 @@ and at which values focal predictors should be represented. If not specified
 otherwise, representative values for numeric variables or predictors are
 evenly distributed from the minimum to the maximum, with a total number of
 <code>length</code> values covering that range (see 'Examples'). Possible options for
-<code>by</code> are:</p><ul><li><p><em>select all variables</em>: <code>"all"</code>, which will include all variables or
-predictors. For factors, will use all levels, for numeric variables, will
-use a range of length <code>length</code> (evenly spread from minimum to maximum)
-and for character vectors, will use all unique values.</p></li>
-<li><p><em>select specific variables</em>: a character vector of one or more variable
-or predictor names, like <code>c("Species", "Sepal.Width")</code>, which will create
-a grid of all combinations of unique values. For factors, will use all
-levels, for numeric variables, will use a range of length <code>length</code>
-(evenly spread from minimum to maximum) and for character vectors, will
-use all unique values.</p></li>
-<li><p><em>select variables and values as list of named elements</em>, indicating focal
-predictors and their representative values, e.g.
-<code>by = list(Sepal.Length = c(2, 4), Species = "setosa")</code>. Argument
-<code>length</code> is ignored.</p></li>
-<li><p><em>select variables and values as string</em> (or character vector), e.g.
-<code>by = "Sepal.Length = 2"</code> or <code>by = c("Sepal.Length = 2", "Species = 'setosa'")</code>.
-Note the usage of single and double quotes to assign strings within
-strings. String assignments can also indicate more than one value, using
-regular R syntax, e.g. <code>by = "Sepal.Length = c(3, 4)"</code>, in which case
-these values are used as representative values. Argument <code>length</code> is
-ignored.</p></li>
-<li><p><em>select variables and value ranges as string</em> (or character vector), e.g.
-<code>by = "Sepal.Length = 2:5"</code>, for which a range from given minimum to
-maximum is created. Argument <code>length</code> is ignored. Other ways to create
-ranges would be using <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq()</a></code>, e.g., <code>by = "Sepal.Length = seq(2, 5, 0.5)"</code>.</p></li>
+<code>by</code> are:</p><ul><li><p><strong>Select variables only:</strong></p><ul><li><p><code>"all"</code>, which will include all variables or predictors.</p></li>
+<li><p>a character vector of one or more variable or predictor names, like
+<code>c("Species", "Sepal.Width")</code>, which will create a grid of all
+combinations of unique values.</p></li>
+</ul><p><strong>Note:</strong> If <code>by</code> specifies only variable names, without associated
+values, the following occurs: factor variables use all their levels,
+numeric variables use a range of <code>length</code> equally spaced values between
+their minimum and maximum, and character variables use all their unique
+values.</p></li>
+<li><p><strong>Select variables and values:</strong></p><ul><li><p><code>by</code> can be a list of named elements, indicating focal predictors and
+their representative values, e.g. <code>by = list(mpg = 10:20)</code> or
+<code>by = list(Sepal.Length = c(2, 4), Species = "setosa")</code>.</p></li>
+<li><p>Instead of a list, it is possible to write a string representation, or
+a character vector of such strings, e.g. <code>by = "Sepal.Length = 2"</code> or
+<code>by = c("Sepal.Length = 2", "Species = 'setosa'")</code>. Note the usage of
+single and double quotes to assign strings within strings. Other
+examples are <code>by = "Sepal.Length = c(3, 4)"</code>, <code>by = "Sepal.Length = 2:5"</code>,
+or <code>by = "Sepal.Length = seq(2, 5, 0.5)"</code>.</p></li>
 <li><p>In general, any expression after a <code>=</code> will be evaluated as R code, which
 allows using own functions, e.g.</p>
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">get_datagrid</span>(iris, <span class="at">by =</span> <span class="st">"Sepal.Width = fun(2:5)"</span>)</span></code></pre><p></p></div></li>
+</ul><p><strong>Note:</strong> If <code>by</code> specifies variables <em>with</em> their associated values,
+argument <code>length</code> is ignored.</p></li>
 </ul><p>There is a special handling of assignments with <em>brackets</em>, i.e. values
-defined inside <code>[</code> and <code>]</code>.For <strong>numeric</strong> variables, the value(s) inside
-the brackets should be a "token" that creates pre-defined representative
-values:</p><ul><li><p>for mean and -/+ 1 SD around the mean: <code>"x = [sd]"</code></p></li>
+defined inside <code>[</code> and <code>]</code>, which create summaries for <em>numeric</em> variables.
+Following "tokens" that creates pre-defined representative values are
+possibble:</p><ul><li><p>for mean and -/+ 1 SD around the mean: <code>"x = [sd]"</code></p></li>
 <li><p>for median and -/+ 1 MAD around the median: <code>"x = [mad]"</code></p></li>
 <li><p>for Tukey's five number summary (minimum, lower-hinge, median,
 upper-hinge, maximum): <code>"x = [fivenum]"</code></p></li>
@@ -193,10 +188,7 @@ upper-hinge, maximum): <code>"x = [fivenum]"</code></p></li>
 <li><p>for 0 and the maximum value: <code>"x = [zeromax]"</code></p></li>
 <li><p>for a random sample from all values: <code>"x = [sample &lt;number&gt;]"</code>, where
 <code>&lt;number&gt;</code> should be a positive integer, e.g. <code>"x = [sample 15]"</code>.</p></li>
-</ul><p>For <strong>factor</strong> variables, the value(s) inside the brackets should indicate
-one or more factor levels, like <code>by = "Species = [setosa, versicolor]"</code>.
-This would be identical to using <code>by = "Species = c('setosa', 'versicolor')"</code>.
-<strong>Note</strong>: the <code>length</code> argument will be ignored when using brackets-tokens.</p>
+</ul><p><strong>Note:</strong> the <code>length</code> argument will be ignored when using brackets-tokens.</p>
 <p>The remaining variables not specified in <code>by</code> will be fixed (see also arguments
 <code>factors</code> and <code>numerics</code>).</p></dd>
 
@@ -326,6 +318,15 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Reference grid data frame.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Data grids are an (artifical or theoretical) representation of the sample.
+They consists of predictors of interest (so-called focal predictors), and
+meaningful values, at which the sample characteristics (focal predictors)
+should be represented. The focal predictors are selected in <code>by</code>. To select
+meaningful (or representative) values, either use <code>by</code>, or use a combination
+of the arguments <code>length</code> and <code>range</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
