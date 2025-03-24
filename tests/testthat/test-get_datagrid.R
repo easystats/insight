@@ -638,6 +638,20 @@ test_that("get_datagrid - colon for ranges, in combination with length", {
     out$Petal.Width,
     c(1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 3L, 3L, 3L, 3L, 3L)
   )
+
+  out <- get_datagrid(
+    iris,
+    by = list(Sepal.WidthSepal.Width = 1:5, Petal.Width = 1:3)
+  )
+  expect_identical(dim(out), c(15L, 5L))
+  expect_identical(
+    out$Sepal.Width,
+    c(1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L)
+  )
+  expect_identical(
+    out$Petal.Width,
+    c(1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 3L, 3L, 3L, 3L, 3L)
+  )
 })
 
 

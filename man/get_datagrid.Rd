@@ -64,31 +64,30 @@ evenly distributed from the minimum to the maximum, with a total number of
 \code{length} values covering that range (see 'Examples'). Possible options for
 \code{by} are:
 \itemize{
-\item \emph{select all variables}: \code{"all"}, which will include all variables or
-predictors. For factors, will use all levels, for numeric variables, will
-use a range of length \code{length} (evenly spread from minimum to maximum)
-and for character vectors, will use all unique values.
-\item \emph{select specific variables}: a character vector of one or more variable
-or predictor names, like \code{c("Species", "Sepal.Width")}, which will create
-a grid of all combinations of unique values. For factors, will use all
-levels, for numeric variables, will use a range of length \code{length}
-(evenly spread from minimum to maximum) and for character vectors, will
-use all unique values.
-\item \emph{select variables and values as list of named elements}, indicating focal
-predictors and their representative values, e.g.
-\code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}. Argument
-\code{length} is ignored.
-\item \emph{select variables and values as string} (or character vector), e.g.
-\code{by = "Sepal.Length = 2"} or \code{by = c("Sepal.Length = 2", "Species = 'setosa'")}.
-Note the usage of single and double quotes to assign strings within
-strings. String assignments can also indicate more than one value, using
-regular R syntax, e.g. \code{by = "Sepal.Length = c(3, 4)"}, in which case
-these values are used as representative values. Argument \code{length} is
-ignored.
-\item \emph{select variables and value ranges as string} (or character vector), e.g.
-\code{by = "Sepal.Length = 2:5"}, for which a range from given minimum to
-maximum is created. Argument \code{length} is ignored. Other ways to create
-ranges would be using \code{seq()}, e.g., \code{by = "Sepal.Length = seq(2, 5, 0.5)"}.
+\item \strong{Select variables only:}
+\itemize{
+\item \code{"all"}, which will include all variables or predictors.
+\item a character vector of one or more variable or predictor names, like
+\code{c("Species", "Sepal.Width")}, which will create a grid of all
+combinations of unique values.
+}
+
+\strong{Note:} If \code{by} specifies only variable names, without associated
+values, the following occurs: factor variables use all their levels,
+numeric variables use a range of \code{length} equally spaced values between
+their minimum and maximum, and character variables use all their unique
+values.
+\item \strong{Select variables and values:}
+\itemize{
+\item \code{by} can be a list of named elements, indicating focal predictors and
+their representative values, e.g. \code{by = list(mpg = 10:20)} or
+\code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}.
+\item Instead of a list, it is possible to write a string representation, or
+a character vector of such strings, e.g. \code{by = "Sepal.Length = 2"} or
+\code{by = c("Sepal.Length = 2", "Species = 'setosa'")}. Note the usage of
+single and double quotes to assign strings within strings. Other
+examples are \code{by = "Sepal.Length = c(3, 4)"}, \code{by = "Sepal.Length = 2:5"},
+or \code{by = "Sepal.Length = seq(2, 5, 0.5)"}.
 \item In general, any expression after a \code{=} will be evaluated as R code, which
 allows using own functions, e.g.
 
@@ -97,10 +96,14 @@ get_datagrid(iris, by = "Sepal.Width = fun(2:5)")
 }\if{html}{\out{</div>}}
 }
 
+\strong{Note:} If \code{by} specifies variables \emph{with} their associated values,
+argument \code{length} is ignored.
+}
+
 There is a special handling of assignments with \emph{brackets}, i.e. values
-defined inside \code{[} and \verb{]}.For \strong{numeric} variables, the value(s) inside
-the brackets should be a "token" that creates pre-defined representative
-values:
+defined inside \code{[} and \verb{]}, which create summaries for \emph{numeric} variables.
+Following "tokens" that creates pre-defined representative values are
+possibble:
 \itemize{
 \item for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
 \item for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
@@ -117,10 +120,7 @@ upper-hinge, maximum): \code{"x = [fivenum]"}
 \verb{<number>} should be a positive integer, e.g. \code{"x = [sample 15]"}.
 }
 
-For \strong{factor} variables, the value(s) inside the brackets should indicate
-one or more factor levels, like \code{by = "Species = [setosa, versicolor]"}.
-This would be identical to using \code{by = "Species = c('setosa', 'versicolor')"}.
-\strong{Note}: the \code{length} argument will be ignored when using brackets-tokens.
+\strong{Note:} the \code{length} argument will be ignored when using brackets-tokens.
 
 The remaining variables not specified in \code{by} will be fixed (see also arguments
 \code{factors} and \code{numerics}).}
@@ -241,6 +241,14 @@ for a tutorial on how to create a visualisation matrix using this function.
 Alternatively, these can also be used to extract the "grid" columns from
 objects generated by \strong{emmeans} and \strong{marginaleffects} (see those
 \link[=get_datagrid.emmGrid]{methods} for more info).
+}
+\details{
+Data grids are an (artifical or theoretical) representation of the sample.
+They consists of predictors of interest (so-called focal predictors), and
+meaningful values, at which the sample characteristics (focal predictors)
+should be represented. The focal predictors are selected in \code{by}. To select
+meaningful (or representative) values, either use \code{by}, or use a combination
+of the arguments \code{length} and \code{range}.
 }
 \examples{
 \dontshow{if (require("bayestestR", quietly = TRUE) && require("datawizard", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

@@ -19,42 +19,42 @@
 #'   evenly distributed from the minimum to the maximum, with a total number of
 #'   `length` values covering that range (see 'Examples'). Possible options for
 #'   `by` are:
-#'   - *select all variables*: `"all"`, which will include all variables or
-#'     predictors. For factors, will use all levels, for numeric variables, will
-#'     use a range of length `length` (evenly spread from minimum to maximum)
-#'     and for character vectors, will use all unique values.
-#'   - *select specific variables*: a character vector of one or more variable
-#'     or predictor names, like `c("Species", "Sepal.Width")`, which will create
-#'     a grid of all combinations of unique values. For factors, will use all
-#'     levels, for numeric variables, will use a range of length `length`
-#'     (evenly spread from minimum to maximum) and for character vectors, will
-#'     use all unique values.
-#'   - *select variables and values as list of named elements*, indicating focal
-#'     predictors and their representative values, e.g.
-#'     `by = list(Sepal.Length = c(2, 4), Species = "setosa")`. Argument
-#'     `length` is ignored.
-#'   - *select variables and values as string* (or character vector), e.g.
-#'     `by = "Sepal.Length = 2"` or `by = c("Sepal.Length = 2", "Species = 'setosa'")`.
-#'     Note the usage of single and double quotes to assign strings within
-#'     strings. String assignments can also indicate more than one value, using
-#'     regular R syntax, e.g. `by = "Sepal.Length = c(3, 4)"`, in which case
-#'     these values are used as representative values. Argument `length` is
-#'     ignored.
-#'   - *select variables and value ranges as string* (or character vector), e.g.
-#'     `by = "Sepal.Length = 2:5"`, for which a range from given minimum to
-#'     maximum is created. Argument `length` is ignored. Other ways to create
-#'     ranges would be using `seq()`, e.g., `by = "Sepal.Length = seq(2, 5, 0.5)"`.
-#'   - In general, any expression after a `=` will be evaluated as R code, which
-#'     allows using own functions, e.g.
-#'     ```
-#'     fun <- function(x) x^2
-#'     get_datagrid(iris, by = "Sepal.Width = fun(2:5)")
-#'     ```
+#'   - **Select variables only:**
+#'     - `"all"`, which will include all variables or predictors.
+#'     - a character vector of one or more variable or predictor names, like
+#'       `c("Species", "Sepal.Width")`, which will create a grid of all
+#'       combinations of unique values.
+#'
+#'     **Note:** If `by` specifies only variable names, without associated
+#'     values, the following occurs: factor variables use all their levels,
+#'     numeric variables use a range of `length` equally spaced values between
+#'     their minimum and maximum, and character variables use all their unique
+#'     values.
+#'
+#'   - **Select variables and values:**
+#'     - `by` can be a list of named elements, indicating focal predictors and
+#'       their representative values, e.g. `by = list(mpg = 10:20)` or
+#'       `by = list(Sepal.Length = c(2, 4), Species = "setosa")`.
+#'     - Instead of a list, it is possible to write a string representation, or
+#'       a character vector of such strings, e.g. `by = "Sepal.Length = 2"` or
+#'       `by = c("Sepal.Length = 2", "Species = 'setosa'")`. Note the usage of
+#'       single and double quotes to assign strings within strings. Other
+#'       examples are `by = "Sepal.Length = c(3, 4)"`, `by = "Sepal.Length = 2:5"`,
+#'       or `by = "Sepal.Length = seq(2, 5, 0.5)"`.
+#'     - In general, any expression after a `=` will be evaluated as R code, which
+#'       allows using own functions, e.g.
+#'       ```
+#'       fun <- function(x) x^2
+#'       get_datagrid(iris, by = "Sepal.Width = fun(2:5)")
+#'       ```
+#'
+#'     **Note:** If `by` specifies variables *with* their associated values,
+#'     argument `length` is ignored.
 #'
 #'   There is a special handling of assignments with _brackets_, i.e. values
-#'   defined inside `[` and `]`.For **numeric** variables, the value(s) inside
-#'   the brackets should be a "token" that creates pre-defined representative
-#'   values:
+#'   defined inside `[` and `]`, which create summaries for *numeric* variables.
+#'   Following "tokens" that creates pre-defined representative values are
+#'   possibble:
 #'
 #'   - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
 #'   - for median and -/+ 1 MAD around the median: `"x = [mad]"`
@@ -70,10 +70,7 @@
 #'   - for a random sample from all values: `"x = [sample <number>]"`, where
 #'     `<number>` should be a positive integer, e.g. `"x = [sample 15]"`.
 #'
-#'   For **factor** variables, the value(s) inside the brackets should indicate
-#'   one or more factor levels, like `by = "Species = [setosa, versicolor]"`.
-#'   This would be identical to using `by = "Species = c('setosa', 'versicolor')"`.
-#'   **Note**: the `length` argument will be ignored when using brackets-tokens.
+#'   **Note:** the `length` argument will be ignored when using brackets-tokens.
 #'
 #'   The remaining variables not specified in `by` will be fixed (see also arguments
 #'   `factors` and `numerics`).
@@ -169,6 +166,14 @@
 #'   or `range` to control the spread of numeric variables.).
 #'
 #' @return Reference grid data frame.
+#'
+#' @details
+#' Data grids are an (artifical or theoretical) representation of the sample.
+#' They consists of predictors of interest (so-called focal predictors), and
+#' meaningful values, at which the sample characteristics (focal predictors)
+#' should be represented. The focal predictors are selected in `by`. To select
+#' meaningful (or representative) values, either use `by`, or use a combination
+#' of the arguments `length` and `range`.
 #'
 #' @seealso [get_predicted()] to extract predictions, for which the data grid
 #' is useful, and see the [methods][get_datagrid.emmGrid] for objects generated
@@ -1316,6 +1321,10 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 #' @keywords internal
 .extract_at_interactions <- function(by) {
+  # don't process when by is a list
+  if (is.list(by)) {
+    return(by)
+  }
   # get interaction terms, but only if these are not inside brackets (like "[4:8]")
   # or parenthesis (like "c(1:3)").Furthermore, "interaction terms" only refer
   # to a value without equal-sign, i.e. `by = "a:b"` is an interaction, but
