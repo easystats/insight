@@ -146,11 +146,12 @@ vector of different values (see 'Examples'). In this case, \code{length} must be
 of same length as numeric target variables. If \code{length} is a named vector,
 values are matched against the names of the target variables.
 
-\code{length} is ignored for integer type variables when \code{length} is larger than
-the number of unique values \emph{and} \code{protect_integers} is \code{TRUE} (default).
-Set \code{protect_integers = FALSE} to create a spread of \code{length} number of
-values from minimum to maximum for integers, including fractions (i.e., to
-treat integer variables as regular "numeric" variables).
+When \code{range = "range"} (the default), \code{length} is ignored for integer type
+variables when \code{length} is larger than the number of unique values \emph{and}
+\code{protect_integers} is \code{TRUE} (default). Set \code{protect_integers = FALSE} to
+create a spread of \code{length} number of values from minimum to maximum for
+integers, including fractions (i.e., to treat integer variables as regular
+numeric variables).
 
 \code{length} is furthermore ignored if "tokens" (in brackets \code{[} and \verb{]}) are
 used in \code{by}, or if representative values are additionally specified in
@@ -200,7 +201,9 @@ should increase the \code{length} argument.}
 
 \item{protect_integers}{Defaults to \code{TRUE}. Indicates whether integers (whole
 numbers) should be treated as integers (i.e., prevent adding any in-between
-round number values), or - if \code{FALSE} - as regular numeric variables.}
+round number values), or - if \code{FALSE} - as regular numeric variables. Only
+applies when \code{range = "range"} (the default), or if \code{range = "grid"} and the
+first predictor in \code{by} is an integer.}
 
 \item{digits}{Number of digits used for rounding numeric values specified in
 \code{by}. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to

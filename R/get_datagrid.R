@@ -87,11 +87,12 @@
 #'   of same length as numeric target variables. If `length` is a named vector,
 #'   values are matched against the names of the target variables.
 #'
-#'   `length` is ignored for integer type variables when `length` is larger than
-#'   the number of unique values *and* `protect_integers` is `TRUE` (default).
-#'   Set `protect_integers = FALSE` to create a spread of `length` number of
-#'   values from minimum to maximum for integers, including fractions (i.e., to
-#'   treat integer variables as regular "numeric" variables).
+#'   When `range = "range"` (the default), `length` is ignored for integer type
+#'   variables when `length` is larger than the number of unique values *and*
+#'   `protect_integers` is `TRUE` (default). Set `protect_integers = FALSE` to
+#'   create a spread of `length` number of values from minimum to maximum for
+#'   integers, including fractions (i.e., to treat integer variables as regular
+#'   numeric variables).
 #'
 #'   `length` is furthermore ignored if "tokens" (in brackets `[` and `]`) are
 #'   used in `by`, or if representative values are additionally specified in
@@ -155,7 +156,9 @@
 #'   variable should be included in the data grid or not.
 #' @param protect_integers Defaults to `TRUE`. Indicates whether integers (whole
 #'   numbers) should be treated as integers (i.e., prevent adding any in-between
-#'   round number values), or - if `FALSE` - as regular numeric variables.
+#'   round number values), or - if `FALSE` - as regular numeric variables. Only
+#'   applies when `range = "range"` (the default), or if `range = "grid"` and the
+#'   first predictor in `by` is an integer.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
 #' @param digits Number of digits used for rounding numeric values specified in
