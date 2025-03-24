@@ -181,6 +181,8 @@
 #'
 #' @examplesIf require("bayestestR", quietly = TRUE) && require("datawizard", quietly = TRUE)
 #' # Datagrids of variables and dataframes =====================================
+#' data(iris)
+#' data(mtcars)
 #'
 #' # Single variable is of interest; all others are "fixed" ------------------
 #'
@@ -205,6 +207,7 @@
 #'
 #' # Manually change min/max
 #' get_datagrid(iris, by = "Sepal.Length = c(0, 1)")
+#'
 #' # -1 SD, mean and +1 SD
 #' get_datagrid(iris, by = "Sepal.Length = [sd]")
 #'
@@ -213,20 +216,9 @@
 #'
 #' # identical to previous line: -1 SD, mean and +1 SD
 #' get_datagrid(iris, by = "Sepal.Length", range = "sd", length = 3)
+#'
 #' # quartiles
 #' get_datagrid(iris, by = "Sepal.Length = [quartiles]")
-#'
-#' # specify length individually for each focal predictor - values are
-#' # matched by names
-#' data(mtcars)
-#' get_datagrid(mtcars[1:4], by = c("mpg", "hp"), length = c(hp = 3, mpg = 2))
-#'
-#' # Numeric and categorical variables, generating a grid for plots
-#' # default spread length = 10
-#' get_datagrid(iris, by = c("Sepal.Length", "Species"), range = "grid")
-#'
-#' # default spread length = 3 (-1 SD, mean and +1 SD)
-#' get_datagrid(iris, by = c("Species", "Sepal.Length"), range = "grid")
 #'
 #' # Standardization and unstandardization
 #' data <- get_datagrid(iris, by = "Sepal.Length", range = "sd", length = 3)
@@ -240,7 +232,9 @@
 #' data
 #' datawizard::unstandardize(data, select = "Sepal.Length")
 #'
+#'
 #' # Multiple variables are of interest, creating a combination --------------
+#'
 #' get_datagrid(iris, by = c("Sepal.Length", "Species"), length = 3)
 #' get_datagrid(iris, by = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
 #' get_datagrid(iris, by = c(1, 3), length = 3)
@@ -249,15 +243,26 @@
 #' get_datagrid(iris, by = c("Sepal.Length = 3", "Species"))
 #' get_datagrid(iris, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #'
-#' # create range of values, with different lengths of ranges
-#' get_datagrid(
-#'   iris,
-#'   by = c("Sepal.Width = 1:5", "Petal.Width = 1:3"),
-#'   length = c(Petal.Width = 3, Sepal.Width = 4)
-#' )
+#' # specify length individually for each focal predictor
+#' # values are matched by names
+#' get_datagrid(mtcars[1:4], by = c("mpg", "hp"), length = c(hp = 3, mpg = 2))
+#'
+#' # Numeric and categorical variables, generating a grid for plots
+#' # default spread when numerics are first: length = 10
+#' get_datagrid(iris, by = c("Sepal.Length", "Species"), range = "grid")
+#'
+#' # default spread when numerics are not first: length = 3 (-1 SD, mean and +1 SD)
+#' get_datagrid(iris, by = c("Species", "Sepal.Length"), range = "grid")
+#'
+#' # range of values
+#' get_datagrid(iris, by = c("Sepal.Width = 1:5", "Petal.Width = 1:3"))
 #'
 #' # With list-style by-argument
-#' get_datagrid(iris, by = list(Sepal.Length = c(1, 3), Species = "setosa"))
+#' get_datagrid(
+#'   iris,
+#'   by = list(Sepal.Length = 1:3, Species = c("setosa", "versicolor"))
+#' )
+#'
 #'
 #' # With models ===============================================================
 #'
