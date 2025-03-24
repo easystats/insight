@@ -653,11 +653,11 @@ test_that("get_datagrid - colon for ranges, in combination with length", {
   expect_identical(dim(out), c(15L, 5L))
   expect_identical(
     out$Sepal.Width,
-    c(1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L)
+    c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)
   )
-  expect_identical(
-    out$Petal.Width,
-    c(1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 3L, 3L, 3L, 3L, 3L)
+  expect_identica(
+    out$Peta.Width,
+    c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3)
   )
 })
 
