@@ -158,14 +158,14 @@ numeric variables use a range of <code>length</code> equally spaced values betwe
 their minimum and maximum, and character variables use all their unique
 values.</p></li>
 <li><p><strong>Select variables and values:</strong></p><ul><li><p><code>by</code> can be a list of named elements, indicating focal predictors and
-their representative values, e.g. <code>by = list(mpg = 10:20)</code> or
-<code>by = list(Sepal.Length = c(2, 4), Species = "setosa")</code>.</p></li>
+their representative values, e.g. <code>by = list(mpg = 10:20)</code>,
+<code>by = list(Sepal.Length = c(2, 4), Species = "setosa")</code>, or
+<code>by = list(Sepal.Length = seq(2, 5, 0.5))</code>.</p></li>
 <li><p>Instead of a list, it is possible to write a string representation, or
-a character vector of such strings, e.g. <code>by = "Sepal.Length = 2"</code> or
-<code>by = c("Sepal.Length = 2", "Species = 'setosa'")</code>. Note the usage of
-single and double quotes to assign strings within strings. Other
-examples are <code>by = "Sepal.Length = c(3, 4)"</code>, <code>by = "Sepal.Length = 2:5"</code>,
-or <code>by = "Sepal.Length = seq(2, 5, 0.5)"</code>.</p></li>
+a character vector of such strings, e.g. <code>by = "mpg = 10:20"</code>,
+<code>by = c("Sepal.Length = c(2, 4)", "Species = 'setosa'")</code>, or
+<code>by = "Sepal.Length = seq(2, 5, 0.5)"</code>. Note the usage of single and
+double quotes to assign strings within strings.</p></li>
 <li><p>In general, any expression after a <code>=</code> will be evaluated as R code, which
 allows using own functions, e.g.</p>
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x<span class="sc">^</span><span class="dv">2</span></span>
@@ -270,9 +270,9 @@ should increase the <code>length</code> argument.</p></dd>
 
 
 <dt id="arg-protect-integers">protect_integers<a class="anchor" aria-label="anchor" href="#arg-protect-integers"></a></dt>
-<dd><p>Defaults to <code>TRUE</code>. Indicates whether integers should
-be treated as integers, or - if <code>FALSE</code> - as numeric variables where
-fractions are possible being creating in the data grid.</p></dd>
+<dd><p>Defaults to <code>TRUE</code>. Indicates whether integers (whole
+numbers) should be treated as integers (i.e., prevent adding any in-between
+round number values), or - if <code>FALSE</code> - as regular numeric variables.</p></dd>
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
