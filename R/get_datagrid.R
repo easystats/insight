@@ -54,7 +54,7 @@
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`, which create summaries for *numeric* variables.
 #'   Following "tokens" that creates pre-defined representative values are
-#'   possibble:
+#'   possible:
 #'
 #'   - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
 #'   - for median and -/+ 1 MAD around the median: `"x = [mad]"`
@@ -171,7 +171,7 @@
 #' @return Reference grid data frame.
 #'
 #' @details
-#' Data grids are an (artifical or theoretical) representation of the sample.
+#' Data grids are an (artificial or theoretical) representation of the sample.
 #' They consists of predictors of interest (so-called focal predictors), and
 #' meaningful values, at which the sample characteristics (focal predictors)
 #' should be represented. The focal predictors are selected in `by`. To select
