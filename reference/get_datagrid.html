@@ -21,7 +21,7 @@ methods for more info).'><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -175,7 +175,7 @@ argument <code>length</code> is ignored.</p></li>
 </ul><p>There is a special handling of assignments with <em>brackets</em>, i.e. values
 defined inside <code>[</code> and <code>]</code>, which create summaries for <em>numeric</em> variables.
 Following "tokens" that creates pre-defined representative values are
-possibble:</p><ul><li><p>for mean and -/+ 1 SD around the mean: <code>"x = [sd]"</code></p></li>
+possible:</p><ul><li><p>for mean and -/+ 1 SD around the mean: <code>"x = [sd]"</code></p></li>
 <li><p>for median and -/+ 1 MAD around the median: <code>"x = [mad]"</code></p></li>
 <li><p>for Tukey's five number summary (minimum, lower-hinge, median,
 upper-hinge, maximum): <code>"x = [fivenum]"</code></p></li>
@@ -217,11 +217,12 @@ values.</p>
 vector of different values (see 'Examples'). In this case, <code>length</code> must be
 of same length as numeric target variables. If <code>length</code> is a named vector,
 values are matched against the names of the target variables.</p>
-<p><code>length</code> is ignored for integer type variables when <code>length</code> is larger than
-the number of unique values <em>and</em> <code>protect_integers</code> is <code>TRUE</code> (default).
-Set <code>protect_integers = FALSE</code> to create a spread of <code>length</code> number of
-values from minimum to maximum for integers, including fractions (i.e., to
-treat integer variables as regular "numeric" variables).</p>
+<p>When <code>range = "range"</code> (the default), <code>length</code> is ignored for integer type
+variables when <code>length</code> is larger than the number of unique values <em>and</em>
+<code>protect_integers</code> is <code>TRUE</code> (default). Set <code>protect_integers = FALSE</code> to
+create a spread of <code>length</code> number of values from minimum to maximum for
+integers, including fractions (i.e., to treat integer variables as regular
+numeric variables).</p>
 <p><code>length</code> is furthermore ignored if "tokens" (in brackets <code>[</code> and <code>]</code>) are
 used in <code>by</code>, or if representative values are additionally specified in
 <code>by</code>.</p></dd>
@@ -272,7 +273,9 @@ should increase the <code>length</code> argument.</p></dd>
 <dt id="arg-protect-integers">protect_integers<a class="anchor" aria-label="anchor" href="#arg-protect-integers"></a></dt>
 <dd><p>Defaults to <code>TRUE</code>. Indicates whether integers (whole
 numbers) should be treated as integers (i.e., prevent adding any in-between
-round number values), or - if <code>FALSE</code> - as regular numeric variables.</p></dd>
+round number values), or - if <code>FALSE</code> - as regular numeric variables. Only
+applies when <code>range = "range"</code> (the default), or if <code>range = "grid"</code> and the
+first predictor in <code>by</code> is an integer.</p></dd>
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
@@ -321,7 +324,7 @@ the data is retrieved via <code><a href="get_data.html">get_data()</a></code>.</
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Data grids are an (artifical or theoretical) representation of the sample.
+    <p>Data grids are an (artificial or theoretical) representation of the sample.
 They consists of predictors of interest (so-called focal predictors), and
 meaningful values, at which the sample characteristics (focal predictors)
 should be represented. The focal predictors are selected in <code>by</code>. To select
@@ -575,36 +578,36 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-in"><span><span class="co"># default spread when numerics are first: length = 10</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length    Species Sepal.Width Petal.Length Petal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         2.531     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         3.359     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         4.187     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         5.015     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         5.843     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         6.671     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7         7.499     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8         8.328     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9         9.156     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10        9.984     setosa    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11        2.531 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12        3.359 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13        4.187 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14        5.015 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15        5.843 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16        6.671 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17        7.499 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18        8.328 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19        9.156 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20        9.984 versicolor    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21        2.531  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22        3.359  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23        4.187  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24        5.015  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25        5.843  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26        6.671  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27        7.499  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28        8.328  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29        9.156  virginica    3.057333        3.758    1.199333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30        9.984  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           4.3     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           4.7     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           5.1     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           5.5     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           5.9     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           6.3     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           6.7     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           7.1     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           7.5     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          7.9     setosa    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          4.3 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          4.7 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13          5.1 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14          5.5 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15          5.9 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16          6.3 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          6.7 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18          7.1 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19          7.5 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20          7.9 versicolor    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21          4.3  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22          4.7  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23          5.1  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24          5.5  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25          5.9  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26          6.3  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27          6.7  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28          7.1  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29          7.5  virginica    3.057333        3.758    1.199333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30          7.9  virginica    3.057333        3.758    1.199333</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># default spread when numerics are not first: length = 3 (-1 SD, mean and +1 SD)</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Length"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span></span></span>
