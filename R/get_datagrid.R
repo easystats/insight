@@ -1196,7 +1196,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
     # protect_integers = FALSE
     if (isTRUE(list(...)$is_first_predictor) && all(.is_integer(x)) && n_unique(x) < length && protect_integers) {
       length <- n_unique(x)
-    } else {
+    } else if (isFALSE(list(...)$is_first_predictor)) {
       range <- "sd"
     }
   }

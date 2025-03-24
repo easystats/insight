@@ -536,6 +536,17 @@ test_that("get_datagrid - include weights", {
 })
 
 
+test_that("get_datagrid - correctly handle multiple numerics for grid and range", {
+  data(mtcars)
+  # range of length 10 for both
+  out <- get_datagrid(mtcars, c("mpg", "hp"), range = "range") # 10x10
+  expect_identical(dim(out), c(100L, 11L))
+  # grid creates range for first focal term and uses SD for remaining
+  out <- get_datagrid(mtcars, c("mpg", "hp"), range = "grid") # 10x3
+  expect_identical(dim(out), c(30L, 11L))
+})
+
+
 test_that("get_datagrid - handle integers", {
   d <- data.frame(
     x = 1:8,
