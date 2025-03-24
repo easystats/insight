@@ -98,12 +98,8 @@ test_that("get_datagrid - range = grid", {
   dg <- insight::get_datagrid(m, "Petal.Width", range = "grid")
   expect_equal(
     dg$Petal.Width,
-    c(
-      `-4 SD` = -1.8496, `-3 SD` = -1.0874, `-2 SD` = -0.3251, `-1 SD` = 0.4371,
-      Mean = 1.1993, `+1 SD` = 1.9616, `+2 SD` = 2.7238, `+3 SD` = 3.486,
-      `+4 SD` = 4.2483, `+5 SD` = 5.0105
-    ),
-    tolerance = 1e-3
+    c(0.1, 0.367, 0.633, 0.9, 1.167, 1.433, 1.7, 1.967, 2.233, 2.5),
+    tolerance = 1e-2
   )
   expect_identical(attributes(dg)$adjusted_for, c("Petal.Length", "Species"))
 
@@ -536,6 +532,17 @@ test_that("get_datagrid - include weights", {
 })
 
 
+test_that("get_datagrid - correctly handle multiple numerics for grid and range", {
+  data(mtcars)
+  # range of length 10 for both
+  out <- get_datagrid(mtcars, c("mpg", "hp"), range = "range") # 10x10
+  expect_identical(dim(out), c(100L, 11L))
+  # grid creates range for first focal term and uses SD for remaining
+  out <- get_datagrid(mtcars, c("mpg", "hp"), range = "grid") # 10x3
+  expect_identical(dim(out), c(30L, 11L))
+})
+
+
 test_that("get_datagrid - handle integers", {
   d <- data.frame(
     x = 1:8,
@@ -641,16 +648,16 @@ test_that("get_datagrid - colon for ranges, in combination with length", {
 
   out <- get_datagrid(
     iris,
-    by = list(Sepal.WidthSepal.Width = 1:5, Petal.Width = 1:3)
+    by = list(Sepal.Width = 1:5, Petal.Width = 1:3)
   )
   expect_identical(dim(out), c(15L, 5L))
   expect_identical(
-    out$Sepal.Width,
-    c(1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L, 1L, 2L, 3L, 4L, 5L)
+    as.numeric(out$Sepal.Width),
+    c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)
   )
   expect_identical(
-    out$Petal.Width,
-    c(1L, 1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 2L, 3L, 3L, 3L, 3L, 3L)
+    as.numeric(out$Petal.Width),
+    c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3)
   )
 })
 

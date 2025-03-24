@@ -54,7 +54,7 @@
 #'   There is a special handling of assignments with _brackets_, i.e. values
 #'   defined inside `[` and `]`, which create summaries for *numeric* variables.
 #'   Following "tokens" that creates pre-defined representative values are
-#'   possibble:
+#'   possible:
 #'
 #'   - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
 #'   - for median and -/+ 1 MAD around the median: `"x = [mad]"`
@@ -87,11 +87,12 @@
 #'   of same length as numeric target variables. If `length` is a named vector,
 #'   values are matched against the names of the target variables.
 #'
-#'   `length` is ignored for integer type variables when `length` is larger than
-#'   the number of unique values *and* `protect_integers` is `TRUE` (default).
-#'   Set `protect_integers = FALSE` to create a spread of `length` number of
-#'   values from minimum to maximum for integers, including fractions (i.e., to
-#'   treat integer variables as regular "numeric" variables).
+#'   When `range = "range"` (the default), `length` is ignored for integer type
+#'   variables when `length` is larger than the number of unique values *and*
+#'   `protect_integers` is `TRUE` (default). Set `protect_integers = FALSE` to
+#'   create a spread of `length` number of values from minimum to maximum for
+#'   integers, including fractions (i.e., to treat integer variables as regular
+#'   numeric variables).
 #'
 #'   `length` is furthermore ignored if "tokens" (in brackets `[` and `]`) are
 #'   used in `by`, or if representative values are additionally specified in
@@ -155,7 +156,9 @@
 #'   variable should be included in the data grid or not.
 #' @param protect_integers Defaults to `TRUE`. Indicates whether integers (whole
 #'   numbers) should be treated as integers (i.e., prevent adding any in-between
-#'   round number values), or - if `FALSE` - as regular numeric variables.
+#'   round number values), or - if `FALSE` - as regular numeric variables. Only
+#'   applies when `range = "range"` (the default), or if `range = "grid"` and the
+#'   first predictor in `by` is an integer.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
 #' @param digits Number of digits used for rounding numeric values specified in
@@ -168,7 +171,7 @@
 #' @return Reference grid data frame.
 #'
 #' @details
-#' Data grids are an (artifical or theoretical) representation of the sample.
+#' Data grids are an (artificial or theoretical) representation of the sample.
 #' They consists of predictors of interest (so-called focal predictors), and
 #' meaningful values, at which the sample characteristics (focal predictors)
 #' should be represented. The focal predictors are selected in `by`. To select
@@ -1189,6 +1192,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
     # is of type integer
     if (isFALSE(list(...)$is_first_predictor)) {
       length <- 3
+      range <- "sd"
     }
     # if we want a representative grid, and have integers as first focal
     # predictors, we want at maximum all valid / unique values, but *not* a
@@ -1196,8 +1200,6 @@ get_datagrid.comparisons <- get_datagrid.slopes
     # protect_integers = FALSE
     if (isTRUE(list(...)$is_first_predictor) && all(.is_integer(x)) && n_unique(x) < length && protect_integers) {
       length <- n_unique(x)
-    } else {
-      range <- "sd"
     }
   }
 
