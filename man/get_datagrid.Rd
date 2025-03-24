@@ -80,14 +80,14 @@ values.
 \item \strong{Select variables and values:}
 \itemize{
 \item \code{by} can be a list of named elements, indicating focal predictors and
-their representative values, e.g. \code{by = list(mpg = 10:20)} or
-\code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}.
+their representative values, e.g. \code{by = list(mpg = 10:20)},
+\code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}, or
+\code{by = list(Sepal.Length = seq(2, 5, 0.5))}.
 \item Instead of a list, it is possible to write a string representation, or
-a character vector of such strings, e.g. \code{by = "Sepal.Length = 2"} or
-\code{by = c("Sepal.Length = 2", "Species = 'setosa'")}. Note the usage of
-single and double quotes to assign strings within strings. Other
-examples are \code{by = "Sepal.Length = c(3, 4)"}, \code{by = "Sepal.Length = 2:5"},
-or \code{by = "Sepal.Length = seq(2, 5, 0.5)"}.
+a character vector of such strings, e.g. \code{by = "mpg = 10:20"},
+\code{by = c("Sepal.Length = c(2, 4)", "Species = 'setosa'")}, or
+\code{by = "Sepal.Length = seq(2, 5, 0.5)"}. Note the usage of single and
+double quotes to assign strings within strings.
 \item In general, any expression after a \code{=} will be evaluated as R code, which
 allows using own functions, e.g.
 
@@ -198,9 +198,9 @@ range of its factor level. This leads to an unbalanced grid. Also, if you
 want the minimum and the maximum to closely match the actual ranges, you
 should increase the \code{length} argument.}
 
-\item{protect_integers}{Defaults to \code{TRUE}. Indicates whether integers should
-be treated as integers, or - if \code{FALSE} - as numeric variables where
-fractions are possible being creating in the data grid.}
+\item{protect_integers}{Defaults to \code{TRUE}. Indicates whether integers (whole
+numbers) should be treated as integers (i.e., prevent adding any in-between
+round number values), or - if \code{FALSE} - as regular numeric variables.}
 
 \item{digits}{Number of digits used for rounding numeric values specified in
 \code{by}. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to

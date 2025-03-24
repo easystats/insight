@@ -33,14 +33,14 @@
 #'
 #'   - **Select variables and values:**
 #'     - `by` can be a list of named elements, indicating focal predictors and
-#'       their representative values, e.g. `by = list(mpg = 10:20)` or
-#'       `by = list(Sepal.Length = c(2, 4), Species = "setosa")`.
+#'       their representative values, e.g. `by = list(mpg = 10:20)`,
+#'       `by = list(Sepal.Length = c(2, 4), Species = "setosa")`, or
+#'       `by = list(Sepal.Length = seq(2, 5, 0.5))`.
 #'     - Instead of a list, it is possible to write a string representation, or
-#'       a character vector of such strings, e.g. `by = "Sepal.Length = 2"` or
-#'       `by = c("Sepal.Length = 2", "Species = 'setosa'")`. Note the usage of
-#'       single and double quotes to assign strings within strings. Other
-#'       examples are `by = "Sepal.Length = c(3, 4)"`, `by = "Sepal.Length = 2:5"`,
-#'       or `by = "Sepal.Length = seq(2, 5, 0.5)"`.
+#'       a character vector of such strings, e.g. `by = "mpg = 10:20"`,
+#'       `by = c("Sepal.Length = c(2, 4)", "Species = 'setosa'")`, or
+#'       `by = "Sepal.Length = seq(2, 5, 0.5)"`. Note the usage of single and
+#'       double quotes to assign strings within strings.
 #'     - In general, any expression after a `=` will be evaluated as R code, which
 #'       allows using own functions, e.g.
 #'       ```
@@ -153,9 +153,9 @@
 #'   usually need data with all variables in the model included.
 #' @param include_response If `x` is a model object, decide whether the response
 #'   variable should be included in the data grid or not.
-#' @param protect_integers Defaults to `TRUE`. Indicates whether integers should
-#'   be treated as integers, or - if `FALSE` - as numeric variables where
-#'   fractions are possible being creating in the data grid.
+#' @param protect_integers Defaults to `TRUE`. Indicates whether integers (whole
+#'   numbers) should be treated as integers (i.e., prevent adding any in-between
+#'   round number values), or - if `FALSE` - as regular numeric variables.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
 #' @param digits Number of digits used for rounding numeric values specified in
