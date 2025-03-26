@@ -27,7 +27,7 @@ find_random_slopes <- function(x) {
 
   # for brms, we can have random effects for auxilliary elements, too
   if (inherits(x, "brmsfit")) {
-    components <- c(components, paste0(names(forms$pforms), "_random"))
+    components <- c(components, names(forms)[endsWith(names(forms), "_random")])
   }
   # for glmmTMB, we can have random effects for dispersion component, too
   if (inherits(x, "glmmTMB")) {
