@@ -245,8 +245,8 @@
 
 .brms_aux_elements <- function() {
   c(
-    "sigma", "mu", "nu", "shape", "beta", "phi", "hu", "ndt", "zoi", "coi",
-    "kappa", "bias", "bs", "zi", "alpha", "xi"
+    "alpha", "beta", "bias", "bs", "coi", "delta", "hu", "k", "kappa",
+    "mu", "ndt", "nu", "phi", "shape", "sigma", "xi", "zi", "zoi"
   )
 }
 
