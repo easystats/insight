@@ -1722,7 +1722,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   }
 
   compact_list(c(
-    list(conditional = f_cond, random = f_random,),
+    list(conditional = f_cond, random = f_random),
     dpar_formulas,
     dpar_random_formulas
   ))
