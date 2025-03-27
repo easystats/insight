@@ -1711,9 +1711,9 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
     # name of auxiliary parameter, handle exceptions
     f_aux_name <- switch(aux,
-      zi = zero_inflated,
-      zoi = zero_one_inflated,
-      coi = conditional_one_inflated,
+      zi = "zero_inflated",
+      zoi = "zero_one_inflated",
+      coi = "conditional_one_inflated",
       aux
     )
     # add formula to list of custom formulas
