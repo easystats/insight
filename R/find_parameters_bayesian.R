@@ -209,10 +209,12 @@ find_parameters.brmsfit <- function(x,
                                     parameters = NULL,
                                     ...) {
   effects <- validate_argument(effects, c("all", "fixed", "random"))
-  component <- validate_argument(component, c("all", .all_elements(), "location", "distributional"))
+  component <- validate_argument(
+    component,
+    unique(c("all", .all_elements(), "location", "distributional"))
+  )
 
   fe <- dimnames(x$fit)$parameters
-  # fe <- colnames(as.data.frame(x))
 
   # remove redundant columns. These seem to be new since brms 2.16?
   pattern <- "^[A-z]_\\d\\.\\d\\.(.*)"
@@ -223,25 +225,44 @@ find_parameters.brmsfit <- function(x,
   # remove "Intercept"
   fe <- fe[!startsWith(fe, "Intercept")]
 
-  cond <- fe[grepl("^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", fe, perl = TRUE)]
+  # extract all components, including custom and auxiliary ones
+  f <- stats::formula(x)
+  if (object_has_names(f, "forms")) {
+    dpars <- lapply(f$forms, function(i) names(i$pforms))
+  } else {
+    dpars <- names(f$pforms)
+  }
+
+  # remove special ones
+
+
+  # create pattern for grouping dpars
+  dpars_pattern1 <- paste0(dpars, "_", collapse = "|")
+  dpars_pattern2 <- paste(dpars, collapse = "|")
+
+  # standard components: conditional, zero-inflated, and their random effects
+  cond <- fe[grepl(paste0("^(b_|bs_|bsp_|bcs_)(?!", dpars_pattern1, ")(.*)"), fe, perl = TRUE)]
   zi <- fe[grepl("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe)]
-  rand <- fe[grepl("(?!.*__(zi|sigma|beta))(?=.*^r_)", fe, perl = TRUE) & !startsWith(fe, "prior_")]
+  rand <- fe[grepl("(?!.*__)(?=.*^r_)", fe, perl = TRUE) & !startsWith(fe, "prior_")]
   randzi <- fe[grepl("^r_(.*__zi)", fe)]
-  rand_sd <- fe[grepl("(?!.*_zi)(?=.*^sd_)", fe, perl = TRUE)]
+  rand_sd <- fe[grepl("(?!.*__)(?=.*^sd_)", fe, perl = TRUE)]
   randzi_sd <- fe[grepl("^sd_(.*_zi)", fe)]
-  rand_cor <- fe[grepl("(?!.*_zi)(?=.*^cor_)", fe, perl = TRUE)]
+  rand_cor <- fe[grepl("(?!.*__)(?=.*^cor_)", fe, perl = TRUE)]
   randzi_cor <- fe[grepl("^cor_(.*_zi)", fe)]
+
+  # special formula functions
   simo <- fe[startsWith(fe, "simo_")]
   car_struc <- fe[fe %in% c("car", "sdcar")]
   smooth_terms <- fe[startsWith(fe, "sds_")]
   priors <- fe[startsWith(fe, "prior_")]
+  shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
+  mix <- fe[grepl("mix", fe, fixed = TRUE)]
+  dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
+
   sigma_param <- fe[startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE)]
   randsigma <- fe[grepl("^r_(.*__sigma)", fe)]
   fixed_beta <- fe[grepl("beta", fe, fixed = TRUE)]
   rand_beta <- fe[grepl("^r_(.*__beta)", fe)]
-  mix <- fe[grepl("mix", fe, fixed = TRUE)]
-  shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
-  dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
   auxiliary <- fe[grepl("(shape|phi|precision|_ndt_)", fe)]
 
   # if auxiliary is modelled directly, we need to remove duplicates here
