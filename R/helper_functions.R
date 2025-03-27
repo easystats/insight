@@ -145,6 +145,10 @@
       re <- as.list(re)
       split_nested <- FALSE
     }
+  } else if (is_empty_object(re)) {
+    # need this for the many brms-custom formulas, this exception might not
+    # be yet captured - so make sure, "re" is not empty here.
+    return(NULL)
   } else {
     re <- trim_ws(substring(re, max(gregexpr(pattern = "|", re, fixed = TRUE)[[1]]) + 1))
   }
