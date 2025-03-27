@@ -241,13 +241,17 @@ find_parameters.brmsfit <- function(x,
   dpars_pattern2 <- paste(dpars, collapse = "|")
 
   # standard components: conditional, zero-inflated, and their random effects
+
+  # fixed
   cond <- fe[grepl(paste0("^(b_|bs_|bsp_|bcs_)(?!", dpars_pattern1, ")(.*)"), fe, perl = TRUE)]
   zi <- fe[grepl("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe)]
+  # conditional random
   rand <- fe[grepl("(?!.*__)(?=.*^r_)", fe, perl = TRUE) & !startsWith(fe, "prior_")]
-  randzi <- fe[grepl("^r_(.*__zi)", fe)]
   rand_sd <- fe[grepl("(?!.*__)(?=.*^sd_)", fe, perl = TRUE)]
-  randzi_sd <- fe[grepl("^sd_(.*_zi)", fe)]
   rand_cor <- fe[grepl("(?!.*__)(?=.*^cor_)", fe, perl = TRUE)]
+  # zero-inlfated random
+  randzi <- fe[grepl("^r_(.*__zi)", fe)]
+  randzi_sd <- fe[grepl("^sd_(.*_zi)", fe)]
   randzi_cor <- fe[grepl("^cor_(.*_zi)", fe)]
 
   # special formula functions
