@@ -81,7 +81,7 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
 
   # for brms, we can have random effects for auxilliary elements, too
   if (inherits(x, "brmsfit")) {
-    components <- c(components, names(forms)[endsWith(names(forms), "_random")])
+    components <- c(components, names(f)[endsWith(names(f), "_random")])
   }
   # for glmmTMB, we can have random effects for dispersion component, too
   if (inherits(x, "glmmTMB")) {

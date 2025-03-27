@@ -20,14 +20,14 @@
 #' @export
 find_random_slopes <- function(x) {
   random_slopes <- vector(mode = "list")
-  forms <- find_formula(x, verbose = FALSE)
+  f <- find_formula(x, verbose = FALSE)
 
   # potential components that can have random effects
   components <- c("random", "zero_inflated_random")
 
   # for brms, we can have random effects for auxilliary elements, too
   if (inherits(x, "brmsfit")) {
-    components <- c(components, names(forms)[endsWith(names(forms), "_random")])
+    components <- c(components, names(f)[endsWith(names(f), "_random")])
   }
   # for glmmTMB, we can have random effects for dispersion component, too
   if (inherits(x, "glmmTMB")) {
@@ -35,7 +35,7 @@ find_random_slopes <- function(x) {
   }
 
   # check which components we have
-  components <- components[vapply(components, function(i) object_has_names(forms, i), logical(1))]
+  components <- components[vapply(components, function(i) object_has_names(f, i), logical(1))]
 
   # if nothing, return null
   if (!length(components)) {
@@ -43,7 +43,7 @@ find_random_slopes <- function(x) {
   }
 
   random_slopes <- lapply(components, function(comp) {
-    .extract_random_slopes(forms[[comp]])
+    .extract_random_slopes(f[[comp]])
   })
   names(random_slopes) <- components
   random_slopes <- compact_list(random_slopes)
@@ -63,14 +63,14 @@ find_random_slopes <- function(x) {
 
   if (!is.list(fr)) fr <- list(fr)
 
-  random_slope <- lapply(fr, function(forms) {
-    if (grepl("(.*)\\|(.*)\\|(.*)", safe_deparse(forms))) {
+  random_slope <- lapply(fr, function(f) {
+    if (grepl("(.*)\\|(.*)\\|(.*)", safe_deparse(f))) {
       pattern <- "(.*)\\|(.*)\\|(.*)"
     } else {
       pattern <- "(.*)\\|(.*)"
     }
-    pattern <- gsub(pattern, "\\1", safe_deparse(forms))
-    re <- all.vars(forms)
+    pattern <- gsub(pattern, "\\1", safe_deparse(f))
+    re <- all.vars(f)
     re[sapply(re, grepl, pattern, fixed = TRUE)]
   })
 
