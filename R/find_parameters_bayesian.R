@@ -228,7 +228,7 @@ find_parameters.brmsfit <- function(x,
   # extract all components, including custom and auxiliary ones
   f <- stats::formula(x)
   if (object_has_names(f, "forms")) {
-    dpars <- lapply(f$forms, function(i) names(i$pforms))
+    dpars <- unique(unlist(lapply(f$forms, function(i) names(i$pforms)), use.names = FALSE))
   } else {
     dpars <- names(f$pforms)
   }
@@ -240,19 +240,12 @@ find_parameters.brmsfit <- function(x,
   dpars_pattern1 <- paste0(dpars, "_", collapse = "|")
   dpars_pattern2 <- paste(dpars, collapse = "|")
 
-  # standard components: conditional, zero-inflated, and their random effects
-
-  # fixed
+  # conditional fixed
   cond <- fe[grepl(paste0("^(b_|bs_|bsp_|bcs_)(?!", dpars_pattern1, ")(.*)"), fe, perl = TRUE)]
-  zi <- fe[grepl("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)", fe)]
   # conditional random
   rand <- fe[grepl("(?!.*__)(?=.*^r_)", fe, perl = TRUE) & !startsWith(fe, "prior_")]
   rand_sd <- fe[grepl("(?!.*__)(?=.*^sd_)", fe, perl = TRUE)]
   rand_cor <- fe[grepl("(?!.*__)(?=.*^cor_)", fe, perl = TRUE)]
-  # zero-inlfated random
-  randzi <- fe[grepl("^r_(.*__zi)", fe)]
-  randzi_sd <- fe[grepl("^sd_(.*_zi)", fe)]
-  randzi_cor <- fe[grepl("^cor_(.*_zi)", fe)]
 
   # special formula functions
   simo <- fe[startsWith(fe, "simo_")]
@@ -263,39 +256,41 @@ find_parameters.brmsfit <- function(x,
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
   dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
 
+  dpars_fixed <- list()
+  dpars_random <- list()
+
+  # build parameter lists for all dpars
+  for (aux in dpars) {
+    # name of auxiliary parameter, handle exceptions
+    dp <- switch(aux,
+      zi = "zero_inflated",
+      zoi = "zero_one_inflated",
+      coi = "conditional_one_inflated",
+      aux
+    )
+    random_dp <- NULL
+    pattern <- paste0("^(b_", dp ,"_|bs_", dp ,"_|bsp_", dp ,"_|bcs_", dp ,"_)")
+    dpars_fixed[[dp]] <- fe[grepl(pattern, fe)]
+
+    pattern <- paste0("^r_(.*__", dp ,")")
+    random_dp <- c(random_dp, fe[grepl(pattern, fe)])
+    pattern <- paste0("^sd_(.*_", dp ,")")
+    random_dp <- c(random_dp, fe[grepl(pattern, fe)])
+    pattern <- paste0("^cor_(.*_", dp ,")")
+    random_dp <- c(random_dp, fe[grepl(pattern, fe)])
+    dpars_random[[dp]] <- compact_character(random_dp)
+  }
+
   sigma_param <- fe[startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE)]
-  randsigma <- fe[grepl("^r_(.*__sigma)", fe)]
-  fixed_beta <- fe[grepl("beta", fe, fixed = TRUE)]
-  rand_beta <- fe[grepl("^r_(.*__beta)", fe)]
-  auxiliary <- fe[grepl("(shape|phi|precision|_ndt_)", fe)]
 
-  # if auxiliary is modelled directly, we need to remove duplicates here
-  # e.g. "b_sigma..." is in "cond" and in "sigma" now, we just need it in "cond".
-
-  sigma_param <- setdiff(sigma_param, c(cond, rand, rand_sd, rand_cor, randsigma, car_struc, "prior_sigma"))
-  fixed_beta <- setdiff(fixed_beta, c(cond, rand, rand_sd, rand_beta, rand_cor, car_struc))
-  auxiliary <- setdiff(auxiliary, c(cond, rand, rand_sd, rand_cor, car_struc))
-
-  l <- compact_list(list(
-    conditional = cond,
-    random = c(rand, rand_sd, rand_cor, car_struc),
-    zero_inflated = zi,
-    zero_inflated_random = c(randzi, randzi_sd, randzi_cor),
-    simplex = simo,
-    smooth_terms = smooth_terms,
-    sigma = sigma_param,
-    sigma_random = randsigma,
-    beta = fixed_beta,
-    beta_random = rand_beta,
-    dispersion = dispersion,
-    mix = mix,
-    shiftprop = shiftprop,
-    auxiliary = auxiliary,
-    priors = priors
+  l <- compact_list(c(
+    list(conditional = cond, random = c(rand, rand_sd, rand_cor, car_struc)),
+    dpars_fixed,
+    dpars_random
   ))
 
   elements <- .get_elements(effects = effects, component = component)
-  elements <- c(elements, "priors")
+  elements <- unique(c(elements, "priors", dpars))
 
   if (is_multivariate(x)) {
     rn <- names(find_response(x))
