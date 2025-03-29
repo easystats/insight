@@ -145,6 +145,10 @@
       re <- as.list(re)
       split_nested <- FALSE
     }
+  } else if (is_empty_object(re)) {
+    # need this for the many brms-custom formulas, this exception might not
+    # be yet captured - so make sure, "re" is not empty here.
+    return(NULL)
   } else {
     re <- trim_ws(substring(re, max(gregexpr(pattern = "|", re, fixed = TRUE)[[1]]) + 1))
   }
@@ -222,14 +226,16 @@
 
 .all_elements <- function() {
   c(
-    "conditional", "conditional1", "conditional2", "conditional3", "precision",
-    "nonlinear", "random", "zi", "zero_inflated", "zero_inflated_random", "shape",
-    "dispersion", "dispersion_random", "instruments", "interactions", "simplex",
-    "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes", "cluster",
-    "extra", "scale", "marginal", "alpha", "beta", "survival", "infrequent_purchase",
-    "auxiliary", "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi",
-    "aux", "dist", "selection", "outcome", "time_dummies", "sigma_random",
-    "beta_random", "car", "nominal", "bidrange", "mu", "kappa", "bias"
+    "alpha", "aux", "auxiliary", "beta", "beta_random", "bias", "bs",
+    "bidrange", "car", "cluster", "coi", "conditional", "conditional1",
+    "conditional2", "conditional3", "correlation", "delta", "dispersion",
+    "dispersion_random", "dist", "extra", "hu", "infrequent_purchase",
+    "instruments", "interactions", "k", "kappa", "marginal", "mix", "mu",
+    "ndt", "nominal", "nonlinear", "nu", "outcome", "phi", "precision",
+    "random", "scale", "selection", "shape", "shiftprop", "sigma",
+    "sigma_random", "simplex", "slopes", "smooth_terms", "survival",
+    "tau", "time_dummies", "xi", "zero_inflated", "zero_inflated_random",
+    "zi", "zoi"
   )
 }
 
@@ -245,8 +251,8 @@
 
 .brms_aux_elements <- function() {
   c(
-    "sigma", "mu", "nu", "shape", "beta", "phi", "hu", "ndt", "zoi", "coi",
-    "kappa", "bias", "bs", "zi", "alpha", "xi"
+    "alpha", "beta", "bias", "bs", "coi", "delta", "hu", "k", "kappa",
+    "mu", "ndt", "nu", "phi", "shape", "sigma", "xi", "zi", "zoi"
   )
 }
 

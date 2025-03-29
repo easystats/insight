@@ -299,6 +299,73 @@ find_predictors.afex_aov <- function(x,
 }
 
 
+#' @export
+find_predictors.brmsfit <- function(x,
+                                    effects = "fixed",
+                                    component = "all",
+                                    flatten = FALSE,
+                                    verbose = TRUE,
+                                    ...) {
+  effects <- validate_argument(effects, c("fixed", "random", "all"))
+  component <- validate_argument(
+    component,
+    c(
+      "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
+      "correlation", "smooth_terms", "location", "auxiliary", "distributional"
+    )
+  )
+
+  f <- find_formula(x, verbose = verbose)
+  is_mv <- is_multivariate(f)
+  elements <- .get_elements(effects, component, model = x)
+
+  # add custom elements
+  if (component %in% c("all", "auxiliary", "distributional")) {
+    elements <- unique(c(elements, names(f)))
+  }
+
+  # filter formulas, depending on requested effects and components
+  if (is_mv) {
+    f <- lapply(f, function(.x) .prepare_predictors_brms(x, .x, elements))
+  } else {
+    f <- .prepare_predictors_brms(x, f, elements)
+  }
+
+  # random effects are returned as list, so we need to unlist here
+  if (is_mv) {
+    l <- lapply(f, .return_vars, x = x)
+  } else {
+    l <- .return_vars(f, x)
+  }
+
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
+    return(NULL)
+  }
+
+
+  # some models, like spatial models, have random slopes that are not defined
+  # as fixed effect predictor. In such cases, we have to add the random slope term
+  # manually, so other functions like "get_data()" work as expected...
+
+  if (object_has_names(l, "random") && effects == "all") {
+    random_slope <- unlist(find_random_slopes(x), use.names = FALSE)
+    all_predictors <- unlist(unique(l), use.names = FALSE)
+    rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
+    if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
+  }
+
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    compact_list(l)
+  }
+}
+
+
+# utilities ------------------------------------------------------------------
+
+
 .return_vars <- function(f, x) {
   l <- lapply(names(f), function(i) {
     if (i %in% c("random", "zero_inflated_random")) {
@@ -365,7 +432,6 @@ find_predictors.afex_aov <- function(x,
 
 .prepare_predictors <- function(x, f, elements) {
   f <- f[names(f) %in% elements]
-
   # from conditional model, remove response
   if (object_has_names(f, "conditional")) {
     f[["conditional"]] <- tryCatch(
@@ -373,7 +439,6 @@ find_predictors.afex_aov <- function(x,
       # some models like {logitr} return a one-sided formula
       error = function(e) f[["conditional"]][[2]]
     )
-
     # for survival models, separate out strata element
     if (inherits(x, "coxph")) {
       f_cond <- safe_deparse(f[["conditional"]])
@@ -405,7 +470,6 @@ find_predictors.afex_aov <- function(x,
         # .*: Matches any character zero or more times.
         # \\): Matches a closing parenthesis.
         no_strata <- "strata\\(.*\\)\\s*[\\+|\\*]*|[\\+|\\*]\\s*strata\\(.*\\)"
-
         # find predictors used inside "strata()"
         strata <- gsub(",", "+", gsub(yes_strata, "\\1", f_cond), fixed = TRUE)
         # remove reserved terms from strata formula
@@ -413,22 +477,18 @@ find_predictors.afex_aov <- function(x,
         strata <- gsub(pattern, "", strata)
         # remove trailing "+"
         strata <- gsub("(.*)\\+$", "\\1", trim_ws(strata))
-
         # find predictors used outside "strata()"
         non_strata <- trim_ws(gsub("~", "", gsub(no_strata, "\\1", f_cond), fixed = TRUE))
-
         # create formula parts
         f$strata <- stats::reformulate(strata)
         f$conditional <- stats::reformulate(non_strata)
       }
     }
   }
-
   # from conditional model, remove response
   if (object_has_names(f, "survival")) {
     f[["survival"]] <- f[["survival"]][[3]]
   }
-
   # from conditional model, remove response
   if (inherits(x, "selection")) {
     if (object_has_names(f, "selection")) {
@@ -438,25 +498,37 @@ find_predictors.afex_aov <- function(x,
       f[["outcome"]] <- f[["outcome"]][[3]]
     }
   }
-
   # if we have random effects, just return grouping variable, not random slopes
   if (object_has_names(f, "random")) {
     f[["random"]] <- .get_group_factor(x, f[["random"]])
   }
-
   # same for zi-random effects
   if (object_has_names(f, "zero_inflated_random")) {
     f[["zero_inflated_random"]] <- .get_group_factor(x, f[["zero_inflated_random"]])
   }
-
   # same for sigma-random effects
-  if (object_has_names(f, "sigma_random")) {
-    f[["sigma_random"]] <- .get_group_factor(x, f[["sigma_random"]])
+  if (object_has_names(f, "dispersion_random")) {
+    f[["dispersion_random"]] <- .get_group_factor(x, f[["dispersion_random"]])
   }
 
-  # same for beta-random effects
-  if (object_has_names(f, "beta_random")) {
-    f[["beta_random"]] <- .get_group_factor(x, f[["beta_random"]])
+  f
+}
+
+
+.prepare_predictors_brms <- function(x, f, elements) {
+  f <- f[names(f) %in% elements]
+  # from conditional model, remove response
+  if (object_has_names(f, "conditional")) {
+    f[["conditional"]] <- tryCatch(
+      f[["conditional"]][[3]],
+      # some models like {logitr} return a one-sided formula
+      error = function(e) f[["conditional"]][[2]]
+    )
+  }
+  # process all remaining elements, might be custom
+  remaining <- setdiff(names(f), "conditional")
+  for (i in remaining) {
+    f[[i]] <- .get_group_factor(x, f[[i]])
   }
 
   f
