@@ -48,7 +48,7 @@ test_that("glmmTMB, Poisson zero-inflated", {
     family = poisson(), data = Salamanders
   ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
-  out2 <- suppressWarnings(performance::r2_nakagawa(m, tolerance = 1e-8, model_component = "conditional", verbose = FALSE))
+  out2 <- suppressWarnings(performance::r2_nakagawa(m, tolerance = 1e-10, model_component = "conditional", verbose = FALSE))
   # we have slight differences here: MuMIn uses "var(fitted())" to exctract fixed
   # effects variances, while insight uses "var(beta %*% t(mm))". The latter gives
   # different values when random slopes are involved
