@@ -321,7 +321,11 @@ find_predictors.brmsfit <- function(x,
 
   # add custom (dpars) elements
   if (component %in% c("all", "auxiliary", "distributional")) {
-    elements <- unique(c(elements, names(f)))
+    if (is_mv) {
+      elements <- unique(c(elements, unlist(lapply(f, names), use.names = FALSE)))
+    } else {
+      elements <- unique(c(elements, names(f)))
+    }
   }
 
   # filter formulas, depending on requested effects and components
