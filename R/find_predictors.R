@@ -319,7 +319,7 @@ find_predictors.brmsfit <- function(x,
   is_mv <- is_multivariate(f)
   elements <- .get_elements(effects, component, model = x)
 
-  # add custom elements
+  # add custom (dpars) elements
   if (component %in% c("all", "auxiliary", "distributional")) {
     elements <- unique(c(elements, names(f)))
   }

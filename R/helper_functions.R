@@ -241,9 +241,9 @@
 
 .aux_elements <- function() {
   c(
-    "sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape",
-    "phi", "(phi)", "ndt", "hu", "xi", "coi", "zoi", "mix", "shiftprop", "auxiliary",
-    "aux", "dist", "mu", "kappa", "bias",
+    "(phi)", "alpha", "aux", "auxiliary", "beta", "bias", "coi", "dispersion",
+    "dist", "hu", "kappa", "mix", "mu", "ndt", "nu", "phi", "precision",
+    "shape", "shiftprop", "sigma", "tau", "xi",  "zoi",
     # random parameters
     "dispersion_random", "sigma_random", "beta_random"
   )
