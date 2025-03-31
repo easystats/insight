@@ -22,7 +22,10 @@ test_that("brms-Intercept", {
   expect_identical(out, list(conditional = "x"))
 
   out <- find_parameters(m)
-  expect_identical(out, list(conditional = c("b_Intercept", "b_xb", "b_kappa_Intercept")))
+  expect_identical(
+    out,
+    list(conditional = c("b_Intercept", "b_xb"), kappa = "b_kappa_Intercept")
+  )
 
   expect_true(has_intercept(m))
 
