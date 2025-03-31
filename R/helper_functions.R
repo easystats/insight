@@ -235,17 +235,21 @@
     "precision", "nonlinear",
     # regular random
     "random",
+    # zero-inflated and random
+    "zero_inflated", "zero_inflated_random",
+    # dispersion and random
+    "dispersion", "dispersion_random",
     # then instruments and smooth terms
     "instruments", "interactions", "smooth_terms",
     # then auxiliary
-    "alpha", "aux", "auxiliary", "beta", "beta_random", "bias", "bs",
-    "bidrange", "car", "cluster", "coi", "correlation", "delta", "dispersion",
+    "zi", "zoi", "alpha", "aux", "auxiliary", "beta", "beta_random", "bias",
+    "bs", "bidrange", "car", "cluster", "coi", "correlation", "delta",
     "dist", "extra", "hu", "infrequent_purchase", "k", "kappa", "marginal",
     "mix", "mu", "ndt", "nominal", "nu", "outcome", "phi", "scale", "selection",
     "shape", "shiftprop", "sigma", "simplex", "slopes", "survival", "tau",
-    "time_dummies", "xi", "zi", "zoi",
-    # random parameters
-    "zero_inflated", "zero_inflated_random", "dispersion_random", "sigma_random"
+    "time_dummies", "xi",
+    # other random parameters
+    "sigma_random"
   )
 }
 
