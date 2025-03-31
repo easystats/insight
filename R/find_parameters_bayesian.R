@@ -233,19 +233,58 @@ find_parameters.brmsfit <- function(x,
     dpars <- names(f$pforms)
   }
 
-  # remove special ones
-
-
   # create pattern for grouping dpars
   dpars_pattern1 <- paste0(dpars, "_", collapse = "|")
   dpars_pattern2 <- paste(dpars, collapse = "|")
 
+  elements <- .get_elements(effects = effects, component = component)
+  elements <- unique(c(elements, "priors", dpars))
+
+  if (is_multivariate(x)) {
+    rn <- names(find_response(x))
+    l <- lapply(rn, .brms_parameters, fe = fe, dpars_pattern1 = dpars_pattern1, elements = elements)
+    names(l) <- rn
+    is_mv <- "1"
+  } else {
+    l <- .brms_parameters(fe, dpars_pattern1, elements)
+  }
+
+  l <- .filter_pars(l, parameters, !is.null(is_mv) && is_mv == "1")
+  attr(l, "is_mv") <- is_mv
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    l
+  }
+}
+
+
+.brms_parameters <- function(fe, dpars_pattern1, elements, mv_response = NULL) {
+  # special pattern for multivariate models
+  if (is.null(mv_response)) {
+    mv_pattern <- ""
+  } else {
+    mv_pattern <- sprintf("\\Q%s\\E_", mv_response)
+  }
+
   # conditional fixed
-  cond <- fe[grepl(paste0("^(b_|bs_|bsp_|bcs_)(?!", dpars_pattern1, ")(.*)"), fe, perl = TRUE)]
+  pattern <- paste0("^(b_|bs_|bsp_|bcs_)(?!", dpars_pattern1, ")", mv_pattern,"(.*)")
+  cond <- fe[grepl(pattern, fe, perl = TRUE)]
+
   # conditional random
-  rand <- fe[grepl("(?!.*__)(?=.*^r_)", fe, perl = TRUE) & !startsWith(fe, "prior_")]
-  rand_sd <- fe[grepl("(?!.*__)(?=.*^sd_)", fe, perl = TRUE)]
-  rand_cor <- fe[grepl("(?!.*__)(?=.*^cor_)", fe, perl = TRUE)]
+  if (is.null(mv_response)) {
+    rand <- fe[grepl("(?!.*__)(?=.*^r_)", fe, perl = TRUE) & !startsWith(fe, "prior_")]
+    rand_sd <- fe[grepl("(?!.*__)(?=.*^sd_)", fe, perl = TRUE)]
+    rand_cor <- fe[grepl("(?!.*__)(?=.*^cor_)", fe, perl = TRUE)]
+  } else {
+    pattern <- paste0("^r_(?!", dpars_pattern1, ")", mv_pattern)
+    rand <- fe[grepl(pattern, fe, perl = TRUE) & !startsWith(fe, "prior_")]
+    pattern <- paste0("^sd_(?!", dpars_pattern1, ")", mv_pattern)
+    rand_sd <- fe[grepl(pattern, fe, perl = TRUE)]
+    pattern <- paste0("^cor_(?!", dpars_pattern1, ")", mv_pattern)
+    rand_cor <- fe[grepl(pattern, fe, perl = TRUE)]
+  }
 
   # special formula functions
   simo <- fe[startsWith(fe, "simo_")]
@@ -260,150 +299,27 @@ find_parameters.brmsfit <- function(x,
   dpars_random <- list()
 
   # build parameter lists for all dpars
-  for (aux in dpars) {
-    # name of auxiliary parameter, handle exceptions
-    dp <- switch(aux,
-      zi = "zero_inflated",
-      zoi = "zero_one_inflated",
-      coi = "conditional_one_inflated",
-      aux
-    )
+  for (dp in dpars) {
     random_dp <- NULL
     pattern <- paste0("^(b_", dp ,"_|bs_", dp ,"_|bsp_", dp ,"_|bcs_", dp ,"_)")
     dpars_fixed[[dp]] <- fe[grepl(pattern, fe)]
 
-    pattern <- paste0("^r_(.*__", dp ,")")
+    pattern <- paste0("^r_(.*__", dp ,")", mv_pattern)
     random_dp <- c(random_dp, fe[grepl(pattern, fe)])
-    pattern <- paste0("^sd_(.*_", dp ,")")
+    pattern <- paste0("^sd_(.*_", dp ,")", mv_pattern)
     random_dp <- c(random_dp, fe[grepl(pattern, fe)])
-    pattern <- paste0("^cor_(.*_", dp ,")")
+    pattern <- paste0("^cor_(.*_", dp ,")", mv_pattern)
     random_dp <- c(random_dp, fe[grepl(pattern, fe)])
     dpars_random[[dp]] <- compact_character(random_dp)
   }
 
   sigma_param <- fe[startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE)]
 
-  l <- compact_list(c(
+  compact_list(c(
     list(conditional = cond, random = c(rand, rand_sd, rand_cor, car_struc)),
     dpars_fixed,
     dpars_random
-  ))
-
-  elements <- .get_elements(effects = effects, component = component)
-  elements <- unique(c(elements, "priors", dpars))
-
-  if (is_multivariate(x)) {
-    rn <- names(find_response(x))
-    l <- lapply(rn, function(i) {
-      if (object_has_names(l, "conditional")) {
-        conditional <- l$conditional[grepl(sprintf("^(b_|bs_|bsp_|bcs_)\\Q%s\\E_", i), l$conditional)]
-      } else {
-        conditional <- NULL
-      }
-
-      if (object_has_names(l, "random")) {
-        random <- l$random[grepl(sprintf("__\\Q%s\\E\\[", i), l$random) |
-          grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$random) |
-          startsWith(l$random, "cor_") |
-          l$random %in% c("car", "sdcar")]
-      } else {
-        random <- NULL
-      }
-
-      if (object_has_names(l, "zero_inflated")) {
-        zero_inflated <- l$zero_inflated[grepl(sprintf("^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)\\Q%s\\E_", i), l$zero_inflated)]
-      } else {
-        zero_inflated <- NULL
-      }
-
-      if (object_has_names(l, "zero_inflated_random")) {
-        zero_inflated_random <- l$zero_inflated_random[grepl(sprintf("__zi_\\Q%s\\E\\[", i), l$zero_inflated_random) |
-          grepl(sprintf("^sd_(.*)\\Q%s\\E\\_", i), l$zero_inflated_random) |
-          startsWith(l$zero_inflated_random, "cor_")]
-      } else {
-        zero_inflated_random <- NULL
-      }
-
-      if (object_has_names(l, "simplex")) {
-        simplex <- l$simplex
-      } else {
-        simplex <- NULL
-      }
-
-      if (object_has_names(l, "sigma")) {
-        sigma_param <- l$sigma[grepl(sprintf("^sigma_\\Q%s\\E$", i), l$sigma)]
-      } else {
-        sigma_param <- NULL
-      }
-
-      if (object_has_names(l, "beta")) {
-        fixed_beta <- l$beta[grepl(sprintf("^beta_\\Q%s\\E$", i), l$beta)]
-      } else {
-        fixed_beta <- NULL
-      }
-
-      if (object_has_names(l, "dispersion")) {
-        dispersion <- l$dispersion[grepl(sprintf("^dispersion_\\Q%s\\E$", i), l$dispersion)]
-      } else {
-        dispersion <- NULL
-      }
-
-      if (object_has_names(l, "mix")) {
-        mix <- l$mix[grepl(sprintf("^mix_\\Q%s\\E$", i), l$mix)]
-      } else {
-        mix <- NULL
-      }
-
-      if (object_has_names(l, "shape") || object_has_names(l, "precision")) {
-        aux <- l$aux[grepl(sprintf("^(shape|precision)_\\Q%s\\E$", i), l$aux)]
-      } else {
-        aux <- NULL
-      }
-
-      if (object_has_names(l, "smooth_terms")) {
-        smooth_terms <- l$smooth_terms
-      } else {
-        smooth_terms <- NULL
-      }
-
-      if (object_has_names(l, "priors")) {
-        priors <- l$priors
-      } else {
-        priors <- NULL
-      }
-
-      pars <- compact_list(list(
-        conditional = conditional,
-        random = random,
-        zero_inflated = zero_inflated,
-        zero_inflated_random = zero_inflated_random,
-        simplex = simplex,
-        smooth_terms = smooth_terms,
-        sigma = sigma_param,
-        beta = fixed_beta,
-        dispersion = dispersion,
-        mix = mix,
-        priors = priors,
-        auxiliary = aux
-      ))
-
-      compact_list(pars[elements])
-    })
-
-    names(l) <- rn
-    is_mv <- "1"
-  } else {
-    l <- compact_list(l[elements])
-  }
-
-  l <- .filter_pars(l, parameters, !is.null(is_mv) && is_mv == "1")
-  attr(l, "is_mv") <- is_mv
-
-  if (flatten) {
-    unique(unlist(l, use.names = FALSE))
-  } else {
-    l
-  }
+  )[elements])
 }
 
 
