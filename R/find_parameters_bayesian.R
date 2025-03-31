@@ -344,6 +344,10 @@ find_parameters.brmsfit <- function(x,
   names(dpars_random) <- gsub("zoi", "zero_one_inflated_random", names(dpars_random), fixed = TRUE)
   names(dpars_random) <- gsub("coi", "conditional_one_inflated_random", names(dpars_random), fixed = TRUE)
 
+  # find names of random dpars that do not have the suffix "_random", and add it
+  no_suffix <- !endsWith(names(dpars_random), "_random")
+  names(dpars_random)[no_suffix] <- paste0(names(dpars_random)[no_suffix], "_random")
+
   compact_list(c(
     list(conditional = cond, random = c(rand, rand_sd, rand_cor, car_struc)),
     dpars_fixed,
