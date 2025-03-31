@@ -247,7 +247,7 @@
   c(
     "(phi)", "alpha", "aux", "auxiliary", "beta", "bias", "coi", "dispersion",
     "dist", "hu", "kappa", "mix", "mu", "ndt", "nu", "phi", "precision",
-    "shape", "shiftprop", "sigma", "tau", "xi",  "zoi",
+    "shape", "shiftprop", "sigma", "tau", "xi", "zoi",
     # random parameters
     "dispersion_random", "sigma_random", "beta_random"
   )
