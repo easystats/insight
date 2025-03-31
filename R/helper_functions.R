@@ -230,16 +230,22 @@
 
 .all_elements <- function() {
   c(
+    # these come first
+    "conditional", "conditional1", "conditional2", "conditional3",
+    "precision", "nonlinear",
+    # regular random
+    "random",
+    # then instruments and smooth terms
+    "instruments", "interactions", "smooth_terms",
+    # then auxiliary
     "alpha", "aux", "auxiliary", "beta", "beta_random", "bias", "bs",
-    "bidrange", "car", "cluster", "coi", "conditional", "conditional1",
-    "conditional2", "conditional3", "correlation", "delta", "dispersion",
-    "dispersion_random", "dist", "extra", "hu", "infrequent_purchase",
-    "instruments", "interactions", "k", "kappa", "marginal", "mix", "mu",
-    "ndt", "nominal", "nonlinear", "nu", "outcome", "phi", "precision",
-    "random", "scale", "selection", "shape", "shiftprop", "sigma",
-    "sigma_random", "simplex", "slopes", "smooth_terms", "survival",
-    "tau", "time_dummies", "xi", "zero_inflated", "zero_inflated_random",
-    "zi", "zoi"
+    "bidrange", "car", "cluster", "coi", "correlation", "delta", "dispersion",
+    "dist", "extra", "hu", "infrequent_purchase", "k", "kappa", "marginal",
+    "mix", "mu", "ndt", "nominal", "nu", "outcome", "phi", "scale", "selection",
+    "shape", "shiftprop", "sigma", "simplex", "slopes", "survival", "tau",
+    "time_dummies", "xi", "zi", "zoi",
+    # random parameters
+    "zero_inflated", "zero_inflated_random", "dispersion_random", "sigma_random"
   )
 }
 
