@@ -211,7 +211,10 @@ find_parameters.brmsfit <- function(x,
   effects <- validate_argument(effects, c("all", "fixed", "random"))
   component <- validate_argument(
     component,
-    unique(c("all", .all_elements(), "location", "distributional"))
+    c(
+      "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
+      "correlation", "smooth_terms", "location", "auxiliary", "distributional"
+    )
   )
 
   fe <- dimnames(x$fit)$parameters
@@ -237,16 +240,34 @@ find_parameters.brmsfit <- function(x,
   dpars_pattern1 <- paste0(dpars, "_", collapse = "|")
   dpars_pattern2 <- paste(dpars, collapse = "|")
 
+  # elements to return
   elements <- .get_elements(effects = effects, component = component)
+
+  # add custom (dpars) elements
+  if (component %in% c("all", "auxiliary", "distributional")) {
+    if (is_multivariate(x)) {
+      elements <- unique(c(elements, unlist(lapply(f, names), use.names = FALSE)))
+    } else {
+      elements <- unique(c(elements, names(f)))
+    }
+  }
+
   elements <- unique(c(elements, "priors", dpars))
 
   if (is_multivariate(x)) {
     rn <- names(find_response(x))
-    l <- lapply(rn, .brms_parameters, fe = fe, dpars_pattern1 = dpars_pattern1, elements = elements)
+    l <- lapply(
+      rn,
+      .brms_parameters,
+      fe = fe,
+      dpars = dpars,
+      dpars_pattern1 = dpars_pattern1,
+      elements = elements
+    )
     names(l) <- rn
     is_mv <- "1"
   } else {
-    l <- .brms_parameters(fe, dpars_pattern1, elements)
+    l <- .brms_parameters(fe, dpars, dpars_pattern1, elements)
   }
 
   l <- .filter_pars(l, parameters, !is.null(is_mv) && is_mv == "1")
@@ -260,7 +281,7 @@ find_parameters.brmsfit <- function(x,
 }
 
 
-.brms_parameters <- function(fe, dpars_pattern1, elements, mv_response = NULL) {
+.brms_parameters <- function(fe, dpars, dpars_pattern1, elements, mv_response = NULL) {
   # special pattern for multivariate models
   if (is.null(mv_response)) {
     mv_pattern <- ""
@@ -269,7 +290,7 @@ find_parameters.brmsfit <- function(x,
   }
 
   # conditional fixed
-  pattern <- paste0("^(b_|bs_|bsp_|bcs_)(?!", dpars_pattern1, ")", mv_pattern,"(.*)")
+  pattern <- paste0("^(b_|bs_|bsp_|bcs_)(?!", dpars_pattern1, ")", mv_pattern, "(.*)")
   cond <- fe[grepl(pattern, fe, perl = TRUE)]
 
   # conditional random
@@ -301,7 +322,7 @@ find_parameters.brmsfit <- function(x,
   # build parameter lists for all dpars
   for (dp in dpars) {
     random_dp <- NULL
-    pattern <- paste0("^(b_", dp ,"_|bs_", dp ,"_|bsp_", dp ,"_|bcs_", dp ,"_)")
+    pattern <- paste0("^(b_", dp ,"_|bs_", dp ,"_|bsp_", dp ,"_|bcs_", dp ,"_)", mv_pattern)
     dpars_fixed[[dp]] <- fe[grepl(pattern, fe)]
 
     pattern <- paste0("^r_(.*__", dp ,")", mv_pattern)
