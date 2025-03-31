@@ -101,6 +101,28 @@ find_terms.default <- function(x,
 
 
 #' @export
+find_terms.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  if (is.null(x)) {
+    return(NULL)
+  }
+
+  resp <- find_response(x, verbose = FALSE)
+
+  if (is_multivariate(x)) {
+    l <- lapply(x, .get_variables_list, resp = resp, model = NULL)
+  } else {
+    l <- .get_variables_list(x, resp, model = NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    l
+  }
+}
+
+
+#' @export
 find_terms.aovlist <- function(x, flatten = FALSE, verbose = TRUE, ...) {
   resp <- find_response(x, verbose = FALSE)
   f <- find_formula(x, verbose = verbose)[[1]]
@@ -227,14 +249,12 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 
   # remove "1" and "0" from variables in random effects
 
-  if (object_has_names(f, "random")) {
-    pos <- which(f$random %in% c("1", "0"))
-    if (length(pos)) f$random <- f$random[-pos]
-  }
-
-  if (object_has_names(f, "zero_inflated_random")) {
-    pos <- which(f$zero_inflated_random %in% c("1", "0"))
-    if (length(pos)) f$zero_inflated_random <- f$zero_inflated_random[-pos]
+  re_comp <- endsWith(names(f), "random")
+  if (any(re_comp)) {
+    for (i in names(f)[re_comp]) {
+      pos <- which(f[[i]] %in% c("1", "0"))
+      if (length(pos)) f[[i]] <- f[[i]][-pos]
+    }
   }
 
   # restore -1

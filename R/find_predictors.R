@@ -367,6 +367,41 @@ find_predictors.brmsfit <- function(x,
 }
 
 
+#' @export
+find_predictors.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  is_mv <- is_multivariate(x)
+  if (is_mv) {
+    elements <- unlist(lapply(x, names), use.names = FALSE)
+  } else {
+    elements <- names(x)
+  }
+
+  # filter formulas, depending on requested effects and components
+  if (is_mv) {
+    f <- lapply(x, function(.x) .prepare_predictors_brms(NULL, .x, elements))
+  } else {
+    f <- .prepare_predictors_brms(x = NULL, f = x, elements)
+  }
+
+  # random effects are returned as list, so we need to unlist here
+  if (is_mv) {
+    l <- lapply(f, .return_vars, x = NULL)
+  } else {
+    l <- .return_vars(f, NULL)
+  }
+
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
+    return(NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    compact_list(l)
+  }
+}
+
+
 # utilities ------------------------------------------------------------------
 
 

@@ -20,10 +20,18 @@
 #' @export
 find_random_slopes <- function(x) {
   random_slopes <- vector(mode = "list")
-  f <- find_formula(x, verbose = FALSE)
 
-  # potential components that can have random effects
-  components <- c("random", "zero_inflated_random")
+  # do we already have a formula?
+  if (inherits(x, "insight_formula")) {
+    f <- x
+    x <- NULL
+    # random components in formulas end with "random"
+    components <- names(f)[endsWith(names(f), "random")]
+  } else {
+    f <- find_formula(x, verbose = FALSE)
+    # potential components that can have random effects
+    components <- c("random", "zero_inflated_random")
+  }
 
   # for brms, we can have random effects for auxilliary elements, too
   if (inherits(x, "brmsfit")) {

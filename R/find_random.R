@@ -41,6 +41,7 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   UseMethod("find_random")
 }
 
+
 #' @export
 find_random.default <- function(x, split_nested = FALSE, flatten = FALSE) {
   f <- find_formula(x, verbose = FALSE)
@@ -65,6 +66,30 @@ find_random.default <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 }
 
+
+#' @export
+find_random.insight_formula <- function(x, split_nested = FALSE, flatten = FALSE) {
+  if (is_multivariate(x)) {
+    rn <- names(find_response(x))
+    l <- lapply(rn, function(i) .find_random_effects(NULL, x[[i]], split_nested))
+    names(l) <- rn
+    l <- compact_list(l)
+  } else {
+    l <- .find_random_effects(NULL, x, split_nested)
+  }
+
+  if (is_empty_object(l)) {
+    return(NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    l
+  }
+}
+
+
 #' @export
 find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
   if (flatten) {
@@ -79,6 +104,10 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
   # potential components that can have random effects
   components <- c("random", "zero_inflated_random")
 
+  # for formulas, we extract everything that ends with "random"
+  if (is.null(x)) {
+    components <- names(f)[endsWith(names(f), "random")]
+  }
   # for brms, we can have random effects for auxilliary elements, too
   if (inherits(x, "brmsfit")) {
     components <- unique(c(components, names(f)[endsWith(names(f), "_random")]))
