@@ -1037,7 +1037,7 @@ test_that("get/find_parameters with dispersion-random", {
         "sppDM", "sppEC-A", "sppEC-L", "sppDES-L", "sppDF", "minedno"
       ),
       dispersion = c("(Intercept)", "DOY"),
-      dispersion_random = "site"
+      dispersion_random = list(site = "(Intercept)")
     ),
     ignore_attr = TRUE
   )
