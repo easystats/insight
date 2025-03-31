@@ -351,7 +351,7 @@ find_predictors.brmsfit <- function(x,
   # as fixed effect predictor. In such cases, we have to add the random slope term
   # manually, so other functions like "get_data()" work as expected...
 
-  if (object_has_names(l, "random") && effects == "all") {
+  if (any(endsWith(names(l), "random")) && effects == "all") {
     random_slope <- unlist(find_random_slopes(x), use.names = FALSE)
     all_predictors <- unlist(unique(l), use.names = FALSE)
     rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
@@ -372,7 +372,7 @@ find_predictors.brmsfit <- function(x,
 
 .return_vars <- function(f, x) {
   l <- lapply(names(f), function(i) {
-    if (i %in% c("random", "zero_inflated_random")) {
+    if (endsWith(i, "random")) {
       # random effects, just unlist
       unique(paste(unlist(f[[i]])))
     } else if (is.numeric(f[[i]])) {
@@ -503,16 +503,10 @@ find_predictors.brmsfit <- function(x,
     }
   }
   # if we have random effects, just return grouping variable, not random slopes
-  if (object_has_names(f, "random")) {
-    f[["random"]] <- .get_group_factor(x, f[["random"]])
-  }
-  # same for zi-random effects
-  if (object_has_names(f, "zero_inflated_random")) {
-    f[["zero_inflated_random"]] <- .get_group_factor(x, f[["zero_inflated_random"]])
-  }
-  # same for sigma-random effects
-  if (object_has_names(f, "dispersion_random")) {
-    f[["dispersion_random"]] <- .get_group_factor(x, f[["dispersion_random"]])
+  for (i in names(f)) {
+    if (endsWith(i, "random")) {
+      f[[i]] <- .get_group_factor(x, f[[i]])
+    }
   }
 
   f
@@ -532,7 +526,9 @@ find_predictors.brmsfit <- function(x,
   # process all remaining elements, might be custom
   remaining <- setdiff(names(f), "conditional")
   for (i in remaining) {
-    f[[i]] <- .get_group_factor(x, f[[i]])
+    if (endsWith(i, "random")) {
+      f[[i]] <- .get_group_factor(x, f[[i]])
+    }
   }
 
   f
