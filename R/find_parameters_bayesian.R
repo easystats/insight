@@ -237,22 +237,23 @@ find_parameters.brmsfit <- function(x,
   }
 
   # create pattern for grouping dpars
-  dpars_pattern1 <- paste0(dpars, "_", collapse = "|")
-  dpars_pattern2 <- paste(dpars, collapse = "|")
+  dpars_pattern <- paste(dpars, collapse = "|")
 
   # elements to return
   elements <- .get_elements(effects = effects, component = component)
 
   # add custom (dpars) elements
   if (component %in% c("all", "auxiliary", "distributional")) {
-    if (is_multivariate(x)) {
-      elements <- unique(c(elements, unlist(lapply(f, names), use.names = FALSE)))
-    } else {
-      elements <- unique(c(elements, names(f)))
-    }
+    elements <- unique(c(elements, dpars))
   }
 
-  elements <- unique(c(elements, "priors", dpars))
+  # add priors
+  elements <- c(elements, "priors")
+
+  # add random effects
+  if (effects %in% c("all", "random")) {
+    elements <- unique(c(elements, paste0(elements, "_random")))
+  }
 
   if (is_multivariate(x)) {
     rn <- names(find_response(x))
@@ -261,13 +262,13 @@ find_parameters.brmsfit <- function(x,
       .brms_parameters,
       fe = fe,
       dpars = dpars,
-      dpars_pattern1 = dpars_pattern1,
+      dpars_pattern = dpars_pattern,
       elements = elements
     )
     names(l) <- rn
     is_mv <- "1"
   } else {
-    l <- .brms_parameters(fe, dpars, dpars_pattern1, elements)
+    l <- .brms_parameters(fe, dpars, dpars_pattern, elements)
   }
 
   l <- .filter_pars(l, parameters, !is.null(is_mv) && is_mv == "1")
@@ -281,31 +282,28 @@ find_parameters.brmsfit <- function(x,
 }
 
 
-.brms_parameters <- function(fe, dpars, dpars_pattern1, elements, mv_response = NULL) {
+.brms_parameters <- function(fe, dpars, dpars_pattern, elements, mv_response = NULL) {
   # special pattern for multivariate models
   if (is.null(mv_response)) {
-    mv_pattern <- ""
+    mv_pattern_fixed <- mv_pattern_random <- mv_pattern_dpars <- ""
   } else {
-    mv_pattern <- sprintf("\\Q%s\\E_", mv_response)
+    mv_pattern_fixed <- sprintf("(\\Q%s\\E_)", mv_response)
+    mv_pattern_random <- sprintf("(_\\Q%s\\E\\[)", mv_response)
+    mv_pattern_dpars <- sprintf("(_\\Q%s\\E_)", mv_response)
   }
+  dpars_params <- grepl(paste0("__(", dpars_pattern ,")"), fe)
 
   # conditional fixed
-  pattern <- paste0("^(b_|bs_|bsp_|bcs_)(?!", dpars_pattern1, ")", mv_pattern, "(.*)")
+  pattern <- paste0("^(b_|bs_|bsp_|bcs_)(?!", dpars_pattern, ")", mv_pattern_fixed, "(.*)")
   cond <- fe[grepl(pattern, fe, perl = TRUE)]
 
   # conditional random
-  if (is.null(mv_response)) {
-    rand <- fe[grepl("(?!.*__)(?=.*^r_)", fe, perl = TRUE) & !startsWith(fe, "prior_")]
-    rand_sd <- fe[grepl("(?!.*__)(?=.*^sd_)", fe, perl = TRUE)]
-    rand_cor <- fe[grepl("(?!.*__)(?=.*^cor_)", fe, perl = TRUE)]
-  } else {
-    pattern <- paste0("^r_(?!", dpars_pattern1, ")", mv_pattern)
-    rand <- fe[grepl(pattern, fe, perl = TRUE) & !startsWith(fe, "prior_")]
-    pattern <- paste0("^sd_(?!", dpars_pattern1, ")", mv_pattern)
-    rand_sd <- fe[grepl(pattern, fe, perl = TRUE)]
-    pattern <- paste0("^cor_(?!", dpars_pattern1, ")", mv_pattern)
-    rand_cor <- fe[grepl(pattern, fe, perl = TRUE)]
-  }
+  pattern <- paste0("^r_(.*)", mv_pattern_random)
+  rand <- fe[grepl(pattern, fe, perl = TRUE) & !startsWith(fe, "prior_") & !dpars_params]
+  pattern <- paste0("^sd_(.*)", mv_pattern_random)
+  rand_sd <- fe[grepl(pattern, fe, perl = TRUE) & !dpars_params]
+  pattern <- paste0("^cor_(.*)", mv_pattern_random)
+  rand_cor <- fe[grepl(pattern, fe, perl = TRUE) & !dpars_params]
 
   # special formula functions
   simo <- fe[startsWith(fe, "simo_")]
@@ -322,19 +320,29 @@ find_parameters.brmsfit <- function(x,
   # build parameter lists for all dpars
   for (dp in dpars) {
     random_dp <- NULL
-    pattern <- paste0("^(b_", dp ,"_|bs_", dp ,"_|bsp_", dp ,"_|bcs_", dp ,"_)", mv_pattern)
+    # fixed
+    pattern <- paste0("^(b_", dp ,"_|bs_", dp ,"_|bsp_", dp ,"_|bcs_", dp ,")", mv_pattern_fixed)
     dpars_fixed[[dp]] <- fe[grepl(pattern, fe)]
-
-    pattern <- paste0("^r_(.*__", dp ,")", mv_pattern)
+    # random
+    pattern <- paste0("^r_(.*__", dp ,")", mv_pattern_random)
     random_dp <- c(random_dp, fe[grepl(pattern, fe)])
-    pattern <- paste0("^sd_(.*_", dp ,")", mv_pattern)
+    pattern <- paste0("^sd_(.*_", dp ,")", mv_pattern_dpars)
     random_dp <- c(random_dp, fe[grepl(pattern, fe)])
-    pattern <- paste0("^cor_(.*_", dp ,")", mv_pattern)
+    pattern <- paste0("^cor_(.*_", dp ,")", mv_pattern_dpars)
     random_dp <- c(random_dp, fe[grepl(pattern, fe)])
     dpars_random[[dp]] <- compact_character(random_dp)
   }
 
   sigma_param <- fe[startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE)]
+
+  # renaming
+  names(dpars_fixed) <- gsub("zi", "zero_inflated", names(dpars_fixed), fixed = TRUE)
+  names(dpars_fixed) <- gsub("zoi", "zero_one_inflated", names(dpars_fixed), fixed = TRUE)
+  names(dpars_fixed) <- gsub("coi", "conditional_one_inflated", names(dpars_fixed), fixed = TRUE)
+
+  names(dpars_random) <- gsub("zi", "zero_inflated_random", names(dpars_random), fixed = TRUE)
+  names(dpars_random) <- gsub("zoi", "zero_one_inflated_random", names(dpars_random), fixed = TRUE)
+  names(dpars_random) <- gsub("coi", "conditional_one_inflated_random", names(dpars_random), fixed = TRUE)
 
   compact_list(c(
     list(conditional = cond, random = c(rand, rand_sd, rand_cor, car_struc)),

@@ -221,19 +221,14 @@ get_parameters.brmsfit <- function(x,
                                    summary = FALSE,
                                    centrality = "mean",
                                    ...) {
-  effects <- validate_argument(effects, c("all", "fixed", "random"))
-  component <- validate_argument(
-    component,
-    c("all", .all_elements(), "location", "distributional")
+  parms <- find_parameters(
+    x,
+    effects = effects,
+    component = component,
+    flatten = TRUE,
+    parameters = parameters
   )
-
-  if (is_multivariate(x)) {
-    parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
-    elements <- .get_elements(effects, component)
-    out <- as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]), use.names = FALSE)]
-  } else {
-    out <- as.data.frame(x)[.get_parms_data(x, effects, component, parameters)]
-  }
+  out <- as.data.frame(x)[parms]
 
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality)
