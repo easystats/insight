@@ -322,14 +322,14 @@ find_parameters.brmsfit <- function(x,
     random_dp <- NULL
     # fixed
     pattern <- paste0("^(b_", dp, "_|bs_", dp, "_|bsp_", dp, "_|bcs_", dp, ")", mv_pattern_fixed)
-    dpars_fixed[[dp]] <- fe[grepl(pattern, fe)]
+    dpars_fixed[[dp]] <- grep(pattern, fe, value = TRUE)
     # random
     pattern <- paste0("^r_(.*__", dp, ")", mv_pattern_random)
-    random_dp <- c(random_dp, fe[grepl(pattern, fe)])
+    random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
     pattern <- paste0("^sd_(.*_", dp, ")", mv_pattern_dpars)
-    random_dp <- c(random_dp, fe[grepl(pattern, fe)])
+    random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
     pattern <- paste0("^cor_(.*_", dp, ")", mv_pattern_dpars)
-    random_dp <- c(random_dp, fe[grepl(pattern, fe)])
+    random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
     dpars_random[[dp]] <- compact_character(random_dp)
   }
 
