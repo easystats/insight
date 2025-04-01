@@ -316,8 +316,8 @@
 
   elements <- switch(effects,
     all = elements,
-    fixed = elements[!elements %in% random_parameters],
-    random = elements[elements %in% random_parameters]
+    fixed = elements[!elements %in% random_parameters & !endsWith(elements, "random")],
+    random = elements[elements %in% random_parameters | endsWith(elements, "random")]
   )
 
   elements <- switch(component,
