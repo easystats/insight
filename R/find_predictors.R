@@ -333,6 +333,11 @@ find_predictors.brmsfit <- function(x,
     elements <- unique(c(elements, dpars))
   }
 
+  # add random effects
+  if (effects %in% c("all", "random")) {
+    elements <- unique(c(elements, paste0(elements, "_random")))
+  }
+
   # filter formulas, depending on requested effects and components
   if (is_mv) {
     f <- lapply(f, function(.x) .prepare_predictors_brms(x, .x, elements))
