@@ -74,10 +74,10 @@ test_that("clean_parameters brms", {
   expect_identical(
     out$Component,
     c(
-      "conditional", "sigma", "conditional", "sigma", "conditional",
+      "conditional", "conditional", "conditional", "conditional",
       "conditional", "conditional", "conditional", "conditional", "conditional",
-      "conditional", "conditional", "conditional", "conditional", "conditional",
-      "conditional", "sigma", "sigma", "sigma", "sigma", "sigma", "sigma"
+      "conditional", "conditional", "sigma", "sigma", "sigma", "sigma",
+      "sigma", "sigma", "sigma", "sigma", "sigma", "sigma", "sigma"
     )
   )
 })
