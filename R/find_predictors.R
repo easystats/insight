@@ -321,16 +321,16 @@ find_predictors.brmsfit <- function(x,
 
   # add custom (dpars) elements
   if (component %in% c("all", "auxiliary", "distributional")) {
-    if (is_mv) {
-      elements <- unique(c(elements, unlist(lapply(f, names), use.names = FALSE)))
+    brms_formulas <- stats::formula(x)
+    if (object_has_names(brms_formulas, "forms")) {
+      dpars <- unique(unlist(
+        lapply(brms_formulas$forms, function(i) names(i$pforms)),
+        use.names = FALSE
+      ))
     } else {
-      elements <- unique(c(elements, names(f)))
+      dpars <- names(brms_formulas$pforms)
     }
-    # need to  remove "random" again, if effects = "fixed". names for random
-    # effects have been added in the above code
-    if (effects == "fixed") {
-      elements <- elements[!endsWith(elements, "random")]
-    }
+    elements <- unique(c(elements, dpars))
   }
 
   # filter formulas, depending on requested effects and components
