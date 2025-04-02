@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not_installed("curl")
 skip_if_offline()
 skip_on_os("mac")
 skip_if_not_installed("brms")
@@ -944,6 +945,7 @@ test_that("get_variance works when sigma is modeled", {
   data(mtcars)
   set.seed(123)
   m <- insight::download_model("brms_sigma_1")
+  skip_if(is.null(m))
   expect_message(
     {
       out <- get_variance(m)
@@ -958,5 +960,73 @@ test_that("get_variance works when sigma is modeled", {
     ),
     ignore_attr = TRUE,
     tolerance = 1e-3
+  )
+})
+
+
+# distributional parameters
+test_that("brms dpars 1", {
+  model <- insight::download_model("brms_sigma_1")
+  skip_if(is.null(model))
+  expect_identical(
+    find_parameters(model),
+    list(
+      conditional = c("b_Intercept", "b_hp"),
+      random = c(
+        "r_cyl[4,Intercept]",  "r_cyl[6,Intercept]",
+        "r_cyl[8,Intercept]", "sd_cyl__Intercept"
+      ),
+      sigma = c("b_sigma_Intercept", "b_sigma_cyl")
+    )
+  )
+  expect_equal(
+    find_formula(model),
+    list(conditional = mpg ~ hp, random = ~1 | cyl, sigma = ~cyl),
+    ignore_attr = TRUE
+  )
+  expect_identical(
+    find_predictors(model),
+    list(conditional = "hp", sigma = "cyl")
+  )
+})
+
+
+# distributional parameters
+test_that("brms dpars 2", {
+  model <- insight::download_model("brms_sigma_3")
+  skip_if(is.null(model))
+  expect_identical(
+    find_parameters(model),
+    list(
+      conditional = c("b_Intercept", "b_Petal.Width"),
+      random = c(
+        "r_Group[G1,Intercept]", "r_Group[G2,Intercept]", "r_Group[G3,Intercept]",
+        "r_Group[G1,Petal.Width]", "r_Group[G2,Petal.Width]",
+        "r_Group[G3,Petal.Width]", "sd_Group__Intercept", "sd_Group__Petal.Width",
+        "cor_Group__Intercept__Petal.Width"
+      ),
+      sigma = c("b_sigma_Intercept", "b_sigma_Petal.Width"),
+      sigma_random = c(
+        "r_Group__sigma[G1,Intercept]", "r_Group__sigma[G2,Intercept]",
+        "r_Group__sigma[G3,Intercept]", "r_Group__sigma[G1,Petal.Width]",
+        "r_Group__sigma[G2,Petal.Width]", "r_Group__sigma[G3,Petal.Width]",
+        "sd_Group__sigma_Intercept", "sd_Group__sigma_Petal.Width",
+        "cor_Group__sigma_Intercept__sigma_Petal.Width"
+      )
+    )
+  )
+  expect_equal(
+    find_formula(model),
+    list(
+      conditional = Sepal.Width ~ Petal.Width,
+      random = ~Petal.Width | Group,
+      sigma = ~Petal.Width,
+      sigma_random = ~Petal.Width | Group
+    ),
+    ignore_attr = TRUE
+  )
+  expect_identical(
+    find_predictors(model),
+    list(conditional = "Petal.Width", sigma = "Petal.Width")
   )
 })
