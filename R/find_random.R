@@ -18,6 +18,10 @@
 #' - `random`, the "random effects" terms from the conditional part of model
 #' - `zero_inflated_random`, the "random effects" terms from the zero-inflation
 #'   component of the model
+#' - `dispersion_random`, the "random effects" terms from the dispersion
+#'   component of the model
+#'
+#' Models of class `brmsfit` may also contain elements for auxiliary parameters.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(sleepstudy, package = "lme4")

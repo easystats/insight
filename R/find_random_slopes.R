@@ -10,8 +10,12 @@
 #' list has following elements:
 #'
 #' - `random`, the random slopes from the conditional part of model
-#' - `zero_inflated_random`, the random slopes from the zero-inflation
-#'   component of the model
+#' - `zero_inflated_random`, the random slopes from the zero-inflation component
+#'   of the model
+#' - `dispersion_random`, the random slopes from the dispersion component of the
+#'   model
+#'
+#' Models of class `brmsfit` may also contain elements for auxiliary parameters.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(sleepstudy, package = "lme4")
