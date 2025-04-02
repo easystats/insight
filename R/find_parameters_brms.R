@@ -128,7 +128,7 @@ find_parameters.brmsfit <- function(x,
   pattern <- "^(b_|bs_|bsp_|bcs_)"
   # need to add negative look ahead for auxiliary, *if we have any*!
   if (isTRUE(nzchar(dpars_pattern))) {
-    pattern <- paste0("(?!", dpars_pattern, ")")
+    pattern <- paste0(pattern, "(?!", dpars_pattern, ")")
   }
   pattern <- paste0(pattern, mv_pattern_fixed, "(.*)")
   cond <- fe[grepl(pattern, fe, perl = TRUE)]
