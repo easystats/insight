@@ -91,7 +91,7 @@
     # but not all variable are duplicates, add indices of regular values
     if (ncol(x) > length(reihenfolge)) {
       # get remaining indices
-      xl <- seq_len(ncol(x))[-seq_len(length(reihenfolge))]
+      xl <- seq_len(ncol(x))[-seq_along(reihenfolge)]
       # add to "reihefolge"
       reihenfolge <- c(reihenfolge, xl)
     }
