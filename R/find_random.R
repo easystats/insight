@@ -118,7 +118,11 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 
   # check which components we have
-  components <- components[vapply(components, function(i) object_has_names(f, i), logical(1))]
+  components <- components[vapply(
+    components,
+    function(i) object_has_names(f, i),
+    logical(1)
+  )]
 
   # if nothing, return null
   if (!length(components)) {

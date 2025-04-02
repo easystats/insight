@@ -43,7 +43,11 @@ find_random_slopes <- function(x) {
   }
 
   # check which components we have
-  components <- components[vapply(components, function(i) object_has_names(f, i), logical(1))]
+  components <- components[vapply(
+    components,
+    function(i) object_has_names(f, i),
+    logical(1)
+  )]
 
   # if nothing, return null
   if (!length(components)) {
