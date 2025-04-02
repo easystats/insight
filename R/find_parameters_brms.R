@@ -62,12 +62,20 @@ find_parameters.brmsfit <- function(x,
 
 
 .brms_dpars <- function(x) {
+  # formula object contains "pforms", which includes all auxiliary parameters
   f <- stats::formula(x)
   if (object_has_names(f, "forms")) {
-    unique(unlist(lapply(f$forms, function(i) names(i$pforms)), use.names = FALSE))
+    out <- unique(unlist(lapply(f$forms, function(i) names(i$pforms)), use.names = FALSE))
   } else {
-    names(f$pforms)
+    out <- names(f$pforms)
   }
+  # add sigma
+  fe <- dimnames(x$fit)$parameters
+  if (any(startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE))) {
+    out <- c(out, "sigma")
+  }
+
+  unique(out)
 }
 
 
@@ -101,11 +109,12 @@ find_parameters.brmsfit <- function(x,
 
   # special pattern for multivariate models
   if (is.null(mv_response)) {
-    mv_pattern_fixed <- mv_pattern_random <- mv_pattern_dpars <- ""
+    mv_pattern_fixed <- mv_pattern_random <- mv_pattern_dpars <- mv_pattern_sigma <- ""
   } else {
     mv_pattern_fixed <- sprintf("(\\Q%s\\E_)", mv_response)
     mv_pattern_random <- sprintf("(_\\Q%s\\E\\[)", mv_response)
     mv_pattern_dpars <- sprintf("(_\\Q%s\\E_)", mv_response)
+    mv_pattern_sigma <- sprintf("\\Q%s\\E", mv_response)
   }
 
   # flag to indicate which parameters are auxiliary parameters
@@ -148,8 +157,14 @@ find_parameters.brmsfit <- function(x,
   for (dp in dpars) {
     random_dp <- NULL
     # fixed
-    pattern <- paste0("^(b_", dp, "_|bs_", dp, "_|bsp_", dp, "_|bcs_", dp, ")", mv_pattern_fixed)
-    dpars_fixed[[dp]] <- grep(pattern, fe, value = TRUE)
+    if (dp == "sigma") {
+      # exception: sigma
+      pattern <- paste0("^sigma_", mv_pattern_sigma)
+      dpars_fixed[[dp]] <- grep(pattern, fe, value = TRUE)
+    } else {
+      pattern <- paste0("^(b_", dp, "_|bs_", dp, "_|bsp_", dp, "_|bcs_", dp, ")", mv_pattern_fixed)
+      dpars_fixed[[dp]] <- grep(pattern, fe, value = TRUE)
+    }
     # random
     pattern <- paste0("^r_(.*__", dp, ")", mv_pattern_random)
     random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
@@ -159,8 +174,6 @@ find_parameters.brmsfit <- function(x,
     random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
     dpars_random[[dp]] <- compact_character(random_dp)
   }
-
-  sigma_param <- fe[startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE)]
 
   # renaming
   names(dpars_fixed) <- gsub("zi", "zero_inflated", names(dpars_fixed), fixed = TRUE)
@@ -177,7 +190,6 @@ find_parameters.brmsfit <- function(x,
 
   compact_list(c(
     list(conditional = cond, random = c(rand, rand_sd, rand_cor, car_struc)),
-    sigma_param,
     dpars_fixed,
     dpars_random
   )[elements])
