@@ -890,13 +890,13 @@ test_that("get_modelmatrix", {
   expect_identical(dim(out), c(32L, 2L))
 })
 
-test_that("get_modelmatrix", {
+test_that("find_variables, mo", {
   m10 <- suppressWarnings(insight::download_model("brms_lf_1"))
   expect_identical(
     find_variables(m10),
     list(
       response = "carb",
-      conditional = c("gear", "vs"), disc = c("disc", "cyl")
+      conditional = c("gear", "vs"), disc = "cyl"
     )
   )
 })
