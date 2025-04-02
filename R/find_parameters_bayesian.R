@@ -236,9 +236,6 @@ find_parameters.brmsfit <- function(x,
     dpars <- names(f$pforms)
   }
 
-  # create pattern for grouping dpars
-  dpars_pattern <- paste(dpars, collapse = "|")
-
   # elements to return
   elements <- .get_elements(effects = effects, component = component)
 
@@ -262,13 +259,12 @@ find_parameters.brmsfit <- function(x,
       .brms_parameters,
       fe = fe,
       dpars = dpars,
-      dpars_pattern = dpars_pattern,
       elements = elements
     )
     names(l) <- rn
     is_mv <- "1"
   } else {
-    l <- .brms_parameters(fe, dpars, dpars_pattern, elements)
+    l <- .brms_parameters(fe, dpars, elements)
   }
 
   l <- .filter_pars(l, parameters, !is.null(is_mv) && is_mv == "1")
@@ -282,7 +278,13 @@ find_parameters.brmsfit <- function(x,
 }
 
 
-.brms_parameters <- function(fe, dpars, dpars_pattern, elements, mv_response = NULL) {
+.brms_parameters <- function(fe, dpars, elements, mv_response = NULL) {
+  # dpars: names of `$pforms` element, which includes the names of
+  #        all auxiliary parameters
+  #
+  # create pattern for grouping dpars
+  dpars_pattern <- paste(dpars, collapse = "|")
+
   # special pattern for multivariate models
   if (is.null(mv_response)) {
     mv_pattern_fixed <- mv_pattern_random <- mv_pattern_dpars <- ""
@@ -291,11 +293,18 @@ find_parameters.brmsfit <- function(x,
     mv_pattern_random <- sprintf("(_\\Q%s\\E\\[)", mv_response)
     mv_pattern_dpars <- sprintf("(_\\Q%s\\E_)", mv_response)
   }
-  dpars_params <- grepl(paste0("__(", dpars_pattern, ")"), fe)
 
-  # conditional fixed
+  # flag to indicate which parameters are auxiliary parameters
+  if (isTRUE(nzchar(dpars_pattern))) {
+    dpars_params <- grepl(paste0("__(", dpars_pattern, ")"), fe)
+  } else {
+    dpars_params <- rep_len(FALSE, length(fe))
+  }
+
+  # extract conditional fixed effects
   pattern <- "^(b_|bs_|bsp_|bcs_)"
-  if (!isTRUE(nzchar(dpars_pattern))) {
+  # need to add negative look ahead for auxiliary, *if we have any*!
+  if (isTRUE(nzchar(dpars_pattern))) {
     pattern <- paste0("(?!", dpars_pattern, ")")
   }
   pattern <- paste0(pattern, mv_pattern_fixed, "(.*)")
