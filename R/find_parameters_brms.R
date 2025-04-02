@@ -112,7 +112,7 @@ find_parameters.brmsfit <- function(x,
     mv_pattern_fixed <- mv_pattern_random <- mv_pattern_dpars <- mv_pattern_sigma <- ""
   } else {
     mv_pattern_fixed <- sprintf("(\\Q%s\\E_)", mv_response)
-    mv_pattern_random <- sprintf("(_\\Q%s\\E\\[)", mv_response)
+    mv_pattern_random <- sprintf("(_\\Q%s\\E)(_|\\[)", mv_response)
     mv_pattern_dpars <- sprintf("(_\\Q%s\\E_)", mv_response)
     mv_pattern_sigma <- sprintf("\\Q%s\\E", mv_response)
   }
