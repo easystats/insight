@@ -294,7 +294,11 @@ find_parameters.brmsfit <- function(x,
   dpars_params <- grepl(paste0("__(", dpars_pattern, ")"), fe)
 
   # conditional fixed
-  pattern <- paste0("^(b_|bs_|bsp_|bcs_)(?!", dpars_pattern, ")", mv_pattern_fixed, "(.*)")
+  pattern <- "^(b_|bs_|bsp_|bcs_)"
+  if (!isTRUE(nzchar(dpars_pattern))) {
+    pattern <- paste0("(?!", dpars_pattern, ")")
+  }
+  pattern <- paste0(pattern, mv_pattern_fixed, "(.*)")
   cond <- fe[grepl(pattern, fe, perl = TRUE)]
 
   # conditional random
