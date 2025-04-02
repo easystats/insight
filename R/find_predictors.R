@@ -326,6 +326,11 @@ find_predictors.brmsfit <- function(x,
     } else {
       elements <- unique(c(elements, names(f)))
     }
+    # need to  remove "random" again, if effects = "fixed". names for random
+    # effects have been added in the above code
+    if (effects == "fixed") {
+      elements <- elements[!endsWith(elements, "random")]
+    }
   }
 
   # filter formulas, depending on requested effects and components
