@@ -319,24 +319,11 @@ find_predictors.brmsfit <- function(x,
   is_mv <- is_multivariate(f)
   elements <- .get_elements(effects, component, model = x)
 
-  # add custom (dpars) elements
-  if (component %in% c("all", "auxiliary", "distributional")) {
-    brms_formulas <- stats::formula(x)
-    if (object_has_names(brms_formulas, "forms")) {
-      dpars <- unique(unlist(
-        lapply(brms_formulas$forms, function(i) names(i$pforms)),
-        use.names = FALSE
-      ))
-    } else {
-      dpars <- names(brms_formulas$pforms)
-    }
-    elements <- unique(c(elements, dpars))
-  }
+  # extract all components, including custom and auxiliary ones
+  dpars <- .brms_dpars(x)
 
-  # add random effects
-  if (effects %in% c("all", "random")) {
-    elements <- unique(c(elements, paste0(elements, "_random")))
-  }
+  # elements to return
+  elements <- .brms_elements(effects, component, dpars)
 
   # filter formulas, depending on requested effects and components
   if (is_mv) {
@@ -355,7 +342,6 @@ find_predictors.brmsfit <- function(x,
   if (is_empty_object(l) || is_empty_object(compact_list(l))) {
     return(NULL)
   }
-
 
   # some models, like spatial models, have random slopes that are not defined
   # as fixed effect predictor. In such cases, we have to add the random slope term
