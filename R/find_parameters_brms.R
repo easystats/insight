@@ -161,7 +161,7 @@ find_parameters.brmsfit <- function(x,
       # exception: sigma
       dpars_fixed[[dp]] <- grep("sigma", fe, fixed = TRUE, value = TRUE)
       pattern <- paste0("^sigma_", mv_pattern_sigma)
-      dpars_fixed[[dp]] <- grep(pattern, fe, value = TRUE)
+      dpars_fixed[[dp]] <- c(dpars_fixed[[dp]], grep(pattern, fe, value = TRUE))
       pattern <- paste0("^(b_", dp, "_|bs_", dp, "_|bsp_", dp, "_|bcs_", dp, ")", mv_pattern_sigma)
       dpars_fixed[[dp]] <- c(dpars_fixed[[dp]], grep(pattern, fe, value = TRUE))
     } else {
