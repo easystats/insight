@@ -396,7 +396,7 @@ test_that("find_paramaters", {
   )
 })
 
-test_that("find_paramaters", {
+test_that("get_paramaters", {
   expect_identical(
     colnames(get_parameters(m4)),
     c(

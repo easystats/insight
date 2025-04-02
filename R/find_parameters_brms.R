@@ -177,6 +177,7 @@ find_parameters.brmsfit <- function(x,
 
   compact_list(c(
     list(conditional = cond, random = c(rand, rand_sd, rand_cor, car_struc)),
+    sigma_param,
     dpars_fixed,
     dpars_random
   )[elements])
