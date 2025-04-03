@@ -442,6 +442,8 @@ clean_parameters.mlm <- function(x, ...) {
       "smooth_terms"
     } else if (grepl("dispersion", i, fixed = TRUE)) {
       "dispersion"
+    } else if (endsWith(i, "_random")) {
+      gsub("_random$", "", i)
     } else {
       i
     }
