@@ -884,12 +884,12 @@ test_that("brms dpars 3", {
     find_formula(model),
     list(
       conditional = Real ~ 0 + Intercept,
-      random = ~0 + Intercept | Participant,
-      delta = ~0 + Intercept,
-      phi = ~0 + Intercept,
-      k = ~0 + Intercept,
-      delta_random = ~0 + Intercept | Participant,
-      k_random = ~0 + Intercept | Participant
+      random = ~ 0 + Intercept | Participant,
+      delta = ~ 0 + Intercept,
+      phi = ~ 0 + Intercept,
+      k = ~ 0 + Intercept,
+      delta_random = ~ 0 + Intercept | Participant,
+      k_random = ~ 0 + Intercept | Participant
     ),
     ignore_attr = TRUE
   )
