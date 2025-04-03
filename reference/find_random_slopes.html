@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,9 +76,12 @@
     <p>A list of character vectors with the name(s) of the random slopes, or
 <code>NULL</code> if model has no random slopes. Depending on the model, the returned
 list has following elements:</p><ul><li><p><code>random</code>, the random slopes from the conditional part of model</p></li>
-<li><p><code>zero_inflated_random</code>, the random slopes from the zero-inflation
-component of the model</p></li>
-</ul></div>
+<li><p><code>zero_inflated_random</code>, the random slopes from the zero-inflation component
+of the model</p></li>
+<li><p><code>dispersion_random</code>, the random slopes from the dispersion component of the
+model</p></li>
+</ul><p>Models of class <code>brmsfit</code> may also contain elements for auxiliary parameters.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
