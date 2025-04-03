@@ -161,11 +161,6 @@ test_that("clean_parameters brms, chocomini", {
 
   expect_identical(
     out$Effects,
-    c("fixed", "fixed", "random", "random", "random", "random", "fixed", "fixed")
-  )
-
-  expect_identical(
-    out$Component,
     c(
       "fixed", "random", "random", "random", "random", "random",
       "random", "random", "random", "random", "random", "random", "random",
@@ -177,6 +172,26 @@ test_that("clean_parameters brms, chocomini", {
       "random", "random", "random", "random", "random", "random", "random",
       "random", "random", "random", "random", "random", "random", "random",
       "random", "random", "random", "random", "random"
+    )
+  )
+
+  expect_identical(
+    out$Component,
+    c(
+      "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "delta", "k", "phi",
+      "delta_random", "delta_random", "delta_random", "delta_random",
+      "delta_random", "delta_random", "delta_random", "delta_random",
+      "delta_random", "delta_random", "delta_random", "delta_random",
+      "delta_random", "delta_random", "delta_random", "delta_random",
+      "delta_random", "delta_random", "delta_random", "delta_random",
+      "delta_random", "k_random", "k_random", "k_random", "k_random",
+      "k_random", "k_random", "k_random", "k_random", "k_random", "k_random",
+      "k_random", "k_random", "k_random", "k_random", "k_random", "k_random",
+      "k_random", "k_random", "k_random", "k_random", "k_random"
     )
   )
 
