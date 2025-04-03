@@ -428,7 +428,7 @@ clean_parameters.mlm <- function(x, ...) {
       "fixed"
     }
 
-    com <- if (grepl("conditional", i, fixed = TRUE)) {
+    com <- if (grepl("conditional", i, fixed = TRUE) || i == "random") {
       "conditional"
     } else if (grepl("zero_inflated", i, fixed = TRUE)) {
       "zero_inflated"
