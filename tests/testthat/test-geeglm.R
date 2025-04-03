@@ -37,6 +37,7 @@ test_that("get_varcov", {
 })
 
 test_that("geeglm: get_sigma", {
+  skip_if(getRversion() < "4.3.0")
   out <- get_sigma(m1)
   expect_equal(out, 2.084632, tolerance = 1e-4)
   expect_equal(as.numeric(out), 2.084632, tolerance = 1e-4)
