@@ -58,6 +58,21 @@ test_that("clean_parameters stanrag", {
       "Days: Subject", "Var/Cov: Subject", "Var/Cov: Subject", "Var/Cov: Subject", ""
     )
   )
+
+  expect_identical(
+    out$Component,
+    c(
+      "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "sigma"
+    )
+  )
 })
 
 
@@ -72,6 +87,16 @@ test_that("clean_parameters brms", {
   out <- clean_parameters(m)
 
   expect_identical(
+    out$Effects,
+    c(
+      "fixed", "fixed", "random", "random", "random", "random", "random",
+      "random", "random", "random", "random", "fixed", "fixed", "random",
+      "random", "random", "random", "random", "random", "random", "random",
+      "random"
+    )
+  )
+
+  expect_identical(
     out$Component,
     c(
       "conditional", "conditional", "conditional", "conditional",
@@ -79,5 +104,46 @@ test_that("clean_parameters brms", {
       "conditional", "conditional", "sigma", "sigma", "sigma", "sigma",
       "sigma", "sigma", "sigma", "sigma", "sigma", "sigma", "sigma"
     )
+  )
+
+  expect_identical(
+    out$Cleaned_Parameter,
+    c(
+      "(Intercept)", "Petal.Width", "Group.G1", "Group.G2", "Group.G3",
+      "Group.G1", "Group.G2", "Group.G3", "(Intercept)", "Petal.Width",
+      "Intercept ~ Petal.Width", "(Intercept)", "Petal.Width", "Group.G1",
+      "Group.G2", "Group.G3", "Group.G1", "Group.G2", "Group.G3", "(Intercept)",
+      "Petal.Width", "Intercept ~ Petal.Width"
+    )
+  )
+})
+
+
+test_that("clean_parameters brms", {
+  skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("brms")
+
+  m <- insight::download_model("brms_sigma_1")
+  out <- clean_parameters(m)
+
+  expect_identical(
+    out$Effects,
+    c("fixed", "fixed", "random", "random", "random", "random", "fixed", "fixed")
+  )
+
+  expect_identical(
+    out$Component,
+    c(
+      "conditional", "conditional", "conditional", "conditional",
+      "conditional", "conditional", "sigma", "sigma"
+    )
+  )
+
+  expect_identical(
+    out$Cleaned_Parameter,
+    c("(Intercept)", "hp", "cyl.4", "cyl.6", "cyl.8", "(Intercept)", "(Intercept)", "cyl")
   )
 })
