@@ -973,7 +973,7 @@ test_that("brms dpars 1", {
     list(
       conditional = c("b_Intercept", "b_hp"),
       random = c(
-        "r_cyl[4,Intercept]",  "r_cyl[6,Intercept]",
+        "r_cyl[4,Intercept]", "r_cyl[6,Intercept]",
         "r_cyl[8,Intercept]", "sd_cyl__Intercept"
       ),
       sigma = c("b_sigma_Intercept", "b_sigma_cyl")
@@ -981,7 +981,7 @@ test_that("brms dpars 1", {
   )
   expect_equal(
     find_formula(model),
-    list(conditional = mpg ~ hp, random = ~1 | cyl, sigma = ~cyl),
+    list(conditional = mpg ~ hp, random = ~ 1 | cyl, sigma = ~cyl),
     ignore_attr = TRUE
   )
   expect_identical(
@@ -1019,9 +1019,9 @@ test_that("brms dpars 2", {
     find_formula(model),
     list(
       conditional = Sepal.Width ~ Petal.Width,
-      random = ~Petal.Width | Group,
+      random = ~ Petal.Width | Group,
       sigma = ~Petal.Width,
-      sigma_random = ~Petal.Width | Group
+      sigma_random = ~ Petal.Width | Group
     ),
     ignore_attr = TRUE
   )
