@@ -1,3 +1,4 @@
+skip_if_not_installed("curl")
 skip_if_offline()
 skip_if_not_installed("mgcv")
 skip_if_not_installed("httr2")

@@ -1694,126 +1694,38 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   f_cond <- stats::as.formula(.get_fixed_effects(f_cond))
 
-  f_zi <- f$pforms$zi
-  f_zirandom <- NULL
+  dpar_formulas <- list()
+  dpar_random_formulas <- list()
 
-  # auxiliary
-  f_sigma <- f$pforms$sigma
-  f_mu <- f$pforms$mu
-  f_nu <- f$pforms$nu
-  f_shape <- f$pforms$shape
-  f_alpha <- f$pforms$alpha
-  f_beta <- f$pforms$beta
-  f_phi <- f$pforms$phi
-  f_xi <- f$pforms$xi
-  f_hu <- f$pforms$hu
-  f_ndt <- f$pforms$ndt
-  f_zoi <- f$pforms$zoi
-  f_coi <- f$pforms$coi
-  f_kappa <- f$pforms$kappa
-  f_bias <- f$pforms$bias
-  f_bs <- f$pforms$bs
-
-  # brms formulas can also have custom names, based on variable names, e.g.:
-  # brm(
-  #   bf(carb ~ gear * vs) + lf(disc ~ 0 + mo(cyl)),
-  #   data = mtcars,
-  #   family = cumulative("probit"),
-  # )
-  # the lf() part is in "f$pforms" with name "disc".
-  #
-  # we therefore need to check whether we have additional names not yet covered
-  # by the above exceptions.
-
-  # auxiliary names
-  auxiliary_names <- .brms_aux_elements()
-
-  # check if any further pforms exist
-  if (all(names(f$pforms) %in% auxiliary_names)) {
-    f_custom <- NULL
-  } else {
-    custom_names <- setdiff(names(f$pforms), auxiliary_names)
-    if (length(custom_names)) {
-      f_custom <- f$pforms[custom_names]
-    }
-  }
-
-  f_sigmarandom <- NULL
-  f_betarandom <- NULL
-
-
-  # split zero-inflated fixed from zero-inflated random
-
-  if (!is_empty_object(f_zi)) {
-    f_zirandom <- lapply(.findbars(f_zi), function(.x) {
-      f <- safe_deparse(.x)
-      stats::as.formula(paste0("~", f))
+  for (aux in names(f$pforms)) {
+    f_aux <- f$pforms[[aux]]
+    f_aux_random <- lapply(.findbars(f_aux), function(.x) {
+      fx <- safe_deparse(.x)
+      stats::as.formula(paste0("~", fx))
     })
-
-    if (length(f_zirandom) == 1L) {
-      f_zirandom <- f_zirandom[[1]]
+    if (length(f_aux_random) == 1L) {
+      f_aux_random <- f_aux_random[[1]]
     }
+    f_aux <- stats::as.formula(paste0("~", safe_deparse(f_aux[[3L]])))
+    f_aux <- stats::as.formula(.get_fixed_effects(f_aux))
 
-    f_zi <- stats::as.formula(paste0("~", safe_deparse(f_zi[[3L]])))
-    f_zi <- stats::as.formula(.get_fixed_effects(f_zi))
+    # name of auxiliary parameter, handle exceptions
+    f_aux_name <- switch(aux,
+      zi = "zero_inflated",
+      zoi = "zero_one_inflated",
+      coi = "conditional_one_inflated",
+      aux
+    )
+    # add formula to list of custom formulas
+    dpar_formulas[[f_aux_name]] <- f_aux
+    dpar_random_formulas[[paste0(f_aux_name, "_random")]] <- f_aux_random
   }
 
-
-  # split sigma fixed from sigma random
-
-  if (!is_empty_object(f_sigma)) {
-    f_sigmarandom <- lapply(.findbars(f_sigma), function(.x) {
-      f <- safe_deparse(.x)
-      stats::as.formula(paste0("~", f))
-    })
-
-    if (length(f_sigmarandom) == 1L) {
-      f_sigmarandom <- f_sigmarandom[[1]]
-    }
-
-    f_sigma <- stats::as.formula(paste0("~", safe_deparse(f_sigma[[3L]])))
-    f_sigma <- stats::as.formula(.get_fixed_effects(f_sigma))
-  }
-
-
-  # split beta fixed from beta random
-
-  if (!is_empty_object(f_beta)) {
-    f_betarandom <- lapply(.findbars(f_beta), function(.x) {
-      f <- safe_deparse(.x)
-      stats::as.formula(paste0("~", f))
-    })
-
-    if (length(f_betarandom) == 1L) {
-      f_betarandom <- f_betarandom[[1]]
-    }
-
-    f_beta <- stats::as.formula(paste0("~", safe_deparse(f_beta[[3L]])))
-    f_beta <- stats::as.formula(.get_fixed_effects(f_beta))
-  }
-
-
-  compact_list(c(list(
-    conditional = f_cond,
-    random = f_random,
-    zero_inflated = f_zi,
-    zero_inflated_random = f_zirandom,
-    sigma = f_sigma,
-    sigma_random = f_sigmarandom,
-    beta = f_beta,
-    beta_random = f_betarandom,
-    shape = f_shape,
-    phi = f_phi,
-    hurdle = f_hu,
-    mu = f_mu,
-    nu = f_nu,
-    ndt = f_ndt,
-    bs = f_bs,
-    bias = f_bias,
-    zero_one_inflated = f_zoi,
-    conditional_one_inflated = f_coi,
-    kappa = f_kappa
-  ), f_custom))
+  compact_list(c(
+    list(conditional = f_cond, random = f_random),
+    dpar_formulas,
+    dpar_random_formulas
+  ))
 }
 
 

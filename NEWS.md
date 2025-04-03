@@ -1,5 +1,15 @@
 # insight (devel)
 
+## Breaking Changes
+
+* The handling of `brms` models in `find_parameters()`, `find_formula()` or
+  `clean_parameters()` (and other functions) should now systematically take
+  the many possible distributional parameters into account, identifying the
+  different types of them, and assigning them to own values in the
+  `Component` columns. *insight* should now be flexible enough to also cope
+  with user-defined variables that have been modelled as distributional
+  parameters.
+
 ## Changes
 
 * `find_random()` and `find_random_slopes()` now also extract random effects

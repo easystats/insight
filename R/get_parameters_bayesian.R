@@ -221,22 +221,17 @@ get_parameters.brmsfit <- function(x,
                                    summary = FALSE,
                                    centrality = "mean",
                                    ...) {
-  effects <- validate_argument(effects, c("all", "fixed", "random"))
-  component <- validate_argument(
-    component,
-    c("all", .all_elements(), "location", "distributional")
+  parms <- find_parameters(
+    x,
+    effects = effects,
+    component = component,
+    flatten = FALSE,
+    parameters = parameters
   )
-
-  if (is_multivariate(x)) {
-    parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
-    elements <- .get_elements(effects, component)
-    out <- as.data.frame(x)[unlist(lapply(parms, function(i) i[elements]), use.names = FALSE)]
-  } else {
-    out <- as.data.frame(x)[.get_parms_data(x, effects, component, parameters)]
-  }
+  out <- as.data.frame(x)[unique(unlist(parms, use.names = FALSE))]
 
   if (isTRUE(summary)) {
-    out <- .summary_of_posteriors(out, centrality = centrality)
+    out <- .summary_of_posteriors(out, centrality = centrality, parms)
   }
   out
 }
@@ -448,17 +443,26 @@ get_parameters.sim <- function(x,
 # helper -----------------------
 
 
-.summary_of_posteriors <- function(out, centrality = "mean", ...) {
+.summary_of_posteriors <- function(out, centrality = "mean", params = NULL, ...) {
   s <- switch(centrality,
     mean = vapply(out, mean, numeric(1), na.rm = TRUE),
     median = vapply(out, stats::median, numeric(1), na.rm = TRUE),
     vapply(out, mean, numeric(1), na.rm = TRUE)
   )
-  data.frame(
+  out <- data.frame(
     Parameter = names(s),
     Estimate = unname(s),
     stringsAsFactors = FALSE
   )
+  if (!is.null(params)) {
+    components <- rep(names(params), lengths(params))
+    out$Effects <- "fixed"
+    out$Effects[endsWith(components, "random")] <- "random"
+    components <- gsub("(_random|random)$", "", components)
+    components[components == ""] <- "conditional"
+    out$Components <- components
+  }
+  out
 }
 
 

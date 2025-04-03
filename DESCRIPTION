@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.1.0.16
+Version: 1.1.0.17
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -219,4 +219,3 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/Needs/website: easystats/easystatstemplate
 Config/Needs/check: stan-dev/cmdstanr
-Remotes: glmmTMB/glmmTMB/glmmTMB#1180
