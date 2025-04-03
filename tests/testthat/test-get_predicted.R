@@ -36,6 +36,7 @@ test_that("get_predicted - lm", {
   expect_equal(max(abs(as.data.frame(ref$fit)$lwr - rez$CI_low)), 0, tolerance = 1e-10)
 
   # Bootstrap
+  skip_if_not_installed("boot")
   set.seed(333)
   ref <- predict(x, newdata = get_data(x), se.fit = TRUE, interval = "confidence")
   rez <- get_predicted(x, iterations = 600, ci = 0.95)
@@ -95,6 +96,7 @@ test_that("get_predicted - glm", {
   expect_equal(max(abs(ref$se.fit - rez$SE)), 0, tolerance = 1e-4)
 
   # Bootstrap
+  skip_if_not_installed("boot")
   set.seed(333)
   ref <- suppressWarnings(predict(x, se.fit = TRUE, type = "response"))
   rez <- suppressWarnings(summary(get_predicted(x, iterations = 800, verbose = FALSE, ci = 0.95)))
