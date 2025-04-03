@@ -183,15 +183,15 @@ test_that("clean_parameters brms, chocomini", {
       "conditional", "conditional", "conditional", "conditional", "conditional",
       "conditional", "conditional", "conditional", "conditional", "conditional",
       "conditional", "conditional", "conditional", "delta", "k", "phi",
-      "delta_random", "delta_random", "delta_random", "delta_random",
-      "delta_random", "delta_random", "delta_random", "delta_random",
-      "delta_random", "delta_random", "delta_random", "delta_random",
-      "delta_random", "delta_random", "delta_random", "delta_random",
-      "delta_random", "delta_random", "delta_random", "delta_random",
-      "delta_random", "k_random", "k_random", "k_random", "k_random",
-      "k_random", "k_random", "k_random", "k_random", "k_random", "k_random",
-      "k_random", "k_random", "k_random", "k_random", "k_random", "k_random",
-      "k_random", "k_random", "k_random", "k_random", "k_random"
+      "delta", "delta", "delta", "delta",
+      "delta", "delta", "delta", "delta",
+      "delta", "delta", "delta", "delta",
+      "delta", "delta", "delta", "delta",
+      "delta", "delta", "delta", "delta",
+      "delta", "k", "k", "k", "k",
+      "k", "k", "k", "k", "k", "k",
+      "k", "k", "k", "k", "k", "k",
+      "k", "k", "k", "k", "k"
     )
   )
 
