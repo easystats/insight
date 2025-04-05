@@ -895,3 +895,37 @@ test_that("brms dpars 3", {
   )
   expect_null(find_predictors(model))
 })
+
+
+test_that("brms dpars find_parameters_random", {
+  model <- insight::download_model("brms_chocomini_1")
+  skip_if(is.null(model))
+  out <- find_parameters(model, effects = "random", component = "all")
+  expect_named(out, c("random", "delta_random", "k_random"))
+  out <- get_parameters(model, effects = "random", component = "all", summary = TRUE)
+  expect_true(all(out$Effects == "random"))
+  out <- find_parameters(model, effects = "all", component = "all")
+  expect_named(
+    out,
+    c("conditional", "random", "delta", "k", "phi", "delta_random", "k_random")
+  )
+})
+
+
+test_that("brms dpars find_auxiliary", {
+  data(mtcars)
+  model <- insight::download_model("brms_chocomini_1")
+  skip_if(is.null(model))
+  out <- find_auxiliary(model)
+  expect_identical(out, c("delta", "phi", "k"))
+
+  expect_warning(get_auxiliary(model), regex = "No auxiliary")
+
+  out <- get_auxiliary(model, type = "all")
+  expect_identical(out$Parameter, c("b_delta_Intercept", "b_phi_Intercept", "b_k_Intercept"))
+
+  expect_error(
+    find_auxiliary(lm(mpg ~ hp, data = mtcars)),
+    regex = "only works for"
+  )
+})

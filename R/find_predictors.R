@@ -320,7 +320,7 @@ find_predictors.brmsfit <- function(x,
   elements <- .get_elements(effects, component, model = x)
 
   # extract all components, including custom and auxiliary ones
-  dpars <- .brms_dpars(x)
+  dpars <- find_auxiliary(x)
 
   # elements to return
   elements <- .brms_elements(effects, component, dpars)

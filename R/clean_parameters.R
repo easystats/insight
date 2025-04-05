@@ -500,7 +500,7 @@ clean_parameters.mlm <- function(x, ...) {
   }
 
   # handle auxiliary components
-  for (i in .brms_dpars(x)) {
+  for (i in find_auxiliary(x)) {
     aux_params <- startsWith(out$Cleaned_Parameter, paste0("b_", i, "_"))
     out$Component[aux_params & out$Component == "conditional"] <- i
   }

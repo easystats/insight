@@ -37,6 +37,9 @@
   option of `"quartiles"` that included minimum and maximum was identical to the
   already existing `"fivenum"` option.
 
+* New function `find_auxiliary()`, which is a small helper to extract all
+  distributional parameters that were used in models from package *brms*.
+
 * Cleaning / revising package documentation.
 
 ## Bug fixes
