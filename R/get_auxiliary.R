@@ -163,7 +163,7 @@ get_dispersion.brmsfit <- get_dispersion.glmmTMB
       param <- find_auxiliary(x)
     }
     aux <- as.data.frame(x)
-    param <- setdiff(param, colnames(aux))
+    param <- intersect(param, colnames(aux))
     if (is.null(param) || !length(param)) {
       format_warning(paste0("No auxiliary parameters named ", toString(param), " found."))
       return(NULL)
