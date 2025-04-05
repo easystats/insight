@@ -28,7 +28,7 @@ find_parameters.brmsfit <- function(x,
 
   # extract all components, including custom and auxiliary ones
   dpars <- .brms_dpars(x)
-browser()
+
   # elements to return
   elements <- .brms_elements(effects, component, dpars)
 
