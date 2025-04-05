@@ -27,7 +27,7 @@ find_parameters.brmsfit <- function(x,
   fe <- fe[!startsWith(fe, "Intercept")]
 
   # extract all components, including custom and auxiliary ones
-  dpars <- .brms_dpars(x)
+  dpars <- find_distributional(x)
 
   # elements to return
   elements <- .brms_elements(effects, component, dpars)
@@ -61,24 +61,6 @@ find_parameters.brmsfit <- function(x,
 # utilities ------------------------------------------------------------
 
 
-.brms_dpars <- function(x) {
-  # formula object contains "pforms", which includes all auxiliary parameters
-  f <- stats::formula(x)
-  if (object_has_names(f, "forms")) {
-    out <- unique(unlist(lapply(f$forms, function(i) names(i$pforms)), use.names = FALSE))
-  } else {
-    out <- names(f$pforms)
-  }
-  # add sigma
-  fe <- dimnames(x$fit)$parameters
-  if (any(startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE))) {
-    out <- c(out, "sigma")
-  }
-
-  unique(out)
-}
-
-
 .brms_elements <- function(effects, component, dpars) {
   # elements to return
   elements <- .get_elements(effects = effects, component = component)
@@ -97,8 +79,7 @@ find_parameters.brmsfit <- function(x,
   }
 
   # remove random effects or keep them only
-  switch(
-    effects,
+  switch(effects,
     fixed = elements[!endsWith(elements, "random")],
     random = elements[endsWith(elements, "random")],
     elements
