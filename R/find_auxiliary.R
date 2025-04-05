@@ -1,14 +1,14 @@
-#' @title Find distributional parameters from models
+#' @title Find auxiliary (distributional) parameters from models
 #'
-#' @description Returns all distributional parameters from brms-models, like
-#' dispersion, sigma, kappa, phi, or beta...
+#' @description Returns the names of all auxiliary / distributional parameters
+#' from brms-models, like dispersion, sigma, kappa, phi, or beta...
 #'
 #' @name find_auxiliary
 #'
 #' @param x A model of class `brmsfit`.
 #' @param ... Currently not used.
 #'
-#' @return All available distributional parameters used in the model.
+#' @return The names of all available auxiliary parameters used in the model.
 #'
 #' @export
 find_auxiliary <- function(x, ...) {

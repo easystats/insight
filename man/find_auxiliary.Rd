@@ -2,7 +2,7 @@
 % Please edit documentation in R/find_auxiliary.R
 \name{find_auxiliary}
 \alias{find_auxiliary}
-\title{Find distributional parameters from models}
+\title{Find auxiliary (distributional) parameters from models}
 \usage{
 find_auxiliary(x, ...)
 }
@@ -12,9 +12,9 @@ find_auxiliary(x, ...)
 \item{...}{Currently not used.}
 }
 \value{
-All available distributional parameters used in the model.
+The names of all available auxiliary parameters used in the model.
 }
 \description{
-Returns all distributional parameters from brms-models, like
-dispersion, sigma, kappa, phi, or beta...
+Returns the names of all auxiliary / distributional parameters
+from brms-models, like dispersion, sigma, kappa, phi, or beta...
 }
