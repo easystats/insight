@@ -196,7 +196,7 @@ find_parameters.brmsfit <- function(x,
   # find names of random dpars that do not have the suffix "_random", and add it
   no_suffix <- !endsWith(names(dpars_random), "_random")
   names(dpars_random)[no_suffix] <- paste0(names(dpars_random)[no_suffix], "_random")
-browser()
+
   compact_list(c(
     list(conditional = cond, random = c(rand, rand_sd, rand_cor, car_struc)),
     dpars_fixed,

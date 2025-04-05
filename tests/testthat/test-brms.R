@@ -895,3 +895,11 @@ test_that("brms dpars 3", {
   )
   expect_null(find_predictors(model))
 })
+
+
+test_that("brms dpars find_parameters_random", {
+  model <- insight::download_model("brms_chocomini_1")
+  skip_if(is.null(model))
+  out <- find_parameters(model, effects = "random", component = "all")
+
+})
