@@ -162,10 +162,15 @@ get_dispersion.brmsfit <- get_dispersion.glmmTMB
     if (all(param == "all")) {
       param <- find_auxiliary(x)
     }
+    # get posterior draws
     aux <- as.data.frame(x)
-    param <- intersect(param, colnames(aux))
+    # find parameter names of distributional parameters
+    param_names <- unlist(find_parameters(x)[param], use.names = FALSE)
+    # intersect only available columns
+    param <- intersect(param_names, colnames(aux))
+    # check if any distributional parameter available
     if (is.null(param) || !length(param)) {
-      format_warning(paste0("No auxiliary parameters named ", toString(param), " found."))
+      format_warning(paste0("No auxiliary parameters found."))
       return(NULL)
     }
     aux <- aux[param]

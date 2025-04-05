@@ -920,7 +920,9 @@ test_that("brms dpars find_auxiliary", {
   expect_identical(out, c("delta", "phi", "k"))
 
   expect_warning(get_auxiliary(model), regex = "No auxiliary")
+
   out <- get_auxiliary(model, type = "all")
+  expect_identical(out$Parameter, c("b_delta_Intercept", "b_phi_Intercept", "b_k_Intercept"))
 
   expect_error(
     find_auxiliary(lm(mpg ~ hp, data = mtcars)),
