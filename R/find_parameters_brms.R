@@ -27,7 +27,7 @@ find_parameters.brmsfit <- function(x,
   fe <- fe[!startsWith(fe, "Intercept")]
 
   # extract all components, including custom and auxiliary ones
-  dpars <- find_distributional(x)
+  dpars <- find_auxiliary(x)
 
   # elements to return
   elements <- .brms_elements(effects, component, dpars)

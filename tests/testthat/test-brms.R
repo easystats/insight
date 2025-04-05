@@ -910,3 +910,17 @@ test_that("brms dpars find_parameters_random", {
     c("conditional", "random", "delta", "k", "phi", "delta_random", "k_random")
   )
 })
+
+
+test_that("brms dpars find_auxiliary", {
+  data(mtcars)
+  model <- insight::download_model("brms_chocomini_1")
+  skip_if(is.null(model))
+  out <- find_auxiliary(model)
+  out
+
+  expect_error(
+    find_auxiliary(lm(mpg ~ hp, data = mtcars)),
+    regex = ""
+  )
+})
