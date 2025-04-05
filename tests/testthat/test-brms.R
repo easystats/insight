@@ -917,10 +917,13 @@ test_that("brms dpars find_auxiliary", {
   model <- insight::download_model("brms_chocomini_1")
   skip_if(is.null(model))
   out <- find_auxiliary(model)
-  out
+  expect_identical(out, c("delta", "phi", "k"))
+
+  expect_warning(get_auxiliary(model), regex = "No auxiliary")
+  out <- get_auxiliary(model, type = "all")
 
   expect_error(
     find_auxiliary(lm(mpg ~ hp, data = mtcars)),
-    regex = ""
+    regex = "only works for"
   )
 })
