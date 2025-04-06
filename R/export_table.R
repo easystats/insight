@@ -62,7 +62,7 @@
 #'   parts, duplicated ("empty") rows will be removed. If `FALSE`, empty rows
 #'   will be preserved. Only applies when `table_width` is *not* `NULL` (or
 #'   `Inf`) *and* table is split into multiple parts.
-#' @param column_names Character vector of names that will be used as colum
+#' @param column_names Character vector of names that will be used as column
 #'   names in the table. Must either be of same length as columns in the table,
 #'   or a named vector, where names (LHS) indicate old column names, and values
 #'   (RHS) are used as new column names.
