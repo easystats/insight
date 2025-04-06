@@ -22,6 +22,7 @@ export_table(
   caption = title,
   subtitle = NULL,
   footer = NULL,
+  column_names = NULL,
   align = NULL,
   by = NULL,
   zap_small = FALSE,
@@ -87,6 +88,11 @@ data frames, \code{caption} may be a list of table captions, one for each table.
 footers, due to the limitation in markdown rendering, are actually just a
 new text line under the table. If \code{x} is a list of data frames, \code{footer}
 may be a list of table captions, one for each table.}
+
+\item{column_names}{Character vector of names that will be used as colum
+names in the table. Must either be of same length as columns in the table,
+or a named vector, where names (LHS) are matched against old column names,
+and values (RHS) are used as new column names.}
 
 \item{align}{Column alignment. For markdown-formatted tables, the default
 \code{align = NULL} will right-align numeric columns, while all other columns
