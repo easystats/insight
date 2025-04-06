@@ -15,7 +15,7 @@ the table_width argument to control this behaviour."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,6 +89,7 @@ the <code>table_width</code> argument to control this behaviour.</p>
 <span>  caption <span class="op">=</span> <span class="va">title</span>,</span>
 <span>  subtitle <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  footer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  column_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  align <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -187,6 +188,13 @@ data frames, <code>caption</code> may be a list of table captions, one for each 
 footers, due to the limitation in markdown rendering, are actually just a
 new text line under the table. If <code>x</code> is a list of data frames, <code>footer</code>
 may be a list of table captions, one for each table.</p></dd>
+
+
+<dt id="arg-column-names">column_names<a class="anchor" aria-label="anchor" href="#arg-column-names"></a></dt>
+<dd><p>Character vector of names that will be used as column
+names in the table. Must either be of same length as columns in the table,
+or a named vector, where names (LHS) indicate old column names, and values
+(RHS) are used as new column names.</p></dd>
 
 
 <dt id="arg-align">align<a class="anchor" aria-label="anchor" href="#arg-align"></a></dt>
@@ -373,6 +381,26 @@ and <a href="https://easystats.github.io/parameters/articles/model_parameters_fo
 <span class="r-out co"><span class="r-pr">#&gt;</span>         4.70 |        3.20 |         1.30 |        0.20 |  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         4.60 |        3.10 |         1.50 |        0.20 |  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         5.00 |        3.60 |         1.40 |        0.20 |  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Without the </span><span style="color: #BB0000;">new-line character </span><span style="color: #0000BB;">we can have multiple colors per line.</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># rename column names</span></span></span>
+<span class="r-in"><span><span class="fu">export_table</span><span class="op">(</span><span class="va">x</span>, column_names <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    a |    b |    c |    d |      e</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.10 | 3.50 | 1.40 | 0.20 | setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.90 | 3.00 | 1.40 | 0.20 | setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.70 | 3.20 | 1.30 | 0.20 | setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.60 | 3.10 | 1.50 | 0.20 | setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.00 | 3.60 | 1.40 | 0.20 | setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Without the </span><span style="color: #BB0000;">new-line character </span><span style="color: #0000BB;">we can have multiple colors per line.</span></span>
+<span class="r-in"><span><span class="fu">export_table</span><span class="op">(</span><span class="va">x</span>, column_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Species <span class="op">=</span> <span class="st">"a"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Sepal.Width | Petal.Length | Petal.Width |      a</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.10 |        3.50 |         1.40 |        0.20 | setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.90 |        3.00 |         1.40 |        0.20 | setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.70 |        3.20 |         1.30 |        0.20 | setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4.60 |        3.10 |         1.50 |        0.20 | setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         5.00 |        3.60 |         1.40 |        0.20 | setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Without the </span><span style="color: #BB0000;">new-line character </span><span style="color: #0000BB;">we can have multiple colors per line.</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
