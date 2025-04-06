@@ -48,6 +48,8 @@
   was used to fit the model (model frame), which can lead to different results
   when the original data contained missing values.
 
+* Fixed issue for `get_predicted()` with multivariate response models.
+
 # insight 1.1.0
 
 ## Breaking Changes
