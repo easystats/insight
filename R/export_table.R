@@ -62,6 +62,10 @@
 #'   parts, duplicated ("empty") rows will be removed. If `FALSE`, empty rows
 #'   will be preserved. Only applies when `table_width` is *not* `NULL` (or
 #'   `Inf`) *and* table is split into multiple parts.
+#' @param column_names Character vector of names that will be used as column
+#'   names in the table. Must either be of same length as columns in the table,
+#'   or a named vector, where names (LHS) indicate old column names, and values
+#'   (RHS) are used as new column names.
 #' @param ... Currently not used.
 #' @inheritParams format_value
 #' @inheritParams get_data
@@ -109,6 +113,10 @@
 #'   c("we can have multiple colors per line.", "blue")
 #' )
 #' export_table(x)
+#'
+#' # rename column names
+#' export_table(x, column_names = letters[1:5])
+#' export_table(x, column_names = c(Species = "a"))
 #' }
 #'
 #' # column-width
@@ -136,6 +144,7 @@ export_table <- function(x,
                          caption = title,
                          subtitle = NULL,
                          footer = NULL,
+                         column_names = NULL,
                          align = NULL,
                          by = NULL,
                          zap_small = FALSE,
@@ -212,6 +221,7 @@ export_table <- function(x,
       caption = caption,
       subtitle = subtitle,
       footer = footer,
+      column_names = column_names,
       align = align,
       group_by = by,
       zap_small = zap_small,
@@ -286,6 +296,7 @@ export_table <- function(x,
         caption = t_title,
         subtitle = attributes(i)$table_subtitle,
         footer = t_footer,
+        column_names = column_names,
         align = align,
         group_by = by,
         zap_small = zap_small,
@@ -365,6 +376,7 @@ print.insight_table <- function(x, ...) {
                           caption = NULL,
                           subtitle = NULL,
                           footer = NULL,
+                          column_names = NULL,
                           align = NULL,
                           group_by = NULL,
                           zap_small = FALSE,
@@ -374,7 +386,10 @@ print.insight_table <- function(x, ...) {
                           table_width = NULL,
                           remove_duplicated_lines = FALSE,
                           verbose = TRUE) {
-  tabledata <- as.data.frame(x)
+  table_data <- as.data.frame(x)
+
+  # rename columns?
+  table_data <- .new_column_names(table_data, column_names)
 
   # check width argument, for format value. cannot have
   # named vector of length > 1 here
@@ -385,8 +400,8 @@ print.insight_table <- function(x, ...) {
   }
 
   # round all numerics, and convert to character
-  col_names <- names(tabledata)
-  tabledata[] <- lapply(tabledata, function(i) {
+  col_names <- names(table_data)
+  table_data[] <- lapply(table_data, function(i) {
     if (is.numeric(i)) {
       out <- format_value(i,
         digits = digits, protect_integers = protect_integers,
@@ -399,14 +414,14 @@ print.insight_table <- function(x, ...) {
   })
 
   # add back column names
-  names(tabledata) <- col_names
-  tabledata[is.na(tabledata)] <- as.character(missing)
+  names(table_data) <- col_names
+  table_data[is.na(table_data)] <- as.character(missing)
 
 
   if (identical(format, "html")) {
     # html formatting starts here, needs less preparation of table matrix
     out <- .format_html_table(
-      tabledata,
+      table_data,
       caption = caption,
       subtitle = subtitle,
       footer = footer,
@@ -419,13 +434,13 @@ print.insight_table <- function(x, ...) {
     # text and markdown go here...
   } else {
     # Add colnames as first row to the data frame
-    tabledata <- rbind(colnames(tabledata), tabledata)
+    table_data <- rbind(colnames(table_data), table_data)
 
     # Initial alignment for complete data frame is right-alignment
-    aligned <- format(tabledata, justify = "right")
+    aligned <- format(table_data, justify = "right")
 
     # default alignment
-    col_align <- rep("right", ncol(tabledata))
+    col_align <- rep("right", ncol(table_data))
 
     # first row definitely right alignment, fixed width
     first_row <- as.character(aligned[1, ])
@@ -849,6 +864,43 @@ print.insight_table <- function(x, ...) {
 
 
 # helper ----------------
+
+
+.new_column_names <- function(table_data, column_names) {
+  # new column names for the table?
+  if (!is.null(column_names)) {
+    # if we have no named vector, we assume that we have new names for each
+    # column in the table
+    if (is.null(names(column_names))) {
+      # error if length does not match number of columns
+      if (length(column_names) != ncol(table_data)) {
+        format_error("Number of names in `column_names` does not match number of columns in data frame.")
+      }
+      colnames(table_data) <- column_names
+    } else {
+      # if we have a named vector, all elements must be named
+      if (!all(nzchar(names(column_names)))) {
+        format_error("If `column_names` is a named vector, all elements must be named.")
+      }
+      # if we have a named vector, all names must be present in column names
+      if (!all(names(column_names) %in% colnames(table_data))) {
+        suggestion <- .misspelled_string(colnames(table_data), names(column_names))
+        msg <- "Not all names in `column_names` were found in column names of data frame."
+        if (is.null(suggestion$msg) || !length(suggestion$msg) || !nzchar(suggestion$msg)) {
+          msg <- paste(msg, "Please use one of the following names:", .to_string(colnames(table_data)))
+        } else {
+          msg <- paste(msg, suggestion$msg)
+        }
+        format_error(msg)
+      }
+      for (i in names(column_names)) {
+        colnames(table_data)[colnames(table_data) == i] <- column_names[i]
+      }
+    }
+  }
+  table_data
+}
+
 
 .paste_footers <- function(footer, rows) {
   if (.is_empty_string(footer)) {

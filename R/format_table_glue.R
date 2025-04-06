@@ -50,7 +50,7 @@
     coef_column <- intersect(colnames(x), coefficient_names)[1]
   }
   ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI" | colnames(x) == "conf.int"] # nolint
-  stat_colum <- colnames(x)[colnames(x) %in% c("t", "z", "Chi2", "Statistic", "statistic") | grepl("^(t\\(|Chi2\\()", colnames(x))] # nolint
+  stat_column <- colnames(x)[colnames(x) %in% c("t", "z", "Chi2", "Statistic", "statistic") | grepl("^(t\\(|Chi2\\()", colnames(x))] # nolint
   # modelbased
   focal_term_column <- c(
     attributes(original_x)$focal_terms,
@@ -131,7 +131,7 @@
   }
 
   # bind glue-columns to original data, but remove former columns first
-  original_x[c(coefficient_names, uncertainty_column, stat_colum, p_column, df_column)] <- NULL # nolint
+  original_x[c(coefficient_names, uncertainty_column, stat_column, p_column, df_column)] <- NULL # nolint
 
   # reorder
   original_x <- standardize_column_order(original_x)

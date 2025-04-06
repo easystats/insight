@@ -29,6 +29,9 @@
 * `get_datagrid()` gets a `protect_integer` argument, to allow a spread of
   values from minimum to maximum of length `length`, also for integer values.
 
+* `export_table()` gets an argument `column_names`, to change the column names
+  of the exported table.
+
 * Creating a range of values in a `get_datagrid()` using `by` was now simplified
   and works like regular R syntax, e.g. `by = "mpg = 20:50"`.
 
