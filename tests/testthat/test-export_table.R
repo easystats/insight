@@ -254,3 +254,32 @@ test_that("export_table, gt, complex with group indention", {
   ))
   expect_snapshot(as.character(out))
 })
+
+test_that("export_table, new column names", {
+  data(iris)
+  x <- as.data.frame(iris[1:5, ])
+  out <- export_table(x, column_names = letters[1:5])
+  expect_identical(
+    strsplit(out, "\n")[[1]][1],
+    "   a |    b |    c |    d |      e"
+  )
+  out <- export_table(x, column_names = c(Species = "a"))
+  expect_identical(
+    strsplit(out, "\n")[[1]][1],
+    "Sepal.Length | Sepal.Width | Petal.Length | Petal.Width |      a"
+  )
+
+  # errors
+  expect_error(
+    export_table(x, column_names = letters[1:4]),
+    regex = "Number of names"
+  )
+  expect_error(
+    export_table(x, column_names = c(Species = "a", abc = "b")),
+    regex = "Not all names"
+  )
+  expect_error(
+    export_table(x, column_names = c(Species = "a", "b")),
+    regex = "is a named vector"
+  )
+})
