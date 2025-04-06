@@ -389,7 +389,7 @@ print.insight_table <- function(x, ...) {
   tabledata <- as.data.frame(x)
 
   # rename columns?
-  table_data <- .new_column_names(tabledata, column_names)
+  tabledata <- .new_column_names(tabledata, column_names)
 
   # check width argument, for format value. cannot have
   # named vector of length > 1 here
