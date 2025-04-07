@@ -95,7 +95,7 @@ get_predicted.stanreg <- function(x,
   }
 
   # Handle special cases
-  if(inherits(model_family, "brmsfamily") && model_family$family == "wiener") {
+  if (inherits(model_family, "brmsfamily") && model_family$family == "wiener") {
     # Separate RT from Choice and assemble into 3D matrix (as if it was a multivariate)
     response <- as.numeric(draws >= 0)
     draws <- abs(draws)
