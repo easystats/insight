@@ -77,9 +77,13 @@ get_predicted.stanreg <- function(x,
   dots[["newdata"]] <- NULL
   fun_args <- c(fun_args, dots)
 
+  model_family <- get_family(x)
+
   # Special case for rwiener (get choice 1 as negative values)
   # Note that for mv models, x$family returns a list of families
-  if(inherits(x$family, "brmsfamily") && x$family$family == "wiener") fun_args$negative_rt <- TRUE
+  if (inherits(model_family, "brmsfamily") && model_family$family == "wiener") {
+    fun_args$negative_rt <- TRUE
+  }
 
   # Get draws
   if (my_args$predict == "link") {
@@ -91,17 +95,25 @@ get_predicted.stanreg <- function(x,
   }
 
   # Handle special cases
-  if(inherits(x$family, "brmsfamily") && x$family$family == "wiener") {
+  if(inherits(model_family, "brmsfamily") && model_family$family == "wiener") {
     # Separate RT from Choice and assemble into 3D matrix (as if it was a multivariate)
-    response <- ifelse(draws < 0, 0, 1)
+    response <- as.numeric(draws >= 0)
     draws <- abs(draws)
-    draws <- array(c(draws, response), dim = c(dim(draws), 2), dimnames = list(NULL, NULL, c("rt", "response")))
+    draws <- array(
+      c(draws, response),
+      dim = c(dim(draws), 2),
+      dimnames = list(NULL, NULL, c("rt", "response"))
+    )
   }
-  if(inherits(x$family, "brmsfamily") && x$family$family == "custom" && x$family$name %in% c("lnr")) {
+  if (inherits(model_family, "brmsfamily") && model_family$family == "custom" && model_family$name %in% c("lnr")) { # nolint
     # LogNormal Race models (cogmod package) return RT and Choice as odd and even columns
     response <- as.matrix(draws[, seq(2, ncol(draws), 2)])
     draws <- as.matrix(draws[, seq(1, ncol(draws), 2)])
-    draws <- array(c(draws, response), dim = c(dim(draws), 2), dimnames = list(NULL, NULL, c("rt", "response")))
+    draws <- array(
+      c(draws, response),
+      dim = c(dim(draws), 2),
+      dimnames = list(NULL, NULL, c("rt", "response"))
+    )
   }
 
   # Get predictions (summarize)
