@@ -97,6 +97,12 @@ get_predicted.stanreg <- function(x,
     draws <- abs(draws)
     draws <- array(c(draws, response), dim = c(dim(draws), 2), dimnames = list(NULL, NULL, c("rt", "response")))
   }
+  if(inherits(x$family, "brmsfamily") && x$family$family == "custom" && x$family$name %in% c("lnr")) {
+    # LogNormal Race models (cogmod package) return RT and Choice as odd and even columns
+    response <- as.matrix(draws[, seq(2, ncol(draws), 2)])
+    draws <- as.matrix(draws[, seq(1, ncol(draws), 2)])
+    draws <- array(c(draws, response), dim = c(dim(draws), 2), dimnames = list(NULL, NULL, c("rt", "response")))
+  }
 
   # Get predictions (summarize)
   predictions <- .get_predicted_centrality_from_draws(
