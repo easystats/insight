@@ -77,6 +77,10 @@ get_predicted.stanreg <- function(x,
   dots[["newdata"]] <- NULL
   fun_args <- c(fun_args, dots)
 
+  # Special case for rwiener (get choice 1 as negative values)
+  # Note that for mv models, x$family returns a list of families
+  if(inherits(x$family, "brmsfamily") && x$family$family == "wiener") fun_args$negative_rt <- TRUE
+
   # Get draws
   if (my_args$predict == "link") {
     draws <- do.call(rstantools::posterior_linpred, fun_args)
@@ -84,6 +88,14 @@ get_predicted.stanreg <- function(x,
     draws <- do.call(rstantools::posterior_epred, fun_args)
   } else {
     draws <- do.call(rstantools::posterior_predict, fun_args)
+  }
+
+  # Handle special cases
+  if(inherits(x$family, "brmsfamily") && x$family$family == "wiener") {
+    # Separate RT from Choice and assemble into 3D matrix (as if it was a multivariate)
+    response <- ifelse(draws < 0, 0, 1)
+    draws <- abs(draws)
+    draws <- array(c(draws, response), dim = c(dim(draws), 2), dimnames = list(NULL, NULL, c("rt", "response")))
   }
 
   # Get predictions (summarize)
