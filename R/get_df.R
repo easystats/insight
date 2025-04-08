@@ -528,6 +528,9 @@ get_df.mediate <- function(x, ...) {
       n <- n_parameters(x)
       extra <- 0
       mi <- model_info(x, verbose = FALSE)
+      if (is_multivariate(x) && is.null(mi$is_linear)) {
+        mi <- mi[[1]]
+      }
 
       if (mi$is_linear || mi$is_negbin) {
         extra <- extra + 1

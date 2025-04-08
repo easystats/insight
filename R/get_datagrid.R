@@ -680,7 +680,20 @@ get_datagrid.default <- function(x,
   # usually require the response to be included in the model, else `get_modelmatrix()`
   # fails, which is required to compute SE/CI for `get_predicted()`
   minfo <- model_info(x)
-  if (minfo$is_binomial && minfo$is_logit && is.factor(data[[response]]) && !include_response && verbose) {
+
+  # handle multivariate - for simplicity, we just extract the information from
+  # the first model
+  if (is_multivariate(x) && is.null(minfo$is_linear)) {
+    minfo <- minfo[[1]]
+  }
+
+  if (
+    minfo$is_binomial &&
+      minfo$is_logit &&
+      any(vapply(data[response], is.factor, logical(1))) &&
+      !include_response &&
+      verbose
+  ) {
     format_warning(
       "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions." # nolint
     )
