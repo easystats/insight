@@ -3,10 +3,11 @@
 #'
 #' @description Retrieve information from model objects.
 #'
-#' @param response If `x` is multivariate reponse model, `model_info()` returns
-#' a list of information for each response variable Set `response` to the number
-#' of a specific response variable, or provide the name of the response variable
-#' in `response` to return the list for only one response.
+#' @param response If `x` is a multivariate response model, `model_info()`
+#' returns a list of information for each response variable. Set `response` to
+#' the number of a specific response variable, or provide the name of the
+#' response variable in `response`, to return the information for only one
+#' response.
 #' @param verbose Toggle off warnings.
 #' @inheritParams find_predictors
 #' @inheritParams link_inverse

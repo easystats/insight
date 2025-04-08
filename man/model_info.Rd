@@ -19,10 +19,11 @@ model_info(x, ...)
 
 \item{verbose}{Toggle off warnings.}
 
-\item{response}{If \code{x} is multivariate reponse model, \code{model_info()} returns
-a list of information for each response variable Set \code{response} to the number
-of a specific response variable, or provide the name of the response variable
-in \code{response} to return the list for only one response.}
+\item{response}{If \code{x} is a multivariate response model, \code{model_info()}
+returns a list of information for each response variable. Set \code{response} to
+the number of a specific response variable, or provide the name of the
+response variable in \code{response}, to return the information for only one
+response.}
 }
 \value{
 A list with information about the model, like family, link-function
