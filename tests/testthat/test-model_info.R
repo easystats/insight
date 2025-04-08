@@ -105,3 +105,18 @@ test_that("model_info, glm bernoulli", {
   expect_true(model_info(mod)$is_binomial)
   expect_true(model_info(mod)$is_bernoulli)
 })
+
+test_that("model_info - multivariate", {
+  skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("brms")
+
+  m <- insight::download_model("brms_mv_1")
+  skip_if(is.null(m))
+  out <- model_info(m)
+  expect_identical(length(out), 3L)
+  out <- model_info(m, response = "gear")
+  expect_identical(length(out), 48L)
+})

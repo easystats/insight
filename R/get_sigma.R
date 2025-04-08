@@ -243,7 +243,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
   }
 
   if (is_empty_object(s)) {
-    info <- model_info(x, verbose = FALSE)
+    info <- model_info(x, response = 1, verbose = FALSE)
     if (!is.null(info) && info$is_mixed) {
       dots <- list(...)
       # in "get_variance()", we call "get_sigma()" - make sure we avoid

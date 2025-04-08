@@ -32,6 +32,11 @@
 * `export_table()` gets an argument `column_names`, to change the column names
   of the exported table.
 
+* `model_info()` gains a `response` argument for classes that can be multivariate
+  response models that return multiple lists of model information (currently,
+  Stan models from *rstanarm* and *brms*). If not `NULL`, only the information
+  for one of the response variables is returned.
+
 * Creating a range of values in a `get_datagrid()` using `by` was now simplified
   and works like regular R syntax, e.g. `by = "mpg = 20:50"`.
 

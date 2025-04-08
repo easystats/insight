@@ -49,7 +49,7 @@ get_family.model_fit <- function(x, ...) {
 
 
 .get_family <- function(x, ...) {
-  info <- model_info(x, verbose = FALSE)
+  info <- model_info(x, response = 1, verbose = FALSE)
 
   if (info$family == "binomial") {
     fam <- stats::binomial(link = info$link_function)
