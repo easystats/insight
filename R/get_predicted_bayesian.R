@@ -83,6 +83,11 @@ get_predicted.stanreg <- function(x,
   # Note that for mv models, x$family returns a list of families
   if (inherits(model_family, "brmsfamily") && model_family$family == "wiener") {
     fun_args$negative_rt <- TRUE
+    if (my_args$predict %in% c("expectation", "response") && verbose) {
+      insight::format_warning(
+        "Using `predict = \"expectation\"` will return the value of the main model parameter. If you want predicted reaction times and responses, use `predict = \"prediction\"`."
+      )
+    }
   }
 
   # Get draws
@@ -92,8 +97,11 @@ get_predicted.stanreg <- function(x,
     draws <- do.call(rstantools::posterior_epred, fun_args)
   } else {
     draws <- do.call(rstantools::posterior_predict, fun_args)
-    # Handle special cases
-    if (inherits(model_family, "brmsfamily") && model_family$family == "wiener") {
+  }
+
+  # Handle special cases
+  if (!my_args$predict %in% c("expectation", "response", "link") && inherits(model_family, "brmsfamily")) {
+    if (model_family$family == "wiener") {
       # Separate RT from Choice and assemble into 3D matrix (as if it was a multivariate)
       response <- as.numeric(draws >= 0)
       draws <- abs(draws)
@@ -102,8 +110,7 @@ get_predicted.stanreg <- function(x,
         dim = c(dim(draws), 2),
         dimnames = list(NULL, NULL, c("rt", "response"))
       )
-    }
-    if (inherits(model_family, "brmsfamily") && model_family$family == "custom" && model_family$name == "lnr") { # nolint
+    } else if (model_family$family == "custom" && model_family$name == "lnr") {
       # LogNormal Race models (cogmod package) return RT and Choice as odd and even columns
       response <- as.matrix(draws[, seq(2, ncol(draws), 2)])
       draws <- as.matrix(draws[, seq(1, ncol(draws), 2)])
