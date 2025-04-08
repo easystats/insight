@@ -92,28 +92,27 @@ get_predicted.stanreg <- function(x,
     draws <- do.call(rstantools::posterior_epred, fun_args)
   } else {
     draws <- do.call(rstantools::posterior_predict, fun_args)
-  }
-
-  # Handle special cases
-  if (inherits(model_family, "brmsfamily") && model_family$family == "wiener") {
-    # Separate RT from Choice and assemble into 3D matrix (as if it was a multivariate)
-    response <- as.numeric(draws >= 0)
-    draws <- abs(draws)
-    draws <- array(
-      c(draws, response),
-      dim = c(dim(draws), 2),
-      dimnames = list(NULL, NULL, c("rt", "response"))
-    )
-  }
-  if (inherits(model_family, "brmsfamily") && model_family$family == "custom" && model_family$name %in% c("lnr")) { # nolint
-    # LogNormal Race models (cogmod package) return RT and Choice as odd and even columns
-    response <- as.matrix(draws[, seq(2, ncol(draws), 2)])
-    draws <- as.matrix(draws[, seq(1, ncol(draws), 2)])
-    draws <- array(
-      c(draws, response),
-      dim = c(dim(draws), 2),
-      dimnames = list(NULL, NULL, c("rt", "response"))
-    )
+    # Handle special cases
+    if (inherits(model_family, "brmsfamily") && model_family$family == "wiener") {
+      # Separate RT from Choice and assemble into 3D matrix (as if it was a multivariate)
+      response <- as.numeric(draws >= 0)
+      draws <- abs(draws)
+      draws <- array(
+        c(draws, response),
+        dim = c(dim(draws), 2),
+        dimnames = list(NULL, NULL, c("rt", "response"))
+      )
+    }
+    if (inherits(model_family, "brmsfamily") && model_family$family == "custom" && model_family$name == "lnr") { # nolint
+      # LogNormal Race models (cogmod package) return RT and Choice as odd and even columns
+      response <- as.matrix(draws[, seq(2, ncol(draws), 2)])
+      draws <- as.matrix(draws[, seq(1, ncol(draws), 2)])
+      draws <- array(
+        c(draws, response),
+        dim = c(dim(draws), 2),
+        dimnames = list(NULL, NULL, c("rt", "response"))
+      )
+    }
   }
 
   # Get predictions (summarize)
