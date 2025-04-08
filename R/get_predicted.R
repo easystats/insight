@@ -730,7 +730,7 @@ get_predicted.phylolm <- function(x,
     }
 
     # Transform to response "type"
-    if (my_args$predict == "classification" && model_info(x, verbose = FALSE)$is_binomial) {
+    if (my_args$predict == "classification" && model_info(x, response = 1, verbose = FALSE)$is_binomial) {
       response <- get_response(x, as_proportion = TRUE)
       ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
       predictions <- .get_predict_transform_response(predictions, response = response)

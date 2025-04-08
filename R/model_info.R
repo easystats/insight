@@ -3,6 +3,11 @@
 #'
 #' @description Retrieve information from model objects.
 #'
+#' @param response If `x` is a multivariate response model, `model_info()`
+#' returns a list of information for each response variable. Set `response` to
+#' the number of a specific response variable, or provide the name of the
+#' response variable in `response`, to return the information for only one
+#' response.
 #' @param verbose Toggle off warnings.
 #' @inheritParams find_predictors
 #' @inheritParams link_inverse
@@ -715,11 +720,12 @@ model_info.stanreg <- function(x, ...) {
 }
 
 
+#' @rdname model_info
 #' @export
-model_info.brmsfit <- function(x, ...) {
+model_info.brmsfit <- function(x, response = NULL, ...) {
   faminfo <- stats::family(x)
   if (is_multivariate(x)) {
-    lapply(faminfo, function(.x) {
+    out <- lapply(faminfo, function(.x) {
       ## TODO: check for multivariate, if we need "x" or ".x"
       form <- find_formula(x, verbose = FALSE)
       is_dispersion <- !is_empty_object(form$sigma) || !is_empty_object(form$kappa)
@@ -734,6 +740,11 @@ model_info.brmsfit <- function(x, ...) {
         ...
       )
     })
+    if (is.null(response)) {
+      out
+    } else {
+      out[[response]]
+    }
   } else {
     form <- find_formula(x, verbose = FALSE)
     is_dispersion <- !is_empty_object(form$sigma) || !is_empty_object(form$kappa)
@@ -751,9 +762,9 @@ model_info.brmsfit <- function(x, ...) {
 
 
 #' @export
-model_info.stanmvreg <- function(x, ...) {
+model_info.stanmvreg <- function(x, response = NULL, ...) {
   faminfo <- stats::family(x)
-  lapply(faminfo, function(.x) {
+  out <- lapply(faminfo, function(.x) {
     .make_family(
       x = x,
       fitfam = .x$family,
@@ -764,6 +775,11 @@ model_info.stanmvreg <- function(x, ...) {
       ...
     )
   })
+  if (is.null(response)) {
+    out
+  } else {
+    out[[response]]
+  }
 }
 
 

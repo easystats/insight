@@ -527,7 +527,7 @@ get_df.mediate <- function(x, ...) {
     if (is.null(r)) {
       n <- n_parameters(x)
       extra <- 0
-      mi <- model_info(x, verbose = FALSE)
+      mi <- model_info(x, response = 1, verbose = FALSE)
 
       if (mi$is_linear || mi$is_negbin) {
         extra <- extra + 1

@@ -50,13 +50,7 @@
   ############################################################################
 
   # Get info
-  info <- model_info(x, verbose = FALSE)
-
-  # just keep information of one model, if multivate. the "is_linear" is just
-  # to check that we indeed have multiple info-lists
-  if (is_multivariate(x) && is.null(info$is_linear)) {
-    info <- info[[1]]
-  }
+  info <- model_info(x, response = 1, verbose = FALSE)
 
   # Data
   if (!is.null(dots$newdata) && is.null(data)) data <- dots$newdata

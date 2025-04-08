@@ -679,8 +679,14 @@ get_datagrid.default <- function(x,
   # check some exceptions here: logistic regression models with factor response
   # usually require the response to be included in the model, else `get_modelmatrix()`
   # fails, which is required to compute SE/CI for `get_predicted()`
-  minfo <- model_info(x)
-  if (minfo$is_binomial && minfo$is_logit && is.factor(data[[response]]) && !include_response && verbose) {
+  minfo <- model_info(x, response = 1)
+
+  # check which response variables are possibly a factor. for multivariate
+  # models, "response" might be a vector, so we iterate with vapply() here
+  factor_response <- vapply(response, function(i) is.factor(data[[i]]), logical(1))
+
+  # any factor response for binomial?
+  if (minfo$is_binomial && minfo$is_logit && any(factor_response) && !include_response && verbose) {
     format_warning(
       "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions." # nolint
     )
