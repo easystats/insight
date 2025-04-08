@@ -83,11 +83,6 @@ get_predicted.stanreg <- function(x,
   # Note that for mv models, x$family returns a list of families
   if (inherits(model_family, "brmsfamily") && model_family$family == "wiener") {
     fun_args$negative_rt <- TRUE
-    if (my_args$predict %in% c("expectation", "response") && verbose) {
-      insight::format_warning(
-        "Using `predict = \"expectation\"` will return the value of the main model parameter. If you want predicted reaction times and responses, use `predict = \"prediction\"`."
-      )
-    }
   }
 
   # Get draws
