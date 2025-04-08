@@ -3,11 +3,14 @@
 \name{model_info}
 \alias{model_info}
 \alias{model_info.default}
+\alias{model_info.brmsfit}
 \title{Access information from model objects}
 \usage{
 model_info(x, ...)
 
 \method{model_info}{default}(x, verbose = TRUE, ...)
+
+\method{model_info}{brmsfit}(x, response = NULL, ...)
 }
 \arguments{
 \item{x}{A fitted model.}
@@ -15,6 +18,11 @@ model_info(x, ...)
 \item{...}{Currently not used.}
 
 \item{verbose}{Toggle off warnings.}
+
+\item{response}{If \code{x} is multivariate reponse model, \code{model_info()} returns
+a list of information for each response variable Set \code{response} to the number
+of a specific response variable, or provide the name of the response variable
+in \code{response} to return the list for only one response.}
 }
 \value{
 A list with information about the model, like family, link-function

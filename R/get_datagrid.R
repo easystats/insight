@@ -679,13 +679,7 @@ get_datagrid.default <- function(x,
   # check some exceptions here: logistic regression models with factor response
   # usually require the response to be included in the model, else `get_modelmatrix()`
   # fails, which is required to compute SE/CI for `get_predicted()`
-  minfo <- model_info(x)
-
-  # handle multivariate - for simplicity, we just extract the information from
-  # the first model
-  if (is_multivariate(x) && is.null(minfo$is_linear)) {
-    minfo <- minfo[[1]]
-  }
+  minfo <- model_info(x, response = 1)
 
   # check which response variables are possibly a factor. for multivariate
   # models, "response" might be a vector, so we iterate with vapply() here
