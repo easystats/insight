@@ -672,3 +672,17 @@ withr::with_environment(
     expect_identical(out$Sepal.Width, c(4, 9, 16, 25))
   })
 )
+
+
+test_that("get_datagrid - multivariate", {
+  skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("brms")
+
+  m <- insight::download_model("brms_mv_1")
+  skip_if(is.null(m))
+  out <- get_datagrid(m, "wt=3:5")
+  expect_identical(dim(out), c(3L, 2L))
+})
