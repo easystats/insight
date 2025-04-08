@@ -41,7 +41,7 @@
   and works like regular R syntax, e.g. `by = "mpg = 20:50"`.
 
 * `get_predicted()` for models of class `brmsfit` now supports Wiener models
-  or similar so called "decision models", that simultanously model, e.g.,
+  or similar so called "decision models", that simultaneously model, e.g.,
   reaction times and choices.
 
 * Token-option `"quartiles2"` was removed and option `"quartiles"` now produces
