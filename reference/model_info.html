@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.25</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.26</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -126,12 +126,14 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <li><p><code>is_zero_inflated</code>: model has zero-inflation component</p></li>
 <li><p><code>is_hurdle</code>: model has zero-inflation component and is a hurdle-model (truncated family distribution)</p></li>
 <li><p><code>is_dispersion</code>: model has dispersion component (not only dispersion <em>parameter</em>)</p></li>
+<li><p><code>is_wiener</code>: model is a <em>brms</em> model with Wiener process</p></li>
 <li><p><code>is_mixed</code>: model is a mixed effects model (with random effects)</p></li>
 <li><p><code>is_multivariate</code>: model is a multivariate response model (currently only works for <em>brmsfit</em> and <em>vglm/vgam</em> objects)</p></li>
 <li><p><code>is_trial</code>: model response contains additional information about the trials</p></li>
 <li><p><code>is_bayesian</code>: model is a Bayesian model</p></li>
 <li><p><code>is_gam</code>: model is a generalized additive model</p></li>
 <li><p><code>is_anova</code>: model is an Anova object</p></li>
+<li><p><code>is_meta</code>: model is a meta-analysis object</p></li>
 <li><p><code>is_ttest</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test()</a></code></p></li>
 <li><p><code>is_correlation</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test()</a></code></p></li>
 <li><p><code>is_ranktest</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test()</a></code>
@@ -143,6 +145,8 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <li><p><code>is_proptest</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">prop.test()</a></code></p></li>
 <li><p><code>is_binomtest</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">binom.test()</a></code></p></li>
 <li><p><code>is_chi2test</code>: model is an an object of class <code>htest</code>, returned by <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code></p></li>
+<li><p><code>is_ftest</code>: model is an an object of class <code>htest</code>, and test-statistic
+is an F-statistic.</p></li>
 <li><p><code>is_xtab</code>: model is an an object of class <code>htest</code> or <code>BFBayesFactor</code>, and
 test-statistic stems from a contingency table (i.e. <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code> or
 <code><a href="https://rdrr.io/pkg/BayesFactor/man/contingencyTableBF.html" class="external-link">BayesFactor::contingencyTableBF()</a></code>).</p></li>
@@ -296,6 +300,9 @@ exceptions (like some <code>htest</code> objects), can also be the name of the t
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_meta</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_wiener</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $link_function</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "logit"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -442,6 +449,9 @@ exceptions (like some <code>htest</code> objects), can also be the name of the t
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_meta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_wiener</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $link_function</span>
