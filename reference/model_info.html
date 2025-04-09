@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.26</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.27</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,6 +127,7 @@ is returned, where all values starting with <code>is_</code> are logicals.</p><u
 <li><p><code>is_hurdle</code>: model has zero-inflation component and is a hurdle-model (truncated family distribution)</p></li>
 <li><p><code>is_dispersion</code>: model has dispersion component (not only dispersion <em>parameter</em>)</p></li>
 <li><p><code>is_wiener</code>: model is a <em>brms</em> model with Wiener process</p></li>
+<li><p><code>is_lnr</code>: model is a <em>brms</em> model with Lognormal Race distribution</p></li>
 <li><p><code>is_mixed</code>: model is a mixed effects model (with random effects)</p></li>
 <li><p><code>is_multivariate</code>: model is a multivariate response model (currently only works for <em>brmsfit</em> and <em>vglm/vgam</em> objects)</p></li>
 <li><p><code>is_trial</code>: model response contains additional information about the trials</p></li>
@@ -303,6 +304,9 @@ exceptions (like some <code>htest</code> objects), can also be the name of the t
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_wiener</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_lnr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $link_function</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "logit"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -452,6 +456,9 @@ exceptions (like some <code>htest</code> objects), can also be the name of the t
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_wiener</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_lnr</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $link_function</span>
