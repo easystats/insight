@@ -7,7 +7,7 @@
 is_converged(x, tolerance = 0.001, ...)
 }
 \arguments{
-\item{x}{A \code{merMod} or \code{glmmTMB}-object.}
+\item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm} or \verb{_glm}.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
 accepted. The smaller \code{tolerance} is, the stricter the test will be.}

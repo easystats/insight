@@ -4,7 +4,7 @@
 #' @description `is_converged()` provides an alternative convergence
 #'   test for `merMod`-objects.
 #'
-#' @param x A `merMod` or `glmmTMB`-object.
+#' @param x A model object from class `merMod`, `glmmTMB`, `glm` or `_glm`.
 #' @param tolerance Indicates up to which value the convergence result is
 #'   accepted. The smaller `tolerance` is, the stricter the test will be.
 #' @param ... Currently not used.
