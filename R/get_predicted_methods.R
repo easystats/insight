@@ -45,7 +45,7 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
     out <- as.data.frame.data.frame(x)
     if ("ci_data" %in% names(attributes(x))) {
       # we have "Component" instead of "Response" for Wiener models
-      if ("Response" %in% colnames(x)) {
+      if ("Response" %in% colnames(out)) {
         by_columns <- c("Row", "Response")
       } else {
         by_columns <- c("Row", "Component")
