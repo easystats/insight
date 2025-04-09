@@ -94,7 +94,7 @@ is_converged.merMod <- function(x, tolerance = 0.001, ...) {
 
 
 #' @export
-is_converged.glmmTMB <- function (x, tolerance = 0.001, ...) {
+is_converged.glmmTMB <- function(x, tolerance = 0.001, ...) {
   # https://github.com/glmmTMB/glmmTMB/issues/275
   # https://stackoverflow.com/q/79110546/2094622
   isTRUE(all.equal(x$fit$convergence, 0, tolerance = tolerance)) && isTRUE(x$sdr$pdHess)
@@ -102,7 +102,7 @@ is_converged.glmmTMB <- function (x, tolerance = 0.001, ...) {
 
 
 #' @export
-is_converged.glm <- function (x, tolerance = 0.001, ...) {
+is_converged.glm <- function(x, tolerance = 0.001, ...) {
   if (!is.null(x$converged)) {
     isTRUE(x$converged)
   } else if (!is.null(x$fit$converged)) {
@@ -114,6 +114,6 @@ is_converged.glm <- function (x, tolerance = 0.001, ...) {
 
 
 #' @export
-is_converged._glm <- function (x, tolerance = 0.001, ...) {
+is_converged._glm <- function(x, tolerance = 0.001, ...) {
   isTRUE(x$fit$converged)
 }
