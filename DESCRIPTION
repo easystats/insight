@@ -63,7 +63,7 @@ Authors@R:
              role = "ctb",
              email = "areinhar@stat.cmu.edu",
              comment = c(ORCID = "0000-0002-6658-514X")))
-Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
+Maintainer: Daniel Lüdecke <officialeasystats@gmail.com>
 Description: A tool to provide an easy, intuitive and consistent
     access to information contained in various R models, like model
     formulas, model terms, information about random effects, data that was
