@@ -858,12 +858,18 @@ get_predicted.phylolm <- function(x,
         predictions <- cbind(predictions, my_args$data[focal_predictors])
       }
     }
+    # we have "Component" instead of "Response" for Wiener models
+    if ("Component" %in% colnames(predictions)) {
+      time_var <- "Component"
+    } else {
+      time_var <- "Response"
+    }
     predictions <- stats::reshape(predictions,
       direction = "long",
       varying = vary,
       times = vary,
       v.names = "Predicted",
-      timevar = "Response",
+      timevar = time_var,
       idvar = "Row"
     )
     row.names(predictions) <- NULL
@@ -922,6 +928,7 @@ get_predicted.phylolm <- function(x,
                                                  iter,
                                                  centrality_function = base::mean,
                                                  datagrid = NULL,
+                                                 is_wiener = FALSE,
                                                  ...) {
   # outcome: ordinal/multinomial/multivariate produce a 3D array of predictions,
   # which we stack in "long" format
@@ -933,10 +940,17 @@ get_predicted.phylolm <- function(x,
       # rows repeated for each response level
       Row = rep(seq_len(ncol(iter)), times = dim(iter)[3]),
       # response levels repeated for each row
-      Response = rep(dimnames(iter)[[3]], each = dim(iter)[2]),
+      .Response_dummy = rep(dimnames(iter)[[3]], each = dim(iter)[2]),
       Predicted = apply(iter_stacked, 1, centrality_function),
       stringsAsFactors = FALSE
     )
+    # make sure we have the correct name for the "Response column"
+    if (is_wiener) {
+      new_name <- "Component"
+    } else {
+      new_name <- "Response"
+    }
+    names(predictions)[names(predictions) == ".Response_dummy"] <- new_name
     # for ordinal etc. outcomes, we need to include the data from the grid, too
     if (!is.null(datagrid)) {
       # due to reshaping predictions into long format, we to repeat the
