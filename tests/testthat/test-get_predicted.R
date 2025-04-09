@@ -727,6 +727,7 @@ test_that("get_predicted works with brms-Wiener", {
   skip_if_not_installed("httr2")
 
   m <- download_model("m_ddm_1")
+  skip_if(is.null(m))
   d <- get_data(m)[1:5, ]
   out <- get_predicted(m, data = d, predict = "prediction", ci = 0.95, iterations = 3)
   expect_identical(dim(as.data.frame(out)), c(10L, 11L))
