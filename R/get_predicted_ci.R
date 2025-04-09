@@ -119,11 +119,14 @@ get_predicted_ci.default <- function(x,
     se <- .get_predicted_se_from_iter(iter = iter, dispersion_method)
     out <- .get_predicted_ci_from_iter(iter = iter, ci = ci, ci_method = ci_method)
     out <- cbind(se, out)
-    # outcome is multinomial/ordinal/cumulative
-    if (inherits(predictions, "data.frame") &&
-      "Response" %in% colnames(predictions) &&
-      "Row" %in% colnames(predictions)) {
-      out <- cbind(predictions[, c("Row", "Response")], out)
+    # outcome is multinomial/ordinal/cumulative, Component for Wiener models
+    if (inherits(predictions, "data.frame") && any(c("Component", "Response") %in% colnames(predictions)) && "Row" %in% colnames(predictions)) { # nolint
+      if ("Response" %in% colnames(predictions)) {
+        by_columns <- c("Row", "Response")
+      } else {
+        by_columns <- c("Row", "Component")
+      }
+      out <- cbind(predictions[, by_columns], out)
     }
     return(out)
   }
