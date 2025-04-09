@@ -173,7 +173,7 @@ test_that("model_info-stanreg-glm", {
       is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
       is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
       is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
-      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
+      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE, is_wiener = FALSE,
       link_function = "logit", family = "binomial", n_obs = 56L,
       n_grouplevels = c(herd = 15L)
     ),
@@ -196,7 +196,7 @@ test_that("model_info-stanreg-glm", {
       is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
       is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
       is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
-      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
+      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE, is_wiener = FALSE,
       link_function = "identity", family = "gaussian", n_obs = 150L,
       n_grouplevels = NULL
     ),
@@ -219,7 +219,7 @@ test_that("model_info-stanreg-glm", {
       is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
       is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
       is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
-      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
+      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE, is_wiener = FALSE,
       link_function = "logit", family = "binomial", n_obs = 32L,
       n_grouplevels = NULL
     ),
