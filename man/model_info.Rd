@@ -61,12 +61,14 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{is_zero_inflated}: model has zero-inflation component
 \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 \item \code{is_dispersion}: model has dispersion component (not only dispersion \emph{parameter})
+\item \code{is_wiener}: model is a \emph{brms} model with Wiener process
 \item \code{is_mixed}: model is a mixed effects model (with random effects)
 \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} and \emph{vglm/vgam} objects)
 \item \code{is_trial}: model response contains additional information about the trials
 \item \code{is_bayesian}: model is a Bayesian model
 \item \code{is_gam}: model is a generalized additive model
 \item \code{is_anova}: model is an Anova object
+\item \code{is_meta}: model is a meta-analysis object
 \item \code{is_ttest}: model is an an object of class \code{htest}, returned by \code{t.test()}
 \item \code{is_correlation}: model is an an object of class \code{htest}, returned by \code{cor.test()}
 \item \code{is_ranktest}: model is an an object of class \code{htest}, returned by \code{cor.test()}
@@ -78,6 +80,8 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{is_proptest}: model is an an object of class \code{htest}, returned by \code{prop.test()}
 \item \code{is_binomtest}: model is an an object of class \code{htest}, returned by \code{binom.test()}
 \item \code{is_chi2test}: model is an an object of class \code{htest}, returned by \code{chisq.test()}
+\item \code{is_ftest}: model is an an object of class \code{htest}, and test-statistic
+is an F-statistic.
 \item \code{is_xtab}: model is an an object of class \code{htest} or \code{BFBayesFactor}, and
 test-statistic stems from a contingency table (i.e. \code{chisq.test()} or
 \code{BayesFactor::contingencyTableBF()}).

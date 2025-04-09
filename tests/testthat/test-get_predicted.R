@@ -717,3 +717,33 @@ test_that("zero-inflation stuff works", {
   expect_equal(p2, p4, tolerance = 1e-1, ignore_attr = TRUE)
   expect_equal(p3, p4, tolerance = 1e-1, ignore_attr = TRUE)
 })
+
+
+test_that("get_predicted works with brms-Wiener", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("RWiener")
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+
+  m <- download_model("m_ddm_1")
+  skip_if(is.null(m))
+  d <- get_data(m)[1:5, ]
+  out <- get_predicted(m, data = d, predict = "prediction", ci = 0.95, iterations = 3)
+  expect_identical(dim(as.data.frame(out)), c(10L, 11L))
+  expect_named(
+    as.data.frame(out),
+    c(
+      "Row", "Component", "rt", "response", "Predicted", "SE", "CI_low",
+      "CI_high", "iter_1", "iter_2", "iter_3"
+    )
+  )
+  expect_identical(
+    as.data.frame(out)$Component,
+    c(
+      "rt", "rt", "rt", "rt", "rt", "response", "response", "response",
+      "response", "response"
+    )
+  )
+  expect_true(model_info(m)$is_wiener)
+})

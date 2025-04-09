@@ -38,13 +38,19 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
   # a regular data.frame (e.g., from PCA/FA)
   if (inherits(x, "data.frame") &&
     !"iterations" %in% names(attributes(x)) &&
-    !"Response" %in% colnames(x)) {
+    !any(c("Response", "Component") %in% colnames(x))) {
     return(as.data.frame.data.frame(x))
-  } else if (inherits(x, "data.frame") && "Response" %in% colnames(x)) {
+  } else if (inherits(x, "data.frame") && any(c("Response", "Component") %in% colnames(x))) {
     # grouped response level (e.g., polr or multinom)
     out <- as.data.frame.data.frame(x)
     if ("ci_data" %in% names(attributes(x))) {
-      out <- merge(out, attributes(x)$ci_data, by = c("Row", "Response"), sort = FALSE)
+      # we have "Component" instead of "Response" for Wiener models
+      if ("Response" %in% colnames(out)) {
+        by_columns <- c("Row", "Response")
+      } else {
+        by_columns <- c("Row", "Component")
+      }
+      out <- merge(out, attributes(x)$ci_data, by = by_columns, sort = FALSE)
     }
   } else {
     # Then it must be predictions from a regression model

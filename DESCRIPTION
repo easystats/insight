@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.1.0.25
+Version: 1.1.0.26
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -63,7 +63,7 @@ Authors@R:
              role = "ctb",
              email = "areinhar@stat.cmu.edu",
              comment = c(ORCID = "0000-0002-6658-514X")))
-Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
+Maintainer: Daniel Lüdecke <officialeasystats@gmail.com>
 Description: A tool to provide an easy, intuitive and consistent
     access to information contained in various R models, like model
     formulas, model terms, information about random effects, data that was
@@ -192,6 +192,7 @@ Suggests:
     rstanarm (>= 2.21.1),
     rstantools (>= 2.1.0),
     rstudioapi,
+    RWiener,
     sandwich,
     serp,
     speedglm,

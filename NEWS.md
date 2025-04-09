@@ -40,6 +40,10 @@
 * Creating a range of values in a `get_datagrid()` using `by` was now simplified
   and works like regular R syntax, e.g. `by = "mpg = 20:50"`.
 
+* `get_predicted()` for models of class `brmsfit` now supports Wiener models
+  or similar so called "decision models", that simultaneously model, e.g.,
+  reaction times and (discrete) choices.
+
 * Token-option `"quartiles2"` was removed and option `"quartiles"` now produces
   the three quartile values (lower hinge, median, upper hinge). The former
   option of `"quartiles"` that included minimum and maximum was identical to the
