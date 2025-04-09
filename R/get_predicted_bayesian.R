@@ -80,6 +80,7 @@ get_predicted.stanreg <- function(x,
   model_family <- get_family(x)
   # exceptions
   is_wiener <- inherits(model_family, "brmsfamily") && model_family$family == "wiener"
+  is_lnr <- model_family$family == "custom" && model_family$name == "lnr"
 
   # Special case for rwiener (get choice 1 as negative values)
   # Note that for mv models, x$family returns a list of families
@@ -107,7 +108,7 @@ get_predicted.stanreg <- function(x,
         dim = c(dim(draws), 2),
         dimnames = list(NULL, NULL, c("rt", "response"))
       )
-    } else if (model_family$family == "custom" && model_family$name == "lnr") {
+    } else if (is_lnr) {
       # LogNormal Race models (cogmod package) return RT and Choice as odd and even columns
       response <- as.matrix(draws[, seq(2, ncol(draws), 2)])
       draws <- as.matrix(draws[, seq(1, ncol(draws), 2)])
@@ -125,6 +126,7 @@ get_predicted.stanreg <- function(x,
     iter = draws,
     datagrid = my_args$data,
     is_wiener = is_wiener,
+    is_lnr = is_lnr,
     ...
   )
 
