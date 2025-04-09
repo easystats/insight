@@ -42,7 +42,7 @@
 
 * `get_predicted()` for models of class `brmsfit` now supports Wiener models
   or similar so called "decision models", that simultaneously model, e.g.,
-  reaction times and choices.
+  reaction times and (discrete) choices.
 
 * Token-option `"quartiles2"` was removed and option `"quartiles"` now produces
   the three quartile values (lower hinge, median, upper hinge). The former

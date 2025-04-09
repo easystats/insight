@@ -744,4 +744,5 @@ test_that("get_predicted works with brms-Wiener", {
       "response", "response"
     )
   )
+  expect_true(model_info(m)$is_wiener)
 })

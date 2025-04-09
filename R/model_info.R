@@ -43,12 +43,14 @@
 #' * `is_zero_inflated`: model has zero-inflation component
 #' * `is_hurdle`: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 #' * `is_dispersion`: model has dispersion component (not only dispersion _parameter_)
+#' * `is_wiener`: model is a *brms* model with Wiener process
 #' * `is_mixed`: model is a mixed effects model (with random effects)
 #' * `is_multivariate`: model is a multivariate response model (currently only works for _brmsfit_ and _vglm/vgam_ objects)
 #' * `is_trial`: model response contains additional information about the trials
 #' * `is_bayesian`: model is a Bayesian model
 #' * `is_gam`: model is a generalized additive model
 #' * `is_anova`: model is an Anova object
+#' * `is_meta`: model is a meta-analysis object
 #' * `is_ttest`: model is an an object of class `htest`, returned by `t.test()`
 #' * `is_correlation`: model is an an object of class `htest`, returned by `cor.test()`
 #' * `is_ranktest`: model is an an object of class `htest`, returned by `cor.test()`
@@ -60,6 +62,8 @@
 #' * `is_proptest`: model is an an object of class `htest`, returned by `prop.test()`
 #' * `is_binomtest`: model is an an object of class `htest`, returned by `binom.test()`
 #' * `is_chi2test`: model is an an object of class `htest`, returned by `chisq.test()`
+#' * `is_ftest`: model is an an object of class `htest`, and test-statistic
+#'   is an F-statistic.
 #' * `is_xtab`: model is an an object of class `htest` or `BFBayesFactor`, and
 #'   test-statistic stems from a contingency table (i.e. `chisq.test()` or
 #'   `BayesFactor::contingencyTableBF()`).

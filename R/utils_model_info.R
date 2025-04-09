@@ -418,6 +418,7 @@
     is_binomtest = is_binomtest,
     is_ftest = is_ftest,
     is_meta = is_meta,
+    is_wiener = inherits(x, "brmsfit") && fitfam == "wiener",
     link_function = link.fun,
     family = fitfam,
     n_obs = n_obs(x),
