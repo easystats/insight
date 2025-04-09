@@ -420,7 +420,7 @@
     is_ftest = is_ftest,
     is_meta = is_meta,
     is_wiener = inherits(x, "brmsfit") && fitfam == "wiener",
-    is_lnr = inherits(x, "brmsfit") && fitfam == "custom" && identical(brms_custom_name, "lnr"),
+    is_rtchoice = inherits(x, "brmsfit") && fitfam == "custom" && identical(brms_custom_name, "lnr"),
     link_function = link.fun,
     family = fitfam,
     n_obs = n_obs(x),

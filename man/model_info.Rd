@@ -61,8 +61,11 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{is_zero_inflated}: model has zero-inflation component
 \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 \item \code{is_dispersion}: model has dispersion component (not only dispersion \emph{parameter})
-\item \code{is_wiener}: model is a \emph{brms} model with Wiener process
-\item \code{is_lnr}: model is a \emph{brms} model with Lognormal Race distribution
+\item \code{is_wiener}: model is a \emph{brms} decision-making (sequential sampling) model
+with Wiener process (also called drift diffusion model)
+\item \code{is_rtchoice}: model is a \emph{brms} decision-making (sequential sampling) model,
+which models outcomes that consists of two components (reaction times and
+choice).
 \item \code{is_mixed}: model is a mixed effects model (with random effects)
 \item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} and \emph{vglm/vgam} objects)
 \item \code{is_trial}: model response contains additional information about the trials
