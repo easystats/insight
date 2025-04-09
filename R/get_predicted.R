@@ -929,6 +929,7 @@ get_predicted.phylolm <- function(x,
                                                  centrality_function = base::mean,
                                                  datagrid = NULL,
                                                  is_wiener = FALSE,
+                                                 is_lnr = FALSE,
                                                  ...) {
   # outcome: ordinal/multinomial/multivariate produce a 3D array of predictions,
   # which we stack in "long" format
@@ -945,7 +946,7 @@ get_predicted.phylolm <- function(x,
       stringsAsFactors = FALSE
     )
     # make sure we have the correct name for the "Response column"
-    if (is_wiener) {
+    if (is_wiener || is_lnr) {
       new_name <- "Component"
     } else {
       new_name <- "Response"

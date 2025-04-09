@@ -44,6 +44,7 @@
 #' * `is_hurdle`: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 #' * `is_dispersion`: model has dispersion component (not only dispersion _parameter_)
 #' * `is_wiener`: model is a *brms* model with Wiener process
+#' * `is_lnr`: model is a *brms* model with Lognormal Race distribution
 #' * `is_mixed`: model is a mixed effects model (with random effects)
 #' * `is_multivariate`: model is a multivariate response model (currently only works for _brmsfit_ and _vglm/vgam_ objects)
 #' * `is_trial`: model response contains additional information about the trials
@@ -741,6 +742,7 @@ model_info.brmsfit <- function(x, response = NULL, ...) {
         multi.var = TRUE,
         link.fun = .x$link,
         dispersion = is_dispersion,
+        brms_custom_name = faminfo$name,
         ...
       )
     })
@@ -759,6 +761,7 @@ model_info.brmsfit <- function(x, response = NULL, ...) {
       multi.var = FALSE,
       link.fun = faminfo$link,
       dispersion = is_dispersion,
+      brms_custom_name = faminfo$name,
       ...
     )
   }

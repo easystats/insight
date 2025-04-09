@@ -499,8 +499,11 @@ clean_parameters.mlm <- function(x, ...) {
     }
   }
 
+  # retrieve auxiliary components
+  dpars <- find_auxiliary(x)
+
   # handle auxiliary components
-  for (i in find_auxiliary(x)) {
+  for (i in dpars) {
     aux_params <- startsWith(out$Cleaned_Parameter, paste0("b_", i, "_"))
     out$Component[aux_params & out$Component == "conditional"] <- i
   }
@@ -512,7 +515,7 @@ clean_parameters.mlm <- function(x, ...) {
 
 
   # clean auxiliary
-  out$Cleaned_Parameter <- gsub(pattern = paste0("^(", paste0("b_", .brms_aux_elements(), "_", collapse = "|"), ")"), "", out$Cleaned_Parameter)
+  out$Cleaned_Parameter <- gsub(pattern = paste0("^(", paste0("b_", dpars, "_", collapse = "|"), ")"), "", out$Cleaned_Parameter)
   # clean fixed effects, conditional and zero-inflated
   out$Cleaned_Parameter <- gsub(pattern = "^b_(?!zi_)(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter, perl = TRUE)
   out$Cleaned_Parameter <- gsub(pattern = "^b_zi_(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter)
@@ -548,7 +551,7 @@ clean_parameters.mlm <- function(x, ...) {
       # we want to have same behaviour as for frequentist models,
       # including levels of grouop factors
       r_levels <- gsub("__zi", "", r_levels, fixed = TRUE)
-      for (i in .brms_aux_elements()) {
+      for (i in dpars) {
         r_levels <- gsub(paste0("__", i), "", r_levels, fixed = TRUE)
       }
       out$Level[rand_eff] <- r_levels
@@ -564,7 +567,7 @@ clean_parameters.mlm <- function(x, ...) {
     r_pars <- gsub("__zi", "", r_pars, fixed = TRUE)
     r_grps <- gsub("__zi", "", r_grps, fixed = TRUE)
 
-    for (i in .brms_aux_elements()) {
+    for (i in dpars) {
       r_pars <- gsub(paste0("__", i), "", r_pars, fixed = TRUE)
       r_grps <- gsub(paste0("__", i), "", r_grps, fixed = TRUE)
     }
