@@ -6,9 +6,11 @@
 #' @name find_auxiliary
 #'
 #' @param x A model of class `brmsfit`.
+#' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
-#' @return The names of all available auxiliary parameters used in the model.
+#' @return The names of all available auxiliary parameters used in the model, or
+#' `NULL` if no auxiliary parameters were found.
 #'
 #' @export
 find_auxiliary <- function(x, ...) {
@@ -16,9 +18,13 @@ find_auxiliary <- function(x, ...) {
 }
 
 
+#' @rdname find_auxiliary
 #' @export
-find_auxiliary.default <- function(x, ...) {
-  format_error("`find_auxiliary()` currently only works for models from package brms.")
+find_auxiliary.default <- function(x, verbose = TRUE, ...) {
+  if (verbose) {
+    format_warning("`find_auxiliary()` currently only works for models from package brms.")
+  }
+  NULL
 }
 
 

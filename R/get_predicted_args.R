@@ -95,7 +95,7 @@
   # retrieve model object's predict-method prediction-types (if any)
   type_methods <- suppressWarnings(eval(formals(predict_method)$type))
   # and together, these prediction-types are supported...
-  supported <- c(easystats_methods, type_methods, .brms_aux_elements())
+  supported <- c(easystats_methods, type_methods, find_auxiliary(x, verbose = FALSE))
 
   # check aliases - ignore "expected" when this is a valid type-argument (e.g. coxph)
   if (predict %in% c("expected", "response") && !"expected" %in% supported) {
