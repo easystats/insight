@@ -924,8 +924,10 @@ test_that("brms dpars find_auxiliary", {
   out <- get_auxiliary(model, type = "all")
   expect_identical(out$Parameter, c("b_delta_Intercept", "b_phi_Intercept", "b_k_Intercept"))
 
-  expect_error(
+  expect_warning(
     find_auxiliary(lm(mpg ~ hp, data = mtcars)),
     regex = "only works for"
   )
+  expect_silent(find_auxiliary(lm(mpg ~ hp, data = mtcars), verbose = FALSE))
+  expect_null(find_auxiliary(lm(mpg ~ hp, data = mtcars), verbose = FALSE))
 })
