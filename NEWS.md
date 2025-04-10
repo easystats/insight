@@ -44,6 +44,9 @@
   or similar so called "decision models", that simultaneously model, e.g.,
   reaction times and (discrete) choices.
 
+* `get_predicted()` no longer throws warnings for models of class `brmsfit`
+  when distributional are predicted.
+
 * Token-option `"quartiles2"` was removed and option `"quartiles"` now produces
   the three quartile values (lower hinge, median, upper hinge). The former
   option of `"quartiles"` that included minimum and maximum was identical to the

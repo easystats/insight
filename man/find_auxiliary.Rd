@@ -2,17 +2,23 @@
 % Please edit documentation in R/find_auxiliary.R
 \name{find_auxiliary}
 \alias{find_auxiliary}
+\alias{find_auxiliary.default}
 \title{Find auxiliary (distributional) parameters from models}
 \usage{
 find_auxiliary(x, ...)
+
+\method{find_auxiliary}{default}(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model of class \code{brmsfit}.}
 
 \item{...}{Currently not used.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
-The names of all available auxiliary parameters used in the model.
+The names of all available auxiliary parameters used in the model, or
+\code{NULL} if no auxiliary parameters were found.
 }
 \description{
 Returns the names of all auxiliary / distributional parameters
