@@ -55,6 +55,9 @@
 * New function `find_auxiliary()`, which is a small helper to extract all
   distributional parameters that were used in models from package *brms*.
 
+* `display()`, `print_md()` and `print_html()` get methods for matrix- and
+  array objects.
+
 * Cleaning / revising package documentation.
 
 ## Bug fixes
