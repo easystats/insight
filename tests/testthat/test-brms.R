@@ -151,12 +151,12 @@ test_that("find_predictors", {
     find_predictors(m4),
     list(
       conditional = c("child", "camper"),
-      zero_inflated = c("child", "camper")
+      zi = c("child", "camper")
     )
   )
   expect_identical(
     find_predictors(m4, effects = "random"),
-    list(random = "persons", zero_inflated_random = "persons")
+    list(random = "persons", zi_random = "persons")
   )
   expect_identical(find_predictors(m4, flatten = TRUE), c("child", "camper"))
 
@@ -165,11 +165,11 @@ test_that("find_predictors", {
     list(
       count = list(
         conditional = c("child", "camper"),
-        zero_inflated = "camper"
+        zi = "camper"
       ),
       count2 = list(
         conditional = c("child", "livebait"),
-        zero_inflated = "child"
+        zi = "child"
       )
     )
   )
@@ -267,8 +267,8 @@ test_that("find_variables", {
       response = "count",
       conditional = c("child", "camper"),
       random = "persons",
-      zero_inflated = c("child", "camper"),
-      zero_inflated_random = "persons"
+      zi = c("child", "camper"),
+      zi_random = "persons"
     )
   )
 
@@ -291,11 +291,11 @@ test_that("find_random", {
   expect_identical(find_random(m5), list(
     count = list(
       random = "persons",
-      zero_inflated_random = "persons"
+      zi_random = "persons"
     ),
     count2 = list(
       random = "persons",
-      zero_inflated_random = "persons"
+      zi_random = "persons"
     )
   ))
   expect_identical(find_random(m5, flatten = TRUE), "persons")
@@ -363,8 +363,8 @@ test_that("find_paramaters", {
     list(
       conditional = c("b_Intercept", "b_child", "b_camper"),
       random = c(sprintf("r_persons[%i,Intercept]", 1:4), "sd_persons__Intercept"),
-      zero_inflated = c("b_zi_Intercept", "b_zi_child", "b_zi_camper"),
-      zero_inflated_random = c(sprintf("r_persons__zi[%i,Intercept]", 1:4), "sd_persons__zi_Intercept")
+      zi = c("b_zi_Intercept", "b_zi_child", "b_zi_camper"),
+      zi_random = c(sprintf("r_persons__zi[%i,Intercept]", 1:4), "sd_persons__zi_Intercept")
     )
   )
 
@@ -375,8 +375,8 @@ test_that("find_paramaters", {
         count = list(
           conditional = c("b_count_Intercept", "b_count_child", "b_count_camper"),
           random = c(sprintf("r_persons__count[%i,Intercept]", 1:4), "sd_persons__count_Intercept"),
-          zero_inflated = c("b_zi_count_Intercept", "b_zi_count_camper"),
-          zero_inflated_random = c(sprintf("r_persons__zi_count[%i,Intercept]", 1:4), "sd_persons__zi_count_Intercept")
+          zi = c("b_zi_count_Intercept", "b_zi_count_camper"),
+          zi_random = c(sprintf("r_persons__zi_count[%i,Intercept]", 1:4), "sd_persons__zi_count_Intercept")
         ),
         count2 = list(
           conditional = c(
@@ -385,8 +385,8 @@ test_that("find_paramaters", {
             "b_count2_livebait"
           ),
           random = c(sprintf("r_persons__count2[%i,Intercept]", 1:4), "sd_persons__count2_Intercept"),
-          zero_inflated = c("b_zi_count2_Intercept", "b_zi_count2_child"),
-          zero_inflated_random = c(
+          zi = c("b_zi_count2_Intercept", "b_zi_count2_child"),
+          zi_random = c(
             sprintf("r_persons__zi_count2[%i,Intercept]", 1:4),
             "sd_persons__zi_count2_Intercept"
           )
@@ -591,9 +591,7 @@ test_that("clean_parameters", {
       ), Component = c(
         "conditional",
         "conditional", "conditional", "conditional", "conditional", "conditional",
-        "conditional", "conditional", "zero_inflated", "zero_inflated",
-        "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
-        "zero_inflated", "zero_inflated"
+        "conditional", "conditional", "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi"
       ),
       Group = c(
         "", "", "", "Intercept: persons",
@@ -640,11 +638,8 @@ test_that("clean_parameters", {
         "conditional", "conditional",
         "conditional", "conditional", "conditional", "conditional", "conditional",
         "conditional", "conditional", "conditional", "conditional", "conditional",
-        "conditional", "conditional", "conditional", "conditional", "zero_inflated",
-        "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
-        "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
-        "zero_inflated", "zero_inflated", "zero_inflated", "zero_inflated",
-        "zero_inflated"
+        "conditional", "conditional", "conditional", "conditional", "zi", "zi",
+        "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi"
       ),
       Group = c(
         "", "", "", "", "", "", "Intercept: persons",
