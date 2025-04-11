@@ -7,6 +7,7 @@ skip_if_not_installed("httr2")
 
 test_that("print_parameters brms", {
   m <- download_model("brms_zi_3")
+  skip_if(is.null(m))
   out <- print_parameters(m)
   expect_named(
     out,
