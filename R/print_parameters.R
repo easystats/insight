@@ -153,6 +153,11 @@ print_parameters <- function(x,
   # determine where to split data frames
   by <- by[by %in% colnames(obj)]
 
+  # convert to factor, to preserve correct order
+  obj[by] <- lapply(obj[by], function(i) {
+    factor(i, levels = unique(i))
+  })
+
   # split into groups, remove empty elements
   out <- split(obj, obj[by])
   out <- compact_list(lapply(out, function(i) {

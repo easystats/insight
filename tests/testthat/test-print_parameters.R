@@ -48,8 +48,8 @@ test_that("print_parameters glmmTMB", {
   expect_named(
     out,
     c(
-      "fixed.conditional", "fixed.zero_inflated", "random.zero_inflated.ID",
-      "random.conditional.persons"
+      "fixed.conditional", "fixed.zero_inflated",
+      "random.zero_inflated.ID", "random.conditional.persons"
     )
   )
   att <- lapply(out, function(i) {
@@ -60,8 +60,8 @@ test_that("print_parameters glmmTMB", {
     list(
       fixed.conditional = c("# Fixed effects (conditional)", "blue"),
       fixed.zero_inflated = c("# Fixed effects (zero-inflated)", "blue"),
-      random.zero_inflated.ID = c("# Random effects (zero-inflated)", "blue"),
-      random.conditional.persons = c("# Random effects (conditional)", "blue")
+      random.conditional.persons = c("# Random effects (conditional)", "blue"),
+      random.zero_inflated.ID = c("# Random effects (zero-inflated)", "blue")
     )
   )
 })
