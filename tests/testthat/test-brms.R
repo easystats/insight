@@ -946,17 +946,9 @@ test_that("brms dpars find_auxiliary", {
         "r_participant[S7,Intercept]", "r_participant[S8,Intercept]",
         "r_participant[S9,Intercept]", "sd_participant__Intercept"
       ),
-      zoi = "b_zoi_Intercept",
       coi = "b_coi_Intercept",
       phi = "b_phi_Intercept",
-      zoi_random = c(
-        "r_participant__zoi[S1,Intercept]",
-        "r_participant__zoi[S10,Intercept]", "r_participant__zoi[S2,Intercept]",
-        "r_participant__zoi[S3,Intercept]", "r_participant__zoi[S4,Intercept]",
-        "r_participant__zoi[S5,Intercept]", "r_participant__zoi[S6,Intercept]",
-        "r_participant__zoi[S7,Intercept]", "r_participant__zoi[S8,Intercept]",
-        "r_participant__zoi[S9,Intercept]", "sd_participant__zoi_Intercept"
-      ),
+      zoi = "b_zoi_Intercept",
       coi_random = c(
         "r_participant__coi[S1,Intercept]",
         "r_participant__coi[S10,Intercept]", "r_participant__coi[S2,Intercept]",
@@ -972,10 +964,18 @@ test_that("brms dpars find_auxiliary", {
         "r_participant__phi[S5,Intercept]", "r_participant__phi[S6,Intercept]",
         "r_participant__phi[S7,Intercept]", "r_participant__phi[S8,Intercept]",
         "r_participant__phi[S9,Intercept]", "sd_participant__phi_Intercept"
+      ),
+      zoi_random = c(
+        "r_participant__zoi[S1,Intercept]",
+        "r_participant__zoi[S10,Intercept]", "r_participant__zoi[S2,Intercept]",
+        "r_participant__zoi[S3,Intercept]", "r_participant__zoi[S4,Intercept]",
+        "r_participant__zoi[S5,Intercept]", "r_participant__zoi[S6,Intercept]",
+        "r_participant__zoi[S7,Intercept]", "r_participant__zoi[S8,Intercept]",
+        "r_participant__zoi[S9,Intercept]", "sd_participant__zoi_Intercept"
       )
     )
   )
   out <- clean_parameters(model)
   expect_identical(dim(out), c(48L, 5L))
-  expect_identical(unique(out$Component), c("conditional", "zoi", "coi", "phi"))
+  expect_identical(unique(out$Component), c("conditional", "coi", "phi", "zoi"))
 })
