@@ -6,10 +6,11 @@
 #' @name find_auxiliary
 #'
 #' @param x A model of class `brmsfit`.
-#' @param use_alias Logical, if `TRUE`, some of the element names will be renamed
-#' into more expressive aliases, like they are already returned by some other
-#' functions. E.g., `zoi` will be renamed to `zero_one_inflated` and `coi` will
-#' be renamed to `conditional_one_inflated`. By default, the names are not changed.
+#' @param use_alias Logical, if `TRUE`, some of the element names will be
+#' renamed into more expressive aliases, like they are already returned by some
+#' other functions. E.g., `zi` will be renamed to `zero_inflated`, `zoi` will be
+#' renamed to `zero_one_inflated` and `coi` will be renamed to
+#' `conditional_one_inflated`. By default, the names are not changed.
 #' @param add_alias Logical, if `TRUE`, more expressive aliases for the names of
 #' distributional parameters will be additionally returned, together with the
 #' original names. If `use_alias = TRUE`, this argument will be ignored.
@@ -56,6 +57,13 @@ find_auxiliary.brmsfit <- function(x,
 
   if ((use_alias || add_alias) && !is.null(out) && length(out)) {
     # add aliases (zoi = zero_one_inflated, coi = conditional_one_inflated)
+    if ("zi" %in% out) {
+      if (use_alias) {
+        out[out == "zii"] <- "zero_inflated"
+      } else {
+        out <- c(out, "zero_inflated")
+      }
+    }
     if ("zoi" %in% out) {
       if (use_alias) {
         out[out == "zoi"] <- "zero_one_inflated"

@@ -14,10 +14,11 @@ find_auxiliary(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{use_alias}{Logical, if \code{TRUE}, some of the element names will be renamed
-into more expressive aliases, like they are already returned by some other
-functions. E.g., \code{zoi} will be renamed to \code{zero_one_inflated} and \code{coi} will
-be renamed to \code{conditional_one_inflated}. By default, the names are not changed.}
+\item{use_alias}{Logical, if \code{TRUE}, some of the element names will be
+renamed into more expressive aliases, like they are already returned by some
+other functions. E.g., \code{zi} will be renamed to \code{zero_inflated}, \code{zoi} will be
+renamed to \code{zero_one_inflated} and \code{coi} will be renamed to
+\code{conditional_one_inflated}. By default, the names are not changed.}
 
 \item{add_alias}{Logical, if \code{TRUE}, more expressive aliases for the names of
 distributional parameters will be additionally returned, together with the
