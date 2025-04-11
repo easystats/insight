@@ -17,7 +17,7 @@
 #'
 #' - `random`, the "random effects" terms from the conditional part of model
 #' - `zero_inflated_random`, the "random effects" terms from the zero-inflation
-#'   component of the model
+#'   component of the model. For **brms**, this is named `zi_random`.
 #' - `dispersion_random`, the "random effects" terms from the dispersion
 #'   component of the model
 #'

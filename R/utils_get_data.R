@@ -508,22 +508,30 @@
       all = c(
         sapply(model.terms[-1], function(i) i$conditional),
         sapply(model.terms[-1], function(i) i$zero_inflated),
+        sapply(model.terms[-1], function(i) i$zi),
         sapply(model.terms[-1], function(i) i$dispersion)
       ),
       conditional = sapply(model.terms[-1], function(i) i$conditional),
       zi = ,
-      zero_inflated = sapply(model.terms[-1], function(i) i$zero_inflated),
+      zero_inflated = c(
+        sapply(model.terms[-1], function(i) i$zero_inflated),
+        sapply(model.terms[-1], function(i) i$zi)
+      ),
       dispersion = sapply(model.terms[-1], function(i) i$dispersion)
     )
 
     random.component.data <- switch(component,
       all = c(
         sapply(model.terms[-1], function(i) i$random),
-        sapply(model.terms[-1], function(i) i$zero_inflated_random)
+        sapply(model.terms[-1], function(i) i$zero_inflated_random),
+        sapply(model.terms[-1], function(i) i$zi_random)
       ),
       conditional = sapply(model.terms[-1], function(i) i$random),
       zi = ,
-      zero_inflated = sapply(model.terms[-1], function(i) i$zero_inflated_random)
+      zero_inflated = c(
+        sapply(model.terms[-1], function(i) i$zero_inflated_random),
+        sapply(model.terms[-1], function(i) i$zi_random)
+      )
     )
 
     fixed.component.data <- unlist(fixed.component.data, use.names = FALSE)
@@ -534,15 +542,15 @@
       all = unlist(model.terms[all_elements], use.names = FALSE),
       conditional = model.terms$conditional,
       zi = ,
-      zero_inflated = model.terms$zero_inflated,
+      zero_inflated = c(model.terms$zero_inflated, model.terms$zi),
       dispersion = model.terms$dispersion
     )
 
     random.component.data <- switch(component,
-      all = c(model.terms$random, model.terms$zero_inflated_random),
+      all = c(model.terms$random, model.terms$zero_inflated_random, model.terms$zi_random),
       conditional = model.terms$random,
       zi = ,
-      zero_inflated = model.terms$zero_inflated_random
+      zero_inflated = c(model.terms$zero_inflated_random, model.terms$zi_random)
     )
   }
 
@@ -607,6 +615,9 @@
 # has other variables than the count component.
 #
 .add_zeroinf_data <- function(x, mf, tn) {
+  if (is.null(tn)) {
+    return(mf)
+  }
   tryCatch(
     {
       env_data <- .recover_data_from_environment(x)[, tn, drop = FALSE]
@@ -637,12 +648,18 @@
   mf <- .prepare_get_data(x, mf, verbose = verbose)
   # add variables from other model components
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
+  mf <- .add_zeroinf_data(x, mf, model.terms$zi)
 
   fixed.data <- switch(component,
-    all = c(model.terms$conditional, model.terms$zero_inflated, model.terms$offset),
+    all = c(
+      model.terms$conditional,
+      model.terms$zero_inflated,
+      model.terms$zi,
+      model.terms$offset
+    ),
     conditional = c(model.terms$conditional, model.terms$offset),
     zi = ,
-    zero_inflated = model.terms$zero_inflated
+    zero_inflated = c(model.terms$zero_inflated, model.terms$zi)
   )
 
   mf[, unique(c(model.terms$response, fixed.data, find_weights(x))), drop = FALSE]

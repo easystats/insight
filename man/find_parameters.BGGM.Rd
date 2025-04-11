@@ -61,21 +61,20 @@ have following elements:
 \item \code{conditional}, the "fixed effects" part from the model
 \item \code{random}, the "random effects" part from the model
 \item \code{zero_inflated}, the "fixed effects" part from the zero-inflation component
-of the model
+of the model. For \strong{brms}, this is named \code{zi}.
 \item \code{zero_inflated_random}, the "random effects" part from the zero-inflation
-component of the model
+component of the model. For \strong{brms}, this is named \code{zi_random}.
 \item \code{smooth_terms}, the smooth parameters
 }
 
-Furthermore, some models, especially from \strong{brms}, can also return auxiliary
-parameters. These may be one of the following:
+Furthermore, some models, especially from \strong{brms}, can also return other
+auxiliary (distributional) parameters. These may be one of the following:
 \itemize{
 \item \code{sigma}, the residual standard deviation (auxiliary parameter)
 \item \code{dispersion}, the dispersion parameters (auxiliary parameter)
 \item \code{beta}, the beta parameter (auxiliary parameter)
-\item \code{simplex}, simplex parameters of monotonic effects (\strong{brms} only)
-\item \code{mix}, mixture parameters (\strong{brms} only)
-\item \code{shiftprop}, shifted proportion parameters (\strong{brms} only)
+\item and any pre-defined or arbitrary distributional parameter for models from
+package \strong{brms}, like \code{mu}, \code{ndt}, \code{kappa}, etc.
 }
 
 Models of class \strong{BGGM} additionally can return the elements \code{correlation}

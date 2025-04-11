@@ -237,17 +237,18 @@
     "random",
     # zero-inflated and random
     "zero_inflated", "zero_inflated_random",
+    "zi", "zi_random",
     # dispersion and random
     "dispersion", "dispersion_random",
     # then instruments and smooth terms
     "instruments", "interactions", "smooth_terms",
     # then auxiliary
-    "zi", "zoi", "alpha", "aux", "auxiliary", "beta", "beta_random", "bias",
+    "alpha", "aux", "auxiliary", "beta", "beta_random", "bias",
     "bs", "bidrange", "car", "cluster", "coi", "correlation", "delta",
     "dist", "extra", "hu", "infrequent_purchase", "k", "kappa", "marginal",
     "mix", "mu", "ndt", "nominal", "nu", "outcome", "phi", "scale", "selection",
     "shape", "shiftprop", "sigma", "simplex", "slopes", "survival", "tau",
-    "time_dummies", "xi",
+    "time_dummies", "xi", "zoi",
     # other random parameters
     "sigma_random"
   )
@@ -275,13 +276,21 @@
   elements <- .all_elements()
 
   # zero-inflation component
-  zero_inflated_component <- c("zi", "zero_inflated", "zero_inflated_random")
+  zero_inflated_component <- c("zi", "zi_random", "zero_inflated", "zero_inflated_random")
 
   # auxiliary parameters
   auxiliary_parameters <- .aux_elements()
 
   # random parameters
-  random_parameters <- c("random", "zero_inflated_random", "dispersion_random", "sigma_random", "beta_random", "car")
+  random_parameters <- c(
+    "random",
+    "zero_inflated_random",
+    "zi_random",
+    "dispersion_random",
+    "sigma_random",
+    "beta_random",
+    "car"
+  )
 
   # conditional component
   conditional_component <- setdiff(
@@ -310,8 +319,7 @@
   # that are not covered by the standard elements. We then just do not
   # filter elements.
   if (inherits(model, "brmsfit") && component == "all") {
-    f <- insight::find_formula(model, verbose = FALSE)
-    elements <- unique(c(elements, names(f)))
+    elements <- unique(c(elements, find_auxiliary(model, verbose = FALSE)))
   }
 
   elements <- switch(effects,

@@ -33,12 +33,7 @@ find_interactions <- function(x, component = "all", flatten = FALSE) {
     c("all", "conditional", "zi", "zero_inflated", "dispersion", "instruments")
   )
 
-  .find_interactions(x,
-    effects = "fixed",
-    component,
-    flatten,
-    main_effects = FALSE
-  )
+  .find_interactions(x, effects = "fixed", component, flatten, main_effects = FALSE)
 }
 
 
@@ -52,7 +47,12 @@ find_interactions <- function(x, component = "all", flatten = FALSE) {
   elements <- .get_elements(effects = effects, component = component)
 
   if (is_mv) {
-    l <- lapply(f, function(.x) compact_list(lapply(.x[elements], .get_interaction_terms, main_effects)))
+    l <- lapply(
+      f,
+      function(.x) {
+        compact_list(lapply(.x[elements], .get_interaction_terms, main_effects))
+      }
+    )
   } else {
     l <- compact_list(lapply(f[elements], .get_interaction_terms, main_effects))
   }

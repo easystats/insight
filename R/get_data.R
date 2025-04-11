@@ -702,6 +702,8 @@ get_data.glmmTMB <- function(x,
   mf <- .add_zeroinf_data(x, mf, model.terms$dispersion)
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated_random)
+  mf <- .add_zeroinf_data(x, mf, model.terms$zi)
+  mf <- .add_zeroinf_data(x, mf, model.terms$zi_random)
   .return_combined_data(x, mf, effects, component, model.terms, verbose = verbose)
 }
 
@@ -1077,8 +1079,11 @@ get_data.MixMod <- function(x,
   }
 
   # fall back to extract data from model frame
-  effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated", "dispersion"))
+  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated", "dispersion")
+  )
 
   tryCatch(
     {

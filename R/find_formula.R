@@ -1,12 +1,11 @@
 #' @title Find model formula
 #' @name find_formula
 #'
-#' @description Returns the formula(s) for the different parts of a model
-#'  (like fixed or random effects, zero-inflated component, ...).
-#'  `formula_ok()` checks if a model formula has valid syntax
-#'  regarding writing `TRUE` instead of `T` inside `poly()`
-#'  and that no data names are used (i.e. no `data$variable`, but rather
-#'  `variable`).
+#' @description Returns the formula(s) for the different parts of a model (like
+#' fixed or random effects, zero-inflated component, ...). `formula_ok()` checks
+#' if a model formula has valid syntax regarding writing `TRUE` instead of `T`
+#' inside `poly()` and that no data names are used (i.e. no `data$variable`, but
+#' rather `variable`).
 #'
 #' @param verbose Toggle warnings.
 #' @param dichotomies Logical, if model is a `nestedLogit` objects, returns
@@ -34,53 +33,53 @@
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
-#' @return A list of formulas that describe the model. For simple models,
-#'  only one list-element, `conditional`, is returned. For more complex
-#'  models, the returned list may have following elements:
+#' @return A list of formulas that describe the model. For simple models, only
+#' one list-element, `conditional`, is returned. For more complex models, the
+#' returned list may have following elements:
 #'
-#'  - `conditional`, the "fixed effects" part from the model (in the
-#'    context of fixed-effects or instrumental variable regression, also
-#'    called *regressors*) . One exception are `DirichletRegModel` models
-#'    from **DirichletReg**, which has two or three components,
-#'    depending on `model`.
+#' - `conditional`, the "fixed effects" part from the model (in the context of
+#'   fixed-effects or instrumental variable regression, also called
+#'   *regressors*) . One exception are `DirichletRegModel` models from
+#'   **DirichletReg**, which has two or three components, depending on `model`.
 #'
-#'  - `random`, the "random effects" part from the model (or the
-#'    `id` for gee-models and similar)
+#' - `random`, the "random effects" part from the model (or the `id` for
+#'   gee-models and similar)
 #'
-#'  - `zero_inflated`, the "fixed effects" part from the
-#'    zero-inflation component of the model
+#' - `zero_inflated`, the "fixed effects" part from the zero-inflation component
+#'   of the model. for models from *brms*, this component is named `zi`.
 #'
-#'  - `zero_inflated_random`, the "random effects" part from the
-#'    zero-inflation component of the model
+#' - `zero_inflated_random`, the "random effects" part from the zero-inflation
+#'   component of the model; for models from *brms*, this component is named
+#'   `zi_random`.
 #'
-#'  - `dispersion`, the dispersion formula
+#' - `dispersion`, the dispersion formula
 #'
-#'  - `instruments`, for fixed-effects or instrumental variable
-#'    regressions like `ivreg::ivreg()`, `lfe::felm()` or `plm::plm()`,
-#'    the instrumental variables
+#' - `instruments`, for fixed-effects or instrumental variable regressions like
+#'   `ivreg::ivreg()`, `lfe::felm()` or `plm::plm()`, the instrumental variables
 #'
-#'  - `cluster`, for fixed-effects regressions like
-#'    `lfe::felm()`, the cluster specification
+#' - `cluster`, for fixed-effects regressions like `lfe::felm()`, the cluster
+#'   specification
 #'
-#'  - `correlation`, for models with correlation-component like
-#'    `nlme::gls()`, the formula that describes the correlation structure
+#' - `correlation`, for models with correlation-component like `nlme::gls()`,
+#'   the formula that describes the correlation structure
 #'
-#'  - `scale`, for distributional models such as `mgcv::gaulss()` family fitted
-#'    with `mgcv::gam()`, the formula that describes the scale parameter
+#' - `scale`, for distributional models such as `mgcv::gaulss()` family fitted
+#'   with `mgcv::gam()`, the formula that describes the scale parameter
 #'
-#'  - `slopes`, for fixed-effects individual-slope models like
-#'    `feisr::feis()`, the formula for the slope parameters
+#' - `slopes`, for fixed-effects individual-slope models like `feisr::feis()`,
+#'   the formula for the slope parameters
 #'
-#'  - `precision`, for `DirichletRegModel` models from
-#'    **DirichletReg**, when parametrization (i.e. `model`) is
-#'    `"alternative"`.
+#' - `precision`, for `DirichletRegModel` models from **DirichletReg**, when
+#'   parametrization (i.e. `model`) is `"alternative"`.
 #'
-#'  - `bidrange`, for models of class `oohbchoice` (from package **DCchoice**),
-#'    which indicates the right-hand side of the bar (the bid-range).
+#' - `bidrange`, for models of class `oohbchoice` (from package **DCchoice**),
+#'   which indicates the right-hand side of the bar (the bid-range).
 #'
-#' @note For models of class `lme` or `gls` the correlation-component
-#'   is only returned, when it is explicitly defined as named argument
-#'   (`form`), e.g. `corAR1(form = ~1 | Mare)`
+#' For models from package **brms**, distributional parameters are also included.
+#'
+#' @note For models of class `lme` or `gls` the correlation-component is only
+#' returned, when it is explicitly defined as named argument (`form`), e.g.
+#' `corAR1(form = ~1 | Mare)`
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(mtcars)
@@ -1708,17 +1707,9 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     }
     f_aux <- stats::as.formula(paste0("~", safe_deparse(f_aux[[3L]])))
     f_aux <- stats::as.formula(.get_fixed_effects(f_aux))
-
-    # name of auxiliary parameter, handle exceptions
-    f_aux_name <- switch(aux,
-      zi = "zero_inflated",
-      zoi = "zero_one_inflated",
-      coi = "conditional_one_inflated",
-      aux
-    )
     # add formula to list of custom formulas
-    dpar_formulas[[f_aux_name]] <- f_aux
-    dpar_random_formulas[[paste0(f_aux_name, "_random")]] <- f_aux_random
+    dpar_formulas[[aux]] <- f_aux
+    dpar_random_formulas[[paste0(aux, "_random")]] <- f_aux_random
   }
 
   compact_list(c(
