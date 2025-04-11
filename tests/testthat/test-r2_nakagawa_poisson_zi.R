@@ -58,7 +58,7 @@ test_that("glmmTMB, Poisson zero-inflated", {
   expect_equal(out2$R2_conditional, 0.6498465, ignore_attr = TRUE, tolerance = 1e-1)
 
   # full model
-  out <- suppressWarnings(performance::r2_nakagawa(m))
+  out <- suppressWarnings(performance::r2_nakagawa(m, tolerance = 1e-10))
   expect_equal(out$R2_marginal, 0.3344432, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out$R2_conditional, 0.4142003, ignore_attr = TRUE, tolerance = 1e-4)
 
