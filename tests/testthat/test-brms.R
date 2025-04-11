@@ -938,6 +938,13 @@ test_that("brms dpars find_auxiliary", {
   skip_if(is.null(model))
   out <- find_auxiliary(model)
   expect_identical(out, c("phi", "zoi", "coi"))
+  out <- find_auxiliary(model, use_alias = TRUE)
+  expect_identical(out, c("phi", "zero_one_inflated", "conditional_one_inflated"))
+  out <- find_auxiliary(model, add_alias = TRUE)
+  expect_identical(
+    out,
+    c("phi", "zoi", "coi", "zero_one_inflated", "conditional_one_inflated")
+  )
   out <- find_parameters(model, effects = "all", component = "all")
   expect_identical(
     out,

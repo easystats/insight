@@ -27,7 +27,7 @@ find_parameters.brmsfit <- function(x,
   fe <- fe[!startsWith(fe, "Intercept")]
 
   # extract all components, including custom and auxiliary ones
-  dpars <- find_auxiliary(x)
+  dpars <- find_auxiliary(x, add_alias = TRUE)
 
   # elements to return
   elements <- .brms_elements(effects, component, dpars)
@@ -68,13 +68,6 @@ find_parameters.brmsfit <- function(x,
   # add custom (dpars) elements
   if (component %in% c("all", "auxiliary", "distributional")) {
     elements <- unique(c(elements, dpars))
-    # add aliases (zoi = zero_one_inflated, coi = conditional_one_inflated)
-    if ("zoi" %in% dpars) {
-      elements <- unique(c(elements, "zero_one_inflated"))
-    }
-    if ("coi" %in% dpars) {
-      elements <- unique(c(elements, "conditional_one_inflated"))
-    }
   }
 
   # add priors
