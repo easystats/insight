@@ -152,13 +152,9 @@ print_parameters <- function(x,
 
   # determine where to split data frames
   by <- by[by %in% colnames(obj)]
-  f <- lapply(by, function(i) {
-    if (i %in% colnames(obj)) obj[[i]]
-  })
-  names(f) <- by
 
   # split into groups, remove empty elements
-  out <- split(obj, f)
+  out <- split(obj, obj[by])
   out <- compact_list(lapply(out, function(i) {
     if (nrow(i) > 0L) i
   }))
