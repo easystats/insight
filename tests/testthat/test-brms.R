@@ -931,3 +931,63 @@ test_that("brms dpars find_auxiliary", {
   expect_silent(find_auxiliary(lm(mpg ~ hp, data = mtcars), verbose = FALSE))
   expect_null(find_auxiliary(lm(mpg ~ hp, data = mtcars), verbose = FALSE))
 })
+
+
+test_that("brms dpars find_auxiliary", {
+  model <- insight::download_model("brms_zoib_1")
+  skip_if(is.null(model))
+  out <- find_auxiliary(model)
+  expect_identical(out, c("phi", "zoi", "coi"))
+  out <- find_auxiliary(model, use_alias = TRUE)
+  expect_identical(out, c("phi", "zero_one_inflated", "conditional_one_inflated"))
+  out <- find_auxiliary(model, add_alias = TRUE)
+  expect_identical(
+    out,
+    c("phi", "zoi", "coi", "zero_one_inflated", "conditional_one_inflated")
+  )
+  out <- find_parameters(model, effects = "all", component = "all")
+  expect_identical(
+    out,
+    list(
+      conditional = "b_Intercept",
+      random = c(
+        "r_participant[S1,Intercept]",
+        "r_participant[S10,Intercept]", "r_participant[S2,Intercept]",
+        "r_participant[S3,Intercept]", "r_participant[S4,Intercept]",
+        "r_participant[S5,Intercept]", "r_participant[S6,Intercept]",
+        "r_participant[S7,Intercept]", "r_participant[S8,Intercept]",
+        "r_participant[S9,Intercept]", "sd_participant__Intercept"
+      ),
+      phi = "b_phi_Intercept",
+      zero_one_inflated = "b_zoi_Intercept",
+      conditional_one_inflated = "b_coi_Intercept",
+      phi_random = c(
+        "r_participant__phi[S1,Intercept]",
+        "r_participant__phi[S10,Intercept]", "r_participant__phi[S2,Intercept]",
+        "r_participant__phi[S3,Intercept]", "r_participant__phi[S4,Intercept]",
+        "r_participant__phi[S5,Intercept]", "r_participant__phi[S6,Intercept]",
+        "r_participant__phi[S7,Intercept]", "r_participant__phi[S8,Intercept]",
+        "r_participant__phi[S9,Intercept]", "sd_participant__phi_Intercept"
+      ),
+      zero_one_inflated_random = c(
+        "r_participant__zoi[S1,Intercept]",
+        "r_participant__zoi[S10,Intercept]", "r_participant__zoi[S2,Intercept]",
+        "r_participant__zoi[S3,Intercept]", "r_participant__zoi[S4,Intercept]",
+        "r_participant__zoi[S5,Intercept]", "r_participant__zoi[S6,Intercept]",
+        "r_participant__zoi[S7,Intercept]", "r_participant__zoi[S8,Intercept]",
+        "r_participant__zoi[S9,Intercept]", "sd_participant__zoi_Intercept"
+      ),
+      conditional_one_inflated_random = c(
+        "r_participant__coi[S1,Intercept]",
+        "r_participant__coi[S10,Intercept]", "r_participant__coi[S2,Intercept]",
+        "r_participant__coi[S3,Intercept]", "r_participant__coi[S4,Intercept]",
+        "r_participant__coi[S5,Intercept]", "r_participant__coi[S6,Intercept]",
+        "r_participant__coi[S7,Intercept]", "r_participant__coi[S8,Intercept]",
+        "r_participant__coi[S9,Intercept]", "sd_participant__coi_Intercept"
+      )
+    )
+  )
+  out <- clean_parameters(model)
+  expect_identical(dim(out), c(48L, 5L))
+  expect_identical(unique(out$Component), c("conditional", "phi", "zero_one_inflated", "conditional_one_inflated"))
+})

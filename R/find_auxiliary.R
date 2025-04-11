@@ -6,6 +6,13 @@
 #' @name find_auxiliary
 #'
 #' @param x A model of class `brmsfit`.
+#' @param use_alias Logical, if `TRUE`, some of the element names will be renamed
+#' into more expressive aliases, like they are already returned by some other
+#' functions. E.g., `zoi` will be renamed to `zero_one_inflated` and `coi` will
+#' be renamed to `conditional_one_inflated`. By default, the names are not changed.
+#' @param add_alias Logical, if `TRUE`, more expressive aliases for the names of
+#' distributional parameters will be additionally returned, together with the
+#' original names. If `use_alias = TRUE`, this argument will be ignored.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
@@ -18,7 +25,6 @@ find_auxiliary <- function(x, ...) {
 }
 
 
-#' @rdname find_auxiliary
 #' @export
 find_auxiliary.default <- function(x, verbose = TRUE, ...) {
   if (verbose) {
@@ -28,8 +34,13 @@ find_auxiliary.default <- function(x, verbose = TRUE, ...) {
 }
 
 
+#' @rdname find_auxiliary
 #' @export
-find_auxiliary.brmsfit <- function(x, ...) {
+find_auxiliary.brmsfit <- function(x,
+                                   use_alias = FALSE,
+                                   add_alias = FALSE,
+                                   verbose = TRUE,
+                                   ...) {
   # formula object contains "pforms", which includes all auxiliary parameters
   f <- stats::formula(x)
   if (object_has_names(f, "forms")) {
@@ -41,6 +52,24 @@ find_auxiliary.brmsfit <- function(x, ...) {
   fe <- dimnames(x$fit)$parameters
   if (any(startsWith(fe, "sigma_") | grepl("sigma", fe, fixed = TRUE))) {
     out <- c(out, "sigma")
+  }
+
+  if ((use_alias || add_alias) && !is.null(out) && length(out)) {
+    # add aliases (zoi = zero_one_inflated, coi = conditional_one_inflated)
+    if ("zoi" %in% out) {
+      if (use_alias) {
+        out[out == "zoi"] <- "zero_one_inflated"
+      } else {
+        out <- c(out, "zero_one_inflated")
+      }
+    }
+    if ("coi" %in% out) {
+      if (use_alias) {
+        out[out == "coi"] <- "conditional_one_inflated"
+      } else {
+        out <- c(out, "conditional_one_inflated")
+      }
+    }
   }
 
   unique(out)
