@@ -276,7 +276,7 @@
   elements <- .all_elements()
 
   # zero-inflation component
-  zero_inflated_component <- c("zi", "zero_inflated", "zero_inflated_random")
+  zero_inflated_component <- c("zi", "zi_random", "zero_inflated", "zero_inflated_random")
 
   # auxiliary parameters
   auxiliary_parameters <- .aux_elements()
@@ -319,8 +319,7 @@
   # that are not covered by the standard elements. We then just do not
   # filter elements.
   if (inherits(model, "brmsfit") && component == "all") {
-    f <- insight::find_formula(model, verbose = FALSE)
-    elements <- unique(c(elements, names(f)))
+    elements <- unique(c(elements, find_auxiliary(model, verbose = FALSE)))
   }
 
   elements <- switch(effects,
