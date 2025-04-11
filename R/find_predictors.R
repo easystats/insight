@@ -75,7 +75,8 @@
 #'
 #' For models of class `brmsfit` (package **brms**), even more options are
 #' possible for the `component` argument, which are not all documented in detail
-#' here.
+#' here. It can be any pre-defined or arbitrary distributional parameter, like
+#' `mu`, `ndt`, `kappa`, etc.
 #'
 #' @section Parameters, Variables, Predictors and Terms:
 #' There are four functions that return information about the variables in a

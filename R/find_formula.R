@@ -51,7 +51,8 @@
 #'    zero-inflation component of the model
 #'
 #'  - `zero_inflated_random`, the "random effects" part from the
-#'    zero-inflation component of the model
+#'    zero-inflation component of the model; for models from *brms*, this
+#'    component is named `zi`.
 #'
 #'  - `dispersion`, the dispersion formula
 #'
@@ -1708,17 +1709,9 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     }
     f_aux <- stats::as.formula(paste0("~", safe_deparse(f_aux[[3L]])))
     f_aux <- stats::as.formula(.get_fixed_effects(f_aux))
-
-    # name of auxiliary parameter, handle exceptions
-    f_aux_name <- switch(aux,
-      zi = "zero_inflated",
-      zoi = "zero_one_inflated",
-      coi = "conditional_one_inflated",
-      aux
-    )
     # add formula to list of custom formulas
-    dpar_formulas[[f_aux_name]] <- f_aux
-    dpar_random_formulas[[paste0(f_aux_name, "_random")]] <- f_aux_random
+    dpar_formulas[[aux]] <- f_aux
+    dpar_random_formulas[[paste0(aux, "_random")]] <- f_aux_random
   }
 
   compact_list(c(

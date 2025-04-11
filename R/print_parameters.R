@@ -166,7 +166,7 @@ print_parameters <- function(x,
   # remove trailing dots
   names(out) <- list_names <- gsub("(.*)\\.$", "\\1", names(out))
 
-  has_zeroinf <- any(grepl("zero_inflated", names(out), fixed = TRUE))
+  has_zeroinf <- any(grepl("(zero_inflated|zi)", names(out), fixed = TRUE))
 
   # create title attributes, and remove unnecessary columns from output
   out <- lapply(names(out), function(i) {
@@ -191,10 +191,11 @@ print_parameters <- function(x,
           random = "Random effects",
           dispersion = "Dispersion",
           conditional = "(conditional)",
+          zi = ,
           zero_inflated = "(zero-inflated)"
         )
         title1 <- paste0(title1, " ", tmp)
-      } else if (!parts[j] %in% c("conditional", "zero_inflated")) {
+      } else if (!parts[j] %in% c("conditional", "zi", "zero_inflated")) {
         # here we have the "subtitles" of a subcomponent
         # (like "Intercept: Group-Level 1")
         tmp <- switch(parts[j],

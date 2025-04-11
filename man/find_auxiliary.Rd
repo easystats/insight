@@ -2,27 +2,17 @@
 % Please edit documentation in R/find_auxiliary.R
 \name{find_auxiliary}
 \alias{find_auxiliary}
-\alias{find_auxiliary.brmsfit}
+\alias{find_auxiliary.default}
 \title{Find auxiliary (distributional) parameters from models}
 \usage{
 find_auxiliary(x, ...)
 
-\method{find_auxiliary}{brmsfit}(x, use_alias = FALSE, add_alias = FALSE, verbose = TRUE, ...)
+\method{find_auxiliary}{default}(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model of class \code{brmsfit}.}
 
 \item{...}{Currently not used.}
-
-\item{use_alias}{Logical, if \code{TRUE}, some of the element names will be
-renamed into more expressive aliases, like they are already returned by some
-other functions. E.g., \code{zi} will be renamed to \code{zero_inflated}, \code{zoi} will be
-renamed to \code{zero_one_inflated} and \code{coi} will be renamed to
-\code{conditional_one_inflated}. By default, the names are not changed.}
-
-\item{add_alias}{Logical, if \code{TRUE}, more expressive aliases for the names of
-distributional parameters will be additionally returned, together with the
-original names. If \code{use_alias = TRUE}, this argument will be ignored.}
 
 \item{verbose}{Toggle warnings.}
 }

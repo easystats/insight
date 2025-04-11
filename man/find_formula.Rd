@@ -70,7 +70,8 @@ depending on \code{model}.
 \item \code{zero_inflated}, the "fixed effects" part from the
 zero-inflation component of the model
 \item \code{zero_inflated_random}, the "random effects" part from the
-zero-inflation component of the model
+zero-inflation component of the model; for models from \emph{brms}, this
+component is named \code{zi}.
 \item \code{dispersion}, the dispersion formula
 \item \code{instruments}, for fixed-effects or instrumental variable
 regressions like \code{ivreg::ivreg()}, \code{lfe::felm()} or \code{plm::plm()},

@@ -20,7 +20,8 @@
 #' - `conditional`, the names of the predictor variables from the *conditional*
 #'    model (as opposed to the zero-inflated part of a model)
 #' - `random`, the names of the random effects (grouping factors)
-#' - `zero_inflated`, the names of the predictor variables from the *zero-inflated* part of the model
+#' - `zero_inflated`, the names of the predictor variables from the
+#'   *zero-inflated* part of the model
 #' - `zero_inflated_random`, the names of the random effects (grouping factors)
 #' - `dispersion`, the name of the dispersion terms
 #' - `instruments`, the names of instrumental variables
