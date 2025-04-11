@@ -185,7 +185,7 @@ print_parameters <- function(x,
     for (j in seq_along(parts)) {
       # Rename "fixed", "random" etc. into proper titles. Here we have the
       # "Main title" of a subcomponent (like "Random effects")
-      if (parts[j] %in% c("fixed", "random") || (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
+      if (parts[j] %in% c("fixed", "random") || (has_zeroinf && parts[j] %in% c("conditional", "zi", "zero_inflated"))) {
         tmp <- switch(parts[j],
           fixed = "Fixed effects",
           random = "Random effects",

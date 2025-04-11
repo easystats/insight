@@ -67,8 +67,8 @@ component of the model. For \strong{brms}, this is named \code{zi_random}.
 \item \code{smooth_terms}, the smooth parameters
 }
 
-Furthermore, some models, especially from \strong{brms}, can also return auxiliary
-(distributional) parameters. These may be one of the following:
+Furthermore, some models, especially from \strong{brms}, can also return other
+auxiliary (distributional) parameters. These may be one of the following:
 \itemize{
 \item \code{sigma}, the residual standard deviation (auxiliary parameter)
 \item \code{dispersion}, the dispersion parameters (auxiliary parameter)

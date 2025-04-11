@@ -25,8 +25,8 @@
 #'   component of the model. For **brms**, this is named `zi_random`.
 #' - `smooth_terms`, the smooth parameters
 #'
-#' Furthermore, some models, especially from **brms**, can also return auxiliary
-#' (distributional) parameters. These may be one of the following:
+#' Furthermore, some models, especially from **brms**, can also return other
+#' auxiliary (distributional) parameters. These may be one of the following:
 #'
 #' - `sigma`, the residual standard deviation (auxiliary parameter)
 #' - `dispersion`, the dispersion parameters (auxiliary parameter)

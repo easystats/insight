@@ -109,9 +109,9 @@
 #' - `conditional`, the "fixed effects" terms from the model
 #' - `random`, the "random effects" terms from the model
 #' - `zero_inflated`, the "fixed effects" terms from the zero-inflation
-#'   component of the model
+#'   component of the model. For models from **brms**, this is named `zi`.
 #' - `zero_inflated_random`, the "random effects" terms from the zero-inflation
-#'   component of the model
+#'   component of the model. For models from **brms**, this is named `zi_random`.
 #' - `dispersion`, the dispersion terms
 #' - `instruments`, for fixed-effects regressions like `ivreg`, `felm` or `plm`,
 #'   the instrumental variables

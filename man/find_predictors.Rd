@@ -59,9 +59,9 @@ predictor variables. Depending on the combination of the arguments
 \item \code{conditional}, the "fixed effects" terms from the model
 \item \code{random}, the "random effects" terms from the model
 \item \code{zero_inflated}, the "fixed effects" terms from the zero-inflation
-component of the model
+component of the model. For models from \strong{brms}, this is named \code{zi}.
 \item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation
-component of the model
+component of the model. For models from \strong{brms}, this is named \code{zi_random}.
 \item \code{dispersion}, the dispersion terms
 \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm},
 the instrumental variables
