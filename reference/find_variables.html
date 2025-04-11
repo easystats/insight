@@ -127,8 +127,9 @@ model (as opposed to the zero-inflated part of a model)</p></li>
 <li><p><code>instruments</code>, the names of instrumental variables</p></li>
 <li><p><code>random</code>, the names of the random effects (grouping factors)</p></li>
 <li><p><code>zero_inflated</code>, the names of the predictor variables from the
-<em>zero-inflated</em> part of the model</p></li>
-<li><p><code>zero_inflated_random</code>, the names of the random effects (grouping factors)</p></li>
+<em>zero-inflated</em> part of the model. For <strong>brms</strong>, this is named <code>zi</code>.</p></li>
+<li><p><code>zero_inflated_random</code>, the names of the random effects (grouping factors).
+For <strong>brms</strong>, this is named <code>zi_random</code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -177,7 +178,8 @@ auxiliary parameters).</p></li>
 <li><p><strong>selection</strong>: <code>"selection"</code>, <code>"outcome"</code>, and <code>"auxiliary"</code></p></li>
 </ul><p>For models of class <code>brmsfit</code> (package <strong>brms</strong>), even more options are
 possible for the <code>component</code> argument, which are not all documented in detail
-here.</p>
+here. It can be any pre-defined or arbitrary distributional parameter, like
+<code>mu</code>, <code>ndt</code>, <code>kappa</code>, etc.</p>
     </div>
     <div class="section level2">
     <h2 id="parameters-variables-predictors-and-terms">Parameters, Variables, Predictors and Terms<a class="anchor" aria-label="anchor" href="#parameters-variables-predictors-and-terms"></a></h2>

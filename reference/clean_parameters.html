@@ -109,15 +109,16 @@ different models, the returned data frame always has at least four columns
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The <code>Effects</code> column indicate if a parameter is a <em>fixed</em> or <em>random</em> effect.
-The <code>Component</code> can either be <em>conditional</em> or <em>zero_inflated</em>. For models
-with random effects, the <code>Group</code> column indicates the grouping factor of the
-random effects. For multivariate response models from <strong>brms</strong> or
-<strong>rstanarm</strong>, an additional <em>Response</em> column is included, to indicate
-which parameters belong to which response formula. Furthermore,
-<em>Cleaned_Parameter</em> column is returned that contains "human readable"
-parameter names (which are mostly identical to <code>Parameter</code>, except for for
-models from <strong>brms</strong> or <strong>rstanarm</strong>, or for specific terms like smooth-
-or spline-terms).</p>
+The <code>Component</code> column refers to special model components like <em>conditional</em>,
+<em>zero_inflated</em>, or <em>dispersion</em>. For models from package <strong>brms</strong>, the
+various distributional parameters are also included in this column. For
+models with random effects, the <code>Group</code> column indicates the grouping factor
+of the random effects. For multivariate response models from <strong>brms</strong> or
+<strong>rstanarm</strong>, an additional <em>Response</em> column is included, to indicate which
+parameters belong to which response formula. Furthermore, <em>Cleaned_Parameter</em>
+column is returned that contains "human readable" parameter names (which are
+mostly identical to <code>Parameter</code>, except for for models from <strong>brms</strong> or
+<strong>rstanarm</strong>, or for specific terms like smooth- or spline-terms).</p>
     </div>
 
     <div class="section level2">
@@ -125,24 +126,24 @@ or spline-terms).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="download_model.html">download_model</a></span><span class="op">(</span><span class="st">"brms_zi_2"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">clean_parameters</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     Parameter Effects     Component              Group</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 b_Intercept   fixed   conditional                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                   b_persons   fixed   conditional                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     b_child   fixed   conditional                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                    b_camper   fixed   conditional                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      r_persons[1,Intercept]  random   conditional Intercept: persons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      r_persons[2,Intercept]  random   conditional Intercept: persons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      r_persons[3,Intercept]  random   conditional Intercept: persons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      r_persons[4,Intercept]  random   conditional Intercept: persons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9       sd_persons__Intercept  random   conditional    SD/Cor: persons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10             b_zi_Intercept   fixed zero_inflated                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                 b_zi_child   fixed zero_inflated                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                b_zi_camper   fixed zero_inflated                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 r_persons__zi[1,Intercept]  random zero_inflated Intercept: persons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 r_persons__zi[2,Intercept]  random zero_inflated Intercept: persons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 r_persons__zi[3,Intercept]  random zero_inflated Intercept: persons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 r_persons__zi[4,Intercept]  random zero_inflated Intercept: persons</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17   sd_persons__zi_Intercept  random zero_inflated    SD/Cor: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Parameter Effects   Component              Group</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 b_Intercept   fixed conditional                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                   b_persons   fixed conditional                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     b_child   fixed conditional                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                    b_camper   fixed conditional                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      r_persons[1,Intercept]  random conditional Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      r_persons[2,Intercept]  random conditional Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      r_persons[3,Intercept]  random conditional Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      r_persons[4,Intercept]  random conditional Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       sd_persons__Intercept  random conditional    SD/Cor: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10             b_zi_Intercept   fixed          zi                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                 b_zi_child   fixed          zi                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                b_zi_camper   fixed          zi                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 r_persons__zi[1,Intercept]  random          zi Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 r_persons__zi[2,Intercept]  random          zi Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 r_persons__zi[3,Intercept]  random          zi Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 r_persons__zi[4,Intercept]  random          zi Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17   sd_persons__zi_Intercept  random          zi    SD/Cor: persons</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Cleaned_Parameter</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        (Intercept)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2            persons</span>

@@ -139,17 +139,16 @@ should be returned.</p></dd>
 have following elements:</p><ul><li><p><code>conditional</code>, the "fixed effects" part from the model</p></li>
 <li><p><code>random</code>, the "random effects" part from the model</p></li>
 <li><p><code>zero_inflated</code>, the "fixed effects" part from the zero-inflation component
-of the model</p></li>
+of the model. For <strong>brms</strong>, this is named <code>zi</code>.</p></li>
 <li><p><code>zero_inflated_random</code>, the "random effects" part from the zero-inflation
-component of the model</p></li>
+component of the model. For <strong>brms</strong>, this is named <code>zi_random</code>.</p></li>
 <li><p><code>smooth_terms</code>, the smooth parameters</p></li>
-</ul><p>Furthermore, some models, especially from <strong>brms</strong>, can also return auxiliary
-parameters. These may be one of the following:</p><ul><li><p><code>sigma</code>, the residual standard deviation (auxiliary parameter)</p></li>
+</ul><p>Furthermore, some models, especially from <strong>brms</strong>, can also return other
+auxiliary (distributional) parameters. These may be one of the following:</p><ul><li><p><code>sigma</code>, the residual standard deviation (auxiliary parameter)</p></li>
 <li><p><code>dispersion</code>, the dispersion parameters (auxiliary parameter)</p></li>
 <li><p><code>beta</code>, the beta parameter (auxiliary parameter)</p></li>
-<li><p><code>simplex</code>, simplex parameters of monotonic effects (<strong>brms</strong> only)</p></li>
-<li><p><code>mix</code>, mixture parameters (<strong>brms</strong> only)</p></li>
-<li><p><code>shiftprop</code>, shifted proportion parameters (<strong>brms</strong> only)</p></li>
+<li><p>and any pre-defined or arbitrary distributional parameter for models from
+package <strong>brms</strong>, like <code>mu</code>, <code>ndt</code>, <code>kappa</code>, etc.</p></li>
 </ul><p>Models of class <strong>BGGM</strong> additionally can return the elements <code>correlation</code>
 and <code>intercept</code>.</p>
 <p>Models of class <strong>BFBayesFactor</strong> additionally can return the element
