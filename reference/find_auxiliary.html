@@ -9,7 +9,7 @@ from brms-models, like dispersion, sigma, kappa, phi, or beta..."><meta property
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.30</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.31</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,8 +65,8 @@ from brms-models, like dispersion, sigma, kappa, phi, or beta...</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_auxiliary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">find_auxiliary</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># S3 method for class 'brmsfit'</span></span>
+<span><span class="fu">find_auxiliary</span><span class="op">(</span><span class="va">x</span>, use_alias <span class="op">=</span> <span class="cn">FALSE</span>, add_alias <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,6 +79,19 @@ from brms-models, like dispersion, sigma, kappa, phi, or beta...</p>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
+
+
+<dt id="arg-use-alias">use_alias<a class="anchor" aria-label="anchor" href="#arg-use-alias"></a></dt>
+<dd><p>Logical, if <code>TRUE</code>, some of the element names will be renamed
+into more expressive aliases, like they are already returned by some other
+functions. E.g., <code>zoi</code> will be renamed to <code>zero_one_inflated</code> and <code>coi</code> will
+be renamed to <code>conditional_one_inflated</code>. By default, the names are not changed.</p></dd>
+
+
+<dt id="arg-add-alias">add_alias<a class="anchor" aria-label="anchor" href="#arg-add-alias"></a></dt>
+<dd><p>Logical, if <code>TRUE</code>, more expressive aliases for the names of
+distributional parameters will be additionally returned, together with the
+original names. If <code>use_alias = TRUE</code>, this argument will be ignored.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
