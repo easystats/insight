@@ -11,7 +11,7 @@
 #'
 #' - `random`, the random slopes from the conditional part of model
 #' - `zero_inflated_random`, the random slopes from the zero-inflation component
-#'   of the model
+#'   of the model. For **brms**, this is named `zi_random`.
 #' - `dispersion_random`, the random slopes from the dispersion component of the
 #'   model
 #'

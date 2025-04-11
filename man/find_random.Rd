@@ -23,7 +23,7 @@ returned list has following elements:
 \itemize{
 \item \code{random}, the "random effects" terms from the conditional part of model
 \item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation
-component of the model
+component of the model. For \strong{brms}, this is named \code{zi_random}.
 \item \code{dispersion_random}, the "random effects" terms from the dispersion
 component of the model
 }

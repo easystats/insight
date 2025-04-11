@@ -57,8 +57,9 @@ model (as opposed to the zero-inflated part of a model)
 \item \code{instruments}, the names of instrumental variables
 \item \code{random}, the names of the random effects (grouping factors)
 \item \code{zero_inflated}, the names of the predictor variables from the
-\emph{zero-inflated} part of the model
-\item \code{zero_inflated_random}, the names of the random effects (grouping factors)
+\emph{zero-inflated} part of the model. For \strong{brms}, this is named \code{zi}.
+\item \code{zero_inflated_random}, the names of the random effects (grouping factors).
+For \strong{brms}, this is named \code{zi_random}.
 }
 }
 \description{
@@ -118,7 +119,8 @@ Some model classes also allow rather uncommon options. These are:
 
 For models of class \code{brmsfit} (package \strong{brms}), even more options are
 possible for the \code{component} argument, which are not all documented in detail
-here.
+here. It can be any pre-defined or arbitrary distributional parameter, like
+\code{mu}, \code{ndt}, \code{kappa}, etc.
 }
 
 \section{Parameters, Variables, Predictors and Terms}{

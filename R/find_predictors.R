@@ -75,7 +75,8 @@
 #'
 #' For models of class `brmsfit` (package **brms**), even more options are
 #' possible for the `component` argument, which are not all documented in detail
-#' here.
+#' here. It can be any pre-defined or arbitrary distributional parameter, like
+#' `mu`, `ndt`, `kappa`, etc.
 #'
 #' @section Parameters, Variables, Predictors and Terms:
 #' There are four functions that return information about the variables in a
@@ -108,9 +109,9 @@
 #' - `conditional`, the "fixed effects" terms from the model
 #' - `random`, the "random effects" terms from the model
 #' - `zero_inflated`, the "fixed effects" terms from the zero-inflation
-#'   component of the model
+#'   component of the model. For models from **brms**, this is named `zi`.
 #' - `zero_inflated_random`, the "random effects" terms from the zero-inflation
-#'   component of the model
+#'   component of the model. For models from **brms**, this is named `zi_random`.
 #' - `dispersion`, the dispersion terms
 #' - `instruments`, for fixed-effects regressions like `ivreg`, `felm` or `plm`,
 #'   the instrumental variables

@@ -10,6 +10,12 @@
   with user-defined variables that have been modelled as distributional
   parameters.
 
+* To be consistent with the naming pattern from package `brms`, all elements
+  related to distributional parameters now returns exactly that "dpar" name.
+  This means that, for instance, `find_formula()` no longer returns an element
+  named `$zero_inflated`, but instead `$zi`. This only applies to models from
+  `brms`! All other packages are not affected by this breaking change.
+
 ## Changes
 
 * `find_random()` and `find_random_slopes()` now also extract random effects

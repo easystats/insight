@@ -20,20 +20,19 @@
 #' - `conditional`, the "fixed effects" part from the model
 #' - `random`, the "random effects" part from the model
 #' - `zero_inflated`, the "fixed effects" part from the zero-inflation component
-#'   of the model
+#'   of the model. For **brms**, this is named `zi`.
 #' - `zero_inflated_random`, the "random effects" part from the zero-inflation
-#'   component of the model
+#'   component of the model. For **brms**, this is named `zi_random`.
 #' - `smooth_terms`, the smooth parameters
 #'
-#' Furthermore, some models, especially from **brms**, can also return auxiliary
-#' parameters. These may be one of the following:
+#' Furthermore, some models, especially from **brms**, can also return other
+#' auxiliary (distributional) parameters. These may be one of the following:
 #'
 #' - `sigma`, the residual standard deviation (auxiliary parameter)
 #' - `dispersion`, the dispersion parameters (auxiliary parameter)
 #' - `beta`, the beta parameter (auxiliary parameter)
-#' - `simplex`, simplex parameters of monotonic effects (**brms** only)
-#' - `mix`, mixture parameters (**brms** only)
-#' - `shiftprop`, shifted proportion parameters (**brms** only)
+#' - and any pre-defined or arbitrary distributional parameter for models from
+#'   package **brms**, like `mu`, `ndt`, `kappa`, etc.
 #'
 #' Models of class **BGGM** additionally can return the elements `correlation`
 #' and `intercept`.

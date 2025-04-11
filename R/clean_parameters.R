@@ -25,15 +25,16 @@
 #' @details
 #'
 #' The `Effects` column indicate if a parameter is a *fixed* or *random* effect.
-#' The `Component` can either be *conditional* or *zero_inflated*. For models
-#' with random effects, the `Group` column indicates the grouping factor of the
-#' random effects. For multivariate response models from **brms** or
-#' **rstanarm**, an additional *Response* column is included, to indicate
-#' which parameters belong to which response formula. Furthermore,
-#' *Cleaned_Parameter* column is returned that contains "human readable"
-#' parameter names (which are mostly identical to `Parameter`, except for for
-#' models from **brms** or **rstanarm**, or for specific terms like smooth-
-#' or spline-terms).
+#' The `Component` column refers to special model components like *conditional*,
+#' *zero_inflated*, or *dispersion*. For models from package **brms**, the
+#' various distributional parameters are also included in this column. For
+#' models with random effects, the `Group` column indicates the grouping factor
+#' of the random effects. For multivariate response models from **brms** or
+#' **rstanarm**, an additional *Response* column is included, to indicate which
+#' parameters belong to which response formula. Furthermore, *Cleaned_Parameter*
+#' column is returned that contains "human readable" parameter names (which are
+#' mostly identical to `Parameter`, except for for models from **brms** or
+#' **rstanarm**, or for specific terms like smooth- or spline-terms).
 #'
 #' @examplesIf require("curl", quietly = TRUE) && curl::has_internet() && require("brms")
 #' \donttest{
@@ -429,12 +430,8 @@ clean_parameters.mlm <- function(x, ...) {
     }
 
     # we must start with "conditional one", so it's not confused with "conditional"
-    com <- if (startsWith(i, "conditional_one_inflated")) {
-      "conditional_one_inflated"
-    } else if (grepl("conditional", i, fixed = TRUE) || i == "random") {
+    com <- if (grepl("conditional", i, fixed = TRUE) || i == "random") {
       "conditional"
-    } else if (grepl("zero_inflated", i, fixed = TRUE)) {
-      "zero_inflated"
     } else if (grepl("sigma", i, fixed = TRUE)) {
       "sigma"
     } else if (grepl("priors", i, fixed = TRUE)) {
