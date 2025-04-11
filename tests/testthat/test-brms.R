@@ -980,4 +980,7 @@ test_that("brms dpars find_auxiliary", {
       )
     )
   )
+  out <- clean_parameters(model)
+  expect_identical(dim(out), c(48L, 5L))
+  expect_identical(unique(out$Component), c("conditional", "phi", "zero_one_inflated", "coi"))
 })
