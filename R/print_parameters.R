@@ -166,7 +166,7 @@ print_parameters <- function(x,
   # remove trailing dots
   names(out) <- list_names <- gsub("(.*)\\.$", "\\1", names(out))
 
-  has_zeroinf <- any(grepl("(zero_inflated|zi)", names(out), fixed = TRUE))
+  has_zeroinf <- any(grepl("(zero_inflated|zi)", names(out)))
 
   # create title attributes, and remove unnecessary columns from output
   out <- lapply(names(out), function(i) {
