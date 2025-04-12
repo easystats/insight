@@ -62,28 +62,27 @@ clean_parameters.default <- function(x, group = "", ...) {
       "fixed"
     }
 
-    com <- if (grepl("zero_inflated", i, fixed = TRUE)) {
-      "zero_inflated"
-    } else if (grepl("dispersion", i, fixed = TRUE)) {
-      "dispersion"
-    } else if (grepl("nonlinear", i, fixed = TRUE)) {
-      "nonlinear"
-    } else if (grepl("instruments", i, fixed = TRUE)) {
-      "instruments"
-    } else if (grepl("extra", i, fixed = TRUE)) {
-      "extra"
-    } else if (grepl("scale", i, fixed = TRUE)) {
-      "scale"
-    } else if (grepl("marginal", i, fixed = TRUE)) {
-      "marginal"
-    } else if (grepl("intercept", i, fixed = TRUE)) {
-      "intercept"
-    } else if (grepl("correlation", i, fixed = TRUE)) {
-      "correlation"
-    } else {
-      "conditional"
+    # which components do we possibly have for that model?
+    components <- c(
+      "zero_inflated", "dispersion", "nonlinear", "instruments",
+      "extra", "scale", "marginal", "intercept", "correlation"
+    )
+
+    # iterate all components
+    com <- NULL
+    for (cm in components) {
+      if (grepl(cm, i, fixed = TRUE)) {
+        com <- cm
+        break
+      }
     }
 
+    # finally, if not found, default to "conditional"
+    if (is.null(com)) {
+      com <- "conditional"
+    }
+
+    # check for smooth terms
     fun <- if (grepl("smooth", i, fixed = TRUE)) {
       "smooth"
     } else {
@@ -454,7 +453,6 @@ clean_parameters.mlm <- function(x, ...) {
       ""
     }
 
-
     data.frame(
       Parameter = pars[[i]],
       Effects = eff,
@@ -512,7 +510,6 @@ clean_parameters.mlm <- function(x, ...) {
   if (any(smooth_function)) {
     out$Function[smooth_function] <- "smooth"
   }
-
 
   # clean auxiliary
   out$Cleaned_Parameter <- gsub(pattern = paste0("^(", paste0("b_", dpars, "_", collapse = "|"), ")"), "", out$Cleaned_Parameter)
