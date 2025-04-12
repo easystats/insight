@@ -49,7 +49,7 @@ test_that("print_parameters glmmTMB", {
     out,
     c(
       "fixed.conditional", "fixed.zero_inflated",
-      "random.zero_inflated.ID", "random.conditional.persons"
+      "random.conditional.persons", "random.zero_inflated.ID"
     )
   )
   att <- lapply(out, function(i) {

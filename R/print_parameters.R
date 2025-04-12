@@ -201,7 +201,7 @@ print_parameters <- function(x,
         # (like "Intercept: Group-Level 1")
         tmp <- switch(parts[j],
           simplex = "(monotonic effects)",
-          parts[j]
+          paste0("(", parts[j], ")")
         )
         title2 <- paste0(title2, " ", tmp)
       }
