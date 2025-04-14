@@ -62,10 +62,15 @@ clean_parameters.default <- function(x, group = "", ...) {
       "fixed"
     }
 
-    # which components do we possibly have for that model?
+    # which components do we possibly have for that model? This should match
+    # those possible components returned by `find_parameters()`, see
+    # @section Model components in `find_predictors.R`, or
+    # `.get_elements("fixed", "all")`
     components <- c(
-      "zero_inflated", "dispersion", "nonlinear", "instruments",
-      "extra", "scale", "marginal", "intercept", "correlation"
+      "zero_inflated", "dispersion", "nonlinear", "instruments", "phi", "mu",
+      "extra", "scale", "marginal", "intercept", "correlation", "ip", "tau",
+      "beta", "precision", "selection", "auxiliary", "outcome", "full",
+      "infrequent_purchase", "delta", "shape", "survival"
     )
 
     # iterate all components
