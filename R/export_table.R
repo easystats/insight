@@ -1015,13 +1015,15 @@ print.insight_table <- function(x, ...) {
   # need data frame, not matrix
   final <- as.data.frame(final)
 
-  align <- switch(align,
-    left = "l",
-    center = "c",
-    right = "r",
-    firstleft = paste0("l", rep_len("r", ncol(final) - 1)),
-    align
-  )
+  if (!is.null(align) && length(align) == 1) {
+    align <- switch(align,
+      left = "l",
+      center = "c",
+      right = "r",
+      firstleft = paste0("l", rep_len("r", ncol(final) - 1)),
+      align
+    )
+  }
 
   check_if_installed("tinytable")
 
