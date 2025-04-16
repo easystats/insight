@@ -25,7 +25,8 @@
 #' find_offset(m1)
 #'
 #' m2 <- pscl::zeroinfl(
-#'   y ~ offset(log(raw_off)) + x | 1, data = dat,
+#'   y ~ offset(log(raw_off)) + x | 1,
+#'   data = dat,
 #'   dist = "poisson"
 #' )
 #' find_offset(m2)

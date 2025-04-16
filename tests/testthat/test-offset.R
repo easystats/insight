@@ -23,12 +23,14 @@ m2 <- pscl::zeroinfl(y ~ x | 1,
 m3 <- pscl::zeroinfl(y ~ x | 1, data = d, dist = "poisson")
 
 m4 <- pscl::zeroinfl(
-  y ~ offset(log(raw_off)) + x | 1, data = d,
+  y ~ offset(log(raw_off)) + x | 1,
+  data = d,
   dist = "poisson"
 )
 
 m5 <- pscl::zeroinfl(
-  y ~ x | 1, data = d,
+  y ~ x | 1,
+  data = d,
   dist = "poisson",
   offset = log(raw_off)
 )
