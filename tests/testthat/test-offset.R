@@ -27,6 +27,12 @@ m4 <- pscl::zeroinfl(
   dist = "poisson"
 )
 
+m5 <- pscl::zeroinfl(
+  y ~ x | 1, data = d,
+  dist = "poisson",
+  offset = log(raw_off)
+)
+
 test_that("offset in get_data()", {
   expect_equal(colnames(get_data(m1)), c("y", "logOff", "x"))
   expect_equal(colnames(get_data(m2)), c("y", "x", "logOff"))
@@ -42,6 +48,10 @@ test_that("offset in get_data()", {
 test_that("offset as term", {
   expect_identical(find_offset(m4), "raw_off")
   expect_identical(find_offset(m4, as_term = TRUE), "log(raw_off)")
+  expect_identical(find_offset(m1), "logOff")
+  expect_identical(find_offset(m1, as_term = TRUE), "logOff")
+  expect_identical(find_offset(m5), "raw_off")
+  expect_identical(find_offset(m5, as_term = TRUE), "log(raw_off)")
 })
 
 # test_that("offset in null_model()", {
