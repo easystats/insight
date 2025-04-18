@@ -106,7 +106,7 @@
   }
 
   # brms-exceptions: predict distributional parameters
-  if (predict %in% find_auxiliary(x, verbose = FALSE)) {
+  if (predict %in% c(find_auxiliary(x, verbose = FALSE), "mu")) {
     dpar <- predict
     predict <- "expectation"
   }
