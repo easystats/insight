@@ -105,8 +105,17 @@
     predict <- "prediction"
   }
 
+  # intermediate step, evaluate dpars                             ------------
+  ############################################################################
+
   # brms-exceptions: predict distributional parameters
-  if (predict %in% c(find_auxiliary(x, verbose = FALSE), "mu")) {
+  if (!is.null(dots$dpars)) {
+    # if user provided dpars argument, we just pass it to the predict-function.
+    # we don't overwrite the "predict" argument, because this allows us to pass
+    # dpars to "posterior_predict()" - else, when dpars are provided via the
+    # predict-argument, we always set predict = "expectation"
+    dpar <- dots$dpars
+  } else if (inherits(x, "brmsfit") && predict %in% c(find_auxiliary(x, verbose = FALSE), "mu")) {
     dpar <- predict
     predict <- "expectation"
   }
