@@ -74,7 +74,9 @@ get_predicted.stanreg <- function(x,
 
   # Fix dots content
   dots <- list(...)
-  dots[["newdata"]] <- NULL
+  # these arguments have already been set
+  dots[names(fun_args)] <- NULL
+
   fun_args <- c(fun_args, dots)
 
   model_family <- get_family(x)
