@@ -97,10 +97,11 @@ find_parameters.brmsfit <- function(x,
   # special pattern for multivariate models
   if (is.null(mv_response)) {
     mv_pattern_fixed <- mv_pattern_random <- mv_pattern_dpars <- mv_pattern_sigma <- ""
+    mv_pattern_random_dpars <- "\\["
   } else {
     mv_pattern_fixed <- sprintf("(\\Q%s\\E_)", mv_response)
-    mv_pattern_random <- sprintf("(_\\Q%s\\E)(_|\\[)", mv_response)
-    mv_pattern_dpars <- sprintf("(_\\Q%s\\E_)", mv_response)
+    mv_pattern_random_dpars <- mv_pattern_random <- sprintf("(_\\Q%s\\E)(_|\\[)", mv_response)
+    mv_pattern_dpars <- sprintf("(\\Q%s\\E_)", mv_response)
     mv_pattern_sigma <- sprintf("\\Q%s\\E", mv_response)
   }
 
@@ -156,11 +157,11 @@ find_parameters.brmsfit <- function(x,
       dpars_fixed[[dp]] <- grep(pattern, fe, value = TRUE)
     }
     # random
-    pattern <- paste0("^r_(.*__", dp, ")", mv_pattern_random)
+    pattern <- paste0("^r_(.*__", dp, ")", mv_pattern_random_dpars)
     random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
-    pattern <- paste0("^sd_(.*_", dp, ")", mv_pattern_dpars)
+    pattern <- paste0("^sd_(.*_", dp, "_)", mv_pattern_dpars)
     random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
-    pattern <- paste0("^cor_(.*_", dp, ")", mv_pattern_dpars)
+    pattern <- paste0("^cor_(.*_", dp, "_)", mv_pattern_dpars)
     random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
     dpars_random[[dp]] <- compact_character(random_dp)
   }

@@ -4,10 +4,14 @@
 \alias{find_offset}
 \title{Find possible offset terms in a model}
 \usage{
-find_offset(x)
+find_offset(x, as_term = FALSE)
 }
 \arguments{
 \item{x}{A fitted model.}
+
+\item{as_term}{Logical, if \code{TRUE}, the offset is returned as term, including
+possible transformations, like \code{log(variable)}. If \code{FALSE} (default), only
+the variable name is returned.}
 }
 \value{
 A character vector with the name(s) of offset terms.
@@ -16,21 +20,29 @@ A character vector with the name(s) of offset terms.
 Returns a character vector with the name(s) of offset terms.
 }
 \examples{
-\dontshow{if (require("pscl")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("pscl", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Generate some zero-inflated data
 set.seed(123)
 N <- 100 # Samples
 x <- runif(N, 0, 10) # Predictor
 off <- rgamma(N, 3, 2) # Offset variable
 yhat <- -1 + x * 0.5 + log(off) # Prediction on log scale
-dat <- data.frame(y = NA, x, logOff = log(off))
+dat <- data.frame(y = NA, x, logOff = log(off), raw_off = off)
 dat$y <- rpois(N, exp(yhat)) # Poisson process
 dat$y <- ifelse(rbinom(N, 1, 0.3), 0, dat$y) # Zero-inflation process
 
-m1 <- zeroinfl(y ~ offset(logOff) + x | 1, data = dat, dist = "poisson")
+m1 <- pscl::zeroinfl(y ~ offset(logOff) + x | 1, data = dat, dist = "poisson")
 find_offset(m1)
 
-m2 <- zeroinfl(y ~ x | 1, data = dat, offset = logOff, dist = "poisson")
+m2 <- pscl::zeroinfl(
+  y ~ offset(log(raw_off)) + x | 1,
+  data = dat,
+  dist = "poisson"
+)
 find_offset(m2)
+find_offset(m2, as_term = TRUE)
+
+m3 <- pscl::zeroinfl(y ~ x | 1, data = dat, offset = logOff, dist = "poisson")
+find_offset(m3)
 \dontshow{\}) # examplesIf}
 }

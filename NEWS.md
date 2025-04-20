@@ -53,6 +53,9 @@
 * `get_predicted()` no longer throws warnings for models of class `brmsfit`
   when distributional are predicted.
 
+* `find_offset()` gets an `as_term` argument, which returns the offset as term,
+  including possible transformations.
+
 * Token-option `"quartiles2"` was removed and option `"quartiles"` now produces
   the three quartile values (lower hinge, median, upper hinge). The former
   option of `"quartiles"` that included minimum and maximum was identical to the
