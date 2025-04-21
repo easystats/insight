@@ -76,13 +76,18 @@ to text-format (see \code{format}).}
 
 \item{format}{Name of output-format, as string. If \code{NULL} (or \code{"text"}),
 returned output is used for basic printing. Can be one of \code{NULL} (the
-default) resp. \code{"text"} for plain text, \code{"markdown"} (or
-\code{"md"}) for markdown and \code{"html"} for HTML output.}
+default) resp. \code{"text"} for plain text, \code{"markdown"} (or \code{"md"}) for
+markdown and \code{"html"} for HTML output. A special option is \code{"tt"}, which
+creates a \code{\link[tinytable:tt]{tinytable::tt()}} object, where the output format is dependent
+on the context where the table is used, i.e. it can be markdown format when
+\code{export_table()} is used in markdown files, or LaTex format when creating
+PDFs etc.}
 
-\item{title, caption, subtitle}{Table title (same as caption) and subtitle, as strings. If \code{NULL},
-no title or subtitle is printed, unless it is stored as attributes (\code{table_title},
-or its alias \code{table_caption}, and \code{table_subtitle}). If \code{x} is a list of
-data frames, \code{caption} may be a list of table captions, one for each table.}
+\item{title, caption, subtitle}{Table title (same as caption) and subtitle, as
+strings. If \code{NULL}, no title or subtitle is printed, unless it is stored as
+attributes (\code{table_title}, or its alias \code{table_caption}, and
+\code{table_subtitle}). If \code{x} is a list of data frames, \code{caption} may be a list
+of table captions, one for each table.}
 
 \item{footer}{Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a
@@ -135,7 +140,8 @@ will be preserved. Only applies when \code{table_width} is \emph{not} \code{NULL
 
 \item{verbose}{Toggle messages and warnings.}
 
-\item{...}{Currently not used.}
+\item{...}{Arguments passed to \code{\link[tinytable:tt]{tinytable::tt()}} and \code{\link[tinytable:style_tt]{tinytable::style_tt()}}
+when \code{format = "tt"}.}
 }
 \value{
 If \code{format = "text"} (or \code{NULL}), a formatted character string is

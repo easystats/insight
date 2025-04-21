@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.1.0.38
+Version: 1.1.0.39
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -202,7 +202,7 @@ Suggests:
     survival,
     svylme,
     testthat,
-    tinytable (>= 0.1.0),
+    tinytable (>= 0.8.0),
     TMB,
     truncreg,
     tune,
