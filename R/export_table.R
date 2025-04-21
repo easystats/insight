@@ -18,7 +18,7 @@
 #'   returned output is used for basic printing. Can be one of `NULL` (the
 #'   default) resp. `"text"` for plain text, `"markdown"` (or `"md"`) for
 #'   markdown and `"html"` for HTML output. A special option is `"tt"`, which
-#'   creates a [`tinytable::tt()`] object, where the output format is dependend
+#'   creates a [`tinytable::tt()`] object, where the output format is dependent
 #'   on the context where the table is used, i.e. it can be markdown format when
 #'   `export_table()` is used in markdown files, or LaTex format when creating
 #'   PDFs etc.
