@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.39</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,38 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.0" id="insight-120">insight 1.2.0<a class="anchor" aria-label="anchor" href="#insight-120"></a></h2><p class="text-muted">CRAN release: 2025-04-22</p>
+<div class="section level3">
+<h3 id="breaking-changes-1-2-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-2-0"></a></h3>
+<ul><li><p>The handling of <code>brms</code> models in <code><a href="../reference/find_parameters.html">find_parameters()</a></code>, <code><a href="../reference/find_formula.html">find_formula()</a></code> or <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> (and other functions) should now systematically take the many possible distributional parameters into account, identifying the different types of them, and assigning them to own values in the <code>Component</code> columns. <em>insight</em> should now be flexible enough to also cope with user-defined variables that have been modelled as distributional parameters.</p></li>
+<li><p>To be consistent with the naming pattern from package <code>brms</code>, all elements related to distributional parameters now returns exactly that “dpar” name. This means that, for instance, <code><a href="../reference/find_formula.html">find_formula()</a></code> no longer returns an element named <code>$zero_inflated</code>, but instead <code>$zi</code>. This only applies to models from <code>brms</code>! All other packages are not affected by this breaking change.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-2-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-2-0"></a></h3>
+<ul><li><p><code><a href="../reference/find_random.html">find_random()</a></code> and <code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code> now also extract random effects names from auxiliary components.</p></li>
+<li><p><code><a href="../reference/find_random.html">find_random()</a></code> and <code><a href="../reference/find_random_slopes.html">find_random_slopes()</a></code> now include random effects from the dispersion component for models from package <em>glmmTMB</em>.</p></li>
+<li><p><code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for brms-models now assigns auxiliary parameters to their related <code>Component</code> and overwrites former assignments to <code>"conditional"</code>.</p></li>
+<li><p><code><a href="../reference/format_table.html">format_table()</a></code> now includes more effect sizes when formatting column names.</p></li>
+<li><p><code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> now allows named vectors for arguments <code>length</code> and <code>range</code>, to match values with target variables defined in <code>by</code>.</p></li>
+<li><p><code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> gets a <code>protect_integer</code> argument, to allow a spread of values from minimum to maximum of length <code>length</code>, also for integer values.</p></li>
+<li><p><code><a href="../reference/export_table.html">export_table()</a></code> gets an argument <code>column_names</code>, to change the column names of the exported table.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> gains a <code>response</code> argument for classes that can be multivariate response models that return multiple lists of model information (currently, Stan models from <em>rstanarm</em> and <em>brms</em>). If not <code>NULL</code>, only the information for one of the response variables is returned.</p></li>
+<li><p>Creating a range of values in a <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> using <code>by</code> was now simplified and works like regular R syntax, e.g. <code>by = "mpg = 20:50"</code>.</p></li>
+<li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> for models of class <code>brmsfit</code> now supports Wiener models or similar so called “decision models”, that simultaneously model, e.g., reaction times and (discrete) choices.</p></li>
+<li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> no longer throws warnings for models of class <code>brmsfit</code> when distributional are predicted.</p></li>
+<li><p><code><a href="../reference/find_offset.html">find_offset()</a></code> gets an <code>as_term</code> argument, which returns the offset as term, including possible transformations.</p></li>
+<li><p>Token-option <code>"quartiles2"</code> was removed and option <code>"quartiles"</code> now produces the three quartile values (lower hinge, median, upper hinge). The former option of <code>"quartiles"</code> that included minimum and maximum was identical to the already existing <code>"fivenum"</code> option.</p></li>
+<li><p>New function <code><a href="../reference/find_auxiliary.html">find_auxiliary()</a></code>, which is a small helper to extract all distributional parameters that were used in models from package <em>brms</em>.</p></li>
+<li><p><code><a href="../reference/display.html">display()</a></code>, <code><a href="../reference/display.html">print_md()</a></code> and <code><a href="../reference/display.html">print_html()</a></code> get methods for matrix- and array objects.</p></li>
+<li><p>Cleaning / revising package documentation.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-2-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-0"></a></h3>
+<ul><li><p><code><a href="../reference/null_model.html">null_model()</a></code> now correctly calculates the null-model based on the data that was used to fit the model (model frame), which can lead to different results when the original data contained missing values.</p></li>
+<li><p>Fixed issue for <code><a href="../reference/get_predicted.html">get_predicted()</a></code> with multivariate response models.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="insight-110">insight 1.1.0<a class="anchor" aria-label="anchor" href="#insight-110"></a></h2><p class="text-muted">CRAN release: 2025-03-01</p>
 <div class="section level3">
