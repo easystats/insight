@@ -101,7 +101,7 @@
     if (verbose) {
       format_warning(
         sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).", name_full), # nolint
-        "Solution: Respecify random structure! You may also decrease the `tolerance` level to enforce the calculation of random effect variances." # nolint
+        "Decrease the `tolerance` level to force the calculation of random effect variances, or impose priors on your random effects parameters (using packages like `brms` or `glmmTMB`)." # nolint
       )
     }
     no_random_variance <- TRUE
@@ -128,7 +128,7 @@
   if (!.random_slopes_in_fixed(model) && verbose) {
     format_warning(
       sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.", name_full),
-      "Solution: Respecify fixed structure!"
+      "Respecify the fixed effects structure of your model (add random slopes as fixed effects)."
     )
   }
 

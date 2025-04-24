@@ -1,3 +1,9 @@
+# insight (devel)
+
+## Changes
+
+* Revised wording for alerts from `get_variance()`.
+
 # insight 1.2.0
 
 ## Breaking Changes
