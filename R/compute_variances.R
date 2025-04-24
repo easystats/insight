@@ -128,7 +128,7 @@
   if (!.random_slopes_in_fixed(model) && verbose) {
     format_warning(
       sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.", name_full),
-      "Solution: Respecify fixed structure!"
+      "Respecify the fixed effects structure of your model (add random slopes as fixed effects)."
     )
   }
 
