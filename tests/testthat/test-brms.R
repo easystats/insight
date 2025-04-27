@@ -345,7 +345,7 @@ test_that("find_paramaters", {
     )
   )
 
-    expect_identical(
+  expect_identical(
     find_parameters(m2),
     structure(
       list(
