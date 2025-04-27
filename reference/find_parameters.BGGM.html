@@ -13,7 +13,7 @@ from as.data.frame()."><meta property="og:image" content="https://easystats.gith
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,7 +124,11 @@ vector, not as list. Duplicated values are removed.</p></dd>
 <dt id="arg-effects">effects<a class="anchor" aria-label="anchor" href="#arg-effects"></a></dt>
 <dd><p>Should variables for fixed effects (<code>"fixed"</code>), random effects
 (<code>"random"</code>) or both (<code>"all"</code>) be returned? Only applies to mixed models. May
-be abbreviated.</p></dd>
+be abbreviated. For models of class <code>brmsfit</code>, it is possible to return
+random effects parameters (variance and correlation components) and group
+level estimates separately. Use <code>"grouplevel"</code> to return only group level
+estimates (those parameters that start with <code>r_</code>), or <code>"random_variances"</code> to
+return random effects variances.</p></dd>
 
 
 <dt id="arg-parameters">parameters<a class="anchor" aria-label="anchor" href="#arg-parameters"></a></dt>
