@@ -447,8 +447,8 @@ test_that("find_paramaters", {
 })
 
 test_that("get_paramaters", {
-  expect_identical(
-    colnames(get_parameters(m4)),
+  expect_named(
+    get_parameters(m4),
     c(
       "b_Intercept",
       "b_child",
@@ -458,12 +458,12 @@ test_that("get_paramaters", {
       "b_zi_camper"
     )
   )
-  expect_identical(
-    colnames(get_parameters(m4, component = "zi")),
+  expect_named(
+    get_parameters(m4, component = "zi"),
     c("b_zi_Intercept", "b_zi_child", "b_zi_camper")
   )
-  expect_identical(
-    colnames(get_parameters(m4, effects = "all")),
+  expect_named(
+    get_parameters(m4, effects = "full"),
     c(
       "b_Intercept", "b_child", "b_camper", "r_persons[1,Intercept]",
       "r_persons[2,Intercept]", "r_persons[3,Intercept]", "r_persons[4,Intercept]",
@@ -472,15 +472,15 @@ test_that("get_paramaters", {
       "r_persons__zi[4,Intercept]", "sd_persons__zi_Intercept"
     )
   )
-  expect_identical(
-    colnames(get_parameters(m4, effects = "random", component = "conditional")),
+  expect_named(
+    get_parameters(m4, effects = "random", component = "conditional"),
     c(
       "r_persons[1,Intercept]", "r_persons[2,Intercept]", "r_persons[3,Intercept]",
       "r_persons[4,Intercept]", "sd_persons__Intercept"
     )
   )
-  expect_identical(
-    colnames(get_parameters(m5, effects = "random", component = "conditional")),
+  expect_named(
+    get_parameters(m5, effects = "random", component = "conditional"),
     c(
       "r_persons__count[1,Intercept]", "r_persons__count[2,Intercept]",
       "r_persons__count[3,Intercept]", "r_persons__count[4,Intercept]",
@@ -490,8 +490,8 @@ test_that("get_paramaters", {
     )
   )
 
-  expect_identical(
-    colnames(get_parameters(m5, effects = "all", component = "all")),
+  expect_named(
+    get_parameters(m5, effects = "full", component = "all"),
     c(
       "b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count[1,Intercept]",
       "r_persons__count[2,Intercept]", "r_persons__count[3,Intercept]",
@@ -505,6 +505,18 @@ test_that("get_paramaters", {
       "sd_persons__count2_Intercept", "b_zi_count2_Intercept", "b_zi_count2_child",
       "r_persons__zi_count2[1,Intercept]", "r_persons__zi_count2[2,Intercept]",
       "r_persons__zi_count2[3,Intercept]", "r_persons__zi_count2[4,Intercept]",
+      "sd_persons__zi_count2_Intercept"
+    )
+  )
+
+  expect_named(
+    get_parameters(m5, effects = "all", component = "all"),
+    c(
+      "b_count_Intercept", "b_count_child", "b_count_camper",
+      "sd_persons__count_Intercept", "b_zi_count_Intercept", "b_zi_count_camper",
+      "sd_persons__zi_count_Intercept",
+      "b_count2_Intercept", "b_count2_child", "b_count2_livebait",
+      "sd_persons__count2_Intercept", "b_zi_count2_Intercept", "b_zi_count2_child",
       "sd_persons__zi_count2_Intercept"
     )
   )
@@ -811,6 +823,14 @@ test_that("brms dpars 1", {
     find_parameters(model),
     list(
       conditional = c("b_Intercept", "b_hp"),
+      random = "sd_cyl__Intercept",
+      sigma = c("b_sigma_Intercept", "b_sigma_cyl")
+    )
+  )
+  expect_identical(
+    find_parameters(model, effects = "full"),
+    list(
+      conditional = c("b_Intercept", "b_hp"),
       random = c(
         "r_cyl[4,Intercept]", "r_cyl[6,Intercept]",
         "r_cyl[8,Intercept]", "sd_cyl__Intercept"
@@ -835,7 +855,7 @@ test_that("brms dpars 2", {
   model <- insight::download_model("brms_sigma_3")
   skip_if(is.null(model))
   expect_identical(
-    find_parameters(model),
+    find_parameters(model, effects = "full"),
     list(
       conditional = c("b_Intercept", "b_Petal.Width"),
       random = c(
@@ -850,6 +870,23 @@ test_that("brms dpars 2", {
         "r_Group__sigma[G3,Intercept]", "r_Group__sigma[G1,Petal.Width]",
         "r_Group__sigma[G2,Petal.Width]", "r_Group__sigma[G3,Petal.Width]",
         "sd_Group__sigma_Intercept", "sd_Group__sigma_Petal.Width",
+        "cor_Group__sigma_Intercept__sigma_Petal.Width"
+      )
+    )
+  )
+  expect_identical(
+    find_parameters(model, effects = "all"),
+    list(
+      conditional = c("b_Intercept", "b_Petal.Width"),
+      random = c(
+        "sd_Group__Intercept",
+        "sd_Group__Petal.Width",
+        "cor_Group__Intercept__Petal.Width"
+      ),
+      sigma = c("b_sigma_Intercept", "b_sigma_Petal.Width"),
+      sigma_random = c(
+        "sd_Group__sigma_Intercept",
+        "sd_Group__sigma_Petal.Width",
         "cor_Group__sigma_Intercept__sigma_Petal.Width"
       )
     )
@@ -876,7 +913,7 @@ test_that("brms dpars 3", {
   model <- insight::download_model("brms_chocomini_1")
   skip_if(is.null(model))
   expect_identical(
-    find_parameters(model),
+    find_parameters(model, effects = "full"),
     list(
       conditional = "b_Intercept",
       random = c(
@@ -1153,7 +1190,7 @@ test_that("brms dpars find_auxiliary", {
   skip_if(is.null(model))
   out <- find_auxiliary(model)
   expect_identical(out, c("phi", "zoi", "coi"))
-  out <- find_parameters(model, effects = "all", component = "all")
+  out <- find_parameters(model, effects = "full", component = "all")
   expect_identical(
     out,
     list(
@@ -1195,6 +1232,22 @@ test_that("brms dpars find_auxiliary", {
       )
     )
   )
+
+  out <- find_parameters(model, effects = "all", component = "all")
+  expect_identical(
+    out,
+    list(
+      conditional = "b_Intercept",
+      random = "sd_participant__Intercept",
+      coi = "b_coi_Intercept",
+      phi = "b_phi_Intercept",
+      zoi = "b_zoi_Intercept",
+      coi_random = "sd_participant__coi_Intercept",
+      phi_random = "sd_participant__phi_Intercept",
+      zoi_random = "sd_participant__zoi_Intercept"
+    )
+  )
+
   out <- clean_parameters(model)
   expect_identical(dim(out), c(48L, 5L))
   expect_identical(unique(out$Component), c("conditional", "coi", "phi", "zoi"))
