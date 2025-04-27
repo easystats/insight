@@ -1030,7 +1030,7 @@ test_that("brms dpars find_auxiliary", {
         "r_Participant__k[S014,Intercept]", "r_Participant__k[S015,Intercept]",
         "r_Participant__k[S016,Intercept]", "r_Participant__k[S017,Intercept]",
         "r_Participant__k[S018,Intercept]", "r_Participant__k[S019,Intercept]",
-        "r_Participant__k[S020,Intercept]", "sd_Participant__delta_Intercept"
+        "r_Participant__k[S020,Intercept]", "sd_Participant__k_Intercept"
       )
     )
   )
