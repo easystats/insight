@@ -144,6 +144,19 @@ find_parameters.brmsfit <- function(x,
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
   dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
 
+  # combine random effects elements for conditional component
+  cond_random <- c(rand, rand_sd, rand_cor, car_struc)
+
+  # check whether group level effects should be returned or not. only when
+  # effects is random, all or grouplevel. For all other effects options,
+  # remove them. For grouplevel, only keep them
+  cond_random <- switch(effects,
+    fixed = ,
+    random_variance = cond_random[!startsWith(cond_random, "r_")],
+    grouplevel = cond_random[startsWith(cond_random, "r_")],
+    cond_random
+  )
+
   dpars_fixed <- list()
   dpars_random <- list()
 
@@ -173,10 +186,13 @@ find_parameters.brmsfit <- function(x,
 
     # check whether group level effects should be returned or not. only when
     # effects is random, all or grouplevel. For all other effects options,
-    # remove them
-    if (effects %in% c("fixed", "random_variance")) {
-      dpars_random[[dp]] <- dpars_random[[dp]][!startsWith(dpars_random[[dp]], "r_")]
-    }
+    # remove them. For grouplevel, only keep them
+    dpars_random[[dp]] <- switch(effects,
+      fixed = ,
+      random_variance = dpars_random[[dp]][!startsWith(dpars_random[[dp]], "r_")],
+      grouplevel = dpars_random[[dp]][startsWith(dpars_random[[dp]], "r_")],
+      dpars_random[[dp]]
+    )
   }
 
   # find names of random dpars that do not have the suffix "_random", and add it
@@ -186,7 +202,7 @@ find_parameters.brmsfit <- function(x,
   }
 
   compact_list(c(
-    list(conditional = cond, random = c(rand, rand_sd, rand_cor, car_struc)),
+    list(conditional = cond, random = cond_random),
     dpars_fixed,
     dpars_random
   )[elements])
