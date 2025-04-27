@@ -48,7 +48,11 @@ vector, not as list. Duplicated values are removed.}
 
 \item{effects}{Should variables for fixed effects (\code{"fixed"}), random effects
 (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
-be abbreviated.}
+be abbreviated. For models of class \code{brmsfit}, it is possible to return
+random effects parameters (variance and correlation components) and group
+level estimates separately. Use \code{"grouplevel"} to return only group level
+estimates (those parameters that start with \code{r_}), or \code{"random_variances"} to
+return random effects variances.}
 
 \item{parameters}{Regular expression pattern that describes the parameters that
 should be returned.}

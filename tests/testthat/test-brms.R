@@ -925,6 +925,115 @@ test_that("brms dpars find_auxiliary", {
   )
   expect_silent(find_auxiliary(lm(mpg ~ hp, data = mtcars), verbose = FALSE))
   expect_null(find_auxiliary(lm(mpg ~ hp, data = mtcars), verbose = FALSE))
+
+  # different parameters for effects
+  expect_identical(
+    find_parameters(model, effects = "fixed"),
+    list(
+      conditional = "b_Intercept",
+      delta = "b_delta_Intercept",
+      k = "b_k_Intercept",
+      phi = "b_phi_Intercept"
+    )
+  )
+
+  expect_identical(
+    find_parameters(model, effects = "random_variance"),
+    list(
+      random = "sd_Participant__Intercept",
+      delta_random = "sd_Participant__delta_Intercept",
+      k_random = "sd_Participant__k_Intercept"
+    )
+  )
+
+  expect_identical(
+    find_parameters(model, effects = "grouplevel"),
+    list(
+      random = c(
+        "r_Participant[S001,Intercept]", "r_Participant[S002,Intercept]",
+        "r_Participant[S003,Intercept]", "r_Participant[S004,Intercept]",
+        "r_Participant[S005,Intercept]", "r_Participant[S006,Intercept]",
+        "r_Participant[S007,Intercept]", "r_Participant[S008,Intercept]",
+        "r_Participant[S009,Intercept]", "r_Participant[S010,Intercept]",
+        "r_Participant[S011,Intercept]", "r_Participant[S012,Intercept]",
+        "r_Participant[S013,Intercept]", "r_Participant[S014,Intercept]",
+        "r_Participant[S015,Intercept]", "r_Participant[S016,Intercept]",
+        "r_Participant[S017,Intercept]", "r_Participant[S018,Intercept]",
+        "r_Participant[S019,Intercept]", "r_Participant[S020,Intercept]"
+      ),
+      delta_random = c(
+        "r_Participant__delta[S001,Intercept]",
+        "r_Participant__delta[S002,Intercept]", "r_Participant__delta[S003,Intercept]",
+        "r_Participant__delta[S004,Intercept]", "r_Participant__delta[S005,Intercept]",
+        "r_Participant__delta[S006,Intercept]", "r_Participant__delta[S007,Intercept]",
+        "r_Participant__delta[S008,Intercept]", "r_Participant__delta[S009,Intercept]",
+        "r_Participant__delta[S010,Intercept]", "r_Participant__delta[S011,Intercept]",
+        "r_Participant__delta[S012,Intercept]", "r_Participant__delta[S013,Intercept]",
+        "r_Participant__delta[S014,Intercept]", "r_Participant__delta[S015,Intercept]",
+        "r_Participant__delta[S016,Intercept]", "r_Participant__delta[S017,Intercept]",
+        "r_Participant__delta[S018,Intercept]", "r_Participant__delta[S019,Intercept]",
+        "r_Participant__delta[S020,Intercept]"
+      ),
+      k_random = c(
+        "r_Participant__k[S001,Intercept]",
+        "r_Participant__k[S002,Intercept]", "r_Participant__k[S003,Intercept]",
+        "r_Participant__k[S004,Intercept]", "r_Participant__k[S005,Intercept]",
+        "r_Participant__k[S006,Intercept]", "r_Participant__k[S007,Intercept]",
+        "r_Participant__k[S008,Intercept]", "r_Participant__k[S009,Intercept]",
+        "r_Participant__k[S010,Intercept]", "r_Participant__k[S011,Intercept]",
+        "r_Participant__k[S012,Intercept]", "r_Participant__k[S013,Intercept]",
+        "r_Participant__k[S014,Intercept]", "r_Participant__k[S015,Intercept]",
+        "r_Participant__k[S016,Intercept]", "r_Participant__k[S017,Intercept]",
+        "r_Participant__k[S018,Intercept]", "r_Participant__k[S019,Intercept]",
+        "r_Participant__k[S020,Intercept]"
+      )
+    )
+  )
+
+  expect_identical(
+    find_parameters(model, effects = "random"),
+    list(
+      random = c(
+        "r_Participant[S001,Intercept]", "r_Participant[S002,Intercept]",
+        "r_Participant[S003,Intercept]", "r_Participant[S004,Intercept]",
+        "r_Participant[S005,Intercept]", "r_Participant[S006,Intercept]",
+        "r_Participant[S007,Intercept]", "r_Participant[S008,Intercept]",
+        "r_Participant[S009,Intercept]", "r_Participant[S010,Intercept]",
+        "r_Participant[S011,Intercept]", "r_Participant[S012,Intercept]",
+        "r_Participant[S013,Intercept]", "r_Participant[S014,Intercept]",
+        "r_Participant[S015,Intercept]", "r_Participant[S016,Intercept]",
+        "r_Participant[S017,Intercept]", "r_Participant[S018,Intercept]",
+        "r_Participant[S019,Intercept]", "r_Participant[S020,Intercept]",
+        "sd_Participant__Intercept"
+      ),
+      delta_random = c(
+        "r_Participant__delta[S001,Intercept]",
+        "r_Participant__delta[S002,Intercept]", "r_Participant__delta[S003,Intercept]",
+        "r_Participant__delta[S004,Intercept]", "r_Participant__delta[S005,Intercept]",
+        "r_Participant__delta[S006,Intercept]", "r_Participant__delta[S007,Intercept]",
+        "r_Participant__delta[S008,Intercept]", "r_Participant__delta[S009,Intercept]",
+        "r_Participant__delta[S010,Intercept]", "r_Participant__delta[S011,Intercept]",
+        "r_Participant__delta[S012,Intercept]", "r_Participant__delta[S013,Intercept]",
+        "r_Participant__delta[S014,Intercept]", "r_Participant__delta[S015,Intercept]",
+        "r_Participant__delta[S016,Intercept]", "r_Participant__delta[S017,Intercept]",
+        "r_Participant__delta[S018,Intercept]", "r_Participant__delta[S019,Intercept]",
+        "r_Participant__delta[S020,Intercept]", "sd_Participant__delta_Intercept"
+      ),
+      k_random = c(
+        "r_Participant__k[S001,Intercept]",
+        "r_Participant__k[S002,Intercept]", "r_Participant__k[S003,Intercept]",
+        "r_Participant__k[S004,Intercept]", "r_Participant__k[S005,Intercept]",
+        "r_Participant__k[S006,Intercept]", "r_Participant__k[S007,Intercept]",
+        "r_Participant__k[S008,Intercept]", "r_Participant__k[S009,Intercept]",
+        "r_Participant__k[S010,Intercept]", "r_Participant__k[S011,Intercept]",
+        "r_Participant__k[S012,Intercept]", "r_Participant__k[S013,Intercept]",
+        "r_Participant__k[S014,Intercept]", "r_Participant__k[S015,Intercept]",
+        "r_Participant__k[S016,Intercept]", "r_Participant__k[S017,Intercept]",
+        "r_Participant__k[S018,Intercept]", "r_Participant__k[S019,Intercept]",
+        "r_Participant__k[S020,Intercept]", "sd_Participant__k_Intercept"
+      )
+    )
+  )
 })
 
 

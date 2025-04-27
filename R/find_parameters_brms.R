@@ -6,7 +6,10 @@ find_parameters.brmsfit <- function(x,
                                     flatten = FALSE,
                                     parameters = NULL,
                                     ...) {
-  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  effects <- validate_argument(
+    effects,
+    c("all", "fixed", "random", "random_variance", "grouplevel")
+  )
   component <- validate_argument(
     component,
     c(
@@ -39,12 +42,13 @@ find_parameters.brmsfit <- function(x,
       .brms_parameters,
       fe = fe,
       dpars = dpars,
-      elements = elements
+      elements = elements,
+      effects = effects
     )
     names(l) <- rn
     is_mv <- "1"
   } else {
-    l <- .brms_parameters(fe, dpars, elements)
+    l <- .brms_parameters(fe, dpars, elements, effects)
   }
 
   l <- .filter_pars(l, parameters, !is.null(is_mv) && is_mv == "1")
@@ -74,20 +78,22 @@ find_parameters.brmsfit <- function(x,
   elements <- c(elements, "priors")
 
   # add random effects
-  if (effects %in% c("all", "random")) {
+  if (effects %in% c("all", "random", "grouplevel", "random_variance")) {
     elements <- unique(c(elements, paste0(elements, "_random")))
   }
 
   # remove random effects or keep them only
   switch(effects,
     fixed = elements[!endsWith(elements, "random")],
+    grouplevel = ,
+    random_variance = ,
     random = elements[endsWith(elements, "random")],
     elements
   )
 }
 
 
-.brms_parameters <- function(fe, dpars, elements, mv_response = NULL) {
+.brms_parameters <- function(fe, dpars, elements, effects = "all", mv_response = NULL) {
   # dpars: names of `$pforms` element, which includes the names of
   #        all auxiliary parameters
   #
@@ -138,6 +144,19 @@ find_parameters.brmsfit <- function(x,
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
   dispersion <- fe[grepl("dispersion", fe, fixed = TRUE)]
 
+  # combine random effects elements for conditional component
+  cond_random <- c(rand, rand_sd, rand_cor, car_struc)
+
+  # check whether group level effects should be returned or not. only when
+  # effects is random, all or grouplevel. For all other effects options,
+  # remove them. For grouplevel, only keep them
+  cond_random <- switch(effects,
+    fixed = ,
+    random_variance = cond_random[!startsWith(cond_random, "r_")],
+    grouplevel = cond_random[startsWith(cond_random, "r_")],
+    cond_random
+  )
+
   dpars_fixed <- list()
   dpars_random <- list()
 
@@ -164,6 +183,16 @@ find_parameters.brmsfit <- function(x,
     pattern <- paste0("^cor_(.*_", dp, "_)", mv_pattern_dpars)
     random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
     dpars_random[[dp]] <- compact_character(random_dp)
+
+    # check whether group level effects should be returned or not. only when
+    # effects is random, all or grouplevel. For all other effects options,
+    # remove them. For grouplevel, only keep them
+    dpars_random[[dp]] <- switch(effects,
+      fixed = ,
+      random_variance = dpars_random[[dp]][!startsWith(dpars_random[[dp]], "r_")],
+      grouplevel = dpars_random[[dp]][startsWith(dpars_random[[dp]], "r_")],
+      dpars_random[[dp]]
+    )
   }
 
   # find names of random dpars that do not have the suffix "_random", and add it
@@ -173,7 +202,7 @@ find_parameters.brmsfit <- function(x,
   }
 
   compact_list(c(
-    list(conditional = cond, random = c(rand, rand_sd, rand_cor, car_struc)),
+    list(conditional = cond, random = cond_random),
     dpars_fixed,
     dpars_random
   )[elements])

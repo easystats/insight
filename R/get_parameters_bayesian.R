@@ -16,7 +16,9 @@
 #'   `centrality = "median"` would use the more robust median value as
 #'   measure of central tendency.
 #' @param verbose Toggle messages and warnings.
-#' @param ... Currently not used.
+#' @param ... Currently only used for models of class `brmsfit`, where a `variable`
+#'   argument can be used, which is directly passed to the `as.data.frame()`
+#'   method (i.e., `as.data.frame(x, variable = variable)`).
 #'
 #' @inheritParams find_parameters.BGGM
 #' @inheritParams find_parameters
@@ -221,14 +223,22 @@ get_parameters.brmsfit <- function(x,
                                    summary = FALSE,
                                    centrality = "mean",
                                    ...) {
-  parms <- find_parameters(
-    x,
-    effects = effects,
-    component = component,
-    flatten = FALSE,
-    parameters = parameters
-  )
-  out <- as.data.frame(x)[unique(unlist(parms, use.names = FALSE))]
+  dots <- list(...)
+  # allow hidden argument "variable" to be passed directly to as.data.frame
+  if (is.null(dots$variable)) {
+    parms <- find_parameters(
+      x,
+      effects = effects,
+      component = component,
+      flatten = FALSE,
+      parameters = parameters
+    )
+    variables <- unique(unlist(parms, use.names = FALSE))
+  } else {
+    variables <- dots$variable
+  }
+
+  out <- as.data.frame(x, variable = variables)
 
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality, parms)

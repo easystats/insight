@@ -8,6 +8,13 @@
 #'
 #' @param parameters Regular expression pattern that describes the parameters that
 #' should be returned.
+#' @param effects Should variables for fixed effects (`"fixed"`), random effects
+#' (`"random"`) or both (`"all"`) be returned? Only applies to mixed models. May
+#' be abbreviated. For models of class `brmsfit`, it is possible to return
+#' random effects parameters (variance and correlation components) and group
+#' level estimates separately. Use `"grouplevel"` to return only group level
+#' estimates (those parameters that start with `r_`), or `"random_variances"` to
+#' return random effects variances.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
 #' @inheritParams find_parameters.betamfx

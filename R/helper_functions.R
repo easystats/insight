@@ -301,6 +301,8 @@
   # location parameters
   location_parameters <- switch(effects,
     fixed = setdiff(elements, c(auxiliary_parameters, random_parameters)),
+    grouplevel = ,
+    random_variance = ,
     random = intersect(setdiff(elements, auxiliary_parameters), random_parameters),
     setdiff(elements, auxiliary_parameters)
   )
@@ -325,6 +327,8 @@
   elements <- switch(effects,
     all = elements,
     fixed = elements[!elements %in% random_parameters & !endsWith(elements, "random")],
+    grouplevel = ,
+    random_variance = ,
     random = elements[elements %in% random_parameters | endsWith(elements, "random")]
   )
 

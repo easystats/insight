@@ -71,11 +71,17 @@ calculate means of posterior samples for each parameter, while
 \code{centrality = "median"} would use the more robust median value as
 measure of central tendency.}
 
-\item{...}{Currently not used.}
+\item{...}{Currently only used for models of class \code{brmsfit}, where a \code{variable}
+argument can be used, which is directly passed to the \code{as.data.frame()}
+method (i.e., \code{as.data.frame(x, variable = variable)}).}
 
 \item{effects}{Should variables for fixed effects (\code{"fixed"}), random effects
 (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
-be abbreviated.}
+be abbreviated. For models of class \code{brmsfit}, it is possible to return
+random effects parameters (variance and correlation components) and group
+level estimates separately. Use \code{"grouplevel"} to return only group level
+estimates (those parameters that start with \code{r_}), or \code{"random_variances"} to
+return random effects variances.}
 
 \item{iterations}{Number of posterior draws.}
 
