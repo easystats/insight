@@ -325,7 +325,8 @@
   }
 
   elements <- switch(effects,
-    all = elements,
+    all = ,
+    full = elements,
     fixed = elements[!elements %in% random_parameters & !endsWith(elements, "random")],
     grouplevel = ,
     random_variance = ,

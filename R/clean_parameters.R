@@ -312,7 +312,7 @@ clean_parameters.blavaan <- function(x, ...) {
 #' @export
 clean_parameters.brmsfit <- function(x, ...) {
   pars <- find_parameters(x,
-    effects = "all",
+    effects = "full",
     component = "all",
     flatten = FALSE
   )

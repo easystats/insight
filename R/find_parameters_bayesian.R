@@ -10,12 +10,18 @@
 #' should be returned.
 #' @param effects Should variables for fixed effects (`"fixed"`), random effects
 #' (`"random"`) or both (`"all"`) be returned? Only applies to mixed models. May
-#' be abbreviated. For models of class `brmsfit`, it is possible to return
-#' random effects parameters (variance and correlation components) and group
-#' level estimates separately. Use `"grouplevel"` to return only group level
-#' estimates (those parameters that start with `r_`), or `"random_variances"` to
-#' return random effects variances. `"random"` returns both, `"all"` returns
-#' fixed effects and random effects variances.
+#' be abbreviated.
+#'
+#' For models of class `brmsfit`, there are additional options:
+#' - `"fixed"` returns fixed effects.
+#' - `"random_variance"` return random effects parameters (variance and
+#'   correlation components, e.g. those parameters that start with `sd_` or
+#'   `cor_`).
+#' - `"grouplevel"` returns random effects group level estimates (BLUPs), i.e.
+#'   those parameters that start with `r_`.
+#' - `"random"` returns both `"random_variance"` and `"grouplevel"`.
+#' - `"all"` returns fixed effects and random effects variances.
+#' - `"full"` returns all parameters.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
 #' @inheritParams find_parameters.betamfx

@@ -8,7 +8,7 @@ find_parameters.brmsfit <- function(x,
                                     ...) {
   effects <- validate_argument(
     effects,
-    c("all", "fixed", "random", "random_variance", "grouplevel")
+    c("all", "fixed", "random", "random_variance", "grouplevel", "full")
   )
   component <- validate_argument(
     component,
@@ -78,7 +78,7 @@ find_parameters.brmsfit <- function(x,
   elements <- c(elements, "priors")
 
   # add random effects
-  if (effects %in% c("all", "random", "grouplevel", "random_variance")) {
+  if (effects != "fixed") {
     elements <- unique(c(elements, paste0(elements, "_random")))
   }
 
@@ -93,7 +93,7 @@ find_parameters.brmsfit <- function(x,
 }
 
 
-.brms_parameters <- function(fe, dpars, elements, effects = "all", mv_response = NULL) {
+.brms_parameters <- function(fe, dpars, elements, effects = "full", mv_response = NULL) {
   # dpars: names of `$pforms` element, which includes the names of
   #        all auxiliary parameters
   #
