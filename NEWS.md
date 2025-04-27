@@ -4,6 +4,14 @@
 
 * Revised wording for alerts from `get_variance()`.
 
+* The `effects` argument of `find_parameters()` and `get_parameters()` for
+  models from package *brms* get two new options, `"grouplevel"` and
+  `"random_variances"`, to return only random effects variance components, or
+  group level effects. This is more efficient especially for models with many
+  samples and many parameters. Additionally, a `variable` argument can be passed
+  to `get_parameters()`, which is in turn passed to `as.data.frame()`, to
+  extract parameters more efficiently.
+
 # insight 1.2.0
 
 ## Breaking Changes
