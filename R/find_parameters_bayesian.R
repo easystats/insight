@@ -14,7 +14,8 @@
 #' random effects parameters (variance and correlation components) and group
 #' level estimates separately. Use `"grouplevel"` to return only group level
 #' estimates (those parameters that start with `r_`), or `"random_variances"` to
-#' return random effects variances.
+#' return random effects variances. `"random"` returns both, `"all"` returns
+#' fixed effects and random effects variances.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
 #' @inheritParams find_parameters.betamfx

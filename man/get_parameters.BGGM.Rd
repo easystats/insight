@@ -81,7 +81,8 @@ be abbreviated. For models of class \code{brmsfit}, it is possible to return
 random effects parameters (variance and correlation components) and group
 level estimates separately. Use \code{"grouplevel"} to return only group level
 estimates (those parameters that start with \code{r_}), or \code{"random_variances"} to
-return random effects variances.}
+return random effects variances. \code{"random"} returns both, \code{"all"} returns
+fixed effects and random effects variances.}
 
 \item{iterations}{Number of posterior draws.}
 
