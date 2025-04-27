@@ -17,8 +17,8 @@
 #' - `"random_variance"` return random effects parameters (variance and
 #'   correlation components, e.g. those parameters that start with `sd_` or
 #'   `cor_`).
-#' - `"grouplevel"` returns random effects group level estimates (BLUPs), i.e.
-#'   those parameters that start with `r_`.
+#' - `"grouplevel"` returns random effects group level estimates, i.e. those
+#'   parameters that start with `r_`.
 #' - `"random"` returns both `"random_variance"` and `"grouplevel"`.
 #' - `"all"` returns fixed effects and random effects variances.
 #' - `"full"` returns all parameters.

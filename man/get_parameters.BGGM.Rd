@@ -85,8 +85,8 @@ For models of class \code{brmsfit}, there are additional options:
 \item \code{"random_variance"} return random effects parameters (variance and
 correlation components, e.g. those parameters that start with \code{sd_} or
 \code{cor_}).
-\item \code{"grouplevel"} returns random effects group level estimates (BLUPs), i.e.
-those parameters that start with \code{r_}.
+\item \code{"grouplevel"} returns random effects group level estimates, i.e. those
+parameters that start with \code{r_}.
 \item \code{"random"} returns both \code{"random_variance"} and \code{"grouplevel"}.
 \item \code{"all"} returns fixed effects and random effects variances.
 \item \code{"full"} returns all parameters.
