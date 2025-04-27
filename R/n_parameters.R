@@ -176,10 +176,13 @@ n_parameters.vgam <- n_parameters.gam
 
 #' @export
 n_parameters.brmsfit <- function(x,
-                                 effects = "all",
+                                 effects = "full",
                                  component = "all",
                                  ...) {
-  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  effects <- validate_argument(
+    effects,
+    c("all", "fixed", "random", "full", "random_variance", "grouplevel")
+  )
   component <- validate_argument(component, c("all", .all_elements()))
 
   length(unlist(

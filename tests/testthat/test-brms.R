@@ -318,7 +318,7 @@ test_that("get_data", {
 
 test_that("find_paramaters", {
   expect_identical(
-    find_parameters(m1),
+    find_parameters(m1, effects = "full"),
     list(
       conditional = c(
         "b_Intercept",
@@ -332,6 +332,20 @@ test_that("find_paramaters", {
   )
 
   expect_identical(
+    find_parameters(m1),
+    list(
+      conditional = c(
+        "b_Intercept",
+        "b_Age",
+        "b_Base",
+        "b_Trt1",
+        "b_Base:Trt1"
+      ),
+      random = "sd_patient__Intercept"
+    )
+  )
+
+    expect_identical(
     find_parameters(m2),
     structure(
       list(
@@ -359,7 +373,7 @@ test_that("find_paramaters", {
   )
 
   expect_identical(
-    find_parameters(m4),
+    find_parameters(m4, effects = "full"),
     list(
       conditional = c("b_Intercept", "b_child", "b_camper"),
       random = c(sprintf("r_persons[%i,Intercept]", 1:4), "sd_persons__Intercept"),
@@ -369,7 +383,17 @@ test_that("find_paramaters", {
   )
 
   expect_identical(
-    find_parameters(m5, effects = "all"),
+    find_parameters(m4),
+    list(
+      conditional = c("b_Intercept", "b_child", "b_camper"),
+      random = "sd_persons__Intercept",
+      zi = c("b_zi_Intercept", "b_zi_child", "b_zi_camper"),
+      zi_random = "sd_persons__zi_Intercept"
+    )
+  )
+
+  expect_identical(
+    find_parameters(m5, effects = "full"),
     structure(
       list(
         count = list(
@@ -390,6 +414,31 @@ test_that("find_paramaters", {
             sprintf("r_persons__zi_count2[%i,Intercept]", 1:4),
             "sd_persons__zi_count2_Intercept"
           )
+        )
+      ),
+      is_mv = "1"
+    )
+  )
+
+  expect_identical(
+    find_parameters(m5, effects = "all"),
+    structure(
+      list(
+        count = list(
+          conditional = c("b_count_Intercept", "b_count_child", "b_count_camper"),
+          random = "sd_persons__count_Intercept",
+          zi = c("b_zi_count_Intercept", "b_zi_count_camper"),
+          zi_random = "sd_persons__zi_count_Intercept"
+        ),
+        count2 = list(
+          conditional = c(
+            "b_count2_Intercept",
+            "b_count2_child",
+            "b_count2_livebait"
+          ),
+          random = "sd_persons__count2_Intercept",
+          zi = c("b_zi_count2_Intercept", "b_zi_count2_child"),
+          zi_random = "sd_persons__zi_count2_Intercept"
         )
       ),
       is_mv = "1"
