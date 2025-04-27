@@ -228,7 +228,7 @@ get_parameters.brmsfit <- function(x,
     flatten = FALSE,
     parameters = parameters
   )
-  out <- as.data.frame(x)[unique(unlist(parms, use.names = FALSE))]
+  out <- as.data.frame(x, variable = unique(unlist(parms, use.names = FALSE)))
 
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality, parms)
