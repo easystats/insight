@@ -938,6 +938,19 @@ test_that("brms dpars find_auxiliary", {
   )
 
   expect_identical(
+    find_parameters(model, effects = "all"),
+    list(
+      conditional = "b_Intercept",
+      random = "sd_Participant__Intercept",
+      delta = "b_delta_Intercept",
+      k = "b_k_Intercept",
+      phi = "b_phi_Intercept",
+      delta_random = "sd_Participant__delta_Intercept",
+      k_random = "sd_Participant__k_Intercept"
+    )
+  )
+
+  expect_identical(
     find_parameters(model, effects = "random_variance"),
     list(
       random = "sd_Participant__Intercept",
