@@ -6,7 +6,10 @@ find_parameters.brmsfit <- function(x,
                                     flatten = FALSE,
                                     parameters = NULL,
                                     ...) {
-  effects <- validate_argument(effects, c("all", "fixed", "random", "grouplevel"))
+  effects <- validate_argument(
+    effects,
+    c("all", "fixed", "random", "random_variance", "grouplevel")
+  )
   component <- validate_argument(
     component,
     c(
@@ -75,7 +78,7 @@ find_parameters.brmsfit <- function(x,
   elements <- c(elements, "priors")
 
   # add random effects
-  if (effects %in% c("all", "random", "grouplevel")) {
+  if (effects %in% c("all", "random", "grouplevel", "random_variance")) {
     elements <- unique(c(elements, paste0(elements, "_random")))
   }
 
@@ -83,6 +86,7 @@ find_parameters.brmsfit <- function(x,
   switch(effects,
     fixed = elements[!endsWith(elements, "random")],
     grouplevel = ,
+    random_variance = ,
     random = elements[endsWith(elements, "random")],
     elements
   )
@@ -167,8 +171,10 @@ find_parameters.brmsfit <- function(x,
     random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
     dpars_random[[dp]] <- compact_character(random_dp)
 
-    # check whether group level effects should be returned or not
-    if (!effects %in% c("all", "grouplevel")) {
+    # check whether group level effects should be returned or not. only when
+    # effects is random, all or grouplevel. For all other effects options,
+    # remove them
+    if (effects %in% c("fixed", "random_variance")) {
       dpars_random[[dp]] <- dpars_random[[dp]][!startsWith(dpars_random[[dp]], "r_")]
     }
   }

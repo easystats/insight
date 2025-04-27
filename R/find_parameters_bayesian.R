@@ -13,8 +13,8 @@
 #' be abbreviated. For models of class `brmsfit`, it is possible to return
 #' random effects parameters (variance and correlation components) and group
 #' level estimates separately. Use `"grouplevel"` to return only group level
-#' estimates (those parameters that start with `r_`), or `"random"` to return
-#' random effects variances.
+#' estimates (those parameters that start with `r_`), or `"random_variances"` to
+#' return random effects variances.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
 #' @inheritParams find_parameters.betamfx
