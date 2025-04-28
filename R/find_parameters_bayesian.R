@@ -245,9 +245,8 @@ find_parameters.stanreg <- function(x,
                                     flatten = FALSE,
                                     parameters = NULL,
                                     ...) {
-  # This does not exclude all relevant names, see e.g. "stanreg_merMod_5", but
-  # is considerably faster than "colnames(as.data.frame())"
-  fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
+  # extract parameter names
+  fe <- .rstanarm_parameter_names(x)
 
   effects <- validate_argument(
     effects,
@@ -298,33 +297,15 @@ find_parameters.stanreg <- function(x,
 
 
 #' @export
-find_parameters.bcplm <- function(x,
-                                  flatten = FALSE,
-                                  parameters = NULL,
-                                  ...) {
-  l <- .filter_pars(list(conditional = dimnames(x$sims.list[[1]])[[2]]), parameters)
-  if (flatten) {
-    unique(unlist(l, use.names = FALSE))
-  } else {
-    l
-  }
-}
-
-
-#' @export
 find_parameters.stanmvreg <- function(x,
                                       effects = "all",
                                       component = "location",
                                       flatten = FALSE,
                                       parameters = NULL,
                                       ...) {
-  # This does not exclude all relevant names, see e.g. "stanreg_merMod_5", but
-  # is considerably faster than "colnames(as.data.frame())"
-  fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
-  # some more cleaning
-  fe <- fe[!endsWith(fe, "mean_PPD")]
-  fe <- fe[!grepl("_NEW_(.*)\\]$", fe)]
-
+  # extract parameter names
+  fe <- .rstanarm_parameter_names(x)
+  # and response
   rn <- names(find_response(x))
 
   effects <- validate_argument(
@@ -365,38 +346,27 @@ find_parameters.stanmvreg <- function(x,
   if (object_has_names(l, "conditional")) {
     x1 <- sub("(.*)(\\|)(.*)", "\\1", l$conditional)
     x2 <- sub("(.*)(\\|)(.*)", "\\3", l$conditional)
-
-    l.cond <- lapply(rn, function(i) {
-      list(conditional = x2[which(x1 == i)])
-    })
+    l.cond <- lapply(rn, function(i) list(conditional = x2[which(x1 == i)]))
     names(l.cond) <- rn
   } else {
     l.cond <- NULL
   }
 
-
   if (object_has_names(l, "random")) {
     x1 <- sub("b\\[(.*)(\\|)(.*)", "\\1", l$random)
     x2 <- sub("(b\\[).*(.*)(\\|)(.*)", "\\1\\4", l$random)
-
-    l.random <- lapply(rn, function(i) {
-      list(random = x2[which(x1 == i)])
-    })
+    l.random <- lapply(rn, function(i) list(random = x2[which(x1 == i)]))
     names(l.random) <- rn
   } else {
     l.random <- NULL
   }
 
-
   if (object_has_names(l, "sigma")) {
-    l.sigma <- lapply(rn, function(i) {
-      list(sigma = "sigma")
-    })
+    l.sigma <- lapply(rn, function(i) list(sigma = "sigma"))
     names(l.sigma) <- rn
   } else {
     l.sigma <- NULL
   }
-
 
   l <- Map(c, l.cond, l.random, l.sigma)
   l <- .filter_pars(l, parameters, is_mv = TRUE)
@@ -406,6 +376,32 @@ find_parameters.stanmvreg <- function(x,
 
   attr(l, "is_mv") <- "1"
 
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    l
+  }
+}
+
+
+.rstanarm_parameter_names <- function(x) {
+  # This does not exclude all relevant names, see e.g. "stanreg_merMod_5", thus
+  # # we need some additional cleaning. but it is considerably faster than
+  # "colnames(as.data.frame())"
+  fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
+  # some more cleaning
+  fe <- fe[!endsWith(fe, "mean_PPD")]
+  fe <- fe[!grepl("_NEW_(.*)\\]$", fe)]
+  fe
+}
+
+
+#' @export
+find_parameters.bcplm <- function(x,
+                                  flatten = FALSE,
+                                  parameters = NULL,
+                                  ...) {
+  l <- .filter_pars(list(conditional = dimnames(x$sims.list[[1]])[[2]]), parameters)
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
   } else {
