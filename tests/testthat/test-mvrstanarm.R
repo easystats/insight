@@ -172,7 +172,7 @@ test_that("find_parameters", {
             "Sigma[id:y2|year,y2|(Intercept)]",
             "Sigma[id:y2|year,y2|year]"
           ),
-         sigma = "y2|sigma"
+          sigma = "y2|sigma"
         )
       ),
       is_mv = "1"
@@ -315,7 +315,8 @@ test_that("get_parameters", {
   )
   expect_named(
     get_parameters(m1, effects = "all"),
-    c("y1|(Intercept)", "y1|year", "Sigma[id:y1|(Intercept),y1|(Intercept)]",
+    c(
+      "y1|(Intercept)", "y1|year", "Sigma[id:y1|(Intercept),y1|(Intercept)]",
       "Sigma[id:y2|(Intercept),y1|(Intercept)]", "Sigma[id:y2|year,y1|(Intercept)]",
       "y2|(Intercept)", "y2|sexf", "y2|year", "Sigma[id:y2|(Intercept),y2|(Intercept)]",
       "Sigma[id:y2|year,y2|(Intercept)]", "Sigma[id:y2|year,y2|year]"
@@ -323,7 +324,8 @@ test_that("get_parameters", {
   )
   expect_named(
     get_parameters(m1, effects = "full"),
-    c("y1|(Intercept)", "y1|year", "b[y1|(Intercept) id:1]", "b[y1|(Intercept) id:2]",
+    c(
+      "y1|(Intercept)", "y1|year", "b[y1|(Intercept) id:1]", "b[y1|(Intercept) id:2]",
       "b[y1|(Intercept) id:3]", "b[y1|(Intercept) id:4]", "b[y1|(Intercept) id:5]",
       "b[y1|(Intercept) id:6]", "b[y1|(Intercept) id:7]", "b[y1|(Intercept) id:8]",
       "b[y1|(Intercept) id:9]", "b[y1|(Intercept) id:10]", "b[y1|(Intercept) id:11]",
