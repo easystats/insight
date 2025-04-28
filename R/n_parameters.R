@@ -201,10 +201,13 @@ n_parameters.brmsfit <- function(x,
 
 #' @export
 n_parameters.stanreg <- function(x,
-                                 effects = "all",
+                                 effects = "full",
                                  component = "all",
                                  ...) {
-  effects <- validate_argument(effects, c("all", "fixed", "random"))
+  effects <- validate_argument(
+    effects,
+    c("all", "fixed", "random", "full", "random_variance", "grouplevel")
+  )
   component <- validate_argument(component, c("all", "conditional", "smooth_terms"))
 
   length(unlist(

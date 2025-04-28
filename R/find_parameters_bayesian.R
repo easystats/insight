@@ -321,6 +321,10 @@ find_parameters.stanmvreg <- function(x,
   # This does not exclude all relevant names, see e.g. "stanreg_merMod_5", but
   # is considerably faster than "colnames(as.data.frame())"
   fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
+  # some more cleaning
+  fe <- fe[!endsWith(fe, "mean_PPD")]
+  fe <- fe[!grepl("_NEW_(.*)\\]$", fe)]
+
   rn <- names(find_response(x))
 
   effects <- validate_argument(
