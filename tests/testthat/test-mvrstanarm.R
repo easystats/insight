@@ -116,9 +116,9 @@ test_that("n_obs", {
   expect_equal(n_obs(m1), 304)
 })
 
-test_that("find_paramaters", {
+test_that("find_parameters", {
   expect_equal(
-    find_parameters(m1, component = "all"),
+    find_parameters(m1, component = "all", effects = "full"),
     structure(
       list(
         y1 = list(
@@ -138,9 +138,25 @@ test_that("find_paramaters", {
       is_mv = "1"
     )
   )
+  expect_equal(
+    find_parameters(m1, component = "all"),
+    structure(
+      list(
+        y1 = list(
+          conditional = c("(Intercept)", "year"),
+          sigma = "sigma"
+        ),
+        y2 = list(
+          conditional = c("(Intercept)", "sexf", "year"),
+          sigma = "sigma"
+        )
+      ),
+      is_mv = "1"
+    )
+  )
 
   expect_equal(
-    find_parameters(m1),
+    find_parameters(m1, effects = "full"),
     structure(
       list(
         y1 = list(
@@ -154,6 +170,16 @@ test_that("find_paramaters", {
             rep(1:40, each = 2)
           )
         )
+      ),
+      is_mv = "1"
+    )
+  )
+  expect_equal(
+    find_parameters(m1),
+    structure(
+      list(
+        y1 = list(conditional = c("(Intercept)", "year")),
+        y2 = list(conditional = c("(Intercept)", "sexf", "year"))
       ),
       is_mv = "1"
     )

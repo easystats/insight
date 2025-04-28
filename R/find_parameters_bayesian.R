@@ -344,25 +344,27 @@ find_parameters.stanmvreg <- function(x,
   ))
 
   if (object_has_names(l, "conditional")) {
-    x1 <- sub("(.*)(\\|)(.*)", "\\1", l$conditional)
-    x2 <- sub("(.*)(\\|)(.*)", "\\3", l$conditional)
-    l.cond <- lapply(rn, function(i) list(conditional = x2[which(x1 == i)]))
+    l.cond <- lapply(rn, function(i) {
+      list(conditional = grep(paste0("^\\Q", i, "\\E\\|"), l$conditional, value = TRUE))
+    })
     names(l.cond) <- rn
   } else {
     l.cond <- NULL
   }
 
   if (object_has_names(l, "random")) {
-    x1 <- sub("b\\[(.*)(\\|)(.*)", "\\1", l$random)
-    x2 <- sub("(b\\[).*(.*)(\\|)(.*)", "\\1\\4", l$random)
-    l.random <- lapply(rn, function(i) list(random = x2[which(x1 == i)]))
+    l.random <- lapply(rn, function(i) {
+      list(random = grep(paste0("\\Q", i, "\\E\\|"), l$random, value = TRUE))
+    })
     names(l.random) <- rn
   } else {
     l.random <- NULL
   }
 
   if (object_has_names(l, "sigma")) {
-    l.sigma <- lapply(rn, function(i) list(sigma = "sigma"))
+    l.sigma <- lapply(rn, function(i) {
+      list(sigma = grep(paste0("\\Q", i, "\\E\\|"), l$sigma, value = TRUE))
+    })
     names(l.sigma) <- rn
   } else {
     l.sigma <- NULL

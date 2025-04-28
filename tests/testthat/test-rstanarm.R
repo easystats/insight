@@ -374,7 +374,7 @@ test_that("find_paramaters", {
     )
   )
   expect_identical(
-    find_parameters(m1, flatten = TRUE),
+    find_parameters(m1, effects = "full", flatten = TRUE),
     c(
       "(Intercept)",
       "size",
@@ -382,6 +382,17 @@ test_that("find_paramaters", {
       "period3",
       "period4",
       sprintf("b[(Intercept) herd:%i]", 1:15),
+      "Sigma[herd:(Intercept),(Intercept)]"
+    )
+  )
+  expect_identical(
+    find_parameters(m1, effects = "all", flatten = TRUE),
+    c(
+      "(Intercept)",
+      "size",
+      "period2",
+      "period3",
+      "period4",
       "Sigma[herd:(Intercept),(Intercept)]"
     )
   )
