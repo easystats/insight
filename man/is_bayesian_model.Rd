@@ -8,6 +8,10 @@ is_bayesian_model(x, exclude = NULL)
 }
 \arguments{
 \item{x}{A model object.}
+
+\item{exclude}{Optional character vector, indicating classes that should not
+be included in the check. E.g., \code{exclude = "stanreg"} would return \code{FALSE}
+for models from package \strong{rstanarm}.}
 }
 \value{
 A logical, \code{TRUE} if \code{x} is a Bayesian model.

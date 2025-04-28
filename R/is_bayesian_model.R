@@ -4,6 +4,9 @@
 #' @description Small helper that checks if a model is a Bayesian model.
 #'
 #' @param x A model object.
+#' @param exclude Optional character vector, indicating classes that should not
+#' be included in the check. E.g., `exclude = "stanreg"` would return `FALSE`
+#' for models from package **rstanarm**.
 #'
 #' @return A logical, `TRUE` if `x` is a Bayesian model.
 #'
