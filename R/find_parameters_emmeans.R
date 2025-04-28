@@ -22,7 +22,7 @@ find_parameters.emmGrid <- function(x, flatten = FALSE, merge_parameters = FALSE
   if ("Component" %in% colnames(params)) {
     params$Component <- factor(params$Component, levels = unique(params$Component))
   }
-  if (.is_baysian_emmeans(x)) {
+  if (.is_bayesian_emmeans(x)) {
     col_names <- colnames(get_parameters(x, summary = FALSE, merge_parameters = merge_parameters))
     if ("Component" %in% colnames(params)) {
       params$Parameter <- col_names

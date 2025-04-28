@@ -1,12 +1,26 @@
 # insight (devel)
 
+## Breaking Changes
+
+* The default option `"all"` for the `effects` argument of `find_parameters()`
+  and `get_parameters()` for models from package *brms* and *rstanarm* has a new
+  behaviour and only returns fixed effects and random effects variance components,
+  but no longer the group level estimates. Use `effects = "full"` to return
+  all parameters. This change is mainly to be more flexible and gain more
+  efficiency for models with many parameters and / or many posterior draws.
+
+## New functions
+
+* `is_bayesian_model()` as a convenient shortcut to check whether a model is
+  Bayesian or not.
+
 ## Changes
 
 * Revised wording for alerts from `get_variance()`.
 
 * The `effects` argument of `find_parameters()` and `get_parameters()` for
-  models from package *brms* get two new options, `"grouplevel"` and
-  `"random_variances"`, to return only random effects variance components, or
+  models from package *brms* and *rstanarm* get two new options, `"grouplevel"`
+  and `"random_variances"`, to return only random effects variance components, or
   group level effects. This is more efficient especially for models with many
   samples and many parameters. Additionally, a `variable` argument can be passed
   to `get_parameters()`, which is in turn passed to `as.data.frame()`, to

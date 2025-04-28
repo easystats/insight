@@ -176,7 +176,7 @@
 
   # Bayesian model --------
 
-  is.bayes <- .is_bayesian_model(x)
+  is.bayes <- is_bayesian_model(x)
 
 
   # survival model --------

@@ -8,7 +8,7 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.default <- function(x, verbose = TRUE, ...) {
-  if (.is_bayesian_model(x, exclude = c("bmerMod", "bayesx", "blmerMod", "bglmerMod"))) {
+  if (is_bayesian_model(x, exclude = c("bmerMod", "bayesx", "blmerMod", "bglmerMod"))) {
     if (check_if_installed("bayestestR", quietly = TRUE)) {
       x <- .safe(bayestestR::bayesian_as_frequentist(x))
       if (is.null(x)) {
