@@ -255,12 +255,22 @@ get_parameters.stanreg <- function(x,
                                    summary = FALSE,
                                    centrality = "mean",
                                    ...) {
-  effects <- validate_argument(effects, c("fixed", "random", "all"))
-  component <- validate_argument(
-    component,
-    c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")
-  )
-  out <- as.data.frame(x)[.get_parms_data(x, effects, component, parameters)]
+  dots <- list(...)
+  # allow hidden argument "variable" to be passed directly to as.data.frame
+  if (is.null(dots$variable)) {
+    parms <- find_parameters(
+      x,
+      effects = effects,
+      component = component,
+      flatten = FALSE,
+      parameters = parameters
+    )
+    variables <- unique(unlist(parms, use.names = FALSE))
+  } else {
+    variables <- dots$variable
+  }
+
+  out <- as.data.frame(x, pars = variables)
 
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality)

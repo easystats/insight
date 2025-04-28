@@ -337,7 +337,7 @@ clean_parameters.brmsfit <- function(x, ...) {
 #' @export
 clean_parameters.stanreg <- function(x, ...) {
   pars <- find_parameters(x,
-    effects = "all",
+    effects = "full",
     component = "all",
     flatten = FALSE
   )
@@ -364,7 +364,7 @@ clean_parameters.bamlss <- function(x, ...) {
 
 #' @export
 clean_parameters.stanmvreg <- function(x, ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  pars <- find_parameters(x, effects = "full", component = "all", flatten = FALSE)
 
   l <- do.call(
     rbind,

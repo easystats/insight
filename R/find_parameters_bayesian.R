@@ -12,7 +12,8 @@
 #' (`"random"`) or both (`"all"`) be returned? Only applies to mixed models. May
 #' be abbreviated.
 #'
-#' For models of class `brmsfit`, there are additional options:
+#' For models of from packages **brms** or **rstanarm** there are additional
+#' options:
 #' - `"fixed"` returns fixed effects.
 #' - `"random_variance"` return random effects parameters (variance and
 #'   correlation components, e.g. those parameters that start with `sd_` or
@@ -244,9 +245,18 @@ find_parameters.stanreg <- function(x,
                                     flatten = FALSE,
                                     parameters = NULL,
                                     ...) {
-  fe <- colnames(as.data.frame(x))
-  # This does not exclude all relevant names, see e.g. "stanreg_merMod_5".
-  # fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
+  # This does not exclude all relevant names, see e.g. "stanreg_merMod_5", but
+  # is considerably faster than "colnames(as.data.frame())"
+  fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
+
+  effects <- validate_argument(
+    effects,
+    c("all", "fixed", "random", "random_variance", "grouplevel", "full")
+  )
+  component <- validate_argument(
+    component,
+    c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")
+  )
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[startsWith(fe, "b[")]
@@ -258,9 +268,17 @@ find_parameters.stanreg <- function(x,
   # remove auxiliary from conditional
   cond <- setdiff(cond, auxiliary)
 
+  # filter random effects
+  ran_eff <- switch(effects,
+    full = ,
+    random = c(rand, rand_sd),
+    grouplevel = rand,
+    rand_sd
+  )
+
   l <- compact_list(list(
     conditional = cond,
-    random = c(rand, rand_sd),
+    random = ran_eff,
     smooth_terms = smooth_terms,
     sigma = sigma_param,
     auxiliary = auxiliary
@@ -268,8 +286,6 @@ find_parameters.stanreg <- function(x,
 
   l <- .filter_pars(l, parameters)
 
-  effects <- validate_argument(effects, c("all", "fixed", "random"))
-  component <- validate_argument(component, c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")) # nolint
   elements <- .get_elements(effects, component)
   l <- compact_list(l[elements])
 
@@ -302,8 +318,19 @@ find_parameters.stanmvreg <- function(x,
                                       flatten = FALSE,
                                       parameters = NULL,
                                       ...) {
-  fe <- colnames(as.data.frame(x))
+  # This does not exclude all relevant names, see e.g. "stanreg_merMod_5", but
+  # is considerably faster than "colnames(as.data.frame())"
+  fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
   rn <- names(find_response(x))
+
+  effects <- validate_argument(
+    effects,
+    c("all", "fixed", "random", "random_variance", "grouplevel", "full")
+  )
+  component <- validate_argument(
+    component,
+    c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")
+  )
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !endsWith(fe, "|sigma")]
   rand <- fe[startsWith(fe, "b[")]
@@ -315,9 +342,17 @@ find_parameters.stanmvreg <- function(x,
   # remove auxiliary from conditional
   cond <- setdiff(cond, auxiliary)
 
+  # filter random effects
+  ran_eff <- switch(effects,
+    full = ,
+    random = c(rand, rand_sd),
+    grouplevel = rand,
+    rand_sd
+  )
+
   l <- compact_list(list(
     conditional = cond,
-    random = c(rand, rand_sd),
+    random = ran_eff,
     smooth_terms = smooth_terms,
     sigma = sigma_param,
     auxiliary = auxiliary
@@ -362,8 +397,6 @@ find_parameters.stanmvreg <- function(x,
   l <- Map(c, l.cond, l.random, l.sigma)
   l <- .filter_pars(l, parameters, is_mv = TRUE)
 
-  effects <- validate_argument(effects, c("all", "fixed", "random"))
-  component <- validate_argument(component, c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")) # nolint
   elements <- .get_elements(effects, component)
   l <- lapply(l, function(i) compact_list(i[elements]))
 

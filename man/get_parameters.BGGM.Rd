@@ -79,7 +79,8 @@ method (i.e., \code{as.data.frame(x, variable = variable)}).}
 (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
 be abbreviated.
 
-For models of class \code{brmsfit}, there are additional options:
+For models of from packages \strong{brms} or \strong{rstanarm} there are additional
+options:
 \itemize{
 \item \code{"fixed"} returns fixed effects.
 \item \code{"random_variance"} return random effects parameters (variance and
