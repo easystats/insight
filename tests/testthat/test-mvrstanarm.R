@@ -122,17 +122,29 @@ test_that("find_parameters", {
     structure(
       list(
         y1 = list(
-          conditional = c("(Intercept)", "year"),
-          random = sprintf("b[(Intercept) id:%i]", 1:40),
-          sigma = "sigma"
+          conditional = c("y1|(Intercept)", "y1|year"),
+          random = c(
+            sprintf("b[y1|(Intercept) id:%i]", 1:40),
+            "Sigma[id:y1|(Intercept),y1|(Intercept)]",
+            "Sigma[id:y2|(Intercept),y1|(Intercept)]",
+            "Sigma[id:y2|year,y1|(Intercept)]"
+          ),
+          sigma = "y1|sigma"
         ),
         y2 = list(
-          conditional = c("(Intercept)", "sexf", "year"),
-          random = sprintf(
-            c("b[(Intercept) id:%i]", "b[year id:%i]"),
-            rep(1:40, each = 2)
+          conditional = c("y2|(Intercept)", "y2|sexf", "y2|year"),
+          random = c(
+            sprintf(
+              c("b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"),
+              rep(1:40, each = 2)
+            ),
+            "Sigma[id:y2|(Intercept),y1|(Intercept)]",
+            "Sigma[id:y2|year,y1|(Intercept)]",
+            "Sigma[id:y2|(Intercept),y2|(Intercept)]",
+            "Sigma[id:y2|year,y2|(Intercept)]",
+            "Sigma[id:y2|year,y2|year]"
           ),
-          sigma = "sigma"
+          sigma = "y2|sigma"
         )
       ),
       is_mv = "1"
@@ -143,12 +155,24 @@ test_that("find_parameters", {
     structure(
       list(
         y1 = list(
-          conditional = c("(Intercept)", "year"),
-          sigma = "sigma"
+          conditional = c("y1|(Intercept)", "y1|year"),
+          random = c(
+            "Sigma[id:y1|(Intercept),y1|(Intercept)]",
+            "Sigma[id:y2|(Intercept),y1|(Intercept)]",
+            "Sigma[id:y2|year,y1|(Intercept)]"
+          ),
+          sigma = "y1|sigma"
         ),
         y2 = list(
-          conditional = c("(Intercept)", "sexf", "year"),
-          sigma = "sigma"
+          conditional = c("y2|(Intercept)", "y2|sexf", "y2|year"),
+          random = c(
+            "Sigma[id:y2|(Intercept),y1|(Intercept)]",
+            "Sigma[id:y2|year,y1|(Intercept)]",
+            "Sigma[id:y2|(Intercept),y2|(Intercept)]",
+            "Sigma[id:y2|year,y2|(Intercept)]",
+            "Sigma[id:y2|year,y2|year]"
+          ),
+         sigma = "y2|sigma"
         )
       ),
       is_mv = "1"
@@ -160,14 +184,26 @@ test_that("find_parameters", {
     structure(
       list(
         y1 = list(
-          conditional = c("(Intercept)", "year"),
-          random = sprintf("b[(Intercept) id:%i]", 1:40)
+          conditional = c("y1|(Intercept)", "y1|year"),
+          random = c(
+            sprintf("b[y1|(Intercept) id:%i]", 1:40),
+            "Sigma[id:y1|(Intercept),y1|(Intercept)]",
+            "Sigma[id:y2|(Intercept),y1|(Intercept)]",
+            "Sigma[id:y2|year,y1|(Intercept)]"
+          )
         ),
         y2 = list(
-          conditional = c("(Intercept)", "sexf", "year"),
-          random = sprintf(
-            c("b[(Intercept) id:%i]", "b[year id:%i]"),
-            rep(1:40, each = 2)
+          conditional = c("y2|(Intercept)", "y2|sexf", "y2|year"),
+          random = c(
+            sprintf(
+              c("b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"),
+              rep(1:40, each = 2)
+            ),
+            "Sigma[id:y2|(Intercept),y1|(Intercept)]",
+            "Sigma[id:y2|year,y1|(Intercept)]",
+            "Sigma[id:y2|(Intercept),y2|(Intercept)]",
+            "Sigma[id:y2|year,y2|(Intercept)]",
+            "Sigma[id:y2|year,y2|year]"
           )
         )
       ),
@@ -175,11 +211,11 @@ test_that("find_parameters", {
     )
   )
   expect_equal(
-    find_parameters(m1),
+    find_parameters(m1, effects = "fixed"),
     structure(
       list(
-        y1 = list(conditional = c("(Intercept)", "year")),
-        y2 = list(conditional = c("(Intercept)", "sexf", "year"))
+        y1 = list(conditional = c("y1|(Intercept)", "y1|year")),
+        y2 = list(conditional = c("y2|(Intercept)", "y2|sexf", "y2|year"))
       ),
       is_mv = "1"
     )
@@ -217,10 +253,22 @@ test_that("find_parameters", {
     find_parameters(m1, effects = "random", component = "all"),
     structure(
       list(
-        y1 = list(random = sprintf("b[y1|(Intercept) id:%i]", 1:40)),
-        y2 = list(random = sprintf(
-          c("b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"),
-          rep(1:40, each = 2)
+        y1 = list(random = c(
+          sprintf("b[y1|(Intercept) id:%i]", 1:40),
+          "Sigma[id:y1|(Intercept),y1|(Intercept)]",
+          "Sigma[id:y2|(Intercept),y1|(Intercept)]",
+          "Sigma[id:y2|year,y1|(Intercept)]"
+        )),
+        y2 = list(random = c(
+          sprintf(
+            c("b[y2|(Intercept) id:%i]", "b[y2|year id:%i]"),
+            rep(1:40, each = 2)
+          ),
+          "Sigma[id:y2|(Intercept),y1|(Intercept)]",
+          "Sigma[id:y2|year,y1|(Intercept)]",
+          "Sigma[id:y2|(Intercept),y2|(Intercept)]",
+          "Sigma[id:y2|year,y2|(Intercept)]",
+          "Sigma[id:y2|year,y2|year]"
         ))
       ),
       is_mv = "1"
