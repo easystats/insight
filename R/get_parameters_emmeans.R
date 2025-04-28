@@ -34,7 +34,7 @@
 #' @export
 get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE, ...) {
   # check if we have a Bayesian model here
-  if (!.is_baysian_emmeans(x) || isTRUE(summary)) {
+  if (!.is_bayesian_emmeans(x) || isTRUE(summary)) {
     s <- summary(x)
     estimate_pos <- which(colnames(s) == attr(s, "estName"))
     params <- s[, seq_len(estimate_pos - 1), drop = FALSE]
@@ -66,7 +66,7 @@ get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE,
 
 #' @export
 get_parameters.emm_list <- function(x, summary = FALSE, ...) {
-  if (!.is_baysian_emmeans(x) || isTRUE(summary)) {
+  if (!.is_bayesian_emmeans(x) || isTRUE(summary)) {
     do.call(rbind, lapply(names(x), function(i) {
       out <- get_parameters(x[[i]], summary = summary)
       if (ncol(out) > 2L) {

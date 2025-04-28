@@ -48,11 +48,21 @@ vector, not as list. Duplicated values are removed.}
 
 \item{effects}{Should variables for fixed effects (\code{"fixed"}), random effects
 (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
-be abbreviated. For models of class \code{brmsfit}, it is possible to return
-random effects parameters (variance and correlation components) and group
-level estimates separately. Use \code{"grouplevel"} to return only group level
-estimates (those parameters that start with \code{r_}), or \code{"random_variances"} to
-return random effects variances.}
+be abbreviated.
+
+For models of from packages \strong{brms} or \strong{rstanarm} there are additional
+options:
+\itemize{
+\item \code{"fixed"} returns fixed effects.
+\item \code{"random_variance"} return random effects parameters (variance and
+correlation components, e.g. those parameters that start with \code{sd_} or
+\code{cor_}).
+\item \code{"grouplevel"} returns random effects group level estimates, i.e. those
+parameters that start with \code{r_}.
+\item \code{"random"} returns both \code{"random_variance"} and \code{"grouplevel"}.
+\item \code{"all"} returns fixed effects and random effects variances.
+\item \code{"full"} returns all parameters.
+}}
 
 \item{parameters}{Regular expression pattern that describes the parameters that
 should be returned.}

@@ -8,7 +8,7 @@ find_parameters.brmsfit <- function(x,
                                     ...) {
   effects <- validate_argument(
     effects,
-    c("all", "fixed", "random", "random_variance", "grouplevel")
+    c("all", "fixed", "random", "random_variance", "grouplevel", "full")
   )
   component <- validate_argument(
     component,
@@ -78,7 +78,7 @@ find_parameters.brmsfit <- function(x,
   elements <- c(elements, "priors")
 
   # add random effects
-  if (effects %in% c("all", "random", "grouplevel", "random_variance")) {
+  if (effects != "fixed") {
     elements <- unique(c(elements, paste0(elements, "_random")))
   }
 
@@ -93,7 +93,7 @@ find_parameters.brmsfit <- function(x,
 }
 
 
-.brms_parameters <- function(fe, dpars, elements, effects = "all", mv_response = NULL) {
+.brms_parameters <- function(fe, dpars, elements, effects = "full", mv_response = NULL) {
   # dpars: names of `$pforms` element, which includes the names of
   #        all auxiliary parameters
   #
@@ -147,10 +147,9 @@ find_parameters.brmsfit <- function(x,
   # combine random effects elements for conditional component
   cond_random <- c(rand, rand_sd, rand_cor, car_struc)
 
-  # check whether group level effects should be returned or not. only when
-  # effects is random, all or grouplevel. For all other effects options,
-  # remove them. For grouplevel, only keep them
+  # check whether group level effects should be returned or not.
   cond_random <- switch(effects,
+    all = ,
     fixed = ,
     random_variance = cond_random[!startsWith(cond_random, "r_")],
     grouplevel = cond_random[startsWith(cond_random, "r_")],
@@ -184,10 +183,9 @@ find_parameters.brmsfit <- function(x,
     random_dp <- c(random_dp, grep(pattern, fe, value = TRUE))
     dpars_random[[dp]] <- compact_character(random_dp)
 
-    # check whether group level effects should be returned or not. only when
-    # effects is random, all or grouplevel. For all other effects options,
-    # remove them. For grouplevel, only keep them
+    # check whether group level effects should be returned or not.
     dpars_random[[dp]] <- switch(effects,
+      all = ,
       fixed = ,
       random_variance = dpars_random[[dp]][!startsWith(dpars_random[[dp]], "r_")],
       grouplevel = dpars_random[[dp]][startsWith(dpars_random[[dp]], "r_")],

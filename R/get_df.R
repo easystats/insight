@@ -489,7 +489,7 @@ get_df.mediate <- function(x, ...) {
 
 #' @keywords internal
 .degrees_of_freedom_analytical <- function(x, kenward = TRUE, model_n_params = TRUE) {
-  if (isTRUE(model_n_params)) {
+  if (isTRUE(model_n_params) && !is_bayesian_model(x)) {
     nparam <- .model_df(x)
   } else {
     nparam <- n_parameters(x)

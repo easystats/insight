@@ -312,7 +312,7 @@ clean_parameters.blavaan <- function(x, ...) {
 #' @export
 clean_parameters.brmsfit <- function(x, ...) {
   pars <- find_parameters(x,
-    effects = "all",
+    effects = "full",
     component = "all",
     flatten = FALSE
   )
@@ -337,7 +337,7 @@ clean_parameters.brmsfit <- function(x, ...) {
 #' @export
 clean_parameters.stanreg <- function(x, ...) {
   pars <- find_parameters(x,
-    effects = "all",
+    effects = "full",
     component = "all",
     flatten = FALSE
   )
@@ -364,7 +364,7 @@ clean_parameters.bamlss <- function(x, ...) {
 
 #' @export
 clean_parameters.stanmvreg <- function(x, ...) {
-  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
+  pars <- find_parameters(x, effects = "full", component = "all", flatten = FALSE)
 
   l <- do.call(
     rbind,
@@ -372,7 +372,7 @@ clean_parameters.stanmvreg <- function(x, ...) {
   )
 
   out <- do.call(rbind, l)
-  out <- .remove_empty_columns_from_pars(.clean_stanreg_params(out))
+  out <- .remove_empty_columns_from_pars(.clean_stanreg_params(out, is_mv = TRUE))
   .fix_random_effect_smooth(x, out)
 }
 
@@ -636,9 +636,17 @@ clean_parameters.mlm <- function(x, ...) {
 }
 
 
-.clean_stanreg_params <- function(out, ...) {
-  out$Cleaned_Parameter <- out$Parameter
+.clean_stanreg_params <- function(out, is_mv = FALSE, ...) {
+  out$Cleaned_Parameter <- dummy_parameter <- out$Parameter
   dots <- list(...)
+
+  # clean stanmvreg parameters from response names
+  if (is_mv) {
+    for (i in unique(out$Response)) {
+      out$Cleaned_Parameter <- gsub(paste0(i, "|"), "", out$Cleaned_Parameter, fixed = TRUE)
+    }
+    dummy_parameter <- out$Cleaned_Parameter
+  }
 
   # extract group-names from random effects and clean random effects
 
@@ -660,14 +668,14 @@ clean_parameters.mlm <- function(x, ...) {
   cor_sd <- startsWith(out$Cleaned_Parameter, "Sigma[")
 
   if (any(cor_sd)) {
-    parm1 <- gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\2", out$Parameter[cor_sd])
-    parm2 <- gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\3", out$Parameter[cor_sd])
+    parm1 <- gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\2", dummy_parameter[cor_sd])
+    parm2 <- gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\3", dummy_parameter[cor_sd])
     out$Cleaned_Parameter[which(cor_sd)] <- parm1
     rand_cor <- parm1 != parm2
     if (any(rand_cor)) {
       out$Cleaned_Parameter[which(cor_sd)[rand_cor]] <- paste0(parm1[rand_cor], " ~ ", parm2[rand_cor])
     }
-    out$Group[cor_sd] <- paste("Var/Cov:", gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\1", out$Parameter[cor_sd]))
+    out$Group[cor_sd] <- paste("Var/Cov:", gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\1", dummy_parameter[cor_sd]))
   }
 
 

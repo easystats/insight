@@ -360,14 +360,21 @@ test_that("n_obs", {
 
 test_that("find_paramaters", {
   expect_identical(
-    find_parameters(m1),
+    find_parameters(m1, effects = "full"),
     list(
       conditional = c("(Intercept)", "size", "period2", "period3", "period4"),
       random = c(sprintf("b[(Intercept) herd:%i]", 1:15), "Sigma[herd:(Intercept),(Intercept)]")
     )
   )
   expect_identical(
-    find_parameters(m1, flatten = TRUE),
+    find_parameters(m1),
+    list(
+      conditional = c("(Intercept)", "size", "period2", "period3", "period4"),
+      random = "Sigma[herd:(Intercept),(Intercept)]"
+    )
+  )
+  expect_identical(
+    find_parameters(m1, effects = "full", flatten = TRUE),
     c(
       "(Intercept)",
       "size",
@@ -378,12 +385,35 @@ test_that("find_paramaters", {
       "Sigma[herd:(Intercept),(Intercept)]"
     )
   )
+  expect_identical(
+    find_parameters(m1, effects = "all", flatten = TRUE),
+    c(
+      "(Intercept)",
+      "size",
+      "period2",
+      "period3",
+      "period4",
+      "Sigma[herd:(Intercept),(Intercept)]"
+    )
+  )
 })
 
-test_that("find_paramaters", {
+test_that("get_parameters", {
   expect_named(
     get_parameters(m1),
     c("(Intercept)", "size", "period2", "period3", "period4")
+  )
+  expect_named(
+    get_parameters(m1, effects = "full"),
+    c(
+      "(Intercept)",
+      "size",
+      "period2",
+      "period3",
+      "period4",
+      sprintf("b[(Intercept) herd:%i]", 1:15),
+      "Sigma[herd:(Intercept),(Intercept)]"
+    )
   )
   expect_named(
     get_parameters(m1, effects = "all"),
@@ -393,7 +423,6 @@ test_that("find_paramaters", {
       "period2",
       "period3",
       "period4",
-      sprintf("b[(Intercept) herd:%i]", 1:15),
       "Sigma[herd:(Intercept),(Intercept)]"
     )
   )

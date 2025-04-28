@@ -10,11 +10,19 @@
 #' should be returned.
 #' @param effects Should variables for fixed effects (`"fixed"`), random effects
 #' (`"random"`) or both (`"all"`) be returned? Only applies to mixed models. May
-#' be abbreviated. For models of class `brmsfit`, it is possible to return
-#' random effects parameters (variance and correlation components) and group
-#' level estimates separately. Use `"grouplevel"` to return only group level
-#' estimates (those parameters that start with `r_`), or `"random_variances"` to
-#' return random effects variances.
+#' be abbreviated.
+#'
+#' For models of from packages **brms** or **rstanarm** there are additional
+#' options:
+#' - `"fixed"` returns fixed effects.
+#' - `"random_variance"` return random effects parameters (variance and
+#'   correlation components, e.g. those parameters that start with `sd_` or
+#'   `cor_`).
+#' - `"grouplevel"` returns random effects group level estimates, i.e. those
+#'   parameters that start with `r_`.
+#' - `"random"` returns both `"random_variance"` and `"grouplevel"`.
+#' - `"all"` returns fixed effects and random effects variances.
+#' - `"full"` returns all parameters.
 #' @param ... Currently not used.
 #' @inheritParams find_parameters
 #' @inheritParams find_parameters.betamfx
@@ -237,9 +245,17 @@ find_parameters.stanreg <- function(x,
                                     flatten = FALSE,
                                     parameters = NULL,
                                     ...) {
-  fe <- colnames(as.data.frame(x))
-  # This does not exclude all relevant names, see e.g. "stanreg_merMod_5".
-  # fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
+  # extract parameter names
+  fe <- .rstanarm_parameter_names(x)
+
+  effects <- validate_argument(
+    effects,
+    c("all", "fixed", "random", "random_variance", "grouplevel", "full")
+  )
+  component <- validate_argument(
+    component,
+    c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")
+  )
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
   rand <- fe[startsWith(fe, "b[")]
@@ -251,9 +267,17 @@ find_parameters.stanreg <- function(x,
   # remove auxiliary from conditional
   cond <- setdiff(cond, auxiliary)
 
+  # filter random effects
+  ran_eff <- switch(effects,
+    full = ,
+    random = c(rand, rand_sd),
+    grouplevel = rand,
+    rand_sd
+  )
+
   l <- compact_list(list(
     conditional = cond,
-    random = c(rand, rand_sd),
+    random = ran_eff,
     smooth_terms = smooth_terms,
     sigma = sigma_param,
     auxiliary = auxiliary
@@ -261,25 +285,9 @@ find_parameters.stanreg <- function(x,
 
   l <- .filter_pars(l, parameters)
 
-  effects <- validate_argument(effects, c("all", "fixed", "random"))
-  component <- validate_argument(component, c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")) # nolint
   elements <- .get_elements(effects, component)
   l <- compact_list(l[elements])
 
-  if (flatten) {
-    unique(unlist(l, use.names = FALSE))
-  } else {
-    l
-  }
-}
-
-
-#' @export
-find_parameters.bcplm <- function(x,
-                                  flatten = FALSE,
-                                  parameters = NULL,
-                                  ...) {
-  l <- .filter_pars(list(conditional = dimnames(x$sims.list[[1]])[[2]]), parameters)
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
   } else {
@@ -295,8 +303,19 @@ find_parameters.stanmvreg <- function(x,
                                       flatten = FALSE,
                                       parameters = NULL,
                                       ...) {
-  fe <- colnames(as.data.frame(x))
+  # extract parameter names
+  fe <- .rstanarm_parameter_names(x)
+  # and response
   rn <- names(find_response(x))
+
+  effects <- validate_argument(
+    effects,
+    c("all", "fixed", "random", "random_variance", "grouplevel", "full")
+  )
+  component <- validate_argument(
+    component,
+    c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")
+  )
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !endsWith(fe, "|sigma")]
   rand <- fe[startsWith(fe, "b[")]
@@ -308,60 +327,83 @@ find_parameters.stanmvreg <- function(x,
   # remove auxiliary from conditional
   cond <- setdiff(cond, auxiliary)
 
+  # filter random effects
+  ran_eff <- switch(effects,
+    full = ,
+    random = c(rand, rand_sd),
+    grouplevel = rand,
+    rand_sd
+  )
+
   l <- compact_list(list(
     conditional = cond,
-    random = c(rand, rand_sd),
+    random = ran_eff,
     smooth_terms = smooth_terms,
     sigma = sigma_param,
     auxiliary = auxiliary
   ))
 
   if (object_has_names(l, "conditional")) {
-    x1 <- sub("(.*)(\\|)(.*)", "\\1", l$conditional)
-    x2 <- sub("(.*)(\\|)(.*)", "\\3", l$conditional)
-
     l.cond <- lapply(rn, function(i) {
-      list(conditional = x2[which(x1 == i)])
+      list(conditional = grep(paste0("^\\Q", i, "\\E\\|"), l$conditional, value = TRUE))
     })
     names(l.cond) <- rn
   } else {
     l.cond <- NULL
   }
 
-
   if (object_has_names(l, "random")) {
-    x1 <- sub("b\\[(.*)(\\|)(.*)", "\\1", l$random)
-    x2 <- sub("(b\\[).*(.*)(\\|)(.*)", "\\1\\4", l$random)
-
     l.random <- lapply(rn, function(i) {
-      list(random = x2[which(x1 == i)])
+      list(random = grep(paste0("\\Q", i, "\\E\\|"), l$random, value = TRUE))
     })
     names(l.random) <- rn
   } else {
     l.random <- NULL
   }
 
-
   if (object_has_names(l, "sigma")) {
     l.sigma <- lapply(rn, function(i) {
-      list(sigma = "sigma")
+      list(sigma = grep(paste0("\\Q", i, "\\E\\|"), l$sigma, value = TRUE))
     })
     names(l.sigma) <- rn
   } else {
     l.sigma <- NULL
   }
 
-
   l <- Map(c, l.cond, l.random, l.sigma)
   l <- .filter_pars(l, parameters, is_mv = TRUE)
 
-  effects <- validate_argument(effects, c("all", "fixed", "random"))
-  component <- validate_argument(component, c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")) # nolint
   elements <- .get_elements(effects, component)
   l <- lapply(l, function(i) compact_list(i[elements]))
 
   attr(l, "is_mv") <- "1"
 
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    l
+  }
+}
+
+
+.rstanarm_parameter_names <- function(x) {
+  # This does not exclude all relevant names, see e.g. "stanreg_merMod_5", thus
+  # # we need some additional cleaning. but it is considerably faster than
+  # "colnames(as.data.frame())"
+  fe <- setdiff(dimnames(x$stanfit)$parameters, c("mean_PPD", "log-posterior"))
+  # some more cleaning
+  fe <- fe[!endsWith(fe, "mean_PPD")]
+  fe <- fe[!grepl("_NEW_(.*)\\]$", fe)]
+  fe
+}
+
+
+#' @export
+find_parameters.bcplm <- function(x,
+                                  flatten = FALSE,
+                                  parameters = NULL,
+                                  ...) {
+  l <- .filter_pars(list(conditional = dimnames(x$sims.list[[1]])[[2]]), parameters)
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
   } else {

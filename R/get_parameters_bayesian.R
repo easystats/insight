@@ -183,37 +183,6 @@ get_parameters.BFBayesFactor <- function(x,
 }
 
 
-#' @export
-get_parameters.stanmvreg <- function(x,
-                                     effects = "fixed",
-                                     parameters = NULL,
-                                     summary = FALSE,
-                                     centrality = "mean",
-                                     ...) {
-  effects <- validate_argument(effects, c("fixed", "random", "all"))
-  elements <- .get_elements(effects, "all")
-  parms <- find_parameters(x, flatten = FALSE, parameters = parameters)
-
-  for (i in names(parms)) {
-    parms[[i]]$conditional <- sprintf("%s|%s", i, parms[[i]]$conditional)
-    find_bracket <- regexpr(pattern = "[", parms[[i]]$random, fixed = TRUE)
-    parms[[i]]$random <- paste0(
-      substr(parms[[i]]$random, start = 1, stop = find_bracket),
-      i, "|",
-      substr(parms[[i]]$random, start = find_bracket + 1, stop = 1000000L)
-    )
-    parms[[i]]$sigma <- NULL
-  }
-
-  out <- as.data.frame(x)[unlist(lapply(compact_list(parms), function(i) i[elements]), use.names = FALSE)]
-
-  if (isTRUE(summary)) {
-    out <- .summary_of_posteriors(out, centrality = centrality)
-  }
-  out
-}
-
-
 #' @rdname get_parameters.BGGM
 #' @export
 get_parameters.brmsfit <- function(x,
@@ -255,12 +224,22 @@ get_parameters.stanreg <- function(x,
                                    summary = FALSE,
                                    centrality = "mean",
                                    ...) {
-  effects <- validate_argument(effects, c("fixed", "random", "all"))
-  component <- validate_argument(
-    component,
-    c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")
-  )
-  out <- as.data.frame(x)[.get_parms_data(x, effects, component, parameters)]
+  dots <- list(...)
+  # allow hidden argument "variable" to be passed directly to as.data.frame
+  if (is.null(dots$variable)) {
+    parms <- find_parameters(
+      x,
+      effects = effects,
+      component = component,
+      flatten = FALSE,
+      parameters = parameters
+    )
+    variables <- unique(unlist(parms, use.names = FALSE))
+  } else {
+    variables <- dots$variable
+  }
+
+  out <- as.data.frame(x, pars = variables)
 
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality)
@@ -268,9 +247,11 @@ get_parameters.stanreg <- function(x,
   out
 }
 
-
 #' @export
 get_parameters.stanfit <- get_parameters.stanreg
+
+#' @export
+get_parameters.stanmvreg <- get_parameters.stanreg
 
 
 #' @export
