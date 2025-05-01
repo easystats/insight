@@ -68,7 +68,7 @@ print_md.data.frame <- function(x, ...) {
 #' @export
 print_html.data.frame <- function(x, ...) {
   dots <- list(...)
-  if (is.null(dots$backend) || !identical(backend, "tt")) {
+  if (is.null(dots$backend) || !identical(dots$backend, "tt")) {
     export_table(x, format = "html", ...)
   } else {
     export_table(x, format = "tt", ...)
