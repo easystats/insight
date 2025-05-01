@@ -15,7 +15,7 @@ See the documentation for the specific objects' classes."><meta property="og:ima
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,13 +101,17 @@ See the documentation for the specific objects' classes.</p>
 
 
 <dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
-<dd><p>String, indicating the output format. Can be <code>"markdown"</code> or <code>"html"</code>.</p></dd>
+<dd><p>String, indicating the output format. Can be <code>"markdown"</code> or
+<code>"html"</code>. A special option is <code>"tt"</code>, which creates a <code><a href="https://vincentarelbundock.github.io/tinytable/man/tt.html" class="external-link">tinytable::tt()</a></code>
+object, where the output format is dependent on the context where the table
+is used, i.e. it can be markdown format when <code><a href="export_table.html">export_table()</a></code> is used in
+markdown files, or LaTex format when creating PDFs etc.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Depending on <code>format</code>, either an object of class <code>gt_tbl</code>
-or a character vector of class <code>knitr_kable</code>.</p>
+    <p>Depending on <code>format</code>, either an object of class <code>gt_tbl</code>,
+<code>tinytable</code>, or a character vector of class <code>knitr_kable</code>.</p>
     </div>
 
     <div class="section level2">
