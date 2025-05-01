@@ -41,8 +41,12 @@ print_html <- function(x, ...) {
 #' @rdname display
 #' @export
 display.data.frame <- function(object, format = "markdown", ...) {
+  format <- validate_argument(format, c("markdown", "html", "tt"))
+
   if (identical(format, "html")) {
     print_html(x = object, ...)
+  } else if (identical(format, "tt")) {
+    print_html(x = object, backend = "tt", ...)
   } else {
     print_md(x = object, ...)
   }
@@ -59,7 +63,12 @@ print_md.data.frame <- function(x, ...) {
 #' @rdname display
 #' @export
 print_html.data.frame <- function(x, ...) {
-  export_table(x, format = "html", ...)
+  dots <- list(...)
+  if (is.null(dots$backend) || !identical(backend, "tt")) {
+    export_table(x, format = "html", ...)
+  } else {
+    export_table(x, format = "tt", ...)
+  }
 }
 
 
@@ -94,7 +103,7 @@ print_html.matrix <- function(x, ...) {
   rownames(x) <- NULL
   colnames(x)[1] <- ""
   # export table now
-  export_table(x, format = "html", ...)
+  print_html.data.frame(x, ...)
 }
 
 #' @export
