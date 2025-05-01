@@ -8,11 +8,15 @@
 #' See the documentation for the specific objects' classes.
 #'
 #' @param object,x A data frame.
-#' @param format String, indicating the output format. Can be `"markdown"` or `"html"`.
+#' @param format String, indicating the output format. Can be `"markdown"` or
+#' `"html"`. A special option is `"tt"`, which creates a [`tinytable::tt()`]
+#' object, where the output format is dependent on the context where the table
+#' is used, i.e. it can be markdown format when `export_table()` is used in
+#' markdown files, or LaTex format when creating PDFs etc.
 #' @param ... Arguments passed to other methods.
 #'
-#' @return Depending on `format`, either an object of class `gt_tbl`
-#'   or a character vector of class `knitr_kable`.
+#' @return Depending on `format`, either an object of class `gt_tbl`,
+#' `tinytable`, or a character vector of class `knitr_kable`.
 #'
 #' @examplesIf requireNamespace("gt")
 #' display(iris[1:5, ], format = "html")
@@ -41,7 +45,7 @@ print_html <- function(x, ...) {
 #' @rdname display
 #' @export
 display.data.frame <- function(object, format = "markdown", ...) {
-  format <- validate_argument(format, c("markdown", "html", "tt"))
+  format <- validate_argument(format, c("md", "markdown", "html", "tt"))
 
   if (identical(format, "html")) {
     print_html(x = object, ...)
