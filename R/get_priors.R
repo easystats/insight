@@ -118,7 +118,6 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
 get_priors.stanmvreg <- function(x, ...) {
   check_if_installed("rstanarm")
 
-
   ps <- rstanarm::prior_summary(x)
 
   l <- compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) { # nolint
@@ -162,9 +161,6 @@ get_priors.stanmvreg <- function(x, ...) {
   string <- strsplit(names(priors), "_", fixed = TRUE)
   string <- lapply(string, format_capitalize)
   names(priors) <- unlist(lapply(string, paste0, collapse = "_"))
-
-  # minor fixes
-  priors$Parameter <- sprintf("%s|%s", priors$Response, priors$Parameter)
 
   priors
 }
