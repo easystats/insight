@@ -192,6 +192,9 @@ get_parameters.brmsfit <- function(x,
                                    summary = FALSE,
                                    centrality = "mean",
                                    ...) {
+  # we require namespace, to ensure that `as.data.frame()` works correctly
+  check_if_installed("brms")
+
   dots <- list(...)
   # allow hidden argument "variable" to be passed directly to as.data.frame
   if (is.null(dots$variable)) {
