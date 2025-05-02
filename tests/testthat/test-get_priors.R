@@ -34,4 +34,9 @@ test_that("get_priors, stanmvref", {
     c(10.86201, 5.57448, 0.7581, 1.39362, 0.38906),
     tolerance = 1e-3
   )
+  expect_identical(
+    priors$Parameter,
+    c("y1|(Intercept)", "y2|(Intercept)", "y1|year", "y2|sexf", "y2|year")
+  )
+  expect_identical(priors$Response, c("y1", "y2", "y1", "y2", "y2"))
 })
