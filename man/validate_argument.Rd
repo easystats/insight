@@ -17,7 +17,7 @@ validate_argument(argument, options)
 \description{
 This is a replacement for \code{match.arg()}, however, the error
 string should be more informative for users. The name of the affected argument
-is shown, and possible typos as well as remaining valid options. Not that
+is shown, and possible typos as well as remaining valid options. Note that
 the argument \code{several.ok} is always \code{FALSE} in \code{validate_argument()}, i.e.
 this function - unlike \code{match.arg()} - does \emph{not} allow evaluating several
 valid options at once.

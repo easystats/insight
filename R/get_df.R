@@ -109,9 +109,9 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   }
 
   # check valid options
-  type <- match.arg(
+  type <- validate_argument(
     tolower(type),
-    choices = c(
+    c(
       "residual", "model", "analytical", "wald", "normal", "ml1", "betwithin",
       "between-within", "profile", "boot", "uniroot", "likelihood", "m-l-1", "any"
     )
@@ -183,7 +183,10 @@ get_df.model_fit <- function(x, type = "residual", verbose = TRUE, ...) {
 
 #' @export
 get_df.logitor <- function(x, type = "residual", verbose = TRUE, ...) {
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "analytical", "any"))
+  type <- validate_argument(
+    tolower(type),
+    c("residual", "model", "normal", "wald", "analytical", "any")
+  )
   get_df.default(x$fit, type = type, verbose = verbose, ...)
 }
 
@@ -315,7 +318,10 @@ get_df.emm_list <- function(x, ...) {
 #' @export
 get_df.mira <- function(x, type = "residual", verbose = TRUE, ...) {
   check_if_installed("mice")
-  type <- match.arg(tolower(type), choices = c("residual", "model", "normal", "wald", "any", "analytical"))
+  type <- validate_argument(
+    tolower(type),
+    c("residual", "model", "normal", "wald", "any", "analytical")
+  )
   get_df(mice::pool(x), type, verbose = verbose, ...)
 }
 
@@ -352,9 +358,9 @@ get_df.serp <- function(x, type = "normal", ...) {
 
 #' @export
 get_df.lmerMod <- function(x, type = "residual", ...) {
-  type <- match.arg(
+  type <- validate_argument(
     tolower(type),
-    choices = c(
+    c(
       "residual", "model", "analytical", "satterthwaite", "kenward",
       "kenward-roger", "kr", "normal", "wald", "ml1", "m-l-1", "betwithin",
       "between-within", "any"
@@ -405,9 +411,9 @@ get_df.fixest <- function(x, type = "residual", ...) {
   if (is.null(type)) {
     type <- "residual"
   }
-  type <- match.arg(
+  type <- validate_argument(
     tolower(type),
-    choices = c("wald", "residual", "normal", "any", "analytical")
+    c("wald", "residual", "normal", "any", "analytical")
   )
   type <- switch(type,
     any = ,
