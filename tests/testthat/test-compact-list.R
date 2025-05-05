@@ -25,6 +25,18 @@ test_that("compact_list, logical > 1", {
   expect_identical(compact_list(x, remove_na = FALSE), list(a = 1, b = c(NA, NA), c = NA))
 })
 
+test_that("compact_list, works with functions", {
+  out <- list(a = 1, b = c(1, 2), c = NULL, d = function(x) 2 * x, e = NA)
+  expect_identical(
+    compact_list(out, remove_na = TRUE),
+    list(a = 1, b = c(1, 2), d = function (x) 2 * x)
+  )
+  expect_identical(
+    compact_list(out, remove_na = FALSE),
+    list(a = 1, b = c(1, 2), d = function (x) 2 * x, e = NA)
+  )
+})
+
 test_that("compact_list, this must work!", {
   skip_if_not_installed("bayestestR")
   out <- lapply(
