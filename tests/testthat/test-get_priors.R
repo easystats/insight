@@ -22,7 +22,7 @@ test_that("get_priors, stanmvref", {
   skip_if_not_installed("rstanarm")
 
   model <- insight::download_model("stanmvreg_1")
-  skip_if(i.null(model))
+  skip_if(is.null(model))
 
   priors <- get_priors(model)
   expect_named(
