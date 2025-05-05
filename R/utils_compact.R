@@ -20,16 +20,14 @@ compact_list <- function(x, remove_na = FALSE) {
     ]
   } else {
     x[
-      !sapply(
-        x,
-        function(i)
-          !is_model(i) &&
-            !inherits(i, c("Formula", "gFormula")) &&
-            !is.function(i) &&
-            (length(i) == 0L ||
-              is.null(i) ||
-              any(.safe(as.character(i) == "NULL", FALSE), na.rm = TRUE))
-      )
+      !sapply(x, function(i) {
+        !is_model(i) &&
+          !inherits(i, c("Formula", "gFormula")) &&
+          !is.function(i) &&
+          (length(i) == 0L ||
+            is.null(i) ||
+            any(.safe(as.character(i) == "NULL", FALSE), na.rm = TRUE))
+      })
     ]
   }
 }
@@ -49,12 +47,10 @@ compact_list <- function(x, remove_na = FALSE) {
 #' @export
 compact_character <- function(x) {
   x[
-    !sapply(
-      x,
-      function(i)
-        !nzchar(i, keepNA = TRUE) ||
-          all(is.na(i)) ||
-          any(as.character(i) == "NULL", na.rm = TRUE)
-    )
+    !sapply(x, function(i) {
+      !nzchar(i, keepNA = TRUE) ||
+        all(is.na(i)) ||
+        any(as.character(i) == "NULL", na.rm = TRUE)
+    })
   ]
 }
