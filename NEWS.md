@@ -26,6 +26,9 @@
   to `get_parameters()`, which is in turn passed to `as.data.frame()`, to
   extract parameters more efficiently.
 
+* The `by` argument in `export_table()` now also splits tables when format is
+  not `"html"`.
+
 # insight 1.2.0
 
 ## Breaking Changes
