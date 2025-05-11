@@ -15,7 +15,7 @@ the table_width argument to control this behaviour."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -216,9 +216,10 @@ column four and left-align the fifth column.</p></dd>
 
 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
-<dd><p>Name of column in <code>x</code> that indicates grouping for tables.
-Only applies when <code>format = "html"</code>. <code>by</code> is passed down to
-<code>gt::gt(groupname_col = by)</code>.</p></dd>
+<dd><p>Name of column(s) in <code>x</code> that indicates grouping for tables.
+When <code>format = "html"</code>, <code>by</code> is passed down to <code>gt::gt(groupname_col = by)</code>.
+For markdown and text format, <code>x</code> is internally split into a list of data
+frames.</p></dd>
 
 
 <dt id="arg-zap-small">zap_small<a class="anchor" aria-label="anchor" href="#arg-zap-small"></a></dt>
@@ -340,6 +341,31 @@ and <a href="https://easystats.github.io/parameters/articles/model_parameters_fo
 <span class="r-out co"><span class="r-pr">#&gt;</span>         4.60 |        0.20 |  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         5.00 |        0.20 |  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         5.40 |        0.40 |  setosa</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># group (split) tables by variables</span></span></span>
+<span class="r-in"><span><span class="fu">export_table</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fl">8</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Group: cyl=6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mpg | disp |  hp | drat |   wt |  qsec | vs | am | gear | carb</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21.00 |  160 | 110 | 3.90 | 2.62 | 16.46 |  0 |  1 |    4 |    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21.00 |  160 | 110 | 3.90 | 2.88 | 17.02 |  0 |  1 |    4 |    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21.40 |  258 | 110 | 3.08 | 3.21 | 19.44 |  1 |  0 |    3 |    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18.10 |  225 | 105 | 2.76 | 3.46 | 20.22 |  1 |  0 |    3 |    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Group: cyl=4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mpg |   disp | hp | drat |   wt |  qsec | vs | am | gear | carb</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22.80 | 108.00 | 93 | 3.85 | 2.32 | 18.61 |  1 |  1 |    4 |    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24.40 | 146.70 | 62 | 3.69 | 3.19 | 20.00 |  1 |  0 |    4 |    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Group: cyl=8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mpg | disp |  hp | drat |   wt |  qsec | vs | am | gear | carb</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18.70 |  360 | 175 | 3.15 | 3.44 | 17.02 |  0 |  0 |    3 |    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14.30 |  360 | 245 | 3.21 | 3.57 | 15.84 |  0 |  0 |    3 |    4</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># colored footers</span></span></span>
