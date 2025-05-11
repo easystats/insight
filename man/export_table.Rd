@@ -110,9 +110,10 @@ equal the number of columns. For instance, \code{align = "lccrl"} would
 left-align the first column, center the second and third, right-align
 column four and left-align the fifth column.}
 
-\item{by}{Name of column in \code{x} that indicates grouping for tables.
-Only applies when \code{format = "html"}. \code{by} is passed down to
-\code{gt::gt(groupname_col = by)}.}
+\item{by}{Name of column(s) in \code{x} that indicates grouping for tables.
+When \code{format = "html"}, \code{by} is passed down to \code{gt::gt(groupname_col = by)}.
+For markdown and text format, \code{x} is internally split into a list of data
+frames.}
 
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
@@ -172,6 +173,9 @@ export_table(head(iris), sep = " ", header = "*", digits = 1)
 
 # split longer tables
 export_table(head(iris), table_width = 30)
+
+# group (split) tables by variables
+export_table(head(mtcars, 8), by = "cyl")
 
 \donttest{
 # colored footers

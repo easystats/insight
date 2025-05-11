@@ -283,3 +283,23 @@ test_that("export_table, new column names", {
     regex = "is a named vector"
   )
 })
+
+
+test_that("export_table, by in text format", {
+  data(mtcars)
+  data(iris)
+
+  expect_snapshot(export_table(mtcars, by = c("cyl", "gear")))
+  expect_snapshot(export_table(iris, by = "Species"))
+  expect_snapshot(export_table(mtcars, by = ~ cyl + gear))
+
+  # errors
+  expect_error(
+    export_table(iris, by = "Specis"),
+    regex = "Not all variables"
+  )
+  expect_error(
+    export_table(iris, by = 6),
+    regex = "cannot be lower"
+  )
+})

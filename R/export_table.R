@@ -41,9 +41,10 @@
 #'   equal the number of columns. For instance, `align = "lccrl"` would
 #'   left-align the first column, center the second and third, right-align
 #'   column four and left-align the fifth column.
-#' @param by Name of column in `x` that indicates grouping for tables.
-#'   Only applies when `format = "html"`. `by` is passed down to
-#'   `gt::gt(groupname_col = by)`.
+#' @param by Name of column(s) in `x` that indicates grouping for tables.
+#'   When `format = "html"`, `by` is passed down to `gt::gt(groupname_col = by)`.
+#'   For markdown and text format, `x` is internally split into a list of data
+#'   frames.
 #' @param width Refers to the width of columns (with numeric values). Can be
 #'   either `NULL`, a number or a named numeric vector. If `NULL`, the width for
 #'   each column is adjusted to the minimum required width. If a number, columns
@@ -98,6 +99,9 @@
 #'
 #' # split longer tables
 #' export_table(head(iris), table_width = 30)
+#'
+#' # group (split) tables by variables
+#' export_table(head(mtcars, 8), by = "cyl")
 #'
 #' \donttest{
 #' # colored footers
@@ -194,6 +198,8 @@ export_table <- function(x,
   indent_groups <- attributes(x)$indent_groups
   indent_rows <- attributes(x)$indent_rows
 
+  # split data frames?
+  x <- .split_tables(x, by, format)
 
   # table from single data frame --------------------------------------------
 
@@ -359,6 +365,64 @@ print.insight_table <- function(x, ...) {
 
 
 # small helper ----------------------
+
+# split data frame for text format - unlike HTML, where we need to bind
+# lists of data frames to a single data frame and have a "group_by" variable,
+# we need a list of data frames for text or markdown output (instead of a
+# single data frame)
+.split_tables <- function(x, by, format) {
+  if (!is.null(by) && is.data.frame(x) && !identical(format, "html")) {
+    # convert formula into string
+    if (inherits(by, "formula")) {
+      by <- all.vars(by)
+    }
+    # numeric indices are possible - just extract column names at that positions
+    if (is.numeric(by)) {
+      if (any(by < 1 || by > ncol(x))) {
+        format_error("Indices in `by` cannot be lower than 1 or higher than the number of columns in the data frame.")
+      }
+      by <- colnames(x)[by]
+    }
+    # check if all by columns are in the data
+    if (!all(by %in% colnames(x))) {
+      suggestion <- .misspelled_string(colnames(x), by)
+      msg <- "Not all variables in `by` were found in the data frame."
+      if (is.null(suggestion$msg) || !length(suggestion$msg) || !nzchar(suggestion$msg)) {
+        msg <- paste(msg, "Please use one of the following names:", .to_string(colnames(x)))
+      } else {
+        msg <- paste(msg, suggestion$msg)
+      }
+      format_error(msg)
+    }
+    # convert `by` columns into factor. we do this so split works with correct
+    # order of values in "by" columns. If `by` columns are character vector,
+    # `split()` sorts alpahbetically, which we don't want
+    x[by] <- lapply(x[by], function(i) {
+      factor(i, levels = unique(i))
+    })
+
+    # create titles based on group names and levels
+    groups <- expand.grid(lapply(x[by], unique))
+    groups[] <- lapply(groups, as.character)
+
+    group_titles <- lapply(seq_len(nrow(groups)), function(i) {
+      paste0(colnames(groups), "=", as.character(groups[i, ]), collapse = ", ")
+    })
+
+    # split data frames
+    x <- split(x, x[by])
+
+    # remove by-columns and set title
+    x <- lapply(seq_along(x), function(i) {
+      x[[i]][by] <- NULL
+      attr(x[[i]], "table_title") <- c(paste("Group:", group_titles[[i]]), "blue")
+      x[[i]]
+    })
+  }
+
+  x
+}
+
 
 # check whether "table_caption" or its alias "table_title" is used as attribute
 .check_caption_attr_name <- function(x) {
