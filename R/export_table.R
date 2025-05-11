@@ -368,7 +368,7 @@ print.insight_table <- function(x, ...) {
 # we need a list of data frames for text or markdown output (instead of a
 # single data frame)
 .split_tables <- function(x, by, format) {
-  if (!is.null(by) && !is.data.frame(x) && !identical(format, "html")) {
+  if (!is.null(by) && is.data.frame(x) && !identical(format, "html")) {
     # convert formula into string
     if (inherits(by, "formula")) {
       by <- all.vars(by)
