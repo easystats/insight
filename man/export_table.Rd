@@ -174,6 +174,9 @@ export_table(head(iris), sep = " ", header = "*", digits = 1)
 # split longer tables
 export_table(head(iris), table_width = 30)
 
+# group (split) tables by variables
+export_table(head(mtcars, 8), by = "cyl")
+
 \donttest{
 # colored footers
 data(iris)
