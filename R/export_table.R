@@ -382,6 +382,7 @@ print.insight_table <- function(x, ...) {
     }
     # check if all by columns are in the data
     if (!all(by %in% colnames(x))) {
+      suggestion <- .misspelled_string(colnames(x), by)
       msg <- "Not all variables in `by` were found in the data frame."
       if (is.null(suggestion$msg) || !length(suggestion$msg) || !nzchar(suggestion$msg)) {
         msg <- paste(msg, "Please use one of the following names:", .to_string(colnames(x)))
