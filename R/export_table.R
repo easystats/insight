@@ -397,8 +397,23 @@ print.insight_table <- function(x, ...) {
       factor(i, levels = unique(i))
     })
 
+    # create titles based on group names and levels
+    groups <- expand.grid(lapply(x[by], unique))
+    groups[] <- lapply(groups, as.character)
+
+    group_titles <- lapply(seq_len(nrow(groups)), function(i) {
+      paste0(colnames(groups), "=", as.character(groups[i, ]), collapse = ", ")
+    })
+
     # split data frames
     x <- split(x, x[by])
+
+    # remove by-columns and set title
+    x <- lapply(seq_along(x), function(i) {
+      x[[i]][by] <- NULL
+      attr(x[[i]], "table_title") <- c(paste("Group:", group_titles[[i]]), "blue")
+      x[[i]]
+    })
   }
 
   x
