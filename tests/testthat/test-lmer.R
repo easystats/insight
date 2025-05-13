@@ -82,6 +82,29 @@ test_that("get_df", {
     ignore_attr = TRUE,
     tolerance = 1e-4
   )
+
+  skip_if_not_installed("lmerTest")
+  # per observation df
+  data(mtcars)
+  mod <- lme4::lmer(am ~ hp + (1 | cyl), data = mtcars)
+  out1 <- get_df(mod, type = "satterthwaite", df_per_obs = TRUE, data = mtcars)
+  out2 <- get_df(mod, type = "satterthwaite", df_per_obs = FALSE)
+  expect_equal(
+    out1,
+    c(
+      1.75657, 1.75657, 1.89121, 1.75657, 1.80609, 1.78946, 2.95048,
+      2.31532, 1.87196, 1.69622, 1.69622, 1.84694, 1.84694, 1.84694,
+      2.13913, 2.29991, 2.59236, 2.2466, 2.50664, 2.26337, 1.85365,
+      1.68312, 1.68312, 2.95048, 1.80609, 2.2466, 1.91138, 1.73945,
+      3.50471, 1.80609, 6.61056, 1.76271
+    ),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    out2,
+    c(`(Intercept)` = 3.99802, hp = 29.3951),
+    tolerance = 1e-3
+  )
 })
 
 test_that("n_parameters", {
