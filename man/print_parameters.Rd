@@ -102,7 +102,7 @@ component for a better overview. Further, parameter names are "cleaned", if
 necessary, also for a cleaner print. See also 'Examples'.
 }
 \examples{
-\dontshow{if (require("curl", quietly = TRUE) && curl::has_internet() && require("bayestestR", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("curl", quietly = TRUE) && curl::has_internet() && all(insight::check_if_installed(c("bayestestR", "httr2", "brms"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 library(bayestestR)
 model <- download_model("brms_zi_2")
