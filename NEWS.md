@@ -29,6 +29,11 @@
 * The `by` argument in `export_table()` now also splits tables when format is
   not `"html"`.
 
+## Bug fixes
+
+* Fixed issue in `find_formula()` for models of class `barts` (package *dbarts*),
+  when formula was abbreviated using `y ~ .`.
+
 # insight 1.2.0
 
 ## Breaking Changes

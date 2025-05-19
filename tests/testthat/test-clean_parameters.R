@@ -1,5 +1,10 @@
+skip_on_cran()
+skip_if_not_installed("curl")
+skip_if_offline()
+skip_if_not_installed("httr2")
+skip_on_os("mac")
+
 test_that("clean_parameters blavaan", {
-  skip_on_cran()
   skip_if_not_installed("blavaan")
   skip_if_not_installed("lavaan")
   skip_if_not_installed("Rcpp")
@@ -32,10 +37,6 @@ test_that("clean_parameters blavaan", {
 
 
 test_that("clean_parameters stanrag", {
-  skip_on_cran()
-  skip_if_not_installed("curl")
-  skip_if_offline()
-  skip_if_not_installed("httr2")
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
 
@@ -77,10 +78,6 @@ test_that("clean_parameters stanrag", {
 
 
 test_that("clean_parameters brms, sigma3", {
-  skip_on_cran()
-  skip_if_not_installed("curl")
-  skip_if_offline()
-  skip_if_not_installed("httr2")
   skip_if_not_installed("brms")
 
   m <- insight::download_model("brms_sigma_3")
@@ -120,10 +117,6 @@ test_that("clean_parameters brms, sigma3", {
 
 
 test_that("clean_parameters brms, sigma1", {
-  skip_on_cran()
-  skip_if_not_installed("curl")
-  skip_if_offline()
-  skip_if_not_installed("httr2")
   skip_if_not_installed("brms")
 
   m <- insight::download_model("brms_sigma_1")
@@ -150,10 +143,6 @@ test_that("clean_parameters brms, sigma1", {
 
 
 test_that("clean_parameters brms, chocomini", {
-  skip_on_cran()
-  skip_if_not_installed("curl")
-  skip_if_offline()
-  skip_if_not_installed("httr2")
   skip_if_not_installed("brms")
 
   m <- insight::download_model("brms_chocomini_1")
