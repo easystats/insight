@@ -46,11 +46,11 @@ test_that("compact_list, works with functions", {
   out <- list(a = 1, b = c(1, 2), c = NULL, d = function(x) 2 * x, e = NA)
   expect_identical(
     compact_list(out, remove_na = TRUE),
-    list(a = 1, b = c(1, 2), d = function (x) 2 * x)
+    list(a = 1, b = c(1, 2), d = function(x) 2 * x)
   )
   expect_identical(
     compact_list(out, remove_na = FALSE),
-    list(a = 1, b = c(1, 2), d = function (x) 2 * x, e = NA)
+    list(a = 1, b = c(1, 2), d = function(x) 2 * x, e = NA)
   )
 })
 
