@@ -1,4 +1,4 @@
-skip_if_not_installed("dbart")
+skip_if_not_installed("dbarts")
 skip_if(getRversion() < "4.5.0")
 
 test_that("find_formula", {

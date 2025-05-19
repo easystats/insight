@@ -111,7 +111,7 @@ Suggests:
     crch,
     curl,
     datawizard,
-    dbart,
+    dbarts,
     effectsize,
     emmeans,
     epiR,
