@@ -31,8 +31,8 @@
 
 ## Bug fixes
 
-* Fixed issue in `find_formula()` for models of class `bart` (package *dbart*),
-  when formula wa abbreviated using `y ~ .`.
+* Fixed issue in `find_formula()` for models of class `barts` (package *dbart*),
+  when formula was abbreviated using `y ~ .`.
 
 # insight 1.2.0
 
