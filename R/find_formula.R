@@ -164,7 +164,7 @@ formula_ok <- function(x,
 #' @rdname find_formula
 #' @export
 find_formula.default <- function(x, verbose = TRUE, ...) {
-  f <- .safe(list(conditional = stats::formula(x)))
+  f <- .safe(list(conditional = .dot_formula(stats::formula(x), x)))
   .find_formula_return(f, verbose = verbose)
 }
 
