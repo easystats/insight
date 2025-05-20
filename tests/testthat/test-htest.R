@@ -41,6 +41,7 @@ test_that("get_data.t-test, one-sample", {
   expect_identical(nrow(get_data(tt2)), 32L)
   expect_true(model_info(tt1)$is_ttest)
   expect_true(model_info(tt2)$is_ttest)
+  expect_silent(get_data(tt1))
 })
 
 # Two sample
