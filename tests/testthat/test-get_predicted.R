@@ -5,8 +5,6 @@ skip_on_cran()
 # =========================================================================
 
 test_that("get_predicted - lm", {
-  skip_on_cran()
-
   x <- lm(mpg ~ cyl + hp, data = mtcars)
 
   # Link vs. relation
@@ -62,8 +60,6 @@ test_that("get_predicted - lm", {
 
 
 test_that("get_predicted - glm", {
-  skip_on_cran()
-
   x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 
   # Link vs. relation
@@ -117,7 +113,6 @@ test_that("get_predicted - glm", {
 })
 
 test_that("get_predicted - glm", {
-  skip_on_cran()
   skip_if_not_installed("modelbased")
   # link works for gaussian with log-link
   set.seed(123)
@@ -204,7 +199,6 @@ test_that("get_predicted - lmerMod", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("merTools")
   skip_if_not_installed("rstanarm")
-  skip_on_cran()
 
   suppressPackageStartupMessages({
     suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE))) # nolint
@@ -398,7 +392,6 @@ test_that("get_predicted - mgcv::gam and gamm", {
 
 
 test_that("get_predicted - rstanarm", {
-  skip_on_cran()
   skip_if_not_installed("rstanarm")
 
   suppressPackageStartupMessages({
@@ -446,7 +439,6 @@ test_that("get_predicted - rstanarm", {
 
 
 test_that("get_predicted - brms, auxiliary", {
-  skip_on_cran()
   skip_if_not_installed("brms")
   skip_if_not_installed("httr2")
 
@@ -466,9 +458,12 @@ test_that("get_predicted - brms, auxiliary", {
 
 
 test_that("get_predicted - brms, categorical family", {
-  skip_on_cran()
   skip_if_not_installed("brms")
   skip_if_not_installed("httr2")
+
+  suppressPackageStartupMessages({
+    suppressWarnings(suppressMessages(library(brms, quietly = TRUE, warn.conflicts = FALSE))) # nolint
+  })
 
   m <- insight::download_model("brms_categorical_1_fct")
   out <- get_predicted(m, data = get_datagrid(m))
@@ -619,7 +614,6 @@ test_that("bugfix: used to fail with matrix variables", {
 
 
 test_that("brms: `type` in ellipsis used to produce the wrong intervals", {
-  skip_on_cran()
   skip_if_not_installed("brms")
   skip_on_os(os = "windows")
   void <- capture.output(
