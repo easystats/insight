@@ -164,7 +164,7 @@ formula_ok <- function(x,
 #' @rdname find_formula
 #' @export
 find_formula.default <- function(x, verbose = TRUE, ...) {
-  f <- .safe(list(conditional = .dot_formula(stats::formula(x), x)))
+  f <- .safe(list(conditional = .dot_formula(stats::formula(x), x, ...)))
   .find_formula_return(f, verbose = verbose)
 }
 
@@ -1141,7 +1141,7 @@ find_formula.tobit <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.hurdle <- function(x, verbose = TRUE, ...) {
-  .zeroinf_formula(x, verbose = verbose)
+  .zeroinf_formula(x, verbose = verbose, ...)
 }
 
 #' @export
@@ -1153,7 +1153,7 @@ find_formula.zerotrunc <- find_formula.hurdle
 
 #' @export
 find_formula.zcpglm <- function(x, verbose = TRUE, ...) {
-  .zeroinf_formula(x, separator = "\\|\\|", verbose = verbose)
+  .zeroinf_formula(x, separator = "\\|\\|", verbose = verbose, ...)
 }
 
 
@@ -1742,7 +1742,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
 # Find formula for zero-inflated regressions, where
 # zero-inflated part is separated by | from count part
-.zeroinf_formula <- function(x, separator = "\\|", verbose = TRUE) {
+.zeroinf_formula <- function(x, separator = "\\|", verbose = TRUE, ...) {
   f <- tryCatch(stats::formula(x), error = function(x) NULL)
 
   if (is.null(f)) {
@@ -1761,7 +1761,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   ## TODO could be extended to all find_formula()
 
   # fix dot-formulas
-  c.form <- .dot_formula(f = c.form, model = x)
+  c.form <- .dot_formula(f = c.form, model = x, ...)
 
   # fix dot-formulas
   zi.form <- tryCatch(
@@ -1786,7 +1786,13 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
 # try to guess "full" formula for dot-abbreviation, e.g.
 # lm(mpg ~., data = mtcars)
-.dot_formula <- function(f, model) {
+.dot_formula <- function(f, model, ...) {
+  # skip_dot_formula = TRUE is only internally used, to avoid infinite loops
+  # when `find_formula()` is called from `get_data()`
+  if (isTRUE(list(...)$skip_dot_formula)) {
+    return(f)
+  }
+
   # fix dot-formulas
   tryCatch(
     {
