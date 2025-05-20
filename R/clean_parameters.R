@@ -808,6 +808,6 @@ clean_parameters.mlm <- function(x, ...) {
     }
   }
 
-  class(out) <- c("clean_parameters", class(out))
+  class(out) <- unique(c("clean_parameters", class(out)))
   out
 }
