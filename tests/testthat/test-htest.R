@@ -15,6 +15,12 @@ test_that("get_data.t-test", {
   )
 })
 
+test_that("find_formula.t-test", {
+  x <- t.test(mpg ~ vs, data = mtcars)
+  expect_null(find_formula(x))
+  expect_silent(find_formula(x))
+})
+
 test_that("model_info.t-test", {
   expect_true(model_info(x)$is_ttest)
 })
