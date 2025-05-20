@@ -221,6 +221,7 @@ test_that("get_data.freedman", {
 test_that("model_info.shapiro-test", {
   expect_true(model_info(m)$is_variancetest)
   expect_identical(model_info(m)$family, "shapiro")
+  expect_silent(model_info(m))
 })
 
 
