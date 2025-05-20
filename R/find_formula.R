@@ -164,7 +164,11 @@ formula_ok <- function(x,
 #' @rdname find_formula
 #' @export
 find_formula.default <- function(x, verbose = TRUE, ...) {
-  f <- .safe(list(conditional = .dot_formula(stats::formula(x), x, ...)))
+  f <- .safe(list(conditional = stats::formula(x)))
+  # if evaluation succeeds, we check in a next steps if dots are used
+  if (!is.null(f)) {
+    f$conditional <- .dot_formula(f$conditional, x, ...)
+  }
   .find_formula_return(f, verbose = verbose)
 }
 
