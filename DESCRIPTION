@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.2.0.11
+Version: 1.3.0
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -148,7 +148,7 @@ Suggests:
     lmtest,
     logistf,
     logitr,
-    marginaleffects (>= 0.25.0),
+    marginaleffects (>= 0.26.0),
     MASS,
     Matrix,
     mclogit,
@@ -221,4 +221,3 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/Needs/website: easystats/easystatstemplate
 Config/Needs/check: stan-dev/cmdstanr
-Remotes: vincentarelbundock/marginaleffects
