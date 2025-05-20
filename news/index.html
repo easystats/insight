@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,28 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.0" id="insight-130">insight 1.3.0<a class="anchor" aria-label="anchor" href="#insight-130"></a></h2><p class="text-muted">CRAN release: 2025-05-20</p>
+<div class="section level3">
+<h3 id="breaking-changes-1-3-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-3-0"></a></h3>
+<ul><li>The default option <code>"all"</code> for the <code>effects</code> argument of <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for models from package <em>brms</em> and <em>rstanarm</em> has a new behaviour and only returns fixed effects and random effects variance components, but no longer the group level estimates. Use <code>effects = "full"</code> to return all parameters. This change is mainly to be more flexible and gain more efficiency for models with many parameters and / or many posterior draws.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-functions-1-3-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-1-3-0"></a></h3>
+<ul><li>
+<code><a href="../reference/is_bayesian_model.html">is_bayesian_model()</a></code> as a convenient shortcut to check whether a model is Bayesian or not.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-3-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-3-0"></a></h3>
+<ul><li><p>Revised wording for alerts from <code><a href="../reference/get_variance.html">get_variance()</a></code>.</p></li>
+<li><p>The <code>effects</code> argument of <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for models from package <em>brms</em> and <em>rstanarm</em> get two new options, <code>"grouplevel"</code> and <code>"random_variances"</code>, to return only random effects variance components, or group level effects. This is more efficient especially for models with many samples and many parameters. Additionally, a <code>variable</code> argument can be passed to <code><a href="../reference/get_parameters.html">get_parameters()</a></code>, which is in turn passed to <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code>, to extract parameters more efficiently.</p></li>
+<li><p>The <code>by</code> argument in <code><a href="../reference/export_table.html">export_table()</a></code> now also splits tables when format is not <code>"html"</code>.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-3-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-0"></a></h3>
+<ul><li>Fixed issue in <code><a href="../reference/find_formula.html">find_formula()</a></code> for models of class <code>barts</code> (package <em>dbarts</em>), when formula was abbreviated using <code>y ~ .</code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="insight-120">insight 1.2.0<a class="anchor" aria-label="anchor" href="#insight-120"></a></h2><p class="text-muted">CRAN release: 2025-04-22</p>
 <div class="section level3">
