@@ -1300,6 +1300,11 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
 find_formula.sdmTMB <- function(x, verbose = TRUE, ...) {
   f.cond <- stats::formula(x)
 
+  # sanity check, we might have a list of formulas, only need first element
+  if (is.list(f.cond)) {
+    f.cond <- f.cond[[1]]
+  }
+
   # extract random parts of formula
   f.random <- lapply(.findbars(f.cond), function(.x) {
     f <- safe_deparse(.x)
