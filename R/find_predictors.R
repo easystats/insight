@@ -367,12 +367,11 @@ find_predictors.brmsfit <- function(x,
 #' @export
 find_predictors.sdmTMB <- function(x,
                                    effects = "fixed",
-                                   component = "all",
                                    flatten = FALSE,
                                    verbose = TRUE,
                                    ...) {
   effects <- validate_argument(effects, c("fixed", "random", "all"))
-  component <- validate_argument(component, c("all", "conditional", "delta"))
+  elements <- .get_elements(effects, component = "conditional", model = x)
 
   f <- find_formula(x, verbose = verbose)
   f <- .prepare_predictors(x, f, elements)
