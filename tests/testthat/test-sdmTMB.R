@@ -78,6 +78,63 @@ test_that("find_formula", {
 })
 
 
+test_that("find_predictors", {
+  expect_identical(
+    find_predictors(m1),
+    list(conditional = c("b1", "b2"), time = "year")
+  )
+  expect_identical(
+    find_predictors(m1, flatten = TRUE),
+    c("b1", "b2", "year")
+  )
+  expect_null(find_predictors(m1, effects = "random"))
+
+  expect_identical(
+    find_predictors(m2),
+    list(conditional = "depth")
+  )
+  expect_identical(
+    find_predictors(m2, flatten = TRUE),
+    "depth"
+  )
+  expect_null(find_predictors(m2, effects = "random"))
+
+  expect_identical(
+    find_predictors(m3),
+    list(conditional = "depth")
+  )
+  expect_identical(
+    find_predictors(m3, "all"),
+    list(conditional = "depth", random = "fyear")
+  )
+  expect_identical(
+    find_predictors(m3, flatten = TRUE),
+    "depth"
+  )
+  expect_identical(
+    find_predictors(m3, "random"),
+    list(random = "fyear")
+  )
+
+  expect_null(find_predictors(m4))
+  expect_identical(
+    find_predictors(m4, "all"),
+    list(random = c("depth", "fyear"))
+  )
+  expect_null(find_predictors(m4, flatten = TRUE))
+  expect_identical(
+    find_predictors(m4, "random", flatten = TRUE),
+    c("depth", "fyear")
+  )
+})
+
+
+
+
+
+
+
+
 
 
 test_that("model_info", {
@@ -86,20 +143,6 @@ test_that("model_info", {
   expect_false(model_info(m1)$is_linear)
 })
 
-test_that("find_predictors", {
-  expect_identical(
-    find_predictors(m1),
-    list(
-      conditional = c("fem", "mar", "kid5", "ment"),
-      zero_inflated = c("kid5", "phd")
-    )
-  )
-  expect_identical(
-    find_predictors(m1, flatten = TRUE),
-    c("fem", "mar", "kid5", "ment", "phd")
-  )
-  expect_null(find_predictors(m1, effects = "random"))
-})
 
 test_that("find_response", {
   expect_identical(find_response(m1), "art")
