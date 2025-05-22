@@ -1297,6 +1297,31 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+find_formula.sdmTMB <- function(x, verbose = TRUE, ...) {
+  f.cond <- stats::formula(x)
+
+  # extract random parts of formula
+  f.random <- lapply(.findbars(f.cond), function(.x) {
+    f <- safe_deparse(.x)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1L) {
+    f.random <- f.random[[1]]
+  }
+
+  # extract fixed effects parts
+  f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
+
+  f <- compact_list(list(
+    conditional = f.cond,
+    random = f.random,
+  ))
+  .find_formula_return(f, verbose = verbose)
+}
+
+
+#' @export
 find_formula.nlmerMod <- function(x, verbose = TRUE, ...) {
   f.random <- lapply(.findbars(stats::formula(x)), function(.x) {
     f <- safe_deparse(.x)
