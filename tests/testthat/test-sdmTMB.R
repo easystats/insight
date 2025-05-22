@@ -41,10 +41,10 @@ m3 <- sdmTMB::sdmTMB(
   family = sdmTMB::tweedie(link = "log")
 )
 
-m4 <- sdmTMB(
+m4 <- sdmTMB::sdmTMB(
   density ~ 1 + (depth | fyear), #<
   data = pcod_2011, mesh = mesh,
-  family = tweedie(link = "log")
+  family = sdmTMB::tweedie(link = "log")
 )
 
 
@@ -137,35 +137,37 @@ test_that("find_response", {
 })
 
 
-
-
-
-
-
-
 test_that("model_info", {
-  expect_true(model_info(m1)$is_poisson)
-  expect_true(model_info(m1)$is_zero_inflated)
-  expect_false(model_info(m1)$is_linear)
+  expect_true(model_info(m1)$is_linear)
+  expect_true(model_info(m2)$is_hurdle)
+  expect_true(model_info(m3)$is_tweedie)
+  expect_true(model_info(m4)$is_tweedie)
 })
 
 
-
-test_that("get_response", {
-  expect_equal(get_response(m1), bioChemists$art)
+test_that("link_function", {
+  expect_equal(link_function(m1)(0.2), 0.2, tolerance = 1e-5)
+  expect_equal(link_function(m2)(0.2), log(0.2), tolerance = 1e-5)
+  expect_equal(link_function(m3)(0.2), log(0.2), tolerance = 1e-5)
+  expect_equal(link_function(m4)(0.2), log(0.2), tolerance = 1e-5)
 })
+
 
 test_that("link_inverse", {
-  expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-5)
+  expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
+  expect_equal(link_inverse(m2)(0.2), exp(0.2), tolerance = 1e-5)
+  expect_equal(link_inverse(m3)(0.2), exp(0.2), tolerance = 1e-5)
+  expect_equal(link_inverse(m4)(0.2), exp(0.2), tolerance = 1e-5)
 })
 
+
 test_that("get_data", {
-  expect_equal(nrow(get_data(m1)), 915)
-  expect_equal(
-    colnames(get_data(m1)),
-    c("art", "fem", "mar", "kid5", "ment", "phd")
-  )
+  expect_equal(dim(get_data(m1)), c(300L, 4L))
+  expect_equal(dim(get_data(m2)), c(969L, 2L))
+  expect_equal(dim(get_data(m3)), c(969L, 3L))
+  expect_equal(dim(get_data(m4)), c(969L, 3L))
 })
+
 
 test_that("get_df", {
   expect_equal(
@@ -184,6 +186,24 @@ test_that("get_df", {
     ignore_attr = TRUE
   )
 })
+
+
+test_that("find_statistic", {
+  expect_identical(find_statistic(m1), "z-statistic")
+  expect_identical(find_statistic(m2), "z-statistic")
+  expect_identical(find_statistic(m3), "z-statistic")
+  expect_identical(find_statistic(m4), "z-statistic")
+})
+
+
+
+
+
+
+
+
+
+
 
 
 test_that("find_variables", {
