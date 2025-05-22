@@ -129,6 +129,12 @@ test_that("find_predictors", {
 })
 
 
+test_that("find_response", {
+  expect_identical(find_response(m1), "observed")
+  expect_identical(find_response(m2), "count")
+  expect_identical(find_response(m3), "density")
+  expect_identical(find_response(m4), "density")
+})
 
 
 
@@ -144,9 +150,6 @@ test_that("model_info", {
 })
 
 
-test_that("find_response", {
-  expect_identical(find_response(m1), "art")
-})
 
 test_that("get_response", {
   expect_equal(get_response(m1), bioChemists$art)
