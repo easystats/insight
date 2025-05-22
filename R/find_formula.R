@@ -1315,7 +1315,7 @@ find_formula.sdmTMB <- function(x, verbose = TRUE, ...) {
 
   f <- compact_list(list(
     conditional = f.cond,
-    random = f.random,
+    random = f.random
   ))
   .find_formula_return(f, verbose = verbose)
 }
