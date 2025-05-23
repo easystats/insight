@@ -28,7 +28,7 @@ get_predicted.sdmTMB <- function(x,
   # 1. step: predictions
   predictions <- stats::predict(
     x,
-    newdata = my_args$data,
+    newdata = as.data.frame(my_args$data),
     se_fit = !is.null(my_args$ci),
     re_form = NA, # i.e., spatial/spatiotemporal random fields off
     re_form_iid = NA,
