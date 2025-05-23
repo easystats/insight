@@ -10,6 +10,63 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
 }
 
 
+#' @export
+get_predicted.sdmTMB <- function(x,
+                                 data = NULL,
+                                 predict = "response",
+                                 ci = NULL,
+                                 verbose = TRUE,
+                                 ...) {
+  # evaluate arguments
+  my_args <- .get_predicted_args(x, data = data, predict = predict, ci = ci, verbose = verbose, ...)
+
+  # evaluate dots, remove some arguments that might be duplicated else
+  dot_args <- list(...)
+  dot_args[["newdata"]] <- NULL
+  dot_args[["type"]] <- NULL
+
+  # 1. step: predictions
+  predictions <- stats::predict(
+    x,
+    newdata = as.data.frame(my_args$data),
+    se_fit = !is.null(my_args$ci),
+    re_form = NA, # i.e., spatial/spatiotemporal random fields off
+    re_form_iid = NA,
+    ...
+  )
+
+  # copy standard errors and predictions
+  se <- as.vector(predictions$est_se)
+  predictions <- as.vector(predictions$est)
+
+  # 2. step: confidence intervals
+  ci_data <- .safe({
+    get_predicted_ci(
+      x,
+      predictions,
+      data = my_args$data,
+      ci = my_args$ci,
+      se = se,
+      ...
+    )
+  })
+
+  # 3. step: back-transform
+  if (is.null(predictions)) {
+    out <- NULL
+  } else {
+    out <- .get_predicted_transform(x, predictions, my_args = my_args, ci_data, verbose = verbose, ...)
+  }
+
+  # 4. step: final preparation
+  if (!is.null(out)) {
+    out <- .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+  }
+
+  out
+}
+
+
 # FA / PCA -------------------------------------------------------------
 # ======================================================================
 

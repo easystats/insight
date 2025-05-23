@@ -565,6 +565,13 @@ link_inverse.averaging <- function(x, ...) {
 
 
 #' @export
+link_inverse.sdmTMB <- function(x, ...) {
+  f <- get_family(x)
+  stats::make.link(link = f$link)$linkinv
+}
+
+
+#' @export
 link_inverse.LORgee <- function(x, ...) {
   if (grepl(pattern = "logit", x = x$link, fixed = TRUE)) {
     link <- "logit"

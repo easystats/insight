@@ -120,7 +120,7 @@ is_regression_model <- function(x) {
     "mle", "mle2", "mlergm", "mlm", "mlma", "mlogit", "model_fit",
     "multinom", "mvmeta", "mvord", "mvr", "marginaleffects",
     "marginaleffects.summary", "mblogit", "mclogit", "mmrm", "mmrm_fit",
-    "mmrm_tmb", "multinom_weightit",
+    "mmrm_tmb", "multinom_weightit", "mmlogit", "med1way", "mcp12",
 
     # n --------------------
     "negbin", "negbinmfx", "negbinirr", "nlreg", "nlrq", "nls",
@@ -128,6 +128,7 @@ is_regression_model <- function(x) {
 
     # o --------------------
     "objectiveML", "ols", "osrt", "orcutt", "ordinal_weightit", "oohbchoice",
+    "onesampb", "orm",
 
     # p --------------------
     "pairwise.htest", "pb1", "pb2", "pgmm", "plm", "plmm", "PMCMR",
@@ -146,7 +147,8 @@ is_regression_model <- function(x) {
     "Sarlm", "scam", "selection", "sem", "SemiParBIV", "serp", "slm", "speedlm",
     "speedglm", "splmm", "spml", "stanmvreg", "stanreg", "summary.lm",
     "survfit", "survreg", "survPresmooth", "svychisq", "svyglm", "svy_vglm",
-    "svyolr", "svytable", "systemfit", "svy2lme", "seqanova.svyglm",
+    "svyolr", "svytable", "systemfit", "svy2lme", "seqanova.svyglm", "sdmTMB",
+    "stanfit", "semLME",
 
     # t --------------------
     "t1way", "t2way", "t3way", "test_mediation", "tobit", "trendPMCMR",

@@ -421,6 +421,13 @@ link_function.Rchoice <- function(x, ...) {
 
 
 #' @export
+link_function.sdmTMB <- function(x, ...) {
+  f <- get_family(x)
+  stats::make.link(link = f$link)$linkfun
+}
+
+
+#' @export
 link_function.oohbchoice <- function(x, ...) {
   link <- switch(x$distribution,
     normal = "identity",

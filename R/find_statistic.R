@@ -140,6 +140,7 @@ find_statistic.default <- function(x, ...) {
     "qr", "QRNLMM", "QRLMM",
     "Rchoice", "riskRegression", "robmixglm", "rma", "rma.mv", "rma.uni", "rrvglm",
     "Sarlm", "sem", "SemiParBIV", "serp", "slm", "slopes", "survreg", "svy_vglm",
+    "sdmTMB",
     "test_mediation", "tobit",
     "vglm",
     "wbgee",

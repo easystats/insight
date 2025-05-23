@@ -1395,6 +1395,23 @@ get_statistic.ergm <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+get_statistic.sdmTMB <- function(x, verbose = TRUE, ...) {
+  est <- stats::coef(x)
+  se <- sqrt(diag(get_varcov(x)))
+
+  out <- data.frame(
+    Parameter = names(est),
+    Statistic = est / se,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.btergm <- function(x, verbose = TRUE, ...) {
   params <- x@coef
   bootstraps <- x@boot$t

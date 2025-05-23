@@ -1,3 +1,9 @@
+# insight (devel)
+
+## Changes
+
+* Better support for models of class `sdmTMB`.
+
 # insight 1.3.0
 
 ## Breaking Changes
