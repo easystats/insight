@@ -137,8 +137,12 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
       out <- gsub("^([0-9]+)[^(\\.|[:alnum:])]+(.*)", "\\2", out)
     }
     for (j in seq_along(pattern)) {
+      # skip any pattern longer than 1
+      if (length(pattern[j]) > 1) {
+        next
+      }
       # check if we find pattern at all
-      if (any(grepl(pattern[j], out, fixed = TRUE))) {
+      if (any(grepl(paste0(pattern[j], "("), out, fixed = TRUE))) {
         # remove possible namespace
         if (grepl("::", out, fixed = TRUE)) {
           out <- sub("(.*)::(.*)", "\\2", out)
