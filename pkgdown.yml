@@ -1,4 +1,4 @@
-pandoc: 3.7.0.1
+pandoc: 3.7.0.2
 pkgdown: 2.1.3.9000
 pkgdown_sha: f950aed41af49c732ba7884d0806c3641a7b94b3
 articles:
@@ -6,7 +6,7 @@ articles:
   export: export.html
   insight: insight.html
   newmodels: newmodels.html
-last_built: 2025-05-20T12:27Z
+last_built: 2025-05-31T11:17Z
 urls:
   reference: https://easystats.github.io/insight/reference
   article: https://easystats.github.io/insight/articles

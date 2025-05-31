@@ -23,7 +23,7 @@ to return only certain results (see print_parameters()).'><meta property="og:ima
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@ to return only certain results (see print_parameters()).'><meta property="og:ima
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Get clean names of model parameters</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/v1.3.0/R/clean_parameters.R" class="external-link"><code>R/clean_parameters.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/main/R/clean_parameters.R" class="external-link"><code>R/clean_parameters.R</code></a></small>
       <div class="d-none name"><code>clean_parameters.Rd</code></div>
     </div>
 
@@ -125,11 +125,43 @@ mostly identical to <code>Parameter</code>, except for for models from <strong>b
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="download_model.html">download_model</a></span><span class="op">(</span><span class="st">"brms_zi_2"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not download model. Request failed with following error:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   HTTP 429 Too Many Requests.</span>
 <span class="r-in"><span><span class="fu">clean_parameters</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Parameters can't be retrieved for objects of class `NULL`.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in class(out) &lt;- unique(c("clean_parameters", class(out))):</span> attempt to set an attribute on NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Parameter Effects   Component              Group</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 b_Intercept   fixed conditional                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                   b_persons   fixed conditional                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     b_child   fixed conditional                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                    b_camper   fixed conditional                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      r_persons[1,Intercept]  random conditional Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      r_persons[2,Intercept]  random conditional Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      r_persons[3,Intercept]  random conditional Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      r_persons[4,Intercept]  random conditional Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       sd_persons__Intercept  random conditional    SD/Cor: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10             b_zi_Intercept   fixed          zi                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                 b_zi_child   fixed          zi                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                b_zi_camper   fixed          zi                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 r_persons__zi[1,Intercept]  random          zi Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 r_persons__zi[2,Intercept]  random          zi Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 r_persons__zi[3,Intercept]  random          zi Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 r_persons__zi[4,Intercept]  random          zi Intercept: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17   sd_persons__zi_Intercept  random          zi    SD/Cor: persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Cleaned_Parameter</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        (Intercept)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            persons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3              child</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             camper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          persons.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          persons.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          persons.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          persons.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        (Intercept)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       (Intercept)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11             child</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12            camper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13         persons.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         persons.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15         persons.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16         persons.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17       (Intercept)</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
