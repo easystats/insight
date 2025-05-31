@@ -174,7 +174,7 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
         } else if (pattern[j] == "scale(poly") {
           out <- trim_ws(unique(sub("^scale\\(poly\\(((\\w|\\.)*).*", "\\1", out)))
         } else if (pattern[j] %in% c("mmc", "mm")) {
-          if (grepl(paste0("^", pattern[j], "\\((.*)\\).*"), out)) {
+          if (startsWith(out, "mm(") || startsWith(out, "mmc(")) {
             out <- all.vars(stats::as.formula(paste("~", out)))
           }
         } else if (pattern[j] == "s" && startsWith(out, "s(")) {
@@ -215,14 +215,14 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
 
 .clean_brms_mm <- function(x) {
   # only clean for mm() / mmc() functions, else return x
-  if (!grepl("^(mmc|mm)\\(", x)) {
+  if (!startsWith(x, "mm(") && !startsWith(x, "mmc(")) {
     return(x)
   }
 
   # extract terms from mm() / mmc() functions, i.e. get
   # multimembership-terms
   compact_character(unlist(lapply(c("mmc", "mm"), function(j) {
-    if (grepl(paste0("^", j, "\\("), x = x)) {
+    if (startsWith(x, paste0(j, "("))) {
       all.vars(stats::as.formula(paste("~", x)))
     } else {
       ""
