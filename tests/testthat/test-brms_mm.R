@@ -1,0 +1,16 @@
+skip_on_cran()
+skip_if_not_installed("curl")
+skip_if_offline()
+skip_on_os("mac")
+skip_if_not_installed("brms")
+skip_if_not_installed("httr2")
+
+# Tests -------------------------------------------------------------------
+test_that("clean_names works with multimembershipt", {
+  m1 <- suppressWarnings(insight::download_model("brms_mm_4"))
+  skip_if(is.null(m1))
+  expect_identical(
+    find_variables(m1),
+    list(response = "y", conditional = "x", random = c("s1", "s2"))
+  )
+})
