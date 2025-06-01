@@ -2,6 +2,9 @@
 
 ## Changes
 
+* The `range` argument in `get_datagrid()` gets a new option, `"pretty"`, to
+  create a range of pretty values.
+
 * Better support for models of class `sdmTMB`.
 
 ## Bug fixes
