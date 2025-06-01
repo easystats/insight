@@ -44,9 +44,12 @@ test_that("find_predictors", {
 
   expect_identical(
     find_predictors(m1, effects = "random"),
-    list(random = "ID")
+    list(random = c("pos", "ID"))
   )
-  expect_identical(find_predictors(m1, effects = "random", flatten = TRUE), "ID")
+  expect_identical(
+    find_predictors(m1, effects = "random", flatten = TRUE),
+    c("pos", "ID")
+  )
 })
 
 test_that("find_response", {
