@@ -51,11 +51,11 @@ test_that("find_predictors", {
   )
   expect_equal(
     find_predictors(m1, effects = "random"),
-    list(random = c("Days", "Subject"))
+    list(random = "Subject")
   )
   expect_equal(
     find_predictors(m1, effects = "random", flatten = TRUE),
-    c("Days", "Subject")
+    "Subject"
   )
   expect_equal(
     find_predictors(m2, effects = "all"),

@@ -176,7 +176,7 @@ find_predictors.default <- function(x,
   # as fixed effect predictor. In such cases, we have to add the random slope term
   # manually, so other functions like "get_data()" work as expected...
 
-  if (object_has_names(l, "random") && effects %in% c("all", "random")) {
+  if (object_has_names(l, "random") && effects == "all") {
     random_slope <- unlist(find_random_slopes(x), use.names = FALSE)
     all_predictors <- unlist(unique(l), use.names = FALSE)
     rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
@@ -387,7 +387,7 @@ find_predictors.sdmTMB <- function(x,
   l$time <- x$call$time
 
   # add random slope, if not yet present
-  if (object_has_names(l, "random") && effects %in% c("all", "random")) {
+  if (object_has_names(l, "random") && effects == "all") {
     random_slope <- unlist(find_random_slopes(x), use.names = FALSE)
     all_predictors <- unlist(unique(l), use.names = FALSE)
     rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))

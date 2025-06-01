@@ -122,10 +122,7 @@ test_that("find_predictors", {
     list(random = c("depth", "fyear"))
   )
   expect_null(find_predictors(m4, flatten = TRUE))
-  expect_identical(
-    find_predictors(m4, "random", flatten = TRUE),
-    c("depth", "fyear")
-  )
+  expect_identical(find_predictors(m4, "random", flatten = TRUE), "fyear")
 })
 
 
