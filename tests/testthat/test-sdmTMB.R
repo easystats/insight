@@ -56,14 +56,14 @@ test_that("find_formula", {
   )
   expect_equal(
     find_formula(m2),
-    list(conditional =  count ~ s(depth)),
+    list(conditional = count ~ s(depth)),
     ignore_attr = TRUE
   )
   expect_equal(
     find_formula(m3),
     list(
       conditional = density ~ s(depth),
-      random = ~1 | fyear
+      random = ~ 1 | fyear
     ),
     ignore_attr = TRUE
   )
@@ -71,7 +71,7 @@ test_that("find_formula", {
     find_formula(m4),
     list(
       conditional = density ~ 1,
-      random = ~depth | fyear
+      random = ~ depth | fyear
     ),
     ignore_attr = TRUE
   )
