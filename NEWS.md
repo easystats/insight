@@ -4,6 +4,10 @@
 
 * Better support for models of class `sdmTMB`.
 
+## Bug fixes
+
+* Fixed issue in `clean_names()` for *brms* models with `mm()` in formula.
+
 # insight 1.3.0
 
 ## Breaking Changes
