@@ -89,7 +89,8 @@ second argument has to be a model).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other argument to be passed, for instance to <code>get_predicted_ci()</code>.</p></dd>
+<dd><p>Other argument to be passed, for instance to the model's <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>
+method, or <code>get_predicted_ci()</code>.</p></dd>
 
 
 <dt id="arg-predictions">predictions<a class="anchor" aria-label="anchor" href="#arg-predictions"></a></dt>
@@ -115,20 +116,20 @@ CI).</p></dd>
 
 
 <dt id="arg-ci-type">ci_type<a class="anchor" aria-label="anchor" href="#arg-ci-type"></a></dt>
-<dd><p>Can be <code>"prediction"</code> or <code>"confidence"</code>. Prediction
-intervals show the range that likely contains the value of a new
-observation (in what range it would fall), whereas confidence intervals
-reflect the uncertainty around the estimated parameters (and gives the
-range of the link; for instance of the regression line in a linear
-regressions). Prediction intervals account for both the uncertainty in the
-model's parameters, plus the random variation of the individual values.
-Thus, prediction intervals are always wider than confidence intervals.
-Moreover, prediction intervals will not necessarily become narrower as the
-sample size increases (as they do not reflect only the quality of the fit).
-This applies mostly for "simple" linear models (like <code>lm</code>), as for
-other models (e.g., <code>glm</code>), prediction intervals are somewhat useless
-(for instance, for a binomial model for which the dependent variable is a
-vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd>
+<dd><p>Can be <code>"prediction"</code> or <code>"confidence"</code>. Prediction intervals
+show the range that likely contains the value of a new observation (in what
+range it would fall), whereas confidence intervals reflect the uncertainty
+around the estimated parameters (and gives the range of the link; for
+instance of the regression line in a linear regressions). Prediction
+intervals account for both the uncertainty in the model's parameters, plus
+the random variation of the individual values. Thus, prediction intervals
+are always wider than confidence intervals. Moreover, prediction intervals
+will not necessarily become narrower as the sample size increases (as they
+do not reflect only the quality of the fit). This applies mostly for
+"simple" linear models (like <code>lm</code>), as for other models (e.g., <code>glm</code>),
+prediction intervals are somewhat useless (for instance, for a binomial
+model for which the dependent variable is a vector of 1s and 0s, the
+prediction interval is... <code>[0, 1]</code>).</p></dd>
 
 
 <dt id="arg-ci-method">ci_method<a class="anchor" aria-label="anchor" href="#arg-ci-method"></a></dt>
@@ -136,8 +137,8 @@ vector of 1s and 0s, the prediction interval is... <code>[0, 1]</code>).</p></dd
 Possible values depend on model type.</p><ul><li><p><code>NULL</code> uses the default method, which varies based on the model type.</p></li>
 <li><p>Most frequentist models: <code>"wald"</code> (default), <code>"residual"</code> or <code>"normal"</code>.</p></li>
 <li><p>Bayesian models:  <code>"quantile"</code>  (default), <code>"hdi"</code>, <code>"eti"</code>, and <code>"spi"</code>.</p></li>
-<li><p>Mixed effects <strong>lme4</strong> models: <code>"wald"</code> (default), <code>"residual"</code>, <code>"normal"</code>,
-<code>"satterthwaite"</code>, and <code>"kenward-roger"</code>.</p></li>
+<li><p>Mixed effects <strong>lme4</strong> models: <code>"wald"</code> (default), <code>"residual"</code>,
+<code>"normal"</code>, <code>"satterthwaite"</code>, and <code>"kenward-roger"</code>.</p></li>
 </ul><p>See <code><a href="get_df.html">get_df()</a></code> for details.</p></dd>
 
 

@@ -255,6 +255,8 @@ the first predictor in <code>by</code>, values from minimum to maximum of the sa
 length as indicated in <code>length</code> are generated. For numeric predictors not
 specified at first in <code>by</code>, mean and -1/+1 SD around the mean are
 returned. For factors, all levels are returned.</p></li>
+<li><p><code>"pretty"</code> will create a range "pretty" values, using <code><a href="https://rdrr.io/r/base/pretty.html" class="external-link">pretty()</a></code>, where
+the value in <code>length</code> is used for the <code>n</code> argument in <code><a href="https://rdrr.io/r/base/pretty.html" class="external-link">pretty()</a></code>.</p></li>
 </ul><p><code>range</code> can also be a vector of different values (see 'Examples'). In this
 case, <code>range</code> must be of same length as numeric target variables. If
 <code>range</code> is a named vector, values are matched against the names of the
