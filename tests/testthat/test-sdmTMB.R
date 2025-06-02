@@ -209,7 +209,7 @@ test_that("get_vcov", {
   expect_identical(colnames(get_varcov(m3)), c("(Intercept)", "sdepth"))
   expect_identical(dim(get_varcov(m4)), c(1L, 1L))
   expect_identical(colnames(get_varcov(m4)), "(Intercept)")
-  expect_identical(dim(get_varcov(m5)), c(2L, 2L))
+  expect_identical(dim(get_varcov(m5)), c(3L, 3L))
   expect_identical(colnames(get_varcov(m5)), c("(Intercept)", "depth", "(Intercept)"))
 })
 
