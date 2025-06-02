@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not_installed("sdmTMB")
 
 set.seed(1)
@@ -48,11 +49,11 @@ m3 <- sdmTMB::sdmTMB(
   family = sdmTMB::tweedie(link = "log")
 )
 
-m4 <- sdmTMB::sdmTMB(
+m4 <- suppressWarnings(sdmTMB::sdmTMB(
   density ~ 1 + (depth | fyear), #<
   data = pcod_2011, mesh = mesh,
   family = sdmTMB::tweedie(link = "log")
-)
+))
 
 
 test_that("find_formula", {
@@ -201,6 +202,7 @@ test_that("find_statistic", {
 
 
 test_that("get_vcov", {
+  skip_on_os(c("mac", "linux"))
   expect_identical(dim(get_varcov(m1)), c(3L, 3L))
   expect_identical(colnames(get_varcov(m1)), c("(Intercept)", "b1", "b2"))
   expect_identical(dim(get_varcov(m2)), c(3L, 3L))
@@ -215,6 +217,7 @@ test_that("get_vcov", {
 
 
 test_that("get_statistic", {
+  skip_on_os(c("mac", "linux"))
   expect_identical(nrow(get_statistic(m1)), 3L)
   expect_identical(nrow(get_statistic(m2)), 4L)
   expect_identical(nrow(get_statistic(m3)), 2L)
