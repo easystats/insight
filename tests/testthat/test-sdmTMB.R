@@ -214,6 +214,24 @@ test_that("get_vcov", {
 })
 
 
+test_that("get_statistic", {
+  expect_identical(nrow(get_statistic(m1)), 3L)
+  expect_identical(nrow(get_statistic(m2)), 4L)
+  expect_identical(nrow(get_statistic(m3)), 2L)
+  expect_identical(nrow(get_statistic(m4)), 1L)
+  expect_identical(nrow(get_statistic(m5)), 4L)
+
+  expect_equal(
+    get_statistic(m1)$Statistic,
+    c(-0.54984, -6.67849, 5.81354),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    get_statistic(m2)$Statistic,
+    c(-3.28141, 0.12244, 19.28922, 0.12244),
+    tolerance = 1e-4
+  )
+})
 
 
 
