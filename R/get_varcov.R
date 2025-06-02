@@ -228,6 +228,39 @@ get_varcov.nestedLogit <- function(x,
 
 
 #' @export
+get_varcov.sdmTMB <- function(x, verbose = TRUE, ...) {
+  delta_comp <- isTRUE(x$family$delta)
+  vc <- stats::vcov(x, complete = TRUE, ...)
+
+  # make sure we find all parameters
+  params <- suppressMessages(names(stats::coef(x)))
+
+  # extract relevant vcov-values
+  if (delta_comp) {
+    dups <- duplicated(colnames(vc))
+    vc <- vc[!dups, !dups, drop = FALSE]
+    index <- grepl("^(b_j|bs|\\(Intercept\\)|b\\d+)", colnames(vc)) | colnames(vc) %in% params
+  } else {
+    index <- grepl("^(b_j$|bs|\\(Intercept\\)|b\\d+)", colnames(vc)) | colnames(vc) %in% params
+  }
+  vc <- vc[index, index, drop = FALSE]
+
+  # fix parameter names
+  if (length(params) < nrow(vc)) {
+    vc_names <- colnames(vc)
+    params1 <- params[match(gsub("^b_j(.*)", "(Intercept)", vc_names), params)]
+    params1[is.na(params1)] <- setdiff(params, params1)
+    params <- params1
+  }
+
+  # update names, so that they match with parameter names
+  dimnames(vc) <- list(params, params)
+
+  .process_vcov(vc, verbose, ...)
+}
+
+
+#' @export
 get_varcov.betareg <- function(x,
                                component = "conditional",
                                verbose = TRUE,
@@ -1066,6 +1099,7 @@ get_varcov.LORgee <- get_varcov.gee
   }
   vc
 }
+
 
 .process_vcov <- function(vc, verbose = TRUE, ...) {
   if (.is_negativ_matrix(vc, ...)) {

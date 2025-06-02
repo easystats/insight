@@ -215,6 +215,48 @@ get_parameters.btergm <- function(x, ...) {
 
 
 #' @export
+get_parameters.sdmTMB <- function(x, component = "all", verbose = TRUE, ...) {
+  delta_comp <- isTRUE(x$family$delta)
+  valid_comp <- compact_character(c("all", "conditional", ifelse(delta_comp, "delta", "")))
+  component <- validate_argument(component, valid_comp)
+
+  cf <- suppressMessages(stats::coef(x, model = 1))
+  conditional <- data.frame(
+    Parameter = names(cf),
+    Estimate = unname(cf),
+    Component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (delta_comp) {
+    cf <- suppressMessages(stats::coef(x, model = 2))
+    delta <- data.frame(
+      Parameter = names(cf),
+      Estimate = unname(cf),
+      Component = "delta",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
+
+  if (delta_comp) {
+    params <- rbind(conditional, delta)
+  } else {
+    params <- conditional
+  }
+
+  params <- switch(component,
+    all = params,
+    conditional = conditional,
+    delta = delta
+  )
+
+  text_remove_backticks(params)
+}
+
+
+#' @export
 get_parameters.mediate <- function(x, ...) {
   info <- model_info(x$model.y, verbose = FALSE)
   if (info$is_linear && !x$INT) {

@@ -1,5 +1,12 @@
 # insight (devel)
 
+## Changes
+
+* The `range` argument in `get_datagrid()` gets a new option, `"pretty"`, to
+  create a range of pretty values.
+
+* Better support for models of class `sdmTMB`.
+
 ## Bug fixes
 
 * Fixed issue in `clean_names()` for *brms* models with `mm()` in formula.

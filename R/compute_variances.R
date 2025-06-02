@@ -163,7 +163,6 @@
   if (component %in% c("residual", "distribution", "all")) {
     var.distribution <- .compute_variance_distribution(
       model,
-      var_cor = mixed_effects_info$vc,
       faminfo,
       model_null = model_null,
       revar_null = var.random_null,
@@ -586,7 +585,6 @@
 # different values for the log/delta/trigamma approximation.
 # -----------------------------------------------------------------------------
 .compute_variance_distribution <- function(model,
-                                           var_cor,
                                            faminfo,
                                            model_null = NULL,
                                            revar_null = NULL,

@@ -1395,6 +1395,64 @@ get_statistic.ergm <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+get_statistic.sdmTMB <- function(x, component = "all", verbose = TRUE, ...) {
+  delta_comp <- isTRUE(x$family$delta)
+  valid_comp <- compact_character(c("all", "conditional", ifelse(delta_comp, "delta", "")))
+  component <- validate_argument(component, valid_comp)
+
+  # get standard errors
+  se <- sqrt(diag(get_varcov(x)))
+
+  # for model with delta component, we have two intercepts
+  intercepts <- which(names(se) == "(Intercept)")
+
+  # get standard errors for each component - we have to remove one intercept
+  if (length(intercepts) > 1) {
+    se_cond <- se[-intercepts[2]]
+    se_delta <- se[-intercepts[1]]
+  } else {
+    se_cond <- se
+    se_delta <- NULL
+  }
+
+  est <- suppressMessages(stats::coef(x, model = 1))
+  conditional <- data.frame(
+    Parameter = names(est),
+    Statistic = est / se_cond,
+    Component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (delta_comp) {
+    est <- suppressMessages(stats::coef(x, model = 2))
+    delta <- data.frame(
+      Parameter = names(est),
+      Statistic = est / se_delta,
+      Component = "delta",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
+
+  if (delta_comp) {
+    out <- rbind(conditional, delta)
+  } else {
+    out <- conditional
+  }
+
+  out <- switch(component,
+    all = out,
+    conditional = conditional,
+    delta = delta
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.btergm <- function(x, verbose = TRUE, ...) {
   params <- x@coef
   bootstraps <- x@boot$t

@@ -562,6 +562,31 @@ model_info.bife <- model_info.MixMod
 
 
 #' @export
+model_info.sdmTMB <- function(x, verbose = TRUE, ...) {
+  faminfo <- x$family
+
+  # check if we have delta component
+  if (length(faminfo$family) > 1) {
+    faminfo <- list(
+      family = faminfo$family[2],
+      link = faminfo$link[2],
+      linkfun = faminfo[[2]]$linkfun,
+      linkinv = faminfo[[2]]$linkinv
+    )
+  }
+
+  .make_family(
+    x = x,
+    fitfam = faminfo$family,
+    logit.link = faminfo$link == "logit",
+    link.fun = faminfo$link,
+    verbose = verbose,
+    ...
+  )
+}
+
+
+#' @export
 model_info.glmx <- function(x, verbose = TRUE, ...) {
   faminfo <- x$family$glm
   .make_family(

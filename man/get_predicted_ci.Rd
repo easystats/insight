@@ -26,7 +26,8 @@ get_predicted_ci(x, ...)
 \item{x}{A statistical model (can also be a data.frame, in which case the
 second argument has to be a model).}
 
-\item{...}{Other argument to be passed, for instance to \code{get_predicted_ci()}.}
+\item{...}{Other argument to be passed, for instance to the model's \code{predict()}
+method, or \code{get_predicted_ci()}.}
 
 \item{predictions}{A vector of predicted values (as obtained by
 \code{stats::fitted()}, \code{stats::predict()} or \code{\link[=get_predicted]{get_predicted()}}).}
@@ -42,20 +43,20 @@ standard errors are calculated based on the variance-covariance matrix.}
 models. Set the interval level to an explicit value, e.g. \code{0.95}, for \verb{95\%}
 CI).}
 
-\item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction
-intervals show the range that likely contains the value of a new
-observation (in what range it would fall), whereas confidence intervals
-reflect the uncertainty around the estimated parameters (and gives the
-range of the link; for instance of the regression line in a linear
-regressions). Prediction intervals account for both the uncertainty in the
-model's parameters, plus the random variation of the individual values.
-Thus, prediction intervals are always wider than confidence intervals.
-Moreover, prediction intervals will not necessarily become narrower as the
-sample size increases (as they do not reflect only the quality of the fit).
-This applies mostly for "simple" linear models (like \code{lm}), as for
-other models (e.g., \code{glm}), prediction intervals are somewhat useless
-(for instance, for a binomial model for which the dependent variable is a
-vector of 1s and 0s, the prediction interval is... \verb{[0, 1]}).}
+\item{ci_type}{Can be \code{"prediction"} or \code{"confidence"}. Prediction intervals
+show the range that likely contains the value of a new observation (in what
+range it would fall), whereas confidence intervals reflect the uncertainty
+around the estimated parameters (and gives the range of the link; for
+instance of the regression line in a linear regressions). Prediction
+intervals account for both the uncertainty in the model's parameters, plus
+the random variation of the individual values. Thus, prediction intervals
+are always wider than confidence intervals. Moreover, prediction intervals
+will not necessarily become narrower as the sample size increases (as they
+do not reflect only the quality of the fit). This applies mostly for
+"simple" linear models (like \code{lm}), as for other models (e.g., \code{glm}),
+prediction intervals are somewhat useless (for instance, for a binomial
+model for which the dependent variable is a vector of 1s and 0s, the
+prediction interval is... \verb{[0, 1]}).}
 
 \item{ci_method}{The method for computing p values and confidence intervals.
 Possible values depend on model type.
@@ -63,8 +64,8 @@ Possible values depend on model type.
 \item \code{NULL} uses the default method, which varies based on the model type.
 \item Most frequentist models: \code{"wald"} (default), \code{"residual"} or \code{"normal"}.
 \item Bayesian models:  \code{"quantile"}  (default), \code{"hdi"}, \code{"eti"}, and \code{"spi"}.
-\item Mixed effects \strong{lme4} models: \code{"wald"} (default), \code{"residual"}, \code{"normal"},
-\code{"satterthwaite"}, and \code{"kenward-roger"}.
+\item Mixed effects \strong{lme4} models: \code{"wald"} (default), \code{"residual"},
+\code{"normal"}, \code{"satterthwaite"}, and \code{"kenward-roger"}.
 }
 
 See \code{\link[=get_df]{get_df()}} for details.}

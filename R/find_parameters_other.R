@@ -64,6 +64,39 @@ find_parameters.glmgee <- function(x, component = "all", flatten = FALSE, ...) {
 
 
 #' @export
+find_parameters.sdmTMB <- function(x, component = "all", flatten = FALSE, ...) {
+  delta_comp <- isTRUE(x$family$delta)
+  valid_comp <- compact_character(c("all", "conditional", ifelse(delta_comp, "delta", "")))
+  component <- validate_argument(component, valid_comp)
+
+  cf <- suppressMessages(stats::coef(x, model = 1))
+  conditional <- names(cf)
+
+  if (delta_comp) {
+    cf <- suppressMessages(stats::coef(x, model = 2))
+    delta <- names(cf)
+  }
+
+  if (delta_comp) {
+    out <- list(
+      conditional = text_remove_backticks(conditional),
+      delta = text_remove_backticks(delta)
+    )
+  } else {
+    out <- list(conditional = text_remove_backticks(conditional))
+  }
+
+  .filter_parameters(
+    out,
+    effects = "all",
+    component = component,
+    flatten = flatten,
+    recursive = FALSE
+  )
+}
+
+
+#' @export
 find_parameters.betareg <- function(x, component = "all", flatten = FALSE, ...) {
   component <- validate_argument(
     component,

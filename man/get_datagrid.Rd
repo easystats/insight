@@ -185,6 +185,8 @@ the first predictor in \code{by}, values from minimum to maximum of the same
 length as indicated in \code{length} are generated. For numeric predictors not
 specified at first in \code{by}, mean and -1/+1 SD around the mean are
 returned. For factors, all levels are returned.
+\item \code{"pretty"} will create a range "pretty" values, using \code{\link[=pretty]{pretty()}}, where
+the value in \code{length} is used for the \code{n} argument in \code{pretty()}.
 }
 
 \code{range} can also be a vector of different values (see 'Examples'). In this

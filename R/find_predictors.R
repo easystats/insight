@@ -187,7 +187,7 @@ find_predictors.default <- function(x,
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
   } else {
-    l
+    compact_list(l)
   }
 }
 
@@ -295,7 +295,7 @@ find_predictors.afex_aov <- function(x,
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
   } else {
-    l
+    compact_list(l)
   }
 }
 
@@ -355,6 +355,44 @@ find_predictors.brmsfit <- function(x,
     if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
   }
 
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    compact_list(l)
+  }
+}
+
+
+#' @export
+find_predictors.sdmTMB <- function(x,
+                                   effects = "fixed",
+                                   flatten = FALSE,
+                                   verbose = TRUE,
+                                   ...) {
+  effects <- validate_argument(effects, c("fixed", "random", "all"))
+  elements <- .get_elements(effects, component = "conditional", model = x)
+
+  f <- find_formula(x, verbose = verbose)
+  f <- .prepare_predictors(x, f, elements)
+
+  # random effects are returned as list, so we need to unlist here
+  l <- .return_vars(f, x)
+
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
+    return(NULL)
+  }
+
+  # add time variable
+  l$time <- x$call$time
+
+  # add random slope, if not yet present
+  if (object_has_names(l, "random") && effects == "all") {
+    random_slope <- unlist(find_random_slopes(x), use.names = FALSE)
+    all_predictors <- unlist(unique(l), use.names = FALSE)
+    rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
+    if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
+  }
 
   if (flatten) {
     unique(unlist(l, use.names = FALSE))

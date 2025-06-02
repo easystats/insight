@@ -68,92 +68,90 @@
 #'   effects to condition on when predicting (passed to the `re.form` argument).
 #'   If `include_random = TRUE` and `data` is provided, make sure to include
 #'   the random effect variables in `data` as well.
-#' @param include_smooth For General Additive Models (GAMs). If `FALSE`,
-#'   will fix the value of the smooth to its average, so that the predictions
-#'   are not depending on it. (default), `mean()`, or
-#'   `bayestestR::map_estimate()`.
+#' @param include_smooth For General Additive Models (GAMs). If `FALSE`, will
+#'   fix the value of the smooth to its average, so that the predictions are not
+#'   depending on it. (default), `mean()`, or `bayestestR::map_estimate()`.
 #' @param ci The interval level. Default is `NULL`, to be fast even for larger
 #'   models. Set the interval level to an explicit value, e.g. `0.95`, for `95%`
 #'   CI).
-#' @param ci_type Can be `"prediction"` or `"confidence"`. Prediction
-#'   intervals show the range that likely contains the value of a new
-#'   observation (in what range it would fall), whereas confidence intervals
-#'   reflect the uncertainty around the estimated parameters (and gives the
-#'   range of the link; for instance of the regression line in a linear
-#'   regressions). Prediction intervals account for both the uncertainty in the
-#'   model's parameters, plus the random variation of the individual values.
-#'   Thus, prediction intervals are always wider than confidence intervals.
-#'   Moreover, prediction intervals will not necessarily become narrower as the
-#'   sample size increases (as they do not reflect only the quality of the fit).
-#'   This applies mostly for "simple" linear models (like `lm`), as for
-#'   other models (e.g., `glm`), prediction intervals are somewhat useless
-#'   (for instance, for a binomial model for which the dependent variable is a
-#'   vector of 1s and 0s, the prediction interval is... `[0, 1]`).
+#' @param ci_type Can be `"prediction"` or `"confidence"`. Prediction intervals
+#'   show the range that likely contains the value of a new observation (in what
+#'   range it would fall), whereas confidence intervals reflect the uncertainty
+#'   around the estimated parameters (and gives the range of the link; for
+#'   instance of the regression line in a linear regressions). Prediction
+#'   intervals account for both the uncertainty in the model's parameters, plus
+#'   the random variation of the individual values. Thus, prediction intervals
+#'   are always wider than confidence intervals. Moreover, prediction intervals
+#'   will not necessarily become narrower as the sample size increases (as they
+#'   do not reflect only the quality of the fit). This applies mostly for
+#'   "simple" linear models (like `lm`), as for other models (e.g., `glm`),
+#'   prediction intervals are somewhat useless (for instance, for a binomial
+#'   model for which the dependent variable is a vector of 1s and 0s, the
+#'   prediction interval is... `[0, 1]`).
 #' @param ci_method The method for computing p values and confidence intervals.
 #'   Possible values depend on model type.
 #'   + `NULL` uses the default method, which varies based on the model type.
 #'   + Most frequentist models: `"wald"` (default), `"residual"` or `"normal"`.
 #'   + Bayesian models:  `"quantile"`  (default), `"hdi"`, `"eti"`, and `"spi"`.
-#'   + Mixed effects **lme4** models: `"wald"` (default), `"residual"`, `"normal"`,
-#'   `"satterthwaite"`, and `"kenward-roger"`.
+#'   + Mixed effects **lme4** models: `"wald"` (default), `"residual"`,
+#'     `"normal"`, `"satterthwaite"`, and `"kenward-roger"`.
 #'
 #'   See [`get_df()`] for details.
 #' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary:
 #'   `"sd"` or `"mad"`.
-#' @param ... Other argument to be passed, for instance to `get_predicted_ci()`.
+#' @param ... Other argument to be passed, for instance to the model's `predict()`
+#' method, or `get_predicted_ci()`.
 #' @inheritParams get_varcov
 #' @inheritParams get_df
 #'
 #' @return The fitted values (i.e. predictions for the response). For Bayesian
-#'   or bootstrapped models (when `iterations != NULL`), iterations (as
-#'   columns and observations are rows) can be accessed via `as.data.frame()`.
+#' or bootstrapped models (when `iterations != NULL`), iterations (as columns
+#' and observations are rows) can be accessed via `as.data.frame()`.
 #'
 #' @details
-#' In `insight::get_predicted()`, the `predict` argument jointly
-#' modulates two separate concepts, the **scale** and the **uncertainty interval**.
+#' In `insight::get_predicted()`, the `predict` argument jointly modulates two
+#' separate concepts, the **scale** and the **uncertainty interval**.
 #'
 #' @section Confidence Interval (CI) vs. Prediction Interval (PI)):
-#' - **Linear models** - `lm()`: For linear models, prediction
-#'   intervals (`predict="prediction"`) show the range that likely
-#'   contains the value of a new observation (in what range it is likely to
-#'   fall), whereas confidence intervals (`predict="expectation"` or
-#'   `predict="link"`) reflect the uncertainty around the estimated
-#'   parameters (and gives the range of uncertainty of the regression line). In
-#'   general, Prediction Intervals (PIs) account for both the uncertainty in the
-#'   model's parameters, plus the random variation of the individual values.
-#'   Thus, prediction intervals are always wider than confidence intervals.
-#'   Moreover, prediction intervals will not necessarily become narrower as the
-#'   sample size increases (as they do not reflect only the quality of the fit,
-#'   but also the variability within the data).
-#' - **Generalized Linear models** - `glm()`: For binomial models,
-#'   prediction intervals are somewhat useless (for instance, for a binomial
-#'   (Bernoulli) model for which the dependent variable is a vector of 1s and
-#'   0s, the prediction interval is... `[0, 1]`).
+#' - **Linear models** - `lm()`: For linear models, prediction intervals
+#'   (`predict="prediction"`) show the range that likely contains the value of a
+#'   new observation (in what range it is likely to fall), whereas confidence
+#'   intervals (`predict="expectation"` or `predict="link"`) reflect the
+#'   uncertainty around the estimated parameters (and gives the range of
+#'   uncertainty of the regression line). In general, Prediction Intervals (PIs)
+#'   account for both the uncertainty in the model's parameters, plus the random
+#'   variation of the individual values. Thus, prediction intervals are always
+#'   wider than confidence intervals. Moreover, prediction intervals will not
+#'   necessarily become narrower as the sample size increases (as they do not
+#'   reflect only the quality of the fit, but also the variability within the
+#'   data).
+#' - **Generalized Linear models** - `glm()`: For binomial models, prediction
+#'   intervals are somewhat useless (for instance, for a binomial (Bernoulli)
+#'   model for which the dependent variable is a vector of 1s and 0s, the
+#'   prediction interval is... `[0, 1]`).
 #'
 #' @section Link scale vs. Response scale:
-#' When users set the `predict` argument to `"expectation"`, the predictions
-#' are returned on the response scale, which is arguably the most convenient
-#' way to understand and visualize relationships of interest. When users set
-#' the `predict` argument to `"link"`, predictions are returned on the link
-#' scale, and no transformation is applied. For instance, for a logistic
-#' regression model, the response scale corresponds to the predicted
-#' probabilities, whereas the link-scale makes predictions of log-odds
-#' (probabilities on the logit scale). Note that when users select
-#' `predict="classification"` in binomial models, the `get_predicted()`
-#' function will first calculate predictions as if the user had selected
-#' `predict="expectation"`. Then, it will round the responses in order to
-#' return the most likely outcome.
+#' When users set the `predict` argument to `"expectation"`, the predictions are
+#' returned on the response scale, which is arguably the most convenient way to
+#' understand and visualize relationships of interest. When users set the
+#' `predict` argument to `"link"`, predictions are returned on the link scale,
+#' and no transformation is applied. For instance, for a logistic regression
+#' model, the response scale corresponds to the predicted probabilities, whereas
+#' the link-scale makes predictions of log-odds (probabilities on the logit
+#' scale). Note that when users select `predict="classification"` in binomial
+#' models, the `get_predicted()` function will first calculate predictions as if
+#' the user had selected `predict="expectation"`. Then, it will round the
+#' responses in order to return the most likely outcome.
 #'
-#' @section Heteroscedasticity consistent standard errors:
-#' The arguments `vcov` and `vcov_args` can be used to calculate robust
-#' standard errors for confidence intervals of predictions. These arguments,
-#' when provided in `get_predicted()`, are passed down to `get_predicted_ci()`,
-#' thus, see the related documentation there for more
-#' details.
+#' @section Heteroscedasticity consistent standard errors: The arguments `vcov`
+#' and `vcov_args` can be used to calculate robust standard errors for
+#' confidence intervals of predictions. These arguments, when provided in
+#' `get_predicted()`, are passed down to `get_predicted_ci()`, thus, see the
+#' related documentation there for more details.
 #'
-#' @section Bayesian and Bootstrapped models and iterations:
-#' For predictions based on multiple iterations, for instance in the case of Bayesian
-#' models and bootstrapped predictions, the function used to compute the centrality
+#' @section Bayesian and Bootstrapped models and iterations: For predictions
+#' based on multiple iterations, for instance in the case of Bayesian models and
+#' bootstrapped predictions, the function used to compute the centrality
 #' (point-estimate predictions) can be modified via the `centrality_function`
 #' argument. For instance, `get_predicted(model, centrality_function = stats::median)`.
 #' The default is `mean`. Individual draws can be accessed by running

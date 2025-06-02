@@ -124,6 +124,8 @@
 #'     length as indicated in `length` are generated. For numeric predictors not
 #'     specified at first in `by`, mean and -1/+1 SD around the mean are
 #'     returned. For factors, all levels are returned.
+#'   - `"pretty"` will create a range "pretty" values, using [`pretty()`], where
+#'     the value in `length` is used for the `n` argument in `pretty()`.
 #'
 #'   `range` can also be a vector of different values (see 'Examples'). In this
 #'   case, `range` must be of same length as numeric target variables. If
@@ -1181,7 +1183,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
                            ...) {
   range <- validate_argument(
     tolower(range),
-    c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid")
+    c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid", "pretty")
   )
 
   # bayestestR only for some options
@@ -1237,6 +1239,11 @@ get_datagrid.comparisons <- get_datagrid.slopes
     names(out) <- labs
 
     return(out)
+  }
+
+  # If Range is a range of pretty values
+  if (range == "pretty") {
+    return(pretty(x, n = length))
   }
 
   # If Range is an interval

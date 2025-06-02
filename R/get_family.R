@@ -47,6 +47,26 @@ get_family.model_fit <- function(x, ...) {
   get_family(x$fit, ...)
 }
 
+#' @export
+get_family.sdmTMB <- function(x, ...) {
+  check_if_installed("sdmTMB")
+  f <- x$family
+  if (length(f$family) > 1) {
+    f <- compact_list(list(
+      family = f$family[2],
+      link = f$link[2],
+      linkfun = f[[2]]$linkfun,
+      linkinv = f[[2]]$linkinv,
+      mu.eta = f[[2]]$mu.eta,
+      valideta = f[[2]]$valideta,
+      name = f[[2]]$name,
+      initialize = f[[2]]$initialize
+    ))
+    class(f) <- "family"
+  }
+  f
+}
+
 
 .get_family <- function(x, ...) {
   info <- model_info(x, response = 1, verbose = FALSE)
