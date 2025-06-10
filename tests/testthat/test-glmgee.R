@@ -123,7 +123,7 @@ test_that("get_predicted", {
       376.58067, 418.48849, 465.06002, 516.81428
     ),
     tolerance = 1e-4,
-    ignore_attre = TRUE
+    ignore_attr = TRUE
   )
   expect_equal(
     as.numeric(attributes(out)$ci_data$CI_low),
@@ -132,6 +132,6 @@ test_that("get_predicted", {
       309.94184, 344.28135, 382.17837, 423.97735
     ),
     tolerance = 1e-4,
-    ignore_attre = TRUE
+    ignore_attr = TRUE
   )
 })
