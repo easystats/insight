@@ -5,6 +5,8 @@
 * The `range` argument in `get_datagrid()` gets a new option, `"pretty"`, to
   create a range of pretty values.
 
+* `get_predicted()` now supports models of class `glmtoolbox::glmee`.
+
 * Better support for models of class `sdmTMB`.
 
 ## Bug fixes

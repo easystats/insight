@@ -114,3 +114,56 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
   class(out) <- c("get_predicted", class(out))
   out
 }
+
+
+#' @export
+get_predicted.glmgee <- function(x,
+                                 data = NULL,
+                                 predict = "expectation",
+                                 ci = NULL,
+                                 vcov = NULL,
+                                 verbose = TRUE,
+                                 ...) {
+  # sanitize argument
+  if (is.null(vcov)) {
+    vcov <- "robust"
+  }
+  vcov <- validate_argument(vcov, c("robust", "df-adjusted", "model", "bias-corrected"))
+
+  # setup predict function
+  predict_function <- function(x, data, ...) {
+    as.data.frame(stats::predict(
+      x,
+      newdata = data,
+      se.fit = TRUE,
+      type = "link",
+      varest = vcov,
+      ...
+    ))
+  }
+
+  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+
+  # 1. step: predictions
+  predictions <- predict_function(x, data = my_args$data)
+  se <- predictions$se.fit
+  predictions <- predictions$fit
+
+  # 2. step: confidence intervals
+  ci_data <- get_predicted_ci(
+    x,
+    predictions,
+    data = my_args$data,
+    se = se,
+    ci = ci,
+    ci_type = my_args$ci_type,
+    verbose = verbose,
+    ...
+  )
+
+  # 3. step: back-transform
+  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
+
+  # 4. step: final preparation
+  .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+}
