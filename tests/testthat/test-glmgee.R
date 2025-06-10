@@ -112,3 +112,26 @@ test_that("get_varcov", {
   out <- get_varcov(m1, vcov = "model")
   expect_equal(out[, 1], c(0.0223564, -5.4e-06, -0.0201031), tolerance = 1e-3, ignore_attr = TRUE)
 })
+
+test_that("get_predicted", {
+  grid <- get_datagrid(m1, "days")
+  out <- get_predicted(m1, data = grid, ci = 0.95)
+  expect_equal(
+    as.numeric(out),
+    c(
+      199.94248, 222.1931, 246.91988, 274.39838, 304.93484, 338.86954,
+      376.58067, 418.48849, 465.06002, 516.81428
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    as.numeric(attributes(out)$ci_data$CI_low),
+    c(
+      162.8059, 181.52372, 202.27579, 225.2637, 250.70719, 278.84595,
+      309.94184, 344.28135, 382.17837, 423.97735
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})
