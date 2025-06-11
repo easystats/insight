@@ -124,7 +124,8 @@ get_predicted.stanreg <- function(x,
       # for mixture models, which predict the class membership, we stop
       # here and just return the predicted class membership
       mixture_output <- do.call(brms::pp_mixture, fun_args)
-      return(apply(mixture_output[, 1, ], 1, which.max))
+      out <- data.frame(Predicted = apply(mixture_output[, 1, ], 1, which.max))
+      return(out)
     }
   }
 
