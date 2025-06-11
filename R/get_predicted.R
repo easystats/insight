@@ -35,7 +35,7 @@
 #' * `"prediction"` also gives an output on the response scale, but this time
 #'   associated with a prediction interval (PI), which is larger than a confidence
 #'   interval (though it mostly make sense for linear models).
-#' * `"classification"` is releveant only for binomial, ordinal or mixture models.
+#' * `"classification"` is relevant only for binomial, ordinal or mixture models.
 #'   - For binomial models, `predict = "classification"` will additionally
 #'     transform the predictions into the original response's type (for
 #'     instance, to a factor).

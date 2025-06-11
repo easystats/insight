@@ -118,5 +118,5 @@ test_that("model_info - multivariate", {
   out <- model_info(m)
   expect_identical(length(out), 3L)
   out <- model_info(m, response = "gear")
-  expect_identical(length(out), 50L)
+  expect_identical(length(out), 51L)
 })
