@@ -338,7 +338,10 @@
     cvn[dupes] <- sprintf("%s.%s", cvn[dupes], seq_along(dupes))
   }
 
-  colnames(mf) <- cvn
+  # sanity check
+  if (length(cvn) == ncol(mf)) {
+    colnames(mf) <- cvn
+  }
 
 
   # add weighting variable ----------------------------------------------------
