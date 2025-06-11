@@ -13,6 +13,8 @@
 
 * Fixed issue in `clean_names()` for *brms* models with `mm()` in formula.
 
+* Fixed issue in `get_data()` for *brms* models with `mmc()` in formula.
+
 # insight 1.3.0
 
 ## Breaking Changes
