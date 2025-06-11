@@ -22,4 +22,11 @@ test_that("get_data works with multimembership", {
     get_data(m1),
     c("y", "x", "s1", "s2")
   )
+
+  m2 <- suppressWarnings(insight::download_model("brms_mm_2"))
+  skip_if(is.null(m2))
+  expect_named(
+    get_data(m2),
+    c("y", "xc", "x1", "x2", "g1", "g2")
+  )
 })

@@ -7,11 +7,18 @@
 
 * `get_predicted()` now supports models of class `glmtoolbox::glmee`.
 
+* `get_predicted()` supports predicting the class membership for models from
+  package *brms* with `mixture()` family, using `predict = "classificaton"`.
+
+* `model_info()` returns `$is_mixture` to identify finite mixture models.
+
 * Better support for models of class `sdmTMB`.
 
 ## Bug fixes
 
 * Fixed issue in `clean_names()` for *brms* models with `mm()` in formula.
+
+* Fixed issue in `get_data()` for *brms* models with `mmc()` in formula.
 
 # insight 1.3.0
 

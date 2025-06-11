@@ -230,7 +230,7 @@ get_varcov.nestedLogit <- function(x,
 #' @export
 get_varcov.sdmTMB <- function(x, verbose = TRUE, ...) {
   delta_comp <- isTRUE(x$family$delta)
-  vc <- stats::vcov(x, complete = TRUE, ...)
+  vc <- suppressWarnings(stats::vcov(x, complete = TRUE, ...))
 
   # make sure we find all parameters
   params <- suppressMessages(names(stats::coef(x)))

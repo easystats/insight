@@ -83,6 +83,7 @@ get_predicted.stanreg <- function(x,
   # exceptions
   is_wiener <- inherits(model_family, "brmsfamily") && model_family$family == "wiener"
   is_rtchoice <- model_family$family == "custom" && model_family$name == "lnr"
+  is_mixture <- model_family$family == "mixture"
 
   # Special case for rwiener (get choice 1 as negative values)
   # Note that for mv models, x$family returns a list of families
@@ -119,6 +120,11 @@ get_predicted.stanreg <- function(x,
         dim = c(dim(draws), 2),
         dimnames = list(NULL, NULL, c("rt", "response"))
       )
+    } else if (is_mixture && identical(my_args$predict, "classification")) {
+      # for mixture models, which predict the class membership, we stop
+      # here and just return the predicted class membership
+      mixture_output <- do.call(brms::pp_mixture, fun_args)
+      return(apply(mixture_output[, 1, ], 1, which.max))
     }
   }
 

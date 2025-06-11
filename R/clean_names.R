@@ -175,6 +175,12 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
           out <- trim_ws(unique(sub("^scale\\(poly\\(((\\w|\\.)*).*", "\\1", out)))
         } else if (pattern[j] %in% c("mmc", "mm")) {
           if (startsWith(out, "mm(") || startsWith(out, "mmc(")) {
+            # sanity check - for `get_data()`, colnames might be messed up,
+            # like "mmc(x1, x2).?x1". we need to check whether "out" ends with
+            # a ")", and if not, remove everything after the last ")".
+            if (!endsWith(out, ")")) {
+              out <- gsub("(.*)\\((.*)\\)(.*)", "\\1(\\2)", out)
+            }
             out <- all.vars(stats::as.formula(paste("~", out)))
           }
         } else if (pattern[j] == "s" && startsWith(out, "s(")) {
@@ -223,6 +229,12 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
   # multimembership-terms
   compact_character(unlist(lapply(c("mmc", "mm"), function(j) {
     if (startsWith(x, paste0(j, "("))) {
+      # sanity check - for `get_data()`, colnames might be messed up,
+      # like "mmc(x1, x2).?x1". we need to check whether "out" ends with
+      # a ")", and if not, remove everything after the last ")".
+      if (!endsWith(x, ")")) {
+        x <- gsub("(.*)\\((.*)\\)(.*)", "\\1(\\2)", x)
+      }
       all.vars(stats::as.formula(paste("~", x)))
     } else {
       ""

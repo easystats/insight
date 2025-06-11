@@ -97,9 +97,18 @@ probabilities).
 \item \code{"prediction"} also gives an output on the response scale, but this time
 associated with a prediction interval (PI), which is larger than a confidence
 interval (though it mostly make sense for linear models).
-\item \code{"classification"} only differs from \code{"prediction"} for binomial models
-where it additionally transforms the predictions into the original response's
-type (for instance, to a factor).
+\item \code{"classification"} is relevant only for binomial, ordinal or mixture models.
+\itemize{
+\item For binomial models, \code{predict = "classification"} will additionally
+transform the predictions into the original response's type (for
+instance, to a factor).
+\item For ordinal models (e.g., classes \code{clm} or \code{multinom}), gives the
+predicted response class membership, defined as highest probability
+prediction.
+\item For finite mixture models (currently only family \code{\link[brms:mixture]{brms::mixture()}} from
+package \emph{brms}), returns a vector of predicted class membership (similar
+as for ordinal models).
+}
 \item Other strings are passed directly to the \code{type} argument of the \code{predict()}
 method supplied by the modelling package.
 \item Specifically for models of class \code{brmsfit} (package \emph{brms}), the \code{predict}
@@ -111,7 +120,7 @@ by the \code{...} ellipsis and passed directly to the \code{predict()} method su
 by the modelling package. Note that this might result in conflicts with
 multiple matching \code{type} arguments - thus, the recommendation is to use the
 \code{predict} argument for those values.
-\item Notes: You can see the 4 options for predictions as on a gradient from
+\item Notes: You can see the four options for predictions as on a gradient from
 "close to the model" to "close to the response data": "link", "expectation",
 "prediction", "classification". The \code{predict} argument modulates two things:
 the scale of the output and the type of certainty interval. Read more about
@@ -269,10 +278,12 @@ understand and visualize relationships of interest. When users set the
 and no transformation is applied. For instance, for a logistic regression
 model, the response scale corresponds to the predicted probabilities, whereas
 the link-scale makes predictions of log-odds (probabilities on the logit
-scale). Note that when users select \code{predict="classification"} in binomial
+scale). Note that when users select \code{predict = "classification"} in binomial
 models, the \code{get_predicted()} function will first calculate predictions as if
-the user had selected \code{predict="expectation"}. Then, it will round the
-responses in order to return the most likely outcome.
+the user had selected \code{predict = "expectation"}. Then, it will round the
+responses in order to return the most likely outcome. For ordinal or mixture
+models, it returns the predicted class membership, based on the highest
+probability of classification.
 }
 
 \section{Heteroscedasticity consistent standard errors}{
