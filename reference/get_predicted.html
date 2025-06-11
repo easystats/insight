@@ -39,7 +39,7 @@ are not available otherwise."><meta property="og:image" content="https://easysta
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -209,9 +209,16 @@ probabilities).</p></li>
 <li><p><code>"prediction"</code> also gives an output on the response scale, but this time
 associated with a prediction interval (PI), which is larger than a confidence
 interval (though it mostly make sense for linear models).</p></li>
-<li><p><code>"classification"</code> only differs from <code>"prediction"</code> for binomial models
-where it additionally transforms the predictions into the original response's
-type (for instance, to a factor).</p></li>
+<li><p><code>"classification"</code> is relevant only for binomial, ordinal or mixture models.</p><ul><li><p>For binomial models, <code>predict = "classification"</code> will additionally
+transform the predictions into the original response's type (for
+instance, to a factor).</p></li>
+<li><p>For ordinal models (e.g., classes <code>clm</code> or <code>multinom</code>), gives the
+predicted response class membership, defined as highest probability
+prediction.</p></li>
+<li><p>For finite mixture models (currently only family <code><a href="https://paulbuerkner.com/brms/reference/mixture.html" class="external-link">brms::mixture()</a></code> from
+package <em>brms</em>), returns a vector of predicted class membership (similar
+as for ordinal models).</p></li>
+</ul></li>
 <li><p>Other strings are passed directly to the <code>type</code> argument of the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>
 method supplied by the modelling package.</p></li>
 <li><p>Specifically for models of class <code>brmsfit</code> (package <em>brms</em>), the <code>predict</code>
@@ -223,7 +230,7 @@ by the <code>...</code> ellipsis and passed directly to the <code><a href="https
 by the modelling package. Note that this might result in conflicts with
 multiple matching <code>type</code> arguments - thus, the recommendation is to use the
 <code>predict</code> argument for those values.</p></li>
-<li><p>Notes: You can see the 4 options for predictions as on a gradient from
+<li><p>Notes: You can see the four options for predictions as on a gradient from
 "close to the model" to "close to the response data": "link", "expectation",
 "prediction", "classification". The <code>predict</code> argument modulates two things:
 the scale of the output and the type of certainty interval. Read more about
@@ -375,10 +382,12 @@ understand and visualize relationships of interest. When users set the
 and no transformation is applied. For instance, for a logistic regression
 model, the response scale corresponds to the predicted probabilities, whereas
 the link-scale makes predictions of log-odds (probabilities on the logit
-scale). Note that when users select <code>predict="classification"</code> in binomial
+scale). Note that when users select <code>predict = "classification"</code> in binomial
 models, the <code>get_predicted()</code> function will first calculate predictions as if
-the user had selected <code>predict="expectation"</code>. Then, it will round the
-responses in order to return the most likely outcome.</p>
+the user had selected <code>predict = "expectation"</code>. Then, it will round the
+responses in order to return the most likely outcome. For ordinal or mixture
+models, it returns the predicted class membership, based on the highest
+probability of classification.</p>
     </div>
     <div class="section level2">
     <h2 id="heteroscedasticity-consistent-standard-errors">Heteroscedasticity consistent standard errors<a class="anchor" aria-label="anchor" href="#heteroscedasticity-consistent-standard-errors"></a></h2>
