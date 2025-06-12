@@ -14,6 +14,8 @@
 
 * Better support for models of class `sdmTMB`.
 
+* Improve efficiency of `clean_parameters()` for more complex *brms* models.
+
 ## Bug fixes
 
 * Fixed issue in `clean_names()` for *brms* models with `mm()` in formula.
