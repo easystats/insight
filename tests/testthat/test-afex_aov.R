@@ -83,7 +83,7 @@ test_that("afex_aov: model values", {
   )
   expect_equal(
     suppressWarnings(sapply(mods, get_df)),
-    c(9L, 9L, 10L, 10L, 15L)
+    c(9L, 9L, 10L, 10L, 15L),
     tolerance = 0.01
   )
   expect_equal(
