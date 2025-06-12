@@ -302,7 +302,7 @@ get_df.afex_aov <- function(x,
     c("residual", "model", "normal", "wald", "any", "analytical")
   )
   model <- validate_argument(model, c("univariate", "multivariate"))
-  if (model == "multivariate" && type == "residual") {
+  if (model == "multivariate" && type %in% c("residual", "wald")) {
     return(stats::df.residual(x$lm))
   }
   NextMethod("get_df")
@@ -317,7 +317,7 @@ get_df.aovlist <- function(x, type = "residual",
     c("residual", "model", "normal", "wald", "any", "analytical")
   )
   model <- validate_argument(model, c("univariate", "multivariate"))
-  if (model == "multivariate" && type == "residual") {
+  if (model == "multivariate" && type %in% c("residual", "wald")) {
     s <- summary(x)
     sdf <- s[[length(s)]][[1]]
     return(sdf$Df[nrow(sdf)])
