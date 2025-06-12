@@ -293,6 +293,39 @@ get_df.mmrm_tmb <- get_df.mmrm
 # ---------------------------------
 
 #' @export
+get_df.afex_aov <- function(x,
+                            type = "residual",
+                            model = "multivariate",
+                            ...) {
+  type <- validate_argument(
+    tolower(type),
+    c("residual", "model", "normal", "wald", "any", "analytical")
+  )
+  model <- validate_argument(model, c("univariate", "multivariate"))
+  if (model == "multivariate" && type == "residual") {
+    return(stats::df.residual(x$lm))
+  }
+  NextMethod("get_df")
+}
+
+#' @export
+get_df.aovlist <- function(x, type = "residual",
+                           model = "multivariate",
+                           ...) {
+  type <- validate_argument(
+    tolower(type),
+    c("residual", "model", "normal", "wald", "any", "analytical")
+  )
+  model <- validate_argument(model, c("univariate", "multivariate"))
+  if (model == "multivariate" && type == "residual") {
+    s <- summary(x)
+    sdf <- s[[length(s)]][[1]]
+    return(sdf$Df[nrow(sdf)])
+  }
+  NextMethod("get_df")
+}
+
+#' @export
 get_df.emmGrid <- function(x, ...) {
   if (!is.null(x@misc$is_boot) && x@misc$is_boot) {
     return(.boot_em_df(x))
