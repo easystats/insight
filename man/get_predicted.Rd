@@ -106,8 +106,8 @@ instance, to a factor).
 predicted response class membership, defined as highest probability
 prediction.
 \item For finite mixture models (currently only family \code{\link[brms:mixture]{brms::mixture()}} from
-package \emph{brms}), returns a vector of predicted class membership (similar
-as for ordinal models).
+package \emph{brms}) also returns the predicted response class membership
+(similar as for ordinal models).
 }
 \item Other strings are passed directly to the \code{type} argument of the \code{predict()}
 method supplied by the modelling package.

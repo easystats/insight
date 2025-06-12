@@ -43,8 +43,8 @@
 #'     predicted response class membership, defined as highest probability
 #'     prediction.
 #'   - For finite mixture models (currently only family [`brms::mixture()`] from
-#'     package *brms*), returns a vector of predicted class membership (similar
-#'     as for ordinal models).
+#'     package *brms*) also returns the predicted response class membership
+#'     (similar as for ordinal models).
 #' * Other strings are passed directly to the `type` argument of the `predict()`
 #'   method supplied by the modelling package.
 #' * Specifically for models of class `brmsfit` (package *brms*), the `predict`
