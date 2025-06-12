@@ -503,7 +503,8 @@ clean_parameters.mlm <- function(x, ...) {
   }
 
   # multimembership / mixture?
-  if (get_family(x)$family == "mixture") {
+  model_fam <- get_family(x)
+  if (inherits(model_fam, "brmsfamily") && model_fam$family == "mixture") {
     class_params <- grepl("^b_mu\\d+_(.*)", out$Parameter)
     if (any(class_params)) {
       out$Group[class_params] <- paste(
