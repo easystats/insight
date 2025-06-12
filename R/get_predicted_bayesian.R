@@ -103,6 +103,8 @@ get_predicted.stanreg <- function(x,
   # Handle special cases
   if (!my_args$predict %in% c("expectation", "response", "link") && inherits(model_family, "brmsfamily")) {
     if (is_wiener) {
+      # Wiener (Drift Diffusion) Models --------------------
+      # ----------------------------------------------------
       # Separate RT from Choice and assemble into 3D matrix (as if it was a multivariate)
       response <- as.numeric(draws >= 0)
       draws <- abs(draws)
@@ -112,6 +114,8 @@ get_predicted.stanreg <- function(x,
         dimnames = list(NULL, NULL, c("rt", "response"))
       )
     } else if (is_rtchoice) {
+      # Reaction time and Choice Models --------------------
+      # ----------------------------------------------------
       # LogNormal Race models (cogmod package) return RT and Choice as odd and even columns
       response <- as.matrix(draws[, seq(2, ncol(draws), 2)])
       draws <- as.matrix(draws[, seq(1, ncol(draws), 2)])
@@ -121,9 +125,14 @@ get_predicted.stanreg <- function(x,
         dimnames = list(NULL, NULL, c("rt", "response"))
       )
     } else if (is_mixture && identical(my_args$predict, "classification")) {
+      # Mixture (multi membership) Models --------------------
+      # ------------------------------------------------------
       # for mixture models, which predict the class membership, we stop
       # here and just return the predicted class membership
       mixture_output <- do.call(brms::pp_mixture, fun_args)
+      # pp_mixture() returns an array with predicted probability for class
+      # assignment for each observation. we here return the class definition
+      # with the highest probability per observation
       out <- data.frame(Predicted = apply(mixture_output[, 1, ], 1, which.max))
       return(out)
     }
