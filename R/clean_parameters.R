@@ -502,6 +502,20 @@ clean_parameters.mlm <- function(x, ...) {
     }
   }
 
+  # multimembership / mixture?
+  model_fam <- get_family(x)
+  if (inherits(model_fam, "brmsfamily") && model_fam$family == "mixture") {
+    class_params <- grepl("^b_mu\\d+_(.*)", out$Parameter)
+    if (any(class_params)) {
+      out$Group[class_params] <- paste(
+        "Class",
+        gsub("^b_mu(\\d+)_(.*)", "\\1", out$Parameter[class_params])
+      )
+    }
+  } else {
+    class_params <- NULL
+  }
+
   # retrieve auxiliary components
   dpars <- find_auxiliary(x)
 
@@ -523,6 +537,15 @@ clean_parameters.mlm <- function(x, ...) {
   out$Cleaned_Parameter <- gsub(pattern = "^b_zi_(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter)
   out$Cleaned_Parameter <- gsub(pattern = "^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", "\\2", out$Cleaned_Parameter, perl = TRUE)
   out$Cleaned_Parameter <- gsub(pattern = "^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)(.*)", "\\2", out$Cleaned_Parameter) # nolint
+
+  if (!is.null(class_params)) {
+    # remove "mu<number>_" from parameters
+    out$Cleaned_Parameter[class_params] <- gsub(
+      "^mu(\\d+)_(.*)",
+      "\\2",
+      out$Cleaned_Parameter[class_params]
+    )
+  }
 
   # correlation and sd
 
@@ -620,7 +643,11 @@ clean_parameters.mlm <- function(x, ...) {
     out$Cleaned_Parameter[intercepts] <- "(Intercept)"
   }
 
-  interaction_terms <- grep(".", out$Cleaned_Parameter, fixed = TRUE)
+  interaction_terms <- grep(
+    ".",
+    out$Cleaned_Parameter[out$Effects != "random"],
+    fixed = TRUE
+  )
 
   if (length(interaction_terms)) {
     for (i in interaction_terms) {

@@ -1,19 +1,19 @@
 # Bayesian --------------------------------------------------------------
 # =======================================================================
 
-
 #' @rdname get_predicted
 #' @export
-get_predicted.stanreg <- function(x,
-                                  data = NULL,
-                                  predict = "expectation",
-                                  iterations = NULL,
-                                  ci = NULL,
-                                  ci_method = NULL,
-                                  include_random = "default",
-                                  include_smooth = TRUE,
-                                  verbose = TRUE,
-                                  ...) {
+get_predicted.stanreg <- function(
+    x,
+    data = NULL,
+    predict = "expectation",
+    iterations = NULL,
+    ci = NULL,
+    ci_method = NULL,
+    include_random = "default",
+    include_smooth = TRUE,
+    verbose = TRUE,
+    ...) {
   check_if_installed("rstantools")
 
   if (is.null(ci_method)) {
@@ -51,7 +51,8 @@ get_predicted.stanreg <- function(x,
   # }
 
   # prepare arguments, avoid possible matching by multiple actual arguments
-  fun_args <- list(x,
+  fun_args <- list(
+    x,
     newdata = my_args$data,
     re.form = my_args$re.form,
     dpar = my_args$distributional_parameter,
@@ -82,8 +83,10 @@ get_predicted.stanreg <- function(x,
   model_family <- get_family(x)
   # exceptions
   is_wiener <- inherits(model_family, "brmsfamily") && model_family$family == "wiener"
-  is_rtchoice <- model_family$family == "custom" && model_family$name == "lnr"
-  is_mixture <- model_family$family == "mixture"
+  is_rtchoice <- inherits(model_family, "brmsfamily") &&
+    model_family$family == "custom" &&
+    model_family$name == "lnr"
+  is_mixture <- inherits(model_family, "brmsfamily") && model_family$family == "mixture"
 
   # Special case for rwiener (get choice 1 as negative values)
   # Note that for mv models, x$family returns a list of families
@@ -101,7 +104,10 @@ get_predicted.stanreg <- function(x,
   }
 
   # Handle special cases
-  if (!my_args$predict %in% c("expectation", "response", "link") && inherits(model_family, "brmsfamily")) {
+  if (
+    !my_args$predict %in% c("expectation", "response", "link") &&
+      inherits(model_family, "brmsfamily")
+  ) {
     if (is_wiener) {
       # Wiener (Drift Diffusion) Models --------------------
       # ----------------------------------------------------
@@ -146,7 +152,7 @@ get_predicted.stanreg <- function(x,
         # pp_mixture returns an array with probs, SE and intervals.
         # if requested, we extract the intervals here for the "ci_data"
         # data.frame
-        res <- lapply (seq_len(nrow(mixture_output)), function(i) {
+        res <- lapply(seq_len(nrow(mixture_output)), function(i) {
           max_prob <- which.max(mixture_output[i, 1, ])
           data.frame(
             Probability = mixture_output[i, 1, max_prob],
