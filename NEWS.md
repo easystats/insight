@@ -10,6 +10,9 @@
 * `get_predicted()` supports predicting the class membership for models from
   package *brms* with `mixture()` family, using `predict = "classificaton"`.
 
+* `get_predicted()` supports predicting the outcome by class membership for
+  models from package *brms* with `mixture()` family, using `predict = "link"`.
+
 * `model_info()` returns `$is_mixture` to identify finite mixture models.
 
 * Better support for models of class `sdmTMB`.

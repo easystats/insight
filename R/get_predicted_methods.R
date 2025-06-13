@@ -40,13 +40,16 @@ as.data.frame.get_predicted <- function(x, ..., keep_iterations = TRUE) {
     !"iterations" %in% names(attributes(x)) &&
     !any(c("Response", "Component") %in% colnames(x))) {
     return(as.data.frame.data.frame(x))
-  } else if (inherits(x, "data.frame") && any(c("Response", "Component") %in% colnames(x))) {
+  } else if (inherits(x, "data.frame") && any(c("Response", "Component", "Class") %in% colnames(x))) {
     # grouped response level (e.g., polr or multinom)
     out <- as.data.frame.data.frame(x)
     if ("ci_data" %in% names(attributes(x))) {
-      # we have "Component" instead of "Response" for Wiener models
       if ("Response" %in% colnames(out)) {
+        # we have "Component" instead of "Response" for Wiener models
         by_columns <- c("Row", "Response")
+      } else if ("Class" %in% colnames(out)) {
+        # we have "Class" instead of "Response" for Mixture models
+        by_columns <- c("Row", "Class")
       } else {
         by_columns <- c("Row", "Component")
       }

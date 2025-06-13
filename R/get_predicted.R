@@ -28,7 +28,10 @@
 #'   matrices can be generated using [get_datagrid()].
 #' @param predict string or `NULL`
 #' * `"link"` returns predictions on the model's link-scale (for logistic models,
-#'   that means the log-odds scale) with a confidence interval (CI).
+#'   that means the log-odds scale) with a confidence interval (CI). This option
+#'   should also be used for finite mixture models (currently only family
+#'   [`brms::mixture()`] from package *brms*), when predicted values of the
+#'   response for each class is required.
 #' * `"expectation"` (default) also returns confidence intervals, but this time
 #'   the output is on the response scale (for logistic models, that means
 #'   probabilities).
@@ -152,18 +155,26 @@
 #' models, it returns the predicted class membership, based on the highest
 #' probability of classification.
 #'
-#' @section Heteroscedasticity consistent standard errors: The arguments `vcov`
-#' and `vcov_args` can be used to calculate robust standard errors for
-#' confidence intervals of predictions. These arguments, when provided in
-#' `get_predicted()`, are passed down to `get_predicted_ci()`, thus, see the
-#' related documentation there for more details.
+#' @section Heteroscedasticity consistent standard errors:
+#' The arguments `vcov` and `vcov_args` can be used to calculate robust standard
+#' errors for confidence intervals of predictions. These arguments, when
+#' provided in `get_predicted()`, are passed down to `get_predicted_ci()`, thus,
+#' see the related documentation there for more details.
 #'
-#' @section Bayesian and Bootstrapped models and iterations: For predictions
-#' based on multiple iterations, for instance in the case of Bayesian models and
-#' bootstrapped predictions, the function used to compute the centrality
-#' (point-estimate predictions) can be modified via the `centrality_function`
-#' argument. For instance, `get_predicted(model, centrality_function = stats::median)`.
-#' The default is `mean`. Individual draws can be accessed by running
+#' @section Finite mixture models:
+#' For finite mixture models (currently, only the `mixture()` family from package
+#' *brms* is supported), use `predict = "classification"` to predict the class
+#' membership. To predict outcome values by class, use `predict = "link"`. Other
+#' `predict` options will return predicted values of the outcome for the full
+#' data, not stratified by class membership.
+#'
+#' @section Bayesian and Bootstrapped models and iterations:
+#' For predictions based on multiple iterations, for instance in the case of
+#' Bayesian models and bootstrapped predictions, the function used to compute
+#' the centrality (point-estimate predictions) can be modified via the
+#' `centrality_function` argument. For instance,
+#' `get_predicted(model, centrality_function = stats::median)`. The default is
+#' `mean`. Individual draws can be accessed by running
 #' `iter <- as.data.frame(get_predicted(model))`, and their iterations can be
 #' reshaped into a long format by `bayestestR::reshape_iterations(iter)`.
 #'
@@ -937,24 +948,33 @@ get_predicted.phylolm <- function(x,
                                                  datagrid = NULL,
                                                  is_wiener = FALSE,
                                                  is_rtchoice = FALSE,
+                                                 is_mixture = FALSE,
                                                  ...) {
-  # outcome: ordinal/multinomial/multivariate produce a 3D array of predictions,
-  # which we stack in "long" format
+  # outcome: ordinal/multinomial/multivariate/mixture produce a 3D array of
+  # predictions, which we stack in "long" format
   if (length(dim(iter)) == 3) {
     # 3rd dimension of the array is the response level. This stacks the draws into:
     # Rows * Response ~ Draws
     iter_stacked <- apply(iter, 1, c)
+    # create name for groups. for mixture, this is NULL
+    dim_names <- dimnames(iter)[[3]]
+    if (is.null(dim_names)) {
+      dim_names <- as.character(seq_len(dim(iter)[3]))
+    }
+
     predictions <- data.frame(
       # rows repeated for each response level
       Row = rep(seq_len(ncol(iter)), times = dim(iter)[3]),
       # response levels repeated for each row
-      .Response_dummy = rep(dimnames(iter)[[3]], each = dim(iter)[2]),
+      .Response_dummy = rep(dim_names, each = dim(iter)[2]),
       Predicted = apply(iter_stacked, 1, centrality_function),
       stringsAsFactors = FALSE
     )
     # make sure we have the correct name for the "Response column"
     if (is_wiener || is_rtchoice) {
       new_name <- "Component"
+    } else if (is_mixture) {
+      new_name <- "Class"
     } else {
       new_name <- "Response"
     }
