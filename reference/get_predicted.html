@@ -39,7 +39,7 @@ are not available otherwise."><meta property="og:image" content="https://easysta
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -202,7 +202,10 @@ matrices can be generated using <code><a href="get_datagrid.html">get_datagrid()
 
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
 <dd><p>string or <code>NULL</code></p><ul><li><p><code>"link"</code> returns predictions on the model's link-scale (for logistic models,
-that means the log-odds scale) with a confidence interval (CI).</p></li>
+that means the log-odds scale) with a confidence interval (CI). This option
+should also be used for finite mixture models (currently only family
+<code><a href="https://paulbuerkner.com/brms/reference/mixture.html" class="external-link">brms::mixture()</a></code> from package <em>brms</em>), when predicted values of the
+response for each class is required.</p></li>
 <li><p><code>"expectation"</code> (default) also returns confidence intervals, but this time
 the output is on the response scale (for logistic models, that means
 probabilities).</p></li>
@@ -391,20 +394,33 @@ probability of classification.</p>
     </div>
     <div class="section level2">
     <h2 id="heteroscedasticity-consistent-standard-errors">Heteroscedasticity consistent standard errors<a class="anchor" aria-label="anchor" href="#heteroscedasticity-consistent-standard-errors"></a></h2>
-    <p>The arguments <code>vcov</code>
-and <code>vcov_args</code> can be used to calculate robust standard errors for
-confidence intervals of predictions. These arguments, when provided in
-<code>get_predicted()</code>, are passed down to <code><a href="get_predicted_ci.html">get_predicted_ci()</a></code>, thus, see the
-related documentation there for more details.</p>
+
+
+<p>The arguments <code>vcov</code> and <code>vcov_args</code> can be used to calculate robust standard
+errors for confidence intervals of predictions. These arguments, when
+provided in <code>get_predicted()</code>, are passed down to <code><a href="get_predicted_ci.html">get_predicted_ci()</a></code>, thus,
+see the related documentation there for more details.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="finite-mixture-models">Finite mixture models<a class="anchor" aria-label="anchor" href="#finite-mixture-models"></a></h2>
+
+
+<p>For finite mixture models (currently, only the <code>mixture()</code> family from package
+<em>brms</em> is supported), use <code>predict = "classification"</code> to predict the class
+membership. To predict outcome values by class, use <code>predict = "link"</code>. Other
+<code>predict</code> options will return predicted values of the outcome for the full
+data, not stratified by class membership.</p>
     </div>
     <div class="section level2">
     <h2 id="bayesian-and-bootstrapped-models-and-iterations">Bayesian and Bootstrapped models and iterations<a class="anchor" aria-label="anchor" href="#bayesian-and-bootstrapped-models-and-iterations"></a></h2>
-    <p>For predictions
-based on multiple iterations, for instance in the case of Bayesian models and
-bootstrapped predictions, the function used to compute the centrality
-(point-estimate predictions) can be modified via the <code>centrality_function</code>
-argument. For instance, <code>get_predicted(model, centrality_function = stats::median)</code>.
-The default is <code>mean</code>. Individual draws can be accessed by running
+
+
+<p>For predictions based on multiple iterations, for instance in the case of
+Bayesian models and bootstrapped predictions, the function used to compute
+the centrality (point-estimate predictions) can be modified via the
+<code>centrality_function</code> argument. For instance,
+<code>get_predicted(model, centrality_function = stats::median)</code>. The default is
+<code>mean</code>. Individual draws can be accessed by running
 <code>iter &lt;- as.data.frame(get_predicted(model))</code>, and their iterations can be
 reshaped into a long format by <code>bayestestR::reshape_iterations(iter)</code>.</p>
     </div>
