@@ -173,6 +173,7 @@ get_predicted.stanreg <- function(
     datagrid = my_args$data,
     is_wiener = is_wiener,
     is_rtchoice = is_rtchoice,
+    is_mixture = is_mixture,
     ...
   )
 

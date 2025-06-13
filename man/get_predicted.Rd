@@ -90,7 +90,10 @@ matrices can be generated using \code{\link[=get_datagrid]{get_datagrid()}}.}
 \item{predict}{string or \code{NULL}
 \itemize{
 \item \code{"link"} returns predictions on the model's link-scale (for logistic models,
-that means the log-odds scale) with a confidence interval (CI).
+that means the log-odds scale) with a confidence interval (CI). This option
+should also be used for finite mixture models (currently only family
+\code{\link[brms:mixture]{brms::mixture()}} from package \emph{brms}), when predicted values of the
+response for each class is required.
 \item \code{"expectation"} (default) also returns confidence intervals, but this time
 the output is on the response scale (for logistic models, that means
 probabilities).
@@ -287,20 +290,30 @@ probability of classification.
 }
 
 \section{Heteroscedasticity consistent standard errors}{
- The arguments \code{vcov}
-and \code{vcov_args} can be used to calculate robust standard errors for
-confidence intervals of predictions. These arguments, when provided in
-\code{get_predicted()}, are passed down to \code{get_predicted_ci()}, thus, see the
-related documentation there for more details.
+
+The arguments \code{vcov} and \code{vcov_args} can be used to calculate robust standard
+errors for confidence intervals of predictions. These arguments, when
+provided in \code{get_predicted()}, are passed down to \code{get_predicted_ci()}, thus,
+see the related documentation there for more details.
+}
+
+\section{Finite mixture models}{
+
+For finite mixture models (currently, only the \code{mixture()} family from package
+\emph{brms} is supported), use \code{predict = "classification"} to predict the class
+membership. To predict outcome values by class, use \code{predict = "link"}. Other
+\code{predict} options will return predicted values of the outcome for the full
+data, not stratified by class membership.
 }
 
 \section{Bayesian and Bootstrapped models and iterations}{
- For predictions
-based on multiple iterations, for instance in the case of Bayesian models and
-bootstrapped predictions, the function used to compute the centrality
-(point-estimate predictions) can be modified via the \code{centrality_function}
-argument. For instance, \code{get_predicted(model, centrality_function = stats::median)}.
-The default is \code{mean}. Individual draws can be accessed by running
+
+For predictions based on multiple iterations, for instance in the case of
+Bayesian models and bootstrapped predictions, the function used to compute
+the centrality (point-estimate predictions) can be modified via the
+\code{centrality_function} argument. For instance,
+\code{get_predicted(model, centrality_function = stats::median)}. The default is
+\code{mean}. Individual draws can be accessed by running
 \code{iter <- as.data.frame(get_predicted(model))}, and their iterations can be
 reshaped into a long format by \code{bayestestR::reshape_iterations(iter)}.
 }
