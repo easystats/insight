@@ -171,6 +171,14 @@ get_residuals.fa <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 }
 
 #' @export
+get_residuals.omega <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  if (isTRUE(weighted) && isTRUE(verbose)) {
+    format_warning("Weighted residuals are not supported for omega.")
+  }
+  x$stats$residual[upper.tri(x$stats$residual)]
+}
+
+#' @export
 get_residuals.principal <- get_residuals.fa
 
 
