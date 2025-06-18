@@ -131,33 +131,33 @@ test_that("get_residuals - glmer", {
 test_that("get_residuals - psych::fa", {
   skip_if_not_installed("psych")
   skip_if_not_installed("parameters")
-  data(mtcars)
+  data(Thurstone, package = "psych")
 
   # PCA
   set.seed(123)
-  x1 <- psych::principal(mtcars, 3)
+  x1 <- psych::principal(Thurstone, 3)
   expect_equal(
     head(get_residuals(x1)),
-    c(0.01696, 0.02793, -0.00879, 0.02376, 0.00343, 0.02581),
+    c(-0.028657, -0.064068, -0.064693, -0.00835, -0.001788, 0.008548),
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
 
   # FA
   set.seed(123)
-  x2 <- psych::fa(mtcars, 3)
+  x2 <- psych::fa(Thurstone, 3)
   expect_equal(
     head(get_residuals(x2)),
-    c(0.01376, 0.01683, -0.00726, 0.00313, 0.00932, 0.03793),
+    c(0.005337, 0.000473, -0.005609, -0.006647, 0.00088, 0.007646),
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
 
   set.seed(123)
-  x3 <- parameters::factor_analysis(mtcars, 3)
+  x3 <- parameters::factor_analysis(as.data.frame(Thurstone), 3, standardize = FALSE)
   expect_equal(
     head(get_residuals(x3)),
-    c(0.01376, 0.01683, -0.00726, 0.00313, 0.00932, 0.03793),
+    c(0.005337, 0.000473, -0.005609, -0.006647, 0.00088, 0.007646),
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
