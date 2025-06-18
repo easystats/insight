@@ -138,6 +138,16 @@ get_residuals.coxph <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
 
 #' @export
+get_residuals.parameters_efa <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  if (isTRUE(weighted) && isTRUE(verbose)) {
+    format_warning("Weighted residuals are not supported for factor analysis models.")
+  }
+  model <- attributes(x)$model
+  model$residual[upper.tri(model$residual)]
+}
+
+
+#' @export
 get_residuals.crr <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   if (isTRUE(weighted) && isTRUE(verbose)) {
     format_warning("Weighted residuals are not supported for `crr` models.")
