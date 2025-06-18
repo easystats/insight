@@ -14,7 +14,7 @@
   models from package *brms* with `mixture()` family, using `predict = "link"`.
 
 * `get_residuals()` gets a method for objects from `parameters::factor_analysis()`,
-  `parameters::principal_components()`, `psych::fa()` and `psych::principal()`.
+  `psych::fa()` and `psych::principal()`.
 
 * `model_info()` returns `$is_mixture` to identify finite mixture models.
 

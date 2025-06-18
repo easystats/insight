@@ -147,7 +147,7 @@ get_residuals.parameters_efa <- function(x, weighted = FALSE, verbose = TRUE, ..
   model <- attributes(x)$model
 
   # sanity check
-  if (is.null(model_attr)) {
+  if (is.null(model)) {
     if (isTRUE(verbose)) {
       format_warning("The `model` attribute is missing or `NULL`.")
     }
@@ -156,9 +156,6 @@ get_residuals.parameters_efa <- function(x, weighted = FALSE, verbose = TRUE, ..
 
   model$residual[upper.tri(model$residual)]
 }
-
-#' @export
-get_residuals.parameters_pca <- get_residuals.parameters_efa
 
 
 #' @export

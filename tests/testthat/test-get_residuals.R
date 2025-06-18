@@ -130,6 +130,7 @@ test_that("get_residuals - glmer", {
 
 test_that("get_residuals - psych::fa", {
   skip_if_not_installed("psych")
+  skip_if_not_installed("parameters")
   data(mtcars)
 
   # PCA
@@ -143,6 +144,14 @@ test_that("get_residuals - psych::fa", {
 
   # FA
   x <- psych::fa(mtcars, 3)
+  expect_identical(
+    head(get_residuals(x)),
+    c(0.01376, 0.01683, -0.00726, 0.00313, 0.00932, 0.03793),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  x <- parameters::factor_analysis(mtcars, 3)
   expect_identical(
     head(get_residuals(x)),
     c(0.01376, 0.01683, -0.00726, 0.00313, 0.00932, 0.03793),
