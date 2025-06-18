@@ -126,3 +126,39 @@ test_that("get_residuals - glmer", {
     as.vector(weighted.residuals(m))
   )
 })
+
+
+test_that("get_residuals - psych::fa", {
+  skip_if_not_installed("psych")
+  skip_if_not_installed("parameters")
+  data(Thurstone, package = "psych")
+
+  # PCA
+  set.seed(123)
+  x1 <- psych::principal(Thurstone, 3)
+  expect_equal(
+    head(get_residuals(x1)),
+    c(-0.028657, -0.064068, -0.064693, -0.00835, -0.001788, 0.008548),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  # FA
+  set.seed(123)
+  x2 <- psych::fa(Thurstone, 3)
+  expect_equal(
+    head(get_residuals(x2)),
+    c(0.005337, 0.000473, -0.005609, -0.006647, 0.00088, 0.007646),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  set.seed(123)
+  x3 <- parameters::factor_analysis(as.data.frame(Thurstone), 3, standardize = FALSE)
+  expect_equal(
+    head(get_residuals(x3)),
+    c(0.005337, 0.000473, -0.005609, -0.006647, 0.00088, 0.007646),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+})

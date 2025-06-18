@@ -13,6 +13,9 @@
 * `get_predicted()` supports predicting the outcome by class membership for
   models from package *brms* with `mixture()` family, using `predict = "link"`.
 
+* `get_residuals()` gets a method for objects from `parameters::factor_analysis()`,
+  `psych::fa()` and `psych::principal()`.
+
 * `model_info()` returns `$is_mixture` to identify finite mixture models.
 
 * Better support for models of class `sdmTMB`.
