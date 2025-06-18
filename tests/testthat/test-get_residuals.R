@@ -134,26 +134,29 @@ test_that("get_residuals - psych::fa", {
   data(mtcars)
 
   # PCA
-  x <- psych::principal(mtcars, 3)
-  expect_identical(
-    head(get_residuals(x)),
+  set.seed(123)
+  x1 <- psych::principal(mtcars, 3)
+  expect_equal(
+    head(get_residuals(x1)),
     c(0.01696, 0.02793, -0.00879, 0.02376, 0.00343, 0.02581),
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
 
   # FA
-  x <- psych::fa(mtcars, 3)
-  expect_identical(
-    head(get_residuals(x)),
+  set.seed(123)
+  x2 <- psych::fa(mtcars, 3)
+  expect_equal(
+    head(get_residuals(x2)),
     c(0.01376, 0.01683, -0.00726, 0.00313, 0.00932, 0.03793),
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
 
-  x <- parameters::factor_analysis(mtcars, 3)
-  expect_identical(
-    head(get_residuals(x)),
+  set.seed(123)
+  x3 <- parameters::factor_analysis(mtcars, 3)
+  expect_equal(
+    head(get_residuals(x3)),
     c(0.01376, 0.01683, -0.00726, 0.00313, 0.00932, 0.03793),
     tolerance = 1e-3,
     ignore_attr = TRUE

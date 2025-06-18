@@ -157,6 +157,10 @@ get_residuals.parameters_efa <- function(x, weighted = FALSE, verbose = TRUE, ..
   model$residual[upper.tri(model$residual)]
 }
 
+#' @export
+get_residuals.psych <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  NextMethod()
+}
 
 #' @export
 get_residuals.fa <- function(x, weighted = FALSE, verbose = TRUE, ...) {
