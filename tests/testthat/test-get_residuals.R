@@ -126,3 +126,27 @@ test_that("get_residuals - glmer", {
     as.vector(weighted.residuals(m))
   )
 })
+
+
+test_that("get_residuals - psych::fa", {
+  skip_if_not_installed("psych")
+  data(mtcars)
+
+  # PCA
+  x <- psych::principal(mtcars, 3)
+  expect_identical(
+    head(get_residuals(x)),
+    c(0.01696, 0.02793, -0.00879, 0.02376, 0.00343, 0.02581),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  # FA
+  x <- psych::fa(mtcars, 3)
+  expect_identical(
+    head(get_residuals(x)),
+    c(0.01376, 0.01683, -0.00726, 0.00313, 0.00932, 0.03793),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+})
