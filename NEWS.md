@@ -30,6 +30,8 @@
 
 * Fixed issue in `get_data()` for *brms* models with `mmc()` in formula.
 
+* Fixed issue in `get_statistic()` for objects of class `aov`.
+
 # insight 1.3.0
 
 ## Breaking Changes

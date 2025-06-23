@@ -231,7 +231,7 @@ test_that("get_statistic", {
   )
   expect_equal(
     get_statistic(m2)$Statistic,
-    c(-3.28141, 0.12244, 19.28922, 0.12244),
+    c(-3.28141, 0.12244, 19.28922, -0.15622),
     tolerance = 1e-4
   )
 })
