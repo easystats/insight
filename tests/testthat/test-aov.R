@@ -1,5 +1,5 @@
 test_that("get_statistic", {
-  skip_if(getRVersion() < "4.5.0")
+  skip_if(getRversion() < "4.5.0")
   data(penguins)
   fit <- aov(
     formula = body_mass ~ species,
