@@ -72,6 +72,24 @@ get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
 
 
 #' @export
+get_statistic.aov <- function(x, ...) {
+  s <- summary(x)[[1]]
+  params <- s[!is.na(s$`F value`), ]
+
+  out <- data.frame(
+    Parameter = trim_ws(row.names(params)),
+    Statistic = params$`F value`,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.htest <- function(x, ...) {
   if (x$method == "Fisher's Exact Test for Count Data") {
     out <- data.frame(
