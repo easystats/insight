@@ -13,9 +13,12 @@ a data frame or any other object that has an attribute containing the model.}
 \item{name}{The name of the attribute that contains the model object. Defaults
 to \code{"model"}.}
 
-\item{element}{If provided, this argument allows you to specify which element
-of the model object to return. This can be useful if the model object is a
-list or has multiple components, and you only want to extract a specific part.}
+\item{element}{String or character vector. If provided, this argument allows
+you to specify which element(s) of the model object to return. This can be
+useful if the model object is a list or has multiple components, and you only
+want to extract a specific part.}
+
+\item{...}{Not used.}
 }
 \value{
 The object that is stored as an attribute of \code{x} with the name \code{name},

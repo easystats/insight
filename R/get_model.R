@@ -10,9 +10,11 @@
 #' a data frame or any other object that has an attribute containing the model.
 #' @param name The name of the attribute that contains the model object. Defaults
 #' to `"model"`.
-#' @param element If provided, this argument allows you to specify which element
-#' of the model object to return. This can be useful if the model object is a
-#' list or has multiple components, and you only want to extract a specific part.
+#' @param element String or character vector. If provided, this argument allows
+#' you to specify which element(s) of the model object to return. This can be
+#' useful if the model object is a list or has multiple components, and you only
+#' want to extract a specific part.
+#' @param ... Not used.
 #'
 #' @return The object that is stored as an attribute of `x` with the name `name`,
 #' or the specific element of that object if `element` is provided. If the
@@ -31,19 +33,25 @@
 #'
 #' @export
 get_model <- function(x, name = "model", element = NULL, ...) {
+  # extract the model from the attributes of x
+  model <- .safe(attr(x, name, exact = TRUE))
+
   # check if "name" exists in attributes of x
-  if (!is.null(attr(x, name, exact = TRUE))) {
-    model <- attr(x, name, exact = TRUE)
-  } else {
+  if (is.null(model)) {
     format_error(paste0("No attribute named `", name, "` found in the object."))
   }
 
   # check if element should be extracted
   if (!is.null(element)) {
-    if (is.list(model) && element %in% names(model)) {
-      return(model[[element]])
+    if (is.list(model) && all(element %in% names(model))) {
+      if (length(element) > 1) {
+        return(model[element])
+      } else {
+        return(model[[element]])
+      }
     } else {
-      format_error(paste0("Element `", element, "` not found in the model object."))
+      element <- element[!element %in% names(model)]
+      format_error(paste0("Element(s) ", toString(paste0("`", element, "`")), " not found in the model object."))
     }
   }
 
