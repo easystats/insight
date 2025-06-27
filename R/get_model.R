@@ -32,17 +32,22 @@
 #'
 #' @export
 get_model <- function(x, name = "model", element = NULL, ...) {
+  # extract the model from the attributes of x
+  model <- .safe(attr(x, name, exact = TRUE))
+
   # check if "name" exists in attributes of x
-  if (!is.null(attr(x, name, exact = TRUE))) {
-    model <- attr(x, name, exact = TRUE)
-  } else {
+  if (is.null(model)) {
     format_error(paste0("No attribute named `", name, "` found in the object."))
   }
 
   # check if element should be extracted
   if (!is.null(element)) {
-    if (is.list(model) && element %in% names(model)) {
-      return(model[[element]])
+    if (is.list(model) && all(element %in% names(model))) {
+      if (length(element) > 1) {
+        return(model[element])
+      } else {
+        return(model[[element]])
+      }
     } else {
       format_error(paste0("Element `", element, "` not found in the model object."))
     }

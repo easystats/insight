@@ -5,6 +5,12 @@ test_that("get_model", {
 
   expect_s3_class(get_model(out), "psych")
   expect_equal(get_model(out, element = "BIC"), -48.27782, tolerance = 1e-3)
+  expect_equal(
+    get_model(out, element = c("BIC", "CFI")),
+    list(BIC = -48.2778171514184, CFI = 0.899274697945245),
+    tolerance = 1e-3
+  )
+
 
   # errors
   expect_error(
