@@ -21,7 +21,19 @@ test_that("get_model", {
 
   expect_error(
     get_model(out, element = "nonexistent"),
-    regex = "Element `nonexistent`",
+    regex = "Element(s) `nonexistent`",
+    fixed = TRUE
+  )
+
+  expect_error(
+    get_model(out, element = c("BIC", "AFI")),
+    regex = "Element(s) `AFI`",
+    fixed = TRUE
+  )
+
+  expect_error(
+    get_model(out, element = c("BIA", "AFI")),
+    regex = "Element(s) `BIA`, `AFI` not",
     fixed = TRUE
   )
 })

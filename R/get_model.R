@@ -10,9 +10,10 @@
 #' a data frame or any other object that has an attribute containing the model.
 #' @param name The name of the attribute that contains the model object. Defaults
 #' to `"model"`.
-#' @param element If provided, this argument allows you to specify which element
-#' of the model object to return. This can be useful if the model object is a
-#' list or has multiple components, and you only want to extract a specific part.
+#' @param element String or character vector. If provided, this argument allows
+#' you to specify which element(s) of the model object to return. This can be
+#' useful if the model object is a list or has multiple components, and you only
+#' want to extract a specific part.
 #' @param ... Not used.
 #'
 #' @return The object that is stored as an attribute of `x` with the name `name`,
@@ -49,7 +50,8 @@ get_model <- function(x, name = "model", element = NULL, ...) {
         return(model[[element]])
       }
     } else {
-      format_error(paste0("Element `", element, "` not found in the model object."))
+      element <- element[!element %in% names(model)]
+      format_error(paste0("Element(s) ", toString(paste0("`", element, "`")), " not found in the model object."))
     }
   }
 
