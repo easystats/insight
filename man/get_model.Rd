@@ -16,6 +16,8 @@ to \code{"model"}.}
 \item{element}{If provided, this argument allows you to specify which element
 of the model object to return. This can be useful if the model object is a
 list or has multiple components, and you only want to extract a specific part.}
+
+\item{...}{Not used.}
 }
 \value{
 The object that is stored as an attribute of \code{x} with the name \code{name},

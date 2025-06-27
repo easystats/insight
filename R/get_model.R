@@ -13,6 +13,7 @@
 #' @param element If provided, this argument allows you to specify which element
 #' of the model object to return. This can be useful if the model object is a
 #' list or has multiple components, and you only want to extract a specific part.
+#' @param ... Not used.
 #'
 #' @return The object that is stored as an attribute of `x` with the name `name`,
 #' or the specific element of that object if `element` is provided. If the
