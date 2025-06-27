@@ -2,6 +2,9 @@
 
 ## Changes
 
+* New function `get_model()` to extract the model object from an arbitrary
+  object, if the model object is stored as attrbiute of the paren object.
+
 * The `range` argument in `get_datagrid()` gets a new option, `"pretty"`, to
   create a range of pretty values.
 

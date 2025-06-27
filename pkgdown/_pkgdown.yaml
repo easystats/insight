@@ -71,6 +71,7 @@ reference:
       Functions to access specific information from model objects.
     contents:
       - get_call
+      - get_model
       - starts_with("link_")
       - model_name
       - starts_with("n_")
