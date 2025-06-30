@@ -1,4 +1,4 @@
-# insight (devel)
+# insight 1.3.1
 
 ## Changes
 
