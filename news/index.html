@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,28 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.1" id="insight-131">insight 1.3.1<a class="anchor" aria-label="anchor" href="#insight-131"></a></h2><p class="text-muted">CRAN release: 2025-06-30</p>
+<div class="section level3">
+<h3 id="changes-1-3-1">Changes<a class="anchor" aria-label="anchor" href="#changes-1-3-1"></a></h3>
+<ul><li><p>New function <code><a href="../reference/get_model.html">get_model()</a></code> to extract the model object from an arbitrary object, if the model object is stored as attribute of the parent object.</p></li>
+<li><p>The <code>range</code> argument in <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> gets a new option, <code>"pretty"</code>, to create a range of pretty values.</p></li>
+<li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> now supports models of class <code>glmtoolbox::glmee</code>.</p></li>
+<li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> supports predicting the class membership for models from package <em>brms</em> with <code>mixture()</code> family, using <code>predict = "classificaton"</code>.</p></li>
+<li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> supports predicting the outcome by class membership for models from package <em>brms</em> with <code>mixture()</code> family, using <code>predict = "link"</code>.</p></li>
+<li><p><code><a href="../reference/get_residuals.html">get_residuals()</a></code> gets a method for objects from <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::factor_analysis()</a></code>, <code><a href="https://rdrr.io/pkg/psych/man/fa.html" class="external-link">psych::fa()</a></code>, <code><a href="https://rdrr.io/pkg/psych/man/omega.html" class="external-link">psych::omega()</a></code> and <code><a href="https://rdrr.io/pkg/psych/man/principal.html" class="external-link">psych::principal()</a></code>.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> returns <code>$is_mixture</code> to identify finite mixture models.</p></li>
+<li><p>Better support for models of class <code>sdmTMB</code>.</p></li>
+<li><p>Improve efficiency of <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> for more complex <em>brms</em> models.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-3-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-1"></a></h3>
+<ul><li><p>Fixed issue in <code><a href="../reference/get_df.html">get_df()</a></code> for models from package <em>afex</em>.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/clean_names.html">clean_names()</a></code> for <em>brms</em> models with <code>mm()</code> in formula.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_data.html">get_data()</a></code> for <em>brms</em> models with <code>mmc()</code> in formula.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for objects of class <code>aov</code>.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.0" id="insight-130">insight 1.3.0<a class="anchor" aria-label="anchor" href="#insight-130"></a></h2><p class="text-muted">CRAN release: 2025-05-20</p>
 <div class="section level3">
