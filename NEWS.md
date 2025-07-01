@@ -1,9 +1,9 @@
-# insight (devel)
+# insight 1.3.1
 
 ## Changes
 
 * New function `get_model()` to extract the model object from an arbitrary
-  object, if the model object is stored as attrbiute of the paren object.
+  object, if the model object is stored as attribute of the parent object.
 
 * The `range` argument in `get_datagrid()` gets a new option, `"pretty"`, to
   create a range of pretty values.
