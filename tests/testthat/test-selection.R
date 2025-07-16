@@ -19,8 +19,18 @@ ys <- as.numeric(ys) + 1
 dat <- data.frame(ys, yo, yo1, yo2, xs, xo1, xo2)
 m1 <- sampleSelection::selection(ys ~ xs, list(yo1 ~ xo1, yo2 ~ xo2), data = dat)
 
+data(Mroz87, package = "sampleSelection")
+Mroz87$kids  <- (Mroz87$kids5 + Mroz87$kids618 > 0)
+m2 <- sampleSelection::selection(
+  lfp ~ age + I( age^2 ) + faminc + kids + educ,
+  wage ~ exper + I( exper^2 ) + educ + city,
+  data = Mroz87
+)
+
+
 test_that("model_info", {
   expect_true(model_info(m1)$is_linear)
+  expect_true(model_info(m2)$is_linear)
 })
 
 test_that("find_predictors", {
@@ -28,10 +38,20 @@ test_that("find_predictors", {
     find_predictors(m1),
     list(conditional = list(selection = "xs", outcome = c("xo1", "xo2")))
   )
+  expect_identical(
+    find_predictors(m2),
+    list(
+      conditional = list(
+        selection = c("age", "faminc", "kids", "educ"),
+        outcome = c("exper", "educ", "city")
+      )
+    )
+  )
 })
 
 test_that("find_response", {
   expect_identical(find_response(m1), c("ys", "yo1", "yo2"))
+  expect_identical(find_response(m2), c("lfp", "wage"))
 })
 
 test_that("get_response", {
@@ -59,6 +79,16 @@ test_that("find_formula", {
     ),
     ignore_attr = TRUE
   )
+  expect_equal(
+    find_formula(m2),
+    list(
+      conditional = list(
+        selection = lfp ~ age + I(age^2) + faminc + kids + educ,
+        outcome = wage ~ exper + I(exper^2) + educ + city
+      )
+    ),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("find_terms", {
@@ -69,6 +99,15 @@ test_that("find_terms", {
   expect_equal(
     find_terms(m1, flatten = TRUE),
     c("ys  xs", "yo1  xo1", "yo2  xo2")
+  )
+  expect_equal(
+    find_terms(m1),
+    list(
+      conditional = list(
+        selection = c("lfp  age", "I(age^2)", "faminc", "kids", "educ"),
+        outcome = c("wage  exper", "I(exper^2)", "educ", "city")
+      )
+    )
   )
 })
 
@@ -81,7 +120,35 @@ test_that("find_parameters", {
     find_parameters(m1),
     list(
       selection = c("(Intercept)", "xs"),
-      auxiliary = c("(Intercept)", "xo1", "sigma1", "rho1", "(Intercept)", "xo2", "sigma2", "rho2")
+      outcome = c("(Intercept)", "xo1", "(Intercept)", "xo2"),
+      auxiliary = c("sigma1", "rho1", "sigma2", "rho2")
+    )
+  )
+  expect_equal(
+    find_parameters(m2),
+    list(
+      selection = c("(Intercept)", "age", "I(age^2)", "faminc", "kidsTRUE", "educ"),
+      outcome = c("(Intercept)", "exper", "I(exper^2)", "educ", "city"),
+      auxiliary = c("sigma", "rho")
+    )
+  )
+})
+
+test_that("get_parameters", {
+  out <- get_parameters(m1)
+  expect_identical(
+    out$Component,
+    c(
+      "selection", "selection", "outcome", "outcome", "auxiliary",
+      "auxiliary", "outcome", "outcome", "auxiliary", "auxiliary"
+    )
+  )
+  out <- get_parameters(m2)
+  expect_identical(
+    out$Component,
+    c(
+      "selection", "selection", "selection", "selection", "selection", "selection",
+      "outcome", "outcome", "outcome", "outcome", "outcome", "auxiliary", "auxiliary"
     )
   )
 })

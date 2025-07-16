@@ -157,12 +157,12 @@ get_parameters.selection <- function(x, component = "all", ...) {
   params <- data.frame(
     Parameter = rn,
     Estimate = estimates[[1]],
-    Component = "auxiliary",
+    Component = "selection",
     stringsAsFactors = FALSE,
     row.names = NULL
   )
-  params$Component[s$param$index$betaS] <- "selection"
-  params$Component[s$param$index$betaO] <- "outcome"
+  params$Component[s$param$index$errTerms] <- "auxiliary"
+  params$Component[s$param$index$outcome] <- "outcome"
 
   if (component != "all") {
     params <- params[params$Component == component, , drop = FALSE]
