@@ -1,3 +1,10 @@
+# insight (devel)
+
+## Bug fixes
+
+* Fixed issue with models of class `selection` with multiple response
+  variables.
+
 # insight 1.3.1
 
 ## Changes
