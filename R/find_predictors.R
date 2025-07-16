@@ -569,7 +569,12 @@ find_predictors.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, 
       f[["selection"]] <- f[["selection"]][[3]]
     }
     if (object_has_names(f, "outcome")) {
-      f[["outcome"]] <- f[["outcome"]][[3]]
+      # can be a list, so we need to check
+      if (is.list(f[["outcome"]])) {
+        f[["outcome"]] <- lapply(f[["outcome"]], function(i) i[[3L]])
+      } else {
+        f[["outcome"]] <- f[["outcome"]][[3L]]
+      }
     }
   }
   # if we have random effects, just return grouping variable, not random slopes

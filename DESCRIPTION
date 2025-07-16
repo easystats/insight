@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.3.1
+Version: 1.3.1.1
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -166,6 +166,7 @@ Suggests:
     modelbased (>= 0.9.0),
     multgee,
     MuMIn,
+    mvtnorm,
     nestedLogit,
     nlme,
     nnet,
@@ -196,6 +197,7 @@ Suggests:
     RWiener,
     sandwich,
     sdmTMB,
+    sampleSelection,
     serp,
     speedglm,
     splines,

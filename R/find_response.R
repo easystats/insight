@@ -121,10 +121,18 @@ find_response.bfsl <- function(x, combine = TRUE, ...) {
 #' @export
 find_response.selection <- function(x, combine = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
-  resp <- c(
-    safe_deparse(f$conditional$selection[[2L]]),
-    safe_deparse(f$conditional$outcome[[2L]])
-  )
+  resp <- safe_deparse(f$conditional$selection[[2L]])
+  # "outcome" can be a list, so we need to check for that
+  if (is.list(f$conditional$outcome)) {
+    additional_resp <- unlist(
+      lapply(f$conditional$outcome, function(i) safe_deparse(i[[2L]])),
+      use.names = FALSE
+    )
+  } else {
+    additional_resp <- safe_deparse(f$conditional$outcome[[2L]])
+  }
+  resp <- c(resp, additional_resp)
+
   check_cbind(resp, combine, model = x)
 }
 
