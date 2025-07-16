@@ -46,7 +46,7 @@ test_that("get_predictors", {
 
 test_that("get_data", {
   expect_equal(nrow(get_data(m1, verbose = FALSE)), 500)
-  expect_named(get_data(m1, verbose = FALSE)), c("ys", "yo1", "yo2", "xs", "xo1", "xo2")
+  expect_named(get_data(m1, verbose = FALSE), c("ys", "yo1", "yo2", "xs", "xo1", "xo2"))
 })
 
 test_that("find_formula", {
