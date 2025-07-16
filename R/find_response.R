@@ -124,16 +124,15 @@ find_response.selection <- function(x, combine = TRUE, ...) {
   resp <- safe_deparse(f$conditional$selection[[2L]])
   # "outcome" can be a list, so we need to check for that
   if (is.list(f$conditional$outcome)) {
-    resp <- c(
-      resp,
-      unlist(
-        lapply(f$conditional$outcome, function(i) safe_deparse(i[[2L]])),
-        use.names = FALSE
-      )
+    additional_resp <- unlist(
+      lapply(f$conditional$outcome, function(i) safe_deparse(i[[2L]])),
+      use.names = FALSE
     )
   } else {
-    resp <- c(resp, safe_deparse(f$conditional$outcome[[2L]]))
+    additional_resp <- safe_deparse(f$conditional$outcome[[2L]])
   }
+  resp <- c(resp, additional_resp)
+
   check_cbind(resp, combine, model = x)
 }
 
