@@ -101,7 +101,7 @@ test_that("find_terms", {
     c("ys  xs", "yo1  xo1", "yo2  xo2")
   )
   expect_equal(
-    find_terms(m1),
+    find_terms(m2),
     list(
       conditional = list(
         selection = c("lfp  age", "I(age^2)", "faminc", "kids", "educ"),
