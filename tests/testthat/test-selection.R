@@ -160,3 +160,34 @@ test_that("is_multivariate", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
 })
+
+test_that("get_statistic", {
+  out <- get_statistic(m1)
+  expect_identical(
+    out$Component,
+    c(
+      "selection", "selection", "outcome", "outcome", "auxiliary",
+      "auxiliary", "outcome", "outcome", "auxiliary", "auxiliary"
+    )
+  )
+  expect_equal(
+    out$Statistic,
+    as.vector(summary(m1)$estimate[, 3]),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  out <- get_statistic(m2)
+  expect_identical(
+    out$Component,
+    c(
+      "selection", "selection", "selection", "selection", "selection", "selection",
+      "outcome", "outcome", "outcome", "outcome", "outcome", "auxiliary", "auxiliary"
+    )
+  )
+  expect_equal(
+    out$Statistic,
+    as.vector(summary(m2)$estimate[, 3]),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+})
