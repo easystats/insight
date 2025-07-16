@@ -21,6 +21,7 @@ m1 <- sampleSelection::selection(ys ~ xs, list(yo1 ~ xo1, yo2 ~ xo2), data = dat
 
 test_that("model_info", {
   ## TODO: should $is_multivariate be TRUE?
+  # hm, it's a multistage model, not multivariate, I think.
   expect_true(model_info(m1)$is_linear)
 })
 
@@ -89,6 +90,7 @@ test_that("find_parameters", {
 
 test_that("is_multivariate", {
   ## FIXME: should be TRUE?
+  # hm, it's a multistage model, not multivariate, I think.
   expect_false(is_multivariate(m1))
 })
 
