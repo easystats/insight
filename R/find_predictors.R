@@ -571,12 +571,9 @@ find_predictors.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, 
     if (object_has_names(f, "outcome")) {
       # can be a list, so we need to check
       if (is.list(f[["outcome"]])) {
-        f[["outcome"]] <- lapply(f[["outcome"]], function(i) {
-          i <- i[[2]]
-          i
-        })
+        f[["outcome"]] <- lapply(f[["outcome"]], function(i) i[[3L]])
       } else {
-        f[["outcome"]] <- f[["outcome"]][[3]]
+        f[["outcome"]] <- f[["outcome"]][[3L]]
       }
     }
   }
