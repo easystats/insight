@@ -16,8 +16,8 @@ xo2 <- runif(500)
 yo2 <- xo2 + eps[, 3]
 yo <- ifelse(ys, yo2, yo1)
 ys <- as.numeric(ys) + 1
-dat <- data.frame(ys, yo, yo1, yo2, xs, xo1, xo2)
-m1 <- sampleSelection::selection(ys ~ xs, list(yo1 ~ xo1, yo2 ~ xo2), data = dat)
+dat_sel <<- data.frame(ys, yo, yo1, yo2, xs, xo1, xo2)
+m1 <- sampleSelection::selection(ys ~ xs, list(yo1 ~ xo1, yo2 ~ xo2), data = dat_sel)
 
 data(Mroz87, package = "sampleSelection")
 Mroz87$kids  <- (Mroz87$kids5 + Mroz87$kids618 > 0)
@@ -55,7 +55,7 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), dat[c("ys", "yo1", "yo2")], ignore_attr = TRUE)
+  expect_equal(get_response(m1), dat_sel[c("ys", "yo1", "yo2")], ignore_attr = TRUE)
 })
 
 test_that("get_predictors", {
