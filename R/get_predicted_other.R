@@ -167,3 +167,17 @@ get_predicted.glmgee <- function(x,
   # 4. step: final preparation
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
 }
+
+
+# htest -------------------------------------------------------------
+# ======================================================================
+
+
+#' @export
+get_predicted.htest <- function(x, ...) {
+  info <- model_info(x)
+  if (info$is_chi2test) {
+    return(x$expected)
+  }
+  NULL
+}

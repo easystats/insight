@@ -4,6 +4,9 @@
 
 * `display()`, `print_md()` and `print_html()` get a `.table` method.
 
+* `get_predicted()` now supports `chisq.test()`, and returnd the expected
+  frequencies.
+
 ## Bug fixes
 
 * Fixed issue with models of class `selection` with multiple response

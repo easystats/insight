@@ -318,6 +318,14 @@ the centrality (point-estimate predictions) can be modified via the
 reshaped into a long format by \code{bayestestR::reshape_iterations(iter)}.
 }
 
+\section{Hypothesis tests}{
+
+There is limited support for hypothesis tests, i.e. objects of class \code{htest}:
+\itemize{
+\item \code{chisq.test()}: returns the expected values of the contingency table.
+}
+}
+
 \examples{
 \dontshow{if (require("boot")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(mtcars)
