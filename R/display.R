@@ -102,7 +102,7 @@ print_html.matrix <- function(x, ...) {
   x <- cbind(Row = rownames(x), x)
   # some cleanup
   rownames(x) <- NULL
-  colnames(x)[1] <- ""
+  colnames(x)[1] <- "Value"
   # export table now
   print_html.data.frame(x, ...)
 }
@@ -146,7 +146,7 @@ print_html.table <- function(x, ...) {
   x <- cbind(Row = rownames(x), x)
   # some cleanup
   rownames(x) <- NULL
-  colnames(x)[1] <- ""
+  colnames(x)[1] <- "Value"
   # export table now
   print_html.data.frame(x, ...)
 }
