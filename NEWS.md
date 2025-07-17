@@ -1,9 +1,15 @@
 # insight (devel)
 
+## Changes
+
+* `display()`, `print_md()` and `print_html()` get a `.table` method.
+
 ## Bug fixes
 
 * Fixed issue with models of class `selection` with multiple response
   variables.
+
+* Fixed issue in `get_datagrid()` for factors with `=` in their levels.
 
 # insight 1.3.1
 
