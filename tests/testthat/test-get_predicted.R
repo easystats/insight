@@ -743,7 +743,7 @@ test_that("get_predicted works with brms-Wiener", {
 })
 
 
-test_that("get_predicted works with brms-Wiener", {
+test_that("get_predicted works with chisq.test", {
   cat_xtbl <- structure(
     c(38L, 59L, 54L, 49L),
     dim = c(2L, 2L),
@@ -757,6 +757,7 @@ test_that("get_predicted works with brms-Wiener", {
   cat_chi <- chisq.test(cat_xtbl)
   out <- get_predicted(cat_chi)
   expect_identical(
+    out,
     structure(
       c(44.62, 52.38, 47.38, 55.62),
       dim = c(2L, 2L),

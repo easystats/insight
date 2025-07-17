@@ -4,7 +4,7 @@
 
 * `display()`, `print_md()` and `print_html()` get a `.table` method.
 
-* `get_predicted()` now supports `chisq.test()`, and returnd the expected
+* `get_predicted()` now supports `chisq.test()`, and returns the expected
   frequencies.
 
 ## Bug fixes
