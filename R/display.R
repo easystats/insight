@@ -82,9 +82,6 @@ print_html.data.frame <- function(x, ...) {
 display.matrix <- display.data.frame
 
 #' @export
-display.array <- display.data.frame
-
-#' @export
 print_md.matrix <- function(x, ...) {
   # to data frame
   x <- as.data.frame(x)
@@ -110,8 +107,46 @@ print_html.matrix <- function(x, ...) {
   print_html.data.frame(x, ...)
 }
 
+
+# array --------------------------------------------------------------
+
+#' @export
+display.array <- display.data.frame
+
 #' @export
 print_md.array <- print_md.matrix
 
 #' @export
 print_html.array <- print_html.matrix
+
+
+# table --------------------------------------------------------------
+
+#' @export
+display.table <- display.data.frame
+
+#' @export
+print_md.table <- function(x, ...) {
+  # to data frame
+  x <- as.data.frame.matrix(x)
+  # add row names
+  x <- cbind(Row = rownames(x), x)
+  # some cleanup
+  rownames(x) <- NULL
+  colnames(x)[1] <- ""
+  # export table now
+  export_table(x, format = "markdown", ...)
+}
+
+#' @export
+print_html.table <- function(x, ...) {
+  # to data frame
+  x <- as.data.frame.matrix(x)
+  # add row names
+  x <- cbind(Row = rownames(x), x)
+  # some cleanup
+  rownames(x) <- NULL
+  colnames(x)[1] <- ""
+  # export table now
+  print_html.data.frame(x, ...)
+}
