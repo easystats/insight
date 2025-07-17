@@ -110,7 +110,7 @@ Suggests:
     cplm,
     crch,
     curl,
-    datawizard,
+    datawizard (>= 1.2.0),
     dbarts,
     effectsize,
     emmeans,
