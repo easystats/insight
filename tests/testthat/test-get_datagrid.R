@@ -686,3 +686,22 @@ test_that("get_datagrid - multivariate", {
   out <- get_datagrid(m, "wt=3:5")
   expect_identical(dim(out), c(3L, 2L))
 })
+
+
+test_that("get_datagrid - '=' in factor levels", {
+  data(warpbreaks)
+  warpbreaks$sizegroup <- with(
+    warpbreaks,
+    factor(
+      ifelse(breaks < 26, "under26", ifelse(breaks > 34, ">34", "26<=34")),
+      levels = c("under26", "26<=34", ">34")
+    )
+  )
+
+  mod <- glm(wool ~ sizegroup + tension, family = binomial(), data = warpbreaks)
+  out <- get_datagrid(mod, by = c("tension", "sizegroup='26<=34'"), verbose = FALSE)
+  expect_identical(
+    as.character(out$sizegroup),
+    c("under26", "under26", "under26", "26<=34", "26<=34", "26<=34", ">34", ">34", ">34")
+  )
+})

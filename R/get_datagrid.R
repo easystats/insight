@@ -958,7 +958,12 @@ get_datagrid.comparisons <- get_datagrid.slopes
     if (grepl("length.out =", by, fixed = TRUE)) {
       by_expression <- by # This is an edgecase
     } else if (grepl("=", by, fixed = TRUE)) {
-      parts <- trim_ws(unlist(strsplit(by, "=", fixed = TRUE), use.names = FALSE)) # Split and clean
+      # Split by '=' but keep quoted parts
+      parts <- trim_ws(unlist(
+        strsplit(by, "(?=(?:[^\"']|\"[^\"]*\"|'[^']*')*$)=", perl = TRUE),
+        use.names = FALSE
+      ))
+      # parts <- trim_ws(unlist(strsplit(by, "=", fixed = TRUE), use.names = FALSE))
       varname <- parts[1] # left-hand part is probably the name of the variable
       by <- parts[2] # right-hand part is the real target
     }
