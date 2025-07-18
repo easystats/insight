@@ -439,7 +439,6 @@ find_predictors.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, 
 
 # utilities ------------------------------------------------------------------
 
-
 .return_vars <- function(f, x) {
   l <- lapply(names(f), function(i) {
     if (endsWith(i, "random")) {
@@ -481,7 +480,9 @@ find_predictors.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, 
       # random effects components.
       l_pforms <- unlist(lapply(nf$pforms, all.vars), recursive = TRUE, use.names = FALSE)
       # don't overwrite. maybe this could be smarter
-      if (length(l_pforms) > 0 && !"nonlinear" %in% names(l) && !"nonlinear" %in% names(f)) {
+      if (
+        length(l_pforms) > 0 && !"nonlinear" %in% names(l) && !"nonlinear" %in% names(f)
+      ) {
         f <- c(f, list(nonlinear = NULL)) # need this for renaming and subsetting later
         l <- c(l, list(nonlinear = unique(l_pforms)))
         l <- lapply(l, .remove_values, nl_parms)
@@ -489,17 +490,16 @@ find_predictors.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, 
     }
   }
 
-
   # remove constants
   l <- lapply(l, .remove_values, c(".", "pi", "1", "0"))
   l <- lapply(l, .remove_values, c(0, 1))
-  l <- lapply(l, function(i) {
-    if (is.list(i)) {
-      i
-    } else {
-      gsub("`", "", i, fixed = TRUE)
-    }
-  })
+  # recursively remove backticks from variable names
+  l <- rapply(
+    l,
+    function(x) gsub("`", "", x, fixed = TRUE),
+    classes = "character",
+    how = "replace"
+  )
   # for brms-models, we need to remove "Intercept", which is a special notation
   if (inherits(x, "brmsfit")) {
     l <- lapply(l, .remove_values, "Intercept")
