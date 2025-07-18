@@ -31,13 +31,17 @@ yo2 <- xo2 + eps[, 3]
 yo <- ifelse(ys, yo2, yo1)
 ys <- as.numeric(ys) + 1
 dat_sel2 <<- data.frame(ys, yo, yo1, yo2, xs1, xs2, xo11, xo12, xo2)
-m3 <- sampleSelection::selection(ys ~ xs1 + xs2, list(yo1 ~ xo11 + xo12, yo2 ~ xo2), data = dat_sel2)
+m3 <- sampleSelection::selection(
+  ys ~ xs1 + xs2,
+  list(yo1 ~ xo11 + xo12, yo2 ~ xo2),
+  data = dat_sel2
+)
 
 data(Mroz87, package = "sampleSelection")
 Mroz87$kids  <- (Mroz87$kids5 + Mroz87$kids618 > 0)
 m2 <- sampleSelection::selection(
-  lfp ~ age + I( age^2 ) + faminc + kids + educ,
-  wage ~ exper + I( exper^2 ) + educ + city,
+  lfp ~ age + I(age^2) + faminc + kids + educ,
+  wage ~ exper + I(exper^2) + educ + city,
   data = Mroz87
 )
 
