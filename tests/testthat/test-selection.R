@@ -19,11 +19,29 @@ ys <- as.numeric(ys) + 1
 dat_sel <<- data.frame(ys, yo, yo1, yo2, xs, xo1, xo2)
 m1 <- sampleSelection::selection(ys ~ xs, list(yo1 ~ xo1, yo2 ~ xo2), data = dat_sel)
 
+set.seed(0)
+xs1 <- runif(500)
+xs2 <- runif(500)
+ys <- xs1 + xs2 + eps[, 1] > 0
+xo11 <- runif(500)
+xo12 <- runif(500)
+yo1 <- xo11 + xo12 + eps[, 2]
+xo2 <- runif(500)
+yo2 <- xo2 + eps[, 3]
+yo <- ifelse(ys, yo2, yo1)
+ys <- as.numeric(ys) + 1
+dat_sel2 <<- data.frame(ys, yo, yo1, yo2, xs1, xs2, xo11, xo12, xo2)
+m3 <- sampleSelection::selection(
+  ys ~ xs1 + xs2,
+  list(yo1 ~ xo11 + xo12, yo2 ~ xo2),
+  data = dat_sel2
+)
+
 data(Mroz87, package = "sampleSelection")
 Mroz87$kids  <- (Mroz87$kids5 + Mroz87$kids618 > 0)
 m2 <- sampleSelection::selection(
-  lfp ~ age + I( age^2 ) + faminc + kids + educ,
-  wage ~ exper + I( exper^2 ) + educ + city,
+  lfp ~ age + I(age^2) + faminc + kids + educ,
+  wage ~ exper + I(exper^2) + educ + city,
   data = Mroz87
 )
 
@@ -36,7 +54,16 @@ test_that("model_info", {
 test_that("find_predictors", {
   expect_identical(
     find_predictors(m1),
-    list(conditional = list(selection = "xs", outcome = c("xo1", "xo2")))
+    list(conditional = list(selection = "xs", outcome = list(yo1 = "xo1", yo2 = "xo2")))
+  )
+  expect_identical(
+    find_predictors(m3),
+    list(
+      conditional = list(
+        selection = c("xs1", "xs2"),
+        outcome = list(yo1 = c("xo11", "xo12"), yo2 = "xo2")
+      )
+    )
   )
   expect_identical(
     find_predictors(m2),
@@ -51,20 +78,24 @@ test_that("find_predictors", {
 
 test_that("find_response", {
   expect_identical(find_response(m1), c("ys", "yo1", "yo2"))
+  expect_identical(find_response(m3), c("ys", "yo1", "yo2"))
   expect_identical(find_response(m2), c("lfp", "wage"))
 })
 
 test_that("get_response", {
   expect_equal(get_response(m1), dat_sel[c("ys", "yo1", "yo2")], ignore_attr = TRUE)
+  expect_equal(get_response(m3), dat_sel2[c("ys", "yo1", "yo2")], ignore_attr = TRUE)
 })
 
 test_that("get_predictors", {
   expect_named(get_predictors(m1), c("xs", "xo1", "xo2"))
+  expect_named(get_predictors(m3), c("xs1", "xs2", "xo11", "xo12", "xo2"))
 })
 
 test_that("get_data", {
   expect_equal(nrow(get_data(m1, verbose = FALSE)), 500)
   expect_named(get_data(m1, verbose = FALSE), c("ys", "yo1", "yo2", "xs", "xo1", "xo2"))
+  expect_named(get_data(m3, verbose = FALSE), c("ys", "yo1", "yo2", "xs1", "xs2", "xo11", "xo12", "xo2"))
 })
 
 test_that("find_formula", {
@@ -75,6 +106,16 @@ test_that("find_formula", {
       conditional = list(
         selection = ys ~ xs,
         outcome = list(yo1 ~ xo1, yo2 ~ xo2)
+      )
+    ),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    find_formula(m3),
+    list(
+      conditional = list(
+        selection = ys ~ xs1 + xs2,
+        outcome = list(yo1 ~ xo11 + xo12, yo2 ~ xo2)
       )
     ),
     ignore_attr = TRUE
