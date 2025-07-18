@@ -493,7 +493,13 @@ find_predictors.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, 
   # remove constants
   l <- lapply(l, .remove_values, c(".", "pi", "1", "0"))
   l <- lapply(l, .remove_values, c(0, 1))
-  l <- lapply(l, function(i) gsub("`", "", i, fixed = TRUE))
+  l <- lapply(l, function(i) {
+    if (is.list(i)) {
+      i
+    } else {
+      gsub("`", "", i, fixed = TRUE)
+    }
+  })
   # for brms-models, we need to remove "Intercept", which is a special notation
   if (inherits(x, "brmsfit")) {
     l <- lapply(l, .remove_values, "Intercept")
