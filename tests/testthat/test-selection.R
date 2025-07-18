@@ -50,7 +50,7 @@ test_that("model_info", {
 test_that("find_predictors", {
   expect_identical(
     find_predictors(m1),
-    list(conditional = list(selection = "xs", outcome = c("xo1", "xo2")))
+    list(conditional = list(selection = "xs", outcome = list("xo1", "xo2")))
   )
   expect_identical(
     find_predictors(m3),
