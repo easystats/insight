@@ -506,6 +506,17 @@ find_predictors.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, 
   }
   names(l) <- names(f)[!empty_elements]
 
+  # for models of class selection, we may have an "outcome" element, which is
+  # # a list of formlas. We want to name those elements, too
+  if (inherits(x, "selection") && object_has_names(l, "outcome") && is.list(l$outcome)) {
+    f <- find_formula(x, verbose = FALSE)
+    # if we have a list of formulas, we need to name them
+    resp <- vapply(f$conditional$outcome, function(i) safe_deparse(i[[2]]), character(1))
+    if (is.list(l$outcome) && length(l$outcome) == length(resp)) {
+        names(l$outcome) <- resp
+    }
+  }
+
   l
 }
 
