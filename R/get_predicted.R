@@ -178,6 +178,10 @@
 #' `iter <- as.data.frame(get_predicted(model))`, and their iterations can be
 #' reshaped into a long format by `bayestestR::reshape_iterations(iter)`.
 #'
+#' @section Hypothesis tests:
+#' There is limited support for hypothesis tests, i.e. objects of class `htest`:
+#' - `chisq.test()`: returns the expected values of the contingency table.
+#'
 #' @seealso [get_datagrid()]
 #'
 #' @examplesIf require("boot")
