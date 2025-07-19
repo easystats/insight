@@ -167,6 +167,9 @@ export_table <- function(x,
     format <- "text"
   }
 
+  # check args
+  format <- validate_argument(format, c("text", "markdown", "md", "html", "tt"))
+
   # handle alias
   if (format == "md") {
     format <- "markdown"
@@ -185,14 +188,7 @@ export_table <- function(x,
   # data frame now. HTML format needs a single data frame. Sub tables
   # are split by their group-column later, see code below
   # "gt(final, groupname_col = group_by_columns)".
-
-  if (identical(format, "html") && !is.data.frame(x) && is.list(x)) {
-    x <- do.call(rbind, lapply(x, function(i) {
-      attr_name <- .check_caption_attr_name(i)
-      i$Component <- attr(i, attr_name)[1]
-      i
-    }))
-  }
+  x <- .bind_html_tables(x, format)
 
   # check for indention
   indent_groups <- attributes(x)$indent_groups
@@ -365,6 +361,28 @@ print.insight_table <- function(x, ...) {
 
 
 # small helper ----------------------
+
+.bind_html_tables <- function(x, format = "html") {
+  if (!is.data.frame(x) && is.list(x)) {
+    if (identical(format, "html")) {
+      x <- do.call(rbind, lapply(x, function(i) {
+        attr_name <- .check_caption_attr_name(i)
+        i$Component <- attr(i, attr_name)[1]
+        i
+      }))
+    } else if (identical(format, "tt")) {
+      # add table caption as group variable, and bind tables
+      # we then extract row headers based on values in the group indices
+      x <- do.call(rbind, lapply(x, function(i) {
+        i$group <- attr(i, "table_caption")
+        i
+      }))
+    }
+  }
+
+  x
+}
+
 
 # split data frame for text format - unlike HTML, where we need to bind
 # lists of data frames to a single data frame and have a "group_by" variable,
@@ -1065,7 +1083,93 @@ print.insight_table <- function(x, ...) {
 }
 
 
-# markdown formatting -------------------
+.indent_rows_tt <- function(out, x, groups = NULL, column_groups = NULL) {
+  insight::check_if_installed("tinytable")
+
+  # check grouping - if we have a grouping variable, we use this for grouping
+  # rows. an alternative is to provide the "groups" argument, which is a list
+  # of row indices, or parameter names, that should be grouped together.
+  if (is.null(x$group)) {
+    row_groups <- NULL
+  } else {
+    row_groups <- as.list(which(!duplicated(x$group)))
+    names(row_groups) <- x$group[unlist(row_groups)]
+    # remove no longer needed group variable
+    x$group <- NULL
+  }
+
+  # do we have grouped columns?
+  if (is.null(column_groups)) {
+    col_groups <- NULL
+  } else {
+    # we need to find out which columns refer to which model, in order to
+    # add a column heading for each model
+    col_names <- gsub("(.*) \\((.*)\\)$", "\\2", colnames(x))
+    col_groups <- sapply(column_groups, function(i) which(i == col_names), simplify = FALSE)
+  }
+  # clean column names. These still contain the model name
+  colnames(x) <- gsub("(.*) \\((.*)\\)$", "\\1", colnames(x))
+  # check if we have column spans at all?
+  if (all(lengths(col_groups) == 1)) {
+    col_groups <- NULL
+  }
+  # group rows? If we have row_groups already, these will be overwritten here
+  if (!is.null(groups)) {
+    # make sure we have numeric indices for groups
+    groups <- lapply(groups, function(g) {
+      if (is.character(g)) {
+        # if groups were provided as parameter names, we find the row position
+        # by matching the parameter name
+        match(g, x$Parameter)
+      } else {
+        # else, we assume that the group is a row position
+        g
+      }
+    })
+    # sanity check - do all rows match a parameter?
+    group_indices <- unlist(groups, use.names = FALSE)
+    if (anyNA(group_indices) || any(group_indices < 1) || any(group_indices > nrow(x))) {
+      insight::format_error("Some group indices do not match any parameter.")
+    }
+    # if row indices are not sorted, we need to resort the parameters data frame
+    if (is.unsorted(unlist(groups))) {
+      new_rows <- c(unlist(groups), setdiff(seq_len(nrow(x)), unlist(groups)))
+      x <- x[new_rows, ]
+      # we need to update indices in groups as well. Therefore, we need to convert
+      # list of row indices into a vector with row indices, then subtract the
+      # differences of old and new row positions, and then split that vector into
+      # a list again
+      groups <- stats::setNames(unlist(groups), rep(names(groups), lengths(groups)))
+      groups <- groups - (unlist(groups) - sort(unlist(groups)))
+      groups <- split(unname(groups), factor(names(groups), levels = unique(names(groups))))
+    }
+    # find matching rows for groups
+    row_groups <- lapply(seq_along(groups), function(i) {
+      g <- groups[[i]]
+      if (is.character(g)) {
+        # if groups were provided as parameter names, we find the row position
+        # by matching the parameter name
+        g <- match(g, formatted_table$Parameter)[1]
+      } else {
+        # else, we assume that the group is a row position
+        g <- g[1]
+      }
+      g
+    })
+    # set element names
+    names(row_groups) <- names(groups)
+  }
+  # replace NA in formatted_table by ""
+  x[is.na(x)] <- ""
+  # insert sub header rows and column spans, if we have them
+  if (!is.null(row_groups) || !is.null(col_groups)) {
+    out <- tinytable::group_tt(out, i = row_groups, j = col_groups)
+  }
+  out
+}
+
+
+# tinytable formatting -------------------
 
 .format_tiny_table <- function(final,
                                x,
@@ -1092,6 +1196,7 @@ print.insight_table <- function(x, ...) {
   check_if_installed("tinytable")
 
   out <- tinytable::tt(final, caption = caption, notes = footer, ...)
+  out <- .indent_rows_tt(out, x, groups = indent_rows, ...)
   tinytable::style_tt(out, align = align, ...)
 }
 
