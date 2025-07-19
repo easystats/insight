@@ -149,8 +149,11 @@ If \code{format = "text"} (or \code{NULL}), a formatted character string is
 returned. \code{format = "markdown"} (or \code{"md"}) returns a character string of
 class \code{knitr_kable}, which renders nicely in markdown files. \code{format = "html"}
 returns an \code{gt} object (created by the \strong{gt} package), which - by default -
-is displayed in the IDE's viewer pane or default browser. This object can
-be further modified with the various gt-functions.
+is displayed in the IDE's viewer pane or default browser. This object can be
+further modified with the various gt-functions. \code{format = "tt"} returns a
+\code{\link[tinytable:tt]{tinytable::tt()}} object, which is a lightweight table format that can be
+used in markdown, LaTeX, HTML and other formats, depending on the context
+where the table is used.
 }
 \description{
 Function to export data frames into tables, which can be printed

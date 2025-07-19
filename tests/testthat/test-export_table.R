@@ -322,6 +322,12 @@ test_that("export_table, tinytable with indented rows", {
     Interactions = c(8, 9),
     Controls = c(2, 3, 7)
   )
-
   expect_snapshot(export_table(mp, format = "tt", table_width = Inf))
+
+  mp <- as.data.frame(format(parameters::model_parameters(model, drop = "^\\(Intercept")))
+  mp$groups <- c(
+    "Engine", "Controls", "Controls", "Engine", "Engine", "Engine", "Controls",
+    "Interactions", "Interactions"
+  )
+  expect_snapshot(export_table(mp, format = "tt", by = "groups", table_width = Inf))
 })

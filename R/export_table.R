@@ -43,6 +43,8 @@
 #'   column four and left-align the fifth column.
 #' @param by Name of column(s) in `x` that indicates grouping for tables.
 #'   When `format = "html"`, `by` is passed down to `gt::gt(groupname_col = by)`.
+#'   Likewise, for `format = "tt"`, `by` indicates the name of the variable in
+#'   the data frame, which is then used to create row headers in the table.
 #'   For markdown and text format, `x` is internally split into a list of data
 #'   frames.
 #' @param width Refers to the width of columns (with numeric values). Can be
@@ -89,8 +91,11 @@
 #' returned. `format = "markdown"` (or `"md"`) returns a character string of
 #' class `knitr_kable`, which renders nicely in markdown files. `format = "html"`
 #' returns an `gt` object (created by the **gt** package), which - by default -
-#' is displayed in the IDE's viewer pane or default browser. This object can
-#' be further modified with the various gt-functions.
+#' is displayed in the IDE's viewer pane or default browser. This object can be
+#' further modified with the various gt-functions. `format = "tt"` returns a
+#' [`tinytable::tt()`] object, which is a lightweight table format that can be
+#' used in markdown, LaTeX, HTML and other formats, depending on the context
+#' where the table is used.
 #'
 #' @examples
 #' export_table(head(iris))
@@ -389,7 +394,7 @@ print.insight_table <- function(x, ...) {
 # we need a list of data frames for text or markdown output (instead of a
 # single data frame)
 .split_tables <- function(x, by, format) {
-  if (!is.null(by) && is.data.frame(x) && !identical(format, "html")) {
+  if (!is.null(by) && is.data.frame(x) && !format %in% c("html", "tt")) {
     # convert formula into string
     if (inherits(by, "formula")) {
       by <- all.vars(by)
@@ -1074,18 +1079,23 @@ print.insight_table <- function(x, ...) {
 }
 
 
-.indent_rows_tt <- function(x, indent_rows = NULL, column_groups = NULL, ...) {
+.indent_rows_tt <- function(x, indent_rows = NULL, group_by = NULL, column_groups = NULL, ...) {
   insight::check_if_installed("tinytable")
-  # check grouping - if we have a grouping variable, we use this for grouping
-  # rows. an alternative is to provide the "indent_rows" argument, which is a
-  # list of row indices, or parameter names, that should be grouped together.
-  if (is.null(x$group)) {
+  # check grouping - if we have a grouping variable in "group_by", we use this
+  # for grouping rows. an alternative is to provide the "indent_rows" argument,
+  # which is a list of row indices, or parameter names, that should be grouped
+  # together.
+  if (is.null(group_by)) {
     row_groups <- NULL
   } else {
-    row_groups <- as.list(which(!duplicated(x$group)))
-    names(row_groups) <- x$group[unlist(row_groups)]
+    groups <- data.frame(
+      group_by = factor(x[[group_by]], levels = unique(x[[group_by]])),
+      row = seq_len(nrow(x)),
+      stringsAsFactors = FALSE
+    )
+    indent_rows <- split(groups$row, groups$group_by)
     # remove no longer needed group variable
-    x$group <- NULL
+    x[[group_by]] <- NULL
   }
   # do we have grouped columns?
   if (is.null(column_groups)) {
@@ -1158,6 +1168,7 @@ print.insight_table <- function(x, ...) {
                                subtitle = NULL,
                                footer = NULL,
                                align = NULL,
+                               group_by = NULL,
                                indent_rows = NULL,
                                ...) {
   # need data frame, not matrix
@@ -1175,7 +1186,7 @@ print.insight_table <- function(x, ...) {
   check_if_installed("tinytable")
 
   # we need to indent rows first, because we re-order the rows here
-  out <- .indent_rows_tt(final, indent_rows = indent_rows, ...)
+  out <- .indent_rows_tt(final, indent_rows = indent_rows, group_by = group_by, ...)
   # now create the tinytable object
   final <- tinytable::tt(out$final, caption = caption, notes = footer, ...)
   # insert sub header rows and column spans, if we have any
@@ -1295,20 +1306,26 @@ print.insight_table <- function(x, ...) {
 
 # html formatting ---------------------------
 
-.format_html_table <- function(final,
-                               caption = NULL,
-                               subtitle = NULL,
-                               footer = NULL,
-                               align = "center",
-                               group_by = NULL,
-                               indent_rows = NULL) {
+.format_html_table <- function(
+  final,
+  caption = NULL,
+  subtitle = NULL,
+  footer = NULL,
+  align = "center",
+  group_by = NULL,
+  indent_rows = NULL,
+  ...
+) {
   check_if_installed("gt")
 
   if (is.null(align)) {
     align <- "firstleft"
   }
 
-  group_by_columns <- c(intersect(c("Group", "Response", "Effects", "Component"), names(final)), group_by)
+  group_by_columns <- c(
+    intersect(c("Group", "Response", "Effects", "Component"), names(final)),
+    group_by
+  )
   if (length(group_by_columns)) {
     # remove columns with only 1 unique value - this *should* be safe to
     # remove, but we may check if all printed sub titles look like intended
@@ -1330,8 +1347,16 @@ print.insight_table <- function(x, ...) {
   }
 
   # do we need to render <br>?
-  any_br <- any(vapply(final, function(i) any(grepl("<br>", i, fixed = TRUE)), logical(1)))
-  any_nbsp <- any(vapply(final, function(i) any(grepl("&nbsp;", i, fixed = TRUE)), logical(1)))
+  any_br <- any(vapply(
+    final,
+    function(i) any(grepl("<br>", i, fixed = TRUE)),
+    logical(1)
+  ))
+  any_nbsp <- any(vapply(
+    final,
+    function(i) any(grepl("&nbsp;", i, fixed = TRUE)),
+    logical(1)
+  ))
 
   # validation check - clean caption, subtitle and footer from ansi-colour codes,
   # which only work for text format... But if user occidentally provides colours
@@ -1369,7 +1394,6 @@ print.insight_table <- function(x, ...) {
     }
   }
 
-
   tab <- gt::gt(final, groupname_col = group_by_columns)
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
   footer <- gt::tab_source_note(header, source_note = gt::html(footer))
@@ -1398,11 +1422,7 @@ print.insight_table <- function(x, ...) {
     out <- gt::cols_align(out, "left", 1)
   } else {
     for (i in 1:nchar(align)) {
-      col_align <- switch(substr(align, i, i),
-        l = "left",
-        r = "right",
-        "center"
-      )
+      col_align <- switch(substr(align, i, i), l = "left", r = "right", "center")
       out <- gt::cols_align(out, col_align, i)
     }
   }
