@@ -508,19 +508,24 @@ print.insight_table <- function(x, ...) {
   names(table_data) <- col_names
   table_data[is.na(table_data)] <- as.character(missing)
 
-
-  if (identical(format, "html")) {
-    # html formatting starts here, needs less preparation of table matrix
-    out <- .format_html_table(
+  if (format %in% c("html", "tt")) {
+    # html / tinytabl formatting starts here, needs
+    # # less preparation of table matrix
+    fun_args <- list(
       table_data,
       caption = caption,
       subtitle = subtitle,
       footer = footer,
       align = align,
       group_by = group_by,
-      indent_groups = indent_groups,
       indent_rows = indent_rows
     )
+    if (format == "html") {
+      out <- do.call(.format_html_table, fun_args)
+    } else {
+      out <- do.call(.format_tiny_table, c(fun_args, list(...)))
+    }
+    return(out)
 
     # text and markdown go here...
   } else {
@@ -576,26 +581,12 @@ print.insight_table <- function(x, ...) {
       # markdown is a bit different...
       out <- .format_markdown_table(
         final,
-        x,
         caption = caption,
         subtitle = subtitle,
         footer = footer,
         align = align,
         indent_groups = indent_groups,
         indent_rows = indent_rows
-      )
-    } else if (format == "tt") {
-      # tiny table formatting...
-      out <- .format_tiny_table(
-        final,
-        x,
-        caption = caption,
-        subtitle = subtitle,
-        footer = footer,
-        align = align,
-        indent_groups = indent_groups,
-        indent_rows = indent_rows,
-        ...
       )
     }
   }
@@ -1083,12 +1074,13 @@ print.insight_table <- function(x, ...) {
 }
 
 
-.indent_rows_tt <- function(out, x, groups = NULL, column_groups = NULL) {
+.indent_rows_tt <- function(out, x, indent_rows = NULL, column_groups = NULL, ...) {
   insight::check_if_installed("tinytable")
-
+  # remove first row, which contains column names
+  x <- x[-1, ]
   # check grouping - if we have a grouping variable, we use this for grouping
-  # rows. an alternative is to provide the "groups" argument, which is a list
-  # of row indices, or parameter names, that should be grouped together.
+  # rows. an alternative is to provide the "indent_rows" argument, which is a
+  # list of row indices, or parameter names, that should be grouped together.
   if (is.null(x$group)) {
     row_groups <- NULL
   } else {
@@ -1097,59 +1089,62 @@ print.insight_table <- function(x, ...) {
     # remove no longer needed group variable
     x$group <- NULL
   }
-
   # do we have grouped columns?
   if (is.null(column_groups)) {
     col_groups <- NULL
   } else {
     # we need to find out which columns refer to which model, in order to
     # add a column heading for each model
-    col_names <- gsub("(.*) \\((.*)\\)$", "\\2", colnames(x))
     col_groups <- sapply(column_groups, function(i) which(i == col_names), simplify = FALSE)
   }
-  # clean column names. These still contain the model name
-  colnames(x) <- gsub("(.*) \\((.*)\\)$", "\\1", colnames(x))
   # check if we have column spans at all?
   if (all(lengths(col_groups) == 1)) {
     col_groups <- NULL
   }
   # group rows? If we have row_groups already, these will be overwritten here
-  if (!is.null(groups)) {
-    # make sure we have numeric indices for groups
-    groups <- lapply(groups, function(g) {
+  if (!is.null(indent_rows)) {
+    # extract first column, which contains the "value" names
+    values <- trim_ws(x[[1]])
+    # now find matching row based on value name or row index
+    indent_rows <- lapply(indent_rows, function(g) {
       if (is.character(g)) {
-        # if groups were provided as parameter names, we find the row position
-        # by matching the parameter name
-        match(g, x$Parameter)
+        # groups were provided as values (string)
+        match(g, values)
       } else {
         # else, we assume that the group is a row position
         g
       }
     })
     # sanity check - do all rows match a parameter?
-    group_indices <- unlist(groups, use.names = FALSE)
+    group_indices <- unlist(indent_rows, use.names = FALSE)
     if (anyNA(group_indices) || any(group_indices < 1) || any(group_indices > nrow(x))) {
       insight::format_error("Some group indices do not match any parameter.")
     }
     # if row indices are not sorted, we need to resort the parameters data frame
-    if (is.unsorted(unlist(groups))) {
-      new_rows <- c(unlist(groups), setdiff(seq_len(nrow(x)), unlist(groups)))
+    if (is.unsorted(unlist(indent_rows))) {
+      new_rows <- c(unlist(indent_rows), setdiff(seq_len(nrow(x)), unlist(indent_rows)))
       x <- x[new_rows, ]
       # we need to update indices in groups as well. Therefore, we need to convert
       # list of row indices into a vector with row indices, then subtract the
       # differences of old and new row positions, and then split that vector into
       # a list again
-      groups <- stats::setNames(unlist(groups), rep(names(groups), lengths(groups)))
-      groups <- groups - (unlist(groups) - sort(unlist(groups)))
-      groups <- split(unname(groups), factor(names(groups), levels = unique(names(groups))))
+      indent_rows <- stats::setNames(
+        unlist(indent_rows),
+        rep(names(indent_rows), lengths(indent_rows))
+      )
+      indent_rows <- indent_rows - (unlist(indent_rows) - sort(unlist(indent_rows)))
+      indent_rows <- split(
+        unname(indent_rows),
+        factor(names(indent_rows), levels = unique(names(indent_rows)))
+      )
     }
     # find matching rows for groups
-    row_groups <- lapply(seq_along(groups), function(i) {
-      g <- groups[[i]]
+    row_groups <- lapply(seq_along(indent_rows), function(i) {
+      g <- indent_rows[[i]]
       if (is.character(g)) {
         # if groups were provided as parameter names, we find the row position
         # by matching the parameter name
-        g <- match(g, formatted_table$Parameter)[1]
+        g <- match(g, x$Parameter)[1]
       } else {
         # else, we assume that the group is a row position
         g <- g[1]
@@ -1157,10 +1152,8 @@ print.insight_table <- function(x, ...) {
       g
     })
     # set element names
-    names(row_groups) <- names(groups)
+    names(row_groups) <- names(indent_rows)
   }
-  # replace NA in formatted_table by ""
-  x[is.na(x)] <- ""
   # insert sub header rows and column spans, if we have them
   if (!is.null(row_groups) || !is.null(col_groups)) {
     out <- tinytable::group_tt(out, i = row_groups, j = col_groups)
@@ -1172,17 +1165,14 @@ print.insight_table <- function(x, ...) {
 # tinytable formatting -------------------
 
 .format_tiny_table <- function(final,
-                               x,
                                caption = NULL,
                                subtitle = NULL,
                                footer = NULL,
                                align = NULL,
-                               indent_groups = NULL,
                                indent_rows = NULL,
                                ...) {
   # need data frame, not matrix
   final <- as.data.frame(final)
-
   if (!is.null(align) && length(align) == 1) {
     align <- switch(align,
       left = "l",
@@ -1196,7 +1186,7 @@ print.insight_table <- function(x, ...) {
   check_if_installed("tinytable")
 
   out <- tinytable::tt(final, caption = caption, notes = footer, ...)
-  out <- .indent_rows_tt(out, x, groups = indent_rows, ...)
+  out <- .indent_rows_tt(out, x = final, indent_rows = indent_rows, ...)
   tinytable::style_tt(out, align = align, ...)
 }
 
@@ -1204,7 +1194,6 @@ print.insight_table <- function(x, ...) {
 # markdown formatting -------------------
 
 .format_markdown_table <- function(final,
-                                   x,
                                    caption = NULL,
                                    subtitle = NULL,
                                    footer = NULL,
@@ -1317,7 +1306,6 @@ print.insight_table <- function(x, ...) {
                                footer = NULL,
                                align = "center",
                                group_by = NULL,
-                               indent_groups = NULL,
                                indent_rows = NULL) {
   check_if_installed("gt")
 

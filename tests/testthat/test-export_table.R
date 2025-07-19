@@ -303,3 +303,25 @@ test_that("export_table, by in text format", {
     regex = "cannot be lower"
   )
 })
+
+
+test_that("export_table, tinytable with indented rows", {
+  skip_if_not_installed("parameters")
+  skip_if_not_installed("tinytable")
+
+  data(mtcars)
+  mtcars$cyl <- as.factor(mtcars$cyl)
+  mtcars$gear <- as.factor(mtcars$gear)
+  model <- lm(mpg ~ hp + gear * vs + cyl + drat, data = mtcars)
+
+  # don't select "Intercept" parameter
+  mp <- as.data.frame(format(parameters::model_parameters(model, drop = "^\\(Intercept")))
+
+  attr(mp, "indent_rows") <- list(
+    Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
+    Interactions = c(8, 9),
+    Controls = c(2, 3, 7)
+  )
+
+  expect_snapshot(export_table(mp, format = "tt", table_width = Inf))
+})
