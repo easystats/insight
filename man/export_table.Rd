@@ -28,6 +28,8 @@ export_table(
   zap_small = FALSE,
   table_width = "auto",
   remove_duplicates = FALSE,
+  row_groups = NULL,
+  column_groups = NULL,
   verbose = TRUE,
   ...
 )
@@ -112,8 +114,10 @@ column four and left-align the fifth column.}
 
 \item{by}{Name of column(s) in \code{x} that indicates grouping for tables.
 When \code{format = "html"}, \code{by} is passed down to \code{gt::gt(groupname_col = by)}.
+Likewise, for \code{format = "tt"}, \code{by} indicates the name of the variable in
+the data frame, which is then used to create row headers in the table.
 For markdown and text format, \code{x} is internally split into a list of data
-frames.}
+frames. See also \code{row_groups} to group rows in the printed output.}
 
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
@@ -138,6 +142,22 @@ width for tables.
 parts, duplicated ("empty") rows will be removed. If \code{FALSE}, empty rows
 will be preserved. Only applies when \code{table_width} is \emph{not} \code{NULL} (or
 \code{Inf}) \emph{and} table is split into multiple parts.}
+
+\item{row_groups}{Named list, can be used as alternative to \code{by} to group
+rows in the printed output, but in a more flexible way. List elements may
+either be character vectors that match the names of values in the first
+column of the data frame that belong to one group, or list elements can be
+row numbers of those value rows that should belong to one group. The names
+of the list elements will be used as group names, which will be inserted as
+"header row". Rows will be re-ordered according to the order used in
+\code{row_groups}, while all rows with non-matching values will be added to the
+end.}
+
+\item{column_groups}{Named list, can be used to group columns in the printed
+output. List elements must be indicate column indices for columns that
+should belong to one group. The names of the list elements will be used as
+group names, which will be inserted as "column header row". Currently only
+applies to \code{format = "tt"}.}
 
 \item{verbose}{Toggle messages and warnings.}
 
