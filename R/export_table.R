@@ -1147,7 +1147,7 @@ print.insight_table <- function(x, ...) {
     # set element names
     names(row_groups) <- names(indent_rows)
   }
-  list(final = final, row_groups = row_groups, col_groups = col_groups)
+  list(final = x, row_groups = row_groups, col_groups = col_groups)
 }
 
 
