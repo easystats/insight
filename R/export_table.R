@@ -1124,7 +1124,7 @@ print.insight_table <- function(x, ...) {
     # extract first column, which contains the "value" names
     values <- trim_ws(x[[1]])
     # now find matching row based on value name or row index
-    row_groups <- lapply(row_groups, function(g) {
+    row_index <- lapply(row_groups, function(g) {
       if (is.character(g)) {
         # groups were provided as values (string)
         match(g, values)
@@ -1134,26 +1134,26 @@ print.insight_table <- function(x, ...) {
       }
     })
     # sanity check - do all rows match a parameter?
-    group_indices <- unlist(row_groups, use.names = FALSE)
+    group_indices <- unlist(row_index, use.names = FALSE)
     if (anyNA(group_indices) || any(group_indices < 1) || any(group_indices > nrow(x))) {
       insight::format_error("Some group indices do not match any parameter.")
     }
     # if row indices are not sorted, we need to resort the parameters data frame
-    if (is.unsorted(unlist(row_groups))) {
-      new_rows <- c(unlist(row_groups), setdiff(seq_len(nrow(x)), unlist(row_groups)))
+    if (is.unsorted(unlist(row_index))) {
+      new_rows <- c(unlist(row_index), setdiff(seq_len(nrow(x)), unlist(row_index)))
       x <- x[new_rows, ]
       # we need to update indices in groups as well. Therefore, we need to convert
       # list of row indices into a vector with row indices, then subtract the
       # differences of old and new row positions, and then split that vector into
       # a list again
-      row_groups <- relist(
-        match(unlist(row_groups, use.names = FALSE), new_rows),
-        skeleton = row_groups
+      row_index <- relist(
+        match(unlist(row_index, use.names = FALSE), new_rows),
+        skeleton = row_index
       )
     }
     # find matching rows for groups
-    row_groups <- lapply(seq_along(row_groups), function(i) {
-      g <- row_groups[[i]]
+    row_groups <- lapply(seq_along(row_index), function(i) {
+      g <- row_index[[i]]
       if (is.character(g)) {
         # if groups were provided as parameter names, we find the row position
         # by matching the parameter name
@@ -1165,7 +1165,7 @@ print.insight_table <- function(x, ...) {
       g
     })
     # set element names
-    names(row_groups) <- names(row_groups)
+    names(row_groups) <- names(row_index)
   }
   list(final = x, row_groups = row_groups)
 }
