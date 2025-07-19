@@ -1074,10 +1074,8 @@ print.insight_table <- function(x, ...) {
 }
 
 
-.indent_rows_tt <- function(out, x, indent_rows = NULL, column_groups = NULL, ...) {
+.indent_rows_tt <- function(x, indent_rows = NULL, column_groups = NULL, ...) {
   insight::check_if_installed("tinytable")
-  # remove first row, which contains column names
-  x <- x[-1, ]
   # check grouping - if we have a grouping variable, we use this for grouping
   # rows. an alternative is to provide the "indent_rows" argument, which is a
   # list of row indices, or parameter names, that should be grouped together.
@@ -1128,14 +1126,9 @@ print.insight_table <- function(x, ...) {
       # list of row indices into a vector with row indices, then subtract the
       # differences of old and new row positions, and then split that vector into
       # a list again
-      indent_rows <- stats::setNames(
-        unlist(indent_rows),
-        rep(names(indent_rows), lengths(indent_rows))
-      )
-      indent_rows <- indent_rows - (unlist(indent_rows) - sort(unlist(indent_rows)))
-      indent_rows <- split(
-        unname(indent_rows),
-        factor(names(indent_rows), levels = unique(names(indent_rows)))
+      indent_rows <- relist(
+        match(unlist(indent_rows, use.names = FALSE), new_rows),
+        skeleton = indent_rows
       )
     }
     # find matching rows for groups
@@ -1154,11 +1147,7 @@ print.insight_table <- function(x, ...) {
     # set element names
     names(row_groups) <- names(indent_rows)
   }
-  # insert sub header rows and column spans, if we have them
-  if (!is.null(row_groups) || !is.null(col_groups)) {
-    out <- tinytable::group_tt(out, i = row_groups, j = col_groups)
-  }
-  out
+  list(final = final, row_groups = row_groups, col_groups = col_groups)
 }
 
 
@@ -1185,9 +1174,15 @@ print.insight_table <- function(x, ...) {
 
   check_if_installed("tinytable")
 
-  out <- tinytable::tt(final, caption = caption, notes = footer, ...)
-  out <- .indent_rows_tt(out, x = final, indent_rows = indent_rows, ...)
-  tinytable::style_tt(out, align = align, ...)
+  # we need to indent rows first, because we re-order the rows here
+  out <- .indent_rows_tt(final, indent_rows = indent_rows, ...)
+  # now create the tinytable object
+  final <- tinytable::tt(out$final, caption = caption, notes = footer, ...)
+  # insert sub header rows and column spans, if we have any
+  if (!is.null(out$row_groups) || !is.null(out$col_groups)) {
+    final <- tinytable::group_tt(final, i = out$row_groups, j = out$col_groups)
+  }
+  tinytable::style_tt(final, align = align, ...)
 }
 
 
