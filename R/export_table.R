@@ -1199,7 +1199,7 @@ print.insight_table <- function(x, ...) {
       # list of row indices into a vector with row indices, then subtract the
       # differences of old and new row positions, and then split that vector into
       # a list again
-      row_index <- relist(
+      row_index <- utils::relist(
         match(unlist(row_index, use.names = FALSE), new_rows),
         skeleton = row_index
       )
