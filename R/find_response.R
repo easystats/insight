@@ -80,8 +80,9 @@ find_response.brmsfit <- function(x, combine = TRUE, ...) {
   if (is_multivariate(f)) {
     resp <- unlist(lapply(f, function(i) {
       resp_formula <- safe_deparse(i$conditional[[2L]])
+      # if we have a response with "|", we want to return only the left part
       if (grepl("|", resp_formula, fixed = TRUE)) {
-        resp_formula <- all.vars(i$conditional[[2L]])
+        resp_formula <- trim_ws(gsub("(.*)\\|(.*)", "\\1", resp_formula))
       }
       resp_formula
     }))

@@ -16,8 +16,9 @@ m6 <- insight::download_model("brms_corr_re1")
 m7 <- suppressWarnings(insight::download_model("brms_mixed_8"))
 m8 <- insight::download_model("brms_ordinal_1")
 brms_trunc_1 <- suppressWarnings(download_model("brms_trunc_1"))
+m9 <- insight::download_model("brms_mv_7")
 
-all_loaded <- !vapply(list(m1, m2, m3, m4, m5, m6, m7, m8, brms_trunc_1), is.null, TRUE)
+all_loaded <- !vapply(list(m1, m2, m3, m4, m5, m6, m7, m8, m9, brms_trunc_1), is.null, TRUE)
 skip_if(!all(all_loaded))
 
 # Tests -------------------------------------------------------------------
@@ -288,18 +289,32 @@ test_that("n_obs", {
 
 
 test_that("find_random", {
-  expect_identical(find_random(m5), list(
-    count = list(
-      random = "persons",
-      zi_random = "persons"
-    ),
-    count2 = list(
-      random = "persons",
-      zi_random = "persons"
+  expect_identical(
+    find_random(m5),
+    list(
+      count = list(
+        random = "persons",
+        zi_random = "persons"
+      ),
+      count2 = list(
+        random = "persons",
+        zi_random = "persons"
+      )
     )
-  ))
+  )
   expect_identical(find_random(m5, flatten = TRUE), "persons")
   expect_identical(find_random(m6, flatten = TRUE), "id")
+  expect_null(find_random(m2))
+  expect_identical(
+    find_random(m9),
+    list(
+      outcome1 = list(random = "participant"),
+      outcome2 = list(
+        random = "participant"
+      ),
+      outcome3 = list(random = "participant")
+    )
+  )
 })
 
 
