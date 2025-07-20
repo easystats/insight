@@ -1104,7 +1104,6 @@ print.insight_table <- function(x, ...) {
 
 
 .row_groups_tt <- function(x, row_groups = NULL, group_by = NULL, ...) {
-  insight::check_if_installed("tinytable")
   # check grouping - if we have a grouping variable in "group_by", we use this
   # for grouping rows. an alternative is to provide the "row_groups" argument,
   # which is a list of row indices, or parameter names, that should be grouped
