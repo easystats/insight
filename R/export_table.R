@@ -247,6 +247,30 @@ export_table <- function(x,
   # split data frames?
   x <- .split_tables(x, by, format)
 
+  # setup common arguments for table formatting -----------------------------
+
+  export_args <- list(
+    sep = sep,
+    header = header,
+    cross = cross,
+    digits = digits,
+    protect_integers = protect_integers,
+    missing = missing,
+    width = width,
+    format = format,
+    column_names = column_names,
+    align = align,
+    group_by = by,
+    zap_small = zap_small,
+    empty_line = empty_line,
+    indent_groups = indent_groups,
+    row_groups = row_groups,
+    column_groups = column_groups,
+    table_width = table_width,
+    remove_duplicated_lines = remove_duplicates,
+    verbose = verbose
+  )
+
   # table from single data frame --------------------------------------------
 
   if (is.data.frame(x)) {
@@ -265,33 +289,14 @@ export_table <- function(x,
       footer <- attributes(x)$table_footer
     }
 
+    # add remaining arguments to export_args
+    export_args$caption <- caption
+    export_args$subtitle <- subtitle
+    export_args$footer <- footer
+
     # convert data frame into specified output format
-    out <- .export_table(
-      x = x,
-      sep = sep,
-      header = header,
-      cross = cross,
-      digits = digits,
-      protect_integers = protect_integers,
-      missing = missing,
-      width = width,
-      format = format,
-      caption = caption,
-      subtitle = subtitle,
-      footer = footer,
-      column_names = column_names,
-      align = align,
-      group_by = by,
-      zap_small = zap_small,
-      empty_line = empty_line,
-      indent_groups = indent_groups,
-      row_groups = row_groups,
-      column_groups = column_groups,
-      table_width = table_width,
-      remove_duplicated_lines = remove_duplicates,
-      verbose = verbose,
-      ...
-    )
+    out <- do.call(.export_table, c(list(x = x), export_args, list(...)))
+
   } else if (is.list(x)) {
     # table from list of data frames -----------------------------------------
 
@@ -342,33 +347,13 @@ export_table <- function(x,
         t_title <- caption[[element]]
       }
 
+      # add remaining arguments to export_args
+      export_args$caption <- t_title
+      export_args$subtitle <- attributes(i)$table_subtitle
+      export_args$footer <- t_footer
+
       # convert data frame into specified output format
-      .export_table(
-        x = i,
-        sep = sep,
-        header = header,
-        cross = cross,
-        digits = digits,
-        protect_integers = protect_integers,
-        missing = missing,
-        width = width,
-        format = format,
-        caption = t_title,
-        subtitle = attributes(i)$table_subtitle,
-        footer = t_footer,
-        column_names = column_names,
-        align = align,
-        group_by = by,
-        zap_small = zap_small,
-        empty_line = empty_line,
-        indent_groups = indent_groups,
-        row_groups = row_groups,
-        column_groups = column_groups,
-        table_width = table_width,
-        remove_duplicated_lines = remove_duplicates,
-        verbose = verbose,
-        ...
-      )
+      do.call(.export_table, c(list(x = i), export_args, list(...)))
     })
 
     # insert new lines between tables, but this is only needed
@@ -667,6 +652,21 @@ print.insight_table <- function(x, ...) {
                                 table_width = NULL,
                                 remove_duplicated_lines = FALSE,
                                 verbose = TRUE) {
+  # indent groups? export_table() allows to indent specific rows,
+  # which might be useful when we have tables of regression coefficients,
+  # and some coefficients are grouped together, which is visually emphasized
+  # by indention...
+
+  if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
+    final <- .indent_groups(final, indent_groups)
+    skip_first_align <- TRUE
+  } else if (!is.null(row_groups)) {
+    final <- .row_groups(final, row_groups)$final
+    skip_first_align <- TRUE
+  } else {
+    skip_first_align <- FALSE
+  }
+
   # align table, if requested. unlike the generic aligments that have been done
   # previously, we now look for column-specific alignments. we furthermore save
   # the alignments in "col_align", which we may need later when we set a fixed
@@ -675,6 +675,11 @@ print.insight_table <- function(x, ...) {
 
   if (!is.null(align) && length(align) == 1) {
     for (i in seq_len(ncol(final))) {
+      # if we have indented groups, we skip the first alignment, else all
+      # indentions are lost
+      if (skip_first_align && i == 1) {
+        next
+      }
       align_char <- ""
       if (!align %in% c("left", "right", "center", "firstleft")) {
         align_char <- substr(align, i, i)
@@ -696,18 +701,6 @@ print.insight_table <- function(x, ...) {
         col_align[i] <- "centre"
       }
     }
-  }
-
-
-  # indent groups? export_table() allows to indent specific rows,
-  # which might be useful when we have tables of regression coefficients,
-  # and some coefficients are grouped together, which is visually emphasized
-  # by indention...
-
-  if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
-    final <- .indent_groups(final, indent_groups)
-  } else if (!is.null(row_groups)) {
-    final <- .row_groups(final, row_groups)$final
   }
 
 

@@ -323,8 +323,25 @@ test_that("export_table, tinytable with indented rows", {
     Controls = c(2, 3, 7)
   )
   expect_snapshot(export_table(mp, format = "tt", row_groups = groups, table_width = Inf))
-  expect_snapshot(export_table(mp, format = "text", row_groups = groups, table_width = Inf))
-  expect_snapshot(export_table(mp, format = "markdown", row_groups = groups, table_width = Inf))
+  expect_snapshot(export_table(
+    mp,
+    format = "text",
+    row_groups = groups,
+    table_width = Inf
+  ))
+  expect_snapshot(export_table(
+    mp,
+    format = "markdown",
+    row_groups = groups,
+    table_width = Inf
+  ))
+  expect_snapshot(export_table(
+    mp,
+    format = "text",
+    row_groups = groups,
+    table_width = Inf,
+    align = "llrrlr"
+  ))
 
   attr(mp, "indent_rows") <- list(
     Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
