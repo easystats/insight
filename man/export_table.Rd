@@ -154,10 +154,10 @@ of the list elements will be used as group names, which will be inserted as
 end.}
 
 \item{column_groups}{Named list, can be used to group columns in the printed
-output. List elements must be indicate column indices for columns that
-should belong to one group. The names of the list elements will be used as
-group names, which will be inserted as "column header row". Currently only
-applies to \code{format = "tt"}.}
+output. List elements must indicate column indices for columns that should
+belong to one group. The names of the list elements will be used as group
+names, which will be inserted as "column header row". Currently only
+works for \code{format = "tt"}.}
 
 \item{verbose}{Toggle messages and warnings.}
 

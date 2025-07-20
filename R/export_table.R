@@ -84,10 +84,10 @@
 #'   `row_groups`, while all rows with non-matching values will be added to the
 #'   end.
 #' @param column_groups Named list, can be used to group columns in the printed
-#'   output. List elements must be indicate column indices for columns that
-#'   should belong to one group. The names of the list elements will be used as
-#'   group names, which will be inserted as "column header row". Currently only
-#'   applies to `format = "tt"`.
+#'   output. List elements must indicate column indices for columns that should
+#'   belong to one group. The names of the list elements will be used as group
+#'   names, which will be inserted as "column header row". Currently only
+#'   works for `format = "tt"`.
 #' @param ... Arguments passed to [`tinytable::tt()`] and [`tinytable::style_tt()`]
 #'   when `format = "tt"`.
 #' @inheritParams format_value
@@ -1151,21 +1151,8 @@ print.insight_table <- function(x, ...) {
         skeleton = row_index
       )
     }
-    # find matching rows for groups
-    row_groups <- lapply(seq_along(row_index), function(i) {
-      g <- row_index[[i]]
-      if (is.character(g)) {
-        # if groups were provided as parameter names, we find the row position
-        # by matching the parameter name
-        g <- match(g, x$Parameter)[1]
-      } else {
-        # else, we assume that the group is a row position
-        g <- g[1]
-      }
-      g
-    })
     # set element names
-    names(row_groups) <- names(row_index)
+    row_groups <- row_index
   }
   list(final = x, row_groups = row_groups)
 }
@@ -1201,7 +1188,7 @@ print.insight_table <- function(x, ...) {
   # now create the tinytable object
   final <- tinytable::tt(out$final, caption = caption, notes = footer, ...)
   # insert sub header rows and column spans, if we have any
-  if (!is.null(out$row_groups) || !is.null(out$col_groups)) {
+  if (!is.null(out$row_groups) || !is.null(column_groups)) {
     final <- tinytable::group_tt(final, i = out$row_groups, j = column_groups)
   }
   tinytable::style_tt(final, align = align, ...)
