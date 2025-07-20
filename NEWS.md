@@ -22,6 +22,9 @@
 
 * Fixed issue in `get_datagrid()` for factors with `=` in their levels.
 
+* Fixed issue in `find_random()` for multivariate response models of class `brms`
+  with special response options.
+
 # insight 1.3.1
 
 ## Changes
