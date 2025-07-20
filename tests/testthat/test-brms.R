@@ -309,9 +309,7 @@ test_that("find_random", {
     find_random(m9),
     list(
       outcome1 = list(random = "participant"),
-      outcome2 = list(
-        random = "participant"
-      ),
+      outcome2 = list(random = "participant"),
       outcome3 = list(random = "participant")
     )
   )
