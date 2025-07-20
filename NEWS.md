@@ -11,6 +11,10 @@
   `format = "tt"` to export tables into the tinytable-format. This can also
   be used with grouped tables, i.e. `by = "group"`.
 
+* `export_table()` gains arguments `row_groups` and `column_groups`, to
+  group rows and columns in the exported table. Column groups currently only
+  work for `format = "tt"`.
+
 ## Bug fixes
 
 * Fixed issue with models of class `selection` with multiple response
