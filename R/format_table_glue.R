@@ -1,9 +1,5 @@
 # this function does the main composition of columns for the output.
-.format_glue_table <- function(x,
-                               style,
-                               coef_column = NULL,
-                               p_stars = NULL,
-                               ...) {
+.format_glue_table <- function(x, style, coef_column = NULL, p_stars = NULL, ...) {
   # evaluate dots
   dots <- list(...)
   original_x <- x
@@ -49,8 +45,14 @@
   if (is.null(coef_column) || !length(coef_column) || !coef_column %in% colnames(x)) {
     coef_column <- intersect(colnames(x), coefficient_names)[1]
   }
-  ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI" | colnames(x) == "conf.int"] # nolint
-  stat_column <- colnames(x)[colnames(x) %in% c("t", "z", "Chi2", "Statistic", "statistic") | grepl("^(t\\(|Chi2\\()", colnames(x))] # nolint
+  ci_column <- colnames(x)[
+    endsWith(colnames(x), " CI") | colnames(x) == "CI" | colnames(x) == "conf.int"
+  ]
+  stat_column <- colnames(x)[
+    colnames(x) %in%
+      c("t", "z", "Chi2", "Statistic", "statistic") |
+      grepl("^(t\\(|Chi2\\()", colnames(x))
+  ]
   # modelbased
   focal_term_column <- c(
     attributes(original_x)$focal_terms,
@@ -67,7 +69,7 @@
   special_rope <- any(grepl("{rope}", style, fixed = TRUE))
 
   # "|" indicates cell split
-  style <- unlist(strsplit(style, split = "|", fixed = TRUE))
+  style <- unlist(strsplit(style, split = "|", fixed = TRUE), use.names = FALSE)
 
   # define column names
   if (length(style) == 1 && !is.null(new_column_name)) {
@@ -78,7 +80,14 @@
 
   # paste glue together
   formatted_columns <- compact_list(lapply(seq_along(style), function(i) {
-    result <- .format_glue_output(x, coef_column, ci_column, style[i], format, column_names[i])
+    result <- .format_glue_output(
+      x,
+      coef_column,
+      ci_column,
+      style[i],
+      format,
+      column_names[i]
+    )
     # fix invalid columns
     if (all(nzchar(colnames(result)))) {
       result
@@ -131,7 +140,13 @@
   }
 
   # bind glue-columns to original data, but remove former columns first
-  original_x[c(coefficient_names, uncertainty_column, stat_column, p_column, df_column)] <- NULL # nolint
+  original_x[c(
+    coefficient_names,
+    uncertainty_column,
+    stat_column,
+    p_column,
+    df_column
+  )] <- NULL # nolint
 
   # reorder
   original_x <- standardize_column_order(original_x)
