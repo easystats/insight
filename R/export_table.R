@@ -1150,8 +1150,13 @@ print.insight_table <- function(x, ...) {
         skeleton = row_index
       )
     }
+    # we now just need the first index of each group, which is the first
+    # row position of each group
+    row_groups <- lapply(seq_along(row_index), function(i) {
+      row_index[[i]][1]
+    })
     # set element names
-    row_groups <- row_index
+    names(row_groups) <- names(row_index)
   }
   list(final = x, row_groups = row_groups)
 }
