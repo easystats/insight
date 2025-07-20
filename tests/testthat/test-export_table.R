@@ -228,7 +228,7 @@ test_that("export_table, gt, simple", {
 
 test_that("export_table, gt, complex with group indention", {
   skip_if_not_installed("gt")
-  skip_if_not_installed("parameters")
+  skip_if_not_installed("parameters", minimum_version = "0.27.0.1")
   skip_on_cran()
   data(iris)
 
@@ -316,6 +316,14 @@ test_that("export_table, tinytable with indented rows", {
 
   # don't select "Intercept" parameter
   mp <- as.data.frame(format(parameters::model_parameters(model, drop = "^\\(Intercept")))
+
+  groups <- list(
+    Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
+    Interactions = c(8, 9),
+    Controls = c(2, 3, 7)
+  )
+  expect_snapshot(export_table(mp, format = "tt", row_groups = groups, table_width = Inf))
+  expect_snapshot(export_table(mp, format = "text", row_groups = groups, table_width = Inf))
 
   attr(mp, "indent_rows") <- list(
     Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
