@@ -194,6 +194,21 @@ test_that("find_response", {
     find_response(m5, combine = TRUE),
     c(count = "count", count2 = "count2")
   )
+  expect_identical(
+    find_response(m9),
+    c(
+      outcome11 = "outcome1",
+      outcome12 = "trials1",
+      outcome21 = "outcome2",
+      outcome22 = "trials2",
+      outcome31 = "outcome3",
+      outcome32 = "trials3"
+    )
+  )
+  expect_identical(
+    find_response(m9, find_random = TRUE),
+    c(outcome1 = "outcome1", outcome2 = "outcome2", outcome3 = "outcome3")
+  )
 })
 
 test_that("get_response", {
