@@ -623,7 +623,9 @@ print.insight_table <- function(x, ...) {
         caption = caption,
         subtitle = subtitle,
         footer = footer,
-        align = align
+        align = align,
+        indent_groups = indent_groups,
+        row_groups = row_groups
       )
     }
   }
@@ -1262,13 +1264,22 @@ print.insight_table <- function(x, ...) {
                                    caption = NULL,
                                    subtitle = NULL,
                                    footer = NULL,
-                                   align = NULL) {
+                                   align = NULL,
+                                   indent_groups = NULL,
+                                   row_groups = NULL) {
   column_width <- nchar(final[1, ])
   n_columns <- ncol(final)
   first_row_leftalign <- (!is.null(align) && align == "firstleft")
 
   ## create header line for markdown table -----
   header <- "|"
+
+  # indent groups?
+  if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
+    final <- .indent_groups(final, indent_groups)
+  } else if (!is.null(row_groups)) {
+    final <- .row_groups(final, row_groups, whitespace = "")$final
+  }
 
   # go through all columns of the data frame
   for (i in 1:n_columns) {

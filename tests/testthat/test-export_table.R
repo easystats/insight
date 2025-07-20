@@ -342,6 +342,13 @@ test_that("export_table, tinytable with indented rows", {
     table_width = Inf,
     align = "llrrlr"
   ))
+  expect_snapshot(export_table(
+    mp,
+    format = "markdown",
+    row_groups = groups,
+    table_width = Inf,
+    align = "llrrlr"
+  ))
 
   attr(mp, "indent_rows") <- list(
     Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
