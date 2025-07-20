@@ -1262,8 +1262,7 @@ print.insight_table <- function(x, ...) {
                                    caption = NULL,
                                    subtitle = NULL,
                                    footer = NULL,
-                                   align = NULL,
-                                  ...) {
+                                   align = NULL) {
   column_width <- nchar(final[1, ])
   n_columns <- ncol(final)
   first_row_leftalign <- (!is.null(align) && align == "firstleft")
