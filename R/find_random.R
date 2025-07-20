@@ -51,7 +51,7 @@ find_random.default <- function(x, split_nested = FALSE, flatten = FALSE) {
   f <- find_formula(x, verbose = FALSE)
 
   if (is_multivariate(x)) {
-    rn <- names(find_response(x))
+    rn <- names(find_response(x, find_random = TRUE))
     l <- lapply(rn, function(i) .find_random_effects(x, f[[i]], split_nested))
     names(l) <- rn
     l <- compact_list(l)
