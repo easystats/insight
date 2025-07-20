@@ -158,6 +158,31 @@
 #' export_table(d, width = 8)
 #' export_table(d, width = c(x = 5, z = 10))
 #' export_table(d, width = c(x = 5, y = 5, z = 10), align = "lcr")
+#'
+#' # group rows in the table
+#' \dontrun{
+#' data(mtcars)
+#'
+#' # fit model
+#' mtcars$cyl <- as.factor(mtcars$cyl)
+#' mtcars$gear <- as.factor(mtcars$gear)
+#' model <- lm(mpg ~ hp + gear * vs + cyl + drat, data = mtcars)
+#'
+#' # model summary, don't select "Intercept" parameter
+#' mp <- as.data.frame(format(
+#'   parameters::model_parameters(model, drop = "^\\(Intercept")
+#' ))
+#'
+#' # define groups for the table
+#' groups <- list(
+#'   Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
+#'   Interactions = c(8, 9),
+#'   Controls = c(2, 3, 7)
+#' )
+#'
+#' # export table with groups, using tinytable format
+#' export_table(mp, format = "tt", row_groups = groups)
+#' }
 #' @export
 export_table <- function(x,
                          sep = " | ",
@@ -683,8 +708,8 @@ print.insight_table <- function(x, ...) {
 
   if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
     final <- .indent_groups(final, indent_groups)
-  } else if (!is.null(row_groups) && any(grepl("# ", final[, 1], fixed = TRUE))) {
-    final <- .row_groups(final, row_groups)
+  } else if (!is.null(row_groups)) {
+    final <- .row_groups(final, row_groups)$final
   }
 
 
@@ -1064,46 +1089,82 @@ print.insight_table <- function(x, ...) {
 }
 
 
-.row_groups <- function(final, row_groups, whitespace = "  ") {
+.row_groups <- function(final, row_groups, whitespace = "  ", remove_first = TRUE) {
+  if (is.list(row_groups)) {
+    # convert matrix to data frame, required for .row_groups_tt()
+    new_final <- as.data.frame(final)
+    if (remove_first) {
+      # remove first row, which contains column names
+      new_final <- new_final[-1, , drop = FALSE]
+    }
+    # if we have a list of row indices, we need to convert this into a vector
+    # of row indices
+    out <- .row_groups_tt(
+      new_final,
+      row_groups = row_groups,
+      first_index_only = FALSE,
+      reorder = TRUE
+    )
+    # updated objects
+    final <- as.matrix(out$final)
+    row_index <- out$row_groups
+    # insert header rows in final-matrix
+    grps <- vapply(out$row_groups, function(i) i[1], numeric(1))
+    for (j in length(grps):1) {
+      if (grps[j] == 1) {
+        final <- rbind(
+          c(names(grps)[j], rep_len("", ncol(final) - 1)),
+          final[1:nrow(final), , drop = FALSE]
+        )
+      } else {
+        final <- rbind(
+          final[1:(grps[j] - 1), , drop = FALSE],
+          c(names(grps)[j], rep_len("", ncol(final) - 1)),
+          final[grps[j]:nrow(final), , drop = FALSE]
+        )
+      }
+      row_index[[j]] <- row_index[[j]] + j
+    }
+    row_index <- unlist(row_index, use.names = FALSE)
+    # we have to add back column names again, and also format them
+    if (remove_first) {
+      final <- rbind(colnames(out$final), final)
+    }
+  } else {
+    row_index <- row_groups
+    grps <- NULL
+  }
+
   # create index for those rows that should be indented
   # for text format, first row is column names, so we need a +1 here
-  grp_rows <- row_groups + 1
+  grp_rows <- row_index
+  if (remove_first) {
+    grp_rows <- grp_rows + 1
+  }
 
   # indent
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
 
   # find rows that should not be indented
-  non_grp_rows <- seq_len(nrow(final))
-  non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
+  non_grp_rows <- setdiff(seq_len(nrow(final)), grp_rows)
 
-  # paste whitespace at end, to ensure equal width for each string
-  final[non_grp_rows, 1] <- paste0(final[non_grp_rows, 1], whitespace)
+  # justify columns
+  for (i in 2:ncol(final)) {
+    final[, i] <- format(final[, i], justify = "right")
+  }
+  # header row should be right-aligned, so we need to do this separately
+  final[, 1] <- format(final[, 1], justify = ifelse(remove_first, "left", "right"))
 
-  # remove indent token
-  grps <- grep("# ", final[, 1], fixed = TRUE)
-  final[, 1] <- gsub("# ", "", final[, 1], fixed = TRUE)
-
-  # move group name (indent header) to left
-  final[grps, 1] <- format(final[grps, 1], justify = "left", width = max(nchar(final[, 1], type = "width")))
-  final
+  list(final = final, row_headers = non_grp_rows)
 }
 
 
-.row_groups_html <- function(final, row_groups, whitespace = "", ...) {
-  # create index for those rows that should be indented
-  grp_rows <- row_groups
-
-  # indent
-  final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
-
-  # remove indent token
-  final[, 1] <- gsub("# ", "", final[, 1], fixed = TRUE)
-
-  final
-}
-
-
-.row_groups_tt <- function(x, row_groups = NULL, group_by = NULL, ...) {
+.row_groups_tt <- function(x,
+                           row_groups = NULL,
+                           group_by = NULL,
+                           first_index_only = TRUE,
+                           reorder = TRUE,
+                           ...) {
   # check grouping - if we have a grouping variable in "group_by", we use this
   # for grouping rows. an alternative is to provide the "row_groups" argument,
   # which is a list of row indices, or parameter names, that should be grouped
@@ -1138,7 +1199,7 @@ print.insight_table <- function(x, ...) {
       insight::format_error("Some group indices do not match any parameter.")
     }
     # if row indices are not sorted, we need to resort the parameters data frame
-    if (is.unsorted(unlist(row_index))) {
+    if (reorder && is.unsorted(unlist(row_index))) {
       new_rows <- c(unlist(row_index), setdiff(seq_len(nrow(x)), unlist(row_index)))
       x <- x[new_rows, ]
       # we need to update indices in groups as well. Therefore, we need to convert
@@ -1152,9 +1213,14 @@ print.insight_table <- function(x, ...) {
     }
     # we now just need the first index of each group, which is the first
     # row position of each group
-    row_groups <- lapply(seq_along(row_index), function(i) {
-      row_index[[i]][1]
-    })
+    if (first_index_only) {
+      row_groups <- lapply(seq_along(row_index), function(i) {
+        row_index[[i]][1]
+      })
+    } else {
+      row_groups <- row_index
+    }
+
     # set element names
     names(row_groups) <- names(row_index)
   }
@@ -1267,8 +1333,8 @@ print.insight_table <- function(x, ...) {
   # indent groups?
   if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
     final <- .indent_groups(final, indent_groups)
-  } else if (!is.null(row_groups) && any(grepl("# ", final[, 1], fixed = TRUE))) {
-    final <- .row_groups(final, row_groups)
+  } else if (!is.null(row_groups)) {
+    final <- .row_groups(final, row_groups)$final
   }
 
   # Transform to character
@@ -1341,9 +1407,10 @@ print.insight_table <- function(x, ...) {
   }
 
   # indent groups?
-  if (!is.null(row_groups) && any(grepl("# ", final[, 1], fixed = TRUE))) {
-    highlight_rows <- grep("# ", final[, 1], fixed = TRUE)
-    final <- .row_groups_html(final, row_groups, "\U00A0\U00A0", ...)
+  if (!is.null(row_groups)) {
+    out <- .row_groups(final, row_groups, "\U00A0\U00A0", remove_first = FALSE)
+    final <- out$final
+    highlight_rows <- out$row_headers
   } else {
     highlight_rows <- NULL
   }

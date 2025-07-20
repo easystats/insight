@@ -236,6 +236,31 @@ export_table(d)
 export_table(d, width = 8)
 export_table(d, width = c(x = 5, z = 10))
 export_table(d, width = c(x = 5, y = 5, z = 10), align = "lcr")
+
+# group rows in the table
+\dontrun{
+data(mtcars)
+
+# fit model
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$gear <- as.factor(mtcars$gear)
+model <- lm(mpg ~ hp + gear * vs + cyl + drat, data = mtcars)
+
+# model summary, don't select "Intercept" parameter
+mp <- as.data.frame(format(
+  parameters::model_parameters(model, drop = "^\\\\(Intercept")
+))
+
+# define groups for the table
+groups <- list(
+  Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
+  Interactions = c(8, 9),
+  Controls = c(2, 3, 7)
+)
+
+# export table with groups, using tinytable format
+export_table(mp, format = "tt", row_groups = groups)
+}
 }
 \seealso{
 Vignettes
