@@ -43,8 +43,10 @@
 #'   column four and left-align the fifth column.
 #' @param by Name of column(s) in `x` that indicates grouping for tables.
 #'   When `format = "html"`, `by` is passed down to `gt::gt(groupname_col = by)`.
+#'   Likewise, for `format = "tt"`, `by` indicates the name of the variable in
+#'   the data frame, which is then used to create row headers in the table.
 #'   For markdown and text format, `x` is internally split into a list of data
-#'   frames.
+#'   frames. See also `row_groups` to group rows in the printed output.
 #' @param width Refers to the width of columns (with numeric values). Can be
 #'   either `NULL`, a number or a named numeric vector. If `NULL`, the width for
 #'   each column is adjusted to the minimum required width. If a number, columns
@@ -72,6 +74,20 @@
 #'   names in the table. Must either be of same length as columns in the table,
 #'   or a named vector, where names (LHS) indicate old column names, and values
 #'   (RHS) are used as new column names.
+#' @param row_groups Named list, can be used as alternative to `by` to group
+#'   rows in the printed output, but in a more flexible way. List elements may
+#'   either be character vectors that match the names of values in the first
+#'   column of the data frame that belong to one group, or list elements can be
+#'   row numbers of those value rows that should belong to one group. The names
+#'   of the list elements will be used as group names, which will be inserted as
+#'   "header row". Rows will be re-ordered according to the order used in
+#'   `row_groups`, while all rows with non-matching values will be added to the
+#'   end.
+#' @param column_groups Named list, can be used to group columns in the printed
+#'   output. List elements must indicate column indices for columns that should
+#'   belong to one group. The names of the list elements will be used as group
+#'   names, which will be inserted as "column header row". Currently only
+#'   works for `format = "tt"`.
 #' @param ... Arguments passed to [`tinytable::tt()`] and [`tinytable::style_tt()`]
 #'   when `format = "tt"`.
 #' @inheritParams format_value
@@ -89,8 +105,11 @@
 #' returned. `format = "markdown"` (or `"md"`) returns a character string of
 #' class `knitr_kable`, which renders nicely in markdown files. `format = "html"`
 #' returns an `gt` object (created by the **gt** package), which - by default -
-#' is displayed in the IDE's viewer pane or default browser. This object can
-#' be further modified with the various gt-functions.
+#' is displayed in the IDE's viewer pane or default browser. This object can be
+#' further modified with the various gt-functions. `format = "tt"` returns a
+#' [`tinytable::tt()`] object, which is a lightweight table format that can be
+#' used in markdown, LaTeX, HTML and other formats, depending on the context
+#' where the table is used.
 #'
 #' @examples
 #' export_table(head(iris))
@@ -139,6 +158,31 @@
 #' export_table(d, width = 8)
 #' export_table(d, width = c(x = 5, z = 10))
 #' export_table(d, width = c(x = 5, y = 5, z = 10), align = "lcr")
+#'
+#' # group rows in the table
+#' \dontrun{
+#' data(mtcars)
+#'
+#' # fit model
+#' mtcars$cyl <- as.factor(mtcars$cyl)
+#' mtcars$gear <- as.factor(mtcars$gear)
+#' model <- lm(mpg ~ hp + gear * vs + cyl + drat, data = mtcars)
+#'
+#' # model summary, don't select "Intercept" parameter
+#' mp <- as.data.frame(format(
+#'   parameters::model_parameters(model, drop = "^\\(Intercept")
+#' ))
+#'
+#' # define groups for the table
+#' groups <- list(
+#'   Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
+#'   Interactions = c(8, 9),
+#'   Controls = c(2, 3, 7)
+#' )
+#'
+#' # export table with groups, using tinytable format
+#' export_table(mp, format = "tt", row_groups = groups)
+#' }
 #' @export
 export_table <- function(x,
                          sep = " | ",
@@ -160,12 +204,17 @@ export_table <- function(x,
                          zap_small = FALSE,
                          table_width = "auto",
                          remove_duplicates = FALSE,
+                         row_groups = NULL,
+                         column_groups = NULL,
                          verbose = TRUE,
                          ...) {
   # check args
   if (is.null(format)) {
     format <- "text"
   }
+
+  # check args
+  format <- validate_argument(format, c("text", "markdown", "md", "html", "tt"))
 
   # handle alias
   if (format == "md") {
@@ -185,21 +234,42 @@ export_table <- function(x,
   # data frame now. HTML format needs a single data frame. Sub tables
   # are split by their group-column later, see code below
   # "gt(final, groupname_col = group_by_columns)".
-
-  if (identical(format, "html") && !is.data.frame(x) && is.list(x)) {
-    x <- do.call(rbind, lapply(x, function(i) {
-      attr_name <- .check_caption_attr_name(i)
-      i$Component <- attr(i, attr_name)[1]
-      i
-    }))
-  }
+  x <- .bind_html_tables(x, format)
 
   # check for indention
   indent_groups <- attributes(x)$indent_groups
-  indent_rows <- attributes(x)$indent_rows
+
+  # check dots for alias name of "indent_rows"
+  if (is.null(row_groups)) {
+    row_groups <- attributes(x)$indent_rows
+  }
 
   # split data frames?
   x <- .split_tables(x, by, format)
+
+  # setup common arguments for table formatting -----------------------------
+
+  export_args <- list(
+    sep = sep,
+    header = header,
+    cross = cross,
+    digits = digits,
+    protect_integers = protect_integers,
+    missing = missing,
+    width = width,
+    format = format,
+    column_names = column_names,
+    align = align,
+    group_by = by,
+    zap_small = zap_small,
+    empty_line = empty_line,
+    indent_groups = indent_groups,
+    row_groups = row_groups,
+    column_groups = column_groups,
+    table_width = table_width,
+    remove_duplicated_lines = remove_duplicates,
+    verbose = verbose
+  )
 
   # table from single data frame --------------------------------------------
 
@@ -219,32 +289,14 @@ export_table <- function(x,
       footer <- attributes(x)$table_footer
     }
 
+    # add remaining arguments to export_args
+    export_args$caption <- caption
+    export_args$subtitle <- subtitle
+    export_args$footer <- footer
+
     # convert data frame into specified output format
-    out <- .export_table(
-      x = x,
-      sep = sep,
-      header = header,
-      cross = cross,
-      digits = digits,
-      protect_integers = protect_integers,
-      missing = missing,
-      width = width,
-      format = format,
-      caption = caption,
-      subtitle = subtitle,
-      footer = footer,
-      column_names = column_names,
-      align = align,
-      group_by = by,
-      zap_small = zap_small,
-      empty_line = empty_line,
-      indent_groups = indent_groups,
-      indent_rows = indent_rows,
-      table_width = table_width,
-      remove_duplicated_lines = remove_duplicates,
-      verbose = verbose,
-      ...
-    )
+    out <- do.call(.export_table, c(list(x = x), export_args, list(...)))
+
   } else if (is.list(x)) {
     # table from list of data frames -----------------------------------------
 
@@ -295,32 +347,13 @@ export_table <- function(x,
         t_title <- caption[[element]]
       }
 
+      # add remaining arguments to export_args
+      export_args$caption <- t_title
+      export_args$subtitle <- attributes(i)$table_subtitle
+      export_args$footer <- t_footer
+
       # convert data frame into specified output format
-      .export_table(
-        x = i,
-        sep = sep,
-        header = header,
-        cross = cross,
-        digits = digits,
-        protect_integers = protect_integers,
-        missing = missing,
-        width = width,
-        format = format,
-        caption = t_title,
-        subtitle = attributes(i)$table_subtitle,
-        footer = t_footer,
-        column_names = column_names,
-        align = align,
-        group_by = by,
-        zap_small = zap_small,
-        empty_line = empty_line,
-        indent_groups = indent_groups,
-        indent_rows = indent_rows,
-        table_width = table_width,
-        remove_duplicated_lines = remove_duplicates,
-        verbose = verbose,
-        ...
-      )
+      do.call(.export_table, c(list(x = i), export_args, list(...)))
     })
 
     # insert new lines between tables, but this is only needed
@@ -366,12 +399,34 @@ print.insight_table <- function(x, ...) {
 
 # small helper ----------------------
 
+.bind_html_tables <- function(x, format = "html") {
+  if (!is.data.frame(x) && is.list(x)) {
+    if (identical(format, "html")) {
+      x <- do.call(rbind, lapply(x, function(i) {
+        attr_name <- .check_caption_attr_name(i)
+        i$Component <- attr(i, attr_name)[1]
+        i
+      }))
+    } else if (identical(format, "tt")) {
+      # add table caption as group variable, and bind tables
+      # we then extract row headers based on values in the group indices
+      x <- do.call(rbind, lapply(x, function(i) {
+        i$group <- attr(i, "table_caption")
+        i
+      }))
+    }
+  }
+
+  x
+}
+
+
 # split data frame for text format - unlike HTML, where we need to bind
 # lists of data frames to a single data frame and have a "group_by" variable,
 # we need a list of data frames for text or markdown output (instead of a
 # single data frame)
 .split_tables <- function(x, by, format) {
-  if (!is.null(by) && is.data.frame(x) && !identical(format, "html")) {
+  if (!is.null(by) && is.data.frame(x) && !format %in% c("html", "tt")) {
     # convert formula into string
     if (inherits(by, "formula")) {
       by <- all.vars(by)
@@ -454,7 +509,8 @@ print.insight_table <- function(x, ...) {
                           zap_small = FALSE,
                           empty_line = NULL,
                           indent_groups = NULL,
-                          indent_rows = NULL,
+                          row_groups = NULL,
+                          column_groups = NULL,
                           table_width = NULL,
                           remove_duplicated_lines = FALSE,
                           verbose = TRUE,
@@ -490,19 +546,25 @@ print.insight_table <- function(x, ...) {
   names(table_data) <- col_names
   table_data[is.na(table_data)] <- as.character(missing)
 
-
-  if (identical(format, "html")) {
-    # html formatting starts here, needs less preparation of table matrix
-    out <- .format_html_table(
+  if (format %in% c("html", "tt")) {
+    # html / tinytabl formatting starts here, needs
+    # less preparation of table matrix
+    fun_args <- list(
       table_data,
       caption = caption,
       subtitle = subtitle,
       footer = footer,
       align = align,
       group_by = group_by,
-      indent_groups = indent_groups,
-      indent_rows = indent_rows
+      column_groups = column_groups,
+      row_groups = row_groups
     )
+    if (format == "html") {
+      out <- do.call(.format_html_table, fun_args)
+    } else {
+      out <- do.call(.format_tiny_table, c(fun_args, list(...)))
+    }
+    return(out)
 
     # text and markdown go here...
   } else {
@@ -546,7 +608,7 @@ print.insight_table <- function(x, ...) {
         align = align,
         empty_line = empty_line,
         indent_groups = indent_groups,
-        indent_rows = indent_rows,
+        row_groups = row_groups,
         col_names = col_names,
         col_width = width,
         col_align = col_align,
@@ -558,26 +620,12 @@ print.insight_table <- function(x, ...) {
       # markdown is a bit different...
       out <- .format_markdown_table(
         final,
-        x,
         caption = caption,
         subtitle = subtitle,
         footer = footer,
         align = align,
         indent_groups = indent_groups,
-        indent_rows = indent_rows
-      )
-    } else if (format == "tt") {
-      # tiny table formatting...
-      out <- .format_tiny_table(
-        final,
-        x,
-        caption = caption,
-        subtitle = subtitle,
-        footer = footer,
-        align = align,
-        indent_groups = indent_groups,
-        indent_rows = indent_rows,
-        ...
+        row_groups = row_groups
       )
     }
   }
@@ -599,13 +647,28 @@ print.insight_table <- function(x, ...) {
                                 align = NULL,
                                 empty_line = NULL,
                                 indent_groups = NULL,
-                                indent_rows = NULL,
+                                row_groups = NULL,
                                 col_names = NULL,
                                 col_width = NULL,
                                 col_align = NULL,
                                 table_width = NULL,
                                 remove_duplicated_lines = FALSE,
                                 verbose = TRUE) {
+  # indent groups? export_table() allows to indent specific rows,
+  # which might be useful when we have tables of regression coefficients,
+  # and some coefficients are grouped together, which is visually emphasized
+  # by indention...
+
+  if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
+    final <- .indent_groups(final, indent_groups)
+    skip_first_align <- TRUE
+  } else if (!is.null(row_groups)) {
+    final <- .row_groups(final, row_groups)$final
+    skip_first_align <- TRUE
+  } else {
+    skip_first_align <- FALSE
+  }
+
   # align table, if requested. unlike the generic aligments that have been done
   # previously, we now look for column-specific alignments. we furthermore save
   # the alignments in "col_align", which we may need later when we set a fixed
@@ -614,6 +677,11 @@ print.insight_table <- function(x, ...) {
 
   if (!is.null(align) && length(align) == 1) {
     for (i in seq_len(ncol(final))) {
+      # if we have indented groups, we skip the first alignment, else all
+      # indentions are lost
+      if (skip_first_align && i == 1) {
+        next
+      }
       align_char <- ""
       if (!align %in% c("left", "right", "center", "firstleft")) {
         align_char <- substr(align, i, i)
@@ -635,18 +703,6 @@ print.insight_table <- function(x, ...) {
         col_align[i] <- "centre"
       }
     }
-  }
-
-
-  # indent groups? export_table() allows to indent specific rows,
-  # which might be useful when we have tables of regression coefficients,
-  # and some coefficients are grouped together, which is visually emphasized
-  # by indention...
-
-  if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
-    final <- .indent_groups(final, indent_groups)
-  } else if (!is.null(indent_rows) && any(grepl("# ", final[, 1], fixed = TRUE))) {
-    final <- .indent_rows(final, indent_rows)
   }
 
 
@@ -1026,59 +1082,158 @@ print.insight_table <- function(x, ...) {
 }
 
 
-.indent_rows <- function(final, indent_rows, whitespace = "  ") {
+.row_groups <- function(final, row_groups, whitespace = "  ", remove_first = TRUE) {
+  if (is.list(row_groups)) {
+    # convert matrix to data frame, required for .row_groups_tt()
+    new_final <- as.data.frame(final)
+    if (remove_first) {
+      # remove first row, which contains column names
+      new_final <- new_final[-1, , drop = FALSE]
+    }
+    # if we have a list of row indices, we need to convert this into a vector
+    # of row indices
+    out <- .row_groups_tt(
+      new_final,
+      row_groups = row_groups,
+      first_index_only = FALSE,
+      reorder = TRUE
+    )
+    # updated objects
+    final <- as.matrix(out$final)
+    row_index <- out$row_groups
+    # insert header rows in final-matrix
+    grps <- vapply(out$row_groups, function(i) i[1], numeric(1))
+    for (j in length(grps):1) {
+      if (grps[j] == 1) {
+        final <- rbind(
+          c(names(grps)[j], rep_len("", ncol(final) - 1)),
+          final[1:nrow(final), , drop = FALSE]
+        )
+      } else {
+        final <- rbind(
+          final[1:(grps[j] - 1), , drop = FALSE],
+          c(names(grps)[j], rep_len("", ncol(final) - 1)),
+          final[grps[j]:nrow(final), , drop = FALSE]
+        )
+      }
+      row_index[[j]] <- row_index[[j]] + j
+    }
+    row_index <- unlist(row_index, use.names = FALSE)
+    # we have to add back column names again, and also format them
+    if (remove_first) {
+      final <- rbind(colnames(out$final), final)
+    }
+  } else {
+    row_index <- row_groups
+    grps <- NULL
+  }
+
   # create index for those rows that should be indented
   # for text format, first row is column names, so we need a +1 here
-  grp_rows <- indent_rows + 1
+  grp_rows <- row_index
+  if (remove_first) {
+    grp_rows <- grp_rows + 1
+  }
 
   # indent
   final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
 
   # find rows that should not be indented
-  non_grp_rows <- seq_len(nrow(final))
-  non_grp_rows <- non_grp_rows[!non_grp_rows %in% grp_rows]
+  non_grp_rows <- setdiff(seq_len(nrow(final)), grp_rows)
 
-  # paste whitespace at end, to ensure equal width for each string
-  final[non_grp_rows, 1] <- paste0(final[non_grp_rows, 1], whitespace)
+  # justify columns
+  for (i in 2:ncol(final)) {
+    final[, i] <- format(final[, i], justify = "right")
+  }
+  # header row should be right-aligned, so we need to do this separately
+  final[, 1] <- format(final[, 1], justify = ifelse(remove_first, "left", "right"))
 
-  # remove indent token
-  grps <- grep("# ", final[, 1], fixed = TRUE)
-  final[, 1] <- gsub("# ", "", final[, 1], fixed = TRUE)
-
-  # move group name (indent header) to left
-  final[grps, 1] <- format(final[grps, 1], justify = "left", width = max(nchar(final[, 1], type = "width")))
-  final
+  list(final = final, row_headers = non_grp_rows)
 }
 
 
-.indent_rows_html <- function(final, indent_rows, whitespace = "") {
-  # create index for those rows that should be indented
-  grp_rows <- indent_rows
+.row_groups_tt <- function(x,
+                           row_groups = NULL,
+                           group_by = NULL,
+                           first_index_only = TRUE,
+                           reorder = TRUE,
+                           ...) {
+  # check grouping - if we have a grouping variable in "group_by", we use this
+  # for grouping rows. an alternative is to provide the "row_groups" argument,
+  # which is a list of row indices, or parameter names, that should be grouped
+  # together.
+  if (!is.null(group_by)) {
+    groups <- data.frame(
+      group_by = factor(x[[group_by]], levels = unique(x[[group_by]])),
+      row = seq_len(nrow(x)),
+      stringsAsFactors = FALSE
+    )
+    row_groups <- split(groups$row, groups$group_by)
+    # remove no longer needed group variable
+    x[[group_by]] <- NULL
+  }
+  # group rows? If we have row_groups already, these will be overwritten here
+  if (!is.null(row_groups)) {
+    # extract first column, which contains the "value" names
+    values <- trim_ws(x[[1]])
+    # now find matching row based on value name or row index
+    row_index <- lapply(row_groups, function(g) {
+      if (is.character(g)) {
+        # groups were provided as values (string)
+        match(g, values)
+      } else {
+        # else, we assume that the group is a row position
+        g
+      }
+    })
+    # sanity check - do all rows match a parameter?
+    group_indices <- unlist(row_index, use.names = FALSE)
+    if (anyNA(group_indices) || any(group_indices < 1) || any(group_indices > nrow(x))) {
+      insight::format_error("Some group indices do not match any parameter.")
+    }
+    # if row indices are not sorted, we need to resort the parameters data frame
+    if (reorder && is.unsorted(unlist(row_index))) {
+      new_rows <- c(unlist(row_index), setdiff(seq_len(nrow(x)), unlist(row_index)))
+      x <- x[new_rows, ]
+      # we need to update indices in groups as well. Therefore, we need to convert
+      # list of row indices into a vector with row indices, then subtract the
+      # differences of old and new row positions, and then split that vector into
+      # a list again
+      row_index <- relist(
+        match(unlist(row_index, use.names = FALSE), new_rows),
+        skeleton = row_index
+      )
+    }
+    # we now just need the first index of each group, which is the first
+    # row position of each group
+    if (first_index_only) {
+      row_groups <- lapply(seq_along(row_index), function(i) {
+        row_index[[i]][1]
+      })
+    } else {
+      row_groups <- row_index
+    }
 
-  # indent
-  final[grp_rows, 1] <- paste0(whitespace, final[grp_rows, 1])
-
-  # remove indent token
-  final[, 1] <- gsub("# ", "", final[, 1], fixed = TRUE)
-
-  final
+    # set element names
+    names(row_groups) <- names(row_index)
+  }
+  list(final = x, row_groups = row_groups)
 }
 
 
-# markdown formatting -------------------
+# tinytable formatting -------------------
 
 .format_tiny_table <- function(final,
-                               x,
                                caption = NULL,
                                subtitle = NULL,
                                footer = NULL,
                                align = NULL,
-                               indent_groups = NULL,
-                               indent_rows = NULL,
+                               group_by = NULL,
+                               column_groups = NULL,
+                               row_groups = NULL,
                                ...) {
   # need data frame, not matrix
   final <- as.data.frame(final)
-
   if (!is.null(align) && length(align) == 1) {
     align <- switch(align,
       left = "l",
@@ -1091,21 +1246,27 @@ print.insight_table <- function(x, ...) {
 
   check_if_installed("tinytable")
 
-  out <- tinytable::tt(final, caption = caption, notes = footer, ...)
-  tinytable::style_tt(out, align = align, ...)
+  # we need to indent rows first, because we re-order the rows here
+  out <- .row_groups_tt(final, row_groups = row_groups, group_by = group_by, ...)
+  # now create the tinytable object
+  final <- tinytable::tt(out$final, caption = caption, notes = footer, ...)
+  # insert sub header rows and column spans, if we have any
+  if (!is.null(out$row_groups) || !is.null(column_groups)) {
+    final <- tinytable::group_tt(final, i = out$row_groups, j = column_groups)
+  }
+  tinytable::style_tt(final, align = align, ...)
 }
 
 
 # markdown formatting -------------------
 
 .format_markdown_table <- function(final,
-                                   x,
                                    caption = NULL,
                                    subtitle = NULL,
                                    footer = NULL,
                                    align = NULL,
                                    indent_groups = NULL,
-                                   indent_rows = NULL) {
+                                   row_groups = NULL) {
   column_width <- nchar(final[1, ])
   n_columns <- ncol(final)
   first_row_leftalign <- (!is.null(align) && align == "firstleft")
@@ -1113,9 +1274,11 @@ print.insight_table <- function(x, ...) {
   ## create header line for markdown table -----
   header <- "|"
 
-  # indention? than adjust column width for first column
-  if (!is.null(indent_rows) || !is.null(indent_groups)) {
-    column_width[1] <- column_width[1] + 2
+  # indent groups?
+  if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
+    final <- .indent_groups(final, indent_groups)
+  } else if (!is.null(row_groups)) {
+    final <- .row_groups(final, row_groups, whitespace = "")$final
   }
 
   # go through all columns of the data frame
@@ -1162,13 +1325,6 @@ print.insight_table <- function(x, ...) {
     header <- paste0(header, tablecol, "|")
   }
 
-  # indent groups?
-  if (!is.null(indent_groups) && any(grepl(indent_groups, final[, 1], fixed = TRUE))) {
-    final <- .indent_groups(final, indent_groups)
-  } else if (!is.null(indent_rows) && any(grepl("# ", final[, 1], fixed = TRUE))) {
-    final <- .indent_rows(final, indent_rows)
-  }
-
   # Transform to character
   rows <- NULL
   for (row in seq_len(nrow(final))) {
@@ -1206,21 +1362,26 @@ print.insight_table <- function(x, ...) {
 
 # html formatting ---------------------------
 
-.format_html_table <- function(final,
-                               caption = NULL,
-                               subtitle = NULL,
-                               footer = NULL,
-                               align = "center",
-                               group_by = NULL,
-                               indent_groups = NULL,
-                               indent_rows = NULL) {
+.format_html_table <- function(
+  final,
+  caption = NULL,
+  subtitle = NULL,
+  footer = NULL,
+  align = "center",
+  group_by = NULL,
+  row_groups = NULL,
+  ...
+) {
   check_if_installed("gt")
 
   if (is.null(align)) {
     align <- "firstleft"
   }
 
-  group_by_columns <- c(intersect(c("Group", "Response", "Effects", "Component"), names(final)), group_by)
+  group_by_columns <- c(
+    intersect(c("Group", "Response", "Effects", "Component"), names(final)),
+    group_by
+  )
   if (length(group_by_columns)) {
     # remove columns with only 1 unique value - this *should* be safe to
     # remove, but we may check if all printed sub titles look like intended
@@ -1234,16 +1395,25 @@ print.insight_table <- function(x, ...) {
   }
 
   # indent groups?
-  if (!is.null(indent_rows) && any(grepl("# ", final[, 1], fixed = TRUE))) {
-    highlight_rows <- grep("# ", final[, 1], fixed = TRUE)
-    final <- .indent_rows_html(final, indent_rows, "\U00A0\U00A0")
+  if (!is.null(row_groups)) {
+    out <- .row_groups(final, row_groups, "\U00A0\U00A0", remove_first = FALSE)
+    final <- out$final
+    highlight_rows <- out$row_headers
   } else {
     highlight_rows <- NULL
   }
 
   # do we need to render <br>?
-  any_br <- any(vapply(final, function(i) any(grepl("<br>", i, fixed = TRUE)), logical(1)))
-  any_nbsp <- any(vapply(final, function(i) any(grepl("&nbsp;", i, fixed = TRUE)), logical(1)))
+  any_br <- any(vapply(
+    final,
+    function(i) any(grepl("<br>", i, fixed = TRUE)),
+    logical(1)
+  ))
+  any_nbsp <- any(vapply(
+    final,
+    function(i) any(grepl("&nbsp;", i, fixed = TRUE)),
+    logical(1)
+  ))
 
   # validation check - clean caption, subtitle and footer from ansi-colour codes,
   # which only work for text format... But if user occidentally provides colours
@@ -1281,7 +1451,6 @@ print.insight_table <- function(x, ...) {
     }
   }
 
-
   tab <- gt::gt(final, groupname_col = group_by_columns)
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
   footer <- gt::tab_source_note(header, source_note = gt::html(footer))
@@ -1310,11 +1479,7 @@ print.insight_table <- function(x, ...) {
     out <- gt::cols_align(out, "left", 1)
   } else {
     for (i in 1:nchar(align)) {
-      col_align <- switch(substr(align, i, i),
-        l = "left",
-        r = "right",
-        "center"
-      )
+      col_align <- switch(substr(align, i, i), l = "left", r = "right", "center")
       out <- gt::cols_align(out, col_align, i)
     }
   }

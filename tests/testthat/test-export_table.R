@@ -228,7 +228,7 @@ test_that("export_table, gt, simple", {
 
 test_that("export_table, gt, complex with group indention", {
   skip_if_not_installed("gt")
-  skip_if_not_installed("parameters")
+  skip_if_not_installed("parameters", minimum_version = "0.27.0.1")
   skip_on_cran()
   data(iris)
 
@@ -242,12 +242,12 @@ test_that("export_table, gt, complex with group indention", {
     select = "{estimate}{stars}|({se})",
     groups = list(
       Species = c(
-        "Species [versicolor]",
-        "Species [virginica]"
+        "Species (versicolor)",
+        "Species (virginica)"
       ),
       Interactions = c(
-        "Species [versicolor] × Petal Length", # note the unicode char!
-        "Species [virginica] × Petal Length"
+        "Species (versicolor) × Petal Length", # note the unicode char!
+        "Species (virginica) × Petal Length"
       ),
       Controls = "Petal Length"
     )
@@ -302,4 +302,65 @@ test_that("export_table, by in text format", {
     export_table(iris, by = 6),
     regex = "cannot be lower"
   )
+})
+
+
+test_that("export_table, tinytable with indented rows", {
+  skip_if_not_installed("parameters")
+  skip_if_not_installed("tinytable")
+
+  data(mtcars)
+  mtcars$cyl <- as.factor(mtcars$cyl)
+  mtcars$gear <- as.factor(mtcars$gear)
+  model <- lm(mpg ~ hp + gear * vs + cyl + drat, data = mtcars)
+
+  # don't select "Intercept" parameter
+  mp <- as.data.frame(format(parameters::model_parameters(model, drop = "^\\(Intercept")))
+
+  groups <- list(
+    Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
+    Interactions = c(8, 9),
+    Controls = c(2, 3, 7)
+  )
+  expect_snapshot(export_table(mp, format = "tt", row_groups = groups, table_width = Inf))
+  expect_snapshot(export_table(
+    mp,
+    format = "text",
+    row_groups = groups,
+    table_width = Inf
+  ))
+  expect_snapshot(export_table(
+    mp,
+    format = "markdown",
+    row_groups = groups,
+    table_width = Inf
+  ))
+  expect_snapshot(export_table(
+    mp,
+    format = "text",
+    row_groups = groups,
+    table_width = Inf,
+    align = "llrrlr"
+  ))
+  expect_snapshot(export_table(
+    mp,
+    format = "markdown",
+    row_groups = groups,
+    table_width = Inf,
+    align = "llrrlr"
+  ))
+
+  attr(mp, "indent_rows") <- list(
+    Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
+    Interactions = c(8, 9),
+    Controls = c(2, 3, 7)
+  )
+  expect_snapshot(export_table(mp, format = "tt", table_width = Inf))
+
+  mp <- as.data.frame(format(parameters::model_parameters(model, drop = "^\\(Intercept")))
+  mp$groups <- c(
+    "Engine", "Controls", "Controls", "Engine", "Engine", "Engine", "Controls",
+    "Interactions", "Interactions"
+  )
+  expect_snapshot(export_table(mp, format = "tt", by = "groups", table_width = Inf))
 })

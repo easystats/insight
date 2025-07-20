@@ -7,6 +7,10 @@
 * `get_predicted()` now supports `chisq.test()`, and returns the expected
   frequencies.
 
+* `export_table()` gains better support for the _tinytables_ package. Use
+  `format = "tt"` to export tables into the tinytable-format. This can also
+  be used with grouped tables, i.e. `by = "group"`.
+
 ## Bug fixes
 
 * Fixed issue with models of class `selection` with multiple response

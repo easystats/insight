@@ -28,6 +28,8 @@ export_table(
   zap_small = FALSE,
   table_width = "auto",
   remove_duplicates = FALSE,
+  row_groups = NULL,
+  column_groups = NULL,
   verbose = TRUE,
   ...
 )
@@ -112,8 +114,10 @@ column four and left-align the fifth column.}
 
 \item{by}{Name of column(s) in \code{x} that indicates grouping for tables.
 When \code{format = "html"}, \code{by} is passed down to \code{gt::gt(groupname_col = by)}.
+Likewise, for \code{format = "tt"}, \code{by} indicates the name of the variable in
+the data frame, which is then used to create row headers in the table.
 For markdown and text format, \code{x} is internally split into a list of data
-frames.}
+frames. See also \code{row_groups} to group rows in the printed output.}
 
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
@@ -139,6 +143,22 @@ parts, duplicated ("empty") rows will be removed. If \code{FALSE}, empty rows
 will be preserved. Only applies when \code{table_width} is \emph{not} \code{NULL} (or
 \code{Inf}) \emph{and} table is split into multiple parts.}
 
+\item{row_groups}{Named list, can be used as alternative to \code{by} to group
+rows in the printed output, but in a more flexible way. List elements may
+either be character vectors that match the names of values in the first
+column of the data frame that belong to one group, or list elements can be
+row numbers of those value rows that should belong to one group. The names
+of the list elements will be used as group names, which will be inserted as
+"header row". Rows will be re-ordered according to the order used in
+\code{row_groups}, while all rows with non-matching values will be added to the
+end.}
+
+\item{column_groups}{Named list, can be used to group columns in the printed
+output. List elements must indicate column indices for columns that should
+belong to one group. The names of the list elements will be used as group
+names, which will be inserted as "column header row". Currently only
+works for \code{format = "tt"}.}
+
 \item{verbose}{Toggle messages and warnings.}
 
 \item{...}{Arguments passed to \code{\link[tinytable:tt]{tinytable::tt()}} and \code{\link[tinytable:style_tt]{tinytable::style_tt()}}
@@ -149,8 +169,11 @@ If \code{format = "text"} (or \code{NULL}), a formatted character string is
 returned. \code{format = "markdown"} (or \code{"md"}) returns a character string of
 class \code{knitr_kable}, which renders nicely in markdown files. \code{format = "html"}
 returns an \code{gt} object (created by the \strong{gt} package), which - by default -
-is displayed in the IDE's viewer pane or default browser. This object can
-be further modified with the various gt-functions.
+is displayed in the IDE's viewer pane or default browser. This object can be
+further modified with the various gt-functions. \code{format = "tt"} returns a
+\code{\link[tinytable:tt]{tinytable::tt()}} object, which is a lightweight table format that can be
+used in markdown, LaTeX, HTML and other formats, depending on the context
+where the table is used.
 }
 \description{
 Function to export data frames into tables, which can be printed
@@ -213,6 +236,31 @@ export_table(d)
 export_table(d, width = 8)
 export_table(d, width = c(x = 5, z = 10))
 export_table(d, width = c(x = 5, y = 5, z = 10), align = "lcr")
+
+# group rows in the table
+\dontrun{
+data(mtcars)
+
+# fit model
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$gear <- as.factor(mtcars$gear)
+model <- lm(mpg ~ hp + gear * vs + cyl + drat, data = mtcars)
+
+# model summary, don't select "Intercept" parameter
+mp <- as.data.frame(format(
+  parameters::model_parameters(model, drop = "^\\\\(Intercept")
+))
+
+# define groups for the table
+groups <- list(
+  Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
+  Interactions = c(8, 9),
+  Controls = c(2, 3, 7)
+)
+
+# export table with groups, using tinytable format
+export_table(mp, format = "tt", row_groups = groups)
+}
 }
 \seealso{
 Vignettes
