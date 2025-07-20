@@ -83,6 +83,8 @@ find_response.brmsfit <- function(x, combine = TRUE, ...) {
       # if we have a response with "|", we want to return only the left part
       if (grepl("|", resp_formula, fixed = TRUE)) {
         resp_formula <- trim_ws(gsub("(.*)\\|(.*)", "\\1", resp_formula))
+        # just for the records, an alternative way to do this:
+        # resp_formula <- trim_ws(sub("^([^|]+)\\|.*", "\\1", resp_formula))
       }
       resp_formula
     }))
