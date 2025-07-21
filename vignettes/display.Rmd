@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-if (!requireNamespace("datawizard", quietly = TRUE) || !requireNamespace("gt", quietly = TRUE) || getRVersion() < "4.2.0") {
+if (!requireNamespace("datawizard", quietly = TRUE) || !requireNamespace("gt", quietly = TRUE) || getRversion() < "4.1.0") {
   knitr::opts_chunk$set(eval = FALSE)
 } else {
   library(datawizard)
