@@ -18,8 +18,12 @@
 #' @return Depending on `format`, either an object of class `gt_tbl`,
 #' `tinytable`, or a character vector of class `knitr_kable`.
 #'
-#' @examplesIf requireNamespace("gt")
+#' @examplesIf all(check_if_installed(c("gt", "tinytable"), quietly = TRUE))
 #' display(iris[1:5, ], format = "html")
+#'
+#' display(iris[1:5, ], format = "tt")
+#'
+#' display(iris[1:5, ], format = "markdown")
 #' @export
 display <- function(object, ...) {
   UseMethod("display")

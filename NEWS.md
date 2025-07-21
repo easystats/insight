@@ -1,5 +1,10 @@
 # insight (devel)
 
+## Breaking changes
+
+* `apply_table_theme()` was removed, since it was an experimental feature that
+  is no longer used in any package.
+
 ## Changes
 
 * `display()`, `print_md()` and `print_html()` get a `.table` method.
