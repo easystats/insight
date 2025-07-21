@@ -5,7 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Formatting, printing and exporting tables}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -15,11 +15,10 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-if (!requireNamespace("poorman", quietly = TRUE) ||
-  !requireNamespace("gt", quietly = TRUE)) {
+if (!requireNamespace("datawizard", quietly = TRUE) || !requireNamespace("gt", quietly = TRUE) || getRversion() < "4.1.0") {
   knitr::opts_chunk$set(eval = FALSE)
 } else {
-  library(poorman)
+  library(datawizard)
   library(gt)
 }
 ```
@@ -81,8 +80,8 @@ format_table(df)
 As you can see, `format_table()` modifies columns, turning number into characters (so that it has the same amount of digits), and  detecting confidence intervals. This is usually combined with column-specific formatting functions, like `format_p()`:
 
 ```{r}
-df %>%
-  mutate(p = format_p(p, stars = TRUE)) %>%
+df |>
+  data_modify(p = format_p(p, stars = TRUE)) |>
   format_table()
 ```
 
@@ -134,9 +133,30 @@ export_table(df, format = "html")
 This can be combined with `format_table()`.
 
 ```{r}
-df %>%
-  format_table(ci_brackets = c("(", ")")) %>%
+df |>
+  format_table(ci_brackets = c("(", ")")) |>
   export_table(format = "html")
 ```
 
-TODO: What about display?
+## Displaying tables with `display()`
+
+While `export_table()` gives you fine-grained control, the `display()` function serves as a high-level wrapper. It is designed to take an object and "display" it in a user-friendly format. Most of the functions in `{easystats}` that produce table-like outputs usually also have a `display()` method, which is a convenient way to visualize the results in different formats, which integrates nicely in markdown or quarto documents.
+
+Let's see how it works with our example data frame:
+
+```{r}
+# By default, display() creates a markdown table
+display(df)
+```
+
+You can specify the output format using the `format` argument. For instance, to create a rich HTML table (powered by the {gt} package), you can use `format = "html"`:
+
+```{r, results='asis'}
+display(df, format = "html")
+```
+
+A special option is `format = "tt"`, which creates a table using the {tinytable} package. This is a very flexible format, as the table can be rendered to HTML, LaTeX, or other formats depending on the context.
+
+```{r}
+display(df, format = "tt")
+```
