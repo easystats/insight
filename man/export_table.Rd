@@ -157,7 +157,7 @@ end.}
 output. List elements must indicate column indices for columns that should
 belong to one group. The names of the list elements will be used as group
 names, which will be inserted as "column header row". Currently only
-works for \code{format = "tt"}.}
+works for \code{format = "tt"} or \code{format = "html"}.}
 
 \item{verbose}{Toggle messages and warnings.}
 

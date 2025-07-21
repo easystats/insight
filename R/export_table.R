@@ -87,7 +87,7 @@
 #'   output. List elements must indicate column indices for columns that should
 #'   belong to one group. The names of the list elements will be used as group
 #'   names, which will be inserted as "column header row". Currently only
-#'   works for `format = "tt"`.
+#'   works for `format = "tt"` or `format = "html"`.
 #' @param ... Arguments passed to [`tinytable::tt()`] and [`tinytable::style_tt()`]
 #'   when `format = "tt"`.
 #' @inheritParams format_value
@@ -634,8 +634,8 @@ print.insight_table <- function(x, ...) {
 }
 
 
-# plain text formatting ------------------------
-
+# plain text formatting ----------------------------------
+# --------------------------------------------------------
 
 .format_basic_table <- function(final,
                                 header,
@@ -876,6 +876,7 @@ print.insight_table <- function(x, ...) {
 
 
 # helper to prepare table body for text output ---------------------
+# ------------------------------------------------------------------
 
 .table_parts <- function(rows,
                          final,
@@ -1005,8 +1006,8 @@ print.insight_table <- function(x, ...) {
 }
 
 
-# helper ----------------
-
+# helper -------------------------------------------------
+# --------------------------------------------------------
 
 .new_column_names <- function(table_data, column_names) {
   # new column names for the table?
@@ -1055,6 +1056,9 @@ print.insight_table <- function(x, ...) {
   paste0(rows, footer[1])
 }
 
+
+# row grouping -------------------------------------------
+# --------------------------------------------------------
 
 .indent_groups <- function(final, indent_groups) {
   # check length of indent string
@@ -1221,7 +1225,8 @@ print.insight_table <- function(x, ...) {
 }
 
 
-# tinytable formatting -------------------
+# tinytable formatting ----------------------------------
+# --------------------------------------------------------
 
 .format_tiny_table <- function(final,
                                caption = NULL,
@@ -1258,7 +1263,8 @@ print.insight_table <- function(x, ...) {
 }
 
 
-# markdown formatting -------------------
+# markdown formatting ------------------------------
+# --------------------------------------------------
 
 .format_markdown_table <- function(final,
                                    caption = NULL,
@@ -1360,7 +1366,8 @@ print.insight_table <- function(x, ...) {
 }
 
 
-# html formatting ---------------------------
+# html formatting ----------------------------------------
+# --------------------------------------------------------
 
 .format_html_table <- function(
   final,
@@ -1370,6 +1377,7 @@ print.insight_table <- function(x, ...) {
   align = "center",
   group_by = NULL,
   row_groups = NULL,
+  column_groups = NULL,
   ...
 ) {
   check_if_installed("gt")
@@ -1481,6 +1489,13 @@ print.insight_table <- function(x, ...) {
     for (i in 1:nchar(align)) {
       col_align <- switch(substr(align, i, i), l = "left", r = "right", "center")
       out <- gt::cols_align(out, col_align, i)
+    }
+  }
+
+  # group columns?
+  if (!is.null(column_groups)) {
+    for (i in names(column_groups)) {
+      out <- gt::tab_spanner(out, label = i, columns = column_groups[[i]])
     }
   }
 
