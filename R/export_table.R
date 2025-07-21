@@ -1254,7 +1254,7 @@ print.insight_table <- function(x, ...) {
   # we need to indent rows first, because we re-order the rows here
   out <- .row_groups_tt(final, row_groups = row_groups, group_by = group_by, ...)
   # now create the tinytable object
-  final <- tinytable::tt(out$final, caption = caption, notes = footer, ...)
+  final <- tinytable::tt(out$final, caption = caption[1], notes = footer, ...)
   # insert sub header rows and column spans, if we have any
   if (!is.null(out$row_groups) || !is.null(column_groups)) {
     final <- tinytable::group_tt(final, i = out$row_groups, j = column_groups)
