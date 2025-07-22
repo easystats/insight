@@ -20,7 +20,7 @@
 #'   markdown and `"html"` for HTML output. A special option is `"tt"`, which
 #'   creates a [`tinytable::tt()`] object, where the output format is dependent
 #'   on the context where the table is used, i.e. it can be markdown format when
-#'   `export_table()` is used in markdown files, or LaTex format when creating
+#'   `export_table()` is used in markdown files, or LaTeX format when creating
 #'   PDFs etc.
 #' @param title,caption,subtitle Table title (same as caption) and subtitle, as
 #'   strings. If `NULL`, no title or subtitle is printed, unless it is stored as
