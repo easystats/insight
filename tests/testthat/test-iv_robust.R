@@ -116,27 +116,29 @@ test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
 })
 
-skip_if_not_installed("ivreg")
-data("CigaretteDemand", package = "ivreg")
-m2 <- estimatr::iv_robust(
-  log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
-  data = CigaretteDemand
-)
-m3 <- estimatr::iv_robust(
-  packs ~ log(rprice) + log(rincome) | salestax + log(rincome),
-  data = CigaretteDemand
-)
-
-m4 <- estimatr::lm_robust(
-  log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
-  data = CigaretteDemand
-)
-m5 <- estimatr::lm_robust(
-  packs ~ log(rprice) + log(rincome) | salestax + log(rincome),
-  data = CigaretteDemand
-)
-
 test_that("get_loglikelihood", {
+  skip_on_cran()
+  skip_if_not_installed("ivreg")
+
+  data("CigaretteDemand", package = "ivreg")
+  m2 <- estimatr::iv_robust(
+    log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
+    data = CigaretteDemand
+  )
+  m3 <- estimatr::iv_robust(
+    packs ~ log(rprice) + log(rincome) | salestax + log(rincome),
+    data = CigaretteDemand
+  )
+
+  m4 <- estimatr::lm_robust(
+    log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
+    data = CigaretteDemand
+  )
+  m5 <- estimatr::lm_robust(
+    packs ~ log(rprice) + log(rincome) | salestax + log(rincome),
+    data = CigaretteDemand
+  )
+
   expect_equal(as.numeric(get_loglikelihood(m2)), -286.56173, tolerance = 1e-3)
   expect_equal(as.numeric(get_loglikelihood(m3)), -206.39546, tolerance = 1e-3)
   expect_equal(as.numeric(get_loglikelihood(m4)), -286.55949, tolerance = 1e-3)
