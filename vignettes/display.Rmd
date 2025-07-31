@@ -15,11 +15,13 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-if (!requireNamespace("datawizard", quietly = TRUE) || !requireNamespace("gt", quietly = TRUE) || getRversion() < "4.1.0") {
+
+pkgs <- c("datawizard", "gt", "tinytable")
+if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
-} else {
-  library(datawizard)
-  library(gt)
+}
+if (getRversion() < "4.1.0") {
+  knitr::opts_chunk$set(eval = FALSE)
 }
 ```
 
@@ -80,6 +82,7 @@ format_table(df)
 As you can see, `format_table()` modifies columns, turning number into characters (so that it has the same amount of digits), and  detecting confidence intervals. This is usually combined with column-specific formatting functions, like `format_p()`:
 
 ```{r}
+library(datawizard) # for data_modify()
 df |>
   data_modify(p = format_p(p, stars = TRUE)) |>
   format_table()
