@@ -187,7 +187,7 @@ export_table(
   x,
   caption = list(
     c("Red Table 1", "red"),
-    c("Blue Table 2", "bue"),
+    c("Blue Table 2", "blue"),
     c("Green Table 3", "green")
   ),
   footer = list(

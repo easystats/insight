@@ -171,13 +171,12 @@ test_that("export_table, table_width, remove duplicated empty lines", {
   expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", sep = " | ", remove_duplicates = TRUE)))
   expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", cross = "+", remove_duplicates = TRUE)))
 
-  skip_if_not_installed("ggeffects")
-  data(efc, package = "ggeffects")
-  out <- datawizard::data_codebook(efc[, 1:4])
+  data(efc_insight, package = "insight")
+  out <- datawizard::data_codebook(efc_insight[, 1:4])
   out$.row_id <- NULL
   expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = TRUE, empty_line = "-", cross = "+")))
   expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = FALSE, empty_line = "-", cross = "+")))
-  out <- datawizard::data_codebook(efc[, 1:3])
+  out <- datawizard::data_codebook(efc_insight[, 1:3])
   out$.row_id <- NULL
   expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = TRUE, empty_line = "-", cross = "+")))
   expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = FALSE, empty_line = "-", cross = "+")))
@@ -229,7 +228,7 @@ test_that("export_table, gt, simple", {
 
 test_that("export_table, gt, complex with group indention", {
   skip_if_not_installed("gt")
-  skip_if_not_installed("parameters")
+  skip_if_not_installed("parameters", minimum_version = "0.27.0.1")
   skip_on_cran()
   data(iris)
 
@@ -243,15 +242,125 @@ test_that("export_table, gt, complex with group indention", {
     select = "{estimate}{stars}|({se})",
     groups = list(
       Species = c(
-        "Species [versicolor]",
-        "Species [virginica]"
+        "Species (versicolor)",
+        "Species (virginica)"
       ),
       Interactions = c(
-        "Species [versicolor] × Petal Length", # note the unicode char!
-        "Species [virginica] × Petal Length"
+        "Species (versicolor) × Petal Length", # note the unicode char!
+        "Species (virginica) × Petal Length"
       ),
       Controls = "Petal Length"
     )
   ))
   expect_snapshot(as.character(out))
+})
+
+test_that("export_table, new column names", {
+  data(iris)
+  x <- as.data.frame(iris[1:5, ])
+  out <- export_table(x, column_names = letters[1:5])
+  expect_identical(
+    strsplit(out, "\n")[[1]][1],
+    "   a |    b |    c |    d |      e"
+  )
+  out <- export_table(x, column_names = c(Species = "a"))
+  expect_identical(
+    strsplit(out, "\n")[[1]][1],
+    "Sepal.Length | Sepal.Width | Petal.Length | Petal.Width |      a"
+  )
+
+  # errors
+  expect_error(
+    export_table(x, column_names = letters[1:4]),
+    regex = "Number of names"
+  )
+  expect_error(
+    export_table(x, column_names = c(Species = "a", abc = "b")),
+    regex = "Not all names"
+  )
+  expect_error(
+    export_table(x, column_names = c(Species = "a", "b")),
+    regex = "is a named vector"
+  )
+})
+
+
+test_that("export_table, by in text format", {
+  data(mtcars)
+  data(iris)
+
+  expect_snapshot(export_table(mtcars, by = c("cyl", "gear")))
+  expect_snapshot(export_table(iris, by = "Species"))
+  expect_snapshot(export_table(mtcars, by = ~ cyl + gear))
+
+  # errors
+  expect_error(
+    export_table(iris, by = "Specis"),
+    regex = "Not all variables"
+  )
+  expect_error(
+    export_table(iris, by = 6),
+    regex = "cannot be lower"
+  )
+})
+
+
+test_that("export_table, tinytable with indented rows", {
+  skip_if_not_installed("parameters")
+  skip_if_not_installed("tinytable")
+
+  data(mtcars)
+  mtcars$cyl <- as.factor(mtcars$cyl)
+  mtcars$gear <- as.factor(mtcars$gear)
+  model <- lm(mpg ~ hp + gear * vs + cyl + drat, data = mtcars)
+
+  # don't select "Intercept" parameter
+  mp <- as.data.frame(format(parameters::model_parameters(model, drop = "^\\(Intercept")))
+
+  groups <- list(
+    Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
+    Interactions = c(8, 9),
+    Controls = c(2, 3, 7)
+  )
+  expect_snapshot(export_table(mp, format = "tt", row_groups = groups, table_width = Inf))
+  expect_snapshot(export_table(
+    mp,
+    format = "text",
+    row_groups = groups,
+    table_width = Inf
+  ))
+  expect_snapshot(export_table(
+    mp,
+    format = "markdown",
+    row_groups = groups,
+    table_width = Inf
+  ))
+  expect_snapshot(export_table(
+    mp,
+    format = "text",
+    row_groups = groups,
+    table_width = Inf,
+    align = "llrrlr"
+  ))
+  expect_snapshot(export_table(
+    mp,
+    format = "markdown",
+    row_groups = groups,
+    table_width = Inf,
+    align = "llrrlr"
+  ))
+
+  attr(mp, "indent_rows") <- list(
+    Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
+    Interactions = c(8, 9),
+    Controls = c(2, 3, 7)
+  )
+  expect_snapshot(export_table(mp, format = "tt", table_width = Inf))
+
+  mp <- as.data.frame(format(parameters::model_parameters(model, drop = "^\\(Intercept")))
+  mp$groups <- c(
+    "Engine", "Controls", "Controls", "Engine", "Engine", "Engine", "Controls",
+    "Interactions", "Interactions"
+  )
+  expect_snapshot(export_table(mp, format = "tt", by = "groups", table_width = Inf))
 })

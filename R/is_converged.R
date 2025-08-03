@@ -4,7 +4,7 @@
 #' @description `is_converged()` provides an alternative convergence
 #'   test for `merMod`-objects.
 #'
-#' @param x A `merMod` or `glmmTMB`-object.
+#' @param x A model object from class `merMod`, `glmmTMB`, `glm` or `_glm`.
 #' @param tolerance Indicates up to which value the convergence result is
 #'   accepted. The smaller `tolerance` is, the stricter the test will be.
 #' @param ... Currently not used.
@@ -80,7 +80,7 @@ is_converged.default <- function(x, tolerance = 0.001, ...) {
 
 #' @export
 is_converged.merMod <- function(x, tolerance = 0.001, ...) {
-  insight::check_if_installed("Matrix")
+  check_if_installed("Matrix")
 
   relgrad <- with(x@optinfo$derivs, Matrix::solve(Hessian, gradient))
 
@@ -94,7 +94,26 @@ is_converged.merMod <- function(x, tolerance = 0.001, ...) {
 
 
 #' @export
-is_converged.glmmTMB <- function(x, ...) {
+is_converged.glmmTMB <- function(x, tolerance = 0.001, ...) {
   # https://github.com/glmmTMB/glmmTMB/issues/275
-  isTRUE(x$sdr$pdHess)
+  # https://stackoverflow.com/q/79110546/2094622
+  isTRUE(all.equal(x$fit$convergence, 0, tolerance = tolerance)) && isTRUE(x$sdr$pdHess)
+}
+
+
+#' @export
+is_converged.glm <- function(x, tolerance = 0.001, ...) {
+  if (!is.null(x$converged)) {
+    isTRUE(x$converged)
+  } else if (!is.null(x$fit$converged)) {
+    isTRUE(x$fit$converged)
+  } else {
+    NULL
+  }
+}
+
+
+#' @export
+is_converged._glm <- function(x, tolerance = 0.001, ...) {
+  isTRUE(x$fit$converged)
 }

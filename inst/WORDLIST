@@ -14,7 +14,9 @@ DOI
 DirichletReg
 DirichletRegModel
 Dom
+EFC
 ESS
+EUROFAMCARE
 Elff
 GJRM
 GLMM
@@ -28,6 +30,7 @@ IC
 IDE's
 Ieno
 Kenward
+LaTex
 MCMCglmm
 MCSE
 Mattan
@@ -53,6 +56,7 @@ VGAM
 Vehtari
 WeightIt
 Zuur
+afex
 al
 ansi
 ateucher
@@ -71,6 +75,7 @@ bmwiernik
 brms
 brmsfit
 btergm
+caregiving
 ci
 cglm
 clm
@@ -78,14 +83,17 @@ cloglog
 clubSandwich
 cmprsk
 codebook
+codecov
 colour
 coloured
 comparator
 coxrobust
 datagrid
 datawizard
+dbarts
 dirichlet
 doi
+dpar
 easystats
 ecosystem
 effectsizes

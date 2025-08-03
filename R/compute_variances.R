@@ -25,7 +25,7 @@
   # needed for singularity check
   check_if_installed("performance", reason = "to check for singularity")
 
-  faminfo <- model_info(model, verbose = FALSE)
+  faminfo <- model_info(model, response = 1, verbose = FALSE)
 
   # check argument
   approx_method <- match.arg(approximation, c("lognormal", "delta", "trigamma", "observation_level"))
@@ -101,7 +101,7 @@
     if (verbose) {
       format_warning(
         sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).", name_full), # nolint
-        "Solution: Respecify random structure! You may also decrease the `tolerance` level to enforce the calculation of random effect variances." # nolint
+        "Decrease the `tolerance` level to force the calculation of random effect variances, or impose priors on your random effects parameters (using packages like `brms` or `glmmTMB`)." # nolint
       )
     }
     no_random_variance <- TRUE
@@ -128,7 +128,7 @@
   if (!.random_slopes_in_fixed(model) && verbose) {
     format_warning(
       sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.", name_full),
-      "Solution: Respecify fixed structure!"
+      "Respecify the fixed effects structure of your model (add random slopes as fixed effects)."
     )
   }
 
@@ -163,7 +163,6 @@
   if (component %in% c("residual", "distribution", "all")) {
     var.distribution <- .compute_variance_distribution(
       model,
-      var_cor = mixed_effects_info$vc,
       faminfo,
       model_null = model_null,
       revar_null = var.random_null,
@@ -586,7 +585,6 @@
 # different values for the log/delta/trigamma approximation.
 # -----------------------------------------------------------------------------
 .compute_variance_distribution <- function(model,
-                                           var_cor,
                                            faminfo,
                                            model_null = NULL,
                                            revar_null = NULL,
@@ -602,7 +600,10 @@
     # single sigma parameter. in this case, we can't calculate residual
     # variance and return NULL
     if (inherits(model, "brmsfit")) {
-      params <- find_parameters(model)$conditional
+      params <- unlist(
+        compact_list(find_parameters(model)[c("conditional", "sigma")]),
+        use.names = FALSE
+      )
       sigma_params <- grepl("b_sigma", params, fixed = TRUE)
       if (sum(sigma_params) > 1) {
         if (verbose) {

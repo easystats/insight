@@ -124,6 +124,20 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
 }
 
 
+.get_sigma.afex_aov <- function(x, verbose = TRUE, ...) {
+  s <- .safe({
+    model_deviance <- get_deviance(x, verbose = verbose)
+    residual_df <- suppressWarnings(get_df(x, type = "residual", model = "univariate"))
+    sqrt(abs(model_deviance) / residual_df)
+  })
+  if (is_empty_object(s)) {
+    return(NULL)
+  }
+  class(s) <- c("insight_aux", class(s))
+  s
+}
+
+
 .get_sigma.model_fit <- function(x, verbose = TRUE, ...) {
   .get_sigma(x$fit, verbose = verbose)
 }
@@ -243,7 +257,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
   }
 
   if (is_empty_object(s)) {
-    info <- model_info(x, verbose = FALSE)
+    info <- model_info(x, response = 1, verbose = FALSE)
     if (!is.null(info) && info$is_mixed) {
       dots <- list(...)
       # in "get_variance()", we call "get_sigma()" - make sure we avoid

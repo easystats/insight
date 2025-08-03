@@ -15,6 +15,12 @@ test_that("get_data.t-test", {
   )
 })
 
+test_that("find_formula.t-test", {
+  x <- t.test(mpg ~ vs, data = mtcars)
+  expect_null(find_formula(x))
+  expect_silent(find_formula(x))
+})
+
 test_that("model_info.t-test", {
   expect_true(model_info(x)$is_ttest)
 })
@@ -35,6 +41,7 @@ test_that("get_data.t-test, one-sample", {
   expect_identical(nrow(get_data(tt2)), 32L)
   expect_true(model_info(tt1)$is_ttest)
   expect_true(model_info(tt2)$is_ttest)
+  expect_silent(get_data(tt1))
 })
 
 # Two sample
@@ -221,6 +228,7 @@ test_that("get_data.freedman", {
 test_that("model_info.shapiro-test", {
   expect_true(model_info(m)$is_variancetest)
   expect_identical(model_info(m)$family, "shapiro")
+  expect_silent(model_info(m))
 })
 
 

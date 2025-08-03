@@ -91,7 +91,7 @@
     # but not all variable are duplicates, add indices of regular values
     if (ncol(x) > length(reihenfolge)) {
       # get remaining indices
-      xl <- seq_len(ncol(x))[-seq_len(length(reihenfolge))]
+      xl <- seq_len(ncol(x))[-seq_along(reihenfolge)]
       # add to "reihefolge"
       reihenfolge <- c(reihenfolge, xl)
     }
@@ -124,14 +124,18 @@
 
 # extract random effects from formula
 .get_model_random <- function(f, model, split_nested = FALSE) {
-  is_special <- inherits(
-    model,
-    c(
-      "MCMCglmm", "gee", "LORgee", "mixor", "clmm2", "felm", "feis", "bife",
-      "BFBayesFactor", "BBmm", "glimML", "MANOVA", "RM", "cglm", "glmm",
-      "glmgee"
+  if (is.null(model)) {
+    is_special <- FALSE
+  } else {
+    is_special <- inherits(
+      model,
+      c(
+        "MCMCglmm", "gee", "LORgee", "mixor", "clmm2", "felm", "feis", "bife",
+        "BFBayesFactor", "BBmm", "glimML", "MANOVA", "RM", "cglm", "glmm",
+        "glmgee"
+      )
     )
-  )
+  }
 
   if (identical(safe_deparse(f), "~0") || identical(safe_deparse(f), "~1")) {
     return(NULL)
@@ -145,6 +149,10 @@
       re <- as.list(re)
       split_nested <- FALSE
     }
+  } else if (is_empty_object(re)) {
+    # need this for the many brms-custom formulas, this exception might not
+    # be yet captured - so make sure, "re" is not empty here.
+    return(NULL)
   } else {
     re <- trim_ws(substring(re, max(gregexpr(pattern = "|", re, fixed = TRUE)[[1]]) + 1))
   }
@@ -222,22 +230,35 @@
 
 .all_elements <- function() {
   c(
-    "conditional", "conditional1", "conditional2", "conditional3", "precision",
-    "nonlinear", "random", "zi", "zero_inflated", "zero_inflated_random", "shape",
-    "dispersion", "dispersion_random", "instruments", "interactions", "simplex",
-    "smooth_terms", "sigma", "nu", "tau", "correlation", "slopes", "cluster",
-    "extra", "scale", "marginal", "alpha", "beta", "survival", "infrequent_purchase",
-    "auxiliary", "mix", "shiftprop", "phi", "ndt", "hu", "xi", "coi", "zoi",
-    "aux", "dist", "selection", "outcome", "time_dummies", "sigma_random",
-    "beta_random", "car", "nominal", "bidrange", "mu", "kappa", "bias"
+    # these come first
+    "conditional", "conditional1", "conditional2", "conditional3",
+    "precision", "nonlinear",
+    # regular random
+    "random",
+    # zero-inflated and random
+    "zero_inflated", "zero_inflated_random",
+    "zi", "zi_random",
+    # dispersion and random
+    "dispersion", "dispersion_random",
+    # then instruments and smooth terms
+    "instruments", "interactions", "smooth_terms",
+    # then auxiliary
+    "alpha", "aux", "auxiliary", "beta", "beta_random", "bias",
+    "bs", "bidrange", "car", "cluster", "coi", "correlation", "delta",
+    "dist", "extra", "hu", "infrequent_purchase", "k", "kappa", "marginal",
+    "mix", "mu", "ndt", "nominal", "nu", "outcome", "phi", "scale", "selection",
+    "shape", "shiftprop", "sigma", "simplex", "slopes", "survival", "tau",
+    "time_dummies", "xi", "zoi",
+    # other random parameters
+    "sigma_random"
   )
 }
 
 .aux_elements <- function() {
   c(
-    "sigma", "alpha", "beta", "dispersion", "precision", "nu", "tau", "shape",
-    "phi", "(phi)", "ndt", "hu", "xi", "coi", "zoi", "mix", "shiftprop", "auxiliary",
-    "aux", "dist", "mu", "kappa", "bias",
+    "(phi)", "alpha", "aux", "auxiliary", "beta", "bias", "coi", "dispersion",
+    "dist", "hu", "kappa", "mix", "mu", "ndt", "nu", "phi", "precision",
+    "shape", "shiftprop", "sigma", "tau", "xi", "zoi",
     # random parameters
     "dispersion_random", "sigma_random", "beta_random"
   )
@@ -245,8 +266,8 @@
 
 .brms_aux_elements <- function() {
   c(
-    "sigma", "mu", "nu", "shape", "beta", "phi", "hu", "ndt", "zoi", "coi",
-    "kappa", "bias", "bs", "zi", "alpha", "xi"
+    "alpha", "beta", "bias", "bs", "coi", "delta", "hu", "k", "kappa",
+    "mu", "ndt", "nu", "phi", "shape", "sigma", "xi", "zi", "zoi"
   )
 }
 
@@ -255,13 +276,21 @@
   elements <- .all_elements()
 
   # zero-inflation component
-  zero_inflated_component <- c("zi", "zero_inflated", "zero_inflated_random")
+  zero_inflated_component <- c("zi", "zi_random", "zero_inflated", "zero_inflated_random")
 
   # auxiliary parameters
   auxiliary_parameters <- .aux_elements()
 
   # random parameters
-  random_parameters <- c("random", "zero_inflated_random", "dispersion_random", "sigma_random", "beta_random", "car")
+  random_parameters <- c(
+    "random",
+    "zero_inflated_random",
+    "zi_random",
+    "dispersion_random",
+    "sigma_random",
+    "beta_random",
+    "car"
+  )
 
   # conditional component
   conditional_component <- setdiff(
@@ -272,6 +301,8 @@
   # location parameters
   location_parameters <- switch(effects,
     fixed = setdiff(elements, c(auxiliary_parameters, random_parameters)),
+    grouplevel = ,
+    random_variance = ,
     random = intersect(setdiff(elements, auxiliary_parameters), random_parameters),
     setdiff(elements, auxiliary_parameters)
   )
@@ -290,14 +321,16 @@
   # that are not covered by the standard elements. We then just do not
   # filter elements.
   if (inherits(model, "brmsfit") && component == "all") {
-    f <- insight::find_formula(model, verbose = FALSE)
-    elements <- unique(c(elements, names(f)))
+    elements <- unique(c(elements, find_auxiliary(model, verbose = FALSE)))
   }
 
   elements <- switch(effects,
-    all = elements,
-    fixed = elements[!elements %in% random_parameters],
-    random = elements[elements %in% random_parameters]
+    all = ,
+    full = elements,
+    fixed = elements[!elements %in% random_parameters & !endsWith(elements, "random")],
+    grouplevel = ,
+    random_variance = ,
+    random = elements[elements %in% random_parameters | endsWith(elements, "random")]
   )
 
   elements <- switch(component,
@@ -462,27 +495,17 @@
 }
 
 
-.is_baysian_emmeans <- function(x) {
+.is_bayesian_marginaleffects <- function(x) {
+  !is.null(attributes(x)$posterior_draws)
+}
+
+
+.is_bayesian_emmeans <- function(x) {
   if (inherits(x, "emm_list")) {
     x <- x[[1]]
   }
   post.beta <- methods::slot(x, "post.beta")
   !(all(dim(post.beta) == 1) && is.na(post.beta))
-}
-
-
-.is_bayesian_model <- function(x, exclude = NULL) {
-  bayes_classes <- c(
-    "brmsfit", "stanfit", "MCMCglmm", "stanreg", "stanmvreg", "bmerMod",
-    "BFBayesFactor", "bamlss", "bayesx", "mcmc", "bcplm", "bayesQR", "BGGM",
-    "meta_random", "meta_fixed", "meta_bma", "blavaan", "blrm", "blmerMod",
-    "bglmerMod"
-  )
-  # if exclude is not NULL, remove elements in exclude from bayes_class
-  if (!is.null(exclude)) {
-    bayes_classes <- bayes_classes[!bayes_classes %in% exclude]
-  }
-  inherits(x, bayes_classes)
 }
 
 

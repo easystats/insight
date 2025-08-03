@@ -50,7 +50,7 @@
   ############################################################################
 
   # Get info
-  info <- model_info(x, verbose = FALSE)
+  info <- model_info(x, response = 1, verbose = FALSE)
 
   # Data
   if (!is.null(dots$newdata) && is.null(data)) data <- dots$newdata
@@ -95,7 +95,7 @@
   # retrieve model object's predict-method prediction-types (if any)
   type_methods <- suppressWarnings(eval(formals(predict_method)$type))
   # and together, these prediction-types are supported...
-  supported <- c(easystats_methods, type_methods, .brms_aux_elements())
+  supported <- c(easystats_methods, type_methods, find_auxiliary(x, verbose = FALSE))
 
   # check aliases - ignore "expected" when this is a valid type-argument (e.g. coxph)
   if (predict %in% c("expected", "response") && !"expected" %in% supported) {
@@ -105,8 +105,17 @@
     predict <- "prediction"
   }
 
+  # intermediate step, evaluate dpars                             ------------
+  ############################################################################
+
   # brms-exceptions: predict distributional parameters
-  if (predict %in% .brms_aux_elements()) {
+  if (!is.null(dots$dpars)) {
+    # if user provided dpars argument, we just pass it to the predict-function.
+    # we don't overwrite the "predict" argument, because this allows us to pass
+    # dpars to "posterior_predict()" - else, when dpars are provided via the
+    # predict-argument, we always set predict = "expectation"
+    dpar <- dots$dpars
+  } else if (inherits(x, "brmsfit") && predict %in% c(find_auxiliary(x, verbose = FALSE), "mu")) {
     dpar <- predict
     predict <- "expectation"
   }

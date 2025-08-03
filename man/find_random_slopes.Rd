@@ -15,9 +15,13 @@ A list of character vectors with the name(s) of the random slopes, or
 list has following elements:
 \itemize{
 \item \code{random}, the random slopes from the conditional part of model
-\item \code{zero_inflated_random}, the random slopes from the zero-inflation
-component of the model
+\item \code{zero_inflated_random}, the random slopes from the zero-inflation component
+of the model. For \strong{brms}, this is named \code{zi_random}.
+\item \code{dispersion_random}, the random slopes from the dispersion component of the
+model
 }
+
+Models of class \code{brmsfit} may also contain elements for auxiliary parameters.
 }
 \description{
 Return the name of the random slopes from mixed effects models.

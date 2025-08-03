@@ -17,7 +17,11 @@
 #'
 #' - `random`, the "random effects" terms from the conditional part of model
 #' - `zero_inflated_random`, the "random effects" terms from the zero-inflation
+#'   component of the model. For **brms**, this is named `zi_random`.
+#' - `dispersion_random`, the "random effects" terms from the dispersion
 #'   component of the model
+#'
+#' Models of class `brmsfit` may also contain elements for auxiliary parameters.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(sleepstudy, package = "lme4")
@@ -41,12 +45,13 @@ find_random <- function(x, split_nested = FALSE, flatten = FALSE) {
   UseMethod("find_random")
 }
 
+
 #' @export
 find_random.default <- function(x, split_nested = FALSE, flatten = FALSE) {
   f <- find_formula(x, verbose = FALSE)
 
   if (is_multivariate(x)) {
-    rn <- names(find_response(x))
+    rn <- names(find_response(x, find_random = TRUE))
     l <- lapply(rn, function(i) .find_random_effects(x, f[[i]], split_nested))
     names(l) <- rn
     l <- compact_list(l)
@@ -65,6 +70,30 @@ find_random.default <- function(x, split_nested = FALSE, flatten = FALSE) {
   }
 }
 
+
+#' @export
+find_random.insight_formula <- function(x, split_nested = FALSE, flatten = FALSE) {
+  if (is_multivariate(x)) {
+    rn <- names(find_response(x))
+    l <- lapply(rn, function(i) .find_random_effects(NULL, x[[i]], split_nested))
+    names(l) <- rn
+    l <- compact_list(l)
+  } else {
+    l <- .find_random_effects(NULL, x, split_nested)
+  }
+
+  if (is_empty_object(l)) {
+    return(NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    l
+  }
+}
+
+
 #' @export
 find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
   if (flatten) {
@@ -76,40 +105,50 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
 
 
 .find_random_effects <- function(x, f, split_nested) {
-  if (!object_has_names(f, "random") && !object_has_names(f, "zero_inflated_random")) {
+  # potential components that can have random effects
+  components <- c("random", "zero_inflated_random")
+
+  # for formulas, we extract everything that ends with "random"
+  if (is.null(x)) {
+    components <- names(f)[endsWith(names(f), "random")]
+  }
+  # for brms, we can have random effects for auxilliary elements, too
+  if (inherits(x, "brmsfit")) {
+    components <- unique(c(components, names(f)[endsWith(names(f), "_random")]))
+  }
+  # for glmmTMB, we can have random effects for dispersion component, too
+  if (inherits(x, "glmmTMB")) {
+    components <- c(components, "dispersion_random")
+  }
+
+  # check which components we have
+  components <- components[vapply(
+    components,
+    function(i) object_has_names(f, i),
+    logical(1)
+  )]
+
+  # if nothing, return null
+  if (!length(components)) {
     return(NULL)
   }
 
-  if (object_has_names(f, "random")) {
-    if (is.list(f$random)) {
-      r1 <- unique(unlist(lapply(
-        f$random,
+  out <- lapply(components, function(comp) {
+    if (is.list(f[[comp]])) {
+      unique(unlist(lapply(
+        f[[comp]],
         .get_model_random,
         model = x,
         split_nested = split_nested
       ), use.names = FALSE))
     } else {
-      r1 <- unique(unlist(
-        .get_model_random(f$random, model = x, split_nested),
+      unique(unlist(
+        .get_model_random(f[[comp]], model = x, split_nested),
         use.names = FALSE
       ))
     }
-  } else {
-    r1 <- NULL
-  }
+  })
 
-  if (object_has_names(f, "zero_inflated_random")) {
-    if (is.list(f$zero_inflated_random)) {
-      r2 <- unique(unlist(
-        lapply(f$zero_inflated_random, .get_model_random, model = x, split_nested = split_nested),
-        use.names = FALSE
-      ))
-    } else {
-      r2 <- unique(.get_model_random(f$zero_inflated_random, model = x, split_nested))
-    }
-  } else {
-    r2 <- NULL
-  }
-
-  compact_list(list(random = r1, zero_inflated_random = r2))
+  names(out) <- components
+  compact_list(out)
 }

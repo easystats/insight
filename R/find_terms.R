@@ -20,7 +20,8 @@
 #' - `conditional`, the names of the predictor variables from the *conditional*
 #'    model (as opposed to the zero-inflated part of a model)
 #' - `random`, the names of the random effects (grouping factors)
-#' - `zero_inflated`, the names of the predictor variables from the *zero-inflated* part of the model
+#' - `zero_inflated`, the names of the predictor variables from the
+#'   *zero-inflated* part of the model
 #' - `zero_inflated_random`, the names of the random effects (grouping factors)
 #' - `dispersion`, the name of the dispersion terms
 #' - `instruments`, the names of instrumental variables
@@ -97,6 +98,28 @@ find_terms.default <- function(x,
   })
 
   compact_list(c(list(response = response), out))
+}
+
+
+#' @export
+find_terms.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  if (is.null(x)) {
+    return(NULL)
+  }
+
+  resp <- find_response(x, verbose = FALSE)
+
+  if (is_multivariate(x)) {
+    l <- lapply(x, .get_variables_list, resp = resp, model = NULL)
+  } else {
+    l <- .get_variables_list(x, resp, model = NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    l
+  }
 }
 
 
@@ -227,14 +250,12 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 
   # remove "1" and "0" from variables in random effects
 
-  if (object_has_names(f, "random")) {
-    pos <- which(f$random %in% c("1", "0"))
-    if (length(pos)) f$random <- f$random[-pos]
-  }
-
-  if (object_has_names(f, "zero_inflated_random")) {
-    pos <- which(f$zero_inflated_random %in% c("1", "0"))
-    if (length(pos)) f$zero_inflated_random <- f$zero_inflated_random[-pos]
+  re_comp <- endsWith(names(f), "random")
+  if (any(re_comp)) {
+    for (i in names(f)[re_comp]) {
+      pos <- which(f[[i]] %in% c("1", "0"))
+      if (length(pos)) f[[i]] <- f[[i]][-pos]
+    }
   }
 
   # restore -1

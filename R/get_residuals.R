@@ -138,6 +138,51 @@ get_residuals.coxph <- function(x, weighted = FALSE, verbose = TRUE, ...) {
 
 
 #' @export
+get_residuals.parameters_efa <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  if (isTRUE(weighted) && isTRUE(verbose)) {
+    format_warning("Weighted residuals are not supported for factor analysis models.")
+  }
+
+  # extract FA object
+  model <- attributes(x)$model
+
+  # sanity check
+  if (is.null(model)) {
+    if (isTRUE(verbose)) {
+      format_warning("The `model` attribute is missing or `NULL`.")
+    }
+    return(NULL)
+  }
+
+  model$residual[upper.tri(model$residual)]
+}
+
+#' @export
+get_residuals.psych <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  NextMethod()
+}
+
+#' @export
+get_residuals.fa <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  if (isTRUE(weighted) && isTRUE(verbose)) {
+    format_warning("Weighted residuals are not supported for factor analysis models.")
+  }
+  x$residual[upper.tri(x$residual)]
+}
+
+#' @export
+get_residuals.omega <- function(x, weighted = FALSE, verbose = TRUE, ...) {
+  if (isTRUE(weighted) && isTRUE(verbose)) {
+    format_warning("Weighted residuals are not supported for omega.")
+  }
+  x$stats$residual[upper.tri(x$stats$residual)]
+}
+
+#' @export
+get_residuals.principal <- get_residuals.fa
+
+
+#' @export
 get_residuals.crr <- function(x, weighted = FALSE, verbose = TRUE, ...) {
   if (isTRUE(weighted) && isTRUE(verbose)) {
     format_warning("Weighted residuals are not supported for `crr` models.")

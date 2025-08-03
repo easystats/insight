@@ -50,6 +50,24 @@ find_response.default <- function(x, combine = TRUE, ...) {
 
 
 #' @export
+find_response.insight_formula <- function(x, combine = TRUE, ...) {
+  if (is.null(x)) {
+    return(NULL)
+  }
+
+  # this is for multivariate response models,
+  # where we have a list of formulas
+  if (is_multivariate(x)) {
+    resp <- unlist(lapply(x, function(i) safe_deparse(i$conditional[[2L]])))
+  } else {
+    resp <- safe_deparse(x$conditional[[2L]])
+  }
+
+  check_cbind(resp, combine, model = NULL)
+}
+
+
+#' @export
 find_response.brmsfit <- function(x, combine = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
 
@@ -62,8 +80,19 @@ find_response.brmsfit <- function(x, combine = TRUE, ...) {
   if (is_multivariate(f)) {
     resp <- unlist(lapply(f, function(i) {
       resp_formula <- safe_deparse(i$conditional[[2L]])
+      # passing "find_random = TRUE" to the function will return only the
+      # left part of the response, if it contains "|". This is required when
+      # called from `find_random()`.
       if (grepl("|", resp_formula, fixed = TRUE)) {
-        resp_formula <- all.vars(i$conditional[[2L]])
+        if (isTRUE(list(...)$find_random)) {
+          # if we have a response with "|", we want to return only the left part
+          resp_formula <- trim_ws(gsub("(.*)\\|(.*)", "\\1", resp_formula))
+          # just for the records, an alternative way to do this:
+          # resp_formula <- trim_ws(sub("^([^|]+)\\|.*", "\\1", resp_formula))
+        } else {
+          # if we do not want to look for random effects, we return the full response
+          resp_formula <- all.vars(i$conditional[[2L]])
+        }
       }
       resp_formula
     }))
@@ -103,10 +132,18 @@ find_response.bfsl <- function(x, combine = TRUE, ...) {
 #' @export
 find_response.selection <- function(x, combine = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
-  resp <- c(
-    safe_deparse(f$conditional$selection[[2L]]),
-    safe_deparse(f$conditional$outcome[[2L]])
-  )
+  resp <- safe_deparse(f$conditional$selection[[2L]])
+  # "outcome" can be a list, so we need to check for that
+  if (is.list(f$conditional$outcome)) {
+    additional_resp <- unlist(
+      lapply(f$conditional$outcome, function(i) safe_deparse(i[[2L]])),
+      use.names = FALSE
+    )
+  } else {
+    additional_resp <- safe_deparse(f$conditional$outcome[[2L]])
+  }
+  resp <- c(resp, additional_resp)
+
   check_cbind(resp, combine, model = x)
 }
 
@@ -144,10 +181,9 @@ find_response.workflow <- function(x, combine = TRUE, ...) {
 }
 
 
-#' @rdname find_response
 #' @export
-find_response.mjoint <- function(x, combine = TRUE, component = c("conditional", "survival", "all"), ...) {
-  component <- match.arg(component)
+find_response.mjoint <- function(x, combine = TRUE, component = "conditional", ...) {
+  component <- validate_argument(component, c("conditional", "survival", "all"))
   f <- find_formula(x, verbose = FALSE)
 
   if (is.null(f)) {
@@ -169,11 +205,8 @@ find_response.mjoint <- function(x, combine = TRUE, component = c("conditional",
 
 #' @rdname find_response
 #' @export
-find_response.joint <- function(x,
-                                combine = TRUE,
-                                component = c("conditional", "survival", "all"),
-                                ...) {
-  component <- match.arg(component)
+find_response.joint <- function(x, combine = TRUE, component = "conditional", ...) {
+  component <- validate_argument(component, c("conditional", "survival", "all"))
   f <- find_formula(x, verbose = FALSE)
 
   if (is.null(f)) {

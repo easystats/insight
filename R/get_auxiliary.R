@@ -62,7 +62,10 @@ get_auxiliary <- function(x,
                           centrality = "mean",
                           verbose = TRUE,
                           ...) {
-  type <- match.arg(type, choices = .aux_elements())
+  type <- validate_argument(
+    type,
+    unique(c(.aux_elements(), .brms_aux_elements(), "all"))
+  )
 
   if (inherits(x, "brmsfit")) {
     return(.get_generic_aux(x, type, summary = summary, centrality = centrality))
@@ -156,10 +159,25 @@ get_dispersion.brmsfit <- get_dispersion.glmmTMB
                              ...) {
   aux <- NULL
   if (inherits(x, "brmsfit")) {
-    aux <- as.data.frame(x)[[param]]
+    if (all(param == "all")) {
+      param <- find_auxiliary(x)
+    }
+    # get posterior draws
+    aux <- as.data.frame(x)
+    # find parameter names of distributional parameters
+    param_names <- unlist(find_parameters(x)[param], use.names = FALSE)
+    # intersect only available columns
+    param <- intersect(param_names, colnames(aux))
+    # check if any distributional parameter available
+    if (is.null(param) || !length(param)) {
+      format_warning(paste0("No auxiliary parameters found."))
+      return(NULL)
+    }
+    aux <- aux[param]
     if (summary) {
       aux <- .summary_of_posteriors(aux, centrality = centrality)
     }
   }
+
   aux
 }

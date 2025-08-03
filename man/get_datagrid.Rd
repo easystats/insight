@@ -15,15 +15,23 @@ get_datagrid(x, ...)
   by = "all",
   factors = "reference",
   numerics = "mean",
-  preserve_range = FALSE,
-  reference = x,
   length = 10,
   range = "range",
+  preserve_range = FALSE,
+  protect_integers = TRUE,
   digits = 3,
+  reference = x,
   ...
 )
 
-\method{get_datagrid}{numeric}(x, length = 10, range = "range", digits = 3, ...)
+\method{get_datagrid}{numeric}(
+  x,
+  length = 10,
+  range = "range",
+  protect_integers = TRUE,
+  digits = 3,
+  ...
+)
 
 \method{get_datagrid}{factor}(x, ...)
 
@@ -56,61 +64,135 @@ evenly distributed from the minimum to the maximum, with a total number of
 \code{length} values covering that range (see 'Examples'). Possible options for
 \code{by} are:
 \itemize{
+\item \strong{Select variables only:}
+\itemize{
 \item \code{"all"}, which will include all variables or predictors.
 \item a character vector of one or more variable or predictor names, like
-\code{c("Species", "Sepal.Width")}, which will create a grid of all combinations
-of unique values. For factors, will use all levels, for numeric variables,
-will use a range of length \code{length} (evenly spread from minimum to maximum)
-and for character vectors, will use all unique values.
-\item a list of named elements, indicating focal predictors and their representative
-values, e.g. \code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}.
-\item a string with assignments, e.g. \code{by = "Sepal.Length = 2"} or
-\code{by = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
-and double quotes to assign strings within strings.
+\code{c("Species", "Sepal.Width")}, which will create a grid of all
+combinations of unique values.
+}
+
+\strong{Note:} If \code{by} specifies only variable names, without associated
+values, the following occurs: factor variables use all their levels,
+numeric variables use a range of \code{length} equally spaced values between
+their minimum and maximum, and character variables use all their unique
+values.
+\item \strong{Select variables and values:}
+\itemize{
+\item \code{by} can be a list of named elements, indicating focal predictors and
+their representative values, e.g. \code{by = list(mpg = 10:20)},
+\code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}, or
+\code{by = list(Sepal.Length = seq(2, 5, 0.5))}.
+\item Instead of a list, it is possible to write a string representation, or
+a character vector of such strings, e.g. \code{by = "mpg = 10:20"},
+\code{by = c("Sepal.Length = c(2, 4)", "Species = 'setosa'")}, or
+\code{by = "Sepal.Length = seq(2, 5, 0.5)"}. Note the usage of single and
+double quotes to assign strings within strings.
+\item In general, any expression after a \code{=} will be evaluated as R code, which
+allows using own functions, e.g.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{fun <- function(x) x^2
+get_datagrid(iris, by = "Sepal.Width = fun(2:5)")
+}\if{html}{\out{</div>}}
+}
+
+\strong{Note:} If \code{by} specifies variables \emph{with} their associated values,
+argument \code{length} is ignored.
 }
 
 There is a special handling of assignments with \emph{brackets}, i.e. values
-defined inside \code{[} and \verb{]}.For \strong{numeric} variables, the value(s) inside
-the brackets should either be
-\itemize{
-\item two values, indicating minimum and maximum (e.g. \code{by = "Sepal.Length = [0, 5]"}),
-for which a range of length \code{length} (evenly spread from given minimum to
-maximum) is created.
-\item more than two numeric values \code{by = "Sepal.Length = [2,3,4,5]"}, in which
-case these values are used as representative values.
-\item a "token" that creates pre-defined representative values:
+defined inside \code{[} and \verb{]}, which create summaries for \emph{numeric} variables.
+Following "tokens" that creates pre-defined representative values are
+possible:
 \itemize{
 \item for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
 \item for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
 \item for Tukey's five number summary (minimum, lower-hinge, median,
 upper-hinge, maximum): \code{"x = [fivenum]"}
-\item for terciles, including minimum and maximum: \code{"x = [terciles]"}
-\item for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
-\item for quartiles, including minimum and maximum: \code{"x = [quartiles]"} (same
-as \code{"x = [fivenum]"})
-\item for quartiles, excluding minimum and maximum: \code{"x = [quartiles2]"}
+\item for quartiles: \code{"x = [quartiles]"} (same as \code{"x = [fivenum]"}, but
+\emph{excluding} minimum and maximum)
+\item for terciles: \code{"x = [terciles]"}
+\item for terciles, \emph{including} minimum and maximum: \code{"x = [terciles2]"}
 \item for a pretty value range: \code{"x = [pretty]"}
 \item for minimum and maximum value: \code{"x = [minmax]"}
 \item for 0 and the maximum value: \code{"x = [zeromax]"}
 \item for a random sample from all values: \code{"x = [sample <number>]"}, where
 \verb{<number>} should be a positive integer, e.g. \code{"x = [sample 15]"}.
 }
-}
 
-For \strong{factor} variables, the value(s) inside the brackets should indicate
-one or more factor levels, like \code{by = "Species = [setosa, versicolor]"}.
-\strong{Note}: the \code{length} argument will be ignored when using brackets-tokens.
+\strong{Note:} the \code{length} argument will be ignored when using brackets-tokens.
 
 The remaining variables not specified in \code{by} will be fixed (see also arguments
 \code{factors} and \code{numerics}).}
 
-\item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the
-reference level), \code{"mode"} (set at the most common level) or \code{"all"} to
-keep all levels.}
+\item{factors}{Type of summary for factors \emph{not} specified in \code{by}. Can be
+\code{"reference"} (set at the reference level), \code{"mode"} (set at the most
+common level) or \code{"all"} to keep all levels.}
 
-\item{numerics}{Type of summary for numeric values. Can be \code{"all"} (will
-duplicate the grid for all unique values), any function (\code{"mean"},
-\code{"median"}, ...) or a value (e.g., \code{numerics = 0}).}
+\item{numerics}{Type of summary for numeric values \emph{not} specified in \code{by}.
+Can be \code{"all"} (will duplicate the grid for all unique values), any
+function (\code{"mean"}, \code{"median"}, ...) or a value (e.g., \code{numerics = 0}).}
+
+\item{length}{Length of numeric target variables selected in \code{by} (if no
+representative values are additionally specified). This arguments controls
+the number of (equally spread) values that will be taken to represent the
+continuous (non-integer alike!) variables. A longer length will increase
+precision, but can also substantially increase the size of the datagrid
+(especially in case of interactions). If \code{NA}, will return all the unique
+values.
+
+In case of multiple continuous target variables, \code{length} can also be a
+vector of different values (see 'Examples'). In this case, \code{length} must be
+of same length as numeric target variables. If \code{length} is a named vector,
+values are matched against the names of the target variables.
+
+When \code{range = "range"} (the default), \code{length} is ignored for integer type
+variables when \code{length} is larger than the number of unique values \emph{and}
+\code{protect_integers} is \code{TRUE} (default). Set \code{protect_integers = FALSE} to
+create a spread of \code{length} number of values from minimum to maximum for
+integers, including fractions (i.e., to treat integer variables as regular
+numeric variables).
+
+\code{length} is furthermore ignored if "tokens" (in brackets \code{[} and \verb{]}) are
+used in \code{by}, or if representative values are additionally specified in
+\code{by}.}
+
+\item{range}{Option to control the representative values given in \code{by}, if no
+specific values were provided. Use in combination with the \code{length}
+argument to control the number of values within the specified range.
+\code{range} can be one of the following:
+\itemize{
+\item \code{"range"} (default), will use the minimum and maximum of the original
+data vector as end-points (min and max). For integer variables, the
+\code{length} argument will be ignored, and \code{"range"} will only use values
+that appear in the data. Set \code{protect_integers = FALSE} to override this
+behaviour for integer variables.
+\item if an interval type is specified, such as \code{\link[=IQR]{"iqr"}},
+\code{\link[bayestestR:ci]{"ci"}}, \code{\link[bayestestR:hdi]{"hdi"}} or
+\code{\link[bayestestR:eti]{"eti"}}, it will spread the values within that range
+(the default CI width is \verb{95\%} but this can be changed by adding for
+instance \code{ci = 0.90}.) See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}. This can
+be useful to have more robust change and skipping extreme values.
+\item if \code{\link[=sd]{"sd"}} or \code{\link[=mad]{"mad"}}, it will spread by this dispersion
+index around the mean or the median, respectively. If the \code{length}
+argument is an even number (e.g., \code{4}), it will have one more step on the
+positive side (i.e., \verb{-1, 0, +1, +2}). The result is a named vector. See
+'Examples.'
+\item \code{"grid"} will create a reference grid that is useful when plotting
+predictions, by choosing representative values for numeric variables
+based on their position in the reference grid. If a numeric variable is
+the first predictor in \code{by}, values from minimum to maximum of the same
+length as indicated in \code{length} are generated. For numeric predictors not
+specified at first in \code{by}, mean and -1/+1 SD around the mean are
+returned. For factors, all levels are returned.
+\item \code{"pretty"} will create a range "pretty" values, using \code{\link[=pretty]{pretty()}}, where
+the value in \code{length} is used for the \code{n} argument in \code{pretty()}.
+}
+
+\code{range} can also be a vector of different values (see 'Examples'). In this
+case, \code{range} must be of same length as numeric target variables. If
+\code{range} is a named vector, values are matched against the names of the
+target variables.}
 
 \item{preserve_range}{In the case of combinations between numeric variables
 and factors, setting \code{preserve_range = TRUE} will drop the observations
@@ -119,48 +201,18 @@ range of its factor level. This leads to an unbalanced grid. Also, if you
 want the minimum and the maximum to closely match the actual ranges, you
 should increase the \code{length} argument.}
 
-\item{reference}{The reference vector from which to compute the mean and SD.
-Used when standardizing or unstandardizing the grid using \code{effectsize::standardize}.}
-
-\item{length}{Length of numeric target variables selected in \code{by}. This
-arguments controls the number of (equally spread) values that will be taken
-to represent the continuous (non-integer alike!) variables. A longer length
-will increase precision, but can also substantially increase the size of
-the datagrid (especially in case of interactions). If \code{NA}, will return all
-the unique values. In case of multiple continuous target variables,
-\code{length} can also be a vector of different values (see 'Examples'). \code{length}
-is ignored for integer type variables only when \code{length} is larger than the
-number of unique values \emph{and} when \code{range = "range"}.}
-
-\item{range}{Option to control the representative values given in \code{by}, if
-no specific values were provided. Use in combination with the \code{length} argument
-to control the number of values within the specified range. \code{range} can be
-one of the following:
-\itemize{
-\item \code{"range"} (default), will use the minimum and maximum of the original data
-vector as end-points (min and max).
-\item if an interval type is specified, such as \code{\link[=IQR]{"iqr"}},
-\code{\link[bayestestR:ci]{"ci"}}, \code{\link[bayestestR:hdi]{"hdi"}} or
-\code{\link[bayestestR:eti]{"eti"}}, it will spread the values within that range
-(the default CI width is \verb{95\%} but this can be changed by adding for instance
-\code{ci = 0.90}.) See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}. This can be useful to have
-more robust change and skipping extreme values.
-\item if \code{\link[=sd]{"sd"}} or \code{\link[=mad]{"mad"}}, it will spread by this dispersion
-index around the mean or the median, respectively. If the \code{length} argument
-is an even number (e.g., \code{4}), it will have one more step on the positive
-side (i.e., \verb{-1, 0, +1, +2}). The result is a named vector. See 'Examples.'
-\item \code{"grid"} will create a reference grid that is useful when plotting
-predictions, by choosing representative values for numeric variables based
-on their position in the reference grid. If a numeric variable is the first
-predictor in \code{by}, values from minimum to maximum of the same length as
-indicated in \code{length} are generated. For numeric predictors not specified at
-first in \code{by}, mean and -1/+1 SD around the mean are returned. For factors,
-all levels are returned.
-}}
+\item{protect_integers}{Defaults to \code{TRUE}. Indicates whether integers (whole
+numbers) should be treated as integers (i.e., prevent adding any in-between
+round number values), or - if \code{FALSE} - as regular numeric variables. Only
+applies when \code{range = "range"} (the default), or if \code{range = "grid"} and the
+first predictor in \code{by} is an integer.}
 
 \item{digits}{Number of digits used for rounding numeric values specified in
 \code{by}. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to
 \code{digits}.}
+
+\item{reference}{The reference vector from which to compute the mean and SD.
+Used when standardizing or unstandardizing the grid using \code{effectsize::standardize}.}
 
 \item{include_smooth}{If \code{x} is a model object, decide whether smooth terms
 should be included in the data grid or not.}
@@ -195,45 +247,71 @@ Alternatively, these can also be used to extract the "grid" columns from
 objects generated by \strong{emmeans} and \strong{marginaleffects} (see those
 \link[=get_datagrid.emmGrid]{methods} for more info).
 }
+\details{
+Data grids are an (artificial or theoretical) representation of the sample.
+They consists of predictors of interest (so-called focal predictors), and
+meaningful values, at which the sample characteristics (focal predictors)
+should be represented. The focal predictors are selected in \code{by}. To select
+meaningful (or representative) values, either use \code{by}, or use a combination
+of the arguments \code{length} and \code{range}.
+}
 \examples{
 \dontshow{if (require("bayestestR", quietly = TRUE) && require("datawizard", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Datagrids of variables and dataframes =====================================
+data(iris)
+data(mtcars)
 
 # Single variable is of interest; all others are "fixed" ------------------
-# Factors
-get_datagrid(iris, by = "Species") # Returns all the levels
-get_datagrid(iris, by = "Species = c('setosa', 'versicolor')") # Specify an expression
 
-# Numeric variables
-get_datagrid(iris, by = "Sepal.Length") # default spread length = 10
-get_datagrid(iris, by = "Sepal.Length", length = 3) # change length
+# Factors, returns all the levels
+get_datagrid(iris, by = "Species")
+# Specify an expression
+get_datagrid(iris, by = "Species = c('setosa', 'versicolor')")
+
+# Numeric variables, default spread length = 10
+get_datagrid(iris, by = "Sepal.Length")
+# change length
+get_datagrid(iris, by = "Sepal.Length", length = 3)
+
+# change non-targets fixing
 get_datagrid(iris[2:150, ],
   by = "Sepal.Length",
   factors = "mode", numerics = "median"
-) # change non-targets fixing
-get_datagrid(iris, by = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
-get_datagrid(iris, by = "Sepal.Length = [0, 1]") # Manually change min/max
-get_datagrid(iris, by = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
-get_datagrid(iris, by = "Sepal.Length = [sd]", digits = 1) # rounded to 1 digit
+)
+
+# change min/max of target
+get_datagrid(iris, by = "Sepal.Length", range = "ci", ci = 0.90)
+
+# Manually change min/max
+get_datagrid(iris, by = "Sepal.Length = c(0, 1)")
+
+# -1 SD, mean and +1 SD
+get_datagrid(iris, by = "Sepal.Length = [sd]")
+
+# rounded to 1 digit
+get_datagrid(iris, by = "Sepal.Length = [sd]", digits = 1)
+
 # identical to previous line: -1 SD, mean and +1 SD
 get_datagrid(iris, by = "Sepal.Length", range = "sd", length = 3)
-get_datagrid(iris, by = "Sepal.Length = [quartiles]") # quartiles
 
-# Numeric and categorical variables, generating a grid for plots
-# default spread length = 10
-get_datagrid(iris, by = c("Sepal.Length", "Species"), range = "grid")
-# default spread length = 3 (-1 SD, mean and +1 SD)
-get_datagrid(iris, by = c("Species", "Sepal.Length"), range = "grid")
+# quartiles
+get_datagrid(iris, by = "Sepal.Length = [quartiles]")
 
 # Standardization and unstandardization
 data <- get_datagrid(iris, by = "Sepal.Length", range = "sd", length = 3)
-data$Sepal.Length # It is a named vector (extract names with `names(out$Sepal.Length)`)
+
+# It is a named vector (extract names with `names(out$Sepal.Length)`)
+data$Sepal.Length
 datawizard::standardize(data, select = "Sepal.Length")
-data <- get_datagrid(iris, by = "Sepal.Length = c(-2, 0, 2)") # Manually specify values
+
+# Manually specify values
+data <- get_datagrid(iris, by = "Sepal.Length = c(-2, 0, 2)")
 data
 datawizard::unstandardize(data, select = "Sepal.Length")
 
+
 # Multiple variables are of interest, creating a combination --------------
+
 get_datagrid(iris, by = c("Sepal.Length", "Species"), length = 3)
 get_datagrid(iris, by = c("Sepal.Length", "Petal.Length"), length = c(3, 2))
 get_datagrid(iris, by = c(1, 3), length = 3)
@@ -242,17 +320,39 @@ get_datagrid(iris, by = c("Sepal.Length", "Species"), numerics = 0)
 get_datagrid(iris, by = c("Sepal.Length = 3", "Species"))
 get_datagrid(iris, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 
+# specify length individually for each focal predictor
+# values are matched by names
+get_datagrid(mtcars[1:4], by = c("mpg", "hp"), length = c(hp = 3, mpg = 2))
+
+# Numeric and categorical variables, generating a grid for plots
+# default spread when numerics are first: length = 10
+get_datagrid(iris, by = c("Sepal.Length", "Species"), range = "grid")
+
+# default spread when numerics are not first: length = 3 (-1 SD, mean and +1 SD)
+get_datagrid(iris, by = c("Species", "Sepal.Length"), range = "grid")
+
+# range of values
+get_datagrid(iris, by = c("Sepal.Width = 1:5", "Petal.Width = 1:3"))
+
 # With list-style by-argument
-get_datagrid(iris, by = list(Sepal.Length = c(1, 3), Species = "setosa"))
+get_datagrid(
+  iris,
+  by = list(Sepal.Length = 1:3, Species = c("setosa", "versicolor"))
+)
+
 
 # With models ===============================================================
+
 # Fit a linear regression
 model <- lm(Sepal.Length ~ Sepal.Width * Petal.Length, data = iris)
+
 # Get datagrid of predictors
 data <- get_datagrid(model, length = c(20, 3), range = c("range", "sd"))
 # same as: get_datagrid(model, range = "grid", length = 20)
+
 # Add predictions
 data$Sepal.Length <- get_predicted(model, data = data)
+
 # Visualize relationships (each color is at -1 SD, Mean, and + 1 SD of Petal.Length)
 plot(data$Sepal.Width, data$Sepal.Length,
   col = data$Petal.Length,

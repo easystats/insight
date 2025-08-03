@@ -1,14 +1,15 @@
-.make_family <- function(x,
-                         fitfam = "gaussian",
-                         zero.inf = FALSE,
-                         hurdle = FALSE,
-                         logit.link = FALSE,
-                         multi.var = FALSE,
-                         link.fun = "identity",
-                         dispersion = FALSE,
-                         verbose = TRUE,
-                         glmmtmb_zeroinf = FALSE, # needed for edge cases
-                         ...) {
+.retrieve_model_info <- function(x,
+                                 fitfam = "gaussian",
+                                 zero.inf = FALSE,
+                                 hurdle = FALSE,
+                                 logit.link = FALSE,
+                                 multi.var = FALSE,
+                                 link.fun = "identity",
+                                 dispersion = FALSE,
+                                 verbose = TRUE,
+                                 glmmtmb_zeroinf = FALSE, # needed for edge cases
+                                 brms_custom_name = NULL, # needed for edge cases
+                                 ...) {
   dots <- list(...)
   if (isTRUE(dots$return_family_only)) {
     return(list(family = fitfam, link_function = link.fun))
@@ -175,7 +176,7 @@
 
   # Bayesian model --------
 
-  is.bayes <- .is_bayesian_model(x)
+  is.bayes <- is_bayesian_model(x)
 
 
   # survival model --------
@@ -418,6 +419,9 @@
     is_binomtest = is_binomtest,
     is_ftest = is_ftest,
     is_meta = is_meta,
+    is_wiener = inherits(x, "brmsfit") && fitfam == "wiener",
+    is_rtchoice = inherits(x, "brmsfit") && fitfam == "custom" && identical(brms_custom_name, "lnr"),
+    is_mixture = fitfam == "mixture",
     link_function = link.fun,
     family = fitfam,
     n_obs = n_obs(x),

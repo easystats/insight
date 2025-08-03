@@ -101,6 +101,7 @@ test_that("clean_names, multimembership", {
 
 test_that("clean_names, multimembership", {
   skip_on_cran()
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
 

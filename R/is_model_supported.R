@@ -35,7 +35,7 @@ is_model_supported <- function(x) {
 #' @rdname is_model_supported
 #' @export
 supported_models <- function() {
-  sort(.supported_models_list())
+  sort(unique(.supported_models_list()))
 }
 
 
@@ -79,6 +79,9 @@ supported_models <- function() {
     # i ----------------------------
     "ivFixed", "iv_robust", "ivreg", "ivprobit",
 
+    # j ----------------------------
+    "joint",
+
     # l ----------------------------
     "lavaan", "lm", "lm_robust", "lme", "lmrob", "lmRob", "lmerMod",
     "lmerModLmerTest", "lmodel2", "logitmfx", "logitor", "logistf", "logitr",
@@ -103,14 +106,14 @@ supported_models <- function() {
     "probitmfx", "phyloglm", "phylolm",
 
     # r ----------------------------
-    "Rchoice", "ridgelm", "riskRegression", "rjags", "rlm", "rlmerMod",
+    "Rchoice", "ridgelm", "riskRegression", "rjags", "rlm", "rlmerMod", "rms",
     "robtab", "RM", "rma", "rma.uni", "robmixglm", "rq", "rqs", "rqss", "rvar",
 
     # s ----------------------------
     "Sarlm", "scam", "selection", "sem", "semLm", "semLme", "SemiParBIV", "serp",
     "slm", "speedlm", "speedglm", "stanfit", "stanmvreg", "stanreg", "summary.lm",
     "survfit", "survreg", "svy_vglm", "svychisq", "svyglm", "svyolr", "svy2lme",
-    "seqanova.svyglm",
+    "seqanova.svyglm", "sdmTMB", "systemfit",
 
     # t ----------------------------
     "t1way", "tobit", "trimcibt", "truncreg",

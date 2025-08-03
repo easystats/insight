@@ -11,30 +11,6 @@
 #'   where the index of the column that is being pulled is `column_index`.
 #'   Defaults to 3, which is the default statistic column for most models'
 #'   summary-output.
-#' @param component String, indicating the model component for which parameters
-#'   should be returned. The default for all models is `"all"`, which returns
-#'   the requested information for all available model components. Furthermore,
-#'   there are specific options depending on the model class. `component` then
-#'   may be one of:
-#'
-#'   - For zero-inflated models (`gmmTMB`, `hurdle`, `zeroinfl`, ...) can also
-#'     be `"conditional"` or `"zero-inflated"`. Note that the *conditional*
-#'     component is also called *count* or *mean* component, depending on the
-#'     model. `glmmTMB` also has a `"dispersion"` component.
-#'   - For models with smooth terms, `component = "smooth_terms"` returns the
-#'     test statistic for the smooth terms.
-#'   - For models of class `mhurdle`, may also be one of  `"conditional"`,
-#'     `"zero_inflated"`, `"infrequent_purchase"` or `"auxiliary"`.
-#'   - For models of class `clm2` or `clmm2`, may also be `"scale"`.
-#'   - For models of class `betareg`, `betaor` or `betamfx`, may also be
-#'     `"precision"`. For other `*mfx` models (`logitmfx`, `betamfx`, ...),
-#'     may also be `"marginal"`.
-#'   - For models of class `mvord`, may also be `"thresholds"` or
-#'     `"correlation"`.
-#'   - For models of class `selection`, may also be `"selection"`, `"outcome"`
-#'     or `"auxiliary"`.
-#'   - For models of class `glmx`, may also be `"extra"`.
-#'   - For models of class `averaging`, may also be `"full"`.
 #' @param robust Logical, if `TRUE`, test statistic based on robust
 #'   standard errors is returned.
 #' @param adjust Character value naming the method used to adjust p-values or
@@ -42,8 +18,11 @@
 #' @param ci Confidence Interval (CI) level. Default to `0.95` (`95%`).
 #'   Currently only applies to objects of class `emmGrid`.
 #' @param ... Currently not used.
+#' @inheritParams find_predictors
 #' @inheritParams get_parameters
 #' @inheritParams get_parameters.emmGrid
+#'
+#' @inheritSection find_predictors Model components
 #'
 #' @return A data frame with the model's parameter names and the related test
 #'   statistic.
@@ -82,6 +61,24 @@ get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
   out <- data.frame(
     Parameter = params,
     Statistic = as.vector(cs[, column_index]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
+get_statistic.aov <- function(x, ...) {
+  s <- summary(x)[[1]]
+  params <- s[!is.na(s$`F value`), ]
+
+  out <- data.frame(
+    Parameter = trim_ws(row.names(params)),
+    Statistic = params$`F value`,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -876,7 +873,7 @@ get_statistic.mvord <- function(x, component = "all", ...) {
 
   params <- rbind(params, params_error)
 
-  if (n_unique(params$Response) == 1) {
+  if (has_single_value(params$Response, remove_na = TRUE)) {
     params$Response <- NULL
   }
 
@@ -1275,12 +1272,12 @@ get_statistic.selection <- function(x, component = "all", ...) {
   params <- data.frame(
     Parameter = rn,
     Statistic = estimates[[3]],
-    Component = "auxiliary",
+    Component = "selection",
     stringsAsFactors = FALSE,
     row.names = NULL
   )
-  params$Component[s$param$index$betaS] <- "selection"
-  params$Component[s$param$index$betaO] <- "outcome"
+  params$Component[s$param$index$errTerms] <- "auxiliary"
+  params$Component[s$param$index$outcome] <- "outcome"
 
   if (component != "all") {
     params <- params[params$Component == component, , drop = FALSE]
@@ -1412,6 +1409,64 @@ get_statistic.garch <- function(x, verbose = TRUE, ...) {
 #' @export
 get_statistic.ergm <- function(x, verbose = TRUE, ...) {
   get_statistic.default(x = x, column_index = 4, verbose = verbose, ...)
+}
+
+
+#' @export
+get_statistic.sdmTMB <- function(x, component = "all", verbose = TRUE, ...) {
+  delta_comp <- isTRUE(x$family$delta)
+  valid_comp <- compact_character(c("all", "conditional", ifelse(delta_comp, "delta", "")))
+  component <- validate_argument(component, valid_comp)
+
+  # get standard errors
+  se <- sqrt(diag(get_varcov(x)))
+
+  # for model with delta component, we have two intercepts
+  intercepts <- which(names(se) == "(Intercept)")
+
+  # get standard errors for each component - we have to remove one intercept
+  if (length(intercepts) > 1) {
+    se_cond <- se[-intercepts[2]]
+    se_delta <- se[-intercepts[1]]
+  } else {
+    se_cond <- se
+    se_delta <- NULL
+  }
+
+  est <- suppressMessages(stats::coef(x, model = 1))
+  conditional <- data.frame(
+    Parameter = names(est),
+    Statistic = est / se_cond,
+    Component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (delta_comp) {
+    est <- suppressMessages(stats::coef(x, model = 2))
+    delta <- data.frame(
+      Parameter = names(est),
+      Statistic = est / se_delta,
+      Component = "delta",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
+
+  if (delta_comp) {
+    out <- rbind(conditional, delta)
+  } else {
+    out <- conditional
+  }
+
+  out <- switch(component,
+    all = out,
+    conditional = conditional,
+    delta = delta
+  )
+
+  attr(out, "statistic") <- find_statistic(x)
+  out
 }
 
 
@@ -2079,10 +2134,8 @@ get_statistic.nlrq <- get_statistic.rq
 
 
 #' @export
-get_statistic.rqss <- function(x,
-                               component = c("all", "conditional", "smooth_terms"),
-                               ...) {
-  component <- match.arg(component)
+get_statistic.rqss <- function(x, component = "all", ...) {
+  component <- validate_argument(component, c("all", "conditional", "smooth_terms"))
 
   cs <- summary(x)
   stat <- c(as.vector(cs$coef[, "t value"]), as.vector(cs$qsstab[, "F value"]))

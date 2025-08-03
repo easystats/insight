@@ -59,9 +59,9 @@ predictor variables. Depending on the combination of the arguments
 \item \code{conditional}, the "fixed effects" terms from the model
 \item \code{random}, the "random effects" terms from the model
 \item \code{zero_inflated}, the "fixed effects" terms from the zero-inflation
-component of the model
+component of the model. For models from \strong{brms}, this is named \code{zi}.
 \item \code{zero_inflated_random}, the "random effects" terms from the zero-inflation
-component of the model
+component of the model. For models from \strong{brms}, this is named \code{zi_random}.
 \item \code{dispersion}, the dispersion terms
 \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm},
 the instrumental variables
@@ -126,7 +126,8 @@ Some model classes also allow rather uncommon options. These are:
 
 For models of class \code{brmsfit} (package \strong{brms}), even more options are
 possible for the \code{component} argument, which are not all documented in detail
-here.
+here. It can be any pre-defined or arbitrary distributional parameter, like
+\code{mu}, \code{ndt}, \code{kappa}, etc.
 }
 
 \section{Parameters, Variables, Predictors and Terms}{

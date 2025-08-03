@@ -79,7 +79,7 @@
 #' component for a better overview. Further, parameter names are "cleaned", if
 #' necessary, also for a cleaner print. See also 'Examples'.
 #'
-#' @examplesIf require("curl", quietly = TRUE) && curl::has_internet() && require("bayestestR", quietly = TRUE)
+#' @examplesIf require("curl", quietly = TRUE) && curl::has_internet() && all(insight::check_if_installed(c("bayestestR", "httr2", "brms"), quietly = TRUE))
 #' \donttest{
 #' library(bayestestR)
 #' model <- download_model("brms_zi_2")
@@ -152,13 +152,14 @@ print_parameters <- function(x,
 
   # determine where to split data frames
   by <- by[by %in% colnames(obj)]
-  f <- lapply(by, function(i) {
-    if (i %in% colnames(obj)) obj[[i]]
+
+  # convert to factor, to preserve correct order
+  obj[by] <- lapply(obj[by], function(i) {
+    factor(i, levels = unique(i))
   })
-  names(f) <- by
 
   # split into groups, remove empty elements
-  out <- split(obj, f)
+  out <- split(obj, obj[by])
   out <- compact_list(lapply(out, function(i) {
     if (nrow(i) > 0L) i
   }))
@@ -166,7 +167,7 @@ print_parameters <- function(x,
   # remove trailing dots
   names(out) <- list_names <- gsub("(.*)\\.$", "\\1", names(out))
 
-  has_zeroinf <- any(grepl("zero_inflated", names(out), fixed = TRUE))
+  has_zeroinf <- any(grepl("(zero_inflated|zi)", names(out)))
 
   # create title attributes, and remove unnecessary columns from output
   out <- lapply(names(out), function(i) {
@@ -185,21 +186,22 @@ print_parameters <- function(x,
     for (j in seq_along(parts)) {
       # Rename "fixed", "random" etc. into proper titles. Here we have the
       # "Main title" of a subcomponent (like "Random effects")
-      if (parts[j] %in% c("fixed", "random") || (has_zeroinf && parts[j] %in% c("conditional", "zero_inflated"))) {
+      if (parts[j] %in% c("fixed", "random") || (has_zeroinf && parts[j] %in% c("conditional", "zi", "zero_inflated"))) {
         tmp <- switch(parts[j],
           fixed = "Fixed effects",
           random = "Random effects",
           dispersion = "Dispersion",
           conditional = "(conditional)",
+          zi = ,
           zero_inflated = "(zero-inflated)"
         )
         title1 <- paste0(title1, " ", tmp)
-      } else if (!parts[j] %in% c("conditional", "zero_inflated")) {
+      } else if (!parts[j] %in% c("conditional", "zi", "zero_inflated")) {
         # here we have the "subtitles" of a subcomponent
         # (like "Intercept: Group-Level 1")
         tmp <- switch(parts[j],
           simplex = "(monotonic effects)",
-          parts[j]
+          paste0("(", parts[j], ")")
         )
         title2 <- paste0(title2, " ", tmp)
       }
@@ -212,7 +214,7 @@ print_parameters <- function(x,
     # we don't need "Effects" and "Component" column any more, and probably
     # also no longer the "Group" column
     columns_to_remove <- c("Effects", "Component", "Cleaned_Parameter")
-    if (n_unique(.group) == 1) {
+    if (has_single_value(.group, remove_na = TRUE)) {
       columns_to_remove <- c(columns_to_remove, "Group")
     } else {
       .group <- NULL

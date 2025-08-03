@@ -1,12 +1,11 @@
 #' @title Find model formula
 #' @name find_formula
 #'
-#' @description Returns the formula(s) for the different parts of a model
-#'  (like fixed or random effects, zero-inflated component, ...).
-#'  `formula_ok()` checks if a model formula has valid syntax
-#'  regarding writing `TRUE` instead of `T` inside `poly()`
-#'  and that no data names are used (i.e. no `data$variable`, but rather
-#'  `variable`).
+#' @description Returns the formula(s) for the different parts of a model (like
+#' fixed or random effects, zero-inflated component, ...). `formula_ok()` checks
+#' if a model formula has valid syntax regarding writing `TRUE` instead of `T`
+#' inside `poly()` and that no data names are used (i.e. no `data$variable`, but
+#' rather `variable`).
 #'
 #' @param verbose Toggle warnings.
 #' @param dichotomies Logical, if model is a `nestedLogit` objects, returns
@@ -34,53 +33,53 @@
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #'
-#' @return A list of formulas that describe the model. For simple models,
-#'  only one list-element, `conditional`, is returned. For more complex
-#'  models, the returned list may have following elements:
+#' @return A list of formulas that describe the model. For simple models, only
+#' one list-element, `conditional`, is returned. For more complex models, the
+#' returned list may have following elements:
 #'
-#'  - `conditional`, the "fixed effects" part from the model (in the
-#'    context of fixed-effects or instrumental variable regression, also
-#'    called *regressors*) . One exception are `DirichletRegModel` models
-#'    from **DirichletReg**, which has two or three components,
-#'    depending on `model`.
+#' - `conditional`, the "fixed effects" part from the model (in the context of
+#'   fixed-effects or instrumental variable regression, also called
+#'   *regressors*) . One exception are `DirichletRegModel` models from
+#'   **DirichletReg**, which has two or three components, depending on `model`.
 #'
-#'  - `random`, the "random effects" part from the model (or the
-#'    `id` for gee-models and similar)
+#' - `random`, the "random effects" part from the model (or the `id` for
+#'   gee-models and similar)
 #'
-#'  - `zero_inflated`, the "fixed effects" part from the
-#'    zero-inflation component of the model
+#' - `zero_inflated`, the "fixed effects" part from the zero-inflation component
+#'   of the model. for models from *brms*, this component is named `zi`.
 #'
-#'  - `zero_inflated_random`, the "random effects" part from the
-#'    zero-inflation component of the model
+#' - `zero_inflated_random`, the "random effects" part from the zero-inflation
+#'   component of the model; for models from *brms*, this component is named
+#'   `zi_random`.
 #'
-#'  - `dispersion`, the dispersion formula
+#' - `dispersion`, the dispersion formula
 #'
-#'  - `instruments`, for fixed-effects or instrumental variable
-#'    regressions like `ivreg::ivreg()`, `lfe::felm()` or `plm::plm()`,
-#'    the instrumental variables
+#' - `instruments`, for fixed-effects or instrumental variable regressions like
+#'   `ivreg::ivreg()`, `lfe::felm()` or `plm::plm()`, the instrumental variables
 #'
-#'  - `cluster`, for fixed-effects regressions like
-#'    `lfe::felm()`, the cluster specification
+#' - `cluster`, for fixed-effects regressions like `lfe::felm()`, the cluster
+#'   specification
 #'
-#'  - `correlation`, for models with correlation-component like
-#'    `nlme::gls()`, the formula that describes the correlation structure
+#' - `correlation`, for models with correlation-component like `nlme::gls()`,
+#'   the formula that describes the correlation structure
 #'
-#'  - `scale`, for distributional models such as `mgcv::gaulss()` family fitted
-#'    with `mgcv::gam()`, the formula that describes the scale parameter
+#' - `scale`, for distributional models such as `mgcv::gaulss()` family fitted
+#'   with `mgcv::gam()`, the formula that describes the scale parameter
 #'
-#'  - `slopes`, for fixed-effects individual-slope models like
-#'    `feisr::feis()`, the formula for the slope parameters
+#' - `slopes`, for fixed-effects individual-slope models like `feisr::feis()`,
+#'   the formula for the slope parameters
 #'
-#'  - `precision`, for `DirichletRegModel` models from
-#'    **DirichletReg**, when parametrization (i.e. `model`) is
-#'    `"alternative"`.
+#' - `precision`, for `DirichletRegModel` models from **DirichletReg**, when
+#'   parametrization (i.e. `model`) is `"alternative"`.
 #'
-#'  - `bidrange`, for models of class `oohbchoice` (from package **DCchoice**),
-#'    which indicates the right-hand side of the bar (the bid-range).
+#' - `bidrange`, for models of class `oohbchoice` (from package **DCchoice**),
+#'   which indicates the right-hand side of the bar (the bid-range).
 #'
-#' @note For models of class `lme` or `gls` the correlation-component
-#'   is only returned, when it is explicitly defined as named argument
-#'   (`form`), e.g. `corAR1(form = ~1 | Mare)`
+#' For models from package **brms**, distributional parameters are also included.
+#'
+#' @note For models of class `lme` or `gls` the correlation-component is only
+#' returned, when it is explicitly defined as named argument (`form`), e.g.
+#' `corAR1(form = ~1 | Mare)`
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(mtcars)
@@ -166,6 +165,10 @@ formula_ok <- function(x,
 #' @export
 find_formula.default <- function(x, verbose = TRUE, ...) {
   f <- .safe(list(conditional = stats::formula(x)))
+  # if evaluation succeeds, we check in a next steps if dots are used
+  if (!is.null(f)) {
+    f$conditional <- .dot_formula(f$conditional, x, ...)
+  }
   .find_formula_return(f, verbose = verbose)
 }
 
@@ -261,9 +264,23 @@ find_formula.gam <- function(x, verbose = TRUE, ...) {
           ziplss = list(conditional = f[[1]], zero_inflated = f[[2]]),
           # handle formula for location-scale models
           gaulss = list(conditional = f[[1]], scale = f[[2]]),
-          # handle formula for multivariate models
+          # handle formula for multivariate models, or for multinomial models,
+          # which also contain a list of formulas
+          multinom = {
+            y <- safe_deparse(f[[1]][[2]])
+            f <- lapply(f, function(.i) {
+              f_cond <- .i
+              if (length(f_cond) < 3) {
+                f_cond <- stats::as.formula(paste(y, safe_deparse(f_cond)))
+              }
+              list(conditional = f_cond)
+            })
+            names(f) <- rep_len(y, length(f))
+            attr(f, "is_mv") <- "1"
+            f
+          },
           `Multivariate normal` = {
-            r <- lapply(f, function(.i) deparse(.i[[2]]))
+            r <- lapply(f, function(.i) safe_deparse(.i[[2]]))
             f <- lapply(f, function(.i) list(conditional = .i))
             names(f) <- r
             attr(f, "is_mv") <- "1"
@@ -1128,7 +1145,7 @@ find_formula.tobit <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.hurdle <- function(x, verbose = TRUE, ...) {
-  .zeroinf_formula(x, verbose = verbose)
+  .zeroinf_formula(x, verbose = verbose, ...)
 }
 
 #' @export
@@ -1140,7 +1157,7 @@ find_formula.zerotrunc <- find_formula.hurdle
 
 #' @export
 find_formula.zcpglm <- function(x, verbose = TRUE, ...) {
-  .zeroinf_formula(x, separator = "\\|\\|", verbose = verbose)
+  .zeroinf_formula(x, separator = "\\|\\|", verbose = verbose, ...)
 }
 
 
@@ -1274,6 +1291,36 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
     zero_inflated_random = f.zirandom,
     dispersion = f.disp,
     dispersion_random = f.disprandom
+  ))
+  .find_formula_return(f, verbose = verbose)
+}
+
+
+#' @export
+find_formula.sdmTMB <- function(x, verbose = TRUE, ...) {
+  f.cond <- stats::formula(x)
+
+  # sanity check, we might have a list of formulas, only need first element
+  if (is.list(f.cond)) {
+    f.cond <- f.cond[[1]]
+  }
+
+  # extract random parts of formula
+  f.random <- lapply(.findbars(f.cond), function(.x) {
+    f <- safe_deparse(.x)
+    stats::as.formula(paste0("~", f))
+  })
+
+  if (length(f.random) == 1L) {
+    f.random <- f.random[[1]]
+  }
+
+  # extract fixed effects parts
+  f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
+
+  f <- compact_list(list(
+    conditional = f.cond,
+    random = f.random
   ))
   .find_formula_return(f, verbose = verbose)
 }
@@ -1680,126 +1727,30 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   f_cond <- stats::as.formula(.get_fixed_effects(f_cond))
 
-  f_zi <- f$pforms$zi
-  f_zirandom <- NULL
+  dpar_formulas <- list()
+  dpar_random_formulas <- list()
 
-  # auxiliary
-  f_sigma <- f$pforms$sigma
-  f_mu <- f$pforms$mu
-  f_nu <- f$pforms$nu
-  f_shape <- f$pforms$shape
-  f_alpha <- f$pforms$alpha
-  f_beta <- f$pforms$beta
-  f_phi <- f$pforms$phi
-  f_xi <- f$pforms$xi
-  f_hu <- f$pforms$hu
-  f_ndt <- f$pforms$ndt
-  f_zoi <- f$pforms$zoi
-  f_coi <- f$pforms$coi
-  f_kappa <- f$pforms$kappa
-  f_bias <- f$pforms$bias
-  f_bs <- f$pforms$bs
-
-  # brms formulas can also have custom names, based on variable names, e.g.:
-  # brm(
-  #   bf(carb ~ gear * vs) + lf(disc ~ 0 + mo(cyl)),
-  #   data = mtcars,
-  #   family = cumulative("probit"),
-  # )
-  # the lf() part is in "f$pforms" with name "disc".
-  #
-  # we therefore need to check whether we have additional names not yet covered
-  # by the above exceptions.
-
-  # auxiliary names
-  auxiliary_names <- .brms_aux_elements()
-
-  # check if any further pforms exist
-  if (all(names(f$pforms) %in% auxiliary_names)) {
-    f_custom <- NULL
-  } else {
-    custom_names <- setdiff(names(f$pforms), auxiliary_names)
-    if (length(custom_names)) {
-      f_custom <- f$pforms[custom_names]
-    }
-  }
-
-  f_sigmarandom <- NULL
-  f_betarandom <- NULL
-
-
-  # split zero-inflated fixed from zero-inflated random
-
-  if (!is_empty_object(f_zi)) {
-    f_zirandom <- lapply(.findbars(f_zi), function(.x) {
-      f <- safe_deparse(.x)
-      stats::as.formula(paste0("~", f))
+  for (aux in names(f$pforms)) {
+    f_aux <- f$pforms[[aux]]
+    f_aux_random <- lapply(.findbars(f_aux), function(.x) {
+      fx <- safe_deparse(.x)
+      stats::as.formula(paste0("~", fx))
     })
-
-    if (length(f_zirandom) == 1L) {
-      f_zirandom <- f_zirandom[[1]]
+    if (length(f_aux_random) == 1L) {
+      f_aux_random <- f_aux_random[[1]]
     }
-
-    f_zi <- stats::as.formula(paste0("~", safe_deparse(f_zi[[3L]])))
-    f_zi <- stats::as.formula(.get_fixed_effects(f_zi))
+    f_aux <- stats::as.formula(paste0("~", safe_deparse(f_aux[[3L]])))
+    f_aux <- stats::as.formula(.get_fixed_effects(f_aux))
+    # add formula to list of custom formulas
+    dpar_formulas[[aux]] <- f_aux
+    dpar_random_formulas[[paste0(aux, "_random")]] <- f_aux_random
   }
 
-
-  # split sigma fixed from sigma random
-
-  if (!is_empty_object(f_sigma)) {
-    f_sigmarandom <- lapply(.findbars(f_sigma), function(.x) {
-      f <- safe_deparse(.x)
-      stats::as.formula(paste0("~", f))
-    })
-
-    if (length(f_sigmarandom) == 1L) {
-      f_sigmarandom <- f_sigmarandom[[1]]
-    }
-
-    f_sigma <- stats::as.formula(paste0("~", safe_deparse(f_sigma[[3L]])))
-    f_sigma <- stats::as.formula(.get_fixed_effects(f_sigma))
-  }
-
-
-  # split beta fixed from beta random
-
-  if (!is_empty_object(f_beta)) {
-    f_betarandom <- lapply(.findbars(f_beta), function(.x) {
-      f <- safe_deparse(.x)
-      stats::as.formula(paste0("~", f))
-    })
-
-    if (length(f_betarandom) == 1L) {
-      f_betarandom <- f_betarandom[[1]]
-    }
-
-    f_beta <- stats::as.formula(paste0("~", safe_deparse(f_beta[[3L]])))
-    f_beta <- stats::as.formula(.get_fixed_effects(f_beta))
-  }
-
-
-  compact_list(c(list(
-    conditional = f_cond,
-    random = f_random,
-    zero_inflated = f_zi,
-    zero_inflated_random = f_zirandom,
-    sigma = f_sigma,
-    sigma_random = f_sigmarandom,
-    beta = f_beta,
-    beta_random = f_betarandom,
-    shape = f_shape,
-    phi = f_phi,
-    hurdle = f_hu,
-    mu = f_mu,
-    nu = f_nu,
-    ndt = f_ndt,
-    bs = f_bs,
-    bias = f_bias,
-    zero_one_inflated = f_zoi,
-    conditional_one_inflated = f_coi,
-    kappa = f_kappa
-  ), f_custom))
+  compact_list(c(
+    list(conditional = f_cond, random = f_random),
+    dpar_formulas,
+    dpar_random_formulas
+  ))
 }
 
 
@@ -1825,7 +1776,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
 # Find formula for zero-inflated regressions, where
 # zero-inflated part is separated by | from count part
-.zeroinf_formula <- function(x, separator = "\\|", verbose = TRUE) {
+.zeroinf_formula <- function(x, separator = "\\|", verbose = TRUE, ...) {
   f <- tryCatch(stats::formula(x), error = function(x) NULL)
 
   if (is.null(f)) {
@@ -1844,7 +1795,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
   ## TODO could be extended to all find_formula()
 
   # fix dot-formulas
-  c.form <- .dot_formula(f = c.form, model = x)
+  c.form <- .dot_formula(f = c.form, model = x, ...)
 
   # fix dot-formulas
   zi.form <- tryCatch(
@@ -1869,7 +1820,13 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
 # try to guess "full" formula for dot-abbreviation, e.g.
 # lm(mpg ~., data = mtcars)
-.dot_formula <- function(f, model) {
+.dot_formula <- function(f, model, ...) {
+  # skip_dot_formula = TRUE is only internally used, to avoid infinite loops
+  # when `find_formula()` is called from `get_data()`
+  if (isTRUE(list(...)$skip_dot_formula)) {
+    return(f)
+  }
+
   # fix dot-formulas
   tryCatch(
     {

@@ -75,7 +75,8 @@
 #'
 #' For models of class `brmsfit` (package **brms**), even more options are
 #' possible for the `component` argument, which are not all documented in detail
-#' here.
+#' here. It can be any pre-defined or arbitrary distributional parameter, like
+#' `mu`, `ndt`, `kappa`, etc.
 #'
 #' @section Parameters, Variables, Predictors and Terms:
 #' There are four functions that return information about the variables in a
@@ -108,9 +109,9 @@
 #' - `conditional`, the "fixed effects" terms from the model
 #' - `random`, the "random effects" terms from the model
 #' - `zero_inflated`, the "fixed effects" terms from the zero-inflation
-#'   component of the model
+#'   component of the model. For models from **brms**, this is named `zi`.
 #' - `zero_inflated_random`, the "random effects" terms from the zero-inflation
-#'   component of the model
+#'   component of the model. For models from **brms**, this is named `zi_random`.
 #' - `dispersion`, the dispersion terms
 #' - `instruments`, for fixed-effects regressions like `ivreg`, `felm` or `plm`,
 #'   the instrumental variables
@@ -186,7 +187,7 @@ find_predictors.default <- function(x,
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
   } else {
-    l
+    compact_list(l)
   }
 }
 
@@ -294,14 +295,153 @@ find_predictors.afex_aov <- function(x,
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
   } else {
-    l
+    compact_list(l)
   }
 }
 
 
+#' @export
+find_predictors.brmsfit <- function(x,
+                                    effects = "fixed",
+                                    component = "all",
+                                    flatten = FALSE,
+                                    verbose = TRUE,
+                                    ...) {
+  effects <- validate_argument(effects, c("fixed", "random", "all"))
+  component <- validate_argument(
+    component,
+    c(
+      "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
+      "correlation", "smooth_terms", "location", "auxiliary", "distributional"
+    )
+  )
+
+  f <- find_formula(x, verbose = verbose)
+  is_mv <- is_multivariate(f)
+  elements <- .get_elements(effects, component, model = x)
+
+  # extract all components, including custom and auxiliary ones
+  dpars <- find_auxiliary(x)
+
+  # elements to return
+  elements <- .brms_elements(effects, component, dpars)
+
+  # filter formulas, depending on requested effects and components
+  if (is_mv) {
+    f <- lapply(f, function(.x) .prepare_predictors_brms(x, .x, elements))
+  } else {
+    f <- .prepare_predictors_brms(x, f, elements)
+  }
+
+  # random effects are returned as list, so we need to unlist here
+  if (is_mv) {
+    l <- lapply(f, .return_vars, x = x)
+  } else {
+    l <- .return_vars(f, x)
+  }
+
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
+    return(NULL)
+  }
+
+  # some models, like spatial models, have random slopes that are not defined
+  # as fixed effect predictor. In such cases, we have to add the random slope term
+  # manually, so other functions like "get_data()" work as expected...
+
+  if (any(endsWith(names(l), "random")) && effects == "all") {
+    random_slope <- unlist(find_random_slopes(x), use.names = FALSE)
+    all_predictors <- unlist(unique(l), use.names = FALSE)
+    rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
+    if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
+  }
+
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    compact_list(l)
+  }
+}
+
+
+#' @export
+find_predictors.sdmTMB <- function(x,
+                                   effects = "fixed",
+                                   flatten = FALSE,
+                                   verbose = TRUE,
+                                   ...) {
+  effects <- validate_argument(effects, c("fixed", "random", "all"))
+  elements <- .get_elements(effects, component = "conditional", model = x)
+
+  f <- find_formula(x, verbose = verbose)
+  f <- .prepare_predictors(x, f, elements)
+
+  # random effects are returned as list, so we need to unlist here
+  l <- .return_vars(f, x)
+
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
+    return(NULL)
+  }
+
+  # add time variable
+  l$time <- x$call$time
+
+  # add random slope, if not yet present
+  if (object_has_names(l, "random") && effects == "all") {
+    random_slope <- unlist(find_random_slopes(x), use.names = FALSE)
+    all_predictors <- unlist(unique(l), use.names = FALSE)
+    rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
+    if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
+  }
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    compact_list(l)
+  }
+}
+
+
+#' @export
+find_predictors.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, ...) {
+  is_mv <- is_multivariate(x)
+  if (is_mv) {
+    elements <- unlist(lapply(x, names), use.names = FALSE)
+  } else {
+    elements <- names(x)
+  }
+
+  # filter formulas, depending on requested effects and components
+  if (is_mv) {
+    f <- lapply(x, function(.x) .prepare_predictors_brms(NULL, .x, elements))
+  } else {
+    f <- .prepare_predictors_brms(x = NULL, f = x, elements)
+  }
+
+  # random effects are returned as list, so we need to unlist here
+  if (is_mv) {
+    l <- lapply(f, .return_vars, x = NULL)
+  } else {
+    l <- .return_vars(f, NULL)
+  }
+
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
+    return(NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    compact_list(l)
+  }
+}
+
+
+# utilities ------------------------------------------------------------------
+
 .return_vars <- function(f, x) {
   l <- lapply(names(f), function(i) {
-    if (i %in% c("random", "zero_inflated_random")) {
+    if (endsWith(i, "random")) {
       # random effects, just unlist
       unique(paste(unlist(f[[i]])))
     } else if (is.numeric(f[[i]])) {
@@ -340,7 +480,9 @@ find_predictors.afex_aov <- function(x,
       # random effects components.
       l_pforms <- unlist(lapply(nf$pforms, all.vars), recursive = TRUE, use.names = FALSE)
       # don't overwrite. maybe this could be smarter
-      if (length(l_pforms) > 0 && !"nonlinear" %in% names(l) && !"nonlinear" %in% names(f)) {
+      if (
+        length(l_pforms) > 0 && !"nonlinear" %in% names(l) && !"nonlinear" %in% names(f)
+      ) {
         f <- c(f, list(nonlinear = NULL)) # need this for renaming and subsetting later
         l <- c(l, list(nonlinear = unique(l_pforms)))
         l <- lapply(l, .remove_values, nl_parms)
@@ -348,16 +490,32 @@ find_predictors.afex_aov <- function(x,
     }
   }
 
-
   # remove constants
   l <- lapply(l, .remove_values, c(".", "pi", "1", "0"))
   l <- lapply(l, .remove_values, c(0, 1))
-  l <- lapply(l, function(i) gsub("`", "", i, fixed = TRUE))
+  # recursively remove backticks from variable names
+  l <- rapply(
+    l,
+    function(x) gsub("`", "", x, fixed = TRUE),
+    classes = "character",
+    how = "replace"
+  )
   # for brms-models, we need to remove "Intercept", which is a special notation
   if (inherits(x, "brmsfit")) {
     l <- lapply(l, .remove_values, "Intercept")
   }
   names(l) <- names(f)[!empty_elements]
+
+  # for models of class selection, we may have an "outcome" element, which is
+  # # a list of formlas. We want to name those elements, too
+  if (inherits(x, "selection") && object_has_names(l, "outcome") && is.list(l$outcome)) {
+    f <- find_formula(x, verbose = FALSE)
+    # if we have a list of formulas, we need to name them
+    resp <- vapply(f$conditional$outcome, function(i) safe_deparse(i[[2]]), character(1))
+    if (is.list(l$outcome) && length(l$outcome) == length(resp)) {
+        names(l$outcome) <- resp
+    }
+  }
 
   l
 }
@@ -365,7 +523,6 @@ find_predictors.afex_aov <- function(x,
 
 .prepare_predictors <- function(x, f, elements) {
   f <- f[names(f) %in% elements]
-
   # from conditional model, remove response
   if (object_has_names(f, "conditional")) {
     f[["conditional"]] <- tryCatch(
@@ -373,7 +530,6 @@ find_predictors.afex_aov <- function(x,
       # some models like {logitr} return a one-sided formula
       error = function(e) f[["conditional"]][[2]]
     )
-
     # for survival models, separate out strata element
     if (inherits(x, "coxph")) {
       f_cond <- safe_deparse(f[["conditional"]])
@@ -405,7 +561,6 @@ find_predictors.afex_aov <- function(x,
         # .*: Matches any character zero or more times.
         # \\): Matches a closing parenthesis.
         no_strata <- "strata\\(.*\\)\\s*[\\+|\\*]*|[\\+|\\*]\\s*strata\\(.*\\)"
-
         # find predictors used inside "strata()"
         strata <- gsub(",", "+", gsub(yes_strata, "\\1", f_cond), fixed = TRUE)
         # remove reserved terms from strata formula
@@ -413,50 +568,59 @@ find_predictors.afex_aov <- function(x,
         strata <- gsub(pattern, "", strata)
         # remove trailing "+"
         strata <- gsub("(.*)\\+$", "\\1", trim_ws(strata))
-
         # find predictors used outside "strata()"
         non_strata <- trim_ws(gsub("~", "", gsub(no_strata, "\\1", f_cond), fixed = TRUE))
-
         # create formula parts
         f$strata <- stats::reformulate(strata)
         f$conditional <- stats::reformulate(non_strata)
       }
     }
   }
-
   # from conditional model, remove response
   if (object_has_names(f, "survival")) {
     f[["survival"]] <- f[["survival"]][[3]]
   }
-
   # from conditional model, remove response
   if (inherits(x, "selection")) {
     if (object_has_names(f, "selection")) {
       f[["selection"]] <- f[["selection"]][[3]]
     }
     if (object_has_names(f, "outcome")) {
-      f[["outcome"]] <- f[["outcome"]][[3]]
+      # can be a list, so we need to check
+      if (is.list(f[["outcome"]])) {
+        f[["outcome"]] <- lapply(f[["outcome"]], function(i) i[[3L]])
+      } else {
+        f[["outcome"]] <- f[["outcome"]][[3L]]
+      }
+    }
+  }
+  # if we have random effects, just return grouping variable, not random slopes
+  for (i in names(f)) {
+    if (endsWith(i, "random")) {
+      f[[i]] <- .get_group_factor(x, f[[i]])
     }
   }
 
-  # if we have random effects, just return grouping variable, not random slopes
-  if (object_has_names(f, "random")) {
-    f[["random"]] <- .get_group_factor(x, f[["random"]])
-  }
+  f
+}
 
-  # same for zi-random effects
-  if (object_has_names(f, "zero_inflated_random")) {
-    f[["zero_inflated_random"]] <- .get_group_factor(x, f[["zero_inflated_random"]])
-  }
 
-  # same for sigma-random effects
-  if (object_has_names(f, "sigma_random")) {
-    f[["sigma_random"]] <- .get_group_factor(x, f[["sigma_random"]])
+.prepare_predictors_brms <- function(x, f, elements) {
+  f <- f[names(f) %in% elements]
+  # from conditional model, remove response
+  if (object_has_names(f, "conditional")) {
+    f[["conditional"]] <- tryCatch(
+      f[["conditional"]][[3]],
+      # some models like {logitr} return a one-sided formula
+      error = function(e) f[["conditional"]][[2]]
+    )
   }
-
-  # same for beta-random effects
-  if (object_has_names(f, "beta_random")) {
-    f[["beta_random"]] <- .get_group_factor(x, f[["beta_random"]])
+  # process all remaining elements, might be custom
+  remaining <- setdiff(names(f), "conditional")
+  for (i in remaining) {
+    if (endsWith(i, "random")) {
+      f[[i]] <- .get_group_factor(x, f[[i]])
+    }
   }
 
   f

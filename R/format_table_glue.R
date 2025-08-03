@@ -1,12 +1,11 @@
 # this function does the main composition of columns for the output.
-.format_glue_table <- function(x,
-                               style,
-                               coef_column = NULL,
-                               p_stars = NULL,
-                               ...) {
+.format_glue_table <- function(x, style, coef_column = NULL, p_stars = NULL, ...) {
   # evaluate dots
   dots <- list(...)
   original_x <- x
+
+  # save model information
+  info <- attributes(x)$model_info
 
   # default format
   if (!is.null(dots$format)) {
@@ -22,10 +21,11 @@
     new_column_name <- NULL
   }
 
-  if (identical(format, "html")) {
-    linesep <- "<br>"
-  } else {
+  # line separator
+  if (is.null(dots$line_separator)) {
     linesep <- " "
+  } else {
+    linesep <- dots$line_separator
   }
 
   # init significant stars
@@ -42,11 +42,17 @@
   ))
 
   # find columns
-  if (is.null(coef_column) || !coef_column %in% colnames(x)) {
+  if (is.null(coef_column) || !length(coef_column) || !coef_column %in% colnames(x)) {
     coef_column <- intersect(colnames(x), coefficient_names)[1]
   }
-  ci_column <- colnames(x)[endsWith(colnames(x), " CI") | colnames(x) == "CI" | colnames(x) == "conf.int"] # nolint
-  stat_colum <- colnames(x)[colnames(x) %in% c("t", "z", "Chi2", "Statistic", "statistic") | grepl("^(t\\(|Chi2\\()", colnames(x))] # nolint
+  ci_column <- colnames(x)[
+    endsWith(colnames(x), " CI") | colnames(x) == "CI" | colnames(x) == "conf.int"
+  ]
+  stat_column <- colnames(x)[
+    colnames(x) %in%
+      c("t", "z", "Chi2", "Statistic", "statistic") |
+      grepl("^(t\\(|Chi2\\()", colnames(x))
+  ]
   # modelbased
   focal_term_column <- c(
     attributes(original_x)$focal_terms,
@@ -55,10 +61,15 @@
   )
 
   # make sure we have a glue-like syntax
-  style <- .convert_to_glue_syntax(style, linesep)
+  style <- .convert_to_glue_syntax(style, linesep, info)
+
+  # we need special handling for ROPE columns. These are sometimes pre-formatted,
+  # have the name "% in ROPE" and then won't be removed at the end. So we check
+  # if we have a {rope} token, and if not, we also remove "% in ROPE" column later
+  special_rope <- any(grepl("{rope}", style, fixed = TRUE))
 
   # "|" indicates cell split
-  style <- unlist(strsplit(style, split = "|", fixed = TRUE))
+  style <- unlist(strsplit(style, split = "|", fixed = TRUE), use.names = FALSE)
 
   # define column names
   if (length(style) == 1 && !is.null(new_column_name)) {
@@ -69,7 +80,14 @@
 
   # paste glue together
   formatted_columns <- compact_list(lapply(seq_along(style), function(i) {
-    result <- .format_glue_output(x, coef_column, ci_column, style[i], format, column_names[i])
+    result <- .format_glue_output(
+      x,
+      coef_column,
+      ci_column,
+      style[i],
+      format,
+      column_names[i]
+    )
     # fix invalid columns
     if (all(nzchar(colnames(result)))) {
       result
@@ -116,9 +134,19 @@
     broom_columns("uncertainty"),
     ci_column
   ))
+  # add special rope column?
+  if (!special_rope) {
+    p_column <- unique(c(p_column, "ROPE", "% in ROPE"))
+  }
 
   # bind glue-columns to original data, but remove former columns first
-  original_x[c(coefficient_names, uncertainty_column, stat_colum, p_column, df_column)] <- NULL # nolint
+  original_x[c(
+    coefficient_names,
+    uncertainty_column,
+    stat_column,
+    p_column,
+    df_column
+  )] <- NULL # nolint
 
   # reorder
   original_x <- standardize_column_order(original_x)
@@ -140,19 +168,22 @@
 
 # this function handles short cuts for "select" and creates the related
 # glue patterns
-.convert_to_glue_syntax <- function(style, linesep = NULL) {
+.convert_to_glue_syntax <- function(style, linesep = NULL, info = NULL) {
   # set default
   if (is.null(linesep)) {
     linesep <- " "
   }
 
+  # for Bayesian models, we have pd instead p
+  p_column <- ifelse(isTRUE(info$is_bayesian), "{pd}", "{p}")
+
   # default
   if (is.null(style)) {
-    style <- paste0("{estimate}", linesep, "({ci})|{p}")
+    style <- paste0("{estimate}", linesep, "({ci})|", p_column)
 
     # style: estimate and CI, p-value in separate column (currently identical to "ci_p2")
   } else if (style %in% c("minimal", "ci_p2")) {
-    style <- paste0("{estimate}", linesep, "({ci})|{p}")
+    style <- paste0("{estimate}", linesep, "({ci})|", p_column)
 
     # style: estimate and CI, no p
   } else if (style == "ci") {
@@ -172,7 +203,7 @@
 
     # style: estimate and SE, p-value in separate column
   } else if (style %in% c("short", "se_p2")) {
-    style <- paste0("{estimate}", linesep, "({se})|{p}")
+    style <- paste0("{estimate}", linesep, "({se})|", p_column)
 
     # style: only estimate
   } else if (style %in% c("est", "coef")) {

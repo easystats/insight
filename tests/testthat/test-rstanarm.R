@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not_installed("curl")
 skip_if_offline()
 skip_if_not_installed("lme4")
 skip_if_not_installed("BayesFactor")
@@ -172,9 +173,9 @@ test_that("model_info-stanreg-glm", {
       is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
       is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
       is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
-      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
-      link_function = "logit", family = "binomial", n_obs = 56L,
-      n_grouplevels = c(herd = 15L)
+      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE, is_wiener = FALSE,
+      is_rtchoice = FALSE, is_mixture = FALSE, link_function = "logit",
+      family = "binomial", n_obs = 56L, n_grouplevels = c(herd = 15L)
     ),
     ignore_attr = TRUE
   )
@@ -195,9 +196,9 @@ test_that("model_info-stanreg-glm", {
       is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
       is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
       is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
-      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
-      link_function = "identity", family = "gaussian", n_obs = 150L,
-      n_grouplevels = NULL
+      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE, is_wiener = FALSE,
+      is_rtchoice = FALSE, is_mixture = FALSE, link_function = "identity",
+      family = "gaussian", n_obs = 150L, n_grouplevels = NULL
     ),
     ignore_attr = TRUE
   )
@@ -218,9 +219,9 @@ test_that("model_info-stanreg-glm", {
       is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
       is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
       is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
-      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE,
-      link_function = "logit", family = "binomial", n_obs = 32L,
-      n_grouplevels = NULL
+      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE, is_wiener = FALSE,
+      is_rtchoice = FALSE, is_mixture = FALSE, link_function = "logit",
+      family = "binomial", n_obs = 32L, n_grouplevels = NULL
     ),
     ignore_attr = TRUE
   )
@@ -359,14 +360,21 @@ test_that("n_obs", {
 
 test_that("find_paramaters", {
   expect_identical(
-    find_parameters(m1),
+    find_parameters(m1, effects = "full"),
     list(
       conditional = c("(Intercept)", "size", "period2", "period3", "period4"),
       random = c(sprintf("b[(Intercept) herd:%i]", 1:15), "Sigma[herd:(Intercept),(Intercept)]")
     )
   )
   expect_identical(
-    find_parameters(m1, flatten = TRUE),
+    find_parameters(m1),
+    list(
+      conditional = c("(Intercept)", "size", "period2", "period3", "period4"),
+      random = "Sigma[herd:(Intercept),(Intercept)]"
+    )
+  )
+  expect_identical(
+    find_parameters(m1, effects = "full", flatten = TRUE),
     c(
       "(Intercept)",
       "size",
@@ -377,12 +385,35 @@ test_that("find_paramaters", {
       "Sigma[herd:(Intercept),(Intercept)]"
     )
   )
+  expect_identical(
+    find_parameters(m1, effects = "all", flatten = TRUE),
+    c(
+      "(Intercept)",
+      "size",
+      "period2",
+      "period3",
+      "period4",
+      "Sigma[herd:(Intercept),(Intercept)]"
+    )
+  )
 })
 
-test_that("find_paramaters", {
+test_that("get_parameters", {
   expect_named(
     get_parameters(m1),
     c("(Intercept)", "size", "period2", "period3", "period4")
+  )
+  expect_named(
+    get_parameters(m1, effects = "full"),
+    c(
+      "(Intercept)",
+      "size",
+      "period2",
+      "period3",
+      "period4",
+      sprintf("b[(Intercept) herd:%i]", 1:15),
+      "Sigma[herd:(Intercept),(Intercept)]"
+    )
   )
   expect_named(
     get_parameters(m1, effects = "all"),
@@ -392,7 +423,6 @@ test_that("find_paramaters", {
       "period2",
       "period3",
       "period4",
-      sprintf("b[(Intercept) herd:%i]", 1:15),
       "Sigma[herd:(Intercept),(Intercept)]"
     )
   )

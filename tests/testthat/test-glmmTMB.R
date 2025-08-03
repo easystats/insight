@@ -1037,7 +1037,7 @@ test_that("get/find_parameters with dispersion-random", {
         "sppDM", "sppEC-A", "sppEC-L", "sppDES-L", "sppDF", "minedno"
       ),
       dispersion = c("(Intercept)", "DOY"),
-      dispersion_random = "site"
+      dispersion_random = list(site = "(Intercept)")
     ),
     ignore_attr = TRUE
   )
@@ -1060,7 +1060,7 @@ test_that("get/find_parameters with dispersion-random", {
     find_parameters(m, effects = "random"),
     list(
       random = list(site = "(Intercept)"),
-      dispersion_random = "site"
+      dispersion_random = list(site = "(Intercept)")
     ),
     ignore_attr = TRUE
   )
@@ -1075,4 +1075,33 @@ test_that("get/find_parameters with dispersion-random", {
     ),
     ignore_attr = TRUE
   )
+
+  # formula and find random works
+  out <- find_formula(m)
+  expect_equal(
+    out,
+    list(
+      conditional = count ~ spp + cover + mined,
+      random = ~ 1 | site,
+      zero_inflated = ~ spp + mined,
+      dispersion = ~DOY,
+      dispersion_random = ~ 1 | site
+    ),
+    ignore_attr = TRUE
+  )
+  out <- find_random(m)
+  expect_identical(out, list(random = "site", dispersion_random = "site"))
+
+  skip_on_cran()
+
+  data(Salamanders, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(
+    count ~ spp + cover + mined + (1 | site),
+    ziformula = ~ spp + mined,
+    dispformula = ~ DOY + (1 + Wtemp | site),
+    data = Salamanders,
+    family = poisson()
+  )
+  out <- find_random_slopes(m)
+  expect_identical(out, list(dispersion_random = "Wtemp"))
 })

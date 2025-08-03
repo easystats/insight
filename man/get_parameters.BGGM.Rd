@@ -71,11 +71,27 @@ calculate means of posterior samples for each parameter, while
 \code{centrality = "median"} would use the more robust median value as
 measure of central tendency.}
 
-\item{...}{Currently not used.}
+\item{...}{Currently only used for models of class \code{brmsfit}, where a \code{variable}
+argument can be used, which is directly passed to the \code{as.data.frame()}
+method (i.e., \code{as.data.frame(x, variable = variable)}).}
 
 \item{effects}{Should variables for fixed effects (\code{"fixed"}), random effects
 (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
-be abbreviated.}
+be abbreviated.
+
+For models of from packages \strong{brms} or \strong{rstanarm} there are additional
+options:
+\itemize{
+\item \code{"fixed"} returns fixed effects.
+\item \code{"random_variance"} return random effects parameters (variance and
+correlation components, e.g. those parameters that start with \code{sd_} or
+\code{cor_}).
+\item \code{"grouplevel"} returns random effects group level estimates, i.e. those
+parameters that start with \code{r_}.
+\item \code{"random"} returns both \code{"random_variance"} and \code{"grouplevel"}.
+\item \code{"all"} returns fixed effects and random effects variances.
+\item \code{"full"} returns all parameters.
+}}
 
 \item{iterations}{Number of posterior draws.}
 
@@ -157,7 +173,8 @@ Some model classes also allow rather uncommon options. These are:
 
 For models of class \code{brmsfit} (package \strong{brms}), even more options are
 possible for the \code{component} argument, which are not all documented in detail
-here.
+here. It can be any pre-defined or arbitrary distributional parameter, like
+\code{mu}, \code{ndt}, \code{kappa}, etc.
 }
 
 \examples{

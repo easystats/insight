@@ -5,45 +5,21 @@
 \alias{n_parameters.default}
 \alias{n_parameters.merMod}
 \alias{n_parameters.glmmTMB}
-\alias{n_parameters.zeroinfl}
-\alias{n_parameters.gam}
-\alias{n_parameters.brmsfit}
 \title{Count number of parameters in a model}
 \usage{
 n_parameters(x, ...)
 
 \method{n_parameters}{default}(x, remove_nonestimable = FALSE, ...)
 
-\method{n_parameters}{merMod}(
-  x,
-  effects = c("fixed", "random"),
-  remove_nonestimable = FALSE,
-  ...
-)
+\method{n_parameters}{merMod}(x, effects = "fixed", remove_nonestimable = FALSE, ...)
 
 \method{n_parameters}{glmmTMB}(
   x,
-  effects = c("fixed", "random"),
-  component = c("all", "conditional", "zi", "zero_inflated"),
+  effects = "fixed",
+  component = "all",
   remove_nonestimable = FALSE,
   ...
 )
-
-\method{n_parameters}{zeroinfl}(
-  x,
-  component = c("all", "conditional", "zi", "zero_inflated"),
-  remove_nonestimable = FALSE,
-  ...
-)
-
-\method{n_parameters}{gam}(
-  x,
-  component = c("all", "conditional", "smooth_terms"),
-  remove_nonestimable = FALSE,
-  ...
-)
-
-\method{n_parameters}{brmsfit}(x, effects = "all", component = "all", ...)
 }
 \arguments{
 \item{x}{A statistical model.}
@@ -58,11 +34,26 @@ rank-deficient model matrix).}
 (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
 be abbreviated.}
 
-\item{component}{Should total number of parameters, number parameters for the
-conditional model, the zero-inflated part of the model, the dispersion term
-or the instrumental variables be returned? Applies to models with
-zero-inflated and/or dispersion formula, or to models with instrumental
-variable (so called fixed-effects regressions). May be abbreviated.}
+\item{component}{Which type of parameters to return, such as parameters for
+the conditional model, the zero-inflated part of the model, the dispersion
+term, the instrumental variables or marginal effects be returned? Applies to
+models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models with
+marginal effects (from \strong{mfx}). See details in section \emph{Model Components}
+.May be abbreviated. Note that the \emph{conditional} component also refers to the
+\emph{count} or \emph{mean} component - names may differ, depending on the modeling
+package. There are three convenient shortcuts (not applicable to \emph{all} model
+classes):
+\itemize{
+\item \code{component = "all"} returns all possible parameters.
+\item If \code{component = "location"}, location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} are returned (everything
+that are fixed or random effects - depending on the \code{effects} argument -
+but no auxiliary parameters).
+\item For \code{component = "distributional"} (or \code{"auxiliary"}), components like
+\code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and other auxiliary
+parameters) are returned.
+}}
 }
 \value{
 The number of parameters in the model.

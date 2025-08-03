@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not_installed("curl")
 skip_if_offline()
 skip_on_os("mac")
 skip_if_not_installed("brms")
@@ -10,19 +11,22 @@ test_that("brms-Intercept", {
   skip_if(is.null(m))
 
   out <- find_predictors(m)
-  expect_identical(out, list(conditional = "x", kappa = "kappa"))
+  expect_identical(out, list(conditional = "x"))
 
   out <- find_predictors(m, component = "location")
   expect_identical(out, list(conditional = "x"))
 
   out <- find_variables(m)
-  expect_identical(out, list(response = "y", conditional = "x", kappa = "kappa"))
+  expect_identical(out, list(response = "y", conditional = "x"))
 
   out <- find_variables(m, component = "location")
   expect_identical(out, list(conditional = "x"))
 
   out <- find_parameters(m)
-  expect_identical(out, list(conditional = c("b_Intercept", "b_xb", "b_kappa_Intercept")))
+  expect_identical(
+    out,
+    list(conditional = c("b_Intercept", "b_xb"), kappa = "b_kappa_Intercept")
+  )
 
   expect_true(has_intercept(m))
 

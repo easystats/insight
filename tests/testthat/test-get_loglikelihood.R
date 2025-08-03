@@ -90,6 +90,7 @@ test_that("get_loglikelihood - glm", {
 })
 
 test_that("get_loglikelihood - (g)lmer", {
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("lme4")
   x <- lme4::lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris)

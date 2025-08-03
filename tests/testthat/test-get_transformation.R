@@ -60,3 +60,15 @@ test_that("get_transformation - include_all", {
   expect_equal(out$conditional$gear$transformation(2), 4, tolerance = 1e-3)
   expect_equal(out$conditional$gear$inverse(2), sqrt(2), tolerance = 1e-3)
 })
+
+
+test_that("get_transformation - base-log", {
+  mdl <- lm(log(dist, base = 8) ~ speed, data = cars)
+  f <- get_transformation(mdl)
+  expect_equal(f$transformation(10), 1.10730936496245, tolerance = 1e-5)
+  expect_equal(f$inverse(1.10730936496245), 10, tolerance = 1e-4)
+  mdl <- lm(log(dist, base = 10) ~ speed, data = cars)
+  f <- get_transformation(mdl)
+  expect_equal(f$transformation(10), 1, tolerance = 1e-4)
+  expect_equal(f$inverse(1), 10, tolerance = 1e-4)
+})

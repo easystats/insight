@@ -157,12 +157,12 @@ get_parameters.selection <- function(x, component = "all", ...) {
   params <- data.frame(
     Parameter = rn,
     Estimate = estimates[[1]],
-    Component = "auxiliary",
+    Component = "selection",
     stringsAsFactors = FALSE,
     row.names = NULL
   )
-  params$Component[s$param$index$betaS] <- "selection"
-  params$Component[s$param$index$betaO] <- "outcome"
+  params$Component[s$param$index$errTerms] <- "auxiliary"
+  params$Component[s$param$index$outcome] <- "outcome"
 
   if (component != "all") {
     params <- params[params$Component == component, , drop = FALSE]
@@ -210,6 +210,48 @@ get_parameters.btergm <- function(x, ...) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+  text_remove_backticks(params)
+}
+
+
+#' @export
+get_parameters.sdmTMB <- function(x, component = "all", verbose = TRUE, ...) {
+  delta_comp <- isTRUE(x$family$delta)
+  valid_comp <- compact_character(c("all", "conditional", ifelse(delta_comp, "delta", "")))
+  component <- validate_argument(component, valid_comp)
+
+  cf <- suppressMessages(stats::coef(x, model = 1))
+  conditional <- data.frame(
+    Parameter = names(cf),
+    Estimate = unname(cf),
+    Component = "conditional",
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (delta_comp) {
+    cf <- suppressMessages(stats::coef(x, model = 2))
+    delta <- data.frame(
+      Parameter = names(cf),
+      Estimate = unname(cf),
+      Component = "delta",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+  }
+
+  if (delta_comp) {
+    params <- rbind(conditional, delta)
+  } else {
+    params <- conditional
+  }
+
+  params <- switch(component,
+    all = params,
+    conditional = conditional,
+    delta = delta
+  )
+
   text_remove_backticks(params)
 }
 
@@ -772,8 +814,8 @@ get_parameters.afex_aov <- function(x, ...) {
 
 
 #' @export
-get_parameters.pgmm <- function(x, component = c("conditional", "all"), ...) {
-  component <- match.arg(component)
+get_parameters.pgmm <- function(x, component = "conditional", ...) {
+  component <- validate_argument(component, c("conditional", "all"))
   cs <- stats::coef(summary(x, time.dummies = TRUE, robust = FALSE))
   params <- data.frame(
     Parameter = rownames(cs),

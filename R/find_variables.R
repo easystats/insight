@@ -26,8 +26,9 @@
 #' - `instruments`, the names of instrumental variables
 #' - `random`, the names of the random effects (grouping factors)
 #' - `zero_inflated`, the names of the predictor variables from the
-#'   *zero-inflated* part of the model
-#' - `zero_inflated_random`, the names of the random effects (grouping factors)
+#'   *zero-inflated* part of the model. For **brms**, this is named `zi`.
+#' - `zero_inflated_random`, the names of the random effects (grouping factors).
+#'   For **brms**, this is named `zi_random`.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(cbpp, package = "lme4")
@@ -66,7 +67,8 @@ find_variables <- function(x,
     component,
     c(
       "all", "conditional", "zi", "zero_inflated", "dispersion",
-      "instruments", "smooth_terms", "scale", "location"
+      "instruments", "smooth_terms", "scale", "location", "auxiliary",
+      "distributional"
     )
   )
 

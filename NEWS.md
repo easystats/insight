@@ -1,5 +1,189 @@
 # insight (devel)
 
+## Breaking changes
+
+* `apply_table_theme()` was removed, since it was an experimental feature that
+  is no longer used in any package.
+
+## Changes
+
+* `display()`, `print_md()` and `print_html()` get a `.table` method.
+
+* `get_predicted()` now supports `chisq.test()`, and returns the expected
+  frequencies.
+
+* `export_table()` gains better support for the _tinytable_ package. Use
+  `format = "tt"` to export tables into the tinytable-format. This can also
+  be used with grouped tables, i.e. `by = "group"`.
+
+* `export_table()` gains arguments `row_groups` and `column_groups`, to
+  group rows and columns in the exported table. Column groups currently only
+  work for `format = "tt"`.
+
+## Bug fixes
+
+* Fixed issue with models of class `selection` with multiple response
+  variables.
+
+* Fixed issue in `get_datagrid()` for factors with `=` in their levels.
+
+* Fixed issue in `find_random()` for multivariate response models of class `brms`
+  with special response options.
+
+# insight 1.3.1
+
+## Changes
+
+* New function `get_model()` to extract the model object from an arbitrary
+  object, if the model object is stored as attribute of the parent object.
+
+* The `range` argument in `get_datagrid()` gets a new option, `"pretty"`, to
+  create a range of pretty values.
+
+* `get_predicted()` now supports models of class `glmtoolbox::glmee`.
+
+* `get_predicted()` supports predicting the class membership for models from
+  package *brms* with `mixture()` family, using `predict = "classificaton"`.
+
+* `get_predicted()` supports predicting the outcome by class membership for
+  models from package *brms* with `mixture()` family, using `predict = "link"`.
+
+* `get_residuals()` gets a method for objects from `parameters::factor_analysis()`,
+  `psych::fa()`, `psych::omega()` and `psych::principal()`.
+
+* `model_info()` returns `$is_mixture` to identify finite mixture models.
+
+* Better support for models of class `sdmTMB`.
+
+* Improve efficiency of `clean_parameters()` for more complex *brms* models.
+
+## Bug fixes
+
+* Fixed issue in `get_df()` for models from package *afex*.
+
+* Fixed issue in `clean_names()` for *brms* models with `mm()` in formula.
+
+* Fixed issue in `get_data()` for *brms* models with `mmc()` in formula.
+
+* Fixed issue in `get_statistic()` for objects of class `aov`.
+
+# insight 1.3.0
+
+## Breaking Changes
+
+* The default option `"all"` for the `effects` argument of `find_parameters()`
+  and `get_parameters()` for models from package *brms* and *rstanarm* has a new
+  behaviour and only returns fixed effects and random effects variance components,
+  but no longer the group level estimates. Use `effects = "full"` to return
+  all parameters. This change is mainly to be more flexible and gain more
+  efficiency for models with many parameters and / or many posterior draws.
+
+## New functions
+
+* `is_bayesian_model()` as a convenient shortcut to check whether a model is
+  Bayesian or not.
+
+## Changes
+
+* Revised wording for alerts from `get_variance()`.
+
+* The `effects` argument of `find_parameters()` and `get_parameters()` for
+  models from package *brms* and *rstanarm* get two new options, `"grouplevel"`
+  and `"random_variances"`, to return only random effects variance components, or
+  group level effects. This is more efficient especially for models with many
+  samples and many parameters. Additionally, a `variable` argument can be passed
+  to `get_parameters()`, which is in turn passed to `as.data.frame()`, to
+  extract parameters more efficiently.
+
+* The `by` argument in `export_table()` now also splits tables when format is
+  not `"html"`.
+
+## Bug fixes
+
+* Fixed issue in `find_formula()` for models of class `barts` (package *dbarts*),
+  when formula was abbreviated using `y ~ .`.
+
+# insight 1.2.0
+
+## Breaking Changes
+
+* The handling of `brms` models in `find_parameters()`, `find_formula()` or
+  `clean_parameters()` (and other functions) should now systematically take
+  the many possible distributional parameters into account, identifying the
+  different types of them, and assigning them to own values in the
+  `Component` columns. *insight* should now be flexible enough to also cope
+  with user-defined variables that have been modelled as distributional
+  parameters.
+
+* To be consistent with the naming pattern from package `brms`, all elements
+  related to distributional parameters now returns exactly that "dpar" name.
+  This means that, for instance, `find_formula()` no longer returns an element
+  named `$zero_inflated`, but instead `$zi`. This only applies to models from
+  `brms`! All other packages are not affected by this breaking change.
+
+## Changes
+
+* `find_random()` and `find_random_slopes()` now also extract random effects
+  names from auxiliary components.
+
+* `find_random()` and `find_random_slopes()` now include random effects from the
+  dispersion component for models from package *glmmTMB*.
+
+* `clean_parameters()` for brms-models now assigns auxiliary parameters to their
+  related `Component` and overwrites former assignments to `"conditional"`.
+
+* `format_table()` now includes more effect sizes when formatting column names.
+
+* `get_datagrid()` now allows named vectors for arguments `length` and `range`,
+  to match values with target variables defined in `by`.
+
+* `get_datagrid()` gets a `protect_integer` argument, to allow a spread of
+  values from minimum to maximum of length `length`, also for integer values.
+
+* `export_table()` gets an argument `column_names`, to change the column names
+  of the exported table.
+
+* `model_info()` gains a `response` argument for classes that can be multivariate
+  response models that return multiple lists of model information (currently,
+  Stan models from *rstanarm* and *brms*). If not `NULL`, only the information
+  for one of the response variables is returned.
+
+* Creating a range of values in a `get_datagrid()` using `by` was now simplified
+  and works like regular R syntax, e.g. `by = "mpg = 20:50"`.
+
+* `get_predicted()` for models of class `brmsfit` now supports Wiener models
+  or similar so called "decision models", that simultaneously model, e.g.,
+  reaction times and (discrete) choices.
+
+* `get_predicted()` no longer throws warnings for models of class `brmsfit`
+  when distributional are predicted.
+
+* `find_offset()` gets an `as_term` argument, which returns the offset as term,
+  including possible transformations.
+
+* Token-option `"quartiles2"` was removed and option `"quartiles"` now produces
+  the three quartile values (lower hinge, median, upper hinge). The former
+  option of `"quartiles"` that included minimum and maximum was identical to the
+  already existing `"fivenum"` option.
+
+* New function `find_auxiliary()`, which is a small helper to extract all
+  distributional parameters that were used in models from package *brms*.
+
+* `display()`, `print_md()` and `print_html()` get methods for matrix- and
+  array objects.
+
+* Cleaning / revising package documentation.
+
+## Bug fixes
+
+* `null_model()` now correctly calculates the null-model based on the data that
+  was used to fit the model (model frame), which can lead to different results
+  when the original data contained missing values.
+
+* Fixed issue for `get_predicted()` with multivariate response models.
+
+# insight 1.1.0
+
 ## Breaking Changes
 
 * `get_datagrid()` no longer creates fractional parts when creating a range of
@@ -19,6 +203,14 @@
   and column layout in a glue-like style.
 
 * `find_response()` now also works for _tidymodels_ workflows.
+
+* `get_transformation()` and `find_transformation()` now also detect
+  log-transformation with logarithmic base.
+
+## Bug fixes
+
+* Fixed issue in `find_formula()`, `find_response()` and `find_predictors()` for
+  multinomial `gam` models from package *mgcv*.
 
 # insight 1.0.2
 

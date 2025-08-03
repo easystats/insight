@@ -1,3 +1,4 @@
+skip_if_not_installed("curl")
 skip_if_offline()
 skip_on_os(c("mac", "linux", "solaris"))
 skip_if_not_installed("bayestestR")

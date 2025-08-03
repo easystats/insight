@@ -28,7 +28,6 @@ reference:
       Functions to get values or data from model objects. These functions
       have no `find_*()`-counterpart.
     contents:
-      - get_auxiliary
       - get_data
       - get_datagrid
       - get_df
@@ -50,6 +49,8 @@ reference:
       Functions to list model-specific objects or to extract values (or data)
       associated with model-specific objects.
     contents:
+      - find_auxiliary
+      - get_auxiliary
       - find_parameters
       - get_parameters
       - find_predictors
@@ -70,6 +71,7 @@ reference:
       Functions to access specific information from model objects.
     contents:
       - get_call
+      - get_model
       - starts_with("link_")
       - model_name
       - starts_with("n_")
@@ -117,6 +119,7 @@ reference:
     desc: >
       Used in examples or for testing
     contents:
+      - efc_insight
       - fish
 
   - title: "Documentation of Specific Class Objects"

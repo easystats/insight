@@ -4,15 +4,7 @@
 \alias{get_varcov}
 \alias{get_varcov.default}
 \alias{get_varcov.glmgee}
-\alias{get_varcov.nestedLogit}
-\alias{get_varcov.betareg}
-\alias{get_varcov.clm2}
-\alias{get_varcov.truncreg}
 \alias{get_varcov.hurdle}
-\alias{get_varcov.glmmTMB}
-\alias{get_varcov.MixMod}
-\alias{get_varcov.brmsfit}
-\alias{get_varcov.betamfx}
 \alias{get_varcov.aov}
 \alias{get_varcov.mixor}
 \title{Get variance-covariance matrix from models}
@@ -21,69 +13,20 @@ get_varcov(x, ...)
 
 \method{get_varcov}{default}(x, verbose = TRUE, vcov = NULL, vcov_args = NULL, ...)
 
-\method{get_varcov}{glmgee}(
-  x,
-  verbose = TRUE,
-  vcov = c("robust", "df-adjusted", "model", "bias-corrected", "jackknife"),
-  ...
-)
-
-\method{get_varcov}{nestedLogit}(
-  x,
-  component = "all",
-  verbose = TRUE,
-  vcov = NULL,
-  vcov_args = NULL,
-  ...
-)
-
-\method{get_varcov}{betareg}(
-  x,
-  component = c("conditional", "precision", "all"),
-  verbose = TRUE,
-  ...
-)
-
-\method{get_varcov}{clm2}(x, component = c("all", "conditional", "scale"), ...)
-
-\method{get_varcov}{truncreg}(x, component = c("conditional", "all"), verbose = TRUE, ...)
+\method{get_varcov}{glmgee}(x, verbose = TRUE, vcov = "robust", ...)
 
 \method{get_varcov}{hurdle}(
   x,
-  component = c("conditional", "zero_inflated", "zi", "all"),
+  component = "conditional",
   vcov = NULL,
   vcov_args = NULL,
-  verbose = TRUE,
-  ...
-)
-
-\method{get_varcov}{glmmTMB}(
-  x,
-  component = c("conditional", "zero_inflated", "zi", "dispersion", "all"),
-  verbose = TRUE,
-  ...
-)
-
-\method{get_varcov}{MixMod}(
-  x,
-  effects = c("fixed", "random"),
-  component = c("conditional", "zero_inflated", "zi", "dispersion", "auxiliary", "all"),
-  verbose = TRUE,
-  ...
-)
-
-\method{get_varcov}{brmsfit}(x, component = "conditional", verbose = TRUE, ...)
-
-\method{get_varcov}{betamfx}(
-  x,
-  component = c("conditional", "precision", "all"),
   verbose = TRUE,
   ...
 )
 
 \method{get_varcov}{aov}(x, complete = FALSE, verbose = TRUE, ...)
 
-\method{get_varcov}{mixor}(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
+\method{get_varcov}{mixor}(x, effects = "all", verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model.}
@@ -112,7 +55,12 @@ identifies the function to be used to compute the covariance matrix.
 \code{"PL"}.
 \item Kenward-Roger approximation: \code{kenward-roger}. See \code{?pbkrtest::vcovAdj}.
 }
-}}
+}
+
+One exception are models of class \code{glmgee}, which have pre-defined options
+for the variance-covariance matrix calculation. These are \code{"robust"},
+\code{"df-adjusted"}, \code{"model"}, \code{"bias-corrected"}, and \code{"jackknife"}. See
+\code{?glmtoolbox::vcov.glmgee} for details.}
 
 \item{vcov_args}{List of arguments to be passed to the function identified by
 the \code{vcov} argument. This function is typically supplied by the
@@ -129,14 +77,14 @@ or models with precision (e.g. \code{betareg}) component. \code{component} may b
 of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"}, \code{"dispersion"}, \code{"precision"},
 or \code{"all"}. May be abbreviated. Note that the \emph{conditional} component also
 refers to the \emph{count} or \emph{mean} component - names may differ, depending on
-the modeling package.}
-
-\item{effects}{Should the complete variance-covariance matrix of the model
-be returned, or only for specific model parameters only? Currently only
-applies to models of class \code{mixor}.}
+the modeling package. See section \emph{Model components} for details.}
 
 \item{complete}{Logical, if \code{TRUE}, for \code{aov}, returns the full
 variance-covariance matrix.}
+
+\item{effects}{Should the complete variance-covariance matrix of the model
+be returned, or only for specific model parameters only? Currently only
+applies to models of class \code{mixor} and \code{MixMod}.}
 }
 \value{
 The variance-covariance matrix, as \code{matrix}-object.
@@ -152,6 +100,57 @@ ensures that it is still possible, for instance, to calculate standard
 errors of model parameters. A message is shown when the matrix is negative
 definite and a corrected matrix is returned.
 }
+\section{Model components}{
+
+Possible values for the \code{component} argument depend on the model class.
+Following are valid options:
+\itemize{
+\item \code{"all"}: returns all model components, applies to all models, but will only
+have an effect for models with more than just the conditional model component.
+\item \code{"conditional"}: only returns the conditional component, i.e. "fixed effects"
+terms from the model. Will only have an effect for models with more than
+just the conditional model component.
+\item \code{"smooth_terms"}: returns smooth terms, only applies to GAMs (or similar
+models that may contain smooth terms).
+\item \code{"zero_inflated"} (or \code{"zi"}): returns the zero-inflation component.
+\item \code{"dispersion"}: returns the dispersion model component. This is common
+for models with zero-inflation or that can model the dispersion parameter.
+\item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
+returns the instruments.
+\item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod} or
+\code{nls}), returns staring estimates for the nonlinear parameters.
+\item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
+variables used to describe the correlation structure are returned.
+\item \code{"location"}: returns location parameters such as \code{conditional},
+\code{zero_inflated}, \code{smooth_terms}, or \code{instruments} (everything that are
+fixed or random effects - depending on the \code{effects} argument - but no
+auxiliary parameters).
+\item \code{"distributional"} (or \code{"auxiliary"}): components like \code{sigma}, \code{dispersion},
+\code{beta} or \code{precision} (and other auxiliary parameters) are returned.
+}
+
+\strong{Special models}
+
+Some model classes also allow rather uncommon options. These are:
+\itemize{
+\item \strong{mhurdle}: \code{"infrequent_purchase"}, \code{"ip"}, and \code{"auxiliary"}
+\item \strong{BGGM}: \code{"correlation"} and \code{"intercept"}
+\item \strong{BFBayesFactor}, \strong{glmx}: \code{"extra"}
+\item \strong{averaging}:\code{"conditional"} and \code{"full"}
+\item \strong{mjoint}: \code{"survival"}
+\item \strong{mfx}: \code{"precision"}, \code{"marginal"}
+\item \strong{betareg}, \strong{DirichletRegModel}: \code{"precision"}
+\item \strong{mvord}: \code{"thresholds"} and \code{"correlation"}
+\item \strong{clm2}: \code{"scale"}
+\item \strong{selection}: \code{"selection"}, \code{"outcome"}, and \code{"auxiliary"}
+}
+
+For models of class \code{brmsfit} (package \strong{brms}), even more options are
+possible for the \code{component} argument, which are not all documented in detail
+here. It can be any pre-defined or arbitrary distributional parameter, like
+\code{mu}, \code{ndt}, \code{kappa}, etc.
+}
+
 \examples{
 \dontshow{if (require("pscl") && require("sandwich")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(mtcars)

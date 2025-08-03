@@ -62,7 +62,7 @@ find_parameters.glmmTMB <- function(x, effects = "all", component = "all", flatt
       zero_inflated = names(lme4::fixef(x)$zi),
       zero_inflated_random = lapply(lme4::ranef(x)$zi, colnames),
       dispersion = names(lme4::fixef(x)$disp),
-      dispersion_random = names(lme4::ranef(x)$disp)
+      dispersion_random = lapply(lme4::ranef(x)$disp, colnames)
     ))
   }
 

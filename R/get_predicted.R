@@ -28,16 +28,26 @@
 #'   matrices can be generated using [get_datagrid()].
 #' @param predict string or `NULL`
 #' * `"link"` returns predictions on the model's link-scale (for logistic models,
-#'   that means the log-odds scale) with a confidence interval (CI).
+#'   that means the log-odds scale) with a confidence interval (CI). This option
+#'   should also be used for finite mixture models (currently only family
+#'   [`brms::mixture()`] from package *brms*), when predicted values of the
+#'   response for each class is required.
 #' * `"expectation"` (default) also returns confidence intervals, but this time
 #'   the output is on the response scale (for logistic models, that means
 #'   probabilities).
 #' * `"prediction"` also gives an output on the response scale, but this time
 #'   associated with a prediction interval (PI), which is larger than a confidence
 #'   interval (though it mostly make sense for linear models).
-#' * `"classification"` only differs from `"prediction"` for binomial models
-#'   where it additionally transforms the predictions into the original response's
-#'   type (for instance, to a factor).
+#' * `"classification"` is relevant only for binomial, ordinal or mixture models.
+#'   - For binomial models, `predict = "classification"` will additionally
+#'     transform the predictions into the original response's type (for
+#'     instance, to a factor).
+#'   - For ordinal models (e.g., classes `clm` or `multinom`), gives the
+#'     predicted response class membership, defined as highest probability
+#'     prediction.
+#'   - For finite mixture models (currently only family [`brms::mixture()`] from
+#'     package *brms*) also returns the predicted response class membership
+#'     (similar as for ordinal models).
 #' * Other strings are passed directly to the `type` argument of the `predict()`
 #'   method supplied by the modelling package.
 #' * Specifically for models of class `brmsfit` (package *brms*), the `predict`
@@ -49,7 +59,7 @@
 #'   by the modelling package. Note that this might result in conflicts with
 #'   multiple matching `type` arguments - thus, the recommendation is to use the
 #'   `predict` argument for those values.
-#' * Notes: You can see the 4 options for predictions as on a gradient from
+#' * Notes: You can see the four options for predictions as on a gradient from
 #'   "close to the model" to "close to the response data": "link", "expectation",
 #'   "prediction", "classification". The `predict` argument modulates two things:
 #'   the scale of the output and the type of certainty interval. Read more about
@@ -68,97 +78,109 @@
 #'   effects to condition on when predicting (passed to the `re.form` argument).
 #'   If `include_random = TRUE` and `data` is provided, make sure to include
 #'   the random effect variables in `data` as well.
-#' @param include_smooth For General Additive Models (GAMs). If `FALSE`,
-#'   will fix the value of the smooth to its average, so that the predictions
-#'   are not depending on it. (default), `mean()`, or
-#'   `bayestestR::map_estimate()`.
+#' @param include_smooth For General Additive Models (GAMs). If `FALSE`, will
+#'   fix the value of the smooth to its average, so that the predictions are not
+#'   depending on it. (default), `mean()`, or `bayestestR::map_estimate()`.
 #' @param ci The interval level. Default is `NULL`, to be fast even for larger
 #'   models. Set the interval level to an explicit value, e.g. `0.95`, for `95%`
 #'   CI).
-#' @param ci_type Can be `"prediction"` or `"confidence"`. Prediction
-#'   intervals show the range that likely contains the value of a new
-#'   observation (in what range it would fall), whereas confidence intervals
-#'   reflect the uncertainty around the estimated parameters (and gives the
-#'   range of the link; for instance of the regression line in a linear
-#'   regressions). Prediction intervals account for both the uncertainty in the
-#'   model's parameters, plus the random variation of the individual values.
-#'   Thus, prediction intervals are always wider than confidence intervals.
-#'   Moreover, prediction intervals will not necessarily become narrower as the
-#'   sample size increases (as they do not reflect only the quality of the fit).
-#'   This applies mostly for "simple" linear models (like `lm`), as for
-#'   other models (e.g., `glm`), prediction intervals are somewhat useless
-#'   (for instance, for a binomial model for which the dependent variable is a
-#'   vector of 1s and 0s, the prediction interval is... `[0, 1]`).
+#' @param ci_type Can be `"prediction"` or `"confidence"`. Prediction intervals
+#'   show the range that likely contains the value of a new observation (in what
+#'   range it would fall), whereas confidence intervals reflect the uncertainty
+#'   around the estimated parameters (and gives the range of the link; for
+#'   instance of the regression line in a linear regressions). Prediction
+#'   intervals account for both the uncertainty in the model's parameters, plus
+#'   the random variation of the individual values. Thus, prediction intervals
+#'   are always wider than confidence intervals. Moreover, prediction intervals
+#'   will not necessarily become narrower as the sample size increases (as they
+#'   do not reflect only the quality of the fit). This applies mostly for
+#'   "simple" linear models (like `lm`), as for other models (e.g., `glm`),
+#'   prediction intervals are somewhat useless (for instance, for a binomial
+#'   model for which the dependent variable is a vector of 1s and 0s, the
+#'   prediction interval is... `[0, 1]`).
 #' @param ci_method The method for computing p values and confidence intervals.
 #'   Possible values depend on model type.
 #'   + `NULL` uses the default method, which varies based on the model type.
 #'   + Most frequentist models: `"wald"` (default), `"residual"` or `"normal"`.
 #'   + Bayesian models:  `"quantile"`  (default), `"hdi"`, `"eti"`, and `"spi"`.
-#'   + Mixed effects **lme4** models: `"wald"` (default), `"residual"`, `"normal"`,
-#'   `"satterthwaite"`, and `"kenward-roger"`.
+#'   + Mixed effects **lme4** models: `"wald"` (default), `"residual"`,
+#'     `"normal"`, `"satterthwaite"`, and `"kenward-roger"`.
 #'
 #'   See [`get_df()`] for details.
 #' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary:
 #'   `"sd"` or `"mad"`.
-#' @param ... Other argument to be passed, for instance to `get_predicted_ci()`.
+#' @param ... Other argument to be passed, for instance to the model's `predict()`
+#' method, or `get_predicted_ci()`.
 #' @inheritParams get_varcov
 #' @inheritParams get_df
 #'
 #' @return The fitted values (i.e. predictions for the response). For Bayesian
-#'   or bootstrapped models (when `iterations != NULL`), iterations (as
-#'   columns and observations are rows) can be accessed via `as.data.frame()`.
+#' or bootstrapped models (when `iterations != NULL`), iterations (as columns
+#' and observations are rows) can be accessed via `as.data.frame()`.
 #'
 #' @details
-#' In `insight::get_predicted()`, the `predict` argument jointly
-#' modulates two separate concepts, the **scale** and the **uncertainty interval**.
+#' In `insight::get_predicted()`, the `predict` argument jointly modulates two
+#' separate concepts, the **scale** and the **uncertainty interval**.
 #'
 #' @section Confidence Interval (CI) vs. Prediction Interval (PI)):
-#' - **Linear models** - `lm()`: For linear models, prediction
-#'   intervals (`predict="prediction"`) show the range that likely
-#'   contains the value of a new observation (in what range it is likely to
-#'   fall), whereas confidence intervals (`predict="expectation"` or
-#'   `predict="link"`) reflect the uncertainty around the estimated
-#'   parameters (and gives the range of uncertainty of the regression line). In
-#'   general, Prediction Intervals (PIs) account for both the uncertainty in the
-#'   model's parameters, plus the random variation of the individual values.
-#'   Thus, prediction intervals are always wider than confidence intervals.
-#'   Moreover, prediction intervals will not necessarily become narrower as the
-#'   sample size increases (as they do not reflect only the quality of the fit,
-#'   but also the variability within the data).
-#' - **Generalized Linear models** - `glm()`: For binomial models,
-#'   prediction intervals are somewhat useless (for instance, for a binomial
-#'   (Bernoulli) model for which the dependent variable is a vector of 1s and
-#'   0s, the prediction interval is... `[0, 1]`).
+#' - **Linear models** - `lm()`: For linear models, prediction intervals
+#'   (`predict="prediction"`) show the range that likely contains the value of a
+#'   new observation (in what range it is likely to fall), whereas confidence
+#'   intervals (`predict="expectation"` or `predict="link"`) reflect the
+#'   uncertainty around the estimated parameters (and gives the range of
+#'   uncertainty of the regression line). In general, Prediction Intervals (PIs)
+#'   account for both the uncertainty in the model's parameters, plus the random
+#'   variation of the individual values. Thus, prediction intervals are always
+#'   wider than confidence intervals. Moreover, prediction intervals will not
+#'   necessarily become narrower as the sample size increases (as they do not
+#'   reflect only the quality of the fit, but also the variability within the
+#'   data).
+#' - **Generalized Linear models** - `glm()`: For binomial models, prediction
+#'   intervals are somewhat useless (for instance, for a binomial (Bernoulli)
+#'   model for which the dependent variable is a vector of 1s and 0s, the
+#'   prediction interval is... `[0, 1]`).
 #'
 #' @section Link scale vs. Response scale:
-#' When users set the `predict` argument to `"expectation"`, the predictions
-#' are returned on the response scale, which is arguably the most convenient
-#' way to understand and visualize relationships of interest. When users set
-#' the `predict` argument to `"link"`, predictions are returned on the link
-#' scale, and no transformation is applied. For instance, for a logistic
-#' regression model, the response scale corresponds to the predicted
-#' probabilities, whereas the link-scale makes predictions of log-odds
-#' (probabilities on the logit scale). Note that when users select
-#' `predict="classification"` in binomial models, the `get_predicted()`
-#' function will first calculate predictions as if the user had selected
-#' `predict="expectation"`. Then, it will round the responses in order to
-#' return the most likely outcome.
+#' When users set the `predict` argument to `"expectation"`, the predictions are
+#' returned on the response scale, which is arguably the most convenient way to
+#' understand and visualize relationships of interest. When users set the
+#' `predict` argument to `"link"`, predictions are returned on the link scale,
+#' and no transformation is applied. For instance, for a logistic regression
+#' model, the response scale corresponds to the predicted probabilities, whereas
+#' the link-scale makes predictions of log-odds (probabilities on the logit
+#' scale). Note that when users select `predict = "classification"` in binomial
+#' models, the `get_predicted()` function will first calculate predictions as if
+#' the user had selected `predict = "expectation"`. Then, it will round the
+#' responses in order to return the most likely outcome. For ordinal or mixture
+#' models, it returns the predicted class membership, based on the highest
+#' probability of classification.
 #'
 #' @section Heteroscedasticity consistent standard errors:
-#' The arguments `vcov` and `vcov_args` can be used to calculate robust
-#' standard errors for confidence intervals of predictions. These arguments,
-#' when provided in `get_predicted()`, are passed down to `get_predicted_ci()`,
-#' thus, see the related documentation there for more
-#' details.
+#' The arguments `vcov` and `vcov_args` can be used to calculate robust standard
+#' errors for confidence intervals of predictions. These arguments, when
+#' provided in `get_predicted()`, are passed down to `get_predicted_ci()`, thus,
+#' see the related documentation there for more details.
+#'
+#' @section Finite mixture models:
+#' For finite mixture models (currently, only the `mixture()` family from package
+#' *brms* is supported), use `predict = "classification"` to predict the class
+#' membership. To predict outcome values by class, use `predict = "link"`. Other
+#' `predict` options will return predicted values of the outcome for the full
+#' data, not stratified by class membership.
 #'
 #' @section Bayesian and Bootstrapped models and iterations:
-#' For predictions based on multiple iterations, for instance in the case of Bayesian
-#' models and bootstrapped predictions, the function used to compute the centrality
-#' (point-estimate predictions) can be modified via the `centrality_function`
-#' argument. For instance, `get_predicted(model, centrality_function = stats::median)`.
-#' The default is `mean`. Individual draws can be accessed by running
+#' For predictions based on multiple iterations, for instance in the case of
+#' Bayesian models and bootstrapped predictions, the function used to compute
+#' the centrality (point-estimate predictions) can be modified via the
+#' `centrality_function` argument. For instance,
+#' `get_predicted(model, centrality_function = stats::median)`. The default is
+#' `mean`. Individual draws can be accessed by running
 #' `iter <- as.data.frame(get_predicted(model))`, and their iterations can be
 #' reshaped into a long format by `bayestestR::reshape_iterations(iter)`.
+#'
+#' @section Hypothesis tests:
+#' There is limited support for hypothesis tests, i.e. objects of class `htest`:
+#' - `chisq.test()`: returns the expected values of the contingency table.
 #'
 #' @seealso [get_datagrid()]
 #'
@@ -730,7 +752,7 @@ get_predicted.phylolm <- function(x,
     }
 
     # Transform to response "type"
-    if (my_args$predict == "classification" && model_info(x, verbose = FALSE)$is_binomial) {
+    if (my_args$predict == "classification" && model_info(x, response = 1, verbose = FALSE)$is_binomial) {
       response <- get_response(x, as_proportion = TRUE)
       ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
       predictions <- .get_predict_transform_response(predictions, response = response)
@@ -858,12 +880,18 @@ get_predicted.phylolm <- function(x,
         predictions <- cbind(predictions, my_args$data[focal_predictors])
       }
     }
+    # we have "Component" instead of "Response" for Wiener models
+    if ("Component" %in% colnames(predictions)) {
+      time_var <- "Component"
+    } else {
+      time_var <- "Response"
+    }
     predictions <- stats::reshape(predictions,
       direction = "long",
       varying = vary,
       times = vary,
       v.names = "Predicted",
-      timevar = "Response",
+      timevar = time_var,
       idvar = "Row"
     )
     row.names(predictions) <- NULL
@@ -922,21 +950,39 @@ get_predicted.phylolm <- function(x,
                                                  iter,
                                                  centrality_function = base::mean,
                                                  datagrid = NULL,
+                                                 is_wiener = FALSE,
+                                                 is_rtchoice = FALSE,
+                                                 is_mixture = FALSE,
                                                  ...) {
-  # outcome: ordinal/multinomial/multivariate produce a 3D array of predictions,
-  # which we stack in "long" format
+  # outcome: ordinal/multinomial/multivariate/mixture produce a 3D array of
+  # predictions, which we stack in "long" format
   if (length(dim(iter)) == 3) {
     # 3rd dimension of the array is the response level. This stacks the draws into:
     # Rows * Response ~ Draws
     iter_stacked <- apply(iter, 1, c)
+    # create name for groups. for mixture, this is NULL
+    dim_names <- dimnames(iter)[[3]]
+    if (is.null(dim_names)) {
+      dim_names <- as.character(seq_len(dim(iter)[3]))
+    }
+
     predictions <- data.frame(
       # rows repeated for each response level
       Row = rep(seq_len(ncol(iter)), times = dim(iter)[3]),
       # response levels repeated for each row
-      Response = rep(dimnames(iter)[[3]], each = dim(iter)[2]),
+      .Response_dummy = rep(dim_names, each = dim(iter)[2]),
       Predicted = apply(iter_stacked, 1, centrality_function),
       stringsAsFactors = FALSE
     )
+    # make sure we have the correct name for the "Response column"
+    if (is_wiener || is_rtchoice) {
+      new_name <- "Component"
+    } else if (is_mixture) {
+      new_name <- "Class"
+    } else {
+      new_name <- "Response"
+    }
+    names(predictions)[names(predictions) == ".Response_dummy"] <- new_name
     # for ordinal etc. outcomes, we need to include the data from the grid, too
     if (!is.null(datagrid)) {
       # due to reshaping predictions into long format, we to repeat the

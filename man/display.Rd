@@ -26,11 +26,15 @@ print_html(x, ...)
 
 \item{...}{Arguments passed to other methods.}
 
-\item{format}{String, indicating the output format. Can be \code{"markdown"} or \code{"html"}.}
+\item{format}{String, indicating the output format. Can be \code{"markdown"} or
+\code{"html"}. A special option is \code{"tt"}, which creates a \code{\link[tinytable:tt]{tinytable::tt()}}
+object, where the output format is dependent on the context where the table
+is used, i.e. it can be markdown format when \code{export_table()} is used in
+markdown files, or LaTex format when creating PDFs etc.}
 }
 \value{
-Depending on \code{format}, either an object of class \code{gt_tbl}
-or a character vector of class \code{knitr_kable}.
+Depending on \code{format}, either an object of class \code{gt_tbl},
+\code{tinytable}, or a character vector of class \code{knitr_kable}.
 }
 \description{
 \code{display()} is a generic function to export data frames
@@ -40,7 +44,11 @@ Similar, \code{print_html()} is a shortcut for \code{display(format = "html")}.
 See the documentation for the specific objects' classes.
 }
 \examples{
-\dontshow{if (requireNamespace("gt")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(check_if_installed(c("gt", "tinytable"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 display(iris[1:5, ], format = "html")
+
+display(iris[1:5, ], format = "tt")
+
+display(iris[1:5, ], format = "markdown")
 \dontshow{\}) # examplesIf}
 }
