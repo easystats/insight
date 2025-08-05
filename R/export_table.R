@@ -1258,6 +1258,7 @@ print.insight_table <- function(x, ...) {
   # insert sub header rows and column spans, if we have any
   if (!is.null(out$row_groups) || !is.null(column_groups)) {
     final <- tinytable::group_tt(final, i = out$row_groups, j = column_groups)
+    final <- tinytable::style_tt(final, i = "~groupi", j = 1, indent = 2)
   }
   tinytable::style_tt(final, align = align, ...)
 }
