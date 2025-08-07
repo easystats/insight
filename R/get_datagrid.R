@@ -159,8 +159,14 @@
 #' @param protect_integers Defaults to `TRUE`. Indicates whether integers (whole
 #'   numbers) should be treated as integers (i.e., prevent adding any in-between
 #'   round number values), or - if `FALSE` - as regular numeric variables. Only
-#'   applies when `range = "range"` (the default), or if `range = "grid"` and the
-#'   first predictor in `by` is an integer.
+#'   applies when:
+#'
+#'   1. `range = "range"` (the default), or if `range = "grid"` and the
+#'   first predictor in `by` is an integer;
+#'   2. `length` is larger than the number of unique values for the variable.
+#'
+#'   If `length` is smaller than the number of unique values, `protect_integers`
+#'   is ignored.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
 #'   the data is retrieved via `get_data()`.
 #' @param digits Number of digits used for rounding numeric values specified in
@@ -408,19 +414,19 @@ get_datagrid.data.frame <- function(x,
       if (length(length) == 1L) {
         length <- rep(length, length(numvars))
       } else if (length(length) != length(numvars)) {
-        format_error(
+        format_error(paste0(
           "The number of elements in `length` must match the number of numeric target variables (n = ",
           length(numvars), ")."
-        )
+        ))
       }
       # Sanitize 'range' argument
       if (length(range) == 1) {
         range <- rep(range, length(numvars))
       } else if (length(range) != length(numvars)) {
-        format_error(
+        format_error(paste0(
           "The number of elements in `range` must match the number of numeric target variables (n = ",
           length(numvars), ")."
-        )
+        ))
       }
 
       # sanity check - do we have a named vector for `length`, and do all names
@@ -600,8 +606,8 @@ get_datagrid.numeric <- function(x,
   }
 
   # validation check
-  if (!is.numeric(length)) {
-    format_error("`length` argument should be an number.")
+  if (is.infinite(length) || !is.numeric(length)) {
+    format_error("`length` argument must be a finite numeric value.")
   }
 
   # Create a spread

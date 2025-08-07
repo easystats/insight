@@ -1,4 +1,4 @@
-# insight (devel)
+# insight 1.4.0
 
 ## Breaking changes
 
@@ -29,6 +29,8 @@
 
 * Fixed issue in `find_random()` for multivariate response models of class `brms`
   with special response options.
+
+* Fixed CRAN check issues on M1 Macs.
 
 # insight 1.3.1
 
