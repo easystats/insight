@@ -212,8 +212,7 @@ first predictor in \code{by} is an integer;
 }
 
 If \code{length} is smaller than the number of unique values, \code{protect_integers}
-is ignored. Thus, set \code{length = Inf} to always use all unique values for
-integers.}
+is ignored.}
 
 \item{digits}{Number of digits used for rounding numeric values specified in
 \code{by}. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to
