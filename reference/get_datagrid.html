@@ -21,7 +21,7 @@ methods for more info).'><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -276,8 +276,11 @@ should increase the <code>length</code> argument.</p></dd>
 <dd><p>Defaults to <code>TRUE</code>. Indicates whether integers (whole
 numbers) should be treated as integers (i.e., prevent adding any in-between
 round number values), or - if <code>FALSE</code> - as regular numeric variables. Only
-applies when <code>range = "range"</code> (the default), or if <code>range = "grid"</code> and the
-first predictor in <code>by</code> is an integer.</p></dd>
+applies when:</p><ol><li><p><code>range = "range"</code> (the default), or if <code>range = "grid"</code> and the
+first predictor in <code>by</code> is an integer;</p></li>
+<li><p><code>length</code> is larger than the number of unique values for the variable.</p></li>
+</ol><p>If <code>length</code> is smaller than the number of unique values, <code>protect_integers</code>
+is ignored.</p></dd>
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
