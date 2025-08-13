@@ -20,6 +20,8 @@
   group rows and columns in the exported table. Column groups currently only
   work for `format = "tt"`.
 
+* Added a `.lavaan` method for `is_converged()`.
+
 ## Bug fixes
 
 * Fixed issue with models of class `selection` with multiple response
