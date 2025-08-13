@@ -309,6 +309,7 @@ test_that("export_table, tinytable with indented rows", {
   skip_on_cran()
   skip_if_not_installed("parameters")
   skip_if_not_installed("tinytable")
+  skip_if_not_installed("knitr")
 
   data(mtcars)
   mtcars$cyl <- as.factor(mtcars$cyl)

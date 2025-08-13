@@ -204,8 +204,15 @@ should increase the \code{length} argument.}
 \item{protect_integers}{Defaults to \code{TRUE}. Indicates whether integers (whole
 numbers) should be treated as integers (i.e., prevent adding any in-between
 round number values), or - if \code{FALSE} - as regular numeric variables. Only
-applies when \code{range = "range"} (the default), or if \code{range = "grid"} and the
-first predictor in \code{by} is an integer.}
+applies when:
+\enumerate{
+\item \code{range = "range"} (the default), or if \code{range = "grid"} and the
+first predictor in \code{by} is an integer;
+\item \code{length} is larger than the number of unique values for the variable.
+}
+
+If \code{length} is smaller than the number of unique values, \code{protect_integers}
+is ignored.}
 
 \item{digits}{Number of digits used for rounding numeric values specified in
 \code{by}. E.g., \verb{x = [sd]} will round the mean and +-/1 SD in the data grid to

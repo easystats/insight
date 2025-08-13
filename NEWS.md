@@ -20,6 +20,8 @@
   group rows and columns in the exported table. Column groups currently only
   work for `format = "tt"`.
 
+* Added a `.lavaan` method for `is_converged()`.
+
 ## Bug fixes
 
 * Fixed issue with models of class `selection` with multiple response
@@ -29,6 +31,8 @@
 
 * Fixed issue in `find_random()` for multivariate response models of class `brms`
   with special response options.
+
+* Fixed CRAN check issues on M1 Macs.
 
 # insight 1.3.1
 
