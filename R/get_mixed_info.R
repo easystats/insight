@@ -314,3 +314,18 @@ get_mixed_info.cpglmm <- function(model, verbose = TRUE, ...) {
 
   .fix_mm_rank_deficiency(mixed_effects_info)
 }
+
+
+#' @export
+get_mixed_info.coxme <- function(model, verbose = TRUE, ...) {
+  check_if_installed("coxme")
+
+  mixed_effects_info <- list(
+    beta = coxme::fixef(model),
+    X = get_modelmatrix(model),
+    vc = coxme::VarCorr(model),
+    re = coxme::ranef(model)
+  )
+
+  .fix_mm_rank_deficiency(mixed_effects_info)
+}

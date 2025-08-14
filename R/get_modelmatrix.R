@@ -40,6 +40,17 @@ get_modelmatrix.merMod <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.coxme <- function(x, ...) {
+  model_terms <- stats::terms(x)
+  dots <- list(...)
+  if ("data" %in% names(dots)) {
+    stats::model.matrix(model_terms, data = dots$data, ...)
+  } else {
+    stats::model.matrix(model_terms, data = get_data(x), ...)
+  }
+}
+
+#' @export
 get_modelmatrix.bracl <- function(x, ...) {
   dots <- list(...)
   if ("data" %in% names(dots)) {
