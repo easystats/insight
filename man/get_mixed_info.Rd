@@ -3,11 +3,14 @@
 \name{get_mixed_info}
 \alias{get_mixed_info}
 \alias{get_mixed_info.default}
+\alias{get_mixed_info.glmmTMB}
 \title{Extract various information from mixed models}
 \usage{
 get_mixed_info(model, ...)
 
 \method{get_mixed_info}{default}(model, verbose = TRUE, ...)
+
+\method{get_mixed_info}{glmmTMB}(model, component = "conditional", verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{A mixed effects model.}
@@ -15,6 +18,10 @@ get_mixed_info(model, ...)
 \item{...}{Not used.}
 
 \item{verbose}{Toggle off warnings.}
+
+\item{component}{For \code{glmmTMB} and \code{MixMod} models, this argument specifies
+the component of the model to extract. Possible values are \code{"conditional"}
+(default) and \code{"zero_inflated"} (or \code{"zi"}).}
 }
 \value{
 This function returns a list that has the same structure for any

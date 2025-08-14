@@ -8,6 +8,9 @@
 #'
 #' @param model A mixed effects model.
 #' @param verbose Toggle off warnings.
+#' @param component For `glmmTMB` and `MixMod` models, this argument specifies
+#' the component of the model to extract. Possible values are `"conditional"`
+#' (default) and `"zero_inflated"` (or `"zi"`).
 #' @param ... Not used.
 #'
 #' @return This function returns a list that has the same structure for any
@@ -61,9 +64,11 @@ get_mixed_info.default <- function(model, verbose = TRUE, ...) {
 # methods ----------------------------
 
 
+#' @rdname get_mixed_info
 #' @export
-get_mixed_info.glmmTMB <- function(model, verbose = TRUE, ...) {
+get_mixed_info.glmmTMB <- function(model, component = "conditional", verbose = TRUE, ...) {
   check_if_installed("glmmTMB")
+  component <- validate_argument(component, c("conditional", "zero_inflated", "zi"))
 
   mixed_effects_info <- list(
     beta = lme4::fixef(model),
@@ -72,12 +77,12 @@ get_mixed_info.glmmTMB <- function(model, verbose = TRUE, ...) {
     re = lme4::ranef(model)
   )
 
-  # for models with zero-inflation, we only want the conditional part
-  mixed_effects_info <- lapply(mixed_effects_info, .collapse_cond)
-
-  # currently, we don't support calculating all variance components
-  # for the zero-inflated part of the model only. This is not fully implemented
-  # mixed_effects_info <- lapply(mixed_effects_info, .collapse_zi)
+  # extract requested component
+  if (component == "conditional") {
+    mixed_effects_info <- lapply(mixed_effects_info, .collapse_cond)
+  } else {
+    mixed_effects_info <- lapply(mixed_effects_info, .collapse_zi)
+  }
 
   # for glmmTMB, tell user that dispersion model is ignored
   if (!is.null(find_formula(model, verbose = FALSE)[["dispersion"]]) && verbose) {
@@ -131,8 +136,9 @@ get_mixed_info.lme <- function(model, verbose = TRUE, ...) {
 
 
 #' @export
-get_mixed_info.MixMod <- function(model, verbose = TRUE, ...) {
+get_mixed_info.MixMod <- function(model, component = "conditional", verbose = TRUE, ...) {
   check_if_installed("GLMMadaptive")
+  component <- validate_argument(component, c("conditional", "zero_inflated", "zi"))
 
   vc1 <- vc2 <- NULL
   re_names <- find_random(model)
@@ -177,12 +183,12 @@ get_mixed_info.MixMod <- function(model, verbose = TRUE, ...) {
   )
   names(mixed_effects_info$re) <- model$id_name
 
-  # for models with zero-inflation, we only want the conditional part
-  mixed_effects_info <- lapply(mixed_effects_info, .collapse_cond)
-
-  # currently, we don't support calculating all variance components
-  # for the zero-inflated part of the model only. This is not fully implemented
-  # mixed_effects_info <- lapply(mixed_effects_info, .collapse_zi)
+  # extract requested component
+  if (component == "conditional") {
+    mixed_effects_info <- lapply(mixed_effects_info, .collapse_cond)
+  } else {
+    mixed_effects_info <- lapply(mixed_effects_info, .collapse_zi)
+  }
 
   # for glmmTMB, tell user that dispersion model is ignored
   if (!is.null(find_formula(model, verbose = FALSE)[["dispersion"]]) && verbose) {
