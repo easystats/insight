@@ -20,6 +20,12 @@
 #'
 #' @export
 get_mixed_info <- function(model, ...) {
+  # sanity check
+  if (is.null(model)) {
+    return(NULL)
+  }
+  check_if_installed("lme4")
+
   UseMethod("get_mixed_info")
 }
 
@@ -27,13 +33,6 @@ get_mixed_info <- function(model, ...) {
 #' @rdname get_mixed_info
 #' @export
 get_mixed_info.default <- function(model, verbose = TRUE, ...) {
-  # sanity check
-  if (is.null(model)) {
-    return(NULL)
-  }
-
-  check_if_installed("lme4")
-
   mixed_effects_info <- list(
     beta = lme4::fixef(model),
     X = lme4::getME(model, "X"),
@@ -64,12 +63,7 @@ get_mixed_info.default <- function(model, verbose = TRUE, ...) {
 
 #' @export
 get_mixed_info.glmmTMB <- function(model, verbose = TRUE, ...) {
-  # sanity check
-  if (is.null(model)) {
-    return(NULL)
-  }
-
-  check_if_installed(c("lme4", "glmmTMB"))
+  check_if_installed("glmmTMB")
 
   mixed_effects_info <- list(
     beta = lme4::fixef(model),
@@ -96,12 +90,7 @@ get_mixed_info.glmmTMB <- function(model, verbose = TRUE, ...) {
 
 #' @export
 get_mixed_info.stanreg <- function(model, verbose = TRUE, ...) {
-  # sanity check
-  if (is.null(model)) {
-    return(NULL)
-  }
-
-  check_if_installed(c("lme4", "rstanarm"))
+  check_if_installed("rstanarm")
 
   mixed_effects_info <- list(
     beta = lme4::fixef(model),
@@ -116,12 +105,7 @@ get_mixed_info.stanreg <- function(model, verbose = TRUE, ...) {
 
 #' @export
 get_mixed_info.lme <- function(model, verbose = TRUE, ...) {
-  # sanity check
-  if (is.null(model)) {
-    return(NULL)
-  }
-
-  check_if_installed(c("lme4", "nlme"))
+  check_if_installed("nlme")
 
   re_names <- find_random(model, split_nested = TRUE, flatten = TRUE)
   comp_x <- get_modelmatrix(model)
@@ -148,12 +132,7 @@ get_mixed_info.lme <- function(model, verbose = TRUE, ...) {
 
 #' @export
 get_mixed_info.MixMod <- function(model, verbose = TRUE, ...) {
-  # sanity check
-  if (is.null(model)) {
-    return(NULL)
-  }
-
-  check_if_installed(c("lme4", "GLMMadaptive"))
+  check_if_installed("GLMMadaptive")
 
   vc1 <- vc2 <- NULL
   re_names <- find_random(model)
@@ -216,13 +195,6 @@ get_mixed_info.MixMod <- function(model, verbose = TRUE, ...) {
 
 #' @export
 get_mixed_info.mjoint <- function(model, verbose = TRUE, ...) {
-  # sanity check
-  if (is.null(model)) {
-    return(NULL)
-  }
-
-  check_if_installed("lme4")
-
   re_names <- find_random(model, flatten = TRUE)
   vcorr <- summary(model)$D
   attr(vcorr, "stddev") <- sqrt(diag(vcorr))
@@ -245,12 +217,7 @@ get_mixed_info.mjoint <- function(model, verbose = TRUE, ...) {
 
 #' @export
 get_mixed_info.clmm <- function(model, verbose = TRUE, ...) {
-  # sanity check
-  if (is.null(model)) {
-    return(NULL)
-  }
-
-  check_if_installed(c("lme4", "ordinal"))
+  check_if_installed("ordinal")
 
   mm <- get_modelmatrix(model)
   mixed_effects_info <- list(
@@ -266,12 +233,7 @@ get_mixed_info.clmm <- function(model, verbose = TRUE, ...) {
 
 #' @export
 get_mixed_info.glmmadmb <- function(model, verbose = TRUE, ...) {
-  # sanity check
-  if (is.null(model)) {
-    return(NULL)
-  }
-
-  check_if_installed(c("lme4", "glmmadmb"))
+  check_if_installed("glmmadmb")
 
   mixed_effects_info <- list(
     beta = lme4::fixef(model),
@@ -286,12 +248,7 @@ get_mixed_info.glmmadmb <- function(model, verbose = TRUE, ...) {
 
 #' @export
 get_mixed_info.brmsfit <- function(model, verbose = TRUE, ...) {
-  # sanity check
-  if (is.null(model)) {
-    return(NULL)
-  }
-
-  check_if_installed(c("lme4", "brms"))
+  check_if_installed("brms")
 
   comp_x <- get_modelmatrix(model)
   rownames(comp_x) <- seq_len(nrow(comp_x))
@@ -335,12 +292,7 @@ get_mixed_info.brmsfit <- function(model, verbose = TRUE, ...) {
 
 #' @export
 get_mixed_info.cpglmm <- function(model, verbose = TRUE, ...) {
-  # sanity check
-  if (is.null(model)) {
-    return(NULL)
-  }
-
-  check_if_installed(c("lme4", "cplm"))
+  check_if_installed("cplm")
 
   mixed_effects_info <- list(
     beta = cplm::fixef(model),
