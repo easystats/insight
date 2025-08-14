@@ -1105,3 +1105,11 @@ test_that("get/find_parameters with dispersion-random", {
   out <- find_random_slopes(m)
   expect_identical(out, list(dispersion_random = "Wtemp"))
 })
+
+
+test_that("get_mixed_info, glmmTMB, with cond and zi", {
+  out <- get_mixed_info(m1)
+  expect_equal(out$vc$persons[, 1], 0.867127, tolerance = 1e-4)
+  out <- get_mixed_info(m1, component = "zi")
+  expect_equal(out$vc$persons[, 1], 1.378258, tolerance = 1e-4)
+})
