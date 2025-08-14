@@ -22,6 +22,9 @@
 
 * Added a `.lavaan` method for `is_converged()`.
 
+* The formerly internal function to extract various information about mixed
+  models is now exported as `get_mixed_info()`.
+
 ## Bug fixes
 
 * Fixed issue with models of class `selection` with multiple response

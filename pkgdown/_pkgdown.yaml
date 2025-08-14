@@ -43,6 +43,7 @@ reference:
       - get_varcov
       - get_deviance
       - get_family
+      - get_mixed_info
 
   - title: "Find Information or Get Data from Model Objects"
     desc: >
