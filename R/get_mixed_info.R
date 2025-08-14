@@ -327,5 +327,13 @@ get_mixed_info.coxme <- function(model, verbose = TRUE, ...) {
     re = coxme::ranef(model)
   )
 
+  # make sure we always have a matrix
+  mixed_effects_info$vc <- lapply(mixed_effects_info$vc, function(i) {
+    if (!is.matrix(i)) {
+      i <- as.matrix(i)
+    }
+    i
+  })
+
   .fix_mm_rank_deficiency(mixed_effects_info)
 }
