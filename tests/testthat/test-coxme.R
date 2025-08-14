@@ -202,7 +202,7 @@ withr::with_environment(
         out$vc,
         list(
           inst = structure(
-            0.0215959053249015,
+            0.0258577545419199,
             dim = c(1L, 1L),
             dimnames = list(
               "(Intercept)",
@@ -212,7 +212,7 @@ withr::with_environment(
         ),
         tolerance = 1e-4
       )
-      out <- get_mixed_info(m2)
+      out <- get_mixed_info(m3)
       expect_equal(
         out$vc,
         list(
