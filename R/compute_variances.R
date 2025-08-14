@@ -28,7 +28,10 @@
   faminfo <- model_info(model, response = 1, verbose = FALSE)
 
   # check argument
-  approx_method <- match.arg(approximation, c("lognormal", "delta", "trigamma", "observation_level"))
+  approx_method <- validate_argument(
+    approximation,
+    c("lognormal", "delta", "trigamma", "observation_level")
+  )
 
   # check whether R2 should be calculated for the full model, or the
   # conditional model only
@@ -111,7 +114,7 @@
 
   # Get variance of fixed effects: multiply coefs by design matrix
   if (component %in% c("fixed", "all")) {
-    var.fixed <- .compute_variance_fixed(mixed_effects_info)
+    var.fixed <- .compute_variance_fixed(model, mixed_effects_info)
   }
 
   # Are random slopes present as fixed effects? Warn.
@@ -264,8 +267,13 @@
 # However, package MuMIn differs and uses "fitted()" instead, leading to minor
 # deviations
 # -----------------------------------------------------------------------------
-.compute_variance_fixed <- function(mixed_effects_info) {
-  with(mixed_effects_info, stats::var(as.vector(beta %*% t(X))))
+.compute_variance_fixed <- function(model, mixed_effects_info) {
+  if (inherits(model, "coxme")) {
+    mixed_effects_info$X <- mixed_effects_info$X[, -1, drop = FALSE] # remove intercept
+    with(mixed_effects_info, stats::var(as.vector(beta %*% t(X))))
+  } else {
+    with(mixed_effects_info, stats::var(as.vector(beta %*% t(X))))
+  }
 }
 
 

@@ -331,6 +331,15 @@ get_mixed_info.coxme <- function(model, verbose = TRUE, ...) {
   mixed_effects_info$vc <- lapply(mixed_effects_info$vc, function(i) {
     if (!is.matrix(i)) {
       i <- as.matrix(i)
+      rownames(i)[rownames(i) == "Intercept"] <- "(Intercept)"
+    }
+    i
+  })
+
+  mixed_effects_info$re <- lapply(mixed_effects_info$re, function(i) {
+    if (!is.matrix(i)) {
+      i <- as.matrix(i)
+      colnames(i) <- "(Intercept)"
     }
     i
   })
