@@ -165,11 +165,13 @@ get_mixed_info.MixMod <- function(model, component = "conditional", verbose = TR
   vc1 <- list(vc1)
   names(vc1) <- re_names[[1]]
   attr(vc1, "sc") <- sqrt(abs(model_deviance) / residual_df)
+  attr(vc1, "useSc") <- TRUE
 
   if (!is.null(vc2)) {
     vc2 <- list(vc2)
     names(vc2) <- re_names[[2]]
     attr(vc2, "sc") <- sqrt(abs(model_deviance) / residual_df)
+    attr(vc2, "useSc") <- FALSE
   }
 
   vcorr <- compact_list(list(vc1, vc2))
@@ -208,6 +210,7 @@ get_mixed_info.mjoint <- function(model, verbose = TRUE, ...) {
   vcorr <- list(vcorr)
   names(vcorr) <- re_names[1]
   attr(vcorr, "sc") <- model$coef$sigma2[[1]]
+  attr(vcorr, "useSc") <- TRUE
 
   mixed_effects_info <- list(
     beta = lme4::fixef(model),
@@ -232,6 +235,7 @@ get_mixed_info.clmm <- function(model, verbose = TRUE, ...) {
     vc = ordinal::VarCorr(model),
     re = ordinal::ranef(model)
   )
+  attr(mixed_effects_info$vc, "useSc") <- FALSE
 
   .fix_mm_rank_deficiency(mixed_effects_info)
 }
@@ -306,6 +310,7 @@ get_mixed_info.cpglmm <- function(model, verbose = TRUE, ...) {
     vc = cplm::VarCorr(model),
     re = cplm::ranef(model)
   )
+  attr(mixed_effects_info$vc, "useSc") <- FALSE
 
   .fix_mm_rank_deficiency(mixed_effects_info)
 }
