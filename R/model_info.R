@@ -1268,11 +1268,17 @@ model_info.glmmTMB <- function(x, ...) {
 
 #' @export
 model_info.betareg <- function(x, ...) {
+  if (!is.null(x$link$mean)) {
+    element_name <- "mean"
+  } else {
+    element_name <- "mu"
+  }
+
   .retrieve_model_info(
     x = x,
     fitfam = "beta",
-    logit.link = x$link$mean$name == "logit",
-    link.fun = x$link$mean$name,
+    logit.link = x$link[[element_name]]$name == "logit",
+    link.fun = x$link[[element_name]]$name,
     ...
   )
 }
