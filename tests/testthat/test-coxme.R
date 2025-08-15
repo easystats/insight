@@ -212,6 +212,11 @@ withr::with_environment(
         ),
         tolerance = 1e-4
       )
+      expect_identical(
+        dimnames(out$vc$inst),
+        list("(Intercept)", "(Intercept)")
+      )
+
       out <- get_mixed_info(m3)
       expect_equal(
         out$vc,
@@ -231,6 +236,26 @@ withr::with_environment(
           )
         ),
         tolerance = 1e-4
+      )
+      expect_identical(
+        dimnames(out$vc$litter),
+        list(c("(Intercept)", "rx"), c("(Intercept)", "rx"))
+      )
+
+      set.seed(1234)
+      rats$grp <- sample(letters[1:3], nrow(rats), replace = TRUE)
+      m <- suppressWarnings(coxme::coxme(
+        Surv(time, status) ~ rx + (1 + rx | litter) + (1 | grp),
+        data = rats
+      ))
+      out <- get_mixed_info(m)
+      expect_identical(
+        dimnames(out$vc$litter),
+        list(c("(Intercept)", "rx"), c("(Intercept)", "rx"))
+      )
+      expect_identical(
+        dimnames(out$vc$grp),
+        list("(Intercept)", "(Intercept)")
       )
     })
   }

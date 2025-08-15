@@ -332,17 +332,18 @@ get_mixed_info.coxme <- function(model, verbose = TRUE, ...) {
     if (!is.matrix(i)) {
       i <- as.matrix(i)
     }
-    rownames(i)[rownames(i) == "Intercept"] <- "(Intercept)"
-    colnames(i)[colnames(i) == "Intercept"] <- "(Intercept)"
+    dimnames(i)[[1]][1] <- "(Intercept)"
+    dimnames(i)[[2]][1] <- "(Intercept)"
     i
   })
 
   mixed_effects_info$re <- lapply(mixed_effects_info$re, function(i) {
     if (!is.matrix(i)) {
       i <- as.matrix(i)
-      colnames(i) <- "(Intercept)"
+      dimnames(i)[[1]][1] <- dimnames(i)[[2]][1] <- "(Intercept)"
     }
-    colnames(i)[colnames(i) == "Intercept"] <- "(Intercept)"
+    dimnames(i)[[1]][1] <- "(Intercept)"
+    dimnames(i)[[2]][1] <- "(Intercept)"
     i
   })
 
