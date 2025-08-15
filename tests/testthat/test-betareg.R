@@ -15,7 +15,7 @@ test_that("model_info", {
   data(mtcars)
   d <- mtcars
   d$y <- d$wt / max(d$wt)
-  m <- betareg::betareg(y ~ mpg, data = data)
+  m <- betareg::betareg(y ~ mpg, data = d)
   expect_true(model_info(m)$is_beta)
   expect_false(model_info(m)$is_linear)
 })
