@@ -10,6 +10,14 @@ m2 <- betareg::betareg(I(food / income) ~ income + persons, data = FoodExpenditu
 test_that("model_info", {
   expect_true(model_info(m1)$is_beta)
   expect_false(model_info(m1)$is_linear)
+
+  # some models have other element names
+  data(mtcars)
+  d <- mtcars
+  d$y <- d$wt / max(d$wt)
+  m <- betareg::betareg(y ~ mpg, data = d)
+  expect_true(model_info(m)$is_beta)
+  expect_false(model_info(m)$is_linear)
 })
 
 test_that("find_predictors", {
