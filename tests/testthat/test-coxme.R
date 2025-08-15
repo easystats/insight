@@ -200,37 +200,54 @@ withr::with_environment(
       out <- get_mixed_info(m1)
       expect_equal(
         out$vc,
-        list(
-          inst = structure(
-            0.0258577545419199,
-            dim = c(1L, 1L),
-            dimnames = list(
-              "(Intercept)",
-              NULL
-            )
-          )
-        ),
-        tolerance = 1e-4
+        list(inst = as.matrix(0.0258577545419199)),
+        tolerance = 1e-4,
+        ignore_attr = TRUE
       )
-      out <- get_mixed_info(m3)
+      expect_identical(
+        dimnames(out$vc$inst),
+        list("(Intercept)", "(Intercept)")
+      )
+
+      out <- suppressWarnings(get_mixed_info(m3))
       expect_equal(
         out$vc,
         list(
-          litter = structure(
+          litter = matrix(
             c(
               1.90330701553847,
               -0.985430250670421,
               -0.985430250670421,
               0.246119854852106
             ),
-            dim = c(2L, 2L),
-            dimnames = list(
-              c("(Intercept)", "rx"),
-              c("(Intercept)", "rx")
-            )
+            ncol = 2
           )
         ),
-        tolerance = 1e-4
+        tolerance = 1e-4,
+        ignore_attr = TRUE
+      )
+      expect_identical(
+        dimnames(out$vc$litter),
+        list(c("(Intercept)", "rx"), c("(Intercept)", "rx"))
+      )
+
+      set.seed(1234)
+      Surv <- survival::Surv
+      rats <- survival::rats
+      rats$grp <- sample(letters[1:3], nrow(rats), replace = TRUE)
+      d2 <<- rats
+      m <- suppressWarnings(coxme::coxme(
+        Surv(time, status) ~ rx + (1 + rx | litter) + (1 | grp),
+        data = d2
+      ))
+      out <- get_mixed_info(m)
+      expect_identical(
+        dimnames(out$vc$litter),
+        list(c("(Intercept)", "rx"), c("(Intercept)", "rx"))
+      )
+      expect_identical(
+        dimnames(out$vc$grp),
+        list("(Intercept)", "(Intercept)")
       )
     })
   }
