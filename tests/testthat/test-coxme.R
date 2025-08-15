@@ -232,11 +232,13 @@ withr::with_environment(
       )
 
       set.seed(1234)
+      Surv <- survival::Surv
       rats <- survival::rats
       rats$grp <- sample(letters[1:3], nrow(rats), replace = TRUE)
+      d2 <<- rats
       m <- suppressWarnings(coxme::coxme(
         Surv(time, status) ~ rx + (1 + rx | litter) + (1 | grp),
-        data = rats
+        data = d2
       ))
       out <- get_mixed_info(m)
       expect_identical(
