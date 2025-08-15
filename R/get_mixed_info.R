@@ -344,7 +344,13 @@ get_mixed_info.coxme <- function(model, verbose = TRUE, ...) {
   if (!is.matrix(x)) {
     x <- as.matrix(x)
   }
-  colnames(x)[1] <- "(Intercept)"
+  if (is.null(rownames(x))) {
+    rownames(x) <- character(nrow(x))
+  }
+  if (is.null(colnames(x))) {
+    colnames(x) <- character(ncol(x))
+  }
   rownames(x)[1] <- "(Intercept)"
+  colnames(x)[1] <- "(Intercept)"
   x
 }
