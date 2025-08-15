@@ -344,7 +344,7 @@ get_mixed_info.coxme <- function(model, verbose = TRUE, ...) {
   if (!is.matrix(x)) {
     x <- as.matrix(x)
   }
-  dimnames(x)[[1]][1] <- "(Intercept)"
-  dimnames(x)[[2]][1] <- "(Intercept)"
+  colnames(x)[1] <- "(Intercept)"
+  rownames(x)[1] <- "(Intercept)"
   x
 }
