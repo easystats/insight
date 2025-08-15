@@ -209,7 +209,7 @@ withr::with_environment(
         list("(Intercept)", "(Intercept)")
       )
 
-      out <- get_mixed_info(m3)
+      out <- suppressWarnings(get_mixed_info(m3))
       expect_equal(
         out$vc,
         list(
