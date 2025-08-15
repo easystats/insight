@@ -328,27 +328,23 @@ get_mixed_info.coxme <- function(model, verbose = TRUE, ...) {
   )
 
   # make sure we always have a matrix
-  mixed_effects_info$vc <- lapply(mixed_effects_info$vc, function(i) {
-    if (!is.matrix(i)) {
-      i <- as.matrix(i)
-    }
-    dimnames(i)[[1]][1] <- "(Intercept)"
-    dimnames(i)[[2]][1] <- "(Intercept)"
-    i
-  })
-
-  mixed_effects_info$re <- lapply(mixed_effects_info$re, function(i) {
-    if (!is.matrix(i)) {
-      i <- as.matrix(i)
-      dimnames(i)[[1]][1] <- dimnames(i)[[2]][1] <- "(Intercept)"
-    }
-    dimnames(i)[[1]][1] <- "(Intercept)"
-    dimnames(i)[[2]][1] <- "(Intercept)"
-    i
-  })
+  mixed_effects_info$vc <- lapply(mixed_effects_info$vc, .fix_dimnames)
+  mixed_effects_info$re <- lapply(mixed_effects_info$re, .fix_dimnames)
 
   # need specific class attribute for coxme, because it has a different structure
   class(mixed_effects_info$vc) <- "VarCorr.coxme"
 
   .fix_mm_rank_deficiency(mixed_effects_info)
+}
+
+
+# helper --------------------
+
+.fix_dimnames <- function(x) {
+  if (!is.matrix(x)) {
+    x <- as.matrix(x)
+  }
+  dimnames(x)[[1]][1] <- "(Intercept)"
+  dimnames(x)[[2]][1] <- "(Intercept)"
+  x
 }
