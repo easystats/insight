@@ -346,5 +346,8 @@ get_mixed_info.coxme <- function(model, verbose = TRUE, ...) {
     i
   })
 
+  # need specific class attribute for coxme, because it has a different structure
+  class(mixed_effects_info$vc) <- "VarCorr.coxme"
+
   .fix_mm_rank_deficiency(mixed_effects_info)
 }
