@@ -131,6 +131,9 @@ get_mixed_info.lme <- function(model, verbose = TRUE, ...) {
   names(mixed_effects_info$re) <- re_names
   names(mixed_effects_info$vc) <- re_names
 
+  # need specific class attribute for nlme, because it has a different structure
+  class(mixed_effects_info$vc) <- "VarCorr.lme"
+
   .fix_mm_rank_deficiency(mixed_effects_info)
 }
 
