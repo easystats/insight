@@ -713,8 +713,14 @@ link_function.svyolr <- function(x, ...) {
 #' @export
 link_function.betareg <- function(x, what = c("mean", "precision"), ...) {
   what <- match.arg(what)
+
+  element_name <- .betareg_mean_element(x)
+  if (is.null(element_name)) {
+    return(NULL)
+  }
+
   switch(what,
-    mean = x$link$mean$linkfun,
+    mean = x$link[[element_name]]$linkfun,
     precision = x$link$precision$linkfun
   )
 }
