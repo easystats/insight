@@ -1288,8 +1288,7 @@ model_info.betareg <- function(x, ...) {
   } else if (!is.null(x$link$mu)) {
     element_name <- "mu"
   } else {
-    format_warning("Could not find link information for the mean model in the betareg-object.")
-    return(NULL)
+    format_error("Could not find link information for the mean model in the betareg-object.")
   }
 }
 

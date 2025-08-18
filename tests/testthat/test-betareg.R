@@ -163,6 +163,9 @@ test_that("get_modelmatrix", {
   mm <- get_modelmatrix(m1, data = head(GasolineYield))
   expect_true(is.matrix(mm))
   expect_identical(dim(mm), c(6L, 11L))
+  mm <- get_modelmatrix(m3)
+  expect_true(is.matrix(mm))
+  expect_identical(dim(mm), c(32L, 2L))
 })
 
 skip_if_not_installed("withr")
