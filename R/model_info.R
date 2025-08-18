@@ -1268,14 +1268,7 @@ model_info.glmmTMB <- function(x, ...) {
 
 #' @export
 model_info.betareg <- function(x, ...) {
-  if (!is.null(x$link$mean)) {
-    element_name <- "mean"
-  } else if (!is.null(x$link$mu)) {
-    element_name <- "mu"
-  } else {
-    format_warning("Could not find link information for the mean model in the betareg-object.")
-    return(NULL)
-  }
+  element_name <- .betareg_mean_element(x)
 
   .retrieve_model_info(
     x = x,
@@ -1284,6 +1277,16 @@ model_info.betareg <- function(x, ...) {
     link.fun = x$link[[element_name]]$name,
     ...
   )
+}
+
+.betareg_mean_element <- function(x) {
+  if (!is.null(x$link$mean)) {
+    "mean"
+  } else if (!is.null(x$link$mu)) {
+    "mu"
+  } else {
+    format_error("Could not find link information for the mean model in the betareg-object.")
+  }
 }
 
 

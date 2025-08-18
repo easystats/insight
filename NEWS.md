@@ -35,7 +35,8 @@
 * Fixed issue in `find_random()` for multivariate response models of class `brms`
   with special response options.
 
-* Fixed issue in `model_info()` for certain betareg-models.
+* Fixed issue in several functions for certain betareg-models that contained
+  a `"mu"` component instead of `"mean"`.
 
 * Fixed CRAN check issues on M1 Macs.
 
