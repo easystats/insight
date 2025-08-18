@@ -733,8 +733,6 @@ get_predicted.phylolm <- function(x,
                                      link_inv = NULL,
                                      verbose = FALSE,
                                      ...) {
-  browser()
-
   # Transform to response scale
   if (isTRUE(my_args$transform)) {
     # retrieve link-inverse, for back transformation...

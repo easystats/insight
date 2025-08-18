@@ -192,5 +192,13 @@ withr::with_environment(
     p2 <- data.frame(p2)
     # expect_false("SE" %in% colnames(p1))
     expect_true("SE" %in% colnames(p2))
+
+    data(mtcars)
+    d <- mtcars
+    d$y <- d$wt / max(d$wt)
+    mp3 <- betareg::betareg(y ~ mpg, data = d)
+    p <- suppressWarnings(get_predicted(mp3))
+    expect_s3_class(p, "get_predicted")
+    expect_length(p, 32)
   })
 )
