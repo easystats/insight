@@ -104,9 +104,6 @@ find_parameters.betareg <- function(x, component = "all", flatten = FALSE, ...) 
   )
 
   element_name <- .betareg_mean_element(x)
-  if (is.null(element_name)) {
-    return(NULL)
-  }
 
   pars <- list(
     conditional = names(x$coefficients[[element_name]]),

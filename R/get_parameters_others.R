@@ -27,9 +27,6 @@ get_parameters.betareg <- function(x, component = "all", ...) {
   cf <- stats::coef(x)
 
   element_name <- .betareg_mean_element(x)
-  if (is.null(element_name)) {
-    return(NULL)
-  }
 
   params <- data.frame(
     Parameter = gsub("^\\(phi\\)_", "", names(cf)),

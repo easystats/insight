@@ -221,9 +221,6 @@ get_modelmatrix.betareg <- function(x, ...) {
     mm <- stats::model.matrix(x, ...)
   } else {
     element_name <- .betareg_mean_element(x)
-    if (is.null(element_name)) {
-      return(NULL)
-    }
     # adapted from betareg::predict.betareg()
     # suppress contrasts dropped from factor
     mf <- suppressWarnings(stats::model.frame(
