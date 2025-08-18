@@ -3,21 +3,20 @@ skip_if_not_installed("betareg")
 data("GasolineYield", package = "betareg")
 data("FoodExpenditure", package = "betareg")
 
-
 m1 <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
 m2 <- betareg::betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
+
+# some models have other element names
+data(mtcars)
+d <- mtcars
+d$y <- d$wt / max(d$wt)
+m3 <- betareg::betareg(y ~ mpg, data = d)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_beta)
   expect_false(model_info(m1)$is_linear)
-
-  # some models have other element names
-  data(mtcars)
-  d <- mtcars
-  d$y <- d$wt / max(d$wt)
-  m <- betareg::betareg(y ~ mpg, data = d)
-  expect_true(model_info(m)$is_beta)
-  expect_false(model_info(m)$is_linear)
+  expect_true(model_info(m3)$is_beta)
+  expect_false(model_info(m3)$is_linear)
 })
 
 test_that("find_predictors", {
@@ -44,6 +43,7 @@ test_that("get_varcov", {
 
 test_that("link_inverse", {
   expect_identical(link_inverse(m1)(0.2), plogis(0.2))
+  expect_identical(link_inverse(m3)(0.2), plogis(0.2))
 })
 
 test_that("get_data", {
@@ -134,6 +134,10 @@ test_that("find_parameters", {
       "temp",
       "(phi)"
     )
+  )
+  expect_identical(
+    find_parameters(m3),
+    list(conditional = c("(Intercept)", "mpg"))
   )
 })
 
