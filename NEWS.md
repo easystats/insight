@@ -20,6 +20,10 @@
   group rows and columns in the exported table. Column groups currently only
   work for `format = "tt"`.
 
+* If arguments `title`, `subtitle` and `footer` in `export_table()` are set to
+  an empty string `""`, no titles/subtitles/footers are printed, even if present
+  as attributes.
+
 * Added a `.lavaan` method for `is_converged()`.
 
 * The formerly internal function to extract various information about mixed
