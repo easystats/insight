@@ -1,4 +1,4 @@
-skip_if_not_installed("mhuirdle")
+skip_if_not_installed("mhurdle")
 
 test_that("model_info", {
   data("Interview", package = "mhurdle")
