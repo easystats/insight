@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.4.0
+Version: 1.4.0.1
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -160,6 +160,7 @@ Suggests:
     metafor,
     metaplus,
     mgcv,
+    mhurdle,
     mice (>= 3.17.0),
     mlogit,
     mmrm,
