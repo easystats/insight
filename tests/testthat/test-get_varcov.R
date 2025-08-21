@@ -53,7 +53,7 @@ test_that("lm: sandwich", {
 
 test_that("glmmTMB: sandwich", {
   skip_on_cran()
-  skip_if_not_installed("glmmTMB", minimum_version = "1.1.2")
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.12")
   data(Salamanders, package = "glmmTMB")
   m <- glmmTMB::glmmTMB(
     count ~ spp + cover + mined + (1 | site),

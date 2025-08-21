@@ -591,9 +591,9 @@ get_varcov.glmmTMB <- function(x,
 
     # find parameters for each component
     zi_parms <- startsWith(colnames(vc), "zi~")
-    disp_params <- startsWith(colnames(vc), "disp~")
+    disp_parms <- startsWith(colnames(vc), "disp~")
     thetha_parms <- startsWith(colnames(vc), "theta_")
-    cond_parms <- !zi_parms & !disp_params & !thetha_parms
+    cond_parms <- !zi_parms & !disp_parms & !thetha_parms
 
     # filter vcov
     vc <- switch(
@@ -601,7 +601,7 @@ get_varcov.glmmTMB <- function(x,
       conditional = vc[cond_parms, cond_parms, drop = FALSE],
       zi = ,
       zero_inflated = vc[zi_parms, zi_parms, drop = FALSE],
-      dispersion = vc[disp_params, disp_params, drop = FALSE],
+      dispersion = vc[disp_parms, disp_parms, drop = FALSE],
       vc
     )
   }
