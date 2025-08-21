@@ -592,8 +592,8 @@ get_varcov.glmmTMB <- function(x,
     # find parameters for each component
     zi_parms <- startsWith(colnames(vc), "zi~")
     disp_parms <- startsWith(colnames(vc), "disp~")
-    thetha_parms <- startsWith(colnames(vc), "theta_")
-    cond_parms <- !zi_parms & !disp_parms & !thetha_parms
+    theta_parms <- startsWith(colnames(vc), "theta_")
+    cond_parms <- !zi_parms & !disp_parms & !theta_parms
 
     # filter vcov
     vc <- switch(
