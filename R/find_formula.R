@@ -933,10 +933,10 @@ find_formula.mhurdle <- function(x, verbose = TRUE, ...) {
   }
 
   # remove "empty" parts
-  if (f.zi == "~0") {
+  if (identical(f.zi, "~0")) {
     f.zi <- NULL
   }
-  if (f.ip == "~0") {
+  if (identical(f.ip, "~0")) {
     f.ip <- NULL
   }
 

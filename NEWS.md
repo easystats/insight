@@ -1,3 +1,9 @@
+# insight (devel)
+
+## Bug fixes
+
+* Fixed issue with `find_formula()` with *mhurdle* models.
+
 # insight 1.4.0
 
 ## Breaking changes
