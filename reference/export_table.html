@@ -15,7 +15,7 @@ the table_width argument to control this behaviour."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@ the table_width argument to control this behaviour."><meta property="og:image" c
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Data frame and Tables Pretty Formatting</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/v1.4.0/R/export_table.R" class="external-link"><code>R/export_table.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/insight/blob/main/R/export_table.R" class="external-link"><code>R/export_table.R</code></a></small>
       <div class="d-none name"><code>export_table.Rd</code></div>
     </div>
 
@@ -507,33 +507,33 @@ and <a href="https://easystats.github.io/parameters/articles/model_parameters_fo
 <span class="r-in"><span><span class="co"># export table with groups, using tinytable format</span></span></span>
 <span class="r-in"><span><span class="fu">export_table</span><span class="op">(</span><span class="va">mp</span>, format <span class="op">=</span> <span class="st">"tt"</span>, row_groups <span class="op">=</span> <span class="va">groups</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | Parameter     | Coefficient | SE   | 95% CI       | t(22) | p     |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +===============+=============+======+==============+=======+=======+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | Engine                                                            |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | cyl [6]       | -2.47       | 2.21 | -7.05, 2.12  | -1.12 | 0.276 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | cyl [8]       | 1.97        | 5.11 | -8.63, 12.58 | 0.39  | 0.703 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | vs            | 3.18        | 3.79 | -4.68, 11.04 | 0.84  | 0.410 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | hp            | -0.06       | 0.02 | -0.11, -0.02 | -2.91 | 0.008 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | Interactions                                                      |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | gear [4] × vs | -2.90       | 4.67 | -12.57, 6.78 | -0.62 | 0.541 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | gear [5] × vs | 2.59        | 4.54 | -6.82, 12.00 | 0.57  | 0.574 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | Controls                                                          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | gear [4]      | 3.10        | 4.34 | -5.90, 12.10 | 0.71  | 0.482 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | gear [5]      | 4.80        | 3.48 | -2.42, 12.01 | 1.38  | 0.182 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | drat          | 2.70        | 2.03 | -1.52, 6.91  | 1.33  | 0.198 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> +---------------+-------------+------+--------------+-------+-------+ </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> | Parameter       | Coefficient | SE   | 95% CI       | t(22) | p     |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +=================+=============+======+==============+=======+=======+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> | Engine                                                              |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |   cyl [6]       | -2.47       | 2.21 | -7.05, 2.12  | -1.12 | 0.276 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |   cyl [8]       | 1.97        | 5.11 | -8.63, 12.58 | 0.39  | 0.703 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |   vs            | 3.18        | 3.79 | -4.68, 11.04 | 0.84  | 0.410 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |   hp            | -0.06       | 0.02 | -0.11, -0.02 | -2.91 | 0.008 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> | Interactions                                                        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |   gear [4] × vs | -2.90       | 4.67 | -12.57, 6.78 | -0.62 | 0.541 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |   gear [5] × vs | 2.59        | 4.54 | -6.82, 12.00 | 0.57  | 0.574 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> | Controls                                                            |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |   gear [4]      | 3.10        | 4.34 | -5.90, 12.10 | 0.71  | 0.482 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |   gear [5]      | 4.80        | 3.48 | -2.42, 12.01 | 1.38  | 0.182 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |   drat          | 2.70        | 2.03 | -1.52, 6.91  | 1.33  | 0.198 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> +-----------------+-------------+------+--------------+-------+-------+ </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
