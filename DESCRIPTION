@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.4.0.1
+Version: 1.4.0.2
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -129,7 +129,7 @@ Suggests:
     geepack,
     geoR,
     GLMMadaptive,
-    glmmTMB (>= 1.1.10),
+    glmmTMB (>= 1.1.12),
     glmtoolbox,
     gmnl,
     grDevices,
@@ -174,7 +174,7 @@ Suggests:
     nonnest2,
     ordinal,
     panelr,
-    parameters,
+    parameters (>= 0.28.0),
     parsnip,
     pbkrtest,
     performance,
@@ -206,7 +206,7 @@ Suggests:
     survival,
     svylme,
     testthat,
-    tinytable (>= 0.8.0),
+    tinytable (>= 0.13.0),
     TMB,
     truncreg,
     tune,

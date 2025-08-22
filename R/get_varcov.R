@@ -192,9 +192,9 @@ get_varcov.glmgee <- function(x,
 #' @export
 get_varcov.nestedLogit <- function(x,
                                    component = "all",
-                                   verbose = TRUE,
                                    vcov = NULL,
                                    vcov_args = NULL,
+                                   verbose = TRUE,
                                    ...) {
   vcovs <- lapply(
     x$models,
@@ -559,20 +559,52 @@ get_varcov.zcpglm <- function(x, component = "conditional", verbose = TRUE, ...)
 
 
 #' @export
-get_varcov.glmmTMB <- function(x, component = "conditional", verbose = TRUE, ...) {
+get_varcov.glmmTMB <- function(x,
+                               component = "conditional",
+                               vcov = NULL,
+                               vcov_args = NULL,
+                               verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   component <- validate_argument(
     component,
     c("conditional", "zero_inflated", "zi", "dispersion", "all")
   )
 
-  vc <- switch(component,
-    conditional = .safe_vcov(x)[["cond"]],
-    zi = ,
-    zero_inflated = .safe_vcov(x)[["zi"]],
-    dispersion = .safe_vcov(x)[["disp"]],
-    stats::vcov(x, full = TRUE)
-  )
+  if (is.null(vcov)) {
+    vc <- switch(
+      component,
+      conditional = .safe_vcov(x)[["cond"]],
+      zi = ,
+      zero_inflated = .safe_vcov(x)[["zi"]],
+      dispersion = .safe_vcov(x)[["disp"]],
+      stats::vcov(x, full = TRUE)
+    )
+  } else {
+    vc <- .get_varcov_sandwich(
+      x,
+      vcov_fun = vcov,
+      vcov_args = vcov_args,
+      full = TRUE,
+      verbose = FALSE,
+      ...
+    )
+
+    # find parameters for each component
+    zi_parms <- startsWith(colnames(vc), "zi~")
+    disp_parms <- startsWith(colnames(vc), "disp~")
+    theta_parms <- startsWith(colnames(vc), "theta_")
+    cond_parms <- !zi_parms & !disp_parms & !theta_parms
+
+    # filter vcov
+    vc <- switch(
+      component,
+      conditional = vc[cond_parms, cond_parms, drop = FALSE],
+      zi = ,
+      zero_inflated = vc[zi_parms, zi_parms, drop = FALSE],
+      dispersion = vc[disp_parms, disp_parms, drop = FALSE],
+      vc
+    )
+  }
   .process_vcov(vc, verbose, ...)
 }
 

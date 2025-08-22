@@ -39,7 +39,8 @@
       vcov_args[["type"]] <- vcov_fun
     } else if (is.null(vcov_fun)) {
       # set defaults
-      vcov_args[["type"]] <- switch(vcov_fun,
+      vcov_args[["type"]] <- switch(
+        vcov_fun,
         CR = "CR3",
         NULL
       )
@@ -109,6 +110,11 @@
   }
 
   vcov_fun <- vcov_fun_clean
+
+  # for glmmTMB models, we allow "full = TRUE" to get the full vcov matrix
+  if (isTRUE(dots$full) && inherits(x, "glmmTMB")) {
+    vcov_args[["full"]] <- TRUE
+  }
 
   # try with arguments
   .vcov <- try(do.call(fun, c(list(x), vcov_args)), silent = TRUE)
