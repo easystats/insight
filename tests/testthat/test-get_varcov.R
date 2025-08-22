@@ -136,6 +136,10 @@ test_that("glmmTMB: sandwich", {
   )
 
   expect_equal(out2, out3[10:17, 10:17], tolerance = 1e-4, ignore_attr = TRUE)
+
+  out1 <- get_varcov(m, component = "all")
+  out2 <- get_varcov(m, vcov = "HC", component = "all")
+  expect_identical(dim(out1), dim(out2))
 })
 
 

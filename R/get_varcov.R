@@ -590,9 +590,9 @@ get_varcov.glmmTMB <- function(x,
     )
 
     # find parameters for each component
+    theta_parms <- startsWith(colnames(vc), "theta_")
     zi_parms <- startsWith(colnames(vc), "zi~")
     disp_parms <- startsWith(colnames(vc), "disp~")
-    theta_parms <- startsWith(colnames(vc), "theta_")
     cond_parms <- !zi_parms & !disp_parms & !theta_parms
 
     # filter vcov
@@ -605,6 +605,13 @@ get_varcov.glmmTMB <- function(x,
       vc
     )
   }
+
+  # drop theta parameters
+  theta_parms <- startsWith(colnames(vc), "theta_")
+  if (any(theta_parms)) {
+    vc <- vc[!theta_parms, !theta_parms, drop = FALSE]
+  }
+
   .process_vcov(vc, verbose, ...)
 }
 
