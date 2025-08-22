@@ -9,7 +9,7 @@ for more model objects that probably don't provide a vcov()-method."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,10 +121,12 @@ identifies the function to be used to compute the covariance matrix.</p><ul><li>
 <code>"PL"</code>.</p></li>
 <li><p>Kenward-Roger approximation: <code>kenward-roger</code>. See <code><a href="https://rdrr.io/pkg/pbkrtest/man/kr-vcovAdj.html" class="external-link">?pbkrtest::vcovAdj</a></code>.</p></li>
 </ul></li>
-</ul><p>One exception are models of class <code>glmgee</code>, which have pre-defined options
-for the variance-covariance matrix calculation. These are <code>"robust"</code>,
+</ul><p>Exceptions are following models:</p><ul><li><p>Model of class <code>glmgee</code>, which have pre-defined options for the
+variance-covariance matrix calculation. These are <code>"robust"</code>,
 <code>"df-adjusted"</code>, <code>"model"</code>, <code>"bias-corrected"</code>, and <code>"jackknife"</code>. See
-<code><a href="https://rdrr.io/pkg/glmtoolbox/man/vcov.glmgee.html" class="external-link">?glmtoolbox::vcov.glmgee</a></code> for details.</p></dd>
+<code><a href="https://rdrr.io/pkg/glmtoolbox/man/vcov.glmgee.html" class="external-link">?glmtoolbox::vcov.glmgee</a></code> for details.</p></li>
+<li><p>Model of class <code>glmmTMB</code> currently only support the <code>"HC0"</code> option.</p></li>
+</ul></dd>
 
 
 <dt id="arg-vcov-args">vcov_args<a class="anchor" aria-label="anchor" href="#arg-vcov-args"></a></dt>
@@ -145,7 +147,9 @@ or models with precision (e.g. <code>betareg</code>) component. <code>component<
 of <code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code>, <code>"dispersion"</code>, <code>"precision"</code>,
 or <code>"all"</code>. May be abbreviated. Note that the <em>conditional</em> component also
 refers to the <em>count</em> or <em>mean</em> component - names may differ, depending on
-the modeling package. See section <em>Model components</em> for details.</p></dd>
+the modeling package. See section <em>Model components</em> for details. For models
+of class <code>glmmTMB</code>, the <code>component</code> argument can also be <code>"full"</code>, to return
+the full variance-covariance matrix (including random effects, called <code>theta</code>).</p></dd>
 
 
 <dt id="arg-complete">complete<a class="anchor" aria-label="anchor" href="#arg-complete"></a></dt>
