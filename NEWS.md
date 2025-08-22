@@ -4,7 +4,9 @@
 
 * `get_varcov()` now supports robust variance-covariance matrices for models
   of class `glmmTMB` (package *glmmTMB*). The argument `vcov` can be used to
-  specify the robust variance-covariance matrix function.
+  specify the robust variance-covariance matrix function. Furthermore, the
+  `component` argument gains the `"full"` option, to return the full
+  variance-covariance matrix, including the random effects (theta parameters).
 
 ## Bug fixes
 

@@ -14,7 +14,9 @@
 #' of `"conditional"`, `"zi"`, `"zero-inflated"`, `"dispersion"`, `"precision"`,
 #' or `"all"`. May be abbreviated. Note that the *conditional* component also
 #' refers to the *count* or *mean* component - names may differ, depending on
-#' the modeling package. See section _Model components_ for details.
+#' the modeling package. See section _Model components_ for details. For models
+#' of class `glmmTMB`, the `component` argument can also be `"full"`, to return
+#' the full variance-covariance matrix (including random effects, called `theta`).
 #' @param effects Should the complete variance-covariance matrix of the model
 #' be returned, or only for specific model parameters only? Currently only
 #' applies to models of class `mixor` and `MixMod`.
@@ -38,10 +40,12 @@
 #'      `"PL"`.
 #'    - Kenward-Roger approximation: `kenward-roger`. See `?pbkrtest::vcovAdj`.
 #'
-#' One exception are models of class `glmgee`, which have pre-defined options
-#' for the variance-covariance matrix calculation. These are `"robust"`,
-#' `"df-adjusted"`, `"model"`, `"bias-corrected"`, and `"jackknife"`. See
-#' `?glmtoolbox::vcov.glmgee` for details.
+#' Exceptions are following models:
+#' - Model of class `glmgee`, which have pre-defined options for the
+#'   variance-covariance matrix calculation. These are `"robust"`,
+#'   `"df-adjusted"`, `"model"`, `"bias-corrected"`, and `"jackknife"`. See
+#'   `?glmtoolbox::vcov.glmgee` for details.
+#' - Model of class `glmmTMB` currently only support the `"HC0"` option.
 #' @param vcov_args List of arguments to be passed to the function identified by
 #'   the `vcov` argument. This function is typically supplied by the
 #'   **sandwich** or **clubSandwich** packages. Please refer to their
