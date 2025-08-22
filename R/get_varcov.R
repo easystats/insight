@@ -567,7 +567,7 @@ get_varcov.glmmTMB <- function(x,
   .check_get_varcov_dots(x, ...)
   component <- validate_argument(
     component,
-    c("conditional", "zero_inflated", "zi", "dispersion", "all")
+    c("conditional", "zero_inflated", "zi", "dispersion", "all", "full")
   )
 
   if (is.null(vcov)) {
@@ -608,7 +608,7 @@ get_varcov.glmmTMB <- function(x,
 
   # drop theta parameters
   theta_parms <- startsWith(colnames(vc), "theta_")
-  if (any(theta_parms)) {
+  if (any(theta_parms) && component != "full") {
     vc <- vc[!theta_parms, !theta_parms, drop = FALSE]
   }
 

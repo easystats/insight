@@ -140,6 +140,12 @@ test_that("glmmTMB: sandwich", {
   out1 <- get_varcov(m, component = "all")
   out2 <- get_varcov(m, vcov = "HC", component = "all")
   expect_identical(dim(out1), dim(out2))
+  expect_identical(dim(out1), c(19L, 19L))
+
+  out1 <- get_varcov(m, component = "full")
+  out2 <- get_varcov(m, vcov = "HC", component = "full")
+  expect_identical(dim(out1), dim(out2))
+  expect_identical(dim(out1), c(21L, 21L))
 })
 
 
