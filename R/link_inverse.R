@@ -242,8 +242,7 @@ link_inverse.betareg <- function(x, what = c("mean", "precision"), ...) {
 
   element_name <- .betareg_mean_element(x)
 
-  switch(
-    what,
+  switch(what,
     mean = x$link[[element_name]]$linkinv,
     precision = x$link$precision$linkinv
   )

@@ -301,7 +301,6 @@ export_table <- function(x,
 
     # convert data frame into specified output format
     out <- do.call(.export_table, c(list(x = x), export_args, list(...)))
-
   } else if (is.list(x)) {
     # table from list of data frames -----------------------------------------
 
@@ -1387,16 +1386,15 @@ print.insight_table <- function(x, ...) {
 # --------------------------------------------------------
 
 .format_html_table <- function(
-  final,
-  caption = NULL,
-  subtitle = NULL,
-  footer = NULL,
-  align = "center",
-  group_by = NULL,
-  row_groups = NULL,
-  column_groups = NULL,
-  ...
-) {
+    final,
+    caption = NULL,
+    subtitle = NULL,
+    footer = NULL,
+    align = "center",
+    group_by = NULL,
+    row_groups = NULL,
+    column_groups = NULL,
+    ...) {
   check_if_installed("gt")
 
   if (is.null(align)) {
@@ -1508,7 +1506,11 @@ print.insight_table <- function(x, ...) {
     out <- gt::cols_align(out, "left", 1)
   } else {
     for (i in 1:nchar(align)) {
-      col_align <- switch(substr(align, i, i), l = "left", r = "right", "center")
+      col_align <- switch(substr(align, i, i),
+        l = "left",
+        r = "right",
+        "center"
+      )
       out <- gt::cols_align(out, col_align, i)
     }
   }
