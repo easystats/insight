@@ -496,7 +496,8 @@
 
 
 .is_bayesian_marginaleffects <- function(x) {
-  !is.null(attributes(x)$posterior_draws)
+  check_if_installed("marginaleffects")
+  !is.null(suppressWarnings(marginaleffects::get_draws(x, "PxD")))
 }
 
 
