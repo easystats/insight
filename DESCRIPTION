@@ -76,7 +76,6 @@ Description: A tool to provide an easy, intuitive and consistent
 License: GPL-3
 URL: https://easystats.github.io/insight/
 BugReports: https://github.com/easystats/insight/issues
-Remotes: vincentarelbundock/marginaleffects
 Depends:
     R (>= 3.6)
 Imports:
@@ -225,3 +224,4 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/Needs/website: easystats/easystatstemplate
 Config/Needs/check: stan-dev/cmdstanr
+Remotes: vincentarelbundock/marginaleffects
