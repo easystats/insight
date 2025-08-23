@@ -48,7 +48,6 @@ n_obs.default <- function(x, ...) {
     },
     error = function(e) {
       FALSE
-    }
     })
 
   if (isTRUE(is_binomial)) {
