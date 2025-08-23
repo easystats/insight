@@ -674,9 +674,6 @@ format_table <- function(x,
     x$ROPE_CI <- NULL
   }
 
-  names(x)[names(x) == "Superiority_Percentage"] <- "Above ROPE"
-  names(x)[names(x) == "Inferiority_Percentage"] <- "Below ROPE"
-
   x
 }
 
@@ -743,6 +740,15 @@ format_table <- function(x,
     x$ROPE_Percentage <- format_rope(x$ROPE_Percentage, name = NULL, digits = rope_digits)
     names(x)[names(x) == "ROPE_Percentage"] <- "% in ROPE"
   }
+  if ("Superiority_Percentage" %in% names(x)) {
+    x$Superiority_Percentage <- format_rope(x$Superiority_Percentage, name = NULL, digits = rope_digits)
+    names(x)[names(x) == "Superiority_Percentage"] <- "Above ROPE"
+  }
+  if ("Inferiority_Percentage" %in% names(x)) {
+    x$Inferiority_Percentage <- format_rope(x$Inferiority_Percentage, name = NULL, digits = rope_digits)
+    names(x)[names(x) == "Inferiority_Percentage"] <- "Below ROPE"
+  }
+
   x <- .format_rope_columns(
     x,
     zap_small = zap_small,
