@@ -7,6 +7,7 @@
   specify the robust variance-covariance matrix function. Furthermore, the
   `component` argument gains the `"full"` option, to return the full
   variance-covariance matrix, including the random effects (theta parameters).
+* Changes to prepare for *marginaleffects* 0.29.0.
 
 ## Bug fixes
 

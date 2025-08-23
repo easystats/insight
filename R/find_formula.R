@@ -473,7 +473,8 @@ find_formula.systemfit <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.marginaleffects <- function(x, verbose = TRUE, ...) {
-  find_formula(attributes(x)$model, verbose = verbose, ...)
+  m <- marginaleffects::components(x, "model")
+  find_formula(m, verbose = verbose, ...)
 }
 
 

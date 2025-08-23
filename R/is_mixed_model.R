@@ -33,7 +33,8 @@ is_mixed_model.afex_aov <- function(x) {
 
 #' @export
 is_mixed_model.marginaleffects <- function(x) {
-  is_mixed_model(attributes(x)$model)
+  m <- marginaleffects::components(x, "model")
+  is_mixed_model(m)
 }
 
 #' @export
