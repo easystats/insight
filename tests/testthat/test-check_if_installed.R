@@ -20,7 +20,7 @@ test_that("check_if_installed", {
     "datawizard", "rstanarm"
   ), minimum_version = c("0.8.0", NA)))
 
-  expect_no_error(check_if_installed("marginaleffects", minimum_version = "0.9.0"))
+  expect_no_error(check_if_installed("marginaleffects", minimum_version = "0.28.0"))
 
   out <- check_if_installed(
     c("insight", "datawizard"),
