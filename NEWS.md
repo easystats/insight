@@ -10,6 +10,8 @@
 
 * Changes to prepare for *marginaleffects* 0.29.0.
 
+* `format_table()` now also formats ROPE columns for superiority and inferiority.
+
 ## Bug fixes
 
 * Fixed issue with `find_formula()` with *mhurdle* models.
