@@ -575,8 +575,7 @@ get_varcov.glmmTMB <- function(x,
   )
 
   if (is.null(vcov)) {
-    vc <- switch(
-      component,
+    vc <- switch(component,
       conditional = .safe_vcov(x)[["cond"]],
       zi = ,
       zero_inflated = .safe_vcov(x)[["zi"]],
@@ -600,8 +599,7 @@ get_varcov.glmmTMB <- function(x,
     cond_parms <- !zi_parms & !disp_parms & !theta_parms
 
     # filter vcov
-    vc <- switch(
-      component,
+    vc <- switch(component,
       conditional = vc[cond_parms, cond_parms, drop = FALSE],
       zi = ,
       zero_inflated = vc[zi_parms, zi_parms, drop = FALSE],

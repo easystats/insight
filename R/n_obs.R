@@ -48,8 +48,7 @@ n_obs.default <- function(x, ...) {
     },
     error = function(e) {
       FALSE
-    }
-  )
+    })
 
   if (isTRUE(is_binomial)) {
     return(n_obs.glm(x, ...))
@@ -69,8 +68,7 @@ n_obs.glm <- function(x, disaggregate = FALSE, ...) {
     },
     error = function(e) {
       FALSE
-    }
-  )
+    })
 
   .nobs <- stats::nobs(x)
 
@@ -468,7 +466,9 @@ n_obs.riskRegression <- function(x, ...) {
 
 #' @export
 n_obs.marginaleffects <- function(x, ...) {
-  n_obs(attributes(x)$model)
+  check_if_installed("marginaleffects", minimum_version = "0.28.0.19")
+  m <- marginaleffects::components(x, "model")
+  n_obs(m)
 }
 
 

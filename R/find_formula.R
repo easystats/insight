@@ -473,7 +473,9 @@ find_formula.systemfit <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.marginaleffects <- function(x, verbose = TRUE, ...) {
-  find_formula(attributes(x)$model, verbose = verbose, ...)
+  check_if_installed("marginaleffects", minimum_version = "0.28.0.19")
+  m <- marginaleffects::components(x, "model")
+  find_formula(m, verbose = verbose, ...)
 }
 
 

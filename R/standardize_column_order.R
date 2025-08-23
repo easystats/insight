@@ -109,7 +109,7 @@ easystats_columns <- function(select = "all") {
   cols_estimate <- c(
     "Coefficient", "r", "rho", "tau", "Estimate", "Log-Mean", "Log-Odds",
     "Log-Ratio", "Log-Prevalence", "Marginal Means", "IRR", "Odds Ratio",
-    "Risk Ratio", "Prevalence Ratio",  "Median", "Mean", "MAP", "MAD", "Dxy",
+    "Risk Ratio", "Prevalence Ratio", "Median", "Mean", "MAP", "MAD", "Dxy",
     "Difference", "Predicted", "Psihat", "Trimmed_Mean", "R2", "Mu", "Ratio",
     "Probability", "Slope", "Z-Score", "Mean Ratio", "Mean Difference",
     "Mean Ratio Difference"

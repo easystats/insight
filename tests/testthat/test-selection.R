@@ -38,7 +38,7 @@ m3 <- sampleSelection::selection(
 )
 
 data(Mroz87, package = "sampleSelection")
-Mroz87$kids  <- (Mroz87$kids5 + Mroz87$kids618 > 0)
+Mroz87$kids <- (Mroz87$kids5 + Mroz87$kids618 > 0)
 m2 <- sampleSelection::selection(
   lfp ~ age + I(age^2) + faminc + kids + educ,
   wage ~ exper + I(exper^2) + educ + city,

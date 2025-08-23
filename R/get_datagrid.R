@@ -929,7 +929,9 @@ get_datagrid.emm_list <- function(x, ...) {
 
 #' @export
 get_datagrid.slopes <- function(x, ...) {
-  cols_newdata <- colnames(attr(x, "newdata"))
+  check_if_installed("marginaleffects", minimum_version = "0.28.0.19")
+  nd <- marginaleffects::components(x, "newdata")
+  cols_newdata <- colnames(nd)
   cols_contrast <- colnames(x)[grep("^contrast_?", colnames(x))]
   cols_misc <- c("term", "by", "hypothesis")
   cols_grid <- union(union(cols_newdata, cols_contrast), cols_misc)
