@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,39 +136,39 @@ result. See examples.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 150 &lt;NA&gt; cyl6 - cyl8</span>
 <span class="r-in"><span><span class="va">mfx1</span> <span class="op">&lt;-</span> <span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://marginaleffects.com/man/r/slopes.html" class="external-link">slopes</a></span><span class="op">(</span><span class="va">mod</span>, variables <span class="op">=</span> <span class="st">"hp"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="get_datagrid.html">get_datagrid</a></span><span class="op">(</span><span class="va">mfx1</span><span class="op">)</span> <span class="co"># not a "true" grid</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    rowid term contrast am cyl  hp    wt</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1   hp    dY/dX  1   6 110 2.620</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2   hp    dY/dX  1   6 110 2.875</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      3   hp    dY/dX  1   4  93 2.320</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      4   hp    dY/dX  0   6 110 3.215</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5   hp    dY/dX  0   8 175 3.440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6   hp    dY/dX  0   6 105 3.460</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7   hp    dY/dX  0   8 245 3.570</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8   hp    dY/dX  0   4  62 3.190</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9   hp    dY/dX  0   4  95 3.150</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10    10   hp    dY/dX  0   6 123 3.440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11    11   hp    dY/dX  0   6 123 3.440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12    12   hp    dY/dX  0   8 180 4.070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13    13   hp    dY/dX  0   8 180 3.730</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14    14   hp    dY/dX  0   8 180 3.780</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15    15   hp    dY/dX  0   8 205 5.250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16    16   hp    dY/dX  0   8 215 5.424</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17    17   hp    dY/dX  0   8 230 5.345</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18    18   hp    dY/dX  1   4  66 2.200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19    19   hp    dY/dX  1   4  52 1.615</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20    20   hp    dY/dX  1   4  65 1.835</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21    21   hp    dY/dX  0   4  97 2.465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22    22   hp    dY/dX  0   8 150 3.520</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23    23   hp    dY/dX  0   8 150 3.435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24    24   hp    dY/dX  0   8 245 3.840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25    25   hp    dY/dX  0   8 175 3.845</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26    26   hp    dY/dX  1   4  66 1.935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27    27   hp    dY/dX  1   4  91 2.140</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28    28   hp    dY/dX  1   4 113 1.513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29    29   hp    dY/dX  1   8 264 3.170</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30    30   hp    dY/dX  1   6 175 2.770</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31    31   hp    dY/dX  1   8 335 3.570</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32    32   hp    dY/dX  1   4 109 2.780</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    rowid term contrast  mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1   hp    dY/dX 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2   hp    dY/dX 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      3   hp    dY/dX 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      4   hp    dY/dX 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5   hp    dY/dX 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6   hp    dY/dX 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7   hp    dY/dX 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8   hp    dY/dX 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9   hp    dY/dX 22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    10   hp    dY/dX 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    11   hp    dY/dX 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    12   hp    dY/dX 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13    13   hp    dY/dX 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    14   hp    dY/dX 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15    15   hp    dY/dX 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16    16   hp    dY/dX 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17    17   hp    dY/dX 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18    18   hp    dY/dX 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19    19   hp    dY/dX 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20    20   hp    dY/dX 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21    21   hp    dY/dX 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22    22   hp    dY/dX 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23    23   hp    dY/dX 15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24    24   hp    dY/dX 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25    25   hp    dY/dX 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26    26   hp    dY/dX 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27    27   hp    dY/dX 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28    28   hp    dY/dX 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29    29   hp    dY/dX 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30    30   hp    dY/dX 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31    31   hp    dY/dX 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32    32   hp    dY/dX 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mfx2</span> <span class="op">&lt;-</span> <span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://marginaleffects.com/man/r/slopes.html" class="external-link">slopes</a></span><span class="op">(</span><span class="va">mod</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hp"</span>, <span class="st">"wt"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"am"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="get_datagrid.html">get_datagrid</a></span><span class="op">(</span><span class="va">mfx2</span><span class="op">)</span></span></span>
