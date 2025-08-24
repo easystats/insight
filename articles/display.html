@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -278,11 +278,11 @@ further modified by the user.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Variable Group         95% CI     p</span></span>
-<span><span class="co">#&gt; 1     1.00     A [ 3.35,  4.23] 0.001</span></span>
-<span><span class="co">#&gt; 2     3.00     A [ 2.42,  5.31] 0.046</span></span>
-<span><span class="co">#&gt; 3     5.00     A [ 6.21,  7.12] 0.450</span></span>
-<span><span class="co">#&gt; 4     3.00     B [12.10, 13.50] 0.004</span></span>
-<span><span class="co">#&gt; 5     1.00     B [ 1.23,  3.61] 0.340</span></span></code></pre></div>
+<span><span class="co">#&gt; 1        1     A [ 3.35,  4.23] 0.001</span></span>
+<span><span class="co">#&gt; 2        3     A [ 2.42,  5.31] 0.046</span></span>
+<span><span class="co">#&gt; 3        5     A [ 6.21,  7.12] 0.450</span></span>
+<span><span class="co">#&gt; 4        3     B [12.10, 13.50] 0.004</span></span>
+<span><span class="co">#&gt; 5        1     B [ 1.23,  3.61] 0.340</span></span></code></pre></div>
 <p>As you can see, <code><a href="../reference/format_table.html">format_table()</a></code> modifies columns, turning
 number into characters (so that it has the same amount of digits), and
 detecting confidence intervals. This is usually combined with
@@ -293,11 +293,11 @@ column-specific formatting functions, like <code><a href="../reference/format_p.
 <span>  <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_modify.html" class="external-link">data_modify</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="../reference/format_p.html">format_p</a></span><span class="op">(</span><span class="va">p</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/format_table.html">format_table</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Variable Group         95% CI           p</span></span>
-<span><span class="co">#&gt; 1     1.00     A [ 3.35,  4.23] p = 0.001**</span></span>
-<span><span class="co">#&gt; 2     3.00     A [ 2.42,  5.31] p = 0.046* </span></span>
-<span><span class="co">#&gt; 3     5.00     A [ 6.21,  7.12] p = 0.450  </span></span>
-<span><span class="co">#&gt; 4     3.00     B [12.10, 13.50] p = 0.004**</span></span>
-<span><span class="co">#&gt; 5     1.00     B [ 1.23,  3.61] p = 0.340</span></span></code></pre></div>
+<span><span class="co">#&gt; 1        1     A [ 3.35,  4.23] p = 0.001**</span></span>
+<span><span class="co">#&gt; 2        3     A [ 2.42,  5.31] p = 0.046* </span></span>
+<span><span class="co">#&gt; 3        5     A [ 6.21,  7.12] p = 0.450  </span></span>
+<span><span class="co">#&gt; 4        3     B [12.10, 13.50] p = 0.004**</span></span>
+<span><span class="co">#&gt; 5        1     B [ 1.23,  3.61] p = 0.340</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -1366,17 +1366,17 @@ to markdown (“md”)…</p>
 <th colspan="3" class="gt_group_heading" style="font-style: oblique;" scope="colgroup" id="A">A</th>
     </tr>
 <tr class="gt_row_group_first">
-<td headers="A  Variable" class="gt_row gt_left">1.00</td>
+<td headers="A  Variable" class="gt_row gt_left">1</td>
 <td headers="A  95% CI" class="gt_row gt_center">( 3.35,  4.23)</td>
 <td headers="A  p" class="gt_row gt_center">0.001</td>
 </tr>
 <tr>
-<td headers="A  Variable" class="gt_row gt_left">3.00</td>
+<td headers="A  Variable" class="gt_row gt_left">3</td>
 <td headers="A  95% CI" class="gt_row gt_center">( 2.42,  5.31)</td>
 <td headers="A  p" class="gt_row gt_center">0.046</td>
 </tr>
 <tr>
-<td headers="A  Variable" class="gt_row gt_left">5.00</td>
+<td headers="A  Variable" class="gt_row gt_left">5</td>
 <td headers="A  95% CI" class="gt_row gt_center">( 6.21,  7.12)</td>
 <td headers="A  p" class="gt_row gt_center">0.450</td>
 </tr>
@@ -1384,12 +1384,12 @@ to markdown (“md”)…</p>
 <th colspan="3" class="gt_group_heading" style="font-style: oblique;" scope="colgroup" id="B">B</th>
     </tr>
 <tr class="gt_row_group_first">
-<td headers="B  Variable" class="gt_row gt_left">3.00</td>
+<td headers="B  Variable" class="gt_row gt_left">3</td>
 <td headers="B  95% CI" class="gt_row gt_center">(12.10, 13.50)</td>
 <td headers="B  p" class="gt_row gt_center">0.004</td>
 </tr>
 <tr>
-<td headers="B  Variable" class="gt_row gt_left">1.00</td>
+<td headers="B  Variable" class="gt_row gt_left">1</td>
 <td headers="B  95% CI" class="gt_row gt_center">( 1.23,  3.61)</td>
 <td headers="B  p" class="gt_row gt_center">0.340</td>
 </tr>
