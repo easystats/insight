@@ -191,3 +191,18 @@ test_that("protect_integers", {
   out <- format_table(mtcars[c("am", "wt")])
   expect_identical(head(out$am), c("1", "1", "1", "0", "0", "0"))
 })
+
+
+test_that("AIC", {
+  set.seed(123)
+  d <- data.frame(
+    x = rnorm(3),
+    AIC = rnorm(3)
+  )
+  out <- format_table(d, digits = 4)
+  expect_identical(out$AIC, c("7.1e-02", "0.1", "1.7"))
+  out <- format_table(d, digits = 4, zap_small = TRUE)
+  expect_identical(out$AIC, c("0.1", "0.1", "1.7"))
+  out <- format_table(d, digits = 4, ic_digits = 3, zap_small = TRUE)
+  expect_identical(out$AIC, c("0.071", "0.129", "1.715"))
+})
