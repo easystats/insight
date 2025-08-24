@@ -12,6 +12,8 @@
 
 * `format_table()` now also formats ROPE columns for superiority and inferiority.
 
+* `format_table()` protects integer columns for non-specific column types.
+
 ## Bug fixes
 
 * Fixed issue with `find_formula()` with *mhurdle* models.
