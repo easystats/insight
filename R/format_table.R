@@ -899,19 +899,19 @@ format_table <- function(
 
   # if we don't have IC weights, format regular IC columns
   if ("AIC" %in% names(x)) {
-    format_value(x[["AIC"]], digits = ic_digits, zap_small = zap_small)
+    x[["AIC"]] <- format_value(x[["AIC"]], digits = ic_digits, zap_small = zap_small)
   }
   if ("BIC" %in% names(x)) {
-    format_value(x[["BIC"]], digits = ic_digits, zap_small = zap_small)
+    x[["BIC"]] <- format_value(x[["BIC"]], digits = ic_digits, zap_small = zap_small)
   }
   if ("AICc" %in% names(x)) {
-    format_value(x[["AICc"]], digits = ic_digits, zap_small = zap_small)
+    x[["AICc"]] <- format_value(x[["AICc"]], digits = ic_digits, zap_small = zap_small)
   }
   if ("WAIC" %in% names(x)) {
-    format_value(x[["WAIC"]], digits = ic_digits, zap_small = zap_small)
+    x[["WAIC"]] <- format_value(x[["WAIC"]], digits = ic_digits, zap_small = zap_small)
   }
   if ("LOOIC" %in% names(x)) {
-    format_value(x[["LOOIC"]], digits = ic_digits, zap_small = zap_small)
+    x[["LOOIC"]] <- format_value(x[["LOOIC"]], digits = ic_digits, zap_small = zap_small)
   }
 
   # Formatting if we only have IC weights ----
