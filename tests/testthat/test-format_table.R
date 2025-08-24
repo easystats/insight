@@ -184,3 +184,10 @@ test_that("modelbased", {
     c("qsec", "mpg", "Predicted (CI)")
   )
 })
+
+
+test_that("protect_integers", {
+  data(mtcars)
+  out <- format_table(mtcars[c("am", "wt")])
+  expect_identical(head(out$am), c("1", "1", "1", "0", "0", "0"))
+})
