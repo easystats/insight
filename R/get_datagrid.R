@@ -935,12 +935,22 @@ get_datagrid.slopes <- function(x, ...) {
 
   ## FIXME: `avg_slopes()` includes all columns when no `by` is specified, which
   ## is a new behaviour in marginaleffects v0.28.0.x
+
   # We don't want to append the complete data frame, just the relevant columns.
   # This is a hack, which might be fixed in
   # https://github.com/vincentarelbundock/marginaleffects/issues/1570
-  draws <- marginaleffects::get_draws(x, "PxD")
+  draws <- suppressWarnings(marginaleffects::get_draws(x, "PxD"))
   if (!is.null(draws) && nrow(draws) == 1) {
     cols_newdata <- NULL
+  }
+
+  # Same issue as above for frequentist models:  we have to ensure that only
+  # model predictors are returned
+  if (is.null(draws)) {
+    cols_newdata <- intersect(
+      find_variables(x, effects = "all", component = "all", flatten = TRUE),
+      cols_newdata
+    )
   }
 
   cols_contrast <- colnames(x)[grep("^contrast_?", colnames(x))]

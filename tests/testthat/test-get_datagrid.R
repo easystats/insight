@@ -743,3 +743,25 @@ test_that("get_datagrid - marginaleffects, avg_slopes, Bayesian", {
   expect_identical(dim(dg), c(1L, 2L))
   expect_named(dg, c("term", "contrast"))
 })
+
+
+test_that("get_datagrid - marginaleffects, avg_slopes, Bayesian", {
+  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.21")
+  data("mtcars")
+  mtcars$cyl <- factor(mtcars$cyl)
+
+  mod <- glm(am ~ cyl + hp + wt,
+    family = binomial("logit"),
+    data = mtcars
+  )
+
+  mfx1 <- marginaleffects::slopes(mod, variables = "hp")
+  dg <- get_datagrid(mfx1)
+  expect_identical(dim(dg), c(32L, 6L))
+  expect_named(dg, c("term", "contrast", "cyl", "hp", "wt", "am"))
+
+  mfx2 <- marginaleffects::slopes(mod, variables = "hp", by = "am")
+  dg <- get_datagrid(mfx2)
+  expect_identical(dim(dg), c(2L, 3L))
+  expect_named(dg, c("term", "contrast", "am"))
+})
