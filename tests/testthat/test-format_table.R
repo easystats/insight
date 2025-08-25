@@ -205,4 +205,13 @@ test_that("AIC", {
   expect_identical(out$AIC, c("0.1", "0.1", "1.7"))
   out <- format_table(d, digits = 4, ic_digits = 3, zap_small = TRUE)
   expect_identical(out$AIC, c("0.071", "0.129", "1.715"))
+
+  set.seed(123)
+  d <- data.frame(
+    x = rnorm(3),
+    AIC = rnorm(3),
+    AIC_wt = runif(3)
+  )
+  out <- format_table(d, digits = 4)
+  expect_identical(out$`AIC (weights)`, c("7.1e-02 (0.6776)", "0.1 (0.5726)", "1.7 (0.1029)"))
 })
