@@ -942,9 +942,10 @@ get_datagrid.slopes <- function(x, ...) {
   draws <- suppressWarnings(marginaleffects::get_draws(x, "PxD"))
 
   if (is.null(draws)) {
+    model <- marginaleffects::components(x, "model")
     # frequentist models
     cols_newdata <- intersect(
-      find_variables(x, effects = "all", component = "all", flatten = TRUE),
+      find_variables(model, effects = "all", component = "all", flatten = TRUE),
       cols_newdata
     )
   } else if (nrow(draws) == 1) {
