@@ -17,6 +17,9 @@
 #'   If `"scientific"`, control the number of digits by adding the value as
 #'   a suffix, e.g.m `digits = "scientific4"` to have scientific notation
 #'   with 4 decimal places.
+#' @param leading_zero Logical, if `FALSE` (default), removes leading zero 
+#'   before decimal seperator. Otherwise, retain leading zero except when 
+#'   p value is truncated
 #' @param ... Arguments from other methods.
 #' @inheritParams format_value
 #'
@@ -40,6 +43,7 @@ format_p <- function(p,
                      missing = "",
                      decimal_separator = NULL,
                      digits = 3,
+                     leading_zero = FALSE
                      ...) {
   # only convert p if it's a valid numeric, or at least coercible to
   # valid numeric values...
@@ -146,6 +150,15 @@ format_p <- function(p,
   # replace decimal separator
   if (!is.null(decimal_separator)) {
     p_text <- gsub(".", decimal_separator, p_text, fixed = TRUE)
+  }
+
+  # remove leading zero 
+  if(!leading_zero){
+    # build a regex that matches "0<sep>" only when preceded by start, space, or an operator (= < >)
+    sep_esc <- if (is.null(decimal_separator)) "\\." else gsub("([\\^$.|?*+(){}\\[\\]\\\\])", "\\\\\\1", decimal_separator)
+    pattern <- paste0("(?:(?<=^)|(?<=\\s)|(?<==)|(?<=<)|(?<=>))0(", sep_esc, ")")
+    # replace with just the separator (i.e., ".123" or ",123")
+    p_text <- gsub(pattern, "\\1", p_text, perl = TRUE)
   }
 
   p_text
