@@ -766,12 +766,12 @@ test_that("get_datagrid - marginaleffects, avg_slopes, Bayesian", {
     data = mtcars
   )
 
-  mfx1 <- marginaleffects::slopes(mod, variables = "hp")
+  mfx1 <- marginaleffects::avg_slopes(mod, variables = "hp")
   dg <- get_datagrid(mfx1)
-  expect_identical(dim(dg), c(32L, 6L))
-  expect_named(dg, c("term", "contrast", "cyl", "hp", "wt", "am"))
+  expect_identical(dim(dg), c(1L, 2L))
+  expect_named(dg, c("term", "contrast"))
 
-  mfx2 <- marginaleffects::slopes(mod, variables = "hp", by = "am")
+  mfx2 <- marginaleffects::avg_slopes(mod, variables = "hp", by = "am")
   dg <- get_datagrid(mfx2)
   expect_identical(dim(dg), c(2L, 3L))
   expect_named(dg, c("term", "contrast", "am"))
