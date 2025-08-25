@@ -932,6 +932,17 @@ get_datagrid.slopes <- function(x, ...) {
   check_if_installed("marginaleffects", minimum_version = "0.28.0.19")
   nd <- marginaleffects::components(x, "newdata")
   cols_newdata <- colnames(nd)
+
+  ## FIXME: `avg_slopes()` includes all columns when no `by` is specified, which
+  ## is a new behaviour in marginaleffects v0.28.0.x
+  # We don't want to append the complete data frame, just the relevant columns.
+  # This is a hack, which might be fixed in
+  # https://github.com/vincentarelbundock/marginaleffects/issues/1570
+  draws <- marginaleffects::get_draws(x, "PxD")
+  if (!is.null(draws) && nrow(draws) == 1) {
+    cols_newdata <- NULL
+  }
+
   cols_contrast <- colnames(x)[grep("^contrast_?", colnames(x))]
   cols_misc <- c("term", "by", "hypothesis")
   cols_grid <- union(union(cols_newdata, cols_contrast), cols_misc)

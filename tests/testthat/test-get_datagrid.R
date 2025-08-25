@@ -719,3 +719,27 @@ test_that("get_datagrid - '=' in factor levels", {
     c("under26", "under26", "under26", "26<=34", "26<=34", "26<=34", ">34", ">34", ">34")
   )
 })
+
+
+test_that("get_datagrid - marginaleffects, avg_slopes, Bayesian", {
+  skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("brms")
+  skip_if_not_installed("BH")
+  skip_if_not_installed("RcppEigen")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.21")
+  skip_if_not_installed("httr2")
+
+  m <- suppressWarnings(download_model("brms_linear_1"))
+
+  out <- marginaleffects::avg_slopes(m, variables = "c12hour", by = "c172code")
+  dg <- get_datagrid(out)
+  expect_identical(dim(dg), c(3L, 3L))
+  expect_named(dg, c("term", "contrast", "c172code"))
+
+  out <- marginaleffects::avg_slopes(m, variables = "c12hour")
+  dg <- get_datagrid(out)
+  expect_identical(dim(dg), c(1L, 2L))
+  expect_named(dg, c("term", "contrast"))
+})
