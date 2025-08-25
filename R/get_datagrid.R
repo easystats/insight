@@ -940,17 +940,16 @@ get_datagrid.slopes <- function(x, ...) {
   # This is a hack, which might be fixed in
   # https://github.com/vincentarelbundock/marginaleffects/issues/1570
   draws <- suppressWarnings(marginaleffects::get_draws(x, "PxD"))
-  if (!is.null(draws) && nrow(draws) == 1) {
-    cols_newdata <- NULL
-  }
 
-  # Same issue as above for frequentist models:  we have to ensure that only
-  # model predictors are returned
   if (is.null(draws)) {
+    # frequentist models
     cols_newdata <- intersect(
       find_variables(x, effects = "all", component = "all", flatten = TRUE),
       cols_newdata
     )
+  } else if (nrow(draws) == 1) {
+    # Bayesian models without `by`
+    cols_newdata <- NULL
   }
 
   cols_contrast <- colnames(x)[grep("^contrast_?", colnames(x))]
