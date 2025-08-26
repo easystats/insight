@@ -160,6 +160,6 @@ print_html.table <- function(x, ...) {
 }
 
 .display_default_format <- function(format) {
-  format <- getOption("easystats_display_format", "markdown")
+  format <- getOption("easystats_display_format", format)
   validate_argument(format, c("markdown", "html", "md", "tt"))
 }
