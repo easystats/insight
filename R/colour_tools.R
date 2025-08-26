@@ -68,17 +68,7 @@
     color <- gsub("^(bright_|br_)", "b", color)
   }
 
-  color %in% c(
-    # regular colors
-    "black", "blue", "cyan", "green", "grey", "red", "violet", "yellow",
-    # bright colors
-    "bblue", "bcyan", "bgreen", "bred", "bviolet", "bwhite", "byellow",
-    # background colors
-    "bg_black", "bg_blue", "bg_cyan", "bg_green", "bg_red", "bg_violet",
-    "bg_white", "bg_yellow",
-    # styles
-    "bold", "italic"
-  )
+  color %in% names(.COLOR_CODES)
 }
 
 
