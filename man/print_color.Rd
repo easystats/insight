@@ -21,13 +21,14 @@ color_theme()
 \arguments{
 \item{text}{The text to print.}
 
-\item{color, colour}{Character vector, indicating the colour for printing.
-May be one of \code{"white"}, \code{"black"}, \code{"red"}, \code{"yellow"}, \code{"green"}, \code{"blue"},
-\code{"violet"}, \code{"cyan"} or \code{"grey"}. Bright variants of colors are available
-by adding the prefix \code{"b"} (or \code{"br_"} or \code{"bright_"}), e.g. \code{"bred"} (or
-\code{"br_red"} resp. \code{"bright_red"}). Background colors can be set by adding
-the prefix \code{"bg_"} (e.g. \code{"bg_red"}). Formatting is also possible with \code{"bold"}
-or \code{"italic"}.}
+\item{color, colour}{Character vector, indicating the colour for printing. May
+be one of \code{"white"}, \code{"black"}, \code{"red"}, \code{"yellow"}, \code{"green"}, \code{"blue"},
+\code{"violet"}, \code{"cyan"} or \code{"grey"}. Bright variants of colors are available by
+adding the prefix \code{"b"} (or \code{"br_"} or \code{"bright_"}), e.g. \code{"bred"} (or
+\code{"br_red"} resp. \code{"bright_red"}). Background colors can be set by adding the
+prefix \code{"bg_"} (e.g. \code{"bg_red"}). Formatting is also possible with \code{"bold"}
+or \code{"italic"}. Note that \code{"bright_black"} is equivalent to \code{"grey"}, and
+\code{"bg_grey"} has no effect (it is equivalent to the IDE's default background).}
 }
 \value{
 Nothing.
@@ -37,12 +38,11 @@ Convenient function that allows coloured output in the console.
 Mainly implemented to reduce package dependencies.
 }
 \details{
-This function prints \code{text} directly to the console using
-\code{cat()}, so no string is returned. \code{color_text()}, however,
-returns only the formatted string, without using \code{cat()}.
-\code{color_theme()} either returns \code{"dark"} when RStudio is used
-with dark color scheme, \code{"light"} when it's used with light theme,
-and \code{NULL} if the theme could not be detected.
+This function prints \code{text} directly to the console using \code{cat()},
+so no string is returned. \code{color_text()}, however, returns only the formatted
+string, without using \code{cat()}. \code{color_theme()} either returns \code{"dark"} when
+RStudio is used with dark color scheme, \code{"light"} when it's used with light
+theme, and \code{NULL} if the theme could not be detected.
 }
 \examples{
 print_color("I'm blue dabedi dabedei", "blue")

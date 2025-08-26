@@ -217,19 +217,19 @@ format_error <- function(...) {
       if (token_pattern[i] == token_pattern[1]) {
         # bold formatting
         pattern <- paste0("(.*)\\{\\.b_", allowed_chars, "\\}(.*)")
-        s2 <- .bold(gsub(pattern, "\\2", string))
+        s2 <- .color(gsub(pattern, "\\2", string), "bold")
       } else if (token_pattern[i] == token_pattern[2]) {
         # italic formatting
         pattern <- paste0("(.*)\\{\\.i_", allowed_chars, "\\}(.*)")
-        s2 <- .italic(gsub(pattern, "\\2", string))
+        s2 <- .color(gsub(pattern, "\\2", string), "italic")
       } else if (token_pattern[i] == token_pattern[3]) {
         # url formatting
         pattern <- paste0("(.*)\\{\\.url_", allowed_chars, "\\}(.*)")
-        s2 <- .italic(.blue(paste0("<", gsub(pattern, "\\2", string), ">")))
+        s2 <- .color(.color(paste0("<", gsub(pattern, "\\2", string), ">"), "blue"), "italic")
       } else if (token_pattern[i] == token_pattern[4]) {
         # package formatting
         pattern <- paste0("(.*)\\{\\.pkg_", allowed_chars, "\\}(.*)")
-        s2 <- .blue(gsub(pattern, "\\2", string))
+        s2 <- .color(gsub(pattern, "\\2", string), "blue")
       }
       s1 <- gsub(pattern, "\\1", string)
       s3 <- gsub(pattern, "\\3", string)

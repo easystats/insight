@@ -5,20 +5,20 @@
 #'  Mainly implemented to reduce package dependencies.
 #'
 #' @param text The text to print.
-#' @param color,colour Character vector, indicating the colour for printing.
-#'   May be one of `"white"`, `"black"`, `"red"`, `"yellow"`, `"green"`, `"blue"`,
-#'   `"violet"`, `"cyan"` or `"grey"`. Bright variants of colors are available
-#'   by adding the prefix `"b"` (or `"br_"` or `"bright_"`), e.g. `"bred"` (or
-#'   `"br_red"` resp. `"bright_red"`). Background colors can be set by adding
-#'   the prefix `"bg_"` (e.g. `"bg_red"`). Formatting is also possible with `"bold"`
-#'   or `"italic"`.
+#' @param color,colour Character vector, indicating the colour for printing. May
+#' be one of `"white"`, `"black"`, `"red"`, `"yellow"`, `"green"`, `"blue"`,
+#' `"violet"`, `"cyan"` or `"grey"`. Bright variants of colors are available by
+#' adding the prefix `"b"` (or `"br_"` or `"bright_"`), e.g. `"bred"` (or
+#' `"br_red"` resp. `"bright_red"`). Background colors can be set by adding the
+#' prefix `"bg_"` (e.g. `"bg_red"`). Formatting is also possible with `"bold"`
+#' or `"italic"`. Note that `"bright_black"` is equivalent to `"grey"`, and
+#' `"bg_grey"` has no effect (it is equivalent to the IDE's default background).
 #'
-#' @details This function prints `text` directly to the console using
-#'   `cat()`, so no string is returned. `color_text()`, however,
-#'   returns only the formatted string, without using `cat()`.
-#'   `color_theme()` either returns `"dark"` when RStudio is used
-#'   with dark color scheme, `"light"` when it's used with light theme,
-#'   and `NULL` if the theme could not be detected.
+#' @details This function prints `text` directly to the console using `cat()`,
+#' so no string is returned. `color_text()`, however, returns only the formatted
+#' string, without using `cat()`. `color_theme()` either returns `"dark"` when
+#' RStudio is used with dark color scheme, `"light"` when it's used with light
+#' theme, and `NULL` if the theme could not be detected.
 #'
 #' @return Nothing.
 #'
@@ -26,26 +26,26 @@
 #' print_color("I'm blue dabedi dabedei", "blue")
 #' @export
 print_color <- function(text, color) {
-  cat(.colour(colour = color, x = text))
+  cat(.color(x = text, color = color))
 }
 
 #' @rdname print_color
 #' @export
 print_colour <- function(text, colour) {
-  print_color(color = colour, text = text)
+  print_color(text = text, color = colour)
 }
 
 
 #' @rdname print_color
 #' @export
 color_text <- function(text, color) {
-  .colour(colour = color, x = text)
+  .color(x = text, color = color)
 }
 
 #' @rdname print_color
 #' @export
 colour_text <- function(text, colour) {
-  .colour(colour = colour, x = text)
+  .color(x = text, color = colour)
 }
 
 #' @rdname print_color
@@ -66,5 +66,5 @@ color_theme <- function() {
       return("light")
     }
   }
-  return(NULL)
+  NULL
 }
