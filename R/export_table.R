@@ -1066,7 +1066,7 @@ print.insight_table <- function(x, ...) {
   }
   # if we have a colour value, make coloured ansi-string
   if (length(footer) == 2 && .is_valid_color(footer[2])) {
-    footer <- .colour(footer[2], footer[1])
+    footer <- .color(footer[1], footer[2])
   }
   paste0(rows, footer[1])
 }
