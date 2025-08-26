@@ -56,6 +56,7 @@
     .apply_color(x, .COLOR_CODES[[color]])
   } else {
     format_warning(paste0("`color` ", color, " not yet supported."))
+    x
   }
 }
 
