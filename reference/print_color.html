@@ -9,7 +9,7 @@ Mainly implemented to reduce package dependencies."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,13 +83,14 @@ Mainly implemented to reduce package dependencies.</p>
 
 
 <dt id="arg-color-colour">color, colour<a class="anchor" aria-label="anchor" href="#arg-color-colour"></a></dt>
-<dd><p>Character vector, indicating the colour for printing.
-May be one of <code>"white"</code>, <code>"black"</code>, <code>"red"</code>, <code>"yellow"</code>, <code>"green"</code>, <code>"blue"</code>,
-<code>"violet"</code>, <code>"cyan"</code> or <code>"grey"</code>. Bright variants of colors are available
-by adding the prefix <code>"b"</code> (or <code>"br_"</code> or <code>"bright_"</code>), e.g. <code>"bred"</code> (or
-<code>"br_red"</code> resp. <code>"bright_red"</code>). Background colors can be set by adding
-the prefix <code>"bg_"</code> (e.g. <code>"bg_red"</code>). Formatting is also possible with <code>"bold"</code>
-or <code>"italic"</code>.</p></dd>
+<dd><p>Character vector, indicating the colour for printing. May
+be one of <code>"white"</code>, <code>"black"</code>, <code>"red"</code>, <code>"yellow"</code>, <code>"green"</code>, <code>"blue"</code>,
+<code>"violet"</code>, <code>"cyan"</code> or <code>"grey"</code>. Bright variants of colors are available by
+adding the prefix <code>"b"</code> (or <code>"br_"</code> or <code>"bright_"</code>), e.g. <code>"bred"</code> (or
+<code>"br_red"</code> resp. <code>"bright_red"</code>). Background colors can be set by adding the
+prefix <code>"bg_"</code> (e.g. <code>"bg_red"</code>). Formatting is also possible with <code>"bold"</code>
+or <code>"italic"</code>. Note that <code>"bright_black"</code> is equivalent to <code>"grey"</code>, and
+<code>"bg_grey"</code> has no effect (it is equivalent to the IDE's default background).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -98,12 +99,11 @@ or <code>"italic"</code>.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function prints <code>text</code> directly to the console using
-<code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>, so no string is returned. <code>color_text()</code>, however,
-returns only the formatted string, without using <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>.
-<code>color_theme()</code> either returns <code>"dark"</code> when RStudio is used
-with dark color scheme, <code>"light"</code> when it's used with light theme,
-and <code>NULL</code> if the theme could not be detected.</p>
+    <p>This function prints <code>text</code> directly to the console using <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>,
+so no string is returned. <code>color_text()</code>, however, returns only the formatted
+string, without using <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>. <code>color_theme()</code> either returns <code>"dark"</code> when
+RStudio is used with dark color scheme, <code>"light"</code> when it's used with light
+theme, and <code>NULL</code> if the theme could not be detected.</p>
     </div>
 
     <div class="section level2">
