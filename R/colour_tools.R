@@ -10,6 +10,7 @@
   white = c(37, 39),
   grey = c(90, 39),
   # bright colors
+  bblack = c(90, 39), # equivalent to grey
   bred = c(91, 39),
   bgreen = c(92, 39),
   byellow = c(93, 39),
@@ -28,7 +29,8 @@
   bg_blue = c(44, 49),
   bg_violet = c(45, 49),
   bg_cyan = c(46, 49),
-  bg_white = c(47, 49)
+  bg_white = c(47, 49),
+  bg_grey = c(50, 49)
 )
 
 
@@ -39,36 +41,41 @@
 }
 
 
-.colour <- function(colour = "red", x) {
+.color <- function(x, color = "red") {
   # do nothing if ANSI-colors are not supported
   if (!.supports_color()) {
     return(x)
   }
 
   # replace "bright" suffixes to a generic color code
-  if (grepl("^(bright_|br_)", colour)) {
-    colour <- gsub("^(bright_|br_)", "b", colour)
+  if (grepl("^(bright_|br_)", color)) {
+    color <- gsub("^(bright_|br_)", "b", color)
   }
 
-  if (colour %in% names(.COLOR_CODES)) {
-    .apply_color(x, .COLOR_CODES[[colour]])
+  if (color %in% names(.COLOR_CODES)) {
+    .apply_color(x, .COLOR_CODES[[color]])
   } else {
-    format_warning(paste0("`color` ", colour, " not yet supported."))
+    format_warning(paste0("`color` ", color, " not yet supported."))
   }
 }
 
 
-.is_valid_colour <- function(colour) {
+.is_valid_color <- function(color) {
   # replace "bright" suffixes to a generic color code
-  if (grepl("^(bright_|br_)", colour)) {
-    colour <- gsub("^(bright_|br_)", "b", colour)
+  if (grepl("^(bright_|br_)", color)) {
+    color <- gsub("^(bright_|br_)", "b", color)
   }
 
-  colour %in% c(
-    "red", "yellow", "green", "blue", "violet", "cyan", "grey", "bold",
-    "italic", "bred", "bgreen", "byellow", "bblue", "bviolet", "bcyan",
-    "bwhite", "bg_red", "bg_green", "bg_yellow", "bg_blue", "bg_violet",
-    "bg_cyan", "bg_white", "bg_black"
+  color %in% c(
+    # regular colors
+    "black", "blue", "cyan", "green", "grey", "red", "violet", "yellow",
+    # bright colors
+    "bblue", "bcyan", "bgreen", "bred", "bviolet", "bwhite", "byellow",
+    # background colors
+    "bg_black", "bg_blue", "bg_cyan", "bg_green", "bg_red", "bg_violet",
+    "bg_white", "bg_yellow",
+    # styles
+    "bold", "italic"
   )
 }
 
