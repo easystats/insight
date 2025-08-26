@@ -466,7 +466,7 @@ n_obs.riskRegression <- function(x, ...) {
 
 #' @export
 n_obs.marginaleffects <- function(x, ...) {
-  check_if_installed("marginaleffects", minimum_version = "0.28.0.19")
+  check_if_installed("marginaleffects", minimum_version = "0.28.0.22")
   m <- marginaleffects::components(x, "model")
   n_obs(m)
 }

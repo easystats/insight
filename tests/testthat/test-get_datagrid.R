@@ -331,7 +331,7 @@ test_that("get_datagrid - emmeans", {
 
 
 test_that("get_datagrid - marginaleffects", {
-  skip_if_not_installed("marginaleffects")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 
   data("mtcars")
 
@@ -367,7 +367,7 @@ test_that("get_datagrid - marginaleffects", {
     newdata = marginaleffects::datagrid(qsec = range)
   )
   res <- get_datagrid(myme)
-  expect_true(all(c("wt", "mpg", "hp", "qsec") %in% colnames(res)))
+  expect_true(all(c("wt", "hp", "qsec") %in% colnames(res)))
   expect_true(all(c("contrast_hp", "contrast_wt") %in% colnames(res)))
 })
 
@@ -732,7 +732,7 @@ withr::with_environment(
     skip_if_not_installed("brms")
     skip_if_not_installed("BH")
     skip_if_not_installed("RcppEigen")
-    skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.21")
+    skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
     skip_if_not_installed("httr2")
     skip_if_not_installed("modelbased")
 
@@ -756,8 +756,8 @@ withr::with_environment(
 )
 
 
-test_that("get_datagrid - marginaleffects, avg_slopes, Bayesian", {
-  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.21")
+test_that("get_datagrid - marginaleffects, avg_slopes, non-Bayesian", {
+  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
   data("mtcars")
   mtcars$cyl <- factor(mtcars$cyl)
 
