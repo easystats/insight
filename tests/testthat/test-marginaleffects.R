@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 skip_if_not_installed("emmeans")
 
 test_that("marginaleffects", {
@@ -32,7 +32,7 @@ test_that("marginaleffects", {
   skip_if_not_installed("marginaleffects", minimum_version = "0.24.0.6")
 
 
-  cols <- c("rowid", "Parameter", "Comparison", "Coefficient", "SE", "Statistic", "p", "S", "CI", "CI_low", "CI_high", "Predicted", "Species", "Petal.Length")
+  cols <- c("rowid", "Parameter", "Comparison", "Coefficient", "SE", "Statistic", "p", "S", "CI", "CI_low", "CI_high", "Predicted")
   expect_true(all(cols %in% colnames(parameters::model_parameters(x))))
 
   expect_equal(n_obs(x), 150) # nrow(iris)
