@@ -38,6 +38,7 @@
   x[!is.na(x)] <- paste0(
     "\033[", color_code[1], "m", x[!is.na(x)], "\033[", color_code[2], "m"
   )
+  x
 }
 
 
