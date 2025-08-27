@@ -1151,7 +1151,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
       out <- round(mean(x, na.rm = TRUE))
     } else {
       # we have a function in "numerics", which is applied here
-      out <- .safe(eval(parse(text = paste0(numerics, "(x)"))))
+      out <- .safe(do.call(numerics, list(x)))
       # sanity check
       if (is.null(out)) {
         format_error(paste0(
