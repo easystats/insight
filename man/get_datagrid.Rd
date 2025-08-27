@@ -131,7 +131,9 @@ common level) or \code{"all"} to keep all levels.}
 
 \item{numerics}{Type of summary for numeric values \emph{not} specified in \code{by}.
 Can be \code{"all"} (will duplicate the grid for all unique values), any
-function (\code{"mean"}, \code{"median"}, ...) or a value (e.g., \code{numerics = 0}).}
+function (\code{"mean"}, \code{"median"}, ...) or a value (e.g., \code{numerics = 0}).
+Special functions are \code{"mode"}, which will set the numeric variable to its
+most common value, and \code{"integer"}, which returns the rounded mean.}
 
 \item{length}{Length of numeric target variables selected in \code{by} (if no
 representative values are additionally specified). This arguments controls
@@ -204,7 +206,7 @@ should increase the \code{length} argument.}
 \item{protect_integers}{Defaults to \code{TRUE}. Indicates whether integers (whole
 numbers) should be treated as integers (i.e., prevent adding any in-between
 round number values), or - if \code{FALSE} - as regular numeric variables. Only
-applies when:
+applies to focal predictors (specified in \code{by}) and when:
 \enumerate{
 \item \code{range = "range"} (the default), or if \code{range = "grid"} and the
 first predictor in \code{by} is an integer;

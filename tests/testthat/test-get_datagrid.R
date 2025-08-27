@@ -688,6 +688,31 @@ withr::with_environment(
 )
 
 
+test_that("get_datagrid - functions mode and integer", {
+  skip_if_not_installed("modelbased")
+  skip_if_not_installed("datawizard")
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  m <- lm(neg_c_7 ~ c12hour + barthtot + e42dep + c161sex * c172code, data = efc)
+
+  # mode
+  out <- get_datagrid(m, by = c("c161sex", "c172code"), numerics = "mode")
+  expect_true(all(out$c12hour == 168))
+
+  # integer
+  out <- get_datagrid(m, by = c("c161sex", "c172code"), numerics = "integer")
+  expect_true(all(out$c12hour == 42))
+
+  # function does not exist
+  expect_error(
+    get_datagrid(m, by = c("c161sex", "c172code"), numerics = "abc"),
+    regex = "The function specified in `numerics` (abc)",
+    fixed = TRUE
+  )
+})
+
+
 test_that("get_datagrid - multivariate", {
   skip_on_cran()
   skip_if_not_installed("curl")
