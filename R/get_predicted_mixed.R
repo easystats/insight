@@ -48,7 +48,13 @@ get_predicted.lmerMod <- function(x,
   # 1. step: predictions
   if (is.null(iterations)) {
     rez <- suppressWarnings(predict_function(x, data = my_args$data, se.fit = !is.null(ci)))
-    predictions <- as.numeric(rez$fit)
+    if (is.list(rez)) {
+      predictions <- as.numeric(rez$fit)
+      se <- rez$se.fit
+    } else {
+      predictions <- as.numeric(rez)
+      se <- NULL
+    }
   } else {
     predictions <- .get_predicted_boot(
       x,
@@ -64,7 +70,7 @@ get_predicted.lmerMod <- function(x,
   ci_data <- .get_predicted_se_to_ci(
     x,
     predictions = predictions,
-    se = rez$se.fit,
+    se = se,
     ci = ci,
     ci_method = ci_method,
     ci_type = my_args$ci_type,
