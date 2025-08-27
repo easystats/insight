@@ -21,7 +21,7 @@ methods for more info).'><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -202,7 +202,9 @@ common level) or <code>"all"</code> to keep all levels.</p></dd>
 <dt id="arg-numerics">numerics<a class="anchor" aria-label="anchor" href="#arg-numerics"></a></dt>
 <dd><p>Type of summary for numeric values <em>not</em> specified in <code>by</code>.
 Can be <code>"all"</code> (will duplicate the grid for all unique values), any
-function (<code>"mean"</code>, <code>"median"</code>, ...) or a value (e.g., <code>numerics = 0</code>).</p></dd>
+function (<code>"mean"</code>, <code>"median"</code>, ...) or a value (e.g., <code>numerics = 0</code>).
+Special functions are <code>"mode"</code>, which will set the numeric variable to its
+most common value, and <code>"integer"</code>, which returns the rounded mean.</p></dd>
 
 
 <dt id="arg-length">length<a class="anchor" aria-label="anchor" href="#arg-length"></a></dt>
@@ -276,7 +278,7 @@ should increase the <code>length</code> argument.</p></dd>
 <dd><p>Defaults to <code>TRUE</code>. Indicates whether integers (whole
 numbers) should be treated as integers (i.e., prevent adding any in-between
 round number values), or - if <code>FALSE</code> - as regular numeric variables. Only
-applies when:</p><ol><li><p><code>range = "range"</code> (the default), or if <code>range = "grid"</code> and the
+applies to focal predictors (specified in <code>by</code>) and when:</p><ol><li><p><code>range = "range"</code> (the default), or if <code>range = "grid"</code> and the
 first predictor in <code>by</code> is an integer;</p></li>
 <li><p><code>length</code> is larger than the number of unique values for the variable.</p></li>
 </ol><p>If <code>length</code> is smaller than the number of unique values, <code>protect_integers</code>
