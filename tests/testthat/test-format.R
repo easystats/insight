@@ -150,6 +150,10 @@ test_that("format_p", {
   expect_identical(format_p(0.02, stars = TRUE, lead_zero = TRUE), "p = 0.020*")
   expect_identical(format_p(0.0214568, digits = "apa"), "p = .021")
   expect_identical(format_p(0.0214568, digits = "apa", lead_zero = TRUE), "p = 0.021")
+  expect_identical(format_p(0.00003, digits = "apa"), "p < .001")
+  expect_identical(format_p(0.00003, digits = "apa", lead_zero = TRUE), "p < 0.001")
+  expect_identical(format_p(0.00003, digits = 5), "p = .00003")
+  expect_identical(format_p(0.00003, digits = 5, lead_zero = TRUE), "p = 0.00003")
 })
 
 test_that("format_table, other CI columns", {
