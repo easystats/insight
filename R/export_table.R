@@ -25,12 +25,17 @@
 #' @param title,caption,subtitle Table title (same as caption) and subtitle, as
 #'   strings. If `NULL`, no title or subtitle is printed, unless it is stored as
 #'   attributes (`table_title`, or its alias `table_caption`, and
-#'   `table_subtitle`). If `x` is a list of data frames, `caption` may be a list
-#'   of table captions, one for each table.
+#'   `table_subtitle`). If you want to force that no title is printed, even if
+#'   present as attribute, use `""`, which will never print titles. If `x` is a
+#'   list of data frames, `caption` may be a list of table captions, one for
+#'   each table.
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
 #'   new text line under the table. If `x` is a list of data frames, `footer`
-#'   may be a list of table captions, one for each table.
+#'   may be a list of table captions, one for each table. If `NULL`, no footer
+#'   is printed, unless it is stored as attributes (`table_footer`). If you want
+#'   to force that no footer is printed, even if present as attribute, use `""`,
+#'   which will never print footers.
 #' @param align Column alignment. For markdown-formatted tables, the default
 #'   `align = NULL` will right-align numeric columns, while all other columns
 #'   will be left-aligned. If `format = "html"`, the default is left-align first
@@ -296,7 +301,6 @@ export_table <- function(x,
 
     # convert data frame into specified output format
     out <- do.call(.export_table, c(list(x = x), export_args, list(...)))
-
   } else if (is.list(x)) {
     # table from list of data frames -----------------------------------------
 
@@ -516,6 +520,17 @@ print.insight_table <- function(x, ...) {
                           verbose = TRUE,
                           ...) {
   table_data <- as.data.frame(x)
+
+  # we set empty caption, subtitle and footer to NULL, so they are not printed
+  if (identical(caption, "")) {
+    caption <- NULL
+  }
+  if (identical(subtitle, "")) {
+    subtitle <- NULL
+  }
+  if (identical(footer, "")) {
+    footer <- NULL
+  }
 
   # rename columns?
   table_data <- .new_column_names(table_data, column_names)
@@ -841,14 +856,14 @@ print.insight_table <- function(x, ...) {
   # if caption is available, add a row with a headline
   if (!is.null(caption) && caption[1] != "") {
     # if we have a colour value, make coloured ansi-string
-    if (length(caption) == 2 && .is_valid_colour(caption[2])) {
-      caption <- .colour(caption[2], caption[1])
+    if (length(caption) == 2 && .is_valid_color(caption[2])) {
+      caption <- .color(caption[1], caption[2])
     }
     if (is.null(subtitle)) {
       subtitle <- ""
-    } else if (length(subtitle) == 2 && .is_valid_colour(subtitle[2])) {
+    } else if (length(subtitle) == 2 && .is_valid_color(subtitle[2])) {
       # if we have a colour value, make coloured ansi-string
-      subtitle <- .colour(subtitle[2], subtitle[1])
+      subtitle <- .color(subtitle[1], subtitle[2])
     }
 
     # paste everything together and remove unnecessary double spaces
@@ -1050,8 +1065,8 @@ print.insight_table <- function(x, ...) {
     return(rows)
   }
   # if we have a colour value, make coloured ansi-string
-  if (length(footer) == 2 && .is_valid_colour(footer[2])) {
-    footer <- .colour(footer[2], footer[1])
+  if (length(footer) == 2 && .is_valid_color(footer[2])) {
+    footer <- .color(footer[1], footer[2])
   }
   paste0(rows, footer[1])
 }
@@ -1258,6 +1273,7 @@ print.insight_table <- function(x, ...) {
   # insert sub header rows and column spans, if we have any
   if (!is.null(out$row_groups) || !is.null(column_groups)) {
     final <- tinytable::group_tt(final, i = out$row_groups, j = column_groups)
+    final <- tinytable::style_tt(final, i = "~groupi", j = 1, indent = 2)
   }
   tinytable::style_tt(final, align = align, ...)
 }
@@ -1277,7 +1293,7 @@ print.insight_table <- function(x, ...) {
   n_columns <- ncol(final)
   first_row_leftalign <- (!is.null(align) && align == "firstleft")
 
-  ## create header line for markdown table -----
+  # create header line for markdown table -----
   header <- "|"
 
   # indent groups?
@@ -1370,16 +1386,15 @@ print.insight_table <- function(x, ...) {
 # --------------------------------------------------------
 
 .format_html_table <- function(
-  final,
-  caption = NULL,
-  subtitle = NULL,
-  footer = NULL,
-  align = "center",
-  group_by = NULL,
-  row_groups = NULL,
-  column_groups = NULL,
-  ...
-) {
+    final,
+    caption = NULL,
+    subtitle = NULL,
+    footer = NULL,
+    align = "center",
+    group_by = NULL,
+    row_groups = NULL,
+    column_groups = NULL,
+    ...) {
   check_if_installed("gt")
 
   if (is.null(align)) {
@@ -1424,7 +1439,7 @@ print.insight_table <- function(x, ...) {
   ))
 
   # validation check - clean caption, subtitle and footer from ansi-colour codes,
-  # which only work for text format... But if user occidentally provides colours
+  # which only work for text format... But if user accidentally provides colours
   # for HTML format as well, remove those colour codes, so they don't appear as
   # text in the table header and footer. Furthermore, in footers, we need to
   # remove newline-characters
@@ -1461,7 +1476,11 @@ print.insight_table <- function(x, ...) {
 
   tab <- gt::gt(final, groupname_col = group_by_columns)
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
-  footer <- gt::tab_source_note(header, source_note = gt::html(footer))
+  if (!is.null(footer)) {
+    footer <- gt::tab_source_note(header, source_note = gt::html(footer))
+  } else {
+    footer <- gt::tab_source_note(header, source_note = NULL)
+  }
   out <- gt::cols_align(footer, align = "center")
 
   # emphasize header of row groups?
@@ -1487,7 +1506,11 @@ print.insight_table <- function(x, ...) {
     out <- gt::cols_align(out, "left", 1)
   } else {
     for (i in 1:nchar(align)) {
-      col_align <- switch(substr(align, i, i), l = "left", r = "right", "center")
+      col_align <- switch(substr(align, i, i),
+        l = "left",
+        r = "right",
+        "center"
+      )
       out <- gt::cols_align(out, col_align, i)
     }
   }

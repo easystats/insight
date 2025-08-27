@@ -26,10 +26,15 @@ get_parameters.betareg <- function(x, component = "all", ...) {
   )
   cf <- stats::coef(x)
 
+  element_name <- .betareg_mean_element(x)
+
   params <- data.frame(
     Parameter = gsub("^\\(phi\\)_", "", names(cf)),
     Estimate = unname(cf),
-    Component = c(rep("conditional", length(x$coefficients$mean)), rep("precision", length(x$coefficients$precision))),
+    Component = c(
+      rep("conditional", length(x$coefficients[[element_name]])),
+      rep("precision", length(x$coefficients$precision))
+    ),
     stringsAsFactors = FALSE,
     row.names = NULL
   )

@@ -186,10 +186,14 @@ identifies the function to be used to compute the covariance matrix.
 }
 }
 
-One exception are models of class \code{glmgee}, which have pre-defined options
-for the variance-covariance matrix calculation. These are \code{"robust"},
+Exceptions are following models:
+\itemize{
+\item Model of class \code{glmgee}, which have pre-defined options for the
+variance-covariance matrix calculation. These are \code{"robust"},
 \code{"df-adjusted"}, \code{"model"}, \code{"bias-corrected"}, and \code{"jackknife"}. See
-\code{?glmtoolbox::vcov.glmgee} for details.}
+\code{?glmtoolbox::vcov.glmgee} for details.
+\item Model of class \code{glmmTMB} currently only support the \code{"HC0"} option.
+}}
 
 \item{vcov_args}{List of arguments to be passed to the function identified by
 the \code{vcov} argument. This function is typically supplied by the

@@ -180,9 +180,22 @@ test_that("get_datagrid - data", {
   expect_identical(dim(get_datagrid(iris, by = 1:2, length = c(3, 2))), c(6L, 5L))
   expect_identical(dim(get_datagrid(iris, by = 1:2, length = c(NA, 2))), c(70L, 5L))
   expect_identical(dim(get_datagrid(iris, by = "Sepal.Length = c(1, 2)", length = NA)), c(2L, 5L))
-  expect_error(get_datagrid(iris, by = 1:2, length = c(3, 2, 4)))
-  expect_error(get_datagrid(iris, by = 1:2, length = "yes"))
+  expect_error(
+    get_datagrid(iris, by = 1:2, length = c(3, 2, 4)),
+    regex = "The number of"
+  )
+  expect_error(
+    get_datagrid(iris, by = 1:2, length = "yes"),
+    regex = "`length` argument must be a finite",
+    fixed = TRUE
+  )
+  expect_error(
+    get_datagrid(iris, by = 1:2, length = Inf),
+    regex = "`length` argument must be a finite",
+    fixed = TRUE
+  )
   expect_identical(as.numeric(get_datagrid(iris, by = 1:2, range = c("range", "mad"), length = c(2, 3))[4, "Sepal.Width"]), median(iris$Sepal.Width)) # nolint
+  expect_identical(dim(get_datagrid(mtcars, by = "gear", length = NA)), c(3L, 11L))
 
   expect_identical(nrow(get_datagrid(data.frame(
     X = c("A", "A", "B"),
@@ -318,7 +331,7 @@ test_that("get_datagrid - emmeans", {
 
 
 test_that("get_datagrid - marginaleffects", {
-  skip_if_not_installed("marginaleffects")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 
   data("mtcars")
 
@@ -354,7 +367,7 @@ test_that("get_datagrid - marginaleffects", {
     newdata = marginaleffects::datagrid(qsec = range)
   )
   res <- get_datagrid(myme)
-  expect_true(all(c("wt", "mpg", "hp", "qsec") %in% colnames(res)))
+  expect_true(all(c("wt", "hp", "qsec") %in% colnames(res)))
   expect_true(all(c("contrast_hp", "contrast_wt") %in% colnames(res)))
 })
 
@@ -549,6 +562,7 @@ test_that("get_datagrid - handle integers", {
     y = letters[1:8]
   )
   expect_identical(dim(get_datagrid(d)), c(64L, 2L)) # 8^2
+  expect_identical(dim(get_datagrid(d, length = 5)), c(40L, 2L)) # 5 * 8
   expect_identical(dim(get_datagrid(d, protect_integers = FALSE)), c(80L, 2L)) # 8 * length
   expect_identical(dim(get_datagrid(d, range = "grid")), c(64L, 2L))
   expect_identical(dim(get_datagrid(d, length = 5)), c(40L, 2L))
@@ -704,4 +718,61 @@ test_that("get_datagrid - '=' in factor levels", {
     as.character(out$sizegroup),
     c("under26", "under26", "under26", "26<=34", "26<=34", "26<=34", ">34", ">34", ">34")
   )
+})
+
+
+skip_if_not_installed("withr")
+
+withr::with_environment(
+  new.env(),
+  test_that("get_datagrid - marginaleffects, avg_slopes, Bayesian", {
+    skip_on_cran()
+    skip_if_not_installed("curl")
+    skip_if_offline()
+    skip_if_not_installed("brms")
+    skip_if_not_installed("BH")
+    skip_if_not_installed("RcppEigen")
+    skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+    skip_if_not_installed("httr2")
+    skip_if_not_installed("modelbased", minimum_version = "0.12.0.19")
+
+    data(efc, package = "modelbased")
+    efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+    levels(efc$c172code) <- c("low", "mid", "high")
+    efc <<- efc
+
+    m <- suppressWarnings(download_model("brms_linear_1"))
+
+    out <- marginaleffects::avg_slopes(m, variables = "c12hour", by = "c172code")
+    dg <- get_datagrid(out)
+    expect_identical(dim(dg), c(3L, 3L))
+    expect_named(dg, c("term", "contrast", "c172code"))
+
+    out <- marginaleffects::avg_slopes(m, variables = "c12hour")
+    dg <- get_datagrid(out)
+    expect_identical(dim(dg), c(1L, 2L))
+    expect_named(dg, c("term", "contrast"))
+  })
+)
+
+
+test_that("get_datagrid - marginaleffects, avg_slopes, non-Bayesian", {
+  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+  data("mtcars")
+  mtcars$cyl <- factor(mtcars$cyl)
+
+  mod <- glm(am ~ cyl + hp + wt,
+    family = binomial("logit"),
+    data = mtcars
+  )
+
+  mfx1 <- marginaleffects::avg_slopes(mod, variables = "hp")
+  dg <- get_datagrid(mfx1)
+  expect_identical(dim(dg), c(1L, 2L))
+  expect_named(dg, c("term", "contrast"))
+
+  mfx2 <- marginaleffects::avg_slopes(mod, variables = "hp", by = "am")
+  dg <- get_datagrid(mfx2)
+  expect_identical(dim(dg), c(2L, 3L))
+  expect_named(dg, c("term", "contrast", "am"))
 })

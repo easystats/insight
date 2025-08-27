@@ -117,3 +117,10 @@ is_converged.glm <- function(x, tolerance = 0.001, ...) {
 is_converged._glm <- function(x, tolerance = 0.001, ...) {
   isTRUE(x$fit$converged)
 }
+
+
+#' @export
+is_converged.lavaan <- function(x, tolerance = 0.001, ...) {
+  check_if_installed("lavaan")
+  lavaan::lavInspect(x, "converged")
+}

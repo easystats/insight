@@ -3,13 +3,20 @@ skip_if_not_installed("betareg")
 data("GasolineYield", package = "betareg")
 data("FoodExpenditure", package = "betareg")
 
-
 m1 <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
 m2 <- betareg::betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
+
+# some models have other element names
+data(mtcars)
+d <- mtcars
+d$y <- d$wt / max(d$wt)
+m3 <- betareg::betareg(y ~ mpg, data = d)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_beta)
   expect_false(model_info(m1)$is_linear)
+  expect_true(model_info(m3)$is_beta)
+  expect_false(model_info(m3)$is_linear)
 })
 
 test_that("find_predictors", {
@@ -36,6 +43,7 @@ test_that("get_varcov", {
 
 test_that("link_inverse", {
   expect_identical(link_inverse(m1)(0.2), plogis(0.2))
+  expect_identical(link_inverse(m3)(0.2), plogis(0.2))
 })
 
 test_that("get_data", {
@@ -127,6 +135,10 @@ test_that("find_parameters", {
       "(phi)"
     )
   )
+  expect_identical(
+    find_parameters(m3),
+    list(conditional = c("(Intercept)", "mpg"))
+  )
 })
 
 test_that("find_terms", {
@@ -151,6 +163,9 @@ test_that("get_modelmatrix", {
   mm <- get_modelmatrix(m1, data = head(GasolineYield))
   expect_true(is.matrix(mm))
   expect_identical(dim(mm), c(6L, 11L))
+  mm <- get_modelmatrix(m3)
+  expect_true(is.matrix(mm))
+  expect_identical(dim(mm), c(32L, 2L))
 })
 
 skip_if_not_installed("withr")
@@ -177,5 +192,13 @@ withr::with_environment(
     p2 <- data.frame(p2)
     # expect_false("SE" %in% colnames(p1))
     expect_true("SE" %in% colnames(p2))
+
+    data(mtcars)
+    d <- mtcars
+    d$y <- d$wt / max(d$wt)
+    mp3 <- betareg::betareg(y ~ mpg, data = d)
+    p <- suppressWarnings(get_predicted(mp3))
+    expect_s3_class(p, "get_predicted")
+    expect_length(p, 32)
   })
 )

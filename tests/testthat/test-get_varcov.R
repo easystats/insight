@@ -14,6 +14,7 @@ test_that("informative error in get_varcov.default", {
   )
 })
 
+
 test_that("lm: sandwich", {
   mod <- lm(mpg ~ hp * wt, data = mtcars)
   expect_equal(
@@ -48,6 +49,105 @@ test_that("lm: sandwich", {
     tolerance = 1e-5
   )
 })
+
+
+test_that("glmmTMB: sandwich", {
+  skip_on_cran()
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.12")
+  data(Salamanders, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(
+    count ~ spp + cover + mined + (1 | site),
+    ziformula = ~ spp + mined,
+    dispformula = ~ DOY + (1 | site),
+    data = Salamanders,
+    family = glmmTMB::nbinom2
+  )
+
+  out1 <- get_varcov(m)
+  out2 <- get_varcov(m, vcov = "HC")
+  out3 <- sandwich::vcovHC(m)
+
+  expect_equal(
+    out1[, 1],
+    c(
+      `(Intercept)` = 0.314644,
+      sppPR = 0.003394,
+      sppDM = -0.039042,
+      `sppEC-A` = -0.035532,
+      `sppEC-L` = -0.042076,
+      `sppDES-L` = -0.032686,
+      sppDF = -0.037002,
+      cover = -0.021823,
+      minedno = -0.252979
+    ),
+    tolerance = 1e-4
+  )
+
+  expect_equal(
+    out2[, 1],
+    c(
+      `(Intercept)` = 2.636175,
+      sppPR = 0.842328,
+      sppDM = -0.162162,
+      `sppEC-A` = -0.100184,
+      `sppEC-L` = -0.125641,
+      `sppDES-L` = 0.038835,
+      sppDF = -0.08137,
+      cover = -0.437675,
+      minedno = -2.102398
+    ),
+    tolerance = 1e-4
+  )
+
+  expect_equal(out2, out3, tolerance = 1e-4, ignore_attr = TRUE)
+
+  out1 <- get_varcov(m, component = "zero_inflated")
+  out2 <- get_varcov(m, vcov = "HC", component = "zero_inflated")
+  out3 <- sandwich::vcovHC(m, full = TRUE)
+
+  expect_equal(
+    out1[, 1],
+    c(
+      `zi~(Intercept)` = 0.496342,
+      `zi~sppPR` = -0.189782,
+      `zi~sppDM` = -0.185776,
+      `zi~sppEC-A` = -0.190133,
+      `zi~sppEC-L` = -0.20859,
+      `zi~sppDES-L` = -0.188361,
+      `zi~sppDF` = 0.259155,
+      `zi~minedno` = -0.32785
+    ),
+    tolerance = 1e-4
+  )
+
+  expect_equal(
+    out2[, 1],
+    c(
+      `zi~(Intercept)` = 3.019479,
+      `zi~sppPR` = 1.723305,
+      `zi~sppDM` = 0.830846,
+      `zi~sppEC-A` = -0.03649,
+      `zi~sppEC-L` = 0.362275,
+      `zi~sppDES-L` = 1.034537,
+      `zi~sppDF` = 7.349731,
+      `zi~minedno` = -2.580633
+    ),
+    tolerance = 1e-4
+  )
+
+  expect_equal(out2, out3[10:17, 10:17], tolerance = 1e-4, ignore_attr = TRUE)
+
+  out1 <- get_varcov(m, component = "all")
+  out2 <- get_varcov(m, vcov = "HC", component = "all")
+  expect_identical(dim(out1), dim(out2))
+  expect_identical(dim(out1), c(19L, 19L))
+
+  out1 <- get_varcov(m, component = "full")
+  out2 <- get_varcov(m, vcov = "HC", component = "full")
+  expect_identical(dim(out1), dim(out2))
+  expect_identical(dim(out1), c(21L, 21L))
+})
+
 
 test_that("lm: clubSandwich", {
   mod <- lm(mpg ~ hp * wt, data = mtcars)

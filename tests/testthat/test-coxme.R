@@ -4,12 +4,14 @@ skip_if_not_installed("nlme")
 skip_if_not_installed("bdsmatrix")
 skip_if_not_installed("coxme")
 skip_if_not_installed("withr")
+skip_on_cran()
 
 withr::with_environment(
   new.env(),
   {
     lung <- survival::lung
     Surv <- survival::Surv
+    rats <- survival::rats
 
     set.seed(1234)
     lung$inst2 <- sample.int(10, size = nrow(lung), replace = TRUE)
@@ -20,6 +22,7 @@ withr::with_environment(
 
     m1 <- suppressWarnings(coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), d))
     m2 <- suppressWarnings(coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst) + (1 | inst2), d))
+    m3 <- suppressWarnings(coxme::coxme(Surv(time, status) ~ rx + (1 + rx | litter), rats))
 
     expect_identical(clean_names(m1), c("time", "status", "ph.ecog", "age", "inst"))
     expect_identical(clean_names(m2), c("time", "status", "ph.ecog", "age", "inst", "inst2"))
@@ -191,6 +194,61 @@ withr::with_environment(
     test_that("find_statistic", {
       expect_identical(find_statistic(m1), "z-statistic")
       expect_identical(find_statistic(m2), "z-statistic")
+    })
+
+    test_that("get_mixed_info", {
+      out <- get_mixed_info(m1)
+      expect_equal(
+        out$vc,
+        list(inst = as.matrix(0.0258577545419199)),
+        tolerance = 1e-4,
+        ignore_attr = TRUE
+      )
+      expect_identical(
+        dimnames(out$vc$inst),
+        list("(Intercept)", "(Intercept)")
+      )
+
+      out <- suppressWarnings(get_mixed_info(m3))
+      expect_equal(
+        out$vc,
+        list(
+          litter = matrix(
+            c(
+              1.90330701553847,
+              -0.985430250670421,
+              -0.985430250670421,
+              0.246119854852106
+            ),
+            ncol = 2
+          )
+        ),
+        tolerance = 1e-4,
+        ignore_attr = TRUE
+      )
+      expect_identical(
+        dimnames(out$vc$litter),
+        list(c("(Intercept)", "rx"), c("(Intercept)", "rx"))
+      )
+
+      set.seed(1234)
+      Surv <- survival::Surv
+      rats <- survival::rats
+      rats$grp <- sample(letters[1:3], nrow(rats), replace = TRUE)
+      d2 <<- rats
+      m <- suppressWarnings(coxme::coxme(
+        Surv(time, status) ~ rx + (1 + rx | litter) + (1 | grp),
+        data = d2
+      ))
+      out <- get_mixed_info(m)
+      expect_identical(
+        dimnames(out$vc$litter),
+        list(c("(Intercept)", "rx"), c("(Intercept)", "rx"))
+      )
+      expect_identical(
+        dimnames(out$vc$grp),
+        list("(Intercept)", "(Intercept)")
+      )
     })
   }
 )

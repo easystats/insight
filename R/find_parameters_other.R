@@ -103,8 +103,10 @@ find_parameters.betareg <- function(x, component = "all", flatten = FALSE, ...) 
     c("all", "conditional", "precision", "location", "distributional", "auxiliary")
   )
 
+  element_name <- .betareg_mean_element(x)
+
   pars <- list(
-    conditional = names(x$coefficients$mean),
+    conditional = names(x$coefficients[[element_name]]),
     precision = names(x$coefficients$precision)
   )
 

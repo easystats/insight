@@ -40,6 +40,17 @@ get_modelmatrix.merMod <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.coxme <- function(x, ...) {
+  model_terms <- stats::terms(x)
+  dots <- list(...)
+  if ("data" %in% names(dots)) {
+    stats::model.matrix(model_terms, data = dots$data, ...)
+  } else {
+    stats::model.matrix(model_terms, data = get_data(x), ...)
+  }
+}
+
+#' @export
 get_modelmatrix.bracl <- function(x, ...) {
   dots <- list(...)
   if ("data" %in% names(dots)) {
@@ -209,6 +220,7 @@ get_modelmatrix.betareg <- function(x, ...) {
   if (is.null(dots$data)) {
     mm <- stats::model.matrix(x, ...)
   } else {
+    element_name <- .betareg_mean_element(x)
     # adapted from betareg::predict.betareg()
     # suppress contrasts dropped from factor
     mf <- suppressWarnings(stats::model.frame(
@@ -217,7 +229,7 @@ get_modelmatrix.betareg <- function(x, ...) {
       na.action = stats::na.pass,
       xlev = x$levels[["mean"]]
     ))
-    mm <- stats::model.matrix(stats::delete.response(x$terms$mean), mf)
+    mm <- stats::model.matrix(stats::delete.response(x$terms[[element_name]]), mf)
   }
   mm
 }

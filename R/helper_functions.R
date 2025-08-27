@@ -496,7 +496,8 @@
 
 
 .is_bayesian_marginaleffects <- function(x) {
-  !is.null(attributes(x)$posterior_draws)
+  check_if_installed("marginaleffects", minimum_version = "0.28.0.22")
+  !is.null(suppressWarnings(marginaleffects::get_draws(x, "PxD")))
 }
 
 

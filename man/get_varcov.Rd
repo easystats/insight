@@ -57,10 +57,14 @@ identifies the function to be used to compute the covariance matrix.
 }
 }
 
-One exception are models of class \code{glmgee}, which have pre-defined options
-for the variance-covariance matrix calculation. These are \code{"robust"},
+Exceptions are following models:
+\itemize{
+\item Model of class \code{glmgee}, which have pre-defined options for the
+variance-covariance matrix calculation. These are \code{"robust"},
 \code{"df-adjusted"}, \code{"model"}, \code{"bias-corrected"}, and \code{"jackknife"}. See
-\code{?glmtoolbox::vcov.glmgee} for details.}
+\code{?glmtoolbox::vcov.glmgee} for details.
+\item Model of class \code{glmmTMB} currently only support the \code{"HC0"} option.
+}}
 
 \item{vcov_args}{List of arguments to be passed to the function identified by
 the \code{vcov} argument. This function is typically supplied by the
@@ -77,7 +81,9 @@ or models with precision (e.g. \code{betareg}) component. \code{component} may b
 of \code{"conditional"}, \code{"zi"}, \code{"zero-inflated"}, \code{"dispersion"}, \code{"precision"},
 or \code{"all"}. May be abbreviated. Note that the \emph{conditional} component also
 refers to the \emph{count} or \emph{mean} component - names may differ, depending on
-the modeling package. See section \emph{Model components} for details.}
+the modeling package. See section \emph{Model components} for details. For models
+of class \code{glmmTMB}, the \code{component} argument can also be \code{"full"}, to return
+the full variance-covariance matrix (including random effects, called \code{theta}).}
 
 \item{complete}{Logical, if \code{TRUE}, for \code{aov}, returns the full
 variance-covariance matrix.}

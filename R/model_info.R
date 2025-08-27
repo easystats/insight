@@ -1268,13 +1268,25 @@ model_info.glmmTMB <- function(x, ...) {
 
 #' @export
 model_info.betareg <- function(x, ...) {
+  element_name <- .betareg_mean_element(x)
+
   .retrieve_model_info(
     x = x,
     fitfam = "beta",
-    logit.link = x$link$mean$name == "logit",
-    link.fun = x$link$mean$name,
+    logit.link = x$link[[element_name]]$name == "logit",
+    link.fun = x$link[[element_name]]$name,
     ...
   )
+}
+
+.betareg_mean_element <- function(x) {
+  if (!is.null(x$link$mean)) {
+    "mean"
+  } else if (!is.null(x$link$mu)) {
+    "mu"
+  } else {
+    format_error("Could not find link information for the mean model in the betareg-object.")
+  }
 }
 
 
@@ -1490,7 +1502,8 @@ model_info.bfsl <- function(x, verbose = TRUE, ...) {
 
 #' @export
 model_info.marginaleffects <- function(x, ...) {
-  model_info(attributes(x)$model)
+  check_if_installed("marginaleffects", minimum_version = "0.28.0.22")
+  model_info(marginaleffects::components(x, "model"))
 }
 
 

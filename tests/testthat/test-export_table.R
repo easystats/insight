@@ -306,8 +306,10 @@ test_that("export_table, by in text format", {
 
 
 test_that("export_table, tinytable with indented rows", {
+  skip_on_cran()
   skip_if_not_installed("parameters")
   skip_if_not_installed("tinytable")
+  skip_if_not_installed("knitr")
 
   data(mtcars)
   mtcars$cyl <- as.factor(mtcars$cyl)
@@ -363,4 +365,27 @@ test_that("export_table, tinytable with indented rows", {
     "Interactions", "Interactions"
   )
   expect_snapshot(export_table(mp, format = "tt", by = "groups", table_width = Inf))
+})
+
+
+test_that("export_table, removing captions work", {
+  skip_on_cran()
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0.19")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+
+  data(iris)
+  mod <- lm(Petal.Length ~ Species, data = iris)
+  means <- modelbased::estimate_means(mod, by = "Species", type = "response")
+
+  expect_snapshot(print(means, table_width = Inf))
+  expect_snapshot(print(means, title = "", table_width = Inf))
+  expect_snapshot(print(means, caption = "", table_width = Inf))
+  expect_snapshot(print(means, footer = "", caption = "", table_width = Inf))
+
+  skip_if_not_installed("gt")
+  set.seed(123)
+  out <- gt::as_raw_html(print_html(means))
+  expect_snapshot(as.character(out))
+  out <- gt::as_raw_html(print_html(means, footer = "", caption = ""))
+  expect_snapshot(as.character(out))
 })

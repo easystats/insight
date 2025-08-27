@@ -239,8 +239,11 @@ link_inverse.svy2lme <- link_inverse.lm
 #' @export
 link_inverse.betareg <- function(x, what = c("mean", "precision"), ...) {
   what <- match.arg(what)
+
+  element_name <- .betareg_mean_element(x)
+
   switch(what,
-    mean = x$link$mean$linkinv,
+    mean = x$link[[element_name]]$linkinv,
     precision = x$link$precision$linkinv
   )
 }

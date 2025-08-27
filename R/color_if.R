@@ -78,26 +78,14 @@ color_if <- function(x,
     xnew[, columns][trim_ws(xnew[, columns]) == "NA"] <- ""
 
     if (!is.null(color_if) && length(x_if)) {
-      xnew[, columns][x_if] <- .colour(color_if, xnew[, columns][x_if])
+      xnew[, columns][x_if] <- .color(xnew[, columns][x_if], color_if)
     }
     if (!is.null(color_else) && length(x_else)) {
-      xnew[, columns][x_else] <- .colour(color_else, xnew[, columns][x_else])
+      xnew[, columns][x_else] <- .color(xnew[, columns][x_else], color_else)
     }
   }
 
   xnew
-}
-
-
-#' Detect coloured cells
-#' @keywords internal
-.colour_detect <- function(x) {
-  ansi_regex <- paste0(
-    "(?:(?:\\x{001b}\\[)|\\x{009b})",
-    "(?:(?:[0-9]{1,3})?(?:(?:;[0-9]{0,3})*)?[A-M|f-m])",
-    "|\\x{001b}[A-M]"
-  )
-  grepl(ansi_regex, x, perl = TRUE)
 }
 
 

@@ -266,6 +266,9 @@ get_variance.wblm <- get_variance.merMod
 get_variance.lme <- get_variance.merMod
 
 #' @export
+get_variance.coxme <- get_variance.merMod
+
+#' @export
 get_variance.brmsfit <- get_variance.merMod
 
 

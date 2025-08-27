@@ -14,7 +14,9 @@
 #' of `"conditional"`, `"zi"`, `"zero-inflated"`, `"dispersion"`, `"precision"`,
 #' or `"all"`. May be abbreviated. Note that the *conditional* component also
 #' refers to the *count* or *mean* component - names may differ, depending on
-#' the modeling package. See section _Model components_ for details.
+#' the modeling package. See section _Model components_ for details. For models
+#' of class `glmmTMB`, the `component` argument can also be `"full"`, to return
+#' the full variance-covariance matrix (including random effects, called `theta`).
 #' @param effects Should the complete variance-covariance matrix of the model
 #' be returned, or only for specific model parameters only? Currently only
 #' applies to models of class `mixor` and `MixMod`.
@@ -38,10 +40,12 @@
 #'      `"PL"`.
 #'    - Kenward-Roger approximation: `kenward-roger`. See `?pbkrtest::vcovAdj`.
 #'
-#' One exception are models of class `glmgee`, which have pre-defined options
-#' for the variance-covariance matrix calculation. These are `"robust"`,
-#' `"df-adjusted"`, `"model"`, `"bias-corrected"`, and `"jackknife"`. See
-#' `?glmtoolbox::vcov.glmgee` for details.
+#' Exceptions are following models:
+#' - Model of class `glmgee`, which have pre-defined options for the
+#'   variance-covariance matrix calculation. These are `"robust"`,
+#'   `"df-adjusted"`, `"model"`, `"bias-corrected"`, and `"jackknife"`. See
+#'   `?glmtoolbox::vcov.glmgee` for details.
+#' - Model of class `glmmTMB` currently only support the `"HC0"` option.
 #' @param vcov_args List of arguments to be passed to the function identified by
 #'   the `vcov` argument. This function is typically supplied by the
 #'   **sandwich** or **clubSandwich** packages. Please refer to their
@@ -192,9 +196,9 @@ get_varcov.glmgee <- function(x,
 #' @export
 get_varcov.nestedLogit <- function(x,
                                    component = "all",
-                                   verbose = TRUE,
                                    vcov = NULL,
                                    vcov_args = NULL,
+                                   verbose = TRUE,
                                    ...) {
   vcovs <- lapply(
     x$models,
@@ -559,20 +563,57 @@ get_varcov.zcpglm <- function(x, component = "conditional", verbose = TRUE, ...)
 
 
 #' @export
-get_varcov.glmmTMB <- function(x, component = "conditional", verbose = TRUE, ...) {
+get_varcov.glmmTMB <- function(x,
+                               component = "conditional",
+                               vcov = NULL,
+                               vcov_args = NULL,
+                               verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
   component <- validate_argument(
     component,
-    c("conditional", "zero_inflated", "zi", "dispersion", "all")
+    c("conditional", "zero_inflated", "zi", "dispersion", "all", "full")
   )
 
-  vc <- switch(component,
-    conditional = .safe_vcov(x)[["cond"]],
-    zi = ,
-    zero_inflated = .safe_vcov(x)[["zi"]],
-    dispersion = .safe_vcov(x)[["disp"]],
-    stats::vcov(x, full = TRUE)
-  )
+  if (is.null(vcov)) {
+    vc <- switch(component,
+      conditional = .safe_vcov(x)[["cond"]],
+      zi = ,
+      zero_inflated = .safe_vcov(x)[["zi"]],
+      dispersion = .safe_vcov(x)[["disp"]],
+      stats::vcov(x, full = TRUE)
+    )
+  } else {
+    vc <- .get_varcov_sandwich(
+      x,
+      vcov_fun = vcov,
+      vcov_args = vcov_args,
+      full = TRUE,
+      verbose = FALSE,
+      ...
+    )
+
+    # find parameters for each component
+    theta_parms <- startsWith(colnames(vc), "theta_")
+    zi_parms <- startsWith(colnames(vc), "zi~")
+    disp_parms <- startsWith(colnames(vc), "disp~")
+    cond_parms <- !zi_parms & !disp_parms & !theta_parms
+
+    # filter vcov
+    vc <- switch(component,
+      conditional = vc[cond_parms, cond_parms, drop = FALSE],
+      zi = ,
+      zero_inflated = vc[zi_parms, zi_parms, drop = FALSE],
+      dispersion = vc[disp_parms, disp_parms, drop = FALSE],
+      vc
+    )
+  }
+
+  # drop theta parameters
+  theta_parms <- startsWith(colnames(vc), "theta_")
+  if (any(theta_parms) && component != "full") {
+    vc <- vc[!theta_parms, !theta_parms, drop = FALSE]
+  }
+
   .process_vcov(vc, verbose, ...)
 }
 

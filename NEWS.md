@@ -1,5 +1,26 @@
 # insight (devel)
 
+## Changes
+
+* `get_varcov()` now supports robust variance-covariance matrices for models
+  of class `glmmTMB` (package *glmmTMB*). The argument `vcov` can be used to
+  specify the robust variance-covariance matrix function. Furthermore, the
+  `component` argument gains the `"full"` option, to return the full
+  variance-covariance matrix, including the random effects (theta parameters).
+
+* `format_table()` now also formats ROPE columns for superiority and inferiority.
+
+* `format_table()` protects integer columns for non-specific column types.
+
+* Modified code base to address changes in the *marginaleffects* package from
+  version 0.29.0 onwards.
+
+## Bug fixes
+
+* Fixed issue with `find_formula()` with *mhurdle* models.
+
+# insight 1.4.0
+
 ## Breaking changes
 
 * `apply_table_theme()` was removed, since it was an experimental feature that
@@ -20,6 +41,15 @@
   group rows and columns in the exported table. Column groups currently only
   work for `format = "tt"`.
 
+* If arguments `title`, `subtitle` and `footer` in `export_table()` are set to
+  an empty string `""`, no titles/subtitles/footers are printed, even if present
+  as attributes.
+
+* Added a `.lavaan` method for `is_converged()`.
+
+* The formerly internal function to extract various information about mixed
+  models is now exported as `get_mixed_info()`.
+
 ## Bug fixes
 
 * Fixed issue with models of class `selection` with multiple response
@@ -29,6 +59,11 @@
 
 * Fixed issue in `find_random()` for multivariate response models of class `brms`
   with special response options.
+
+* Fixed issue in several functions for certain betareg-models that contained
+  a `"mu"` component instead of `"mean"`.
+
+* Fixed CRAN check issues on M1 Macs.
 
 # insight 1.3.1
 

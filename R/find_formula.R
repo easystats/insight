@@ -473,7 +473,9 @@ find_formula.systemfit <- function(x, verbose = TRUE, ...) {
 
 #' @export
 find_formula.marginaleffects <- function(x, verbose = TRUE, ...) {
-  find_formula(attributes(x)$model, verbose = verbose, ...)
+  check_if_installed("marginaleffects", minimum_version = "0.28.0.22")
+  m <- marginaleffects::components(x, "model")
+  find_formula(m, verbose = verbose, ...)
 }
 
 
@@ -933,10 +935,10 @@ find_formula.mhurdle <- function(x, verbose = TRUE, ...) {
   }
 
   # remove "empty" parts
-  if (f.zi == "~0") {
+  if (identical(f.zi, "~0")) {
     f.zi <- NULL
   }
-  if (f.ip == "~0") {
+  if (identical(f.ip, "~0")) {
     f.ip <- NULL
   }
 

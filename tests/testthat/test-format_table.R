@@ -169,7 +169,9 @@ test_that("significance stars", {
 
 
 test_that("modelbased", {
-  skip_if_not_installed("modelbased", minimum_version = "0.9.0.6")
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0.19")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+
   data(iris)
   model <- lm(Petal.Length ~ Species, data = iris)
   out <- modelbased::estimate_means(model, "Species")
@@ -183,4 +185,35 @@ test_that("modelbased", {
     format(out, include_grid = TRUE, select = "{estimate} ({ci})|{stars}"),
     c("qsec", "mpg", "Predicted (CI)")
   )
+})
+
+
+test_that("protect_integers", {
+  data(mtcars)
+  out <- format_table(mtcars[c("am", "wt")])
+  expect_identical(head(out$am), c("1", "1", "1", "0", "0", "0"))
+})
+
+
+test_that("AIC", {
+  set.seed(123)
+  d <- data.frame(
+    x = rnorm(3),
+    AIC = rnorm(3)
+  )
+  out <- format_table(d, digits = 4)
+  expect_identical(out$AIC, c("7.1e-02", "0.1", "1.7"))
+  out <- format_table(d, digits = 4, zap_small = TRUE)
+  expect_identical(out$AIC, c("0.1", "0.1", "1.7"))
+  out <- format_table(d, digits = 4, ic_digits = 3, zap_small = TRUE)
+  expect_identical(out$AIC, c("0.071", "0.129", "1.715"))
+
+  set.seed(123)
+  d <- data.frame(
+    x = rnorm(3),
+    AIC = rnorm(3),
+    AIC_wt = runif(3)
+  )
+  out <- format_table(d, digits = 4)
+  expect_identical(out$`AIC (weights)`, c("7.1e-02 (0.6776)", "0.1 (0.5726)", "1.7 (0.1029)"))
 })

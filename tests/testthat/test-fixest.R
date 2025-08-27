@@ -1,5 +1,5 @@
 # Currently doesn't work on devel - potential fixest issue?
-skip_if(TRUE)
+skip_on_cran()
 
 skip_on_os("mac")
 skip_if_not_installed("fixest", minimum_version = "0.11.2")

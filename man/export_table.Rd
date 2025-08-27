@@ -77,13 +77,18 @@ PDFs etc.}
 \item{title, caption, subtitle}{Table title (same as caption) and subtitle, as
 strings. If \code{NULL}, no title or subtitle is printed, unless it is stored as
 attributes (\code{table_title}, or its alias \code{table_caption}, and
-\code{table_subtitle}). If \code{x} is a list of data frames, \code{caption} may be a list
-of table captions, one for each table.}
+\code{table_subtitle}). If you want to force that no title is printed, even if
+present as attribute, use \code{""}, which will never print titles. If \code{x} is a
+list of data frames, \code{caption} may be a list of table captions, one for
+each table.}
 
 \item{footer}{Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a
 new text line under the table. If \code{x} is a list of data frames, \code{footer}
-may be a list of table captions, one for each table.}
+may be a list of table captions, one for each table. If \code{NULL}, no footer
+is printed, unless it is stored as attributes (\code{table_footer}). If you want
+to force that no footer is printed, even if present as attribute, use \code{""},
+which will never print footers.}
 
 \item{column_names}{Character vector of names that will be used as column
 names in the table. Must either be of same length as columns in the table,

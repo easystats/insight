@@ -125,24 +125,26 @@
 #' @return A data frame. Note that `format_table()` converts all columns
 #' into character vectors!
 #' @export
-format_table <- function(x,
-                         pretty_names = TRUE,
-                         stars = FALSE,
-                         stars_only = FALSE,
-                         digits = 2,
-                         ci_width = "auto",
-                         ci_brackets = TRUE,
-                         ci_digits = digits,
-                         p_digits = 3,
-                         rope_digits = digits,
-                         ic_digits = 1,
-                         zap_small = FALSE,
-                         preserve_attributes = FALSE,
-                         exact = TRUE,
-                         use_symbols = getOption("insight_use_symbols", FALSE),
-                         select = NULL,
-                         verbose = TRUE,
-                         ...) {
+format_table <- function(
+  x,
+  pretty_names = TRUE,
+  stars = FALSE,
+  stars_only = FALSE,
+  digits = 2,
+  ci_width = "auto",
+  ci_brackets = TRUE,
+  ci_digits = digits,
+  p_digits = 3,
+  rope_digits = digits,
+  ic_digits = 1,
+  zap_small = FALSE,
+  preserve_attributes = FALSE,
+  exact = TRUE,
+  use_symbols = getOption("insight_use_symbols", FALSE),
+  select = NULL,
+  verbose = TRUE,
+  ...
+) {
   # validation check
   if (is.null(x) || (is.data.frame(x) && nrow(x) == 0)) {
     if (isTRUE(verbose)) {
@@ -152,11 +154,21 @@ format_table <- function(x,
   }
 
   # check if user supplied digits attributes
-  if (missing(digits)) digits <- .additional_arguments(x, "digits", 2)
-  if (missing(ci_digits)) ci_digits <- .additional_arguments(x, "ci_digits", digits)
-  if (missing(p_digits)) p_digits <- .additional_arguments(x, "p_digits", 3)
-  if (missing(rope_digits)) rope_digits <- .additional_arguments(x, "rope_digits", digits)
-  if (missing(ic_digits)) ic_digits <- .additional_arguments(x, "ic_digits", 1)
+  if (missing(digits)) {
+    digits <- .additional_arguments(x, "digits", 2)
+  }
+  if (missing(ci_digits)) {
+    ci_digits <- .additional_arguments(x, "ci_digits", digits)
+  }
+  if (missing(p_digits)) {
+    p_digits <- .additional_arguments(x, "p_digits", 3)
+  }
+  if (missing(rope_digits)) {
+    rope_digits <- .additional_arguments(x, "rope_digits", digits)
+  }
+  if (missing(ic_digits)) {
+    ic_digits <- .additional_arguments(x, "ic_digits", 1)
+  }
 
   # find name of coefficient, if present
   coef_column_name <- attributes(x)$coef_name
@@ -171,7 +183,6 @@ format_table <- function(x,
   att <- attributes(x)
   x <- as.data.frame(x, stringsAsFactors = FALSE)
 
-
   # Format parameters names ----
   if (pretty_names && !is.null(att$pretty_names)) {
     shared <- intersect(x$Parameter, names(att$pretty_names))
@@ -180,31 +191,37 @@ format_table <- function(x,
   }
 
   # Format specific columns ----
-  if ("n_Obs" %in% names(x)) x$n_Obs <- format_value(x$n_Obs, protect_integers = TRUE)
-  if ("n_Missing" %in% names(x)) x$n_Missing <- format_value(x$n_Missing, protect_integers = TRUE)
-
+  if ("n_Obs" %in% names(x)) {
+    x$n_Obs <- format_value(x$n_Obs, protect_integers = TRUE)
+  }
+  if ("n_Missing" %in% names(x)) {
+    x$n_Missing <- format_value(x$n_Missing, protect_integers = TRUE)
+  }
 
   # Format df columns ----
   x <- .format_df_columns(x)
 
-
   # Format special anova columns ----
   x <- .format_aov_columns(x)
-
 
   # Format frequentist stats ----
   x <- .format_freq_stats(x)
 
-
   # P values ----
   x <- .format_p_values(x, stars = stars, p_digits = p_digits, stars_only = stars_only)
 
-
   # Main CI and Prediction Intervals ----
   x <- .format_main_ci_columns(x, att, ci_digits, zap_small, ci_width, ci_brackets)
-  x <- .format_main_ci_columns(x, att, ci_digits, zap_small, ci_width, ci_brackets, ci_name = "PI")
+  x <- .format_main_ci_columns(
+    x,
+    att,
+    ci_digits,
+    zap_small,
+    ci_width,
+    ci_brackets,
+    ci_name = "PI"
+  )
   x <- .format_broom_ci_columns(x, ci_digits, zap_small, ci_width, ci_brackets)
-
 
   # Misc / Effect Sizes
   x <- .format_effectsize_columns(x, use_symbols)
@@ -214,10 +231,8 @@ format_table <- function(x,
   x <- out$x
   other_ci_colname <- out$other_ci_colname
 
-
   # Standardized ----
   x <- .format_std_columns(x, other_ci_colname, digits, zap_small)
-
 
   # Partial ----
   x[names(x)[endsWith(names(x), "_partial")]] <- format_value(
@@ -229,10 +244,10 @@ format_table <- function(x,
     " (partial)"
   )
 
-
   # metafor ----
-  if ("Weight" %in% names(x)) x$Weight <- format_value(x$Weight, protect_integers = TRUE)
-
+  if ("Weight" %in% names(x)) {
+    x$Weight <- format_value(x$Weight, protect_integers = TRUE)
+  }
 
   # Bayesian ---
   x <- .format_bayes_columns(
@@ -245,21 +260,19 @@ format_table <- function(x,
     exact = exact
   )
 
-
   # rename performance columns
   x <- .format_performance_columns(x, digits, ic_digits, zap_small, use_symbols)
 
-
   # format symbols in column names, if any left
   x <- .format_symbols(x, use_symbols)
-
 
   # Format remaining columns
   other_cols <- names(x)[vapply(x, is.numeric, logical(1))]
   x[other_cols[other_cols %in% names(x)]] <- format_value(
     x[other_cols[other_cols %in% names(x)]],
     digits = digits,
-    zap_small = zap_small
+    zap_small = zap_small,
+    protect_integers = TRUE
   )
 
   # SEM links
@@ -268,7 +281,11 @@ format_table <- function(x,
 
     col_position <- which(names(x) == "To")
     # Replace at initial position
-    x <- x[c(names(x)[0:(col_position - 1)], "Link", names(x)[col_position:(length(names(x)) - 1)])]
+    x <- x[c(
+      names(x)[0:(col_position - 1)],
+      "Link",
+      names(x)[col_position:(length(names(x)) - 1)]
+    )]
     x$To <- x$Operator <- x$From <- NULL
   }
 
@@ -325,7 +342,7 @@ format_table <- function(x,
   for (stats in c(
     "p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA", "p_ROPE",
     "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR", "p_calibrated",
-    "weak_instruments_p"
+    "weak_instruments_p", "p_Superiority", "p_Inferiority"
   )) {
     if (stats %in% names(x)) {
       x[[stats]] <- format_p(
@@ -352,9 +369,13 @@ format_table <- function(x,
 
 .format_df_columns <- function(x) {
   # generic df
-  if ("df" %in% names(x)) x$df <- format_value(x$df, protect_integers = TRUE)
+  if ("df" %in% names(x)) {
+    x$df <- format_value(x$df, protect_integers = TRUE)
+  }
   # residual df
-  if ("df_residual" %in% names(x)) x$df_residual <- format_value(x$df_residual, protect_integers = TRUE)
+  if ("df_residual" %in% names(x)) {
+    x$df_residual <- format_value(x$df_residual, protect_integers = TRUE)
+  }
   names(x)[names(x) == "df_residual"] <- "df"
   # df for errors
   if ("df_error" %in% names(x)) {
@@ -673,6 +694,7 @@ format_table <- function(x,
     names(x)[names(x) == "ROPE_low"] <- "ROPE"
     x$ROPE_CI <- NULL
   }
+
   x
 }
 
@@ -739,6 +761,15 @@ format_table <- function(x,
     x$ROPE_Percentage <- format_rope(x$ROPE_Percentage, name = NULL, digits = rope_digits)
     names(x)[names(x) == "ROPE_Percentage"] <- "% in ROPE"
   }
+  if ("Superiority_Percentage" %in% names(x)) {
+    x$Superiority_Percentage <- format_rope(x$Superiority_Percentage, name = NULL, digits = rope_digits)
+    names(x)[names(x) == "Superiority_Percentage"] <- "Above ROPE"
+  }
+  if ("Inferiority_Percentage" %in% names(x)) {
+    x$Inferiority_Percentage <- format_rope(x$Inferiority_Percentage, name = NULL, digits = rope_digits)
+    names(x)[names(x) == "Inferiority_Percentage"] <- "Below ROPE"
+  }
+
   x <- .format_rope_columns(
     x,
     zap_small = zap_small,
@@ -786,39 +817,78 @@ format_table <- function(x,
 
 .format_performance_columns <- function(x, digits, ic_digits, zap_small, use_symbols) {
   if (isTRUE(use_symbols) && .unicode_symbols()) {
-    if ("R2" %in% names(x)) names(x)[names(x) == "R2"] <- "R\u00b2"
-    if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R\u00b2 (adj.)"
-    if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R\u00b2 (cond.)"
-    if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R\u00b2 (marg.)"
-    if ("R2_Tjur" %in% names(x)) names(x)[names(x) == "R2_Tjur"] <- "Tjur's R\u00b2"
-    if ("R2_Nagelkerke" %in% names(x)) names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R\u00b2"
+    if ("R2" %in% names(x)) {
+      names(x)[names(x) == "R2"] <- "R\u00b2"
+    }
+    if ("R2_adjusted" %in% names(x)) {
+      names(x)[names(x) == "R2_adjusted"] <- "R\u00b2 (adj.)"
+    }
+    if ("R2_conditional" %in% names(x)) {
+      names(x)[names(x) == "R2_conditional"] <- "R\u00b2 (cond.)"
+    }
+    if ("R2_marginal" %in% names(x)) {
+      names(x)[names(x) == "R2_marginal"] <- "R\u00b2 (marg.)"
+    }
+    if ("R2_Tjur" %in% names(x)) {
+      names(x)[names(x) == "R2_Tjur"] <- "Tjur's R\u00b2"
+    }
+    if ("R2_Nagelkerke" %in% names(x)) {
+      names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R\u00b2"
+    }
   } else {
-    if ("R2_adjusted" %in% names(x)) names(x)[names(x) == "R2_adjusted"] <- "R2 (adj.)"
-    if ("R2_conditional" %in% names(x)) names(x)[names(x) == "R2_conditional"] <- "R2 (cond.)"
-    if ("R2_marginal" %in% names(x)) names(x)[names(x) == "R2_marginal"] <- "R2 (marg.)"
-    if ("R2_Tjur" %in% names(x)) names(x)[names(x) == "R2_Tjur"] <- "Tjur's R2"
-    if ("R2_Nagelkerke" %in% names(x)) names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R2"
+    if ("R2_adjusted" %in% names(x)) {
+      names(x)[names(x) == "R2_adjusted"] <- "R2 (adj.)"
+    }
+    if ("R2_conditional" %in% names(x)) {
+      names(x)[names(x) == "R2_conditional"] <- "R2 (cond.)"
+    }
+    if ("R2_marginal" %in% names(x)) {
+      names(x)[names(x) == "R2_marginal"] <- "R2 (marg.)"
+    }
+    if ("R2_Tjur" %in% names(x)) {
+      names(x)[names(x) == "R2_Tjur"] <- "Tjur's R2"
+    }
+    if ("R2_Nagelkerke" %in% names(x)) {
+      names(x)[names(x) == "R2_Nagelkerke"] <- "Nagelkerke's R2"
+    }
   }
-  if ("Performance_Score" %in% names(x)) names(x)[names(x) == "Performance_Score"] <- "Performance-Score"
-  if ("Wu_Hausman" %in% names(x)) names(x)[names(x) == "Wu_Hausman"] <- "Wu & Hausman"
-  if ("p(Wu_Hausman)" %in% names(x)) names(x)[names(x) == "p(Wu_Hausman)"] <- "p(Wu & Hausman)"
-  if ("weak_instruments" %in% names(x)) names(x)[names(x) == "weak_instruments"] <- "Weak instruments"
-  if ("weak_instruments_p" %in% names(x)) names(x)[names(x) == "weak_instruments_p"] <- "p(Weak instruments)"
+  if ("Performance_Score" %in% names(x)) {
+    names(x)[names(x) == "Performance_Score"] <- "Performance-Score"
+  }
+  if ("Wu_Hausman" %in% names(x)) {
+    names(x)[names(x) == "Wu_Hausman"] <- "Wu & Hausman"
+  }
+  if ("p(Wu_Hausman)" %in% names(x)) {
+    names(x)[names(x) == "p(Wu_Hausman)"] <- "p(Wu & Hausman)"
+  }
+  if ("weak_instruments" %in% names(x)) {
+    names(x)[names(x) == "weak_instruments"] <- "Weak instruments"
+  }
+  if ("weak_instruments_p" %in% names(x)) {
+    names(x)[names(x) == "weak_instruments_p"] <- "p(Weak instruments)"
+  }
 
   # Formatting if we have IC and IC weight columns ----
 
   # add IC weights to IC columns. The next code lines only apply if we have
   # both the IC and IC weights in the data frame
   all_ics <- list(
-    AIC = c("AIC", "AIC_wt"), BIC = c("BIC", "BIC_wt"),
-    AICc = c("AICc", "AICc_wt"), WAIC = c("WAIC", "WAIC_wt"),
+    AIC = c("AIC", "AIC_wt"),
+    BIC = c("BIC", "BIC_wt"),
+    AICc = c("AICc", "AICc_wt"),
+    WAIC = c("WAIC", "WAIC_wt"),
     LOOIC = c("LOOIC", "LOOIC_wt")
   )
   for (ic in names(all_ics)) {
     ics <- all_ics[[ic]]
     if (all(ics %in% colnames(x))) {
       x[[ics[1]]] <- format_value(x[[ics[1]]], digits = ic_digits, zap_small = zap_small)
-      x[[ics[2]]] <- format_p(x[[ics[2]]], digits = digits, name = NULL, whitespace = FALSE)
+      x[[ics[2]]] <- format_p(
+        x[[ics[2]]],
+        digits = digits,
+        name = NULL,
+        whitespace = FALSE
+      )
       x[[ics[1]]] <- sprintf("%s (%s)", x[[ics[1]]], x[[ics[2]]])
       x[ics[2]] <- NULL
       names(x)[names(x) == ics[1]] <- sprintf("%s (weights)", ics[1])
@@ -828,11 +898,21 @@ format_table <- function(x,
   # Formatting if we only have IC columns ----
 
   # if we don't have IC weights, format regular IC columns
-  if ("AIC" %in% names(x)) format_value(x[["AIC"]], digits = ic_digits, zap_small = zap_small)
-  if ("BIC" %in% names(x)) format_value(x[["BIC"]], digits = ic_digits, zap_small = zap_small)
-  if ("AICc" %in% names(x)) format_value(x[["AICc"]], digits = ic_digits, zap_small = zap_small)
-  if ("WAIC" %in% names(x)) format_value(x[["WAIC"]], digits = ic_digits, zap_small = zap_small)
-  if ("LOOIC" %in% names(x)) format_value(x[["LOOIC"]], digits = ic_digits, zap_small = zap_small)
+  if ("AIC" %in% names(x)) {
+    x[["AIC"]] <- format_value(x[["AIC"]], digits = ic_digits, zap_small = zap_small)
+  }
+  if ("BIC" %in% names(x)) {
+    x[["BIC"]] <- format_value(x[["BIC"]], digits = ic_digits, zap_small = zap_small)
+  }
+  if ("AICc" %in% names(x)) {
+    x[["AICc"]] <- format_value(x[["AICc"]], digits = ic_digits, zap_small = zap_small)
+  }
+  if ("WAIC" %in% names(x)) {
+    x[["WAIC"]] <- format_value(x[["WAIC"]], digits = ic_digits, zap_small = zap_small)
+  }
+  if ("LOOIC" %in% names(x)) {
+    x[["LOOIC"]] <- format_value(x[["LOOIC"]], digits = ic_digits, zap_small = zap_small)
+  }
 
   # Formatting if we only have IC weights ----
 
