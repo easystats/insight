@@ -137,6 +137,8 @@
 #' @param numerics Type of summary for numeric values *not* specified in `by`.
 #'   Can be `"all"` (will duplicate the grid for all unique values), any
 #'   function (`"mean"`, `"median"`, ...) or a value (e.g., `numerics = 0`).
+#'   Special functions are `"mode"`, which will set the numeric variable to its
+#'   most common value, and `"integer"`, which returns the rounded mean.
 #' @param preserve_range In the case of combinations between numeric variables
 #'   and factors, setting `preserve_range = TRUE` will drop the observations
 #'   where the value of the numeric variable is originally not present in the
@@ -159,7 +161,7 @@
 #' @param protect_integers Defaults to `TRUE`. Indicates whether integers (whole
 #'   numbers) should be treated as integers (i.e., prevent adding any in-between
 #'   round number values), or - if `FALSE` - as regular numeric variables. Only
-#'   applies when:
+#'   applies to focal predictors (specified in `by`) and when:
 #'
 #'   1. `range = "range"` (the default), or if `range = "grid"` and the
 #'   first predictor in `by` is an integer;
@@ -1143,9 +1145,20 @@ get_datagrid.comparisons <- get_datagrid.slopes
     } else if (numerics %in% c("all", "combination")) {
       # all values in the variable are preserved
       out <- unique(x)
+    } else if (numerics == "mode") {
+      out <- .mode_value(x)
+    } else if (numerics == "integer") {
+      out <- round(mean(x, na.rm = TRUE))
     } else {
       # we have a function in "numerics", which is applied here
-      out <- eval(parse(text = paste0(numerics, "(x)")))
+      out <- .safe(do.call(numerics, list(x)))
+      # sanity check
+      if (is.null(out)) {
+        format_error(paste0(
+          "The function specified in `numerics` (", numerics, ") does not return any value.",
+          " Please check the spelling, or report the bug at <https://github.com/easystats/insight/issues>."
+        ))
+      }
     }
   } else if (factors %in% c("all", "combination")) {
     out <- unique(x)
