@@ -47,14 +47,8 @@ get_predicted.lmerMod <- function(x,
 
   # 1. step: predictions
   if (is.null(iterations)) {
-    rez <- suppressWarnings(predict_function(x, data = my_args$data, se.fit = !inherits(x, "glmerMod")))
-    # for glmer, se.fit = TRUE currently fails, so we compute CIs manually
-    # see https://github.com/lme4/lme4/issues/866
-    if (!is.list(rez) || is.null(rez$se.fit)) {
-      predictions <- rez
-    } else {
-      predictions <- as.numeric(rez$fit)
-    }
+    rez <- suppressWarnings(predict_function(x, data = my_args$data, se.fit = !is.null(ci)))
+    predictions <- as.numeric(rez$fit)
   } else {
     predictions <- .get_predicted_boot(
       x,
@@ -67,30 +61,16 @@ get_predicted.lmerMod <- function(x,
   }
 
   # 2. step: confidence intervals
-  if (!is.list(rez) || is.null(rez$se.fit)) {
-    # for glmer, se.fit = TRUE currently fails, so we compute CIs manually
-    # see https://github.com/lme4/lme4/issues/866
-    ci_data <- get_predicted_ci(
-      x,
-      predictions,
-      data = my_args$data,
-      ci = ci,
-      ci_method = ci_method,
-      ci_type = my_args$ci_type,
-      ...
-    )
-  } else {
-    ci_data <- .get_predicted_se_to_ci(
-      x,
-      predictions = predictions,
-      se = rez$se.fit,
-      ci = ci,
-      ci_method = ci_method,
-      ci_type = my_args$ci_type,
-      verbose = verbose,
-      ...
-    )
-  }
+  ci_data <- .get_predicted_se_to_ci(
+    x,
+    predictions = predictions,
+    se = rez$se.fit,
+    ci = ci,
+    ci_method = ci_method,
+    ci_type = my_args$ci_type,
+    verbose = verbose,
+    ...
+  )
 
   # 3. step: back-transform
   out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
