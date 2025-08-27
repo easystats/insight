@@ -12,6 +12,10 @@
 
 * `format_table()` protects integer columns for non-specific column types.
 
+* The `numerics` argument in `get_datagrid()` gains two new options, `"integer"`
+  and `"mode"`, to either return the rounded mean or the most frequent value of
+  a numeric vector.
+
 * Modified code base to address changes in the *marginaleffects* package from
   version 0.29.0 onwards.
 
