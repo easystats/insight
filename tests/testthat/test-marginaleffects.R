@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 skip_if_not_installed("emmeans")
 
 test_that("marginaleffects", {
@@ -28,12 +28,17 @@ test_that("marginaleffects", {
   expect_identical(insight::find_statistic(x), "z-statistic")
 
   # standardize names - "s.value" becomes "S"
-  skip_if_not_installed("parameters", minimum_version = "0.24.0")
-  skip_if_not_installed("marginaleffects", minimum_version = "0.24.0.6")
+  skip_if_not_installed("parameters", minimum_version = "0.28.0.13")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 
-
-  cols <- c("rowid", "Parameter", "Comparison", "Coefficient", "SE", "Statistic", "p", "S", "CI", "CI_low", "CI_high", "Predicted", "Species", "Petal.Length")
-  expect_true(all(cols %in% colnames(parameters::model_parameters(x))))
+  expect_named(
+    parameters::model_parameters(x),
+    c(
+      "rowid", "Parameter", "Comparison", "Coefficient", "SE", "Statistic",
+      "p", "S", "CI", "CI_low", "CI_high", "Species", "Petal.Length",
+      "Predicted"
+    )
+  )
 
   expect_equal(n_obs(x), 150) # nrow(iris)
 })

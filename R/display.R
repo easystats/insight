@@ -18,6 +18,12 @@
 #' @return Depending on `format`, either an object of class `gt_tbl`,
 #' `tinytable`, or a character vector of class `knitr_kable`.
 #'
+#' @section Global Options to Customize Output when Printing:
+#'
+#' - `easystats_display_format`: `options(easystats_display_format = <value>)`
+#'   will set the default format for the `display()` methods. Can be one of
+#'   `"markdown"`, `"html"`, or `"tt"`.
+#'
 #' @examplesIf all(check_if_installed(c("gt", "tinytable"), quietly = TRUE))
 #' display(iris[1:5, ], format = "html")
 #'
@@ -49,7 +55,7 @@ print_html <- function(x, ...) {
 #' @rdname display
 #' @export
 display.data.frame <- function(object, format = "markdown", ...) {
-  format <- validate_argument(format, c("md", "markdown", "html", "tt"))
+  format <- .display_default_format(format)
 
   if (identical(format, "html")) {
     print_html(x = object, ...)
@@ -151,4 +157,9 @@ print_html.table <- function(x, ...) {
   rownames(x) <- NULL
   colnames(x)[1] <- col_names
   x
+}
+
+.display_default_format <- function(format) {
+  format <- getOption("easystats_display_format", format)
+  validate_argument(format, c("markdown", "html", "md", "tt"))
 }

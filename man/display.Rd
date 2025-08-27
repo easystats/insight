@@ -43,6 +43,15 @@ usually is a convenient wrapper for \code{display(format = "markdown")}.
 Similar, \code{print_html()} is a shortcut for \code{display(format = "html")}.
 See the documentation for the specific objects' classes.
 }
+\section{Global Options to Customize Output when Printing}{
+
+\itemize{
+\item \code{easystats_display_format}: \verb{options(easystats_display_format = <value>)}
+will set the default format for the \code{display()} methods. Can be one of
+\code{"markdown"}, \code{"html"}, or \code{"tt"}.
+}
+}
+
 \examples{
 \dontshow{if (all(check_if_installed(c("gt", "tinytable"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 display(iris[1:5, ], format = "html")
