@@ -143,6 +143,13 @@ test_that("format_p", {
   expect_identical(nchar(format_p(0.02)), 9L)
   expect_identical(nchar(format_p(0.02, stars = TRUE)), 10L)
   expect_identical(nchar(format_p(0.02, stars_only = TRUE)), 1L)
+
+  expect_identical(format_p(0.02), "p = .020")
+  expect_identical(format_p(0.02, lead_zero = TRUE), "p = 0.020")
+  expect_identical(format_p(0.02, stars = TRUE), "p = .020*")
+  expect_identical(format_p(0.02, stars = TRUE, lead_zero = TRUE), "p = 0.020*")
+  expect_identical(format_p(0.0214568, digits = "apa"), "p = .021")
+  expect_identical(format_p(0.0214568, digits = "apa", lead_zero = TRUE), "p = 0.021")
 })
 
 test_that("format_table, other CI columns", {

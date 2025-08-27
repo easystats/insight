@@ -13,6 +13,7 @@ format_p(
   missing = "",
   decimal_separator = NULL,
   digits = 3,
+  lead_zero = FALSE,
   ...
 )
 }
@@ -41,6 +42,10 @@ an APA 7th edition-style for p-values (equivalent to \code{digits = 3}).
 If \code{"scientific"}, control the number of digits by adding the value as
 a suffix, e.g.m \code{digits = "scientific4"} to have scientific notation
 with 4 decimal places.}
+
+\item{lead_zero}{Logical, if \code{FALSE} (default), removes leading zero
+before decimal separator. Otherwise, retain leading zero except when
+p value is truncated}
 
 \item{...}{Arguments from other methods.}
 }

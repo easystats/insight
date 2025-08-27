@@ -17,8 +17,8 @@
 #'   If `"scientific"`, control the number of digits by adding the value as
 #'   a suffix, e.g.m `digits = "scientific4"` to have scientific notation
 #'   with 4 decimal places.
-#' @param leading_zero Logical, if `FALSE` (default), removes leading zero 
-#'   before decimal seperator. Otherwise, retain leading zero except when 
+#' @param lead_zero Logical, if `FALSE` (default), removes leading zero
+#'   before decimal separator. Otherwise, retain leading zero except when
 #'   p value is truncated
 #' @param ... Arguments from other methods.
 #' @inheritParams format_value
@@ -43,7 +43,7 @@ format_p <- function(p,
                      missing = "",
                      decimal_separator = NULL,
                      digits = 3,
-                     leading_zero = FALSE
+                     lead_zero = FALSE,
                      ...) {
   # only convert p if it's a valid numeric, or at least coercible to
   # valid numeric values...
@@ -61,6 +61,15 @@ format_p <- function(p,
 
   if (digits == "apa") {
     digits <- 3
+  }
+
+  # hard-coded thresholds for small p-values, including or excluding leading zero
+  if (lead_zero) {
+    low_p <- "< 0.001***"
+    high_p <- "> 0.999"
+  } else {
+    low_p <- "< .001***"
+    high_p <- "> .999"
   }
 
   if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
@@ -83,11 +92,11 @@ format_p <- function(p,
     )
   } else if (digits <= 3) {
     p_text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, "< .001***", # nolint
-        ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"), # nolint
-          ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"), # nolint
-            ifelse(p > 0.999, "> .999", # nolint
-              paste0("= ", format_value(p, digits))
+      ifelse(p < 0.001, low_p, # nolint
+        ifelse(p < 0.01, paste0("= ", format_value(p, digits, lead_zero = lead_zero), "**"), # nolint
+          ifelse(p < 0.05, paste0("= ", format_value(p, digits, lead_zero = lead_zero), "*"), # nolint
+            ifelse(p > 0.999, high_p, # nolint
+              paste0("= ", format_value(p, digits, lead_zero = lead_zero))
             )
           )
         )
@@ -95,10 +104,10 @@ format_p <- function(p,
     )
   } else {
     p_text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, paste0("= ", format_value(p, digits), "***"), # nolint
-        ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"), # nolint
-          ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"), # nolint
-            paste0("= ", format_value(p, digits))
+      ifelse(p < 0.001, paste0("= ", format_value(p, digits, lead_zero = lead_zero), "***"), # nolint
+        ifelse(p < 0.01, paste0("= ", format_value(p, digits, lead_zero = lead_zero), "**"), # nolint
+          ifelse(p < 0.05, paste0("= ", format_value(p, digits, lead_zero = lead_zero), "*"), # nolint
+            paste0("= ", format_value(p, digits, lead_zero = lead_zero))
           )
         )
       )
@@ -150,15 +159,6 @@ format_p <- function(p,
   # replace decimal separator
   if (!is.null(decimal_separator)) {
     p_text <- gsub(".", decimal_separator, p_text, fixed = TRUE)
-  }
-
-  # remove leading zero 
-  if(!leading_zero){
-    # build a regex that matches "0<sep>" only when preceded by start, space, or an operator (= < >)
-    sep_esc <- if (is.null(decimal_separator)) "\\." else gsub("([\\^$.|?*+(){}\\[\\]\\\\])", "\\\\\\1", decimal_separator)
-    pattern <- paste0("(?:(?<=^)|(?<=\\s)|(?<==)|(?<=<)|(?<=>))0(", sep_esc, ")")
-    # replace with just the separator (i.e., ".123" or ",123")
-    p_text <- gsub(pattern, "\\1", p_text, perl = TRUE)
   }
 
   p_text
