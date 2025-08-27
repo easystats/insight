@@ -47,7 +47,7 @@ get_predicted.lmerMod <- function(x,
 
   # 1. step: predictions
   if (is.null(iterations)) {
-    rez <- predict_function(x, data = my_args$data, se.fit = TRUE)
+    rez <- suppressWarnings(predict_function(x, data = my_args$data, se.fit = TRUE))
     predictions <- as.numeric(rez$fit)
   } else {
     predictions <- .get_predicted_boot(
