@@ -163,3 +163,9 @@ A special option is `format = "tt"`, which creates a table using the {tinytable}
 ```{r}
 display(df, format = "tt")
 ```
+
+Since all arguments are passed to `export_table()`, you can, for instance, also use the `by` argument for grouping.
+
+```{r}
+display(df, format = "tt", by = "Group")
+```
