@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,21 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.1" id="insight-141">insight 1.4.1<a class="anchor" aria-label="anchor" href="#insight-141"></a></h2><p class="text-muted">CRAN release: 2025-08-29</p>
+<div class="section level3">
+<h3 id="changes-1-4-1">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-1"></a></h3>
+<ul><li><p><code><a href="../reference/get_varcov.html">get_varcov()</a></code> now supports robust variance-covariance matrices for models of class <code>glmmTMB</code> (package <em>glmmTMB</em>). The argument <code>vcov</code> can be used to specify the robust variance-covariance matrix function. Furthermore, the <code>component</code> argument gains the <code>"full"</code> option, to return the full variance-covariance matrix, including the random effects (theta parameters).</p></li>
+<li><p><code><a href="../reference/format_table.html">format_table()</a></code> now also formats ROPE columns for superiority and inferiority.</p></li>
+<li><p><code><a href="../reference/format_table.html">format_table()</a></code> protects integer columns for non-specific column types.</p></li>
+<li><p>The <code>numerics</code> argument in <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> gains two new options, <code>"integer"</code> and <code>"mode"</code>, to either return the rounded mean or the most frequent value of a numeric vector.</p></li>
+<li><p>Modified code base to address changes in the <em>marginaleffects</em> package from version 0.29.0 onwards.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-1"></a></h3>
+<ul><li>Fixed issue with <code><a href="../reference/find_formula.html">find_formula()</a></code> with <em>mhurdle</em> models.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.0" id="insight-140">insight 1.4.0<a class="anchor" aria-label="anchor" href="#insight-140"></a></h2><p class="text-muted">CRAN release: 2025-08-18</p>
 <div class="section level3">
