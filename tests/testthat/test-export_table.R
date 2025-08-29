@@ -370,8 +370,8 @@ test_that("export_table, tinytable with indented rows", {
 
 test_that("export_table, removing captions work", {
   skip_on_cran()
-  skip_if_not_installed("modelbased", minimum_version = "0.12.0.19")
-  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+  skip_if_not_installed("modelbased", minimum_version = "0.13.0")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
   data(iris)
   mod <- lm(Petal.Length ~ Species, data = iris)

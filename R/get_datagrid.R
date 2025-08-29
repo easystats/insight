@@ -888,7 +888,7 @@ get_datagrid.datagrid <- get_datagrid.visualisation_matrix
 #' eml1 <- emmeans::emmeans(mod, pairwise ~ cyl | hp, at = list(hp = c(100, 150)))
 #' get_datagrid(eml1) # not a "true" grid
 #'
-#' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.25.0")
+#' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.29.0")
 #' mfx1 <- marginaleffects::slopes(mod, variables = "hp")
 #' get_datagrid(mfx1) # not a "true" grid
 #'
@@ -931,7 +931,7 @@ get_datagrid.emm_list <- function(x, ...) {
 
 #' @export
 get_datagrid.slopes <- function(x, ...) {
-  check_if_installed("marginaleffects", minimum_version = "0.28.0.22")
+  check_if_installed("marginaleffects", minimum_version = "0.29.0")
   by_cols <- unique(c(
     marginaleffects::components(x, "variable_names_by"),
     marginaleffects::components(x, "variable_names_by_hypothesis"),

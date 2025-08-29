@@ -33,7 +33,7 @@ is_mixed_model.afex_aov <- function(x) {
 
 #' @export
 is_mixed_model.marginaleffects <- function(x) {
-  check_if_installed("marginaleffects", minimum_version = "0.28.0.22")
+  check_if_installed("marginaleffects", minimum_version = "0.29.0")
   m <- marginaleffects::components(x, "model")
   is_mixed_model(m)
 }

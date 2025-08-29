@@ -113,7 +113,7 @@ test_that("get_predicted - glm", {
 })
 
 test_that("get_predicted - glm", {
-  skip_if_not_installed("modelbased", minimum_version = "0.12.0.19")
+  skip_if_not_installed("modelbased", minimum_version = "0.13.0")
   # link works for gaussian with log-link
   set.seed(123)
   dat <- data.frame(Y = rlnorm(100), x = rnorm(100))
