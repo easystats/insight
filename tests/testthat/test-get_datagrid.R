@@ -759,7 +759,7 @@ withr::with_environment(
     skip_if_not_installed("RcppEigen")
     skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
     skip_if_not_installed("httr2")
-    skip_if_not_installed("modelbased", minimum_version = "0.12.0.19")
+    skip_if_not_installed("modelbased", minimum_version = "0.13.0")
 
     data(efc, package = "modelbased")
     efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
