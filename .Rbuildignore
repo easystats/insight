@@ -22,3 +22,5 @@
 ^CRAN-SUBMISSION$
 ^Rplots.pdf$
 ^tests/testthat/_snaps/.
+^[.]?air[.]toml$
+^\.vscode$
