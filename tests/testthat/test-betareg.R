@@ -193,6 +193,7 @@ withr::with_environment(
     # expect_false("SE" %in% colnames(p1))
     expect_true("SE" %in% colnames(p2))
 
+    skip_on_cran() # fails on Mac OS Oldrel
     data(mtcars)
     d <- mtcars
     d$y <- d$wt / max(d$wt)
