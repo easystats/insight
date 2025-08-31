@@ -740,19 +740,27 @@ get_predicted.phylolm <- function(x,
       link_inv <- .link_inverse(model = x, verbose = verbose, ...)
     }
 
-    if (!is.null(ci_data)) {
-      # Transform CI
-      se_col <- names(ci_data) == "SE"
+    # find columns with standard errors
+    se_col <- names(ci_data) == "SE"
 
+    # Transform CI
+    if (!is.null(ci_data)) {
       # fix for R 3.4
       row.names(ci_data) <- NULL
 
-      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inv)
+      # any valid values?
+      na_columns <- vapply(ci_data[!se_col], function(z) all(is.na(z)), logical(1))
+
+      if (!any(na_columns)) {
+        ci_data[!se_col] <- lapply(ci_data[!se_col], link_inv)
+      }
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
       # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
       mu_eta <- .safe(abs(get_family(x)$mu.eta(predictions)))
-      if (is.null(mu_eta)) {
+      if (any(se_col) && !all(is.na(ci_data[se_col])) && !is.null(mu_eta)) {
+        ci_data[se_col] <- ci_data[se_col] * mu_eta
+      } else {
         ci_data[se_col] <- NULL
         if (isTRUE(verbose)) {
           format_warning(
@@ -761,8 +769,6 @@ get_predicted.phylolm <- function(x,
             "`predict=\"link\"` argument value."
           )
         }
-      } else {
-        ci_data[se_col] <- ci_data[se_col] * mu_eta
       }
     }
 
