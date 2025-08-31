@@ -740,6 +740,14 @@ get_predicted.phylolm <- function(x,
       link_inv <- .link_inverse(model = x, verbose = verbose, ...)
     }
 
+    # Transform predictions
+    predictions <- link_inv(predictions)
+
+    # Transform iterations
+    if ("iterations" %in% names(attributes(predictions))) {
+      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv)) # nolint
+    }
+
     # Transform CI
     if (!is.null(ci_data)) {
       # find columns with standard errors
@@ -770,29 +778,21 @@ get_predicted.phylolm <- function(x,
           )
         }
       }
-    }
 
-    # Transform predictions
-    predictions <- link_inv(predictions)
-
-    # Transform iterations
-    if ("iterations" %in% names(attributes(predictions))) {
-      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv)) # nolint
-    }
-
-    # Transform to response "type"
-    if (my_args$predict == "classification" && model_info(x, response = 1, verbose = FALSE)$is_binomial) {
-      response <- get_response(x, as_proportion = TRUE)
-      ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
-      predictions <- .get_predict_transform_response(predictions, response = response)
-      if ("iterations" %in% names(attributes(predictions))) {
-        attr(predictions, "iterations") <- as.data.frame(
-          sapply( # nolint
-            attributes(predictions)$iterations,
-            .get_predict_transform_response,
-            response = response
+      # Transform to response "type"
+      if (my_args$predict == "classification" && model_info(x, response = 1, verbose = FALSE)$is_binomial) {
+        response <- get_response(x, as_proportion = TRUE)
+        ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
+        predictions <- .get_predict_transform_response(predictions, response = response)
+        if ("iterations" %in% names(attributes(predictions))) {
+          attr(predictions, "iterations") <- as.data.frame(
+            sapply( # nolint
+              attributes(predictions)$iterations,
+              .get_predict_transform_response,
+              response = response
+            )
           )
-        )
+        }
       }
     }
   }
