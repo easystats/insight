@@ -747,7 +747,14 @@ get_predicted.phylolm <- function(x,
       # fix for R 3.4
       row.names(ci_data) <- NULL
 
-      ci_data[!se_col] <- lapply(ci_data[!se_col], link_inv)
+      # need to check type, of "value", else it fails on CRAN for MacOS old-release
+      ci_data[!se_col] <- lapply(ci_data[!se_col], function(value) {
+        if (is.numeric(value)) {
+          link_inv(value)
+        } else {
+          NA_real_
+        }
+      })
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
       # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
@@ -776,7 +783,12 @@ get_predicted.phylolm <- function(x,
 
     # Transform to response "type"
     if (my_args$predict == "classification" && model_info(x, response = 1, verbose = FALSE)$is_binomial) {
+      # we have to re-define SE column again, it a) might not be initialized yet
+      # or b) have been removed above if mu_eta was NULL
+      se_col <- names(ci_data) == "SE"
       response <- get_response(x, as_proportion = TRUE)
+      # for classification, we need to "round" the values and only return
+      # values for the actual factor levels
       ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
       predictions <- .get_predict_transform_response(predictions, response = response)
       if ("iterations" %in% names(attributes(predictions))) {
