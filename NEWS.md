@@ -1,3 +1,9 @@
+# insight (devel)
+
+## Bug fixes
+
+* Fix CRAN failures for Mac OS R-old-release.
+
 # insight 1.4.1
 
 ## Changes
