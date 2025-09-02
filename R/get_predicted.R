@@ -749,7 +749,7 @@ get_predicted.phylolm <- function(x,
 
       # need to check type, of "value", else it fails on CRAN for MacOS old-release
       ci_data[!se_col] <- lapply(ci_data[!se_col], function(value) {
-        if (is.numeric(value)) {
+        if (is.numeric(value) && !all(is.na(value))) {
           link_inv(value)
         } else {
           NA_real_
