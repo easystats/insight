@@ -331,10 +331,19 @@ get_parameters.lcmm <- function(x, component = "all", ...) {
     comp[startsWith(names(params), "Linear")] <- "linear"
   }
 
+  # check if we have mutilple classes
+  if (any(grepl("(.*) (class\\d+)$", names(params)))) {
+    grp <- "link"
+    grp <- gsub("(.*) (class\\d+)$", "\\2", names(params))
+  } else {
+    grp <- NULL
+  }
+
   out <- data.frame(
     Parameter = names(params),
     Estimate = as.vector(params),
     Component = comp,
+    Group = grp,
     stringsAsFactors = FALSE,
     row.names = NULL
   )

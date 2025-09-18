@@ -228,10 +228,19 @@ get_statistic.lcmm <- function(x, ...) {
     Component[startsWith(names(statistic), "Linear")] <- "linear"
   }
 
+  # check if we have mutilple classes
+  if (any(grepl("(.*) (class\\d+)$", names(statistic)))) {
+    grp <- "link"
+    grp <- gsub("(.*) (class\\d+)$", "\\2", names(statistic))
+  } else {
+    grp <- NULL
+  }
+
   out <- data.frame(
     Parameter = names(statistic),
     Statistic = as.vector(statistic),
     Component = Component,
+    Group = grp,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
