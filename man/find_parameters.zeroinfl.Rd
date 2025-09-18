@@ -102,7 +102,7 @@ here. It can be any pre-defined or arbitrary distributional parameter, like
 }
 
 \examples{
-\dontshow{if (requireNamespace("pscl", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("pscl", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(bioChemists, package = "pscl")
 m <- pscl::zeroinfl(
   art ~ fem + mar + kid5 + ment | kid5 + phd,

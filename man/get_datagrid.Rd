@@ -265,7 +265,7 @@ meaningful (or representative) values, either use \code{by}, or use a combinatio
 of the arguments \code{length} and \code{range}.
 }
 \examples{
-\dontshow{if (require("bayestestR", quietly = TRUE) && require("datawizard", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("bayestestR", quietly = TRUE) && require("datawizard", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # Datagrids of variables and dataframes =====================================
 data(iris)
 data(mtcars)

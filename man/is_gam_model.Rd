@@ -24,7 +24,7 @@ formula. If model has no smooth terms or is not from a typical gam class,
 \code{FALSE} is returned.
 }
 \examples{
-\dontshow{if (require("mgcv")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("mgcv")) withAutoprint(\{ # examplesIf}
 data(iris)
 model1 <- lm(Petal.Length ~ Petal.Width + Sepal.Length, data = iris)
 model2 <- mgcv::gam(Petal.Length ~ Petal.Width + s(Sepal.Length), data = iris)

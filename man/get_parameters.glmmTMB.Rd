@@ -103,7 +103,7 @@ here. It can be any pre-defined or arbitrary distributional parameter, like
 }
 
 \examples{
-\dontshow{if (requireNamespace("glmmTMB", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("glmmTMB", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(Salamanders, package = "glmmTMB")
 m <- glmmTMB::glmmTMB(
   count ~ mined + (1 | site),

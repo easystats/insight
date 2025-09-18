@@ -55,7 +55,7 @@ For \code{style = "easystats"}, when \code{data} is an object from \code{broom::
 column names are converted from "broom"-style into "easystats"-style.
 }
 \examples{
-\dontshow{if (require("parameters")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("parameters")) withAutoprint(\{ # examplesIf}
 model <- lm(mpg ~ wt + cyl, data = mtcars)
 mp <- model_parameters(model)
 

@@ -157,7 +157,7 @@ here. It can be any pre-defined or arbitrary distributional parameter, like
 }
 
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(cbpp, package = "lme4")
 cbpp$trials <- cbpp$size - cbpp$incidence
 m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)

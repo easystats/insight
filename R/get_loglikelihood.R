@@ -364,6 +364,11 @@ get_loglikelihood.phylolm <- function(x, check_response = FALSE, verbose = TRUE,
 #' @export
 get_loglikelihood.phyloglm <- get_loglikelihood.phylolm
 
+#' @export
+get_loglikelihood.lcmm <- function(x, verbose = TRUE, ...) {
+  x$loglik
+}
+
 
 # Methods WITH individual LLs ---------------------------------------------
 

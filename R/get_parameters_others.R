@@ -309,6 +309,36 @@ get_parameters.mjoint <- function(x, component = "all", ...) {
 
 
 #' @export
+get_parameters.lcmm <- function(x, ...) {
+  params <- x$best
+  params <- names(params)[
+    !startsWith(names(params), "cholesky ") | !startsWith(names(params), "varcov ")
+  ]
+  Component <- rep("conditional", times = length(params))
+
+  if (x$linktype == 1) {
+    Component <- Component[startsWith(names(params), "Beta")] <- "beta"
+  } else if (x$linktype == 2) {
+    Component <- Component[startsWith(names(statisparamstic), "I-splines")] <- "splines"
+  } else if (x$linktype == 3) {
+    ## TODO: thresholds
+  } else {
+    Component <- Component[startsWith(names(params), "Linear")] <- "linear"
+  }
+
+  out <- data.frame(
+    Parameter = names(params),
+    Estimate = as.vector(params),
+    Component = Component,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  text_remove_backticks(out)
+}
+
+
+#' @export
 get_parameters.systemfit <- function(x, ...) {
   cf <- stats::coef(summary(x))
   f <- find_formula(x, verbose = FALSE)

@@ -23,7 +23,7 @@ Small helper that checks if all objects are \emph{supported}
 (regression) model objects and of same class.
 }
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(mtcars)
 data(sleepstudy, package = "lme4")
 

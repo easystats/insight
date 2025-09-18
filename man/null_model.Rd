@@ -24,7 +24,7 @@ This function computes the null-model (i.e. \code{(y ~ 1)}) of
 a model. For mixed models, the null-model takes random effects into account.
 }
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(sleepstudy)
 m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 summary(m)

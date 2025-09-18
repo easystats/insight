@@ -38,7 +38,7 @@ vector, while \code{find_variables()} returns a list of character
 vectors, unless \code{flatten = TRUE}. See 'Examples'.
 }
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # example from ?stats::glm
 counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
 outcome <- as.numeric(gl(3, 1, 9))

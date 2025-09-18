@@ -53,7 +53,7 @@ will set the default format for the \code{display()} methods. Can be one of
 }
 
 \examples{
-\dontshow{if (all(check_if_installed(c("gt", "tinytable"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(check_if_installed(c("gt", "tinytable"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 display(iris[1:5, ], format = "html")
 
 display(iris[1:5, ], format = "tt")

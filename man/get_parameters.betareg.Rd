@@ -91,7 +91,7 @@ here. It can be any pre-defined or arbitrary distributional parameter, like
 }
 
 \examples{
-\dontshow{if (requireNamespace("betareg", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("betareg", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data("GasolineYield", package = "betareg")
 m <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
 get_parameters(m)

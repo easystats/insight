@@ -321,3 +321,39 @@ find_parameters.oohbchoice <- function(x, flatten = FALSE, ...) {
     out
   }
 }
+
+
+#' @export
+find_parameters.lcmm <- function(x, component = "all", flatten = FALSE, ...) {
+  coefficients <- stats::coef(x)
+  params <- names(coefficients)[!startsWith(names(coefficients), "cholesky ")]
+
+  if (x$linktype == 1) {
+    # beta
+    out <- list(
+      conditional = params[!startsWith(params, "Beta")],
+      beta = params[startsWith(params, "Beta")]
+    )
+  } else if (x$linktype == 2) {
+    # splines - we don't want coefficients whose name starts with "cholesky"
+    out <- list(
+      conditional = params[!startsWith(params, "I-splines")],
+      splines = params[startsWith(params, "I-splines")]
+    )
+  } else if (x$linktype == 3) {
+    ## TODO: thresholds
+  } else {
+    # default and linear link, we use all coefficients
+    out <- list(
+      conditional = params[!startsWith(params, "Linear")],
+      linear = params[startsWith(params, "Linear")]
+    )
+  }
+  out <- compact_list(out)
+
+  if (flatten) {
+    unique(unlist(out, use.names = FALSE))
+  } else {
+    out
+  }
+}

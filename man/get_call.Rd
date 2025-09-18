@@ -16,7 +16,7 @@ A function call.
 Returns the model's function call when available.
 }
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 get_call(m)

@@ -158,7 +158,7 @@ here. It can be any pre-defined or arbitrary distributional parameter, like
 }
 
 \examples{
-\dontshow{if (require("pscl") && require("sandwich")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("pscl") && require("sandwich")) withAutoprint(\{ # examplesIf}
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 get_varcov(m)

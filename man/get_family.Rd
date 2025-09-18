@@ -16,7 +16,7 @@ A robust and resilient alternative to \code{stats::family}. To avoid issues
 with models like \code{gamm4}.
 }
 \examples{
-\dontshow{if (require("mgcv")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("mgcv")) withAutoprint(\{ # examplesIf}
 data(mtcars)
 x <- glm(vs ~ wt, data = mtcars, family = "binomial")
 get_family(x)

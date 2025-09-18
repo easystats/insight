@@ -36,7 +36,7 @@ mod <- glm(am ~ cyl + hp + wt,
   data = mtcars
 )
 
-\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 em1 <- emmeans::emmeans(mod, ~ cyl + hp, at = list(hp = c(100, 150)))
 get_datagrid(em1)
 
@@ -46,7 +46,7 @@ get_datagrid(contr1)
 eml1 <- emmeans::emmeans(mod, pairwise ~ cyl | hp, at = list(hp = c(100, 150)))
 get_datagrid(eml1) # not a "true" grid
 \dontshow{\}) # examplesIf}
-\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.29.0")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE, minimum_version = "0.29.0")) withAutoprint(\{ # examplesIf}
 mfx1 <- marginaleffects::slopes(mod, variables = "hp")
 get_datagrid(mfx1) # not a "true" grid
 

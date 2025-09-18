@@ -19,7 +19,7 @@ A character vector with the name(s) of the smooth terms.
 Return the names of smooth terms from a model object.
 }
 \examples{
-\dontshow{if (require("mgcv")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("mgcv")) withAutoprint(\{ # examplesIf}
 data(iris)
 model <- mgcv::gam(Petal.Length ~ Petal.Width + s(Sepal.Length), data = iris)
 find_smooth(model)

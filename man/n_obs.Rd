@@ -51,7 +51,7 @@ data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 n_obs(m)
 
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(cbpp, package = "lme4")
 m <- glm(
   cbind(incidence, size - incidence) ~ period,

@@ -41,12 +41,12 @@ as well as optimization functions, or for Bayesian model information on
 chains, iterations and warmup-samples.
 }
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(sleepstudy, package = "lme4")
 m <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
 find_algorithm(m)
 \dontshow{\}) # examplesIf}
-\dontshow{if (require("rstanarm") && require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("rstanarm") && require("lme4")) withAutoprint(\{ # examplesIf}
 \donttest{
 data(sleepstudy, package = "lme4")
 m <- suppressWarnings(rstanarm::stan_lmer(
