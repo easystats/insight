@@ -758,6 +758,20 @@ get_varcov.merModList <- function(x, ...) {
 
 
 #' @export
+get_varcov.lcmm <- function(x, ...) {
+  .check_get_varcov_dots(x, ...)
+  format_warning("Can't access variance-covariance matrix for 'lcmm' objects.")
+  NULL
+}
+
+#' @export
+get_varcov.externX <- get_varcov.lcmm
+
+#' @export
+get_varcov.externVar <- get_varcov.lcmm
+
+
+#' @export
 get_varcov.mediate <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
   format_warning("Can't access variance-covariance matrix for 'mediate' objects.")
