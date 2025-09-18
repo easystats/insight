@@ -312,14 +312,14 @@ get_parameters.mjoint <- function(x, component = "all", ...) {
 get_parameters.lcmm <- function(x, component = "all", ...) {
   component <- validate_argument(
     component,
-    c("all", "conditional", "beta", "splines", "linear")
+    c("all", "conditional", "membership", "longitudinal", "beta", "splines", "linear")
   )
 
   params <- x$best
   params <- params[
     !startsWith(names(params), "cholesky ") & !startsWith(names(params), "varcov ")
   ]
-  comp <- rep("conditional", times = length(params))
+  comp <- rep("longitudinal", times = length(params))
 
   if (x$linktype == 1) {
     comp[startsWith(names(params), "Beta")] <- "beta"
@@ -329,6 +329,14 @@ get_parameters.lcmm <- function(x, component = "all", ...) {
     ## TODO: thresholds
   } else {
     comp[startsWith(names(params), "Linear")] <- "linear"
+  }
+
+  # check whether we have membership and longitudinal submodel
+  n_membership <- x$N[1]
+  n_longitudinal <- x$N[2]
+
+  if (n_membership > 0) {
+    comp[seq_len(n_membership)] <- "membership"
   }
 
   # check if we have mutilple classes

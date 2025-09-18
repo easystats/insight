@@ -216,16 +216,24 @@ get_statistic.lcmm <- function(x, ...) {
   statistic <- statistic[
     !startsWith(names(statistic), "cholesky ") & !startsWith(names(statistic), "varcov ")
   ]
-  Component <- rep("conditional", times = length(statistic))
+  comp <- rep("conditional", times = length(statistic))
 
   if (x$linktype == 1) {
-    Component[startsWith(names(statistic), "Beta")] <- "beta"
+    comp[startsWith(names(statistic), "Beta")] <- "beta"
   } else if (x$linktype == 2) {
-    Component[startsWith(names(statistic), "I-splines")] <- "splines"
+    comp[startsWith(names(statistic), "I-splines")] <- "splines"
   } else if (x$linktype == 3) {
     ## TODO: thresholds
   } else {
-    Component[startsWith(names(statistic), "Linear")] <- "linear"
+    comp[startsWith(names(statistic), "Linear")] <- "linear"
+  }
+
+  # check whether we have membership and longitudinal submodel
+  n_membership <- x$N[1]
+  n_longitudinal <- x$N[2]
+
+  if (n_membership > 0) {
+    comp[seq_len(n_membership)] <- "membership"
   }
 
   # check if we have mutilple classes
@@ -240,7 +248,7 @@ get_statistic.lcmm <- function(x, ...) {
   out <- data.frame(
     Parameter = names(statistic),
     Statistic = as.vector(statistic),
-    Component = Component,
+    Component = comp,
     stringsAsFactors = FALSE,
     row.names = NULL
   )

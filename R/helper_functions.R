@@ -250,7 +250,7 @@
     "shape", "shiftprop", "sigma", "simplex", "slopes", "survival", "tau",
     "time_dummies", "xi", "zoi",
     # special elements, from lcmm
-    "linear", "splines",
+    "linear", "splines", "membership", "longitudinal",
     # other random parameters
     "sigma_random"
   )
@@ -262,7 +262,7 @@
     "dist", "hu", "kappa", "mix", "mu", "ndt", "nu", "phi", "precision",
     "shape", "shiftprop", "sigma", "tau", "xi", "zoi",
     # special elements, from lcmm
-    "linear", "splines",
+    "linear", "splines", "membership", "longitudinal",
     # random parameters
     "dispersion_random", "sigma_random", "beta_random"
   )

@@ -327,29 +327,36 @@ find_parameters.oohbchoice <- function(x, flatten = FALSE, ...) {
 find_parameters.lcmm <- function(x, component = "all", flatten = FALSE, ...) {
   coefficients <- stats::coef(x)
   params <- names(coefficients)[!startsWith(names(coefficients), "cholesky ")]
-  component <- validate_argument(component, c("all", "conditional", "beta", "splines", "linear"))
+  component <- validate_argument(
+    component,
+    c("all", "membership", "longitudinal", "conditional", "beta", "splines", "linear")
+  )
+
+  n_membership <- x$N[1]
+  n_longitudinal <- x$N[2]
 
   if (x$linktype == 1) {
-    # beta
-    out <- list(
-      conditional = params[!startsWith(params, "Beta")],
-      beta = params[startsWith(params, "Beta")]
-    )
+    type <- "Beta"
   } else if (x$linktype == 2) {
-    # splines - we don't want coefficients whose name starts with "cholesky"
-    out <- list(
-      conditional = params[!startsWith(params, "I-splines")],
-      splines = params[startsWith(params, "I-splines")]
-    )
+    type <- "I-splines"
   } else if (x$linktype == 3) {
-    ## TODO: thresholds
+    ## TODO: check if this is correct
   } else {
-    # default and linear link, we use all coefficients
-    out <- list(
-      conditional = params[!startsWith(params, "Linear")],
-      linear = params[startsWith(params, "Linear")]
-    )
+    type <- "Linear"
   }
+
+  out <- list(
+    membership = params[!startsWith(params, type)][seq_len(n_membership)],
+    longitudinal = params[!startsWith(params, type)][(n_membership + 1):(n_membership + n_longitudinal)],
+    extra = params[startsWith(params, type)]
+  )
+  names(out)[3] <- switch(
+    type,
+    "Beta" = "beta",
+    "I-splines" = "splines",
+    "Linear" = "linear"
+  )
+
   out <- compact_list(out)
 
  .filter_parameters(
