@@ -141,6 +141,7 @@ Suggests:
     knitr,
     lavaan,
     lavaSearch2,
+    lcmm,
     lfe,
     lme4,
     lmerTest,
