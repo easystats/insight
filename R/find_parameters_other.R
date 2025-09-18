@@ -347,7 +347,9 @@ find_parameters.lcmm <- function(x, component = "all", flatten = FALSE, ...) {
 
   out <- list(
     membership = params[!startsWith(params, type)][seq_len(n_membership)],
-    longitudinal = params[!startsWith(params, type)][(n_membership + 1):(n_membership + n_longitudinal)],
+    longitudinal = params[!startsWith(params, type)][
+      (n_membership + 1):(n_membership + n_longitudinal)
+    ],
     extra = params[startsWith(params, type)]
   )
   names(out)[3] <- switch(
@@ -359,7 +361,7 @@ find_parameters.lcmm <- function(x, component = "all", flatten = FALSE, ...) {
 
   out <- compact_list(out)
 
- .filter_parameters(
+  .filter_parameters(
     out,
     effects = "all",
     component = component,
