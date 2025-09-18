@@ -1525,7 +1525,7 @@ model_info.ggcomparisons <- function(x, ...) {
 }
 
 #' @export
-model_info.lcmm <- function(x, ...) {
+model_info.lcmm <- function(x, verbose = TRUE, ...) {
   .retrieve_model_info(
     x = x,
     fitfam = "gaussian",
@@ -1537,7 +1537,7 @@ model_info.lcmm <- function(x, ...) {
 }
 
 #' @export
-model_info.externX <- function(x, ...) {
+model_info.externX <- function(x, verbose = TRUE, ...) {
   .retrieve_model_info(
     x = x,
     fitfam = "multinomial",
