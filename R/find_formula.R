@@ -669,7 +669,7 @@ find_formula.lcmm <- function(x, verbose = TRUE, ...) {
     classmb = model_call$classmb,
     survival = model_call$survival
   ))
-  .find_formula_return(f)
+  .find_formula_return(f, verbose)
 }
 
 #' @export

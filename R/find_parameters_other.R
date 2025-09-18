@@ -327,6 +327,7 @@ find_parameters.oohbchoice <- function(x, flatten = FALSE, ...) {
 find_parameters.lcmm <- function(x, component = "all", flatten = FALSE, ...) {
   coefficients <- stats::coef(x)
   params <- names(coefficients)[!startsWith(names(coefficients), "cholesky ")]
+  component <- validate_argument(component, c("all", "conditional", "beta", "splines", "linear"))
 
   if (x$linktype == 1) {
     # beta
@@ -351,16 +352,18 @@ find_parameters.lcmm <- function(x, component = "all", flatten = FALSE, ...) {
   }
   out <- compact_list(out)
 
-  if (flatten) {
-    unique(unlist(out, use.names = FALSE))
-  } else {
-    out
-  }
+ .filter_parameters(
+    out,
+    effects = "all",
+    component = component,
+    flatten = flatten,
+    recursive = FALSE
+  )
 }
 
 
 #' @export
-find_parameters.externX <- function(x, component = "all", flatten = FALSE, ...) {
+find_parameters.externX <- function(x, flatten = FALSE, ...) {
   coefficients <- stats::coef(x)
   out <- list(conditional = names(coefficients))
 

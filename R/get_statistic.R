@@ -213,17 +213,19 @@ get_statistic.lcmm <- function(x, ...) {
   se <- sqrt(x$V[indice])
   statistic <- x$best / se
 
-  statistic <- names(statistic)[!startsWith(names(statistic), "cholesky ") | !startsWith(names(statistic), "varcov ")]
+  statistic <- statistic[
+    !startsWith(names(statistic), "cholesky ") & !startsWith(names(statistic), "varcov ")
+  ]
   Component <- rep("conditional", times = length(statistic))
 
   if (x$linktype == 1) {
-    Component <- Component[startsWith(names(statistic), "Beta")] <- "beta"
+    Component[startsWith(names(statistic), "Beta")] <- "beta"
   } else if (x$linktype == 2) {
-    Component <- Component[startsWith(names(statistic), "I-splines")] <- "splines"
+    Component[startsWith(names(statistic), "I-splines")] <- "splines"
   } else if (x$linktype == 3) {
     ## TODO: thresholds
   } else {
-    Component <- Component[startsWith(names(statistic), "Linear")] <- "linear"
+    Component[startsWith(names(statistic), "Linear")] <- "linear"
   }
 
   out <- data.frame(
