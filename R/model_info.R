@@ -1526,15 +1526,27 @@ model_info.ggcomparisons <- function(x, ...) {
 
 #' @export
 model_info.lcmm <- function(x, ...) {
-  NULL
+  .retrieve_model_info(
+    x = x,
+    fitfam = "gaussian",
+    logit.link = FALSE,
+    link.fun = "identity",
+    verbose = verbose,
+    ...
+  )
 }
 
 #' @export
 model_info.externX <- function(x, ...) {
-  NULL
+  .retrieve_model_info(
+    x = x,
+    fitfam = "multinomial",
+    logit.link = TRUE,
+    link.fun = "logit",
+    verbose = verbose,
+    ...
+  )
 }
 
 #' @export
-model_info.externVar <- function(x, ...) {
-  NULL
-}
+model_info.externVar <- model_info.externX

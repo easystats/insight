@@ -233,6 +233,15 @@ get_df.rlm <- function(x, type = "residual", verbose = TRUE, ...) {
 get_df.mipo <- get_df.rlm
 
 #' @export
+get_df.lcmm <- get_df.rlm
+
+#' @export
+get_df.externX <- get_df.rlm
+
+#' @export
+get_df.externVar <- get_df.rlm
+
+#' @export
 get_df.mhurdle <- get_df.rlm
 
 #' @export
