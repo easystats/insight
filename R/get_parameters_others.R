@@ -309,33 +309,64 @@ get_parameters.mjoint <- function(x, component = "all", ...) {
 
 
 #' @export
-get_parameters.lcmm <- function(x, ...) {
+get_parameters.lcmm <- function(x, component = "all", ...) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "beta", "splines", "linear")
+  )
+
   params <- x$best
   params <- params[
     !startsWith(names(params), "cholesky ") & !startsWith(names(params), "varcov ")
   ]
-  Component <- rep("conditional", times = length(params))
+  comp <- rep("conditional", times = length(params))
 
   if (x$linktype == 1) {
-    Component[startsWith(names(params), "Beta")] <- "beta"
+    comp[startsWith(names(params), "Beta")] <- "beta"
   } else if (x$linktype == 2) {
-    Component[startsWith(names(params), "I-splines")] <- "splines"
+    comp[startsWith(names(params), "I-splines")] <- "splines"
   } else if (x$linktype == 3) {
     ## TODO: thresholds
   } else {
-    Component[startsWith(names(params), "Linear")] <- "linear"
+    comp[startsWith(names(params), "Linear")] <- "linear"
   }
 
   out <- data.frame(
     Parameter = names(params),
     Estimate = as.vector(params),
-    Component = Component,
+    Component = comp,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  if (component != "all") {
+    out <- out[out$Component == component, , drop = FALSE]
+  }
+
+  text_remove_backticks(out)
+}
+
+
+#' @export
+get_parameters.externX <- function(x, ...) {
+  params <- x$best
+  params <- params[
+    !startsWith(names(params), "cholesky ") & !startsWith(names(params), "varcov ")
+  ]
+
+  out <- data.frame(
+    Parameter = names(params),
+    Estimate = as.vector(params),
+    Group = gsub("(.*) (class\\d+)$", "\\2", names(params)),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
 
   text_remove_backticks(out)
 }
+
+#' @export
+get_parameters.externVar <- get_parameters.externX
 
 
 #' @export

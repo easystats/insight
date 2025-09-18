@@ -243,6 +243,34 @@ get_statistic.lcmm <- function(x, ...) {
 
 
 #' @export
+get_statistic.externX <- function(x, ...) {
+  id <- seq_along(x$best)
+  indice <- rep(id * (id + 1) / 2)
+  se <- sqrt(x$V[indice])
+  statistic <- x$best / se
+
+  statistic <- statistic[
+    !startsWith(names(statistic), "cholesky ") & !startsWith(names(statistic), "varcov ")
+  ]
+
+  out <- data.frame(
+    Parameter = names(statistic),
+    Statistic = as.vector(statistic),
+    Group = gsub("(.*) (class\\d+)$", "\\2", names(statistic)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+#' @export
+get_statistic.externVar <- get_statistic.externX
+
+
+#' @export
 get_statistic.oohbchoice <- function(x, ...) {
   cftable <- summary(x)$coef
   out <- data.frame(
