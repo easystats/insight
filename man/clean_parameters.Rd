@@ -46,7 +46,9 @@ mostly identical to \code{Parameter}, except for for models from \strong{brms} o
 \dontshow{if (require("curl", quietly = TRUE) && curl::has_internet() && require("brms")) withAutoprint(\{ # examplesIf}
 \donttest{
 model <- download_model("brms_zi_2")
-clean_parameters(model)
+if (!is.null(model)) {
+  clean_parameters(model)
+}
 }
 \dontshow{\}) # examplesIf}
 }

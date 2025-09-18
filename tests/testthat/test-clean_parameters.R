@@ -42,6 +42,8 @@ test_that("clean_parameters stanrag", {
 
   data(sleepstudy, package = "lme4")
   m <- insight::download_model("stanreg_merMod_6")
+  skip_if(is.null(m))
+
   out <- clean_parameters(m)
 
   expect_identical(
@@ -81,6 +83,8 @@ test_that("clean_parameters brms, sigma3", {
   skip_if_not_installed("brms")
 
   m <- insight::download_model("brms_sigma_3")
+  skip_if(is.null(m))
+
   out <- clean_parameters(m)
 
   expect_identical(
@@ -120,6 +124,8 @@ test_that("clean_parameters brms, sigma1", {
   skip_if_not_installed("brms")
 
   m <- insight::download_model("brms_sigma_1")
+  skip_if(is.null(m))
+
   out <- clean_parameters(m)
 
   expect_identical(
@@ -146,6 +152,8 @@ test_that("clean_parameters brms, chocomini", {
   skip_if_not_installed("brms")
 
   m <- insight::download_model("brms_chocomini_1")
+  skip_if(is.null(m))
+
   out <- clean_parameters(m)
 
   expect_identical(
