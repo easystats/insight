@@ -229,9 +229,9 @@ get_statistic.lcmm <- function(x, ...) {
   }
 
   # check if we have mutilple classes
-  has_classes <- grepl("(.*) (class\\d+)$", names(params))
+  has_classes <- grepl("(.*) (class\\d+)$", names(statistic))
   if (any(has_classes)) {
-    grp <- gsub("(.*) (class\\d+)$", "\\2", names(params))
+    grp <- gsub("(.*) (class\\d+)$", "\\2", names(statistic))
     grp[!has_classes] <- "link"
   } else {
     grp <- NULL
