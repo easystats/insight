@@ -92,7 +92,6 @@ Suggests:
     bbmle,
     bdsmatrix,
     betareg,
-    bife,
     biglm,
     BH,
     blavaan (>= 0.5-5),
