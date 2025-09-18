@@ -1523,3 +1523,18 @@ model_info.deltaMethod <- function(x, ...) {
 model_info.ggcomparisons <- function(x, ...) {
   NULL
 }
+
+#' @export
+model_info.lcmm <- function(x, ...) {
+  NULL
+}
+
+#' @export
+model_info.externX <- function(x, ...) {
+  NULL
+}
+
+#' @export
+model_info.externVar <- function(x, ...) {
+  NULL
+}

@@ -149,6 +149,17 @@
 .degrees_of_freedom_residual.lqm <- .degrees_of_freedom_residual.lqmm
 
 #' @keywords internal
+.degrees_of_freedom_residual.lcmm <- function(x, verbose = TRUE, ...) {
+  Inf
+}
+
+#' @keywords internal
+.degrees_of_freedom_residual.externX <- .degrees_of_freedom_residual.lcmm
+
+#' @keywords internal
+.degrees_of_freedom_residual.externVar <- .degrees_of_freedom_residual.lcmm
+
+#' @keywords internal
 .degrees_of_freedom_residual.cgam <- function(x, verbose = TRUE, ...) {
   # x$resid_df_obs
   # new in cgam 1.18
