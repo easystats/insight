@@ -207,7 +207,12 @@ get_statistic.asym <- function(x, ...) {
 
 
 #' @export
-get_statistic.lcmm <- function(x, ...) {
+get_statistic.lcmm <- function(x, component = "all", ...) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "membership", "longitudinal", "beta", "splines", "linear")
+  )
+
   id <- seq_along(x$best)
   indice <- rep(id * (id + 1) / 2)
   se <- sqrt(x$V[indice])
@@ -216,7 +221,7 @@ get_statistic.lcmm <- function(x, ...) {
   statistic <- statistic[
     !startsWith(names(statistic), "cholesky ") & !startsWith(names(statistic), "varcov ")
   ]
-  comp <- rep("conditional", times = length(statistic))
+  comp <- rep("longitudinal", times = length(statistic))
 
   if (x$linktype == 1) {
     comp[startsWith(names(statistic), "Beta")] <- "beta"
@@ -254,6 +259,10 @@ get_statistic.lcmm <- function(x, ...) {
   )
   # separate, because can be NULL
   out$Group <- grp
+
+  if (component != "all") {
+    out <- out[out$Component == component, , drop = FALSE]
+  }
 
   out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
