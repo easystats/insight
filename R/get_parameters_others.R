@@ -332,9 +332,10 @@ get_parameters.lcmm <- function(x, component = "all", ...) {
   }
 
   # check if we have mutilple classes
-  if (any(grepl("(.*) (class\\d+)$", names(params)))) {
-    grp <- "link"
+  has_classes <- grepl("(.*) (class\\d+)$", names(params))
+  if (any(has_classes)) {
     grp <- gsub("(.*) (class\\d+)$", "\\2", names(params))
+    grp[!has_classes] <- "link"
   } else {
     grp <- NULL
   }
@@ -343,10 +344,11 @@ get_parameters.lcmm <- function(x, component = "all", ...) {
     Parameter = names(params),
     Estimate = as.vector(params),
     Component = comp,
-    Group = grp,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+  # separate, because can be NULL
+  out$Group <- grp
 
   if (component != "all") {
     out <- out[out$Component == component, , drop = FALSE]

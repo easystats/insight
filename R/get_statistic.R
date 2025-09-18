@@ -229,9 +229,10 @@ get_statistic.lcmm <- function(x, ...) {
   }
 
   # check if we have mutilple classes
-  if (any(grepl("(.*) (class\\d+)$", names(statistic)))) {
-    grp <- "link"
-    grp <- gsub("(.*) (class\\d+)$", "\\2", names(statistic))
+  has_classes <- grepl("(.*) (class\\d+)$", names(params))
+  if (any(has_classes)) {
+    grp <- gsub("(.*) (class\\d+)$", "\\2", names(params))
+    grp[!has_classes] <- "link"
   } else {
     grp <- NULL
   }
@@ -240,10 +241,11 @@ get_statistic.lcmm <- function(x, ...) {
     Parameter = names(statistic),
     Statistic = as.vector(statistic),
     Component = Component,
-    Group = grp,
     stringsAsFactors = FALSE,
     row.names = NULL
   )
+  # separate, because can be NULL
+  out$Group <- grp
 
   out <- text_remove_backticks(out)
   attr(out, "statistic") <- find_statistic(x)
