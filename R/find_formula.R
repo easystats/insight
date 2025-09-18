@@ -665,10 +665,18 @@ find_formula.lcmm <- function(x, verbose = TRUE, ...) {
   f <- compact_list(list(
     conditional = model_call$fixed,
     random = model_call$random,
-    mixture = model_call$mixture
+    mixture = model_call$mixture,
+    classmb = model_call$classmb,
+    survival = model_call$survival
   ))
   .find_formula_return(f)
 }
+
+#' @export
+find_formula.externVar <- find_formula.lcmm
+
+#' @export
+find_formula.externX <- find_formula.lcmm
 
 
 #' @export

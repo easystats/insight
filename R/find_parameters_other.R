@@ -357,3 +357,19 @@ find_parameters.lcmm <- function(x, component = "all", flatten = FALSE, ...) {
     out
   }
 }
+
+
+#' @export
+find_parameters.externX <- function(x, component = "all", flatten = FALSE, ...) {
+  coefficients <- stats::coef(x)
+  out <- list(conditional = names(coefficients))
+
+  if (flatten) {
+    unique(unlist(out, use.names = FALSE))
+  } else {
+    out
+  }
+}
+
+#' @export
+find_parameters.externVar <- find_parameters.externX

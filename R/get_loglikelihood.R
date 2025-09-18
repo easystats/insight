@@ -369,6 +369,12 @@ get_loglikelihood.lcmm <- function(x, verbose = TRUE, ...) {
   x$loglik
 }
 
+#' @export
+get_loglikelihood.externX <- get_loglikelihood.lcmm
+
+#' @export
+get_loglikelihood.externVar <- get_loglikelihood.lcmm
+
 
 # Methods WITH individual LLs ---------------------------------------------
 
