@@ -24,6 +24,7 @@ test_that("model_info", {
 
 test_that("find_predictors", {
   expect_identical(find_predictors(m1), list(conditional = "Time"))
+  expect_identical(find_predictors(m3), list(conditional = "Time"))
   expect_identical(
     find_predictors(m2, flatten = TRUE),
     c("Petal.Width", "Species")
