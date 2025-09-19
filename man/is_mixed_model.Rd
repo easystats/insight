@@ -17,7 +17,7 @@ Small helper that checks if a model is a mixed effects model,
 i.e. if it the model has random effects.
 }
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 data(mtcars)
 model <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 is_mixed_model(model)

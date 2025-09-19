@@ -35,7 +35,7 @@ but may rather contain \emph{values}, e.g. for contrasts. See an example for
 pairwise comparisons below.
 }
 \examples{
-\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("emmeans", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(mtcars)
 model <- lm(mpg ~ wt * factor(cyl), data = mtcars)
 

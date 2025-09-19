@@ -17,7 +17,7 @@ if model has no random effects.
 Returns the data from all random effects terms.
 }
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(sleepstudy)
 # prepare some data...
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)

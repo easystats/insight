@@ -63,7 +63,7 @@ If the model is a multivariate response model, a data frame with values
 from all response variables is returned.
 }
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(cbpp)
 cbpp$trials <- cbpp$size - cbpp$incidence
 dat <<- cbpp

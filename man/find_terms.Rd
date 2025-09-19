@@ -83,7 +83,7 @@ variables. The return value would be \code{"gear"}.
 }
 
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(sleepstudy, package = "lme4")
 m <- suppressWarnings(lme4::lmer(
   log(Reaction) ~ Days + I(Days^2) + (1 + Days + exp(Days) | Subject),

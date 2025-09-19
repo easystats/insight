@@ -758,6 +758,34 @@ get_varcov.merModList <- function(x, ...) {
 
 
 #' @export
+get_varcov.lcmm <- function(x, verbose = TRUE, ...) {
+  .check_get_varcov_dots(x, ...)
+
+  # extract vcov, which, however, is stored as a vector
+  V <- x$V
+  # get number of parameters
+  p <- length(x$best)
+
+  # create empty matrix
+  vcov_matrix <- matrix(0, nrow = p, ncol = p)
+  # fill upper triangle
+  vcov_matrix[upper.tri(vcov_matrix, diag = TRUE)] <- V
+  # fill lower triangle
+  vcov_matrix[lower.tri(vcov_matrix)] <- t(vcov_matrix)[lower.tri(vcov_matrix)]
+  # set names
+  dimnames(vcov_matrix) <- list(names(x$best), names(x$best))
+
+  .process_vcov(vcov_matrix, verbose = verbose, ...)
+}
+
+#' @export
+get_varcov.externX <- get_varcov.lcmm
+
+#' @export
+get_varcov.externVar <- get_varcov.lcmm
+
+
+#' @export
 get_varcov.mediate <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
   format_warning("Can't access variance-covariance matrix for 'mediate' objects.")

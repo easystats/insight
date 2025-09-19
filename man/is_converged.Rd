@@ -61,7 +61,7 @@ or not.
 }
 
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(cbpp)
 set.seed(1)
 cbpp$x <- rnorm(nrow(cbpp))
@@ -75,7 +75,7 @@ model <- glmer(
 
 is_converged(model)
 \dontshow{\}) # examplesIf}
-\dontshow{if (getOption("warn") < 2L && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getOption("warn") < 2L && require("glmmTMB")) withAutoprint(\{ # examplesIf}
 \donttest{
 model <- glmmTMB(
   Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +

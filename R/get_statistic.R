@@ -207,6 +207,98 @@ get_statistic.asym <- function(x, ...) {
 
 
 #' @export
+get_statistic.lcmm <- function(x, component = "all", ...) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "membership", "longitudinal", "beta", "splines", "linear")
+  )
+
+  id <- seq_along(x$best)
+  indice <- rep(id * (id + 1) / 2)
+  se <- sqrt(x$V[indice])
+  statistic <- x$best / se
+
+  statistic <- statistic[
+    !startsWith(names(statistic), "cholesky ") & !startsWith(names(statistic), "varcov ")
+  ]
+  comp <- rep("longitudinal", times = length(statistic))
+
+  if (x$linktype == 1) {
+    comp[startsWith(names(statistic), "Beta")] <- "beta"
+  } else if (x$linktype == 2) {
+    comp[startsWith(names(statistic), "I-splines")] <- "splines"
+  } else if (x$linktype == 3) {
+    ## TODO: thresholds
+  } else {
+    comp[startsWith(names(statistic), "Linear")] <- "linear"
+  }
+
+  # check whether we have membership and longitudinal submodel
+  n_membership <- x$N[1]
+  n_longitudinal <- x$N[2]
+
+  if (n_membership > 0) {
+    comp[seq_len(n_membership)] <- "membership"
+  }
+
+  # check if we have mutilple classes
+  has_classes <- grepl("(.*) (class\\d+)$", names(statistic))
+  if (any(has_classes)) {
+    grp <- gsub("(.*) (class\\d+)$", "\\2", names(statistic))
+    grp[!has_classes] <- "link"
+  } else {
+    grp <- NULL
+  }
+
+  out <- data.frame(
+    Parameter = names(statistic),
+    Statistic = as.vector(statistic),
+    Component = comp,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+  # separate, because can be NULL
+  out$Group <- grp
+
+  if (component != "all") {
+    out <- out[out$Component == component, , drop = FALSE]
+  }
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
+get_statistic.externX <- function(x, ...) {
+  id <- seq_along(x$best)
+  indice <- rep(id * (id + 1) / 2)
+  se <- sqrt(x$V[indice])
+  statistic <- x$best / se
+
+  statistic <- statistic[
+    !startsWith(names(statistic), "cholesky ") & !startsWith(names(statistic), "varcov ")
+  ]
+
+  out <- data.frame(
+    Parameter = names(statistic),
+    Statistic = as.vector(statistic),
+    Group = gsub("(.*) (class\\d+)$", "\\2", names(statistic)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+#' @export
+get_statistic.externVar <- get_statistic.externX
+
+
+#' @export
 get_statistic.oohbchoice <- function(x, ...) {
   cftable <- summary(x)$coef
   out <- data.frame(

@@ -39,7 +39,9 @@
 #' @examplesIf require("curl", quietly = TRUE) && curl::has_internet() && require("brms")
 #' \donttest{
 #' model <- download_model("brms_zi_2")
-#' clean_parameters(model)
+#' if (!is.null(model)) {
+#'   clean_parameters(model)
+#' }
 #' }
 #' @export
 clean_parameters <- function(x, ...) {

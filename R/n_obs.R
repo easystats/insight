@@ -566,6 +566,24 @@ n_obs.aovlist <- function(x, ...) {
 }
 
 
+#' @export
+n_obs.lcmm <- function(x, ...) {
+  x$N[5]
+}
+
+
+#' @export
+n_obs.externVar <- function(x, ...) {
+  NULL
+}
+
+
+#' @export
+n_obs.externX <- function(x, ...) {
+  NULL
+}
+
+
 #' @rdname n_obs
 #' @export
 n_obs.stanmvreg <- function(x, select = NULL, ...) {

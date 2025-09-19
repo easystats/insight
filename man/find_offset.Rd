@@ -20,7 +20,7 @@ A character vector with the name(s) of offset terms.
 Returns a character vector with the name(s) of offset terms.
 }
 \examples{
-\dontshow{if (requireNamespace("pscl", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("pscl", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # Generate some zero-inflated data
 set.seed(123)
 N <- 100 # Samples

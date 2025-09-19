@@ -37,7 +37,7 @@ The code that generated the model is available at the
 \url{https://easystats.github.io/circus/reference/index.html}.
 }
 \examples{
-\dontshow{if (require("httr2", quietly = TRUE) && curl::has_internet() && interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("httr2", quietly = TRUE) && curl::has_internet() && interactive()) withAutoprint(\{ # examplesIf}
 \donttest{
 download_model("aov_1")
 try(download_model("non_existent_model"))

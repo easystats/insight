@@ -72,6 +72,8 @@
 #' - **mvord**: `"thresholds"` and `"correlation"`
 #' - **clm2**: `"scale"`
 #' - **selection**: `"selection"`, `"outcome"`, and `"auxiliary"`
+#' - **lcmm**: `"membership"`, `"longitudinal"`, `"beta"`, `"splines"`, and
+#'   `"linear"`
 #'
 #' For models of class `brmsfit` (package **brms**), even more options are
 #' possible for the `component` argument, which are not all documented in detail
@@ -190,6 +192,47 @@ find_predictors.default <- function(x,
     compact_list(l)
   }
 }
+
+
+#' @export
+find_predictors.lcmm <- function(
+  x,
+  component = "all",
+  flatten = FALSE,
+  verbose = TRUE,
+  ...
+) {
+  component <- validate_argument(
+    component,
+    c(
+      "all", "conditional", "membership", "longitudinal", "beta", "splines",
+      "linear", "mixture", "classmb"
+    )
+  )
+
+  f <- .prepare_predictors(
+    x,
+    f = find_formula(x, verbose = verbose),
+    elements = .get_elements(effects = "all", component, model = x)
+  )
+  l <- .return_vars(f, x)
+
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
+    return(NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    compact_list(l)
+  }
+}
+
+#' @export
+find_predictors.externX <- find_predictors.lcmm
+
+#' @export
+find_predictors.externVar <- find_predictors.lcmm
 
 
 #' @export

@@ -149,6 +149,8 @@ Some model classes also allow rather uncommon options. These are:
 \item \strong{mvord}: \code{"thresholds"} and \code{"correlation"}
 \item \strong{clm2}: \code{"scale"}
 \item \strong{selection}: \code{"selection"}, \code{"outcome"}, and \code{"auxiliary"}
+\item \strong{lcmm}: \code{"membership"}, \code{"longitudinal"}, \code{"beta"}, \code{"splines"}, and
+\code{"linear"}
 }
 
 For models of class \code{brmsfit} (package \strong{brms}), even more options are
@@ -158,7 +160,7 @@ here. It can be any pre-defined or arbitrary distributional parameter, like
 }
 
 \examples{
-\dontshow{if (require("pscl") && require("sandwich")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("pscl") && require("sandwich")) withAutoprint(\{ # examplesIf}
 data(mtcars)
 m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 get_varcov(m)

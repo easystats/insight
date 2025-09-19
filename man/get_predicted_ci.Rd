@@ -146,7 +146,7 @@ posterior distribution or bootstrapped samples of the predictions. These are
 actually accurate standard errors resp. confidence (or uncertainty) intervals.
 }
 \examples{
-\dontshow{if (require("boot") && require("datawizard") && require("bayestestR")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("boot") && require("datawizard") && require("bayestestR")) withAutoprint(\{ # examplesIf}
 # Confidence Intervals for Model Predictions
 # ------------------------------------------
 

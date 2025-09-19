@@ -17,7 +17,7 @@ Checks if model is a null-model (intercept-only), i.e. if
 the conditional part of the model has no predictors.
 }
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 model <- lm(mpg ~ 1, data = mtcars)
 is_nullmodel(model)
 

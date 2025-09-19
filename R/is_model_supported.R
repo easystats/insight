@@ -61,7 +61,7 @@ supported_models <- function() {
     "dep.effect", "DirichletRegModel", "draws", "drc",
 
     # e ----------------------------
-    "eglm", "elm", "epi.2by2", "ergm", "emmGrid",
+    "eglm", "elm", "epi.2by2", "ergm", "emmGrid", "externX", "externVar",
 
     # f ----------------------------
     "fdm", "feis", "felm", "feglm", "fitdistr", "fixest", "flexsurvreg",
@@ -85,7 +85,7 @@ supported_models <- function() {
     # l ----------------------------
     "lavaan", "lm", "lm_robust", "lme", "lmrob", "lmRob", "lmerMod",
     "lmerModLmerTest", "lmodel2", "logitmfx", "logitor", "logistf", "logitr",
-    "LORgee", "lqm", "lqmm", "lrm",
+    "LORgee", "lqm", "lqmm", "lrm", "lcmm",
 
     # m ----------------------------
     "manova", "MANOVA", "margins", "marginaleffects", "marginaleffects.summary",

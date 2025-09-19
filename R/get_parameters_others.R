@@ -309,6 +309,86 @@ get_parameters.mjoint <- function(x, component = "all", ...) {
 
 
 #' @export
+get_parameters.lcmm <- function(x, component = "all", ...) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "membership", "longitudinal", "beta", "splines", "linear")
+  )
+
+  params <- x$best
+  params <- params[
+    !startsWith(names(params), "cholesky ") & !startsWith(names(params), "varcov ")
+  ]
+  comp <- rep("longitudinal", times = length(params))
+
+  if (x$linktype == 1) {
+    comp[startsWith(names(params), "Beta")] <- "beta"
+  } else if (x$linktype == 2) {
+    comp[startsWith(names(params), "I-splines")] <- "splines"
+  } else if (x$linktype == 3) {
+    ## TODO: thresholds
+  } else {
+    comp[startsWith(names(params), "Linear")] <- "linear"
+  }
+
+  # check whether we have membership and longitudinal submodel
+  n_membership <- x$N[1]
+  n_longitudinal <- x$N[2]
+
+  if (n_membership > 0) {
+    comp[seq_len(n_membership)] <- "membership"
+  }
+
+  # check if we have mutilple classes
+  has_classes <- grepl("(.*) (class\\d+)$", names(params))
+  if (any(has_classes)) {
+    grp <- gsub("(.*) (class\\d+)$", "\\2", names(params))
+    grp[!has_classes] <- "link"
+  } else {
+    grp <- NULL
+  }
+
+  out <- data.frame(
+    Parameter = names(params),
+    Estimate = as.vector(params),
+    Component = comp,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+  # separate, because can be NULL
+  out$Group <- grp
+
+  if (component != "all") {
+    out <- out[out$Component == component, , drop = FALSE]
+  }
+
+  text_remove_backticks(out)
+}
+
+
+#' @export
+get_parameters.externX <- function(x, ...) {
+  params <- x$best
+  params <- params[
+    !startsWith(names(params), "cholesky ") & !startsWith(names(params), "varcov ")
+  ]
+
+  out <- data.frame(
+    Parameter = names(params),
+    Estimate = as.vector(params),
+    Group = gsub("(.*) (class\\d+)$", "\\2", names(params)),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  text_remove_backticks(out)
+}
+
+#' @export
+get_parameters.externVar <- get_parameters.externX
+
+
+#' @export
 get_parameters.systemfit <- function(x, ...) {
   cf <- stats::coef(summary(x))
   f <- find_formula(x, verbose = FALSE)

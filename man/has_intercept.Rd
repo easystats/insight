@@ -24,7 +24,7 @@ has_intercept(model)
 model <- lm(mpg ~ gear, data = mtcars)
 has_intercept(model)
 
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 model <- lmer(Reaction ~ 0 + Days + (Days | Subject), data = sleepstudy)
 has_intercept(model)
 

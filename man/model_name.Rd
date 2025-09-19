@@ -25,7 +25,7 @@ A character string of a name (which usually equals the model's class attribute).
 Returns the "name" (class attribute) of a model, possibly including further information.
 }
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 m <- lm(Sepal.Length ~ Petal.Width, data = iris)
 model_name(m)
 model_name(m, include_formula = TRUE)

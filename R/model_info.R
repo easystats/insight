@@ -1523,3 +1523,30 @@ model_info.deltaMethod <- function(x, ...) {
 model_info.ggcomparisons <- function(x, ...) {
   NULL
 }
+
+#' @export
+model_info.lcmm <- function(x, verbose = TRUE, ...) {
+  .retrieve_model_info(
+    x = x,
+    fitfam = "gaussian",
+    logit.link = FALSE,
+    link.fun = "identity",
+    verbose = verbose,
+    ...
+  )
+}
+
+#' @export
+model_info.externX <- function(x, verbose = TRUE, ...) {
+  .retrieve_model_info(
+    x = x,
+    fitfam = "multinomial",
+    logit.link = TRUE,
+    link.fun = "logit",
+    verbose = verbose,
+    ...
+  )
+}
+
+#' @export
+model_info.externVar <- model_info.externX

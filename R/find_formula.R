@@ -660,6 +660,26 @@ find_formula.afex_aov <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+find_formula.lcmm <- function(x, verbose = TRUE, ...) {
+  model_call <- get_call(x)
+  f <- compact_list(list(
+    conditional = model_call$fixed,
+    random = model_call$random,
+    mixture = model_call$mixture,
+    classmb = model_call$classmb,
+    survival = model_call$survival
+  ))
+  .find_formula_return(f, verbose)
+}
+
+#' @export
+find_formula.externVar <- find_formula.lcmm
+
+#' @export
+find_formula.externX <- find_formula.lcmm
+
+
+#' @export
 find_formula.mira <- function(x, verbose = TRUE, ...) {
   .find_formula_return(find_formula(x$analyses[[1]]), verbose = verbose)
 }

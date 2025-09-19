@@ -249,6 +249,8 @@
     "mix", "mu", "ndt", "nominal", "nu", "outcome", "phi", "scale", "selection",
     "shape", "shiftprop", "sigma", "simplex", "slopes", "survival", "tau",
     "time_dummies", "xi", "zoi",
+    # special elements, from lcmm
+    "linear", "splines", "membership", "longitudinal", "mixture", "classmb",
     # other random parameters
     "sigma_random"
   )
@@ -259,6 +261,8 @@
     "(phi)", "alpha", "aux", "auxiliary", "beta", "bias", "coi", "dispersion",
     "dist", "hu", "kappa", "mix", "mu", "ndt", "nu", "phi", "precision",
     "shape", "shiftprop", "sigma", "tau", "xi", "zoi",
+    # special elements, from lcmm
+    "linear", "splines", "membership", "longitudinal", "mixture", "classmb",
     # random parameters
     "dispersion_random", "sigma_random", "beta_random"
   )

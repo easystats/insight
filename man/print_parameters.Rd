@@ -102,26 +102,28 @@ component for a better overview. Further, parameter names are "cleaned", if
 necessary, also for a cleaner print. See also 'Examples'.
 }
 \examples{
-\dontshow{if (require("curl", quietly = TRUE) && curl::has_internet() && all(insight::check_if_installed(c("bayestestR", "httr2", "brms"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("curl", quietly = TRUE) && curl::has_internet() && all(insight::check_if_installed(c("bayestestR", "httr2", "brms"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 \donttest{
 library(bayestestR)
 model <- download_model("brms_zi_2")
-x <- hdi(model, effects = "all", component = "all")
+if (!is.null(model)) {
+  x <- hdi(model, effects = "all", component = "all")
 
-# hdi() returns a data frame; here we use only the
-# information on parameter names and HDI values
-tmp <- as.data.frame(x)[, 1:4]
-tmp
+  # hdi() returns a data frame; here we use only the
+  # information on parameter names and HDI values
+  tmp <- as.data.frame(x)[, 1:4]
+  tmp
 
-# Based on the "by" argument, we get a list of data frames that
-# is split into several parts that reflect the model components.
-print_parameters(model, tmp)
+  # Based on the "by" argument, we get a list of data frames that
+  # is split into several parts that reflect the model components.
+  print_parameters(model, tmp)
 
-# This is the standard print()-method for "bayestestR::hdi"-objects.
-# For printing methods, it is easy to print complex summary statistics
-# in a clean way to the console by splitting the information into
-# different model components.
-x
+  # This is the standard print()-method for "bayestestR::hdi"-objects.
+  # For printing methods, it is easy to print complex summary statistics
+  # in a clean way to the console by splitting the information into
+  # different model components.
+  x
+}
 }
 \dontshow{\}) # examplesIf}
 }

@@ -25,7 +25,7 @@ Provides a summary of the prior distributions used
 for the parameters in a given model.
 }
 \examples{
-\dontshow{if (require("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("rstanarm", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \donttest{
 library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)

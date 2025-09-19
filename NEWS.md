@@ -1,3 +1,13 @@
+# insight 1.4.3
+
+## Changes
+
+* Added support for models from package *lcmm* (`lcmm`, `externVar`).
+
+## Bug fixes
+
+* Fix CRAN check failures.
+
 # insight 1.4.2
 
 ## Bug fixes

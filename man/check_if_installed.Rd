@@ -51,7 +51,7 @@ returned, indicating which of the packages are installed, and which not.
 Checking if needed package is installed
 }
 \examples{
-\dontshow{if (interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 \donttest{
 check_if_installed("insight")
 try(check_if_installed("datawizard", stop = FALSE))

@@ -219,6 +219,12 @@ link_function.multinom <- function(x, ...) {
 link_function.logitr <- link_function.multinom
 
 #' @export
+link_function.externVar <- link_function.multinom
+
+#' @export
+link_function.externX <- link_function.multinom
+
+#' @export
 link_function.BBreg <- link_function.multinom
 
 #' @export

@@ -26,16 +26,13 @@
   }
 
   # 1st try
-  dof <- try(stats::df.residual(x), silent = TRUE)
+  dof <- tryCatch(stats::df.residual(x), error = function(e) NULL)
 
   # 2nd try
-  if (inherits(dof, "try-error") || is.null(dof) || all(is.na(dof))) {
-    junk <- utils::capture.output(dof = try(summary(x)$df[2], silent = TRUE))
-  }
-
-  # last try
-  if (inherits(dof, "try-error")) {
-    dof <- NULL
+  if (is.null(dof) || all(is.na(dof))) {
+    junk <- utils::capture.output(
+      dof = tryCatch(summary(x)$df[2], error = function(e) NULL)
+    )
   }
 
   dof
@@ -147,6 +144,17 @@
 
 #' @keywords internal
 .degrees_of_freedom_residual.lqm <- .degrees_of_freedom_residual.lqmm
+
+#' @keywords internal
+.degrees_of_freedom_residual.lcmm <- function(x, verbose = TRUE, ...) {
+  Inf
+}
+
+#' @keywords internal
+.degrees_of_freedom_residual.externX <- .degrees_of_freedom_residual.lcmm
+
+#' @keywords internal
+.degrees_of_freedom_residual.externVar <- .degrees_of_freedom_residual.lcmm
 
 #' @keywords internal
 .degrees_of_freedom_residual.cgam <- function(x, verbose = TRUE, ...) {

@@ -31,7 +31,7 @@ vector, or \code{NULL} if response variable could not be found.
 Returns the name(s) of the response variable(s) from a model object.
 }
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(cbpp, package = "lme4")
 cbpp$trials <- cbpp$size - cbpp$incidence
 m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)

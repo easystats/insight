@@ -1406,8 +1406,8 @@ get_datagrid.comparisons <- get_datagrid.slopes
   while (n > minframe) {
     n <- n - 1L
     env <- sys.frame(n)
-    r <- try(eval(str2lang(x), envir = env), silent = TRUE)
-    if (!inherits(r, "try-error") && !is.null(r)) {
+    r <- tryCatch(eval(str2lang(x), envir = env), error = function(e) NULL)
+    if (!is.null(r)) {
       return(r)
     }
   }

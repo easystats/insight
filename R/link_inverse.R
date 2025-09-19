@@ -90,6 +90,12 @@ link_inverse.speedglm <- link_inverse.glm
 link_inverse.bigglm <- link_inverse.glm
 
 #' @export
+link_inverse.externX <- link_inverse.glm
+
+#' @export
+link_inverse.externVar <- link_inverse.glm
+
+#' @export
 link_inverse.nestedLogit <- function(x, ...) {
   stats::make.link(link = "logit")$linkinv
 }

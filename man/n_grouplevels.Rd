@@ -20,7 +20,7 @@ The number of group levels in the model.
 Returns the number of group levels of random effects from mixed models.
 }
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 data(sleepstudy, package = "lme4")
 set.seed(12345)
 sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)

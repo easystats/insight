@@ -79,6 +79,7 @@ is_regression_model <- function(x) {
 
     # e --------------------
     "eglm", "elm", "emmGrid", "emm_list", "epi.2by2", "ergm",
+    "externVar", "externX",
 
     # f --------------------
     "fdm", "feglm", "feis", "felm", "fitdistr", "fixest", "flexmix",
@@ -110,6 +111,7 @@ is_regression_model <- function(x) {
     "loggammacenslmrob", "logistf", "LogitBoost", "loo",
     "LORgee", "lmodel2", "lmerMod", "lmerModLmerTest",
     "logitmfx", "logitor", "logitr", "lqm", "lqmm", "lrm",
+    "lcmm",
 
     # m --------------------
     "maov", "manova", "MANOVA", "margins", "maxLik", "mboostLSS",

@@ -331,7 +331,7 @@ There is limited support for hypothesis tests, i.e. objects of class \code{htest
 }
 
 \examples{
-\dontshow{if (require("boot")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("boot")) withAutoprint(\{ # examplesIf}
 data(mtcars)
 x <- lm(mpg ~ cyl + hp, data = mtcars)
 
