@@ -204,7 +204,10 @@ find_predictors.lcmm <- function(
 ) {
   component <- validate_argument(
     component,
-    c("all", "conditional", "membership", "longitudinal", "beta", "splines", "linear")
+    c(
+      "all", "conditional", "membership", "longitudinal", "beta", "splines",
+      "linear", "mixture", "classmb"
+    )
   )
 
   f <- .prepare_predictors(
