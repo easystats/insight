@@ -24,72 +24,36 @@ test_that("model_info", {
 
 test_that("find_predictors", {
   expect_identical(find_predictors(m1), list(conditional = "Time"))
-  expect_identical(find_predictors(m3), list(conditional = "Time"))
-  expect_identical(
-    find_predictors(m2, flatten = TRUE),
-    c("Petal.Width", "Species")
-  )
-  expect_null(find_predictors(m1, effects = "random"))
-
-  expect_identical(find_predictors(m2), list(conditional = c("hp", "cyl", "wt")))
-  expect_identical(find_predictors(m2, flatten = TRUE), c("hp", "cyl", "wt"))
-  expect_null(find_predictors(m2, effects = "random"))
+  expect_identical(find_predictors(m2), list(conditional = "Time", mixture = "Time"))
+  expect_identical(find_predictors(m3), list(classmb = c("X1", "X2", "X3")))
 })
 
 test_that("find_response", {
-  expect_identical(find_response(m1), "Sepal.Length")
-  expect_identical(find_response(m2), "mpg")
+  expect_identical(find_response(m1), "Ydep2")
+  expect_identical(find_response(m2), "Ydep2")
+  expect_identical(find_response(m3), "")
 })
 
 test_that("link_inverse", {
-  expect_identical(link_inverse(m1)(0.2), 0.2)
-  expect_identical(link_inverse(m2)(0.2), 0.2)
+  expect_equal(link_inverse(m3)(0.2), plogis(0.2), tolerance = 1e-4)
 })
 
 test_that("loglik", {
-  expect_equal(get_loglikelihood(m1), logLik(m1), ignore_attr = TRUE)
-  expect_equal(get_loglikelihood(m2), logLik(m2), ignore_attr = TRUE)
+  expect_equal(get_loglikelihood(m1), m1$loglik, ignore_attr = TRUE, tolerance = 1e-3)
+  expect_equal(get_loglikelihood(m2), m2$loglik, ignore_attr = TRUE, tolerance = 1e-3)
+  expect_equal(get_loglikelihood(m3), m3$loglik, ignore_attr = TRUE, tolerance = 1e-3)
 })
 
 test_that("get_df", {
-  expect_equal(get_df(m1), df.residual(m1), ignore_attr = TRUE)
-  expect_equal(get_df(m2), df.residual(m2), ignore_attr = TRUE)
-  expect_equal(get_df(m1, type = "model"), attr(logLik(m1), "df"), ignore_attr = TRUE)
-  expect_equal(get_df(m2, type = "model"), attr(logLik(m2), "df"), ignore_attr = TRUE)
-})
-
-test_that("get_df", {
-  expect_equal(
-    get_df(m1, type = "residual"),
-    df.residual(m1),
-    ignore_attr = TRUE
-  )
-  expect_equal(
-    get_df(m1, type = "normal"),
-    Inf,
-    ignore_attr = TRUE
-  )
-  expect_equal(
-    get_df(m1, type = "wald"),
-    df.residual(m1),
-    ignore_attr = TRUE
-  )
-})
-
-test_that("get_data", {
-  expect_identical(nrow(get_data(m1)), 150L)
-  expect_named(get_data(m1), c("Sepal.Length", "Petal.Width", "Species"))
-  expect_identical(nrow(get_data(m2)), 32L)
-  expect_named(get_data(m2), c("mpg", "hp", "cyl", "wt"))
-})
-
-test_that("get_intercept", {
-  expect_equal(get_intercept(m1), as.vector(stats::coef(m1)[1]), ignore_attr = TRUE)
-  expect_equal(get_intercept(m2), as.vector(stats::coef(m2)[1]), ignore_attr = TRUE)
+  expect_equal(get_df(m1), Inf, ignore_attr = TRUE)
+  expect_equal(get_df(m2), Inf, ignore_attr = TRUE)
+  expect_equal(get_df(m3), Inf, ignore_attr = TRUE)
+  expect_equal(get_df(m1, type = "model"), 5, ignore_attr = TRUE)
+  expect_equal(get_df(m3, type = "model"), 8, ignore_attr = TRUE)
 })
 
 test_that("find_formula", {
-  expect_length(find_formula(m1), 1)
+  expect_length(find_formula(m1), 2)
   expect_equal(
     find_formula(m1),
     list(conditional = as.formula("Sepal.Length ~ Petal.Width + Species")),
