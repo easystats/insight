@@ -24,7 +24,7 @@ test_that("robust variance-covariance", {
   mod <- fixest::feols(mpg ~ hp + drat | cyl, data = mtcars)
   # default is clustered
   expect_equal(
-    sqrt(diag(vcov(mod))),
+    sqrt(diag(vcov(mod, vcov = ~cyl))),
     sqrt(diag(get_varcov(mod, vcov = ~cyl))),
     tolerance = 1e-5,
     ignore_attr = TRUE
