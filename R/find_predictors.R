@@ -72,6 +72,8 @@
 #' - **mvord**: `"thresholds"` and `"correlation"`
 #' - **clm2**: `"scale"`
 #' - **selection**: `"selection"`, `"outcome"`, and `"auxiliary"`
+#' - **lcmm**: `"membership"`, `"longitudinal"`, `"beta"`, `"splines"`, and
+#'   `"linear"`
 #'
 #' For models of class `brmsfit` (package **brms**), even more options are
 #' possible for the `component` argument, which are not all documented in detail

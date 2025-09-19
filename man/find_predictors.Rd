@@ -122,6 +122,8 @@ Some model classes also allow rather uncommon options. These are:
 \item \strong{mvord}: \code{"thresholds"} and \code{"correlation"}
 \item \strong{clm2}: \code{"scale"}
 \item \strong{selection}: \code{"selection"}, \code{"outcome"}, and \code{"auxiliary"}
+\item \strong{lcmm}: \code{"membership"}, \code{"longitudinal"}, \code{"beta"}, \code{"splines"}, and
+\code{"linear"}
 }
 
 For models of class \code{brmsfit} (package \strong{brms}), even more options are
