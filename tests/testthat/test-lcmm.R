@@ -22,11 +22,13 @@ test_that("model_info", {
   expect_true(model_info(m3)$is_multinomial)
 })
 
+
 test_that("find_predictors", {
   expect_identical(find_predictors(m1), list(conditional = "Time"))
   expect_identical(find_predictors(m2), list(conditional = "Time", mixture = "Time"))
   expect_identical(find_predictors(m3), list(classmb = c("X1", "X2", "X3")))
 })
+
 
 test_that("find_response", {
   expect_identical(find_response(m1), "Ydep2")
@@ -34,15 +36,18 @@ test_that("find_response", {
   expect_identical(find_response(m3), "")
 })
 
+
 test_that("link_inverse", {
   expect_equal(link_inverse(m3)(0.2), plogis(0.2), tolerance = 1e-4)
 })
+
 
 test_that("loglik", {
   expect_equal(get_loglikelihood(m1), m1$loglik, ignore_attr = TRUE, tolerance = 1e-3)
   expect_equal(get_loglikelihood(m2), m2$loglik, ignore_attr = TRUE, tolerance = 1e-3)
   expect_equal(get_loglikelihood(m3), m3$loglik, ignore_attr = TRUE, tolerance = 1e-3)
 })
+
 
 test_that("get_df", {
   expect_equal(get_df(m1), Inf, ignore_attr = TRUE)
@@ -52,208 +57,103 @@ test_that("get_df", {
   expect_equal(get_df(m3, type = "model"), 8, ignore_attr = TRUE)
 })
 
+
 test_that("find_formula", {
   expect_length(find_formula(m1), 2)
   expect_equal(
     find_formula(m1),
-    list(conditional = as.formula("Sepal.Length ~ Petal.Width + Species")),
+    list(conditional = Ydep2 ~ Time + I(Time^2), random = ~Time),
     ignore_attr = TRUE
   )
 
-  expect_length(find_formula(m2), 1)
   expect_equal(
-    find_formula(m2),
-    list(
-      conditional = as.formula(
-        "log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE)"
-      )
-    ),
+    find_formula(m3),
+    list(classmb = ~X1 + X2 + X3),
     ignore_attr = TRUE
   )
 })
+
 
 test_that("find_terms", {
   expect_identical(
     find_terms(m1),
-    list(
-      response = "Sepal.Length",
-      conditional = c("Petal.Width", "Species")
-    )
+    list(response = "Ydep2", conditional = c("Time", "I(Time^2)"), random = "Time")
   )
   expect_identical(
-    find_terms(m2),
-    list(
-      response = "log(mpg)",
-      conditional = c(
-        "log(hp)",
-        "cyl",
-        "I(cyl^2)",
-        "poly(wt, degree = 2, raw = TRUE)"
-      )
-    )
-  )
-  expect_identical(
-    find_terms(m1, flatten = TRUE),
-    c("Sepal.Length", "Petal.Width", "Species")
-  )
-  expect_identical(
-    find_terms(m2, flatten = TRUE),
-    c(
-      "log(mpg)",
-      "log(hp)",
-      "cyl",
-      "I(cyl^2)",
-      "poly(wt, degree = 2, raw = TRUE)"
-    )
+    find_terms(m3),
+    list(classmb = c("X1", "X2", "X3"))
   )
 })
+
 
 test_that("find_variables", {
   expect_identical(
     find_variables(m1),
-    list(
-      response = "Sepal.Length",
-      conditional = c("Petal.Width", "Species")
-    )
-  )
-  expect_identical(find_variables(m2), list(
-    response = "mpg",
-    conditional = c("hp", "cyl", "wt")
-  ))
-  expect_identical(
-    find_variables(m1, flatten = TRUE),
-    c("Sepal.Length", "Petal.Width", "Species")
+    list(response = "Ydep2", conditional = "Time")
   )
   expect_identical(
-    find_variables(m2, flatten = TRUE),
-    c("mpg", "hp", "cyl", "wt")
+    find_variables(m3),
+    list(response = "", classmb = c("X1", "X2", "X3"))
   )
 })
+
 
 test_that("find_parameters", {
   expect_identical(
     find_parameters(m1),
     list(
-      conditional = c(
-        "(Intercept)",
-        "Petal.Width",
-        "Speciesversicolor",
-        "Speciesvirginica"
+      linear = c("Linear 1 (intercept)", "Linear 2 (std err)"),
+      longitudinal = c("Time", "I(Time^2)")
+    )
+  )
+  expect_identical(
+    find_parameters(m2),
+    list(
+      linear = c("Linear 1 (intercept)", "Linear 2 (std err)"),
+      membership = c("intercept class1", "intercept class2"),
+      longitudinal = c(
+        "intercept class2",
+        "intercept class3",
+        "Time class1",
+        "Time class2",
+        "Time class3",
+        "I(Time^2) class1",
+        "I(Time^2) class2",
+        "I(Time^2) class3"
       )
     )
   )
-  expect_identical(nrow(get_parameters(m1)), 4L)
   expect_identical(
-    get_parameters(m1)$Parameter,
-    c(
-      "(Intercept)",
-      "Petal.Width",
-      "Speciesversicolor",
-      "Speciesvirginica"
-    )
-  )
-})
-
-
-test_that("find_parameters summary.lm", {
-  s <- summary(m1)
-  expect_identical(
-    find_parameters(s),
+    find_parameters(m3),
     list(
       conditional = c(
-        "(Intercept)",
-        "Petal.Width",
-        "Speciesversicolor",
-        "Speciesvirginica"
+        "intercept class1",
+        "intercept class2",
+        "X1 class1",
+        "X1 class2",
+        "X2 class1",
+        "X2 class2",
+        "X3 class1",
+        "X3 class2"
       )
     )
   )
 })
 
-test_that("linkfun", {
-  expect_false(is.null(link_function(m1)))
-  expect_false(is.null(link_function(m2)))
-})
 
-test_that("find_algorithm", {
-  expect_identical(find_algorithm(m1), list(algorithm = "OLS"))
-})
+test_that("get_parameters", {
+  out <- get_parameters(m1)
+  est <- m1$best[!startsWith(names(m1$best), "varcov ")]
+  expect_named(out, c("Parameter", "Estimate", "Component"))
+  expect_equal(out$Estimate, est, ignore_attr = TRUE, tolerance = 1e-4)
 
-test_that("get_variance", {
-  expect_warning(expect_null(get_variance(m1)))
-  expect_warning(expect_null(get_variance_dispersion(m1)))
-  expect_warning(expect_null(get_variance_distribution(m1)))
-  expect_warning(expect_null(get_variance_fixed(m1)))
-  expect_warning(expect_null(get_variance_intercept(m1)))
-  expect_warning(expect_null(get_variance_random(m1)))
-  expect_warning(expect_null(get_variance_residual(m1)))
-})
+  out <- get_parameters(m2)
+  est <- m2$best[!startsWith(names(m2$best), "varcov ")]
+  expect_named(out, c("Parameter", "Estimate", "Component", "Group"))
+  expect_equal(out$Estimate, est, ignore_attr = TRUE, tolerance = 1e-4)
 
-test_that("is_model", {
-  expect_true(is_model(m1))
-})
-
-test_that("all_models_equal", {
-  expect_true(all_models_equal(m1, m2))
-})
-
-test_that("get_varcov", {
-  expect_equal(diag(get_varcov(m1)), diag(vcov(m1)), tolerance = 1e-5)
-})
-
-test_that("get_statistic", {
-  expect_equal(get_statistic(m1)$Statistic, c(57.5427, 4.7298, -0.2615, -0.1398), tolerance = 1e-3)
-})
-
-test_that("find_statistic", {
-  expect_identical(find_statistic(m1), "t-statistic")
-})
-
-
-data("DNase")
-DNase1 <- subset(DNase, Run == 1)
-m3 <-
-  stats::nls(
-    density ~ stats::SSlogis(log(conc), Asym, xmid, scal),
-    DNase1,
-    start = list(
-      Asym = 1,
-      xmid = 1,
-      scal = 1
-    )
-  )
-
-## Dobson (1990) Page 93: Randomized Controlled Trial :
-counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
-outcome <- gl(3, 1, 9)
-treatment <- gl(3, 3)
-m4 <- glm(counts ~ outcome + treatment, family = poisson())
-
-test_that("is_model", {
-  expect_true(is_model(m3))
-})
-
-test_that("is_model", {
-  expect_false(is_model_supported(m3))
-})
-
-test_that("all_models_equal", {
-  expect_false(all_models_equal(m1, m2, m3))
-  expect_false(all_models_equal(m1, m2, m4))
-})
-
-test_that("find_statistic", {
-  expect_identical(find_statistic(m1), "t-statistic")
-  expect_identical(find_statistic(m2), "t-statistic")
-  expect_identical(find_statistic(m3), "t-statistic")
-  expect_identical(find_statistic(m4), "z-statistic")
-})
-
-test_that("find_statistic", {
-  m <- lm(cbind(mpg, hp) ~ cyl + drat, data = mtcars)
-  expect_message(
-    get_predicted(m),
-    "not yet supported for models of class `mlm`"
-  )
-  expect_s3_class(suppressMessages(get_predicted(m)), "get_predicted")
+  out <- get_parameters(m3)
+  est <- m3$best[!startsWith(names(m3$best), "varcov ")]
+  expect_named(out, c("Parameter", "Estimate", "Group"))
+  expect_equal(out$Estimate, est, ignore_attr = TRUE, tolerance = 1e-4)
 })
