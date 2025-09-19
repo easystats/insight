@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,9 +50,20 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/easystats/insight/blob/v1.4.2/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.3" id="insight-143">insight 1.4.3<a class="anchor" aria-label="anchor" href="#insight-143"></a></h2>
+<div class="section level3">
+<h3 id="changes-1-4-3">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-3"></a></h3>
+<ul><li>Added support for models from package <em>lcmm</em> (<code>lcmm</code>, <code>externVar</code>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-3"></a></h3>
+<ul><li>Fix CRAN check failures.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.2" id="insight-142">insight 1.4.2<a class="anchor" aria-label="anchor" href="#insight-142"></a></h2><p class="text-muted">CRAN release: 2025-09-02</p>
 <div class="section level3">
@@ -877,7 +888,7 @@
 <ul><li><p>Improved support for models of class <code>sampleSelection</code>.</p></li>
 <li><p>Improved documentation.</p></li>
 <li><p><code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> now supports: <code><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">rms::lrm</a></code></p></li>
-<li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> supports: <code><a href="https://rdrr.io/pkg/MASS/man/polr.html" class="external-link">MASS::polr</a></code>, <code><a href="https://rdrr.io/pkg/MASS/man/rlm.html" class="external-link">MASS::rlm</a></code>, <code><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">rms::lrm</a></code>, <code>fixest</code>, <code><a href="https://rdrr.io/pkg/bife/man/bife.html" class="external-link">bife::bife</a></code>, <code><a href="https://rdrr.io/pkg/ordinal/man/clm.html" class="external-link">ordinal::clm</a></code>.</p></li>
+<li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> supports: <code><a href="https://rdrr.io/pkg/MASS/man/polr.html" class="external-link">MASS::polr</a></code>, <code><a href="https://rdrr.io/pkg/MASS/man/rlm.html" class="external-link">MASS::rlm</a></code>, <code><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">rms::lrm</a></code>, <code>fixest</code>, <code>bife::bife</code>, <code><a href="https://rdrr.io/pkg/ordinal/man/clm.html" class="external-link">ordinal::clm</a></code>.</p></li>
 <li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> standard errors are often much faster to compute.</p></li>
 <li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> supports models with “grouped” or “level” outcomes (e.g., multinomial logit).</p></li>
 <li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> handles factors better.</p></li>
