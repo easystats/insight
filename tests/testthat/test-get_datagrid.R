@@ -767,6 +767,7 @@ withr::with_environment(
     efc <<- efc
 
     m <- suppressWarnings(download_model("brms_linear_1"))
+    skip_if(is.null(m))
 
     out <- marginaleffects::avg_slopes(m, variables = "c12hour", by = "c172code")
     dg <- get_datagrid(out)

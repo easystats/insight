@@ -439,10 +439,16 @@ test_that("get_predicted - rstanarm", {
 
 
 test_that("get_predicted - brms, auxiliary", {
+  skip_if_not_installed("curl")
+  skip_if_offline()
   skip_if_not_installed("brms")
   skip_if_not_installed("httr2")
+  skip_if_not_installed("BH")
+  skip_if_not_installed("RcppEigen")
 
   m <- insight::download_model("brms_sigma_2")
+  skip_if(is.null(m))
+
   dg <- get_datagrid(m, reference = "grid", include_random = TRUE)
   out <- get_predicted(m, data = dg, predict = "sigma")
   expect_equal(
