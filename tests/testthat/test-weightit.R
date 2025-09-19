@@ -3,6 +3,10 @@ skip_if_not_installed("WeightIt")
 skip_if_not_installed("cobalt")
 skip_if_not_installed("fwb")
 
+skip("Currently not working")
+## TODO: needs to be fixed?
+## see https://github.com/ngreifer/WeightIt/issues/85
+
 data("lalonde", package = "cobalt")
 
 # Logistic regression ATT weights
