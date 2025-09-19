@@ -758,7 +758,7 @@ get_varcov.merModList <- function(x, ...) {
 
 
 #' @export
-get_varcov.lcmm <- function(x, ...) {
+get_varcov.lcmm <- function(x, verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
 
   # extract vcov, which, however, is stored as a vector
