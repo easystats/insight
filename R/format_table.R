@@ -342,7 +342,8 @@ format_table <- function(
   for (stats in c(
     "p_CochransQ", "p_Omnibus", "p_Chi2", "p_Baseline", "p_RMSEA", "p_ROPE",
     "p_MAP", "Wu_Hausman_p", "Sargan_p", "p_Omega2", "p_LR", "p_calibrated",
-    "weak_instruments_p", "p_Superiority", "p_Inferiority"
+    "weak_instruments_p", "p_Superiority", "p_Inferiority", "p_Equivalence",
+    "p_Nonsuperiority", "p_Noninferiority",
   )) {
     if (stats %in% names(x)) {
       x[[stats]] <- format_p(
