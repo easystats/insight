@@ -15,7 +15,7 @@ below."><meta property="og:image" content="https://easystats.github.io/insight/r
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -187,8 +187,6 @@ necessary, also for a cleaner print. See also 'Examples'.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/bayestestR/" class="external-link">bayestestR</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="download_model.html">download_model</a></span><span class="op">(</span><span class="st">"brms_zi_2"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not download model. Request failed with following error:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   HTTP 503 Service Unavailable.</span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html" class="external-link">hdi</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"all"</span>, component <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -207,6 +205,34 @@ necessary, also for a cleaner print. See also 'Examples'.</p>
 <span class="r-in"><span>  <span class="co"># different model components.</span></span></span>
 <span class="r-in"><span>  <span class="va">x</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Highest Density Interval</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter   |        95% HDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) | [-1.58, -0.19]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> persons     | [ 0.62,  1.07]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> child       | [-1.32, -0.96]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> camper      | [ 0.55,  0.93]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Fixed effects (zero-inflated)</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter   |        95% HDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) | [-2.14,  0.82]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> child       | [ 1.24,  2.56]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> camper      | [-1.56, -0.14]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Random effects (conditional)</span> <span style="color: #0000BB;">(SD/Cor: persons)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter   |        95% HDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) | [ 0.00,  0.54]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Random effects (zero-inflated)</span> <span style="color: #0000BB;">(SD/Cor: persons)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter   |        95% HDI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) | [ 0.37,  3.07]</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
