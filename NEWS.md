@@ -4,6 +4,9 @@
 
 * Added support for models from package *lcmm* (`lcmm`, `externVar`).
 
+* Better formatting for p-values-columns from equivalence tests from other
+  packages.
+
 ## Bug fixes
 
 * Fix CRAN check failures.
