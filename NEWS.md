@@ -27,6 +27,9 @@
   `component` argument gains the `"full"` option, to return the full
   variance-covariance matrix, including the random effects (theta parameters).
 
+* `format_p()` now also gets a `lead_zero` argument, to keep or drop the leading
+  zero of a formatted p-value.
+
 * `format_table()` now also formats ROPE columns for superiority and inferiority.
 
 * `format_table()` protects integer columns for non-specific column types.
