@@ -62,3 +62,31 @@ test_that("modelbased get_df", {
   params <- get_df(out)
   expect_identical(params, c(28L, 28L, 28L))
 })
+
+
+test_that("modelbased get_vcov", {
+  data(mtcars)
+  mod <- lm(mpg ~ as.factor(gear) + wt, data = mtcars)
+
+  out <- modelbased::estimate_means(mod, "gear")
+  params <- get_varcov(out)
+  expect_equal(
+    params,
+    matrix(
+      c(
+        0.797266841554893,
+        -0.20517609342839,
+        -0.199732557238491,
+        -0.20517609342839,
+        0.890647337964126,
+        0.177620673860557,
+        -0.199732557238491,
+        0.177620673860558,
+        1.87255360193076
+      ),
+      nrow = 3
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+})
