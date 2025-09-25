@@ -40,6 +40,17 @@ get_call.lm <- function(x) {
 get_call.glm <- get_call.lm
 
 #' @export
+get_call.estimate_means <- function(x) {
+  attributes(x)$call
+}
+
+#' @export
+get_call.estimate_slopes <- get_call.estimate_means
+
+#' @export
+get_call.estimate_contrasts <- get_call.estimate_means
+
+#' @export
 get_call.mvord <- function(x) {
   x$rho$mc
 }

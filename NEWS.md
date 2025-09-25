@@ -6,7 +6,7 @@
 
 * Support for objects from the *modelbased* package. This includes methods for
   `get_parameters()`, `get_statistic()`, `get_df()`, `get_varcov()`,
-  `find_formula()`, `find_parameters()`, `find_statistic()`.
+  `find_formula()`, `find_parameters()`, `find_statistic()`, and `get_call()`.
 
 * Better formatting for p-values-columns from equivalence tests from other
   packages.
