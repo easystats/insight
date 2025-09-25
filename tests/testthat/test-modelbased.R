@@ -52,3 +52,13 @@ test_that("modelbased get_statistic", {
   expect_identical(params$Parameter, c("4 - 3", "5 - 3", "5 - 4"))
   expect_equal(params$Statistic, out[["t"]], tolerance = 1e-5)
 })
+
+
+test_that("modelbased get_df", {
+  data(mtcars)
+  mod <- lm(mpg ~ as.factor(gear) + wt, data = mtcars)
+
+  out <- modelbased::estimate_means(mod, "gear")
+  params <- get_df(out)
+  expect_identical(params, c(28L, 28L, 28L))
+})

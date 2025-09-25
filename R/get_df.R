@@ -445,6 +445,25 @@ get_df.phylolm <- function(x, type = "residual", ...) {
 #' @export
 get_df.phyloglm <- get_df.phylolm
 
+
+#' @export
+get_df.estimate_means <- function(x, type = "residual", ...) {
+  if (identical(type, "model")) {
+    .model_df(get_model(x))
+  } else if ("df" %in% colnames(x)) {
+    x[["df"]]
+  } else {
+    Inf
+  }
+}
+
+#' @export
+get_df.estimate_contrasts <- get_df.estimate_means
+
+#' @export
+get_df.estimate_slopes <- get_df.estimate_means
+
+
 #' @export
 get_df.fixest <- function(x, type = "residual", ...) {
   # fixest degrees of freedom can be tricky. best to use the function by the
