@@ -319,11 +319,15 @@ get_parameters.estimate_means <- function(x, ...) {
   estimate_col <- intersect(
     colnames(x),
     modelbased_coefficient_names
-  )[1]
+  )
+
+  if (!length(estimate_col)) {
+    format_error("Could not find a column with coefficient estimates in the `modelbased` object.")
+  }
 
   data.frame(
     Parameter = x[[1]],
-    Estimate = x[[estimate_col]],
+    Estimate = x[[estimate_col[1]]],
     stringsAsFactors = FALSE
   )
 }
@@ -333,11 +337,15 @@ get_parameters.estimate_contrasts <- function(x, ...) {
   estimate_col <- intersect(
     colnames(x),
     modelbased_coefficient_names
-  )[1]
+  )
+
+  if (!length(estimate_col)) {
+    format_error("Could not find a column with coefficient estimates in the `modelbased` object.")
+  }
 
   data.frame(
     Parameter = paste0(x$Level1, " - ", x$Level2),
-    Estimate = x[[estimate_col]],
+    Estimate = x[[estimate_col[1]]],
     stringsAsFactors = FALSE
   )
 }

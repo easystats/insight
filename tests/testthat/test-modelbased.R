@@ -28,6 +28,28 @@ test_that("modelbased get_parameters", {
 })
 
 
+test_that("modelbased find_parameters", {
+  data(mtcars)
+  mod <- lm(mpg ~ as.factor(gear) + wt, data = mtcars)
+
+  out <- modelbased::estimate_means(mod, "gear")
+  params <- find_parameters(out)
+  expect_identical(params, list(conditional = c(3, 4, 5)))
+
+  out <- modelbased::estimate_slopes(mod, "wt")
+  params <- find_parameters(out)
+  expect_identical(params, list(conditional = "wt"))
+
+  out <- modelbased::estimate_slopes(mod, "wt", by = "gear")
+  params <- find_parameters(out)
+  expect_identical(params, list(conditional = c(3, 4, 5)))
+
+  out <- modelbased::estimate_contrasts(mod, "gear")
+  params <- find_parameters(out)
+  expect_identical(params, list(conditional = c("4 - 3", "5 - 3", "5 - 4")))
+})
+
+
 test_that("modelbased get_statistic", {
   data(mtcars)
   mod <- lm(mpg ~ as.factor(gear) + wt, data = mtcars)
