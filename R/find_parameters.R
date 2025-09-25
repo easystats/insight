@@ -312,7 +312,7 @@ find_parameters.estimate_means <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.estimate_contrasts <- function(x, ...) {
+find_parameters.estimate_contrasts <- function(x, flatten = FALSE, ...) {
   pars <- list(conditional = paste0(x$Level1, " - ", x$Level2))
   if (flatten) {
     unique(unlist(pars, use.names = FALSE))
@@ -323,7 +323,7 @@ find_parameters.estimate_contrasts <- function(x, ...) {
 
 
 #' @export
-find_parameters.estimate_slopes <- function(x, ...) {
+find_parameters.estimate_slopes <- function(x, flatten = FALSE, ...) {
   if (colnames(x)[1] != "Slope") {
     param <- x[[1]]
   } else {

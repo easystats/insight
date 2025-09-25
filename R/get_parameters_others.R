@@ -316,14 +316,7 @@ modelbased_coefficient_names <- c(
 
 #' @export
 get_parameters.estimate_means <- function(x, ...) {
-  estimate_col <- intersect(
-    colnames(x),
-    modelbased_coefficient_names
-  )
-
-  if (!length(estimate_col)) {
-    format_error("Could not find a column with coefficient estimates in the `modelbased` object.")
-  }
+  estimate_col <- .find_modelbased_estimate_col(x)
 
   data.frame(
     Parameter = x[[1]],
@@ -334,14 +327,7 @@ get_parameters.estimate_means <- function(x, ...) {
 
 #' @export
 get_parameters.estimate_contrasts <- function(x, ...) {
-  estimate_col <- intersect(
-    colnames(x),
-    modelbased_coefficient_names
-  )
-
-  if (!length(estimate_col)) {
-    format_error("Could not find a column with coefficient estimates in the `modelbased` object.")
-  }
+  estimate_col <- .find_modelbased_estimate_col(x)
 
   data.frame(
     Parameter = paste0(x$Level1, " - ", x$Level2),
@@ -362,6 +348,20 @@ get_parameters.estimate_slopes <- function(x, ...) {
     Estimate = x$Slope,
     stringsAsFactors = FALSE
   )
+}
+
+.find_modelbased_estimate_col <- function(x) {
+  estimate_col <- intersect(
+    colnames(x),
+    modelbased_coefficient_names
+  )
+
+  if (!length(estimate_col)) {
+    format_error(
+      "Could not find a column with coefficient estimates in the `modelbased` object."
+    )
+  }
+  estimate_col[1]
 }
 
 
