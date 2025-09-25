@@ -50,6 +50,18 @@ test_that("modelbased find_parameters", {
 })
 
 
+test_that("modelbased find_formula", {
+  data(mtcars)
+  mod <- lm(mpg ~ as.factor(gear) + wt, data = mtcars)
+
+  out <- modelbased::estimate_means(mod, "gear")
+  expect_identical(
+    find_formula(out),
+    list(conditional = mpg ~ as.factor(gear) + wt)
+  )
+})
+
+
 test_that("modelbased get_statistic", {
   data(mtcars)
   mod <- lm(mpg ~ as.factor(gear) + wt, data = mtcars)
