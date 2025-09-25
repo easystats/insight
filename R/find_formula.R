@@ -438,6 +438,17 @@ find_formula.maxLik <- find_formula.default
 #' @export
 find_formula.maxim <- find_formula.default
 
+#' @export
+find_formula.estimate_means <- function(x, verbose = TRUE, ...) {
+  find_formula(get_model(x), verbose = verbose, ...)
+}
+
+#' @export
+find_formula.estimate_slopes <- find_formula.estimate_means
+
+#' @export
+find_formula.estimate_contrasts <- find_formula.estimate_means
+
 
 #' @rdname find_formula
 #' @export

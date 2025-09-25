@@ -308,6 +308,63 @@ get_parameters.mjoint <- function(x, component = "all", ...) {
 }
 
 
+# fmt: skip
+modelbased_coefficient_names <- c(
+  "Mean", "Probability", "Difference", "Ratio", "Rate", "ZI-Probability",
+  "Proportion", "Median", "MAP", "Coefficient", "Odds_ratio"
+)
+
+#' @export
+get_parameters.estimate_means <- function(x, ...) {
+  estimate_col <- .find_modelbased_estimate_col(x)
+
+  data.frame(
+    Parameter = x[[1]],
+    Estimate = x[[estimate_col[1]]],
+    stringsAsFactors = FALSE
+  )
+}
+
+#' @export
+get_parameters.estimate_contrasts <- function(x, ...) {
+  estimate_col <- .find_modelbased_estimate_col(x)
+
+  data.frame(
+    Parameter = paste0(x$Level1, " - ", x$Level2),
+    Estimate = x[[estimate_col[1]]],
+    stringsAsFactors = FALSE
+  )
+}
+
+#' @export
+get_parameters.estimate_slopes <- function(x, ...) {
+  if (colnames(x)[1] != "Slope") {
+    param <- x[[1]]
+  } else {
+    param <- attributes(x)$trend
+  }
+  data.frame(
+    Parameter = param,
+    Estimate = x$Slope,
+    stringsAsFactors = FALSE
+  )
+}
+
+.find_modelbased_estimate_col <- function(x) {
+  estimate_col <- intersect(
+    colnames(x),
+    modelbased_coefficient_names
+  )
+
+  if (!length(estimate_col)) {
+    format_error(
+      "Could not find a column with coefficient estimates in the `modelbased` object."
+    )
+  }
+  estimate_col[1]
+}
+
+
 #' @export
 get_parameters.lcmm <- function(x, component = "all", ...) {
   component <- validate_argument(

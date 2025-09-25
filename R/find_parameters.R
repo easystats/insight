@@ -301,6 +301,44 @@ find_parameters.wbgee <- find_parameters.wbm
 # Other models -----------------------------------
 
 #' @export
+find_parameters.estimate_means <- function(x, flatten = FALSE, ...) {
+  pars <- list(conditional = x[[1]])
+  if (flatten) {
+    unique(unlist(pars, use.names = FALSE))
+  } else {
+    pars
+  }
+}
+
+
+#' @export
+find_parameters.estimate_contrasts <- function(x, flatten = FALSE, ...) {
+  pars <- list(conditional = paste0(x$Level1, " - ", x$Level2))
+  if (flatten) {
+    unique(unlist(pars, use.names = FALSE))
+  } else {
+    pars
+  }
+}
+
+
+#' @export
+find_parameters.estimate_slopes <- function(x, flatten = FALSE, ...) {
+  if (colnames(x)[1] != "Slope") {
+    param <- x[[1]]
+  } else {
+    param <- attributes(x)$trend
+  }
+  pars <- list(conditional = param)
+  if (flatten) {
+    unique(unlist(pars, use.names = FALSE))
+  } else {
+    pars
+  }
+}
+
+
+#' @export
 find_parameters.rms <- find_parameters.default
 
 #' @export

@@ -79,7 +79,8 @@ is_regression_model <- function(x) {
 
     # e --------------------
     "eglm", "elm", "emmGrid", "emm_list", "epi.2by2", "ergm",
-    "externVar", "externX",
+    "externVar", "externX", "estimate_means", "estimate_slopes",
+    "estimate_contrasts",
 
     # f --------------------
     "fdm", "feglm", "feis", "felm", "fitdistr", "fixest", "flexmix",
@@ -172,7 +173,8 @@ is_regression_model <- function(x) {
   if (isTRUE(regression_only)) {
     out <- setdiff(out, c(
       "emmGrid", "emm_list", "htest", "pairwise.htest", "summary.lm",
-      "marginaleffects", "marginaleffects.summary", "ggcomparisons"
+      "marginaleffects", "marginaleffects.summary", "ggcomparisons",
+      "estimate_means", "estimate_slopes", "estimate_contrasts"
     ))
   }
 

@@ -750,6 +750,23 @@ get_varcov.flac <- get_varcov.flic
 
 
 #' @export
+get_varcov.estimate_means <- function(x, verbose = TRUE, ...) {
+  .check_get_varcov_dots(x, ...)
+  v <- attributes(x)$vcov
+  if (is.null(v)) {
+    return(get_varcov(get_model(x), verbose = verbose, ...))
+  }
+  .process_vcov(v, verbose, ...)
+}
+
+#' @export
+get_varcov.estimate_slopes <- get_varcov.estimate_means
+
+#' @export
+get_varcov.estimate_contrasts <- get_varcov.estimate_means
+
+
+#' @export
 get_varcov.merModList <- function(x, ...) {
   .check_get_varcov_dots(x, ...)
   format_warning("Can't access variance-covariance matrix for 'merModList' objects.")

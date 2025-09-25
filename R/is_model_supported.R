@@ -62,6 +62,7 @@ supported_models <- function() {
 
     # e ----------------------------
     "eglm", "elm", "epi.2by2", "ergm", "emmGrid", "externX", "externVar",
+    "estimate_means", "estimate_slopes", "estimate_contrasts",
 
     # f ----------------------------
     "fdm", "feis", "felm", "feglm", "fitdistr", "fixest", "flexsurvreg",
