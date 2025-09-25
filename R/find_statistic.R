@@ -357,6 +357,22 @@ find_statistic.default <- function(x, ...) {
 }
 
 
+#' @export
+find_statistic.estimate_means <- function(x, ...) {
+  if ("t" %in% colnames(x)) {
+    return("t-statistic")
+  } else {
+    return("z-statistic")
+  }
+}
+
+#' @export
+find_statistic.estimate_slopes <- find_statistic.estimate_means
+
+#' @export
+find_statistic.estimate_contrasts <- find_statistic.estimate_means
+
+
 # helper ---------------
 
 .is_tweedie <- function(model, info) {

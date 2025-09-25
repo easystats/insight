@@ -1293,6 +1293,35 @@ get_statistic.glmgee <- function(x, ...) {
 
 
 #' @export
+get_statistic.estimate_means <- function(x, ...) {
+  if ("t" %in% colnames(x)) {
+    stat <- x[["t"]]
+  } else {
+    stat <- x[["z"]]
+  }
+
+  params <- get_parameters(x)
+
+  out <- data.frame(
+    Parameter = params$Parameter,
+    Statistic = as.vector(stat),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+#' @export
+get_statistic.estimate_slopes <- get_statistic.estimate_means
+
+#' @export
+get_statistic.estimate_contrasts <- get_statistic.estimate_means
+
+
+#' @export
 get_statistic.nestedLogit <- function(x, component = "all", verbose = TRUE, ...) {
   cf <- as.data.frame(stats::coef(x))
   out <- as.data.frame(do.call(rbind, lapply(x$models, function(i) stats::coef(summary(i)))))
