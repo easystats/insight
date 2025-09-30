@@ -13,15 +13,21 @@ test_that("export_table", {
 
 test_that("export_table", {
   out <- export_table(d, format = "md")
-  expect_equal(out, structure(
-    c(
-      "|      a|     b|", "|------:|-----:|",
-      "|   1.30|    ab|", "|   2.00|    cd|",
-      "| 543.00| abcde|"
+  expect_equal(
+    out,
+    structure(
+      c(
+        "|      a|     b|",
+        "|------:|-----:|",
+        "|   1.30|    ab|",
+        "|   2.00|    cd|",
+        "| 543.00| abcde|"
+      ),
+      format = "pipe",
+      class = c("knitr_kable", "character")
     ),
-    format = "pipe",
-    class = c("knitr_kable", "character")
-  ), ignore_attr = TRUE)
+    ignore_attr = TRUE
+  )
 })
 
 d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
@@ -33,8 +39,13 @@ test_that("export_table", {
     out,
     structure(
       c(
-        "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
-        "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|"
+        "Table: Table Title",
+        "",
+        "|      a|     b|",
+        "|------:|-----:|",
+        "|   1.30|    ab|",
+        "|   2.00|    cd|",
+        "| 543.00| abcde|"
       ),
       format = "pipe",
       class = c("knitr_kable", "character")
@@ -52,8 +63,13 @@ test_that("export_table", {
     out,
     structure(
       c(
-        "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
-        "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|"
+        "Table: Table Title",
+        "",
+        "|      a|     b|",
+        "|------:|-----:|",
+        "|   1.30|    ab|",
+        "|   2.00|    cd|",
+        "| 543.00| abcde|"
       ),
       format = "pipe",
       class = c("knitr_kable", "character")
@@ -70,8 +86,13 @@ test_that("export_table", {
     out,
     structure(
       c(
-        "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
-        "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|"
+        "Table: Table Title",
+        "",
+        "|      a|     b|",
+        "|------:|-----:|",
+        "|   1.30|    ab|",
+        "|   2.00|    cd|",
+        "| 543.00| abcde|"
       ),
       format = "pipe",
       class = c("knitr_kable", "character")
@@ -90,9 +111,16 @@ test_that("export_table", {
     out,
     structure(
       c(
-        "Table: Table Title", "", "|      a|     b|", "|------:|-----:|",
-        "|   1.30|    ab|", "|   2.00|    cd|", "| 543.00| abcde|",
-        "first", "second", "third"
+        "Table: Table Title",
+        "",
+        "|      a|     b|",
+        "|------:|-----:|",
+        "|   1.30|    ab|",
+        "|   2.00|    cd|",
+        "| 543.00| abcde|",
+        "first",
+        "second",
+        "third"
       ),
       format = "pipe",
       class = c("knitr_kable", "character")
@@ -122,7 +150,10 @@ test_that("export_table, table_width", {
   lm1 <- lm(Sepal.Length ~ Species, data = iris)
   lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
   lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
-  lm6 <- lm5 <- lm4 <- lm(Sepal.Length ~ Species * Petal.Length + Petal.Width, data = iris)
+  lm6 <- lm5 <- lm4 <- lm(
+    Sepal.Length ~ Species * Petal.Length + Petal.Width,
+    data = iris
+  )
 
   tab <- parameters::compare_parameters(lm1, lm2, lm3, lm4, lm5, lm6)
   expect_snapshot(print(tab, ci_digits = 2, table_width = 80), variant = "windows")
@@ -149,7 +180,10 @@ test_that("export_table, table_width, no split", {
   lm1 <- lm(Sepal.Length ~ Species, data = iris)
   lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
   lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
-  lm6 <- lm5 <- lm4 <- lm(Sepal.Length ~ Species * Petal.Length + Petal.Width, data = iris)
+  lm6 <- lm5 <- lm4 <- lm(
+    Sepal.Length ~ Species * Petal.Length + Petal.Width,
+    data = iris
+  )
 
   tab <- parameters::compare_parameters(lm1, lm2, lm3, lm4, lm5, lm6)
   expect_snapshot(print(tab, table_width = NULL), variant = "windows")
@@ -162,24 +196,82 @@ test_that("export_table, table_width, remove duplicated empty lines", {
   out <- datawizard::data_codebook(efc)
   out$.row_id <- NULL
   expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = FALSE)))
-  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", remove_duplicates = FALSE)))
-  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", sep = " | ", remove_duplicates = FALSE)))
-  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", cross = "+", remove_duplicates = FALSE)))
+  expect_snapshot(print(export_table(
+    out,
+    table_width = 60,
+    empty_line = "-",
+    remove_duplicates = FALSE
+  )))
+  expect_snapshot(print(export_table(
+    out,
+    table_width = 60,
+    empty_line = "-",
+    sep = " | ",
+    remove_duplicates = FALSE
+  )))
+  expect_snapshot(print(export_table(
+    out,
+    table_width = 60,
+    empty_line = "-",
+    cross = "+",
+    remove_duplicates = FALSE
+  )))
   # don't remove duplicates
   expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = TRUE)))
-  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", remove_duplicates = TRUE)))
-  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", sep = " | ", remove_duplicates = TRUE)))
-  expect_snapshot(print(export_table(out, table_width = 60, empty_line = "-", cross = "+", remove_duplicates = TRUE)))
+  expect_snapshot(print(export_table(
+    out,
+    table_width = 60,
+    empty_line = "-",
+    remove_duplicates = TRUE
+  )))
+  expect_snapshot(print(export_table(
+    out,
+    table_width = 60,
+    empty_line = "-",
+    sep = " | ",
+    remove_duplicates = TRUE
+  )))
+  expect_snapshot(print(export_table(
+    out,
+    table_width = 60,
+    empty_line = "-",
+    cross = "+",
+    remove_duplicates = TRUE
+  )))
 
   data(efc_insight, package = "insight")
   out <- datawizard::data_codebook(efc_insight[, 1:4])
   out$.row_id <- NULL
-  expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = TRUE, empty_line = "-", cross = "+")))
-  expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = FALSE, empty_line = "-", cross = "+")))
+  expect_snapshot(print(export_table(
+    out,
+    table_width = 60,
+    remove_duplicates = TRUE,
+    empty_line = "-",
+    cross = "+"
+  )))
+  expect_snapshot(print(export_table(
+    out,
+    table_width = 60,
+    remove_duplicates = FALSE,
+    empty_line = "-",
+    cross = "+"
+  )))
   out <- datawizard::data_codebook(efc_insight[, 1:3])
   out$.row_id <- NULL
-  expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = TRUE, empty_line = "-", cross = "+")))
-  expect_snapshot(print(export_table(out, table_width = 60, remove_duplicates = FALSE, empty_line = "-", cross = "+")))
+  expect_snapshot(print(export_table(
+    out,
+    table_width = 60,
+    remove_duplicates = TRUE,
+    empty_line = "-",
+    cross = "+"
+  )))
+  expect_snapshot(print(export_table(
+    out,
+    table_width = 60,
+    remove_duplicates = FALSE,
+    empty_line = "-",
+    cross = "+"
+  )))
 })
 
 
@@ -202,7 +294,11 @@ test_that("export_table, overlengthy lines", {
 test_that("export_table, gt, simple", {
   skip_if_not_installed("gt")
   skip_on_cran()
-  d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
+  d <- data.frame(
+    a = c(1.3, 2, 543),
+    b = c("ab", "cd", "abcde"),
+    stringsAsFactors = FALSE
+  )
   attr(d, "table_caption") <- "Table Title"
   set.seed(123)
   out <- gt::as_raw_html(export_table(d, format = "html"))
@@ -238,7 +334,8 @@ test_that("export_table, gt, complex with group indention", {
   cp <- parameters::compare_parameters(lm1, lm2, drop = "^\\(Intercept")
 
   set.seed(123)
-  out <- gt::as_raw_html(print_html(cp,
+  out <- gt::as_raw_html(print_html(
+    cp,
     select = "{estimate}{stars}|({se})",
     groups = list(
       Species = c(
@@ -361,8 +458,15 @@ test_that("export_table, tinytable with indented rows", {
 
   mp <- as.data.frame(format(parameters::model_parameters(model, drop = "^\\(Intercept")))
   mp$groups <- c(
-    "Engine", "Controls", "Controls", "Engine", "Engine", "Engine", "Controls",
-    "Interactions", "Interactions"
+    "Engine",
+    "Controls",
+    "Controls",
+    "Engine",
+    "Engine",
+    "Engine",
+    "Controls",
+    "Interactions",
+    "Interactions"
   )
   expect_snapshot(export_table(mp, format = "tt", by = "groups", table_width = Inf))
 })
@@ -392,7 +496,11 @@ test_that("export_table, removing captions work", {
 
 test_that("export_table with big_mark", {
   # Test with comma separator
-  d <- data.frame(x = c(1234.56, 9876543.21, 12.34), y = c("a", "b", "c"), stringsAsFactors = FALSE)
+  d <- data.frame(
+    x = c(1234.56, 9876543.21, 12.34),
+    y = c("a", "b", "c"),
+    stringsAsFactors = FALSE
+  )
   out <- export_table(d, big_mark = ",", format = "text")
   expect_true(grepl("1,234.56", out, fixed = TRUE))
   expect_true(grepl("9,876,543.21", out, fixed = TRUE))
