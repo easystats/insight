@@ -1390,15 +1390,16 @@ print.insight_table <- function(x, ...) {
 # --------------------------------------------------------
 
 .format_html_table <- function(
-    final,
-    caption = NULL,
-    subtitle = NULL,
-    footer = NULL,
-    align = "center",
-    group_by = NULL,
-    row_groups = NULL,
-    column_groups = NULL,
-    ...) {
+  final,
+  caption = NULL,
+  subtitle = NULL,
+  footer = NULL,
+  align = "center",
+  group_by = NULL,
+  row_groups = NULL,
+  column_groups = NULL,
+  ...
+) {
   check_if_installed("gt")
 
   if (is.null(align)) {

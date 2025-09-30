@@ -303,7 +303,7 @@ format_percent <- function(x, ...) {
         )
       }
     }
-    
+
     # Apply thousands separator if requested
     # Only apply to non-scientific notation and non-percentage values
     if (!is.null(.big_mark) && !identical(.big_mark, "") && is.character(x)) {

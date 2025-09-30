@@ -45,36 +45,36 @@ test_that("format_value with big_mark", {
   # Test basic thousands separator with comma
   expect_identical(format_value(1234.56, big_mark = ","), "1,234.56")
   expect_identical(format_value(1234567.89, big_mark = ","), "1,234,567.89")
-  
+
   # Test with space separator
   expect_identical(format_value(1234.56, big_mark = " "), "1 234.56")
   expect_identical(format_value(1234567.89, big_mark = " "), "1 234 567.89")
-  
+
   # Test with protect_integers
   expect_identical(format_value(1234, big_mark = ",", protect_integers = TRUE), "1,234")
   expect_identical(format_value(1234.0, big_mark = ",", protect_integers = TRUE), "1,234")
-  
+
   # Test with vectors
   expect_identical(
     format_value(c(1234.56, 987654.32, 12.34), big_mark = ","),
     c("1,234.56", "987,654.32", "12.34")
   )
-  
+
   # Test with negative numbers
   expect_identical(format_value(-1234.56, big_mark = ","), "-1,234.56")
   expect_identical(format_value(-1234567.89, big_mark = ","), "-1,234,567.89")
-  
+
   # Test that NULL or empty string disables thousands separator (backward compatibility)
   expect_identical(format_value(1234.56, big_mark = NULL), "1234.56")
   expect_identical(format_value(1234.56, big_mark = ""), "1234.56")
-  
+
   # Test that scientific notation is not affected by big_mark
   expect_identical(format_value(1234565789101112, big_mark = ","), "1.23e+15")
-  
+
   # Test with decimal_point and big_mark together
   expect_identical(format_value(1234.56, big_mark = ",", decimal_point = ","), "1,234,56")
   expect_identical(format_value(1234.56, big_mark = " ", decimal_point = ","), "1 234,56")
-  
+
   # Test that percentages are not affected by big_mark (they have % sign)
   # Percentages don't typically need thousands separators in their display
   expect_identical(format_value(0.95, as_percent = TRUE, big_mark = ","), "95.00%")

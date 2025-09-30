@@ -352,8 +352,7 @@ find_parameters.lcmm <- function(x, component = "all", flatten = FALSE, ...) {
     ],
     extra = params[startsWith(params, type)]
   )
-  names(out)[3] <- switch(
-    type,
+  names(out)[3] <- switch(type,
     "Beta" = "beta",
     "I-splines" = "splines",
     "Linear" = "linear"
