@@ -68,8 +68,12 @@ test_that("format_value with big_mark", {
   expect_identical(format_value(1234.56, big_mark = NULL), "1234.56")
   expect_identical(format_value(1234.56, big_mark = ""), "1234.56")
 
-  # Test that scientific notation is not affected by big_mark
-  expect_identical(format_value(1234565789101112, big_mark = ","), "1.23e+15")
+  # Test very large numbers - when big_mark is provided, scientific notation is suppressed
+  # to show the full number with separators
+  expect_identical(format_value(1234565789101112, big_mark = ","), "1,234,565,789,101,112.00")
+  
+  # Test that without big_mark, very large numbers still use scientific notation
+  expect_identical(format_value(1234565789101112), "1.23e+15")
 
   # Test with decimal_point and big_mark together
   expect_identical(format_value(1234.56, big_mark = ",", decimal_point = ","), "1,234,56")

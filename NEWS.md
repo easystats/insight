@@ -11,6 +11,12 @@
 * Better formatting for p-values-columns from equivalence tests from other
   packages.
 
+* `format_value()`, `format_number()`, and `export_table()` gain a `big_mark`
+  argument to format numbers with thousands separators (e.g., `1,234,567.89` or
+  `1 234 567.89`). This makes large numbers more readable in tables and formatted
+  output. When `big_mark` is provided, scientific notation is suppressed for
+  large numbers to show the full value with separators.
+
 ## Bug fixes
 
 * Fix CRAN check failures.

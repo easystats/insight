@@ -291,8 +291,11 @@ format_percent <- function(x, ...) {
       if (is.na(digits)) digits <- 3
       x <- as.character(signif(x, digits))
     } else {
+      # When big_mark is provided, suppress scientific notation for large numbers
+      # since the user wants to see the full number with thousands separators
+      use_big_mark <- !is.null(.big_mark) && !identical(.big_mark, "")
       need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits)) & x != 0
-      if (.zap_small) {
+      if (.zap_small || use_big_mark) {
         x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
       } else {
         x <- ifelse(is.na(x), .missing,
