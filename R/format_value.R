@@ -36,6 +36,9 @@
 #'   `"parens"` to wrap the number in parentheses.
 #' @param decimal_point Character string containing a single character that
 #'   is used as decimal point in output conversions.
+#' @param big_mark Character used as thousands separator. If `NULL` (default),
+#'   no thousands separator is used. Use `","` for comma separator or `" "`
+#'   for space separator.
 #' @param ... Arguments passed to or from other methods.
 #'
 #'
@@ -52,6 +55,8 @@
 #' format_value(c(0.0045, 0.12, 0.34), digits = "scientific2")
 #' format_value(c(0.045, 0.12, 0.34), lead_zero = FALSE)
 #' format_value(c(0.0045, 0.12, 0.34), decimal_point = ",")
+#' format_value(c(1234567.89, 1234.56), big_mark = ",")
+#' format_value(c(1234567.89, 1234.56), big_mark = " ")
 #'
 #' # default
 #' format_value(c(0.0045, 0.123, 0.345))
@@ -84,6 +89,7 @@ format_value.data.frame <- function(x,
                                     style_positive = "none",
                                     style_negative = "hyphen",
                                     decimal_point = getOption("OutDec"),
+                                    big_mark = NULL,
                                     ...) {
   as.data.frame(sapply(
     x,
@@ -98,6 +104,7 @@ format_value.data.frame <- function(x,
     style_positive = style_positive,
     style_negative = style_negative,
     decimal_point = decimal_point,
+    big_mark = big_mark,
     simplify = FALSE
   ))
 }
@@ -116,6 +123,7 @@ format_value.numeric <- function(x,
                                  style_positive = "none",
                                  style_negative = "hyphen",
                                  decimal_point = getOption("OutDec"),
+                                 big_mark = NULL,
                                  ...) {
   # check input
   style_positive <- validate_argument(style_positive, c("none", "plus", "space"))
@@ -129,6 +137,7 @@ format_value.numeric <- function(x,
       .width = width,
       .as_percent = as_percent,
       .zap_small = zap_small,
+      .big_mark = big_mark,
       ...
     )
   } else {
@@ -139,6 +148,7 @@ format_value.numeric <- function(x,
       .width = width,
       .as_percent = as_percent,
       .zap_small = zap_small,
+      .big_mark = big_mark,
       ...
     )
   }
@@ -210,7 +220,8 @@ format_percent <- function(x, ...) {
                                          .missing = "",
                                          .width = NULL,
                                          .as_percent = FALSE,
-                                         .zap_small = FALSE, ...) {
+                                         .zap_small = FALSE,
+                                         .big_mark = NULL, ...) {
   x_nonmiss <- x[!is.na(x)]
   if (is.numeric(x) && !all(.is_integer(x_nonmiss))) {
     .format_value(
@@ -219,7 +230,8 @@ format_percent <- function(x, ...) {
       .missing = .missing,
       .width = .width,
       .as_percent = .as_percent,
-      .zap_small = .zap_small
+      .zap_small = .zap_small,
+      .big_mark = .big_mark
     )
   } else if (anyNA(x)) {
     .convert_missing(x, .missing)
@@ -237,6 +249,7 @@ format_percent <- function(x, ...) {
                           .width = NULL,
                           .as_percent = FALSE,
                           .zap_small = FALSE,
+                          .big_mark = NULL,
                           ...) {
   # proper character NA
   if (is.na(.missing)) .missing <- NA_character_
@@ -288,6 +301,16 @@ format_percent <- function(x, ...) {
             sprintf("%.*f", digits, x)
           )
         )
+      }
+    }
+    
+    # Apply thousands separator if requested
+    # Only apply to non-scientific notation values
+    if (!is.null(.big_mark) && !identical(.big_mark, "") && is.character(x)) {
+      # Don't apply to scientific notation (contains 'e')
+      needs_big_mark <- !grepl("e", x, fixed = TRUE) & !is.na(x) & x != .missing
+      if (any(needs_big_mark)) {
+        x[needs_big_mark] <- prettyNum(x[needs_big_mark], big.mark = .big_mark, preserve.width = "none")
       }
     }
   } else if (anyNA(x)) {
