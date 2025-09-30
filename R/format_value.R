@@ -238,7 +238,15 @@ format_percent <- function(x, ...) {
   } else if (is.numeric(x) && all(.is_integer(x_nonmiss)) && !is.null(.width)) {
     format(x, justify = "right", width = .width)
   } else {
-    as.character(x)
+    # For integers, apply big_mark if requested
+    out <- as.character(x)
+    if (!is.null(.big_mark) && !identical(.big_mark, "") && is.character(out)) {
+      needs_big_mark <- !is.na(out) & out != .missing
+      if (any(needs_big_mark)) {
+        out[needs_big_mark] <- prettyNum(out[needs_big_mark], big.mark = .big_mark, preserve.width = "none")
+      }
+    }
+    out
   }
 }
 
@@ -262,7 +270,9 @@ format_percent <- function(x, ...) {
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
       need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0
-      if (.zap_small) {
+      # When big_mark is provided, suppress scientific notation for percentages too
+      use_big_mark <- !is.null(.big_mark) && !identical(.big_mark, "")
+      if (.zap_small || use_big_mark) {
         x <- ifelse(is.na(x), .missing, sprintf("%.*f%%", digits, 100 * x))
       } else {
         x <- ifelse(is.na(x), .missing,
@@ -308,12 +318,28 @@ format_percent <- function(x, ...) {
     }
 
     # Apply thousands separator if requested
-    # Only apply to non-scientific notation and non-percentage values
+    # Only apply to non-scientific notation values
     if (!is.null(.big_mark) && !identical(.big_mark, "") && is.character(x)) {
-      # Don't apply to scientific notation (contains 'e') or percentages (contains '%')
-      needs_big_mark <- !grepl("e", x, fixed = TRUE) & !grepl("%", x, fixed = TRUE) & !is.na(x) & x != .missing
+      # Don't apply to scientific notation (contains 'e')
+      needs_big_mark <- !grepl("e", x, fixed = TRUE) & !is.na(x) & x != .missing
       if (any(needs_big_mark)) {
-        x[needs_big_mark] <- prettyNum(x[needs_big_mark], big.mark = .big_mark, preserve.width = "none")
+        # For percentages, we need to handle them specially
+        has_percent <- grepl("%", x, fixed = TRUE)
+        
+        # Apply big_mark to non-percentage values directly
+        if (any(needs_big_mark & !has_percent)) {
+          x[needs_big_mark & !has_percent] <- prettyNum(x[needs_big_mark & !has_percent], big.mark = .big_mark, preserve.width = "none")
+        }
+        
+        # For percentages, extract the number, apply big_mark, then add % back
+        if (any(needs_big_mark & has_percent)) {
+          idx <- which(needs_big_mark & has_percent)
+          for (i in idx) {
+            # Remove the % sign, apply prettyNum, then add % back
+            num_part <- gsub("%", "", x[i], fixed = TRUE)
+            x[i] <- paste0(prettyNum(num_part, big.mark = .big_mark, preserve.width = "none"), "%")
+          }
+        }
       }
     }
   } else if (anyNA(x)) {
