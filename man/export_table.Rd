@@ -23,6 +23,7 @@ export_table(
   align = NULL,
   by = NULL,
   zap_small = FALSE,
+  big_mark = NULL,
   table_width = "auto",
   remove_duplicates = FALSE,
   row_groups = NULL,
@@ -116,6 +117,10 @@ frames. See also \code{row_groups} to group rows in the printed output.}
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
 places than \code{digits} are printed in scientific notation.}
+
+\item{big_mark}{Character used as thousands separator. If \code{NULL} (default),
+no thousands separator is used. Use \code{","} for comma separator or \code{" "}
+for space separator.}
 
 \item{table_width}{Numeric,\code{"auto"}, \code{NULL} or \code{Inf}, indicating the width of
 the complete table.
