@@ -305,10 +305,10 @@ format_percent <- function(x, ...) {
     }
     
     # Apply thousands separator if requested
-    # Only apply to non-scientific notation values
+    # Only apply to non-scientific notation and non-percentage values
     if (!is.null(.big_mark) && !identical(.big_mark, "") && is.character(x)) {
-      # Don't apply to scientific notation (contains 'e')
-      needs_big_mark <- !grepl("e", x, fixed = TRUE) & !is.na(x) & x != .missing
+      # Don't apply to scientific notation (contains 'e') or percentages (contains '%')
+      needs_big_mark <- !grepl("e", x, fixed = TRUE) & !grepl("%", x, fixed = TRUE) & !is.na(x) & x != .missing
       if (any(needs_big_mark)) {
         x[needs_big_mark] <- prettyNum(x[needs_big_mark], big.mark = .big_mark, preserve.width = "none")
       }

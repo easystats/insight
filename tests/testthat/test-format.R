@@ -74,6 +74,11 @@ test_that("format_value with big_mark", {
   # Test with decimal_point and big_mark together
   expect_identical(format_value(1234.56, big_mark = ",", decimal_point = ","), "1,234,56")
   expect_identical(format_value(1234.56, big_mark = " ", decimal_point = ","), "1 234,56")
+  
+  # Test that percentages are not affected by big_mark (they have % sign)
+  # Percentages don't typically need thousands separators in their display
+  expect_identical(format_value(0.95, as_percent = TRUE, big_mark = ","), "95.00%")
+  expect_identical(format_value(12.345, as_percent = TRUE, big_mark = ","), "1,234.50%")
 })
 
 test_that("format_number with big_mark", {
