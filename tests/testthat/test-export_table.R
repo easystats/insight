@@ -502,21 +502,21 @@ test_that("export_table with big_mark", {
     stringsAsFactors = FALSE
   )
   out <- export_table(d, big_mark = ",", format = "text")
-  expect_true(grepl("1,234.56", out, fixed = TRUE))
-  expect_true(grepl("9,876,543.21", out, fixed = TRUE))
+  expect_true(any(grepl("1,234.56", out, fixed = TRUE)))
+  expect_true(any(grepl("9,876,543.21", out, fixed = TRUE)))
 
   # Test with space separator
   out <- export_table(d, big_mark = " ", format = "text")
-  expect_true(grepl("1 234.56", out, fixed = TRUE))
-  expect_true(grepl("9 876 543.21", out, fixed = TRUE))
+  expect_true(any(grepl("1 234.56", out, fixed = TRUE)))
+  expect_true(any(grepl("9 876 543.21", out, fixed = TRUE)))
 
   # Test with markdown format
   out <- export_table(d, big_mark = ",", format = "md")
-  expect_true(grepl("1,234.56", out, fixed = TRUE))
-  expect_true(grepl("9,876,543.21", out, fixed = TRUE))
+  expect_true(any(grepl("1,234.56", out, fixed = TRUE)))
+  expect_true(any(grepl("9,876,543.21", out, fixed = TRUE)))
 
   # Test backward compatibility - no big_mark
   out <- export_table(d, format = "text")
-  expect_true(grepl("1234.56", out, fixed = TRUE))
-  expect_true(grepl("9876543.21", out, fixed = TRUE))
+  expect_true(any(grepl("1234.56", out, fixed = TRUE)))
+  expect_true(any(grepl("9876543.21", out, fixed = TRUE)))
 })
