@@ -290,13 +290,15 @@ format_percent <- function(x, ...) {
       if (.zap_small || use_big_mark) {
         x <- ifelse(is.na(x), .missing, sprintf("%.*f%%", digits, 100 * x))
       } else {
-        # Avoid nested ifelse - use vectorized approach
-        result <- character(length(x))
-        x_na <- is.na(x)
-        result[x_na] <- .missing
-        result[!x_na & need_sci] <- sprintf("%.*e%%", digits, 100 * x[!x_na & need_sci])
-        result[!x_na & !need_sci] <- sprintf("%.*f%%", digits, 100 * x[!x_na & !need_sci])
-        x <- result
+        x <- ifelse(
+          is.na(x),
+          .missing,
+          ifelse(
+            need_sci, # nolint
+            sprintf("%.*e%%", digits, 100 * x),
+            sprintf("%.*f%%", digits, 100 * x)
+          )
+        )
       }
     } else if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
       digits <- tryCatch(
@@ -328,13 +330,15 @@ format_percent <- function(x, ...) {
       if (.zap_small || use_big_mark) {
         x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
       } else {
-        # Avoid nested ifelse - use vectorized approach
-        result <- character(length(x))
-        x_na <- is.na(x)
-        result[x_na] <- .missing
-        result[!x_na & need_sci] <- sprintf("%.*e", digits, x[!x_na & need_sci])
-        result[!x_na & !need_sci] <- sprintf("%.*f", digits, x[!x_na & !need_sci])
-        x <- result
+        x <- ifelse(
+          is.na(x),
+          .missing,
+          ifelse(
+            need_sci, # nolint
+            sprintf("%.*e", digits, x),
+            sprintf("%.*f", digits, x)
+          )
+        )
       }
     }
 

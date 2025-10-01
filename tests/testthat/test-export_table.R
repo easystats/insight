@@ -357,7 +357,7 @@ test_that("export_table, new column names", {
   x <- as.data.frame(iris[1:5, ])
   out <- export_table(x, column_names = letters[1:5])
   expect_identical(
-    strsplit(out, "\n", fixed = TRUE)[[1]][1],
+    strsplit(out, fixed = TRUE, "\n")[[1]][1],
     "   a |    b |    c |    d |      e"
   )
   out <- export_table(x, column_names = c(Species = "a"))
