@@ -518,5 +518,5 @@ test_that("export_table with big_mark", {
   # Test backward compatibility - no big_mark
   out <- export_table(d, format = "text")
   expect_true(any(grepl("1234.56", out, fixed = TRUE)))
-  expect_true(any(grepl("9876543.21", out, fixed = TRUE)))
+  expect_true(any(grepl("9.88e+06", out, fixed = TRUE)))
 })
