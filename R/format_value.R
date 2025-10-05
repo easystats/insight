@@ -247,13 +247,14 @@ format_percent <- function(x, ...) {
   } else {
     # For integers, apply big_mark if requested
     out <- as.character(x)
-    if (!is.null(.big_mark) && !identical(.big_mark, "") && is.character(out)) {
+    if (!is.null(.big_mark) && !identical(.big_mark, "")) {
       needs_big_mark <- !is.na(out) & out != .missing
       if (any(needs_big_mark)) {
         out[needs_big_mark] <- prettyNum(
-          out[needs_big_mark],
+          as.numeric(out[needs_big_mark]),
           big.mark = .big_mark,
-          preserve.width = "none"
+          preserve.width = "none",
+          scientific = FALSE
         )
       }
     }
@@ -282,11 +283,12 @@ format_percent <- function(x, ...) {
     digits <- 2
   }
 
+  use_big_mark <- !is.null(.big_mark) && !identical(.big_mark, "")
+
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
       need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0
       # When big_mark is provided, suppress scientific notation for percentages too
-      use_big_mark <- !is.null(.big_mark) && !identical(.big_mark, "")
       if (.zap_small || use_big_mark) {
         x <- ifelse(is.na(x), .missing, sprintf("%.*f%%", digits, 100 * x))
       } else {
@@ -325,7 +327,6 @@ format_percent <- function(x, ...) {
     } else {
       # When big_mark is provided, suppress scientific notation for large numbers
       # since the user wants to see the full number with thousands separators
-      use_big_mark <- !is.null(.big_mark) && !identical(.big_mark, "")
       need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits)) & x != 0
       if (.zap_small || use_big_mark) {
         x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
@@ -362,15 +363,12 @@ format_percent <- function(x, ...) {
 
         # For percentages, extract the number, apply big_mark, then add % back
         if (any(needs_big_mark & has_percent)) {
-          idx <- which(needs_big_mark & has_percent)
-          for (i in idx) {
-            # Remove the % sign, apply prettyNum, then add % back
-            num_part <- gsub("%", "", x[i], fixed = TRUE)
-            x[i] <- paste0(
-              prettyNum(num_part, big.mark = .big_mark, preserve.width = "none"),
-              "%"
-            )
-          }
+          selector <- needs_big_mark & has_percent
+          num_parts <- gsub("%", "", x[selector], fixed = TRUE)
+          x[selector] <- paste0(
+            prettyNum(num_parts, big.mark = .big_mark, preserve.width = "none"),
+            "%"
+          )
         }
       }
     }
