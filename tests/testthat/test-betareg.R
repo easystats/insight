@@ -1,4 +1,5 @@
 skip_if_not_installed("betareg")
+skip_if_not_installed("statmod")
 
 data("GasolineYield", package = "betareg")
 data("FoodExpenditure", package = "betareg")

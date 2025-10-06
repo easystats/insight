@@ -48,7 +48,8 @@ n_obs.default <- function(x, ...) {
     },
     error = function(e) {
       FALSE
-    })
+    }
+  )
 
   if (isTRUE(is_binomial)) {
     return(n_obs.glm(x, ...))
@@ -68,7 +69,8 @@ n_obs.glm <- function(x, disaggregate = FALSE, ...) {
     },
     error = function(e) {
       FALSE
-    })
+    }
+  )
 
   .nobs <- stats::nobs(x)
 

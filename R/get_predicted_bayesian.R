@@ -4,16 +4,17 @@
 #' @rdname get_predicted
 #' @export
 get_predicted.stanreg <- function(
-    x,
-    data = NULL,
-    predict = "expectation",
-    iterations = NULL,
-    ci = NULL,
-    ci_method = NULL,
-    include_random = "default",
-    include_smooth = TRUE,
-    verbose = TRUE,
-    ...) {
+  x,
+  data = NULL,
+  predict = "expectation",
+  iterations = NULL,
+  ci = NULL,
+  ci_method = NULL,
+  include_random = "default",
+  include_smooth = TRUE,
+  verbose = TRUE,
+  ...
+) {
   check_if_installed("rstantools")
 
   if (is.null(ci_method)) {

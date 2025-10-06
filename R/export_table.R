@@ -207,6 +207,7 @@ export_table <- function(x,
                          align = NULL,
                          by = NULL,
                          zap_small = FALSE,
+                         big_mark = NULL,
                          table_width = "auto",
                          remove_duplicates = FALSE,
                          row_groups = NULL,
@@ -267,6 +268,7 @@ export_table <- function(x,
     align = align,
     group_by = by,
     zap_small = zap_small,
+    big_mark = big_mark,
     empty_line = empty_line,
     indent_groups = indent_groups,
     row_groups = row_groups,
@@ -511,6 +513,7 @@ print.insight_table <- function(x, ...) {
                           align = NULL,
                           group_by = NULL,
                           zap_small = FALSE,
+                          big_mark = NULL,
                           empty_line = NULL,
                           indent_groups = NULL,
                           row_groups = NULL,
@@ -549,7 +552,8 @@ print.insight_table <- function(x, ...) {
     if (is.numeric(i)) {
       out <- format_value(i,
         digits = digits, protect_integers = protect_integers,
-        missing = missing, width = col_width, zap_small = zap_small
+        missing = missing, width = col_width, zap_small = zap_small,
+        big_mark = big_mark
       )
     } else {
       out <- i
@@ -1386,15 +1390,16 @@ print.insight_table <- function(x, ...) {
 # --------------------------------------------------------
 
 .format_html_table <- function(
-    final,
-    caption = NULL,
-    subtitle = NULL,
-    footer = NULL,
-    align = "center",
-    group_by = NULL,
-    row_groups = NULL,
-    column_groups = NULL,
-    ...) {
+  final,
+  caption = NULL,
+  subtitle = NULL,
+  footer = NULL,
+  align = "center",
+  group_by = NULL,
+  row_groups = NULL,
+  column_groups = NULL,
+  ...
+) {
   check_if_installed("gt")
 
   if (is.null(align)) {

@@ -68,7 +68,7 @@ test_that("find_formula", {
 
   expect_equal(
     find_formula(m3),
-    list(classmb = ~X1 + X2 + X3),
+    list(classmb = ~ X1 + X2 + X3),
     ignore_attr = TRUE
   )
 })

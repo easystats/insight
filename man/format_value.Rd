@@ -21,6 +21,7 @@ format_value(x, ...)
   style_positive = "none",
   style_negative = "hyphen",
   decimal_point = getOption("OutDec"),
+  big_mark = NULL,
   ...
 )
 
@@ -36,6 +37,7 @@ format_value(x, ...)
   style_positive = "none",
   style_negative = "hyphen",
   decimal_point = getOption("OutDec"),
+  big_mark = NULL,
   ...
 )
 
@@ -84,6 +86,10 @@ May be \code{"hyphen"} (default), \code{"minus"} for a proper Unicode minus symb
 
 \item{decimal_point}{Character string containing a single character that
 is used as decimal point in output conversions.}
+
+\item{big_mark}{Character used as thousands separator. If \code{NULL} (default),
+no thousands separator is used. Use \code{","} for comma separator or \code{" "}
+for space separator.}
 }
 \value{
 A formatted string.
@@ -104,6 +110,8 @@ format_value(c(0.0045, 0.12, 0.34), digits = "scientific")
 format_value(c(0.0045, 0.12, 0.34), digits = "scientific2")
 format_value(c(0.045, 0.12, 0.34), lead_zero = FALSE)
 format_value(c(0.0045, 0.12, 0.34), decimal_point = ",")
+format_value(c(1234567.89, 1234.56), big_mark = ",")
+format_value(c(1234567.89, 1234.56), big_mark = " ")
 
 # default
 format_value(c(0.0045, 0.123, 0.345))

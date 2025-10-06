@@ -6,22 +6,45 @@ test_that("format_value", {
   expect_identical(format_value(0), "0.00")
   expect_identical(format_value(0, decimal_point = ","), "0,00")
   expect_identical(format_value(1234565789101112), "1.23e+15")
-  expect_identical(format_value(1234565789101112, protect_integers = TRUE), "1234565789101112")
+  expect_identical(
+    format_value(1234565789101112, protect_integers = TRUE),
+    "1234565789101112"
+  )
   expect_identical(format_value(0.0000000123), "1.23e-08")
   expect_identical(format_value(0.0000000123, zap_small = TRUE), "0.00")
   expect_identical(format_value(0.0000000123, digits = 8), "0.00000001")
-  expect_identical(format_value(c(0.012, 0.45, -0.03), lead_zero = FALSE), c(".01", ".45", "-.03"))
-  expect_identical(format_value(c(1.012, 0.45, -0.03), lead_zero = FALSE), c("1.01", ".45", "-.03"))
-  expect_identical(format_value(c(1.012, 0.45, -0.03), lead_zero = FALSE, decimal_point = ","), c("1,01", ",45", "-,03"))
-  expect_identical(format_value(c(0.45, -0.03), style_positive = "plus"), c("+0.45", "-0.03"))
-  expect_identical(format_value(c(0.45, -0.03), style_positive = "plus", lead_zero = FALSE), c("+.45", "-.03"))
+  expect_identical(
+    format_value(c(0.012, 0.45, -0.03), lead_zero = FALSE),
+    c(".01", ".45", "-.03")
+  )
+  expect_identical(
+    format_value(c(1.012, 0.45, -0.03), lead_zero = FALSE),
+    c("1.01", ".45", "-.03")
+  )
+  expect_identical(
+    format_value(c(1.012, 0.45, -0.03), lead_zero = FALSE, decimal_point = ","),
+    c("1,01", ",45", "-,03")
+  )
+  expect_identical(
+    format_value(c(0.45, -0.03), style_positive = "plus"),
+    c("+0.45", "-0.03")
+  )
+  expect_identical(
+    format_value(c(0.45, -0.03), style_positive = "plus", lead_zero = FALSE),
+    c("+.45", "-.03")
+  )
   expect_equal(
     format_value(as.factor(c("A", "B", "A"))),
     structure(c(1L, 2L, 1L), levels = c("A", "B"), class = "factor"),
     ignore_attr = TRUE
   )
   expect_identical(
-    format_value(c(0.45, -0.03), style_positive = "plus", style_negative = "parens", lead_zero = FALSE),
+    format_value(
+      c(0.45, -0.03),
+      style_positive = "plus",
+      style_negative = "parens",
+      lead_zero = FALSE
+    ),
     c("+.45", "(.03)")
   )
   expect_identical(
@@ -41,26 +64,107 @@ test_that("format_value", {
   expect_identical(format_value(0.00045, digits = 4), "0.0004")
 })
 
+test_that("format_value with big_mark", {
+  # Test basic thousands separator with comma
+  expect_identical(format_value(1234.56, big_mark = ","), "1,234.56")
+  expect_identical(format_value(1234567.89, big_mark = ","), "1,234,567.89")
+
+  # Test with space separator
+  expect_identical(format_value(1234.56, big_mark = " "), "1 234.56")
+  expect_identical(format_value(1234567.89, big_mark = " "), "1 234 567.89")
+
+  # Test with protect_integers
+  expect_identical(format_value(1234, big_mark = ",", protect_integers = TRUE), "1,234")
+  expect_identical(format_value(1234.0, big_mark = ",", protect_integers = TRUE), "1,234")
+
+  # Test with vectors
+  expect_identical(
+    format_value(c(1234.56, 987654.32, 12.34), big_mark = ","),
+    c("1,234.56", "987,654.32", "12.34")
+  )
+
+  # Test with negative numbers
+  expect_identical(format_value(-1234.56, big_mark = ","), "-1,234.56")
+  expect_identical(format_value(-1234567.89, big_mark = ","), "-1,234,567.89")
+
+  # Test that NULL or empty string disables thousands separator (backward compatibility)
+  expect_identical(format_value(1234.56, big_mark = NULL), "1234.56")
+  expect_identical(format_value(1234.56, big_mark = ""), "1234.56")
+
+  # Test very large numbers - when big_mark is provided, scientific notation is suppressed
+  # to show the full number with separators
+  expect_identical(
+    format_value(1234565789101112, big_mark = ","),
+    "1,234,565,789,101,112.00"
+  )
+
+  # Test that without big_mark, very large numbers still use scientific notation
+  expect_identical(format_value(1234565789101112), "1.23e+15")
+
+  # Test with decimal_point and big_mark together
+  expect_identical(format_value(1234.56, big_mark = ",", decimal_point = ","), "1,234,56")
+  expect_identical(format_value(1234.56, big_mark = " ", decimal_point = ","), "1 234,56")
+
+  # Test that percentages are not affected by big_mark (they have % sign)
+  # Percentages don't typically need thousands separators in their display
+  expect_identical(format_value(0.95, as_percent = TRUE, big_mark = ","), "95.00%")
+  expect_identical(format_value(12.345, as_percent = TRUE, big_mark = ","), "1,234.50%")
+})
+
+test_that("format_number with big_mark", {
+  # Test that format_number passes big_mark when textual=FALSE
+  expect_identical(format_number(1234.56, textual = FALSE, big_mark = ","), "1,234.56")
+  expect_identical(
+    format_number(1234567.89, textual = FALSE, big_mark = " "),
+    "1 234 567.89"
+  )
+})
+
 test_that("format_ci", {
   expect_identical(
     format_ci(c(123, 123, 123, 123), c(123, 12345, 123456, 123456789012), width = "auto"),
-    c("95% CI [123.00,   123.00]", "95% CI [123.00, 12345.00]", "95% CI [123.00, 1.23e+05]", "95% CI [123.00, 1.23e+11]")
-  )
-  expect_identical(
-    format_ci(c(123, 123, 123, 123), c(123, 12345, 123456, 123456789012), width = "auto", digits = 5),
     c(
-      "95% CI [123.00000,   123.00000]", "95% CI [123.00000, 12345.00000]",
-      "95% CI [123.00000, 1.23456e+05]", "95% CI [123.00000, 1.23457e+11]"
+      "95% CI [123.00,   123.00]",
+      "95% CI [123.00, 12345.00]",
+      "95% CI [123.00, 1.23e+05]",
+      "95% CI [123.00, 1.23e+11]"
     )
   )
   expect_identical(
-    format_ci(c(123, 123, 123, 123), c(123, 12345, 123456, 123456789012), width = "auto", digits = 0),
-    c("95% CI [123,    123]", "95% CI [123,  12345]", "95% CI [123,  1e+05]", "95% CI [123,  1e+11]")
+    format_ci(
+      c(123, 123, 123, 123),
+      c(123, 12345, 123456, 123456789012),
+      width = "auto",
+      digits = 5
+    ),
+    c(
+      "95% CI [123.00000,   123.00000]",
+      "95% CI [123.00000, 12345.00000]",
+      "95% CI [123.00000, 1.23456e+05]",
+      "95% CI [123.00000, 1.23457e+11]"
+    )
+  )
+  expect_identical(
+    format_ci(
+      c(123, 123, 123, 123),
+      c(123, 12345, 123456, 123456789012),
+      width = "auto",
+      digits = 0
+    ),
+    c(
+      "95% CI [123,    123]",
+      "95% CI [123,  12345]",
+      "95% CI [123,  1e+05]",
+      "95% CI [123,  1e+11]"
+    )
   )
   expect_identical(format_ci(1.24, 0.0000054), "95% CI [1.24, 5.40e-06]")
   expect_identical(format_ci(1.24, 0.0000054, digits = 0), "95% CI [1, 5e-06]")
   expect_identical(format_ci(1.24, 0.0000054, zap_small = TRUE), "95% CI [1.24, 0.00]")
-  expect_identical(format_ci(1.24, 0.0000054, zap_small = TRUE, digits = 0), "95% CI [1, 0]")
+  expect_identical(
+    format_ci(1.24, 0.0000054, zap_small = TRUE, digits = 0),
+    "95% CI [1, 0]"
+  )
 })
 
 test_that("format_ci, bayestestR", {
@@ -78,7 +182,9 @@ test_that("format_ci, parameters", {
   expect_identical(
     format_ci(parameters::ci(mm)),
     c(
-      "95% CI [4.62, 4.94]", "95% CI [0.53, 1.30]", "95% CI [-0.52, 0.40]",
+      "95% CI [4.62, 4.94]",
+      "95% CI [0.53, 1.30]",
+      "95% CI [-0.52, 0.40]",
       "95% CI [-0.76, 0.66]"
     )
   )
@@ -178,7 +284,13 @@ test_that("format_table, other CI columns", {
   attr(x, "ci") <- 0.8
   attr(x, "ci_test") <- 0.9
   test <- utils::capture.output(format_table(x))
-  expect_identical(test, c("        80% CI  test 80% CI other 80% CI", "1 [2.43, 5.45] [0.10, 1.30] [0.12, 1.40]"))
+  expect_identical(
+    test,
+    c(
+      "        80% CI  test 80% CI other 80% CI",
+      "1 [2.43, 5.45] [0.10, 1.30] [0.12, 1.40]"
+    )
+  )
 })
 
 
@@ -209,7 +321,6 @@ test_that("format_table, multiple CI columns", {
     ),
     ignore_attr = TRUE
   )
-
 
   # d <- data.frame(
   #   Parameter = c("(Intercept)", "wt", "cyl"),
@@ -244,6 +355,9 @@ test_that("format_table, preserve attributes", {
   attr(d, "table_footer") <- "This is a footer"
   attr(d, "table_caption") <- "And the caption"
   d2 <- insight::format_table(d, digits = 3, preserve_attributes = TRUE)
-  expect_named(attributes(d2), c("names", "row.names", "class", "table_footer", "table_caption"))
+  expect_named(
+    attributes(d2),
+    c("names", "row.names", "class", "table_footer", "table_caption")
+  )
   expect_identical(attributes(d2)$table_caption, "And the caption")
 })

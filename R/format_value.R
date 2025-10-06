@@ -36,6 +36,9 @@
 #'   `"parens"` to wrap the number in parentheses.
 #' @param decimal_point Character string containing a single character that
 #'   is used as decimal point in output conversions.
+#' @param big_mark Character used as thousands separator. If `NULL` (default),
+#'   no thousands separator is used. Use `","` for comma separator or `" "`
+#'   for space separator.
 #' @param ... Arguments passed to or from other methods.
 #'
 #'
@@ -52,6 +55,8 @@
 #' format_value(c(0.0045, 0.12, 0.34), digits = "scientific2")
 #' format_value(c(0.045, 0.12, 0.34), lead_zero = FALSE)
 #' format_value(c(0.0045, 0.12, 0.34), decimal_point = ",")
+#' format_value(c(1234567.89, 1234.56), big_mark = ",")
+#' format_value(c(1234567.89, 1234.56), big_mark = " ")
 #'
 #' # default
 #' format_value(c(0.0045, 0.123, 0.345))
@@ -73,18 +78,21 @@ format_value <- function(x, ...) {
 
 #' @rdname format_value
 #' @export
-format_value.data.frame <- function(x,
-                                    digits = 2,
-                                    protect_integers = FALSE,
-                                    missing = "",
-                                    width = NULL,
-                                    as_percent = FALSE,
-                                    zap_small = FALSE,
-                                    lead_zero = TRUE,
-                                    style_positive = "none",
-                                    style_negative = "hyphen",
-                                    decimal_point = getOption("OutDec"),
-                                    ...) {
+format_value.data.frame <- function(
+  x,
+  digits = 2,
+  protect_integers = FALSE,
+  missing = "",
+  width = NULL,
+  as_percent = FALSE,
+  zap_small = FALSE,
+  lead_zero = TRUE,
+  style_positive = "none",
+  style_negative = "hyphen",
+  decimal_point = getOption("OutDec"),
+  big_mark = NULL,
+  ...
+) {
   as.data.frame(sapply(
     x,
     format_value,
@@ -98,6 +106,7 @@ format_value.data.frame <- function(x,
     style_positive = style_positive,
     style_negative = style_negative,
     decimal_point = decimal_point,
+    big_mark = big_mark,
     simplify = FALSE
   ))
 }
@@ -105,18 +114,21 @@ format_value.data.frame <- function(x,
 
 #' @rdname format_value
 #' @export
-format_value.numeric <- function(x,
-                                 digits = 2,
-                                 protect_integers = FALSE,
-                                 missing = "",
-                                 width = NULL,
-                                 as_percent = FALSE,
-                                 zap_small = FALSE,
-                                 lead_zero = TRUE,
-                                 style_positive = "none",
-                                 style_negative = "hyphen",
-                                 decimal_point = getOption("OutDec"),
-                                 ...) {
+format_value.numeric <- function(
+  x,
+  digits = 2,
+  protect_integers = FALSE,
+  missing = "",
+  width = NULL,
+  as_percent = FALSE,
+  zap_small = FALSE,
+  lead_zero = TRUE,
+  style_positive = "none",
+  style_negative = "hyphen",
+  decimal_point = getOption("OutDec"),
+  big_mark = NULL,
+  ...
+) {
   # check input
   style_positive <- validate_argument(style_positive, c("none", "plus", "space"))
   style_negative <- validate_argument(style_negative, c("hyphen", "minus", "parens"))
@@ -129,6 +141,7 @@ format_value.numeric <- function(x,
       .width = width,
       .as_percent = as_percent,
       .zap_small = zap_small,
+      .big_mark = big_mark,
       ...
     )
   } else {
@@ -139,6 +152,7 @@ format_value.numeric <- function(x,
       .width = width,
       .as_percent = as_percent,
       .zap_small = zap_small,
+      .big_mark = big_mark,
       ...
     )
   }
@@ -205,12 +219,16 @@ format_percent <- function(x, ...) {
 }
 
 
-.format_value_unless_integer <- function(x,
-                                         digits = 2,
-                                         .missing = "",
-                                         .width = NULL,
-                                         .as_percent = FALSE,
-                                         .zap_small = FALSE, ...) {
+.format_value_unless_integer <- function(
+  x,
+  digits = 2,
+  .missing = "",
+  .width = NULL,
+  .as_percent = FALSE,
+  .zap_small = FALSE,
+  .big_mark = NULL,
+  ...
+) {
   x_nonmiss <- x[!is.na(x)]
   if (is.numeric(x) && !all(.is_integer(x_nonmiss))) {
     .format_value(
@@ -219,41 +237,66 @@ format_percent <- function(x, ...) {
       .missing = .missing,
       .width = .width,
       .as_percent = .as_percent,
-      .zap_small = .zap_small
+      .zap_small = .zap_small,
+      .big_mark = .big_mark
     )
   } else if (anyNA(x)) {
     .convert_missing(x, .missing)
   } else if (is.numeric(x) && all(.is_integer(x_nonmiss)) && !is.null(.width)) {
     format(x, justify = "right", width = .width)
   } else {
-    as.character(x)
+    # For integers, apply big_mark if requested
+    out <- as.character(x)
+    if (!is.null(.big_mark) && !identical(.big_mark, "")) {
+      needs_big_mark <- !is.na(out) & out != .missing
+      if (any(needs_big_mark)) {
+        out[needs_big_mark] <- prettyNum(
+          as.numeric(out[needs_big_mark]),
+          big.mark = .big_mark,
+          preserve.width = "none",
+          scientific = FALSE
+        )
+      }
+    }
+    out
   }
 }
 
 
-.format_value <- function(x,
-                          digits = 2,
-                          .missing = "",
-                          .width = NULL,
-                          .as_percent = FALSE,
-                          .zap_small = FALSE,
-                          ...) {
+.format_value <- function(
+  x,
+  digits = 2,
+  .missing = "",
+  .width = NULL,
+  .as_percent = FALSE,
+  .zap_small = FALSE,
+  .big_mark = NULL,
+  ...
+) {
   # proper character NA
-  if (is.na(.missing)) .missing <- NA_character_
+  if (is.na(.missing)) {
+    .missing <- NA_character_
+  }
 
   # sometimes, digits can be `NULL` - sanity check
   if (is.null(digits)) {
     digits <- 2
   }
 
+  use_big_mark <- !is.null(.big_mark) && !identical(.big_mark, "")
+
   if (is.numeric(x)) {
     if (isTRUE(.as_percent)) {
       need_sci <- (abs(100 * x) >= 1e+5 | (log10(abs(100 * x)) < -digits)) & x != 0
-      if (.zap_small) {
+      # When big_mark is provided, suppress scientific notation for percentages too
+      if (.zap_small || use_big_mark) {
         x <- ifelse(is.na(x), .missing, sprintf("%.*f%%", digits, 100 * x))
       } else {
-        x <- ifelse(is.na(x), .missing,
-          ifelse(need_sci, # nolint
+        x <- ifelse(
+          is.na(x),
+          .missing,
+          ifelse(
+            need_sci,
             sprintf("%.*e%%", digits, 100 * x),
             sprintf("%.*f%%", digits, 100 * x)
           )
@@ -266,7 +309,9 @@ format_percent <- function(x, ...) {
           5
         }
       )
-      if (is.na(digits)) digits <- 5
+      if (is.na(digits)) {
+        digits <- 5
+      }
       x <- sprintf("%.*e", digits, x)
     } else if (is.character(digits) && grepl("signif", digits, fixed = TRUE)) {
       digits <- tryCatch(
@@ -275,19 +320,56 @@ format_percent <- function(x, ...) {
           NA
         }
       )
-      if (is.na(digits)) digits <- 3
+      if (is.na(digits)) {
+        digits <- 3
+      }
       x <- as.character(signif(x, digits))
     } else {
+      # When big_mark is provided, suppress scientific notation for large numbers
+      # since the user wants to see the full number with thousands separators
       need_sci <- (abs(x) >= 1e+5 | (log10(abs(x)) < -digits)) & x != 0
-      if (.zap_small) {
+      if (.zap_small || use_big_mark) {
         x <- ifelse(is.na(x), .missing, sprintf("%.*f", digits, x))
       } else {
-        x <- ifelse(is.na(x), .missing,
-          ifelse(need_sci, # nolint
+        x <- ifelse(
+          is.na(x),
+          .missing,
+          ifelse(
+            need_sci, # nolint
             sprintf("%.*e", digits, x),
             sprintf("%.*f", digits, x)
           )
         )
+      }
+    }
+
+    # Apply thousands separator if requested
+    # Only apply to non-scientific notation values
+    if (!is.null(.big_mark) && !identical(.big_mark, "") && is.character(x)) {
+      # Don't apply to scientific notation (contains 'e')
+      needs_big_mark <- !grepl("e", x, fixed = TRUE) & !is.na(x) & x != .missing
+      if (any(needs_big_mark)) {
+        # For percentages, we need to handle them specially
+        has_percent <- grepl("%", x, fixed = TRUE)
+
+        # Apply big_mark to non-percentage values directly
+        if (any(needs_big_mark & !has_percent)) {
+          x[needs_big_mark & !has_percent] <- prettyNum(
+            x[needs_big_mark & !has_percent],
+            big.mark = .big_mark,
+            preserve.width = "none"
+          )
+        }
+
+        # For percentages, extract the number, apply big_mark, then add % back
+        if (any(needs_big_mark & has_percent)) {
+          selector <- needs_big_mark & has_percent
+          num_parts <- gsub("%", "", x[selector], fixed = TRUE)
+          x[selector] <- paste0(
+            prettyNum(num_parts, big.mark = .big_mark, preserve.width = "none"),
+            "%"
+          )
+        }
       }
     }
   } else if (anyNA(x)) {
