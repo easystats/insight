@@ -296,7 +296,7 @@ format_percent <- function(x, ...) {
           is.na(x),
           .missing,
           ifelse(
-            need_sci, # nolint
+            need_sci,
             sprintf("%.*e%%", digits, 100 * x),
             sprintf("%.*f%%", digits, 100 * x)
           )
