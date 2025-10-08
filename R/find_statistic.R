@@ -1,3 +1,5 @@
+# fmt: skip file
+
 #' @title Find statistic for model
 #' @description Returns the statistic for a regression model (*t*-statistic,
 #'   *z*-statistic, etc.).

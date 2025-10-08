@@ -50,7 +50,7 @@ is_regression_model <- function(x) {
   x
 }
 
-
+# fmt: skip
 .get_model_classes <- function(regression_only = FALSE) {
   out <- c(
     "_ranger",
@@ -181,11 +181,10 @@ is_regression_model <- function(x) {
   out
 }
 
-
+# fmt: skip
 .get_gam_classes <- function() {
   out <- c(
-    "bamlss", "bamlss.frame", "brmsfit",
-    "cgam", "cgamm",
+    "bamlss", "bamlss.frame", "brmsfit", "cgam", "cgamm",
     "gam", "Gam", "GAMBoost", "gamlr", "gamlss", "gamm", "gamm4",
     "stanmvreg", "stanreg"
   )
