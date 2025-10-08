@@ -41,7 +41,6 @@ get_parameters.htest <- function(x, ...) {
 
 # extract htest correlation ----------------------
 
-
 .extract_htest_correlation <- function(model) {
   out <- data.frame(
     Parameter = model$data.name,
@@ -59,7 +58,6 @@ get_parameters.htest <- function(x, ...) {
 
 # extract htest ranktest ----------------------
 
-
 .extract_htest_ranktest <- function(model) {
   out <- data.frame(
     Parameter = model$data.name,
@@ -76,7 +74,6 @@ get_parameters.htest <- function(x, ...) {
 
 
 # extract htest leveneTest ----------------------
-
 
 .extract_htest_levenetest <- function(model) {
   data.frame(
@@ -105,14 +102,12 @@ get_parameters.htest <- function(x, ...) {
 
 # extract htest oneway ----------------------
 
-
 .extract_htest_oneway <- function(model) {
   NULL
 }
 
 
 # extract htest chi2 ----------------------
-
 
 .extract_htest_chi2 <- function(model) {
   out <- data.frame(
@@ -130,7 +125,6 @@ get_parameters.htest <- function(x, ...) {
 
 
 # extract htest prop ----------------------
-
 
 .extract_htest_prop <- function(model) {
   out <- data.frame(

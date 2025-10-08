@@ -91,7 +91,9 @@ get_residuals.default <- function(x, weighted = FALSE, verbose = TRUE, ...) {
     res <- NULL
   } else if (yield_warning) {
     format_warning(paste0(
-      "Can't extract '", res_type, "' residuals. Returning response residuals."
+      "Can't extract '",
+      res_type,
+      "' residuals. Returning response residuals."
     ))
   }
 
@@ -241,7 +243,10 @@ as.data.frame.insight_residuals <- function(x, ...) {
 print.insight_residuals <- function(x, ...) {
   print_colour("Residuals:\n\n", "blue")
   print.default(as.vector(x))
-  print_colour("\nNOTE: Credible intervals are stored as attributes and can be accessed using `as.data.frame()` on this output.\n", "yellow") # nolint
+  print_colour(
+    "\nNOTE: Credible intervals are stored as attributes and can be accessed using `as.data.frame()` on this output.\n",
+    "yellow"
+  ) # nolint
 }
 
 
@@ -273,9 +278,13 @@ print.insight_residuals <- function(x, ...) {
         res_dev <- res_dev[!is.na(w) & w != 0]
       } else if (verbose) {
         if (is.null(w)) {
-          format_warning("Can't calculate weighted residuals from model. Model doesn't seem to have weights.")
+          format_warning(
+            "Can't calculate weighted residuals from model. Model doesn't seem to have weights."
+          )
         } else if (is.null(res_dev)) {
-          format_warning("Can't calculate weighted residuals from model. Could not extract deviance-residuals.")
+          format_warning(
+            "Can't calculate weighted residuals from model. Could not extract deviance-residuals."
+          )
         }
       }
       res_dev
@@ -292,7 +301,6 @@ print.insight_residuals <- function(x, ...) {
 
 ## pearson residuals -------------------------------------------
 ## =============================================================
-
 
 .pearson_residuals <- function(x) {
   pr <- tryCatch(stats::residuals(x, type = "pearson"), error = function(e) NULL)
@@ -324,7 +332,8 @@ print.insight_residuals <- function(x, ...) {
     mu <- stats::predict(model, type = "conditional")
     # sigma
     betadisp <- model$fit$par["betadisp"]
-    k <- switch(faminfo$family,
+    k <- switch(
+      faminfo$family,
       gaussian = exp(0.5 * betadisp),
       Gamma = exp(-0.5 * betadisp),
       exp(betadisp)

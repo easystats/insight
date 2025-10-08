@@ -1,13 +1,16 @@
 skip_if_not_installed("nlme")
 
 data(Ovary, package = "nlme")
-m1 <- nlme::gls(follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time),
+m1 <- nlme::gls(
+  follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time),
   Ovary,
   correlation = nlme::corAR1(form = ~ 1 | Mare)
 )
 
 cr <<- nlme::corAR1(form = ~ 1 | Mare)
-m2 <- nlme::gls(follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time), Ovary,
+m2 <- nlme::gls(
+  follicles ~ sin(2 * pi * Time) + cos(2 * pi * Time),
+  Ovary,
   correlation = cr
 )
 
@@ -15,7 +18,8 @@ set.seed(123)
 d <- Ovary
 d$x1 <- runif(nrow(d))
 d$x2 <- sample(1:10, size = nrow(d), replace = TRUE)
-m3 <- nlme::gls(follicles ~ Time + x1 + x2,
+m3 <- nlme::gls(
+  follicles ~ Time + x1 + x2,
   d,
   correlation = nlme::corAR1(form = ~ 1 | Mare)
 )

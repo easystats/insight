@@ -32,8 +32,13 @@ find_parameters.betamfx <- function(x, component = "all", flatten = FALSE, ...) 
   component <- validate_argument(
     component,
     c(
-      "all", "conditional", "precision", "marginal", "location",
-      "distributional", "auxiliary"
+      "all",
+      "conditional",
+      "precision",
+      "marginal",
+      "location",
+      "distributional",
+      "auxiliary"
     )
   )
   elements <- .get_elements(effects = "all", component = component)
@@ -74,7 +79,10 @@ find_parameters.logitmfx <- function(x, component = "all", flatten = FALSE, ...)
   p <- text_remove_backticks(names(stats::coef(x$fit)))
   pars <- list(marginal = text_remove_backticks(rownames(x$mfxest)), conditional = p)
 
-  component <- validate_argument(component, c("all", "conditional", "marginal", "location"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "marginal", "location")
+  )
   elements <- .get_elements(effects = "all", component = component)
   pars <- compact_list(pars[elements])
 

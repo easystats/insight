@@ -50,7 +50,8 @@ withr::with_environment(
       x = c(0, 2, 1, 1, 1, 0, 0),
       sex = c(0, 0, 0, 0, 1, 1, 1)
     )
-    mod <- survival::coxph(Surv(time, status) ~ x + strata(sex),
+    mod <- survival::coxph(
+      Surv(time, status) ~ x + strata(sex),
       data = dat_regression_test,
       ties = "breslow"
     )
@@ -68,7 +69,8 @@ withr::with_environment(
       x = c(0, 2, 1, 1, 1, 0, 0),
       sex = c(0, 0, 0, 0, 1, 1, 1)
     )
-    mod <- survival::coxph(Surv(time, status) ~ x + strata(sex),
+    mod <- survival::coxph(
+      Surv(time, status) ~ x + strata(sex),
       data = dat_regression_test,
       ties = "breslow"
     )
@@ -81,18 +83,23 @@ test_that("find_formula", {
   expect_length(find_formula(m1), 1)
   expect_equal(
     find_formula(m1),
-    list(conditional = as.formula(
-      "Surv(time, status) ~ sex + age + ph.ecog"
-    )),
+    list(
+      conditional = as.formula(
+        "Surv(time, status) ~ sex + age + ph.ecog"
+      )
+    ),
     ignore_attr = TRUE
   )
 })
 
 test_that("find_variables", {
-  expect_identical(find_variables(m1), list(
-    response = c("time", "status"),
-    conditional = c("sex", "age", "ph.ecog")
-  ))
+  expect_identical(
+    find_variables(m1),
+    list(
+      response = c("time", "status"),
+      conditional = c("sex", "age", "ph.ecog")
+    )
+  )
   expect_identical(
     find_variables(m1, flatten = TRUE),
     c("time", "status", "sex", "age", "ph.ecog")
@@ -145,7 +152,10 @@ test_that("JM", {
   d <- get_data(m)
   expect_identical(dim(d), c(1405L, 4L))
   expect_named(d, c("start", "stop", "event", "CD4"))
-  expect_identical(find_variables(m), list(response = c("start", "stop", "event"), conditional = "CD4"))
+  expect_identical(
+    find_variables(m),
+    list(response = c("start", "stop", "event"), conditional = "CD4")
+  )
 })
 
 test_that("get_statistic", {
@@ -153,7 +163,9 @@ test_that("get_statistic", {
   bladder1 <- bladder[bladder$enum < 5, ]
   mod <- survival::coxph(
     Surv(stop, event) ~ (rx + size + number) * strata(enum),
-    cluster = id, bladder1, robust = TRUE
+    cluster = id,
+    bladder1,
+    robust = TRUE
   )
   z1 <- get_statistic(mod)$Statistic
   z2 <- coef(summary(mod))[, "z"]

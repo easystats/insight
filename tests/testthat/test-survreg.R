@@ -4,11 +4,15 @@ Surv <- survival::Surv
 strata <- survival::strata
 ovarian <<- survival::ovarian
 
-mod_survreg_1 <- survival::survreg(Surv(futime, fustat) ~ ecog.ps + rx,
+mod_survreg_1 <- survival::survreg(
+  Surv(futime, fustat) ~ ecog.ps + rx,
   data = ovarian,
   dist = "exponential"
 )
-mod_survreg_2 <- survival::survreg(Surv(time, status) ~ ph.ecog + age + strata(sex), data = survival::lung)
+mod_survreg_2 <- survival::survreg(
+  Surv(time, status) ~ ph.ecog + age + strata(sex),
+  data = survival::lung
+)
 
 test_that("model_info", {
   expect_false(model_info(mod_survreg_1)$is_linear)
@@ -21,7 +25,10 @@ test_that("find_predictors", {
   expect_identical(find_predictors(mod_survreg_1), list(conditional = c("ecog.ps", "rx")))
   expect_identical(find_predictors(mod_survreg_1, flatten = TRUE), c("ecog.ps", "rx"))
   expect_null(find_predictors(mod_survreg_1, effects = "random"))
-  expect_identical(find_predictors(mod_survreg_2), list(conditional = c("ph.ecog", "age", "sex")))
+  expect_identical(
+    find_predictors(mod_survreg_2),
+    list(conditional = c("ph.ecog", "age", "sex"))
+  )
 })
 
 test_that("find_random", {
@@ -84,10 +91,13 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_equal(find_variables(mod_survreg_1), list(
-    response = c("futime", "fustat"),
-    conditional = c("ecog.ps", "rx")
-  ))
+  expect_equal(
+    find_variables(mod_survreg_1),
+    list(
+      response = c("futime", "fustat"),
+      conditional = c("ecog.ps", "rx")
+    )
+  )
   expect_equal(
     find_variables(mod_survreg_1, flatten = TRUE),
     c("futime", "fustat", "ecog.ps", "rx")
@@ -116,10 +126,21 @@ test_that("find_parameters", {
 test_that("get_parameters", {
   expect_equal(nrow(get_parameters(mod_survreg_1)), 3)
   expect_equal(get_parameters(mod_survreg_1)$Parameter, c("(Intercept)", "ecog.ps", "rx"))
-  expect_equal(get_parameters(mod_survreg_1)$Estimate, c(6.96184, -0.43313, 0.5815), tolerance = 1e-3)
+  expect_equal(
+    get_parameters(mod_survreg_1)$Estimate,
+    c(6.96184, -0.43313, 0.5815),
+    tolerance = 1e-3
+  )
   expect_equal(nrow(get_parameters(mod_survreg_2)), 5)
-  expect_equal(get_parameters(mod_survreg_2)$Parameter, c("(Intercept)", "ph.ecog", "age", "sex=1", "sex=2"))
-  expect_equal(get_parameters(mod_survreg_2)$Estimate, c(6.73235, -0.32443, -0.00581, -0.24408, -0.42345), tolerance = 1e-3)
+  expect_equal(
+    get_parameters(mod_survreg_2)$Parameter,
+    c("(Intercept)", "ph.ecog", "age", "sex=1", "sex=2")
+  )
+  expect_equal(
+    get_parameters(mod_survreg_2)$Estimate,
+    c(6.73235, -0.32443, -0.00581, -0.24408, -0.42345),
+    tolerance = 1e-3
+  )
 })
 
 test_that("get_statistic", {

@@ -1,14 +1,14 @@
 test_that("get_predicted", {
   # easystats conventions
   df1 <- cbind.data.frame(
-    CI_low      = -2.873,
-    t           = 5.494,
-    CI_high     = -1.088,
-    p           = 0.00001,
-    Parameter   = -1.980,
-    CI          = 0.95,
-    df          = 29.234,
-    Method      = "Student's t-test"
+    CI_low = -2.873,
+    t = 5.494,
+    CI_high = -1.088,
+    p = 0.00001,
+    Parameter = -1.980,
+    CI = 0.95,
+    df = 29.234,
+    Method = "Student's t-test"
   )
 
   expect_named(
@@ -18,35 +18,41 @@ test_that("get_predicted", {
 
   # broom conventions
   df2 <- cbind.data.frame(
-    conf.low   = -2.873,
-    statistic  = 5.494,
-    conf.high  = -1.088,
-    p.value    = 0.00001,
-    estimate   = -1.980,
+    conf.low = -2.873,
+    statistic = 5.494,
+    conf.high = -1.088,
+    p.value = 0.00001,
+    estimate = -1.980,
     conf.level = 0.95,
-    df         = 29.234,
-    method     = "Student's t-test"
+    df = 29.234,
+    method = "Student's t-test"
   )
 
   expect_named(
     standardize_column_order(df2, style = "broom"),
     c(
-      "estimate", "conf.level", "conf.low", "conf.high", "method",
-      "statistic", "df", "p.value"
+      "estimate",
+      "conf.level",
+      "conf.low",
+      "conf.high",
+      "method",
+      "statistic",
+      "df",
+      "p.value"
     )
   )
 
   # deliberately misspecify column names
   # the misspecified columns should be pushed to the end
   df3 <- cbind.data.frame(
-    CI_Low      = -2.873,
-    t           = 5.494,
-    CI_High     = -1.088,
-    p           = 0.00001,
-    Parameter   = -1.980,
-    CI          = 0.95,
-    df          = 29.234,
-    Method      = "Student's t-test"
+    CI_Low = -2.873,
+    t = 5.494,
+    CI_High = -1.088,
+    p = 0.00001,
+    Parameter = -1.980,
+    CI = 0.95,
+    df = 29.234,
+    Method = "Student's t-test"
   )
 
   expect_named(
@@ -76,8 +82,17 @@ test_that("reorder columns BF", {
   expect_named(
     standardize_column_order(out),
     c(
-      "Parameter", "Median", "Component", "CI", "CI_low", "CI_high",
-      "pd", "ROPE_Percentage", "log_BF", "Rhat", "ESS"
+      "Parameter",
+      "Median",
+      "Component",
+      "CI",
+      "CI_low",
+      "CI_high",
+      "pd",
+      "ROPE_Percentage",
+      "log_BF",
+      "Rhat",
+      "ESS"
     )
   )
 })
@@ -87,16 +102,33 @@ test_that("easystats_columns", {
   expect_identical(
     easystats_columns("uncertainty"),
     c(
-      "SE", "Std. Error", "SD", "Deviance_error", "CI", "CI_low",
-      "CI_high", "Difference_CI_low", "Difference_CI_high", "CI_Method",
-      "CI_Distribution", "CI_Iterations", "Sum_Squares", "Mean_Square"
+      "SE",
+      "Std. Error",
+      "SD",
+      "Deviance_error",
+      "CI",
+      "CI_low",
+      "CI_high",
+      "Difference_CI_low",
+      "Difference_CI_high",
+      "CI_Method",
+      "CI_Distribution",
+      "CI_Iterations",
+      "Sum_Squares",
+      "Mean_Square"
     )
   )
   expect_identical(
     easystats_columns("p"),
     c(
-      "p", "pd", "ROPE_CI", "ROPE_low", "ROPE_high", "ROPE_Percentage",
-      "BF", "log_BF"
+      "p",
+      "pd",
+      "ROPE_CI",
+      "ROPE_low",
+      "ROPE_high",
+      "ROPE_Percentage",
+      "BF",
+      "log_BF"
     )
   )
 })

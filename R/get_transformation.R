@@ -82,7 +82,9 @@ get_transformation <- function(x, include_all = FALSE, verbose = TRUE) {
   } else if (startsWith(transform_fun, "log(x,base=")) {
     base_value <- gsub("log\\(x,base=(\\d+)\\)", "\\1", transform_fun)
     out <- list(
-      transformation = eval(parse(text = paste0("function(x) log(x,base=", base_value, ")"))),
+      transformation = eval(parse(
+        text = paste0("function(x) log(x,base=", base_value, ")")
+      )),
       inverse = eval(parse(text = paste0("function(x) ", base_value, "^x")))
     )
   } else if (transform_fun == "exp") {
@@ -94,14 +96,31 @@ get_transformation <- function(x, include_all = FALSE, verbose = TRUE) {
   } else if (transform_fun == "scale") {
     denominator <- .extract_scale_denominator(model)
     out <- list(
-      transformation = eval(parse(text = paste0("function(x) x / ", as.character(denominator)))), # nolint
+      transformation = eval(parse(
+        text = paste0("function(x) x / ", as.character(denominator))
+      )), # nolint
       inverse = eval(parse(text = paste0("function(x) x * ", as.character(denominator))))
     )
   } else if (transform_fun == "box-cox") {
     denominator <- .extract_scale_denominator(model)
     out <- list(
-      transformation = eval(parse(text = paste0("function(x) (x^", as.character(denominator), "-1) / ", as.character(denominator)))), # nolint
-      inverse = eval(parse(text = paste0("function(x) exp(log(1 + ", as.character(denominator), " * x) / ", as.character(denominator), ")"))) # nolint
+      transformation = eval(parse(
+        text = paste0(
+          "function(x) (x^",
+          as.character(denominator),
+          "-1) / ",
+          as.character(denominator)
+        )
+      )), # nolint
+      inverse = eval(parse(
+        text = paste0(
+          "function(x) exp(log(1 + ",
+          as.character(denominator),
+          " * x) / ",
+          as.character(denominator),
+          ")"
+        )
+      )) # nolint
     )
   } else if (transform_fun == "power") {
     trans_power <- .extract_power_transformation(model)
@@ -109,8 +128,12 @@ get_transformation <- function(x, include_all = FALSE, verbose = TRUE) {
     # returns 1, independent from the input-values
     if (!is.null(trans_power) && trans_power != 0) {
       out <- list(
-        transformation = eval(parse(text = paste0("function(x) x^", as.character(trans_power)))), # nolint
-        inverse = eval(parse(text = paste0("function(x) x^(", as.character(trans_power), "^-1)")))
+        transformation = eval(parse(
+          text = paste0("function(x) x^", as.character(trans_power))
+        )), # nolint
+        inverse = eval(parse(
+          text = paste0("function(x) x^(", as.character(trans_power), "^-1)")
+        ))
       )
     }
   } else if (transform_fun == "expm1") {
@@ -125,7 +148,11 @@ get_transformation <- function(x, include_all = FALSE, verbose = TRUE) {
   # warn if no transformation could be identified
   if (verbose && is.null(out)) {
     insight::format_alert(
-      paste0("The transformation and inverse-transformation functions for `", transform_fun, "` could not be determined.") # nolint
+      paste0(
+        "The transformation and inverse-transformation functions for `",
+        transform_fun,
+        "` could not be determined."
+      ) # nolint
     )
   }
 
@@ -135,14 +162,17 @@ get_transformation <- function(x, include_all = FALSE, verbose = TRUE) {
 
 # helper ------------------------------
 
-
 .extract_power_transformation <- function(model) {
   if (is.character(model)) {
     resp_term <- model
   } else {
     resp_term <- find_terms(model)[["response"]]
   }
-  .safe(as.numeric(gsub("\\(|\\)", "", gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", resp_term)))) # nolint
+  .safe(as.numeric(gsub(
+    "\\(|\\)",
+    "",
+    gsub("(.*)(\\^|\\*\\*)\\s*(\\d+|[()])", "\\3", resp_term)
+  ))) # nolint
 }
 
 

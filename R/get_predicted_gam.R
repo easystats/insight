@@ -2,20 +2,29 @@
 # =======================================================================
 #' @rdname get_predicted
 #' @export
-get_predicted.gam <- function(x,
-                              data = NULL,
-                              predict = "expectation",
-                              ci = NULL,
-                              include_random = TRUE,
-                              include_smooth = TRUE,
-                              iterations = NULL,
-                              verbose = TRUE,
-                              ...) {
+get_predicted.gam <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  include_random = TRUE,
+  include_smooth = TRUE,
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
   # allow users to set `predict=NULL` and specify `type` directly
   if (!is.null(predict)) {
     predict <- match.arg(
       predict,
-      choices = c("expectation", "expected", "link", "prediction", "predicted", "classification")
+      choices = c(
+        "expectation",
+        "expected",
+        "link",
+        "prediction",
+        "predicted",
+        "classification"
+      )
     )
 
     # validation checks
@@ -46,16 +55,21 @@ get_predicted.gam <- function(x,
     ...
   )
 
-  if (inherits(x, c("gamm", "list"))) x <- x$gam
-
+  if (inherits(x, c("gamm", "list"))) {
+    x <- x$gam
+  }
 
   # Prediction function
   predict_function <- function(x, data, se.fit = TRUE, ...) {
     dot_args <- list(...)
     dot_args[["type"]] <- NULL
-    predict_args <- list(x,
-      newdata = data, type = my_args$type, re.form = my_args$re.form,
-      unconditional = FALSE, se.fit = se.fit
+    predict_args <- list(
+      x,
+      newdata = data,
+      type = my_args$type,
+      re.form = my_args$re.form,
+      unconditional = FALSE,
+      se.fit = se.fit
     )
     predict_args <- c(predict_args, dot_args)
     do.call(stats::predict, compact_list(predict_args))
@@ -88,11 +102,24 @@ get_predicted.gam <- function(x,
 
   # Get CI
   if (!is.null(ci)) {
-    ci_data <- .get_predicted_se_to_ci(x, predictions = predictions, se = rez$se.fit, ci = ci, verbose = verbose)
+    ci_data <- .get_predicted_se_to_ci(
+      x,
+      predictions = predictions,
+      se = rez$se.fit,
+      ci = ci,
+      verbose = verbose
+    )
   } else {
     ci_data <- NULL
   }
-  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
+  out <- .get_predicted_transform(
+    x,
+    predictions,
+    my_args,
+    ci_data,
+    verbose = verbose,
+    ...
+  )
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
 }
 
@@ -110,15 +137,18 @@ get_predicted.list <- get_predicted.gam # gamm4
 # =======================================================================
 
 #' @export
-get_predicted.gamlss <- function(x,
-                                 data = NULL,
-                                 predict = "expectation",
-                                 ci = NULL,
-                                 include_smooth = TRUE,
-                                 iterations = NULL,
-                                 verbose = TRUE,
-                                 ...) {
-  get_predicted.default(x,
+get_predicted.gamlss <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  include_smooth = TRUE,
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
+  get_predicted.default(
+    x,
     data = NULL,
     predict = "expectation",
     ci = NULL,

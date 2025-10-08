@@ -22,7 +22,10 @@ withr::with_environment(
       ),
       ignore_attr = TRUE
     )
-    expect_identical(find_predictors(m, "all"), list(conditional = "Trt", random = "patient"))
+    expect_identical(
+      find_predictors(m, "all"),
+      list(conditional = "Trt", random = "patient")
+    )
     expect_identical(find_random(m), list(random = "patient"))
     d <- get_data(m)
     expect_named(d, c("count", "Trt", "patient"))

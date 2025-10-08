@@ -31,7 +31,6 @@ link_inverse <- function(x, ...) {
 
 # Default method ---------------------------------------
 
-
 #' @export
 link_inverse.default <- function(x, ...) {
   if (inherits(x, "list") && object_has_names(x, "gam")) {
@@ -67,7 +66,8 @@ link_inverse.default <- function(x, ...) {
   }
   # if all fails, force default link
   if (is.null(out) && !is.null(default_link)) {
-    out <- switch(default_link,
+    out <- switch(
+      default_link,
       identity = .safe(stats::gaussian(link = "identity")$linkinv),
       .safe(stats::make.link(link = default_link)$linkinv)
     )
@@ -102,7 +102,6 @@ link_inverse.nestedLogit <- function(x, ...) {
 
 
 # Tobit Family ---------------------------------
-
 
 #' @export
 link_inverse.tobit <- function(x, ...) {
@@ -248,7 +247,8 @@ link_inverse.betareg <- function(x, what = c("mean", "precision"), ...) {
 
   element_name <- .betareg_mean_element(x)
 
-  switch(what,
+  switch(
+    what,
     mean = x$link[[element_name]]$linkinv,
     precision = x$link$precision$linkinv
   )
@@ -262,7 +262,8 @@ link_inverse.DirichletRegModel <- function(x, what = c("mean", "precision"), ...
   if (x$parametrization == "common") {
     stats::make.link("logit")$linkinv
   } else {
-    switch(what,
+    switch(
+      what,
       mean = stats::make.link("logit")$linkinv,
       precision = stats::make.link("log")$linkinv
     )
@@ -398,7 +399,6 @@ link_inverse.mixor <- link_inverse.clm
 
 # mfx models ------------------------------------------------------
 
-
 #' @rdname link_inverse
 #' @export
 link_inverse.betamfx <- function(x, what = c("mean", "precision"), ...) {
@@ -443,7 +443,8 @@ link_inverse.Rchoice <- function(x, ...) {
 
 #' @export
 link_inverse.oohbchoice <- function(x, ...) {
-  link <- switch(x$distribution,
+  link <- switch(
+    x$distribution,
     normal = "identity",
     weibull = ,
     "log-normal" = "log",
@@ -463,7 +464,8 @@ link_inverse.merModList <- function(x, ...) {
 
 #' @export
 link_inverse.robmixglm <- function(x, ...) {
-  switch(tolower(x$family),
+  switch(
+    tolower(x$family),
     gaussian = stats::make.link(link = "identity")$linkinv,
     binomial = stats::make.link(link = "logit")$linkinv,
     gamma = stats::make.link(link = "inverse")$linkinv,
@@ -511,7 +513,8 @@ link_inverse.fixest <- function(x, ...) {
   } else if (inherits(x$family, "family")) {
     x$family$linkinv
   } else {
-    link <- switch(x$family,
+    link <- switch(
+      x$family,
       poisson = ,
       negbin = "log",
       logit = "logit",
@@ -549,7 +552,9 @@ link_inverse.glmmadmb <- function(x, ...) {
 #' @export
 link_inverse.polr <- function(x, ...) {
   link <- x$method
-  if (link == "logistic") link <- "logit"
+  if (link == "logistic") {
+    link <- "logit"
+  }
   stats::make.link(link)$linkinv
 }
 
@@ -557,7 +562,9 @@ link_inverse.polr <- function(x, ...) {
 #' @export
 link_inverse.svyolr <- function(x, ...) {
   link <- x$method
-  if (link == "logistic") link <- "logit"
+  if (link == "logistic") {
+    link <- "logit"
+  }
   stats::make.link(link)$linkinv
 }
 
@@ -620,7 +627,8 @@ link_inverse.glmmTMB <- function(x, ...) {
 
 #' @export
 link_inverse.MCMCglmm <- function(x, ...) {
-  switch(x$Residual$original.family,
+  switch(
+    x$Residual$original.family,
     cengaussian = ,
     gaussian = stats::gaussian(link = "identity")$linkinv,
     categorical = ,
@@ -639,7 +647,8 @@ link_inverse.MCMCglmm <- function(x, ...) {
 
 #' @export
 link_inverse.glmm <- function(x, ...) {
-  switch(tolower(x$family.glmm$family.glmm),
+  switch(
+    tolower(x$family.glmm$family.glmm),
     bernoulli.glmm = ,
     binomial.glmm = stats::make.link("logit")$linkinv,
     poisson.glmm = stats::make.link("log")$linkinv,
@@ -665,7 +674,8 @@ link_inverse.stanmvreg <- function(x, ...) {
 
 #' @export
 link_inverse.gbm <- function(x, ...) {
-  switch(x$distribution$name,
+  switch(
+    x$distribution$name,
     laplace = ,
     tdist = ,
     gaussian = stats::gaussian(link = "identity")$linkinv,
@@ -708,7 +718,8 @@ link_inverse.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
   if (faminfo$family[1] == "LOGNO") {
     function(eta) pmax(exp(eta), .Machine$double.eps)
   } else {
-    switch(what,
+    switch(
+      what,
       mu = faminfo$mu.linkinv,
       sigma = faminfo$sigma.linkinv,
       nu = faminfo$nu.linkinv,
@@ -814,7 +825,9 @@ link_inverse.mira <- function(x, ...) {
 .get_cplm_family <- function(x) {
   link <- parse(text = safe_deparse(x@call))[[1]]$link
 
-  if (is.null(link)) link <- "log"
+  if (is.null(link)) {
+    link <- "log"
+  }
 
   if (is.numeric(link)) {
     check_if_installed("statmod")

@@ -35,11 +35,26 @@
 #' )
 #' find_parameters(m)
 #' @export
-find_parameters.glmmTMB <- function(x, effects = "all", component = "all", flatten = FALSE, ...) {
+find_parameters.glmmTMB <- function(
+  x,
+  effects = "all",
+  component = "all",
+  flatten = FALSE,
+  ...
+) {
   effects <- validate_argument(effects, c("all", "fixed", "random"))
   component <- validate_argument(
     component,
-    c("all", "conditional", "zi", "zero_inflated", "dispersion", "location", "distributional", "auxiliary")
+    c(
+      "all",
+      "conditional",
+      "zi",
+      "zero_inflated",
+      "dispersion",
+      "location",
+      "distributional",
+      "auxiliary"
+    )
   )
 
   # installed
@@ -66,16 +81,18 @@ find_parameters.glmmTMB <- function(x, effects = "all", component = "all", flatt
     ))
   }
 
-  .filter_parameters(l,
-    effects = effects,
-    component = component,
-    flatten = flatten
-  )
+  .filter_parameters(l, effects = effects, component = component, flatten = flatten)
 }
 
 
 #' @export
-find_parameters.MixMod <- function(x, effects = "all", component = "all", flatten = FALSE, ...) {
+find_parameters.MixMod <- function(
+  x,
+  effects = "all",
+  component = "all",
+  flatten = FALSE,
+  ...
+) {
   # installed
   check_if_installed("lme4")
 
@@ -101,7 +118,10 @@ find_parameters.MixMod <- function(x, effects = "all", component = "all", flatte
   l <- lapply(l, text_remove_backticks)
 
   effects <- validate_argument(effects, c("all", "fixed", "random"))
-  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated")
+  )
 
   elements <- .get_elements(effects = effects, component = component)
   l <- compact_list(l[elements])
@@ -115,7 +135,13 @@ find_parameters.MixMod <- function(x, effects = "all", component = "all", flatte
 
 
 #' @export
-find_parameters.nlmerMod <- function(x, effects = "all", component = "all", flatten = FALSE, ...) {
+find_parameters.nlmerMod <- function(
+  x,
+  effects = "all",
+  component = "all",
+  flatten = FALSE,
+  ...
+) {
   # installed
   check_if_installed("lme4")
 
@@ -142,7 +168,13 @@ find_parameters.nlmerMod <- function(x, effects = "all", component = "all", flat
 
 
 #' @export
-find_parameters.hglm <- function(x, effects = "all", component = "all", flatten = FALSE, ...) {
+find_parameters.hglm <- function(
+  x,
+  effects = "all",
+  component = "all",
+  flatten = FALSE,
+  ...
+) {
   effects <- validate_argument(effects, c("all", "fixed", "random"))
   component <- validate_argument(
     component,
@@ -306,11 +338,7 @@ find_parameters.coxme <- function(x, effects = "all", flatten = FALSE, ...) {
     ))
   }
 
-  .filter_parameters(l,
-    effects = effects,
-    flatten = flatten,
-    recursive = FALSE
-  )
+  .filter_parameters(l, effects = effects, flatten = flatten, recursive = FALSE)
 }
 
 
@@ -384,11 +412,7 @@ find_parameters.BBmm <- function(x, effects = "all", flatten = FALSE, ...) {
     random = x$namesRand
   ))
 
-  .filter_parameters(l,
-    effects = effects,
-    flatten = flatten,
-    recursive = FALSE
-  )
+  .filter_parameters(l, effects = effects, flatten = flatten, recursive = FALSE)
 }
 
 
@@ -401,11 +425,7 @@ find_parameters.glimML <- function(x, effects = "all", flatten = FALSE, ...) {
     random = names(x@random.param)
   ))
 
-  .filter_parameters(l,
-    effects = effects,
-    flatten = flatten,
-    recursive = FALSE
-  )
+  .filter_parameters(l, effects = effects, flatten = flatten, recursive = FALSE)
 }
 
 
@@ -413,7 +433,10 @@ find_parameters.glimML <- function(x, effects = "all", flatten = FALSE, ...) {
 find_parameters.mixor <- function(x, effects = "all", flatten = FALSE, ...) {
   effects <- validate_argument(effects, c("all", "fixed", "random"))
   coefs <- x$Model
-  random_start <- grep("(\\(Intercept\\) \\(Intercept\\)|Random\\.\\(Intercept\\))", rownames(coefs))
+  random_start <- grep(
+    "(\\(Intercept\\) \\(Intercept\\)|Random\\.\\(Intercept\\))",
+    rownames(coefs)
+  )
   thresholds <- grep("Threshold\\d", rownames(coefs))
 
   l <- list(

@@ -12,7 +12,12 @@
   re_groups <- get_random(x)
 
   parameters <- find_parameters(x, effects = "fixed")[["conditional"]]
-  predictors <- find_predictors(x, effects = "fixed", component = "conditional", flatten = TRUE)
+  predictors <- find_predictors(
+    x,
+    effects = "fixed",
+    component = "conditional",
+    flatten = TRUE
+  )
   predictors <- setdiff(predictors, names(re_groups))
 
   model_data <- get_data(x, verbose = FALSE)[predictors]
@@ -28,7 +33,9 @@
   ltab <- list(m = as.integer(names(ltab)), l = as.vector(ltab))
 
   ltab$ddf <- ltab$m - ltab$l
-  if (has_intcp) ltab$ddf <- ltab$ddf - 1
+  if (has_intcp) {
+    ltab$ddf <- ltab$ddf - 1
+  }
 
   ii <- match(ddf, ltab$m)
   ddf[] <- ltab$ddf[ii]
@@ -38,7 +45,9 @@
   suppressWarnings({
     out[which("(Intercept)" != parameters)] <- ddf[term_assignment]
   })
-  if (has_intcp) out[which("(Intercept)" == parameters)] <- min(ddf)
+  if (has_intcp) {
+    out[which("(Intercept)" == parameters)] <- min(ddf)
+  }
 
   stats::setNames(out, parameters)
 }

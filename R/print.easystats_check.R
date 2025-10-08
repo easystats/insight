@@ -7,8 +7,12 @@ print.easystats_check <- function(x, ...) {
 
   # no attributes found? check list elements then...
   if (is.null(my_title) && is.null(my_text) && is.null(color)) {
-    if ("title" %in% names(x)) my_title <- x$title
-    if ("text" %in% names(x)) my_text <- x$text
+    if ("title" %in% names(x)) {
+      my_title <- x$title
+    }
+    if ("text" %in% names(x)) {
+      my_text <- x$text
+    }
     if ("color" %in% names(x)) color <- x$color
   }
 

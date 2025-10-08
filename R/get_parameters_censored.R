@@ -1,6 +1,5 @@
 # Survival and censored  models ---------------------------------------------
 
-
 #' @export
 get_parameters.flexsurvreg <- function(x, ...) {
   cf <- stats::coef(x)
@@ -48,7 +47,10 @@ get_parameters.crr <- function(x, ...) {
 #' @export
 get_parameters.lmodel2 <- function(x, ...) {
   res <- x$regression.results
-  out <- as.data.frame(cbind(Method = rep(res$Method, 2), utils::stack(res, select = 2:3)))
+  out <- as.data.frame(cbind(
+    Method = rep(res$Method, 2),
+    utils::stack(res, select = 2:3)
+  ))
   colnames(out) <- c("Component", "Estimate", "Parameter")
   out[c("Parameter", "Estimate", "Component")]
 }

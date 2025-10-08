@@ -64,7 +64,8 @@ test_that("retrieve from call formula environment", {
 test_that("lme", {
   skip_if_not_installed("nlme")
   data("Orthodont", package = "nlme")
-  m <- nlme::lme( # a model of variance only
+  m <- nlme::lme(
+    # a model of variance only
     distance ~ 1,
     data = Orthodont, # grand mean
     weights = nlme::varConstPower(form = ~ age | Sex)
@@ -79,8 +80,10 @@ test_that("lme4", {
   data("cbpp", package = "lme4")
   set.seed(123)
   cbpp$cont <- rnorm(nrow(cbpp))
-  m <- lme4::glmer(cbind(incidence, size - incidence) ~ poly(cont, 2) + (1 | herd),
-    data = cbpp, family = binomial
+  m <- lme4::glmer(
+    cbind(incidence, size - incidence) ~ poly(cont, 2) + (1 | herd),
+    data = cbpp,
+    family = binomial
   )
   expect_s3_class(get_data(m), "data.frame")
 })
@@ -135,15 +138,23 @@ test_that("get_data lavaan", {
   "
   m <- lavaan::sem(model, data = PoliticalDemocracy)
   expect_s3_class(get_data(m, verbose = FALSE), "data.frame")
-  expect_equal(head(get_data(m, verbose = FALSE)), head(PoliticalDemocracy), ignore_attr = TRUE, tolerance = 1e-3)
+  expect_equal(
+    head(get_data(m, verbose = FALSE)),
+    head(PoliticalDemocracy),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
 
   # works when data not in environment
   holz_data <<- lavaan::HolzingerSwineford1939
   HS.model <- " visual  =~ x1 + x2 + x3
                 textual =~ x4 + x5 + x6
                 speed   =~ x7 + x8 + x9 "
-  m_holz <- lavaan::lavaan(HS.model,
-    data = holz_data, auto.var = TRUE, auto.fix.first = TRUE,
+  m_holz <- lavaan::lavaan(
+    HS.model,
+    data = holz_data,
+    auto.var = TRUE,
+    auto.fix.first = TRUE,
     auto.cov.lv.x = TRUE
   )
 
@@ -152,8 +163,21 @@ test_that("get_data lavaan", {
   expect_named(
     out1,
     c(
-      "id", "sex", "ageyr", "agemo", "school", "grade", "x1", "x2",
-      "x3", "x4", "x5", "x6", "x7", "x8", "x9"
+      "id",
+      "sex",
+      "ageyr",
+      "agemo",
+      "school",
+      "grade",
+      "x1",
+      "x2",
+      "x3",
+      "x4",
+      "x5",
+      "x6",
+      "x7",
+      "x8",
+      "x9"
     )
   )
   expect_identical(nrow(out1), 301L)
@@ -177,11 +201,17 @@ test_that("get_data include weights, even if ones", {
 
   # Model with nonuniform weights
   fn <- lm(y ~ x, weights = wn)
-  expect_identical(colnames(get_data(fn, verbose = FALSE)), c("y", "x", "(weights)", "wn"))
+  expect_identical(
+    colnames(get_data(fn, verbose = FALSE)),
+    c("y", "x", "(weights)", "wn")
+  )
 
   # Model with weights equal to 1
   f1 <- lm(y ~ x, weights = w1)
-  expect_identical(colnames(get_data(f1, verbose = FALSE)), c("y", "x", "(weights)", "w1"))
+  expect_identical(
+    colnames(get_data(f1, verbose = FALSE)),
+    c("y", "x", "(weights)", "w1")
+  )
 
   # Model with no weights
   f0 <- lm(y ~ x)
@@ -195,9 +225,102 @@ test_that("get_data include weights, even if ones", {
 
 test_that("lm with transformations", {
   d <- data.frame(
-    time = as.factor(c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)),
-    group = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
-    sum = c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50)
+    time = as.factor(c(
+      1,
+      2,
+      3,
+      4,
+      5,
+      1,
+      2,
+      3,
+      4,
+      5,
+      1,
+      2,
+      3,
+      4,
+      5,
+      1,
+      2,
+      3,
+      4,
+      5,
+      1,
+      2,
+      3,
+      4,
+      5,
+      1,
+      2,
+      3,
+      4,
+      5
+    )),
+    group = c(
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2
+    ),
+    sum = c(
+      0,
+      5,
+      10,
+      15,
+      20,
+      0,
+      20,
+      25,
+      45,
+      50,
+      0,
+      5,
+      10,
+      15,
+      20,
+      0,
+      20,
+      25,
+      45,
+      50,
+      0,
+      5,
+      10,
+      15,
+      20,
+      0,
+      20,
+      25,
+      45,
+      50
+    )
   )
   m <- lm(log(sum + 1) ~ as.numeric(time) * group, data = d)
   expect_identical(colnames(get_data(m)), c("sum", "time", "group"))
@@ -209,7 +332,11 @@ test_that("lm with poly and NA in response", {
   d[1:25, "Sepal.Length"] <- NA
   d2 <- d
   m <- lm(Sepal.Length ~ Species / poly(Petal.Width, 2), data = d2)
-  expect_equal(get_data(m), iris[26:150, c("Sepal.Length", "Species", "Petal.Width")], ignore_attr = TRUE)
+  expect_equal(
+    get_data(m),
+    iris[26:150, c("Sepal.Length", "Species", "Petal.Width")],
+    ignore_attr = TRUE
+  )
 })
 
 
@@ -221,7 +348,10 @@ test_that("mgcv", {
   # https://github.com/cran/mgcv/blob/a4e69cf44a49c84a41a42e90c86995a843733968/R/mgcv.r#L2156-L2159
   d <- iris
   d$NewFac <- rep_len(c(1, 2), 150)
-  model <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)), data = d)
+  model <- mgcv::gam(
+    Sepal.Length ~ s(Petal.Length, by = interaction(Species, NewFac)),
+    data = d
+  )
 
   # There should be two warnings: One for failing to get the data from the
   # environment, and one for not recovering interaction() accurately
@@ -237,25 +367,17 @@ test_that("mgcv", {
 
 test_that("lm with poly and NA in response", {
   s1 <- summary(iris$Sepal.Length)
-  model <- lm(Petal.Length ~ log(Sepal.Width) + Sepal.Length,
-    data = iris
-  )
+  model <- lm(Petal.Length ~ log(Sepal.Width) + Sepal.Length, data = iris)
   # Same min-max
   s2 <- summary(insight::get_data(model)$Sepal.Length)
 
-  model <- lm(Petal.Length ~ log(1 + Sepal.Width) + Sepal.Length,
-    data = iris
-  )
+  model <- lm(Petal.Length ~ log(1 + Sepal.Width) + Sepal.Length, data = iris)
   s3 <- summary(insight::get_data(model)$Sepal.Length)
 
-  model <- lm(Petal.Length ~ log(Sepal.Width + 1) + Sepal.Length,
-    data = iris
-  )
+  model <- lm(Petal.Length ~ log(Sepal.Width + 1) + Sepal.Length, data = iris)
   s4 <- summary(insight::get_data(model)$Sepal.Length)
 
-  model <- lm(Petal.Length ~ log1p(Sepal.Width) + Sepal.Length,
-    data = iris
-  )
+  model <- lm(Petal.Length ~ log1p(Sepal.Width) + Sepal.Length, data = iris)
   s5 <- summary(insight::get_data(model)$Sepal.Length)
 
   expect_equal(s1, s2, tolerance = 1e-4)
@@ -442,7 +564,13 @@ test_that("workaround bug in estimatr", {
 test_that("get_data colnames", {
   skip_on_os("windows")
   skip_if_not_installed("brms")
-  m <- suppressMessages(suppressWarnings(brms::brm(mpg ~ hp + mo(cyl), data = mtcars, refresh = 0, iter = 200, chains = 1)))
+  m <- suppressMessages(suppressWarnings(brms::brm(
+    mpg ~ hp + mo(cyl),
+    data = mtcars,
+    refresh = 0,
+    iter = 200,
+    chains = 1
+  )))
   out <- get_data(m)
   expect_type(out$cyl, "double")
   expect_true(all(colnames(out) %in% c("mpg", "hp", "cyl")))
@@ -493,7 +621,11 @@ test_that("get_data works for fixest inside functions", {
 
   # regular example
   data(iris)
-  res <- fixest::feglm(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris, "poisson")
+  res <- fixest::feglm(
+    Sepal.Length ~ Sepal.Width + Petal.Length | Species,
+    iris,
+    "poisson"
+  )
   expect_named(
     get_data(res),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Species")

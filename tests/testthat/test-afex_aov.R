@@ -9,7 +9,8 @@ Mc <- suppressWarnings(suppressMessages(
   afex::aov_car(
     value ~ treatment * gender + age + Error(id / (phase * hour)),
     factorize = FALSE,
-    data = obk.long, include_aov = FALSE
+    data = obk.long,
+    include_aov = FALSE
   )
 ))
 
@@ -17,28 +18,32 @@ Mc2 <- suppressWarnings(suppressMessages(
   afex::aov_car(
     value ~ treatment * gender + exp(age) + Error(id / (phase * hour)),
     factorize = FALSE,
-    data = obk.long, include_aov = FALSE
+    data = obk.long,
+    include_aov = FALSE
   )
 ))
 
 M <- suppressWarnings(suppressMessages(
   afex::aov_car(
     value ~ treatment * gender + Error(id / (phase * hour)),
-    data = obk.long, include_aov = FALSE
+    data = obk.long,
+    include_aov = FALSE
   )
 ))
 
 B <- suppressWarnings(suppressMessages(
   afex::aov_car(
     value ~ treatment * gender + Error(id),
-    data = obk.long, include_aov = FALSE
+    data = obk.long,
+    include_aov = FALSE
   )
 ))
 
 W <- suppressWarnings(suppressMessages(
   afex::aov_car(
     value ~ Error(id / (phase * hour)),
-    data = obk.long, include_aov = FALSE
+    data = obk.long,
+    include_aov = FALSE
   )
 ))
 

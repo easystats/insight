@@ -37,10 +37,13 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(
-    response = "durable",
-    conditional = c("age", "quant")
-  ))
+  expect_equal(
+    find_terms(m1),
+    list(
+      response = "durable",
+      conditional = c("age", "quant")
+    )
+  )
   expect_equal(find_terms(m1, flatten = TRUE), c("durable", "age", "quant"))
 })
 
@@ -55,9 +58,14 @@ test_that("linkfun", {
 test_that("find_parameters", {
   expect_equal(
     find_parameters(m1),
-    list(conditional = c(
-      "(Intercept)", "age", "quant", "sigma"
-    ))
+    list(
+      conditional = c(
+        "(Intercept)",
+        "age",
+        "quant",
+        "sigma"
+      )
+    )
   )
   expect_equal(nrow(get_parameters(m1)), 4)
   expect_equal(

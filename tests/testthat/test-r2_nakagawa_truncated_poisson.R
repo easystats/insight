@@ -12,9 +12,11 @@ skip_if_not_installed("performance", minimum_version = "0.12.1")
 test_that("glmmTMB, truncated_poisson", {
   data(Salamanders, package = "glmmTMB")
 
-  m <- glmmTMB::glmmTMB(count ~ spp + mined + (1 | site),
+  m <- glmmTMB::glmmTMB(
+    count ~ spp + mined + (1 | site),
     ziformula = ~ spp + mined,
-    family = glmmTMB::truncated_poisson(), data = glmmTMB::Salamanders
+    family = glmmTMB::truncated_poisson(),
+    data = glmmTMB::Salamanders
   )
 
   # truncated only works for full model

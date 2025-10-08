@@ -103,23 +103,28 @@
 #' }
 #' }
 #' @export
-print_parameters <- function(x,
-                             ...,
-                             by = c("Effects", "Component", "Group", "Response"),
-                             format = "text",
-                             parameter_column = "Parameter",
-                             keep_parameter_column = TRUE,
-                             remove_empty_column = FALSE,
-                             titles = NULL,
-                             subtitles = NULL) {
+print_parameters <- function(
+  x,
+  ...,
+  by = c("Effects", "Component", "Group", "Response"),
+  format = "text",
+  parameter_column = "Parameter",
+  keep_parameter_column = TRUE,
+  remove_empty_column = FALSE,
+  titles = NULL,
+  subtitles = NULL
+) {
   obj <- list(...)
 
   # save attributes of original object
-  att <- do.call(c, compact_list(lapply(obj, function(i) {
-    a <- attributes(i)
-    a$names <- a$class <- a$row.names <- NULL
-    a
-  })))
+  att <- do.call(
+    c,
+    compact_list(lapply(obj, function(i) {
+      a <- attributes(i)
+      a$names <- a$class <- a$row.names <- NULL
+      a
+    }))
+  )
   att <- att[!duplicated(names(att))]
 
   # get cleaned parameters
@@ -133,14 +138,19 @@ print_parameters <- function(x,
   obj <- Reduce(
     function(x, y) {
       # check for valid column name
-      if (parameter_column != "Parameter" &&
-        parameter_column %in% colnames(y) &&
-        !"Parameter" %in% colnames(y)) {
+      if (
+        parameter_column != "Parameter" &&
+          parameter_column %in% colnames(y) &&
+          !"Parameter" %in% colnames(y)
+      ) {
         colnames(y)[colnames(y) == parameter_column] <- "Parameter"
       }
       merge_by <- unique(c(
         "Parameter",
-        intersect(colnames(y), intersect(c("Effects", "Component", "Group", "Response"), colnames(x)))
+        intersect(
+          colnames(y),
+          intersect(c("Effects", "Component", "Group", "Response"), colnames(x))
+        )
       ))
       merge(x, y, all.x = FALSE, by = merge_by, sort = FALSE)
     },
@@ -188,8 +198,13 @@ print_parameters <- function(x,
     for (j in seq_along(parts)) {
       # Rename "fixed", "random" etc. into proper titles. Here we have the
       # "Main title" of a subcomponent (like "Random effects")
-      if (parts[j] %in% c("fixed", "random") || (has_zeroinf && parts[j] %in% c("conditional", "zi", "zero_inflated"))) {
-        tmp <- switch(parts[j],
+      if (
+        parts[j] %in%
+          c("fixed", "random") ||
+          (has_zeroinf && parts[j] %in% c("conditional", "zi", "zero_inflated"))
+      ) {
+        tmp <- switch(
+          parts[j],
           fixed = "Fixed effects",
           random = "Random effects",
           dispersion = "Dispersion",
@@ -201,7 +216,8 @@ print_parameters <- function(x,
       } else if (!parts[j] %in% c("conditional", "zi", "zero_inflated")) {
         # here we have the "subtitles" of a subcomponent
         # (like "Intercept: Group-Level 1")
-        tmp <- switch(parts[j],
+        tmp <- switch(
+          parts[j],
           simplex = "(monotonic effects)",
           paste0("(", parts[j], ")")
         )
@@ -228,7 +244,10 @@ print_parameters <- function(x,
     # match parameters of pretty names here, and add this attributes
     # to each element here...
     if ("pretty_names" %in% names(att)) {
-      attr(element, "pretty_names") <- stats::setNames(att$pretty_names[element$Parameter], element$Cleaned_Parameter)
+      attr(element, "pretty_names") <- stats::setNames(
+        att$pretty_names[element$Parameter],
+        element$Cleaned_Parameter
+      )
     }
 
     # keep or remove old parameter column?
@@ -240,7 +259,11 @@ print_parameters <- function(x,
     # remove empty columns
     if (isTRUE(remove_empty_column)) {
       for (j in colnames(element)) {
-        if (all(is.na(element[[j]])) || (is.character(element[[j]]) && all(element[[j]] == ""))) { # nolint
+        if (
+          all(is.na(element[[j]])) ||
+            (is.character(element[[j]]) && all(element[[j]] == ""))
+        ) {
+          # nolint
           element[[j]] <- NULL
         }
       }

@@ -48,13 +48,15 @@
 #' x <- color_if(iris[1:10, ], columns = "Sepal.Length", predicate = p)
 #' cat(x$Sepal.Length)
 #' @export
-color_if <- function(x,
-                     columns,
-                     predicate = `>`,
-                     value = 0,
-                     color_if = "green",
-                     color_else = "red",
-                     digits = 2) {
+color_if <- function(
+  x,
+  columns,
+  predicate = `>`,
+  value = 0,
+  color_if = "green",
+  color_else = "red",
+  digits = 2
+) {
   xnew <- x
 
   if (columns %in% names(x)) {
@@ -91,13 +93,15 @@ color_if <- function(x,
 
 #' @rdname color_if
 #' @export
-colour_if <- function(x,
-                      columns,
-                      predicate = `>`,
-                      value = 0,
-                      colour_if = "green",
-                      colour_else = "red",
-                      digits = 2) {
+colour_if <- function(
+  x,
+  columns,
+  predicate = `>`,
+  value = 0,
+  colour_if = "green",
+  colour_else = "red",
+  digits = 2
+) {
   color_if(
     x = x,
     columns = columns,

@@ -11,7 +11,11 @@ d <- (y > c)
 dat <<- data.frame(y, x, c, d)
 
 # model
-m1 <- quantreg::crq(survival::Surv(pmax(y, c), d, type = "left") ~ x, method = "Portnoy", data = dat)
+m1 <- quantreg::crq(
+  survival::Surv(pmax(y, c), d, type = "left") ~ x,
+  method = "Portnoy",
+  data = dat
+)
 
 test_that("model_info", {
   expect_false(model_info(m1)$is_linear)
@@ -93,7 +97,16 @@ test_that("find_parameters", {
   )
   expect_equal(
     get_parameters(m1)$Component,
-    c("tau (0.2)", "tau (0.2)", "tau (0.4)", "tau (0.4)", "tau (0.6)", "tau (0.6)", "tau (0.8)", "tau (0.8)")
+    c(
+      "tau (0.2)",
+      "tau (0.2)",
+      "tau (0.4)",
+      "tau (0.4)",
+      "tau (0.6)",
+      "tau (0.6)",
+      "tau (0.8)",
+      "tau (0.8)"
+    )
   )
 })
 

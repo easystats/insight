@@ -2,7 +2,8 @@ skip_if_not_installed("ivreg")
 
 data("CigaretteDemand", package = "ivreg")
 
-m1 <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
+m1 <- ivreg::ivreg(
+  log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
   data = CigaretteDemand
 )
 

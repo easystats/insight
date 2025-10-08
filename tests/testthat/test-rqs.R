@@ -87,9 +87,13 @@ test_that("link_inverse", {
 test_that("find_parameters", {
   expect_identical(
     find_parameters(m1),
-    list(conditional = c(
-      "(Intercept)", "Air.Flow", "Water.Temp"
-    ))
+    list(
+      conditional = c(
+        "(Intercept)",
+        "Air.Flow",
+        "Water.Temp"
+      )
+    )
   )
   expect_identical(nrow(get_parameters(m1)), 9L)
   expect_identical(

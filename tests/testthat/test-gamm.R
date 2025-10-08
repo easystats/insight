@@ -48,7 +48,48 @@ test_that("link_inverse", {
 
 test_that("get_data", {
   expect_equal(nrow(get_data(m1)), 200)
-  expect_equal(colnames(get_data(m1)), c("y", "x0", "x1", "x2", "fac", "g", "g.0", "g.1", "y.0", "Xr.V1", "Xr.V2", "Xr.V3", "Xr.V4", "Xr.V5", "Xr.V6", "Xr.V7", "Xr.V8", "Xr.0.V1", "Xr.0.V2", "Xr.0.V3", "Xr.0.V4", "Xr.0.V5", "Xr.0.V6", "Xr.0.V7", "Xr.0.V8", "Xr.1.V1", "Xr.1.V2", "Xr.1.V3", "Xr.1.V4", "Xr.1.V5", "Xr.1.V6", "Xr.1.V7", "Xr.1.V8", "X.(Intercept)", "X.s(x0)Fx1", "X.s(x1)Fx1", "X.s(x2)Fx1"))
+  expect_equal(
+    colnames(get_data(m1)),
+    c(
+      "y",
+      "x0",
+      "x1",
+      "x2",
+      "fac",
+      "g",
+      "g.0",
+      "g.1",
+      "y.0",
+      "Xr.V1",
+      "Xr.V2",
+      "Xr.V3",
+      "Xr.V4",
+      "Xr.V5",
+      "Xr.V6",
+      "Xr.V7",
+      "Xr.V8",
+      "Xr.0.V1",
+      "Xr.0.V2",
+      "Xr.0.V3",
+      "Xr.0.V4",
+      "Xr.0.V5",
+      "Xr.0.V6",
+      "Xr.0.V7",
+      "Xr.0.V8",
+      "Xr.1.V1",
+      "Xr.1.V2",
+      "Xr.1.V3",
+      "Xr.1.V4",
+      "Xr.1.V5",
+      "Xr.1.V6",
+      "Xr.1.V7",
+      "Xr.1.V8",
+      "X.(Intercept)",
+      "X.s(x0)Fx1",
+      "X.s(x1)Fx1",
+      "X.s(x2)Fx1"
+    )
+  )
 })
 
 test_that("find_formula", {
@@ -64,12 +105,18 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(response = "y", conditional = c("s(x0)", "s(x1)", "s(x2)"), random = "fac"))
+  expect_equal(
+    find_terms(m1),
+    list(response = "y", conditional = c("s(x0)", "s(x1)", "s(x2)"), random = "fac")
+  )
   expect_equal(find_terms(m1, flatten = TRUE), c("y", "s(x0)", "s(x1)", "s(x2)", "fac"))
 })
 
 test_that("find_variables", {
-  expect_equal(find_variables(m1), list(response = "y", conditional = c("x0", "x1", "x2"), random = "fac"))
+  expect_equal(
+    find_variables(m1),
+    list(response = "y", conditional = c("x0", "x1", "x2"), random = "fac")
+  )
   expect_equal(find_variables(m1, flatten = TRUE), c("y", "x0", "x1", "x2", "fac"))
 })
 
@@ -96,7 +143,6 @@ test_that("find_parameters", {
 test_that("is_multivariate", {
   expect_false(is_multivariate(m1))
 })
-
 
 
 # test formula random effects -----------------------

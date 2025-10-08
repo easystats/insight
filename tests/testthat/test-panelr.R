@@ -78,15 +78,27 @@ test_that("clean_parameters", {
   expect_identical(
     cp$Cleaned_Parameter,
     c(
-      "union", "wks", "(Intercept)", "imean(lag(union))", "imean(wks)",
-      "blk", "fem", "union:blk"
+      "union",
+      "wks",
+      "(Intercept)",
+      "imean(lag(union))",
+      "imean(wks)",
+      "blk",
+      "fem",
+      "union:blk"
     )
   )
   expect_identical(
     cp$Component,
     c(
-      "conditional", "conditional", "instruments", "instruments",
-      "instruments", "instruments", "instruments", "interactions"
+      "conditional",
+      "conditional",
+      "instruments",
+      "instruments",
+      "instruments",
+      "instruments",
+      "instruments",
+      "interactions"
     )
   )
 })
@@ -223,13 +235,24 @@ test_that("get_parameters", {
         "lag(union):blk"
       ),
       Estimate = c(
-        0.0582474262882615, -0.00163678667081885, 6.59813245629044,
-        -0.0279959204722801, 0.00438047648390025, -0.229414915661438,
-        -0.441756913071962, -0.127319623945541
+        0.0582474262882615,
+        -0.00163678667081885,
+        6.59813245629044,
+        -0.0279959204722801,
+        0.00438047648390025,
+        -0.229414915661438,
+        -0.441756913071962,
+        -0.127319623945541
       ),
       Component = c(
-        "within", "within", "between", "between",
-        "between", "between", "between", "interactions"
+        "within",
+        "within",
+        "between",
+        "between",
+        "between",
+        "between",
+        "between",
+        "interactions"
       ),
       stringsAsFactors = FALSE
     ),

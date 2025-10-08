@@ -73,7 +73,14 @@ test_that("find_parameters", {
   expect_identical(
     find_parameters(m1),
     list(
-      conditional = c("(Intercept)", "+lag(pov)", "-lag(pov)", "+spouse", "-spouse", "wave")
+      conditional = c(
+        "(Intercept)",
+        "+lag(pov)",
+        "-lag(pov)",
+        "+spouse",
+        "-spouse",
+        "wave"
+      )
     )
   )
   expect_identical(nrow(get_parameters(m1)), 6L)
@@ -85,12 +92,20 @@ test_that("get_parameters", {
     get_parameters(m1),
     data.frame(
       Parameter = c(
-        "(Intercept)", "+lag(pov)", "-lag(pov)",
-        "+spouse", "-spouse", "wave"
+        "(Intercept)",
+        "+lag(pov)",
+        "-lag(pov)",
+        "+spouse",
+        "-spouse",
+        "wave"
       ),
       Estimate = c(
-        5.07629091766534,  -0.695146196282601, 2.74491742707041,
-        -2.99740859292258, -0.399625620609947, -0.812955475294268
+        5.07629091766534,
+        -0.695146196282601,
+        2.74491742707041,
+        -2.99740859292258,
+        -0.399625620609947,
+        -0.812955475294268
       ),
       stringsAsFactors = FALSE
     ),
@@ -105,12 +120,20 @@ test_that("get_statistic", {
     get_statistic(m1),
     data.frame(
       Parameter = c(
-        "(Intercept)", "+lag(pov)", "-lag(pov)",
-        "+spouse", "-spouse", "wave"
+        "(Intercept)",
+        "+lag(pov)",
+        "-lag(pov)",
+        "+spouse",
+        "-spouse",
+        "wave"
       ),
       Statistic = c(
-        3.72593191668147, -0.946399537913606, 3.48400992278831,
-        -2.27338697388243, -0.160677061930687, -2.3766486580145
+        3.72593191668147,
+        -0.946399537913606,
+        3.48400992278831,
+        -2.27338697388243,
+        -0.160677061930687,
+        -2.3766486580145
       ),
       stringsAsFactors = FALSE
     ),

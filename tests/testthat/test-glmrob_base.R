@@ -76,10 +76,13 @@ test_that("find_terms", {
 })
 
 test_that("find_variables", {
-  expect_equal(find_variables(m1), list(
-    response = c("success", "total"),
-    conditional = c("logdose", "block")
-  ))
+  expect_equal(
+    find_variables(m1),
+    list(
+      response = c("success", "total"),
+      conditional = c("logdose", "block")
+    )
+  )
   expect_equal(
     find_variables(m1, flatten = TRUE),
     c("success", "total", "logdose", "block")

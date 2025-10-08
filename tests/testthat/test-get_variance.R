@@ -42,33 +42,25 @@ test_that("error for non-mixed", {
     get_variance(glmmTMB::glmmTMB(mpg ~ gear, data = mtcars)),
     regex = "This function only works for mixed models"
   )
-  expect_silent(get_variance(glmmTMB::glmmTMB(mpg ~ gear, data = mtcars), verbose = FALSE))
+  expect_silent(get_variance(
+    glmmTMB::glmmTMB(mpg ~ gear, data = mtcars),
+    verbose = FALSE
+  ))
 })
 
 test_that("get_variance-1", {
-  expect_equal(v1$var.intercept,
-    c(Subject = 612.10016),
-    tolerance = 1e-2
-  )
-  expect_equal(v1$var.slope,
-    c(Subject.Days = 35.07171),
-    tolerance = 1e-2
-  )
+  expect_equal(v1$var.intercept, c(Subject = 612.10016), tolerance = 1e-2)
+  expect_equal(v1$var.slope, c(Subject.Days = 35.07171), tolerance = 1e-2)
 })
 
 test_that("get_variance-2", {
-  expect_equal(v2$var.intercept,
-    c(Subject = 627.56905),
-    tolerance = 1e-2
-  )
-  expect_equal(v2$var.slope,
-    c(Subject.Days = 35.85838),
-    tolerance = 1e-2
-  )
+  expect_equal(v2$var.intercept, c(Subject = 627.56905), tolerance = 1e-2)
+  expect_equal(v2$var.slope, c(Subject.Days = 35.85838), tolerance = 1e-2)
 })
 
 test_that("get_variance-3", {
-  expect_equal(v3$var.intercept,
+  expect_equal(
+    v3$var.intercept,
     c(
       subgrp.grp.1 = 0,
       Subject = 662.52047,
@@ -88,10 +80,7 @@ test_that("get_variance-3", {
 })
 
 test_that("get_variance-4", {
-  expect_equal(v4$var.intercept,
-    c(Subject = 1378.17851),
-    tolerance = 1e-2
-  )
+  expect_equal(v4$var.intercept, c(Subject = 1378.17851), tolerance = 1e-2)
   expect_null(v4$var.slope)
 })
 
@@ -192,7 +181,10 @@ test_that("get_variance-9", {
 
 
 test_that("get_variance-10", {
-  model <- suppressMessages(lme4::lmer(Reaction ~ Days2 + (1 + Days2 || Subject), data = study_data2))
+  model <- suppressMessages(lme4::lmer(
+    Reaction ~ Days2 + (1 + Days2 || Subject),
+    data = study_data2
+  ))
   vmodel <- suppressWarnings(get_variance(model))
 
   expect_equal(
@@ -346,7 +338,10 @@ test_that("random effects CIs, simple slope", {
 test_that("random effects CIs, poly slope", {
   data(cake, package = "lme4")
   suppressMessages({
-    m <- lme4::lmer(angle ~ poly(temp, 2) + (poly(temp, 2) | replicate) + (1 | recipe), data = cake)
+    m <- lme4::lmer(
+      angle ~ poly(temp, 2) + (poly(temp, 2) | replicate) + (1 | recipe),
+      data = cake
+    )
   })
   vc <- suppressWarnings(get_variance(m))
 
@@ -367,12 +362,22 @@ test_that("fixed effects variance for rank-deficient models, #765", {
     x2 = runif(1000, 0, 10),
     re = rep(1:20, each = 50)
   )
-  dd <- transform(dd, x3 = as.factor(ifelse(
-    x1 <= 500, "Low", sample(c("Middle", "High"), 1000, replace = TRUE)
-  )))
-  dd <- transform(dd, x4 = as.factor(ifelse(
-    x1 > 500, "High", sample(c("Absent", "Low"), 1000, replace = TRUE)
-  )))
+  dd <- transform(
+    dd,
+    x3 = as.factor(ifelse(
+      x1 <= 500,
+      "Low",
+      sample(c("Middle", "High"), 1000, replace = TRUE)
+    ))
+  )
+  dd <- transform(
+    dd,
+    x4 = as.factor(ifelse(
+      x1 > 500,
+      "High",
+      sample(c("Absent", "Low"), 1000, replace = TRUE)
+    ))
+  )
   dd <- transform(dd, z = z + re * 5)
 
   expect_message({

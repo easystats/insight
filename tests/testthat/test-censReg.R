@@ -14,15 +14,18 @@ test_that("model_info", {
 })
 
 test_that("find_predictors", {
-  expect_identical(find_predictors(m1), list(
-    conditional = c(
-      "age",
-      "yearsmarried",
-      "religiousness",
-      "occupation",
-      "rating"
+  expect_identical(
+    find_predictors(m1),
+    list(
+      conditional = c(
+        "age",
+        "yearsmarried",
+        "religiousness",
+        "occupation",
+        "rating"
+      )
     )
-  ))
+  )
   expect_identical(
     find_predictors(m1, flatten = TRUE),
     c(

@@ -51,10 +51,13 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(
-    response = "mpg",
-    conditional = c("gear", "wt", "cyl")
-  ))
+  expect_equal(
+    find_terms(m1),
+    list(
+      response = "mpg",
+      conditional = c("gear", "wt", "cyl")
+    )
+  )
   expect_equal(find_terms(m1, flatten = TRUE), c("mpg", "gear", "wt", "cyl"))
 })
 

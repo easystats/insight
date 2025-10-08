@@ -77,7 +77,10 @@ test_that("find_predictors", {
   )
   expect_null(find_predictors(m1, effects = "random"))
 
-  expect_identical(find_predictors(m2), list(conditional = c("x2", "x3"), zero_inflated = c("x0", "x1")))
+  expect_identical(
+    find_predictors(m2),
+    list(conditional = c("x2", "x3"), zero_inflated = c("x0", "x1"))
+  )
   expect_identical(find_predictors(m2, flatten = TRUE), c("x2", "x3", "x0", "x1"))
   expect_null(find_predictors(m2, effects = "random"))
 
@@ -99,11 +102,17 @@ test_that("find_response", {
 })
 
 test_that("find_smooth", {
-  expect_identical(find_smooth(m1), list(smooth_terms = c("s(x0)", "s(x1)", "s(x2)", "s(x3)")))
+  expect_identical(
+    find_smooth(m1),
+    list(smooth_terms = c("s(x0)", "s(x1)", "s(x2)", "s(x3)"))
+  )
 })
 
 test_that("get_call", {
-  expect_identical(deparse(get_call(m1)), "mgcv::gam(formula = y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat2)")
+  expect_identical(
+    deparse(get_call(m1)),
+    "mgcv::gam(formula = y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat2)"
+  )
 })
 
 test_that("get_response", {
@@ -120,9 +129,15 @@ test_that("link_inverse", {
 
 test_that("get_data", {
   expect_identical(nrow(get_data(m1, verbose = FALSE)), 400L)
-  expect_identical(colnames(get_data(m1, verbose = FALSE)), c("y", "x0", "x1", "x2", "x3"))
+  expect_identical(
+    colnames(get_data(m1, verbose = FALSE)),
+    c("y", "x0", "x1", "x2", "x3")
+  )
   expect_identical(nrow(get_data(m2, verbose = FALSE)), 500L)
-  expect_identical(colnames(get_data(m2, verbose = FALSE)), c("y", "x2", "x3", "x0", "x1"))
+  expect_identical(
+    colnames(get_data(m2, verbose = FALSE)),
+    c("y", "x2", "x3", "x0", "x1")
+  )
   expect_identical(nrow(get_data(m3, verbose = FALSE)), 300L)
 
   # extract data from environment allows us to keep additional variables
@@ -162,7 +177,10 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_identical(find_variables(m1), list(response = "y", conditional = c("x0", "x1", "x2", "x3")))
+  expect_identical(
+    find_variables(m1),
+    list(response = "y", conditional = c("x0", "x1", "x2", "x3"))
+  )
   expect_identical(find_variables(m1, flatten = TRUE), c("y", "x0", "x1", "x2", "x3"))
   expect_identical(
     find_variables(m2),
@@ -181,7 +199,10 @@ test_that("find_variables", {
       y1 = list(conditional = c("x2", "x3"))
     )
   )
-  expect_identical(find_variables(m3, flatten = TRUE), c("y0", "y1", "x0", "x1", "x2", "x3"))
+  expect_identical(
+    find_variables(m3, flatten = TRUE),
+    c("y0", "y1", "x0", "x1", "x2", "x3")
+  )
 })
 
 test_that("n_obs", {

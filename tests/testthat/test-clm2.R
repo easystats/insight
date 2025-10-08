@@ -69,10 +69,13 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(
-    response = "Sat",
-    conditional = c("Infl", "Type", "Cont")
-  ))
+  expect_equal(
+    find_terms(m1),
+    list(
+      response = "Sat",
+      conditional = c("Infl", "Type", "Cont")
+    )
+  )
   expect_equal(
     find_terms(m1, flatten = TRUE),
     c("Sat", "Infl", "Type", "Cont")

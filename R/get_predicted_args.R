@@ -1,14 +1,16 @@
 # process predict-specific arguments ------------------------------------------
 
-.get_predicted_args <- function(x,
-                                data = NULL,
-                                predict = "expectation",
-                                include_random = "default",
-                                include_smooth = TRUE,
-                                ci = NULL,
-                                ci_method = NULL,
-                                verbose = TRUE,
-                                ...) {
+.get_predicted_args <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  include_random = "default",
+  include_smooth = TRUE,
+  ci = NULL,
+  ci_method = NULL,
+  verbose = TRUE,
+  ...
+) {
   # First step, check whether "predict" or type argument is used -------------
   ############################################################################
 
@@ -40,11 +42,13 @@
     predict <- predict[1]
     if (isTRUE(verbose)) {
       format_warning(
-        sprintf("More than one option provided in `predict`. Using first option `%s` now.", predict[1])
+        sprintf(
+          "More than one option provided in `predict`. Using first option `%s` now.",
+          predict[1]
+        )
       )
     }
   }
-
 
   # Intermediate step, get model information and evaluate data argument ------
   ############################################################################
@@ -53,9 +57,12 @@
   info <- model_info(x, response = 1, verbose = FALSE)
 
   # Data
-  if (!is.null(dots$newdata) && is.null(data)) data <- dots$newdata
-  if (is.null(data)) data <- get_data(x, verbose = FALSE)
-
+  if (!is.null(dots$newdata) && is.null(data)) {
+    data <- dots$newdata
+  }
+  if (is.null(data)) {
+    data <- get_data(x, verbose = FALSE)
+  }
 
   # Intermediate step, check data classes  ------
   # if data=NULL, check terms
@@ -64,7 +71,8 @@
 
   if (is.null(data)) {
     flag_matrix <- .safe(
-      any(grepl("matrix", attributes(stats::terms(x))$dataClasses, fixed = TRUE)), FALSE
+      any(grepl("matrix", attributes(stats::terms(x))$dataClasses, fixed = TRUE)),
+      FALSE
     )
   } else {
     flag_matrix <- .safe(any(vapply(data, inherits, TRUE, what = "matrix")), FALSE)
@@ -76,13 +84,13 @@
     )
   }
 
-
   # Second step, evaluate "predict" argument                      ------------
   ############################################################################
 
   # check `predict` user-input
   predict_method <- lapply(
-    class(x), function(i) {
+    class(x),
+    function(i) {
       .safe(utils::getS3method("predict", i))
     }
   )
@@ -115,7 +123,9 @@
     # dpars to "posterior_predict()" - else, when dpars are provided via the
     # predict-argument, we always set predict = "expectation"
     dpar <- dots$dpars
-  } else if (inherits(x, "brmsfit") && predict %in% c(find_auxiliary(x, verbose = FALSE), "mu")) {
+  } else if (
+    inherits(x, "brmsfit") && predict %in% c(find_auxiliary(x, verbose = FALSE), "mu")
+  ) {
     dpar <- predict
     predict <- "expectation"
   }
@@ -124,14 +134,19 @@
   # model-supported predicted type
   if (isTRUE(verbose) && !is.null(predict) && !predict %in% supported) {
     format_warning(
-      sprintf("`predict` = \"%s\"` is not officially supported by `get_predicted()`.", predict),
+      sprintf(
+        "`predict` = \"%s\"` is not officially supported by `get_predicted()`.",
+        predict
+      ),
       "`predict` will be passed directly to the `predict()` method for the model and not validated.",
       "Please check the validity and scale of the results.",
       "Set `verbose = FALSE` to silence this warning, or use one of the supported values for the `predict` argument:",
-      paste(" ", toString(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted")))))
+      paste(
+        " ",
+        toString(sprintf('"%s"', setdiff(easystats_methods, c("expected", "predicted"))))
+      )
     )
   }
-
 
   # Third step, prepare arguments that define the type/scale of predictions --
   ############################################################################
@@ -226,7 +241,6 @@
     my_transform <- FALSE
   }
 
-
   # 2. step: define CI type
   if (predict %in% c("prediction", "classification")) {
     ci_type <- "prediction"
@@ -245,7 +259,6 @@
       }
     }
   }
-
 
   # Fourth step, evaluate random effects                       ---------------
   ############################################################################
@@ -269,7 +282,11 @@
   }
 
   # only check and yield warnings when random effects are requested.
-  if ((isTRUE(include_random) || identical(include_random, "default")) && !is.null(data) && !is.null(x)) {
+  if (
+    (isTRUE(include_random) || identical(include_random, "default")) &&
+      !is.null(data) &&
+      !is.null(x)
+  ) {
     # get random effect terms
     re_terms <- find_random(x, flatten = TRUE, split_nested = TRUE)
 
@@ -294,9 +311,13 @@
       # to TRUE.
 
       re_data <- get_random(x)
-      all_levels_found <- vapply(re_terms, function(i) {
-        all(unique(data[[i]]) %in% re_data[[i]])
-      }, TRUE)
+      all_levels_found <- vapply(
+        re_terms,
+        function(i) {
+          all(unique(data[[i]]) %in% re_data[[i]])
+        },
+        TRUE
+      )
 
       if (all(all_levels_found)) {
         # include_random still might be "default" - change to TRUE here
@@ -320,7 +341,6 @@
     include_random <- FALSE
   }
 
-
   # Add (or set) random variables to "NA"
   if (isFALSE(include_random)) {
     ran_effects <- find_variables(x, effects = "random", verbose = FALSE)$random
@@ -335,7 +355,6 @@
   }
 
   re.form <- .format_reform(include_random)
-
 
   # Return all args                                            ---------------
   ############################################################################

@@ -1,4 +1,4 @@
-if ( require("PROreg")) {
+if (require("PROreg")) {
   set.seed(123)
 
   # defining the parameters

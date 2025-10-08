@@ -125,8 +125,14 @@ test_that("get_statistic", {
   expect_equal(
     get_statistic(m1)$Component,
     c(
-      "conditional", "conditional", "conditional", "conditional",
-      "conditional", "zero_inflated", "zero_inflated", "zero_inflated"
+      "conditional",
+      "conditional",
+      "conditional",
+      "conditional",
+      "conditional",
+      "zero_inflated",
+      "zero_inflated",
+      "zero_inflated"
     ),
     tolerance = 1e-3
   )
@@ -135,7 +141,11 @@ test_that("get_statistic", {
 test_that("get_varcov", {
   # needs to be loaded
   suppressPackageStartupMessages({
-    suppressWarnings(suppressMessages(library(sandwich, quietly = TRUE, warn.conflicts = FALSE))) # nolint
+    suppressWarnings(suppressMessages(library(
+      sandwich,
+      quietly = TRUE,
+      warn.conflicts = FALSE
+    ))) # nolint
   })
 
   set.seed(123)
@@ -150,7 +160,12 @@ test_that("get_varcov", {
   expect_equal(vc1, vc2[count_col, count_col], ignore_attr = TRUE)
 
   set.seed(123)
-  vc1 <- get_varcov(m1, component = "zero_inflated", vcov = "BS", vcov_args = list(R = 50))
+  vc1 <- get_varcov(
+    m1,
+    component = "zero_inflated",
+    vcov = "BS",
+    vcov_args = list(R = 50)
+  )
   zero_col <- startsWith(colnames(vc2), "zero_")
   expect_equal(vc1, vc2[zero_col, zero_col], ignore_attr = TRUE)
 })
@@ -168,8 +183,13 @@ test_that("get_statistic", {
   expect_equal(
     get_statistic(m2)$Component,
     c(
-      "conditional", "conditional", "conditional", "conditional",
-      "conditional", "conditional", "zero_inflated"
+      "conditional",
+      "conditional",
+      "conditional",
+      "conditional",
+      "conditional",
+      "conditional",
+      "zero_inflated"
     ),
     tolerance = 1e-3
   )

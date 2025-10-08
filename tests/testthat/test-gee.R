@@ -16,7 +16,8 @@ dat <- data.frame(
 
 # test for #770
 junk <- capture.output({
-  dep_gee <- suppressMessages(gee::gee(depression ~ drug * time,
+  dep_gee <- suppressMessages(gee::gee(
+    depression ~ drug * time,
     data = dat,
     id = id,
     family = binomial,
@@ -60,7 +61,11 @@ test_that("get_random", {
 })
 
 test_that("get_predictors", {
-  expect_equal(get_predictors(m1), warpbreaks[, "tension", drop = FALSE], tolerance = 1e-4)
+  expect_equal(
+    get_predictors(m1),
+    warpbreaks[, "tension", drop = FALSE],
+    tolerance = 1e-4
+  )
 })
 
 test_that("link_inverse", {
@@ -110,9 +115,13 @@ test_that("linkfun", {
 test_that("find_parameters", {
   expect_identical(
     find_parameters(m1),
-    list(conditional = c(
-      "(Intercept)", "tensionM", "tensionH"
-    ))
+    list(
+      conditional = c(
+        "(Intercept)",
+        "tensionM",
+        "tensionH"
+      )
+    )
   )
   expect_identical(nrow(get_parameters(m1)), 3L)
   expect_identical(

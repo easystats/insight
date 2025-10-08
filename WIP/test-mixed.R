@@ -16,7 +16,10 @@ for (i in 1:5) {
 }
 
 m1_mixed <<- afex::mixed(Reaction ~ Days + (1 + Days | Subject), data = df_sleepstudy)
-m2_mixed <<- afex::mixed(Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject), data = df_sleepstudy)
+m2_mixed <<- afex::mixed(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = df_sleepstudy
+)
 
 test_that("model_info", {
   expect_true(model_info(m1_mixed)$is_linear)
@@ -63,7 +66,10 @@ test_that("find_predictors", {
     find_predictors(m2_mixed, effects = "fixed"),
     list(conditional = "Days")
   )
-  expect_equal(find_predictors(m2_mixed, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_equal(
+    find_predictors(m2_mixed, effects = "random"),
+    list(random = c("mysubgrp", "mygrp", "Subject"))
+  )
   expect_null(find_predictors(m2_mixed, effects = "all", component = "zi"))
   expect_null(find_predictors(m2_mixed, effects = "fixed", component = "zi"))
   expect_null(find_predictors(m2_mixed, effects = "random", component = "zi"))
@@ -72,8 +78,14 @@ test_that("find_predictors", {
 test_that("find_random", {
   expect_equal(find_random(m1_mixed), list(random = "Subject"))
   expect_equal(find_random(m1_mixed, flatten = TRUE), "Subject")
-  expect_equal(find_random(m2_mixed), list(random = c("mysubgrp:mygrp", "mygrp", "Subject")))
-  expect_equal(find_random(m2_mixed, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_equal(
+    find_random(m2_mixed),
+    list(random = c("mysubgrp:mygrp", "mygrp", "Subject"))
+  )
+  expect_equal(
+    find_random(m2_mixed, split_nested = TRUE),
+    list(random = c("mysubgrp", "mygrp", "Subject"))
+  )
   expect_equal(
     find_random(m2_mixed, flatten = TRUE),
     c("mysubgrp:mygrp", "mygrp", "Subject")
@@ -100,7 +112,10 @@ test_that("link_inverse", {
 
 test_that("get_data", {
   expect_equal(colnames(get_data(m1_mixed)), c("Reaction", "Days", "Subject"))
-  expect_equal(colnames(get_data(m1_mixed, effects = "all")), c("Reaction", "Days", "Subject"))
+  expect_equal(
+    colnames(get_data(m1_mixed, effects = "all")),
+    c("Reaction", "Days", "Subject")
+  )
   expect_equal(colnames(get_data(m1_mixed, effects = "random")), "Subject")
   expect_equal(
     colnames(get_data(m2_mixed)),
@@ -110,7 +125,10 @@ test_that("get_data", {
     colnames(get_data(m2_mixed, effects = "all")),
     c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
   )
-  expect_equal(colnames(get_data(m2_mixed, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
+  expect_equal(
+    colnames(get_data(m2_mixed, effects = "random")),
+    c("mysubgrp", "mygrp", "Subject")
+  )
 })
 
 test_that("get_df", {
@@ -235,7 +253,10 @@ test_that("find_parameters", {
 
   expect_equal(nrow(get_parameters(m2_mixed)), 2)
   expect_equal(get_parameters(m2_mixed)$Parameter, c("(Intercept)", "Days"))
-  expect_named(get_parameters(m2_mixed, effects = "random"), c("mysubgrp:mygrp", "Subject", "mygrp"))
+  expect_named(
+    get_parameters(m2_mixed, effects = "random"),
+    c("mysubgrp:mygrp", "Subject", "mygrp")
+  )
 })
 
 test_that("is_multivariate", {
@@ -259,14 +280,8 @@ test_that("get_variance", {
     tolerance = 1e-1
   )
 
-  expect_equal(get_variance_fixed(m1_mixed),
-    c(var.fixed = 908.9534),
-    tolerance = 1e-1
-  )
-  expect_equal(get_variance_random(m1_mixed),
-    c(var.random = 1698.084),
-    tolerance = 1e-1
-  )
+  expect_equal(get_variance_fixed(m1_mixed), c(var.fixed = 908.9534), tolerance = 1e-1)
+  expect_equal(get_variance_random(m1_mixed), c(var.random = 1698.084), tolerance = 1e-1)
   expect_equal(
     get_variance_residual(m1_mixed),
     c(var.residual = 654.94),
@@ -277,10 +292,7 @@ test_that("get_variance", {
     c(var.distribution = 654.94),
     tolerance = 1e-1
   )
-  expect_equal(get_variance_dispersion(m1_mixed),
-    c(var.dispersion = 0),
-    tolerance = 1e-1
-  )
+  expect_equal(get_variance_dispersion(m1_mixed), c(var.dispersion = 0), tolerance = 1e-1)
 
   expect_equal(
     get_variance_intercept(m1_mixed),
@@ -297,7 +309,6 @@ test_that("get_variance", {
     c(cor.slope_intercept.Subject = 0.06555124),
     tolerance = 1e-1
   )
-
 
   expect_warning(expect_equal(
     get_variance(m2_mixed),

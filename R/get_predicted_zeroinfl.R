@@ -2,13 +2,15 @@
 # =======================================================================
 
 #' @export
-get_predicted.hurdle <- function(x,
-                                 data = NULL,
-                                 predict = "expectation",
-                                 ci = 0.95,
-                                 iterations = NULL,
-                                 verbose = TRUE,
-                                 ...) {
+get_predicted.hurdle <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = 0.95,
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
   # pscl models return the fitted values immediately and ignores the `type`
   # argument when `data` is NULL
   if (is.null(data)) {
@@ -89,7 +91,14 @@ get_predicted.hurdle <- function(x,
     )
 
     # 3. step: back-transform
-    out <- .get_predicted_transform(x, predictions, my_args, ci_data, link_inv = linv, verbose = verbose)
+    out <- .get_predicted_transform(
+      x,
+      predictions,
+      my_args,
+      ci_data,
+      link_inv = linv,
+      verbose = verbose
+    )
   }
 
   # 4. step: final preparation

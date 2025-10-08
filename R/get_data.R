@@ -50,13 +50,15 @@ get_data <- function(x, ...) {
 # are returned that we actually find in the model...
 # data_name is useful when we have the name of the data frame object stored as
 # a string (e.g., in brmsfit attr(x$data, "data_frame"))
-.get_data_from_environment <- function(x,
-                                       effects = "all",
-                                       component = "all",
-                                       source = "environment",
-                                       additional_variables = NULL,
-                                       verbose = FALSE,
-                                       data_name = NULL) {
+.get_data_from_environment <- function(
+  x,
+  effects = "all",
+  component = "all",
+  source = "environment",
+  additional_variables = NULL,
+  verbose = FALSE,
+  data_name = NULL
+) {
   # process arguments, check whether data should be recovered from
   # environment or model frame
   source <- .check_data_source_arg(source)
@@ -89,7 +91,13 @@ get_data <- function(x, ...) {
 
   # extract model variables, if possible
   vars <- try(
-    find_variables(x, effects = selected_vars, component = component, flatten = TRUE, verbose = FALSE),
+    find_variables(
+      x,
+      effects = selected_vars,
+      component = component,
+      flatten = TRUE,
+      verbose = FALSE
+    ),
     silent = TRUE
   )
 
@@ -231,7 +239,8 @@ get_data <- function(x, ...) {
     # first, try environment of formula, see #666. set enclos = NULL so eval()
     # does not fall back to parent frame when the environment is NULL, since we
     # want to try that after checking the formula
-    dat <- .safe(eval(model_call$data,
+    dat <- .safe(eval(
+      model_call$data,
       envir = environment(model_call$formula),
       enclos = NULL
     ))
@@ -239,9 +248,12 @@ get_data <- function(x, ...) {
 
   # second, try to extract formula directly
   if (is.null(dat)) {
-    dat <- .safe(eval(model_call$data,
+    dat <- .safe(eval(
+      model_call$data,
       # skip_dot_formula = TRUE is only internally used, to avoid infinite loops
-      envir = environment(find_formula(x, verbose = FALSE, skip_dot_formula = TRUE)$conditional),
+      envir = environment(
+        find_formula(x, verbose = FALSE, skip_dot_formula = TRUE)$conditional
+      ),
       enclos = NULL
     ))
   }
@@ -269,7 +281,9 @@ get_data <- function(x, ...) {
     if (!is.null(subset_data)) {
       dat <- subset_data
     } else if (verbose) {
-      format_warning("Looks like the original data was subset, however `get_data()` could not retrieve the subset of the data. The full data set is returned.") # nolint
+      format_warning(
+        "Looks like the original data was subset, however `get_data()` could not retrieve the subset of the data. The full data set is returned."
+      ) # nolint
     }
   }
 
@@ -341,7 +355,10 @@ get_data.maxim <- get_data.default
 #' @export
 get_data.summary.lm <- function(x, verbose = TRUE, ...) {
   mf <- tryCatch(
-    .recover_data_from_environment(x, verbose = verbose)[, all.vars(x$terms), drop = FALSE],
+    .recover_data_from_environment(x, verbose = verbose)[,
+      all.vars(x$terms),
+      drop = FALSE
+    ],
     error = function(x) NULL
   )
   .prepare_get_data(x, mf, verbose = verbose)
@@ -361,7 +378,6 @@ get_data.mhurdle <- function(x, verbose = TRUE, ...) {
 
 
 # classical and survival models -----------------------------------------------
-
 
 #' @export
 get_data.mjoint <- function(x, source = "environment", verbose = TRUE, ...) {
@@ -394,11 +410,13 @@ get_data.mjoint <- function(x, source = "environment", verbose = TRUE, ...) {
 
 
 #' @export
-get_data.geeglm <- function(x,
-                            effects = "all",
-                            source = "environment",
-                            verbose = TRUE,
-                            ...) {
+get_data.geeglm <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(
     x,
@@ -420,7 +438,8 @@ get_data.geeglm <- function(x,
     colnames(id) <- deparse(parse(text = safe_deparse(get_call(x)))[[1]][["id"]])
     mf <- cbind(mf, id)
     # select effects
-    vars <- switch(effects,
+    vars <- switch(
+      effects,
       all = find_variables(x, flatten = TRUE, verbose = FALSE),
       fixed = find_variables(x, effects = "fixed", flatten = TRUE, verbose = FALSE),
       random = find_random(x, flatten = TRUE)
@@ -435,13 +454,16 @@ get_data.glmgee <- get_data.geeglm
 
 
 #' @export
-get_data.gee <- function(x,
-                         effects = "all",
-                         source = "environment",
-                         verbose = TRUE,
-                         ...) {
+get_data.gee <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x,
+  model_data <- .get_data_from_environment(
+    x,
     effects = effects,
     source = source,
     verbose = verbose,
@@ -457,7 +479,8 @@ get_data.gee <- function(x,
   mf <- tryCatch(
     {
       dat <- .recover_data_from_environment(x, verbose = verbose)
-      vars <- switch(effects,
+      vars <- switch(
+        effects,
         all = find_variables(x, flatten = TRUE, verbose = FALSE),
         fixed = find_variables(x, effects = "fixed", flatten = TRUE, verbose = FALSE),
         random = find_random(x, flatten = TRUE)
@@ -473,13 +496,16 @@ get_data.gee <- function(x,
 
 
 #' @export
-get_data.rqss <- function(x,
-                          component = "all",
-                          source = "environment",
-                          verbose = TRUE,
-                          ...) {
+get_data.rqss <- function(
+  x,
+  component = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x,
+  model_data <- .get_data_from_environment(
+    x,
     component = component,
     source = source,
     verbose = verbose,
@@ -581,15 +607,17 @@ get_data.gnls <- get_data.gls
 
 # zero-inflated models -------------------------------------------------------
 
-
 #' @export
-get_data.hurdle <- function(x,
-                            component = "all",
-                            source = "environment",
-                            verbose = TRUE,
-                            ...) {
+get_data.hurdle <- function(
+  x,
+  component = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x,
+  model_data <- .get_data_from_environment(
+    x,
     component = component,
     source = source,
     verbose = verbose,
@@ -601,7 +629,10 @@ get_data.hurdle <- function(x,
   }
 
   # fall back to extract data from model frame
-  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated", "dispersion"))
+  component <- match.arg(
+    component,
+    choices = c("all", "conditional", "zi", "zero_inflated", "dispersion")
+  )
   .return_zeroinf_data(x, component, verbose = verbose)
 }
 
@@ -613,13 +644,16 @@ get_data.zerotrunc <- get_data.hurdle
 
 
 #' @export
-get_data.zcpglm <- function(x,
-                            component = "all",
-                            source = "environment",
-                            verbose = TRUE,
-                            ...) {
+get_data.zcpglm <- function(
+  x,
+  component = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x,
+  model_data <- .get_data_from_environment(
+    x,
     component = component,
     source = source,
     verbose = verbose,
@@ -631,7 +665,10 @@ get_data.zcpglm <- function(x,
   }
 
   # fall back to extract data from model frame
-  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated"))
+  component <- match.arg(
+    component,
+    choices = c("all", "conditional", "zi", "zero_inflated")
+  )
 
   mf <- stats::model.frame(x)
   mf_zero <- mf$zero
@@ -647,7 +684,8 @@ get_data.zcpglm <- function(x,
     mf_zero <- NULL
   }
 
-  mf <- switch(component,
+  mf <- switch(
+    component,
     all = do.call(cbind, compact_list(list(mf_tweedie, mf_zero))),
     conditional = mf_tweedie,
     zi = ,
@@ -659,15 +697,16 @@ get_data.zcpglm <- function(x,
 
 # mixed models -------------------------------------------------------------
 
-
 #' @rdname get_data
 #' @export
-get_data.glmmTMB <- function(x,
-                             effects = "all",
-                             component = "all",
-                             source = "environment",
-                             verbose = TRUE,
-                             ...) {
+get_data.glmmTMB <- function(
+  x,
+  effects = "all",
+  component = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(
     x,
@@ -684,7 +723,8 @@ get_data.glmmTMB <- function(x,
 
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  component <- match.arg(component,
+  component <- match.arg(
+    component,
     choices = c("all", "conditional", "zi", "zero_inflated", "dispersion")
   )
 
@@ -710,13 +750,16 @@ get_data.glmmTMB <- function(x,
 
 
 #' @export
-get_data.merMod <- function(x,
-                            effects = "all",
-                            source = "environment",
-                            verbose = TRUE,
-                            ...) {
+get_data.merMod <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x,
+  model_data <- .get_data_from_environment(
+    x,
     effects = effects,
     source = source,
     verbose = verbose,
@@ -731,10 +774,14 @@ get_data.merMod <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
   mf <- .safe({
-    switch(effects,
+    switch(
+      effects,
       fixed = stats::model.frame(x, fixed.only = TRUE),
       all = stats::model.frame(x, fixed.only = FALSE),
-      random = stats::model.frame(x, fixed.only = FALSE)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE] # nolint
+      random = stats::model.frame(x, fixed.only = FALSE)[,
+        find_random(x, split_nested = TRUE, flatten = TRUE),
+        drop = FALSE
+      ] # nolint
     )
   })
   .prepare_get_data(x, mf, effects, verbose = verbose)
@@ -742,11 +789,13 @@ get_data.merMod <- function(x,
 
 
 #' @export
-get_data.mmrm <- function(x,
-                          effects = "all",
-                          source = "environment",
-                          verbose = TRUE,
-                          ...) {
+get_data.mmrm <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   # find variables
   fixed_vars <- find_variables(x, effects = "fixed", flatten = TRUE)
@@ -754,7 +803,8 @@ get_data.mmrm <- function(x,
   # data from model frame
   mf <- .prepare_get_data(x, stats::model.frame(x), effects, verbose = verbose)
   tryCatch(
-    switch(effects,
+    switch(
+      effects,
       fixed = mf[intersect(colnames(mf), fixed_vars)],
       all = mf[intersect(colnames(mf), unique(c(fixed_vars, random_vars)))],
       random = mf[intersect(colnames(mf), random_vars)]
@@ -778,13 +828,21 @@ get_data.merModList <- function(x, effects = "all", ...) {
 
 
 #' @export
-get_data.MANOVA <- function(x,
-                            effects = "all",
-                            source = "environment",
-                            verbose = TRUE,
-                            ...) {
+get_data.MANOVA <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -794,7 +852,8 @@ get_data.MANOVA <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
   mf <- .safe({
-    switch(effects,
+    switch(
+      effects,
       fixed = .remove_column(x$input$data, x$input$subject),
       all = x$input$data,
       random = x$input$data[, x$input$subject, drop = FALSE]
@@ -808,13 +867,21 @@ get_data.RM <- get_data.MANOVA
 
 
 #' @export
-get_data.cpglmm <- function(x,
-                            effects = "all",
-                            source = "environment",
-                            verbose = TRUE,
-                            ...) {
+get_data.cpglmm <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -825,8 +892,12 @@ get_data.cpglmm <- function(x,
   dat <- stats::model.frame(x)
 
   mf <- tryCatch(
-    switch(effects,
-      fixed = dat[, find_predictors(x, effects = "fixed", flatten = TRUE, verbose = FALSE), drop = FALSE],
+    switch(
+      effects,
+      fixed = dat[,
+        find_predictors(x, effects = "fixed", flatten = TRUE, verbose = FALSE),
+        drop = FALSE
+      ],
       all = dat,
       random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
     ),
@@ -840,13 +911,16 @@ get_data.HLfit <- get_data.cpglmm
 
 
 #' @export
-get_data.glmm <- function(x,
-                          effects = "all",
-                          source = "environment",
-                          verbose = TRUE,
-                          ...) {
+get_data.glmm <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x,
+  model_data <- .get_data_from_environment(
+    x,
     effects = effects,
     source = source,
     verbose = verbose,
@@ -862,13 +936,17 @@ get_data.glmm <- function(x,
   dat <- get_data.default(x, verbose = verbose)
 
   mf <- .safe({
-    switch(effects,
-      fixed = dat[, find_predictors(
-        x,
-        effects = "fixed",
-        flatten = TRUE,
-        verbose = FALSE
-      ), drop = FALSE],
+    switch(
+      effects,
+      fixed = dat[,
+        find_predictors(
+          x,
+          effects = "fixed",
+          flatten = TRUE,
+          verbose = FALSE
+        ),
+        drop = FALSE
+      ],
       all = dat,
       random = dat[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
     )
@@ -878,13 +956,16 @@ get_data.glmm <- function(x,
 
 
 #' @export
-get_data.mixor <- function(x,
-                           effects = "all",
-                           source = "environment",
-                           verbose = TRUE,
-                           ...) {
+get_data.mixor <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x,
+  model_data <- .get_data_from_environment(
+    x,
     effects = effects,
     source = source,
     verbose = verbose,
@@ -899,7 +980,8 @@ get_data.mixor <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
   mf <- tryCatch(
-    switch(effects,
+    switch(
+      effects,
       fixed = stats::model.frame(x),
       all = cbind(stats::model.frame(x), x$id),
       random = data.frame(x$id)
@@ -914,13 +996,16 @@ get_data.mixor <- function(x,
 
 
 #' @export
-get_data.glmmadmb <- function(x,
-                              effects = "all",
-                              source = "environment",
-                              verbose = TRUE,
-                              ...) {
+get_data.glmmadmb <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x,
+  model_data <- .get_data_from_environment(
+    x,
     effects = effects,
     source = source,
     verbose = verbose,
@@ -935,10 +1020,14 @@ get_data.glmmadmb <- function(x,
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
   fixed_data <- x$frame
-  random_data <- .recover_data_from_environment(x, verbose = verbose)[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE]
+  random_data <- .recover_data_from_environment(x, verbose = verbose)[,
+    find_random(x, split_nested = TRUE, flatten = TRUE),
+    drop = FALSE
+  ]
 
   mf <- .safe({
-    switch(effects,
+    switch(
+      effects,
       fixed = fixed_data,
       all = cbind(fixed_data, random_data),
       random = random_data
@@ -949,9 +1038,21 @@ get_data.glmmadmb <- function(x,
 
 
 #' @export
-get_data.rlmerMod <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
+get_data.rlmerMod <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -967,13 +1068,16 @@ get_data.clmm <- get_data.rlmerMod
 
 
 #' @export
-get_data.mixed <- function(x,
-                           effects = "all",
-                           source = "environment",
-                           verbose = TRUE,
-                           ...) {
+get_data.mixed <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x,
+  model_data <- .get_data_from_environment(
+    x,
     effects = effects,
     source = source,
     verbose = verbose
@@ -1004,13 +1108,16 @@ get_data.afex_aov <- function(x, shape = c("long", "wide"), ...) {
 
 
 #' @export
-get_data.sem <- function(x,
-                         effects = "all",
-                         source = "environment",
-                         verbose = TRUE,
-                         ...) {
+get_data.sem <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x,
+  model_data <- .get_data_from_environment(
+    x,
     effects = effects,
     source = source,
     verbose = verbose,
@@ -1026,7 +1133,8 @@ get_data.sem <- function(x,
   mf <- tryCatch(
     {
       dat <- .recover_data_from_environment(x, verbose = verbose)
-      vars <- switch(effects,
+      vars <- switch(
+        effects,
         all = find_variables(x, flatten = TRUE, verbose = FALSE),
         fixed = find_variables(x, effects = "fixed", flatten = TRUE, verbose = FALSE),
         random = find_random(x, flatten = TRUE)
@@ -1042,9 +1150,21 @@ get_data.sem <- function(x,
 
 
 #' @export
-get_data.lme <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
+get_data.lme <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1059,12 +1179,14 @@ get_data.lme <- function(x, effects = "all", source = "environment", verbose = T
 
 
 #' @export
-get_data.MixMod <- function(x,
-                            effects = "all",
-                            component = "all",
-                            source = "environment",
-                            verbose = TRUE,
-                            ...) {
+get_data.MixMod <- function(
+  x,
+  effects = "all",
+  component = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
   model_data <- .get_data_from_environment(
     x,
@@ -1121,7 +1243,14 @@ get_data.MixMod <- function(x,
         verbose = FALSE
       )
 
-      .return_combined_data(x, mf = fitfram, effects, component, model.terms, verbose = verbose)
+      .return_combined_data(
+        x,
+        mf = fitfram,
+        effects,
+        component,
+        model.terms,
+        verbose = verbose
+      )
     },
     error = function(x) {
       NULL
@@ -1131,9 +1260,21 @@ get_data.MixMod <- function(x,
 
 
 #' @export
-get_data.BBmm <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
+get_data.BBmm <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1143,8 +1284,12 @@ get_data.BBmm <- function(x, effects = "all", source = "environment", verbose = 
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- tryCatch(
     {
-      dat <- .recover_data_from_environment(x, verbose = verbose)[, find_variables(x, flatten = TRUE), drop = FALSE]
-      switch(effects,
+      dat <- .recover_data_from_environment(x, verbose = verbose)[,
+        find_variables(x, flatten = TRUE),
+        drop = FALSE
+      ]
+      switch(
+        effects,
         all = dat[, find_variables(x, flatten = TRUE), drop = FALSE],
         fixed = dat[, find_variables(x, effects = "fixed", flatten = TRUE), drop = FALSE],
         random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
@@ -1160,9 +1305,21 @@ get_data.BBmm <- function(x, effects = "all", source = "environment", verbose = 
 
 
 #' @export
-get_data.glimML <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
+get_data.glimML <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1171,7 +1328,8 @@ get_data.glimML <- function(x, effects = "all", source = "environment", verbose 
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   dat <- x@data
-  mf <- switch(effects,
+  mf <- switch(
+    effects,
     all = dat[, find_variables(x, flatten = TRUE), drop = FALSE],
     fixed = dat[, find_variables(x, effects = "fixed", flatten = TRUE), drop = FALSE],
     random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
@@ -1245,7 +1403,10 @@ get_data.vgam <- function(x, source = "environment", verbose = TRUE, ...) {
 
   # fall back to extract data from model frame
   mf <- tryCatch(
-    get(x@misc$dataname, envir = parent.frame())[, find_variables(x, flatten = TRUE), drop = FALSE],
+    get(x@misc$dataname, envir = parent.frame())[,
+      find_variables(x, flatten = TRUE),
+      drop = FALSE
+    ],
     error = function(x) NULL
   )
 
@@ -1305,11 +1466,22 @@ get_data.gamlss <- function(x, source = "environment", verbose = TRUE, ...) {
 
 # fixed effects and panel regression --------------------------------------
 
-
 #' @export
-get_data.felm <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
+get_data.felm <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1323,9 +1495,21 @@ get_data.felm <- function(x, effects = "all", source = "environment", verbose = 
 
 
 #' @export
-get_data.feis <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
+get_data.feis <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1334,7 +1518,8 @@ get_data.feis <- function(x, effects = "all", source = "environment", verbose = 
   # fall back to extract data from model frame
   # original data does not appear to be stored in the model object
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  mf <- tryCatch(.recover_data_from_environment(x, verbose = verbose),
+  mf <- tryCatch(
+    .recover_data_from_environment(x, verbose = verbose),
     error = function(x) stats::model.frame(x)
   )
   .get_data_from_modelframe(x, mf, effects, verbose = verbose)
@@ -1386,7 +1571,8 @@ get_data.pgmm <- function(x, source = "environment", verbose = TRUE, ...) {
 
   # fall back to extract data from model frame
   model_terms <- find_variables(x, effects = "all", component = "all", flatten = TRUE)
-  mf <- tryCatch(.recover_data_from_environment(x, verbose = verbose)[, model_terms, drop = FALSE],
+  mf <- tryCatch(
+    .recover_data_from_environment(x, verbose = verbose)[, model_terms, drop = FALSE],
     error = function(x) NULL
   )
   .prepare_get_data(x, mf, verbose = verbose)
@@ -1402,7 +1588,13 @@ get_data.plm <- function(x, source = "environment", verbose = TRUE, ...) {
   if ("additional_variables" %in% names(list(...))) {
     model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
   } else {
-    model_data <- .get_data_from_environment(x, source = source, additional_variables = index, verbose = verbose, ...)
+    model_data <- .get_data_from_environment(
+      x,
+      source = source,
+      additional_variables = index,
+      verbose = verbose,
+      ...
+    )
   }
 
   if (!is.null(model_data)) {
@@ -1455,7 +1647,10 @@ get_data.wbm <- function(x, effects = "all", verbose = TRUE, ...) {
   # dat <- as.data.frame(x@orig_data)
 
   if (effects == "random") {
-    return(stats::na.omit(mf[, unique(find_random(x, split_nested = TRUE, flatten = TRUE)), drop = FALSE]))
+    return(stats::na.omit(mf[,
+      unique(find_random(x, split_nested = TRUE, flatten = TRUE)),
+      drop = FALSE
+    ]))
   }
 
   resp.col <- which(colnames(mf) == find_response(x))
@@ -1523,9 +1718,21 @@ get_data.ivprobit <- function(x, source = "environment", verbose = TRUE, ...) {
 
 
 #' @export
-get_data.bife <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
+get_data.bife <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1536,9 +1743,15 @@ get_data.bife <- function(x, effects = "all", source = "environment", verbose = 
   mf <- as.data.frame(x$data)
 
   if (effects == "random") {
-    return(stats::na.omit(mf[, unique(find_random(x, split_nested = TRUE, flatten = TRUE)), drop = FALSE]))
+    return(stats::na.omit(mf[,
+      unique(find_random(x, split_nested = TRUE, flatten = TRUE)),
+      drop = FALSE
+    ]))
   } else if (effects == "fixed") {
-    mf <- mf[, setdiff(colnames(mf), unique(find_random(x, split_nested = TRUE, flatten = TRUE))), drop = FALSE]
+    mf <- mf[,
+      setdiff(colnames(mf), unique(find_random(x, split_nested = TRUE, flatten = TRUE))),
+      drop = FALSE
+    ]
   }
 
   .prepare_get_data(x, stats::na.omit(mf), effects, verbose = verbose)
@@ -1547,9 +1760,15 @@ get_data.bife <- function(x, effects = "all", source = "environment", verbose = 
 
 # Bayesian regression ---------------------------------------------------
 
-
 #' @export
-get_data.brmsfit <- function(x, effects = "all", component = "all", source = "environment", verbose = FALSE, ...) {
+get_data.brmsfit <- function(
+  x,
+  effects = "all",
+  component = "all",
+  source = "environment",
+  verbose = FALSE,
+  ...
+) {
   # try to recover data from environment
   # verbose is FALSE by default because `get_call()` often does not work on
   # `brmsfit` objects, so we typically default to the `data` held in the object.
@@ -1597,9 +1816,21 @@ get_data.brmsfit <- function(x, effects = "all", component = "all", source = "en
 
 
 #' @export
-get_data.stanreg <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
+get_data.stanreg <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1608,11 +1839,7 @@ get_data.stanreg <- function(x, effects = "all", source = "environment", verbose
   # fall back to extract data from model frame
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
 
-  model.terms <- find_variables(x,
-    effects = "all",
-    component = "all",
-    flatten = FALSE
-  )
+  model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE)
 
   mf <- stats::model.frame(x)
 
@@ -1635,9 +1862,21 @@ get_data.BFBayesFactor <- function(x, ...) {
 
 
 #' @export
-get_data.MCMCglmm <- function(x, effects = "all", source = "environment", verbose = TRUE, ...) {
+get_data.MCMCglmm <- function(
+  x,
+  effects = "all",
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1658,8 +1897,12 @@ get_data.MCMCglmm <- function(x, effects = "all", source = "environment", verbos
         NULL
       } else {
         dat <- get(mf)
-        switch(effects,
-          fixed = dat[, setdiff(colnames(dat), find_random(x, flatten = TRUE)), drop = FALSE],
+        switch(
+          effects,
+          fixed = dat[,
+            setdiff(colnames(dat), find_random(x, flatten = TRUE)),
+            drop = FALSE
+          ],
           all = dat,
           random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
         )
@@ -1736,7 +1979,6 @@ get_data.negbinmfx <- get_data.betamfx
 
 # other models ------------------------------------------------------
 
-
 #' @export
 get_data.svy_vglm <- function(x, source = "environment", verbose = TRUE, ...) {
   # try to recover data from environment
@@ -1794,13 +2036,19 @@ get_data.averaging <- function(x, ...) {
   }
 
   mf <- tryCatch(
-    Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), lapply(ml, stats::model.frame)),
+    Reduce(
+      function(x, y) merge(x, y, all = TRUE, sort = FALSE),
+      lapply(ml, stats::model.frame)
+    ),
     error = function(x) NULL
   )
 
   if (is.null(mf)) {
     mf <- tryCatch(
-      .recover_data_from_environment(x)[, find_variables(x, flatten = TRUE), drop = FALSE],
+      .recover_data_from_environment(x)[,
+        find_variables(x, flatten = TRUE),
+        drop = FALSE
+      ],
       error = function(x) NULL
     )
   }
@@ -1898,7 +2146,9 @@ get_data.vglm <- function(x, source = "environment", verbose = TRUE, ...) {
       x@model
     } else {
       env <- environment(x@terms$terms)
-      if (is.null(env)) env <- parent.frame()
+      if (is.null(env)) {
+        env <- parent.frame()
+      }
       fcall <- x@call
       fcall$method <- "model.frame"
       fcall$smart <- FALSE
@@ -1930,9 +2180,21 @@ get_data.bigglm <- get_data.biglm
 
 
 #' @export
-get_data.LORgee <- function(x, source = "environment", effects = "all", verbose = TRUE, ...) {
+get_data.LORgee <- function(
+  x,
+  source = "environment",
+  effects = "all",
+  verbose = TRUE,
+  ...
+) {
   # try to recover data from environment
-  model_data <- .get_data_from_environment(x, effects = effects, source = source, verbose = verbose, ...)
+  model_data <- .get_data_from_environment(
+    x,
+    effects = effects,
+    source = source,
+    verbose = verbose,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1942,8 +2204,12 @@ get_data.LORgee <- function(x, source = "environment", effects = "all", verbose 
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   mf <- tryCatch(
     {
-      dat <- .recover_data_from_environment(x, verbose = verbose)[, find_variables(x, flatten = TRUE), drop = FALSE]
-      switch(effects,
+      dat <- .recover_data_from_environment(x, verbose = verbose)[,
+        find_variables(x, flatten = TRUE),
+        drop = FALSE
+      ]
+      switch(
+        effects,
         all = dat[, find_variables(x, flatten = TRUE), drop = FALSE],
         fixed = dat[, find_variables(x, effects = "fixed", flatten = TRUE), drop = FALSE],
         random = dat[, find_random(x, flatten = TRUE), drop = FALSE]
@@ -1984,7 +2250,10 @@ get_data.gbm <- function(x, source = "environment", verbose = TRUE, ...) {
 
   # fall back to extract data from model frame
   mf <- tryCatch(
-    get(safe_deparse(x$call$data), envir = parent.frame())[, find_variables(x, flatten = TRUE), drop = FALSE],
+    get(safe_deparse(x$call$data), envir = parent.frame())[,
+      find_variables(x, flatten = TRUE),
+      drop = FALSE
+    ],
     error = function(x) stats::model.frame(x)
   )
 
@@ -2027,11 +2296,17 @@ get_data.clmm2 <- function(x, source = "environment", verbose = TRUE, ...) {
 
       if (!is.null(data_scale)) {
         remain <- setdiff(colnames(data_scale), colnames(data_complete))
-        if (length(remain)) data_complete <- cbind(data_complete, data_scale[, remain, drop = FALSE])
+        if (length(remain)) {
+          data_complete <- cbind(data_complete, data_scale[, remain, drop = FALSE])
+        }
       }
 
       data_complete <- cbind(data_complete, x$grFac)
-      colnames(data_complete)[ncol(data_complete)] <- unlist(.find_random_effects(x, f = find_formula(x, verbose = FALSE), split_nested = TRUE)) # nolint
+      colnames(data_complete)[ncol(data_complete)] <- unlist(.find_random_effects(
+        x,
+        f = find_formula(x, verbose = FALSE),
+        split_nested = TRUE
+      )) # nolint
 
       data_complete
     },
@@ -2061,7 +2336,9 @@ get_data.clm2 <- function(x, source = "environment", verbose = TRUE, ...) {
 
       if (!is.null(data_scale)) {
         remain <- setdiff(colnames(data_scale), colnames(data_complete))
-        if (length(remain)) data_complete <- cbind(data_complete, data_scale[, remain, drop = FALSE])
+        if (length(remain)) {
+          data_complete <- cbind(data_complete, data_scale[, remain, drop = FALSE])
+        }
       }
 
       data_complete
@@ -2129,14 +2406,16 @@ get_data.phyloglm <- get_data.phylolm
 #'   passed to the `transf` function.
 #' @param ci For meta-analysis models, the Confidence Interval (CI) level if
 #'   `include_interval = TRUE`. Default to 0.95 (95%).
-get_data.rma <- function(x,
-                         source = "environment",
-                         verbose = TRUE,
-                         include_interval = FALSE,
-                         transf = NULL,
-                         transf_args = NULL,
-                         ci = 0.95,
-                         ...) {
+get_data.rma <- function(
+  x,
+  source = "environment",
+  verbose = TRUE,
+  include_interval = FALSE,
+  transf = NULL,
+  transf_args = NULL,
+  ci = 0.95,
+  ...
+) {
   # standard errors and moderators are not found by find_predictors(),
   # so we need them as additional variables
   model_call <- get_call(x)
@@ -2159,9 +2438,18 @@ get_data.rma <- function(x,
   }
 
   # fall back to extract data from model frame
-  mf <- tryCatch(.recover_data_from_environment(x, verbose = verbose), error = function(x) NULL)
+  mf <- tryCatch(
+    .recover_data_from_environment(x, verbose = verbose),
+    error = function(x) NULL
+  )
   mf_attr <- attributes(mf)
-  mf <- merge(mf, data.frame(Weights = get_weights(x)), by = "row.names", all = TRUE, sort = FALSE)
+  mf <- merge(
+    mf,
+    data.frame(Weights = get_weights(x)),
+    by = "row.names",
+    all = TRUE,
+    sort = FALSE
+  )
   rownames(mf) <- mf$Row.names
   mf$Row.names <- NULL
   mostattributes(mf) <- c(
@@ -2283,8 +2571,5 @@ get_data.htest <- function(x, ...) {
 
 .check_data_source_arg <- function(source) {
   source <- match.arg(source, choices = c("environment", "mf", "modelframe", "frame"))
-  switch(source,
-    environment = "environment",
-    "frame"
-  )
+  switch(source, environment = "environment", "frame")
 }

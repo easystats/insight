@@ -26,9 +26,25 @@ is_bayesian_model <- function(x, exclude = NULL) {
     return(.is_bayesian_marginaleffects(x))
   }
   bayes_classes <- c(
-    "brmsfit", "stanfit", "MCMCglmm", "stanreg", "stanmvreg", "bmerMod",
-    "BFBayesFactor", "bamlss", "bayesx", "mcmc", "bcplm", "bayesQR", "BGGM",
-    "meta_random", "meta_fixed", "meta_bma", "blavaan", "blrm", "blmerMod",
+    "brmsfit",
+    "stanfit",
+    "MCMCglmm",
+    "stanreg",
+    "stanmvreg",
+    "bmerMod",
+    "BFBayesFactor",
+    "bamlss",
+    "bayesx",
+    "mcmc",
+    "bcplm",
+    "bayesQR",
+    "BGGM",
+    "meta_random",
+    "meta_fixed",
+    "meta_bma",
+    "blavaan",
+    "blrm",
+    "blmerMod",
     "bglmerMod"
   )
   # if exclude is not NULL, remove elements in exclude from bayes_class

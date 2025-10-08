@@ -19,7 +19,12 @@ m2 <- glm(counts ~ outcome + treatment, data = d, family = poisson())
 m3 <- MASS::glm.nb(Days ~ Sex / (Age + Eth * Lrn), data = quine)
 
 test_that("get_dispersion", {
-  expect_equal(get_auxiliary(m1, type = "dispersion"), summary(m1)$dispersion, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(
+    get_auxiliary(m1, type = "dispersion"),
+    summary(m1)$dispersion,
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
   expect_equal(get_auxiliary(m2, type = "dispersion"), 1)
   expect_equal(get_auxiliary(m3, type = "dispersion"), 1)
 })

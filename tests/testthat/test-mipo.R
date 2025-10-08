@@ -23,5 +23,8 @@ test_that("param", {
   expect_equal(out2$Response, c("6", "6", "6", "8", "8", "8"))
   expect_snapshot(out1)
   expect_snapshot(out2)
-  expect_identical(find_parameters(pooled), list(conditional = c("(Intercept)", "disp", "hp")))
+  expect_identical(
+    find_parameters(pooled),
+    list(conditional = c("(Intercept)", "disp", "hp"))
+  )
 })

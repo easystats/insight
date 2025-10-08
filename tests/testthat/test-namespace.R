@@ -48,7 +48,9 @@ test_that("find_formula", {
   expect_equal(
     find_formula(m1),
     list(
-      conditional = as.formula("Sepal.Length ~ splines::bs(Petal.Width, df = 4) + Species")
+      conditional = as.formula(
+        "Sepal.Length ~ splines::bs(Petal.Width, df = 4) + Species"
+      )
     ),
     ignore_attr = TRUE
   )

@@ -19,7 +19,10 @@ test_that("compact_list works as expected", {
 test_that("compact_list works as expected, NA removed", {
   expect_identical(compact_list(list(NULL, 1, c(NA, NA)), remove_na = TRUE), list(1))
   expect_identical(compact_list(c(1, NA, NA), remove_na = TRUE), 1)
-  expect_identical(compact_list(list(NULL, 1, list(NULL, NULL)), remove_na = FALSE), list(1))
+  expect_identical(
+    compact_list(list(NULL, 1, list(NULL, NULL)), remove_na = FALSE),
+    list(1)
+  )
   expect_identical(compact_list(c(1, 2, 3), remove_na = TRUE), c(1, 2, 3))
   expect_identical(compact_list("", remove_na = TRUE), "")
   expect_null(compact_list(NULL, remove_na = TRUE))
@@ -65,15 +68,28 @@ test_that("compact_list, this must work!", {
   result <- compact_list(out)
   expect_identical(
     lapply(result, class),
-    list(mpg = c(
-      "bayestestR_eti", "see_eti", "bayestestR_ci", "see_ci",
-      "data.frame"
-    ), cyl = c(
-      "bayestestR_eti", "see_eti", "bayestestR_ci",
-      "see_ci", "data.frame"
-    ), disp = c(
-      "bayestestR_eti", "see_eti",
-      "bayestestR_ci", "see_ci", "data.frame"
-    ))
+    list(
+      mpg = c(
+        "bayestestR_eti",
+        "see_eti",
+        "bayestestR_ci",
+        "see_ci",
+        "data.frame"
+      ),
+      cyl = c(
+        "bayestestR_eti",
+        "see_eti",
+        "bayestestR_ci",
+        "see_ci",
+        "data.frame"
+      ),
+      disp = c(
+        "bayestestR_eti",
+        "see_eti",
+        "bayestestR_ci",
+        "see_ci",
+        "data.frame"
+      )
+    )
   )
 })

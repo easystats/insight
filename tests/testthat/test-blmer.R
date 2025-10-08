@@ -11,7 +11,8 @@ for (i in 1:5) {
     sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
-m1 <- blme::blmer(Reaction ~ Days + (1 + Days | Subject),
+m1 <- blme::blmer(
+  Reaction ~ Days + (1 + Days | Subject),
   data = sleepstudy,
   cov.prior = NULL
 )
@@ -72,7 +73,10 @@ test_that("find_predictors", {
     find_predictors(m2, effects = "fixed"),
     list(conditional = "Days")
   )
-  expect_equal(find_predictors(m2, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_equal(
+    find_predictors(m2, effects = "random"),
+    list(random = c("mysubgrp", "mygrp", "Subject"))
+  )
   expect_null(find_predictors(m2, effects = "all", component = "zi"))
   expect_null(find_predictors(m2, effects = "fixed", component = "zi"))
   expect_null(find_predictors(m2, effects = "random", component = "zi"))
@@ -82,7 +86,10 @@ test_that("find_random", {
   expect_equal(find_random(m1), list(random = "Subject"))
   expect_equal(find_random(m1, flatten = TRUE), "Subject")
   expect_equal(find_random(m2), list(random = c("mysubgrp:mygrp", "mygrp", "Subject")))
-  expect_equal(find_random(m2, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_equal(
+    find_random(m2, split_nested = TRUE),
+    list(random = c("mysubgrp", "mygrp", "Subject"))
+  )
   expect_equal(
     find_random(m2, flatten = TRUE),
     c("mysubgrp:mygrp", "mygrp", "Subject")
@@ -119,7 +126,10 @@ test_that("get_data", {
     colnames(get_data(m2, effects = "all")),
     c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
   )
-  expect_equal(colnames(get_data(m2, effects = "random")), c("mysubgrp", "mygrp", "Subject"))
+  expect_equal(
+    colnames(get_data(m2, effects = "random")),
+    c("mysubgrp", "mygrp", "Subject")
+  )
 })
 
 test_that("find_formula", {
@@ -237,7 +247,10 @@ test_that("find_parameters", {
 
   expect_equal(nrow(get_parameters(m2)), 2)
   expect_equal(get_parameters(m2)$Parameter, c("(Intercept)", "Days"))
-  expect_named(get_parameters(m2, effects = "random"), c("mysubgrp:mygrp", "Subject", "mygrp"))
+  expect_named(
+    get_parameters(m2, effects = "random"),
+    c("mysubgrp:mygrp", "Subject", "mygrp")
+  )
 })
 
 test_that("is_multivariate", {
@@ -263,14 +276,8 @@ test_that("get_variance", {
     tolerance = 1e-1
   )
 
-  expect_equal(get_variance_fixed(m1),
-    c(var.fixed = 908.9534),
-    tolerance = 1e-1
-  )
-  expect_equal(get_variance_random(m1),
-    c(var.random = 1698.084),
-    tolerance = 1e-1
-  )
+  expect_equal(get_variance_fixed(m1), c(var.fixed = 908.9534), tolerance = 1e-1)
+  expect_equal(get_variance_random(m1), c(var.random = 1698.084), tolerance = 1e-1)
   expect_equal(
     get_variance_residual(m1),
     c(var.residual = 654.94),
@@ -281,10 +288,7 @@ test_that("get_variance", {
     c(var.distribution = 654.94),
     tolerance = 1e-1
   )
-  expect_equal(get_variance_dispersion(m1),
-    c(var.dispersion = 0),
-    tolerance = 1e-1
-  )
+  expect_equal(get_variance_dispersion(m1), c(var.dispersion = 0), tolerance = 1e-1)
 
   expect_equal(
     get_variance_intercept(m1),

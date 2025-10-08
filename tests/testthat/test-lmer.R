@@ -10,14 +10,10 @@ for (i in 1:5) {
     sample.int(30, size = sum(filter_group), replace = TRUE)
 }
 
-m1 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject),
-  data = sleepstudy
-)
+m1 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
 m2 <- suppressMessages(
-  lme4::lmer(Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-    data = sleepstudy
-  )
+  lme4::lmer(Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject), data = sleepstudy)
 )
 
 test_that("model_info", {
@@ -30,8 +26,16 @@ test_that("loglik", {
   expect_equal(get_loglikelihood(m2, estimator = "REML"), logLik(m2), ignore_attr = TRUE)
   expect_equal(get_loglikelihood(m1), logLik(m1), ignore_attr = TRUE)
   expect_equal(get_loglikelihood(m2), logLik(m2), ignore_attr = TRUE)
-  expect_equal(get_loglikelihood(m1, estimator = "ML"), logLik(m1, REML = FALSE), ignore_attr = TRUE)
-  expect_equal(get_loglikelihood(m2, estimator = "ML"), logLik(m2, REML = FALSE), ignore_attr = TRUE)
+  expect_equal(
+    get_loglikelihood(m1, estimator = "ML"),
+    logLik(m1, REML = FALSE),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    get_loglikelihood(m2, estimator = "ML"),
+    logLik(m2, REML = FALSE),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("get_df", {
@@ -92,11 +96,38 @@ test_that("get_df", {
   expect_equal(
     out1,
     c(
-      1.75657, 1.75657, 1.89121, 1.75657, 1.80609, 1.78946, 2.95048,
-      2.31532, 1.87196, 1.69622, 1.69622, 1.84694, 1.84694, 1.84694,
-      2.13913, 2.29991, 2.59236, 2.2466, 2.50664, 2.26337, 1.85365,
-      1.68312, 1.68312, 2.95048, 1.80609, 2.2466, 1.91138, 1.73945,
-      3.50471, 1.80609, 6.61056, 1.76271
+      1.75657,
+      1.75657,
+      1.89121,
+      1.75657,
+      1.80609,
+      1.78946,
+      2.95048,
+      2.31532,
+      1.87196,
+      1.69622,
+      1.69622,
+      1.84694,
+      1.84694,
+      1.84694,
+      2.13913,
+      2.29991,
+      2.59236,
+      2.2466,
+      2.50664,
+      2.26337,
+      1.85365,
+      1.68312,
+      1.68312,
+      2.95048,
+      1.80609,
+      2.2466,
+      1.91138,
+      1.73945,
+      3.50471,
+      1.80609,
+      6.61056,
+      1.76271
     ),
     tolerance = 1e-3
   )
@@ -161,7 +192,10 @@ test_that("find_predictors", {
     find_predictors(m2, effects = "fixed"),
     list(conditional = "Days")
   )
-  expect_identical(find_predictors(m2, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_identical(
+    find_predictors(m2, effects = "random"),
+    list(random = c("mysubgrp", "mygrp", "Subject"))
+  )
   expect_null(find_predictors(m2, effects = "all", component = "zi"))
   expect_null(find_predictors(m2, effects = "fixed", component = "zi"))
   expect_null(find_predictors(m2, effects = "random", component = "zi"))
@@ -170,8 +204,14 @@ test_that("find_predictors", {
 test_that("find_random", {
   expect_identical(find_random(m1), list(random = "Subject"))
   expect_identical(find_random(m1, flatten = TRUE), "Subject")
-  expect_identical(find_random(m2), list(random = c("mysubgrp:mygrp", "mygrp", "Subject")))
-  expect_identical(find_random(m2, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_identical(
+    find_random(m2),
+    list(random = c("mysubgrp:mygrp", "mygrp", "Subject"))
+  )
+  expect_identical(
+    find_random(m2, split_nested = TRUE),
+    list(random = c("mysubgrp", "mygrp", "Subject"))
+  )
   expect_identical(
     find_random(m2, flatten = TRUE),
     c("mysubgrp:mygrp", "mygrp", "Subject")
@@ -369,14 +409,8 @@ test_that("get_variance", {
     tolerance = 1e-1
   )
 
-  expect_equal(get_variance_fixed(m1),
-    c(var.fixed = 908.9534),
-    tolerance = 1e-1
-  )
-  expect_equal(get_variance_random(m1),
-    c(var.random = 1698.084),
-    tolerance = 1e-1
-  )
+  expect_equal(get_variance_fixed(m1), c(var.fixed = 908.9534), tolerance = 1e-1)
+  expect_equal(get_variance_random(m1), c(var.random = 1698.084), tolerance = 1e-1)
   expect_equal(
     get_variance_residual(m1),
     c(var.residual = 654.94),
@@ -387,10 +421,7 @@ test_that("get_variance", {
     c(var.distribution = 654.94),
     tolerance = 1e-1
   )
-  expect_equal(get_variance_dispersion(m1),
-    c(var.dispersion = 0),
-    tolerance = 1e-1
-  )
+  expect_equal(get_variance_dispersion(m1), c(var.dispersion = 0), tolerance = 1e-1)
 
   expect_equal(
     get_variance_intercept(m1),
@@ -439,19 +470,17 @@ test_that("find_random_slopes", {
 
 
 suppressMessages({
-  m3 <- lme4::lmer(Reaction ~ (1 + Days | Subject),
-    data = sleepstudy
-  )
+  m3 <- lme4::lmer(Reaction ~ (1 + Days | Subject), data = sleepstudy)
 
   m4 <- lme4::lmer(
-    Reaction ~ (1 |
-      mygrp / mysubgrp) + (1 | Subject),
+    Reaction ~
+      (1 |
+        mygrp / mysubgrp) +
+        (1 | Subject),
     data = sleepstudy
   )
 
-  m5 <- lme4::lmer(Reaction ~ 1 + (1 + Days | Subject),
-    data = sleepstudy
-  )
+  m5 <- lme4::lmer(Reaction ~ 1 + (1 + Days | Subject), data = sleepstudy)
 
   m6 <- lme4::lmer(
     Reaction ~ 1 + (1 | mygrp / mysubgrp) + (1 | Subject),
@@ -554,7 +583,14 @@ test_that("get_predicted_ci: warning when model matrix and varcovmat do not matc
   skip_if(getRversion() < "4.1.0")
   data(ChickWeight)
   mod <- suppressMessages(lme4::lmer(
-    weight ~ 1 + Time + I(Time^2) + Diet + Time:Diet + I(Time^2):Diet + (1 + Time + I(Time^2) | Chick),
+    weight ~
+      1 +
+        Time +
+        I(Time^2) +
+        Diet +
+        Time:Diet +
+        I(Time^2):Diet +
+        (1 + Time + I(Time^2) | Chick),
     data = ChickWeight
   ))
   newdata <- ChickWeight[ChickWeight$Time %in% 0:10 & ChickWeight$Chick %in% c(1, 40), ]
@@ -578,7 +614,12 @@ test_that("get_predicted_ci: warning when model matrix and varcovmat do not matc
     CI_high = c(40.84771, 49.57913, 61.78894, 75.05927, 88.78662, 103.08789)
   )
 
-  p <- suppressWarnings(get_predicted(mod, data = newdata, include_random = FALSE, ci = 0.95))
+  p <- suppressWarnings(get_predicted(
+    mod,
+    data = newdata,
+    include_random = FALSE,
+    ci = 0.95
+  ))
   expect_equal(
     head(data.frame(p)$Predicted),
     known$Predicted,

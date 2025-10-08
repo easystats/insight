@@ -46,7 +46,10 @@ test_that("link_inverse", {
 test_that("get_data", {
   expect_equal(nrow(get_data(m1, verbose = FALSE)), 24)
   expect_equal(nrow(get_data(m2, verbose = FALSE)), 24)
-  expect_equal(colnames(get_data(m1, verbose = FALSE)), c("yield", "N", "P", "K", "block"))
+  expect_equal(
+    colnames(get_data(m1, verbose = FALSE)),
+    c("yield", "N", "P", "K", "block")
+  )
   expect_equal(colnames(get_data(m2, verbose = FALSE)), c("yield", "N", "P", "K"))
 })
 
@@ -66,19 +69,25 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(
-    response = "yield",
-    conditional = c("N", "P", "K"),
-    error = "Error(block)"
-  ))
+  expect_equal(
+    find_terms(m1),
+    list(
+      response = "yield",
+      conditional = c("N", "P", "K"),
+      error = "Error(block)"
+    )
+  )
   expect_equal(
     find_terms(m1, flatten = TRUE),
     c("yield", "N", "P", "K", "Error(block)")
   )
-  expect_equal(find_terms(m2), list(
-    response = "yield",
-    conditional = c("N", "P", "K")
-  ))
+  expect_equal(
+    find_terms(m2),
+    list(
+      response = "yield",
+      conditional = c("N", "P", "K")
+    )
+  )
   expect_equal(find_terms(m2, flatten = TRUE), c("yield", "N", "P", "K"))
 })
 
@@ -95,7 +104,18 @@ test_that("linkfun", {
 test_that("find_parameters", {
   expect_equal(
     find_parameters(m1),
-    list(conditional = c("(Intercept)", "N1:P1:K1", "N1", "P1", "K1", "N1:P1", "N1:K1", "P1:K1"))
+    list(
+      conditional = c(
+        "(Intercept)",
+        "N1:P1:K1",
+        "N1",
+        "P1",
+        "K1",
+        "N1:P1",
+        "N1:K1",
+        "P1:K1"
+      )
+    )
   )
 
   expect_equal(ncol(get_parameters(m1)), 3)

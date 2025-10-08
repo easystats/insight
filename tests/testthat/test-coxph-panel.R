@@ -47,10 +47,13 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_identical(find_variables(mod), list(
-    response = c("time", "status"),
-    conditional = c("ph.ecog", "age")
-  ))
+  expect_identical(
+    find_variables(mod),
+    list(
+      response = c("time", "status"),
+      conditional = c("ph.ecog", "age")
+    )
+  )
 
   expect_identical(
     find_variables(mod, flatten = TRUE),

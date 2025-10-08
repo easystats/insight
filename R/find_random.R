@@ -135,12 +135,15 @@ find_random.afex_aov <- function(x, split_nested = FALSE, flatten = FALSE) {
 
   out <- lapply(components, function(comp) {
     if (is.list(f[[comp]])) {
-      unique(unlist(lapply(
-        f[[comp]],
-        .get_model_random,
-        model = x,
-        split_nested = split_nested
-      ), use.names = FALSE))
+      unique(unlist(
+        lapply(
+          f[[comp]],
+          .get_model_random,
+          model = x,
+          split_nested = split_nested
+        ),
+        use.names = FALSE
+      ))
     } else {
       unique(unlist(
         .get_model_random(f[[comp]], model = x, split_nested),

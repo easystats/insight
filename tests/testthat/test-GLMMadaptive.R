@@ -250,24 +250,47 @@ test_that("get_data", {
     sort(colnames(get_data(m, component = "zi", effects = "fixed", verbose = FALSE))),
     sort(c("count", "child", "livebait"))
   )
-  expect_identical(colnames(get_data(
-    m,
-    component = "zi", effects = "random", verbose = FALSE
-  )), "persons")
+  expect_identical(
+    colnames(get_data(
+      m,
+      component = "zi",
+      effects = "random",
+      verbose = FALSE
+    )),
+    "persons"
+  )
   expect_identical(
     colnames(get_data(m, component = "cond", verbose = FALSE)),
     c("count", "child", "camper", "persons")
   )
-  expect_identical(colnames(get_data(
+  expect_identical(
+    colnames(get_data(
+      m,
+      component = "cond",
+      effects = "fixed",
+      verbose = FALSE
+    )),
+    c("count", "child", "camper")
+  )
+  expect_identical(
+    colnames(get_data(
+      m,
+      component = "cond",
+      effects = "random",
+      verbose = FALSE
+    )),
+    "persons"
+  )
+  expect_identical(
+    colnames(suppressWarnings(get_data(m, component = "dispersion"))),
+    "count"
+  )
+  expect_null(suppressWarnings(get_data(
     m,
-    component = "cond", effects = "fixed", verbose = FALSE
-  )), c("count", "child", "camper"))
-  expect_identical(colnames(get_data(
-    m,
-    component = "cond", effects = "random", verbose = FALSE
-  )), "persons")
-  expect_identical(colnames(suppressWarnings(get_data(m, component = "dispersion"))), "count")
-  expect_null(suppressWarnings(get_data(m, component = "dispersion", effects = "random", verbose = FALSE)))
+    component = "dispersion",
+    effects = "random",
+    verbose = FALSE
+  )))
   expect_identical(
     colnames(get_data(m3)),
     c("incidence", "size", "period", "herd")
@@ -310,10 +333,16 @@ test_that("find_parameter", {
     tolerance = 1e-5
   )
   expect_identical(nrow(get_parameters(m2)), 6L)
-  expect_equal(get_parameters(m2, effects = "random"),
-    list(random = c(
-      -1.3262364, -0.2048055, 1.3852572, 0.5282277
-    )),
+  expect_equal(
+    get_parameters(m2, effects = "random"),
+    list(
+      random = c(
+        -1.3262364,
+        -0.2048055,
+        1.3852572,
+        0.5282277
+      )
+    ),
     tolerance = 1e-5
   )
   expect_identical(
@@ -438,17 +467,25 @@ test_that("detect custom families", {
     }
     structure(
       list(
-        family = "two-part log-normal", link = stats$name,
-        linkfun = stats$linkfun, linkinv = stats$linkinv, log_dens = log_dens,
-        score_eta_fun = score_eta_fun, score_eta_zi_fun = score_eta_zi_fun,
-        score_phis_fun = score_phis_fun, simulate = simulateResponses
+        family = "two-part log-normal",
+        link = stats$name,
+        linkfun = stats$linkfun,
+        linkinv = stats$linkinv,
+        log_dens = log_dens,
+        score_eta_fun = score_eta_fun,
+        score_eta_zi_fun = score_eta_zi_fun,
+        score_phis_fun = score_phis_fun,
+        simulate = simulateResponses
       ),
       class = "family"
     )
   }
-  km1 <- GLMMadaptive::mixed_model(y ~ sex * time,
-    random = ~ 1 | id, data = DF,
-    family = hurdle.lognormal(), n_phis = 1,
+  km1 <- GLMMadaptive::mixed_model(
+    y ~ sex * time,
+    random = ~ 1 | id,
+    data = DF,
+    family = hurdle.lognormal(),
+    n_phis = 1,
     zi_fixed = ~sex
   )
   out <- model_info(km1)

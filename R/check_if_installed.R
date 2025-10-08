@@ -39,13 +39,15 @@
 #' ))
 #' }
 #' @export
-check_if_installed <- function(package,
-                               reason = "for this function to work",
-                               stop = TRUE,
-                               minimum_version = NULL,
-                               quietly = FALSE,
-                               prompt = interactive(),
-                               ...) {
+check_if_installed <- function(
+  package,
+  reason = "for this function to work",
+  stop = TRUE,
+  minimum_version = NULL,
+  quietly = FALSE,
+  prompt = interactive(),
+  ...
+) {
   is_installed <- vapply(package, requireNamespace, quietly = TRUE, FUN.VALUE = TRUE)
   what_is_wrong <- what_you_can_do <- NULL
 
@@ -80,13 +82,17 @@ check_if_installed <- function(package,
       toString(sprintf("\"%s\"", package))
     )
   } else if (!is.null(minimum_version)) {
-    needs_update <- unlist(Map(function(p, m) {
-      if (is.na(m)) {
-        FALSE
-      } else {
-        utils::packageVersion(p) < package_version(m)
-      }
-    }, package, minimum_version))
+    needs_update <- unlist(Map(
+      function(p, m) {
+        if (is.na(m)) {
+          FALSE
+        } else {
+          utils::packageVersion(p) < package_version(m)
+        }
+      },
+      package,
+      minimum_version
+    ))
 
     if (any(needs_update)) {
       # set is_installed to FALSE for packages that fail minimum version check

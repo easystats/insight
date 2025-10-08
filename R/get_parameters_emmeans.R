@@ -67,37 +67,44 @@ get_parameters.emmGrid <- function(x, summary = FALSE, merge_parameters = FALSE,
 #' @export
 get_parameters.emm_list <- function(x, summary = FALSE, ...) {
   if (!.is_bayesian_emmeans(x) || isTRUE(summary)) {
-    do.call(rbind, lapply(names(x), function(i) {
-      out <- get_parameters(x[[i]], summary = summary)
-      if (ncol(out) > 2L) {
-        est <- out$Estimate
-        out$Estimate <- NULL
-        r <- apply(out, 1, function(i) paste0(colnames(out), " [", i, "]"))
-        out <- data.frame(
-          Parameter = unname(vapply(as.data.frame(r), toString, character(1))),
-          Estimate = unname(est),
-          stringsAsFactors = FALSE
-        )
-      }
-      out$Component <- i
-      colnames(out)[1] <- "Parameter"
-      out
-    }))
+    do.call(
+      rbind,
+      lapply(names(x), function(i) {
+        out <- get_parameters(x[[i]], summary = summary)
+        if (ncol(out) > 2L) {
+          est <- out$Estimate
+          out$Estimate <- NULL
+          r <- apply(out, 1, function(i) paste0(colnames(out), " [", i, "]"))
+          out <- data.frame(
+            Parameter = unname(vapply(as.data.frame(r), toString, character(1))),
+            Estimate = unname(est),
+            stringsAsFactors = FALSE
+          )
+        }
+        out$Component <- i
+        colnames(out)[1] <- "Parameter"
+        out
+      })
+    )
   } else {
-    do.call(cbind, lapply(names(x), function(i) {
-      .clean_emmeans_draws(x[[i]])
-    }))
+    do.call(
+      cbind,
+      lapply(names(x), function(i) {
+        .clean_emmeans_draws(x[[i]])
+      })
+    )
   }
 }
 
 
 # helper --------------------
 
-
 .clean_emmeans_draws <- function(x, ...) {
   check_if_installed("emmeans")
 
-  if (!is.null(attributes(x)$misc$predict.type) && attributes(x)$misc$predict.type != "none") {
+  if (
+    !is.null(attributes(x)$misc$predict.type) && attributes(x)$misc$predict.type != "none"
+  ) {
     x <- emmeans::regrid(x, transform = attributes(x)$misc$predict.type, ...)
   }
 

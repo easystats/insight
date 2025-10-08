@@ -154,7 +154,6 @@ ellipsis_info.ListModels <- function(objects, ..., verbose = TRUE) {
 
 # ListRegressions ---------------------------------------------------------
 
-
 #' @export
 ellipsis_info.ListVarious <- function(objects, ...) {
   # Do nothing (for now?)
@@ -178,7 +177,10 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
   same_response <- TRUE
   i <- 2
   while (same_response && i <= length(objects)) {
-    same_response <- isTRUE(all.equal(get_response(objects[[i]], verbose = FALSE), outcome))
+    same_response <- isTRUE(all.equal(
+      get_response(objects[[i]], verbose = FALSE),
+      outcome
+    ))
     i <- i + 1
   }
   attr(objects, "same_response") <- isTRUE(same_response)
@@ -189,7 +191,10 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
   for (i in 2:len) {
     nested_decreasing <- .nested_regressions(objects[[i - 1]], objects[[i]])
-    nested_increasing <- .nested_regressions(objects[[len + 2 - i]], objects[[len + 1 - i]])
+    nested_increasing <- .nested_regressions(
+      objects[[len + 2 - i]],
+      objects[[len + 1 - i]]
+    )
 
     is_nested_decreasing <- c(is_nested_decreasing, nested_decreasing$is_nested)
     is_nested_increasing <- c(is_nested_increasing, nested_increasing$is_nested)
@@ -217,7 +222,9 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
     # order of df from models
     model_df <- sapply(objects, n_parameters)
     model_names <- sapply(objects, model_name, include_formula = FALSE)
-    identical_models <- is_nested && anyDuplicated(model_df) > 0 && all(model_names == model_names[1])
+    identical_models <- is_nested &&
+      anyDuplicated(model_df) > 0 &&
+      all(model_names == model_names[1])
 
     attr(objects, "is_nested_increasing") <- all(is_nested_increasing)
     attr(objects, "is_nested_decreasing") <- all(is_nested_decreasing)
@@ -237,7 +244,10 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
     for (i in 2:len) {
       nested_decreasing <- .nested_random_effects(objects[[i - 1]], objects[[i]])
-      nested_increasing <- .nested_random_effects(objects[[len + 2 - i]], objects[[len + 1 - i]])
+      nested_increasing <- .nested_random_effects(
+        objects[[len + 2 - i]],
+        objects[[len + 1 - i]]
+      )
 
       re_nested_decreasing <- c(re_nested_decreasing, nested_decreasing$is_nested)
       re_nested_increasing <- c(re_nested_increasing, nested_increasing$is_nested)
@@ -274,7 +284,11 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
   # determine which is linear or binomial model
   attr(objects, "is_linear") <- vapply(model_infos, function(i) i$is_linear, logical(1))
-  attr(objects, "is_binomial") <- vapply(model_infos, function(i) i$is_binomial, logical(1))
+  attr(objects, "is_binomial") <- vapply(
+    model_infos,
+    function(i) i$is_binomial,
+    logical(1)
+  )
 
   objects
 }
@@ -284,13 +298,15 @@ ellipsis_info.ListRegressions <- function(objects, ..., verbose = TRUE) {
 
 #' @keywords internal
 .nested_regressions <- function(basemodel, model) {
-  params_base <- find_parameters(basemodel,
+  params_base <- find_parameters(
+    basemodel,
     effects = "fixed",
     component = "conditional",
     flatten = TRUE
   )
 
-  params <- find_parameters(model,
+  params <- find_parameters(
+    model,
     effects = "fixed",
     component = "conditional",
     flatten = TRUE

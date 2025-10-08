@@ -47,10 +47,13 @@ test_that("find_formula", {
 })
 
 test_that("find_variables", {
-  expect_equal(find_variables(m1), list(
-    response = "mpg",
-    conditional = c("hp", "cyl", "wt")
-  ))
+  expect_equal(
+    find_variables(m1),
+    list(
+      response = "mpg",
+      conditional = c("hp", "cyl", "wt")
+    )
+  )
   expect_equal(
     find_variables(m1, flatten = TRUE),
     c("mpg", "hp", "cyl", "wt")

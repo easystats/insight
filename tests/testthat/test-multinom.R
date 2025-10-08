@@ -16,7 +16,10 @@ test_that("n_parameters", {
 })
 
 test_that("find_predictors", {
-  expect_identical(find_predictors(m1), list(conditional = c("age", "lwt", "race", "smoke")))
+  expect_identical(
+    find_predictors(m1),
+    list(conditional = c("age", "lwt", "race", "smoke"))
+  )
   expect_identical(
     find_predictors(m1, flatten = TRUE),
     c("age", "lwt", "race", "smoke")
@@ -50,10 +53,13 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_identical(find_terms(m1), list(
-    response = "low",
-    conditional = c("age", "lwt", "race", "smoke")
-  ))
+  expect_identical(
+    find_terms(m1),
+    list(
+      response = "low",
+      conditional = c("age", "lwt", "race", "smoke")
+    )
+  )
   expect_identical(
     find_terms(m1, flatten = TRUE),
     c("low", "age", "lwt", "race", "smoke")
@@ -71,9 +77,15 @@ test_that("linkfun", {
 test_that("find_parameters", {
   expect_identical(
     find_parameters(m1),
-    list(conditional = c(
-      "(Intercept)", "age", "lwt", "race", "smoke"
-    ))
+    list(
+      conditional = c(
+        "(Intercept)",
+        "age",
+        "lwt",
+        "race",
+        "smoke"
+      )
+    )
   )
   expect_identical(nrow(get_parameters(m1)), 5L)
   expect_identical(

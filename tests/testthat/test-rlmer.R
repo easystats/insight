@@ -10,16 +10,17 @@ sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
   filter_group <- sleepstudy$mygrp == i
   sleepstudy$mysubgrp[filter_group] <-
-    sample.int(30,
-      size = sum(filter_group),
-      replace = TRUE
-    )
+    sample.int(30, size = sum(filter_group), replace = TRUE)
 }
 
 dat <<- sleepstudy
 
 suppressPackageStartupMessages({
-  suppressWarnings(suppressMessages(library(lme4, quietly = TRUE, warn.conflicts = FALSE)))
+  suppressWarnings(suppressMessages(library(
+    lme4,
+    quietly = TRUE,
+    warn.conflicts = FALSE
+  )))
 })
 
 suppressMessages({
@@ -83,7 +84,10 @@ test_that("find_predictors", {
     find_predictors(m2, effects = "fixed"),
     list(conditional = "Days")
   )
-  expect_identical(find_predictors(m2, effects = "random"), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_identical(
+    find_predictors(m2, effects = "random"),
+    list(random = c("mysubgrp", "mygrp", "Subject"))
+  )
   expect_null(find_predictors(m2, effects = "all", component = "zi"))
   expect_null(find_predictors(m2, effects = "fixed", component = "zi"))
   expect_null(find_predictors(m2, effects = "random", component = "zi"))
@@ -92,10 +96,20 @@ test_that("find_predictors", {
 test_that("find_random", {
   expect_identical(find_random(m1), list(random = "Subject"))
   expect_identical(find_random(m1, flatten = TRUE), "Subject")
-  expect_identical(find_random(m2), list(random = c(
-    "mysubgrp:mygrp", "mygrp", "Subject"
-  )))
-  expect_identical(find_random(m2, split_nested = TRUE), list(random = c("mysubgrp", "mygrp", "Subject")))
+  expect_identical(
+    find_random(m2),
+    list(
+      random = c(
+        "mysubgrp:mygrp",
+        "mygrp",
+        "Subject"
+      )
+    )
+  )
+  expect_identical(
+    find_random(m2, split_nested = TRUE),
+    list(random = c("mysubgrp", "mygrp", "Subject"))
+  )
   expect_identical(
     find_random(m2, flatten = TRUE),
     c("mysubgrp:mygrp", "mygrp", "Subject")
@@ -125,7 +139,10 @@ test_that("get_data", {
   expect_named(get_data(m1, effects = "all"), c("Reaction", "Days", "Subject"))
   expect_named(get_data(m1, effects = "random"), "Subject")
   expect_named(get_data(m2), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
-  expect_named(get_data(m2, effects = "all"), c("Reaction", "Days", "mysubgrp", "mygrp", "Subject"))
+  expect_named(
+    get_data(m2, effects = "all"),
+    c("Reaction", "Days", "mysubgrp", "mygrp", "Subject")
+  )
   expect_named(get_data(m2, effects = "random"), c("mysubgrp", "mygrp", "Subject"))
 })
 
@@ -261,9 +278,12 @@ test_that("get_variance", {
   expect_equal(
     get_variance(m1),
     list(
-      var.fixed = 944.68388146469, var.random = 1911.1173962696,
-      var.residual = 399.07090932584, var.distribution = 399.07090932584,
-      var.dispersion = 0, var.intercept = c(Subject = 782.758817383975),
+      var.fixed = 944.68388146469,
+      var.random = 1911.1173962696,
+      var.residual = 399.07090932584,
+      var.distribution = 399.07090932584,
+      var.dispersion = 0,
+      var.intercept = c(Subject = 782.758817383975),
       var.slope = c(Subject.Days = 41.8070895953001),
       cor.slope_intercept = c(Subject = -0.0387835013909591)
     ),
@@ -280,8 +300,10 @@ test_that("get_variance", {
   expect_equal(
     out,
     list(
-      var.fixed = 914.841369705924, var.residual = 809.318117542254,
-      var.distribution = 809.318117542254, var.dispersion = 0,
+      var.fixed = 914.841369705924,
+      var.residual = 809.318117542254,
+      var.distribution = 809.318117542254,
+      var.dispersion = 0,
       var.intercept = c(
         `mysubgrp:mygrp` = 0,
         Subject = 1390.66848960834,

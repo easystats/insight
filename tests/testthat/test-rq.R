@@ -3,10 +3,7 @@ skip_if_not_installed("quantreg")
 
 data(stackloss)
 m1 <-
-  quantreg::rq(stack.loss ~ Air.Flow + Water.Temp,
-    data = stackloss,
-    tau = 0.25
-  )
+  quantreg::rq(stack.loss ~ Air.Flow + Water.Temp, data = stackloss, tau = 0.25)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_linear)
@@ -87,9 +84,13 @@ test_that("link_inverse", {
 test_that("find_parameters", {
   expect_identical(
     find_parameters(m1),
-    list(conditional = c(
-      "(Intercept)", "Air.Flow", "Water.Temp"
-    ))
+    list(
+      conditional = c(
+        "(Intercept)",
+        "Air.Flow",
+        "Water.Temp"
+      )
+    )
   )
   expect_identical(nrow(get_parameters(m1)), 3L)
   expect_identical(

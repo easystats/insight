@@ -118,14 +118,22 @@ find_transformation.character <- function(x, ...) {
         }
       } else if (grepl(",", x, fixed = TRUE)) {
         # check if we have log() with base-definition (e.g. `log(x, base = 5)`)
-        base_value <- trim_ws(gsub(",", "", gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", x), fixed = TRUE))
+        base_value <- trim_ws(gsub(
+          ",",
+          "",
+          gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", x),
+          fixed = TRUE
+        ))
         if (startsWith(base_value, "base")) {
           base_value <- suppressWarnings(as.numeric(trim_ws(
             gsub("base", "", gsub("=", "", base_value, fixed = TRUE), fixed = TRUE)
           )))
         }
       }
-      if ((is.null(plus_minus) || is.function(plus_minus)) && (is.null(base_value) || is.na(base_value))) {
+      if (
+        (is.null(plus_minus) || is.function(plus_minus)) &&
+          (is.null(base_value) || is.na(base_value))
+      ) {
         transform_fun <- "log"
       } else if (!is.null(base_value) && !is.na(base_value)) {
         transform_fun <- paste0("log(x,base=", base_value, ")")
@@ -180,7 +188,8 @@ find_transformation.character <- function(x, ...) {
 # helper -----------------------------
 
 .is_division <- function(x) {
-  any(grepl("(.*)/([0-9\\.\\+\\-]+)(\\)*)$", x)) && !any(grepl("(.*)(\\^|\\*\\*)\\((.*)/(.*)\\)", x))
+  any(grepl("(.*)/([0-9\\.\\+\\-]+)(\\)*)$", x)) &&
+    !any(grepl("(.*)(\\^|\\*\\*)\\((.*)/(.*)\\)", x))
 }
 
 .is_box_cox <- function(x) {

@@ -4,7 +4,8 @@ skip_if_not_installed("biglm")
 data(Salamanders, package = "glmmTMB")
 Salamanders$cover <- abs(Salamanders$cover)
 
-m1 <- biglm::bigglm(count ~ mined + log(cover) + sample,
+m1 <- biglm::bigglm(
+  count ~ mined + log(cover) + sample,
   family = poisson(),
   data = Salamanders
 )

@@ -42,7 +42,11 @@ test_that("find_random", {
 })
 
 test_that("get_random", {
-  expect_equal(get_random(m1), arthritis[!is.na(arthritis$y), "id", drop = FALSE], ignore_attr = TRUE)
+  expect_equal(
+    get_random(m1),
+    arthritis[!is.na(arthritis$y), "id", drop = FALSE],
+    ignore_attr = TRUE
+  )
 })
 
 test_that("get_predictors", {

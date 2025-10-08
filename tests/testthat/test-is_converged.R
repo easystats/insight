@@ -14,7 +14,11 @@ model <- suppressMessages(suppressWarnings(lme4::glmer(
 
 test_that("is_converged", {
   expect_true(is_converged(model))
-  expect_equal(is_converged(model), structure(TRUE, gradient = 0.000280307452338331), tolerance = 1e-3)
+  expect_equal(
+    is_converged(model),
+    structure(TRUE, gradient = 0.000280307452338331),
+    tolerance = 1e-3
+  )
 })
 
 model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)

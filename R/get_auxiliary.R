@@ -56,12 +56,14 @@
 #' model <- glm(lot1 ~ log(u), data = clotting, family = Gamma())
 #' get_auxiliary(model, type = "dispersion") # same as summary(model)$dispersion
 #' @export
-get_auxiliary <- function(x,
-                          type = "sigma",
-                          summary = TRUE,
-                          centrality = "mean",
-                          verbose = TRUE,
-                          ...) {
+get_auxiliary <- function(
+  x,
+  type = "sigma",
+  summary = TRUE,
+  centrality = "mean",
+  verbose = TRUE,
+  ...
+) {
   type <- validate_argument(
     type,
     unique(c(.aux_elements(), .brms_aux_elements(), "all"))
@@ -90,7 +92,10 @@ get_dispersion <- function(x, ...) {
 #' @rdname get_auxiliary
 #' @export
 get_dispersion.default <- function(x, ...) {
-  format_error(sprintf("`get_dispersion()` does not yet support models of class \"%s\".", class(x)[1])) # nolint
+  format_error(sprintf(
+    "`get_dispersion()` does not yet support models of class \"%s\".",
+    class(x)[1]
+  )) # nolint
 }
 
 #' @export
@@ -152,11 +157,7 @@ get_dispersion.brmsfit <- get_dispersion.glmmTMB
 # special ------------------
 
 #' @keywords internal
-.get_generic_aux <- function(x,
-                             param,
-                             summary = TRUE,
-                             centrality = "mean",
-                             ...) {
+.get_generic_aux <- function(x, param, summary = TRUE, centrality = "mean", ...) {
   aux <- NULL
   if (inherits(x, "brmsfit")) {
     if (all(param == "all")) {

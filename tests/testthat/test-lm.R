@@ -1,5 +1,6 @@
 m1 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
-m2 <- lm(log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE),
+m2 <- lm(
+  log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE),
   data = mtcars
 )
 
@@ -150,10 +151,13 @@ test_that("find_variables", {
       conditional = c("Petal.Width", "Species")
     )
   )
-  expect_identical(find_variables(m2), list(
-    response = "mpg",
-    conditional = c("hp", "cyl", "wt")
-  ))
+  expect_identical(
+    find_variables(m2),
+    list(
+      response = "mpg",
+      conditional = c("hp", "cyl", "wt")
+    )
+  )
   expect_identical(
     find_variables(m1, flatten = TRUE),
     c("Sepal.Length", "Petal.Width", "Species")
@@ -236,7 +240,11 @@ test_that("get_varcov", {
 })
 
 test_that("get_statistic", {
-  expect_equal(get_statistic(m1)$Statistic, c(57.5427, 4.7298, -0.2615, -0.1398), tolerance = 1e-3)
+  expect_equal(
+    get_statistic(m1)$Statistic,
+    c(57.5427, 4.7298, -0.2615, -0.1398),
+    tolerance = 1e-3
+  )
 })
 
 test_that("find_statistic", {

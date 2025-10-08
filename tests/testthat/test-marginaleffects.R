@@ -5,7 +5,8 @@ skip_if_not_installed("emmeans")
 test_that("marginaleffects", {
   m <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-  x <- marginaleffects::slopes(m,
+  x <- marginaleffects::slopes(
+    m,
     variables = "Petal.Length",
     newdata = insight::get_datagrid(m, by = "Species")
   )
@@ -34,8 +35,19 @@ test_that("marginaleffects", {
   expect_named(
     parameters::model_parameters(x),
     c(
-      "rowid", "Parameter", "Comparison", "Coefficient", "SE", "Statistic",
-      "p", "S", "CI", "CI_low", "CI_high", "Species", "Petal.Length",
+      "rowid",
+      "Parameter",
+      "Comparison",
+      "Coefficient",
+      "SE",
+      "Statistic",
+      "p",
+      "S",
+      "CI",
+      "CI_low",
+      "CI_high",
+      "Species",
+      "Petal.Length",
       "Predicted"
     )
   )

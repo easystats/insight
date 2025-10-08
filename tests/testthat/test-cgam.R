@@ -25,10 +25,13 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m), list(
-    response = "y",
-    conditional = "incr.conv(x)"
-  ))
+  expect_equal(
+    find_terms(m),
+    list(
+      response = "y",
+      conditional = "incr.conv(x)"
+    )
+  )
   expect_equal(
     find_terms(m, flatten = TRUE),
     c("y", "incr.conv(x)")

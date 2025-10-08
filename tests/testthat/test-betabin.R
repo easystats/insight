@@ -1,7 +1,11 @@
 skip_if_not_installed("aod")
 
 data(dja, package = "aod")
-m1 <- suppressWarnings(aod::betabin(cbind(y, n - y) ~ group * trisk, ~village, data = dja))
+m1 <- suppressWarnings(aod::betabin(
+  cbind(y, n - y) ~ group * trisk,
+  ~village,
+  data = dja
+))
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_binomial)
@@ -59,7 +63,10 @@ test_that("link_function", {
 
 test_that("get_data", {
   expect_equal(nrow(get_data(m1, verbose = FALSE)), 75)
-  expect_equal(colnames(get_data(m1, verbose = FALSE)), c("y", "n", "group", "trisk", "village"))
+  expect_equal(
+    colnames(get_data(m1, verbose = FALSE)),
+    c("y", "n", "group", "trisk", "village")
+  )
 })
 
 test_that("find_formula", {
@@ -83,7 +90,10 @@ test_that("find_variables", {
       random = "village"
     )
   )
-  expect_equal(find_variables(m1, flatten = TRUE), c("y", "n", "group", "trisk", "village"))
+  expect_equal(
+    find_variables(m1, flatten = TRUE),
+    c("y", "n", "group", "trisk", "village")
+  )
 })
 
 test_that("n_obs", {
@@ -96,16 +106,33 @@ test_that("find_parameters", {
     list(
       conditional = c("(Intercept)", "groupTREAT", "trisk", "groupTREAT:trisk"),
       random = c(
-        "phi.villageBAK", "phi.villageBAM", "phi.villageBAN",
-        "phi.villageBIJ", "phi.villageBOU", "phi.villageBYD", "phi.villageDEM",
-        "phi.villageDIA", "phi.villageHAM", "phi.villageLAM", "phi.villageLAY",
-        "phi.villageMAF", "phi.villageMAH", "phi.villageMAK", "phi.villageMED",
-        "phi.villageNAB", "phi.villageSAG", "phi.villageSAM", "phi.villageSOU"
+        "phi.villageBAK",
+        "phi.villageBAM",
+        "phi.villageBAN",
+        "phi.villageBIJ",
+        "phi.villageBOU",
+        "phi.villageBYD",
+        "phi.villageDEM",
+        "phi.villageDIA",
+        "phi.villageHAM",
+        "phi.villageLAM",
+        "phi.villageLAY",
+        "phi.villageMAF",
+        "phi.villageMAH",
+        "phi.villageMAK",
+        "phi.villageMED",
+        "phi.villageNAB",
+        "phi.villageSAG",
+        "phi.villageSAM",
+        "phi.villageSOU"
       )
     )
   )
   expect_equal(nrow(get_parameters(m1)), 4)
-  expect_equal(get_parameters(m1)$Parameter, c("(Intercept)", "groupTREAT", "trisk", "groupTREAT:trisk"))
+  expect_equal(
+    get_parameters(m1)$Parameter,
+    c("(Intercept)", "groupTREAT", "trisk", "groupTREAT:trisk")
+  )
 })
 
 test_that("is_multivariate", {

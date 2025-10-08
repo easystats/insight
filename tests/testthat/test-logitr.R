@@ -3,10 +3,10 @@ skip_if_not_installed("logitr", minimum_version = "0.8.0")
 data(yogurt, package = "logitr")
 
 mod <- suppressMessages(logitr::logitr(
-  data    = yogurt,
+  data = yogurt,
   outcome = "choice",
-  obsID   = "obsID",
-  pars    = c("price", "feat", "brand")
+  obsID = "obsID",
+  pars = c("price", "feat", "brand")
 ))
 
 test_that("minimalist tests", {

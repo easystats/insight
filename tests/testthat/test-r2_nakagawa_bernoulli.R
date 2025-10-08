@@ -51,7 +51,6 @@ test_that("glmmTMB, bernoulli", {
   expect_equal(out2$R2_marginal, 0.0002789592, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out2$R2_conditional, 0.2838634, ignore_attr = TRUE, tolerance = 1e-4)
 
-
   # glmmTMB, probit, no random slope -----------------------------------------
   m <- glmmTMB::glmmTMB(
     outcome ~ var_binom + var_cont + (1 | group),
@@ -229,31 +228,76 @@ test_that("glmer, Bernoulli", {
   Habitat <- factor(rep(rep(c("Dry", "Wet"), each = 4), 120))
   Treatment <- factor(rep(c("Cont", "Exp"), 480))
   Data <- data.frame(
-    Population = Population, Container = Container, Sex = Sex,
-    Habitat = Habitat, Treatment = Treatment
+    Population = Population,
+    Container = Container,
+    Sex = Sex,
+    Habitat = Habitat,
+    Treatment = Treatment
   )
   DataFemale <- Data[Data$Sex == "Female", ]
   set.seed(777)
   PopulationE <- rnorm(12, 0, sqrt(0.4))
   ContainerE <- rnorm(120, 0, sqrt(0.05))
-  EggL <- with(DataFemale, 1.1 + 0.5 * (as.numeric(Treatment) - 1) + 0.1 * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container] + rnorm(480, 0, sqrt(0.1)))
+  EggL <- with(
+    DataFemale,
+    1.1 +
+      0.5 * (as.numeric(Treatment) - 1) +
+      0.1 * (as.numeric(Habitat) - 1) +
+      PopulationE[Population] +
+      ContainerE[Container] +
+      rnorm(480, 0, sqrt(0.1))
+  )
   DataFemale$Egg <- rpois(length(EggL), exp(EggL))
   DataAll <- Data
   PopulationE <- rnorm(12, 0, sqrt(0.5))
   ContainerE <- rnorm(120, 0, sqrt(0.8))
-  ParasiteL <- with(DataAll, 1.8 + 2 * (-1) * (as.numeric(Sex) - 1) + 0.8 * (-1) * (as.numeric(Treatment) - 1) + 0.7 * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container])
+  ParasiteL <- with(
+    DataAll,
+    1.8 +
+      2 * (-1) * (as.numeric(Sex) - 1) +
+      0.8 * (-1) * (as.numeric(Treatment) - 1) +
+      0.7 * (as.numeric(Habitat) - 1) +
+      PopulationE[Population] +
+      ContainerE[Container]
+  )
   DataAll$Parasite <- rnbinom(length(ParasiteL), size = 5, mu = exp(ParasiteL))
   PopulationE <- rnorm(12, 0, sqrt(1.3))
   ContainerE <- rnorm(120, 0, sqrt(0.3))
-  DataAll$BodyL <- 15 + 3 * (-1) * (as.numeric(Sex) - 1) + 0.4 * (as.numeric(Treatment) - 1) + 0.15 * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container] + rnorm(960, 0, sqrt(1.2))
+  DataAll$BodyL <- 15 +
+    3 * (-1) * (as.numeric(Sex) - 1) +
+    0.4 * (as.numeric(Treatment) - 1) +
+    0.15 * (as.numeric(Habitat) - 1) +
+    PopulationE[Population] +
+    ContainerE[Container] +
+    rnorm(960, 0, sqrt(1.2))
   PopulationE <- rnorm(12, 0, sqrt(0.2))
   ContainerE <- rnorm(120, 0, sqrt(0.2))
-  ExplorationL <- with(DataAll, 4 + 1 * (-1) * (as.numeric(Sex) - 1) + 2 * (as.numeric(Treatment) - 1) + 0.5 * (-1) * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container])
-  DataAll$Exploration <- rgamma(length(ExplorationL), shape = exp(ExplorationL) * 0.3, rate = 0.3)
+  ExplorationL <- with(
+    DataAll,
+    4 +
+      1 * (-1) * (as.numeric(Sex) - 1) +
+      2 * (as.numeric(Treatment) - 1) +
+      0.5 * (-1) * (as.numeric(Habitat) - 1) +
+      PopulationE[Population] +
+      ContainerE[Container]
+  )
+  DataAll$Exploration <- rgamma(
+    length(ExplorationL),
+    shape = exp(ExplorationL) * 0.3,
+    rate = 0.3
+  )
   DataMale <- subset(Data, Sex == "Male")
   PopulationE <- rnorm(12, 0, sqrt(1.2))
   ContainerE <- rnorm(120, 0, sqrt(0.2))
-  ColourL <- with(DataMale, 0.8 * (-1) + 0.8 * (as.numeric(Treatment) - 1) + 0.5 * (as.numeric(Habitat) - 1) + PopulationE[Population] + ContainerE[Container])
+  ColourL <- with(
+    DataMale,
+    0.8 *
+      (-1) +
+      0.8 * (as.numeric(Treatment) - 1) +
+      0.5 * (as.numeric(Habitat) - 1) +
+      PopulationE[Population] +
+      ContainerE[Container]
+  )
   DataMale$Colour <- rbinom(length(ColourL), 1, plogis(ColourL))
 
   morphmodGLMERr <- lme4::glmer(
@@ -271,17 +315,24 @@ test_that("glmer, Bernoulli", {
   VarF <- var(as.vector(model.matrix(morphmodGLMERf) %*% lme4::fixef(morphmodGLMERf)))
   VarDS <- pi^2 / 3
   Vt <- lme4::VarCorr(morphmodGLMERr)$Population + lme4::VarCorr(morphmodGLMERr)$Container
-  pmean <- as.numeric(plogis(as.vector(lme4::fixef(morphmodGLMERr)) - 0.5 * Vt * tanh(as.vector(lme4::fixef(morphmodGLMERr)) * (1 + 2 * exp(-0.5 * Vt)) / 6)))
+  pmean <- as.numeric(plogis(
+    as.vector(lme4::fixef(morphmodGLMERr)) -
+      0.5 *
+        Vt *
+        tanh(as.vector(lme4::fixef(morphmodGLMERr)) * (1 + 2 * exp(-0.5 * Vt)) / 6)
+  ))
   VarOL <- 1 / (pmean * (1 - pmean))
 
   R2glmmM <- VarF / (VarF + sum(as.numeric(lme4::VarCorr(morphmodGLMERf))) + VarDS)
-  R2glmmC <- (VarF + sum(as.numeric(lme4::VarCorr(morphmodGLMERf)))) / (VarF + sum(as.numeric(lme4::VarCorr(morphmodGLMERf))) + VarDS)
+  R2glmmC <- (VarF + sum(as.numeric(lme4::VarCorr(morphmodGLMERf)))) /
+    (VarF + sum(as.numeric(lme4::VarCorr(morphmodGLMERf))) + VarDS)
   out <- performance::r2_nakagawa(morphmodGLMERf)
   expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
 
   R2glmmM <- VarF / (VarF + sum(as.numeric(lme4::VarCorr(morphmodGLMERf))) + VarOL)
-  R2glmmC <- (VarF + sum(as.numeric(lme4::VarCorr(morphmodGLMERf)))) / (VarF + sum(as.numeric(lme4::VarCorr(morphmodGLMERf))) + VarOL)
+  R2glmmC <- (VarF + sum(as.numeric(lme4::VarCorr(morphmodGLMERf)))) /
+    (VarF + sum(as.numeric(lme4::VarCorr(morphmodGLMERf))) + VarOL)
   out <- performance::r2_nakagawa(morphmodGLMERf, approximation = "observation_level")
   expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)

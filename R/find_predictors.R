@@ -135,25 +135,33 @@ find_predictors <- function(x, ...) {
 
 #' @rdname find_predictors
 #' @export
-find_predictors.default <- function(x,
-                                    effects = "fixed",
-                                    component = "all",
-                                    flatten = FALSE,
-                                    verbose = TRUE,
-                                    ...) {
+find_predictors.default <- function(
+  x,
+  effects = "fixed",
+  component = "all",
+  flatten = FALSE,
+  verbose = TRUE,
+  ...
+) {
   effects <- validate_argument(effects, c("fixed", "random", "all"))
   component <- validate_argument(
     component,
     c(
-      "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
-      "correlation", "smooth_terms", "location"
+      "all",
+      "conditional",
+      "zi",
+      "zero_inflated",
+      "dispersion",
+      "instruments",
+      "correlation",
+      "smooth_terms",
+      "location"
     )
   )
 
   f <- find_formula(x, verbose = verbose)
   is_mv <- is_multivariate(f)
   elements <- .get_elements(effects, component, model = x)
-
 
   # filter formulas, depending on requested effects and components
   if (is_mv) {
@@ -173,7 +181,6 @@ find_predictors.default <- function(x,
     return(NULL)
   }
 
-
   # some models, like spatial models, have random slopes that are not defined
   # as fixed effect predictor. In such cases, we have to add the random slope term
   # manually, so other functions like "get_data()" work as expected...
@@ -184,7 +191,6 @@ find_predictors.default <- function(x,
     rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
     if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
   }
-
 
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
@@ -205,8 +211,15 @@ find_predictors.lcmm <- function(
   component <- validate_argument(
     component,
     c(
-      "all", "conditional", "membership", "longitudinal", "beta", "splines",
-      "linear", "mixture", "classmb"
+      "all",
+      "conditional",
+      "membership",
+      "longitudinal",
+      "beta",
+      "splines",
+      "linear",
+      "mixture",
+      "classmb"
     )
   )
 
@@ -277,7 +290,10 @@ find_predictors.fixest <- function(x, flatten = FALSE, ...) {
   cluster <- x$fixef_vars
 
   if (!is.null(instruments)) {
-    instruments <- all.vars(stats::as.formula(paste0("~", paste(instruments, collapse = "+"))))
+    instruments <- all.vars(stats::as.formula(paste0(
+      "~",
+      paste(instruments, collapse = "+")
+    )))
   }
   if (!is.null(endo)) {
     endo <- all.vars(endo)
@@ -319,11 +335,13 @@ find_predictors.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
 
 #' @export
-find_predictors.afex_aov <- function(x,
-                                     effects = "fixed",
-                                     flatten = FALSE,
-                                     verbose = TRUE,
-                                     ...) {
+find_predictors.afex_aov <- function(
+  x,
+  effects = "fixed",
+  flatten = FALSE,
+  verbose = TRUE,
+  ...
+) {
   effects <- validate_argument(effects, c("fixed", "random", "all"))
 
   if (effects == "all") {
@@ -344,18 +362,29 @@ find_predictors.afex_aov <- function(x,
 
 
 #' @export
-find_predictors.brmsfit <- function(x,
-                                    effects = "fixed",
-                                    component = "all",
-                                    flatten = FALSE,
-                                    verbose = TRUE,
-                                    ...) {
+find_predictors.brmsfit <- function(
+  x,
+  effects = "fixed",
+  component = "all",
+  flatten = FALSE,
+  verbose = TRUE,
+  ...
+) {
   effects <- validate_argument(effects, c("fixed", "random", "all"))
   component <- validate_argument(
     component,
     c(
-      "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
-      "correlation", "smooth_terms", "location", "auxiliary", "distributional"
+      "all",
+      "conditional",
+      "zi",
+      "zero_inflated",
+      "dispersion",
+      "instruments",
+      "correlation",
+      "smooth_terms",
+      "location",
+      "auxiliary",
+      "distributional"
     )
   )
 
@@ -398,7 +427,6 @@ find_predictors.brmsfit <- function(x,
     if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
   }
 
-
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
   } else {
@@ -408,11 +436,13 @@ find_predictors.brmsfit <- function(x,
 
 
 #' @export
-find_predictors.sdmTMB <- function(x,
-                                   effects = "fixed",
-                                   flatten = FALSE,
-                                   verbose = TRUE,
-                                   ...) {
+find_predictors.sdmTMB <- function(
+  x,
+  effects = "fixed",
+  flatten = FALSE,
+  verbose = TRUE,
+  ...
+) {
   effects <- validate_argument(effects, c("fixed", "random", "all"))
   elements <- .get_elements(effects, component = "conditional", model = x)
 

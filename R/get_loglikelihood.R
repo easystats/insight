@@ -72,16 +72,23 @@ get_loglikelihood_adjustment <- function(x) {
     {
       trans <- find_transformation(x)
 
-      if (trans == "identity") { # nolint
+      if (trans == "identity") {
+        # nolint
         .weighted_sum(log(get_response(x, as_proportion = TRUE)), w = weights)
       } else if (trans == "log") {
         .weighted_sum(log(1 / get_response(x, as_proportion = TRUE)), w = weights)
       } else if (trans == "log1p") {
         .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) + 1)), w = weights)
       } else if (trans == "log2") {
-        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) * log(2))), w = weights)
+        .weighted_sum(
+          log(1 / (get_response(x, as_proportion = TRUE) * log(2))),
+          w = weights
+        )
       } else if (trans == "log10") {
-        .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) * log(10))), w = weights)
+        .weighted_sum(
+          log(1 / (get_response(x, as_proportion = TRUE) * log(10))),
+          w = weights
+        )
       } else if (trans == "exp") {
         .weighted_sum(get_response(x, as_proportion = TRUE), w = weights)
       } else if (trans == "expm1") {
@@ -100,7 +107,10 @@ get_loglikelihood_adjustment <- function(x) {
         .weighted_sum(log(1 / rep.int(scale_denominator, n_obs(x))), w = weights) # nolint
       } else if (trans == "power") {
         trans_power <- .extract_power_transformation(x)
-        .weighted_sum(log(trans_power * (get_response(x, as_proportion = TRUE)^(trans_power - 1))), w = weights) # nolint
+        .weighted_sum(
+          log(trans_power * (get_response(x, as_proportion = TRUE)^(trans_power - 1))),
+          w = weights
+        ) # nolint
       } else if (is.null(weights)) {
         .ll_log_adjustment(x)
       } else {
@@ -121,12 +131,14 @@ get_loglikelihood_adjustment <- function(x) {
 
 #' @rdname get_loglikelihood
 #' @export
-get_loglikelihood.lm <- function(x,
-                                 estimator = "ML",
-                                 REML = FALSE,
-                                 check_response = FALSE,
-                                 verbose = TRUE,
-                                 ...) {
+get_loglikelihood.lm <- function(
+  x,
+  estimator = "ML",
+  REML = FALSE,
+  check_response = FALSE,
+  verbose = TRUE,
+  ...
+) {
   if (inherits(x, "list") && object_has_names(x, "gam")) {
     x <- x$gam
   }
@@ -136,7 +148,8 @@ get_loglikelihood.lm <- function(x,
     check_if_installed("tweedie")
     ll <- .loglikelihood_prep_output(x, lls = tweedie::logLiktweedie(x))
   } else if (info$is_linear) {
-    ll <- .get_loglikelihood_lm(x,
+    ll <- .get_loglikelihood_lm(
+      x,
       estimator = estimator,
       REML = REML,
       check_response = check_response,
@@ -166,12 +179,14 @@ get_loglikelihood.list <- get_loglikelihood.lm
 
 
 #' @export
-get_loglikelihood.lmerMod <- function(x,
-                                      estimator = NULL,
-                                      REML = FALSE,
-                                      check_response = FALSE,
-                                      verbose = TRUE,
-                                      ...) {
+get_loglikelihood.lmerMod <- function(
+  x,
+  estimator = NULL,
+  REML = FALSE,
+  check_response = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # use defaults for REML?
   if ((missing(estimator) || is.null(estimator)) && missing(REML)) {
     lls <- stats::logLik(x)
@@ -213,10 +228,7 @@ get_loglikelihood.glmmTMB <- get_loglikelihood.lmerMod
 
 
 #' @export
-get_loglikelihood.hglm <- function(x,
-                                   check_response = FALSE,
-                                   verbose = TRUE,
-                                   ...) {
+get_loglikelihood.hglm <- function(x, check_response = FALSE, verbose = TRUE, ...) {
   lls <- x$likelihood
   .loglikelihood_prep_output(
     x,
@@ -251,12 +263,14 @@ get_loglikelihood.mlogit <- get_loglikelihood.mblogit
 
 
 #' @export
-get_loglikelihood.model_fit <- function(x,
-                                        estimator = "ML",
-                                        REML = FALSE,
-                                        check_response = FALSE,
-                                        verbose = TRUE,
-                                        ...) {
+get_loglikelihood.model_fit <- function(
+  x,
+  estimator = "ML",
+  REML = FALSE,
+  check_response = FALSE,
+  verbose = TRUE,
+  ...
+) {
   get_loglikelihood(
     x$fit,
     estimator = estimator,
@@ -288,7 +302,6 @@ get_loglikelihood.stanreg <- function(x, centrality = stats::median, ...) {
 
 
 # Methods WITHOUT individual LLs ---------------------------------------------
-
 
 #' @export
 get_loglikelihood.iv_robust <- function(x, verbose = TRUE, ...) {
@@ -381,16 +394,21 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
 # TODO: Complete for other families with https://github.com/cran/nonnest2/blob/master/R/llcont.R
 # https://stats.stackexchange.com/questions/322038/input-format-for-response-in-binomial-glm-in-r
 
-
-.get_loglikelihood_lm <- function(x,
-                                  estimator = "ML",
-                                  REML = FALSE,
-                                  check_response = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+.get_loglikelihood_lm <- function(
+  x,
+  estimator = "ML",
+  REML = FALSE,
+  check_response = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # Replace arg if compatibility base R is activated
-  if (REML) estimator <- "REML"
-  if (is.null(estimator)) estimator <- "ML"
+  if (REML) {
+    estimator <- "REML"
+  }
+  if (is.null(estimator)) {
+    estimator <- "ML"
+  }
 
   # Get weights
   w <- get_weights(x, null_as_ones = TRUE)
@@ -415,7 +433,13 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
     val <- 0.5 * (sum(log(w)) - N * (log(2 * pi) + 1 - log(N) + log(sum(w * res^2))))
     p <- n_parameters(x, remove_nonestimable = TRUE)
     ll <- val - sum(log(abs(diag(x$qr$qr)[1:p])))
-    return(.loglikelihood_prep_output(x, ll, check_response = check_response, REML = REML, verbose = verbose))
+    return(.loglikelihood_prep_output(
+      x,
+      ll,
+      check_response = check_response,
+      REML = REML,
+      verbose = verbose
+    ))
   }
 
   # Get S2
@@ -430,7 +454,13 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
   # Get individual log-likelihoods
   lls <- 0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * res^2) / s2))
 
-  .loglikelihood_prep_output(x, lls, check_response = check_response, REML = REML, verbose = verbose)
+  .loglikelihood_prep_output(
+    x,
+    lls,
+    check_response = check_response,
+    REML = REML,
+    verbose = verbose
+  )
 }
 
 
@@ -456,7 +486,8 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
   }
 
   # Calculate Log Likelihoods depending on the family
-  lls <- switch(fam,
+  lls <- switch(
+    fam,
     binomial = ,
     categorical = ,
     multinomial = ,
@@ -490,13 +521,15 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
 
 # Helpers -----------------------------------------------------------------
 
-.loglikelihood_prep_output <- function(x,
-                                       lls = NA,
-                                       df = NULL,
-                                       check_response = FALSE,
-                                       verbose = FALSE,
-                                       lls2 = NULL,
-                                       ...) {
+.loglikelihood_prep_output <- function(
+  x,
+  lls = NA,
+  df = NULL,
+  check_response = FALSE,
+  verbose = FALSE,
+  lls2 = NULL,
+  ...
+) {
   # Prepare output
   if (all(is.na(lls))) {
     out <- stats::logLik(x, ...)
@@ -512,7 +545,6 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
     attr(out, "per_obs") <- lls # This is useful for some models comparison tests
   }
 
-
   if (isTRUE(check_response)) {
     # check if we have transformed response, and if so, adjust LogLik
     response_transform <- find_transformation(x)
@@ -520,11 +552,15 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
       # get log-likelihood adjustment-value
       ll_adjustment <- get_loglikelihood_adjustment(x)
       if (is.null(ll_adjustment) && isTRUE(verbose)) {
-        format_warning("Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate.") # nolint
+        format_warning(
+          "Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate."
+        ) # nolint
       } else if (!is.null(ll_adjustment)) {
         out[1] <- out[1] + ll_adjustment
         if (isTRUE(list(...)$REML) && isTRUE(verbose)) {
-          format_warning("Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate.") # nolint
+          format_warning(
+            "Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate."
+          ) # nolint
         }
       }
     }
@@ -534,7 +570,9 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
   attr(out, "nall") <- attr(out, "nobs") <- n_obs(x)
 
   # See https://stats.stackexchange.com/q/393016/54740
-  if (is.null(df)) df <- get_df(x, type = "model")
+  if (is.null(df)) {
+    df <- get_df(x, type = "model")
+  }
   attr(out, "df") <- df
 
   # Make of same class as returned by stats::logLik(x)
@@ -569,17 +607,23 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
   out <- tryCatch(
     {
       trans <- get_transformation(model)$transformation
-      suppressWarnings(.weighted_sum(log(
-        diag(attr(with(
-          get_data(model, verbose = FALSE),
-          stats::numericDeriv(
-            expr = quote(trans(
-              get(find_response(model))
-            )),
-            theta = find_response(model)
-          )
-        ), "gradient"))
-      ), weights))
+      suppressWarnings(.weighted_sum(
+        log(
+          diag(attr(
+            with(
+              get_data(model, verbose = FALSE),
+              stats::numericDeriv(
+                expr = quote(trans(
+                  get(find_response(model))
+                )),
+                theta = find_response(model)
+              )
+            ),
+            "gradient"
+          ))
+        ),
+        weights
+      ))
     },
     error = function(e) {
       NULL
@@ -607,6 +651,7 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
   .safe({
     w <- get_weights(x, null_as_ones = TRUE)
     s2 <- (get_sigma(x) * sqrt(get_df(x, type = "residual") / n_obs(x)))^2
-    0.5 * (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = FALSE)^2) / s2))
+    0.5 *
+      (log(w) - (log(2 * pi) + log(s2) + (w * get_residuals(x, verbose = FALSE)^2) / s2))
   })
 }

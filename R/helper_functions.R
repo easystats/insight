@@ -80,7 +80,9 @@
   reihenfolge <- c(which(!doubles), which(doubles))
 
   # remove duplicate column names, if requested
-  if (replace && any(doubles)) tmp <- tmp[, !doubles, drop = FALSE]
+  if (replace && any(doubles)) {
+    tmp <- tmp[, !doubles, drop = FALSE]
+  }
 
   # bind all data
   x <- cbind(tmp, data)
@@ -118,7 +120,12 @@
 # if there are any chars left, these come from further terms that come after
 # random effects...
 .formula_empty_after_random_effect <- function(f) {
-  nchar(gsub("(~|\\+|\\*|-|/|:)", "", gsub(" ", "", gsub("\\((.*)\\)", "", f), fixed = TRUE))) == 0 # nolint
+  nchar(gsub(
+    "(~|\\+|\\*|-|/|:)",
+    "",
+    gsub(" ", "", gsub("\\((.*)\\)", "", f), fixed = TRUE)
+  )) ==
+    0 # nolint
 }
 
 
@@ -130,8 +137,21 @@
     is_special <- inherits(
       model,
       c(
-        "MCMCglmm", "gee", "LORgee", "mixor", "clmm2", "felm", "feis", "bife",
-        "BFBayesFactor", "BBmm", "glimML", "MANOVA", "RM", "cglm", "glmm",
+        "MCMCglmm",
+        "gee",
+        "LORgee",
+        "mixor",
+        "clmm2",
+        "felm",
+        "feis",
+        "bife",
+        "BFBayesFactor",
+        "BBmm",
+        "glimML",
+        "MANOVA",
+        "RM",
+        "cglm",
+        "glmm",
         "glmgee"
       )
     )
@@ -192,7 +212,11 @@
     )
 
     if (any(has_parantheses)) {
-      re[has_parantheses] <- gsub(pattern = "[\\(\\)]", replacement = "", x = re[has_parantheses])
+      re[has_parantheses] <- gsub(
+        pattern = "[\\(\\)]",
+        replacement = "",
+        x = re[has_parantheses]
+      )
     }
 
     re
@@ -231,26 +255,73 @@
 .all_elements <- function() {
   c(
     # these come first
-    "conditional", "conditional1", "conditional2", "conditional3",
-    "precision", "nonlinear",
+    "conditional",
+    "conditional1",
+    "conditional2",
+    "conditional3",
+    "precision",
+    "nonlinear",
     # regular random
     "random",
     # zero-inflated and random
-    "zero_inflated", "zero_inflated_random",
-    "zi", "zi_random",
+    "zero_inflated",
+    "zero_inflated_random",
+    "zi",
+    "zi_random",
     # dispersion and random
-    "dispersion", "dispersion_random",
+    "dispersion",
+    "dispersion_random",
     # then instruments and smooth terms
-    "instruments", "interactions", "smooth_terms",
+    "instruments",
+    "interactions",
+    "smooth_terms",
     # then auxiliary
-    "alpha", "aux", "auxiliary", "beta", "beta_random", "bias",
-    "bs", "bidrange", "car", "cluster", "coi", "correlation", "delta",
-    "dist", "extra", "hu", "infrequent_purchase", "k", "kappa", "marginal",
-    "mix", "mu", "ndt", "nominal", "nu", "outcome", "phi", "scale", "selection",
-    "shape", "shiftprop", "sigma", "simplex", "slopes", "survival", "tau",
-    "time_dummies", "xi", "zoi",
+    "alpha",
+    "aux",
+    "auxiliary",
+    "beta",
+    "beta_random",
+    "bias",
+    "bs",
+    "bidrange",
+    "car",
+    "cluster",
+    "coi",
+    "correlation",
+    "delta",
+    "dist",
+    "extra",
+    "hu",
+    "infrequent_purchase",
+    "k",
+    "kappa",
+    "marginal",
+    "mix",
+    "mu",
+    "ndt",
+    "nominal",
+    "nu",
+    "outcome",
+    "phi",
+    "scale",
+    "selection",
+    "shape",
+    "shiftprop",
+    "sigma",
+    "simplex",
+    "slopes",
+    "survival",
+    "tau",
+    "time_dummies",
+    "xi",
+    "zoi",
     # special elements, from lcmm
-    "linear", "splines", "membership", "longitudinal", "mixture", "classmb",
+    "linear",
+    "splines",
+    "membership",
+    "longitudinal",
+    "mixture",
+    "classmb",
     # other random parameters
     "sigma_random"
   )
@@ -258,20 +329,63 @@
 
 .aux_elements <- function() {
   c(
-    "(phi)", "alpha", "aux", "auxiliary", "beta", "bias", "coi", "dispersion",
-    "dist", "hu", "kappa", "mix", "mu", "ndt", "nu", "phi", "precision",
-    "shape", "shiftprop", "sigma", "tau", "xi", "zoi",
+    "(phi)",
+    "alpha",
+    "aux",
+    "auxiliary",
+    "beta",
+    "bias",
+    "coi",
+    "dispersion",
+    "dist",
+    "hu",
+    "kappa",
+    "mix",
+    "mu",
+    "ndt",
+    "nu",
+    "phi",
+    "precision",
+    "shape",
+    "shiftprop",
+    "sigma",
+    "tau",
+    "xi",
+    "zoi",
     # special elements, from lcmm
-    "linear", "splines", "membership", "longitudinal", "mixture", "classmb",
+    "linear",
+    "splines",
+    "membership",
+    "longitudinal",
+    "mixture",
+    "classmb",
     # random parameters
-    "dispersion_random", "sigma_random", "beta_random"
+    "dispersion_random",
+    "sigma_random",
+    "beta_random"
   )
 }
 
 .brms_aux_elements <- function() {
   c(
-    "alpha", "beta", "bias", "bs", "coi", "delta", "hu", "k", "kappa",
-    "mu", "ndt", "nu", "phi", "shape", "sigma", "xi", "zi", "zoi"
+    "alpha",
+    "beta",
+    "bias",
+    "bs",
+    "coi",
+    "delta",
+    "hu",
+    "k",
+    "kappa",
+    "mu",
+    "ndt",
+    "nu",
+    "phi",
+    "shape",
+    "sigma",
+    "xi",
+    "zi",
+    "zoi"
   )
 }
 
@@ -303,7 +417,8 @@
   )
 
   # location parameters
-  location_parameters <- switch(effects,
+  location_parameters <- switch(
+    effects,
     fixed = setdiff(elements, c(auxiliary_parameters, random_parameters)),
     grouplevel = ,
     random_variance = ,
@@ -328,7 +443,8 @@
     elements <- unique(c(elements, find_auxiliary(model, verbose = FALSE)))
   }
 
-  elements <- switch(effects,
+  elements <- switch(
+    effects,
     all = ,
     full = elements,
     fixed = elements[!elements %in% random_parameters & !endsWith(elements, "random")],
@@ -337,7 +453,8 @@
     random = elements[elements %in% random_parameters | endsWith(elements, "random")]
   )
 
-  elements <- switch(component,
+  elements <- switch(
+    component,
     all = elements,
     cond = ,
     conditional = elements[elements %in% conditional_component],
@@ -372,13 +489,16 @@
 
 .filter_pars_univariate <- function(l, parameters) {
   lapply(l, function(component) {
-    unlist(sapply(
-      parameters,
-      function(pattern) {
-        grep(pattern = pattern, x = component, perl = TRUE, value = TRUE)
-      },
-      simplify = FALSE
-    ), use.names = FALSE)
+    unlist(
+      sapply(
+        parameters,
+        function(pattern) {
+          grep(pattern = pattern, x = component, perl = TRUE, value = TRUE)
+        },
+        simplify = FALSE
+      ),
+      use.names = FALSE
+    )
   })
 }
 
@@ -408,7 +528,9 @@
 
 .grep_zi_smoothers <- function(x) {
   # this one captures smoothers in zi- or mv-models from gam
-  grepl("^(s\\.\\d\\()", x) | grepl("^(gam::s\\.\\d\\()", x) | grepl("^(mgcv::s\\.\\d\\()", x)
+  grepl("^(s\\.\\d\\()", x) |
+    grepl("^(gam::s\\.\\d\\()", x) |
+    grepl("^(mgcv::s\\.\\d\\()", x)
 }
 
 
@@ -440,7 +562,6 @@
 #   c(x, rval)
 # }
 
-
 .gam_family <- function(x) {
   faminfo <- .safe(stats::family(x))
 
@@ -456,7 +577,8 @@
 # for models with zero-inflation component, return
 # required component of model-summary
 .filter_component <- function(dat, component) {
-  switch(component,
+  switch(
+    component,
     cond = ,
     conditional = dat[dat$Component == "conditional", , drop = FALSE],
     zi = ,
@@ -474,11 +596,10 @@
 
 
 #' @keywords internal
-.gather <- function(x,
-                    names_to = "key",
-                    values_to = "value",
-                    columns = colnames(x)) {
-  if (is.numeric(columns)) columns <- colnames(x)[columns]
+.gather <- function(x, names_to = "key", values_to = "value", columns = colnames(x)) {
+  if (is.numeric(columns)) {
+    columns <- colnames(x)[columns]
+  }
 
   dat <- stats::reshape(
     x,
@@ -562,16 +683,27 @@
 
 ## copied from lme4::findbars() -----------------------
 
-
 .expandDoubleVert <- function(term) {
   frml <- stats::formula(substitute(~x, list(x = term[[2]])))
   newtrms <- paste0("0+", attr(stats::terms(frml), "term.labels"))
   if (attr(stats::terms(frml), "intercept") != 0) {
     newtrms <- c("1", newtrms)
   }
-  stats::as.formula(paste("~(", paste(vapply(newtrms, function(trm) { # nolint
-    paste0(trm, "|", deparse(term[[3]]))
-  }, ""), collapse = ")+("), ")"))[[2]]
+  stats::as.formula(paste(
+    "~(",
+    paste(
+      vapply(
+        newtrms,
+        function(trm) {
+          # nolint
+          paste0(trm, "|", deparse(term[[3]]))
+        },
+        ""
+      ),
+      collapse = ")+("
+    ),
+    ")"
+  ))[[2]]
 }
 
 
@@ -648,17 +780,18 @@
       expandSlash(list(bb))
     }
   }
-  modterm <- .expandDoubleVerts(if (methods::is(term, "formula")) {
-    term[[length(term)]]
-  } else {
-    term
-  })
+  modterm <- .expandDoubleVerts(
+    if (methods::is(term, "formula")) {
+      term[[length(term)]]
+    } else {
+      term
+    }
+  )
   expandSlash(fb(modterm))
 }
 
 
 ## copied from lme4::nobars() -----------------------
-
 
 .nobars <- function(term) {
   nb <- .nobars_(term)
@@ -736,7 +869,6 @@
 
 
 # classify emmeans objects -------------
-
 
 is.emmeans.contrast <- function(x) {
   if (inherits(x, "list")) {

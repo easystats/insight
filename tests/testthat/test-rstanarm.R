@@ -7,7 +7,11 @@ skip_if_not_installed("rstanarm")
 skip_if_not_installed("httr2")
 
 suppressPackageStartupMessages({
-  suppressWarnings(suppressMessages(library(rstanarm, quietly = TRUE, warn.conflicts = FALSE)))
+  suppressWarnings(suppressMessages(library(
+    rstanarm,
+    quietly = TRUE,
+    warn.conflicts = FALSE
+  )))
 })
 
 data(sleepstudy, package = "lme4")
@@ -47,9 +51,13 @@ m6 <- insight::download_model("stanreg_gamm4_1")
 skip_if(is.null(m6))
 
 m7 <- suppressWarnings(
-  stan_lm(mpg ~ wt + qsec + am,
-    data = mtcars, prior = R2(0.75),
-    chains = 1, iter = 300, refresh = 0
+  stan_lm(
+    mpg ~ wt + qsec + am,
+    data = mtcars,
+    prior = R2(0.75),
+    chains = 1,
+    iter = 300,
+    refresh = 0
   )
 )
 
@@ -73,7 +81,8 @@ m10 <- stan_betareg(
   algorithm = "optimizing" # just for speed of example
 )
 
-ols <- lm(mpg ~ wt + qsec + am,
+ols <- lm(
+  mpg ~ wt + qsec + am,
   data = mtcars, # all row are complete so ...
   na.action = na.exclude
 ) # not necessary in this case
@@ -87,22 +96,34 @@ y <- mtcars$mpg[not_NA]
 ybar <- mean(y)
 s_y <- sd(y)
 m11 <- suppressWarnings(
-  stan_biglm.fit(b, R, SSR, N, xbar, ybar, s_y,
+  stan_biglm.fit(
+    b,
+    R,
+    SSR,
+    N,
+    xbar,
+    ybar,
+    s_y,
     prior = R2(0.75),
     # the next line is only to make the example go fast
     refresh = 0,
-    chains = 1, iter = 500, seed = 12345
+    chains = 1,
+    iter = 500,
+    seed = 12345
   )
 )
 
 dat <- infert[order(infert$stratum), ] # order by strata
 m12 <- suppressWarnings(
-  stan_clogit(case ~ spontaneous + induced + (1 | education),
+  stan_clogit(
+    case ~ spontaneous + induced + (1 | education),
     strata = stratum,
     data = dat,
     subset = parity <= 2,
     QR = TRUE,
-    chains = 2, iter = 500, refresh = 0
+    chains = 2,
+    iter = 500,
+    refresh = 0
   )
 ) # for speed only
 
@@ -119,7 +140,11 @@ test_that("stan_jm", {
           dataEvent = pbcSurv,
           time_var = "year",
           # this next line is only to keep the example small in size!
-          chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
+          chains = 1,
+          cores = 1,
+          seed = 12345,
+          iter = 1000,
+          refresh = 0
         )
       )
     )
@@ -151,7 +176,11 @@ invisible(capture.output({
       ),
       data = pbcLong,
       # this next line is only to keep the example small in size!
-      chains = 1, cores = 1, seed = 12345, iter = 1000, refresh = 0
+      chains = 1,
+      cores = 1,
+      seed = 12345,
+      iter = 1000,
+      refresh = 0
     )
   )
 }))
@@ -160,22 +189,57 @@ test_that("model_info-stanreg-glm", {
   expect_equal(
     model_info(m1),
     list(
-      is_binomial = TRUE, is_bernoulli = FALSE, is_count = FALSE,
-      is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
-      is_orderedbeta = FALSE, is_dirichlet = FALSE, is_exponential = FALSE, is_logit = TRUE,
-      is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
-      is_survival = FALSE, is_linear = FALSE, is_tweedie = FALSE,
-      is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
-      is_hurdle = FALSE, is_ordinal = FALSE, is_cumulative = FALSE,
-      is_multinomial = FALSE, is_categorical = FALSE, is_mixed = TRUE,
-      is_multivariate = FALSE, is_trial = TRUE, is_bayesian = TRUE,
-      is_gam = FALSE, is_anova = FALSE, is_timeseries = FALSE,
-      is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
-      is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
-      is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
-      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE, is_wiener = FALSE,
-      is_rtchoice = FALSE, is_mixture = FALSE, link_function = "logit",
-      family = "binomial", n_obs = 56L, n_grouplevels = c(herd = 15L)
+      is_binomial = TRUE,
+      is_bernoulli = FALSE,
+      is_count = FALSE,
+      is_poisson = FALSE,
+      is_negbin = FALSE,
+      is_beta = FALSE,
+      is_betabinomial = FALSE,
+      is_orderedbeta = FALSE,
+      is_dirichlet = FALSE,
+      is_exponential = FALSE,
+      is_logit = TRUE,
+      is_probit = FALSE,
+      is_censored = FALSE,
+      is_truncated = FALSE,
+      is_survival = FALSE,
+      is_linear = FALSE,
+      is_tweedie = FALSE,
+      is_zeroinf = FALSE,
+      is_zero_inflated = FALSE,
+      is_dispersion = FALSE,
+      is_hurdle = FALSE,
+      is_ordinal = FALSE,
+      is_cumulative = FALSE,
+      is_multinomial = FALSE,
+      is_categorical = FALSE,
+      is_mixed = TRUE,
+      is_multivariate = FALSE,
+      is_trial = TRUE,
+      is_bayesian = TRUE,
+      is_gam = FALSE,
+      is_anova = FALSE,
+      is_timeseries = FALSE,
+      is_ttest = FALSE,
+      is_correlation = FALSE,
+      is_onewaytest = FALSE,
+      is_chi2test = FALSE,
+      is_ranktest = FALSE,
+      is_levenetest = FALSE,
+      is_variancetest = FALSE,
+      is_xtab = FALSE,
+      is_proptest = FALSE,
+      is_binomtest = FALSE,
+      is_ftest = FALSE,
+      is_meta = FALSE,
+      is_wiener = FALSE,
+      is_rtchoice = FALSE,
+      is_mixture = FALSE,
+      link_function = "logit",
+      family = "binomial",
+      n_obs = 56L,
+      n_grouplevels = c(herd = 15L)
     ),
     ignore_attr = TRUE
   )
@@ -183,22 +247,57 @@ test_that("model_info-stanreg-glm", {
   expect_equal(
     model_info(m2),
     list(
-      is_binomial = FALSE, is_bernoulli = FALSE, is_count = FALSE,
-      is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
-      is_orderedbeta = FALSE, is_dirichlet = FALSE, is_exponential = FALSE, is_logit = FALSE,
-      is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
-      is_survival = FALSE, is_linear = TRUE, is_tweedie = FALSE,
-      is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
-      is_hurdle = FALSE, is_ordinal = FALSE, is_cumulative = FALSE,
-      is_multinomial = FALSE, is_categorical = FALSE, is_mixed = FALSE,
-      is_multivariate = FALSE, is_trial = FALSE, is_bayesian = TRUE,
-      is_gam = FALSE, is_anova = FALSE, is_timeseries = FALSE,
-      is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
-      is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
-      is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
-      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE, is_wiener = FALSE,
-      is_rtchoice = FALSE, is_mixture = FALSE, link_function = "identity",
-      family = "gaussian", n_obs = 150L, n_grouplevels = NULL
+      is_binomial = FALSE,
+      is_bernoulli = FALSE,
+      is_count = FALSE,
+      is_poisson = FALSE,
+      is_negbin = FALSE,
+      is_beta = FALSE,
+      is_betabinomial = FALSE,
+      is_orderedbeta = FALSE,
+      is_dirichlet = FALSE,
+      is_exponential = FALSE,
+      is_logit = FALSE,
+      is_probit = FALSE,
+      is_censored = FALSE,
+      is_truncated = FALSE,
+      is_survival = FALSE,
+      is_linear = TRUE,
+      is_tweedie = FALSE,
+      is_zeroinf = FALSE,
+      is_zero_inflated = FALSE,
+      is_dispersion = FALSE,
+      is_hurdle = FALSE,
+      is_ordinal = FALSE,
+      is_cumulative = FALSE,
+      is_multinomial = FALSE,
+      is_categorical = FALSE,
+      is_mixed = FALSE,
+      is_multivariate = FALSE,
+      is_trial = FALSE,
+      is_bayesian = TRUE,
+      is_gam = FALSE,
+      is_anova = FALSE,
+      is_timeseries = FALSE,
+      is_ttest = FALSE,
+      is_correlation = FALSE,
+      is_onewaytest = FALSE,
+      is_chi2test = FALSE,
+      is_ranktest = FALSE,
+      is_levenetest = FALSE,
+      is_variancetest = FALSE,
+      is_xtab = FALSE,
+      is_proptest = FALSE,
+      is_binomtest = FALSE,
+      is_ftest = FALSE,
+      is_meta = FALSE,
+      is_wiener = FALSE,
+      is_rtchoice = FALSE,
+      is_mixture = FALSE,
+      link_function = "identity",
+      family = "gaussian",
+      n_obs = 150L,
+      n_grouplevels = NULL
     ),
     ignore_attr = TRUE
   )
@@ -206,22 +305,57 @@ test_that("model_info-stanreg-glm", {
   expect_equal(
     model_info(m3),
     list(
-      is_binomial = TRUE, is_bernoulli = TRUE, is_count = FALSE,
-      is_poisson = FALSE, is_negbin = FALSE, is_beta = FALSE, is_betabinomial = FALSE,
-      is_orderedbeta = FALSE, is_dirichlet = FALSE, is_exponential = FALSE, is_logit = TRUE,
-      is_probit = FALSE, is_censored = FALSE, is_truncated = FALSE,
-      is_survival = FALSE, is_linear = FALSE, is_tweedie = FALSE,
-      is_zeroinf = FALSE, is_zero_inflated = FALSE, is_dispersion = FALSE,
-      is_hurdle = FALSE, is_ordinal = FALSE, is_cumulative = FALSE,
-      is_multinomial = FALSE, is_categorical = FALSE, is_mixed = FALSE,
-      is_multivariate = FALSE, is_trial = FALSE, is_bayesian = TRUE,
-      is_gam = FALSE, is_anova = FALSE, is_timeseries = FALSE,
-      is_ttest = FALSE, is_correlation = FALSE, is_onewaytest = FALSE,
-      is_chi2test = FALSE, is_ranktest = FALSE, is_levenetest = FALSE,
-      is_variancetest = FALSE, is_xtab = FALSE, is_proptest = FALSE,
-      is_binomtest = FALSE, is_ftest = FALSE, is_meta = FALSE, is_wiener = FALSE,
-      is_rtchoice = FALSE, is_mixture = FALSE, link_function = "logit",
-      family = "binomial", n_obs = 32L, n_grouplevels = NULL
+      is_binomial = TRUE,
+      is_bernoulli = TRUE,
+      is_count = FALSE,
+      is_poisson = FALSE,
+      is_negbin = FALSE,
+      is_beta = FALSE,
+      is_betabinomial = FALSE,
+      is_orderedbeta = FALSE,
+      is_dirichlet = FALSE,
+      is_exponential = FALSE,
+      is_logit = TRUE,
+      is_probit = FALSE,
+      is_censored = FALSE,
+      is_truncated = FALSE,
+      is_survival = FALSE,
+      is_linear = FALSE,
+      is_tweedie = FALSE,
+      is_zeroinf = FALSE,
+      is_zero_inflated = FALSE,
+      is_dispersion = FALSE,
+      is_hurdle = FALSE,
+      is_ordinal = FALSE,
+      is_cumulative = FALSE,
+      is_multinomial = FALSE,
+      is_categorical = FALSE,
+      is_mixed = FALSE,
+      is_multivariate = FALSE,
+      is_trial = FALSE,
+      is_bayesian = TRUE,
+      is_gam = FALSE,
+      is_anova = FALSE,
+      is_timeseries = FALSE,
+      is_ttest = FALSE,
+      is_correlation = FALSE,
+      is_onewaytest = FALSE,
+      is_chi2test = FALSE,
+      is_ranktest = FALSE,
+      is_levenetest = FALSE,
+      is_variancetest = FALSE,
+      is_xtab = FALSE,
+      is_proptest = FALSE,
+      is_binomtest = FALSE,
+      is_ftest = FALSE,
+      is_meta = FALSE,
+      is_wiener = FALSE,
+      is_rtchoice = FALSE,
+      is_mixture = FALSE,
+      link_function = "logit",
+      family = "binomial",
+      n_obs = 32L,
+      n_grouplevels = NULL
     ),
     ignore_attr = TRUE
   )
@@ -250,7 +384,11 @@ test_that("get_priors", {
     )
   )
   expect_equal(get_priors(m1)$Scale, c(2.5, 2.5, 2.5, 2.5, 2.5), tolerance = 1e-3)
-  expect_equal(get_priors(m2)$Adjusted_Scale, c(1.08967, 2.30381, 2.30381, 0.61727, 0.53603, 0.41197), tolerance = 1e-3)
+  expect_equal(
+    get_priors(m2)$Adjusted_Scale,
+    c(1.08967, 2.30381, 2.30381, 0.61727, 0.53603, 0.41197),
+    tolerance = 1e-3
+  )
   expect_equal(get_priors(m3)$Adjusted_Scale, c(NA, 2.555042), tolerance = 1e-3)
   expect_equal(get_priors(m4)$Adjusted_Scale, c(6.399801, NA, NA, NA), tolerance = 1e-3)
   expect_equal(get_priors(m5)$Adjusted_Scale, c(6.399801, NA, NA, NA), tolerance = 1e-3)
@@ -363,7 +501,10 @@ test_that("find_paramaters", {
     find_parameters(m1, effects = "full"),
     list(
       conditional = c("(Intercept)", "size", "period2", "period3", "period4"),
-      random = c(sprintf("b[(Intercept) herd:%i]", 1:15), "Sigma[herd:(Intercept),(Intercept)]")
+      random = c(
+        sprintf("b[(Intercept) herd:%i]", 1:15),
+        "Sigma[herd:(Intercept),(Intercept)]"
+      )
     )
   )
   expect_identical(
@@ -470,26 +611,15 @@ test_that("get_variance", {
     tolerance = 1e-3
   )
 
-  expect_equal(get_variance_fixed(m1),
-    c(var.fixed = 0.3627389),
-    tolerance = 1e-4
-  )
-  expect_equal(get_variance_random(m1),
-    c(var.random = 0.5988885),
-    tolerance = 1e-4
-  )
-  expect_equal(get_variance_residual(m1),
-    c(var.residual = 0.2188036),
-    tolerance = 1e-4
-  )
-  expect_equal(get_variance_distribution(m1),
+  expect_equal(get_variance_fixed(m1), c(var.fixed = 0.3627389), tolerance = 1e-4)
+  expect_equal(get_variance_random(m1), c(var.random = 0.5988885), tolerance = 1e-4)
+  expect_equal(get_variance_residual(m1), c(var.residual = 0.2188036), tolerance = 1e-4)
+  expect_equal(
+    get_variance_distribution(m1),
     c(var.distribution = 0.2188036),
     tolerance = 1e-4
   )
-  expect_equal(get_variance_dispersion(m1),
-    c(var.dispersion = 0),
-    tolerance = 1e-4
-  )
+  expect_equal(get_variance_dispersion(m1), c(var.dispersion = 0), tolerance = 1e-4)
 })
 
 test_that("find_algorithm", {
@@ -519,8 +649,13 @@ test_that("clean_parameters", {
           "sigma"
         ),
         Effects = c(
-          "fixed", "fixed", "fixed",
-          "fixed", "fixed", "fixed", "fixed"
+          "fixed",
+          "fixed",
+          "fixed",
+          "fixed",
+          "fixed",
+          "fixed",
+          "fixed"
         ),
         Component = c(
           "conditional",

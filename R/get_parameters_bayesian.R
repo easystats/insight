@@ -47,11 +47,13 @@
 #' m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 #' get_parameters(m)
 #' @export
-get_parameters.BGGM <- function(x,
-                                component = "correlation",
-                                summary = FALSE,
-                                centrality = "mean",
-                                ...) {
+get_parameters.BGGM <- function(
+  x,
+  component = "correlation",
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   # check_if_installed("BGGM")
   #
   # out <- as.data.frame(BGGM::posterior_samples(x))
@@ -64,7 +66,8 @@ get_parameters.BGGM <- function(x,
     component,
     c("correlation", "conditional", "intercept", "all")
   )
-  out <- switch(component,
+  out <- switch(
+    component,
     conditional = out[, conditional, drop = FALSE],
     correlation = out[, correlations, drop = FALSE],
     intercept = out[, intercepts, drop = FALSE],
@@ -78,16 +81,21 @@ get_parameters.BGGM <- function(x,
 
 
 #' @export
-get_parameters.MCMCglmm <- function(x,
-                                    effects = "fixed",
-                                    summary = FALSE,
-                                    centrality = "mean",
-                                    ...) {
+get_parameters.MCMCglmm <- function(
+  x,
+  effects = "fixed",
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   effects <- validate_argument(effects, c("fixed", "random", "all"))
 
   nF <- x$Fixed$nfl
   fixed <- as.data.frame(x$Sol[, 1:nF, drop = FALSE])
-  random <- as.data.frame(x$VCV[, find_random(x, split_nested = TRUE, flatten = TRUE), drop = FALSE])
+  random <- as.data.frame(x$VCV[,
+    find_random(x, split_nested = TRUE, flatten = TRUE),
+    drop = FALSE
+  ])
   all_params <- cbind(fixed, random)
 
   out <- if (effects == "fixed") {
@@ -107,15 +115,17 @@ get_parameters.MCMCglmm <- function(x,
 
 #' @rdname get_parameters.BGGM
 #' @export
-get_parameters.BFBayesFactor <- function(x,
-                                         effects = "all",
-                                         component = "all",
-                                         iterations = 4000,
-                                         progress = FALSE,
-                                         verbose = TRUE,
-                                         summary = FALSE,
-                                         centrality = "mean",
-                                         ...) {
+get_parameters.BFBayesFactor <- function(
+  x,
+  effects = "all",
+  component = "all",
+  iterations = 4000,
+  progress = FALSE,
+  verbose = TRUE,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   check_if_installed("BayesFactor")
 
   effects <- validate_argument(effects, c("all", "fixed", "random"))
@@ -124,30 +134,49 @@ get_parameters.BFBayesFactor <- function(x,
 
   # check if valid model was indexed...
 
-  if ((length(x@numerator) > 1 ||
-    !xor(
-      x@denominator@shortName == "Intercept only",
-      grepl("^(Null|Indep)", x@denominator@shortName)
-    )) && verbose) {
+  if (
+    (length(x@numerator) > 1 ||
+      !xor(
+        x@denominator@shortName == "Intercept only",
+        grepl("^(Null|Indep)", x@denominator@shortName)
+      )) &&
+      verbose
+  ) {
     format_alert(
       "Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.",
       'See help("get_parameters", package = "insight").'
     )
   }
 
-
-  params <- find_parameters(x, effects = effects, component = component, flatten = TRUE, ...)
+  params <- find_parameters(
+    x,
+    effects = effects,
+    component = component,
+    flatten = TRUE,
+    ...
+  )
 
   if (bf_type %in% c("correlation", "ttest1", "ttest2", "meta", "linear")) {
     posteriors <-
       as.data.frame(suppressMessages(
-        BayesFactor::posterior(x, iterations = iterations, progress = progress, index = 1, ...)
+        BayesFactor::posterior(
+          x,
+          iterations = iterations,
+          progress = progress,
+          index = 1,
+          ...
+        )
       ))
 
-    out <- switch(bf_type,
+    out <- switch(
+      bf_type,
       correlation = data.frame(rho = as.numeric(posteriors$rho)),
-      ttest1 = data.frame(Difference = as.numeric(posteriors[, 1]) - x@numerator[[1]]@prior$mu),
-      ttest2 = data.frame(Difference = as.numeric(posteriors[, 2]) - x@numerator[[1]]@prior$mu),
+      ttest1 = data.frame(
+        Difference = as.numeric(posteriors[, 1]) - x@numerator[[1]]@prior$mu
+      ),
+      ttest2 = data.frame(
+        Difference = as.numeric(posteriors[, 2]) - x@numerator[[1]]@prior$mu
+      ),
       meta = data.frame(Effect = as.numeric(posteriors$delta)),
       linear = .get_bf_posteriors(posteriors, params),
       NULL
@@ -185,13 +214,15 @@ get_parameters.BFBayesFactor <- function(x,
 
 #' @rdname get_parameters.BGGM
 #' @export
-get_parameters.brmsfit <- function(x,
-                                   effects = "fixed",
-                                   component = "all",
-                                   parameters = NULL,
-                                   summary = FALSE,
-                                   centrality = "mean",
-                                   ...) {
+get_parameters.brmsfit <- function(
+  x,
+  effects = "fixed",
+  component = "all",
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   # we require namespace, to ensure that `as.data.frame()` works correctly
   check_if_installed("brms")
 
@@ -220,13 +251,15 @@ get_parameters.brmsfit <- function(x,
 
 
 #' @export
-get_parameters.stanreg <- function(x,
-                                   effects = "fixed",
-                                   component = "location",
-                                   parameters = NULL,
-                                   summary = FALSE,
-                                   centrality = "mean",
-                                   ...) {
+get_parameters.stanreg <- function(
+  x,
+  effects = "fixed",
+  component = "location",
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   # we require namespace, to ensure that `as.data.frame()` works correctly
   check_if_installed("rstanarm")
 
@@ -261,11 +294,13 @@ get_parameters.stanmvreg <- get_parameters.stanreg
 
 
 #' @export
-get_parameters.bcplm <- function(x,
-                                 parameters = NULL,
-                                 summary = FALSE,
-                                 centrality = "mean",
-                                 ...) {
+get_parameters.bcplm <- function(
+  x,
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   out <- as.data.frame(do.call(rbind, x$sims.list))
   if (!is.null(parameters)) {
     out <- out[grepl(pattern = parameters, x = colnames(out), perl = TRUE)]
@@ -278,11 +313,13 @@ get_parameters.bcplm <- function(x,
 
 
 #' @export
-get_parameters.bayesx <- function(x,
-                                  component = "conditional",
-                                  summary = FALSE,
-                                  centrality = "mean",
-                                  ...) {
+get_parameters.bayesx <- function(
+  x,
+  component = "conditional",
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   component <- validate_argument(component, c("conditional", "smooth_terms", "all"))
 
   smooth_dat <- data.frame(
@@ -299,7 +336,8 @@ get_parameters.bayesx <- function(x,
     stringsAsFactors = FALSE
   )
 
-  params <- switch(component,
+  params <- switch(
+    component,
     all = rbind(fixed_dat, smooth_dat),
     conditional = fixed_dat,
     smooth_terms = smooth_dat
@@ -315,11 +353,13 @@ get_parameters.bayesx <- function(x,
 
 
 #' @export
-get_parameters.mcmc.list <- function(x,
-                                     parameters = NULL,
-                                     summary = FALSE,
-                                     centrality = "mean",
-                                     ...) {
+get_parameters.mcmc.list <- function(
+  x,
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   out <- as.data.frame(do.call(rbind, x))
   if (!is.null(parameters)) {
     out <- out[grepl(pattern = parameters, x = colnames(out), perl = TRUE)]
@@ -332,12 +372,14 @@ get_parameters.mcmc.list <- function(x,
 
 
 #' @export
-get_parameters.bamlss <- function(x,
-                                  component = "all",
-                                  parameters = NULL,
-                                  summary = FALSE,
-                                  centrality = "mean",
-                                  ...) {
+get_parameters.bamlss <- function(
+  x,
+  component = "all",
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   component <- validate_argument(
     component,
     c("all", "conditional", "smooth_terms", "location", "distributional", "auxiliary")
@@ -354,11 +396,13 @@ get_parameters.bamlss <- function(x,
 
 
 #' @export
-get_parameters.mcmc <- function(x,
-                                parameters = NULL,
-                                summary = FALSE,
-                                centrality = "mean",
-                                ...) {
+get_parameters.mcmc <- function(
+  x,
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   out <- as.data.frame(x)[.get_parms_data(x, "all", "all", parameters)]
   if (isTRUE(summary)) {
     out <- .summary_of_posteriors(out, centrality = centrality)
@@ -368,11 +412,13 @@ get_parameters.mcmc <- function(x,
 
 
 #' @export
-get_parameters.bayesQR <- function(x,
-                                   parameters = NULL,
-                                   summary = FALSE,
-                                   centrality = "mean",
-                                   ...) {
+get_parameters.bayesQR <- function(
+  x,
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   out <- as.data.frame(x[[1]]$betadraw)
   names(out) <- x[[1]]$names
   out <- out[.get_parms_data(x, "all", "all", parameters)]
@@ -384,11 +430,13 @@ get_parameters.bayesQR <- function(x,
 
 
 #' @export
-get_parameters.blrm <- function(x,
-                                parameters = NULL,
-                                summary = FALSE,
-                                centrality = "mean",
-                                ...) {
+get_parameters.blrm <- function(
+  x,
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   out <- as.data.frame(x$draws)
   out <- out[.get_parms_data(x, "all", "all", parameters)]
   if (isTRUE(summary)) {
@@ -399,16 +447,22 @@ get_parameters.blrm <- function(x,
 
 
 #' @export
-get_parameters.sim.merMod <- function(x,
-                                      effects = "fixed",
-                                      parameters = NULL,
-                                      summary = FALSE,
-                                      centrality = "mean",
-                                      ...) {
+get_parameters.sim.merMod <- function(
+  x,
+  effects = "fixed",
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   effects <- validate_argument(effects, c("fixed", "random", "all"))
   fe <- re <- NULL
-  if (effects %in% c("fixed", "all")) fe <- .get_armsim_fixef_parms(x)
-  if (effects %in% c("random", "all")) re <- .get_armsim_ranef_parms(x)
+  if (effects %in% c("fixed", "all")) {
+    fe <- .get_armsim_fixef_parms(x)
+  }
+  if (effects %in% c("random", "all")) {
+    re <- .get_armsim_ranef_parms(x)
+  }
 
   dat <- do.call(cbind, compact_list(list(fe, re)))
 
@@ -422,11 +476,13 @@ get_parameters.sim.merMod <- function(x,
 
 
 #' @export
-get_parameters.sim <- function(x,
-                               parameters = NULL,
-                               summary = FALSE,
-                               centrality = "mean",
-                               ...) {
+get_parameters.sim <- function(
+  x,
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+) {
   dat <- .get_armsim_fixef_parms(x)
   out <- as.data.frame(dat)[.get_parms_data(x, "all", "all", parameters)]
 
@@ -439,9 +495,9 @@ get_parameters.sim <- function(x,
 
 # helper -----------------------
 
-
 .summary_of_posteriors <- function(out, centrality = "mean", params = NULL, ...) {
-  s <- switch(centrality,
+  s <- switch(
+    centrality,
     mean = vapply(out, mean, numeric(1), na.rm = TRUE),
     median = vapply(out, stats::median, numeric(1), na.rm = TRUE),
     vapply(out, mean, numeric(1), na.rm = TRUE)
@@ -471,7 +527,13 @@ get_parameters.sim <- function(x,
 
 .get_parms_data <- function(x, effects, component, parameters = NULL) {
   elements <- .get_elements(effects, component)
-  unlist(find_parameters(x, effects = "all", component = "all", flatten = FALSE, parameters = parameters)[elements])
+  unlist(find_parameters(
+    x,
+    effects = "all",
+    component = "all",
+    flatten = FALSE,
+    parameters = parameters
+  )[elements])
 }
 
 
@@ -486,7 +548,8 @@ get_parameters.sim <- function(x,
     pcors_total <- p * (p - 1) * 0.5
     I_p <- diag(p)
     iter <- object$iter
-    pcor_samples <- matrix(object$post_samp$pcors[, , 51:(iter + 50)][upper.tri(I_p)],
+    pcor_samples <- matrix(
+      object$post_samp$pcors[,, 51:(iter + 50)][upper.tri(I_p)],
       nrow = iter,
       ncol = pcors_total,
       byrow = TRUE
@@ -512,17 +575,20 @@ get_parameters.sim <- function(x,
       } else {
         col_names <- cn
       }
-      beta_start <- matrix(beta_samples[1:n_beta_terms, 1, 51:(iter + 50)],
+      beta_start <- matrix(
+        beta_samples[1:n_beta_terms, 1, 51:(iter + 50)],
         nrow = iter,
         n_beta_terms,
         byrow = TRUE
       )
       colnames(beta_start) <- paste0(
-        col_names[1], "_",
+        col_names[1],
+        "_",
         beta_terms
       )
       for (i in 2:p) {
-        beta_i <- matrix(beta_samples[1:n_beta_terms, i, 51:(iter + 50)],
+        beta_i <- matrix(
+          beta_samples[1:n_beta_terms, i, 51:(iter + 50)],
           nrow = iter,
           n_beta_terms,
           byrow = TRUE
@@ -540,7 +606,8 @@ get_parameters.sim <- function(x,
     pcors_total <- p * (p - 1) * 0.5
     I_p <- diag(p)
     iter <- object$iter
-    pcor_samples <- matrix(object$fit$pcors[, , 51:(iter + 50)][upper.tri(I_p)],
+    pcor_samples <- matrix(
+      object$fit$pcors[,, 51:(iter + 50)][upper.tri(I_p)],
       nrow = iter,
       ncol = pcors_total,
       byrow = TRUE
@@ -557,14 +624,16 @@ get_parameters.sim <- function(x,
     beta_samples <- object$fit$beta
     col_names <- colnames(object$Y)
     beta_terms <- colnames(object$X)
-    beta_start <- matrix(beta_samples[1:n_beta_terms, 1, 51:(iter + 50)],
+    beta_start <- matrix(
+      beta_samples[1:n_beta_terms, 1, 51:(iter + 50)],
       nrow = iter,
       n_beta_terms,
       byrow = TRUE
     )
     colnames(beta_start) <- paste0(col_names[1], "_", beta_terms)
     for (i in 2:p) {
-      beta_i <- matrix(beta_samples[1:n_beta_terms, i, 51:(iter + 50)],
+      beta_i <- matrix(
+        beta_samples[1:n_beta_terms, i, 51:(iter + 50)],
         nrow = iter,
         n_beta_terms,
         byrow = TRUE

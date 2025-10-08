@@ -49,13 +49,15 @@ get_mixed_info.default <- function(model, verbose = TRUE, ...) {
 
 # helper ---------------------
 
-
 .fix_mm_rank_deficiency <- function(mixed_effects_info) {
   # fix rank deficiency
   rankdef <- is.na(mixed_effects_info$beta)
   if (any(rankdef)) {
     rankdef_names <- names(mixed_effects_info$beta)[rankdef]
-    mixed_effects_info$beta <- mixed_effects_info$beta[setdiff(names(mixed_effects_info$beta), rankdef_names)]
+    mixed_effects_info$beta <- mixed_effects_info$beta[setdiff(
+      names(mixed_effects_info$beta),
+      rankdef_names
+    )]
   }
   mixed_effects_info
 }
@@ -63,10 +65,14 @@ get_mixed_info.default <- function(model, verbose = TRUE, ...) {
 
 # methods ----------------------------
 
-
 #' @rdname get_mixed_info
 #' @export
-get_mixed_info.glmmTMB <- function(model, component = "conditional", verbose = TRUE, ...) {
+get_mixed_info.glmmTMB <- function(
+  model,
+  component = "conditional",
+  verbose = TRUE,
+  ...
+) {
   check_if_installed("glmmTMB")
   component <- validate_argument(component, c("conditional", "zero_inflated", "zi"))
 
@@ -233,7 +239,10 @@ get_mixed_info.clmm <- function(model, verbose = TRUE, ...) {
 
   mm <- get_modelmatrix(model)
   mixed_effects_info <- list(
-    beta = c("(Intercept)" = 1, stats::coef(model)[intersect(names(stats::coef(model)), colnames(mm))]),
+    beta = c(
+      "(Intercept)" = 1,
+      stats::coef(model)[intersect(names(stats::coef(model)), colnames(mm))]
+    ),
     X = mm,
     vc = ordinal::VarCorr(model),
     re = ordinal::ranef(model)
@@ -270,10 +279,20 @@ get_mixed_info.brmsfit <- function(model, verbose = TRUE, ...) {
     if (i != "residual__") {
       if (is.null(element$cov)) {
         out <- as.matrix(drop(element$sd[, 1])^2)
-        colnames(out) <- rownames(out) <- gsub("Intercept", "(Intercept)", rownames(element$sd), fixed = TRUE)
+        colnames(out) <- rownames(out) <- gsub(
+          "Intercept",
+          "(Intercept)",
+          rownames(element$sd),
+          fixed = TRUE
+        )
       } else {
         out <- as.matrix(drop(element$cov[, 1, ]))
-        colnames(out) <- rownames(out) <- gsub("Intercept", "(Intercept)", rownames(element$cov), fixed = TRUE)
+        colnames(out) <- rownames(out) <- gsub(
+          "Intercept",
+          "(Intercept)",
+          rownames(element$cov),
+          fixed = TRUE
+        )
       }
       attr(out, "sttdev") <- element$sd[, 1]
     } else {
@@ -297,7 +316,12 @@ get_mixed_info.brmsfit <- function(model, verbose = TRUE, ...) {
       reval
     })
   )
-  names(mixed_effects_info$beta) <- gsub("Intercept", "(Intercept)", names(mixed_effects_info$beta), fixed = TRUE)
+  names(mixed_effects_info$beta) <- gsub(
+    "Intercept",
+    "(Intercept)",
+    names(mixed_effects_info$beta),
+    fixed = TRUE
+  )
 
   .fix_mm_rank_deficiency(mixed_effects_info)
 }

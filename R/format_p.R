@@ -32,15 +32,17 @@
 #' format_p(p, digits = "scientific")
 #' format_p(p, digits = "scientific2")
 #' @export
-format_p <- function(p,
-                     stars = FALSE,
-                     stars_only = FALSE,
-                     whitespace = TRUE,
-                     name = "p",
-                     missing = "",
-                     decimal_separator = NULL,
-                     digits = 3,
-                     ...) {
+format_p <- function(
+  p,
+  stars = FALSE,
+  stars_only = FALSE,
+  whitespace = TRUE,
+  name = "p",
+  missing = "",
+  decimal_separator = NULL,
+  digits = 3,
+  ...
+) {
   # only convert p if it's a valid numeric, or at least coercible to
   # valid numeric values...
   if (!is.numeric(p)) {
@@ -60,17 +62,28 @@ format_p <- function(p,
   }
 
   if (is.character(digits) && grepl("scientific", digits, fixed = TRUE)) {
-    digits <- tryCatch(as.numeric(gsub("scientific", "", digits, fixed = TRUE)),
+    digits <- tryCatch(
+      as.numeric(gsub("scientific", "", digits, fixed = TRUE)),
       error = function(e) NA
     )
     if (is.na(digits)) {
       digits <- 5
     }
-    p_text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, sprintf("= %.*e***", digits, p), # nolint
-        ifelse(p < 0.01, sprintf("= %.*e**", digits, p), # nolint
-          ifelse(p < 0.05, sprintf("= %.*e*", digits, p), # nolint
-            ifelse(p > 0.999, sprintf("= %.*e", digits, p), # nolint
+    p_text <- ifelse(
+      is.na(p),
+      NA,
+      ifelse(
+        p < 0.001,
+        sprintf("= %.*e***", digits, p), # nolint
+        ifelse(
+          p < 0.01,
+          sprintf("= %.*e**", digits, p), # nolint
+          ifelse(
+            p < 0.05,
+            sprintf("= %.*e*", digits, p), # nolint
+            ifelse(
+              p > 0.999,
+              sprintf("= %.*e", digits, p), # nolint
               sprintf("= %.*e", digits, p)
             )
           )
@@ -78,11 +91,21 @@ format_p <- function(p,
       )
     )
   } else if (digits <= 3) {
-    p_text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, "< .001***", # nolint
-        ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"), # nolint
-          ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"), # nolint
-            ifelse(p > 0.999, "> .999", # nolint
+    p_text <- ifelse(
+      is.na(p),
+      NA,
+      ifelse(
+        p < 0.001,
+        "< .001***", # nolint
+        ifelse(
+          p < 0.01,
+          paste0("= ", format_value(p, digits), "**"), # nolint
+          ifelse(
+            p < 0.05,
+            paste0("= ", format_value(p, digits), "*"), # nolint
+            ifelse(
+              p > 0.999,
+              "> .999", # nolint
               paste0("= ", format_value(p, digits))
             )
           )
@@ -90,10 +113,18 @@ format_p <- function(p,
       )
     )
   } else {
-    p_text <- ifelse(is.na(p), NA,
-      ifelse(p < 0.001, paste0("= ", format_value(p, digits), "***"), # nolint
-        ifelse(p < 0.01, paste0("= ", format_value(p, digits), "**"), # nolint
-          ifelse(p < 0.05, paste0("= ", format_value(p, digits), "*"), # nolint
+    p_text <- ifelse(
+      is.na(p),
+      NA,
+      ifelse(
+        p < 0.001,
+        paste0("= ", format_value(p, digits), "***"), # nolint
+        ifelse(
+          p < 0.01,
+          paste0("= ", format_value(p, digits), "**"), # nolint
+          ifelse(
+            p < 0.05,
+            paste0("= ", format_value(p, digits), "*"), # nolint
             paste0("= ", format_value(p, digits))
           )
         )
@@ -101,19 +132,29 @@ format_p <- function(p,
     )
   }
 
-  .add_prefix_and_remove_stars(p_text, stars, stars_only, name, missing, whitespace, decimal_separator)
+  .add_prefix_and_remove_stars(
+    p_text,
+    stars,
+    stars_only,
+    name,
+    missing,
+    whitespace,
+    decimal_separator
+  )
 }
 
 
 #' @keywords internal
-.add_prefix_and_remove_stars <- function(p_text,
-                                         stars,
-                                         stars_only,
-                                         name,
-                                         missing = "",
-                                         whitespace = TRUE,
-                                         decimal_separator = NULL,
-                                         inferiority_star = "\u00B0") {
+.add_prefix_and_remove_stars <- function(
+  p_text,
+  stars,
+  stars_only,
+  name,
+  missing = "",
+  whitespace = TRUE,
+  decimal_separator = NULL,
+  inferiority_star = "\u00B0"
+) {
   missing_index <- is.na(p_text)
 
   if (is.null(name)) {

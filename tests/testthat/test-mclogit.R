@@ -2,7 +2,11 @@ skip_if_not_installed("mclogit")
 
 data(Transport, package = "mclogit")
 mod_mb <- mclogit::mblogit(factor(gear) ~ mpg + hp, data = mtcars, trace = FALSE)
-mod_mc <- mclogit::mclogit(resp | suburb ~ distance + cost, data = Transport, trace = FALSE)
+mod_mc <- mclogit::mclogit(
+  resp | suburb ~ distance + cost,
+  data = Transport,
+  trace = FALSE
+)
 
 test_that("mblogit and mclogit is not linear", {
   skip_if_not(packageVersion("mclogit") >= "0.9.1")

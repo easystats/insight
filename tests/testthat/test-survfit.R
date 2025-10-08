@@ -1,6 +1,9 @@
 skip_if_not_installed("survival")
 
-m1 <- survival::survfit(survival::Surv(time, status) ~ sex + age + ph.ecog, data = survival::lung)
+m1 <- survival::survfit(
+  survival::Surv(time, status) ~ sex + age + ph.ecog,
+  data = survival::lung
+)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_logit)
@@ -30,18 +33,23 @@ test_that("find_formula", {
   expect_length(find_formula(m1), 1)
   expect_equal(
     find_formula(m1),
-    list(conditional = as.formula(
-      "survival::Surv(time, status) ~ sex + age + ph.ecog"
-    )),
+    list(
+      conditional = as.formula(
+        "survival::Surv(time, status) ~ sex + age + ph.ecog"
+      )
+    ),
     ignore_attr = TRUE
   )
 })
 
 test_that("find_variables", {
-  expect_identical(find_variables(m1), list(
-    response = c("time", "status"),
-    conditional = c("sex", "age", "ph.ecog")
-  ))
+  expect_identical(
+    find_variables(m1),
+    list(
+      response = c("time", "status"),
+      conditional = c("sex", "age", "ph.ecog")
+    )
+  )
   expect_identical(
     find_variables(m1, flatten = TRUE),
     c("time", "status", "sex", "age", "ph.ecog")

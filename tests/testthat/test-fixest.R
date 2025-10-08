@@ -13,8 +13,16 @@ data(trade, package = "fixest")
 data(Greene, package = "carData")
 
 m1 <- fixest::femlm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade)
-m2 <- fixest::femlm(log1p(Euros) ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "gaussian")
-m3 <- fixest::feglm(Euros ~ log(dist_km) | Origin + Destination + Product, data = trade, family = "poisson")
+m2 <- fixest::femlm(
+  log1p(Euros) ~ log(dist_km) | Origin + Destination + Product,
+  data = trade,
+  family = "gaussian"
+)
+m3 <- fixest::feglm(
+  Euros ~ log(dist_km) | Origin + Destination + Product,
+  data = trade,
+  family = "poisson"
+)
 m4 <- fixest::feols(
   Sepal.Width ~ Petal.Length | Species | Sepal.Length ~ Petal.Width,
   data = iris
@@ -39,8 +47,7 @@ test_that("robust variance-covariance", {
   )
 
   expect_true(all(
-    sqrt(diag(vcov(mod))) !=
-      sqrt(diag(get_varcov(mod, vcov = "HC1")))
+    sqrt(diag(vcov(mod))) != sqrt(diag(get_varcov(mod, vcov = "HC1")))
   ))
 })
 
@@ -60,13 +67,27 @@ test_that("model_info", {
 })
 
 test_that("find_predictors", {
-  expect_identical(find_predictors(m1), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
-  expect_identical(find_predictors(m2), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
-  expect_identical(find_predictors(m3), list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product")))
-  expect_identical(find_predictors(m4), list(
-    conditional = c("Petal.Length", "Sepal.Length"), cluster = "Species",
-    instruments = "Petal.Width", endogenous = "Sepal.Length"
-  ))
+  expect_identical(
+    find_predictors(m1),
+    list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_predictors(m2),
+    list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_predictors(m3),
+    list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+  )
+  expect_identical(
+    find_predictors(m4),
+    list(
+      conditional = c("Petal.Length", "Sepal.Length"),
+      cluster = "Species",
+      instruments = "Petal.Width",
+      endogenous = "Sepal.Length"
+    )
+  )
   expect_identical(
     find_predictors(m1, component = "all"),
     list(conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
@@ -118,9 +139,18 @@ test_that("get_response", {
 })
 
 test_that("get_predictors", {
-  expect_identical(colnames(get_predictors(m1)), c("dist_km", "Origin", "Destination", "Product"))
-  expect_identical(colnames(get_predictors(m2)), c("dist_km", "Origin", "Destination", "Product"))
-  expect_identical(colnames(get_predictors(m3)), c("dist_km", "Origin", "Destination", "Product"))
+  expect_identical(
+    colnames(get_predictors(m1)),
+    c("dist_km", "Origin", "Destination", "Product")
+  )
+  expect_identical(
+    colnames(get_predictors(m2)),
+    c("dist_km", "Origin", "Destination", "Product")
+  )
+  expect_identical(
+    colnames(get_predictors(m3)),
+    c("dist_km", "Origin", "Destination", "Product")
+  )
 })
 
 test_that("link_inverse", {
@@ -137,9 +167,15 @@ test_that("link_function", {
 
 test_that("get_data", {
   expect_identical(nrow(get_data(m1, verbose = FALSE)), 38325L)
-  expect_identical(colnames(get_data(m1, verbose = FALSE)), c("Euros", "dist_km", "Origin", "Destination", "Product"))
+  expect_identical(
+    colnames(get_data(m1, verbose = FALSE)),
+    c("Euros", "dist_km", "Origin", "Destination", "Product")
+  )
   expect_identical(nrow(get_data(m2, verbose = FALSE)), 38325L)
-  expect_identical(colnames(get_data(m2, verbose = FALSE)), c("Euros", "dist_km", "Origin", "Destination", "Product"))
+  expect_identical(
+    colnames(get_data(m2, verbose = FALSE)),
+    c("Euros", "dist_km", "Origin", "Destination", "Product")
+  )
 
   # old bug: m4 uses a complex formula and we need to extract all relevant
   # variables in order to compute predictions.
@@ -151,10 +187,18 @@ test_that("get_data", {
 
 skip_if_not_installed("parameters")
 test_that("get_df", {
-  expect_equal(get_df(m1, type = "residual"), fixest::degrees_freedom(m1, type = "resid"), ignore_attr = TRUE)
+  expect_equal(
+    get_df(m1, type = "residual"),
+    fixest::degrees_freedom(m1, type = "resid"),
+    ignore_attr = TRUE
+  )
   expect_equal(get_df(m1, type = "normal"), Inf, ignore_attr = TRUE)
   ## statistic is t for this model
-  expect_equal(get_df(m1, type = "wald"), fixest::degrees_freedom(m1, type = "t"), ignore_attr = TRUE)
+  expect_equal(
+    get_df(m1, type = "wald"),
+    fixest::degrees_freedom(m1, type = "t"),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("find_formula", {
@@ -181,7 +225,11 @@ test_that("find_formula", {
 test_that("find_terms", {
   expect_identical(
     find_terms(m1),
-    list(response = "Euros", conditional = "log(dist_km)", cluster = c("Origin", "Destination", "Product"))
+    list(
+      response = "Euros",
+      conditional = "log(dist_km)",
+      cluster = c("Origin", "Destination", "Product")
+    )
   )
   expect_identical(
     find_terms(m1, flatten = TRUE),
@@ -189,7 +237,11 @@ test_that("find_terms", {
   )
   expect_identical(
     find_terms(m2),
-    list(response = "log1p(Euros)", conditional = "log(dist_km)", cluster = c("Origin", "Destination", "Product"))
+    list(
+      response = "log1p(Euros)",
+      conditional = "log(dist_km)",
+      cluster = c("Origin", "Destination", "Product")
+    )
   )
   expect_identical(
     find_terms(m2, flatten = TRUE),
@@ -201,7 +253,11 @@ test_that("find_terms", {
 test_that("find_variables", {
   expect_identical(
     find_variables(m1),
-    list(response = "Euros", conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+    list(
+      response = "Euros",
+      conditional = "dist_km",
+      cluster = c("Origin", "Destination", "Product")
+    )
   )
   expect_identical(
     find_variables(m1, flatten = TRUE),
@@ -209,7 +265,11 @@ test_that("find_variables", {
   )
   expect_identical(
     find_variables(m2),
-    list(response = "Euros", conditional = "dist_km", cluster = c("Origin", "Destination", "Product"))
+    list(
+      response = "Euros",
+      conditional = "dist_km",
+      cluster = c("Origin", "Destination", "Product")
+    )
   )
   expect_identical(
     find_variables(m1, flatten = TRUE),
@@ -263,9 +323,11 @@ test_that("find_statistic", {
   # and https://github.com/lrberge/fixest/blob/c14c55917897478d996f80bd3392d2e7355b1f29/R/ESTIMATION_FUNS.R#L2903
   d <- Greene
   d$dv <- as.numeric(Greene$decision == "yes")
-  m5 <- fixest::feglm(dv ~ language | judge,
+  m5 <- fixest::feglm(
+    dv ~ language | judge,
     data = d,
-    cluster = "judge", family = "logit"
+    cluster = "judge",
+    family = "logit"
   )
   expect_identical(find_statistic(m1), "z-statistic")
   expect_identical(find_statistic(m2), "t-statistic")
@@ -326,8 +388,12 @@ withr::with_environment(
       data.frame(
         Y = c(FALSE, TRUE, TRUE, TRUE, TRUE, TRUE),
         X = c(
-          -1.80603125680195, -0.582075924689333, -1.10888962442678,
-          -1.01496200949201, -0.162309523556819, 0.563055818994517
+          -1.80603125680195,
+          -0.582075924689333,
+          -1.10888962442678,
+          -1.01496200949201,
+          -0.162309523556819,
+          0.563055818994517
         )
       ),
       ignore_attr = TRUE,
@@ -343,8 +409,11 @@ test_that("find_variables with interaction", {
   expect_equal(
     find_variables(mod),
     list(
-      response = "mpg", conditional = "vs", cluster = "carb",
-      instruments = c("am", "cyl"), endogenous = c("vs", "cyl")
+      response = "mpg",
+      conditional = "vs",
+      cluster = "carb",
+      instruments = c("am", "cyl"),
+      endogenous = c("vs", "cyl")
     ),
     ignore_attr = TRUE
   )

@@ -38,7 +38,14 @@ get_response <- function(x, ...) {
 
 #' @rdname get_response
 #' @export
-get_response.default <- function(x, select = NULL, as_proportion = TRUE, source = "environment", verbose = TRUE, ...) {
+get_response.default <- function(
+  x,
+  select = NULL,
+  as_proportion = TRUE,
+  source = "environment",
+  verbose = TRUE,
+  ...
+) {
   rn <- find_response(x, combine = FALSE)
   combined_rn <- find_response(x, combine = TRUE)
 
@@ -70,9 +77,15 @@ get_response.default <- function(x, select = NULL, as_proportion = TRUE, source 
     response <- response[[1]]
   }
   # for special classes, coerce to simple vector
-  if (!is.factor(response) && !is.numeric(response) && !is.character(response) &&
-    !is.logical(response) && !is.integer(response) && !is.data.frame(response) &&
-    !is.matrix(response)) {
+  if (
+    !is.factor(response) &&
+      !is.numeric(response) &&
+      !is.character(response) &&
+      !is.logical(response) &&
+      !is.integer(response) &&
+      !is.data.frame(response) &&
+      !is.matrix(response)
+  ) {
     response <- as.vector(response)
   }
 
@@ -100,7 +113,12 @@ get_response.bfsl <- function(x, source = "environment", ...) {
 
 #' @rdname get_response
 #' @export
-get_response.nestedLogit <- function(x, dichotomies = FALSE, source = "environment", ...) {
+get_response.nestedLogit <- function(
+  x,
+  dichotomies = FALSE,
+  source = "environment",
+  ...
+) {
   if (isTRUE(dichotomies)) {
     stats::setNames(
       lapply(names(x$models), function(m) {

@@ -17,11 +17,13 @@ void <- capture.output({
 })
 
 void <- capture.output({
-  m_gamlss2 <- gamlss::gamlss(y ~ x1 + x2 + x3,
+  m_gamlss2 <- gamlss::gamlss(
+    y ~ x1 + x2 + x3,
     sigma.formula = ~ x4 + x5 + x6 + x4:x5,
     nu.formula = ~ x2 + x5,
     tau.formula = ~ x1 + x4 + x5 + x6 + x1:x4,
-    family = "ZIBNB", data = usair
+    family = "ZIBNB",
+    data = usair
   )
 })
 
@@ -180,8 +182,15 @@ test_that("find_parameters", {
   expect_identical(
     find_parameters(m)$conditional,
     c(
-      "(Intercept)", "date", "scale(cont1)", "scale(cont2)", "I(scale(cont2)^2)",
-      "cat1B", "cat1C", "I(scale(cont2)^2):cat1B", "I(scale(cont2)^2):cat1C"
+      "(Intercept)",
+      "date",
+      "scale(cont1)",
+      "scale(cont2)",
+      "I(scale(cont2)^2)",
+      "cat1B",
+      "cat1C",
+      "I(scale(cont2)^2):cat1B",
+      "I(scale(cont2)^2):cat1C"
     )
   )
 })

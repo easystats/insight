@@ -33,7 +33,8 @@ n_parameters <- function(x, ...) {
 #' @rdname n_parameters
 #' @export
 n_parameters.default <- function(x, remove_nonestimable = FALSE, ...) {
-  .n_parameters_effects(x,
+  .n_parameters_effects(
+    x,
     effects = "fixed",
     remove_nonestimable = remove_nonestimable,
     ...
@@ -55,13 +56,11 @@ n_parameters.default <- function(x, remove_nonestimable = FALSE, ...) {
 
 #' @rdname n_parameters
 #' @export
-n_parameters.merMod <- function(x,
-                                effects = "fixed",
-                                remove_nonestimable = FALSE,
-                                ...) {
+n_parameters.merMod <- function(x, effects = "fixed", remove_nonestimable = FALSE, ...) {
   effects <- validate_argument(effects, c("fixed", "random"))
 
-  .n_parameters_effects(x,
+  .n_parameters_effects(
+    x,
     effects = effects,
     remove_nonestimable = remove_nonestimable,
     ...
@@ -105,13 +104,18 @@ n_parameters.svy2lme <- n_parameters.merMod
 # Models with random effects and other components ----------------------------
 
 #' @export
-n_parameters.MixMod <- function(x,
-                                effects = "fixed",
-                                component = "all",
-                                remove_nonestimable = FALSE,
-                                ...) {
+n_parameters.MixMod <- function(
+  x,
+  effects = "fixed",
+  component = "all",
+  remove_nonestimable = FALSE,
+  ...
+) {
   effects <- validate_argument(effects, c("fixed", "random"))
-  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated")
+  )
 
   if (effects == "random" || isFALSE(remove_nonestimable)) {
     length(unlist(
@@ -139,11 +143,16 @@ n_parameters.glmmTMB <- n_parameters.MixMod
 # Models with (zero-inflation) components ----------------------------
 
 #' @export
-n_parameters.zeroinfl <- function(x,
-                                  component = "all",
-                                  remove_nonestimable = FALSE,
-                                  ...) {
-  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
+n_parameters.zeroinfl <- function(
+  x,
+  component = "all",
+  remove_nonestimable = FALSE,
+  ...
+) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated")
+  )
   .n_parameters_component(x, component, remove_nonestimable, ...)
 }
 
@@ -157,10 +166,7 @@ n_parameters.zerotrunc <- n_parameters.default
 # GAMs ----------------------------
 
 #' @export
-n_parameters.gam <- function(x,
-                             component = "all",
-                             remove_nonestimable = FALSE,
-                             ...) {
+n_parameters.gam <- function(x, component = "all", remove_nonestimable = FALSE, ...) {
   component <- validate_argument(component, c("all", "conditional", "smooth_terms"))
   .n_parameters_component(x, component, remove_nonestimable, ...)
 }
@@ -175,10 +181,7 @@ n_parameters.vgam <- n_parameters.gam
 # Bayesian Models ----------------------------
 
 #' @export
-n_parameters.brmsfit <- function(x,
-                                 effects = "full",
-                                 component = "all",
-                                 ...) {
+n_parameters.brmsfit <- function(x, effects = "full", component = "all", ...) {
   effects <- validate_argument(
     effects,
     c("all", "fixed", "random", "full", "random_variance", "grouplevel")
@@ -200,10 +203,7 @@ n_parameters.brmsfit <- function(x,
 
 
 #' @export
-n_parameters.stanreg <- function(x,
-                                 effects = "full",
-                                 component = "all",
-                                 ...) {
+n_parameters.stanreg <- function(x, effects = "full", component = "all", ...) {
   effects <- validate_argument(
     effects,
     c("all", "fixed", "random", "full", "random_variance", "grouplevel")
@@ -229,7 +229,6 @@ n_parameters.stanmvreg <- n_parameters.stanreg
 
 # Other models -------------------------------------
 
-
 #' @export
 n_parameters.gls <- function(x, ...) {
   x$dims[["p"]]
@@ -239,7 +238,8 @@ n_parameters.gls <- function(x, ...) {
 #' @export
 n_parameters.logitr <- function(x, effects = "all", ...) {
   effects <- validate_argument(effects, c("all", "fixed", "random"))
-  switch(effects,
+  switch(
+    effects,
     fixed = x$n$parsFixed,
     random = x$n$parsRandom,
     x$n$parsFixed + x$n$parsRandom
@@ -250,7 +250,6 @@ n_parameters.logitr <- function(x, effects = "all", ...) {
 #' @export
 n_parameters.lavaan <- function(x, ...) {
   # TODO
-
   # check_if_installed("lavaan")
   # lavaan::fitmeasures(x)[["npar"]]
 }

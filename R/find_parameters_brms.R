@@ -1,11 +1,13 @@
 #' @rdname find_parameters.BGGM
 #' @export
-find_parameters.brmsfit <- function(x,
-                                    effects = "all",
-                                    component = "all",
-                                    flatten = FALSE,
-                                    parameters = NULL,
-                                    ...) {
+find_parameters.brmsfit <- function(
+  x,
+  effects = "all",
+  component = "all",
+  flatten = FALSE,
+  parameters = NULL,
+  ...
+) {
   effects <- validate_argument(
     effects,
     c("all", "fixed", "random", "random_variance", "grouplevel", "full")
@@ -13,8 +15,17 @@ find_parameters.brmsfit <- function(x,
   component <- validate_argument(
     component,
     c(
-      "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
-      "correlation", "smooth_terms", "location", "auxiliary", "distributional"
+      "all",
+      "conditional",
+      "zi",
+      "zero_inflated",
+      "dispersion",
+      "instruments",
+      "correlation",
+      "smooth_terms",
+      "location",
+      "auxiliary",
+      "distributional"
     )
   )
 
@@ -64,7 +75,6 @@ find_parameters.brmsfit <- function(x,
 
 # utilities ------------------------------------------------------------
 
-
 .brms_elements <- function(effects, component, dpars) {
   # elements to return
   elements <- .get_elements(effects = effects, component = component)
@@ -83,7 +93,8 @@ find_parameters.brmsfit <- function(x,
   }
 
   # remove random effects or keep them only
-  switch(effects,
+  switch(
+    effects,
     fixed = elements[!endsWith(elements, "random")],
     grouplevel = ,
     random_variance = ,
@@ -106,7 +117,10 @@ find_parameters.brmsfit <- function(x,
     mv_pattern_random_dpars <- "\\["
   } else {
     mv_pattern_fixed <- sprintf("(\\Q%s\\E_)", mv_response)
-    mv_pattern_random_dpars <- mv_pattern_random <- sprintf("(_\\Q%s\\E)(_|\\[)", mv_response)
+    mv_pattern_random_dpars <- mv_pattern_random <- sprintf(
+      "(_\\Q%s\\E)(_|\\[)",
+      mv_response
+    )
     mv_pattern_dpars <- sprintf("(\\Q%s\\E_)", mv_response)
     mv_pattern_sigma <- sprintf("\\Q%s\\E", mv_response)
   }
@@ -148,7 +162,8 @@ find_parameters.brmsfit <- function(x,
   cond_random <- c(rand, rand_sd, rand_cor, car_struc)
 
   # check whether group level effects should be returned or not.
-  cond_random <- switch(effects,
+  cond_random <- switch(
+    effects,
     all = ,
     fixed = ,
     random_variance = cond_random[!startsWith(cond_random, "r_")],
@@ -168,10 +183,32 @@ find_parameters.brmsfit <- function(x,
       dpars_fixed[[dp]] <- fe[fe == "sigma"]
       pattern <- paste0("^sigma_", mv_pattern_sigma)
       dpars_fixed[[dp]] <- c(dpars_fixed[[dp]], grep(pattern, fe, value = TRUE))
-      pattern <- paste0("^(b_", dp, "_|bs_", dp, "_|bsp_", dp, "_|bcs_", dp, ")", mv_pattern_sigma)
+      pattern <- paste0(
+        "^(b_",
+        dp,
+        "_|bs_",
+        dp,
+        "_|bsp_",
+        dp,
+        "_|bcs_",
+        dp,
+        ")",
+        mv_pattern_sigma
+      )
       dpars_fixed[[dp]] <- c(dpars_fixed[[dp]], grep(pattern, fe, value = TRUE))
     } else {
-      pattern <- paste0("^(b_", dp, "_|bs_", dp, "_|bsp_", dp, "_|bcs_", dp, ")", mv_pattern_fixed)
+      pattern <- paste0(
+        "^(b_",
+        dp,
+        "_|bs_",
+        dp,
+        "_|bsp_",
+        dp,
+        "_|bcs_",
+        dp,
+        ")",
+        mv_pattern_fixed
+      )
       dpars_fixed[[dp]] <- grep(pattern, fe, value = TRUE)
     }
     # random
@@ -184,7 +221,8 @@ find_parameters.brmsfit <- function(x,
     dpars_random[[dp]] <- compact_character(random_dp)
 
     # check whether group level effects should be returned or not.
-    dpars_random[[dp]] <- switch(effects,
+    dpars_random[[dp]] <- switch(
+      effects,
       all = ,
       fixed = ,
       random_variance = dpars_random[[dp]][!startsWith(dpars_random[[dp]], "r_")],

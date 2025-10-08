@@ -128,7 +128,11 @@ test_that("get_data", {
 
 test_that("get_intercept", {
   expect_equal(get_intercept(fit3), as.vector(stats::coef(fit3)[1]), ignore_attr = TRUE)
-  expect_equal(get_intercept(fit4), as.vector(stats::coef(fit4)[c(1, 5)]), ignore_attr = TRUE)
+  expect_equal(
+    get_intercept(fit4),
+    as.vector(stats::coef(fit4)[c(1, 5)]),
+    ignore_attr = TRUE
+  )
   expect_true(is.na(get_intercept(fit5)))
 })
 

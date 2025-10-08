@@ -9,7 +9,10 @@
   L <- as.data.frame(diag(rep(1, n_parameters(x, effects = "fixed"))))
   krvcov <- .vcov_kenward_ajusted(x)
 
-  dof <- stats::setNames(sapply(L, .kenward_adjusted_ddf, model = x, adjusted_vcov = krvcov), parameters)
+  dof <- stats::setNames(
+    sapply(L, .kenward_adjusted_ddf, model = x, adjusted_vcov = krvcov),
+    parameters
+  )
 
   attr(dof, "vcov") <- krvcov
   attr(dof, "se") <- abs(as.vector(sqrt(diag(as.matrix(krvcov)))))
@@ -32,7 +35,10 @@
     linear_coef <- matrix(linear_coef, ncol = 1)
   }
   vlb <- sum(linear_coef * (unadjusted_vcov %*% linear_coef))
-  theta <- Matrix::Matrix(as.numeric(outer(linear_coef, linear_coef) / vlb), nrow = length(linear_coef))
+  theta <- Matrix::Matrix(
+    as.numeric(outer(linear_coef, linear_coef) / vlb),
+    nrow = length(linear_coef)
+  )
   P <- attr(adjusted_vcov, "P")
   W <- attr(adjusted_vcov, "W")
 
@@ -204,7 +210,8 @@
     for (jj in ii:n.ggamma) {
       www <- .indexSymmat2vec(ii, jj, n.ggamma)
       IE2[ii, jj] <- IE2[jj, ii] <- Ktrace[ii, jj] -
-        2 * sum(Phi * QQ[[www]]) + sum(Phi.P.ii * (PP[[jj]] %*% Phi))
+        2 * sum(Phi * QQ[[www]]) +
+        sum(Phi.P.ii * (PP[[jj]] %*% Phi))
     }
   }
 

@@ -77,7 +77,9 @@ find_random_slopes <- function(x) {
     return(NULL)
   }
 
-  if (!is.list(fr)) fr <- list(fr)
+  if (!is.list(fr)) {
+    fr <- list(fr)
+  }
 
   random_slope <- lapply(fr, function(f) {
     if (grepl("(.*)\\|(.*)\\|(.*)", safe_deparse(f))) {

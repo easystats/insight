@@ -14,7 +14,6 @@
   # we may store model weights here later
   mw <- NULL
 
-
   # make sure it's a data frame -----------------------------------------------
 
   if (!is.data.frame(mf)) {
@@ -30,7 +29,6 @@
     }
   }
 
-
   # offset variables ----------------------------------------------------------
 
   # do we have an offset, not specified in the formula?
@@ -38,30 +36,30 @@
   # This is a bit slower - restore if tests fail...
   # offcol <- grep("^(\\(offset\\)|offset\\((.*)\\))", colnames(mf))
 
-  offcol <- grepl("(offset)", colnames(mf), fixed = TRUE) | grepl("offset(", colnames(mf), fixed = TRUE)
+  offcol <- grepl("(offset)", colnames(mf), fixed = TRUE) |
+    grepl("offset(", colnames(mf), fixed = TRUE)
   model_call <- get_call(x)
   if (length(offcol) && object_has_names(model_call, "offset")) {
     colnames(mf)[offcol] <- clean_names(safe_deparse(model_call$offset))
   }
 
-
   # backtransform variables, such as log, sqrt etc ----------------------------
 
   mf <- .backtransform(mf, x)
-
 
   # clean 1-dimensional matrices ---------------------------------------------
 
   # in particular, transformation like "scale()" may produce a 1D-matrix,
   # where we want a vector instead
   mf[] <- lapply(mf, function(.x) {
-    if (is.matrix(.x) && dim(.x)[2] == 1 && !inherits(.x, c("ns", "bs", "poly", "mSpline"))) {
+    if (
+      is.matrix(.x) && dim(.x)[2] == 1 && !inherits(.x, c("ns", "bs", "poly", "mSpline"))
+    ) {
       as.vector(.x)
     } else {
       .x
     }
   })
-
 
   # detect matrix columns ----------------------------------------------------
 
@@ -75,17 +73,25 @@
   rn_not_combined <- find_response(x, combine = FALSE)
 
   # make sure rn is not NULL, but empty string
-  if (is.null(rn)) rn <- ""
-  if (is.null(rn_not_combined)) rn_not_combined <- ""
+  if (is.null(rn)) {
+    rn <- ""
+  }
+  if (is.null(rn_not_combined)) {
+    rn_not_combined <- ""
+  }
 
   trials.data <- NULL
-
 
   # restore original variables used in matrix-response columns ----------------
 
   if (mc[1] && rn == colnames(mf)[1]) {
     mc[1] <- FALSE
-    if (inherits(x, c("coxph", "flexsurvreg", "coxme", "survreg", "survfit", "crq", "psm", "coxr"))) {
+    if (
+      inherits(
+        x,
+        c("coxph", "flexsurvreg", "coxme", "survreg", "survfit", "crq", "psm", "coxr")
+      )
+    ) {
       n_of_responses <- ncol(mf[[1]])
       mf <- cbind(as.data.frame(as.matrix(mf[[1]])), mf)
       colnames(mf)[1:n_of_responses] <- rn_not_combined[1:n_of_responses]
@@ -110,7 +116,6 @@
       )
     }
   }
-
 
   # process matrix-variables (restore original data from matrix variables) ----
 
@@ -185,7 +190,9 @@
         }
       }
 
-      if (inherits(x, c("coxph", "coxme", "coxr")) || any(startsWith(spline.term, "Surv("))) {
+      if (
+        inherits(x, c("coxph", "coxme", "coxr")) || any(startsWith(spline.term, "Surv("))
+      ) {
         # no further processing for survival models
         mf <- md
       } else {
@@ -218,15 +225,29 @@
           mf <- stats::na.omit(mf)
 
           # then set back attributes
-          mf <- as.data.frame(Map(function(.d, .l) {
-            attr(.d, "labels") <- .l
-            .d
-          }, mf, value_labels), stringsAsFactors = FALSE)
+          mf <- as.data.frame(
+            Map(
+              function(.d, .l) {
+                attr(.d, "labels") <- .l
+                .d
+              },
+              mf,
+              value_labels
+            ),
+            stringsAsFactors = FALSE
+          )
 
-          mf <- as.data.frame(Map(function(.d, .l) {
-            attr(.d, "label") <- .l
-            .d
-          }, mf, variable_labels), stringsAsFactors = FALSE)
+          mf <- as.data.frame(
+            Map(
+              function(.d, .l) {
+                attr(.d, "label") <- .l
+                .d
+              },
+              mf,
+              variable_labels
+            ),
+            stringsAsFactors = FALSE
+          )
         }
       }
 
@@ -246,7 +267,6 @@
     }
   }
 
-
   # monotonic predictors ------------------------------------------------------
 
   # check if we have monotonic variables, included in formula
@@ -258,25 +278,34 @@
     }
   }
 
-
   # strata-variables in coxph() -----------------------------------------------
 
   strata_columns <- grepl("strata(", colnames(mf), fixed = TRUE)
   if (any(strata_columns)) {
     for (sc in colnames(mf)[strata_columns]) {
       strata_variable <- gsub("strata\\((.*)\\)", "\\1", sc)
-      levels(mf[[sc]]) <- gsub(paste0(strata_variable, "="), "", levels(mf[[sc]]), fixed = TRUE)
+      levels(mf[[sc]]) <- gsub(
+        paste0(strata_variable, "="),
+        "",
+        levels(mf[[sc]]),
+        fixed = TRUE
+      )
     }
   }
-
 
   # restore original data for factors and logicals -----------------------------
 
   # are there any factor variables that have been coerced "on-the-fly",
   # using "factor()" or "as.factor()"? if so, get names and convert back
   # to numeric later
-  factors <- colnames(mf)[grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", colnames(mf))]
-  logicals <- colnames(mf)[grepl("^(as\\.logical|as_logical|logical)\\((.*)\\)", colnames(mf))]
+  factors <- colnames(mf)[grepl(
+    "^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)",
+    colnames(mf)
+  )]
+  logicals <- colnames(mf)[grepl(
+    "^(as\\.logical|as_logical|logical)\\((.*)\\)",
+    colnames(mf)
+  )]
 
   ## TODO check! some lines above (see "mos_eisly"). monotonic terms are removed from the model frame
 
@@ -295,7 +324,6 @@
   # clean variable names
   cvn <- .remove_pattern_from_names(colnames(mf), ignore_lag = TRUE)
 
-
   # check for interaction pattern ----------------------------------------
 
   ints <- grepl("interaction(", colnames(mf), fixed = TRUE)
@@ -307,18 +335,23 @@
       mf[ints] <- NULL
       cvn <- cvn[!ints]
     } else {
-      interactions <- stats::setNames(cvn[ints], trim_ws(gsub("interaction\\((.*),(.*)\\)", "\\2", colnames(mf)[ints])))
+      interactions <- stats::setNames(
+        cvn[ints],
+        trim_ws(gsub("interaction\\((.*),(.*)\\)", "\\2", colnames(mf)[ints]))
+      )
       factors <- unique(c(factors, interactions, names(interactions)))
     }
   }
-
 
   # as-is variables I() -------------------------------------------------------
 
   # keep "as is" variable for response variables in data frame
   if (colnames(mf)[1] == rn[1] && grepl("I(", rn[1], fixed = TRUE, ignore.case = FALSE)) {
     md <- .safe({
-      tmp <- .recover_data_from_environment(x)[, unique(c(rn_not_combined, cvn)), drop = FALSE]
+      tmp <- .recover_data_from_environment(x)[,
+        unique(c(rn_not_combined, cvn)),
+        drop = FALSE
+      ]
       tmp[, rn_not_combined, drop = FALSE]
     })
 
@@ -328,7 +361,6 @@
       cvn[1] <- rn[1]
     }
   }
-
 
   # fix duplicated colnames ---------------------------------------------------
 
@@ -342,7 +374,6 @@
   if (length(cvn) == ncol(mf)) {
     colnames(mf) <- cvn
   }
-
 
   # add weighting variable ----------------------------------------------------
 
@@ -360,12 +391,13 @@
     )
   }
 
-
   # add back possible trials-data ---------------------------------------------
 
   if (!is.null(trials.data)) {
     new.cols <- setdiff(colnames(trials.data), colnames(mf))
-    if (!.is_empty_string(new.cols)) mf <- cbind(mf, trials.data[, new.cols, drop = FALSE])
+    if (!.is_empty_string(new.cols)) {
+      mf <- cbind(mf, trials.data[, new.cols, drop = FALSE])
+    }
   }
 
   # remove "trial response"
@@ -389,14 +421,16 @@
 
 # add remainng variables with special pattern -------------------------------
 
-.add_remaining_missing_variables <- function(model,
-                                             mf,
-                                             effects,
-                                             component,
-                                             factors = NULL,
-                                             logicals = NULL,
-                                             interactions = NULL,
-                                             verbose = TRUE) {
+.add_remaining_missing_variables <- function(
+  model,
+  mf,
+  effects,
+  component,
+  factors = NULL,
+  logicals = NULL,
+  interactions = NULL,
+  verbose = TRUE
+) {
   # check if data argument was used
   model_call <- get_call(model)
   if (is.null(model_call)) {
@@ -466,7 +500,11 @@
 
   # add attributes for those that were factors
   if (length(factors)) {
-    factors <- gsub("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", "\\2", factors)
+    factors <- gsub(
+      "^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)",
+      "\\2",
+      factors
+    )
     for (i in factors) {
       if (.is_numeric_character(mf[[i]])) {
         mf[[i]] <- .to_numeric(mf[[i]])
@@ -500,14 +538,23 @@
 # This helper functions ensures that data from different model components
 # are included in the returned data frame
 #
-.return_combined_data <- function(x, mf, effects, component, model.terms, is_mv = FALSE, verbose = TRUE) {
+.return_combined_data <- function(
+  x,
+  mf,
+  effects,
+  component,
+  model.terms,
+  is_mv = FALSE,
+  verbose = TRUE
+) {
   response <- unlist(model.terms$response, use.names = FALSE)
 
   # save factors attribute
   factors <- attr(mf, "factors", exact = TRUE)
 
   if (is_mv) {
-    fixed.component.data <- switch(component,
+    fixed.component.data <- switch(
+      component,
       all = c(
         sapply(model.terms[-1], function(i) i$conditional),
         sapply(model.terms[-1], function(i) i$zero_inflated),
@@ -523,7 +570,8 @@
       dispersion = sapply(model.terms[-1], function(i) i$dispersion)
     )
 
-    random.component.data <- switch(component,
+    random.component.data <- switch(
+      component,
       all = c(
         sapply(model.terms[-1], function(i) i$random),
         sapply(model.terms[-1], function(i) i$zero_inflated_random),
@@ -541,7 +589,8 @@
     random.component.data <- unlist(random.component.data, use.names = FALSE)
   } else {
     all_elements <- intersect(names(model.terms), .get_elements("fixed", "all"))
-    fixed.component.data <- switch(component,
+    fixed.component.data <- switch(
+      component,
       all = unlist(model.terms[all_elements], use.names = FALSE),
       conditional = model.terms$conditional,
       zi = ,
@@ -549,14 +598,18 @@
       dispersion = model.terms$dispersion
     )
 
-    random.component.data <- switch(component,
-      all = c(model.terms$random, model.terms$zero_inflated_random, model.terms$zi_random),
+    random.component.data <- switch(
+      component,
+      all = c(
+        model.terms$random,
+        model.terms$zero_inflated_random,
+        model.terms$zi_random
+      ),
       conditional = model.terms$random,
       zi = ,
       zero_inflated = c(model.terms$zero_inflated_random, model.terms$zi_random)
     )
   }
-
 
   # this is to remove the "1" from intercept-ony-models
 
@@ -574,7 +627,8 @@
   #   model_weights <- c(model_weights, "(weights)")
   # }
 
-  vars <- switch(effects,
+  vars <- switch(
+    effects,
     all = unique(c(response, fixed.component.data, random.component.data, model_weights)),
     fixed = unique(c(response, fixed.component.data, model_weights)),
     random = unique(random.component.data)
@@ -590,7 +644,11 @@
   if (is_empty_object(dat)) {
     if (isTRUE(verbose)) {
       format_warning(
-        sprintf("Data frame is empty, probably component `%s` does not exist in the %s-part of the model?", component, effects)
+        sprintf(
+          "Data frame is empty, probably component `%s` does not exist in the %s-part of the model?",
+          component,
+          effects
+        )
       )
     }
     return(NULL)
@@ -598,7 +656,10 @@
 
   if (length(still_missing) && isTRUE(verbose)) {
     format_warning(
-      sprintf("Following potential variables could not be found in the data: %s", toString(still_missing))
+      sprintf(
+        "Following potential variables could not be found in the data: %s",
+        toString(still_missing)
+      )
     )
   }
 
@@ -644,7 +705,13 @@
 # combine data from count and zi-component -----------------------------------
 
 .return_zeroinf_data <- function(x, component, verbose = TRUE) {
-  model.terms <- find_variables(x, effects = "all", component = "all", flatten = FALSE, verbose = FALSE)
+  model.terms <- find_variables(
+    x,
+    effects = "all",
+    component = "all",
+    flatten = FALSE,
+    verbose = FALSE
+  )
   model.terms$offset <- find_offset(x)
 
   mf <- .safe(stats::model.frame(x))
@@ -653,7 +720,8 @@
   mf <- .add_zeroinf_data(x, mf, model.terms$zero_inflated)
   mf <- .add_zeroinf_data(x, mf, model.terms$zi)
 
-  fixed.data <- switch(component,
+  fixed.data <- switch(
+    component,
     all = c(
       model.terms$conditional,
       model.terms$zero_inflated,
@@ -680,7 +748,8 @@
   }
   cn <- clean_names(colnames(dat))
 
-  ft <- switch(effects,
+  ft <- switch(
+    effects,
     fixed = find_variables(x, effects = "fixed", flatten = TRUE),
     all = find_variables(x, flatten = TRUE),
     random = find_random(x, split_nested = TRUE, flatten = TRUE)
@@ -699,7 +768,9 @@
 .get_startvector_from_env <- function(x) {
   .safe({
     sv <- eval(parse(text = safe_deparse(x@call))[[1]]$start)
-    if (is.list(sv)) sv <- sv[["nlpars"]]
+    if (is.list(sv)) {
+      sv <- sv[["nlpars"]]
+    }
     names(sv)
   })
 }
@@ -711,14 +782,31 @@
   tryCatch(
     {
       patterns <- c(
-        "scale\\(log", "exp\\(scale", "log\\(log", "log", "log1p",
-        "log10", "log2", "sqrt", "exp", "expm1", "scale", "cos", "sin",
-        "tan", "acos", "asin", "atan"
+        "scale\\(log",
+        "exp\\(scale",
+        "log\\(log",
+        "log",
+        "log1p",
+        "log10",
+        "log2",
+        "sqrt",
+        "exp",
+        "expm1",
+        "scale",
+        "cos",
+        "sin",
+        "tan",
+        "acos",
+        "asin",
+        "atan"
       )
 
       # to save time, create a full regex and see if we have any
       # transformation at all, instead of always checking for each pattern
-      full_pattern <- sprintf("%s\\(([^,)]*).*", paste0("(", paste0(patterns, collapse = "|"), ")"))
+      full_pattern <- sprintf(
+        "%s\\(([^,)]*).*",
+        paste0("(", paste0(patterns, collapse = "|"), ")")
+      )
 
       # only backtransform if we have any matches
       if (any(grepl(full_pattern, colnames(mf)))) {
@@ -739,7 +827,8 @@
   cn <- .get_transformed_names(colnames(mf), type)
   if (!.is_empty_string(cn)) {
     for (i in cn) {
-      if (type == "scale\\(log") { # nolint
+      if (type == "scale\\(log") {
+        # nolint
         mf[[i]] <- exp(.unscale(mf[[i]]))
       } else if (type == "exp\\(scale") {
         mf[[i]] <- .unscale(log(mf[[i]]))
@@ -751,10 +840,14 @@
         # no plus-minus?
         if (grepl("log\\((.*)\\+(.*)\\)", i)) {
           # 1. try: log(x + number)
-          plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\2", i))))
+          plus_minus <- .safe(eval(parse(
+            text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\2", i)
+          )))
           # 2. try: log(number + x)
           if (is.null(plus_minus)) {
-            plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\1", i))))
+            plus_minus <- .safe(eval(parse(
+              text = gsub("log\\(([^,\\+)]+)(.*)\\)", "\\1", i)
+            )))
           }
         }
         if (is.null(plus_minus)) {
@@ -790,8 +883,12 @@
   m <- attr(x, "scaled:center")
   s <- attr(x, "scaled:scale")
 
-  if (is.null(m)) m <- 0
-  if (is.null(s)) s <- 1
+  if (is.null(m)) {
+    m <- 0
+  }
+  if (is.null(s)) {
+    s <- 1
+  }
 
   s * x + m
 }
@@ -852,8 +949,10 @@
         }
 
         # exeception: list for kruskal-wallis
-        if (grepl("Kruskal-Wallis", x$method, fixed = TRUE) &&
-          (length(data_name) == 1 && startsWith(data_name, "list("))) {
+        if (
+          grepl("Kruskal-Wallis", x$method, fixed = TRUE) &&
+            (length(data_name) == 1 && startsWith(data_name, "list("))
+        ) {
           l <- eval(str2lang(x$data.name))
           names(l) <- paste0("x", seq_along(l))
           return(l)
@@ -866,12 +965,20 @@
 
         # McNemar ============================================================
 
-        if (!grepl(" (and|by) ", x$data.name) && !grepl(x$method, "Paired t-test", fixed = TRUE) &&
-          !startsWith(x$method, "Wilcoxon") &&
-          (startsWith(x$method, "McNemar") || (length(columns) == 1 && is.matrix(columns[[1]])))) {
+        if (
+          !grepl(" (and|by) ", x$data.name) &&
+            !grepl(x$method, "Paired t-test", fixed = TRUE) &&
+            !startsWith(x$method, "Wilcoxon") &&
+            (startsWith(x$method, "McNemar") ||
+              (length(columns) == 1 && is.matrix(columns[[1]])))
+        ) {
           # McNemar: preserve table data for McNemar ----
           return(as.table(columns[[1]]))
-        } else if (startsWith(x$method, "Kruskal-Wallis") && length(columns) == 1 && is.list(columns[[1]])) {
+        } else if (
+          startsWith(x$method, "Kruskal-Wallis") &&
+            length(columns) == 1 &&
+            is.list(columns[[1]])
+        ) {
           # Kruskal-Wallis: check if data is a list for kruskal-wallis ----
           l <- columns[[1]]
           names(l) <- paste0("x", seq_along(l))
@@ -929,7 +1036,9 @@
         }
 
         # fix column names
-        if (all(grepl("(.*)\\$(.*)", data_name)) && length(data_name) == length(colnames(d))) {
+        if (
+          all(grepl("(.*)\\$(.*)", data_name)) && length(data_name) == length(colnames(d))
+        ) {
           colnames(d) <- gsub("(.*)\\$(.*)", "\\2", data_name)
         } else if (ncol(d) > 2L) {
           colnames(d) <- paste0("x", seq_len(ncol(d)))
@@ -951,7 +1060,10 @@
   if (is.null(out)) {
     for (parent_level in 1:5) {
       out <- .safe({
-        data_name <- trim_ws(unlist(strsplit(x$data.name, "(and|,|by)"), use.names = FALSE))
+        data_name <- trim_ws(unlist(
+          strsplit(x$data.name, "(and|,|by)"),
+          use.names = FALSE
+        ))
         as.table(get(data_name, envir = parent.frame(n = parent_level)))
       })
       if (!is.null(out)) break

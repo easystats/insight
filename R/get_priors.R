@@ -28,7 +28,6 @@ get_priors <- function(x, ...) {
 # RSTANARM ----------------------------------------------------------------
 # =========================================================================
 
-
 #' @export
 get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   check_if_installed("rstanarm")
@@ -76,7 +75,6 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
     prior_info$adjusted_scale[flat] <- NA
   }
 
-
   params <- find_parameters(x, parameters = "^(?!(R2|log-fit_ratio))")$conditional
 
   # this is a particular fix for the "R2" prior, which conveys prior
@@ -93,18 +91,24 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   } else {
     prior_info$parameter <- params
   }
-  prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale"), colnames(prior_info))]
+  prior_info <- prior_info[, intersect(
+    c("parameter", "dist", "location", "scale", "adjusted_scale"),
+    colnames(prior_info)
+  )]
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info), fixed = TRUE)
   colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info), fixed = TRUE)
 
-  priors <- as.data.frame(lapply(prior_info, function(x) {
-    if (.is_numeric_character(x)) {
-      as.numeric(as.character(x))
-    } else {
-      as.character(x)
-    }
-  }), stringsAsFactors = FALSE)
+  priors <- as.data.frame(
+    lapply(prior_info, function(x) {
+      if (.is_numeric_character(x)) {
+        as.numeric(as.character(x))
+      } else {
+        as.character(x)
+      }
+    }),
+    stringsAsFactors = FALSE
+  )
 
   string <- strsplit(names(priors), "_", fixed = TRUE)
   string <- lapply(string, format_capitalize)
@@ -120,43 +124,58 @@ get_priors.stanmvreg <- function(x, ...) {
 
   ps <- rstanarm::prior_summary(x)
 
-  l <- compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) { # nolint
+  l <- compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) {
+    # nolint
     lapply(.x, function(.i) {
       if (!is.null(.i)) do.call(cbind, .i)
     })
   }))
 
-  prior_info <- do.call(rbind, lapply(l, function(.x) {
-    if (length(.x) > 1L) {
-      out <- lapply(names(.x), function(.i) {
-        if (!("adjusted_scale" %in% colnames(.x[[.i]]))) .x[[.i]] <- cbind(.x[[.i]], adjusted_scale = NA)
-        data.frame(.x[[.i]], response = .i, stringsAsFactors = FALSE)
-      })
-      do.call(rbind, out)
-    } else {
-      cn <- colnames(.x[[1]])
-      prior_info <- as.data.frame(.x)
-      colnames(prior_info) <- cn
-    }
-  }))
+  prior_info <- do.call(
+    rbind,
+    lapply(l, function(.x) {
+      if (length(.x) > 1L) {
+        out <- lapply(names(.x), function(.i) {
+          if (!("adjusted_scale" %in% colnames(.x[[.i]]))) {
+            .x[[.i]] <- cbind(.x[[.i]], adjusted_scale = NA)
+          }
+          data.frame(.x[[.i]], response = .i, stringsAsFactors = FALSE)
+        })
+        do.call(rbind, out)
+      } else {
+        cn <- colnames(.x[[1]])
+        prior_info <- as.data.frame(.x)
+        colnames(prior_info) <- cn
+      }
+    })
+  )
 
   # find parameter names
   params <- unlist(lapply(find_parameters(x), function(.i) .i$conditional))
-  params <- params[c(which(endsWith(params, "(Intercept)")), which(!endsWith(params, "(Intercept)")))]
+  params <- params[c(
+    which(endsWith(params, "(Intercept)")),
+    which(!endsWith(params, "(Intercept)"))
+  )]
   prior_info$parameter <- params
 
-  prior_info <- prior_info[, intersect(c("parameter", "dist", "location", "scale", "adjusted_scale", "response"), colnames(prior_info))]
+  prior_info <- prior_info[, intersect(
+    c("parameter", "dist", "location", "scale", "adjusted_scale", "response"),
+    colnames(prior_info)
+  )]
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info), fixed = TRUE)
   colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info), fixed = TRUE)
 
-  priors <- as.data.frame(lapply(prior_info, function(x) {
-    if (.is_numeric_character(x)) {
-      as.numeric(as.character(x))
-    } else {
-      as.character(x)
-    }
-  }), stringsAsFactors = FALSE)
+  priors <- as.data.frame(
+    lapply(prior_info, function(x) {
+      if (.is_numeric_character(x)) {
+        as.numeric(as.character(x))
+      } else {
+        as.character(x)
+      }
+    }),
+    stringsAsFactors = FALSE
+  )
 
   string <- strsplit(names(priors), "_", fixed = TRUE)
   string <- lapply(string, format_capitalize)
@@ -180,11 +199,9 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
   # Format the prior string ------------------------------------
   priors$Distribution <- gsub(
-    "(.*)\\(.*", "\\1",
-    ifelse(info$prior == "(flat)",
-      "uniform",
-      info$prior
-    )
+    "(.*)\\(.*",
+    "\\1",
+    ifelse(info$prior == "(flat)", "uniform", info$prior)
   )
   priors$Distribution[priors$Distribution == "lkj_corr_cholesky"] <- "lkj"
 
@@ -195,13 +212,29 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
   # student_t(df, location, scale)
   is_student_t <- priors$Distribution == "student_t"
-  priors$Location[is_student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\3", info$prior[is_student_t])
-  priors$Scale[is_student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\4", info$prior[is_student_t])
-  priors$df[is_student_t] <- gsub("(.*)\\((.*)\\,(.*)\\,(.*)\\)", "\\2", info$prior[is_student_t])
+  priors$Location[is_student_t] <- gsub(
+    "(.*)\\((.*)\\,(.*)\\,(.*)\\)",
+    "\\3",
+    info$prior[is_student_t]
+  )
+  priors$Scale[is_student_t] <- gsub(
+    "(.*)\\((.*)\\,(.*)\\,(.*)\\)",
+    "\\4",
+    info$prior[is_student_t]
+  )
+  priors$df[is_student_t] <- gsub(
+    "(.*)\\((.*)\\,(.*)\\,(.*)\\)",
+    "\\2",
+    info$prior[is_student_t]
+  )
 
   # normal(location, scale)
   is_normal <- priors$Distribution == "normal"
-  priors$Location[is_normal] <- gsub("(.*)\\((.*)\\,(.*)\\)", "\\2", info$prior[is_normal])
+  priors$Location[is_normal] <- gsub(
+    "(.*)\\((.*)\\,(.*)\\)",
+    "\\2",
+    info$prior[is_normal]
+  )
   priors$Scale[is_normal] <- gsub("(.*)\\((.*)\\,(.*)\\)", "\\3", info$prior[is_normal])
 
   # lkj(eta)
@@ -232,7 +265,10 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
       # If still empty, make empty df
       if (nrow(prior_subset) == 0) {
-        prior_subset <- stats::setNames(data.frame(t(rep(NA, 5))), c("Parameter", "Distribution", "Location", "Scale", "df"))
+        prior_subset <- stats::setNames(
+          data.frame(t(rep(NA, 5))),
+          c("Parameter", "Distribution", "Location", "Scale", "df")
+        )
       }
     }
 
@@ -292,7 +328,6 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
     out
   }
 
-
   stopifnot(brms::is.brmsprior(x))
   if (is.null(x$source)) {
     x$source <- "(unknown)"
@@ -326,7 +361,8 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
   p <- rep("", nrow(pr))
 
   # class == Intercept -------------------------
-  p <- ifelse(pr$class == "Intercept",
+  p <- ifelse(
+    pr$class == "Intercept",
     paste0(
       "b",
       ifelse(pr$dpar != "", paste0("_", pr$dpar), ""), # nolint
@@ -349,7 +385,6 @@ get_priors.brmsfit <- function(x, verbose = TRUE, ...) {
 
   # class == L ------------------------------
   p <- ifelse(pr$class == "L", paste0("cor_", pr$group, "_"), p)
-
 
   # class == sigma ------------------------------
   # TODO: I only saw it alone, but possibly can have other parameters
@@ -388,7 +423,9 @@ get_priors.bcplm <- function(x, ...) {
   params <- setdiff(find_parameters(x, flatten = TRUE), c("phi", "p"))
 
   location <- eval(parse(text = safe_deparse(x@call))[[1]]$prior.beta.mean)
-  if (is.null(location)) location <- 0
+  if (is.null(location)) {
+    location <- 0
+  }
 
   prior_scale <- eval(parse(text = safe_deparse(x@call))[[1]]$prior.beta.var)
   if (is.null(prior_scale)) {
@@ -408,7 +445,6 @@ get_priors.bcplm <- function(x, ...) {
 # =========================================================================
 # meta -------------------------------------------------------------
 # =========================================================================
-
 
 #' @export
 get_priors.meta_random <- function(x, ...) {
@@ -475,13 +511,13 @@ get_priors.meta_fixed <- function(x, ...) {
 # BayesFactor -------------------------------------------------------------
 # =========================================================================
 
-
 #' @export
 get_priors.BFBayesFactor <- function(x, ...) {
   prior <- compact_list(utils::tail(x@numerator, 1)[[1]]@prior[[1]])
   bf_type <- .classify_BFBayesFactor(x)
 
-  prior_names <- switch(bf_type,
+  prior_names <- switch(
+    bf_type,
     correlation = "rho",
     ttest1 = ,
     ttest2 = "Difference",
@@ -525,7 +561,6 @@ get_priors.BFBayesFactor <- function(x, ...) {
     location <- 0
   }
 
-
   # Prepare output
   if (bf_type == "linear") {
     # find data types, to match priors
@@ -540,11 +575,18 @@ get_priors.BFBayesFactor <- function(x, ...) {
     out$Scale <- NA
 
     # find parameter names pattern to match data types
-    find_types <- do.call(rbind, strsplit(out$Parameter, "-", fixed = TRUE))[, 1, drop = TRUE]
+    find_types <- do.call(rbind, strsplit(out$Parameter, "-", fixed = TRUE))[,
+      1,
+      drop = TRUE
+    ]
     interactions <- grepl(":", find_types, fixed = TRUE)
     find_types[interactions] <- gsub("(.*):(.*)", "\\2", find_types[interactions])
     cont_types <- data_types == "continuous"
-    data_types[cont_types] <- paste0(data_types[cont_types], ".", names(data_types[cont_types]))
+    data_types[cont_types] <- paste0(
+      data_types[cont_types],
+      ".",
+      names(data_types[cont_types])
+    )
     for (i in seq_along(data_types)) {
       out$Scale[find_types == names(data_types)[i]] <- prior_scale[data_types[i]]
     }
@@ -570,19 +612,24 @@ get_priors.BFBayesFactor <- function(x, ...) {
 # blavaan -------------------------------------------------------------
 # =========================================================================
 
-
 #' @export
 get_priors.blavaan <- function(x, ...) {
   check_if_installed("lavaan")
 
-
   PE <- lavaan::parameterEstimates(
     x,
-    se = FALSE, ci = FALSE, remove.eq = FALSE, remove.system.eq = TRUE,
-    remove.ineq = FALSE, remove.def = FALSE, add.attributes = TRUE
+    se = FALSE,
+    ci = FALSE,
+    remove.eq = FALSE,
+    remove.system.eq = TRUE,
+    remove.ineq = FALSE,
+    remove.def = FALSE,
+    add.attributes = TRUE
   )
 
-  if (!("group" %in% names(PE))) PE$group <- 1
+  if (!("group" %in% names(PE))) {
+    PE$group <- 1
+  }
 
   newpt <- x@ParTable
   pte2 <- which(newpt$free > 0)
@@ -615,8 +662,8 @@ get_priors.mcmc.list <- function(x, ...) {
 
 # Utils -------------------------------------------------------------------
 
-
 .is_numeric_character <- function(x) {
-  (is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x[nzchar(x, keepNA = TRUE)]))))) ||
+  (is.character(x) &&
+    !anyNA(suppressWarnings(as.numeric(stats::na.omit(x[nzchar(x, keepNA = TRUE)]))))) ||
     (is.factor(x) && !anyNA(suppressWarnings(as.numeric(levels(x)))))
 }

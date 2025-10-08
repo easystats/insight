@@ -28,7 +28,10 @@ get_parameters.gamm <- function(x, component = "all", ...) {
 
 #' @export
 get_parameters.Gam <- function(x, component = "all", ...) {
-  component <- validate_argument(component, c("all", "conditional", "smooth_terms", "location"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "smooth_terms", "location")
+  )
   pars <- stats::coef(x)
 
   .return_smooth_parms(
@@ -41,7 +44,10 @@ get_parameters.Gam <- function(x, component = "all", ...) {
 
 #' @export
 get_parameters.gam <- function(x, component = "all", ...) {
-  component <- validate_argument(component, c("all", "conditional", "smooth_terms", "location"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "smooth_terms", "location")
+  )
   pars <- stats::coef(x)
 
   st <- summary(x)$s.table
@@ -61,7 +67,10 @@ get_parameters.scam <- get_parameters.gam
 
 #' @export
 get_parameters.vgam <- function(x, component = "all", ...) {
-  component <- validate_argument(component, c("all", "conditional", "smooth_terms", "location"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "smooth_terms", "location")
+  )
   pars <- stats::coef(x)
 
   .return_smooth_parms(
@@ -79,19 +88,24 @@ get_parameters.gamlss <- function(x, ...) {
   })
 
   names(pars) <- x$parameters
-  if ("mu" %in% names(pars)) names(pars)[1] <- "conditional"
+  if ("mu" %in% names(pars)) {
+    names(pars)[1] <- "conditional"
+  }
 
-  do.call(rbind, lapply(names(pars), function(i) {
-    params <- data.frame(
-      Parameter = names(pars[[i]]),
-      Estimate = pars[[i]],
-      Component = i,
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
+  do.call(
+    rbind,
+    lapply(names(pars), function(i) {
+      params <- data.frame(
+        Parameter = names(pars[[i]]),
+        Estimate = pars[[i]],
+        Component = i,
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
 
-    text_remove_backticks(params)
-  }))
+      text_remove_backticks(params)
+    })
+  )
 
   # data.frame(
   #   Parameter = c(names(pars$conditional), names(pars$sigma), names(pars$nu), names(pars$tau)),
@@ -132,7 +146,9 @@ get_parameters.cgam <- function(x, component = "all", ...) {
   estimates <- sc$coefficients
   smooth_terms <- sc$coefficients2
 
-  if (!is.null(smooth_terms)) smooth_terms <- stats::setNames(smooth_terms[, 1], rownames(smooth_terms))
+  if (!is.null(smooth_terms)) {
+    smooth_terms <- stats::setNames(smooth_terms[, 1], rownames(smooth_terms))
+  }
 
   .return_smooth_parms(
     conditional = stats::setNames(estimates[, 1], rownames(estimates)),
@@ -146,12 +162,15 @@ get_parameters.cgam <- function(x, component = "all", ...) {
 get_parameters.SemiParBIV <- function(x, ...) {
   s <- summary(x)
   s <- compact_list(s[startsWith(names(s), "tableP")])
-  params <- do.call(rbind, lapply(seq_along(s), function(i) {
-    out <- as.data.frame(s[[i]])
-    out$Parameter <- rownames(out)
-    out$Component <- paste0("Equation", i)
-    out
-  }))
+  params <- do.call(
+    rbind,
+    lapply(seq_along(s), function(i) {
+      out <- as.data.frame(s[[i]])
+      out$Parameter <- rownames(out)
+      out$Component <- paste0("Equation", i)
+      out
+    })
+  )
   colnames(params)[1] <- "Estimate"
   rownames(params) <- NULL
   text_remove_backticks(params[c("Parameter", "Estimate", "Component")])
@@ -159,7 +178,6 @@ get_parameters.SemiParBIV <- function(x, ...) {
 
 
 # helper -------------------
-
 
 .return_smooth_parms <- function(conditional, smooth_terms, component) {
   if (is_empty_object(conditional)) {
@@ -186,7 +204,8 @@ get_parameters.SemiParBIV <- function(x, ...) {
     )
   }
 
-  pars <- switch(component,
+  pars <- switch(
+    component,
     all = ,
     location = rbind(cond, smooth_pars),
     conditional = cond,

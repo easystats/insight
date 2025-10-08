@@ -9,7 +9,10 @@
 
   ## FIXME: doesn't work for nested RE from MASS::glmmPQL, see Nakagawa example
   re_index <- (which(rownames(vcor) == "(Intercept)") - 1)[-1]
-  vc_list <- split(data.frame(vcor, stringsAsFactors = FALSE), findInterval(seq_len(nrow(vcor)), re_index))
+  vc_list <- split(
+    data.frame(vcor, stringsAsFactors = FALSE),
+    findInterval(seq_len(nrow(vcor)), re_index)
+  )
   vc_rownames <- split(rownames(vcor), findInterval(seq_len(nrow(vcor)), re_index))
   re_pars <- unique(unlist(find_parameters(x)["random"]))
   re_names <- find_random(x, split_nested = TRUE, flatten = TRUE)
@@ -25,7 +28,11 @@
       }
       row.names(x) <- as.vector(y)
       vl <- rownames(x) %in% re_pars
-      x <- suppressWarnings(apply(x[vl, vl, drop = FALSE], MARGIN = c(1, 2), FUN = as.numeric))
+      x <- suppressWarnings(apply(
+        x[vl, vl, drop = FALSE],
+        MARGIN = c(1, 2),
+        FUN = as.numeric
+      ))
       m1 <- matrix(, nrow = nrow(x), ncol = ncol(x))
       m1[seq_len(nrow(m1)), seq_len(ncol(m1))] <- as.vector(x[, 1])
       rownames(m1) <- rownames(x)

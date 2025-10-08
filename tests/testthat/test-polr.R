@@ -62,10 +62,13 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_identical(find_terms(m1), list(
-    response = "Sat",
-    conditional = c("Infl", "Type", "Cont")
-  ))
+  expect_identical(
+    find_terms(m1),
+    list(
+      response = "Sat",
+      conditional = c("Infl", "Type", "Cont")
+    )
+  )
   expect_identical(
     find_terms(m1, flatten = TRUE),
     c("Sat", "Infl", "Type", "Cont")
@@ -85,17 +88,16 @@ test_that("find_parameters", {
   expect_identical(
     find_parameters(m1),
     list(
-      conditional =
-        c(
-          "Intercept: Low|Medium",
-          "Intercept: Medium|High",
-          "InflMedium",
-          "InflHigh",
-          "TypeApartment",
-          "TypeAtrium",
-          "TypeTerrace",
-          "ContHigh"
-        )
+      conditional = c(
+        "Intercept: Low|Medium",
+        "Intercept: Medium|High",
+        "InflMedium",
+        "InflHigh",
+        "TypeApartment",
+        "TypeAtrium",
+        "TypeTerrace",
+        "ContHigh"
+      )
     )
   )
 })

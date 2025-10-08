@@ -51,7 +51,11 @@ text_remove_backticks <- function(x, ...) {
 text_remove_backticks.default <- function(x, verbose = FALSE, ...) {
   if (isTRUE(verbose)) {
     format_warning(
-      paste0("Removing backticks currently not supported for objects of class '", class(x)[1], "'.")
+      paste0(
+        "Removing backticks currently not supported for objects of class '",
+        class(x)[1],
+        "'."
+      )
     )
   }
   x
@@ -60,7 +64,12 @@ text_remove_backticks.default <- function(x, verbose = FALSE, ...) {
 
 #' @rdname text_remove_backticks
 #' @export
-text_remove_backticks.data.frame <- function(x, column = "Parameter", verbose = FALSE, ...) {
+text_remove_backticks.data.frame <- function(
+  x,
+  column = "Parameter",
+  verbose = FALSE,
+  ...
+) {
   if (is.null(column)) {
     column <- colnames(x)[vapply(x, is.character, logical(1))]
   }

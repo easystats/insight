@@ -235,34 +235,49 @@ get_predicted <- function(x, ...) {
 
 #' @rdname get_predicted
 #' @export
-get_predicted.default <- function(x,
-                                  data = NULL,
-                                  predict = "expectation",
-                                  ci = NULL,
-                                  ci_type = "confidence",
-                                  ci_method = NULL,
-                                  dispersion_method = "sd",
-                                  vcov = NULL,
-                                  vcov_args = NULL,
-                                  verbose = TRUE,
-                                  ...) {
+get_predicted.default <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  ci_type = "confidence",
+  ci_method = NULL,
+  dispersion_method = "sd",
+  vcov = NULL,
+  vcov_args = NULL,
+  verbose = TRUE,
+  ...
+) {
   # evaluate arguments
-  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+  my_args <- .get_predicted_args(
+    x,
+    data = data,
+    predict = predict,
+    verbose = verbose,
+    ...
+  )
 
   # evaluate dots, remove some arguments that might be duplicated else
   dot_args <- list(...)
   dot_args[["newdata"]] <- NULL
   dot_args[["type"]] <- NULL
 
-
   # 1. step: predictions
-  predict_args <- compact_list(list(x, newdata = my_args$data, type = my_args$type, dot_args))
+  predict_args <- compact_list(list(
+    x,
+    newdata = my_args$data,
+    type = my_args$type,
+    dot_args
+  ))
   predictions <- .safe(do.call("predict", predict_args))
 
   # may fail due to invalid "dot_args", so try shorter argument list
   if (is.null(predictions)) {
     predictions <- .safe(
-      do.call("predict", compact_list(list(x, newdata = my_args$data, type = my_args$type)))
+      do.call(
+        "predict",
+        compact_list(list(x, newdata = my_args$data, type = my_args$type))
+      )
     )
   }
 
@@ -296,7 +311,14 @@ get_predicted.default <- function(x,
   if (is.null(predictions)) {
     out <- NULL
   } else {
-    out <- .get_predicted_transform(x, predictions, my_args = my_args, ci_data, verbose = verbose, ...)
+    out <- .get_predicted_transform(
+      x,
+      predictions,
+      my_args = my_args,
+      ci_data,
+      verbose = verbose,
+      ...
+    )
   }
 
   # 4. step: final preparation
@@ -321,24 +343,35 @@ get_predicted.data.frame <- function(x, data = NULL, verbose = TRUE, ...) {
 # LM and GLM --------------------------------------------------------------
 # =========================================================================
 
-
 #' @rdname get_predicted
 #' @export
-get_predicted.lm <- function(x,
-                             data = NULL,
-                             predict = "expectation",
-                             ci = NULL,
-                             iterations = NULL,
-                             verbose = TRUE,
-                             ...) {
+get_predicted.lm <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
   predict_function <- function(x, data, ...) {
-    stats::predict(x,
-      newdata = data, interval = "none",
-      type = my_args$type, se.fit = FALSE, ...
+    stats::predict(
+      x,
+      newdata = data,
+      interval = "none",
+      type = my_args$type,
+      se.fit = FALSE,
+      ...
     )
   }
 
-  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+  my_args <- .get_predicted_args(
+    x,
+    data = data,
+    predict = predict,
+    verbose = verbose,
+    ...
+  )
 
   # 0. step: convert matrix variable types attributes to numeric, if necessary.
   # see https://github.com/easystats/insight/pull/671
@@ -348,7 +381,8 @@ get_predicted.lm <- function(x,
     attributes(x$terms)$dataClasses <- dataClasses
     attributes(attributes(x$model)$terms)$dataClasses <- dataClasses
     my_args$data[] <- lapply(my_args$data, function(x) {
-      if (all(class(x) == c("matrix", "array"))) { # nolint
+      if (all(class(x) == c("matrix", "array"))) {
+        # nolint
         as.numeric(x)
       } else {
         x
@@ -382,7 +416,14 @@ get_predicted.lm <- function(x,
   )
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
+  out <- .get_predicted_transform(
+    x,
+    predictions,
+    my_args,
+    ci_data,
+    verbose = verbose,
+    ...
+  )
 
   # 4. step: final preparation
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
@@ -424,14 +465,22 @@ get_predicted.survreg <- get_predicted.lm
 # =======================================================================
 
 #' @export
-get_predicted.coxph <- function(x,
-                                data = NULL,
-                                predict = "expectation",
-                                ci = NULL,
-                                iterations = NULL,
-                                verbose = TRUE,
-                                ...) {
-  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+get_predicted.coxph <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
+  my_args <- .get_predicted_args(
+    x,
+    data = data,
+    predict = predict,
+    verbose = verbose,
+    ...
+  )
   se <- NULL
 
   predict_function <- function(x, data, ...) {
@@ -468,7 +517,14 @@ get_predicted.coxph <- function(x,
   )
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(x, predictions, my_args, ci_data, link_inv = exp, verbose = verbose)
+  out <- .get_predicted_transform(
+    x,
+    predictions,
+    my_args,
+    ci_data,
+    link_inv = exp,
+    verbose = verbose
+  )
 
   # 4. step: final preparation
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
@@ -476,15 +532,19 @@ get_predicted.coxph <- function(x,
 
 
 #' @export
-get_predicted.coxme <- function(x,
-                                data = NULL,
-                                predict = "expectation",
-                                ci = NULL,
-                                iterations = NULL,
-                                verbose = TRUE,
-                                ...) {
+get_predicted.coxme <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
   if (!is.null(data)) {
-    format_error("The `coxme` package does not yet support the `newdata` argument for predictions. Hence, the `data` argument must be `NULL`.")
+    format_error(
+      "The `coxme` package does not yet support the `newdata` argument for predictions. Hence, the `data` argument must be `NULL`."
+    )
   }
   get_predicted.default(
     x = x,
@@ -502,17 +562,14 @@ get_predicted.coxme <- function(x,
 # =======================================================================
 
 #' @export
-get_predicted.bife <- function(x,
-                               predict = "expectation",
-                               data = NULL,
-                               verbose = TRUE,
-                               ...) {
-  my_args <- .get_predicted_args(x,
-    data = data,
-    predict = predict,
-    verbose = TRUE,
-    ...
-  )
+get_predicted.bife <- function(
+  x,
+  predict = "expectation",
+  data = NULL,
+  verbose = TRUE,
+  ...
+) {
+  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = TRUE, ...)
 
   out <- .safe(stats::predict(x, type = my_args$scale, X_new = my_args$data))
 
@@ -527,20 +584,17 @@ get_predicted.bife <- function(x,
 # rma -------------------------------------------------------------------
 # =======================================================================
 #' @export
-get_predicted.rma <- function(x,
-                              predict = "expectation",
-                              data = NULL,
-                              ci = NULL,
-                              verbose = TRUE,
-                              transf = NULL,
-                              transf_args = NULL,
-                              ...) {
-  my_args <- .get_predicted_args(x,
-    data = data,
-    predict = predict,
-    verbose = TRUE,
-    ...
-  )
+get_predicted.rma <- function(
+  x,
+  predict = "expectation",
+  data = NULL,
+  ci = NULL,
+  verbose = TRUE,
+  transf = NULL,
+  transf_args = NULL,
+  ...
+) {
+  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = TRUE, ...)
 
   has_scale_model <- inherits(x, "rma.ls")
   # TODO: Handle tau2.levels and gamma2.levels arguments for rma.mv()
@@ -557,9 +611,20 @@ get_predicted.rma <- function(x,
     if (!is.null(data)) {
       out <- .safe(stats::predict(x, transf = transf, targs = transf_args))
     } else if (has_scale_model) {
-      out <- .safe(stats::predict(x, newmods = newmods, newscale = newscale, transf = transf, targs = transf_args))
+      out <- .safe(stats::predict(
+        x,
+        newmods = newmods,
+        newscale = newscale,
+        transf = transf,
+        targs = transf_args
+      ))
     } else {
-      out <- .safe(stats::predict(x, newmods = newmods, transf = transf, targs = transf_args))
+      out <- .safe(stats::predict(
+        x,
+        newmods = newmods,
+        transf = transf,
+        targs = transf_args
+      ))
     }
     if (predict == "prediction") {
       out <- stats::setNames(
@@ -600,7 +665,9 @@ get_predicted.rma <- function(x,
     }
     out <- stats::setNames(as.data.frame(out), c("Predicted", "SE", "CI_low", "CI_high"))
   } else {
-    format_error("`predict` must be one of 'link', 'expectation', 'prediction', or 'blup'.")
+    format_error(
+      "`predict` must be one of 'link', 'expectation', 'prediction', or 'blup'."
+    )
   }
 
   if (!is.null(out)) {
@@ -644,28 +711,43 @@ get_predicted.afex_aov <- function(x, data = NULL, ...) {
 # =======================================================================
 
 #' @export
-get_predicted.phylolm <- function(x,
-                                  data = NULL,
-                                  predict = "expectation",
-                                  verbose = TRUE,
-                                  ...) {
+get_predicted.phylolm <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  verbose = TRUE,
+  ...
+) {
   # evaluate arguments
-  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+  my_args <- .get_predicted_args(
+    x,
+    data = data,
+    predict = predict,
+    verbose = verbose,
+    ...
+  )
 
   # evaluate dots, remove some arguments that might be duplicated else
   dot_args <- list(...)
   dot_args[["newdata"]] <- NULL
   dot_args[["type"]] <- NULL
 
-
   # 1. step: predictions
-  predict_args <- compact_list(list(x, newdata = my_args$data, type = my_args$type, dot_args))
+  predict_args <- compact_list(list(
+    x,
+    newdata = my_args$data,
+    type = my_args$type,
+    dot_args
+  ))
   predictions <- .safe(do.call("predict", predict_args))
 
   # may fail due to invalid "dot_args", so try shorter argument list
   if (is.null(predictions)) {
     predictions <- .safe(
-      do.call("predict", compact_list(list(x, newdata = my_args$data, type = my_args$type)))
+      do.call(
+        "predict",
+        compact_list(list(x, newdata = my_args$data, type = my_args$type))
+      )
     )
   }
 
@@ -692,7 +774,6 @@ get_predicted.phylolm <- function(x,
 # ====================================================================
 # Utils --------------------------------------------------------------
 # ====================================================================
-
 
 .format_reform <- function(include_random = TRUE) {
   # Format re.form
@@ -726,13 +807,15 @@ get_predicted.phylolm <- function(x,
 }
 
 
-.get_predicted_transform <- function(x,
-                                     predictions,
-                                     my_args = NULL,
-                                     ci_data = NULL,
-                                     link_inv = NULL,
-                                     verbose = FALSE,
-                                     ...) {
+.get_predicted_transform <- function(
+  x,
+  predictions,
+  my_args = NULL,
+  ci_data = NULL,
+  link_inv = NULL,
+  verbose = FALSE,
+  ...
+) {
   # Transform to response scale
   if (isTRUE(my_args$transform)) {
     # retrieve link-inverse, for back transformation...
@@ -778,22 +861,33 @@ get_predicted.phylolm <- function(x,
 
     # Transform iterations
     if ("iterations" %in% names(attributes(predictions))) {
-      attr(predictions, "iterations") <- as.data.frame(sapply(attributes(predictions)$iterations, link_inv)) # nolint
+      attr(predictions, "iterations") <- as.data.frame(sapply(
+        attributes(predictions)$iterations,
+        link_inv
+      )) # nolint
     }
 
     # Transform to response "type"
-    if (my_args$predict == "classification" && model_info(x, response = 1, verbose = FALSE)$is_binomial) {
+    if (
+      my_args$predict == "classification" &&
+        model_info(x, response = 1, verbose = FALSE)$is_binomial
+    ) {
       # we have to re-define SE column again, it a) might not be initialized yet
       # or b) have been removed above if mu_eta was NULL
       se_col <- names(ci_data) == "SE"
       response <- get_response(x, as_proportion = TRUE)
       # for classification, we need to "round" the values and only return
       # values for the actual factor levels
-      ci_data[!se_col] <- lapply(ci_data[!se_col], .get_predict_transform_response, response = response)
+      ci_data[!se_col] <- lapply(
+        ci_data[!se_col],
+        .get_predict_transform_response,
+        response = response
+      )
       predictions <- .get_predict_transform_response(predictions, response = response)
       if ("iterations" %in% names(attributes(predictions))) {
         attr(predictions, "iterations") <- as.data.frame(
-          sapply( # nolint
+          sapply(
+            # nolint
             attributes(predictions)$iterations,
             .get_predict_transform_response,
             response = response
@@ -808,11 +902,13 @@ get_predicted.phylolm <- function(x,
 
 
 # internal to return possibly bias correct link-function
-.link_inverse <- function(model = NULL,
-                          bias_correction = FALSE,
-                          sigma = NULL,
-                          verbose = TRUE,
-                          ...) {
+.link_inverse <- function(
+  model = NULL,
+  bias_correction = FALSE,
+  sigma = NULL,
+  verbose = TRUE,
+  ...
+) {
   if (isTRUE(bias_correction)) {
     dots <- list(...)
     if (!is.null(sigma) && !is.na(sigma)) {
@@ -845,7 +941,9 @@ get_predicted.phylolm <- function(x,
   # we need residual variance
   if (is.null(residual_variance)) {
     if (verbose) {
-      format_alert("Could not extract residual variance to apply bias correction. No bias adjustment carried out.") # nolint
+      format_alert(
+        "Could not extract residual variance to apply bias correction. No bias adjustment carried out."
+      ) # nolint
     }
     return(NULL)
   }
@@ -855,7 +953,9 @@ get_predicted.phylolm <- function(x,
   # we need a link function
   if (is.null(link)) {
     if (verbose) {
-      format_alert("Could not extract information about the model's link-function to apply bias correction. No bias adjustment carried out.") # nolint
+      format_alert(
+        "Could not extract information about the model's link-function to apply bias correction. No bias adjustment carried out."
+      ) # nolint
     }
     return(NULL)
   }
@@ -871,7 +971,10 @@ get_predicted.phylolm <- function(x,
     with(link, inv(eta) + residual_variance * der2(eta))
   }
   link$mu.eta <- function(eta) {
-    with(link, der(eta) + 1000 * residual_variance * (der2(eta + 5e-4) - der2(eta - 5e-4)))
+    with(
+      link,
+      der(eta) + 1000 * residual_variance * (der2(eta + 5e-4) - der2(eta - 5e-4))
+    )
   }
   link
 }
@@ -921,7 +1024,8 @@ get_predicted.phylolm <- function(x,
     } else {
       time_var <- "Response"
     }
-    predictions <- stats::reshape(predictions,
+    predictions <- stats::reshape(
+      predictions,
       direction = "long",
       varying = vary,
       times = vary,
@@ -939,13 +1043,17 @@ get_predicted.phylolm <- function(x,
 
 # Bootstrap ==============================================================
 
-.get_predicted_boot <- function(x,
-                                data = NULL,
-                                predict_function = NULL,
-                                iterations = 500,
-                                verbose = TRUE,
-                                ...) {
-  if (is.null(data)) data <- get_data(x, verbose = FALSE)
+.get_predicted_boot <- function(
+  x,
+  data = NULL,
+  predict_function = NULL,
+  iterations = 500,
+  verbose = TRUE,
+  ...
+) {
+  if (is.null(data)) {
+    data <- get_data(x, verbose = FALSE)
+  }
 
   # TODO: how to make it work with the seed argument??
 
@@ -968,7 +1076,13 @@ get_predicted.phylolm <- function(x,
         suppressWarnings(predict_function(model, data = predict_data, ...))
       }
     }
-    draws <- boot::boot(data = get_data(x, verbose = FALSE), boot_fun, R = iterations, predict_data = data, ...)
+    draws <- boot::boot(
+      data = get_data(x, verbose = FALSE),
+      boot_fun,
+      R = iterations,
+      predict_data = data,
+      ...
+    )
   }
 
   # Format draws
@@ -981,14 +1095,16 @@ get_predicted.phylolm <- function(x,
 
 # -------------------------------------------------------------------------
 
-.get_predicted_centrality_from_draws <- function(x,
-                                                 iter,
-                                                 centrality_function = base::mean,
-                                                 datagrid = NULL,
-                                                 is_wiener = FALSE,
-                                                 is_rtchoice = FALSE,
-                                                 is_mixture = FALSE,
-                                                 ...) {
+.get_predicted_centrality_from_draws <- function(
+  x,
+  iter,
+  centrality_function = base::mean,
+  datagrid = NULL,
+  is_wiener = FALSE,
+  is_rtchoice = FALSE,
+  is_mixture = FALSE,
+  ...
+) {
   # outcome: ordinal/multinomial/multivariate/mixture produce a 3D array of
   # predictions, which we stack in "long" format
   if (length(dim(iter)) == 3) {

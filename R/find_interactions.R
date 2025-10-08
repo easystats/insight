@@ -37,11 +37,13 @@ find_interactions <- function(x, component = "all", flatten = FALSE) {
 }
 
 
-.find_interactions <- function(x,
-                               effects = "fixed",
-                               component,
-                               flatten,
-                               main_effects = FALSE) {
+.find_interactions <- function(
+  x,
+  effects = "fixed",
+  component,
+  flatten,
+  main_effects = FALSE
+) {
   f <- find_formula(x, verbose = FALSE)
   is_mv <- is_multivariate(f)
   elements <- .get_elements(effects = effects, component = component)

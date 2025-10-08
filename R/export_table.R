@@ -189,31 +189,33 @@
 #' export_table(mp, format = "tt", row_groups = groups)
 #' }
 #' @export
-export_table <- function(x,
-                         sep = " | ",
-                         header = "-",
-                         cross = NULL,
-                         empty_line = NULL,
-                         digits = 2,
-                         protect_integers = TRUE,
-                         missing = "",
-                         width = NULL,
-                         format = NULL,
-                         title = NULL,
-                         caption = title,
-                         subtitle = NULL,
-                         footer = NULL,
-                         column_names = NULL,
-                         align = NULL,
-                         by = NULL,
-                         zap_small = FALSE,
-                         big_mark = NULL,
-                         table_width = "auto",
-                         remove_duplicates = FALSE,
-                         row_groups = NULL,
-                         column_groups = NULL,
-                         verbose = TRUE,
-                         ...) {
+export_table <- function(
+  x,
+  sep = " | ",
+  header = "-",
+  cross = NULL,
+  empty_line = NULL,
+  digits = 2,
+  protect_integers = TRUE,
+  missing = "",
+  width = NULL,
+  format = NULL,
+  title = NULL,
+  caption = title,
+  subtitle = NULL,
+  footer = NULL,
+  column_names = NULL,
+  align = NULL,
+  by = NULL,
+  zap_small = FALSE,
+  big_mark = NULL,
+  table_width = "auto",
+  remove_duplicates = FALSE,
+  row_groups = NULL,
+  column_groups = NULL,
+  verbose = TRUE,
+  ...
+) {
   # check args
   if (is.null(format)) {
     format <- "text"
@@ -234,7 +236,6 @@ export_table <- function(x,
     }
     return(NULL)
   }
-
 
   # if we have a list of data frames and HTML format, create a single
   # data frame now. HTML format needs a single data frame. Sub tables
@@ -318,15 +319,24 @@ export_table <- function(x,
 
       # ...unless we have a footer-argument.
       # Then use this as last (final) footer
-      if (element == length(l) && is.null(attributes(i)$table_footer) && !is.null(footer) && !is.list(footer)) {
+      if (
+        element == length(l) &&
+          is.null(attributes(i)$table_footer) &&
+          !is.null(footer) &&
+          !is.list(footer)
+      ) {
         t_footer <- footer
       }
 
       # if we still have no footer, check if user provided a list of titles
-      if (is.null(t_footer) && !is.null(footer) && is.list(footer) && length(footer) == length(l)) {
+      if (
+        is.null(t_footer) &&
+          !is.null(footer) &&
+          is.list(footer) &&
+          length(footer) == length(l)
+      ) {
         t_footer <- footer[[element]]
       }
-
 
       # for lists of data frame, each list element may have
       # an own attribute for the title, to have "subheadings"
@@ -344,12 +354,22 @@ export_table <- function(x,
 
       # ...unless we have a title-argument.
       # Then use this as first (main) header
-      if (element == 1 && is.null(attributes(i)[[attr_name]]) && !is.null(caption) && !is.list(caption)) {
+      if (
+        element == 1 &&
+          is.null(attributes(i)[[attr_name]]) &&
+          !is.null(caption) &&
+          !is.list(caption)
+      ) {
         t_title <- caption
       }
 
       # if we still have no title, check if user provided a list of titles
-      if (is.null(t_title) && !is.null(caption) && is.list(caption) && length(caption) == length(l)) {
+      if (
+        is.null(t_title) &&
+          !is.null(caption) &&
+          is.list(caption) &&
+          length(caption) == length(l)
+      ) {
         t_title <- caption[[element]]
       }
 
@@ -408,18 +428,24 @@ print.insight_table <- function(x, ...) {
 .bind_html_tables <- function(x, format = "html") {
   if (!is.data.frame(x) && is.list(x)) {
     if (identical(format, "html")) {
-      x <- do.call(rbind, lapply(x, function(i) {
-        attr_name <- .check_caption_attr_name(i)
-        i$Component <- attr(i, attr_name)[1]
-        i
-      }))
+      x <- do.call(
+        rbind,
+        lapply(x, function(i) {
+          attr_name <- .check_caption_attr_name(i)
+          i$Component <- attr(i, attr_name)[1]
+          i
+        })
+      )
     } else if (identical(format, "tt")) {
       # add table caption as group variable, and bind tables
       # we then extract row headers based on values in the group indices
-      x <- do.call(rbind, lapply(x, function(i) {
-        i$group <- attr(i, "table_caption")
-        i
-      }))
+      x <- do.call(
+        rbind,
+        lapply(x, function(i) {
+          i$group <- attr(i, "table_caption")
+          i
+        })
+      )
     }
   }
 
@@ -440,7 +466,9 @@ print.insight_table <- function(x, ...) {
     # numeric indices are possible - just extract column names at that positions
     if (is.numeric(by)) {
       if (any(by < 1 || by > ncol(x))) {
-        format_error("Indices in `by` cannot be lower than 1 or higher than the number of columns in the data frame.")
+        format_error(
+          "Indices in `by` cannot be lower than 1 or higher than the number of columns in the data frame."
+        )
       }
       by <- colnames(x)[by]
     }
@@ -449,7 +477,11 @@ print.insight_table <- function(x, ...) {
       suggestion <- .misspelled_string(colnames(x), by)
       msg <- "Not all variables in `by` were found in the data frame."
       if (is.null(suggestion$msg) || !length(suggestion$msg) || !nzchar(suggestion$msg)) {
-        msg <- paste(msg, "Please use one of the following names:", .to_string(colnames(x)))
+        msg <- paste(
+          msg,
+          "Please use one of the following names:",
+          .to_string(colnames(x))
+        )
       } else {
         msg <- paste(msg, suggestion$msg)
       }
@@ -488,7 +520,10 @@ print.insight_table <- function(x, ...) {
 # check whether "table_caption" or its alias "table_title" is used as attribute
 .check_caption_attr_name <- function(x) {
   attr_name <- "table_caption"
-  if (is.null(attr(x, attr_name, exact = TRUE)) && !is.null(attr(x, "table_title", exact = TRUE))) {
+  if (
+    is.null(attr(x, attr_name, exact = TRUE)) &&
+      !is.null(attr(x, "table_title", exact = TRUE))
+  ) {
     attr_name <- "table_title"
   }
   attr_name
@@ -497,31 +532,33 @@ print.insight_table <- function(x, ...) {
 
 # work horse: create matrix of raw table layout --------------------
 
-.export_table <- function(x,
-                          sep = " | ",
-                          header = "-",
-                          cross = NULL,
-                          digits = 2,
-                          protect_integers = TRUE,
-                          missing = "",
-                          width = NULL,
-                          format = NULL,
-                          caption = NULL,
-                          subtitle = NULL,
-                          footer = NULL,
-                          column_names = NULL,
-                          align = NULL,
-                          group_by = NULL,
-                          zap_small = FALSE,
-                          big_mark = NULL,
-                          empty_line = NULL,
-                          indent_groups = NULL,
-                          row_groups = NULL,
-                          column_groups = NULL,
-                          table_width = NULL,
-                          remove_duplicated_lines = FALSE,
-                          verbose = TRUE,
-                          ...) {
+.export_table <- function(
+  x,
+  sep = " | ",
+  header = "-",
+  cross = NULL,
+  digits = 2,
+  protect_integers = TRUE,
+  missing = "",
+  width = NULL,
+  format = NULL,
+  caption = NULL,
+  subtitle = NULL,
+  footer = NULL,
+  column_names = NULL,
+  align = NULL,
+  group_by = NULL,
+  zap_small = FALSE,
+  big_mark = NULL,
+  empty_line = NULL,
+  indent_groups = NULL,
+  row_groups = NULL,
+  column_groups = NULL,
+  table_width = NULL,
+  remove_duplicated_lines = FALSE,
+  verbose = TRUE,
+  ...
+) {
   table_data <- as.data.frame(x)
 
   # we set empty caption, subtitle and footer to NULL, so they are not printed
@@ -550,9 +587,13 @@ print.insight_table <- function(x, ...) {
   col_names <- names(table_data)
   table_data[] <- lapply(table_data, function(i) {
     if (is.numeric(i)) {
-      out <- format_value(i,
-        digits = digits, protect_integers = protect_integers,
-        missing = missing, width = col_width, zap_small = zap_small,
+      out <- format_value(
+        i,
+        digits = digits,
+        protect_integers = protect_integers,
+        missing = missing,
+        width = col_width,
+        zap_small = zap_small,
         big_mark = big_mark
       )
     } else {
@@ -656,23 +697,25 @@ print.insight_table <- function(x, ...) {
 # plain text formatting ----------------------------------
 # --------------------------------------------------------
 
-.format_basic_table <- function(final,
-                                header,
-                                sep,
-                                cross = NULL,
-                                caption = NULL,
-                                subtitle = NULL,
-                                footer = NULL,
-                                align = NULL,
-                                empty_line = NULL,
-                                indent_groups = NULL,
-                                row_groups = NULL,
-                                col_names = NULL,
-                                col_width = NULL,
-                                col_align = NULL,
-                                table_width = NULL,
-                                remove_duplicated_lines = FALSE,
-                                verbose = TRUE) {
+.format_basic_table <- function(
+  final,
+  header,
+  sep,
+  cross = NULL,
+  caption = NULL,
+  subtitle = NULL,
+  footer = NULL,
+  align = NULL,
+  empty_line = NULL,
+  indent_groups = NULL,
+  row_groups = NULL,
+  col_names = NULL,
+  col_width = NULL,
+  col_align = NULL,
+  table_width = NULL,
+  remove_duplicated_lines = FALSE,
+  verbose = TRUE
+) {
   # indent groups? export_table() allows to indent specific rows,
   # which might be useful when we have tables of regression coefficients,
   # and some coefficients are grouped together, which is visually emphasized
@@ -724,7 +767,6 @@ print.insight_table <- function(x, ...) {
     }
   }
 
-
   # check for fixed column widths. usually, column width is aligned to the
   # widest element in that column. for multiple tables, this may result in
   # columns which do not have the the same width across tables, despite
@@ -744,14 +786,14 @@ print.insight_table <- function(x, ...) {
     }
   }
 
-
   # we can split very wide tables
   final_extra <- NULL
   overlength_warning <- FALSE
 
   # check if user requested automatic width-adjustment of tables,
   # or if a given width is required
-  table_width_adjustment <- identical(table_width, "auto") || (!is.null(table_width) && !is.infinite(table_width) && is.numeric(table_width)) # nolint
+  table_width_adjustment <- identical(table_width, "auto") ||
+    (!is.null(table_width) && !is.infinite(table_width) && is.numeric(table_width)) # nolint
 
   if (table_width_adjustment) {
     # define the length of a table line. if specific table width is defined
@@ -774,12 +816,22 @@ print.insight_table <- function(x, ...) {
     if (row_width > line_width) {
       final_extra <- list(final)
       e <- 1
-      while (nchar(paste(utils::tail(final_extra, 1)[[1]][1, ], collapse = sep), type = "width") > line_width && e <= length(final_extra)) { # nolint
+      while (
+        nchar(
+          paste(utils::tail(final_extra, 1)[[1]][1, ], collapse = sep),
+          type = "width"
+        ) >
+          line_width &&
+          e <= length(final_extra)
+      ) {
+        # nolint
         .final_temp <- final_extra[[e]]
 
         i <- 1
         # determine how many columns fit into the first line
-        while (nchar(paste(.final_temp[1, 1:i], collapse = sep), type = "width") < line_width) {
+        while (
+          nchar(paste(.final_temp[1, 1:i], collapse = sep), type = "width") < line_width
+        ) {
           i <- i + 1
         }
         # copy first column, and all columns that did not fit into the first line
@@ -825,7 +877,9 @@ print.insight_table <- function(x, ...) {
   }
 
   if (overlength_warning && verbose) {
-    format_warning("The table contains very wide columns that don't fit into the available display-width of the console. Splitting tables into multiple parts did not have the desired effect.") # nolint
+    format_warning(
+      "The table contains very wide columns that don't fit into the available display-width of the console. Splitting tables into multiple parts did not have the desired effect."
+    ) # nolint
   }
 
   # Transform table matrix into a string value that can be printed
@@ -897,14 +951,16 @@ print.insight_table <- function(x, ...) {
 # helper to prepare table body for text output ---------------------
 # ------------------------------------------------------------------
 
-.table_parts <- function(rows,
-                         final,
-                         header,
-                         sep,
-                         cross,
-                         empty_line,
-                         table_width_adjustment,
-                         remove_duplicated_lines = FALSE) {
+.table_parts <- function(
+  rows,
+  final,
+  header,
+  sep,
+  cross,
+  empty_line,
+  table_width_adjustment,
+  remove_duplicated_lines = FALSE
+) {
   # "final" is a matrix here. we now paste each row into a character string,
   # add separator chars etc.
   for (row in seq_len(nrow(final))) {
@@ -922,7 +978,9 @@ print.insight_table <- function(x, ...) {
         # will now be replaced by the "empty line char", so we have a
         # clean separator line
         paste(rep_len(empty_line, nchar(final_row, type = "width")), collapse = ""),
-        cross, sep, final_row,
+        cross,
+        sep,
+        final_row,
         is_last_row = row == nrow(final)
       )
       rows <- paste0(rows, empty_line_with_cross, "\n")
@@ -931,12 +989,15 @@ print.insight_table <- function(x, ...) {
     }
 
     # After first row, we might have a separator row
-    if (row == 1 && !is.null(header)) { # check if we have any separator for the header row
+    if (row == 1 && !is.null(header)) {
+      # check if we have any separator for the header row
       # check whether user wants to have a "cross" char where vertical and
       # horizontal lines (from header line) cross.
       header_line <- .insert_cross(
         paste(rep_len(header, nchar(final_row, type = "width")), collapse = ""),
-        cross, sep, final_row,
+        cross,
+        sep,
+        final_row,
         is_last_row = row == nrow(final)
       )
       # add separator row after header line
@@ -985,7 +1046,12 @@ print.insight_table <- function(x, ...) {
         # remove_duplicates = FALSE
         out[remove_dups] <- gsub(empty_line, " ", out[remove_dups], fixed = TRUE)
         if (!is.null(sep) && nzchar(sep) && !is.null(cross) && nzchar(cross)) {
-          out[remove_dups] <- gsub(trim_ws(cross), trim_ws(sep), out[remove_dups], fixed = TRUE)
+          out[remove_dups] <- gsub(
+            trim_ws(cross),
+            trim_ws(sep),
+            out[remove_dups],
+            fixed = TRUE
+          )
         }
       }
       # collapse back into single string
@@ -1016,7 +1082,10 @@ print.insight_table <- function(x, ...) {
   # special char. E.g., if columns are separated with "|" and header line
   # with "-", we might have a "+" to have properly "crossed lines"
   if (!is.null(cross) && !is_last_row) {
-    cross_position <- unlist(gregexpr(trim_ws(sep), pattern, fixed = TRUE), use.names = FALSE)
+    cross_position <- unlist(
+      gregexpr(trim_ws(sep), pattern, fixed = TRUE),
+      use.names = FALSE
+    )
     for (pp in cross_position) {
       substr(row, pp, pp) <- cross
     }
@@ -1036,7 +1105,9 @@ print.insight_table <- function(x, ...) {
     if (is.null(names(column_names))) {
       # error if length does not match number of columns
       if (length(column_names) != ncol(table_data)) {
-        format_error("Number of names in `column_names` does not match number of columns in data frame.")
+        format_error(
+          "Number of names in `column_names` does not match number of columns in data frame."
+        )
       }
       colnames(table_data) <- column_names
     } else {
@@ -1048,8 +1119,14 @@ print.insight_table <- function(x, ...) {
       if (!all(names(column_names) %in% colnames(table_data))) {
         suggestion <- .misspelled_string(colnames(table_data), names(column_names))
         msg <- "Not all names in `column_names` were found in column names of data frame."
-        if (is.null(suggestion$msg) || !length(suggestion$msg) || !nzchar(suggestion$msg)) {
-          msg <- paste(msg, "Please use one of the following names:", .to_string(colnames(table_data)))
+        if (
+          is.null(suggestion$msg) || !length(suggestion$msg) || !nzchar(suggestion$msg)
+        ) {
+          msg <- paste(
+            msg,
+            "Please use one of the following names:",
+            .to_string(colnames(table_data))
+          )
         } else {
           msg <- paste(msg, suggestion$msg)
         }
@@ -1100,7 +1177,11 @@ print.insight_table <- function(x, ...) {
   final[, 1] <- trimws(final[, 1], which = "right")
 
   # move group name (indent header) to left
-  final[, 1] <- format(final[, 1], justify = "left", width = max(nchar(final[, 1], type = "width")))
+  final[, 1] <- format(
+    final[, 1],
+    justify = "left",
+    width = max(nchar(final[, 1], type = "width"))
+  )
   final
 }
 
@@ -1175,12 +1256,14 @@ print.insight_table <- function(x, ...) {
 }
 
 
-.row_groups_tt <- function(x,
-                           row_groups = NULL,
-                           group_by = NULL,
-                           first_index_only = TRUE,
-                           reorder = TRUE,
-                           ...) {
+.row_groups_tt <- function(
+  x,
+  row_groups = NULL,
+  group_by = NULL,
+  first_index_only = TRUE,
+  reorder = TRUE,
+  ...
+) {
   # check grouping - if we have a grouping variable in "group_by", we use this
   # for grouping rows. an alternative is to provide the "row_groups" argument,
   # which is a list of row indices, or parameter names, that should be grouped
@@ -1247,19 +1330,22 @@ print.insight_table <- function(x, ...) {
 # tinytable formatting ----------------------------------
 # --------------------------------------------------------
 
-.format_tiny_table <- function(final,
-                               caption = NULL,
-                               subtitle = NULL,
-                               footer = NULL,
-                               align = NULL,
-                               group_by = NULL,
-                               column_groups = NULL,
-                               row_groups = NULL,
-                               ...) {
+.format_tiny_table <- function(
+  final,
+  caption = NULL,
+  subtitle = NULL,
+  footer = NULL,
+  align = NULL,
+  group_by = NULL,
+  column_groups = NULL,
+  row_groups = NULL,
+  ...
+) {
   # need data frame, not matrix
   final <- as.data.frame(final)
   if (!is.null(align) && length(align) == 1) {
-    align <- switch(align,
+    align <- switch(
+      align,
       left = "l",
       center = "c",
       right = "r",
@@ -1286,13 +1372,15 @@ print.insight_table <- function(x, ...) {
 # markdown formatting ------------------------------
 # --------------------------------------------------
 
-.format_markdown_table <- function(final,
-                                   caption = NULL,
-                                   subtitle = NULL,
-                                   footer = NULL,
-                                   align = NULL,
-                                   indent_groups = NULL,
-                                   row_groups = NULL) {
+.format_markdown_table <- function(
+  final,
+  caption = NULL,
+  subtitle = NULL,
+  footer = NULL,
+  align = NULL,
+  indent_groups = NULL,
+  row_groups = NULL
+) {
   column_width <- nchar(final[1, ])
   n_columns <- ncol(final)
   first_row_leftalign <- (!is.null(align) && align == "firstleft")
@@ -1511,11 +1599,7 @@ print.insight_table <- function(x, ...) {
     out <- gt::cols_align(out, "left", 1)
   } else {
     for (i in 1:nchar(align)) {
-      col_align <- switch(substr(align, i, i),
-        l = "left",
-        r = "right",
-        "center"
-      )
+      col_align <- switch(substr(align, i, i), l = "left", r = "right", "center")
       out <- gt::cols_align(out, col_align, i)
     }
   }

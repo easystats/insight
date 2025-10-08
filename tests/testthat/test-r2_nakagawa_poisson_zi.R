@@ -14,9 +14,11 @@ test_that("glmmTMB, Poisson zero-inflated", {
   data(Salamanders, package = "glmmTMB")
 
   # glmmTMB, no random slope -------------------------------------------------
-  m <- glmmTMB::glmmTMB(count ~ mined + (1 | site),
+  m <- glmmTMB::glmmTMB(
+    count ~ mined + (1 | site),
     ziformula = ~mined,
-    family = poisson(), data = Salamanders
+    family = poisson(),
+    data = Salamanders
   )
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m, model_component = "conditional", verbose = FALSE)
@@ -32,9 +34,11 @@ test_that("glmmTMB, Poisson zero-inflated", {
   expect_equal(out$R2_conditional, 0.362671, ignore_attr = TRUE, tolerance = 1e-4)
 
   # glmmTMB, sqrt, no random slope -------------------------------------------------
-  m <- glmmTMB::glmmTMB(count ~ mined + (1 | site),
+  m <- glmmTMB::glmmTMB(
+    count ~ mined + (1 | site),
     ziformula = ~mined,
-    family = poisson("sqrt"), data = Salamanders
+    family = poisson("sqrt"),
+    data = Salamanders
   )
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)
@@ -43,12 +47,19 @@ test_that("glmmTMB, Poisson zero-inflated", {
   expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
   # glmmTMB, random slope -------------------------------------------------
-  m <- suppressWarnings(glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
+  m <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ mined + cover + (1 + cover | site),
     ziformula = ~mined,
-    family = poisson(), data = Salamanders
+    family = poisson(),
+    data = Salamanders
   ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
-  out2 <- suppressWarnings(performance::r2_nakagawa(m, tolerance = 1e-10, model_component = "conditional", verbose = FALSE))
+  out2 <- suppressWarnings(performance::r2_nakagawa(
+    m,
+    tolerance = 1e-10,
+    model_component = "conditional",
+    verbose = FALSE
+  ))
   # we have slight differences here: MuMIn uses "var(fitted())" to exctract fixed
   # effects variances, while insight uses "var(beta %*% t(mm))". The latter gives
   # different values when random slopes are involved
@@ -62,11 +73,12 @@ test_that("glmmTMB, Poisson zero-inflated", {
   expect_equal(out$R2_marginal, 0.3344432, ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(out$R2_conditional, 0.4142003, ignore_attr = TRUE, tolerance = 1e-4)
 
-
   # glmmTMB, sqrt, random slope -------------------------------------------------
-  m <- suppressWarnings(glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
+  m <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ mined + cover + (1 + cover | site),
     ziformula = ~mined,
-    family = poisson("sqrt"), data = Salamanders
+    family = poisson("sqrt"),
+    data = Salamanders
   ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- suppressWarnings(performance::r2_nakagawa(m, tolerance = 1e-8))

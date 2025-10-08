@@ -57,17 +57,27 @@
 #' find_variables(m2)
 #' find_variables(m2, flatten = TRUE)
 #' @export
-find_variables <- function(x,
-                           effects = "all",
-                           component = "all",
-                           flatten = FALSE,
-                           verbose = TRUE) {
+find_variables <- function(
+  x,
+  effects = "all",
+  component = "all",
+  flatten = FALSE,
+  verbose = TRUE
+) {
   effects <- validate_argument(effects, c("all", "fixed", "random"))
   component <- validate_argument(
     component,
     c(
-      "all", "conditional", "zi", "zero_inflated", "dispersion",
-      "instruments", "smooth_terms", "scale", "location", "auxiliary",
+      "all",
+      "conditional",
+      "zi",
+      "zero_inflated",
+      "dispersion",
+      "instruments",
+      "smooth_terms",
+      "scale",
+      "location",
+      "auxiliary",
       "distributional"
     )
   )

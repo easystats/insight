@@ -36,7 +36,13 @@
 
 .apply_color <- function(x, color_code) {
   x[!is.na(x)] <- paste0(
-    "\033[", color_code[1], "m", x[!is.na(x)], "\033[", color_code[2], "m"
+    "\033[",
+    color_code[1],
+    "m",
+    x[!is.na(x)],
+    "\033[",
+    color_code[2],
+    "m"
   )
   x
 }
@@ -101,8 +107,11 @@
   if (Sys.getenv("TERM") == "dumb") {
     return(FALSE)
   }
-  grepl("^screen|^xterm|^vt100|color|ansi|cygwin|linux", Sys.getenv("TERM"),
-    ignore.case = TRUE, perl = TRUE
+  grepl(
+    "^screen|^xterm|^vt100|color|ansi|cygwin|linux",
+    Sys.getenv("TERM"),
+    ignore.case = TRUE,
+    perl = TRUE
   )
 }
 

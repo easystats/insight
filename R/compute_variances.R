@@ -1,12 +1,14 @@
-.compute_variances <- function(model,
-                               component,
-                               name_fun = NULL,
-                               name_full = NULL,
-                               verbose = TRUE,
-                               tolerance = 1e-8,
-                               model_component = "full",
-                               model_null = NULL,
-                               approximation = "lognormal") {
+.compute_variances <- function(
+  model,
+  component,
+  name_fun = NULL,
+  name_full = NULL,
+  verbose = TRUE,
+  tolerance = 1e-8,
+  model_component = "full",
+  model_null = NULL,
+  approximation = "lognormal"
+) {
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
   ## version of Jon Lefcheck's code from SEMfit
@@ -17,7 +19,9 @@
   # sanity check - only proceed for mixed models
   if (!is_mixed_model(model)) {
     if (verbose) {
-      format_warning("This function only works for mixed models, i.e. models with random effects.")
+      format_warning(
+        "This function only works for mixed models, i.e. models with random effects."
+      )
     }
     return(NULL)
   }
@@ -51,15 +55,26 @@
   }
 
   # sanity checks - distribution supported with requested component?
-  if ((any(startsWith(faminfo$family, "truncated_")) || any(startsWith(faminfo$family, "hurdle"))) && model_component != "full") { # nolint
+  if (
+    (any(startsWith(faminfo$family, "truncated_")) ||
+      any(startsWith(faminfo$family, "hurdle"))) &&
+      model_component != "full"
+  ) {
+    # nolint
     if (verbose) {
-      format_warning("Truncated or hurdle families are only supported for `model_component = \"full\"`.")
+      format_warning(
+        "Truncated or hurdle families are only supported for `model_component = \"full\"`."
+      )
     }
     return(NA)
   }
 
   # zero-inflated model, but not conditioning on full model?
-  if (!identical(model_component, "full") && (faminfo$is_zero_inflated || faminfo$is_hurdle) && verbose) {
+  if (
+    !identical(model_component, "full") &&
+      (faminfo$is_zero_inflated || faminfo$is_hurdle) &&
+      verbose
+  ) {
     format_alert(
       "Zero-inflation part of the model is not considered for variance decomposition. Use `model_component = \"full\"` to take both the conditional and the zero-inflation model into account." # nolint
     )
@@ -88,12 +103,18 @@
 
   # Test for non-zero random effects ((near) singularity)
   no_random_variance <- FALSE
-  singular_fit <- isTRUE(.safe(performance::check_singularity(model, tolerance = tolerance)))
+  singular_fit <- isTRUE(.safe(performance::check_singularity(
+    model,
+    tolerance = tolerance
+  )))
 
   if (singular_fit && !(component %in% c("slope", "intercept"))) {
     if (verbose) {
       format_warning(
-        sprintf("Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).", name_full), # nolint
+        sprintf(
+          "Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).",
+          name_full
+        ), # nolint
         "Decrease the `tolerance` level to force the calculation of random effect variances, or impose priors on your random effects parameters (using packages like `brms` or `glmmTMB`)." # nolint
       )
     }
@@ -120,7 +141,10 @@
   # Are random slopes present as fixed effects? Warn.
   if (!.random_slopes_in_fixed(model) && verbose) {
     format_warning(
-      sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.", name_full),
+      sprintf(
+        "Random slopes not present as fixed effects. This artificially inflates the conditional %s.",
+        name_full
+      ),
       "Respecify the fixed effects structure of your model (add random slopes as fixed effects)."
     )
   }
@@ -202,14 +226,12 @@
     cor.slopes <- NULL
   }
 
-
   # if we only need residual variance, we can delete those
   # values again...
   if (component == "residual") {
     var.distribution <- NULL
     var.dispersion <- NULL
   }
-
 
   compact_list(list(
     var.fixed = var.fixed,
@@ -230,7 +252,9 @@
 .badlink <- function(link, family, verbose = TRUE) {
   if (verbose) {
     format_warning(sprintf(
-      "Model link `%s` is not yet supported for the %s distribution.", link, family
+      "Model link `%s` is not yet supported for the %s distribution.",
+      link,
+      family
     ))
   }
   return(NA)
@@ -343,14 +367,16 @@
 # despite being correctly re-formulated in "null_model()", returns slightly
 # different values for the log/delta/trigamma approximation.
 # -----------------------------------------------------------------------------
-.compute_variance_distribution <- function(model,
-                                           faminfo,
-                                           model_null = NULL,
-                                           revar_null = NULL,
-                                           name,
-                                           approx_method = "lognormal",
-                                           model_component = NULL,
-                                           verbose = TRUE) {
+.compute_variance_distribution <- function(
+  model,
+  faminfo,
+  model_null = NULL,
+  revar_null = NULL,
+  name,
+  approx_method = "lognormal",
+  model_component = NULL,
+  verbose = TRUE
+) {
   # get overdispersion parameter / sigma
   sig <- .safe(.get_sigma(model, no_recursion = TRUE))
 
@@ -366,7 +392,9 @@
       sigma_params <- grepl("b_sigma", params, fixed = TRUE)
       if (sum(sigma_params) > 1) {
         if (verbose) {
-          format_alert("`sigma` is modeled directly, and hence there is no longer a single sigma parameter to calculate the residual variance. Returning `NULL` instead.") # nolint
+          format_alert(
+            "`sigma` is modeled directly, and hence there is no longer a single sigma parameter to calculate the residual variance. Returning `NULL` instead."
+          ) # nolint
         }
         return(NULL)
       }
@@ -386,7 +414,8 @@
     # beta-binomial ----
     # ------------------
 
-    resid.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(
+      faminfo$link_function,
       logit = ,
       probit = ,
       cloglog = ,
@@ -420,17 +449,26 @@
       approx_method <- "lognormal" # we don't have lognormal, it's just the default
     }
 
-    resid.variance <- switch(faminfo$link_function,
-      logit = switch(approx_method,
+    resid.variance <- switch(
+      faminfo$link_function,
+      logit = switch(
+        approx_method,
         observation_level = 1 / (y_factor * pmean * (1 - pmean)),
         pi^2 / (3 * y_factor)
       ),
-      probit = switch(approx_method,
-        observation_level = 2 * pi / y_factor * pmean * (1 - pmean) * exp((stats::qnorm(pmean) / sqrt(2))^2)^2, # nolint
+      probit = switch(
+        approx_method,
+        observation_level = 2 *
+          pi /
+          y_factor *
+          pmean *
+          (1 - pmean) *
+          exp((stats::qnorm(pmean) / sqrt(2))^2)^2, # nolint
         1 / y_factor
       ),
       cloglog = ,
-      clogloglink = switch(approx_method,
+      clogloglink = switch(
+        approx_method,
         observation_level = pmean / y_factor / log(1 - pmean)^2 / (1 - pmean),
         pi^2 / (6 * y_factor)
       ),
@@ -454,7 +492,8 @@
     # count  ----
     # -----------
 
-    resid.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(
+      faminfo$link_function,
       log = .variance_distributional(
         model,
         faminfo = faminfo,
@@ -473,10 +512,12 @@
     # Gamma  ----
     # -----------
 
-    resid.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(
+      faminfo$link_function,
       inverse = ,
       identity = stats::family(model)$variance(sig),
-      log = switch(approx_method,
+      log = switch(
+        approx_method,
         delta = 1 / sig^-2,
         trigamma = trigamma(sig^-2),
         log1p(1 / sig^-2)
@@ -487,7 +528,8 @@
     # (Ordered) Beta  ----
     # --------------------
 
-    resid.variance <- switch(faminfo$link_function,
+    resid.variance <- switch(
+      faminfo$link_function,
       logit = .variance_distributional(
         model,
         faminfo = faminfo,
@@ -535,7 +577,10 @@
 # of the response
 .obs_level_variance <- function(model_null, revar_null) {
   fe_null <- .safe(as.numeric(.collapse_cond(lme4::fixef(model_null))))
-  .safe(as.numeric(stats::plogis(fe_null - 0.5 * sum(revar_null) * tanh(fe_null * (1 + 2 * exp(-0.5 * sum(revar_null))) / 6)))) # nolint
+  .safe(as.numeric(stats::plogis(
+    fe_null -
+      0.5 * sum(revar_null) * tanh(fe_null * (1 + 2 * exp(-0.5 * sum(revar_null))) / 6)
+  ))) # nolint
 }
 
 
@@ -555,15 +600,17 @@
 # VarOlF <- log(1 + (1 / lambda) + (1 / thetaF)) # log-normal approximation
 # VarOtF <- trigamma((1 / lambda + 1 / thetaF)^(-1)) # trigamma function
 # -----------------------------------------------------------------------------
-.variance_distributional <- function(model,
-                                     faminfo,
-                                     sig,
-                                     model_null = NULL,
-                                     revar_null = NULL,
-                                     name,
-                                     approx_method = "lognormal",
-                                     model_component = NULL,
-                                     verbose = TRUE) {
+.variance_distributional <- function(
+  model,
+  faminfo,
+  sig,
+  model_null = NULL,
+  revar_null = NULL,
+  name,
+  approx_method = "lognormal",
+  model_component = NULL,
+  verbose = TRUE
+) {
   check_if_installed("lme4", "to compute variances for mixed models")
 
   # ------------------------------------------------------------------
@@ -606,7 +653,8 @@
     mu <- link_inverse(model)(mu)
   } else {
     # transform mu
-    mu <- switch(faminfo$family,
+    mu <- switch(
+      faminfo$family,
       # beta-alike
       beta = ,
       betabinomial = ,
@@ -643,10 +691,14 @@
         # Tweedie models ------------------------------------------------------
         # ---------------------------------------------------------------------
         dispersion_param <- .variance_family_tweedie(model, mu, sig)
-      } else if (identical(model_component, "full") && (faminfo$is_zero_inflated || faminfo$is_hurdle)) {
+      } else if (
+        identical(model_component, "full") &&
+          (faminfo$is_zero_inflated || faminfo$is_hurdle)
+      ) {
         # Zero Inflated models ------------------------------------------------
         # ---------------------------------------------------------------------
-        dispersion_param <- switch(faminfo$family,
+        dispersion_param <- switch(
+          faminfo$family,
 
           # (zero-inflated) poisson ----
           # ----------------------------
@@ -662,7 +714,12 @@
           nbinom12 = ,
           negbinomial = ,
           `negative binomial` = ,
-          `zero-inflated negative binomial` = .variance_family_nbinom(model, mu, sig, faminfo),
+          `zero-inflated negative binomial` = .variance_family_nbinom(
+            model,
+            mu,
+            sig,
+            faminfo
+          ),
 
           # hurdle and Gamma ----
           # -------------------------
@@ -679,7 +736,8 @@
       } else {
         # All other families (or conditional model only) ------------------
         # -----------------------------------------------------------------
-        dispersion_param <- switch(faminfo$family,
+        dispersion_param <- switch(
+          faminfo$family,
 
           # (compoised) poisson ----
           # ------------------------
@@ -736,7 +794,8 @@
       if (faminfo$link_function == "tweedie") {
         dispersion_param
       } else if (identical(approx_method, "trigamma")) {
-        switch(faminfo$family,
+        switch(
+          faminfo$family,
           nbinom = ,
           nbinom1 = ,
           nbinom2 = ,
@@ -749,7 +808,8 @@
           dispersion_param / mu^2
         )
       } else {
-        switch(faminfo$family,
+        switch(
+          faminfo$family,
           nbinom = ,
           nbinom1 = ,
           nbinom2 = ,
@@ -774,7 +834,8 @@
     }
   )
 
-  switch(approx_method,
+  switch(
+    approx_method,
     delta = cvsquared,
     trigamma = trigamma(cvsquared),
     log1p(cvsquared)
@@ -850,7 +911,9 @@
 # ----------------------------------------------
 .variance_family_nbinom <- function(model, mu, sig, faminfo) {
   if (faminfo$is_zero_inflated) {
-    if (missing(sig)) sig <- 0
+    if (missing(sig)) {
+      sig <- 0
+    }
     .variance_zinb(model, sig, faminfo, family_var = mu * (1 + sig))
   } else if (inherits(model, "MixMod")) {
     if (missing(sig)) {
@@ -862,7 +925,9 @@
     if ("psi" %in% names(model$fit$par)) {
       psi <- model$fit$par["psi"]
     } else {
-      format_error("Could not extract psi-parameter for the distributional variance for nbinom12-family.")
+      format_error(
+        "Could not extract psi-parameter for the distributional variance for nbinom12-family."
+      )
     }
     stats::family(model)$variance(mu, sig, psi)
   } else {
@@ -881,7 +946,9 @@
       if ("psi" %in% names(model$fit$par)) {
         psi <- model$fit$par["psi"]
       } else {
-        format_error("Could not extract psi-parameter for the distributional variance for nbinom12-family.")
+        format_error(
+          "Could not extract psi-parameter for the distributional variance for nbinom12-family."
+        )
       }
     }
     v <- stats::family(model)$variance
@@ -891,7 +958,8 @@
     mu <- stats::predict(model, type = "conditional")
     # sigma
     betadisp <- model$fit$par["betadisp"]
-    k <- switch(faminfo$family,
+    k <- switch(
+      faminfo$family,
       gaussian = exp(0.5 * betadisp),
       Gamma = exp(-0.5 * betadisp),
       exp(betadisp)
@@ -904,7 +972,11 @@
   } else if (inherits(model, "MixMod")) {
     v <- family_var
     p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
-    mu <- suppressWarnings(stats::predict(model, type_pred = "link", type = "mean_subject"))
+    mu <- suppressWarnings(stats::predict(
+      model,
+      type_pred = "link",
+      type = "mean_subject"
+    ))
     k <- sig
     pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
   } else {
@@ -963,7 +1035,9 @@
     },
     error = function(e) {
       if (verbose) {
-        format_warning("Can't calculate model's distribution-specific variance. Results are not reliable.")
+        format_warning(
+          "Can't calculate model's distribution-specific variance. Results are not reliable."
+        )
       }
       0
     }
@@ -991,8 +1065,12 @@
   # make sure we have identical subcomponents between random and
   # fixed effects
   fe <- compact_list(fe[c("conditional", "zero_inflated")])
-  if (length(rs) > length(fe)) rs <- rs[seq_along(fe)]
-  if (length(fe) > length(rs)) fe <- fe[seq_along(rs)]
+  if (length(rs) > length(fe)) {
+    rs <- rs[seq_along(fe)]
+  }
+  if (length(fe) > length(rs)) {
+    fe <- fe[seq_along(rs)]
+  }
 
   all(mapply(function(r, f) all(r %in% f), rs, fe, SIMPLIFY = TRUE))
 }
@@ -1030,7 +1108,9 @@
     if (length(non_intercepts) == length(mixed_effects_info$vc)) {
       out <- unlist(lapply(mixed_effects_info$vc, diag))
     } else if (length(non_intercepts)) {
-      dn <- unlist(lapply(mixed_effects_info$vc, function(i) dimnames(i)[1])[non_intercepts])
+      dn <- unlist(lapply(mixed_effects_info$vc, function(i) dimnames(i)[1])[
+        non_intercepts
+      ])
       rndslopes <- unlist(lapply(mixed_effects_info$vc, function(i) {
         if (is.null(dim(i)) || identical(dim(i), c(1, 1))) {
           as.vector(i)
@@ -1123,7 +1203,9 @@
   pattern <- paste0("(I|poly)(.*)(", paste(rnd_slopes, collapse = "|"), ")")
   poly_random_slopes <- any(grepl(pattern, rs_names))
 
-  if (length(rnd_slopes) < 2 && !isTRUE(cat_random_slopes) && !isTRUE(poly_random_slopes)) {
+  if (
+    length(rnd_slopes) < 2 && !isTRUE(cat_random_slopes) && !isTRUE(poly_random_slopes)
+  ) {
     return(NULL)
   }
 
@@ -1173,9 +1255,7 @@
 
 # helper --------------------------
 
-.reshape_longer <- function(data,
-                            colnames_to = "Name",
-                            rows_to = NULL) {
+.reshape_longer <- function(data, colnames_to = "Name", rows_to = NULL) {
   cols <- names(data)
   values_to <- "Value"
 
@@ -1186,7 +1266,8 @@
   data[["_Row"]] <- .to_numeric(row.names(data))
 
   # Reshape
-  long <- stats::reshape(data,
+  long <- stats::reshape(
+    data,
     varying = cols,
     idvar = "_Row",
     v.names = values_to,

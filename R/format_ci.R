@@ -50,18 +50,20 @@ format_ci.logical <- function(CI_low, ...) {
 
 #' @rdname format_ci
 #' @export
-format_ci.numeric <- function(CI_low,
-                              CI_high,
-                              ci = 0.95,
-                              digits = 2,
-                              brackets = TRUE,
-                              width = NULL,
-                              width_low = width,
-                              width_high = width,
-                              missing = "",
-                              zap_small = FALSE,
-                              ci_string = "CI",
-                              ...) {
+format_ci.numeric <- function(
+  CI_low,
+  CI_high,
+  ci = 0.95,
+  digits = 2,
+  brackets = TRUE,
+  width = NULL,
+  width_low = width,
+  width_high = width,
+  missing = "",
+  zap_small = FALSE,
+  ci_string = "CI",
+  ...
+) {
   # check proper defaults
   if (isTRUE(brackets)) {
     ci_brackets <- c("[", "]")
@@ -79,17 +81,24 @@ format_ci.numeric <- function(CI_low,
     # and then convert to numeric
     if (is.character(digits)) {
       if (startsWith(digits, "scientific")) {
-        if (digits == "scientific") digits <- "scientific3"
+        if (digits == "scientific") {
+          digits <- "scientific3"
+        }
         sig_digits <- as.numeric(gsub("scientific", "", digits, fixed = TRUE)) + 3
       } else {
-        if (digits == "signif") digits <- "signif2"
+        if (digits == "signif") {
+          digits <- "signif2"
+        }
         sig_digits <- as.numeric(gsub("signif", "", digits, fixed = TRUE))
       }
     }
 
     # round CI-values for standard rounding, or scientific
     if (is.numeric(CI_low) && is.numeric(CI_high)) {
-      if (is.numeric(digits) || (is.character(digits) && grepl("scientific", digits, fixed = TRUE))) {
+      if (
+        is.numeric(digits) ||
+          (is.character(digits) && grepl("scientific", digits, fixed = TRUE))
+      ) {
         CI_low <- round(CI_low, sig_digits)
         CI_high <- round(CI_high, sig_digits)
       } else {
@@ -101,29 +110,37 @@ format_ci.numeric <- function(CI_low,
     if (all(is.na(CI_low) | is.infinite(CI_low))) {
       width_low <- 1
     } else {
-      width_low <- max(unlist(lapply(stats::na.omit(CI_low), function(.i) {
-        if (.i > 1e+5) {
-          6 + digits
-        } else {
-          nchar(as.character(.i))
-        }
-      }), use.names = FALSE))
+      width_low <- max(unlist(
+        lapply(stats::na.omit(CI_low), function(.i) {
+          if (.i > 1e+5) {
+            6 + digits
+          } else {
+            nchar(as.character(.i))
+          }
+        }),
+        use.names = FALSE
+      ))
     }
 
     if (all(is.na(CI_high) | is.infinite(CI_high))) {
       width_high <- 1
     } else {
-      width_high <- max(unlist(lapply(stats::na.omit(CI_high), function(.i) {
-        if (.i > 1e+5) {
-          6 + digits
-        } else {
-          nchar(as.character(.i))
-        }
-      }), use.names = FALSE))
+      width_high <- max(unlist(
+        lapply(stats::na.omit(CI_high), function(.i) {
+          if (.i > 1e+5) {
+            6 + digits
+          } else {
+            nchar(as.character(.i))
+          }
+        }),
+        use.names = FALSE
+      ))
     }
   }
 
-  if (is.na(missing)) missing <- NA_character_
+  if (is.na(missing)) {
+    missing <- NA_character_
+  }
 
   if (is.null(ci)) {
     ifelse(
@@ -141,7 +158,8 @@ format_ci.numeric <- function(CI_low,
       )
     )
   } else {
-    ifelse(is.na(CI_low) & is.na(CI_high),
+    ifelse(
+      is.na(CI_low) & is.na(CI_high),
       missing,
       paste0(
         ci * 100,
@@ -207,16 +225,17 @@ format_ci.data.frame <- function(CI_low, ci_string = "CI", ...) {
 
 # Convenience function ----------------------------------------------------
 
-
 #' @keywords internal
-.format_ci <- function(CI_low,
-                       CI_high,
-                       digits = 2,
-                       ci_brackets = c("[", "]"),
-                       width_low = NULL,
-                       width_high = NULL,
-                       missing = "NA",
-                       zap_small = FALSE) {
+.format_ci <- function(
+  CI_low,
+  CI_high,
+  digits = 2,
+  ci_brackets = c("[", "]"),
+  width_low = NULL,
+  width_high = NULL,
+  missing = "NA",
+  zap_small = FALSE
+) {
   paste0(
     ci_brackets[1],
     format_value(

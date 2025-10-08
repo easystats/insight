@@ -2,7 +2,8 @@ skip_if_not_installed("metaBMA")
 
 data(towels, package = "metaBMA")
 set.seed(123)
-mf <- metaBMA::meta_fixed(logOR,
+mf <- metaBMA::meta_fixed(
+  logOR,
   SE,
   study,
   data = towels,
@@ -18,7 +19,10 @@ test_that("get_priors-metaBMA", {
 
 set.seed(123)
 mr <- suppressWarnings(
-  metaBMA::meta_random(logOR, SE, study,
+  metaBMA::meta_random(
+    logOR,
+    SE,
+    study,
     data = towels,
     d = metaBMA::prior("cauchy", c(location = 0, scale = 0.707)),
     tau = metaBMA::prior("invgamma", c(shape = 1, scale = 0.15))

@@ -9,7 +9,11 @@ withr::with_environment(
     m <- lm(`Sepal Width` ~ Petal.Length + `a m` * log(Sepal.Length), data = dat)
     m2 <- lm(`Sepal Width` ~ Petal.Length + `a m`, data = dat)
 
-    d <- data.frame(Parameter = names(coef(m2)), Estimate = unname(coef(m2)), stringsAsFactors = FALSE)
+    d <- data.frame(
+      Parameter = names(coef(m2)),
+      Estimate = unname(coef(m2)),
+      stringsAsFactors = FALSE
+    )
     expect_identical(
       text_remove_backticks(d)$Parameter,
       c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica")
@@ -22,8 +26,14 @@ withr::with_environment(
       stringsAsFactors = FALSE
     )
     x <- text_remove_backticks(d, c("Parameter", "Term"))
-    expect_identical(x$Parameter, c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"))
-    expect_identical(x$Term, c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"))
+    expect_identical(
+      x$Parameter,
+      c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica")
+    )
+    expect_identical(
+      x$Term,
+      c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica")
+    )
 
     d <- list(Parameter = names(coef(m2)), Estimate = unname(coef(m2)))
     expect_warning(text_remove_backticks(d, verbose = TRUE))
@@ -31,37 +41,63 @@ withr::with_environment(
       text_remove_backticks(d),
       list(
         Parameter = c("(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica"),
-        Estimate = c(2.99186937324135, 0.298310962215218, -1.49267407227818, -1.67409183546024)
+        Estimate = c(
+          2.99186937324135,
+          0.298310962215218,
+          -1.49267407227818,
+          -1.67409183546024
+        )
       ),
       tolerance = 1e-3
     )
     expect_identical(
       find_parameters(m),
-      list(conditional = c(
-        "(Intercept)", "Petal.Length", "a mversicolor",
-        "a mvirginica", "log(Sepal.Length)", "a mversicolor:log(Sepal.Length)",
-        "a mvirginica:log(Sepal.Length)"
-      ))
+      list(
+        conditional = c(
+          "(Intercept)",
+          "Petal.Length",
+          "a mversicolor",
+          "a mvirginica",
+          "log(Sepal.Length)",
+          "a mversicolor:log(Sepal.Length)",
+          "a mvirginica:log(Sepal.Length)"
+        )
+      )
     )
     expect_identical(
       get_parameters(m)$Parameter,
       c(
-        "(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica", "log(Sepal.Length)",
-        "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)"
+        "(Intercept)",
+        "Petal.Length",
+        "a mversicolor",
+        "a mvirginica",
+        "log(Sepal.Length)",
+        "a mversicolor:log(Sepal.Length)",
+        "a mvirginica:log(Sepal.Length)"
       )
     )
     expect_identical(
       get_statistic(m)$Parameter,
       c(
-        "(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica", "log(Sepal.Length)",
-        "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)"
+        "(Intercept)",
+        "Petal.Length",
+        "a mversicolor",
+        "a mvirginica",
+        "log(Sepal.Length)",
+        "a mversicolor:log(Sepal.Length)",
+        "a mvirginica:log(Sepal.Length)"
       )
     )
     expect_identical(
       clean_parameters(m)$Parameter,
       c(
-        "(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica", "log(Sepal.Length)",
-        "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)"
+        "(Intercept)",
+        "Petal.Length",
+        "a mversicolor",
+        "a mvirginica",
+        "log(Sepal.Length)",
+        "a mversicolor:log(Sepal.Length)",
+        "a mvirginica:log(Sepal.Length)"
       )
     )
     expect_identical(
@@ -85,8 +121,13 @@ withr::with_environment(
     expect_identical(
       rownames(get_varcov(m)),
       c(
-        "(Intercept)", "Petal.Length", "a mversicolor", "a mvirginica",
-        "log(Sepal.Length)", "a mversicolor:log(Sepal.Length)", "a mvirginica:log(Sepal.Length)"
+        "(Intercept)",
+        "Petal.Length",
+        "a mversicolor",
+        "a mvirginica",
+        "log(Sepal.Length)",
+        "a mversicolor:log(Sepal.Length)",
+        "a mvirginica:log(Sepal.Length)"
       )
     )
     expect_identical(

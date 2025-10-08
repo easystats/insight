@@ -1,8 +1,10 @@
-.simulate_zi_predictions <- function(model,
-                                     newdata,
-                                     predictions,
-                                     nsim = NULL,
-                                     ci = 0.95) {
+.simulate_zi_predictions <- function(
+  model,
+  newdata,
+  predictions,
+  nsim = NULL,
+  ci = 0.95
+) {
   # Since the zero inflation and the conditional model are working in "opposite
   # directions", confidence intervals can not be derived directly  from the
   # "predict()"-function. Thus, confidence intervals are based on quantiles
@@ -45,7 +47,6 @@
     stringsAsFactors = FALSE
   )
 
-
   # We need to fix a bit here. We have the simulated standard errors and CI's -
   # but can use the "correct" predictions from "predict(type = "response")".
   # in order to make CI and predictions match, we take the simulated CI-range
@@ -60,7 +61,8 @@
   neg.ci <- ci.low < 0
   if (any(neg.ci)) {
     ci.range[neg.ci] <- ci.range[neg.ci] - abs(ci.low[neg.ci]) - 1e-05
-    simulated$SE[neg.ci] <- simulated$SE[neg.ci] - ((abs(ci.low[neg.ci]) + 1e-05) / stats::qnorm(ci))
+    simulated$SE[neg.ci] <- simulated$SE[neg.ci] -
+      ((abs(ci.low[neg.ci]) + 1e-05) / stats::qnorm(ci))
   }
 
   simulated$CI_low <- predictions - ci.range
@@ -71,7 +73,6 @@
 
 
 # glmmTMB -------------------
-
 
 .simulate_predictions_glmmTMB <- function(model, newdata, nsim) {
   check_if_installed("lme4")
@@ -106,7 +107,6 @@
 
 # GLMMAdaptive MixMod -------------------
 
-
 .simulate_predictions_MixMod <- function(model, newdata, nsim) {
   check_if_installed("lme4")
   check_if_installed("MASS")
@@ -140,24 +140,39 @@
 
 # pscl::zeroinfl ----------------------
 
-
 .simulate_predictions_zeroinfl <- function(model, newdata, nsim = 1000) {
   # check for at least to factor levels, in order to build contrasts
   single_factor_levels <- sapply(newdata, function(i) is.factor(i) && nlevels(i) == 1)
   if (any(single_factor_levels)) {
-    format_warning("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals.")
+    format_warning(
+      "Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."
+    )
     return(NULL)
   }
 
   tryCatch(
     {
-      condformula <- stats::as.formula(paste0("~", safe_deparse(stats::formula(model)[[3]][[2]])))
-      ziformula <- stats::as.formula(paste0("~", safe_deparse(stats::formula(model)[[3]][[3]])))
+      condformula <- stats::as.formula(paste0(
+        "~",
+        safe_deparse(stats::formula(model)[[3]][[2]])
+      ))
+      ziformula <- stats::as.formula(paste0(
+        "~",
+        safe_deparse(stats::formula(model)[[3]][[3]])
+      ))
 
-      matrix.conditional <- stats::model.matrix(condformula, model = "count", data = newdata)
+      matrix.conditional <- stats::model.matrix(
+        condformula,
+        model = "count",
+        data = newdata
+      )
       beta.conditional <- stats::coef(model, model = "count")
 
-      matrix.zero_inflated <- stats::model.matrix(ziformula, model = "zero", data = newdata)
+      matrix.zero_inflated <- stats::model.matrix(
+        ziformula,
+        model = "zero",
+        data = newdata
+      )
       beta.zero_inflated <- stats::coef(model, model = "zero")
 
       .get_simulation_from_zi(
@@ -177,7 +192,6 @@
 
 
 # gam --------------------
-
 
 .get_zeroinfl_gam_predictions <- function(model, newdata, nsim = 1000) {
   tryCatch(
@@ -214,13 +228,14 @@
 
 # helper -----------------
 
-
-.get_simulation_from_zi <- function(model,
-                                    nsim,
-                                    beta.conditional,
-                                    beta.zero_inflated,
-                                    matrix.conditional,
-                                    matrix.zero_inflated) {
+.get_simulation_from_zi <- function(
+  model,
+  nsim,
+  beta.conditional,
+  beta.zero_inflated,
+  matrix.conditional,
+  matrix.zero_inflated
+) {
   # if formula has a polynomial term, and this term is one that is held
   # constant, model.matrix() with "newdata" will throw an error - so we
   # re-build the newdata-argument by including all values for poly-terms, if

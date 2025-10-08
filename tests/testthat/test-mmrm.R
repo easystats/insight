@@ -18,15 +18,33 @@ test_that("model_info", {
 })
 
 test_that("loglik", {
-  expect_equal(get_loglikelihood(mod_mmrm, estimator = "REML"), logLik(mod_mmrm), ignore_attr = TRUE)
+  expect_equal(
+    get_loglikelihood(mod_mmrm, estimator = "REML"),
+    logLik(mod_mmrm),
+    ignore_attr = TRUE
+  )
   expect_equal(get_loglikelihood(mod_mmrm), logLik(mod_mmrm), ignore_attr = TRUE)
 })
 
 test_that("get_df", {
-  expect_equal(get_df(mod_mmrm), c(
-    218.8018, 168.6657, 157.1382, 166.1324, 145.552, 143.8758,
-    155.5575, 138.4708, 138.5643, 158.1651, 129.7204
-  ), ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(
+    get_df(mod_mmrm),
+    c(
+      218.8018,
+      168.6657,
+      157.1382,
+      166.1324,
+      145.552,
+      143.8758,
+      155.5575,
+      138.4708,
+      138.5643,
+      158.1651,
+      129.7204
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
   expect_equal(get_df(mod_mmrm, type = "model"), 12, ignore_attr = TRUE)
 })
 
@@ -80,7 +98,12 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(mod_mmrm), na.omit(fev_data$FEV1), ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(
+    get_response(mod_mmrm),
+    na.omit(fev_data$FEV1),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
 })
 
 test_that("link_inverse", {
@@ -88,8 +111,14 @@ test_that("link_inverse", {
 })
 
 test_that("get_data", {
-  expect_identical(colnames(get_data(mod_mmrm)), c("FEV1", "RACE", "SEX", "ARMCD", "AVISIT", "USUBJID"))
-  expect_identical(colnames(get_data(mod_mmrm, effects = "fixed")), c("FEV1", "RACE", "SEX", "ARMCD", "AVISIT"))
+  expect_identical(
+    colnames(get_data(mod_mmrm)),
+    c("FEV1", "RACE", "SEX", "ARMCD", "AVISIT", "USUBJID")
+  )
+  expect_identical(
+    colnames(get_data(mod_mmrm, effects = "fixed")),
+    c("FEV1", "RACE", "SEX", "ARMCD", "AVISIT")
+  )
   expect_identical(colnames(get_data(mod_mmrm, effects = "random")), "USUBJID")
   expect_identical(dim(get_data(mod_mmrm)), c(537L, 6L))
 })
@@ -109,10 +138,16 @@ test_that("find_formula", {
 test_that("find_terms", {
   expect_identical(
     find_terms(mod_mmrm),
-    list(response = "FEV1", conditional = c(
-      "RACE", "SEX", "ARMCD",
-      "AVISIT"
-    ), random = c("AVISIT", "USUBJID"))
+    list(
+      response = "FEV1",
+      conditional = c(
+        "RACE",
+        "SEX",
+        "ARMCD",
+        "AVISIT"
+      ),
+      random = c("AVISIT", "USUBJID")
+    )
   )
   expect_identical(
     find_terms(mod_mmrm, flatten = TRUE),
@@ -121,7 +156,10 @@ test_that("find_terms", {
 })
 
 test_that("get_predictors", {
-  expect_identical(colnames(get_predictors(mod_mmrm)), c("RACE", "SEX", "ARMCD", "AVISIT"))
+  expect_identical(
+    colnames(get_predictors(mod_mmrm)),
+    c("RACE", "SEX", "ARMCD", "AVISIT")
+  )
 })
 
 test_that("get_random", {
@@ -135,19 +173,37 @@ test_that("linkfun", {
 test_that("find_parameters", {
   expect_identical(
     find_parameters(mod_mmrm),
-    list(conditional = c(
-      "(Intercept)", "RACEBlack or African American",
-      "RACEWhite", "SEXFemale", "ARMCDTRT", "AVISITVIS2", "AVISITVIS3",
-      "AVISITVIS4", "ARMCDTRT:AVISITVIS2", "ARMCDTRT:AVISITVIS3", "ARMCDTRT:AVISITVIS4"
-    ))
+    list(
+      conditional = c(
+        "(Intercept)",
+        "RACEBlack or African American",
+        "RACEWhite",
+        "SEXFemale",
+        "ARMCDTRT",
+        "AVISITVIS2",
+        "AVISITVIS3",
+        "AVISITVIS4",
+        "ARMCDTRT:AVISITVIS2",
+        "ARMCDTRT:AVISITVIS3",
+        "ARMCDTRT:AVISITVIS4"
+      )
+    )
   )
   expect_identical(nrow(get_parameters(mod_mmrm)), 11L)
   expect_identical(
     get_parameters(mod_mmrm)$Parameter,
     c(
-      "(Intercept)", "RACEBlack or African American", "RACEWhite",
-      "SEXFemale", "ARMCDTRT", "AVISITVIS2", "AVISITVIS3", "AVISITVIS4",
-      "ARMCDTRT:AVISITVIS2", "ARMCDTRT:AVISITVIS3", "ARMCDTRT:AVISITVIS4"
+      "(Intercept)",
+      "RACEBlack or African American",
+      "RACEWhite",
+      "SEXFemale",
+      "ARMCDTRT",
+      "AVISITVIS2",
+      "AVISITVIS3",
+      "AVISITVIS4",
+      "ARMCDTRT:AVISITVIS2",
+      "ARMCDTRT:AVISITVIS3",
+      "ARMCDTRT:AVISITVIS4"
     )
   )
 })

@@ -219,7 +219,11 @@
   # check whether we have broom styled or easystats styled columns
   se_column <- ifelse("SE" %in% colnames(x), "SE", "std.error")
   p_column <- ifelse("p" %in% colnames(x), "p", "p.value")
-  rope_column <- ifelse("ROPE_Percentage" %in% colnames(x), "ROPE_Percentage", "rope.percentage")
+  rope_column <- ifelse(
+    "ROPE_Percentage" %in% colnames(x),
+    "ROPE_Percentage",
+    "rope.percentage"
+  )
   ess_column <- ifelse("ESS" %in% colnames(x), "ESS", "ess")
   rhat_column <- ifelse("Rhat" %in% colnames(x), "Rhat", "rhat")
 
@@ -316,15 +320,17 @@
 # this function checks if the glue-columns actually exist in the data
 # and if not, these are being removed from the glue-pattern. we need
 # this to avoid columns that contain glue-tokens instead of values
-.clean_style_pattern <- function(x,
-                                 style,
-                                 ci_low,
-                                 ci_high,
-                                 se_column,
-                                 p_column,
-                                 rhat_column,
-                                 ess_column,
-                                 rope_column) {
+.clean_style_pattern <- function(
+  x,
+  style,
+  ci_low,
+  ci_high,
+  se_column,
+  p_column,
+  rhat_column,
+  ess_column,
+  rope_column
+) {
   if (!p_column %in% colnames(x) && any(grepl("(\\{p\\}|\\{stars\\})", style))) {
     style <- gsub("(\\{p\\}|\\{stars\\})", "", style)
   }
@@ -343,7 +349,11 @@
   if (!"pd" %in% colnames(x) && any(grepl("{pd}", style, fixed = TRUE))) {
     style <- gsub("{pd}", "", style, fixed = TRUE)
   }
-  if (is.null(ci_low) && is.null(ci_high) && any(grepl("{ci_low}, {ci_high}", style, fixed = TRUE))) {
+  if (
+    is.null(ci_low) &&
+      is.null(ci_high) &&
+      any(grepl("{ci_low}, {ci_high}", style, fixed = TRUE))
+  ) {
     style <- gsub("{ci_low}, {ci_high}", "", style, fixed = TRUE)
   }
 
@@ -354,16 +364,18 @@
 # we create a data frame with dummy-content, where each column
 # contains the style pattern. here, we replace the style pattern
 # with the related content from the original data frame.
-.replace_style_with_column <- function(x,
-                                       style,
-                                       ci_low,
-                                       ci_high,
-                                       coef_column,
-                                       se_column,
-                                       p_column,
-                                       rhat_column,
-                                       ess_column,
-                                       rope_column) {
+.replace_style_with_column <- function(
+  x,
+  style,
+  ci_low,
+  ci_high,
+  coef_column,
+  se_column,
+  p_column,
+  rhat_column,
+  ess_column,
+  rope_column
+) {
   # create new string
   table_row <- rep(style, times = nrow(x))
   for (r in seq_along(table_row)) {
