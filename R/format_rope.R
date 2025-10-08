@@ -16,7 +16,7 @@ format_rope <- function(rope_percentage, name = "in ROPE", digits = 2) {
     "0%",
     ifelse(
       rope_percentage == 1,
-      "100%", # nolint
+      "100%",
       format_value(rope_percentage, digits = digits, as_percent = TRUE)
     )
   )

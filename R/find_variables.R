@@ -65,19 +65,12 @@ find_variables <- function(
   verbose = TRUE
 ) {
   effects <- validate_argument(effects, c("all", "fixed", "random"))
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
-      "all",
-      "conditional",
-      "zi",
-      "zero_inflated",
-      "dispersion",
-      "instruments",
-      "smooth_terms",
-      "scale",
-      "location",
-      "auxiliary",
+      "all", "conditional", "zi", "zero_inflated", "dispersion",
+      "instruments", "smooth_terms", "scale", "location", "auxiliary",
       "distributional"
     )
   )

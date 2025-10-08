@@ -15,13 +15,13 @@ format_pd <- function(pd, stars = FALSE, stars_only = FALSE, name = "pd") {
     "= 100%***",
     ifelse(
       pd > 0.999,
-      paste0("= ", format_value(pd * 100), "%***"), # nolint
+      paste0("= ", format_value(pd * 100), "%***"),
       ifelse(
         pd > 0.99,
-        paste0("= ", format_value(pd * 100), "%**"), # nolint
+        paste0("= ", format_value(pd * 100), "%**"),
         ifelse(
           pd > 0.97,
-          paste0("= ", format_value(pd * 100), "%*"), # nolint
+          paste0("= ", format_value(pd * 100), "%*"),
           paste0("= ", format_value(pd * 100), "%")
         )
       )

@@ -36,7 +36,6 @@ format_string.default <- function(x, ...) {
 #' @export
 format_string.data.frame <- function(x, length = NULL, abbreviate = "...", ...) {
   as.data.frame(sapply(
-    # nolint
     x,
     format_string,
     length = length,

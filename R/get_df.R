@@ -109,23 +109,12 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   }
 
   # check valid options
+  # fmt: skip
   type <- validate_argument(
     tolower(type),
     c(
-      "residual",
-      "model",
-      "analytical",
-      "wald",
-      "normal",
-      "ml1",
-      "betwithin",
-      "between-within",
-      "profile",
-      "boot",
-      "uniroot",
-      "likelihood",
-      "m-l-1",
-      "any"
+      "residual", "model", "analytical", "wald", "normal", "ml1", "betwithin",
+      "between-within", "profile", "boot", "uniroot", "likelihood", "m-l-1", "any"
     )
   )
 
@@ -411,23 +400,13 @@ get_df.serp <- function(x, type = "normal", ...) {
 
 #' @export
 get_df.lmerMod <- function(x, type = "residual", ...) {
+  # fmt: skip
   type <- validate_argument(
     tolower(type),
     c(
-      "residual",
-      "model",
-      "analytical",
-      "satterthwaite",
-      "kenward",
-      "kenward-roger",
-      "kr",
-      "normal",
-      "wald",
-      "ml1",
-      "m-l-1",
-      "betwithin",
-      "between-within",
-      "any"
+      "residual", "model", "analytical", "satterthwaite", "kenward",
+      "kenward-roger", "kr", "normal", "wald", "ml1", "m-l-1", "betwithin",
+      "between-within", "any"
     )
   )
 
@@ -640,22 +619,8 @@ get_df.mediate <- function(x, ...) {
 
 .check_df_type <- function(type) {
   # handle mixing of ci_method and type arguments
-  if (
-    tolower(type) %in%
-      c(
-        "profile",
-        "uniroot",
-        "quantile",
-        "likelihood",
-        "eti",
-        "hdi",
-        "bci",
-        "boot",
-        "spi",
-        "nokr",
-        "any"
-      )
-  ) {
+  # fmt: skip
+  if (tolower(type) %in% c("profile", "uniroot", "quantile", "likelihood", "eti", "hdi", "bci", "boot", "spi", "nokr", "any")) {
     type <- "wald"
   } else if (tolower(type) == "analytical") {
     type <- "residual"

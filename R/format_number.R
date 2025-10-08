@@ -46,28 +46,16 @@ format_number <- function(x, textual = TRUE, ...) {
   ones <- c("", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
   names(ones) <- 0:9
 
+  # fmt: skip
   teens <- c(
-    "ten",
-    "eleven",
-    "twelve",
-    "thirteen",
-    "fourteen",
-    "fifteen",
-    "sixteen",
-    " seventeen",
-    "eighteen",
-    "nineteen"
+    "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+    "sixteen", " seventeen", "eighteen", "nineteen"
   )
   names(teens) <- 0:9
 
+  # fmt: skip
   tens <- c(
-    "twenty",
-    "thirty",
-    "forty",
-    "fifty",
-    "sixty",
-    "seventy",
-    "eighty",
+    "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty",
     "ninety"
   )
   names(tens) <- 2:9
