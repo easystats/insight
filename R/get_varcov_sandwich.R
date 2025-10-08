@@ -29,28 +29,11 @@
     return(.vcov)
   }
 
+  # fmt: skip
   vcov_type_shortcuts <- c(
-    "HC0",
-    "HC1",
-    "HC2",
-    "HC3",
-    "HC4",
-    "HC4m",
-    "HC5",
-    "CR0",
-    "CR1",
-    "CR1p",
-    "CR1S",
-    "CR2",
-    "CR3",
-    "xy",
-    "residual",
-    "wild",
-    "mammen",
-    "webb",
-    "fractional",
-    "jackknife",
-    "norm"
+    "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "CR0", "CR1",
+    "CR1p", "CR1S", "CR2", "CR3", "xy", "residual", "wild", "mammen",
+    "webb", "fractional", "jackknife", "norm"
   )
 
   # type shortcuts: overwrite only if not supplied explicitly by the user

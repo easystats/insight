@@ -134,24 +134,12 @@
   if (is.null(model)) {
     is_special <- FALSE
   } else {
+    # fmt: skip
     is_special <- inherits(
       model,
       c(
-        "MCMCglmm",
-        "gee",
-        "LORgee",
-        "mixor",
-        "clmm2",
-        "felm",
-        "feis",
-        "bife",
-        "BFBayesFactor",
-        "BBmm",
-        "glimML",
-        "MANOVA",
-        "RM",
-        "cglm",
-        "glmm",
+        "MCMCglmm", "gee", "LORgee", "mixor", "clmm2", "felm", "feis", "bife",
+        "BFBayesFactor", "BBmm", "glimML", "MANOVA", "RM", "cglm", "glmm",
         "glmgee"
       )
     )
@@ -252,140 +240,53 @@
 
 # helper to access model components ----------------
 
+# fmt: skip
 .all_elements <- function() {
   c(
     # these come first
-    "conditional",
-    "conditional1",
-    "conditional2",
-    "conditional3",
-    "precision",
-    "nonlinear",
+    "conditional", "conditional1", "conditional2", "conditional3",
+    "precision", "nonlinear",
     # regular random
     "random",
     # zero-inflated and random
-    "zero_inflated",
-    "zero_inflated_random",
-    "zi",
-    "zi_random",
+    "zero_inflated", "zero_inflated_random",
+    "zi", "zi_random",
     # dispersion and random
-    "dispersion",
-    "dispersion_random",
+    "dispersion", "dispersion_random",
     # then instruments and smooth terms
-    "instruments",
-    "interactions",
-    "smooth_terms",
+    "instruments", "interactions", "smooth_terms",
     # then auxiliary
-    "alpha",
-    "aux",
-    "auxiliary",
-    "beta",
-    "beta_random",
-    "bias",
-    "bs",
-    "bidrange",
-    "car",
-    "cluster",
-    "coi",
-    "correlation",
-    "delta",
-    "dist",
-    "extra",
-    "hu",
-    "infrequent_purchase",
-    "k",
-    "kappa",
-    "marginal",
-    "mix",
-    "mu",
-    "ndt",
-    "nominal",
-    "nu",
-    "outcome",
-    "phi",
-    "scale",
-    "selection",
-    "shape",
-    "shiftprop",
-    "sigma",
-    "simplex",
-    "slopes",
-    "survival",
-    "tau",
-    "time_dummies",
-    "xi",
-    "zoi",
+    "alpha", "aux", "auxiliary", "beta", "beta_random", "bias",
+    "bs", "bidrange", "car", "cluster", "coi", "correlation", "delta",
+    "dist", "extra", "hu", "infrequent_purchase", "k", "kappa", "marginal",
+    "mix", "mu", "ndt", "nominal", "nu", "outcome", "phi", "scale", "selection",
+    "shape", "shiftprop", "sigma", "simplex", "slopes", "survival", "tau",
+    "time_dummies", "xi", "zoi",
     # special elements, from lcmm
-    "linear",
-    "splines",
-    "membership",
-    "longitudinal",
-    "mixture",
-    "classmb",
+    "linear", "splines", "membership", "longitudinal", "mixture", "classmb",
     # other random parameters
     "sigma_random"
   )
 }
 
+# fmt: skip
 .aux_elements <- function() {
   c(
-    "(phi)",
-    "alpha",
-    "aux",
-    "auxiliary",
-    "beta",
-    "bias",
-    "coi",
-    "dispersion",
-    "dist",
-    "hu",
-    "kappa",
-    "mix",
-    "mu",
-    "ndt",
-    "nu",
-    "phi",
-    "precision",
-    "shape",
-    "shiftprop",
-    "sigma",
-    "tau",
-    "xi",
-    "zoi",
+    "(phi)", "alpha", "aux", "auxiliary", "beta", "bias", "coi", "dispersion",
+    "dist", "hu", "kappa", "mix", "mu", "ndt", "nu", "phi", "precision",
+    "shape", "shiftprop", "sigma", "tau", "xi", "zoi",
     # special elements, from lcmm
-    "linear",
-    "splines",
-    "membership",
-    "longitudinal",
-    "mixture",
-    "classmb",
+    "linear", "splines", "membership", "longitudinal", "mixture", "classmb",
     # random parameters
-    "dispersion_random",
-    "sigma_random",
-    "beta_random"
+    "dispersion_random", "sigma_random", "beta_random"
   )
 }
 
+# fmt: skip
 .brms_aux_elements <- function() {
   c(
-    "alpha",
-    "beta",
-    "bias",
-    "bs",
-    "coi",
-    "delta",
-    "hu",
-    "k",
-    "kappa",
-    "mu",
-    "ndt",
-    "nu",
-    "phi",
-    "shape",
-    "sigma",
-    "xi",
-    "zi",
-    "zoi"
+    "alpha", "beta", "bias", "bs", "coi", "delta", "hu", "k", "kappa",
+    "mu", "ndt", "nu", "phi", "shape", "sigma", "xi", "zi", "zoi"
   )
 }
 

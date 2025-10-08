@@ -217,19 +217,12 @@ get_variance.merMod <- function(
   verbose = TRUE,
   ...
 ) {
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
-      "all",
-      "fixed",
-      "random",
-      "residual",
-      "distribution",
-      "dispersion",
-      "intercept",
-      "slope",
-      "rho01",
-      "rho00"
+      "all", "fixed", "random", "residual", "distribution", "dispersion",
+      "intercept", "slope", "rho01", "rho00"
     )
   )
   .safe(.compute_variances(
@@ -291,19 +284,12 @@ get_variance.glmmTMB <- function(
   verbose = TRUE,
   ...
 ) {
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
-      "all",
-      "fixed",
-      "random",
-      "residual",
-      "distribution",
-      "dispersion",
-      "intercept",
-      "slope",
-      "rho01",
-      "rho00"
+      "all", "fixed", "random", "residual", "distribution", "dispersion",
+      "intercept", "slope", "rho01", "rho00"
     )
   )
   .safe(.compute_variances(
@@ -333,19 +319,12 @@ get_variance.mixed <- function(
   verbose = TRUE,
   ...
 ) {
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
-      "all",
-      "fixed",
-      "random",
-      "residual",
-      "distribution",
-      "dispersion",
-      "intercept",
-      "slope",
-      "rho01",
-      "rho00"
+      "all", "fixed", "random", "residual", "distribution", "dispersion",
+      "intercept", "slope", "rho01", "rho00"
     )
   )
   .safe(.compute_variances(

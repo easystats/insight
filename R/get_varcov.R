@@ -432,16 +432,12 @@ get_varcov.mjoint <- function(x, component = "all", verbose = TRUE, ...) {
 #' @export
 get_varcov.mhurdle <- function(x, component = "all", verbose = TRUE, ...) {
   .check_get_varcov_dots(x, ...)
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
-      "all",
-      "conditional",
-      "zi",
-      "zero_inflated",
-      "infrequent_purchase",
-      "ip",
-      "auxiliary"
+      "all", "conditional", "zi", "zero_inflated", "infrequent_purchase",
+      "ip", "auxiliary"
     )
   )
   vc <- .safe_vcov(x)
