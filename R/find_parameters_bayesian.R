@@ -287,17 +287,10 @@ find_parameters.stanreg <- function(
     effects,
     c("all", "fixed", "random", "random_variance", "grouplevel", "full")
   )
+  # fmt: skip
   component <- validate_argument(
     component,
-    c(
-      "location",
-      "all",
-      "conditional",
-      "smooth_terms",
-      "sigma",
-      "distributional",
-      "auxiliary"
-    )
+    c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")
   )
 
   cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
@@ -358,17 +351,10 @@ find_parameters.stanmvreg <- function(
     effects,
     c("all", "fixed", "random", "random_variance", "grouplevel", "full")
   )
+  # fmt: skip
   component <- validate_argument(
     component,
-    c(
-      "location",
-      "all",
-      "conditional",
-      "smooth_terms",
-      "sigma",
-      "distributional",
-      "auxiliary"
-    )
+    c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")
   )
 
   cond <- fe[

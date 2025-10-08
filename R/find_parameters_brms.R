@@ -12,20 +12,12 @@ find_parameters.brmsfit <- function(
     effects,
     c("all", "fixed", "random", "random_variance", "grouplevel", "full")
   )
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
-      "all",
-      "conditional",
-      "zi",
-      "zero_inflated",
-      "dispersion",
-      "instruments",
-      "correlation",
-      "smooth_terms",
-      "location",
-      "auxiliary",
-      "distributional"
+      "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
+      "correlation", "smooth_terms", "location", "auxiliary", "distributional"
     )
   )
 
@@ -178,37 +170,16 @@ find_parameters.brmsfit <- function(
   for (dp in dpars) {
     random_dp <- NULL
     # fixed
+    # fmt: skip
     if (dp == "sigma") {
       # exception: sigma
       dpars_fixed[[dp]] <- fe[fe == "sigma"]
       pattern <- paste0("^sigma_", mv_pattern_sigma)
       dpars_fixed[[dp]] <- c(dpars_fixed[[dp]], grep(pattern, fe, value = TRUE))
-      pattern <- paste0(
-        "^(b_",
-        dp,
-        "_|bs_",
-        dp,
-        "_|bsp_",
-        dp,
-        "_|bcs_",
-        dp,
-        ")",
-        mv_pattern_sigma
-      )
+      pattern <- paste0("^(b_", dp, "_|bs_", dp, "_|bsp_", dp, "_|bcs_", dp, ")", mv_pattern_sigma)
       dpars_fixed[[dp]] <- c(dpars_fixed[[dp]], grep(pattern, fe, value = TRUE))
     } else {
-      pattern <- paste0(
-        "^(b_",
-        dp,
-        "_|bs_",
-        dp,
-        "_|bsp_",
-        dp,
-        "_|bcs_",
-        dp,
-        ")",
-        mv_pattern_fixed
-      )
+      pattern <- paste0("^(b_", dp, "_|bs_", dp, "_|bsp_", dp, "_|bcs_", dp, ")", mv_pattern_fixed)
       dpars_fixed[[dp]] <- grep(pattern, fe, value = TRUE)
     }
     # random

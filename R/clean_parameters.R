@@ -64,30 +64,12 @@ clean_parameters.default <- function(x, group = "", ...) {
     # those possible components returned by `find_parameters()`, see
     # @section Model components in `find_predictors.R`, or
     # `.get_elements("fixed", "all")`
+    # fmt: skip
     components <- c(
-      "zero_inflated",
-      "dispersion",
-      "nonlinear",
-      "instruments",
-      "phi",
-      "mu",
-      "extra",
-      "scale",
-      "marginal",
-      "intercept",
-      "correlation",
-      "ip",
-      "tau",
-      "beta",
-      "precision",
-      "selection",
-      "auxiliary",
-      "outcome",
-      "full",
-      "infrequent_purchase",
-      "delta",
-      "shape",
-      "survival"
+      "zero_inflated", "dispersion", "nonlinear", "instruments", "phi", "mu",
+      "extra", "scale", "marginal", "intercept", "correlation", "ip", "tau",
+      "beta", "precision", "selection", "auxiliary", "outcome", "full",
+      "infrequent_purchase", "delta", "shape", "survival"
     )
 
     # iterate all components
@@ -586,7 +568,7 @@ clean_parameters.mlm <- function(x, ...) {
         " ~ ",
         out$Cleaned_Parameter[which(cor_sd)[cor_only]],
         fixed = TRUE
-      ) # nolint
+      )
     }
   }
 
@@ -658,7 +640,7 @@ clean_parameters.mlm <- function(x, ...) {
       "^(simo_|simo_mo)(.*)\\[(\\d)\\]$",
       "\\2[\\3]",
       out$Cleaned_Parameter[simplex]
-    ) # nolint
+    )
     out$Component[simplex] <- "simplex"
   }
 

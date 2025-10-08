@@ -28,17 +28,12 @@ find_parameters.betamfx <- function(x, component = "all", flatten = FALSE, ...) 
     conditional = text_remove_backticks(names(x$fit$coefficients$mean)),
     precision = text_remove_backticks(names(x$fit$coefficients$precision))
   )
-
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
-      "all",
-      "conditional",
-      "precision",
-      "marginal",
-      "location",
-      "distributional",
-      "auxiliary"
+      "all", "conditional", "precision", "marginal", "location",
+      "distributional", "auxiliary"
     )
   )
   elements <- .get_elements(effects = "all", component = component)

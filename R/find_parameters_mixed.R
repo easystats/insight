@@ -43,18 +43,10 @@ find_parameters.glmmTMB <- function(
   ...
 ) {
   effects <- validate_argument(effects, c("all", "fixed", "random"))
+  # fmt: skip
   component <- validate_argument(
     component,
-    c(
-      "all",
-      "conditional",
-      "zi",
-      "zero_inflated",
-      "dispersion",
-      "location",
-      "distributional",
-      "auxiliary"
-    )
+    c("all", "conditional", "zi", "zero_inflated", "dispersion", "location", "distributional", "auxiliary")
   )
 
   # installed

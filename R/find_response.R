@@ -243,15 +243,9 @@ check_cbind <- function(resp, combine, model) {
     r2 <- trim_ws(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
     # check for "resp_thres" and similar patterns
     r_resp <- trim_ws(unlist(strsplit(resp, "|", fixed = TRUE))[2])
-    if (
-      grepl("^(resp_thres|thres|resp_weights|weights|resp_se|se|resp_cens|cens)", r_resp)
-    ) {
-      r3 <- trim_ws(sub(
-        "=",
-        "",
-        sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp),
-        fixed = TRUE
-      ))
+    # fmt: skip
+    if (grepl("^(resp_thres|thres|resp_weights|weights|resp_se|se|resp_cens|cens)", r_resp)) {
+      r3 <- trim_ws(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp), fixed = TRUE))
       numeric_values <- suppressWarnings(as.numeric(r2))
       r2 <- r2[is.na(numeric_values)]
       if (is.na(suppressWarnings(as.numeric(r3)))) {

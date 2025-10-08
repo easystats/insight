@@ -144,18 +144,12 @@ find_predictors.default <- function(
   ...
 ) {
   effects <- validate_argument(effects, c("fixed", "random", "all"))
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
-      "all",
-      "conditional",
-      "zi",
-      "zero_inflated",
-      "dispersion",
-      "instruments",
-      "correlation",
-      "smooth_terms",
-      "location"
+      "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
+      "correlation", "smooth_terms", "location"
     )
   )
 
@@ -208,18 +202,12 @@ find_predictors.lcmm <- function(
   verbose = TRUE,
   ...
 ) {
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
-      "all",
-      "conditional",
-      "membership",
-      "longitudinal",
-      "beta",
-      "splines",
-      "linear",
-      "mixture",
-      "classmb"
+      "all", "conditional", "membership", "longitudinal", "beta", "splines",
+      "linear", "mixture", "classmb"
     )
   )
 
@@ -371,20 +359,12 @@ find_predictors.brmsfit <- function(
   ...
 ) {
   effects <- validate_argument(effects, c("fixed", "random", "all"))
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
-      "all",
-      "conditional",
-      "zi",
-      "zero_inflated",
-      "dispersion",
-      "instruments",
-      "correlation",
-      "smooth_terms",
-      "location",
-      "auxiliary",
-      "distributional"
+      "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
+      "correlation", "smooth_terms", "location", "auxiliary", "distributional"
     )
   )
 
