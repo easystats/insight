@@ -540,7 +540,7 @@ get_datagrid.data.frame <- function(
       if (nrow(targets) == 0) {
         format_error(
           "No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to `FALSE`."
-        ) # nolint
+        )
       }
     }
   }
@@ -741,7 +741,7 @@ get_datagrid.default <- function(
     if (ncol(data) < 1L) {
       format_error(
         "Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."
-      ) # nolint
+      )
     }
   }
 
@@ -1088,17 +1088,10 @@ get_datagrid.comparisons <- get_datagrid.slopes
       }
 
       # Make expression ----------
+      # fmt: skip
       shortcuts <- c(
-        "meansd",
-        "sd",
-        "mad",
-        "quartiles",
-        "zeromax",
-        "minmax",
-        "terciles",
-        "terciles2",
-        "fivenum",
-        "pretty"
+        "meansd", "sd", "mad", "quartiles", "zeromax", "minmax", "terciles",
+        "terciles2", "fivenum", "pretty"
       )
       if (
         (is.factor(x) && all(parts %in% levels(x))) ||
