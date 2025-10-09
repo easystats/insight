@@ -781,24 +781,11 @@
 .backtransform <- function(mf, x) {
   tryCatch(
     {
+      # fmt: skip
       patterns <- c(
-        "scale\\(log",
-        "exp\\(scale",
-        "log\\(log",
-        "log",
-        "log1p",
-        "log10",
-        "log2",
-        "sqrt",
-        "exp",
-        "expm1",
-        "scale",
-        "cos",
-        "sin",
-        "tan",
-        "acos",
-        "asin",
-        "atan"
+        "scale\\(log", "exp\\(scale", "log\\(log", "log", "log1p", "log10",
+        "log2", "sqrt", "exp", "expm1", "scale", "cos", "sin", "tan",
+        "acos", "asin","atan"
       )
 
       # to save time, create a full regex and see if we have any
