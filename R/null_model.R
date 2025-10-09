@@ -258,12 +258,12 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
             print_color(
               "Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n",
               "red"
-            ) # nolint
+            )
           } else if (startsWith(msg, "could not find function")) {
             print_color(
               "Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n",
               "red"
-            ) # nolint
+            )
           }
         }
         NULL
