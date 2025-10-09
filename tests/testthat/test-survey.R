@@ -26,6 +26,10 @@ test_that("find_predictors", {
     list(conditional = c("ell", "meals", "mobility"))
   )
   expect_identical(
+    find_predictors(m1, component = "design"),
+    list(design = c("stype", "fpc"))
+  )
+  expect_identical(
     find_predictors(m1, flatten = TRUE),
     c("ell", "meals", "mobility", "stype", "fpc")
   )
