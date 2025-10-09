@@ -168,6 +168,6 @@ test_that("get_data for svyglm and survey.design", {
   expect_named(out, c("w", "x", "y"))
 
   out <- get_data(des)
-  expect_named(out, c("w", "x", "y"))
+  expect_named(out, c("w", "x", "y", "z"))
   expect_equal(out$x, dat$x)
 })
