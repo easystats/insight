@@ -264,6 +264,8 @@
     "time_dummies", "xi", "zoi",
     # special elements, from lcmm
     "linear", "splines", "membership", "longitudinal", "mixture", "classmb",
+    # special elements, from survey
+    "design",
     # other random parameters
     "sigma_random"
   )
@@ -314,7 +316,13 @@
   # conditional component
   conditional_component <- setdiff(
     elements,
-    c(auxiliary_parameters, zero_inflated_component, "smooth_terms", "nonlinear")
+    c(
+      auxiliary_parameters,
+      zero_inflated_component,
+      "smooth_terms",
+      "nonlinear",
+      "design"
+    )
   )
 
   # location parameters

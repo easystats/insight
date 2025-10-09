@@ -149,7 +149,7 @@ find_predictors.default <- function(
     component,
     c(
       "all", "conditional", "zi", "zero_inflated", "dispersion", "instruments",
-      "correlation", "smooth_terms", "location"
+      "correlation", "smooth_terms", "location", "design"
     )
   )
 
@@ -234,6 +234,76 @@ find_predictors.externX <- find_predictors.lcmm
 
 #' @export
 find_predictors.externVar <- find_predictors.lcmm
+
+#' @export
+find_predictors.survey.design <- function(
+  x,
+  flatten = FALSE,
+  verbose = TRUE,
+  ...
+) {
+  vars <- .safe(compact_list(lapply(get_call(x), all.vars)))
+  if (!is.null(vars)) {
+    # remove NULL or unnamed entries
+    vars <- vars[!is.null(names(vars)) & names(vars) != ""]
+    # we don't want the name of the data or weights variable
+    vars[names(vars) %in% c("data", "weights")] <- NULL
+    vars <- unlist(vars, use.names = FALSE)
+    # make sure all variables actually appear in the data
+    vars <- list(design = intersect(colnames(stats::model.frame(x)), vars))
+  }
+  if (is_empty_object(vars)) {
+    return(NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(vars, use.names = FALSE))
+  } else {
+    vars
+  }
+}
+
+#' @export
+find_predictors.survey.design2 <- find_predictors.survey.design
+
+#' @export
+find_predictors.svyglm <- function(
+  x,
+  component = "all",
+  flatten = FALSE,
+  verbose = TRUE,
+  ...
+) {
+  component <- validate_argument(component, c("all", "conditional", "design"))
+
+  f <- find_formula(x, verbose = verbose)
+  elements <- .get_elements(effects = "all", component, model = x)
+
+  # filter formulas, depending on requested effects and components
+  f <- .prepare_predictors(x, f, elements)
+
+  # random effects are returned as list, so we need to unlist here
+  l <- .return_vars(f, x)
+
+  # add design variables
+  if (component != "conditional") {
+    l$design <- find_predictors.survey.design(
+      x$survey.design,
+      flatten = TRUE,
+      verbose = FALSE
+    )
+  }
+
+  if (is_empty_object(l) || is_empty_object(compact_list(l))) {
+    return(NULL)
+  }
+
+  if (flatten) {
+    unique(unlist(l, use.names = FALSE))
+  } else {
+    compact_list(l)
+  }
+}
 
 
 #' @export

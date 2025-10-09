@@ -1,4 +1,4 @@
-# insight 1.4.3
+# insight (devel)
 
 ## Changes
 
@@ -20,6 +20,8 @@
 ## Bug fixes
 
 * Fix CRAN check failures.
+
+* Fixed issue in `get_data()` for models from package *survey*.
 
 # insight 1.4.2
 
