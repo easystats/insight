@@ -1969,16 +1969,8 @@ get_data.svyglm <- function(x, source = "mf", ...) {
   if (is.null(x$survey.design)) {
     get_data.default(x, ...)
   } else {
-    # extract variable names from the design call
-    vars <- .safe(insight::compact_list(lapply(get_call(x$survey.design), all.vars)))
-    if (!is.null(vars)) {
-      # remove NULL or unnamed entries
-      vars <- vars[!is.null(names(vars)) & names(vars) != ""]
-      vars[names(vars) == "data"] <- NULL
-      vars <- unlist(vars, use.names = FALSE)
-    }
     # add variables from the model
-    vars <- unique(c(find_variables(x, flatten = TRUE), vars))
+    vars <- unique(c(find_variables(x, flatten = TRUE), find_weights(x)))
     get_data(x$survey.design, variables = vars, ...)
   }
 }

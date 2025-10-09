@@ -17,8 +17,49 @@ test_that("model_info", {
 })
 
 test_that("find_predictors", {
-  expect_identical(find_predictors(m1), list(conditional = c("ell", "meals", "mobility")))
-  expect_null(find_predictors(m1, effects = "random"))
+  expect_identical(
+    find_predictors(m1),
+    list(conditional = c("ell", "meals", "mobility"), design = c("stype", "fpc"))
+  )
+  expect_identical(
+    find_predictors(m1, component = "conditional"),
+    list(conditional = c("ell", "meals", "mobility"))
+  )
+  expect_identical(
+    find_predictors(m1, flatten = TRUE),
+    c("ell", "meals", "mobility", "stype", "fpc")
+  )
+  expect_identical(
+    find_predictors(dstrat),
+    list(design = c("stype", "fpc"))
+  )
+  expect_identical(
+    find_predictors(dstrat, flatten = TRUE),
+    c("stype", "fpc")
+  )
+})
+
+test_that("find_variables", {
+  expect_identical(
+    find_variables(m1),
+    list(
+      response = "api00",
+      conditional = c("ell", "meals", "mobility"),
+      design = c("stype", "fpc")
+    )
+  )
+  expect_identical(
+    find_variables(m1, flatten = TRUE),
+    c("api00", "ell", "meals", "mobility", "stype", "fpc")
+  )
+  expect_identical(
+    find_variables(dstrat),
+    list(design = c("stype", "fpc"))
+  )
+  expect_identical(
+    find_variables(dstrat, flatten = TRUE),
+    c("stype", "fpc")
+  )
 })
 
 test_that("find_response", {
