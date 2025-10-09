@@ -68,6 +68,16 @@ test_that("n_obs", {
   expect_equal(n_obs(m1), 200)
 })
 
+test_that("find_weights", {
+  expect_identical(find_weights(m1), "pw")
+  expect_identical(find_weights(dstrat), "pw")
+})
+
+test_that("get_weights", {
+  expect_equal(get_weights(m1), apistrat$pw, tolerance = 1e-4)
+  expect_equal(get_weights(dstrat), apistrat$pw, tolerance = 1e-4)
+})
+
 test_that("linkfun", {
   expect_false(is.null(link_function(m1)))
 })

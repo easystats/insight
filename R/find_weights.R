@@ -85,6 +85,20 @@ find_weights.model_fit <- function(x, ...) {
 
 
 #' @export
+find_weights.survey.design <- function(x, ...) {
+  .safe(all.vars(get_call(x)$weights))
+}
+
+#' @export
+find_weights.survey.design2 <- find_weights.survey.design
+
+#' @export
+find_weights.svyglm <- function(x, ...) {
+  find_weights(x$survey.design, ...)
+}
+
+
+#' @export
 find_weights.merMod <- function(x, ...) {
   tryCatch(
     {
