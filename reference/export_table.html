@@ -15,7 +15,7 @@ the table_width argument to control this behaviour."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,7 @@ the <code>table_width</code> argument to control this behaviour.</p>
 <span>  align <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  zap_small <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  big_mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  table_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  remove_duplicates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  row_groups <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -219,6 +220,12 @@ frames. See also <code>row_groups</code> to group rows in the printed output.</p
 <dd><p>Logical, if <code>TRUE</code>, small values are rounded after
 <code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal
 places than <code>digits</code> are printed in scientific notation.</p></dd>
+
+
+<dt id="arg-big-mark">big_mark<a class="anchor" aria-label="anchor" href="#arg-big-mark"></a></dt>
+<dd><p>Character used as thousands separator. If <code>NULL</code> (default),
+no thousands separator is used. Use <code>","</code> for comma separator or <code>" "</code>
+for space separator.</p></dd>
 
 
 <dt id="arg-table-width">table_width<a class="anchor" aria-label="anchor" href="#arg-table-width"></a></dt>

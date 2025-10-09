@@ -11,7 +11,7 @@ format_percent() is a short-cut for format_value(as_percent = TRUE)."><meta prop
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,6 +81,7 @@ formatting can be something like rounding digits, scientific notation etc.
 <span>  style_positive <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  style_negative <span class="op">=</span> <span class="st">"hyphen"</span>,</span>
 <span>  decimal_point <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"OutDec"</span><span class="op">)</span>,</span>
+<span>  big_mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -97,6 +98,7 @@ formatting can be something like rounding digits, scientific notation etc.
 <span>  style_positive <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  style_negative <span class="op">=</span> <span class="st">"hyphen"</span>,</span>
 <span>  decimal_point <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"OutDec"</span><span class="op">)</span>,</span>
+<span>  big_mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -173,6 +175,12 @@ May be <code>"hyphen"</code> (default), <code>"minus"</code> for a proper Unicod
 <dd><p>Character string containing a single character that
 is used as decimal point in output conversions.</p></dd>
 
+
+<dt id="arg-big-mark">big_mark<a class="anchor" aria-label="anchor" href="#arg-big-mark"></a></dt>
+<dd><p>Character used as thousands separator. If <code>NULL</code> (default),
+no thousands separator is used. Use <code>","</code> for comma separator or <code>" "</code>
+for space separator.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -201,6 +209,10 @@ is used as decimal point in output conversions.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".04" ".12" ".34"</span>
 <span class="r-in"><span><span class="fu">format_value</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0045</span>, <span class="fl">0.12</span>, <span class="fl">0.34</span><span class="op">)</span>, decimal_point <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4,50e-03" "0,12"     "0,34"    </span>
+<span class="r-in"><span><span class="fu">format_value</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1234567.89</span>, <span class="fl">1234.56</span><span class="op">)</span>, big_mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1,234,567.89" "1,234.56"    </span>
+<span class="r-in"><span><span class="fu">format_value</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1234567.89</span>, <span class="fl">1234.56</span><span class="op">)</span>, big_mark <span class="op">=</span> <span class="st">" "</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1 234 567.89" "1 234.56"    </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># default</span></span></span>
 <span class="r-in"><span><span class="fu">format_value</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0045</span>, <span class="fl">0.123</span>, <span class="fl">0.345</span><span class="op">)</span><span class="op">)</span></span></span>
