@@ -94,3 +94,25 @@ test_that("find_parameters", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
 })
+
+test_that("find_statistic", {
+  set.seed(123)
+  n <- 5
+  x <- runif(n)
+  y <- runif(n)
+  z <- runif(n)
+  w <- rep(1, n)
+
+  dat <- data.frame(w, x, y, z)
+
+  des <- survey::svydesign(~1, weights = ~w, data = dat)
+  svy_fit <- survey::svyglm(y ~ poly(x, 2), design = des)
+
+  out <- get_data(svy_fit)
+  expect_equal(out$x, dat$x)
+  expect_named(out, c("w", "x", "y", "z", "~w"))
+
+  out <- get_data(des)
+  expect_named(out, c("w", "x", "y", "z", "~w"))
+  expect_equal(out$x, dat$x)
+})

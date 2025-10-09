@@ -1945,6 +1945,22 @@ get_data.stanmvreg <- function(x, source = "environment", verbose = TRUE, ...) {
 }
 
 
+# survey models ------------------------------------------------------
+
+#' @export
+get_data.survey.design <- function(x, ...) {
+  get_data.default(x, source = "mf", ...)
+}
+
+#' @export
+get_data.survey.design2 <- get_data.survey.design
+
+#' @export
+get_data.svyglm <- function(x, ...) {
+  get_data(x$survey.design, ...)
+}
+
+
 # mfx models ------------------------------------------------------
 
 #' @export
