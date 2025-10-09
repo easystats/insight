@@ -1948,19 +1948,38 @@ get_data.stanmvreg <- function(x, source = "environment", verbose = TRUE, ...) {
 # survey models ------------------------------------------------------
 
 #' @export
-get_data.survey.design <- function(x, ...) {
-  get_data.default(x, source = "mf", ...)
+get_data.survey.design <- function(x, source = "mf", variables = NULL, ...) {
+  # get data from survey design object, extracting it from the model frame
+  # this ensures that we really have all original variables
+  out <- get_data.default(x, source = "mf", ...)
+  # the default model frame often returns too many variables. If we really
+  # know all existing variables, we can subset the data
+  if (!is.null(variables)) {
+    out <- out[, intersect(colnames(out), variables), drop = FALSE]
+  }
+  out
 }
 
 #' @export
 get_data.survey.design2 <- get_data.survey.design
 
 #' @export
-get_data.svyglm <- function(x, ...) {
+get_data.svyglm <- function(x, source = "mf", ...) {
+  # if we have no survey design, fall back to default extractor
   if (is.null(x$survey.design)) {
     get_data.default(x, ...)
   } else {
-    get_data(x$survey.design, ...)
+    # extract variable names from the design call
+    vars <- .safe(insight::compact_list(lapply(get_call(x$survey.design), all.vars)))
+    if (!is.null(vars)) {
+      # remove NULL or unnamed entries
+      vars <- vars[!is.null(names(vars)) & names(vars) != ""]
+      vars[names(vars) == "data"] <- NULL
+      vars <- unlist(vars, use.names = FALSE)
+    }
+    # add variables from the model
+    vars <- unique(c(find_variables(x, flatten = TRUE), vars))
+    get_data(x$survey.design, variables = vars, ...)
   }
 }
 

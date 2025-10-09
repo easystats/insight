@@ -37,7 +37,7 @@ test_that("get_data", {
   expect_equal(nrow(get_data(m1, verbose = FALSE)), 200)
   expect_equal(
     colnames(get_data(m1, verbose = FALSE)),
-    c("api00", "ell", "meals", "mobility", "(weights)")
+    c("stype", "api00", "meals", "ell", "mobility", "pw", "fpc")
   )
 })
 
@@ -110,9 +110,9 @@ test_that("get_data for svyglm and survey.design", {
 
   out <- get_data(svy_fit)
   expect_equal(out$x, dat$x)
-  expect_named(out, c("w", "x", "y", "z", "~w"))
+  expect_named(out, c("w", "x", "y"))
 
   out <- get_data(des)
-  expect_named(out, c("w", "x", "y", "z", "~w"))
+  expect_named(out, c("w", "x", "y"))
   expect_equal(out$x, dat$x)
 })
