@@ -95,7 +95,7 @@ test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
 })
 
-test_that("find_statistic", {
+test_that("get_data for svyglm and survey.design", {
   set.seed(123)
   n <- 5
   x <- runif(n)
