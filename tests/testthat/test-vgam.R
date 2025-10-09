@@ -88,7 +88,9 @@ test_that("find_formula", {
   expect_equal(
     find_formula(m2),
     list(
-      conditional = as.formula("cbind(agaaus, kniexc) ~ vitluc + s(altitude, df = c(2, 3))")
+      conditional = as.formula(
+        "cbind(agaaus, kniexc) ~ vitluc + s(altitude, df = c(2, 3))"
+      )
     ),
     ignore_attr = TRUE
   )
@@ -135,10 +137,13 @@ test_that("find_variables", {
     find_variables(m1, flatten = TRUE),
     c("agaaus", "vitluc", "altitude")
   )
-  expect_identical(find_variables(m2), list(
-    response = c("agaaus", "kniexc"),
-    conditional = c("vitluc", "altitude")
-  ))
+  expect_identical(
+    find_variables(m2),
+    list(
+      response = c("agaaus", "kniexc"),
+      conditional = c("vitluc", "altitude")
+    )
+  )
   expect_identical(
     find_variables(m2, flatten = TRUE),
     c("agaaus", "kniexc", "vitluc", "altitude")

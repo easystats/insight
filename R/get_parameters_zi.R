@@ -20,7 +20,10 @@
 #' get_parameters(m)
 #' @export
 get_parameters.zeroinfl <- function(x, component = "all", ...) {
-  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated")
+  )
   .return_zeroinf_parms(x, component)
 }
 
@@ -33,7 +36,10 @@ get_parameters.zerotrunc <- get_parameters.default
 
 #' @export
 get_parameters.zcpglm <- function(x, component = "all", ...) {
-  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated")
+  )
   cf <- stats::coef(x)
 
   cond <- data.frame(
@@ -52,7 +58,8 @@ get_parameters.zcpglm <- function(x, component = "all", ...) {
     row.names = NULL
   )
 
-  pars <- switch(component,
+  pars <- switch(
+    component,
     all = rbind(cond, zi),
     conditional = cond,
     zi = ,
@@ -91,7 +98,8 @@ get_parameters.zcpglm <- function(x, component = "all", ...) {
     row.names = NULL
   )
 
-  pars <- switch(component,
+  pars <- switch(
+    component,
     all = rbind(cond, zi),
     conditional = cond,
     zi = ,
@@ -111,8 +119,13 @@ get_parameters.mhurdle <- function(x, component = "all", ...) {
   component <- validate_argument(
     component,
     c(
-      "all", "conditional", "zi", "zero_inflated",
-      "infrequent_purchase", "ip", "auxiliary"
+      "all",
+      "conditional",
+      "zi",
+      "zero_inflated",
+      "infrequent_purchase",
+      "ip",
+      "auxiliary"
     )
   )
   cf <- stats::coef(x)

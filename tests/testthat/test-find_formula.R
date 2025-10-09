@@ -2,7 +2,11 @@ test_that("`find_formula` works with `mgcv::gam()`", {
   skip_if_not_installed("mgcv")
   set.seed(2) ## simulate some data...
   dat <- mgcv::gamSim(1, n = 50, dist = "normal", scale = 2, verbose = FALSE)
-  b <- mgcv::gam(list(y ~ s(x0) + s(x1) + s(x2), ~ s(x3)), family = mgcv::gaulss(), data = dat)
+  b <- mgcv::gam(
+    list(y ~ s(x0) + s(x1) + s(x2), ~ s(x3)),
+    family = mgcv::gaulss(),
+    data = dat
+  )
 
   f <- find_formula(b)
   expect_named(f, c("conditional", "scale"))
@@ -31,7 +35,10 @@ test_that("formula warns when using backticks", {
   expect_message(expect_false(formula_ok(m, action = "message")), regex = "syntactically")
   expect_error(expect_false(formula_ok(m, action = "error")), regex = "syntactically")
   # add own message
-  expect_message(expect_false(
-    formula_ok(m, action = "message", prefix_msg = "Test-Unit failed.")
-  ), regex = "Test-Unit failed")
+  expect_message(
+    expect_false(
+      formula_ok(m, action = "message", prefix_msg = "Test-Unit failed.")
+    ),
+    regex = "Test-Unit failed"
+  )
 })

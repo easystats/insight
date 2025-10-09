@@ -37,7 +37,6 @@ find_parameters <- function(x, ...) {
 
 # Default methods -------------------------------------------
 
-
 #' @rdname find_parameters
 #' @export
 find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
@@ -59,11 +58,13 @@ find_parameters.default <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
   if (is.null(pars$conditional) || is.null(pars)) {
     if (isTRUE(verbose)) {
-      format_warning(sprintf("Parameters can't be retrieved for objects of class `%s`.", class(x)[1]))
+      format_warning(sprintf(
+        "Parameters can't be retrieved for objects of class `%s`.",
+        class(x)[1]
+      ))
     }
     return(NULL)
   }
-
 
   if (flatten) {
     unique(unlist(pars, use.names = FALSE))
@@ -96,7 +97,9 @@ find_parameters.summary.lm <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.polr <- function(x, flatten = FALSE, ...) {
-  pars <- list(conditional = c(sprintf("Intercept: %s", names(x$zeta)), names(stats::coef(x))))
+  pars <- list(
+    conditional = c(sprintf("Intercept: %s", names(x$zeta)), names(stats::coef(x)))
+  )
   pars$conditional <- text_remove_backticks(pars$conditional)
 
   if (flatten) {
@@ -120,7 +123,9 @@ find_parameters.clm2 <- function(x, flatten = FALSE, ...) {
   } else {
     pars <- compact_list(list(
       conditional = names(cf)[1:(n_intercepts + n_location)],
-      scale = names(cf)[(1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)]
+      scale = names(cf)[
+        (1 + n_intercepts + n_location):(n_scale + n_intercepts + n_location)
+      ]
     ))
     pars <- rapply(pars, text_remove_backticks, how = "list")
   }
@@ -152,7 +157,6 @@ find_parameters.bracl <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.multinom <- function(x, flatten = FALSE, ...) {
   params <- stats::coef(x)
-
 
   pars <- if (is.matrix(params)) {
     list(conditional = colnames(params))
@@ -201,7 +205,11 @@ find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
     params <- paste0(params, " (group ", param_tab$group, ")")
     groups <- grepl("(.*)\\.g(.*)", coef_labels)
     coef_labels[!groups] <- paste0(coef_labels[!groups], " (group 1)")
-    coef_labels[groups] <- gsub("(.*)\\.g(.*)", "\\1 \\(group \\2\\)", coef_labels[groups])
+    coef_labels[groups] <- gsub(
+      "(.*)\\.g(.*)",
+      "\\1 \\(group \\2\\)",
+      coef_labels[groups]
+    )
   }
 
   are_labels <- !coef_labels %in% params
@@ -531,11 +539,7 @@ find_parameters.mle <- find_parameters.mle2
 #' @export
 find_parameters.glht <- function(x, flatten = FALSE, ...) {
   s <- summary(x)
-  alt <- switch(x$alternative,
-    two.sided = "==",
-    less = ">=",
-    greater = "<="
-  )
+  alt <- switch(x$alternative, two.sided = "==", less = ">=", greater = "<=")
 
   l <- list(conditional = paste(names(s$test$coefficients), alt, x$rhs))
 
@@ -549,7 +553,9 @@ find_parameters.glht <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.manova <- function(x, flatten = FALSE, ...) {
-  out <- list(conditional = text_remove_backticks(rownames(stats::na.omit(stats::coef(x)))))
+  out <- list(
+    conditional = text_remove_backticks(rownames(stats::na.omit(stats::coef(x))))
+  )
 
   if (flatten) {
     unique(unlist(out, use.names = FALSE))
@@ -667,7 +673,12 @@ find_parameters.flexsurvreg <- find_parameters.lrm
 
 #' @export
 find_parameters.aovlist <- function(x, flatten = FALSE, ...) {
-  l <- list(conditional = text_remove_backticks(unlist(lapply(stats::coef(x), names), use.names = FALSE)))
+  l <- list(
+    conditional = text_remove_backticks(unlist(
+      lapply(stats::coef(x), names),
+      use.names = FALSE
+    ))
+  )
 
   if (flatten) {
     unique(unlist(l, use.names = FALSE))

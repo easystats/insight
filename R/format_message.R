@@ -69,10 +69,12 @@
 #' message(msg)
 #'
 #' @export
-format_message <- function(string,
-                           ...,
-                           line_length = 0.9 * getOption("width", 80),
-                           indent = "  ") {
+format_message <- function(
+  string,
+  ...,
+  line_length = 0.9 * getOption("width", 80),
+  indent = "  "
+) {
   if (is.null(line_length) || is.infinite(line_length) || line_length < 1L) {
     line_length <- 70
   }
@@ -119,29 +121,44 @@ format_message <- function(string,
 #' format_warning("This is a warning.")
 #'
 #' @export
-format_alert <- function(string,
-                         ...,
-                         line_length = 0.9 * getOption("width", 80),
-                         indent = "  ",
-                         type = "message",
-                         call = FALSE,
-                         immediate = FALSE) {
+format_alert <- function(
+  string,
+  ...,
+  line_length = 0.9 * getOption("width", 80),
+  indent = "  ",
+  type = "message",
+  call = FALSE,
+  immediate = FALSE
+) {
   type <- validate_argument(type, c("message", "warning", "error"))
   if (type == "message") {
     message(format_message(
-      string = string, ...,
-      line_length = line_length, indent = indent
+      string = string,
+      ...,
+      line_length = line_length,
+      indent = indent
     ))
   } else if (type == "warning") {
-    warning(format_message(
-      string = string, ...,
-      line_length = line_length, indent = indent
-    ), call. = call, immediate. = immediate)
+    warning(
+      format_message(
+        string = string,
+        ...,
+        line_length = line_length,
+        indent = indent
+      ),
+      call. = call,
+      immediate. = immediate
+    )
   } else {
-    stop(format_message(
-      string = string, ...,
-      line_length = line_length, indent = indent
-    ), call. = call)
+    stop(
+      format_message(
+        string = string,
+        ...,
+        line_length = line_length,
+        indent = indent
+      ),
+      call. = call
+    )
   }
 }
 
@@ -225,7 +242,10 @@ format_error <- function(...) {
       } else if (token_pattern[i] == token_pattern[3]) {
         # url formatting
         pattern <- paste0("(.*)\\{\\.url_", allowed_chars, "\\}(.*)")
-        s2 <- .color(.color(paste0("<", gsub(pattern, "\\2", string), ">"), "blue"), "italic")
+        s2 <- .color(
+          .color(paste0("<", gsub(pattern, "\\2", string), ">"), "blue"),
+          "italic"
+        )
       } else if (token_pattern[i] == token_pattern[4]) {
         # package formatting
         pattern <- paste0("(.*)\\{\\.pkg_", allowed_chars, "\\}(.*)")

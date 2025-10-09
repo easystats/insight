@@ -161,10 +161,12 @@ model_info.model_fit <- function(x, verbose = TRUE, ...) {
 
 # Models with general handling, Gaussian ----------------------------------
 
-
 #' @export
 model_info.anova <- function(x, verbose = TRUE, ...) {
-  if (!is.null(attributes(x)$heading) && grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)) {
+  if (
+    !is.null(attributes(x)$heading) &&
+      grepl("Levene's Test", attributes(x)$heading, fixed = TRUE)
+  ) {
     .retrieve_model_info(x, verbose = verbose, ...)
   } else {
     NULL
@@ -356,7 +358,6 @@ model_info.afex_aov <- function(x, verbose = TRUE, ...) {
 
 # Models with logit-link --------------------------------
 
-
 #' @export
 model_info.logistf <- function(x, verbose = TRUE, ...) {
   faminfo <- stats::binomial(link = "logit")
@@ -420,7 +421,6 @@ model_info.phyloglm <- function(x, verbose = TRUE, ...) {
 
 # Models with ordinal family ------------------------------------
 
-
 #' @export
 model_info.clm <- function(x, verbose = TRUE, ...) {
   faminfo <- stats::binomial(link = .get_ordinal_link(x))
@@ -480,7 +480,6 @@ model_info.mvord <- function(x, verbose = verbose, ...) {
 
 # Models with family-function  ----------------------------------
 
-
 #' @export
 model_info.bamlss <- function(x, verbose = TRUE, ...) {
   faminfo <- stats::family(x)
@@ -513,7 +512,6 @@ model_info.brmultinom <- model_info.speedglm
 
 
 # Models with tobit family ----------------------------------
-
 
 #' @export
 model_info.flexsurvreg <- function(x, verbose = TRUE, ...) {
@@ -552,7 +550,6 @@ model_info.survreg <- model_info.tobit
 
 
 # Models with family in object ----------------------------------
-
 
 #' @export
 model_info.MixMod <- function(x, verbose = TRUE, ...) {
@@ -632,13 +629,10 @@ model_info.fixest <- function(x, verbose = TRUE, ...) {
       ...
     )
   } else {
-    fitfam <- switch(faminfo,
-      negbin = "negative binomial",
-      logit = "binomial",
-      faminfo
-    )
+    fitfam <- switch(faminfo, negbin = "negative binomial", logit = "binomial", faminfo)
 
-    link <- switch(faminfo,
+    link <- switch(
+      faminfo,
       poisson = ,
       negbin = "log",
       logit = "logit",
@@ -702,7 +696,8 @@ model_info.zeroinfl <- function(x, ...) {
   } else {
     distribution <- x$dist
   }
-  fitfam <- switch(distribution,
+  fitfam <- switch(
+    distribution,
     poisson = "poisson",
     negbin = "negative binomial",
     "poisson"
@@ -727,7 +722,8 @@ model_info.hurdle <- function(x, ...) {
   } else {
     distribution <- x$dist
   }
-  fitfam <- switch(distribution,
+  fitfam <- switch(
+    distribution,
     poisson = "poisson",
     negbin = "negative binomial",
     "poisson"
@@ -755,7 +751,6 @@ model_info.mhurdle <- function(x, ...) {
 
 
 # Bayesian Models ---------------------------
-
 
 #' @export
 model_info.stanreg <- function(x, ...) {
@@ -834,7 +829,8 @@ model_info.stanmvreg <- function(x, response = NULL, ...) {
 
 #' @export
 model_info.oohbchoice <- function(x, ...) {
-  link <- switch(x$distribution,
+  link <- switch(
+    x$distribution,
     normal = ,
     "log-normal" = stats::gaussian()$link,
     logistic = ,
@@ -842,7 +838,8 @@ model_info.oohbchoice <- function(x, ...) {
     "log"
   )
 
-  fam <- switch(x$distribution,
+  fam <- switch(
+    x$distribution,
     normal = ,
     "log-normal" = "gaussian",
     logistic = ,
@@ -863,16 +860,9 @@ model_info.oohbchoice <- function(x, ...) {
 
 #' @export
 model_info.BGGM <- function(x, ...) {
-  link <- switch(x$type,
-    continuous = stats::gaussian(),
-    stats::binomial()
-  )
+  link <- switch(x$type, continuous = stats::gaussian(), stats::binomial())
 
-  fam <- switch(x$type,
-    continuous = "gaussian",
-    binary = "binomial",
-    "ordinal"
-  )
+  fam <- switch(x$type, continuous = "gaussian", binary = "binomial", "ordinal")
 
   .retrieve_model_info(
     x = x,
@@ -934,7 +924,8 @@ model_info.coeftest <- function(x, ...) {
 
 #' @export
 model_info.glmm <- function(x, ...) {
-  f <- switch(tolower(x$family.glmm$family.glmm),
+  f <- switch(
+    tolower(x$family.glmm$family.glmm),
     bernoulli.glmm = ,
     binomial.glmm = stats::binomial("logit"),
     poisson.glmm = stats::poisson("log"),
@@ -953,7 +944,8 @@ model_info.glmm <- function(x, ...) {
 
 #' @export
 model_info.robmixglm <- function(x, ...) {
-  f <- switch(tolower(x$family),
+  f <- switch(
+    tolower(x$family),
     gaussian = stats::gaussian("identity"),
     binomial = stats::binomial("logit"),
     poisson = stats::poisson("log"),
@@ -987,7 +979,9 @@ model_info.summary.lm <- model_info.Arima
 #' @export
 model_info.averaging <- function(x, ...) {
   if (is.null(attributes(x)$modelList)) {
-    format_warning("Can't access model information. Please use 'fit = TRUE' in 'model.avg()'.")
+    format_warning(
+      "Can't access model information. Please use 'fit = TRUE' in 'model.avg()'."
+    )
     return(NULL)
   }
   model_info(x = attributes(x)$modelList[[1]])
@@ -1133,8 +1127,12 @@ model_info.glmgee <- function(x, ...) {
 #' @export
 model_info.cpglmm <- function(x, ...) {
   link <- parse(text = safe_deparse(x@call))[[1]]$link
-  if (is.null(link)) link <- "log"
-  if (is.numeric(link)) link <- "tweedie"
+  if (is.null(link)) {
+    link <- "log"
+  }
+  if (is.numeric(link)) {
+    link <- "tweedie"
+  }
   .retrieve_model_info(
     x = x,
     fitfam = "poisson",
@@ -1149,8 +1147,12 @@ model_info.cpglmm <- function(x, ...) {
 #' @export
 model_info.zcpglm <- function(x, ...) {
   link <- parse(text = safe_deparse(x@call))[[1]]$link
-  if (is.null(link)) link <- "log"
-  if (is.numeric(link)) link <- "tweedie"
+  if (is.null(link)) {
+    link <- "log"
+  }
+  if (is.numeric(link)) {
+    link <- "tweedie"
+  }
   .retrieve_model_info(
     x = x,
     fitfam = "poisson",
@@ -1171,10 +1173,7 @@ model_info.bcplm <- model_info.cpglmm
 
 #' @export
 model_info.glimML <- function(x, ...) {
-  fitfam <- switch(x@method,
-    BB = "betabinomial",
-    NB = "negative binomial"
-  )
+  fitfam <- switch(x@method, BB = "betabinomial", NB = "negative binomial")
   .retrieve_model_info(
     x = x,
     fitfam = fitfam,
@@ -1250,7 +1249,8 @@ model_info.glmmTMB <- function(x, ...) {
   check_if_installed("lme4")
 
   faminfo <- stats::family(x)
-  zero_inflated <- !is_empty_object(lme4::fixef(x)$zi) || startsWith(faminfo$family, "truncated")
+  zero_inflated <- !is_empty_object(lme4::fixef(x)$zi) ||
+    startsWith(faminfo$family, "truncated")
 
   .retrieve_model_info(
     x = x,
@@ -1285,7 +1285,9 @@ model_info.betareg <- function(x, ...) {
   } else if (!is.null(x$link$mu)) {
     "mu"
   } else {
-    format_error("Could not find link information for the mean model in the betareg-object.")
+    format_error(
+      "Could not find link information for the mean model in the betareg-object."
+    )
   }
 }
 
@@ -1304,7 +1306,8 @@ model_info.DirichletRegModel <- function(x, ...) {
 
 #' @export
 model_info.gbm <- function(x, ...) {
-  faminfo <- switch(x$distribution$name,
+  faminfo <- switch(
+    x$distribution$name,
     laplace = ,
     tdist = ,
     gaussian = list(name = "gaussian", logit = FALSE, link = NULL),
@@ -1340,7 +1343,9 @@ model_info.MCMCglmm <- function(x, ...) {
 #' @export
 model_info.polr <- function(x, ...) {
   link <- x$method
-  if (link == "logistic") link <- "logit"
+  if (link == "logistic") {
+    link <- "logit"
+  }
   faminfo <- stats::binomial(link = link)
   .retrieve_model_info(
     x = x,
@@ -1401,10 +1406,7 @@ model_info.orm <- function(x, ...) {
 
 #' @export
 model_info.svyolr <- function(x, ...) {
-  l <- switch(x$method,
-    logistic = "logit",
-    x$method
-  )
+  l <- switch(x$method, logistic = "logit", x$method)
   faminfo <- stats::binomial(link = l)
   .retrieve_model_info(
     x = x,

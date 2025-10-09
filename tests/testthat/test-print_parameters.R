@@ -13,8 +13,11 @@ test_that("print_parameters brms", {
   expect_named(
     out,
     c(
-      "fixed.conditional", "fixed.zi", "random.conditional.Intercept: persons",
-      "random.zi.Intercept: persons", "random.conditional.SD/Cor: persons",
+      "fixed.conditional",
+      "fixed.zi",
+      "random.conditional.Intercept: persons",
+      "random.zi.Intercept: persons",
+      "random.conditional.SD/Cor: persons",
       "random.zi.SD/Cor: persons"
     )
   )
@@ -26,7 +29,10 @@ test_that("print_parameters brms", {
     list(
       fixed.conditional = c("# Fixed effects (conditional)", "blue"),
       fixed.zi = c("# Fixed effects (zero-inflated)", "blue"),
-      `random.conditional.Intercept: persons` = c("# Random effects (conditional)", "blue"),
+      `random.conditional.Intercept: persons` = c(
+        "# Random effects (conditional)",
+        "blue"
+      ),
       `random.zi.Intercept: persons` = c("# Random effects (zero-inflated)", "blue"),
       `random.conditional.SD/Cor: persons` = c("# Random effects (conditional)", "blue"),
       `random.zi.SD/Cor: persons` = c("# Random effects (zero-inflated)", "blue")
@@ -48,8 +54,10 @@ test_that("print_parameters glmmTMB", {
   expect_named(
     out,
     c(
-      "fixed.conditional", "fixed.zero_inflated",
-      "random.conditional.persons", "random.zero_inflated.ID"
+      "fixed.conditional",
+      "fixed.zero_inflated",
+      "random.conditional.persons",
+      "random.zero_inflated.ID"
     )
   )
   att <- lapply(out, function(i) {

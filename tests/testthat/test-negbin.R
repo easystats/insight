@@ -2,10 +2,7 @@ skip_if_not_installed("aod")
 
 data(dja, package = "aod")
 m1 <- suppressWarnings(
-  aod::negbin(y ~ group + offset(log(trisk)),
-    random = ~village,
-    data = dja
-  )
+  aod::negbin(y ~ group + offset(log(trisk)), random = ~village, data = dja)
 )
 
 test_that("model_info", {
@@ -79,7 +76,10 @@ test_that("link_function", {
 
 test_that("get_data", {
   expect_equal(nrow(get_data(m1, verbose = FALSE)), 75)
-  expect_equal(colnames(get_data(m1, verbose = FALSE)), c("y", "group", "trisk", "village"))
+  expect_equal(
+    colnames(get_data(m1, verbose = FALSE)),
+    c("y", "group", "trisk", "village")
+  )
 })
 
 test_that("find_formula", {

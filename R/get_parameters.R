@@ -48,7 +48,6 @@ get_parameters <- function(x, ...) {
 
 # Default models ---------------------------------------------
 
-
 #' @rdname get_parameters
 #' @export
 get_parameters.default <- function(x, verbose = TRUE, ...) {
@@ -109,7 +108,6 @@ get_parameters.data.frame <- function(x, ...) {
 
 
 # Special models ---------------------------------------------
-
 
 #' @export
 get_parameters.rms <- get_parameters.default
@@ -217,7 +215,11 @@ get_parameters.btergm <- function(x, ...) {
 #' @export
 get_parameters.sdmTMB <- function(x, component = "all", verbose = TRUE, ...) {
   delta_comp <- isTRUE(x$family$delta)
-  valid_comp <- compact_character(c("all", "conditional", ifelse(delta_comp, "delta", "")))
+  valid_comp <- compact_character(c(
+    "all",
+    "conditional",
+    ifelse(delta_comp, "delta", "")
+  ))
   component <- validate_argument(component, valid_comp)
 
   cf <- suppressMessages(stats::coef(x, model = 1))
@@ -246,11 +248,7 @@ get_parameters.sdmTMB <- function(x, component = "all", verbose = TRUE, ...) {
     params <- conditional
   }
 
-  params <- switch(component,
-    all = params,
-    conditional = conditional,
-    delta = delta
-  )
+  params <- switch(component, all = params, conditional = conditional, delta = delta)
 
   text_remove_backticks(params)
 }
@@ -266,6 +264,7 @@ get_parameters.mediate <- function(x, ...) {
       stringsAsFactors = FALSE
     )
   } else {
+    # fmt: skip
     out <- data.frame(
       Parameter = c(
         "ACME (control)", "ACME (treated)", "ADE (control)",
@@ -385,11 +384,7 @@ get_parameters.margins <- function(x, ...) {
 #' @export
 get_parameters.glht <- function(x, ...) {
   s <- summary(x)
-  alt <- switch(x$alternative,
-    two.sided = "==",
-    less = ">=",
-    greater = "<="
-  )
+  alt <- switch(x$alternative, two.sided = "==", less = ">=", greater = "<=")
   out <- data.frame(
     Parameter = paste(names(s$test$coefficients), alt, x$rhs),
     Estimate = unname(s$test$coefficients),
@@ -451,13 +446,16 @@ get_parameters.multinom <- function(x, ...) {
   if (is.matrix(params)) {
     out <- data.frame()
     for (i in seq_len(nrow(params))) {
-      out <- rbind(out, data.frame(
-        Parameter = colnames(params),
-        Estimate = unname(params[i, ]),
-        Response = rownames(params)[i],
-        stringsAsFactors = FALSE,
-        row.names = NULL
-      ))
+      out <- rbind(
+        out,
+        data.frame(
+          Parameter = colnames(params),
+          Estimate = unname(params[i, ]),
+          Response = rownames(params)[i],
+          stringsAsFactors = FALSE,
+          row.names = NULL
+        )
+      )
     }
   } else {
     out <- data.frame(
@@ -642,7 +640,6 @@ get_parameters.metaplus <- function(x, ...) {
 
 # SEM models ---------------------------------------------
 
-
 #' @export
 get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...) {
   if (isTRUE(summary)) {
@@ -668,7 +665,11 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
     params <- paste0(params, " (group ", param_tab$group, ")")
     groups <- grepl("(.*)\\.g(.*)", coef_labels)
     coef_labels[!groups] <- paste0(coef_labels[!groups], " (group 1)")
-    coef_labels[groups] <- gsub("(.*)\\.g(.*)", "\\1 \\(group \\2\\)", coef_labels[groups])
+    coef_labels[groups] <- gsub(
+      "(.*)\\.g(.*)",
+      "\\1 \\(group \\2\\)",
+      coef_labels[groups]
+    )
   }
 
   are_labels <- !coef_labels %in% params
@@ -717,7 +718,6 @@ get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
 
 # Ordinal models ---------------------------------------------
 
-
 #' @export
 get_parameters.polr <- function(x, ...) {
   pars <- c(sprintf("Intercept: %s", names(x$zeta)), names(x$coefficients))
@@ -751,7 +751,6 @@ get_parameters.bracl <- function(x, ...) {
 
 # Anova and Standard models --------------------------------------------------
 
-
 #' @export
 get_parameters.aov <- function(x, ...) {
   cf <- stats::coef(x)
@@ -770,15 +769,18 @@ get_parameters.aov <- function(x, ...) {
 #' @export
 get_parameters.aovlist <- function(x, ...) {
   cs <- stats::coef(x)
-  out <- do.call(rbind, lapply(names(cs), function(i) {
-    params <- data.frame(
-      Parameter = names(cs[[i]]),
-      Estimate = unname(cs[[i]]),
-      Group = i,
-      stringsAsFactors = FALSE
-    )
-    text_remove_backticks(params)
-  }))
+  out <- do.call(
+    rbind,
+    lapply(names(cs), function(i) {
+      params <- data.frame(
+        Parameter = names(cs[[i]]),
+        Estimate = unname(cs[[i]]),
+        Group = i,
+        stringsAsFactors = FALSE
+      )
+      text_remove_backticks(params)
+    })
+  )
   rownames(out) <- NULL
   out
 }
@@ -837,7 +839,6 @@ get_parameters.pgmm <- function(x, component = "conditional", ...) {
 
 
 # utility functions ---------------------------------
-
 
 .get_armsim_fixef_parms <- function(x) {
   sn <- methods::slotNames(x)

@@ -3,8 +3,10 @@ skip_if_not_installed("sdmTMB")
 
 set.seed(1)
 predictor_dat <- data.frame(
-  X = runif(300), Y = runif(300),
-  b1 = rnorm(300), b2 = rnorm(300),
+  X = runif(300),
+  Y = runif(300),
+  b1 = rnorm(300),
+  b2 = rnorm(300),
   year = rep(1:6, each = 50)
 )
 mesh <- sdmTMB::make_mesh(predictor_dat, xy_cols = c("X", "Y"), cutoff = 0.1)
@@ -30,14 +32,16 @@ mesh <- sdmTMB::make_mesh(pcod_2011, c("X", "Y"), cutoff = 20)
 pcod_2011$count <- round(pcod_2011$density)
 m2 <- sdmTMB::sdmTMB(
   count ~ s(depth),
-  data = pcod_2011, mesh = mesh,
+  data = pcod_2011,
+  mesh = mesh,
   spatial = "off",
   family = sdmTMB::delta_truncated_nbinom2()
 )
 
 m5 <- sdmTMB::sdmTMB(
   count ~ depth,
-  data = pcod_2011, mesh = mesh,
+  data = pcod_2011,
+  mesh = mesh,
   spatial = "off",
   family = sdmTMB::delta_truncated_nbinom2()
 )
@@ -45,13 +49,15 @@ m5 <- sdmTMB::sdmTMB(
 pcod_2011$fyear <- as.factor(pcod_2011$year)
 m3 <- sdmTMB::sdmTMB(
   density ~ s(depth) + (1 | fyear), #<
-  data = pcod_2011, mesh = mesh,
+  data = pcod_2011,
+  mesh = mesh,
   family = sdmTMB::tweedie(link = "log")
 )
 
 m4 <- suppressWarnings(sdmTMB::sdmTMB(
   density ~ 1 + (depth | fyear), #<
-  data = pcod_2011, mesh = mesh,
+  data = pcod_2011,
+  mesh = mesh,
   family = sdmTMB::tweedie(link = "log")
 ))
 

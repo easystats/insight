@@ -43,7 +43,10 @@ test_that("clean_names", {
   expect_identical(clean_names("I(Sepal.Length / 10)"), "Sepal.Length")
   expect_identical(clean_names("poly(Sepal.Length, 2)"), "Sepal.Length")
   expect_identical(clean_names("poly(Sepal.Length, degrees = 2)"), "Sepal.Length")
-  expect_identical(clean_names("poly(Sepal.Length, degrees = 2, raw = TRUE)"), "Sepal.Length")
+  expect_identical(
+    clean_names("poly(Sepal.Length, degrees = 2, raw = TRUE)"),
+    "Sepal.Length"
+  )
   expect_identical(clean_names("ns(Sepal.Length)"), "Sepal.Length")
   expect_identical(clean_names("ns(Sepal.Length, df = 2)"), "Sepal.Length")
   expect_identical(clean_names("bs(Sepal.Length)"), "Sepal.Length")
@@ -55,7 +58,10 @@ test_that("clean_names", {
   expect_identical(clean_names("~ 1 | Sepal.Length"), "Sepal.Length")
   expect_identical(clean_names("~1|Sepal.Length"), "Sepal.Length")
   expect_identical(clean_names("1 | Sepal.Length"), "Sepal.Length")
-  expect_identical(clean_names(c("scale(a)", "scale(b)", "scale(a):scale(b)")), c("a", "b", "a:b"))
+  expect_identical(
+    clean_names(c("scale(a)", "scale(b)", "scale(a):scale(b)")),
+    c("a", "b", "a:b")
+  )
   expect_identical(
     clean_names(c("scale(a)", "scale(b)", "scale(a):scale(b)"), include_names = TRUE),
     c(`scale(a)` = "a", `scale(b)` = "b", `scale(a):scale(b)` = "a:b")

@@ -11,7 +11,10 @@ skip_if(is.null(m1))
 
 test_that("format_table with stars bayes", {
   set.seed(123)
-  x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf"))))
+  x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(
+    m1,
+    test = c("pd", "bf")
+  )))
 
   out <- format_table(x)
   expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
@@ -48,21 +51,41 @@ test_that("format_table with stars bayes", {
 
 test_that("format_table with column order", {
   set.seed(123)
-  x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(m1, test = c("pd", "bf", "rope"))))
+  x <- suppressWarnings(as.data.frame(bayestestR::describe_posterior(
+    m1,
+    test = c("pd", "bf", "rope")
+  )))
 
   out <- format_table(x)
   expect_named(
     out,
     c(
-      "Parameter", "Median", "95% CI", "pd", "ROPE", "% in ROPE",
-      "BF", "Rhat", "ESS"
+      "Parameter",
+      "Median",
+      "95% CI",
+      "pd",
+      "ROPE",
+      "% in ROPE",
+      "BF",
+      "Rhat",
+      "ESS"
     )
   )
   expect_named(
     standardize_column_order(x),
     c(
-      "Parameter", "Median", "CI", "CI_low", "CI_high", "pd", "ROPE_CI",
-      "ROPE_low", "ROPE_high", "ROPE_Percentage", "log_BF", "Rhat",
+      "Parameter",
+      "Median",
+      "CI",
+      "CI_low",
+      "CI_high",
+      "pd",
+      "ROPE_CI",
+      "ROPE_low",
+      "ROPE_high",
+      "ROPE_Percentage",
+      "log_BF",
+      "Rhat",
       "ESS"
     )
   )
@@ -73,7 +96,10 @@ test_that("format_table with column order", {
 test_that("format_table with stars freq", {
   skip_if_not_installed("parameters")
   data(iris)
-  x <- as.data.frame(parameters::model_parameters(lm(Sepal.Length ~ Species + Sepal.Width, data = iris)))
+  x <- as.data.frame(parameters::model_parameters(lm(
+    Sepal.Length ~ Species + Sepal.Width,
+    data = iris
+  )))
 
   out <- format_table(x)
   expect_named(out, c("Parameter", "Coefficient", "SE", "95% CI", "t(146)", "p"))
@@ -132,7 +158,14 @@ test_that("formatting ROPE CI", {
   expect_snapshot(print(parameters::equivalence_test(m10)))
 
   # drop attributes
-  mp <- as.data.frame(parameters::model_parameters(m10))[c("Parameter", "Coefficient", "CI", "CI_low", "CI_high", "p")]
+  mp <- as.data.frame(parameters::model_parameters(m10))[c(
+    "Parameter",
+    "Coefficient",
+    "CI",
+    "CI_low",
+    "CI_high",
+    "p"
+  )]
   expect_snapshot(format_table(mp), variant = "windows")
   expect_snapshot(format_table(mp, digits = 4), variant = "windows")
 })
@@ -215,5 +248,8 @@ test_that("AIC", {
     AIC_wt = runif(3)
   )
   out <- format_table(d, digits = 4)
-  expect_identical(out$`AIC (weights)`, c("7.1e-02 (0.6776)", "0.1 (0.5726)", "1.7 (0.1029)"))
+  expect_identical(
+    out$`AIC (weights)`,
+    c("7.1e-02 (0.6776)", "0.1 (0.5726)", "1.7 (0.1029)")
+  )
 })

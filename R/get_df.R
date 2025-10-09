@@ -109,6 +109,7 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   }
 
   # check valid options
+  # fmt: skip
   type <- validate_argument(
     tolower(type),
     c(
@@ -128,7 +129,8 @@ get_df.default <- function(x, type = "residual", verbose = TRUE, ...) {
   # handle aliases, resp. mixing type and ci_method
   type <- .check_df_type(type)
 
-  if (type == "normal") { # nolint
+  if (type == "normal") {
+    # nolint
     # Wald normal approximation - always Inf -----
     return(Inf)
   } else if (type == "residual") {
@@ -302,10 +304,7 @@ get_df.mmrm_tmb <- get_df.mmrm
 # ---------------------------------
 
 #' @export
-get_df.afex_aov <- function(x,
-                            type = "residual",
-                            model = "multivariate",
-                            ...) {
+get_df.afex_aov <- function(x, type = "residual", model = "multivariate", ...) {
   type <- validate_argument(
     tolower(type),
     c("residual", "model", "normal", "wald", "any", "analytical")
@@ -318,9 +317,7 @@ get_df.afex_aov <- function(x,
 }
 
 #' @export
-get_df.aovlist <- function(x, type = "residual",
-                           model = "multivariate",
-                           ...) {
+get_df.aovlist <- function(x, type = "residual", model = "multivariate", ...) {
   type <- validate_argument(
     tolower(type),
     c("residual", "model", "normal", "wald", "any", "analytical")
@@ -348,13 +345,16 @@ get_df.emm_list <- function(x, ...) {
     return(.boot_em_df(x))
   }
   s <- summary(x)
-  unlist(lapply(s, function(i) {
-    if (is.null(i$df)) {
-      rep(Inf, nrow(i))
-    } else {
-      i$df
-    }
-  }), use.names = FALSE)
+  unlist(
+    lapply(s, function(i) {
+      if (is.null(i$df)) {
+        rep(Inf, nrow(i))
+      } else {
+        i$df
+      }
+    }),
+    use.names = FALSE
+  )
 }
 
 #' @export
@@ -400,6 +400,7 @@ get_df.serp <- function(x, type = "normal", ...) {
 
 #' @export
 get_df.lmerMod <- function(x, type = "residual", ...) {
+  # fmt: skip
   type <- validate_argument(
     tolower(type),
     c(
@@ -412,7 +413,11 @@ get_df.lmerMod <- function(x, type = "residual", ...) {
   # hidden gem - required for get_predicted_ci(), where we have per-observation DF
   dots <- list(...)
 
-  if (type %in% c("satterthwaite", "kr", "kenward", "kenward-roger") && isTRUE(dots$df_per_obs)) {
+  if (
+    type %in%
+      c("satterthwaite", "kr", "kenward", "kenward-roger") &&
+      isTRUE(dots$df_per_obs)
+  ) {
     .satterthwaite_kr_df_per_obs(x, type, dots$data)
   } else if (type == "satterthwaite") {
     .degrees_of_freedom_satterthwaite(x)
@@ -476,13 +481,7 @@ get_df.fixest <- function(x, type = "residual", ...) {
     tolower(type),
     c("wald", "residual", "normal", "any", "analytical")
   )
-  type <- switch(type,
-    any = ,
-    wald = "t",
-    analytical = ,
-    residual = "resid",
-    type
-  )
+  type <- switch(type, any = , wald = "t", analytical = , residual = "resid", type)
   if (type == "normal") {
     return(Inf)
   }
@@ -620,6 +619,7 @@ get_df.mediate <- function(x, ...) {
 
 .check_df_type <- function(type) {
   # handle mixing of ci_method and type arguments
+  # fmt: skip
   if (tolower(type) %in% c("profile", "uniroot", "quantile", "likelihood", "eti", "hdi", "bci", "boot", "spi", "nokr", "any")) {
     type <- "wald"
   } else if (tolower(type) == "analytical") {
@@ -634,25 +634,29 @@ get_df.mediate <- function(x, ...) {
   l <- lengths(lapply(s, stats::coef))
   parts <- strsplit(names(l), ";", fixed = TRUE)
 
-  id_columns <- Map(function(i, j) {
-    if (length(j) == 1 && startsWith(j, "rhs")) {
-      data.frame(
-        Group = rep(trim_ws(sub("rhs:", "", j, fixed = TRUE)), i),
-        stringsAsFactors = FALSE
-      )
-    } else if (length(j) == 1 && startsWith(j, "lhs")) {
-      data.frame(
-        Response = rep(trim_ws(sub("lhs:", "", j, fixed = TRUE)), i),
-        stringsAsFactors = FALSE
-      )
-    } else {
-      data.frame(
-        Response = rep(trim_ws(sub("lhs:", "", j[1], fixed = TRUE)), i),
-        Group = rep(trim_ws(sub("rhs:", "", j[2], fixed = TRUE)), i),
-        stringsAsFactors = FALSE
-      )
-    }
-  }, unname(l), parts)
+  id_columns <- Map(
+    function(i, j) {
+      if (length(j) == 1 && startsWith(j, "rhs")) {
+        data.frame(
+          Group = rep(trim_ws(sub("rhs:", "", j, fixed = TRUE)), i),
+          stringsAsFactors = FALSE
+        )
+      } else if (length(j) == 1 && startsWith(j, "lhs")) {
+        data.frame(
+          Response = rep(trim_ws(sub("lhs:", "", j, fixed = TRUE)), i),
+          stringsAsFactors = FALSE
+        )
+      } else {
+        data.frame(
+          Response = rep(trim_ws(sub("lhs:", "", j[1], fixed = TRUE)), i),
+          Group = rep(trim_ws(sub("rhs:", "", j[2], fixed = TRUE)), i),
+          stringsAsFactors = FALSE
+        )
+      }
+    },
+    unname(l),
+    parts
+  )
 
   do.call(rbind, id_columns)
 }

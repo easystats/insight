@@ -37,7 +37,11 @@ test_that("find_random", {
 })
 
 test_that("get_random", {
-  expect_equal(get_random(mod_mcmcglmm), data.frame(FSfamily = PlodiaPO$FSfamily), ignore_attr = TRUE)
+  expect_equal(
+    get_random(mod_mcmcglmm),
+    data.frame(FSfamily = PlodiaPO$FSfamily),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("find_response", {
@@ -58,7 +62,10 @@ test_that("link_inverse", {
 
 test_that("get_data", {
   expect_equal(nrow(get_data(mod_mcmcglmm, verbose = FALSE)), 511)
-  expect_equal(colnames(get_data(mod_mcmcglmm, verbose = FALSE)), c("FSfamily", "PO", "plate"))
+  expect_equal(
+    colnames(get_data(mod_mcmcglmm, verbose = FALSE)),
+    c("FSfamily", "PO", "plate")
+  )
 })
 
 test_that("find_formula", {
@@ -103,8 +110,14 @@ test_that("find_parameters", {
   )
   expect_equal(nrow(get_parameters(mod_mcmcglmm, summary = TRUE)), 2)
   expect_equal(nrow(get_parameters(mod_mcmcglmm, summary = FALSE)), 1000)
-  expect_equal(get_parameters(mod_mcmcglmm, summary = TRUE)$Parameter, c("(Intercept)", "plate"))
-  expect_equal(colnames(get_parameters(mod_mcmcglmm, summary = FALSE)), c("(Intercept)", "plate"))
+  expect_equal(
+    get_parameters(mod_mcmcglmm, summary = TRUE)$Parameter,
+    c("(Intercept)", "plate")
+  )
+  expect_equal(
+    colnames(get_parameters(mod_mcmcglmm, summary = FALSE)),
+    c("(Intercept)", "plate")
+  )
   expect_equal(
     get_parameters(mod_mcmcglmm, effects = "random", summary = TRUE)$Parameter,
     "FSfamily"

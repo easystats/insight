@@ -34,7 +34,12 @@ is_nullmodel.default <- function(x) {
       .check_for_nullmodel
     ))
   } else {
-    .check_for_nullmodel(find_predictors(x, effects = "fixed", component = "conditional", verbose = FALSE))
+    .check_for_nullmodel(find_predictors(
+      x,
+      effects = "fixed",
+      component = "conditional",
+      verbose = FALSE
+    ))
   }
 }
 

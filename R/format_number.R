@@ -46,12 +46,14 @@ format_number <- function(x, textual = TRUE, ...) {
   ones <- c("", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
   names(ones) <- 0:9
 
+  # fmt: skip
   teens <- c(
     "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
     "sixteen", " seventeen", "eighteen", "nineteen"
   )
   names(teens) <- 0:9
 
+  # fmt: skip
   tens <- c(
     "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty",
     "ninety"
@@ -80,7 +82,8 @@ format_number <- function(x, textual = TRUE, ...) {
     }
     .trim_ws_and(paste(
       Recall(.make_number(digits[nDigits:(3 * nSuffix + 1)])),
-      suffixes[nSuffix], ",",
+      suffixes[nSuffix],
+      ",",
       Recall(.make_number(digits[(3 * nSuffix):1]))
     ))
   }

@@ -1,7 +1,6 @@
 # Other models ----------------------------------------------------------
 # =======================================================================
 
-
 #' @export
 get_predicted.crr <- function(x, verbose = TRUE, ...) {
   out <- as.data.frame(unclass(stats::predict(x, ...)))
@@ -11,14 +10,23 @@ get_predicted.crr <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-get_predicted.sdmTMB <- function(x,
-                                 data = NULL,
-                                 predict = "response",
-                                 ci = NULL,
-                                 verbose = TRUE,
-                                 ...) {
+get_predicted.sdmTMB <- function(
+  x,
+  data = NULL,
+  predict = "response",
+  ci = NULL,
+  verbose = TRUE,
+  ...
+) {
   # evaluate arguments
-  my_args <- .get_predicted_args(x, data = data, predict = predict, ci = ci, verbose = verbose, ...)
+  my_args <- .get_predicted_args(
+    x,
+    data = data,
+    predict = predict,
+    ci = ci,
+    verbose = verbose,
+    ...
+  )
 
   # evaluate dots, remove some arguments that might be duplicated else
   dot_args <- list(...)
@@ -55,7 +63,14 @@ get_predicted.sdmTMB <- function(x,
   if (is.null(predictions)) {
     out <- NULL
   } else {
-    out <- .get_predicted_transform(x, predictions, my_args = my_args, ci_data, verbose = verbose, ...)
+    out <- .get_predicted_transform(
+      x,
+      predictions,
+      my_args = my_args,
+      ci_data,
+      verbose = verbose,
+      ...
+    )
   }
 
   # 4. step: final preparation
@@ -69,7 +84,6 @@ get_predicted.sdmTMB <- function(x,
 
 # FA / PCA -------------------------------------------------------------
 # ======================================================================
-
 
 #' @rdname get_predicted
 #' @export
@@ -117,13 +131,15 @@ get_predicted.faMain <- function(x, data = NULL, ...) {
 
 
 #' @export
-get_predicted.glmgee <- function(x,
-                                 data = NULL,
-                                 predict = "expectation",
-                                 ci = NULL,
-                                 vcov = NULL,
-                                 verbose = TRUE,
-                                 ...) {
+get_predicted.glmgee <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  vcov = NULL,
+  verbose = TRUE,
+  ...
+) {
   # sanitize argument
   if (is.null(vcov)) {
     vcov <- "robust"
@@ -142,7 +158,13 @@ get_predicted.glmgee <- function(x,
     ))
   }
 
-  my_args <- .get_predicted_args(x, data = data, predict = predict, verbose = verbose, ...)
+  my_args <- .get_predicted_args(
+    x,
+    data = data,
+    predict = predict,
+    verbose = verbose,
+    ...
+  )
 
   # 1. step: predictions
   predictions <- predict_function(x, data = my_args$data)
@@ -162,7 +184,14 @@ get_predicted.glmgee <- function(x,
   )
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
+  out <- .get_predicted_transform(
+    x,
+    predictions,
+    my_args,
+    ci_data,
+    verbose = verbose,
+    ...
+  )
 
   # 4. step: final preparation
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
@@ -171,7 +200,6 @@ get_predicted.glmgee <- function(x,
 
 # htest -------------------------------------------------------------
 # ======================================================================
-
 
 #' @export
 get_predicted.htest <- function(x, ...) {

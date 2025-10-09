@@ -198,10 +198,7 @@ get_variance <- function(x, ...) {
 }
 
 #' @export
-get_variance.default <- function(x,
-                                 component = "all",
-                                 verbose = TRUE,
-                                 ...) {
+get_variance.default <- function(x, component = "all", verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     format_warning(sprintf("Objects of class `%s` are not supported.", class(x)[1]))
   }
@@ -211,13 +208,16 @@ get_variance.default <- function(x,
 
 #' @rdname get_variance
 #' @export
-get_variance.merMod <- function(x,
-                                component = "all",
-                                tolerance = 1e-8,
-                                null_model = NULL,
-                                approximation = "lognormal",
-                                verbose = TRUE,
-                                ...) {
+get_variance.merMod <- function(
+  x,
+  component = "all",
+  tolerance = 1e-8,
+  null_model = NULL,
+  approximation = "lognormal",
+  verbose = TRUE,
+  ...
+) {
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
@@ -274,14 +274,17 @@ get_variance.brmsfit <- get_variance.merMod
 
 #' @rdname get_variance
 #' @export
-get_variance.glmmTMB <- function(x,
-                                 component = "all",
-                                 model_component = NULL,
-                                 tolerance = 1e-8,
-                                 null_model = NULL,
-                                 approximation = "lognormal",
-                                 verbose = TRUE,
-                                 ...) {
+get_variance.glmmTMB <- function(
+  x,
+  component = "all",
+  model_component = NULL,
+  tolerance = 1e-8,
+  null_model = NULL,
+  approximation = "lognormal",
+  verbose = TRUE,
+  ...
+) {
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
@@ -307,13 +310,16 @@ get_variance.MixMod <- get_variance.glmmTMB
 
 
 #' @export
-get_variance.mixed <- function(x,
-                               component = "all",
-                               tolerance = 1e-8,
-                               null_model = NULL,
-                               approximation = "lognormal",
-                               verbose = TRUE,
-                               ...) {
+get_variance.mixed <- function(
+  x,
+  component = "all",
+  tolerance = 1e-8,
+  null_model = NULL,
+  approximation = "lognormal",
+  verbose = TRUE,
+  ...
+) {
+  # fmt: skip
   component <- validate_argument(
     component,
     c(
@@ -349,7 +355,13 @@ get_variance_fixed <- function(x, verbose = TRUE, ...) {
 #' @rdname get_variance
 #' @export
 get_variance_random <- function(x, verbose = TRUE, tolerance = 1e-8, ...) {
-  unlist(get_variance(x, component = "random", verbose = verbose, tolerance = tolerance, ...))
+  unlist(get_variance(
+    x,
+    component = "random",
+    verbose = verbose,
+    tolerance = tolerance,
+    ...
+  ))
 }
 
 #' @rdname get_variance

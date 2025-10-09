@@ -5,7 +5,8 @@ data(wine, package = "ordinal")
 data(soup, package = "ordinal")
 
 m1 <- ordinal::clmm(rating ~ temp + contact + (1 | judge), data = wine)
-m2 <- ordinal::clmm(SURENESS ~ PROD + (1 | RESP) + (1 | RESP:PROD),
+m2 <- ordinal::clmm(
+  SURENESS ~ PROD + (1 | RESP) + (1 | RESP:PROD),
   data = soup,
   link = "probit",
   threshold = "equidistant"
@@ -55,7 +56,11 @@ test_that("find_random", {
 
 test_that("get_random", {
   expect_equal(get_random(m1), wine[, "judge", drop = FALSE], ignore_attr = TRUE)
-  expect_equal(get_random(m2), soup[, c("RESP", "PROD"), drop = FALSE], ignore_attr = TRUE)
+  expect_equal(
+    get_random(m2),
+    soup[, c("RESP", "PROD"), drop = FALSE],
+    ignore_attr = TRUE
+  )
 })
 
 test_that("find_response", {

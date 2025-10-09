@@ -2,12 +2,14 @@
 # =======================================================================
 
 #' @export
-get_predicted.clm <- function(x,
-                              data = NULL,
-                              predict = "expectation",
-                              ci = NULL,
-                              verbose = TRUE,
-                              ...) {
+get_predicted.clm <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  verbose = TRUE,
+  ...
+) {
   # When (a) `newdata` is not null and (b) the response variable does *not*
   # appear in `newdata`, predict.clm() returns matrices with predictions for
   # each levels of the response.  When either of those conditions fail,
@@ -71,7 +73,8 @@ get_predicted.clm <- function(x,
     se <- pred$se.fit
     se <- as.data.frame(se)
     se$Row <- seq_len(nrow(se))
-    se <- stats::reshape(se,
+    se <- stats::reshape(
+      se,
       direction = "long",
       varying = setdiff(colnames(se), "Row"),
       times = setdiff(colnames(se), "Row"),
@@ -92,7 +95,8 @@ get_predicted.clm <- function(x,
         }
         vary <- setdiff(colnames(conf), "Row")
         conf$Row <- seq_len(nrow(conf))
-        conf <- stats::reshape(conf,
+        conf <- stats::reshape(
+          conf,
           direction = "long",
           varying = vary,
           times = vary,
@@ -126,7 +130,14 @@ get_predicted.clm <- function(x,
 # =======================================================================
 
 #' @export
-get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci = NULL, verbose = TRUE, ...) {
+get_predicted.multinom <- function(
+  x,
+  predict = "expectation",
+  data = NULL,
+  ci = NULL,
+  verbose = TRUE,
+  ...
+) {
   dots <- list(...)
 
   # `type` argument can be: probs | class
@@ -136,7 +147,9 @@ get_predicted.multinom <- function(x, predict = "expectation", data = NULL, ci =
   } else if ("type" %in% names(dots)) {
     type_arg <- match.arg(dots$type, choices = c("class", "probs"))
   } else {
-    format_error("The `predict` argument must be either \"expectation\" or \"classification\".")
+    format_error(
+      "The `predict` argument must be either \"expectation\" or \"classification\"."
+    )
   }
 
   my_args <- c(list(x, data = data, ci = ci, predict = type_arg), list(...))

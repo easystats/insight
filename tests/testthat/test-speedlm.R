@@ -3,7 +3,8 @@ data(iris)
 data(mtcars)
 
 m1 <- speedglm::speedlm(Sepal.Length ~ Petal.Width + Species, data = iris)
-m2 <- speedglm::speedlm(log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE),
+m2 <- speedglm::speedlm(
+  log(mpg) ~ log(hp) + cyl + I(cyl^2) + poly(wt, degree = 2, raw = TRUE),
   data = mtcars
 )
 

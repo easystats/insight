@@ -3,12 +3,14 @@ skip_if_not_installed("gam")
 s <- gam::s
 
 data(kyphosis, package = "rpart")
-void <- capture.output(m1 <- gam::gam(
-  Kyphosis ~ s(Age, 4) + Number,
-  family = binomial,
-  data = kyphosis,
-  trace = TRUE
-))
+void <- capture.output(
+  m1 <- gam::gam(
+    Kyphosis ~ s(Age, 4) + Number,
+    family = binomial,
+    data = kyphosis,
+    trace = TRUE
+  )
+)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_binomial)

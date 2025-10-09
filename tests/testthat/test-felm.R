@@ -12,8 +12,22 @@ y <- x + 0.5 * x2 + id.eff[id] + firm.eff[firm] + u
 x3 <- rnorm(length(x))
 x4 <- sample(12, length(x), replace = TRUE)
 
-Q <- 0.3 * x3 + x + 0.2 * x2 + id.eff[id] + 0.3 * log(x4) - 0.3 * y + rnorm(length(x), sd = 0.3)
-W <- 0.7 * x3 - 2 * x + 0.1 * x2 - 0.7 * id.eff[id] + 0.8 * cos(x4) - 0.2 * y + rnorm(length(x), sd = 0.6)
+Q <- 0.3 *
+  x3 +
+  x +
+  0.2 * x2 +
+  id.eff[id] +
+  0.3 * log(x4) -
+  0.3 * y +
+  rnorm(length(x), sd = 0.3)
+W <- 0.7 *
+  x3 -
+  2 * x +
+  0.1 * x2 -
+  0.7 * id.eff[id] +
+  0.8 * cos(x4) -
+  0.2 * y +
+  rnorm(length(x), sd = 0.6)
 
 # add them to the outcome
 y <- y + Q + W
@@ -33,7 +47,10 @@ test_that("find_predictors", {
       instruments = c("Q", "W", "x3", "x4")
     )
   )
-  expect_identical(find_predictors(m1, effects = "random"), list(random = c("id", "firm")))
+  expect_identical(
+    find_predictors(m1, effects = "random"),
+    list(random = c("id", "firm"))
+  )
   expect_identical(
     find_predictors(m1, effects = "all", flatten = TRUE),
     c("x", "x2", "id", "firm", "Q", "W", "x3", "x4")

@@ -40,14 +40,15 @@ test_that("get_data, modelframe", {
 
 data(dat.bcg, package = "metadat")
 dat <- metafor::escalc(
-  measure = "RR", ai = tpos, bi = tneg, ci = cpos,
-  di = cneg, data = dat.bcg
+  measure = "RR",
+  ai = tpos,
+  bi = tneg,
+  ci = cpos,
+  di = cneg,
+  data = dat.bcg
 )
 dat$alloc <- ifelse(dat$alloc == "random", "random", "other")
-model <- metafor::rma(yi, vi,
-  mods = ~alloc, data = dat, digits = 3,
-  slab = author
-)
+model <- metafor::rma(yi, vi, mods = ~alloc, data = dat, digits = 3, slab = author)
 test_that("get_data, modelframe", {
   expect_equal(
     find_formula(model),

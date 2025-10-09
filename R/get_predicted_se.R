@@ -1,19 +1,20 @@
 # Get SE ------------------------------------------------------------------
 
-get_predicted_se <- function(x,
-                             data = NULL,
-                             ci_type = "confidence",
-                             vcov = NULL,
-                             vcov_args = NULL,
-                             ci_method = NULL,
-                             verbose = TRUE,
-                             ...) {
+get_predicted_se <- function(
+  x,
+  data = NULL,
+  ci_type = "confidence",
+  vcov = NULL,
+  vcov_args = NULL,
+  ci_method = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Matrix-multiply X by the parameter vector B to get the predictions, then
   # extract the variance-covariance matrix V of the parameters and compute XVX'
   # to get the variance-covariance matrix of the predictions. The square-root of
   # the diagonal of this matrix represent the standard errors of the predictions,
   # which are then multiplied by 1.96 for the confidence intervals.
-
 
   ## TODO: what about Satterthwaite? @vincentarelbundock
 
@@ -23,7 +24,9 @@ get_predicted_se <- function(x,
       check_if_installed("pbkrtest")
       vcovmat <- as.matrix(pbkrtest::vcovAdj(x))
     } else {
-      format_error("The `vcov` argument cannot be used together with the `ci_method=\"kenward-roger\"` argument.")
+      format_error(
+        "The `vcov` argument cannot be used together with the `ci_method=\"kenward-roger\"` argument."
+      )
     }
 
     # all other varcov types can be supplied manually
@@ -36,7 +39,12 @@ get_predicted_se <- function(x,
     )
   }
 
-  mm <- .get_predicted_ci_modelmatrix(x, data = data, vcovmat = vcovmat, verbose = verbose)
+  mm <- .get_predicted_ci_modelmatrix(
+    x,
+    data = data,
+    vcovmat = vcovmat,
+    verbose = verbose
+  )
 
   # return NULL for fail
   if (is.null(mm)) {
@@ -55,13 +63,21 @@ get_predicted_se <- function(x,
     # remove response level to match column names of model matrix
     colnames(vcovmat) <- gsub("^(+.):(.*)", "\\2", colnames(vcovmat))
     keep <- setdiff(intersect(colnames(mm), colnames(vcovmat)), "(Intercept)")
-    vcovmat <- vcovmat[colnames(vcovmat) %in% keep, colnames(vcovmat) %in% keep, drop = FALSE]
+    vcovmat <- vcovmat[
+      colnames(vcovmat) %in% keep,
+      colnames(vcovmat) %in% keep,
+      drop = FALSE
+    ]
     mm <- mm[, keep, drop = FALSE]
 
     # sometimes, model matrix and vcov won't match exactly, so try some hacks here
   } else if (ncol(mm) != ncol(vcovmat)) {
     # last desperate try
-    if (ncol(mm) == nrow(mm) && ncol(vcovmat) > ncol(mm) && all(colnames(mm) %in% colnames(vcovmat))) {
+    if (
+      ncol(mm) == nrow(mm) &&
+        ncol(vcovmat) > ncol(mm) &&
+        all(colnames(mm) %in% colnames(vcovmat))
+    ) {
       # we might have a correct model matrix, but the vcov matrix contains values
       # from specific model parameters that do not appear in the model matrix
       # we then need to reduce the vcov matrix.
@@ -74,7 +90,6 @@ get_predicted_se <- function(x,
       # below is commented out because it is dangerous and silently produces incorrect
       # numerical results in some cases. We CANNOT uncomment it before thorough.
       # See example at the bottom of test-get_predicted.R
-
       # # model matrix rows might mismatch. we need a larger model matrix and
       # # then filter those rows that match the vcov matrix.
       # mm_full <- get_modelmatrix(x)
@@ -87,7 +102,9 @@ get_predicted_se <- function(x,
     # still no match?
     if (isTRUE(ncol(mm) != ncol(vcovmat))) {
       if (verbose) {
-        format_warning("Could not compute standard errors or confidence intervals because the model and variance-covariance matrices are non-conformable. This can sometimes happen when the `data` used to make predictions fails to include all the levels of a factor variable or all the interaction components.")
+        format_warning(
+          "Could not compute standard errors or confidence intervals because the model and variance-covariance matrices are non-conformable. This can sometimes happen when the `data` used to make predictions fails to include all the levels of a factor variable or all the interaction components."
+        )
       }
       return(NULL)
     }
@@ -125,15 +142,24 @@ get_predicted_se <- function(x,
 
 # Get Model matrix ------------------------------------------------------------
 
-.get_predicted_ci_modelmatrix <- function(x, data = NULL, vcovmat = NULL, verbose = TRUE, ...) {
+.get_predicted_ci_modelmatrix <- function(
+  x,
+  data = NULL,
+  vcovmat = NULL,
+  verbose = TRUE,
+  ...
+) {
   resp <- find_response(x, combine = FALSE)
-  if (is.null(vcovmat)) vcovmat <- get_varcov(x, ...)
-
+  if (is.null(vcovmat)) {
+    vcovmat <- get_varcov(x, ...)
+  }
 
   if (is.null(data)) {
     mm <- get_modelmatrix(x)
   } else {
-    if (!all(resp %in% colnames(data))) data[resp] <- 0 # fake response
+    if (!all(resp %in% colnames(data))) {
+      data[resp] <- 0
+    } # fake response
     # else, model.matrix below fails, e.g. for log-terms
     attr(data, "terms") <- NULL
 
@@ -144,9 +170,9 @@ get_predicted_se <- function(x,
     # does not include all the levels of a factor variable.
     if (inherits(x, c("zeroinfl", "hurdle", "zerotrunc", "MixMod"))) {
       # model terms, required for model matrix
-      model_terms <- tryCatch(stats::terms(x),
-        error = function(e) find_formula(x, verbose = FALSE)$conditional
-      )
+      model_terms <- tryCatch(stats::terms(x), error = function(e) {
+        find_formula(x, verbose = FALSE)$conditional
+      })
 
       all_terms <- find_terms(x)$conditional
       off_terms <- grepl("^offset\\((.*)\\)", all_terms)
@@ -154,20 +180,29 @@ get_predicted_se <- function(x,
       if (any(off_terms)) {
         all_terms <- all_terms[!off_terms]
         # TODO: preserve interactions
-        vcov_names <- dimnames(vcovmat)[[1]][grepl(":", dimnames(vcovmat)[[1]], fixed = TRUE)]
+        vcov_names <- dimnames(vcovmat)[[1]][grepl(
+          ":",
+          dimnames(vcovmat)[[1]],
+          fixed = TRUE
+        )]
         if (length(vcov_names)) {
           vcov_names <- gsub(":", "*", vcov_names, fixed = TRUE)
           all_terms <- unique(c(all_terms, vcov_names))
         }
         off_terms <- grepl("^offset\\((.*)\\)", all_terms)
-        model_terms <- stats::reformulate(all_terms[!off_terms], response = find_response(x))
+        model_terms <- stats::reformulate(
+          all_terms[!off_terms],
+          response = find_response(x)
+        )
       }
 
       # check for at least to factor levels, in order to build contrasts
       single_factor_levels <- sapply(data, function(i) is.factor(i) && nlevels(i) == 1)
       if (any(single_factor_levels)) {
         if (verbose) {
-          format_warning("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals.")
+          format_warning(
+            "Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."
+          )
         }
         return(NULL)
       }
@@ -192,9 +227,13 @@ get_predicted_se <- function(x,
     if (inherits(mm, "simpleError")) {
       if (verbose) {
         if (grepl("2 or more levels", mm$message, fixed = TRUE)) {
-          format_warning("Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals.")
+          format_warning(
+            "Some factors in the data have only one level. Cannot compute model matrix for standard errors and confidence intervals."
+          )
         } else {
-          format_warning("Something went wrong with computing standard errors and confidence intervals for predictions.")
+          format_warning(
+            "Something went wrong with computing standard errors and confidence intervals for predictions."
+          )
         }
       }
       return(NULL)

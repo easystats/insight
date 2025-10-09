@@ -4,7 +4,10 @@ data(sleepstudy, package = "lme4")
 
 m1 <- lm(mpg ~ 0 + gear, data = mtcars)
 m2 <- lm(mpg ~ gear, data = mtcars)
-m3 <- suppressWarnings(lme4::lmer(Reaction ~ 0 + Days + (Days | Subject), data = sleepstudy))
+m3 <- suppressWarnings(lme4::lmer(
+  Reaction ~ 0 + Days + (Days | Subject),
+  data = sleepstudy
+))
 m4 <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
 m5 <- suppressWarnings(lme4::lmer(Reaction ~ 0 + (Days | Subject), data = sleepstudy))
 

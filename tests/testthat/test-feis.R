@@ -20,10 +20,13 @@ test_that("get_varcov", {
 })
 
 test_that("find_predictors", {
-  expect_identical(find_predictors(m1), list(
-    conditional = c("marry", "enrol", "yeargr"),
-    slopes = "exp"
-  ))
+  expect_identical(
+    find_predictors(m1),
+    list(
+      conditional = c("marry", "enrol", "yeargr"),
+      slopes = "exp"
+    )
+  )
   expect_identical(find_predictors(m1, effects = "random"), list(random = "id"))
   expect_identical(
     find_predictors(m1, effects = "all", flatten = TRUE),

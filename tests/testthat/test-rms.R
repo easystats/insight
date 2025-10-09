@@ -56,10 +56,13 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_identical(find_terms(m1), list(
-    response = "am",
-    conditional = c("mpg", "gear")
-  ))
+  expect_identical(
+    find_terms(m1),
+    list(
+      response = "am",
+      conditional = c("mpg", "gear")
+    )
+  )
   expect_identical(find_terms(m1, flatten = TRUE), c("am", "mpg", "gear"))
 })
 
@@ -107,7 +110,10 @@ test_that("find_statistic anova", {
 })
 
 test_that("find_parameters anova", {
-  expect_identical(find_parameters(aov_model), list(conditional = c("cyl", "disp", "hp", "drat", "TOTAL")))
+  expect_identical(
+    find_parameters(aov_model),
+    list(conditional = c("cyl", "disp", "hp", "drat", "TOTAL"))
+  )
 })
 
 test_that("get_statistic anova", {

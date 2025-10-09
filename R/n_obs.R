@@ -166,11 +166,7 @@ n_obs.lavaan <- function(x, ...) {
 n_obs.selection <- function(x, type = c("all", "observed", "censored"), ...) {
   type <- match.arg(type)
   s <- summary(x)
-  switch(type,
-    all = s$param$nObs,
-    observed = s$param$N1,
-    s$param$N0
-  )
+  switch(type, all = s$param$nObs, observed = s$param$N1, s$param$N0)
 }
 
 

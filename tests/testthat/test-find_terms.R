@@ -10,10 +10,15 @@ test_that("find_terms by formula", {
   )
   expect_identical(
     find_terms(m, as_term_labels = TRUE),
-    list(conditional = c(
-      "log(hp)", "am", "factor(cyl)", "log(hp):am",
-      "log(hp):factor(cyl)"
-    ))
+    list(
+      conditional = c(
+        "log(hp)",
+        "am",
+        "factor(cyl)",
+        "log(hp):am",
+        "log(hp):factor(cyl)"
+      )
+    )
   )
 })
 
@@ -60,7 +65,11 @@ m <- suppressMessages(lme4::lmer(y ~ post + time1 + (post + time1 - 1 | g2), dat
 test_that("find_terms", {
   expect_identical(
     find_terms(m),
-    list(response = "y", conditional = c("post", "time1"), random = c("post", "time1", "g2"))
+    list(
+      response = "y",
+      conditional = c("post", "time1"),
+      random = c("post", "time1", "g2")
+    )
   )
   expect_true(has_intercept(m))
 })

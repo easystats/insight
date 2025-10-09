@@ -4,10 +4,7 @@ data(Salamanders, package = "glmmTMB")
 Salamanders$cover <- abs(Salamanders$cover)
 dat <<- Salamanders
 
-m1 <- glm(count ~ mined + log(cover) + sample,
-  family = poisson,
-  data = dat
-)
+m1 <- glm(count ~ mined + log(cover) + sample, family = poisson, data = dat)
 
 test_that("model_info", {
   expect_true(model_info(m1)$is_poisson)

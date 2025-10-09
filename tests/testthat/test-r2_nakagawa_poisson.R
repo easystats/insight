@@ -15,8 +15,10 @@ test_that("glmmTMB, Poisson", {
   data(Salamanders, package = "glmmTMB")
 
   # glmmTMB, no random slope -------------------------------------------------
-  m <- glmmTMB::glmmTMB(count ~ mined + (1 | site),
-    family = poisson(), data = Salamanders
+  m <- glmmTMB::glmmTMB(
+    count ~ mined + (1 | site),
+    family = poisson(),
+    data = Salamanders
   )
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)
@@ -25,8 +27,10 @@ test_that("glmmTMB, Poisson", {
   expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
   # glmmTMB, sqrt, no random slope -------------------------------------------------
-  m <- glmmTMB::glmmTMB(count ~ mined + (1 | site),
-    family = poisson("sqrt"), data = Salamanders
+  m <- glmmTMB::glmmTMB(
+    count ~ mined + (1 | site),
+    family = poisson("sqrt"),
+    data = Salamanders
   )
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)
@@ -35,8 +39,10 @@ test_that("glmmTMB, Poisson", {
   expect_equal(out1[1, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
   # glmmTMB, random slope -------------------------------------------------
-  m <- suppressWarnings(glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
-    family = poisson(), data = Salamanders
+  m <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ mined + cover + (1 + cover | site),
+    family = poisson(),
+    data = Salamanders
   ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m, tolerance = 1e-8)
@@ -47,8 +53,10 @@ test_that("glmmTMB, Poisson", {
   expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-1)
 
   # glmmTMB, sqrt, random slope -------------------------------------------------
-  m <- suppressWarnings(glmmTMB::glmmTMB(count ~ mined + cover + (1 + cover | site),
-    family = poisson("sqrt"), data = Salamanders
+  m <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ mined + cover + (1 + cover | site),
+    family = poisson("sqrt"),
+    data = Salamanders
   ))
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m, tolerance = 1e-8)
@@ -65,14 +73,21 @@ test_that("glmmTMB, Poisson, Nakagawa", {
   data(Salamanders, package = "glmmTMB")
 
   # glmmTMB, no random slope -------------------------------------------------
-  fecmodADMBr <- glmmTMB::glmmTMB(count ~ (1 | site),
-    family = poisson(), data = Salamanders
+  fecmodADMBr <- glmmTMB::glmmTMB(
+    count ~ (1 | site),
+    family = poisson(),
+    data = Salamanders
   )
-  fecmodADMBf <- glmmTMB::glmmTMB(count ~ mined + (1 | site),
-    family = poisson(), data = Salamanders
+  fecmodADMBf <- glmmTMB::glmmTMB(
+    count ~ mined + (1 | site),
+    family = poisson(),
+    data = Salamanders
   )
   VarF <- var(as.vector(model.matrix(fecmodADMBf) %*% glmmTMB::fixef(fecmodADMBf)$cond))
-  lambda <- as.numeric(exp(glmmTMB::fixef(fecmodADMBr)$cond + 0.5 * (as.numeric(glmmTMB::VarCorr(fecmodADMBr)$cond))))
+  lambda <- as.numeric(exp(
+    glmmTMB::fixef(fecmodADMBr)$cond +
+      0.5 * (as.numeric(glmmTMB::VarCorr(fecmodADMBr)$cond))
+  ))
   omegaF <- sigma(fecmodADMBf) # overdispersion omega is alpha in glmmadmb
   VarOdF <- omegaF / lambda # the delta method
   VarOlF <- log(1 + omegaF / lambda) # log-normal approximation
@@ -80,21 +95,24 @@ test_that("glmmTMB, Poisson, Nakagawa", {
 
   # lognormal
   R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOlF)
-  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOlF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond))) /
+    (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOlF)
   out <- performance::r2_nakagawa(fecmodADMBf)
   expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
 
   # delta
   R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOdF)
-  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOdF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond))) /
+    (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOdF)
   out <- performance::r2_nakagawa(fecmodADMBf, approximation = "delta")
   expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
 
   # trigamma
   R2glmmM <- VarF / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOtF)
-  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond))) / (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOtF)
+  R2glmmC <- (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond))) /
+    (VarF + sum(as.numeric(glmmTMB::VarCorr(fecmodADMBf)$cond)) + VarOtF)
   out <- performance::r2_nakagawa(fecmodADMBf, approximation = "trigamma")
   expect_equal(out$R2_conditional, R2glmmC, tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$R2_marginal, R2glmmM, tolerance = 1e-4, ignore_attr = TRUE)
@@ -110,9 +128,7 @@ test_that("lme4, Poisson", {
   data(Salamanders, package = "glmmTMB")
 
   # lme4, no random slope -------------------------------------------------
-  m <- lme4::glmer(count ~ mined + (1 | site),
-    family = poisson(), data = Salamanders
-  )
+  m <- lme4::glmer(count ~ mined + (1 | site), family = poisson(), data = Salamanders)
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)
   # matches theoretical values
@@ -120,8 +136,10 @@ test_that("lme4, Poisson", {
   expect_equal(out1[2, "R2c"], out2$R2_conditional, ignore_attr = TRUE, tolerance = 1e-4)
 
   # lme4, sqrt, no random slope -------------------------------------------------
-  m <- lme4::glmer(count ~ mined + (1 | site),
-    family = poisson("sqrt"), data = Salamanders
+  m <- lme4::glmer(
+    count ~ mined + (1 | site),
+    family = poisson("sqrt"),
+    data = Salamanders
   )
   out1 <- suppressWarnings(MuMIn::r.squaredGLMM(m))
   out2 <- performance::r2_nakagawa(m)

@@ -91,7 +91,8 @@ test_that("get_data", {
 })
 
 test_that("find_formula", {
-  expect_equal(find_formula(x),
+  expect_equal(
+    find_formula(x),
     list(conditional = as.formula("len ~ supp + dose + supp:dose")),
     ignore_attr = TRUE
   )
@@ -109,22 +110,39 @@ test_that("clean_parameters", {
   expect_identical(
     cp$Cleaned_Parameter,
     c(
-      "supp [OJ]", "supp [VC]", "dose [Low]", "dose [Medium]",
-      "dose [High]", "mu", "sig2", "g_supp"
+      "supp [OJ]",
+      "supp [VC]",
+      "dose [Low]",
+      "dose [Medium]",
+      "dose [High]",
+      "mu",
+      "sig2",
+      "g_supp"
     )
   )
   expect_identical(
     cp$Component,
     c(
-      "conditional", "conditional", "conditional", "conditional",
-      "conditional", "extra", "extra", "extra"
+      "conditional",
+      "conditional",
+      "conditional",
+      "conditional",
+      "conditional",
+      "extra",
+      "extra",
+      "extra"
     )
   )
 })
 
 
 data(puzzles, package = "BayesFactor")
-x <- BayesFactor::anovaBF(RT ~ shape * color + ID, data = puzzles, whichRandom = "ID", progress = FALSE)
+x <- BayesFactor::anovaBF(
+  RT ~ shape * color + ID,
+  data = puzzles,
+  whichRandom = "ID",
+  progress = FALSE
+)
 
 test_that("get_data", {
   expect_s3_class(get_data(x), "data.frame")
@@ -145,9 +163,24 @@ test_that("get_parameters", {
   expect_named(
     get_parameters(x, verbose = FALSE),
     c(
-      "mu", "shape-round", "shape-square", "ID-1", "ID-2", "ID-3",
-      "ID-4", "ID-5", "ID-6", "ID-7", "ID-8", "ID-9", "ID-10", "ID-11",
-      "ID-12", "sig2", "g_shape", "g_ID"
+      "mu",
+      "shape-round",
+      "shape-square",
+      "ID-1",
+      "ID-2",
+      "ID-3",
+      "ID-4",
+      "ID-5",
+      "ID-6",
+      "ID-7",
+      "ID-8",
+      "ID-9",
+      "ID-10",
+      "ID-11",
+      "ID-12",
+      "sig2",
+      "g_shape",
+      "g_ID"
     )
   )
 })
@@ -157,13 +190,28 @@ test_that("get_parameters", {
     find_parameters(x[4]),
     list(
       conditional = c(
-        "shape-round", "shape-square", "color-color", "color-monochromatic",
-        "shape:color-round.&.color", "shape:color-round.&.monochromatic",
-        "shape:color-square.&.color", "shape:color-square.&.monochromatic"
+        "shape-round",
+        "shape-square",
+        "color-color",
+        "color-monochromatic",
+        "shape:color-round.&.color",
+        "shape:color-round.&.monochromatic",
+        "shape:color-square.&.color",
+        "shape:color-square.&.monochromatic"
       ),
       random = c(
-        "ID-1", "ID-2", "ID-3", "ID-4", "ID-5", "ID-6", "ID-7",
-        "ID-8", "ID-9", "ID-10", "ID-11", "ID-12"
+        "ID-1",
+        "ID-2",
+        "ID-3",
+        "ID-4",
+        "ID-5",
+        "ID-6",
+        "ID-7",
+        "ID-8",
+        "ID-9",
+        "ID-10",
+        "ID-11",
+        "ID-12"
       ),
       extra = c("mu", "sig2", "g_shape", "g_color", "g_ID", "g_shape:color")
     )
@@ -205,24 +253,92 @@ test_that("get_priors", {
     get_priors(x),
     data.frame(
       Parameter = c(
-        "shape-round", "shape-square", "color-color",
-        "color-monochromatic", "ID-1", "ID-2", "ID-3", "ID-4", "ID-5",
-        "ID-6", "ID-7", "ID-8", "ID-9", "ID-10", "ID-11", "ID-12", "mu",
-        "sig2", "g_shape", "g_ID"
+        "shape-round",
+        "shape-square",
+        "color-color",
+        "color-monochromatic",
+        "ID-1",
+        "ID-2",
+        "ID-3",
+        "ID-4",
+        "ID-5",
+        "ID-6",
+        "ID-7",
+        "ID-8",
+        "ID-9",
+        "ID-10",
+        "ID-11",
+        "ID-12",
+        "mu",
+        "sig2",
+        "g_shape",
+        "g_ID"
       ),
       Distribution = c(
-        "cauchy", "cauchy",
-        NA, NA, "cauchy", "cauchy", "cauchy", "cauchy", "cauchy", "cauchy",
-        "cauchy", "cauchy", "cauchy", "cauchy", "cauchy", "cauchy", NA,
-        NA, NA, NA
+        "cauchy",
+        "cauchy",
+        NA,
+        NA,
+        "cauchy",
+        "cauchy",
+        "cauchy",
+        "cauchy",
+        "cauchy",
+        "cauchy",
+        "cauchy",
+        "cauchy",
+        "cauchy",
+        "cauchy",
+        "cauchy",
+        "cauchy",
+        NA,
+        NA,
+        NA,
+        NA
       ),
       Location = c(
-        0, 0, NA, NA, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, NA, NA, NA, NA
+        0,
+        0,
+        NA,
+        NA,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        NA,
+        NA,
+        NA,
+        NA
       ),
       Scale = c(
-        0.5, 0.5, NA, NA, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NA, NA, NA, NA
+        0.5,
+        0.5,
+        NA,
+        NA,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        NA,
+        NA,
+        NA,
+        NA
       ),
       stringsAsFactors = FALSE,
       row.names = NULL
@@ -237,33 +353,59 @@ test_that("get_data", {
   expect_s3_class(get_data(x), "data.frame")
 })
 test_that("find_formula", {
-  expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")), ignore_attr = TRUE)
+  expect_equal(
+    find_formula(x),
+    list(conditional = as.formula("len ~ supp + dose")),
+    ignore_attr = TRUE
+  )
 })
 test_that("get_parameters", {
   expect_named(
     get_parameters(x),
     c(
-      "mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
-      "sig2", "g_supp", "g_dose"
+      "mu",
+      "supp-OJ",
+      "supp-VC",
+      "dose-Low",
+      "dose-Medium",
+      "dose-High",
+      "sig2",
+      "g_supp",
+      "g_dose"
     )
   )
 })
 
 
-x2 <- BayesFactor::lmBF(len ~ supp + dose + supp:dose, data = ToothGrowth, progress = FALSE)
+x2 <- BayesFactor::lmBF(
+  len ~ supp + dose + supp:dose,
+  data = ToothGrowth,
+  progress = FALSE
+)
 x <- x / x2
 test_that("get_data", {
   expect_s3_class(get_data(x), "data.frame")
 })
 test_that("find_formula", {
-  expect_equal(find_formula(x), list(conditional = as.formula("len ~ supp + dose")), ignore_attr = TRUE)
+  expect_equal(
+    find_formula(x),
+    list(conditional = as.formula("len ~ supp + dose")),
+    ignore_attr = TRUE
+  )
 })
 test_that("get_parameters", {
   expect_named(
     get_parameters(x, verbose = FALSE),
     c(
-      "mu", "supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High",
-      "sig2", "g_supp", "g_dose"
+      "mu",
+      "supp-OJ",
+      "supp-VC",
+      "dose-Low",
+      "dose-Medium",
+      "dose-High",
+      "sig2",
+      "g_supp",
+      "g_dose"
     )
   )
 })
@@ -272,7 +414,17 @@ test_that("get_priors", {
   expect_equal(
     get_priors(x),
     data.frame(
-      Parameter = c("supp-OJ", "supp-VC", "dose-Low", "dose-Medium", "dose-High", "mu", "sig2", "g_supp", "g_dose"),
+      Parameter = c(
+        "supp-OJ",
+        "supp-VC",
+        "dose-Low",
+        "dose-Medium",
+        "dose-High",
+        "mu",
+        "sig2",
+        "g_supp",
+        "g_dose"
+      ),
       Distribution = c("cauchy", "cauchy", "cauchy", "cauchy", "cauchy", NA, NA, NA, NA),
       Location = c(0, 0, 0, 0, 0, NA, NA, NA, NA),
       Scale = c(0.5, 0.5, 0.5, 0.5, 0.5, NA, NA, NA, NA),
@@ -289,29 +441,53 @@ test_that("find_statistic", {
 })
 
 
-corr_BF1 <- BayesFactor::correlationBF(iris$Sepal.Length, iris$Sepal.Width, progress = FALSE)
-corr_BFk <- BayesFactor::correlationBF(iris$Sepal.Length, iris$Sepal.Width,
+corr_BF1 <- BayesFactor::correlationBF(
+  iris$Sepal.Length,
+  iris$Sepal.Width,
+  progress = FALSE
+)
+corr_BFk <- BayesFactor::correlationBF(
+  iris$Sepal.Length,
+  iris$Sepal.Width,
   progress = FALSE,
   nullInterval = c(-1, 0)
 )
 
 data(raceDolls, package = "BayesFactor")
-xtab_BF1 <- BayesFactor::contingencyTableBF(raceDolls, sampleType = "indepMulti", fixedMargin = "cols", priorConcentration = 2)
+xtab_BF1 <- BayesFactor::contingencyTableBF(
+  raceDolls,
+  sampleType = "indepMulti",
+  fixedMargin = "cols",
+  priorConcentration = 2
+)
 
-ttest_BF1 <- BayesFactor::ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2], progress = FALSE)
-ttest_BFk <- BayesFactor::ttestBF(sleep$extra[sleep$group == 1], sleep$extra[sleep$group == 2],
+ttest_BF1 <- BayesFactor::ttestBF(
+  sleep$extra[sleep$group == 1],
+  sleep$extra[sleep$group == 2],
+  progress = FALSE
+)
+ttest_BFk <- BayesFactor::ttestBF(
+  sleep$extra[sleep$group == 1],
+  sleep$extra[sleep$group == 2],
   progress = FALSE,
   nullInterval = c(-3, 0)
 )
 
 prop_BF1 <- BayesFactor::proportionBF(y = 15, N = 25, p = 0.5, progress = FALSE)
 prop_BFk <- BayesFactor::proportionBF(
-  y = 15, N = 25, p = 0.5, progress = FALSE,
+  y = 15,
+  N = 25,
+  p = 0.5,
+  progress = FALSE,
   nullInterval = c(0, 0.3)
 )
 
 
-lm_BFk <- BayesFactor::generalTestBF(Sepal.Width ~ Sepal.Length + Species, data = iris, progress = FALSE)
+lm_BFk <- BayesFactor::generalTestBF(
+  Sepal.Width ~ Sepal.Length + Species,
+  data = iris,
+  progress = FALSE
+)
 lm_BFd <- lm_BFk[3] / lm_BFk[2]
 lm_BF1 <- lm_BFk[2]
 
@@ -349,13 +525,19 @@ test_that("get_priors for xtable", {
 test_that("get_priors for correlation", {
   expect_equal(
     get_priors(corr_BF1),
-    structure(list(
-      Parameter = "rho", Distribution = "beta", Location = 3,
-      Scale = 3
-    ), class = "data.frame", row.names = c(
-      NA,
-      -1L
-    )),
+    structure(
+      list(
+        Parameter = "rho",
+        Distribution = "beta",
+        Location = 3,
+        Scale = 3
+      ),
+      class = "data.frame",
+      row.names = c(
+        NA,
+        -1L
+      )
+    ),
     tolerance = 1e-5
   )
 })
@@ -382,8 +564,11 @@ test_that("get_priors for t-test", {
 
 mtcars$cyl <- factor(mtcars$cyl)
 mtcars$gear <- factor(mtcars$gear)
-model <- BayesFactor::lmBF(mpg ~ cyl + gear + cyl:gear, mtcars,
-  progress = FALSE, whichRandom = c("gear", "cyl:gear")
+model <- BayesFactor::lmBF(
+  mpg ~ cyl + gear + cyl:gear,
+  mtcars,
+  progress = FALSE,
+  whichRandom = c("gear", "cyl:gear")
 )
 
 test_that("find_formula for lmBF", {

@@ -61,10 +61,18 @@
 #' find_parameters(m)
 #' @export
 find_parameters.BGGM <- function(x, component = "correlation", flatten = FALSE, ...) {
-  component <- validate_argument(component, c("correlation", "conditional", "intercept", "all"))
-  l <- switch(component,
-    correlation = list(correlation = colnames(get_parameters(x, component = "correlation"))),
-    conditional = list(conditional = colnames(get_parameters(x, component = "conditional"))),
+  component <- validate_argument(
+    component,
+    c("correlation", "conditional", "intercept", "all")
+  )
+  l <- switch(
+    component,
+    correlation = list(
+      correlation = colnames(get_parameters(x, component = "correlation"))
+    ),
+    conditional = list(
+      conditional = colnames(get_parameters(x, component = "conditional"))
+    ),
     intercept = list(intercept = colnames(x$Y)),
     all = list(
       intercept = colnames(x$Y),
@@ -84,11 +92,13 @@ find_parameters.BGGM <- function(x, component = "correlation", flatten = FALSE, 
 
 
 #' @export
-find_parameters.BFBayesFactor <- function(x,
-                                          effects = "all",
-                                          component = "all",
-                                          flatten = FALSE,
-                                          ...) {
+find_parameters.BFBayesFactor <- function(
+  x,
+  effects = "all",
+  component = "all",
+  flatten = FALSE,
+  ...
+) {
   conditional <- NULL
   random <- NULL
   extra <- NULL
@@ -115,37 +125,49 @@ find_parameters.BFBayesFactor <- function(x,
     dat <- get_data(x, verbose = FALSE)
 
     if ("conditional" %in% names(vars)) {
-      conditional <- unlist(lapply(vars$conditional, function(i) {
-        if (is.factor(dat[[i]])) {
-          sprintf("%s-%s", i, levels(dat[[i]]))
-        } else {
-          sprintf("%s-%s", i, i)
-        }
-      }), use.names = FALSE)
+      conditional <- unlist(
+        lapply(vars$conditional, function(i) {
+          if (is.factor(dat[[i]])) {
+            sprintf("%s-%s", i, levels(dat[[i]]))
+          } else {
+            sprintf("%s-%s", i, i)
+          }
+        }),
+        use.names = FALSE
+      )
     }
 
     # add interaction terms to conditional
     if ("conditional" %in% names(interactions)) {
       for (i in interactions$conditional) {
-        conditional <- c(conditional, grep(paste0("^\\Q", i, "\\E"), params, value = TRUE))
+        conditional <- c(
+          conditional,
+          grep(paste0("^\\Q", i, "\\E"), params, value = TRUE)
+        )
       }
     }
 
     if ("random" %in% names(vars)) {
-      random <- unlist(lapply(vars$random, function(i) {
-        if (is.factor(dat[[i]])) {
-          sprintf("%s-%s", i, levels(dat[[i]]))
-        } else {
-          sprintf("%s-%s", i, i)
-        }
-      }), use.names = FALSE)
+      random <- unlist(
+        lapply(vars$random, function(i) {
+          if (is.factor(dat[[i]])) {
+            sprintf("%s-%s", i, levels(dat[[i]]))
+          } else {
+            sprintf("%s-%s", i, i)
+          }
+        }),
+        use.names = FALSE
+      )
     }
 
     extra <- setdiff(params, c(conditional, random))
   }
 
   elements <- .get_elements(effects, component = component)
-  l <- lapply(compact_list(list(conditional = conditional, random = random, extra = extra)), text_remove_backticks)
+  l <- lapply(
+    compact_list(list(conditional = conditional, random = random, extra = extra)),
+    text_remove_backticks
+  )
   l <- compact_list(l[elements])
 
   if (flatten) {
@@ -166,11 +188,7 @@ find_parameters.MCMCglmm <- function(x, effects = "all", flatten = FALSE, ...) {
     random = rownames(sc$Gcovariances)
   ))
 
-  .filter_parameters(l,
-    effects = effects,
-    flatten = flatten,
-    recursive = FALSE
-  )
+  .filter_parameters(l, effects = effects, flatten = flatten, recursive = FALSE)
 }
 
 
@@ -186,8 +204,17 @@ find_parameters.mcmc.list <- function(x, flatten = FALSE, ...) {
 
 
 #' @export
-find_parameters.bamlss <- function(x, flatten = FALSE, component = "all", parameters = NULL, ...) {
-  component <- validate_argument(component, c("all", "conditional", "location", "distributional", "auxiliary"))
+find_parameters.bamlss <- function(
+  x,
+  flatten = FALSE,
+  component = "all",
+  parameters = NULL,
+  ...
+) {
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "location", "distributional", "auxiliary")
+  )
   cn <- colnames(as.data.frame(unclass(x$samples)))
 
   ignore <- grepl("(\\.alpha|logLik|\\.accepted|\\.edf)$", cn)
@@ -215,7 +242,13 @@ find_parameters.bamlss <- function(x, flatten = FALSE, component = "all", parame
 
 
 #' @export
-find_parameters.bayesx <- function(x, component = "all", flatten = FALSE, parameters = NULL, ...) {
+find_parameters.bayesx <- function(
+  x,
+  component = "all",
+  flatten = FALSE,
+  parameters = NULL,
+  ...
+) {
   cond <- rownames(stats::coef(x))
   smooth_terms <- rownames(x$smooth.hyp)
 
@@ -239,12 +272,14 @@ find_parameters.bayesx <- function(x, component = "all", flatten = FALSE, parame
 
 
 #' @export
-find_parameters.stanreg <- function(x,
-                                    effects = "all",
-                                    component = "location",
-                                    flatten = FALSE,
-                                    parameters = NULL,
-                                    ...) {
+find_parameters.stanreg <- function(
+  x,
+  effects = "all",
+  component = "location",
+  flatten = FALSE,
+  parameters = NULL,
+  ...
+) {
   # extract parameter names
   fe <- .rstanarm_parameter_names(x)
 
@@ -252,6 +287,7 @@ find_parameters.stanreg <- function(x,
     effects,
     c("all", "fixed", "random", "random_variance", "grouplevel", "full")
   )
+  # fmt: skip
   component <- validate_argument(
     component,
     c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")
@@ -268,7 +304,8 @@ find_parameters.stanreg <- function(x,
   cond <- setdiff(cond, auxiliary)
 
   # filter random effects
-  ran_eff <- switch(effects,
+  ran_eff <- switch(
+    effects,
     full = ,
     random = c(rand, rand_sd),
     grouplevel = rand,
@@ -297,12 +334,14 @@ find_parameters.stanreg <- function(x,
 
 
 #' @export
-find_parameters.stanmvreg <- function(x,
-                                      effects = "all",
-                                      component = "location",
-                                      flatten = FALSE,
-                                      parameters = NULL,
-                                      ...) {
+find_parameters.stanmvreg <- function(
+  x,
+  effects = "all",
+  component = "location",
+  flatten = FALSE,
+  parameters = NULL,
+  ...
+) {
   # extract parameter names
   fe <- .rstanarm_parameter_names(x)
   # and response
@@ -312,12 +351,17 @@ find_parameters.stanmvreg <- function(x,
     effects,
     c("all", "fixed", "random", "random_variance", "grouplevel", "full")
   )
+  # fmt: skip
   component <- validate_argument(
     component,
     c("location", "all", "conditional", "smooth_terms", "sigma", "distributional", "auxiliary")
   )
 
-  cond <- fe[grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) & .grep_non_smoothers(fe) & !endsWith(fe, "|sigma")]
+  cond <- fe[
+    grepl("^(?!(b\\[|sigma|Sigma))", fe, perl = TRUE) &
+      .grep_non_smoothers(fe) &
+      !endsWith(fe, "|sigma")
+  ]
   rand <- fe[startsWith(fe, "b[")]
   rand_sd <- fe[startsWith(fe, "Sigma[")]
   smooth_terms <- fe[startsWith(fe, "smooth_sd")]
@@ -328,7 +372,8 @@ find_parameters.stanmvreg <- function(x,
   cond <- setdiff(cond, auxiliary)
 
   # filter random effects
-  ran_eff <- switch(effects,
+  ran_eff <- switch(
+    effects,
     full = ,
     random = c(rand, rand_sd),
     grouplevel = rand,
@@ -399,10 +444,7 @@ find_parameters.stanmvreg <- function(x,
 
 
 #' @export
-find_parameters.bcplm <- function(x,
-                                  flatten = FALSE,
-                                  parameters = NULL,
-                                  ...) {
+find_parameters.bcplm <- function(x, flatten = FALSE, parameters = NULL, ...) {
   l <- .filter_pars(list(conditional = dimnames(x$sims.list[[1]])[[2]]), parameters)
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
@@ -414,13 +456,14 @@ find_parameters.bcplm <- function(x,
 
 # Simulation models -----------------------------
 
-
 #' @export
-find_parameters.sim.merMod <- function(x,
-                                       effects = "all",
-                                       flatten = FALSE,
-                                       parameters = NULL,
-                                       ...) {
+find_parameters.sim.merMod <- function(
+  x,
+  effects = "all",
+  flatten = FALSE,
+  parameters = NULL,
+  ...
+) {
   fe <- colnames(.get_armsim_fixef_parms(x))
   re <- colnames(.get_armsim_ranef_parms(x))
 
@@ -483,10 +526,18 @@ find_parameters.bayesQR <- function(x, flatten = FALSE, parameters = NULL, ...) 
 
 
 #' @export
-find_parameters.stanfit <- function(x, effects = "all", flatten = FALSE, parameters = NULL, ...) {
+find_parameters.stanfit <- function(
+  x,
+  effects = "all",
+  flatten = FALSE,
+  parameters = NULL,
+  ...
+) {
   fe <- colnames(as.data.frame(x))
 
-  cond <- fe[grepl("^(?!(b\\[|sigma|Sigma|lp__))", fe, perl = TRUE) & .grep_non_smoothers(fe)]
+  cond <- fe[
+    grepl("^(?!(b\\[|sigma|Sigma|lp__))", fe, perl = TRUE) & .grep_non_smoothers(fe)
+  ]
   rand <- fe[startsWith(fe, "b[")]
 
   l <- compact_list(list(

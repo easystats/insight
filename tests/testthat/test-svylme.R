@@ -28,7 +28,10 @@ withr::with_environment(
     })
 
     test_that("find_predictors", {
-      expect_identical(find_predictors(m1), list(conditional = c("ell", "mobility", "api99")))
+      expect_identical(
+        find_predictors(m1),
+        list(conditional = c("ell", "mobility", "api99"))
+      )
       expect_identical(
         find_predictors(m1, effects = "random"),
         list(random = "dnum")

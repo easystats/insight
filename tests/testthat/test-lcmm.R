@@ -5,7 +5,9 @@ skip_if_offline()
 skip_if_not_installed("httr2")
 
 out <- tryCatch(
-  datawizard::data_read("https://github.com/easystats/circus/raw/refs/heads/main/data/lcmm.rda"),
+  datawizard::data_read(
+    "https://github.com/easystats/circus/raw/refs/heads/main/data/lcmm.rda"
+  ),
   error = function(e) NULL
 )
 

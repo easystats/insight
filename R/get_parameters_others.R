@@ -127,8 +127,16 @@ get_parameters.DirichletRegModel <- function(x, component = "all", ...) {
       row.names = NULL
     )
   } else {
-    out1 <- .gather(data.frame(do.call(cbind, cf$beta)), names_to = "Response", values_to = "Estimate")
-    out2 <- .gather(data.frame(do.call(cbind, cf$gamma)), names_to = "Component", values_to = "Estimate")
+    out1 <- .gather(
+      data.frame(do.call(cbind, cf$beta)),
+      names_to = "Response",
+      values_to = "Estimate"
+    )
+    out2 <- .gather(
+      data.frame(do.call(cbind, cf$gamma)),
+      names_to = "Component",
+      values_to = "Estimate"
+    )
     out1$Component <- "conditional"
     out2$Component <- "precision"
     out2$Response <- NA
@@ -206,7 +214,10 @@ get_parameters.clm2 <- function(x, component = "all", ...) {
   params <- data.frame(
     Parameter = rownames(cf),
     Estimate = unname(cf[, "Estimate"]),
-    Component = c(rep("conditional", times = n_intercepts + n_location), rep("scale", times = n_scale)),
+    Component = c(
+      rep("conditional", times = n_intercepts + n_location),
+      rep("scale", times = n_scale)
+    ),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -249,7 +260,10 @@ get_parameters.mvord <- function(x, component = "all", ...) {
   params <- data.frame(
     Parameter = c(thresholds$Parameter, model_coef$Parameter),
     Estimate = c(unname(thresholds[, "Estimate"]), unname(model_coef[, "Estimate"])),
-    Component = c(rep("thresholds", nrow(thresholds)), rep("conditional", nrow(model_coef))),
+    Component = c(
+      rep("thresholds", nrow(thresholds)),
+      rep("conditional", nrow(model_coef))
+    ),
     Response = c(thresholds$Response, model_coef$Response),
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -469,7 +483,12 @@ get_parameters.systemfit <- function(x, ...) {
 
 
 #' @export
-get_parameters.marginaleffects <- function(x, summary = FALSE, merge_parameters = FALSE, ...) {
+get_parameters.marginaleffects <- function(
+  x,
+  summary = FALSE,
+  merge_parameters = FALSE,
+  ...
+) {
   # check if we have a Bayesian model here
   if (isTRUE(summary)) {
     s <- summary(x)
@@ -496,9 +515,21 @@ get_parameters.marginaleffects <- function(x, summary = FALSE, merge_parameters 
     }
   } else {
     excl <- c(
-      "rowid", "type", "std.error", "contrast", "term", "dydx",
-      "statistic", "p.value", "conf.low", "conf.high", "predicted_hi",
-      "predicted_lo", "eps", "marginaleffects_eps", "predicted"
+      "rowid",
+      "type",
+      "std.error",
+      "contrast",
+      "term",
+      "dydx",
+      "statistic",
+      "p.value",
+      "conf.low",
+      "conf.high",
+      "predicted_hi",
+      "predicted_lo",
+      "eps",
+      "marginaleffects_eps",
+      "predicted"
     )
     out <- as.data.frame(x[, !names(x) %in% excl, drop = FALSE])
     if ("dydx" %in% colnames(x)) {
@@ -532,7 +563,10 @@ get_parameters.deltaMethod <- function(x, ...) {
 
 #' @export
 get_parameters.ggcomparisons <- function(x, merge_parameters = FALSE, ...) {
-  estimate_name <- intersect(colnames(x), c(attr(x, "coef_name"), "Difference", "Mean", "Ratio"))[1]
+  estimate_name <- intersect(
+    colnames(x),
+    c(attr(x, "coef_name"), "Difference", "Mean", "Ratio")
+  )[1]
   estimate_pos <- which(colnames(x) == estimate_name)
   params <- x[, seq_len(estimate_pos - 1), drop = FALSE]
 

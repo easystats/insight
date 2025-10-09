@@ -12,7 +12,10 @@ test_that("find_formula", {
   form <- find_formula(mod)
   expect_equal(
     form,
-    list(conditional = bill_len ~ species + island + bill_dep + flipper_len + body_mass + sex + year), # nolint
+    list(
+      conditional = bill_len ~
+        species + island + bill_dep + flipper_len + body_mass + sex + year
+    ), # nolint
     ignore_attr = TRUE
   )
 })

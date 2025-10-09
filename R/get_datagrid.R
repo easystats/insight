@@ -304,19 +304,25 @@ get_datagrid <- function(x, ...) {
 
 #' @rdname get_datagrid
 #' @export
-get_datagrid.data.frame <- function(x,
-                                    by = "all",
-                                    factors = "reference",
-                                    numerics = "mean",
-                                    length = 10,
-                                    range = "range",
-                                    preserve_range = FALSE,
-                                    protect_integers = TRUE,
-                                    digits = 3,
-                                    reference = x,
-                                    ...) {
+get_datagrid.data.frame <- function(
+  x,
+  by = "all",
+  factors = "reference",
+  numerics = "mean",
+  length = 10,
+  range = "range",
+  preserve_range = FALSE,
+  protect_integers = TRUE,
+  digits = 3,
+  reference = x,
+  ...
+) {
   # find numerics that were coerced to factor in-formula
-  numeric_factors <- colnames(x)[vapply(x, function(i) isTRUE(attributes(i)$factor), logical(1))]
+  numeric_factors <- colnames(x)[vapply(
+    x,
+    function(i) isTRUE(attributes(i)$factor),
+    logical(1)
+  )]
 
   specs <- NULL
 
@@ -330,13 +336,17 @@ get_datagrid.data.frame <- function(x,
 
     # if list, convert to character
     if (is.list(by)) {
-      by <- unname(vapply(names(by), function(i) {
-        if (is.numeric(by[[i]])) {
-          paste0(i, " = c(", toString(by[[i]]), ")")
-        } else {
-          paste0(i, " = c(", toString(sprintf("'%s'", by[[i]])), ")")
-        }
-      }, character(1)))
+      by <- unname(vapply(
+        names(by),
+        function(i) {
+          if (is.numeric(by[[i]])) {
+            paste0(i, " = c(", toString(by[[i]]), ")")
+          } else {
+            paste0(i, " = c(", toString(sprintf("'%s'", by[[i]])), ")")
+          }
+        },
+        character(1)
+      ))
     }
 
     # if by is "all" or numeric or logical indices, extract related
@@ -418,7 +428,8 @@ get_datagrid.data.frame <- function(x,
       } else if (length(length) != length(numvars)) {
         format_error(paste0(
           "The number of elements in `length` must match the number of numeric target variables (n = ",
-          length(numvars), ")."
+          length(numvars),
+          ")."
         ))
       }
       # Sanitize 'range' argument
@@ -427,7 +438,8 @@ get_datagrid.data.frame <- function(x,
       } else if (length(range) != length(numvars)) {
         format_error(paste0(
           "The number of elements in `range` must match the number of numeric target variables (n = ",
-          length(numvars), ")."
+          length(numvars),
+          ")."
         ))
       }
 
@@ -468,7 +480,8 @@ get_datagrid.data.frame <- function(x,
       # Get datagrids
       for (i in seq_along(numvars)) {
         num <- numvars[i]
-        nums[[num]] <- get_datagrid(x[[num]],
+        nums[[num]] <- get_datagrid(
+          x[[num]],
           by = specs[specs$varname == num, "expression"],
           reference = reference[[num]],
           length = length[i],
@@ -495,7 +508,11 @@ get_datagrid.data.frame <- function(x,
       facs_combinations <- expand.grid(facs)
       for (i in seq_len(nrow(facs_combinations))) {
         # Query subset of original dataset
-        data_subset <- x[.data_match(x, to = facs_combinations[i, , drop = FALSE]), , drop = FALSE]
+        data_subset <- x[
+          .data_match(x, to = facs_combinations[i, , drop = FALSE]),
+          ,
+          drop = FALSE
+        ]
         idx <- .data_match(targets, to = facs_combinations[i, , drop = FALSE])
 
         # Skip if no instance of factor combination, drop the chunk
@@ -509,7 +526,10 @@ get_datagrid.data.frame <- function(x,
         for (num in names(nums)) {
           mini <- min(data_subset[[num]], na.rm = TRUE)
           maxi <- max(data_subset[[num]], na.rm = TRUE)
-          rows_to_remove <- c(rows_to_remove, which(targets[[num]] < mini | targets[[num]] > maxi))
+          rows_to_remove <- c(
+            rows_to_remove,
+            which(targets[[num]] < mini | targets[[num]] > maxi)
+          )
         }
         if (length(rows_to_remove) > 0) {
           targets <- targets[-idx[idx %in% rows_to_remove], ] # Drop incompatible rows
@@ -518,11 +538,12 @@ get_datagrid.data.frame <- function(x,
       }
 
       if (nrow(targets) == 0) {
-        format_error("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to `FALSE`.") # nolint
+        format_error(
+          "No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to `FALSE`."
+        )
       }
     }
   }
-
 
   # Deal with the rest =========================================================
   rest_vars <- names(x)[!names(x) %in% names(targets)]
@@ -569,7 +590,10 @@ get_datagrid.data.frame <- function(x,
   # Printing decorations
   attr(targets, "table_title") <- c("Visualisation Grid", "blue")
   if (!(length(rest_vars) == 1 && is.na(rest_vars)) && length(rest_vars) >= 1) {
-    attr(targets, "table_footer") <- paste0("\nMaintained constant: ", toString(rest_vars))
+    attr(targets, "table_footer") <- paste0(
+      "\nMaintained constant: ",
+      toString(rest_vars)
+    )
   }
   if (!is.null(attr(targets, "table_footer"))) {
     attr(targets, "table_footer") <- c(attr(targets, "table_footer"), "blue")
@@ -587,12 +611,14 @@ get_datagrid.data.frame <- function(x,
 
 #' @rdname get_datagrid
 #' @export
-get_datagrid.numeric <- function(x,
-                                 length = 10,
-                                 range = "range",
-                                 protect_integers = TRUE,
-                                 digits = 3,
-                                 ...) {
+get_datagrid.numeric <- function(
+  x,
+  length = 10,
+  range = "range",
+  protect_integers = TRUE,
+  digits = 3,
+  ...
+) {
   # Check and clean the target argument
   specs <- .get_datagrid_clean_target(x, digits = digits, ...)
 
@@ -629,7 +655,6 @@ get_datagrid.double <- get_datagrid.numeric
 
 ## Factors & Characters ----------------------------------------------------
 
-
 #' @rdname get_datagrid
 #' @export
 get_datagrid.factor <- function(x, ...) {
@@ -661,19 +686,21 @@ get_datagrid.logical <- get_datagrid.character
 
 #' @rdname get_datagrid
 #' @export
-get_datagrid.default <- function(x,
-                                 by = "all",
-                                 factors = "reference",
-                                 numerics = "mean",
-                                 preserve_range = TRUE,
-                                 reference = x,
-                                 include_smooth = TRUE,
-                                 include_random = FALSE,
-                                 include_response = FALSE,
-                                 data = NULL,
-                                 digits = 3,
-                                 verbose = TRUE,
-                                 ...) {
+get_datagrid.default <- function(
+  x,
+  by = "all",
+  factors = "reference",
+  numerics = "mean",
+  preserve_range = TRUE,
+  reference = x,
+  include_smooth = TRUE,
+  include_random = FALSE,
+  include_response = FALSE,
+  data = NULL,
+  digits = 3,
+  verbose = TRUE,
+  ...
+) {
   # validation check
   if (!is_model(x)) {
     format_error("`x` must be a statistical model.")
@@ -696,7 +723,13 @@ get_datagrid.default <- function(x,
   factor_response <- vapply(response, function(i) is.factor(data[[i]]), logical(1))
 
   # any factor response for binomial?
-  if (minfo$is_binomial && minfo$is_logit && any(factor_response) && !include_response && verbose) {
+  if (
+    minfo$is_binomial &&
+      minfo$is_logit &&
+      any(factor_response) &&
+      !include_response &&
+      verbose
+  ) {
     format_warning(
       "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions." # nolint
     )
@@ -706,7 +739,9 @@ get_datagrid.default <- function(x,
   if (isFALSE(include_response)) {
     data <- data[!colnames(data) %in% response]
     if (ncol(data) < 1L) {
-      format_error("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid.") # nolint
+      format_error(
+        "Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."
+      )
     }
   }
 
@@ -733,7 +768,9 @@ get_datagrid.default <- function(x,
   }
 
   # user wants to include all predictors?
-  if (all(by == "all")) by <- colnames(data)
+  if (all(by == "all")) {
+    by <- colnames(data)
+  }
 
   # exluce smooth terms?
   if (isFALSE(include_smooth) || identical(include_smooth, "fixed")) {
@@ -797,16 +834,18 @@ get_datagrid.logitr <- function(x, ...) {
 
 
 #' @export
-get_datagrid.wbm <- function(x,
-                             by = "all",
-                             factors = "reference",
-                             numerics = "mean",
-                             preserve_range = TRUE,
-                             reference = x,
-                             include_smooth = TRUE,
-                             include_random = FALSE,
-                             data = NULL,
-                             ...) {
+get_datagrid.wbm <- function(
+  x,
+  by = "all",
+  factors = "reference",
+  numerics = "mean",
+  preserve_range = TRUE,
+  reference = x,
+  include_smooth = TRUE,
+  include_random = FALSE,
+  data = NULL,
+  ...
+) {
   # Retrieve data from model
   data <- .get_model_data_for_grid(x, data)
 
@@ -823,10 +862,17 @@ get_datagrid.wbm <- function(x,
   colnames(data) <- clean_names(colnames(data))
 
   get_datagrid.default(
-    x = x, by = by, factors = factors, numerics = numerics,
-    preserve_range = preserve_range, reference = reference,
-    include_smooth = include_smooth, include_random = include_random,
-    include_response = TRUE, data = data, ...
+    x = x,
+    by = by,
+    factors = factors,
+    numerics = numerics,
+    preserve_range = preserve_range,
+    reference = reference,
+    include_smooth = include_smooth,
+    include_random = include_random,
+    include_response = TRUE,
+    data = data,
+    ...
   )
 }
 
@@ -834,9 +880,11 @@ get_datagrid.wbm <- function(x,
 # Functions that work on get_datagrid -------------------------------------
 
 #' @export
-get_datagrid.visualisation_matrix <- function(x,
-                                              reference = attributes(x)$reference,
-                                              ...) {
+get_datagrid.visualisation_matrix <- function(
+  x,
+  reference = attributes(x)$reference,
+  ...
+) {
   datagrid <- get_datagrid(as.data.frame(x), reference = reference, ...)
 
   if ("model" %in% names(attributes(x))) {
@@ -991,14 +1039,18 @@ get_datagrid.comparisons <- get_datagrid.slopes
         # here. Or we can have an equal-sign, so the variable name is saved in
         # `varname` - in this case, overwrite `by` with `varname` for informative
         # error message.
-        if (!is.na(varname)) by <- varname
+        if (!is.na(varname)) {
+          by <- varname
+        }
         suggestion <- .misspelled_string(
           colnames(x),
           by,
           default_message = "Please check the spelling."
         )
         format_error(paste0(
-          "Variable `", by, "` was not found in the data. ", # nolint
+          "Variable `",
+          by,
+          "` was not found in the data. ", # nolint
           suggestion$msg
         ))
       } else {
@@ -1011,7 +1063,10 @@ get_datagrid.comparisons <- get_datagrid.slopes
     if (is.na(by_expression) && grepl("\\[.*\\]", by)) {
       # Clean --------------------
       # Keep the content
-      parts <- trim_ws(unlist(regmatches(by, gregexpr("\\[.+?\\]", by)), use.names = FALSE))
+      parts <- trim_ws(unlist(
+        regmatches(by, gregexpr("\\[.+?\\]", by)),
+        use.names = FALSE
+      ))
       # Drop the brackets
       parts <- gsub("\\[|\\]", "", parts)
       # do we have a range, indicated by colon? If yes, we just want these two
@@ -1025,15 +1080,23 @@ get_datagrid.comparisons <- get_datagrid.slopes
       # Split by a separator like ','
       parts <- trim_ws(unlist(strsplit(parts, ",", fixed = TRUE), use.names = FALSE))
       # If the elements have quotes around them, drop them
-      if (all(grepl("\\'.*\\'", parts))) parts <- gsub("'", "", parts, fixed = TRUE)
-      if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts, fixed = TRUE)
+      if (all(grepl("\\'.*\\'", parts))) {
+        parts <- gsub("'", "", parts, fixed = TRUE)
+      }
+      if (all(grepl('\\".*\\"', parts))) {
+        parts <- gsub('"', "", parts, fixed = TRUE)
+      }
 
       # Make expression ----------
+      # fmt: skip
       shortcuts <- c(
         "meansd", "sd", "mad", "quartiles", "zeromax", "minmax", "terciles",
         "terciles2", "fivenum", "pretty"
       )
-      if ((is.factor(x) && all(parts %in% levels(x))) || (is.character(x) && all(parts %in% x))) {
+      if (
+        (is.factor(x) && all(parts %in% levels(x))) ||
+          (is.character(x) && all(parts %in% x))
+      ) {
         # Factor ----------------
         # -----------------------
         # Add quotes around them
@@ -1044,35 +1107,106 @@ get_datagrid.comparisons <- get_datagrid.slopes
         # If only one value, might be a shortcut. or a sampling request ----
         # ------------------------------------------------------------------
         if (grepl("sample", parts, fixed = TRUE)) {
-          n_to_sample <- suppressWarnings(as.numeric(trim_ws(gsub("sample", "", parts, fixed = TRUE))))
+          n_to_sample <- suppressWarnings(as.numeric(trim_ws(gsub(
+            "sample",
+            "",
+            parts,
+            fixed = TRUE
+          ))))
           # do we have a proper definition of the sample size? If not, error
           if (is.null(n_to_sample) || is.na(n_to_sample) || !length(n_to_sample)) {
-            format_error("The token `sample` must be followed by the number of samples to be drawn, e.g. `[sample 15]`.") # nolint
+            format_error(
+              "The token `sample` must be followed by the number of samples to be drawn, e.g. `[sample 15]`."
+            ) # nolint
           }
-          by_expression <- paste0("c(", paste(sample(x, n_to_sample), collapse = ","), ")")
+          by_expression <- paste0(
+            "c(",
+            paste(sample(x, n_to_sample), collapse = ","),
+            ")"
+          )
         } else if (parts %in% shortcuts) {
           if (parts %in% c("meansd", "sd")) {
             center <- mean(x, na.rm = TRUE)
             spread <- stats::sd(x, na.rm = TRUE)
-            by_expression <- paste0("c(", round(center - spread, digits), ",", round(center, digits), ",", round(center + spread, digits), ")") # nolint
+            by_expression <- paste0(
+              "c(",
+              round(center - spread, digits),
+              ",",
+              round(center, digits),
+              ",",
+              round(center + spread, digits),
+              ")"
+            ) # nolint
           } else if (parts == "mad") {
             center <- stats::median(x, na.rm = TRUE)
             spread <- stats::mad(x, na.rm = TRUE)
-            by_expression <- paste0("c(", round(center - spread, digits), ",", round(center, digits), ",", round(center + spread, digits), ")") # nolint
+            by_expression <- paste0(
+              "c(",
+              round(center - spread, digits),
+              ",",
+              round(center, digits),
+              ",",
+              round(center + spread, digits),
+              ")"
+            ) # nolint
           } else if (parts == "fivenum") {
-            by_expression <- paste0("c(", paste(round(as.vector(stats::fivenum(x, na.rm = TRUE)), digits), collapse = ","), ")") # nolint
+            by_expression <- paste0(
+              "c(",
+              paste(
+                round(as.vector(stats::fivenum(x, na.rm = TRUE)), digits),
+                collapse = ","
+              ),
+              ")"
+            ) # nolint
           } else if (parts == "quartiles") {
-            by_expression <- paste0("c(", paste(round(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], digits), collapse = ","), ")") # nolint
+            by_expression <- paste0(
+              "c(",
+              paste(
+                round(as.vector(stats::quantile(x, na.rm = TRUE))[2:4], digits),
+                collapse = ","
+              ),
+              ")"
+            ) # nolint
           } else if (parts == "terciles") {
-            by_expression <- paste0("c(", paste(round(as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)), digits), collapse = ","), ")") # nolint
+            by_expression <- paste0(
+              "c(",
+              paste(
+                round(
+                  as.vector(stats::quantile(x, probs = (1:2) / 3, na.rm = TRUE)),
+                  digits
+                ),
+                collapse = ","
+              ),
+              ")"
+            ) # nolint
           } else if (parts == "terciles2") {
-            by_expression <- paste0("c(", paste(round(as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)), digits), collapse = ","), ")") # nolint
+            by_expression <- paste0(
+              "c(",
+              paste(
+                round(
+                  as.vector(stats::quantile(x, probs = (0:3) / 3, na.rm = TRUE)),
+                  digits
+                ),
+                collapse = ","
+              ),
+              ")"
+            ) # nolint
           } else if (parts == "pretty") {
-            by_expression <- paste0("c(", paste(as.vector(pretty(x, na.rm = TRUE)), collapse = ","), ")")
+            by_expression <- paste0(
+              "c(",
+              paste(as.vector(pretty(x, na.rm = TRUE)), collapse = ","),
+              ")"
+            )
           } else if (parts == "zeromax") {
             by_expression <- paste0("c(0,", round(max(x, na.rm = TRUE), digits), ")")
           } else if (parts == "minmax") {
-            by_expression <- paste0("c(", round(min(x, na.rm = TRUE), digits), ",", round(max(x, na.rm = TRUE), digits), ")")
+            by_expression <- paste0(
+              "c(",
+              round(min(x, na.rm = TRUE), digits),
+              ",",
+              round(max(x, na.rm = TRUE), digits),
+              ")"
+            )
           }
         } else if (is.numeric(parts)) {
           # if value in brackets is not a character, it must be numeric ---
@@ -1086,7 +1220,13 @@ get_datagrid.comparisons <- get_datagrid.slopes
         # -----------------------------------------
         if (is_range && length(parts) == 2) {
           # If we have a two values and range-indictor is TRUE, we have a range
-          by_expression <- paste0("seq(", parts[1], ", ", parts[2], ", length.out = length)")
+          by_expression <- paste0(
+            "seq(",
+            parts[1],
+            ", ",
+            parts[2],
+            ", length.out = length)"
+          )
         } else {
           # Else we have single values
           parts <- as.numeric(parts)
@@ -1098,7 +1238,9 @@ get_datagrid.comparisons <- get_datagrid.slopes
       if (is.null(by_expression)) {
         format_error(
           paste0(
-            "The `by` argument (", by, ") should either indicate a valid factor level, the minimum and the maximum value of a vector, or one of the following options: ", # nolint
+            "The `by` argument (",
+            by,
+            ") should either indicate a valid factor level, the minimum and the maximum value of a vector, or one of the following options: ", # nolint
             toString(shortcuts),
             "."
           )
@@ -1118,7 +1260,11 @@ get_datagrid.comparisons <- get_datagrid.slopes
         },
         error = function(r) {
           format_error(
-            paste0("The `by` argument (`", original_target, "`) cannot be read and could be mispecified.")
+            paste0(
+              "The `by` argument (`",
+              original_target,
+              "`) cannot be read and could be mispecified."
+            )
           )
         }
       )
@@ -1131,12 +1277,16 @@ get_datagrid.comparisons <- get_datagrid.slopes
 # to their mean (or other value), factors to reference etc.
 
 #' @keywords internal
-.get_datagrid_summary <- function(x,
-                                  numerics = "mean",
-                                  factors = "reference",
-                                  remove_na = TRUE,
-                                  ...) {
-  if (remove_na) x <- stats::na.omit(x)
+.get_datagrid_summary <- function(
+  x,
+  numerics = "mean",
+  factors = "reference",
+  remove_na = TRUE,
+  ...
+) {
+  if (remove_na) {
+    x <- stats::na.omit(x)
+  }
 
   if (is.numeric(x)) {
     if (is.numeric(numerics)) {
@@ -1155,7 +1305,9 @@ get_datagrid.comparisons <- get_datagrid.slopes
       # sanity check
       if (is.null(out)) {
         format_error(paste0(
-          "The function specified in `numerics` (", numerics, ") does not return any value.",
+          "The function specified in `numerics` (",
+          numerics,
+          ") does not return any value.",
           " Please check the spelling, or report the bug at <https://github.com/easystats/insight/issues>."
         ))
       }
@@ -1173,7 +1325,9 @@ get_datagrid.comparisons <- get_datagrid.slopes
       all_levels <- unique(x)
     } else {
       format_error(paste0(
-        "Argument is not numeric nor factor but ", class(x), ".",
+        "Argument is not numeric nor factor but ",
+        class(x),
+        ".",
         "Please report the bug at https://github.com/easystats/insight/issues"
       ))
     }
@@ -1203,13 +1357,15 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 
 #' @keywords internal
-.create_spread <- function(x,
-                           length = 10,
-                           range = "range",
-                           ci = 0.95,
-                           digits = 3,
-                           protect_integers = TRUE,
-                           ...) {
+.create_spread <- function(
+  x,
+  length = 10,
+  range = "range",
+  ci = 0.95,
+  digits = 3,
+  protect_integers = TRUE,
+  ...
+) {
   range <- validate_argument(
     tolower(range),
     c("range", "iqr", "ci", "hdi", "eti", "sd", "mad", "grid", "pretty")
@@ -1235,7 +1391,12 @@ get_datagrid.comparisons <- get_datagrid.slopes
     # predictors, we want at maximum all valid / unique values, but *not* a
     # spread with fractions. This behaviour can only be overriden by setting
     # protect_integers = FALSE
-    if (isTRUE(list(...)$is_first_predictor) && all(.is_integer(x)) && n_unique(x) < length && protect_integers) {
+    if (
+      isTRUE(list(...)$is_first_predictor) &&
+        all(.is_integer(x)) &&
+        n_unique(x) < length &&
+        protect_integers
+    ) {
       length <- n_unique(x)
     }
   }
@@ -1244,7 +1405,9 @@ get_datagrid.comparisons <- get_datagrid.slopes
   # length if necessary. This means, for numerics with, say, two or three values,
   # we still have these two or three values after creating the spread. This
   # behaviour can only be overriden by setting protect_integers = FALSE
-  if (all(.is_integer(x)) && n_unique(x) < length && range == "range" && protect_integers) {
+  if (
+    all(.is_integer(x)) && n_unique(x) < length && range == "range" && protect_integers
+  ) {
     length <- n_unique(x)
   }
 
@@ -1254,13 +1417,17 @@ get_datagrid.comparisons <- get_datagrid.slopes
     if (range == "sd") {
       disp <- stats::sd(x, na.rm = TRUE)
       center <- mean(x, na.rm = TRUE)
-      labs <- ifelse(sign(spread) == -1, paste(spread, "SD"),
+      labs <- ifelse(
+        sign(spread) == -1,
+        paste(spread, "SD"),
         ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean") # nolint
       )
     } else {
       disp <- stats::mad(x, na.rm = TRUE)
       center <- stats::median(x, na.rm = TRUE)
-      labs <- ifelse(sign(spread) == -1, paste(spread, "MAD"),
+      labs <- ifelse(
+        sign(spread) == -1,
+        paste(spread, "MAD"),
         ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median") # nolint
       )
     }
@@ -1276,7 +1443,8 @@ get_datagrid.comparisons <- get_datagrid.slopes
   }
 
   # If Range is an interval
-  if (range == "iqr") { # nolint
+  if (range == "iqr") {
+    # nolint
     mini <- stats::quantile(x, (1 - ci) / 2, ...)
     maxi <- stats::quantile(x, (1 + ci) / 2, ...)
   } else if (range == "ci") {
@@ -1341,7 +1509,10 @@ get_datagrid.comparisons <- get_datagrid.slopes
   # from fitted models is retrieved using `get_data(source = "mf")`. Since we
   # do not retrieve data from the model frame, we do this step here manually
 
-  factors <- grepl("^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)", model_terms)
+  factors <- grepl(
+    "^(as\\.factor|as_factor|factor|as\\.ordered|ordered)\\((.*)\\)",
+    model_terms
+  )
   if (any(factors)) {
     factor_expressions <- lapply(model_terms[factors], str2lang)
     cleaned_terms <- vapply(factor_expressions, all.vars, character(1))

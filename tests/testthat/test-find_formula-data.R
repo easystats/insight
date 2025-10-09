@@ -21,7 +21,8 @@ test_that("find_formula-data2", {
 test_that("find_formula-data3", {
   expect_equal(
     find_formula(m3),
-    structure(list(conditional = mpg ~ hp * cyl + poly(drat, 2) / disp),
+    structure(
+      list(conditional = mpg ~ hp * cyl + poly(drat, 2) / disp),
       class = c("insight_formula", "list")
     ),
     ignore_attr = TRUE

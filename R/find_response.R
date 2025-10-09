@@ -156,7 +156,10 @@ find_response.mediate <- function(x, combine = TRUE, ...) {
     return(NULL)
   }
 
-  resp <- c(safe_deparse(f$mediator$conditional[[2L]]), safe_deparse(f$outcome$conditional[[2L]]))
+  resp <- c(
+    safe_deparse(f$mediator$conditional[[2L]]),
+    safe_deparse(f$outcome$conditional[[2L]])
+  )
   check_cbind(resp, combine, model = x)
 }
 
@@ -190,10 +193,13 @@ find_response.mjoint <- function(x, combine = TRUE, component = "conditional", .
     return(NULL)
   }
 
-  conditional <- unlist(lapply(f[startsWith(names(f), "conditional")], function(i) safe_deparse(i[[2L]])))
+  conditional <- unlist(lapply(f[startsWith(names(f), "conditional")], function(i) {
+    safe_deparse(i[[2L]])
+  }))
   survial <- safe_deparse(f$survival[[2L]])
 
-  resp <- switch(component,
+  resp <- switch(
+    component,
     conditional = conditional,
     survial = survial,
     all = c(conditional, survial)
@@ -216,7 +222,8 @@ find_response.joint <- function(x, combine = TRUE, component = "conditional", ..
   conditional <- safe_deparse(f$conditional[[2L]])
   survial <- safe_deparse(f$survival[[2L]])
 
-  resp <- switch(component,
+  resp <- switch(
+    component,
     conditional = conditional,
     survial = survial,
     all = c(conditional, survial)
@@ -228,7 +235,6 @@ find_response.joint <- function(x, combine = TRUE, component = "conditional", ..
 
 # utils ---------------------
 
-
 # should not be called for brms-models!
 check_cbind <- function(resp, combine, model) {
   if (any(.string_contains("|", resp))) {
@@ -237,6 +243,7 @@ check_cbind <- function(resp, combine, model) {
     r2 <- trim_ws(sub("(.*)\\|(.*)\\(([^,)]*).*", "\\3", resp))
     # check for "resp_thres" and similar patterns
     r_resp <- trim_ws(unlist(strsplit(resp, "|", fixed = TRUE))[2])
+    # fmt: skip
     if (grepl("^(resp_thres|thres|resp_weights|weights|resp_se|se|resp_cens|cens)", r_resp)) {
       r3 <- trim_ws(sub("=", "", sub("(.*)\\(([^=)]*)(.*)\\)", "\\3", r_resp), fixed = TRUE))
       numeric_values <- suppressWarnings(as.numeric(r2))
@@ -271,7 +278,8 @@ check_cbind <- function(resp, combine, model) {
     # "all.vars()" will take care of extracting the correct variables.
     resp_combined_string <- paste(resp, collapse = "+")
     # create an expression, so all.vars() works similar like for formulas
-    resp_combined <- tryCatch(all.vars(str2lang(resp_combined_string)),
+    resp_combined <- tryCatch(
+      all.vars(str2lang(resp_combined_string)),
       error = function(e) resp_combined_string
     )
     # if we do not want to combine, or if we just have one variable as

@@ -202,17 +202,20 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
     model_args <- lapply(get_call(model), safe_deparse)[-1]
     formula_args <- endsWith(names(model_args), "formula")
     resp <- find_response(model)
-    model_args[formula_args] <- lapply(names(model_args[formula_args]), function(f_names) {
-      f <- model_args[[f_names]]
-      re_string <- sapply(.findbars(stats::as.formula(f)), safe_deparse)
-      if (is_empty_object(re_string)) {
-        stats::as.formula("~1")
-      } else if (any(startsWith(f_names, c("zi", "disp")))) {
-        stats::reformulate(paste0("(", re_string, ")"), response = NULL)
-      } else {
-        stats::reformulate(paste0("(", re_string, ")"), response = resp)
+    model_args[formula_args] <- lapply(
+      names(model_args[formula_args]),
+      function(f_names) {
+        f <- model_args[[f_names]]
+        re_string <- sapply(.findbars(stats::as.formula(f)), safe_deparse)
+        if (is_empty_object(re_string)) {
+          stats::as.formula("~1")
+        } else if (any(startsWith(f_names, c("zi", "disp")))) {
+          stats::reformulate(paste0("(", re_string, ")"), response = NULL)
+        } else {
+          stats::reformulate(paste0("(", re_string, ")"), response = resp)
+        }
       }
-    })
+    )
     model_args[!formula_args] <- lapply(model_args[!formula_args], str2lang)
     # add offset back
     if (!is.null(offset_term)) {
@@ -252,9 +255,15 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
         msg <- e$message
         if (verbose) {
           if (grepl("(^object)(.*)(not found$)", msg)) {
-            print_color("Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n", "red") # nolint
+            print_color(
+              "Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n",
+              "red"
+            )
           } else if (startsWith(msg, "could not find function")) {
-            print_color("Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n", "red") # nolint
+            print_color(
+              "Can't calculate null-model. Probably you need to load the package that was used to fit the model.\n",
+              "red"
+            )
           }
         }
         NULL
@@ -294,7 +303,6 @@ null_model.glmmadmb <- null_model.glmmTMB
 
 
 # helper -------------------------------
-
 
 .grep_offset_term <- function(model_formula) {
   tryCatch(

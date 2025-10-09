@@ -3,11 +3,7 @@ skip_on_cran()
 
 data("Fishing", package = "mlogit")
 Fish <-
-  mlogit::mlogit.data(Fishing,
-    varying = 2:9,
-    shape = "wide",
-    choice = "mode"
-  )
+  mlogit::mlogit.data(Fishing, varying = 2:9, shape = "wide", choice = "mode")
 
 m1 <- mlogit::mlogit(mode ~ price + catch, data = Fish)
 m2 <- mlogit::mlogit(mode ~ price + catch | income, data = Fish)
@@ -93,15 +89,21 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_identical(find_terms(m1), list(
-    response = "mode",
-    conditional = c("price", "catch")
-  ))
+  expect_identical(
+    find_terms(m1),
+    list(
+      response = "mode",
+      conditional = c("price", "catch")
+    )
+  )
   expect_identical(find_terms(m1, flatten = TRUE), c("mode", "price", "catch"))
-  expect_identical(find_terms(m2), list(
-    response = "mode",
-    conditional = c("price", "catch", "income")
-  ))
+  expect_identical(
+    find_terms(m2),
+    list(
+      response = "mode",
+      conditional = c("price", "catch", "income")
+    )
+  )
   expect_identical(
     find_terms(m2, flatten = TRUE),
     c("mode", "price", "catch", "income")

@@ -87,18 +87,20 @@ get_predicted_ci <- function(x, ...) {
 
 #' @rdname get_predicted_ci
 #' @export
-get_predicted_ci.default <- function(x,
-                                     predictions = NULL,
-                                     data = NULL,
-                                     se = NULL,
-                                     ci = 0.95,
-                                     ci_type = "confidence",
-                                     ci_method = NULL,
-                                     dispersion_method = "sd",
-                                     vcov = NULL,
-                                     vcov_args = NULL,
-                                     verbose = TRUE,
-                                     ...) {
+get_predicted_ci.default <- function(
+  x,
+  predictions = NULL,
+  data = NULL,
+  se = NULL,
+  ci = 0.95,
+  ci_type = "confidence",
+  ci_method = NULL,
+  dispersion_method = "sd",
+  vcov = NULL,
+  vcov_args = NULL,
+  verbose = TRUE,
+  ...
+) {
   # validation check, if CI should be skipped
   if (is.null(ci)) {
     return(ci)
@@ -142,9 +144,11 @@ get_predicted_ci.default <- function(x,
   # 1. Find appropriate interval function
   if (!is.null(se)) {
     ci_function <- .get_predicted_se_to_ci
-  } else if (ci_type == "confidence" ||
-    identical(get_family(x)$family, "gaussian") ||
-    (!is.null(vcov) && is.matrix(vcov))) {
+  } else if (
+    ci_type == "confidence" ||
+      identical(get_family(x)$family, "gaussian") ||
+      (!is.null(vcov) && is.matrix(vcov))
+  ) {
     # gaussian or CI
     se <- get_predicted_se(
       x,
@@ -201,21 +205,27 @@ get_predicted_ci.default <- function(x,
 #' @export
 get_predicted_ci.mlm <- function(x, verbose = TRUE, ...) {
   if (verbose) {
-    format_alert(paste0("Confidence intervals are not yet supported for models of class `", class(x)[1], "`."))
+    format_alert(paste0(
+      "Confidence intervals are not yet supported for models of class `",
+      class(x)[1],
+      "`."
+    ))
   }
   NULL
 }
 
 
 #' @export
-get_predicted_ci.polr <- function(x,
-                                  predictions = NULL,
-                                  data = NULL,
-                                  se = NULL,
-                                  ci = 0.95,
-                                  type = NULL,
-                                  verbose = TRUE,
-                                  ...) {
+get_predicted_ci.polr <- function(
+  x,
+  predictions = NULL,
+  data = NULL,
+  se = NULL,
+  ci = 0.95,
+  type = NULL,
+  verbose = TRUE,
+  ...
+) {
   ci_data <- NULL
   # add CI, if type = "probs"
   if (identical(type, "probs") && !is.null(data)) {
@@ -230,8 +240,12 @@ get_predicted_ci.polr <- function(x,
       ci_data <- data.frame(
         Row = predictions$Row,
         Response = predictions$Response,
-        CI_low = linv(stats::qlogis(predictions$Predicted) - stats::qnorm((1 + ci) / 2) * se),
-        CI_high = linv(stats::qlogis(predictions$Predicted) + stats::qnorm((1 + ci) / 2) * se)
+        CI_low = linv(
+          stats::qlogis(predictions$Predicted) - stats::qnorm((1 + ci) / 2) * se
+        ),
+        CI_high = linv(
+          stats::qlogis(predictions$Predicted) + stats::qnorm((1 + ci) / 2) * se
+        )
       )
     }
   }
@@ -248,13 +262,15 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 
 ## Convert to CI -----------
 
-.get_predicted_se_to_ci <- function(x,
-                                    predictions = NULL,
-                                    se = NULL,
-                                    ci = 0.95,
-                                    ci_method = "wald",
-                                    data = NULL,
-                                    ...) {
+.get_predicted_se_to_ci <- function(
+  x,
+  predictions = NULL,
+  se = NULL,
+  ci = 0.95,
+  ci_method = "wald",
+  data = NULL,
+  ...
+) {
   # TODO: Prediction interval for binomial: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-i/
   # TODO: Prediction interval for poisson: https://fromthebottomoftheheap.net/2017/05/01/glm-prediction-intervals-ii/
 
@@ -302,9 +318,13 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
         # for multiple length, SE and predictions may match, could be intended?
         # could there be any cases where we have twice or x times the length of
         # predictions as standard errors?
-        format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.") # nolint
+        format_warning(
+          "Predictions and standard errors are not of the same length. Please check if you need the `data` argument."
+        ) # nolint
       } else {
-        format_error("Predictions and standard errors are not of the same length. Please specify the `data` argument.")
+        format_error(
+          "Predictions and standard errors are not of the same length. Please specify the `data` argument."
+        )
       }
     }
 
@@ -326,8 +346,10 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
     format_error("The `data` argument should be a data frame.")
   }
   mm <- get_modelmatrix(x, data = data)
-  out <- sapply( # nolint
-    seq_len(nrow(mm)), function(i) {
+  out <- sapply(
+    # nolint
+    seq_len(nrow(mm)),
+    function(i) {
       suppressMessages(
         lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
       )
@@ -337,12 +359,14 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 }
 
 
-.get_predicted_se_to_ci_zeroinfl <- function(x,
-                                             predictions = NULL,
-                                             se = NULL,
-                                             ci = 0.95,
-                                             link_inv = NULL,
-                                             ...) {
+.get_predicted_se_to_ci_zeroinfl <- function(
+  x,
+  predictions = NULL,
+  se = NULL,
+  ci = 0.95,
+  link_inv = NULL,
+  ...
+) {
   # validation checks
   if (is.null(predictions)) {
     return(data.frame(SE = se))
@@ -367,9 +391,13 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
         # for multiple length, SE and predictions may match, could be intended?
         # could there be any cases where we have twice or x times the length of
         # predictions as standard errors?
-        format_warning("Predictions and standard errors are not of the same length. Please check if you need the `data` argument.") # nolint
+        format_warning(
+          "Predictions and standard errors are not of the same length. Please check if you need the `data` argument."
+        ) # nolint
       } else {
-        format_error("Predictions and standard errors are not of the same length. Please specify the `data` argument.")
+        format_error(
+          "Predictions and standard errors are not of the same length. Please specify the `data` argument."
+        )
       }
     }
 
@@ -449,7 +477,11 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
     if (length(ci) == 1) names(out) <- c("Parameter", "CI_low", "CI_high")
   } else {
     check_if_installed(c("bayestestR", "datawizard"))
-    out <- as.data.frame(bayestestR::ci(as.data.frame(t(iter)), ci = ci, method = ci_method))
+    out <- as.data.frame(bayestestR::ci(
+      as.data.frame(t(iter)),
+      ci = ci,
+      method = ci_method
+    ))
     if (length(ci) > 1L) out <- datawizard::reshape_ci(out)
   }
   out$Parameter <- out$CI <- NULL

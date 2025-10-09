@@ -22,14 +22,16 @@
 #' format_bf(bfs, protect_ratio = TRUE, exact = TRUE)
 #' format_bf(bfs, na_reference = 1)
 #' @export
-format_bf <- function(bf,
-                      stars = FALSE,
-                      stars_only = FALSE,
-                      inferiority_star = "\u00B0",
-                      name = "BF",
-                      protect_ratio = FALSE,
-                      na_reference = NA,
-                      exact = FALSE) {
+format_bf <- function(
+  bf,
+  stars = FALSE,
+  stars_only = FALSE,
+  inferiority_star = "\u00B0",
+  name = "BF",
+  protect_ratio = FALSE,
+  na_reference = NA,
+  exact = FALSE
+) {
   if (is.na(na_reference)) {
     bf[bad_bf <- is.na(bf)] <- 1
   } else {
@@ -57,23 +59,28 @@ format_bf <- function(bf,
   is_extreme <- bf_orig > 1000 | bf_orig < 1 / 1000
   if (any(is_extreme)) {
     if (exact) {
-      bf_text[is_extreme] <- ifelse(bf_orig[is_extreme] > 1000,
+      bf_text[is_extreme] <- ifelse(
+        bf_orig[is_extreme] > 1000,
         sprintf("= %.2e", bf_orig[is_extreme]),
         bf_text[is_extreme]
       )
-      bf_text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
-        ifelse(is_small[is_extreme], # nolint
+      bf_text[is_extreme] <- ifelse(
+        bf_orig[is_extreme] < 1 / 1000,
+        ifelse(
+          is_small[is_extreme], # nolint
           sprintf("= 1/%.2e", bf[is_extreme]),
           sprintf("= %.2e", bf_orig[is_extreme])
         ),
         bf_text[is_extreme]
       )
     } else {
-      bf_text[is_extreme] <- ifelse(bf_orig[is_extreme] > 1000,
+      bf_text[is_extreme] <- ifelse(
+        bf_orig[is_extreme] > 1000,
         "> 1000",
         bf_text[is_extreme]
       )
-      bf_text[is_extreme] <- ifelse(bf_orig[is_extreme] < 1 / 1000,
+      bf_text[is_extreme] <- ifelse(
+        bf_orig[is_extreme] < 1 / 1000,
         ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"), # nolint
         bf_text[is_extreme]
       )
@@ -81,16 +88,24 @@ format_bf <- function(bf,
   }
 
   ## Add stars
-  bf_text <- ifelse(bf_orig > 30, paste0(bf_text, "***"),
-    ifelse(bf_orig > 10, paste0(bf_text, "**"), # nolint
+  bf_text <- ifelse(
+    bf_orig > 30,
+    paste0(bf_text, "***"),
+    ifelse(
+      bf_orig > 10,
+      paste0(bf_text, "**"), # nolint
       ifelse(bf_orig > 3, paste0(bf_text, "*"), bf_text) # nolint
     )
   )
 
   ## Add inferiority stars
   if (!is.null(inferiority_star)) {
-    bf_text <- ifelse(bf_orig < (1 / 30), paste0(bf_text, paste(rep_len(inferiority_star, 3), collapse = "")), # nolint
-      ifelse(bf_orig < 0.1, paste0(bf_text, paste(rep_len(inferiority_star, 2), collapse = "")), # nolint
+    bf_text <- ifelse(
+      bf_orig < (1 / 30),
+      paste0(bf_text, paste(rep_len(inferiority_star, 3), collapse = "")), # nolint
+      ifelse(
+        bf_orig < 0.1,
+        paste0(bf_text, paste(rep_len(inferiority_star, 2), collapse = "")), # nolint
         ifelse(bf_orig < (1 / 3), paste0(bf_text, inferiority_star), bf_text) # nolint
       )
     )
@@ -103,6 +118,8 @@ format_bf <- function(bf,
     name = name,
     inferiority_star = inferiority_star
   )
-  if (is.na(na_reference)) out[bad_bf] <- ""
+  if (is.na(na_reference)) {
+    out[bad_bf] <- ""
+  }
   out
 }

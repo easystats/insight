@@ -25,6 +25,7 @@ is_bayesian_model <- function(x, exclude = NULL) {
   if (inherits(x, c("marginaleffects", "slopes", "predictions", "comparisons"))) {
     return(.is_bayesian_marginaleffects(x))
   }
+  # fmt: skip
   bayes_classes <- c(
     "brmsfit", "stanfit", "MCMCglmm", "stanreg", "stanmvreg", "bmerMod",
     "BFBayesFactor", "bamlss", "bayesx", "mcmc", "bcplm", "bayesQR", "BGGM",

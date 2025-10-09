@@ -26,7 +26,12 @@
 #' find_parameters(m)
 #' find_parameters(m, component = "precision")
 #' @export
-find_parameters.averaging <- function(x, component = "conditional", flatten = FALSE, ...) {
+find_parameters.averaging <- function(
+  x,
+  component = "conditional",
+  flatten = FALSE,
+  ...
+) {
   component <- validate_argument(component, c("conditional", "full"))
   cf <- stats::coef(x, full = component == "full")
   out <- list(conditional = text_remove_backticks(names(cf)))
@@ -66,7 +71,11 @@ find_parameters.glmgee <- function(x, component = "all", flatten = FALSE, ...) {
 #' @export
 find_parameters.sdmTMB <- function(x, component = "all", flatten = FALSE, ...) {
   delta_comp <- isTRUE(x$family$delta)
-  valid_comp <- compact_character(c("all", "conditional", ifelse(delta_comp, "delta", "")))
+  valid_comp <- compact_character(c(
+    "all",
+    "conditional",
+    ifelse(delta_comp, "delta", "")
+  ))
   component <- validate_argument(component, valid_comp)
 
   cf <- suppressMessages(stats::coef(x, model = 1))
@@ -122,7 +131,12 @@ find_parameters.betareg <- function(x, component = "all", flatten = FALSE, ...) 
 
 
 #' @export
-find_parameters.DirichletRegModel <- function(x, component = "all", flatten = FALSE, ...) {
+find_parameters.DirichletRegModel <- function(
+  x,
+  component = "all",
+  flatten = FALSE,
+  ...
+) {
   component <- validate_argument(
     component,
     c("all", "conditional", "precision", "location", "distributional", "auxiliary")
@@ -234,6 +248,7 @@ find_parameters.bfsl <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.marginaleffects <- function(x, flatten = FALSE, ...) {
   # Recover dataframe
+  # fmt: skip
   excl <- c(
     "rowid", "type", "estimate", "std.error", "contrast", "term", "dydx",
     "statistic", "p.value", "s.value", "conf.low", "conf.high", "predicted_hi",

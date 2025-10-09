@@ -138,9 +138,17 @@ withr::with_package(
   test_that("get_varcov, pgmm", {
     data("EmplUK", package = "plm")
     mar <- suppressWarnings(plm::pgmm(
-      log(emp) ~ lag(log(emp), 1:2) + lag(log(wage), 0:1) + log(capital) +
-        lag(log(capital), 2) + log(output) + lag(log(output), 2) | lag(log(emp), 2:99),
-      data = EmplUK, effect = "twoways", model = "twosteps"
+      log(emp) ~
+        lag(log(emp), 1:2) +
+          lag(log(wage), 0:1) +
+          log(capital) +
+          lag(log(capital), 2) +
+          log(output) +
+          lag(log(output), 2) |
+          lag(log(emp), 2:99),
+      data = EmplUK,
+      effect = "twoways",
+      model = "twosteps"
     ))
     out1 <- sqrt(diag(insight::get_varcov(mar, vcov = "HC1", component = "all")))
     validate1 <- sqrt(diag(plm::vcovHC(mar)))

@@ -30,7 +30,10 @@
 #' @export
 find_parameters.zeroinfl <- function(x, component = "all", flatten = FALSE, ...) {
   cf <- names(stats::coef(x))
-  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated")
+  )
 
   l <- compact_list(list(
     conditional = cf[startsWith(cf, "count_")],
@@ -56,7 +59,10 @@ find_parameters.zerotrunc <- find_parameters.zeroinfl
 #' @export
 find_parameters.zcpglm <- function(x, component = "all", flatten = FALSE, ...) {
   cf <- stats::coef(x)
-  component <- validate_argument(component, c("all", "conditional", "zi", "zero_inflated"))
+  component <- validate_argument(
+    component,
+    c("all", "conditional", "zi", "zero_inflated")
+  )
 
   l <- compact_list(list(
     conditional = names(cf$tweedie),
@@ -77,7 +83,16 @@ find_parameters.zcpglm <- function(x, component = "all", flatten = FALSE, ...) {
 find_parameters.mhurdle <- function(x, component = "all", flatten = FALSE, ...) {
   component <- validate_argument(
     component,
-    c("all", "conditional", "zi", "zero_inflated", "infrequent_purchase", "ip", "auxiliary", "distributional")
+    c(
+      "all",
+      "conditional",
+      "zi",
+      "zero_inflated",
+      "infrequent_purchase",
+      "ip",
+      "auxiliary",
+      "distributional"
+    )
   )
   cf <- stats::coef(x)
 

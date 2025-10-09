@@ -6,11 +6,7 @@ data(housing, package = "MASS")
 
 dat <<- mlogit::mlogit.data(housing, choice = "Sat", shape = "wide")
 void <- capture.output(
-  m1 <- gmnl::gmnl(Sat ~ Infl + Type + Cont | 1,
-    data = dat,
-    model = "smnl",
-    R = 100
-  )
+  m1 <- gmnl::gmnl(Sat ~ Infl + Type + Cont | 1, data = dat, model = "smnl", R = 100)
 )
 
 test_that("model_info", {
@@ -45,10 +41,13 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(
-    response = "Sat",
-    conditional = c("Infl", "Type", "Cont", "1")
-  ))
+  expect_equal(
+    find_terms(m1),
+    list(
+      response = "Sat",
+      conditional = c("Infl", "Type", "Cont", "1")
+    )
+  )
   expect_equal(
     find_terms(m1, flatten = TRUE),
     c("Sat", "Infl", "Type", "Cont", "1")
@@ -60,10 +59,13 @@ test_that("n_obs", {
 })
 
 test_that("find_variables", {
-  expect_equal(find_variables(m1), list(
-    response = "Sat",
-    conditional = c("Infl", "Type", "Cont")
-  ))
+  expect_equal(
+    find_variables(m1),
+    list(
+      response = "Sat",
+      conditional = c("Infl", "Type", "Cont")
+    )
+  )
   expect_equal(
     find_variables(m1, flatten = TRUE),
     c("Sat", "Infl", "Type", "Cont")

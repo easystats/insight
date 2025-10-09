@@ -36,9 +36,10 @@ get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...)
   check_if_installed("lme4")
 
   effects <- validate_argument(effects, c("fixed", "random"))
+  # fmt: skip
   component <- validate_argument(
     component,
-    c("all", "conditional", "zi", "zero_inflated", "dispersion", "location", "distributional", "auxiliary") # nolint
+    c("all", "conditional", "zi", "zero_inflated", "dispersion", "location", "distributional", "auxiliary")
   )
 
   if (effects == "fixed") {
@@ -96,7 +97,8 @@ get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...)
   # ---- build result
 
   if (effects == "fixed") {
-    out <- switch(component,
+    out <- switch(
+      component,
       all = rbind(fixed, fixedzi, fixeddisp),
       conditional = fixed,
       zi = ,
@@ -105,7 +107,8 @@ get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...)
     )
     text_remove_backticks(out)
   } else if (effects == "random") {
-    switch(component,
+    switch(
+      component,
       all = compact_list(list(
         random = l$random,
         zero_inflated_random = l$zero_inflated_random,
@@ -127,7 +130,10 @@ get_parameters.glmm <- function(x, effects = "all", ...) {
   params <- data.frame(
     Parameter = names(c(x$beta, x$nu)),
     Estimate = unname(c(x$beta, x$nu)),
-    Effects = c(rep("fixed", times = length(x$beta)), rep("random", times = length(x$nu))),
+    Effects = c(
+      rep("fixed", times = length(x$beta)),
+      rep("random", times = length(x$nu))
+    ),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -257,7 +263,8 @@ get_parameters.nlmerMod <- function(x, effects = "fixed", component = "all", ...
   )
 
   if (effects == "fixed") {
-    params <- switch(component,
+    params <- switch(
+      component,
       all = rbind(fixed_cond, fixed_nl),
       conditional = fixed_cond,
       nonlinear = fixed_nl
@@ -456,9 +463,10 @@ get_parameters.MixMod <- function(x, effects = "fixed", component = "all", ...) 
   check_if_installed("lme4")
 
   effects <- validate_argument(effects, c("fixed", "random"))
+  # fmt: skip
   component <- validate_argument(
     component,
-    c("all", "conditional", "zi", "zero_inflated", "dispersion", "location", "distributional", "auxiliary") # nolint
+    c("all", "conditional", "zi", "zero_inflated", "dispersion", "location", "distributional", "auxiliary")
   )
 
   has_zeroinf <- !is.null(find_formula(x, verbose = FALSE)[["zero_inflated"]])
@@ -478,7 +486,6 @@ get_parameters.MixMod <- function(x, effects = "fixed", component = "all", ...) 
     z_inflated_random <- NULL
     component <- "conditional"
   }
-
 
   l <- compact_list(list(
     conditional = lme4::fixef(x, sub_model = "main"),
@@ -506,7 +513,8 @@ get_parameters.MixMod <- function(x, effects = "fixed", component = "all", ...) 
   }
 
   if (effects == "fixed") {
-    params <- switch(component,
+    params <- switch(
+      component,
       all = rbind(fixed, fixedzi),
       conditional = fixed,
       zi = ,
@@ -514,8 +522,12 @@ get_parameters.MixMod <- function(x, effects = "fixed", component = "all", ...) 
     )
     text_remove_backticks(params)
   } else if (effects == "random") {
-    switch(component,
-      all = compact_list(list(random = l$random, zero_inflated_random = l$zero_inflated_random)),
+    switch(
+      component,
+      all = compact_list(list(
+        random = l$random,
+        zero_inflated_random = l$zero_inflated_random
+      )),
       conditional = list(random = l$random),
       zi = ,
       zero_inflated = list(zero_inflated_random = l$zero_inflated_random)
@@ -562,13 +574,16 @@ get_parameters.hglm <- function(x, effects = "fixed", component = "all", ...) {
     stringsAsFactors = FALSE
   )
 
-  out <- switch(effects,
-    fixed = switch(component,
+  out <- switch(
+    effects,
+    fixed = switch(
+      component,
       conditional = fixed,
       dispersion = dispersion,
       rbind(fixed, dispersion)
     ),
-    all = switch(component,
+    all = switch(
+      component,
       conditional = rbind(fixed, random),
       dispersion = dispersion,
       rbind(fixed, random, dispersion)
@@ -604,11 +619,7 @@ get_parameters.mixor <- function(x, effects = "all", ...) {
     random <- NULL
   }
 
-  switch(effects,
-    all = rbind(fixed, random),
-    fixed = fixed,
-    random = random
-  )
+  switch(effects, all = rbind(fixed, random), fixed = fixed, random = random)
 }
 
 

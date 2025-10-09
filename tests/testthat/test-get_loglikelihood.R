@@ -5,8 +5,18 @@ test_that("get_loglikelihood - lm", {
   ll <- loglikelihood(x, estimator = "ML")
   ll2 <- stats::logLik(x)
   expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
-  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
-  expect_equal(sum(attributes(ll)$per_obs - nonnest2::llcont(x)), 0, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(
+    attributes(ll)$df,
+    attributes(ll2)$df,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    sum(attributes(ll)$per_obs - nonnest2::llcont(x)),
+    0,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 
   # REML
   ll <- loglikelihood(x, estimator = "REML")
@@ -25,7 +35,11 @@ test_that("get_loglikelihood - lm", {
 
   x <- lm(log(mpg) ~ wt, data = mtcars)
   expect_equal(as.numeric(get_loglikelihood(x)), 19.42433, tolerance = 1e-3)
-  expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -75.21614, tolerance = 1e-3)
+  expect_equal(
+    as.numeric(get_loglikelihood(x, check_response = TRUE)),
+    -75.21614,
+    tolerance = 1e-3
+  )
   expect_equal(
     as.numeric(get_loglikelihood(x, check_response = TRUE)),
     as.numeric(get_loglikelihood(x)) + as.numeric(get_loglikelihood_adjustment(x)),
@@ -39,27 +53,47 @@ test_that("get_loglikelihood - lm", {
 
   x <- lm(log(mpg) ~ wt, weights = wg, data = mtcars)
   expect_equal(as.numeric(get_loglikelihood(x)), 18.4205, tolerance = 1e-3)
-  expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -75.58669, tolerance = 1e-3)
+  expect_equal(
+    as.numeric(get_loglikelihood(x, check_response = TRUE)),
+    -75.58669,
+    tolerance = 1e-3
+  )
 
   # sqrt-response
   x <- lm(sqrt(mpg) ~ wt, data = mtcars)
   expect_equal(as.numeric(get_loglikelihood(x)), -7.395031, tolerance = 1e-3)
-  expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -76.89597, tolerance = 1e-3)
+  expect_equal(
+    as.numeric(get_loglikelihood(x, check_response = TRUE)),
+    -76.89597,
+    tolerance = 1e-3
+  )
 
   # power to x
   x <- lm(mpg^3.5 ~ wt, weights = wg, data = mtcars)
   expect_equal(as.numeric(get_loglikelihood(x)), -385.6256, tolerance = 1e-3)
-  expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -110.5192, tolerance = 1e-3)
+  expect_equal(
+    as.numeric(get_loglikelihood(x, check_response = TRUE)),
+    -110.5192,
+    tolerance = 1e-3
+  )
 
   # scale
   x <- lm(mpg / 3.5 ~ wt, weights = wg, data = mtcars)
   expect_equal(as.numeric(get_loglikelihood(x)), -41.94534, tolerance = 1e-3)
-  expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -82.03376, tolerance = 1e-3)
+  expect_equal(
+    as.numeric(get_loglikelihood(x, check_response = TRUE)),
+    -82.03376,
+    tolerance = 1e-3
+  )
 
   # scale, no weights
   x <- lm(mpg / 3.5 ~ wt, data = mtcars)
   expect_equal(as.numeric(get_loglikelihood(x)), -39.9263, tolerance = 1e-3)
-  expect_equal(as.numeric(get_loglikelihood(x, check_response = TRUE)), -80.01471, tolerance = 1e-3)
+  expect_equal(
+    as.numeric(get_loglikelihood(x, check_response = TRUE)),
+    -80.01471,
+    tolerance = 1e-3
+  )
 })
 
 test_that("get_loglikelihood - not supported", {
@@ -76,14 +110,29 @@ test_that("get_loglikelihood - glm", {
   ll <- loglikelihood(x)
   ll2 <- stats::logLik(x)
   expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
-  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
-  expect_equal(sum(attributes(ll)$per_obs - nonnest2::llcont(x)), 0, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(
+    attributes(ll)$df,
+    attributes(ll2)$df,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    sum(attributes(ll)$per_obs - nonnest2::llcont(x)),
+    0,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 
   x <- glm(cbind(cyl, gear) ~ mpg, data = mtcars, weights = disp, family = binomial)
   ll <- loglikelihood(x)
   ll2 <- stats::logLik(x)
   expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
-  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(
+    attributes(ll)$df,
+    attributes(ll2)$df,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
   # Nonnest2 seems to be giving diffenrent results,
   # which sums doesn't add up to base R's result... so commenting off
   # expect_equal(sum(attributes(ll)$per_obs - nonnest2::llcont(x)), 0)
@@ -99,7 +148,12 @@ test_that("get_loglikelihood - (g)lmer", {
   ll <- loglikelihood(x, estimator = "REML")
   ll2 <- stats::logLik(x)
   expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
-  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(
+    attributes(ll)$df,
+    attributes(ll2)$df,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 
   # ML
   ll <- loglikelihood(x, estimator = "ML")
@@ -110,13 +164,23 @@ test_that("get_loglikelihood - (g)lmer", {
   ll <- loglikelihood(x)
   ll2 <- stats::logLik(x)
   expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
-  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(
+    attributes(ll)$df,
+    attributes(ll2)$df,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 
   x <- lme4::glmer(vs ~ mpg + (1 | cyl), data = mtcars, family = "binomial")
   ll <- loglikelihood(x, estimator = "REML") # no REML for glmer
   ll2 <- stats::logLik(x)
   expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-4, ignore_attr = TRUE)
-  expect_equal(attributes(ll)$df, attributes(ll2)$df, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(
+    attributes(ll)$df,
+    attributes(ll2)$df,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 
   ll <- loglikelihood(x, estimator = "ML")
   ll2 <- stats::logLik(x, REML = FALSE)
@@ -163,13 +227,20 @@ test_that("get_loglikelihood - stanreg ", {
   ll <- loglikelihood(x)
   ll2 <- loglikelihood(ref)
   expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 2)
-  expect_equal(mean(abs(attributes(ll)$per_obs - attributes(ll2)$per_obs)), 0, tolerance = 0.1)
+  expect_equal(
+    mean(abs(attributes(ll)$per_obs - attributes(ll2)$per_obs)),
+    0,
+    tolerance = 0.1
+  )
 })
 
 test_that("get_loglikelihood - ivreg", {
   skip_if_not_installed("ivreg")
   data("CigaretteDemand", package = "ivreg")
-  x <- ivreg::ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome), data = CigaretteDemand)
+  x <- ivreg::ivreg(
+    log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
+    data = CigaretteDemand
+  )
 
   ll <- loglikelihood(x)
   expect_equal(as.numeric(ll), 13.26255, tolerance = 1e-3)
@@ -179,8 +250,10 @@ test_that("get_loglikelihood - plm", {
   skip_if_not_installed("plm")
   data("Produc", package = "plm")
   x <- suppressWarnings(
-    plm::plm(log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp,
-      data = Produc, index = c("state", "year")
+    plm::plm(
+      log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp,
+      data = Produc,
+      index = c("state", "year")
     )
   )
 

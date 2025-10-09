@@ -34,7 +34,10 @@ get_deviance.default <- function(x, verbose = TRUE, ...) {
     dev <- .safe(x$deviance)
   }
   if (is.null(dev)) {
-    dev <- .safe(sum(get_residuals(x, weighted = TRUE, verbose = verbose)^2, na.rm = TRUE))
+    dev <- .safe(sum(
+      get_residuals(x, weighted = TRUE, verbose = verbose)^2,
+      na.rm = TRUE
+    ))
   }
   dev
 }

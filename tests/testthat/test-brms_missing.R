@@ -31,6 +31,16 @@ test_that("get_response brms aterms-trials 1", {
   expect_true(is_multivariate(miss_1))
   out <- get_response(miss_1)
   expect_named(out, c("survived", "age"))
-  expect_equal(head(out$age), c(29, 0.9167, 2, 30, 25, 48), tolerance = 1e-4, ignore_attr = TRUE)
-  expect_equal(head(out$survived), c(1, 1, 0, 0, 0, 1), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(
+    head(out$age),
+    c(29, 0.9167, 2, 30, 25, 48),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    head(out$survived),
+    c(1, 1, 0, 0, 0, 1),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 })

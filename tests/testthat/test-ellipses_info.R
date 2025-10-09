@@ -71,7 +71,10 @@ skip_if_not_installed("lme4")
 
 data(sleepstudy, package = "lme4")
 m1 <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-m2 <- suppressMessages(lme4::lmer(Reaction ~ Days + (1 | Subject) + (1 | Days), data = sleepstudy))
+m2 <- suppressMessages(lme4::lmer(
+  Reaction ~ Days + (1 | Subject) + (1 | Days),
+  data = sleepstudy
+))
 
 info <- ellipsis_info(m1, m2, verbose = FALSE)
 test_that("ellipses_info, random effects", {

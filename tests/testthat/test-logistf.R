@@ -12,9 +12,19 @@ test_that("model_info", {
 })
 
 test_that("find_predictors", {
-  expect_identical(find_predictors(m1), list(conditional = c(
-    "age", "oc", "vic", "vicl", "vis", "dia"
-  )))
+  expect_identical(
+    find_predictors(m1),
+    list(
+      conditional = c(
+        "age",
+        "oc",
+        "vic",
+        "vicl",
+        "vis",
+        "dia"
+      )
+    )
+  )
   expect_identical(
     find_predictors(m1, flatten = TRUE),
     c("age", "oc", "vic", "vicl", "vis", "dia")
@@ -67,10 +77,13 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_identical(find_terms(m1), list(
-    response = "case",
-    conditional = c("age", "oc", "vic", "vicl", "vis", "dia")
-  ))
+  expect_identical(
+    find_terms(m1),
+    list(
+      response = "case",
+      conditional = c("age", "oc", "vic", "vicl", "vis", "dia")
+    )
+  )
   expect_identical(
     find_terms(m1, flatten = TRUE),
     c("case", "age", "oc", "vic", "vicl", "vis", "dia")

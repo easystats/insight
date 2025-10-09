@@ -3,7 +3,11 @@ skip_if_not_installed("cplm")
 
 # cplm::cpglmm doesn't work
 suppressPackageStartupMessages({
-  suppressWarnings(suppressMessages(library(cplm, quietly = TRUE, warn.conflicts = FALSE)))
+  suppressWarnings(suppressMessages(library(
+    cplm,
+    quietly = TRUE,
+    warn.conflicts = FALSE
+  )))
 })
 
 data("FineRoot", package = "cplm")
@@ -134,7 +138,10 @@ test_that("find_parameters", {
     )
   )
   expect_identical(nrow(get_parameters(m1)), 4L)
-  expect_identical(get_parameters(m1)$Parameter, c("(Intercept)", "StockMM106", "StockMark", "Spacing5x3"))
+  expect_identical(
+    get_parameters(m1)$Parameter,
+    c("(Intercept)", "StockMM106", "StockMark", "Spacing5x3")
+  )
 })
 
 test_that("is_multivariate", {

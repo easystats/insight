@@ -107,7 +107,7 @@ test_that("find_transformation - detect powers", {
   m3 <- lm(I(Sepal.Length^(1 / 2)) ~ Species, data = iris)
   m4 <- lm(I(Sepal.Length^3) ~ Species, data = iris)
   m5 <- lm(I(Sepal.Length^2) ~ Species, data = iris)
-  m6 <- lm(Sepal.Length ^ 2.3 ~ Species, data = iris)
+  m6 <- lm(Sepal.Length^2.3 ~ Species, data = iris)
   m7 <- lm(Sepal.Length^-0.5 ~ Species, data = iris)
 
   expect_identical(insight::find_transformation(m1), "power")
@@ -126,7 +126,7 @@ test_that("find_transformation - detect powers", {
   m3 <- lm(I(Sepal.Length**(1 / 2)) ~ Species, data = iris)
   m4 <- lm(I(Sepal.Length**3) ~ Species, data = iris)
   m5 <- lm(I(Sepal.Length**2) ~ Species, data = iris)
-  m6 <- lm(I(Sepal.Length ** 1.8) ~ Species, data = iris)
+  m6 <- lm(I(Sepal.Length**1.8) ~ Species, data = iris)
 
   expect_identical(insight::find_transformation(m1), "power")
   expect_identical(insight::find_transformation(m2), "power")

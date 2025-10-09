@@ -53,11 +53,7 @@ m5 <- glmmTMB::glmmTMB(
 )
 
 m6 <-
-  glmmTMB::glmmTMB(count ~ 1,
-    ziformula = ~1,
-    family = poisson(),
-    data = Salamanders
-  )
+  glmmTMB::glmmTMB(count ~ 1, ziformula = ~1, family = poisson(), data = Salamanders)
 
 test_that("find_weights", {
   expect_null(find_weights(m2))
@@ -387,7 +383,11 @@ test_that("find_formula", {
     ),
     ignore_attr = TRUE
   )
-  expect_equal(find_formula(m6), list(conditional = as.formula("count ~ 1")), ignore_attr = TRUE)
+  expect_equal(
+    find_formula(m6),
+    list(conditional = as.formula("count ~ 1")),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("find_predictors", {
@@ -587,11 +587,18 @@ test_that("get_data", {
     c("count", "child", "camper", "livebait", "xb")
   )
   expect_identical(colnames(get_data(m4, effects = "random")), c("persons", "ID"))
-  expect_identical(colnames(get_data(m4, component = "zi")), c("child", "livebait", "ID", "count"))
-  expect_identical(colnames(get_data(
-    m4,
-    component = "zi", effects = "fixed"
-  )), c("child", "livebait", "count"))
+  expect_identical(
+    colnames(get_data(m4, component = "zi")),
+    c("child", "livebait", "ID", "count")
+  )
+  expect_identical(
+    colnames(get_data(
+      m4,
+      component = "zi",
+      effects = "fixed"
+    )),
+    c("child", "livebait", "count")
+  )
   expect_named(
     get_data(m4, component = "zi", effects = "random", verbose = FALSE),
     "ID"
@@ -609,10 +616,14 @@ test_that("get_data", {
     "persons"
   )
   expect_identical(colnames(get_data(m4, component = "disp")), c("xb", "count"))
-  expect_identical(colnames(get_data(
-    m4,
-    component = "disp", effects = "fixed"
-  )), c("xb", "count"))
+  expect_identical(
+    colnames(get_data(
+      m4,
+      component = "disp",
+      effects = "fixed"
+    )),
+    c("xb", "count")
+  )
   expect_null(get_data(m4, component = "disp", effects = "random", verbose = FALSE))
 })
 
@@ -748,13 +759,18 @@ data(Salamanders, package = "glmmTMB")
 mpred <- glmmTMB::glmmTMB(
   count ~ mined + (1 | site),
   zi = ~mined,
-  family = poisson, data = Salamanders
+  family = poisson,
+  data = Salamanders
 )
 
 test_that("get_predicted with new levels", {
   skip_on_cran() ## FIXME: check with win-devel
   pr <- get_predicted(mpred, data = head(Salamanders), allow.new.levels = TRUE)
-  expect_equal(as.vector(pr), c(0.252, 0.39207, 0.21119, 2.20128, 2.39424, 2.28901), tolerance = 1e-3)
+  expect_equal(
+    as.vector(pr),
+    c(0.252, 0.39207, 0.21119, 2.20128, 2.39424, 2.28901),
+    tolerance = 1e-3
+  )
 })
 
 # test_that("get_variance", {
@@ -785,7 +801,6 @@ test_that("find_algorithm", {
 
 test_that("find_random_slopes", {
   skip_on_cran()
-
 
   expect_null(find_random_slopes(m6))
 
@@ -927,7 +942,6 @@ test_that("get_predicted", {
   expect_equal(x, z, ignore_attr = TRUE)
   expect_equal(y, z, ignore_attr = TRUE)
 
-
   # link
   x <- get_predicted(m1, predict = "link", include_random = TRUE)
   y <- get_predicted(m1, predict = NULL, type = "link", include_random = TRUE)
@@ -1028,13 +1042,26 @@ test_that("get/find_parameters with dispersion-random", {
     find_parameters(m),
     list(
       conditional = c(
-        "(Intercept)", "sppPR", "sppDM", "sppEC-A",
-        "sppEC-L", "sppDES-L", "sppDF", "cover", "minedno"
+        "(Intercept)",
+        "sppPR",
+        "sppDM",
+        "sppEC-A",
+        "sppEC-L",
+        "sppDES-L",
+        "sppDF",
+        "cover",
+        "minedno"
       ),
       random = list(site = "(Intercept)"),
       zero_inflated = c(
-        "(Intercept)", "sppPR",
-        "sppDM", "sppEC-A", "sppEC-L", "sppDES-L", "sppDF", "minedno"
+        "(Intercept)",
+        "sppPR",
+        "sppDM",
+        "sppEC-A",
+        "sppEC-L",
+        "sppDES-L",
+        "sppDF",
+        "minedno"
       ),
       dispersion = c("(Intercept)", "DOY"),
       dispersion_random = list(site = "(Intercept)")
@@ -1045,12 +1072,25 @@ test_that("get/find_parameters with dispersion-random", {
     find_parameters(m, effects = "fixed"),
     list(
       conditional = c(
-        "(Intercept)", "sppPR", "sppDM", "sppEC-A",
-        "sppEC-L", "sppDES-L", "sppDF", "cover", "minedno"
+        "(Intercept)",
+        "sppPR",
+        "sppDM",
+        "sppEC-A",
+        "sppEC-L",
+        "sppDES-L",
+        "sppDF",
+        "cover",
+        "minedno"
       ),
       zero_inflated = c(
-        "(Intercept)", "sppPR",
-        "sppDM", "sppEC-A", "sppEC-L", "sppDES-L", "sppDF", "minedno"
+        "(Intercept)",
+        "sppPR",
+        "sppDM",
+        "sppEC-A",
+        "sppEC-L",
+        "sppDES-L",
+        "sppDF",
+        "minedno"
       ),
       dispersion = c("(Intercept)", "DOY")
     ),
@@ -1068,8 +1108,15 @@ test_that("get/find_parameters with dispersion-random", {
     find_parameters(m, component = "conditional"),
     list(
       conditional = c(
-        "(Intercept)", "sppPR", "sppDM", "sppEC-A",
-        "sppEC-L", "sppDES-L", "sppDF", "cover", "minedno"
+        "(Intercept)",
+        "sppPR",
+        "sppDM",
+        "sppEC-A",
+        "sppEC-L",
+        "sppDES-L",
+        "sppDF",
+        "cover",
+        "minedno"
       ),
       random = list(site = "(Intercept)")
     ),

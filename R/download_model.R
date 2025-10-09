@@ -28,10 +28,12 @@
 #' }
 #'
 #' @export
-download_model <- function(name,
-                           url = "https://raw.github.com/easystats/circus/master/data/",
-                           extension = ".rda",
-                           verbose = TRUE) {
+download_model <- function(
+  name,
+  url = "https://raw.github.com/easystats/circus/master/data/",
+  extension = ".rda",
+  verbose = TRUE
+) {
   check_if_installed("httr2", "to download models from the circus-repo")
 
   url <- paste0(url, name, extension)

@@ -28,7 +28,6 @@ link_function <- function(x, ...) {
 
 # Default method ---------------------------
 
-
 #' @export
 link_function.default <- function(x, ...) {
   if (inherits(x, "list") && object_has_names(x, "gam")) {
@@ -60,7 +59,8 @@ link_function.default <- function(x, ...) {
   }
   # if all fails, force default link
   if (is.null(out) && !is.null(default_link)) {
-    out <- switch(default_link,
+    out <- switch(
+      default_link,
       identity = .safe(stats::gaussian(link = "identity")$linkfun),
       .safe(stats::make.link(link = default_link)$linkfun)
     )
@@ -312,7 +312,6 @@ link_function.ivprobit <- function(x, ...) {
 
 # Log links ------------------------
 
-
 #' @export
 link_function.zeroinfl <- function(x, ...) {
   stats::make.link("log")$linkfun
@@ -350,7 +349,6 @@ link_function.flexsurvreg <- function(x, ...) {
 
 # Ordinal and cumulative links --------------------------
 
-
 #' @export
 link_function.mvord <- function(x, ...) {
   link_name <- x$rho$link$name
@@ -378,7 +376,6 @@ link_function.mixor <- link_function.clm
 
 
 # mfx models ------------------------------------------------------
-
 
 #' @rdname link_function
 #' @export
@@ -419,7 +416,6 @@ link_function.model_fit <- link_function.logitmfx
 
 # Other models -----------------------------
 
-
 #' @export
 link_function.Rchoice <- function(x, ...) {
   stats::make.link(link = x$link)$linkfun
@@ -435,7 +431,8 @@ link_function.sdmTMB <- function(x, ...) {
 
 #' @export
 link_function.oohbchoice <- function(x, ...) {
-  link <- switch(x$distribution,
+  link <- switch(
+    x$distribution,
     normal = "identity",
     weibull = ,
     "log-normal" = "log",
@@ -480,7 +477,8 @@ link_function.averaging <- function(x, ...) {
 
 #' @export
 link_function.robmixglm <- function(x, ...) {
-  switch(tolower(x$family),
+  switch(
+    tolower(x$family),
     gaussian = stats::make.link(link = "identity")$linkfun,
     binomial = stats::make.link(link = "logit")$linkfun,
     gamma = stats::make.link(link = "inverse")$linkfun,
@@ -493,7 +491,8 @@ link_function.robmixglm <- function(x, ...) {
 
 #' @export
 link_function.MCMCglmm <- function(x, ...) {
-  switch(x$Residual$original.family,
+  switch(
+    x$Residual$original.family,
     cengaussian = ,
     gaussian = stats::gaussian(link = "identity")$linkfun,
     categorical = ,
@@ -531,7 +530,8 @@ link_function.fixest <- function(x, ...) {
   } else if (inherits(x$family, "family")) {
     x$family$linkfun
   } else {
-    link <- switch(x$family,
+    link <- switch(
+      x$family,
       poisson = ,
       negbin = "log",
       logit = "logit",
@@ -608,7 +608,8 @@ link_function.glmmadmb <- function(x, ...) {
 
 #' @export
 link_function.glmm <- function(x, ...) {
-  switch(tolower(x$family.glmm$family.glmm),
+  switch(
+    tolower(x$family.glmm$family.glmm),
     bernoulli.glmm = ,
     binomial.glmm = stats::make.link("logit")$linkfun,
     poisson.glmm = stats::make.link("log")$linkfun,
@@ -626,7 +627,8 @@ link_function.gamlss <- function(x, what = c("mu", "sigma", "nu", "tau"), ...) {
   if (faminfo$family[1] == "LOGNO") {
     function(mu) log(mu)
   } else {
-    switch(what,
+    switch(
+      what,
       mu = faminfo$mu.linkfun,
       sigma = faminfo$sigma.linkfun,
       nu = faminfo$nu.linkfun,
@@ -693,11 +695,7 @@ link_function.svy_vglm <- function(x, ...) {
 
 #' @export
 link_function.polr <- function(x, ...) {
-  link <- switch(x$method,
-    logistic = "logit",
-    probit = "probit",
-    "log"
-  )
+  link <- switch(x$method, logistic = "logit", probit = "probit", "log")
 
   stats::make.link(link)$linkfun
 }
@@ -705,11 +703,7 @@ link_function.polr <- function(x, ...) {
 
 #' @export
 link_function.svyolr <- function(x, ...) {
-  link <- switch(x$method,
-    logistic = "logit",
-    probit = "probit",
-    "log"
-  )
+  link <- switch(x$method, logistic = "logit", probit = "probit", "log")
 
   stats::make.link(link)$linkfun
 }
@@ -722,7 +716,8 @@ link_function.betareg <- function(x, what = c("mean", "precision"), ...) {
 
   element_name <- .betareg_mean_element(x)
 
-  switch(what,
+  switch(
+    what,
     mean = x$link[[element_name]]$linkfun,
     precision = x$link$precision$linkfun
   )
@@ -736,7 +731,8 @@ link_function.DirichletRegModel <- function(x, what = c("mean", "precision"), ..
   if (x$parametrization == "common") {
     stats::make.link("logit")$linkfun
   } else {
-    switch(what,
+    switch(
+      what,
       mean = stats::make.link("logit")$linkfun,
       precision = stats::make.link("log")$linkfun
     )
@@ -746,7 +742,8 @@ link_function.DirichletRegModel <- function(x, what = c("mean", "precision"), ..
 
 #' @export
 link_function.gbm <- function(x, ...) {
-  switch(x$distribution$name,
+  switch(
+    x$distribution$name,
     laplace = ,
     tdist = ,
     gaussian = stats::gaussian(link = "identity")$linkfun,
@@ -778,7 +775,6 @@ link_function.brmsfit <- function(x, ...) {
 
 
 # helper -----------------------
-
 
 .brms_link_fun <- function(fam) {
   # do we have custom families?

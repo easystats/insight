@@ -1,3 +1,5 @@
+# fmt: skip file
+
 #' @title Checks if a regression model object is supported by the insight package
 #' @name is_model_supported
 #'

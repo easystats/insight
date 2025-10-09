@@ -51,7 +51,11 @@ get_model <- function(x, name = "model", element = NULL, ...) {
       }
     } else {
       element <- element[!element %in% names(model)]
-      format_error(paste0("Element(s) ", toString(paste0("`", element, "`")), " not found in the model object."))
+      format_error(paste0(
+        "Element(s) ",
+        toString(paste0("`", element, "`")),
+        " not found in the model object."
+      ))
     }
   }
 

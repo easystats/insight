@@ -95,7 +95,10 @@ test_that("get_predictors", {
 test_that("get_data", {
   expect_equal(nrow(get_data(m1, verbose = FALSE)), 500)
   expect_named(get_data(m1, verbose = FALSE), c("ys", "yo1", "yo2", "xs", "xo1", "xo2"))
-  expect_named(get_data(m3, verbose = FALSE), c("ys", "yo1", "yo2", "xs1", "xs2", "xo11", "xo12", "xo2"))
+  expect_named(
+    get_data(m3, verbose = FALSE),
+    c("ys", "yo1", "yo2", "xs1", "xs2", "xo11", "xo12", "xo2")
+  )
 })
 
 test_that("find_formula", {
@@ -180,16 +183,35 @@ test_that("get_parameters", {
   expect_identical(
     out$Component,
     c(
-      "selection", "selection", "outcome", "outcome", "auxiliary",
-      "auxiliary", "outcome", "outcome", "auxiliary", "auxiliary"
+      "selection",
+      "selection",
+      "outcome",
+      "outcome",
+      "auxiliary",
+      "auxiliary",
+      "outcome",
+      "outcome",
+      "auxiliary",
+      "auxiliary"
     )
   )
   out <- get_parameters(m2)
   expect_identical(
     out$Component,
     c(
-      "selection", "selection", "selection", "selection", "selection", "selection",
-      "outcome", "outcome", "outcome", "outcome", "outcome", "auxiliary", "auxiliary"
+      "selection",
+      "selection",
+      "selection",
+      "selection",
+      "selection",
+      "selection",
+      "outcome",
+      "outcome",
+      "outcome",
+      "outcome",
+      "outcome",
+      "auxiliary",
+      "auxiliary"
     )
   )
 })
@@ -207,8 +229,16 @@ test_that("get_statistic", {
   expect_identical(
     out$Component,
     c(
-      "selection", "selection", "outcome", "outcome", "auxiliary",
-      "auxiliary", "outcome", "outcome", "auxiliary", "auxiliary"
+      "selection",
+      "selection",
+      "outcome",
+      "outcome",
+      "auxiliary",
+      "auxiliary",
+      "outcome",
+      "outcome",
+      "auxiliary",
+      "auxiliary"
     )
   )
   expect_equal(
@@ -221,8 +251,19 @@ test_that("get_statistic", {
   expect_identical(
     out$Component,
     c(
-      "selection", "selection", "selection", "selection", "selection", "selection",
-      "outcome", "outcome", "outcome", "outcome", "outcome", "auxiliary", "auxiliary"
+      "selection",
+      "selection",
+      "selection",
+      "selection",
+      "selection",
+      "selection",
+      "outcome",
+      "outcome",
+      "outcome",
+      "outcome",
+      "outcome",
+      "auxiliary",
+      "auxiliary"
     )
   )
   expect_equal(

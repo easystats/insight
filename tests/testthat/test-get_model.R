@@ -11,7 +11,6 @@ test_that("get_model", {
     tolerance = 1e-3
   )
 
-
   # errors
   expect_error(
     get_model(out, name = "nonexistent"),

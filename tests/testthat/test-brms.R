@@ -18,7 +18,11 @@ m8 <- insight::download_model("brms_ordinal_1")
 brms_trunc_1 <- suppressWarnings(download_model("brms_trunc_1"))
 m9 <- insight::download_model("brms_mv_7")
 
-all_loaded <- !vapply(list(m1, m2, m3, m4, m5, m6, m7, m8, m9, brms_trunc_1), is.null, TRUE)
+all_loaded <- !vapply(
+  list(m1, m2, m3, m4, m5, m6, m7, m8, m9, brms_trunc_1),
+  is.null,
+  TRUE
+)
 skip_if(!all(all_loaded))
 
 # Tests -------------------------------------------------------------------
@@ -51,10 +55,10 @@ test_that("get_predicted.brmsfit: ordinal dv", {
   # compare to manual predictions
   pred3 <- get_predicted(m8, centrality_function = stats::median, ci = 0.95)
   manual <- rstantools::posterior_epred(m8)
-  manual <- apply(manual[, , 1], 2, median)
+  manual <- apply(manual[,, 1], 2, median)
   expect_equal(pred3$Predicted[1:32], manual, ignore_attr = TRUE)
   manual <- rstantools::posterior_epred(m8)
-  manual <- apply(manual[, , 1], 2, mean) # nolint
+  manual <- apply(manual[,, 1], 2, mean) # nolint
   expect_equal(pred1$Predicted[1:32], manual, ignore_attr = TRUE)
 })
 
@@ -136,9 +140,13 @@ test_that("find_predictors", {
   expect_identical(
     find_predictors(m2),
     list(
-      SepalLength = list(conditional = c(
-        "Petal.Length", "Sepal.Width", "Species"
-      )),
+      SepalLength = list(
+        conditional = c(
+          "Petal.Length",
+          "Sepal.Width",
+          "Species"
+        )
+      ),
       SepalWidth = list(conditional = "Species")
     )
   )
@@ -256,9 +264,13 @@ test_that("find_variables", {
     find_variables(m2),
     list(
       response = c(SepalLength = "Sepal.Length", SepalWidth = "Sepal.Width"),
-      SepalLength = list(conditional = c(
-        "Petal.Length", "Sepal.Width", "Species"
-      )),
+      SepalLength = list(
+        conditional = c(
+          "Petal.Length",
+          "Sepal.Width",
+          "Species"
+        )
+      ),
       SepalWidth = list(conditional = "Species")
     )
   )
@@ -272,10 +284,13 @@ test_that("find_variables", {
       "Species"
     )
   )
-  expect_identical(find_variables(m3), list(
-    response = c("r", "n"),
-    conditional = c("treat", "c2")
-  ))
+  expect_identical(
+    find_variables(m3),
+    list(
+      response = c("r", "n"),
+      conditional = c("treat", "c2")
+    )
+  )
 
   expect_identical(
     find_variables(m4),
@@ -406,7 +421,10 @@ test_that("find_paramaters", {
       conditional = c("b_Intercept", "b_child", "b_camper"),
       random = c(sprintf("r_persons[%i,Intercept]", 1:4), "sd_persons__Intercept"),
       zi = c("b_zi_Intercept", "b_zi_child", "b_zi_camper"),
-      zi_random = c(sprintf("r_persons__zi[%i,Intercept]", 1:4), "sd_persons__zi_Intercept")
+      zi_random = c(
+        sprintf("r_persons__zi[%i,Intercept]", 1:4),
+        "sd_persons__zi_Intercept"
+      )
     )
   )
 
@@ -426,9 +444,15 @@ test_that("find_paramaters", {
       list(
         count = list(
           conditional = c("b_count_Intercept", "b_count_child", "b_count_camper"),
-          random = c(sprintf("r_persons__count[%i,Intercept]", 1:4), "sd_persons__count_Intercept"),
+          random = c(
+            sprintf("r_persons__count[%i,Intercept]", 1:4),
+            "sd_persons__count_Intercept"
+          ),
           zi = c("b_zi_count_Intercept", "b_zi_count_camper"),
-          zi_random = c(sprintf("r_persons__zi_count[%i,Intercept]", 1:4), "sd_persons__zi_count_Intercept")
+          zi_random = c(
+            sprintf("r_persons__zi_count[%i,Intercept]", 1:4),
+            "sd_persons__zi_count_Intercept"
+          )
         ),
         count2 = list(
           conditional = c(
@@ -436,7 +460,10 @@ test_that("find_paramaters", {
             "b_count2_child",
             "b_count2_livebait"
           ),
-          random = c(sprintf("r_persons__count2[%i,Intercept]", 1:4), "sd_persons__count2_Intercept"),
+          random = c(
+            sprintf("r_persons__count2[%i,Intercept]", 1:4),
+            "sd_persons__count2_Intercept"
+          ),
           zi = c("b_zi_count2_Intercept", "b_zi_count2_child"),
           zi_random = c(
             sprintf("r_persons__zi_count2[%i,Intercept]", 1:4),
@@ -493,46 +520,82 @@ test_that("get_paramaters", {
   expect_named(
     get_parameters(m4, effects = "full"),
     c(
-      "b_Intercept", "b_child", "b_camper", "r_persons[1,Intercept]",
-      "r_persons[2,Intercept]", "r_persons[3,Intercept]", "r_persons[4,Intercept]",
-      "sd_persons__Intercept", "b_zi_Intercept", "b_zi_child", "b_zi_camper",
-      "r_persons__zi[1,Intercept]", "r_persons__zi[2,Intercept]", "r_persons__zi[3,Intercept]",
-      "r_persons__zi[4,Intercept]", "sd_persons__zi_Intercept"
+      "b_Intercept",
+      "b_child",
+      "b_camper",
+      "r_persons[1,Intercept]",
+      "r_persons[2,Intercept]",
+      "r_persons[3,Intercept]",
+      "r_persons[4,Intercept]",
+      "sd_persons__Intercept",
+      "b_zi_Intercept",
+      "b_zi_child",
+      "b_zi_camper",
+      "r_persons__zi[1,Intercept]",
+      "r_persons__zi[2,Intercept]",
+      "r_persons__zi[3,Intercept]",
+      "r_persons__zi[4,Intercept]",
+      "sd_persons__zi_Intercept"
     )
   )
   expect_named(
     get_parameters(m4, effects = "random", component = "conditional"),
     c(
-      "r_persons[1,Intercept]", "r_persons[2,Intercept]", "r_persons[3,Intercept]",
-      "r_persons[4,Intercept]", "sd_persons__Intercept"
+      "r_persons[1,Intercept]",
+      "r_persons[2,Intercept]",
+      "r_persons[3,Intercept]",
+      "r_persons[4,Intercept]",
+      "sd_persons__Intercept"
     )
   )
   expect_named(
     get_parameters(m5, effects = "random", component = "conditional"),
     c(
-      "r_persons__count[1,Intercept]", "r_persons__count[2,Intercept]",
-      "r_persons__count[3,Intercept]", "r_persons__count[4,Intercept]",
-      "sd_persons__count_Intercept", "r_persons__count2[1,Intercept]",
-      "r_persons__count2[2,Intercept]", "r_persons__count2[3,Intercept]",
-      "r_persons__count2[4,Intercept]", "sd_persons__count2_Intercept"
+      "r_persons__count[1,Intercept]",
+      "r_persons__count[2,Intercept]",
+      "r_persons__count[3,Intercept]",
+      "r_persons__count[4,Intercept]",
+      "sd_persons__count_Intercept",
+      "r_persons__count2[1,Intercept]",
+      "r_persons__count2[2,Intercept]",
+      "r_persons__count2[3,Intercept]",
+      "r_persons__count2[4,Intercept]",
+      "sd_persons__count2_Intercept"
     )
   )
 
   expect_named(
     get_parameters(m5, effects = "full", component = "all"),
     c(
-      "b_count_Intercept", "b_count_child", "b_count_camper", "r_persons__count[1,Intercept]",
-      "r_persons__count[2,Intercept]", "r_persons__count[3,Intercept]",
-      "r_persons__count[4,Intercept]", "sd_persons__count_Intercept",
-      "b_zi_count_Intercept", "b_zi_count_camper", "r_persons__zi_count[1,Intercept]",
-      "r_persons__zi_count[2,Intercept]", "r_persons__zi_count[3,Intercept]",
-      "r_persons__zi_count[4,Intercept]", "sd_persons__zi_count_Intercept",
-      "b_count2_Intercept", "b_count2_child", "b_count2_livebait",
-      "r_persons__count2[1,Intercept]", "r_persons__count2[2,Intercept]",
-      "r_persons__count2[3,Intercept]", "r_persons__count2[4,Intercept]",
-      "sd_persons__count2_Intercept", "b_zi_count2_Intercept", "b_zi_count2_child",
-      "r_persons__zi_count2[1,Intercept]", "r_persons__zi_count2[2,Intercept]",
-      "r_persons__zi_count2[3,Intercept]", "r_persons__zi_count2[4,Intercept]",
+      "b_count_Intercept",
+      "b_count_child",
+      "b_count_camper",
+      "r_persons__count[1,Intercept]",
+      "r_persons__count[2,Intercept]",
+      "r_persons__count[3,Intercept]",
+      "r_persons__count[4,Intercept]",
+      "sd_persons__count_Intercept",
+      "b_zi_count_Intercept",
+      "b_zi_count_camper",
+      "r_persons__zi_count[1,Intercept]",
+      "r_persons__zi_count[2,Intercept]",
+      "r_persons__zi_count[3,Intercept]",
+      "r_persons__zi_count[4,Intercept]",
+      "sd_persons__zi_count_Intercept",
+      "b_count2_Intercept",
+      "b_count2_child",
+      "b_count2_livebait",
+      "r_persons__count2[1,Intercept]",
+      "r_persons__count2[2,Intercept]",
+      "r_persons__count2[3,Intercept]",
+      "r_persons__count2[4,Intercept]",
+      "sd_persons__count2_Intercept",
+      "b_zi_count2_Intercept",
+      "b_zi_count2_child",
+      "r_persons__zi_count2[1,Intercept]",
+      "r_persons__zi_count2[2,Intercept]",
+      "r_persons__zi_count2[3,Intercept]",
+      "r_persons__zi_count2[4,Intercept]",
       "sd_persons__zi_count2_Intercept"
     )
   )
@@ -540,11 +603,19 @@ test_that("get_paramaters", {
   expect_named(
     get_parameters(m5, effects = "all", component = "all"),
     c(
-      "b_count_Intercept", "b_count_child", "b_count_camper",
-      "sd_persons__count_Intercept", "b_zi_count_Intercept", "b_zi_count_camper",
+      "b_count_Intercept",
+      "b_count_child",
+      "b_count_camper",
+      "sd_persons__count_Intercept",
+      "b_zi_count_Intercept",
+      "b_zi_count_camper",
       "sd_persons__zi_count_Intercept",
-      "b_count2_Intercept", "b_count2_child", "b_count2_livebait",
-      "sd_persons__count2_Intercept", "b_zi_count2_Intercept", "b_zi_count2_child",
+      "b_count2_Intercept",
+      "b_count2_child",
+      "b_count2_livebait",
+      "sd_persons__count2_Intercept",
+      "b_zi_count2_Intercept",
+      "b_zi_count2_child",
       "sd_persons__zi_count2_Intercept"
     )
   )
@@ -608,13 +679,24 @@ test_that("get_priors", {
     get_priors(m7),
     data.frame(
       Parameter = c(
-        "b_Intercept", "b_Age", "b_Base", "b_Trt1", "b_Base:Trt1",
-        "sd_patient__Intercept", "sd_patient__Age",
+        "b_Intercept",
+        "b_Age",
+        "b_Base",
+        "b_Trt1",
+        "b_Base:Trt1",
+        "sd_patient__Intercept",
+        "sd_patient__Age",
         "cor_patient__Intercept__Age"
       ),
       Distribution = c(
-        "student_t", "student_t", "student_t",
-        "student_t", "student_t", "cauchy", "cauchy", "lkj"
+        "student_t",
+        "student_t",
+        "student_t",
+        "student_t",
+        "student_t",
+        "cauchy",
+        "cauchy",
+        "lkj"
       ),
       Location = c(1.4, 0, 0, 0, 0, NA, NA, 1),
       Scale = c(2.5, 10, 10, 10, 10, NA, NA, NA),
@@ -667,31 +749,93 @@ test_that("clean_parameters", {
     clean_parameters(m4),
     list(
       Parameter = c(
-        "b_Intercept", "b_child", "b_camper",
-        "r_persons[1,Intercept]", "r_persons[2,Intercept]", "r_persons[3,Intercept]",
-        "r_persons[4,Intercept]", "sd_persons__Intercept", "b_zi_Intercept",
-        "b_zi_child", "b_zi_camper", "r_persons__zi[1,Intercept]", "r_persons__zi[2,Intercept]",
-        "r_persons__zi[3,Intercept]", "r_persons__zi[4,Intercept]", "sd_persons__zi_Intercept"
+        "b_Intercept",
+        "b_child",
+        "b_camper",
+        "r_persons[1,Intercept]",
+        "r_persons[2,Intercept]",
+        "r_persons[3,Intercept]",
+        "r_persons[4,Intercept]",
+        "sd_persons__Intercept",
+        "b_zi_Intercept",
+        "b_zi_child",
+        "b_zi_camper",
+        "r_persons__zi[1,Intercept]",
+        "r_persons__zi[2,Intercept]",
+        "r_persons__zi[3,Intercept]",
+        "r_persons__zi[4,Intercept]",
+        "sd_persons__zi_Intercept"
       ),
       Effects = c(
-        "fixed", "fixed", "fixed", "random", "random",
-        "random", "random", "random", "fixed", "fixed", "fixed", "random",
-        "random", "random", "random", "random"
-      ), Component = c(
+        "fixed",
+        "fixed",
+        "fixed",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "fixed",
+        "fixed",
+        "fixed",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random"
+      ),
+      Component = c(
         "conditional",
-        "conditional", "conditional", "conditional", "conditional", "conditional",
-        "conditional", "conditional", "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi"
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi"
       ),
       Group = c(
-        "", "", "", "Intercept: persons",
-        "Intercept: persons", "Intercept: persons", "Intercept: persons",
-        "SD/Cor: persons", "", "", "", "Intercept: persons", "Intercept: persons",
-        "Intercept: persons", "Intercept: persons", "SD/Cor: persons"
+        "",
+        "",
+        "",
+        "Intercept: persons",
+        "Intercept: persons",
+        "Intercept: persons",
+        "Intercept: persons",
+        "SD/Cor: persons",
+        "",
+        "",
+        "",
+        "Intercept: persons",
+        "Intercept: persons",
+        "Intercept: persons",
+        "Intercept: persons",
+        "SD/Cor: persons"
       ),
       Cleaned_Parameter = c(
-        "(Intercept)", "child", "camper", "persons.1",
-        "persons.2", "persons.3", "persons.4", "(Intercept)", "(Intercept)",
-        "child", "camper", "persons.1", "persons.2", "persons.3", "persons.4",
+        "(Intercept)",
+        "child",
+        "camper",
+        "persons.1",
+        "persons.2",
+        "persons.3",
+        "persons.4",
+        "(Intercept)",
+        "(Intercept)",
+        "child",
+        "camper",
+        "persons.1",
+        "persons.2",
+        "persons.3",
+        "persons.4",
         "(Intercept)"
       )
     ),
@@ -702,59 +846,196 @@ test_that("clean_parameters", {
     clean_parameters(m5),
     list(
       Parameter = c(
-        "b_count_Intercept", "b_count_child",
-        "b_count_camper", "b_count2_Intercept", "b_count2_child", "b_count2_livebait",
-        "r_persons__count[1,Intercept]", "r_persons__count[2,Intercept]",
-        "r_persons__count[3,Intercept]", "r_persons__count[4,Intercept]",
-        "sd_persons__count_Intercept", "r_persons__count2[1,Intercept]",
-        "r_persons__count2[2,Intercept]", "r_persons__count2[3,Intercept]",
-        "r_persons__count2[4,Intercept]", "sd_persons__count2_Intercept",
-        "b_zi_count_Intercept", "b_zi_count_camper", "b_zi_count2_Intercept",
-        "b_zi_count2_child", "r_persons__zi_count[1,Intercept]", "r_persons__zi_count[2,Intercept]",
-        "r_persons__zi_count[3,Intercept]", "r_persons__zi_count[4,Intercept]",
-        "sd_persons__zi_count_Intercept", "r_persons__zi_count2[1,Intercept]",
-        "r_persons__zi_count2[2,Intercept]", "r_persons__zi_count2[3,Intercept]",
-        "r_persons__zi_count2[4,Intercept]", "sd_persons__zi_count2_Intercept"
+        "b_count_Intercept",
+        "b_count_child",
+        "b_count_camper",
+        "b_count2_Intercept",
+        "b_count2_child",
+        "b_count2_livebait",
+        "r_persons__count[1,Intercept]",
+        "r_persons__count[2,Intercept]",
+        "r_persons__count[3,Intercept]",
+        "r_persons__count[4,Intercept]",
+        "sd_persons__count_Intercept",
+        "r_persons__count2[1,Intercept]",
+        "r_persons__count2[2,Intercept]",
+        "r_persons__count2[3,Intercept]",
+        "r_persons__count2[4,Intercept]",
+        "sd_persons__count2_Intercept",
+        "b_zi_count_Intercept",
+        "b_zi_count_camper",
+        "b_zi_count2_Intercept",
+        "b_zi_count2_child",
+        "r_persons__zi_count[1,Intercept]",
+        "r_persons__zi_count[2,Intercept]",
+        "r_persons__zi_count[3,Intercept]",
+        "r_persons__zi_count[4,Intercept]",
+        "sd_persons__zi_count_Intercept",
+        "r_persons__zi_count2[1,Intercept]",
+        "r_persons__zi_count2[2,Intercept]",
+        "r_persons__zi_count2[3,Intercept]",
+        "r_persons__zi_count2[4,Intercept]",
+        "sd_persons__zi_count2_Intercept"
       ),
       Effects = c(
-        "fixed", "fixed", "fixed", "fixed", "fixed", "fixed",
-        "random", "random", "random", "random", "random", "random", "random",
-        "random", "random", "random", "fixed", "fixed", "fixed", "fixed",
-        "random", "random", "random", "random", "random", "random", "random",
-        "random", "random", "random"
+        "fixed",
+        "fixed",
+        "fixed",
+        "fixed",
+        "fixed",
+        "fixed",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "fixed",
+        "fixed",
+        "fixed",
+        "fixed",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random",
+        "random"
       ),
       Component = c(
-        "conditional", "conditional",
-        "conditional", "conditional", "conditional", "conditional", "conditional",
-        "conditional", "conditional", "conditional", "conditional", "conditional",
-        "conditional", "conditional", "conditional", "conditional", "zi", "zi",
-        "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi", "zi"
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "conditional",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi",
+        "zi"
       ),
       Group = c(
-        "", "", "", "", "", "", "Intercept: persons",
-        "Intercept: persons", "Intercept: persons", "Intercept: persons",
-        "SD/Cor: persons", "Intercept: persons2", "Intercept: persons2",
-        "Intercept: persons2", "Intercept: persons2", "SD/Cor: persons",
-        "", "", "", "", "Intercept: persons", "Intercept: persons", "Intercept: persons",
-        "Intercept: persons", "SD/Cor: persons", "Intercept: persons2",
-        "Intercept: persons2", "Intercept: persons2", "Intercept: persons2",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Intercept: persons",
+        "Intercept: persons",
+        "Intercept: persons",
+        "Intercept: persons",
+        "SD/Cor: persons",
+        "Intercept: persons2",
+        "Intercept: persons2",
+        "Intercept: persons2",
+        "Intercept: persons2",
+        "SD/Cor: persons",
+        "",
+        "",
+        "",
+        "",
+        "Intercept: persons",
+        "Intercept: persons",
+        "Intercept: persons",
+        "Intercept: persons",
+        "SD/Cor: persons",
+        "Intercept: persons2",
+        "Intercept: persons2",
+        "Intercept: persons2",
+        "Intercept: persons2",
         "SD/Cor: persons"
       ),
       Response = c(
-        "count", "count", "count", "count2",
-        "count2", "count2", "count", "count", "count", "count", "count",
-        "count2", "count2", "count2", "count2", "count2", "count", "count",
-        "count2", "count2", "count", "count", "count", "count", "count",
-        "count2", "count2", "count2", "count2", "count2"
+        "count",
+        "count",
+        "count",
+        "count2",
+        "count2",
+        "count2",
+        "count",
+        "count",
+        "count",
+        "count",
+        "count",
+        "count2",
+        "count2",
+        "count2",
+        "count2",
+        "count2",
+        "count",
+        "count",
+        "count2",
+        "count2",
+        "count",
+        "count",
+        "count",
+        "count",
+        "count",
+        "count2",
+        "count2",
+        "count2",
+        "count2",
+        "count2"
       ),
       Cleaned_Parameter = c(
         "(Intercept)",
-        "child", "camper", "(Intercept)", "child", "livebait", "persons.1",
-        "persons.2", "persons.3", "persons.4", "(Intercept)", "persons2.1",
-        "persons2.2", "persons2.3", "persons2.4", "(Intercept)", "(Intercept)",
-        "camper", "(Intercept)", "child", "persons.1", "persons.2", "persons.3",
-        "persons.4", "(Intercept)", "persons2.1", "persons2.2", "persons2.3",
-        "persons2.4", "(Intercept)"
+        "child",
+        "camper",
+        "(Intercept)",
+        "child",
+        "livebait",
+        "persons.1",
+        "persons.2",
+        "persons.3",
+        "persons.4",
+        "(Intercept)",
+        "persons2.1",
+        "persons2.2",
+        "persons2.3",
+        "persons2.4",
+        "(Intercept)",
+        "(Intercept)",
+        "camper",
+        "(Intercept)",
+        "child",
+        "persons.1",
+        "persons.2",
+        "persons.3",
+        "persons.4",
+        "(Intercept)",
+        "persons2.1",
+        "persons2.2",
+        "persons2.3",
+        "persons2.4",
+        "(Intercept)"
       )
     ),
     ignore_attr = TRUE
@@ -776,7 +1057,8 @@ test_that("find_variables, mo", {
     find_variables(m10),
     list(
       response = "carb",
-      conditional = c("gear", "vs"), disc = "cyl"
+      conditional = c("gear", "vs"),
+      disc = "cyl"
     )
   )
 })
@@ -834,8 +1116,10 @@ test_that("get_variance works when sigma is modeled", {
   expect_equal(
     out,
     list(
-      var.fixed = 2.712739833628, var.random = 25.6254745619452,
-      var.dispersion = 0, var.intercept = c(cyl = 25.6254745619452)
+      var.fixed = 2.712739833628,
+      var.random = 25.6254745619452,
+      var.dispersion = 0,
+      var.intercept = c(cyl = 25.6254745619452)
     ),
     ignore_attr = TRUE,
     tolerance = 1e-3
@@ -860,8 +1144,10 @@ test_that("brms dpars 1", {
     list(
       conditional = c("b_Intercept", "b_hp"),
       random = c(
-        "r_cyl[4,Intercept]", "r_cyl[6,Intercept]",
-        "r_cyl[8,Intercept]", "sd_cyl__Intercept"
+        "r_cyl[4,Intercept]",
+        "r_cyl[6,Intercept]",
+        "r_cyl[8,Intercept]",
+        "sd_cyl__Intercept"
       ),
       sigma = c("b_sigma_Intercept", "b_sigma_cyl")
     )
@@ -887,17 +1173,26 @@ test_that("brms dpars 2", {
     list(
       conditional = c("b_Intercept", "b_Petal.Width"),
       random = c(
-        "r_Group[G1,Intercept]", "r_Group[G2,Intercept]", "r_Group[G3,Intercept]",
-        "r_Group[G1,Petal.Width]", "r_Group[G2,Petal.Width]",
-        "r_Group[G3,Petal.Width]", "sd_Group__Intercept", "sd_Group__Petal.Width",
+        "r_Group[G1,Intercept]",
+        "r_Group[G2,Intercept]",
+        "r_Group[G3,Intercept]",
+        "r_Group[G1,Petal.Width]",
+        "r_Group[G2,Petal.Width]",
+        "r_Group[G3,Petal.Width]",
+        "sd_Group__Intercept",
+        "sd_Group__Petal.Width",
         "cor_Group__Intercept__Petal.Width"
       ),
       sigma = c("b_sigma_Intercept", "b_sigma_Petal.Width"),
       sigma_random = c(
-        "r_Group__sigma[G1,Intercept]", "r_Group__sigma[G2,Intercept]",
-        "r_Group__sigma[G3,Intercept]", "r_Group__sigma[G1,Petal.Width]",
-        "r_Group__sigma[G2,Petal.Width]", "r_Group__sigma[G3,Petal.Width]",
-        "sd_Group__sigma_Intercept", "sd_Group__sigma_Petal.Width",
+        "r_Group__sigma[G1,Intercept]",
+        "r_Group__sigma[G2,Intercept]",
+        "r_Group__sigma[G3,Intercept]",
+        "r_Group__sigma[G1,Petal.Width]",
+        "r_Group__sigma[G2,Petal.Width]",
+        "r_Group__sigma[G3,Petal.Width]",
+        "sd_Group__sigma_Intercept",
+        "sd_Group__sigma_Petal.Width",
         "cor_Group__sigma_Intercept__sigma_Petal.Width"
       )
     )
@@ -946,44 +1241,74 @@ test_that("brms dpars 3", {
       conditional = "b_Intercept",
       random = c(
         "r_Participant[S001,Intercept]",
-        "r_Participant[S002,Intercept]", "r_Participant[S003,Intercept]",
-        "r_Participant[S004,Intercept]", "r_Participant[S005,Intercept]",
-        "r_Participant[S006,Intercept]", "r_Participant[S007,Intercept]",
-        "r_Participant[S008,Intercept]", "r_Participant[S009,Intercept]",
-        "r_Participant[S010,Intercept]", "r_Participant[S011,Intercept]",
-        "r_Participant[S012,Intercept]", "r_Participant[S013,Intercept]",
-        "r_Participant[S014,Intercept]", "r_Participant[S015,Intercept]",
-        "r_Participant[S016,Intercept]", "r_Participant[S017,Intercept]",
-        "r_Participant[S018,Intercept]", "r_Participant[S019,Intercept]",
-        "r_Participant[S020,Intercept]", "sd_Participant__Intercept"
+        "r_Participant[S002,Intercept]",
+        "r_Participant[S003,Intercept]",
+        "r_Participant[S004,Intercept]",
+        "r_Participant[S005,Intercept]",
+        "r_Participant[S006,Intercept]",
+        "r_Participant[S007,Intercept]",
+        "r_Participant[S008,Intercept]",
+        "r_Participant[S009,Intercept]",
+        "r_Participant[S010,Intercept]",
+        "r_Participant[S011,Intercept]",
+        "r_Participant[S012,Intercept]",
+        "r_Participant[S013,Intercept]",
+        "r_Participant[S014,Intercept]",
+        "r_Participant[S015,Intercept]",
+        "r_Participant[S016,Intercept]",
+        "r_Participant[S017,Intercept]",
+        "r_Participant[S018,Intercept]",
+        "r_Participant[S019,Intercept]",
+        "r_Participant[S020,Intercept]",
+        "sd_Participant__Intercept"
       ),
       delta = "b_delta_Intercept",
       k = "b_k_Intercept",
       phi = "b_phi_Intercept",
       delta_random = c(
         "r_Participant__delta[S001,Intercept]",
-        "r_Participant__delta[S002,Intercept]", "r_Participant__delta[S003,Intercept]",
-        "r_Participant__delta[S004,Intercept]", "r_Participant__delta[S005,Intercept]",
-        "r_Participant__delta[S006,Intercept]", "r_Participant__delta[S007,Intercept]",
-        "r_Participant__delta[S008,Intercept]", "r_Participant__delta[S009,Intercept]",
-        "r_Participant__delta[S010,Intercept]", "r_Participant__delta[S011,Intercept]",
-        "r_Participant__delta[S012,Intercept]", "r_Participant__delta[S013,Intercept]",
-        "r_Participant__delta[S014,Intercept]", "r_Participant__delta[S015,Intercept]",
-        "r_Participant__delta[S016,Intercept]", "r_Participant__delta[S017,Intercept]",
-        "r_Participant__delta[S018,Intercept]", "r_Participant__delta[S019,Intercept]",
-        "r_Participant__delta[S020,Intercept]", "sd_Participant__delta_Intercept"
+        "r_Participant__delta[S002,Intercept]",
+        "r_Participant__delta[S003,Intercept]",
+        "r_Participant__delta[S004,Intercept]",
+        "r_Participant__delta[S005,Intercept]",
+        "r_Participant__delta[S006,Intercept]",
+        "r_Participant__delta[S007,Intercept]",
+        "r_Participant__delta[S008,Intercept]",
+        "r_Participant__delta[S009,Intercept]",
+        "r_Participant__delta[S010,Intercept]",
+        "r_Participant__delta[S011,Intercept]",
+        "r_Participant__delta[S012,Intercept]",
+        "r_Participant__delta[S013,Intercept]",
+        "r_Participant__delta[S014,Intercept]",
+        "r_Participant__delta[S015,Intercept]",
+        "r_Participant__delta[S016,Intercept]",
+        "r_Participant__delta[S017,Intercept]",
+        "r_Participant__delta[S018,Intercept]",
+        "r_Participant__delta[S019,Intercept]",
+        "r_Participant__delta[S020,Intercept]",
+        "sd_Participant__delta_Intercept"
       ),
       k_random = c(
-        "r_Participant__k[S001,Intercept]", "r_Participant__k[S002,Intercept]",
-        "r_Participant__k[S003,Intercept]", "r_Participant__k[S004,Intercept]",
-        "r_Participant__k[S005,Intercept]", "r_Participant__k[S006,Intercept]",
-        "r_Participant__k[S007,Intercept]", "r_Participant__k[S008,Intercept]",
-        "r_Participant__k[S009,Intercept]", "r_Participant__k[S010,Intercept]",
-        "r_Participant__k[S011,Intercept]", "r_Participant__k[S012,Intercept]",
-        "r_Participant__k[S013,Intercept]", "r_Participant__k[S014,Intercept]",
-        "r_Participant__k[S015,Intercept]", "r_Participant__k[S016,Intercept]",
-        "r_Participant__k[S017,Intercept]", "r_Participant__k[S018,Intercept]",
-        "r_Participant__k[S019,Intercept]", "r_Participant__k[S020,Intercept]",
+        "r_Participant__k[S001,Intercept]",
+        "r_Participant__k[S002,Intercept]",
+        "r_Participant__k[S003,Intercept]",
+        "r_Participant__k[S004,Intercept]",
+        "r_Participant__k[S005,Intercept]",
+        "r_Participant__k[S006,Intercept]",
+        "r_Participant__k[S007,Intercept]",
+        "r_Participant__k[S008,Intercept]",
+        "r_Participant__k[S009,Intercept]",
+        "r_Participant__k[S010,Intercept]",
+        "r_Participant__k[S011,Intercept]",
+        "r_Participant__k[S012,Intercept]",
+        "r_Participant__k[S013,Intercept]",
+        "r_Participant__k[S014,Intercept]",
+        "r_Participant__k[S015,Intercept]",
+        "r_Participant__k[S016,Intercept]",
+        "r_Participant__k[S017,Intercept]",
+        "r_Participant__k[S018,Intercept]",
+        "r_Participant__k[S019,Intercept]",
+        "r_Participant__k[S020,Intercept]",
         "sd_Participant__k_Intercept"
       )
     )
@@ -1031,7 +1356,10 @@ test_that("brms dpars find_auxiliary", {
   expect_warning(get_auxiliary(model), regex = "No auxiliary")
 
   out <- get_auxiliary(model, type = "all")
-  expect_identical(out$Parameter, c("b_delta_Intercept", "b_phi_Intercept", "b_k_Intercept"))
+  expect_identical(
+    out$Parameter,
+    c("b_delta_Intercept", "b_phi_Intercept", "b_k_Intercept")
+  )
 
   expect_warning(
     find_auxiliary(lm(mpg ~ hp, data = mtcars)),
@@ -1077,41 +1405,69 @@ test_that("brms dpars find_auxiliary", {
     find_parameters(model, effects = "grouplevel"),
     list(
       random = c(
-        "r_Participant[S001,Intercept]", "r_Participant[S002,Intercept]",
-        "r_Participant[S003,Intercept]", "r_Participant[S004,Intercept]",
-        "r_Participant[S005,Intercept]", "r_Participant[S006,Intercept]",
-        "r_Participant[S007,Intercept]", "r_Participant[S008,Intercept]",
-        "r_Participant[S009,Intercept]", "r_Participant[S010,Intercept]",
-        "r_Participant[S011,Intercept]", "r_Participant[S012,Intercept]",
-        "r_Participant[S013,Intercept]", "r_Participant[S014,Intercept]",
-        "r_Participant[S015,Intercept]", "r_Participant[S016,Intercept]",
-        "r_Participant[S017,Intercept]", "r_Participant[S018,Intercept]",
-        "r_Participant[S019,Intercept]", "r_Participant[S020,Intercept]"
+        "r_Participant[S001,Intercept]",
+        "r_Participant[S002,Intercept]",
+        "r_Participant[S003,Intercept]",
+        "r_Participant[S004,Intercept]",
+        "r_Participant[S005,Intercept]",
+        "r_Participant[S006,Intercept]",
+        "r_Participant[S007,Intercept]",
+        "r_Participant[S008,Intercept]",
+        "r_Participant[S009,Intercept]",
+        "r_Participant[S010,Intercept]",
+        "r_Participant[S011,Intercept]",
+        "r_Participant[S012,Intercept]",
+        "r_Participant[S013,Intercept]",
+        "r_Participant[S014,Intercept]",
+        "r_Participant[S015,Intercept]",
+        "r_Participant[S016,Intercept]",
+        "r_Participant[S017,Intercept]",
+        "r_Participant[S018,Intercept]",
+        "r_Participant[S019,Intercept]",
+        "r_Participant[S020,Intercept]"
       ),
       delta_random = c(
         "r_Participant__delta[S001,Intercept]",
-        "r_Participant__delta[S002,Intercept]", "r_Participant__delta[S003,Intercept]",
-        "r_Participant__delta[S004,Intercept]", "r_Participant__delta[S005,Intercept]",
-        "r_Participant__delta[S006,Intercept]", "r_Participant__delta[S007,Intercept]",
-        "r_Participant__delta[S008,Intercept]", "r_Participant__delta[S009,Intercept]",
-        "r_Participant__delta[S010,Intercept]", "r_Participant__delta[S011,Intercept]",
-        "r_Participant__delta[S012,Intercept]", "r_Participant__delta[S013,Intercept]",
-        "r_Participant__delta[S014,Intercept]", "r_Participant__delta[S015,Intercept]",
-        "r_Participant__delta[S016,Intercept]", "r_Participant__delta[S017,Intercept]",
-        "r_Participant__delta[S018,Intercept]", "r_Participant__delta[S019,Intercept]",
+        "r_Participant__delta[S002,Intercept]",
+        "r_Participant__delta[S003,Intercept]",
+        "r_Participant__delta[S004,Intercept]",
+        "r_Participant__delta[S005,Intercept]",
+        "r_Participant__delta[S006,Intercept]",
+        "r_Participant__delta[S007,Intercept]",
+        "r_Participant__delta[S008,Intercept]",
+        "r_Participant__delta[S009,Intercept]",
+        "r_Participant__delta[S010,Intercept]",
+        "r_Participant__delta[S011,Intercept]",
+        "r_Participant__delta[S012,Intercept]",
+        "r_Participant__delta[S013,Intercept]",
+        "r_Participant__delta[S014,Intercept]",
+        "r_Participant__delta[S015,Intercept]",
+        "r_Participant__delta[S016,Intercept]",
+        "r_Participant__delta[S017,Intercept]",
+        "r_Participant__delta[S018,Intercept]",
+        "r_Participant__delta[S019,Intercept]",
         "r_Participant__delta[S020,Intercept]"
       ),
       k_random = c(
         "r_Participant__k[S001,Intercept]",
-        "r_Participant__k[S002,Intercept]", "r_Participant__k[S003,Intercept]",
-        "r_Participant__k[S004,Intercept]", "r_Participant__k[S005,Intercept]",
-        "r_Participant__k[S006,Intercept]", "r_Participant__k[S007,Intercept]",
-        "r_Participant__k[S008,Intercept]", "r_Participant__k[S009,Intercept]",
-        "r_Participant__k[S010,Intercept]", "r_Participant__k[S011,Intercept]",
-        "r_Participant__k[S012,Intercept]", "r_Participant__k[S013,Intercept]",
-        "r_Participant__k[S014,Intercept]", "r_Participant__k[S015,Intercept]",
-        "r_Participant__k[S016,Intercept]", "r_Participant__k[S017,Intercept]",
-        "r_Participant__k[S018,Intercept]", "r_Participant__k[S019,Intercept]",
+        "r_Participant__k[S002,Intercept]",
+        "r_Participant__k[S003,Intercept]",
+        "r_Participant__k[S004,Intercept]",
+        "r_Participant__k[S005,Intercept]",
+        "r_Participant__k[S006,Intercept]",
+        "r_Participant__k[S007,Intercept]",
+        "r_Participant__k[S008,Intercept]",
+        "r_Participant__k[S009,Intercept]",
+        "r_Participant__k[S010,Intercept]",
+        "r_Participant__k[S011,Intercept]",
+        "r_Participant__k[S012,Intercept]",
+        "r_Participant__k[S013,Intercept]",
+        "r_Participant__k[S014,Intercept]",
+        "r_Participant__k[S015,Intercept]",
+        "r_Participant__k[S016,Intercept]",
+        "r_Participant__k[S017,Intercept]",
+        "r_Participant__k[S018,Intercept]",
+        "r_Participant__k[S019,Intercept]",
         "r_Participant__k[S020,Intercept]"
       )
     )
@@ -1121,43 +1477,73 @@ test_that("brms dpars find_auxiliary", {
     find_parameters(model, effects = "random"),
     list(
       random = c(
-        "r_Participant[S001,Intercept]", "r_Participant[S002,Intercept]",
-        "r_Participant[S003,Intercept]", "r_Participant[S004,Intercept]",
-        "r_Participant[S005,Intercept]", "r_Participant[S006,Intercept]",
-        "r_Participant[S007,Intercept]", "r_Participant[S008,Intercept]",
-        "r_Participant[S009,Intercept]", "r_Participant[S010,Intercept]",
-        "r_Participant[S011,Intercept]", "r_Participant[S012,Intercept]",
-        "r_Participant[S013,Intercept]", "r_Participant[S014,Intercept]",
-        "r_Participant[S015,Intercept]", "r_Participant[S016,Intercept]",
-        "r_Participant[S017,Intercept]", "r_Participant[S018,Intercept]",
-        "r_Participant[S019,Intercept]", "r_Participant[S020,Intercept]",
+        "r_Participant[S001,Intercept]",
+        "r_Participant[S002,Intercept]",
+        "r_Participant[S003,Intercept]",
+        "r_Participant[S004,Intercept]",
+        "r_Participant[S005,Intercept]",
+        "r_Participant[S006,Intercept]",
+        "r_Participant[S007,Intercept]",
+        "r_Participant[S008,Intercept]",
+        "r_Participant[S009,Intercept]",
+        "r_Participant[S010,Intercept]",
+        "r_Participant[S011,Intercept]",
+        "r_Participant[S012,Intercept]",
+        "r_Participant[S013,Intercept]",
+        "r_Participant[S014,Intercept]",
+        "r_Participant[S015,Intercept]",
+        "r_Participant[S016,Intercept]",
+        "r_Participant[S017,Intercept]",
+        "r_Participant[S018,Intercept]",
+        "r_Participant[S019,Intercept]",
+        "r_Participant[S020,Intercept]",
         "sd_Participant__Intercept"
       ),
       delta_random = c(
         "r_Participant__delta[S001,Intercept]",
-        "r_Participant__delta[S002,Intercept]", "r_Participant__delta[S003,Intercept]",
-        "r_Participant__delta[S004,Intercept]", "r_Participant__delta[S005,Intercept]",
-        "r_Participant__delta[S006,Intercept]", "r_Participant__delta[S007,Intercept]",
-        "r_Participant__delta[S008,Intercept]", "r_Participant__delta[S009,Intercept]",
-        "r_Participant__delta[S010,Intercept]", "r_Participant__delta[S011,Intercept]",
-        "r_Participant__delta[S012,Intercept]", "r_Participant__delta[S013,Intercept]",
-        "r_Participant__delta[S014,Intercept]", "r_Participant__delta[S015,Intercept]",
-        "r_Participant__delta[S016,Intercept]", "r_Participant__delta[S017,Intercept]",
-        "r_Participant__delta[S018,Intercept]", "r_Participant__delta[S019,Intercept]",
-        "r_Participant__delta[S020,Intercept]", "sd_Participant__delta_Intercept"
+        "r_Participant__delta[S002,Intercept]",
+        "r_Participant__delta[S003,Intercept]",
+        "r_Participant__delta[S004,Intercept]",
+        "r_Participant__delta[S005,Intercept]",
+        "r_Participant__delta[S006,Intercept]",
+        "r_Participant__delta[S007,Intercept]",
+        "r_Participant__delta[S008,Intercept]",
+        "r_Participant__delta[S009,Intercept]",
+        "r_Participant__delta[S010,Intercept]",
+        "r_Participant__delta[S011,Intercept]",
+        "r_Participant__delta[S012,Intercept]",
+        "r_Participant__delta[S013,Intercept]",
+        "r_Participant__delta[S014,Intercept]",
+        "r_Participant__delta[S015,Intercept]",
+        "r_Participant__delta[S016,Intercept]",
+        "r_Participant__delta[S017,Intercept]",
+        "r_Participant__delta[S018,Intercept]",
+        "r_Participant__delta[S019,Intercept]",
+        "r_Participant__delta[S020,Intercept]",
+        "sd_Participant__delta_Intercept"
       ),
       k_random = c(
         "r_Participant__k[S001,Intercept]",
-        "r_Participant__k[S002,Intercept]", "r_Participant__k[S003,Intercept]",
-        "r_Participant__k[S004,Intercept]", "r_Participant__k[S005,Intercept]",
-        "r_Participant__k[S006,Intercept]", "r_Participant__k[S007,Intercept]",
-        "r_Participant__k[S008,Intercept]", "r_Participant__k[S009,Intercept]",
-        "r_Participant__k[S010,Intercept]", "r_Participant__k[S011,Intercept]",
-        "r_Participant__k[S012,Intercept]", "r_Participant__k[S013,Intercept]",
-        "r_Participant__k[S014,Intercept]", "r_Participant__k[S015,Intercept]",
-        "r_Participant__k[S016,Intercept]", "r_Participant__k[S017,Intercept]",
-        "r_Participant__k[S018,Intercept]", "r_Participant__k[S019,Intercept]",
-        "r_Participant__k[S020,Intercept]", "sd_Participant__k_Intercept"
+        "r_Participant__k[S002,Intercept]",
+        "r_Participant__k[S003,Intercept]",
+        "r_Participant__k[S004,Intercept]",
+        "r_Participant__k[S005,Intercept]",
+        "r_Participant__k[S006,Intercept]",
+        "r_Participant__k[S007,Intercept]",
+        "r_Participant__k[S008,Intercept]",
+        "r_Participant__k[S009,Intercept]",
+        "r_Participant__k[S010,Intercept]",
+        "r_Participant__k[S011,Intercept]",
+        "r_Participant__k[S012,Intercept]",
+        "r_Participant__k[S013,Intercept]",
+        "r_Participant__k[S014,Intercept]",
+        "r_Participant__k[S015,Intercept]",
+        "r_Participant__k[S016,Intercept]",
+        "r_Participant__k[S017,Intercept]",
+        "r_Participant__k[S018,Intercept]",
+        "r_Participant__k[S019,Intercept]",
+        "r_Participant__k[S020,Intercept]",
+        "sd_Participant__k_Intercept"
       )
     )
   )
@@ -1168,44 +1554,74 @@ test_that("brms dpars find_auxiliary", {
       conditional = "b_Intercept",
       random = c(
         "r_Participant[S001,Intercept]",
-        "r_Participant[S002,Intercept]", "r_Participant[S003,Intercept]",
-        "r_Participant[S004,Intercept]", "r_Participant[S005,Intercept]",
-        "r_Participant[S006,Intercept]", "r_Participant[S007,Intercept]",
-        "r_Participant[S008,Intercept]", "r_Participant[S009,Intercept]",
-        "r_Participant[S010,Intercept]", "r_Participant[S011,Intercept]",
-        "r_Participant[S012,Intercept]", "r_Participant[S013,Intercept]",
-        "r_Participant[S014,Intercept]", "r_Participant[S015,Intercept]",
-        "r_Participant[S016,Intercept]", "r_Participant[S017,Intercept]",
-        "r_Participant[S018,Intercept]", "r_Participant[S019,Intercept]",
-        "r_Participant[S020,Intercept]", "sd_Participant__Intercept"
+        "r_Participant[S002,Intercept]",
+        "r_Participant[S003,Intercept]",
+        "r_Participant[S004,Intercept]",
+        "r_Participant[S005,Intercept]",
+        "r_Participant[S006,Intercept]",
+        "r_Participant[S007,Intercept]",
+        "r_Participant[S008,Intercept]",
+        "r_Participant[S009,Intercept]",
+        "r_Participant[S010,Intercept]",
+        "r_Participant[S011,Intercept]",
+        "r_Participant[S012,Intercept]",
+        "r_Participant[S013,Intercept]",
+        "r_Participant[S014,Intercept]",
+        "r_Participant[S015,Intercept]",
+        "r_Participant[S016,Intercept]",
+        "r_Participant[S017,Intercept]",
+        "r_Participant[S018,Intercept]",
+        "r_Participant[S019,Intercept]",
+        "r_Participant[S020,Intercept]",
+        "sd_Participant__Intercept"
       ),
       delta = "b_delta_Intercept",
       k = "b_k_Intercept",
       phi = "b_phi_Intercept",
       delta_random = c(
         "r_Participant__delta[S001,Intercept]",
-        "r_Participant__delta[S002,Intercept]", "r_Participant__delta[S003,Intercept]",
-        "r_Participant__delta[S004,Intercept]", "r_Participant__delta[S005,Intercept]",
-        "r_Participant__delta[S006,Intercept]", "r_Participant__delta[S007,Intercept]",
-        "r_Participant__delta[S008,Intercept]", "r_Participant__delta[S009,Intercept]",
-        "r_Participant__delta[S010,Intercept]", "r_Participant__delta[S011,Intercept]",
-        "r_Participant__delta[S012,Intercept]", "r_Participant__delta[S013,Intercept]",
-        "r_Participant__delta[S014,Intercept]", "r_Participant__delta[S015,Intercept]",
-        "r_Participant__delta[S016,Intercept]", "r_Participant__delta[S017,Intercept]",
-        "r_Participant__delta[S018,Intercept]", "r_Participant__delta[S019,Intercept]",
-        "r_Participant__delta[S020,Intercept]", "sd_Participant__delta_Intercept"
+        "r_Participant__delta[S002,Intercept]",
+        "r_Participant__delta[S003,Intercept]",
+        "r_Participant__delta[S004,Intercept]",
+        "r_Participant__delta[S005,Intercept]",
+        "r_Participant__delta[S006,Intercept]",
+        "r_Participant__delta[S007,Intercept]",
+        "r_Participant__delta[S008,Intercept]",
+        "r_Participant__delta[S009,Intercept]",
+        "r_Participant__delta[S010,Intercept]",
+        "r_Participant__delta[S011,Intercept]",
+        "r_Participant__delta[S012,Intercept]",
+        "r_Participant__delta[S013,Intercept]",
+        "r_Participant__delta[S014,Intercept]",
+        "r_Participant__delta[S015,Intercept]",
+        "r_Participant__delta[S016,Intercept]",
+        "r_Participant__delta[S017,Intercept]",
+        "r_Participant__delta[S018,Intercept]",
+        "r_Participant__delta[S019,Intercept]",
+        "r_Participant__delta[S020,Intercept]",
+        "sd_Participant__delta_Intercept"
       ),
       k_random = c(
-        "r_Participant__k[S001,Intercept]", "r_Participant__k[S002,Intercept]",
-        "r_Participant__k[S003,Intercept]", "r_Participant__k[S004,Intercept]",
-        "r_Participant__k[S005,Intercept]", "r_Participant__k[S006,Intercept]",
-        "r_Participant__k[S007,Intercept]", "r_Participant__k[S008,Intercept]",
-        "r_Participant__k[S009,Intercept]", "r_Participant__k[S010,Intercept]",
-        "r_Participant__k[S011,Intercept]", "r_Participant__k[S012,Intercept]",
-        "r_Participant__k[S013,Intercept]", "r_Participant__k[S014,Intercept]",
-        "r_Participant__k[S015,Intercept]", "r_Participant__k[S016,Intercept]",
-        "r_Participant__k[S017,Intercept]", "r_Participant__k[S018,Intercept]",
-        "r_Participant__k[S019,Intercept]", "r_Participant__k[S020,Intercept]",
+        "r_Participant__k[S001,Intercept]",
+        "r_Participant__k[S002,Intercept]",
+        "r_Participant__k[S003,Intercept]",
+        "r_Participant__k[S004,Intercept]",
+        "r_Participant__k[S005,Intercept]",
+        "r_Participant__k[S006,Intercept]",
+        "r_Participant__k[S007,Intercept]",
+        "r_Participant__k[S008,Intercept]",
+        "r_Participant__k[S009,Intercept]",
+        "r_Participant__k[S010,Intercept]",
+        "r_Participant__k[S011,Intercept]",
+        "r_Participant__k[S012,Intercept]",
+        "r_Participant__k[S013,Intercept]",
+        "r_Participant__k[S014,Intercept]",
+        "r_Participant__k[S015,Intercept]",
+        "r_Participant__k[S016,Intercept]",
+        "r_Participant__k[S017,Intercept]",
+        "r_Participant__k[S018,Intercept]",
+        "r_Participant__k[S019,Intercept]",
+        "r_Participant__k[S020,Intercept]",
         "sd_Participant__k_Intercept"
       )
     )
@@ -1225,38 +1641,58 @@ test_that("brms dpars find_auxiliary", {
       conditional = "b_Intercept",
       random = c(
         "r_participant[S1,Intercept]",
-        "r_participant[S10,Intercept]", "r_participant[S2,Intercept]",
-        "r_participant[S3,Intercept]", "r_participant[S4,Intercept]",
-        "r_participant[S5,Intercept]", "r_participant[S6,Intercept]",
-        "r_participant[S7,Intercept]", "r_participant[S8,Intercept]",
-        "r_participant[S9,Intercept]", "sd_participant__Intercept"
+        "r_participant[S10,Intercept]",
+        "r_participant[S2,Intercept]",
+        "r_participant[S3,Intercept]",
+        "r_participant[S4,Intercept]",
+        "r_participant[S5,Intercept]",
+        "r_participant[S6,Intercept]",
+        "r_participant[S7,Intercept]",
+        "r_participant[S8,Intercept]",
+        "r_participant[S9,Intercept]",
+        "sd_participant__Intercept"
       ),
       coi = "b_coi_Intercept",
       phi = "b_phi_Intercept",
       zoi = "b_zoi_Intercept",
       coi_random = c(
         "r_participant__coi[S1,Intercept]",
-        "r_participant__coi[S10,Intercept]", "r_participant__coi[S2,Intercept]",
-        "r_participant__coi[S3,Intercept]", "r_participant__coi[S4,Intercept]",
-        "r_participant__coi[S5,Intercept]", "r_participant__coi[S6,Intercept]",
-        "r_participant__coi[S7,Intercept]", "r_participant__coi[S8,Intercept]",
-        "r_participant__coi[S9,Intercept]", "sd_participant__coi_Intercept"
+        "r_participant__coi[S10,Intercept]",
+        "r_participant__coi[S2,Intercept]",
+        "r_participant__coi[S3,Intercept]",
+        "r_participant__coi[S4,Intercept]",
+        "r_participant__coi[S5,Intercept]",
+        "r_participant__coi[S6,Intercept]",
+        "r_participant__coi[S7,Intercept]",
+        "r_participant__coi[S8,Intercept]",
+        "r_participant__coi[S9,Intercept]",
+        "sd_participant__coi_Intercept"
       ),
       phi_random = c(
         "r_participant__phi[S1,Intercept]",
-        "r_participant__phi[S10,Intercept]", "r_participant__phi[S2,Intercept]",
-        "r_participant__phi[S3,Intercept]", "r_participant__phi[S4,Intercept]",
-        "r_participant__phi[S5,Intercept]", "r_participant__phi[S6,Intercept]",
-        "r_participant__phi[S7,Intercept]", "r_participant__phi[S8,Intercept]",
-        "r_participant__phi[S9,Intercept]", "sd_participant__phi_Intercept"
+        "r_participant__phi[S10,Intercept]",
+        "r_participant__phi[S2,Intercept]",
+        "r_participant__phi[S3,Intercept]",
+        "r_participant__phi[S4,Intercept]",
+        "r_participant__phi[S5,Intercept]",
+        "r_participant__phi[S6,Intercept]",
+        "r_participant__phi[S7,Intercept]",
+        "r_participant__phi[S8,Intercept]",
+        "r_participant__phi[S9,Intercept]",
+        "sd_participant__phi_Intercept"
       ),
       zoi_random = c(
         "r_participant__zoi[S1,Intercept]",
-        "r_participant__zoi[S10,Intercept]", "r_participant__zoi[S2,Intercept]",
-        "r_participant__zoi[S3,Intercept]", "r_participant__zoi[S4,Intercept]",
-        "r_participant__zoi[S5,Intercept]", "r_participant__zoi[S6,Intercept]",
-        "r_participant__zoi[S7,Intercept]", "r_participant__zoi[S8,Intercept]",
-        "r_participant__zoi[S9,Intercept]", "sd_participant__zoi_Intercept"
+        "r_participant__zoi[S10,Intercept]",
+        "r_participant__zoi[S2,Intercept]",
+        "r_participant__zoi[S3,Intercept]",
+        "r_participant__zoi[S4,Intercept]",
+        "r_participant__zoi[S5,Intercept]",
+        "r_participant__zoi[S6,Intercept]",
+        "r_participant__zoi[S7,Intercept]",
+        "r_participant__zoi[S8,Intercept]",
+        "r_participant__zoi[S9,Intercept]",
+        "sd_participant__zoi_Intercept"
       )
     )
   )

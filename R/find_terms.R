@@ -55,11 +55,13 @@ find_terms <- function(x, ...) {
 
 #' @rdname find_terms
 #' @export
-find_terms.default <- function(x,
-                               flatten = FALSE,
-                               as_term_labels = FALSE,
-                               verbose = TRUE,
-                               ...) {
+find_terms.default <- function(
+  x,
+  flatten = FALSE,
+  as_term_labels = FALSE,
+  verbose = TRUE,
+  ...
+) {
   f <- find_formula(x, verbose = verbose)
 
   if (is.null(f)) {
@@ -179,7 +181,6 @@ find_terms.bfsl <- function(x, flatten = FALSE, verbose = TRUE, ...) {
 
 # unsupported ------------------
 
-
 #' @export
 find_terms.mipo <- function(x, flatten = FALSE, ...) {
   l <- list(conditional = unique(as.vector(summary(x)$term)))
@@ -192,7 +193,6 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 
 
 # helper -----------------------
-
 
 .get_variables_list <- function(f, resp = NULL, model = NULL) {
   # exception for formula w/o response
@@ -223,10 +223,15 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
   # unless they are preceded by a ^ and followed by a closing parenthesis ).
   f <- lapply(f, function(.x) {
     pattern <- "(?<!\\^)[*+:|\\-\\/](?![^(]*\\))" # was: "[\\*\\+:\\-\\|/](?![^(]*\\))"
-    f_parts <- gsub("~", "", trim_ws(unlist(
-      strsplit(split = pattern, x = .x, perl = TRUE),
-      use.names = FALSE
-    )), fixed = TRUE)
+    f_parts <- gsub(
+      "~",
+      "",
+      trim_ws(unlist(
+        strsplit(split = pattern, x = .x, perl = TRUE),
+        use.names = FALSE
+      )),
+      fixed = TRUE
+    )
     # if user has used namespace in formula-functions, these are returned
     # as empty elements. remove those here
     if (!all(nzchar(f_parts, keepNA = TRUE))) {
@@ -237,7 +242,12 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 
   # exceptions where we want to preserve the response value come here
   # - lm(1 / Sepal.Length ~ Species, data = iris)
-  if (!is.null(original_response) && !is_empty_object(original_response) && startsWith(original_response, "1/")) { # nolint
+  if (
+    !is.null(original_response) &&
+      !is_empty_object(original_response) &&
+      startsWith(original_response, "1/")
+  ) {
+    # nolint
     f$response <- original_response
   }
 
@@ -263,7 +273,10 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
   if (any(need_split)) {
     f$conditional <- c(
       f$conditional[!need_split],
-      trim_ws(unlist(strsplit(f$conditional[need_split], " ", fixed = TRUE), use.names = FALSE))
+      trim_ws(unlist(
+        strsplit(f$conditional[need_split], " ", fixed = TRUE),
+        use.names = FALSE
+      ))
     )
   }
 
@@ -276,10 +289,14 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 
 
 .get_variables_list_aovlist <- function(f, resp = NULL) {
-  i <- vapply(f[[3]], function(x) {
-    x <- as.character(x)
-    x[1] == "Error" && length(x) > 1
-  }, TRUE)
+  i <- vapply(
+    f[[3]],
+    function(x) {
+      x <- as.character(x)
+      x[1] == "Error" && length(x) > 1
+    },
+    TRUE
+  )
   error <- utils::capture.output(print(f[[3]][i][[1]]))
   f[[3]][i] <- NULL
   f[[3]] <- f[[3]][[2]]
@@ -292,6 +309,8 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 }
 
 .formula_to_string <- function(f) {
-  if (!is.character(f)) f <- safe_deparse(f)
+  if (!is.character(f)) {
+    f <- safe_deparse(f)
+  }
   f
 }

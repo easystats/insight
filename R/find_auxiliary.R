@@ -22,7 +22,9 @@ find_auxiliary <- function(x, ...) {
 #' @export
 find_auxiliary.default <- function(x, verbose = TRUE, ...) {
   if (verbose) {
-    format_warning("`find_auxiliary()` currently only works for models from package brms.")
+    format_warning(
+      "`find_auxiliary()` currently only works for models from package brms."
+    )
   }
   NULL
 }

@@ -19,6 +19,12 @@ test_that("get_predicted bias_correction", {
   expect_equal(out$Predicted, c(0.34234, 0.32517), tolerance = 1e-4)
   out <- as.data.frame(get_predicted(m1, data = d, ci = 0.95, bias_correction = TRUE))
   expect_equal(out$Predicted, c(0.45912, 0.45138), tolerance = 1e-4)
-  out <- as.data.frame(get_predicted(m1, data = d, ci = 0.95, bias_correction = TRUE, sigma = 2.5))
+  out <- as.data.frame(get_predicted(
+    m1,
+    data = d,
+    ci = 0.95,
+    bias_correction = TRUE,
+    sigma = 2.5
+  ))
   expect_equal(out$Predicted, c(0.56419, 0.56494), tolerance = 1e-4)
 })

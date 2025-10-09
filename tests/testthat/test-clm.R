@@ -3,9 +3,11 @@ skip_if_not_installed("ordinal")
 data(wine, package = "ordinal")
 m1 <- ordinal::clm(rating ~ temp * contact, data = wine)
 
-m2 <- suppressWarnings(ordinal::clm( # nominal + scale effects
+m2 <- suppressWarnings(ordinal::clm(
+  # nominal + scale effects
   cyl ~ wt,
-  scale = ~vs, nominal = ~hp,
+  scale = ~vs,
+  nominal = ~hp,
   data = transform(mtcars, cyl = factor(cyl))
 ))
 

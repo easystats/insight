@@ -3,15 +3,17 @@
 
 #' @rdname get_predicted
 #' @export
-get_predicted.lmerMod <- function(x,
-                                  data = NULL,
-                                  predict = "expectation",
-                                  ci = NULL,
-                                  ci_method = NULL,
-                                  include_random = "default",
-                                  iterations = NULL,
-                                  verbose = TRUE,
-                                  ...) {
+get_predicted.lmerMod <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  ci_method = NULL,
+  include_random = "default",
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Sanitize input
   my_args <- .get_predicted_args(
     x,
@@ -59,14 +61,25 @@ get_predicted.lmerMod <- function(x,
   }
 
   # 2. step: confidence intervals
-  ci_data <- get_predicted_ci(x, predictions,
-    data = my_args$data, ci = ci,
-    ci_method = ci_method, ci_type = my_args$ci_type,
+  ci_data <- get_predicted_ci(
+    x,
+    predictions,
+    data = my_args$data,
+    ci = ci,
+    ci_method = ci_method,
+    ci_type = my_args$ci_type,
     ...
   )
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
+  out <- .get_predicted_transform(
+    x,
+    predictions,
+    my_args,
+    ci_data,
+    verbose = verbose,
+    ...
+  )
 
   # 4. step: final preparation
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
@@ -80,14 +93,16 @@ get_predicted.merMod <- get_predicted.lmerMod
 # =======================================================================
 
 #' @export
-get_predicted.glmmTMB <- function(x,
-                                  data = NULL,
-                                  predict = "expectation",
-                                  ci = NULL,
-                                  include_random = "default",
-                                  iterations = NULL,
-                                  verbose = TRUE,
-                                  ...) {
+get_predicted.glmmTMB <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  include_random = "default",
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
   # validation checks
   if (!is.null(predict) && predict %in% c("prediction", "predicted", "classification")) {
     predict <- "expectation"
@@ -181,7 +196,14 @@ get_predicted.glmmTMB <- function(x,
     )
 
     # 3. step: back-transform
-    out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
+    out <- .get_predicted_transform(
+      x,
+      predictions,
+      my_args,
+      ci_data,
+      verbose = verbose,
+      ...
+    )
   }
 
   # 4. step: final preparation
@@ -193,14 +215,16 @@ get_predicted.glmmTMB <- function(x,
 # =======================================================================
 
 #' @export
-get_predicted.MixMod <- function(x,
-                                 data = NULL,
-                                 predict = "expectation",
-                                 ci = NULL,
-                                 include_random = "default",
-                                 iterations = NULL,
-                                 verbose = TRUE,
-                                 ...) {
+get_predicted.MixMod <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  include_random = "default",
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
   # validation checks
   if (!is.null(predict) && predict %in% c("prediction", "predicted", "classification")) {
     predict <- "expectation"
@@ -255,7 +279,13 @@ get_predicted.MixMod <- function(x,
 
   if (my_args$scale == "response" && my_args$info$is_zero_inflated) {
     # 2. and 3. step: confidence intervals and back-transform
-    ci_data <- .simulate_zi_predictions(model = x, newdata = data, predictions = predictions, nsim = iterations, ci = ci)
+    ci_data <- .simulate_zi_predictions(
+      model = x,
+      newdata = data,
+      predictions = predictions,
+      nsim = iterations,
+      ci = ci
+    )
     out <- list(predictions = predictions, ci_data = ci_data)
   } else {
     # 2. step: confidence intervals
@@ -269,7 +299,14 @@ get_predicted.MixMod <- function(x,
     )
 
     # 3. step: back-transform
-    out <- .get_predicted_transform(x, predictions, my_args, ci_data, verbose = verbose, ...)
+    out <- .get_predicted_transform(
+      x,
+      predictions,
+      my_args,
+      ci_data,
+      verbose = verbose,
+      ...
+    )
   }
 
   # 4. step: final preparation

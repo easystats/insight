@@ -43,21 +43,19 @@ standardize_column_order <- function(data, ...) {
 
 #' @export
 standardize_column_order.default <- function(data, ...) {
-  print_color(sprintf("Objects of class '%s' are currently not supported.\n", class(data)[1]), "red")
+  print_color(
+    sprintf("Objects of class '%s' are currently not supported.\n", class(data)[1]),
+    "red"
+  )
   invisible(data)
 }
 
 #' @rdname standardize_column_order
 #' @export
-standardize_column_order.parameters_model <- function(data,
-                                                      style = "easystats",
-                                                      ...) {
+standardize_column_order.parameters_model <- function(data, style = "easystats", ...) {
   style <- validate_argument(style, c("easystats", "broom"))
 
-  col_order <- switch(style,
-    easystats = easystats_columns(),
-    broom_columns()
-  )
+  col_order <- switch(style, easystats = easystats_columns(), broom_columns())
 
   data[union(intersect(col_order, names(data)), names(data))]
 }
@@ -93,6 +91,7 @@ standardize_column_order.parameters_distribution <- standardize_column_order.par
 #'
 #' @export
 easystats_columns <- function(select = "all") {
+  # fmt: skip
   select <- validate_argument(
     select,
     c(
@@ -101,11 +100,13 @@ easystats_columns <- function(select = "all") {
     )
   )
   # Parameter names or levels
+  # fmt: skip
   cols_parameter <- c(
     "Level1", "Level2", "Parameter1", "Parameter2", "Parameter",
     "Mean_Parameter1", "Mean_Parameter2", "Mean_Group1", "Mean_Group2"
   )
   # estimate
+  # fmt: skip
   cols_estimate <- c(
     "Coefficient", "r", "rho", "tau", "Estimate", "Log-Mean", "Log-Odds",
     "Log-Ratio", "Log-Prevalence", "Marginal Means", "IRR", "Odds Ratio",
@@ -115,8 +116,10 @@ easystats_columns <- function(select = "all") {
     "Mean Ratio Difference"
   )
   # type of estimate
+  # fmt: skip
   cols_esttype <- c("Group", "Component", "Response", "Response_Level", "Effects", "Weight")
   # uncertainty
+  # fmt: skip
   cols_uncertainty <- c(
     "SE", "Std. Error", "SD", "Deviance_error",
     "CI", "CI_low", "CI_high", "Difference_CI_low", "Difference_CI_high",
@@ -128,6 +131,7 @@ easystats_columns <- function(select = "all") {
   # test details
   cols_method <- c("Method", "method")
   # statistic
+  # fmt: skip
   cols_statistic <- c(
     "t", "t value", "z", "z value", "F", "F value", "Chi2", "Chi2 value",
     "chisq", "Chisq", "chi-sq", "t / F", "z / Chisq", "z / Chi2", "W", "S",
@@ -136,10 +140,12 @@ easystats_columns <- function(select = "all") {
   # degrees of freedom
   cols_df <- c("df", "df_error", "df_residual")
   # p-value
+  # fmt: skip
   cols_p <- c("p", "pd", "ROPE_CI", "ROPE_low", "ROPE_high", "ROPE_Percentage", "BF", "log_BF")
   # other details
   cols_other <- c("Alternative", "n_Obs", "Rhat", "ESS")
   # effectsize details
+  # fmt: skip
   cols_effsize <- c(
     "Effectsize",
     "d", "Cohens_d", "d_CI_low", "d_CI_high",
@@ -198,6 +204,7 @@ easystats_columns <- function(select = "all") {
 #' @rdname easystats_columns
 #' @export
 broom_columns <- function(select = "all") {
+  # fmt: skip
   select <- validate_argument(
     select,
     c(
@@ -210,8 +217,10 @@ broom_columns <- function(select = "all") {
   # estimate
   cols_estimate <- c("estimate", "mean.group1", "mean.group2", "predicted")
   # type of estimate
+  # fmt: skip
   cols_esttype <- c("group", "component", "response", "response.level", "effects", "weight")
   # uncertainty
+  # fmt: skip
   cols_uncertainty <- c(
     "std.error", "std.dev",
     "conf.level", "conf.low", "conf.high", "conf.method", "conf.distribution", "conf.iterations",
@@ -230,6 +239,7 @@ broom_columns <- function(select = "all") {
   # other details
   cols_other <- c("alternative", "n.obs", "rhat", "ess")
   # effectsize details
+  # fmt: skip
   cols_effsize <- c(
     "effectsize",
     "d", "cohens.d", "d.conf.low", "d.conf.high",

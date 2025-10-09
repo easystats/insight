@@ -51,11 +51,7 @@ clean_parameters <- function(x, ...) {
 
 #' @export
 clean_parameters.default <- function(x, group = "", ...) {
-  pars <- find_parameters(x,
-    effects = "all",
-    component = "all",
-    flatten = FALSE
-  )
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
 
   l <- lapply(names(pars), function(i) {
     eff <- if (grepl("random", i, fixed = TRUE)) {
@@ -68,6 +64,7 @@ clean_parameters.default <- function(x, group = "", ...) {
     # those possible components returned by `find_parameters()`, see
     # @section Model components in `find_predictors.R`, or
     # `.get_elements("fixed", "all")`
+    # fmt: skip
     components <- c(
       "zero_inflated", "dispersion", "nonlinear", "instruments", "phi", "mu",
       "extra", "scale", "marginal", "intercept", "correlation", "ip", "tau",
@@ -157,11 +154,7 @@ clean_parameters.emm_list <- clean_parameters.emmGrid
 
 #' @export
 clean_parameters.BFBayesFactor <- function(x, ...) {
-  pars <- find_parameters(x,
-    effects = "all",
-    component = "all",
-    flatten = FALSE
-  )
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
 
   l <- lapply(names(pars), function(i) {
     eff <- if (grepl("random", i, fixed = TRUE)) {
@@ -194,11 +187,7 @@ clean_parameters.BFBayesFactor <- function(x, ...) {
 
 #' @export
 clean_parameters.wbm <- function(x, ...) {
-  pars <- find_parameters(x,
-    effects = "all",
-    component = "all",
-    flatten = FALSE
-  )
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
 
   l <- lapply(names(pars), function(i) {
     com <- if (grepl("random", i, fixed = TRUE)) {
@@ -251,11 +240,7 @@ clean_parameters.model_fit <- function(x, ...) {
 
 #' @export
 clean_parameters.glmm <- function(x, ...) {
-  pars <- find_parameters(x,
-    effects = "all",
-    component = "all",
-    flatten = FALSE
-  )
+  pars <- find_parameters(x, effects = "all", component = "all", flatten = FALSE)
 
   l <- lapply(names(pars), function(i) {
     data.frame(
@@ -313,11 +298,7 @@ clean_parameters.blavaan <- function(x, ...) {
 
 #' @export
 clean_parameters.brmsfit <- function(x, ...) {
-  pars <- find_parameters(x,
-    effects = "full",
-    component = "all",
-    flatten = FALSE
-  )
+  pars <- find_parameters(x, effects = "full", component = "all", flatten = FALSE)
 
   is_mv <- is_multivariate(pars)
 
@@ -338,11 +319,7 @@ clean_parameters.brmsfit <- function(x, ...) {
 
 #' @export
 clean_parameters.stanreg <- function(x, ...) {
-  pars <- find_parameters(x,
-    effects = "full",
-    component = "all",
-    flatten = FALSE
-  )
+  pars <- find_parameters(x, effects = "full", component = "all", flatten = FALSE)
 
   l <- .get_stan_params(pars)
 
@@ -425,7 +402,6 @@ clean_parameters.mlm <- function(x, ...) {
 
 
 # helper -------------------------
-
 
 .get_stan_params <- function(pars, response = NA) {
   lapply(names(pars), function(i) {
@@ -533,12 +509,34 @@ clean_parameters.mlm <- function(x, ...) {
   }
 
   # clean auxiliary
-  out$Cleaned_Parameter <- gsub(pattern = paste0("^(", paste0("b_", dpars, "_", collapse = "|"), ")"), "", out$Cleaned_Parameter)
+  out$Cleaned_Parameter <- gsub(
+    pattern = paste0("^(", paste0("b_", dpars, "_", collapse = "|"), ")"),
+    "",
+    out$Cleaned_Parameter
+  )
   # clean fixed effects, conditional and zero-inflated
-  out$Cleaned_Parameter <- gsub(pattern = "^b_(?!zi_)(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter, perl = TRUE)
-  out$Cleaned_Parameter <- gsub(pattern = "^b_zi_(.*)\\.(\\d)\\.$", "\\1[\\2]", out$Cleaned_Parameter)
-  out$Cleaned_Parameter <- gsub(pattern = "^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)", "\\2", out$Cleaned_Parameter, perl = TRUE)
-  out$Cleaned_Parameter <- gsub(pattern = "^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)(.*)", "\\2", out$Cleaned_Parameter) # nolint
+  out$Cleaned_Parameter <- gsub(
+    pattern = "^b_(?!zi_)(.*)\\.(\\d)\\.$",
+    "\\1[\\2]",
+    out$Cleaned_Parameter,
+    perl = TRUE
+  )
+  out$Cleaned_Parameter <- gsub(
+    pattern = "^b_zi_(.*)\\.(\\d)\\.$",
+    "\\1[\\2]",
+    out$Cleaned_Parameter
+  )
+  out$Cleaned_Parameter <- gsub(
+    pattern = "^(b_|bs_|bsp_|bcs_)(?!zi_)(.*)",
+    "\\2",
+    out$Cleaned_Parameter,
+    perl = TRUE
+  )
+  out$Cleaned_Parameter <- gsub(
+    pattern = "^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)(.*)",
+    "\\2",
+    out$Cleaned_Parameter
+  ) # nolint
 
   if (!is.null(class_params)) {
     # remove "mu<number>_" from parameters
@@ -553,12 +551,24 @@ clean_parameters.mlm <- function(x, ...) {
 
   cor_sd <- grepl("(sd_|cor_)(.*)", out$Cleaned_Parameter)
   if (any(cor_sd)) {
-    out$Cleaned_Parameter[cor_sd] <- gsub("^(sd_|cor_)(.*?)__(.*)", "\\3", out$Parameter[cor_sd])
-    out$Group[cor_sd] <- paste("SD/Cor:", gsub("^(sd_|cor_)(.*?)__(.*)", "\\2", out$Parameter[cor_sd]))
+    out$Cleaned_Parameter[cor_sd] <- gsub(
+      "^(sd_|cor_)(.*?)__(.*)",
+      "\\3",
+      out$Parameter[cor_sd]
+    )
+    out$Group[cor_sd] <- paste(
+      "SD/Cor:",
+      gsub("^(sd_|cor_)(.*?)__(.*)", "\\2", out$Parameter[cor_sd])
+    )
     # replace "__" by "~"
     cor_only <- startsWith(out$Parameter[cor_sd], "cor_")
     if (any(cor_only)) {
-      out$Cleaned_Parameter[which(cor_sd)[cor_only]] <- sub("__", " ~ ", out$Cleaned_Parameter[which(cor_sd)[cor_only]], fixed = TRUE) # nolint
+      out$Cleaned_Parameter[which(cor_sd)[cor_only]] <- sub(
+        "__",
+        " ~ ",
+        out$Cleaned_Parameter[which(cor_sd)[cor_only]],
+        fixed = TRUE
+      )
     }
   }
 
@@ -588,7 +598,11 @@ clean_parameters.mlm <- function(x, ...) {
         out$Group[sd_cor] <- gsub("SD/Cor: (.*)", "\\1", out$Group[sd_cor])
       }
     } else {
-      r_grps <- gsub("^r_(.*)\\[(.*),(.*)\\]", "\\3: \\1", out$Cleaned_Parameter[rand_eff])
+      r_grps <- gsub(
+        "^r_(.*)\\[(.*),(.*)\\]",
+        "\\3: \\1",
+        out$Cleaned_Parameter[rand_eff]
+      )
     }
 
     r_pars <- gsub("__zi", "", r_pars, fixed = TRUE)
@@ -622,7 +636,11 @@ clean_parameters.mlm <- function(x, ...) {
 
   simplex <- startsWith(out$Cleaned_Parameter, "simo_")
   if (length(simplex)) {
-    out$Cleaned_Parameter[simplex] <- gsub("^(simo_|simo_mo)(.*)\\[(\\d)\\]$", "\\2[\\3]", out$Cleaned_Parameter[simplex]) # nolint
+    out$Cleaned_Parameter[simplex] <- gsub(
+      "^(simo_|simo_mo)(.*)\\[(\\d)\\]$",
+      "\\2[\\3]",
+      out$Cleaned_Parameter[simplex]
+    )
     out$Component[simplex] <- "simplex"
   }
 
@@ -672,7 +690,12 @@ clean_parameters.mlm <- function(x, ...) {
   # clean stanmvreg parameters from response names
   if (is_mv) {
     for (i in unique(out$Response)) {
-      out$Cleaned_Parameter <- gsub(paste0(i, "|"), "", out$Cleaned_Parameter, fixed = TRUE)
+      out$Cleaned_Parameter <- gsub(
+        paste0(i, "|"),
+        "",
+        out$Cleaned_Parameter,
+        fixed = TRUE
+      )
     }
     dummy_parameter <- out$Cleaned_Parameter
   }
@@ -682,7 +705,11 @@ clean_parameters.mlm <- function(x, ...) {
   rand_intercepts <- startsWith(out$Cleaned_Parameter, "b[(Intercept)")
 
   if (any(rand_intercepts)) {
-    re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_intercepts])
+    re_grp_level <- gsub(
+      "b\\[(.*) (.*):(.*)\\]",
+      "\\2",
+      out$Cleaned_Parameter[rand_intercepts]
+    )
     out$Cleaned_Parameter[rand_intercepts] <- gsub(
       "b\\[\\(Intercept\\) (.*)\\]",
       "\\1",
@@ -690,7 +717,6 @@ clean_parameters.mlm <- function(x, ...) {
     )
     out$Group[rand_intercepts] <- sprintf("Intercept: %s", re_grp_level)
   }
-
 
   # correlation and sd
 
@@ -702,11 +728,17 @@ clean_parameters.mlm <- function(x, ...) {
     out$Cleaned_Parameter[which(cor_sd)] <- parm1
     rand_cor <- parm1 != parm2
     if (any(rand_cor)) {
-      out$Cleaned_Parameter[which(cor_sd)[rand_cor]] <- paste0(parm1[rand_cor], " ~ ", parm2[rand_cor])
+      out$Cleaned_Parameter[which(cor_sd)[rand_cor]] <- paste0(
+        parm1[rand_cor],
+        " ~ ",
+        parm2[rand_cor]
+      )
     }
-    out$Group[cor_sd] <- paste("Var/Cov:", gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\1", dummy_parameter[cor_sd]))
+    out$Group[cor_sd] <- paste(
+      "Var/Cov:",
+      gsub("^Sigma\\[(.*):(.*),(.*)\\]", "\\1", dummy_parameter[cor_sd])
+    )
   }
-
 
   # extract group-names from random effects and clean random effects
 
@@ -716,7 +748,11 @@ clean_parameters.mlm <- function(x, ...) {
     r_pars <- gsub("b\\[(.*) (.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
     if (identical(dots$version, 2)) {
       out$Level <- ""
-      r_levels <- gsub("b\\[(.*) (.*):(.*)\\]", "\\3", out$Cleaned_Parameter[rand_effects])
+      r_levels <- gsub(
+        "b\\[(.*) (.*):(.*)\\]",
+        "\\3",
+        out$Cleaned_Parameter[rand_effects]
+      )
       r_grps <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
       out$Group[rand_effects] <- r_grps
       out$Level[rand_effects] <- r_levels
@@ -726,7 +762,11 @@ clean_parameters.mlm <- function(x, ...) {
         out$Group[sd_cor] <- gsub("Var/Cov: (.*)", "\\1", out$Group[sd_cor])
       }
     } else {
-      re_grp_level <- gsub("b\\[(.*) (.*):(.*)\\]", "\\2", out$Cleaned_Parameter[rand_effects])
+      re_grp_level <- gsub(
+        "b\\[(.*) (.*):(.*)\\]",
+        "\\2",
+        out$Cleaned_Parameter[rand_effects]
+      )
       r_grps <- gsub("b\\[(.*) (.*)\\]", "\\1", out$Cleaned_Parameter[rand_effects])
       out$Group[rand_effects] <- sprintf("%s: %s", r_grps, re_grp_level)
     }
@@ -784,13 +824,30 @@ clean_parameters.mlm <- function(x, ...) {
 
 .clean_bamlss_params <- function(out) {
   out$Cleaned_Parameter <- out$Parameter
-  out$Cleaned_Parameter <- gsub("^(mu\\.p\\.|pi\\.p\\.)(.*)", "\\2", out$Cleaned_Parameter)
-  out$Cleaned_Parameter <- gsub("^(mu\\.s\\.|pi\\.s\\.)(.*)", "s\\(\\2\\)", out$Cleaned_Parameter)
-  out$Cleaned_Parameter <- gsub("^sigma\\.p\\.(.*)", "sigma \\(\\1\\)", out$Cleaned_Parameter)
+  out$Cleaned_Parameter <- gsub(
+    "^(mu\\.p\\.|pi\\.p\\.)(.*)",
+    "\\2",
+    out$Cleaned_Parameter
+  )
+  out$Cleaned_Parameter <- gsub(
+    "^(mu\\.s\\.|pi\\.s\\.)(.*)",
+    "s\\(\\2\\)",
+    out$Cleaned_Parameter
+  )
+  out$Cleaned_Parameter <- gsub(
+    "^sigma\\.p\\.(.*)",
+    "sigma \\(\\1\\)",
+    out$Cleaned_Parameter
+  )
   out$Cleaned_Parameter <- gsub("..", ".", out$Cleaned_Parameter, fixed = TRUE)
   out$Cleaned_Parameter <- gsub(".)", ")", out$Cleaned_Parameter, fixed = TRUE)
   out$Cleaned_Parameter <- gsub("(.", "(", out$Cleaned_Parameter, fixed = TRUE)
-  out$Cleaned_Parameter <- gsub(".Intercept.", "Intercept", out$Cleaned_Parameter, fixed = TRUE)
+  out$Cleaned_Parameter <- gsub(
+    ".Intercept.",
+    "Intercept",
+    out$Cleaned_Parameter,
+    fixed = TRUE
+  )
   out$Cleaned_Parameter <- gsub("(\\.$)", "", out$Cleaned_Parameter)
   out
 }

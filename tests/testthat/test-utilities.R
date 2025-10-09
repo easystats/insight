@@ -120,7 +120,10 @@ withr::with_environment(
     )
 
     foo3 <- function(test = "short_distance") {
-      validate_argument(test, c("short_distance", "shorter_distance", "shortest_distance"))
+      validate_argument(
+        test,
+        c("short_distance", "shorter_distance", "shortest_distance")
+      )
     }
     # match
     expect_identical(foo3("short_distance"), "short_distance")

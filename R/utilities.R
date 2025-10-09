@@ -92,7 +92,9 @@ n_unique.default <- function(x, remove_na = TRUE, ...) {
   if (is.null(x)) {
     return(0)
   }
-  if (isTRUE(remove_na)) x <- x[!is.na(x)]
+  if (isTRUE(remove_na)) {
+    x <- x[!is.na(x)]
+  }
   length(unique(x))
 }
 
@@ -138,6 +140,8 @@ safe_deparse_symbol <- function(x) {
 #' @rdname trim_ws
 #' @export
 has_single_value <- function(x, remove_na = FALSE, ...) {
-  if (remove_na) x <- x[!is.na(x)]
+  if (remove_na) {
+    x <- x[!is.na(x)]
+  }
   !is.null(x) && length(x) > 0L && isTRUE(all(x == x[1]))
 }

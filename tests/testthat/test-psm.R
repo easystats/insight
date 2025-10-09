@@ -17,10 +17,7 @@ d.time <- pmin(d.time, cens)
 
 dat <<- data.frame(d.time, death, sex, age, stringsAsFactors = FALSE)
 
-m1 <- rms::psm(Surv(d.time, death) ~ sex * pol(age, 2),
-  dist = "lognormal",
-  data = dat
-)
+m1 <- rms::psm(Surv(d.time, death) ~ sex * pol(age, 2), dist = "lognormal", data = dat)
 
 test_that("model_info", {
   expect_false(model_info(m1)$is_binomial)
@@ -67,9 +64,11 @@ test_that("find_formula", {
   expect_length(find_formula(m1), 1)
   expect_equal(
     find_formula(m1),
-    list(conditional = as.formula(
-      "Surv(d.time, death) ~ sex * pol(age, 2)"
-    )),
+    list(
+      conditional = as.formula(
+        "Surv(d.time, death) ~ sex * pol(age, 2)"
+      )
+    ),
     ignore_attr = TRUE
   )
 })
@@ -86,10 +85,13 @@ test_that("find_terms", {
 })
 
 test_that("find_variables", {
-  expect_equal(find_variables(m1), list(
-    response = c("d.time", "death"),
-    conditional = c("sex", "age")
-  ))
+  expect_equal(
+    find_variables(m1),
+    list(
+      response = c("d.time", "death"),
+      conditional = c("sex", "age")
+    )
+  )
   expect_equal(
     find_variables(m1, flatten = TRUE),
     c("d.time", "death", "sex", "age")

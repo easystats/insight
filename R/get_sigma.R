@@ -66,14 +66,12 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
 
 # Retrieve sigma ----------------------------------------------------------
 
-
 .get_sigma <- function(x, ...) {
   UseMethod(".get_sigma")
 }
 
 
 # special handling ---------------
-
 
 .get_sigma.glmerMod <- function(x, ...) {
   check_if_installed("lme4")
@@ -182,7 +180,9 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
 
 .get_sigma.cgam <- function(x, verbose = TRUE, ...) {
   s <- .safe(
-    sqrt(get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose))
+    sqrt(
+      get_deviance(x, verbose = verbose) / get_df(x, type = "residual", verbose = verbose)
+    )
   )
 
   if (is_empty_object(s)) {
@@ -223,11 +223,7 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
 
 
 .get_sigma.glmmPQL <- function(x, ...) {
-  switch(x$family$family,
-    gaussian = ,
-    Gamma = x$sigma,
-    x$sigma^2
-  )
+  switch(x$family$family, gaussian = , Gamma = x$sigma, x$sigma^2)
 }
 
 
@@ -285,7 +281,6 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
 
   # default sigma ---------------
   s <- .safe(stats::sigma(x))
-
 
   # compute sigma manually ---------------
   if (is_empty_object(s)) {

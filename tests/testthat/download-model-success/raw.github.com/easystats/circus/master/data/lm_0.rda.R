@@ -1,5 +1,5 @@
 # nolint start
-# styler: off
+# fmt: skip
 structure(list(
   method = "GET", url = "https://raw.githubusercontent.com/easystats/circus/master/data/lm_0.rda",
   status_code = 200L, headers = structure(list(

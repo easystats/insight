@@ -19,7 +19,8 @@ withr::with_options(
       model = "BM",
       parameters = list(ancestral.state = 0, sigma2 = 10)
     )
-    y <- b0 + b1 * x +
+    y <- b0 +
+      b1 * x +
       phylolm::rTrait(
         n = 1,
         phy = tre,

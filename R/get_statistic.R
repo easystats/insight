@@ -39,7 +39,6 @@ get_statistic <- function(x, ...) {
 
 # Default models ----------------------------------------------------------
 
-
 #' @rdname get_statistic
 #' @export
 get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
@@ -376,14 +375,18 @@ get_statistic.feis <- get_statistic.default
 
 # Models with zero-inflation component --------------------------------------
 
-
 #' @export
 get_statistic.mhurdle <- function(x, component = "all", ...) {
   component <- match.arg(
     component,
     choices = c(
-      "all", "conditional", "zi", "zero_inflated", "infrequent_purchase",
-      "ip", "auxiliary"
+      "all",
+      "conditional",
+      "zi",
+      "zero_inflated",
+      "infrequent_purchase",
+      "ip",
+      "auxiliary"
     )
   )
 
@@ -408,7 +411,10 @@ get_statistic.mhurdle <- function(x, component = "all", ...) {
   stats$Component[aux_pars] <- "auxiliary"
 
   params <- merge(params, stats, sort = FALSE)
-  params <- .filter_component(params, component)[intersect(c("Parameter", "Statistic", "Component"), colnames(params))]
+  params <- .filter_component(params, component)[intersect(
+    c("Parameter", "Statistic", "Component"),
+    colnames(params)
+  )]
   params <- text_remove_backticks(params)
   attr(params, "statistic") <- find_statistic(x)
 
@@ -467,11 +473,7 @@ get_statistic.zeroinfl <- function(x, component = "all", ...) {
     }
 
     data.frame(
-      Parameter = find_parameters(x,
-        effects = "fixed",
-        component = comp,
-        flatten = TRUE
-      ),
+      Parameter = find_parameters(x, effects = "fixed", component = comp, flatten = TRUE),
       Statistic = as.vector(stats[, 3]),
       Component = comp,
       stringsAsFactors = FALSE,
@@ -511,11 +513,7 @@ get_statistic.MixMod <- function(x, component = "all", ...) {
 
   out <- lapply(names(cs), function(i) {
     data.frame(
-      Parameter = find_parameters(x,
-        effects = "fixed",
-        component = i,
-        flatten = TRUE
-      ),
+      Parameter = find_parameters(x, effects = "fixed", component = i, flatten = TRUE),
       Statistic = as.vector(cs[[i]][, 3]),
       Component = i,
       stringsAsFactors = FALSE,
@@ -532,7 +530,6 @@ get_statistic.MixMod <- function(x, component = "all", ...) {
 
 
 # gam models --------------------------------------------------------------
-
 
 #' @export
 get_statistic.Gam <- function(x, ...) {
@@ -592,12 +589,15 @@ get_statistic.SemiParBIV <- function(x, ...) {
   s <- summary(x)
   s <- compact_list(s[startsWith(names(s), "tableP")])
 
-  params <- do.call(rbind, lapply(seq_along(s), function(i) {
-    out <- as.data.frame(s[[i]])
-    out$Parameter <- rownames(out)
-    out$Component <- paste0("Equation", i)
-    out
-  }))
+  params <- do.call(
+    rbind,
+    lapply(seq_along(s), function(i) {
+      out <- as.data.frame(s[[i]])
+      out$Parameter <- rownames(out)
+      out$Component <- paste0("Equation", i)
+      out
+    })
+  )
 
   colnames(params)[3] <- "Statistic"
   rownames(params) <- NULL
@@ -692,7 +692,9 @@ get_statistic.cgam <- function(x, component = "all", ...) {
 
   sc <- summary(x)
   stat <- as.vector(sc$coefficients[, 3])
-  if (!is.null(sc$coefficients2)) stat <- c(stat, rep(NA, nrow(sc$coefficients2)))
+  if (!is.null(sc$coefficients2)) {
+    stat <- c(stat, rep(NA, nrow(sc$coefficients2)))
+  }
 
   params <- get_parameters(x, component = "all")
 
@@ -714,7 +716,6 @@ get_statistic.cgam <- function(x, component = "all", ...) {
 
 
 # Survival models ------------------------------------------
-
 
 #' @export
 get_statistic.coxph <- function(x, ...) {
@@ -881,7 +882,6 @@ get_statistic.aareg <- function(x, ...) {
 
 # Ordinal models --------------------------------------------------
 
-
 #' @export
 get_statistic.clm2 <- function(x, component = "all", ...) {
   component <- match.arg(component, choices = c("all", "conditional", "scale"))
@@ -894,7 +894,10 @@ get_statistic.clm2 <- function(x, component = "all", ...) {
   out <- data.frame(
     Parameter = rownames(stats),
     Statistic = unname(stats[, "z value"]),
-    Component = c(rep("conditional", times = n_intercepts + n_location), rep("scale", times = n_scale)),
+    Component = c(
+      rep("conditional", times = n_intercepts + n_location),
+      rep("scale", times = n_scale)
+    ),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -948,7 +951,10 @@ get_statistic.mvord <- function(x, component = "all", ...) {
   params <- data.frame(
     Parameter = c(thresholds$Parameter, model_coef$Parameter),
     Statistic = c(unname(thresholds[, "z value"]), unname(model_coef[, "z value"])),
-    Component = c(rep("thresholds", nrow(thresholds)), rep("conditional", nrow(model_coef))),
+    Component = c(
+      rep("thresholds", nrow(thresholds)),
+      rep("conditional", nrow(model_coef))
+    ),
     Response = c(thresholds$Response, model_coef$Response),
     stringsAsFactors = FALSE,
     row.names = NULL
@@ -1271,7 +1277,6 @@ get_statistic.negbinirr <- get_statistic.logitor
 
 # Other models -------------------------------------------------------
 
-
 #' @export
 get_statistic.glmgee <- function(x, ...) {
   junk <- utils::capture.output({
@@ -1324,7 +1329,10 @@ get_statistic.estimate_contrasts <- get_statistic.estimate_means
 #' @export
 get_statistic.nestedLogit <- function(x, component = "all", verbose = TRUE, ...) {
   cf <- as.data.frame(stats::coef(x))
-  out <- as.data.frame(do.call(rbind, lapply(x$models, function(i) stats::coef(summary(i)))))
+  out <- as.data.frame(do.call(
+    rbind,
+    lapply(x$models, function(i) stats::coef(summary(i)))
+  ))
   colnames(out)[3] <- "Statistic"
   response_levels <- unlist(lapply(x$dichotomies, function(i) {
     paste0("{", toString(i[[1]]), "} vs. {", toString(i[[2]]), "}")
@@ -1536,7 +1544,11 @@ get_statistic.ergm <- function(x, verbose = TRUE, ...) {
 #' @export
 get_statistic.sdmTMB <- function(x, component = "all", verbose = TRUE, ...) {
   delta_comp <- isTRUE(x$family$delta)
-  valid_comp <- compact_character(c("all", "conditional", ifelse(delta_comp, "delta", "")))
+  valid_comp <- compact_character(c(
+    "all",
+    "conditional",
+    ifelse(delta_comp, "delta", "")
+  ))
   component <- validate_argument(component, valid_comp)
 
   # get standard errors
@@ -1580,11 +1592,7 @@ get_statistic.sdmTMB <- function(x, component = "all", verbose = TRUE, ...) {
     out <- conditional
   }
 
-  out <- switch(component,
-    all = out,
-    conditional = conditional,
-    delta = delta
-  )
+  out <- switch(component, all = out, conditional = conditional, delta = delta)
 
   attr(out, "statistic") <- find_statistic(x)
   out
@@ -1597,10 +1605,14 @@ get_statistic.btergm <- function(x, verbose = TRUE, ...) {
   bootstraps <- x@boot$t
 
   # standard error
-  sdev <- vapply(seq_len(ncol(bootstraps)), function(i) {
-    cur <- (bootstraps[, i] - params[i])^2
-    sqrt(sum(cur) / length(cur))
-  }, numeric(1))
+  sdev <- vapply(
+    seq_len(ncol(bootstraps)),
+    function(i) {
+      cur <- (bootstraps[, i] - params[i])^2
+      sqrt(sum(cur) / length(cur))
+    },
+    numeric(1)
+  )
   stat <- (0 - colMeans(bootstraps)) / sdev
 
   out <- data.frame(
@@ -1775,11 +1787,7 @@ get_statistic.mle <- get_statistic.mle2
 #' @export
 get_statistic.glht <- function(x, ...) {
   s <- summary(x)
-  alt <- switch(x$alternative,
-    two.sided = "==",
-    less = ">=",
-    greater = "<="
-  )
+  alt <- switch(x$alternative, two.sided = "==", less = ">=", greater = "<=")
   out <- data.frame(
     Parameter = paste(names(s$test$coefficients), alt, x$rhs),
     Statistic = unname(s$test$tstat),
@@ -1793,7 +1801,13 @@ get_statistic.glht <- function(x, ...) {
 
 #' @rdname get_statistic
 #' @export
-get_statistic.emmGrid <- function(x, ci = 0.95, adjust = "none", merge_parameters = FALSE, ...) {
+get_statistic.emmGrid <- function(
+  x,
+  ci = 0.95,
+  adjust = "none",
+  merge_parameters = FALSE,
+  ...
+) {
   s <- summary(x, level = ci, adjust = adjust, infer = TRUE)
 
   stat <- s[["t.ratio"]]
@@ -1981,11 +1995,14 @@ get_statistic.Arima <- function(x, ...) {
 get_statistic.wbm <- function(x, ...) {
   s <- summary(x)
 
-  statistic_column <- if ("t val." %in% c(
-    colnames(s$within_table),
-    colnames(s$between_table),
-    colnames(s$ints_table)
-  )) {
+  statistic_column <- if (
+    "t val." %in%
+      c(
+        colnames(s$within_table),
+        colnames(s$between_table),
+        colnames(s$ints_table)
+      )
+  ) {
     "t val."
   } else {
     "z val."
@@ -2043,7 +2060,9 @@ get_statistic.sem <- function(x, ...) {
   params <- get_parameters(x, effects = "fixed")
 
   if (is.null(x$se)) {
-    format_warning("Model has no standard errors. Please fit model again with bootstrapped standard errors.")
+    format_warning(
+      "Model has no standard errors. Please fit model again with bootstrapped standard errors."
+    )
     return(NULL)
   }
 
@@ -2082,7 +2101,10 @@ get_statistic.cpglm <- function(x, ...) {
 get_statistic.zcpglm <- function(x, component = "all", ...) {
   check_if_installed("cplm")
 
-  component <- match.arg(component, choices = c("all", "conditional", "zi", "zero_inflated"))
+  component <- match.arg(
+    component,
+    choices = c("all", "conditional", "zi", "zero_inflated")
+  )
   junk <- utils::capture.output(stats <- cplm::summary(x)$coefficients) # nolint
   params <- get_parameters(x)
 
@@ -2129,17 +2151,20 @@ get_statistic.manova <- function(x, ...) {
 #' @export
 get_statistic.maov <- function(x, ...) {
   s <- summary(x)
-  out <- do.call(rbind, lapply(names(s), function(i) {
-    stats <- s[[i]]
-    missing_values <- is.na(stats[["F value"]])
-    data.frame(
-      Parameter = rownames(stats)[!missing_values],
-      Statistic = as.vector(stats[["F value"]][!missing_values]),
-      Response = gsub("\\s*Response ", "", i),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
-  }))
+  out <- do.call(
+    rbind,
+    lapply(names(s), function(i) {
+      stats <- s[[i]]
+      missing_values <- is.na(stats[["F value"]])
+      data.frame(
+        Parameter = rownames(stats)[!missing_values],
+        Statistic = as.vector(stats[["F value"]][!missing_values]),
+        Response = gsub("\\s*Response ", "", i),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    })
+  )
 
   attr(out, "statistic") <- find_statistic(x)
   out

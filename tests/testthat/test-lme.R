@@ -5,10 +5,7 @@ data(sleepstudy, package = "lme4")
 data(Orthodont, package = "nlme")
 data(Ovary, package = "nlme")
 
-m1 <- nlme::lme(Reaction ~ Days,
-  random = ~ 1 + Days | Subject,
-  data = sleepstudy
-)
+m1 <- nlme::lme(Reaction ~ Days, random = ~ 1 + Days | Subject, data = sleepstudy)
 
 m2 <- nlme::lme(distance ~ age + Sex, data = Orthodont, random = ~1)
 
@@ -21,10 +18,7 @@ for (i in 1:5) {
     sample.int(30, size = sum(filter_group), replace = TRUE)
 }
 
-m3 <- nlme::lme(Reaction ~ Days,
-  random = ~ 1 | mygrp / mysubgrp,
-  data = sleepstudy
-)
+m3 <- nlme::lme(Reaction ~ Days, random = ~ 1 | mygrp / mysubgrp, data = sleepstudy)
 
 # from easystats/insight/482
 cr <<- nlme::corAR1(form = ~ 1 | Mare)
@@ -87,8 +81,16 @@ test_that("find_random", {
 })
 
 test_that("get_random", {
-  expect_equal(get_random(m1), data.frame(Subject = sleepstudy$Subject), ignore_attr = TRUE)
-  expect_equal(get_random(m2), data.frame(Subject = Orthodont$Subject), ignore_attr = TRUE)
+  expect_equal(
+    get_random(m1),
+    data.frame(Subject = sleepstudy$Subject),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    get_random(m2),
+    data.frame(Subject = Orthodont$Subject),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("link_inverse", {
@@ -237,10 +239,7 @@ test_that("Issue #658", {
   models <- lapply(
     c("", " + Sex"),
     function(x) {
-      nlme::lme(as.formula(paste0("distance  ~ age", x)),
-        random = ~1,
-        data = Orthodont
-      )
+      nlme::lme(as.formula(paste0("distance  ~ age", x)), random = ~1, data = Orthodont)
     }
   )
   dat <- lapply(models, get_data)

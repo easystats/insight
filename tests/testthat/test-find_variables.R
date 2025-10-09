@@ -4,7 +4,11 @@ test_that("`find_variables` works with `mgcv::gam`", {
   dat <- mgcv::gamSim(1, n = 50, dist = "normal", scale = 2, verbose = FALSE)
 
   b1 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2), family = stats::gaussian(), data = dat)
-  b2 <- mgcv::gam(list(y ~ s(x0) + s(x1) + s(x2), ~ s(x3)), family = mgcv::gaulss(), data = dat)
+  b2 <- mgcv::gam(
+    list(y ~ s(x0) + s(x1) + s(x2), ~ s(x3)),
+    family = mgcv::gaulss(),
+    data = dat
+  )
 
   f_b1 <- find_variables(b1)
   f_b2 <- find_variables(b2)

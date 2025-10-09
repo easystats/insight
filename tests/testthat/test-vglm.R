@@ -58,7 +58,10 @@ test_that("link_inverse", {
 
 test_that("get_data", {
   expect_equal(nrow(get_data(m1, verbose = FALSE)), 9)
-  expect_equal(colnames(get_data(m1, verbose = FALSE)), c("counts", "outcome", "treatment"))
+  expect_equal(
+    colnames(get_data(m1, verbose = FALSE)),
+    c("counts", "outcome", "treatment")
+  )
 })
 
 test_that("find_formula", {
@@ -71,10 +74,13 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(find_terms(m1), list(
-    response = "counts",
-    conditional = c("outcome", "treatment")
-  ))
+  expect_equal(
+    find_terms(m1),
+    list(
+      response = "counts",
+      conditional = c("outcome", "treatment")
+    )
+  )
   expect_equal(
     find_terms(m1, flatten = TRUE),
     c("counts", "outcome", "treatment")

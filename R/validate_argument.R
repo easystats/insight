@@ -38,7 +38,11 @@ validate_argument <- function(argument, options) {
       options <- setdiff(options, suggestion$possible_strings)
       msg <- paste(msg, suggestion$msg)
       if (length(options)) {
-        msg <- paste(msg, "Otherwise, use one of the following options:", .to_string(options))
+        msg <- paste(
+          msg,
+          "Otherwise, use one of the following options:",
+          .to_string(options)
+        )
       }
     }
     format_error(msg)
@@ -60,9 +64,12 @@ validate_argument <- function(argument, options) {
   searchterm <- setdiff(searchterm, same)
   valid_strings <- setdiff(valid_strings, same)
   # guess the misspelled string
-  possible_strings <- unlist(lapply(searchterm, function(s) {
-    valid_strings[.fuzzy_grep(valid_strings, s)] # nolint
-  }), use.names = FALSE)
+  possible_strings <- unlist(
+    lapply(searchterm, function(s) {
+      valid_strings[.fuzzy_grep(valid_strings, s)] # nolint
+    }),
+    use.names = FALSE
+  )
   if (length(possible_strings)) {
     msg <- "Did you mean "
     if (length(possible_strings) > 1) {

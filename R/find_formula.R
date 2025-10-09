@@ -98,12 +98,14 @@ find_formula <- function(x, ...) {
 
 #' @rdname find_formula
 #' @export
-formula_ok <- function(x,
-                       checks = "all",
-                       action = "warning",
-                       prefix_msg = NULL,
-                       verbose = TRUE,
-                       ...) {
+formula_ok <- function(
+  x,
+  checks = "all",
+  action = "warning",
+  prefix_msg = NULL,
+  verbose = TRUE,
+  ...
+) {
   # if a model, retrieve formula. else, treat x as formula
   if (is_model(x)) {
     f <- find_formula(x, verbose = FALSE)
@@ -260,7 +262,8 @@ find_formula.gam <- function(x, verbose = TRUE, ...) {
     if (is.list(f)) {
       mi <- .gam_family(x)
       if (!is.null(mi)) {
-        f <- switch(mi$family,
+        f <- switch(
+          mi$family,
           ziplss = list(conditional = f[[1]], zero_inflated = f[[2]]),
           # handle formula for location-scale models
           gaulss = list(conditional = f[[1]], scale = f[[2]]),
@@ -428,7 +431,6 @@ find_formula.deltaMethod <- find_formula.meta_random
 
 # Other models ----------------------------------------------
 
-
 #' @export
 find_formula.censReg <- find_formula.default
 
@@ -503,10 +505,12 @@ find_formula.selection <- function(x, verbose = TRUE, ...) {
     stats::as.formula(model_call$outcome),
     error = function(e) stats::as.formula(eval(model_call$outcome))
   )
-  f <- list(conditional = list(
-    selection = f_selection,
-    outcome = f_outcome
-  ))
+  f <- list(
+    conditional = list(
+      selection = f_selection,
+      outcome = f_outcome
+    )
+  )
   attr(f, "two_stage") <- TRUE
   .find_formula_return(f, verbose = verbose)
 }
@@ -914,7 +918,10 @@ find_formula.pgmm <- find_formula.plm
 #' @export
 find_formula.felm <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- trim_ws(unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE))
+  f_parts <- trim_ws(unlist(
+    strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE),
+    use.names = FALSE
+  ))
 
   f.cond <- f_parts[1]
 
@@ -949,7 +956,10 @@ find_formula.felm <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.mhurdle <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x)[[3]])
-  f_parts <- trim_ws(unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE))
+  f_parts <- trim_ws(unlist(
+    strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE),
+    use.names = FALSE
+  ))
 
   f.zi <- paste0("~", f_parts[1])
 
@@ -985,7 +995,10 @@ find_formula.mhurdle <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.feglm <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
+  f_parts <- unlist(
+    strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE),
+    use.names = FALSE
+  )
 
   f.cond <- trim_ws(f_parts[1])
 
@@ -1013,7 +1026,10 @@ find_formula.feglm <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.fixest <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
+  f_parts <- unlist(
+    strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE),
+    use.names = FALSE
+  )
 
   f.cond <- trim_ws(f_parts[1])
 
@@ -1053,7 +1069,10 @@ find_formula.oohbchoice <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.feis <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
+  f_parts <- unlist(
+    strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE),
+    use.names = FALSE
+  )
 
   f.cond <- trim_ws(f_parts[1])
   id <- parse(text = safe_deparse(x$call))[[1]]$id
@@ -1107,7 +1126,10 @@ find_formula.ivprobit <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.wbm <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
+  f_parts <- unlist(
+    strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE),
+    use.names = FALSE
+  )
 
   f.cond <- trim_ws(f_parts[1])
 
@@ -1199,9 +1221,16 @@ find_formula.zcpglm <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.clmm2 <- function(x, verbose = TRUE, ...) {
   f <- compact_list(list(
-    conditional = stats::as.formula(safe_deparse(attr(x$location, "terms", exact = TRUE))),
+    conditional = stats::as.formula(safe_deparse(attr(
+      x$location,
+      "terms",
+      exact = TRUE
+    ))),
     scale = stats::as.formula(safe_deparse(attr(x$scale, "terms", exact = TRUE))),
-    random = stats::as.formula(paste0("~", parse(text = safe_deparse(x$call))[[1]]$random))
+    random = stats::as.formula(paste0(
+      "~",
+      parse(text = safe_deparse(x$call))[[1]]$random
+    ))
   ))
   .find_formula_return(f, verbose = verbose)
 }
@@ -1231,7 +1260,10 @@ find_formula.clm <- function(x, verbose = TRUE, ...) {
 #' @export
 find_formula.DirichletRegModel <- function(x, verbose = TRUE, ...) {
   f <- safe_deparse(stats::formula(x))
-  f_parts <- unlist(strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE), use.names = FALSE)
+  f_parts <- unlist(
+    strsplit(f, "(?<!\\()\\|(?![\\w\\s\\+\\(~]*[\\)])", perl = TRUE),
+    use.names = FALSE
+  )
 
   f.cond <- trim_ws(f_parts[1])
 
@@ -1314,8 +1346,12 @@ find_formula.glmmTMB <- function(x, verbose = TRUE, ...) {
 
   # extract fixed effects parts
   f.cond <- stats::as.formula(.get_fixed_effects(f.cond))
-  if (!is.null(f.zi)) f.zi <- stats::as.formula(.get_fixed_effects(f.zi))
-  if (!is.null(f.disp)) f.disp <- stats::as.formula(.get_fixed_effects(f.disp))
+  if (!is.null(f.zi)) {
+    f.zi <- stats::as.formula(.get_fixed_effects(f.zi))
+  }
+  if (!is.null(f.disp)) {
+    f.disp <- stats::as.formula(.get_fixed_effects(f.disp))
+  }
 
   f <- compact_list(list(
     conditional = f.cond,
@@ -1370,8 +1406,15 @@ find_formula.nlmerMod <- function(x, verbose = TRUE, ...) {
     f.random <- f.random[[1]]
   }
 
-  f.cond <- .nobars(stats::as.formula(gsub("(.*)(~)(.*)~(.*)", "\\1\\2\\4", safe_deparse(stats::formula(x)))))
-  f.nonlin <- stats::as.formula(paste0("~", trim_ws(gsub("(.*)~(.*)~(.*)", "\\2", safe_deparse(stats::formula(x))))))
+  f.cond <- .nobars(stats::as.formula(gsub(
+    "(.*)(~)(.*)~(.*)",
+    "\\1\\2\\4",
+    safe_deparse(stats::formula(x))
+  )))
+  f.nonlin <- stats::as.formula(paste0(
+    "~",
+    trim_ws(gsub("(.*)~(.*)~(.*)", "\\2", safe_deparse(stats::formula(x))))
+  ))
 
   f <- compact_list(list(
     conditional = f.cond,
@@ -1536,7 +1579,10 @@ find_formula.mixor <- function(x, verbose = TRUE, ...) {
   if (is.null(f_rs)) {
     fmr <- f_id
   } else {
-    f_rs <- trim_ws(unlist(strsplit(safe_deparse(x$call$formula[[3]]), "+", fixed = TRUE), use.names = FALSE))[f_rs]
+    f_rs <- trim_ws(unlist(
+      strsplit(safe_deparse(x$call$formula[[3]]), "+", fixed = TRUE),
+      use.names = FALSE
+    ))[f_rs]
     fmr <- paste(f_rs, "|", f_id)
   }
 
@@ -1845,7 +1891,6 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     }
   )
 
-
   f <- compact_list(list(conditional = c.form, zero_inflated = zi.form))
   .find_formula_return(f, verbose = verbose)
 }
@@ -1897,10 +1942,14 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     f <- list(f)
   }
   len <- length(f)
-  keep <- vapply(f, function(i) {
-    i <- gsub("(~1| | \\|)", "", deparse(i))
-    !any(grepl("(Xr\\.\\d|g\\.\\d)", i) | i %in% c("Xr", "g"))
-  }, TRUE)
+  keep <- vapply(
+    f,
+    function(i) {
+      i <- gsub("(~1| | \\|)", "", deparse(i))
+      !any(grepl("(Xr\\.\\d|g\\.\\d)", i) | i %in% c("Xr", "g"))
+    },
+    TRUE
+  )
   f <- compact_list(f[keep])
   # exceptions, if random effect is named Xr
   if (!length(f) && len > 1L) {
@@ -1923,7 +1972,12 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 }
 
 
-.check_formula_for_T <- function(f, action = "warning", prefix_msg = NULL, verbose = TRUE) {
+.check_formula_for_T <- function(
+  f,
+  action = "warning",
+  prefix_msg = NULL,
+  verbose = TRUE
+) {
   f <- safe_deparse(f[[1]])
 
   if (is_empty_object(f)) {
@@ -1949,7 +2003,12 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 # in various functions throughout the easystats packages. We warn the user
 # here...
 
-.check_formula_for_dollar <- function(f, action = "warning", prefix_msg = NULL, verbose = TRUE) {
+.check_formula_for_dollar <- function(
+  f,
+  action = "warning",
+  prefix_msg = NULL,
+  verbose = TRUE
+) {
   if (is_empty_object(f)) {
     return(TRUE)
   }
@@ -1964,7 +2023,10 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
         prefix_msg,
         paste0(
           "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.", # nolint
-          "\n  Try: ", fc$formula, ", data = ", fc$data
+          "\n  Try: ",
+          fc$formula,
+          ", data = ",
+          fc$data
         )
       )
       format_alert(msg, type = action)
@@ -1979,7 +2041,13 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 # cause problems in various functions throughout the easystats packages. We
 # warn the user here...
 
-.check_formula_index_df <- function(f, x, action = "warning", prefix_msg = NULL, verbose = TRUE) {
+.check_formula_index_df <- function(
+  f,
+  x,
+  action = "warning",
+  prefix_msg = NULL,
+  verbose = TRUE
+) {
   if (is_empty_object(f)) {
     return(TRUE)
   }
@@ -2001,7 +2069,12 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 # formulas with non-syntactic names, where backticks are used, may cause
 # problems. warn user here
 
-.check_formula_backticks <- function(f, action = "warning", prefix_msg = NULL, verbose = TRUE) {
+.check_formula_backticks <- function(
+  f,
+  action = "warning",
+  prefix_msg = NULL,
+  verbose = TRUE
+) {
   if (is_empty_object(f)) {
     return(TRUE)
   }
@@ -2036,14 +2109,22 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
 
   pattern <- "[\\s*+:()|^,\\-\\/]" # was: "[\\s\\*\\+:\\-\\|/\\(\\)\\^,]"
 
-  parts <- trim_ws(unlist(strsplit(split = pattern, x = LHS, perl = TRUE), use.names = FALSE))
+  parts <- trim_ws(unlist(
+    strsplit(split = pattern, x = LHS, perl = TRUE),
+    use.names = FALSE
+  ))
   d_LHS <- unique(gsub("(.*)\\$(.*)", "\\1", grep("(.*)\\$(.*)", parts, value = TRUE)))
 
-  parts <- trim_ws(unlist(strsplit(split = pattern, x = RHS, perl = TRUE), use.names = FALSE))
+  parts <- trim_ws(unlist(
+    strsplit(split = pattern, x = RHS, perl = TRUE),
+    use.names = FALSE
+  ))
   d_RHS <- unique(gsub("(.*)\\$(.*)", "\\1", grep("(.*)\\$(.*)", parts, value = TRUE)))
 
   if (n_unique(c(d_LHS, d_RHS)) > 1L) {
-    format_error("Multiple data objects present in formula. Specify your model using the `data` argument instead.")
+    format_error(
+      "Multiple data objects present in formula. Specify your model using the `data` argument instead."
+    )
   } else {
     d <- unique(d_RHS)
   }

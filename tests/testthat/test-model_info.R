@@ -91,11 +91,7 @@ test_that("model_info, glm bernoulli", {
   dat <- data.frame(tot, suc)
   dat$prop <- suc / tot
 
-  mod <- glm(prop ~ 1,
-    family = binomial,
-    data = dat,
-    weights = tot
-  )
+  mod <- glm(prop ~ 1, family = binomial, data = dat, weights = tot)
 
   expect_true(model_info(mod)$is_binomial)
   expect_false(model_info(mod)$is_bernoulli)
