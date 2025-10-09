@@ -1957,7 +1957,11 @@ get_data.survey.design2 <- get_data.survey.design
 
 #' @export
 get_data.svyglm <- function(x, ...) {
-  get_data(x$survey.design, ...)
+  if (is.null(x$survey.design)) {
+    get_data.default(x, ...)
+  } else {
+    get_data(x$survey.design, ...)
+  }
 }
 
 
