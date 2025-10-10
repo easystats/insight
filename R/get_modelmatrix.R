@@ -172,6 +172,9 @@ get_modelmatrix.svyolr <- get_modelmatrix.svyglm
 #' @export
 get_modelmatrix.svycoxph <- get_modelmatrix.svyglm
 
+#' @export
+get_modelmatrix.svysurvreg <- get_modelmatrix.svyglm
+
 
 #' @export
 get_modelmatrix.brmsfit <- function(x, ...) {

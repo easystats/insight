@@ -148,6 +148,9 @@ get_weights.svyolr <- get_weights.survey.design
 #' @export
 get_weights.svycoxph <- get_weights.survey.design
 
+#' @export
+get_weights.svysurvreg <- get_weights.survey.design
+
 
 #' @export
 get_weights.list <- function(x, remove_na = FALSE, null_as_ones = FALSE, ...) {
