@@ -1978,6 +1978,9 @@ get_data.svyglm <- function(x, source = "mf", ...) {
 #' @export
 get_data.svyolr <- get_data.svyglm
 
+#' @export
+get_data.svycoxph <- get_data.svyglm
+
 
 # mfx models ------------------------------------------------------
 

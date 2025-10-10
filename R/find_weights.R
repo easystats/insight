@@ -102,6 +102,9 @@ find_weights.svyglm <- function(x, ...) {
 #' @export
 find_weights.svyolr <- find_weights.svyglm
 
+#' @export
+find_weights.svycoxph <- find_weights.svyglm
+
 
 # mixed models -------------------------------------
 

@@ -313,6 +313,9 @@ find_predictors.svyglm <- function(
 #' @export
 find_predictors.svyolr <- find_predictors.svyglm
 
+#' @export
+find_predictors.svycoxph <- find_predictors.svyglm
+
 
 #' @export
 find_predictors.selection <- function(x, flatten = FALSE, verbose = TRUE, ...) {
