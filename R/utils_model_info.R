@@ -52,33 +52,14 @@
   is_bernoulli <- FALSE
 
   # These models can be logistic regresion models with bernoulli outcome
+  # fmt: skip
   potential_bernoulli <- inherits(
     x,
     c(
-      "glm",
-      "gee",
-      "glmmTMB",
-      "glmerMod",
-      "merMod",
-      "stanreg",
-      "MixMod",
-      "logistf",
-      "bigglm",
-      "brglm",
-      "feglm",
-      "geeglm",
-      "glmm",
-      "glmmadmb",
-      "glmmPQL",
-      "glmrob",
-      "glmRob",
-      "logitmfx",
-      "logitor",
-      "logitr",
-      "mixed",
-      "mixor",
-      "svyglm",
-      "glmgee"
+      "glm", "gee", "glmmTMB", "glmerMod", "merMod", "stanreg", "MixMod",
+      "logistf", "bigglm", "brglm", "feglm", "geeglm", "glmm", "glmmadmb",
+      "glmmPQL", "glmrob", "glmRob", "logitmfx", "logitor", "logitr", "mixed",
+      "mixor", "svyglm", "glmgee"
     )
   )
 
@@ -163,21 +144,12 @@
 
   # ordinal family --------
 
+  # fmt: skip
   is.ordinal <-
     inherits(
       x,
-      c(
-        "svyolr",
-        "polr",
-        "serp",
-        "clm",
-        "clm2",
-        "clmm",
-        "mixor",
-        "LORgee",
-        "mvord",
-        "ordinal_weightit"
-      )
+      c("svyolr", "polr", "serp", "clm", "clm2", "clmm", "mixor", "LORgee",
+        "mvord", "ordinal_weightit")
     ) |
     fitfam %in% c("cumulative", "ordinal")
 
@@ -231,19 +203,12 @@
 
   # survival model --------
 
+  # fmt: skip
   is.survival <- inherits(
     x,
     c(
-      "aareg",
-      "survreg",
-      "survfit",
-      "survPresmooth",
-      "flexsurvreg",
-      "coxph",
-      "coxme",
-      "coxr",
-      "riskRegression",
-      "comprisk"
+      "aareg", "survreg", "survfit", "survPresmooth", "flexsurvreg", "coxph",
+      "coxme", "coxr", "riskRegression", "comprisk", "svycoxph"
     )
   )
 
