@@ -116,7 +116,7 @@ test_that("find_parameters", {
     find_parameters(m1),
     list(conditional = c("log(bili)", "protime", "albumin"))
   )
-  expect_equal(nrow(get_parameters(m1)), 4)
+  expect_identical(nrow(get_parameters(m1)), 3L)
   expect_equal(
     get_parameters(m1)$Parameter,
     c("log(bili)", "protime", "albumin")
