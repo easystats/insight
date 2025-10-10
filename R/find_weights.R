@@ -88,7 +88,11 @@ find_weights.model_fit <- function(x, ...) {
 
 #' @export
 find_weights.survey.design <- function(x, ...) {
-  .safe(all.vars(get_call(x)$weights))
+  out <- .safe(all.vars(get_call(x)$weights))
+  if (!length(out)) {
+    out <- NULL
+  }
+  out
 }
 
 #' @export
