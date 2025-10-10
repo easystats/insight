@@ -17,6 +17,8 @@
   output. When `big_mark` is provided, scientific notation is suppressed for
   large numbers to show the full value with separators.
 
+* Improved support for models from package *survey*.
+
 ## Bug fixes
 
 * Fix CRAN check failures.

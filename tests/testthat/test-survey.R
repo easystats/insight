@@ -80,8 +80,8 @@ test_that("link_inverse", {
 
 test_that("get_data", {
   expect_equal(nrow(get_data(m1, verbose = FALSE)), 200)
-  expect_equal(
-    colnames(get_data(m1, verbose = FALSE)),
+  expect_named(
+    get_data(m1, verbose = FALSE),
     c("stype", "api00", "meals", "ell", "mobility", "pw", "fpc")
   )
 })

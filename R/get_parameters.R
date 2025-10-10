@@ -732,6 +732,8 @@ get_parameters.polr <- function(x, ...) {
   text_remove_backticks(params)
 }
 
+#' @export
+get_parameters.svyolr <- get_parameters.polr
 
 #' @export
 get_parameters.bracl <- function(x, ...) {

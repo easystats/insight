@@ -167,6 +167,16 @@ get_modelmatrix.svyglm <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.svyolr <- get_modelmatrix.svyglm
+
+#' @export
+get_modelmatrix.svycoxph <- get_modelmatrix.svyglm
+
+#' @export
+get_modelmatrix.svysurvreg <- get_modelmatrix.svyglm
+
+
+#' @export
 get_modelmatrix.brmsfit <- function(x, ...) {
   formula_rhs <- safe_deparse(find_formula(x, verbose = FALSE)$conditional[[3]])
   # exception: for null-models, we need different handling, else `reformulate()`

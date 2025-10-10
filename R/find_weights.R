@@ -84,9 +84,15 @@ find_weights.model_fit <- function(x, ...) {
 }
 
 
+# survey package methods -------------------------------------
+
 #' @export
 find_weights.survey.design <- function(x, ...) {
-  .safe(all.vars(get_call(x)$weights))
+  out <- .safe(all.vars(get_call(x)$weights))
+  if (!length(out)) {
+    out <- NULL
+  }
+  out
 }
 
 #' @export
@@ -97,6 +103,17 @@ find_weights.svyglm <- function(x, ...) {
   find_weights(x$survey.design, ...)
 }
 
+#' @export
+find_weights.svyolr <- find_weights.svyglm
+
+#' @export
+find_weights.svycoxph <- find_weights.svyglm
+
+#' @export
+find_weights.svysurvreg <- find_weights.svyglm
+
+
+# mixed models -------------------------------------
 
 #' @export
 find_weights.merMod <- function(x, ...) {

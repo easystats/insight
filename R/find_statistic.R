@@ -92,6 +92,7 @@ find_statistic.default <- function(x, ...) {
 
   # t-value objects ----------------------------------------------------------
 
+  # fmt: skip
   t.mods <- c(
     "asym",
     "bayesx", "BBreg", "BBmm", "bcplm", "biglm", "bfsl", "blmerMod",
@@ -120,6 +121,7 @@ find_statistic.default <- function(x, ...) {
 
   # z-value objects ----------------------------------------------------------
 
+  # fmt: skip
   z.mods <- c(
     "aareg", "Arima", "averaging",
     "betamfx", "betaor", "betareg", "bife", "bifeAPEs", "bglmerMod",
@@ -143,7 +145,7 @@ find_statistic.default <- function(x, ...) {
     "qr", "QRNLMM", "QRLMM",
     "Rchoice", "riskRegression", "robmixglm", "rma", "rma.mv", "rma.uni", "rrvglm",
     "Sarlm", "sem", "SemiParBIV", "serp", "slm", "slopes", "survreg", "svy_vglm",
-    "sdmTMB",
+    "sdmTMB", "svycoxph", "svysurvreg",
     "test_mediation", "tobit",
     "vglm",
     "wbgee",

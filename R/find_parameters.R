@@ -109,6 +109,8 @@ find_parameters.polr <- function(x, flatten = FALSE, ...) {
   }
 }
 
+#' @export
+find_parameters.svyolr <- find_parameters.polr
 
 #' @export
 find_parameters.clm2 <- function(x, flatten = FALSE, ...) {

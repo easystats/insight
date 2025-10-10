@@ -52,6 +52,7 @@ is_regression_model <- function(x) {
 
 # fmt: skip
 .get_model_classes <- function(regression_only = FALSE) {
+  # fmt: skip
   out <- c(
     "_ranger",
 
@@ -150,8 +151,8 @@ is_regression_model <- function(x) {
     "Sarlm", "scam", "selection", "sem", "SemiParBIV", "serp", "slm", "speedlm",
     "speedglm", "splmm", "spml", "stanmvreg", "stanreg", "summary.lm",
     "survfit", "survreg", "survPresmooth", "svychisq", "svyglm", "svy_vglm",
-    "svyolr", "svytable", "systemfit", "svy2lme", "seqanova.svyglm", "sdmTMB",
-    "stanfit", "semLME",
+    "svyolr", "svytable", "systemfit", "svy2lme", "svycoxph", "seqanova.svyglm",
+    "sdmTMB", "stanfit", "semLME", "svysurvreg",
 
     # t --------------------
     "t1way", "t2way", "t3way", "test_mediation", "tobit", "trendPMCMR",
@@ -171,6 +172,7 @@ is_regression_model <- function(x) {
   )
 
   if (isTRUE(regression_only)) {
+    # fmt: skip
     out <- setdiff(out, c(
       "emmGrid", "emm_list", "htest", "pairwise.htest", "summary.lm",
       "marginaleffects", "marginaleffects.summary", "ggcomparisons",

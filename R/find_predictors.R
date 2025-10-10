@@ -194,6 +194,8 @@ find_predictors.default <- function(
 }
 
 
+# lcmm package -------------------------------------
+
 #' @export
 find_predictors.lcmm <- function(
   x,
@@ -234,6 +236,9 @@ find_predictors.externX <- find_predictors.lcmm
 
 #' @export
 find_predictors.externVar <- find_predictors.lcmm
+
+
+# survey package methods -------------------------------------
 
 #' @export
 find_predictors.survey.design <- function(
@@ -304,6 +309,15 @@ find_predictors.svyglm <- function(
     compact_list(l)
   }
 }
+
+#' @export
+find_predictors.svyolr <- find_predictors.svyglm
+
+#' @export
+find_predictors.svycoxph <- find_predictors.svyglm
+
+#' @export
+find_predictors.svysurvreg <- find_predictors.svyglm
 
 
 #' @export
