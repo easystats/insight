@@ -138,6 +138,17 @@ test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
 })
 
+test_that("get_statistic", {
+  out <- get_statistic(m1)
+  cs <- coef(summary(m1))
+  expect_equal(
+    out$Statistic,
+    cs[, 3][match(c(names(m1$zeta), names(m1$coefficients)), rownames(cs))],
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})
+
 test_that("get_predicted", {
   p1 <- get_predicted(m1, predict = "expectation")
   p2 <- get_predicted(m1, predict = "classification")

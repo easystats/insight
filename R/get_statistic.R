@@ -883,6 +883,28 @@ get_statistic.aareg <- function(x, ...) {
 # Ordinal models --------------------------------------------------
 
 #' @export
+get_statistic.polr <- function(x, verbose = TRUE, ...) {
+  cs <- suppressWarnings(stats::coef(summary(x)))
+  params <- c(sprintf("Intercept: %s", names(x$zeta)), names(x$coefficients))
+  param_order <- match(c(names(x$zeta), names(x$coefficients)), rownames(cs))
+
+  out <- data.frame(
+    Parameter = params,
+    Statistic = as.vector(cs[, 3])[param_order],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+#' @export
+get_statistic.svyolr <- get_statistic.polr
+
+
+#' @export
 get_statistic.clm2 <- function(x, component = "all", ...) {
   component <- match.arg(component, choices = c("all", "conditional", "scale"))
 
