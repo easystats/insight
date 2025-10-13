@@ -26,21 +26,19 @@ find_weights.default <- function(x, ...) {
   tryCatch(
     {
       model_call <- get_call(x)
-      if (!is.null(model_call)) {
+      if (is.null(model_call)) {
+        w <- NULL
+      } else {
         w <- safe_deparse(model_call$weights)
-
         # edge case, users use "eval(parse())" to parse weight variables
-        if (grepl("eval(parse(", w, fixed = TRUE)) {
+        if (!is.null(w) && grepl("eval(parse(", w, fixed = TRUE)) {
           w <- eval(parse(
             text = trim_ws(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))
           ))
         }
-
         if (is_empty_object(w) || w == "NULL") {
           w <- NULL
         }
-      } else {
-        w <- NULL
       }
       w
     },
