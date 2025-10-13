@@ -25,9 +25,9 @@ find_weights <- function(x, ...) {
 find_weights.default <- function(x, ...) {
   tryCatch(
     {
-      call_string <- safe_deparse(get_call(x))
-      if (!is.null(call_string)) {
-        w <- safe_deparse(parse(text = call_string)[[1]]$weights)
+      model_call <- get_call(x)
+      if (!is.null(model_call)) {
+        w <- safe_deparse(model_call$weights)
 
         # edge case, users use "eval(parse())" to parse weight variables
         if (grepl("eval(parse(", w, fixed = TRUE)) {
@@ -36,7 +36,9 @@ find_weights.default <- function(x, ...) {
           ))
         }
 
-        if (is_empty_object(w) || w == "NULL") w <- NULL
+        if (is_empty_object(w) || w == "NULL") {
+          w <- NULL
+        }
       } else {
         w <- NULL
       }
@@ -114,29 +116,6 @@ find_weights.svysurvreg <- find_weights.svyglm
 
 
 # mixed models -------------------------------------
-
-#' @export
-find_weights.merMod <- function(x, ...) {
-  tryCatch(
-    {
-      w <- safe_deparse(parse(text = safe_deparse(x@call))[[1]]$weights)
-
-      # edge case, users use "eval(parse())" to parse weight variables
-      if (grepl("eval(parse(", w, fixed = TRUE)) {
-        w <- eval(parse(text = trim_ws(gsub("eval\\(parse\\((.*)=(.*)\\)\\)", "\\2", w))))
-      }
-
-      if (is_empty_object(w) || w == "NULL") {
-        w <- NULL
-      }
-      w
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-}
-
 
 #' @export
 find_weights.lme <- function(x, ...) {
