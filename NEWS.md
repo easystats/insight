@@ -19,6 +19,9 @@
 
 * Improved support for models from package *survey*.
 
+* `get_df()` now supports Kenward-Roger and Satterthwaite degrees of freedom
+  for models from package *glmmTMB*. This requires package version 1.1.3.
+
 ## Bug fixes
 
 * Fix CRAN check failures.
