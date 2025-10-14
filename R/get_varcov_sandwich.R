@@ -102,7 +102,6 @@
     if (inherits(x, "glmmTMB")) {
       # for glmmTMB, we have the KR-adjusted vcov as attributed saved
       # in the degrees of freedom
-      check_if_installed("glmmTMB", minimum_version = "1.1.3")
       dof <- .degrees_of_freedom_kr(x, verbose = verbose)
       return(attributes(dof)$vcov)
     } else {
