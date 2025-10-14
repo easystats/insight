@@ -99,7 +99,7 @@ find_weights.survey.design <- function(x, ...) {
 
   # if we want to recover data from environment, we use the standard string
   # for weights, so it is compatible to `get_data()`
-  if (source == "environment" && !is.null(out) && length(out)) {
+  if (source == "environment" && length(out)) {
     return("(weights)")
   }
 
