@@ -1965,6 +1965,11 @@ get_data.survey.design2 <- get_data.survey.design
 
 #' @export
 get_data.svyglm <- function(x, source = "mf", ...) {
+  source <- .check_data_source_arg(source)
+  # if we want to recover data from environment, use default extractor
+  if (source == "environment") {
+    return(get_data.default(x, source = source, verbose = FALSE, ...))
+  }
   # if we have no survey design, fall back to default extractor
   if (is.null(x$survey.design)) {
     get_data.default(x, ...)

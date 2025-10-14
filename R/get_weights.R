@@ -128,7 +128,7 @@ get_weights.btergm <- function(x, null_as_ones = FALSE, ...) {
 
 #' @export
 get_weights.survey.design <- function(x, null_as_ones = FALSE, ...) {
-  w <- .safe(get_data(x)[[find_weights(x)]])
+  w <- .safe(get_data(x, ...)[[find_weights(x, ...)]])
   if (is.null(w) && null_as_ones) {
     w <- rep.int(1, n_obs(x))
   }
