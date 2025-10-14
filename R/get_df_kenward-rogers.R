@@ -34,7 +34,7 @@
   dof <- as.vector(out)
 
   attr(dof, "vcov") <- krvcov
-  attr(dof, "se") <- abs(as.vector(sqrt(diag(as.matrix(krvcov)))))
+  attr(dof, "se") <- abs(as.vector(sqrt(diag(krvcov))))
   stats::setNames(dof, names(out))
 }
 
