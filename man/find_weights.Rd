@@ -9,7 +9,9 @@ find_weights(x, ...)
 \arguments{
 \item{x}{A fitted model.}
 
-\item{...}{Currently not used.}
+\item{...}{Used for objects from package \strong{survey}, to pass the \code{source}
+argument to \code{\link[=get_data]{get_data()}}. See related documentation of that argument
+for further details.}
 }
 \value{
 The name of the weighting variable as character vector, or \code{NULL}

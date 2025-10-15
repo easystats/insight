@@ -8,7 +8,9 @@
 #' @param null_as_ones Logical, if `TRUE`, will return a vector of `1`
 #'   if no weights were specified in the model (as if the weights were all set
 #'   to 1).
-#' @param ... Currently not used.
+#' @param ... Used for objects from package **survey**, to pass the `source`
+#'   argument to [`get_data()`]. See related documentation of that argument
+#'   for further details.
 #'
 #' @return The weighting variable, or `NULL` if no weights were specified.
 #' If the weighting variable should also be returned (instead of `NULL`)

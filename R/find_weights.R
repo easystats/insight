@@ -5,7 +5,9 @@
 #'   model.
 #'
 #' @param x A fitted model.
-#' @param ... Currently not used.
+#' @param ... Used for objects from package **survey**, to pass the `source`
+#'   argument to [`get_data()`]. See related documentation of that argument
+#'   for further details.
 #'
 #' @return The name of the weighting variable as character vector, or `NULL`
 #'   if no weights were specified.

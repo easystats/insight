@@ -54,7 +54,13 @@ original data may fail. If \code{source = "environment"} fails to recover the
 data, it tries to extract the data from the model frame; if
 \code{source = "frame"} and data cannot be extracted from the model frame, data
 will be recovered from the environment. Both ways only returns observations
-that have no missing data in the variables used for model fitting.}
+that have no missing data in the variables used for model fitting.
+
+For objects from package \strong{survey}, \code{"mf"} extracts data from the model
+frame of the survey design object, which is usually equivalent to the
+original data. \code{source = "environment"} extracts data from the model-object
+in the environment, which usually includes processed variables (like the
+\code{"(weights)"} variable for weights).}
 
 \item{verbose}{Toggle messages and warnings.}
 

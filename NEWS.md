@@ -17,7 +17,13 @@
   output. When `big_mark` is provided, scientific notation is suppressed for
   large numbers to show the full value with separators.
 
-* Improved support for models from package *survey*.
+* Improved support for models from package *survey*. This includes a dedicated
+  `source` argument for methods such as `get_data()`, `get_weights()`,
+  `find_weights()`, or `get_response()`, to specify whether the data should be
+  extracted from the model frame of the survey design object (`"mf"`), which is
+  usually equivalent to the original data, or from the data that can be extracted
+  from the model-object in the environment (`"environment"`) , which usually
+  includes processed variables (like the `"(weights)"` variable for weights).
 
 * `get_df()` now supports Kenward-Roger and Satterthwaite degrees of freedom
   for models from package *glmmTMB*. This requires package version 1.1.3.

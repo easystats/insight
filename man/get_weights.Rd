@@ -12,7 +12,9 @@ get_weights(x, ...)
 \arguments{
 \item{x}{A fitted model.}
 
-\item{...}{Currently not used.}
+\item{...}{Used for objects from package \strong{survey}, to pass the \code{source}
+argument to \code{\link[=get_data]{get_data()}}. See related documentation of that argument
+for further details.}
 
 \item{remove_na}{Logical, if \code{TRUE}, removes possible missing values.}
 
