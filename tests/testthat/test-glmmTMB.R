@@ -1160,3 +1160,58 @@ test_that("get_mixed_info, glmmTMB, with cond and zi", {
   out <- get_mixed_info(m1, component = "zi")
   expect_equal(out$vc$persons[, 1], 1.378258, tolerance = 1e-4)
 })
+
+
+test_that("get_df and get_varcov KR", {
+  skip_if_not_installed("lme4")
+  data(sleepstudy, package = "lme4")
+  m <- glmmTMB::glmmTMB(
+    Reaction ~ Days + (1 | Subject),
+    data = sleepstudy,
+    family = gaussian()
+  )
+  expect_warning(
+    {
+      out <- get_df(m, type = "kenward-roger")
+    },
+    regex = "typically not appropriate"
+  )
+  expect_equal(
+    out,
+    c(23.1335675155781, 160.999999999712),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  out <- get_varcov(m, vcov = "kenward-roger")
+  expect_identical(dim(out), c(2L, 2L))
+  expect_equal(out[1, 1], 90.367529, tolerance = 1e-4, ignore_attr = TRUE)
+
+  out <- get_varcov(m, vcov = "HC0")
+  expect_identical(dim(out), c(2L, 2L))
+  expect_equal(out[1, 1], 43.987100, tolerance = 1e-4, ignore_attr = TRUE)
+
+  m <- glmmTMB::glmmTMB(
+    Reaction ~ Days + (1 | Subject),
+    data = sleepstudy,
+    REML = TRUE,
+    family = gaussian()
+  )
+  expect_silent(
+    {
+      out <- get_df(m, type = "kenward-roger")
+    }
+  )
+  expect_equal(
+    out,
+    c(22.8102052426685, 160.999999999998),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  out <- get_varcov(m, vcov = "kenward-roger")
+  expect_identical(dim(out), c(2L, 2L))
+  expect_equal(out[1, 1], 94.998394, tolerance = 1e-4, ignore_attr = TRUE)
+
+  expect_error(get_varcov(m, vcov = "HC0"))
+})

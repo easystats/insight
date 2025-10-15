@@ -19,6 +19,25 @@
   dof
 }
 
+#' @keywords internal
+.degrees_of_freedom_kr.glmmTMB <- function(x, verbose = TRUE, ...) {
+  check_if_installed("glmmTMB", minimum_version = "1.1.3")
+
+  if (!isTRUE(x$modelInfo$REML) && verbose) {
+    format_warning(
+      "Kenward-Roger degrees of freedom are typically not appropriate for models fit with ML. Use `REML = TRUE`."
+    )
+  }
+
+  out <- glmmTMB::dof_KR(x)
+  krvcov <- as.matrix(attributes(out)$vcov)
+  dof <- as.vector(out)
+
+  attr(dof, "vcov") <- krvcov
+  attr(dof, "se") <- abs(as.vector(sqrt(diag(krvcov))))
+  stats::setNames(dof, names(out))
+}
+
 
 # The following code was taken from the "pbkrtest" package and slightly modified
 #' @author Søren Højsgaard, \email{sorenh@@math.aau.dk}
