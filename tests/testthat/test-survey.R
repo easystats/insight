@@ -163,11 +163,11 @@ test_that("get_data for svyglm and survey.design", {
   des <- survey::svydesign(~1, weights = ~w, data = dat)
   svy_fit <- survey::svyglm(y ~ poly(x, 2), design = des)
 
-  out <- get_data(svy_fit)
+  out <- get_data(svy_fit, source = "mf")
   expect_equal(out$x, dat$x)
   expect_named(out, c("w", "x", "y"))
 
-  out <- get_data(des)
+  out <- get_data(des, source = "mf")
   expect_named(out, c("w", "x", "y", "z"))
   expect_equal(out$x, dat$x)
 })

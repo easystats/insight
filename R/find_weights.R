@@ -90,7 +90,7 @@ find_weights.model_fit <- function(x, ...) {
 find_weights.survey.design <- function(x, ...) {
   dots <- list(...)
   if (is.null(dots$source)) {
-    source <- "mf"
+    source <- "environment"
   } else {
     source <- dots$source
   }

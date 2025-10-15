@@ -1964,7 +1964,7 @@ get_data.survey.design <- function(x, source = "mf", variables = NULL, ...) {
 get_data.survey.design2 <- get_data.survey.design
 
 #' @export
-get_data.svyglm <- function(x, source = "mf", ...) {
+get_data.svyglm <- function(x, source = "environment", verbose = TRUE, ...) {
   source <- .check_data_source_arg(source)
   # if we want to recover data from environment, use default extractor
   if (source == "environment") {
@@ -1975,8 +1975,8 @@ get_data.svyglm <- function(x, source = "mf", ...) {
     get_data.default(x, ...)
   } else {
     # add variables from the model
-    vars <- unique(c(find_variables(x, flatten = TRUE), find_weights(x)))
-    get_data(x$survey.design, variables = vars, ...)
+    vars <- unique(c(find_variables(x, flatten = TRUE), find_weights(x, source = source)))
+    get_data(x$survey.design, variables = vars, verbose = verbose, ...)
   }
 }
 
