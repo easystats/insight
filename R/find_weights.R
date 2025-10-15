@@ -88,7 +88,21 @@ find_weights.model_fit <- function(x, ...) {
 
 #' @export
 find_weights.survey.design <- function(x, ...) {
+  dots <- list(...)
+  if (is.null(dots$source)) {
+    source <- "environment"
+  } else {
+    source <- dots$source
+  }
+  source <- .check_data_source_arg(source)
   out <- .safe(all.vars(get_call(x)$weights))
+
+  # if we want to recover data from environment, we use the standard string
+  # for weights, so it is compatible to `get_data()`
+  if (source == "environment" && length(out)) {
+    return("(weights)")
+  }
+
   if (!length(out)) {
     out <- NULL
   }

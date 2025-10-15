@@ -63,7 +63,19 @@ test_that("find_response", {
 })
 
 test_that("get_response", {
-  expect_equal(get_response(m1), subset(pbc, randomized)[c("time", "status")])
+  expect_equal(
+    get_response(m1, source = "mf"),
+    subset(pbc, randomized)[c("time", "status")],
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    head(get_response(m1)),
+    data.frame(
+      time = c(400, 4500, 1012, 1925, 1504, 2503),
+      status = c(1, 0, 1, 1, 1, 1)
+    ),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("link_inverse", {
@@ -73,8 +85,20 @@ test_that("link_inverse", {
 test_that("get_data", {
   expect_equal(nrow(get_data(m1, verbose = FALSE)), 312)
   expect_named(
-    get_data(m1, verbose = FALSE),
+    get_data(m1, source = "mf", verbose = FALSE),
     c("time", "status", "edema", "bili", "albumin", "protime", "randprob")
+  )
+  expect_named(
+    get_data(m1, verbose = FALSE),
+    c(
+      "time",
+      "status",
+      "Surv(time, status > 0)",
+      "bili",
+      "protime",
+      "albumin",
+      "(weights)"
+    )
   )
 })
 

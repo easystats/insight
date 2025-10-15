@@ -2,7 +2,7 @@
 # to ensure we have a "clean" data frame from the data that was used to fit
 # the model. This also means that, unless necessary for further processing,
 # variables transformed during model fitting are not included in this data frame
-.prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE) {
+.prepare_get_data <- function(x, mf, effects = "fixed", verbose = TRUE, ...) {
   # check if we have any data yet
   if (is_empty_object(mf)) {
     if (isTRUE(verbose)) {
@@ -13,6 +13,7 @@
 
   # we may store model weights here later
   mw <- NULL
+  dots <- list(...)
 
   # make sure it's a data frame -----------------------------------------------
 
@@ -378,7 +379,11 @@
   # add weighting variable ----------------------------------------------------
 
   weighting_var <- find_weights(x)
-  if (!is.null(weighting_var) && !all(weighting_var %in% colnames(mf))) {
+  if (
+    !is.null(weighting_var) &&
+      !all(weighting_var %in% colnames(mf)) &&
+      !isTRUE(dots$ignore_weights)
+  ) {
     mf <- tryCatch(
       {
         tmp <- suppressWarnings(cbind(mf, get_weights(x)))
