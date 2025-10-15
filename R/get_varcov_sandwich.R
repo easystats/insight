@@ -99,8 +99,16 @@
       vcov_fun[1]
     ))
   } else if (isTRUE(vcov_fun_clean == "vcovAdj")) {
-    check_if_installed("pbkrtest")
-    fun <- try(get(vcov_fun_clean, asNamespace("pbkrtest")), silent = TRUE)
+    if (inherits(x, "glmmTMB")) {
+      # for glmmTMB, we have the KR-adjusted vcov as attributed saved
+      # in the degrees of freedom
+      dof <- .degrees_of_freedom_kr(x, verbose = verbose)
+      return(attributes(dof)$vcov)
+    } else {
+      # for other packages, we need pbkrtest
+      check_if_installed("pbkrtest")
+      fun <- try(get(vcov_fun_clean, asNamespace("pbkrtest")), silent = TRUE)
+    }
   } else if (isTRUE(vcov_fun_clean == "vcovCR")) {
     check_if_installed("clubSandwich", reason = "to get cluster-robust standard errors")
     fun <- try(get(vcov_fun_clean, asNamespace("clubSandwich")), silent = TRUE)
