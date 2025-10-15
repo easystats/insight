@@ -122,7 +122,12 @@ original data may fail. If <code>source = "environment"</code> fails to recover 
 data, it tries to extract the data from the model frame; if
 <code>source = "frame"</code> and data cannot be extracted from the model frame, data
 will be recovered from the environment. Both ways only returns observations
-that have no missing data in the variables used for model fitting.</p></dd>
+that have no missing data in the variables used for model fitting.</p>
+<p>For objects from package <strong>survey</strong>, <code>"mf"</code> extracts data from the model
+frame of the survey design object, which is usually equivalent to the
+original data. <code>source = "environment"</code> extracts data from the model-object
+in the environment, which usually includes processed variables (like the
+<code>"(weights)"</code> variable for weights).</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
