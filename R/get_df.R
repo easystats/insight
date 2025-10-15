@@ -403,10 +403,11 @@ get_df.lmerMod <- function(x, type = "residual", verbose = TRUE, ...) {
   # fmt: skip
   type <- validate_argument(
     tolower(type),
+    # uniroot, profile and noot relevant for glmmTMB
     c(
       "residual", "model", "analytical", "satterthwaite", "kenward",
       "kenward-roger", "kr", "normal", "wald", "ml1", "m-l-1", "betwithin",
-      "between-within", "any"
+      "between-within", "any", "uniroot", "profile", "boot"
     )
   )
 
