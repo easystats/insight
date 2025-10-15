@@ -163,7 +163,7 @@ test_that("get_data for svyglm and survey.design", {
   x <- runif(n)
   y <- runif(n)
   z <- runif(n)
-  w <- rep(1, n)
+  w <- rnorm(n, 1, 0.05)
 
   dat <- data.frame(w, x, y, z)
 
@@ -186,12 +186,12 @@ test_that("get_data for svyglm and survey.design", {
 
   expect_equal(
     get_weights(svy_fit, source = "environment"),
-    c(1, 1, 1, 1, 1),
+    c(1.0204, 0.87617, 1.04004, 0.98315, 1.08023),
     tolerance = 1e-3
   )
   expect_equal(
     get_weights(svy_fit, source = "mf"),
-    c(1, 1, 1, 1, 1),
+    c(1.06403, 0.91364, 1.08451, 1.02519, 1.12642),
     tolerance = 1e-3
   )
 })
