@@ -57,7 +57,8 @@ get_data <- function(x, ...) {
   source = "environment",
   additional_variables = NULL,
   verbose = FALSE,
-  data_name = NULL
+  data_name = NULL,
+  ...
 ) {
   # process arguments, check whether data should be recovered from
   # environment or model frame
@@ -331,7 +332,7 @@ get_data.default <- function(x, source = "environment", verbose = TRUE, ...) {
         }
       )
     }
-    model_data <- .prepare_get_data(x, mf, verbose = verbose)
+    model_data <- .prepare_get_data(x, mf, verbose = verbose, ...)
   }
   model_data
 }
