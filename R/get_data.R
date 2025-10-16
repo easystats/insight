@@ -290,7 +290,7 @@ get_data <- function(x, ...) {
     } else if (verbose) {
       format_warning(
         "Looks like the original data was subset, however `get_data()` could not retrieve the subset of the data. The full data set is returned."
-      ) # nolint
+      )
     }
   }
 

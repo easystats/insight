@@ -100,11 +100,13 @@ get_weights.default <- function(x, remove_na = FALSE, null_as_ones = FALSE, ...)
 get_weights.brmsfit <- function(x, remove_na = FALSE, null_as_ones = FALSE, ...) {
   w <- unique(find_weights(x))
 
+  # we need "ignore_weights" so we can avoid calling get_weights again
+  # when we call "get_data" - which internally may call "get_weights()"
   if (!is.null(w)) {
     if (length(w) > 1L) {
-      return(get_data(x, verbose = FALSE)[w])
+      return(get_data(x, ignore_weights = TRUE, verbose = FALSE)[w])
     }
-    w <- get_data(x, verbose = FALSE)[[w]]
+    w <- get_data(x, ignore_weights = TRUE, verbose = FALSE)[[w]]
   }
 
   if (!is.null(w) && all(w == 1L)) {
@@ -131,7 +133,7 @@ get_weights.btergm <- function(x, null_as_ones = FALSE, ...) {
 #' @export
 get_weights.survey.design <- function(x, null_as_ones = FALSE, ...) {
   # we need "ignore_weights" so we can avoid calling get_weights again
-  # when we call "get_data"
+  # when we call "get_data" - which internally may call "get_weights()"
   w <- .safe(get_data(x, ignore_weights = TRUE, ...)[[find_weights(x, ...)]])
   if (is.null(w) && null_as_ones) {
     w <- rep.int(1, n_obs(x))
