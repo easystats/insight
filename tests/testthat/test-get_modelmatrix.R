@@ -131,14 +131,16 @@ test_that("get_modelmatrix works with NA columns, Issue #1147", {
   nd$flipper_len <- 0
   out <- get_modelmatrix(mod, data = nd)
 
-  expect_named(out, c("(Intercept)", "bill_dep", "sexmale", "bill_dep:sexmale"))
+  expect_identical(
+    colnames(out),
+    c("(Intercept)", "bill_dep", "sexmale", "bill_dep:sexmale")
+  )
   expect_identical(dim(out), c(18L, 4L))
 
   # these examples should work without error
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("modelbased")
 
-  data(penguins)
   mod_tmb <- glmmTMB::glmmTMB(
     flipper_len ~ bill_dep * sex,
     data = penguins
