@@ -121,3 +121,34 @@ test_that("Issue #693", {
   mm <- get_modelmatrix(m, data = head(dat, 1))
   expect_true(all(c("x2", "x3", "w2", "w3", "w4") %in% colnames(mm)))
 })
+
+
+test_that("get_modelmatrix works with NA columns, Issue #1147", {
+  skip_if(getRversion() < "4.5.0")
+  data(penguins)
+  mod <- lm(flipper_len ~ bill_dep * sex, data = penguins, weights = body_mass)
+  nd <- get_datagrid(mod)
+  nd$flipper_len <- 0
+  out <- get_modelmatrix(mod, data = nd)
+
+  expect_named(out, c("(Intercept)", "bill_dep", "sexmale", "bill_dep:sexmale"))
+  expect_identical(dim(out), c(18L, 4L))
+
+  # these examples should work without error
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("modelbased")
+
+  data(penguins)
+  mod_tmb <- glmmTMB::glmmTMB(
+    flipper_len ~ bill_dep * sex,
+    data = penguins
+  )
+  expect_silent(modelbased::estimate_relation(mod_tmb, by = c("bill_dep", "sex")))
+
+  mod_tmb <- glmmTMB::glmmTMB(
+    flipper_len ~ bill_dep * sex,
+    data = penguins,
+    weights = body_mass
+  )
+  expect_silent(modelbased::estimate_relation(mod_tmb, by = c("bill_dep", "sex")))
+})

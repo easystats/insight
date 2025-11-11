@@ -270,10 +270,11 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
 
 .pad_modelmatrix_unpad <- function(x, data, ...) {
   data <- .pad_modelmatrix(x = x, data = data)
-  # remove columns that only contain NA values - else, model.matrix() fails
-  all_na <- vapply(data, function(col) all(is.na(col)), logical(1))
-  if (any(all_na)) {
-    data <- data[, !all_na, drop = FALSE]
+  # replace columns that only contain NA values with 1 - else, model.matrix() fails
+  for (n in names(data)) {
+    if (all(is.na(data[[n]]))) {
+      data[[n]] <- 1
+    }
   }
   mm <- stats::model.matrix(object = x, data = data, ...)
   .unpad_modelmatrix(mm = mm, data = data)
