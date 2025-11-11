@@ -34,6 +34,9 @@
 
 * Fixed issue in `get_data()` for models from package *survey*.
 
+* Fixed issue in `get_modelmatrix()` when the `data` argument was provided
+  and contained columns with only missing values.
+
 # insight 1.4.2
 
 ## Bug fixes
