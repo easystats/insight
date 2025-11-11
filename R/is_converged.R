@@ -4,7 +4,8 @@
 #' @description `is_converged()` provides an alternative convergence
 #'   test for `merMod`-objects.
 #'
-#' @param x A model object from class `merMod`, `glmmTMB`, `glm` or `_glm`.
+#' @param x A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan` or
+#' `_glm`.
 #' @param tolerance Indicates up to which value the convergence result is
 #'   accepted. The smaller `tolerance` is, the stricter the test will be.
 #' @param ... Currently not used.
@@ -43,6 +44,7 @@
 #' or not.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
+#' library(lme4)
 #' data(cbpp)
 #' set.seed(1)
 #' cbpp$x <- rnorm(nrow(cbpp))
@@ -58,6 +60,7 @@
 #'
 #' @examplesIf getOption("warn") < 2L && require("glmmTMB")
 #' \donttest{
+#' library(glmmTMB)
 #' model <- glmmTMB(
 #'   Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
 #'     (1 + poly(Petal.Width, 4) | Species),

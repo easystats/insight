@@ -7,7 +7,8 @@
 is_converged(x, tolerance = 0.001, ...)
 }
 \arguments{
-\item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm} or \verb{_glm}.}
+\item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm}, \code{lavaan} or
+\verb{_glm}.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
 accepted. The smaller \code{tolerance} is, the stricter the test will be.}
@@ -62,6 +63,7 @@ or not.
 
 \examples{
 \dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+library(lme4)
 data(cbpp)
 set.seed(1)
 cbpp$x <- rnorm(nrow(cbpp))
@@ -77,6 +79,7 @@ is_converged(model)
 \dontshow{\}) # examplesIf}
 \dontshow{if (getOption("warn") < 2L && require("glmmTMB")) withAutoprint(\{ # examplesIf}
 \donttest{
+library(glmmTMB)
 model <- glmmTMB(
   Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
     (1 + poly(Petal.Width, 4) | Species),
