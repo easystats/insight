@@ -253,6 +253,12 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
   BayesFactor::model.matrix(x, ...)
 }
 
+#' @export
+get_modelmatrix.fixest <- function(x, ...) {
+  check_if_installed("fixest")
+  model.matrix(x, type = c("lhs", "fixef"), ...)
+}
+
 
 # helper ----------------
 
