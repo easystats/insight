@@ -1,6 +1,7 @@
+skip_on_cran()
+
 test_that("get_priors", {
   skip_on_os(os = c("mac", "windows"))
-  skip_on_cran()
   skip_if_not_installed("brms")
 
   set.seed(123)
@@ -15,7 +16,6 @@ test_that("get_priors", {
 
 test_that("get_priors, stanmvref", {
   skip_on_os(os = "mac")
-  skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")

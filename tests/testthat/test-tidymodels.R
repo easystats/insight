@@ -1,5 +1,5 @@
-skip_if_not_installed("parsnip")
 skip_on_cran()
+skip_if_not_installed("parsnip")
 
 data(mtcars)
 m <- parsnip::linear_reg()

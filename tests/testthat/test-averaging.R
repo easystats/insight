@@ -1,6 +1,6 @@
+skip_on_cran()
 skip_if_not_installed("MuMIn")
 skip_if_not_installed("withr")
-skip_on_cran()
 
 withr::with_options(
   list(na.action = "na.fail"),
