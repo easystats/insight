@@ -7,7 +7,8 @@
 is_converged(x, tolerance = 0.001, ...)
 }
 \arguments{
-\item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm} or \verb{_glm}.}
+\item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm}, \code{lavaan} or
+\verb{_glm}.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
 accepted. The smaller \code{tolerance} is, the stricter the test will be.}
@@ -41,13 +42,17 @@ convergence test for \code{merMod}-objects.
 
 \section{Resolving convergence issues}{
 
-Convergence issues are not easy to diagnose. The help page on \code{?lme4::convergence}
-provides most of the current advice about how to resolve convergence issues.
-Another clue might be large parameter values, e.g. estimates (on the scale of
-the linear predictor) larger than 10 in (non-identity link) generalized linear
-model \emph{might} indicate complete separation, which can be addressed by
-regularization, e.g. penalized regression or Bayesian regression with
-appropriate priors on the fixed effects.
+Convergence issues are not easy to diagnose. The help page on
+\code{?lme4::convergence} provides most of the current advice about how to resolve
+convergence issues. In general, convergence issues may be addressed by one or
+more of the following strategies: 1. Rescale continuous predictors; 2. try a
+different optimizer; 3. increase the number of iterations; or, if everything
+else fails, 4. simplify the model. Another clue might be large parameter
+values, e.g. estimates (on the scale of the linear predictor) larger than 10
+in (non-identity link) generalized linear model \emph{might} indicate complete
+separation, which can be addressed by regularization, e.g. penalized
+regression or Bayesian regression with appropriate priors on the fixed
+effects.
 }
 
 \section{Convergence versus Singularity}{
@@ -57,11 +62,13 @@ indicates an issue with the "true" best estimate, i.e. whether the maximum
 likelihood estimation for the variance-covariance matrix of the random effects
 is positive definite or only semi-definite. Convergence is a question of
 whether we can assume that the numerical optimization has worked correctly
-or not.
+or not. A convergence failure means the optimizer (the algorithm) could not
+find a stable solution (\emph{Bates et. al 2015}).
 }
 
 \examples{
 \dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+library(lme4)
 data(cbpp)
 set.seed(1)
 cbpp$x <- rnorm(nrow(cbpp))
@@ -77,6 +84,7 @@ is_converged(model)
 \dontshow{\}) # examplesIf}
 \dontshow{if (getOption("warn") < 2L && require("glmmTMB")) withAutoprint(\{ # examplesIf}
 \donttest{
+library(glmmTMB)
 model <- glmmTMB(
   Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
     (1 + poly(Petal.Width, 4) | Species),
@@ -86,4 +94,9 @@ model <- glmmTMB(
 is_converged(model)
 }
 \dontshow{\}) # examplesIf}
+}
+\references{
+Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting Linear
+Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1),
+1-48. \doi{10.18637/jss.v067.i01}
 }

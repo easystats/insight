@@ -1,5 +1,5 @@
-skip_if_not_installed("mlogit")
 skip_on_cran()
+skip_if_not_installed("mlogit")
 
 data("Fishing", package = "mlogit")
 Fish <-

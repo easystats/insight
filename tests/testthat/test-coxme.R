@@ -1,10 +1,10 @@
+skip_on_cran()
 skip_if_not_installed("survival")
 skip_if_not_installed("lme4")
 skip_if_not_installed("nlme")
 skip_if_not_installed("bdsmatrix")
 skip_if_not_installed("coxme")
 skip_if_not_installed("withr")
-skip_on_cran()
 
 withr::with_environment(
   new.env(),
