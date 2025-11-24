@@ -9,7 +9,7 @@ test for merMod-objects."><meta property="og:image" content="https://easystats.g
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,8 @@ test for <code>merMod</code>-objects.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A model object from class <code>merMod</code>, <code>glmmTMB</code>, <code>glm</code> or <code>_glm</code>.</p></dd>
+<dd><p>A model object from class <code>merMod</code>, <code>glmmTMB</code>, <code>glm</code>, <code>lavaan</code> or
+<code>_glm</code>.</p></dd>
 
 
 <dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
@@ -111,13 +112,17 @@ convergence test for <code>merMod</code>-objects.</p>
     <h2 id="resolving-convergence-issues">Resolving convergence issues<a class="anchor" aria-label="anchor" href="#resolving-convergence-issues"></a></h2>
 
 
-<p>Convergence issues are not easy to diagnose. The help page on <code><a href="https://rdrr.io/pkg/lme4/man/convergence.html" class="external-link">?lme4::convergence</a></code>
-provides most of the current advice about how to resolve convergence issues.
-Another clue might be large parameter values, e.g. estimates (on the scale of
-the linear predictor) larger than 10 in (non-identity link) generalized linear
-model <em>might</em> indicate complete separation, which can be addressed by
-regularization, e.g. penalized regression or Bayesian regression with
-appropriate priors on the fixed effects.</p>
+<p>Convergence issues are not easy to diagnose. The help page on
+<code><a href="https://rdrr.io/pkg/lme4/man/convergence.html" class="external-link">?lme4::convergence</a></code> provides most of the current advice about how to resolve
+convergence issues. In general, convergence issues may be addressed by one or
+more of the following strategies: 1. Rescale continuous predictors; 2. try a
+different optimizer; 3. increase the number of iterations; or, if everything
+else fails, 4. simplify the model. Another clue might be large parameter
+values, e.g. estimates (on the scale of the linear predictor) larger than 10
+in (non-identity link) generalized linear model <em>might</em> indicate complete
+separation, which can be addressed by regularization, e.g. penalized
+regression or Bayesian regression with appropriate priors on the fixed
+effects.</p>
     </div>
     <div class="section level2">
     <h2 id="convergence-versus-singularity">Convergence versus Singularity<a class="anchor" aria-label="anchor" href="#convergence-versus-singularity"></a></h2>
@@ -128,12 +133,20 @@ indicates an issue with the "true" best estimate, i.e. whether the maximum
 likelihood estimation for the variance-covariance matrix of the random effects
 is positive definite or only semi-definite. Convergence is a question of
 whether we can assume that the numerical optimization has worked correctly
-or not.</p>
+or not. A convergence failure means the optimizer (the algorithm) could not
+find a stable solution (<em>Bates et. al 2015</em>).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting Linear
+Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1),
+1-48. <a href="https://doi.org/10.18637/jss.v067.i01" class="external-link">doi:10.18637/jss.v067.i01</a></p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cbpp</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cbpp</span><span class="op">$</span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -150,7 +163,8 @@ or not.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"gradient")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8.444782e-05</span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/glmmTMB/glmmTMB" class="external-link">glmmTMB</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">Sepal.Length</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Petal.Width</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Petal.Length</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>    <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Petal.Width</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">iris</span></span></span>

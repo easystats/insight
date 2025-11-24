@@ -13,7 +13,8 @@ is_converged(x, tolerance = 0.001, ...)
 
 - x:
 
-  A model object from class `merMod`, `glmmTMB`, `glm` or `_glm`.
+  A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan` or
+  `_glm`.
 
 - tolerance:
 
@@ -51,11 +52,15 @@ alternative convergence test for `merMod`-objects.
 Convergence issues are not easy to diagnose. The help page on
 [`?lme4::convergence`](https://rdrr.io/pkg/lme4/man/convergence.html)
 provides most of the current advice about how to resolve convergence
-issues. Another clue might be large parameter values, e.g. estimates (on
-the scale of the linear predictor) larger than 10 in (non-identity link)
-generalized linear model *might* indicate complete separation, which can
-be addressed by regularization, e.g. penalized regression or Bayesian
-regression with appropriate priors on the fixed effects.
+issues. In general, convergence issues may be addressed by one or more
+of the following strategies: 1. Rescale continuous predictors; 2. try a
+different optimizer; 3. increase the number of iterations; or, if
+everything else fails, 4. simplify the model. Another clue might be
+large parameter values, e.g. estimates (on the scale of the linear
+predictor) larger than 10 in (non-identity link) generalized linear
+model *might* indicate complete separation, which can be addressed by
+regularization, e.g. penalized regression or Bayesian regression with
+appropriate priors on the fixed effects.
 
 ## Convergence versus Singularity
 
@@ -64,11 +69,21 @@ singularity indicates an issue with the "true" best estimate, i.e.
 whether the maximum likelihood estimation for the variance-covariance
 matrix of the random effects is positive definite or only semi-definite.
 Convergence is a question of whether we can assume that the numerical
-optimization has worked correctly or not.
+optimization has worked correctly or not. A convergence failure means
+the optimizer (the algorithm) could not find a stable solution (*Bates
+et. al 2015*).
+
+## References
+
+Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting
+Linear Mixed-Effects Models Using lme4. Journal of Statistical Software,
+67(1), 1-48.
+[doi:10.18637/jss.v067.i01](https://doi.org/10.18637/jss.v067.i01)
 
 ## Examples
 
 ``` r
+library(lme4)
 data(cbpp)
 set.seed(1)
 cbpp$x <- rnorm(nrow(cbpp))
@@ -86,6 +101,7 @@ is_converged(model)
 #> attr(,"gradient")
 #> [1] 8.444782e-05
 # \donttest{
+library(glmmTMB)
 model <- glmmTMB(
   Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
     (1 + poly(Petal.Width, 4) | Species),
