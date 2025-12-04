@@ -97,9 +97,7 @@ model <- glmer(
 #> boundary (singular) fit: see help('isSingular')
 
 is_converged(model)
-#> [1] TRUE
-#> attr(,"gradient")
-#> [1] 8.444782e-05
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'a' in selecting a method for function 'solve': object 'Hessian' not found
 # \donttest{
 library(glmmTMB)
 model <- glmmTMB(
