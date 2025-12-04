@@ -1546,7 +1546,7 @@ get_data.fixest <- function(x, source = "environment", verbose = TRUE, ...) {
   # original data does not appear to be stored in the model object
   # see https://github.com/lrberge/fixest/issues/340 and #629
   model_call <- get_call(x)
-  mf <- eval(model_call$data, envir = parent.env(x$call_env))
+  mf <- .safe(eval(model_call$data, envir = parent.env(x$call_env)))
   # mf <- .recover_data_from_environment(x, verbose = verbose)
   .get_data_from_modelframe(x, mf, effects = "all", verbose = verbose)
 }
