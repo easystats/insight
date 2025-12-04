@@ -12,6 +12,9 @@
 #'
 #' @return `TRUE` if convergence is fine and `FALSE` if convergence
 #'   is suspicious. Additionally, the convergence value is returned as attribute.
+#'   For `merMod` models, `NA` is returned when the model is singular and
+#'   convergence cannot be reliably assessed (e.g., when gradient and Hessian
+#'   are not available).
 #'
 #' @section Convergence and log-likelihood:
 #' Convergence problems typically arise when the model hasn't converged to a
@@ -47,6 +50,14 @@
 #' whether we can assume that the numerical optimization has worked correctly
 #' or not. A convergence failure means the optimizer (the algorithm) could not
 #' find a stable solution (_Bates et. al 2015_).
+#'
+#' For singular models (see `?lme4::isSingular`), convergence is determined
+#' based on the optimizer's convergence code. If the optimizer reports successful
+#' convergence (convergence code 0) for a singular model, `is_converged()`
+#' returns `TRUE`. In cases where the gradient and Hessian are not available
+#' (as may happen in development versions of lme4 for singular fits),
+#' `is_converged()` returns `NA` to indicate that convergence cannot be assessed
+#' through the usual gradient-based checks.
 #'
 #' @references
 #' Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting Linear
@@ -97,6 +108,21 @@ is_converged.default <- function(x, tolerance = 0.001, ...) {
 #' @export
 is_converged.merMod <- function(x, tolerance = 0.001, ...) {
   check_if_installed("Matrix")
+  check_if_installed("lme4")
+
+  # First check for singularity
+  # If model is singular and optimizer convergence code is 0, model has converged
+  if (lme4::isSingular(x) && isTRUE(x@optinfo$conv$opt == 0)) {
+    return(structure(TRUE, gradient = NA_real_))
+  }
+
+  # Check if derivatives are available
+  # In development lme4, derivatives may not be calculated for singular fits
+  if (is.null(x@optinfo$derivs) || 
+      is.null(x@optinfo$derivs$Hessian) || 
+      is.null(x@optinfo$derivs$gradient)) {
+    return(structure(NA, gradient = NA_real_))
+  }
 
   relgrad <- with(x@optinfo$derivs, Matrix::solve(Hessian, gradient))
 
