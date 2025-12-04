@@ -10,11 +10,11 @@
 #'   accepted. The smaller `tolerance` is, the stricter the test will be.
 #' @param ... Currently not used.
 #'
-#' @return `TRUE` if convergence is fine and `FALSE` if convergence
-#'   is suspicious. Additionally, the convergence value is returned as attribute.
-#'   For `merMod` models, `NA` is returned when the model is singular and
-#'   convergence cannot be reliably assessed (e.g., when gradient and Hessian
-#'   are not available).
+#' @return `TRUE` if convergence is fine and `FALSE` if convergence is
+#'   suspicious. Additionally, the convergence value is returned as attribute.
+#'   For `merMod` models, if the model is singular, convergence is determined by
+#'   the optimizer's convergence code. For non-singular models where derivatives
+#'   are unavailable, `NA` is returned.
 #'
 #' @section Convergence and log-likelihood:
 #' Convergence problems typically arise when the model hasn't converged to a
@@ -54,10 +54,9 @@
 #' For singular models (see `?lme4::isSingular`), convergence is determined
 #' based on the optimizer's convergence code. If the optimizer reports successful
 #' convergence (convergence code 0) for a singular model, `is_converged()`
-#' returns `TRUE`. In cases where the gradient and Hessian are not available
-#' (as may happen in development versions of lme4 for singular fits),
-#' `is_converged()` returns `NA` to indicate that convergence cannot be assessed
-#' through the usual gradient-based checks.
+#' returns `TRUE`. For non-singular models, in cases where the gradient and
+#' Hessian are not available, `is_converged()` returns `NA` to indicate that
+#' convergence cannot be assessed through the usual gradient-based checks.
 #'
 #' @references
 #' Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting Linear

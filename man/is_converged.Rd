@@ -16,11 +16,11 @@ accepted. The smaller \code{tolerance} is, the stricter the test will be.}
 \item{...}{Currently not used.}
 }
 \value{
-\code{TRUE} if convergence is fine and \code{FALSE} if convergence
-is suspicious. Additionally, the convergence value is returned as attribute.
-For \code{merMod} models, \code{NA} is returned when the model is singular and
-convergence cannot be reliably assessed (e.g., when gradient and Hessian
-are not available).
+\code{TRUE} if convergence is fine and \code{FALSE} if convergence is
+suspicious. Additionally, the convergence value is returned as attribute.
+For \code{merMod} models, if the model is singular, convergence is determined by
+the optimizer's convergence code. For non-singular models where derivatives
+are unavailable, \code{NA} is returned.
 }
 \description{
 \code{is_converged()} provides an alternative convergence
@@ -71,10 +71,9 @@ find a stable solution (\emph{Bates et. al 2015}).
 For singular models (see \code{?lme4::isSingular}), convergence is determined
 based on the optimizer's convergence code. If the optimizer reports successful
 convergence (convergence code 0) for a singular model, \code{is_converged()}
-returns \code{TRUE}. In cases where the gradient and Hessian are not available
-(as may happen in development versions of lme4 for singular fits),
-\code{is_converged()} returns \code{NA} to indicate that convergence cannot be assessed
-through the usual gradient-based checks.
+returns \code{TRUE}. For non-singular models, in cases where the gradient and
+Hessian are not available, \code{is_converged()} returns \code{NA} to indicate that
+convergence cannot be assessed through the usual gradient-based checks.
 }
 
 \examples{
