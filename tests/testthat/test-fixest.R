@@ -436,3 +436,11 @@ test_that("find_predictors with i(f1, i.f2) interaction", {
     ignore_attr = TRUE
   )
 })
+
+
+test_that("get_data with lean=TRUE", {
+  data(mtcars)
+  est1 <- fixest::feols(mpg ~ wt, mtcars, lean = TRUE)
+  est2 <- fixest::feols(mpg ~ wt, mtcars, lean = FALSE)
+  expect_equal(get_data(est1), get_data(est2), ignore_attr = TRUE, tolerance = 1e-4)
+})
