@@ -109,15 +109,16 @@ is_converged.merMod <- function(x, tolerance = 0.001, ...) {
   check_if_installed(c("Matrix", "lme4"))
 
   # First check for singularity
-  # For singular models, if optimizer convergence code is 0, the model has converged
-  # We check singularity first because singular models may not have derivatives available
+  # For singular models, if optimizer convergence code is 0, the model has
+  # converged. We check singularity first because singular models may not have
+  # derivatives available
   if (lme4::isSingular(x)) {
     # optimizer convergence code is zero is necessary for convergence
     return(structure(isTRUE(x@optinfo$conv$opt == 0), gradient = NA_real_))
   }
 
   # Check if derivatives are available
-  # In development lme4, derivatives may not be calculated for singular fits
+  # In some cases, derivatives may not be available even for non-singular fits.
   derivs <- x@optinfo$derivs
   if (is.null(derivs) || is.null(derivs$Hessian) || is.null(derivs$gradient)) {
     return(structure(NA, gradient = NA_real_))
