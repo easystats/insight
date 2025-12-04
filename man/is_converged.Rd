@@ -18,6 +18,9 @@ accepted. The smaller \code{tolerance} is, the stricter the test will be.}
 \value{
 \code{TRUE} if convergence is fine and \code{FALSE} if convergence
 is suspicious. Additionally, the convergence value is returned as attribute.
+For \code{merMod} models, \code{NA} is returned when the model is singular and
+convergence cannot be reliably assessed (e.g., when gradient and Hessian
+are not available).
 }
 \description{
 \code{is_converged()} provides an alternative convergence
@@ -64,6 +67,14 @@ is positive definite or only semi-definite. Convergence is a question of
 whether we can assume that the numerical optimization has worked correctly
 or not. A convergence failure means the optimizer (the algorithm) could not
 find a stable solution (\emph{Bates et. al 2015}).
+
+For singular models (see \code{?lme4::isSingular}), convergence is determined
+based on the optimizer's convergence code. If the optimizer reports successful
+convergence (convergence code 0) for a singular model, \code{is_converged()}
+returns \code{TRUE}. In cases where the gradient and Hessian are not available
+(as may happen in development versions of lme4 for singular fits),
+\code{is_converged()} returns \code{NA} to indicate that convergence cannot be assessed
+through the usual gradient-based checks.
 }
 
 \examples{
