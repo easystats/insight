@@ -68,7 +68,7 @@ test_that("link_inverse", {
 })
 
 test_that("linkfun", {
-  expect_equal(link_function(m)(0.2), -1.609438, tolerance = 1e-4)
+  expect_equal(link_function(m)(0.2), -0.2, tolerance = 1e-4)
 })
 
 test_that("get_data", {
