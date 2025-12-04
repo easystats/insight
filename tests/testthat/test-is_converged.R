@@ -27,6 +27,22 @@ test_that("is_converged", {
   expect_true(is_converged(model))
 })
 
+# Test singular model (from the issue)
+d <- data.frame(y = 1:10, f = factor(rep(1:3, length.out = 10)))
+model_singular <- suppressWarnings(lme4::lmer(y ~ 1 + (1 | f), data = d))
+
+test_that("is_converged handles singular models", {
+  # Should not error
+  result <- is_converged(model_singular)
+  # Result should be either TRUE (if optimizer converged) or NA (if derivs unavailable)
+  expect_true(is.logical(result) || is.na(result))
+  # If it's TRUE or NA, gradient attribute should be NA
+  if (is.na(result) || isTRUE(result)) {
+    expect_true(is.na(attr(result, "gradient")))
+  }
+})
+
+
 
 skip_on_os("mac") # error: FreeADFunObject
 skip_on_cran() ## FIXME: check with win-devel
