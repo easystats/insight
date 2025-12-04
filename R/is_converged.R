@@ -118,13 +118,12 @@ is_converged.merMod <- function(x, tolerance = 0.001, ...) {
 
   # Check if derivatives are available
   # In development lme4, derivatives may not be calculated for singular fits
-  if (is.null(x@optinfo$derivs) || 
-      is.null(x@optinfo$derivs$Hessian) || 
-      is.null(x@optinfo$derivs$gradient)) {
+  derivs <- x@optinfo$derivs
+  if (is.null(derivs) || is.null(derivs$Hessian) || is.null(derivs$gradient)) {
     return(structure(NA, gradient = NA_real_))
   }
 
-  relgrad <- with(x@optinfo$derivs, Matrix::solve(Hessian, gradient))
+  relgrad <- with(derivs, Matrix::solve(Hessian, gradient))
 
   # copy logical value, TRUE if convergence is OK
   retval <- max(abs(relgrad)) < tolerance
