@@ -259,7 +259,12 @@ test_that("get_predicted - lmerMod", {
   expect_identical(c(nrow(rez), ncol(rez)), c(32L, 9L))
 
   # Compare to merTools
-  rez_merTools <- merTools::predictInterval(x, level = 0.95, seed = 333, n.sims = 2000)
+  rez_merTools <- suppressWarnings(merTools::predictInterval(
+    x,
+    level = 0.95,
+    seed = 333,
+    n.sims = 2000
+  ))
   expect_equal(
     mean(abs(as.data.frame(rezpred)$CI_low - rez_merTools$lwr)),
     0,
