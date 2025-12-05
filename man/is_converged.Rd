@@ -2,9 +2,12 @@
 % Please edit documentation in R/is_converged.R
 \name{is_converged}
 \alias{is_converged}
+\alias{is_converged.merMod}
 \title{Convergence test for mixed effects models}
 \usage{
 is_converged(x, tolerance = 0.001, ...)
+
+\method{is_converged}{merMod}(x, tolerance = 0.001, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm}, \code{lavaan} or
@@ -20,7 +23,8 @@ accepted. The smaller \code{tolerance} is, the stricter the test will be.}
 suspicious. Additionally, the convergence value is returned as attribute.
 For \code{merMod} models, if the model is singular, convergence is determined by
 the optimizer's convergence code. For non-singular models where derivatives
-are unavailable, \code{NA} is returned.
+are unavailable, \code{FALSE} is returned and a message is printed to indicate
+that convergence cannot be assessed through the usual gradient-based checks.
 }
 \description{
 \code{is_converged()} provides an alternative convergence
@@ -69,11 +73,12 @@ or not. A convergence failure means the optimizer (the algorithm) could not
 find a stable solution (\emph{Bates et. al 2015}).
 
 For singular models (see \code{?lme4::isSingular}), convergence is determined
-based on the optimizer's convergence code. If the optimizer reports successful
-convergence (convergence code 0) for a singular model, \code{is_converged()}
-returns \code{TRUE}. For non-singular models, in cases where the gradient and
-Hessian are not available, \code{is_converged()} returns \code{NA} to indicate that
-convergence cannot be assessed through the usual gradient-based checks.
+based on the optimizer's convergence code. If the optimizer reports
+successful convergence (convergence code 0) for a singular model,
+\code{is_converged()} returns \code{TRUE}. For non-singular models, in cases where the
+gradient and Hessian are not available, \code{is_converged()} returns \code{FALSE} and
+prints a message to indicate that convergence cannot be assessed through the
+usual gradient-based checks.
 }
 
 \examples{

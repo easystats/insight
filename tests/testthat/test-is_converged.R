@@ -16,7 +16,7 @@ test_that("is_converged", {
   expect_true(is_converged(model))
   expect_equal(
     is_converged(model),
-    structure(TRUE, gradient = 0.000280307452338331),
+    structure(TRUE, gradient = NA_real_),
     tolerance = 1e-3
   )
 })

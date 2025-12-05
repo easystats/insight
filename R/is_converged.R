@@ -14,7 +14,8 @@
 #'   suspicious. Additionally, the convergence value is returned as attribute.
 #'   For `merMod` models, if the model is singular, convergence is determined by
 #'   the optimizer's convergence code. For non-singular models where derivatives
-#'   are unavailable, `NA` is returned.
+#'   are unavailable, `FALSE` is returned and a message is printed to indicate
+#'   that convergence cannot be assessed through the usual gradient-based checks.
 #'
 #' @section Convergence and log-likelihood:
 #' Convergence problems typically arise when the model hasn't converged to a
@@ -52,11 +53,12 @@
 #' find a stable solution (_Bates et. al 2015_).
 #'
 #' For singular models (see `?lme4::isSingular`), convergence is determined
-#' based on the optimizer's convergence code. If the optimizer reports successful
-#' convergence (convergence code 0) for a singular model, `is_converged()`
-#' returns `TRUE`. For non-singular models, in cases where the gradient and
-#' Hessian are not available, `is_converged()` returns `NA` to indicate that
-#' convergence cannot be assessed through the usual gradient-based checks.
+#' based on the optimizer's convergence code. If the optimizer reports
+#' successful convergence (convergence code 0) for a singular model,
+#' `is_converged()` returns `TRUE`. For non-singular models, in cases where the
+#' gradient and Hessian are not available, `is_converged()` returns `FALSE` and
+#' prints a message to indicate that convergence cannot be assessed through the
+#' usual gradient-based checks.
 #'
 #' @references
 #' Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting Linear
@@ -104,8 +106,9 @@ is_converged.default <- function(x, tolerance = 0.001, ...) {
 }
 
 
+#' @rdname is_converged
 #' @export
-is_converged.merMod <- function(x, tolerance = 0.001, ...) {
+is_converged.merMod <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   check_if_installed(c("Matrix", "lme4"))
 
   # First check for singularity
@@ -113,15 +116,27 @@ is_converged.merMod <- function(x, tolerance = 0.001, ...) {
   # converged. We check singularity first because singular models may not have
   # derivatives available
   if (lme4::isSingular(x)) {
+    # check if model converged based on optimizer convergence code
+    converged <- isTRUE(x@optinfo$conv$opt == 0)
+    if (verbose && !converged) {
+      format_alert(
+        "Singular model fit. Cannot assess convergence, returning `FALSE` now."
+      )
+    }
     # optimizer convergence code is zero is necessary for convergence
-    return(structure(isTRUE(x@optinfo$conv$opt == 0), gradient = NA_real_))
+    return(structure(converged, gradient = NA_real_))
   }
 
   # Check if derivatives are available
   # In some cases, derivatives may not be available even for non-singular fits.
   derivs <- x@optinfo$derivs
   if (is.null(derivs) || is.null(derivs$Hessian) || is.null(derivs$gradient)) {
-    return(structure(NA, gradient = NA_real_))
+    if (verbose) {
+      format_alert(
+        "Derivatives (gradient and/or Hessian) not available. Cannot assess convergence through gradient-based checks."
+      )
+    }
+    return(structure(FALSE, gradient = NA_real_))
   }
 
   relgrad <- with(derivs, Matrix::solve(Hessian, gradient))
