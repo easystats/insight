@@ -7,6 +7,9 @@
 
 ``` r
 is_converged(x, tolerance = 0.001, ...)
+
+# S3 method for class 'merMod'
+is_converged(x, tolerance = 0.001, verbose = TRUE, ...)
 ```
 
 ## Arguments
@@ -28,7 +31,12 @@ is_converged(x, tolerance = 0.001, ...)
 ## Value
 
 `TRUE` if convergence is fine and `FALSE` if convergence is suspicious.
-Additionally, the convergence value is returned as attribute.
+Additionally, the convergence value is returned as attribute. For
+`merMod` models, if the model is singular, convergence is determined by
+the optimizer's convergence code. For non-singular models where
+derivatives are unavailable, `FALSE` is returned and a message is
+printed to indicate that convergence cannot be assessed through the
+usual gradient-based checks.
 
 ## Convergence and log-likelihood
 
@@ -73,6 +81,15 @@ optimization has worked correctly or not. A convergence failure means
 the optimizer (the algorithm) could not find a stable solution (*Bates
 et. al 2015*).
 
+For singular models (see
+[`?lme4::isSingular`](https://rdrr.io/pkg/lme4/man/isSingular.html)),
+convergence is determined based on the optimizer's convergence code. If
+the optimizer reports successful convergence (convergence code 0) for a
+singular model, `is_converged()` returns `TRUE`. For non-singular
+models, in cases where the gradient and Hessian are not available,
+`is_converged()` returns `FALSE` and prints a message to indicate that
+convergence cannot be assessed through the usual gradient-based checks.
+
 ## References
 
 Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting
@@ -97,7 +114,9 @@ model <- glmer(
 #> boundary (singular) fit: see help('isSingular')
 
 is_converged(model)
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'a' in selecting a method for function 'solve': object 'Hessian' not found
+#> [1] TRUE
+#> attr(,"gradient")
+#> [1] NA
 # \donttest{
 library(glmmTMB)
 model <- glmmTMB(
