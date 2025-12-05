@@ -17,6 +17,8 @@ is_converged(x, tolerance = 0.001, ...)
 accepted. The smaller \code{tolerance} is, the stricter the test will be.}
 
 \item{...}{Currently not used.}
+
+\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 \code{TRUE} if convergence is fine and \code{FALSE} if convergence is

@@ -8,6 +8,7 @@
 #' `_glm`.
 #' @param tolerance Indicates up to which value the convergence result is
 #'   accepted. The smaller `tolerance` is, the stricter the test will be.
+#' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #'
 #' @return `TRUE` if convergence is fine and `FALSE` if convergence is
