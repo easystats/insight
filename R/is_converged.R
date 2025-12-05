@@ -27,8 +27,9 @@
 #' **lme4** performs a convergence-check (see `?lme4::convergence`), however, as
 #' discussed [here](https://github.com/lme4/lme4/issues/120) and suggested by
 #' one of the lme4-authors in [this comment](https://github.com/lme4/lme4/issues/120#issuecomment-39920269),
-#' this check can be too strict. `is_converged()` thus provides an alternative
-#' convergence test for `merMod`-objects.
+#' this check can be too strict. `is_converged()` (and its wrapper function,
+#' `performance::check_convergence()`) thus provides an alternative convergence
+#' test for `merMod`-objects.
 #'
 #' @section Resolving convergence issues:
 #' Convergence issues are not easy to diagnose. The help page on
@@ -58,7 +59,8 @@
 #' `is_converged()` returns `TRUE`. For non-singular models, in cases where the
 #' gradient and Hessian are not available, `is_converged()` returns `FALSE` and
 #' prints a message to indicate that convergence cannot be assessed through the
-#' usual gradient-based checks.
+#' usual gradient-based checks. Note that `performance::check_convergence()` is
+#' a wrapper around `insight::is_converged()`.
 #'
 #' @references
 #' Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting Linear

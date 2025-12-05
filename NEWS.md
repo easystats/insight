@@ -1,4 +1,4 @@
-# insight (devel)
+# insight 1.4.4
 
 ## Bug fixes
 
