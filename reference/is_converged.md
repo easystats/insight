@@ -28,6 +28,10 @@ is_converged(x, tolerance = 0.001, verbose = TRUE, ...)
 
   Currently not used.
 
+- verbose:
+
+  Toggle messages and warnings.
+
 ## Value
 
 `TRUE` if convergence is fine and `FALSE` if convergence is suspicious.
@@ -52,8 +56,10 @@ standard errors.
 however, as discussed [here](https://github.com/lme4/lme4/issues/120)
 and suggested by one of the lme4-authors in [this
 comment](https://github.com/lme4/lme4/issues/120#issuecomment-39920269),
-this check can be too strict. `is_converged()` thus provides an
-alternative convergence test for `merMod`-objects.
+this check can be too strict. `is_converged()` (and its wrapper
+function,
+[`performance::check_convergence()`](https://easystats.github.io/performance/reference/check_convergence.html))
+thus provides an alternative convergence test for `merMod`-objects.
 
 ## Resolving convergence issues
 
@@ -89,6 +95,9 @@ singular model, `is_converged()` returns `TRUE`. For non-singular
 models, in cases where the gradient and Hessian are not available,
 `is_converged()` returns `FALSE` and prints a message to indicate that
 convergence cannot be assessed through the usual gradient-based checks.
+Note that
+[`performance::check_convergence()`](https://easystats.github.io/performance/reference/check_convergence.html)
+is a wrapper around `insight::is_converged()`.
 
 ## References
 

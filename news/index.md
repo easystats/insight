@@ -1,5 +1,16 @@
 # Changelog
 
+## insight 1.4.4
+
+### Bug fixes
+
+- Fixed issue with
+  [`is_converged()`](https://easystats.github.io/insight/reference/is_converged.md)
+  due to changes in *lme4* package.
+
+- Fixed issue in `get_data(source = "mf")` for models from package
+  *fixest* when `lean` was set to `TRUE` in the model call.
+
 ## insight 1.4.3
 
 CRAN release: 2025-11-24

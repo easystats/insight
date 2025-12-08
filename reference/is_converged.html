@@ -9,7 +9,7 @@ test for merMod-objects."><meta property="og:image" content="https://easystats.g
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +86,10 @@ accepted. The smaller <code>tolerance</code> is, the stricter the test will be.<
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
 
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>Toggle messages and warnings.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -112,8 +116,9 @@ errors.</p>
 <p><strong>lme4</strong> performs a convergence-check (see <code><a href="https://rdrr.io/pkg/lme4/man/convergence.html" class="external-link">?lme4::convergence</a></code>), however, as
 discussed <a href="https://github.com/lme4/lme4/issues/120" class="external-link">here</a> and suggested by
 one of the lme4-authors in <a href="https://github.com/lme4/lme4/issues/120#issuecomment-39920269" class="external-link">this comment</a>,
-this check can be too strict. <code>is_converged()</code> thus provides an alternative
-convergence test for <code>merMod</code>-objects.</p>
+this check can be too strict. <code>is_converged()</code> (and its wrapper function,
+<code><a href="https://easystats.github.io/performance/reference/check_convergence.html" class="external-link">performance::check_convergence()</a></code>) thus provides an alternative convergence
+test for <code>merMod</code>-objects.</p>
     </div>
     <div class="section level2">
     <h2 id="resolving-convergence-issues">Resolving convergence issues<a class="anchor" aria-label="anchor" href="#resolving-convergence-issues"></a></h2>
@@ -148,7 +153,8 @@ successful convergence (convergence code 0) for a singular model,
 <code>is_converged()</code> returns <code>TRUE</code>. For non-singular models, in cases where the
 gradient and Hessian are not available, <code>is_converged()</code> returns <code>FALSE</code> and
 prints a message to indicate that convergence cannot be assessed through the
-usual gradient-based checks.</p>
+usual gradient-based checks. Note that <code><a href="https://easystats.github.io/performance/reference/check_convergence.html" class="external-link">performance::check_convergence()</a></code> is
+a wrapper around <code>insight::is_converged()</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
