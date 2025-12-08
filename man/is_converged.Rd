@@ -17,6 +17,8 @@ is_converged(x, tolerance = 0.001, ...)
 accepted. The smaller \code{tolerance} is, the stricter the test will be.}
 
 \item{...}{Currently not used.}
+
+\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 \code{TRUE} if convergence is fine and \code{FALSE} if convergence is
@@ -43,8 +45,9 @@ errors.
 \strong{lme4} performs a convergence-check (see \code{?lme4::convergence}), however, as
 discussed \href{https://github.com/lme4/lme4/issues/120}{here} and suggested by
 one of the lme4-authors in \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment},
-this check can be too strict. \code{is_converged()} thus provides an alternative
-convergence test for \code{merMod}-objects.
+this check can be too strict. \code{is_converged()} (and its wrapper function,
+\code{performance::check_convergence()}) thus provides an alternative convergence
+test for \code{merMod}-objects.
 }
 
 \section{Resolving convergence issues}{
@@ -78,7 +81,8 @@ successful convergence (convergence code 0) for a singular model,
 \code{is_converged()} returns \code{TRUE}. For non-singular models, in cases where the
 gradient and Hessian are not available, \code{is_converged()} returns \code{FALSE} and
 prints a message to indicate that convergence cannot be assessed through the
-usual gradient-based checks.
+usual gradient-based checks. Note that \code{performance::check_convergence()} is
+a wrapper around \code{insight::is_converged()}.
 }
 
 \examples{
