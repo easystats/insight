@@ -822,6 +822,30 @@ test_that("get_datagrid - include_random works with numeric group factors", {
   expect_identical(out$cyl, c(NA, NA))
 })
 
+test_that("get_datagrid - by with tokened random effect", {
+  skip_if_not_installed("glmmTMB")
+
+  data(mtcars)
+  mtcars$vs <- as.factor(mtcars$vs)
+  model <- glmmTMB::glmmTMB(
+    mpg ~ vs + (1 | cyl),
+    data = mtcars
+  )
+  out <- get_datagrid(
+    model,
+    by = c("vs", "cyl = [minmax]")
+  )
+
+  expect_identical(
+    out$vs,
+    structure(c(1L, 1L, 2L), levels = c("0", "1"), class = "factor")
+  )
+  expect_identical(
+    out$cyl,
+    c(4, 8, 4)
+  )
+})
+
 
 test_that("get_datagrid - include_random works with interacting random effects", {
   skip_if_not_installed("glmmTMB")

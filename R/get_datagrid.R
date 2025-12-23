@@ -747,6 +747,13 @@ get_datagrid.default <- function(
 
   # check for interactions in "by"
   by <- .extract_at_interactions(by)
+  by_stripped <- vapply(
+    by,
+    function(by_var) {
+      .get_datagrid_clean_target(by_var, x = data, digits = digits)$varname
+    },
+    character(1)
+  )
 
   # Drop random factors
   random_factors <- find_random(x, flatten = TRUE, split_nested = TRUE)
@@ -756,8 +763,8 @@ get_datagrid.default <- function(
       keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
       if (!is.null(keep)) {
         if (all(by != "all")) {
-          keep <- c(keep, by[by %in% random_factors])
-          random_factors <- setdiff(random_factors, by)
+          keep <- c(keep, by_stripped[by_stripped %in% random_factors])
+          random_factors <- setdiff(random_factors, by_stripped)
         }
         data <- data[colnames(data) %in% keep]
       }
