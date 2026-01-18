@@ -2,6 +2,8 @@
 
 ## insight 1.4.4
 
+CRAN release: 2025-12-06
+
 ### Bug fixes
 
 - Fixed issue with
