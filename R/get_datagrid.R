@@ -747,10 +747,34 @@ get_datagrid.default <- function(
 
   # check for interactions in "by"
   by <- .extract_at_interactions(by)
+
+  if (is.list(by)) {
+    by <- unname(vapply(
+      names(by),
+      function(i) {
+        if (is.numeric(by[[i]])) {
+          paste0(i, " = c(", toString(by[[i]]), ")")
+        } else {
+          paste0(i, " = c(", toString(sprintf("'%s'", by[[i]])), ")")
+        }
+      },
+      character(1)
+    ))
+  }
+
   by_stripped <- vapply(
     by,
     function(by_var) {
-      .get_datagrid_clean_target(by_var, x = data, digits = digits)$varname
+      if (grepl("=", by_var, fixed = TRUE)) {
+        # Split by '=' but keep quoted parts
+        parts <- trim_ws(unlist(
+          strsplit(by_var, "(?=(?:[^\"']|\"[^\"]*\"|'[^']*')*$)=", perl = TRUE),
+          use.names = FALSE
+        ))
+        parts[1]
+      } else {
+        by_var
+      }
     },
     character(1)
   )
