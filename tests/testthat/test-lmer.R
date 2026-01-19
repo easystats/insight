@@ -476,7 +476,7 @@ suppressMessages({
     Reaction ~
       (1 |
         mygrp / mysubgrp) +
-        (1 | Subject),
+      (1 | Subject),
     data = sleepstudy
   )
 
@@ -585,12 +585,12 @@ test_that("get_predicted_ci: warning when model matrix and varcovmat do not matc
   mod <- suppressMessages(lme4::lmer(
     weight ~
       1 +
-        Time +
-        I(Time^2) +
-        Diet +
-        Time:Diet +
-        I(Time^2):Diet +
-        (1 + Time + I(Time^2) | Chick),
+      Time +
+      I(Time^2) +
+      Diet +
+      Time:Diet +
+      I(Time^2):Diet +
+      (1 + Time + I(Time^2) | Chick),
     data = ChickWeight
   ))
   newdata <- ChickWeight[ChickWeight$Time %in% 0:10 & ChickWeight$Chick %in% c(1, 40), ]
