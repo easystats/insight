@@ -140,12 +140,12 @@ withr::with_package(
     mar <- suppressWarnings(plm::pgmm(
       log(emp) ~
         lag(log(emp), 1:2) +
-          lag(log(wage), 0:1) +
-          log(capital) +
-          lag(log(capital), 2) +
-          log(output) +
-          lag(log(output), 2) |
-          lag(log(emp), 2:99),
+        lag(log(wage), 0:1) +
+        log(capital) +
+        lag(log(capital), 2) +
+        log(output) +
+        lag(log(output), 2) |
+        lag(log(emp), 2:99),
       data = EmplUK,
       effect = "twoways",
       model = "twosteps"

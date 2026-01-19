@@ -12,13 +12,7 @@
 is_empty_object <- function(x) {
   flag_empty <- FALSE
 
-  # precaution to take for a tibble
-  if (inherits(x, c("tbl_df", "tbl"))) {
-    x <- as.data.frame(x)
-  }
-
   if (inherits(x, "data.frame")) {
-    x <- as.data.frame(x)
     flag_empty <- TRUE
     if (nrow(x) > 0 && ncol(x) > 0) {
       i <- 0

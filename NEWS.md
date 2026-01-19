@@ -1,3 +1,11 @@
+# insight (devel)
+
+## Changes
+
+* Improve performance for `is_empty_object()` for large data frames (which, in
+  turn, should improve performance of many other functions relying on this
+  helper-function, including from other packages).
+
 # insight 1.4.4
 
 ## Bug fixes
