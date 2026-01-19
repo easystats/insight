@@ -40,8 +40,8 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #> 
 #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 2.2e-05 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.22 seconds.
+#> Chain 1: Gradient evaluation took 2.3e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -58,15 +58,15 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #> Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 0.406 seconds (Warm-up)
-#> Chain 1:                0.394 seconds (Sampling)
-#> Chain 1:                0.8 seconds (Total)
+#> Chain 1:  Elapsed Time: 0.408 seconds (Warm-up)
+#> Chain 1:                0.396 seconds (Sampling)
+#> Chain 1:                0.804 seconds (Total)
 #> Chain 1: 
 #> 
 #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
 #> Chain 2: 
-#> Chain 2: Gradient evaluation took 1.6e-05 seconds
-#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Chain 2: Gradient evaluation took 1.2e-05 seconds
+#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
 #> Chain 2: Adjust your expectations accordingly!
 #> Chain 2: 
 #> Chain 2: 
@@ -83,15 +83,15 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #> Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #> Chain 2: 
-#> Chain 2:  Elapsed Time: 0.388 seconds (Warm-up)
-#> Chain 2:                0.385 seconds (Sampling)
-#> Chain 2:                0.773 seconds (Total)
+#> Chain 2:  Elapsed Time: 0.386 seconds (Warm-up)
+#> Chain 2:                0.384 seconds (Sampling)
+#> Chain 2:                0.77 seconds (Total)
 #> Chain 2: 
 #> 
 #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
 #> Chain 3: 
-#> Chain 3: Gradient evaluation took 1.1e-05 seconds
-#> Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
+#> Chain 3: Gradient evaluation took 4.1e-05 seconds
+#> Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.41 seconds.
 #> Chain 3: Adjust your expectations accordingly!
 #> Chain 3: 
 #> Chain 3: 
@@ -108,15 +108,15 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #> Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #> Chain 3: 
-#> Chain 3:  Elapsed Time: 0.416 seconds (Warm-up)
-#> Chain 3:                0.443 seconds (Sampling)
-#> Chain 3:                0.859 seconds (Total)
+#> Chain 3:  Elapsed Time: 0.411 seconds (Warm-up)
+#> Chain 3:                0.441 seconds (Sampling)
+#> Chain 3:                0.852 seconds (Total)
 #> Chain 3: 
 #> 
 #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
 #> Chain 4: 
-#> Chain 4: Gradient evaluation took 1.2e-05 seconds
-#> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
+#> Chain 4: Gradient evaluation took 1.3e-05 seconds
+#> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
 #> Chain 4: Adjust your expectations accordingly!
 #> Chain 4: 
 #> Chain 4: 
@@ -133,9 +133,9 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #> Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #> Chain 4: 
-#> Chain 4:  Elapsed Time: 0.405 seconds (Warm-up)
-#> Chain 4:                0.453 seconds (Sampling)
-#> Chain 4:                0.858 seconds (Total)
+#> Chain 4:  Elapsed Time: 0.402 seconds (Warm-up)
+#> Chain 4:                0.451 seconds (Sampling)
+#> Chain 4:                0.853 seconds (Total)
 #> Chain 4: 
 get_priors(model)
 #>                        Parameter Distribution Location Scale Adjusted_Scale
