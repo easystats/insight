@@ -7,8 +7,24 @@ test_that("display, matrix", {
     byrow = TRUE,
     dimnames = list(c("row1", "row2"), c("C.1", "C.2", "C.3"))
   )
-  expect_snapshot(as.character(display(mdat)))
-  expect_snapshot(as.character(print_md(mdat)))
+  expect_identical(
+    as.character(display(mdat)),
+    c(
+      "|     | C.1| C.2| C.3|",
+      "|:----|---:|---:|---:|",
+      "|row1 |   1|   2|   3|",
+      "|row2 |  11|  12|  13|"
+    )
+  )
+  expect_identical(
+    as.character(print_md(mdat)),
+    c(
+      "|     | C.1| C.2| C.3|",
+      "|:----|---:|---:|---:|",
+      "|row1 |   1|   2|   3|",
+      "|row2 |  11|  12|  13|"
+    )
+  )
 })
 
 
@@ -29,6 +45,22 @@ test_that("display, table", {
   )
   cat_chi <- chisq.test(as.table(cat_xtbl, simplify = TRUE))
   res <- get_residuals(cat_chi)
-  expect_snapshot(as.character(display(res)))
-  expect_snapshot(as.character(print_md(res)))
+  expect_identical(
+    as.character(display(res)),
+    c(
+      "|    | hiphop| salsa|",
+      "|:---|------:|-----:|",
+      "|no  |  -0.99|  0.96|",
+      "|yes |   0.91| -0.89|"
+    )
+  )
+  expect_identical(
+    as.character(print_md(res)),
+    c(
+      "|    | hiphop| salsa|",
+      "|:---|------:|-----:|",
+      "|no  |  -0.99|  0.96|",
+      "|yes |   0.91| -0.89|"
+    )
+  )
 })
