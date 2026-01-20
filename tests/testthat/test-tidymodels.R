@@ -75,3 +75,131 @@ test_that("get_data", {
   expect_equal(nrow(get_data(m)), 32)
   expect_named(get_data(m), c("mpg", "am", "vs"))
 })
+
+
+# Workflow tests ----------------------------------------------------------
+
+skip_if_not_installed("workflows")
+skip_if_not_installed("recipes")
+
+test_that("workflow with recipe - find_predictors", {
+  rec <- recipes::recipe(mpg ~ am + vs + cyl, data = mtcars) %>%
+    recipes::step_normalize(recipes::all_numeric_predictors())
+
+  wf <- workflows::workflow() %>%
+    workflows::add_recipe(rec) %>%
+    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+
+  wf_fit <- parsnip::fit(wf, data = mtcars)
+
+  expect_identical(find_predictors(wf_fit), list(conditional = c("am", "vs", "cyl")))
+  expect_identical(find_predictors(wf_fit, flatten = TRUE), c("am", "vs", "cyl"))
+})
+
+test_that("workflow with recipe - find_response", {
+  rec <- recipes::recipe(mpg ~ am + vs, data = mtcars)
+  wf <- workflows::workflow() %>%
+    workflows::add_recipe(rec) %>%
+    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+  wf_fit <- parsnip::fit(wf, data = mtcars)
+
+  expect_identical(find_response(wf_fit), "mpg")
+})
+
+test_that("workflow with recipe - find_variables", {
+  rec <- recipes::recipe(mpg ~ am + vs, data = mtcars)
+  wf <- workflows::workflow() %>%
+    workflows::add_recipe(rec) %>%
+    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+  wf_fit <- parsnip::fit(wf, data = mtcars)
+
+  vars <- find_variables(wf_fit)
+  expect_identical(vars$response, "mpg")
+  expect_identical(vars$conditional, c("am", "vs"))
+})
+
+test_that("workflow with recipe - get_data", {
+  rec <- recipes::recipe(mpg ~ am + vs, data = mtcars)
+  wf <- workflows::workflow() %>%
+    workflows::add_recipe(rec) %>%
+    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+  wf_fit <- parsnip::fit(wf, data = mtcars)
+
+  data <- get_data(wf_fit)
+  expect_equal(nrow(data), 32)
+  expect_true(all(c("mpg", "am", "vs") %in% colnames(data)))
+})
+
+test_that("workflow with formula - find_predictors", {
+  wf <- workflows::workflow() %>%
+    workflows::add_formula(mpg ~ am + vs + cyl) %>%
+    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+  wf_fit <- parsnip::fit(wf, data = mtcars)
+
+  expect_identical(find_predictors(wf_fit), list(conditional = c("am", "vs", "cyl")))
+  expect_identical(find_predictors(wf_fit, flatten = TRUE), c("am", "vs", "cyl"))
+})
+
+test_that("workflow with formula - find_variables", {
+  wf <- workflows::workflow() %>%
+    workflows::add_formula(mpg ~ am + vs) %>%
+    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+  wf_fit <- parsnip::fit(wf, data = mtcars)
+
+  vars <- find_variables(wf_fit)
+  expect_identical(vars$response, "mpg")
+  expect_identical(vars$conditional, c("am", "vs"))
+})
+
+test_that("workflow with formula - get_data", {
+  wf <- workflows::workflow() %>%
+    workflows::add_formula(mpg ~ am + vs) %>%
+    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+  wf_fit <- parsnip::fit(wf, data = mtcars)
+
+  data <- get_data(wf_fit)
+  expect_equal(nrow(data), 32)
+  expect_true(all(c("mpg", "am", "vs") %in% colnames(data)))
+})
+
+test_that("workflow with complex recipe transformations", {
+  # Create a dataset with numeric and categorical variables
+  test_data <- mtcars
+  test_data$cyl <- factor(test_data$cyl)
+  test_data$gear <- factor(test_data$gear)
+
+  rec <- recipes::recipe(mpg ~ ., data = test_data) %>%
+    recipes::step_log(mpg, base = 10) %>%
+    recipes::step_normalize(recipes::all_numeric_predictors()) %>%
+    recipes::step_dummy(recipes::all_nominal_predictors())
+
+  wf <- workflows::workflow() %>%
+    workflows::add_recipe(rec) %>%
+    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+
+  wf_fit <- parsnip::fit(wf, data = test_data)
+
+  # Test find_predictors
+  predictors <- find_predictors(wf_fit, flatten = TRUE)
+  expect_true(length(predictors) > 0)
+  expect_true("disp" %in% predictors)
+  expect_true("hp" %in% predictors)
+  expect_true("cyl" %in% predictors)
+  expect_true("gear" %in% predictors)
+  expect_false("mpg" %in% predictors)  # Response should not be in predictors
+
+  # Test find_response
+  expect_identical(find_response(wf_fit), "mpg")
+
+  # Test find_variables
+  vars <- find_variables(wf_fit)
+  expect_identical(vars$response, "mpg")
+  expect_true(length(vars$conditional) >= 10)  # All predictor variables
+
+  # Test get_data
+  data <- get_data(wf_fit)
+  expect_equal(nrow(data), nrow(test_data))
+  expect_true("mpg" %in% colnames(data))
+  expect_true("disp" %in% colnames(data))
+  expect_true("cyl" %in% colnames(data))
+})
