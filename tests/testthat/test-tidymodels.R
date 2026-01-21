@@ -186,7 +186,7 @@ test_that("workflow with complex recipe transformations", {
   expect_true("hp" %in% predictors)
   expect_true("cyl" %in% predictors)
   expect_true("gear" %in% predictors)
-  expect_false("mpg" %in% predictors)  # Response should not be in predictors
+  expect_false("mpg" %in% predictors) # Response should not be in predictors
 
   # Test find_response
   expect_identical(find_response(wf_fit), "mpg")
@@ -194,7 +194,7 @@ test_that("workflow with complex recipe transformations", {
   # Test find_variables
   vars <- find_variables(wf_fit)
   expect_identical(vars$response, "mpg")
-  expect_true(length(vars$conditional) >= 10)  # All predictor variables
+  expect_true(length(vars$conditional) >= 10) # All predictor variables
 
   # Test get_data
   data <- get_data(wf_fit)
