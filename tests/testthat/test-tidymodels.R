@@ -96,7 +96,7 @@ test_that("workflow with recipe - find_predictors", {
   expect_identical(find_predictors(wf_fit, flatten = TRUE), c("am", "vs", "cyl"))
 })
 
-test_that("workflow with recipe - find_response", {
+test_that("workflow with recipe - find_response, find_variables, get_data", {
   rec <- recipes::recipe(mpg ~ am + vs, data = mtcars)
   wf <- workflows::workflow() %>%
     workflows::add_recipe(rec) %>%
@@ -104,33 +104,17 @@ test_that("workflow with recipe - find_response", {
   wf_fit <- parsnip::fit(wf, data = mtcars)
 
   expect_identical(find_response(wf_fit), "mpg")
-})
-
-test_that("workflow with recipe - find_variables", {
-  rec <- recipes::recipe(mpg ~ am + vs, data = mtcars)
-  wf <- workflows::workflow() %>%
-    workflows::add_recipe(rec) %>%
-    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
-  wf_fit <- parsnip::fit(wf, data = mtcars)
 
   vars <- find_variables(wf_fit)
   expect_identical(vars$response, "mpg")
   expect_identical(vars$conditional, c("am", "vs"))
-})
-
-test_that("workflow with recipe - get_data", {
-  rec <- recipes::recipe(mpg ~ am + vs, data = mtcars)
-  wf <- workflows::workflow() %>%
-    workflows::add_recipe(rec) %>%
-    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
-  wf_fit <- parsnip::fit(wf, data = mtcars)
 
   data <- get_data(wf_fit)
   expect_equal(nrow(data), 32)
   expect_true(all(c("mpg", "am", "vs") %in% colnames(data)))
 })
 
-test_that("workflow with formula - find_predictors", {
+test_that("workflow with formula - find_predictors, find_variables, get_data", {
   wf <- workflows::workflow() %>%
     workflows::add_formula(mpg ~ am + vs + cyl) %>%
     workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
@@ -138,28 +122,14 @@ test_that("workflow with formula - find_predictors", {
 
   expect_identical(find_predictors(wf_fit), list(conditional = c("am", "vs", "cyl")))
   expect_identical(find_predictors(wf_fit, flatten = TRUE), c("am", "vs", "cyl"))
-})
-
-test_that("workflow with formula - find_variables", {
-  wf <- workflows::workflow() %>%
-    workflows::add_formula(mpg ~ am + vs) %>%
-    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
-  wf_fit <- parsnip::fit(wf, data = mtcars)
 
   vars <- find_variables(wf_fit)
   expect_identical(vars$response, "mpg")
-  expect_identical(vars$conditional, c("am", "vs"))
-})
-
-test_that("workflow with formula - get_data", {
-  wf <- workflows::workflow() %>%
-    workflows::add_formula(mpg ~ am + vs) %>%
-    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
-  wf_fit <- parsnip::fit(wf, data = mtcars)
+  expect_identical(vars$conditional, c("am", "vs", "cyl"))
 
   data <- get_data(wf_fit)
   expect_equal(nrow(data), 32)
-  expect_true(all(c("mpg", "am", "vs") %in% colnames(data)))
+  expect_true(all(c("mpg", "am", "vs", "cyl") %in% colnames(data)))
 })
 
 test_that("workflow with complex recipe transformations", {
