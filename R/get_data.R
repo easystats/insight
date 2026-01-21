@@ -390,7 +390,9 @@ get_data.workflow <- function(x, verbose = TRUE, ...) {
     if (!is.null(fitted_model)) {
       return(get_data(fitted_model, verbose = verbose, ...))
     }
-    if (verbose) format_warning("Could not extract data from workflow.")
+    if (verbose) {
+      format_warning("Could not extract data from workflow.")
+    }
     return(NULL)
   }
 
@@ -398,7 +400,9 @@ get_data.workflow <- function(x, verbose = TRUE, ...) {
   if (inherits(preprocessor, "recipe")) {
     training_data <- preprocessor$template
     if (is.null(training_data) || nrow(training_data) == 0) {
-      if (verbose) format_warning("Recipe has no training data (template).")
+      if (verbose) {
+        format_warning("Recipe has no training data (template).")
+      }
       return(NULL)
     }
     return(training_data)
@@ -411,14 +415,18 @@ get_data.workflow <- function(x, verbose = TRUE, ...) {
       training_data <- cbind(mold$outcomes, mold$predictors)
       return(as.data.frame(training_data))
     }
-    if (verbose) format_warning("Could not extract data from formula-based workflow.")
+    if (verbose) {
+      format_warning("Could not extract data from formula-based workflow.")
+    }
     return(NULL)
   }
 
   # Unknown preprocessor type
   if (verbose) {
-    format_warning(sprintf("Unknown preprocessor type: %s",
-                           paste(class(preprocessor), collapse = ", ")))
+    format_warning(sprintf(
+      "Unknown preprocessor type: %s",
+      paste(class(preprocessor), collapse = ", ")
+    ))
   }
   NULL
 }

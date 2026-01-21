@@ -195,8 +195,14 @@ find_predictors.default <- function(
 
 
 #' @export
-find_predictors.workflow <- function(x, effects = "fixed", component = "all",
-                                     flatten = FALSE, verbose = TRUE, ...) {
+find_predictors.workflow <- function(
+  x,
+  effects = "fixed",
+  component = "all",
+  flatten = FALSE,
+  verbose = TRUE,
+  ...
+) {
   insight::check_if_installed(c("workflows", "recipes"))
 
   preprocessor <- .safe(workflows::extract_preprocessor(x))
@@ -207,7 +213,9 @@ find_predictors.workflow <- function(x, effects = "fixed", component = "all",
     if (!is.null(fitted_model)) {
       return(find_predictors(fitted_model, effects, component, flatten, verbose, ...))
     }
-    if (verbose) format_warning("Could not extract predictors from workflow.")
+    if (verbose) {
+      format_warning("Could not extract predictors from workflow.")
+    }
     return(NULL)
   }
 
@@ -215,12 +223,16 @@ find_predictors.workflow <- function(x, effects = "fixed", component = "all",
   if (inherits(preprocessor, "recipe")) {
     var_info <- preprocessor$var_info
     if (is.null(var_info) || nrow(var_info) == 0) {
-      if (verbose) format_warning("Recipe has no variable information.")
+      if (verbose) {
+        format_warning("Recipe has no variable information.")
+      }
       return(NULL)
     }
 
     predictor_vars <- var_info$variable[var_info$role == "predictor"]
-    if (length(predictor_vars) == 0) return(NULL)
+    if (length(predictor_vars) == 0) {
+      return(NULL)
+    }
 
     l <- list(conditional = predictor_vars)
     return(if (flatten) unique(unlist(l, use.names = FALSE)) else compact_list(l))
@@ -233,14 +245,18 @@ find_predictors.workflow <- function(x, effects = "fixed", component = "all",
     f <- .prepare_predictors(x, f, elements)
     l <- .return_vars(f, x)
 
-    if (is_empty_object(l) || is_empty_object(compact_list(l))) return(NULL)
+    if (is_empty_object(l) || is_empty_object(compact_list(l))) {
+      return(NULL)
+    }
     return(if (flatten) unique(unlist(l, use.names = FALSE)) else compact_list(l))
   }
 
   # Unknown preprocessor type
   if (verbose) {
-    format_warning(sprintf("Unknown preprocessor type: %s",
-                           paste(class(preprocessor), collapse = ", ")))
+    format_warning(sprintf(
+      "Unknown preprocessor type: %s",
+      paste(class(preprocessor), collapse = ", ")
+    ))
   }
   NULL
 }
