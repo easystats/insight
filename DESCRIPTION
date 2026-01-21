@@ -185,6 +185,7 @@ Suggests:
     quantreg,
     Rcpp,
     RcppEigen,
+    recipes,
     rmarkdown,
     rms,
     robustbase,
@@ -213,7 +214,8 @@ Suggests:
     tweedie,
     VGAM,
     WeightIt,
-    withr
+    withr,
+    workflows
 VignetteBuilder:
     knitr
 Encoding: UTF-8
