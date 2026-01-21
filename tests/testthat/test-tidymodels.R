@@ -141,7 +141,7 @@ test_that("workflow with complex recipe transformations", {
   rec <- recipes::recipe(mpg ~ ., data = test_data) %>%
     recipes::step_log(mpg, base = 10) %>%
     recipes::step_normalize(recipes::all_numeric_predictors()) %>%
-    recipes::step_dummy(recipes::all_nominal_predictors())
+    recipes::step_dummy(recipes::all_nominal_predictors(), contrasts = "contr.treatment")
 
   wf <- workflows::workflow() %>%
     workflows::add_recipe(rec) %>%
