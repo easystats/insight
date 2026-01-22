@@ -379,6 +379,60 @@ get_data.model_fit <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+get_data.workflow <- function(x, verbose = TRUE, ...) {
+  insight::check_if_installed("workflows")
+
+  preprocessor <- .safe(workflows::extract_preprocessor(x))
+
+  if (is.null(preprocessor)) {
+    # Delegate to fitted model
+    fitted_model <- .safe(workflows::extract_fit_parsnip(x))
+    if (!is.null(fitted_model)) {
+      return(get_data(fitted_model, verbose = verbose, ...))
+    }
+    if (verbose) {
+      format_warning("Could not extract data from workflow.")
+    }
+    return(NULL)
+  }
+
+  # Recipe preprocessor - use template
+  if (inherits(preprocessor, "recipe")) {
+    training_data <- preprocessor$template
+    if (is.null(training_data) || nrow(training_data) == 0) {
+      if (verbose) {
+        format_warning("Recipe has no training data (template).")
+      }
+      return(NULL)
+    }
+    return(training_data)
+  }
+
+  # Formula preprocessor - extract from mold
+  if (inherits(preprocessor, "formula")) {
+    mold <- .safe(x$pre$mold)
+    if (!is.null(mold) && !is.null(mold$predictors) && !is.null(mold$outcomes)) {
+      training_data <- cbind(mold$outcomes, mold$predictors)
+      return(as.data.frame(training_data))
+    }
+    if (verbose) {
+      format_warning("Could not extract data from formula-based workflow.")
+    }
+    return(NULL)
+  }
+
+  # Unknown preprocessor type
+  if (verbose) {
+    format_warning(sprintf(
+      "Unknown preprocessor type: %s",
+      paste(class(preprocessor), collapse = ", ")
+    ))
+  }
+  NULL
+}
+
+
+#' @export
 get_data.mhurdle <- function(x, verbose = TRUE, ...) {
   x[["model"]]
 }
