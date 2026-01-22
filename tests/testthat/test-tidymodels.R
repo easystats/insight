@@ -60,7 +60,7 @@ test_that("get_response", {
 })
 
 test_that("get_predictors", {
-  expect_equal(colnames(get_predictors(m)), c("am", "vs"))
+  expect_named(get_predictors(m), c("am", "vs"))
 })
 
 test_that("link_inverse", {
@@ -83,12 +83,12 @@ skip_if_not_installed("workflows")
 skip_if_not_installed("recipes")
 
 test_that("workflow with recipe - find_predictors", {
-  rec <- recipes::recipe(mpg ~ am + vs + cyl, data = mtcars) %>%
-    recipes::step_normalize(recipes::all_numeric_predictors())
+  rec <- recipes::recipe(mpg ~ am + vs + cyl, data = mtcars)
+  rec <- recipes::step_normalize(rec, recipes::all_numeric_predictors())
 
-  wf <- workflows::workflow() %>%
-    workflows::add_recipe(rec) %>%
-    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+  wf <- workflows::workflow()
+  wf <- workflows::add_recipe(wf, rec)
+  wf <- workflows::add_model(wf, parsnip::set_engine(parsnip::linear_reg(), "lm"))
 
   wf_fit <- parsnip::fit(wf, data = mtcars)
 
@@ -98,9 +98,9 @@ test_that("workflow with recipe - find_predictors", {
 
 test_that("workflow with recipe - find_response, find_variables, get_data", {
   rec <- recipes::recipe(mpg ~ am + vs, data = mtcars)
-  wf <- workflows::workflow() %>%
-    workflows::add_recipe(rec) %>%
-    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+  wf <- workflows::workflow()
+  wf <- workflows::add_recipe(wf, rec)
+  wf <- workflows::add_model(wf, parsnip::set_engine(parsnip::linear_reg(), "lm"))
   wf_fit <- parsnip::fit(wf, data = mtcars)
 
   expect_identical(find_response(wf_fit), "mpg")
@@ -110,14 +110,14 @@ test_that("workflow with recipe - find_response, find_variables, get_data", {
   expect_identical(vars$conditional, c("am", "vs"))
 
   data <- get_data(wf_fit)
-  expect_equal(nrow(data), 32)
+  expect_identical(nrow(data), 32L)
   expect_true(all(c("mpg", "am", "vs") %in% colnames(data)))
 })
 
 test_that("workflow with formula - find_predictors, find_variables, get_data", {
-  wf <- workflows::workflow() %>%
-    workflows::add_formula(mpg ~ am + vs + cyl) %>%
-    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+  wf <- workflows::workflow()
+  wf <- workflows::add_formula(wf, mpg ~ am + vs + cyl)
+  wf <- workflows::add_model(parsnip::set_engine(parsnip::linear_reg(), "lm"))
   wf_fit <- parsnip::fit(wf, data = mtcars)
 
   expect_identical(find_predictors(wf_fit), list(conditional = c("am", "vs", "cyl")))
@@ -128,7 +128,7 @@ test_that("workflow with formula - find_predictors, find_variables, get_data", {
   expect_identical(vars$conditional, c("am", "vs", "cyl"))
 
   data <- get_data(wf_fit)
-  expect_equal(nrow(data), 32)
+  expect_identical(nrow(data), 32L)
   expect_true(all(c("mpg", "am", "vs", "cyl") %in% colnames(data)))
 })
 
