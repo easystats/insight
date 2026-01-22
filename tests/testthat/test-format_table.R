@@ -228,7 +228,7 @@ withr::with_options(
     )
 
     expect_identical(
-      capture.output(format_table(out)),
+      capture.output(print(format_table(out), width = 200)),
       c(
         "    Parameter   Component Median         95% CI   pd % in ROPE       BF  Rhat ESS",
         "1 b_Intercept conditional  32.22 [27.22, 35.76] 100%        0% 1.97e+06 1.004  88",
