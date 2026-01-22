@@ -24,25 +24,25 @@ test_that("param", {
   expect_identical(
     capture.output(out1),
     c(
-      "    Parameter  Estimate Response",
-      "1 (Intercept)  -64.4763        6",
-      "2        disp    0.2340        6",
-      "3          hp    0.2832        6",
-      "4 (Intercept) -124.0253        8",
-      "5        disp    0.2899        8",
-      "6          hp    0.6234        8"
+      "    Parameter Estimate Response",
+      "1 (Intercept) -54.2937        6",
+      "2        disp   0.2231        6",
+      "3          hp   0.2030        6",
+      "4 (Intercept) -92.8615        8",
+      "5        disp   0.2578        8",
+      "6          hp   0.4259        8"
     )
   )
   expect_identical(
     capture.output(out2),
     c(
       "    Parameter Statistic Response",
-      "1 (Intercept)   -0.9588        6",
-      "2        disp    0.5503        6",
-      "3          hp    0.4947        6",
-      "4 (Intercept)   -1.6898        8",
-      "5        disp    0.4413        8",
-      "6          hp    0.6006        8"
+      "1 (Intercept)   -1.1577        6",
+      "2        disp    0.5763        6",
+      "3          hp    0.3571        6",
+      "4 (Intercept)   -1.3732        8",
+      "5        disp    0.6402        8",
+      "6          hp    0.6742        8"
     )
   )
   expect_identical(
