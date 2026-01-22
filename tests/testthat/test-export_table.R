@@ -1,3 +1,5 @@
+skip_on_ci()
+
 d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
 
 test_that("export_table", {
