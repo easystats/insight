@@ -138,14 +138,18 @@ test_that("workflow with complex recipe transformations", {
   test_data$cyl <- factor(test_data$cyl)
   test_data$gear <- factor(test_data$gear)
 
-  rec <- recipes::recipe(mpg ~ ., data = test_data) %>%
-    recipes::step_log(mpg, base = 10) %>%
-    recipes::step_normalize(recipes::all_numeric_predictors()) %>%
-    recipes::step_dummy(recipes::all_nominal_predictors(), contrasts = "contr.treatment")
+  rec <- recipes::recipe(mpg ~ ., data = test_data)
+  rec <- recipes::step_log(rec, mpg, base = 10)
+  rec <- recipes::step_normalize(rec, recipes::all_numeric_predictors())
+  rec <- recipes::step_dummy(
+    rec,
+    recipes::all_nominal_predictors(),
+    contrasts = "contr.treatment"
+  )
 
-  wf <- workflows::workflow() %>%
-    workflows::add_recipe(rec) %>%
-    workflows::add_model(parsnip::linear_reg() %>% parsnip::set_engine("lm"))
+  wf <- workflows::workflow()
+  wf <- workflows::add_recipe(wf, rec)
+  wf <- workflows::add_model(wf, parsnip::set_engine(parsnip::linear_reg(), "lm"))
 
   wf_fit <- parsnip::fit(wf, data = test_data)
 
