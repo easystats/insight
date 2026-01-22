@@ -21,8 +21,30 @@ test_that("param", {
   out2$Statistic <- round(out2$Statistic, 4)
   expect_equal(out1$Response, c("6", "6", "6", "8", "8", "8"))
   expect_equal(out2$Response, c("6", "6", "6", "8", "8", "8"))
-  expect_snapshot(out1)
-  expect_snapshot(out2)
+  expect_identical(
+    capture.output(out1),
+    c(
+      "    Parameter  Estimate Response",
+      "1 (Intercept)  -64.4763        6",
+      "2        disp    0.2340        6",
+      "3          hp    0.2832        6",
+      "4 (Intercept) -124.0253        8",
+      "5        disp    0.2899        8",
+      "6          hp    0.6234        8"
+    )
+  )
+  expect_identical(
+    capture.output(out2),
+    c(
+      "    Parameter Statistic Response",
+      "1 (Intercept)   -0.9588        6",
+      "2        disp    0.5503        6",
+      "3          hp    0.4947        6",
+      "4 (Intercept)   -1.6898        8",
+      "5        disp    0.4413        8",
+      "6          hp    0.6006        8"
+    )
+  )
   expect_identical(
     find_parameters(pooled),
     list(conditional = c("(Intercept)", "disp", "hp"))
