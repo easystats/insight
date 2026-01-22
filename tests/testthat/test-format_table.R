@@ -150,12 +150,27 @@ test_that("format_table with stars freq", {
 
 # test for freq models -----------------
 test_that("formatting ROPE CI", {
+  skip_on_cran()
   skip_if_not_installed("parameters")
   data(iris)
   d <- iris
   d$Sepal.Length10 <- 10 * d$Sepal.Length
   m10 <- lm(Sepal.Length10 ~ Sepal.Width + Species, data = d)
-  expect_snapshot(print(parameters::equivalence_test(m10)))
+  expect_identical(
+    capture.output(print(parameters::equivalence_test(m10))),
+    c(
+      "# TOST-test for Practical Equivalence",
+      "",
+      "  ROPE: [-0.83 0.83]",
+      "",
+      "Parameter            |         90% CI |   SGPV | Equivalence |      p",
+      "---------------------------------------------------------------------",
+      "(Intercept)          | [16.39, 28.63] | < .001 |    Rejected | > .999",
+      "Sepal Width          | [ 6.28,  9.80] | < .001 |    Rejected | > .999",
+      "Species [versicolor] | [12.73, 16.44] | < .001 |    Rejected | > .999",
+      "Species [virginica]  | [17.81, 21.12] | < .001 |    Rejected | > .999"
+    )
+  )
 
   # drop attributes
   mp <- as.data.frame(parameters::model_parameters(m10))[c(
@@ -166,12 +181,31 @@ test_that("formatting ROPE CI", {
     "CI_high",
     "p"
   )]
-  expect_snapshot(format_table(mp), variant = "windows")
-  expect_snapshot(format_table(mp, digits = 4), variant = "windows")
+  expect_identical(
+    capture.output(format_table(mp)),
+    c(
+      "          Parameter Coefficient         95% CI      p",
+      "1       (Intercept)       22.51 [15.21, 29.82] < .001",
+      "2       Sepal.Width        8.04 [ 5.93, 10.14] < .001",
+      "3 Speciesversicolor       14.59 [12.37, 16.80] < .001",
+      "4  Speciesvirginica       19.47 [17.49, 21.44] < .001"
+    )
+  )
+  expect_identical(
+    capture.output(format_table(mp, digits = 4)),
+    c(
+      "          Parameter Coefficient             95% CI      p",
+      "1       (Intercept)     22.5139 [15.2063, 29.8216] < .001",
+      "2       Sepal.Width      8.0356 [ 5.9340, 10.1372] < .001",
+      "3 Speciesversicolor     14.5874 [12.3718, 16.8031] < .001",
+      "4  Speciesvirginica     19.4682 [17.4915, 21.4448] < .001"
+    )
+  )
 })
 
 
 test_that("reorder columns BF", {
+  skip_on_cran()
   # brms_bf <- suppressWarnings(download_model("brms_bf_1"))
   out <- data.frame(
     Parameter = c("b_Intercept", "b_wt", "sigma"),
@@ -188,16 +222,41 @@ test_that("reorder columns BF", {
     stringsAsFactors = FALSE
   )
 
-  expect_snapshot(format_table(out), variant = "windows")
+  expect_identical(
+    capture.output(format_table(out)),
+    c(
+      "    Parameter   Component Median         95% CI   pd % in ROPE       BF  Rhat ESS",
+      "1 b_Intercept conditional  32.22 [27.22, 35.76] 100%        0% 1.97e+06 1.004  88",
+      "2        b_wt conditional  -3.76 [-4.97, -2.21] 100%        0%   330.18 1.001  92",
+      "3       sigma       sigma   3.46 [ 2.65,  4.70] 100%        0% 7.29e+03 0.992 168"
+    )
+  )
 })
 
 
 test_that("significance stars", {
+  skip_on_cran()
   m <- lm(mpg ~ wt, data = mtcars)
   out <- parameters::parameters(m)
 
-  expect_snapshot(print(out, stars = TRUE), variant = "windows")
-  expect_snapshot(print(out, stars = TRUE, stars_only = TRUE), variant = "windows")
+  expect_identical(
+    capture.output(print(out, stars = TRUE)),
+    c(
+      "Parameter   | Coefficient |   SE |         95% CI | t(30) |         p",
+      "---------------------------------------------------------------------",
+      "(Intercept) |       37.29 | 1.88 | [33.45, 41.12] | 19.86 | < .001***",
+      "wt          |       -5.34 | 0.56 | [-6.49, -4.20] | -9.56 | < .001***"
+    )
+  )
+  expect_identical(
+    capture.output(print(out, stars = TRUE, stars_only = TRUE)),
+    c(
+      "Parameter   | Coefficient |   SE |         95% CI | t(30) |   p",
+      "---------------------------------------------------------------",
+      "(Intercept) |       37.29 | 1.88 | [33.45, 41.12] | 19.86 | ***",
+      "wt          |       -5.34 | 0.56 | [-6.49, -4.20] | -9.56 | ***"
+    )
+  )
 })
 
 
