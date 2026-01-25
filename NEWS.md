@@ -13,6 +13,8 @@
 
 * Disabled test for the *feisr* package, which currently seems to be broken.
 
+* Fixes issue where `get_datagrid()` failed on random effects with tokens in `by`.
+
 # insight 1.4.4
 
 ## Bug fixes

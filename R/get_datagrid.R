@@ -335,19 +335,7 @@ get_datagrid.data.frame <- function(
     # Validate by argument ============================
 
     # if list, convert to character
-    if (is.list(by)) {
-      by <- unname(vapply(
-        names(by),
-        function(i) {
-          if (is.numeric(by[[i]])) {
-            paste0(i, " = c(", toString(by[[i]]), ")")
-          } else {
-            paste0(i, " = c(", toString(sprintf("'%s'", by[[i]])), ")")
-          }
-        },
-        character(1)
-      ))
-    }
+    by <- .unlist_by(by)
 
     # if by is "all" or numeric or logical indices, extract related
     # column names from data frame and use these as by-variables
@@ -748,6 +736,9 @@ get_datagrid.default <- function(
   # check for interactions in "by"
   by <- .extract_at_interactions(by)
 
+  # convert list-object into character vector
+  by <- .unlist_by(by)
+
   # Drop random factors
   random_factors <- find_random(x, flatten = TRUE, split_nested = TRUE)
   if (!is.null(random_factors)) {
@@ -756,8 +747,25 @@ get_datagrid.default <- function(
       keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
       if (!is.null(keep)) {
         if (all(by != "all")) {
-          keep <- c(keep, by[by %in% random_factors])
-          random_factors <- setdiff(random_factors, by)
+          # make by-token work with random effects, see #1156
+          by_stripped <- vapply(
+            by,
+            function(by_var) {
+              if (grepl("=", by_var, fixed = TRUE)) {
+                # Split by '=' but keep quoted parts
+                parts <- trim_ws(unlist(
+                  strsplit(by_var, "(?=(?:[^\"']|\"[^\"]*\"|'[^']*')*$)=", perl = TRUE),
+                  use.names = FALSE
+                ))
+                parts[1]
+              } else {
+                by_var
+              }
+            },
+            character(1)
+          )
+          keep <- c(keep, by_stripped[by_stripped %in% random_factors])
+          random_factors <- setdiff(random_factors, by_stripped)
         }
         data <- data[colnames(data) %in% keep]
       }
@@ -1536,6 +1544,25 @@ get_datagrid.comparisons <- get_datagrid.slopes
   }
 
   data
+}
+
+
+#' @keywords internal
+.unlist_by <- function(by) {
+  if (is.list(by)) {
+    by <- unname(vapply(
+      names(by),
+      function(i) {
+        if (is.numeric(by[[i]])) {
+          paste0(i, " = c(", toString(by[[i]]), ")")
+        } else {
+          paste0(i, " = c(", toString(sprintf("'%s'", by[[i]])), ")")
+        }
+      },
+      character(1)
+    ))
+  }
+  by
 }
 
 
