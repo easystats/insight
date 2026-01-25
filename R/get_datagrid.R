@@ -335,9 +335,7 @@ get_datagrid.data.frame <- function(
     # Validate by argument ============================
 
     # if list, convert to character
-    if (is.list(by)) {
-      by <- .unlist_by(by)
-    }
+    by <- .unlist_by(by)
 
     # if by is "all" or numeric or logical indices, extract related
     # column names from data frame and use these as by-variables
@@ -739,9 +737,7 @@ get_datagrid.default <- function(
   by <- .extract_at_interactions(by)
 
   # convert list-object into character vector
-  if (is.list(by)) {
-    by <- .unlist_by(by)
-  }
+  by <- .unlist_by(by)
 
   # Drop random factors
   random_factors <- find_random(x, flatten = TRUE, split_nested = TRUE)
@@ -1553,17 +1549,20 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 #' @keywords internal
 .unlist_by <- function(by) {
-  unname(vapply(
-    names(by),
-    function(i) {
-      if (is.numeric(by[[i]])) {
-        paste0(i, " = c(", toString(by[[i]]), ")")
-      } else {
-        paste0(i, " = c(", toString(sprintf("'%s'", by[[i]])), ")")
-      }
-    },
-    character(1)
-  ))
+  if (is.list(by)) {
+    by <- unname(vapply(
+      names(by),
+      function(i) {
+        if (is.numeric(by[[i]])) {
+          paste0(i, " = c(", toString(by[[i]]), ")")
+        } else {
+          paste0(i, " = c(", toString(sprintf("'%s'", by[[i]])), ")")
+        }
+      },
+      character(1)
+    ))
+  }
+  by
 }
 
 
