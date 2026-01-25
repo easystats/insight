@@ -748,6 +748,7 @@ get_datagrid.default <- function(
   # check for interactions in "by"
   by <- .extract_at_interactions(by)
 
+  # convert list-object into character vector
   if (is.list(by)) {
     by <- unname(vapply(
       names(by),
@@ -762,23 +763,6 @@ get_datagrid.default <- function(
     ))
   }
 
-  by_stripped <- vapply(
-    by,
-    function(by_var) {
-      if (grepl("=", by_var, fixed = TRUE)) {
-        # Split by '=' but keep quoted parts
-        parts <- trim_ws(unlist(
-          strsplit(by_var, "(?=(?:[^\"']|\"[^\"]*\"|'[^']*')*$)=", perl = TRUE),
-          use.names = FALSE
-        ))
-        parts[1]
-      } else {
-        by_var
-      }
-    },
-    character(1)
-  )
-
   # Drop random factors
   random_factors <- find_random(x, flatten = TRUE, split_nested = TRUE)
   if (!is.null(random_factors)) {
@@ -787,6 +771,23 @@ get_datagrid.default <- function(
       keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
       if (!is.null(keep)) {
         if (all(by != "all")) {
+          # make by-token work with random effects, see #1156
+          by_stripped <- vapply(
+            by,
+            function(by_var) {
+              if (grepl("=", by_var, fixed = TRUE)) {
+                # Split by '=' but keep quoted parts
+                parts <- trim_ws(unlist(
+                  strsplit(by_var, "(?=(?:[^\"']|\"[^\"]*\"|'[^']*')*$)=", perl = TRUE),
+                  use.names = FALSE
+                ))
+                parts[1]
+              } else {
+                by_var
+              }
+            },
+            character(1)
+          )
           keep <- c(keep, by_stripped[by_stripped %in% random_factors])
           random_factors <- setdiff(random_factors, by_stripped)
         }
