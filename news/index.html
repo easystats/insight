@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.4.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,19 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.5" id="insight-145">insight 1.4.5<a class="anchor" aria-label="anchor" href="#insight-145"></a></h2><p class="text-muted">CRAN release: 2026-01-26</p>
+<div class="section level3">
+<h3 id="changes-1-4-5">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-5"></a></h3>
+<ul><li><p><code><a href="../reference/find_predictors.html">find_predictors()</a></code>, <code><a href="../reference/find_variables.html">find_variables()</a></code>, and <code><a href="../reference/get_data.html">get_data()</a></code> now work with tidymodels workflow objects (<a href="https://github.com/easystats/insight/issues/1161" class="external-link">#1161</a>).</p></li>
+<li><p>Improve performance for <code><a href="../reference/is_empty_object.html">is_empty_object()</a></code> for large data frames (which, in turn, should improve performance of many other functions relying on this helper-function, including from other packages).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-5"></a></h3>
+<ul><li><p>Disabled test for the <em>feisr</em> package, which currently seems to be broken.</p></li>
+<li><p>Fixes issue where <code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> failed on random effects with tokens in <code>by</code>.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.4" id="insight-144">insight 1.4.4<a class="anchor" aria-label="anchor" href="#insight-144"></a></h2><p class="text-muted">CRAN release: 2025-12-06</p>
 <div class="section level3">

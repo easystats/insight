@@ -1,5 +1,33 @@
 # Changelog
 
+## insight 1.4.5
+
+CRAN release: 2026-01-26
+
+### Changes
+
+- [`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md),
+  [`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md),
+  and
+  [`get_data()`](https://easystats.github.io/insight/reference/get_data.md)
+  now work with tidymodels workflow objects
+  ([\#1161](https://github.com/easystats/insight/issues/1161)).
+
+- Improve performance for
+  [`is_empty_object()`](https://easystats.github.io/insight/reference/is_empty_object.md)
+  for large data frames (which, in turn, should improve performance of
+  many other functions relying on this helper-function, including from
+  other packages).
+
+### Bug fixes
+
+- Disabled test for the *feisr* package, which currently seems to be
+  broken.
+
+- Fixes issue where
+  [`get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.md)
+  failed on random effects with tokens in `by`.
+
 ## insight 1.4.4
 
 CRAN release: 2025-12-06
