@@ -254,7 +254,15 @@ print.insight_residuals <- function(x, ...) {
 ## ================================================
 
 .weighted_residuals <- function(x, verbose = TRUE) {
-  w <- get_weights(x, null_as_ones = TRUE)
+  # new in R 4.6 - weights and residuals for glm objects now default to
+  # working weights and residuals
+  if (inherits(x, "glm") && getRversion() >= "4.6.0") {
+    w <- get_weights(x, null_as_ones = TRUE, type = "working")
+    r_type <- "working"
+  } else {
+    w <- get_weights(x, null_as_ones = TRUE)
+    r_type <- "deviance"
+  }
   tryCatch(
     {
       res_resp <- as.vector(get_residuals(
@@ -267,12 +275,15 @@ print.insight_residuals <- function(x, ...) {
       res_dev <- as.vector(get_residuals(
         x,
         weighted = FALSE,
-        type = "deviance",
+        type = r_type,
         verbose = FALSE
       ))
 
       if (!is.null(w) && !is.null(res_dev) && !all(w == 1)) {
-        if (!is.null(res_resp) && identical(res_resp, res_dev)) {
+        if (
+          (!is.null(res_resp) && identical(res_resp, res_dev)) ||
+            identical(r_type, "working")
+        ) {
           res_dev <- res_dev * w^0.5
         }
         res_dev <- res_dev[!is.na(w) & w != 0]
