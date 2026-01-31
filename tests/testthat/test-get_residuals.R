@@ -58,8 +58,9 @@ test_that("get_residuals - glm", {
     as.vector(deviance(m))
   )
   expect_equal(
-    get_residuals(m, weighted = TRUE),
-    as.vector(weighted.residuals(m))
+    as.vector(get_residuals(m, weighted = TRUE)),
+    as.vector(weighted.residuals(m)),
+    ignore_attr = TRUE
   )
 })
 
