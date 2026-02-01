@@ -58,12 +58,14 @@ test_that("get_residuals - glm", {
     as.vector(deviance(m))
   )
   expect_equal(
-    get_residuals(m, weighted = TRUE),
-    as.vector(weighted.residuals(m))
+    as.vector(get_residuals(m, weighted = TRUE)),
+    as.vector(weighted.residuals(m)),
+    ignore_attr = TRUE
   )
 })
 
 test_that("get_residuals - lmer", {
+  skip_on_cran()
   m <- lme4::lmer(Reaction ~ Days + (Days | Subject), weights = w, data = sleepstudy)
   expect_equal(
     as.vector(get_residuals(m, weighted = FALSE)),
@@ -92,6 +94,7 @@ test_that("get_residuals - lmer", {
 })
 
 test_that("get_residuals - glmer", {
+  skip_on_cran()
   m <- lme4::glmer(
     cbind(incidence, size - incidence) ~ period + (1 | herd),
     weights = w,

@@ -1,3 +1,10 @@
+# insight (devel)
+
+## Breaking Changes
+
+* Revised weighted residuals (`get_residuals(weighted = TRUE)`) to be in line
+  with R 4.6.0, which now returns weighted working residuals for `glm` objects.
+
 # insight 1.4.5
 
 ## Changes
