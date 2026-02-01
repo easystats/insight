@@ -22,7 +22,7 @@ needs to be checked in any of the libraries.}
 generic description.}
 
 \item{stop}{Logical that decides whether the function should stop if the
-needed package is not installed.}
+needed package is not installed. Ignored if \code{quietly = TRUE}.}
 
 \item{minimum_version}{A character vector, representing the minimum package
 version that is required for each package. Should be of same length as
