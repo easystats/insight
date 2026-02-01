@@ -173,6 +173,7 @@ Suggests:
     nnet,
     nonnest2,
     ordinal,
+    panelr,
     parameters (>= 0.28.0),
     parsnip,
     pbkrtest,
