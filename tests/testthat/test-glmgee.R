@@ -125,7 +125,7 @@ test_that("get_varcov", {
 
 test_that("get_predicted", {
   grid <- get_datagrid(m1, "days")
-  out <- get_predicted(m1, data = grid, ci = 0.95)
+  out <- get_predicted(m1, data = grid, ci = 0.95, verbose = FALSE)
   expect_equal(
     as.numeric(out),
     c(
