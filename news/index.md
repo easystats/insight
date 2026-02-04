@@ -1,5 +1,15 @@
 # Changelog
 
+## insight 1.4.6
+
+CRAN release: 2026-02-04
+
+### Breaking Changes
+
+- Revised weighted residuals (`get_residuals(weighted = TRUE)`) to be in
+  line with R 4.6.0, which now returns weighted working residuals for
+  `glm` objects.
+
 ## insight 1.4.5
 
 CRAN release: 2026-01-26

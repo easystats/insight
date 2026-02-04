@@ -31,7 +31,7 @@ check_if_installed(
 - stop:
 
   Logical that decides whether the function should stop if the needed
-  package is not installed.
+  package is not installed. Ignored if `quietly = TRUE`.
 
 - minimum_version:
 
