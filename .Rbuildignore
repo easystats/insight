@@ -11,6 +11,7 @@
 ^pkgdown$
 ^README.Rmd
 ^air.toml
+^GEMINI\.md$
 ^paper$
 ^Meta$
 ^WIP$
