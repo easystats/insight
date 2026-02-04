@@ -41,7 +41,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/easystats/insight/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/easystats/insight/blob/v1.4.6/inst/CITATION)
 
 Lüdecke D, Waggoner P, Makowski D (2019). “insight: A Unified Interface
 to Access Information from Model Objects in R.” *Journal of Open Source
