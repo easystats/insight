@@ -5,7 +5,7 @@
 #' @param reason A phrase describing why the package is needed. The default is a
 #'   generic description.
 #' @param stop Logical that decides whether the function should stop if the
-#'   needed package is not installed.
+#'   needed package is not installed. Ignored if `quietly = TRUE`.
 #' @param quietly Logical, if `TRUE`, invisibly returns a vector of logicals
 #'   (`TRUE` for each installed package, `FALSE` otherwise), and does not stop
 #'   or throw a warning. If `quietly = TRUE`, arguments `stop` and `prompt` are

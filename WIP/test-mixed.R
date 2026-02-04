@@ -323,7 +323,7 @@ test_that("get_variance", {
         mygrp = 24.4064
       )
     ),
-    tolerance = 1e-1,
+    tolerance = 1e-1
   ))
 })
 

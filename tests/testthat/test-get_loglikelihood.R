@@ -315,3 +315,16 @@ test_that("get_loglikelihood - fails for negative values for some transformation
   )
   expect_null(get_loglikelihood_adjustment(m))
 })
+
+test_that("get_loglikelihood - tweedie", {
+  skip_on_cran()
+  skip_if_not_installed("tweedie")
+  skip_if_not_installed("statmod")
+  set.seed(123)
+  y <- rgamma(20, shape = 5)
+  x <- 1:20
+  m <- glm(y ~ x, family = statmod::tweedie(var.power = 3, link.power = 0))
+
+  ll <- loglikelihood(m)
+  expect_equal(as.numeric(ll), -42.6214, tolerance = 1e-2, ignore_attr = TRUE)
+})

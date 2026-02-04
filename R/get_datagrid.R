@@ -1202,7 +1202,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
           } else if (parts == "pretty") {
             by_expression <- paste0(
               "c(",
-              paste(as.vector(pretty(x, na.rm = TRUE)), collapse = ","),
+              paste(as.vector(suppressWarnings(pretty(x, na.rm = TRUE))), collapse = ","),
               ")"
             )
           } else if (parts == "zeromax") {
