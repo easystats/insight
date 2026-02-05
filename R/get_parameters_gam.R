@@ -53,8 +53,9 @@ get_parameters.gam <- function(x, component = "all", ...) {
   # avoid calling summary and extract the EDF directly
   smooth_terms <- vapply(
     x[["smooth"]],
-    FUN = \(s) sum(x$edf[seq(s$first.para, s$last.para, by = 1L)]),
-    FUN.VALUE = numeric(1)
+    FUN = function(s, x) sum(x$edf[seq(s$first.para, s$last.para, by = 1L)]),
+    FUN.VALUE = numeric(1),
+    x = x
   )
   names(smooth_terms) <- find_parameters(
     x,
