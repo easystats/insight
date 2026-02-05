@@ -29,6 +29,8 @@ dat <<- data.frame(y0 = y[, 1], y1 = y[, 2], x0 = x0, x1 = x1, x2 = x2, x3 = x3)
 m1 <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat2)
 m2 <- download_model("gam_zi_1")
 m3 <- download_model("gam_mv_1")
+# not a GAM but check functions work if there are no smooths
+m4 <- mgcv::gam(y ~ x0 + x1 + x2 + x3, data = dat2)
 
 skip_if(is.null(m2))
 skip_if(is.null(m3))
@@ -221,6 +223,12 @@ test_that("find_parameters", {
     list(
       conditional = "(Intercept)",
       smooth_terms = c("s(x0)", "s(x1)", "s(x2)", "s(x3)")
+    )
+  )
+  expect_identical(
+    find_parameters(m4),
+    list(
+      conditional = c("(Intercept)", "x0", "x1", "x2", "x3")
     )
   )
   expect_identical(nrow(get_parameters(m1)), 5L)
