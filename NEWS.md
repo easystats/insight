@@ -1,3 +1,10 @@
+# insight (devel)
+
+## Changes
+
+* Improved performance of `find_parameters()` for models from package *mgcv*
+  that include random effects.
+
 # insight 1.4.6
 
 ## Breaking Changes
