@@ -46,10 +46,11 @@ find_parameters.gam <- function(x, component = "all", flatten = FALSE, ...) {
   pars <- list(conditional = names(stats::coef(x)))
   pars$conditional <- text_remove_backticks(pars$conditional)
 
-  st <- summary(x)$s.table
-
   pars$conditional <- pars$conditional[.grep_non_smoothers(pars$conditional)]
-  pars$smooth_terms <- row.names(st)
+  # avoid calling summary(x) as it is expensive for models with ranefs
+  pars$smooth_terms <- vapply(
+    x[["smooth"]], FUN = `[[`, FUN.VALUE = character(1), "label"
+  )
 
   pars <- compact_list(pars)
 
