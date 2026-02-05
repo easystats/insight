@@ -50,9 +50,18 @@ get_parameters.gam <- function(x, component = "all", ...) {
   )
   pars <- stats::coef(x)
 
-  st <- summary(x)$s.table
-  smooth_terms <- st[, 1]
-  names(smooth_terms) <- row.names(st)
+  # avoid calling summary and extract the EDF directly
+  smooth_terms <- vapply(
+    x[["smooth"]],
+    FUN = function(s, x) sum(x$edf[seq(s$first.para, s$last.para, by = 1L)]),
+    FUN.VALUE = numeric(1),
+    x = x
+  )
+  names(smooth_terms) <- find_parameters(
+    x,
+    component = "smooth",
+    flatten = TRUE
+  )
 
   .return_smooth_parms(
     conditional = pars[.grep_non_smoothers(names(pars))],
