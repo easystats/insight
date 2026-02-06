@@ -1,3 +1,5 @@
+skip_if_not_installed("reformulas")
+
 gfe <- .get_fixed_effects
 
 test_that(".get_fixed_effects", {

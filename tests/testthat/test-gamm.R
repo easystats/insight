@@ -1,5 +1,6 @@
 skip_if_not_installed("mgcv")
 skip_if_not_installed("nlme")
+skip_if_not_installed("reformulas")
 
 set.seed(0)
 void <- capture.output(dat <- mgcv::gamSim(6, n = 200, scale = 0.2, dist = "poisson"))
