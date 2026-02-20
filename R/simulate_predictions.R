@@ -1,9 +1,7 @@
 simulate_predictions <- function(
   model,
-  nsim,
-  clean_terms,
+  iterations = 1000,
   ci,
-  type,
   interval = "confidence"
 ) {
   model_data <- get_data(model)
@@ -15,19 +13,15 @@ simulate_predictions <- function(
       model_info$is_ordinal ||
       model_info$is_categorical
   ) {
-    insight::format_error(
-      "Can't simulate predictions from models with binary, categorical or ordinal outcome. Please use another option for argument `type`."
+    format_error(
+      "Can't simulate predictions from models with binary, categorical or ordinal outcome."
     )
-  } # nolint
-
-  if (type == "simulate") {
-    sims <- suppressWarnings(tryCatch(
-      stats::simulate(model, nsim = nsim, re.form = NULL),
-      error = function(e) stats::simulate(model, nsim = nsim, re.form = NA)
-    ))
-  } else {
-    sims <- stats::simulate(model, nsim = nsim, re.form = NA)
   }
+
+  sims <- suppressWarnings(tryCatch(
+    stats::simulate(model, nsim = iterations, re.form = NULL),
+    error = function(e) stats::simulate(model, nsim = iterations, re.form = NA)
+  ))
 
   model_data$predicted <- rowMeans(sims)
   model_data$conf.low <- apply(sims, 1, stats::quantile, probs = 1 - ci)
