@@ -40,7 +40,8 @@ get_simulated(x, ...)
 \arguments{
 \item{x}{A model.}
 
-\item{...}{Additional arguments (currently unused for \code{lm}).}
+\item{...}{Additional arguments passed to the underlying prediction or
+simulation methods.}
 
 \item{data}{An optional data frame in which to evaluate predictions before
 simulation. This can be a data grid created with \code{\link[=get_datagrid]{get_datagrid()}}.}
@@ -49,8 +50,27 @@ simulation. This can be a data grid created with \code{\link[=get_datagrid]{get_
 
 \item{seed}{An optional integer random seed.}
 
-\item{re.form}{For \code{glmmTMB} models, random effects formula passed to
-simulation (\code{NULL}, \code{NA} or \code{~0}).}
+\item{re.form}{For \code{glmmTMB} and \code{merMod} models, random effects formula
+passed to simulation (\code{NULL}, \code{NA} or \code{~0}).}
+
+\item{use.u}{For \code{merMod} models, logical indicating whether to condition
+on the current conditional modes of the random effects when simulating.}
+
+\item{newparams}{For \code{merMod} models, optional list or vector of alternative
+parameter values (e.g., fixed- and random-effect parameters) to be used for
+simulation instead of those from the fitted model.}
+
+\item{family}{For \code{merMod} models, optional \code{family} object or function to
+override the model's family when simulating responses.}
+
+\item{cluster.rand}{For \code{merMod} models, function used to generate random
+draws for the random effects (e.g., \code{rnorm}).}
+
+\item{allow.new.levels}{For \code{merMod} models, logical indicating whether new
+levels of grouping variables are allowed in \code{data} when simulating.}
+
+\item{na.action}{For \code{merMod} models, function specifying how to handle
+missing values in \code{data} before simulation (e.g., \code{"na.pass"}).}
 }
 \value{
 A data frame with one column per simulation (\code{iter_1}, \code{iter_2}, ...).

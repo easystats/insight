@@ -9,9 +9,23 @@
 #'   simulation. This can be a data grid created with [get_datagrid()].
 #' @param iterations Number of response vectors to simulate.
 #' @param seed An optional integer random seed.
-#' @param re.form For `glmmTMB` models, random effects formula passed to
-#'   simulation (`NULL`, `NA` or `~0`).
-#' @param ... Additional arguments (currently unused for `lm`).
+#' @param re.form For `glmmTMB` and `merMod` models, random effects formula
+#' passed to simulation (`NULL`, `NA` or `~0`).
+#' @param use.u For `merMod` models, logical indicating whether to condition
+#' on the current conditional modes of the random effects when simulating.
+#' @param newparams For `merMod` models, optional list or vector of alternative
+#' parameter values (e.g., fixed- and random-effect parameters) to be used for
+#' simulation instead of those from the fitted model.
+#' @param family For `merMod` models, optional `family` object or function to
+#' override the model's family when simulating responses.
+#' @param cluster.rand For `merMod` models, function used to generate random
+#' draws for the random effects (e.g., `rnorm`).
+#' @param allow.new.levels For `merMod` models, logical indicating whether new
+#' levels of grouping variables are allowed in `data` when simulating.
+#' @param na.action For `merMod` models, function specifying how to handle
+#' missing values in `data` before simulation (e.g., `"na.pass"`).
+#' @param ... Additional arguments passed to the underlying prediction or
+#' simulation methods.
 #'
 #' @return A data frame with one column per simulation (`iter_1`, `iter_2`, ...).
 #'   The attribute `seed` contains information about the RNG state used.
@@ -333,7 +347,7 @@ get_simulated.gamlss <- get_simulated.default
 #' @export
 get_simulated.gamm <- get_simulated.default
 #' @export
-get_simulated.glm <- get_simulated.default
+get_simulated.glm <- get_simulated.lm
 #' @export
 get_simulated.glmgee <- get_simulated.default
 #' @export
