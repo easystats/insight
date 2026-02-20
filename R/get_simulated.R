@@ -121,8 +121,10 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
 #' @export
 get_simulated.betareg <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
-    runif(1)
+    stats::runif(1)
   }
+
+  check_if_installed("betareg")
 
   if (is.null(seed)) {
     RNGstate <- get(".Random.seed", envir = .GlobalEnv)
