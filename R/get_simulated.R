@@ -251,6 +251,7 @@ get_simulated.merMod <- function(
   na.action = na.pass,
   ...
 ) {
+  check_if_installed("lme4")
   simulate_fun <- get(".simulateFun", envir = asNamespace("lme4"))
 
   val <- simulate_fun(
