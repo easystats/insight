@@ -37,7 +37,7 @@ get_simulated <- function(x, ...) {
 #' @export
 get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
-    runif(1) # initialize the RNG if necessary
+    stats::runif(1) # initialize the RNG if necessary
   }
 
   if (is.null(seed)) {
@@ -53,51 +53,54 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
     data <- get_data(x, verbose = FALSE)
   }
 
-  fam <- if (isGlm <- inherits(x, "glm")) x$family$family else "gaussian"
-  if (is.null(data)) {
-    ftd <- fitted(x) # == napredict(*, x$fitted)
+  isGlm <- inherits(x, "glm")
+  if (isGlm) {
+    fam <- x$family$family
   } else {
-    ftd <- stats::predict(x, newdata = data, ...)
+    fam <- "gaussian"
   }
-  isMlm <- identical(fam, "gaussian") && is.matrix(ftd)
-  nm <- if (isMlm) dimnames(ftd) else names(ftd)
+  if (is.null(data)) {
+    fitted_values <- stats::fitted(x) # == napredict(*, x$fitted)
+  } else {
+    fitted_values <- stats::predict(x, newdata = data, ...)
+  }
+  isMlm <- identical(fam, "gaussian") && is.matrix(fitted_values)
+  if (isMlm) {
+    nm <- dimnames(fitted_values)
+  } else {
+    nm <- names(fitted_values)
+  }
 
   if (isMlm) {
-    stop("simulate() is not yet implemented for multivariate lm()")
+    format_error("`simulate()` is not yet implemented for multivariate models.")
   }
 
-  n <- length(ftd)
+  n <- length(fitted_values)
   ntot <- n * iterations
 
   val <- switch(
     fam,
     "gaussian" = {
-      vars <- deviance(x) / df.residual(x)
-      if (isMlm) {
-        # not yet implemented
-      } else {
-        if (isGlm) {
-          if (!is.null(x$prior.weights) && length(x$prior.weights) == n) {
-            vars <- vars / x$prior.weights
-          }
-        } else if (
-          !(is.null(w <- x$weights) || (length(w) == 1L && w == 1)) && length(w) == n
-        ) {
-          vars <- vars / w
+      vars <- stats::deviance(x) / stats::df.residual(x)
+      if (isGlm) {
+        if (!is.null(x$prior.weights) && length(x$prior.weights) == n) {
+          vars <- vars / x$prior.weights
         }
-        ftd + rnorm(ntot, sd = sqrt(vars))
+      } else if (
+        !(is.null(w <- x$weights) || (length(w) == 1L && w == 1)) && length(w) == n
+      ) {
+        vars <- vars / w
       }
+      fitted_values + stats::rnorm(ntot, sd = sqrt(vars))
     },
     if (!is.null(x$family$simulate)) {
       x$family$simulate(x, iterations)
     } else {
-      stop(gettextf("family '%s' not implemented", fam), domain = NA)
+      format_error(paste0("Family '", fam, "' not implemented."))
     }
   )
 
-  if (isMlm) {
-    # not yet implemented
-  } else if (!is.list(val)) {
+  if (!is.list(val)) {
     dim(val) <- c(n, iterations)
     val <- as.data.frame(val)
   } else {
