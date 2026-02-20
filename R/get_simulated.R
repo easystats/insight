@@ -66,9 +66,9 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   }
   isMlm <- identical(fam, "gaussian") && is.matrix(fitted_values)
   if (isMlm) {
-    nm <- dimnames(fitted_values)
+    row_names <- dimnames(fitted_values)
   } else {
-    nm <- names(fitted_values)
+    row_names <- names(fitted_values)
   }
 
   if (isMlm) {
@@ -108,8 +108,8 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   }
 
   names(val) <- paste0("iter_", seq_len(iterations))
-  if (!is.null(nm)) {
-    row.names(val) <- nm
+  if (!is.null(row_names)) {
+    row.names(val) <- row_names
   }
 
   attr(val, "seed") <- RNGstate
@@ -145,7 +145,7 @@ get_simulated.betareg <- function(x, data = NULL, iterations = 1, seed = NULL, .
   p <- as.data.frame(p)
 
   n <- nrow(p)
-  nm <- rownames(p)
+  row_names <- rownames(p)
   dist <- if (is.null(x$dist)) "beta" else x$dist
 
   s <- switch(
@@ -164,8 +164,8 @@ get_simulated.betareg <- function(x, data = NULL, iterations = 1, seed = NULL, .
 
   s <- as.data.frame(s)
   names(s) <- paste0("iter_", seq_len(iterations))
-  if (!is.null(nm)) {
-    row.names(s) <- nm
+  if (!is.null(row_names)) {
+    row.names(s) <- row_names
   }
 
   attr(s, "seed") <- RNGstate
