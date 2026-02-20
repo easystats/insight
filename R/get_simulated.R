@@ -185,9 +185,10 @@ get_simulated.glmmTMB <- function(
   re.form = NULL,
   ...
 ) {
+  check_if_installed("glmmTMB")
   no_sim <- get("noSim", envir = asNamespace("glmmTMB"))
   if (no_sim(x$modelInfo$family$family)) {
-    stop("Simulation code has not been implemented for this family")
+    format_error("Simulation code has not been implemented for this family.")
   }
 
   if (!is.null(data)) {
@@ -195,16 +196,12 @@ get_simulated.glmmTMB <- function(
   }
 
   pop_pred <- !is.null(re.form) && ((re.form == ~0) || identical(re.form, NA))
-  if (!(is.null(re.form) || pop_pred)) {
-    stop("re.form must equal NULL, NA, or ~0")
-  }
-
-  if (pop_pred) {
-    stop("conditional simulation is not currently implemented")
+  if (!is.null(re.form)) {
+    format_error("Only `re.form = NULL` is currently implemented.")
   }
 
   if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
-    runif(1)
+    stats::runif(1)
   }
   if (is.null(seed)) {
     RNGstate <- get(".Random.seed", envir = .GlobalEnv)
