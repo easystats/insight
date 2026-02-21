@@ -323,23 +323,25 @@ get_simulated.glmmTMB <- function(
   # do we need to filter?
   if (!is.null(data) && nrow(data) != nrow(model_data)) {
     check_if_installed("datawizard")
+    # find focal terms from data grid
+    focal <- attributes(data)$by
     # remove random effects from data grid
     re <- find_random(x, split_nested = TRUE, flatten = TRUE)
     data[re] <- NULL
     # add simulations to model data
     model_data <- cbind(model_data, ret)
     # next, filter data
-    filtered_data <- datawizard::data_match(model_data, data)
+    filtered_data <- datawizard::data_match(model_data, data[focal])
     # sanity check - did filtering work?
     if (nrow(filtered_data) == 0) {
       format_error(
-        "Simulating prediction only works when values in data grid are also present in the data that was used to fit the model."
+        "Simulating predictions only works when values in the data grid are also present in the data that was used to fit the model."
       )
     }
     # aggreate and average simulations
     ret <- aggregate(
       filtered_data[colnames(ret)],
-      by = filtered_data[colnames(data)],
+      by = filtered_data[focal],
       mean,
       na.rm = TRUE
     )
