@@ -80,25 +80,25 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
     data <- get_data(x, verbose = FALSE)
   }
 
-  isGlm <- inherits(x, "glm")
-  if (isGlm) {
-    fam <- x$family$family
+  is_glm <- inherits(x, "glm")
+  if (is_glm) {
+    model_family <- x$family$family
   } else {
-    fam <- "gaussian"
+    model_family <- "gaussian"
   }
   if (is.null(data)) {
     fitted_values <- stats::fitted(x) # == napredict(*, x$fitted)
   } else {
     fitted_values <- stats::predict(x, newdata = data, ...)
   }
-  isMlm <- identical(fam, "gaussian") && is.matrix(fitted_values)
-  if (isMlm) {
+  is_multivariate <- identical(model_family, "gaussian") && is.matrix(fitted_values)
+  if (is_multivariate) {
     row_names <- dimnames(fitted_values)
   } else {
     row_names <- names(fitted_values)
   }
 
-  if (isMlm) {
+  if (is_multivariate) {
     format_error("`simulate()` is not yet implemented for multivariate models.")
   }
 
@@ -106,11 +106,11 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   ntot <- n * iterations
 
   val <- switch(
-    fam,
+    model_family,
     "gaussian" = {
       vars <- stats::deviance(x) / stats::df.residual(x)
       w <- .safe(x$weights)
-      if (isGlm) {
+      if (is_glm) {
         if (!is.null(x$prior.weights) && length(x$prior.weights) == n) {
           vars <- vars / x$prior.weights
         }
@@ -122,7 +122,7 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
     if (!is.null(x$family$simulate)) {
       x$family$simulate(x, iterations)
     } else {
-      format_error(paste0("Family '", fam, "' not implemented."))
+      format_error(paste0("Family '", model_family, "' not implemented."))
     }
   )
 
