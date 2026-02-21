@@ -276,8 +276,12 @@ get_simulated.glmmTMB <- function(
     format_error("Simulation code has not been implemented for this family.")
   }
 
-  if (!is.null(data)) {
-    format_error("`data` is currently not supported for `get_simulated.glmmTMB()`.")
+  # extract data
+  model_data <- get_data(x, verbose = FALSE)
+
+  # check if all variables in data grid are also present in data
+  if (!is.null(data) && !all(colnames(data) %in% colnames(model_data))) {
+    format_error("Not all variables in `data` were found in the model.")
   }
 
   pop_pred <- !is.null(re.form) && ((re.form == ~0) || identical(re.form, NA))
@@ -315,6 +319,32 @@ get_simulated.glmmTMB <- function(
   }
 
   names(ret) <- paste0("iter_", seq_len(iterations))
+
+  # do we need to filter?
+  if (!is.null(data) && nrow(data) != nrow(model_data)) {
+    check_if_installed("datawizard")
+    # remove random effects from data grid
+    re <- find_random(x, split_nested = TRUE, flatten = TRUE)
+    data[re] <- NULL
+    # add simulations to model data
+    model_data <- cbind(model_data, ret)
+    # next, filter data
+    filtered_data <- datawizard::data_match(model_data, data)
+    # sanity check - did filtering work?
+    if (nrow(filtered_data) == 0) {
+      format_error(
+        "Simulating prediction only works when values in data grid are also present in the data that was used to fit the model."
+      )
+    }
+    # aggreate and average simulations
+    ret <- aggregate(
+      filtered_data[colnames(ret)],
+      by = filtered_data[colnames(data)],
+      mean,
+      na.rm = TRUE
+    )
+  }
+
   attr(ret, "seed") <- RNGstate
   ret
 }
