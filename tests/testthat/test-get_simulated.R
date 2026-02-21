@@ -13,7 +13,8 @@ test_that("get_simulated - lm", {
 })
 
 
-test_that("get_simulated - glm", {
+test_that("get_simulated - glm, binomial", {
+  data(mtcars)
   model <- glm(vs ~ am + wt, data = mtcars, family = "binomial")
 
   out <- get_simulated(model, iterations = 2, seed = 123)
@@ -25,6 +26,22 @@ test_that("get_simulated - glm", {
   expect_identical(nrow(out), nrow(mtcars))
   expect_equal(out, ref, tolerance = 1e-12, ignore_attr = TRUE)
   expect_false(is.null(attributes(out)$seed))
+
+  model <- glm(vs ~ am + wt, data = mtcars, family = "binomial")
+  out <- get_simulated(
+    model,
+    iterations = 5,
+    seed = 123,
+    data = insight::get_datagrid(model, "am")
+  )
+  expect_identical(dim(out), c(2L, 5L))
+
+  skip_if_not_installed("lme4")
+  data(cbpp, package = "lme4")
+
+  m <- glm(cbind(incidence, size - incidence) ~ period, data = cbpp, family = binomial)
+  out <- get_simulated(m)
+  expect_identical(dim(out), c(56L, 1L))
 })
 
 
