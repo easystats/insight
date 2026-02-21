@@ -338,11 +338,23 @@ get_simulated.glmmTMB <- function(
         "Simulating predictions only works when values in the data grid are also present in the data that was used to fit the model."
       )
     }
-    # aggreate and average simulations
+    # for categorical outcomes, we aggregrate using the mode, not the mean
+    model_info <- model_info(x)
+    use_mode <- any(unlist(
+      model_info[c("is_binomial", "is_ordinal", "is_multinomial", "is_categorical")],
+      use.names = FALSE
+    ))
+
+    if (use_mode) {
+      aggregate_fun <- .mode_value
+    } else {
+      aggregate_fun <- mean
+    }
+    # aggreate and "average" simulations
     ret <- stats::aggregate(
       filtered_data[colnames(ret)],
       by = filtered_data[focal],
-      mean,
+      aggregate_fun,
       na.rm = TRUE
     )
   }
