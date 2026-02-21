@@ -339,7 +339,7 @@ get_simulated.glmmTMB <- function(
       )
     }
     # aggreate and average simulations
-    ret <- aggregate(
+    ret <- stats::aggregate(
       filtered_data[colnames(ret)],
       by = filtered_data[focal],
       mean,
