@@ -158,11 +158,11 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
 
   # when we have no prior weights, we must ensure it's of the same length
   # as the number of iterations
-  if (all(wts == 1) && nrow(data) != length(wts)) {
+  if (all(wts == 1) && ntot != length(wts)) {
     wts <- rep(1, ntot)
   }
   # check length, cannot use prior weights when not the same
-  if (!(all(wts == 1)) && length(ntot) != length(wts)) {
+  if (!(all(wts == 1)) && ntot != length(wts)) {
     format_error("Cannot simulate with `prior.weights` for a data grid.")
   }
 
