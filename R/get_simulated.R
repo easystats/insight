@@ -54,6 +54,19 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
     stats::runif(1) # initialize the RNG if necessary
   }
 
+  model_info <- model_info(model)
+
+  if (
+    model_info$is_binomial ||
+      model_info$is_multinomial ||
+      model_info$is_ordinal ||
+      model_info$is_categorical
+  ) {
+    format_error(
+      "Can't simulate predictions from models with binary, categorical or ordinal outcome."
+    )
+  }
+
   if (is.null(seed)) {
     RNGstate <- get(".Random.seed", envir = .GlobalEnv)
   } else {
