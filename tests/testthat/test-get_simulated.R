@@ -42,6 +42,12 @@ test_that("get_simulated - glm, binomial", {
   m <- glm(cbind(incidence, size - incidence) ~ period, data = cbpp, family = binomial)
   out <- get_simulated(m)
   expect_identical(dim(out), c(56L, 1L))
+
+  expect_error(
+    get_simulated(m, data = get_datagrid(m, "period")),
+    regex = "Cannot simulate with `prior.weights`",
+    fixed = TRUE
+  )
 })
 
 
