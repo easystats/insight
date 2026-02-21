@@ -89,6 +89,8 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   if (is.null(data)) {
     fitted_values <- stats::fitted(x) # == napredict(*, x$fitted)
   } else {
+    # type = "response" required for binomial glm later
+    ## TODO: check if we can use this in general, or need other types for other models
     fitted_values <- stats::predict(x, newdata = data, type = "response", ...)
   }
   is_multivariate <- identical(model_family, "gaussian") && is.matrix(fitted_values)
