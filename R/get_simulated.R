@@ -169,20 +169,20 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   if (!is.null(m)) {
     y <- stats::model.response(m)
     if (is.factor(y)) {
-      yy <- factor(
+      sims <- factor(
         1 + stats::rbinom(ntot, size = 1, prob = fitted_values),
         labels = levels(y)
       )
-      split(yy, rep(seq_len(iterations), each = n))
+      split(sims, rep(seq_len(iterations), each = n))
     } else if (is.matrix(y) && ncol(y) == 2) {
-      yy <- vector("list", iterations)
+      sims <- vector("list", iterations)
       for (i in seq_len(iterations)) {
-        Y <- stats::rbinom(n, size = wts, prob = fitted_values)
-        YY <- cbind(Y, wts - Y)
-        colnames(YY) <- colnames(y)
-        yy[[i]] <- YY
+        sim_column <- stats::rbinom(n, size = wts, prob = fitted_values)
+        sim_matrix <- cbind(sim_column, wts - sim_column)
+        colnames(sim_matrix) <- colnames(y)
+        sims[[i]] <- sim_matrix
       }
-      yy
+      sims
     } else {
       stats::rbinom(ntot, size = wts, prob = fitted_values) / wts
     }
