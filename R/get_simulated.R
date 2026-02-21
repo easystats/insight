@@ -216,39 +216,47 @@ get_simulated.betareg <- function(x, data = NULL, iterations = 1, seed = NULL, .
     data <- get_data(x, verbose = FALSE)
   }
 
-  p <- if (is.null(data)) {
-    stats::predict(x, type = "parameter")
+  if (is.null(data)) {
+    predictions <- stats::predict(x, type = "parameter")
   } else {
-    stats::predict(x, newdata = data, type = "parameter")
+    predictions <- stats::predict(x, newdata = data, type = "parameter")
   }
-  p <- as.data.frame(p)
+  predictions <- as.data.frame(predictions)
 
-  n <- nrow(p)
-  row_names <- rownames(p)
-  dist <- if (is.null(x$dist)) "beta" else x$dist
+  n <- nrow(predictions)
+  row_names <- rownames(predictions)
 
-  s <- switch(
+  if (is.null(x$dist)) {
+    dist <- "beta"
+  } else {
+    dist <- x$dist
+  }
+
+  sims <- switch(
     dist,
-    "beta" = replicate(iterations, betareg::rbetar(n, mu = p$mu, phi = p$phi)),
-    "xbeta" = replicate(
+    beta = replicate(
       iterations,
-      betareg::rxbeta(n, mu = p$mu, phi = p$phi, nu = p$nu)
+      betareg::rbetar(n, mu = predictions$mu, phi = predictions$phi)
     ),
-    "xbetax" = replicate(
+    xbeta = replicate(
       iterations,
-      betareg::rxbetax(n, mu = p$mu, phi = p$phi, nu = p$nu)
+      betareg::rxbeta(n, mu = predictions$mu, phi = predictions$phi, nu = predictions$nu)
+    ),
+    xbetax = replicate(
+      iterations,
+      betareg::rxbetax(n, mu = predictions$mu, phi = predictions$phi, nu = predictions$nu)
     ),
     format_error(sprintf("Distribution '%s' is not supported for simulation.", dist))
   )
 
-  s <- as.data.frame(s)
-  names(s) <- paste0("iter_", seq_len(iterations))
+  sims <- as.data.frame(sims)
+  names(sims) <- paste0("iter_", seq_len(iterations))
   if (!is.null(row_names)) {
-    row.names(s) <- row_names
+    row.names(sims) <- row_names
   }
 
-  attr(s, "seed") <- RNGstate
-  s
+  attr(sims, "seed") <- RNGstate
+  sims
 }
 
 
