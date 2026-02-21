@@ -13,6 +13,21 @@ test_that("get_simulated - lm", {
 })
 
 
+test_that("get_simulated - glm", {
+  model <- glm(vs ~ am + wt, data = mtcars, family = "binomial")
+
+  out <- get_simulated(model, iterations = 2, seed = 123)
+  ref <- stats::simulate(model, nsim = 2, seed = 123)
+  names(ref) <- c("iter_1", "iter_2")
+
+  expect_s3_class(out, "data.frame")
+  expect_identical(names(out), c("iter_1", "iter_2"))
+  expect_identical(nrow(out), nrow(mtcars))
+  expect_equal(out, ref, tolerance = 1e-12, ignore_attr = TRUE)
+  expect_false(is.null(attributes(out)$seed))
+})
+
+
 test_that("get_simulated - data.frame dispatch", {
   model <- lm(mpg ~ wt + cyl, data = mtcars)
   dg <- get_datagrid(model, wt = c(2, 3), cyl = c(4, 6))
