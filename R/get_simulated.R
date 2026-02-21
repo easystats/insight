@@ -96,13 +96,12 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
     fam,
     "gaussian" = {
       vars <- stats::deviance(x) / stats::df.residual(x)
+      w <- .safe(x$weights)
       if (isGlm) {
         if (!is.null(x$prior.weights) && length(x$prior.weights) == n) {
           vars <- vars / x$prior.weights
         }
-      } else if (
-        !(is.null(w <- x$weights) || (length(w) == 1L && w == 1)) && length(w) == n
-      ) {
+      } else if (!(is.null(w) || (length(w) == 1L && w == 1)) && length(w) == n) {
         vars <- vars / w
       }
       fitted_values + stats::rnorm(ntot, sd = sqrt(vars))
