@@ -56,16 +56,16 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
 
   model_info <- model_info(model)
 
-  if (
-    model_info$is_binomial ||
-      model_info$is_multinomial ||
-      model_info$is_ordinal ||
-      model_info$is_categorical
-  ) {
-    format_error(
-      "Can't simulate predictions from models with binary, categorical or ordinal outcome."
-    )
-  }
+  # if (
+  #   model_info$is_binomial ||
+  #     model_info$is_multinomial ||
+  #     model_info$is_ordinal ||
+  #     model_info$is_categorical
+  # ) {
+  #   format_error(
+  #     "Can't simulate predictions from models with binary, categorical or ordinal outcome."
+  #   )
+  # }
 
   if (is.null(seed)) {
     RNGstate <- get(".Random.seed", envir = .GlobalEnv)
@@ -89,7 +89,7 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   if (is.null(data)) {
     fitted_values <- stats::fitted(x) # == napredict(*, x$fitted)
   } else {
-    fitted_values <- stats::predict(x, newdata = data, ...)
+    fitted_values <- stats::predict(x, newdata = data, type = "response", ...)
   }
   is_multivariate <- identical(model_family, "gaussian") && is.matrix(fitted_values)
   if (is_multivariate) {
@@ -107,7 +107,7 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
 
   val <- switch(
     model_family,
-    "gaussian" = {
+    gaussian = {
       vars <- stats::deviance(x) / stats::df.residual(x)
       w <- .safe(x$weights)
       if (is_glm) {
@@ -118,6 +118,9 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
         vars <- vars / w
       }
       fitted_values + stats::rnorm(ntot, sd = sqrt(vars))
+    },
+    binomial = {
+      .get_simulated_binomial(x, iterations, fitted_values, data)
     },
     if (!is.null(x$family$simulate)) {
       x$family$simulate(x, iterations)
@@ -140,6 +143,52 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
 
   attr(val, "seed") <- RNGstate
   val
+}
+
+
+.get_simulated_binomial <- function(x, iterations, fitted_values, data) {
+  n <- length(fitted_values)
+  ntot <- n * iterations
+  wts <- x$prior.weights
+  m <- x$model
+
+  if (any(wts %% 1 != 0)) {
+    format_error("Cannot simulate from non-integer prior weights.")
+  }
+
+  # when we have no prior weights, we must ensure it's of the same length
+  # as the number of iterations
+  if (all(wts == 1) && nrow(data) != length(wts)) {
+    wts <- rep(1, ntot)
+  }
+  # check length, cannot use prior weights when not the same
+  if (!(all(wts == 1)) && length(ntot) != length(wts)) {
+    format_error("Cannot simulate with `prior.weights` for a data grid.")
+  }
+
+  if (!is.null(m)) {
+    y <- stats::model.response(m)
+    if (is.factor(y)) {
+      yy <- factor(
+        1 + stats::rbinom(ntot, size = 1, prob = fitted_values),
+        labels = levels(y)
+      )
+      split(yy, rep(seq_len(iterations), each = n))
+    } else if (is.matrix(y) && ncol(y) == 2) {
+      yy <- vector("list", iterations)
+      for (i in seq_len(iterations)) {
+        Y <- stats::rbinom(n, size = wts, prob = fitted_values)
+        YY <- cbind(Y, wts - Y)
+        colnames(YY) <- colnames(y)
+        yy[[i]] <- YY
+      }
+      yy
+    } else {
+      stats::rbinom(ntot, size = wts, prob = fitted_values) / wts
+    }
+  } else {
+    stats::rbinom(ntot, size = wts, prob = fitted_values) / wts
+  }
 }
 
 
