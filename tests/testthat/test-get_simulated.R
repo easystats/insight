@@ -97,13 +97,68 @@ test_that("get_simulated - glmmTMB", {
   out <- get_simulated(model, iterations = 2, seed = 123)
 
   expect_s3_class(out, "data.frame")
-  expect_identical(names(out), c("iter_1", "iter_2"))
+  expect_named(out, c("vs", "am", "cyl", "iter_1", "iter_2"))
   expect_false(is.null(attributes(out)$seed))
 
-  expect_error(
-    get_simulated(model, data = mtcars[1:4, ], iterations = 1, seed = 123),
-    "currently not supported"
+  skip_if_not_installed("modelbased")
+  skip_if_not_installed("datawizard")
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("e42dep", "c172code"))
+
+  m <- glmmTMB::glmmTMB(neg_c_7 ~ e42dep + c172code + c12hour + (1 | grp), data = efc)
+
+  set.seed(1234)
+  out <- get_simulated(m, iterations = 5)
+  expect_named(
+    out,
+    c(
+      "neg_c_7",
+      "e42dep",
+      "c172code",
+      "c12hour",
+      "grp",
+      "iter_1",
+      "iter_2",
+      "iter_3",
+      "iter_4",
+      "iter_5"
+    )
   )
+  expect_identical(dim(out), c(834L, 10L))
+
+  set.seed(1234)
+  out <- get_simulated(m, iterations = 5, data = get_datagrid(m, c("e42dep", "c172code")))
+  expect_named(
+    out,
+    c("e42dep", "c172code", "iter_1", "iter_2", "iter_3", "iter_4", "iter_5")
+  )
+  expect_identical(dim(out), c(12L, 7L))
+  expect_identical(
+    as.character(out$e42dep),
+    c(
+      "independent",
+      "slightly dependent",
+      "moderately dependent",
+      "severely dependent",
+      "independent",
+      "slightly dependent",
+      "moderately dependent",
+      "severely dependent",
+      "independent",
+      "slightly dependent",
+      "moderately dependent",
+      "severely dependent"
+    )
+  )
+
+  set.seed(1234)
+  out <- get_simulated(m, iterations = 5, data = get_datagrid(m, "c12hour"))
+  expect_named(
+    out,
+    c("c12hour", "iter_1", "iter_2", "iter_3", "iter_4", "iter_5")
+  )
+  expect_identical(dim(out), c(2L, 6L))
+  expect_equal(out$c12hour, c(4, 168))
 })
 
 

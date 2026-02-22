@@ -300,6 +300,10 @@ get_simulated.glmmTMB <- function(
       aggregate_fun,
       na.rm = TRUE
     )
+  } else {
+    # find predictors
+    focal <- intersect(find_variables(x, flatten = TRUE), colnames(model_data))
+    ret <- cbind(model_data[focal], ret)
   }
 
   attr(ret, "seed") <- RNGstate
