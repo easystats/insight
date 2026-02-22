@@ -9,6 +9,11 @@
 * Improved performance of `find_parameters()` for models from package *mgcv*
   that include random effects.
 
+## Bug fixes
+
+* Fixes issue with duplicates `link_inverse()` and missing `link_function()` for
+  `phyloglm` models.
+
 # insight 1.4.6
 
 ## Breaking Changes
