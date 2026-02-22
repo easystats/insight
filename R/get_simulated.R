@@ -121,7 +121,7 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   )
 
   if (!is.list(val)) {
-    dim(val) <- c(n, iterations)
+    dim(val) <- c(length(fitted_values), iterations)
     val <- as.data.frame(val)
   } else {
     class(val) <- "data.frame"
