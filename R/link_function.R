@@ -293,13 +293,16 @@ link_function.ordinal_weightit <- link_function.multinom_weightit
 # Phylo glm ------------------------
 
 #' @export
-link_inverse.phyloglm <- function(x, ...) {
+link_function.phyloglm <- function(x, ...) {
   if (startsWith(x$method, "logistic")) {
     stats::make.link("logit")$linkfun
   } else {
     stats::poisson(link = "log")$linkfun
   }
 }
+
+#' @export
+link_function.phylolm <- link_function.lm
 
 
 # Probit link ------------------------
