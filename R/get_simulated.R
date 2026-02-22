@@ -89,8 +89,11 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   if (is.null(data)) {
     fitted_values <- stats::fitted(x) # == napredict(*, x$fitted)
   } else {
-    # type = "response" required for binomial glm later
     ## TODO: check if we can use this in general, or need other types for other models
+
+    # type = "response" required for binomial, poisson etc. glm later
+    # confirmed that response can be used for: binomial, poisson, Gamma
+
     fitted_values <- stats::predict(x, newdata = data, type = "response", ...)
   }
   is_multivariate <- identical(model_family, "gaussian") && is.matrix(fitted_values)
@@ -123,6 +126,12 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
     },
     binomial = {
       .get_simulated_binomial(x, iterations, fitted_values, data)
+    },
+    poisson = {
+      .get_simulated_poisson(x, iterations, fitted_values)
+    },
+    Gamma = {
+      .get_simulated_gamma(x, iterations, fitted_values)
     },
     if (!is.null(x$family$simulate)) {
       x$family$simulate(x, iterations)
@@ -191,6 +200,34 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   } else {
     stats::rbinom(ntot, size = wts, prob = fitted_values) / wts
   }
+}
+
+
+.get_simulated_poisson <- function(x, iterations, fitted_values) {
+  n <- length(fitted_values)
+  ntot <- n * iterations
+  wts <- x$prior.weights
+
+  if (any(wts != 1)) {
+    format_alert("Ignoring prior weights.")
+  }
+
+  stats::rpois(ntot, fitted_values)
+}
+
+
+.get_simulated_gamma <- function(x, iterations, fitted_values) {
+  check_if_installed("MASS")
+
+  n <- length(fitted_values)
+  ntot <- n * iterations
+  wts <- x$prior.weights
+
+  if (any(wts != 1)) {
+    format_alert("Using weights as shape parameters.")
+  }
+  shape <- MASS::gamma.shape(x)$alpha * wts
+  stats::rgamma(ntot, shape = shape, rate = shape / fitted_values)
 }
 
 
