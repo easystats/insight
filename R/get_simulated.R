@@ -78,6 +78,9 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
 
   if (is.null(data)) {
     data <- get_data(x, verbose = FALSE)
+    focal <- find_variables(x, flatten = TRUE)
+  } else {
+    focal <- colnames(data)
   }
 
   is_glm <- inherits(x, "glm")
@@ -122,12 +125,15 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
 
   if (!is.list(val)) {
     dim(val) <- c(length(fitted_values), iterations)
-    val <- as.data.frame(val)
-  } else {
-    class(val) <- "data.frame"
   }
 
-  names(val) <- paste0("iter_", seq_len(iterations))
+  val <- as.data.frame(val)
+  colnames(val) <- paste0("iter_", seq_len(iterations))
+
+  # keep only focal terms
+  data <- data[intersect(focal, colnames(data))]
+  val <- cbind(data, val)
+
   if (!is.null(row_names)) {
     row.names(val) <- row_names
   }

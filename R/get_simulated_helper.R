@@ -27,11 +27,11 @@
 
   # when we have no prior weights, we must ensure it's of the same length
   # as the number of iterations
-  if (all(wts == 1) && ntot != length(wts)) {
-    wts <- rep(1, ntot)
+  if (all(wts == 1) && n != length(wts)) {
+    wts <- rep(1, n)
   }
   # check length, cannot use prior weights when not the same
-  if (!(all(wts == 1)) && ntot != length(wts)) {
+  if (!(all(wts == 1)) && n != length(wts)) {
     format_error("Cannot simulate with `prior.weights` for a data grid.")
   }
 
