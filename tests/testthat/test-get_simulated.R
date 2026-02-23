@@ -22,7 +22,7 @@ test_that("get_simulated - lm", {
     seed = 123
   )
   expect_named(out, c("iter_1", "iter_2"))
-  expect_identical(dim(out), c(2L, 3L))
+  expect_identical(dim(out), c(3L, 2L))
 
   out <- get_simulated(
     model,
