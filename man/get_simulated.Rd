@@ -3,7 +3,6 @@
 \name{get_simulated}
 \alias{get_simulated}
 \alias{get_simulated.lm}
-\alias{get_simulated.betareg}
 \alias{get_simulated.glmmTMB}
 \alias{get_simulated.merMod}
 \alias{get_simulated.default}
@@ -13,15 +12,6 @@
 get_simulated(x, ...)
 
 \method{get_simulated}{lm}(
-  x,
-  data = NULL,
-  iterations = 1,
-  include_data = FALSE,
-  seed = NULL,
-  ...
-)
-
-\method{get_simulated}{betareg}(
   x,
   data = NULL,
   iterations = 1,

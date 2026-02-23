@@ -150,7 +150,6 @@ get_simulated.lm <- function(
 }
 
 
-#' @rdname get_simulated
 #' @export
 get_simulated.betareg <- function(
   x,
