@@ -8,6 +8,9 @@
 #' @param data An optional data frame in which to evaluate predictions before
 #'   simulation. This can be a data grid created with [get_datagrid()].
 #' @param iterations Number of response vectors to simulate.
+#' @param include_data Logical, if `TRUE`, `data` is returned alongside with
+#' the simulated draws. If `data = NULL`, the data used to fit the model is
+#' included.
 #' @param seed An optional integer random seed.
 #' @param re.form For `glmmTMB` and `merMod` models, random effects formula
 #' passed to simulation (`NULL`, `NA` or `~0`).
@@ -49,7 +52,14 @@ get_simulated <- function(x, ...) {
 
 #' @rdname get_simulated
 #' @export
-get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
+get_simulated.lm <- function(
+  x,
+  data = NULL,
+  iterations = 1,
+  include_data = FALSE,
+  seed = NULL,
+  ...
+) {
   if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
     stats::runif(1) # initialize the RNG if necessary
   }
@@ -130,9 +140,11 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
   val <- as.data.frame(val)
   colnames(val) <- paste0("iter_", seq_len(iterations))
 
-  # keep only focal terms
-  data <- data[intersect(focal, colnames(data))]
-  val <- cbind(data, val)
+  if (include_data) {
+    # keep only focal terms
+    data <- data[intersect(focal, colnames(data))]
+    val <- cbind(data, val)
+  }
 
   if (!is.null(row_names)) {
     row.names(val) <- row_names
@@ -145,7 +157,14 @@ get_simulated.lm <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
 
 #' @rdname get_simulated
 #' @export
-get_simulated.betareg <- function(x, data = NULL, iterations = 1, seed = NULL, ...) {
+get_simulated.betareg <- function(
+  x,
+  data = NULL,
+  iterations = 1,
+  include_data = FALSE,
+  seed = NULL,
+  ...
+) {
   if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
     stats::runif(1)
   }
@@ -215,6 +234,7 @@ get_simulated.glmmTMB <- function(
   x,
   data = NULL,
   iterations = 1,
+  include_data = FALSE,
   seed = NULL,
   re.form = NULL,
   ...
@@ -306,7 +326,12 @@ get_simulated.glmmTMB <- function(
       aggregate_fun,
       na.rm = TRUE
     )
-  } else {
+    # by default, we have the data bound to the iterations, so we might
+    # need to remove them here
+    if (!include_data) {
+      ret[colnames(filtered_data)] <- NULL
+    }
+  } else if (include_data) {
     # find predictors
     focal <- intersect(find_variables(x, flatten = TRUE), colnames(model_data))
     ret <- cbind(model_data[focal], ret)
@@ -323,6 +348,7 @@ get_simulated.merMod <- function(
   x,
   data = NULL,
   iterations = 1,
+  include_data = FALSE,
   seed = NULL,
   use.u = FALSE,
   re.form = NA,
@@ -372,12 +398,12 @@ get_simulated.default <- function(x, ...) {
 
 #' @rdname get_simulated
 #' @export
-get_simulated.data.frame <- function(x, data = NULL, ...) {
+get_simulated.data.frame <- function(x, data = NULL, include_data = FALSE, ...) {
   # This makes it pipe friendly; data %>% get_simulated(model)
   if (is.null(data)) {
     format_error("Please provide a model to base the simulations on.")
   } else {
-    get_simulated(data, x, ...)
+    get_simulated(data, x, include_data = include_data, ...)
   }
 }
 

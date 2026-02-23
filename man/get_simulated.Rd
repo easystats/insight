@@ -12,16 +12,39 @@
 \usage{
 get_simulated(x, ...)
 
-\method{get_simulated}{lm}(x, data = NULL, iterations = 1, seed = NULL, ...)
+\method{get_simulated}{lm}(
+  x,
+  data = NULL,
+  iterations = 1,
+  include_data = FALSE,
+  seed = NULL,
+  ...
+)
 
-\method{get_simulated}{betareg}(x, data = NULL, iterations = 1, seed = NULL, ...)
+\method{get_simulated}{betareg}(
+  x,
+  data = NULL,
+  iterations = 1,
+  include_data = FALSE,
+  seed = NULL,
+  ...
+)
 
-\method{get_simulated}{glmmTMB}(x, data = NULL, iterations = 1, seed = NULL, re.form = NULL, ...)
+\method{get_simulated}{glmmTMB}(
+  x,
+  data = NULL,
+  iterations = 1,
+  include_data = FALSE,
+  seed = NULL,
+  re.form = NULL,
+  ...
+)
 
 \method{get_simulated}{merMod}(
   x,
   data = NULL,
   iterations = 1,
+  include_data = FALSE,
   seed = NULL,
   use.u = FALSE,
   re.form = NA,
@@ -35,7 +58,7 @@ get_simulated(x, ...)
 
 \method{get_simulated}{default}(x, ...)
 
-\method{get_simulated}{data.frame}(x, data = NULL, ...)
+\method{get_simulated}{data.frame}(x, data = NULL, include_data = FALSE, ...)
 }
 \arguments{
 \item{x}{A model.}
@@ -47,6 +70,10 @@ simulation methods.}
 simulation. This can be a data grid created with \code{\link[=get_datagrid]{get_datagrid()}}.}
 
 \item{iterations}{Number of response vectors to simulate.}
+
+\item{include_data}{Logical, if \code{TRUE}, \code{data} is returned alongside with
+the simulated draws. If \code{data = NULL}, the data used to fit the model is
+included.}
 
 \item{seed}{An optional integer random seed.}
 
