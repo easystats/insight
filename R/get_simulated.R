@@ -414,6 +414,18 @@ get_simulated.merMod <- function(
   val <- do.call(simulate_fun, c(args, list(...)))
 
   names(val) <- paste0("iter_", seq_len(iterations))
+
+  if (include_data) {
+    if (is.null(data)) {
+      data <- get_data(x, verbose = FALSE)
+    } else {
+      focal <- colnames(data)
+    }
+    # keep only focal terms
+    data <- data[intersect(focal, colnames(data))]
+    val <- cbind(data, val)
+  }
+
   val
 }
 

@@ -394,7 +394,7 @@ test_that("get_simulated - merMod", {
   expect_identical(nrow(out), nrow(mtcars))
   expect_false(is.null(attributes(out)$seed))
 
-  dg <- get_datagrid(model, am = c(0, 1), cyl = c(4, 6))
+  dg <- get_datagrid(model, c("am = c(3, 1)", "cyl = c(4, 6)"))
   out2 <- get_simulated(
     model,
     data = dg,
@@ -403,5 +403,16 @@ test_that("get_simulated - merMod", {
     allow.new.levels = TRUE
   )
   expect_identical(nrow(out2), nrow(dg))
-  expect_identical(names(out2), c("iter_1", "iter_2"))
+  expect_named(out2, c("iter_1", "iter_2"))
+
+  out2 <- get_simulated(
+    model,
+    data = dg,
+    include_data = TRUE,
+    iterations = 2,
+    seed = 123,
+    allow.new.levels = TRUE
+  )
+  expect_identical(nrow(out2), nrow(dg))
+  expect_named(out2, c("am", "cyl", "iter_1", "iter_2"))
 })
