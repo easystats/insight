@@ -164,6 +164,13 @@ test_that("get_simulated - glmmTMB", {
   expect_named(out, c("iter_1", "iter_2"))
   expect_false(is.null(attributes(out)$seed))
 
+  # errors --------------------------
+  expect_error(
+    get_simulated(model, iterations = 2, seed = 123, re.form = NA),
+    "Only `re.form = NULL` is",
+    fixed = TRUE
+  )
+
   # linear -----------------------------------
   skip_if_not_installed("modelbased")
   skip_if_not_installed("datawizard")
