@@ -116,6 +116,8 @@ get_simulated.lm <- function(
     format_error("`simulate()` is not yet implemented for multivariate models.")
   }
 
+  ## TODO: add mgcv::gam families
+
   val <- switch(
     model_family,
     gaussian = .get_simulated_gaussian(x, iterations, fitted_values, is_glm),
