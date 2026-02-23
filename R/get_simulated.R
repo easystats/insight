@@ -124,7 +124,11 @@ get_simulated.lm <- function(
     binomial = .get_simulated_binomial(x, iterations, fitted_values, data),
     poisson = .get_simulated_poisson(x, iterations, fitted_values),
     Gamma = .get_simulated_gamma(x, iterations, fitted_values),
-    if (!is.null(x$family$simulate)) {
+    if (startsWith(model_family, "Negative Binomial") && inherits(x, "gam")) {
+      # mgcv::gam, family negbin
+      .get_simulated_negbin(x, iterations, fitted_values)
+    } else if (!is.null(x$family$simulate)) {
+      # all other familis
       x$family$simulate(x, iterations)
     } else {
       format_error(paste0("Family '", model_family, "' not implemented."))

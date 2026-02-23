@@ -427,4 +427,40 @@ test_that("get_simulated - mgcv", {
   b <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
   out <- get_simulated(b, data = get_datagrid(b, "x1"), iterations = 5)
   expect_identical(dim(out), c(10L, 5L))
+
+  skip_if_not_installed("modelbased")
+  skip_if_not_installed("datawizard")
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("e42dep", "c172code"))
+
+  m <- mgcv::gam(
+    tot_sc_e ~ e42dep + c172code + s(c12hour),
+    data = efc,
+    family = mgcv::negbin(3)
+  )
+  out <- get_simulated(m, iterations = 5, seed = 1234)
+  expect_identical(dim(out), c(842L, 5L))
+
+  out <- get_simulated(m, iterations = 5, get_datagrid(m, "e42dep"), seed = 1234)
+  expect_identical(dim(out), c(4L, 5L))
+
+  out <- get_simulated(
+    m,
+    iterations = 5,
+    get_datagrid(m, "e42dep"),
+    seed = 1234,
+    include_data = TRUE
+  )
+  expect_identical(dim(out), c(4L, 8L))
+
+  m <- mgcv::gam(
+    tot_sc_e ~ e42dep + c172code + s(c12hour),
+    data = efc,
+    family = mgcv::nb()
+  )
+  out <- get_simulated(m, iterations = 5, seed = 1234)
+  expect_identical(dim(out), c(842L, 5L))
+
+  out <- get_simulated(m, iterations = 5, get_datagrid(m, "e42dep"), seed = 1234)
+  expect_identical(dim(out), c(4L, 5L))
 })

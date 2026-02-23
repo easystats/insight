@@ -92,3 +92,26 @@
   shape <- MASS::gamma.shape(x)$alpha * wts
   stats::rgamma(ntot, shape = shape, rate = shape / fitted_values)
 }
+
+
+.get_simulated_negbin <- function(x, iterations, fitted_values) {
+  check_if_installed("MASS")
+
+  n <- length(fitted_values)
+  ntot <- n * iterations
+  wts <- x$prior.weights
+
+  if (any(wts != 1)) {
+    format_alert("Ignoring prior weights.")
+  }
+
+  # try to extract theta
+  if (inherits(x, "gam")) {
+    f <- get_family(m)
+    theta <- .safe(f$getTheta())
+  } else {
+    theta <- 1
+  }
+
+  MASS::rnegbin(ntot, mu = as.vector(fitted_values), theta = theta)
+}
