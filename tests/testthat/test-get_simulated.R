@@ -1,4 +1,5 @@
 test_that("get_simulated - lm", {
+  data(mtcars)
   model <- lm(mpg ~ cyl + hp, data = mtcars)
 
   out <- get_simulated(model, iterations = 2, seed = 123)
@@ -415,4 +416,15 @@ test_that("get_simulated - merMod", {
   )
   expect_identical(nrow(out2), nrow(dg))
   expect_named(out2, c("am", "cyl", "iter_1", "iter_2"))
+})
+
+
+test_that("get_simulated - mgcv", {
+  skip_if_not_installed("mgcv")
+
+  set.seed(2) ## simulate some data...
+  dat <- mgcv::gamSim(1, n = 400, dist = "normal", scale = 2)
+  b <- mgcv::gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
+  out <- get_simulated(b, data = get_datagrid(b, "x1"), iterations = 5)
+  expect_identical(dim(out), c(10L, 5L))
 })

@@ -161,9 +161,11 @@ get_simulated.lm <- function(
   val
 }
 
-
 #' @export
 get_simulated.glm <- get_simulated.lm
+
+#' @export
+get_simulated.gam <- get_simulated.lm
 
 
 #' @export
@@ -469,8 +471,6 @@ get_simulated.bracl <- get_simulated.default
 #' @export
 get_simulated.brmsfit <- get_simulated.default
 #' @export
-get_simulated.clm <- get_simulated.default
-#' @export
 get_simulated.coxme <- get_simulated.default
 #' @export
 get_simulated.coxph <- get_simulated.default
@@ -482,8 +482,6 @@ get_simulated.fa <- get_simulated.default
 get_simulated.faMain <- get_simulated.default
 #' @export
 get_simulated.fixest <- get_simulated.default
-#' @export
-get_simulated.gam <- get_simulated.default
 #' @export
 get_simulated.gamlss <- get_simulated.default
 #' @export
@@ -518,6 +516,9 @@ get_simulated.stanreg <- get_simulated.default
 get_simulated.survreg <- get_simulated.default
 
 # verified: no simulate() methods available -------------------
+
+#' @export
+get_simulated.clm <- get_simulated.default
 
 #' @export
 get_simulated.hurdle <- get_simulated.default

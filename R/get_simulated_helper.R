@@ -11,7 +11,7 @@
   } else if (!(is.null(w) || (length(w) == 1L && w == 1)) && length(w) == n) {
     vars <- vars / w
   }
-  fitted_values + stats::rnorm(ntot, sd = sqrt(vars))
+  as.vector(fitted_values) + stats::rnorm(ntot, sd = sqrt(vars))
 }
 
 
