@@ -2,7 +2,7 @@
 
 ## Changes
 
-* New function, `get_simulatzed()`, to return simulated values from the response
+* New function, `get_simulated()`, to return simulated values from the response
   of regression models, which is comparable to posterior predictions from a
   model.
 
