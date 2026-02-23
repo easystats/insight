@@ -158,7 +158,7 @@ test_that("get_simulated - glmmTMB", {
   out <- get_simulated(model, iterations = 2, seed = 123)
 
   expect_s3_class(out, "data.frame")
-  expect_named(out, c("vs", "am", "cyl", "iter_1", "iter_2"))
+  expect_named(out, c("iter_1", "iter_2"))
   expect_false(is.null(attributes(out)$seed))
 
   skip_if_not_installed("modelbased")
@@ -170,6 +170,14 @@ test_that("get_simulated - glmmTMB", {
 
   set.seed(1234)
   out <- get_simulated(m, iterations = 5)
+  expect_named(
+    out,
+    c("iter_1", "iter_2", "iter_3", "iter_4", "iter_5")
+  )
+  expect_identical(dim(out), c(834L, 5L))
+
+  set.seed(1234)
+  out <- get_simulated(m, iterations = 5, include_data = TRUE)
   expect_named(
     out,
     c(
@@ -189,6 +197,19 @@ test_that("get_simulated - glmmTMB", {
 
   set.seed(1234)
   out <- get_simulated(m, iterations = 5, data = get_datagrid(m, c("e42dep", "c172code")))
+  expect_named(
+    out,
+    c("iter_1", "iter_2", "iter_3", "iter_4", "iter_5")
+  )
+  expect_identical(dim(out), c(12L, 5L))
+
+  set.seed(1234)
+  out <- get_simulated(
+    m,
+    iterations = 5,
+    data = get_datagrid(m, c("e42dep", "c172code")),
+    include_data = TRUE
+  )
   expect_named(
     out,
     c("e42dep", "c172code", "iter_1", "iter_2", "iter_3", "iter_4", "iter_5")
@@ -213,13 +234,30 @@ test_that("get_simulated - glmmTMB", {
   )
 
   set.seed(1234)
-  out <- get_simulated(m, iterations = 5, data = get_datagrid(m, "c12hour"))
+  out <- get_simulated(
+    m,
+    iterations = 5,
+    data = get_datagrid(m, "c12hour"),
+    include_data = TRUE
+  )
   expect_named(
     out,
     c("c12hour", "iter_1", "iter_2", "iter_3", "iter_4", "iter_5")
   )
   expect_identical(dim(out), c(2L, 6L))
   expect_equal(out$c12hour, c(4, 168))
+
+  set.seed(1234)
+  out <- get_simulated(
+    m,
+    iterations = 5,
+    data = get_datagrid(m, "c12hour")
+  )
+  expect_named(
+    out,
+    c("iter_1", "iter_2", "iter_3", "iter_4", "iter_5")
+  )
+  expect_identical(dim(out), c(2L, 5L))
 })
 
 

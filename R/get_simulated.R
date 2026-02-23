@@ -320,7 +320,8 @@ get_simulated.glmmTMB <- function(
     # by default, we have the data bound to the iterations, so we might
     # need to remove them here
     if (!include_data) {
-      ret[colnames(filtered_data)] <- NULL
+      keep <- grep("iter_\\d+", colnames(ret), value = TRUE)
+      ret <- ret[keep]
     }
   } else if (include_data) {
     # find predictors
