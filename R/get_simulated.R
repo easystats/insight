@@ -386,20 +386,32 @@ get_simulated.merMod <- function(
   check_if_installed("lme4")
   simulate_fun <- get(".simulateFun", envir = asNamespace("lme4"))
 
-  val <- simulate_fun(
+  # we cannot pass those arguments directly to "simulate_fun", because
+  # that function internally checks that at least of those argument is
+  # missing - this would never be TRUE if we include those arguments in
+  # the function call. thus, we handle the defaults separately
+  add_reform <- missing(use.u) && !missing(re.form)
+  add_use_u <- !missing(use.u) && missing(re.form)
+
+  args <- list(
     object = x,
     nsim = iterations,
     seed = seed,
-    use.u = use.u,
-    re.form = re.form,
     newdata = data,
     newparams = newparams,
     family = family,
     cluster.rand = cluster.rand,
     allow.new.levels = allow.new.levels,
-    na.action = na.action,
-    ...
+    na.action = na.action
   )
+
+  if (add_reform) {
+    args$re.form <- re.form
+  } else if (add_use_u) {
+    args$use.u <- use.u
+  }
+
+  val <- do.call(simulate_fun, c(args, list(...)))
 
   names(val) <- paste0("iter_", seq_len(iterations))
   val

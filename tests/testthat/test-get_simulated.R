@@ -32,7 +32,7 @@ test_that("get_simulated - lm", {
     seed = 123
   )
   expect_named(out, c("cyl", "hp", "iter_1", "iter_2"))
-  expect_identical(dim(out), c(4L, 3L))
+  expect_identical(dim(out), c(3L, 4L))
 })
 
 
@@ -277,7 +277,7 @@ test_that("get_simulated - glmmTMB", {
     family = poisson()
   ))
   out <- get_simulated(m, iterations = 5, seed = 1234)
-  ref <- simulate(m, nsims = 5, seed = 1234)
+  ref <- simulate(m, nsim = 5, seed = 1234)
   expect_equal(head(out), head(ref), ignore_attr = TRUE)
 
   out <- get_simulated(m, data = get_datagrid(m, "c172code"), iterations = 5, seed = 1234)
