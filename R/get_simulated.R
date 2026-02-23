@@ -127,6 +127,9 @@ get_simulated.lm <- function(
     if (startsWith(model_family, "Negative Binomial") && inherits(x, "gam")) {
       # mgcv::gam, family negbin
       .get_simulated_negbin(x, iterations, fitted_values)
+    } else if (startsWith(model_family, "Beta regression") && inherits(x, "gam")) {
+      # mgcv::gam, family beta
+      .get_simulated_beta(x, iterations, fitted_values)
     } else if (!is.null(x$family$simulate)) {
       # all other familis
       x$family$simulate(x, iterations)

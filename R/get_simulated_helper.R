@@ -107,11 +107,36 @@
 
   # try to extract theta
   if (inherits(x, "gam")) {
-    f <- get_family(m)
+    f <- get_family(x)
     theta <- .safe(f$getTheta())
   } else {
     theta <- 1
   }
 
   MASS::rnegbin(ntot, mu = as.vector(fitted_values), theta = theta)
+}
+
+
+.get_simulated_beta <- function(x, iterations, fitted_values) {
+  check_if_installed("betareg")
+
+  n <- length(fitted_values)
+  wts <- x$prior.weights
+
+  if (any(wts != 1)) {
+    format_alert("Ignoring prior weights.")
+  }
+
+  # try to extract theta
+  if (inherits(x, "gam")) {
+    f <- get_family(x)
+    phi <- .safe(exp(f$getTheta()))
+  } else {
+    phi <- 1
+  }
+
+  replicate(
+    iterations,
+    betareg::rbetar(n, mu = fitted_values, phi = phi)
+  )
 }
