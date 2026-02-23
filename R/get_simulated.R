@@ -64,19 +64,6 @@ get_simulated.lm <- function(
     stats::runif(1) # initialize the RNG if necessary
   }
 
-  model_info <- model_info(model)
-
-  # if (
-  #   model_info$is_binomial ||
-  #     model_info$is_multinomial ||
-  #     model_info$is_ordinal ||
-  #     model_info$is_categorical
-  # ) {
-  #   format_error(
-  #     "Can't simulate predictions from models with binary, categorical or ordinal outcome."
-  #   )
-  # }
-
   if (is.null(seed)) {
     RNGstate <- get(".Random.seed", envir = .GlobalEnv)
   } else {
@@ -99,16 +86,13 @@ get_simulated.lm <- function(
   } else {
     model_family <- "gaussian"
   }
-  if (is.null(data)) {
-    fitted_values <- stats::fitted(x) # == napredict(*, x$fitted)
-  } else {
-    ## TODO: check if we can use this in general, or need other types for other models
 
-    # type = "response" required for binomial, poisson etc. glm later
-    # confirmed that response can be used for: binomial, poisson, Gamma
+  ## TODO: check if we can use this in general, or need other types for other models
 
-    fitted_values <- stats::predict(x, newdata = data, type = "response", ...)
-  }
+  # type = "response" required for binomial, poisson etc. glm later
+  # confirmed that response can be used for: binomial, poisson, Gamma
+  fitted_values <- stats::predict(x, newdata = data, type = "response", ...)
+
   is_multivariate <- identical(model_family, "gaussian") && is.matrix(fitted_values)
   if (is_multivariate) {
     row_names <- dimnames(fitted_values)
@@ -138,7 +122,18 @@ get_simulated.lm <- function(
   }
 
   val <- as.data.frame(val)
-  colnames(val) <- paste0("iter_", seq_len(iterations))
+
+  # for glm with "cbind()" response, we need special handling here
+  resp <- find_response(x, combine = FALSE)
+  if (length(resp) == 2) {
+    colnames(val) <- paste(
+      rep(paste0("iter_", seq_len(iterations)), each = 2),
+      resp,
+      sep = "_"
+    )
+  } else {
+    colnames(val) <- paste0("iter_", seq_len(iterations))
+  }
 
   if (include_data) {
     # keep only focal terms
@@ -184,11 +179,7 @@ get_simulated.betareg <- function(
     data <- get_data(x, verbose = FALSE)
   }
 
-  if (is.null(data)) {
-    predictions <- stats::predict(x, type = "parameter")
-  } else {
-    predictions <- stats::predict(x, newdata = data, type = "parameter")
-  }
+  predictions <- suppressWarnings(stats::predict(x, newdata = data, type = "parameter"))
   predictions <- as.data.frame(predictions)
 
   n <- nrow(predictions)

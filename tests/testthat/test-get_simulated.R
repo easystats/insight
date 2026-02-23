@@ -6,10 +6,33 @@ test_that("get_simulated - lm", {
   names(ref) <- c("iter_1", "iter_2")
 
   expect_s3_class(out, "data.frame")
-  expect_identical(names(out), c("iter_1", "iter_2"))
+  expect_named(out, c("iter_1", "iter_2"))
   expect_identical(nrow(out), nrow(mtcars))
   expect_equal(out, ref, tolerance = 1e-12, ignore_attr = TRUE)
   expect_false(is.null(attributes(out)$seed))
+
+  out <- get_simulated(model, iterations = 2, include_data = TRUE, seed = 123)
+  expect_named(out, c("mpg", "cyl", "hp", "iter_1", "iter_2"))
+  expect_identical(dim(out), c(32L, 5L))
+
+  out <- get_simulated(
+    model,
+    iterations = 2,
+    data = get_datagrid(model, "cyl"),
+    seed = 123
+  )
+  expect_named(out, c("iter_1", "iter_2"))
+  expect_identical(dim(out), c(2L, 3L))
+
+  out <- get_simulated(
+    model,
+    iterations = 2,
+    data = get_datagrid(model, "cyl"),
+    include_data = TRUE,
+    seed = 123
+  )
+  expect_named(out, c("cyl", "hp", "iter_1", "iter_2"))
+  expect_identical(dim(out), c(4L, 3L))
 })
 
 
@@ -22,15 +45,30 @@ test_that("get_simulated - glm, binomial", {
   names(ref) <- c("iter_1", "iter_2")
 
   expect_s3_class(out, "data.frame")
-  expect_named(out, c("vs", "am", "wt", "iter_1", "iter_2"))
+  expect_named(out, c("iter_1", "iter_2"))
   expect_identical(nrow(out), nrow(mtcars))
   expect_equal(out, ref, tolerance = 1e-12, ignore_attr = TRUE)
   expect_false(is.null(attributes(out)$seed))
+
+  out <- get_simulated(model, iterations = 2, seed = 123, include_data = TRUE)
+  expect_named(out, c("vs", "am", "wt", "iter_1", "iter_2"))
+  expect_identical(dim(out), c(32L, 5L))
 
   model <- glm(vs ~ am + wt, data = mtcars, family = "binomial")
   out <- get_simulated(
     model,
     iterations = 5,
+    seed = 123,
+    data = insight::get_datagrid(model, "am")
+  )
+  expect_identical(dim(out), c(2L, 5L))
+  expect_named(out, c("iter_1", "iter_2", "iter_3", "iter_4", "iter_5"))
+
+  model <- glm(vs ~ am + wt, data = mtcars, family = "binomial")
+  out <- get_simulated(
+    model,
+    iterations = 5,
+    include_data = TRUE,
     seed = 123,
     data = insight::get_datagrid(model, "am")
   )
@@ -42,12 +80,23 @@ test_that("get_simulated - glm, binomial", {
 
   m <- glm(cbind(incidence, size - incidence) ~ period, data = cbpp, family = binomial)
 
-  ## FIXME: these need to be fixed, wrong column names
-  # out <- get_simulated(m)
-  # expect_identical(dim(out), c(56L, 1L))
+  out <- get_simulated(m)
+  expect_named(out, c("iter_1_incidence", "iter_1_size"))
+  expect_identical(dim(out), c(56L, 2L))
 
-  # out <- get_simulated(m, iterations = 3)
-  # expect_identical(dim(out), c(56L, 1L))
+  out <- get_simulated(m, iterations = 3)
+  expect_named(
+    out,
+    c(
+      "iter_1_incidence",
+      "iter_1_size",
+      "iter_2_incidence",
+      "iter_2_size",
+      "iter_3_incidence",
+      "iter_3_size"
+    )
+  )
+  expect_identical(dim(out), c(56L, 6L))
 
   expect_error(
     get_simulated(m, data = get_datagrid(m, "period")),
@@ -64,8 +113,14 @@ test_that("get_simulated - data.frame dispatch", {
   out <- get_simulated(dg, model, iterations = 3, seed = 123)
 
   expect_s3_class(out, "data.frame")
-  expect_identical(names(out), c("iter_1", "iter_2", "iter_3"))
+  expect_named(out, c("iter_1", "iter_2", "iter_3"))
   expect_identical(nrow(out), nrow(dg))
+
+  out <- get_simulated(dg, model, iterations = 3, seed = 123, include_data = TRUE)
+
+  expect_s3_class(out, "data.frame")
+  expect_named(out, c("wt", "cyl", "iter_1", "iter_2", "iter_3"))
+  expect_identical(dim(out), c(30L, 5L))
 })
 
 

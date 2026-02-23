@@ -44,11 +44,16 @@
       )
       split(sims, rep(seq_len(iterations), each = n))
     } else if (is.matrix(y) && ncol(y) == 2) {
+      resp <- find_response(x, combine = FALSE)
       sims <- vector("list", iterations)
       for (i in seq_len(iterations)) {
         sim_column <- stats::rbinom(n, size = wts, prob = fitted_values)
         sim_matrix <- cbind(sim_column, wts - sim_column)
-        colnames(sim_matrix) <- colnames(y)
+        if (length(resp) == ncol(sim_matrix)) {
+          colnames(sim_matrix) <- resp
+        } else {
+          colnames(sim_matrix) <- colnames(y)
+        }
         sims[[i]] <- sim_matrix
       }
       sims
