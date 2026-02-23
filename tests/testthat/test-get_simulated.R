@@ -149,6 +149,7 @@ test_that("get_simulated - glmmTMB", {
   skip_if_not_installed("glmmTMB")
   skip_on_cran()
 
+  # binomial ---------------------------------
   model <- suppressWarnings(glmmTMB::glmmTMB(
     vs ~ am + (1 | cyl),
     data = mtcars,
@@ -161,6 +162,7 @@ test_that("get_simulated - glmmTMB", {
   expect_named(out, c("iter_1", "iter_2"))
   expect_false(is.null(attributes(out)$seed))
 
+  # linear -----------------------------------
   skip_if_not_installed("modelbased")
   skip_if_not_installed("datawizard")
   data(efc, package = "modelbased")
@@ -258,6 +260,42 @@ test_that("get_simulated - glmmTMB", {
     c("iter_1", "iter_2", "iter_3", "iter_4", "iter_5")
   )
   expect_identical(dim(out), c(2L, 5L))
+
+  # poisson -------------------------------#
+  m <- suppressWarnings(glmmTMB::glmmTMB(
+    tot_sc_e ~ e42dep + c172code + c12hour + (1 | grp),
+    data = efc,
+    family = poisson()
+  ))
+  out <- get_simulated(m, iterations = 5, seed = 1234)
+  ref <- simulate(m, nsims = 5, seed = 1234)
+  expect_equal(head(out), head(ref), ignore_attr = TRUE)
+
+  out <- get_simulated(m, data = get_datagrid(m, "c172code"), iterations = 5, seed = 1234)
+  expect_named(out, c("iter_1", "iter_2", "iter_3", "iter_4", "iter_5"))
+  expect_identical(dim(out), c(3L, 5L))
+  expect_identical(out$iter_1, c(0, 0, 0))
+  expect_identical(out$iter_4, c(0, 1, 1))
+
+  out <- get_simulated(
+    m,
+    data = get_datagrid(m, "c172code"),
+    iterations = 5,
+    seed = 1234,
+    include_data = TRUE
+  )
+  expect_named(out, c("c172code", "iter_1", "iter_2", "iter_3", "iter_4", "iter_5"))
+  expect_identical(dim(out), c(3L, 6L))
+  expect_identical(out$iter_1, c(0, 0, 0))
+  expect_identical(out$iter_4, c(0, 1, 1))
+  expect_identical(
+    as.character(out$c172code),
+    c(
+      "low level of education",
+      "intermediate level of education",
+      "high level of education"
+    )
+  )
 })
 
 

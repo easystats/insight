@@ -301,7 +301,14 @@ get_simulated.glmmTMB <- function(
     # for categorical outcomes, we aggregrate using the mode, not the mean
     model_info <- model_info(x)
     use_mode <- any(unlist(
-      model_info[c("is_binomial", "is_ordinal", "is_multinomial", "is_categorical")],
+      model_info[c(
+        "is_binomial",
+        "is_ordinal",
+        "is_multinomial",
+        "is_poisson",
+        "is_count",
+        "is_categorical"
+      )],
       use.names = FALSE
     ))
 
