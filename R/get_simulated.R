@@ -495,10 +495,6 @@ get_simulated.hglm <- get_simulated.default
 #' @export
 get_simulated.htest <- get_simulated.default
 #' @export
-get_simulated.hurdle <- get_simulated.default
-#' @export
-get_simulated.list <- get_simulated.default
-#' @export
 get_simulated.lrm <- get_simulated.default
 #' @export
 get_simulated.multinom <- get_simulated.default
@@ -520,5 +516,14 @@ get_simulated.sdmTMB <- get_simulated.default
 get_simulated.stanreg <- get_simulated.default
 #' @export
 get_simulated.survreg <- get_simulated.default
+
+# verified: no simulate() methods available -------------------
+
+#' @export
+get_simulated.hurdle <- get_simulated.default
+
+#' @export
+get_simulated.list <- get_simulated.default
+
 #' @export
 get_simulated.zeroinfl <- get_simulated.default
