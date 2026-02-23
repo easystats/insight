@@ -277,6 +277,25 @@ test_that("get_simulated - glmmTMB", {
   expect_identical(out$iter_1, c(0, 0, 0))
   expect_identical(out$iter_4, c(0, 1, 1))
 
+  # centrality argument works
+  out <- get_simulated(
+    m,
+    data = get_datagrid(m, "c172code"),
+    iterations = 5,
+    seed = 1234,
+    centrality = mean
+  )
+  expect_equal(out$iter_1, c(0.7, 0.95059, 1.17308), tolerance = 1e-3)
+
+  out <- get_simulated(
+    m,
+    data = get_datagrid(m, "c172code"),
+    iterations = 5,
+    seed = 1234,
+    centrality = median
+  )
+  expect_equal(out$iter_1, c(1, 1, 1), tolerance = 1e-3)
+
   out <- get_simulated(
     m,
     data = get_datagrid(m, "c172code"),
