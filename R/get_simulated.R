@@ -20,7 +20,7 @@
 #' `get_simulated.glmmTMB()` internally, first, filters the results using
 #' `datawizard::data_match()` with the model data and `data`. This may return
 #' more than one row of simulated draws per group defined in `data`, thus, in
-#' a second step, the filtered data are aggregrated by the groups defined in
+#' a second step, the filtered data are aggregated by the groups defined in
 #' `data`. Resulting estimates of simulated values are summarized using
 #' `centrylity`, which, by default is the mode for categorical, ordinal or
 #' count response variables, or the mean otherwise.

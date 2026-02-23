@@ -76,7 +76,7 @@ data that was used to fit the model. If a data grid is passed via \code{data},
 \code{get_simulated.glmmTMB()} internally, first, filters the results using
 \code{datawizard::data_match()} with the model data and \code{data}. This may return
 more than one row of simulated draws per group defined in \code{data}, thus, in
-a second step, the filtered data are aggregrated by the groups defined in
+a second step, the filtered data are aggregated by the groups defined in
 \code{data}. Resulting estimates of simulated values are summarized using
 \code{centrylity}, which, by default is the mode for categorical, ordinal or
 count response variables, or the mean otherwise.}
