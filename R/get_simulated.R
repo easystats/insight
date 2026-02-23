@@ -12,6 +12,18 @@
 #' the simulated draws. If `data = NULL`, the data used to fit the model is
 #' included.
 #' @param seed An optional integer random seed.
+#' @param centrality Function, indicating how to summarize aggregated simulated
+#' values when `data` is a data grid. Only applies to models from package
+#' `glmmTMB`, because a special handling for the `data` argument is required
+#' here. `simulate.glmmTMB()` always returns simulated draws for the full
+#' data that was used to fit the model. If a data grid is passed via `data`,
+#' `get_simulated.glmmTMB()` internally, first, filters the results using
+#' `datawizard::data_match()` with the model data and `data`. This may return
+#' more than one row of simulated draws per group defined in `data`, thus, in
+#' a second step, the filtered data are aggregrated by the groups defined in
+#' `data`. Resulting estimates of simulated values are summarized using
+#' `centrylity`, which, by default is the mode for categorical, ordinal or
+#' count response variables, or the mean otherwise.
 #' @param re.form For `glmmTMB` and `merMod` models, random effects formula
 #' passed to simulation (`NULL`, `NA` or `~0`).
 #' @param use.u For `merMod` models, logical indicating whether to condition
@@ -151,6 +163,10 @@ get_simulated.lm <- function(
 
 
 #' @export
+get_simulated.glm <- get_simulated.lm
+
+
+#' @export
 get_simulated.betareg <- function(
   x,
   data = NULL,
@@ -226,6 +242,7 @@ get_simulated.glmmTMB <- function(
   iterations = 1,
   include_data = FALSE,
   seed = NULL,
+  centrality = NULL,
   re.form = NULL,
   ...
 ) {
@@ -287,6 +304,10 @@ get_simulated.glmmTMB <- function(
     # remove random effects from data grid
     re <- find_random(x, split_nested = TRUE, flatten = TRUE)
     data[re] <- NULL
+    # if we don't have a data grid, use column names instead
+    if (is.null(focal)) {
+      focal <- colnames(data)
+    }
     # add simulations to model data
     model_data <- cbind(model_data, ret)
     # next, filter data
@@ -297,30 +318,35 @@ get_simulated.glmmTMB <- function(
         "Simulating predictions only works when values in the data grid are also present in the data that was used to fit the model."
       )
     }
-    # for categorical outcomes, we aggregrate using the mode, not the mean
-    model_info <- model_info(x)
-    use_mode <- any(unlist(
-      model_info[c(
-        "is_binomial",
-        "is_ordinal",
-        "is_multinomial",
-        "is_poisson",
-        "is_count",
-        "is_categorical"
-      )],
-      use.names = FALSE
-    ))
+    # define function how to summarize aggregated simulations. by default,
+    # we use the mode for categorical, ordinal and count data, and the mea
+    # for everything else
+    if (is.null(centrality)) {
+      # for categorical outcomes, we aggregrate using the mode, not the mean
+      model_info <- model_info(x)
+      use_mode <- any(unlist(
+        model_info[c(
+          "is_binomial",
+          "is_ordinal",
+          "is_multinomial",
+          "is_poisson",
+          "is_count",
+          "is_categorical"
+        )],
+        use.names = FALSE
+      ))
 
-    if (use_mode) {
-      aggregate_fun <- .mode_value
-    } else {
-      aggregate_fun <- mean
+      if (use_mode) {
+        centrality <- .mode_value
+      } else {
+        centrality <- mean
+      }
     }
     # aggreate and "average" simulations
     ret <- stats::aggregate(
       filtered_data[colnames(ret)],
       by = filtered_data[focal],
-      aggregate_fun,
+      centrality,
       na.rm = TRUE
     )
     # by default, we have the data bound to the iterations, so we might
@@ -438,8 +464,6 @@ get_simulated.gam <- get_simulated.default
 get_simulated.gamlss <- get_simulated.default
 #' @export
 get_simulated.gamm <- get_simulated.default
-#' @export
-get_simulated.glm <- get_simulated.lm
 #' @export
 get_simulated.glmgee <- get_simulated.default
 #' @export

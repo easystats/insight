@@ -26,6 +26,7 @@ get_simulated(x, ...)
   iterations = 1,
   include_data = FALSE,
   seed = NULL,
+  centrality = NULL,
   re.form = NULL,
   ...
 )
@@ -66,6 +67,19 @@ the simulated draws. If \code{data = NULL}, the data used to fit the model is
 included.}
 
 \item{seed}{An optional integer random seed.}
+
+\item{centrality}{Function, indicating how to summarize aggregated simulated
+values when \code{data} is a data grid. Only applies to models from package
+\code{glmmTMB}, because a special handling for the \code{data} argument is required
+here. \code{simulate.glmmTMB()} always returns simulated draws for the full
+data that was used to fit the model. If a data grid is passed via \code{data},
+\code{get_simulated.glmmTMB()} internally, first, filters the results using
+\code{datawizard::data_match()} with the model data and \code{data}. This may return
+more than one row of simulated draws per group defined in \code{data}, thus, in
+a second step, the filtered data are aggregrated by the groups defined in
+\code{data}. Resulting estimates of simulated values are summarized using
+\code{centrylity}, which, by default is the mode for categorical, ordinal or
+count response variables, or the mean otherwise.}
 
 \item{re.form}{For \code{glmmTMB} and \code{merMod} models, random effects formula
 passed to simulation (\code{NULL}, \code{NA} or \code{~0}).}
