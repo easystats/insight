@@ -149,6 +149,8 @@ test_that("get_simulated - glmmTMB", {
   skip_if_not_installed("glmmTMB")
   skip_on_cran()
 
+  data(mtcars)
+
   # binomial ---------------------------------
   model <- suppressWarnings(glmmTMB::glmmTMB(
     vs ~ am + (1 | cyl),
@@ -314,6 +316,62 @@ test_that("get_simulated - glmmTMB", {
       "intermediate level of education",
       "high level of education"
     )
+  )
+
+  # zero-inflation --------------------------------
+  data(Salamanders, package = "glmmTMB")
+  m2 <- glmmTMB::glmmTMB(
+    count ~ spp + mined + (1 | site),
+    zi = ~ spp + mined,
+    family = glmmTMB::nbinom2,
+    data = Salamanders
+  )
+
+  out <- get_simulated(m2)
+  expect_named(out, "iter_1")
+  expect_identical(dim(out), c(644L, 1L))
+
+  out <- get_simulated(m2, iterations = 3)
+  expect_named(out, c("iter_1", "iter_2", "iter_3"))
+  expect_identical(dim(out), c(644L, 3L))
+
+  out <- get_simulated(m2, iterations = 3, include_data = TRUE)
+  expect_named(out, c("count", "spp", "mined", "site", "iter_1", "iter_2", "iter_3"))
+  expect_identical(dim(out), c(644L, 7L))
+
+  out <- get_simulated(
+    m2,
+    iterations = 3,
+    data = get_datagrid(m2, "spp"),
+    include_data = TRUE,
+    seed = 1234
+  )
+  expect_named(out, c("spp", "iter_1", "iter_2", "iter_3"))
+  expect_identical(dim(out), c(7L, 4L))
+  expect_equal(out$iter_1, c(0, 0, 0, 0, 0, 0, 0))
+
+  out <- get_simulated(
+    m2,
+    iterations = 3,
+    data = get_datagrid(m2, "spp"),
+    include_data = TRUE,
+    centrality = median,
+    seed = 1234
+  )
+  expect_equal(out$iter_1, c(0, 0, 0, 0, 0, 1, 1))
+
+  out <- get_simulated(
+    m2,
+    iterations = 3,
+    data = get_datagrid(m2, "spp"),
+    include_data = TRUE,
+    centrality = mean,
+    seed = 1234
+  )
+  expect_equal(
+    out$iter_1,
+    c(0.95652, 0.25, 1.02174, 0.48913, 1.91304, 2.66304, 1.47826),
+    tolerance = 1e-3
   )
 })
 
