@@ -567,10 +567,13 @@ get_predicted.nestedLogit <- function(
   x,
   data = NULL,
   predict = "expectation",
+  submodel = "nested",
   ci = NULL,
   verbose = TRUE,
   ...
 ) {
+  submodel <- validate_argument(submodel, c("nested", "dichotomies"))
+
   predict_function <- function(x, data, ...) {
     as.data.frame(
       stats::predict(
@@ -617,8 +620,12 @@ get_predicted.nestedLogit <- function(
     ...
   )
 
-  # 4. step: final preparation
-  .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+  # 4. step: final preparation - for nested logit, we need to save the response
+  # level, too
+  out <- .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+  attr(out, "response") <- predictions$Response_Level
+
+  out
 }
 
 
