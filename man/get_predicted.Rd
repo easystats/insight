@@ -5,6 +5,7 @@
 \alias{get_predicted}
 \alias{get_predicted.default}
 \alias{get_predicted.lm}
+\alias{get_predicted.nestedLogit}
 \alias{get_predicted.stanreg}
 \alias{get_predicted.gam}
 \alias{get_predicted.lmerMod}
@@ -33,6 +34,15 @@ get_predicted(x, ...)
   predict = "expectation",
   ci = NULL,
   iterations = NULL,
+  verbose = TRUE,
+  ...
+)
+
+\method{get_predicted}{nestedLogit}(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
   verbose = TRUE,
   ...
 )

@@ -561,6 +561,68 @@ get_predicted.coxme <- function(
 # bife ------------------------------------------------------------------
 # =======================================================================
 
+#' @rdname get_predicted
+#' @export
+get_predicted.nestedLogit <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  verbose = TRUE,
+  ...
+) {
+  predict_function <- as.data.frame(
+    stats::predict(
+      model,
+      newdata = data,
+      type = my_args$type,
+      ...
+    ),
+    newdata = data_grid
+  )
+
+  my_args <- .get_predicted_args(
+    x,
+    data = data,
+    predict = predict,
+    verbose = verbose,
+    ...
+  )
+
+  # 1. step: predictions
+  predictions <- predict_function(x, data = my_args$data)
+  colnames(predictions)[colnames(predictions) == "response"] <- "response.level"
+  colnames(predictions)[colnames(predictions) == "logit"] <- "predicted"
+
+  # 2. step: confidence intervals
+  ci_data <- get_predicted_ci(
+    x,
+    predictions,
+    data = my_args$data,
+    ci = ci,
+    ci_type = my_args$ci_type,
+    verbose = verbose,
+    ...
+  )
+
+  # 3. step: back-transform
+  out <- .get_predicted_transform(
+    x,
+    predictions,
+    my_args,
+    ci_data,
+    verbose = verbose,
+    ...
+  )
+
+  # 4. step: final preparation
+  .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+}
+
+
+# bife ------------------------------------------------------------------
+# =======================================================================
+
 #' @export
 get_predicted.bife <- function(
   x,
