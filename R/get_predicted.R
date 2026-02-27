@@ -558,7 +558,7 @@ get_predicted.coxme <- function(
 }
 
 
-# bife ------------------------------------------------------------------
+# nestedLogit------------------------------------------------------------
 # =======================================================================
 
 #' @rdname get_predicted
@@ -571,15 +571,16 @@ get_predicted.nestedLogit <- function(
   verbose = TRUE,
   ...
 ) {
-  predict_function <- as.data.frame(
-    stats::predict(
-      x,
-      newdata = data,
-      type = my_args$type,
-      ...
-    ),
-    newdata = data_grid
-  )
+  predict_function <- function(x, data, ...) {
+    as.data.frame(
+      stats::predict(
+        x,
+        newdata = data,
+        ...
+      ),
+      newdata = data
+    )
+  }
 
   my_args <- .get_predicted_args(
     x,
@@ -590,15 +591,16 @@ get_predicted.nestedLogit <- function(
   )
 
   # 1. step: predictions
-  predictions <- predict_function(x, data = my_args$data)
-  colnames(predictions)[colnames(predictions) == "response"] <- "response.level"
-  colnames(predictions)[colnames(predictions) == "logit"] <- "predicted"
+  predictions <- predict_function(x, data = my_args$data, ...)
+  colnames(predictions)[colnames(predictions) == "response"] <- "Response_Level"
+  colnames(predictions)[colnames(predictions) == "logit"] <- "Predicted"
 
   # 2. step: confidence intervals
   ci_data <- get_predicted_ci(
     x,
-    predictions,
+    predictions$Predicted,
     data = my_args$data,
+    se = predictions$se.logit,
     ci = ci,
     ci_type = my_args$ci_type,
     verbose = verbose,
@@ -608,7 +610,7 @@ get_predicted.nestedLogit <- function(
   # 3. step: back-transform
   out <- .get_predicted_transform(
     x,
-    predictions,
+    predictions$Predicted,
     my_args,
     ci_data,
     verbose = verbose,
