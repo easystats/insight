@@ -573,7 +573,7 @@ get_predicted.nestedLogit <- function(
 ) {
   predict_function <- as.data.frame(
     stats::predict(
-      model,
+      x,
       newdata = data,
       type = my_args$type,
       ...
