@@ -55,6 +55,17 @@ get_predicted(
   ...
 )
 
+# S3 method for class 'nestedLogit'
+get_predicted(
+  x,
+  data = NULL,
+  predict = "expectation",
+  submodel = "nested",
+  ci = NULL,
+  verbose = TRUE,
+  ...
+)
+
 # S3 method for class 'stanreg'
 get_predicted(
   x,
@@ -299,6 +310,14 @@ get_predicted(x, data = NULL, ...)
   bootstrapped draws, from which bootstrapped CIs will be computed.
   Iterations can be accessed by running
   `as.data.frame(..., keep_iterations = TRUE)` on the output.
+
+- submodel:
+
+  Only applies to models of class `nestedLogit`. Can be `"nested"` or
+  `"dichotomies"`. If `"nested"` (default), the fitted probabilities
+  under the nested logit model are returned. For `"dichotomies"`,
+  [`predict()`](https://rdrr.io/r/stats/predict.html) is invoked for
+  each binary logit model.
 
 - include_random:
 

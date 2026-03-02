@@ -39,7 +39,7 @@ are not available otherwise."><meta property="og:image" content="https://easysta
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.6.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.6.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,6 +132,17 @@ are not available otherwise.</p>
 <span>  predict <span class="op">=</span> <span class="st">"expectation"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  iterations <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'nestedLogit'</span></span>
+<span><span class="fu">get_predicted</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict <span class="op">=</span> <span class="st">"expectation"</span>,</span>
+<span>  submodel <span class="op">=</span> <span class="st">"nested"</span>,</span>
+<span>  ci <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -325,6 +336,13 @@ iteration of the model). For frequentist models, if not <code>NULL</code>, will
 generate bootstrapped draws, from which bootstrapped CIs will be computed.
 Iterations can be accessed by running <code>as.data.frame(..., keep_iterations = TRUE)</code>
 on the output.</p></dd>
+
+
+<dt id="arg-submodel">submodel<a class="anchor" aria-label="anchor" href="#arg-submodel"></a></dt>
+<dd><p>Only applies to models of class <code>nestedLogit</code>. Can be
+<code>"nested"</code> or <code>"dichotomies"</code>. If <code>"nested"</code> (default), the fitted
+probabilities under the nested logit model are returned. For <code>"dichotomies"</code>,
+<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> is invoked for each binary logit model.</p></dd>
 
 
 <dt id="arg-include-random">include_random<a class="anchor" aria-label="anchor" href="#arg-include-random"></a></dt>
