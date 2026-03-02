@@ -290,4 +290,16 @@ test_that("get_predicted", {
     regex = "Invalid option for argument `submodel`.",
     fixed = TRUE
   )
+
+  out <- as.data.frame(get_predicted(mnl1, data = d, ci = 0.95, predict = "link"))
+  expect_equal(
+    out$Predictions,
+    c(-0.7115, -2.34256, 0.3354, 0.86415, -1.37518, -2.25768),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    out$CI_low,
+    c(-1.18639, -3.15412, -0.1215, 0.5448, -1.74915, -2.78268),
+    tolerance = 1e-3
+  )
 })
