@@ -5,6 +5,7 @@
 \alias{get_predicted}
 \alias{get_predicted.default}
 \alias{get_predicted.lm}
+\alias{get_predicted.nestedLogit}
 \alias{get_predicted.stanreg}
 \alias{get_predicted.gam}
 \alias{get_predicted.lmerMod}
@@ -33,6 +34,16 @@ get_predicted(x, ...)
   predict = "expectation",
   ci = NULL,
   iterations = NULL,
+  verbose = TRUE,
+  ...
+)
+
+\method{get_predicted}{nestedLogit}(
+  x,
+  data = NULL,
+  predict = "expectation",
+  submodel = "nested",
+  ci = NULL,
   verbose = TRUE,
   ...
 )
@@ -211,6 +222,11 @@ iteration of the model). For frequentist models, if not \code{NULL}, will
 generate bootstrapped draws, from which bootstrapped CIs will be computed.
 Iterations can be accessed by running \code{as.data.frame(..., keep_iterations = TRUE)}
 on the output.}
+
+\item{submodel}{Only applies to models of class \code{nestedLogit}. Can be
+\code{"nested"} or \code{"dichotomies"}. If \code{"nested"} (default), the fitted
+probabilities under the nested logit model are returned. For \code{"dichotomies"},
+\code{predict()} is invoked for each binary logit model.}
 
 \item{include_random}{If \code{"default"}, include all random effects in the
 prediction, unless random effect variables are not in the data.  If \code{TRUE},

@@ -5,6 +5,8 @@
 * Improved performance of `find_parameters()` for models from package *mgcv*
   that include random effects.
 
+* `get_predicted()` supports models from package *nestedLogit*.
+
 ## Bug fixes
 
 * Fixes issue with duplicates `link_inverse()` and missing `link_function()` for
