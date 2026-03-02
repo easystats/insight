@@ -302,4 +302,51 @@ test_that("get_predicted", {
     c(-1.18639, -3.15412, -0.1215, 0.5448, -1.74915, -2.78268),
     tolerance = 1e-3
   )
+
+  out <- get_predicted(mnl2)
+  expect_identical(length(out), 324L)
+  expect_equal(
+    head(out),
+    c(0.71458, 0.21003, 0.07539, 0.70479, 0.20517, 0.09004),
+    tolerance = 1e-3
+  )
+  expect_identical(ncol(as.data.frame(out)), 1L)
+
+  d <- get_datagrid(mnl2, "children", include_response = TRUE)
+
+  out <- get_predicted(mnl2, data = d)
+  expect_identical(dim(out), c(6L, 4L))
+  expect_named(out, c("Row", "Response", "children", "Predictions"))
+
+  out <- as.data.frame(get_predicted(mnl2, data = d, ci = 0.95))
+  expect_identical(dim(out), c(6L, 7L))
+  expect_named(
+    out,
+    c("Row", "Response", "children", "Predictions", "SE", "CI_low", "CI_high")
+  )
+
+  out <- as.data.frame(get_predicted(mnl2, data = d, ci = 0.95, submodel = "dichotomies"))
+  expect_identical(dim(out), c(4L, 7L))
+  expect_named(
+    out,
+    c("Row", "Response", "children", "Predictions", "SE", "CI_low", "CI_high")
+  )
+
+  expect_error(
+    get_predicted(mnl2, data = d, ci = 0.95, submodel = "test"),
+    regex = "Invalid option for argument `submodel`.",
+    fixed = TRUE
+  )
+
+  out <- as.data.frame(get_predicted(mnl2, data = d, ci = 0.95, predict = "link"))
+  expect_equal(
+    out$Predictions,
+    c(-0.84747, -2.85315, 0.59939, 0.95536, -1.30874, -2.66435),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    out$CI_low,
+    c(-1.59451, -4.35748, -0.11586, 0.44797, -1.88383, -3.67293),
+    tolerance = 1e-3
+  )
 })
