@@ -109,6 +109,10 @@
 #'   See [`get_df()`] for details.
 #' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary:
 #'   `"sd"` or `"mad"`.
+#' @param submodel Only applies to models of class `nestedLogit`. Can be
+#' `"nested"` or `"dichotomies"`. If `"nested"` (default), the fitted
+#' probabilities under the nested logit model are returned. For `"dichotomies"`,
+#' `predict()` is invoked for each binary logit model.
 #' @param ... Other argument to be passed, for instance to the model's `predict()`
 #' method, or `get_predicted_ci()`.
 #' @inheritParams get_varcov
@@ -555,6 +559,112 @@ get_predicted.coxme <- function(
     verbose = verbose,
     ...
   )
+}
+
+
+# nestedLogit------------------------------------------------------------
+# =======================================================================
+
+#' @rdname get_predicted
+#' @export
+get_predicted.nestedLogit <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  submodel = "nested",
+  ci = NULL,
+  verbose = TRUE,
+  ...
+) {
+  submodel <- validate_argument(submodel, c("nested", "dichotomies"))
+
+  predict_function <- function(x, data, ...) {
+    as.data.frame(
+      stats::predict(
+        x,
+        newdata = data,
+        model = submodel,
+        ...
+      )
+    )
+  }
+
+  my_args <- .get_predicted_args(
+    x,
+    data = data,
+    predict = predict,
+    verbose = verbose,
+    ...
+  )
+
+  # 1. step: predictions
+  predictions <- predict_function(x, data = my_args$data, ...)
+  colnames(predictions)[colnames(predictions) == "response"] <- "Response"
+  colnames(predictions)[colnames(predictions) == "logit"] <- "Predicted"
+
+  # 2. step: confidence intervals
+  ci_data <- get_predicted_ci(
+    x,
+    predictions$Predicted,
+    data = my_args$data,
+    se = predictions$se.logit,
+    ci = ci,
+    ci_type = my_args$ci_type,
+    verbose = verbose,
+    ...
+  )
+
+  # 3. step: back-transform
+  out <- .get_predicted_transform(
+    x,
+    predictions$Predicted,
+    my_args,
+    ci_data,
+    verbose = verbose,
+    ...
+  )
+
+  # 4. step: final preparation - for nested logit, we need to save the response
+  # level, too
+
+  # for data grids, we append focal terms to predictions, due to multiple
+  # response levels. Else, it's difficult to assign predictions
+  if (inherits(data, "datagrid")) {
+    focal_terms <- attributes(data)$by
+    # check if all variables are present
+    if (all(focal_terms %in% colnames(predictions))) {
+      # update ci_data, if we have any
+      if (!is.null(ci_data)) {
+        ci_data <- cbind(
+          data.frame(Row = 1:nrow(predictions)),
+          predictions["Response"],
+          out$ci_data
+        )
+      }
+      # update out
+      out <- cbind(
+        data.frame(Row = 1:nrow(predictions)),
+        predictions[c("Response", focal_terms)],
+        data.frame(Predictions = out$predictions)
+      )
+      attr(out, "ci_data") <- ci_data
+      attr(out, "data") <- data
+      class(out) <- c("get_predicted", "data.frame")
+    } else {
+      if (verbose) {
+        format_alert(
+          "Could not match data grid with predictions. Returning predicted values only."
+        )
+      }
+      out <- .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+      attr(out, "response") <- predictions$Response
+    }
+  } else {
+    out <- .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+    attr(out, "response") <- predictions$Response
+  }
+
+  out
 }
 
 
