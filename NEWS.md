@@ -2,6 +2,10 @@
 
 ## Changes
 
+* New function, `get_simulated()`, to return simulated values from the response
+  of regression models, which is comparable to posterior predictions from a
+  model.
+
 * Improved performance of `find_parameters()` for models from package *mgcv*
   that include random effects.
 
