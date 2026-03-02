@@ -109,10 +109,10 @@
 #'   See [`get_df()`] for details.
 #' @param dispersion_method Bootstrap dispersion and Bayesian posterior summary:
 #'   `"sd"` or `"mad"`.
-#' @param submodel For `"nested"` (default), in which case fitted probabilities
-#' under the nested logit model are returned, or `"dichotomies"`, in which case
-#' `predict()` is invoked for each binary logit model fit to the nested
-#' dichotomies and a named list of the results is returned.
+#' @param submodel Only applies to models of class `nestedLogit`. Can be
+#' `"nested"` or `"dichotomies"`. If `"nested"` (default), the fitted
+#' probabilities under the nested logit model are returned. For `"dichotomies"`,
+#' `predict()` is invoked for each binary logit model.
 #' @param ... Other argument to be passed, for instance to the model's `predict()`
 #' method, or `get_predicted_ci()`.
 #' @inheritParams get_varcov

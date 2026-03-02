@@ -223,10 +223,10 @@ generate bootstrapped draws, from which bootstrapped CIs will be computed.
 Iterations can be accessed by running \code{as.data.frame(..., keep_iterations = TRUE)}
 on the output.}
 
-\item{submodel}{For \code{"nested"} (default), in which case fitted probabilities
-under the nested logit model are returned, or \code{"dichotomies"}, in which case
-\code{predict()} is invoked for each binary logit model fit to the nested
-dichotomies and a named list of the results is returned.}
+\item{submodel}{Only applies to models of class \code{nestedLogit}. Can be
+\code{"nested"} or \code{"dichotomies"}. If \code{"nested"} (default), the fitted
+probabilities under the nested logit model are returned. For \code{"dichotomies"},
+\code{predict()} is invoked for each binary logit model.}
 
 \item{include_random}{If \code{"default"}, include all random effects in the
 prediction, unless random effect variables are not in the data.  If \code{TRUE},
