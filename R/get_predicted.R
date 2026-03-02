@@ -585,8 +585,7 @@ get_predicted.nestedLogit <- function(
         newdata = data,
         model = submodel,
         ...
-      ),
-      newdata = data
+      )
     )
   }
 
@@ -645,12 +644,20 @@ get_predicted.nestedLogit <- function(
       # update out
       out <- cbind(
         data.frame(Row = 1:nrow(predictions)),
-        predictions[c(focal_terms, "Response")],
+        predictions[c("Response", focal_terms)],
         data.frame(Predictions = out$predictions)
       )
       attr(out, "ci_data") <- ci_data
       attr(out, "data") <- data
       class(out) <- c("get_predicted", "data.frame")
+    } else {
+      if (verbose) {
+        format_alert(
+          "Could not match data grid with predictions. Returning predicted values only."
+        )
+      }
+      out <- .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+      attr(out, "response") <- predictions$Response
     }
   } else {
     out <- .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)

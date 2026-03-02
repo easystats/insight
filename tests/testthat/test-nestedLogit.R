@@ -269,20 +269,20 @@ test_that("get_predicted", {
 
   out <- get_predicted(mnl1, data = d)
   expect_identical(dim(out), c(6L, 4L))
-  expect_named(out, c("Row", "children", "Response", "Predictions"))
+  expect_named(out, c("Row", "Response", "children", "Predictions"))
 
   out <- as.data.frame(get_predicted(mnl1, data = d, ci = 0.95))
   expect_identical(dim(out), c(6L, 7L))
   expect_named(
     out,
-    c("Row", "children", "Response", "Predictions", "SE", "CI_low", "CI_high")
+    c("Row", "Response", "children", "Predictions", "SE", "CI_low", "CI_high")
   )
 
   out <- as.data.frame(get_predicted(mnl1, data = d, ci = 0.95, submodel = "dichotomies"))
   expect_identical(dim(out), c(4L, 7L))
   expect_named(
     out,
-    c("Row", "children", "Response", "Predictions", "SE", "CI_low", "CI_high")
+    c("Row", "Response", "children", "Predictions", "SE", "CI_low", "CI_high")
   )
 
   expect_error(
