@@ -583,6 +583,7 @@ get_predicted.nestedLogit <- function(
       stats::predict(
         x,
         newdata = data,
+        model = submodel,
         ...
       ),
       newdata = data
@@ -599,7 +600,7 @@ get_predicted.nestedLogit <- function(
 
   # 1. step: predictions
   predictions <- predict_function(x, data = my_args$data, ...)
-  colnames(predictions)[colnames(predictions) == "response"] <- "Response_Level"
+  colnames(predictions)[colnames(predictions) == "response"] <- "Response"
   colnames(predictions)[colnames(predictions) == "logit"] <- "Predicted"
 
   # 2. step: confidence intervals
@@ -626,8 +627,33 @@ get_predicted.nestedLogit <- function(
 
   # 4. step: final preparation - for nested logit, we need to save the response
   # level, too
-  out <- .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
-  attr(out, "response") <- predictions$Response_Level
+
+  # for data grids, we append focal terms to predictions, due to multiple
+  # response levels. Else, it's difficult to assign predictions
+  if (inherits(data, "datagrid")) {
+    focal_terms <- attributes(data)$by
+    # check if all variables are present
+    if (all(focal_terms %in% colnames(predictions))) {
+      # update ci_data
+      ci_data <- cbind(
+        data.frame(Row = 1:nrow(predictions)),
+        predictions["Response"],
+        out$ci_data
+      )
+      # update out
+      out <- cbind(
+        data.frame(Row = 1:nrow(predictions)),
+        predictions[c(focal_terms, "Response")],
+        data.frame(Predictions = out$predictions)
+      )
+      attr(out, "ci_data") <- ci_data
+      attr(out, "data") <- data
+      class(out) <- c("get_predicted", "data.frame")
+    }
+  } else {
+    out <- .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+    attr(out, "response") <- predictions$Response
+  }
 
   out
 }
