@@ -634,12 +634,14 @@ get_predicted.nestedLogit <- function(
     focal_terms <- attributes(data)$by
     # check if all variables are present
     if (all(focal_terms %in% colnames(predictions))) {
-      # update ci_data
-      ci_data <- cbind(
-        data.frame(Row = 1:nrow(predictions)),
-        predictions["Response"],
-        out$ci_data
-      )
+      # update ci_data, if we have any
+      if (!is.null(ci_data)) {
+        ci_data <- cbind(
+          data.frame(Row = 1:nrow(predictions)),
+          predictions["Response"],
+          out$ci_data
+        )
+      }
       # update out
       out <- cbind(
         data.frame(Row = 1:nrow(predictions)),
