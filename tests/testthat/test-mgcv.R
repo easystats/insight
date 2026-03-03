@@ -110,4 +110,13 @@ test_that("get_statistic", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+
+  s <- summary(m_gam)
+  out <- get_statistic(s)
+  expect_equal(
+    out$Statistic,
+    as.vector(c(s$p.table[, "t value"], s$s.table[, "F"])),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 })

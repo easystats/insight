@@ -556,8 +556,13 @@ get_statistic.Gam <- function(x, ...) {
 #' @export
 get_statistic.gam <- function(x, re_test = TRUE, ...) {
   summ <- summary(x, re.test = re_test)
-  p.table <- summ$p.table
-  s.table <- summ$s.table
+  get_statistic(summ, statistic = find_statistic(x), ...)
+}
+
+#' @export
+get_statistic.summary.gam <- function(x, statistic = "t-statistic", ...) {
+  p.table <- x$p.table
+  s.table <- x$s.table
 
   d1 <- d2 <- NULL
 
@@ -582,7 +587,7 @@ get_statistic.gam <- function(x, re_test = TRUE, ...) {
   }
 
   out <- text_remove_backticks(rbind(d1, d2))
-  attr(out, "statistic") <- find_statistic(x)
+  attr(out, "statistic") <- statistic
   out
 }
 
