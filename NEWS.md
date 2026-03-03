@@ -2,7 +2,7 @@
 
 ## Changes
 
-* Improved performance of `find_parameters()` and `get_statistic()`for models
+* Improved performance of `find_parameters()` and `get_statistic()` for models
   from package *mgcv* that include random effects.
 
 * `get_predicted()` supports models from package *nestedLogit*.
