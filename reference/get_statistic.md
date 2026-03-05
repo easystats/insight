@@ -14,6 +14,9 @@ get_statistic(x, column_index = 3, verbose = TRUE, ...)
 # S3 method for class 'glmmTMB'
 get_statistic(x, component = "all", ...)
 
+# S3 method for class 'gam'
+get_statistic(x, re_test = TRUE, ...)
+
 # S3 method for class 'emmGrid'
 get_statistic(x, ci = 0.95, adjust = "none", merge_parameters = FALSE, ...)
 
@@ -67,6 +70,14 @@ get_statistic(x, robust = FALSE, ...)
   - For `component = "distributional"` (or `"auxiliary"`), components
     like `sigma`, `dispersion`, `beta` or `precision` (and other
     auxiliary parameters) are returned.
+
+- re_test:
+
+  Logical, if `TRUE` (default), tests for random effects terms are
+  performed. Only applies to
+  [`mgcv::gam()`](https://rdrr.io/pkg/mgcv/man/gam.html) model. For
+  large models these tests can be computationally expensive, in which
+  case it is recommended to set this argument to `FALSE`.
 
 - ci:
 

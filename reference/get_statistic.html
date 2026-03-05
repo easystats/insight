@@ -11,7 +11,7 @@ coef(summary())."><meta property="og:image" content="https://easystats.github.io
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.6.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.6.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,6 +74,9 @@ estimates. In most cases, this is the related column from
 <span><span class="co"># S3 method for class 'glmmTMB'</span></span>
 <span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, component <span class="op">=</span> <span class="st">"all"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for class 'gam'</span></span>
+<span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, re_test <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for class 'emmGrid'</span></span>
 <span><span class="fu">get_statistic</span><span class="op">(</span><span class="va">x</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, adjust <span class="op">=</span> <span class="st">"none"</span>, merge_parameters <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
@@ -125,6 +128,13 @@ but no auxiliary parameters).</p></li>
 <code>sigma</code>, <code>dispersion</code>, <code>beta</code> or <code>precision</code> (and other auxiliary
 parameters) are returned.</p></li>
 </ul></dd>
+
+
+<dt id="arg-re-test">re_test<a class="anchor" aria-label="anchor" href="#arg-re-test"></a></dt>
+<dd><p>Logical, if <code>TRUE</code> (default), tests for random effects terms
+are performed. Only applies to <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">mgcv::gam()</a></code> model. For large models these
+tests can be computationally expensive, in which case it is recommended to
+set this argument to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
