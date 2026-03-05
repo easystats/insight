@@ -4,6 +4,7 @@
 \alias{get_statistic}
 \alias{get_statistic.default}
 \alias{get_statistic.glmmTMB}
+\alias{get_statistic.gam}
 \alias{get_statistic.emmGrid}
 \alias{get_statistic.gee}
 \title{Get statistic associated with estimates}
@@ -13,6 +14,8 @@ get_statistic(x, ...)
 \method{get_statistic}{default}(x, column_index = 3, verbose = TRUE, ...)
 
 \method{get_statistic}{glmmTMB}(x, component = "all", ...)
+
+\method{get_statistic}{gam}(x, re_test = TRUE, ...)
 
 \method{get_statistic}{emmGrid}(x, ci = 0.95, adjust = "none", merge_parameters = FALSE, ...)
 
@@ -52,6 +55,11 @@ but no auxiliary parameters).
 \code{sigma}, \code{dispersion}, \code{beta} or \code{precision} (and other auxiliary
 parameters) are returned.
 }}
+
+\item{re_test}{Logical, if \code{TRUE} (default), tests for random effects terms
+are performed. Only applies to \code{mgcv::gam()} model. For large models these
+tests can be computationally expensive, in which case it is recommended to
+set this argument to \code{FALSE}.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).
 Currently only applies to objects of class \code{emmGrid}.}
