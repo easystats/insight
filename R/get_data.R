@@ -2118,6 +2118,18 @@ get_data.mle <- get_data.mle2
 
 
 #' @export
+get_data.aft <- function(x, ...) {
+  x@args$data
+}
+
+#' @export
+get_data.stpm2 <- get_data.aft
+
+#' @export
+get_data.pstpm2 <- get_data.aft
+
+
+#' @export
 get_data.nestedLogit <- function(x, ...) {
   d <- x$data
   if (!is.null(x$subset)) {

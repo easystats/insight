@@ -432,6 +432,25 @@ find_formula.deltaMethod <- find_formula.meta_random
 # Other models ----------------------------------------------
 
 #' @export
+find_formula.aft <- function(x, verbose = TRUE, ...) {
+  f <- .safe(list(conditional = environment(x@args$negll)$formula))
+  .find_formula_return(f, verbose = verbose)
+}
+
+#' @export
+find_formula.stpm2 <- function(x, verbose = TRUE, ...) {
+  f <- list(conditional = x@call.formula)
+  .find_formula_return(f, verbose = verbose)
+}
+
+#' @export
+find_formula.pstpm2 <- function(x, verbose = TRUE, ...) {
+  f <- list(conditional = eval(x@Call$formula))
+  .find_formula_return(f, verbose = verbose)
+}
+
+
+#' @export
 find_formula.censReg <- find_formula.default
 
 #' @export
