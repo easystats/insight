@@ -686,6 +686,15 @@ model_info.riskRegression <- model_info.coxph
 #' @export
 model_info.comprisk <- model_info.coxph
 
+#' @export
+model_info.aft <- model_info.coxph
+
+#' @export
+model_info.stpm2 <- model_info.coxph
+
+#' @export
+model_info.pstpm2 <- model_info.coxph
+
 
 # Zero-Inflated Models ------------------------------
 
