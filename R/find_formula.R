@@ -2052,7 +2052,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     }
     return(FALSE)
   }
-  return(TRUE)
+  TRUE
 }
 
 
@@ -2081,7 +2081,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     }
     return(FALSE)
   }
-  return(TRUE)
+  TRUE
 }
 
 
@@ -2117,7 +2117,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     }
     return(FALSE)
   }
-  return(TRUE)
+  TRUE
 }
 
 

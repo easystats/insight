@@ -48,20 +48,20 @@ test_that("aft: find_formula", {
 
 test_that("aft: find_variables", {
   v <- find_variables(mod_aft)
-  expect_equal(v$response, c("time", "status"))
-  expect_equal(v$conditional, c("age", "sex", "ph.ecog"))
+  expect_identical(v$response, c("time", "status"))
+  expect_identical(v$conditional, c("age", "sex", "ph.ecog"))
 })
 
 test_that("aft: find_response", {
-  expect_equal(find_response(mod_aft, combine = FALSE), c("time", "status"))
+  expect_identical(find_response(mod_aft, combine = FALSE), c("time", "status"))
 })
 
 test_that("aft: find_predictors", {
-  expect_equal(
+  expect_identical(
     find_predictors(mod_aft),
     list(conditional = c("age", "sex", "ph.ecog"))
   )
-  expect_equal(
+  expect_identical(
     find_predictors(mod_aft, flatten = TRUE),
     c("age", "sex", "ph.ecog")
   )
@@ -70,7 +70,7 @@ test_that("aft: find_predictors", {
 
 test_that("aft: get_data", {
   d <- get_data(mod_aft)
-  expect_equal(nrow(d), 227)
+  expect_identical(nrow(d), 227L)
   expect_true(all(c("time", "status", "age", "sex", "ph.ecog") %in% colnames(d)))
 })
 
@@ -105,13 +105,13 @@ test_that("stpm2: find_formula", {
 
 test_that("stpm2: find_variables", {
   v <- find_variables(mod_stpm2)
-  expect_equal(v$response, c("time", "status"))
-  expect_equal(v$conditional, c("age", "sex", "ph.ecog"))
+  expect_identical(v$response, c("time", "status"))
+  expect_identical(v$conditional, c("age", "sex", "ph.ecog"))
 })
 
 test_that("stpm2: get_data", {
   d <- get_data(mod_stpm2)
-  expect_equal(nrow(d), 227)
+  expect_identical(nrow(d), 227L)
   expect_true(all(c("time", "status", "age", "sex", "ph.ecog") %in% colnames(d)))
 })
 
@@ -140,13 +140,13 @@ test_that("pstpm2: find_formula", {
 
 test_that("pstpm2: find_variables", {
   v <- find_variables(mod_pstpm2)
-  expect_equal(v$response, c("time", "status"))
-  expect_equal(v$conditional, c("age", "sex", "ph.ecog"))
+  expect_identical(v$response, c("time", "status"))
+  expect_identical(v$conditional, c("age", "sex", "ph.ecog"))
 })
 
 test_that("pstpm2: get_data", {
   d <- get_data(mod_pstpm2)
-  expect_equal(nrow(d), 227)
+  expect_identical(nrow(d), 227L)
   expect_true(all(c("time", "status", "age", "sex", "ph.ecog") %in% colnames(d)))
 })
 

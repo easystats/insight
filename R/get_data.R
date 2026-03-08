@@ -289,7 +289,8 @@ get_data <- function(x, ...) {
       dat <- subset_data
     } else if (verbose) {
       format_warning(
-        "Looks like the original data was subset, however `get_data()` could not retrieve the subset of the data. The full data set is returned."
+        "Looks like the original data was subset, however `get_data()` could not retrieve",
+        "the subset of the data. The full data set is returned."
       )
     }
   }
@@ -425,7 +426,7 @@ get_data.workflow <- function(x, verbose = TRUE, ...) {
   if (verbose) {
     format_warning(sprintf(
       "Unknown preprocessor type: %s",
-      paste(class(preprocessor), collapse = ", ")
+      toString(class(preprocessor))
     ))
   }
   NULL
@@ -884,7 +885,7 @@ get_data.mmrm_tmb <- get_data.mmrm
 #' @export
 get_data.merModList <- function(x, effects = "all", ...) {
   format_warning("Can't access data for `merModList` objects.")
-  return(NULL)
+  NULL
 }
 
 
