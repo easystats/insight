@@ -28,5 +28,5 @@ test_that("find_formula, get_data glmmPQL", {
     data = example_dat
   )
   expect_identical(find_formula(mn)$conditional, as.formula("prop ~ x + size"))
-  expect_named(get_data(mn), c("prop", "size", "x", "species"))
+  expect_named(get_data(mn), c("prop", "x", "size", "species"))
 })
