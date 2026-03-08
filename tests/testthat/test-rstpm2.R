@@ -4,7 +4,6 @@ skip_if_not_installed("survival")
 # rstpm2 must be attached (not just loaded) because stpm2/pstpm2
 # use eval() in the parent frame and need internal functions on the search path
 require(rstpm2, quietly = TRUE)
-require(survival, quietly = TRUE)
 
 data(cancer, package = "survival")
 lung2 <- subset(lung, complete.cases(time, status, age, sex, ph.ecog))

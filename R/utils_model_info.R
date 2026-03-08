@@ -207,9 +207,9 @@
   is.survival <- inherits(
     x,
     c(
-      "aareg", "aft", "survreg", "survfit", "survPresmooth", "flexsurvreg",
-      "coxph", "coxme", "coxr", "riskRegression", "comprisk", "svycoxph",
-      "stpm2", "pstpm2"
+      "aareg", "aft", "comprisk", "coxme", "coxph", "coxr", "flexsurvreg",
+      "pstpm2", "riskRegression", "stpm2", "survfit", "survPresmooth", "survreg",
+      "svycoxph"
     )
   )
 
