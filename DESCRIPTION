@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.4.6.9
+Version: 1.4.6.10
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -195,6 +195,7 @@ Suggests:
     rpart,
     rstanarm (>= 2.21.1),
     rstantools (>= 2.1.0),
+    rstpm2,
     rstudioapi,
     RWiener,
     sandwich,

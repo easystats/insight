@@ -7,6 +7,10 @@
 
 * `get_predicted()` supports models from package *nestedLogit*.
 
+* Added support for `aft`, `stpm2`, and `pstpm2` models from package *rstpm2*.
+  `find_formula()`, `find_variables()`, `get_data()`, and `model_info()` now
+  work with these flexible parametric survival models.
+
 ## Bug fixes
 
 * Fixed issue with duplicated `link_inverse()` and missing `link_function()` for

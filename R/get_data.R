@@ -425,7 +425,7 @@ get_data.workflow <- function(x, verbose = TRUE, ...) {
   if (verbose) {
     format_warning(sprintf(
       "Unknown preprocessor type: %s",
-      paste(class(preprocessor), collapse = ", ")
+      toString(class(preprocessor))
     ))
   }
   NULL
@@ -884,7 +884,7 @@ get_data.mmrm_tmb <- get_data.mmrm
 #' @export
 get_data.merModList <- function(x, effects = "all", ...) {
   format_warning("Can't access data for `merModList` objects.")
-  return(NULL)
+  NULL
 }
 
 
@@ -2115,6 +2115,18 @@ get_data.mle2 <- function(x, ...) {
 
 #' @export
 get_data.mle <- get_data.mle2
+
+
+#' @export
+get_data.aft <- function(x, ...) {
+  x@args$data
+}
+
+#' @export
+get_data.stpm2 <- get_data.aft
+
+#' @export
+get_data.pstpm2 <- get_data.aft
 
 
 #' @export

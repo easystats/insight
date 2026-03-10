@@ -57,7 +57,7 @@ is_regression_model <- function(x) {
     "_ranger",
 
     # a --------------------
-    "aareg", "afex_aov", "AKP", "ancova", "anova", "Anova.mlm",
+    "aareg", "afex_aov", "aft", "AKP", "ancova", "anova", "Anova.mlm",
     "anova.rms", "aov", "aovlist", "Arima", "averaging", "asym",
 
     # b --------------------
@@ -137,7 +137,7 @@ is_regression_model <- function(x) {
     # p --------------------
     "pairwise.htest", "pb1", "pb2", "pgmm", "plm", "plmm", "PMCMR",
     "poissonmfx", "poissonirr", "polr", "pseudoglm", "psm", "probitmfx",
-    "phyloglm", "phylolm",
+    "phyloglm", "phylolm", "pstpm2",
 
     # q --------------------
     "qr", "QRNLMM", "QRLMM",
@@ -149,7 +149,7 @@ is_regression_model <- function(x) {
 
     # s --------------------
     "Sarlm", "scam", "selection", "sem", "SemiParBIV", "serp", "slm", "speedlm",
-    "speedglm", "splmm", "spml", "stanmvreg", "stanreg", "summary.lm",
+    "speedglm", "splmm", "spml", "stanmvreg", "stanreg", "stpm2", "summary.lm",
     "survfit", "survreg", "survPresmooth", "svychisq", "svyglm", "svy_vglm",
     "svyolr", "svytable", "systemfit", "svy2lme", "svycoxph", "seqanova.svyglm",
     "sdmTMB", "stanfit", "semLME", "svysurvreg",
