@@ -16,7 +16,7 @@ get_datagrid(x, ...)
 
   An object created by a function such as
   [`emmeans::emmeans()`](https://rvlenth.github.io/emmeans/reference/emmeans.html),
-  [`marginaleffects::slopes()`](https://marginaleffects.com/man/r/slopes.html),
+  [`marginaleffects::slopes()`](https://rdrr.io/pkg/marginaleffects/man/slopes.html),
   etc.
 
 - ...:

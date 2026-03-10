@@ -239,6 +239,7 @@ m2 <- lme4::lmer(
   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
   data = sleepstudy
 )
+#> boundary (singular) fit: see help('isSingular')
 find_variables(m2)
 #> $response
 #> [1] "Reaction"

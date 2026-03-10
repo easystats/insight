@@ -60,6 +60,7 @@ m <- lme4::lmer(
   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
   data = sleepstudy
 )
+#> boundary (singular) fit: see help('isSingular')
 
 find_random(m)
 #> $random

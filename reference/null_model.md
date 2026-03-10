@@ -47,10 +47,10 @@ summary(m)
 #> -3.9536 -0.4634  0.0231  0.4634  5.1793 
 #> 
 #> Random effects:
-#>  Groups   Name        Variance Std.Dev. Corr
-#>  Subject  (Intercept) 612.10   24.741       
-#>           Days         35.07    5.922   0.07
-#>  Residual             654.94   25.592       
+#>  Groups   Name        Variance Std.Dev. Corr 
+#>  Subject  (Intercept) 612.10   24.741        
+#>           Days         35.07    5.922   0.07 
+#>  Residual             654.94   25.592        
 #> Number of obs: 180, groups:  Subject, 18
 #> 
 #> Fixed effects:
@@ -123,10 +123,10 @@ summary(null_model(m))
 #> -4.0449 -0.4486  0.0089  0.4819  5.2186 
 #> 
 #> Random effects:
-#>  Groups   Name        Variance Std.Dev. Corr 
-#>  Subject  (Intercept) 651.6    25.53         
-#>           Days        142.2    11.93    -0.18
-#>  Residual             654.9    25.59         
+#>  Groups   Name        Variance Std.Dev. Corr  
+#>  Subject  (Intercept) 651.6    25.53          
+#>           Days        142.2    11.93    -0.18 
+#>  Residual             654.9    25.59          
 #> Number of obs: 180, groups:  Subject, 18
 #> 
 #> Fixed effects:

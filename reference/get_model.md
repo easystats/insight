@@ -57,10 +57,10 @@ get_model(d)
 #> 
 #> Coefficients:
 #> (Intercept)            x  
-#>    -0.11556      0.09456  
+#>    -0.24418     -0.09238  
 #> 
 # get the coefficients of the model
 get_model(d, element = "coefficients")
 #> (Intercept)           x 
-#> -0.11555541  0.09455584 
+#> -0.24418246 -0.09238425 
 ```
