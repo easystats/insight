@@ -17,6 +17,10 @@
 #'   confidence intervals. See `?emmeans::summary.emmGrid` for details.
 #' @param ci Confidence Interval (CI) level. Default to `0.95` (`95%`).
 #'   Currently only applies to objects of class `emmGrid`.
+#' @param re_test Logical, if `TRUE` (default), tests for random effects terms
+#' are performed. Only applies to `mgcv::gam()` model. For large models these
+#' tests can be computationally expensive, in which case it is recommended to
+#' set this argument to `FALSE`.
 #' @param ... Currently not used.
 #' @inheritParams find_predictors
 #' @inheritParams get_parameters
@@ -548,10 +552,17 @@ get_statistic.Gam <- function(x, ...) {
 }
 
 
+#' @rdname get_statistic
 #' @export
-get_statistic.gam <- function(x, ...) {
-  p.table <- summary(x)$p.table
-  s.table <- summary(x)$s.table
+get_statistic.gam <- function(x, re_test = TRUE, ...) {
+  summ <- summary(x, re.test = re_test)
+  get_statistic(summ, statistic = find_statistic(x), ...)
+}
+
+#' @export
+get_statistic.summary.gam <- function(x, statistic = "t-statistic", ...) {
+  p.table <- x$p.table
+  s.table <- x$s.table
 
   d1 <- d2 <- NULL
 
@@ -565,7 +576,7 @@ get_statistic.gam <- function(x, ...) {
     )
   }
 
-  if (!is.null(s.table)) {
+  if (!is.null(s.table) && nrow(s.table) > 0) {
     d2 <- data.frame(
       Parameter = rownames(s.table),
       Statistic = as.vector(s.table[, 3]),
@@ -576,7 +587,7 @@ get_statistic.gam <- function(x, ...) {
   }
 
   out <- text_remove_backticks(rbind(d1, d2))
-  attr(out, "statistic") <- find_statistic(x)
+  attr(out, "statistic") <- statistic
   out
 }
 

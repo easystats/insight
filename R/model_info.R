@@ -52,7 +52,8 @@
 #' * `is_mixed`: model is a mixed effects model (with random effects)
 #' * `is_mixture`: model is a finite mixture model (currently only recognized for
 #'   package *brms*).
-#' * `is_multivariate`: model is a multivariate response model (currently only works for _brmsfit_ and _vglm/vgam_ objects)
+#' * `is_multivariate`: model is a multivariate response model (currently only
+#'   works for _brmsfit_ and _vglm/vgam_ objects)
 #' * `is_hurdle`: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 #' * `is_rtchoice`: model is a *brms* decision-making (sequential sampling) model,
 #'   which models outcomes that consists of two components (reaction times and
@@ -686,6 +687,15 @@ model_info.riskRegression <- model_info.coxph
 #' @export
 model_info.comprisk <- model_info.coxph
 
+#' @export
+model_info.aft <- model_info.coxph
+
+#' @export
+model_info.stpm2 <- model_info.coxph
+
+#' @export
+model_info.pstpm2 <- model_info.coxph
+
 
 # Zero-Inflated Models ------------------------------
 
@@ -1282,12 +1292,12 @@ model_info.betareg <- function(x, ...) {
 .betareg_mean_element <- function(x) {
   if (!is.null(x$link$mean)) {
     "mean"
-  } else if (!is.null(x$link$mu)) {
-    "mu"
-  } else {
+  } else if (is.null(x$link$mu)) {
     format_error(
       "Could not find link information for the mean model in the betareg-object."
     )
+  } else {
+    "mu"
   }
 }
 

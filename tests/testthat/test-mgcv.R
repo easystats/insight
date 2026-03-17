@@ -81,3 +81,42 @@ test_that("finds_*, multinom", {
     ignore_attr = TRUE
   )
 })
+
+
+test_that("get_statistic", {
+  skip_if_not_installed("lme4")
+  data("sleepstudy", package = "lme4")
+  m_gam <- mgcv::gam(
+    Reaction ~ poly(Days, 2) + s(Subject, bs = "re"),
+    family = gaussian(),
+    data = sleepstudy,
+    method = "ML"
+  )
+
+  out <- get_statistic(m_gam)
+  s <- summary(m_gam)
+  expect_equal(
+    out$Statistic,
+    as.vector(c(s$p.table[, "t value"], s$s.table[, "F"])),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  out <- get_statistic(m_gam, re_test = FALSE)
+  s <- summary(m_gam, re.test = FALSE)
+  expect_equal(
+    out$Statistic,
+    as.vector(s$p.table[, "t value"]),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  s <- summary(m_gam)
+  out <- get_statistic(s)
+  expect_equal(
+    out$Statistic,
+    as.vector(c(s$p.table[, "t value"], s$s.table[, "F"])),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})
