@@ -1356,7 +1356,8 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 
 #' @keywords internal
-.mode_value <- function(x) {
+.mode_value <- function(x, na.rm = TRUE) {
+  # na.rm = TRUE not used, only required for "get_simulated.glmmTMB()"
   uniqv <- unique(x)
   tab <- tabulate(match(x, uniqv))
   idx <- which.max(tab)
