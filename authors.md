@@ -8,9 +8,8 @@
 - **[Dominique Makowski](https://dominiquemakowski.github.io/)**.
   Author, contributor. [](https://orcid.org/0000-0001-5375-9967)
 
-- **[Indrajeet
-  Patil](https://sites.google.com/site/indrajeetspatilmorality/)**.
-  Author, contributor. [](https://orcid.org/0000-0003-1995-6531)
+- **[Indrajeet Patil](https://www.indrapatil.com/)**. Author,
+  contributor. [](https://orcid.org/0000-0003-1995-6531)
 
 - **Philip Waggoner**. Author, contributor.
   [](https://orcid.org/0000-0002-7825-7573)

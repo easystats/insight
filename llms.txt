@@ -497,6 +497,8 @@ no `find_*()`-counterpart.
   : Model predictions (robust) and their confidence intervals
 - [`get_predicted_ci()`](https://easystats.github.io/insight/reference/get_predicted_ci.md)
   : Confidence intervals around predicted values
+- [`get_simulated()`](https://easystats.github.io/insight/reference/get_simulated.md)
+  : Simulate values from fitted models
 - [`get_priors()`](https://easystats.github.io/insight/reference/get_priors.md)
   : Get summary of priors used for a model
 - [`get_residuals()`](https://easystats.github.io/insight/reference/get_residuals.md)

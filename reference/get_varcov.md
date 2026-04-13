@@ -244,6 +244,6 @@ get_varcov(
 )
 #>                   count_(Intercept)     count_phd count_femWomen
 #> count_(Intercept)       0.035208897 -0.0084544838  -0.0029448560
-#> count_phd              -0.008454484  0.0026430079   0.0005519599
+#> count_phd              -0.008454484  0.0026430078   0.0005519599
 #> count_femWomen         -0.002944856  0.0005519599   0.0114174557
 ```
