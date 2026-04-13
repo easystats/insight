@@ -1,4 +1,4 @@
-# insight 1.4.7
+# insight 1.5.0
 
 ## Changes
 
