@@ -70,7 +70,8 @@ is returned, where all values starting with \code{is_} are logicals.
 \item \code{is_mixed}: model is a mixed effects model (with random effects)
 \item \code{is_mixture}: model is a finite mixture model (currently only recognized for
 package \emph{brms}).
-\item \code{is_multivariate}: model is a multivariate response model (currently only works for \emph{brmsfit} and \emph{vglm/vgam} objects)
+\item \code{is_multivariate}: model is a multivariate response model (currently only
+works for \emph{brmsfit} and \emph{vglm/vgam} objects)
 \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 \item \code{is_rtchoice}: model is a \emph{brms} decision-making (sequential sampling) model,
 which models outcomes that consists of two components (reaction times and

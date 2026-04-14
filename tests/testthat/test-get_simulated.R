@@ -418,8 +418,8 @@ test_that("get_simulated - merMod", {
   expect_named(out2, c("am", "cyl", "iter_1", "iter_2"))
 })
 
-
 test_that("get_simulated - mgcv", {
+  skip_on_cran()
   skip_if_not_installed("mgcv")
 
   set.seed(2) ## simulate some data...

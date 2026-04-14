@@ -389,9 +389,9 @@ get_simulated.merMod <- function(
   re.form = NA,
   newparams = NULL,
   family = NULL,
-  cluster.rand = rnorm,
+  cluster.rand = stats::rnorm,
   allow.new.levels = FALSE,
-  na.action = na.pass,
+  na.action = stats::na.pass,
   ...
 ) {
   check_if_installed("lme4")
