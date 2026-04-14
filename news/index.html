@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.6.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,21 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.0" id="insight-150">insight 1.5.0<a class="anchor" aria-label="anchor" href="#insight-150"></a></h2><p class="text-muted">CRAN release: 2026-04-14</p>
+<div class="section level3">
+<h3 id="changes-1-5-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-5-0"></a></h3>
+<ul><li><p>New function, <code><a href="../reference/get_simulated.html">get_simulated()</a></code>, to return simulated values from the response of regression models, which is comparable to posterior predictions from a model.</p></li>
+<li><p>Improved performance of <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for models from package <em>mgcv</em> that include random effects.</p></li>
+<li><p>Improved performance of <code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/get_statistic.html">get_statistic()</a></code> for models from package <em>mgcv</em> that include random effects.</p></li>
+<li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> supports models from package <em>nestedLogit</em>.</p></li>
+<li><p>Added support for <code>aft</code>, <code>stpm2</code>, and <code>pstpm2</code> models from package <em>rstpm2</em>. <code><a href="../reference/find_formula.html">find_formula()</a></code>, <code><a href="../reference/find_variables.html">find_variables()</a></code>, <code><a href="../reference/get_data.html">get_data()</a></code>, and <code><a href="../reference/model_info.html">model_info()</a></code> now work with these flexible parametric survival models.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-5-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-0"></a></h3>
+<ul><li>Fixed issue with duplicated <code><a href="../reference/link_inverse.html">link_inverse()</a></code> and missing <code><a href="../reference/link_function.html">link_function()</a></code> for <code>phyloglm</code> models.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.6" id="insight-146">insight 1.4.6<a class="anchor" aria-label="anchor" href="#insight-146"></a></h2><p class="text-muted">CRAN release: 2026-02-04</p>
 <div class="section level3">

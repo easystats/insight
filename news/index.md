@@ -1,5 +1,46 @@
 # Changelog
 
+## insight 1.5.0
+
+CRAN release: 2026-04-14
+
+### Changes
+
+- New function,
+  [`get_simulated()`](https://easystats.github.io/insight/reference/get_simulated.md),
+  to return simulated values from the response of regression models,
+  which is comparable to posterior predictions from a model.
+
+- Improved performance of
+  [`find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.md)
+  for models from package *mgcv* that include random effects.
+
+- Improved performance of
+  [`find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.md)
+  and
+  [`get_statistic()`](https://easystats.github.io/insight/reference/get_statistic.md)
+  for models from package *mgcv* that include random effects.
+
+- [`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.md)
+  supports models from package *nestedLogit*.
+
+- Added support for `aft`, `stpm2`, and `pstpm2` models from package
+  *rstpm2*.
+  [`find_formula()`](https://easystats.github.io/insight/reference/find_formula.md),
+  [`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md),
+  [`get_data()`](https://easystats.github.io/insight/reference/get_data.md),
+  and
+  [`model_info()`](https://easystats.github.io/insight/reference/model_info.md)
+  now work with these flexible parametric survival models.
+
+### Bug fixes
+
+- Fixed issue with duplicated
+  [`link_inverse()`](https://easystats.github.io/insight/reference/link_inverse.md)
+  and missing
+  [`link_function()`](https://easystats.github.io/insight/reference/link_function.md)
+  for `phyloglm` models.
+
 ## insight 1.4.6
 
 CRAN release: 2026-02-04
