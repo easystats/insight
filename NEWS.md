@@ -1,3 +1,9 @@
+# insight (devel)
+
+## Changes
+
+* `format_bf()` gains a digits argument.
+
 # insight 1.5.0
 
 ## Changes

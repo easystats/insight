@@ -9,6 +9,8 @@
 #' @param inferiority_star String, indicating the symbol that is used to
 #'   indicate inferiority, i.e. when the Bayes Factor is smaller than one third
 #'   (the thresholds are smaller than one third, 1/10 and 1/30).
+#' @param digits Number of significant digits. Can also be `"scientific"` (which
+#' is identical to `exact = TRUE`).
 #' @inheritParams format_p
 #'
 #' @return A formatted string.
@@ -30,7 +32,8 @@ format_bf <- function(
   name = "BF",
   protect_ratio = FALSE,
   na_reference = NA,
-  exact = FALSE
+  exact = FALSE,
+  digits = NULL
 ) {
   if (is.na(na_reference)) {
     bf[bad_bf <- is.na(bf)] <- 1
@@ -47,7 +50,15 @@ format_bf <- function(
     is_small <- logical(length(bf))
   }
 
-  digits <- ifelse(is.na(bf), 0, ifelse(bf < 1, 3, 2)) # nolint
+  # digis = scientific is the same as exact = TRUE
+  if (identical(digits, "scientific")) {
+    exact <- TRUE
+    digits <- NULL
+  }
+
+  if (is.null(digits) || is.character(digits)) {
+    digits <- ifelse(is.na(bf), 0, ifelse(bf < 1, 3, 2))
+  }
 
   bf_text <- paste0(
     "= ",
@@ -56,7 +67,7 @@ format_bf <- function(
   )
 
   ## Very big/small values
-  is_extreme <- bf_orig > 1000 | bf_orig < 1 / 1000
+  is_extreme <- bf_orig > 1000 | bf_orig < 1 / (10^digits)
   if (any(is_extreme)) {
     if (exact) {
       bf_text[is_extreme] <- ifelse(
