@@ -61,6 +61,18 @@ get_response.default <- function(
   # data used to fit the model
   model_data <- get_data(x, source = source, verbose = FALSE)
 
+  # check if response is in data - might be missing, if the original data is
+  # not in the environment
+  if (!all(rn %in% colnames(model_data))) {
+    missing_response <- setdiff(rn, colnames(model_data))
+    format_error(
+      sprintf(
+        "The response variable(s) %s could not be found in the data. Please check if the data that was used to fit the model is loaded into the environment.",
+        paste0("'", missing_response, "'", collapse = ", ")
+      )
+    )
+  }
+
   response <- model_data[, rn, drop = FALSE]
   # if user only wants specific response value, return this only
   if (!is.null(select) && all(select %in% colnames(response))) {
