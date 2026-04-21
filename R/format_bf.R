@@ -67,10 +67,9 @@ format_bf <- function(
   )
 
   # what is extreme small?
-  if (digits < 3) {
+  extreme_small <- (10^max(digits))
+  if (extreme_small < 1000) {
     extreme_small <- 1000
-  } else {
-    extreme_small <- (10^digits)
   }
 
   ## Very big/small values
