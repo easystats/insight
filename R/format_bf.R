@@ -76,9 +76,9 @@ format_bf <- function(
         bf_text[is_extreme]
       )
       bf_text[is_extreme] <- ifelse(
-        bf_orig[is_extreme] < 1 / 1000,
+        bf_orig[is_extreme] < 1 / (10^digits),
         ifelse(
-          is_small[is_extreme], # nolint
+          is_small[is_extreme],
           sprintf("= 1/%.2e", bf[is_extreme]),
           sprintf("= %.2e", bf_orig[is_extreme])
         ),
@@ -91,7 +91,7 @@ format_bf <- function(
         bf_text[is_extreme]
       )
       bf_text[is_extreme] <- ifelse(
-        bf_orig[is_extreme] < 1 / 1000,
+        bf_orig[is_extreme] < 1 / (10^digits),
         ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"), # nolint
         bf_text[is_extreme]
       )
