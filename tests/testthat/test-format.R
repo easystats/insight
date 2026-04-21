@@ -225,6 +225,10 @@ test_that("format others", {
     c("BF = 4.50e-05", "BF = 0.23", "", "BF = 1.56e+03", "BF = 3.54")
   )
   expect_identical(
+    format_bf(c(0.000045, 0.233, NA, 1557, 3.54), exact = TRUE, digits = 10),
+    c("BF = 0.0000450000", "BF = 0.2330000000", "", "BF = 1.56e+03", "BF = 3.5400000000")
+  )
+  expect_identical(
     format_bf(c(0.000045, 0.033, NA, 1557, 3.54)),
     c("BF < 0.001", "BF = 0.033", "", "BF > 1000", "BF = 3.54")
   )
