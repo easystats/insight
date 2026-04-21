@@ -66,8 +66,15 @@ format_bf <- function(
     format_value(bf, digits = digits)
   )
 
+  # what is extreme small?
+  if (digits < 3) {
+    extreme_small <- 1000
+  } else {
+    extreme_small <- (10^digits)
+  }
+
   ## Very big/small values
-  is_extreme <- bf_orig > 1000 | bf_orig < 1 / (10^digits)
+  is_extreme <- bf_orig > 1000 | bf_orig < 1 / extreme_small
   if (any(is_extreme)) {
     if (exact) {
       bf_text[is_extreme] <- ifelse(
@@ -76,7 +83,7 @@ format_bf <- function(
         bf_text[is_extreme]
       )
       bf_text[is_extreme] <- ifelse(
-        bf_orig[is_extreme] < 1 / (10^digits),
+        bf_orig[is_extreme] < 1 / extreme_small,
         ifelse(
           is_small[is_extreme],
           sprintf("= 1/%.2e", bf[is_extreme]),
@@ -91,7 +98,7 @@ format_bf <- function(
         bf_text[is_extreme]
       )
       bf_text[is_extreme] <- ifelse(
-        bf_orig[is_extreme] < 1 / (10^digits),
+        bf_orig[is_extreme] < 1 / extreme_small,
         ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"), # nolint
         bf_text[is_extreme]
       )
