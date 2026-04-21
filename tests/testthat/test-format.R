@@ -208,6 +208,18 @@ test_that("format_ci, character", {
 test_that("format others", {
   expect_type(insight::format_pd(0.02), "character")
   expect_identical(nchar(format_bf(4)), 9L)
+  expect_identical(format_bf(0.000000045), "BF < 0.001")
+  expect_identical(format_bf(0.000000045, exact = TRUE), "BF = 4.50e-08")
+  expect_identical(format_bf(0.000000045, digits = 3), "BF < 0.001")
+  expect_identical(
+    format_bf(0.000000045, digits = 3, protect_ratio = TRUE),
+    "BF < 1/1000"
+  )
+  expect_identical(format_bf(0.000000045, digits = 10), "BF = 0.0000000450")
+  expect_identical(
+    format_bf(0.000000045, digits = 10, protect_ratio = TRUE),
+    "BF = 1/2.2222222222e+07"
+  )
   expect_identical(
     format_bf(c(0.000045, 0.233, NA, 1557, 3.54), digits = 8),
     c("BF = 0.00004500", "BF = 0.23300000", "", "BF > 1000", "BF = 3.54000000")

@@ -35,8 +35,9 @@ format_bf <- function(
   exact = FALSE,
   digits = NULL
 ) {
+  bad_bf <- is.na(bf)
   if (is.na(na_reference)) {
-    bf[bad_bf <- is.na(bf)] <- 1
+    bf[bad_bf] <- 1
   } else {
     bf[is.na(bf)] <- na_reference
   }
@@ -98,7 +99,14 @@ format_bf <- function(
       )
       bf_text[is_extreme] <- ifelse(
         bf_orig[is_extreme] < 1 / extreme_small,
-        ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"), # nolint
+        ifelse(
+          is_small[is_extreme],
+          paste0("< 1/", extreme_small),
+          paste0(
+            "< ",
+            format_value(1 / extreme_small, digits = round(log10(extreme_small)))
+          )
+        ),
         bf_text[is_extreme]
       )
     }
@@ -110,8 +118,8 @@ format_bf <- function(
     paste0(bf_text, "***"),
     ifelse(
       bf_orig > 10,
-      paste0(bf_text, "**"), # nolint
-      ifelse(bf_orig > 3, paste0(bf_text, "*"), bf_text) # nolint
+      paste0(bf_text, "**"),
+      ifelse(bf_orig > 3, paste0(bf_text, "*"), bf_text)
     )
   )
 
@@ -119,11 +127,11 @@ format_bf <- function(
   if (!is.null(inferiority_star)) {
     bf_text <- ifelse(
       bf_orig < (1 / 30),
-      paste0(bf_text, paste(rep_len(inferiority_star, 3), collapse = "")), # nolint
+      paste0(bf_text, paste(rep_len(inferiority_star, 3), collapse = "")),
       ifelse(
         bf_orig < 0.1,
-        paste0(bf_text, paste(rep_len(inferiority_star, 2), collapse = "")), # nolint
-        ifelse(bf_orig < (1 / 3), paste0(bf_text, inferiority_star), bf_text) # nolint
+        paste0(bf_text, paste(rep_len(inferiority_star, 2), collapse = "")),
+        ifelse(bf_orig < (1 / 3), paste0(bf_text, inferiority_star), bf_text)
       )
     )
   }
