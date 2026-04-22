@@ -9,6 +9,8 @@
 #' @param inferiority_star String, indicating the symbol that is used to
 #'   indicate inferiority, i.e. when the Bayes Factor is smaller than one third
 #'   (the thresholds are smaller than one third, 1/10 and 1/30).
+#' @param digits Number of significant digits. Can also be `"scientific"` (which
+#' is identical to `exact = TRUE`).
 #' @inheritParams format_p
 #'
 #' @return A formatted string.
@@ -30,10 +32,12 @@ format_bf <- function(
   name = "BF",
   protect_ratio = FALSE,
   na_reference = NA,
-  exact = FALSE
+  exact = FALSE,
+  digits = NULL
 ) {
+  bad_bf <- is.na(bf)
   if (is.na(na_reference)) {
-    bf[bad_bf <- is.na(bf)] <- 1
+    bf[bad_bf] <- 1
   } else {
     bf[is.na(bf)] <- na_reference
   }
@@ -47,7 +51,15 @@ format_bf <- function(
     is_small <- logical(length(bf))
   }
 
-  digits <- ifelse(is.na(bf), 0, ifelse(bf < 1, 3, 2)) # nolint
+  # digis = scientific is the same as exact = TRUE
+  if (identical(digits, "scientific")) {
+    exact <- TRUE
+    digits <- NULL
+  }
+
+  if (is.null(digits) || is.character(digits)) {
+    digits <- ifelse(is.na(bf), 0, ifelse(bf < 1, 3, 2))
+  }
 
   bf_text <- paste0(
     "= ",
@@ -55,8 +67,14 @@ format_bf <- function(
     format_value(bf, digits = digits)
   )
 
+  # what is extreme small?
+  extreme_small <- (10^max(digits))
+  if (extreme_small < 1000) {
+    extreme_small <- 1000
+  }
+
   ## Very big/small values
-  is_extreme <- bf_orig > 1000 | bf_orig < 1 / 1000
+  is_extreme <- bf_orig > 1000 | bf_orig < 1 / extreme_small
   if (any(is_extreme)) {
     if (exact) {
       bf_text[is_extreme] <- ifelse(
@@ -65,9 +83,9 @@ format_bf <- function(
         bf_text[is_extreme]
       )
       bf_text[is_extreme] <- ifelse(
-        bf_orig[is_extreme] < 1 / 1000,
+        bf_orig[is_extreme] < 1 / extreme_small,
         ifelse(
-          is_small[is_extreme], # nolint
+          is_small[is_extreme],
           sprintf("= 1/%.2e", bf[is_extreme]),
           sprintf("= %.2e", bf_orig[is_extreme])
         ),
@@ -80,8 +98,15 @@ format_bf <- function(
         bf_text[is_extreme]
       )
       bf_text[is_extreme] <- ifelse(
-        bf_orig[is_extreme] < 1 / 1000,
-        ifelse(is_small[is_extreme], "< 1/1000", "< 0.001"), # nolint
+        bf_orig[is_extreme] < 1 / extreme_small,
+        ifelse(
+          is_small[is_extreme],
+          paste0("< 1/", extreme_small),
+          paste0(
+            "< ",
+            format_value(1 / extreme_small, digits = round(log10(extreme_small)))
+          )
+        ),
         bf_text[is_extreme]
       )
     }
@@ -93,8 +118,8 @@ format_bf <- function(
     paste0(bf_text, "***"),
     ifelse(
       bf_orig > 10,
-      paste0(bf_text, "**"), # nolint
-      ifelse(bf_orig > 3, paste0(bf_text, "*"), bf_text) # nolint
+      paste0(bf_text, "**"),
+      ifelse(bf_orig > 3, paste0(bf_text, "*"), bf_text)
     )
   )
 
@@ -102,11 +127,11 @@ format_bf <- function(
   if (!is.null(inferiority_star)) {
     bf_text <- ifelse(
       bf_orig < (1 / 30),
-      paste0(bf_text, paste(rep_len(inferiority_star, 3), collapse = "")), # nolint
+      paste0(bf_text, paste(rep_len(inferiority_star, 3), collapse = "")),
       ifelse(
         bf_orig < 0.1,
-        paste0(bf_text, paste(rep_len(inferiority_star, 2), collapse = "")), # nolint
-        ifelse(bf_orig < (1 / 3), paste0(bf_text, inferiority_star), bf_text) # nolint
+        paste0(bf_text, paste(rep_len(inferiority_star, 2), collapse = "")),
+        ifelse(bf_orig < (1 / 3), paste0(bf_text, inferiority_star), bf_text)
       )
     )
   }

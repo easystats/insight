@@ -2,6 +2,8 @@
 
 ## Changes
 
+* `format_bf()` gains a digits argument.
+
 * More informative error message when the response variable in `get_response()`
   is not present in the data.
 
