@@ -195,23 +195,8 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
     cn[cn == "Difference"] <- "estimate"
   }
 
-  cn[
-    cn %in%
-      c(
-        "W",
-        "S",
-        "t",
-        "z",
-        "F",
-        "Chi2",
-        "chisq",
-        "chi-sq",
-        "Chisq",
-        "t / F",
-        "z / Chisq",
-        "z / Chi2"
-      )
-  ] <- "statistic"
+  # fmt: skip
+  cn[cn %in% c("W", "S", "t", "z", "F", "Chi2", "chisq", "chi-sq", "Chisq", "t / F", "z / Chisq", "z / Chi2")] <- "statistic"
 
   # fancy regex replacements
   cn <- gsub("^CI_low", "conf.low", cn)

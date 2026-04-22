@@ -7,6 +7,9 @@
 * More informative error message when the response variable in `get_response()`
   is not present in the data.
 
+* `format_table()` now also formats columns for tail and bulk ESS from Bayesian
+  models.
+
 # insight 1.5.0
 
 ## Changes
