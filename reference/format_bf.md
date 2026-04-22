@@ -13,7 +13,8 @@ format_bf(
   name = "BF",
   protect_ratio = FALSE,
   na_reference = NA,
-  exact = FALSE
+  exact = FALSE,
+  digits = NULL
 )
 ```
 
@@ -56,6 +57,11 @@ format_bf(
   Should very large or very small values be reported with a scientific
   format (e.g., 4.24e5), or as truncated values (as "\> 1000" and "\<
   1/1000").
+
+- digits:
+
+  Number of significant digits. Can also be `"scientific"` (which is
+  identical to `exact = TRUE`).
 
 ## Value
 
