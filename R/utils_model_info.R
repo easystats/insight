@@ -250,6 +250,7 @@
 
   is_ftest <- FALSE
   is_ttest <- FALSE
+  is_ztest <- FALSE
   is_correlation <- FALSE
   is_oneway <- FALSE
   is_proptest <- FALSE
@@ -273,8 +274,10 @@
         grepl("friedman", tolower(x$method), fixed = TRUE)
     ) {
       is_ranktest <- TRUE
-    } else if (grepl("t-test", x$method, fixed = TRUE)) {
+    } else if (grepl("t-test", tolower(x$method), fixed = TRUE)) {
       is_ttest <- TRUE
+    } else if (grepl("z-test", tolower(x$method), fixed = TRUE)) {
+      is_ztest <- TRUE
     } else if (grepl("F test", x$method, fixed = TRUE)) {
       is_ftest <- TRUE
     } else if (startsWith(x$method, "One-way")) {
@@ -460,6 +463,7 @@
     is_ranktest = is_ranktest,
     is_levenetest = is_levenetest,
     is_variancetest = is_variancetest,
+    is_ztest = is_ztest,
     is_xtab = is_xtab,
     is_proptest = is_proptest,
     is_binomtest = is_binomtest,
