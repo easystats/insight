@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.5.0.4
+Version: 1.5.0.5
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -90,7 +90,7 @@ Suggests:
     BayesFactor,
     bayestestR,
     bbmle,
-    BDSA,
+    BSDA,
     bdsmatrix,
     betareg,
     biglm,

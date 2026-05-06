@@ -374,9 +374,9 @@ test_that("model_info.kruskal-test", {
 })
 
 
-# BDSA -------
+# BSDA -------
 
-test_that("model_info.BDSA-test", {
+test_that("model_info.BSDA-test", {
   skip_if_not_installed("BSDA")
   m <- suppressWarnings(BSDA::tsum.test(
     mean.x = 5.6,

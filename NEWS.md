@@ -2,7 +2,7 @@
 
 ## Changes
 
-* `model_info()` now correctly detects t- and z-tests from package *BDSA*.
+* `model_info()` now correctly detects t- and z-tests from package *BSDA*.
 
 * `format_bf()` gains a digits argument.
 
