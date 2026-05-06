@@ -312,6 +312,9 @@ model_info(m)
 #> $is_variancetest
 #> [1] FALSE
 #> 
+#> $is_ztest
+#> [1] FALSE
+#> 
 #> $is_xtab
 #> [1] FALSE
 #> 
@@ -467,6 +470,9 @@ model_info(m)
 #> [1] FALSE
 #> 
 #> $is_variancetest
+#> [1] FALSE
+#> 
+#> $is_ztest
 #> [1] FALSE
 #> 
 #> $is_xtab
