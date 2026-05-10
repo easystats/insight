@@ -651,7 +651,7 @@ get_parameters.sim <- function(
 
 #' @export
 get_parameters.CmdStanFit <- function(x, parameters = NULL, ...) {
-  insight::check_if_installed("cmdstanr")
+  check_if_installed("cmdstanr")
 
   par_names <- find_parameters(x, flatten = TRUE)
   if (!is.null(parameters)) {
