@@ -347,3 +347,13 @@ find_algorithm.brmsfit <- function(x, ...) {
     warmup = info$warmup
   )
 }
+
+#' @export
+find_algorithm.CmdStanFit <- function(x, ...) {
+  check_if_installed("cmdstanr")
+  md <- x$metadata()
+  out <- md[c("method", "num_chains", "iter_sampling", "iter_warmup")]
+  names(out) <- c("algorithm", "chains", "iterations", "warmup")
+  out$chains <- out$chains * length(md$id)
+  out
+}
