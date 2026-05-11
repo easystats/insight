@@ -557,3 +557,18 @@ find_parameters.stanfit <- function(
     l
   }
 }
+
+#' @export
+find_parameters.CmdStanFit <- function(x, flatten = FALSE, ...) {
+  check_if_installed("cmdstanr")
+  md <- x$metadata()
+
+  v <- md$variables
+  # v <- md$stan_variables
+
+  v <- setdiff(v, "lp__")
+  if (isTRUE(flatten)) {
+    return(v)
+  }
+  list(conditional = v)
+}

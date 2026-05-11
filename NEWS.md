@@ -2,6 +2,8 @@
 
 ## Changes
 
+* New support for `CmdStanFit` models from the `{cmdstanr}` package - `find_algorithm()`, `find_parameters()`, and `get_parameters()` now work with these models.
+
 * `model_info()` now correctly detects t- and z-tests from package *BSDA*.
 
 * `format_bf()` gains a digits argument.
