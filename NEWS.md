@@ -2,17 +2,24 @@
 
 ## Changes
 
-* New support for `CmdStanFit` models from the `{cmdstanr}` package - `find_algorithm()`, `find_parameters()`, and `get_parameters()` now work with these models.
+* New support for `CmdStanFit` models from the *cmdstanr* package -
+  `find_algorithm()`, `find_parameters()`, and `get_parameters()` now work with
+  these models.
 
 * `model_info()` now correctly detects t- and z-tests from package *BSDA*.
 
-* `format_bf()` gains a digits argument.
+* `format_bf()` gains a `digits` argument.
 
 * More informative error message when the response variable in `get_response()`
   is not present in the data.
 
 * `format_table()` now also formats columns for tail and bulk ESS from Bayesian
   models.
+
+## Bug fixes
+
+* `has_intercept()` now correctly detects whether models from packages *fixest*
+  and *lfe* have intercepts or not.
 
 # insight 1.5.0
 
