@@ -5,6 +5,7 @@
 #'
 #' @param x A model object.
 #' @param verbose Toggle warnings.
+#' @param ... Currently not used.
 #'
 #' @return `TRUE` if `x` has an intercept, `FALSE` otherwise.
 #'
@@ -22,7 +23,12 @@
 #' model <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
 #' has_intercept(model)
 #' @export
-has_intercept <- function(x, verbose = TRUE) {
+has_intercept <- function(x, verbose = TRUE, ...) {
+  UseMethod("has_intercept")
+}
+
+#' @export
+has_intercept.default <- function(x, verbose = TRUE, ...) {
   f <- find_formula(x, verbose = FALSE)
   if (is_multivariate(x)) {
     lapply(f, .check_for_intercept, x = x, verbose = verbose)
@@ -30,6 +36,17 @@ has_intercept <- function(x, verbose = TRUE) {
     .check_for_intercept(f, x, verbose)
   }
 }
+
+#' @export
+has_intercept.fixest <- function(x, verbose = TRUE, ...) {
+  return("(Intercept)" %in% find_parameters(x, flatten = TRUE, verbose = FALSE))
+}
+
+#' @export
+has_intercept.felm <- has_intercept.fixest
+
+#' @export
+has_intercept.fepois <- has_intercept.fixest
 
 .check_for_intercept <- function(f, x, verbose = TRUE) {
   if (!is.null(f$conditional)) {

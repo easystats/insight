@@ -14,6 +14,11 @@
 * `format_table()` now also formats columns for tail and bulk ESS from Bayesian
   models.
 
+## Bug fixes
+
+* `has_intercept()` now correctly detects whether models from packages *fixest*
+  and *lfe* have intercepts or not.
+
 # insight 1.5.0
 
 ## Changes
