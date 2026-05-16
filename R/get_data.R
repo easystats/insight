@@ -2674,6 +2674,7 @@ get_data.mipo <- function(x, ...) {
   })
 }
 
+
 #' @export
 get_data.mira <- function(x, ...) {
   # for mira-objects
@@ -2686,6 +2687,7 @@ get_data.mira <- function(x, ...) {
   })
   compact_list(model_data)
 }
+
 
 #' @export
 get_data.htest <- function(x, ...) {
