@@ -5,7 +5,7 @@ Checks if model has an intercept.
 ## Usage
 
 ``` r
-has_intercept(x, verbose = TRUE)
+has_intercept(x, verbose = TRUE, ...)
 ```
 
 ## Arguments
@@ -17,6 +17,10 @@ has_intercept(x, verbose = TRUE)
 - verbose:
 
   Toggle warnings.
+
+- ...:
+
+  Currently not used.
 
 ## Value
 
