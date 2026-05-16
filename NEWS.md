@@ -16,6 +16,8 @@
 * `format_table()` now also formats columns for tail and bulk ESS from Bayesian
   models.
 
+* `get_data()` now supports objects of class `mira` from package *mice*.
+
 ## Bug fixes
 
 * `has_intercept()` now correctly detects whether models from packages *fixest*
