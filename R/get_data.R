@@ -2677,12 +2677,11 @@ get_data.mipo <- function(x, ...) {
 #' @export
 get_data.mira <- function(x, ...) {
   # for mira-objects
-  variables <- find_variables(x, flatten = TRUE)
-  data_list <- str2lang(sprintf("list(%s)", toString(variables)))
+  variables <- find_variables(x, flatten = TRUE, ...)
   model_data <- lapply(x$analyses, function(fit) {
     .safe({
-      out <- eval(data_list, environment(find_formula(fit)$conditional))
-      stats::setNames(list2DF(out), variables)
+      out <- mget(variables, environment(find_formula(fit)$conditional), inherits = TRUE)
+      as.data.frame(out)
     })
   })
   compact_list(model_data)
