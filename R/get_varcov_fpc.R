@@ -1,10 +1,33 @@
-# Code adapted from Lai et al. 2018
-# Lai, M. H. C., Kwok, O.-m., Hsiao, Y.-Y., & Cao, Q. (2018). Finite population
-# correction for two-level hierarchical linear models. Psychological Methods,
-# 23(1), 94–112. \doi{10.1037/met0000137}
-#
-# Code was modified using stricter sanity checks and extended to work with
-# the glmmTMB package
+#' @title Obtain finite-population-adjusted variance-covariance matrix
+#' @name vcovFPC
+#'
+#' @description
+#' This function returns the variance-covariance matrix as returned by `vcov()`,
+#' but with finite population correction (FPC) applied.
+#'
+#' @param model A model inheriting from `lm`, `glm`, `merMod` or `glmmTMB`
+#' (2-level only).
+#' @param population_size The finite population size (for mixed models: for
+#' level-1).
+#' @param cluster_size The finite population size for level-2 (cluster groups).
+#' @param kr Logical, if `TRUE`, also applies Kenward-Roger adjustment to the
+#' returned variance-covariance matrix.
+#' @param ... Not used.
+#'
+#' @details
+#' The FPC is defined as:
+#'
+#' \deqn{FPC = \frac{N - n}{N - 1}}{FPC = (N - n) / (N - 1)}
+#'
+#' FPC for multilevel models is based on the method described by Lai et al. (2018).
+#'
+#' @return The variance-covariance matrix of the fixed effect estimates, as
+#' returned by `vcov()`, but with FPC applied.
+#'
+#' @references Lai, M. H., Kwok, O. M., Hsiao, Y. Y., & Cao, Q. (2018). Finite
+#' population correction for two-level hierarchical linear models.
+#' _Psychological methods, 23_(1), 94.
+#'
 #' @export
 vcovFPC <- function(model, ...) {
   UseMethod("vcovFPC")
@@ -17,8 +40,23 @@ vcovFPC.default <- function(model, ...) {
 }
 
 
+#' @rdname vcovFPC
 #' @export
-vcovFPC.merMod <- function(model, ...) {
+vcovFPC.merMod <- function(
+  model,
+  population_size = NULL,
+  cluster_size = NULL,
+  kr = FALSE,
+  ...
+) {
+  # Code adapted from Lai et al. 2018
+  # Lai, M. H. C., Kwok, O.-m., Hsiao, Y.-Y., & Cao, Q. (2018). Finite population
+  # correction for two-level hierarchical linear models. Psychological Methods,
+  # 23(1), 94–112. \doi{10.1037/met0000137}
+  #
+  # Code was modified using stricter sanity checks and extended to work with
+  # the glmmTMB package
+
   # sanity checks -------------------------------
 
   check_if_installed(c("lme4", "Matrix"))
@@ -38,11 +76,9 @@ vcovFPC.merMod <- function(model, ...) {
     )
   }
 
-  vcov_args <- list(...)
-
   # user must specify at least one population size
-  fpc1 <- vcov_args$population_size
-  fpc2 <- vcov_args$cluster_size
+  fpc1 <- population_size
+  fpc2 <- cluster_size
   if (is.null(fpc1) && is.null(fpc2)) {
     format_error(
       "You must provide either `population_size` or `cluster_size` for finite population correction in the `vcov_args` argument.",
@@ -83,9 +119,6 @@ vcovFPC.merMod <- function(model, ...) {
   if (fpc2 > n_grplevel) {
     fpc2 <- 1 - n_grplevel / fpc2
   }
-
-  # user wants KR adjustment?
-  kr <- isTRUE(vcov_args$kenward_roger) || isTRUE(vcov_args$kr)
 
   # 1. Extract and scale the random effects structure -------------------------
 
@@ -151,9 +184,8 @@ vcovFPC.glmmTMB <- vcovFPC.merMod
 
 
 #' @export
-vcovFPC.lm <- function(model, ...) {
-  vcov_args <- list(...)
-  if (is.null(vcov_args$population_size)) {
+vcovFPC.lm <- function(model, population_size = NULL, ...) {
+  if (is.null(population_size)) {
     format_error(
       "You must provide `population_size` for finite population correction in the `vcov_args` argument."
     )
@@ -161,13 +193,12 @@ vcovFPC.lm <- function(model, ...) {
 
   N <- n_obs(model)
   V <- stats::vcov(model)
-  popsize <- vcov_args$population_size
 
-  if (popsize <= N) {
+  if (population_size <= N) {
     format_error("`population_size` must be larger than the sample size.")
   }
 
-  fpc <- (popsize - N) / (popsize - 1)
+  fpc <- (population_size - N) / (population_size - 1)
   return(V / fpc)
 }
 

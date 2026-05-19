@@ -77,6 +77,7 @@ reference:
       - starts_with("link_")
       - model_name
       - starts_with("n_")
+      - vcovFPC
 
   - title: "Test Model Properties"
     desc: >
