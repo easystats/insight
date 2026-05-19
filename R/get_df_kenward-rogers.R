@@ -5,15 +5,22 @@
 
 #' @keywords internal
 .degrees_of_freedom_kr.default <- function(x, ...) {
+  # Extract fixed effect parameter names
   parameters <- find_parameters(x, effects = "fixed", flatten = TRUE)
+
+  # Create an identity matrix (L) representing linear contrasts for each parameter
   L <- as.data.frame(diag(rep(1, n_parameters(x, effects = "fixed"))))
+
+  # Calculate the Kenward-Roger adjusted variance-covariance matrix
   krvcov <- .vcov_kenward_ajusted(x)
 
+  # Calculate the denominator degrees of freedom (ddf) for each parameter (each column in L)
   dof <- stats::setNames(
     sapply(L, .kenward_adjusted_ddf, model = x, adjusted_vcov = krvcov),
     parameters
   )
 
+  # Attach standard errors and adjusted vcov as attributes for downstream use
   attr(dof, "vcov") <- krvcov
   attr(dof, "se") <- abs(as.vector(sqrt(diag(as.matrix(krvcov)))))
   dof
@@ -23,12 +30,14 @@
 .degrees_of_freedom_kr.glmmTMB <- function(x, verbose = TRUE, ...) {
   check_if_installed("glmmTMB", minimum_version = "1.1.3")
 
+  # Kenward-Roger relies on Restricted Maximum Likelihood (REML)
   if (!isTRUE(x$modelInfo$REML) && verbose) {
     format_warning(
       "Kenward-Roger degrees of freedom are typically not appropriate for models fit with ML. Use `REML = TRUE`."
     )
   }
 
+  # Use glmmTMB's native KR calculation
   out <- glmmTMB::dof_KR(x)
   krvcov <- as.matrix(attributes(out)$vcov)
   dof <- as.vector(out)
@@ -42,6 +51,7 @@
 # The following code was taken from the "pbkrtest" package and slightly modified
 #' @author Søren Højsgaard, \email{sorenh@@math.aau.dk}
 .kenward_adjusted_ddf <- function(model, linear_coef, adjusted_vcov) {
+  # Wrapper to pass the unadjusted vcov alongside the adjusted one
   .adjusted_ddf(adjusted_vcov, linear_coef, stats::vcov(model))
 }
 
@@ -50,47 +60,59 @@
 .adjusted_ddf <- function(adjusted_vcov, linear_coef, unadjusted_vcov = adjusted_vcov) {
   check_if_installed("Matrix")
 
+  # Ensure linear contrast is a column vector
   if (!is.matrix(linear_coef)) {
     linear_coef <- matrix(linear_coef, ncol = 1)
   }
+
+  # Calculate scaling factor 'vlb'
   vlb <- sum(linear_coef * (unadjusted_vcov %*% linear_coef))
+
+  # Matrix theta based on the outer product of the contrast vector
   theta <- Matrix::Matrix(
     as.numeric(outer(linear_coef, linear_coef) / vlb),
     nrow = length(linear_coef)
   )
+
+  # Retrieve derivative matrices computed during the adjusted vcov step
   P <- attr(adjusted_vcov, "P")
   W <- attr(adjusted_vcov, "W")
 
   A1 <- A2 <- 0
   theta_unadjusted_vcov <- theta %*% unadjusted_vcov
-  n.ggamma <- length(P)
-  for (ii in 1:n.ggamma) {
-    for (jj in ii:n.ggamma) {
-      if (ii == jj) {
-        e <- 1
-      } else {
-        e <- 2
-      }
+  n_variance_components <- length(P)
+
+  # Taylor expansion approximation steps based on Kenward & Roger (1997)
+  # Loops over variance parameters to accumulate adjustment terms A1 and A2
+  for (ii in 1:n_variance_components) {
+    for (jj in ii:n_variance_components) {
+      # Adjust weighting based on whether indices match (diagonal vs off-diagonal)
+      e <- ifelse(ii == jj, 1, 2)
+
+      # ui and uj are inner matrix products used to calculate traces
       ui <- as.matrix(theta_unadjusted_vcov %*% P[[ii]] %*% unadjusted_vcov)
       uj <- as.matrix(theta_unadjusted_vcov %*% P[[jj]] %*% unadjusted_vcov)
+
+      # Sum of diag() represents the matrix trace
       A1 <- A1 + e * W[ii, jj] * (sum(diag(ui)) * sum(diag(uj)))
       A2 <- A2 + e * W[ii, jj] * sum(ui * t(uj))
     }
   }
 
+  # Constants and intermediate variables for the final ddf formula
   B <- (A1 + 6 * A2) / 2
   g <- (2 * A1 - 5 * A2) / (3 * A2)
   c1 <- g / (3 + 2 * (1 - g))
   c2 <- (1 - g) / (3 + 2 * (1 - g))
   c3 <- (3 - g) / (3 + 2 * (1 - g))
-  EE <- 1 + A2
-  VV <- 2 * (1 + B)
-  EEstar <- 1 / (1 - A2)
-  VVstar <- 2 * ((1 + c1 * B) / ((1 - c2 * B)^2 * (1 - c3 * B)))
+
+  # Further adjustment factors
   V0 <- 1 + c1 * B
   V1 <- 1 - c2 * B
   V2 <- 1 - c3 * B
   V0 <- ifelse(abs(V0) < 1e-10, 0, V0)
+
+  # Calculate rho and finally the degrees of freedom (df2)
   rho <- (.divZero(1 - A2, V1))^2 * V0 / V2
   df2 <- 4 + 3 / (rho - 1)
   df2
@@ -98,7 +120,7 @@
 
 
 .divZero <- function(x, y, tol = 1e-14) {
-  ## ratio x/y is set to 1 if both |x| and |y| are below tol
+  # Safe division to handle edge cases where ratio approaches 1
   if (abs(x) < tol && abs(y) < tol) {
     1
   } else {
@@ -110,9 +132,12 @@
 .vcov_kenward_ajusted <- function(model) {
   check_if_installed("lme4")
 
+  # Force REML estimation if the model was fit with ML
   if (!(lme4::getME(model, "is_REML"))) {
     model <- stats::update(model, . ~ ., REML = TRUE)
   }
+
+  # Compute the adjusted covariance matrix
   .vcovAdj16_internal(stats::vcov(model), .get_SigmaG(model), lme4::getME(model, "X"))
 }
 
@@ -122,63 +147,70 @@
   check_if_installed("Matrix")
 
   GGamma <- lme4::VarCorr(model)
-  SS <- .shgetME(model)
+  re_structure <- .shgetME(model)
 
-  ## Put covariance parameters for the random effects into a vector:
-  ## TODO: It is a bit ugly to throw everything into one long vector here; a list would be more elegant
+  # Combine covariance parameters for all random effects into a single vector (ggamma)
   ggamma <- NULL
-  for (ii in 1:(SS$n.RT)) {
+  for (ii in 1:(re_structure$n.RT)) {
     Lii <- GGamma[[ii]]
+    # Extract lower triangular part including diagonal
     ggamma <- c(ggamma, Lii[lower.tri(Lii, diag = TRUE)])
   }
-  ggamma <- c(ggamma, stats::sigma(model)^2) ## Extend ggamma by the residuals variance
-  n.ggamma <- length(ggamma)
+  # Append the residual variance
+  ggamma <- c(ggamma, stats::sigma(model)^2)
+  n_variance_components <- length(ggamma)
 
-  ## Find G_r:
+  # Construct the corresponding G matrices for random effects
   G <- NULL
   Zt <- lme4::getME(model, "Zt")
-  for (ss in 1:SS$n.RT) {
-    ZZ <- .shget_Zt_group(ss, Zt, SS$Gp)
-    n.lev <- SS$n.lev.by.RT2[ss] ## ; cat(sprintf("n.lev=%i\n", n.lev))
+  for (ss in 1:re_structure$n.RT) {
+    ZZ <- .shget_Zt_group(ss, Zt, re_structure$Gp)
+    n.lev <- re_structure$n.lev.by.RT2[ss]
     Ig <- Matrix::sparseMatrix(1:n.lev, 1:n.lev, x = 1)
-    for (rr in 1:SS$n.parm.by.RT[ss]) {
-      ## This is takes care of the case where there is random regression and several matrices have to be constructed.
-      ## FIXME: I am not sure this is correct if there is a random quadratic term. The '2' below looks suspicious.
-      ii.jj <- .index2UpperTriEntry(rr, SS$n.comp.by.RT[ss]) ## ; cat("ii.jj:"); print(ii.jj)
+
+    for (rr in 1:re_structure$n.parm.by.RT[ss]) {
+      ii.jj <- .index2UpperTriEntry(rr, re_structure$n.comp.by.RT[ss])
       ii.jj <- unique(ii.jj)
+
+      # Build sparse indicator matrices
       if (length(ii.jj) == 1) {
         EE <- Matrix::sparseMatrix(
           ii.jj,
           ii.jj,
           x = 1,
-          dims = rep(SS$n.comp.by.RT[ss], 2)
+          dims = rep(re_structure$n.comp.by.RT[ss], 2)
         )
       } else {
-        EE <- Matrix::sparseMatrix(ii.jj, ii.jj[2:1], dims = rep(SS$n.comp.by.RT[ss], 2))
+        EE <- Matrix::sparseMatrix(
+          ii.jj,
+          ii.jj[2:1],
+          dims = rep(re_structure$n.comp.by.RT[ss], 2)
+        )
       }
-      EE <- Ig %x% EE ## Kronecker product
+
+      # Kronecker product of Identity and EE
+      EE <- Ig %x% EE
       G <- c(G, list(t(ZZ) %*% EE %*% ZZ))
     }
   }
 
-  ## Extend by the indentity for the residual
+  # Append the identity matrix for the residual component
   n.obs <- n_obs(model)
   G <- c(G, list(Matrix::sparseMatrix(1:n.obs, 1:n.obs, x = 1)))
 
+  # Construct Sigma by multiplying the variance parameters with their G matrices
   Sigma <- ggamma[1] * G[[1]]
-  for (ii in 2:n.ggamma) {
+  for (ii in 2:n_variance_components) {
     Sigma <- Sigma + ggamma[ii] * G[[ii]]
   }
 
-  list(Sigma = Sigma, G = G, n.ggamma = n.ggamma)
+  list(Sigma = Sigma, G = G, n_variance_components = n_variance_components)
 }
 
 
 .index2UpperTriEntry <- function(k, N) {
-  ## inverse of indexSymmat2vec
-  ## result: index pair (i,j) with i>=j
-  ## k: element in the vector of upper triangular elements
-  ## example: N=3: k=1 -> (1,1), k=2 -> (1,2), k=3 -> (1,3), k=4 -> (2,2)
+  # Translates a linear 1D index (k) back into 2D coordinates (i, j)
+  # for the upper triangular portion of an N x N symmetric matrix
   aa <- cumsum(N:1)
   aaLow <- c(0, aa[-length(aa)])
   i <- which(aaLow < k & k <= aa)
@@ -191,75 +223,92 @@
   check_if_installed("MASS")
   check_if_installed("Matrix")
 
+  # Inverse of the Sigma matrix
   SigmaInv <- chol2inv(chol(Matrix::forceSymmetric(as.matrix(SigmaG$Sigma))))
-  n.ggamma <- SigmaG$n.ggamma
+  n_variance_components <- SigmaG$n_variance_components
   TT <- as.matrix(SigmaInv %*% X)
-  HH <- OO <- vector("list", n.ggamma)
 
-  for (ii in 1:n.ggamma) {
+  # Pre-allocate lists for performance
+  HH <- OO <- vector("list", n_variance_components)
+
+  for (ii in 1:n_variance_components) {
     HH[[ii]] <- as.matrix(SigmaG$G[[ii]] %*% SigmaInv)
     OO[[ii]] <- as.matrix(HH[[ii]] %*% X)
   }
 
-  ## Finding PP, QQ
-  PP <- QQ <- NULL
-  for (rr in 1:n.ggamma) {
+  # Find partial derivative matrices PP and QQ
+  PP <- vector("list", n_variance_components)
+  QQ <- vector("list", (n_variance_components * (n_variance_components + 1)) / 2)
+
+  qq_idx <- 1
+  for (rr in 1:n_variance_components) {
     OrTrans <- t(OO[[rr]])
-    PP <- c(PP, list(Matrix::forceSymmetric(-1 * OrTrans %*% TT)))
-    for (ss in rr:n.ggamma) {
-      QQ <- c(QQ, list(OrTrans %*% SigmaInv %*% OO[[ss]]))
+    PP[[rr]] <- Matrix::forceSymmetric(-1 * OrTrans %*% TT)
+    for (ss in rr:n_variance_components) {
+      QQ[[qq_idx]] <- OrTrans %*% SigmaInv %*% OO[[ss]]
+      qq_idx <- qq_idx + 1
     }
   }
 
   PP <- as.matrix(PP)
   QQ <- as.matrix(QQ)
 
-  Ktrace <- matrix(NA, nrow = n.ggamma, ncol = n.ggamma)
-  for (rr in 1:n.ggamma) {
+  # Calculate Ktrace
+  Ktrace <- matrix(NA, nrow = n_variance_components, ncol = n_variance_components)
+  for (rr in 1:n_variance_components) {
     HrTrans <- t(HH[[rr]])
-    for (ss in rr:n.ggamma) {
+    for (ss in rr:n_variance_components) {
       Ktrace[rr, ss] <- Ktrace[ss, rr] <- sum(HrTrans * HH[[ss]])
     }
   }
 
-  ## Finding information matrix
-  IE2 <- matrix(NA, nrow = n.ggamma, ncol = n.ggamma)
-  for (ii in 1:n.ggamma) {
+  # Find expected information matrix (IE2)
+  IE2 <- matrix(NA, nrow = n_variance_components, ncol = n_variance_components)
+  for (ii in 1:n_variance_components) {
     Phi.P.ii <- Phi %*% PP[[ii]]
-    for (jj in ii:n.ggamma) {
-      www <- .indexSymmat2vec(ii, jj, n.ggamma)
+    for (jj in ii:n_variance_components) {
+      www <- .indexSymmat2vec(ii, jj, n_variance_components)
       IE2[ii, jj] <- IE2[jj, ii] <- Ktrace[ii, jj] -
         2 * sum(Phi * QQ[[www]]) +
         sum(Phi.P.ii * (PP[[jj]] %*% Phi))
     }
   }
 
+  # Eigenvalue decomposition to check conditioning
   eigenIE2 <- eigen(IE2, only.values = TRUE)$values
   condi <- min(abs(eigenIE2))
 
+  # Calculate W matrix (inverse of Information matrix), falling back to
+  # pseudo-inverse if ill-conditioned
   WW <- if (condi > 1e-10) {
     as.matrix(Matrix::forceSymmetric(2 * solve(IE2)))
   } else {
     as.matrix(Matrix::forceSymmetric(2 * MASS::ginv(IE2)))
   }
 
+  # Calculate U matrix for final adjustment
   UU <- matrix(0, nrow = ncol(X), ncol = ncol(X))
-  for (ii in 1:(n.ggamma - 1)) {
-    for (jj in (ii + 1):n.ggamma) {
-      www <- .indexSymmat2vec(ii, jj, n.ggamma)
+  for (ii in 1:(n_variance_components - 1)) {
+    for (jj in (ii + 1):n_variance_components) {
+      www <- .indexSymmat2vec(ii, jj, n_variance_components)
       UU <- UU + WW[ii, jj] * (QQ[[www]] - PP[[ii]] %*% Phi %*% PP[[jj]])
     }
   }
 
   UU <- as.matrix(UU)
-  UU <- UU + t(UU)
-  for (ii in 1:n.ggamma) {
-    www <- .indexSymmat2vec(ii, ii, n.ggamma)
+  UU <- UU + t(UU) # Make symmetric
+
+  # Add diagonal components
+  for (ii in 1:n_variance_components) {
+    www <- .indexSymmat2vec(ii, ii, n_variance_components)
     UU <- UU + WW[ii, ii] * (QQ[[www]] - PP[[ii]] %*% Phi %*% PP[[ii]])
   }
 
+  # Final Kenward-Roger adjusted covariance matrix (PhiA)
   GGAMMA <- Phi %*% UU %*% Phi
   PhiA <- Phi + 2 * GGAMMA
+
+  # Save intermediate matrices as attributes for DDF calculations
   attr(PhiA, "P") <- PP
   attr(PhiA, "W") <- WW
   attr(PhiA, "condi") <- condi
@@ -268,10 +317,8 @@
 
 
 .indexSymmat2vec <- function(i, j, N) {
-  ## S[i,j] symetric N times N matrix
-  ## r the vector of upper triangular element  in row major order:
-  ## r= c(S[1,1],S[1,2]...,S[1,j], S[1,N], S[2,2],...S[N,N]
-  ## Result: k: index of k-th element of r
+  # Translates 2D indices (i, j) of a symmetric N x N matrix back
+  # into a 1D vector index mapping to its upper triangular elements.
   k <- if (i <= j) {
     (i - 1) * (N - i / 2) + j
   } else {
@@ -283,30 +330,32 @@
 .shgetME <- function(model) {
   check_if_installed("lme4")
 
+  # Extract various structural properties of the random effects
   Gp <- lme4::getME(model, "Gp")
-  n.RT <- length(Gp) - 1 ## Number of random terms (i.e. of (|)'s)
+  n.RT <- length(Gp) - 1
   n.lev.by.RT <- vapply(lme4::getME(model, "flist"), nlevels, numeric(1))
   n.comp.by.RT <- .get.RT.dim.by.RT(model)
   n.parm.by.RT <- (n.comp.by.RT + 1) * n.comp.by.RT / 2
   n.RE.by.RT <- diff(Gp)
 
-  n.lev.by.RT2 <- n.RE.by.RT / n.comp.by.RT ## Same as n.lev.by.RT2 ???
+  n.lev.by.RT2 <- n.RE.by.RT / n.comp.by.RT
 
   list(
-    Gp = Gp, ## group.index
-    n.RT = n.RT, ## n.groupFac
-    n.lev.by.RT = n.lev.by.RT, ## nn.groupFacLevelsNew
-    n.comp.by.RT = n.comp.by.RT, ## nn.GGamma
-    n.parm.by.RT = n.parm.by.RT, ## mm.GGamma
-    n.RE.by.RT = n.RE.by.RT, ## ... Not returned before
-    n.lev.by.RT2 = n.lev.by.RT2, ## nn.groupFacLevels
+    Gp = Gp,
+    n.RT = n.RT,
+    n.lev.by.RT = n.lev.by.RT,
+    n.comp.by.RT = n.comp.by.RT,
+    n.parm.by.RT = n.parm.by.RT,
+    n.RE.by.RT = n.RE.by.RT,
+    n.lev.by.RT2 = n.lev.by.RT2,
     n_rtrms = lme4::getME(model, "n_rtrms")
   )
 }
 
 
-## Alternative to .get_Zt_group
 .shget_Zt_group <- function(ii.group, Zt, Gp, ...) {
+  # Subsets the Zt matrix (transposed random effects design matrix)
+  # for a specific grouping factor
   zIndex.sub <- (Gp[ii.group] + 1):Gp[ii.group + 1]
   as.matrix(Zt[zIndex.sub, ])
 }
@@ -315,7 +364,7 @@
 .get.RT.dim.by.RT <- function(model) {
   check_if_installed("lme4")
 
-  ## output: dimension (no of columns) of covariance matrix for random term ii
+  # Output: dimension (no of columns) of covariance matrix for random terms
   if (inherits(model, "mer")) {
     vapply(model@ST, nrow, numeric(1))
   } else {
