@@ -4,7 +4,7 @@ skip_if_not_installed("lme4")
 skip_if_not_installed("glmmTMB")
 skip_if_not_installed("pbkrtest")
 
-test_that("get_varcov, fpc", {
+test_that("get_varcov, fpc, mixed", {
   data("sleepstudy", package = "lme4")
   model <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
   model2 <- glmmTMB::glmmTMB(
@@ -12,7 +12,7 @@ test_that("get_varcov, fpc", {
     data = sleepstudy
   )
 
-  vcovFPC <- function(object, popsize2 = NULL, popsize1 = NULL, KR = FALSE) {
+  vcovFPC_Lai <- function(object, popsize2 = NULL, popsize1 = NULL, KR = FALSE) {
     # Obtained finite-population-adjusted standard errors for fixed effect
     # estimates for a fitted multilevel model
     #
@@ -83,11 +83,11 @@ test_that("get_varcov, fpc", {
     }
   }
 
-  out1 <- as.matrix(vcovFPC(model, popsize2 = 20))
+  out1 <- as.matrix(vcovFPC_Lai(model, popsize2 = 20))
   out2 <- get_varcov(model, vcov = "fpc", vcov_args = list(cluster_size = 20))
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
 
-  out1 <- as.matrix(vcovFPC(model, popsize2 = 20, popsize1 = 400))
+  out1 <- as.matrix(vcovFPC_Lai(model, popsize2 = 20, popsize1 = 400))
   out2 <- get_varcov(
     model,
     vcov = "fpc",
@@ -95,7 +95,7 @@ test_that("get_varcov, fpc", {
   )
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
 
-  out1 <- as.matrix(vcovFPC(model, popsize2 = 20, popsize1 = 400, KR = TRUE))
+  out1 <- as.matrix(vcovFPC_Lai(model, popsize2 = 20, popsize1 = 400, KR = TRUE))
   out2 <- get_varcov(
     model,
     vcov = "fpc",
@@ -128,6 +128,50 @@ test_that("get_varcov, fpc", {
       vcov_args = list(population_size = 10)
     ),
     regex = "`population_size` must be larger",
+    fixed = TRUE
+  )
+})
+
+
+test_that("get_varcov, fpc, lm", {
+  data(iris)
+  model <- lm(Sepal.Width ~ Species, data = iris)
+  out <- get_varcov(model, vcov = "fpc", vcov_args = list(population_size = 200))
+
+  expect_equal(
+    out,
+    matrix(
+      c(
+        0.00918486530612247,
+        -0.00918486530612247,
+        -0.00918486530612247,
+        -0.00918486530612247,
+        0.0183697306122449,
+        0.00918486530612246,
+        -0.00918486530612247,
+        0.00918486530612246,
+        0.0183697306122449
+      ),
+      nrow = 3
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  # errors
+  expect_error(
+    get_varcov(
+      model,
+      vcov = "fpc",
+      vcov_args = list(population_size = 10)
+    ),
+    regex = "`population_size` must be larger",
+    fixed = TRUE
+  )
+
+  expect_error(
+    get_varcov(model, vcov = "fpc"),
+    regex = "You must provide",
     fixed = TRUE
   )
 })

@@ -18,7 +18,7 @@ vcovFPC.default <- function(model, ...) {
 
 
 #' @export
-vcovFPC.merMod <- function(model, vcov_args = NULL, ...) {
+vcovFPC.merMod <- function(model, ...) {
   # sanity checks -------------------------------
 
   check_if_installed(c("lme4", "Matrix"))
@@ -30,13 +30,6 @@ vcovFPC.merMod <- function(model, vcov_args = NULL, ...) {
     )
   }
 
-  # only works for merMod and glmmTMB
-  if (!inherits(model, c("merMod", "glmmTMB"))) {
-    format_error(
-      "Finite population correction is currently only supported for model from packages 'lme4' and 'glmmTMB'."
-    )
-  }
-
   # only works for two-level models
   n_level <- length(find_random(model)$random)
   if (n_level != 1) {
@@ -44,6 +37,8 @@ vcovFPC.merMod <- function(model, vcov_args = NULL, ...) {
       "Finite population correction is currently only supported for two-level models (one grouping factor)."
     )
   }
+
+  vcov_args <- list(...)
 
   # user must specify at least one population size
   fpc1 <- vcov_args$population_size
@@ -156,10 +151,11 @@ vcovFPC.glmmTMB <- vcovFPC.merMod
 
 
 #' @export
-vcovFPC.lm <- function(model, vcov_args = NULL, ...) {
-  if (is.null(vcov_args)) {
+vcovFPC.lm <- function(model, ...) {
+  vcov_args <- list(...)
+  if (is.null(vcov_args$population_size)) {
     format_error(
-      "You must provide `population_size` for finite population correction in the `vcov_args` argument.",
+      "You must provide `population_size` for finite population correction in the `vcov_args` argument."
     )
   }
 

@@ -148,12 +148,13 @@
 
   # extract variance-covariance matrix
   if (!inherits(.vcov, "matrix")) {
+    error_msg <- gsub("  ", " ", gsub("\n", "", attr(.vcov, "condition")$message))
     msg <- sprintf(
       "Unable to extract a variance-covariance matrix for model object of class `%s`. Different values of the `vcov` argument trigger calls to the `sandwich` or `clubSandwich` packages in order to extract the matrix (see `?insight::get_varcov`). Your model or the requested estimation type may not be supported by one or both of those packages, or you were missing one or more required arguments in `vcov_args` (like `cluster`).",
       class(x)[1]
-    ) # nolint
+    )
     if (inherits(.vcov, "try-error")) {
-      msg <- c(msg, "", "This error was raised:", attr(.vcov, "condition")$message)
+      msg <- c(msg, "", "This error was raised:", error_msg)
     }
     format_error(msg)
   }
