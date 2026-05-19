@@ -126,9 +126,8 @@ vcovFPC.merMod <- function(
   # matrix (Lambda^T) and multiply it by the transposed random effects design
   # matrix (Z^T). Mathematically, this captures the unadjusted level-2 variance
   # structure.
-  unscaled_re_structure <- as.matrix(
-    .get_transposed_cholesky(model) %*% t(as.matrix(lme4::getME(model, "Z")))
-  )
+  unscaled_re_structure <- .get_transposed_cholesky(model) %*%
+    Matrix::t(lme4::getME(model, "Z"))
 
   # Apply the level-2 Finite Population Correction (FPC).
   # We scale the random effects structure by the square root of the level-2 FPC factor.
@@ -147,15 +146,14 @@ vcovFPC.merMod <- function(
   # Construct the modified diagonal matrix 'D'. This incorporates the level-1
   # FPC (fpc1) on the diagonal and the cross-product of the adjusted random
   # effects structure (scaled_re_structure %*% t(scaled_re_structure)).
-  D <- as.matrix(
-    Matrix::Diagonal(nrow(scaled_re_structure), fpc1) + tcrossprod(scaled_re_structure)
-  )
+  D <- Matrix::Diagonal(nrow(scaled_re_structure), fpc1) + tcrossprod(scaled_re_structure)
 
   # Calculate the Fisher Information matrix for the fixed effects. Instead of a
   # computationally heavy matrix inversion of D, this uses solve(t(chol(D)),
   # scaled_re_fe) which is a highly optimized way to compute D^-1 * scaled_re_fe
   # by utilizing the Cholesky decomposition.
-  fisher_info <- (crossprod(X) - crossprod(solve(t(chol(D)), scaled_re_fe))) / fpc1
+  # fmt: skip
+  fisher_info <- (crossprod(X) - crossprod(solve(t(chol(D)), as.matrix(scaled_re_fe)))) / fpc1
 
   # 4. Compute the adjusted Variance-Covariance Matrix (Phi, vcov_fixed_effects) ------------------
 
@@ -240,8 +238,8 @@ vcovFPC.glm <- vcovFPC.lm
     }
 
     # Combine all random effect terms into the final global Cholesky matrix
-    L_matrix <- as.matrix(Matrix::bdiag(L_list))
+    L_matrix <- Matrix::bdiag(L_list)
 
-    as.matrix(t(L_matrix / stats::sigma(model)))
+    Matrix::t(L_matrix / stats::sigma(model))
   }
 }
