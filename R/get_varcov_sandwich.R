@@ -214,6 +214,16 @@
     fpc2 <- 1
   }
 
+  # check if correction needed at all?
+  if (fpc1 == 1 && fpc2 == 1) {
+    if (fpc1 < n && fpc2 < n_grplevel) {
+      msg <- "`popsize_level1` must be larger than the sample size."
+    } else if (fpc2 < n_grplevel) {
+      msg <- "`popsize_level2` must be larger than the number of clusters."
+    }
+    format_error(msg)
+  }
+
   # adjust population size factor when it's larger than actual sample or group size
   if (fpc1 > n) {
     fpc1 <- 1 - n / fpc1
@@ -231,8 +241,9 @@
   # matrix (Lambda^T) and multiply it by the transposed random effects design
   # matrix (Z^T). Mathematically, this captures the unadjusted level-2 variance
   # structure.
-  unscaled_re_structure <- .get_transposed_cholesky(model) %*%
-    t(as.matrix(lme4::getME(model, "Z")))
+  unscaled_re_structure <- as.matrix(
+    .get_transposed_cholesky(model) %*% t(as.matrix(lme4::getME(model, "Z")))
+  )
 
   # Apply the level-2 Finite Population Correction (FPC).
   # We scale the random effects structure by the square root of the level-2 FPC factor.
