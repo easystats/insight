@@ -206,22 +206,20 @@
 
   n <- n_obs(model)
 
+  # check if correction needed at all?
+  if (!is.null(fpc1) && fpc1 < n) {
+    format_error("`popsize_level1` must be larger than the sample size.")
+  }
+  if (!is.null(fpc2) && fpc2 < n_grplevel) {
+    format_error("`popsize_level2` must be larger than the group size of random effects.")
+  }
+
   # make sure fpc's are not NULL
   if (is.null(fpc1)) {
     fpc1 <- 1
   }
   if (is.null(fpc2)) {
     fpc2 <- 1
-  }
-
-  # check if correction needed at all?
-  if (fpc1 == 1 && fpc2 == 1) {
-    if (fpc1 < n && fpc2 < n_grplevel) {
-      msg <- "`popsize_level1` must be larger than the sample size."
-    } else if (fpc2 < n_grplevel) {
-      msg <- "`popsize_level2` must be larger than the number of clusters."
-    }
-    format_error(msg)
   }
 
   # adjust population size factor when it's larger than actual sample or group size
