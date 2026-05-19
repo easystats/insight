@@ -23,6 +23,9 @@
 * `has_intercept()` now correctly detects whether models from packages *fixest*
   and *lfe* have intercepts or not.
 
+* The `vcov` argument in `get_varcov()` was ignored when `vcov` was of class
+  `"dpoMatrix"` and did not return `TRUE` to `is.matrix()`.
+
 # insight 1.5.0
 
 ## Changes
