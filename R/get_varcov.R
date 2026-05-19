@@ -38,7 +38,15 @@
 #'      `?sandwich::vcovBS`
 #'    - Other `sandwich` package functions: `"HAC"`, `"PC"`, `"CL"`, `"OPG"`,
 #'      `"PL"`.
-#'    - Kenward-Roger approximation: `kenward-roger`. See `?pbkrtest::vcovAdj`.
+#'    - Kenward-Roger approximation: `"kenward-roger"`. See `?pbkrtest::vcovAdj`.
+#'    - Finite Population Correction: `"fpc"` applies the finite population
+#'      correction, as proposed by *Lai et al. 2018*. When `vcov = "fpc"`, at
+#'      least one of `population_size` (size of the finite population, must be
+#'      larger than the number of observations in the model) or `cluster_size`
+#'      (the finite size of cluster groups in the population, must be larger
+#'      than the number of groups of the random effects) in the `vcov_args`
+#'      argument. You can additionally apply the Kenward-Roger approximation
+#'      with the `kr` argument, e.g. `vcov_args = list(cluster_size = 15, kr = TRUE)`.
 #'
 #' Exceptions are following models:
 #' - Model of class `glmgee`, which have pre-defined options for the
@@ -65,6 +73,11 @@
 #' @inheritSection find_predictors Model components
 #'
 #' @return The variance-covariance matrix, as `matrix`-object.
+#'
+#' @references
+#' Lai, M. H. C., Kwok, O.-m., Hsiao, Y.-Y., & Cao, Q. (2018). Finite population
+#' correction for two-level hierarchical linear models. Psychological Methods,
+#' 23(1), 94–112. \doi{10.1037/met0000137}
 #'
 #' @examplesIf require("pscl") && require("sandwich")
 #' data(mtcars)

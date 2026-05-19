@@ -164,7 +164,7 @@
 .vcov_fpc <- function(model, vcov_args = NULL) {
   # sanity checks -------------------------------
 
-  check_if_installed("lme4")
+  check_if_installed(c("lme4", "Matrix"))
 
   # only works for mixed models
   if (!is_mixed_model(model)) {
@@ -189,12 +189,12 @@
   }
 
   # user must specify at least one population size
-  fpc1 <- vcov_args$popsize_level1
-  fpc2 <- vcov_args$popsize_level2
+  fpc1 <- vcov_args$population_size
+  fpc2 <- vcov_args$cluster_size
   if (is.null(fpc1) && is.null(fpc2)) {
     format_error(
-      "You must provide either `popsize_level1` or `popsize_level2` for finite population correction in the `vcov_args` argument.",
-      "`popsize_level1` refers to the population size on level 1, and `popsize_level2` refers to the population size on level 2."
+      "You must provide either `population_size` or `cluster_size` for finite population correction in the `vcov_args` argument.",
+      "`population_size` refers to the population size on level 1, and `cluster_size` refers to the population size (number of clusters or groups) on level 2."
     )
   }
 
@@ -208,10 +208,12 @@
 
   # check if correction needed at all?
   if (!is.null(fpc1) && fpc1 < n) {
-    format_error("`popsize_level1` must be larger than the sample size.")
+    format_error("`population_size` must be larger than the sample size.")
   }
   if (!is.null(fpc2) && fpc2 < n_grplevel) {
-    format_error("`popsize_level2` must be larger than the group size of random effects.")
+    format_error(
+      "`cluster_size` must be larger than the number of groups of random effects."
+    )
   }
 
   # make sure fpc's are not NULL
@@ -231,7 +233,7 @@
   }
 
   # user wants KR adjustment?
-  kr <- isTRUE(vcov_args$kenward_rogers) | isTRUE(vcov_args$kr)
+  kr <- isTRUE(vcov_args$kenward_roger) || isTRUE(vcov_args$kr)
 
   # 1. Extract and scale the random effects structure -------------------------
 

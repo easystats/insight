@@ -53,7 +53,15 @@ identifies the function to be used to compute the covariance matrix.
 \code{?sandwich::vcovBS}
 \item Other \code{sandwich} package functions: \code{"HAC"}, \code{"PC"}, \code{"CL"}, \code{"OPG"},
 \code{"PL"}.
-\item Kenward-Roger approximation: \code{kenward-roger}. See \code{?pbkrtest::vcovAdj}.
+\item Kenward-Roger approximation: \code{"kenward-roger"}. See \code{?pbkrtest::vcovAdj}.
+\item Finite Population Correction: \code{"fpc"} applies the finite population
+correction, as proposed by \emph{Lai et al. 2018}. When \code{vcov = "fpc"}, at
+least one of \code{population_size} (size of the finite population, must be
+larger than the number of observations in the model) or \code{cluster_size}
+(the finite size of cluster groups in the population, must be larger
+than the number of groups of the random effects) in the \code{vcov_args}
+argument. You can additionally apply the Kenward-Roger approximation
+with the \code{kr} argument, e.g. \code{vcov_args = list(cluster_size = 15, kr = TRUE)}.
 }
 }
 
@@ -180,4 +188,9 @@ get_varcov(
   vcov_args = list(R = 50)
 )
 \dontshow{\}) # examplesIf}
+}
+\references{
+Lai, M. H. C., Kwok, O.-m., Hsiao, Y.-Y., & Cao, Q. (2018). Finite population
+correction for two-level hierarchical linear models. Psychological Methods,
+23(1), 94–112. \doi{10.1037/met0000137}
 }
