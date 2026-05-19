@@ -336,7 +336,7 @@
     }
 
     # Combine all random effect terms into the final global Cholesky matrix
-    L_matrix <- Matrix::bdiag(L_list)
+    L_matrix <- as.matrix(Matrix::bdiag(L_list))
 
     as.matrix(t(L_matrix / stats::sigma(model)))
   }
