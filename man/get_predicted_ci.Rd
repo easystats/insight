@@ -92,6 +92,7 @@ identifies the function to be used to compute the covariance matrix.
 \item Other \code{sandwich} package functions: \code{"HAC"}, \code{"PC"}, \code{"CL"}, \code{"OPG"},
 \code{"PL"}.
 \item Kenward-Roger approximation: \code{kenward-roger}. See \code{?pbkrtest::vcovAdj}.
+\item Finite population correction: \code{FPC}. See \code{?vcovFPC}.
 }
 }
 

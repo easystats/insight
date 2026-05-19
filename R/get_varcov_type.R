@@ -1,6 +1,6 @@
 # Get Variance-covariance Matrix ---------------------------------------------------
 
-.get_varcov_sandwich <- function(
+.get_varcov_type <- function(
   x,
   vcov_fun = NULL,
   vcov_args = NULL,
@@ -39,7 +39,7 @@
   vcov_type_shortcuts <- c(
     "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "CR0", "CR1",
     "CR1p", "CR1S", "CR2", "CR3", "xy", "residual", "wild", "mammen",
-    "webb", "fractional", "jackknife", "norm"
+    "webb", "fractional", "jackknife", "norm", "FPC"
   )
 
   # type shortcuts: overwrite only if not supplied explicitly by the user
@@ -94,7 +94,8 @@
       PC = "vcovPC",
       CL = "vcovCL",
       PL = "vcovPL",
-      `kenward-roger` = "vcovAdj"
+      `kenward-roger` = "vcovAdj",
+      FPC = "vcovFPC"
     )
   }
 
@@ -118,6 +119,8 @@
   } else if (isTRUE(vcov_fun_clean == "vcovCR")) {
     check_if_installed("clubSandwich", reason = "to get cluster-robust standard errors")
     fun <- try(get(vcov_fun_clean, asNamespace("clubSandwich")), silent = TRUE)
+  } else if (isTRUE(vcov_fun_clean == "vcovFPC")) {
+    fun <- vcovFPC # internal function in this package
   } else {
     check_if_installed("sandwich", reason = "to get robust standard errors")
     fun <- try(get(vcov_fun_clean, asNamespace("sandwich")), silent = TRUE)

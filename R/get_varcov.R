@@ -39,6 +39,7 @@
 #'    - Other `sandwich` package functions: `"HAC"`, `"PC"`, `"CL"`, `"OPG"`,
 #'      `"PL"`.
 #'    - Kenward-Roger approximation: `kenward-roger`. See `?pbkrtest::vcovAdj`.
+#'    - Finite population correction: `FPC`. See `?vcovFPC`.
 #'
 #' Exceptions are following models:
 #' - Model of class `glmgee`, which have pre-defined options for the
@@ -103,7 +104,7 @@ get_varcov.default <- function(x, verbose = TRUE, vcov = NULL, vcov_args = NULL,
   if (is.null(vcov)) {
     vc <- .safe_vcov(x)
   } else {
-    vc <- .get_varcov_sandwich(
+    vc <- .get_varcov_type(
       x,
       vcov_fun = vcov,
       vcov_args = vcov_args,
@@ -360,7 +361,7 @@ get_varcov.pgmm <- function(
   if (is.null(vcov)) {
     vc <- .safe_vcov(x)
   } else {
-    vc <- .get_varcov_sandwich(
+    vc <- .get_varcov_type(
       x,
       vcov_fun = vcov,
       vcov_args = vcov_args,
@@ -508,7 +509,7 @@ get_varcov.hurdle <- function(
       stats::vcov(object = x)
     )
   } else {
-    vc <- .get_varcov_sandwich(
+    vc <- .get_varcov_type(
       x,
       vcov_fun = vcov,
       vcov_args = vcov_args,
@@ -586,7 +587,7 @@ get_varcov.glmmTMB <- function(
       stats::vcov(x, full = TRUE)
     )
   } else {
-    vc <- .get_varcov_sandwich(
+    vc <- .get_varcov_type(
       x,
       vcov_fun = vcov,
       vcov_args = vcov_args,

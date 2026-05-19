@@ -2,6 +2,8 @@
 
 ## Changes
 
+* New support for finite-population-corrected (FPC) standard errors via `get_varcov(vcov = "FPC")`
+
 * New support for `CmdStanFit` models from the *cmdstanr* package -
   `find_algorithm()`, `find_parameters()`, and `get_parameters()` now work with
   these models.
