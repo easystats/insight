@@ -12,7 +12,9 @@ vcovFPC <- function(model, ...) {
 
 
 #' @export
-vcovFPC.default <- function(model, ...) {}
+vcovFPC.default <- function(model, ...) {
+  format_error(paste0("Models of class `", class(model)[1], "` are not yet supported."))
+}
 
 
 #' @export
