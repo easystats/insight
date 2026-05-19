@@ -161,6 +161,13 @@
 }
 
 
+# Code adapted from Lai et al. 2018
+# Lai, M. H. C., Kwok, O.-m., Hsiao, Y.-Y., & Cao, Q. (2018). Finite population
+# correction for two-level hierarchical linear models. Psychological Methods,
+# 23(1), 94–112. \doi{10.1037/met0000137}
+#
+# Code was modified using stricter sanity checks and extended to work with
+# the glmmTMB package
 .vcov_fpc <- function(model, vcov_args = NULL) {
   # sanity checks -------------------------------
 
