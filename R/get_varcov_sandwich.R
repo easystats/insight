@@ -294,11 +294,7 @@
   dimnames(vcov_fixed_effects) <- list(fe_names, fe_names)
 
   if (kr) {
-    SigmaG <- .get_SigmaG(model)
-    vcov_fixed_effects <- as(
-      .vcovAdj16_internal(vcov_fixed_effects, SigmaG, X),
-      "dpoMatrix"
-    )
+    vcov_fixed_effects <- .vcovAdj16_internal(vcov_fixed_effects, .get_SigmaG(model), X)
   }
 
   vcov_fixed_effects
