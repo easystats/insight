@@ -9,6 +9,11 @@
 ) {
   dots <- list(...)
 
+  # make sure we have a "matrix" class
+  if (inherits(vcov_fun, "dpoMatrix")) {
+    vcov_fun <- as.matrix(vcov_fun)
+  }
+
   if (is.null(vcov_args)) {
     vcov_args <- list()
   }
