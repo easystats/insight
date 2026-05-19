@@ -10,7 +10,8 @@
   dots <- list(...)
 
   # make sure we have a "matrix" class
-  if (inherits(vcov_fun, "dpoMatrix")) {
+  if (inherits(vcov_fun, "Matrix") || inherits(vcov_fun, "dpoMatrix")) {
+    check_if_installed("Matrix")
     vcov_fun <- as.matrix(vcov_fun)
   }
 
