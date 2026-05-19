@@ -6,7 +6,6 @@ skip_if_not_installed("pbkrtest")
 
 test_that("get_varcov, fpc", {
   data("sleepstudy", package = "lme4")
-  requireNamespace("Matrix")
   model <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
   model2 <- glmmTMB::glmmTMB(
     Reaction ~ Days + (Days | Subject),
@@ -59,11 +58,11 @@ test_that("get_varcov, fpc", {
       message("Return results from lme4::vcov.merMod()")
       return(vcov(object))
     }
-    A <- PR$Lambdat %*% PR$Zt
+    A <- as.matrix(PR$Lambdat %*% PR$Zt)
     Astar <- A * sqrt(fpc2)
     X <- PR$X
     Astar_X <- Astar %*% X
-    D <- Matrix::Diagonal(nrow(Astar), fpc1) + tcrossprod(Astar)
+    D <- as.matrix(Matrix::Diagonal(nrow(Astar), fpc1) + tcrossprod(Astar))
     Fisher_I <- (crossprod(X) - crossprod(solve(t(chol(D)), Astar_X))) / fpc1
     Phi <- solve(Fisher_I) * sigma(object)^2
     Phi <- as(Phi, "dpoMatrix")
@@ -128,7 +127,7 @@ test_that("get_varcov, fpc", {
       vcov = "fpc",
       vcov_args = list(population_size = 10)
     ),
-    regex = "`cluster_size` must be larger",
+    regex = "`population_size` must be larger",
     fixed = TRUE
   )
 })
