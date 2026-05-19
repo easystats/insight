@@ -10,6 +10,11 @@ vcovFPC <- function(model, ...) {
   UseMethod("vcovFPC")
 }
 
+
+#' @export
+vcovFPC.default <- function(model, ...) {}
+
+
 #' @export
 vcovFPC.merMod <- function(model, vcov_args = NULL, ...) {
   # sanity checks -------------------------------
@@ -149,19 +154,28 @@ vcovFPC.glmmTMB <- vcovFPC.merMod
 
 
 #' @export
-vcovFPC.lm <- function(object, popsize = NULL, ..., verbose = TRUE) {
-  N <- insight::n_obs(object)
-  V <- stats::vcov(object)
+vcovFPC.lm <- function(model, vcov_args = NULL, ...) {
+  if (is.null(vcov_args)) {
+    format_error(
+      "You must provide `population_size` for finite population correction in the `vcov_args` argument.",
+    )
+  }
+
+  N <- n_obs(model)
+  V <- stats::vcov(model)
+  popsize <- vcov_args$population_size
+
   if (popsize <= N) {
-    if (verbose) {
-      insight::format_alert("No FPC needed.")
-    }
-    return(V)
+    format_error("`population_size` must be larger than the sample size.")
   }
 
   fpc <- (popsize - N) / (popsize - 1)
   return(V / fpc)
 }
+
+
+#' @export
+vcovFPC.glm <- vcovFPC.lm
 
 
 # helper -----------------------------------------------
