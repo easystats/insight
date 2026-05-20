@@ -98,10 +98,10 @@ different degrees of freedom for within-cluster and between-cluster
 effects. Note that this implementation does not return exactly the same
 results as shown in *Li and Redden 2015*, but similar.
 
-*Satterthwaite and Kenward-Rogers degrees of freedom*
+*Satterthwaite and Kenward-Roger degrees of freedom*
 
 Unlike simpler approximation heuristics like the "m-l-1" rule
-(`type = "ml1"`), the Satterthwaite or Kenward-Rogers approximation is
+(`type = "ml1"`), the Satterthwaite or Kenward-Roger approximation is
 also applicable in more complex multilevel designs. However, the "m-l-1"
 or "between-within" heuristics also apply to generalized mixed models,
 while approaches like Kenward-Roger or Satterthwaite are limited to

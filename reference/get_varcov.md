@@ -78,8 +78,20 @@ get_varcov(x, effects = "all", verbose = TRUE, ...)
     - Other `sandwich` package functions: `"HAC"`, `"PC"`, `"CL"`,
       `"OPG"`, `"PL"`.
 
-    - Kenward-Roger approximation: `kenward-roger`. See
+    - Kenward-Roger approximation: `"kenward-roger"`. See
       [`?pbkrtest::vcovAdj`](https://rdrr.io/pkg/pbkrtest/man/kr-vcovAdj.html).
+
+    - Finite Population Correction: `"fpc"` applies the finite
+      population correction. Requires the `population_size` to be
+      specified in `vcov_args`. For mixed models, FPC is based on *Lai
+      et al. 2018*. When `vcov = "fpc"`, at least one of
+      `population_size` (size of the finite population, must be larger
+      than the number of observations in the model) or `cluster_size`
+      (the finite size of cluster groups in the population, must be
+      larger than the number of groups of the random effects) in the
+      `vcov_args` argument. You can additionally apply the Kenward-Roger
+      approximation with the `kr` argument, e.g.
+      `vcov_args = list(cluster_size = 15, kr = TRUE)`.
 
   Exceptions are following models:
 
@@ -102,7 +114,8 @@ get_varcov(x, effects = "all", verbose = TRUE, ...)
   to see the list of available arguments. If no estimation type
   (argument `type`) is given, the default type for `"HC"` equals the
   default from the **sandwich** package; for type `"CR"`, the default is
-  set to `"CR3"`.
+  set to `"CR3"`. For `vcov = "fpc"`, `vcov_args` must specify either
+  `population_size` or `cluster_size`, depending on the model.
 
 - component:
 
@@ -212,6 +225,13 @@ For models of class `brmsfit` (package **brms**), even more options are
 possible for the `component` argument, which are not all documented in
 detail here. It can be any pre-defined or arbitrary distributional
 parameter, like `mu`, `ndt`, `kappa`, etc.
+
+## References
+
+Lai, M. H. C., Kwok, O.-m., Hsiao, Y.-Y., & Cao, Q. (2018). Finite
+population correction for two-level hierarchical linear models.
+Psychological Methods, 23(1), 94–112.
+[doi:10.1037/met0000137](https://doi.org/10.1037/met0000137)
 
 ## Examples
 

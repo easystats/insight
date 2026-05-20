@@ -39,7 +39,7 @@ are not available otherwise."><meta property="og:image" content="https://easysta
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -305,7 +305,17 @@ identifies the function to be used to compute the covariance matrix.</p><ul><li>
 <code><a href="https://sandwich.R-Forge.R-project.org/reference/vcovBS.html" class="external-link">?sandwich::vcovBS</a></code></p></li>
 <li><p>Other <code>sandwich</code> package functions: <code>"HAC"</code>, <code>"PC"</code>, <code>"CL"</code>, <code>"OPG"</code>,
 <code>"PL"</code>.</p></li>
-<li><p>Kenward-Roger approximation: <code>kenward-roger</code>. See <code><a href="https://rdrr.io/pkg/pbkrtest/man/kr-vcovAdj.html" class="external-link">?pbkrtest::vcovAdj</a></code>.</p></li>
+<li><p>Kenward-Roger approximation: <code>"kenward-roger"</code>. See <code><a href="https://rdrr.io/pkg/pbkrtest/man/kr-vcovAdj.html" class="external-link">?pbkrtest::vcovAdj</a></code>.</p></li>
+<li><p>Finite Population Correction: <code>"fpc"</code> applies the finite population
+correction. Requires the <code>population_size</code> to be specified in <code>vcov_args</code>.
+For mixed models, FPC is based on <em>Lai et al. 2018</em>. When <code>vcov = "fpc"</code>,
+at least one of <code>population_size</code> (size of the finite population, must
+be larger than the number of observations in the model) or
+<code>cluster_size</code> (the finite size of cluster groups in the population,
+must be larger than the number of groups of the random effects) in the
+<code>vcov_args</code> argument. You can additionally apply the Kenward-Roger
+approximation with the <code>kr</code> argument, e.g.
+<code>vcov_args = list(cluster_size = 15, kr = TRUE)</code>.</p></li>
 </ul></li>
 </ul><p>Exceptions are following models:</p><ul><li><p>Model of class <code>glmgee</code>, which have pre-defined options for the
 variance-covariance matrix calculation. These are <code>"robust"</code>,
@@ -322,7 +332,8 @@ the <code>vcov</code> argument. This function is typically supplied by the
 documentation (e.g., <code><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHAC.html" class="external-link">?sandwich::vcovHAC</a></code>) to see the list of available
 arguments. If no estimation type (argument <code>type</code>) is given, the default
 type for <code>"HC"</code> equals the default from the <strong>sandwich</strong> package; for type
-<code>"CR"</code>, the default is set to <code>"CR3"</code>.</p></dd>
+<code>"CR"</code>, the default is set to <code>"CR3"</code>. For <code>vcov = "fpc"</code>, <code>vcov_args</code> must
+specify either <code>population_size</code> or <code>cluster_size</code>, depending on the model.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>

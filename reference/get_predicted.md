@@ -272,8 +272,20 @@ get_predicted(x, data = NULL, ...)
     - Other `sandwich` package functions: `"HAC"`, `"PC"`, `"CL"`,
       `"OPG"`, `"PL"`.
 
-    - Kenward-Roger approximation: `kenward-roger`. See
+    - Kenward-Roger approximation: `"kenward-roger"`. See
       [`?pbkrtest::vcovAdj`](https://rdrr.io/pkg/pbkrtest/man/kr-vcovAdj.html).
+
+    - Finite Population Correction: `"fpc"` applies the finite
+      population correction. Requires the `population_size` to be
+      specified in `vcov_args`. For mixed models, FPC is based on *Lai
+      et al. 2018*. When `vcov = "fpc"`, at least one of
+      `population_size` (size of the finite population, must be larger
+      than the number of observations in the model) or `cluster_size`
+      (the finite size of cluster groups in the population, must be
+      larger than the number of groups of the random effects) in the
+      `vcov_args` argument. You can additionally apply the Kenward-Roger
+      approximation with the `kr` argument, e.g.
+      `vcov_args = list(cluster_size = 15, kr = TRUE)`.
 
   Exceptions are following models:
 
@@ -296,7 +308,8 @@ get_predicted(x, data = NULL, ...)
   to see the list of available arguments. If no estimation type
   (argument `type`) is given, the default type for `"HC"` equals the
   default from the **sandwich** package; for type `"CR"`, the default is
-  set to `"CR3"`.
+  set to `"CR3"`. For `vcov = "fpc"`, `vcov_args` must specify either
+  `population_size` or `cluster_size`, depending on the model.
 
 - verbose:
 

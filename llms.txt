@@ -590,6 +590,8 @@ Functions to access specific information from model objects.
   [`safe_deparse_symbol()`](https://easystats.github.io/insight/reference/trim_ws.md)
   [`has_single_value()`](https://easystats.github.io/insight/reference/trim_ws.md)
   : Small helper functions
+- [`vcovFPC()`](https://easystats.github.io/insight/reference/vcovFPC.md)
+  : Obtain finite-population-adjusted variance-covariance matrix
 
 ## Test Model Properties
 
