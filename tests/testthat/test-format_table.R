@@ -17,27 +17,27 @@ test_that("format_table with stars bayes", {
   )))
 
   out <- format_table(x)
-  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS (tail)"))
   expect_identical(out$BF[2], "114.21")
   expect_identical(out$pd, c("99.98%", "100%"))
 
   out <- format_table(x, stars = TRUE)
-  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS (tail)"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = c("pd", "BF"))
-  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS (tail)"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = "pd")
-  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS (tail)"))
   expect_identical(out$BF[2], "114.21")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = "BF")
-  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS (tail)"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%", "100%"))
 
@@ -86,7 +86,7 @@ test_that("format_table with column order", {
       "ROPE_Percentage",
       "log_BF",
       "Rhat",
-      "ESS (tail)"
+      "ESS_tail"
     )
   )
 })
