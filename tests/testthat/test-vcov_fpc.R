@@ -174,4 +174,79 @@ test_that("get_varcov, fpc, lm", {
     regex = "You must provide",
     fixed = TRUE
   )
+
+  # works with glmmTMB non-mixed
+  model <- glmmTMB::glmmTMB(Sepal.Width ~ Species, data = iris)
+  out <- get_varcov(model, vcov = "fpc", vcov_args = list(population_size = 200))
+  expect_equal(
+    out,
+    matrix(
+      c(
+        0.00900116810242169,
+        -0.00900116810242169,
+        -0.00900116810242068,
+        -0.00900116810242169,
+        0.0180023362048435,
+        0.00900116810242068,
+        -0.00900116810242068,
+        0.00900116810242068,
+        0.0180023362048394
+      ),
+      nrow = 3
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  data(Salamanders, package = "glmmTMB")
+  model <- glmmTMB::glmmTMB(
+    count ~ mined,
+    zi = ~mined,
+    family = poisson,
+    data = Salamanders
+  )
+
+  out <- get_varcov(model, vcov = "fpc", vcov_args = list(population_size = 1000))
+  expect_equal(
+    out,
+    matrix(
+      c(0.0569646994831179, -0.056964699483118, -0.056964699483118, 0.061083308151862),
+      nrow = 2
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  out <- get_varcov(
+    model,
+    component = "all",
+    vcov = "fpc",
+    vcov_args = list(population_size = 1000)
+  )
+  expect_equal(
+    out,
+    matrix(
+      c(
+        0.0569646994831179,
+        -0.056964699483118,
+        0.0331260378863964,
+        -0.0331260378863981,
+        -0.056964699483118,
+        0.061083308151862,
+        -0.0331260378863966,
+        0.0343146159414342,
+        0.0331260378863964,
+        -0.0331260378863966,
+        0.0966756920482037,
+        -0.0966756920482086,
+        -0.0331260378863981,
+        0.0343146159414342,
+        -0.0966756920482085,
+        0.136083103725165
+      ),
+      nrow = 4
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
 })

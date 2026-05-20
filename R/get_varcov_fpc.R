@@ -178,7 +178,19 @@ vcovFPC.merMod <- function(
 
 
 #' @export
-vcovFPC.glmmTMB <- vcovFPC.merMod
+vcovFPC.glmmTMB <- function(
+  model,
+  population_size = NULL,
+  cluster_size = NULL,
+  kr = FALSE,
+  ...
+) {
+  if (is_mixed_model(model)) {
+    return(vcovFPC.merMod(model, population_size, cluster_size, kr, ...))
+  }
+
+  vcovFPC.lm(model, population_size, varcov = get_varcov(model, component = "all"), ...)
+}
 
 
 #' @export
@@ -190,7 +202,13 @@ vcovFPC.lm <- function(model, population_size = NULL, ...) {
   }
 
   N <- n_obs(model)
-  V <- stats::vcov(model)
+
+  dots <- list(...)
+  if (is.null(dots$varcov)) {
+    V <- stats::vcov(model)
+  } else {
+    V <- dots$varcov
+  }
 
   if (population_size <= N) {
     format_error("`population_size` must be larger than the sample size.")
