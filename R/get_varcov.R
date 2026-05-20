@@ -40,13 +40,15 @@
 #'      `"PL"`.
 #'    - Kenward-Roger approximation: `"kenward-roger"`. See `?pbkrtest::vcovAdj`.
 #'    - Finite Population Correction: `"fpc"` applies the finite population
-#'      correction, as proposed by *Lai et al. 2018*. When `vcov = "fpc"`, at
-#'      least one of `population_size` (size of the finite population, must be
-#'      larger than the number of observations in the model) or `cluster_size`
-#'      (the finite size of cluster groups in the population, must be larger
-#'      than the number of groups of the random effects) in the `vcov_args`
-#'      argument. You can additionally apply the Kenward-Roger approximation
-#'      with the `kr` argument, e.g. `vcov_args = list(cluster_size = 15, kr = TRUE)`.
+#'      correction. Requires the `population_size` to be specified in `vcov_args`.
+#'      For mixed models, FPC is based on *Lai et al. 2018*. When `vcov = "fpc"`,
+#'      at least one of `population_size` (size of the finite population, must
+#'      be larger than the number of observations in the model) or
+#'      `cluster_size` (the finite size of cluster groups in the population,
+#'      must be larger than the number of groups of the random effects) in the
+#'      `vcov_args` argument. You can additionally apply the Kenward-Roger
+#'      approximation with the `kr` argument, e.g.
+#'      `vcov_args = list(cluster_size = 15, kr = TRUE)`.
 #'
 #' Exceptions are following models:
 #' - Model of class `glmgee`, which have pre-defined options for the
@@ -60,7 +62,8 @@
 #'   documentation (e.g., `?sandwich::vcovHAC`) to see the list of available
 #'   arguments. If no estimation type (argument `type`) is given, the default
 #'   type for `"HC"` equals the default from the **sandwich** package; for type
-#'   `"CR"`, the default is set to `"CR3"`.
+#'   `"CR"`, the default is set to `"CR3"`. For `vcov = "fpc"`, `vcov_args` must
+#'   specify either `population_size` or `cluster_size`, depending on the model.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
@@ -110,8 +113,6 @@ get_varcov <- function(x, ...) {
 #' @export
 get_varcov.default <- function(x, verbose = TRUE, vcov = NULL, vcov_args = NULL, ...) {
   .check_get_varcov_dots(x, ...)
-  # process vcov-argument
-  vcov <- .check_vcov_args(x, vcov = vcov, verbose = verbose, ...)
 
   if (is.null(vcov)) {
     vc <- .safe_vcov(x)
@@ -366,8 +367,6 @@ get_varcov.pgmm <- function(
   ...
 ) {
   .check_get_varcov_dots(x, ...)
-  # process vcov-argument
-  vcov <- .check_vcov_args(x, vcov = vcov, verbose = verbose, ...)
   component <- validate_argument(component, c("conditional", "all"))
 
   if (is.null(vcov)) {
@@ -504,8 +503,6 @@ get_varcov.hurdle <- function(
   ...
 ) {
   .check_get_varcov_dots(x, ...)
-  # process vcov-argument
-  vcov <- .check_vcov_args(x, vcov = vcov, verbose = verbose, ...)
 
   component <- validate_argument(
     component,
@@ -1333,15 +1330,4 @@ get_varcov.LORgee <- get_varcov.gee
       "The `robust` argument is no longer supported. Please use the `vcov` and `vcov_args` instead."
     )
   }
-}
-
-
-.check_vcov_args <- function(x, vcov, verbose = TRUE, ...) {
-  dots <- list(...)
-
-  # backward compatibility for `get_predicted_se()`
-  if (is.null(vcov) && "vcov_estimation" %in% names(dots)) {
-    vcov <- dots[["vcov_estimation"]]
-  }
-  vcov
 }
