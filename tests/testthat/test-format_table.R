@@ -43,9 +43,9 @@ test_that("format_table with stars bayes", {
 
   # glue
   out <- format_table(x, select = "minimal")
-  expect_named(out, c("Parameter", "Median (CI)", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median (CI)", "Rhat", "ESS (tail)"))
   out <- format_table(x, select = "{estimate} ({pd})")
-  expect_named(out, c("Parameter", "Median (pd)", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median (pd)", "Rhat", "ESS (tail)"))
 })
 
 
@@ -68,7 +68,7 @@ test_that("format_table with column order", {
       "% in ROPE",
       "BF",
       "Rhat",
-      "ESS"
+      "ESS (tail)"
     )
   )
   expect_named(
@@ -86,7 +86,7 @@ test_that("format_table with column order", {
       "ROPE_Percentage",
       "log_BF",
       "Rhat",
-      "ESS"
+      "ESS (tail)"
     )
   )
 })
