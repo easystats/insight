@@ -33,8 +33,8 @@ be extracted.
 \item For mixed models, can also be \code{"ml1"} (or \code{"m-l-1"}, approximation of
 degrees of freedom based on a "m-l-1" heuristic as suggested by \emph{Elff et
 al. 2019}) or \code{"between-within"} (or \code{"betwithin"}).
-\item For mixed models of class \code{merMod}, \code{type} can also be \code{"satterthwaite"}
-or \code{"kenward-roger"} (or \code{"kenward"}). See 'Details'.
+\item For mixed models of class \code{merMod} or \code{glmmTMB}, \code{type} can also be
+\code{"satterthwaite"} or \code{"kenward-roger"} (or \code{"kenward"}). See 'Details'.
 }
 
 Usually, when degrees of freedom are required to calculate p-values or

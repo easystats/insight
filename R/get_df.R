@@ -24,8 +24,8 @@
 #'   + For mixed models, can also be `"ml1"` (or `"m-l-1"`, approximation of
 #'     degrees of freedom based on a "m-l-1" heuristic as suggested by _Elff et
 #'     al. 2019_) or `"between-within"` (or `"betwithin"`).
-#'   + For mixed models of class `merMod`, `type` can also be `"satterthwaite"`
-#'     or `"kenward-roger"` (or `"kenward"`). See 'Details'.
+#'   + For mixed models of class `merMod` or `glmmTMB`, `type` can also be
+#'     `"satterthwaite"` or `"kenward-roger"` (or `"kenward"`). See 'Details'.
 #'
 #' Usually, when degrees of freedom are required to calculate p-values or
 #' confidence intervals, `type = "wald"` is likely to be the best choice in
