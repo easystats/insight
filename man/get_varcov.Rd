@@ -53,7 +53,17 @@ identifies the function to be used to compute the covariance matrix.
 \code{?sandwich::vcovBS}
 \item Other \code{sandwich} package functions: \code{"HAC"}, \code{"PC"}, \code{"CL"}, \code{"OPG"},
 \code{"PL"}.
-\item Kenward-Roger approximation: \code{kenward-roger}. See \code{?pbkrtest::vcovAdj}.
+\item Kenward-Roger approximation: \code{"kenward-roger"}. See \code{?pbkrtest::vcovAdj}.
+\item Finite Population Correction: \code{"fpc"} applies the finite population
+correction. Requires the \code{population_size} to be specified in \code{vcov_args}.
+For mixed models, FPC is based on \emph{Lai et al. 2018}. When \code{vcov = "fpc"},
+at least one of \code{population_size} (size of the finite population, must
+be larger than the number of observations in the model) or
+\code{cluster_size} (the finite size of cluster groups in the population,
+must be larger than the number of groups of the random effects) in the
+\code{vcov_args} argument. You can additionally apply the Kenward-Roger
+approximation with the \code{kr} argument, e.g.
+\code{vcov_args = list(cluster_size = 15, kr = TRUE)}.
 }
 }
 
@@ -72,7 +82,8 @@ the \code{vcov} argument. This function is typically supplied by the
 documentation (e.g., \code{?sandwich::vcovHAC}) to see the list of available
 arguments. If no estimation type (argument \code{type}) is given, the default
 type for \code{"HC"} equals the default from the \strong{sandwich} package; for type
-\code{"CR"}, the default is set to \code{"CR3"}.}
+\code{"CR"}, the default is set to \code{"CR3"}. For \code{vcov = "fpc"}, \code{vcov_args} must
+specify either \code{population_size} or \code{cluster_size}, depending on the model.}
 
 \item{component}{Should the complete variance-covariance matrix of the model
 be returned, or only for specific model components only (like count or
@@ -180,4 +191,9 @@ get_varcov(
   vcov_args = list(R = 50)
 )
 \dontshow{\}) # examplesIf}
+}
+\references{
+Lai, M. H. C., Kwok, O.-m., Hsiao, Y.-Y., & Cao, Q. (2018). Finite population
+correction for two-level hierarchical linear models. Psychological Methods,
+23(1), 94–112. \doi{10.1037/met0000137}
 }

@@ -419,6 +419,7 @@ test_that("get_simulated - merMod", {
 })
 
 test_that("get_simulated - mgcv", {
+  skip("Works only interactively")
   skip_on_cran()
   skip_if_not_installed("mgcv")
 
