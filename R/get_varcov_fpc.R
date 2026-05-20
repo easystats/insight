@@ -156,7 +156,7 @@ vcovFPC.merMod <- function(
 
   # Cast the resulting matrix to a positive-definite symmetric matrix ("dpoMatrix")
   # to ensure compatibility with downstream methods like vcov()
-  vcov_fixed_effects <- as(vcov_fixed_effects, "dpoMatrix")
+  vcov_fixed_effects <- methods::as(vcov_fixed_effects, "dpoMatrix")
 
   # Assign the original fixed effect parameter names to the rows and columns
   fe_names <- colnames(X)

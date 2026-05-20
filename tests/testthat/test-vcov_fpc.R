@@ -36,7 +36,7 @@ test_that("get_varcov, fpc, mixed", {
     D <- as.matrix(Matrix::Diagonal(nrow(Astar), fpc1) + tcrossprod(Astar))
     Fisher_I <- (crossprod(X) - crossprod(solve(t(chol(D)), Astar_X))) / fpc1
     Phi <- solve(Fisher_I) * sigma(object)^2
-    Phi <- as(Phi, "dpoMatrix")
+    Phi <- methods::as(Phi, "dpoMatrix")
     nmsX <- colnames(X)
     dimnames(Phi) <- list(nmsX, nmsX)
     if (!KR) {
