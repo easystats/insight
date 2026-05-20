@@ -127,6 +127,11 @@ test_that("get_varcov, fpc, lm", {
     ignore_attr = TRUE
   )
 
+  # FPC should return smaller vcov values
+  out1 <- get_varcov(model, vcov = "fpc", vcov_args = list(population_size = 200))
+  out2 <- stats::vcov(model)
+  expect_true(all(abs(out1) < abs(out2)))
+
   # errors
   expect_error(
     get_varcov(
