@@ -50,7 +50,7 @@ get_df(x, type = "residual", verbose = TRUE, ...)
     of degrees of freedom based on a "m-l-1" heuristic as suggested by
     *Elff et al. 2019*) or `"between-within"` (or `"betwithin"`).
 
-  - For mixed models of class `merMod`, `type` can also be
+  - For mixed models of class `merMod` or `glmmTMB`, `type` can also be
     `"satterthwaite"` or `"kenward-roger"` (or `"kenward"`). See
     'Details'.
 
