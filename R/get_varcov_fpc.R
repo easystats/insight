@@ -208,7 +208,7 @@ vcovFPC.lm <- function(model, population_size = NULL, ...) {
   }
 
   fpc <- (population_size - N) / (population_size - 1)
-  return(V / fpc)
+  return(V * fpc)
 }
 
 
