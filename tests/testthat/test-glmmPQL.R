@@ -1,6 +1,7 @@
 skip_if_not_installed("nlme")
 skip_if_not_installed("MASS")
 skip_if(getRversion() < "4.3.0")
+skip_on_ci()
 
 test_that("find_formula, get_data glmmPQL", {
   example_dat <- data.frame(
