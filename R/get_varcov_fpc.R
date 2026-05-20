@@ -61,13 +61,6 @@ vcovFPC.merMod <- function(
 
   check_if_installed(c("lme4", "Matrix"))
 
-  # only works for mixed models
-  if (!is_mixed_model(model)) {
-    format_error(
-      "Finite population correction is only applicable to mixed models from packages 'lme4' and 'glmmTMB'."
-    )
-  }
-
   # only works for two-level models
   n_level <- length(find_random(model)$random)
   if (n_level != 1) {
