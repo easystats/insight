@@ -213,7 +213,40 @@ vcovFPC.lm <- function(model, population_size = NULL, ...) {
 
 
 #' @export
+vcovFPC.model_fit <- function(model, population_size = NULL, ...) {
+  vcovFPC(model$fit, population_size, ...)
+}
+
+
+#' @export
 vcovFPC.glm <- vcovFPC.lm
+
+#' @export
+vcovFPC.speedglm <- vcovFPC.lm
+
+#' @export
+vcovFPC.speedlm <- vcovFPC.lm
+
+#' @export
+vcovFPC.lmRob <- vcovFPC.lm
+
+#' @export
+vcovFPC.glmRob <- vcovFPC.lm
+
+#' @export
+vcovFPC.glmrob <- vcovFPC.lm
+
+#' @export
+vcovFPC.lm_robust <- vcovFPC.lm
+
+#' @export
+vcovFPC.polr <- vcovFPC.lm
+
+#' @export
+vcovFPC.clm <- vcovFPC.lm
+
+#' @export
+vcovFPC.clm2 <- vcovFPC.lm
 
 
 # helper -----------------------------------------------
