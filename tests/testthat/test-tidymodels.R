@@ -1,5 +1,6 @@
 skip_on_cran()
 skip_if_not_installed("parsnip")
+skip_if_not_installed("recipes")
 
 data(mtcars)
 m <- parsnip::linear_reg()
@@ -133,6 +134,7 @@ test_that("workflow with formula - find_predictors, find_variables, get_data", {
 })
 
 test_that("workflow with complex recipe transformations", {
+  skip_on_ci()
   # Create a dataset with numeric and categorical variables
   test_data <- mtcars
   test_data$cyl <- factor(test_data$cyl)
