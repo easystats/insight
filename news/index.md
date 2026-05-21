@@ -1,5 +1,51 @@
 # Changelog
 
+## insight 1.5.1
+
+### Changes
+
+- New support for `CmdStanFit` models from the *cmdstanr* package -
+  [`find_algorithm()`](https://easystats.github.io/insight/reference/find_algorithm.md),
+  [`find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.md),
+  and
+  [`get_parameters()`](https://easystats.github.io/insight/reference/get_parameters.md)
+  now work with these models.
+
+- [`model_info()`](https://easystats.github.io/insight/reference/model_info.md)
+  now correctly detects t- and z-tests from package *BSDA*.
+
+- [`format_bf()`](https://easystats.github.io/insight/reference/format_bf.md)
+  gains a `digits` argument.
+
+- More informative error message when the response variable in
+  [`get_response()`](https://easystats.github.io/insight/reference/get_response.md)
+  is not present in the data.
+
+- [`format_table()`](https://easystats.github.io/insight/reference/format_table.md)
+  now also formats columns for tail and bulk ESS from Bayesian models.
+
+- [`get_data()`](https://easystats.github.io/insight/reference/get_data.md)
+  now supports objects of class `mira` from package *mice*.
+
+- [`get_varcov()`](https://easystats.github.io/insight/reference/get_varcov.md)
+  now supports the option `"fpc"` to apply finite population correction
+  (Lai et al. 2018).
+
+- Added a new function,
+  [`vcovFPC()`](https://easystats.github.io/insight/reference/vcovFPC.md),
+  to calculate finite-population-adjusted variance-covariance matrices.
+
+### Bug fixes
+
+- [`has_intercept()`](https://easystats.github.io/insight/reference/has_intercept.md)
+  now correctly detects whether models from packages *fixest* and *lfe*
+  have intercepts or not.
+
+- The `vcov` argument in
+  [`get_varcov()`](https://easystats.github.io/insight/reference/get_varcov.md)
+  was ignored when `vcov` was of class `"dpoMatrix"` and did not return
+  `TRUE` to [`is.matrix()`](https://rdrr.io/r/base/matrix.html).
+
 ## insight 1.5.0
 
 CRAN release: 2026-04-14
