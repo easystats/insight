@@ -34,6 +34,9 @@ compact_list <- function(x, remove_na = FALSE) {
         return(FALSE)
       }
       if (remove_na) {
+        # is.na() returns logical() for empty vectors or NULL, and thus
+        # all(is.na()) returns TRUE - which is intended, and we don't need
+        # to check for is.null or length() == 0
         all(is.na(i)) || .is_null_string(i)
       } else {
         (length(i) == 0L || is.null(i) || .is_null_string(i))

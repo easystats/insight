@@ -28,6 +28,23 @@ test_that("compact_list works as expected with deeper lists", {
     compact_list(l),
     list(a = 1, b = list(NULL, list(1, 2, 3), list(list(x = 3, y = 4, NULL))))
   )
+
+  l <- list(
+    a = 1,
+    NULL,
+    NA,
+    integer(),
+    b = list(NULL, list(1, 2, 3), list(list(x = 3, y = 4, NULL))),
+    NULL
+  )
+  expect_identical(
+    compact_list(l),
+    list(a = 1, NA, b = list(NULL, list(1, 2, 3), list(list(x = 3, y = 4, NULL))))
+  )
+  expect_identical(
+    compact_list(l, remove_na = TRUE),
+    list(a = 1, b = list(NULL, list(1, 2, 3), list(list(x = 3, y = 4, NULL))))
+  )
 })
 
 test_that("compact_list works as expected, NA removed", {
