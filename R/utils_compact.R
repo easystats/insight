@@ -46,13 +46,17 @@ compact_list <- function(x, remove_na = FALSE) {
 #'
 #' @export
 compact_character <- function(x) {
-  x[
-    !sapply(x, function(i) {
+  is_remove <- vapply(
+    x,
+    function(i) {
       !nzchar(i, keepNA = TRUE) ||
         all(is.na(i)) ||
         any(as.character(i) == "NULL", na.rm = TRUE)
-    })
-  ]
+    },
+    FUN.VALUE = logical(1),
+    USE.NAMES = FALSE
+  )
+  x[!is_remove]
 }
 
 # helper -----------------
