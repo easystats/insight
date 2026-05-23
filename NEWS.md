@@ -1,6 +1,6 @@
 # insight (devel)
 
-## changes
+## Changes
 
 * Major performance improvement for `compact_list` on very large, nested list
   objects.

@@ -9,20 +9,6 @@
 #' compact_list(c(1, NA, NA), remove_na = TRUE)
 #' @export
 compact_list <- function(x, remove_na = FALSE) {
-  .is_null_string <- function(object) {
-    if (is.character(object) || is.factor(object)) {
-      return(any(object == "NULL", na.rm = TRUE))
-    }
-    if (is.atomic(object)) {
-      return(FALSE)
-    }
-    if (is.list(object)) {
-      return(any(rapply(object, .is_null_string, how = "unlist")))
-    }
-    # recursion on nested lists
-    .safe(any(as.character(object) == "NULL", na.rm = TRUE), FALSE)
-  }
-
   is_remove <- vapply(
     x,
     function(i) {
@@ -67,4 +53,20 @@ compact_character <- function(x) {
         any(as.character(i) == "NULL", na.rm = TRUE)
     })
   ]
+}
+
+# helper -----------------
+
+.is_null_string <- function(object) {
+  if (is.character(object) || is.factor(object)) {
+    return(any(object == "NULL", na.rm = TRUE))
+  }
+  if (is.atomic(object)) {
+    return(FALSE)
+  }
+  if (is.list(object)) {
+    # recursion on nested lists
+    return(any(rapply(object, .is_null_string, how = "unlist")))
+  }
+  .safe(any(as.character(object) == "NULL", na.rm = TRUE), FALSE)
 }
