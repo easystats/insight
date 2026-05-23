@@ -75,6 +75,7 @@ compact_character <- function(x) {
   x[!is_remove]
 }
 
+
 # helper -----------------
 
 .is_null_string <- function(object) {
