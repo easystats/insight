@@ -17,7 +17,7 @@ compact_list <- function(x, remove_na = FALSE) {
       return(FALSE)
     }
     if (is.list(object)) {
-      return(any(rapply(object, is_null_string, how = "unlist")))
+      return(any(rapply(object, .is_null_string, how = "unlist")))
     }
     # recursion on nested lists
     .safe(any(as.character(object) == "NULL", na.rm = TRUE), FALSE)
