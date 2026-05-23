@@ -9,27 +9,41 @@
 #' compact_list(c(1, NA, NA), remove_na = TRUE)
 #' @export
 compact_list <- function(x, remove_na = FALSE) {
-  if (remove_na) {
-    x[
-      !sapply(x, function(i) {
-        !is_model(i) &&
-          !inherits(i, c("Formula", "gFormula")) &&
-          !is.function(i) &&
-          (all(is.na(i)) || any(.safe(as.character(i) == "NULL", FALSE), na.rm = TRUE))
-      })
-    ]
-  } else {
-    x[
-      !sapply(x, function(i) {
-        !is_model(i) &&
-          !inherits(i, c("Formula", "gFormula")) &&
-          !is.function(i) &&
-          (length(i) == 0L ||
-            is.null(i) ||
-            any(.safe(as.character(i) == "NULL", FALSE), na.rm = TRUE))
-      })
-    ]
+  .is_null_string <- function(object) {
+    if (is.character(object) || is.factor(object)) {
+      return(any(object == "NULL", na.rm = TRUE))
+    }
+    if (is.atomic(object)) {
+      return(FALSE)
+    }
+    if (is.list(object)) {
+      return(any(rapply(object, is_null_string, how = "unlist")))
+    }
+    # recursion on nested lists
+    .safe(any(as.character(object) == "NULL", na.rm = TRUE), FALSE)
   }
+
+  is_remove <- vapply(
+    x,
+    function(i) {
+      if (is_model(i) || inherits(i, c("Formula", "gFormula")) || is.function(i)) {
+        return(FALSE)
+      }
+      if (remove_na) {
+        if (is.atomic(i) && all(is.na(i))) {
+          return(TRUE)
+        } else if (.safe(all(is.na(i)), FALSE)) {
+          return(TRUE)
+        }
+      } else if (length(i) == 0L || is.null(i)) {
+        return(TRUE)
+      }
+      .is_null_string(i)
+    },
+    FUN.VALUE = logical(1),
+    USE.NAMES = FALSE
+  )
+  x[!is_remove]
 }
 
 #' Remove empty strings from character
