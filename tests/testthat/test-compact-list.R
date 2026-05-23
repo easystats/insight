@@ -17,6 +17,9 @@ test_that("compact_list works as expected", {
 })
 
 test_that("compact_list works as expected with deeper lists", {
+  expect_identical(compact_list(list(list(NULL))), list())
+  expect_identical(compact_list(list(list(NULL), list(list(NULL)))), list())
+
   l <- list(
     a = 1,
     NULL,

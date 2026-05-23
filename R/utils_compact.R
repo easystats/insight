@@ -86,26 +86,38 @@ compact_character <- function(x) {
     return(FALSE)
   }
   if (is.list(object)) {
-    # we check for deeper list objects here, because `as.character()` can be
-    # very slow for large lists; we only need to check for first level when
-    # compacting lists.
-    if (.large_list_depth(object) > 1) {
-      return(FALSE)
-    } else {
-      return(.safe(
-        any(unlist(as.character(object), use.names = FALSE) == "NULL", na.rm = TRUE),
-        FALSE
-      ))
-    }
+    return(.is_null_list(object))
   }
   .safe(any(as.character(object) == "NULL", na.rm = TRUE), FALSE)
 }
 
 
-.large_list_depth <- function(x, depth = 0) {
-  if (!is.list(x) || is.data.frame(x) || depth > 1) {
-    return(depth)
-  } else {
-    return(max(vapply(x, .large_list_depth, FUN.VALUE = numeric(1), depth = depth + 1)))
+.is_null_list <- function(x) {
+  if (!is.list(x) || is.data.frame(x)) {
+    return(FALSE)
   }
+  if (!length(x)) {
+    return(TRUE)
+  }
+
+  for (i in x) {
+    if (is.null(i)) {
+      next
+    }
+    if (is.character(i) || is.factor(i)) {
+      if (any(i == "NULL", na.rm = TRUE)) {
+        next
+      }
+      return(FALSE)
+    }
+    if (is.list(i)) {
+      if (.is_null_list(i)) {
+        next
+      }
+      return(FALSE)
+    }
+    return(FALSE)
+  }
+
+  TRUE
 }
