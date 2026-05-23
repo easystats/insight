@@ -9,6 +9,22 @@
 #' compact_list(c(1, NA, NA), remove_na = TRUE)
 #' @export
 compact_list <- function(x, remove_na = FALSE) {
+  # recursive compact_list() nested lists
+  if (is.list(x)) {
+    x <- lapply(x, function(i) {
+      if (
+        is.list(i) &&
+          !is.data.frame(i) &&
+          !is_model(i) &&
+          !inherits(i, c("Formula", "gFormula")) &&
+          !is.function(i)
+      ) {
+        return(compact_list(i, remove_na = remove_na))
+      }
+      i
+    })
+  }
+
   is_remove <- vapply(
     x,
     function(i) {
@@ -22,6 +38,8 @@ compact_list <- function(x, remove_na = FALSE) {
           return(TRUE)
         }
       } else if (length(i) == 0L || is.null(i)) {
+        # Because of the recursive compact_list step above, list(NULL, NULL) is
+        # now list(), which triggers length(i) == 0L.
         return(TRUE)
       }
       .is_null_string(i)
@@ -29,6 +47,7 @@ compact_list <- function(x, remove_na = FALSE) {
     FUN.VALUE = logical(1),
     USE.NAMES = FALSE
   )
+
   x[!is_remove]
 }
 
