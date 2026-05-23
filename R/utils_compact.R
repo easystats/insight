@@ -70,6 +70,9 @@ compact_character <- function(x) {
     return(FALSE)
   }
   if (is.list(object)) {
+    # we check for deeper list objects here, because `as.character()` can be
+    # very slow for large lists; we only need to check for first level when
+    # compacting lists.
     if (.large_list_depth(object) > 1) {
       return(FALSE)
     } else {
@@ -90,42 +93,3 @@ compact_character <- function(x) {
     return(max(vapply(x, .large_list_depth, FUN.VALUE = numeric(1), depth = depth + 1)))
   }
 }
-
-# # recursive compact_list() nested lists
-# if (is.list(x)) {
-#   x <- lapply(x, function(i) {
-#     if (
-#       is.list(i) &&
-#         !is.data.frame(i) &&
-#         !is_model(i) &&
-#         !inherits(i, c("Formula", "gFormula")) &&
-#         !is.function(i)
-#     ) {
-#       return(compact_list(i, remove_na = remove_na))
-#     }
-#     i
-#   })
-# }
-
-# is_remove <- vapply(
-#   x,
-#   function(i) {
-#     if (is_model(i) || inherits(i, c("Formula", "gFormula")) || is.function(i)) {
-#       return(FALSE)
-#     }
-#     if (remove_na) {
-#       if (is.atomic(i) && all(is.na(i))) {
-#         return(TRUE)
-#       } else if (.safe(all(is.na(i)), FALSE)) {
-#         return(TRUE)
-#       }
-#     } else if (length(i) == 0L || is.null(i)) {
-#       # Because of the recursive compact_list step above, list(NULL, NULL) is
-#       # now list(), which triggers length(i) == 0L.
-#       return(TRUE)
-#     }
-#     .is_null_string(i)
-#   },
-#   FUN.VALUE = logical(1),
-#   USE.NAMES = FALSE
-# )
