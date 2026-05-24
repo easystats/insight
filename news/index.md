@@ -2,6 +2,8 @@
 
 ## insight 1.5.1
 
+CRAN release: 2026-05-21
+
 ### Changes
 
 - New support for `CmdStanFit` models from the *cmdstanr* package -
