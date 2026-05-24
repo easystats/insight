@@ -17,9 +17,6 @@ test_that("compact_list works as expected", {
 })
 
 test_that("compact_list works as expected with deeper lists", {
-  expect_identical(compact_list(list(list(NULL))), list())
-  expect_identical(compact_list(list(list(NULL), list(list(NULL)))), list())
-
   l <- list(
     a = 1,
     NULL,
@@ -48,6 +45,11 @@ test_that("compact_list works as expected with deeper lists", {
     compact_list(l, remove_na = TRUE),
     list(a = 1, b = list(NULL, list(1, 2, 3), list(list(x = 3, y = 4, NULL))))
   )
+
+  # deeper NULL lists
+  expect_identical(compact_list(list(list(NULL), 1)), list(1))
+  expect_identical(compact_list(list(list(NULL))), list())
+  expect_identical(compact_list(list(list(NULL), list(list(NULL)))), list())
 })
 
 test_that("compact_list works as expected, NA removed", {
