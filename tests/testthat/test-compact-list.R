@@ -16,6 +16,42 @@ test_that("compact_list works as expected", {
   )
 })
 
+test_that("compact_list works as expected with deeper lists", {
+  l <- list(
+    a = 1,
+    NULL,
+    b = list(NULL, list(1, 2, 3), list(list(x = 3, y = 4, NULL))),
+    NULL
+  )
+  # remove the two NULL on first level only
+  expect_identical(
+    compact_list(l),
+    list(a = 1, b = list(NULL, list(1, 2, 3), list(list(x = 3, y = 4, NULL))))
+  )
+
+  l <- list(
+    a = 1,
+    NULL,
+    NA,
+    integer(),
+    b = list(NULL, list(1, 2, 3), list(list(x = 3, y = 4, NULL))),
+    NULL
+  )
+  expect_identical(
+    compact_list(l),
+    list(a = 1, NA, b = list(NULL, list(1, 2, 3), list(list(x = 3, y = 4, NULL))))
+  )
+  expect_identical(
+    compact_list(l, remove_na = TRUE),
+    list(a = 1, b = list(NULL, list(1, 2, 3), list(list(x = 3, y = 4, NULL))))
+  )
+
+  # deeper NULL lists
+  expect_identical(compact_list(list(list(NULL), 1)), list(1))
+  expect_identical(compact_list(list(list(NULL))), list())
+  expect_identical(compact_list(list(list(NULL), list(list(NULL)))), list())
+})
+
 test_that("compact_list works as expected, NA removed", {
   expect_identical(compact_list(list(NULL, 1, c(NA, NA)), remove_na = TRUE), list(1))
   expect_identical(compact_list(c(1, NA, NA), remove_na = TRUE), 1)

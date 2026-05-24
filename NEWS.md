@@ -1,3 +1,10 @@
+# insight (devel)
+
+## Changes
+
+* Major performance improvement for `compact_list` on very large, nested list
+  objects.
+
 # insight 1.5.1
 
 ## Changes
