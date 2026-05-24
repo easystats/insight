@@ -95,32 +95,53 @@ compact_character <- function(x) {
 }
 
 
+# Helper function to check if a list recursively contains only NULL or "NULL" values
 .is_null_list <- function(x) {
+  # 1. Base guard: If 'x' is not a list, or it is a data frame (which is
+  # technically a list under the hood), it cannot be a "null list".
   if (!is.list(x) || is.data.frame(x)) {
     return(FALSE)
   }
+
+  # 2. Base guard: If the list is completely empty (length 0),
+  # it is considered a null list.
   if (!length(x)) {
     return(TRUE)
   }
 
+  # 3. Iterate through each element in the list to check its contents
   for (i in x) {
+    # If the element is explicitly NULL, it passes the check; move to the next element
     if (is.null(i)) {
       next
     }
+
+    # If the element is a character or a factor, check for the literal string "NULL"
     if (is.character(i) || is.factor(i)) {
+      # Check if "NULL" exists anywhere in the character/factor vector
       if (any(i == "NULL", na.rm = TRUE)) {
         next
       }
+      # If the string does not contain "NULL", the list contains valid data
       return(FALSE)
     }
+
+    # If the element is a nested list, call this function recursively
     if (is.list(i)) {
+      # If the nested list is also entirely null, move to the next element
       if (.is_null_list(i)) {
         next
       }
+      # If the nested list contains valid data, return FALSE
       return(FALSE)
     }
+
+    # If the element is of any other type (e.g., numeric, logical, matrix),
+    # it is not null, so the list as a whole is not a null list.
     return(FALSE)
   }
 
+  # 4. If the loop completes without ever returning FALSE, all elements
+  # were confirmed to be some variation of null.
   TRUE
 }
