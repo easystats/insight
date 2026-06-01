@@ -5,6 +5,8 @@
 * Major performance improvement for `compact_list` on very large, nested list
   objects.
 
+* `get_varcov()` now explicitly works for `lavaan` objects.
+
 ## Bug fixes
 
 * `get_modelmatrix()` now correctly handles *brms* models fitted with

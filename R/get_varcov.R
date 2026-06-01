@@ -358,6 +358,13 @@ get_varcov.glmx <- function(x, component = "all", verbose = TRUE, ...) {
 
 
 #' @export
+get_varcov.lavaan <- function(x, verbose = TRUE, ...) {
+  check_if_installed("lavaan")
+  .process_vcov(lavaan::vcov(x), verbose, ...)
+}
+
+
+#' @export
 get_varcov.pgmm <- function(
   x,
   component = "conditional",
