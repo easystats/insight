@@ -12,6 +12,9 @@
 * `get_modelmatrix()` now correctly handles *brms* models fitted with
   `0 + Intercept` formulas.
 
+* `get_priors()` did not return degrees of freedom for Student's t-distribution
+  for *rstanarm* models.
+
 # insight 1.5.1
 
 ## Changes
