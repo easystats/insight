@@ -802,6 +802,13 @@ format_table <- function(
   if ("ESS" %in% names(x)) {
     x$ESS <- round(x$ESS)
   }
+  if ("ESS_tail" %in% names(x)) {
+    x$ESS_tail <- round(x$ESS_tail)
+  }
+  if ("ESS_bulk" %in% names(x)) {
+    x$ESS_bulk <- round(x$ESS_bulk)
+  }
+  colnames(x) <- gsub("^ESS_(.*)$", "ESS (\\1)", colnames(x))
 
   if ("ROPE_Equivalence" %in% names(x)) {
     names(x)[names(x) == "ROPE_Equivalence"] <- "Equivalence (ROPE)"

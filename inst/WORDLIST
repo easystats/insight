@@ -8,6 +8,8 @@ BayesFactor
 Biometrics
 Bolker
 Bundock
+BSDA
+Cao
 CMD
 Coloured
 DCchoice
@@ -19,6 +21,7 @@ EFC
 ESS
 EUROFAMCARE
 Elff
+FPC
 GJRM
 GLMM
 GLMMadaptive
@@ -27,10 +30,13 @@ Gelman
 HDI
 Heisig
 Heteroskedasticity
+Hsiao
 IC
 IDE's
 Ieno
 Kenward
+Kwok
+Lai
 LaTex
 MCMCglmm
 MCSE
@@ -83,6 +89,7 @@ cglm
 clm
 cloglog
 clubSandwich
+cmdstanr
 cmprsk
 codebook
 codecov
@@ -131,6 +138,7 @@ knitr
 labelling
 lavaan
 lcmm
+lfe
 lme
 lmodel
 lmtest

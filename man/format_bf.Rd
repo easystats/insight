@@ -12,7 +12,8 @@ format_bf(
   name = "BF",
   protect_ratio = FALSE,
   na_reference = NA,
-  exact = FALSE
+  exact = FALSE,
+  digits = NULL
 )
 }
 \arguments{
@@ -36,6 +37,9 @@ indicate inferiority, i.e. when the Bayes Factor is smaller than one third
 \item{exact}{Should very large or very small values be reported with a
 scientific format (e.g., 4.24e5), or as truncated values (as "> 1000" and
 "< 1/1000").}
+
+\item{digits}{Number of significant digits. Can also be \code{"scientific"} (which
+is identical to \code{exact = TRUE}).}
 }
 \value{
 A formatted string.

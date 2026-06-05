@@ -24,8 +24,8 @@
 #'   + For mixed models, can also be `"ml1"` (or `"m-l-1"`, approximation of
 #'     degrees of freedom based on a "m-l-1" heuristic as suggested by _Elff et
 #'     al. 2019_) or `"between-within"` (or `"betwithin"`).
-#'   + For mixed models of class `merMod`, `type` can also be `"satterthwaite"`
-#'     or `"kenward-roger"` (or `"kenward"`). See 'Details'.
+#'   + For mixed models of class `merMod` or `glmmTMB`, `type` can also be
+#'     `"satterthwaite"` or `"kenward-roger"` (or `"kenward"`). See 'Details'.
 #'
 #' Usually, when degrees of freedom are required to calculate p-values or
 #' confidence intervals, `type = "wald"` is likely to be the best choice in
@@ -66,10 +66,10 @@
 #' and between-cluster effects. Note that this implementation does not return
 #' exactly the same results as shown in _Li and Redden 2015_, but similar.
 #'
-#' *Satterthwaite and Kenward-Rogers degrees of freedom*
+#' *Satterthwaite and Kenward-Roger degrees of freedom*
 #'
 #' Unlike simpler approximation heuristics like the "m-l-1" rule (`type = "ml1"`),
-#' the Satterthwaite or Kenward-Rogers approximation is also applicable in more
+#' the Satterthwaite or Kenward-Roger approximation is also applicable in more
 #' complex multilevel designs. However, the "m-l-1" or "between-within" heuristics
 #' also apply to generalized mixed models, while approaches like Kenward-Roger
 #' or Satterthwaite are limited to linear mixed models only.

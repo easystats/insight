@@ -2,8 +2,52 @@
 
 ## Changes
 
+* Major performance improvement for `compact_list` on very large, nested list
+  objects.
+
+* `get_varcov()` now explicitly works for `lavaan` objects.
+
+## Bug fixes
+
+* `get_modelmatrix()` now correctly handles *brms* models fitted with
+  `0 + Intercept` formulas.
+
+* `get_priors()` did not return degrees of freedom for Student's t-distribution
+  for *rstanarm* models.
+
+# insight 1.5.1
+
+## Changes
+
+* New support for `CmdStanFit` models from the *cmdstanr* package -
+  `find_algorithm()`, `find_parameters()`, and `get_parameters()` now work with
+  these models.
+
+* `model_info()` now correctly detects t- and z-tests from package *BSDA*.
+
+* `format_bf()` gains a `digits` argument.
+
 * More informative error message when the response variable in `get_response()`
   is not present in the data.
+
+* `format_table()` now also formats columns for tail and bulk ESS from Bayesian
+  models.
+
+* `get_data()` now supports objects of class `mira` from package *mice*.
+
+* `get_varcov()` now supports the option `"fpc"` to apply finite population
+  correction (Lai et al. 2018).
+
+* Added a new function, `vcovFPC()`, to calculate finite-population-adjusted
+  variance-covariance matrices.
+
+## Bug fixes
+
+* `has_intercept()` now correctly detects whether models from packages *fixest*
+  and *lfe* have intercepts or not.
+
+* The `vcov` argument in `get_varcov()` was ignored when `vcov` was of class
+  `"dpoMatrix"` and did not return `TRUE` to `is.matrix()`.
 
 # insight 1.5.0
 

@@ -257,7 +257,7 @@ d <<- data.frame(
   y = sample(1:3, 50, TRUE)
 )
 
-test_that("model_info.shapiro-test", {
+test_that("model_info.kruskal-test", {
   k1 <- kruskal.test(x ~ y, data = d)
   expect_null(get_data(k1))
   k2 <- kruskal.test(list(d$x, d$y))
@@ -371,4 +371,36 @@ test_that("model_info.shapiro-test", {
       )
     )
   )
+})
+
+
+# BSDA -------
+
+test_that("model_info.BSDA-test", {
+  skip_if_not_installed("BSDA")
+  m <- suppressWarnings(BSDA::tsum.test(
+    mean.x = 5.6,
+    s.x = 2.1,
+    n.x = 16,
+    mu = 4.9,
+    alternative = "greater"
+  ))
+  expect_true(model_info(m)$is_ttest)
+  expect_identical(model_info(m)$family, "gaussian")
+
+  # z-test
+  x <- c(7.8, 6.6, 6.5, 7.4, 7.3, 7.0, 6.4, 7.1, 6.7, 7.6, 6.8)
+  y <- c(4.5, 5.4, 6.1, 6.1, 5.4, 5.0, 4.1, 5.5)
+  m <- suppressWarnings(BSDA::zsum.test(
+    mean(x),
+    sigma.x = 0.5,
+    n.x = 11,
+    mean(y),
+    sigma.y = 0.5,
+    n.y = 8,
+    mu = 2
+  ))
+  expect_false(model_info(m)$is_ttest)
+  expect_true(model_info(m)$is_ztest)
+  expect_identical(model_info(m)$family, "gaussian")
 })

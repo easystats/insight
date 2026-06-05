@@ -92,12 +92,11 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
     prior_info$parameter <- params
   }
   prior_info <- prior_info[, intersect(
-    c("parameter", "dist", "location", "scale", "adjusted_scale"),
+    c("parameter", "dist", "df", "location", "scale", "adjusted_scale"),
     colnames(prior_info)
   )]
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info), fixed = TRUE)
-  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info), fixed = TRUE)
 
   priors <- as.data.frame(
     lapply(prior_info, function(x) {
@@ -114,6 +113,9 @@ get_priors.stanreg <- function(x, verbose = TRUE, ...) {
   string <- lapply(string, format_capitalize)
   names(priors) <- unlist(lapply(string, paste0, collapse = "_"))
 
+  # df needs to be lower case
+  names(priors)[names(priors) == "Df"] <- "df"
+
   priors
 }
 
@@ -125,9 +127,18 @@ get_priors.stanmvreg <- function(x, ...) {
   ps <- rstanarm::prior_summary(x)
 
   l <- compact_list(lapply(ps[c("prior_intercept", "prior")], function(.x) {
-    # nolint
     lapply(.x, function(.i) {
-      if (!is.null(.i)) do.call(cbind, .i)
+      if (!is.null(.i)) {
+        # quick and dirty fix for flat priors
+        # else, compact_list() will set this item as "NA"
+        if (is.na(.x$dist)) {
+          .x$dist <- "uniform"
+          .x$location <- 0
+          .x$scale <- 0
+          .x$adjusted_scale <- 0
+        }
+        do.call(cbind, .i)
+      }
     })
   }))
 
@@ -159,12 +170,11 @@ get_priors.stanmvreg <- function(x, ...) {
   prior_info$parameter <- params
 
   prior_info <- prior_info[, intersect(
-    c("parameter", "dist", "location", "scale", "adjusted_scale", "response"),
+    c("parameter", "dist", "df", "location", "scale", "adjusted_scale", "response"),
     colnames(prior_info)
   )]
 
   colnames(prior_info) <- gsub("dist", "distribution", colnames(prior_info), fixed = TRUE)
-  colnames(prior_info) <- gsub("df", "DoF", colnames(prior_info), fixed = TRUE)
 
   priors <- as.data.frame(
     lapply(prior_info, function(x) {
@@ -180,6 +190,9 @@ get_priors.stanmvreg <- function(x, ...) {
   string <- strsplit(names(priors), "_", fixed = TRUE)
   string <- lapply(string, format_capitalize)
   names(priors) <- unlist(lapply(string, paste0, collapse = "_"))
+
+  # df needs to be lower case
+  names(priors)[names(priors) == "Df"] <- "df"
 
   priors
 }

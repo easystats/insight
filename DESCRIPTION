@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.5.0.1
+Version: 1.5.1.4
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -90,6 +90,7 @@ Suggests:
     BayesFactor,
     bayestestR,
     bbmle,
+    BSDA,
     bdsmatrix,
     betareg,
     biglm,
@@ -223,9 +224,9 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/Needs/website: easystats/easystatstemplate
 Config/Needs/check: stan-dev/cmdstanr
+Config/roxygen2/version: 8.0.0

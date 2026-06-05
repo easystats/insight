@@ -4,12 +4,14 @@
 \alias{has_intercept}
 \title{Checks if model has an intercept}
 \usage{
-has_intercept(x, verbose = TRUE)
+has_intercept(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model object.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{...}{Currently not used.}
 }
 \value{
 \code{TRUE} if \code{x} has an intercept, \code{FALSE} otherwise.

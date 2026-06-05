@@ -9,6 +9,12 @@
 ) {
   dots <- list(...)
 
+  # make sure we have a "matrix" class
+  if (inherits(vcov_fun, "Matrix") || inherits(vcov_fun, "dpoMatrix")) {
+    check_if_installed("Matrix")
+    vcov_fun <- as.matrix(vcov_fun)
+  }
+
   if (is.null(vcov_args)) {
     vcov_args <- list()
   }
@@ -88,7 +94,9 @@
       PC = "vcovPC",
       CL = "vcovCL",
       PL = "vcovPL",
-      `kenward-roger` = "vcovAdj"
+      `kenward-roger` = "vcovAdj",
+      FPC = ,
+      fpc = "vcovFPC"
     )
   }
 
@@ -112,6 +120,8 @@
   } else if (isTRUE(vcov_fun_clean == "vcovCR")) {
     check_if_installed("clubSandwich", reason = "to get cluster-robust standard errors")
     fun <- try(get(vcov_fun_clean, asNamespace("clubSandwich")), silent = TRUE)
+  } else if (isTRUE(vcov_fun_clean == "vcovFPC")) {
+    fun <- try(get(vcov_fun_clean, asNamespace("insight")), silent = TRUE)
   } else {
     check_if_installed("sandwich", reason = "to get robust standard errors")
     fun <- try(get(vcov_fun_clean, asNamespace("sandwich")), silent = TRUE)
@@ -134,6 +144,9 @@
   .vcov <- try(do.call(fun, c(list(x), vcov_args)), silent = TRUE)
   if (!inherits(.vcov, "try-error")) {
     .vcov <- as.matrix(.vcov) # weird matrix classes in clubSandwich and vcovAdj
+    error_msg <- NULL
+  } else {
+    error_msg <- gsub("  ", " ", gsub("\n", "", attr(.vcov, "condition")$message))
   }
 
   # extract variance-covariance matrix
@@ -141,9 +154,9 @@
     msg <- sprintf(
       "Unable to extract a variance-covariance matrix for model object of class `%s`. Different values of the `vcov` argument trigger calls to the `sandwich` or `clubSandwich` packages in order to extract the matrix (see `?insight::get_varcov`). Your model or the requested estimation type may not be supported by one or both of those packages, or you were missing one or more required arguments in `vcov_args` (like `cluster`).",
       class(x)[1]
-    ) # nolint
+    )
     if (inherits(.vcov, "try-error")) {
-      msg <- c(msg, "", "This error was raised:", attr(.vcov, "condition")$message)
+      msg <- c(msg, "", "This error was raised:", error_msg)
     }
     format_error(msg)
   }

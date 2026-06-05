@@ -1,7 +1,7 @@
 skip_if_not_installed("curl")
 skip_if_offline()
 skip_on_os(c("mac", "linux", "solaris"))
-skip_if_not_installed("bayestestR")
+skip_if_not_installed("bayestestR", minimum_version = "0.17.1")
 skip_if_not_installed("rstanarm")
 skip_if_not_installed("httr2")
 
@@ -17,35 +17,35 @@ test_that("format_table with stars bayes", {
   )))
 
   out <- format_table(x)
-  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS (tail)"))
   expect_identical(out$BF[2], "114.21")
   expect_identical(out$pd, c("99.98%", "100%"))
 
   out <- format_table(x, stars = TRUE)
-  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS (tail)"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = c("pd", "BF"))
-  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS (tail)"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = "pd")
-  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS (tail)"))
   expect_identical(out$BF[2], "114.21")
   expect_identical(out$pd, c("99.98%***", "100%***"))
 
   out <- format_table(x, stars = "BF")
-  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median", "95% CI", "pd", "BF", "Rhat", "ESS (tail)"))
   expect_identical(out$BF[2], "114.21***")
   expect_identical(out$pd, c("99.98%", "100%"))
 
   # glue
   out <- format_table(x, select = "minimal")
-  expect_named(out, c("Parameter", "Median (CI)", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median (CI)", "Rhat", "ESS (tail)"))
   out <- format_table(x, select = "{estimate} ({pd})")
-  expect_named(out, c("Parameter", "Median (pd)", "Rhat", "ESS"))
+  expect_named(out, c("Parameter", "Median (pd)", "Rhat", "ESS (tail)"))
 })
 
 
@@ -68,7 +68,7 @@ test_that("format_table with column order", {
       "% in ROPE",
       "BF",
       "Rhat",
-      "ESS"
+      "ESS (tail)"
     )
   )
   expect_named(
@@ -86,7 +86,7 @@ test_that("format_table with column order", {
       "ROPE_Percentage",
       "log_BF",
       "Rhat",
-      "ESS"
+      "ESS_tail"
     )
   )
 })

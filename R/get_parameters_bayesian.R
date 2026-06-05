@@ -648,3 +648,17 @@ get_parameters.sim <- function(
 
   posterior_samples
 }
+
+#' @export
+get_parameters.CmdStanFit <- function(x, parameters = NULL, ...) {
+  check_if_installed("cmdstanr")
+
+  par_names <- find_parameters(x, flatten = TRUE)
+  if (!is.null(parameters)) {
+    par_names <- par_names[grepl(parameters, par_names)]
+  }
+
+  out <- as.data.frame(x$draws(variables = par_names, format = "draws_df"))
+  out[c(".chain", ".iteration", ".draw")] <- NULL
+  out
+}

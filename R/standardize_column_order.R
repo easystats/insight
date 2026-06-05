@@ -143,7 +143,7 @@ easystats_columns <- function(select = "all") {
   # fmt: skip
   cols_p <- c("p", "pd", "ROPE_CI", "ROPE_low", "ROPE_high", "ROPE_Percentage", "BF", "log_BF")
   # other details
-  cols_other <- c("Alternative", "n_Obs", "Rhat", "ESS")
+  cols_other <- c("Alternative", "n_Obs", "Rhat", "ESS", "ESS_tail", "ESS_bulk")
   # effectsize details
   # fmt: skip
   cols_effsize <- c(
@@ -237,7 +237,7 @@ broom_columns <- function(select = "all") {
   # p-value
   cols_p <- c("p.value", "pd", "rope.percentage", "bayes.factor", "log(bayes.factor)")
   # other details
-  cols_other <- c("alternative", "n.obs", "rhat", "ess")
+  cols_other <- c("alternative", "n.obs", "rhat", "ess", "ess_tail", "ess_bulk")
   # effectsize details
   # fmt: skip
   cols_effsize <- c(
