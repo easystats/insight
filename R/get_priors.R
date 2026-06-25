@@ -131,11 +131,11 @@ get_priors.stanmvreg <- function(x, ...) {
       if (!is.null(.i)) {
         # quick and dirty fix for flat priors
         # else, compact_list() will set this item as "NA"
-        if (is.na(.x$dist)) {
-          .x$dist <- "uniform"
-          .x$location <- 0
-          .x$scale <- 0
-          .x$adjusted_scale <- 0
+        if (is.na(.i$dist)) {
+          .i$dist <- "uniform"
+          .i$location <- 0
+          .i$scale <- 0
+          .i$adjusted_scale <- 0
         }
         do.call(cbind, .i)
       }
