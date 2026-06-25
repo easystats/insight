@@ -318,12 +318,14 @@ get_mixed_info.brmsfit <- function(model, verbose = TRUE, ...) {
       reval
     })
   )
-  names(mixed_effects_info$beta) <- gsub(
-    "Intercept",
-    "(Intercept)",
-    names(mixed_effects_info$beta),
-    fixed = TRUE
-  )
+  if (!is.null(names(mixed_effects_info$beta))) {
+    names(mixed_effects_info$beta) <- gsub(
+      "Intercept",
+      "(Intercept)",
+      names(mixed_effects_info$beta),
+      fixed = TRUE
+    )
+  }
 
   .fix_mm_rank_deficiency(mixed_effects_info)
 }
