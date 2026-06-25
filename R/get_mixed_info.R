@@ -305,7 +305,9 @@ get_mixed_info.brmsfit <- function(model, verbose = TRUE, ...) {
   attr(vc, "sc") <- lme4::VarCorr(model)$residual__$sd[1, 1]
   fixef_params <- lme4::fixef(model)[, 1]
   # remove sigma parameters
-  fixef_params <- fixef_params[!startsWith(names(fixef_params), "sigma_")]
+  if (!is.null(names(fixef_params))) {
+    fixef_params <- fixef_params[!startsWith(names(fixef_params), "sigma_")]
+  }
   mixed_effects_info <- list(
     beta = fixef_params,
     X = comp_x,
