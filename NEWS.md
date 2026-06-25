@@ -15,6 +15,8 @@
 * `get_priors()` did not return degrees of freedom for Student's t-distribution
   for *rstanarm* models.
 
+* Fixed issue in `get_variance()` for *brms* intercept-only models.
+
 # insight 1.5.1
 
 ## Changes
