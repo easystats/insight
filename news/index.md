@@ -1,5 +1,29 @@
 # Changelog
 
+## insight 1.5.2
+
+### Changes
+
+- Major performance improvement for `compact_list` on very large, nested
+  list objects.
+
+- [`get_varcov()`](https://easystats.github.io/insight/reference/get_varcov.md)
+  now explicitly works for `lavaan` objects.
+
+### Bug fixes
+
+- [`get_modelmatrix()`](https://easystats.github.io/insight/reference/get_modelmatrix.md)
+  now correctly handles *brms* models fitted with `0 + Intercept`
+  formulas.
+
+- [`get_priors()`](https://easystats.github.io/insight/reference/get_priors.md)
+  did not return degrees of freedom for Student’s t-distribution for
+  *rstanarm* models.
+
+- Fixed issue in
+  [`get_variance()`](https://easystats.github.io/insight/reference/get_variance.md)
+  for *brms* intercept-only models.
+
 ## insight 1.5.1
 
 CRAN release: 2026-05-21

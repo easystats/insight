@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,20 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.2" id="insight-152">insight 1.5.2<a class="anchor" aria-label="anchor" href="#insight-152"></a></h2>
+<div class="section level3">
+<h3 id="changes-1-5-2">Changes<a class="anchor" aria-label="anchor" href="#changes-1-5-2"></a></h3>
+<ul><li><p>Major performance improvement for <code>compact_list</code> on very large, nested list objects.</p></li>
+<li><p><code><a href="../reference/get_varcov.html">get_varcov()</a></code> now explicitly works for <code>lavaan</code> objects.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-5-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-2"></a></h3>
+<ul><li><p><code><a href="../reference/get_modelmatrix.html">get_modelmatrix()</a></code> now correctly handles <em>brms</em> models fitted with <code>0 + Intercept</code> formulas.</p></li>
+<li><p><code><a href="../reference/get_priors.html">get_priors()</a></code> did not return degrees of freedom for Student’s t-distribution for <em>rstanarm</em> models.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/get_variance.html">get_variance()</a></code> for <em>brms</em> intercept-only models.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.1" id="insight-151">insight 1.5.1<a class="anchor" aria-label="anchor" href="#insight-151"></a></h2><p class="text-muted">CRAN release: 2026-05-21</p>
 <div class="section level3">
