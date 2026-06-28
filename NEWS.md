@@ -1,4 +1,4 @@
-# insight (devel)
+# insight 1.5.2
 
 ## Changes
 
