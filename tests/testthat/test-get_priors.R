@@ -1,7 +1,8 @@
 skip_on_cran()
+skip_on_os(os = "mac")
 
-test_that("get_priors", {
-  skip_on_os(os = c("mac", "windows"))
+test_that("get_priors, brms", {
+  skip_on_os(os = "mac")
   skip_if_not_installed("brms")
 
   set.seed(123)
@@ -14,8 +15,26 @@ test_that("get_priors", {
   expect_equal(priors$Parameter, c("b_Intercept", "b_wt", "sigma"))
 })
 
+test_that("get_priors, rstanarm", {
+  skip_if_not_installed("rstanarm")
+  set.seed(123)
+
+  model <- suppressMessages(rstanarm::stan_glm(
+    mpg ~ wt,
+    data = mtcars,
+    prior = rstanarm::student_t(5, 1, 2),
+    seed = 123,
+    refresh = 0,
+    open_progress = FALSE
+  ))
+  priors <- insight::get_priors(model)
+
+  expect_equal(priors$Location, c(20.09062, 1), tolerance = 1e-3)
+  expect_equal(priors$Distribution, c("normal", "student_t"))
+  expect_equal(priors$df, c(NA, 5))
+})
+
 test_that("get_priors, stanmvref", {
-  skip_on_os(os = "mac")
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")

@@ -1104,8 +1104,26 @@ test_that("get_variance works", {
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
+
   # make sure it's a matrix
   # expect_true(is.matrix(get_modelmatrix(null_model(mdl))))
+
+  # works for intercept only models
+  mdl <- suppressWarnings(insight::download_model("brms_intercept_1"))
+  out <- get_variance(mdl)
+  expect_equal(
+    out,
+    list(
+      var.fixed = 0,
+      var.random = 0.0584576196129624,
+      var.residual = 0.844970089929599,
+      var.distribution = 0.844970089929599,
+      var.dispersion = 0,
+      var.intercept = c(day = 0.0584576196129623)
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
 })
 
 

@@ -1,4 +1,4 @@
-# insight (devel)
+# insight 1.5.2
 
 ## Changes
 
@@ -11,6 +11,11 @@
 
 * `get_modelmatrix()` now correctly handles *brms* models fitted with
   `0 + Intercept` formulas.
+
+* `get_priors()` did not return degrees of freedom for Student's t-distribution
+  for *rstanarm* models.
+
+* Fixed issue in `get_variance()` for *brms* intercept-only models.
 
 # insight 1.5.1
 
