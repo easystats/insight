@@ -108,6 +108,26 @@ find_response.brmsfit <- function(x, combine = TRUE, ...) {
 
 
 #' @export
+find_response.predictions <- function(x, combine = TRUE, ...) {
+  check_if_installed("marginaleffects")
+  resp <- marginaleffects::components(x, "variable_names_response")
+  if (is.null(resp)) {
+    return(NULL)
+  }
+  check_cbind(resp, combine, model = x)
+}
+
+#' @export
+find_response.comparisons <- find_response.predictions
+
+#' @export
+find_response.slopes <- find_response.predictions
+
+#' @export
+find_response.marginaleffects <- find_response.predictions
+
+
+#' @export
 find_response.logitr <- function(x, ...) {
   get_call(x)$outcome
 }

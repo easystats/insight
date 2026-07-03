@@ -54,3 +54,47 @@ test_that("marginaleffects", {
 
   expect_equal(n_obs(x), 150) # nrow(iris)
 })
+
+test_that("marginaleffects, find_response", {
+  data(mtcars)
+  tmp <- mtcars
+  tmp$am <- as.logical(tmp$am)
+  mod <- lm(mpg ~ am + factor(cyl), tmp)
+
+  mod_comp <- suppressWarnings(marginaleffects::avg_comparisons(
+    mod,
+    variables = list(cyl = "reference")
+  ))
+  expect_identical(find_response(mod_comp), "mpg")
+  mod_comp <- marginaleffects::avg_predictions(mod, variables = "cyl")
+  expect_identical(find_response(mod_comp), "mpg")
+  mod_comp <- marginaleffects::avg_slopes(mod, variables = "am")
+  expect_identical(find_response(mod_comp), "mpg")
+
+  skip_if_not_installed("lme4")
+  data("cbpp", package = "lme4")
+  m <- glm(cbind(incidence, size - incidence) ~ herd, data = cbpp, family = binomial)
+  mod_comp <- marginaleffects::avg_predictions(m, variables = "herd")
+  expect_identical(find_response(mod_comp, combine = FALSE), c("incidence", "size"))
+  expect_identical(
+    find_response(mod_comp, combine = TRUE),
+    "cbind(incidence, size - incidence)"
+  )
+})
+
+test_that("marginaleffects, find_predictors", {
+  data(mtcars)
+  tmp <- mtcars
+  tmp$am <- as.logical(tmp$am)
+  mod <- lm(mpg ~ am + factor(cyl), tmp)
+
+  mod_comp <- suppressWarnings(marginaleffects::avg_comparisons(
+    mod,
+    variables = list(cyl = "reference")
+  ))
+  expect_identical(find_predictors(mod_comp), c("am", "cyl"))
+  mod_comp <- marginaleffects::avg_predictions(mod, variables = "cyl")
+  expect_identical(find_predictors(mod_comp), c("am", "cyl"))
+  mod_comp <- marginaleffects::avg_slopes(mod, variables = "am")
+  expect_identical(find_predictors(mod_comp), c("am", "cyl"))
+})
