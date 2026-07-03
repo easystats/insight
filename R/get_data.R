@@ -2083,6 +2083,21 @@ get_data.probitmfx <- get_data.betamfx
 get_data.negbinmfx <- get_data.betamfx
 
 
+# marginaleffects ------------------------------------------------------
+
+#' @export
+get_data.comparisons <- function(x, ...) {
+  check_if_installed("marginaleffects", minimum_version = "0.29.0")
+  marginaleffects::components(x, "modeldata")
+}
+
+#' @export
+get_data.predictions <- get_data.comparisons
+
+#' @export
+get_data.slopes <- get_data.comparisons
+
+
 # other models ------------------------------------------------------
 
 #' @export
