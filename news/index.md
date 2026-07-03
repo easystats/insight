@@ -2,6 +2,8 @@
 
 ## insight 1.5.2
 
+CRAN release: 2026-06-28
+
 ### Changes
 
 - Major performance improvement for `compact_list` on very large, nested
