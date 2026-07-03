@@ -1,3 +1,9 @@
+# insight (devel)
+
+## Changes
+
+* `find_response()` now also works for objects from package *marginaleffects*.
+
 # insight 1.5.2
 
 ## Changes
