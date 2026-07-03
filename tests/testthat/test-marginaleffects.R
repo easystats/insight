@@ -98,3 +98,23 @@ test_that("marginaleffects, find_predictors", {
   mod_comp <- marginaleffects::avg_slopes(mod, variables = "am")
   expect_identical(find_predictors(mod_comp), c("am", "cyl"))
 })
+
+test_that("marginaleffects, get_data", {
+  data(mtcars)
+  tmp <- mtcars
+  tmp$cyl <- as.factor(tmp$cyl)
+  attr(tmp$mpg, "label") <- "Miles per gallon"
+  attr(tmp$cyl, "label") <- "Number of cylinders"
+  attr(tmp$disp, "label") <- "Displacement"
+
+  mod <- lm(mpg ~ cyl + disp, tmp)
+  mod_ame <- marginaleffects::avg_comparisons(mod, variables = list(cyl = "reference"))
+  out <- get_data(mod)
+  expect_named(out, c("mpg", "cyl", "disp"))
+  expect_identical(attributes(out$cyl)$label, "Number of cylinders")
+
+  mod <- marginaleffects::avg_predictions(mod, variables = "cyl")
+  out <- get_data(mod)
+  expect_named(out, c("mpg", "cyl", "disp"))
+  expect_identical(attributes(out$cyl)$label, "Number of cylinders")
+})
