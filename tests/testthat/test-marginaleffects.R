@@ -54,3 +54,17 @@ test_that("marginaleffects", {
 
   expect_equal(n_obs(x), 150) # nrow(iris)
 })
+
+test_that("marginaleffects, find_response", {
+  data(mtcars)
+  tmp <- mtcars
+  tmp$am <- as.logical(tmp$am)
+  mod <- lm(mpg ~ am + factor(cyl), tmp)
+
+  mod_comp <- marginaleffects::avg_comparisons(mod, variables = list(cyl = "reference"))
+  expect_identical(find_response(mod_comp), "mpg")
+  mod_comp <- marginaleffects::avg_predictions(mod, variables = "cyl")
+  expect_identical(find_response(mod_comp), "mpg")
+  mod_comp <- marginaleffects::avg_slopes(mod, variables = "am")
+  expect_identical(find_response(mod_comp), "mpg")
+})
