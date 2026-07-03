@@ -61,7 +61,10 @@ test_that("marginaleffects, find_response", {
   tmp$am <- as.logical(tmp$am)
   mod <- lm(mpg ~ am + factor(cyl), tmp)
 
-  mod_comp <- marginaleffects::avg_comparisons(mod, variables = list(cyl = "reference"))
+  mod_comp <- suppressWarnings(marginaleffects::avg_comparisons(
+    mod,
+    variables = list(cyl = "reference")
+  ))
   expect_identical(find_response(mod_comp), "mpg")
   mod_comp <- marginaleffects::avg_predictions(mod, variables = "cyl")
   expect_identical(find_response(mod_comp), "mpg")
