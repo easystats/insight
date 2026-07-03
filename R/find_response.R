@@ -110,7 +110,11 @@ find_response.brmsfit <- function(x, combine = TRUE, ...) {
 #' @export
 find_response.predictions <- function(x, combine = TRUE, ...) {
   check_if_installed("marginaleffects")
-  marginaleffects::components(x, "variable_names_response")
+  resp <- marginaleffects::components(x, "variable_names_response")
+  if (is.null(resp)) {
+    return(NULL)
+  }
+  check_cbind(resp, combine, model = x)
 }
 
 #' @export

@@ -642,6 +642,22 @@ find_predictors.insight_formula <- function(x, flatten = FALSE, verbose = TRUE, 
 }
 
 
+#' @export
+find_predictors.predictions <- function(x, ...) {
+  check_if_installed("marginaleffects")
+  marginaleffects::components(x, "variable_names_predictors")
+}
+
+#' @export
+find_predictors.comparisons <- find_predictors.predictions
+
+#' @export
+find_predictors.slopes <- find_predictors.predictions
+
+#' @export
+find_predictors.marginaleffects <- find_predictors.predictions
+
+
 # utilities ------------------------------------------------------------------
 
 .return_vars <- function(f, x) {
