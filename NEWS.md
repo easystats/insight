@@ -5,6 +5,9 @@
 * `find_response()`, `find_predictors()`, and `find_variables()` now also work
   for objects from package *marginaleffects*.
 
+* Preliminary support in `find_parameters()` for objects from package
+  *marginaleffects*.
+
 # insight 1.5.2
 
 ## Changes
