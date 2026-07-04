@@ -153,7 +153,7 @@ m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 find_formula(m)
 #> $conditional
 #> mpg ~ wt + cyl + vs
-#> <environment: 0x55ef024cc7f0>
+#> <environment: 0x564d31d874c8>
 #> 
 #> attr(,"class")
 #> [1] "insight_formula" "list"           
@@ -163,11 +163,11 @@ f <- find_formula(m)
 f
 #> $conditional
 #> Sepal.Length ~ Sepal.Width
-#> <environment: 0x55ef024cc7f0>
+#> <environment: 0x564d31d874c8>
 #> 
 #> $random
 #> ~1 | Species
-#> <environment: 0x55ef01958330>
+#> <environment: 0x564d3127fed0>
 #> 
 #> attr(,"class")
 #> [1] "insight_formula" "list"           
