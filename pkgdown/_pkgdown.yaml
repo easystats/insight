@@ -118,6 +118,10 @@ reference:
       - trim_ws
       - n_unique
 
+  - title: "Global options"
+    contents:
+      - insight-options
+
   - title: "Example Datasets"
     desc: >
       Used in examples or for testing

@@ -3,6 +3,9 @@ test_that("format_table with ci-level", {
   ft <- insight::format_table(d)
   expect_named(ft, "97% CI")
 
+  ft <- insight::format_table(d, ci_brackets = FALSE, ci_separator = "-")
+  expect_equal(ft, data.frame(`97% CI` = "1.00-3.00"), ignore_attr = TRUE)
+
   d$CI <- 0.788
   ft <- insight::format_table(d)
   expect_named(ft, "78.8% CI")

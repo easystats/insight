@@ -158,6 +158,16 @@ test_that("format_ci", {
       "95% CI [123,  1e+11]"
     )
   )
+  expect_identical(
+    format_ci(
+      c(123, 123, 123, 123),
+      c(123, 12345, 123456, 123456789012),
+      digits = 0,
+      brackets = FALSE,
+      separator = "-"
+    ),
+    c("95% CI 123-123", "95% CI 123-12345", "95% CI 123-1e+05", "95% CI 123-1e+11")
+  )
   expect_identical(format_ci(1.24, 0.0000054), "95% CI [1.24, 5.40e-06]")
   expect_identical(format_ci(1.24, 0.0000054, digits = 0), "95% CI [1, 5e-06]")
   expect_identical(format_ci(1.24, 0.0000054, zap_small = TRUE), "95% CI [1.24, 0.00]")
