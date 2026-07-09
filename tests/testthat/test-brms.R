@@ -1090,6 +1090,7 @@ test_that("find_variables, mo", {
 # get variance
 test_that("get_variance works", {
   mdl <- suppressWarnings(insight::download_model("brms_mixed_9"))
+  skip_if(is.null(mdl))
   out <- get_variance(mdl)
   expect_equal(
     out,
@@ -1110,6 +1111,7 @@ test_that("get_variance works", {
 
   # works for intercept only models
   mdl <- suppressWarnings(insight::download_model("brms_intercept_1"))
+  skip_if(is.null(mdl))
   out <- get_variance(mdl)
   expect_equal(
     out,
