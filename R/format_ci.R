@@ -9,6 +9,7 @@
 #'   encompassed in square brackets. If `FALSE` or `NULL`, no brackets
 #'   are used. Else, a character vector of length two, indicating the opening
 #'   and closing brackets.
+#' @param separator String, used to separate lower and upper CI limit values.
 #' @param width Minimum width of the returned string. If not `NULL` and
 #'   `width` is larger than the string's length, leading whitespaces are
 #'   added to the string. If `width="auto"`, width will be set to the
@@ -27,6 +28,7 @@
 #' format_ci(1.20, 3.57, ci = NULL)
 #' format_ci(1.20, 3.57, ci = NULL, brackets = FALSE)
 #' format_ci(1.20, 3.57, ci = NULL, brackets = c("(", ")"))
+#' format_ci(1.20, 3.57, ci = NULL, brackets = FALSE, separator = "-")
 #' format_ci(c(1.205645, 23.4), c(3.57, -1.35), ci = 0.90)
 #' format_ci(c(1.20, NA, NA), c(3.57, -1.35, NA), ci = 0.90)
 #'
@@ -55,7 +57,8 @@ format_ci.numeric <- function(
   CI_high,
   ci = 0.95,
   digits = 2,
-  brackets = TRUE,
+  brackets = getOption("easystats_ci_brackets", TRUE),
+  separator = getOption("easystats_ci_separator", ", "),
   width = NULL,
   width_low = width,
   width_high = width,
@@ -151,6 +154,7 @@ format_ci.numeric <- function(
         CI_high,
         digits = digits,
         ci_brackets = ci_brackets,
+        ci_separator = separator,
         width_low = width_low,
         width_high = width_high,
         missing = missing,
@@ -171,6 +175,7 @@ format_ci.numeric <- function(
           CI_high,
           digits = digits,
           ci_brackets = ci_brackets,
+          ci_separator = separator,
           width_low = width_low,
           width_high = width_high,
           missing = missing,
@@ -231,6 +236,7 @@ format_ci.data.frame <- function(CI_low, ci_string = "CI", ...) {
   CI_high,
   digits = 2,
   ci_brackets = c("[", "]"),
+  ci_separator = ", ",
   width_low = NULL,
   width_high = NULL,
   missing = "NA",
@@ -245,7 +251,7 @@ format_ci.data.frame <- function(CI_low, ci_string = "CI", ...) {
       width = width_low,
       zap_small = zap_small
     ),
-    ", ",
+    ci_separator,
     format_value(
       CI_high,
       digits = digits,

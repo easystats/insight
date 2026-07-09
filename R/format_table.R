@@ -24,6 +24,9 @@
 #'   will be set to the length of the longest string.
 #' @param ci_brackets Logical, if `TRUE` (default), CI-values are
 #'   encompassed in square brackets (else in parentheses).
+#' @param ci_separator String, used to separate lower and upper CI limit values.
+#'   `options(easystats_ci_separator = "<value>")` can be used to set a default
+#'   separator string.
 #' @param preserve_attributes Logical, if `TRUE`, preserves all attributes
 #'   from the input data frame.
 #' @param exact Formatting for Bayes factor columns, in case the provided data
@@ -132,7 +135,8 @@ format_table <- function(
   stars_only = FALSE,
   digits = 2,
   ci_width = "auto",
-  ci_brackets = TRUE,
+  ci_brackets = getOption("easystats_ci_brackets", TRUE),
+  ci_separator = getOption("easystats_ci_separator", ", "),
   ci_digits = digits,
   p_digits = 3,
   rope_digits = digits,
@@ -211,23 +215,47 @@ format_table <- function(
   x <- .format_p_values(x, stars = stars, p_digits = p_digits, stars_only = stars_only)
 
   # Main CI and Prediction Intervals ----
-  x <- .format_main_ci_columns(x, att, ci_digits, zap_small, ci_width, ci_brackets)
   x <- .format_main_ci_columns(
     x,
     att,
-    ci_digits,
-    zap_small,
-    ci_width,
-    ci_brackets,
+    ci_digits = ci_digits,
+    zap_small = zap_small,
+    ci_width = ci_width,
+    ci_brackets = ci_brackets,
+    ci_separator = ci_separator
+  )
+  x <- .format_main_ci_columns(
+    x,
+    att,
+    ci_digits = ci_digits,
+    zap_small = zap_small,
+    ci_width = ci_width,
+    ci_brackets = ci_brackets,
+    ci_separator = ci_separator,
     ci_name = "PI"
   )
-  x <- .format_broom_ci_columns(x, ci_digits, zap_small, ci_width, ci_brackets)
+  x <- .format_broom_ci_columns(
+    x,
+    ci_digits = ci_digits,
+    zap_small = zap_small,
+    ci_width = ci_width,
+    ci_brackets = ci_brackets,
+    ci_separator = ci_separator
+  )
 
   # Misc / Effect Sizes
   x <- .format_effectsize_columns(x, use_symbols)
 
   # Other CIs ----
-  out <- .format_other_ci_columns(x, att, ci_digits, zap_small, ci_width, ci_brackets)
+  out <- .format_other_ci_columns(
+    x,
+    att,
+    ci_digits = ci_digits,
+    zap_small = zap_small,
+    ci_width = ci_width,
+    ci_brackets = ci_brackets,
+    ci_separator = ci_separator
+  )
   x <- out$x
   other_ci_colname <- out$other_ci_colname
 
@@ -257,6 +285,7 @@ format_table <- function(
     zap_small = zap_small,
     ci_width = ci_width,
     ci_brackets = ci_brackets,
+    ci_separator = ci_separator,
     exact = exact
   )
 
@@ -539,7 +568,8 @@ format_table <- function(
   zap_small,
   ci_width = "auto",
   ci_brackets = TRUE,
-  ci_name = "CI"
+  ci_name = "CI",
+  ci_separator = ", "
 ) {
   # Main CI
   ci_low <- names(x)[grep(paste0("^", ci_name, "_low"), names(x))]
@@ -592,6 +622,7 @@ format_table <- function(
         digits = ci_digits,
         width = ci_width,
         brackets = ci_brackets,
+        separator = ci_separator,
         zap_small = zap_small
       )
       # rename lower CI into final CI column
@@ -613,7 +644,8 @@ format_table <- function(
   ci_digits,
   zap_small,
   ci_width = "auto",
-  ci_brackets = TRUE
+  ci_brackets = TRUE,
+  ci_separator = ", "
 ) {
   other_ci_low <- names(x)[endsWith(names(x), "_CI_low")]
   other_ci_high <- names(x)[endsWith(names(x), "_CI_high")]
@@ -652,6 +684,7 @@ format_table <- function(
         digits = ci_digits,
         width = ci_width,
         brackets = ci_brackets,
+        separator = ci_separator,
         zap_small = zap_small
       )
       # rename lower CI into final CI column
@@ -678,7 +711,8 @@ format_table <- function(
   ci_digits,
   zap_small,
   ci_width = "auto",
-  ci_brackets = TRUE
+  ci_brackets = TRUE,
+  ci_separator = ", "
 ) {
   if (!any(grepl("conf.low", names(x), fixed = TRUE))) {
     return(x)
@@ -697,6 +731,7 @@ format_table <- function(
         digits = ci_digits,
         width = ci_width,
         brackets = ci_brackets,
+        separator = ci_separator,
         zap_small = zap_small
       )
       names(x)[names(x) == "conf.low"] <- "conf.int"
@@ -710,7 +745,13 @@ format_table <- function(
 }
 
 
-.format_rope_columns <- function(x, zap_small, ci_width = "auto", ci_brackets = TRUE) {
+.format_rope_columns <- function(
+  x,
+  zap_small,
+  ci_width = "auto",
+  ci_brackets = TRUE,
+  ci_separator = ", "
+) {
   if (all(c("ROPE_low", "ROPE_high") %in% names(x))) {
     x$ROPE_low <- format_ci(
       x$ROPE_low,
@@ -718,6 +759,7 @@ format_table <- function(
       ci = NULL,
       width = ci_width,
       brackets = ci_brackets,
+      separator = ci_separator,
       zap_small = zap_small
     )
     x$ROPE_high <- NULL
@@ -769,6 +811,7 @@ format_table <- function(
   rope_digits = 2,
   ci_width = "auto",
   ci_brackets = TRUE,
+  ci_separator = ", ",
   exact = TRUE
 ) {
   # Specify stars for which column
@@ -838,7 +881,8 @@ format_table <- function(
     x,
     zap_small = zap_small,
     ci_width = ci_width,
-    ci_brackets = ci_brackets
+    ci_brackets = ci_brackets,
+    ci_separator = ci_separator
   )
 
   # Priors

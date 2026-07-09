@@ -12,7 +12,8 @@ format_ci(CI_low, ...)
   CI_high,
   ci = 0.95,
   digits = 2,
-  brackets = TRUE,
+  brackets = getOption("easystats_ci_brackets", TRUE),
+  separator = getOption("easystats_ci_separator", ", "),
   width = NULL,
   width_low = width,
   width_high = width,
@@ -45,6 +46,8 @@ encompassed in square brackets. If \code{FALSE} or \code{NULL}, no brackets
 are used. Else, a character vector of length two, indicating the opening
 and closing brackets.}
 
+\item{separator}{String, used to separate lower and upper CI limit values.}
+
 \item{width}{Minimum width of the returned string. If not \code{NULL} and
 \code{width} is larger than the string's length, leading whitespaces are
 added to the string. If \code{width="auto"}, width will be set to the
@@ -76,6 +79,7 @@ format_ci(1.20, 3.57, ci = 0.90)
 format_ci(1.20, 3.57, ci = NULL)
 format_ci(1.20, 3.57, ci = NULL, brackets = FALSE)
 format_ci(1.20, 3.57, ci = NULL, brackets = c("(", ")"))
+format_ci(1.20, 3.57, ci = NULL, brackets = FALSE, separator = "-")
 format_ci(c(1.205645, 23.4), c(3.57, -1.35), ci = 0.90)
 format_ci(c(1.20, NA, NA), c(3.57, -1.35, NA), ci = 0.90)
 

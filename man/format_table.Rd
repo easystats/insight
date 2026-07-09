@@ -11,7 +11,8 @@ format_table(
   stars_only = FALSE,
   digits = 2,
   ci_width = "auto",
-  ci_brackets = TRUE,
+  ci_brackets = getOption("easystats_ci_brackets", TRUE),
+  ci_separator = getOption("easystats_ci_separator", ", "),
   ci_digits = digits,
   p_digits = 3,
   rope_digits = digits,
@@ -58,6 +59,10 @@ will be set to the length of the longest string.}
 
 \item{ci_brackets}{Logical, if \code{TRUE} (default), CI-values are
 encompassed in square brackets (else in parentheses).}
+
+\item{ci_separator}{String, used to separate lower and upper CI limit values.
+\code{options(easystats_ci_separator = "<value>")} can be used to set a default
+separator string.}
 
 \item{zap_small}{Logical, if \code{TRUE}, small values are rounded after
 \code{digits} decimal places. If \code{FALSE}, values with more decimal
