@@ -3,7 +3,7 @@
 ## Changes
 
 * `format_ci()` gains a `separator` argument, to customize the separator for
-  lowe and upper CI values.
+  lower and upper CI values.
 
 * `find_response()`, `find_predictors()`, and `find_variables()` now also work
   for objects from package *marginaleffects*.
