@@ -135,7 +135,7 @@ format_table <- function(
   stars_only = FALSE,
   digits = 2,
   ci_width = "auto",
-  ci_brackets = TRUE,
+  ci_brackets = getOption("easystats_ci_brackets", TRUE),
   ci_separator = getOption("easystats_ci_separator", ", "),
   ci_digits = digits,
   p_digits = 3,

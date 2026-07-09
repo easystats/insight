@@ -33,6 +33,12 @@
 #'   used between the lower and upper CI limits. Defaults to `", "`, resulting
 #'   in an output like `[0.3, 0.8]`.
 #'
+#' - `options(easystats_ci_brackets = <value>)` determines whether brackets or
+#'   parentheses are used to enclose formatted CIs. Can be `FALSE` to omit them,
+#'   `TRUE` to include them (defaults to `[` and `]` for text output), or a
+#'   character vector of length 2 to define custom opening and closing symbols
+#'   (e.g., `c("(", ")")`).
+#'
 #' - `options(insight_use_symbols = <value>)` accepts `TRUE` or `FALSE`. If
 #'   `TRUE`, statistical symbols (e.g., eta-squared, omega) are rendered using
 #'   their corresponding Unicode characters.
