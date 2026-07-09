@@ -272,6 +272,11 @@ but rather small utility functions (mostly for printing)
   [`has_single_value()`](https://easystats.github.io/insight/reference/trim_ws.md)
   : Small helper functions
 
+## Global options
+
+- [`insight-options`](https://easystats.github.io/insight/reference/insight-options.md)
+  : Global options from the insight package
+
 ## Example Datasets
 
 Used in examples or for testing

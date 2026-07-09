@@ -15,7 +15,7 @@ See the documentation for the specific objects' classes."><meta property="og:ima
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,9 +117,24 @@ markdown files, or LaTex format when creating PDFs etc.</p></dd>
     <h2 id="global-options-to-customize-output-when-printing">Global Options to Customize Output when Printing<a class="anchor" aria-label="anchor" href="#global-options-to-customize-output-when-printing"></a></h2>
 
 
-<ul><li><p><code>easystats_display_format</code>: <code>options(easystats_display_format = &lt;value&gt;)</code>
-will set the default format for the <code>display()</code> methods. Can be one of
-<code>"markdown"</code>, <code>"html"</code>, or <code>"tt"</code>.</p></li>
+<ul><li><p><code>options(easystats_display_format = &lt;value&gt;)</code> will set the default format
+for the <code>display()</code> methods. Can be one of <code>"markdown"</code>, <code>"html"</code>, or
+<code>"tt"</code>. See <code>display()</code> for details.</p></li>
+<li><p><code>options(easystats_table_width = &lt;value&gt;)</code> sets the default width
+for tables printed to the console. Tables exceeding this width are
+wrapped into multiple parts to ensure clean formatting and avoid
+excessively long lines.</p></li>
+<li><p><code>options(easystats_ci_separator = &lt;value&gt;)</code> defines the separator string
+used between the lower and upper CI limits. Defaults to <code>", "</code>, resulting
+in an output like <code>[0.3, 0.8]</code>.</p></li>
+<li><p><code>options(easystats_ci_brackets = &lt;value&gt;)</code> determines whether brackets or
+parentheses are used to enclose formatted CIs. Can be <code>FALSE</code> to omit them,
+<code>TRUE</code> to include them (defaults to <code>[</code> and <code>]</code> for text output), or a
+character vector of length 2 to define custom opening and closing symbols
+(e.g., <code>c("(", ")")</code>).</p></li>
+<li><p><code>options(insight_use_symbols = &lt;value&gt;)</code> accepts <code>TRUE</code> or <code>FALSE</code>. If
+<code>TRUE</code>, statistical symbols (e.g., eta-squared, omega) are rendered using
+their corresponding Unicode characters.</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -190,7 +205,7 @@ will set the default format for the <code>display()</code> methods. Can be one o
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.9000.</p>
 </div>
 
     </footer></div>

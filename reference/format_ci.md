@@ -13,7 +13,8 @@ format_ci(
   CI_high,
   ci = 0.95,
   digits = 2,
-  brackets = TRUE,
+  brackets = getOption("easystats_ci_brackets", TRUE),
+  separator = getOption("easystats_ci_separator", ", "),
   width = NULL,
   width_low = width,
   width_high = width,
@@ -60,6 +61,10 @@ format_ci(
   character vector of length two, indicating the opening and closing
   brackets.
 
+- separator:
+
+  String, used to separate lower and upper CI limit values.
+
 - width:
 
   Minimum width of the returned string. If not `NULL` and `width` is
@@ -105,6 +110,8 @@ format_ci(1.20, 3.57, ci = NULL, brackets = FALSE)
 #> [1] "1.20, 3.57"
 format_ci(1.20, 3.57, ci = NULL, brackets = c("(", ")"))
 #> [1] "(1.20, 3.57)"
+format_ci(1.20, 3.57, ci = NULL, brackets = FALSE, separator = "-")
+#> [1] "1.20-3.57"
 format_ci(c(1.205645, 23.4), c(3.57, -1.35), ci = 0.90)
 #> [1] "90% CI [1.21, 3.57]"   "90% CI [23.40, -1.35]"
 format_ci(c(1.20, NA, NA), c(3.57, -1.35, NA), ci = 0.90)

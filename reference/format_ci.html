@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,8 @@
 <span>  <span class="va">CI_high</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  brackets <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  brackets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"easystats_ci_brackets"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  separator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"easystats_ci_separator"</span>, <span class="st">", "</span><span class="op">)</span>,</span>
 <span>  width <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  width_low <span class="op">=</span> <span class="va">width</span>,</span>
 <span>  width_high <span class="op">=</span> <span class="va">width</span>,</span>
@@ -117,6 +118,10 @@ are used. Else, a character vector of length two, indicating the opening
 and closing brackets.</p></dd>
 
 
+<dt id="arg-separator">separator<a class="anchor" aria-label="anchor" href="#arg-separator"></a></dt>
+<dd><p>String, used to separate lower and upper CI limit values.</p></dd>
+
+
 <dt id="arg-width">width<a class="anchor" aria-label="anchor" href="#arg-width"></a></dt>
 <dd><p>Minimum width of the returned string. If not <code>NULL</code> and
 <code>width</code> is larger than the string's length, leading whitespaces are
@@ -162,6 +167,8 @@ if necessary.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1.20, 3.57"</span>
 <span class="r-in"><span><span class="fu">format_ci</span><span class="op">(</span><span class="fl">1.20</span>, <span class="fl">3.57</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, brackets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"("</span>, <span class="st">")"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "(1.20, 3.57)"</span>
+<span class="r-in"><span><span class="fu">format_ci</span><span class="op">(</span><span class="fl">1.20</span>, <span class="fl">3.57</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, brackets <span class="op">=</span> <span class="cn">FALSE</span>, separator <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1.20-3.57"</span>
 <span class="r-in"><span><span class="fu">format_ci</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.205645</span>, <span class="fl">23.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.57</span>, <span class="op">-</span><span class="fl">1.35</span><span class="op">)</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "90% CI [1.21, 3.57]"   "90% CI [23.40, -1.35]"</span>
 <span class="r-in"><span><span class="fu">format_ci</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.20</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.57</span>, <span class="op">-</span><span class="fl">1.35</span>, <span class="cn">NA</span><span class="op">)</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span></span>
@@ -190,7 +197,7 @@ if necessary.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.9000.</p>
 </div>
 
     </footer></div>

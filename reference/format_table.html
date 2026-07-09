@@ -15,7 +15,7 @@ that format_table() converts all columns into character vectors!"><meta property
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,8 @@ that <code>format_table()</code> converts all columns into character vectors!</p
 <span>  stars_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  ci_width <span class="op">=</span> <span class="st">"auto"</span>,</span>
-<span>  ci_brackets <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ci_brackets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"easystats_ci_brackets"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  ci_separator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"easystats_ci_separator"</span>, <span class="st">", "</span><span class="op">)</span>,</span>
 <span>  ci_digits <span class="op">=</span> <span class="va">digits</span>,</span>
 <span>  p_digits <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  rope_digits <span class="op">=</span> <span class="va">digits</span>,</span>
@@ -143,6 +144,12 @@ will be set to the length of the longest string.</p></dd>
 <dt id="arg-ci-brackets">ci_brackets<a class="anchor" aria-label="anchor" href="#arg-ci-brackets"></a></dt>
 <dd><p>Logical, if <code>TRUE</code> (default), CI-values are
 encompassed in square brackets (else in parentheses).</p></dd>
+
+
+<dt id="arg-ci-separator">ci_separator<a class="anchor" aria-label="anchor" href="#arg-ci-separator"></a></dt>
+<dd><p>String, used to separate lower and upper CI limit values.
+<code>options(easystats_ci_separator = "&lt;value&gt;")</code> can be used to set a default
+separator string.</p></dd>
 
 
 <dt id="arg-zap-small">zap_small<a class="anchor" aria-label="anchor" href="#arg-zap-small"></a></dt>
@@ -326,7 +333,7 @@ and <a href="https://easystats.github.io/parameters/articles/model_parameters_fo
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.9000.</p>
 </div>
 
     </footer></div>
