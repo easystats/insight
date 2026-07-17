@@ -129,8 +129,8 @@ test_that("get_data.mcnemar", {
     get_data(m),
     structure(
       c(794, 86, 150, 570),
-      .Dim = c(2L, 2L),
-      .Dimnames = list(
+      dim = c(2L, 2L),
+      dimnames = list(
         `1st Survey` = c("Approve", "Disapprove"),
         `2nd Survey` = c("Approve", "Disapprove")
       ),

@@ -13,6 +13,8 @@
 
 * Added a documentation page for available `options`.
 
+* Updated test-files for `htest` objects and fixed deprecated names.
+
 # insight 1.5.2
 
 ## Changes
