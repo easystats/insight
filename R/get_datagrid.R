@@ -311,6 +311,7 @@ get_datagrid.data.frame <- function(
   numerics = "mean",
   length = 10,
   range = "range",
+  weight = FALSE,
   preserve_range = FALSE,
   protect_integers = TRUE,
   digits = 3,
@@ -325,6 +326,11 @@ get_datagrid.data.frame <- function(
   )]
 
   specs <- NULL
+
+  # Special handling: weighted data grid (see #1207) --------------------
+  if (isTRUE(weight)) {
+    return(.get_datagrid_weighted(x, by))
+  }
 
   if (is.null(by)) {
     targets <- data.frame()
@@ -1280,6 +1286,36 @@ get_datagrid.comparisons <- get_datagrid.slopes
   }
   data.frame(varname = varname, expression = by_expression, stringsAsFactors = FALSE)
 }
+
+
+# This functions creates a "weighted" data grid, i.e. instead of passing a full
+# data frame as "newdata" argument to `predict()`, we just have a data frame of
+# all unique combinations, and a related "weight" variable that indicates how
+# often each unique combination appears in the data. this allows users to pass
+# a much smaller data grid that returns the same predictions, when "weight" is
+# passed as weight-argument
+
+#' @keywords internal
+.get_datagrid_weighted <- function(x, by) {
+  ## TODO: need to clean "by" variable, extract factors, and for now, we
+  # set numerics to their mean.
+
+  ## TODO: we may take a real "weights" variable into account, multiplying the
+  # sum of weights with the create "weight" value, e.g. if we have sampling
+  # weights
+
+  split_data <- split(x[by], x[by], drop = TRUE)
+  grid <- do.call(
+    rbind,
+    lapply(split_data, function(s) {
+      data.frame(s[1, ], weight = nrow(s))
+    })
+  )
+  row.names(grid) <- NULL
+
+  grid
+}
+
 
 # This functions deals with the non-focal predictors, i.e. sets numerics
 # to their mean (or other value), factors to reference etc.
