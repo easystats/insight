@@ -1185,6 +1185,12 @@ test_that("get_datagrid - weighted data grids, data frames", {
   expect_equal(out$species, factor(c("Adelie", "Chinstrap", "Gentoo")))
   expect_equal(out$weight, c(152, 68, 124))
 
+  # one factor, filtered
+  out <- get_datagrid(penguins, "island=c('Biscoe', 'Dream')", weighted = TRUE)
+  expect_identical(dim(out), c(2L, 2L))
+  expect_equal(out$island, factor(c(1L, 2L), labels = c("Biscoe", "Dream")))
+  expect_equal(out$weight, c(168, 124))
+
   # two factors
   out <- get_datagrid(penguins, c("species", "island"), weighted = TRUE)
   expect_equal(
@@ -1196,6 +1202,25 @@ test_that("get_datagrid - weighted data grids, data frames", {
       ),
       island = factor(c(1L, 1L, 2L, 2L, 3L), labels = c("Biscoe", "Dream", "Torgersen")),
       weight = c(44, 124, 56, 68, 52)
+    ),
+    ignore_attr = TRUE
+  )
+
+  # two factors, filtered
+  out <- get_datagrid(
+    penguins,
+    c("species=c('Adelie', 'Gentoo')", "island=c('Biscoe', 'Dream')"),
+    weighted = TRUE
+  )
+  expect_equal(
+    out,
+    data.frame(
+      species = factor(
+        c(1L, 2L, 1L),
+        labels = c("Adelie", "Gentoo")
+      ),
+      island = factor(c(1L, 1L, 2L), labels = c("Biscoe", "Dream")),
+      weight = c(44, 124, 56)
     ),
     ignore_attr = TRUE
   )

@@ -1444,7 +1444,22 @@ get_datagrid.comparisons <- get_datagrid.slopes
     colnames(grid)[1] <- by
   }
 
-  ## TODO: we may filter by "by" specs / expressions
+  # check if user wanted to filter by specific levels
+  if (!all(is.na(specs$expression))) {
+    # iterate all specs
+    for (i in seq_len(nrow(specs))) {
+      # we can only filter for factors, and if we have any expressions at all
+      # (e.g., `c('Biscoe', 'Dream')` for the column `island` of the penguins data)
+      if (!is.na(specs$expression[i]) && isTRUE(specs$is_factor[i])) {
+        # evaluate expression, to extract factor levels
+        filter_levels <- eval(parse(text = specs$expression[i]))
+        # filter
+        grid <- grid[grid[[specs$varname[i]]] %in% filter_levels, , drop = FALSE]
+        grid[[specs$varname[i]]] <- droplevels(grid[[specs$varname[i]]])
+      }
+    }
+  }
+
   grid
 }
 
