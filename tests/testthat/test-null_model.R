@@ -156,6 +156,34 @@ test_that("null_model with offset", {
 })
 
 
+test_that("null_model with nested-parenthesis offset and trailing terms", {
+  # `.grep_offset_term()` used to extract the offset with a paren-blind regex,
+  # which broke when the offset expression itself contained parentheses
+  # (`offset(log(x))`) AND further terms followed the offset in the formula
+  # (`... + offset(log(x)) + g`): the offset's closing paren was then no longer
+  # the last `)` in the deparsed formula, so an unbalanced, unparseable string
+  # was captured and null_model() errored.
+  set.seed(123)
+  N <- 200
+  x <- runif(N, 0, 10)
+  g <- factor(sample(letters[1:3], N, replace = TRUE))
+  off <- rgamma(N, 3, 2)
+  y <- rpois(N, exp(-1 + 0.5 * x + log(off)))
+  d <<- data.frame(y = y, x = x, g = g, off = off)
+
+  # inline offset (nested paren) with a factor term AFTER it
+  m1 <- glm(y ~ x + offset(log(off)) + g, data = d, family = "poisson")
+  # equivalent model with the offset supplied via the `offset` argument
+  m2 <- glm(y ~ x + g, offset = log(off), data = d, family = "poisson")
+
+  nm1 <- null_model(m1)
+  nm2 <- null_model(m2)
+  # the null model builds without error and keeps the offset
+  expect_identical(find_offset(nm1), "off")
+  expect_equal(coef(nm1), coef(nm2), tolerance = 1e-4)
+})
+
+
 skip_if_not_installed("MASS")
 skip_if_not_installed("withr")
 withr::with_options(

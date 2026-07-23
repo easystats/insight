@@ -1,5 +1,12 @@
 # insight (devel)
 
+## Bug fixes
+
+* `null_model()` no longer fails for models whose offset is written inline in
+  the formula with a nested-parenthesis expression followed by further terms
+  (e.g. `y ~ x + offset(log(exposure)) + factor(year)`). The offset term is now
+  extracted from the formula's language tree instead of by a paren-blind regex.
+
 ## Changes
 
 * `format_ci()` gains a `separator` argument, to customize the separator for

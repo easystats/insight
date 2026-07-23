@@ -307,13 +307,34 @@ null_model.glmmadmb <- null_model.glmmTMB
 .grep_offset_term <- function(model_formula) {
   tryCatch(
     {
-      f <- safe_deparse(model_formula$conditional)
-      if (grepl("offset(", f, fixed = TRUE)) {
-        out <- gsub("(.*)offset\\((.*)\\)(.*)", "\\2", f)
-      } else {
-        out <- NULL
+      f <- model_formula$conditional
+      if (is.null(f)) {
+        return(NULL)
       }
-      out
+      # Walk the formula's language tree to find the offset() call and return
+      # its argument. A regex on the deparsed formula cannot reliably extract
+      # the offset expression when that expression contains nested parentheses
+      # (e.g. `offset(log(x))`) or when further terms follow the offset in the
+      # formula (e.g. `... + offset(log(x)) + factor(year)`): the closing paren
+      # of `offset(` is then no longer the last `)` in the string, so the old
+      # regex captured an unbalanced, unparseable substring.
+      offset_expr <- NULL
+      find_offset_call <- function(e) {
+        if (!is.null(offset_expr) || !is.call(e)) {
+          return(NULL)
+        }
+        if (identical(e[[1L]], as.name("offset")) && length(e) >= 2L) {
+          offset_expr <<- e[[2L]]
+          return(NULL)
+        }
+        for (i in seq_along(e)) find_offset_call(e[[i]])
+      }
+      find_offset_call(f)
+      if (is.null(offset_expr)) {
+        NULL
+      } else {
+        safe_deparse(offset_expr)
+      }
     },
     error = function(e) {
       NULL
