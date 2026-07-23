@@ -728,6 +728,11 @@ get_datagrid.default <- function(
   # variables right now
   if (!is.null(weighted) && !isFALSE(weighted)) {
     data <- get_data(x)
+    # check if user wants to include random effects, and if so, add them to `by`
+    if (include_random) {
+      by <- unique(c(by, find_random(x, flatten = TRUE, split_nested = TRUE)))
+      include_random <- FALSE
+    }
     random_factors <- NULL
   } else {
     # Retrieve data from model
