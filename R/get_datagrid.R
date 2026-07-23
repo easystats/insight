@@ -311,7 +311,7 @@ get_datagrid.data.frame <- function(
   numerics = "mean",
   length = 10,
   range = "range",
-  weight = FALSE,
+  weighted = FALSE,
   preserve_range = FALSE,
   protect_integers = TRUE,
   digits = 3,
@@ -328,8 +328,8 @@ get_datagrid.data.frame <- function(
   specs <- NULL
 
   # Special handling: weighted data grid (see #1207) --------------------
-  if (isTRUE(weight)) {
-    return(.get_datagrid_weighted(x, by))
+  if (isTRUE(weighted)) {
+    return(.get_datagrid_weighted(x, by, weighted, digits = digits, ...))
   }
 
   if (is.null(by)) {
@@ -381,20 +381,7 @@ get_datagrid.data.frame <- function(
     # Find eventual user-defined specifications for each target. Here we parse
     # the `by` variable for user specified values or token, e.g. `by="mpg=c(40,50)"`
     # or `by="mpg=[sd]"`.
-    specs <- do.call(
-      rbind,
-      lapply(by, .get_datagrid_clean_target, x = x, digits = digits)
-    )
-    # information about specification in our data frame should be a string
-    specs$varname <- as.character(specs$varname) # make sure it's a string not fac
-    specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
-
-    # check and mark which focal predictors are factors/characters
-    specs$is_factor <- vapply(
-      x[specs$varname],
-      function(x) is.factor(x) || is.character(x),
-      TRUE
-    )
+    specs <- .create_datagrid_specs(x, by, digits)
 
     # Create target list of factors -----------------------------------------
     facs <- list()
@@ -1015,6 +1002,28 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 # Utilities -----------------------------------------------------------------
 
+# Find eventual user-defined specifications for each target. Here we parse
+# the `by` variable for user specified values or token, e.g. `by="mpg=c(40,50)"`
+
+.create_datagrid_specs <- function(x, by, digits = 3) {
+  specs <- do.call(
+    rbind,
+    lapply(by, .get_datagrid_clean_target, x = x, digits = digits)
+  )
+  # information about specification in our data frame should be a string
+  specs$varname <- as.character(specs$varname) # make sure it's a string not fac
+  specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
+
+  # check and mark which focal predictors are factors/characters
+  specs$is_factor <- vapply(
+    x[specs$varname],
+    function(x) is.factor(x) || is.character(x),
+    TRUE
+  )
+  specs
+}
+
+
 # This function extract representative values specified in the `by` argument,
 # e.g. `by="mpg=c(20,30,40)"` or `by="mpg=[sd]"`
 
@@ -1296,23 +1305,76 @@ get_datagrid.comparisons <- get_datagrid.slopes
 # passed as weight-argument
 
 #' @keywords internal
-.get_datagrid_weighted <- function(x, by) {
-  ## TODO: need to clean "by" variable, extract factors, and for now, we
-  # set numerics to their mean.
+.get_datagrid_weighted <- function(x, by, weighted, digits = 3, ...) {
+  specs <- .create_datagrid_specs(x, by, digits)
 
-  ## TODO: we may take a real "weights" variable into account, multiplying the
+  # extract cleaned names for factor and numeric variables
+  by <- specs$varname[specs$is_factor]
+  nums <- specs$varname[!specs$is_factor]
+
+  # sanity check: any factors?
+  if (is.null(by) || !length(by)) {
+    format_error(
+      "No factors were specified in `by`, which is required to create a weighted data grid."
+    )
+  }
+
+  # if we have any numeric variables, we set them to their mean for now.
+  # we create a single-row data frame, which can be column-bound below
+  if (length(nums)) {
+    numerics <- as.data.frame(do.call(
+      cbind,
+      lapply(x[nums], function(num) {
+        round(mean(num, na.rm = TRUE), digits = digits)
+      })
+    ))
+  } else {
+    numerics <- NULL
+  }
+
+  # check if user specified a variable names for the weights variable.
+  # we may take a real "weights" variable into account, multiplying the
   # sum of weights with the create "weight" value, e.g. if we have sampling
   # weights
+  if (is.character(weighted)) {
+    if (length(weighted) > 1) {
+      # "weighted" can only be of length 1
+      format_error("`weighted` can only name a single variable.")
+    } else if (!weighted %in% colnames(x)) {
+      # "weighted" does not exist in the data
+      msg <- paste0("The variable `", weighted, "` does not exist in the data.")
+      suggestion <- .misspelled_string(colnames(x), weighted)
+      if (!is.null(suggestion$msg) && nzchar(suggestion$msg)) {
+        msg <- paste(msg, suggestion$msg)
+      }
+      format_error(msg)
+    }
+  }
 
   split_data <- split(x[by], x[by], drop = TRUE)
   grid <- do.call(
     rbind,
     lapply(split_data, function(s) {
-      data.frame(s[1, ], weight = nrow(s))
+      if (is.character(weighted)) {
+        w_factor <- sum(s[[weighted]], na.rm = TRUE)
+      } else {
+        w_factor <- 1
+      }
+      out <- data.frame(s[1, ], weight = nrow(s) * w_factor)
+      if (!is.null(numerics)) {
+        out <- cbind(out, numerics)
+      }
+      out
     })
   )
   row.names(grid) <- NULL
 
+  # fix: if we have only one factor, we need to set the column name explicitly
+  if (length(by) == 1) {
+    colnames(grid)[1] <- by
+  }
+
+  ## TODO: we may filter by "by" specs / expressions
   grid
 }
 
