@@ -14,169 +14,179 @@
 #'
 #' @param x An object from which to construct the reference grid.
 #' @param by Indicates the _focal predictors_ (variables) for the reference grid
-#'   and at which values focal predictors should be represented. If not specified
-#'   otherwise, representative values for numeric variables or predictors are
-#'   evenly distributed from the minimum to the maximum, with a total number of
-#'   `length` values covering that range (see 'Examples'). Possible options for
-#'   `by` are:
-#'   - **Select variables only:**
-#'     - `"all"`, which will include all variables or predictors.
-#'     - a character vector of one or more variable or predictor names, like
-#'       `c("Species", "Sepal.Width")`, which will create a grid of all
-#'       combinations of unique values.
+#' and at which values focal predictors should be represented. If not specified
+#' otherwise, representative values for numeric variables or predictors are
+#' evenly distributed from the minimum to the maximum, with a total number of
+#' `length` values covering that range (see 'Examples'). Possible options for
+#' `by` are:
+#' - **Select variables only:**
+#'   - `"all"`, which will include all variables or predictors.
+#'   - a character vector of one or more variable or predictor names, like
+#'     `c("Species", "Sepal.Width")`, which will create a grid of all
+#'     combinations of unique values.
 #'
-#'     **Note:** If `by` specifies only variable names, without associated
-#'     values, the following occurs: factor variables use all their levels,
-#'     numeric variables use a range of `length` equally spaced values between
-#'     their minimum and maximum, and character variables use all their unique
-#'     values.
-#'
-#'   - **Select variables and values:**
-#'     - `by` can be a list of named elements, indicating focal predictors and
-#'       their representative values, e.g. `by = list(mpg = 10:20)`,
-#'       `by = list(Sepal.Length = c(2, 4), Species = "setosa")`, or
-#'       `by = list(Sepal.Length = seq(2, 5, 0.5))`.
-#'     - Instead of a list, it is possible to write a string representation, or
-#'       a character vector of such strings, e.g. `by = "mpg = 10:20"`,
-#'       `by = c("Sepal.Length = c(2, 4)", "Species = 'setosa'")`, or
-#'       `by = "Sepal.Length = seq(2, 5, 0.5)"`. Note the usage of single and
-#'       double quotes to assign strings within strings.
-#'     - In general, any expression after a `=` will be evaluated as R code, which
-#'       allows using own functions, e.g.
-#'       ```
-#'       fun <- function(x) x^2
-#'       get_datagrid(iris, by = "Sepal.Width = fun(2:5)")
-#'       ```
-#'
-#'     **Note:** If `by` specifies variables *with* their associated values,
-#'     argument `length` is ignored.
-#'
-#'   There is a special handling of assignments with _brackets_, i.e. values
-#'   defined inside `[` and `]`, which create summaries for *numeric* variables.
-#'   Following "tokens" that creates pre-defined representative values are
-#'   possible:
-#'
-#'   - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
-#'   - for median and -/+ 1 MAD around the median: `"x = [mad]"`
-#'   - for Tukey's five number summary (minimum, lower-hinge, median,
-#'     upper-hinge, maximum): `"x = [fivenum]"`
-#'   - for quartiles: `"x = [quartiles]"` (same as `"x = [fivenum]"`, but
-#'     *excluding* minimum and maximum)
-#'   - for terciles: `"x = [terciles]"`
-#'   - for terciles, *including* minimum and maximum: `"x = [terciles2]"`
-#'   - for a pretty value range: `"x = [pretty]"`
-#'   - for minimum and maximum value: `"x = [minmax]"`
-#'   - for 0 and the maximum value: `"x = [zeromax]"`
-#'   - for a random sample from all values: `"x = [sample <number>]"`, where
-#'     `<number>` should be a positive integer, e.g. `"x = [sample 15]"`.
-#'
-#'   **Note:** the `length` argument will be ignored when using brackets-tokens.
-#'
-#'   The remaining variables not specified in `by` will be fixed (see also arguments
-#'   `factors` and `numerics`).
-#' @param length Length of numeric target variables selected in `by` (if no
-#'   representative values are additionally specified). This arguments controls
-#'   the number of (equally spread) values that will be taken to represent the
-#'   continuous (non-integer alike!) variables. A longer length will increase
-#'   precision, but can also substantially increase the size of the datagrid
-#'   (especially in case of interactions). If `NA`, will return all the unique
+#'   **Note:** If `by` specifies only variable names, without associated
+#'   values, the following occurs: factor variables use all their levels,
+#'   numeric variables use a range of `length` equally spaced values between
+#'   their minimum and maximum, and character variables use all their unique
 #'   values.
 #'
-#'   In case of multiple continuous target variables, `length` can also be a
-#'   vector of different values (see 'Examples'). In this case, `length` must be
-#'   of same length as numeric target variables. If `length` is a named vector,
-#'   values are matched against the names of the target variables.
+#' - **Select variables and values:**
+#'   - `by` can be a list of named elements, indicating focal predictors and
+#'     their representative values, e.g. `by = list(mpg = 10:20)`,
+#'     `by = list(Sepal.Length = c(2, 4), Species = "setosa")`, or
+#'     `by = list(Sepal.Length = seq(2, 5, 0.5))`.
+#'   - Instead of a list, it is possible to write a string representation, or
+#'     a character vector of such strings, e.g. `by = "mpg = 10:20"`,
+#'     `by = c("Sepal.Length = c(2, 4)", "Species = 'setosa'")`, or
+#'     `by = "Sepal.Length = seq(2, 5, 0.5)"`. Note the usage of single and
+#'     double quotes to assign strings within strings.
+#'   - In general, any expression after a `=` will be evaluated as R code, which
+#'     allows using own functions, e.g.
+#'     ```
+#'     fun <- function(x) x^2
+#'     get_datagrid(iris, by = "Sepal.Width = fun(2:5)")
+#'     ```
 #'
-#'   When `range = "range"` (the default), `length` is ignored for integer type
-#'   variables when `length` is larger than the number of unique values *and*
-#'   `protect_integers` is `TRUE` (default). Set `protect_integers = FALSE` to
-#'   create a spread of `length` number of values from minimum to maximum for
-#'   integers, including fractions (i.e., to treat integer variables as regular
-#'   numeric variables).
+#'   **Note:** If `by` specifies variables *with* their associated values,
+#'   argument `length` is ignored.
 #'
-#'   `length` is furthermore ignored if "tokens" (in brackets `[` and `]`) are
-#'   used in `by`, or if representative values are additionally specified in
-#'   `by`.
+#' There is a special handling of assignments with _brackets_, i.e. values
+#' defined inside `[` and `]`, which create summaries for *numeric* variables.
+#' Following "tokens" that creates pre-defined representative values are
+#' possible:
+#'
+#' - for mean and -/+ 1 SD around the mean: `"x = [sd]"`
+#' - for median and -/+ 1 MAD around the median: `"x = [mad]"`
+#' - for Tukey's five number summary (minimum, lower-hinge, median,
+#'   upper-hinge, maximum): `"x = [fivenum]"`
+#' - for quartiles: `"x = [quartiles]"` (same as `"x = [fivenum]"`, but
+#'   *excluding* minimum and maximum)
+#' - for terciles: `"x = [terciles]"`
+#' - for terciles, *including* minimum and maximum: `"x = [terciles2]"`
+#' - for a pretty value range: `"x = [pretty]"`
+#' - for minimum and maximum value: `"x = [minmax]"`
+#' - for 0 and the maximum value: `"x = [zeromax]"`
+#' - for a random sample from all values: `"x = [sample <number>]"`, where
+#'   `<number>` should be a positive integer, e.g. `"x = [sample 15]"`.
+#'
+#' **Note:** the `length` argument will be ignored when using brackets-tokens.
+#'
+#' The remaining variables not specified in `by` will be fixed (see also arguments
+#' `factors` and `numerics`).
+#' @param length Length of numeric target variables selected in `by` (if no
+#' representative values are additionally specified). This arguments controls
+#' the number of (equally spread) values that will be taken to represent the
+#' continuous (non-integer alike!) variables. A longer length will increase
+#' precision, but can also substantially increase the size of the datagrid
+#' (especially in case of interactions). If `NA`, will return all the unique
+#' values.
+#'
+#' In case of multiple continuous target variables, `length` can also be a
+#' vector of different values (see 'Examples'). In this case, `length` must be
+#' of same length as numeric target variables. If `length` is a named vector,
+#' values are matched against the names of the target variables.
+#'
+#' When `range = "range"` (the default), `length` is ignored for integer type
+#' variables when `length` is larger than the number of unique values *and*
+#' `protect_integers` is `TRUE` (default). Set `protect_integers = FALSE` to
+#' create a spread of `length` number of values from minimum to maximum for
+#' integers, including fractions (i.e., to treat integer variables as regular
+#' numeric variables).
+#'
+#' `length` is furthermore ignored if "tokens" (in brackets `[` and `]`) are
+#' used in `by`, or if representative values are additionally specified in
+#' `by`.
 #' @param range Option to control the representative values given in `by`, if no
-#'   specific values were provided. Use in combination with the `length`
-#'   argument to control the number of values within the specified range.
-#'   `range` can be one of the following:
-#'   - `"range"` (default), will use the minimum and maximum of the original
-#'     data vector as end-points (min and max). For integer variables, the
-#'     `length` argument will be ignored, and `"range"` will only use values
-#'     that appear in the data. Set `protect_integers = FALSE` to override this
-#'     behaviour for integer variables.
-#'   - if an interval type is specified, such as [`"iqr"`][IQR()],
-#'     [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or
-#'     [`"eti"`][bayestestR::eti()], it will spread the values within that range
-#'     (the default CI width is `95%` but this can be changed by adding for
-#'     instance `ci = 0.90`.) See [`IQR()`] and [`bayestestR::ci()`]. This can
-#'     be useful to have more robust change and skipping extreme values.
-#'   - if [`"sd"`][sd()] or [`"mad"`][mad()], it will spread by this dispersion
-#'     index around the mean or the median, respectively. If the `length`
-#'     argument is an even number (e.g., `4`), it will have one more step on the
-#'     positive side (i.e., `-1, 0, +1, +2`). The result is a named vector. See
-#'     'Examples.'
-#'   - `"grid"` will create a reference grid that is useful when plotting
-#'     predictions, by choosing representative values for numeric variables
-#'     based on their position in the reference grid. If a numeric variable is
-#'     the first predictor in `by`, values from minimum to maximum of the same
-#'     length as indicated in `length` are generated. For numeric predictors not
-#'     specified at first in `by`, mean and -1/+1 SD around the mean are
-#'     returned. For factors, all levels are returned.
-#'   - `"pretty"` will create a range "pretty" values, using [`pretty()`], where
-#'     the value in `length` is used for the `n` argument in `pretty()`.
+#' specific values were provided. Use in combination with the `length`
+#' argument to control the number of values within the specified range.
+#' `range` can be one of the following:
+#' - `"range"` (default), will use the minimum and maximum of the original
+#'   data vector as end-points (min and max). For integer variables, the
+#'   `length` argument will be ignored, and `"range"` will only use values
+#'   that appear in the data. Set `protect_integers = FALSE` to override this
+#'   behaviour for integer variables.
+#' - if an interval type is specified, such as [`"iqr"`][IQR()],
+#'   [`"ci"`][bayestestR::ci()], [`"hdi"`][bayestestR::hdi()] or
+#'   [`"eti"`][bayestestR::eti()], it will spread the values within that range
+#'   (the default CI width is `95%` but this can be changed by adding for
+#'   instance `ci = 0.90`.) See [`IQR()`] and [`bayestestR::ci()`]. This can
+#'   be useful to have more robust change and skipping extreme values.
+#' - if [`"sd"`][sd()] or [`"mad"`][mad()], it will spread by this dispersion
+#'   index around the mean or the median, respectively. If the `length`
+#'   argument is an even number (e.g., `4`), it will have one more step on the
+#'   positive side (i.e., `-1, 0, +1, +2`). The result is a named vector. See
+#'   'Examples.'
+#' - `"grid"` will create a reference grid that is useful when plotting
+#'   predictions, by choosing representative values for numeric variables
+#'   based on their position in the reference grid. If a numeric variable is
+#'   the first predictor in `by`, values from minimum to maximum of the same
+#'   length as indicated in `length` are generated. For numeric predictors not
+#'   specified at first in `by`, mean and -1/+1 SD around the mean are
+#'   returned. For factors, all levels are returned.
+#' - `"pretty"` will create a range "pretty" values, using [`pretty()`], where
+#'   the value in `length` is used for the `n` argument in `pretty()`.
 #'
-#'   `range` can also be a vector of different values (see 'Examples'). In this
-#'   case, `range` must be of same length as numeric target variables. If
-#'   `range` is a named vector, values are matched against the names of the
-#'   target variables.
+#' `range` can also be a vector of different values (see 'Examples'). In this
+#' case, `range` must be of same length as numeric target variables. If
+#' `range` is a named vector, values are matched against the names of the
+#' target variables.
 #' @param factors Type of summary for factors *not* specified in `by`. Can be
-#'   `"reference"` (set at the reference level), `"mode"` (set at the most
-#'   common level) or `"all"` to keep all levels.
+#' `"reference"` (set at the reference level), `"mode"` (set at the most
+#' common level) or `"all"` to keep all levels.
 #' @param numerics Type of summary for numeric values *not* specified in `by`.
-#'   Can be `"all"` (will duplicate the grid for all unique values), any
-#'   function (`"mean"`, `"median"`, ...) or a value (e.g., `numerics = 0`).
-#'   Special functions are `"mode"`, which will set the numeric variable to its
-#'   most common value, and `"integer"`, which returns the rounded mean.
+#' Can be `"all"` (will duplicate the grid for all unique values), any
+#' function (`"mean"`, `"median"`, ...) or a value (e.g., `numerics = 0`).
+#' Special functions are `"mode"`, which will set the numeric variable to its
+#' most common value, and `"integer"`, which returns the rounded mean.
 #' @param preserve_range In the case of combinations between numeric variables
-#'   and factors, setting `preserve_range = TRUE` will drop the observations
-#'   where the value of the numeric variable is originally not present in the
-#'   range of its factor level. This leads to an unbalanced grid. Also, if you
-#'   want the minimum and the maximum to closely match the actual ranges, you
-#'   should increase the `length` argument.
+#' and factors, setting `preserve_range = TRUE` will drop the observations
+#' where the value of the numeric variable is originally not present in the
+#' range of its factor level. This leads to an unbalanced grid. Also, if you
+#' want the minimum and the maximum to closely match the actual ranges, you
+#' should increase the `length` argument.
 #' @param reference The reference vector from which to compute the mean and SD.
-#'   Used when standardizing or unstandardizing the grid using `effectsize::standardize`.
+#' Used when standardizing or unstandardizing the grid using `effectsize::standardize`.
 #' @param include_smooth If `x` is a model object, decide whether smooth terms
-#'   should be included in the data grid or not.
+#' should be included in the data grid or not.
 #' @param include_random If `x` is a mixed model object, decide whether random
-#'   effect terms should be included in the data grid or not. If
-#'   `include_random` is `FALSE`, but `x` is a mixed model with random effects,
-#'   these will still be included in the returned grid, but set to their
-#'   "population level" value (e.g., `NA` for *glmmTMB* or `0` for *merMod*).
-#'   This ensures that common `predict()` methods work properly, as these
-#'   usually need data with all variables in the model included.
+#' effect terms should be included in the data grid or not. If
+#' `include_random` is `FALSE`, but `x` is a mixed model with random effects,
+#' these will still be included in the returned grid, but set to their
+#' "population level" value (e.g., `NA` for *glmmTMB* or `0` for *merMod*).
+#' This ensures that common `predict()` methods work properly, as these
+#' usually need data with all variables in the model included.
 #' @param include_response If `x` is a model object, decide whether the response
-#'   variable should be included in the data grid or not.
+#' variable should be included in the data grid or not.
 #' @param protect_integers Defaults to `TRUE`. Indicates whether integers (whole
-#'   numbers) should be treated as integers (i.e., prevent adding any in-between
-#'   round number values), or - if `FALSE` - as regular numeric variables. Only
-#'   applies to focal predictors (specified in `by`) and when:
+#' numbers) should be treated as integers (i.e., prevent adding any in-between
+#' round number values), or - if `FALSE` - as regular numeric variables. Only
+#' applies to focal predictors (specified in `by`) and when:
 #'
-#'   1. `range = "range"` (the default), or if `range = "grid"` and the
-#'   first predictor in `by` is an integer;
-#'   2. `length` is larger than the number of unique values for the variable.
+#' 1. `range = "range"` (the default), or if `range = "grid"` and the
+#' first predictor in `by` is an integer;
+#' 2. `length` is larger than the number of unique values for the variable.
 #'
-#'   If `length` is smaller than the number of unique values, `protect_integers`
-#'   is ignored.
+#' If `length` is smaller than the number of unique values, `protect_integers`
+#' is ignored.
 #' @param data Optional, the data frame that was used to fit the model. Usually,
-#'   the data is retrieved via `get_data()`.
+#' the data is retrieved via `get_data()`.
 #' @param digits Number of digits used for rounding numeric values specified in
 #' `by`. E.g., `x = [sd]` will round the mean and +-/1 SD in the data grid to
 #' `digits`.
+#' @param weighted Either a logical, and if `TRUE`, creates a "weighted" data
+#' grid, which is a smaller representation of a large data grid. Multiple unique
+#' combinations of (categorical) predictors are included only once (i.e. one row
+#' per unique combination of predictors specified in `by`), and a new `weight`
+#' variable is included that indicates how often each combination appears in the
+#' original data. `weighted` can also be a name of an exisiting weighting
+#' variable in the data. In this case, the returned `weight` variable is
+#' multiplied by the sum of weights for all observations that are identified by
+#' the unique combination of predictors, thus, `weight` represents a "weighted"
+#' weight-variable.
 #' @param verbose Toggle warnings.
 #' @param ... Arguments passed to or from other methods (for instance, `length`
-#'   or `range` to control the spread of numeric variables.).
+#' or `range` to control the spread of numeric variables.).
 #'
 #' @return Reference grid data frame.
 #'
@@ -277,6 +287,18 @@
 #' )
 #'
 #'
+#' # Weighted data grid ------------------------------------------------------
+#' data(penguins)
+#' # Adelie appears 152 times in the data, Chinstrap 68 times and Gentoo 124
+#' # times. Instead of a three-row data grid, which assumes that each species
+#' # is present equally often in the data, we now could "weight" each row
+#' # according to their actual frequency in the data
+#' get_datagrid(penguins, "species", weighted = TRUE)
+#'
+#' # numeric variables are included, but set to their mean value
+#' get_datagrid(penguins, c("species", "island", "body_mass"), weighted = TRUE)
+#'
+#'
 #' # With models ===============================================================
 #'
 #' # Fit a linear regression
@@ -294,6 +316,19 @@
 #'   col = data$Petal.Length,
 #'   main = "Relationship at -1 SD, Mean, and + 1 SD of Petal.Length"
 #' )
+#'
+#' # weighted data grid
+#' model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
+#' # when `by` is not specified, all predictors are used to create a weighted grid
+#' get_datagrid(model, weighted = TRUE)
+#'
+#' # weighted data grid
+#' d <- iris
+#' d$weights <- abs(rnorm(nrow(d), 1, 0.2))
+#'
+#' model <- lm(Sepal.Length ~ Species + Sepal.Width, data = d, weights = weights)
+#' get_datagrid(model, "Species", weighted = "weights")
+#'
 #' @export
 get_datagrid <- function(x, ...) {
   UseMethod("get_datagrid")
@@ -1306,6 +1341,11 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 #' @keywords internal
 .get_datagrid_weighted <- function(x, by, weighted, digits = 3, ...) {
+  # if `by` was not specified, it is set to "all" - use all column names
+  if (is.null(by) || all(by == "all")) {
+    by <- colnames(x)
+  }
+
   specs <- .create_datagrid_specs(x, by, digits)
 
   # extract cleaned names for factor and numeric variables
