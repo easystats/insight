@@ -353,6 +353,11 @@ get_datagrid.data.frame <- function(
   reference = x,
   ...
 ) {
+  # Special handling: weighted data grid (see #1207) --------------------
+  if (isTRUE(weighted)) {
+    return(.get_datagrid_weighted(x, by, weighted, digits = digits, ...))
+  }
+
   # find numerics that were coerced to factor in-formula
   numeric_factors <- colnames(x)[vapply(
     x,
@@ -361,11 +366,6 @@ get_datagrid.data.frame <- function(
   )]
 
   specs <- NULL
-
-  # Special handling: weighted data grid (see #1207) --------------------
-  if (isTRUE(weighted)) {
-    return(.get_datagrid_weighted(x, by, weighted, digits = digits, ...))
-  }
 
   if (is.null(by)) {
     targets <- data.frame()
