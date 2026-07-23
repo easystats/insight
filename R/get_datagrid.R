@@ -707,6 +707,7 @@ get_datagrid.default <- function(
   by = "all",
   factors = "reference",
   numerics = "mean",
+  weighted = FALSE,
   preserve_range = TRUE,
   reference = x,
   include_smooth = TRUE,
@@ -722,108 +723,117 @@ get_datagrid.default <- function(
     format_error("`x` must be a statistical model.")
   }
 
-  # Retrieve data from model
-  data <- .get_model_data_for_grid(x, data)
-  data_attr <- attributes(data)
+  # check if user passed a a "weighted" argument. if so, we need the full
+  # data frame to create a weighted data grid and do not process any other
+  # variables right now
+  if (!is.null(weighted) && !isFALSE(weighted)) {
+    data <- get_data(x)
+    random_factors <- NULL
+  } else {
+    # Retrieve data from model
+    data <- .get_model_data_for_grid(x, data)
+    data_attr <- attributes(data)
 
-  # save response - might be necessary to include
-  response <- find_response(x)
+    # save response - might be necessary to include
+    response <- find_response(x)
 
-  # check some exceptions here: logistic regression models with factor response
-  # usually require the response to be included in the model, else `get_modelmatrix()`
-  # fails, which is required to compute SE/CI for `get_predicted()`
-  minfo <- model_info(x, response = 1)
+    # check some exceptions here: logistic regression models with factor response
+    # usually require the response to be included in the model, else `get_modelmatrix()`
+    # fails, which is required to compute SE/CI for `get_predicted()`
+    minfo <- model_info(x, response = 1)
 
-  # check which response variables are possibly a factor. for multivariate
-  # models, "response" might be a vector, so we iterate with vapply() here
-  factor_response <- vapply(response, function(i) is.factor(data[[i]]), logical(1))
+    # check which response variables are possibly a factor. for multivariate
+    # models, "response" might be a vector, so we iterate with vapply() here
+    factor_response <- vapply(response, function(i) is.factor(data[[i]]), logical(1))
 
-  # any factor response for binomial?
-  if (
-    minfo$is_binomial &&
-      minfo$is_logit &&
-      any(factor_response) &&
-      !include_response &&
-      verbose
-  ) {
-    format_warning(
-      "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions." # nolint
-    )
-  }
-
-  # Deal with intercept-only models
-  if (isFALSE(include_response)) {
-    data <- data[!colnames(data) %in% response]
-    if (ncol(data) < 1L) {
-      format_error(
-        "Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."
+    # any factor response for binomial?
+    if (
+      minfo$is_binomial &&
+        minfo$is_logit &&
+        any(factor_response) &&
+        !include_response &&
+        verbose
+    ) {
+      format_warning(
+        "Logistic regression model has a categorical response variable. You may need to set `include_response=TRUE` to make it work for predictions." # nolint
       )
     }
-  }
 
-  # check for interactions in "by"
-  by <- .extract_at_interactions(by)
-
-  # convert list-object into character vector
-  by <- .unlist_by(by)
-
-  # Drop random factors
-  random_factors <- find_random(x, flatten = TRUE, split_nested = TRUE)
-  if (!is.null(random_factors)) {
-    if (isFALSE(include_random)) {
-      # drop random factors, if these should not be included
-      keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
-      if (!is.null(keep)) {
-        if (all(by != "all")) {
-          # make by-token work with random effects, see #1156
-          by_stripped <- vapply(
-            by,
-            function(by_var) {
-              if (grepl("=", by_var, fixed = TRUE)) {
-                # Split by '=' but keep quoted parts
-                parts <- trim_ws(unlist(
-                  strsplit(by_var, "(?=(?:[^\"']|\"[^\"]*\"|'[^']*')*$)=", perl = TRUE),
-                  use.names = FALSE
-                ))
-                parts[1]
-              } else {
-                by_var
-              }
-            },
-            character(1)
-          )
-          keep <- c(keep, by_stripped[by_stripped %in% random_factors])
-          random_factors <- setdiff(random_factors, by_stripped)
-        }
-        data <- data[colnames(data) %in% keep]
+    # Deal with intercept-only models
+    if (isFALSE(include_response)) {
+      data <- data[!colnames(data) %in% response]
+      if (ncol(data) < 1L) {
+        format_error(
+          "Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the reference grid."
+        )
       }
-    } else {
-      # make sure random factors are not numeric, else, wrong "levels" will be returned
-      data[random_factors] <- lapply(data[random_factors], as.factor)
     }
-  }
 
-  # user wants to include all predictors?
-  if (all(by == "all")) {
-    by <- colnames(data)
-  }
+    # check for interactions in "by"
+    by <- .extract_at_interactions(by)
 
-  # exluce smooth terms?
-  if (isFALSE(include_smooth) || identical(include_smooth, "fixed")) {
-    s <- find_smooth(x, flatten = TRUE)
-    if (!is.null(s)) {
-      by <- colnames(data)[!colnames(data) %in% clean_names(s)]
+    # convert list-object into character vector
+    by <- .unlist_by(by)
+
+    # Drop random factors
+    random_factors <- find_random(x, flatten = TRUE, split_nested = TRUE)
+    if (!is.null(random_factors)) {
+      if (isFALSE(include_random)) {
+        # drop random factors, if these should not be included
+        keep <- c(find_predictors(x, effects = "fixed", flatten = TRUE), response)
+        if (!is.null(keep)) {
+          if (all(by != "all")) {
+            # make by-token work with random effects, see #1156
+            by_stripped <- vapply(
+              by,
+              function(by_var) {
+                if (grepl("=", by_var, fixed = TRUE)) {
+                  # Split by '=' but keep quoted parts
+                  parts <- trim_ws(unlist(
+                    strsplit(by_var, "(?=(?:[^\"']|\"[^\"]*\"|'[^']*')*$)=", perl = TRUE),
+                    use.names = FALSE
+                  ))
+                  parts[1]
+                } else {
+                  by_var
+                }
+              },
+              character(1)
+            )
+            keep <- c(keep, by_stripped[by_stripped %in% random_factors])
+            random_factors <- setdiff(random_factors, by_stripped)
+          }
+          data <- data[colnames(data) %in% keep]
+        }
+      } else {
+        # make sure random factors are not numeric, else, wrong "levels" will be returned
+        data[random_factors] <- lapply(data[random_factors], as.factor)
+      }
     }
-  }
 
-  # set back custom attributes
-  data <- .replace_attr(data, data_attr)
+    # user wants to include all predictors?
+    if (all(by == "all")) {
+      by <- colnames(data)
+    }
+
+    # exluce smooth terms?
+    if (isFALSE(include_smooth) || identical(include_smooth, "fixed")) {
+      s <- find_smooth(x, flatten = TRUE)
+      if (!is.null(s)) {
+        by <- colnames(data)[!colnames(data) %in% clean_names(s)]
+      }
+    }
+
+    # set back custom attributes
+    data <- .replace_attr(data, data_attr)
+  }
 
   vm <- get_datagrid(
     data,
     by = by,
     factors = factors,
     numerics = numerics,
+    weighted = weighted,
     preserve_range = preserve_range,
     reference = data,
     digits = digits,
@@ -842,7 +852,7 @@ get_datagrid.default <- function(
 
   # if model has weights, we need to add a dummy for certain classes, e.g. glmmTMB
   w <- insight::find_weights(x)
-  if (!inherits(x, "brmsfit") && !is.null(w)) {
+  if (!inherits(x, "brmsfit") && !is.null(w) && !identical(w, weighted)) {
     # for lme, can't be NA
     if (inherits(x, c("lme", "gls"))) {
       vm[w] <- 1
@@ -1391,12 +1401,26 @@ get_datagrid.comparisons <- get_datagrid.slopes
     }
   }
 
-  split_data <- split(x[by], x[by], drop = TRUE)
+  # check which columns we need to keep for splitting
+  split_cols <- by
+  if (is.character(weighted)) {
+    split_cols <- c(split_cols, weighted)
+  }
+
+  # split data set by all unique factor-level combinations
+  split_data <- split(x[split_cols], x[by], drop = TRUE)
+
+  # create a "one-row" summary, i.e. a weighted grid, which is a smaller
+  # representation of a large data grid. The amount of actual occurences of
+  # each combination in the data is indicated by the "weight" column
   grid <- do.call(
     rbind,
     lapply(split_data, function(s) {
+      # if we have a weighting-variable, we average weighting-variable to use
+      # it as factor for the frequency of occurences - this gives us a
+      # "double-weighted" data grid
       if (is.character(weighted)) {
-        w_factor <- sum(s[[weighted]], na.rm = TRUE)
+        w_factor <- mean(s[[weighted]], na.rm = TRUE)
       } else {
         w_factor <- 1
       }
