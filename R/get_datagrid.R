@@ -1399,7 +1399,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
       # "weighted" does not exist in the data
       msg <- paste0("The variable `", weighted, "` does not exist in the data.")
       suggestion <- .misspelled_string(colnames(x), weighted)
-      if (!is.null(suggestion$msg) && nzchar(suggestion$msg)) {
+      if (!is.null(suggestion$msg) && isTRUE(nzchar(suggestion$msg))) {
         msg <- paste(msg, suggestion$msg)
       }
       format_error(msg)
@@ -1426,6 +1426,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
       # "double-weighted" data grid
       if (is.character(weighted)) {
         w_factor <- mean(s[[weighted]], na.rm = TRUE)
+        s[[weighted]] <- NULL
       } else {
         w_factor <- 1
       }
