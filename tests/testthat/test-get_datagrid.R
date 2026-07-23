@@ -1293,6 +1293,6 @@ test_that("get_datagrid - weighted data grids, data frames", {
 
   # double weighting
   out <- get_datagrid(d, "island", weighted = "weights")
-  expect_names(c("island", "weight"))
+  expect_named(out, c("island", "weight"))
   expect_equal(out$weight, c(167.05601, 127.47271, 52.24464), tolerance = 1e-2)
 })
