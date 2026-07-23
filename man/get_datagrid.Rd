@@ -41,6 +41,7 @@ get_datagrid(x, ...)
   by = "all",
   factors = "reference",
   numerics = "mean",
+  weighted = FALSE,
   preserve_range = TRUE,
   reference = x,
   include_smooth = TRUE,
