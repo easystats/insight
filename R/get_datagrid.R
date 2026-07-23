@@ -354,7 +354,7 @@ get_datagrid.data.frame <- function(
   ...
 ) {
   # Special handling: weighted data grid (see #1207) --------------------
-  if (isTRUE(weighted)) {
+  if (!is.null(weighted) && !isFALSE(weighted)) {
     return(.get_datagrid_weighted(x, by, weighted, digits = digits, ...))
   }
 
