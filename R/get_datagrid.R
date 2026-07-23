@@ -179,7 +179,7 @@
 #' combinations of (categorical) predictors are included only once (i.e. one row
 #' per unique combination of predictors specified in `by`), and a new `weight`
 #' variable is included that indicates how often each combination appears in the
-#' original data. `weighted` can also be a name of an exisiting weighting
+#' original data. `weighted` can also be a name of an existing weighting
 #' variable in the data. In this case, the returned `weight` variable is
 #' multiplied by the sum of weights for all observations that are identified by
 #' the unique combination of predictors, thus, `weight` represents a "weighted"
