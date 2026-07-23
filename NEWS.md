@@ -2,9 +2,9 @@
 
 ## Changes
 
-* `get_datagrid()` gains a `weight` argument, to create a smaller representation
+* `get_datagrid()` gains a `weighted` argument, to create a smaller representation
   of large data grids, where multiple unique combinations of predictors are
-  included only once, and a new `weight` variable indicates how often each
+  included only once, and a new `weight` column indicates how often each
   combination appears in the original data.
 
 * `format_ci()` gains a `separator` argument, to customize the separator for
