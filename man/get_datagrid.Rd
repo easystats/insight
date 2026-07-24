@@ -17,6 +17,7 @@ get_datagrid(x, ...)
   numerics = "mean",
   length = 10,
   range = "range",
+  weighted = FALSE,
   preserve_range = FALSE,
   protect_integers = TRUE,
   digits = 3,
@@ -40,6 +41,7 @@ get_datagrid(x, ...)
   by = "all",
   factors = "reference",
   numerics = "mean",
+  weighted = FALSE,
   preserve_range = TRUE,
   reference = x,
   include_smooth = TRUE,
@@ -196,6 +198,17 @@ case, \code{range} must be of same length as numeric target variables. If
 \code{range} is a named vector, values are matched against the names of the
 target variables.}
 
+\item{weighted}{Either a logical, and if \code{TRUE}, creates a "weighted" data
+grid, which is a smaller representation of a large data grid. Multiple unique
+combinations of (categorical) predictors are included only once (i.e. one row
+per unique combination of predictors specified in \code{by}), and a new \code{weight}
+variable is included that indicates how often each combination appears in the
+original data. \code{weighted} can also be a name of an existing weighting
+variable in the data. In this case, the returned \code{weight} variable is
+multiplied by the sum of weights for all observations that are identified by
+the unique combination of predictors, thus, \code{weight} represents a "weighted"
+weight-variable.}
+
 \item{preserve_range}{In the case of combinations between numeric variables
 and factors, setting \code{preserve_range = TRUE} will drop the observations
 where the value of the numeric variable is originally not present in the
@@ -350,6 +363,18 @@ get_datagrid(
 )
 
 
+# Weighted data grid ------------------------------------------------------
+data(penguins)
+# Adelie appears 152 times in the data, Chinstrap 68 times and Gentoo 124
+# times. Instead of a three-row data grid, which assumes that each species
+# is present equally often in the data, we now could "weight" each row
+# according to their actual frequency in the data
+get_datagrid(penguins, "species", weighted = TRUE)
+
+# numeric variables are included, but set to their mean value
+get_datagrid(penguins, c("species", "island", "body_mass"), weighted = TRUE)
+
+
 # With models ===============================================================
 
 # Fit a linear regression
@@ -367,6 +392,18 @@ plot(data$Sepal.Width, data$Sepal.Length,
   col = data$Petal.Length,
   main = "Relationship at -1 SD, Mean, and + 1 SD of Petal.Length"
 )
+
+# weighted data grid
+model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
+# when `by` is not specified, all predictors are used to create a weighted grid
+get_datagrid(model, weighted = TRUE)
+
+# weighted data grid
+d <- iris
+d$weights <- abs(rnorm(nrow(d), 1, 0.2))
+
+model <- lm(Sepal.Length ~ Species + Sepal.Width, data = d, weights = weights)
+get_datagrid(model, "Species", weighted = "weights")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
