@@ -728,6 +728,15 @@ get_datagrid.default <- function(
   # variables right now
   if (!is.null(weighted) && !isFALSE(weighted)) {
     data <- get_data(x)
+    # handle including response
+    if (isFALSE(include_response)) {
+      response <- find_response(x, combine = FALSE)
+      data <- data[!colnames(data) %in% response]
+    }
+    # check if `by` is `"all"`
+    if (is.null(by) || all(by == "all")) {
+      by <- colnames(data)
+    }
     # check if user wants to include random effects, and if so, add them to `by`
     if (include_random) {
       by <- unique(c(by, find_random(x, flatten = TRUE, split_nested = TRUE)))
