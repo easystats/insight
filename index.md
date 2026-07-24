@@ -40,10 +40,7 @@ version is available on R-universe (from *rOpenSci*) or GitHub.
 
 Once you have downloaded the package, you can then load it using:
 
-``` r
-
-library("insight")
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`"insight"`](https://easystats.github.io/insight/)`)`
 
 > **Tip**
 >
@@ -197,34 +194,7 @@ In this example, we fit a simple linear model, but it could be replaced
 by (m)any other models, so this approach is “universal” and applies to
 many different model objects.
 
-``` r
-
-library(insight)
-m <- lm(
-  Sepal.Length ~ Species + Petal.Width + Sepal.Width,
-  data = iris
-)
-
-dat <- get_data(m)
-pred <- find_predictors(m, flatten = TRUE)
-
-l <- lapply(pred, function(x) {
-  if (is.numeric(dat[[x]])) {
-    mean(dat[[x]])
-  } else {
-    unique(dat[[x]])
-  }
-})
-
-names(l) <- pred
-l <- as.data.frame(l)
-
-cbind(l, predictions = predict(m, newdata = l))
-#>      Species Petal.Width Sepal.Width predictions
-#> 1     setosa         1.2         3.1         5.1
-#> 2 versicolor         1.2         3.1         6.1
-#> 3  virginica         1.2         3.1         6.3
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`insight`](https://easystats.github.io/insight/)`)`` ``m`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(`` `` ``Sepal.Length`` ``~`` ``Species`` ``+`` ``Petal.Width`` ``+`` ``Sepal.Width``,`` `` data ``=`` ``iris`` ``)`` `` ``dat`` ``<-`` `[`get_data`](https://easystats.github.io/insight/reference/get_data.md)`(``m``)`` ``pred`` ``<-`` `[`find_predictors`](https://easystats.github.io/insight/reference/find_predictors.md)`(``m``, flatten ``=`` ``TRUE``)`` `` ``l`` ``<-`` `[`lapply`](https://rdrr.io/r/base/lapply.html)`(``pred``, ``function``(``x``)`` ``{`` `` ``if`` ``(`[`is.numeric`](https://rdrr.io/r/base/numeric.html)`(``dat``[[``x``]``]``)``)`` ``{`` `` `[`mean`](https://rdrr.io/r/base/mean.html)`(``dat``[[``x``]``]``)`` `` ``}`` ``else`` ``{`` `` `[`unique`](https://rdrr.io/r/base/unique.html)`(``dat``[[``x``]``]``)`` `` ``}`` ``}``)`` `` `[`names`](https://rdrr.io/r/base/names.html)`(``l``)`` ``<-`` ``pred`` ``l`` ``<-`` `[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``l``)`` `` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``l``, predictions ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m``, newdata ``=`` ``l``)``)`` ``#> Species Petal.Width Sepal.Width predictions`` ``#> 1 setosa 1.2 3.1 5.1`` ``#> 2 versicolor 1.2 3.1 6.1`` ``#> 3 virginica 1.2 3.1 6.3`
 
 #### Printing Model Coefficients
 
@@ -236,25 +206,7 @@ The first approach uses the functions that are available for some, but
 obviously not for all models, to access the information about model
 coefficients.
 
-``` r
-
-print_params <- function(model) {
-  paste0(
-    "My parameters are ",
-    toString(row.names(summary(model)$coefficients)),
-    ", thank you for your attention!"
-  )
-}
-
-m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
-print_params(m1)
-#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
-
-# obviously, something is missing in the output
-m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
-print_params(m2)
-#> [1] "My parameters are , thank you for your attention!"
-```
+`print_params`` ``<-`` ``function``(``model``)`` ``{`` `` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`` `` ``"My parameters are "``,`` `` `[`toString`](https://rdrr.io/r/base/toString.html)`(`[`row.names`](https://rdrr.io/r/base/row.names.html)`(`[`summary`](https://rdrr.io/r/base/summary.html)`(``model``)``$``coefficients``)``)``,`` `` ``", thank you for your attention!"`` `` ``)`` ``}`` `` ``m1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Width``, data ``=`` ``iris``)`` ``print_params``(``m1``)`` ``#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"`` `` ``# obviously, something is missing in the output`` ``m2`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``Sepal.Length`` ``~`` ``Petal.Width`` ``+`` ``s``(``Petal.Length``)``, data ``=`` ``iris``)`` ``print_params``(``m2``)`` ``#> [1] "My parameters are , thank you for your attention!"`
 
 As we can see, the function fails for *gam*-models. As the access to
 models depends on the type of the model in the R ecosystem, we would
@@ -262,24 +214,7 @@ need to create specific functions for all models types. With
 **insight**, users can write a function without having to worry about
 the model type.
 
-``` r
-
-print_params <- function(model) {
-  paste0(
-    "My parameters are ",
-    toString(insight::find_parameters(model, flatten = TRUE)),
-    ", thank you for your attention!"
-  )
-}
-
-m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
-print_params(m1)
-#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
-
-m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
-print_params(m2)
-#> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"
-```
+`print_params`` ``<-`` ``function``(``model``)`` ``{`` `` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`` `` ``"My parameters are "``,`` `` `[`toString`](https://rdrr.io/r/base/toString.html)`(``insight``::`[`find_parameters`](https://easystats.github.io/insight/reference/find_parameters.md)`(``model``, flatten ``=`` ``TRUE``)``)``,`` `` ``", thank you for your attention!"`` `` ``)`` ``}`` `` ``m1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Width``, data ``=`` ``iris``)`` ``print_params``(``m1``)`` ``#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"`` `` ``m2`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``Sepal.Length`` ``~`` ``Petal.Width`` ``+`` ``s``(``Petal.Length``)``, data ``=`` ``iris``)`` ``print_params``(``m2``)`` ``#> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"`
 
 ## Contributing and Support
 
@@ -293,136 +228,7 @@ email or also file an issue.
 
 Currently, about 251 model classes are supported.
 
-``` r
-
-supported_models()
-#>   [1] "aareg"                   "afex_aov"               
-#>   [3] "AKP"                     "Anova.mlm"              
-#>   [5] "anova.rms"               "aov"                    
-#>   [7] "aovlist"                 "Arima"                  
-#>   [9] "asym"                    "averaging"              
-#>  [11] "bamlss"                  "bamlss.frame"           
-#>  [13] "bayesQR"                 "bayesx"                 
-#>  [15] "BBmm"                    "BBreg"                  
-#>  [17] "bcplm"                   "betamfx"                
-#>  [19] "betaor"                  "betareg"                
-#>  [21] "BFBayesFactor"           "bfsl"                   
-#>  [23] "BGGM"                    "bife"                   
-#>  [25] "bifeAPEs"                "bigglm"                 
-#>  [27] "biglm"                   "blavaan"                
-#>  [29] "blrm"                    "bracl"                  
-#>  [31] "brglm"                   "brmsfit"                
-#>  [33] "brmultinom"              "btergm"                 
-#>  [35] "censReg"                 "cgam"                   
-#>  [37] "cgamm"                   "cglm"                   
-#>  [39] "clm"                     "clm2"                   
-#>  [41] "clmm"                    "clmm2"                  
-#>  [43] "clogit"                  "coeftest"               
-#>  [45] "complmrob"               "confusionMatrix"        
-#>  [47] "coxme"                   "coxph"                  
-#>  [49] "coxph.penal"             "coxph_weightit"         
-#>  [51] "coxr"                    "cpglm"                  
-#>  [53] "cpglmm"                  "crch"                   
-#>  [55] "crq"                     "crqs"                   
-#>  [57] "crr"                     "dep.effect"             
-#>  [59] "DirichletRegModel"       "draws"                  
-#>  [61] "drc"                     "eglm"                   
-#>  [63] "elm"                     "emmGrid"                
-#>  [65] "epi.2by2"                "ergm"                   
-#>  [67] "estimate_contrasts"      "estimate_means"         
-#>  [69] "estimate_slopes"         "externVar"              
-#>  [71] "externX"                 "fdm"                    
-#>  [73] "feglm"                   "feis"                   
-#>  [75] "felm"                    "fitdistr"               
-#>  [77] "fixest"                  "flac"                   
-#>  [79] "flexsurvreg"             "flic"                   
-#>  [81] "gam"                     "Gam"                    
-#>  [83] "gamlss"                  "gamm"                   
-#>  [85] "gamm4"                   "garch"                  
-#>  [87] "gbm"                     "gee"                    
-#>  [89] "geeglm"                  "ggcomparisons"          
-#>  [91] "glht"                    "glimML"                 
-#>  [93] "glm"                     "Glm"                    
-#>  [95] "glm_weightit"            "glmerMod"               
-#>  [97] "glmgee"                  "glmm"                   
-#>  [99] "glmmadmb"                "glmmPQL"                
-#> [101] "glmmTMB"                 "glmrob"                 
-#> [103] "glmRob"                  "glmx"                   
-#> [105] "gls"                     "gmnl"                   
-#> [107] "hglm"                    "HLfit"                  
-#> [109] "htest"                   "hurdle"                 
-#> [111] "iv_robust"               "ivFixed"                
-#> [113] "ivprobit"                "ivreg"                  
-#> [115] "joint"                   "lavaan"                 
-#> [117] "lcmm"                    "lm"                     
-#> [119] "lm_robust"               "lme"                    
-#> [121] "lmerMod"                 "lmerModLmerTest"        
-#> [123] "lmodel2"                 "lmrob"                  
-#> [125] "lmRob"                   "logistf"                
-#> [127] "logitmfx"                "logitor"                
-#> [129] "logitr"                  "LORgee"                 
-#> [131] "lqm"                     "lqmm"                   
-#> [133] "lrm"                     "manova"                 
-#> [135] "MANOVA"                  "marginaleffects"        
-#> [137] "marginaleffects.summary" "margins"                
-#> [139] "maxLik"                  "mblogit"                
-#> [141] "mclogit"                 "mcmc"                   
-#> [143] "mcmc.list"               "MCMCglmm"               
-#> [145] "mcp1"                    "mcp12"                  
-#> [147] "mcp2"                    "med1way"                
-#> [149] "mediate"                 "merMod"                 
-#> [151] "merModList"              "meta_bma"               
-#> [153] "meta_fixed"              "meta_random"            
-#> [155] "metaplus"                "mhurdle"                
-#> [157] "mipo"                    "mira"                   
-#> [159] "mixed"                   "MixMod"                 
-#> [161] "mixor"                   "mjoint"                 
-#> [163] "mle"                     "mle2"                   
-#> [165] "mlm"                     "mlogit"                 
-#> [167] "mmclogit"                "mmlogit"                
-#> [169] "mmrm"                    "mmrm_fit"               
-#> [171] "mmrm_tmb"                "model_fit"              
-#> [173] "multinom"                "multinom_weightit"      
-#> [175] "mvord"                   "negbinirr"              
-#> [177] "negbinmfx"               "nestedLogit"            
-#> [179] "ols"                     "onesampb"               
-#> [181] "oohbchoice"              "ordinal_weightit"       
-#> [183] "orm"                     "pgmm"                   
-#> [185] "phyloglm"                "phylolm"                
-#> [187] "plm"                     "PMCMR"                  
-#> [189] "poissonirr"              "poissonmfx"             
-#> [191] "polr"                    "probitmfx"              
-#> [193] "psm"                     "Rchoice"                
-#> [195] "ridgelm"                 "riskRegression"         
-#> [197] "rjags"                   "rlm"                    
-#> [199] "rlmerMod"                "RM"                     
-#> [201] "rma"                     "rma.uni"                
-#> [203] "rms"                     "robmixglm"              
-#> [205] "robtab"                  "rq"                     
-#> [207] "rqs"                     "rqss"                   
-#> [209] "rvar"                    "Sarlm"                  
-#> [211] "scam"                    "sdmTMB"                 
-#> [213] "selection"               "sem"                    
-#> [215] "SemiParBIV"              "semLm"                  
-#> [217] "semLme"                  "seqanova.svyglm"        
-#> [219] "serp"                    "slm"                    
-#> [221] "speedglm"                "speedlm"                
-#> [223] "stanfit"                 "stanmvreg"              
-#> [225] "stanreg"                 "summary.lm"             
-#> [227] "survfit"                 "survreg"                
-#> [229] "svy_vglm"                "svy2lme"                
-#> [231] "svychisq"                "svycoxph"               
-#> [233] "svyglm"                  "svyolr"                 
-#> [235] "svysurvreg"              "systemfit"              
-#> [237] "t1way"                   "tobit"                  
-#> [239] "trimcibt"                "truncreg"               
-#> [241] "vgam"                    "vglm"                   
-#> [243] "wbgee"                   "wblm"                   
-#> [245] "wbm"                     "wmcpAKP"                
-#> [247] "yuen"                    "yuend"                  
-#> [249] "zcpglm"                  "zeroinfl"               
-#> [251] "zerotrunc"
-```
+[`supported_models`](https://easystats.github.io/insight/reference/is_model_supported.md)`(``)`` ``#> [1] "aareg" "afex_aov" `` ``#> [3] "AKP" "Anova.mlm" `` ``#> [5] "anova.rms" "aov" `` ``#> [7] "aovlist" "Arima" `` ``#> [9] "asym" "averaging" `` ``#> [11] "bamlss" "bamlss.frame" `` ``#> [13] "bayesQR" "bayesx" `` ``#> [15] "BBmm" "BBreg" `` ``#> [17] "bcplm" "betamfx" `` ``#> [19] "betaor" "betareg" `` ``#> [21] "BFBayesFactor" "bfsl" `` ``#> [23] "BGGM" "bife" `` ``#> [25] "bifeAPEs" "bigglm" `` ``#> [27] "biglm" "blavaan" `` ``#> [29] "blrm" "bracl" `` ``#> [31] "brglm" "brmsfit" `` ``#> [33] "brmultinom" "btergm" `` ``#> [35] "censReg" "cgam" `` ``#> [37] "cgamm" "cglm" `` ``#> [39] "clm" "clm2" `` ``#> [41] "clmm" "clmm2" `` ``#> [43] "clogit" "coeftest" `` ``#> [45] "complmrob" "confusionMatrix" `` ``#> [47] "coxme" "coxph" `` ``#> [49] "coxph.penal" "coxph_weightit" `` ``#> [51] "coxr" "cpglm" `` ``#> [53] "cpglmm" "crch" `` ``#> [55] "crq" "crqs" `` ``#> [57] "crr" "dep.effect" `` ``#> [59] "DirichletRegModel" "draws" `` ``#> [61] "drc" "eglm" `` ``#> [63] "elm" "emmGrid" `` ``#> [65] "epi.2by2" "ergm" `` ``#> [67] "estimate_contrasts" "estimate_means" `` ``#> [69] "estimate_slopes" "externVar" `` ``#> [71] "externX" "fdm" `` ``#> [73] "feglm" "feis" `` ``#> [75] "felm" "fitdistr" `` ``#> [77] "fixest" "flac" `` ``#> [79] "flexsurvreg" "flic" `` ``#> [81] "gam" "Gam" `` ``#> [83] "gamlss" "gamm" `` ``#> [85] "gamm4" "garch" `` ``#> [87] "gbm" "gee" `` ``#> [89] "geeglm" "ggcomparisons" `` ``#> [91] "glht" "glimML" `` ``#> [93] "glm" "Glm" `` ``#> [95] "glm_weightit" "glmerMod" `` ``#> [97] "glmgee" "glmm" `` ``#> [99] "glmmadmb" "glmmPQL" `` ``#> [101] "glmmTMB" "glmrob" `` ``#> [103] "glmRob" "glmx" `` ``#> [105] "gls" "gmnl" `` ``#> [107] "hglm" "HLfit" `` ``#> [109] "htest" "hurdle" `` ``#> [111] "iv_robust" "ivFixed" `` ``#> [113] "ivprobit" "ivreg" `` ``#> [115] "joint" "lavaan" `` ``#> [117] "lcmm" "lm" `` ``#> [119] "lm_robust" "lme" `` ``#> [121] "lmerMod" "lmerModLmerTest" `` ``#> [123] "lmodel2" "lmrob" `` ``#> [125] "lmRob" "logistf" `` ``#> [127] "logitmfx" "logitor" `` ``#> [129] "logitr" "LORgee" `` ``#> [131] "lqm" "lqmm" `` ``#> [133] "lrm" "manova" `` ``#> [135] "MANOVA" "marginaleffects" `` ``#> [137] "marginaleffects.summary" "margins" `` ``#> [139] "maxLik" "mblogit" `` ``#> [141] "mclogit" "mcmc" `` ``#> [143] "mcmc.list" "MCMCglmm" `` ``#> [145] "mcp1" "mcp12" `` ``#> [147] "mcp2" "med1way" `` ``#> [149] "mediate" "merMod" `` ``#> [151] "merModList" "meta_bma" `` ``#> [153] "meta_fixed" "meta_random" `` ``#> [155] "metaplus" "mhurdle" `` ``#> [157] "mipo" "mira" `` ``#> [159] "mixed" "MixMod" `` ``#> [161] "mixor" "mjoint" `` ``#> [163] "mle" "mle2" `` ``#> [165] "mlm" "mlogit" `` ``#> [167] "mmclogit" "mmlogit" `` ``#> [169] "mmrm" "mmrm_fit" `` ``#> [171] "mmrm_tmb" "model_fit" `` ``#> [173] "multinom" "multinom_weightit" `` ``#> [175] "mvord" "negbinirr" `` ``#> [177] "negbinmfx" "nestedLogit" `` ``#> [179] "ols" "onesampb" `` ``#> [181] "oohbchoice" "ordinal_weightit" `` ``#> [183] "orm" "pgmm" `` ``#> [185] "phyloglm" "phylolm" `` ``#> [187] "plm" "PMCMR" `` ``#> [189] "poissonirr" "poissonmfx" `` ``#> [191] "polr" "probitmfx" `` ``#> [193] "psm" "Rchoice" `` ``#> [195] "ridgelm" "riskRegression" `` ``#> [197] "rjags" "rlm" `` ``#> [199] "rlmerMod" "RM" `` ``#> [201] "rma" "rma.uni" `` ``#> [203] "rms" "robmixglm" `` ``#> [205] "robtab" "rq" `` ``#> [207] "rqs" "rqss" `` ``#> [209] "rvar" "Sarlm" `` ``#> [211] "scam" "sdmTMB" `` ``#> [213] "selection" "sem" `` ``#> [215] "SemiParBIV" "semLm" `` ``#> [217] "semLme" "seqanova.svyglm" `` ``#> [219] "serp" "slm" `` ``#> [221] "speedglm" "speedlm" `` ``#> [223] "stanfit" "stanmvreg" `` ``#> [225] "stanreg" "summary.lm" `` ``#> [227] "survfit" "survreg" `` ``#> [229] "svy_vglm" "svy2lme" `` ``#> [231] "svychisq" "svycoxph" `` ``#> [233] "svyglm" "svyolr" `` ``#> [235] "svysurvreg" "systemfit" `` ``#> [237] "t1way" "tobit" `` ``#> [239] "trimcibt" "truncreg" `` ``#> [241] "vgam" "vglm" `` ``#> [243] "wbgee" "wblm" `` ``#> [245] "wbm" "wmcpAKP" `` ``#> [247] "yuen" "yuend" `` ``#> [249] "zcpglm" "zeroinfl" `` ``#> [251] "zerotrunc"`
 
 - **Didn’t find a model?** [File an
   issue](https://github.com/easystats/insight/issues) and request

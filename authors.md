@@ -47,13 +47,8 @@ to Access Information from Model Objects in R.” *Journal of Open Source
 Software*, **4**(38), 1412.
 [doi:10.21105/joss.01412](https://doi.org/10.21105/joss.01412).
 
-    @Article{,
-      title = {{insight}: A Unified Interface to Access Information from Model Objects in {R}.},
-      volume = {4},
-      doi = {10.21105/joss.01412},
-      number = {38},
-      journal = {Journal of Open Source Software},
-      author = {Daniel Lüdecke and Philip Waggoner and Dominique Makowski},
-      year = {2019},
-      pages = {1412},
-    }
+@Article{, title = {{insight}: A Unified Interface to Access Information
+from Model Objects in {R}.}, volume = {4}, doi = {10.21105/joss.01412},
+number = {38}, journal = {Journal of Open Source Software}, author =
+{Daniel Lüdecke and Philip Waggoner and Dominique Makowski}, year =
+{2019}, pages = {1412}, }

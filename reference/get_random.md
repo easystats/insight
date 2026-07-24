@@ -36,14 +36,13 @@ m <- lmer(
   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
   data = sleepstudy
 )
-#> boundary (singular) fit: see help('isSingular')
 
 head(get_random(m))
 #>   mysubgrp mygrp Subject
-#> 1        7     2     308
-#> 2       21     1     308
-#> 3        7     4     308
-#> 4       24     1     308
-#> 5       17     2     308
-#> 6       20     3     308
+#> 1       22     4     308
+#> 2       22     4     308
+#> 3        8     3     308
+#> 4        6     4     308
+#> 5       12     5     308
+#> 6       26     1     308
 ```

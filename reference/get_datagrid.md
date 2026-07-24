@@ -26,6 +26,7 @@ get_datagrid(
   numerics = "mean",
   length = 10,
   range = "range",
+  weighted = FALSE,
   preserve_range = FALSE,
   protect_integers = TRUE,
   digits = 3,
@@ -52,6 +53,7 @@ get_datagrid(
   by = "all",
   factors = "reference",
   numerics = "mean",
+  weighted = FALSE,
   preserve_range = TRUE,
   reference = x,
   include_smooth = TRUE,
@@ -248,6 +250,19 @@ get_datagrid(
   this case, `range` must be of same length as numeric target variables.
   If `range` is a named vector, values are matched against the names of
   the target variables.
+
+- weighted:
+
+  Either a logical, and if `TRUE`, creates a "weighted" data grid, which
+  is a smaller representation of a large data grid. Multiple unique
+  combinations of (categorical) predictors are included only once (i.e.
+  one row per unique combination of predictors specified in `by`), and a
+  new `weight` variable is included that indicates how often each
+  combination appears in the original data. `weighted` can also be a
+  name of an existing weighting variable in the data. In this case, the
+  returned `weight` variable is multiplied by the sum of weights for all
+  observations that are identified by the unique combination of
+  predictors, thus, `weight` represents a "weighted" weight-variable.
 
 - preserve_range:
 
@@ -658,6 +673,28 @@ get_datagrid(
 #> 6            3 versicolor    3.057333        3.758    1.199333
 
 
+# Weighted data grid ------------------------------------------------------
+data(penguins)
+# Adelie appears 152 times in the data, Chinstrap 68 times and Gentoo 124
+# times. Instead of a three-row data grid, which assumes that each species
+# is present equally often in the data, we now could "weight" each row
+# according to their actual frequency in the data
+get_datagrid(penguins, "species", weighted = TRUE)
+#>     species weight
+#> 1    Adelie    152
+#> 2 Chinstrap     68
+#> 3    Gentoo    124
+
+# numeric variables are included, but set to their mean value
+get_datagrid(penguins, c("species", "island", "body_mass"), weighted = TRUE)
+#>     species    island weight body_mass
+#> 1    Adelie    Biscoe     44  4201.754
+#> 2    Gentoo    Biscoe    124  4201.754
+#> 3    Adelie     Dream     56  4201.754
+#> 4 Chinstrap     Dream     68  4201.754
+#> 5    Adelie Torgersen     52  4201.754
+
+
 # With models ===============================================================
 
 # Fit a linear regression
@@ -675,4 +712,25 @@ plot(data$Sepal.Width, data$Sepal.Length,
   col = data$Petal.Length,
   main = "Relationship at -1 SD, Mean, and + 1 SD of Petal.Length"
 )
+
+
+# weighted data grid
+model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
+# when `by` is not specified, all predictors are used to create a weighted grid
+get_datagrid(model, weighted = TRUE)
+#>      Species weight Sepal.Width
+#> 1     setosa     50       3.057
+#> 2 versicolor     50       3.057
+#> 3  virginica     50       3.057
+
+# weighted data grid
+d <- iris
+d$weights <- abs(rnorm(nrow(d), 1, 0.2))
+
+model <- lm(Sepal.Length ~ Species + Sepal.Width, data = d, weights = weights)
+get_datagrid(model, "Species", weighted = "weights")
+#>      Species   weight
+#> 1     setosa 49.81076
+#> 2 versicolor 49.82967
+#> 3  virginica 47.33075
 ```

@@ -124,82 +124,9 @@ or
 Here are some examples that demonstrate the differences of each
 function:
 
-``` r
+[`library`](https://rdrr.io/r/base/library.html)`(`[`insight`](https://easystats.github.io/insight/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`lme4`](https://github.com/lme4/lme4/)`)`` `[`data`](https://rdrr.io/r/utils/data.html)`(``sleepstudy``)`` ``sleepstudy``$``mygrp`` ``<-`` `[`sample.int`](https://rdrr.io/r/base/sample.html)`(``5``, size ``=`` ``180``, replace ``=`` ``TRUE``)`` ``sleepstudy``$``mysubgrp`` ``<-`` ``NA`` ``sleepstudy``$``Weeks`` ``<-`` ``sleepstudy``$``Days`` ``/`` ``7`` ``sleepstudy``$``cat`` ``<-`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(`[`sample`](https://rdrr.io/r/base/sample.html)`(``letters``[``1``:``4``]``, `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``sleepstudy``)``, replace ``=`` ``TRUE``)``)`` `` ``for`` ``(``i`` ``in`` ``1``:``5``)`` ``{`` `` ``filter_group`` ``<-`` ``sleepstudy``$``mygrp`` ``==`` ``i`` `` ``sleepstudy``$``mysubgrp``[``filter_group``]`` ``<-`` `` `[`sample.int`](https://rdrr.io/r/base/sample.html)`(``30``, size ``=`` `[`sum`](https://rdrr.io/r/base/sum.html)`(``filter_group``)``, replace ``=`` ``TRUE``)`` ``}`` `` ``model`` ``<-`` `[`suppressWarnings`](https://rdrr.io/r/base/warning.html)`(`[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(`` `` ``Reaction`` ``~`` ``Days`` ``+`` `[`I`](https://rdrr.io/r/base/AsIs.html)`(``Days``^``2``)`` ``+`` `[`log1p`](https://rdrr.io/r/base/Log.html)`(``Weeks``)`` ``+`` ``cat`` ``+`` `` ``(``1`` ``|`` ``mygrp`` ``/`` ``mysubgrp``)`` ``+`` `` ``(``1`` ``+`` ``Days`` ``|`` ``Subject``)``,`` `` data ``=`` ``sleepstudy`` ``)``)`
 
-library(insight)
-library(lme4)
-data(sleepstudy)
-sleepstudy$mygrp <- sample.int(5, size = 180, replace = TRUE)
-sleepstudy$mysubgrp <- NA
-sleepstudy$Weeks <- sleepstudy$Days / 7
-sleepstudy$cat <- as.factor(sample(letters[1:4], nrow(sleepstudy), replace = TRUE))
-
-for (i in 1:5) {
-  filter_group <- sleepstudy$mygrp == i
-  sleepstudy$mysubgrp[filter_group] <-
-    sample.int(30, size = sum(filter_group), replace = TRUE)
-}
-
-model <- suppressWarnings(lmer(
-  Reaction ~ Days + I(Days^2) + log1p(Weeks) + cat +
-    (1 | mygrp / mysubgrp) +
-    (1 + Days | Subject),
-  data = sleepstudy
-))
-```
-
-``` r
-
-# find the response variable
-find_response(model)
-#> [1] "Reaction"
-
-# find all predictors, fixed part by default
-find_predictors(model)
-#> $conditional
-#> [1] "Days"  "Weeks" "cat"
-
-# find random effects, grouping factors only
-find_random(model)
-#> $random
-#> [1] "mysubgrp:mygrp" "mygrp"          "Subject"
-
-# find random slopes
-find_random_slopes(model)
-#> $random
-#> [1] "Days"
-
-# find all predictors, including random effects
-find_predictors(model, effects = "all", component = "all")
-#> $conditional
-#> [1] "Days"  "Weeks" "cat"  
-#> 
-#> $random
-#> [1] "mysubgrp" "mygrp"    "Subject"
-
-# find all terms, including response and random effects
-# this is essentially the same as the previous example plus response
-find_terms(model)
-#> $response
-#> [1] "Reaction"
-#> 
-#> $conditional
-#> [1] "Days"         "I(Days^2)"    "log1p(Weeks)" "cat"         
-#> 
-#> $random
-#> [1] "mysubgrp" "mygrp"    "Days"     "Subject"
-
-# find all variables, i.e. also quadratic or log-transformed predictors
-find_variables(model)
-#> $response
-#> [1] "Reaction"
-#> 
-#> $conditional
-#> [1] "Days"  "Weeks" "cat"  
-#> 
-#> $random
-#> [1] "mysubgrp" "mygrp"    "Subject"
-```
+`# find the response variable`` `[`find_response`](https://easystats.github.io/insight/reference/find_response.md)`(``model``)`` ``#> [1] "Reaction"`` `` ``# find all predictors, fixed part by default`` `[`find_predictors`](https://easystats.github.io/insight/reference/find_predictors.md)`(``model``)`` ``#> $conditional`` ``#> [1] "Days" "Weeks" "cat"`` `` ``# find random effects, grouping factors only`` `[`find_random`](https://easystats.github.io/insight/reference/find_random.md)`(``model``)`` ``#> $random`` ``#> [1] "mysubgrp:mygrp" "mygrp" "Subject"`` `` ``# find random slopes`` `[`find_random_slopes`](https://easystats.github.io/insight/reference/find_random_slopes.md)`(``model``)`` ``#> $random`` ``#> [1] "Days"`` `` ``# find all predictors, including random effects`` `[`find_predictors`](https://easystats.github.io/insight/reference/find_predictors.md)`(``model``, effects ``=`` ``"all"``, component ``=`` ``"all"``)`` ``#> $conditional`` ``#> [1] "Days" "Weeks" "cat" `` ``#> `` ``#> $random`` ``#> [1] "mysubgrp" "mygrp" "Subject"`` `` ``# find all terms, including response and random effects`` ``# this is essentially the same as the previous example plus response`` `[`find_terms`](https://easystats.github.io/insight/reference/find_terms.md)`(``model``)`` ``#> $response`` ``#> [1] "Reaction"`` ``#> `` ``#> $conditional`` ``#> [1] "Days" "I(Days^2)" "log1p(Weeks)" "cat" `` ``#> `` ``#> $random`` ``#> [1] "mysubgrp" "mygrp" "Days" "Subject"`` `` ``# find all variables, i.e. also quadratic or log-transformed predictors`` `[`find_variables`](https://easystats.github.io/insight/reference/find_variables.md)`(``model``)`` ``#> $response`` ``#> [1] "Reaction"`` ``#> `` ``#> $conditional`` ``#> [1] "Days" "Weeks" "cat" `` ``#> `` ``#> $random`` ``#> [1] "mysubgrp" "mygrp" "Subject"`
 
 Finally, there is
 [`find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.md).
@@ -207,24 +134,7 @@ Parameters are also known as *coefficients*, and
 [`find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.md)
 does exactly that: returns the model coefficients.
 
-``` r
-
-# find model parameters, i.e. coefficients
-find_parameters(model)
-#> $conditional
-#> [1] "(Intercept)"  "Days"         "I(Days^2)"    "log1p(Weeks)" "catb"        
-#> [6] "catc"         "catd"        
-#> 
-#> $random
-#> $random$`mysubgrp:mygrp`
-#> [1] "(Intercept)"
-#> 
-#> $random$Subject
-#> [1] "(Intercept)" "Days"       
-#> 
-#> $random$mygrp
-#> [1] "(Intercept)"
-```
+`# find model parameters, i.e. coefficients`` `[`find_parameters`](https://easystats.github.io/insight/reference/find_parameters.md)`(``model``)`` ``#> $conditional`` ``#> [1] "(Intercept)" "Days" "I(Days^2)" "log1p(Weeks)" "catb" `` ``#> [6] "catc" "catd" `` ``#> `` ``#> $random`` ``` #> $random$`mysubgrp:mygrp` ``` ``#> [1] "(Intercept)"`` ``#> `` ``#> $random$Subject`` ``#> [1] "(Intercept)" "Days" `` ``#> `` ``#> $random$mygrp`` ``#> [1] "(Intercept)"`
 
 ## Examples of Use Cases in R
 
@@ -253,33 +163,7 @@ In this example, we fit a simple linear model, but it could be replaced
 by (m)any other models, so this approach is “universal” and applies to
 many different model objects.
 
-``` r
-
-library(insight)
-m <- lm(
-  Sepal.Length ~ Species + Petal.Width + Sepal.Width, 
-  data = iris
-)
-
-dat <- get_data(m)
-pred <- find_predictors(m, flatten = TRUE)
-
-l <- lapply(pred, function(x) {
-  if (is.numeric(dat[[x]]))
-    mean(dat[[x]])
-  else
-    unique(dat[[x]])
-})
-
-names(l) <- pred
-l <- as.data.frame(l)
-
-cbind(l, predictions = predict(m, newdata = l))
-#>      Species Petal.Width Sepal.Width predictions
-#> 1     setosa    1.199333    3.057333    5.101427
-#> 2 versicolor    1.199333    3.057333    6.089557
-#> 3  virginica    1.199333    3.057333    6.339015
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`insight`](https://easystats.github.io/insight/)`)`` ``m`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(`` `` ``Sepal.Length`` ``~`` ``Species`` ``+`` ``Petal.Width`` ``+`` ``Sepal.Width``, `` `` data ``=`` ``iris`` ``)`` `` ``dat`` ``<-`` `[`get_data`](https://easystats.github.io/insight/reference/get_data.md)`(``m``)`` ``pred`` ``<-`` `[`find_predictors`](https://easystats.github.io/insight/reference/find_predictors.md)`(``m``, flatten ``=`` ``TRUE``)`` `` ``l`` ``<-`` `[`lapply`](https://rdrr.io/r/base/lapply.html)`(``pred``, ``function``(``x``)`` ``{`` `` ``if`` ``(`[`is.numeric`](https://rdrr.io/r/base/numeric.html)`(``dat``[[``x``]``]``)``)`` `` `[`mean`](https://rdrr.io/r/base/mean.html)`(``dat``[[``x``]``]``)`` `` ``else`` `` `[`unique`](https://rdrr.io/r/base/unique.html)`(``dat``[[``x``]``]``)`` ``}``)`` `` `[`names`](https://rdrr.io/r/base/names.html)`(``l``)`` ``<-`` ``pred`` ``l`` ``<-`` `[`as.data.frame`](https://rdrr.io/r/base/as.data.frame.html)`(``l``)`` `` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``l``, predictions ``=`` `[`predict`](https://rdrr.io/r/stats/predict.html)`(``m``, newdata ``=`` ``l``)``)`` ``#> Species Petal.Width Sepal.Width predictions`` ``#> 1 setosa 1.199333 3.057333 5.101427`` ``#> 2 versicolor 1.199333 3.057333 6.089557`` ``#> 3 virginica 1.199333 3.057333 6.339015`
 
 ### Printing Model Coefficients
 
@@ -291,49 +175,14 @@ The first approach uses the functions that are available for some, but
 obviously not for all models, to access the information about model
 coefficients.
 
-``` r
-
-print_params <- function(model){
-  paste0(
-    "My parameters are ",
-    paste0(row.names(summary(model)$coefficients),  collapse = ", "),
-    ", thank you for your attention!"
-  )
-}
-
-m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
-print_params(m1)
-#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
-
-# obviously, something is missing in the output
-m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
-print_params(m2)
-#> [1] "My parameters are , thank you for your attention!"
-```
+`print_params`` ``<-`` ``function``(``model``)``{`` `` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`` `` ``"My parameters are "``,`` `` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`[`row.names`](https://rdrr.io/r/base/row.names.html)`(`[`summary`](https://rdrr.io/r/base/summary.html)`(``model``)``$``coefficients``)``, collapse ``=`` ``", "``)``,`` `` ``", thank you for your attention!"`` `` ``)`` ``}`` `` ``m1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Width``, data ``=`` ``iris``)`` ``print_params``(``m1``)`` ``#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"`` `` ``# obviously, something is missing in the output`` ``m2`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``Sepal.Length`` ``~`` ``Petal.Width`` ``+`` ``s``(``Petal.Length``)``, data ``=`` ``iris``)`` ``print_params``(``m2``)`` ``#> [1] "My parameters are , thank you for your attention!"`
 
 As we can see, the function fails for *gam*-models. As the access to
 models depends on the type of the model in the R ecosystem, we would
 need to create specific functions for all models types. With {insight},
 users can write a function without having to worry about the model type.
 
-``` r
-
-print_params <- function(model){
-  paste0(
-    "My parameters are ",
-    paste0(insight::find_parameters(model, flatten = TRUE),  collapse = ", "),
-    ", thank you for your attention!"
-  )
-}
-
-m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
-print_params(m1)
-#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"
-
-m2 <- mgcv::gam(Sepal.Length ~ Petal.Width + s(Petal.Length), data = iris)
-print_params(m2)
-#> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"
-```
+`print_params`` ``<-`` ``function``(``model``)``{`` `` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`` `` ``"My parameters are "``,`` `` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``insight``::`[`find_parameters`](https://easystats.github.io/insight/reference/find_parameters.md)`(``model``, flatten ``=`` ``TRUE``)``, collapse ``=`` ``", "``)``,`` `` ``", thank you for your attention!"`` `` ``)`` ``}`` `` ``m1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Width``, data ``=`` ``iris``)`` ``print_params``(``m1``)`` ``#> [1] "My parameters are (Intercept), Petal.Width, thank you for your attention!"`` `` ``m2`` ``<-`` ``mgcv``::`[`gam`](https://rdrr.io/pkg/mgcv/man/gam.html)`(``Sepal.Length`` ``~`` ``Petal.Width`` ``+`` ``s``(``Petal.Length``)``, data ``=`` ``iris``)`` ``print_params``(``m2``)`` ``#> [1] "My parameters are (Intercept), Petal.Width, s(Petal.Length), thank you for your attention!"`
 
 ## Examples of Use Cases in R packages
 
