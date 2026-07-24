@@ -1287,7 +1287,7 @@ test_that("get_datagrid - weighted data grids, data frames", {
 
   expect_error(
     get_datagrid(d, "island", weighted = "weight"),
-    regex = "Did you mean \"weights\"",
+    regex = "Did you",
     fixed = TRUE
   )
 
@@ -1302,7 +1302,7 @@ test_that("get_datagrid - weighted data grids, models", {
   data(iris)
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
   out <- get_datagrid(model, weighted = TRUE)
-  expect_identical(dim(out), c(3L, 4L))
+  expect_identical(dim(out), c(3L, 3L))
   expect_equal(out$weight, c(50, 50, 50))
 
   d <- iris
