@@ -1313,3 +1313,29 @@ test_that("get_datagrid - weighted data grids, models", {
   expect_identical(dim(out), c(3L, 2L))
   expect_equal(out$weight, c(50.34404, 51.46408, 47.461), tolerance = 1e-2)
 })
+
+
+test_that("get_datagrid - weighted data grids, mixed models", {
+  skip_if_not_installed("lme4")
+  data(penguins)
+  model <- lme4::lmer(body_mass ~ species + sex + (1 | island), data = penguins)
+
+  out <- get_datagrid(model, "species", weighted = TRUE)
+  expect_identical(dim(out), c(3L, 2L))
+  expect_equal(out$species, factor(c("Adelie", "Chinstrap", "Gentoo")))
+  expect_equal(out$weight, c(146, 68, 119))
+
+  out <- get_datagrid(model, "species", weighted = TRUE, include_random = TRUE)
+  expect_equal(
+    out,
+    data.frame(
+      species = factor(
+        c(1L, 3L, 1L, 2L, 1L),
+        labels = c("Adelie", "Chinstrap", "Gentoo")
+      ),
+      island = factor(c(1L, 1L, 2L, 2L, 3L), labels = c("Biscoe", "Dream", "Torgersen")),
+      weight = c(44, 119, 55, 68, 47)
+    ),
+    ignore_attr = TRUE
+  )
+})
