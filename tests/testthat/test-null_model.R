@@ -2,7 +2,7 @@ skip_if_not_installed("glmmTMB")
 skip_if_not_installed("lme4")
 skip_if_not_installed("TMB")
 
-test_that("null_model with offset", {
+test_that("null_model with offset-1", {
   data(mtcars)
   m1 <- suppressWarnings(lme4::glmer.nb(
     mpg ~ disp + (1 | cyl) + offset(log(wt)),
@@ -20,7 +20,7 @@ test_that("null_model with offset", {
 
 skip_on_os("mac") # error: FreeADFunObject
 
-test_that("null_model with offset", {
+test_that("null_model with offset-2", {
   data(mtcars)
   m1 <- suppressWarnings(glmmTMB::glmmTMB(
     mpg ~ disp + (1 | cyl) + offset(log(wt)),
@@ -136,7 +136,7 @@ test_that("null_model with non-mixed glmmTMB", {
 })
 
 
-test_that("null_model with offset", {
+test_that("null_model with offset-3", {
   set.seed(123)
   N <- 100 # Samples
   x <- runif(N, 0, 10) # Predictor
@@ -150,9 +150,12 @@ test_that("null_model with offset", {
 
   m1 <- glm(y ~ x + offset(logOff), data = d, family = "poisson")
   m2 <- glm(y ~ x, offset = logOff, data = d, family = "poisson")
+  m3 <- glm(y ~ offset(logOff) + x, data = d, family = "poisson")
   nm1 <- null_model(m1)
   nm2 <- null_model(m2)
+  nm3 <- null_model(m3)
   expect_equal(coef(nm1), coef(nm2), tolerance = 1e-4)
+  expect_equal(coef(nm1), coef(nm3), tolerance = 1e-4)
 })
 
 
