@@ -1191,6 +1191,21 @@ test_that("get_datagrid - weighted data grids, data frames", {
   expect_equal(out$island, factor(c(1L, 2L), labels = c("Biscoe", "Dream")))
   expect_equal(out$weight, c(168, 124))
 
+  # test if attributes are present
+  expect_named(
+    attrbiutes(out),
+    c(
+      "names",
+      "row.names",
+      "class",
+      "at_specs",
+      "at",
+      "by",
+      "preserve_range",
+      "table_title"
+    )
+  )
+
   # two factors
   out <- get_datagrid(penguins, c("species", "island"), weighted = TRUE)
   expect_equal(

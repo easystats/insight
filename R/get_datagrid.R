@@ -595,27 +595,16 @@ get_datagrid.data.frame <- function(
   }
 
   # Attributes
-  attr(targets, "adjusted_for") <- rest_vars
-  attr(targets, "at_specs") <- specs
-  attr(targets, "at") <- by
-  attr(targets, "by") <- by
-  attr(targets, "preserve_range") <- preserve_range
-  attr(targets, "reference") <- reference
-  attr(targets, "data") <- x
+  targets <- .add_datagrid_attributes(
+    x = targets,
+    by = by,
+    specs = specs,
+    rest_vars = rest_vars,
+    preserve_range = preserve_range,
+    reference = reference,
+    data = x
+  )
 
-  # Printing decorations
-  attr(targets, "table_title") <- c("Visualisation Grid", "blue")
-  if (!(length(rest_vars) == 1 && is.na(rest_vars)) && length(rest_vars) >= 1) {
-    attr(targets, "table_footer") <- paste0(
-      "\nMaintained constant: ",
-      toString(rest_vars)
-    )
-  }
-  if (!is.null(attr(targets, "table_footer"))) {
-    attr(targets, "table_footer") <- c(attr(targets, "table_footer"), "blue")
-  }
-
-  class(targets) <- unique(c("datagrid", "visualisation_matrix", class(targets)))
   targets
 }
 
@@ -1061,6 +1050,40 @@ get_datagrid.comparisons <- get_datagrid.slopes
 
 # Utilities -----------------------------------------------------------------
 
+# helper function to add attributes to returned datagrid object
+
+.add_datagrid_attributes <- function(
+  x,
+  by,
+  specs,
+  rest_vars = NULL,
+  preserve_range = FALSE,
+  reference = NULL,
+  data = NULL
+) {
+  # Attributes
+  attr(x, "adjusted_for") <- rest_vars
+  attr(x, "at_specs") <- specs
+  attr(x, "at") <- by
+  attr(x, "by") <- by
+  attr(x, "preserve_range") <- preserve_range
+  attr(x, "reference") <- reference
+  attr(x, "data") <- data
+
+  # Printing decorations
+  attr(x, "table_title") <- c("Visualisation Grid", "blue")
+  if (!(length(rest_vars) == 1 && is.na(rest_vars)) && length(rest_vars) >= 1) {
+    attr(x, "table_footer") <- paste0("\nMaintained constant: ", toString(rest_vars))
+  }
+  if (!is.null(attr(x, "table_footer"))) {
+    attr(x, "table_footer") <- c(attr(x, "table_footer"), "blue")
+  }
+
+  class(x) <- unique(c("datagrid", "visualisation_matrix", class(x)))
+  x
+}
+
+
 # Find eventual user-defined specifications for each target. Here we parse
 # the `by` variable for user specified values or token, e.g. `by="mpg=c(40,50)"`
 
@@ -1468,6 +1491,12 @@ get_datagrid.comparisons <- get_datagrid.slopes
       }
     }
   }
+
+  grid <- .add_datagrid_attributes(
+    x = grid,
+    by = by,
+    specs = specs
+  )
 
   grid
 }
