@@ -162,10 +162,12 @@ test_that("null_model with offset-3", {
 test_that("null_model with nested-parenthesis offset and trailing terms", {
   # `.grep_offset_term()` used to extract the offset with a paren-blind regex,
   # which broke when the offset expression itself contained parentheses
-  # (`offset(log(x))`) AND further terms followed the offset in the formula
-  # (`... + offset(log(x)) + g`): the offset's closing paren was then no longer
-  # the last `)` in the deparsed formula, so an unbalanced, unparseable string
-  # was captured and null_model() errored.
+  # (`offset(log(x))`) AND a term that *itself* contains parentheses followed
+  # the offset in the formula (`... + offset(log(x)) + factor(g)`): the offset's
+  # closing paren was then no longer the last `)` in the deparsed formula, so an
+  # unbalanced, unparseable string was captured and null_model() errored.
+  # NOTE: the trailing term must contain parens, otherwise the offset's `)` is
+  # still the last one in the string and the old regex happened to work.
   set.seed(123)
   N <- 200
   x <- runif(N, 0, 10)
@@ -174,10 +176,10 @@ test_that("null_model with nested-parenthesis offset and trailing terms", {
   y <- rpois(N, exp(-1 + 0.5 * x + log(off)))
   d <<- data.frame(y = y, x = x, g = g, off = off)
 
-  # inline offset (nested paren) with a factor term AFTER it
-  m1 <- glm(y ~ x + offset(log(off)) + g, data = d, family = "poisson")
+  # inline offset (nested paren) with a parenthesised term AFTER it
+  m1 <- glm(y ~ x + offset(log(off)) + factor(g), data = d, family = "poisson")
   # equivalent model with the offset supplied via the `offset` argument
-  m2 <- glm(y ~ x + g, offset = log(off), data = d, family = "poisson")
+  m2 <- glm(y ~ x + factor(g), offset = log(off), data = d, family = "poisson")
 
   nm1 <- null_model(m1)
   nm2 <- null_model(m2)
