@@ -189,6 +189,28 @@ test_that("null_model with nested-parenthesis offset and trailing terms", {
 })
 
 
+test_that("null_model with nested-parenthesis offset, glmmTMB", {
+  # same shape as the test above, but for glmmTMB - the class the issue was
+  # originally reported for. The conditional formula deparses to
+  # `mpg ~ disp + offset(log(wt)) + factor(gear)`, so the offset's closing
+  # paren is not the last `)` in the string.
+  data(mtcars)
+  m1 <- suppressWarnings(glmmTMB::glmmTMB(
+    mpg ~ disp + offset(log(wt)) + factor(gear) + (1 | cyl),
+    data = mtcars
+  ))
+  m2 <- suppressWarnings(glmmTMB::glmmTMB(
+    mpg ~ disp + factor(gear) + (1 | cyl),
+    offset = log(wt),
+    data = mtcars
+  ))
+  nm1 <- null_model(m1)
+  nm2 <- null_model(m2)
+  expect_identical(find_offset(nm1), "wt")
+  expect_equal(glmmTMB::fixef(nm1), glmmTMB::fixef(nm2), tolerance = 1e-4)
+})
+
+
 skip_if_not_installed("MASS")
 skip_if_not_installed("withr")
 withr::with_options(
