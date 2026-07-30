@@ -1193,7 +1193,7 @@ test_that("get_datagrid - weighted data grids, data frames", {
 
   # test if attributes are present
   expect_named(
-    attrbiutes(out),
+    attributes(out),
     c(
       "names",
       "row.names",
