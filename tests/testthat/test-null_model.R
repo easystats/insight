@@ -2,7 +2,7 @@ skip_if_not_installed("glmmTMB")
 skip_if_not_installed("lme4")
 skip_if_not_installed("TMB")
 
-test_that("null_model with offset", {
+test_that("null_model with offset-1", {
   data(mtcars)
   m1 <- suppressWarnings(lme4::glmer.nb(
     mpg ~ disp + (1 | cyl) + offset(log(wt)),
@@ -20,7 +20,7 @@ test_that("null_model with offset", {
 
 skip_on_os("mac") # error: FreeADFunObject
 
-test_that("null_model with offset", {
+test_that("null_model with offset-2", {
   data(mtcars)
   m1 <- suppressWarnings(glmmTMB::glmmTMB(
     mpg ~ disp + (1 | cyl) + offset(log(wt)),
@@ -136,7 +136,7 @@ test_that("null_model with non-mixed glmmTMB", {
 })
 
 
-test_that("null_model with offset", {
+test_that("null_model with offset-3", {
   set.seed(123)
   N <- 100 # Samples
   x <- runif(N, 0, 10) # Predictor
@@ -150,9 +150,64 @@ test_that("null_model with offset", {
 
   m1 <- glm(y ~ x + offset(logOff), data = d, family = "poisson")
   m2 <- glm(y ~ x, offset = logOff, data = d, family = "poisson")
+  m3 <- glm(y ~ offset(logOff) + x, data = d, family = "poisson")
   nm1 <- null_model(m1)
   nm2 <- null_model(m2)
+  nm3 <- null_model(m3)
   expect_equal(coef(nm1), coef(nm2), tolerance = 1e-4)
+  expect_equal(coef(nm1), coef(nm3), tolerance = 1e-4)
+})
+
+
+test_that("null_model with nested-parenthesis offset and trailing terms", {
+  # `.grep_offset_term()` used to extract the offset with a paren-blind regex,
+  # which broke when the offset expression itself contained parentheses
+  # (`offset(log(x))`) AND a term that *itself* contains parentheses followed
+  # the offset in the formula (`... + offset(log(x)) + factor(g)`): the offset's
+  # closing paren was then no longer the last `)` in the deparsed formula, so an
+  # unbalanced, unparseable string was captured and null_model() errored.
+  # NOTE: the trailing term must contain parens, otherwise the offset's `)` is
+  # still the last one in the string and the old regex happened to work.
+  set.seed(123)
+  N <- 200
+  x <- runif(N, 0, 10)
+  g <- factor(sample(letters[1:3], N, replace = TRUE))
+  off <- rgamma(N, 3, 2)
+  y <- rpois(N, exp(-1 + 0.5 * x + log(off)))
+  d <<- data.frame(y = y, x = x, g = g, off = off)
+
+  # inline offset (nested paren) with a parenthesised term AFTER it
+  m1 <- glm(y ~ x + offset(log(off)) + factor(g), data = d, family = "poisson")
+  # equivalent model with the offset supplied via the `offset` argument
+  m2 <- glm(y ~ x + factor(g), offset = log(off), data = d, family = "poisson")
+
+  nm1 <- null_model(m1)
+  nm2 <- null_model(m2)
+  # the null model builds without error and keeps the offset
+  expect_identical(find_offset(nm1), "off")
+  expect_equal(coef(nm1), coef(nm2), tolerance = 1e-4)
+})
+
+
+test_that("null_model with nested-parenthesis offset, glmmTMB", {
+  # same shape as the test above, but for glmmTMB - the class the issue was
+  # originally reported for. The conditional formula deparses to
+  # `mpg ~ disp + offset(log(wt)) + factor(gear)`, so the offset's closing
+  # paren is not the last `)` in the string.
+  data(mtcars)
+  m1 <- suppressWarnings(glmmTMB::glmmTMB(
+    mpg ~ disp + offset(log(wt)) + factor(gear) + (1 | cyl),
+    data = mtcars
+  ))
+  m2 <- suppressWarnings(glmmTMB::glmmTMB(
+    mpg ~ disp + factor(gear) + (1 | cyl),
+    offset = log(wt),
+    data = mtcars
+  ))
+  nm1 <- null_model(m1)
+  nm2 <- null_model(m2)
+  expect_identical(find_offset(nm1), "wt")
+  expect_equal(glmmTMB::fixef(nm1), glmmTMB::fixef(nm2), tolerance = 1e-4)
 })
 
 

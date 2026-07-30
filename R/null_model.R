@@ -307,13 +307,56 @@ null_model.glmmadmb <- null_model.glmmTMB
 .grep_offset_term <- function(model_formula) {
   tryCatch(
     {
-      f <- safe_deparse(model_formula$conditional)
-      if (grepl("offset(", f, fixed = TRUE)) {
-        out <- gsub("(.*)offset\\((.*)\\)(.*)", "\\2", f)
-      } else {
-        out <- NULL
+      f <- model_formula$conditional
+      if (is.null(f)) {
+        return(NULL)
       }
-      out
+      # Walk the formula's language tree to find the offset() call and return
+      # its argument. A regex on the deparsed formula cannot reliably extract
+      # the offset expression when that expression contains nested parentheses
+      # (e.g. `offset(log(x))`) or when further terms follow the offset in the
+      # formula (e.g. `... + offset(log(x)) + factor(year)`): the closing paren of
+      # `offset(` is then no longer the last `)` in the string, so the old regex
+      # captured an unbalanced, unparseable substring.
+      .find_offset_call <- function(e) {
+        # If the current element is not a call (e.g., a symbol or a constant),
+        # it cannot be an offset() call, so we return NULL.
+        if (!is.call(e)) {
+          return(NULL)
+        }
+
+        # Check if the current call is `offset(...)`
+        # We ensure it's exactly the function 'offset' and has at least one argument.
+        if (identical(e[[1L]], as.name("offset")) && length(e) >= 2L) {
+          # Return the argument passed to offset()
+          return(e[[2L]])
+        }
+
+        # Recursively walking the syntax tree. If it's not the offset call,
+        # recursively check all components of the current call. We iterate over
+        # all elements (e.g., in `y ~ x + offset(z)`, `e` is a call to `~` with
+        # arguments `y` and `x + offset(z)`)
+        for (i in seq_along(e)) {
+          res <- .find_offset_call(e[[i]])
+          # If a non-NULL result is found in any of the child nodes, immediately
+          # return it up the call stack.
+          if (!is.null(res)) {
+            return(res)
+          }
+        }
+
+        # If the offset call is not found in this branch, return NULL
+        return(NULL)
+      }
+      # Executing the search and formatting the result. Start the recursive
+      # search on the formula 'f'
+      offset_expr <- .find_offset_call(f)
+
+      if (is.null(offset_expr)) {
+        NULL
+      } else {
+        safe_deparse(offset_expr)
+      }
     },
     error = function(e) {
       NULL
