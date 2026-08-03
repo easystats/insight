@@ -257,12 +257,12 @@ get_datagrid(
   is a smaller representation of a large data grid. Multiple unique
   combinations of (categorical) predictors are included only once (i.e.
   one row per unique combination of predictors specified in `by`), and a
-  new `weight` variable is included that indicates how often each
+  new `Weight` variable is included that indicates how often each
   combination appears in the original data. `weighted` can also be a
   name of an existing weighting variable in the data. In this case, the
-  returned `weight` variable is multiplied by the sum of weights for all
+  returned `Weight` variable is multiplied by the sum of weights for all
   observations that are identified by the unique combination of
-  predictors, thus, `weight` represents a "weighted" weight-variable.
+  predictors, thus, `Weight` represents a "weighted" weight-variable.
 
 - preserve_range:
 
@@ -680,14 +680,14 @@ data(penguins)
 # is present equally often in the data, we now could "weight" each row
 # according to their actual frequency in the data
 get_datagrid(penguins, "species", weighted = TRUE)
-#>     species weight
+#>     species Weight
 #> 1    Adelie    152
 #> 2 Chinstrap     68
 #> 3    Gentoo    124
 
 # numeric variables are included, but set to their mean value
 get_datagrid(penguins, c("species", "island", "body_mass"), weighted = TRUE)
-#>     species    island weight body_mass
+#>     species    island Weight body_mass
 #> 1    Adelie    Biscoe     44  4201.754
 #> 2    Gentoo    Biscoe    124  4201.754
 #> 3    Adelie     Dream     56  4201.754
@@ -718,7 +718,7 @@ plot(data$Sepal.Width, data$Sepal.Length,
 model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 # when `by` is not specified, all predictors are used to create a weighted grid
 get_datagrid(model, weighted = TRUE)
-#>      Species weight Sepal.Width
+#>      Species Weight Sepal.Width
 #> 1     setosa     50       3.057
 #> 2 versicolor     50       3.057
 #> 3  virginica     50       3.057
@@ -729,7 +729,7 @@ d$weights <- abs(rnorm(nrow(d), 1, 0.2))
 
 model <- lm(Sepal.Length ~ Species + Sepal.Width, data = d, weights = weights)
 get_datagrid(model, "Species", weighted = "weights")
-#>      Species   weight
+#>      Species   Weight
 #> 1     setosa 49.81076
 #> 2 versicolor 49.82967
 #> 3  virginica 47.33075

@@ -21,7 +21,7 @@ methods for more info).'><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -271,12 +271,12 @@ target variables.</p></dd>
 <dd><p>Either a logical, and if <code>TRUE</code>, creates a "weighted" data
 grid, which is a smaller representation of a large data grid. Multiple unique
 combinations of (categorical) predictors are included only once (i.e. one row
-per unique combination of predictors specified in <code>by</code>), and a new <code>weight</code>
+per unique combination of predictors specified in <code>by</code>), and a new <code>Weight</code>
 variable is included that indicates how often each combination appears in the
 original data. <code>weighted</code> can also be a name of an existing weighting
-variable in the data. In this case, the returned <code>weight</code> variable is
+variable in the data. In this case, the returned <code>Weight</code> variable is
 multiplied by the sum of weights for all observations that are identified by
-the unique combination of predictors, thus, <code>weight</code> represents a "weighted"
+the unique combination of predictors, thus, <code>Weight</code> represents a "weighted"
 weight-variable.</p></dd>
 
 
@@ -684,14 +684,14 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-in"><span><span class="co"># is present equally often in the data, we now could "weight" each row</span></span></span>
 <span class="r-in"><span><span class="co"># according to their actual frequency in the data</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">penguins</span>, <span class="st">"species"</span>, weighted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     species weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     species Weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    Adelie    152</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 Chinstrap     68</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3    Gentoo    124</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># numeric variables are included, but set to their mean value</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">penguins</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"island"</span>, <span class="st">"body_mass"</span><span class="op">)</span>, weighted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     species    island weight body_mass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     species    island Weight body_mass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    Adelie    Biscoe     44  4201.754</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    Gentoo    Biscoe    124  4201.754</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3    Adelie     Dream     56  4201.754</span>
@@ -722,7 +722,7 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># when `by` is not specified, all predictors are used to create a weighted grid</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">model</span>, weighted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Species weight Sepal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Species Weight Sepal.Width</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     setosa     50       3.057</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 versicolor     50       3.057</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  virginica     50       3.057</span>
@@ -733,7 +733,7 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">d</span>, weights <span class="op">=</span> <span class="va">weights</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">model</span>, <span class="st">"Species"</span>, weighted <span class="op">=</span> <span class="st">"weights"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Species   weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Species   Weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     setosa 49.81076</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 versicolor 49.82967</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  virginica 47.33075</span>
