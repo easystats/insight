@@ -43,9 +43,8 @@ standardize_column_order <- function(data, ...) {
 
 #' @export
 standardize_column_order.default <- function(data, ...) {
-  print_color(
-    sprintf("Objects of class '%s' are currently not supported.\n", class(data)[1]),
-    "red"
+  format_alert(
+    sprintf("Objects of class '%s' are currently not supported.", class(data)[1])
   )
   invisible(data)
 }
@@ -54,7 +53,6 @@ standardize_column_order.default <- function(data, ...) {
 #' @export
 standardize_column_order.parameters_model <- function(data, style = "easystats", ...) {
   style <- validate_argument(style, c("easystats", "broom"))
-
   col_order <- switch(style, easystats = easystats_columns(), broom_columns())
 
   data[union(intersect(col_order, names(data)), names(data))]
@@ -218,7 +216,7 @@ broom_columns <- function(select = "all") {
   cols_estimate <- c("estimate", "mean.group1", "mean.group2", "predicted")
   # type of estimate
   # fmt: skip
-  cols_esttype <- c("group", "component", "response", "response.level", "effects", "weight")
+  cols_esttype <- c("group", "component", "response", "response.level", "effects", "weight", "weights")
   # uncertainty
   # fmt: skip
   cols_uncertainty <- c(

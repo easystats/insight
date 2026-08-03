@@ -201,12 +201,12 @@ target variables.}
 \item{weighted}{Either a logical, and if \code{TRUE}, creates a "weighted" data
 grid, which is a smaller representation of a large data grid. Multiple unique
 combinations of (categorical) predictors are included only once (i.e. one row
-per unique combination of predictors specified in \code{by}), and a new \code{weight}
+per unique combination of predictors specified in \code{by}), and a new \code{Weight}
 variable is included that indicates how often each combination appears in the
 original data. \code{weighted} can also be a name of an existing weighting
-variable in the data. In this case, the returned \code{weight} variable is
+variable in the data. In this case, the returned \code{Weight} variable is
 multiplied by the sum of weights for all observations that are identified by
-the unique combination of predictors, thus, \code{weight} represents a "weighted"
+the unique combination of predictors, thus, \code{Weight} represents a "weighted"
 weight-variable.}
 
 \item{preserve_range}{In the case of combinations between numeric variables

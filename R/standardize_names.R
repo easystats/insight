@@ -131,6 +131,10 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "n.obs"] <- "n_Obs"
   cn[cn == "n"] <- "n_Obs"
   cn[cn == "type"] <- "Type"
+  cn[cn == "weight"] <- "Weight"
+  if (!"Weight" %in% names(cn)) {
+    cn[cn == "weights"] <- "Weight"
+  }
   # marginaleffects
   cn[cn == "hypothesis"] <- "Parameter"
   cn[cn == "value"] <- "Level"
@@ -172,6 +176,7 @@ standardize_names.parameters_distribution <- standardize_names.parameters_model
   cn[cn == "n"] <- "n.obs"
   cn[cn == "n_Missing"] <- "missing.obs"
   cn[cn == "Level"] <- "value"
+  cn[cn == "Weight"] <- "weight"
   # anova
   cn[cn == "Sum_Squares"] <- "sumsq"
   cn[cn == "Mean_Square"] <- "meansq"

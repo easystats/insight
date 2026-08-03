@@ -177,12 +177,12 @@
 #' @param weighted Either a logical, and if `TRUE`, creates a "weighted" data
 #' grid, which is a smaller representation of a large data grid. Multiple unique
 #' combinations of (categorical) predictors are included only once (i.e. one row
-#' per unique combination of predictors specified in `by`), and a new `weight`
+#' per unique combination of predictors specified in `by`), and a new `Weight`
 #' variable is included that indicates how often each combination appears in the
 #' original data. `weighted` can also be a name of an existing weighting
-#' variable in the data. In this case, the returned `weight` variable is
+#' variable in the data. In this case, the returned `Weight` variable is
 #' multiplied by the sum of weights for all observations that are identified by
-#' the unique combination of predictors, thus, `weight` represents a "weighted"
+#' the unique combination of predictors, thus, `Weight` represents a "weighted"
 #' weight-variable.
 #' @param verbose Toggle warnings.
 #' @param ... Arguments passed to or from other methods (for instance, `length`
@@ -1462,7 +1462,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
       } else {
         w_factor <- 1
       }
-      out <- data.frame(s[1, ], weight = nrow(s) * w_factor)
+      out <- data.frame(s[1, ], Weight = nrow(s) * w_factor)
       if (!is.null(numerics)) {
         out <- cbind(out, numerics)
       }

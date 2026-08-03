@@ -1183,13 +1183,13 @@ test_that("get_datagrid - weighted data grids, data frames", {
   out <- get_datagrid(penguins, "species", weighted = TRUE)
   expect_identical(dim(out), c(3L, 2L))
   expect_equal(out$species, factor(c("Adelie", "Chinstrap", "Gentoo")))
-  expect_equal(out$weight, c(152, 68, 124))
+  expect_equal(out$Weight, c(152, 68, 124))
 
   # one factor, filtered
   out <- get_datagrid(penguins, "island=c('Biscoe', 'Dream')", weighted = TRUE)
   expect_identical(dim(out), c(2L, 2L))
   expect_equal(out$island, factor(c(1L, 2L), labels = c("Biscoe", "Dream")))
-  expect_equal(out$weight, c(168, 124))
+  expect_equal(out$Weight, c(168, 124))
 
   # test if attributes are present
   expect_named(
@@ -1216,7 +1216,7 @@ test_that("get_datagrid - weighted data grids, data frames", {
         labels = c("Adelie", "Chinstrap", "Gentoo")
       ),
       island = factor(c(1L, 1L, 2L, 2L, 3L), labels = c("Biscoe", "Dream", "Torgersen")),
-      weight = c(44, 124, 56, 68, 52)
+      Weight = c(44, 124, 56, 68, 52)
     ),
     ignore_attr = TRUE
   )
@@ -1235,7 +1235,7 @@ test_that("get_datagrid - weighted data grids, data frames", {
         labels = c("Adelie", "Gentoo")
       ),
       island = factor(c(1L, 1L, 2L), labels = c("Biscoe", "Dream")),
-      weight = c(44, 124, 56)
+      Weight = c(44, 124, 56)
     ),
     ignore_attr = TRUE
   )
@@ -1250,7 +1250,7 @@ test_that("get_datagrid - weighted data grids, data frames", {
         labels = c("Adelie", "Chinstrap", "Gentoo")
       ),
       island = factor(c(1L, 1L, 2L, 2L, 3L), labels = c("Biscoe", "Dream", "Torgersen")),
-      weight = c(44, 124, 56, 68, 52),
+      Weight = c(44, 124, 56, 68, 52),
       body_mass = c(4201.754, 4201.754, 4201.754, 4201.754, 4201.754)
     ),
     ignore_attr = TRUE
@@ -1265,7 +1265,7 @@ test_that("get_datagrid - weighted data grids, data frames", {
       "species",
       "island",
       "sex",
-      "weight",
+      "Weight",
       "bill_len",
       "bill_dep",
       "flipper_len",
@@ -1308,8 +1308,8 @@ test_that("get_datagrid - weighted data grids, data frames", {
 
   # double weighting
   out <- get_datagrid(d, "island", weighted = "weights")
-  expect_named(out, c("island", "weight"))
-  expect_equal(out$weight, c(167.05601, 127.47271, 52.24464), tolerance = 1e-2)
+  expect_named(out, c("island", "Weight"))
+  expect_equal(out$Weight, c(167.05601, 127.47271, 52.24464), tolerance = 1e-2)
 })
 
 
@@ -1318,7 +1318,7 @@ test_that("get_datagrid - weighted data grids, models", {
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
   out <- get_datagrid(model, weighted = TRUE)
   expect_identical(dim(out), c(3L, 3L))
-  expect_equal(out$weight, c(50, 50, 50))
+  expect_equal(out$Weight, c(50, 50, 50))
 
   d <- iris
   set.seed(123)
@@ -1326,7 +1326,7 @@ test_that("get_datagrid - weighted data grids, models", {
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = d, weights = weights)
   out <- get_datagrid(model, "Species", weighted = "weights")
   expect_identical(dim(out), c(3L, 2L))
-  expect_equal(out$weight, c(50.34404, 51.46408, 47.461), tolerance = 1e-2)
+  expect_equal(out$Weight, c(50.34404, 51.46408, 47.461), tolerance = 1e-2)
 })
 
 
@@ -1338,7 +1338,7 @@ test_that("get_datagrid - weighted data grids, mixed models", {
   out <- get_datagrid(model, "species", weighted = TRUE)
   expect_identical(dim(out), c(3L, 2L))
   expect_equal(out$species, factor(c("Adelie", "Chinstrap", "Gentoo")))
-  expect_equal(out$weight, c(146, 68, 119))
+  expect_equal(out$Weight, c(146, 68, 119))
 
   out <- get_datagrid(model, "species", weighted = TRUE, include_random = TRUE)
   expect_equal(
@@ -1349,7 +1349,7 @@ test_that("get_datagrid - weighted data grids, mixed models", {
         labels = c("Adelie", "Chinstrap", "Gentoo")
       ),
       island = factor(c(1L, 1L, 2L, 2L, 3L), labels = c("Biscoe", "Dream", "Torgersen")),
-      weight = c(44, 119, 55, 68, 47)
+      Weight = c(44, 119, 55, 68, 47)
     ),
     ignore_attr = TRUE
   )

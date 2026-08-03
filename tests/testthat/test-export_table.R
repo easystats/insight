@@ -1,9 +1,12 @@
 skip_on_ci()
 
-d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
-
-test_that("export_table", {
+test_that("export_table-1", {
   skip_on_cran()
+  d <- data.frame(
+    a = c(1.3, 2, 543),
+    b = c("ab", "cd", "abcde"),
+    stringsAsFactors = FALSE
+  )
   expect_equal(
     export_table(d),
     structure(
@@ -14,8 +17,13 @@ test_that("export_table", {
   )
 })
 
-test_that("export_table", {
+test_that("export_table-2", {
   skip_on_cran()
+  d <- data.frame(
+    a = c(1.3, 2, 543),
+    b = c("ab", "cd", "abcde"),
+    stringsAsFactors = FALSE
+  )
   expect_equal(
     export_table(d, sep = " ", header = "*", digits = 1),
     structure(
@@ -29,7 +37,12 @@ test_that("export_table", {
 
 # snapshots have a very messy output for format = "md"
 
-test_that("export_table", {
+test_that("export_table-3", {
+  d <- data.frame(
+    a = c(1.3, 2, 543),
+    b = c("ab", "cd", "abcde"),
+    stringsAsFactors = FALSE
+  )
   out <- export_table(d, format = "md")
   expect_equal(
     out,
@@ -48,34 +61,14 @@ test_that("export_table", {
   )
 })
 
-d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
-attr(d, "table_caption") <- "Table Title"
 
-test_that("export_table", {
-  out <- export_table(d, format = "md")
-  expect_equal(
-    out,
-    structure(
-      c(
-        "Table: Table Title",
-        "",
-        "|      a|     b|",
-        "|------:|-----:|",
-        "|   1.30|    ab|",
-        "|   2.00|    cd|",
-        "| 543.00| abcde|"
-      ),
-      format = "pipe",
-      class = c("knitr_kable", "character")
-    ),
-    ignore_attr = TRUE
+test_that("export_table-4", {
+  d <- data.frame(
+    a = c(1.3, 2, 543),
+    b = c("ab", "cd", "abcde"),
+    stringsAsFactors = FALSE
   )
-})
-
-d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
-attr(d, "table_title") <- "Table Title"
-
-test_that("export_table", {
+  attr(d, "table_caption") <- "Table Title"
   out <- export_table(d, format = "md")
   expect_equal(
     out,
@@ -96,9 +89,40 @@ test_that("export_table", {
   )
 })
 
-d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
 
-test_that("export_table", {
+test_that("export_table-5", {
+  d <- data.frame(
+    a = c(1.3, 2, 543),
+    b = c("ab", "cd", "abcde"),
+    stringsAsFactors = FALSE
+  )
+  attr(d, "table_title") <- "Table Title"
+  out <- export_table(d, format = "md")
+  expect_equal(
+    out,
+    structure(
+      c(
+        "Table: Table Title",
+        "",
+        "|      a|     b|",
+        "|------:|-----:|",
+        "|   1.30|    ab|",
+        "|   2.00|    cd|",
+        "| 543.00| abcde|"
+      ),
+      format = "pipe",
+      class = c("knitr_kable", "character")
+    ),
+    ignore_attr = TRUE
+  )
+})
+
+test_that("export_table-6", {
+  d <- data.frame(
+    a = c(1.3, 2, 543),
+    b = c("ab", "cd", "abcde"),
+    stringsAsFactors = FALSE
+  )
   out <- export_table(d, format = "md", title = "Table Title")
   expect_equal(
     out,
@@ -119,11 +143,14 @@ test_that("export_table", {
   )
 })
 
-d <- data.frame(a = c(1.3, 2, 543), b = c("ab", "cd", "abcde"), stringsAsFactors = FALSE)
-attr(d, "table_caption") <- "Table Title"
-attr(d, "table_footer") <- list("first", "second", "third")
-
-test_that("export_table", {
+test_that("export_table-7", {
+  d <- data.frame(
+    a = c(1.3, 2, 543),
+    b = c("ab", "cd", "abcde"),
+    stringsAsFactors = FALSE
+  )
+  attr(d, "table_caption") <- "Table Title"
+  attr(d, "table_footer") <- list("first", "second", "third")
   out <- export_table(d, format = "md")
   expect_equal(
     out,
@@ -148,7 +175,7 @@ test_that("export_table", {
 })
 
 
-test_that("export_table, table_width", {
+test_that("export_table, table_width (lavaan)", {
   skip_on_cran()
   skip_if_not_installed("lavaan")
   skip_if_not_installed("performance")
@@ -269,7 +296,7 @@ test_that("export_table, table_width", {
 })
 
 
-test_that("export_table, table_width, no split", {
+test_that("export_table, table_width (lavaan), no split", {
   skip_on_cran()
   skip_if_not_installed("lavaan")
   skip_if_not_installed("performance")
