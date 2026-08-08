@@ -65,3 +65,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /.quarto/
+
+# scrutin history + caches (keep runner scripts tracked)
+.scrutin/state.db*
