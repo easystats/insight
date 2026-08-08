@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not_installed("dbarts")
 skip_if(getRversion() < "4.5.0")
 
@@ -15,7 +16,7 @@ test_that("find_formula", {
     list(
       conditional = bill_len ~
         species + island + bill_dep + flipper_len + body_mass + sex + year
-    ), # nolint
+    ),
     ignore_attr = TRUE
   )
 })
