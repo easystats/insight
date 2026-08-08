@@ -65,7 +65,7 @@ get_varcov(x, effects = "all", verbose = TRUE, ...)
 
     - Heteroskedasticity-consistent: `"HC"`, `"HC0"`, `"HC1"`, `"HC2"`,
       `"HC3"`, `"HC4"`, `"HC4m"`, `"HC5"`. See
-      [`?sandwich::vcovHC`](https://sandwich.R-Forge.R-project.org/reference/vcovHC.html)
+      [`?sandwich::vcovHC`](https://zeileis.codeberg.page/sandwich/reference/vcovHC.html)
 
     - Cluster-robust: `"CR"`, `"CR0"`, `"CR1"`, `"CR1p"`, `"CR1S"`,
       `"CR2"`, `"CR3"`. See
@@ -73,7 +73,7 @@ get_varcov(x, effects = "all", verbose = TRUE, ...)
 
     - Bootstrap: `"BS"`, `"xy"`, `"residual"`, `"wild"`, `"mammen"`,
       `"fractional"`, `"jackknife"`, `"norm"`, `"webb"`. See
-      [`?sandwich::vcovBS`](https://sandwich.R-Forge.R-project.org/reference/vcovBS.html)
+      [`?sandwich::vcovBS`](https://zeileis.codeberg.page/sandwich/reference/vcovBS.html)
 
     - Other `sandwich` package functions: `"HAC"`, `"PC"`, `"CL"`,
       `"OPG"`, `"PL"`.
@@ -110,7 +110,7 @@ get_varcov(x, effects = "all", verbose = TRUE, ...)
   `vcov` argument. This function is typically supplied by the
   **sandwich** or **clubSandwich** packages. Please refer to their
   documentation (e.g.,
-  [`?sandwich::vcovHAC`](https://sandwich.R-Forge.R-project.org/reference/vcovHAC.html))
+  [`?sandwich::vcovHAC`](https://zeileis.codeberg.page/sandwich/reference/vcovHAC.html))
   to see the list of available arguments. If no estimation type
   (argument `type`) is given, the default type for `"HC"` equals the
   default from the **sandwich** package; for type `"CR"`, the default is
@@ -263,7 +263,7 @@ get_varcov(
   vcov_args = list(R = 50)
 )
 #>                   count_(Intercept)     count_phd count_femWomen
-#> count_(Intercept)       0.039955437 -0.0097360198  -0.0043036878
-#> count_phd              -0.009736020  0.0029991299   0.0006021611
-#> count_femWomen         -0.004303688  0.0006021611   0.0111837031
+#> count_(Intercept)       0.039955437 -0.0097360197  -0.0043036878
+#> count_phd              -0.009736020  0.0029991299   0.0006021612
+#> count_femWomen         -0.004303688  0.0006021612   0.0111837032
 ```
