@@ -1439,7 +1439,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
     }
   }
 
-  # process numeric variables - we weither set them to their mean values, or
+  # process numeric variables - we either set them to their mean values, or
   # bin them, if `n_bins` is given
   numeric_means <- NULL
   if (length(nums)) {
