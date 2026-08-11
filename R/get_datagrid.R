@@ -1444,7 +1444,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
     # we still may have model weights, which must be ignored and not treated
     # as "numeric" predictor - remove any weights variable, if not specified
     # in "weighted"
-    model_weights <- find_weights(model)
+    model_weights <- find_weights(x)
     if (!is.null(model_weights)) {
       nums <- setdiff(nums, model_weights)
     }
