@@ -27,6 +27,7 @@ get_datagrid(
   length = 10,
   range = "range",
   weighted = FALSE,
+  n_bins = 5,
   preserve_range = FALSE,
   protect_integers = TRUE,
   digits = 3,
@@ -54,6 +55,7 @@ get_datagrid(
   factors = "reference",
   numerics = "mean",
   weighted = FALSE,
+  n_bins = 5,
   preserve_range = TRUE,
   reference = x,
   include_smooth = TRUE,
@@ -253,16 +255,29 @@ get_datagrid(
 
 - weighted:
 
-  Either a logical, and if `TRUE`, creates a "weighted" data grid, which
-  is a smaller representation of a large data grid. Multiple unique
-  combinations of (categorical) predictors are included only once (i.e.
-  one row per unique combination of predictors specified in `by`), and a
-  new `Weight` variable is included that indicates how often each
-  combination appears in the original data. `weighted` can also be a
-  name of an existing weighting variable in the data. In this case, the
-  returned `Weight` variable is multiplied by the sum of weights for all
-  observations that are identified by the unique combination of
-  predictors, thus, `Weight` represents a "weighted" weight-variable.
+  Logical or character. If `TRUE`, creates a "weighted" data grid, which
+  is a smaller representation of a large data grid. Each unique
+  combination of (categorical) predictors is included only once (i.e.,
+  one row per unique combination of predictors specified in `by`).
+  Numeric predictors are binned (see argument `n_bins`) and each value
+  is recoded into the mean value for the related bin. A new `Weight`
+  variable is added that indicates how often each combination appears in
+  the original data. `weighted` can also be the name of an existing
+  weighting variable in the data. In this case, the new `Weight`
+  variable represents the sum of the weights for all observations that
+  share the unique combination of predictors.
+
+- n_bins:
+
+  Numeric value indicating the number of bins to use for numeric
+  predictors when creating a weighted data grid (see `weighted`).
+  Defaults to 5. If a numeric predictor has more unique values than
+  `n_bins`, it is divided into `n_bins` equal-sized intervals, and each
+  value is replaced by the mean of its respective bin. If a predictor
+  has fewer unique values than `n_bins`, it is not binned. If
+  `n_bins = NULL` or `NA`, numeric predictors are not used to group the
+  data; instead, they are held constant at their overall mean across the
+  dataset.
 
 - preserve_range:
 
@@ -680,19 +695,11 @@ data(penguins)
 # is present equally often in the data, we now could "weight" each row
 # according to their actual frequency in the data
 get_datagrid(penguins, "species", weighted = TRUE)
-#>     species Weight
-#> 1    Adelie    152
-#> 2 Chinstrap     68
-#> 3    Gentoo    124
+#> Error in .get_datagrid_weighted(x, by, weighted, digits = digits, n_bins = n_bins,     ...): object 'model' not found
 
 # numeric variables are included, but set to their mean value
 get_datagrid(penguins, c("species", "island", "body_mass"), weighted = TRUE)
-#>     species    island Weight body_mass
-#> 1    Adelie    Biscoe     44  4201.754
-#> 2    Gentoo    Biscoe    124  4201.754
-#> 3    Adelie     Dream     56  4201.754
-#> 4 Chinstrap     Dream     68  4201.754
-#> 5    Adelie Torgersen     52  4201.754
+#> Error in .get_datagrid_weighted(x, by, weighted, digits = digits, n_bins = n_bins,     ...): object 'model' not found
 
 
 # With models ===============================================================
@@ -718,10 +725,7 @@ plot(data$Sepal.Width, data$Sepal.Length,
 model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 # when `by` is not specified, all predictors are used to create a weighted grid
 get_datagrid(model, weighted = TRUE)
-#>      Species Weight Sepal.Width
-#> 1     setosa     50       3.057
-#> 2 versicolor     50       3.057
-#> 3  virginica     50       3.057
+#> Error in .get_datagrid_weighted(x, by, weighted, digits = digits, n_bins = n_bins,     ...): object 'model' not found
 
 # weighted data grid
 d <- iris
