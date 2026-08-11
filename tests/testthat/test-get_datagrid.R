@@ -1437,3 +1437,19 @@ test_that("get_datagrid - weighted data grids, mixed models", {
     ignore_attr = TRUE
   )
 })
+
+
+test_that("get_datagrid - weighted data grids, models with weights", {
+  data(penguins)
+  set.seed(123)
+  d <- penguins
+  d$weights <- abs(rnorm(nrow(d), 1, 0.2))
+  model <- lm(body_mass ~ species + sex + bill_len, data = d, weights = weights)
+
+  # should have same number of rows
+  out1 <- get_datagrid(model, weighted = "weights")
+  out2 <- get_datagrid(model, weighted = TRUE)
+
+  expect_identical(dim(out1), c(18L, 4L))
+  expect_identical(dim(out2), c(18L, 5L))
+})

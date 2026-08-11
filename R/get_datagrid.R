@@ -1440,6 +1440,14 @@ get_datagrid.comparisons <- get_datagrid.slopes
       # remove weighted variable from binning
       nums <- setdiff(nums, weighted)
     }
+  } else {
+    # we still may have model weights, which must be ignored and not treated
+    # as "numeric" predictor - remove any weights variable, if not specified
+    # in "weighted"
+    model_weights <- find_weights(model)
+    if (!is.null(model_weights)) {
+      nums <- setdiff(nums, model_weights)
+    }
   }
 
   # process numeric variables - we either set them to their mean values, or
