@@ -12,7 +12,8 @@
 * `get_datagrid()` gains a `weighted` argument, to create a smaller representation
   of large data grids, where multiple unique combinations of predictors are
   included only once, and a new `Weight` column indicates how often each
-  combination appears in the original data.
+  combination appears in the original data. The related `n_bins` argument
+  indicates how numeric values are represented in the reduced data grid.
 
 * `format_ci()` gains a `separator` argument, to customize the separator for
   lower and upper CI values.

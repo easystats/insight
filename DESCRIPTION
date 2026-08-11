@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.5.2.8
+Version: 1.5.2.9
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -229,4 +229,4 @@ Config/testthat/edition: 3
 Config/testthat/parallel: false
 Config/Needs/website: easystats/easystatstemplate
 Config/Needs/check: stan-dev/cmdstanr
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

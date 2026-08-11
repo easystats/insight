@@ -174,16 +174,24 @@
 #' @param digits Number of digits used for rounding numeric values specified in
 #' `by`. E.g., `x = [sd]` will round the mean and +-/1 SD in the data grid to
 #' `digits`.
-#' @param weighted Either a logical, and if `TRUE`, creates a "weighted" data
-#' grid, which is a smaller representation of a large data grid. Multiple unique
-#' combinations of (categorical) predictors are included only once (i.e. one row
-#' per unique combination of predictors specified in `by`), and a new `Weight`
-#' variable is included that indicates how often each combination appears in the
-#' original data. `weighted` can also be a name of an existing weighting
-#' variable in the data. In this case, the returned `Weight` variable is
-#' multiplied by the sum of weights for all observations that are identified by
-#' the unique combination of predictors, thus, `Weight` represents a "weighted"
-#' weight-variable.
+#' @param weighted Logical or character. If `TRUE`, creates a "weighted" data
+#' grid, which is a smaller representation of a large data grid. Each unique
+#' combination of (categorical) predictors is included only once (i.e., one row
+#' per unique combination of predictors specified in `by`). Numeric predictors
+#' are binned (see argument `n_bins`) and each value is recoded into the mean
+#' value for the related bin. A new `Weight` variable is added that indicates
+#' how often each combination appears in the original data. `weighted` can also
+#' be the name of an existing weighting variable in the data. In this case, the
+#' new `Weight` variable represents the sum of the weights for all observations
+#' that share the unique combination of predictors.
+#' @param n_bins Numeric value indicating the number of bins to use for numeric
+#' predictors when creating a weighted data grid (see `weighted`). Defaults to
+#' 5. If a numeric predictor has more unique values than `n_bins`, it is divided
+#' into `n_bins` equal-sized intervals, and each value is replaced by the mean
+#' of its respective bin. If a predictor has fewer unique values than `n_bins`,
+#' it is not binned. If `n_bins = NULL` or `NA`, numeric predictors are not used
+#' to group the data; instead, they are held constant at their overall mean
+#' across the dataset.
 #' @param verbose Toggle warnings.
 #' @param ... Arguments passed to or from other methods (for instance, `length`
 #' or `range` to control the spread of numeric variables.).
@@ -347,6 +355,7 @@ get_datagrid.data.frame <- function(
   length = 10,
   range = "range",
   weighted = FALSE,
+  n_bins = 5,
   preserve_range = FALSE,
   protect_integers = TRUE,
   digits = 3,
@@ -355,7 +364,7 @@ get_datagrid.data.frame <- function(
 ) {
   # Special handling: weighted data grid (see #1207) --------------------
   if (!is.null(weighted) && !isFALSE(weighted)) {
-    return(.get_datagrid_weighted(x, by, weighted, digits = digits, ...))
+    return(.get_datagrid_weighted(x, by, weighted, digits = digits, n_bins = n_bins, ...))
   }
 
   # find numerics that were coerced to factor in-formula
@@ -697,6 +706,7 @@ get_datagrid.default <- function(
   factors = "reference",
   numerics = "mean",
   weighted = FALSE,
+  n_bins = 5,
   preserve_range = TRUE,
   reference = x,
   include_smooth = TRUE,
@@ -837,6 +847,7 @@ get_datagrid.default <- function(
     factors = factors,
     numerics = numerics,
     weighted = weighted,
+    n_bins = n_bins,
     preserve_range = preserve_range,
     reference = data,
     digits = digits,
@@ -1387,7 +1398,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
 # passed as weight-argument
 
 #' @keywords internal
-.get_datagrid_weighted <- function(x, by, weighted, digits = 3, ...) {
+.get_datagrid_weighted <- function(x, by, weighted, digits = 3, n_bins = 5, ...) {
   # if `by` was not specified, it is set to "all" - use all column names
   if (is.null(by) || all(by == "all")) {
     by <- colnames(x)
@@ -1406,19 +1417,6 @@ get_datagrid.comparisons <- get_datagrid.slopes
     )
   }
 
-  # if we have any numeric variables, we set them to their mean for now.
-  # we create a single-row data frame, which can be column-bound below
-  if (length(nums)) {
-    numerics <- as.data.frame(do.call(
-      cbind,
-      lapply(x[nums], function(num) {
-        round(mean(num, na.rm = TRUE), digits = digits)
-      })
-    ))
-  } else {
-    numerics <- NULL
-  }
-
   # check if user specified a variable names for the weights variable.
   # we may take a real "weights" variable into account, multiplying the
   # sum of weights with the create "weight" value, e.g. if we have sampling
@@ -1435,6 +1433,57 @@ get_datagrid.comparisons <- get_datagrid.slopes
         msg <- paste(msg, suggestion$msg)
       }
       format_error(msg)
+    } else {
+      if (!is.numeric(x[[weighted]])) {
+        format_error(paste0("The `weighted` variable `", weighted, "` must be numeric."))
+      }
+      # remove weighted variable from binning
+      nums <- setdiff(nums, weighted)
+    }
+  } else {
+    # we still may have model weights, which must be ignored and not treated
+    # as "numeric" predictor - remove any weights variable, if not specified
+    # in "weighted"
+    model_weights <- find_weights(model)
+    if (!is.null(model_weights)) {
+      nums <- setdiff(nums, model_weights)
+    }
+  }
+
+  # process numeric variables - we either set them to their mean values, or
+  # bin them, if `n_bins` is given
+  numeric_means <- NULL
+  if (length(nums)) {
+    # if no bins requested, we set numerics to their mean.
+    # we create a single-row data frame, which can be column-bound below
+    if (is.null(n_bins) || is.na(n_bins)) {
+      numeric_means <- as.data.frame(do.call(
+        cbind,
+        lapply(x[nums], function(num) {
+          round(mean(num, na.rm = TRUE), digits = digits)
+        })
+      ))
+    } else {
+      # we now bin numeric values, if they have more unique values than `n_bins`
+      # binned num
+      x[nums] <- lapply(
+        x[nums],
+        function(n) {
+          # if we have more unique values than requested bins, bin values
+          if (n_unique(n) > n_bins) {
+            # cut vector into bins
+            x_bin <- cut(n, n_bins)
+            # use mean value for each "bin" as factor level
+            levels(x_bin) <- vapply(split(n, x_bin), mean, numeric(1), na.rm = TRUE)
+            # return numeric value, which is the mean value for each bin
+            as.numeric(as.character(x_bin))
+          } else {
+            n
+          }
+        }
+      )
+      # we also want to split by numerics
+      by <- c(by, nums)
     }
   }
 
@@ -1463,8 +1512,8 @@ get_datagrid.comparisons <- get_datagrid.slopes
         w_factor <- 1
       }
       out <- data.frame(s[1, ], Weight = nrow(s) * w_factor)
-      if (!is.null(numerics)) {
-        out <- cbind(out, numerics)
+      if (!is.null(numeric_means)) {
+        out <- cbind(out, numeric_means)
       }
       out
     })
