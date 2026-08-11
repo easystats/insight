@@ -695,11 +695,30 @@ data(penguins)
 # is present equally often in the data, we now could "weight" each row
 # according to their actual frequency in the data
 get_datagrid(penguins, "species", weighted = TRUE)
-#> Error in .get_datagrid_weighted(x, by, weighted, digits = digits, n_bins = n_bins,     ...): object 'model' not found
+#>     species Weight
+#> 1    Adelie    152
+#> 2 Chinstrap     68
+#> 3    Gentoo    124
 
 # numeric variables are included, but set to their mean value
 get_datagrid(penguins, c("species", "island", "body_mass"), weighted = TRUE)
-#> Error in .get_datagrid_weighted(x, by, weighted, digits = digits, n_bins = n_bins,     ...): object 'model' not found
+#>      species    island body_mass Weight
+#> 1     Adelie    Biscoe  3191.810     12
+#> 2     Adelie     Dream  3191.810     17
+#> 3  Chinstrap     Dream  3191.810     15
+#> 4     Adelie Torgersen  3191.810     14
+#> 5     Adelie    Biscoe  3743.952     25
+#> 6     Gentoo    Biscoe  3743.952      2
+#> 7     Adelie     Dream  3743.952     27
+#> 8  Chinstrap     Dream  3743.952     44
+#> 9     Adelie Torgersen  3743.952     26
+#> 10    Adelie    Biscoe  4492.470      7
+#> 11    Gentoo    Biscoe  4492.470     44
+#> 12    Adelie     Dream  4492.470     12
+#> 13 Chinstrap     Dream  4492.470      9
+#> 14    Adelie Torgersen  4492.470     11
+#> 15    Gentoo    Biscoe  5217.273     55
+#> 16    Gentoo    Biscoe  5809.091     22
 
 
 # With models ===============================================================
@@ -725,7 +744,19 @@ plot(data$Sepal.Width, data$Sepal.Length,
 model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 # when `by` is not specified, all predictors are used to create a weighted grid
 get_datagrid(model, weighted = TRUE)
-#> Error in .get_datagrid_weighted(x, by, weighted, digits = digits, n_bins = n_bins,     ...): object 'model' not found
+#>       Species Sepal.Width Weight
+#> 1      setosa    2.272727      1
+#> 2  versicolor    2.272727      9
+#> 3   virginica    2.272727      1
+#> 4      setosa    2.728261      1
+#> 5  versicolor    2.728261     25
+#> 6   virginica    2.728261     20
+#> 7      setosa    3.151471     26
+#> 8  versicolor    3.151471     16
+#> 9   virginica    3.151471     26
+#> 10     setosa    3.671429     18
+#> 11  virginica    3.671429      3
+#> 12     setosa    4.175000      4
 
 # weighted data grid
 d <- iris
