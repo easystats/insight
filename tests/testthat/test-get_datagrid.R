@@ -1241,7 +1241,12 @@ test_that("get_datagrid - weighted data grids, data frames", {
   )
 
   # two factors, one numeric
-  out <- get_datagrid(penguins, c("species", "island", "body_mass"), weighted = TRUE)
+  out <- get_datagrid(
+    penguins,
+    c("species", "island", "body_mass"),
+    n_bins = NULL,
+    weighted = TRUE
+  )
   expect_equal(
     out,
     data.frame(
@@ -1265,12 +1270,12 @@ test_that("get_datagrid - weighted data grids, data frames", {
       "species",
       "island",
       "sex",
-      "Weight",
       "bill_len",
       "bill_dep",
       "flipper_len",
       "body_mass",
-      "year"
+      "year",
+      "Weight"
     )
   )
 
@@ -1311,6 +1316,11 @@ test_that("get_datagrid - weighted data grids, data frames", {
   expect_error(
     get_datagrid(penguins, "island", weighted = "weights"),
     regex = "The variable `weights`",
+    fixed = TRUE
+  )
+  expect_error(
+    get_datagrid(penguins, "island", weighted = "species"),
+    regex = "The `weighted` variable `species`",
     fixed = TRUE
   )
 
@@ -1357,9 +1367,13 @@ test_that("get_datagrid - weighted data grids, data frames", {
 test_that("get_datagrid - weighted data grids, models", {
   data(iris)
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
-  out <- get_datagrid(model, weighted = TRUE)
+  out <- get_datagrid(model, n_bins = NULL, weighted = TRUE)
   expect_identical(dim(out), c(3L, 3L))
   expect_equal(out$Weight, c(50, 50, 50))
+
+  out <- get_datagrid(model, weighted = TRUE)
+  expect_identical(dim(out), c(12L, 3L))
+  expect_equal(out$Weight, c(1, 9, 1, 1, 25, 20, 26, 16, 26, 18, 3, 4))
 
   d <- iris
   set.seed(123)
