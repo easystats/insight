@@ -1256,8 +1256,26 @@ test_that("get_datagrid - weighted data grids, data frames", {
     ignore_attr = TRUE
   )
 
-  # auto-detection
+  # auto-detection, binning for numerics
   out <- get_datagrid(penguins, weighted = TRUE)
+  expect_identical(dim(out), c(210L, 9L))
+  expect_named(
+    out,
+    c(
+      "species",
+      "island",
+      "sex",
+      "Weight",
+      "bill_len",
+      "bill_dep",
+      "flipper_len",
+      "body_mass",
+      "year"
+    )
+  )
+
+  # auto-detection, numerics set to mean
+  out <- get_datagrid(penguins, n_bins = NULL, weighted = TRUE)
   expect_identical(dim(out), c(10L, 9L))
   expect_named(
     out,
@@ -1310,6 +1328,29 @@ test_that("get_datagrid - weighted data grids, data frames", {
   out <- get_datagrid(d, "island", weighted = "weights")
   expect_named(out, c("island", "Weight"))
   expect_equal(out$Weight, c(167.05601, 127.47271, 52.24464), tolerance = 1e-2)
+
+  # double weighting, with numerics
+  out <- get_datagrid(d, c("island", "bill_len"), weighted = "weights")
+  expect_named(out, c("island", "bill_len", "Weight"))
+  # fmt: skip
+  expect_equal(
+    out$Weight,
+    c(
+      10.21418, 24.78394, 17.16585, 36.60343, 34.45455, 31.31535,
+      75.74931, 27.2788, 2.74934, 39.33409, 38.04889, 3.9625, 2.90653
+    ),
+    tolerance = 1e-2
+  )
+
+  # no weighting, with numerics
+  out <- get_datagrid(d, c("island", "bill_len"), weighted = TRUE)
+  expect_named(out, c("island", "bill_len", "Weight"))
+  # fmt: skip
+  expect_equal(
+    out$Weight,
+    c(11, 24, 17, 38, 34, 31, 74, 27, 3, 40, 36, 4, 3),
+    tolerance = 1e-2
+  )
 })
 
 
@@ -1327,6 +1368,34 @@ test_that("get_datagrid - weighted data grids, models", {
   out <- get_datagrid(model, "Species", weighted = "weights")
   expect_identical(dim(out), c(3L, 2L))
   expect_equal(out$Weight, c(50.34404, 51.46408, 47.461), tolerance = 1e-2)
+
+  data(penguins)
+  model <- lm(body_mass ~ species + sex + bill_len, data = penguins)
+  out <- get_datagrid(model, weighted = TRUE)
+  expect_identical(dim(out), c(18L, 4L))
+  # fmt: skip
+  expect_equal(
+    out$Weight,
+    c(42, 8, 31, 4, 7, 58, 24, 47, 7, 1, 21, 5, 4, 31, 36, 1, 2, 4),
+    tolerance = 1e-4
+  )
+
+  set.seed(123)
+  d <- penguins
+  d$weights <- abs(rnorm(nrow(d), 1, 0.2))
+  model <- lm(body_mass ~ species + sex + bill_len, data = d, weights = weights)
+  out <- get_datagrid(model, weighted = "weights")
+  expect_identical(dim(out), c(18L, 4L))
+  # fmt: skip
+  expect_equal(
+    out$Weight,
+    c(
+      42.63021, 7.76446, 30.92026, 4.42138, 6.8328, 56.97125, 24.32047,
+      48.90596, 7.28324, 0.72982, 20.55951, 4.73998, 4.25043, 33.30891,
+      35.08365, 0.88451, 2.02202, 3.9625
+    ),
+    tolerance = 1e-4
+  )
 })
 
 

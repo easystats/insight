@@ -18,6 +18,7 @@ get_datagrid(x, ...)
   length = 10,
   range = "range",
   weighted = FALSE,
+  n_bins = 5,
   preserve_range = FALSE,
   protect_integers = TRUE,
   digits = 3,
@@ -42,6 +43,7 @@ get_datagrid(x, ...)
   factors = "reference",
   numerics = "mean",
   weighted = FALSE,
+  n_bins = 5,
   preserve_range = TRUE,
   reference = x,
   include_smooth = TRUE,
@@ -198,16 +200,25 @@ case, \code{range} must be of same length as numeric target variables. If
 \code{range} is a named vector, values are matched against the names of the
 target variables.}
 
-\item{weighted}{Either a logical, and if \code{TRUE}, creates a "weighted" data
-grid, which is a smaller representation of a large data grid. Multiple unique
-combinations of (categorical) predictors are included only once (i.e. one row
-per unique combination of predictors specified in \code{by}), and a new \code{Weight}
-variable is included that indicates how often each combination appears in the
-original data. \code{weighted} can also be a name of an existing weighting
-variable in the data. In this case, the returned \code{Weight} variable is
-multiplied by the sum of weights for all observations that are identified by
-the unique combination of predictors, thus, \code{Weight} represents a "weighted"
-weight-variable.}
+\item{weighted}{Logical or character. If \code{TRUE}, creates a "weighted" data
+grid, which is a smaller representation of a large data grid. Each unique
+combination of (categorical) predictors is included only once (i.e., one row
+per unique combination of predictors specified in \code{by}). Numeric predictors
+are binned (see argument \code{n_bins}) and each value is recoded into the mean
+value for the related bin. A new \code{Weight} variable is added that indicates
+how often each combination appears in the original data. \code{weighted} can also
+be the name of an existing weighting variable in the data. In this case, the
+new \code{Weight} variable represents the sum of the weights for all observations
+that share the unique combination of predictors.}
+
+\item{n_bins}{Numeric value indicating the number of bins to use for numeric
+predictors when creating a weighted data grid (see \code{weighted}). Defaults to
+5. If a numeric predictor has more unique values than \code{n_bins}, it is divided
+into \code{n_bins} equal-sized intervals, and each value is replaced by the mean
+of its respective bin. If a predictor has fewer unique values than \code{n_bins},
+it is not binned. If \code{n_bins = NULL} or \code{NA}, numeric predictors are not used
+to group the data; instead, they are held constant at their overall mean
+across the dataset.}
 
 \item{preserve_range}{In the case of combinations between numeric variables
 and factors, setting \code{preserve_range = TRUE} will drop the observations
