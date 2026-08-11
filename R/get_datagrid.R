@@ -1434,6 +1434,9 @@ get_datagrid.comparisons <- get_datagrid.slopes
       }
       format_error(msg)
     } else {
+      if (!is.numeric(x[[weighted]])) {
+        format_error(paste0("The `weighted` variable `", weighted, "` must be numeric."))
+      }
       # remove weighted variable from binning
       nums <- setdiff(nums, weighted)
     }
