@@ -700,7 +700,7 @@ get_datagrid(penguins, "species", weighted = TRUE)
 #> 2 Chinstrap     68
 #> 3    Gentoo    124
 
-# numeric variables are included, but set to their mean value
+# numeric variables are included and "binned"
 get_datagrid(penguins, c("species", "island", "body_mass"), weighted = TRUE)
 #>      species    island body_mass Weight
 #> 1     Adelie    Biscoe  3191.810     12
@@ -720,6 +720,19 @@ get_datagrid(penguins, c("species", "island", "body_mass"), weighted = TRUE)
 #> 15    Gentoo    Biscoe  5217.273     55
 #> 16    Gentoo    Biscoe  5809.091     22
 
+# numeric variables are included, but set to their mean value
+get_datagrid(
+  penguins,
+  c("species", "island", "body_mass"),
+  n_bins = NULL,
+  weighted = TRUE
+)
+#>     species    island Weight body_mass
+#> 1    Adelie    Biscoe     44  4201.754
+#> 2    Gentoo    Biscoe    124  4201.754
+#> 3    Adelie     Dream     56  4201.754
+#> 4 Chinstrap     Dream     68  4201.754
+#> 5    Adelie Torgersen     52  4201.754
 
 # With models ===============================================================
 
@@ -757,6 +770,18 @@ get_datagrid(model, weighted = TRUE)
 #> 10     setosa    3.671429     18
 #> 11  virginica    3.671429      3
 #> 12     setosa    4.175000      4
+
+# fewer bins for numeric values
+get_datagrid(model, n_bins = 3, weighted = TRUE)
+#>      Species Sepal.Width Weight
+#> 1     setosa    2.585106      1
+#> 2 versicolor    2.585106     27
+#> 3  virginica    2.585106     19
+#> 4     setosa    3.167045     36
+#> 5 versicolor    3.167045     23
+#> 6  virginica    3.167045     29
+#> 7     setosa    3.893333     13
+#> 8  virginica    3.893333      2
 
 # weighted data grid
 d <- iris

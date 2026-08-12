@@ -702,7 +702,7 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 Chinstrap     68</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3    Gentoo    124</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># numeric variables are included, but set to their mean value</span></span></span>
+<span class="r-in"><span><span class="co"># numeric variables are included and "binned"</span></span></span>
 <span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">penguins</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"island"</span>, <span class="st">"body_mass"</span><span class="op">)</span>, weighted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      species    island body_mass Weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     Adelie    Biscoe  3191.810     12</span>
@@ -722,6 +722,19 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15    Gentoo    Biscoe  5217.273     55</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 16    Gentoo    Biscoe  5809.091     22</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># numeric variables are included, but set to their mean value</span></span></span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">penguins</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"island"</span>, <span class="st">"body_mass"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  n_bins <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>  weighted <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     species    island Weight body_mass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Adelie    Biscoe     44  4201.754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    Gentoo    Biscoe    124  4201.754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    Adelie     Dream     56  4201.754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Chinstrap     Dream     68  4201.754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    Adelie Torgersen     52  4201.754</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With models ===============================================================</span></span></span>
 <span class="r-in"><span></span></span>
@@ -759,6 +772,18 @@ by <strong>emmeans</strong> and <strong>marginaleffects</strong> to extract the 
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10     setosa    3.671429     18</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11  virginica    3.671429      3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12     setosa    4.175000      4</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># fewer bins for numeric values</span></span></span>
+<span class="r-in"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">model</span>, n_bins <span class="op">=</span> <span class="fl">3</span>, weighted <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Species Sepal.Width Weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     setosa    2.585106      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 versicolor    2.585106     27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  virginica    2.585106     19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     setosa    3.167045     36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 versicolor    3.167045     23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  virginica    3.167045     29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     setosa    3.893333     13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  virginica    3.893333      2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># weighted data grid</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">iris</span></span></span>
