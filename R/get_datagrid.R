@@ -303,9 +303,16 @@
 #' # according to their actual frequency in the data
 #' get_datagrid(penguins, "species", weighted = TRUE)
 #'
-#' # numeric variables are included, but set to their mean value
+#' # numeric variables are included and "binned"
 #' get_datagrid(penguins, c("species", "island", "body_mass"), weighted = TRUE)
 #'
+#' # numeric variables are included, but set to their mean value
+#' get_datagrid(
+#'   penguins,
+#'   c("species", "island", "body_mass"),
+#'   n_bins = NULL,
+#'   weighted = TRUE
+#' )
 #'
 #' # With models ===============================================================
 #'
@@ -329,6 +336,9 @@
 #' model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 #' # when `by` is not specified, all predictors are used to create a weighted grid
 #' get_datagrid(model, weighted = TRUE)
+#'
+#' # fewer bins for numeric values
+#' get_datagrid(model, n_bins = 3, weighted = TRUE)
 #'
 #' # weighted data grid
 #' d <- iris
