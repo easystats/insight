@@ -732,6 +732,9 @@ get_datagrid.default <- function(
     format_error("`x` must be a statistical model.")
   }
 
+  # extract model weights, used twice later
+  model_weights <- find_weights(x)
+
   # check if user passed a a "weighted" argument. if so, we need the full
   # data frame to create a weighted data grid and do not process any other
   # variables right now
@@ -751,6 +754,13 @@ get_datagrid.default <- function(
       by <- unique(c(by, find_random(x, flatten = TRUE, split_nested = TRUE)))
       include_random <- FALSE
     }
+    # we still may have model weights, which must be ignored and not treated
+    # as "numeric" predictor - remove any weights variable, if not specified
+    # in "weighted"
+    if (!is.null(model_weights)) {
+      by <- setdiff(by, model_weights)
+    }
+    # reset random factors, no longer needed for weighted-option
     random_factors <- NULL
   } else {
     # Retrieve data from model
@@ -851,7 +861,7 @@ get_datagrid.default <- function(
     data <- .replace_attr(data, data_attr)
   }
 
-  vm <- get_datagrid(
+  vis_matrix <- get_datagrid(
     data,
     by = by,
     factors = factors,
@@ -868,29 +878,33 @@ get_datagrid.default <- function(
   # "population level" if not conditioned on via "by"
   if (isFALSE(include_random) && !is.null(random_factors)) {
     if (inherits(x, c("glmmTMB", "brmsfit", "MixMod"))) {
-      vm[random_factors] <- NA
+      vis_matrix[random_factors] <- NA
     } else if (inherits(x, c("merMod", "rlmerMod", "lme"))) {
-      vm[random_factors] <- 0
+      vis_matrix[random_factors] <- 0
     }
   }
 
   # if model has weights, we need to add a dummy for certain classes, e.g. glmmTMB
-  w <- insight::find_weights(x)
-  if (!inherits(x, "brmsfit") && !is.null(w) && !identical(w, weighted)) {
+  if (
+    !inherits(x, "brmsfit") &&
+      !is.null(model_weights) &&
+      !identical(model_weights, weighted)
+  ) {
     # for lme, can't be NA
     if (inherits(x, c("lme", "gls"))) {
-      vm[w] <- 1
+      vis_matrix[model_weights] <- 1
     } else {
-      vm[w] <- NA_real_
+      vis_matrix[model_weights] <- NA_real_
     }
   }
 
   if (isFALSE(include_smooth)) {
-    vm[colnames(vm) %in% clean_names(find_smooth(x, flatten = TRUE))] <- NULL
+    smooth_terms <- colnames(vis_matrix) %in% clean_names(find_smooth(x, flatten = TRUE))
+    vis_matrix[smooth_terms] <- NULL
   }
 
-  attr(vm, "model") <- x
-  vm
+  attr(vis_matrix, "model") <- x
+  vis_matrix
 }
 
 
@@ -1449,14 +1463,6 @@ get_datagrid.comparisons <- get_datagrid.slopes
       }
       # remove weighted variable from binning
       nums <- setdiff(nums, weighted)
-    }
-  } else {
-    # we still may have model weights, which must be ignored and not treated
-    # as "numeric" predictor - remove any weights variable, if not specified
-    # in "weighted"
-    model_weights <- find_weights(x)
-    if (!is.null(model_weights)) {
-      nums <- setdiff(nums, model_weights)
     }
   }
 
