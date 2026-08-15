@@ -86,7 +86,7 @@ get_predicted.stanreg <- function(
   is_wiener <- inherits(model_family, "brmsfamily") && model_family$family == "wiener"
   is_rtchoice <- inherits(model_family, "brmsfamily") &&
     model_family$family == "custom" &&
-    model_family$name == "lnr"
+    .is_rtchoice_family(model_family$name)
   is_mixture <- inherits(model_family, "brmsfamily") && model_family$family == "mixture"
 
   # Special case for rwiener (get choice 1 as negative values)
@@ -123,7 +123,8 @@ get_predicted.stanreg <- function(
     } else if (is_rtchoice) {
       # Reaction time and Choice Models --------------------
       # ----------------------------------------------------
-      # LogNormal Race models (cogmod package) return RT and Choice as odd and even columns
+      # DDM, LBA, LogNormal Race and RDM models (cogmod package) return RT and
+      # Choice as odd and even columns
       response <- as.matrix(draws[, seq(2, ncol(draws), 2)])
       draws <- as.matrix(draws[, seq(1, ncol(draws), 2)])
       draws <- array(

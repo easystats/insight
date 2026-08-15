@@ -472,7 +472,7 @@
     is_wiener = inherits(x, "brmsfit") && fitfam == "wiener",
     is_rtchoice = inherits(x, "brmsfit") &&
       fitfam == "custom" &&
-      identical(brms_custom_name, "lnr"),
+      .is_rtchoice_family(brms_custom_name),
     is_mixture = fitfam == "mixture",
     link_function = link.fun,
     family = fitfam,
@@ -545,4 +545,13 @@
 
 .is_semLme <- function(x) {
   all(inherits(x, c("sem", "lme")))
+}
+
+
+# Custom brms families (from the *cogmod* package) that jointly model reaction
+# times and choice, and whose `posterior_predict()` methods return both
+# components: reaction times in the odd and choices in the even columns.
+.is_rtchoice_family <- function(family_name) {
+  !is.null(family_name) &&
+    family_name %in% c("ddm", "lba", "lnr", "rdm")
 }

@@ -9,6 +9,12 @@
 
 ## Changes
 
+* `model_info()` and `get_predicted()` now recognize the `ddm()`, `lba()` and
+  `rdm()` custom *brms* families from package *cogmod* as reaction-time and
+  choice models (`is_rtchoice`), alongside the already supported `lnr()`. Their
+  predictions are hence split into the `"rt"` and `"response"` components,
+  instead of being returned as a single interleaved vector.
+
 * `get_datagrid()` gains a `weighted` argument, to create a smaller representation
   of large data grids, where multiple unique combinations of predictors are
   included only once, and a new `Weight` column indicates how often each
