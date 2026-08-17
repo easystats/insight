@@ -57,7 +57,8 @@
 #' * `is_hurdle`: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 #' * `is_rtchoice`: model is a *brms* decision-making (sequential sampling) model,
 #'   which models outcomes that consists of two components (reaction times and
-#'   choice).
+#'   choice). This currently covers the `ddm()`, `lba()`, `lnr()` and `rdm()`
+#'   custom families from package *cogmod*.
 #' * `is_survival`: model is a survival model
 #' * `is_trial`: model response contains additional information about the trials
 #' * `is_truncated`: model is a truncated model (has a truncated response)

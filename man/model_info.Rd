@@ -75,7 +75,8 @@ works for \emph{brmsfit} and \emph{vglm/vgam} objects)
 \item \code{is_hurdle}: model has zero-inflation component and is a hurdle-model (truncated family distribution)
 \item \code{is_rtchoice}: model is a \emph{brms} decision-making (sequential sampling) model,
 which models outcomes that consists of two components (reaction times and
-choice).
+choice). This currently covers the \code{ddm()}, \code{lba()}, \code{lnr()} and \code{rdm()}
+custom families from package \emph{cogmod}.
 \item \code{is_survival}: model is a survival model
 \item \code{is_trial}: model response contains additional information about the trials
 \item \code{is_truncated}: model is a truncated model (has a truncated response)
