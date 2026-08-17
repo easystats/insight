@@ -115,7 +115,8 @@ values starting with `is_` are logicals.
 
 - `is_rtchoice`: model is a *brms* decision-making (sequential sampling)
   model, which models outcomes that consists of two components (reaction
-  times and choice).
+  times and choice). This currently covers the `ddm()`, `lba()`, `lnr()`
+  and `rdm()` custom families from package *cogmod*.
 
 - `is_survival`: model is a survival model
 

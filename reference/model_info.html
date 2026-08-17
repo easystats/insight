@@ -135,7 +135,8 @@ works for <em>brmsfit</em> and <em>vglm/vgam</em> objects)</p></li>
 <li><p><code>is_hurdle</code>: model has zero-inflation component and is a hurdle-model (truncated family distribution)</p></li>
 <li><p><code>is_rtchoice</code>: model is a <em>brms</em> decision-making (sequential sampling) model,
 which models outcomes that consists of two components (reaction times and
-choice).</p></li>
+choice). This currently covers the <code>ddm()</code>, <code>lba()</code>, <code>lnr()</code> and <code>rdm()</code>
+custom families from package <em>cogmod</em>.</p></li>
 <li><p><code>is_survival</code>: model is a survival model</p></li>
 <li><p><code>is_trial</code>: model response contains additional information about the trials</p></li>
 <li><p><code>is_truncated</code>: model is a truncated model (has a truncated response)</p></li>
