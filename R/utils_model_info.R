@@ -553,5 +553,6 @@
 # components: reaction times in the odd and choices in the even columns.
 .is_rtchoice_family <- function(family_name) {
   !is.null(family_name) &&
+    nzchar(family_name) &&
     family_name %in% c("ddm", "lba", "lnr", "rdm")
 }
