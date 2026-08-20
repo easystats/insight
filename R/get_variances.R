@@ -233,7 +233,8 @@ get_variance.merMod <- function(
     verbose = verbose,
     tolerance = tolerance,
     model_null = null_model,
-    approximation = approximation
+    approximation = approximation,
+    ...
   ))
 }
 
@@ -301,7 +302,8 @@ get_variance.glmmTMB <- function(
     tolerance = tolerance,
     model_component = model_component,
     model_null = null_model,
-    approximation = approximation
+    approximation = approximation,
+    ...
   ))
 }
 
@@ -335,7 +337,8 @@ get_variance.mixed <- function(
     verbose = verbose,
     tolerance = tolerance,
     model_null = null_model,
-    approximation = approximation
+    approximation = approximation,
+    ...
   ))
 }
 
