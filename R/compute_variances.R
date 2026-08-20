@@ -7,7 +7,8 @@
   tolerance = 1e-8,
   model_component = "full",
   model_null = NULL,
-  approximation = "lognormal"
+  approximation = "lognormal",
+  ...
 ) {
   ## Original code taken from GitGub-Repo of package glmmTMB
   ## Author: Ben Bolker, who used an cleaned-up/adapted
@@ -60,7 +61,6 @@
       any(startsWith(faminfo$family, "hurdle"))) &&
       model_component != "full"
   ) {
-    # nolint
     if (verbose) {
       format_warning(
         "Truncated or hurdle families are only supported for `model_component = \"full\"`."
@@ -76,7 +76,7 @@
       verbose
   ) {
     format_alert(
-      "Zero-inflation part of the model is not considered for variance decomposition. Use `model_component = \"full\"` to take both the conditional and the zero-inflation model into account." # nolint
+      "Zero-inflation part of the model is not considered for variance decomposition. Use `model_component = \"full\"` to take both the conditional and the zero-inflation model into account."
     )
   }
 
@@ -87,7 +87,7 @@
 
   # get necessary model information, like fixed and random effects,
   # variance-covariance matrix etc.
-  mixed_effects_info <- get_mixed_info(model, verbose = verbose)
+  mixed_effects_info <- get_mixed_info(model, verbose = verbose, ...)
 
   # we also need necessary model information, like fixed and random effects,
   # variance-covariance matrix etc. for the null model
@@ -98,7 +98,7 @@
     if (is.null(model_null)) {
       model_null <- .safe(null_model(model, verbose = FALSE))
     }
-    me_info_null <- get_mixed_info(model_null, verbose = verbose)
+    me_info_null <- get_mixed_info(model_null, verbose = verbose, ...)
   }
 
   # Test for non-zero random effects ((near) singularity)
@@ -114,8 +114,8 @@
         sprintf(
           "Can't compute %s. Some variance components equal zero. Your model may suffer from singularity (see `?lme4::isSingular` and `?performance::check_singularity`).",
           name_full
-        ), # nolint
-        "Decrease the `tolerance` level to force the calculation of random effect variances, or impose priors on your random effects parameters (using packages like `brms` or `glmmTMB`)." # nolint
+        ),
+        "Decrease the `tolerance` level to force the calculation of random effect variances, or impose priors on your random effects parameters (using packages like `brms` or `glmmTMB`)."
       )
     }
     no_random_variance <- TRUE
@@ -394,7 +394,7 @@
         if (verbose) {
           format_alert(
             "`sigma` is modeled directly, and hence there is no longer a single sigma parameter to calculate the residual variance. Returning `NULL` instead."
-          ) # nolint
+          )
         }
         return(NULL)
       }
@@ -463,7 +463,7 @@
           y_factor *
           pmean *
           (1 - pmean) *
-          exp((stats::qnorm(pmean) / sqrt(2))^2)^2, # nolint
+          exp((stats::qnorm(pmean) / sqrt(2))^2)^2,
         1 / y_factor
       ),
       cloglog = ,
@@ -580,7 +580,7 @@
   .safe(as.numeric(stats::plogis(
     fe_null -
       0.5 * sum(revar_null) * tanh(fe_null * (1 + 2 * exp(-0.5 * sum(revar_null))) / 6)
-  ))) # nolint
+  )))
 }
 
 
@@ -642,7 +642,7 @@
     if (verbose) {
       format_warning(
         "Can't calculate model's distribution-specific variance. Results are not reliable.",
-        "A reason can be that the null model could not be computed manually. Try to fit the null model manually and pass it to `null_model`." # nolint
+        "A reason can be that the null model could not be computed manually. Try to fit the null model manually and pass it to `null_model`."
       )
     }
     return(0)
