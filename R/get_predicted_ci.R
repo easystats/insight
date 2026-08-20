@@ -359,6 +359,25 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
 }
 
 
+.mmrm_df_per_obs <- function(x, data = NULL) {
+  check_if_installed("mmrm")
+  if (is.null(data)) {
+    data <- get_data(x, verbose = FALSE)
+  }
+  if (!inherits(data, "data.frame")) {
+    format_error("The `data` argument should be a data frame.")
+  }
+  mm <- get_modelmatrix(x, data = data)
+  # `df_1d()` uses the method that was chosen when fitting the model, e.g.
+  # Satterthwaite or Kenward-Roger
+  vapply(
+    seq_len(nrow(mm)),
+    function(i) mmrm::df_1d(x, mm[i, ])$df,
+    numeric(1)
+  )
+}
+
+
 .get_predicted_se_to_ci_zeroinfl <- function(
   x,
   predictions = NULL,
