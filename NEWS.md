@@ -9,6 +9,10 @@
 
 ## Changes
 
+* `get_df()` now supports the `df_per_obs` argument for models of class `mmrm`,
+  returning one degree of freedom per row of `data` instead of one per
+  coefficient, using the method chosen when fitting the model.
+
 * `model_info()` and `get_predicted()` now recognize the `ddm()`, `lba()` and
   `rdm()` custom *brms* families from package *cogmod* as reaction-time and
   choice models (`is_rtchoice`), alongside the already supported `lnr()`. Their
