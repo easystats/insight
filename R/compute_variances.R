@@ -1,8 +1,8 @@
 .compute_variances <- function(
   model,
   component,
-  name_fun = NULL,
-  name_full = NULL,
+  name_fun = "get_variance",
+  name_full = "random effect variances",
   verbose = TRUE,
   tolerance = 1e-8,
   model_component = "full",
