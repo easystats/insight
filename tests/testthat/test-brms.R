@@ -1106,7 +1106,7 @@ test_that("get_variance works", {
     ignore_attr = TRUE
   )
 
-  get_variance(mdl, robust = TRUE)
+  out <- get_variance(mdl, robust = TRUE)
   expect_equal(
     out,
     list(
