@@ -270,8 +270,14 @@ get_mixed_info.glmmadmb <- function(model, verbose = TRUE, ...) {
 
 #' @export
 get_mixed_info.brmsfit <- function(model, verbose = TRUE, ...) {
-  check_if_installed("brms")
-  varcorr <- lme4::VarCorr(model, ...)
+  check_if_installed(c("brms", "lme4"))
+
+  # evaluate dots, make sure "summary" is not passed. Else, we
+  # get incompatible posterior draws when calling VarCorr()
+  dots <- list(...)
+  dots$summary <- NULL
+
+  varcorr <- do.call(lme4::VarCorr, list(model, dots))
 
   comp_x <- get_modelmatrix(model)
   rownames(comp_x) <- seq_len(nrow(comp_x))
