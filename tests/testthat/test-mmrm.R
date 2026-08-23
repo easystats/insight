@@ -48,6 +48,48 @@ test_that("get_df", {
   expect_equal(get_df(mod_mmrm, type = "model"), 12, ignore_attr = TRUE)
 })
 
+test_that("get_df, per observation", {
+  d <- get_data(mod_mmrm)
+  out1 <- get_df(mod_mmrm, type = "satterthwaite", df_per_obs = TRUE, data = d)
+  out2 <- get_df(mod_mmrm, type = "satterthwaite", df_per_obs = FALSE)
+  expect_length(out1, nrow(d))
+  expect_length(out2, 11)
+  # `data` defaults to the data used to fit the model
+  expect_equal(
+    get_df(mod_mmrm, df_per_obs = TRUE),
+    out1,
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  # same Satterthwaite DF as `emmeans` for the same combination of predictors
+  skip_if_not_installed("emmeans")
+  emm <- emmeans::emmeans(
+    mod_mmrm,
+    ~ RACE + SEX + ARMCD + AVISIT,
+    at = lapply(d[1, c("RACE", "SEX", "ARMCD", "AVISIT")], as.character)
+  )
+  expect_equal(
+    out1[1],
+    summary(emm)$df,
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  # same for a model fitted with Kenward-Roger (which happens to give the same
+  # degrees of freedom as Satterthwaite for this balanced design)
+  mod_kr <- mmrm::mmrm(
+    formula = FEV1 ~ RACE + SEX + ARMCD * AVISIT + us(AVISIT | USUBJID),
+    data = fev_data,
+    method = "Kenward-Roger"
+  )
+  emm_kr <- emmeans::emmeans(
+    mod_kr,
+    ~ RACE + SEX + ARMCD + AVISIT,
+    at = lapply(d[1, c("RACE", "SEX", "ARMCD", "AVISIT")], as.character)
+  )
+  out_kr <- get_df(mod_kr, df_per_obs = TRUE)
+  expect_equal(out_kr[1], summary(emm_kr)$df, ignore_attr = TRUE, tolerance = 1e-4)
+})
+
 test_that("n_parameters", {
   expect_identical(n_parameters(mod_mmrm), 11L)
 })

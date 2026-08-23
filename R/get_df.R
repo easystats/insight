@@ -285,7 +285,15 @@ get_df.svy2lme <- function(x, type = "residual", verbose = TRUE, ...) {
 
 #' @export
 get_df.mmrm <- function(x, type = "residual", verbose = TRUE, ...) {
-  if (identical(type, "model")) {
+  # hidden gem - required when per-observation DF are needed, e.g. to compute
+  # confidence intervals around predictions. note that "mmrm" models have no
+  # `type` option: the method used to compute the degrees of freedom is chosen
+  # when the model is fitted, and is used for all contrasts
+  dots <- list(...)
+
+  if (isTRUE(dots$df_per_obs)) {
+    .mmrm_df_per_obs(x, dots$data)
+  } else if (identical(type, "model")) {
     .model_df(x)
   } else {
     summary_table <- stats::coef(summary(x))
