@@ -51,15 +51,15 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #> Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 0.405 seconds (Warm-up)
-#> Chain 1:                0.42 seconds (Sampling)
-#> Chain 1:                0.825 seconds (Total)
+#> Chain 1:  Elapsed Time: 0.406 seconds (Warm-up)
+#> Chain 1:                0.424 seconds (Sampling)
+#> Chain 1:                0.83 seconds (Total)
 #> Chain 1: 
 #> 
 #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
 #> Chain 2: 
-#> Chain 2: Gradient evaluation took 1.6e-05 seconds
-#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#> Chain 2: Gradient evaluation took 1.5e-05 seconds
+#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
 #> Chain 2: Adjust your expectations accordingly!
 #> Chain 2: 
 #> Chain 2: 
@@ -76,9 +76,9 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #> Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #> Chain 2: 
-#> Chain 2:  Elapsed Time: 0.409 seconds (Warm-up)
-#> Chain 2:                0.421 seconds (Sampling)
-#> Chain 2:                0.83 seconds (Total)
+#> Chain 2:  Elapsed Time: 0.411 seconds (Warm-up)
+#> Chain 2:                0.424 seconds (Sampling)
+#> Chain 2:                0.835 seconds (Total)
 #> Chain 2: 
 #> 
 #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
@@ -101,15 +101,15 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #> Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #> Chain 3: 
-#> Chain 3:  Elapsed Time: 0.395 seconds (Warm-up)
-#> Chain 3:                0.418 seconds (Sampling)
-#> Chain 3:                0.813 seconds (Total)
+#> Chain 3:  Elapsed Time: 0.399 seconds (Warm-up)
+#> Chain 3:                0.421 seconds (Sampling)
+#> Chain 3:                0.82 seconds (Total)
 #> Chain 3: 
 #> 
 #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
 #> Chain 4: 
-#> Chain 4: Gradient evaluation took 1.5e-05 seconds
-#> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#> Chain 4: Gradient evaluation took 1.6e-05 seconds
+#> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
 #> Chain 4: Adjust your expectations accordingly!
 #> Chain 4: 
 #> Chain 4: 
@@ -126,9 +126,9 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #> Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #> Chain 4: 
-#> Chain 4:  Elapsed Time: 0.396 seconds (Warm-up)
-#> Chain 4:                0.49 seconds (Sampling)
-#> Chain 4:                0.886 seconds (Total)
+#> Chain 4:  Elapsed Time: 0.398 seconds (Warm-up)
+#> Chain 4:                0.479 seconds (Sampling)
+#> Chain 4:                0.877 seconds (Total)
 #> Chain 4: 
 is_bayesian_model(model)
 #> [1] TRUE
