@@ -103,7 +103,7 @@ as *coefficients*.
 
 Any unique variable names that appear in a regression model, e.g.,
 response variable, predictors or random effects. A “variable” only
-relates to the unique occurence of a term, or the term name. For
+relates to the unique occurrence of a term, or the term name. For
 instance, the expression `x + poly(x, 2)` has only the variable `x`.
 
 #### Terms
