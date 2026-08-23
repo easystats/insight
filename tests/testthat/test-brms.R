@@ -1106,6 +1106,21 @@ test_that("get_variance works", {
     ignore_attr = TRUE
   )
 
+  get_variance(mdl, robust = TRUE)
+  expect_equal(
+    out,
+    list(
+      var.fixed = 4.91103174480995,
+      var.random = 17.6083462129,
+      var.residual = 10.9304525807216,
+      var.distribution = 10.9304525807216,
+      var.dispersion = 0,
+      var.intercept = c(cyl = 17.6083462129)
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
   # make sure it's a matrix
   # expect_true(is.matrix(get_modelmatrix(null_model(mdl))))
 

@@ -1,12 +1,5 @@
 # insight (devel)
 
-## Bug fixes
-
-* `null_model()` no longer fails for models whose offset is written inline in
-  the formula with a nested-parenthesis expression followed by further terms
-  (e.g. `y ~ x + offset(log(exposure)) + factor(year)`). The offset term is now
-  extracted from the formula's language tree instead of by a paren-blind regex.
-
 ## Changes
 
 * `get_df()` now supports the `df_per_obs` argument for models of class `mmrm`,
@@ -37,6 +30,13 @@
 * Added a documentation page for available `options`.
 
 * Updated test-files for `htest` objects and fixed deprecated names.
+
+## Bug fixes
+
+* `null_model()` no longer fails for models whose offset is written inline in
+  the formula with a nested-parenthesis expression followed by further terms
+  (e.g. `y ~ x + offset(log(exposure)) + factor(year)`). The offset term is now
+  extracted from the formula's language tree instead of by a paren-blind regex.
 
 # insight 1.5.2
 

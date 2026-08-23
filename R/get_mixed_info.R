@@ -277,7 +277,7 @@ get_mixed_info.brmsfit <- function(model, verbose = TRUE, ...) {
   dots <- list(...)
   dots$summary <- NULL
 
-  varcorr <- do.call(lme4::VarCorr, list(model, dots))
+  varcorr <- do.call(lme4::VarCorr, c(list(model), dots))
 
   comp_x <- get_modelmatrix(model)
   rownames(comp_x) <- seq_len(nrow(comp_x))
