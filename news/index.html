@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,26 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.3" id="insight-153">insight 1.5.3<a class="anchor" aria-label="anchor" href="#insight-153"></a></h2>
+<div class="section level3">
+<h3 id="changes-1-5-3">Changes<a class="anchor" aria-label="anchor" href="#changes-1-5-3"></a></h3>
+<ul><li><p><code><a href="../reference/get_df.html">get_df()</a></code> now supports the <code>df_per_obs</code> argument for models of class <code>mmrm</code>, returning one degree of freedom per row of <code>data</code> instead of one per coefficient, using the method chosen when fitting the model.</p></li>
+<li><p><code><a href="../reference/model_info.html">model_info()</a></code> and <code><a href="../reference/get_predicted.html">get_predicted()</a></code> now recognize the <code>ddm()</code>, <code>lba()</code> and <code>rdm()</code> custom <em>brms</em> families from package <em>cogmod</em> as reaction-time and choice models (<code>is_rtchoice</code>), alongside the already supported <code>lnr()</code>. Their predictions are hence split into the <code>"rt"</code> and <code>"response"</code> components, instead of being returned as a single interleaved vector.</p></li>
+<li><p><code><a href="../reference/get_datagrid.html">get_datagrid()</a></code> gains a <code>weighted</code> argument, to create a smaller representation of large data grids, where multiple unique combinations of predictors are included only once, and a new <code>Weight</code> column indicates how often each combination appears in the original data. The related <code>n_bins</code> argument indicates how numeric values are represented in the reduced data grid.</p></li>
+<li><p><code><a href="../reference/format_ci.html">format_ci()</a></code> gains a <code>separator</code> argument, to customize the separator for lower and upper CI values.</p></li>
+<li><p><code><a href="../reference/find_response.html">find_response()</a></code>, <code><a href="../reference/find_predictors.html">find_predictors()</a></code>, and <code><a href="../reference/find_variables.html">find_variables()</a></code> now also work for objects from package <em>marginaleffects</em>.</p></li>
+<li><p>Preliminary support in <code><a href="../reference/find_parameters.html">find_parameters()</a></code> for objects from package <em>marginaleffects</em>.</p></li>
+<li><p><code>get_variances()</code> now passes <code>...</code> down to <code><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">VarCorr()</a></code>, which might be useful for Bayesian models (e.g. to return robust estimates using <code>robust = TRUE</code>).</p></li>
+<li><p>Added a documentation page for available <code>options</code>.</p></li>
+<li><p>Updated test-files for <code>htest</code> objects and fixed deprecated names.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-5-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-3"></a></h3>
+<ul><li>
+<code><a href="../reference/null_model.html">null_model()</a></code> no longer fails for models whose offset is written inline in the formula with a nested-parenthesis expression followed by further terms (e.g. <code>y ~ x + offset(log(exposure)) + factor(year)</code>). The offset term is now extracted from the formula’s language tree instead of by a paren-blind regex.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.2" id="insight-152">insight 1.5.2<a class="anchor" aria-label="anchor" href="#insight-152"></a></h2><p class="text-muted">CRAN release: 2026-06-28</p>
 <div class="section level3">
