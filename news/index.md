@@ -2,6 +2,8 @@
 
 ## insight 1.5.3
 
+CRAN release: 2026-08-25
+
 ### Changes
 
 - [`get_df()`](https://easystats.github.io/insight/reference/get_df.md)
