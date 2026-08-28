@@ -1,3 +1,12 @@
+# insight (devel)
+
+## Bug fixes
+
+* Fixed a bug where `get_statistic()` incorrectly extracted degrees of freedom
+  (df) instead of the t value for `rlmerMod` models (*robustlmm*) after
+  Satterthwaite degrees of freedom were cached (e.g., following `emmeans`
+  calls).
+
 # insight 1.5.3
 
 ## Changes

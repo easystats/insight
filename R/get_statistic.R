@@ -179,6 +179,24 @@ get_statistic.mmrm_tmb <- get_statistic.mmrm
 
 
 #' @export
+get_statistic.rlmerMod <- function(x, ...) {
+  cs <- suppressWarnings(stats::coef(summary(x)))
+  column_index <- which(colnames(cs) == "t value")
+
+  out <- data.frame(
+    Parameter = names(cs[, column_index]),
+    Statistic = as.vector(cs[, column_index]),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  out <- text_remove_backticks(out)
+  attr(out, "statistic") <- find_statistic(x)
+  out
+}
+
+
+#' @export
 get_statistic.merModList <- function(x, ...) {
   s <- suppressWarnings(summary(x))
   out <- data.frame(

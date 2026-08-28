@@ -331,3 +331,23 @@ test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
   expect_identical(find_statistic(m2), "t-statistic")
 })
+
+skip_if_not_installed("withr")
+withr::with_environment(
+  new.env(),
+  test_that("get_statistic, Satterthwaite and emmeans issue", {
+    skip_if_not_installed("emmeans")
+    data(sleepstudy, package = "lme4")
+    fit <- robustlmm::rlmer(
+      Reaction ~ Days + (1 | Subject),
+      data = sleepstudy
+    )
+    before <- get_statistic(fit)
+
+    # Calculates and caches the Satterthwaite information
+    emmeans::emtrends(fit, ~1, var = "Days")
+    after <- get_statistic(fit)
+
+    expect_equal(before$Statistic, after$Statistic, tolerance = 1e-4)
+  })
+)
