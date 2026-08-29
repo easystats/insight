@@ -1,5 +1,9 @@
 # insight (devel)
 
+## Changes
+
+* *insight* now supports the new `ordinal` family from *glmmTMB* models.
+
 ## Bug fixes
 
 * Fixed a bug where `get_statistic()` incorrectly extracted degrees of freedom

@@ -73,6 +73,13 @@ find_parameters.glmmTMB <- function(
     ))
   }
 
+  # handle ordinal models - no intercept
+  if (identical(stats::family(x)$family, "ordinal")) {
+    l <- lapply(l, function(i) {
+      setdiff(i, "(Intercept)")
+    })
+  }
+
   .filter_parameters(l, effects = effects, component = component, flatten = flatten)
 }
 

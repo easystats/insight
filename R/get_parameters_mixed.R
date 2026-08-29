@@ -105,6 +105,10 @@ get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...)
       zero_inflated = fixedzi,
       dispersion = fixeddisp
     )
+    # handle ordinal models - no intercept
+    if (identical(stats::family(x)$family, "ordinal")) {
+      out <- out[-1, ]
+    }
     text_remove_backticks(out)
   } else if (effects == "random") {
     switch(
