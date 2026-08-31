@@ -593,6 +593,12 @@ get_varcov.glmmTMB <- function(
     c("conditional", "zero_inflated", "zi", "dispersion", "all", "full")
   )
 
+  # handle ordinal models - we need full varcov here
+  is_ordinal <- identical(stats::family(x)$family, "ordinal")
+  if (is_ordinal) {
+    component <- "full"
+  }
+
   if (is.null(vcov)) {
     vc <- switch(
       component,
@@ -631,8 +637,18 @@ get_varcov.glmmTMB <- function(
 
   # drop theta parameters
   theta_parms <- startsWith(colnames(vc), "theta_")
-  if (any(theta_parms) && component != "full") {
+  if (any(theta_parms) && (is_ordinal || component != "full")) {
     vc <- vc[!theta_parms, !theta_parms, drop = FALSE]
+  }
+
+  # reorder for ordinal, to be in line with order of parameters
+  if (is_ordinal) {
+    # find parameters to re-order the vcov-matrix
+    params <- intersect(find_parameters(x)$conditional, colnames(vc))
+    # check if dimensions still match
+    if (length(params) == ncol(vc)) {
+      vc <- vc[params, params]
+    }
   }
 
   .process_vcov(vc, verbose, ...)

@@ -78,6 +78,8 @@ find_parameters.glmmTMB <- function(
     l <- lapply(l, function(i) {
       setdiff(i, "(Intercept)")
     })
+    # add threshold names
+    l$conditional <- c(names(glmmTMB::family_params(x)), l$conditional)
   }
 
   .filter_parameters(l, effects = effects, component = component, flatten = flatten)

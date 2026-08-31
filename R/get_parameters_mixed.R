@@ -59,6 +59,11 @@ get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...)
     ))
   }
 
+  # handle ordinal models - add thresholds
+  if (identical(stats::family(x)$family, "ordinal")) {
+    l$conditional <- c(glmmTMB::family_params(x), l$conditional)
+  }
+
   # ---- fixed effects (conditional model)
 
   fixed <- data.frame(
