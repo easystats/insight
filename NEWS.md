@@ -1,8 +1,17 @@
 # insight (devel)
 
-## Changes
+## New supported models
 
-* *insight* now supports the new `ordinal` family from *glmmTMB* models.
+* Support for models of class `glmmTMB` fitted with the new `ordinal()`
+  family (*glmmTMB* >= 1.1.15). As for `ordinal::clm()`, the thresholds are
+  returned as conditional parameters ahead of the slopes, with standard errors
+  and statistics obtained via the delta method (the thresholds are estimated on
+  an internal, softmax-parameterized scale), while the intercept, which is
+  fixed to zero by *glmmTMB*, is dropped. `get_predicted()` returns
+  per-category probabilities for `predict = "expectation"` and the most likely
+  category for `predict = "classification"`, and `get_variance()` uses the
+  distribution-specific residual variance of the latent scale, as for
+  `ordinal::clmm()`.
 
 ## Bug fixes
 

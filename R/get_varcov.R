@@ -593,21 +593,20 @@ get_varcov.glmmTMB <- function(
     c("conditional", "zero_inflated", "zi", "dispersion", "all", "full")
   )
 
-  # handle ordinal models - we need full varcov here
-  is_ordinal <- identical(stats::family(x)$family, "ordinal")
-  if (is_ordinal) {
-    component <- "full"
-  }
-
   if (is.null(vcov)) {
-    vc <- switch(
-      component,
-      conditional = .safe_vcov(x)[["cond"]],
-      zi = ,
-      zero_inflated = .safe_vcov(x)[["zi"]],
-      dispersion = .safe_vcov(x)[["disp"]],
-      stats::vcov(x, full = TRUE)
-    )
+    if (.is_glmmtmb_ordinal(x) && component %in% c("conditional", "all")) {
+      # thresholds (delta method) and estimated fixed effects
+      vc <- .glmmtmb_ordinal_varcov(x)
+    } else {
+      vc <- switch(
+        component,
+        conditional = .safe_vcov(x)[["cond"]],
+        zi = ,
+        zero_inflated = .safe_vcov(x)[["zi"]],
+        dispersion = .safe_vcov(x)[["disp"]],
+        stats::vcov(x, full = TRUE)
+      )
+    }
   } else {
     vc <- .get_varcov_sandwich(
       x,
@@ -637,18 +636,8 @@ get_varcov.glmmTMB <- function(
 
   # drop theta parameters
   theta_parms <- startsWith(colnames(vc), "theta_")
-  if (any(theta_parms) && (is_ordinal || component != "full")) {
+  if (any(theta_parms) && component != "full") {
     vc <- vc[!theta_parms, !theta_parms, drop = FALSE]
-  }
-
-  # reorder for ordinal, to be in line with order of parameters
-  if (is_ordinal) {
-    # find parameters to re-order the vcov-matrix
-    params <- intersect(find_parameters(x)$conditional, colnames(vc))
-    # check if dimensions still match
-    if (length(params) == ncol(vc)) {
-      vc <- vc[params, params]
-    }
   }
 
   .process_vcov(vc, verbose, ...)
@@ -1200,9 +1189,9 @@ get_varcov.LORgee <- get_varcov.gee
 
 # helper-functions -----------------------------------------------------
 
-.safe_vcov <- function(x) {
+.safe_vcov <- function(x, ...) {
   vc <- tryCatch(
-    suppressWarnings(stats::vcov(x)),
+    suppressWarnings(stats::vcov(x, ...)),
     error = function(e) e
   )
   if (inherits(vc, "error")) {

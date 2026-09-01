@@ -59,9 +59,9 @@ get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...)
     ))
   }
 
-  # handle ordinal models - add thresholds
-  if (identical(stats::family(x)$family, "ordinal")) {
-    l$conditional <- c(glmmTMB::family_params(x), l$conditional)
+  # ordinal family: thresholds instead of the (fixed) intercept
+  if (.is_glmmtmb_ordinal(x)) {
+    l$conditional <- .glmmtmb_ordinal_conditional(x)
   }
 
   # ---- fixed effects (conditional model)
@@ -110,10 +110,6 @@ get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...)
       zero_inflated = fixedzi,
       dispersion = fixeddisp
     )
-    # handle ordinal models - no intercept
-    if (identical(stats::family(x)$family, "ordinal")) {
-      out <- out[-1, ]
-    }
     text_remove_backticks(out)
   } else if (effects == "random") {
     switch(

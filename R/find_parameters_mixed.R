@@ -73,13 +73,9 @@ find_parameters.glmmTMB <- function(
     ))
   }
 
-  # handle ordinal models - no intercept
-  if (identical(stats::family(x)$family, "ordinal")) {
-    l <- lapply(l, function(i) {
-      setdiff(i, "(Intercept)")
-    })
-    # add threshold names
-    l$conditional <- c(names(glmmTMB::family_params(x)), l$conditional)
+  # ordinal family: thresholds instead of the (fixed) intercept
+  if (.is_glmmtmb_ordinal(x)) {
+    l$conditional <- names(.glmmtmb_ordinal_conditional(x))
   }
 
   .filter_parameters(l, effects = effects, component = component, flatten = flatten)
