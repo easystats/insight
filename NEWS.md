@@ -1,4 +1,4 @@
-# insight (devel)
+# insight 1.5.4
 
 ## Bug fixes
 
@@ -6,6 +6,8 @@
   (df) instead of the t value for `rlmerMod` models (*robustlmm*) after
   Satterthwaite degrees of freedom were cached (e.g., following `emmeans`
   calls).
+
+* Fix failing CRAN checks.
 
 # insight 1.5.3
 
