@@ -1,5 +1,17 @@
 # Changelog
 
+## insight 1.5.4
+
+### Bug fixes
+
+- Fixed a bug where
+  [`get_statistic()`](https://easystats.github.io/insight/reference/get_statistic.md)
+  incorrectly extracted degrees of freedom (df) instead of the t value
+  for `rlmerMod` models (*robustlmm*) after Satterthwaite degrees of
+  freedom were cached (e.g., following `emmeans` calls).
+
+- Fix failing CRAN checks.
+
 ## insight 1.5.3
 
 CRAN release: 2026-08-25
