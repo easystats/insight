@@ -1,3 +1,16 @@
+# insight (devel)
+
+## Bug fixes
+
+* `find_auxiliary()` no longer returns `"sigma"` for *brms* models that have no
+  residual standard deviation, but auxiliary parameters whose names merely
+  contain `"sigma"` (e.g. `"sigmadrift"` or `"sigmabias"` from custom families).
+
+* `clean_parameters()` no longer assigns auxiliary parameters whose names
+  contain `"sigma"` (like `"sigmabias"`) to the `"sigma"` component. These are
+  now returned as their own component, which also fixes the related grouping in
+  `parameters::model_parameters()`.
+
 # insight 1.5.4
 
 ## Bug fixes
