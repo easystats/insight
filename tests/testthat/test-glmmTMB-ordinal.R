@@ -93,7 +93,7 @@ test_that("get_predicted: per-category probabilities", {
   out <- get_predicted(m_tmb, ci = 0.95, verbose = FALSE)
   expect_s3_class(out, "data.frame")
   expect_true(all(c("Row", "Response", "Predicted") %in% colnames(out)))
-  expect_identical(nrow(out), nrow(wine) * nlevels(wine$rating))
+  expect_shape(out, nrow = nrow(wine) * nlevels(wine$rating))
 
   # matches glmmTMB's own predict(type = "probs")
   pr <- predict(m_tmb, type = "probs", se.fit = TRUE)
@@ -115,7 +115,7 @@ test_that("get_predicted: per-category probabilities", {
   # data grid
   dg <- get_datagrid(m_tmb, "temp", verbose = FALSE)
   out <- get_predicted(m_tmb, data = dg, verbose = FALSE)
-  expect_identical(nrow(out), nrow(dg) * nlevels(wine$rating))
+  expect_shape(out, nrow = nrow(dg) * nlevels(wine$rating))
   expect_true("temp" %in% colnames(out))
   expect_equal(
     out$Predicted,
