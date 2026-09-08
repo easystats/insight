@@ -411,24 +411,21 @@ clean_parameters.mlm <- function(x, ...) {
       "fixed"
     }
 
-    # we must start with "conditional one", so it's not confused with "conditional"
-    com <- if (grepl("conditional", i, fixed = TRUE) || i == "random") {
-      "conditional"
-    } else if (grepl("sigma", i, fixed = TRUE)) {
-      "sigma"
-    } else if (grepl("priors", i, fixed = TRUE)) {
-      "priors"
-    } else if (i %in% c("car", "sdcar")) {
-      "car"
-    } else if (grepl("smooth_terms", i, fixed = TRUE)) {
-      "smooth_terms"
-    } else if (grepl("dispersion", i, fixed = TRUE)) {
-      "dispersion"
-    } else if (endsWith(i, "_random")) {
-      gsub("_random$", "", i)
-    } else {
-      i
-    }
+    # elements that hold the group-level part of a component have a "_random"
+    # suffix, e.g. "sigma_random" belongs to the component "sigma" - we strip
+    # that suffix, and then compare the resulting name against the known
+    # components. Note that we must check for *exact* matches here, else
+    # auxiliary parameters of custom brms-families, like "sigmabias", would be
+    # lumped together with the "sigma" component (see #1224)
+    com <- sub("_random$", "", i)
+    com <- switch(
+      com,
+      conditional = ,
+      random = "conditional",
+      car = ,
+      sdcar = "car",
+      com
+    )
 
     fun <- if (grepl("smooth", i, fixed = TRUE)) {
       "smooth"
