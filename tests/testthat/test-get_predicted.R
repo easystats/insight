@@ -889,25 +889,26 @@ test_that("zero-inflation stuff works", {
 })
 
 
-test_that("get_predicted works with brms-Wiener", {
+test_that("get_predicted works with brms-Wiener (cogmod-RT-choice)", {
   skip_if_not_installed("brms")
   skip_if_not_installed("RWiener")
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
 
-  m <- download_model("m_ddm_1")
+  m <- download_model("cogmod_ddm_1")
   skip_if(is.null(m))
   d <- get_data(m)[1:5, ]
   out <- get_predicted(m, data = d, predict = "prediction", ci = 0.95, iterations = 3)
-  expect_identical(dim(as.data.frame(out)), c(10L, 11L))
+  expect_identical(dim(as.data.frame(out)), c(10L, 12L))
   expect_named(
     as.data.frame(out),
     c(
       "Row",
       "Component",
       "rt",
-      "response",
+      "Error",
+      "Condition",
       "Predicted",
       "SE",
       "CI_low",
@@ -932,7 +933,7 @@ test_that("get_predicted works with brms-Wiener", {
       "response"
     )
   )
-  expect_true(model_info(m)$is_wiener)
+  expect_true(model_info(m)$is_rtchoice)
 })
 
 

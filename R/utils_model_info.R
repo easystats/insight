@@ -554,5 +554,5 @@
 .is_rtchoice_family <- function(family_name) {
   !is.null(family_name) &&
     nzchar(family_name) &&
-    family_name %in% c("ddm", "lba", "lnr", "rdm")
+    family_name %in% c("cogmod_ddm", "cogmod_lba2", "cogmod_lnr", "cogmod_rdm")
 }
