@@ -59,6 +59,11 @@ get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...)
     ))
   }
 
+  # ordinal family: thresholds instead of the (fixed) intercept
+  if (.is_glmmtmb_ordinal(x)) {
+    l$conditional <- .glmmtmb_ordinal_conditional(x)
+  }
+
   # ---- fixed effects (conditional model)
 
   fixed <- data.frame(
