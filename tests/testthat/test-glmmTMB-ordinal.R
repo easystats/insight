@@ -256,6 +256,9 @@ test_that("non-estimated parameters", {
     tolerance = 1e-6
   )
 
+  # supplied covariance matrices are rejected explicitly
+  expect_error(get_varcov(m_tmb, vcov = "HC0"), "not supported")
+
   # errors from glmmTMB are wrapped in insight's message
   m_disp <- glmmTMB::glmmTMB(
     rating ~ temp + contact,
@@ -264,6 +267,30 @@ test_that("non-estimated parameters", {
     family = glmmTMB::ordinal()
   )
   expect_error(get_varcov(m_disp), "Can't extract")
+})
+
+test_that("get_predicted: dot-arguments reach predict()", {
+  # `na.action` is not managed by insight and is forwarded to `predict()`:
+  # by default (`na.pass`), rows with missing predictors are kept as `NA`,
+  # with `na.omit` they are dropped
+  wine_na <- wine
+  wine_na$temp[1] <- NA
+  out <- get_predicted(
+    m_tmb,
+    data = wine_na,
+    predict = "classification",
+    verbose = FALSE
+  )
+  expect_length(out, nrow(wine_na))
+  expect_true(is.na(out[1]))
+  out <- get_predicted(
+    m_tmb,
+    data = wine_na,
+    predict = "classification",
+    na.action = stats::na.omit,
+    verbose = FALSE
+  )
+  expect_length(out, nrow(wine_na) - 1L)
 })
 
 test_that("get_predicted: classification", {

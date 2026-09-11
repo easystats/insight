@@ -593,6 +593,14 @@ get_varcov.glmmTMB <- function(
     c("conditional", "zero_inflated", "zi", "dispersion", "all", "full")
   )
 
+  # ordinal family: supplied (robust) covariance matrices would be on the
+  # internal softmax scale for the thresholds and are not supported
+  if (.is_glmmtmb_ordinal(x) && !is.null(vcov)) {
+    format_error(
+      "The `vcov` argument is not supported for `glmmTMB` models with `ordinal()` family."
+    )
+  }
+
   if (is.null(vcov)) {
     if (.is_glmmtmb_ordinal(x) && component %in% c("conditional", "all")) {
       # thresholds (delta method) and estimated fixed effects

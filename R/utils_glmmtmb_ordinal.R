@@ -129,7 +129,9 @@
   )
   my_args$predict <- ifelse(classification, "classification", "expectation")
 
-  rez <- stats::predict(
+  # remaining dot-arguments are forwarded to `predict()`, as for other
+  # families; those managed here take precedence
+  predict_args <- list(
     x,
     newdata = my_args$data,
     type = "probs",
@@ -137,6 +139,8 @@
     allow.new.levels = my_args$allow_new_levels,
     se.fit = !classification
   )
+  dots[c("type", "newdata", "re.form", "allow.new.levels", "se.fit")] <- NULL
+  rez <- do.call(stats::predict, c(predict_args, dots))
   if (classification) {
     probs <- rez
   } else {
