@@ -40,6 +40,7 @@
 # psi elements, so the Jacobian is J[j, m] = s[m] * ((m <= j) - C_j) /
 # (C_j * (1 - C_j)), with s = softmax(c(psi, 0)) and C_j = cumsum(s)[j]
 .glmmtmb_ordinal_varcov <- function(x) {
+  check_if_installed(c("lme4", "glmmTMB"))
   V <- .safe_vcov(x, full = TRUE)
   thresholds <- glmmTMB::family_params(x)
   cf <- lme4::fixef(x)$cond

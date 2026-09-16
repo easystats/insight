@@ -33,7 +33,7 @@
 #' get_parameters(m)
 #' @export
 get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...) {
-  check_if_installed("lme4")
+  check_if_installed(c("lme4", "glmmTMB"))
 
   effects <- validate_argument(effects, c("fixed", "random"))
   # fmt: skip
