@@ -907,7 +907,7 @@ test_that("get_predicted works with brms-Wiener (cogmod-RT-choice)", {
     c(
       "Row",
       "Component",
-      "rt",
+      "RT",
       "Error",
       "Condition",
       "Predicted",
