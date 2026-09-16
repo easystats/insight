@@ -103,6 +103,44 @@ get_predicted.glmmTMB <- function(
   verbose = TRUE,
   ...
 ) {
+  # ordinal family: "expectation" returns per-category probabilities (like
+  # `clm`), not `plogis()` of the linear predictor. As in `.get_predicted_args()`,
+  # a `type` argument takes precedence over `predict`
+  dots <- list(...)
+  if (.is_glmmtmb_ordinal(x)) {
+    if (is.null(dots$type)) {
+      requested <- predict[1]
+    } else {
+      requested <- dots$type[1]
+    }
+    ordinal_types <- c(
+      "expectation",
+      "expected",
+      "response",
+      "prediction",
+      "predicted",
+      "classification",
+      "probs"
+    )
+    if (isTRUE(requested %in% ordinal_types)) {
+      if (!is.null(iterations) && verbose) {
+        format_warning(
+          "Bootstrapped predictions are currently not supported for `glmmTMB` models with `ordinal()` family.",
+          "Ignoring the `iterations` argument."
+        )
+      }
+      return(.get_predicted_glmmtmb_ordinal(
+        x,
+        data = data,
+        predict = predict,
+        ci = ci,
+        include_random = include_random,
+        verbose = verbose,
+        dots = dots
+      ))
+    }
+  }
+
   # validation checks
   if (!is.null(predict) && predict %in% c("prediction", "predicted", "classification")) {
     predict <- "expectation"

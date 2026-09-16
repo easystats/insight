@@ -593,15 +593,28 @@ get_varcov.glmmTMB <- function(
     c("conditional", "zero_inflated", "zi", "dispersion", "all", "full")
   )
 
-  if (is.null(vcov)) {
-    vc <- switch(
-      component,
-      conditional = .safe_vcov(x)[["cond"]],
-      zi = ,
-      zero_inflated = .safe_vcov(x)[["zi"]],
-      dispersion = .safe_vcov(x)[["disp"]],
-      stats::vcov(x, full = TRUE)
+  # ordinal family: supplied (robust) covariance matrices would be on the
+  # internal softmax scale for the thresholds and are not supported
+  if (.is_glmmtmb_ordinal(x) && !is.null(vcov)) {
+    format_error(
+      "The `vcov` argument is not supported for `glmmTMB` models with `ordinal()` family."
     )
+  }
+
+  if (is.null(vcov)) {
+    if (.is_glmmtmb_ordinal(x) && component %in% c("conditional", "all")) {
+      # thresholds (delta method) and estimated fixed effects
+      vc <- .glmmtmb_ordinal_varcov(x)
+    } else {
+      vc <- switch(
+        component,
+        conditional = .safe_vcov(x)[["cond"]],
+        zi = ,
+        zero_inflated = .safe_vcov(x)[["zi"]],
+        dispersion = .safe_vcov(x)[["disp"]],
+        stats::vcov(x, full = TRUE)
+      )
+    }
   } else {
     vc <- .get_varcov_sandwich(
       x,
@@ -1184,9 +1197,9 @@ get_varcov.LORgee <- get_varcov.gee
 
 # helper-functions -----------------------------------------------------
 
-.safe_vcov <- function(x) {
+.safe_vcov <- function(x, ...) {
   vc <- tryCatch(
-    suppressWarnings(stats::vcov(x)),
+    suppressWarnings(stats::vcov(x, ...)),
     error = function(e) e
   )
   if (inherits(vc, "error")) {

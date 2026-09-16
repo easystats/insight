@@ -452,6 +452,25 @@ get_statistic.glmmTMB <- function(x, component = "all", ...) {
     choices = c("all", "conditional", "zi", "zero_inflated", "dispersion")
   )
 
+  # ordinal family: thresholds are not in the summary coefficient table,
+  # so compute Wald statistics from the (delta-method) covariance matrix
+  if (.is_glmmtmb_ordinal(x)) {
+    params <- get_parameters(x, effects = "fixed", component = "conditional")
+    se <- sqrt(diag(get_varcov(x, component = "conditional", verbose = FALSE)))
+    # match by name - non-estimated parameters (rank deficiency, `map`) are
+    # kept by get_parameters() but have no variance
+    stat <- data.frame(
+      Parameter = params$Parameter,
+      Statistic = params$Estimate / unname(se[params$Parameter]),
+      Component = "conditional",
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+    stat <- .filter_component(stat, component)
+    attr(stat, "statistic") <- find_statistic(x)
+    return(stat)
+  }
+
   cs <- compact_list(stats::coef(summary(x)))
   out <- lapply(names(cs), function(i) {
     data.frame(

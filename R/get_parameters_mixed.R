@@ -33,7 +33,7 @@
 #' get_parameters(m)
 #' @export
 get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...) {
-  check_if_installed("lme4")
+  check_if_installed(c("lme4", "glmmTMB"))
 
   effects <- validate_argument(effects, c("fixed", "random"))
   # fmt: skip
@@ -57,6 +57,11 @@ get_parameters.glmmTMB <- function(x, effects = "fixed", component = "all", ...)
       dispersion = lme4::fixef(x)$disp,
       dispersion_random = lme4::ranef(x)$disp
     ))
+  }
+
+  # ordinal family: thresholds instead of the (fixed) intercept
+  if (.is_glmmtmb_ordinal(x)) {
+    l$conditional <- .glmmtmb_ordinal_conditional(x)
   }
 
   # ---- fixed effects (conditional model)

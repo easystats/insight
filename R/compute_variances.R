@@ -432,17 +432,22 @@
       ),
       .badlink(faminfo$link_function, faminfo$family, verbose = verbose)
     )
-  } else if (faminfo$is_binomial) {
-    # binomial / bernoulli  ----
-    # --------------------------
+  } else if (faminfo$is_binomial || (faminfo$is_ordinal && inherits(model, "glmmTMB"))) {
+    # binomial / bernoulli / cumulative link  ----
+    # -------------------------------------------
 
     # we need this to adjust for "cbind()" outcomes
     y_factor <- .binomial_response_weight(model)
 
     # for observation level approximation, when we don't want the "fixed"
     # residual variance, pi^2/3, but the variance based on the distribution
-    # of the response
-    pmean <- .obs_level_variance(model_null, revar_null)
+    # of the response. Ordinal models have no meaningful pmean (glmmTMB fixes
+    # the null model's intercept to zero, the thresholds absorb it)
+    if (faminfo$is_ordinal) {
+      pmean <- NULL
+    } else {
+      pmean <- .obs_level_variance(model_null, revar_null)
+    }
 
     # sanity check - clmm-models are "binomial" but have no pmean
     if (is.null(pmean) && identical(approx_method, "observation_level")) {

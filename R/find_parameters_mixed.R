@@ -50,7 +50,7 @@ find_parameters.glmmTMB <- function(
   )
 
   # installed
-  check_if_installed("lme4")
+  check_if_installed(c("lme4", "glmmTMB"))
 
   # we extract random effects only when really necessary, to save
   # computational time. In particular model with large sample and
@@ -71,6 +71,11 @@ find_parameters.glmmTMB <- function(
       dispersion = names(lme4::fixef(x)$disp),
       dispersion_random = lapply(lme4::ranef(x)$disp, colnames)
     ))
+  }
+
+  # ordinal family: thresholds instead of the (fixed) intercept
+  if (.is_glmmtmb_ordinal(x)) {
+    l$conditional <- names(.glmmtmb_ordinal_conditional(x))
   }
 
   .filter_parameters(l, effects = effects, component = component, flatten = flatten)
