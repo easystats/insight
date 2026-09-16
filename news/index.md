@@ -2,6 +2,8 @@
 
 ## insight 1.5.4
 
+CRAN release: 2026-09-05
+
 ### Bug fixes
 
 - Fixed a bug where
