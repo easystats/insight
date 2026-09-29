@@ -16,7 +16,7 @@
 ## Bug fixes
 
 * `format_table` now correctly formats labels consistently when parameter names
-  occured multiple times.
+  occurred multiple times.
 
 * `find_auxiliary()` no longer returns `"sigma"` for *brms* models that have no
   residual standard deviation, but auxiliary parameters whose names merely
