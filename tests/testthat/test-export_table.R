@@ -976,6 +976,11 @@ test_that("export_table, tinytable with indented rows", {
   # don't select "Intercept" parameter
   mp <- as.data.frame(format(parameters::model_parameters(model, drop = "^\\(Intercept")))
 
+  expect_identical(
+    as.data.frame(mp)$Coefficient,
+    sprintf("%.2f", coef(model)[-1])
+  )
+
   groups <- list(
     Engine = c("cyl [6]", "cyl [8]", "vs", "hp"),
     Interactions = c(8, 9),
@@ -1016,7 +1021,27 @@ test_that("export_table, tinytable with indented rows", {
   )
   expect_snapshot(export_table(mp, format = "tt", table_width = Inf))
 
-  mp <- as.data.frame(format(parameters::model_parameters(model, drop = "^\\(Intercept")))
+  # manually validate correct coefficients
+  junk <- capture.output(export_table(
+    mp,
+    format = "text",
+    row_groups = groups,
+    table_width = Inf
+  ))
+  # extract coefficients from table
+  out <- trimws(substr(junk, 25, 29)[3:14])
+  # remove empty strings
+  out <- out[nzchar(out)]
+  # compare to desired order from original model coeffients
+  expect_identical(
+    sprintf("%.2f", coef(model)[c(6, 7, 5, 2, 9, 10, 3, 4, 8)]),
+    out
+  )
+
+  mp <- as.data.frame(format(parameters::model_parameters(
+    model,
+    drop = "^\\(Intercept"
+  )))
   # fmt: skip
   mp$groups <- c(
     "Engine", "Controls", "Controls", "Engine", "Engine", "Engine", "Controls",
