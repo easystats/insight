@@ -180,3 +180,18 @@ test_that("get_statistic", {
   z2 <- coef(summary(mod))[, "Chisq"]
   expect_equal(z1, z2, ignore_attr = TRUE)
 })
+
+
+test_that("get_data keeps variable labels, source = 'mf', #790", {
+  d <- data.frame(
+    time = c(4, 3, 1, 1, 2, 2, 3, 5),
+    status = c(1, 1, 1, 0, 1, 1, 0, 1),
+    x = c(0, 2, 1, 1, 1, 0, 0, NA),
+    sex = c(0, 0, 0, 0, 1, 1, 1, 1)
+  )
+  attr(d$x, "label") <- "Pred"
+  mod <- survival::coxph(Surv(time, status) ~ x + strata(sex), data = d, ties = "breslow")
+  out <- get_data(mod, source = "mf")
+  expect_identical(nrow(out), 7L)
+  expect_identical(attr(out$x, "label", exact = TRUE), "Pred")
+})

@@ -2218,7 +2218,7 @@ get_data.coxph <- function(x, source = "environment", verbose = TRUE, ...) {
   dat <- tryCatch(
     {
       mf <- .recover_data_from_environment(x, verbose = verbose)
-      mf <- .prepare_get_data(x, stats::na.omit(mf), verbose = FALSE)
+      mf <- .prepare_get_data(x, .na_omit_keep_labels(mf), verbose = FALSE)
     },
     error = function(x) NULL
   )
