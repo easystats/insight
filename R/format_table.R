@@ -193,7 +193,7 @@ format_table <- function(
     # match labels, make sure that multiple occurrences are correctly matched
     label_idx <- match(x$Parameter, shared)
     has_label <- !is.na(label_idx)
-    x$Parameter[has_label] <- att$pretty_names[label_idx[has_label]]
+    x$Parameter[has_label] <- unname(att$pretty_names[x$Parameter[has_label]])
     # index <- match(shared, x$Parameter)
     # x$Parameter[index] <- as.vector(att$pretty_names[x$Parameter[index]])
   }
