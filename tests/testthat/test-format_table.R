@@ -358,4 +358,9 @@ test_that("correct label formatting for multiple occurrences of parameter names"
       "(Intercept)", "treatment [1]", "(Intercept)", "treatment [1]"
     )
   )
+
+  expect_identical(
+    format_table(out)$Coefficient,
+    sprintf("%.2f", as.data.frame(out)$Coefficient)
+  )
 })
