@@ -321,7 +321,7 @@ test_that("AIC", {
   )
 })
 
-test_that("correct label formatting for multiple occurences of parameter names", {
+test_that("correct label formatting for multiple occurrences of parameter names", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("modelbased")
 
