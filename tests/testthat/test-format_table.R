@@ -320,3 +320,47 @@ test_that("AIC", {
     c("7.1e-02 (0.6776)", "0.1 (0.5726)", "1.7 (0.1029)")
   )
 })
+
+test_that("pretty names are matched by parameter name", {
+  x <- data.frame(Parameter = c("beta", "alpha", "beta"))
+  attr(x, "pretty_names") <- c(alpha = "Alpha", beta = "Beta")
+  expect_identical(format_table(x)$Parameter, c("Beta", "Alpha", "Beta"))
+})
+
+
+test_that("correct label formatting for multiple occurrences of parameter names", {
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("modelbased")
+
+  data(sleepstudy, package = "lme4")
+  # Prepare built-in data with a 0/1 categorical predictor
+  dat <- transform(sleepstudy, treatment = factor(ifelse(Days > 4, "1", "0")))
+
+  # Fit a model with a random slope for the factor
+  fit <- lme4::lmer(Reaction ~ treatment + (1 + treatment | Subject), data = dat)
+
+  # Extract random effects
+  # Notice Subject 308 gets "treatment [1]" while 309+ get "treatment1"
+  out <- modelbased::estimate_grouplevel(fit, type = "random")
+
+  # fmt: skip
+  expect_identical(
+    format_table(out)$Parameter,
+    c(
+      "(Intercept)", "treatment [1]", "(Intercept)", "treatment [1]",
+      "(Intercept)", "treatment [1]", "(Intercept)", "treatment [1]",
+      "(Intercept)", "treatment [1]", "(Intercept)", "treatment [1]",
+      "(Intercept)", "treatment [1]", "(Intercept)", "treatment [1]",
+      "(Intercept)", "treatment [1]", "(Intercept)", "treatment [1]",
+      "(Intercept)", "treatment [1]", "(Intercept)", "treatment [1]",
+      "(Intercept)", "treatment [1]", "(Intercept)", "treatment [1]",
+      "(Intercept)", "treatment [1]", "(Intercept)", "treatment [1]",
+      "(Intercept)", "treatment [1]", "(Intercept)", "treatment [1]"
+    )
+  )
+
+  expect_identical(
+    format_table(out)$Coefficient,
+    sprintf("%.2f", as.data.frame(out)$Coefficient)
+  )
+})
