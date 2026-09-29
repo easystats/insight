@@ -146,6 +146,33 @@ test_that("clean_parameters keeps sigma and its random effects together", {
 })
 
 
+test_that("find_parameters keeps parameters that start with a dpar name, #1226", {
+  # a custom family with a distributional parameter "c" must not drop
+  # conditional parameters of a predictor named, e.g., "condition"
+  m <- .brmsfit_mock(
+    brms::bf(N ~ condition + (1 + condition | ID), c ~ condition + (1 | ID)),
+    c(
+      "b_Intercept", "b_condition2", "b_c_Intercept", "b_c_condition2",
+      "sd_ID__Intercept", "sd_ID__condition2", "sd_ID__c_Intercept",
+      "cor_ID__Intercept__condition2", "r_ID[1,Intercept]",
+      "r_ID[1,condition2]", "r_ID__c[1,Intercept]", "Intercept",
+      "Intercept_c", "lprior", "lp__"
+    )
+  )
+  out <- find_parameters(m, effects = "full")
+  expect_identical(out$conditional, c("b_Intercept", "b_condition2"))
+  expect_identical(
+    out$random,
+    c(
+      "r_ID[1,Intercept]", "r_ID[1,condition2]", "sd_ID__Intercept",
+      "sd_ID__condition2", "cor_ID__Intercept__condition2"
+    )
+  )
+  expect_identical(out$c, c("b_c_Intercept", "b_c_condition2"))
+  expect_identical(out$c_random, c("r_ID__c[1,Intercept]", "sd_ID__c_Intercept"))
+})
+
+
 test_that(".get_stan_params maps component names for all supported classes", {
   # element names that `find_parameters()` returns for the model classes that
   # share this helper (brmsfit, stanreg, stanfit, stanmvreg and bamlss), plus

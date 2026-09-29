@@ -119,7 +119,9 @@ find_parameters.brmsfit <- function(
 
   # flag to indicate which parameters are auxiliary parameters
   if (isTRUE(nzchar(dpars_pattern))) {
-    dpars_params <- grepl(paste0("__(", dpars_pattern, ")"), fe)
+    # dpar names must be followed by "_" or "[", else we also match
+    # parameters that only start with a dpar name (like "condition" for "c")
+    dpars_params <- grepl(paste0("__(", dpars_pattern, ")(_|\\[)"), fe)
   } else {
     dpars_params <- rep_len(FALSE, length(fe))
   }
@@ -128,7 +130,7 @@ find_parameters.brmsfit <- function(
   pattern <- "^(b_|bs_|bsp_|bcs_)"
   # need to add negative look ahead for auxiliary, *if we have any*!
   if (isTRUE(nzchar(dpars_pattern))) {
-    pattern <- paste0(pattern, "(?!", dpars_pattern, ")")
+    pattern <- paste0(pattern, "(?!(", dpars_pattern, ")_)")
   }
   pattern <- paste0(pattern, mv_pattern_fixed, "(.*)")
   cond <- fe[grepl(pattern, fe, perl = TRUE)]
