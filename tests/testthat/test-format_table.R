@@ -321,6 +321,13 @@ test_that("AIC", {
   )
 })
 
+test_that("pretty names are matched by parameter name", {
+  x <- data.frame(Parameter = c("beta", "alpha", "beta"))
+  attr(x, "pretty_names") <- c(alpha = "Alpha", beta = "Beta")
+  expect_identical(format_table(x)$Parameter, c("Beta", "Alpha", "Beta"))
+})
+
+
 test_that("correct label formatting for multiple occurrences of parameter names", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("modelbased")

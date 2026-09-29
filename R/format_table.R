@@ -189,13 +189,8 @@ format_table <- function(
 
   # Format parameters names ----
   if (pretty_names && !is.null(att$pretty_names)) {
-    shared <- intersect(x$Parameter, names(att$pretty_names))
-    # match labels, make sure that multiple occurrences are correctly matched
-    label_idx <- match(x$Parameter, shared)
-    has_label <- !is.na(label_idx)
+    has_label <- x$Parameter %in% names(att$pretty_names)
     x$Parameter[has_label] <- unname(att$pretty_names[x$Parameter[has_label]])
-    # index <- match(shared, x$Parameter)
-    # x$Parameter[index] <- as.vector(att$pretty_names[x$Parameter[index]])
   }
 
   # Format specific columns ----
