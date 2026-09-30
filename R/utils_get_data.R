@@ -538,6 +538,26 @@
 }
 
 
+# remove missing values, but keep variable and value labels -----------------
+
+# "stats::na.omit()" subsets all rows, which drops the "label" and "labels"
+# attributes of numeric and character vectors
+.na_omit_keep_labels <- function(x) {
+  variable_labels <- lapply(x, attr, which = "label", exact = TRUE)
+  value_labels <- lapply(x, attr, which = "labels", exact = TRUE)
+  x <- stats::na.omit(x)
+  for (i in seq_along(x)) {
+    if (!is.null(variable_labels[[i]])) {
+      attr(x[[i]], "label") <- variable_labels[[i]]
+    }
+    if (!is.null(value_labels[[i]])) {
+      attr(x[[i]], "labels") <- value_labels[[i]]
+    }
+  }
+  x
+}
+
+
 # combine data from different model components -------------------------------
 
 # This helper functions ensures that data from different model components

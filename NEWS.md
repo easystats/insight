@@ -18,6 +18,9 @@
 * `format_table` now correctly formats labels consistently when parameter names
   occurred multiple times.
 
+* `get_data()` for `coxph` models no longer drops variable and value labels when
+  `source = "mf"`.
+
 * `find_parameters()` for *brms* models no longer drops parameters whose names
   start with the name of a distributional parameter, e.g. the coefficient
   `b_condition2` in a model with a (custom) distributional parameter `c`.
