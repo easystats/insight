@@ -36,9 +36,12 @@ test_that("find_auxiliary, sigma in multivariate models", {
   m <- .brmsfit_mock(
     brms::bf(Sepal.Length ~ Petal.Length) + brms::bf(Sepal.Width ~ Species),
     c(
-      "b_SepalLength_Intercept", "b_SepalLength_Petal.Length",
-      "b_SepalWidth_Intercept", "b_SepalWidth_Speciesversicolor",
-      "sigma_SepalLength", "sigma_SepalWidth"
+      "b_SepalLength_Intercept",
+      "b_SepalLength_Petal.Length",
+      "b_SepalWidth_Intercept",
+      "b_SepalWidth_Speciesversicolor",
+      "sigma_SepalLength",
+      "sigma_SepalWidth"
     )
   )
   expect_identical(find_auxiliary(m), "sigma")
@@ -69,8 +72,14 @@ test_that("find_auxiliary does not mistake custom dpars for sigma, #1224", {
   m <- .brmsfit_mock(
     brms::bf(rt ~ Condition, boundary ~ Condition, bias ~ 1, ndt ~ 1),
     c(
-      "b_Intercept", "b_boundary_Intercept", "b_bias_Intercept",
-      "b_ndt_Intercept", "sigmadrift", "sigmabias", "sigmandt", "poutlier"
+      "b_Intercept",
+      "b_boundary_Intercept",
+      "b_bias_Intercept",
+      "b_ndt_Intercept",
+      "sigmadrift",
+      "sigmabias",
+      "sigmandt",
+      "poutlier"
     )
   )
   expect_identical(find_auxiliary(m), c("boundary", "bias", "ndt"))
@@ -79,8 +88,12 @@ test_that("find_auxiliary does not mistake custom dpars for sigma, #1224", {
   m <- .brmsfit_mock(
     brms::bf(rt ~ Condition, sigmabias ~ Condition, boundary ~ 1, ndt ~ 1),
     c(
-      "b_Intercept", "b_sigmabias_Intercept", "b_boundary_Intercept",
-      "b_ndt_Intercept", "sigmadrift", "poutlier"
+      "b_Intercept",
+      "b_sigmabias_Intercept",
+      "b_boundary_Intercept",
+      "b_ndt_Intercept",
+      "sigmadrift",
+      "poutlier"
     )
   )
   expect_identical(find_auxiliary(m), c("sigmabias", "boundary", "ndt"))
@@ -102,25 +115,41 @@ test_that("clean_parameters does not lump custom dpars into sigma, #1224", {
   m <- .brmsfit_mock(
     brms::bf(rt ~ Condition, sigmabias ~ Condition, boundary ~ Condition, ndt ~ 1),
     c(
-      "b_Intercept", "b_ConditionSpeed",
-      "b_sigmabias_Intercept", "b_sigmabias_ConditionSpeed",
-      "b_boundary_Intercept", "b_boundary_ConditionSpeed",
-      "b_ndt_Intercept", "sigma"
+      "b_Intercept",
+      "b_ConditionSpeed",
+      "b_sigmabias_Intercept",
+      "b_sigmabias_ConditionSpeed",
+      "b_boundary_Intercept",
+      "b_boundary_ConditionSpeed",
+      "b_ndt_Intercept",
+      "sigma"
     )
   )
   out <- clean_parameters(m)
   expect_identical(
     out$Component,
     c(
-      "conditional", "conditional", "ndt", "sigma", "sigmabias", "sigmabias",
-      "boundary", "boundary"
+      "conditional",
+      "conditional",
+      "ndt",
+      "sigma",
+      "sigmabias",
+      "sigmabias",
+      "boundary",
+      "boundary"
     )
   )
   expect_identical(
     out$Cleaned_Parameter,
     c(
-      "(Intercept)", "ConditionSpeed", "(Intercept)", "sigma", "(Intercept)",
-      "ConditionSpeed", "(Intercept)", "ConditionSpeed"
+      "(Intercept)",
+      "ConditionSpeed",
+      "(Intercept)",
+      "sigma",
+      "(Intercept)",
+      "ConditionSpeed",
+      "(Intercept)",
+      "ConditionSpeed"
     )
   )
 })
@@ -130,8 +159,12 @@ test_that("clean_parameters keeps sigma and its random effects together", {
   m <- .brmsfit_mock(
     brms::bf(y ~ x, sigma ~ x + (1 | id)),
     c(
-      "b_Intercept", "b_x", "b_sigma_Intercept", "b_sigma_x",
-      "sd_id__sigma_Intercept", "r_id__sigma[1,Intercept]"
+      "b_Intercept",
+      "b_x",
+      "b_sigma_Intercept",
+      "b_sigma_x",
+      "sd_id__sigma_Intercept",
+      "r_id__sigma[1,Intercept]"
     )
   )
   out <- clean_parameters(m)
@@ -146,17 +179,72 @@ test_that("clean_parameters keeps sigma and its random effects together", {
 })
 
 
+test_that("find_parameters keeps parameters that start with a dpar name, #1226", {
+  # a custom family with a distributional parameter "c" must not drop
+  # conditional parameters of a predictor named, e.g., "condition"
+  m <- .brmsfit_mock(
+    brms::bf(N ~ condition + (1 + condition | ID), c ~ condition + (1 | ID)),
+    c(
+      "b_Intercept",
+      "b_condition2",
+      "b_c_Intercept",
+      "b_c_condition2",
+      "sd_ID__Intercept",
+      "sd_ID__condition2",
+      "sd_ID__c_Intercept",
+      "cor_ID__Intercept__condition2",
+      "r_ID[1,Intercept]",
+      "r_ID[1,condition2]",
+      "r_ID__c[1,Intercept]",
+      "Intercept",
+      "Intercept_c",
+      "lprior",
+      "lp__"
+    )
+  )
+  out <- find_parameters(m, effects = "full")
+  expect_identical(out$conditional, c("b_Intercept", "b_condition2"))
+  expect_identical(
+    out$random,
+    c(
+      "r_ID[1,Intercept]",
+      "r_ID[1,condition2]",
+      "sd_ID__Intercept",
+      "sd_ID__condition2",
+      "cor_ID__Intercept__condition2"
+    )
+  )
+  expect_identical(out$c, c("b_c_Intercept", "b_c_condition2"))
+  expect_identical(out$c_random, c("r_ID__c[1,Intercept]", "sd_ID__c_Intercept"))
+})
+
+
 test_that(".get_stan_params maps component names for all supported classes", {
   # element names that `find_parameters()` returns for the model classes that
   # share this helper (brmsfit, stanreg, stanfit, stanmvreg and bamlss), plus
   # their group-level ("_random") counterparts
   elements <- c(
-    "conditional", "random", "conditional_random", "sigma", "sigma_random",
-    "smooth_terms", "smooth_terms_random", "auxiliary", "alpha", "priors",
-    "dispersion", "dispersion_random", "zi", "zi_random", "car", "sdcar",
+    "conditional",
+    "random",
+    "conditional_random",
+    "sigma",
+    "sigma_random",
+    "smooth_terms",
+    "smooth_terms_random",
+    "auxiliary",
+    "alpha",
+    "priors",
+    "dispersion",
+    "dispersion_random",
+    "zi",
+    "zi_random",
+    "car",
+    "sdcar",
     # auxiliary parameters of custom families that merely *contain* the name
     # of a known component
-    "sigmabias", "sigmabias_random", "sigmadrift"
+    "sigmabias",
+    "sigmabias_random",
+    "sigmadrift"
   )
   pars <- stats::setNames(as.list(elements), elements)
   out <- do.call(rbind, insight:::.get_stan_params(pars))
@@ -164,10 +252,25 @@ test_that(".get_stan_params maps component names for all supported classes", {
   expect_identical(
     out$Component,
     c(
-      "conditional", "conditional", "conditional", "sigma", "sigma",
-      "smooth_terms", "smooth_terms", "auxiliary", "alpha", "priors",
-      "dispersion", "dispersion", "zi", "zi", "car", "car",
-      "sigmabias", "sigmabias", "sigmadrift"
+      "conditional",
+      "conditional",
+      "conditional",
+      "sigma",
+      "sigma",
+      "smooth_terms",
+      "smooth_terms",
+      "auxiliary",
+      "alpha",
+      "priors",
+      "dispersion",
+      "dispersion",
+      "zi",
+      "zi",
+      "car",
+      "car",
+      "sigmabias",
+      "sigmabias",
+      "sigmadrift"
     )
   )
   expect_identical(

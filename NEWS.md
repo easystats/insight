@@ -21,6 +21,10 @@
 * `get_data()` for `coxph` models no longer drops variable and value labels when
   `source = "mf"`.
 
+* `find_parameters()` for *brms* models no longer drops parameters whose names
+  start with the name of a distributional parameter, e.g. the coefficient
+  `b_condition2` in a model with a (custom) distributional parameter `c`.
+
 * `find_auxiliary()` no longer returns `"sigma"` for *brms* models that have no
   residual standard deviation, but auxiliary parameters whose names merely
   contain `"sigma"` (e.g. `"sigmadrift"` or `"sigmabias"` from custom families).
