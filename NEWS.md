@@ -22,11 +22,15 @@
   the names of non-linear parameters. `clean_parameters()` labels their
   coefficients like `summary()` from *brms*, for example `ult_Intercept`. The
   `effects`, `component` and `parameters` arguments of `get_parameters()` now
-  select the coefficients of non-linear parameters (#1076).
+  select the coefficients of non-linear parameters. `get_varcov()`,
+  `n_parameters(component = "conditional")` and
+  `find_parameters(component = "location")` now include these coefficients,
+  where they included none before. This also applies to non-linear parameters
+  that are nested with `nlf()` (#1076).
 
 * `get_parameters()` for *brms* models now returns `NULL` when no parameter
   matches the selection of `effects`, `component` and `parameters`, instead of
-  the posterior draws of all parameters.
+  the posterior draws of all parameters (#1076).
 
 * `format_table` now correctly formats labels consistently when parameter names
   occurred multiple times.

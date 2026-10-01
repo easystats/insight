@@ -58,6 +58,20 @@ test_that("find_parameters, group-level terms of non-linear parameters are rando
 })
 
 
+test_that("find_parameters, non-linear coefficients are location parameters", {
+  out <- find_parameters(m, component = "location")
+  expect_identical(out$conditional, nl_fixed)
+})
+
+
+test_that("get_varcov and n_parameters, non-linear coefficients are conditional", {
+  vc <- get_varcov(m)
+  expect_identical(dim(vc), c(3L, 3L))
+  # 3 fixed coefficients, 2 x 10 group-level terms, 2 SD terms
+  expect_equal(n_parameters(m, component = "conditional"), 25)
+})
+
+
 test_that("find_auxiliary, non-linear parameters of mu are not auxiliary", {
   expect_identical(find_auxiliary(m), "sigma")
 })

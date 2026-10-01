@@ -24,5 +24,5 @@ The names of all available auxiliary parameters used in the model, or
 Returns the names of all auxiliary / distributional parameters
 from brms-models, like dispersion, sigma, kappa, phi, or beta... For
 univariate non-linear models (\code{nl = TRUE}), the non-linear parameters of \code{mu}
-are no auxiliary parameters, and are not returned.
+are not auxiliary parameters, and are not returned.
 }

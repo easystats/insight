@@ -3,7 +3,7 @@
 #' @description Returns the names of all auxiliary / distributional parameters
 #' from brms-models, like dispersion, sigma, kappa, phi, or beta... For
 #' univariate non-linear models (`nl = TRUE`), the non-linear parameters of `mu`
-#' are no auxiliary parameters, and are not returned.
+#' are not auxiliary parameters, and are not returned.
 #'
 #' @name find_auxiliary
 #'
@@ -40,7 +40,7 @@ find_auxiliary.brmsfit <- function(x, ...) {
     out <- unique(unlist(lapply(f$forms, function(i) names(i$pforms)), use.names = FALSE))
   } else {
     # for non-linear models (`nl = TRUE`), "pforms" also contains the
-    # non-linear parameters of "mu". These are no auxiliary parameters, their
+    # non-linear parameters of "mu". These are not auxiliary parameters, their
     # coefficients belong to the conditional component (see #1076)
     out <- setdiff(names(f$pforms), .brms_nlpars(x))
   }
