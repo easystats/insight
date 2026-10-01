@@ -249,3 +249,51 @@ test_that("Issue #658", {
   expect_s3_class(dat[[1]], "data.frame")
   expect_s3_class(dat[[2]], "data.frame")
 })
+
+test_that("find_formula, random effects given as list or pdMat, #965", {
+  data(RatPupWeight, package = "nlme")
+  data(Pixel, package = "nlme")
+
+  # one grouping factor, named list of formulas
+  m_frm <- nlme::lme(weight ~ Treatment, random = ~ 1 | Litter, data = RatPupWeight)
+  m_lst <- nlme::lme(weight ~ Treatment, random = list(Litter = ~1), data = RatPupWeight)
+  expect_equal(find_formula(m_lst), find_formula(m_frm), ignore_attr = TRUE)
+  expect_identical(find_random(m_lst), list(random = "Litter"))
+  expect_identical(find_variables(m_lst), find_variables(m_frm))
+
+  # random slope, named list of formulas and pdMat objects
+  m_frm <- nlme::lme(distance ~ age, random = ~ age | Subject, data = Orthodont)
+  m_lst <- nlme::lme(distance ~ age, random = list(Subject = ~age), data = Orthodont)
+  m_pd <- nlme::lme(
+    distance ~ age,
+    random = list(Subject = nlme::pdDiag(~age)),
+    data = Orthodont
+  )
+  m_pd2 <- nlme::lme(distance ~ age, random = nlme::pdDiag(~age), data = Orthodont)
+  for (m in list(m_lst, m_pd, m_pd2)) {
+    expect_equal(find_formula(m), find_formula(m_frm), ignore_attr = TRUE)
+    expect_identical(find_random(m), list(random = "Subject"))
+    expect_identical(find_random_slopes(m), list(random = "age"))
+    expect_identical(find_variables(m), find_variables(m_frm))
+  }
+
+  # nested grouping factors, same random terms on each level
+  m_frm <- nlme::lme(pixel ~ day, random = ~ 1 | Dog / Side, data = Pixel)
+  m_lst <- nlme::lme(pixel ~ day, random = list(Dog = ~1, Side = ~1), data = Pixel)
+  expect_equal(find_formula(m_lst), find_formula(m_frm), ignore_attr = TRUE)
+  expect_identical(find_random(m_lst), find_random(m_frm))
+
+  # nested grouping factors, different random terms on each level
+  m_lst <- nlme::lme(pixel ~ day, random = list(Dog = ~day, Side = ~1), data = Pixel)
+  expect_equal(
+    find_formula(m_lst)$random,
+    list(as.formula("~day | Dog"), as.formula("~1 | Dog:Side")),
+    ignore_attr = TRUE
+  )
+  expect_identical(find_random(m_lst), list(random = c("Dog", "Dog:Side")))
+  expect_identical(
+    find_random(m_lst, split_nested = TRUE),
+    list(random = c("Dog", "Side"))
+  )
+  expect_identical(find_random_slopes(m_lst), list(random = "day"))
+})

@@ -1551,9 +1551,13 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
 
 .find_formula_nlme <- function(x, fm, verbose = TRUE, ...) {
   fmr <- eval(x$call$random)
-  if (!is.null(fmr) && safe_deparse(fmr)[1] == "~1") {
-    check_if_installed("nlme")
-    fmr <- stats::as.formula(paste("~1 |", all.vars(nlme::getGroupsFormula(x))))
+  # random effects may also be given without grouping factor (e.g. `~1` for
+  # grouped data), as named list (`list(g = ~1)`) or as pdMat object
+  if (
+    !is.null(fmr) &&
+      !(inherits(fmr, "formula") && grepl("|", safe_deparse(fmr), fixed = TRUE))
+  ) {
+    fmr <- .nlme_random_formula(x)
   }
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
@@ -1571,6 +1575,32 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
     correlation = stats::as.formula(fc)
   ))
   .find_formula_return(f, verbose = verbose)
+}
+
+# rebuild the random effects formula from the fitted random effects structure,
+# using lme4-syntax for nested groups with different random terms per level
+.nlme_random_formula <- function(x) {
+  tryCatch(
+    {
+      groups <- names(x$groups)
+      # reStruct lists the levels from innermost to outermost
+      re_forms <- stats::formula(x$modelStruct$reStruct)[groups]
+      re_terms <- vapply(re_forms, function(i) safe_deparse(i[[2]]), character(1))
+      if (all(re_terms == re_terms[1])) {
+        stats::as.formula(paste("~", re_terms[1], "|", paste(groups, collapse = "/")))
+      } else {
+        lapply(seq_along(groups), function(i) {
+          stats::as.formula(paste(
+            "~",
+            re_terms[i],
+            "|",
+            paste(groups[1:i], collapse = ":")
+          ))
+        })
+      }
+    },
+    error = function(e) NULL
+  )
 }
 
 

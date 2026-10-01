@@ -34,6 +34,12 @@
   now returned as their own component, which also fixes the related grouping in
   `parameters::model_parameters()`.
 
+* `find_formula()` now returns the correct random effects formula for
+  `nlme::lme()` and `MASS::glmmPQL()` models with a named list or a `pdMat`
+  object in the `random` argument. Examples are `random = list(g = ~1)` and
+  `random = pdDiag(~x)`. Before this fix, `find_random()` returned `NULL` for
+  these models, and `parameters::model_parameters()` failed.
+
 # insight 1.5.4
 
 ## Bug fixes
