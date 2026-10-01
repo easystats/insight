@@ -197,7 +197,12 @@ test_that("clean_parameters, correlated group-level terms of non-linear paramete
   expect_identical(find_auxiliary(m), "sigma")
   out <- clean_parameters(m)
   rows <- match(
-    c("b_a_Intercept", "sd_id__a_Intercept", "cor_id__a_Intercept__b_Intercept", "r_id__b[1,Intercept]"),
+    c(
+      "b_a_Intercept",
+      "sd_id__a_Intercept",
+      "cor_id__a_Intercept__b_Intercept",
+      "r_id__b[1,Intercept]"
+    ),
     out$Parameter
   )
   expect_identical(
@@ -220,7 +225,10 @@ test_that("clean_parameters, non-linear parameter names that end in 'sd', 'cor' 
     c("b_ksd_Intercept", "b_kcor_Intercept", "b_lsigma_Intercept", "sigma")
   )
   out <- clean_parameters(m)
-  rows <- match(c("b_ksd_Intercept", "b_kcor_Intercept", "b_lsigma_Intercept"), out$Parameter)
+  rows <- match(
+    c("b_ksd_Intercept", "b_kcor_Intercept", "b_lsigma_Intercept"),
+    out$Parameter
+  )
   expect_identical(
     out$Cleaned_Parameter[rows],
     c("ksd_Intercept", "kcor_Intercept", "lsigma_Intercept")
@@ -286,7 +294,12 @@ test_that("clean_parameters, non-linear parameter names that share a prefix ('a'
   )
   out <- clean_parameters(m)
   rows <- match(
-    c("b_ab_Intercept", "sd_id__ab_Intercept", "r_id__a[1,Intercept]", "r_id__ab[1,Intercept]"),
+    c(
+      "b_ab_Intercept",
+      "sd_id__ab_Intercept",
+      "r_id__a[1,Intercept]",
+      "r_id__ab[1,Intercept]"
+    ),
     out$Parameter
   )
   expect_identical(
@@ -335,7 +348,14 @@ test_that("find_auxiliary, nested non-linear parameters from nlf() are not auxil
 test_that("find_auxiliary, non-linear parameters of sigma from nlf() stay auxiliary, #1076", {
   # only non-linear parameters of "mu" are conditional, "s" belongs to "sigma"
   m <- .brmsfit_mock(
-    brms::bf(y ~ a * exp(b * x), a ~ 1, b ~ 1, brms::nlf(sigma ~ s * x), s ~ 1, nl = TRUE),
+    brms::bf(
+      y ~ a * exp(b * x),
+      a ~ 1,
+      b ~ 1,
+      brms::nlf(sigma ~ s * x),
+      s ~ 1,
+      nl = TRUE
+    ),
     c("b_a_Intercept", "b_b_Intercept", "b_s_Intercept")
   )
   expect_setequal(find_auxiliary(m), c("sigma", "s"))
@@ -352,9 +372,68 @@ test_that("find_auxiliary, non-linear model without auxiliary parameters returns
 })
 
 
+test_that("find_auxiliary, categorical non-linear model has no dpar 'mu', #1076", {
+  # the only dpar is "muB", which must not be taken for "mu", so the
+  # non-linear parameter "a" stays auxiliary as before
+  d <- data.frame(y = factor(rep(c("A", "B"), 10)), x = 1:20)
+  f <- brms:::validate_formula(
+    brms::bf(y ~ a * x, a ~ 1, nl = TRUE),
+    data = d,
+    family = brms::categorical()
+  )
+  m <- .brmsfit_mock(f, "b_muB_a_Intercept")
+  expect_identical(find_auxiliary(m), "a")
+})
+
+
+test_that("clean_parameters, smooth term of a non-linear parameter ('bs_a_sz_1'), #1076", {
+  m <- .brmsfit_mock(
+    brms::bf(y ~ a * exp(b * x), a ~ s(z), b ~ 1, nl = TRUE),
+    c("b_a_Intercept", "bs_a_sz_1", "sds_a_sz_1", "s_a_sz_1[1]", "b_b_Intercept", "sigma")
+  )
+  out <- clean_parameters(m)
+  row <- out[out$Parameter == "bs_a_sz_1", ]
+  expect_identical(row$Cleaned_Parameter, "a_sz_1")
+  expect_identical(row$Component, "conditional")
+  expect_identical(row$Function, "smooth")
+})
+
+
+test_that("find_parameters, non-linear parameter name that starts with a dpar name, #1076", {
+  # "sigmaA" is a non-linear parameter of "mu", "sigma" is a dpar
+  m <- .brmsfit_mock(
+    brms::bf(
+      y ~ a * exp(sigmaA * x),
+      a ~ 1,
+      sigmaA ~ 1 + (1 | id),
+      sigma ~ 1,
+      nl = TRUE
+    ),
+    c(
+      "b_a_Intercept",
+      "b_sigmaA_Intercept",
+      "b_sigma_Intercept",
+      "sd_id__sigmaA_Intercept",
+      "r_id__sigmaA[1,Intercept]"
+    )
+  )
+  out <- find_parameters(m, effects = "full")
+  expect_identical(out$conditional, c("b_a_Intercept", "b_sigmaA_Intercept"))
+  expect_setequal(out$random, c("r_id__sigmaA[1,Intercept]", "sd_id__sigmaA_Intercept"))
+  expect_identical(out$sigma, "b_sigma_Intercept")
+  expect_false(any(c("sigmaA", "sigmaA_random") %in% names(out)))
+})
+
+
 test_that("clean_parameters, correlation of a non-linear and a 'sigma' group-level term, #1076", {
   m <- .brmsfit_mock(
-    brms::bf(y ~ a * exp(b * x), a ~ 1 + (1 | p | id), b ~ 1, sigma ~ 1 + (1 | p | id), nl = TRUE),
+    brms::bf(
+      y ~ a * exp(b * x),
+      a ~ 1 + (1 | p | id),
+      b ~ 1,
+      sigma ~ 1 + (1 | p | id),
+      nl = TRUE
+    ),
     c(
       "b_a_Intercept",
       "b_b_Intercept",

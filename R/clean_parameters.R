@@ -751,7 +751,11 @@ clean_parameters.mlm <- function(x, ...) {
   # SD and correlations, e.g. "sd_AY__ult_Intercept" is "ult_Intercept" in
   # the group "SD/Cor: AY", or in the group "AY" for version 2
   sd_cor <- grepl("^(sd|cor)_(.*?)__", parameter)
-  sd_cor_terms <- strsplit(sub("^(sd|cor)_(.*?)__", "", parameter[sd_cor]), "__", fixed = TRUE)
+  sd_cor_terms <- strsplit(
+    sub("^(sd|cor)_(.*?)__", "", parameter[sd_cor]),
+    "__",
+    fixed = TRUE
+  )
   nl_terms <- vapply(
     sd_cor_terms,
     function(i) any(grepl(sprintf("^(%s)_", nl_pattern), i)),

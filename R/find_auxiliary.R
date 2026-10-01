@@ -77,7 +77,9 @@ find_auxiliary.brmsfit <- function(x, ...) {
   if (is.null(bt)) {
     return(NULL)
   }
-  out <- bt$dpars$mu$used_nlpars
+  # `[[` instead of `$`, to avoid partial matching of "muB" etc. in
+  # categorical models
+  out <- bt$dpars[["mu"]]$used_nlpars
   # non-linear parameters can be nested, e.g. `nlf(a ~ c + d)`, so we also
   # need the non-linear parameters of the non-linear parameters of "mu"
   repeat {
