@@ -25,7 +25,8 @@
   select the coefficients of non-linear parameters (#1076).
 
 * `get_parameters()` for *brms* models now returns `NULL` when no parameter
-  matches the selection, instead of the posterior draws of all parameters.
+  matches the selection of `effects`, `component` and `parameters`, instead of
+  the posterior draws of all parameters.
 
 * `format_table` now correctly formats labels consistently when parameter names
   occurred multiple times.
