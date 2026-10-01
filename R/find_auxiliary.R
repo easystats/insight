@@ -53,6 +53,12 @@ find_auxiliary.brmsfit <- function(x, ...) {
   if (!"sigma" %in% out && .brms_has_sigma(x)) {
     out <- c(out, "sigma")
   }
+  # for non-linear models with only non-linear parameters in "pforms",
+  # `setdiff()` returns `character(0)`, but we want `NULL` as for other models
+  # without auxiliary parameters
+  if (!length(out)) {
+    return(NULL)
+  }
   unique(out)
 }
 
@@ -67,7 +73,22 @@ find_auxiliary.brmsfit <- function(x, ...) {
   if (object_has_names(f, "forms") || !isTRUE(attr(f$formula, "nl"))) {
     return(NULL)
   }
-  .safe(brms::brmsterms(f)$dpars$mu$used_nlpars)
+  bt <- .safe(brms::brmsterms(f))
+  if (is.null(bt)) {
+    return(NULL)
+  }
+  out <- bt$dpars$mu$used_nlpars
+  # non-linear parameters can be nested, e.g. `nlf(a ~ c + d)`, so we also
+  # need the non-linear parameters of the non-linear parameters of "mu"
+  repeat {
+    nested <- unlist(lapply(bt$nlpars[out], function(i) i$used_nlpars), use.names = FALSE)
+    nested <- setdiff(nested, out)
+    if (!length(nested)) {
+      break
+    }
+    out <- c(out, nested)
+  }
+  out
 }
 
 

@@ -300,6 +300,58 @@ test_that("clean_parameters, non-linear parameter names that share a prefix ('a'
 })
 
 
+test_that("find_auxiliary, nested non-linear parameters from nlf() are not auxiliary, #1076", {
+  # "c" and "d" are non-linear parameters of the non-linear parameter "a"
+  m <- .brmsfit_mock(
+    brms::bf(
+      y ~ a * exp(b * x),
+      brms::nlf(a ~ c + d),
+      c ~ 1 + (1 | g),
+      d ~ 1,
+      b ~ 1,
+      nl = TRUE
+    ),
+    c(
+      "b_c_Intercept",
+      "b_d_Intercept",
+      "b_b_Intercept",
+      "sd_g__c_Intercept",
+      "r_g__c[1,Intercept]",
+      "sigma"
+    )
+  )
+  expect_identical(find_auxiliary(m), "sigma")
+  out <- find_parameters(m, effects = "full")
+  expect_setequal(out$conditional, c("b_c_Intercept", "b_d_Intercept", "b_b_Intercept"))
+  expect_setequal(out$random, c("r_g__c[1,Intercept]", "sd_g__c_Intercept"))
+  expect_false(any(c("a", "b", "c", "d") %in% names(out)))
+  cp <- clean_parameters(m)
+  row <- cp[cp$Parameter == "r_g__c[1,Intercept]", ]
+  expect_identical(row$Group, "c_Intercept: g")
+  expect_identical(row$Component, "conditional")
+})
+
+
+test_that("find_auxiliary, non-linear parameters of sigma from nlf() stay auxiliary, #1076", {
+  # only non-linear parameters of "mu" are conditional, "s" belongs to "sigma"
+  m <- .brmsfit_mock(
+    brms::bf(y ~ a * exp(b * x), a ~ 1, b ~ 1, brms::nlf(sigma ~ s * x), s ~ 1, nl = TRUE),
+    c("b_a_Intercept", "b_b_Intercept", "b_s_Intercept")
+  )
+  expect_setequal(find_auxiliary(m), c("sigma", "s"))
+})
+
+
+test_that("find_auxiliary, non-linear model without auxiliary parameters returns NULL, #1076", {
+  # no formula for a distributional parameter, and no "sigma" (e.g. poisson)
+  m <- .brmsfit_mock(
+    brms::bf(y ~ a * exp(b * x), a ~ 1, b ~ 1, nl = TRUE),
+    c("b_a_Intercept", "b_b_Intercept")
+  )
+  expect_null(find_auxiliary(m))
+})
+
+
 test_that("clean_parameters, correlation of a non-linear and a 'sigma' group-level term, #1076", {
   m <- .brmsfit_mock(
     brms::bf(y ~ a * exp(b * x), a ~ 1 + (1 | p | id), b ~ 1, sigma ~ 1 + (1 | p | id), nl = TRUE),
