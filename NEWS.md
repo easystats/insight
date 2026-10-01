@@ -15,6 +15,18 @@
 
 ## Bug fixes
 
+* For univariate non-linear *brms* models (`nl = TRUE`), `find_parameters()`
+  now returns the coefficients of the non-linear parameters as conditional
+  parameters, and their group-level terms as random parameters. Before, they
+  were returned as auxiliary parameters. `find_auxiliary()` no longer returns
+  the names of non-linear parameters. `clean_parameters()` labels their
+  coefficients like `summary()` from *brms*, for example `ult_Intercept`. The
+  `effects`, `component` and `parameters` arguments of `get_parameters()` now
+  select the coefficients of non-linear parameters (#1076).
+
+* `get_parameters()` for *brms* models now returns `NULL` when no parameter
+  matches the selection, instead of the posterior draws of all parameters.
+
 * `format_table` now correctly formats labels consistently when parameter names
   occurred multiple times.
 

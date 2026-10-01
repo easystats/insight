@@ -27,6 +27,8 @@
 #' @return The posterior samples from the requested parameters as data frame.
 #'   If `summary = TRUE`, returns a data frame with two columns: the
 #'   parameter names and the related point estimates (based on `centrality`).
+#'   For models of class `brmsfit`, `NULL` is returned if no parameter matches
+#'   the selection of `effects`, `component` and `parameters`.
 #'
 #' @details In most cases when models either return different "effects" (fixed,
 #' random) or "components" (conditional, zero-inflated, ...), the arguments

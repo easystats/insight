@@ -1,7 +1,9 @@
 #' @title Find auxiliary (distributional) parameters from models
 #'
 #' @description Returns the names of all auxiliary / distributional parameters
-#' from brms-models, like dispersion, sigma, kappa, phi, or beta...
+#' from brms-models, like dispersion, sigma, kappa, phi, or beta... For
+#' univariate non-linear models (`nl = TRUE`), the non-linear parameters of `mu`
+#' are no auxiliary parameters, and are not returned.
 #'
 #' @name find_auxiliary
 #'
