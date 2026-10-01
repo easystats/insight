@@ -63,6 +63,14 @@ test_that("find_auxiliary, non-linear parameters of mu are not auxiliary", {
 })
 
 
+test_that("find_predictors, group-level terms of non-linear parameters, effects = 'random'", {
+  # the formulas of the non-linear parameters are still separate elements
+  out <- find_predictors(m, effects = "random")
+  expect_identical(out$ult_random, "AY")
+  expect_identical(out$theta_random, "AY")
+})
+
+
 test_that("get_parameters, select one non-linear coefficient by name", {
   out <- get_parameters(
     m,

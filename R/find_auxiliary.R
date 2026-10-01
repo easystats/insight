@@ -37,7 +37,10 @@ find_auxiliary.brmsfit <- function(x, ...) {
   if (object_has_names(f, "forms")) {
     out <- unique(unlist(lapply(f$forms, function(i) names(i$pforms)), use.names = FALSE))
   } else {
-    out <- names(f$pforms)
+    # for non-linear models (`nl = TRUE`), "pforms" also contains the
+    # non-linear parameters of "mu". These are no auxiliary parameters, their
+    # coefficients belong to the conditional component (see #1076)
+    out <- setdiff(names(f$pforms), .brms_nlpars(x))
   }
   # "pforms" only contains those distributional parameters that were modelled
   # with a formula. "sigma" usually is estimated as a single (constant)
@@ -49,6 +52,20 @@ find_auxiliary.brmsfit <- function(x, ...) {
     out <- c(out, "sigma")
   }
   unique(out)
+}
+
+
+# returns the names of the non-linear parameters of "mu" for univariate
+# non-linear brms-models (`nl = TRUE`), or `NULL` for all other models
+.brms_nlpars <- function(x) {
+  if (!inherits(x, "brmsfit")) {
+    return(NULL)
+  }
+  f <- stats::formula(x)
+  if (object_has_names(f, "forms") || !isTRUE(attr(f$formula, "nl"))) {
+    return(NULL)
+  }
+  .safe(brms::brmsterms(f)$dpars$mu$used_nlpars)
 }
 
 
