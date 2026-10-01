@@ -34,6 +34,12 @@
   now returned as their own component, which also fixes the related grouping in
   `parameters::model_parameters()`.
 
+* `get_variance()` returned wrong values for `lme` models with nested random
+  effects, for example `random = ~ 1 | Dog / Side`. It returned the standard
+  deviations of the random effects instead of their variances, and it gave them
+  the wrong group names. This also gave wrong results for `performance::icc()`
+  and `performance::r2()`.
+
 # insight 1.5.4
 
 ## Bug fixes
