@@ -212,6 +212,140 @@ test_that("clean_parameters, correlated group-level terms of non-linear paramete
 })
 
 
+test_that("clean_parameters, non-linear parameter names that end in 'sd', 'cor' or 'sigma', #1076", {
+  # "ksd", "kcor" and "lsigma" contain the strings "sd_", "cor_" and "sigma_",
+  # which are cleaned for group-level and sigma parameters
+  m <- .brmsfit_mock(
+    brms::bf(y ~ ksd * exp(kcor * x) + lsigma, ksd ~ 1, kcor ~ 1, lsigma ~ 1, nl = TRUE),
+    c("b_ksd_Intercept", "b_kcor_Intercept", "b_lsigma_Intercept", "sigma")
+  )
+  out <- clean_parameters(m)
+  rows <- match(c("b_ksd_Intercept", "b_kcor_Intercept", "b_lsigma_Intercept"), out$Parameter)
+  expect_identical(
+    out$Cleaned_Parameter[rows],
+    c("ksd_Intercept", "kcor_Intercept", "lsigma_Intercept")
+  )
+  # no group-level terms, so there is no "SD/Cor" group
+  expect_true(is.null(out$Group) || all(out$Group[rows] == ""))
+  expect_identical(out$Component[rows], rep("conditional", 3))
+})
+
+
+test_that("clean_parameters, non-linear parameter name that starts with a dpar name, #1076", {
+  # "sigmaA" starts with "sigma", and "sigma" has its own group-level term
+  m <- .brmsfit_mock(
+    brms::bf(
+      y ~ a * exp(sigmaA * x),
+      a ~ 1 + (1 | id),
+      sigmaA ~ 1 + (1 | id),
+      sigma ~ 1 + (1 | id),
+      nl = TRUE
+    ),
+    c(
+      "b_a_Intercept",
+      "b_sigmaA_Intercept",
+      "b_sigma_Intercept",
+      "sd_id__a_Intercept",
+      "sd_id__sigmaA_Intercept",
+      "sd_id__sigma_Intercept",
+      "r_id__a[1,Intercept]",
+      "r_id__sigmaA[1,Intercept]",
+      "r_id__sigma[1,Intercept]"
+    )
+  )
+  out <- clean_parameters(m)
+  rows <- match(
+    c("b_sigmaA_Intercept", "sd_id__sigmaA_Intercept", "r_id__sigmaA[1,Intercept]"),
+    out$Parameter
+  )
+  expect_identical(
+    out$Cleaned_Parameter[rows],
+    c("sigmaA_Intercept", "sigmaA_Intercept", "id.1")
+  )
+  expect_identical(out$Group[rows], c("", "SD/Cor: id", "sigmaA_Intercept: id"))
+  expect_identical(out$Component[rows], rep("conditional", 3))
+  # the group-level term of "sigma" itself keeps its labels
+  sigma_row <- out[out$Parameter == "r_id__sigma[1,Intercept]", ]
+  expect_identical(sigma_row$Group, "Intercept: id")
+  expect_identical(sigma_row$Component, "sigma")
+})
+
+
+test_that("clean_parameters, non-linear parameter names that share a prefix ('a', 'ab'), #1076", {
+  m <- .brmsfit_mock(
+    brms::bf(y ~ a * exp(ab * x), a ~ 1 + (1 | id), ab ~ 1 + (1 | id), nl = TRUE),
+    c(
+      "b_a_Intercept",
+      "b_ab_Intercept",
+      "sd_id__a_Intercept",
+      "sd_id__ab_Intercept",
+      "r_id__a[1,Intercept]",
+      "r_id__ab[1,Intercept]",
+      "sigma"
+    )
+  )
+  out <- clean_parameters(m)
+  rows <- match(
+    c("b_ab_Intercept", "sd_id__ab_Intercept", "r_id__a[1,Intercept]", "r_id__ab[1,Intercept]"),
+    out$Parameter
+  )
+  expect_identical(
+    out$Cleaned_Parameter[rows],
+    c("ab_Intercept", "ab_Intercept", "id.1", "id.1")
+  )
+  expect_identical(
+    out$Group[rows],
+    c("", "SD/Cor: id", "a_Intercept: id", "ab_Intercept: id")
+  )
+})
+
+
+test_that("clean_parameters, correlation of a non-linear and a 'sigma' group-level term, #1076", {
+  m <- .brmsfit_mock(
+    brms::bf(y ~ a * exp(b * x), a ~ 1 + (1 | p | id), b ~ 1, sigma ~ 1 + (1 | p | id), nl = TRUE),
+    c(
+      "b_a_Intercept",
+      "b_b_Intercept",
+      "b_sigma_Intercept",
+      "sd_id__a_Intercept",
+      "sd_id__sigma_Intercept",
+      "cor_id__sigma_Intercept__a_Intercept",
+      "r_id__a[1,Intercept]",
+      "r_id__sigma[1,Intercept]"
+    )
+  )
+  out <- clean_parameters(m)
+  cor_row <- out[out$Parameter == "cor_id__sigma_Intercept__a_Intercept", ]
+  expect_identical(cor_row$Cleaned_Parameter, "sigma_Intercept ~ a_Intercept")
+  expect_identical(cor_row$Group, "SD/Cor: id")
+})
+
+
+test_that("clean_parameters, non-linear parameters named 'zi' and 'sd', #1076", {
+  m <- .brmsfit_mock(
+    brms::bf(y ~ zi * exp(sd * x), zi ~ 1 + (1 | id), sd ~ 1, nl = TRUE),
+    c(
+      "b_zi_Intercept",
+      "b_sd_Intercept",
+      "sd_id__zi_Intercept",
+      "r_id__zi[1,Intercept]",
+      "sigma"
+    )
+  )
+  out <- clean_parameters(m)
+  rows <- match(
+    c("b_zi_Intercept", "b_sd_Intercept", "sd_id__zi_Intercept", "r_id__zi[1,Intercept]"),
+    out$Parameter
+  )
+  expect_identical(
+    out$Cleaned_Parameter[rows],
+    c("zi_Intercept", "sd_Intercept", "zi_Intercept", "id.1")
+  )
+  expect_identical(out$Group[rows], c("", "", "SD/Cor: id", "zi_Intercept: id"))
+  expect_identical(out$Component[rows], rep("conditional", 4))
+})
+
+
 test_that("find_parameters keeps parameters that start with a dpar name, #1226", {
   # a custom family with a distributional parameter "c" must not drop
   # conditional parameters of a predictor named, e.g., "condition"
