@@ -237,6 +237,11 @@ get_parameters.brmsfit <- function(
       parameters = parameters
     )
     variables <- unique(unlist(parms, use.names = FALSE))
+    # no parameters selected? `as.data.frame()` would return all parameters
+    # for `variable = NULL`, so we return `NULL` instead
+    if (!length(variables)) {
+      return(NULL)
+    }
   } else {
     variables <- dots$variable
   }
