@@ -494,6 +494,19 @@ clean_parameters.mlm <- function(x, ...) {
   # retrieve auxiliary components
   dpars <- find_auxiliary(x)
 
+  # non-linear parameters of "mu" (`nl = TRUE`) belong to the conditional
+  # component, but each one has its own coefficients. We label them like in
+  # brms' summary(), e.g. "ult_Intercept", and keep the non-linear parameter
+  # name in group-level terms (see #1076). The labels are created here from
+  # the original parameter names and restored at the end, because the
+  # cleaning steps below can match parts of the names of non-linear
+  # parameters (like "sigmaA", "lsigma" or "ksd")
+  nl_labels <- .brms_nl_labels(
+    out$Parameter,
+    .brms_nlpars(x),
+    version2 = identical(dots$version, 2)
+  )
+
   # handle auxiliary components
   for (i in dpars) {
     aux_params <- startsWith(out$Cleaned_Parameter, paste0("b_", i, "_"))
@@ -675,6 +688,91 @@ clean_parameters.mlm <- function(x, ...) {
       }
     }
   }
+
+  # restore labels of non-linear parameters
+  nl_rows <- !is.na(nl_labels$Cleaned_Parameter)
+  if (any(nl_rows)) {
+    out$Cleaned_Parameter[nl_rows] <- nl_labels$Cleaned_Parameter[nl_rows]
+    out$Group[nl_rows] <- nl_labels$Group[nl_rows]
+    nl_component <- nl_rows & !is.na(nl_labels$Component)
+    out$Component[nl_component] <- nl_labels$Component[nl_component]
+    if (identical(dots$version, 2) && "Level" %in% colnames(out)) {
+      out$Level[nl_rows] <- nl_labels$Level[nl_rows]
+    }
+  }
+
+  out
+}
+
+
+# labels for the parameters of non-linear parameters of "mu" in brms-models
+# (`nl = TRUE`). Returns a data frame with one row per parameter, and the
+# columns "Cleaned_Parameter", "Group", "Level" and "Component", which are
+# `NA` for parameters that do not belong to a non-linear parameter.
+# Correlations are labelled if at least one correlated term belongs to a
+# non-linear parameter, but keep their component, because the other term
+# can belong to a distributional parameter like "sigma".
+.brms_nl_labels <- function(parameter, nlpars, version2 = FALSE) {
+  out <- data.frame(
+    Cleaned_Parameter = rep(NA_character_, length(parameter)),
+    Group = NA_character_,
+    Level = NA_character_,
+    Component = NA_character_,
+    stringsAsFactors = FALSE
+  )
+  if (!length(nlpars)) {
+    return(out)
+  }
+  nl_pattern <- paste(nlpars, collapse = "|")
+
+  # population-level, e.g. "b_ult_Intercept" is "ult_Intercept"
+  fixed <- grepl(sprintf("^(b|bs|bsp|bcs)_(%s)_", nl_pattern), parameter)
+  out$Cleaned_Parameter[fixed] <- sub("^(b|bs|bsp|bcs)_", "", parameter[fixed])
+  out$Group[fixed] <- ""
+  out$Level[fixed] <- ""
+  out$Component[fixed] <- "conditional"
+
+  # group-level, e.g. "r_AY__ult[1991,Intercept]" is "AY.1991" in the group
+  # "ult_Intercept: AY", or in the group "AY" with level "1991" for version 2
+  r_pattern <- sprintf("^r_(.*)__(%s)\\[(.*),(.*)\\]$", nl_pattern)
+  rand <- grepl(r_pattern, parameter)
+  r_group <- sub(r_pattern, "\\1", parameter[rand])
+  r_level <- sub(r_pattern, "\\3", parameter[rand])
+  out$Cleaned_Parameter[rand] <- paste0(r_group, ".", r_level)
+  if (version2) {
+    out$Group[rand] <- r_group
+    out$Level[rand] <- r_level
+  } else {
+    out$Group[rand] <- sub(r_pattern, "\\2_\\4: \\1", parameter[rand])
+    out$Level[rand] <- ""
+  }
+  out$Component[rand] <- "conditional"
+
+  # SD and correlations, e.g. "sd_AY__ult_Intercept" is "ult_Intercept" in
+  # the group "SD/Cor: AY", or in the group "AY" for version 2
+  sd_cor <- grepl("^(sd|cor)_(.*?)__", parameter)
+  sd_cor_terms <- strsplit(
+    sub("^(sd|cor)_(.*?)__", "", parameter[sd_cor]),
+    "__",
+    fixed = TRUE
+  )
+  nl_terms <- vapply(
+    sd_cor_terms,
+    function(i) any(grepl(sprintf("^(%s)_", nl_pattern), i)),
+    logical(1)
+  )
+  sd_cor[sd_cor] <- nl_terms
+  sd_cor_group <- sub("^(sd|cor)_(.*?)__(.*)", "\\2", parameter[sd_cor])
+  out$Cleaned_Parameter[sd_cor] <- vapply(
+    sd_cor_terms[nl_terms],
+    paste,
+    character(1),
+    collapse = " ~ "
+  )
+  out$Group[sd_cor] <- if (version2) sd_cor_group else paste("SD/Cor:", sd_cor_group)
+  out$Level[sd_cor] <- ""
+  sd_only <- sd_cor & startsWith(parameter, "sd_")
+  out$Component[sd_only] <- "conditional"
 
   out
 }

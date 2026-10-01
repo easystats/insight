@@ -91,6 +91,10 @@ auxiliary (distributional) parameters. These may be one of the following:
 package \strong{brms}, like \code{mu}, \code{ndt}, \code{kappa}, etc.
 }
 
+For univariate non-linear models from \strong{brms} (\code{nl = TRUE}), the
+coefficients of the non-linear parameters of \code{mu} are returned in the
+\code{conditional} element, and their group-level terms in the \code{random} element.
+
 Models of class \strong{BGGM} additionally can return the elements \code{correlation}
 and \code{intercept}.
 
