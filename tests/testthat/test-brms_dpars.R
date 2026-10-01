@@ -179,6 +179,39 @@ test_that("clean_parameters keeps sigma and its random effects together", {
 })
 
 
+test_that("clean_parameters, correlated group-level terms of non-linear parameters, #1076", {
+  # non-linear parameters "a" and "b" share a correlated group-level term
+  m <- .brmsfit_mock(
+    brms::bf(y ~ a * exp(b * x), a ~ 1 + (1 | p | id), b ~ 1 + (1 | p | id), nl = TRUE),
+    c(
+      "b_a_Intercept",
+      "b_b_Intercept",
+      "sd_id__a_Intercept",
+      "sd_id__b_Intercept",
+      "cor_id__a_Intercept__b_Intercept",
+      "r_id__a[1,Intercept]",
+      "r_id__b[1,Intercept]",
+      "sigma"
+    )
+  )
+  expect_identical(find_auxiliary(m), "sigma")
+  out <- clean_parameters(m)
+  rows <- match(
+    c("b_a_Intercept", "sd_id__a_Intercept", "cor_id__a_Intercept__b_Intercept", "r_id__b[1,Intercept]"),
+    out$Parameter
+  )
+  expect_identical(
+    out$Cleaned_Parameter[rows],
+    c("a_Intercept", "a_Intercept", "a_Intercept ~ b_Intercept", "id.1")
+  )
+  expect_identical(
+    out$Group[rows],
+    c("", "SD/Cor: id", "SD/Cor: id", "b_Intercept: id")
+  )
+  expect_true(all(out$Component[out$Parameter != "sigma"] == "conditional"))
+})
+
+
 test_that("find_parameters keeps parameters that start with a dpar name, #1226", {
   # a custom family with a distributional parameter "c" must not drop
   # conditional parameters of a predictor named, e.g., "condition"

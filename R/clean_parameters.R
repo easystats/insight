@@ -494,6 +494,24 @@ clean_parameters.mlm <- function(x, ...) {
   # retrieve auxiliary components
   dpars <- find_auxiliary(x)
 
+  # non-linear parameters of "mu" (`nl = TRUE`) belong to the conditional
+  # component, but each one has its own coefficients. We label them like in
+  # brms' summary(), e.g. "ult_Intercept", and keep the non-linear parameter
+  # name in group-level terms (see #1076)
+  nlpars <- .brms_nlpars(x)
+  if (length(nlpars)) {
+    nl_pattern <- paste(nlpars, collapse = "|")
+    nl_params <- grepl(
+      sprintf(
+        "^(b_|bs_|bsp_|bcs_)(%1$s)_|^r_(.*)__(%1$s)\\[|^(sd_|cor_)(.*)__(%1$s)_",
+        nl_pattern
+      ),
+      out$Parameter
+    )
+  } else {
+    nl_params <- rep_len(FALSE, nrow(out))
+  }
+
   # handle auxiliary components
   for (i in dpars) {
     aux_params <- startsWith(out$Cleaned_Parameter, paste0("b_", i, "_"))
@@ -610,6 +628,22 @@ clean_parameters.mlm <- function(x, ...) {
       r_grps <- gsub(paste0("__", i), "", r_grps, fixed = TRUE)
     }
 
+    # non-linear parameters, e.g. "r_AY__ult[1991,Intercept]" gets the group
+    # "ult_Intercept: AY" and the parameter name "AY.1991"
+    for (i in nlpars) {
+      nl_rand <- grepl(paste0("__", i, "["), out$Cleaned_Parameter[rand_eff], fixed = TRUE)
+      r_pars[nl_rand] <- gsub(paste0("__", i), "", r_pars[nl_rand], fixed = TRUE)
+      if (identical(dots$version, 2)) {
+        r_grps[nl_rand] <- gsub(paste0("__", i), "", r_grps[nl_rand], fixed = TRUE)
+      } else {
+        r_grps[nl_rand] <- sub(
+          paste0("^(.*): (.*)__", i, "$"),
+          paste0(i, "_\\1: \\2"),
+          r_grps[nl_rand]
+        )
+      }
+    }
+
     out$Cleaned_Parameter[rand_eff] <- r_pars
     out$Group[rand_eff] <- r_grps
   }
@@ -648,12 +682,13 @@ clean_parameters.mlm <- function(x, ...) {
     out$Function[smooth_parameters] <- "smooth"
   }
 
-  # fix intercept names
+  # fix intercept names, but keep the labels of non-linear parameters
 
   intercepts <- which(
-    out$Cleaned_Parameter %in%
+    (out$Cleaned_Parameter %in%
       c("Intercept", "zi_Intercept") |
-      endsWith(out$Cleaned_Parameter, "_Intercept")
+      endsWith(out$Cleaned_Parameter, "_Intercept")) &
+      !nl_params
   )
 
   if (!is_empty_object(intercepts)) {
