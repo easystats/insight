@@ -1550,11 +1550,13 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
 }
 
 .find_formula_nlme <- function(x, fm, verbose = TRUE, ...) {
-  fmr <- eval(x$call$random)
+  # the call can refer to objects or functions (like `pdDiag()`) that cannot
+  # be found here, e.g. when the model was fitted inside a function
+  fmr <- tryCatch(eval(x$call$random), error = function(e) NULL)
   # random effects may also be given without grouping factor (e.g. `~1` for
   # grouped data), as named list (`list(g = ~1)`) or as pdMat object
   if (
-    !is.null(fmr) &&
+    !is.null(x$call$random) &&
       !(inherits(fmr, "formula") && grepl("|", safe_deparse(fmr), fixed = TRUE))
   ) {
     fmr <- .nlme_random_formula(x)

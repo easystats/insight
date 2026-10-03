@@ -297,3 +297,37 @@ test_that("find_formula, random effects given as list or pdMat, #965", {
   )
   expect_identical(find_random_slopes(m_lst), list(random = "day"))
 })
+
+test_that("find_formula, random effects given as object in another environment, #965", {
+  fit <- function() {
+    re <- list(Subject = nlme::pdDiag(~age))
+    nlme::lme(distance ~ age, random = re, data = Orthodont)
+  }
+  m <- fit()
+  m_frm <- nlme::lme(distance ~ age, random = ~ age | Subject, data = Orthodont)
+  expect_equal(find_formula(m), find_formula(m_frm), ignore_attr = TRUE)
+  expect_identical(find_random(m), list(random = "Subject"))
+})
+
+test_that("find_formula, glmmPQL with random effects given as list, #965", {
+  skip_if_not_installed("MASS")
+  data(bacteria, package = "MASS")
+
+  m_frm <- MASS::glmmPQL(
+    y ~ trt,
+    random = ~ 1 | ID,
+    family = binomial,
+    data = bacteria,
+    verbose = FALSE
+  )
+  m_lst <- MASS::glmmPQL(
+    y ~ trt,
+    random = list(ID = ~1),
+    family = binomial,
+    data = bacteria,
+    verbose = FALSE
+  )
+  expect_equal(find_formula(m_lst), find_formula(m_frm), ignore_attr = TRUE)
+  expect_identical(find_random(m_lst), list(random = "ID"))
+  expect_identical(find_random(m_lst), find_random(m_frm))
+})
