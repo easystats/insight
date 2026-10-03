@@ -37,9 +37,19 @@
       colnames(m1) <- rownames(x)[vl]
 
       if (length(g_cor) && nrow(m1) > 1) {
-        m1_cov <- sqrt(prod(diag(m1))) * g_cor
-        for (j in seq_len(ncol(m1))) {
-          m1[j, nrow(m1) - j + 1] <- m1_cov[1]
+        # the correlations are a lower triangle: row i holds the correlations
+        # with terms 1 to i - 1, starting in the "Corr" column
+        corr_cols <- which(colnames(x) == "Corr"):ncol(x)
+        r <- suppressWarnings(matrix(
+          as.numeric(as.matrix(x[vl, corr_cols, drop = FALSE])),
+          nrow = nrow(m1)
+        ))
+        for (i in 2:nrow(m1)) {
+          for (k in seq_len(min(i - 1, ncol(r)))) {
+            if (!is.na(r[i, k])) {
+              m1[i, k] <- m1[k, i] <- r[i, k] * sqrt(m1[i, i] * m1[k, k])
+            }
+          }
         }
       }
 

@@ -38,7 +38,8 @@
   effects, for example `random = ~ 1 | Dog / Side`. It returned the standard
   deviations of the random effects instead of their variances, and it gave them
   the wrong group names. This also gave wrong results for `performance::icc()`
-  and `performance::r2()`.
+  and `performance::r2()`. For groups with three or more correlated random
+  terms, the variances and covariances of the random effects were also wrong.
 
 # insight 1.5.4
 

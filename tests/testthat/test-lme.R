@@ -97,6 +97,28 @@ test_that("get_variance, nested lme, easystats/insight#1232", {
 })
 
 
+test_that("nested lme, three correlated random terms", {
+  skip_on_cran()
+  data(Pixel, package = "nlme")
+
+  m <- nlme::lme(
+    pixel ~ day,
+    random = ~ day + I(day^2) | Dog / Side,
+    data = Pixel,
+    control = nlme::lmeControl(opt = "optim")
+  )
+  vc <- insight:::.get_nested_lme_varcorr(m)
+  # covariance matrices from the fitted model, scaled by the residual variance
+  vc_nlme <- lapply(
+    nlme::pdMatrix(m$modelStruct$reStruct),
+    function(i) i * m$sigma^2
+  )
+  # VarCorr() rounds the correlations to three decimals
+  expect_equal(vc$Dog, vc_nlme$Dog, ignore_attr = TRUE, tolerance = 1e-3)
+  expect_equal(vc$Side, vc_nlme$Side, ignore_attr = TRUE, tolerance = 1e-3)
+})
+
+
 test_that("model_info", {
   expect_true(model_info(m1)$is_linear)
 })
