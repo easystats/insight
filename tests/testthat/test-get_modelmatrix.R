@@ -362,6 +362,11 @@ test_that("get_modelmatrix - clmm, user contrasts replace model contrasts", {
 test_that("get_modelmatrix - brmsfit with sum contrasts, new data with a subset of levels", {
   skip_if_not_installed("brms")
   fx <- brms_fixture()
+  # the full model matrix uses the sum contrasts of the factor
+  expect_modelmatrix(
+    get_modelmatrix(fx$model),
+    stats::model.matrix(~ cyl + wt, fx$data, contrasts.arg = list(cyl = "contr.sum"))
+  )
   s <- fx$data$cyl %in% c("4", "6")
   expected <- get_modelmatrix(fx$model)[which(s), , drop = FALSE]
   # (a) rows of the model data, all factor levels and the contrasts kept
@@ -387,4 +392,31 @@ test_that("get_modelmatrix - brmsfit, user contrasts replace model contrasts", {
     out <- get_modelmatrix(fx$model, contrasts.arg = list(cyl = "contr.helmert"))
   })
   expect_modelmatrix(out, expected)
+})
+
+test_that("get_modelmatrix - brmsfit, no warning for contrasts of a grouping factor", {
+  skip_if_not_installed("brms")
+  d <- mtcars
+  d$cyl <- factor(d$cyl)
+  contrasts(d$cyl) <- contr.sum(3)
+  m <- suppressMessages(suppressWarnings(
+    brms::brm(mpg ~ wt + (1 | cyl), data = d, empty = TRUE)
+  ))
+  expect_no_warning({
+    out <- get_modelmatrix(m)
+  })
+  expect_identical(colnames(out), c("(Intercept)", "wt"))
+})
+
+test_that("get_modelmatrix - clmm fitted with model = FALSE", {
+  skip_if_not_installed("ordinal")
+  fx <- clmm_fixture()
+  w3 <- fx$data
+  m <- ordinal::clmm(
+    rating ~ temp + ch + (1 | judge),
+    data = w3,
+    contrasts = list(temp = "contr.sum"),
+    model = FALSE
+  )
+  expect_modelmatrix(get_modelmatrix(m), get_modelmatrix(fx$model))
 })

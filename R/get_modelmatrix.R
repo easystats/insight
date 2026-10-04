@@ -138,10 +138,15 @@ get_modelmatrix.gls <- get_modelmatrix.lme
 get_modelmatrix.clmm <- function(x, ...) {
   # model.matrix() for clmm objects ignores the `data` and `contrasts.arg`
   # arguments, so we use the terms of the fixed effects. The response is
-  # removed, because new data may not contain it.
+  # removed, because new data may not contain it. Models fitted with
+  # `model = FALSE` store no model frame, so we use get_data() instead.
+  model_data <- x$model
+  if (is.null(model_data)) {
+    model_data <- get_data(x, verbose = FALSE)
+  }
   .modelmatrix_model_contrasts(
     object = stats::delete.response(stats::terms(x)),
-    model_data = x$model,
+    model_data = model_data,
     model_contrasts = x$contrasts,
     ...
   )
@@ -211,8 +216,10 @@ get_modelmatrix.brmsfit <- function(x, ...) {
     } else {
       # brms takes the contrasts from the factors in the data. Re-leveling
       # new data drops this attribute, so we pass the contrasts explicitly.
+      # Only predictors are used, because model.matrix() warns about
+      # contrasts for variables that are not in the formula.
       model_contrasts <- compact_list(lapply(
-        Filter(is.factor, model_data),
+        Filter(is.factor, model_data[intersect(predictors, colnames(model_data))]),
         attr,
         which = "contrasts"
       ))
