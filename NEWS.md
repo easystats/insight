@@ -15,6 +15,13 @@
 
 ## Bug fixes
 
+* If variables used in the model are missing from the data in the
+  environment, `get_data()` now warns and takes the data from the model frame.
+  For example, if you overwrite the data object after the model fit, these
+  variables are missing. Before this fix, `get_data()` silently dropped these
+  variables, and `get_predicted()` and `get_loglikelihood()` failed with
+  "object not found" errors (#1210).
+
 * `format_table` now correctly formats labels consistently when parameter names
   occurred multiple times.
 
