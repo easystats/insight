@@ -130,6 +130,24 @@ get_data <- function(x, ...) {
     {
       # recover data frame from environment
       dat <- .recover_data_from_environment(x, data_name = data_name, verbose = verbose)
+      # if model variables are missing from the data in the environment (e.g.,
+      # the data object was overwritten after fitting the model), but are in
+      # the model frame, we return NULL, so data is taken from the model frame
+      # (see #1210)
+      missing_vars <- .missing_model_variables(x, vars, dat)
+      if (length(missing_vars)) {
+        if (verbose) {
+          format_warning(
+            paste0(
+              "Some variables used in the model were not found in the data in the environment: ",
+              toString(paste0("`", missing_vars, "`")),
+              "."
+            ),
+            "Data is taken from the model frame instead."
+          )
+        }
+        return(NULL)
+      }
       # for metafor, we need to add weights...
       if (inherits(x, c("rma.uni", "rma"))) {
         ## TODO: check if we need to do this for other meta-analysis packages, too
@@ -223,6 +241,35 @@ get_data <- function(x, ...) {
     )
   }
   out
+}
+
+
+# check for model variables that are missing in the environment data ---------
+
+# returns the model variables that are not in `dat`, but in the model frame.
+# returns NULL if no model variable is found in `dat` at all, because then
+# `dat` is not the model data and the usual fallback applies.
+.missing_model_variables <- function(x, vars, dat) {
+  if (is.null(vars) || !is.data.frame(dat)) {
+    return(NULL)
+  }
+  missing_vars <- setdiff(vars, colnames(dat))
+  if (!length(missing_vars) || !any(vars %in% colnames(dat))) {
+    return(NULL)
+  }
+  # only the model frame tells whether a name is a variable, or something
+  # else, like the nonlinear parameters in nlmer models
+  mf <- .safe(stats::model.frame(x))
+  if (is.null(mf) || !is.data.frame(mf)) {
+    return(NULL)
+  }
+  # column names of the model frame can be terms like "log(a)", so we need
+  # the variable names in these terms
+  mf_vars <- unlist(
+    lapply(colnames(mf), function(i) .safe(all.vars(str2lang(i)), i)),
+    use.names = FALSE
+  )
+  intersect(missing_vars, mf_vars)
 }
 
 
