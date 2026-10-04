@@ -15,9 +15,11 @@
 #'   the environment. Hence, if the data was modified _after_ model fitting
 #'   (e.g., variables were recoded or rows filtered), the returned data may no
 #'   longer equal the model data. If a variable used in the model is missing
-#'   from the data in the environment, but `model.frame()` returns it,
-#'   `get_data()` warns and uses the model frame instead. This applies to most,
-#'   but not all, model classes. If `source = "frame"` (or `"mf"`), the data
+#'   from the data in the environment, but is a column of `model.frame()` (i.e.,
+#'   it is not transformed in the formula), `get_data()` warns and uses the
+#'   model frame instead. This applies to most, but not all, model classes.
+#'   Variables used only inside a transformation, like `a` in `log(a)`, are not
+#'   detected. If `source = "frame"` (or `"mf"`), the data
 #'   is taken from the model frame. Any transformed variables are back-transformed,
 #'   if possible. This option returns the data even if it is not available in
 #'   the environment, however, in certain edge cases back-transforming to the
@@ -135,8 +137,9 @@ get_data <- function(x, ...) {
       # recover data frame from environment
       dat <- .recover_data_from_environment(x, data_name = data_name, verbose = verbose)
       # if model variables are missing from the data in the environment (e.g.,
-      # the data object was overwritten after fitting the model), but are in
-      # the model frame, we return NULL, so data is taken from the model frame
+      # the data object was overwritten after fitting the model), but are
+      # columns of the model frame, we return NULL, so data is taken from the
+      # model frame
       # (see #1210). Methods whose fallback re-reads the environment data, or
       # that have no fallback, set `check_missing = FALSE`.
       if (isTRUE(check_missing)) {
@@ -271,7 +274,9 @@ get_data <- function(x, ...) {
   # only names that are model frame columns on their own count as missing.
   # names inside transformed columns, like `k` in `poly(x, degree = k)` or
   # `thr` in `I(y > thr)`, are often objects in the workspace, and names like
-  # the nonlinear parameters in nlmer models are not in the model frame at all
+  # the nonlinear parameters in nlmer models are not in the model frame at all.
+  # data variables used only inside a transformation, like `a` in `log(a)`,
+  # are therefore not detected either
   mf <- .safe(stats::model.frame(x))
   if (is.null(mf) || !is.data.frame(mf)) {
     return(NULL)
@@ -1058,7 +1063,9 @@ get_data.glmm <- function(
   }
 
   # fall back to extract data from model frame. `source = "frame"` skips the
-  # environment, which we already tried above
+  # environment, which we already tried above, unless the model frame cannot
+  # be computed or is empty; then get_data.default() re-reads the environment
+  # data (without the missing-variable check)
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
   dat <- get_data.default(x, source = "frame", verbose = verbose)
 

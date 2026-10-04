@@ -39,9 +39,11 @@ fitting are returned. Note that always the \emph{current} data is recovered from
 the environment. Hence, if the data was modified \emph{after} model fitting
 (e.g., variables were recoded or rows filtered), the returned data may no
 longer equal the model data. If a variable used in the model is missing
-from the data in the environment, but \code{model.frame()} returns it,
-\code{get_data()} warns and uses the model frame instead. This applies to most,
-but not all, model classes. If \code{source = "frame"} (or \code{"mf"}), the data
+from the data in the environment, but is a column of \code{model.frame()} (i.e.,
+it is not transformed in the formula), \code{get_data()} warns and uses the
+model frame instead. This applies to most, but not all, model classes.
+Variables used only inside a transformation, like \code{a} in \code{log(a)}, are not
+detected. If \code{source = "frame"} (or \code{"mf"}), the data
 is taken from the model frame. Any transformed variables are back-transformed,
 if possible. This option returns the data even if it is not available in
 the environment, however, in certain edge cases back-transforming to the
