@@ -96,3 +96,36 @@ test_that("get_data, nlmer, nonlinear parameters are not data columns", {
   })
   expect_identical(nrow(out), nrow(Orange))
 })
+
+
+test_that("get_data, data object unchanged, workspace objects as term arguments", {
+  d <- base_data[c("y", "a", "b", "g")]
+  d$cnt <- rpois(20, 3)
+  k <- 2
+  br <- c(-Inf, 0, Inf)
+  c0 <- 10
+  off <- rep(0.5, 20)
+
+  # `k` is an argument of `poly()`
+  m <- lm(y ~ poly(a, degree = k), data = d)
+  expect_silent(get_data(m))
+
+  # `br` is an argument of `cut()`, predictions must still work
+  m <- lm(y ~ cut(a, breaks = br), data = d)
+  expect_silent({
+    out <- get_data(m)
+  })
+  expect_named(out, c("y", "a"))
+  expect_silent(get_predicted(m))
+
+  # `c0` is used inside `log()`
+  m <- lm(y ~ log(b + c0), data = d)
+  expect_silent(get_data(m))
+
+  # `off` is an offset from the workspace
+  m <- glm(cnt ~ a + offset(off), family = poisson, data = d)
+  expect_silent({
+    out <- get_data(m)
+  })
+  expect_false("off" %in% colnames(out))
+})

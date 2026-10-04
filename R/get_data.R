@@ -67,6 +67,7 @@ get_data <- function(x, ...) {
   additional_variables = NULL,
   verbose = FALSE,
   data_name = NULL,
+  check_missing = TRUE,
   ...
 ) {
   # process arguments, check whether data should be recovered from
@@ -136,8 +137,13 @@ get_data <- function(x, ...) {
       # if model variables are missing from the data in the environment (e.g.,
       # the data object was overwritten after fitting the model), but are in
       # the model frame, we return NULL, so data is taken from the model frame
-      # (see #1210)
-      missing_vars <- .missing_model_variables(x, vars, dat)
+      # (see #1210). Methods whose fallback does not use the model frame set
+      # `check_missing = FALSE`.
+      if (isTRUE(check_missing)) {
+        missing_vars <- .missing_model_variables(x, vars, dat)
+      } else {
+        missing_vars <- NULL
+      }
       if (length(missing_vars)) {
         if (verbose) {
           format_warning(
@@ -149,6 +155,8 @@ get_data <- function(x, ...) {
             "Data is taken from the model frame instead."
           )
         }
+        # this returns from `.get_data_from_environment()`, not only from
+        # `tryCatch()`, so the warning below is not shown as well
         return(NULL)
       }
       # for metafor, we need to add weights...
@@ -258,6 +266,32 @@ get_data <- function(x, ...) {
   }
   missing_vars <- setdiff(vars, colnames(dat))
   if (!length(missing_vars) || !any(vars %in% colnames(dat))) {
+    return(NULL)
+  }
+  # names that are only used inside a term, like `k` in `poly(x, degree = k)`,
+  # are often objects in the workspace, not data. These are not missing. Names
+  # that are terms on their own, like `z` in `y ~ a + z`, are still checked.
+  model_formula <- .safe(stats::formula(x))
+  model_env <- .safe(environment(model_formula))
+  if (is.null(model_env)) {
+    model_env <- globalenv()
+  }
+  bare_terms <- .safe(
+    c(
+      all.vars(model_formula[[2]]),
+      attr(stats::terms(model_formula), "term.labels")
+    )
+  )
+  is_workspace_object <- vapply(
+    missing_vars,
+    function(i) {
+      obj <- get0(i, envir = model_env)
+      !is.null(obj) && !is.function(obj)
+    },
+    logical(1)
+  )
+  missing_vars <- missing_vars[!is_workspace_object | missing_vars %in% bare_terms]
+  if (!length(missing_vars)) {
     return(NULL)
   }
   # only the model frame tells whether a name is a variable, or something
@@ -1613,12 +1647,14 @@ get_data.feis <- function(
   verbose = TRUE,
   ...
 ) {
-  # try to recover data from environment
+  # try to recover data from environment. the fallback below does not use the
+  # model frame, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     effects = effects,
     source = source,
     verbose = verbose,
+    check_missing = FALSE,
     ...
   )
 
@@ -1673,8 +1709,15 @@ get_data.feglm <- function(x, source = "environment", verbose = TRUE, ...) {
 
 #' @export
 get_data.pgmm <- function(x, source = "environment", verbose = TRUE, ...) {
-  # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
+  # try to recover data from environment. the fallback below does not use the
+  # model frame, so we don't check for missing variables
+  model_data <- .get_data_from_environment(
+    x,
+    source = source,
+    verbose = verbose,
+    check_missing = FALSE,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -2572,7 +2615,14 @@ get_data.phylolm <- function(x, source = "environment", verbose = TRUE, ...) {
   # environment. We still need the "source" argument, even if it's not used here,
   #  to avoid the "multiple argument match" error for those instances, where
   # `get_data()` is called # with `source = "frame"`.
-  .get_data_from_environment(x, source = "environment", verbose = verbose, ...)
+  # there is no fallback, so we don't check for missing variables
+  .get_data_from_environment(
+    x,
+    source = "environment",
+    verbose = verbose,
+    check_missing = FALSE,
+    ...
+  )
 }
 
 #' @export
@@ -2607,12 +2657,14 @@ get_data.rma <- function(
     safe_deparse(model_call$sei),
     safe_deparse(model_call$mods)
   )
-  # try to recover data from environment
+  # try to recover data from environment. the fallback below does not use the
+  # model frame, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     source = source,
     additional_variables = additional_variables,
     verbose = verbose,
+    check_missing = FALSE,
     ...
   )
 
@@ -2676,8 +2728,15 @@ get_data.rma <- function(
 
 #' @export
 get_data.metaplus <- function(x, source = "environment", verbose = TRUE, ...) {
-  # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
+  # try to recover data from environment. the fallback below does not use the
+  # model frame, so we don't check for missing variables
+  model_data <- .get_data_from_environment(
+    x,
+    source = source,
+    verbose = verbose,
+    check_missing = FALSE,
+    ...
+  )
 
   if (!is.null(model_data)) {
     return(model_data)
