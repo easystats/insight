@@ -209,10 +209,18 @@ get_modelmatrix.brmsfit <- function(x, ...) {
         matrix(nrow = nrow(model_data), ncol = 0)
       }
     } else {
-      .data_in_dots(
-        ...,
+      # brms takes the contrasts from the factors in the data. Re-leveling
+      # new data drops this attribute, so we pass the contrasts explicitly.
+      model_contrasts <- compact_list(lapply(
+        Filter(is.factor, model_data),
+        attr,
+        which = "contrasts"
+      ))
+      .modelmatrix_model_contrasts(
         object = stats::reformulate(predictors, intercept = intercept),
-        default_data = model_data
+        model_data = model_data,
+        model_contrasts = model_contrasts,
+        ...
       )
     }
   }
