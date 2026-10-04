@@ -15,6 +15,16 @@
 
 ## Bug fixes
 
+* If variables used in the model are missing from the data in the
+  environment, but are columns of the model frame, `get_data()` now warns and
+  takes the data from the model frame. This applies, for example, to `lm`,
+  `glm`, `lmer`, `glmmTMB` and `gam` models. Variables are missing, for
+  example, if you overwrite the data object after the model fit. Before this fix,
+  `get_data()` silently dropped these variables. Then `get_predicted()`, and
+  `get_loglikelihood()` for `glm` models, failed with "object not found"
+  errors. Variables used only inside a transformation, like `a` in `log(a)`,
+  are not detected (#1210).
+
 * `get_modelmatrix()` for `lme` and `gls` models now uses the contrasts stored
   in the model instead of treatment contrasts. You set these contrasts with
   `contrasts = list(x = contr.sum)` in `lme()`, or with
