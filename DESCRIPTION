@@ -62,7 +62,12 @@ Authors@R:
              family = "Reinhart",
              role = "ctb",
              email = "areinhar@stat.cmu.edu",
-             comment = c(ORCID = "0000-0002-6658-514X")))
+             comment = c(ORCID = "0000-0002-6658-514X")),
+      person(given = "Jeffrey",
+             family = "Girard",
+             role = "ctb",
+             email = "me@jmgirard.com",
+             comment = c(ORCID = "0000-0002-7359-3746")))
 Maintainer: Daniel Lüdecke <officialeasystats@gmail.com>
 Description: A tool to provide an easy, intuitive and consistent
     access to information contained in various R models, like model
