@@ -319,7 +319,7 @@ test_that("get_modelmatrix - clmm with sum contrasts, no data", {
   expect_modelmatrix(get_modelmatrix(fx$model), expected)
 })
 
-test_that("get_variance - clmm with sum contrasts equals default contrasts", {
+test_that("get_variance - clmm var.fixed with sum contrasts equals default contrasts", {
   skip_if_not_installed("ordinal")
   fx <- clmm_fixture()
   m_default <- ordinal::clmm(rating ~ temp + ch + (1 | judge), data = fx$data)

@@ -19,7 +19,7 @@
   model, so `get_variance()` works for `clmm` models fitted with, for example,
   `contrasts = list(x = "contr.sum")`. For `clmm` models, a `data` argument is
   now used. For `clmm` and `brmsfit` models, factor variables in `data` get the
-  levels and contrasts of the model data. Thus, new data with only some of the
+  levels of the model data, and the contrasts of the model are used. Thus, new data with only some of the
   levels gives the correct columns. A `contrasts.arg` list is now accepted for
   both model classes.
 
