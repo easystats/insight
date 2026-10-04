@@ -123,7 +123,26 @@ get_modelmatrix.lme <- function(x, ...) {
   # we check the dots for a "data" argument. To make model.matrix work
   # for certain objects, we need to specify the data-argument explicitly,
   # however, if the user provides a data-argument, this should be used instead.
-  .data_in_dots(..., object = x, default_data = get_data(x, verbose = FALSE))
+  dots <- list(...)
+  # model.matrix() does not use the contrasts stored in the model object,
+  # so we pass them explicitly, unless the user provides own contrasts
+  if (!"contrasts.arg" %in% names(dots) && !is.null(x$contrasts)) {
+    dots$contrasts.arg <- x$contrasts
+  }
+  model_data <- get_data(x, verbose = FALSE)
+  if (is.null(dots$data)) {
+    dots$data <- model_data
+  } else {
+    # new data may not contain all factor levels, which the contrasts
+    # require, so we use the factor levels from the model data. Character
+    # vectors are converted to factors by model.matrix(), so they need
+    # the levels from the model data, too.
+    is_categorical <- function(i) is.factor(i) || is.character(i)
+    for (i in intersect(names(Filter(is_categorical, model_data)), colnames(dots$data))) {
+      dots$data[[i]] <- factor(dots$data[[i]], levels = levels(factor(model_data[[i]])))
+    }
+  }
+  do.call(stats::model.matrix, c(list(object = x), dots))
 }
 
 #' @export
