@@ -52,7 +52,8 @@
 * `get_predicted()` for `coxph` models with `predict = "survival"` now computes
   confidence intervals on the cumulative-hazard scale and back-transforms them,
   as `survival::survfit()` does by default. Before this fix, the intervals were
-  symmetric around the survival probability and could fall outside 0 and 1.
+  symmetric around the survival probability and were not always between 0
+  and 1.
 
 * `get_predicted()` for `coxph` models with `predict = "expectation"` or
   `predict = "risk"` now returns standard errors and no longer warns that the
