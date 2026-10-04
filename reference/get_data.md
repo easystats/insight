@@ -57,7 +57,13 @@ get_data(
   *current* data is recovered from the environment. Hence, if the data
   was modified *after* model fitting (e.g., variables were recoded or
   rows filtered), the returned data may no longer equal the model data.
-  If `source = "frame"` (or `"mf"`), the data is taken from the model
+  If a variable used in the model is missing from the data in the
+  environment, but is a column of
+  [`model.frame()`](https://rdrr.io/r/stats/model.frame.html),
+  `get_data()` warns and uses the model frame instead. This applies to
+  most, but not all, model classes. Variables used only inside a
+  transformation, like `a` in `log(a)`, are not detected. If
+  `source = "frame"` (or `"mf"`), the data is taken from the model
   frame. Any transformed variables are back-transformed, if possible.
   This option returns the data even if it is not available in the
   environment, however, in certain edge cases back-transforming to the
