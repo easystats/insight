@@ -8,7 +8,7 @@ base_data <- data.frame(
   a = rnorm(20),
   b = rnorm(20),
   c = rnorm(20),
-  g = sample(1:3, 20, replace = TRUE)
+  g = sample.int(3, 20, replace = TRUE)
 )
 
 
@@ -27,7 +27,7 @@ test_that("get_data, lm and glm with `y ~ .`, data object overwritten after the 
     expect_length(warnings, 1)
     expect_match(warnings, "`a`", fixed = TRUE)
     expect_named(out, c("y", "a", "b"))
-    expect_identical(nrow(out), nrow(mf))
+    expect_shape(out, nrow = nrow(mf))
     expect_equal(out$a, mf$a, ignore_attr = TRUE)
 
     expect_silent({
@@ -94,7 +94,7 @@ test_that("get_data, nlmer, nonlinear parameters are not data columns", {
   expect_silent({
     out <- get_data(nm1)
   })
-  expect_identical(nrow(out), nrow(Orange))
+  expect_shape(out, nrow = nrow(Orange))
 })
 
 
