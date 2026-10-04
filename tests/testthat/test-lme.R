@@ -27,16 +27,95 @@ m4 <- nlme::lme(follicles ~ Time, Ovary, correlation = cr)
 test_that("nested_varCorr", {
   skip_on_cran()
 
+  # variances, not standard deviations, and the outer group first
   expect_equal(
-    insight:::.get_nested_lme_varcorr(m3)$mysubgrp[1, 1],
-    7.508310765,
+    insight:::.get_nested_lme_varcorr(m3)$mygrp[1, 1],
+    56.37473,
     tolerance = 1e-3
   )
   expect_equal(
-    insight:::.get_nested_lme_varcorr(m3)$mygrp[1, 1],
-    0.004897827,
+    insight:::.get_nested_lme_varcorr(m3)$mysubgrp[1, 1],
+    2.400317e-05,
     tolerance = 1e-2
   )
+})
+
+
+test_that("get_variance, nested lme, easystats/insight#1232", {
+  skip_on_cran()
+  data(Pixel, package = "nlme")
+
+  m <- nlme::lme(pixel ~ day, random = ~ 1 | Dog / Side, data = Pixel)
+  vc <- insight:::.get_nested_lme_varcorr(m)
+  expect_named(vc, c("Dog", "Side"))
+  expect_equal(vc$Dog[1, 1], 647.3259, tolerance = 1e-4)
+  expect_equal(vc$Side[1, 1], 218.3414, tolerance = 1e-4)
+
+  # same model fitted with lme4
+  m_lme4 <- lme4::lmer(pixel ~ day + (1 | Dog / Side), data = Pixel)
+  v <- get_variance(m)
+  v_lme4 <- get_variance(m_lme4)
+  expect_equal(v$var.random, v_lme4$var.random, tolerance = 1e-3)
+  expect_equal(
+    v$var.intercept,
+    c(Dog = 647.3259, Side = 218.3414),
+    tolerance = 1e-4
+  )
+
+  # random slopes: variance on the diagonal, covariance off the diagonal
+  m_slope <- nlme::lme(pixel ~ day, random = ~ day | Dog / Side, data = Pixel)
+  vc_nlme <- nlme::VarCorr(m_slope)
+  vc <- insight:::.get_nested_lme_varcorr(m_slope)
+  expect_named(vc, c("Dog", "Side"))
+  expect_equal(
+    diag(vc$Dog),
+    as.numeric(vc_nlme[2:3, "Variance"]),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  expect_equal(
+    vc$Dog[1, 2],
+    prod(as.numeric(vc_nlme[2:3, "StdDev"])) * as.numeric(vc_nlme[3, "Corr"]),
+    tolerance = 1e-4
+  )
+
+  # uncorrelated random slopes: zero covariance
+  m_diag <- nlme::lme(
+    pixel ~ day,
+    random = list(Dog = nlme::pdDiag(~day), Side = ~1),
+    data = Pixel
+  )
+  vc_nlme <- nlme::VarCorr(m_diag)
+  vc <- insight:::.get_nested_lme_varcorr(m_diag)
+  expect_equal(
+    vc$Dog,
+    diag(as.numeric(vc_nlme[2:3, "Variance"])),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  expect_equal(vc$Side[1, 1], as.numeric(vc_nlme[5, "Variance"]), tolerance = 1e-4)
+})
+
+
+test_that("nested lme, three correlated random terms", {
+  skip_on_cran()
+  data(Pixel, package = "nlme")
+
+  m <- nlme::lme(
+    pixel ~ day,
+    random = ~ day + I(day^2) | Dog / Side,
+    data = Pixel,
+    control = nlme::lmeControl(opt = "optim")
+  )
+  vc <- insight:::.get_nested_lme_varcorr(m)
+  # covariance matrices from the fitted model, scaled by the residual variance
+  vc_nlme <- lapply(
+    nlme::pdMatrix(m$modelStruct$reStruct),
+    function(i) i * m$sigma^2
+  )
+  # VarCorr() rounds the correlations to three decimals
+  expect_equal(vc$Dog, vc_nlme$Dog, ignore_attr = TRUE, tolerance = 1e-3)
+  expect_equal(vc$Side, vc_nlme$Side, ignore_attr = TRUE, tolerance = 1e-3)
 })
 
 

@@ -34,6 +34,13 @@
   now returned as their own component, which also fixes the related grouping in
   `parameters::model_parameters()`.
 
+* `get_variance()` returned wrong values for `lme` models with nested random
+  effects, for example `random = ~ 1 | Dog / Side`. It returned the standard
+  deviations of the random effects instead of their variances, and it gave them
+  the wrong group names. This also gave wrong results for `performance::icc()`
+  and `performance::r2()`. For groups with three or more correlated random
+  terms, the variances and covariances of the random effects were also wrong.
+
 * `find_formula()` now returns the correct random effects formula for
   `nlme::lme()` and `MASS::glmmPQL()` models with a named list or a `pdMat`
   object in the `random` argument. Examples are `random = list(g = ~1)` and
