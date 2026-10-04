@@ -15,6 +15,14 @@
 
 ## Bug fixes
 
+* `get_modelmatrix()` for `clmm` models now uses the contrasts stored in the
+  model, so `get_variance()` works for `clmm` models fitted with, for example,
+  `contrasts = list(x = "contr.sum")`. For `clmm` models, a `data` argument is
+  now used. For `clmm` and `brmsfit` models, factor variables in `data` get the
+  levels and contrasts of the model data. Thus, new data with only some of the
+  levels gives the correct columns. A `contrasts.arg` list is now accepted for
+  both model classes.
+
 * If variables used in the model are missing from the data in the
   environment, but are columns of the model frame, `get_data()` now warns and
   takes the data from the model frame. This applies, for example, to `lm`,
