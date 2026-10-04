@@ -126,7 +126,7 @@ get_modelmatrix.lme <- function(x, ...) {
   dots <- list(...)
   # model.matrix() does not use the contrasts stored in the model object,
   # so we pass them explicitly, unless the user provides own contrasts
-  if (is.null(dots$contrasts.arg) && !is.null(x$contrasts)) {
+  if (!"contrasts.arg" %in% names(dots) && !is.null(x$contrasts)) {
     dots$contrasts.arg <- x$contrasts
   }
   model_data <- get_data(x, verbose = FALSE)
@@ -134,9 +134,12 @@ get_modelmatrix.lme <- function(x, ...) {
     dots$data <- model_data
   } else {
     # new data may not contain all factor levels, which the contrasts
-    # require, so we use the factor levels from the model data
-    for (i in intersect(names(Filter(is.factor, model_data)), colnames(dots$data))) {
-      dots$data[[i]] <- factor(dots$data[[i]], levels = levels(model_data[[i]]))
+    # require, so we use the factor levels from the model data. Character
+    # vectors are converted to factors by model.matrix(), so they need
+    # the levels from the model data, too.
+    is_categorical <- function(i) is.factor(i) || is.character(i)
+    for (i in intersect(names(Filter(is_categorical, model_data)), colnames(dots$data))) {
+      dots$data[[i]] <- factor(dots$data[[i]], levels = levels(factor(model_data[[i]])))
     }
   }
   do.call(stats::model.matrix, c(list(object = x), dots))

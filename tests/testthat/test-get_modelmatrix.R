@@ -152,10 +152,52 @@ test_that("get_modelmatrix - lme uses model contrasts, Issue #483", {
   out <- get_modelmatrix(m, data = nd)
   expect_equal(out, expected[c(1, 5), ], ignore_attr = TRUE)
 
+  # user-provided contrasts, also NULL, replace the model contrasts
+  out <- get_modelmatrix(m, contrasts.arg = NULL)
+  expect_identical(colnames(out), c("(Intercept)", "cyl6", "cyl8"))
+
   # default contrasts are unchanged
   m <- nlme::lme(mpg ~ cyl, data = d, random = ~ 1 | gear)
   out <- get_modelmatrix(m)
   expect_identical(colnames(out), c("(Intercept)", "cyl6", "cyl8"))
+})
+
+
+test_that("get_modelmatrix - lme, new data with character predictor", {
+  skip_if_not_installed("nlme")
+  d <- mtcars
+  d$cyl <- as.character(d$cyl)
+  m <- nlme::lme(mpg ~ cyl, data = d, random = ~ 1 | gear)
+  expected <- stats::model.matrix(~cyl, data = d)
+  # new data with only some of the levels
+  nd <- data.frame(mpg = 0, cyl = c("6", "8"), gear = 4)
+  out <- get_modelmatrix(m, data = nd)
+  expect_identical(colnames(out), c("(Intercept)", "cyl6", "cyl8"))
+  expect_equal(out, expected[c(1, 5), ], ignore_attr = TRUE)
+})
+
+
+test_that("get_modelmatrix - gls uses model contrasts", {
+  skip_if_not_installed("nlme")
+  d <- mtcars
+  d$cyl <- factor(d$cyl)
+  m <- withr::with_options(
+    list(contrasts = c("contr.sum", "contr.poly")),
+    nlme::gls(mpg ~ cyl, data = d)
+  )
+  expected <- stats::model.matrix(
+    ~cyl,
+    data = d,
+    contrasts.arg = list(cyl = contr.sum)
+  )
+  out <- get_modelmatrix(m)
+  expect_identical(colnames(out), names(stats::coef(m)))
+  expect_equal(out, expected, ignore_attr = TRUE)
+
+  # new data with only some of the factor levels
+  nd <- data.frame(mpg = 0, cyl = c("6", "8"))
+  out <- get_modelmatrix(m, data = nd)
+  expect_equal(out, expected[c(1, 5), ], ignore_attr = TRUE)
 })
 
 
