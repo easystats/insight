@@ -298,14 +298,16 @@ clmm_fixture <- function() {
   list(data = w2, model = m_c)
 }
 
+# not `d`: with the global `d` that test-coxme.R leaves, get_data() returns
+# the wrong data for brmsfit models
 brms_fixture <- function() {
-  d <- mtcars
-  d$cyl <- factor(d$cyl)
-  contrasts(d$cyl) <- contr.sum(3)
+  d_brms <- mtcars
+  d_brms$cyl <- factor(d_brms$cyl)
+  contrasts(d_brms$cyl) <- contr.sum(3)
   m_b <- suppressMessages(suppressWarnings(
-    brms::brm(mpg ~ cyl + wt, data = d, empty = TRUE)
+    brms::brm(mpg ~ cyl + wt, data = d_brms, empty = TRUE)
   ))
-  list(data = d, model = m_b)
+  list(data = d_brms, model = m_b)
 }
 
 test_that("get_modelmatrix - clmm with sum contrasts, no data", {
@@ -396,11 +398,11 @@ test_that("get_modelmatrix - brmsfit, user contrasts replace model contrasts", {
 
 test_that("get_modelmatrix - brmsfit, no warning for contrasts of a grouping factor", {
   skip_if_not_installed("brms")
-  d <- mtcars
-  d$cyl <- factor(d$cyl)
-  contrasts(d$cyl) <- contr.sum(3)
+  d_brms <- mtcars
+  d_brms$cyl <- factor(d_brms$cyl)
+  contrasts(d_brms$cyl) <- contr.sum(3)
   m <- suppressMessages(suppressWarnings(
-    brms::brm(mpg ~ wt + (1 | cyl), data = d, empty = TRUE)
+    brms::brm(mpg ~ wt + (1 | cyl), data = d_brms, empty = TRUE)
   ))
   expect_no_warning({
     out <- get_modelmatrix(m)
