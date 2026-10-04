@@ -179,15 +179,17 @@ test_that("get_modelmatrix - lme, new data with character predictor", {
 
 test_that("get_modelmatrix - gls uses model contrasts", {
   skip_if_not_installed("nlme")
-  d <- mtcars
-  d$cyl <- factor(d$cyl)
+  # not `d`: with the global `d` that test-coxme.R leaves, get_data() returns
+  # the wrong data for this model
+  d_gls <- mtcars
+  d_gls$cyl <- factor(d_gls$cyl)
   m <- withr::with_options(
     list(contrasts = c("contr.sum", "contr.poly")),
-    nlme::gls(mpg ~ cyl, data = d)
+    nlme::gls(mpg ~ cyl, data = d_gls)
   )
   expected <- stats::model.matrix(
     ~cyl,
-    data = d,
+    data = d_gls,
     contrasts.arg = list(cyl = contr.sum)
   )
   out <- get_modelmatrix(m)
@@ -198,6 +200,48 @@ test_that("get_modelmatrix - gls uses model contrasts", {
   nd <- data.frame(mpg = 0, cyl = c("6", "8"))
   out <- get_modelmatrix(m, data = nd)
   expect_equal(out, expected[c(1, 5), ], ignore_attr = TRUE)
+})
+
+
+test_that("get_modelmatrix - lme ignores model.matrix() methods for lme objects", {
+  skip_if_not_installed("nlme")
+  # MuMIn registers a model.matrix() method for lme objects that ignores the
+  # `data` and `contrasts.arg` arguments
+  local_mocked_s3_method(
+    "model.matrix",
+    "lme",
+    function(object, ...) stop("model.matrix.lme() was called", call. = FALSE)
+  )
+  d_lme <- mtcars
+  d_lme$cyl <- factor(d_lme$cyl)
+  m <- nlme::lme(
+    mpg ~ cyl,
+    data = d_lme,
+    random = ~ 1 | gear,
+    contrasts = list(cyl = contr.sum)
+  )
+  expected <- stats::model.matrix(
+    ~cyl,
+    data = d_lme,
+    contrasts.arg = list(cyl = contr.sum)
+  )
+  out <- get_modelmatrix(m, data = head(d_lme, 5))
+  expect_equal(out, head(expected, 5), ignore_attr = TRUE)
+})
+
+
+test_that("get_modelmatrix - lme and gls, new data keeps the basis of poly()", {
+  skip_if_not_installed("nlme")
+  d_lme <- mtcars
+  d_lme$cyl <- factor(d_lme$cyl)
+  expected <- stats::model.matrix(stats::lm(mpg ~ poly(wt, 2) + cyl, data = d_lme))
+  m <- nlme::lme(mpg ~ poly(wt, 2) + cyl, data = d_lme, random = ~ 1 | gear)
+  out <- get_modelmatrix(m, data = head(d_lme, 5))
+  expect_identical(colnames(out), colnames(expected))
+  expect_equal(out, head(expected, 5), ignore_attr = TRUE)
+  m <- nlme::gls(mpg ~ poly(wt, 2) + cyl, data = d_lme)
+  out <- get_modelmatrix(m, data = head(d_lme, 5))
+  expect_equal(out, head(expected, 5), ignore_attr = TRUE)
 })
 
 
