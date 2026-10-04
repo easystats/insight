@@ -15,9 +15,9 @@
 #'   the environment. Hence, if the data was modified _after_ model fitting
 #'   (e.g., variables were recoded or rows filtered), the returned data may no
 #'   longer equal the model data. If a variable used in the model is missing
-#'   from the data in the environment, but is a column of `model.frame()` (i.e.,
-#'   it is not transformed in the formula), `get_data()` warns and uses the
-#'   model frame instead. This applies to most, but not all, model classes.
+#'   from the data in the environment, but is a column of `model.frame()`,
+#'   `get_data()` warns and uses the model frame instead. This applies to most,
+#'   but not all, model classes.
 #'   Variables used only inside a transformation, like `a` in `log(a)`, are not
 #'   detected. If `source = "frame"` (or `"mf"`), the data
 #'   is taken from the model frame. Any transformed variables are back-transformed,
@@ -2041,8 +2041,9 @@ get_data.MCMCglmm <- function(
   verbose = TRUE,
   ...
 ) {
-  # try to recover data from environment. the fallback below re-reads the
-  # environment data, so we don't check for missing variables
+  # try to recover data from environment. the fallback below searches the
+  # workspace for a data frame with all predictors, so we don't check for
+  # missing variables
   model_data <- .get_data_from_environment(
     x,
     effects = effects,
