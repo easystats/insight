@@ -32,6 +32,12 @@
   factor and character variables get the levels of the model data. Thus, new
   data with only some of the levels gives the correct columns.
 
+* `get_modelmatrix()` for `lme` and `gls` models with new `data` now keeps the
+  basis of terms like `poly()` from the model data. Thus, the columns match the
+  fitted coefficients. If another package, like *MuMIn*, provides its own
+  `model.matrix()` method for `lme` objects, `get_modelmatrix()` now still uses
+  `data` and the model contrasts.
+
 * `format_table` now correctly formats labels consistently when parameter names
   occurred multiple times.
 
