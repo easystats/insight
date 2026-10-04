@@ -15,6 +15,13 @@
 
 ## Bug fixes
 
+* `get_modelmatrix()` for `lme` and `gls` models now uses the contrasts stored
+  in the model instead of treatment contrasts. You set these contrasts with
+  `contrasts = list(x = contr.sum)` in `lme()`, or with
+  `options(contrasts = ...)` when you fit the model. If you provide `data`, its
+  factor and character variables get the levels of the model data. Thus, new
+  data with only some of the levels gives the correct columns.
+
 * `format_table` now correctly formats labels consistently when parameter names
   occurred multiple times.
 
