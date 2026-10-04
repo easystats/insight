@@ -309,18 +309,6 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
 }
 
 
-.data_in_dots <- function(..., object = NULL, default_data = NULL) {
-  dot.arguments <- lapply(match.call(expand.dots = FALSE)[["..."]], function(x) x)
-  data_arg <- if ("data" %in% names(dot.arguments)) {
-    eval(dot.arguments[["data"]])
-  } else {
-    default_data
-  }
-  remaining_dots <- setdiff(names(dot.arguments), "data")
-  do.call(stats::model.matrix, c(list(object = object, data = data_arg), remaining_dots))
-}
-
-
 .pad_modelmatrix_unpad <- function(x, data, ...) {
   data <- .pad_modelmatrix(x = x, data = data)
   # replace columns that only contain NA values with 1 - else, model.matrix() fails
