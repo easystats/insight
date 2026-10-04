@@ -137,8 +137,8 @@ get_data <- function(x, ...) {
       # if model variables are missing from the data in the environment (e.g.,
       # the data object was overwritten after fitting the model), but are in
       # the model frame, we return NULL, so data is taken from the model frame
-      # (see #1210). Methods whose fallback does not use the model frame set
-      # `check_missing = FALSE`.
+      # (see #1210). Methods whose fallback re-reads the environment data, or
+      # that have no fallback, set `check_missing = FALSE`.
       if (isTRUE(check_missing)) {
         missing_vars <- .missing_model_variables(x, vars, dat)
       } else {
@@ -606,12 +606,14 @@ get_data.gee <- function(
   verbose = TRUE,
   ...
 ) {
-  # try to recover data from environment
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     effects = effects,
     source = source,
     verbose = verbose,
+    check_missing = FALSE,
     ...
   )
 
@@ -648,12 +650,14 @@ get_data.rqss <- function(
   verbose = TRUE,
   ...
 ) {
-  # try to recover data from environment
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     component = component,
     source = source,
     verbose = verbose,
+    check_missing = FALSE,
     ...
   )
 
@@ -686,8 +690,9 @@ get_data.rqss <- function(
 
 #' @export
 get_data.gls <- function(x, source = "environment", verbose = TRUE, ...) {
-  # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, check_missing = FALSE, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -1148,12 +1153,14 @@ get_data.glmmadmb <- function(
   verbose = TRUE,
   ...
 ) {
-  # try to recover data from environment
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     effects = effects,
     source = source,
     verbose = verbose,
+    check_missing = FALSE,
     ...
   )
 
@@ -1260,12 +1267,14 @@ get_data.sem <- function(
   verbose = TRUE,
   ...
 ) {
-  # try to recover data from environment
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     effects = effects,
     source = source,
     verbose = verbose,
+    check_missing = FALSE,
     ...
   )
 
@@ -1412,12 +1421,14 @@ get_data.BBmm <- function(
   verbose = TRUE,
   ...
 ) {
-  # try to recover data from environment
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     effects = effects,
     source = source,
     verbose = verbose,
+    check_missing = FALSE,
     ...
   )
 
@@ -1647,8 +1658,8 @@ get_data.feis <- function(
   verbose = TRUE,
   ...
 ) {
-  # try to recover data from environment. the fallback below does not use the
-  # model frame, so we don't check for missing variables
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     effects = effects,
@@ -1709,8 +1720,8 @@ get_data.feglm <- function(x, source = "environment", verbose = TRUE, ...) {
 
 #' @export
 get_data.pgmm <- function(x, source = "environment", verbose = TRUE, ...) {
-  # try to recover data from environment. the fallback below does not use the
-  # model frame, so we don't check for missing variables
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     source = source,
@@ -2489,8 +2500,9 @@ get_data.gbm <- function(x, source = "environment", verbose = TRUE, ...) {
 
 #' @export
 get_data.tobit <- function(x, source = "environment", verbose = TRUE, ...) {
-  # try to recover data from environment
-  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
+  model_data <- .get_data_from_environment(x, source = source, verbose = verbose, check_missing = FALSE, ...)
 
   if (!is.null(model_data)) {
     return(model_data)
@@ -2657,8 +2669,8 @@ get_data.rma <- function(
     safe_deparse(model_call$sei),
     safe_deparse(model_call$mods)
   )
-  # try to recover data from environment. the fallback below does not use the
-  # model frame, so we don't check for missing variables
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     source = source,
@@ -2728,8 +2740,8 @@ get_data.rma <- function(
 
 #' @export
 get_data.metaplus <- function(x, source = "environment", verbose = TRUE, ...) {
-  # try to recover data from environment. the fallback below does not use the
-  # model frame, so we don't check for missing variables
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data, so we don't check for missing variables
   model_data <- .get_data_from_environment(
     x,
     source = source,
