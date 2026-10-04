@@ -41,6 +41,14 @@
   and `performance::r2()`. For groups with three or more correlated random
   terms, the variances and covariances of the random effects were also wrong.
 
+* `find_formula()` now returns the correct random effects formula for
+  `nlme::lme()` and `MASS::glmmPQL()` models with a named list or a `pdMat`
+  object in the `random` argument. Examples are `random = list(g = ~1)` and
+  `random = pdDiag(~x)`. Before this fix, `find_random()` returned `NULL` for
+  these models, and `parameters::model_parameters()` failed. If the `random`
+  argument names an object that was defined inside a function, `find_formula()`
+  also no longer fails.
+
 # insight 1.5.4
 
 ## Bug fixes
