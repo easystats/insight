@@ -129,3 +129,23 @@ test_that("get_data, data object unchanged, workspace objects as term arguments"
   })
   expect_false("off" %in% colnames(out))
 })
+
+
+test_that("get_data, data object unchanged, workspace objects in the response", {
+  d <- base_data[c("y", "a", "b")]
+  d$s <- rbinom(20, 10, 0.5)
+  thr <- 0.5
+  n_trials <- 10
+
+  # `thr` is used inside the response
+  m <- glm(I(y > thr) ~ a, family = binomial, data = d)
+  expect_silent({
+    out <- get_data(m)
+  })
+  expect_identical(out$y, d$y)
+  expect_silent(get_datagrid(m, include_response = TRUE))
+
+  # `n_trials` is used inside a `cbind()` response
+  m <- glm(cbind(s, n_trials - s) ~ a, family = binomial, data = d)
+  expect_silent(get_data(m))
+})

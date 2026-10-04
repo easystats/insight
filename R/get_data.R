@@ -257,9 +257,9 @@ get_data <- function(x, ...) {
 
 # check for model variables that are missing in the environment data ---------
 
-# returns the model variables that are not in `dat`, but in the model frame.
-# returns NULL if no model variable is found in `dat` at all, because then
-# `dat` is not the model data and the usual fallback applies.
+# returns the model variables that are not in `dat`, but are columns of the
+# model frame. returns NULL if no model variable is found in `dat` at all,
+# because then `dat` is not the model data and the usual fallback applies.
 .missing_model_variables <- function(x, vars, dat) {
   if (is.null(vars) || !is.data.frame(dat)) {
     return(NULL)
@@ -268,45 +268,15 @@ get_data <- function(x, ...) {
   if (!length(missing_vars) || !any(vars %in% colnames(dat))) {
     return(NULL)
   }
-  # names that are only used inside a term, like `k` in `poly(x, degree = k)`,
-  # are often objects in the workspace, not data. These are not missing. Names
-  # that are terms on their own, like `z` in `y ~ a + z`, are still checked.
-  model_formula <- .safe(stats::formula(x))
-  model_env <- .safe(environment(model_formula))
-  if (is.null(model_env)) {
-    model_env <- globalenv()
-  }
-  bare_terms <- .safe(
-    c(
-      all.vars(model_formula[[2]]),
-      attr(stats::terms(model_formula), "term.labels")
-    )
-  )
-  is_workspace_object <- vapply(
-    missing_vars,
-    function(i) {
-      obj <- get0(i, envir = model_env)
-      !is.null(obj) && !is.function(obj)
-    },
-    logical(1)
-  )
-  missing_vars <- missing_vars[!is_workspace_object | missing_vars %in% bare_terms]
-  if (!length(missing_vars)) {
-    return(NULL)
-  }
-  # only the model frame tells whether a name is a variable, or something
-  # else, like the nonlinear parameters in nlmer models
+  # only names that are model frame columns on their own count as missing.
+  # names inside transformed columns, like `k` in `poly(x, degree = k)` or
+  # `thr` in `I(y > thr)`, are often objects in the workspace, and names like
+  # the nonlinear parameters in nlmer models are not in the model frame at all
   mf <- .safe(stats::model.frame(x))
   if (is.null(mf) || !is.data.frame(mf)) {
     return(NULL)
   }
-  # column names of the model frame can be terms like "log(a)", so we need
-  # the variable names in these terms
-  mf_vars <- unlist(
-    lapply(colnames(mf), function(i) .safe(all.vars(str2lang(i)), i)),
-    use.names = FALSE
-  )
-  intersect(missing_vars, mf_vars)
+  intersect(missing_vars, colnames(mf))
 }
 
 
@@ -1087,9 +1057,10 @@ get_data.glmm <- function(
     return(model_data)
   }
 
-  # fall back to extract data from model frame
+  # fall back to extract data from model frame. `source = "frame"` skips the
+  # environment, which we already tried above
   effects <- match.arg(effects, choices = c("all", "fixed", "random"))
-  dat <- get_data.default(x, verbose = verbose)
+  dat <- get_data.default(x, source = "frame", verbose = verbose)
 
   mf <- .safe({
     switch(
@@ -1769,16 +1740,24 @@ get_data.pgmm <- function(x, source = "environment", verbose = TRUE, ...) {
 get_data.plm <- function(x, source = "environment", verbose = TRUE, ...) {
   # extract index variables
   index <- eval(get_call(x)$index)
-  # try to recover data from environment
-  # avoid feeding the same argument twice
+  # try to recover data from environment. the fallback below re-reads the
+  # environment data for the index variables, so we don't check for missing
+  # variables. avoid feeding the same argument twice
   if ("additional_variables" %in% names(list(...))) {
-    model_data <- .get_data_from_environment(x, source = source, verbose = verbose, ...)
+    model_data <- .get_data_from_environment(
+      x,
+      source = source,
+      verbose = verbose,
+      check_missing = FALSE,
+      ...
+    )
   } else {
     model_data <- .get_data_from_environment(
       x,
       source = source,
       additional_variables = index,
       verbose = verbose,
+      check_missing = FALSE,
       ...
     )
   }
