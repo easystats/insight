@@ -487,6 +487,13 @@ get_predicted.coxph <- function(
   )
   se <- NULL
 
+  # survival probabilities are exp(-expected). Compute SE and CI on the
+  # cumulative-hazard scale and back-transform, as survfit() does by default
+  is_survival <- identical(my_args$predict, "survival") && is.null(iterations)
+  if (is_survival) {
+    my_args$type <- "expected"
+  }
+
   predict_function <- function(x, data, ...) {
     stats::predict(x, newdata = data, type = my_args$type, ...)
   }
@@ -521,17 +528,40 @@ get_predicted.coxph <- function(
   )
 
   # 3. step: back-transform
-  out <- .get_predicted_transform(
-    x,
-    predictions,
-    my_args,
-    ci_data,
-    link_inv = exp,
-    verbose = verbose
-  )
+  if (is_survival) {
+    out <- .get_predicted_transform_survival(predictions, ci_data)
+  } else {
+    out <- .get_predicted_transform(
+      x,
+      predictions,
+      my_args,
+      ci_data,
+      link_inv = exp,
+      mu_eta = exp,
+      verbose = verbose
+    )
+  }
 
   # 4. step: final preparation
   .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+}
+
+
+# back-transform expected number of events (cumulative hazard) to survival
+# probabilities. exp(-x) is decreasing, so lower and upper CI limits swap.
+.get_predicted_transform_survival <- function(predictions, ci_data) {
+  surv <- exp(-predictions)
+  if (!is.null(ci_data)) {
+    if ("SE" %in% names(ci_data)) {
+      ci_data$SE <- ci_data$SE * surv
+    }
+    low_cols <- grep("^CI_low", names(ci_data), value = TRUE)
+    high_cols <- sub("^CI_low", "CI_high", low_cols)
+    ci_low <- ci_data[low_cols]
+    ci_data[low_cols] <- exp(-ci_data[high_cols])
+    ci_data[high_cols] <- exp(-ci_low)
+  }
+  list(predictions = surv, ci_data = ci_data)
 }
 
 
@@ -924,6 +954,7 @@ get_predicted.phylolm <- function(
   ci_data = NULL,
   link_inv = NULL,
   verbose = FALSE,
+  mu_eta = NULL,
   ...
 ) {
   # Transform to response scale
@@ -951,7 +982,11 @@ get_predicted.phylolm <- function(
 
       # Transform SE (https://github.com/SurajGupta/r-source/blob/master/src/library/stats/R/predict.glm.R#L60)
       # Delta method; SE * deriv( inverse_link(x) wrt lin_pred(x) )
-      mu_eta <- .safe(abs(get_family(x)$mu.eta(predictions)))
+      # models without a family object can pass the derivative via `mu_eta`
+      if (is.null(mu_eta)) {
+        mu_eta <- .safe(get_family(x)$mu.eta)
+      }
+      mu_eta <- .safe(abs(mu_eta(predictions)))
       if (is.null(mu_eta)) {
         ci_data[se_col] <- NULL
         if (isTRUE(verbose)) {

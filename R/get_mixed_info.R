@@ -124,6 +124,8 @@ get_mixed_info.lme <- function(model, verbose = TRUE, ...) {
   if (.is_nested_lme(model)) {
     vals_vc <- .get_nested_lme_varcorr(model)
     vals_re <- lme4::ranef(model)
+    # same order as the blocks of VarCorr(), from outermost to innermost group
+    re_names <- names(vals_vc)
   } else {
     vals_vc <- list(nlme::getVarCov(model))
     vals_re <- list(lme4::ranef(model))

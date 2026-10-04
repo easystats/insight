@@ -27,16 +27,95 @@ m4 <- nlme::lme(follicles ~ Time, Ovary, correlation = cr)
 test_that("nested_varCorr", {
   skip_on_cran()
 
+  # variances, not standard deviations, and the outer group first
   expect_equal(
-    insight:::.get_nested_lme_varcorr(m3)$mysubgrp[1, 1],
-    7.508310765,
+    insight:::.get_nested_lme_varcorr(m3)$mygrp[1, 1],
+    56.37473,
     tolerance = 1e-3
   )
   expect_equal(
-    insight:::.get_nested_lme_varcorr(m3)$mygrp[1, 1],
-    0.004897827,
+    insight:::.get_nested_lme_varcorr(m3)$mysubgrp[1, 1],
+    2.400317e-05,
     tolerance = 1e-2
   )
+})
+
+
+test_that("get_variance, nested lme, easystats/insight#1232", {
+  skip_on_cran()
+  data(Pixel, package = "nlme")
+
+  m <- nlme::lme(pixel ~ day, random = ~ 1 | Dog / Side, data = Pixel)
+  vc <- insight:::.get_nested_lme_varcorr(m)
+  expect_named(vc, c("Dog", "Side"))
+  expect_equal(vc$Dog[1, 1], 647.3259, tolerance = 1e-4)
+  expect_equal(vc$Side[1, 1], 218.3414, tolerance = 1e-4)
+
+  # same model fitted with lme4
+  m_lme4 <- lme4::lmer(pixel ~ day + (1 | Dog / Side), data = Pixel)
+  v <- get_variance(m)
+  v_lme4 <- get_variance(m_lme4)
+  expect_equal(v$var.random, v_lme4$var.random, tolerance = 1e-3)
+  expect_equal(
+    v$var.intercept,
+    c(Dog = 647.3259, Side = 218.3414),
+    tolerance = 1e-4
+  )
+
+  # random slopes: variance on the diagonal, covariance off the diagonal
+  m_slope <- nlme::lme(pixel ~ day, random = ~ day | Dog / Side, data = Pixel)
+  vc_nlme <- nlme::VarCorr(m_slope)
+  vc <- insight:::.get_nested_lme_varcorr(m_slope)
+  expect_named(vc, c("Dog", "Side"))
+  expect_equal(
+    diag(vc$Dog),
+    as.numeric(vc_nlme[2:3, "Variance"]),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  expect_equal(
+    vc$Dog[1, 2],
+    prod(as.numeric(vc_nlme[2:3, "StdDev"])) * as.numeric(vc_nlme[3, "Corr"]),
+    tolerance = 1e-4
+  )
+
+  # uncorrelated random slopes: zero covariance
+  m_diag <- nlme::lme(
+    pixel ~ day,
+    random = list(Dog = nlme::pdDiag(~day), Side = ~1),
+    data = Pixel
+  )
+  vc_nlme <- nlme::VarCorr(m_diag)
+  vc <- insight:::.get_nested_lme_varcorr(m_diag)
+  expect_equal(
+    vc$Dog,
+    diag(as.numeric(vc_nlme[2:3, "Variance"])),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  expect_equal(vc$Side[1, 1], as.numeric(vc_nlme[5, "Variance"]), tolerance = 1e-4)
+})
+
+
+test_that("nested lme, three correlated random terms", {
+  skip_on_cran()
+  data(Pixel, package = "nlme")
+
+  m <- nlme::lme(
+    pixel ~ day,
+    random = ~ day + I(day^2) | Dog / Side,
+    data = Pixel,
+    control = nlme::lmeControl(opt = "optim")
+  )
+  vc <- insight:::.get_nested_lme_varcorr(m)
+  # covariance matrices from the fitted model, scaled by the residual variance
+  vc_nlme <- lapply(
+    nlme::pdMatrix(m$modelStruct$reStruct),
+    function(i) i * m$sigma^2
+  )
+  # VarCorr() rounds the correlations to three decimals
+  expect_equal(vc$Dog, vc_nlme$Dog, ignore_attr = TRUE, tolerance = 1e-3)
+  expect_equal(vc$Side, vc_nlme$Side, ignore_attr = TRUE, tolerance = 1e-3)
 })
 
 
@@ -248,4 +327,86 @@ test_that("Issue #658", {
   expect_s3_class(form[[2]], "insight_formula")
   expect_s3_class(dat[[1]], "data.frame")
   expect_s3_class(dat[[2]], "data.frame")
+})
+
+test_that("find_formula, random effects given as list or pdMat, #965", {
+  data(RatPupWeight, package = "nlme")
+  data(Pixel, package = "nlme")
+
+  # one grouping factor, named list of formulas
+  m_frm <- nlme::lme(weight ~ Treatment, random = ~ 1 | Litter, data = RatPupWeight)
+  m_lst <- nlme::lme(weight ~ Treatment, random = list(Litter = ~1), data = RatPupWeight)
+  expect_equal(find_formula(m_lst), find_formula(m_frm), ignore_attr = TRUE)
+  expect_identical(find_random(m_lst), list(random = "Litter"))
+  expect_identical(find_variables(m_lst), find_variables(m_frm))
+
+  # random slope, named list of formulas and pdMat objects
+  m_frm <- nlme::lme(distance ~ age, random = ~ age | Subject, data = Orthodont)
+  m_lst <- nlme::lme(distance ~ age, random = list(Subject = ~age), data = Orthodont)
+  m_pd <- nlme::lme(
+    distance ~ age,
+    random = list(Subject = nlme::pdDiag(~age)),
+    data = Orthodont
+  )
+  m_pd2 <- nlme::lme(distance ~ age, random = nlme::pdDiag(~age), data = Orthodont)
+  for (m in list(m_lst, m_pd, m_pd2)) {
+    expect_equal(find_formula(m), find_formula(m_frm), ignore_attr = TRUE)
+    expect_identical(find_random(m), list(random = "Subject"))
+    expect_identical(find_random_slopes(m), list(random = "age"))
+    expect_identical(find_variables(m), find_variables(m_frm))
+  }
+
+  # nested grouping factors, same random terms on each level
+  m_frm <- nlme::lme(pixel ~ day, random = ~ 1 | Dog / Side, data = Pixel)
+  m_lst <- nlme::lme(pixel ~ day, random = list(Dog = ~1, Side = ~1), data = Pixel)
+  expect_equal(find_formula(m_lst), find_formula(m_frm), ignore_attr = TRUE)
+  expect_identical(find_random(m_lst), find_random(m_frm))
+
+  # nested grouping factors, different random terms on each level
+  m_lst <- nlme::lme(pixel ~ day, random = list(Dog = ~day, Side = ~1), data = Pixel)
+  expect_equal(
+    find_formula(m_lst)$random,
+    list(as.formula("~day | Dog"), as.formula("~1 | Dog:Side")),
+    ignore_attr = TRUE
+  )
+  expect_identical(find_random(m_lst), list(random = c("Dog", "Dog:Side")))
+  expect_identical(
+    find_random(m_lst, split_nested = TRUE),
+    list(random = c("Dog", "Side"))
+  )
+  expect_identical(find_random_slopes(m_lst), list(random = "day"))
+})
+
+test_that("find_formula, random effects given as object in another environment, #965", {
+  fit <- function() {
+    re <- list(Subject = nlme::pdDiag(~age))
+    nlme::lme(distance ~ age, random = re, data = Orthodont)
+  }
+  m <- fit()
+  m_frm <- nlme::lme(distance ~ age, random = ~ age | Subject, data = Orthodont)
+  expect_equal(find_formula(m), find_formula(m_frm), ignore_attr = TRUE)
+  expect_identical(find_random(m), list(random = "Subject"))
+})
+
+test_that("find_formula, glmmPQL with random effects given as list, #965", {
+  skip_if_not_installed("MASS")
+  data(bacteria, package = "MASS")
+
+  m_frm <- MASS::glmmPQL(
+    y ~ trt,
+    random = ~ 1 | ID,
+    family = binomial,
+    data = bacteria,
+    verbose = FALSE
+  )
+  m_lst <- MASS::glmmPQL(
+    y ~ trt,
+    random = list(ID = ~1),
+    family = binomial,
+    data = bacteria,
+    verbose = FALSE
+  )
+  expect_equal(find_formula(m_lst), find_formula(m_frm), ignore_attr = TRUE)
+  expect_identical(find_random(m_lst), list(random = "ID"))
+  expect_identical(find_random(m_lst), find_random(m_frm))
 })

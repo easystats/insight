@@ -34,6 +34,13 @@
   depending on the selection, it returned the posterior draws of all
   parameters, an empty data frame, or an error (#1076).
 
+* `get_modelmatrix()` for `lme` and `gls` models now uses the contrasts stored
+  in the model instead of treatment contrasts. You set these contrasts with
+  `contrasts = list(x = contr.sum)` in `lme()`, or with
+  `options(contrasts = ...)` when you fit the model. If you provide `data`, its
+  factor and character variables get the levels of the model data. Thus, new
+  data with only some of the levels gives the correct columns.
+
 * `format_table` now correctly formats labels consistently when parameter names
   occurred multiple times.
 
@@ -52,6 +59,31 @@
   contain `"sigma"` (like `"sigmabias"`) to the `"sigma"` component. These are
   now returned as their own component, which also fixes the related grouping in
   `parameters::model_parameters()`.
+
+* `get_variance()` returned wrong values for `lme` models with nested random
+  effects, for example `random = ~ 1 | Dog / Side`. It returned the standard
+  deviations of the random effects instead of their variances, and it gave them
+  the wrong group names. This also gave wrong results for `performance::icc()`
+  and `performance::r2()`. For groups with three or more correlated random
+  terms, the variances and covariances of the random effects were also wrong.
+
+* `find_formula()` now returns the correct random effects formula for
+  `nlme::lme()` and `MASS::glmmPQL()` models with a named list or a `pdMat`
+  object in the `random` argument. Examples are `random = list(g = ~1)` and
+  `random = pdDiag(~x)`. Before this fix, `find_random()` returned `NULL` for
+  these models, and `parameters::model_parameters()` failed. If the `random`
+  argument names an object that was defined inside a function, `find_formula()`
+  also no longer fails.
+
+* `get_predicted()` for `coxph` models with `predict = "survival"` now computes
+  confidence intervals on the cumulative-hazard scale and back-transforms them,
+  as `survival::survfit()` does by default. Before this fix, the intervals were
+  symmetric around the survival probability and were not always between 0
+  and 1.
+
+* `get_predicted()` for `coxph` models with `predict = "expectation"` or
+  `predict = "risk"` now returns standard errors and no longer warns that the
+  delta method could not be applied.
 
 # insight 1.5.4
 
