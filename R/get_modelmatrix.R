@@ -136,10 +136,15 @@ get_modelmatrix.gls <- get_modelmatrix.lme
 
 #' @export
 get_modelmatrix.clmm <- function(x, ...) {
-  # former implementation in "get_variance()"
-  # f <- find_formula(x)$conditional
-  # stats::model.matrix(object = f, data = x$model, ...)
-  .data_in_dots(..., object = x, default_data = x$model)
+  # model.matrix() for clmm objects ignores the `data` and `contrasts.arg`
+  # arguments, so we use the terms of the fixed effects. The response is
+  # removed, because new data may not contain it.
+  .modelmatrix_model_contrasts(
+    object = stats::delete.response(stats::terms(x)),
+    model_data = x$model,
+    model_contrasts = x$contrasts,
+    ...
+  )
 }
 
 #' @export
