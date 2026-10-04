@@ -149,3 +149,29 @@ test_that("get_data, data object unchanged, workspace objects in the response", 
   m <- glm(cbind(s, n_trials - s) ~ a, family = binomial, data = d)
   expect_silent(get_data(m))
 })
+
+
+test_that("get_data, overwritten data, model variable also exists as a global object", {
+  skip_if_not_installed("lme4")
+  d <- base_data[c("y", "a", "g")]
+  # `g` also exists outside the data, e.g. because `d` was built from vectors
+  g <- d$g
+  m <- lme4::lmer(a ~ y + (1 | g), data = d)
+  d <- base_data[c("y", "a")]
+  expect_warning(
+    {
+      out <- get_data(m)
+    },
+    "`g`",
+    fixed = TRUE
+  )
+  expect_true("g" %in% colnames(out))
+})
+
+
+test_that("get_data, data object unchanged, weights from the workspace", {
+  d <- base_data[c("y", "a")]
+  w <- runif(20)
+  m <- lm(y ~ a, data = d, weights = w)
+  expect_silent(get_data(m))
+})
