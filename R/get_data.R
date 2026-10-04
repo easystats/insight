@@ -15,8 +15,9 @@
 #'   the environment. Hence, if the data was modified _after_ model fitting
 #'   (e.g., variables were recoded or rows filtered), the returned data may no
 #'   longer equal the model data. If a variable used in the model is missing
-#'   from the data in the environment, but is in the model frame, `get_data()`
-#'   warns and uses the model frame instead. If `source = "frame"` (or `"mf"`), the data
+#'   from the data in the environment, but `model.frame()` returns it,
+#'   `get_data()` warns and uses the model frame instead. This applies to most,
+#'   but not all, model classes. If `source = "frame"` (or `"mf"`), the data
 #'   is taken from the model frame. Any transformed variables are back-transformed,
 #'   if possible. This option returns the data even if it is not available in
 #'   the environment, however, in certain edge cases back-transforming to the

@@ -78,7 +78,7 @@ test_that("get_data, data object unchanged, environment data is returned", {
   expect_silent({
     out <- get_data(m)
   })
-  # `g` is numeric in the data, but a factor in the model frame
+  # `g` is numeric in the data; the model frame has the factor column `factor(g)`
   expect_identical(out$g, d$g)
 })
 
