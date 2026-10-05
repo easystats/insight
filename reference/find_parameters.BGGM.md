@@ -124,6 +124,11 @@ following:
 - and any pre-defined or arbitrary distributional parameter for models
   from package **brms**, like `mu`, `ndt`, `kappa`, etc.
 
+For univariate non-linear models from **brms** (`nl = TRUE`), the
+coefficients of the non-linear parameters of `mu` are returned in the
+`conditional` element, and their group-level terms in the `random`
+element.
+
 Models of class **BGGM** additionally can return the elements
 `correlation` and `intercept`.
 

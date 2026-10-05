@@ -9,7 +9,7 @@ models) from a model."><meta property="og:image" content="https://easystats.gith
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -185,7 +185,9 @@ should be returned.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The posterior samples from the requested parameters as data frame.
 If <code>summary = TRUE</code>, returns a data frame with two columns: the
-parameter names and the related point estimates (based on <code>centrality</code>).</p>
+parameter names and the related point estimates (based on <code>centrality</code>).
+For models of class <code>brmsfit</code>, <code>NULL</code> is returned if no parameter matches
+the selection of <code>effects</code>, <code>component</code> and <code>parameters</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

@@ -13,7 +13,7 @@ from as.data.frame()."><meta property="og:image" content="https://easystats.gith
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -160,7 +160,10 @@ auxiliary (distributional) parameters. These may be one of the following:</p><ul
 <li><p><code>beta</code>, the beta parameter (auxiliary parameter)</p></li>
 <li><p>and any pre-defined or arbitrary distributional parameter for models from
 package <strong>brms</strong>, like <code>mu</code>, <code>ndt</code>, <code>kappa</code>, etc.</p></li>
-</ul><p>Models of class <strong>BGGM</strong> additionally can return the elements <code>correlation</code>
+</ul><p>For univariate non-linear models from <strong>brms</strong> (<code>nl = TRUE</code>), the
+coefficients of the non-linear parameters of <code>mu</code> are returned in the
+<code>conditional</code> element, and their group-level terms in the <code>random</code> element.</p>
+<p>Models of class <strong>BGGM</strong> additionally can return the elements <code>correlation</code>
 and <code>intercept</code>.</p>
 <p>Models of class <strong>BFBayesFactor</strong> additionally can return the element
 <code>extra</code>.</p>
