@@ -130,7 +130,7 @@
 #' is_converged(model)
 #' }
 #'
-#' @examplesIf require("curl", quietly = TRUE) && curl::has_internet() && all(insight::check_if_installed(c("rstan", "httr2"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("curl", "rstan", "httr2"), quietly = TRUE)) && curl::has_internet()
 #' \donttest{
 #' # a model fitted with brms
 #' model <- download_model("brms_1")
