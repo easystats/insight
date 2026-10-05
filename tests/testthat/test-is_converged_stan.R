@@ -62,8 +62,10 @@ conv_fit_stanreg <- conv_stanreg$stanfit
   d$Diagnostic[!d$Passed]
 }
 
-# checks for which rstan gives a warning after sampling. The "pairs()"
-# warning belongs to no check and is ignored.
+# checks other than E-BFMI for which rstan gives a warning after sampling.
+# rstan gives no E-BFMI warning for the downloaded fits, because
+# `rstan:::is_sfinstance_valid()` is FALSE for them, and the "pairs()" warning
+# belongs to no check.
 .conv_rstan_failed <- function(fit) {
   msgs <- character()
   withCallingHandlers(
@@ -209,7 +211,8 @@ test_that("is_converged, low ESS with four chains", {
 test_that("is_converged, ESS threshold depends on the number of chains", {
   conv_two_chains <- .conv_keep_chains(conv_fit_brms, 1:2)
 
-  # ESS between 200 and 400: fails for four chains, passes for two
+  # ESS between 200 and 400: passes for two chains (threshold 200), would fail
+  # for four (threshold 400)
   fit <- conv_two_chains
   for (chain in 1:2) {
     fit <- .conv_repeat_draws(fit, chain, "sigma", 4)
@@ -289,6 +292,32 @@ test_that("is_converged, NA without MCMC draws from NUTS", {
   expect_message(expect_identical(is_converged(fit), NA), "NUTS")
   expect_silent(expect_identical(is_converged(fit, verbose = FALSE), NA))
 
+  # static HMC, as stored by brms with the cmdstanr backend
+  fit <- conv_fit_brms
+  fit@stan_args <- lapply(fit@stan_args, function(args) {
+    args$algorithm <- "hmc"
+    args$engine <- "static"
+    args
+  })
+  expect_message(expect_identical(is_converged(fit), NA), "NUTS")
+
+  # variational inference, as stored by rstan::vb()
+  fit <- conv_fit_brms
+  fit@stan_args <- lapply(fit@stan_args, function(args) {
+    args$algorithm <- "meanfield"
+    args
+  })
+  expect_message(expect_identical(is_converged(fit), NA), "NUTS")
+
+  # static HMC, as stored by rstan (no engine field)
+  fit <- conv_fit_brms
+  fit@stan_args <- lapply(fit@stan_args, function(args) {
+    args$algorithm <- "HMC"
+    args$engine <- NULL
+    args
+  })
+  expect_message(expect_identical(is_converged(fit), NA), "NUTS")
+
   model <- conv_brms
   model$algorithm <- "meanfield"
   expect_message(expect_identical(is_converged(model), NA), "NUTS")
@@ -298,4 +327,19 @@ test_that("is_converged, NA without MCMC draws from NUTS", {
   model$algorithm <- "optimizing"
   expect_message(expect_identical(is_converged(model), NA), "NUTS")
   expect_silent(expect_identical(is_converged(model, verbose = FALSE), NA))
+})
+
+test_that("is_converged, NUTS as stored by brms with the cmdstanr backend", {
+  fit <- conv_fit_brms
+  fit@stan_args <- lapply(fit@stan_args, function(args) {
+    args$algorithm <- "hmc"
+    args$engine <- "nuts"
+    args
+  })
+  expect_identical(is_converged(fit), is_converged(conv_fit_brms))
+
+  fit <- .conv_set_sampler(fit, 1, "divergent__", 1, 1)
+  result <- .conv_expect_rstan(fit)
+  expect_false(result)
+  expect_identical(.conv_failed(result), "Divergences")
 })

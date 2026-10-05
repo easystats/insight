@@ -249,7 +249,12 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 .is_converged_stan <- function(x, verbose = TRUE) {
   check_if_installed("rstan")
 
-  if (!identical(.safe(x@stan_args[[1]]$algorithm), "NUTS")) {
+  # rstan stores the algorithm "NUTS". brms with the cmdstanr backend stores
+  # the algorithm "hmc" and the engine "nuts" (`brms:::read_csv_as_stanfit()`)
+  stan_args <- .safe(x@stan_args[[1]])
+  is_nuts <- identical(stan_args$algorithm, "NUTS") ||
+    (identical(stan_args$algorithm, "hmc") && identical(stan_args$engine, "nuts"))
+  if (!is_nuts) {
     return(.is_converged_stan_no_mcmc(verbose))
   }
 
