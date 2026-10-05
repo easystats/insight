@@ -194,3 +194,50 @@ test_that("find_parameters", {
     )
   )
 })
+
+test_that("get_residuals, type = 'response'", {
+  counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
+  d_po <- data.frame(
+    counts = counts,
+    outcome = gl(3, 1, 9),
+    treatment = gl(3, 3)
+  )
+  void <- capture.output({
+    m_po <- gamlss::gamlss(counts ~ outcome + treatment, family = "PO", data = d_po)
+  })
+  m_glm <- stats::glm(counts ~ outcome + treatment, family = poisson(), data = d_po)
+  expect_equal(
+    unname(get_residuals(m_po, type = "response")),
+    unname(get_residuals(m_glm, type = "response")),
+    tolerance = 1e-4
+  )
+
+  # default residuals are still the normalized quantile residuals
+  expect_equal(get_residuals(m_gamlss1), m_gamlss1$residuals, ignore_attr = TRUE)
+
+  # for zero-inflated families, the mean is not mu
+  set.seed(123)
+  d_zip <- data.frame(x = rnorm(200))
+  d_zip$y <- ifelse(runif(200) < 0.3, 0, rpois(200, exp(1 + 0.3 * d_zip$x)))
+  void <- capture.output({
+    m_zip <- gamlss::gamlss(y ~ x, family = "ZIP", data = d_zip)
+  })
+  expected <- (1 - stats::fitted(m_zip, "sigma")) * stats::fitted(m_zip, "mu")
+  expect_equal(
+    unname(get_residuals(m_zip, type = "response")),
+    unname(d_zip$y - expected),
+    tolerance = 1e-4
+  )
+
+  # families without a mean function fall back to mu, with a warning
+  expect_warning(
+    out <- get_residuals(m_gamlss1, type = "response"),
+    regexp = "BCT"
+  )
+  expect_equal(
+    unname(out),
+    unname(abdom$y - stats::fitted(m_gamlss1, "mu")),
+    tolerance = 1e-4
+  )
+  expect_silent(get_residuals(m_gamlss1, type = "response", verbose = FALSE))
+})

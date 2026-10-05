@@ -15,6 +15,14 @@
 
 ## Bug fixes
 
+* `get_residuals()` for *gamlss* models now returns response residuals
+  (observed minus expected values) for `type = "response"`. Before, it
+  returned the normalized quantile residuals without a warning. The
+  `mean()` function of the family gives the expected values. Thus, the result
+  is also correct for families where `mu` is not the mean, for example
+  zero-inflated families. For families without a `mean()` function, the
+  residuals use `mu`, with a warning (#327).
+
 * For univariate non-linear *brms* models (`nl = TRUE`), `find_parameters()`
   now returns the coefficients of the non-linear parameters of `mu` as
   conditional parameters, and their group-level terms as random parameters.
