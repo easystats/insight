@@ -22,6 +22,25 @@
   caption or footer of that table. Before this fix, `export_table()` still
   printed the attributes (#930).
 
+* For univariate non-linear *brms* models (`nl = TRUE`), `find_parameters()`
+  now returns the coefficients of the non-linear parameters of `mu` as
+  conditional parameters, and their group-level terms as random parameters.
+  Before, they were returned as auxiliary parameters. `find_auxiliary()` no
+  longer returns the names of these non-linear parameters.
+  `clean_parameters()` labels their coefficients like `summary()` from
+  *brms*, for example `ult_Intercept`. The `effects`, `component` and
+  `parameters` arguments of `get_parameters()` now select the coefficients of
+  non-linear parameters. `get_varcov()`,
+  `n_parameters(component = "conditional")` and
+  `find_parameters(component = "location")` now include these coefficients,
+  where they included none before. This also applies to non-linear parameters
+  that are nested with `nlf()` (#1076).
+
+* `get_parameters()` for *brms* models now returns `NULL` when no parameter
+  matches the selection of `effects`, `component` and `parameters`. Before,
+  depending on the selection, it returned the posterior draws of all
+  parameters, an empty data frame, or an error (#1076).
+
 * `get_modelmatrix()` for `clmm` models now uses the contrasts stored in the
   model, so `get_variance()` works for `clmm` models fitted with, for example,
   `contrasts = list(x = "contr.sum")`. For `clmm` models, a `data` argument is

@@ -1,7 +1,9 @@
 #' @title Find auxiliary (distributional) parameters from models
 #'
 #' @description Returns the names of all auxiliary / distributional parameters
-#' from brms-models, like dispersion, sigma, kappa, phi, or beta...
+#' from brms-models, like dispersion, sigma, kappa, phi, or beta... For
+#' univariate non-linear models (`nl = TRUE`), the non-linear parameters of `mu`
+#' are not auxiliary parameters, and are not returned.
 #'
 #' @name find_auxiliary
 #'
@@ -37,7 +39,10 @@ find_auxiliary.brmsfit <- function(x, ...) {
   if (object_has_names(f, "forms")) {
     out <- unique(unlist(lapply(f$forms, function(i) names(i$pforms)), use.names = FALSE))
   } else {
-    out <- names(f$pforms)
+    # for non-linear models (`nl = TRUE`), "pforms" also contains the
+    # non-linear parameters of "mu". These are not auxiliary parameters, their
+    # coefficients belong to the conditional component (see #1076)
+    out <- setdiff(names(f$pforms), .brms_nlpars(x))
   }
   # "pforms" only contains those distributional parameters that were modelled
   # with a formula. "sigma" usually is estimated as a single (constant)
@@ -48,7 +53,44 @@ find_auxiliary.brmsfit <- function(x, ...) {
   if (!"sigma" %in% out && .brms_has_sigma(x)) {
     out <- c(out, "sigma")
   }
+  # for non-linear models with only non-linear parameters in "pforms",
+  # `setdiff()` returns `character(0)`, but we want `NULL` as for other models
+  # without auxiliary parameters
+  if (!length(out)) {
+    return(NULL)
+  }
   unique(out)
+}
+
+
+# returns the names of the non-linear parameters of "mu" for univariate
+# non-linear brms-models (`nl = TRUE`), or `NULL` for all other models
+.brms_nlpars <- function(x) {
+  if (!inherits(x, "brmsfit")) {
+    return(NULL)
+  }
+  f <- stats::formula(x)
+  if (object_has_names(f, "forms") || !isTRUE(attr(f$formula, "nl"))) {
+    return(NULL)
+  }
+  bt <- .safe(brms::brmsterms(f))
+  if (is.null(bt)) {
+    return(NULL)
+  }
+  # `[[` instead of `$`, to avoid partial matching of "muB" etc. in
+  # categorical models
+  out <- bt$dpars[["mu"]]$used_nlpars
+  # non-linear parameters can be nested, e.g. `nlf(a ~ c + d)`, so we also
+  # need the non-linear parameters of the non-linear parameters of "mu"
+  repeat {
+    nested <- unlist(lapply(bt$nlpars[out], function(i) i$used_nlpars), use.names = FALSE)
+    nested <- setdiff(nested, out)
+    if (!length(nested)) {
+      break
+    }
+    out <- c(out, nested)
+  }
+  out
 }
 
 
