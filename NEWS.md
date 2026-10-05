@@ -15,6 +15,13 @@
 
 ## Bug fixes
 
+* For a list of data frames, `caption = ""` (or `title = ""`) now makes
+  `export_table()` remove the captions of all tables. This includes captions
+  stored as attributes. `subtitle = ""` and `footer = ""` do the same for
+  subtitles and footers. In a list of captions or footers, `""` removes the
+  caption or footer of that table. Before this fix, `export_table()` still
+  printed the attributes (#930).
+
 * `get_modelmatrix()` for `clmm` models now uses the contrasts stored in the
   model, so `get_variance()` works for `clmm` models fitted with, for example,
   `contrasts = list(x = "contr.sum")`. For `clmm` models, a `data` argument is

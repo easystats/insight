@@ -310,6 +310,12 @@ export_table <- function(
     # remove empty elements
     l <- compact_list(x)
 
+    # "" forces that no caption, subtitle or footer is printed, even if
+    # present as attributes
+    no_caption <- identical(caption, "")
+    no_subtitle <- identical(subtitle, "")
+    no_footer <- identical(footer, "")
+
     # list of data frames
     tmp <- lapply(seq_along(l), function(element) {
       i <- l[[element]]
@@ -336,6 +342,11 @@ export_table <- function(
           length(footer) == length(l)
       ) {
         t_footer <- footer[[element]]
+      }
+
+      # "" removes the footer, also when it is stored as attribute
+      if (no_footer || (is.list(footer) && identical(footer[element][[1]], ""))) {
+        t_footer <- NULL
       }
 
       # for lists of data frame, each list element may have
@@ -373,9 +384,14 @@ export_table <- function(
         t_title <- caption[[element]]
       }
 
+      # "" removes the caption, also when it is stored as attribute
+      if (no_caption || (is.list(caption) && identical(caption[element][[1]], ""))) {
+        t_title <- NULL
+      }
+
       # add remaining arguments to export_args
       export_args$caption <- t_title
-      export_args$subtitle <- attributes(i)$table_subtitle
+      export_args$subtitle <- if (!no_subtitle) attributes(i)$table_subtitle
       export_args$footer <- t_footer
 
       # convert data frame into specified output format
