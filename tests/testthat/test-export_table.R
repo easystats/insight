@@ -1096,6 +1096,11 @@ test_that("export_table, empty strings remove captions for lists of tables", {
     expect_match(out, "Footer One", fixed = TRUE)
     out <- paste(export_table(l, format = fmt, title = ""), collapse = "\n")
     expect_no_match(out, "Effects", fixed = TRUE)
+    out <- paste(
+      export_table(l, format = fmt, title = "", caption = NULL),
+      collapse = "\n"
+    )
+    expect_no_match(out, "Effects", fixed = TRUE)
     out <- paste(export_table(l, format = fmt, subtitle = ""), collapse = "\n")
     expect_no_match(out, "Subtitle One", fixed = TRUE)
     expect_match(out, "Fixed Effects", fixed = TRUE)

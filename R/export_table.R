@@ -312,7 +312,8 @@ export_table <- function(
 
     # "" forces that no caption, subtitle or footer is printed, even if
     # present as attributes
-    no_caption <- identical(caption, "")
+    no_caption <- identical(caption, "") ||
+      (is.null(caption) && identical(title, ""))
     no_subtitle <- identical(subtitle, "")
     no_footer <- identical(footer, "")
 
