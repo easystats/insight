@@ -1073,6 +1073,52 @@ test_that("export_table, removing captions work", {
   expect_snapshot(as.character(out))
 })
 
+test_that("export_table, empty strings remove captions for lists of tables", {
+  d1 <- data.frame(x = 1:2)
+  attr(d1, "table_caption") <- "# Fixed Effects"
+  attr(d1, "table_subtitle") <- "Subtitle One"
+  attr(d1, "table_footer") <- "Footer One"
+  d2 <- data.frame(x = 3:4)
+  attr(d2, "table_caption") <- "# Random Effects"
+  attr(d2, "table_footer") <- "Footer Two"
+  l <- list(d1, d2)
+
+  for (fmt in c("text", "markdown")) {
+    out <- paste(export_table(l, format = fmt), collapse = "\n")
+    expect_match(out, "Fixed Effects", fixed = TRUE)
+    expect_match(out, "Subtitle One", fixed = TRUE)
+    expect_match(out, "Footer Two", fixed = TRUE)
+
+    # "" removes captions, subtitles and footers stored as attributes
+    out <- paste(export_table(l, format = fmt, caption = ""), collapse = "\n")
+    expect_no_match(out, "Effects", fixed = TRUE)
+    expect_no_match(out, "Subtitle One", fixed = TRUE)
+    expect_match(out, "Footer One", fixed = TRUE)
+    out <- paste(export_table(l, format = fmt, title = ""), collapse = "\n")
+    expect_no_match(out, "Effects", fixed = TRUE)
+    out <- paste(
+      export_table(l, format = fmt, title = "", caption = NULL),
+      collapse = "\n"
+    )
+    expect_no_match(out, "Effects", fixed = TRUE)
+    out <- paste(export_table(l, format = fmt, subtitle = ""), collapse = "\n")
+    expect_no_match(out, "Subtitle One", fixed = TRUE)
+    expect_match(out, "Fixed Effects", fixed = TRUE)
+    out <- paste(export_table(l, format = fmt, footer = ""), collapse = "\n")
+    expect_no_match(out, "Footer", fixed = TRUE)
+    expect_match(out, "Random Effects", fixed = TRUE)
+
+    # a list of captions or footers removes them per table
+    out <- paste(
+      export_table(l, format = fmt, caption = list("", "Second"), footer = list("", "")),
+      collapse = "\n"
+    )
+    expect_no_match(out, "Fixed Effects", fixed = TRUE)
+    expect_match(out, "Random Effects", fixed = TRUE)
+    expect_no_match(out, "Footer", fixed = TRUE)
+  }
+})
+
 test_that("export_table with big_mark", {
   # Test with comma separator
   d <- data.frame(

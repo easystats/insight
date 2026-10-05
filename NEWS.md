@@ -23,6 +23,13 @@
   zero-inflated families. For families without a `mean()` function, the
   residuals use `mu`, with a warning (#327).
 
+* For a list of data frames, `caption = ""` (or `title = ""`) now makes
+  `export_table()` remove the captions of all tables. This includes captions
+  stored as attributes. `subtitle = ""` and `footer = ""` do the same for
+  subtitles and footers. In a list of captions or footers, `""` removes the
+  caption or footer of that table. Before this fix, `export_table()` still
+  printed the attributes (#930).
+
 * For univariate non-linear *brms* models (`nl = TRUE`), `find_parameters()`
   now returns the coefficients of the non-linear parameters of `mu` as
   conditional parameters, and their group-level terms as random parameters.
