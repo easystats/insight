@@ -248,7 +248,7 @@ test_that("non-estimated parameters", {
   out <- suppressWarnings(get_statistic(m_rd))
   expect_identical(out$Parameter, params$Parameter)
   expect_true(is.na(out$Statistic[out$Parameter == "temp2warm"]))
-  ref <- coef(summary(m_rd))$cond[, "z value"]
+  ref <- suppressWarnings(coef(summary(m_rd)))$cond[, "z value"]
   ref <- ref[!is.na(ref)]
   expect_equal(
     out$Statistic[match(names(ref), out$Parameter)],
