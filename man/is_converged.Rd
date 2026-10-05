@@ -26,11 +26,13 @@ used for Stan models.}
 }
 \value{
 \code{TRUE} if convergence is fine and \code{FALSE} if convergence is
-suspicious. Additionally, the convergence value is returned as attribute.
-For \code{merMod} models, if the model is singular, convergence is determined by
-the optimizer's convergence code. For non-singular models where derivatives
-are unavailable, \code{FALSE} is returned and a message is printed to indicate
-that convergence cannot be assessed through the usual gradient-based checks.
+suspicious or cannot be assessed. For \code{merMod} models, the convergence
+value is returned as attribute \code{gradient}. If the model is singular,
+convergence is determined by the optimizer's convergence code. For
+non-singular models where derivatives are unavailable, \code{FALSE} is returned
+and a message is printed to indicate that convergence cannot be assessed
+through the usual gradient-based checks.
+
 For Stan models, the attribute \code{diagnostics} is a data frame with the
 value, the threshold and the result of each check. For Stan models whose
 convergence cannot be assessed, \code{FALSE} is returned without this attribute,
@@ -154,7 +156,7 @@ model <- glmmTMB(
 is_converged(model)
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (all(insight::check_if_installed(c("curl", "rstan", "httr2"), quietly = TRUE)) && curl::has_internet()) withAutoprint(\{ # examplesIf}
+\dontshow{if (all(check_if_installed(c("curl", "brms", "rstan", "httr2"), quietly = TRUE)) && curl::has_internet()) withAutoprint(\{ # examplesIf}
 \donttest{
 # a model fitted with brms
 model <- download_model("brms_1")

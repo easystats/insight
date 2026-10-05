@@ -288,9 +288,8 @@ test_that("is_converged, constant parameters", {
   model
 }
 
-# a copy in which all six checks fail
+# a copy in which all six checks fail; callers set the seed
 .conv_all_failed <- function() {
-  set.seed(123)
   fit <- .conv_set_sampler(conv_fit_brms, 1, "divergent__", 1, 1)
   fit <- .conv_set_sampler(fit, 2, "treedepth__", 1, 10)
   for (chain in 1:4) {
@@ -311,7 +310,6 @@ test_that("is_converged, constant parameters", {
 conv_checks <- c("Divergences", "Treedepth", "E-BFMI", "Rhat", "ESS_bulk", "ESS_tail")
 
 test_that("is_converged, brmsfit and stanreg use their stanfit", {
-  withr::local_seed(123)
   expect_identical(is_converged(conv_brms), is_converged(conv_fit_brms))
   expect_identical(is_converged(conv_stanreg), is_converged(conv_fit_stanreg))
 
@@ -354,8 +352,13 @@ test_that("is_converged, alert for failed checks", {
   fit <- .conv_set_sampler(fit, 2, "treedepth__", 1, 10)
   msgs <- .conv_messages(is_converged(fit))
   expect_length(msgs, 1)
-  expect_true(grepl("Divergences: divergent transitions after warmup (2, threshold 0)", msgs, fixed = TRUE))
-  expect_true(grepl("Treedepth: transitions at the maximum treedepth (1, threshold 0)", msgs, fixed = TRUE))
+  expected <- c(
+    "Divergences: divergent transitions after warmup (2, threshold 0)",
+    "Treedepth: transitions at the maximum treedepth (1, threshold 0)"
+  )
+  for (text in expected) {
+    expect_true(grepl(text, msgs, fixed = TRUE), info = text)
+  }
   for (check in setdiff(conv_checks, c("Divergences", "Treedepth"))) {
     expect_false(grepl(check, msgs, fixed = TRUE), info = check)
   }
@@ -414,6 +417,11 @@ test_that("is_converged, FALSE if convergence cannot be assessed", {
   # no draws after warmup (rstan sets mode 2 for fits without samples)
   fit <- conv_fit_brms
   fit@mode <- 2L
+  .conv_expect_not_assessed(fit, "warmup")
+
+  # no draws after warmup in a fit with samples (only warmup draws saved)
+  fit <- conv_fit_brms
+  fit@sim$warmup2 <- fit@sim$n_save
   .conv_expect_not_assessed(fit, "warmup")
 
   model <- conv_brms

@@ -14,11 +14,13 @@
 #' @param ... Currently not used.
 #'
 #' @return `TRUE` if convergence is fine and `FALSE` if convergence is
-#'   suspicious. Additionally, the convergence value is returned as attribute.
-#'   For `merMod` models, if the model is singular, convergence is determined by
-#'   the optimizer's convergence code. For non-singular models where derivatives
-#'   are unavailable, `FALSE` is returned and a message is printed to indicate
-#'   that convergence cannot be assessed through the usual gradient-based checks.
+#'   suspicious or cannot be assessed. For `merMod` models, the convergence
+#'   value is returned as attribute `gradient`. If the model is singular,
+#'   convergence is determined by the optimizer's convergence code. For
+#'   non-singular models where derivatives are unavailable, `FALSE` is returned
+#'   and a message is printed to indicate that convergence cannot be assessed
+#'   through the usual gradient-based checks.
+#'
 #'   For Stan models, the attribute `diagnostics` is a data frame with the
 #'   value, the threshold and the result of each check. For Stan models whose
 #'   convergence cannot be assessed, `FALSE` is returned without this attribute,
@@ -130,7 +132,7 @@
 #' is_converged(model)
 #' }
 #'
-#' @examplesIf all(insight::check_if_installed(c("curl", "rstan", "httr2"), quietly = TRUE)) && curl::has_internet()
+#' @examplesIf all(check_if_installed(c("curl", "brms", "rstan", "httr2"), quietly = TRUE)) && curl::has_internet()
 #' \donttest{
 #' # a model fitted with brms
 #' model <- download_model("brms_1")
@@ -285,7 +287,7 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
   # rstan stores the algorithm "NUTS". brms with the cmdstanr backend stores
   # the algorithm "hmc" and the engine "nuts" (`brms:::read_csv_as_stanfit()`)
-  stan_args <- .safe(x@stan_args[[1]])
+  stan_args <- .safe(x@stan_args[[1]], list())
   is_nuts <- identical(stan_args$algorithm, "NUTS") ||
     (identical(stan_args$algorithm, "hmc") && identical(stan_args$engine, "nuts"))
   if (!is_nuts) {
@@ -345,13 +347,17 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
   if (verbose && !converged) {
     failed <- diagnostics[!diagnostics$Passed, ]
-    # counts as integers, other values with three significant digits
-    .format_value <- function(value, diagnostic) {
+    # counts as integers, other values with three significant digits, or
+    # more if the rounded value would look like the threshold
+    .format_value <- function(value, diagnostic, threshold = NULL) {
       if (diagnostic %in% c("Divergences", "Treedepth")) {
-        format(as.integer(value))
-      } else {
-        format(value, digits = 3)
+        return(format(as.integer(value)))
       }
+      out <- format(value, digits = 3)
+      if (!is.null(threshold) && out == format(threshold, digits = 3)) {
+        out <- format(value, digits = 6)
+      }
+      out
     }
     msg <- sprintf(
       "%s: %s (%s, threshold %s)",
@@ -366,7 +372,13 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       )[failed$Diagnostic],
       vapply(
         seq_len(nrow(failed)),
-        function(i) .format_value(failed$Value[i], failed$Diagnostic[i]),
+        function(i) {
+          .format_value(
+            failed$Value[i],
+            failed$Diagnostic[i],
+            failed$Threshold[i]
+          )
+        },
         character(1)
       ),
       vapply(
