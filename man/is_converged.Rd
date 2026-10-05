@@ -33,7 +33,8 @@ are unavailable, \code{FALSE} is returned and a message is printed to indicate
 that convergence cannot be assessed through the usual gradient-based checks.
 For \code{coxph} models, the attribute \code{diagnostics} is a data frame with the
 result of each check. If convergence cannot be assessed, \code{FALSE} is returned
-without this attribute, and a message gives the reason.
+without this attribute, and, if \code{verbose = TRUE}, a message gives the
+reason.
 }
 \description{
 \code{is_converged()} provides an alternative convergence
@@ -101,7 +102,8 @@ models (with \code{frailty()}, \code{ridge()} or \code{pspline()} terms), for mo
 of 1 or less, for models fitted with \code{y = FALSE}, for model objects without
 a call, and if the control arguments of the model call or the score
 residuals cannot be computed. Objects of other classes that inherit from
-\code{coxph}, for example from \code{survey::svycoxph()}, are not supported. For models with right-censored data,
+\code{coxph}, for example from \code{survival::clogit()} or \code{survey::svycoxph()}, are
+not supported: \code{NULL} is returned with a message. For models with right-censored data,
 the score residuals are computed from the data of the model call, unless the
 model was fitted with \code{model = TRUE} or \code{x = TRUE}. If these data were
 removed after the model was fitted, convergence cannot be assessed. If they

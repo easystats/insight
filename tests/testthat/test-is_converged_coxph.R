@@ -448,7 +448,20 @@ test_that("is_converged.coxph, convergence cannot be assessed", {
 
 
 test_that("is_converged.coxph, other classes that inherit from coxph", {
-  # as rms::cph() sets it; rms is not needed for the class
+  # an object of another class that inherits from "coxph"
+  cvx_clogit <- survival::clogit(
+    case ~ spontaneous + strata(stratum),
+    data = datasets::infert,
+    method = "efron"
+  )
+  expect_s3_class(cvx_clogit, "coxph")
+  expect_message(
+    expect_null(is_converged(cvx_clogit)),
+    "does not work for models of class 'clogit'",
+    fixed = TRUE
+  )
+
+  # a class vector like that of rms::cph(); rms is not needed for the class
   cph_like <- cvx_fits$reprex$fit
   class(cph_like) <- c("cph", "rms", "coxph")
   expect_message(

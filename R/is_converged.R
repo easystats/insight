@@ -21,7 +21,8 @@
 #'   that convergence cannot be assessed through the usual gradient-based checks.
 #'   For `coxph` models, the attribute `diagnostics` is a data frame with the
 #'   result of each check. If convergence cannot be assessed, `FALSE` is returned
-#'   without this attribute, and a message gives the reason.
+#'   without this attribute, and, if `verbose = TRUE`, a message gives the
+#'   reason.
 #'
 #' @section Convergence and log-likelihood:
 #' Convergence problems typically arise when the model hasn't converged to a
@@ -76,7 +77,8 @@
 #' of 1 or less, for models fitted with `y = FALSE`, for model objects without
 #' a call, and if the control arguments of the model call or the score
 #' residuals cannot be computed. Objects of other classes that inherit from
-#' `coxph`, for example from `survey::svycoxph()`, are not supported. For models with right-censored data,
+#' `coxph`, for example from `survival::clogit()` or `survey::svycoxph()`, are
+#' not supported: `NULL` is returned with a message. For models with right-censored data,
 #' the score residuals are computed from the data of the model call, unless the
 #' model was fitted with `model = TRUE` or `x = TRUE`. If these data were
 #' removed after the model was fitted, convergence cannot be assessed. If they
@@ -231,8 +233,9 @@ is_converged.lavaan <- function(x, tolerance = 0.001, ...) {
 #' @rdname is_converged
 #' @export
 is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
-  # other packages (for example survey, rms) build objects that inherit from
-  # "coxph" but have other calls and control values
+  # objects of other classes that inherit from "coxph" (for example from
+  # survey::svycoxph(), which stores its own call, or survival::clogit()) go to
+  # the default method, as before
   if (!class(x)[1] %in% c("coxph", "coxphms", "coxph.penal", "coxph.null")) {
     return(NextMethod())
   }
@@ -371,7 +374,9 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       "approximations of ties."
     ))
   }
-  # survival cannot compute the score residuals of models with `tt()` terms
+  # unless the model was fitted with `x = TRUE`, survival cannot compute the
+  # score residuals of models with `tt()` terms; the checks are not recomputed
+  # for these models
   if (!is.null(attr(x$terms, "specials")$tt)) {
     return("The checks cannot be recomputed for models with `tt()` terms.")
   }
