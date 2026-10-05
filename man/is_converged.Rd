@@ -37,7 +37,8 @@ convergence cannot be assessed, \code{FALSE} is returned without this attribute,
 and a message gives the reason: models without MCMC draws from the NUTS
 sampler (for example, models fitted with variational inference or
 optimization), models without draws after warmup, and models fitted with
-\code{brms::brm_multiple()}, whose chains come from different imputed data sets.
+\code{brms::brm_multiple()}, whose chains come from different data sets (such
+as imputed ones).
 }
 \description{
 \code{is_converged()} provides an alternative convergence

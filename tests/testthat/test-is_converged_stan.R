@@ -424,7 +424,7 @@ test_that("is_converged, FALSE if convergence cannot be assessed", {
   model$algorithm <- "optimizing"
   .conv_expect_not_assessed(model, no_nuts)
 
-  # brm_multiple() pools the chains of several imputed data sets
+  # brm_multiple() pools the chains of several data sets
   model <- conv_brms
   class(model) <- c("brmsfit_multiple", class(model))
   .conv_expect_not_assessed(model, "brm_multiple")

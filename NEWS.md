@@ -16,10 +16,10 @@
 ## Changes
 
 * `is_converged()` now supports models fitted with Stan (`stanfit`, `brmsfit`
-  and `stanreg`). Before, it returned `NULL` for `stanreg` models and did not
-  work for `brmsfit` models. It checks divergent transitions, transitions at
-  the maximum treedepth, E-BFMI, R-hat, and bulk and tail effective sample
-  size, with the thresholds of the warnings that *rstan* gives after sampling.
+  and `stanreg`). Before, it did not work for `stanreg` and `brmsfit` models.
+  It checks divergent transitions, transitions at the maximum treedepth,
+  E-BFMI, R-hat, and bulk and tail effective sample size, with the thresholds
+  of the warnings that *rstan* gives after sampling.
   E-BFMI is computed as in `rstan::check_hmc_diagnostics()`. The values of the
   checks are returned in the `diagnostics` attribute. If convergence cannot be
   assessed, for example for models fitted with variational inference or with

@@ -25,7 +25,8 @@
 #'   and a message gives the reason: models without MCMC draws from the NUTS
 #'   sampler (for example, models fitted with variational inference or
 #'   optimization), models without draws after warmup, and models fitted with
-#'   `brms::brm_multiple()`, whose chains come from different imputed data sets.
+#'   `brms::brm_multiple()`, whose chains come from different data sets (such
+#'   as imputed ones).
 #'
 #' @section Stan models:
 #' For models fitted with Stan, `is_converged()` returns `FALSE` if at least one
@@ -244,8 +245,9 @@ is_converged.brmsfit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     return(.is_converged_stan_not_assessed(
       paste(
         "The chains of models fitted with `brm_multiple()` come from different",
-        "imputed data sets. Check the convergence of the model for each data",
-        "set, for example with `x$rhats`."
+        "data sets (such as imputed ones). Check the convergence of the chains",
+        "of each data set separately, as shown in",
+        "`vignette(\"brms_missings\", package = \"brms\")`."
       ),
       verbose
     ))
@@ -290,7 +292,9 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     return(.is_converged_stan_not_assessed(.stan_no_nuts_reason, verbose))
   }
 
-  # `as.array()` returns an empty vector if the model has no draws
+  # `as.array()` has length 0 if the model has no draws after warmup
+  # (`numeric(0)` if rstan stored no samples, an array with no iterations
+  # otherwise)
   draws <- as.array(x)
   if (!length(draws)) {
     return(.is_converged_stan_not_assessed(
