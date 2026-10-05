@@ -13,6 +13,14 @@
   distribution-specific residual variance of the latent scale, as for
   `ordinal::clmm()`.
 
+## Changes
+
+* `is_converged()` now supports models fitted with Stan (`stanfit`, `brmsfit`
+  and `stanreg`). It checks divergent transitions, transitions at the maximum
+  treedepth, E-BFMI, R-hat, and bulk and tail effective sample size, with the
+  thresholds of the warnings that *rstan* gives after sampling. The values of
+  the checks are returned in the `diagnostics` attribute (#619).
+
 ## Bug fixes
 
 * `get_variance()` and `get_variance_distribution()` returned a wrong
