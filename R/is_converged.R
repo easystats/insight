@@ -1,13 +1,15 @@
-#' @title Convergence test for mixed effects models
+#' @title Convergence test for mixed effects and Stan models
 #' @name is_converged
 #'
 #' @description `is_converged()` provides an alternative convergence
-#'   test for `merMod`-objects.
+#'   test for `merMod`-objects. For models fitted with Stan (`stanfit`,
+#'   `brmsfit` and `stanreg`), it checks the diagnostics of the sampler.
 #'
-#' @param x A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan` or
-#' `_glm`.
+#' @param x A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan`,
+#' `_glm`, `stanfit`, `brmsfit` or `stanreg`.
 #' @param tolerance Indicates up to which value the convergence result is
-#'   accepted. The smaller `tolerance` is, the stricter the test will be.
+#'   accepted. The smaller `tolerance` is, the stricter the test will be. Not
+#'   used for Stan models.
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #'
@@ -17,6 +19,35 @@
 #'   the optimizer's convergence code. For non-singular models where derivatives
 #'   are unavailable, `FALSE` is returned and a message is printed to indicate
 #'   that convergence cannot be assessed through the usual gradient-based checks.
+#'   For Stan models, the attribute `diagnostics` is a data frame with the
+#'   value, the threshold and the result of each check. `NA` is returned for
+#'   Stan models without MCMC draws from the NUTS sampler (for example, models
+#'   fitted with variational inference or optimization).
+#'
+#' @section Stan models:
+#' For models fitted with Stan, `is_converged()` returns `FALSE` if at least one
+#' of the checks below fails. The checks and thresholds are those of the
+#' warnings that *rstan* gives after sampling, and the values are computed with
+#' functions from *rstan*:
+#'
+#' - Divergent transitions after warmup (`rstan::get_num_divergent()`): the
+#'   check fails if there is at least one.
+#' - Transitions after warmup that reach the maximum treedepth
+#'   (`rstan::get_num_max_treedepth()`): the check fails if there is at least
+#'   one.
+#' - E-BFMI (`rstan::get_bfmi()`): the check fails if at least one chain has
+#'   a value below 0.2. This is the E-BFMI of `rstan::check_hmc_diagnostics()`,
+#'   which can differ from the warning that *rstan* prints after sampling.
+#' - R-hat (`rstan::Rhat()`): the check fails if the largest value over all
+#'   parameters is above 1.05.
+#' - Bulk and tail effective sample size (`rstan::ess_bulk()` and
+#'   `rstan::ess_tail()`): each check fails if the smallest value over all
+#'   parameters is below 100 times the number of chains.
+#'
+#' Missing values (for example, R-hat of a constant parameter) are ignored. Stan
+#' also prints messages about rejected proposals ("exception thrown") during
+#' sampling. These messages are not checked, because the model object does not
+#' store them.
 #'
 #' @section Convergence and log-likelihood:
 #' Convergence problems typically arise when the model hasn't converged to a
@@ -183,4 +214,117 @@ is_converged._glm <- function(x, tolerance = 0.001, ...) {
 is_converged.lavaan <- function(x, tolerance = 0.001, ...) {
   check_if_installed("lavaan")
   lavaan::lavInspect(x, "converged")
+}
+
+
+# Stan models ------------------------------------------------------------------
+
+#' @rdname is_converged
+#' @export
+is_converged.stanfit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
+  .is_converged_stan(x, verbose = verbose)
+}
+
+
+#' @export
+is_converged.brmsfit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
+  if (!identical(x$algorithm, "sampling")) {
+    return(.is_converged_stan_no_mcmc(verbose))
+  }
+  .is_converged_stan(x$fit, verbose = verbose)
+}
+
+
+#' @export
+is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
+  if (!identical(x$algorithm, "sampling")) {
+    return(.is_converged_stan_no_mcmc(verbose))
+  }
+  .is_converged_stan(x$stanfit, verbose = verbose)
+}
+
+
+# checks and thresholds follow the warnings that rstan gives after sampling,
+# see `rstan:::throw_sampler_warnings()` and `rstan::check_hmc_diagnostics()`
+.is_converged_stan <- function(x, verbose = TRUE) {
+  check_if_installed("rstan")
+
+  if (!identical(.safe(x@stan_args[[1]]$algorithm), "NUTS")) {
+    return(.is_converged_stan_no_mcmc(verbose))
+  }
+
+  draws <- as.array(x)
+  n_chains <- dim(draws)[2]
+
+  # largest or smallest value, or NA if all values are NA
+  .na_or <- function(values, fun) {
+    values <- values[!is.na(values)]
+    if (length(values)) fun(values) else NA_real_
+  }
+
+  diagnostics <- data.frame(
+    Diagnostic = c(
+      "Divergences",
+      "Treedepth",
+      "E-BFMI",
+      "Rhat",
+      "ESS_bulk",
+      "ESS_tail"
+    ),
+    Value = c(
+      rstan::get_num_divergent(x),
+      rstan::get_num_max_treedepth(x),
+      .na_or(rstan::get_bfmi(x), min),
+      .na_or(apply(draws, 3, rstan::Rhat), max),
+      .na_or(apply(draws, 3, rstan::ess_bulk), min),
+      .na_or(apply(draws, 3, rstan::ess_tail), min)
+    ),
+    Threshold = c(0, 0, 0.2, 1.05, 100 * n_chains, 100 * n_chains),
+    stringsAsFactors = FALSE
+  )
+
+  # divergences, treedepth and Rhat must not exceed the threshold, E-BFMI and
+  # ESS must not fall below it. Checks with a missing value pass, as in rstan.
+  upper <- diagnostics$Diagnostic %in% c("Divergences", "Treedepth", "Rhat")
+  diagnostics$Passed <- is.na(diagnostics$Value) |
+    ifelse(
+      upper,
+      diagnostics$Value <= diagnostics$Threshold,
+      diagnostics$Value >= diagnostics$Threshold
+    )
+
+  converged <- all(diagnostics$Passed)
+
+  if (verbose && !converged) {
+    failed <- diagnostics[!diagnostics$Passed, ]
+    msg <- sprintf(
+      "%s (%s, threshold %s)",
+      c(
+        Divergences = "divergent transitions after warmup",
+        Treedepth = "transitions at the maximum treedepth",
+        `E-BFMI` = "low E-BFMI in at least one chain",
+        Rhat = "R-hat too high",
+        ESS_bulk = "bulk ESS too low",
+        ESS_tail = "tail ESS too low"
+      )[failed$Diagnostic],
+      format(failed$Value, digits = 3),
+      format(failed$Threshold, digits = 3)
+    )
+    format_alert(
+      "The model has not converged. These checks failed:",
+      paste0("- ", msg)
+    )
+  }
+
+  structure(converged, diagnostics = diagnostics)
+}
+
+
+.is_converged_stan_no_mcmc <- function(verbose = TRUE) {
+  if (verbose) {
+    format_alert(
+      "Convergence checks for Stan models need MCMC draws from the NUTS sampler. Returning `NA`."
+    )
+  }
+  NA
 }

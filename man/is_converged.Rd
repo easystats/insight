@@ -3,18 +3,22 @@
 \name{is_converged}
 \alias{is_converged}
 \alias{is_converged.merMod}
-\title{Convergence test for mixed effects models}
+\alias{is_converged.stanfit}
+\title{Convergence test for mixed effects and Stan models}
 \usage{
 is_converged(x, tolerance = 0.001, ...)
 
 \method{is_converged}{merMod}(x, tolerance = 0.001, verbose = TRUE, ...)
+
+\method{is_converged}{stanfit}(x, tolerance = 0.001, verbose = TRUE, ...)
 }
 \arguments{
-\item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm}, \code{lavaan} or
-\verb{_glm}.}
+\item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm}, \code{lavaan},
+\verb{_glm}, \code{stanfit}, \code{brmsfit} or \code{stanreg}.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
-accepted. The smaller \code{tolerance} is, the stricter the test will be.}
+accepted. The smaller \code{tolerance} is, the stricter the test will be. Not
+used for Stan models.}
 
 \item{...}{Currently not used.}
 
@@ -27,11 +31,44 @@ For \code{merMod} models, if the model is singular, convergence is determined by
 the optimizer's convergence code. For non-singular models where derivatives
 are unavailable, \code{FALSE} is returned and a message is printed to indicate
 that convergence cannot be assessed through the usual gradient-based checks.
+For Stan models, the attribute \code{diagnostics} is a data frame with the
+value, the threshold and the result of each check. \code{NA} is returned for
+Stan models without MCMC draws from the NUTS sampler (for example, models
+fitted with variational inference or optimization).
 }
 \description{
 \code{is_converged()} provides an alternative convergence
-test for \code{merMod}-objects.
+test for \code{merMod}-objects. For models fitted with Stan (\code{stanfit},
+\code{brmsfit} and \code{stanreg}), it checks the diagnostics of the sampler.
 }
+\section{Stan models}{
+
+For models fitted with Stan, \code{is_converged()} returns \code{FALSE} if at least one
+of the checks below fails. The checks and thresholds are those of the
+warnings that \emph{rstan} gives after sampling, and the values are computed with
+functions from \emph{rstan}:
+\itemize{
+\item Divergent transitions after warmup (\code{rstan::get_num_divergent()}): the
+check fails if there is at least one.
+\item Transitions after warmup that reach the maximum treedepth
+(\code{rstan::get_num_max_treedepth()}): the check fails if there is at least
+one.
+\item E-BFMI (\code{rstan::get_bfmi()}): the check fails if at least one chain has
+a value below 0.2. This is the E-BFMI of \code{rstan::check_hmc_diagnostics()},
+which can differ from the warning that \emph{rstan} prints after sampling.
+\item R-hat (\code{rstan::Rhat()}): the check fails if the largest value over all
+parameters is above 1.05.
+\item Bulk and tail effective sample size (\code{rstan::ess_bulk()} and
+\code{rstan::ess_tail()}): each check fails if the smallest value over all
+parameters is below 100 times the number of chains.
+}
+
+Missing values (for example, R-hat of a constant parameter) are ignored. Stan
+also prints messages about rejected proposals ("exception thrown") during
+sampling. These messages are not checked, because the model object does not
+store them.
+}
+
 \section{Convergence and log-likelihood}{
 
 Convergence problems typically arise when the model hasn't converged to a
