@@ -1,4 +1,4 @@
-#' @title Convergence test for mixed effects models
+#' @title Convergence test for mixed effects and Cox models
 #' @name is_converged
 #'
 #' @description `is_converged()` provides an alternative convergence
@@ -78,12 +78,13 @@
 #' a call, and if the control arguments of the model call or the score
 #' residuals cannot be computed. Objects of other classes that inherit from
 #' `coxph`, for example from `survival::clogit()` or `survey::svycoxph()`, are
-#' not supported: `NULL` is returned with a message. For models with right-censored data,
-#' the score residuals are computed from the data of the model call, unless the
-#' model was fitted with `model = TRUE` or `x = TRUE`. If these data were
-#' removed after the model was fitted, convergence cannot be assessed. If they
-#' were changed, the result can be wrong. In both cases, refit the model with
-#' `model = TRUE`.
+#' not supported: `NULL` is returned with a message.
+#'
+#' For models with right-censored data, the score residuals are computed from
+#' the data of the model call, unless the model was fitted with `model = TRUE`
+#' or `x = TRUE`. If these data were removed after the model was fitted,
+#' convergence cannot be assessed. If they were changed, the result can be
+#' wrong. In both cases, refit the model with `model = TRUE`.
 #'
 #' @section Convergence versus Singularity:
 #' Note the different meaning between singularity and convergence: singularity

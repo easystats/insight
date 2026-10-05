@@ -4,7 +4,7 @@
 \alias{is_converged}
 \alias{is_converged.merMod}
 \alias{is_converged.coxph}
-\title{Convergence test for mixed effects models}
+\title{Convergence test for mixed effects and Cox models}
 \usage{
 is_converged(x, tolerance = 0.001, ...)
 
@@ -103,12 +103,13 @@ of 1 or less, for models fitted with \code{y = FALSE}, for model objects without
 a call, and if the control arguments of the model call or the score
 residuals cannot be computed. Objects of other classes that inherit from
 \code{coxph}, for example from \code{survival::clogit()} or \code{survey::svycoxph()}, are
-not supported: \code{NULL} is returned with a message. For models with right-censored data,
-the score residuals are computed from the data of the model call, unless the
-model was fitted with \code{model = TRUE} or \code{x = TRUE}. If these data were
-removed after the model was fitted, convergence cannot be assessed. If they
-were changed, the result can be wrong. In both cases, refit the model with
-\code{model = TRUE}.
+not supported: \code{NULL} is returned with a message.
+
+For models with right-censored data, the score residuals are computed from
+the data of the model call, unless the model was fitted with \code{model = TRUE}
+or \code{x = TRUE}. If these data were removed after the model was fitted,
+convergence cannot be assessed. If they were changed, the result can be
+wrong. In both cases, refit the model with \code{model = TRUE}.
 }
 
 \section{Convergence versus Singularity}{
