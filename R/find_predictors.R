@@ -255,7 +255,7 @@ find_predictors.workflow <- function(
   if (verbose) {
     format_warning(sprintf(
       "Unknown preprocessor type: %s",
-      paste(class(preprocessor), collapse = ", ")
+      toString(class(preprocessor))
     ))
   }
   NULL
@@ -524,8 +524,10 @@ find_predictors.brmsfit <- function(
   is_mv <- is_multivariate(f)
   elements <- .get_elements(effects, component, model = x)
 
-  # extract all components, including custom and auxiliary ones
-  dpars <- find_auxiliary(x)
+  # extract all components, including custom and auxiliary ones. For
+  # non-linear models, `find_formula()` returns the formulas of the non-linear
+  # parameters as separate elements, so we need these names, too
+  dpars <- c(find_auxiliary(x), .brms_nlpars(x))
 
   # elements to return
   elements <- .brms_elements(effects, component, dpars)

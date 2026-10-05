@@ -106,6 +106,8 @@ should be returned.}
 The posterior samples from the requested parameters as data frame.
 If \code{summary = TRUE}, returns a data frame with two columns: the
 parameter names and the related point estimates (based on \code{centrality}).
+For models of class \code{brmsfit}, \code{NULL} is returned if no parameter matches
+the selection of \code{effects}, \code{component} and \code{parameters}.
 }
 \description{
 Returns the coefficients (or posterior samples for Bayesian
