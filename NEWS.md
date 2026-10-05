@@ -15,6 +15,12 @@
 
 ## Bug fixes
 
+* `get_variance()` and `get_variance_distribution()` returned a wrong
+  distribution-specific variance for beta-binomial models with a probit or
+  cloglog link. The cause was the back-transformation of the null-model mean,
+  which always used the inverse logit. The mean now uses the inverse link of
+  the model.
+
 * For a list of data frames, `caption = ""` (or `title = ""`) now makes
   `export_table()` remove the captions of all tables. This includes captions
   stored as attributes. `subtitle = ""` and `footer = ""` do the same for

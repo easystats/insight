@@ -660,9 +660,9 @@
     # transform mu
     mu <- switch(
       faminfo$family,
-      # beta-alike
+      # beta-alike (betabinomial also allows probit and cloglog links,
+      # so it uses the model's inverse link below)
       beta = ,
-      betabinomial = ,
       ordbeta = stats::plogis(mu),
       # for count models, Nakagawa et al. suggest this transformation
       poisson = ,
