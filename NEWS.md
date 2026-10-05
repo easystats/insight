@@ -15,6 +15,11 @@
 
 ## Bug fixes
 
+* `n_obs(disaggregate = TRUE)` now returns the total number of trials for
+  *brms* models with a `trials()` term in the response, for example
+  `y | trials(size) ~ x`. Before, it ignored `disaggregate` and returned the
+  number of data rows (#581).
+
 * `get_variance()` and `get_variance_distribution()` returned a wrong
   distribution-specific variance for beta-binomial models with a probit or
   cloglog link. The cause was the back-transformation of the null-model mean,

@@ -10,7 +10,9 @@
 #'   the total number of trials is returned instead (determined by summing the
 #'   results of `weights()` for aggregated data, which will be either the
 #'   weights input for proportion success response or the row sums of the
-#'   response matrix if matrix response, see 'Examples').
+#'   response matrix if matrix response, see 'Examples'). For *brms* models
+#'   with a `trials()` term in the response (e.g., `y | trials(size) ~ x`),
+#'   the values of `trials()` are summed.
 #' @inheritParams find_predictors
 #' @inheritParams get_response
 #' @inheritParams find_formula
@@ -96,6 +98,66 @@ n_obs.glm <- function(x, disaggregate = FALSE, ...) {
 
   .nobs
 }
+
+#' @export
+n_obs.brmsfit <- function(x, disaggregate = FALSE, ...) {
+  .nobs <- .safe(stats::nobs(x))
+
+  if (
+    isTRUE(disaggregate) &&
+      !is.null(.nobs) &&
+      isTRUE(model_info(x, verbose = FALSE)$is_trial)
+  ) {
+    trials <- .brms_trials(x)
+    # "trials()" is either a constant or a value for each observation
+    if (length(trials) == 1L) {
+      .nobs <- as.integer(trials * .nobs)
+    } else if (length(trials) == .nobs) {
+      .nobs <- as.integer(sum(trials))
+    }
+  }
+
+  .nobs
+}
+
+
+# evaluates the argument of "trials()" in the response of a brms formula,
+# e.g. "y | trials(size)" or "y | weights(w) + trials(10)"
+.brms_trials <- function(x) {
+  lhs <- .safe(stats::formula(x)$formula[[2L]])
+  if (is.null(lhs)) {
+    return(NULL)
+  }
+
+  .find_trials_call <- function(expr) {
+    if (!is.call(expr)) {
+      return(NULL)
+    }
+    fun <- safe_deparse(expr[[1L]])
+    if (fun %in% c("trials", "resp_trials")) {
+      return(expr)
+    }
+    for (i in seq_along(expr)[-1L]) {
+      out <- .find_trials_call(expr[[i]])
+      if (!is.null(out)) {
+        return(out)
+      }
+    }
+    NULL
+  }
+
+  trials_call <- .find_trials_call(lhs)
+  if (is.null(trials_call) || length(trials_call) < 2L) {
+    return(NULL)
+  }
+
+  trials <- .safe(eval(trials_call[[2L]], envir = x$data, enclos = baseenv()))
+  if (!is.numeric(trials)) {
+    return(NULL)
+  }
+  trials
+}
+
 
 #' @export
 n_obs.censReg <- n_obs.default
