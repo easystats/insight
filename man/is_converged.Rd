@@ -32,9 +32,12 @@ the optimizer's convergence code. For non-singular models where derivatives
 are unavailable, \code{FALSE} is returned and a message is printed to indicate
 that convergence cannot be assessed through the usual gradient-based checks.
 For Stan models, the attribute \code{diagnostics} is a data frame with the
-value, the threshold and the result of each check. \code{NA} is returned for
-Stan models without MCMC draws from the NUTS sampler (for example, models
-fitted with variational inference or optimization).
+value, the threshold and the result of each check. For Stan models whose
+convergence cannot be assessed, \code{FALSE} is returned without this attribute,
+and a message gives the reason: models without MCMC draws from the NUTS
+sampler (for example, models fitted with variational inference or
+optimization), models without draws after warmup, and models fitted with
+\code{brms::brm_multiple()}, whose chains come from different imputed data sets.
 }
 \description{
 \code{is_converged()} provides an alternative convergence
@@ -148,6 +151,15 @@ model <- glmmTMB(
 )
 
 is_converged(model)
+}
+\dontshow{\}) # examplesIf}
+\dontshow{if (require("curl", quietly = TRUE) && curl::has_internet() && all(insight::check_if_installed(c("rstan", "httr2"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
+\donttest{
+# a model fitted with brms
+model <- download_model("brms_1")
+result <- is_converged(model)
+result
+attributes(result)$diagnostics
 }
 \dontshow{\}) # examplesIf}
 }

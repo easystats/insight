@@ -20,9 +20,12 @@
 #'   are unavailable, `FALSE` is returned and a message is printed to indicate
 #'   that convergence cannot be assessed through the usual gradient-based checks.
 #'   For Stan models, the attribute `diagnostics` is a data frame with the
-#'   value, the threshold and the result of each check. `NA` is returned for
-#'   Stan models without MCMC draws from the NUTS sampler (for example, models
-#'   fitted with variational inference or optimization).
+#'   value, the threshold and the result of each check. For Stan models whose
+#'   convergence cannot be assessed, `FALSE` is returned without this attribute,
+#'   and a message gives the reason: models without MCMC draws from the NUTS
+#'   sampler (for example, models fitted with variational inference or
+#'   optimization), models without draws after warmup, and models fitted with
+#'   `brms::brm_multiple()`, whose chains come from different imputed data sets.
 #'
 #' @section Stan models:
 #' For models fitted with Stan, `is_converged()` returns `FALSE` if at least one
@@ -124,6 +127,15 @@
 #' )
 #'
 #' is_converged(model)
+#' }
+#'
+#' @examplesIf require("curl", quietly = TRUE) && curl::has_internet() && all(insight::check_if_installed(c("rstan", "httr2"), quietly = TRUE))
+#' \donttest{
+#' # a model fitted with brms
+#' model <- download_model("brms_1")
+#' result <- is_converged(model)
+#' result
+#' attributes(result)$diagnostics
 #' }
 #' @export
 is_converged <- function(x, tolerance = 0.001, ...) {
@@ -228,8 +240,18 @@ is_converged.stanfit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
 #' @export
 is_converged.brmsfit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
-  if (!identical(x$algorithm, "sampling")) {
-    return(.is_converged_stan_no_mcmc(verbose))
+  if (inherits(x, "brmsfit_multiple")) {
+    return(.is_converged_stan_not_assessed(
+      paste(
+        "The chains of models fitted with `brm_multiple()` come from different",
+        "imputed data sets. Check the convergence of the model for each data",
+        "set, for example with `x$rhats`."
+      ),
+      verbose
+    ))
+  }
+  if (!.is_stan_sampling(x)) {
+    return(.is_converged_stan_not_assessed(.stan_no_nuts_reason, verbose))
   }
   .is_converged_stan(x$fit, verbose = verbose)
 }
@@ -237,11 +259,21 @@ is_converged.brmsfit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
 #' @export
 is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
-  if (!identical(x$algorithm, "sampling")) {
-    return(.is_converged_stan_no_mcmc(verbose))
+  if (!.is_stan_sampling(x)) {
+    return(.is_converged_stan_not_assessed(.stan_no_nuts_reason, verbose))
   }
   .is_converged_stan(x$stanfit, verbose = verbose)
 }
+
+
+# brmsfit and stanreg objects store the algorithm; a missing value is treated
+# as sampling, the default of both packages
+.is_stan_sampling <- function(x) {
+  is.null(x$algorithm) || identical(x$algorithm, "sampling")
+}
+
+
+.stan_no_nuts_reason <- "The model has no MCMC draws from the NUTS sampler."
 
 
 # checks and thresholds follow the warnings that rstan gives after sampling,
@@ -255,10 +287,17 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   is_nuts <- identical(stan_args$algorithm, "NUTS") ||
     (identical(stan_args$algorithm, "hmc") && identical(stan_args$engine, "nuts"))
   if (!is_nuts) {
-    return(.is_converged_stan_no_mcmc(verbose))
+    return(.is_converged_stan_not_assessed(.stan_no_nuts_reason, verbose))
   }
 
+  # `as.array()` returns an empty vector if the model has no draws
   draws <- as.array(x)
+  if (!length(draws)) {
+    return(.is_converged_stan_not_assessed(
+      "The model has no draws after warmup.",
+      verbose
+    ))
+  }
   n_chains <- dim(draws)[2]
 
   # largest or smallest value, or NA if all values are NA
@@ -279,7 +318,7 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     Value = c(
       rstan::get_num_divergent(x),
       rstan::get_num_max_treedepth(x),
-      .na_or(rstan::get_bfmi(x), min),
+      .na_or(.safe(rstan::get_bfmi(x), NA_real_), min),
       .na_or(apply(draws, 3, rstan::Rhat), max),
       .na_or(apply(draws, 3, rstan::ess_bulk), min),
       .na_or(apply(draws, 3, rstan::ess_tail), min)
@@ -302,8 +341,17 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
   if (verbose && !converged) {
     failed <- diagnostics[!diagnostics$Passed, ]
+    # counts as integers, other values with three significant digits
+    .format_value <- function(value, diagnostic) {
+      if (diagnostic %in% c("Divergences", "Treedepth")) {
+        format(as.integer(value))
+      } else {
+        format(value, digits = 3)
+      }
+    }
     msg <- sprintf(
-      "%s (%s, threshold %s)",
+      "%s: %s (%s, threshold %s)",
+      failed$Diagnostic,
       c(
         Divergences = "divergent transitions after warmup",
         Treedepth = "transitions at the maximum treedepth",
@@ -312,8 +360,16 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
         ESS_bulk = "bulk ESS too low",
         ESS_tail = "tail ESS too low"
       )[failed$Diagnostic],
-      format(failed$Value, digits = 3),
-      format(failed$Threshold, digits = 3)
+      vapply(
+        seq_len(nrow(failed)),
+        function(i) .format_value(failed$Value[i], failed$Diagnostic[i]),
+        character(1)
+      ),
+      vapply(
+        seq_len(nrow(failed)),
+        function(i) .format_value(failed$Threshold[i], failed$Diagnostic[i]),
+        character(1)
+      )
     )
     format_alert(
       "The model has not converged. These checks failed:",
@@ -325,11 +381,13 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 }
 
 
-.is_converged_stan_no_mcmc <- function(verbose = TRUE) {
+# as for other models, `FALSE` is returned if convergence cannot be assessed
+# (see https://github.com/easystats/insight/pull/1154)
+.is_converged_stan_not_assessed <- function(reason, verbose = TRUE) {
   if (verbose) {
     format_alert(
-      "Convergence checks for Stan models need MCMC draws from the NUTS sampler. Returning `NA`."
+      paste("Convergence cannot be assessed.", reason, "Returning `FALSE`.")
     )
   }
-  NA
+  FALSE
 }
