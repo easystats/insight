@@ -2,10 +2,11 @@
 #' @name is_converged
 #'
 #' @description `is_converged()` provides an alternative convergence
-#'   test for `merMod`-objects.
+#'   test for `merMod`-objects. For `coxph` models, it recomputes the checks
+#'   of the *survival* package.
 #'
-#' @param x A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan` or
-#' `_glm`.
+#' @param x A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan`,
+#' `_glm` or `coxph`.
 #' @param tolerance Indicates up to which value the convergence result is
 #'   accepted. The smaller `tolerance` is, the stricter the test will be.
 #' @param verbose Toggle messages and warnings.
@@ -44,6 +45,34 @@
 #' separation, which can be addressed by regularization, e.g. penalized
 #' regression or Bayesian regression with appropriate priors on the fixed
 #' effects.
+#'
+#' @section Cox proportional hazards models:
+#' *survival* warns about convergence problems when a `coxph` model is fitted,
+#' but does not store the warnings in the model object. For `coxph` models,
+#' `is_converged()` therefore computes the two checks of *survival* again,
+#' with the `iter.max`, `eps` and `toler.inf` values of the model call:
+#'
+#' - Iterations: the check fails if the model did not converge within
+#'   `iter.max` iterations ("Ran out of iterations and did not converge").
+#' - Infinite coefficient: the check fails for a coefficient if the
+#'   log-likelihood converged before the coefficient did ("Loglik converged
+#'   before variable ...; coefficient may be infinite"). This happens, for
+#'   example, if a factor level has no events. As in *survival*, this check
+#'   runs only if the first check passed.
+#'
+#' `is_converged()` returns `FALSE` if a check fails. The attribute
+#' `diagnostics` is a data frame with the value, the threshold and the result
+#' of each check, with one row for each coefficient for the second check. The
+#' `tolerance` argument is not used for `coxph` models.
+#'
+#' Convergence cannot be assessed, and `FALSE` is returned, for penalized
+#' models (with `frailty()`, `ridge()` or `pspline()` terms), for models with
+#' `ties = "exact"`, for models with `iter.max` of 1 or less, and if the
+#' control arguments of the model call or the score residuals cannot be
+#' computed. For models with right-censored data, the score residuals are
+#' computed from the data of the model call. If these data were removed after
+#' the model was fitted, convergence cannot be assessed. If they were changed,
+#' the result can be wrong. In both cases, refit the model with `model = TRUE`.
 #'
 #' @section Convergence versus Singularity:
 #' Note the different meaning between singularity and convergence: singularity
@@ -200,7 +229,10 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   }
   if (inherits(x, "coxph.penal")) {
     return(.is_converged_coxph_not_assessed(
-      "The checks do not apply to penalized models, for example models with `frailty()`, `ridge()` or `pspline()` terms.",
+      paste(
+        "The checks do not apply to penalized models, for example models",
+        "with `frailty()`, `ridge()` or `pspline()` terms."
+      ),
       verbose
     ))
   }
@@ -366,13 +398,13 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       if (is.null(env)) {
         env <- parent.frame()
       }
-      args <- as.list(x$call)[-1]
-      if (is.null(args$control)) {
-        extra <- args[!names(args) %in% names(formals(survival::coxph))]
+      call_args <- as.list(x$call)[-1]
+      if (is.null(call_args$control)) {
+        extra <- call_args[!names(call_args) %in% names(formals(survival::coxph))]
         extra <- lapply(extra, eval, envir = env)
         do.call(survival::coxph.control, extra)
       } else {
-        control <- eval(args$control, envir = env)
+        control <- eval(call_args$control, envir = env)
         do.call(survival::coxph.control, as.list(control))
       }
     },

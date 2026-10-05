@@ -10,8 +10,8 @@ is_converged(x, tolerance = 0.001, ...)
 \method{is_converged}{merMod}(x, tolerance = 0.001, verbose = TRUE, ...)
 }
 \arguments{
-\item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm}, \code{lavaan} or
-\verb{_glm}.}
+\item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm}, \code{lavaan},
+\verb{_glm} or \code{coxph}.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
 accepted. The smaller \code{tolerance} is, the stricter the test will be.}
@@ -30,7 +30,8 @@ that convergence cannot be assessed through the usual gradient-based checks.
 }
 \description{
 \code{is_converged()} provides an alternative convergence
-test for \code{merMod}-objects.
+test for \code{merMod}-objects. For \code{coxph} models, it recomputes the checks
+of the \emph{survival} package.
 }
 \section{Convergence and log-likelihood}{
 
@@ -63,6 +64,37 @@ in (non-identity link) generalized linear model \emph{might} indicate complete
 separation, which can be addressed by regularization, e.g. penalized
 regression or Bayesian regression with appropriate priors on the fixed
 effects.
+}
+
+\section{Cox proportional hazards models}{
+
+\emph{survival} warns about convergence problems when a \code{coxph} model is fitted,
+but does not store the warnings in the model object. For \code{coxph} models,
+\code{is_converged()} therefore computes the two checks of \emph{survival} again,
+with the \code{iter.max}, \code{eps} and \code{toler.inf} values of the model call:
+\itemize{
+\item Iterations: the check fails if the model did not converge within
+\code{iter.max} iterations ("Ran out of iterations and did not converge").
+\item Infinite coefficient: the check fails for a coefficient if the
+log-likelihood converged before the coefficient did ("Loglik converged
+before variable ...; coefficient may be infinite"). This happens, for
+example, if a factor level has no events. As in \emph{survival}, this check
+runs only if the first check passed.
+}
+
+\code{is_converged()} returns \code{FALSE} if a check fails. The attribute
+\code{diagnostics} is a data frame with the value, the threshold and the result
+of each check, with one row for each coefficient for the second check. The
+\code{tolerance} argument is not used for \code{coxph} models.
+
+Convergence cannot be assessed, and \code{FALSE} is returned, for penalized
+models (with \code{frailty()}, \code{ridge()} or \code{pspline()} terms), for models with
+\code{ties = "exact"}, for models with \code{iter.max} of 1 or less, and if the
+control arguments of the model call or the score residuals cannot be
+computed. For models with right-censored data, the score residuals are
+computed from the data of the model call. If these data were removed after
+the model was fitted, convergence cannot be assessed. If they were changed,
+the result can be wrong. In both cases, refit the model with \code{model = TRUE}.
 }
 
 \section{Convergence versus Singularity}{

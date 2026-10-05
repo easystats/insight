@@ -29,15 +29,15 @@ cvx_mgus2$event <- with(
 
 # fit a model and keep the warnings of survival
 .cvx_fit <- function(expr) {
-  warnings <- character(0)
+  caught <- character(0)
   fit <- withCallingHandlers(
     expr,
     warning = function(w) {
-      warnings <<- c(warnings, conditionMessage(w))
+      caught <<- c(caught, conditionMessage(w))
       invokeRestart("muffleWarning")
     }
   )
-  list(fit = fit, warnings = warnings)
+  list(fit = fit, warnings = caught)
 }
 
 # names of the coefficients that the survival warning names by position
@@ -46,7 +46,7 @@ cvx_mgus2$event <- with(
   if (!length(w)) {
     return(character(0))
   }
-  idx <- as.integer(strsplit(sub(".*variable\\s+([0-9,]+)\\s*;.*", "\\1", w), ",")[[1]])
+  idx <- as.integer(strsplit(sub(".*variable\\s+([0-9,]+)\\s*;.*", "\\1", w), ",", fixed = TRUE)[[1]])
   names(stats::coef(f$fit))[idx]
 }
 
@@ -172,7 +172,7 @@ test_that("is_converged.coxph, the probes cover the cases they name", {
   u <- colSums(as.matrix(stats::residuals(fit, type = "score", weighted = TRUE)))
   robust_infs <- stats::setNames(abs(drop(u %*% fit$var)), names(stats::coef(fit)))
   diagnostics <- attr(is_converged(fit, verbose = FALSE), "diagnostics")
-  tmp_row <- diagnostics$Term %in% "tmp1"
+  tmp_row <- which(diagnostics$Term == "tmp1")
   expect_lt(robust_infs[["tmp1"]], diagnostics$Threshold[tmp_row])
   expect_false(diagnostics$Passed[tmp_row])
 
@@ -243,6 +243,23 @@ test_that("is_converged.coxph, diagnostics", {
     )
   }
 
+  # the bounds of coxph.fit() and agreg.fit() differ
+  toler_inf <- survival::coxph.control()$toler.inf
+  for (i in c("counting", "ms_counting")) {
+    diagnostics <- attr(is_converged(cvx_fits[[i]]$fit, verbose = FALSE), "diagnostics")
+    expect_equal(
+      diagnostics$Threshold[-1],
+      toler_inf * (1 + abs(unname(stats::coef(cvx_fits[[i]]$fit)))),
+      tolerance = 1e-10
+    )
+  }
+  diagnostics <- attr(is_converged(cvx_fits$three_terms$fit, verbose = FALSE), "diagnostics")
+  expect_equal(
+    diagnostics$Threshold[-1],
+    pmax(1e-9, toler_inf * abs(unname(stats::coef(cvx_fits$three_terms$fit)))),
+    tolerance = 1e-10
+  )
+
   # if check (a) fails, check (b) does not run
   for (i in c("iter_arg", "counting_iter2")) {
     diagnostics <- attr(is_converged(cvx_fits[[i]]$fit, verbose = FALSE), "diagnostics")
@@ -257,7 +274,7 @@ test_that("is_converged.coxph, diagnostics", {
 
   # an aliased coefficient is never flagged
   diagnostics <- attr(is_converged(cvx_fits$aliased$fit, verbose = FALSE), "diagnostics")
-  aliased_row <- diagnostics$Term %in% "age2"
+  aliased_row <- which(diagnostics$Term == "age2")
   expect_true(is.na(stats::coef(cvx_fits$aliased$fit)[["age2"]]))
   expect_true(is.na(diagnostics$Threshold[aliased_row]))
   expect_true(diagnostics$Passed[aliased_row])
