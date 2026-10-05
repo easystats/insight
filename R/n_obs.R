@@ -103,11 +103,9 @@ n_obs.glm <- function(x, disaggregate = FALSE, ...) {
 n_obs.brmsfit <- function(x, disaggregate = FALSE, ...) {
   .nobs <- .safe(stats::nobs(x))
 
-  if (
-    isTRUE(disaggregate) &&
-      !is.null(.nobs) &&
-      isTRUE(model_info(x, verbose = FALSE)$is_trial)
-  ) {
+  if (isTRUE(disaggregate) && !is.null(.nobs)) {
+    # NULL if the response has no "trials()" term. `model_info()$is_trial` is
+    # not used, because it misses combined terms like "weights(w) + trials(n)"
     trials <- .brms_trials(x)
     # "trials()" is either a constant or a value for each observation
     if (length(trials) == 1L) {

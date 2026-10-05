@@ -48,3 +48,18 @@ test_that("n_obs ignores disaggregate for brms models without trials()", {
   ))
   expect_identical(n_obs(m, disaggregate = TRUE), 56L)
 })
+
+test_that("n_obs disaggregates brms models with weights() and trials()", {
+  cbpp_w <- cbpp
+  cbpp_w$w <- 1
+  m <- suppressMessages(suppressWarnings(
+    brms::brm(
+      incidence | weights(w) + trials(size) ~ period,
+      data = cbpp_w,
+      family = "binomial",
+      empty = TRUE
+    )
+  ))
+  expect_identical(n_obs(m), 56L)
+  expect_identical(n_obs(m, disaggregate = TRUE), 842L)
+})
