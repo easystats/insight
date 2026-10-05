@@ -142,7 +142,10 @@ get_modelmatrix.lme <- function(x, ...) {
       dots$data[[i]] <- factor(dots$data[[i]], levels = levels(factor(model_data[[i]])))
     }
   }
-  do.call(stats::model.matrix, c(list(object = x), dots))
+  # we use the terms, not the model object: their "predvars" keep the basis
+  # of terms like poly() for new data, and model.matrix() methods for lme
+  # objects from other packages (like MuMIn) ignore `data` and `contrasts.arg`
+  do.call(stats::model.matrix, c(list(object = stats::terms(x)), dots))
 }
 
 #' @export

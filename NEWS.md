@@ -34,12 +34,28 @@
   depending on the selection, it returned the posterior draws of all
   parameters, an empty data frame, or an error (#1076).
 
+* If variables used in the model are missing from the data in the
+  environment, but are columns of the model frame, `get_data()` now warns and
+  takes the data from the model frame. This applies, for example, to `lm`,
+  `glm`, `lmer`, `glmmTMB` and `gam` models. Variables are missing, for
+  example, if you overwrite the data object after the model fit. Before this fix,
+  `get_data()` silently dropped these variables. Then `get_predicted()`, and
+  `get_loglikelihood()` for `glm` models, failed with "object not found"
+  errors. Variables used only inside a transformation, like `a` in `log(a)`,
+  are not detected (#1210).
+
 * `get_modelmatrix()` for `lme` and `gls` models now uses the contrasts stored
   in the model instead of treatment contrasts. You set these contrasts with
   `contrasts = list(x = contr.sum)` in `lme()`, or with
   `options(contrasts = ...)` when you fit the model. If you provide `data`, its
   factor and character variables get the levels of the model data. Thus, new
   data with only some of the levels gives the correct columns.
+
+* `get_modelmatrix()` for `lme` and `gls` models with new `data` now keeps the
+  basis of terms like `poly()` from the model data. Thus, the columns match the
+  fitted coefficients. If another package, like *MuMIn*, provides its own
+  `model.matrix()` method for `lme` objects, `get_modelmatrix()` now still uses
+  `data` and the model contrasts.
 
 * `format_table` now correctly formats labels consistently when parameter names
   occurred multiple times.
