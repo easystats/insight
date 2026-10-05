@@ -1,11 +1,8 @@
 skip_if_not_installed("survival")
 
-# specials of coxph() formulas must be found by their name
-Surv <- survival::Surv
-strata <- survival::strata
-frailty <- survival::frailty
-ridge <- survival::ridge
-pspline <- survival::pspline
+# survival is not attached. coxph() adds Surv() and the specials that the
+# formula uses to the formula environment, so only the functions that the
+# tests call by name are needed here.
 coxph <- survival::coxph
 coxph.control <- survival::coxph.control
 

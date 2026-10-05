@@ -56,7 +56,8 @@
 #'   `iter.max` iterations ("Ran out of iterations and did not converge").
 #' - Infinite coefficient: the check fails for a coefficient if the
 #'   log-likelihood converged before the coefficient did ("Loglik converged
-#'   before variable ...; coefficient may be infinite"). This happens, for
+#'   before variable ...; coefficient may be infinite", or "beta may be
+#'   infinite" for counting-process data). This happens, for
 #'   example, if a factor level has no events. As in *survival*, this check
 #'   runs only if the first check passed.
 #'
@@ -67,12 +68,14 @@
 #'
 #' Convergence cannot be assessed, and `FALSE` is returned, for penalized
 #' models (with `frailty()`, `ridge()` or `pspline()` terms), for models with
-#' `ties = "exact"`, for models with `iter.max` of 1 or less, and if the
-#' control arguments of the model call or the score residuals cannot be
-#' computed. For models with right-censored data, the score residuals are
-#' computed from the data of the model call. If these data were removed after
-#' the model was fitted, convergence cannot be assessed. If they were changed,
-#' the result can be wrong. In both cases, refit the model with `model = TRUE`.
+#' `ties = "exact"`, for models with `iter.max` of 1 or less, for models fitted
+#' with `y = FALSE`, and if the control arguments of the model call or the
+#' score residuals cannot be computed. For models with right-censored data,
+#' the score residuals are computed from the data of the model call, unless the
+#' model was fitted with `model = TRUE` or `x = TRUE`. If these data were
+#' removed after the model was fitted, convergence cannot be assessed. If they
+#' were changed, the result can be wrong. In both cases, refit the model with
+#' `model = TRUE`.
 #'
 #' @section Convergence versus Singularity:
 #' Note the different meaning between singularity and convergence: singularity
@@ -218,7 +221,7 @@ is_converged.lavaan <- function(x, tolerance = 0.001, ...) {
 # the checks are those that `survival:::coxph.fit()` (right-censored data) and
 # `survival:::agreg.fit()` (counting-process data) apply after the fit, and
 # that give the warnings "Ran out of iterations and did not converge" and
-# "Loglik converged before variable ...; coefficient may be infinite"
+# "Loglik converged before variable ...; coefficient (or beta) may be infinite"
 #' @export
 is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   check_if_installed("survival")
@@ -236,10 +239,12 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       verbose
     ))
   }
-  # with `ties = "exact"`, survival computes no score residuals
+  # with `ties = "exact"`, survival gives no score residuals for right-censored
+  # data and stores no score vector or convergence flag for counting-process
+  # data, so the checks cannot be recomputed
   if (!isTRUE(x$method %in% c("efron", "breslow"))) {
     return(.is_converged_coxph_not_assessed(
-      "The checks are only available for the Efron and Breslow approximations of ties.",
+      "The checks can only be recomputed for the Efron and Breslow approximations of ties.",
       verbose
     ))
   }
@@ -352,8 +357,9 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 }
 
 
-# one row for each coefficient: `infs` and its bound, as computed in
-# coxph.fit() or agreg.fit()
+# one row for each coefficient: `infs` and its bound, as in coxph.fit() or
+# agreg.fit(). For right-censored data, the score vector is recomputed from
+# the score residuals.
 .coxph_infinite <- function(x, control, counting) {
   coefs <- stats::coef(x)
   if (counting) {

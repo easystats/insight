@@ -77,7 +77,8 @@ with the \code{iter.max}, \code{eps} and \code{toler.inf} values of the model ca
 \code{iter.max} iterations ("Ran out of iterations and did not converge").
 \item Infinite coefficient: the check fails for a coefficient if the
 log-likelihood converged before the coefficient did ("Loglik converged
-before variable ...; coefficient may be infinite"). This happens, for
+before variable ...; coefficient may be infinite", or "beta may be
+infinite" for counting-process data). This happens, for
 example, if a factor level has no events. As in \emph{survival}, this check
 runs only if the first check passed.
 }
@@ -89,12 +90,14 @@ of each check, with one row for each coefficient for the second check. The
 
 Convergence cannot be assessed, and \code{FALSE} is returned, for penalized
 models (with \code{frailty()}, \code{ridge()} or \code{pspline()} terms), for models with
-\code{ties = "exact"}, for models with \code{iter.max} of 1 or less, and if the
-control arguments of the model call or the score residuals cannot be
-computed. For models with right-censored data, the score residuals are
-computed from the data of the model call. If these data were removed after
-the model was fitted, convergence cannot be assessed. If they were changed,
-the result can be wrong. In both cases, refit the model with \code{model = TRUE}.
+\code{ties = "exact"}, for models with \code{iter.max} of 1 or less, for models fitted
+with \code{y = FALSE}, and if the control arguments of the model call or the
+score residuals cannot be computed. For models with right-censored data,
+the score residuals are computed from the data of the model call, unless the
+model was fitted with \code{model = TRUE} or \code{x = TRUE}. If these data were
+removed after the model was fitted, convergence cannot be assessed. If they
+were changed, the result can be wrong. In both cases, refit the model with
+\code{model = TRUE}.
 }
 
 \section{Convergence versus Singularity}{
