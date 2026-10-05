@@ -52,6 +52,7 @@ Other contributors:
   \item Grant McDermott \email{grantmcd@uoregon.edu} (\href{https://orcid.org/0000-0001-7883-8573}{ORCID}) [contributor]
   \item Rémi Thériault \email{remi.theriault@mail.mcgill.ca} (\href{https://orcid.org/0000-0003-4315-6788}{ORCID}) [contributor]
   \item Alex Reinhart \email{areinhar@stat.cmu.edu} (\href{https://orcid.org/0000-0002-6658-514X}{ORCID}) [contributor]
+  \item Jeffrey Girard \email{me@jmgirard.com} (\href{https://orcid.org/0000-0002-7359-3746}{ORCID}) [contributor]
 }
 
 }
