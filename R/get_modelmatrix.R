@@ -120,32 +120,15 @@ get_modelmatrix.ivreg <- get_modelmatrix.iv_robust
 
 #' @export
 get_modelmatrix.lme <- function(x, ...) {
-  # we check the dots for a "data" argument. To make model.matrix work
-  # for certain objects, we need to specify the data-argument explicitly,
-  # however, if the user provides a data-argument, this should be used instead.
-  dots <- list(...)
-  # model.matrix() does not use the contrasts stored in the model object,
-  # so we pass them explicitly, unless the user provides own contrasts
-  if (!"contrasts.arg" %in% names(dots) && !is.null(x$contrasts)) {
-    dots$contrasts.arg <- x$contrasts
-  }
-  model_data <- get_data(x, verbose = FALSE)
-  if (is.null(dots$data)) {
-    dots$data <- model_data
-  } else {
-    # new data may not contain all factor levels, which the contrasts
-    # require, so we use the factor levels from the model data. Character
-    # vectors are converted to factors by model.matrix(), so they need
-    # the levels from the model data, too.
-    is_categorical <- function(i) is.factor(i) || is.character(i)
-    for (i in intersect(names(Filter(is_categorical, model_data)), colnames(dots$data))) {
-      dots$data[[i]] <- factor(dots$data[[i]], levels = levels(factor(model_data[[i]])))
-    }
-  }
   # we use the terms, not the model object: their "predvars" keep the basis
   # of terms like poly() for new data, and model.matrix() methods for lme
   # objects from other packages (like MuMIn) ignore `data` and `contrasts.arg`
-  do.call(stats::model.matrix, c(list(object = stats::terms(x)), dots))
+  .modelmatrix_model_contrasts(
+    object = stats::terms(x),
+    model_data = get_data(x, verbose = FALSE),
+    model_contrasts = x$contrasts,
+    ...
+  )
 }
 
 #' @export
@@ -153,10 +136,20 @@ get_modelmatrix.gls <- get_modelmatrix.lme
 
 #' @export
 get_modelmatrix.clmm <- function(x, ...) {
-  # former implementation in "get_variance()"
-  # f <- find_formula(x)$conditional
-  # stats::model.matrix(object = f, data = x$model, ...)
-  .data_in_dots(..., object = x, default_data = x$model)
+  # model.matrix() for clmm objects ignores the `data` and `contrasts.arg`
+  # arguments, so we use the terms of the fixed effects. The response is
+  # removed, because new data may not contain it. Models fitted with
+  # `model = FALSE` store no model frame, so we use get_data() instead.
+  model_data <- x$model
+  if (is.null(model_data)) {
+    model_data <- get_data(x, verbose = FALSE)
+  }
+  .modelmatrix_model_contrasts(
+    object = stats::delete.response(stats::terms(x)),
+    model_data = model_data,
+    model_contrasts = x$contrasts,
+    ...
+  )
 }
 
 #' @export
@@ -221,10 +214,20 @@ get_modelmatrix.brmsfit <- function(x, ...) {
         matrix(nrow = nrow(model_data), ncol = 0)
       }
     } else {
-      .data_in_dots(
-        ...,
+      # brms takes the contrasts from the factors in the data. Re-leveling
+      # new data drops this attribute, so we pass the contrasts explicitly.
+      # Only predictors are used, because model.matrix() warns about
+      # contrasts for variables that are not in the formula.
+      model_contrasts <- compact_list(lapply(
+        Filter(is.factor, model_data[intersect(predictors, colnames(model_data))]),
+        attr,
+        which = "contrasts"
+      ))
+      .modelmatrix_model_contrasts(
         object = stats::reformulate(predictors, intercept = intercept),
-        default_data = model_data
+        model_data = model_data,
+        model_contrasts = model_contrasts,
+        ...
       )
     }
   }
@@ -287,15 +290,29 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
 
 # helper ----------------
 
-.data_in_dots <- function(..., object = NULL, default_data = NULL) {
-  dot.arguments <- lapply(match.call(expand.dots = FALSE)[["..."]], function(x) x)
-  data_arg <- if ("data" %in% names(dot.arguments)) {
-    eval(dot.arguments[["data"]])
-  } else {
-    default_data
+# `object` is passed to model.matrix(), `model_data` is the data used when the
+# user provides no `data` argument, and `model_contrasts` are the contrasts
+# the model was fitted with.
+.modelmatrix_model_contrasts <- function(object, model_data, model_contrasts = NULL, ...) {
+  dots <- list(...)
+  # model.matrix() does not use the contrasts stored in the model object,
+  # so we pass them explicitly, unless the user provides own contrasts
+  if (!"contrasts.arg" %in% names(dots) && length(model_contrasts)) {
+    dots$contrasts.arg <- model_contrasts
   }
-  remaining_dots <- setdiff(names(dot.arguments), "data")
-  do.call(stats::model.matrix, c(list(object = object, data = data_arg), remaining_dots))
+  if (is.null(dots$data)) {
+    dots$data <- model_data
+  } else {
+    # new data may not contain all factor levels, which the contrasts
+    # require, so we use the factor levels from the model data. Character
+    # vectors are converted to factors by model.matrix(), so they need
+    # the levels from the model data, too.
+    is_categorical <- function(i) is.factor(i) || is.character(i)
+    for (i in intersect(names(Filter(is_categorical, model_data)), colnames(dots$data))) {
+      dots$data[[i]] <- factor(dots$data[[i]], levels = levels(factor(model_data[[i]])))
+    }
+  }
+  do.call(stats::model.matrix, c(list(object = object), dots))
 }
 
 
