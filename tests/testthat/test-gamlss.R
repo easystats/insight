@@ -241,3 +241,26 @@ test_that("get_residuals, type = 'response'", {
   )
   expect_silent(get_residuals(m_gamlss1, type = "response", verbose = FALSE))
 })
+
+test_that("get_residuals, type = 'response', family defined inside a function", {
+  # the family function `myZIP` exists only in the environment of `fit_local()`
+  fit_local <- function() {
+    myZIP <- function() {
+      fam <- gamlss.dist::ZIP()
+      fam$family[1] <- "myZIP"
+      fam
+    }
+    set.seed(123)
+    d <- data.frame(x = rnorm(200))
+    d$y <- ifelse(runif(200) < 0.3, 0, rpois(200, exp(1 + 0.3 * d$x)))
+    void <- capture.output({
+      m <- gamlss::gamlss(y ~ x, family = myZIP(), data = d)
+    })
+    m
+  }
+  m <- fit_local()
+  expect_identical(m$family[1], "myZIP")
+  expected <- (1 - stats::fitted(m, "sigma")) * stats::fitted(m, "mu")
+  expect_silent(out <- get_residuals(m, type = "response"))
+  expect_equal(unname(out), unname(m$y - expected), tolerance = 1e-4)
+})
