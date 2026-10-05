@@ -15,6 +15,12 @@
 
 ## Bug fixes
 
+* `get_variance()` and `get_variance_distribution()` returned a wrong
+  distribution-specific variance for beta-binomial models with a probit or
+  cloglog link. The cause was the back-transformation of the null-model mean,
+  which always used the inverse logit. The mean now uses the inverse link of
+  the model.
+
 * `get_residuals()` for *gamlss* models now returns response residuals
   (observed minus expected values) for `type = "response"`. Before, it
   returned the normalized quantile residuals without a warning. The

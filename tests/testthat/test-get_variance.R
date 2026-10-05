@@ -391,3 +391,60 @@ test_that("fixed effects variance for rank-deficient models, #765", {
   out <- get_variance_fixed(mod_TMB)
   expect_equal(out, 627.04511567, tolerance = 1e-4, ignore_attr = TRUE)
 })
+
+test_that("distribution variance for betabinomial uses the model's link", {
+  skip_if_not_installed("glmmTMB")
+  set.seed(123)
+  d <- data.frame(
+    g = factor(rep(1:15, each = 20)),
+    x = rnorm(300),
+    n = 20
+  )
+  eta <- -1 + 0.4 * d$x + rnorm(15, 0, 0.6)[d$g]
+  p <- 1 - exp(-exp(eta))
+  d$y <- rbinom(300, d$n, rbeta(300, p * 10, (1 - p) * 10))
+
+  # expected value, with the inverse link stated independently of the model
+  expected_variance <- function(m, inverse_link) {
+    b0 <- unname(glmmTMB::fixef(null_model(m))$cond)
+    mu <- inverse_link(b0)
+    phi <- stats::sigma(m)
+    log1p(mu * (1 - mu) / (1 + phi) / mu^2)
+  }
+
+  m_logit <- glmmTMB::glmmTMB(
+    cbind(y, n - y) ~ x + (1 | g),
+    data = d,
+    family = glmmTMB::betabinomial(link = "logit")
+  )
+  expect_equal(
+    get_variance_distribution(m_logit, verbose = FALSE),
+    expected_variance(m_logit, function(eta) 1 / (1 + exp(-eta))),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  m_cloglog <- glmmTMB::glmmTMB(
+    cbind(y, n - y) ~ x + (1 | g),
+    data = d,
+    family = glmmTMB::betabinomial(link = "cloglog")
+  )
+  expect_equal(
+    get_variance_distribution(m_cloglog, verbose = FALSE),
+    expected_variance(m_cloglog, function(eta) 1 - exp(-exp(eta))),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  m_probit <- glmmTMB::glmmTMB(
+    cbind(y, n - y) ~ x + (1 | g),
+    data = d,
+    family = glmmTMB::betabinomial(link = "probit")
+  )
+  expect_equal(
+    get_variance_distribution(m_probit, verbose = FALSE),
+    expected_variance(m_probit, stats::pnorm),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})
