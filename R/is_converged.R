@@ -8,7 +8,8 @@
 #' @param x A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan`,
 #' `_glm` or `coxph`.
 #' @param tolerance Indicates up to which value the convergence result is
-#'   accepted. The smaller `tolerance` is, the stricter the test will be.
+#'   accepted. The smaller `tolerance` is, the stricter the test will be. Not
+#'   used for `coxph` models.
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
 #'
@@ -18,6 +19,9 @@
 #'   the optimizer's convergence code. For non-singular models where derivatives
 #'   are unavailable, `FALSE` is returned and a message is printed to indicate
 #'   that convergence cannot be assessed through the usual gradient-based checks.
+#'   For `coxph` models, the attribute `diagnostics` is a data frame with the
+#'   result of each check. If convergence cannot be assessed, `FALSE` is returned
+#'   without this attribute, and a message gives the reason.
 #'
 #' @section Convergence and log-likelihood:
 #' Convergence problems typically arise when the model hasn't converged to a
@@ -68,9 +72,11 @@
 #'
 #' Convergence cannot be assessed, and `FALSE` is returned, for penalized
 #' models (with `frailty()`, `ridge()` or `pspline()` terms), for models with
-#' `ties = "exact"`, for models with `iter.max` of 1 or less, for models fitted
-#' with `y = FALSE`, and if the control arguments of the model call or the
-#' score residuals cannot be computed. For models with right-censored data,
+#' `ties = "exact"`, for models with `tt()` terms, for models with `iter.max`
+#' of 1 or less, for models fitted with `y = FALSE`, for model objects without
+#' a call, and if the control arguments of the model call or the score
+#' residuals cannot be computed. Objects of other classes that inherit from
+#' `coxph`, for example from `survey::svycoxph()`, are not supported. For models with right-censored data,
 #' the score residuals are computed from the data of the model call, unless the
 #' model was fitted with `model = TRUE` or `x = TRUE`. If these data were
 #' removed after the model was fitted, convergence cannot be assessed. If they
@@ -222,31 +228,23 @@ is_converged.lavaan <- function(x, tolerance = 0.001, ...) {
 # `survival:::agreg.fit()` (counting-process data) apply after the fit, and
 # that give the warnings "Ran out of iterations and did not converge" and
 # "Loglik converged before variable ...; coefficient (or beta) may be infinite"
+#' @rdname is_converged
 #' @export
 is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
+  # other packages (for example survey, rms) build objects that inherit from
+  # "coxph" but have other calls and control values
+  if (!class(x)[1] %in% c("coxph", "coxphms", "coxph.penal", "coxph.null")) {
+    return(NextMethod())
+  }
   check_if_installed("survival")
 
   # a null model has no coefficients that could diverge
   if (inherits(x, "coxph.null")) {
     return(structure(TRUE, diagnostics = .coxph_diagnostics()))
   }
-  if (inherits(x, "coxph.penal")) {
-    return(.is_converged_coxph_not_assessed(
-      paste(
-        "The checks do not apply to penalized models, for example models",
-        "with `frailty()`, `ridge()` or `pspline()` terms."
-      ),
-      verbose
-    ))
-  }
-  # with `ties = "exact"`, survival gives no score residuals for right-censored
-  # data and stores no score vector or convergence flag for counting-process
-  # data, so the checks cannot be recomputed
-  if (!isTRUE(x$method %in% c("efron", "breslow"))) {
-    return(.is_converged_coxph_not_assessed(
-      "The checks can only be recomputed for the Efron and Breslow approximations of ties.",
-      verbose
-    ))
+  reason <- .coxph_not_assessed_reason(x)
+  if (!is.null(reason)) {
+    return(.is_converged_coxph_not_assessed(reason, verbose))
   }
   control <- .coxph_control(x)
   if (is.null(control)) {
@@ -265,25 +263,25 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
   # coxph() sends right-censored responses to coxph.fit() and all other
   # responses to agreg.fit()
-  response_type <- attr(x$y, "type")
-  if (is.null(response_type)) {
-    return(.is_converged_coxph_not_assessed(
-      "The model has no response. Refit the model with `y = TRUE`.",
-      verbose
-    ))
-  }
-  counting <- !grepl("right", response_type, fixed = TRUE)
+  counting <- !grepl("right", attr(x$y, "type"), fixed = TRUE)
 
   # check (a): coxph.fit() returns one iteration more than `iter.max` if it
   # ran out of iterations, agreg.fit() stores a convergence flag
   if (counting) {
-    iterations_passed <- isTRUE(x$info[["convergence"]] == 0)
+    convergence <- unname(x$info["convergence"])
+    if (length(convergence) != 1 || is.na(convergence)) {
+      return(.is_converged_coxph_not_assessed(
+        "The model object has no convergence flag.",
+        verbose
+      ))
+    }
+    iterations_passed <- convergence == 0
   } else {
     iterations_passed <- x$iter <= control$iter.max
   }
   diagnostics <- .coxph_diagnostics(
     Diagnostic = "Iterations",
-    Term = NA_character_,
+    Parameter = NA_character_,
     Value = x$iter,
     Threshold = control$iter.max,
     Passed = iterations_passed
@@ -301,7 +299,9 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
         conditionMessage(infinite),
         ")."
       )
-      if (is.null(x$model) && grepl("not found", conditionMessage(infinite), fixed = TRUE)) {
+      if (
+        is.null(x$model) && grepl("not found", conditionMessage(infinite), fixed = TRUE)
+      ) {
         reason <- paste(
           reason,
           "If the data of the model are no longer available, refit the model with `model = TRUE`."
@@ -315,39 +315,86 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   converged <- all(diagnostics$Passed)
 
   if (verbose && !converged) {
-    msg <- NULL
-    if (!iterations_passed) {
-      msg <- sprintf(
-        "Iterations: the model did not converge within `iter.max` = %i iterations",
-        as.integer(control$iter.max)
-      )
-    }
-    flagged <- diagnostics$Term[diagnostics$Diagnostic == "Infinite coefficient" & !diagnostics$Passed]
-    if (length(flagged)) {
-      msg <- c(msg, sprintf(
-        "Infinite coefficient: the log-likelihood converged before %s, so the %s may be infinite",
-        toString(flagged),
-        ngettext(length(flagged), "coefficient", "coefficients")
-      ))
-    }
-    format_alert(
-      "The model has not converged. These checks failed:",
-      paste0("- ", msg)
-    )
+    .coxph_alert(diagnostics, control$iter.max)
   }
 
   structure(converged, diagnostics = diagnostics)
 }
 
 
-.coxph_diagnostics <- function(Diagnostic = character(0),
-                               Term = character(0),
-                               Value = numeric(0),
-                               Threshold = numeric(0),
-                               Passed = logical(0)) {
+# one alert that names each failed check
+.coxph_alert <- function(diagnostics, iter_max) {
+  msg <- NULL
+  if (!diagnostics$Passed[1]) {
+    msg <- sprintf(
+      "Iterations: the model did not converge within `iter.max` = %i iterations",
+      as.integer(iter_max)
+    )
+  }
+  flagged <- diagnostics$Parameter[
+    diagnostics$Diagnostic == "Infinite coefficient" & !diagnostics$Passed
+  ]
+  if (length(flagged)) {
+    msg <- c(
+      msg,
+      sprintf(
+        "Infinite coefficient: the log-likelihood converged before %s, so the %s may be infinite",
+        toString(flagged),
+        ngettext(length(flagged), "coefficient", "coefficients")
+      )
+    )
+  }
+  format_alert(
+    "The model has not converged. These checks failed:",
+    paste0("- ", msg)
+  )
+}
+
+
+# the reason why the checks cannot be recomputed, or NULL
+.coxph_not_assessed_reason <- function(x) {
+  if (is.null(x$iter) || is.null(x$coefficients)) {
+    return("The model object has no iterations or coefficients.")
+  }
+  if (inherits(x, "coxph.penal")) {
+    return(paste(
+      "The checks do not apply to penalized models, for example models",
+      "with `frailty()`, `ridge()` or `pspline()` terms."
+    ))
+  }
+  # with `ties = "exact"`, survival gives no score residuals for right-censored
+  # data and stores no score vector or convergence flag for counting-process
+  # data, so the checks cannot be recomputed
+  if (!isTRUE(x$method %in% c("efron", "breslow"))) {
+    return(paste(
+      "The checks can only be recomputed for the Efron and Breslow",
+      "approximations of ties."
+    ))
+  }
+  # survival cannot compute the score residuals of models with `tt()` terms
+  if (!is.null(attr(x$terms, "specials")$tt)) {
+    return("The checks cannot be recomputed for models with `tt()` terms.")
+  }
+  if (is.null(x$call)) {
+    return("The model has no call, so the control arguments of the fit are unknown.")
+  }
+  if (is.null(attr(x$y, "type"))) {
+    return("The model has no response. Refit the model with `y = TRUE`.")
+  }
+  NULL
+}
+
+
+.coxph_diagnostics <- function(
+  Diagnostic = character(0),
+  Parameter = character(0),
+  Value = numeric(0),
+  Threshold = numeric(0),
+  Passed = logical(0)
+) {
   data.frame(
     Diagnostic = Diagnostic,
-    Term = Term,
+    Parameter = Parameter,
     Value = as.numeric(Value),
     Threshold = as.numeric(Threshold),
     Passed = Passed,
@@ -365,10 +412,13 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   if (counting) {
     u <- x$first
   } else {
-    u <- colSums(
-      as.matrix(stats::residuals(x, type = "score", weighted = TRUE)),
-      na.rm = TRUE
-    )
+    score <- as.matrix(stats::residuals(x, type = "score", weighted = TRUE))
+    # with `na.action = na.exclude`, the residuals have NA rows for the
+    # observations that the fit did not use
+    if (inherits(x$na.action, "exclude")) {
+      score <- score[-x$na.action, , drop = FALSE]
+    }
+    u <- colSums(score)
   }
   # the robust variance replaces `var` and the model-based variance is kept as
   # `naive.var`; the fitters use the model-based variance
@@ -387,7 +437,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   flagged[is.na(flagged)] <- FALSE
   .coxph_diagnostics(
     Diagnostic = rep("Infinite coefficient", length(coefs)),
-    Term = names(coefs),
+    Parameter = names(coefs),
     Value = infs,
     Threshold = threshold,
     Passed = !flagged
@@ -402,7 +452,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     {
       env <- environment(stats::formula(x))
       if (is.null(env)) {
-        env <- parent.frame()
+        stop("The model formula has no environment.", call. = FALSE)
       }
       call_args <- as.list(x$call)[-1]
       if (is.null(call_args$control)) {

@@ -3,18 +3,22 @@
 \name{is_converged}
 \alias{is_converged}
 \alias{is_converged.merMod}
+\alias{is_converged.coxph}
 \title{Convergence test for mixed effects models}
 \usage{
 is_converged(x, tolerance = 0.001, ...)
 
 \method{is_converged}{merMod}(x, tolerance = 0.001, verbose = TRUE, ...)
+
+\method{is_converged}{coxph}(x, tolerance = 0.001, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm}, \code{lavaan},
 \verb{_glm} or \code{coxph}.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
-accepted. The smaller \code{tolerance} is, the stricter the test will be.}
+accepted. The smaller \code{tolerance} is, the stricter the test will be. Not
+used for \code{coxph} models.}
 
 \item{...}{Currently not used.}
 
@@ -27,6 +31,9 @@ For \code{merMod} models, if the model is singular, convergence is determined by
 the optimizer's convergence code. For non-singular models where derivatives
 are unavailable, \code{FALSE} is returned and a message is printed to indicate
 that convergence cannot be assessed through the usual gradient-based checks.
+For \code{coxph} models, the attribute \code{diagnostics} is a data frame with the
+result of each check. If convergence cannot be assessed, \code{FALSE} is returned
+without this attribute, and a message gives the reason.
 }
 \description{
 \code{is_converged()} provides an alternative convergence
@@ -90,9 +97,11 @@ of each check, with one row for each coefficient for the second check. The
 
 Convergence cannot be assessed, and \code{FALSE} is returned, for penalized
 models (with \code{frailty()}, \code{ridge()} or \code{pspline()} terms), for models with
-\code{ties = "exact"}, for models with \code{iter.max} of 1 or less, for models fitted
-with \code{y = FALSE}, and if the control arguments of the model call or the
-score residuals cannot be computed. For models with right-censored data,
+\code{ties = "exact"}, for models with \code{tt()} terms, for models with \code{iter.max}
+of 1 or less, for models fitted with \code{y = FALSE}, for model objects without
+a call, and if the control arguments of the model call or the score
+residuals cannot be computed. Objects of other classes that inherit from
+\code{coxph}, for example from \code{survey::svycoxph()}, are not supported. For models with right-censored data,
 the score residuals are computed from the data of the model call, unless the
 model was fitted with \code{model = TRUE} or \code{x = TRUE}. If these data were
 removed after the model was fitted, convergence cannot be assessed. If they
