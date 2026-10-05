@@ -255,7 +255,7 @@ find_predictors.workflow <- function(
   if (verbose) {
     format_warning(sprintf(
       "Unknown preprocessor type: %s",
-      paste(class(preprocessor), collapse = ", ")
+      toString(class(preprocessor))
     ))
   }
   NULL
