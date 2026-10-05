@@ -450,7 +450,7 @@ test_that("is_converged.coxph, convergence cannot be assessed", {
 test_that("is_converged.coxph, other classes that inherit from coxph", {
   # an object of another class that inherits from "coxph"
   cvx_clogit <- survival::clogit(
-    case ~ spontaneous + strata(stratum),
+    case ~ spontaneous + survival::strata(stratum),
     data = datasets::infert,
     method = "efron"
   )
