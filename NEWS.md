@@ -15,6 +15,9 @@
 
 ## Bug fixes
 
+* If *performance* is not installed, `get_variance()` now gives an error that
+  asks you to install it. Before, it returned `NULL` without a message (#928).
+
 * `n_obs(disaggregate = TRUE)` now returns the total number of trials for
   *brms* models with a `trials()` term in the response, for example
   `y | trials(size) ~ x`. Before, it ignored `disaggregate` and returned the
