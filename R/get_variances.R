@@ -226,8 +226,11 @@ get_variance.merMod <- function(
     )
   )
   # needed for singularity check. Called outside of ".safe()", so the
-  # error message reaches the user instead of a silent NULL (#928)
-  check_if_installed("performance", reason = "to check for singularity")
+  # error message reaches the user instead of a silent NULL (#928). Not
+  # needed for non-mixed models, which ".compute_variances()" rejects.
+  if (is_mixed_model(x)) {
+    check_if_installed("performance", reason = "to check for singularity")
+  }
   .safe(.compute_variances(
     model = x,
     component = component,
@@ -295,7 +298,9 @@ get_variance.glmmTMB <- function(
     )
   )
   # needed for singularity check, see get_variance.merMod()
-  check_if_installed("performance", reason = "to check for singularity")
+  if (is_mixed_model(x)) {
+    check_if_installed("performance", reason = "to check for singularity")
+  }
   .safe(.compute_variances(
     model = x,
     component = component,
@@ -331,7 +336,9 @@ get_variance.mixed <- function(
     )
   )
   # needed for singularity check, see get_variance.merMod()
-  check_if_installed("performance", reason = "to check for singularity")
+  if (is_mixed_model(x$full_model)) {
+    check_if_installed("performance", reason = "to check for singularity")
+  }
   .safe(.compute_variances(
     model = x$full_model,
     component = component,

@@ -462,4 +462,11 @@ test_that("get_variance errors when performance is not installed, #928", {
   skip_if_not_installed("glmmTMB")
   m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = study_data)
   expect_error(get_variance(m), "to check for singularity", fixed = TRUE)
+  # non-mixed models keep their warning and do not need performance
+  m <- glmmTMB::glmmTMB(Reaction ~ Days, data = study_data)
+  expect_warning(
+    expect_null(get_variance(m)),
+    "This function only works for mixed models",
+    fixed = TRUE
+  )
 })
