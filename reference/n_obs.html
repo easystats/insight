@@ -9,7 +9,7 @@ to fit the model, as numeric value."><meta property="og:image" content="https://
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,7 +96,9 @@ returns the number of data rows by default. If <code>disaggregate = TRUE</code>,
 the total number of trials is returned instead (determined by summing the
 results of <code><a href="https://rdrr.io/r/stats/weights.html" class="external-link">weights()</a></code> for aggregated data, which will be either the
 weights input for proportion success response or the row sums of the
-response matrix if matrix response, see 'Examples').</p></dd>
+response matrix if matrix response, see 'Examples'). For <em>brms</em> models
+with a <code>trials()</code> term in the response (e.g., <code>y | trials(size) ~ x</code>),
+the values of <code>trials()</code> are summed.</p></dd>
 
 
 <dt id="arg-weighted">weighted<a class="anchor" aria-label="anchor" href="#arg-weighted"></a></dt>

@@ -39,7 +39,9 @@ n_obs(x, select = NULL, ...)
   [`weights()`](https://rdrr.io/r/stats/weights.html) for aggregated
   data, which will be either the weights input for proportion success
   response or the row sums of the response matrix if matrix response,
-  see 'Examples').
+  see 'Examples'). For *brms* models with a `trials()` term in the
+  response (e.g., `y | trials(size) ~ x`), the values of `trials()` are
+  summed.
 
 - weighted:
 
