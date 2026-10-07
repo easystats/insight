@@ -252,7 +252,12 @@ export_table <- function(
   # "gt(final, groupname_col = group_by_columns)".
   if (identical(format, "html") && .is_html_table_list(x)) {
     # captions of each table become row groups, footers become source notes
-    html_list <- .bind_html_table_list(x, caption = caption, title = title, footer = footer)
+    html_list <- .bind_html_table_list(
+      x,
+      caption = caption,
+      title = title,
+      footer = footer
+    )
     x <- html_list$x
     caption <- html_list$caption
     title <- NULL

@@ -1252,7 +1252,10 @@ test_that("export_table, html footers for lists of tables", {
 
   # a colored multi-line footer list gives one note, joined like text output
   d_colored <- d_one
-  attr(d_colored, "table_footer") <- list(c("\nA yellow line", "yellow"), c("\nA red line", "red"))
+  attr(d_colored, "table_footer") <- list(
+    c("\nA yellow line", "yellow"),
+    c("\nA red line", "red")
+  )
   out <- export_table(list(d_colored, d_two), format = "html")
   expect_identical(gt_parts(out)$notes, "A yellow line<br>A red line")
 })
