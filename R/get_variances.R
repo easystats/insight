@@ -225,6 +225,12 @@ get_variance.merMod <- function(
       "intercept", "slope", "rho01", "rho00"
     )
   )
+  # needed for singularity check. Called outside of ".safe()", so the
+  # error message reaches the user instead of a silent NULL (#928). Not
+  # needed for non-mixed models, which ".compute_variances()" rejects.
+  if (is_mixed_model(x)) {
+    check_if_installed("performance", reason = "to check for singularity")
+  }
   .safe(.compute_variances(
     model = x,
     component = component,
@@ -291,6 +297,10 @@ get_variance.glmmTMB <- function(
       "intercept", "slope", "rho01", "rho00"
     )
   )
+  # needed for singularity check, see get_variance.merMod()
+  if (is_mixed_model(x)) {
+    check_if_installed("performance", reason = "to check for singularity")
+  }
   .safe(.compute_variances(
     model = x,
     component = component,
@@ -325,6 +335,10 @@ get_variance.mixed <- function(
       "intercept", "slope", "rho01", "rho00"
     )
   )
+  # needed for singularity check, see get_variance.merMod()
+  if (is_mixed_model(x$full_model)) {
+    check_if_installed("performance", reason = "to check for singularity")
+  }
   .safe(.compute_variances(
     model = x$full_model,
     component = component,
