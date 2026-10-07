@@ -448,3 +448,25 @@ test_that("distribution variance for betabinomial uses the model's link", {
     ignore_attr = TRUE
   )
 })
+
+test_that("get_variance errors when performance is not installed, #928", {
+  real_check <- check_if_installed
+  # pretend that "performance" is not installed
+  local_mocked_bindings(
+    check_if_installed = function(package, ...) {
+      package[package == "performance"] <- "notAnInstalledPackage928"
+      real_check(package, ...)
+    }
+  )
+  expect_error(get_variance(fm4), "to check for singularity", fixed = TRUE)
+  skip_if_not_installed("glmmTMB")
+  m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = study_data)
+  expect_error(get_variance(m), "to check for singularity", fixed = TRUE)
+  # non-mixed models keep their warning and do not need performance
+  m <- glmmTMB::glmmTMB(Reaction ~ Days, data = study_data)
+  expect_warning(
+    expect_null(get_variance(m)),
+    "This function only works for mixed models",
+    fixed = TRUE
+  )
+})

@@ -28,7 +28,9 @@ returns the number of data rows by default. If \code{disaggregate = TRUE},
 the total number of trials is returned instead (determined by summing the
 results of \code{weights()} for aggregated data, which will be either the
 weights input for proportion success response or the row sums of the
-response matrix if matrix response, see 'Examples').}
+response matrix if matrix response, see 'Examples'). For \emph{brms} models
+with a \code{trials()} term in the response (e.g., \code{y | trials(size) ~ x}),
+the values of \code{trials()} are summed.}
 
 \item{weighted}{For survey designs, returns the weighted sample size.}
 
