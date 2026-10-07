@@ -13,7 +13,19 @@
   distribution-specific residual variance of the latent scale, as for
   `ordinal::clmm()`.
 
+## Changes
+
+* `export_table(format = "html")` passes arguments of `gt::gt()` from `...`
+  to `gt::gt()`, for example `id` or `rowname_col` (#631).
+
 ## Bug fixes
+
+* `export_table(format = "html")` for a list of data frames now shows the
+  caption of each data frame as the label of its row group, and the footer of
+  each data frame as a source note. Before, a list `footer` or a mix of
+  captioned and uncaptioned tables gave an error. Footers stored as attributes
+  were dropped, and a list `caption` became one title. A caption that all
+  tables share is now the title (#631).
 
 * If *performance* is not installed, `get_variance()` now gives an error that
   asks you to install it. Before, it returned `NULL` without a message (#928).
