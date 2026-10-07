@@ -206,10 +206,10 @@ is_converged.glmmTMB <- function(x, tolerance = 0.001, ...) {
 is_converged.glm <- function(x, tolerance = 0.001, ...) {
   if (!is.null(x$converged)) {
     isTRUE(x$converged)
-  } else if (!is.null(x$fit$converged)) {
-    isTRUE(x$fit$converged)
-  } else {
+  } else if (is.null(x$fit$converged)) {
     NULL
+  } else {
+    isTRUE(x$fit$converged)
   }
 }
 

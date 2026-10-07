@@ -67,7 +67,7 @@ cvx_mgus2$event <- with(
   expect_identical(d$Diagnostic[1], "Iterations")
   expect_identical(d$Passed[1], !ran_out)
   if (ran_out) {
-    expect_identical(nrow(d), 1L)
+    expect_shape(d, nrow = 1L)
     expect_false(result)
   } else {
     warned <- .cvx_warned_terms(f)
@@ -246,7 +246,7 @@ test_that("is_converged.coxph, null model", {
   result <- is_converged(cvx_fits$null$fit)
   expect_true(result)
   diagnostics <- attr(result, "diagnostics")
-  expect_identical(nrow(diagnostics), 0L)
+  expect_shape(diagnostics, nrow = 0L)
   expect_named(diagnostics, c("Diagnostic", "Parameter", "Value", "Threshold", "Passed"))
 })
 
