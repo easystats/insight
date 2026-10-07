@@ -1145,3 +1145,55 @@ test_that("export_table with big_mark", {
   expect_true(any(grepl("1234.56", out, fixed = TRUE)))
   expect_true(any(grepl("9.88e+06", out, fixed = TRUE)))
 })
+
+# returns the <table> element of a gt table as lines, with the random table
+# id replaced, so that snapshots are stable
+gt_table_lines <- function(x) {
+  out <- as.character(gt::as_raw_html(x, inline_css = FALSE))
+  table_id <- regmatches(out, regexpr("(?<=id=\")[a-z]+(?=\")", out, perl = TRUE))
+  out <- gsub(table_id, "ID", out, fixed = TRUE)
+  out <- regmatches(out, regexpr("<table[\\s\\S]*</table>", out, perl = TRUE))
+  out <- trimws(strsplit(out, "\n", fixed = TRUE)[[1]])
+  out[nzchar(out)]
+}
+
+test_that("export_table, html output for lists with group columns", {
+  skip_if_not_installed("gt")
+  # tables that already have an "Effects" column
+  d_fixed <- data.frame(
+    Parameter = c("(Intercept)", "x"),
+    Coefficient = c(1.5, 2),
+    Effects = "fixed"
+  )
+  attr(d_fixed, "table_caption") <- "Fixed Effects"
+  d_random <- data.frame(Parameter = "SD", Coefficient = 0.3, Effects = "random")
+  attr(d_random, "table_caption") <- "Random Effects"
+  expect_snapshot(gt_table_lines(
+    export_table(list(d_fixed, d_random), format = "html")
+  ))
+  # tables that already have a "Component" column
+  d_cond <- data.frame(Parameter = "x", Coefficient = 2, Component = "conditional")
+  attr(d_cond, "table_caption") <- "Conditional"
+  d_zi <- data.frame(Parameter = "x", Coefficient = 0.1, Component = "zero_inflated")
+  attr(d_zi, "table_caption") <- "Zero-Inflated"
+  expect_snapshot(gt_table_lines(
+    export_table(list(d_cond, d_zi), format = "html")
+  ))
+})
+
+test_that("export_table, html output for a colored footer with new lines", {
+  skip_if_not_installed("gt")
+  d_footer <- data.frame(x = 1:2)
+  attr(d_footer, "table_footer") <- c("\nF\n", "yellow")
+  expect_snapshot(gt_table_lines(export_table(d_footer, format = "html")))
+})
+
+test_that("export_table, tinytable output for lists", {
+  skip_if_not_installed("tinytable")
+  d_one <- data.frame(x = 1:2)
+  attr(d_one, "table_caption") <- "Table One"
+  attr(d_one, "table_footer") <- "Footer One"
+  d_two <- data.frame(x = 3:4)
+  attr(d_two, "table_caption") <- "Table Two"
+  expect_snapshot(export_table(list(d_one, d_two), format = "tt", table_width = Inf))
+})
