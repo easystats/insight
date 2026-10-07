@@ -31,7 +31,7 @@
 #'   each table. For `format = "html"`, a list of data frames is shown as one
 #'   table, and the caption of each data frame is the label of its row group,
 #'   or the title if all data frames have the same caption. This does not
-#'   apply if the data frames have a `Component`, `Effects`, `Group` or
+#'   apply if any data frame has a `Component`, `Effects`, `Group` or
 #'   `Response` column.
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
@@ -41,8 +41,8 @@
 #'   to force that no footer is printed, even if present as attribute, use `""`,
 #'   which will never print footers. For `format = "html"` and a list of data
 #'   frames, the footer of each data frame is a source note of the table,
-#'   followed by `footer` if it is a string. This does not apply if the data
-#'   frames have a `Component`, `Effects`, `Group` or `Response` column.
+#'   followed by `footer` if it is a string. This does not apply if any data
+#'   frame has a `Component`, `Effects`, `Group` or `Response` column.
 #' @param align Column alignment. For markdown-formatted tables, the default
 #'   `align = NULL` will right-align numeric columns, while all other columns
 #'   will be left-aligned. If `format = "html"`, the default is left-align first

@@ -25,9 +25,9 @@
   each data frame as a source note. Before, a list `footer` or a mix of
   captioned and uncaptioned tables gave an error. Of the footers stored as
   attributes, only the first one was kept, and a list `caption` became one
-  title. Lists of data frames with a `Component`, `Effects`, `Group` or
-  `Response` column keep the old output, but a list `footer` no longer gives
-  an error for them (#631).
+  title. If any data frame in the list has a `Component`, `Effects`, `Group`
+  or `Response` column, the old output stays, but a list `footer` no longer
+  gives an error (#631).
 
 * If *performance* is not installed, `get_variance()` now gives an error that
   asks you to install it. Before, it returned `NULL` without a message (#928).
