@@ -28,14 +28,17 @@
 #'   `table_subtitle`). If you want to force that no title is printed, even if
 #'   present as attribute, use `""`, which will never print titles. If `x` is a
 #'   list of data frames, `caption` may be a list of table captions, one for
-#'   each table.
+#'   each table. For `format = "html"`, a list of data frames is shown as one
+#'   table, and the caption of each data frame is the label of its row group.
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
 #'   new text line under the table. If `x` is a list of data frames, `footer`
 #'   may be a list of table captions, one for each table. If `NULL`, no footer
 #'   is printed, unless it is stored as attributes (`table_footer`). If you want
 #'   to force that no footer is printed, even if present as attribute, use `""`,
-#'   which will never print footers.
+#'   which will never print footers. For `format = "html"` and a list of data
+#'   frames, the footer of each data frame is a source note of the table,
+#'   followed by `footer` if it is a string.
 #' @param align Column alignment. For markdown-formatted tables, the default
 #'   `align = NULL` will right-align numeric columns, while all other columns
 #'   will be left-aligned. If `format = "html"`, the default is left-align first
@@ -94,7 +97,9 @@
 #'   names, which will be inserted as "column header row". Currently only
 #'   works for `format = "tt"` or `format = "html"`.
 #' @param ... Arguments passed to [`tinytable::tt()`] and [`tinytable::style_tt()`]
-#'   when `format = "tt"`.
+#'   when `format = "tt"`. When `format = "html"`, arguments of [`gt::gt()`],
+#'   for example `id` or `rowname_col`, are passed to `gt::gt()`, except
+#'   `data`, `groupname_col` and `auto_align`.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
@@ -768,7 +773,7 @@ print.insight_table <- function(x, ...) {
       row_groups = row_groups
     )
     if (format == "html") {
-      out <- do.call(.format_html_table, fun_args)
+      out <- do.call(.format_html_table, c(fun_args, list(...)))
     } else {
       out <- do.call(.format_tiny_table, c(fun_args, list(...)))
     }
@@ -1713,7 +1718,12 @@ print.insight_table <- function(x, ...) {
     }
   }
 
-  tab <- gt::gt(final, groupname_col = group_by_columns)
+  # arguments in `...` that gt::gt() accepts are passed to it, except those
+  # that we set ourselves or that our alignment overrides
+  dots <- list(...)
+  gt_args <- setdiff(names(formals(gt::gt)), c("data", "groupname_col", "auto_align"))
+  dots <- dots[names(dots) %in% gt_args]
+  tab <- do.call(gt::gt, c(list(final, groupname_col = group_by_columns), dots))
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
   if (is.list(footer)) {
     for (i in footer) {

@@ -81,7 +81,8 @@ attributes (\code{table_title}, or its alias \code{table_caption}, and
 \code{table_subtitle}). If you want to force that no title is printed, even if
 present as attribute, use \code{""}, which will never print titles. If \code{x} is a
 list of data frames, \code{caption} may be a list of table captions, one for
-each table.}
+each table. For \code{format = "html"}, a list of data frames is shown as one
+table, and the caption of each data frame is the label of its row group.}
 
 \item{footer}{Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a
@@ -89,7 +90,9 @@ new text line under the table. If \code{x} is a list of data frames, \code{foote
 may be a list of table captions, one for each table. If \code{NULL}, no footer
 is printed, unless it is stored as attributes (\code{table_footer}). If you want
 to force that no footer is printed, even if present as attribute, use \code{""},
-which will never print footers.}
+which will never print footers. For \code{format = "html"} and a list of data
+frames, the footer of each data frame is a source note of the table,
+followed by \code{footer} if it is a string.}
 
 \item{column_names}{Character vector of names that will be used as column
 names in the table. Must either be of same length as columns in the table,
@@ -161,7 +164,9 @@ works for \code{format = "tt"} or \code{format = "html"}.}
 \item{verbose}{Toggle messages and warnings.}
 
 \item{...}{Arguments passed to \code{\link[tinytable:tt]{tinytable::tt()}} and \code{\link[tinytable:style_tt]{tinytable::style_tt()}}
-when \code{format = "tt"}.}
+when \code{format = "tt"}. When \code{format = "html"}, arguments of \code{\link[gt:gt]{gt::gt()}},
+for example \code{id} or \code{rowname_col}, are passed to \code{gt::gt()}, except
+\code{data}, \code{groupname_col} and \code{auto_align}.}
 }
 \value{
 If \code{format = "text"} (or \code{NULL}), a formatted character string is

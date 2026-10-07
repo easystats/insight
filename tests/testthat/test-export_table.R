@@ -1188,6 +1188,12 @@ test_that("export_table, html output for a colored footer with new lines", {
   expect_snapshot(gt_table_lines(export_table(d_footer, format = "html")))
 })
 
+# returns the value of an option of a gt table
+gt_table_option <- function(x, option) {
+  opts <- x[["_options"]]
+  opts$value[[which(opts$parameter == option)]]
+}
+
 # returns the title, the source notes and the row groups of a gt table
 gt_parts <- function(x) {
   list(
@@ -1328,6 +1334,30 @@ test_that("export_table, html captions for lists of tables", {
   out <- export_table(list(d_one_c, d_two_c), format = "html", title = "")
   expect_null(gt_parts(out)$title)
   expect_length(gt_parts(out)$groups, 0)
+})
+
+test_that("export_table, html passes gt::gt() arguments from ...", {
+  skip_if_not_installed("gt")
+  d_one <- data.frame(x = 1:2, y = c("a", "b"))
+  d_two <- data.frame(x = 3:4, y = c("c", "d"))
+  attr(d_one, "table_caption") <- "Caption One"
+  attr(d_two, "table_caption") <- "Caption Two"
+
+  # "id" sets the table id, for a data frame and for a list
+  out <- export_table(d_one, format = "html", id = "tab1")
+  expect_identical(gt_table_option(out, "table_id"), "tab1")
+  out <- export_table(list(d_one, d_two), format = "html", id = "tab1")
+  expect_identical(gt_table_option(out, "table_id"), "tab1")
+
+  # "rowname_col" puts that column into the stub
+  out <- export_table(d_one, format = "html", rowname_col = "y")
+  expect_identical(out[["_boxhead"]]$type[out[["_boxhead"]]$var == "y"], "stub")
+
+  # arguments that gt::gt() does not have are ignored
+  expect_identical(
+    export_table(d_one, format = "html", not_a_gt_argument = TRUE),
+    export_table(d_one, format = "html")
+  )
 })
 
 test_that("export_table, tinytable output for lists", {
