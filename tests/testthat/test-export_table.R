@@ -1179,6 +1179,16 @@ test_that("export_table, html output for lists with group columns", {
   expect_snapshot(gt_table_lines(
     export_table(list(d_cond, d_zi), format = "html")
   ))
+  # a list footer gives one note per non-empty entry (an error on main)
+  out <- export_table(
+    list(d_fixed, d_random),
+    format = "html",
+    footer = list("", "F2")
+  )
+  expect_identical(
+    vapply(compact_list(out[["_source_notes"]]), as.character, character(1)),
+    "F2"
+  )
 })
 
 test_that("export_table, html output for a colored footer with new lines", {

@@ -1736,7 +1736,10 @@ print.insight_table <- function(x, ...) {
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
   if (is.list(footer)) {
     for (i in footer) {
-      header <- gt::tab_source_note(header, source_note = gt::html(i))
+      # "" gives no source note, like an empty footer string
+      if (!.is_empty_string(i)) {
+        header <- gt::tab_source_note(header, source_note = gt::html(i))
+      }
     }
     footer <- header
   } else if (!is.null(footer)) {
