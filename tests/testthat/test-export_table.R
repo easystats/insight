@@ -1188,6 +1188,148 @@ test_that("export_table, html output for a colored footer with new lines", {
   expect_snapshot(gt_table_lines(export_table(d_footer, format = "html")))
 })
 
+# returns the title, the source notes and the row groups of a gt table
+gt_parts <- function(x) {
+  list(
+    title = x[["_heading"]]$title,
+    notes = vapply(compact_list(x[["_source_notes"]]), as.character, character(1)),
+    groups = as.character(x[["_row_groups"]])
+  )
+}
+
+test_that("export_table, html footers for lists of tables", {
+  skip_if_not_installed("gt")
+  d_one <- data.frame(x = 1:2)
+  d_two <- data.frame(x = 3:4)
+  d_one_f <- d_one
+  attr(d_one_f, "table_footer") <- "Footer One"
+  d_two_f <- d_two
+  attr(d_two_f, "table_footer") <- "Footer Two"
+
+  # a list footer gives one note per table (an error on main)
+  out <- export_table(list(d_one, d_two), format = "html", footer = list("F1", "F2"))
+  expect_identical(gt_parts(out)$notes, c("F1", "F2"))
+
+  # footers stored as attributes are kept (dropped on main)
+  out <- export_table(list(d_one_f, d_two_f), format = "html")
+  expect_identical(gt_parts(out)$notes, c("Footer One", "Footer Two"))
+
+  # a string footer comes after the table footers
+  out <- export_table(list(d_one_f, d_two_f), format = "html", footer = "Main")
+  expect_identical(gt_parts(out)$notes, c("Footer One", "Footer Two", "Main"))
+
+  # footer = "" removes all footers, also those stored as attributes
+  out <- export_table(list(d_one_f, d_two_f), format = "html", footer = "")
+  expect_length(gt_parts(out)$notes, 0)
+
+  # a "" entry in a list footer removes the footer of that table only
+  out <- export_table(list(d_one_f, d_two_f), format = "html", footer = list("", "F2"))
+  expect_identical(gt_parts(out)$notes, "Footer Two")
+
+  # a list footer of the wrong length is not used
+  out <- export_table(list(d_one, d_two), format = "html", footer = list("F1"))
+  expect_length(gt_parts(out)$notes, 0)
+
+  # a "" entry removes the footer also in a list of the wrong length
+  out <- export_table(list(d_one_f, d_two_f), format = "html", footer = list(""))
+  expect_identical(gt_parts(out)$notes, "Footer Two")
+
+  # an attribute wins over a non-empty list entry
+  out <- export_table(list(d_one_f, d_two), format = "html", footer = list("F1", "F2"))
+  expect_identical(gt_parts(out)$notes, c("Footer One", "F2"))
+
+  # leading and trailing new lines are removed, inner ones become line breaks
+  d_newline <- d_one
+  attr(d_newline, "table_footer") <- "\nLine one\nLine two\n"
+  out <- export_table(list(d_newline, d_two), format = "html")
+  expect_identical(gt_parts(out)$notes, "Line one<br>Line two")
+
+  # a colored multi-line footer list gives one note, joined like text output
+  d_colored <- d_one
+  attr(d_colored, "table_footer") <- list(c("\nA yellow line", "yellow"), c("\nA red line", "red"))
+  out <- export_table(list(d_colored, d_two), format = "html")
+  expect_identical(gt_parts(out)$notes, "A yellow line<br>A red line")
+})
+
+test_that("export_table, html captions for lists of tables", {
+  skip_if_not_installed("gt")
+  d_one <- data.frame(x = 1:2)
+  d_two <- data.frame(x = 3:4)
+  d_one_c <- d_one
+  attr(d_one_c, "table_caption") <- "Caption One"
+  d_two_c <- d_two
+  attr(d_two_c, "table_caption") <- "Caption Two"
+
+  # a list caption labels the row groups (a two-element title on main)
+  out <- export_table(list(d_one, d_two), format = "html", caption = list("C1", "C2"))
+  expect_null(gt_parts(out)$title)
+  expect_identical(gt_parts(out)$groups, c("C1", "C2"))
+
+  # caption attributes label the row groups, and there is no title (on main,
+  # the title repeated the first label)
+  out <- export_table(list(d_one_c, d_two_c), format = "html")
+  expect_null(gt_parts(out)$title)
+  expect_identical(gt_parts(out)$groups, c("Caption One", "Caption Two"))
+
+  # a string caption is the title
+  out <- export_table(list(d_one_c, d_two_c), format = "html", caption = "Main")
+  expect_identical(gt_parts(out)$title, "Main")
+  expect_identical(gt_parts(out)$groups, c("Caption One", "Caption Two"))
+
+  # title wins over caption
+  out <- export_table(
+    list(d_one_c, d_two_c),
+    format = "html",
+    title = "Title",
+    caption = "Caption"
+  )
+  expect_identical(gt_parts(out)$title, "Title")
+
+  # a list title takes the place of a NULL caption
+  out <- export_table(list(d_one, d_two), format = "html", title = list("T1", "T2"))
+  expect_null(gt_parts(out)$title)
+  expect_identical(gt_parts(out)$groups, c("T1", "T2"))
+
+  # a table_title attribute is a caption, too
+  d_one_t <- d_one
+  attr(d_one_t, "table_title") <- "Title One"
+  out <- export_table(list(d_one_t, d_two_c), format = "html")
+  expect_identical(gt_parts(out)$groups, c("Title One", "Caption Two"))
+
+  # an attribute wins over a non-empty list entry
+  out <- export_table(list(d_one_c, d_two), format = "html", caption = list("C1", "C2"))
+  expect_identical(gt_parts(out)$groups, c("Caption One", "C2"))
+
+  # a "" entry removes the caption of that table, also an attribute
+  out <- export_table(list(d_one_c, d_two_c), format = "html", caption = list("", "C2"))
+  expect_identical(gt_parts(out)$groups, c("", "Caption Two"))
+
+  # a caption is the first string of a two-string (colored) attribute
+  d_one_col <- d_one
+  attr(d_one_col, "table_caption") <- c("A", "blue")
+  d_two_col <- d_two
+  attr(d_two_col, "table_caption") <- c("B", "red")
+  out <- export_table(list(d_one_col, d_two_col), format = "html")
+  expect_identical(gt_parts(out)$groups, c("A", "B"))
+
+  # a table without a caption gets the label "" (an error on main)
+  out <- export_table(list(d_one_c, d_two), format = "html")
+  expect_identical(gt_parts(out)$groups, c("Caption One", ""))
+
+  # one table: its caption is the title, and there are no row groups
+  out <- export_table(list(d_one_c), format = "html")
+  expect_identical(gt_parts(out)$title, "Caption One")
+  expect_length(gt_parts(out)$groups, 0)
+
+  # caption = "" or title = "" removes the title and the row groups
+  out <- export_table(list(d_one_c, d_two_c), format = "html", caption = "")
+  expect_null(gt_parts(out)$title)
+  expect_length(gt_parts(out)$groups, 0)
+  out <- export_table(list(d_one_c, d_two_c), format = "html", title = "")
+  expect_null(gt_parts(out)$title)
+  expect_length(gt_parts(out)$groups, 0)
+})
+
 test_that("export_table, tinytable output for lists", {
   skip_if_not_installed("tinytable")
   d_one <- data.frame(x = 1:2)
