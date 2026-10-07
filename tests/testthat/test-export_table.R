@@ -1215,6 +1215,16 @@ test_that("export_table, html output for lists with group columns", {
     footer = list("", "")
   )
   expect_length(compact_list(out[["_source_notes"]]), 0)
+  # NULL entries keep it, as in text output
+  out <- export_table(
+    list(d_fixed_f, d_random),
+    format = "html",
+    footer = list(NULL, "")
+  )
+  expect_identical(
+    vapply(compact_list(out[["_source_notes"]]), as.character, character(1)),
+    "Footer Fixed"
+  )
 })
 
 test_that("export_table, html output for a colored footer with new lines", {
@@ -1399,6 +1409,18 @@ test_that("export_table, html passes gt::gt() arguments from ...", {
     row_groups = list(G = 2)
   )
   expect_identical(out[["_boxhead"]]$type[out[["_boxhead"]]$var == "y"], "stub")
+  # the row group headers stay italic when the first column is the stub: the
+  # same rows are styled, in the stub instead of the body
+  d_stub <- data.frame(y = c("a", "b"), x = 1:2, stringsAsFactors = FALSE)
+  out <- export_table(
+    d_stub,
+    format = "html",
+    rowname_col = "y",
+    row_groups = list(G = 2)
+  )
+  out_body <- export_table(d_stub, format = "html", row_groups = list(G = 2))
+  expect_identical(unique(out[["_styles"]]$locname), "stub")
+  expect_identical(out[["_styles"]]$rownum, out_body[["_styles"]]$rownum)
 
   # arguments that gt::gt() does not have are ignored
   expect_identical(

@@ -268,9 +268,11 @@ export_table <- function(
     # for a list of tables with a group column, each element of a list
     # footer is one source note
     if (identical(format, "html") && !is.data.frame(x) && is.list(footer)) {
+      first_removed <- length(footer) > 0 && identical(footer[[1]], "")
       footer <- .as_html_notes(footer)
-      # no note left: "" keeps the footer attribute of the bound table away
-      if (is.null(footer)) {
+      # the bound table keeps the footer attribute of the first table. If no
+      # note is left and the first entry is "", "" removes that attribute too
+      if (is.null(footer) && first_removed) {
         footer <- ""
       }
     }
@@ -1806,10 +1808,17 @@ print.insight_table <- function(x, ...) {
 
   # emphasize header of row groups?
   if (!is.null(highlight_rows) && length(highlight_rows)) {
+    # if "rowname_col" moved the first column into the stub, its cells are
+    # stub cells, not body cells
+    if (isTRUE(gt_args$rowname_col[1] == colnames(final)[1])) {
+      header_cells <- gt::cells_stub(rows = highlight_rows)
+    } else {
+      header_cells <- gt::cells_body(columns = 1, rows = highlight_rows)
+    }
     out <- gt::tab_style(
       out,
       style = gt::cell_text(style = "oblique"),
-      locations = gt::cells_body(columns = 1, rows = highlight_rows)
+      locations = header_cells
     )
   }
 
