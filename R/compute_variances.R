@@ -27,9 +27,6 @@
     return(NULL)
   }
 
-  # needed for singularity check
-  check_if_installed("performance", reason = "to check for singularity")
-
   faminfo <- model_info(model, response = 1, verbose = FALSE)
 
   # check argument
