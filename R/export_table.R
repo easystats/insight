@@ -264,7 +264,8 @@ export_table <- function(
     title <- NULL
     footer <- html_list$footer
   } else {
-    # for a list of tables, a list footer has one entry per table
+    # for a list of tables with a group column, each element of a list
+    # footer is one source note
     if (identical(format, "html") && !is.data.frame(x) && is.list(footer)) {
       footer <- .as_html_notes(footer)
     }
@@ -1743,8 +1744,7 @@ print.insight_table <- function(x, ...) {
   ))
 
   # caption, subtitle and footer can have a colour name as second string, which
-  # only works for text format, so we only use the first string. A list footer
-  # gives one source note per element, without newline-characters
+  # only works for text format, so we only use the first string
 
   if (!is.null(caption)) {
     if (is.list(caption)) {
