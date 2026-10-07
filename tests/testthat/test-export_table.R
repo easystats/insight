@@ -1216,7 +1216,7 @@ test_that("export_table, html footers for lists of tables", {
   out <- export_table(list(d_one, d_two), format = "html", footer = list("F1", "F2"))
   expect_identical(gt_parts(out)$notes, c("F1", "F2"))
 
-  # footers stored as attributes are kept (dropped on main)
+  # footers stored as attributes are kept (on main, only the first one)
   out <- export_table(list(d_one_f, d_two_f), format = "html")
   expect_identical(gt_parts(out)$notes, c("Footer One", "Footer Two"))
 
