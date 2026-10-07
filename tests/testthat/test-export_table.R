@@ -1205,7 +1205,8 @@ test_that("export_table, html output for lists with group columns", {
     vapply(compact_list(out[["_source_notes"]]), as.character, character(1)),
     "F2"
   )
-  # a list footer with only "" entries removes footers stored as attributes
+  # a list footer with only "" entries removes the footer attribute of the
+  # first table
   d_fixed_f <- d_fixed
   attr(d_fixed_f, "table_footer") <- "Footer Fixed"
   out <- export_table(

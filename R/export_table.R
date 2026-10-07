@@ -1785,8 +1785,8 @@ print.insight_table <- function(x, ...) {
   # that we set ourselves or that our alignment overrides
   gt_names <- setdiff(names(formals(gt::gt)), c("data", "groupname_col", "auto_align"))
   gt_args <- gt_args[names(gt_args) %in% gt_names]
-  # with row groups, "final" is a matrix, and gt::gt() checks "rowname_col"
-  # against column names before it converts the matrix
+  # with row groups, "final" is a matrix. gt::gt() checks "rowname_col"
+  # against names(data), which is NULL for a matrix, before it converts it
   if (!is.null(gt_args$rowname_col) && is.matrix(final)) {
     final <- as.data.frame(final, stringsAsFactors = FALSE)
   }
