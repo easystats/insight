@@ -170,7 +170,8 @@ works for \code{format = "tt"} or \code{format = "html"}.}
 \item{...}{Arguments passed to \code{\link[tinytable:tt]{tinytable::tt()}} and \code{\link[tinytable:style_tt]{tinytable::style_tt()}}
 when \code{format = "tt"}. When \code{format = "html"}, arguments of \code{\link[gt:gt]{gt::gt()}},
 for example \code{id} or \code{rowname_col}, are passed to \code{gt::gt()}, except
-\code{data}, \code{groupname_col} and \code{auto_align}.}
+\code{data}, \code{groupname_col} and \code{auto_align}. \code{caption} is not passed,
+because it is an argument of \code{export_table()}.}
 }
 \value{
 If \code{format = "text"} (or \code{NULL}), a formatted character string is

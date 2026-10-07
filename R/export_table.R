@@ -103,7 +103,8 @@
 #' @param ... Arguments passed to [`tinytable::tt()`] and [`tinytable::style_tt()`]
 #'   when `format = "tt"`. When `format = "html"`, arguments of [`gt::gt()`],
 #'   for example `id` or `rowname_col`, are passed to `gt::gt()`, except
-#'   `data`, `groupname_col` and `auto_align`.
+#'   `data`, `groupname_col` and `auto_align`. `caption` is not passed,
+#'   because it is an argument of `export_table()`.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
@@ -268,6 +269,10 @@ export_table <- function(
     # footer is one source note
     if (identical(format, "html") && !is.data.frame(x) && is.list(footer)) {
       footer <- .as_html_notes(footer)
+      # no note left: "" keeps the footer attribute of the bound table away
+      if (is.null(footer)) {
+        footer <- ""
+      }
     }
     x <- .bind_html_tables(x, format)
   }
@@ -1780,6 +1785,11 @@ print.insight_table <- function(x, ...) {
   # that we set ourselves or that our alignment overrides
   gt_names <- setdiff(names(formals(gt::gt)), c("data", "groupname_col", "auto_align"))
   gt_args <- gt_args[names(gt_args) %in% gt_names]
+  # with row groups, "final" is a matrix, and gt::gt() checks "rowname_col"
+  # against column names before it converts the matrix
+  if (!is.null(gt_args$rowname_col) && is.matrix(final)) {
+    final <- as.data.frame(final, stringsAsFactors = FALSE)
+  }
   tab <- do.call(gt::gt, c(list(final, groupname_col = group_by_columns), gt_args))
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
   if (inherits(footer, "insight_html_notes")) {

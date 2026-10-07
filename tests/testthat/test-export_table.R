@@ -1163,18 +1163,34 @@ test_that("export_table, html output for lists with group columns", {
   d_fixed <- data.frame(
     Parameter = c("(Intercept)", "x"),
     Coefficient = c(1.5, 2),
-    Effects = "fixed"
+    Effects = "fixed",
+    stringsAsFactors = FALSE
   )
   attr(d_fixed, "table_caption") <- "Fixed Effects"
-  d_random <- data.frame(Parameter = "SD", Coefficient = 0.3, Effects = "random")
+  d_random <- data.frame(
+    Parameter = "SD",
+    Coefficient = 0.3,
+    Effects = "random",
+    stringsAsFactors = FALSE
+  )
   attr(d_random, "table_caption") <- "Random Effects"
   expect_snapshot(gt_table_lines(
     export_table(list(d_fixed, d_random), format = "html")
   ))
   # tables that already have a "Component" column
-  d_cond <- data.frame(Parameter = "x", Coefficient = 2, Component = "conditional")
+  d_cond <- data.frame(
+    Parameter = "x",
+    Coefficient = 2,
+    Component = "conditional",
+    stringsAsFactors = FALSE
+  )
   attr(d_cond, "table_caption") <- "Conditional"
-  d_zi <- data.frame(Parameter = "x", Coefficient = 0.1, Component = "zero_inflated")
+  d_zi <- data.frame(
+    Parameter = "x",
+    Coefficient = 0.1,
+    Component = "zero_inflated",
+    stringsAsFactors = FALSE
+  )
   attr(d_zi, "table_caption") <- "Zero-Inflated"
   expect_snapshot(gt_table_lines(
     export_table(list(d_cond, d_zi), format = "html")
@@ -1189,6 +1205,15 @@ test_that("export_table, html output for lists with group columns", {
     vapply(compact_list(out[["_source_notes"]]), as.character, character(1)),
     "F2"
   )
+  # a list footer with only "" entries removes footers stored as attributes
+  d_fixed_f <- d_fixed
+  attr(d_fixed_f, "table_footer") <- "Footer Fixed"
+  out <- export_table(
+    list(d_fixed_f, d_random),
+    format = "html",
+    footer = list("", "")
+  )
+  expect_length(compact_list(out[["_source_notes"]]), 0)
 })
 
 test_that("export_table, html output for a colored footer with new lines", {
@@ -1351,8 +1376,8 @@ test_that("export_table, html captions for lists of tables", {
 
 test_that("export_table, html passes gt::gt() arguments from ...", {
   skip_if_not_installed("gt")
-  d_one <- data.frame(x = 1:2, y = c("a", "b"))
-  d_two <- data.frame(x = 3:4, y = c("c", "d"))
+  d_one <- data.frame(x = 1:2, y = c("a", "b"), stringsAsFactors = FALSE)
+  d_two <- data.frame(x = 3:4, y = c("c", "d"), stringsAsFactors = FALSE)
   attr(d_one, "table_caption") <- "Caption One"
   attr(d_two, "table_caption") <- "Caption Two"
 
@@ -1364,6 +1389,14 @@ test_that("export_table, html passes gt::gt() arguments from ...", {
 
   # "rowname_col" puts that column into the stub
   out <- export_table(d_one, format = "html", rowname_col = "y")
+  expect_identical(out[["_boxhead"]]$type[out[["_boxhead"]]$var == "y"], "stub")
+  # also when row groups are active
+  out <- export_table(
+    d_one,
+    format = "html",
+    rowname_col = "y",
+    row_groups = list(G = 2)
+  )
   expect_identical(out[["_boxhead"]]$type[out[["_boxhead"]]$var == "y"], "stub")
 
   # arguments that gt::gt() does not have are ignored
