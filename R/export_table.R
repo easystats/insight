@@ -1799,10 +1799,10 @@ print.insight_table <- function(x, ...) {
       header <- gt::tab_source_note(header, source_note = gt::html(i))
     }
     footer <- header
-  } else if (!is.null(footer)) {
-    footer <- gt::tab_source_note(header, source_note = gt::html(footer))
-  } else {
+  } else if (is.null(footer)) {
     footer <- gt::tab_source_note(header, source_note = NULL)
+  } else {
+    footer <- gt::tab_source_note(header, source_note = gt::html(footer))
   }
   out <- gt::cols_align(footer, align = "center")
 
