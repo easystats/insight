@@ -1371,6 +1371,67 @@ test_that("export_table, html passes gt::gt() arguments from ...", {
     export_table(d_one, format = "html", not_a_gt_argument = TRUE),
     export_table(d_one, format = "html")
   )
+  # also when their name matches an internal argument, fully or partly
+  expect_identical(
+    export_table(d_one, format = "html", final = d_two),
+    export_table(d_one, format = "html")
+  )
+  expect_identical(
+    export_table(d_one, format = "html", fi = d_two),
+    export_table(d_one, format = "html")
+  )
+})
+
+test_that("export_table, html edge cases for lists of tables", {
+  skip_if_not_installed("gt")
+  d_one <- data.frame(x = 1:2)
+  d_two <- data.frame(x = 3:4)
+  attr(d_one, "table_caption") <- "Caption One"
+  attr(d_two, "table_caption") <- "Caption Two"
+
+  # caption = "" removes title and row groups, also when title is given
+  out <- export_table(list(d_one, d_two), format = "html", title = "T", caption = "")
+  expect_null(gt_parts(out)$title)
+  expect_length(gt_parts(out)$groups, 0)
+  # title = "" removes them, also when caption is given
+  out <- export_table(list(d_one, d_two), format = "html", title = "", caption = "C")
+  expect_null(gt_parts(out)$title)
+  expect_length(gt_parts(out)$groups, 0)
+
+  # a data frame with no rows and a list caption
+  out <- export_table(
+    list(data.frame(x = integer(0)), data.frame(x = 3:4)),
+    format = "html",
+    caption = list("A", "B")
+  )
+  expect_s3_class(out, "gt_tbl")
+
+  # the subtitle of the first table shows without a main caption, under an
+  # empty title (on main, the first caption was the title)
+  d_sub <- d_one
+  attr(d_sub, "table_subtitle") <- "Sub One"
+  out <- export_table(list(d_sub, d_two), format = "html")
+  expect_identical(gt_parts(out)$title, "")
+  expect_identical(out[["_heading"]]$subtitle, "Sub One")
+  expect_identical(gt_parts(out)$groups, c("Caption One", "Caption Two"))
+
+  # a NULL element in a footer list is skipped, not shown as "NA"
+  d_null <- data.frame(x = 1:2)
+  attr(d_null, "table_footer") <- list("x", NULL, "y")
+  out <- export_table(list(d_null, d_two), format = "html")
+  expect_identical(gt_parts(out)$notes, "xy")
+})
+
+test_that("export_table, html list footer for a single data frame", {
+  skip_if_not_installed("gt")
+  # a list footer gives one note, joined like text output (an error on main)
+  d_colored <- data.frame(x = 1:2)
+  attr(d_colored, "table_footer") <- list(
+    c("\nA yellow line", "yellow"),
+    c("\nA red line", "red")
+  )
+  out <- export_table(d_colored, format = "html")
+  expect_identical(gt_parts(out)$notes, "A yellow line<br>A red line")
 })
 
 test_that("export_table, tinytable output for lists", {

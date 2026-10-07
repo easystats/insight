@@ -29,6 +29,10 @@
   or `Response` column, the old output stays, but a list `footer` no longer
   gives an error (#631).
 
+* `export_table(format = "html")` for a single data frame with a list footer
+  (a multi-line, colored footer) gave an error. The parts of the footer are
+  now joined into one source note, as in text output.
+
 * If *performance* is not installed, `get_variance()` now gives an error that
   asks you to install it. Before, it returned `NULL` without a message (#928).
 

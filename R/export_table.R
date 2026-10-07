@@ -256,6 +256,7 @@ export_table <- function(
       x,
       caption = caption,
       title = title,
+      subtitle = subtitle,
       footer = footer
     )
     x <- html_list$x
@@ -263,6 +264,10 @@ export_table <- function(
     title <- NULL
     footer <- html_list$footer
   } else {
+    # for a list of tables, a list footer has one entry per table
+    if (identical(format, "html") && !is.data.frame(x) && is.list(footer)) {
+      footer <- .as_html_notes(footer)
+    }
     x <- .bind_html_tables(x, format)
   }
 
@@ -526,6 +531,7 @@ print.insight_table <- function(x, ...) {
 # in between become line breaks.
 .html_footer_string <- function(x) {
   if (is.list(x)) {
+    x <- compact_list(x)
     x <- paste(vapply(x, function(i) as.character(i)[1], character(1)), collapse = "")
   } else {
     x <- as.character(x)[1]
@@ -539,7 +545,52 @@ print.insight_table <- function(x, ...) {
 }
 
 
-.bind_html_table_list <- function(x, caption = NULL, title = NULL, footer = NULL) {
+# one source note per element, for `.format_html_table()`. Empty notes are
+# removed, and NULL is returned if no note is left
+.as_html_notes <- function(x) {
+  x <- compact_list(lapply(x, .html_footer_string))
+  if (!length(x)) {
+    return(NULL)
+  }
+  structure(x, class = "insight_html_notes")
+}
+
+
+# source notes of a list of tables: the footer of each table, then the
+# footer argument if it is a string. `footer = ""` removes all of them
+.html_list_notes <- function(x, footer) {
+  if (identical(footer, "")) {
+    return(NULL)
+  }
+  n <- length(x)
+  values <- lapply(seq_len(n), function(i) {
+    .table_list_entry(attributes(x[[i]])$table_footer, footer, i, n)
+  })
+  if (is.character(footer)) {
+    values <- c(values, list(footer))
+  }
+  .as_html_notes(values)
+}
+
+
+# TRUE if the subtitle argument, or else the subtitle of the first table, is
+# a non-empty string
+.has_html_subtitle <- function(x, subtitle) {
+  if (is.null(subtitle)) {
+    subtitle <- attributes(x[[1]])$table_subtitle
+  }
+  subtitle <- as.character(unlist(subtitle))
+  length(subtitle) > 0 && !is.na(subtitle[1]) && nzchar(subtitle[1])
+}
+
+
+.bind_html_table_list <- function(
+  x,
+  caption = NULL,
+  title = NULL,
+  subtitle = NULL,
+  footer = NULL
+) {
   x <- compact_list(x)
   n <- length(x)
 
@@ -550,7 +601,9 @@ print.insight_table <- function(x, ...) {
   } else if (is.character(caption)) {
     main_caption <- caption[1]
   }
-  no_caption <- identical(main_caption, "")
+  # "" for caption or title removes the title and all table captions
+  no_caption <- (is.character(title) && identical(title[1], "")) ||
+    (is.character(caption) && identical(caption[1], ""))
 
   # captions of each table, "title" takes the place of a missing "caption"
   # no `%||%`, which needs R >= 4.4
@@ -567,20 +620,7 @@ print.insight_table <- function(x, ...) {
   )
 
   # footers of each table, then the footer argument
-  notes <- NULL
-  if (!identical(footer, "")) {
-    notes <- lapply(seq_len(n), function(i) {
-      value <- .table_list_entry(attributes(x[[i]])$table_footer, footer, i, n)
-      if (!is.null(value)) .html_footer_string(value)
-    })
-    if (is.character(footer)) {
-      notes <- c(notes, list(.html_footer_string(footer)))
-    }
-    notes <- compact_list(notes)
-    if (!length(notes)) {
-      notes <- NULL
-    }
-  }
+  notes <- .html_list_notes(x, footer)
 
   # distinct captions become row groups, a single shared caption the title
   add_groups <- FALSE
@@ -594,13 +634,19 @@ print.insight_table <- function(x, ...) {
   if (no_caption) {
     main_caption <- NULL
   }
+  # gt shows no subtitle without a title, so an empty title keeps the
+  # subtitle visible. The class keeps `.export_table()` from removing the
+  # empty caption, `caption[1]` in `.format_html_table()` drops it again
+  if (is.null(main_caption) && !no_caption && .has_html_subtitle(x, subtitle)) {
+    main_caption <- structure("", class = "insight_empty_title")
+  }
 
   out <- do.call(
     rbind,
     lapply(seq_len(n), function(i) {
       d <- x[[i]]
       if (add_groups) {
-        d$Component <- captions[i]
+        d$Component <- rep(captions[i], nrow(d))
       }
       d
     })
@@ -782,7 +828,9 @@ print.insight_table <- function(x, ...) {
       row_groups = row_groups
     )
     if (format == "html") {
-      out <- do.call(.format_html_table, c(fun_args, list(...)))
+      # pass `...` as one list, so that its names cannot match the
+      # arguments of .format_html_table()
+      out <- do.call(.format_html_table, c(fun_args, list(gt_args = list(...))))
     } else {
       out <- do.call(.format_tiny_table, c(fun_args, list(...)))
     }
@@ -1648,6 +1696,7 @@ print.insight_table <- function(x, ...) {
   group_by = NULL,
   row_groups = NULL,
   column_groups = NULL,
+  gt_args = NULL,
   ...
 ) {
   check_if_installed("gt")
@@ -1717,11 +1766,11 @@ print.insight_table <- function(x, ...) {
     }
   }
 
-  if (!is.null(footer)) {
+  # source notes of a list of tables are already prepared. Any other list
+  # footer (multi-line, colored) gives one source note, joined like text
+  if (!is.null(footer) && !inherits(footer, "insight_html_notes")) {
     if (is.list(footer)) {
-      footer <- lapply(footer, function(i) {
-        gsub("\n", "", i[1], fixed = TRUE)
-      })
+      footer <- .as_html_notes(list(footer))
     } else {
       footer <- footer[1]
     }
@@ -1729,17 +1778,13 @@ print.insight_table <- function(x, ...) {
 
   # arguments in `...` that gt::gt() accepts are passed to it, except those
   # that we set ourselves or that our alignment overrides
-  dots <- list(...)
-  gt_args <- setdiff(names(formals(gt::gt)), c("data", "groupname_col", "auto_align"))
-  dots <- dots[names(dots) %in% gt_args]
-  tab <- do.call(gt::gt, c(list(final, groupname_col = group_by_columns), dots))
+  gt_names <- setdiff(names(formals(gt::gt)), c("data", "groupname_col", "auto_align"))
+  gt_args <- gt_args[names(gt_args) %in% gt_names]
+  tab <- do.call(gt::gt, c(list(final, groupname_col = group_by_columns), gt_args))
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
-  if (is.list(footer)) {
+  if (inherits(footer, "insight_html_notes")) {
     for (i in footer) {
-      # "" gives no source note, like an empty footer string
-      if (!.is_empty_string(i)) {
-        header <- gt::tab_source_note(header, source_note = gt::html(i))
-      }
+      header <- gt::tab_source_note(header, source_note = gt::html(i))
     }
     footer <- header
   } else if (!is.null(footer)) {
