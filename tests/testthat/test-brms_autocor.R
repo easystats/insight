@@ -54,3 +54,24 @@ test_that("find_predictors keeps the car() grouping variable", {
   )
   expect_named(get_data(m_car), c("y", "x", "g"))
 })
+
+test_that("the autocorrelation matrix is dropped from formulas", {
+  # named `M`, also after other arguments, and `fcor()`
+  f <- list(
+    conditional = y ~ x + sar(M = W, type = "lag"),
+    sigma = ~ z + car(gr = g, M = Wg),
+    mu2 = ~ v + brms::fcor(V)
+  )
+  out <- insight:::.prepare_predictors_brms(
+    NULL,
+    f,
+    c("conditional", "sigma", "mu2")
+  )
+  expect_identical(all.vars(out$conditional), "x")
+  expect_identical(all.vars(out$sigma), c("z", "g"))
+  expect_identical(all.vars(out$mu2), "v")
+  expect_identical(
+    all.vars(insight:::.remove_brms_autocor_matrix(y ~ x + fcor(V))),
+    c("y", "x")
+  )
+})
