@@ -2,6 +2,7 @@ APA
 Anova
 Arel
 BFBayesFactor
+BFMI
 BGGM
 BMC
 BayesFactor
@@ -187,6 +188,7 @@ recoded
 rempsyc
 riskRegression
 rms
+rstan
 rstanarm
 sampleSelection
 serp
@@ -208,6 +210,7 @@ th
 tidymodels
 tinytable
 tranformations
+treedepth
 tseries
 tweedie
 unevaluated
@@ -215,6 +218,7 @@ unformatted
 unicode
 unstandardizing
 variates
+variational
 vectorized
 vgam
 vglm

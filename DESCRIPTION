@@ -199,6 +199,7 @@ Suggests:
     robustbase,
     robustlmm,
     rpart,
+    rstan,
     rstanarm (>= 2.21.1),
     rstantools (>= 2.1.0),
     rstpm2,
