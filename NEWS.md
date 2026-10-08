@@ -18,6 +18,18 @@
 * `export_table(format = "html")` passes arguments of `gt::gt()` from `...`
   to `gt::gt()`, for example `id` or `rowname_col` (#631).
 
+* `is_converged()` now supports `coxph` models from *survival*. Before, it did
+  not work for these models. It checks whether the model ran out of
+  iterations and whether a coefficient is possibly infinite, as *survival*
+  does when it fits the model. If a check fails, it returns `FALSE`. The
+  attribute `diagnostics` shows the result of each check and the coefficients
+  that are possibly infinite. For penalized models, the checks do not apply.
+  For models with `ties = "exact"` or `tt()` terms, and in the other cases
+  that the help page lists, `is_converged()` cannot recompute them. In these
+  cases, it returns `FALSE`. Objects of other classes that inherit from
+  `coxph`, such as `survival::clogit()` and `survey::svycoxph()`, are not
+  supported (#1090).
+
 ## Bug fixes
 
 * `export_table(format = "html")` for a list of data frames now shows the
@@ -32,6 +44,11 @@
 * `export_table(format = "html")` for a single data frame with a list footer
   (a multi-line, colored footer) gave an error. The parts of the footer are
   now joined into one source note, as in text output.
+
+* `find_predictors()` and `find_variables()` no longer return the matrix of the
+  *brms* autocorrelation terms `sar()`, `car()` and `fcor()`, for example `W`
+  in `y ~ x + sar(W)`. This matrix is an object in `data2`, not a variable in
+  the data. The grouping variable of `car()` is still returned.
 
 * If *performance* is not installed, `get_variance()` now gives an error that
   asks you to install it. Before, it returned `NULL` without a message (#928).
