@@ -420,6 +420,14 @@ test_that("is_converged.coxph, convergence cannot be assessed", {
   no_flag$info <- no_flag$info[c("rank", "rescale")]
   .cvx_expect_not_assessed(no_flag, "no convergence flag")
 
+  # models fitted with `y = FALSE` store no response
+  f <- .cvx_fit(coxph(Surv(time, status) ~ age + tmp, data = cvx_lung, y = FALSE))
+  expect_null(f$fit$y)
+  .cvx_expect_not_assessed(f$fit, "`y = TRUE`")
+  f <- .cvx_fit(coxph(Surv(start0, time, status) ~ age + tmp, data = cvx_lung, y = FALSE))
+  expect_null(f$fit$y)
+  .cvx_expect_not_assessed(f$fit, "`y = TRUE`")
+
   # the score residuals of right-censored models need the data
   cvx_gone <- cvx_lung
   f <- .cvx_fit(coxph(Surv(time, status) ~ age + tmp, data = cvx_gone))
