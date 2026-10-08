@@ -13,6 +13,20 @@
   distribution-specific residual variance of the latent scale, as for
   `ordinal::clmm()`.
 
+## Changes
+
+* `is_converged()` now supports `coxph` models from *survival*. Before, it did
+  not work for these models. It checks whether the model ran out of
+  iterations and whether a coefficient is possibly infinite, as *survival*
+  does when it fits the model. If a check fails, it returns `FALSE`. The
+  attribute `diagnostics` shows the result of each check and the coefficients
+  that are possibly infinite. For penalized models, the checks do not apply.
+  For models with `ties = "exact"` or `tt()` terms, and in the other cases
+  that the help page lists, `is_converged()` cannot recompute them. In these
+  cases, it returns `FALSE`. Objects of other classes that inherit from
+  `coxph`, such as `survival::clogit()` and `survey::svycoxph()`, are not
+  supported (#1090).
+
 ## Bug fixes
 
 * If *performance* is not installed, `get_variance()` now gives an error that
