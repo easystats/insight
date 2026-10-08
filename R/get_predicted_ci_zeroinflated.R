@@ -75,13 +75,12 @@
 # glmmTMB -------------------
 
 .simulate_predictions_glmmTMB <- function(model, newdata, nsim) {
-  check_if_installed("lme4")
-  check_if_installed("MASS")
+  check_if_installed(c("lme4", "MASS"))
 
   tryCatch(
     {
-      condformula <- lme4::nobars(stats::formula(model)[-2])
-      ziformula <- lme4::nobars(stats::formula(model$modelInfo$allForm$ziformula))
+      condformula <- .nobars(stats::formula(model)[-2])
+      ziformula <- .nobars(stats::formula(model$modelInfo$allForm$ziformula))
 
       matrix.conditional <- stats::model.matrix(condformula, newdata)
       beta.conditional <- lme4::fixef(model)$cond
