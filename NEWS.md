@@ -15,6 +15,16 @@
 
 ## Changes
 
+* `is_converged()` now supports models fitted with Stan (`stanfit`, `brmsfit`
+  and `stanreg`). Before, it did not work for these models.
+  It checks divergent transitions, transitions at the maximum treedepth,
+  E-BFMI, R-hat, and bulk and tail effective sample size, with the thresholds
+  of the warnings that *rstan* gives after sampling.
+  E-BFMI is computed as in `rstan::check_hmc_diagnostics()`. The values of the
+  checks are returned in the `diagnostics` attribute. If convergence cannot be
+  assessed, for example for models fitted with variational inference or with
+  `brms::brm_multiple()`, `FALSE` is returned with a message (#619).
+
 * `is_converged()` now supports `coxph` models from *survival*. Before, it did
   not work for these models. It checks whether the model ran out of
   iterations and whether a coefficient is possibly infinite, as *survival*
