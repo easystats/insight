@@ -1,8 +1,9 @@
-# Convergence test for mixed effects and Cox models
+# Convergence test for mixed effects, Stan and Cox models
 
 `is_converged()` provides an alternative convergence test for
-`merMod`-objects. For `coxph` models, it recomputes the checks of the
-*survival* package.
+`merMod`-objects. For models fitted with Stan (`stanfit`, `brmsfit` and
+`stanreg`), it checks the diagnostics of the sampler. For `coxph`
+models, it recomputes the checks of the *survival* package.
 
 ## Usage
 
@@ -10,6 +11,9 @@
 is_converged(x, tolerance = 0.001, ...)
 
 # S3 method for class 'merMod'
+is_converged(x, tolerance = 0.001, verbose = TRUE, ...)
+
+# S3 method for class 'stanfit'
 is_converged(x, tolerance = 0.001, verbose = TRUE, ...)
 
 # S3 method for class 'coxph'
@@ -20,14 +24,14 @@ is_converged(x, tolerance = 0.001, verbose = TRUE, ...)
 
 - x:
 
-  A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan`, `_glm`
-  or `coxph`.
+  A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan`,
+  `_glm`, `stanfit`, `brmsfit`, `stanreg` or `coxph`.
 
 - tolerance:
 
   Indicates up to which value the convergence result is accepted. The
   smaller `tolerance` is, the stricter the test will be. Not used for
-  `coxph` models.
+  Stan and `coxph` models.
 
 - ...:
 
@@ -39,16 +43,67 @@ is_converged(x, tolerance = 0.001, verbose = TRUE, ...)
 
 ## Value
 
-`TRUE` if convergence is fine and `FALSE` if convergence is suspicious.
-Additionally, the convergence value is returned as attribute. For
-`merMod` models, if the model is singular, convergence is determined by
-the optimizer's convergence code. For non-singular models where
-derivatives are unavailable, `FALSE` is returned and a message is
-printed to indicate that convergence cannot be assessed through the
-usual gradient-based checks. For `coxph` models, the attribute
-`diagnostics` is a data frame with the result of each check. If
+`TRUE` if convergence is fine and `FALSE` if convergence is suspicious
+or cannot be assessed. For `merMod` models, the convergence value is
+returned as attribute `gradient`. If the model is singular, convergence
+is determined by the optimizer's convergence code. For non-singular
+models where derivatives are unavailable, `FALSE` is returned and a
+message is printed to indicate that convergence cannot be assessed
+through the usual gradient-based checks.
+
+For Stan models, the attribute `diagnostics` is a data frame with the
+value, the threshold and the result of each check. For Stan models whose
 convergence cannot be assessed, `FALSE` is returned without this
-attribute, and, if `verbose = TRUE`, a message gives the reason.
+attribute, and a message gives the reason: models without MCMC draws
+from the NUTS sampler (for example, models fitted with variational
+inference or optimization), models without draws after warmup, and
+models fitted with
+[`brms::brm_multiple()`](https://paulbuerkner.com/brms/reference/brm_multiple.html),
+whose chains come from different data sets (such as imputed ones).
+
+For `coxph` models, the attribute `diagnostics` is a data frame with the
+result of each check. If convergence cannot be assessed, `FALSE` is
+returned without this attribute, and, if `verbose = TRUE`, a message
+gives the reason.
+
+## Stan models
+
+For models fitted with Stan, `is_converged()` returns `FALSE` if at
+least one of the checks below fails. The checks and thresholds are those
+of the warnings that *rstan* gives after sampling, and the values are
+computed with functions from *rstan*:
+
+- Divergent transitions after warmup
+  ([`rstan::get_num_divergent()`](https://mc-stan.org/rstan/reference/check_hmc_diagnostics.html)):
+  the check fails if there is at least one.
+
+- Transitions after warmup that reach the maximum treedepth
+  ([`rstan::get_num_max_treedepth()`](https://mc-stan.org/rstan/reference/check_hmc_diagnostics.html)):
+  the check fails if there is at least one.
+
+- E-BFMI
+  ([`rstan::get_bfmi()`](https://mc-stan.org/rstan/reference/check_hmc_diagnostics.html)):
+  the check fails if at least one chain has a value below 0.2. This is
+  the E-BFMI of
+  [`rstan::check_hmc_diagnostics()`](https://mc-stan.org/rstan/reference/check_hmc_diagnostics.html),
+  which can differ from the warning that *rstan* prints after sampling.
+
+- R-hat
+  ([`rstan::Rhat()`](https://mc-stan.org/rstan/reference/Rhat.html)):
+  the check fails if the largest value over all parameters is above
+  1.05.
+
+- Bulk and tail effective sample size
+  ([`rstan::ess_bulk()`](https://mc-stan.org/rstan/reference/Rhat.html)
+  and
+  [`rstan::ess_tail()`](https://mc-stan.org/rstan/reference/Rhat.html)):
+  each check fails if the smallest value over all parameters is below
+  100 times the number of chains.
+
+Missing values (for example, R-hat of a constant parameter) are ignored.
+Stan also prints messages about rejected proposals ("exception thrown")
+during sampling. These messages are not checked, because the model
+object does not store them.
 
 ## Convergence and log-likelihood
 
@@ -186,5 +241,28 @@ model <- glmmTMB(
 
 is_converged(model)
 #> [1] FALSE
+# }
+# \donttest{
+# a model fitted with brms
+model <- download_model("brms_1")
+result <- is_converged(model)
+result
+#> [1] TRUE
+#> attr(,"diagnostics")
+#>    Diagnostic        Value Threshold Passed
+#> 1 Divergences    0.0000000      0.00   TRUE
+#> 2   Treedepth    0.0000000      0.00   TRUE
+#> 3      E-BFMI    0.8455105      0.20   TRUE
+#> 4        Rhat    1.0021166      1.05   TRUE
+#> 5    ESS_bulk 1631.5978432    400.00   TRUE
+#> 6    ESS_tail 1918.0354686    400.00   TRUE
+attributes(result)$diagnostics
+#>    Diagnostic        Value Threshold Passed
+#> 1 Divergences    0.0000000      0.00   TRUE
+#> 2   Treedepth    0.0000000      0.00   TRUE
+#> 3      E-BFMI    0.8455105      0.20   TRUE
+#> 4        Rhat    1.0021166      1.05   TRUE
+#> 5    ESS_bulk 1631.5978432    400.00   TRUE
+#> 6    ESS_tail 1918.0354686    400.00   TRUE
 # }
 ```
