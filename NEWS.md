@@ -29,6 +29,11 @@
 
 ## Bug fixes
 
+* `find_predictors()` and `find_variables()` no longer return the matrix of the
+  *brms* autocorrelation terms `sar()`, `car()` and `fcor()`, for example `W`
+  in `y ~ x + sar(W)`. This matrix is an object in `data2`, not a variable in
+  the data. The grouping variable of `car()` is still returned.
+
 * If *performance* is not installed, `get_variance()` now gives an error that
   asks you to install it. Before, it returned `NULL` without a message (#928).
 
