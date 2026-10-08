@@ -159,7 +159,7 @@ Functions to test specific properties of model objects.
 - [`is_bayesian_model()`](https://easystats.github.io/insight/reference/is_bayesian_model.md)
   : Checks if a model is a Bayesian model
 - [`is_converged()`](https://easystats.github.io/insight/reference/is_converged.md)
-  : Convergence test for mixed effects models
+  : Convergence test for mixed effects and Cox models
 - [`is_empty_object()`](https://easystats.github.io/insight/reference/is_empty_object.md)
   : Check if object is empty
 - [`is_gam_model()`](https://easystats.github.io/insight/reference/is_gam_model.md)

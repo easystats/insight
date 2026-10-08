@@ -1,7 +1,8 @@
-# Convergence test for mixed effects models
+# Convergence test for mixed effects and Cox models
 
 `is_converged()` provides an alternative convergence test for
-`merMod`-objects.
+`merMod`-objects. For `coxph` models, it recomputes the checks of the
+*survival* package.
 
 ## Usage
 
@@ -10,19 +11,23 @@ is_converged(x, tolerance = 0.001, ...)
 
 # S3 method for class 'merMod'
 is_converged(x, tolerance = 0.001, verbose = TRUE, ...)
+
+# S3 method for class 'coxph'
+is_converged(x, tolerance = 0.001, verbose = TRUE, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan` or
-  `_glm`.
+  A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan`, `_glm`
+  or `coxph`.
 
 - tolerance:
 
   Indicates up to which value the convergence result is accepted. The
-  smaller `tolerance` is, the stricter the test will be.
+  smaller `tolerance` is, the stricter the test will be. Not used for
+  `coxph` models.
 
 - ...:
 
@@ -40,7 +45,10 @@ Additionally, the convergence value is returned as attribute. For
 the optimizer's convergence code. For non-singular models where
 derivatives are unavailable, `FALSE` is returned and a message is
 printed to indicate that convergence cannot be assessed through the
-usual gradient-based checks.
+usual gradient-based checks. For `coxph` models, the attribute
+`diagnostics` is a data frame with the result of each check. If
+convergence cannot be assessed, `FALSE` is returned without this
+attribute, and, if `verbose = TRUE`, a message gives the reason.
 
 ## Convergence and log-likelihood
 
@@ -75,6 +83,46 @@ predictor) larger than 10 in (non-identity link) generalized linear
 model *might* indicate complete separation, which can be addressed by
 regularization, e.g. penalized regression or Bayesian regression with
 appropriate priors on the fixed effects.
+
+## Cox proportional hazards models
+
+*survival* warns about convergence problems when a `coxph` model is
+fitted, but does not store the warnings in the model object. For `coxph`
+models, `is_converged()` therefore computes the two checks of *survival*
+again, with the `iter.max`, `eps` and `toler.inf` values of the model
+call:
+
+- Iterations: the check fails if the model did not converge within
+  `iter.max` iterations ("Ran out of iterations and did not converge").
+
+- Infinite coefficient: the check fails for a coefficient if the
+  log-likelihood converged before the coefficient did ("Loglik converged
+  before variable ...; coefficient may be infinite", or "beta may be
+  infinite" for counting-process data). This happens, for example, if a
+  factor level has no events. As in *survival*, this check runs only if
+  the first check passed.
+
+`is_converged()` returns `FALSE` if a check fails. The attribute
+`diagnostics` is a data frame with the value, the threshold and the
+result of each check, with one row for each coefficient for the second
+check. The `tolerance` argument is not used for `coxph` models.
+
+Convergence cannot be assessed, and `FALSE` is returned, for penalized
+models (with `frailty()`, `ridge()` or `pspline()` terms), for models
+with `ties = "exact"`, for models with `tt()` terms, for models with
+`iter.max` of 1 or less, for models fitted with `y = FALSE`, for model
+objects without a call, and if the control arguments of the model call
+or the score residuals cannot be computed. Objects of other classes that
+inherit from `coxph`, for example from
+[`survival::clogit()`](https://rdrr.io/pkg/survival/man/clogit.html) or
+[`survey::svycoxph()`](https://rdrr.io/pkg/survey/man/svycoxph.html),
+are not supported: `NULL` is returned with a message.
+
+For models with right-censored data, the score residuals are computed
+from the data of the model call, unless the model was fitted with
+`model = TRUE` or `x = TRUE`. If these data were removed after the model
+was fitted, convergence cannot be assessed. If they were changed, the
+result can be wrong. In both cases, refit the model with `model = TRUE`.
 
 ## Convergence versus Singularity
 

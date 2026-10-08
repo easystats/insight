@@ -71,3 +71,6 @@ Other contributors:
 
 - Alex Reinhart <areinhar@stat.cmu.edu>
   ([ORCID](https://orcid.org/0000-0002-6658-514X)) \[contributor\]
+
+- Jeffrey Girard <me@jmgirard.com>
+  ([ORCID](https://orcid.org/0000-0002-7359-3746)) \[contributor\]
