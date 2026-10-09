@@ -55,6 +55,15 @@
   (a multi-line, colored footer) gave an error. The parts of the footer are
   now joined into one source note, as in text output.
 
+* `get_sigma()`, `get_variance()` and `get_variance_residual()` now support
+  *brms* models where `sigma` has an intercept-only formula, for example
+  `bf(y ~ x, sigma ~ 1)`. Sigma is the mean of the posterior draws of
+  `b_sigma_Intercept`, back-transformed with the link function of `sigma`.
+  Before, `get_sigma()` returned `NULL` and `get_variance()` returned a
+  residual variance of 1. If `sigma` varies, for example with
+  `sigma ~ (1 | g)`, `get_variance()` now returns no residual variance with a
+  message, as it already did for `sigma ~ x` (#967).
+
 * `find_parameters()`, `get_parameters()` and `clean_parameters()` now work for
   *blavaan* models with multiple groups and equality constraints, for example
   `group.equal = "loadings"`. Before, `find_parameters()` and
