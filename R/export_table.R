@@ -104,7 +104,9 @@
 #'   when `format = "tt"`. When `format = "html"`, arguments of [`gt::gt()`],
 #'   for example `id` or `rowname_col`, are passed to `gt::gt()`, except
 #'   `data`, `groupname_col` and `auto_align`. `caption` is not passed,
-#'   because it is an argument of `export_table()`.
+#'   because it is an argument of `export_table()`. With `rowname_col`, the
+#'   first characters of `align` go to the `rowname_col` columns, which are
+#'   shown first, and the other characters to the remaining columns.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
@@ -1831,15 +1833,16 @@ print.insight_table <- function(x, ...) {
     )
   }
 
-  # custom alignment of columns. gt shows the stub first and hides the group
-  # columns, so with "rowname_col" the alignment follows the display order
+  # custom alignment of columns. gt shows the stub columns first, in the order
+  # of "rowname_col", and hides the group columns, so with "rowname_col" the
+  # stub columns come first and the group columns last
   align_cols <- seq_len(max(ncol(final), nchar(align)))
   if (!is.null(gt_args$rowname_col)) {
-    stub_col <- which(colnames(final) == gt_args$rowname_col[1])
+    stub_cols <- match(gt_args$rowname_col, colnames(final))
     hidden_cols <- which(colnames(final) %in% group_by_columns)
     align_cols <- c(
-      stub_col,
-      setdiff(align_cols, c(stub_col, hidden_cols)),
+      stub_cols,
+      setdiff(align_cols, c(stub_cols, hidden_cols)),
       hidden_cols
     )
   }

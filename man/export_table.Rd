@@ -171,7 +171,9 @@ works for \code{format = "tt"} or \code{format = "html"}.}
 when \code{format = "tt"}. When \code{format = "html"}, arguments of \code{\link[gt:gt]{gt::gt()}},
 for example \code{id} or \code{rowname_col}, are passed to \code{gt::gt()}, except
 \code{data}, \code{groupname_col} and \code{auto_align}. \code{caption} is not passed,
-because it is an argument of \code{export_table()}.}
+because it is an argument of \code{export_table()}. With \code{rowname_col}, the
+first characters of \code{align} go to the \code{rowname_col} columns, which are
+shown first, and the other characters to the remaining columns.}
 }
 \value{
 If \code{format = "text"} (or \code{NULL}), a formatted character string is

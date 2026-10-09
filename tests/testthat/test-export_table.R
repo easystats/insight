@@ -1446,6 +1446,17 @@ test_that("export_table, html passes gt::gt() arguments from ...", {
     col_align(out)[c("a", "b", "c")],
     c(a = "center", b = "left", c = "right")
   )
+  # two "rowname_col" columns are shown first, in the order given: c, b, a
+  out <- export_table(
+    d_three,
+    format = "html",
+    align = "lcr",
+    rowname_col = c("c", "b")
+  )
+  expect_identical(
+    col_align(out)[c("a", "b", "c")],
+    c(a = "right", b = "center", c = "left")
+  )
   # without "rowname_col", "align" follows the column order
   out <- export_table(d_three, format = "html", align = "lcr")
   expect_identical(col_align(out), c(a = "left", b = "center", c = "right"))
