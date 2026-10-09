@@ -214,6 +214,11 @@ variance-covariance matrix calculation. These are \code{"robust"},
 \code{"df-adjusted"}, \code{"model"}, \code{"bias-corrected"}, and \code{"jackknife"}. See
 \code{?glmtoolbox::vcov.glmgee} for details.
 \item Model of class \code{glmmTMB} currently only support the \code{"HC0"} option.
+\item Models of class \code{fixest} use the \code{vcov()} method of the \strong{fixest}
+package, so \code{vcov} accepts the types listed in \code{?fixest::vcov.fixest}.
+Of the heteroskedasticity-consistent types, \code{"HC0"} to \code{"HC3"} are
+supported. \code{"HC0"} uses \code{vcov = "hetero"} without the small-sample
+adjustment (\code{ssc = fixest::ssc(K.adj = FALSE)}).
 }}
 
 \item{vcov_args}{List of arguments to be passed to the function identified by
