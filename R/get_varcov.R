@@ -56,6 +56,11 @@
 #'   `"df-adjusted"`, `"model"`, `"bias-corrected"`, and `"jackknife"`. See
 #'   `?glmtoolbox::vcov.glmgee` for details.
 #' - Model of class `glmmTMB` currently only support the `"HC0"` option.
+#' - Models of class `fixest` use the `vcov()` method of the **fixest**
+#'   package, so `vcov` accepts the types listed in `?fixest::vcov.fixest`.
+#'   Of the heteroskedasticity-consistent types, `"HC0"` to `"HC3"` are
+#'   supported. `"HC0"` uses `vcov = "hetero"` without the small-sample
+#'   adjustment (`ssc = fixest::ssc(K.adj = FALSE)`).
 #' @param vcov_args List of arguments to be passed to the function identified by
 #'   the `vcov` argument. This function is typically supplied by the
 #'   **sandwich** or **clubSandwich** packages. Please refer to their
@@ -145,6 +150,28 @@ get_varcov.fixest <- function(x, vcov = NULL, vcov_args = NULL, ...) {
   # fixest supplies its own mechanism. Vincent thinks it might not be wise to
   # try `sandwich`, because there may be inconsistencies.
   check_if_installed("fixest")
+  if (is.character(vcov) && length(vcov) == 1L) {
+    vcov_type <- tolower(vcov)
+    if (vcov_type == "hc0") {
+      # fixest has no "hc0" type. HC0 is the "hetero" estimator without the
+      # small-sample adjustment. A user-supplied `ssc` is kept otherwise.
+      vcov <- "hetero"
+      ssc <- vcov_args$ssc
+      if (is.null(ssc)) {
+        ssc <- fixest::ssc(K.adj = FALSE)
+      } else {
+        ssc$K.adj <- FALSE
+      }
+      vcov_args$ssc <- ssc
+    } else if (vcov_type %in% c("hc", "hc4", "hc4m", "hc5")) {
+      format_error(paste0(
+        "`vcov = \"",
+        vcov,
+        "\"` is not supported for models of class `fixest`. Use `\"HC0\"`, `\"HC1\"`, `\"HC2\"` or `\"HC3\"`, or",
+        " another type that `fixest::vcov.fixest()` accepts, for example `\"iid\"`, `\"hetero\"` or `\"cluster\"`."
+      ))
+    }
+  }
   my_args <- c(list(x, vcov = vcov), vcov_args)
   FUN <- stats::vcov
   do.call("FUN", my_args)

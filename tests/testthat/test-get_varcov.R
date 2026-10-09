@@ -208,3 +208,57 @@ test_that("error: from vcov", {
     regex = "number of observations"
   )
 })
+
+
+test_that("fixest: HC0 matches sandwich", {
+  skip_if_not_installed("fixest")
+  fixest::setFixest_nthreads(1)
+
+  # plain model, upper and lower case
+  mod <- fixest::feols(Sepal.Length ~ Sepal.Width + Petal.Length, data = iris)
+  ref <- sandwich::vcovHC(
+    lm(Sepal.Length ~ Sepal.Width + Petal.Length, data = iris),
+    type = "HC0"
+  )
+  expect_equal(get_varcov(mod, vcov = "HC0"), ref, tolerance = 1e-8, ignore_attr = TRUE)
+  expect_equal(get_varcov(mod, vcov = "hc0"), ref, tolerance = 1e-8, ignore_attr = TRUE)
+
+  # a user-supplied `ssc` is kept, but without the K adjustment
+  expect_equal(
+    get_varcov(mod, vcov = "HC0", vcov_args = list(ssc = fixest::ssc(K.adj = TRUE))),
+    ref,
+    tolerance = 1e-8,
+    ignore_attr = TRUE
+  )
+
+  # other HC types are unchanged
+  expect_equal(get_varcov(mod, vcov = "HC1"), vcov(mod, vcov = "hc1"), tolerance = 1e-8)
+
+  # fixed effects
+  mod <- fixest::feols(Sepal.Length ~ Sepal.Width | Species, data = iris)
+  ref <- sandwich::vcovHC(lm(Sepal.Length ~ Sepal.Width + Species, data = iris), type = "HC0")
+  expect_equal(
+    get_varcov(mod, vcov = "HC0"),
+    ref["Sepal.Width", "Sepal.Width"],
+    tolerance = 1e-8,
+    ignore_attr = TRUE
+  )
+
+  # weights
+  mod <- fixest::feols(mpg ~ wt, data = mtcars, weights = ~hp)
+  ref <- sandwich::vcovHC(lm(mpg ~ wt, data = mtcars, weights = hp), type = "HC0")
+  expect_equal(get_varcov(mod, vcov = "HC0"), ref, tolerance = 1e-8, ignore_attr = TRUE)
+})
+
+
+test_that("fixest: unsupported HC types give a clear error", {
+  skip_if_not_installed("fixest")
+  mod <- fixest::feols(Sepal.Length ~ Sepal.Width, data = iris)
+  for (type in c("HC", "HC4", "hc4m", "HC5")) {
+    expect_error(
+      get_varcov(mod, vcov = type),
+      regexp = "not supported for models of class `fixest`",
+      fixed = TRUE
+    )
+  }
+})
