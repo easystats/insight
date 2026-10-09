@@ -110,7 +110,11 @@ export_table(
   If you want to force that no title is printed, even if present as
   attribute, use `""`, which will never print titles. If `x` is a list
   of data frames, `caption` may be a list of table captions, one for
-  each table.
+  each table. For `format = "html"`, a list of data frames is shown as
+  one table, and the caption of each data frame is the label of its row
+  group, or the title if all data frames have the same caption. This
+  does not apply if any data frame has a `Component`, `Effects`, `Group`
+  or `Response` column.
 
 - footer:
 
@@ -120,7 +124,11 @@ export_table(
   may be a list of table captions, one for each table. If `NULL`, no
   footer is printed, unless it is stored as attributes (`table_footer`).
   If you want to force that no footer is printed, even if present as
-  attribute, use `""`, which will never print footers.
+  attribute, use `""`, which will never print footers. For
+  `format = "html"` and a list of data frames, the footer of each data
+  frame is a source note of the table, followed by `footer` if it is a
+  string. This does not apply if any data frame has a `Component`,
+  `Effects`, `Group` or `Response` column.
 
 - column_names:
 
@@ -221,7 +229,14 @@ export_table(
   [`tinytable::tt()`](https://vincentarelbundock.github.io/tinytable/man/tt.html)
   and
   [`tinytable::style_tt()`](https://vincentarelbundock.github.io/tinytable/man/style_tt.html)
-  when `format = "tt"`.
+  when `format = "tt"`. When `format = "html"`, arguments of
+  [`gt::gt()`](https://gt.rstudio.com/reference/gt.html), for example
+  `id` or `rowname_col`, are passed to
+  [`gt::gt()`](https://gt.rstudio.com/reference/gt.html), except `data`,
+  `groupname_col` and `auto_align`. `caption` is not passed, because it
+  is an argument of `export_table()`. With `rowname_col`, the first
+  characters of `align` go to the `rowname_col` columns, which are shown
+  first, and the other characters to the remaining columns.
 
 ## Value
 

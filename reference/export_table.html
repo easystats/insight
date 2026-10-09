@@ -15,7 +15,7 @@ the table_width argument to control this behaviour."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.19</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -174,7 +174,11 @@ attributes (<code>table_title</code>, or its alias <code>table_caption</code>, a
 <code>table_subtitle</code>). If you want to force that no title is printed, even if
 present as attribute, use <code>""</code>, which will never print titles. If <code>x</code> is a
 list of data frames, <code>caption</code> may be a list of table captions, one for
-each table.</p></dd>
+each table. For <code>format = "html"</code>, a list of data frames is shown as one
+table, and the caption of each data frame is the label of its row group,
+or the title if all data frames have the same caption. This does not
+apply if any data frame has a <code>Component</code>, <code>Effects</code>, <code>Group</code> or
+<code>Response</code> column.</p></dd>
 
 
 <dt id="arg-footer">footer<a class="anchor" aria-label="anchor" href="#arg-footer"></a></dt>
@@ -184,7 +188,10 @@ new text line under the table. If <code>x</code> is a list of data frames, <code
 may be a list of table captions, one for each table. If <code>NULL</code>, no footer
 is printed, unless it is stored as attributes (<code>table_footer</code>). If you want
 to force that no footer is printed, even if present as attribute, use <code>""</code>,
-which will never print footers.</p></dd>
+which will never print footers. For <code>format = "html"</code> and a list of data
+frames, the footer of each data frame is a source note of the table,
+followed by <code>footer</code> if it is a string. This does not apply if any data
+frame has a <code>Component</code>, <code>Effects</code>, <code>Group</code> or <code>Response</code> column.</p></dd>
 
 
 <dt id="arg-column-names">column_names<a class="anchor" aria-label="anchor" href="#arg-column-names"></a></dt>
@@ -276,7 +283,12 @@ works for <code>format = "tt"</code> or <code>format = "html"</code>.</p></dd>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to <code><a href="https://vincentarelbundock.github.io/tinytable/man/tt.html" class="external-link">tinytable::tt()</a></code> and <code><a href="https://vincentarelbundock.github.io/tinytable/man/style_tt.html" class="external-link">tinytable::style_tt()</a></code>
-when <code>format = "tt"</code>.</p></dd>
+when <code>format = "tt"</code>. When <code>format = "html"</code>, arguments of <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code>,
+for example <code>id</code> or <code>rowname_col</code>, are passed to <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code>, except
+<code>data</code>, <code>groupname_col</code> and <code>auto_align</code>. <code>caption</code> is not passed,
+because it is an argument of <code>export_table()</code>. With <code>rowname_col</code>, the
+first characters of <code>align</code> go to the <code>rowname_col</code> columns, which are
+shown first, and the other characters to the remaining columns.</p></dd>
 
 </dl></div>
     <div class="section level2">
