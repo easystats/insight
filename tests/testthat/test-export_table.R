@@ -1422,6 +1422,26 @@ test_that("export_table, html passes gt::gt() arguments from ...", {
   expect_identical(unique(out[["_styles"]]$locname), "stub")
   expect_identical(out[["_styles"]]$rownum, out_body[["_styles"]]$rownum)
 
+  # gt shows the stub first, so "align" follows the display order when
+  # "rowname_col" names a column that is not the first: b, a, c
+  d_three <- data.frame(
+    a = c("x", "y"),
+    b = c("1.0", "2.0"),
+    c = c("3.0", "4.0"),
+    stringsAsFactors = FALSE
+  )
+  col_align <- function(x) {
+    stats::setNames(x[["_boxhead"]]$column_align, x[["_boxhead"]]$var)
+  }
+  out <- export_table(d_three, format = "html", align = "lcr", rowname_col = "b")
+  expect_identical(col_align(out), c(a = "center", b = "left", c = "right"))
+  # the default "firstleft" left-aligns the stub
+  out <- export_table(d_three, format = "html", rowname_col = "b")
+  expect_identical(col_align(out), c(a = "center", b = "left", c = "center"))
+  # without "rowname_col", "align" follows the column order
+  out <- export_table(d_three, format = "html", align = "lcr")
+  expect_identical(col_align(out), c(a = "left", b = "center", c = "right"))
+
   # arguments that gt::gt() does not have are ignored
   expect_identical(
     export_table(d_one, format = "html", not_a_gt_argument = TRUE),

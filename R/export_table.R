@@ -1831,13 +1831,19 @@ print.insight_table <- function(x, ...) {
     )
   }
 
-  # custom alignment of columns
+  # custom alignment of columns. gt shows the stub first, so with "rowname_col"
+  # the alignment follows the display order, not the column order
+  align_cols <- seq_len(max(ncol(final), nchar(align)))
+  if (!is.null(gt_args$rowname_col)) {
+    stub_col <- which(colnames(final) == gt_args$rowname_col[1])
+    align_cols <- c(stub_col, setdiff(align_cols, stub_col))
+  }
   if (align == "firstleft") {
-    out <- gt::cols_align(out, "left", 1)
+    out <- gt::cols_align(out, "left", align_cols[1])
   } else {
     for (i in 1:nchar(align)) {
       col_align <- switch(substr(align, i, i), l = "left", r = "right", "center")
-      out <- gt::cols_align(out, col_align, i)
+      out <- gt::cols_align(out, col_align, align_cols[i])
     }
   }
 
