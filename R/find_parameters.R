@@ -226,15 +226,25 @@ find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
 # names for the free parameters of a blavaan model, in the order of coef()
 # and of the posterior draws. The "free" column of the parameter table numbers
 # the free parameters in that order, also when labels or equality constraints
-# give several parameters the same name in coef()
-.blavaan_coef_labels <- function(x) {
+# give several parameters the same name in coef(). With "defined = TRUE", the
+# user-defined (":=") parameters follow, as in the posterior draws. They belong
+# to no group, so they get no group suffix
+.blavaan_coef_labels <- function(x, defined = FALSE) {
   param_tab <- lavaan::parTable(x)
-  param_tab <- param_tab[param_tab$free > 0, , drop = FALSE]
-  param_tab <- param_tab[order(param_tab$free), , drop = FALSE]
+  free_tab <- param_tab[param_tab$free > 0, , drop = FALSE]
+  free_tab <- free_tab[order(free_tab$free), , drop = FALSE]
 
-  params <- paste0(param_tab$lhs, param_tab$op, param_tab$rhs)
-  if ("group" %in% colnames(param_tab) && n_unique(param_tab$group) > 1L) {
-    params <- paste0(params, " (group ", param_tab$group, ")")
+  params <- paste0(free_tab$lhs, free_tab$op, free_tab$rhs)
+  if ("group" %in% colnames(free_tab) && n_unique(free_tab$group) > 1L) {
+    params <- paste0(params, " (group ", free_tab$group, ")")
+  }
+
+  if (defined) {
+    defined_tab <- param_tab[param_tab$op == ":=", , drop = FALSE]
+    params <- c(
+      params,
+      paste0(defined_tab$lhs, defined_tab$op, defined_tab$rhs)
+    )
   }
   params
 }

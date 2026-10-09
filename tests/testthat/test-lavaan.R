@@ -23,7 +23,7 @@ test_that("get_varcov", {
   data <- data.frame(x = x, y = y)
 
   # Fit simple lavaan model
-  model <- 'y ~ x'
+  model <- "y ~ x"
   fit <- lavaan::sem(model, data = data)
   expect_equal(
     get_varcov(fit),
@@ -40,7 +40,7 @@ test_that("get_data, model frame of models with multiple groups", {
     group = "school"
   )
   out <- get_data(model, source = "mf", verbose = FALSE)
-  expect_identical(dim(out), c(301L, 4L))
+  expect_shape(out, dim = c(301L, 4L))
   expect_named(out, c("x1", "x2", "x3", "school"))
   expect_identical(
     as.vector(table(out$school)[c("Pasteur", "Grant-White")]),

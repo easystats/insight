@@ -659,7 +659,12 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
     }
   } else {
     draws <- blavaan::blavInspect(x, "draws")
-    coef_labels <- .blavaan_coef_labels(x)
+    coef_labels <- .blavaan_coef_labels(x, defined = TRUE)
+  }
+  # for models with user-defined parameters, the chains in the mcmc.list are
+  # plain matrices, which as.matrix() for mcmc.list objects does not accept
+  if (inherits(draws, "mcmc.list")) {
+    draws <- do.call(rbind, lapply(draws, as.matrix))
   }
   posteriors <- as.data.frame(as.matrix(draws))
   colnames(posteriors) <- coef_labels
