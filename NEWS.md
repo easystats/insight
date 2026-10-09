@@ -39,6 +39,13 @@
 
 ## Bug fixes
 
+* `get_varcov()` for *fixest* models now supports `vcov = "HC0"`. Before, it
+  gave an error. The result is the same as
+  `fixest::vcov_hetero(ssc = fixest::ssc(K.adj = FALSE))`, the
+  heteroskedasticity-consistent matrix without the small-sample adjustment.
+  For `"HC"`, `"HC4"`, `"HC4m"` and `"HC5"`, the error now names the
+  supported types (#1251).
+
 * `find_predictors()` and `find_variables()` no longer return the matrix of the
   *brms* autocorrelation terms `sar()`, `car()` and `fcor()`, for example `W`
   in `y ~ x + sar(W)`. This matrix is an object in `data2`, not a variable in
