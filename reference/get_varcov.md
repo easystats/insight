@@ -104,6 +104,14 @@ get_varcov(x, effects = "all", verbose = TRUE, ...)
 
   - Model of class `glmmTMB` currently only support the `"HC0"` option.
 
+  - Models of class `fixest` use the
+    [`vcov()`](https://rdrr.io/r/stats/vcov.html) method of the
+    **fixest** package, so `vcov` accepts the types listed in
+    [`?fixest::vcov.fixest`](https://lrberge.github.io/fixest/reference/vcov.fixest.html).
+    Of the heteroskedasticity-consistent types, `"HC0"` to `"HC3"` are
+    supported. `"HC0"` uses `vcov = "hetero"` without the small-sample
+    adjustment (`ssc = fixest::ssc(K.adj = FALSE)`).
+
 - vcov_args:
 
   List of arguments to be passed to the function identified by the
@@ -263,7 +271,7 @@ get_varcov(
   vcov_args = list(R = 50)
 )
 #>                   count_(Intercept)     count_phd count_femWomen
-#> count_(Intercept)       0.039955437 -0.0097360197  -0.0043036878
-#> count_phd              -0.009736020  0.0029991299   0.0006021612
-#> count_femWomen         -0.004303688  0.0006021612   0.0111837032
+#> count_(Intercept)       0.039955437 -0.0097360198  -0.0043036878
+#> count_phd              -0.009736020  0.0029991299   0.0006021611
+#> count_femWomen         -0.004303688  0.0006021611   0.0111837031
 ```

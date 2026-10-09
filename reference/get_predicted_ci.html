@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -179,6 +179,11 @@ variance-covariance matrix calculation. These are <code>"robust"</code>,
 <code>"df-adjusted"</code>, <code>"model"</code>, <code>"bias-corrected"</code>, and <code>"jackknife"</code>. See
 <code><a href="https://rdrr.io/pkg/glmtoolbox/man/vcov.glmgee.html" class="external-link">?glmtoolbox::vcov.glmgee</a></code> for details.</p></li>
 <li><p>Model of class <code>glmmTMB</code> currently only support the <code>"HC0"</code> option.</p></li>
+<li><p>Models of class <code>fixest</code> use the <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code> method of the <strong>fixest</strong>
+package, so <code>vcov</code> accepts the types listed in <code><a href="https://lrberge.github.io/fixest/reference/vcov.fixest.html" class="external-link">?fixest::vcov.fixest</a></code>.
+Of the heteroskedasticity-consistent types, <code>"HC0"</code> to <code>"HC3"</code> are
+supported. <code>"HC0"</code> uses <code>vcov = "hetero"</code> without the small-sample
+adjustment (<code>ssc = fixest::ssc(K.adj = FALSE)</code>).</p></li>
 </ul></dd>
 
 

@@ -298,6 +298,14 @@ get_predicted(x, data = NULL, ...)
 
   - Model of class `glmmTMB` currently only support the `"HC0"` option.
 
+  - Models of class `fixest` use the
+    [`vcov()`](https://rdrr.io/r/stats/vcov.html) method of the
+    **fixest** package, so `vcov` accepts the types listed in
+    [`?fixest::vcov.fixest`](https://lrberge.github.io/fixest/reference/vcov.fixest.html).
+    Of the heteroskedasticity-consistent types, `"HC0"` to `"HC3"` are
+    supported. `"HC0"` uses `vcov = "hetero"` without the small-sample
+    adjustment (`ssc = fixest::ssc(K.adj = FALSE)`).
+
 - vcov_args:
 
   List of arguments to be passed to the function identified by the
