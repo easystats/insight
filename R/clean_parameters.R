@@ -288,6 +288,21 @@ clean_parameters.lavaan <- function(x, ...) {
 clean_parameters.blavaan <- function(x, ...) {
   params <- get_parameters(x, summary = TRUE)
   params$Estimate <- NULL
+
+  # for models with multiple groups, add the group suffix that the names of
+  # the posterior draws have. "params" has one row per row of the table below.
+  # User-defined (":=") parameters have group 0 and get no suffix
+  param_tab <- lavaan::parameterEstimates(x)
+  if ("group" %in% colnames(param_tab) && n_unique(param_tab$group) > 1L) {
+    in_group <- param_tab$group > 0
+    params$Parameter[in_group] <- paste0(
+      params$Parameter[in_group],
+      " (group ",
+      param_tab$group[in_group],
+      ")"
+    )
+  }
+
   params$Group <- ""
   params$Function <- ""
   params$Cleaned_Parameter <- params$Parameter

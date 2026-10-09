@@ -55,6 +55,21 @@
   (a multi-line, colored footer) gave an error. The parts of the footer are
   now joined into one source note, as in text output.
 
+* `find_parameters()`, `get_parameters()` and `clean_parameters()` now work for
+  *blavaan* models with multiple groups and equality constraints, for example
+  `group.equal = "loadings"`. Before, `find_parameters()` and
+  `get_parameters()` failed with the error "replacement has length zero".
+  `get_parameters(standardize = TRUE)` now gives the correct names for the
+  posterior draws of all *blavaan* models. Before, the names were shifted,
+  because the standardized draws also include the fixed parameters.
+  `get_parameters()` now also works for *blavaan* models with user-defined
+  parameters (`:=`) and returns their posterior draws. Before, it failed with
+  the error "Arguments must be mcmc objects".
+  `get_data(source = "mf")` now works for *lavaan* and *blavaan* models with
+  multiple groups and returns the grouping variable as a column. Together,
+  these fixes let `parameters::model_parameters()` work for multiple-group
+  *blavaan* models (easystats/parameters#735).
+
 * `get_varcov()` for *fixest* models now supports `vcov = "HC0"`. Before, it
   gave an error. The result is the same as
   `fixest::vcov_hetero(ssc = fixest::ssc(K.adj = FALSE))`, the

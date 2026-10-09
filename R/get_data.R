@@ -1495,7 +1495,22 @@ get_data.lavaan <- function(x, source = "environment", verbose = TRUE, ...) {
 
   # fall back to extract data from model frame
   check_if_installed("lavaan")
-  as.data.frame(lavaan::lavInspect(x, what = "data"))
+  model_data <- lavaan::lavInspect(x, what = "data")
+
+  # models with multiple groups return one data matrix per group
+  if (is.list(model_data)) {
+    group_data <- data.frame(rep(
+      names(model_data),
+      vapply(model_data, nrow, integer(1))
+    ))
+    colnames(group_data) <- lavaan::lavInspect(x, what = "group")
+    model_data <- cbind(
+      as.data.frame(do.call(rbind, unname(model_data))),
+      group_data
+    )
+  }
+
+  as.data.frame(model_data)
 }
 
 #' @export
