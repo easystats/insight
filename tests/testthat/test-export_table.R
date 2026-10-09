@@ -1438,6 +1438,14 @@ test_that("export_table, html passes gt::gt() arguments from ...", {
   # the default "firstleft" left-aligns the stub
   out <- export_table(d_three, format = "html", rowname_col = "b")
   expect_identical(col_align(out), c(a = "center", b = "left", c = "center"))
+  # a "Component" column with two values becomes row groups and is not shown,
+  # so no "align" character goes to it
+  d_comp <- cbind(Component = c("conditional", "zero_inflated"), d_three)
+  out <- export_table(d_comp, format = "html", align = "lcr", rowname_col = "b")
+  expect_identical(
+    col_align(out)[c("a", "b", "c")],
+    c(a = "center", b = "left", c = "right")
+  )
   # without "rowname_col", "align" follows the column order
   out <- export_table(d_three, format = "html", align = "lcr")
   expect_identical(col_align(out), c(a = "left", b = "center", c = "right"))
