@@ -23,12 +23,27 @@ test_that("get_varcov", {
   data <- data.frame(x = x, y = y)
 
   # Fit simple lavaan model
-  model <- 'y ~ x'
+  model <- "y ~ x"
   fit <- lavaan::sem(model, data = data)
   expect_equal(
     get_varcov(fit),
     lavaan::vcov(fit),
     ignore_attr = TRUE,
     tolerance = 1e-4
+  )
+})
+
+test_that("get_data, model frame of models with multiple groups", {
+  model <- lavaan::cfa(
+    "visual =~ x1 + x2 + x3",
+    data = lavaan::HolzingerSwineford1939,
+    group = "school"
+  )
+  out <- get_data(model, source = "mf", verbose = FALSE)
+  expect_shape(out, dim = c(301L, 4L))
+  expect_named(out, c("x1", "x2", "x3", "school"))
+  expect_identical(
+    as.vector(table(out$school)[c("Pasteur", "Grant-White")]),
+    c(156L, 145L)
   )
 })
