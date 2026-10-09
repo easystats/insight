@@ -295,8 +295,12 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
     link,
     log = exp,
     identity = identity,
-    softplus = function(eta) log1p(exp(eta)),
-    squareplus = function(eta) (eta + sqrt(eta^2 + 4)) / 2,
+    # written to avoid overflow for large positive `eta`, and cancellation
+    # for large negative `eta`
+    softplus = function(eta) pmax(eta, 0) + log1p(exp(-abs(eta))),
+    squareplus = function(eta) {
+      ifelse(eta >= 0, (eta + sqrt(eta^2 + 4)) / 2, 2 / (sqrt(eta^2 + 4) - eta))
+    },
     NULL
   )
   if (is.null(linkinv)) {

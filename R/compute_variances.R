@@ -383,12 +383,14 @@
     # variance and return NULL. intercept-only sigma (`sigma ~ 1`) is
     # handled in ".get_sigma()", so we only get here when sigma varies
     if (inherits(model, "brmsfit")) {
+      model_params <- find_parameters(model)
       params <- unlist(
-        compact_list(find_parameters(model)[c("conditional", "sigma")]),
+        compact_list(model_params[c("conditional", "sigma")]),
         use.names = FALSE
       )
       sigma_params <- grepl("b_sigma", params, fixed = TRUE)
-      if (any(sigma_params)) {
+      # random-only sigma (`sigma ~ 0 + (1 | g)`) has no "b_sigma" parameter
+      if (any(sigma_params) || length(model_params$sigma_random)) {
         if (verbose) {
           format_alert(
             "`sigma` is modeled directly, and hence there is no longer a single sigma parameter to calculate the residual variance. Returning `NULL` instead."

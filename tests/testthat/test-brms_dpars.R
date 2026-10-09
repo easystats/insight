@@ -685,9 +685,69 @@ test_that("residual variance, sigma modelled as distributional parameter", {
   m <- .brmsfit_draws_mock(brms::bf(mpg ~ 1, sigma ~ (1 | cyl)), draws)
   expect_message(
     {
-      out <- .compute_variance_distribution(m, faminfo = faminfo, name = "var.distribution")
+      out <- .compute_variance_distribution(
+        m,
+        faminfo = faminfo,
+        name = "var.distribution"
+      )
     },
     regex = "modeled directly"
   )
   expect_null(out)
+
+  # sigma varies by group, without an intercept: there is no "b_sigma"
+  # parameter, but sigma is still modelled
+  draws <- data.frame(
+    b_Intercept = rnorm(100, 30),
+    sd_cyl__sigma_Intercept = abs(rnorm(100, 0.5, 0.1))
+  )
+  draws[["r_cyl__sigma[4,Intercept]"]] <- rnorm(100)
+  draws[["r_cyl__sigma[6,Intercept]"]] <- rnorm(100)
+  m <- .brmsfit_draws_mock(brms::bf(mpg ~ 1, sigma ~ 0 + (1 | cyl)), draws)
+  expect_null(get_sigma(m))
+  expect_message(
+    {
+      out <- .compute_variance_distribution(
+        m,
+        faminfo = faminfo,
+        name = "var.distribution"
+      )
+    },
+    regex = "modeled directly"
+  )
+  expect_null(out)
+})
+
+
+test_that("get_sigma, intercept-only sigma with extreme draws on the link-scale", {
+  skip_if_not_installed("rstan")
+  draws <- data.frame(
+    b_Intercept = rep(30, 4),
+    b_sigma_Intercept = c(1000, 1000, -1e10, -1e10)
+  )
+  draws$Intercept_sigma <- draws$b_sigma_Intercept
+
+  # softplus: log(1 + exp(1000)) is about 1000, and about 0 for -1e10
+  m <- .brmsfit_draws_mock(
+    brms::bf(
+      mpg ~ 1,
+      sigma ~ 1,
+      family = brms::brmsfamily("gaussian", link_sigma = "softplus")
+    ),
+    draws
+  )
+  expect_equal(get_sigma(m), 500, tolerance = 1e-8, ignore_attr = TRUE)
+
+  # squareplus: about 1 / 1e10 for -1e10
+  draws$b_sigma_Intercept <- draws$Intercept_sigma <- rep(-1e10, 4)
+  m <- .brmsfit_draws_mock(
+    brms::bf(
+      mpg ~ 1,
+      sigma ~ 1,
+      family = brms::brmsfamily("gaussian", link_sigma = "squareplus")
+    ),
+    draws
+  )
+  # scaled, because a tolerance compares values close to 0 absolutely
+  expect_equal(get_sigma(m) * 1e10, 1, tolerance = 1e-8, ignore_attr = TRUE)
 })
