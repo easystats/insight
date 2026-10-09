@@ -650,37 +650,18 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
   check_if_installed("blavaan")
 
   if (isTRUE(standardize)) {
+    # standardized draws also include fixed parameters, and are already named
+    # "lhs op rhs", with a ".g<n>" suffix for models with multiple groups
     draws <- blavaan::standardizedPosterior(x)
+    coef_labels <- colnames(draws)
+    if (lavaan::lavInspect(x, "ngroups") > 1L) {
+      coef_labels <- gsub("\\.g([0-9]+)$", " (group \\1)", coef_labels)
+    }
   } else {
     draws <- blavaan::blavInspect(x, "draws")
+    coef_labels <- .blavaan_coef_labels(x)
   }
   posteriors <- as.data.frame(as.matrix(draws))
-
-  param_tab <- lavaan::parameterEstimates(x)
-  params <- paste0(param_tab$lhs, param_tab$op, param_tab$rhs)
-
-  coef_labels <- names(lavaan::coef(x))
-
-  if ("group" %in% colnames(param_tab) && n_unique(param_tab$group) > 1L) {
-    params <- paste0(params, " (group ", param_tab$group, ")")
-    groups <- grepl("(.*)\\.g(.*)", coef_labels)
-    coef_labels[!groups] <- paste0(coef_labels[!groups], " (group 1)")
-    coef_labels[groups] <- gsub(
-      "(.*)\\.g(.*)",
-      "\\1 \\(group \\2\\)",
-      coef_labels[groups]
-    )
-  }
-
-  are_labels <- !coef_labels %in% params
-  if (any(are_labels)) {
-    unique_labels <- unique(coef_labels[are_labels])
-    for (ll in seq_along(unique_labels)) {
-      coef_labels[coef_labels == unique_labels[ll]] <-
-        params[param_tab$label == unique_labels[ll]]
-    }
-  }
-
   colnames(posteriors) <- coef_labels
 
   posteriors

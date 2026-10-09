@@ -198,30 +198,7 @@ find_parameters.multinom_weightit <- function(x, flatten = FALSE, ...) {
 find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
   check_if_installed("lavaan")
 
-  param_tab <- lavaan::parameterEstimates(x)
-  params <- paste0(param_tab$lhs, param_tab$op, param_tab$rhs)
-
-  coef_labels <- names(lavaan::coef(x))
-
-  if ("group" %in% colnames(param_tab) && n_unique(param_tab$group) > 1L) {
-    params <- paste0(params, " (group ", param_tab$group, ")")
-    groups <- grepl("(.*)\\.g(.*)", coef_labels)
-    coef_labels[!groups] <- paste0(coef_labels[!groups], " (group 1)")
-    coef_labels[groups] <- gsub(
-      "(.*)\\.g(.*)",
-      "\\1 \\(group \\2\\)",
-      coef_labels[groups]
-    )
-  }
-
-  are_labels <- !coef_labels %in% params
-  if (any(are_labels)) {
-    unique_labels <- unique(coef_labels[are_labels])
-    for (ll in seq_along(unique_labels)) {
-      coef_labels[coef_labels == unique_labels[ll]] <-
-        params[param_tab$label == unique_labels[ll]]
-    }
-  }
+  coef_labels <- .blavaan_coef_labels(x)
 
   pars <- data.frame(
     pars = coef_labels,
@@ -243,6 +220,23 @@ find_parameters.blavaan <- function(x, flatten = FALSE, ...) {
   } else {
     pars
   }
+}
+
+
+# names for the free parameters of a blavaan model, in the order of coef()
+# and of the posterior draws. The "free" column of the parameter table numbers
+# the free parameters in that order, also when labels or equality constraints
+# give several parameters the same name in coef()
+.blavaan_coef_labels <- function(x) {
+  param_tab <- lavaan::parTable(x)
+  param_tab <- param_tab[param_tab$free > 0, , drop = FALSE]
+  param_tab <- param_tab[order(param_tab$free), , drop = FALSE]
+
+  params <- paste0(param_tab$lhs, param_tab$op, param_tab$rhs)
+  if ("group" %in% colnames(param_tab) && n_unique(param_tab$group) > 1L) {
+    params <- paste0(params, " (group ", param_tab$group, ")")
+  }
+  params
 }
 
 
