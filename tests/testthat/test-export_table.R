@@ -1828,6 +1828,23 @@ test_that("export_table, tinytable column names for lists with row groups", {
   ))
   expect_identical(out$names, c("Parameter", "V"))
   expect_identical(out$groups, list(A = c("a1", "a2"), B = "b1"))
+
+  # a shown column renamed to "Component", the name of the hidden column,
+  # keeps its values and the row groups
+  out <- export_table(
+    list(cap_a, cap_b),
+    format = "tt",
+    column_names = c(Value = "Component")
+  )
+  expect_identical(tt_parts(out)$names, c("Parameter", "Component"))
+  expect_identical(tt_parts(out)$groups, list(A = c("a1", "a2"), B = "b1"))
+  expect_identical(as.character(out@data$Component), c("1", "2", "1"))
+
+  # the hidden column cannot be renamed, it is not a column of the tables
+  expect_error(
+    export_table(list(cap_a, cap_b), format = "tt", column_names = c(Component = "G")),
+    regex = "Not all names in `column_names` were found"
+  )
 })
 
 

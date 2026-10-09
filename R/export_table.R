@@ -275,20 +275,17 @@ export_table <- function(
     # for tinytable, the row groups are created from the group column. `by` is
     # NULL for tinytable lists, and the HTML format returns no group column
     by <- c(by, html_list$group_by)
-    # an unnamed `column_names` vector names the shown columns. The group
-    # column of tinytable becomes the row groups and is not shown
-    if (
-      !is.null(html_list$group_by) &&
-        !is.null(column_names) &&
-        is.null(names(column_names))
-    ) {
-      shown_columns <- setdiff(colnames(x), html_list$group_by)
-      if (length(column_names) != length(shown_columns)) {
-        format_error(
-          "Number of names in `column_names` does not match number of columns in data frame."
-        )
-      }
-      names(column_names) <- shown_columns
+    # the group column of tinytable becomes the row groups and is not shown,
+    # so `column_names` renames the shown columns only. The group column is
+    # added back with a name that no shown column has
+    if (!is.null(html_list$group_by) && !is.null(column_names)) {
+      groups <- x[[html_list$group_by]]
+      x[[html_list$group_by]] <- NULL
+      x <- .new_column_names(x, column_names)
+      group_column <- make.unique(c(colnames(x), html_list$group_by))[ncol(x) + 1]
+      x[[group_column]] <- groups
+      by <- group_column
+      column_names <- NULL
     }
   } else {
     # for a list of tables that is not bound above, each element of a list
