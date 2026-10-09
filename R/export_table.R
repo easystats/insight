@@ -28,14 +28,21 @@
 #'   `table_subtitle`). If you want to force that no title is printed, even if
 #'   present as attribute, use `""`, which will never print titles. If `x` is a
 #'   list of data frames, `caption` may be a list of table captions, one for
-#'   each table.
+#'   each table. For `format = "html"`, a list of data frames is shown as one
+#'   table, and the caption of each data frame is the label of its row group,
+#'   or the title if all data frames have the same caption. This does not
+#'   apply if any data frame has a `Component`, `Effects`, `Group` or
+#'   `Response` column.
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
 #'   new text line under the table. If `x` is a list of data frames, `footer`
 #'   may be a list of table captions, one for each table. If `NULL`, no footer
 #'   is printed, unless it is stored as attributes (`table_footer`). If you want
 #'   to force that no footer is printed, even if present as attribute, use `""`,
-#'   which will never print footers.
+#'   which will never print footers. For `format = "html"` and a list of data
+#'   frames, the footer of each data frame is a source note of the table,
+#'   followed by `footer` if it is a string. This does not apply if any data
+#'   frame has a `Component`, `Effects`, `Group` or `Response` column.
 #' @param align Column alignment. For markdown-formatted tables, the default
 #'   `align = NULL` will right-align numeric columns, while all other columns
 #'   will be left-aligned. If `format = "html"`, the default is left-align first
@@ -94,7 +101,12 @@
 #'   names, which will be inserted as "column header row". Currently only
 #'   works for `format = "tt"` or `format = "html"`.
 #' @param ... Arguments passed to [`tinytable::tt()`] and [`tinytable::style_tt()`]
-#'   when `format = "tt"`.
+#'   when `format = "tt"`. When `format = "html"`, arguments of [`gt::gt()`],
+#'   for example `id` or `rowname_col`, are passed to `gt::gt()`, except
+#'   `data`, `groupname_col` and `auto_align`. `caption` is not passed,
+#'   because it is an argument of `export_table()`. With `rowname_col`, the
+#'   first characters of `align` go to the `rowname_col` columns, which are
+#'   shown first, and the other characters to the remaining columns.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
@@ -241,7 +253,33 @@ export_table <- function(
   # data frame now. HTML format needs a single data frame. Sub tables
   # are split by their group-column later, see code below
   # "gt(final, groupname_col = group_by_columns)".
-  x <- .bind_html_tables(x, format)
+  if (identical(format, "html") && .is_html_table_list(x)) {
+    # captions of each table become row groups, footers become source notes
+    html_list <- .bind_html_table_list(
+      x,
+      caption = caption,
+      title = title,
+      subtitle = subtitle,
+      footer = footer
+    )
+    x <- html_list$x
+    caption <- html_list$caption
+    title <- NULL
+    footer <- html_list$footer
+  } else {
+    # for a list of tables with a group column, each element of a list
+    # footer is one source note
+    if (identical(format, "html") && !is.data.frame(x) && is.list(footer)) {
+      first_removed <- length(footer) > 0 && identical(footer[[1]], "")
+      footer <- .as_html_notes(footer)
+      # the bound table keeps the footer attribute of the first table. If no
+      # note is left and the first entry is "", "" removes that attribute too
+      if (is.null(footer) && first_removed) {
+        footer <- ""
+      }
+    }
+    x <- .bind_html_tables(x, format)
+  }
 
   # check for indention
   indent_groups <- attributes(x)$indent_groups
@@ -470,6 +508,169 @@ print.insight_table <- function(x, ...) {
 }
 
 
+# lists of data frames for HTML format are bound into one data frame, where
+# the caption of each table is its row group. Tables that already have a
+# column used for row groups are bound by `.bind_html_tables()` instead.
+.is_html_table_list <- function(x) {
+  if (is.data.frame(x) || !is.list(x)) {
+    return(FALSE)
+  }
+  x <- compact_list(x)
+  group_columns <- c("Component", "Effects", "Group", "Response")
+  length(x) > 0 &&
+    all(vapply(x, is.data.frame, logical(1))) &&
+    !any(vapply(x, function(i) any(group_columns %in% colnames(i)), logical(1)))
+}
+
+
+# returns the caption or footer of the i-th of n tables. An attribute wins
+# over a list entry, but a "" list entry removes it - as for text format
+.table_list_entry <- function(value, entries, i, n) {
+  if (is.list(entries) && length(entries) >= i && identical(entries[[i]], "")) {
+    return(NULL)
+  }
+  if (is.null(value) && is.list(entries) && length(entries) == n) {
+    value <- entries[[i]]
+  }
+  value
+}
+
+
+# first string of a footer. Lists (multi-line, colored footers) are joined
+# like in text format. New lines at the start and end are removed, new lines
+# in between become line breaks.
+.html_footer_string <- function(x) {
+  if (is.list(x)) {
+    x <- compact_list(x)
+    x <- paste(vapply(x, function(i) as.character(i)[1], character(1)), collapse = "")
+  } else {
+    x <- as.character(x)[1]
+  }
+  x <- gsub("^\n+|\n+$", "", x)
+  x <- gsub("\n", "<br>", x, fixed = TRUE)
+  if (is.na(x) || !nzchar(x)) {
+    return(NULL)
+  }
+  x
+}
+
+
+# one source note per element, for `.format_html_table()`. Empty notes are
+# removed, and NULL is returned if no note is left
+.as_html_notes <- function(x) {
+  x <- compact_list(lapply(x, .html_footer_string))
+  if (!length(x)) {
+    return(NULL)
+  }
+  structure(x, class = "insight_html_notes")
+}
+
+
+# source notes of a list of tables: the footer of each table, then the
+# footer argument if it is a string. `footer = ""` removes all of them
+.html_list_notes <- function(x, footer) {
+  if (identical(footer, "")) {
+    return(NULL)
+  }
+  n <- length(x)
+  values <- lapply(seq_len(n), function(i) {
+    .table_list_entry(attributes(x[[i]])$table_footer, footer, i, n)
+  })
+  if (is.character(footer)) {
+    values <- c(values, list(footer))
+  }
+  .as_html_notes(values)
+}
+
+
+# TRUE if the subtitle argument, or else the subtitle of the first table, is
+# a non-empty string
+.has_html_subtitle <- function(x, subtitle) {
+  if (is.null(subtitle)) {
+    subtitle <- attributes(x[[1]])$table_subtitle
+  }
+  subtitle <- as.character(unlist(subtitle))
+  length(subtitle) > 0 && !is.na(subtitle[1]) && nzchar(subtitle[1])
+}
+
+
+.bind_html_table_list <- function(
+  x,
+  caption = NULL,
+  title = NULL,
+  subtitle = NULL,
+  footer = NULL
+) {
+  x <- compact_list(x)
+  n <- length(x)
+
+  # the main caption is the title of the gt table
+  main_caption <- NULL
+  if (is.character(title)) {
+    main_caption <- title[1]
+  } else if (is.character(caption)) {
+    main_caption <- caption[1]
+  }
+  # "" for caption or title removes the title and all table captions
+  no_caption <- (is.character(title) && identical(title[1], "")) ||
+    (is.character(caption) && identical(caption[1], ""))
+
+  # captions of each table, "title" takes the place of a missing "caption"
+  # no `%||%`, which needs R >= 4.4
+  caption_entries <- if (is.null(caption)) title else caption # nolint: coalesce_linter
+  captions <- vapply(
+    seq_len(n),
+    function(i) {
+      attr_name <- .check_caption_attr_name(x[[i]])
+      value <- .table_list_entry(attributes(x[[i]])[[attr_name]], caption_entries, i, n)
+      value <- as.character(unlist(value))
+      if (length(value)) value[1] else ""
+    },
+    character(1)
+  )
+
+  # footers of each table, then the footer argument
+  notes <- .html_list_notes(x, footer)
+
+  # distinct captions become row groups, a single shared caption the title
+  add_groups <- FALSE
+  if (!no_caption) {
+    if (length(unique(captions)) > 1) {
+      add_groups <- TRUE
+    } else if (nzchar(captions[1]) && is.null(main_caption)) {
+      main_caption <- captions[1]
+    }
+  }
+  if (no_caption) {
+    main_caption <- NULL
+  }
+  # gt shows no subtitle without a title, so an empty title keeps the
+  # subtitle visible. The class keeps `.export_table()` from removing the
+  # empty caption, `caption[1]` in `.format_html_table()` drops it again
+  if (is.null(main_caption) && !no_caption && .has_html_subtitle(x, subtitle)) {
+    main_caption <- structure("", class = "insight_empty_title")
+  }
+
+  out <- do.call(
+    rbind,
+    lapply(seq_len(n), function(i) {
+      d <- x[[i]]
+      if (add_groups) {
+        d$Component <- rep(captions[i], nrow(d))
+      }
+      d
+    })
+  )
+  # rbind() keeps the attributes of the first table, which are no longer
+  # needed for the bound table
+  attr(out, "table_caption") <- NULL
+  attr(out, "table_title") <- NULL
+  attr(out, "table_footer") <- NULL
+
+  list(x = out, caption = main_caption, footer = notes)
+}
+
+
 # split data frame for text format - unlike HTML, where we need to bind
 # lists of data frames to a single data frame and have a "group_by" variable,
 # we need a list of data frames for text or markdown output (instead of a
@@ -637,7 +838,9 @@ print.insight_table <- function(x, ...) {
       row_groups = row_groups
     )
     if (format == "html") {
-      out <- do.call(.format_html_table, fun_args)
+      # pass `...` as one list, so that its names cannot match the
+      # arguments of .format_html_table()
+      out <- do.call(.format_html_table, c(fun_args, list(gt_args = list(...))))
     } else {
       out <- do.call(.format_tiny_table, c(fun_args, list(...)))
     }
@@ -1503,6 +1706,7 @@ print.insight_table <- function(x, ...) {
   group_by = NULL,
   row_groups = NULL,
   column_groups = NULL,
+  gt_args = NULL,
   ...
 ) {
   check_if_installed("gt")
@@ -1548,11 +1752,8 @@ print.insight_table <- function(x, ...) {
     logical(1)
   ))
 
-  # validation check - clean caption, subtitle and footer from ansi-colour codes,
-  # which only work for text format... But if user accidentally provides colours
-  # for HTML format as well, remove those colour codes, so they don't appear as
-  # text in the table header and footer. Furthermore, in footers, we need to
-  # remove newline-characters
+  # caption, subtitle and footer can have a colour name as second string, which
+  # only works for text format, so we only use the first string
 
   if (!is.null(caption)) {
     if (is.list(caption)) {
@@ -1574,31 +1775,52 @@ print.insight_table <- function(x, ...) {
     }
   }
 
-  if (!is.null(footer)) {
+  # source notes of a list of tables are already prepared. Any other list
+  # footer (multi-line, colored) gives one source note, joined like text
+  if (!is.null(footer) && !inherits(footer, "insight_html_notes")) {
     if (is.list(footer)) {
-      footer <- lapply(footer, function(i) {
-        gsub("\n", "", i[1], fixed = TRUE)
-      })
+      footer <- .as_html_notes(list(footer))
     } else {
       footer <- footer[1]
     }
   }
 
-  tab <- gt::gt(final, groupname_col = group_by_columns)
+  # arguments in `...` that gt::gt() accepts are passed to it, except those
+  # that we set ourselves or that our alignment overrides
+  gt_names <- setdiff(names(formals(gt::gt)), c("data", "groupname_col", "auto_align"))
+  gt_args <- gt_args[names(gt_args) %in% gt_names]
+  # with row groups, "final" is a matrix. gt::gt() checks "rowname_col"
+  # against names(data), which is NULL for a matrix, before it converts it
+  if (!is.null(gt_args$rowname_col) && is.matrix(final)) {
+    final <- as.data.frame(final, stringsAsFactors = FALSE)
+  }
+  tab <- do.call(gt::gt, c(list(final, groupname_col = group_by_columns), gt_args))
   header <- gt::tab_header(tab, title = caption, subtitle = subtitle)
-  if (!is.null(footer)) {
-    footer <- gt::tab_source_note(header, source_note = gt::html(footer))
-  } else {
+  if (inherits(footer, "insight_html_notes")) {
+    for (i in footer) {
+      header <- gt::tab_source_note(header, source_note = gt::html(i))
+    }
+    footer <- header
+  } else if (is.null(footer)) {
     footer <- gt::tab_source_note(header, source_note = NULL)
+  } else {
+    footer <- gt::tab_source_note(header, source_note = gt::html(footer))
   }
   out <- gt::cols_align(footer, align = "center")
 
   # emphasize header of row groups?
   if (!is.null(highlight_rows) && length(highlight_rows)) {
+    # if "rowname_col" moved the first column into the stub, its cells are
+    # stub cells, not body cells
+    if (isTRUE(gt_args$rowname_col[1] == colnames(final)[1])) {
+      header_cells <- gt::cells_stub(rows = highlight_rows)
+    } else {
+      header_cells <- gt::cells_body(columns = 1, rows = highlight_rows)
+    }
     out <- gt::tab_style(
       out,
       style = gt::cell_text(style = "oblique"),
-      locations = gt::cells_body(columns = 1, rows = highlight_rows)
+      locations = header_cells
     )
   }
 
@@ -1611,13 +1833,25 @@ print.insight_table <- function(x, ...) {
     )
   }
 
-  # custom alignment of columns
+  # custom alignment of columns. gt shows the stub columns first, in the order
+  # of "rowname_col", and hides the group columns, so with "rowname_col" the
+  # stub columns come first and the group columns last
+  align_cols <- seq_len(max(ncol(final), nchar(align)))
+  if (!is.null(gt_args$rowname_col)) {
+    stub_cols <- match(gt_args$rowname_col, colnames(final))
+    hidden_cols <- which(colnames(final) %in% group_by_columns)
+    align_cols <- c(
+      stub_cols,
+      setdiff(align_cols, c(stub_cols, hidden_cols)),
+      hidden_cols
+    )
+  }
   if (align == "firstleft") {
-    out <- gt::cols_align(out, "left", 1)
+    out <- gt::cols_align(out, "left", align_cols[1])
   } else {
     for (i in 1:nchar(align)) {
       col_align <- switch(substr(align, i, i), l = "left", r = "right", "center")
-      out <- gt::cols_align(out, col_align, i)
+      out <- gt::cols_align(out, col_align, align_cols[i])
     }
   }
 

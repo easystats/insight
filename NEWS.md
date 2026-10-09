@@ -15,6 +15,9 @@
 
 ## Changes
 
+* `export_table(format = "html")` passes arguments of `gt::gt()` from `...`
+  to `gt::gt()`, for example `id` or `rowname_col` (#631).
+
 * `is_converged()` now supports models fitted with Stan (`stanfit`, `brmsfit`
   and `stanreg`). Before, it did not work for these models.
   It checks divergent transitions, transitions at the maximum treedepth,
@@ -38,6 +41,19 @@
   supported (#1090).
 
 ## Bug fixes
+
+* `export_table(format = "html")` for a list of data frames now shows the
+  caption of each data frame as the label of its row group, and the footer of
+  each data frame as a source note. Before, a list `footer` or a mix of
+  captioned and uncaptioned tables gave an error. Of the footers stored as
+  attributes, only the first one was kept, and a list `caption` became one
+  title. If any data frame in the list has a `Component`, `Effects`, `Group`
+  or `Response` column, the old output stays, but a list `footer` no longer
+  gives an error (#631).
+
+* `export_table(format = "html")` for a single data frame with a list footer
+  (a multi-line, colored footer) gave an error. The parts of the footer are
+  now joined into one source note, as in text output.
 
 * `get_sigma()`, `get_variance()` and `get_variance_residual()` now support
   *brms* models where `sigma` has an intercept-only formula, for example
