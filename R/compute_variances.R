@@ -380,14 +380,15 @@
   if (is.null(sig)) {
     # for brms-models, when sigma is modeled, there is no longer a
     # single sigma parameter. in this case, we can't calculate residual
-    # variance and return NULL
+    # variance and return NULL. intercept-only sigma (`sigma ~ 1`) is
+    # handled in ".get_sigma()", so we only get here when sigma varies
     if (inherits(model, "brmsfit")) {
       params <- unlist(
         compact_list(find_parameters(model)[c("conditional", "sigma")]),
         use.names = FALSE
       )
       sigma_params <- grepl("b_sigma", params, fixed = TRUE)
-      if (sum(sigma_params) > 1) {
+      if (any(sigma_params)) {
         if (verbose) {
           format_alert(
             "`sigma` is modeled directly, and hence there is no longer a single sigma parameter to calculate the residual variance. Returning `NULL` instead."

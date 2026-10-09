@@ -576,3 +576,118 @@ test_that(".get_stan_params maps component names for all supported classes", {
     rep("random", 7)
   )
 })
+
+
+# "brmsfit"-mockups with posterior draws, to test functions that call
+# `as.data.frame()` on the model. brms reads the draws from the "stanfit"
+# object, so we build a minimal one from a data frame of draws.
+.brmsfit_draws_mock <- function(formula, draws) {
+  fit <- methods::new(
+    methods::getClass("stanfit", where = asNamespace("rstan")),
+    sim = list(
+      samples = list(draws),
+      fnames_oi = colnames(draws),
+      chains = 1,
+      iter = nrow(draws),
+      warmup = 0,
+      warmup2 = 0,
+      thin = 1,
+      n_save = nrow(draws),
+      permutation = list(seq_len(nrow(draws)))
+    ),
+    model_pars = colnames(draws),
+    mode = 0L
+  )
+  structure(list(formula = formula, fit = fit, family = NULL), class = "brmsfit")
+}
+
+
+test_that("get_sigma, sigma modelled as intercept-only distributional parameter", {
+  skip_if_not_installed("rstan")
+  set.seed(123)
+  draws <- data.frame(
+    b_Intercept = rnorm(100, 30),
+    b_hp = rnorm(100, -0.07, 0.01),
+    b_sigma_Intercept = rnorm(100, 1.2, 0.1)
+  )
+  draws$Intercept_sigma <- draws$b_sigma_Intercept
+
+  # default log-link for sigma
+  m <- .brmsfit_draws_mock(brms::bf(mpg ~ hp, sigma ~ 1), draws)
+  expect_equal(
+    get_sigma(m),
+    mean(exp(draws$b_sigma_Intercept)),
+    ignore_attr = TRUE
+  )
+
+  # identity-link for sigma
+  m <- .brmsfit_draws_mock(
+    brms::bf(
+      mpg ~ hp,
+      sigma ~ 1,
+      family = brms::brmsfamily("gaussian", link_sigma = "identity")
+    ),
+    draws
+  )
+  expect_equal(
+    get_sigma(m),
+    mean(draws$b_sigma_Intercept),
+    ignore_attr = TRUE
+  )
+})
+
+
+test_that("get_sigma, sigma modelled with predictors or random effects", {
+  skip_if_not_installed("rstan")
+  set.seed(123)
+  draws <- data.frame(
+    b_Intercept = rnorm(100, 30),
+    b_sigma_Intercept = rnorm(100, 1.2, 0.1),
+    b_sigma_hp = rnorm(100, 0, 0.01)
+  )
+  m <- .brmsfit_draws_mock(brms::bf(mpg ~ 1, sigma ~ hp), draws)
+  expect_null(get_sigma(m))
+
+  draws <- data.frame(
+    b_Intercept = rnorm(100, 30),
+    b_sigma_Intercept = rnorm(100, 1.2, 0.1),
+    sd_cyl__sigma_Intercept = abs(rnorm(100, 0.5, 0.1))
+  )
+  m <- .brmsfit_draws_mock(brms::bf(mpg ~ 1, sigma ~ (1 | cyl)), draws)
+  expect_null(get_sigma(m))
+})
+
+
+test_that("residual variance, sigma modelled as distributional parameter", {
+  skip_if_not_installed("rstan")
+  faminfo <- list(is_linear = TRUE, is_tweedie = FALSE)
+  set.seed(123)
+
+  # intercept-only sigma: the residual variance is sigma^2
+  draws <- data.frame(
+    b_Intercept = rnorm(100, 30),
+    b_sigma_Intercept = rnorm(100, 1.2, 0.1)
+  )
+  draws$Intercept_sigma <- draws$b_sigma_Intercept
+  m <- .brmsfit_draws_mock(brms::bf(mpg ~ 1, sigma ~ 1), draws)
+  expect_equal(
+    .compute_variance_distribution(m, faminfo = faminfo, name = "var.distribution"),
+    mean(exp(draws$b_sigma_Intercept))^2,
+    ignore_attr = TRUE
+  )
+
+  # sigma varies by group: no single residual variance
+  draws <- data.frame(
+    b_Intercept = rnorm(100, 30),
+    b_sigma_Intercept = rnorm(100, 1.2, 0.1),
+    sd_cyl__sigma_Intercept = abs(rnorm(100, 0.5, 0.1))
+  )
+  m <- .brmsfit_draws_mock(brms::bf(mpg ~ 1, sigma ~ (1 | cyl)), draws)
+  expect_message(
+    {
+      out <- .compute_variance_distribution(m, faminfo = faminfo, name = "var.distribution")
+    },
+    regex = "modeled directly"
+  )
+  expect_null(out)
+})

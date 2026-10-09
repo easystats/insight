@@ -39,6 +39,15 @@
 
 ## Bug fixes
 
+* `get_sigma()`, `get_variance()` and `get_variance_residual()` now support
+  *brms* models where `sigma` has an intercept-only formula, for example
+  `bf(y ~ x, sigma ~ 1)`. Sigma is the mean of the posterior draws of
+  `b_sigma_Intercept`, back-transformed with the link function of `sigma`.
+  Before, `get_sigma()` returned `NULL` and `get_variance()` returned a
+  residual variance of 1. If `sigma` varies, for example with
+  `sigma ~ (1 | g)`, `get_variance()` now returns no residual variance with a
+  message, as it already did for `sigma ~ x` (#967).
+
 * `find_predictors()` and `find_variables()` no longer return the matrix of the
   *brms* autocorrelation terms `sar()`, `car()` and `fcor()`, for example `W`
   in `y ~ x + sar(W)`. This matrix is an object in `data2`, not a variable in

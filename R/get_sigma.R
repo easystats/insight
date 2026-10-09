@@ -235,9 +235,14 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
       if (length(sigma_column) == 1) {
         mean(dat[[sigma_column]])
       } else if (length(sigma_column)) {
-        # if more than one sigma column,
-        # there isn't a traditional sigma for the model
-        return(NULL)
+        # if more than one sigma column, there isn't a traditional sigma for
+        # the model - unless sigma is modelled as intercept-only distributional
+        # parameter (`sigma ~ 1`), which is a single sigma on the link-scale
+        s_intercept <- .brms_sigma_intercept(x, dat)
+        if (is.null(s_intercept)) {
+          return(NULL)
+        }
+        s_intercept
       } else {
         NULL
       }
@@ -269,6 +274,35 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
   }
   class(s) <- c("insight_aux", class(s))
   s
+}
+
+
+# for brms-models where sigma is modelled as intercept-only distributional
+# parameter (`sigma ~ 1`), returns the mean of the posterior draws of sigma
+# on the response scale, or `NULL` for all other models
+.brms_sigma_intercept <- function(x, dat) {
+  sigma_columns <- grep("sigma", colnames(dat), fixed = TRUE, value = TRUE)
+  # "Intercept_sigma" is the intercept of the centered design matrix, which
+  # equals "b_sigma_Intercept" when sigma has no predictors
+  if (!identical(setdiff(sigma_columns, "Intercept_sigma"), "b_sigma_Intercept")) {
+    return(NULL)
+  }
+  link <- .safe(brms::brmsterms(stats::formula(x))$dpars$sigma$family$link)
+  if (!is.character(link) || length(link) != 1) {
+    return(NULL)
+  }
+  linkinv <- switch(
+    link,
+    log = exp,
+    identity = identity,
+    softplus = function(eta) log1p(exp(eta)),
+    squareplus = function(eta) (eta + sqrt(eta^2 + 4)) / 2,
+    NULL
+  )
+  if (is.null(linkinv)) {
+    return(NULL)
+  }
+  mean(linkinv(dat$b_sigma_Intercept))
 }
 
 
