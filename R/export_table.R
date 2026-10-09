@@ -28,21 +28,26 @@
 #'   `table_subtitle`). If you want to force that no title is printed, even if
 #'   present as attribute, use `""`, which will never print titles. If `x` is a
 #'   list of data frames, `caption` may be a list of table captions, one for
-#'   each table. For `format = "html"`, a list of data frames is shown as one
-#'   table, and the caption of each data frame is the label of its row group,
-#'   or the title if all data frames have the same caption. This does not
-#'   apply if any data frame has a `Component`, `Effects`, `Group` or
-#'   `Response` column.
+#'   each table. For `format = "html"` and `format = "tt"`, a list of data
+#'   frames is shown as one table, and the caption of each data frame is the
+#'   label of its row group, or the title if all data frames have the same
+#'   caption. This does not apply if any data frame has a `Component`,
+#'   `Effects`, `Group` or `Response` column. For `format = "tt"`, it also does
+#'   not apply if a data frame has one column, no rows or row groups
+#'   (`indent_rows`), if the data frames have different column names, or if
+#'   `by`, `row_groups` or `column_groups` is given.
 #' @param footer Table footer, as string. For markdown-formatted tables, table
 #'   footers, due to the limitation in markdown rendering, are actually just a
 #'   new text line under the table. If `x` is a list of data frames, `footer`
 #'   may be a list of table captions, one for each table. If `NULL`, no footer
 #'   is printed, unless it is stored as attributes (`table_footer`). If you want
 #'   to force that no footer is printed, even if present as attribute, use `""`,
-#'   which will never print footers. For `format = "html"` and a list of data
-#'   frames, the footer of each data frame is a source note of the table,
-#'   followed by `footer` if it is a string. This does not apply if any data
-#'   frame has a `Component`, `Effects`, `Group` or `Response` column.
+#'   which will never print footers. For `format = "html"` and `format = "tt"`
+#'   and a list of data frames, the footer of each data frame is a note of the
+#'   table, followed by `footer` if it is a string. The exceptions are the same
+#'   as for `caption`. For `format = "tt"` and a single data frame, the footer
+#'   is one note. For a list of data frames that is not shown as one table,
+#'   each element of a list `footer` is one note.
 #' @param align Column alignment. For markdown-formatted tables, the default
 #'   `align = NULL` will right-align numeric columns, while all other columns
 #'   will be left-aligned. If `format = "html"`, the default is left-align first
@@ -253,25 +258,44 @@ export_table <- function(
   # data frame now. HTML format needs a single data frame. Sub tables
   # are split by their group-column later, see code below
   # "gt(final, groupname_col = group_by_columns)".
-  if (identical(format, "html") && .is_html_table_list(x)) {
+  if (.is_bound_table_list(x, format, by, row_groups, column_groups)) {
     # captions of each table become row groups, footers become source notes
     html_list <- .bind_html_table_list(
       x,
       caption = caption,
       title = title,
       subtitle = subtitle,
-      footer = footer
+      footer = footer,
+      format = format
     )
     x <- html_list$x
     caption <- html_list$caption
     title <- NULL
     footer <- html_list$footer
+    # for tinytable, the row groups are created from the group column. `by` is
+    # NULL for tinytable lists, and the HTML format returns no group column
+    by <- c(by, html_list$group_by)
+    # an unnamed `column_names` vector names the shown columns. The group
+    # column of tinytable becomes the row groups and is not shown
+    if (
+      !is.null(html_list$group_by) &&
+        !is.null(column_names) &&
+        is.null(names(column_names))
+    ) {
+      shown_columns <- setdiff(colnames(x), html_list$group_by)
+      if (length(column_names) != length(shown_columns)) {
+        format_error(
+          "Number of names in `column_names` does not match number of columns in data frame."
+        )
+      }
+      names(column_names) <- shown_columns
+    }
   } else {
-    # for a list of tables with a group column, each element of a list
+    # for a list of tables that is not bound above, each element of a list
     # footer is one source note
-    if (identical(format, "html") && !is.data.frame(x) && is.list(footer)) {
+    if (format %in% c("html", "tt") && !is.data.frame(x) && is.list(footer)) {
       first_removed <- length(footer) > 0 && identical(footer[[1]], "")
-      footer <- .as_html_notes(footer)
+      footer <- .as_html_notes(footer, line_break = .note_line_break(format))
       # the bound table keeps the footer attribute of the first table. If no
       # note is left and the first entry is "", "" removes that attribute too
       if (is.null(footer) && first_removed) {
@@ -523,6 +547,42 @@ print.insight_table <- function(x, ...) {
 }
 
 
+# TRUE if a list of data frames is bound by `.bind_html_table_list()`
+.is_bound_table_list <- function(x, format, by, row_groups, column_groups) {
+  switch(
+    format,
+    html = .is_html_table_list(x),
+    tt = .is_tt_table_list(x, by, row_groups, column_groups),
+    FALSE
+  )
+}
+
+
+# lists of data frames for tinytable format are bound like for HTML format, if
+# no other grouping is requested. tinytable cannot show row groups for tables
+# with one column, and the tables must have the same columns to be bound.
+.is_tt_table_list <- function(x, by, row_groups, column_groups) {
+  if (!is.null(by) || !is.null(row_groups) || !is.null(column_groups)) {
+    return(FALSE)
+  }
+  if (!.is_html_table_list(x)) {
+    return(FALSE)
+  }
+  x <- compact_list(x)
+  col_names <- colnames(x[[1]])
+  all(vapply(
+    x,
+    function(i) {
+      ncol(i) > 1 &&
+        nrow(i) > 0 &&
+        identical(colnames(i), col_names) &&
+        is.null(attributes(i)$indent_rows)
+    },
+    logical(1)
+  ))
+}
+
+
 # returns the caption or footer of the i-th of n tables. An attribute wins
 # over a list entry, but a "" list entry removes it - as for text format
 .table_list_entry <- function(value, entries, i, n) {
@@ -536,10 +596,18 @@ print.insight_table <- function(x, ...) {
 }
 
 
+# line break inside a note: "<br>" for gt, "\n" for tinytable. tinytable 0.19.0
+# keeps "\n" in the note text: HTML output shows it as a space, and it breaks
+# the markdown grid
+.note_line_break <- function(format) {
+  if (identical(format, "tt")) "\n" else "<br>"
+}
+
+
 # first string of a footer. Lists (multi-line, colored footers) are joined
 # like in text format. New lines at the start and end are removed, new lines
-# in between become line breaks.
-.html_footer_string <- function(x) {
+# in between become `line_break`.
+.html_footer_string <- function(x, line_break = "<br>") {
   if (is.list(x)) {
     x <- compact_list(x)
     x <- paste(vapply(x, function(i) as.character(i)[1], character(1)), collapse = "")
@@ -547,7 +615,7 @@ print.insight_table <- function(x, ...) {
     x <- as.character(x)[1]
   }
   x <- gsub("^\n+|\n+$", "", x)
-  x <- gsub("\n", "<br>", x, fixed = TRUE)
+  x <- gsub("\n", line_break, x, fixed = TRUE)
   if (is.na(x) || !nzchar(x)) {
     return(NULL)
   }
@@ -555,10 +623,11 @@ print.insight_table <- function(x, ...) {
 }
 
 
-# one source note per element, for `.format_html_table()`. Empty notes are
-# removed, and NULL is returned if no note is left
-.as_html_notes <- function(x) {
-  x <- compact_list(lapply(x, .html_footer_string))
+# one source note per element, for `.format_html_table()` and
+# `.format_tiny_table()`. Empty notes are removed, and NULL is returned if no
+# note is left
+.as_html_notes <- function(x, line_break = "<br>") {
+  x <- compact_list(lapply(x, .html_footer_string, line_break = line_break))
   if (!length(x)) {
     return(NULL)
   }
@@ -568,7 +637,7 @@ print.insight_table <- function(x, ...) {
 
 # source notes of a list of tables: the footer of each table, then the
 # footer argument if it is a string. `footer = ""` removes all of them
-.html_list_notes <- function(x, footer) {
+.html_list_notes <- function(x, footer, line_break = "<br>") {
   if (identical(footer, "")) {
     return(NULL)
   }
@@ -579,7 +648,7 @@ print.insight_table <- function(x, ...) {
   if (is.character(footer)) {
     values <- c(values, list(footer))
   }
-  .as_html_notes(values)
+  .as_html_notes(values, line_break = line_break)
 }
 
 
@@ -594,17 +663,15 @@ print.insight_table <- function(x, ...) {
 }
 
 
-.bind_html_table_list <- function(
-  x,
-  caption = NULL,
-  title = NULL,
-  subtitle = NULL,
-  footer = NULL
-) {
-  x <- compact_list(x)
+# main caption, whether captions are removed, and the captions of each table,
+# "" for a table without caption. "title" takes the
+# place of a missing "caption". tinytable needs a non-empty label for each row
+# group, so for tinytable, tables without a caption share the label " ", also
+# with a caption " " or NA
+.table_list_captions <- function(x, caption = NULL, title = NULL, format = "html") {
   n <- length(x)
-
-  # the main caption is the title of the gt table
+  # the main caption is the title of the gt table, or the caption of the
+  # tinytable
   main_caption <- NULL
   if (is.character(title)) {
     main_caption <- title[1]
@@ -615,7 +682,6 @@ print.insight_table <- function(x, ...) {
   no_caption <- (is.character(title) && identical(title[1], "")) ||
     (is.character(caption) && identical(caption[1], ""))
 
-  # captions of each table, "title" takes the place of a missing "caption"
   # no `%||%`, which needs R >= 4.4
   caption_entries <- if (is.null(caption)) title else caption # nolint: coalesce_linter
   captions <- vapply(
@@ -628,9 +694,43 @@ print.insight_table <- function(x, ...) {
     },
     character(1)
   )
+  group_labels <- captions
+  if (identical(format, "tt")) {
+    captions[is.na(captions) | captions == " "] <- ""
+    group_labels <- captions
+    group_labels[!nzchar(group_labels)] <- " "
+  }
+  list(
+    captions = captions,
+    labels = group_labels,
+    main = main_caption,
+    none = no_caption
+  )
+}
+
+
+.bind_html_table_list <- function(
+  x,
+  caption = NULL,
+  title = NULL,
+  subtitle = NULL,
+  footer = NULL,
+  format = "html"
+) {
+  x <- compact_list(x)
+  n <- length(x)
+  line_break <- .note_line_break(format)
+
+  # the main caption, the captions of each table, and the labels of their
+  # row groups
+  captions <- .table_list_captions(x, caption, title, format)
+  main_caption <- captions$main
+  no_caption <- captions$none
+  group_labels <- captions$labels
+  captions <- captions$captions
 
   # footers of each table, then the footer argument
-  notes <- .html_list_notes(x, footer)
+  notes <- .html_list_notes(x, footer, line_break = line_break)
 
   # distinct captions become row groups, a single shared caption the title
   add_groups <- FALSE
@@ -646,8 +746,14 @@ print.insight_table <- function(x, ...) {
   }
   # gt shows no subtitle without a title, so an empty title keeps the
   # subtitle visible. The class keeps `.export_table()` from removing the
-  # empty caption, `caption[1]` in `.format_html_table()` drops it again
-  if (is.null(main_caption) && !no_caption && .has_html_subtitle(x, subtitle)) {
+  # empty caption, `caption[1]` in `.format_html_table()` drops it again.
+  # tinytable has no subtitle
+  if (
+    identical(format, "html") &&
+      is.null(main_caption) &&
+      !no_caption &&
+      .has_html_subtitle(x, subtitle)
+  ) {
     main_caption <- structure("", class = "insight_empty_title")
   }
 
@@ -656,7 +762,7 @@ print.insight_table <- function(x, ...) {
     lapply(seq_len(n), function(i) {
       d <- x[[i]]
       if (add_groups) {
-        d$Component <- rep(captions[i], nrow(d))
+        d$Component <- rep(group_labels[i], nrow(d))
       }
       d
     })
@@ -667,7 +773,13 @@ print.insight_table <- function(x, ...) {
   attr(out, "table_title") <- NULL
   attr(out, "table_footer") <- NULL
 
-  list(x = out, caption = main_caption, footer = notes)
+  # the HTML format finds the group column itself, tinytable needs it as `by`
+  group_by <- NULL
+  if (add_groups && identical(format, "tt")) {
+    group_by <- "Component"
+  }
+
+  list(x = out, caption = main_caption, footer = notes, group_by = group_by)
 }
 
 
@@ -1575,6 +1687,16 @@ print.insight_table <- function(x, ...) {
   }
 
   check_if_installed("tinytable")
+
+  # notes of a list of tables are already prepared. Any other footer gives one
+  # note: its first string, or the joined first strings of a list (multi-line,
+  # colored footers), like in text format
+  if (!is.null(footer) && !inherits(footer, "insight_html_notes")) {
+    footer <- .as_html_notes(list(footer), line_break = "\n")
+  }
+  if (!is.null(footer)) {
+    footer <- unlist(footer, use.names = FALSE)
+  }
 
   # we need to indent rows first, because we re-order the rows here
   out <- .row_groups_tt(final, row_groups = row_groups, group_by = group_by, ...)
