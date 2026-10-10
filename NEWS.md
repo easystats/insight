@@ -53,7 +53,9 @@
 
   `var.slope` of `nlme::lme()` models now leaves out the term named
   `(Intercept)`, not the first term of a block. So a block whose intercept is
-  not its first term no longer reports the intercept as a slope.
+  not its first term no longer reports the intercept as a slope. Such a block,
+  for example from `nlme::pdBlocked()`, now also has its intercept variance in
+  `var.intercept`.
 
 * `export_table(format = "html")` for a list of data frames now shows the
   caption of each data frame as the label of its row group, and the footer of
