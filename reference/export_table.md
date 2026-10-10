@@ -110,11 +110,14 @@ export_table(
   If you want to force that no title is printed, even if present as
   attribute, use `""`, which will never print titles. If `x` is a list
   of data frames, `caption` may be a list of table captions, one for
-  each table. For `format = "html"`, a list of data frames is shown as
-  one table, and the caption of each data frame is the label of its row
-  group, or the title if all data frames have the same caption. This
-  does not apply if any data frame has a `Component`, `Effects`, `Group`
-  or `Response` column.
+  each table. For `format = "html"` and `format = "tt"`, a list of data
+  frames is shown as one table, and the caption of each data frame is
+  the label of its row group, or the title if all data frames have the
+  same caption. This does not apply if any data frame has a `Component`,
+  `Effects`, `Group` or `Response` column. For `format = "tt"`, it also
+  does not apply if a data frame has one column, no rows or row groups
+  (`indent_rows`), if the data frames have different column names, or if
+  `by`, `row_groups` or `column_groups` is given.
 
 - footer:
 
@@ -125,10 +128,12 @@ export_table(
   footer is printed, unless it is stored as attributes (`table_footer`).
   If you want to force that no footer is printed, even if present as
   attribute, use `""`, which will never print footers. For
-  `format = "html"` and a list of data frames, the footer of each data
-  frame is a source note of the table, followed by `footer` if it is a
-  string. This does not apply if any data frame has a `Component`,
-  `Effects`, `Group` or `Response` column.
+  `format = "html"` and `format = "tt"` and a list of data frames, the
+  footer of each data frame is a note of the table, followed by `footer`
+  if it is a string. The exceptions are the same as for `caption`. For
+  `format = "tt"` and a single data frame, the footer is one note. For a
+  list of data frames that is not shown as one table, each element of a
+  list `footer` is one note.
 
 - column_names:
 

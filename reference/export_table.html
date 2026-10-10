@@ -15,7 +15,7 @@ the table_width argument to control this behaviour."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.4.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -174,11 +174,14 @@ attributes (<code>table_title</code>, or its alias <code>table_caption</code>, a
 <code>table_subtitle</code>). If you want to force that no title is printed, even if
 present as attribute, use <code>""</code>, which will never print titles. If <code>x</code> is a
 list of data frames, <code>caption</code> may be a list of table captions, one for
-each table. For <code>format = "html"</code>, a list of data frames is shown as one
-table, and the caption of each data frame is the label of its row group,
-or the title if all data frames have the same caption. This does not
-apply if any data frame has a <code>Component</code>, <code>Effects</code>, <code>Group</code> or
-<code>Response</code> column.</p></dd>
+each table. For <code>format = "html"</code> and <code>format = "tt"</code>, a list of data
+frames is shown as one table, and the caption of each data frame is the
+label of its row group, or the title if all data frames have the same
+caption. This does not apply if any data frame has a <code>Component</code>,
+<code>Effects</code>, <code>Group</code> or <code>Response</code> column. For <code>format = "tt"</code>, it also does
+not apply if a data frame has one column, no rows or row groups
+(<code>indent_rows</code>), if the data frames have different column names, or if
+<code>by</code>, <code>row_groups</code> or <code>column_groups</code> is given.</p></dd>
 
 
 <dt id="arg-footer">footer<a class="anchor" aria-label="anchor" href="#arg-footer"></a></dt>
@@ -188,10 +191,12 @@ new text line under the table. If <code>x</code> is a list of data frames, <code
 may be a list of table captions, one for each table. If <code>NULL</code>, no footer
 is printed, unless it is stored as attributes (<code>table_footer</code>). If you want
 to force that no footer is printed, even if present as attribute, use <code>""</code>,
-which will never print footers. For <code>format = "html"</code> and a list of data
-frames, the footer of each data frame is a source note of the table,
-followed by <code>footer</code> if it is a string. This does not apply if any data
-frame has a <code>Component</code>, <code>Effects</code>, <code>Group</code> or <code>Response</code> column.</p></dd>
+which will never print footers. For <code>format = "html"</code> and <code>format = "tt"</code>
+and a list of data frames, the footer of each data frame is a note of the
+table, followed by <code>footer</code> if it is a string. The exceptions are the same
+as for <code>caption</code>. For <code>format = "tt"</code> and a single data frame, the footer
+is one note. For a list of data frames that is not shown as one table,
+each element of a list <code>footer</code> is one note.</p></dd>
 
 
 <dt id="arg-column-names">column_names<a class="anchor" aria-label="anchor" href="#arg-column-names"></a></dt>
