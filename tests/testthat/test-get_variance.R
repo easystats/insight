@@ -114,7 +114,7 @@ test_that("get_variance-7", {
     vmodel,
     list(
       var.fixed = 908.95336,
-      var.random = 627.56905,
+      var.random = 1649.53296,
       var.residual = 653.5835,
       var.distribution = 653.5835,
       var.dispersion = 0,
@@ -122,6 +122,44 @@ test_that("get_variance-7", {
       var.slope = c(Subject.Days = 35.85838)
     ),
     tolerance = 1e-2
+  )
+})
+
+
+test_that("get_variance, var.random includes uncorrelated random slopes", {
+  # lme4 splits (x || g) into several VarCorr() elements ("g", "g.1"), but
+  # ranef() returns one element "g"
+  model <- lme4::lmer(Reaction ~ Days + (Days || Subject), data = study_data)
+  vc <- as.data.frame(lme4::VarCorr(model))
+  x <- study_data$Days
+  # mean random-effect variance (Johnson 2014)
+  expected <- vc$vcov[1] + vc$vcov[2] * mean(x^2)
+  expect_equal(get_variance_random(model), c(var.random = expected), tolerance = 1e-4)
+  expect_equal(expected, 1649.53296, tolerance = 1e-4)
+
+  # same for a centered predictor
+  study_data$Days0 <- study_data$Days - 10
+  model <- lme4::lmer(Reaction ~ Days0 + (Days0 || Subject), data = study_data)
+  vc <- as.data.frame(lme4::VarCorr(model))
+  expected <- vc$vcov[1] + vc$vcov[2] * mean(study_data$Days0^2)
+  expect_equal(get_variance_random(model), c(var.random = expected), tolerance = 1e-4)
+
+  # nested uncorrelated terms: VarCorr() names "subgrp.grp", ranef() "subgrp:grp"
+  vc <- lme4::VarCorr(fm3)
+  X <- lme4::getME(fm3, "X")
+  expected <- sum(vapply(
+    vc,
+    function(Sigma) {
+      Z <- X[, rownames(Sigma), drop = FALSE]
+      mean(rowSums((Z %*% Sigma) * Z))
+    },
+    numeric(1)
+  ))
+  # fm3 is singular, so tolerance = 0 forces the computation
+  expect_equal(
+    get_variance_random(fm3, tolerance = 0, verbose = FALSE),
+    c(var.random = expected),
+    tolerance = 1e-4
   )
 })
 

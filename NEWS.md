@@ -67,6 +67,14 @@
   for example from `nlme::pdBlocked()`, now also has its intercept variance in
   `var.intercept`.
 
+* `get_variance()` for *lme4* models with uncorrelated random effects, for
+  example `(1 + Days || Subject)`, now includes the random-slope variance in
+  `var.random`. Before, `var.random` included only the random-intercept
+  variance. For nested grouping factors, for example
+  `(1 + Days || grp / subgrp)`, `var.random` was `NULL`. This also changes
+  `performance::r2_nakagawa()` and `performance::icc()` for these models
+  (#304, easystats/performance#428).
+
 * `export_table(format = "html")` for a list of data frames now shows the
   caption of each data frame as the label of its row group, and the footer of
   each data frame as a source note. Before, a list `footer` or a mix of
