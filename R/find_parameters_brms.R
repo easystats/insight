@@ -144,9 +144,9 @@ find_parameters.brmsfit <- function(
   rand_cor <- fe[grepl(pattern, fe, perl = TRUE) & !dpars_params]
 
   # special formula functions
-  simo <- fe[startsWith(fe, "simo_")]
+  simo <- fe[grepl(paste0("^simo_", mv_pattern_fixed), fe)]
   car_struc <- fe[fe %in% c("car", "sdcar")]
-  smooth_terms <- fe[startsWith(fe, "sds_")]
+  smooth_terms <- fe[grepl(paste0("^sds_", mv_pattern_fixed), fe)]
   priors <- fe[startsWith(fe, "prior_")]
   shiftprop <- fe[grepl("shiftprop", fe, fixed = TRUE)]
   mix <- fe[grepl("mix", fe, fixed = TRUE)]
@@ -211,7 +211,12 @@ find_parameters.brmsfit <- function(
   }
 
   compact_list(c(
-    list(conditional = cond, random = cond_random),
+    list(
+      conditional = cond,
+      random = cond_random,
+      simplex = simo,
+      smooth_terms = smooth_terms
+    ),
     dpars_fixed,
     dpars_random
   )[elements])

@@ -42,6 +42,12 @@
 
 ## Bug fixes
 
+* `find_parameters()` for *brms* models again returns the standard deviations
+  of smooth terms (`sds_*`, in the `smooth_terms` element) and the simplex
+  parameters of monotonic effects (`simo_*`, in the `simplex` element). For
+  multivariate models, each response gets only its own parameters
+  (easystats/parameters#1191).
+
 * `export_table(format = "html")` for a list of data frames now shows the
   caption of each data frame as the label of its row group, and the footer of
   each data frame as a source note. Before, a list `footer` or a mix of
