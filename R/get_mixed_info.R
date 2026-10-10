@@ -138,11 +138,60 @@ get_mixed_info.lme <- function(model, verbose = TRUE, ...) {
   )
   names(mixed_effects_info$re) <- re_names
   names(mixed_effects_info$vc) <- re_names
+  mixed_effects_info$vc <- .lme_block_correlations(model, mixed_effects_info$vc)
 
   # need specific class attribute for nlme, because it has a different structure
   class(mixed_effects_info$vc) <- "VarCorr.lme"
 
   .fix_mm_rank_deficiency(mixed_effects_info)
+}
+
+
+# adds the correlation matrix of each random-effects block as attribute
+# "correlation", as lme4 stores it. `.random_slopes_corr()` needs it in every
+# block. Correlations that the model does not estimate are NA, where the
+# covariance matrix has zeros.
+.lme_block_correlations <- function(model, vc) {
+  re_struct <- model$modelStruct$reStruct
+  for (i in seq_along(vc)) {
+    block <- vc[[i]]
+    cov_matrix <- matrix(
+      as.numeric(block),
+      nrow = nrow(block),
+      dimnames = dimnames(block)
+    )
+    correlation <- suppressWarnings(stats::cov2cor(cov_matrix))
+    estimated <- .lme_estimated_correlations(
+      re_struct[[names(vc)[i]]],
+      rownames(correlation)
+    )
+    correlation[!estimated] <- NA
+    attr(vc[[i]], "correlation") <- correlation
+  }
+  vc
+}
+
+
+# TRUE for each pair of terms whose correlation the pdMat object estimates.
+# pdDiag and pdIdent estimate none, and pdBlocked only those within each of
+# its sub-blocks. A block without a matching pdMat object gets none, so that
+# its zeros are never reported as correlations.
+.lme_estimated_correlations <- function(pd, terms) {
+  n <- length(terms)
+  if (is.null(pd) || inherits(pd, c("pdDiag", "pdIdent"))) {
+    return(diag(n) == 1)
+  }
+  if (!inherits(pd, "pdBlocked")) {
+    return(matrix(TRUE, nrow = n, ncol = n))
+  }
+  estimated <- diag(n) == 1
+  for (sub_block in pd) {
+    if (!inherits(sub_block, c("pdDiag", "pdIdent"))) {
+      in_block <- terms %in% nlme::Names(sub_block)
+      estimated[in_block, in_block] <- TRUE
+    }
+  }
+  estimated
 }
 
 
