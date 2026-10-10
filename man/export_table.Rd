@@ -81,11 +81,14 @@ attributes (\code{table_title}, or its alias \code{table_caption}, and
 \code{table_subtitle}). If you want to force that no title is printed, even if
 present as attribute, use \code{""}, which will never print titles. If \code{x} is a
 list of data frames, \code{caption} may be a list of table captions, one for
-each table. For \code{format = "html"}, a list of data frames is shown as one
-table, and the caption of each data frame is the label of its row group,
-or the title if all data frames have the same caption. This does not
-apply if any data frame has a \code{Component}, \code{Effects}, \code{Group} or
-\code{Response} column.}
+each table. For \code{format = "html"} and \code{format = "tt"}, a list of data
+frames is shown as one table, and the caption of each data frame is the
+label of its row group, or the title if all data frames have the same
+caption. This does not apply if any data frame has a \code{Component},
+\code{Effects}, \code{Group} or \code{Response} column. For \code{format = "tt"}, it also does
+not apply if a data frame has one column, no rows or row groups
+(\code{indent_rows}), if the data frames have different column names, or if
+\code{by}, \code{row_groups} or \code{column_groups} is given.}
 
 \item{footer}{Table footer, as string. For markdown-formatted tables, table
 footers, due to the limitation in markdown rendering, are actually just a
@@ -93,10 +96,12 @@ new text line under the table. If \code{x} is a list of data frames, \code{foote
 may be a list of table captions, one for each table. If \code{NULL}, no footer
 is printed, unless it is stored as attributes (\code{table_footer}). If you want
 to force that no footer is printed, even if present as attribute, use \code{""},
-which will never print footers. For \code{format = "html"} and a list of data
-frames, the footer of each data frame is a source note of the table,
-followed by \code{footer} if it is a string. This does not apply if any data
-frame has a \code{Component}, \code{Effects}, \code{Group} or \code{Response} column.}
+which will never print footers. For \code{format = "html"} and \code{format = "tt"}
+and a list of data frames, the footer of each data frame is a note of the
+table, followed by \code{footer} if it is a string. The exceptions are the same
+as for \code{caption}. For \code{format = "tt"} and a single data frame, the footer
+is one note. For a list of data frames that is not shown as one table,
+each element of a list \code{footer} is one note.}
 
 \item{column_names}{Character vector of names that will be used as column
 names in the table. Must either be of same length as columns in the table,

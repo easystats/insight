@@ -119,6 +119,300 @@ test_that("nested lme, three correlated random terms", {
 })
 
 
+test_that("get_variance, nested lme, block without an intercept", {
+  skip_on_cran()
+  data(Pixel, package = "nlme")
+
+  # random slope without intercept on both levels
+  m <- nlme::lme(pixel ~ day, random = ~ 0 + day | Dog / Side, data = Pixel)
+  m_lme4 <- lme4::lmer(pixel ~ day + (0 + day | Dog / Side), data = Pixel)
+  v <- get_variance(m)
+  v_lme4 <- get_variance(m_lme4)
+  expect_type(v, "list")
+  expect_equal(v$var.fixed, v_lme4$var.fixed, tolerance = 1e-3)
+  expect_equal(v$var.random, v_lme4$var.random, tolerance = 1e-3)
+  expect_equal(v$var.residual, v_lme4$var.residual, tolerance = 1e-3)
+
+  # random intercept on the outer level, random slope without intercept on
+  # the inner level
+  m <- nlme::lme(
+    pixel ~ day,
+    random = list(Dog = ~1, Side = ~ 0 + day),
+    data = Pixel
+  )
+  m_lme4 <- lme4::lmer(
+    pixel ~ day + (1 | Dog) + (0 + day | Dog:Side),
+    data = Pixel
+  )
+  v <- get_variance(m)
+  v_lme4 <- get_variance(m_lme4)
+  expect_type(v, "list")
+  expect_equal(v$var.fixed, v_lme4$var.fixed, tolerance = 1e-3)
+  expect_equal(v$var.random, v_lme4$var.random, tolerance = 1e-3)
+  expect_equal(v$var.residual, v_lme4$var.residual, tolerance = 1e-3)
+})
+
+
+test_that("get_variance, lme, random slopes of blocks without an intercept", {
+  skip_on_cran()
+  data(Pixel, package = "nlme")
+  # variances from the "Variance" column of VarCorr(), by row number
+  vc_variance <- function(model, rows) {
+    as.numeric(nlme::VarCorr(model)[rows, "Variance"])
+  }
+
+  # nested, random slope without intercept on both levels
+  # VarCorr() rows: Dog =, day, Side =, day, Residual
+  m <- nlme::lme(pixel ~ day, random = ~ 0 + day | Dog / Side, data = Pixel)
+  v <- get_variance(m)
+  expect_equal(
+    v$var.slope,
+    stats::setNames(vc_variance(m, c(2, 4)), c("Dog.day", "Side.day")),
+    tolerance = 1e-4
+  )
+  expect_null(v$cor.slope_intercept)
+
+  # nested, random intercept on the outer level, random slope without
+  # intercept on the inner level
+  # VarCorr() rows: Dog =, (Intercept), Side =, day, Residual
+  m <- nlme::lme(
+    pixel ~ day,
+    random = list(Dog = ~1, Side = ~ 0 + day),
+    data = Pixel
+  )
+  v <- get_variance(m)
+  expect_equal(
+    v$var.slope,
+    stats::setNames(vc_variance(m, 4), "Side.day"),
+    tolerance = 1e-4
+  )
+  expect_null(v$cor.slope_intercept)
+
+  # nested, two uncorrelated random slopes without intercept on the outer
+  # level, random intercept on the inner level
+  # VarCorr() rows: Dog =, day, I(day^2), Side =, (Intercept), Residual
+  m <- nlme::lme(
+    pixel ~ day,
+    random = list(Dog = nlme::pdDiag(~ 0 + day + I(day^2)), Side = ~1),
+    data = Pixel
+  )
+  v <- get_variance(m)
+  expect_equal(
+    v$var.slope,
+    stats::setNames(vc_variance(m, 2:3), c("Dog.day", "Dog.I(day^2)")),
+    tolerance = 1e-4
+  )
+  expect_null(v$cor.slope_intercept)
+
+  # not nested, random slope without intercept
+  # VarCorr() rows: day, Residual
+  m <- nlme::lme(pixel ~ day, random = ~ 0 + day | Dog, data = Pixel)
+  v <- get_variance(m)
+  expect_equal(
+    v$var.slope,
+    stats::setNames(vc_variance(m, 1), "Dog.day"),
+    tolerance = 1e-4
+  )
+  expect_null(v$cor.slope_intercept)
+
+  # nested, two correlated random slopes without intercept on both levels
+  # VarCorr() rows: Dog =, day, I(day^2), Side =, day, I(day^2), Residual
+  m <- nlme::lme(
+    pixel ~ day,
+    random = ~ 0 + day + I(day^2) | Dog / Side,
+    data = Pixel,
+    control = nlme::lmeControl(opt = "optim")
+  )
+  v <- get_variance(m)
+  expect_equal(
+    v$var.slope,
+    stats::setNames(
+      vc_variance(m, c(2, 3, 5, 6)),
+      c("Dog.day", "Dog.I(day^2)", "Side.day", "Side.I(day^2)")
+    ),
+    tolerance = 1e-4
+  )
+  expect_null(v$cor.slope_intercept)
+
+  # not nested, two correlated random slopes without intercept
+  # VarCorr() rows: day, I(day^2), Residual
+  m <- nlme::lme(
+    pixel ~ day,
+    random = ~ 0 + day + I(day^2) | Dog,
+    data = Pixel,
+    control = nlme::lmeControl(opt = "optim")
+  )
+  v <- get_variance(m)
+  expect_equal(
+    v$var.slope,
+    stats::setNames(vc_variance(m, 1:2), c("Dog.day", "Dog.I(day^2)")),
+    tolerance = 1e-4
+  )
+  expect_null(v$cor.slope_intercept)
+
+  # nested, two correlated random slopes without intercept on the outer
+  # level, random intercept on the inner level
+  # VarCorr() rows: Dog =, day, I(day^2), Side =, (Intercept), Residual
+  m <- nlme::lme(
+    pixel ~ day,
+    random = list(Dog = ~ 0 + day + I(day^2), Side = ~1),
+    data = Pixel,
+    control = nlme::lmeControl(opt = "optim")
+  )
+  v <- get_variance(m)
+  expect_equal(
+    v$var.slope,
+    stats::setNames(vc_variance(m, 2:3), c("Dog.day", "Dog.I(day^2)")),
+    tolerance = 1e-4
+  )
+  expect_null(v$cor.slope_intercept)
+
+  # nested, correlated random intercept and slope on the outer level, random
+  # slope without intercept on the inner level
+  # VarCorr() rows: Dog =, (Intercept), day, Side =, day, Residual
+  m <- nlme::lme(
+    pixel ~ day,
+    random = list(Dog = ~day, Side = ~ 0 + day),
+    data = Pixel,
+    control = nlme::lmeControl(opt = "optim")
+  )
+  v <- get_variance(m)
+  expect_equal(
+    v$var.slope,
+    stats::setNames(vc_variance(m, c(3, 5)), c("Dog.day", "Side.day")),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    v$cor.slope_intercept,
+    c(Dog = as.numeric(nlme::VarCorr(m)[3, "Corr"])),
+    tolerance = 1e-4
+  )
+
+  # nested, the intercept is the second term of the outer block, so the
+  # random slope is the first term
+  # VarCorr() rows: Dog =, day, (Intercept), Side =, (Intercept), Residual
+  m <- nlme::lme(
+    pixel ~ day,
+    random = list(
+      Dog = nlme::pdBlocked(list(nlme::pdIdent(~ day - 1), ~1)),
+      Side = ~1
+    ),
+    data = Pixel
+  )
+  v <- get_variance(m)
+  expect_equal(
+    v$var.slope,
+    stats::setNames(vc_variance(m, 2), "Dog.day"),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    v$var.intercept,
+    stats::setNames(vc_variance(m, c(3, 5)), c("Dog", "Side")),
+    tolerance = 1e-4
+  )
+})
+
+
+test_that("get_variance, lme with an intercept in every block, unchanged", {
+  skip_on_cran()
+  data(Pixel, package = "nlme")
+
+  # expected values are the results of insight 1.5.4.19 (commit 434d09c08)
+
+  # one grouping factor, correlated intercept and slope
+  m <- nlme::lme(pixel ~ day, random = ~ day | Dog, data = Pixel)
+  expect_equal(
+    get_variance(m),
+    list(
+      var.fixed = 0.02115043,
+      var.random = 773.6784,
+      var.residual = 307.939,
+      var.distribution = 307.939,
+      var.dispersion = 0,
+      var.intercept = c(Dog = 1032.062),
+      var.slope = c(Dog.day = 0.7841284),
+      cor.slope_intercept = c(Dog = -0.755)
+    ),
+    tolerance = 1e-4
+  )
+
+  # nested grouping factors, intercepts only
+  m <- nlme::lme(pixel ~ day, random = ~ 1 | Dog / Side, data = Pixel)
+  expect_equal(
+    get_variance(m),
+    list(
+      var.fixed = 2.352231,
+      var.random = 865.6673,
+      var.residual = 233.3453,
+      var.distribution = 233.3453,
+      var.dispersion = 0,
+      var.intercept = c(Dog = 647.3259, Side = 218.3414)
+    ),
+    tolerance = 1e-4
+  )
+
+  # nested grouping factors, correlated intercept and slope on both levels
+  m <- nlme::lme(pixel ~ day, random = ~ day | Dog / Side, data = Pixel)
+  expect_equal(
+    get_variance(m),
+    list(
+      var.fixed = 0.5543973,
+      var.random = 915.051,
+      var.residual = 211.2343,
+      var.distribution = 211.2343,
+      var.dispersion = 0,
+      var.intercept = c(Dog = 991.8458, Side = 227.7047),
+      var.slope = c(Dog.day = 1.149103, Side.day = 6.278051e-10),
+      cor.slope_intercept = c(Dog = -0.786, Side = 0)
+    ),
+    tolerance = 1e-4
+  )
+
+  # nested grouping factors, uncorrelated intercept and slope on the outer level
+  m <- nlme::lme(
+    pixel ~ day,
+    random = list(Dog = nlme::pdDiag(~day), Side = ~1),
+    data = Pixel
+  )
+  expect_equal(
+    get_variance(m),
+    list(
+      var.fixed = 0.5967164,
+      var.random = 957.5163,
+      var.residual = 221.8694,
+      var.distribution = 221.8694,
+      var.dispersion = 0,
+      var.intercept = c(Dog = 703.421, Side = 223.2052),
+      var.slope = c(Dog.day = 0.3816367)
+    ),
+    tolerance = 1e-4
+  )
+
+  # nested grouping factors, block-diagonal matrix on the outer level
+  m <- nlme::lme(
+    pixel ~ day,
+    random = list(
+      Dog = nlme::pdBlocked(list(~1, nlme::pdIdent(~ day - 1))),
+      Side = ~1
+    ),
+    data = Pixel
+  )
+  expect_equal(
+    get_variance(m),
+    list(
+      var.fixed = 0.5967557,
+      var.random = 957.4883,
+      var.residual = 221.8708,
+      var.distribution = 221.8708,
+      var.dispersion = 0,
+      var.intercept = c(Dog = 703.3994, Side = 223.1996),
+      var.slope = c(Dog.day = 0.381627)
+    ),
+    tolerance = 1e-4
+  )
+})
+
+
 test_that("model_info", {
   expect_true(model_info(m1)$is_linear)
 })
