@@ -42,6 +42,11 @@
 
 ## Bug fixes
 
+* `null_model()` now works when the model was fitted inside a function and its
+  call uses a local object other than the data, for example
+  `family = fam`. Before, it returned `NULL` for mixed models and gave an error
+  for other models (easystats/performance#145).
+
 * `find_parameters()` for *brms* models again returns the standard deviations
   of smooth terms (`sds_*`) in the `smooth_terms` element. It also returns the
   simplex parameters of monotonic effects (`simo_*`) in the `simplex` element.
