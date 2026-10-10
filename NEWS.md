@@ -42,6 +42,12 @@
 
 ## Bug fixes
 
+* `find_random_slopes()` no longer reports a grouping factor or a *brms*
+  correlation id as a random slope because its name is part of a slope name.
+  An example is `p` in `(0 + Intercept | p | g)`. For *brms* models, the
+  explicit `Intercept` is no longer a random slope. Before, `get_variance()` warned
+  that random slopes were not present as fixed effects for these models.
+
 * `find_parameters()` for *brms* models again returns the standard deviations
   of smooth terms (`sds_*`) in the `smooth_terms` element. It also returns the
   simplex parameters of monotonic effects (`simo_*`) in the `simplex` element.

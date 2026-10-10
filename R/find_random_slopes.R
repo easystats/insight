@@ -58,8 +58,9 @@ find_random_slopes <- function(x) {
     return(NULL)
   }
 
+  # in brms, "Intercept" is the explicit intercept, not a slope
   random_slopes <- lapply(components, function(comp) {
-    .extract_random_slopes(f[[comp]])
+    .extract_random_slopes(f[[comp]], drop_intercept = inherits(x, "brmsfit"))
   })
   names(random_slopes) <- components
   random_slopes <- compact_list(random_slopes)
@@ -72,7 +73,7 @@ find_random_slopes <- function(x) {
 }
 
 
-.extract_random_slopes <- function(fr) {
+.extract_random_slopes <- function(fr, drop_intercept = FALSE) {
   if (is.null(fr)) {
     return(NULL)
   }
@@ -82,15 +83,39 @@ find_random_slopes <- function(x) {
   }
 
   random_slope <- lapply(fr, function(f) {
-    if (grepl("(.*)\\|(.*)\\|(.*)", safe_deparse(f))) {
-      pattern <- "(.*)\\|(.*)\\|(.*)"
-    } else {
-      pattern <- "(.*)\\|(.*)"
+    slope_terms <- .random_slope_terms(f)
+    # no "|", e.g. lme formulas like ~ day
+    if (is.null(slope_terms)) {
+      slope_terms <- list(f)
     }
-    pattern <- gsub(pattern, "\\1", safe_deparse(f))
-    re <- all.vars(f)
-    re[sapply(re, grepl, pattern, fixed = TRUE)]
+    re <- unlist(lapply(slope_terms, all.vars), use.names = FALSE)
+    if (drop_intercept) {
+      re <- re[re != "Intercept"]
+    }
+    re
   })
 
   unique(unlist(compact_list(random_slope)))
+}
+
+
+# the terms left of each "|" or "||". For brms terms like (1 + x | p | g),
+# this also skips the correlation id "p".
+.random_slope_terms <- function(x) {
+  is_bar <- function(i) {
+    is.call(i) && (identical(i[[1]], as.name("|")) || identical(i[[1]], as.name("||")))
+  }
+  if (!is.call(x)) {
+    return(NULL)
+  }
+  if (is_bar(x)) {
+    lhs <- x[[2]]
+    while (is_bar(lhs)) {
+      lhs <- lhs[[2]]
+    }
+    return(list(lhs))
+  }
+  out <- lapply(as.list(x)[-1], .random_slope_terms)
+  out <- unlist(out, recursive = FALSE)
+  if (length(out)) out else NULL
 }
