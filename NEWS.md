@@ -42,6 +42,12 @@
 
 ## Bug fixes
 
+* `get_variance()` for `nlme::lme()` models with a random-effect block that has
+  no intercept, for example `random = ~ 0 + day | Dog / Side`. For nested
+  grouping factors, `get_variance()` returned `NULL`. `var.slope` left out the
+  first slope of such a block, and `cor.slope_intercept` returned the
+  correlation of two slopes as a slope-intercept correlation.
+
 * `export_table(format = "html")` for a list of data frames now shows the
   caption of each data frame as the label of its row group, and the footer of
   each data frame as a source note. Before, a list `footer` or a mix of
