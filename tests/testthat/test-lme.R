@@ -413,6 +413,143 @@ test_that("get_variance, lme with an intercept in every block, unchanged", {
 })
 
 
+# correlations between random slopes (cor.slopes) ----------------------------
+
+# correlation of two terms in a block, from the fitted model
+pd_cor <- function(model, block, term1, term2) {
+  stats::cov2cor(nlme::pdMatrix(model$modelStruct$reStruct)[[block]])[term1, term2]
+}
+
+# nested data with random intercepts and two correlated random slopes on both
+# levels, 15 groups with 6 subgroups each
+sim_slopecor_data <- function() {
+  set.seed(2)
+  d <- expand.grid(obs = 1:10, sub = 1:6, grp = 1:15)
+  d$sub <- factor(paste(d$grp, d$sub, sep = "_"))
+  d$grp <- factor(d$grp)
+  d$x1 <- stats::rnorm(nrow(d))
+  d$x2 <- stats::rnorm(nrow(d))
+  L <- chol(matrix(c(1, 0.3, -0.2, 0.3, 1, 0.5, -0.2, 0.5, 1), 3))
+  b_grp <- 1.5 * matrix(stats::rnorm(15 * 3), ncol = 3) %*% L
+  b_sub <- matrix(stats::rnorm(nlevels(d$sub) * 3), ncol = 3) %*% L
+  g <- as.integer(d$grp)
+  s <- as.integer(d$sub)
+  d$y <- 1 +
+    d$x1 +
+    d$x2 +
+    b_grp[g, 1] +
+    b_grp[g, 2] * d$x1 +
+    b_grp[g, 3] * d$x2 +
+    b_sub[s, 1] +
+    b_sub[s, 2] * d$x1 +
+    b_sub[s, 3] * d$x2 +
+    stats::rnorm(nrow(d))
+  d
+}
+
+
+test_that("get_variance, lme, cor.slopes", {
+  skip_on_cran()
+  sleep_slopecor <- sleepstudy
+  sleep_slopecor$D2 <- sleep_slopecor$Days^2 / 10
+
+  m <- nlme::lme(
+    Reaction ~ Days + D2,
+    random = ~ Days + D2 | Subject,
+    data = sleep_slopecor,
+    control = nlme::lmeControl(opt = "optim")
+  )
+  m_lme4 <- lme4::lmer(Reaction ~ Days + D2 + (Days + D2 | Subject), data = sleep_slopecor)
+  v <- get_variance(m)
+  v_lme4 <- get_variance(m_lme4)
+
+  expect_named(v$cor.slopes, "Subject.Days-D2")
+  expect_named(v_lme4$cor.slopes, "Subject.Days-D2")
+  expect_lte(abs(v$cor.slopes - v_lme4$cor.slopes), 0.01)
+  expect_lte(abs(v$cor.slopes - pd_cor(m, "Subject", "Days", "D2")), 1e-6)
+})
+
+
+test_that("get_variance, nested lme, cor.slopes", {
+  skip_on_cran()
+  d_slopecor <- sim_slopecor_data()
+
+  expect_no_warning({
+    m <- nlme::lme(y ~ x1 + x2, random = ~ x1 + x2 | grp / sub, data = d_slopecor)
+  })
+  m_lme4 <- lme4::lmer(y ~ x1 + x2 + (x1 + x2 | grp / sub), data = d_slopecor)
+  expect_false(lme4::isSingular(m_lme4))
+  v <- get_variance(m)
+  v_lme4 <- get_variance(m_lme4)
+
+  expect_named(v$cor.slopes, c("grp.x1-x2", "sub.x1-x2"))
+  expect_lte(abs(v$cor.slopes[["grp.x1-x2"]] - v_lme4$cor.slopes[["grp.x1-x2"]]), 0.01)
+  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - v_lme4$cor.slopes[["sub:grp.x1-x2"]]), 0.01)
+  # the nested path reads VarCorr(), which rounds correlations to 3 decimals
+  expect_lte(abs(v$cor.slopes[["grp.x1-x2"]] - pd_cor(m, "grp", "x1", "x2")), 0.001)
+  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - pd_cor(m, "sub", "x1", "x2")), 0.001)
+
+  # an intercept-only block or a pdDiag block does not stop the other block
+  # from reporting
+  expect_no_warning({
+    m <- nlme::lme(
+      y ~ x1 + x2,
+      random = list(grp = ~1, sub = ~ x1 + x2),
+      data = d_slopecor
+    )
+  })
+  v <- get_variance(m)
+  expect_named(v$cor.slopes, "sub.x1-x2")
+  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - pd_cor(m, "sub", "x1", "x2")), 0.001)
+
+  expect_no_warning({
+    m <- nlme::lme(
+      y ~ x1 + x2,
+      random = list(grp = nlme::pdDiag(~ x1 + x2), sub = ~ x1 + x2),
+      data = d_slopecor
+    )
+  })
+  v <- get_variance(m)
+  expect_named(v$cor.slopes, "sub.x1-x2")
+  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - pd_cor(m, "sub", "x1", "x2")), 0.001)
+})
+
+
+test_that("get_variance, lme, no cor.slopes for pdDiag and pdIdent blocks", {
+  skip_on_cran()
+  data(Pixel, package = "nlme")
+  sleep_slopecor <- sleepstudy
+  sleep_slopecor$D2 <- sleep_slopecor$Days^2 / 10
+
+  m <- nlme::lme(
+    Reaction ~ Days + D2,
+    random = list(Subject = nlme::pdDiag(~ Days + D2)),
+    data = sleep_slopecor
+  )
+  v <- get_variance(m)
+  expect_false("cor.slopes" %in% names(v))
+  expect_true("var.slope" %in% names(v))
+
+  m <- nlme::lme(
+    Reaction ~ Days + D2,
+    random = list(Subject = nlme::pdIdent(~ 0 + Days + D2)),
+    data = sleep_slopecor
+  )
+  v <- get_variance(m)
+  expect_false("cor.slopes" %in% names(v))
+  expect_true("var.slope" %in% names(v))
+
+  m <- nlme::lme(
+    pixel ~ day + I(day^2),
+    random = list(Dog = nlme::pdDiag(~ day + I(day^2)), Side = ~1),
+    data = Pixel
+  )
+  v <- get_variance(m)
+  expect_false("cor.slopes" %in% names(v))
+  expect_true("var.slope" %in% names(v))
+})
+
+
 test_that("model_info", {
   expect_true(model_info(m1)$is_linear)
 })
