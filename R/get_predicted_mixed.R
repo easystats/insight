@@ -110,9 +110,8 @@ get_predicted.lme <- function(
   if (is.null(data) && !is.null(dots$newdata)) {
     data <- dots$newdata
   }
-  # without new data, we return the predictions for the model data. Nonlinear
-  # models (gnls, nlme) have no terms, so they also use the default method.
-  if (is.null(data) || inherits(x, c("gnls", "nlme"))) {
+  # nonlinear models (gnls, nlme) have no terms, so they use the default method
+  if (inherits(x, c("gnls", "nlme"))) {
     return(get_predicted.default(
       x,
       data = data,
@@ -127,29 +126,39 @@ get_predicted.lme <- function(
       ...
     ))
   }
-  data <- as.data.frame(data)
-
   # predict() for lme and gls stops for rows with missing values or with factor
-  # levels that the model data does not have, so we predict the other rows only
-  bad_rows <- .lme_unusable_rows(x, data, verbose = verbose)
-  if (all(bad_rows)) {
-    return(NULL)
+  # levels that the model data does not have, so we predict the other rows only.
+  # Without new data, .get_predicted_args() uses the model data.
+  bad_rows <- FALSE
+  predict_data <- NULL
+  if (!is.null(data)) {
+    data <- as.data.frame(data)
+    bad_rows <- .lme_unusable_rows(x, data, verbose = verbose)
+    if (all(bad_rows)) {
+      return(NULL)
+    }
+    predict_data <- data[!bad_rows, , drop = FALSE]
   }
 
   my_args <- .get_predicted_args(
     x,
-    data = data[!bad_rows, , drop = FALSE],
+    data = predict_data,
     predict = predict,
     verbose = verbose,
     ...
   )
 
-  # 1. step: predictions. If grouping columns are missing or have new levels,
-  # .get_predicted_args() sets them to NA, and we return population-level
-  # predictions, as for lme4 models
+  # 1. step: predictions. An explicit `level` is used as given. Else, if
+  # grouping columns are missing or have new levels, .get_predicted_args()
+  # sets them to NA, and we return population-level predictions, as for lme4
+  # models
   predict_args <- list(x, newdata = my_args$data)
-  if (inherits(x, "lme") && isFALSE(my_args$include_random)) {
-    predict_args$level <- 0
+  if (inherits(x, "lme")) {
+    if (!is.null(dots$level)) {
+      predict_args$level <- dots$level
+    } else if (isFALSE(my_args$include_random)) {
+      predict_args$level <- 0
+    }
   }
   predictions <- .safe(do.call(stats::predict, predict_args))
   if (is.null(predictions)) {
@@ -166,6 +175,7 @@ get_predicted.lme <- function(
     x,
     predictions,
     data = my_args$data,
+    ci = ci,
     ci_type = my_args$ci_type,
     ci_method = ci_method,
     vcov = vcov,

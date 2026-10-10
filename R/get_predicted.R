@@ -285,15 +285,15 @@ get_predicted.default <- function(
     )
   }
 
-  # still fails? try fitted(). For new data, we only use the fitted values if
-  # they have one value per data row, else they belong to the model data.
+  # still fails? try fitted(). The fitted values belong to the model data, so
+  # for new data we only use them if the new data is the model data.
   if (is.null(predictions)) {
     predictions <- .safe(do.call("fitted", predict_args))
     new_data <- data
     if (is.null(new_data)) {
       new_data <- list(...)$newdata
     }
-    if (!is.null(new_data) && !is.null(predictions) && NROW(predictions) != NROW(new_data)) {
+    if (!is.null(new_data) && !is.null(predictions) && !.is_model_data(x, new_data, predictions)) {
       predictions <- NULL
     }
   }
@@ -1191,6 +1191,26 @@ get_predicted.phylolm <- function(
 
   class(predictions) <- c("get_predicted", class(predictions))
   predictions
+}
+
+
+# TRUE if `data` has the rows of the model data, so that the fitted values
+# (`predictions`) belong to its rows. Only the columns that `data` and the
+# model data share are compared.
+.is_model_data <- function(x, data, predictions) {
+  model_data <- .safe(get_data(x, verbose = FALSE))
+  if (is.null(model_data) || NROW(predictions) != nrow(model_data) || nrow(data) != nrow(model_data)) {
+    return(FALSE)
+  }
+  shared <- intersect(colnames(model_data), colnames(data))
+  if (!length(shared)) {
+    return(FALSE)
+  }
+  isTRUE(all.equal(
+    as.data.frame(data)[shared],
+    as.data.frame(model_data)[shared],
+    check.attributes = FALSE
+  ))
 }
 
 

@@ -182,3 +182,58 @@ test_that("get_predicted - lme, intervals use the smallest df, also without new 
     tolerance = 1e-10
   )
 })
+
+test_that("get_predicted - clmm, fitted values only for the model data itself", {
+  skip_if_not_installed("ordinal")
+  d_pnd <- pnd_fixture()
+  m <- ordinal::clmm(yo ~ x + f + (1 | grp), data = d_pnd)
+  # the model data, given explicitly, still gets the fitted values
+  expect_no_warning({
+    out <- get_predicted(m, data = d_pnd)
+  })
+  expect_equal(as.vector(out), as.vector(get_predicted(m)), tolerance = 1e-10)
+  # other data with as many rows as the model data does not
+  expect_warning(
+    get_predicted(m, data = d_pnd[rev(seq_len(nrow(d_pnd))), ]),
+    "Could not compute predictions for model of class `clmm`.",
+    fixed = TRUE
+  )
+  expect_null(suppressWarnings(get_predicted(m, data = d_pnd[rev(seq_len(nrow(d_pnd))), ])))
+})
+
+test_that("get_predicted - lme, an explicit `level` is used", {
+  skip_if_not_installed("nlme")
+  d_pnd <- pnd_fixture()
+  nd_pnd <- pnd_newdata(d_pnd)[c(1, 5), ]
+  m <- nlme::lme(y ~ x + f, random = ~ 1 | grp, data = d_pnd)
+  out <- get_predicted(m, data = nd_pnd, level = 0)
+  expect_equal(
+    as.vector(out),
+    as.vector(stats::predict(m, newdata = nd_pnd, level = 0)),
+    tolerance = 1e-10
+  )
+})
+
+test_that("get_predicted - lme and gls, `ci` sets the interval level", {
+  skip_if_not_installed("nlme")
+  d_pnd <- pnd_fixture()
+  nd_pnd <- pnd_newdata(d_pnd)[c(1, 5), ]
+  models <- list(
+    lme = nlme::lme(y ~ x + f, random = ~ 1 | grp, data = d_pnd),
+    gls = nlme::gls(y ~ x + f, data = d_pnd)
+  )
+  for (m in models) {
+    dof <- min(get_df(m, type = "wald"))
+    for (new_data in list(nd_pnd, NULL)) {
+      out <- as.data.frame(get_predicted(m, data = new_data, ci = 0.5))
+      expect_equal(
+        out$CI_high - out$Predicted,
+        stats::qt(0.75, dof) * out$SE,
+        tolerance = 1e-10
+      )
+      # no intervals without `ci`, as for other models
+      out <- as.data.frame(get_predicted(m, data = new_data))
+      expect_false(any(c("CI_low", "CI_high") %in% colnames(out)))
+    }
+  }
+})
