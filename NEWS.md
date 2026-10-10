@@ -70,6 +70,29 @@
   (a multi-line, colored footer) gave an error. The parts of the footer are
   now joined into one source note, as in text output.
 
+* `export_table(format = "tt")` for a list of data frames now shows the
+  caption of each data frame as the label of its row group, and the footer of
+  each data frame as a note. Before, the captions were shown as an extra
+  `group` column, the first caption became the title, and only the footer of
+  the first data frame, or only `footer` if given, was kept. A list `caption`,
+  or a mix of `table_title` and `table_caption` attributes, gave an error.
+  An unnamed `column_names` vector names the shown columns. Before, it also
+  needed a name for the `group` column.
+  The old behavior stays if a data frame has one column, no rows, row groups
+  (`indent_rows`) or a `Component`, `Effects`, `Group` or `Response` column,
+  if the data frames have different column names, or if `by`, `row_groups` or
+  `column_groups` is given. For these lists, each element of a list `footer`
+  still gives one note. Each footer changes as for a single data frame. The
+  color is not shown as a note, new lines at the start and end are removed,
+  and an empty footer gives no note.
+
+* `export_table(format = "tt")` for a single data frame now shows a footer as
+  one note. A character vector gives its first string, because the second
+  string is the color, and a list gives its strings joined. Before, each
+  string was a note, so the color of a colored footer was shown as a second
+  note, and a list footer with colors (a multi-line, colored footer) gave an
+  error.
+
 * `get_sigma()`, `get_variance()` and `get_variance_residual()` now support
   *brms* models where `sigma` has an intercept-only formula, for example
   `bf(y ~ x, sigma ~ 1)`. Sigma is the mean of the posterior draws of

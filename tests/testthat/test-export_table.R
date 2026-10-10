@@ -1538,3 +1538,328 @@ test_that("export_table, tinytable output for lists", {
   attr(d_two, "table_caption") <- "Table Two"
   expect_snapshot(export_table(list(d_one, d_two), format = "tt", table_width = Inf))
 })
+
+
+test_that("export_table, tinytable output that lists of tables do not change", {
+  skip_if_not_installed("tinytable")
+  # one-column tables with caption attributes
+  tt_one_a <- data.frame(x = 1:2)
+  attr(tt_one_a, "table_caption") <- "One A"
+  tt_one_b <- data.frame(x = 3:4)
+  attr(tt_one_b, "table_caption") <- "One B"
+  expect_snapshot(export_table(
+    list(tt_one_a, tt_one_b),
+    format = "tt",
+    table_width = Inf
+  ))
+
+  # tables with an Effects column
+  tt_eff_a <- data.frame(
+    Parameter = c("a", "b"),
+    Coefficient = 1:2,
+    Effects = "fixed",
+    stringsAsFactors = FALSE
+  )
+  attr(tt_eff_a, "table_caption") <- "Fixed"
+  tt_eff_b <- data.frame(
+    Parameter = "c",
+    Coefficient = 3,
+    Effects = "random",
+    stringsAsFactors = FALSE
+  )
+  attr(tt_eff_b, "table_caption") <- "Random"
+  expect_snapshot(export_table(
+    list(tt_eff_a, tt_eff_b),
+    format = "tt",
+    table_width = Inf
+  ))
+
+  # tables with a Component column
+  tt_comp_a <- data.frame(
+    Parameter = c("a", "b"),
+    Coefficient = 1:2,
+    Component = "conditional",
+    stringsAsFactors = FALSE
+  )
+  attr(tt_comp_a, "table_caption") <- "Conditional"
+  tt_comp_b <- data.frame(
+    Parameter = "c",
+    Coefficient = 3,
+    Component = "zero_inflated",
+    stringsAsFactors = FALSE
+  )
+  attr(tt_comp_b, "table_caption") <- "Zero-Inflated"
+  expect_snapshot(export_table(
+    list(tt_comp_a, tt_comp_b),
+    format = "tt",
+    table_width = Inf
+  ))
+
+  # `by = "group"` with caption attributes
+  tt_by_a <- data.frame(x = 1:2, y = 5:6)
+  attr(tt_by_a, "table_caption") <- "By A"
+  tt_by_b <- data.frame(x = 3:4, y = 7:8)
+  attr(tt_by_b, "table_caption") <- "By B"
+  expect_snapshot(export_table(
+    list(tt_by_a, tt_by_b),
+    format = "tt",
+    by = "group",
+    table_width = Inf
+  ))
+})
+
+
+test_that("export_table, tinytable output that data frames do not change", {
+  skip_if_not_installed("tinytable")
+  tt_df <- data.frame(x = 1:2, y = c("a", "b"), stringsAsFactors = FALSE)
+  # no footer
+  expect_snapshot(export_table(tt_df, format = "tt", table_width = Inf))
+  # a string footer with no leading or trailing new line
+  expect_snapshot(export_table(
+    tt_df,
+    format = "tt",
+    footer = "A note",
+    table_width = Inf
+  ))
+})
+
+
+# caption, notes, column names and row groups of a tinytable object. The row
+# groups are the values of the first column of each group, by group label.
+# `@group_index_i` holds the position of each group header in the table with
+# the header rows, so the first data row of group i is at `index[i] - i + 1`.
+tt_parts <- function(x) {
+  index <- x@group_index_i
+  groups <- NULL
+  if (length(index)) {
+    first_rows <- index - seq_along(index) + 1
+    last_rows <- c(first_rows[-1] - 1, nrow(x@data))
+    groups <- lapply(seq_along(index), function(i) {
+      x@data[[1]][first_rows[i]:last_rows[i]]
+    })
+    names(groups) <- names(index)
+  }
+  list(
+    caption = x@caption,
+    notes = unlist(x@notes),
+    names = x@names,
+    groups = groups
+  )
+}
+
+# a table with two columns, its first column holds `rows`
+tt_table <- function(rows, caption = NULL, title = NULL, footer = NULL) {
+  out <- data.frame(Parameter = rows, Value = seq_along(rows))
+  attr(out, "table_caption") <- caption
+  attr(out, "table_title") <- title
+  attr(out, "table_footer") <- footer
+  out
+}
+
+
+test_that("export_table, tinytable notes for lists of tables", {
+  skip_if_not_installed("tinytable")
+  t_a <- tt_table(c("a1", "a2"))
+  t_b <- tt_table("b1")
+
+  # a list footer, one entry per table
+  out <- export_table(list(t_a, t_b), format = "tt", footer = list("Foot A", "Foot B"))
+  expect_s4_class(out, "tinytable")
+  expect_identical(tt_parts(out)$notes, c("Foot A", "Foot B"))
+
+  # footer attributes of both tables (main kept only the first)
+  f_a <- tt_table(c("a1", "a2"), footer = "Attr A")
+  f_b <- tt_table("b1", footer = "Attr B")
+  out <- export_table(list(f_a, f_b), format = "tt")
+  expect_identical(tt_parts(out)$notes, c("Attr A", "Attr B"))
+
+  # footer attributes and a string footer, which comes last
+  out <- export_table(list(f_a, f_b), format = "tt", footer = "Main")
+  expect_identical(tt_parts(out)$notes, c("Attr A", "Attr B", "Main"))
+
+  # footer = "" removes the footer attributes
+  out <- export_table(list(f_a, f_b), format = "tt", footer = "")
+  expect_length(tt_parts(out)$notes, 0)
+
+  # a "" list entry removes the attribute of its table
+  out <- export_table(list(f_a, t_b), format = "tt", footer = list("", "Foot B"))
+  expect_identical(tt_parts(out)$notes, "Foot B")
+
+  # a list footer of the wrong length is not used, the attribute still is
+  out <- export_table(list(f_a, t_b), format = "tt", footer = list("x", "y", "z"))
+  expect_identical(tt_parts(out)$notes, "Attr A")
+
+  # leading and trailing new lines are removed
+  n_a <- tt_table(c("a1", "a2"), footer = "\nAttr A\n")
+  out <- export_table(list(n_a, t_b), format = "tt")
+  expect_identical(tt_parts(out)$notes, "Attr A")
+
+  # a colored multi-line footer list gives one note, its text only
+  c_a <- tt_table(
+    c("a1", "a2"),
+    footer = list(c("\nLine 1", "yellow"), c("\nLine 2", "red"))
+  )
+  out <- export_table(list(c_a, t_b), format = "tt")
+  expect_identical(tt_parts(out)$notes, "Line 1\nLine 2")
+
+  # a list that is not bound (a table has an Effects column) keeps one note
+  # for each element of a list footer, as on main
+  e_a <- t_a
+  e_a$Effects <- "fixed"
+  e_b <- t_b
+  e_b$Effects <- "random"
+  out <- export_table(list(e_a, e_b), format = "tt", footer = list("Foot A", "Foot B"))
+  expect_identical(tt_parts(out)$notes, c("Foot A", "Foot B"))
+})
+
+
+test_that("export_table, tinytable row groups for lists of tables", {
+  skip_if_not_installed("tinytable")
+  t_a <- tt_table(c("a1", "a2"))
+  t_b <- tt_table("b1")
+  cap_a <- tt_table(c("a1", "a2"), caption = "A")
+  cap_b <- tt_table("b1", caption = "B")
+  ab_groups <- list(A = c("a1", "a2"), B = "b1")
+
+  # caption attributes on every table (on main, a "group" column and the
+  # first caption as title)
+  out <- tt_parts(export_table(list(cap_a, cap_b), format = "tt"))
+  expect_identical(out$groups, ab_groups)
+  expect_null(out$caption)
+  expect_identical(out$names, c("Parameter", "Value"))
+
+  # a list caption (an error on main)
+  out <- tt_parts(export_table(list(t_a, t_b), format = "tt", caption = list("A", "B")))
+  expect_identical(out$groups, ab_groups)
+  expect_null(out$caption)
+
+  # a table_title attribute on one table and table_caption on the other
+  # (an error on main)
+  title_a <- tt_table(c("a1", "a2"), title = "A")
+  out <- tt_parts(export_table(list(title_a, cap_b), format = "tt"))
+  expect_identical(out$groups, ab_groups)
+
+  # title and caption together, title is the main caption
+  out <- tt_parts(export_table(
+    list(cap_a, cap_b),
+    format = "tt",
+    title = "Main",
+    caption = "Cap"
+  ))
+  expect_identical(out$groups, ab_groups)
+  expect_identical(out$caption, "Main")
+
+  # a list title takes the place of a missing caption
+  out <- tt_parts(export_table(list(t_a, t_b), format = "tt", title = list("A", "B")))
+  expect_identical(out$groups, ab_groups)
+  expect_null(out$caption)
+
+  # a "" list entry removes the caption attribute of its table
+  out <- tt_parts(export_table(
+    list(cap_a, cap_b),
+    format = "tt",
+    caption = list("", "X")
+  ))
+  expect_identical(out$groups, list(" " = c("a1", "a2"), B = "b1"))
+
+  # captions "A" and none
+  out <- tt_parts(export_table(list(cap_a, t_b), format = "tt"))
+  expect_identical(out$groups, list(A = c("a1", "a2"), " " = "b1"))
+
+  # an NA caption is no caption, and a caption " " shares its row group
+  na_b <- tt_table("b1", caption = NA_character_)
+  space_c <- tt_table("c1", caption = " ")
+  out <- tt_parts(export_table(list(cap_a, na_b, space_c), format = "tt"))
+  expect_identical(out$groups, list(A = c("a1", "a2"), " " = c("b1", "c1")))
+
+  # the same caption on two tables that are not next to each other
+  cap_c <- tt_table("c1", caption = "A")
+  out <- tt_parts(export_table(list(cap_a, cap_b, cap_c), format = "tt"))
+  expect_identical(out$groups, list(A = c("a1", "a2", "c1"), B = "b1"))
+
+  # one caption value: no row groups, the caption is the title
+  out <- tt_parts(export_table(list(cap_a), format = "tt"))
+  expect_null(out$groups)
+  expect_identical(out$caption, "A")
+  out <- tt_parts(export_table(list(cap_a, cap_c), format = "tt"))
+  expect_null(out$groups)
+  expect_identical(out$caption, "A")
+  out <- tt_parts(export_table(list(cap_a, cap_c), format = "tt", caption = "Main"))
+  expect_null(out$groups)
+  expect_identical(out$caption, "Main")
+  out <- tt_parts(export_table(list(t_a, t_b), format = "tt"))
+  expect_null(out$groups)
+  expect_null(out$caption)
+  expect_identical(out$names, c("Parameter", "Value"))
+
+  # caption = "" removes the caption attributes and row groups
+  out <- tt_parts(export_table(list(cap_a, cap_b), format = "tt", caption = ""))
+  expect_null(out$groups)
+  expect_null(out$caption)
+})
+
+
+test_that("export_table, tinytable column names for lists with row groups", {
+  skip_if_not_installed("tinytable")
+  cap_a <- tt_table(c("a1", "a2"), caption = "A")
+  cap_b <- tt_table("b1", caption = "B")
+
+  # an unnamed `column_names` vector names the shown columns, not the hidden
+  # column of the row groups (an error with two names)
+  out <- tt_parts(export_table(
+    list(cap_a, cap_b),
+    format = "tt",
+    column_names = c("P", "V")
+  ))
+  expect_identical(out$names, c("P", "V"))
+  expect_identical(out$groups, list(A = c("a1", "a2"), B = "b1"))
+
+  # a vector with a name for the hidden column has the wrong length
+  expect_error(
+    export_table(list(cap_a, cap_b), format = "tt", column_names = c("P", "V", "G")),
+    regex = "Number of names in `column_names`"
+  )
+
+  # a named vector renames its columns only
+  out <- tt_parts(export_table(
+    list(cap_a, cap_b),
+    format = "tt",
+    column_names = c(Value = "V")
+  ))
+  expect_identical(out$names, c("Parameter", "V"))
+  expect_identical(out$groups, list(A = c("a1", "a2"), B = "b1"))
+
+  # a shown column renamed to "Component", the name of the hidden column,
+  # keeps its values and the row groups
+  out <- export_table(
+    list(cap_a, cap_b),
+    format = "tt",
+    column_names = c(Value = "Component")
+  )
+  expect_identical(tt_parts(out)$names, c("Parameter", "Component"))
+  expect_identical(tt_parts(out)$groups, list(A = c("a1", "a2"), B = "b1"))
+  expect_identical(as.character(out@data$Component), c("1", "2", "1"))
+
+  # the hidden column cannot be renamed, it is not a column of the tables
+  expect_error(
+    export_table(list(cap_a, cap_b), format = "tt", column_names = c(Component = "G")),
+    regex = "Not all names in `column_names` were found"
+  )
+})
+
+
+test_that("export_table, tinytable notes for data frames", {
+  skip_if_not_installed("tinytable")
+  # a colored footer gives its text only (two notes on main)
+  d <- tt_table(c("a1", "a2"), footer = c("Footer", "yellow"))
+  expect_identical(tt_parts(export_table(d, format = "tt"))$notes, "Footer")
+  # a list of colored lines gives one note (an error on main)
+  d <- tt_table(c("a1", "a2"), footer = list(c("Line 1", "yellow"), c("\nLine 2", "red")))
+  expect_identical(tt_parts(export_table(d, format = "tt"))$notes, "Line 1\nLine 2")
+  # leading new lines are removed
+  d <- tt_table(c("a1", "a2"))
+  expect_identical(
+    tt_parts(export_table(d, format = "tt", footer = "\nNote"))$notes,
+    "Note"
+  )
+})
