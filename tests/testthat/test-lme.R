@@ -448,7 +448,7 @@ sim_slopecor_data <- function() {
 }
 
 
-test_that("get_variance, lme, cor.slopes", {
+test_that("get_variance, lme, cor.slopes of pdLogChol and pdSymm blocks", {
   skip_on_cran()
   sleep_slopecor <- sleepstudy
   sleep_slopecor$D2 <- sleep_slopecor$Days^2 / 10
@@ -481,7 +481,7 @@ test_that("get_variance, lme, cor.slopes", {
 })
 
 
-test_that("get_variance, nested lme, cor.slopes", {
+test_that("get_variance, nested lme, cor.slopes with intercept-only, pdDiag and pdSymm blocks", {
   skip_on_cran()
   d_slopecor <- sim_slopecor_data()
 
@@ -569,6 +569,49 @@ test_that("get_variance, lme, no cor.slopes for pdDiag and pdIdent blocks", {
   v <- get_variance(m)
   expect_false("cor.slopes" %in% names(v))
   expect_true("var.slope" %in% names(v))
+})
+
+
+test_that("get_variance, lme, cor.slopes only within pdBlocked sub-blocks", {
+  skip_on_cran()
+  sleep_slopecor <- sleepstudy
+  sleep_slopecor$D2 <- sleep_slopecor$Days^2 / 10
+  sleep_slopecor$D3 <- cos(sleep_slopecor$Days)
+
+  # Days and D2 share a pdSymm sub-block, D3 is in a pdIdent sub-block
+  m <- nlme::lme(
+    Reaction ~ Days + D2 + D3,
+    random = list(
+      Subject = nlme::pdBlocked(list(nlme::pdSymm(~ Days + D2), nlme::pdIdent(~ 0 + D3)))
+    ),
+    data = sleep_slopecor,
+    control = nlme::lmeControl(opt = "optim")
+  )
+  v <- get_variance(m)
+  expect_named(v$cor.slopes, "Subject.Days-D2")
+  expect_lte(abs(v$cor.slopes - pd_cor(m, "Subject", "Days", "D2")), 1e-6)
+
+  # the slopes are in different sub-blocks, so no correlation is estimated
+  m <- nlme::lme(
+    Reaction ~ Days + D2,
+    random = list(
+      Subject = nlme::pdBlocked(list(nlme::pdSymm(~Days), nlme::pdIdent(~ 0 + D2)))
+    ),
+    data = sleep_slopecor
+  )
+  expect_false("cor.slopes" %in% names(get_variance(m)))
+
+  d_slopecor <- sim_slopecor_data()
+  m <- nlme::lme(
+    y ~ x1 + x2,
+    random = list(
+      grp = nlme::pdBlocked(list(nlme::pdSymm(~x1), nlme::pdIdent(~ 0 + x2))),
+      sub = ~ x1 + x2
+    ),
+    data = d_slopecor
+  )
+  v <- get_variance(m)
+  expect_named(v$cor.slopes, "sub.x1-x2")
 })
 
 
