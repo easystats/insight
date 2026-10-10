@@ -501,6 +501,7 @@ ndord_fixture <- function() {
     grp = factor(rep(1:9, each = 10))
   )
   d_ndord$y <- d_ndord$x + as.numeric(d_ndord$g) + rnorm(90)
+  d_ndord$yo <- cut(d_ndord$y, 3, labels = c("q1", "q2", "q3"), ordered_result = TRUE)
   d_ndord
 }
 
@@ -520,11 +521,13 @@ expect_ndord_modelmatrix <- function(m, d_ndord) {
   expect_modelmatrix(out[, c("g.L", "g.Q")], expected)
 }
 
-test_that("get_modelmatrix - lme, ordered predictor given as character in new data", {
+test_that("get_modelmatrix - lme, gls and clmm, ordered predictor given as character in new data", {
   skip_if_not_installed("nlme")
+  skip_if_not_installed("ordinal")
   d_ndord <- ndord_fixture()
-  m <- nlme::lme(y ~ x + g, random = ~ 1 | grp, data = d_ndord)
-  expect_ndord_modelmatrix(m, d_ndord)
+  expect_ndord_modelmatrix(nlme::lme(y ~ x + g, random = ~ 1 | grp, data = d_ndord), d_ndord)
+  expect_ndord_modelmatrix(nlme::gls(y ~ x + g, data = d_ndord), d_ndord)
+  expect_ndord_modelmatrix(ordinal::clmm(yo ~ x + g + (1 | grp), data = d_ndord), d_ndord)
 })
 
 test_that("get_modelmatrix - brmsfit, ordered predictor given as character in new data", {

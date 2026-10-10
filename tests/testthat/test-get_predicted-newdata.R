@@ -42,8 +42,8 @@ test_that("get_predicted - lme and gls, new data rows with NA or unknown levels 
     gls = nlme::gls(y ~ x + f, data = d_pnd)
   )
   # `f` as factor with the extra level "d", and as character vector
-  for (character in c(FALSE, TRUE)) for (m in models) {
-    nd_pnd <- pnd_newdata(d_pnd, character = character)
+  for (as_character in c(FALSE, TRUE)) for (m in models) {
+    nd_pnd <- pnd_newdata(d_pnd, character = as_character)
     warning_messages <- character()
     out <- withCallingHandlers(
       as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)),
@@ -117,4 +117,43 @@ test_that("get_predicted - clmm, no fitted values of the model data for new data
   })
   expect_length(out, nrow(d_pnd))
   expect_equal(as.vector(out), stats::plogis(as.vector(stats::fitted(m))), tolerance = 1e-10)
+})
+
+test_that("get_predicted - gnls, new data gives predictions", {
+  skip_if_not_installed("nlme")
+  d_pnd_soy <- nlme::Soybean
+  m <- nlme::gnls(weight ~ SSlogis(Time, Asym, xmid, scal), data = d_pnd_soy)
+  out <- get_predicted(m, data = d_pnd_soy[1:3, ])
+  expect_length(out, 3)
+  expect_equal(
+    as.vector(out),
+    as.vector(stats::predict(m, newdata = d_pnd_soy[1:3, ])),
+    tolerance = 1e-10
+  )
+})
+
+test_that("get_predicted - lme, `ci_type` does not drop the intervals", {
+  skip_if_not_installed("nlme")
+  d_pnd <- pnd_fixture()
+  nd_pnd <- pnd_newdata(d_pnd)[c(1, 5), ]
+  m <- nlme::lme(y ~ x + f, random = ~ 1 | grp, data = d_pnd)
+  out <- as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95, ci_type = "confidence"))
+  expect_false(anyNA(out[c("SE", "CI_low", "CI_high")]))
+  expect_equal(out, as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)), tolerance = 1e-10)
+})
+
+test_that("get_predicted - lme, intervals use the smallest df, also without new data", {
+  skip_if_not_installed("nlme")
+  # `Sex` is constant within `Subject`, so its df differ from those of `age`
+  d_pnd_orth <- nlme::Orthodont
+  m <- nlme::lme(distance ~ age + Sex, random = ~ 1 | Subject, data = d_pnd_orth)
+  dof <- min(get_df(m, type = "wald"))
+  expect_gt(max(get_df(m, type = "wald")), dof)
+  out <- as.data.frame(get_predicted(m, ci = 0.95))
+  expect_identical(nrow(out), nrow(d_pnd_orth))
+  expect_equal(
+    out$CI_high - out$CI_low,
+    2 * stats::qt(0.975, dof) * out$SE,
+    tolerance = 1e-10
+  )
 })

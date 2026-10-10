@@ -98,7 +98,9 @@ get_predicted.lme <- function(
   data = NULL,
   predict = "expectation",
   ci = NULL,
+  ci_type = "confidence",
   ci_method = NULL,
+  dispersion_method = "sd",
   vcov = NULL,
   vcov_args = NULL,
   verbose = TRUE,
@@ -108,13 +110,17 @@ get_predicted.lme <- function(
   if (is.null(data) && !is.null(dots$newdata)) {
     data <- dots$newdata
   }
-  # without new data, we return the predictions for the model data
-  if (is.null(data)) {
+  # without new data, we return the predictions for the model data. Nonlinear
+  # models (gnls, nlme) have no terms, so they also use the default method.
+  if (is.null(data) || inherits(x, c("gnls", "nlme"))) {
     return(get_predicted.default(
       x,
+      data = data,
       predict = predict,
       ci = ci,
+      ci_type = ci_type,
       ci_method = ci_method,
+      dispersion_method = dispersion_method,
       vcov = vcov,
       vcov_args = vcov_args,
       verbose = verbose,
@@ -145,7 +151,7 @@ get_predicted.lme <- function(
   if (inherits(x, "lme") && isFALSE(my_args$include_random)) {
     predict_args$level <- 0
   }
-  predictions <- .safe(as.vector(do.call(stats::predict, predict_args)))
+  predictions <- .safe(do.call(stats::predict, predict_args))
   if (is.null(predictions)) {
     if (isTRUE(verbose)) {
       format_warning(
