@@ -1085,14 +1085,17 @@
 # between-subject-variance (tau 00) ----
 # ----------------------------------------------
 .between_subject_variance <- function(mixed_effects_info) {
-  vars <- lapply(mixed_effects_info$vc, function(i) i[1])
-  # check for uncorrelated random slopes-intercept
-  non_intercepts <- which(sapply(mixed_effects_info$vc, function(i) {
-    !startsWith(dimnames(i)[[1]][1], "(Intercept)")
-  }))
-  if (length(non_intercepts)) {
-    vars <- vars[-non_intercepts]
-  }
+  # the intercept need not be the first term of a block, for example in
+  # nlme::pdBlocked(). Blocks without an intercept have no intercept variance.
+  vars <- lapply(mixed_effects_info$vc, function(i) {
+    pos <- which(startsWith(dimnames(i)[[1]], "(Intercept)"))
+    if (length(pos)) {
+      i[pos[1], pos[1]]
+    } else {
+      NULL
+    }
+  })
+  vars <- compact_list(vars)
 
   sapply(vars, function(i) i)
 }

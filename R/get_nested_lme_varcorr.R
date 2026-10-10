@@ -55,8 +55,9 @@
         }
       }
 
-      # a block without an intercept has no slope-intercept correlation
-      if ("(Intercept)" %in% rownames(m1)) {
+      # the "Corr" column holds the correlations with the first term, so they
+      # are slope-intercept correlations only if the intercept is first
+      if (identical(rownames(m1)[1], "(Intercept)")) {
         attr(m1, "cor_slope_intercept") <- g_cor
       }
       m1

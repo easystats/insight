@@ -305,6 +305,11 @@ test_that("get_variance, lme, random slopes of blocks without an intercept", {
     stats::setNames(vc_variance(m, 2), "Dog.day"),
     tolerance = 1e-4
   )
+  expect_equal(
+    v$var.intercept,
+    stats::setNames(vc_variance(m, c(3, 5)), c("Dog", "Side")),
+    tolerance = 1e-4
+  )
 })
 
 
