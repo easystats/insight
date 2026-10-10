@@ -42,6 +42,36 @@
 
 ## Bug fixes
 
+* `get_modelmatrix()` with new `data` for *nlme* (`lme`, `gls`), `clmm` and
+  *brms* models returns one row per data row. A row with a missing value or a
+  factor level that the model data does not have holds `NA` values. Before, it
+  was dropped. For *brms* models, an ordered factor given as a character
+  vector in `data` gets the polynomial contrasts of the model.
+
+* `get_predicted()` with new `data` for `lme` and `gls` models returns `NA`
+  for rows with a missing value or a factor level that the model data does not
+  have in a fixed-effect predictor, with a warning. If no row can be
+  predicted, it returns `NULL` with a warning. Before, such a row made
+  `get_predicted()` return the predictions for the model data. If `data` has no grouping column, `lme`
+  models give population-level predictions, as for *lme4* models.
+
+* `get_predicted()` for `lme` and `gls` models uses the `ci` argument, with or
+  without new `data`. As for other models, the default `ci = NULL` returns no
+  intervals or standard errors. Before, the interval level did not follow
+  `ci`. For `lme` models, an explicit `level` argument is passed to
+  `predict()`.
+
+* The confidence intervals of `get_predicted()` for `lme` models, with or
+  without new `data`, use one degree of freedom value for all rows, the
+  smallest of the values per coefficient. Before, the values per coefficient
+  were recycled against the predictions.
+
+* `get_predicted()` with new `data` for `clmm` models returns `NULL` with a
+  warning. Before, it returned the fitted values of the model data,
+  transformed with the inverse link. If `data` has the rows of the model data
+  and all of its predictor columns with the same values, the fitted values are
+  still returned.
+
 * `find_parameters()` for *brms* models again returns the standard deviations
   of smooth terms (`sds_*`) in the `smooth_terms` element. It also returns the
   simplex parameters of monotonic effects (`simo_*`) in the `simplex` element.
