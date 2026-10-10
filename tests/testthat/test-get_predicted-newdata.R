@@ -124,14 +124,37 @@ test_that("get_predicted - gnls, new data gives predictions", {
   d_pnd_soy <- nlme::Soybean
   m <- nlme::gnls(weight ~ SSlogis(Time, Asym, xmid, scal), data = d_pnd_soy)
   # as on main, a warning says that standard errors could not be computed.
-  # That warning is not what this test is about.
-  out <- suppressWarnings(get_predicted(m, data = d_pnd_soy[1:3, ]))
-  expect_length(out, 3)
-  expect_equal(
-    as.vector(out),
-    as.vector(stats::predict(m, newdata = d_pnd_soy[1:3, ])),
-    tolerance = 1e-10
+  # That warning is not what this test is about, so only it is muffled.
+  muffle_se_warning <- function(w) {
+    if (grepl("standard errors", conditionMessage(w), fixed = TRUE)) {
+      invokeRestart("muffleWarning")
+    }
+  }
+  expected <- as.vector(stats::predict(m, newdata = d_pnd_soy[1:3, ]))
+  out <- withCallingHandlers(
+    get_predicted(m, data = d_pnd_soy[1:3, ]),
+    warning = muffle_se_warning
   )
+  expect_length(out, 3)
+  expect_equal(as.vector(out), expected, tolerance = 1e-10)
+  out <- withCallingHandlers(
+    get_predicted(m, newdata = d_pnd_soy[1:3, ]),
+    warning = muffle_se_warning
+  )
+  expect_equal(as.vector(out), expected, tolerance = 1e-10)
+})
+
+test_that("get_predicted - lme, no row can be predicted", {
+  skip_if_not_installed("nlme")
+  d_pnd <- pnd_fixture()
+  nd_pnd <- pnd_newdata(d_pnd)[2:4, ]
+  m <- nlme::lme(y ~ x + f, random = ~ 1 | grp, data = d_pnd)
+  expect_warning(
+    get_predicted(m, data = nd_pnd),
+    "Could not compute predictions for 3 row(s)",
+    fixed = TRUE
+  )
+  expect_null(suppressWarnings(get_predicted(m, data = nd_pnd)))
 })
 
 test_that("get_predicted - lme, `ci_type` does not drop the intervals", {

@@ -50,8 +50,9 @@
 
 * `get_predicted()` with new `data` for `lme` and `gls` models returns `NA`
   for rows with a missing value or a factor level that the model data does not
-  have, with a warning. Before, such a row made `get_predicted()` return the
-  predictions for the model data. If `data` has no grouping column, `lme`
+  have in a fixed-effect predictor, with a warning. If no row can be
+  predicted, it returns `NULL` with a warning. Before, such a row made
+  `get_predicted()` return the predictions for the model data. If `data` has no grouping column, `lme`
   models give population-level predictions, as for *lme4* models.
 
 * The confidence intervals of `get_predicted()` for `lme` models, with or
