@@ -8,7 +8,9 @@
   class(vcor) <- "matrix"
 
   ## FIXME: doesn't work for nested RE from MASS::glmmPQL, see Nakagawa example
-  re_index <- (which(rownames(vcor) == "(Intercept)") - 1)[-1]
+  # each block starts with a header row like "Dog =", so a new block starts
+  # at every header row but the first. Blocks need not have an intercept.
+  re_index <- which(endsWith(rownames(vcor), "="))[-1]
   vc_list <- split(
     data.frame(vcor, stringsAsFactors = FALSE),
     findInterval(seq_len(nrow(vcor)), re_index)
@@ -53,7 +55,10 @@
         }
       }
 
-      attr(m1, "cor_slope_intercept") <- g_cor
+      # a block without an intercept has no slope-intercept correlation
+      if ("(Intercept)" %in% rownames(m1)) {
+        attr(m1, "cor_slope_intercept") <- g_cor
+      }
       m1
     },
     vc_list,
