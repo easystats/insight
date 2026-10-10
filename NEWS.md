@@ -57,8 +57,9 @@
 
 * `get_predicted()` for `lme` and `gls` models uses the `ci` argument, with or
   without new `data`. As for other models, the default `ci = NULL` returns no
-  intervals. Before, 95% intervals were always returned. For `lme` models, an
-  explicit `level` argument is passed to `predict()`.
+  intervals or standard errors. Before, the interval level did not follow
+  `ci`. For `lme` models, an explicit `level` argument is passed to
+  `predict()`.
 
 * The confidence intervals of `get_predicted()` for `lme` models, with or
   without new `data`, use one degree of freedom value for all rows, the
@@ -67,8 +68,9 @@
 
 * `get_predicted()` with new `data` for `clmm` models returns `NULL` with a
   warning. Before, it returned the fitted values of the model data,
-  transformed with the inverse link. If `data` is the model data itself, the
-  fitted values are still returned.
+  transformed with the inverse link. If `data` has the rows of the model data
+  and all of its predictor columns with the same values, the fitted values are
+  still returned.
 
 * `find_parameters()` for *brms* models again returns the standard deviations
   of smooth terms (`sds_*`) in the `smooth_terms` element. It also returns the

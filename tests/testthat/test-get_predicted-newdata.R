@@ -183,7 +183,7 @@ test_that("get_predicted - lme, intervals use the smallest df, also without new 
   )
 })
 
-test_that("get_predicted - clmm, fitted values only for the model data itself", {
+test_that("get_predicted - clmm, fitted values only for data that matches the model data", {
   skip_if_not_installed("ordinal")
   d_pnd <- pnd_fixture()
   m <- ordinal::clmm(yo ~ x + f + (1 | grp), data = d_pnd)
@@ -192,13 +192,16 @@ test_that("get_predicted - clmm, fitted values only for the model data itself", 
     out <- get_predicted(m, data = d_pnd)
   })
   expect_equal(as.vector(out), as.vector(get_predicted(m)), tolerance = 1e-10)
-  # other data with as many rows as the model data does not
-  expect_warning(
-    get_predicted(m, data = d_pnd[rev(seq_len(nrow(d_pnd))), ]),
-    "Could not compute predictions for model of class `clmm`.",
-    fixed = TRUE
-  )
-  expect_null(suppressWarnings(get_predicted(m, data = d_pnd[rev(seq_len(nrow(d_pnd))), ])))
+  # reordered rows of the model data, and only some of its predictor columns,
+  # do not
+  for (nd_pnd in list(d_pnd[rev(seq_len(nrow(d_pnd))), ], d_pnd["grp"])) {
+    expect_warning(
+      get_predicted(m, data = nd_pnd),
+      "Could not compute predictions for model of class `clmm`.",
+      fixed = TRUE
+    )
+    expect_null(suppressWarnings(get_predicted(m, data = nd_pnd)))
+  }
 })
 
 test_that("get_predicted - lme, an explicit `level` is used", {
