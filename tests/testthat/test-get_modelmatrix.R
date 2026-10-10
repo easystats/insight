@@ -422,3 +422,110 @@ test_that("get_modelmatrix - clmm fitted with model = FALSE", {
   )
   expect_modelmatrix(get_modelmatrix(m), get_modelmatrix(fx$model))
 })
+
+
+# new data with NA values or unknown factor levels keeps its rows ----
+
+# data names that no other test file uses
+ndrows_fixture <- function() {
+  set.seed(5)
+  d_ndrows <- data.frame(
+    x = rnorm(120),
+    f = factor(sample(c("a", "b", "c"), 120, replace = TRUE)),
+    grp = factor(rep(1:12, each = 10))
+  )
+  d_ndrows$y <- 1 + d_ndrows$x + as.numeric(d_ndrows$f) + rnorm(120)
+  d_ndrows$yo <- cut(d_ndrows$y, 4, labels = c("q1", "q2", "q3", "q4"), ordered_result = TRUE)
+  d_ndrows
+}
+
+# 5 rows: rows 1 and 5 complete, row 2 NA in `x`, row 3 NA in `f`,
+# row 4 a level of `f` ("d") that the model data does not have
+ndrows_newdata <- function(d_ndrows, character = FALSE) {
+  f <- c("a", "b", NA, "d", "c")
+  nd_ndrows <- data.frame(
+    x = c(0.5, NA, 1, -0.2, 0.8),
+    f = if (character) f else factor(f, levels = c("a", "b", "c", "d")),
+    grp = factor(rep(1, 5), levels = levels(d_ndrows$grp)),
+    y = 0,
+    yo = d_ndrows$yo[rep(1, 5)],
+    stringsAsFactors = FALSE
+  )
+  nd_ndrows
+}
+
+expect_ndrows_modelmatrix <- function(m, nd_ndrows) {
+  out <- get_modelmatrix(m, data = nd_ndrows)
+  expect_identical(nrow(out), 5L)
+  expect_modelmatrix(
+    out[c(1, 5), , drop = FALSE],
+    get_modelmatrix(m, data = nd_ndrows[c(1, 5), ])
+  )
+  expect_true(all(apply(out[2:4, , drop = FALSE], 1, anyNA)))
+}
+
+test_that("get_modelmatrix - lme, gls and clmm, new data rows with NA or unknown levels kept", {
+  skip_if_not_installed("nlme")
+  skip_if_not_installed("ordinal")
+  d_ndrows <- ndrows_fixture()
+  models <- list(
+    lme = nlme::lme(y ~ x + f, random = ~ 1 | grp, data = d_ndrows),
+    gls = nlme::gls(y ~ x + f, data = d_ndrows),
+    clmm = ordinal::clmm(yo ~ x + f + (1 | grp), data = d_ndrows)
+  )
+  for (m in models) {
+    # `f` as factor with the extra level "d", and as character vector
+    expect_ndrows_modelmatrix(m, ndrows_newdata(d_ndrows))
+    expect_ndrows_modelmatrix(m, ndrows_newdata(d_ndrows, character = TRUE))
+  }
+})
+
+test_that("get_modelmatrix - brmsfit, new data rows with NA or unknown levels kept", {
+  skip_if_not_installed("brms")
+  d_ndrows <- ndrows_fixture()
+  m <- suppressMessages(suppressWarnings(
+    brms::brm(y ~ x + f, data = d_ndrows, empty = TRUE)
+  ))
+  expect_ndrows_modelmatrix(m, ndrows_newdata(d_ndrows))
+  expect_ndrows_modelmatrix(m, ndrows_newdata(d_ndrows, character = TRUE))
+})
+
+
+# ordered predictor given as character vector in new data ----
+
+ndord_fixture <- function() {
+  set.seed(6)
+  d_ndord <- data.frame(
+    x = rnorm(90),
+    g = factor(sample(c("lo", "mid", "hi"), 90, replace = TRUE), levels = c("lo", "mid", "hi"), ordered = TRUE),
+    grp = factor(rep(1:9, each = 10))
+  )
+  d_ndord$y <- d_ndord$x + as.numeric(d_ndord$g) + rnorm(90)
+  d_ndord
+}
+
+expect_ndord_modelmatrix <- function(m, d_ndord) {
+  nd_ndord <- data.frame(x = c(0, 1, 2), g = c("mid", "hi", "lo"), grp = factor(1), y = 0)
+  ndo_ndord <- nd_ndord
+  ndo_ndord$g <- factor(ndo_ndord$g, levels = levels(d_ndord$g), ordered = TRUE)
+  expected <- stats::model.matrix(~g, ndo_ndord)[, c("g.L", "g.Q")]
+  out <- get_modelmatrix(m, data = nd_ndord)
+  expect_true(all(c("g.L", "g.Q") %in% colnames(out)))
+  expect_modelmatrix(out[, c("g.L", "g.Q")], expected)
+}
+
+test_that("get_modelmatrix - lme, ordered predictor given as character in new data", {
+  skip_if_not_installed("nlme")
+  d_ndord <- ndord_fixture()
+  m <- nlme::lme(y ~ x + g, random = ~ 1 | grp, data = d_ndord)
+  expect_ndord_modelmatrix(m, d_ndord)
+})
+
+test_that("get_modelmatrix - brmsfit, ordered predictor given as character in new data", {
+  skip_if_not_installed("brms")
+  d_ndord <- ndord_fixture()
+  m <- suppressMessages(suppressWarnings(
+    brms::brm(y ~ x + g, data = d_ndord, empty = TRUE)
+  ))
+  expect_ndord_modelmatrix(m, d_ndord)
+})
