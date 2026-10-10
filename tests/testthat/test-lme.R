@@ -468,7 +468,7 @@ test_that("get_variance, lme, cor.slopes", {
   expect_lte(abs(v$cor.slopes - v_lme4$cor.slopes), 0.01)
   expect_lte(abs(v$cor.slopes - pd_cor(m, "Subject", "Days", "D2")), 1e-6)
 
-  # pdSymm, the other general covariance block
+  # pdSymm, another general covariance block
   m <- nlme::lme(
     Reaction ~ Days + D2,
     random = list(Subject = nlme::pdSymm(~ Days + D2)),
@@ -497,6 +497,17 @@ test_that("get_variance, nested lme, cor.slopes", {
   expect_lte(abs(v$cor.slopes[["grp.x1-x2"]] - v_lme4$cor.slopes[["grp.x1-x2"]]), 0.01)
   expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - v_lme4$cor.slopes[["sub:grp.x1-x2"]]), 0.01)
   # the nested path reads VarCorr(), which rounds correlations to 3 decimals
+  expect_lte(abs(v$cor.slopes[["grp.x1-x2"]] - pd_cor(m, "grp", "x1", "x2")), 0.001)
+  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - pd_cor(m, "sub", "x1", "x2")), 0.001)
+
+  # pdSymm blocks on both levels
+  m <- nlme::lme(
+    y ~ x1 + x2,
+    random = list(grp = nlme::pdSymm(~ x1 + x2), sub = nlme::pdSymm(~ x1 + x2)),
+    data = d_slopecor
+  )
+  v <- get_variance(m)
+  expect_named(v$cor.slopes, c("grp.x1-x2", "sub.x1-x2"))
   expect_lte(abs(v$cor.slopes[["grp.x1-x2"]] - pd_cor(m, "grp", "x1", "x2")), 0.001)
   expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - pd_cor(m, "sub", "x1", "x2")), 0.001)
 

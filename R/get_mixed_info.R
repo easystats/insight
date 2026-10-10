@@ -150,7 +150,7 @@ get_mixed_info.lme <- function(model, verbose = TRUE, ...) {
 # adds the correlation matrix of each random-effects block as attribute
 # "correlation", as lme4 stores it. `.random_slopes_corr()` needs it in every
 # block. pdDiag and pdIdent blocks do not estimate correlations, so they get
-# NA off the diagonal, where `getVarCov()` has zeros.
+# NA off the diagonal, where the covariance matrix has zeros.
 .lme_block_correlations <- function(model, vc) {
   pd_class <- lapply(model$modelStruct$reStruct, class)
   for (i in seq_along(vc)) {
