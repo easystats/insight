@@ -89,6 +89,147 @@ get_predicted.lmerMod <- function(
 get_predicted.merMod <- get_predicted.lmerMod
 
 
+# nlme ------------------------------------------------------------------
+# =======================================================================
+
+#' @export
+get_predicted.lme <- function(
+  x,
+  data = NULL,
+  predict = "expectation",
+  ci = NULL,
+  ci_method = NULL,
+  vcov = NULL,
+  vcov_args = NULL,
+  verbose = TRUE,
+  ...
+) {
+  dots <- list(...)
+  if (is.null(data) && !is.null(dots$newdata)) {
+    data <- dots$newdata
+  }
+  # without new data, we return the predictions for the model data
+  if (is.null(data)) {
+    return(get_predicted.default(
+      x,
+      predict = predict,
+      ci = ci,
+      ci_method = ci_method,
+      vcov = vcov,
+      vcov_args = vcov_args,
+      verbose = verbose,
+      ...
+    ))
+  }
+  data <- as.data.frame(data)
+
+  # predict() for lme and gls stops for rows with missing values or with factor
+  # levels that the model data does not have, so we predict the other rows only
+  bad_rows <- .lme_unusable_rows(x, data, verbose = verbose)
+  if (all(bad_rows)) {
+    return(NULL)
+  }
+
+  my_args <- .get_predicted_args(
+    x,
+    data = data[!bad_rows, , drop = FALSE],
+    predict = predict,
+    verbose = verbose,
+    ...
+  )
+
+  # 1. step: predictions. If grouping columns are missing or have new levels,
+  # .get_predicted_args() sets them to NA, and we return population-level
+  # predictions, as for lme4 models
+  predict_args <- list(x, newdata = my_args$data)
+  if (inherits(x, "lme") && isFALSE(my_args$include_random)) {
+    predict_args$level <- 0
+  }
+  predictions <- .safe(as.vector(do.call(stats::predict, predict_args)))
+  if (is.null(predictions)) {
+    if (isTRUE(verbose)) {
+      format_warning(
+        paste0("Could not compute predictions for model of class `", class(x)[1], "`.")
+      )
+    }
+    return(NULL)
+  }
+
+  # 2. step: confidence intervals
+  ci_data <- .safe(get_predicted_ci(
+    x,
+    predictions,
+    data = my_args$data,
+    ci_type = my_args$ci_type,
+    ci_method = ci_method,
+    vcov = vcov,
+    vcov_args = vcov_args,
+    ...
+  ))
+
+  # 3. step: back-transform, 4. step: final preparation
+  out <- .get_predicted_transform(x, predictions, my_args = my_args, ci_data, verbose = verbose, ...)
+  out <- .get_predicted_out(out$predictions, my_args = my_args, ci_data = out$ci_data)
+  if (!any(bad_rows)) {
+    return(out)
+  }
+
+  # return one row per row of `data`, with NA for the rows we did not predict
+  expand_rows <- function(values) {
+    full <- rep(NA, nrow(data))
+    full[!bad_rows] <- values
+    full
+  }
+  predictions <- expand_rows(as.vector(out))
+  attributes(predictions) <- attributes(out)[setdiff(names(attributes(out)), "names")]
+  ci_data <- attr(out, "ci_data")
+  if (!is.null(ci_data)) {
+    attr(predictions, "ci_data") <- as.data.frame(lapply(ci_data, expand_rows))
+  }
+  attr(predictions, "data") <- data
+  predictions
+}
+
+#' @export
+get_predicted.gls <- get_predicted.lme
+
+
+# rows of `data` with missing values or factor levels that the model data does
+# not have. We only check the columns of the fixed effects, because
+# .get_predicted_args() sets missing grouping columns to NA.
+.lme_unusable_rows <- function(x, data, verbose = TRUE) {
+  model_data <- get_data(x, verbose = FALSE)
+  fixed_vars <- intersect(
+    all.vars(stats::delete.response(stats::terms(x))),
+    colnames(data)
+  )
+  bad_rows <- rep(FALSE, nrow(data))
+  bad_columns <- NULL
+  for (i in fixed_vars) {
+    bad <- is.na(data[[i]])
+    if (is.factor(model_data[[i]]) || is.character(model_data[[i]])) {
+      bad <- bad | !as.character(data[[i]]) %in% levels(factor(model_data[[i]]))
+    }
+    if (any(bad)) {
+      bad_rows <- bad_rows | bad
+      bad_columns <- c(bad_columns, i)
+    }
+  }
+  if (any(bad_rows) && isTRUE(verbose)) {
+    format_warning(paste0(
+      "Could not compute predictions for ",
+      sum(bad_rows),
+      " row(s) of `data`, because of missing values or factor levels",
+      " that are not in the model data, in ",
+      toString(paste0("`", bad_columns, "`")),
+      ".",
+      if (!all(bad_rows)) " The predictions for these rows are `NA`."
+    ))
+  }
+  bad_rows
+}
+
+
 # glmmTMB ---------------------------------------------------------------
 # =======================================================================
 

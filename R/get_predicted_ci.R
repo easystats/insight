@@ -296,6 +296,12 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
     dof <- .satterthwaite_kr_df_per_obs(x, type = ci_method, data = data)
   } else {
     dof <- get_df(x, type = .check_df_type(ci_method))
+    # lme models have one df per coefficient, not one per prediction, so we
+    # use the smallest one. Else, the intervals are recycled to the number
+    # of coefficients.
+    if (inherits(x, "lme") && length(dof) > 1L) {
+      dof <- min(dof)
+    }
   }
 
   # Return NA

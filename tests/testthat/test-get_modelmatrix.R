@@ -505,7 +505,13 @@ ndord_fixture <- function() {
 }
 
 expect_ndord_modelmatrix <- function(m, d_ndord) {
-  nd_ndord <- data.frame(x = c(0, 1, 2), g = c("mid", "hi", "lo"), grp = factor(1), y = 0)
+  nd_ndord <- data.frame(
+    x = c(0, 1, 2),
+    g = c("mid", "hi", "lo"),
+    grp = factor(1),
+    y = 0,
+    stringsAsFactors = FALSE
+  )
   ndo_ndord <- nd_ndord
   ndo_ndord$g <- factor(ndo_ndord$g, levels = levels(d_ndord$g), ordered = TRUE)
   expected <- stats::model.matrix(~g, ndo_ndord)[, c("g.L", "g.Q")]
