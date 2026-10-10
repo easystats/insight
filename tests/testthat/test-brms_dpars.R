@@ -399,6 +399,64 @@ test_that("clean_parameters, smooth term of a non-linear parameter ('bs_a_sz_1')
 })
 
 
+test_that("find_parameters, smooth SDs and monotonic simplex parameters, parameters#1191", {
+  m <- .brmsfit_mock(
+    brms::bf(mpg ~ s(hp) + mo(cyl)),
+    c(
+      "b_Intercept",
+      "bsp_mocyl",
+      "bs_shp_1",
+      "sds_shp_1",
+      "sigma",
+      "simo_mocyl1[1]",
+      "simo_mocyl1[2]",
+      "s_shp_1[1]",
+      "Intercept",
+      "lprior",
+      "lp__"
+    )
+  )
+  out <- find_parameters(m)
+  expect_identical(out$smooth_terms, "sds_shp_1")
+  expect_identical(out$simplex, c("simo_mocyl1[1]", "simo_mocyl1[2]"))
+  expect_identical(
+    find_parameters(m, component = "smooth_terms"),
+    list(smooth_terms = "sds_shp_1")
+  )
+  expect_identical(
+    find_parameters(m, effects = "fixed", flatten = TRUE),
+    c("b_Intercept", "bsp_mocyl", "bs_shp_1", "sds_shp_1", "sigma", "simo_mocyl1[1]", "simo_mocyl1[2]")
+  )
+  expect_null(find_parameters(m, effects = "random")$smooth_terms)
+
+  # multivariate model: each response gets only its own parameters
+  d <- data.frame(y1 = 1:4, y2 = 1:4, hp = 1:4, cyl = c(1, 2, 1, 2))
+  f <- brms:::validate_formula(
+    brms::mvbf(brms::bf(y1 ~ s(hp)), brms::bf(y2 ~ mo(cyl))) +
+      brms::set_rescor(FALSE),
+    data = d
+  )
+  m <- .brmsfit_mock(
+    f,
+    c(
+      "b_y1_Intercept",
+      "b_y2_Intercept",
+      "bs_y1_shp_1",
+      "sds_y1_shp_1",
+      "bsp_y2_mocyl",
+      "simo_y2_mocyl1[1]",
+      "sigma_y1",
+      "sigma_y2"
+    )
+  )
+  out <- find_parameters(m)
+  expect_identical(out$y1$smooth_terms, "sds_y1_shp_1")
+  expect_null(out$y1$simplex)
+  expect_null(out$y2$smooth_terms)
+  expect_identical(out$y2$simplex, "simo_y2_mocyl1[1]")
+})
+
+
 test_that("find_parameters, non-linear parameter name that starts with a dpar name, #1076", {
   # "sigmaA" is a non-linear parameter of "mu", "sigma" is a dpar
   m <- .brmsfit_mock(

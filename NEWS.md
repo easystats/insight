@@ -42,6 +42,12 @@
 
 ## Bug fixes
 
+* `find_parameters()` for *brms* models again returns the standard deviations
+  of smooth terms (`sds_*`) in the `smooth_terms` element. It also returns the
+  simplex parameters of monotonic effects (`simo_*`) in the `simplex` element.
+  For multivariate models, each response gets only its own parameters
+  (easystats/parameters#1191)
+
 * `get_data()` for `merModList` objects (package *merTools*) gets a `verbose`
   argument. If `verbose = FALSE`, it gives no warning that the data cannot be
   accessed.
