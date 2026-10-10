@@ -297,8 +297,8 @@ get_predicted_ci.bracl <- get_predicted_ci.mlm
   } else {
     dof <- get_df(x, type = .check_df_type(ci_method))
     # lme models have one df per coefficient, not one per prediction, so we
-    # use the smallest one. Else, the intervals are recycled to the number
-    # of coefficients.
+    # use the smallest one. Else, the df vector is recycled against the
+    # predictions.
     if (inherits(x, "lme") && length(dof) > 1L) {
       dof <- min(dof)
     }

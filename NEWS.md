@@ -53,11 +53,13 @@
   have, with a warning. Before, such a row made `get_predicted()` return the
   predictions for the model data. If `data` has no grouping column, `lme`
   models give population-level predictions, as for *lme4* models. The
-  confidence intervals of `lme` models are no longer recycled to the number of
-  coefficients.
+  confidence intervals of `lme` models with new `data` use one degree of
+  freedom value for all rows. Before, the values per coefficient were recycled
+  against the predictions.
 
 * `get_predicted()` with new `data` for `clmm` models returns `NULL` with a
-  warning. Before, it returned the fitted values of the model data.
+  warning. Before, it returned the fitted values of the model data,
+  transformed with the inverse link.
 
 * `find_parameters()` for *brms* models again returns the standard deviations
   of smooth terms (`sds_*`) in the `smooth_terms` element. It also returns the
