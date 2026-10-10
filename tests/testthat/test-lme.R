@@ -467,6 +467,17 @@ test_that("get_variance, lme, cor.slopes", {
   expect_named(v_lme4$cor.slopes, "Subject.Days-D2")
   expect_lte(abs(v$cor.slopes - v_lme4$cor.slopes), 0.01)
   expect_lte(abs(v$cor.slopes - pd_cor(m, "Subject", "Days", "D2")), 1e-6)
+
+  # pdSymm, the other general covariance block
+  m <- nlme::lme(
+    Reaction ~ Days + D2,
+    random = list(Subject = nlme::pdSymm(~ Days + D2)),
+    data = sleep_slopecor,
+    control = nlme::lmeControl(opt = "optim")
+  )
+  v <- get_variance(m)
+  expect_named(v$cor.slopes, "Subject.Days-D2")
+  expect_lte(abs(v$cor.slopes - pd_cor(m, "Subject", "Days", "D2")), 1e-6)
 })
 
 

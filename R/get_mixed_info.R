@@ -138,11 +138,35 @@ get_mixed_info.lme <- function(model, verbose = TRUE, ...) {
   )
   names(mixed_effects_info$re) <- re_names
   names(mixed_effects_info$vc) <- re_names
+  mixed_effects_info$vc <- .lme_block_correlations(model, mixed_effects_info$vc)
 
   # need specific class attribute for nlme, because it has a different structure
   class(mixed_effects_info$vc) <- "VarCorr.lme"
 
   .fix_mm_rank_deficiency(mixed_effects_info)
+}
+
+
+# adds the correlation matrix of each random-effects block as attribute
+# "correlation", as lme4 stores it. `.random_slopes_corr()` needs it in every
+# block. pdDiag and pdIdent blocks do not estimate correlations, so they get
+# NA off the diagonal, where `getVarCov()` has zeros.
+.lme_block_correlations <- function(model, vc) {
+  pd_class <- lapply(model$modelStruct$reStruct, class)
+  for (i in seq_along(vc)) {
+    block <- vc[[i]]
+    cov_matrix <- matrix(
+      as.numeric(block),
+      nrow = nrow(block),
+      dimnames = dimnames(block)
+    )
+    correlation <- suppressWarnings(stats::cov2cor(cov_matrix))
+    if (any(c("pdDiag", "pdIdent") %in% pd_class[[names(vc)[i]]])) {
+      correlation[row(correlation) != col(correlation)] <- NA
+    }
+    attr(vc[[i]], "correlation") <- correlation
+  }
+  vc
 }
 
 
