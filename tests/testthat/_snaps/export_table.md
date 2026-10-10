@@ -1088,3 +1088,113 @@
       +===+===========+
       Table: Table One 
 
+# export_table, tinytable output that lists of tables do not change
+
+    Code
+      export_table(list(tt_one_a, tt_one_b), format = "tt", table_width = Inf)
+    Output
+      
+      +---+-------+
+      | x | group |
+      +===+=======+
+      | 1 | One A |
+      +---+-------+
+      | 2 | One A |
+      +---+-------+
+      | 3 | One B |
+      +---+-------+
+      | 4 | One B |
+      +---+-------+
+      
+      Table: One A 
+
+---
+
+    Code
+      export_table(list(tt_eff_a, tt_eff_b), format = "tt", table_width = Inf)
+    Output
+      
+      +-----------+-------------+---------+--------+
+      | Parameter | Coefficient | Effects | group  |
+      +===========+=============+=========+========+
+      | a         | 1           | fixed   | Fixed  |
+      +-----------+-------------+---------+--------+
+      | b         | 2           | fixed   | Fixed  |
+      +-----------+-------------+---------+--------+
+      | c         | 3           | random  | Random |
+      +-----------+-------------+---------+--------+
+      
+      Table: Fixed 
+
+---
+
+    Code
+      export_table(list(tt_comp_a, tt_comp_b), format = "tt", table_width = Inf)
+    Output
+      
+      +-----------+-------------+---------------+---------------+
+      | Parameter | Coefficient | Component     | group         |
+      +===========+=============+===============+===============+
+      | a         | 1           | conditional   | Conditional   |
+      +-----------+-------------+---------------+---------------+
+      | b         | 2           | conditional   | Conditional   |
+      +-----------+-------------+---------------+---------------+
+      | c         | 3           | zero_inflated | Zero-Inflated |
+      +-----------+-------------+---------------+---------------+
+      
+      Table: Conditional 
+
+---
+
+    Code
+      export_table(list(tt_by_a, tt_by_b), format = "tt", by = "group", table_width = Inf)
+    Output
+      
+      +-----+---+
+      | x   | y |
+      +=====+===+
+      | By A    |
+      +-----+---+
+      |   1 | 5 |
+      +-----+---+
+      |   2 | 6 |
+      +-----+---+
+      | By B    |
+      +-----+---+
+      |   3 | 7 |
+      +-----+---+
+      |   4 | 8 |
+      +-----+---+
+      Table: By A 
+
+# export_table, tinytable output that data frames do not change
+
+    Code
+      export_table(tt_df, format = "tt", table_width = Inf)
+    Output
+      
+      +---+---+
+      | x | y |
+      +===+===+
+      | 1 | a |
+      +---+---+
+      | 2 | b |
+      +---+---+ 
+
+---
+
+    Code
+      export_table(tt_df, format = "tt", footer = "A note", table_width = Inf)
+    Output
+      
+      +---+---+
+      | x | y |
+      +===+===+
+      | 1 | a |
+      +---+---+
+      | 2 | b |
+      +===+===+
+      | A     |
+      | note  |
+      +===+===+ 
+

@@ -1085,14 +1085,17 @@
 # between-subject-variance (tau 00) ----
 # ----------------------------------------------
 .between_subject_variance <- function(mixed_effects_info) {
-  vars <- lapply(mixed_effects_info$vc, function(i) i[1])
-  # check for uncorrelated random slopes-intercept
-  non_intercepts <- which(sapply(mixed_effects_info$vc, function(i) {
-    !startsWith(dimnames(i)[[1]][1], "(Intercept)")
-  }))
-  if (length(non_intercepts)) {
-    vars <- vars[-non_intercepts]
-  }
+  # the intercept need not be the first term of a block, for example in
+  # nlme::pdBlocked(). Blocks without an intercept have no intercept variance.
+  vars <- lapply(mixed_effects_info$vc, function(i) {
+    pos <- which(startsWith(dimnames(i)[[1]], "(Intercept)"))
+    if (length(pos)) {
+      i[pos[1], pos[1]]
+    } else {
+      NULL
+    }
+  })
+  vars <- compact_list(vars)
 
   sapply(vars, function(i) i)
 }
@@ -1102,7 +1105,16 @@
 # ----------------------------------------------
 .random_slope_variance <- function(model, mixed_effects_info) {
   if (inherits(model, "lme")) {
-    unlist(lapply(mixed_effects_info$vc, function(i) diag(i)[-1]))
+    # every term but the intercept is a random slope, also in blocks
+    # without an intercept
+    unlist(lapply(mixed_effects_info$vc, function(i) {
+      d <- diag(i)
+      if (is.null(names(d))) {
+        d[-1]
+      } else {
+        d[names(d) != "(Intercept)"]
+      }
+    }))
   } else {
     # random slopes for correlated slope-intercept
     out <- unlist(lapply(mixed_effects_info$vc, function(i) diag(i)[-1]))
@@ -1158,10 +1170,14 @@
 # ----------------------------------------------
 .random_slope_intercept_corr <- function(model, mixed_effects_info) {
   if (inherits(model, "lme")) {
-    rho01 <- unlist(sapply(mixed_effects_info$vc, attr, which = "cor_slope_intercept"))
-    if (is.null(rho01)) {
+    rho01 <- unlist(lapply(mixed_effects_info$vc, attr, which = "cor_slope_intercept"))
+    # nested models have the attribute only for blocks with an intercept, so
+    # the fallback is for models that are not nested. Without an intercept,
+    # the "Corr" column holds correlations of slopes.
+    if (!length(rho01) && !.is_nested_lme(model)) {
+      rho01 <- NULL
       vc <- lme4::VarCorr(model)
-      if ("Corr" %in% colnames(vc)) {
+      if ("Corr" %in% colnames(vc) && "(Intercept)" %in% rownames(vc)) {
         re_name <- find_random(model, split_nested = FALSE, flatten = TRUE)
         rho01 <- as.vector(suppressWarnings(stats::na.omit(as.numeric(vc[, "Corr"]))))
         if (length(re_name) == length(rho01)) {
