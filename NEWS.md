@@ -42,6 +42,10 @@
 
 ## Bug fixes
 
+* `get_data()` for `merModList` objects (package *merTools*) gets a `verbose`
+  argument. If `verbose = FALSE`, it gives no warning that the data cannot be
+  accessed.
+
 * `export_table(format = "html")` for a list of data frames now shows the
   caption of each data frame as the label of its row group, and the footer of
   each data frame as a source note. Before, a list `footer` or a mix of
