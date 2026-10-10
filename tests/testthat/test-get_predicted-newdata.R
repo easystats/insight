@@ -123,7 +123,9 @@ test_that("get_predicted - gnls, new data gives predictions", {
   skip_if_not_installed("nlme")
   d_pnd_soy <- nlme::Soybean
   m <- nlme::gnls(weight ~ SSlogis(Time, Asym, xmid, scal), data = d_pnd_soy)
-  out <- get_predicted(m, data = d_pnd_soy[1:3, ])
+  # as on main, a warning says that standard errors could not be computed.
+  # That warning is not what this test is about.
+  out <- suppressWarnings(get_predicted(m, data = d_pnd_soy[1:3, ]))
   expect_length(out, 3)
   expect_equal(
     as.vector(out),
