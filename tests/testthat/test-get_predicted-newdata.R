@@ -17,21 +17,23 @@ pnd_fixture <- function() {
 
 # 5 rows: rows 1 and 5 complete, row 2 NA in `x`, row 3 NA in `f`,
 # row 4 a level of `f` ("d") that the model data does not have
-pnd_newdata <- function(d_pnd) {
+pnd_newdata <- function(d_pnd, character = FALSE) {
+  f <- c("a", "b", NA, "d", "c")
   data.frame(
     x = c(0.5, NA, 1, -0.2, 0.8),
-    f = factor(c("a", "b", NA, "d", "c"), levels = c("a", "b", "c", "d")),
+    f = if (character) f else factor(f, levels = c("a", "b", "c", "d")),
     grp = factor(c(1, 2, 3, 4, 2), levels = levels(d_pnd$grp)),
-    y = 0
+    y = 0,
+    yo = d_pnd$yo[rep(1, 5)],
+    stringsAsFactors = FALSE
   )
 }
 
 test_that("get_predicted - lme and gls, new data rows with NA or unknown levels are NA", {
   skip_if_not_installed("nlme")
   d_pnd <- pnd_fixture()
-  nd_pnd <- pnd_newdata(d_pnd)
   # the complete rows, with the factor levels of the model data
-  nd2_pnd <- nd_pnd[c(1, 5), ]
+  nd2_pnd <- pnd_newdata(d_pnd)[c(1, 5), ]
   nd2_pnd$f <- factor(nd2_pnd$f, levels = levels(d_pnd$f))
   X <- stats::model.matrix(~ x + f, nd2_pnd)
 
@@ -39,7 +41,9 @@ test_that("get_predicted - lme and gls, new data rows with NA or unknown levels 
     lme = nlme::lme(y ~ x + f, random = ~ 1 | grp, data = d_pnd),
     gls = nlme::gls(y ~ x + f, data = d_pnd)
   )
-  for (m in models) {
+  # `f` as factor with the extra level "d", and as character vector
+  for (character in c(FALSE, TRUE)) for (m in models) {
+    nd_pnd <- pnd_newdata(d_pnd, character = character)
     warnings <- character()
     out <- withCallingHandlers(
       as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)),
@@ -57,7 +61,7 @@ test_that("get_predicted - lme and gls, new data rows with NA or unknown levels 
     # effects for lme models
     expect_equal(
       out$Predicted[c(1, 5)],
-      as.vector(stats::predict(m, newdata = nd2_pnd)),
+      as.vector(stats::predict(m, newdata = pnd_newdata(d_pnd)[c(1, 5), ])),
       tolerance = 1e-10
     )
     expect_equal(
@@ -76,9 +80,9 @@ test_that("get_predicted - lme and gls, new data rows with NA or unknown levels 
 test_that("get_predicted - lme, new data without the grouping column gives population-level predictions", {
   skip_if_not_installed("nlme")
   d_pnd <- pnd_fixture()
+  # `f` keeps the unused extra level "d"
   nd_pnd <- pnd_newdata(d_pnd)[c(1, 5), ]
   nd_pnd$grp <- NULL
-  nd_pnd$f <- factor(nd_pnd$f, levels = levels(d_pnd$f))
   m <- nlme::lme(y ~ x + f, random = ~ 1 | grp, data = d_pnd)
   out <- as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95))
   expect_identical(nrow(out), 2L)
