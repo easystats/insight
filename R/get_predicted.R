@@ -285,9 +285,17 @@ get_predicted.default <- function(
     )
   }
 
-  # still fails? try fitted()
+  # still fails? try fitted(). For new data, we only use the fitted values if
+  # they have one value per data row, else they belong to the model data.
   if (is.null(predictions)) {
     predictions <- .safe(do.call("fitted", predict_args))
+    new_data <- data
+    if (is.null(new_data)) {
+      new_data <- list(...)$newdata
+    }
+    if (!is.null(new_data) && !is.null(predictions) && NROW(predictions) != NROW(new_data)) {
+      predictions <- NULL
+    }
   }
 
   # stop here if we have no predictions

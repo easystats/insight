@@ -44,11 +44,11 @@ test_that("get_predicted - lme and gls, new data rows with NA or unknown levels 
   # `f` as factor with the extra level "d", and as character vector
   for (character in c(FALSE, TRUE)) for (m in models) {
     nd_pnd <- pnd_newdata(d_pnd, character = character)
-    warnings <- character()
+    warning_messages <- character()
     out <- withCallingHandlers(
       as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)),
       warning = function(w) {
-        warnings <<- c(warnings, conditionMessage(w))
+        warning_messages <<- c(warning_messages, conditionMessage(w))
         invokeRestart("muffleWarning")
       }
     )
@@ -71,9 +71,9 @@ test_that("get_predicted - lme and gls, new data rows with NA or unknown levels 
       ignore_attr = TRUE
     )
     # one warning that names both columns
-    expect_length(warnings, 1)
-    expect_match(warnings, "`x`", fixed = TRUE)
-    expect_match(warnings, "`f`", fixed = TRUE)
+    expect_length(warning_messages, 1)
+    expect_match(warning_messages, "`x`", fixed = TRUE)
+    expect_match(warning_messages, "`f`", fixed = TRUE)
   }
 })
 
@@ -99,19 +99,22 @@ test_that("get_predicted - clmm, no fitted values of the model data for new data
   nd_pnd <- pnd_newdata(d_pnd)[c(1, 5), ]
   m <- ordinal::clmm(yo ~ x + f + (1 | grp), data = d_pnd)
   expect_warning(
-    out <- get_predicted(m, data = nd_pnd),
+    get_predicted(m, data = nd_pnd),
     "Could not compute predictions for model of class `clmm`.",
     fixed = TRUE
   )
-  expect_null(out)
+  expect_null(suppressWarnings(get_predicted(m, data = nd_pnd)))
   expect_warning(
-    out <- get_predicted(m, newdata = nd_pnd),
+    get_predicted(m, newdata = nd_pnd),
     "Could not compute predictions for model of class `clmm`.",
     fixed = TRUE
   )
-  expect_null(out)
-  # without new data, the fitted values are still returned
-  out <- get_predicted(m)
+  expect_null(suppressWarnings(get_predicted(m, newdata = nd_pnd)))
+  # without new data, the fitted values are still returned. As before, the
+  # inverse link is applied to them.
+  expect_no_warning({
+    out <- get_predicted(m)
+  })
   expect_length(out, nrow(d_pnd))
-  expect_equal(as.vector(out), as.vector(stats::fitted(m)), tolerance = 1e-10)
+  expect_equal(as.vector(out), stats::plogis(as.vector(stats::fitted(m))), tolerance = 1e-10)
 })
