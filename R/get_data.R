@@ -952,8 +952,10 @@ get_data.mmrm_tmb <- get_data.mmrm
 
 
 #' @export
-get_data.merModList <- function(x, effects = "all", ...) {
-  format_warning("Can't access data for `merModList` objects.")
+get_data.merModList <- function(x, effects = "all", verbose = TRUE, ...) {
+  if (verbose) {
+    format_warning("Can't access data for `merModList` objects.")
+  }
   NULL
 }
 

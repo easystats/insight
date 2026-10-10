@@ -42,6 +42,10 @@
 
 ## Bug fixes
 
+* `get_data()` for `merModList` objects (package *merTools*) gets a `verbose`
+  argument. If `verbose = FALSE`, it gives no warning that the data cannot be
+  accessed.
+
 * `get_variance()` for `nlme::lme()` models with a random-effect block that has
   no intercept, for example `random = ~ 0 + day | Dog / Side`:
 
