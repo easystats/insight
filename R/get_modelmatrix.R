@@ -306,11 +306,20 @@ get_modelmatrix.BFBayesFactor <- function(x, ...) {
     # new data may not contain all factor levels, which the contrasts
     # require, so we use the factor levels from the model data. Character
     # vectors are converted to factors by model.matrix(), so they need
-    # the levels from the model data, too.
+    # the levels from the model data, too. Ordered factors stay ordered,
+    # so that they get the polynomial contrasts of the model.
     is_categorical <- function(i) is.factor(i) || is.character(i)
     for (i in intersect(names(Filter(is_categorical, model_data)), colnames(dots$data))) {
-      dots$data[[i]] <- factor(dots$data[[i]], levels = levels(factor(model_data[[i]])))
+      dots$data[[i]] <- factor(
+        dots$data[[i]],
+        levels = levels(factor(model_data[[i]])),
+        ordered = is.ordered(model_data[[i]])
+      )
     }
+    # model.matrix() drops rows with missing values, which includes levels
+    # that the model data does not have. We keep these rows, so that the
+    # model matrix has one row per row of the new data.
+    dots$data <- stats::model.frame(object, data = dots$data, na.action = stats::na.pass)
   }
   do.call(stats::model.matrix, c(list(object = object), dots))
 }
