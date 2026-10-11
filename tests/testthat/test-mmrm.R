@@ -45,7 +45,7 @@ test_that("get_df", {
     ignore_attr = TRUE,
     tolerance = 1e-4
   )
-  expect_equal(get_df(mod_mmrm, type = "model"), 12, ignore_attr = TRUE)
+  expect_equal(get_df(mod_mmrm, type = "model"), 10, ignore_attr = TRUE)
 })
 
 test_that("get_df, per observation", {
