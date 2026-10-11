@@ -15,6 +15,13 @@
 
 ## Changes
 
+* `get_variance()` for `nlme::lme()` models now returns `cor.slopes`, the
+  correlations between random slopes, as for *lme4* models. Before, it was
+  missing. This works for nested and non-nested grouping factors with general
+  covariance blocks (`pdSymm` and the default `pdLogChol`). Blocks of class
+  `pdDiag` or `pdIdent` do not estimate correlations, so they add no entry to
+  `cor.slopes`.
+
 * `export_table(format = "html")` passes arguments of `gt::gt()` from `...`
   to `gt::gt()`, for example `id` or `rowname_col` (#631).
 
