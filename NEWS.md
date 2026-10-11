@@ -49,6 +49,11 @@
 
 ## Bug fixes
 
+* `null_model()` now works when the model was fitted inside a function and its
+  call uses a local object other than the data, for example
+  `family = fam`. Before, it returned `NULL` for mixed models and gave an error
+  for other models (easystats/performance#145).
+
 * `find_random_slopes()` no longer reports a grouping factor or a *brms*
   correlation id as a random slope because its name is part of a slope name.
   An example is `p` in `(0 + Intercept | p | g)`. For *brms* models, the

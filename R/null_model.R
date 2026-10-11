@@ -68,7 +68,7 @@ null_model.default <- function(model, verbose = TRUE, ...) {
     }
   )
 
-  suppressWarnings(eval(out, envir = env))
+  .eval_null_model(out, model, env)
 }
 
 
@@ -93,7 +93,7 @@ null_model.multinom <- function(model, verbose = TRUE, ...) {
   }
 
   out <- suppressWarnings(do.call(stats::update, base_args))
-  suppressWarnings(eval(out, envir = env))
+  .eval_null_model(out, model, env)
 }
 
 
@@ -118,7 +118,7 @@ null_model.clm2 <- function(model, verbose = TRUE, ...) {
   }
 
   out <- suppressWarnings(do.call(stats::update, base_args))
-  suppressWarnings(eval(out, envir = env))
+  .eval_null_model(out, model, env)
 }
 
 
@@ -145,7 +145,7 @@ null_model.MixMod <- function(model, verbose = TRUE, ...) {
   }
 
   out <- suppressWarnings(do.call(stats::update, base_args))
-  null.model <- suppressWarnings(eval(out, envir = env))
+  null.model <- .eval_null_model(out, model, env)
   # fix fixed effects formula
   null.model$call$fixed <- nullform
 
@@ -176,7 +176,7 @@ null_model.cpglmm <- function(model, verbose = TRUE, ...) {
   }
 
   out <- suppressWarnings(do.call(stats::update, base_args))
-  suppressWarnings(eval(out, envir = env))
+  .eval_null_model(out, model, env)
 }
 
 
@@ -225,7 +225,11 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
     if (!is.null(update_data)) {
       model_args$data <- update_data
     }
-    null.model <- do.call(glmmTMB::glmmTMB, model_args)
+    null.model <- .eval_null_model(
+      as.call(c(list(quote(glmmTMB::glmmTMB)), model_args)),
+      model,
+      environment()
+    )
   } else {
     f <- stats::formula(model)
     resp <- find_response(model)
@@ -249,14 +253,19 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
           env <- NULL
         }
         out <- suppressWarnings(do.call(stats::update, fun_args))
-        suppressWarnings(eval(out, envir = env))
+        .eval_null_model(out, model, env)
       },
       error = function(e) {
         msg <- e$message
         if (verbose) {
           if (grepl("(^object)(.*)(not found$)", msg)) {
             print_color(
-              "Can't calculate null-model. Probably the data that was used to fit the model cannot be found.\n",
+              paste0(
+                "Can't calculate null-model. Probably the data or another object ",
+                "that was used to fit the model cannot be found (",
+                msg,
+                ").\n"
+              ),
               "red"
             )
           } else if (startsWith(msg, "could not find function")) {
@@ -303,6 +312,27 @@ null_model.glmmadmb <- null_model.glmmTMB
 
 
 # helper -------------------------------
+
+# Evaluate the updated model call. Objects in the call other than the data,
+# such as `family = fam`, may exist only where the model was fitted, for
+# example inside a function. That is the environment of the model formula, so
+# the call is evaluated there first, and in `env` if that fails.
+.eval_null_model <- function(call, model, env) {
+  if (is.null(env)) {
+    env <- parent.frame()
+  }
+  model_env <- tryCatch(environment(stats::formula(model)), error = function(e) NULL)
+  if (is.environment(model_env)) {
+    out <- tryCatch(
+      suppressWarnings(eval(call, envir = model_env)),
+      error = function(e) NULL
+    )
+    if (!is.null(out)) {
+      return(out)
+    }
+  }
+  suppressWarnings(eval(call, envir = env))
+}
 
 .grep_offset_term <- function(model_formula) {
   tryCatch(
