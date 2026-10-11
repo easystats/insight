@@ -346,7 +346,27 @@
   # } else {
   #   sum(sapply(mixed_effects_info$vc[terms], .sigma_sum))
   # }
-  sum(sapply(mixed_effects_info$vc[terms], .sigma_sum))
+  vc_terms <- .vc_random_terms(mixed_effects_info)
+  sum(sapply(mixed_effects_info$vc[vc_terms %in% terms], .sigma_sum))
+}
+
+
+# map each element of VarCorr() to its term in ranef(). lme4 splits
+# uncorrelated terms like (x || g) into several VarCorr() elements ("g",
+# "g.1"), and names nested terms with make.names() ("subgrp.grp"), while
+# ranef() returns one element "g" or "subgrp:grp"
+.vc_random_terms <- function(mixed_effects_info) {
+  vc_names <- names(mixed_effects_info$vc)
+  re_names <- names(mixed_effects_info$re)
+  idx <- match(vc_names, re_names)
+  no_match <- is.na(idx)
+  idx[no_match] <- match(vc_names[no_match], make.names(re_names))
+  no_match <- is.na(idx)
+  idx[no_match] <- match(
+    sub("\\.[0-9]+$", "", vc_names[no_match]),
+    make.names(re_names)
+  )
+  re_names[idx]
 }
 
 
