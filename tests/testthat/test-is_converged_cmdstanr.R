@@ -80,12 +80,16 @@ cmdstan_fit_schools <- .cmdstan_sample(
 }
 
 # compare the diagnostics with those of the stanfit from the same CSV files.
-# Divergences and Treedepth are counts. The other values come from posterior
-# (cmdstanr) and rstan (stanfit), which can differ slightly. `Passed` is
-# compared for checks whose value is not close to the threshold.
+# Divergences and Treedepth are counts. E-BFMI uses the same formula in
+# cmdstanr and rstan. R-hat and ESS come from posterior (cmdstanr) and rstan
+# (stanfit), which can differ slightly. `Passed` is compared for checks whose
+# value is not close to the threshold.
 .cmdstan_expect_stanfit <- function(fit) {
   stanfit <- .cmdstan_as_stanfit(fit)
-  expect_equal(dim(as.array(stanfit))[1], fit$metadata()$iter_sampling)
+  expect_identical(
+    dim(as.array(stanfit))[1],
+    as.integer(fit$metadata()$iter_sampling)
+  )
 
   result <- is_converged(fit, verbose = FALSE)
   reference <- is_converged(stanfit, verbose = FALSE)
