@@ -1,9 +1,9 @@
 # Convergence test for mixed effects, Stan and Cox models
 
 `is_converged()` provides an alternative convergence test for
-`merMod`-objects. For models fitted with Stan (`stanfit`, `brmsfit` and
-`stanreg`), it checks the diagnostics of the sampler. For `coxph`
-models, it recomputes the checks of the *survival* package.
+`merMod`-objects. For models fitted with Stan (`stanfit`, `brmsfit`,
+`stanreg` and `CmdStanMCMC`), it checks the diagnostics of the sampler.
+For `coxph` models, it recomputes the checks of the *survival* package.
 
 ## Usage
 
@@ -25,7 +25,7 @@ is_converged(x, tolerance = 0.001, verbose = TRUE, ...)
 - x:
 
   A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan`,
-  `_glm`, `stanfit`, `brmsfit`, `stanreg` or `coxph`.
+  `_glm`, `stanfit`, `brmsfit`, `stanreg`, `CmdStanMCMC` or `coxph`.
 
 - tolerance:
 
@@ -70,16 +70,25 @@ gives the reason.
 
 For models fitted with Stan, `is_converged()` returns `FALSE` if at
 least one of the checks below fails. The checks and thresholds are those
-of the warnings that *rstan* gives after sampling, and the values are
-computed with functions from *rstan*:
+of the warnings that *rstan* gives after sampling. For `stanfit`,
+`brmsfit` and `stanreg` models, the values are computed with functions
+from *rstan*:
 
 - Divergent transitions after warmup
   ([`rstan::get_num_divergent()`](https://mc-stan.org/rstan/reference/check_hmc_diagnostics.html)):
   the check fails if there is at least one.
 
-- Transitions after warmup that reach the maximum treedepth
-  ([`rstan::get_num_max_treedepth()`](https://mc-stan.org/rstan/reference/check_hmc_diagnostics.html)):
-  the check fails if there is at least one.
+- Transitions after warmup that reach the maximum treedepth stored in
+  the model
+  ([`rstan::get_sampler_params()`](https://mc-stan.org/rstan/reference/stanfit-class.html)):
+  the check fails if there is at least one. The maximum is read from the
+  `control` settings. Models from
+  [`rstan::read_stan_csv()`](https://mc-stan.org/rstan/reference/stan_csv.html)
+  store it outside `control`, and `is_converged()` reads it from there.
+  For these models,
+  [`rstan::get_num_max_treedepth()`](https://mc-stan.org/rstan/reference/check_hmc_diagnostics.html)
+  counts against the default maximum of 10. If the model stores no
+  maximum, 10 is used.
 
 - E-BFMI
   ([`rstan::get_bfmi()`](https://mc-stan.org/rstan/reference/check_hmc_diagnostics.html)):
@@ -98,7 +107,13 @@ computed with functions from *rstan*:
   and
   [`rstan::ess_tail()`](https://mc-stan.org/rstan/reference/Rhat.html)):
   each check fails if the smallest value over all parameters is below
-  100 times the number of chains.
+  100 times the number of chains with draws after warmup.
+
+For `CmdStanMCMC` models from *cmdstanr*, the same checks and thresholds
+are used. Divergent transitions, transitions at the maximum treedepth
+and E-BFMI come from the `$diagnostic_summary()` method of the model,
+and R-hat and effective sample size from its `$summary()` method. The
+E-BFMI warning of *cmdstanr* uses a threshold of 0.3, not 0.2.
 
 Missing values (for example, R-hat of a constant parameter) are ignored.
 Stan also prints messages about rejected proposals ("exception thrown")
