@@ -1952,25 +1952,22 @@ print.insight_table <- function(x, ...) {
     )
   }
 
-  # custom alignment of columns. gt shows the stub columns first, in the order
-  # of "rowname_col", and hides the group columns, so with "rowname_col" the
-  # stub columns come first and the group columns last
-  align_cols <- seq_len(max(ncol(final), nchar(align)))
-  if (!is.null(gt_args$rowname_col)) {
-    stub_cols <- match(gt_args$rowname_col, colnames(final))
-    hidden_cols <- which(colnames(final) %in% group_by_columns)
-    align_cols <- c(
-      stub_cols,
-      setdiff(align_cols, c(stub_cols, hidden_cols)),
-      hidden_cols
-    )
-  }
-  if (align == "firstleft") {
-    out <- gt::cols_align(out, "left", align_cols[1])
+  # custom alignment of the shown columns, in the order gt shows them
+  shown_cols <- .html_shown_columns(
+    colnames(final),
+    group_by_columns,
+    column_groups,
+    gt_args$rowname_col
+  )
+  if (align %in% c("left", "right", "center")) {
+    out <- gt::cols_align(out, align, shown_cols)
+  } else if (align == "firstleft") {
+    out <- gt::cols_align(out, "left", shown_cols[1])
   } else {
-    for (i in 1:nchar(align)) {
+    # characters beyond the shown columns are ignored, as in text output
+    for (i in seq_len(min(nchar(align), length(shown_cols)))) {
       col_align <- switch(substr(align, i, i), l = "left", r = "right", "center")
-      out <- gt::cols_align(out, col_align, align_cols[i])
+      out <- gt::cols_align(out, col_align, shown_cols[i])
     }
   }
 
@@ -1987,4 +1984,32 @@ print.insight_table <- function(x, ...) {
   }
 
   out
+}
+
+# names of the columns that gt shows, in the order it shows them. Row group
+# columns are hidden. gt::tab_spanner() moves the columns of a spanner, in the
+# order listed, to the position of the first column listed. The stub columns
+# of "rowname_col" come first, in the order given.
+.html_shown_columns <- function(
+  columns,
+  group_by_columns = NULL,
+  column_groups = NULL,
+  rowname_col = NULL
+) {
+  # column indices refer to the data, not to the order shown
+  data_columns <- columns
+  for (spanned in column_groups) {
+    if (is.numeric(spanned)) {
+      spanned <- data_columns[spanned]
+    }
+    spanned <- spanned[spanned %in% columns]
+    if (length(spanned)) {
+      before <- columns[seq_len(match(spanned[1], columns) - 1)]
+      before <- setdiff(before, spanned)
+      columns <- c(before, spanned, setdiff(columns, c(before, spanned)))
+    }
+  }
+  columns <- setdiff(columns, group_by_columns)
+  stub <- intersect(rowname_col, columns)
+  c(stub, setdiff(columns, stub))
 }
