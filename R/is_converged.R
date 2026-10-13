@@ -364,7 +364,7 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     ),
     Value = c(
       rstan::get_num_divergent(x),
-      rstan::get_num_max_treedepth(x),
+      .stan_treedepth_hits(x, stan_args),
       .na_or(.safe(rstan::get_bfmi(x), NA_real_), min),
       .na_or(apply(draws, 3, rstan::Rhat), max),
       .na_or(apply(draws, 3, rstan::ess_bulk), min),
@@ -435,6 +435,28 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   }
 
   structure(converged, diagnostics = diagnostics)
+}
+
+
+# number of transitions after warmup at the maximum treedepth. rstan reads the
+# maximum only from `control` (`rstan:::get_treedepth_threshold()`, default
+# 10), but `rstan::read_stan_csv()` stores it as `max_depth` or
+# `max_treedepth` outside `control`
+.stan_treedepth_hits <- function(x, stan_args) {
+  max_depth <- 10
+  for (limit in list(
+    stan_args[["control"]][["max_treedepth"]],
+    stan_args[["max_depth"]],
+    stan_args[["max_treedepth"]]
+  )) {
+    if (!is.null(limit)) {
+      max_depth <- limit
+      break
+    }
+  }
+  sampler_params <- rstan::get_sampler_params(x, inc_warmup = FALSE)
+  treedepth <- unlist(lapply(sampler_params, function(sp) sp[, "treedepth__"]))
+  sum(treedepth >= max_depth)
 }
 
 
