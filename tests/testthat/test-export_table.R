@@ -1789,8 +1789,8 @@ test_that("export_table, html align with one character per column", {
   out <- export_table(data.frame(a = c("x", "y")), format = "html", by = "a")
   expect_s3_class(out, "gt_tbl")
 
-  # gt makes no spanner for an unnamed element of "column_groups", so the
-  # columns are not moved
+  # export_table() makes no spanner for an unnamed element of
+  # "column_groups", so the columns are not moved
   out <- export_table(
     d6,
     format = "html",
