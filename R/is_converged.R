@@ -59,7 +59,8 @@
 #'   parameters is above 1.05.
 #' - Bulk and tail effective sample size (`rstan::ess_bulk()` and
 #'   `rstan::ess_tail()`): each check fails if the smallest value over all
-#'   parameters is below 100 times the number of chains.
+#'   parameters is below 100 times the number of chains with draws after
+#'   warmup.
 #'
 #' For `CmdStanMCMC` models from *cmdstanr*, the same checks and thresholds
 #' are used. Divergent transitions, transitions at the maximum treedepth and
@@ -352,9 +353,13 @@ is_converged.CmdStanMCMC <- function(x, tolerance = 0.001, verbose = TRUE, ...) 
   }
 
   # one value per chain for the sampler diagnostics, one row per variable in
-  # the summary. cmdstanr warns if E-BFMI cannot be computed (fewer than three
-  # draws), which the check then ignores, as missing values in rstan
-  sampler <- suppressWarnings(x$diagnostic_summary(quiet = TRUE))
+  # the summary. cmdstanr warns if E-BFMI cannot be computed (for example from
+  # fewer than three draws); the missing value then passes, as in rstan
+  if (verbose) {
+    sampler <- x$diagnostic_summary(quiet = TRUE)
+  } else {
+    sampler <- suppressWarnings(x$diagnostic_summary(quiet = TRUE))
+  }
   draws_summary <- x$summary(NULL, "rhat", "ess_bulk", "ess_tail")
   .stan_diagnostics(
     values = c(
@@ -366,7 +371,7 @@ is_converged.CmdStanMCMC <- function(x, tolerance = 0.001, verbose = TRUE, ...) 
       .stan_na_or(draws_summary$ess_tail, min)
     ),
     # `x$num_chains()` also counts chains that failed and have no draws
-    n_chains = dim(x$draws("lp__"))[2],
+    n_chains = dim(x$draws("lp__", format = "draws_array"))[2],
     verbose = verbose
   )
 }

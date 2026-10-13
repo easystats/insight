@@ -82,8 +82,8 @@ cmdstan_fit_schools <- .cmdstan_sample(
 # compare the diagnostics with those of the stanfit from the same CSV files.
 # Divergences and Treedepth are counts. E-BFMI uses the same formula in
 # cmdstanr and rstan. R-hat and ESS come from posterior (cmdstanr) and rstan
-# (stanfit), which can differ slightly. `Passed` is compared for checks whose
-# value is not close to the threshold.
+# (stanfit), which can differ slightly. `Passed` is compared for the counts and
+# for the other checks whose value is not close to the threshold.
 .cmdstan_expect_stanfit <- function(fit) {
   stanfit <- .cmdstan_as_stanfit(fit)
   expect_identical(
@@ -210,7 +210,19 @@ test_that("is_converged, CmdStanMCMC with two draws is silent", {
     iter_sampling = 2
   )
   expect_silent(is_converged(fit, verbose = FALSE))
-  expect_identical(attr(is_converged(fit), "diagnostics")$Value[3], NA_real_)
+  expect_warning(result <- is_converged(fit), "E-BFMI")
+  expect_identical(attr(result, "diagnostics")$Value[3], NA_real_)
+})
+
+test_that("is_converged, CmdStanMCMC with another draws format", {
+  # `$draws()` returns the format of the option `cmdstanr_draws_format`
+  expected <- is_converged(cmdstan_fit_schools, verbose = FALSE)
+  for (format in c("draws_df", "draws_matrix", "draws_list")) {
+    old <- options(cmdstanr_draws_format = format)
+    result <- is_converged(cmdstan_fit_schools, verbose = FALSE)
+    options(old)
+    expect_identical(result, expected, info = format)
+  }
 })
 
 test_that("is_converged, CmdStanMCMC without draws after warmup", {

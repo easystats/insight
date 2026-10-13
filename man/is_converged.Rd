@@ -80,7 +80,8 @@ which can differ from the warning that \emph{rstan} prints after sampling.
 parameters is above 1.05.
 \item Bulk and tail effective sample size (\code{rstan::ess_bulk()} and
 \code{rstan::ess_tail()}): each check fails if the smallest value over all
-parameters is below 100 times the number of chains.
+parameters is below 100 times the number of chains with draws after
+warmup.
 }
 
 For \code{CmdStanMCMC} models from \emph{cmdstanr}, the same checks and thresholds
