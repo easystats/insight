@@ -49,6 +49,12 @@
 
 ## Bug fixes
 
+* `find_parameters()` and `clean_parameters()` now work for multivariate
+  *brms* models with addition terms in the response, such as `resp_weights()`
+  or `trials()`. Before, `find_parameters()` returned empty elements with
+  wrong response names, and `clean_parameters()` gave an error
+  (easystats/bayestestR#700).
+
 * `null_model()` now works when the model was fitted inside a function and its
   call uses a local object other than the data, for example
   `family = fam`. Before, it returned `NULL` for mixed models and gave an error
