@@ -201,6 +201,13 @@ test_that("is_converged, maximum treedepth stored outside `control`", {
   # no stored limit: 10, as in rstan
   expect_identical(.treedepth_hits(10), 3)
   expect_identical(.treedepth_hits(9), 0)
+
+  # a stored limit that is not one finite number is skipped
+  expect_identical(.treedepth_hits(10, max_depth = NA), 3)
+  expect_identical(.treedepth_hits(10, max_depth = "15"), 3)
+  expect_identical(.treedepth_hits(10, max_depth = c(15, 15)), 3)
+  expect_identical(.treedepth_hits(5, max_depth = NA, max_treedepth = 5), 3)
+  expect_identical(.treedepth_hits(7, control = NA, max_depth = 15), 0)
 })
 
 test_that("is_converged, low E-BFMI", {

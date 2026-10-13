@@ -355,12 +355,14 @@ is_converged.CmdStanMCMC <- function(x, tolerance = 0.001, verbose = TRUE, ...) 
   # one value per chain for the sampler diagnostics, one row per variable in
   # the summary. cmdstanr warns if E-BFMI cannot be computed (for example from
   # fewer than three draws); the missing value then passes, as in rstan
-  if (verbose) {
-    sampler <- x$diagnostic_summary(quiet = TRUE)
-  } else {
-    sampler <- suppressWarnings(x$diagnostic_summary(quiet = TRUE))
-  }
-  draws_summary <- x$summary(NULL, "rhat", "ess_bulk", "ess_tail")
+  sampler <- .stan_quiet_unless(
+    x$diagnostic_summary(quiet = TRUE),
+    verbose
+  )
+  draws_summary <- .stan_quiet_unless(
+    x$summary(NULL, "rhat", "ess_bulk", "ess_tail"),
+    verbose
+  )
   .stan_diagnostics(
     values = c(
       sum(sampler$num_divergent),
@@ -374,6 +376,12 @@ is_converged.CmdStanMCMC <- function(x, tolerance = 0.001, verbose = TRUE, ...) 
     n_chains = dim(x$draws("lp__", format = "draws_array"))[2],
     verbose = verbose
   )
+}
+
+
+# warnings from cmdstanr and posterior are shown only if `verbose = TRUE`
+.stan_quiet_unless <- function(expr, verbose) {
+  if (verbose) expr else suppressWarnings(expr)
 }
 
 
@@ -515,7 +523,8 @@ is_converged.CmdStanFit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 # number of transitions after warmup at the maximum treedepth. rstan reads the
 # maximum only from `control` (`rstan:::get_treedepth_threshold()`, default
 # 10), but `rstan::read_stan_csv()` stores it as `max_depth` or
-# `max_treedepth` outside `control`
+# `max_treedepth` outside `control`. A stored limit that is not one finite
+# number is skipped, because a missing limit would make the check pass
 .stan_treedepth_hits <- function(x, stan_args) {
   max_depth <- 10
   for (limit in list(
@@ -523,7 +532,7 @@ is_converged.CmdStanFit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     stan_args[["max_depth"]],
     stan_args[["max_treedepth"]]
   )) {
-    if (!is.null(limit)) {
+    if (is.numeric(limit) && length(limit) == 1 && is.finite(limit)) {
       max_depth <- limit
       break
     }

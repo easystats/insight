@@ -1,6 +1,7 @@
 skip_on_cran()
 skip_if_not_installed("cmdstanr")
 skip_if_not_installed("rstan")
+skip_if_not_installed("withr")
 skip_if(is.null(cmdstanr::cmdstan_version(error_on_NA = FALSE)))
 
 # normal model, which converges
@@ -219,9 +220,10 @@ test_that("is_converged, CmdStanMCMC with another draws format", {
   # `$draws()` returns the format of the option `cmdstanr_draws_format`
   expected <- is_converged(cmdstan_fit_schools, verbose = FALSE)
   for (format in c("draws_df", "draws_matrix", "draws_list")) {
-    old <- options(cmdstanr_draws_format = format)
-    result <- is_converged(cmdstan_fit_schools, verbose = FALSE)
-    options(old)
+    result <- withr::with_options(
+      list(cmdstanr_draws_format = format),
+      is_converged(cmdstan_fit_schools, verbose = FALSE)
+    )
     expect_identical(result, expected, info = format)
   }
 })
