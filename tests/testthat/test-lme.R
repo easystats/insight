@@ -910,3 +910,104 @@ test_that("find_formula, glmmPQL with random effects given as list, #965", {
   expect_identical(find_random(m_lst), list(random = "ID"))
   expect_identical(find_random(m_lst), find_random(m_frm))
 })
+
+
+test_that("get_modelmatrix and get_variance, glmmPQL", {
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("performance")
+  data(bacteria, package = "MASS")
+
+  # the terms of a glmmPQL model have the working response "zz", which is not
+  # in the data
+  m <- MASS::glmmPQL(
+    y ~ trt + I(week > 2),
+    random = ~ 1 | ID,
+    family = binomial,
+    data = bacteria,
+    verbose = FALSE
+  )
+  mm <- model.matrix(~ trt + I(week > 2), data = bacteria)
+  expect_equal(get_modelmatrix(m), mm, ignore_attr = TRUE)
+
+  v <- get_variance(m)
+  expect_equal(
+    v$var.fixed,
+    var(as.vector(mm %*% nlme::fixef(m))),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    v$var.intercept,
+    c(ID = as.numeric(nlme::VarCorr(m)[1, "Variance"])),
+    tolerance = 1e-4
+  )
+  expect_equal(v$var.distribution, pi^2 / 3, tolerance = 1e-4)
+
+  # nested random effects
+  set.seed(123)
+  d_pql_nested <- data.frame(
+    g1 = rep(1:10, each = 20),
+    g2 = rep(1:40, each = 5),
+    x = rnorm(200)
+  )
+  d_pql_nested$y <- rbinom(
+    200,
+    1,
+    plogis(0.5 * d_pql_nested$x + rnorm(10)[d_pql_nested$g1] + rnorm(40, sd = 0.5)[d_pql_nested$g2])
+  )
+  m_nested <- MASS::glmmPQL(
+    y ~ x,
+    random = ~ 1 | g1 / g2,
+    family = binomial,
+    data = d_pql_nested,
+    verbose = FALSE
+  )
+  vc <- nlme::VarCorr(m_nested)
+  v <- get_variance(m_nested)
+  expect_equal(
+    v$var.intercept,
+    c(g1 = as.numeric(vc[2, "Variance"]), g2 = as.numeric(vc[4, "Variance"])),
+    tolerance = 1e-4
+  )
+})
+
+
+test_that("null_model, lme and glmmPQL", {
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("performance")
+
+  m <- nlme::lme(distance ~ age, random = ~ 1 | Subject, data = Orthodont)
+  m_null <- nlme::lme(distance ~ 1, random = ~ 1 | Subject, data = Orthodont)
+  nm <- null_model(m)
+  expect_s3_class(nm, "lme")
+  expect_equal(nlme::fixef(nm), nlme::fixef(m_null), tolerance = 1e-4)
+
+  # a Poisson model needs the null model for the distribution variance
+  set.seed(123)
+  d_pql_pois <- data.frame(g1 = rep(1:20, each = 10), x = rnorm(200))
+  d_pql_pois$cnt <- rpois(
+    200,
+    exp(0.5 + 0.3 * d_pql_pois$x + rnorm(20, sd = 0.4)[d_pql_pois$g1])
+  )
+  m <- MASS::glmmPQL(
+    cnt ~ x,
+    random = ~ 1 | g1,
+    family = poisson,
+    data = d_pql_pois,
+    verbose = FALSE
+  )
+  m_null <- MASS::glmmPQL(
+    cnt ~ 1,
+    random = ~ 1 | g1,
+    family = poisson,
+    data = d_pql_pois,
+    verbose = FALSE
+  )
+  nm <- null_model(m)
+  expect_s3_class(nm, "glmmPQL")
+  expect_equal(nlme::fixef(nm), nlme::fixef(m_null), tolerance = 1e-4)
+
+  v <- get_variance(m)
+  v_null <- get_variance(m, null_model = m_null)
+  expect_gt(v$var.distribution, 0)
+  expect_equal(v$var.distribution, v_null$var.distribution, tolerance = 1e-4)
+})

@@ -135,6 +135,19 @@ get_modelmatrix.lme <- function(x, ...) {
 get_modelmatrix.gls <- get_modelmatrix.lme
 
 #' @export
+get_modelmatrix.glmmPQL <- function(x, ...) {
+  # the terms of glmmPQL models have the working response "zz" of the PQL
+  # fit, which is not in the data. The model matrix does not need the
+  # response, so we remove it from the terms.
+  .modelmatrix_model_contrasts(
+    object = stats::delete.response(stats::terms(x)),
+    model_data = get_data(x, verbose = FALSE),
+    model_contrasts = x$contrasts,
+    ...
+  )
+}
+
+#' @export
 get_modelmatrix.clmm <- function(x, ...) {
   # model.matrix() for clmm objects ignores the `data` and `contrasts.arg`
   # arguments, so we use the terms of the fixed effects. The response is
