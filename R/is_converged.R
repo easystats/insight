@@ -359,6 +359,14 @@ is_converged.CmdStanMCMC <- function(x, tolerance = 0.001, verbose = TRUE, ...) 
 }
 
 
+# other cmdstanr fits, for example from `$variational()` or `$optimize()`,
+# have no MCMC draws
+#' @export
+is_converged.CmdStanFit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
+  .is_converged_stan_not_assessed(.stan_no_nuts_reason, verbose)
+}
+
+
 # checks and thresholds follow the warnings that rstan gives after sampling,
 # see `rstan:::throw_sampler_warnings()` and `rstan::check_hmc_diagnostics()`
 .is_converged_stan <- function(x, verbose = TRUE) {

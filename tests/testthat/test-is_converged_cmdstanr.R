@@ -147,6 +147,31 @@ test_that("is_converged, CmdStanMCMC with fixed parameters", {
   expect_false(is_converged(fit, verbose = FALSE))
 })
 
+test_that("is_converged, cmdstanr fits without MCMC draws", {
+  fits <- suppressMessages(suppressWarnings(list(
+    variational = cmdstan_normal$variational(
+      data = cmdstan_normal_data,
+      seed = 123,
+      refresh = 0
+    ),
+    optimize = cmdstan_normal$optimize(
+      data = cmdstan_normal_data,
+      seed = 123,
+      refresh = 0
+    )
+  )))
+  expect_s3_class(fits$variational, "CmdStanVB")
+  expect_s3_class(fits$optimize, "CmdStanMLE")
+  for (fit in fits) {
+    expect_message(is_converged(fit), "cannot be assessed")
+    expect_message(is_converged(fit), "NUTS", fixed = TRUE)
+    result <- suppressMessages(is_converged(fit))
+    expect_false(result)
+    expect_null(attr(result, "diagnostics"))
+    expect_silent(is_converged(fit, verbose = FALSE))
+  }
+})
+
 test_that("is_converged, CmdStanMCMC without draws after warmup", {
   fit <- .cmdstan_sample(
     cmdstan_normal,
