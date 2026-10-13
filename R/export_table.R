@@ -1993,9 +1993,11 @@ print.insight_table <- function(x, ...) {
 }
 
 # names of the columns that gt shows, in the order it shows them. Row group
-# columns are hidden. gt::tab_spanner() moves the columns of a spanner, in the
-# order listed, to the position of the first column listed. The stub columns
-# of "rowname_col" come first, in the order given.
+# columns are hidden. gt::tab_spanner() leaves out row group and stub columns.
+# It moves the other columns of a spanner, in the order listed, to the
+# position of the first column listed, but only if no earlier spanner has one
+# of these columns (a first-level spanner). The stub columns of "rowname_col"
+# come first, in the order given.
 .html_shown_columns <- function(
   columns,
   group_by_columns = NULL,
@@ -2004,16 +2006,19 @@ print.insight_table <- function(x, ...) {
 ) {
   # column indices refer to the data, not to the order shown
   data_columns <- columns
+  spanned_before <- NULL
   for (spanned in column_groups) {
     if (is.numeric(spanned)) {
       spanned <- data_columns[spanned]
     }
     spanned <- spanned[spanned %in% columns]
-    if (length(spanned)) {
+    spanned <- setdiff(spanned, c(group_by_columns, rowname_col))
+    if (length(spanned) && !any(spanned %in% spanned_before)) {
       before <- columns[seq_len(match(spanned[1], columns) - 1)]
       before <- setdiff(before, spanned)
       columns <- c(before, spanned, setdiff(columns, c(before, spanned)))
     }
+    spanned_before <- c(spanned_before, spanned)
   }
   columns <- setdiff(columns, group_by_columns)
   stub <- intersect(rowname_col, columns)

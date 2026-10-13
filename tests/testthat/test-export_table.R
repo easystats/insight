@@ -1554,7 +1554,8 @@ test_that("export_table, html align follows the shown columns", {
   out <- export_table(d_two_groups, format = "html", align = "firstleft")
   expect_identical(shown_align(out), c(a = "left", b = "center", c = "center"))
 
-  # gt moves the columns of a spanner to the position of the first one listed,
+  # gt moves the columns of a first-level spanner (one that shares no column
+  # with an earlier spanner) to the position of the first one listed,
   # and "align" follows the order shown
   out <- export_table(
     d6,
@@ -1606,6 +1607,27 @@ test_that("export_table, html align follows the shown columns", {
     shown_align(out),
     c(a = "left", b = "right", d = "center", c = "left", e = "right", f = "center")
   )
+
+  # a spanner that shares a column with an earlier spanner is a second-level
+  # spanner, and gt does not move its columns
+  out <- export_table(
+    d6,
+    format = "html",
+    align = "lrclrc",
+    column_groups = list(G1 = c("b", "d"), G2 = c("d", "f"))
+  )
+  expect_identical(
+    shown_align(out),
+    c(a = "left", b = "right", d = "center", c = "left", e = "right", f = "center")
+  )
+  # gt leaves a row group column out of a spanner, so "c" decides the position
+  out <- export_table(
+    cbind(Component = c("g1", "g2"), d3),
+    format = "html",
+    align = "lrc",
+    column_groups = list(G = c("Component", "c", "a"))
+  )
+  expect_identical(shown_align(out), c(b = "left", c = "right", a = "center"))
 
   # characters beyond the shown columns are ignored
   out <- export_table(d3, format = "html", align = "lcrr")
