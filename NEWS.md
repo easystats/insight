@@ -68,10 +68,11 @@
   table shows, in the order shown. `align = "left"`, `"right"` or `"center"`
   aligns all columns. Before, `export_table()` read these words as one
   character per column, and it gave an error for tables with fewer columns
-  than letters. Columns that become row groups (like `Component` or the `by`
-  columns) no longer take an `align` character. Columns that `column_groups`
-  moves under a spanner take the character of their shown position. Extra
-  characters are ignored.
+  than letters. A string with one character per column still skips the
+  characters of the columns that become row groups (like `Component` or the
+  `by` columns). A string with fewer characters now applies to the shown
+  columns only. Columns that `column_groups` moves under a spanner take the
+  character of their shown position. Extra characters are ignored.
 
 * `find_parameters()` and `clean_parameters()` now work for multivariate
   *brms* models with addition terms in the response, such as `resp_weights()`

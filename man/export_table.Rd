@@ -117,13 +117,17 @@ rules for the complete table, like \code{"left"}, \code{"right"}, \code{"center"
 with abbreviated alignment characters, one per column. For instance,
 \code{align = "lccrl"} would left-align the first column, center the second and
 third, right-align column four and left-align the fifth column. If
-\code{format = "html"}, the columns are the columns that the table shows, in
-the order shown: \code{"left"}, \code{"right"} and \code{"center"} align all shown
-columns, \code{"firstleft"} left-aligns the first shown column, columns that
-become row groups (like \code{Component} or the \code{by} columns) take no
-character, columns that \code{column_groups} moves under a spanner take the
-character of their shown position, and characters beyond the number of
-shown columns are ignored.}
+\code{format = "html"}, the characters go to the columns that the table shows,
+in the order shown (the \code{rowname_col} columns first, and the columns of a
+\code{column_groups} spanner where gt shows them). \code{"left"}, \code{"right"} and
+\code{"center"} align all shown columns, and \code{"firstleft"} left-aligns the first
+shown column. The group columns \code{Component}, \code{Effects}, \code{Group} and
+\code{Response}, and the \code{by} columns, are not shown: with two or more values
+they become row groups, with one value they are removed. A string with
+one character per column of \code{x} (for a list of data frames, per column of
+one data frame) skips the characters of these group columns. A string of
+any other length is for the shown columns only, and characters beyond the
+number of shown columns are ignored.}
 
 \item{by}{Name of column(s) in \code{x} that indicates grouping for tables.
 When \code{format = "html"}, \code{by} is passed down to \code{gt::gt(groupname_col = by)}.

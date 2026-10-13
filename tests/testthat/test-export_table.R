@@ -1553,6 +1553,12 @@ test_that("export_table, html align follows the shown columns", {
   expect_identical(shown_align(out), c(a = "right", b = "left", c = "center"))
   out <- export_table(d_two_groups, format = "html", align = "firstleft")
   expect_identical(shown_align(out), c(a = "left", b = "center", c = "center"))
+  # a "by" column and a "Component" column
+  d_by_comp <- cbind(Component = c("x", "y"), g = c("g1", "g2"), d3)
+  out <- export_table(d_by_comp, format = "html", align = "lcr", by = "g")
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+  out <- export_table(d_by_comp, format = "html", align = "firstleft", by = "g")
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "center"))
 
   # gt moves the columns of a first-level spanner (one that shares no column
   # with an earlier spanner) to the position of the first one listed,
@@ -1635,9 +1641,136 @@ test_that("export_table, html align follows the shown columns", {
   out <- export_table(
     cbind(Component = c("g1", "g2"), d3[1:2]),
     format = "html",
-    align = "lcr"
+    align = "lcrr"
   )
   expect_identical(shown_align(out), c(a = "left", b = "center"))
+})
+
+test_that("export_table, html align with one character per column", {
+  skip_if_not_installed("gt")
+
+  shown_align <- function(x) {
+    b <- x[["_boxhead"]]
+    b <- b[order(b$type != "stub"), ]
+    b <- b[b$type %in% c("default", "stub"), ]
+    stats::setNames(b$column_align, b$var)
+  }
+  d6 <- data.frame(
+    a = c("x", "y"),
+    b = c("1.0", "2.0"),
+    c = c("3.0", "4.0"),
+    d = c("5.0", "6.0"),
+    e = c("7.0", "8.0"),
+    f = c("9.0", "10.0"),
+    stringsAsFactors = FALSE
+  )
+  d3 <- d6[1:3]
+
+  # a string with one character per column skips the characters of the group
+  # columns, which are row groups and not shown, first or between the columns
+  for (g in c("Component", "Effects", "Group", "Response")) {
+    groups <- stats::setNames(data.frame(c("g1", "g2")), g)
+    out <- export_table(cbind(groups, d3), format = "html", align = "rlcr")
+    expect_identical(
+      shown_align(out),
+      c(a = "left", b = "center", c = "right"),
+      info = g
+    )
+    out <- export_table(
+      cbind(d3[1], groups, d3[2:3]),
+      format = "html",
+      align = "lrcr"
+    )
+    expect_identical(
+      shown_align(out),
+      c(a = "left", b = "center", c = "right"),
+      info = g
+    )
+  }
+  by_col <- data.frame(g = c("g1", "g2"))
+  out <- export_table(cbind(by_col, d3), format = "html", align = "rlcr", by = "g")
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+  out <- export_table(
+    cbind(d3[1], by_col, d3[2:3]),
+    format = "html",
+    align = "lrcr",
+    by = "g"
+  )
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+
+  # a group column with one value is not shown, and its character is skipped
+  out <- export_table(
+    cbind(Component = c("x", "x"), d3),
+    format = "html",
+    align = "rlcr"
+  )
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+
+  # the other characters go to the shown columns in the order shown: the stub
+  # first, and the columns of a spanner where gt shows them
+  out <- export_table(
+    cbind(Component = c("x", "y"), d3),
+    format = "html",
+    align = "rlcr",
+    rowname_col = "b"
+  )
+  expect_identical(shown_align(out), c(b = "left", a = "center", c = "right"))
+  out <- export_table(
+    cbind(Component = c("x", "y"), d6),
+    format = "html",
+    align = "rlrclrc",
+    column_groups = list(G = c("b", "d"))
+  )
+  expect_identical(
+    shown_align(out),
+    c(a = "left", b = "right", d = "center", c = "left", e = "right", f = "center")
+  )
+
+  # for a list of data frames, the string has one character per column of one
+  # data frame, and the "Component" column that the html output adds for the
+  # captions is not counted
+  d_g <- cbind(g = c("g1", "g2"), d3)
+  attr(d_g, "table_caption") <- "Table 1"
+  d_g2 <- d_g
+  attr(d_g2, "table_caption") <- "Table 2"
+  out <- export_table(
+    list(d_g, d_g2),
+    format = "html",
+    align = "rlcr",
+    by = "g"
+  )
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+  d_group <- cbind(Group = c("A", "B"), d3)
+  attr(d_group, "table_caption") <- "Table 1"
+  d_group2 <- d_group
+  attr(d_group2, "table_caption") <- "Table 2"
+  out <- export_table(list(d_group, d_group2), format = "html", align = "rlcr")
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+  # a string for the shown columns of a list also works
+  l3 <- list(d3, d3)
+  attr(l3[[1]], "table_caption") <- "Table 1"
+  attr(l3[[2]], "table_caption") <- "Table 2"
+  out <- export_table(l3, format = "html", align = "rlc")
+  expect_identical(shown_align(out), c(a = "right", b = "left", c = "center"))
+
+  # with no shown column, nothing is aligned
+  out <- export_table(data.frame(Component = c("x", "y")), format = "html")
+  expect_s3_class(out, "gt_tbl")
+  out <- export_table(data.frame(a = c("x", "y")), format = "html", by = "a")
+  expect_s3_class(out, "gt_tbl")
+
+  # gt makes no spanner for an unnamed element of "column_groups", so the
+  # columns are not moved
+  out <- export_table(
+    d6,
+    format = "html",
+    align = "lrlrlr",
+    column_groups = list(c("e", "b"))
+  )
+  expect_identical(
+    shown_align(out),
+    c(a = "left", b = "right", c = "left", d = "right", e = "left", f = "right")
+  )
 })
 
 test_that("export_table, html edge cases for lists of tables", {

@@ -57,13 +57,17 @@
 #'   with abbreviated alignment characters, one per column. For instance,
 #'   `align = "lccrl"` would left-align the first column, center the second and
 #'   third, right-align column four and left-align the fifth column. If
-#'   `format = "html"`, the columns are the columns that the table shows, in
-#'   the order shown: `"left"`, `"right"` and `"center"` align all shown
-#'   columns, `"firstleft"` left-aligns the first shown column, columns that
-#'   become row groups (like `Component` or the `by` columns) take no
-#'   character, columns that `column_groups` moves under a spanner take the
-#'   character of their shown position, and characters beyond the number of
-#'   shown columns are ignored.
+#'   `format = "html"`, the characters go to the columns that the table shows,
+#'   in the order shown (the `rowname_col` columns first, and the columns of a
+#'   `column_groups` spanner where gt shows them). `"left"`, `"right"` and
+#'   `"center"` align all shown columns, and `"firstleft"` left-aligns the first
+#'   shown column. The group columns `Component`, `Effects`, `Group` and
+#'   `Response`, and the `by` columns, are not shown: with two or more values
+#'   they become row groups, with one value they are removed. A string with
+#'   one character per column of `x` (for a list of data frames, per column of
+#'   one data frame) skips the characters of these group columns. A string of
+#'   any other length is for the shown columns only, and characters beyond the
+#'   number of shown columns are ignored.
 #' @param by Name of column(s) in `x` that indicates grouping for tables.
 #'   When `format = "html"`, `by` is passed down to `gt::gt(groupname_col = by)`.
 #'   Likewise, for `format = "tt"`, `by` indicates the name of the variable in
@@ -260,6 +264,19 @@ export_table <- function(
     return(NULL)
   }
 
+  # columns of one table of a list, for an "align" string with one character
+  # per column, see `.html_list_align()`
+  list_columns <- NULL
+  if (
+    identical(format, "html") &&
+      !is.data.frame(x) &&
+      is.list(x) &&
+      length(x) &&
+      is.data.frame(x[[1]])
+  ) {
+    list_columns <- ncol(x[[1]])
+  }
+
   # if we have a list of data frames and HTML format, create a single
   # data frame now. HTML format needs a single data frame. Sub tables
   # are split by their group-column later, see code below
@@ -307,6 +324,7 @@ export_table <- function(
     }
     x <- .bind_html_tables(x, format)
   }
+  align <- .html_list_align(align, list_columns, x)
 
   # check for indention
   indent_groups <- attributes(x)$indent_groups
@@ -506,6 +524,22 @@ print.insight_table <- function(x, ...) {
 
 
 # small helper ----------------------
+
+# the html output binds a list of tables and adds a "Component" column as the
+# last column. An "align" string with one character per column of one table
+# gets one more character for it, so that `.format_html_table()` skips it
+# like the other group columns
+.html_list_align <- function(align, list_columns, x) {
+  # `list_columns` is NULL if `x` was not a list of data frames
+  added_column <- is.data.frame(x) && isTRUE(ncol(x) == list_columns + 1)
+  align_string <- is.character(align) &&
+    length(align) == 1 &&
+    !align %in% c("left", "right", "center", "firstleft")
+  if (added_column && align_string && isTRUE(nchar(align) == list_columns)) {
+    align <- paste0(align, "c")
+  }
+  align
+}
 
 .bind_html_tables <- function(x, format = "html") {
   if (!is.data.frame(x) && is.list(x)) {
@@ -1840,6 +1874,10 @@ print.insight_table <- function(x, ...) {
     align <- "firstleft"
   }
 
+  # all columns, before group columns with one value are removed. An "align"
+  # string can have one character for each of them
+  table_columns <- colnames(final)
+
   group_by_columns <- c(
     intersect(c("Group", "Response", "Effects", "Component"), names(final)),
     group_by
@@ -1965,14 +2003,22 @@ print.insight_table <- function(x, ...) {
     column_groups,
     gt_args$rowname_col
   )
-  if (align %in% c("left", "right", "center")) {
+  if (!length(shown_cols)) {
+    # all columns are row groups, nothing to align
+  } else if (align %in% c("left", "right", "center")) {
     out <- gt::cols_align(out, align, shown_cols)
   } else if (align == "firstleft") {
     out <- gt::cols_align(out, "left", shown_cols[1])
   } else {
+    align_chars <- strsplit(align, "", fixed = TRUE)[[1]]
+    # with one character per column, the characters of the group columns are
+    # skipped. Any other string is for the shown columns
+    if (length(align_chars) == length(table_columns)) {
+      align_chars <- align_chars[!table_columns %in% group_by_columns]
+    }
     # characters beyond the shown columns are ignored, as in text output
-    for (i in seq_len(min(nchar(align), length(shown_cols)))) {
-      col_align <- switch(substr(align, i, i), l = "left", r = "right", "center")
+    for (i in seq_len(min(length(align_chars), length(shown_cols)))) {
+      col_align <- switch(align_chars[i], l = "left", r = "right", "center")
       out <- gt::cols_align(out, col_align, shown_cols[i])
     }
   }
@@ -2007,7 +2053,9 @@ print.insight_table <- function(x, ...) {
   # column indices refer to the data, not to the order shown
   data_columns <- columns
   spanned_before <- NULL
-  for (spanned in column_groups) {
+  # only named elements become spanners
+  for (i in names(column_groups)) {
+    spanned <- column_groups[[i]]
     if (is.numeric(spanned)) {
       spanned <- data_columns[spanned]
     }
