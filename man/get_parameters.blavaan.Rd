@@ -21,17 +21,20 @@ posterior samples (\code{summary = FALSE}) or point estimates
 \item{...}{If \code{standardize = TRUE}, a \code{type} argument can be used, which is
 passed to \code{lavaan::standardizedSolution()} (or to
 \code{blavaan::standardizedPosterior()} for the posterior samples of
-\strong{blavaan} models). \code{type} can be \code{"std.all"} (the default), \code{"std.lv"}
-or \code{"std.nox"}. Other arguments are not passed on.}
+\strong{blavaan} models). For example, \code{type} can be \code{"std.all"} (the
+default), \code{"std.lv"} or \code{"std.nox"}. See \code{lavaan::standardizedSolution()}
+for all values. Other arguments are not passed on.}
 }
 \value{
 For \strong{blavaan} models with \code{summary = FALSE}, the posterior samples
-as data frame, with one column per parameter. Else, a data frame with the
-columns \code{Parameter}, \code{Estimate} and \code{Component}.
+as data frame, with one row per draw (chains pooled) and one column per
+free or defined parameter. If \code{standardize = TRUE}, fixed parameters are
+included, too. Else, a data frame with the columns \code{Parameter}, \code{Estimate}
+and \code{Component}.
 }
 \description{
 Returns the coefficients (or posterior samples for \strong{blavaan}
-models) from a structural equation model.
+models with \code{summary = FALSE}) from a structural equation model.
 }
 \examples{
 \dontshow{if (require("lavaan", quietly = TRUE)) withAutoprint(\{ # examplesIf}

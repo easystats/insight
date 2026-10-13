@@ -645,7 +645,7 @@ get_parameters.metaplus <- function(x, ...) {
 #' @name get_parameters.blavaan
 #'
 #' @description Returns the coefficients (or posterior samples for **blavaan**
-#'   models) from a structural equation model.
+#'   models with `summary = FALSE`) from a structural equation model.
 #'
 #' @param x A model of class `lavaan` or `blavaan`.
 #' @param summary Logical. For **blavaan** models, indicates whether the full
@@ -655,12 +655,15 @@ get_parameters.metaplus <- function(x, ...) {
 #' @param ... If `standardize = TRUE`, a `type` argument can be used, which is
 #'   passed to `lavaan::standardizedSolution()` (or to
 #'   `blavaan::standardizedPosterior()` for the posterior samples of
-#'   **blavaan** models). `type` can be `"std.all"` (the default), `"std.lv"`
-#'   or `"std.nox"`. Other arguments are not passed on.
+#'   **blavaan** models). For example, `type` can be `"std.all"` (the
+#'   default), `"std.lv"` or `"std.nox"`. See `lavaan::standardizedSolution()`
+#'   for all values. Other arguments are not passed on.
 #'
 #' @return For **blavaan** models with `summary = FALSE`, the posterior samples
-#'   as data frame, with one column per parameter. Else, a data frame with the
-#'   columns `Parameter`, `Estimate` and `Component`.
+#'   as data frame, with one row per draw (chains pooled) and one column per
+#'   free or defined parameter. If `standardize = TRUE`, fixed parameters are
+#'   included, too. Else, a data frame with the columns `Parameter`, `Estimate`
+#'   and `Component`.
 #'
 #' @examplesIf require("lavaan", quietly = TRUE)
 #' m <- lavaan::cfa("visual =~ x1 + x2 + x3", data = lavaan::HolzingerSwineford1939)
@@ -729,7 +732,8 @@ get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
 
 
 # arguments for standardizedPosterior() and standardizedSolution(). Only "type"
-# is taken from "...", because both functions stop for other arguments.
+# is taken from "...", because both functions stop for arguments they do not
+# know, such as "verbose".
 .lavaan_std_args <- function(x, ...) {
   type <- list(...)[["type"]]
   if (is.null(type)) {
