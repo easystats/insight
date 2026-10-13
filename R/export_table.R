@@ -1891,12 +1891,17 @@ print.insight_table <- function(x, ...) {
   }
   # the characters of all group columns are skipped in an "align" string with
   # one character per column. gt makes no row groups if one of the group
-  # columns is missing, so only the remaining ones are passed to gt
+  # columns is missing, so only the remaining ones are passed to gt. With
+  # "row_groups", a removed group column still means no row groups, because
+  # `.row_groups()` writes its headers into the first column
   skip_columns <- group_by_columns
-  group_by_columns <- intersect(group_by_columns, colnames(final))
-  if (!length(group_by_columns)) {
-    group_by_columns <- NULL
+  remaining <- intersect(group_by_columns, colnames(final))
+  if (
+    !length(remaining) || (!is.null(row_groups) && !setequal(remaining, group_by_columns))
+  ) {
+    remaining <- NULL
   }
+  group_by_columns <- remaining
 
   # indent groups?
   if (!is.null(row_groups)) {

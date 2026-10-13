@@ -1779,6 +1779,46 @@ test_that("export_table, html align with one character per column", {
   out <- export_table(d_mixed, format = "html", align = "rrlcr")
   expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
 
+  # a "by" column that is not in the data does not stop the row groups
+  out <- export_table(
+    cbind(Group = c("g1", "g2"), d3),
+    format = "html",
+    by = "not_a_column"
+  )
+  expect_identical(
+    out[["_boxhead"]]$type[out[["_boxhead"]]$var == "Group"],
+    "row_group"
+  )
+
+  # with "row_groups", a removed group column still means no row groups, as
+  # before, and the other group column is shown
+  d_rows <- data.frame(
+    Group = c("g1", "g1", "g2", "g2"),
+    Component = "conditional",
+    a = c("p", "q", "r", "s"),
+    b = c("1.0", "2.0", "3.0", "4.0"),
+    stringsAsFactors = FALSE
+  )
+  out <- export_table(d_rows, format = "html", row_groups = list(A = 1:2, B = 3:4))
+  expect_identical(
+    out[["_boxhead"]]$type[out[["_boxhead"]]$var == "Group"],
+    "default"
+  )
+  expect_identical(shown_align(out), c(Group = "left", a = "center", b = "center"))
+
+  # a list of tables that share one "Effects" value: "Effects" is removed, and
+  # the captions become row groups
+  d_eff <- cbind(Effects = c("fixed", "fixed"), d3)
+  attr(d_eff, "table_caption") <- "Conditional"
+  d_eff2 <- d_eff
+  attr(d_eff2, "table_caption") <- "Zero-inflated"
+  out <- export_table(list(d_eff, d_eff2), format = "html", align = "rlcr")
+  expect_identical(
+    out[["_boxhead"]]$type[out[["_boxhead"]]$var == "Component"],
+    "row_group"
+  )
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+
   # a numeric "align" centers all columns
   out <- export_table(d3, format = "html", align = 1)
   expect_identical(shown_align(out), c(a = "center", b = "center", c = "center"))

@@ -73,9 +73,12 @@
   worked only without `rowname_col`, and a group column with one value gave
   an error. A string with fewer characters now applies to the shown
   columns only. Columns that `column_groups` moves under a spanner take the
-  character of their shown position. Extra characters are ignored. Also, if
-  one group column has one value, another group column with two or more
-  values now becomes row groups. Before, no row groups were made.
+  character of their shown position. Extra characters are ignored.
+
+* If one group column has one value, or a `by` column is not in the data,
+  `export_table(format = "html")` now makes row groups from the other group
+  columns with two or more values. Before, it made no row groups in these
+  cases. With `row_groups`, it still makes no row groups in these cases.
 
 * `find_parameters()` and `clean_parameters()` now work for multivariate
   *brms* models with addition terms in the response, such as `resp_weights()`
