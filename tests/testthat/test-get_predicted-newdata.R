@@ -285,8 +285,13 @@ test_that("get_predicted - zero-inflated glmmTMB, data object overwritten after 
   out <- get_predicted(m_fe, predict = "expectation")
   expect_equal(as.numeric(out), as.numeric(expected_fe), tolerance = 1e-6)
 
-  out <- get_predicted(m_fe, predict = "expectation", ci = NULL)
-  expect_equal(as.numeric(out), as.numeric(expected_fe), tolerance = 1e-6)
+  # the intervals use the recovered data
+  set.seed(7)
+  out <- as.data.frame(get_predicted(m_fe, predict = "expectation", ci = 0.95))
+  set.seed(7)
+  expected <- as.data.frame(get_predicted(m_fe, data = d_copy, predict = "expectation", ci = 0.95))
+  expect_named(out, c("Predicted", "SE", "CI_low", "CI_high"))
+  expect_equal(out, expected, tolerance = 1e-10)
 })
 
 test_that("get_predicted - zero-inflated glmmTMB and zeroinfl, `newdata` gives the same as `data`", {
@@ -312,4 +317,10 @@ test_that("get_predicted - zero-inflated glmmTMB and zeroinfl, `newdata` gives t
     expect_named(with_newdata, c("Predicted", "SE", "CI_low", "CI_high"))
     expect_equal(with_newdata, with_data, tolerance = 1e-10)
   }
+  # bootstrapped predictions
+  set.seed(3)
+  with_data <- get_predicted(models$glmmTMB, data = nd_zipnd2, iterations = 5)
+  set.seed(3)
+  with_newdata <- get_predicted(models$glmmTMB, newdata = nd_zipnd2, iterations = 5)
+  expect_equal(with_newdata, with_data, tolerance = 1e-10, ignore_attr = TRUE)
 })
