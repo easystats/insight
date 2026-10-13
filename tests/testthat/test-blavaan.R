@@ -64,7 +64,8 @@ test_that("find_parameters and get_parameters, multiple groups with equality con
   )
 
   # other types of standardization keep the names of the std.all draws. lavaan
-  # warns for std.nox in models without exogenous covariates
+  # warns for std.nox in models without exogenous covariates, where std.nox
+  # equals std.all, so for std.nox this only checks names and shape
   for (type in c("std.lv", "std.nox")) {
     out_type <- suppressWarnings(get_parameters(bfit, standardize = TRUE, type = type))
     expect_identical(colnames(out_type), colnames(out))
@@ -223,6 +224,14 @@ test_that("get_parameters and clean_parameters, defined parameters", {
   out <- get_parameters(bfit, standardize = TRUE)
   expect_identical(colnames(out)[ncol(out)], "ab:=a*b")
   expect_false(anyNA(colnames(out)))
+
+  out_lv <- get_parameters(bfit, standardize = TRUE, type = "std.lv")
+  expect_identical(colnames(out_lv), colnames(out))
+  expect_equal(
+    unname(as.matrix(out_lv)),
+    unname(blavaan::standardizedPosterior(bfit, type = "std.lv")),
+    tolerance = 1e-8
+  )
 
   out <- clean_parameters(bfit)
   expect_identical(out$Parameter[nrow(out)], "ab:=a*b")

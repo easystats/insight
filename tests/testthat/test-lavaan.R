@@ -55,9 +55,13 @@ test_that("get_parameters, standardized parameters with type", {
   # type has no effect without standardization
   expect_identical(get_parameters(model, type = "std.lv"), get_parameters(model))
 
-  # other arguments in ... are not passed to lavaan
+  # other arguments in ... are not passed to lavaan, and not evaluated
   expect_identical(
     get_parameters(model, standardize = TRUE, type = "std.lv", verbose = FALSE),
+    out
+  )
+  expect_identical(
+    get_parameters(model, standardize = TRUE, type = "std.lv", foo = stop("not evaluated", call. = FALSE)),
     out
   )
 })

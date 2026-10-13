@@ -680,7 +680,12 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
   if (isTRUE(standardize)) {
     # standardized draws also include fixed parameters, and are already named
     # "lhs op rhs", with a ".g<n>" suffix for models with multiple groups
-    draws <- do.call(blavaan::standardizedPosterior, .lavaan_std_args(x, ...))
+    type <- .lavaan_std_type(...)
+    if (is.null(type)) {
+      draws <- blavaan::standardizedPosterior(x)
+    } else {
+      draws <- blavaan::standardizedPosterior(x, type = type)
+    }
     coef_labels <- colnames(draws)
     if (lavaan::lavInspect(x, "ngroups") > 1L) {
       coef_labels <- gsub("\\.g([0-9]+)$", " (group \\1)", coef_labels)
@@ -707,7 +712,12 @@ get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   check_if_installed("lavaan")
 
   if (standardize) {
-    params <- do.call(lavaan::standardizedSolution, .lavaan_std_args(x, ...))
+    type <- .lavaan_std_type(...)
+    if (is.null(type)) {
+      params <- lavaan::standardizedSolution(x)
+    } else {
+      params <- lavaan::standardizedSolution(x, type = type)
+    }
   } else {
     params <- lavaan::parameterEstimates(x)
   }
@@ -731,16 +741,11 @@ get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
 }
 
 
-# arguments for standardizedPosterior() and standardizedSolution(). Only "type"
-# is taken from "...", because both functions stop for arguments they do not
-# know, such as "verbose".
-.lavaan_std_args <- function(x, ...) {
-  type <- list(...)[["type"]]
-  if (is.null(type)) {
-    list(x)
-  } else {
-    list(x, type = type)
-  }
+# the "type" argument for standardizedPosterior() and standardizedSolution().
+# Only "type" is taken from "...", because both functions stop for arguments
+# they do not know, such as "verbose". Other arguments are not evaluated.
+.lavaan_std_type <- function(..., type = NULL) {
+  type
 }
 
 
