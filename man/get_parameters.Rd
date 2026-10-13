@@ -36,6 +36,7 @@ models) from a model. See the documentation for your object's class:
 \item \link[=get_parameters.zeroinfl]{Zero-inflated and hurdle models} (\strong{pscl}, ...)
 \item \link[=get_parameters.betareg]{Models with special components} (\strong{betareg}, \strong{MuMIn}, ...)
 \item \link[=get_parameters.htest]{Hypothesis tests} (\code{htest})
+\item \link[=get_parameters.blavaan]{Structural equation models} (\strong{lavaan}, \strong{blavaan})
 }
 }
 \details{

@@ -12,6 +12,7 @@
 #' - [Zero-inflated and hurdle models][get_parameters.zeroinfl] (**pscl**, ...)
 #' - [Models with special components][get_parameters.betareg] (**betareg**, **MuMIn**, ...)
 #' - [Hypothesis tests][get_parameters.htest] (`htest`)
+#' - [Structural equation models][get_parameters.blavaan] (**lavaan**, **blavaan**)
 #'
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
@@ -640,6 +641,30 @@ get_parameters.metaplus <- function(x, ...) {
 
 # SEM models ---------------------------------------------
 
+#' @title Get model parameters from structural equation models
+#' @name get_parameters.blavaan
+#'
+#' @description Returns the coefficients (or posterior samples for **blavaan**
+#'   models) from a structural equation model.
+#'
+#' @param x A model of class `lavaan` or `blavaan`.
+#' @param summary Logical. For **blavaan** models, indicates whether the full
+#'   posterior samples (`summary = FALSE`) or point estimates
+#'   (`summary = TRUE`) should be returned.
+#' @param standardize Logical. If `TRUE`, standardized parameters are returned.
+#' @param ... If `standardize = TRUE`, a `type` argument can be used, which is
+#'   passed to `lavaan::standardizedSolution()` (or to
+#'   `blavaan::standardizedPosterior()` for the posterior samples of
+#'   **blavaan** models). `type` can be `"std.all"` (the default), `"std.lv"`
+#'   or `"std.nox"`. Other arguments are not passed on.
+#'
+#' @return For **blavaan** models with `summary = FALSE`, the posterior samples
+#'   as data frame, with one column per parameter. Else, a data frame with the
+#'   columns `Parameter`, `Estimate` and `Component`.
+#'
+#' @examplesIf require("lavaan", quietly = TRUE)
+#' m <- lavaan::cfa("visual =~ x1 + x2 + x3", data = lavaan::HolzingerSwineford1939)
+#' get_parameters(m, standardize = TRUE, type = "std.lv")
 #' @export
 get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...) {
   if (isTRUE(summary)) {
@@ -673,6 +698,7 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
 }
 
 
+#' @rdname get_parameters.blavaan
 #' @export
 get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   check_if_installed("lavaan")

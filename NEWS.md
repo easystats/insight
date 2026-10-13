@@ -15,6 +15,12 @@
 
 ## Changes
 
+* If `standardize = TRUE`, `get_parameters()` for *lavaan* and *blavaan*
+  models passes a `type` argument to `lavaan::standardizedSolution()` or
+  `blavaan::standardizedPosterior()`. Use
+  `type = "std.lv"` or `type = "std.nox"` to get other standardized
+  parameters than `"std.all"`.
+
 * `get_variance()` for `nlme::lme()` models now returns `cor.slopes`, the
   correlations between random slopes, as for *lme4* models. Before, it was
   missing. This works for nested and non-nested grouping factors with general
