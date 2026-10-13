@@ -17,7 +17,7 @@ is_converged(x, tolerance = 0.001, ...)
 }
 \arguments{
 \item{x}{A model object from class \code{merMod}, \code{glmmTMB}, \code{glm}, \code{lavaan},
-\verb{_glm}, \code{stanfit}, \code{brmsfit}, \code{stanreg} or \code{coxph}.}
+\verb{_glm}, \code{stanfit}, \code{brmsfit}, \code{stanreg}, \code{CmdStanMCMC} or \code{coxph}.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
 accepted. The smaller \code{tolerance} is, the stricter the test will be. Not
@@ -53,21 +53,26 @@ the reason.
 \description{
 \code{is_converged()} provides an alternative convergence
 test for \code{merMod}-objects. For models fitted with Stan (\code{stanfit},
-\code{brmsfit} and \code{stanreg}), it checks the diagnostics of the sampler. For
-\code{coxph} models, it recomputes the checks of the \emph{survival} package.
+\code{brmsfit}, \code{stanreg} and \code{CmdStanMCMC}), it checks the diagnostics of the
+sampler. For \code{coxph} models, it recomputes the checks of the \emph{survival}
+package.
 }
 \section{Stan models}{
 
 For models fitted with Stan, \code{is_converged()} returns \code{FALSE} if at least one
 of the checks below fails. The checks and thresholds are those of the
-warnings that \emph{rstan} gives after sampling, and the values are computed with
-functions from \emph{rstan}:
+warnings that \emph{rstan} gives after sampling. For \code{stanfit}, \code{brmsfit} and
+\code{stanreg} models, the values are computed with functions from \emph{rstan}:
 \itemize{
 \item Divergent transitions after warmup (\code{rstan::get_num_divergent()}): the
 check fails if there is at least one.
-\item Transitions after warmup that reach the maximum treedepth
-(\code{rstan::get_num_max_treedepth()}): the check fails if there is at least
-one.
+\item Transitions after warmup that reach the maximum treedepth stored in the
+model (\code{rstan::get_sampler_params()}): the check fails if there is at
+least one. The maximum is read from the \code{control} settings. Models from
+\code{rstan::read_stan_csv()} store it outside \code{control}, and
+\code{is_converged()} reads it from there. For these models,
+\code{rstan::get_num_max_treedepth()} counts against the default maximum of
+10. If the model stores no maximum, 10 is used.
 \item E-BFMI (\code{rstan::get_bfmi()}): the check fails if at least one chain has
 a value below 0.2. This is the E-BFMI of \code{rstan::check_hmc_diagnostics()},
 which can differ from the warning that \emph{rstan} prints after sampling.
@@ -75,8 +80,15 @@ which can differ from the warning that \emph{rstan} prints after sampling.
 parameters is above 1.05.
 \item Bulk and tail effective sample size (\code{rstan::ess_bulk()} and
 \code{rstan::ess_tail()}): each check fails if the smallest value over all
-parameters is below 100 times the number of chains.
+parameters is below 100 times the number of chains with draws after
+warmup.
 }
+
+For \code{CmdStanMCMC} models from \emph{cmdstanr}, the same checks and thresholds
+are used. Divergent transitions, transitions at the maximum treedepth and
+E-BFMI come from the \verb{$diagnostic_summary()} method of the model, and R-hat
+and effective sample size from its \verb{$summary()} method. The E-BFMI warning
+of \emph{cmdstanr} uses a threshold of 0.3, not 0.2.
 
 Missing values (for example, R-hat of a constant parameter) are ignored. Stan
 also prints messages about rejected proposals ("exception thrown") during

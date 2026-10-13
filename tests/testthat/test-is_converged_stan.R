@@ -159,6 +159,57 @@ test_that("is_converged, maximum treedepth", {
   expect_identical(.conv_failed(result), "Treedepth")
 })
 
+test_that("is_converged, maximum treedepth stored outside `control`", {
+  # `rstan::read_stan_csv()` stores the maximum treedepth as `max_depth` (or
+  # `max_treedepth`) outside `control`, where rstan does not read it. Each
+  # case below sets every post-warmup treedepth to 1, then sets the treedepth
+  # of three transitions in chain 2 to `depth`, and returns the Treedepth value
+  .treedepth_hits <- function(depth, control = NULL, max_depth = NULL,
+                              max_treedepth = NULL) {
+    fit <- conv_fit_brms
+    fit@stan_args <- lapply(fit@stan_args, function(args) {
+      args$control$max_treedepth <- control
+      args$max_depth <- max_depth
+      args$max_treedepth <- max_treedepth
+      args
+    })
+    for (chain in seq_along(fit@sim$samples)) {
+      rows <- seq_along(.conv_post_warmup(fit, chain))
+      fit <- .conv_set_sampler(fit, chain, "treedepth__", rows, 1)
+    }
+    fit <- .conv_set_sampler(fit, 2, "treedepth__", 1:3, depth)
+    attr(is_converged(fit, verbose = FALSE), "diagnostics")$Value[2]
+  }
+
+  # stored limit above 10: depths from 10 to 14 are below it
+  expect_identical(.treedepth_hits(12, max_depth = 15), 0)
+  expect_identical(.treedepth_hits(15, max_depth = 15), 3)
+  expect_identical(.treedepth_hits(12, max_treedepth = 15), 0)
+  expect_identical(.treedepth_hits(15, max_treedepth = 15), 3)
+
+  # stored limit below 10: depths from the limit to 9 reach it
+  expect_identical(.treedepth_hits(5, max_depth = 5), 3)
+  expect_identical(.treedepth_hits(4, max_depth = 5), 0)
+  expect_identical(.treedepth_hits(7, max_treedepth = 5), 3)
+  expect_identical(.treedepth_hits(4, max_treedepth = 5), 0)
+
+  # `control` comes first, then `max_depth`, then `max_treedepth`
+  expect_identical(.treedepth_hits(7, control = 15, max_depth = 5), 0)
+  expect_identical(.treedepth_hits(7, max_depth = 5, max_treedepth = 15), 3)
+  expect_identical(.treedepth_hits(12, max_depth = 15, max_treedepth = 5), 0)
+
+  # no stored limit: 10, as in rstan
+  expect_identical(.treedepth_hits(10), 3)
+  expect_identical(.treedepth_hits(9), 0)
+
+  # a stored limit that is not one finite number is skipped
+  expect_identical(.treedepth_hits(10, max_depth = NA), 3)
+  expect_identical(.treedepth_hits(10, max_depth = "15"), 3)
+  expect_identical(.treedepth_hits(10, max_depth = c(15, 15)), 3)
+  expect_identical(.treedepth_hits(5, max_depth = NA, max_treedepth = 5), 3)
+  expect_identical(.treedepth_hits(7, control = NA, max_depth = 15), 0)
+})
+
 test_that("is_converged, low E-BFMI", {
   # energy as a random walk in chain 3
   withr::local_seed(123)
