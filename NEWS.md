@@ -73,7 +73,9 @@
   worked only without `rowname_col`, and a group column with one value gave
   an error. A string with fewer characters now applies to the shown
   columns only. Columns that `column_groups` moves under a spanner take the
-  character of their shown position. Extra characters are ignored.
+  character of their shown position. Extra characters are ignored. Also, if
+  one group column has one value, another group column with two or more
+  values now becomes row groups. Before, no row groups were made.
 
 * `find_parameters()` and `clean_parameters()` now work for multivariate
   *brms* models with addition terms in the response, such as `resp_weights()`

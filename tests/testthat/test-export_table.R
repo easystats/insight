@@ -1753,6 +1753,36 @@ test_that("export_table, html align with one character per column", {
   out <- export_table(l3, format = "html", align = "rlc")
   expect_identical(shown_align(out), c(a = "right", b = "left", c = "center"))
 
+  # a list whose first element is NULL
+  out <- export_table(
+    list(NULL, d_group, d_group2),
+    format = "html",
+    align = "rlcr"
+  )
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+
+  # a group column with one value next to one with two values: the first is
+  # removed, and the second becomes row groups
+  d_mixed <- cbind(
+    Effects = c("fixed", "random"),
+    Component = c("conditional", "conditional"),
+    d3
+  )
+  out <- export_table(d_mixed, format = "html")
+  expect_identical(
+    out[["_boxhead"]]$type[out[["_boxhead"]]$var == "Effects"],
+    "row_group"
+  )
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "center"))
+  out <- export_table(d_mixed, format = "html", align = "lcr")
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+  out <- export_table(d_mixed, format = "html", align = "rrlcr")
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+
+  # a numeric "align" centers all columns
+  out <- export_table(d3, format = "html", align = 1)
+  expect_identical(shown_align(out), c(a = "center", b = "center", c = "center"))
+
   # with no shown column, nothing is aligned
   out <- export_table(data.frame(Component = c("x", "y")), format = "html")
   expect_s3_class(out, "gt_tbl")

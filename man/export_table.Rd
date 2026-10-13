@@ -122,12 +122,12 @@ in the order shown (the \code{rowname_col} columns first, and the columns of a
 \code{column_groups} spanner where gt shows them). \code{"left"}, \code{"right"} and
 \code{"center"} align all shown columns, and \code{"firstleft"} left-aligns the first
 shown column. The group columns \code{Component}, \code{Effects}, \code{Group} and
-\code{Response}, and the \code{by} columns, are not shown: with two or more values
-they become row groups, with one value they are removed. A string with
-one character per column of \code{x} (for a list of data frames, per column of
-one data frame) skips the characters of these group columns. A shorter
-string is for the shown columns only, and characters beyond the number of
-shown columns are ignored.}
+\code{Response}, and the \code{by} columns given by name, are not shown: with two
+or more values they become row groups, with one value they are removed.
+A string with one character per column of \code{x} (for a list of data frames,
+per column of one data frame) skips the characters of these group
+columns. A shorter string is for the shown columns only, and characters
+beyond the number of shown columns are ignored.}
 
 \item{by}{Name of column(s) in \code{x} that indicates grouping for tables.
 When \code{format = "html"}, \code{by} is passed down to \code{gt::gt(groupname_col = by)}.
@@ -187,8 +187,9 @@ when \code{format = "tt"}. When \code{format = "html"}, arguments of \code{\link
 for example \code{id} or \code{rowname_col}, are passed to \code{gt::gt()}, except
 \code{data}, \code{groupname_col} and \code{auto_align}. \code{caption} is not passed,
 because it is an argument of \code{export_table()}. With \code{rowname_col}, the
-first characters of \code{align} go to the \code{rowname_col} columns, which are
-shown first, and the other characters to the remaining columns.}
+\code{rowname_col} columns are shown first, so they take the first characters
+of \code{align} that go to the shown columns (see \code{align}), and the remaining
+columns take the other characters.}
 }
 \value{
 If \code{format = "text"} (or \code{NULL}), a formatted character string is

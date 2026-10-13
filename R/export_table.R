@@ -62,12 +62,12 @@
 #'   `column_groups` spanner where gt shows them). `"left"`, `"right"` and
 #'   `"center"` align all shown columns, and `"firstleft"` left-aligns the first
 #'   shown column. The group columns `Component`, `Effects`, `Group` and
-#'   `Response`, and the `by` columns, are not shown: with two or more values
-#'   they become row groups, with one value they are removed. A string with
-#'   one character per column of `x` (for a list of data frames, per column of
-#'   one data frame) skips the characters of these group columns. A shorter
-#'   string is for the shown columns only, and characters beyond the number of
-#'   shown columns are ignored.
+#'   `Response`, and the `by` columns given by name, are not shown: with two
+#'   or more values they become row groups, with one value they are removed.
+#'   A string with one character per column of `x` (for a list of data frames,
+#'   per column of one data frame) skips the characters of these group
+#'   columns. A shorter string is for the shown columns only, and characters
+#'   beyond the number of shown columns are ignored.
 #' @param by Name of column(s) in `x` that indicates grouping for tables.
 #'   When `format = "html"`, `by` is passed down to `gt::gt(groupname_col = by)`.
 #'   Likewise, for `format = "tt"`, `by` indicates the name of the variable in
@@ -120,8 +120,9 @@
 #'   for example `id` or `rowname_col`, are passed to `gt::gt()`, except
 #'   `data`, `groupname_col` and `auto_align`. `caption` is not passed,
 #'   because it is an argument of `export_table()`. With `rowname_col`, the
-#'   first characters of `align` go to the `rowname_col` columns, which are
-#'   shown first, and the other characters to the remaining columns.
+#'   `rowname_col` columns are shown first, so they take the first characters
+#'   of `align` that go to the shown columns (see `align`), and the remaining
+#'   columns take the other characters.
 #' @inheritParams format_value
 #' @inheritParams get_data
 #'
@@ -267,14 +268,11 @@ export_table <- function(
   # columns of one table of a list, for an "align" string with one character
   # per column, see `.html_list_align()`
   list_columns <- NULL
-  if (
-    identical(format, "html") &&
-      !is.data.frame(x) &&
-      is.list(x) &&
-      length(x) &&
-      is.data.frame(x[[1]])
-  ) {
-    list_columns <- ncol(x[[1]])
+  if (identical(format, "html") && !is.data.frame(x) && is.list(x)) {
+    first_table <- Find(is.data.frame, x)
+    if (!is.null(first_table)) {
+      list_columns <- ncol(first_table)
+    }
   }
 
   # if we have a list of data frames and HTML format, create a single
@@ -1890,7 +1888,13 @@ print.insight_table <- function(x, ...) {
         final[[i]] <- NULL
       }
     }
-  } else {
+  }
+  # the characters of all group columns are skipped in an "align" string with
+  # one character per column. gt makes no row groups if one of the group
+  # columns is missing, so only the remaining ones are passed to gt
+  skip_columns <- group_by_columns
+  group_by_columns <- intersect(group_by_columns, colnames(final))
+  if (!length(group_by_columns)) {
     group_by_columns <- NULL
   }
 
@@ -2010,11 +2014,11 @@ print.insight_table <- function(x, ...) {
   } else if (align == "firstleft") {
     out <- gt::cols_align(out, "left", shown_cols[1])
   } else {
-    align_chars <- strsplit(align, "", fixed = TRUE)[[1]]
+    align_chars <- strsplit(as.character(align), "", fixed = TRUE)[[1]]
     # with one character per column, the characters of the group columns are
     # skipped. Any other string is for the shown columns
     if (length(align_chars) == length(table_columns)) {
-      align_chars <- align_chars[!table_columns %in% group_by_columns]
+      align_chars <- align_chars[!table_columns %in% skip_columns]
     }
     # characters beyond the shown columns are ignored, as in text output
     for (i in seq_len(min(length(align_chars), length(shown_cols)))) {
