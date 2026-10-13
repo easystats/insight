@@ -47,10 +47,11 @@
 #'   check fails if there is at least one.
 #' - Transitions after warmup that reach the maximum treedepth stored in the
 #'   model (`rstan::get_sampler_params()`): the check fails if there is at
-#'   least one. Models from `rstan::read_stan_csv()` store the maximum outside
-#'   the `control` settings. For these models, `rstan::get_num_max_treedepth()`
-#'   counts against the default maximum of 10, but `is_converged()` uses the
-#'   stored maximum.
+#'   least one. The maximum is read from the `control` settings. Models from
+#'   `rstan::read_stan_csv()` store it outside `control`, and
+#'   `is_converged()` reads it from there. For these models,
+#'   `rstan::get_num_max_treedepth()` counts against the default maximum of
+#'   10. If the model stores no maximum, 10 is used.
 #' - E-BFMI (`rstan::get_bfmi()`): the check fails if at least one chain has
 #'   a value below 0.2. This is the E-BFMI of `rstan::check_hmc_diagnostics()`,
 #'   which can differ from the warning that *rstan* prints after sampling.
