@@ -102,6 +102,7 @@ cmdstan_fit_schools <- .cmdstan_sample(
   rel_diff <- abs(d$Value[3:6] - r$Value[3:6]) / abs(r$Value[3:6])
   expect_true(all(rel_diff <= 1e-3), info = toString(rel_diff))
   near <- abs(r$Value - r$Threshold) <= 1e-3 * abs(r$Threshold)
+  near[1:2] <- FALSE
   expect_identical(d$Passed[!near], r$Passed[!near])
   result
 }
@@ -156,12 +157,14 @@ test_that("is_converged, cmdstanr fits without MCMC draws", {
     variational = cmdstan_normal$variational(
       data = cmdstan_normal_data,
       seed = 123,
-      refresh = 0
+      refresh = 0,
+      show_messages = FALSE
     ),
     optimize = cmdstan_normal$optimize(
       data = cmdstan_normal_data,
       seed = 123,
-      refresh = 0
+      refresh = 0,
+      show_messages = FALSE
     )
   )))
   expect_s3_class(fits$variational, "CmdStanVB")
@@ -174,6 +177,40 @@ test_that("is_converged, cmdstanr fits without MCMC draws", {
     expect_null(attr(result, "diagnostics"))
     expect_silent(is_converged(fit, verbose = FALSE))
   }
+})
+
+test_that("is_converged, CmdStanMCMC with a failed chain", {
+  # chain 2 starts where the model rejects every proposal, so it has no draws.
+  # The ESS threshold counts only the chain with draws, as for the stanfit
+  model <- cmdstanr::cmdstan_model(
+    cmdstanr::write_stan_file(
+      "parameters { real mu; }
+      model { if (mu > 1) reject(\"mu > 1\"); mu ~ normal(0, 0.1); }"
+    ),
+    quiet = TRUE
+  )
+  fit <- .cmdstan_sample(
+    model,
+    data = list(),
+    chains = 2,
+    init = list(list(mu = 0), list(mu = 5))
+  )
+  expect_identical(fit$num_chains(), 2L)
+  expect_length(fit$output_files(), 1)
+  result <- .cmdstan_expect_stanfit(fit)
+  expect_identical(attr(result, "diagnostics")$Threshold[5:6], c(100, 100))
+})
+
+test_that("is_converged, CmdStanMCMC with two draws is silent", {
+  # cmdstanr warns that E-BFMI cannot be computed from fewer than three draws
+  fit <- .cmdstan_sample(
+    cmdstan_normal,
+    cmdstan_normal_data,
+    chains = 1,
+    iter_sampling = 2
+  )
+  expect_silent(is_converged(fit, verbose = FALSE))
+  expect_identical(attr(is_converged(fit), "diagnostics")$Value[3], NA_real_)
 })
 
 test_that("is_converged, CmdStanMCMC without draws after warmup", {

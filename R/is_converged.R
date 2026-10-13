@@ -351,9 +351,10 @@ is_converged.CmdStanMCMC <- function(x, tolerance = 0.001, verbose = TRUE, ...) 
   }
 
   # one value per chain for the sampler diagnostics, one row per variable in
-  # the summary
-  sampler <- x$diagnostic_summary(quiet = TRUE)
-  draws_summary <- x$summary()
+  # the summary. cmdstanr warns if E-BFMI cannot be computed (fewer than three
+  # draws), which the check then ignores, as missing values in rstan
+  sampler <- suppressWarnings(x$diagnostic_summary(quiet = TRUE))
+  draws_summary <- x$summary(NULL, "rhat", "ess_bulk", "ess_tail")
   .stan_diagnostics(
     values = c(
       sum(sampler$num_divergent),
@@ -363,7 +364,8 @@ is_converged.CmdStanMCMC <- function(x, tolerance = 0.001, verbose = TRUE, ...) 
       .stan_na_or(draws_summary$ess_bulk, min),
       .stan_na_or(draws_summary$ess_tail, min)
     ),
-    n_chains = x$num_chains(),
+    # `x$num_chains()` also counts chains that failed and have no draws
+    n_chains = dim(x$draws("lp__"))[2],
     verbose = verbose
   )
 }
