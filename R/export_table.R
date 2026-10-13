@@ -65,9 +65,9 @@
 #'   `Response`, and the `by` columns, are not shown: with two or more values
 #'   they become row groups, with one value they are removed. A string with
 #'   one character per column of `x` (for a list of data frames, per column of
-#'   one data frame) skips the characters of these group columns. A string of
-#'   any other length is for the shown columns only, and characters beyond the
-#'   number of shown columns are ignored.
+#'   one data frame) skips the characters of these group columns. A shorter
+#'   string is for the shown columns only, and characters beyond the number of
+#'   shown columns are ignored.
 #' @param by Name of column(s) in `x` that indicates grouping for tables.
 #'   When `format = "html"`, `by` is passed down to `gt::gt(groupname_col = by)`.
 #'   Likewise, for `format = "tt"`, `by` indicates the name of the variable in
@@ -525,10 +525,10 @@ print.insight_table <- function(x, ...) {
 
 # small helper ----------------------
 
-# the html output binds a list of tables and adds a "Component" column as the
-# last column. An "align" string with one character per column of one table
-# gets one more character for it, so that `.format_html_table()` skips it
-# like the other group columns
+# the html output may bind a list of tables with an added "Component" column
+# (from the captions) as the last column. Then an "align" string with one
+# character per column of one table gets one more character for it, so that
+# `.format_html_table()` skips it like the other group columns
 .html_list_align <- function(align, list_columns, x) {
   # `list_columns` is NULL if `x` was not a list of data frames
   added_column <- is.data.frame(x) && isTRUE(ncol(x) == list_columns + 1)

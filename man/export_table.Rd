@@ -125,9 +125,9 @@ shown column. The group columns \code{Component}, \code{Effects}, \code{Group} a
 \code{Response}, and the \code{by} columns, are not shown: with two or more values
 they become row groups, with one value they are removed. A string with
 one character per column of \code{x} (for a list of data frames, per column of
-one data frame) skips the characters of these group columns. A string of
-any other length is for the shown columns only, and characters beyond the
-number of shown columns are ignored.}
+one data frame) skips the characters of these group columns. A shorter
+string is for the shown columns only, and characters beyond the number of
+shown columns are ignored.}
 
 \item{by}{Name of column(s) in \code{x} that indicates grouping for tables.
 When \code{format = "html"}, \code{by} is passed down to \code{gt::gt(groupname_col = by)}.
