@@ -189,8 +189,10 @@ null_model.lme <- function(model, verbose = TRUE, ...) {
   # the call of lme models is "lme.formula()", which is not exported, and
   # packages may not be attached, so we name the function with its package
   if (inherits(model, "glmmPQL")) {
+    check_if_installed(c("MASS", "nlme"))
     out[[1]] <- quote(MASS::glmmPQL)
   } else {
+    check_if_installed("nlme")
     out[[1]] <- quote(nlme::lme)
   }
   .eval_null_model(out, model, env)
