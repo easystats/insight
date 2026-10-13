@@ -210,7 +210,8 @@ test_that("is_converged, CmdStanMCMC with two draws is silent", {
     iter_sampling = 2
   )
   expect_silent(is_converged(fit, verbose = FALSE))
-  expect_warning(result <- is_converged(fit), "E-BFMI")
+  expect_warning(is_converged(fit), "E-BFMI")
+  result <- suppressWarnings(is_converged(fit))
   expect_identical(attr(result, "diagnostics")$Value[3], NA_real_)
 })
 
