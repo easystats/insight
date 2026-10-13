@@ -49,6 +49,11 @@
 
 ## Bug fixes
 
+* If you use the hidden `variable` argument with `summary = TRUE`,
+  `get_parameters()` for *brms* models no longer fails with the error
+  `object 'parms' not found`. The summary then has the columns `Parameter` and
+  `Estimate`.
+
 * `get_predicted()` for zero-inflated *glmmTMB* models no longer fails for
   population-level predictions (`include_random = FALSE`, or a model without
   random effects) when the data object of the model call was changed or
