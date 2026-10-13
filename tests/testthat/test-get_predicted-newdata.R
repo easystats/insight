@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not_installed("reformulas")
 
 # new data with NA values or unknown factor levels ----
 
@@ -42,38 +43,40 @@ test_that("get_predicted - lme and gls, new data rows with NA or unknown levels 
     gls = nlme::gls(y ~ x + f, data = d_pnd)
   )
   # `f` as factor with the extra level "d", and as character vector
-  for (as_character in c(FALSE, TRUE)) for (m in models) {
-    nd_pnd <- pnd_newdata(d_pnd, character = as_character)
-    warning_messages <- character()
-    out <- withCallingHandlers(
-      as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)),
-      warning = function(w) {
-        warning_messages <<- c(warning_messages, conditionMessage(w))
-        invokeRestart("muffleWarning")
+  for (as_character in c(FALSE, TRUE)) {
+    for (m in models) {
+      nd_pnd <- pnd_newdata(d_pnd, character = as_character)
+      warning_messages <- character()
+      out <- withCallingHandlers(
+        as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)),
+        warning = function(w) {
+          warning_messages <<- c(warning_messages, conditionMessage(w))
+          invokeRestart("muffleWarning")
+        }
+      )
+      expect_identical(nrow(out), 5L)
+      for (column in c("Predicted", "SE", "CI_low", "CI_high")) {
+        expect_true(all(is.na(out[[column]][2:4])))
+        expect_false(anyNA(out[[column]][c(1, 5)]))
       }
-    )
-    expect_identical(nrow(out), 5L)
-    for (column in c("Predicted", "SE", "CI_low", "CI_high")) {
-      expect_true(all(is.na(out[[column]][2:4])))
-      expect_false(anyNA(out[[column]][c(1, 5)]))
+      # nlme predictions at the default level, which includes the random
+      # effects for lme models
+      expect_equal(
+        out$Predicted[c(1, 5)],
+        as.vector(stats::predict(m, newdata = pnd_newdata(d_pnd)[c(1, 5), ])),
+        tolerance = 1e-10
+      )
+      expect_equal(
+        out$SE[c(1, 5)],
+        sqrt(diag(X %*% stats::vcov(m) %*% t(X))),
+        tolerance = 1e-10,
+        ignore_attr = TRUE
+      )
+      # one warning that names both columns
+      expect_length(warning_messages, 1)
+      expect_match(warning_messages, "`x`", fixed = TRUE)
+      expect_match(warning_messages, "`f`", fixed = TRUE)
     }
-    # nlme predictions at the default level, which includes the random
-    # effects for lme models
-    expect_equal(
-      out$Predicted[c(1, 5)],
-      as.vector(stats::predict(m, newdata = pnd_newdata(d_pnd)[c(1, 5), ])),
-      tolerance = 1e-10
-    )
-    expect_equal(
-      out$SE[c(1, 5)],
-      sqrt(diag(X %*% stats::vcov(m) %*% t(X))),
-      tolerance = 1e-10,
-      ignore_attr = TRUE
-    )
-    # one warning that names both columns
-    expect_length(warning_messages, 1)
-    expect_match(warning_messages, "`x`", fixed = TRUE)
-    expect_match(warning_messages, "`f`", fixed = TRUE)
   }
 })
 
@@ -116,7 +119,11 @@ test_that("get_predicted - clmm, no fitted values of the model data for new data
     out <- get_predicted(m)
   })
   expect_length(out, nrow(d_pnd))
-  expect_equal(as.vector(out), stats::plogis(as.vector(stats::fitted(m))), tolerance = 1e-10)
+  expect_equal(
+    as.vector(out),
+    stats::plogis(as.vector(stats::fitted(m))),
+    tolerance = 1e-10
+  )
 })
 
 test_that("get_predicted - gnls, new data gives predictions", {
@@ -164,7 +171,11 @@ test_that("get_predicted - lme, `ci_type` does not drop the intervals", {
   m <- nlme::lme(y ~ x + f, random = ~ 1 | grp, data = d_pnd)
   out <- as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95, ci_type = "confidence"))
   expect_false(anyNA(out[c("SE", "CI_low", "CI_high")]))
-  expect_equal(out, as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)), tolerance = 1e-10)
+  expect_equal(
+    out,
+    as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)),
+    tolerance = 1e-10
+  )
 })
 
 test_that("get_predicted - lme, intervals use the smallest df, also without new data", {
@@ -239,4 +250,93 @@ test_that("get_predicted - lme and gls, `ci` sets the interval level", {
       expect_false(any(c("CI_low", "CI_high") %in% colnames(out)))
     }
   }
+})
+
+
+# zero-inflated models ----
+
+zipnd_fixture <- function() {
+  set.seed(11)
+  d <- data.frame(
+    x = rnorm(200),
+    grp = factor(rep(1:20, each = 10))
+  )
+  mu <- exp(0.5 + 0.4 * d$x + rnorm(20, sd = 0.3)[d$grp])
+  zero <- stats::rbinom(200, 1, stats::plogis(-1 + 0.5 * d$x))
+  d$count <- stats::rpois(200, mu) * (1 - zero)
+  d
+}
+
+test_that("get_predicted - zero-inflated glmmTMB, data object overwritten after the fit", {
+  skip_if_not_installed("glmmTMB")
+  d_zipnd <- zipnd_fixture()
+  d_copy <- d_zipnd
+  # with and without random effects; population-level predictions make
+  # glmmTMB rebuild the model frame from the data object of the call
+  m_re <- glmmTMB::glmmTMB(
+    count ~ x + (1 | grp),
+    ziformula = ~x,
+    family = poisson(),
+    data = d_zipnd
+  )
+  m_fe <- glmmTMB::glmmTMB(
+    count ~ x,
+    ziformula = ~x,
+    family = poisson(),
+    data = d_zipnd
+  )
+  expected_re <- stats::predict(m_re, newdata = d_copy, type = "response", re.form = NA)
+  expected_fe <- stats::predict(m_fe, newdata = d_copy, type = "response")
+  d_zipnd <- NULL
+
+  out <- get_predicted(m_re, predict = "expectation", include_random = FALSE)
+  expect_equal(as.numeric(out), as.numeric(expected_re), tolerance = 1e-6)
+  expect_identical(nrow(as.data.frame(out)), 200L)
+
+  out <- get_predicted(m_fe, predict = "expectation")
+  expect_equal(as.numeric(out), as.numeric(expected_fe), tolerance = 1e-6)
+
+  # the intervals use the recovered data
+  set.seed(7)
+  out <- as.data.frame(get_predicted(m_fe, predict = "expectation", ci = 0.95))
+  set.seed(7)
+  expected <- as.data.frame(get_predicted(
+    m_fe,
+    data = d_copy,
+    predict = "expectation",
+    ci = 0.95
+  ))
+  expect_named(out, c("Predicted", "SE", "CI_low", "CI_high"))
+  expect_equal(out, expected, tolerance = 1e-10)
+})
+
+test_that("get_predicted - zero-inflated glmmTMB and zeroinfl, `newdata` gives the same as `data`", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("pscl")
+  d_zipnd2 <- zipnd_fixture()
+  nd_zipnd2 <- d_zipnd2[c(3, 50, 120, 199), ]
+  models <- list(
+    glmmTMB = glmmTMB::glmmTMB(
+      count ~ x + (1 | grp),
+      ziformula = ~x,
+      family = poisson(),
+      data = d_zipnd2
+    ),
+    zeroinfl = pscl::zeroinfl(count ~ x | x, data = d_zipnd2, dist = "poisson")
+  )
+  for (m in models) {
+    set.seed(3)
+    with_data <- as.data.frame(get_predicted(m, data = nd_zipnd2, ci = 0.95))
+    set.seed(3)
+    with_newdata <- as.data.frame(get_predicted(m, newdata = nd_zipnd2, ci = 0.95))
+    expect_identical(nrow(with_newdata), 4L)
+    expect_named(with_newdata, c("Predicted", "SE", "CI_low", "CI_high"))
+    expect_equal(with_newdata, with_data, tolerance = 1e-10)
+  }
+  # bootstrapped predictions
+  set.seed(3)
+  with_data <- get_predicted(models$glmmTMB, data = nd_zipnd2, iterations = 5)
+  set.seed(3)
+  with_newdata <- get_predicted(models$glmmTMB, newdata = nd_zipnd2, iterations = 5)
+  expect_equal(with_newdata, with_data, tolerance = 1e-10, ignore_attr = TRUE)
 })

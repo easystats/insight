@@ -12,6 +12,7 @@
 #' - [Zero-inflated and hurdle models][get_parameters.zeroinfl] (**pscl**, ...)
 #' - [Models with special components][get_parameters.betareg] (**betareg**, **MuMIn**, ...)
 #' - [Hypothesis tests][get_parameters.htest] (`htest`)
+#' - [Structural equation models][get_parameters.blavaan] (**lavaan**, **blavaan**)
 #'
 #' @param verbose Toggle messages and warnings.
 #' @param ... Currently not used.
@@ -640,6 +641,33 @@ get_parameters.metaplus <- function(x, ...) {
 
 # SEM models ---------------------------------------------
 
+#' @title Get model parameters from structural equation models
+#' @name get_parameters.blavaan
+#'
+#' @description Returns the coefficients (or posterior samples for **blavaan**
+#'   models with `summary = FALSE`) from a structural equation model.
+#'
+#' @param x A model of class `lavaan` or `blavaan`.
+#' @param summary Logical. For **blavaan** models, indicates whether the full
+#'   posterior samples (`summary = FALSE`) or point estimates
+#'   (`summary = TRUE`) should be returned.
+#' @param standardize Logical. If `TRUE`, standardized parameters are returned.
+#' @param ... If `standardize = TRUE`, a `type` argument can be used, which is
+#'   passed to `lavaan::standardizedSolution()` (or to
+#'   `blavaan::standardizedPosterior()` for the posterior samples of
+#'   **blavaan** models). For example, `type` can be `"std.all"` (the
+#'   default), `"std.lv"` or `"std.nox"`. See `lavaan::standardizedSolution()`
+#'   for all values. Other arguments are not passed on.
+#'
+#' @return For **blavaan** models with `summary = FALSE`, the posterior samples
+#'   as data frame, with one row per draw (chains pooled) and one column per
+#'   free or defined parameter. If `standardize = TRUE`, fixed parameters are
+#'   included, too. Else, a data frame with the columns `Parameter`, `Estimate`
+#'   and `Component`.
+#'
+#' @examplesIf require("lavaan", quietly = TRUE)
+#' m <- lavaan::cfa("visual =~ x1 + x2 + x3", data = lavaan::HolzingerSwineford1939)
+#' get_parameters(m, standardize = TRUE, type = "std.lv")
 #' @export
 get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...) {
   if (isTRUE(summary)) {
@@ -652,7 +680,12 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
   if (isTRUE(standardize)) {
     # standardized draws also include fixed parameters, and are already named
     # "lhs op rhs", with a ".g<n>" suffix for models with multiple groups
-    draws <- blavaan::standardizedPosterior(x)
+    type <- .lavaan_std_type(...)
+    if (is.null(type)) {
+      draws <- blavaan::standardizedPosterior(x)
+    } else {
+      draws <- blavaan::standardizedPosterior(x, type = type)
+    }
     coef_labels <- colnames(draws)
     if (lavaan::lavInspect(x, "ngroups") > 1L) {
       coef_labels <- gsub("\\.g([0-9]+)$", " (group \\1)", coef_labels)
@@ -673,12 +706,18 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
 }
 
 
+#' @rdname get_parameters.blavaan
 #' @export
 get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   check_if_installed("lavaan")
 
   if (standardize) {
-    params <- lavaan::standardizedSolution(x)
+    type <- .lavaan_std_type(...)
+    if (is.null(type)) {
+      params <- lavaan::standardizedSolution(x)
+    } else {
+      params <- lavaan::standardizedSolution(x, type = type)
+    }
   } else {
     params <- lavaan::parameterEstimates(x)
   }
@@ -699,6 +738,14 @@ get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   )
 
   text_remove_backticks(params)
+}
+
+
+# the "type" argument for standardizedPosterior() and standardizedSolution().
+# Only "type" is taken from "...", because both functions stop for arguments
+# they do not know, such as "verbose". Other arguments are not evaluated.
+.lavaan_std_type <- function(..., type = NULL) {
+  type
 }
 
 

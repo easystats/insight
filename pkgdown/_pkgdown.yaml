@@ -147,3 +147,4 @@ reference:
       - get_parameters.zeroinfl
       - get_parameters.betareg
       - get_parameters.htest
+      - get_parameters.blavaan
