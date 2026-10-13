@@ -351,10 +351,14 @@ test_that("get_variance, lme with an intercept in every block, unchanged", {
     tolerance = 1e-4
   )
 
-  # nested grouping factors, correlated intercept and slope on both levels
+  # nested grouping factors, correlated intercept and slope on both levels.
+  # The slope variance of `Side` is near zero, so `check_singularity()` flags
+  # the model with its default tolerance, and `var.random` is not returned.
+  # performance 0.18.2 cannot check nested lme models, so a lower tolerance
+  # keeps the result the same for all versions of performance
   m <- nlme::lme(pixel ~ day, random = ~ day | Dog / Side, data = Pixel)
   expect_equal(
-    get_variance(m),
+    get_variance(m, tolerance = 1e-13),
     list(
       var.fixed = 0.5543973,
       var.random = 915.051,
