@@ -575,6 +575,48 @@ test_that("find_parameters keeps parameters that start with a dpar name, #1226",
 })
 
 
+test_that("find_parameters, multivariate models with addition terms, bayestestR#700", {
+  # with an addition term such as resp_weights(), the response side holds more
+  # than one variable, but the parameters are still named after the responses
+  pars <- c(
+    "b_y1_Intercept[1]",
+    "b_y1_Intercept[2]",
+    "b_y2_Intercept[1]",
+    "b_y2_Intercept[2]",
+    "disc_y1",
+    "disc_y2",
+    "Intercept_y1[1]",
+    "Intercept_y1[2]",
+    "Intercept_y2[1]",
+    "Intercept_y2[2]",
+    "lprior",
+    "lp__"
+  )
+  m <- .brmsfit_mock(
+    brms::bf(brms::mvbind(y_1, y_2) | resp_weights(n) ~ 1, family = brms::cumulative()) +
+      brms::set_rescor(FALSE),
+    pars
+  )
+  out <- find_parameters(m)
+  expect_named(out, c("y1", "y2"))
+  expect_identical(out$y1$conditional, c("b_y1_Intercept[1]", "b_y1_Intercept[2]"))
+  expect_identical(out$y2$conditional, c("b_y2_Intercept[1]", "b_y2_Intercept[2]"))
+  out <- clean_parameters(m)
+  expect_identical(out$Response, c("y1", "y1", "y2", "y2"))
+
+  # trials() in a multivariate binomial model
+  m <- .brmsfit_mock(
+    brms::bf(a | trials(k) ~ x, family = stats::binomial()) +
+      brms::bf(b | trials(k) ~ x, family = stats::binomial()),
+    c("b_a_Intercept", "b_a_x", "b_b_Intercept", "b_b_x", "lprior", "lp__")
+  )
+  out <- find_parameters(m)
+  expect_named(out, c("a", "b"))
+  expect_identical(out$a$conditional, c("b_a_Intercept", "b_a_x"))
+  expect_identical(out$b$conditional, c("b_b_Intercept", "b_b_x"))
+})
+
+
 test_that(".get_stan_params maps component names for all supported classes", {
   # element names that `find_parameters()` returns for the model classes that
   # share this helper (brmsfit, stanreg, stanfit, stanmvreg and bamlss), plus

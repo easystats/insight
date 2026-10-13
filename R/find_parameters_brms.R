@@ -39,7 +39,9 @@ find_parameters.brmsfit <- function(
   elements <- .brms_elements(effects, component, dpars)
 
   if (is_multivariate(x)) {
-    rn <- names(find_response(x))
+    # the formulas are named after the responses. names(find_response()) are
+    # not, if a response has addition terms such as resp_weights() or trials()
+    rn <- names(find_formula(x, verbose = FALSE))
     l <- lapply(
       rn,
       .brms_parameters,
