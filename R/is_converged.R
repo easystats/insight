@@ -321,6 +321,44 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 .stan_no_nuts_reason <- "The model has no MCMC draws from the NUTS sampler."
 
 
+#' @export
+is_converged.CmdStanMCMC <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
+  check_if_installed("cmdstanr")
+
+  # cmdstanr stores the algorithm "hmc" and the engine "nuts", or the
+  # algorithm "fixed_param"
+  metadata <- x$metadata()
+  is_nuts <- identical(metadata$algorithm, "hmc") &&
+    identical(metadata$engine, "nuts")
+  if (!is_nuts) {
+    return(.is_converged_stan_not_assessed(.stan_no_nuts_reason, verbose))
+  }
+  if (!isTRUE(metadata$iter_sampling > 0)) {
+    return(.is_converged_stan_not_assessed(
+      "The model has no draws after warmup.",
+      verbose
+    ))
+  }
+
+  # one value per chain for the sampler diagnostics, one row per variable in
+  # the summary
+  sampler <- x$diagnostic_summary(quiet = TRUE)
+  draws_summary <- x$summary()
+  .stan_diagnostics(
+    values = c(
+      sum(sampler$num_divergent),
+      sum(sampler$num_max_treedepth),
+      .stan_na_or(sampler$ebfmi, min),
+      .stan_na_or(draws_summary$rhat, max),
+      .stan_na_or(draws_summary$ess_bulk, min),
+      .stan_na_or(draws_summary$ess_tail, min)
+    ),
+    n_chains = x$num_chains(),
+    verbose = verbose
+  )
+}
+
+
 # checks and thresholds follow the warnings that rstan gives after sampling,
 # see `rstan:::throw_sampler_warnings()` and `rstan::check_hmc_diagnostics()`
 .is_converged_stan <- function(x, verbose = TRUE) {
@@ -345,14 +383,31 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       verbose
     ))
   }
-  n_chains <- dim(draws)[2]
+  .stan_diagnostics(
+    values = c(
+      rstan::get_num_divergent(x),
+      .stan_treedepth_hits(x, stan_args),
+      .stan_na_or(.safe(rstan::get_bfmi(x), NA_real_), min),
+      .stan_na_or(apply(draws, 3, rstan::Rhat), max),
+      .stan_na_or(apply(draws, 3, rstan::ess_bulk), min),
+      .stan_na_or(apply(draws, 3, rstan::ess_tail), min)
+    ),
+    n_chains = dim(draws)[2],
+    verbose = verbose
+  )
+}
 
-  # largest or smallest value, or NA if all values are NA
-  .na_or <- function(values, fun) {
-    values <- values[!is.na(values)]
-    if (length(values)) fun(values) else NA_real_
-  }
 
+# largest or smallest value, or NA if all values are NA
+.stan_na_or <- function(values, fun) {
+  values <- values[!is.na(values)]
+  if (length(values)) fun(values) else NA_real_
+}
+
+
+# the six checks for the values of divergences, treedepth hits, E-BFMI, R-hat,
+# bulk ESS and tail ESS, with the `diagnostics` attribute and the alert
+.stan_diagnostics <- function(values, n_chains, verbose = TRUE) {
   diagnostics <- data.frame(
     Diagnostic = c(
       "Divergences",
@@ -362,14 +417,7 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       "ESS_bulk",
       "ESS_tail"
     ),
-    Value = c(
-      rstan::get_num_divergent(x),
-      .stan_treedepth_hits(x, stan_args),
-      .na_or(.safe(rstan::get_bfmi(x), NA_real_), min),
-      .na_or(apply(draws, 3, rstan::Rhat), max),
-      .na_or(apply(draws, 3, rstan::ess_bulk), min),
-      .na_or(apply(draws, 3, rstan::ess_tail), min)
-    ),
+    Value = values,
     Threshold = c(0, 0, 0.2, 1.05, 100 * n_chains, 100 * n_chains),
     stringsAsFactors = FALSE
   )
