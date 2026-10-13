@@ -114,10 +114,16 @@ will be left-aligned. If \code{format = "html"}, the default is left-align first
 column and center all remaining. May be a string to indicate alignment
 rules for the complete table, like \code{"left"}, \code{"right"}, \code{"center"} or
 \code{"firstleft"} (to left-align first column, center remaining); or a string
-with abbreviated alignment characters, where the length of the string must
-equal the number of columns. For instance, \code{align = "lccrl"} would
-left-align the first column, center the second and third, right-align
-column four and left-align the fifth column.}
+with abbreviated alignment characters, one per column. For instance,
+\code{align = "lccrl"} would left-align the first column, center the second and
+third, right-align column four and left-align the fifth column. If
+\code{format = "html"}, the columns are the columns that the table shows, in
+the order shown: \code{"left"}, \code{"right"} and \code{"center"} align all shown
+columns, \code{"firstleft"} left-aligns the first shown column, columns that
+become row groups (like \code{Component} or the \code{by} columns) take no
+character, columns that \code{column_groups} moves under a spanner take the
+character of their shown position, and characters beyond the number of
+shown columns are ignored.}
 
 \item{by}{Name of column(s) in \code{x} that indicates grouping for tables.
 When \code{format = "html"}, \code{by} is passed down to \code{gt::gt(groupname_col = by)}.

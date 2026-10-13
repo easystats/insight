@@ -54,10 +54,16 @@
 #'   column and center all remaining. May be a string to indicate alignment
 #'   rules for the complete table, like `"left"`, `"right"`, `"center"` or
 #'   `"firstleft"` (to left-align first column, center remaining); or a string
-#'   with abbreviated alignment characters, where the length of the string must
-#'   equal the number of columns. For instance, `align = "lccrl"` would
-#'   left-align the first column, center the second and third, right-align
-#'   column four and left-align the fifth column.
+#'   with abbreviated alignment characters, one per column. For instance,
+#'   `align = "lccrl"` would left-align the first column, center the second and
+#'   third, right-align column four and left-align the fifth column. If
+#'   `format = "html"`, the columns are the columns that the table shows, in
+#'   the order shown: `"left"`, `"right"` and `"center"` align all shown
+#'   columns, `"firstleft"` left-aligns the first shown column, columns that
+#'   become row groups (like `Component` or the `by` columns) take no
+#'   character, columns that `column_groups` moves under a spanner take the
+#'   character of their shown position, and characters beyond the number of
+#'   shown columns are ignored.
 #' @param by Name of column(s) in `x` that indicates grouping for tables.
 #'   When `format = "html"`, `by` is passed down to `gt::gt(groupname_col = by)`.
 #'   Likewise, for `format = "tt"`, `by` indicates the name of the variable in
