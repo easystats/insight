@@ -15,6 +15,15 @@
 
 ## Changes
 
+* `is_converged()` now supports `CmdStanMCMC` models from *cmdstanr*, with the
+  same checks and thresholds as for other Stan models. The values come from
+  the `$diagnostic_summary()` and `$summary()` methods of the model. Other
+  *cmdstanr* models, for example from `$variational()` or `$optimize()`,
+  return `FALSE` with a message. `stanfit` models from `rstan::read_stan_csv()`
+  store the maximum treedepth outside `control`. For these models,
+  `is_converged()` counts treedepth hits against this stored maximum, not
+  against the default of 10.
+
 * `get_variance()` for `nlme::lme()` models now returns `cor.slopes`, the
   correlations between random slopes, as for *lme4* models. Before, it was
   missing. This works for nested and non-nested grouping factors with general

@@ -3,11 +3,12 @@
 #'
 #' @description `is_converged()` provides an alternative convergence
 #'   test for `merMod`-objects. For models fitted with Stan (`stanfit`,
-#'   `brmsfit` and `stanreg`), it checks the diagnostics of the sampler. For
-#'   `coxph` models, it recomputes the checks of the *survival* package.
+#'   `brmsfit`, `stanreg` and `CmdStanMCMC`), it checks the diagnostics of the
+#'   sampler. For `coxph` models, it recomputes the checks of the *survival*
+#'   package.
 #'
 #' @param x A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan`,
-#' `_glm`, `stanfit`, `brmsfit`, `stanreg` or `coxph`.
+#' `_glm`, `stanfit`, `brmsfit`, `stanreg`, `CmdStanMCMC` or `coxph`.
 #' @param tolerance Indicates up to which value the convergence result is
 #'   accepted. The smaller `tolerance` is, the stricter the test will be. Not
 #'   used for Stan and `coxph` models.
@@ -39,14 +40,17 @@
 #' @section Stan models:
 #' For models fitted with Stan, `is_converged()` returns `FALSE` if at least one
 #' of the checks below fails. The checks and thresholds are those of the
-#' warnings that *rstan* gives after sampling, and the values are computed with
-#' functions from *rstan*:
+#' warnings that *rstan* gives after sampling. For `stanfit`, `brmsfit` and
+#' `stanreg` models, the values are computed with functions from *rstan*:
 #'
 #' - Divergent transitions after warmup (`rstan::get_num_divergent()`): the
 #'   check fails if there is at least one.
-#' - Transitions after warmup that reach the maximum treedepth
-#'   (`rstan::get_num_max_treedepth()`): the check fails if there is at least
-#'   one.
+#' - Transitions after warmup that reach the maximum treedepth stored in the
+#'   model (`rstan::get_sampler_params()`): the check fails if there is at
+#'   least one. Models from `rstan::read_stan_csv()` store the maximum outside
+#'   the `control` settings. For these models, `rstan::get_num_max_treedepth()`
+#'   counts against the default maximum of 10, but `is_converged()` uses the
+#'   stored maximum.
 #' - E-BFMI (`rstan::get_bfmi()`): the check fails if at least one chain has
 #'   a value below 0.2. This is the E-BFMI of `rstan::check_hmc_diagnostics()`,
 #'   which can differ from the warning that *rstan* prints after sampling.
@@ -55,6 +59,12 @@
 #' - Bulk and tail effective sample size (`rstan::ess_bulk()` and
 #'   `rstan::ess_tail()`): each check fails if the smallest value over all
 #'   parameters is below 100 times the number of chains.
+#'
+#' For `CmdStanMCMC` models from *cmdstanr*, the same checks and thresholds
+#' are used. Divergent transitions, transitions at the maximum treedepth and
+#' E-BFMI come from the `$diagnostic_summary()` method of the model, and R-hat
+#' and effective sample size from its `$summary()` method. The E-BFMI warning
+#' of *cmdstanr* uses a threshold of 0.3, not 0.2.
 #'
 #' Missing values (for example, R-hat of a constant parameter) are ignored. Stan
 #' also prints messages about rejected proposals ("exception thrown") during
