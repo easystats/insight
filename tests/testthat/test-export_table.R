@@ -1805,6 +1805,15 @@ test_that("export_table, html align with one character per column", {
     "default"
   )
   expect_identical(shown_align(out), c(Group = "left", a = "center", b = "center"))
+  # the shown group column keeps its character in a string with one character
+  # per column
+  out <- export_table(
+    d_rows,
+    format = "html",
+    align = "lrcr",
+    row_groups = list(A = 1:2, B = 3:4)
+  )
+  expect_identical(shown_align(out), c(Group = "left", a = "center", b = "right"))
 
   # a list of tables that share one "Effects" value: "Effects" is removed, and
   # the captions become row groups

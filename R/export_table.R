@@ -64,10 +64,12 @@
 #'   shown column. The group columns `Component`, `Effects`, `Group` and
 #'   `Response`, and the `by` columns given by name, are not shown: with two
 #'   or more values they become row groups, with one value they are removed.
-#'   A string with one character per column of `x` (for a list of data frames,
-#'   per column of one data frame) skips the characters of these group
-#'   columns. A shorter string is for the shown columns only, and characters
-#'   beyond the number of shown columns are ignored.
+#'   With `row_groups`, if a group column is removed, the other group columns
+#'   do not become row groups and are shown. A string with one character per
+#'   column of `x` (for a list of data frames, per column of one data frame)
+#'   skips the characters of the group columns that are not shown. A shorter
+#'   string is for the shown columns only, and characters beyond the number of
+#'   shown columns are ignored.
 #' @param by Name of column(s) in `x` that indicates grouping for tables.
 #'   When `format = "html"`, `by` is passed down to `gt::gt(groupname_col = by)`.
 #'   Likewise, for `format = "tt"`, `by` indicates the name of the variable in
@@ -1889,12 +1891,10 @@ print.insight_table <- function(x, ...) {
       }
     }
   }
-  # the characters of all group columns are skipped in an "align" string with
-  # one character per column. gt makes no row groups if one of the group
-  # columns is missing, so only the remaining ones are passed to gt. With
-  # "row_groups", a removed group column still means no row groups, because
-  # `.row_groups()` writes its headers into the first column
-  skip_columns <- group_by_columns
+  # gt makes no row groups if one of the group columns is missing, so only the
+  # remaining ones are passed to gt. With "row_groups", a removed group column
+  # still means no row groups, because `.row_groups()` writes its headers into
+  # the first column
   remaining <- intersect(group_by_columns, colnames(final))
   if (
     !length(remaining) || (!is.null(row_groups) && !setequal(remaining, group_by_columns))
@@ -2020,10 +2020,11 @@ print.insight_table <- function(x, ...) {
     out <- gt::cols_align(out, "left", shown_cols[1])
   } else {
     align_chars <- strsplit(as.character(align), "", fixed = TRUE)[[1]]
-    # with one character per column, the characters of the group columns are
-    # skipped. Any other string is for the shown columns
+    # with one character per column, the characters of the columns that are
+    # not shown (row groups, removed group columns) are skipped. Any other
+    # string is for the shown columns
     if (length(align_chars) == length(table_columns)) {
-      align_chars <- align_chars[!table_columns %in% skip_columns]
+      align_chars <- align_chars[table_columns %in% shown_cols]
     }
     # characters beyond the shown columns are ignored, as in text output
     for (i in seq_len(min(length(align_chars), length(shown_cols)))) {
