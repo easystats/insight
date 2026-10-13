@@ -33,6 +33,35 @@ test_that("get_varcov", {
   )
 })
 
+test_that("get_parameters, standardized parameters with type", {
+  model <- lavaan::cfa(
+    "visual =~ x1 + x2 + x3",
+    data = lavaan::HolzingerSwineford1939
+  )
+  out <- get_parameters(model, standardize = TRUE, type = "std.lv")
+  expect_equal(
+    out$Estimate,
+    lavaan::standardizedSolution(model, type = "std.lv")$est.std,
+    tolerance = 1e-8
+  )
+  out_all <- get_parameters(model, standardize = TRUE)
+  expect_equal(
+    out_all$Estimate,
+    lavaan::standardizedSolution(model)$est.std,
+    tolerance = 1e-8
+  )
+  expect_gt(max(abs(out$Estimate - out_all$Estimate)), 0.01)
+
+  # type has no effect without standardization
+  expect_identical(get_parameters(model, type = "std.lv"), get_parameters(model))
+
+  # other arguments in ... are not passed to lavaan
+  expect_identical(
+    get_parameters(model, standardize = TRUE, type = "std.lv", verbose = FALSE),
+    out
+  )
+})
+
 test_that("get_data, model frame of models with multiple groups", {
   model <- lavaan::cfa(
     "visual =~ x1 + x2 + x3",
