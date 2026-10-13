@@ -66,12 +66,12 @@
   was dropped. For *brms* models, an ordered factor given as a character
   vector in `data` gets the polynomial contrasts of the model.
 
-* `get_predicted()` with new `data` for `lme` and `gls` models returns `NA`
-  for rows with a missing value or a factor level that the model data does not
-  have in a fixed-effect predictor, with a warning. If no row can be
-  predicted, it returns `NULL` with a warning. Before, such a row made
-  `get_predicted()` return the predictions for the model data. If `data` has no grouping column, `lme`
-  models give population-level predictions, as for *lme4* models.
+* `get_predicted()` with new `data` for `lme` and `gls` models returns `NA` for
+  rows with a missing value or a factor level that the model data does not have
+  in a fixed-effect predictor, with a warning. If no row can be predicted, it
+  returns `NULL` with a warning. Before, such a row made `get_predicted()`
+  return the predictions for the model data. If `data` has no grouping column,
+  `lme` models give population-level predictions, as for *lme4* models.
 
 * `get_predicted()` for `lme` and `gls` models uses the `ci` argument, with or
   without new `data`. As for other models, the default `ci = NULL` returns no
