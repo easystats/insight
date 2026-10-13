@@ -3,11 +3,12 @@
 #'
 #' @description `is_converged()` provides an alternative convergence
 #'   test for `merMod`-objects. For models fitted with Stan (`stanfit`,
-#'   `brmsfit` and `stanreg`), it checks the diagnostics of the sampler. For
-#'   `coxph` models, it recomputes the checks of the *survival* package.
+#'   `brmsfit`, `stanreg` and `CmdStanMCMC`), it checks the diagnostics of the
+#'   sampler. For `coxph` models, it recomputes the checks of the *survival*
+#'   package.
 #'
 #' @param x A model object from class `merMod`, `glmmTMB`, `glm`, `lavaan`,
-#' `_glm`, `stanfit`, `brmsfit`, `stanreg` or `coxph`.
+#' `_glm`, `stanfit`, `brmsfit`, `stanreg`, `CmdStanMCMC` or `coxph`.
 #' @param tolerance Indicates up to which value the convergence result is
 #'   accepted. The smaller `tolerance` is, the stricter the test will be. Not
 #'   used for Stan and `coxph` models.
@@ -39,14 +40,18 @@
 #' @section Stan models:
 #' For models fitted with Stan, `is_converged()` returns `FALSE` if at least one
 #' of the checks below fails. The checks and thresholds are those of the
-#' warnings that *rstan* gives after sampling, and the values are computed with
-#' functions from *rstan*:
+#' warnings that *rstan* gives after sampling. For `stanfit`, `brmsfit` and
+#' `stanreg` models, the values are computed with functions from *rstan*:
 #'
 #' - Divergent transitions after warmup (`rstan::get_num_divergent()`): the
 #'   check fails if there is at least one.
-#' - Transitions after warmup that reach the maximum treedepth
-#'   (`rstan::get_num_max_treedepth()`): the check fails if there is at least
-#'   one.
+#' - Transitions after warmup that reach the maximum treedepth stored in the
+#'   model (`rstan::get_sampler_params()`): the check fails if there is at
+#'   least one. The maximum is read from the `control` settings. Models from
+#'   `rstan::read_stan_csv()` store it outside `control`, and
+#'   `is_converged()` reads it from there. For these models,
+#'   `rstan::get_num_max_treedepth()` counts against the default maximum of
+#'   10. If the model stores no maximum, 10 is used.
 #' - E-BFMI (`rstan::get_bfmi()`): the check fails if at least one chain has
 #'   a value below 0.2. This is the E-BFMI of `rstan::check_hmc_diagnostics()`,
 #'   which can differ from the warning that *rstan* prints after sampling.
@@ -54,7 +59,14 @@
 #'   parameters is above 1.05.
 #' - Bulk and tail effective sample size (`rstan::ess_bulk()` and
 #'   `rstan::ess_tail()`): each check fails if the smallest value over all
-#'   parameters is below 100 times the number of chains.
+#'   parameters is below 100 times the number of chains with draws after
+#'   warmup.
+#'
+#' For `CmdStanMCMC` models from *cmdstanr*, the same checks and thresholds
+#' are used. Divergent transitions, transitions at the maximum treedepth and
+#' E-BFMI come from the `$diagnostic_summary()` method of the model, and R-hat
+#' and effective sample size from its `$summary()` method. The E-BFMI warning
+#' of *cmdstanr* uses a threshold of 0.3, not 0.2.
 #'
 #' Missing values (for example, R-hat of a constant parameter) are ignored. Stan
 #' also prints messages about rejected proposals ("exception thrown") during
@@ -321,6 +333,66 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 .stan_no_nuts_reason <- "The model has no MCMC draws from the NUTS sampler."
 
 
+#' @export
+is_converged.CmdStanMCMC <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
+  check_if_installed("cmdstanr")
+
+  # cmdstanr stores the algorithm "hmc" and the engine "nuts", or the
+  # algorithm "fixed_param"
+  metadata <- x$metadata()
+  is_nuts <- identical(metadata$algorithm, "hmc") &&
+    identical(metadata$engine, "nuts")
+  if (!is_nuts) {
+    return(.is_converged_stan_not_assessed(.stan_no_nuts_reason, verbose))
+  }
+  if (!isTRUE(metadata$iter_sampling > 0)) {
+    return(.is_converged_stan_not_assessed(
+      "The model has no draws after warmup.",
+      verbose
+    ))
+  }
+
+  # one value per chain for the sampler diagnostics, one row per variable in
+  # the summary. cmdstanr warns if E-BFMI cannot be computed (for example from
+  # fewer than three draws); the missing value then passes, as in rstan
+  sampler <- .stan_quiet_unless(
+    x$diagnostic_summary(quiet = TRUE),
+    verbose
+  )
+  draws_summary <- .stan_quiet_unless(
+    x$summary(NULL, "rhat", "ess_bulk", "ess_tail"),
+    verbose
+  )
+  .stan_diagnostics(
+    values = c(
+      sum(sampler$num_divergent),
+      sum(sampler$num_max_treedepth),
+      .stan_na_or(sampler$ebfmi, min),
+      .stan_na_or(draws_summary$rhat, max),
+      .stan_na_or(draws_summary$ess_bulk, min),
+      .stan_na_or(draws_summary$ess_tail, min)
+    ),
+    # `x$num_chains()` also counts chains that failed and have no draws
+    n_chains = dim(x$draws("lp__", format = "draws_array"))[2],
+    verbose = verbose
+  )
+}
+
+
+# warnings from cmdstanr and posterior are shown only if `verbose = TRUE`
+.stan_quiet_unless <- function(expr, verbose) {
+  if (verbose) expr else suppressWarnings(expr)
+}
+
+
+# other cmdstanr fits, for example from `$variational()` or `$optimize()`,
+# have no MCMC draws
+#' @export
+is_converged.CmdStanFit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
+  .is_converged_stan_not_assessed(.stan_no_nuts_reason, verbose)
+}
+
+
 # checks and thresholds follow the warnings that rstan gives after sampling,
 # see `rstan:::throw_sampler_warnings()` and `rstan::check_hmc_diagnostics()`
 .is_converged_stan <- function(x, verbose = TRUE) {
@@ -345,14 +417,31 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       verbose
     ))
   }
-  n_chains <- dim(draws)[2]
+  .stan_diagnostics(
+    values = c(
+      rstan::get_num_divergent(x),
+      .stan_treedepth_hits(x, stan_args),
+      .stan_na_or(.safe(rstan::get_bfmi(x), NA_real_), min),
+      .stan_na_or(apply(draws, 3, rstan::Rhat), max),
+      .stan_na_or(apply(draws, 3, rstan::ess_bulk), min),
+      .stan_na_or(apply(draws, 3, rstan::ess_tail), min)
+    ),
+    n_chains = dim(draws)[2],
+    verbose = verbose
+  )
+}
 
-  # largest or smallest value, or NA if all values are NA
-  .na_or <- function(values, fun) {
-    values <- values[!is.na(values)]
-    if (length(values)) fun(values) else NA_real_
-  }
 
+# largest or smallest value, or NA if all values are NA
+.stan_na_or <- function(values, fun) {
+  values <- values[!is.na(values)]
+  if (length(values)) fun(values) else NA_real_
+}
+
+
+# the six checks for the values of divergences, treedepth hits, E-BFMI, R-hat,
+# bulk ESS and tail ESS, with the `diagnostics` attribute and the alert
+.stan_diagnostics <- function(values, n_chains, verbose = TRUE) {
   diagnostics <- data.frame(
     Diagnostic = c(
       "Divergences",
@@ -362,14 +451,7 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       "ESS_bulk",
       "ESS_tail"
     ),
-    Value = c(
-      rstan::get_num_divergent(x),
-      rstan::get_num_max_treedepth(x),
-      .na_or(.safe(rstan::get_bfmi(x), NA_real_), min),
-      .na_or(apply(draws, 3, rstan::Rhat), max),
-      .na_or(apply(draws, 3, rstan::ess_bulk), min),
-      .na_or(apply(draws, 3, rstan::ess_tail), min)
-    ),
+    Value = values,
     Threshold = c(0, 0, 0.2, 1.05, 100 * n_chains, 100 * n_chains),
     stringsAsFactors = FALSE
   )
@@ -435,6 +517,29 @@ is_converged.stanreg <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   }
 
   structure(converged, diagnostics = diagnostics)
+}
+
+
+# number of transitions after warmup at the maximum treedepth. rstan reads the
+# maximum only from `control` (`rstan:::get_treedepth_threshold()`, default
+# 10), but `rstan::read_stan_csv()` stores it as `max_depth` or
+# `max_treedepth` outside `control`. A stored limit that is not one finite
+# number is skipped, because a missing limit would make the check pass
+.stan_treedepth_hits <- function(x, stan_args) {
+  max_depth <- 10
+  for (limit in list(
+    stan_args[["control"]][["max_treedepth"]],
+    stan_args[["max_depth"]],
+    stan_args[["max_treedepth"]]
+  )) {
+    if (is.numeric(limit) && length(limit) == 1 && is.finite(limit)) {
+      max_depth <- limit
+      break
+    }
+  }
+  sampler_params <- rstan::get_sampler_params(x, inc_warmup = FALSE)
+  treedepth <- unlist(lapply(sampler_params, function(sp) sp[, "treedepth__"]))
+  sum(treedepth >= max_depth)
 }
 
 
