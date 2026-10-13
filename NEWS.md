@@ -55,6 +55,19 @@
 
 ## Bug fixes
 
+* If you use the hidden `variable` argument with `summary = TRUE`,
+  `get_parameters()` for *brms* models no longer fails with the error
+  `object 'parms' not found`. The summary then has the columns `Parameter` and
+  `Estimate`.
+
+* `get_predicted()` for zero-inflated *glmmTMB* models no longer fails for
+  population-level predictions (`include_random = FALSE`, or a model without
+  random effects) when the data object of the model call was changed or
+  removed after the fit. Also, `get_predicted()` for zero-inflated *glmmTMB*
+  and *pscl* models now accepts new data in the `newdata` argument. Before, it
+  gave the error `formal argument "newdata" matched by multiple actual
+  arguments`.
+
 * `null_model()` now works when the model was fitted inside a function and its
   call uses a local object other than the data, for example
   `family = fam`. Before, it returned `NULL` for mixed models and gave an error
@@ -72,12 +85,12 @@
   was dropped. For *brms* models, an ordered factor given as a character
   vector in `data` gets the polynomial contrasts of the model.
 
-* `get_predicted()` with new `data` for `lme` and `gls` models returns `NA`
-  for rows with a missing value or a factor level that the model data does not
-  have in a fixed-effect predictor, with a warning. If no row can be
-  predicted, it returns `NULL` with a warning. Before, such a row made
-  `get_predicted()` return the predictions for the model data. If `data` has no grouping column, `lme`
-  models give population-level predictions, as for *lme4* models.
+* `get_predicted()` with new `data` for `lme` and `gls` models returns `NA` for
+  rows with a missing value or a factor level that the model data does not have
+  in a fixed-effect predictor, with a warning. If no row can be predicted, it
+  returns `NULL` with a warning. Before, such a row made `get_predicted()`
+  return the predictions for the model data. If `data` has no grouping column,
+  `lme` models give population-level predictions, as for *lme4* models.
 
 * `get_predicted()` for `lme` and `gls` models uses the `ci` argument, with or
   without new `data`. As for other models, the default `ci = NULL` returns no

@@ -323,6 +323,11 @@ get_predicted.glmmTMB <- function(
     ...
   )
 
+  # remove arguments that would be duplicated in the `predict()` calls
+  pred_dots <- dots
+  pred_dots[["newdata"]] <- NULL
+  pred_dots[["type"]] <- NULL
+
   # Prediction function
   predict_function <- function(x, data, ...) {
     stats::predict(
@@ -341,13 +346,18 @@ get_predicted.glmmTMB <- function(
   if (is.null(iterations)) {
     predictions <- as.numeric(rez$fit)
   } else {
-    predictions <- .get_predicted_boot(
-      x,
-      data = my_args$data,
-      predict_function = predict_function,
-      iterations = iterations,
-      verbose = verbose,
-      ...
+    predictions <- do.call(
+      .get_predicted_boot,
+      c(
+        list(
+          x,
+          data = my_args$data,
+          predict_function = predict_function,
+          iterations = iterations,
+          verbose = verbose
+        ),
+        pred_dots
+      )
     )
   }
 
@@ -359,12 +369,14 @@ get_predicted.glmmTMB <- function(
     # for truncated family, behaviour in glmmTMB changed in 1.1.5  to correct
     # conditional and response predictions
     if (!my_args$info$is_hurdle) {
-      zi_predictions <- stats::predict(
-        x,
-        newdata = data,
-        type = "zprob",
-        re.form = my_args$re.form,
-        ...
+      # `data` can be NULL, and then glmmTMB re-reads the data object of the
+      # model call, so we use the data from `.get_predicted_args()`
+      zi_predictions <- do.call(
+        stats::predict,
+        c(
+          list(x, newdata = my_args$data, type = "zprob", re.form = my_args$re.form),
+          pred_dots
+        )
       )
       predictions <- link_inverse(x)(predictions) * (1 - as.vector(zi_predictions))
     }
@@ -372,7 +384,7 @@ get_predicted.glmmTMB <- function(
     # 2. and 3. step: confidence intervals and back-transform
     ci_data <- .simulate_zi_predictions(
       model = x,
-      newdata = data,
+      newdata = my_args$data,
       predictions = predictions,
       nsim = iterations,
       ci = ci

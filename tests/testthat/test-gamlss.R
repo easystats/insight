@@ -243,6 +243,7 @@ test_that("get_residuals, type = 'response'", {
 })
 
 test_that("get_residuals, type = 'response', family defined inside a function", {
+  skip_if_not_installed("gamlss.dist")
   # the family function `myZIP` exists only in the environment of `fit_local()`
   fit_local <- function() {
     myZIP <- function() {

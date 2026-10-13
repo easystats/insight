@@ -246,6 +246,7 @@ get_parameters.brmsfit <- function(
     }
   } else {
     variables <- dots$variable
+    parms <- NULL
   }
 
   out <- as.data.frame(x, variable = variables)

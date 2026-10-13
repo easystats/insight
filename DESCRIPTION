@@ -128,6 +128,7 @@ Suggests:
     gam,
     gamlss,
     gamlss.data,
+    gamlss.dist,
     gamm4,
     gbm,
     gee,
