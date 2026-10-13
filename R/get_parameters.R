@@ -652,7 +652,7 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
   if (isTRUE(standardize)) {
     # standardized draws also include fixed parameters, and are already named
     # "lhs op rhs", with a ".g<n>" suffix for models with multiple groups
-    draws <- blavaan::standardizedPosterior(x)
+    draws <- do.call(blavaan::standardizedPosterior, .lavaan_std_args(x, ...))
     coef_labels <- colnames(draws)
     if (lavaan::lavInspect(x, "ngroups") > 1L) {
       coef_labels <- gsub("\\.g([0-9]+)$", " (group \\1)", coef_labels)
@@ -678,7 +678,7 @@ get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   check_if_installed("lavaan")
 
   if (standardize) {
-    params <- lavaan::standardizedSolution(x)
+    params <- do.call(lavaan::standardizedSolution, .lavaan_std_args(x, ...))
   } else {
     params <- lavaan::parameterEstimates(x)
   }
@@ -699,6 +699,18 @@ get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   )
 
   text_remove_backticks(params)
+}
+
+
+# arguments for standardizedPosterior() and standardizedSolution(). Only "type"
+# is taken from "...", because both functions stop for other arguments.
+.lavaan_std_args <- function(x, ...) {
+  type <- list(...)[["type"]]
+  if (is.null(type)) {
+    list(x)
+  } else {
+    list(x, type = type)
+  }
 }
 
 
