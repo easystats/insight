@@ -49,6 +49,14 @@
 
 ## Bug fixes
 
+* `get_predicted()` for zero-inflated *glmmTMB* models no longer fails for
+  population-level predictions (`include_random = FALSE`, or a model without
+  random effects) when the data object of the model call was changed or
+  removed after the fit. Also, `get_predicted()` for zero-inflated *glmmTMB*
+  and *pscl* models now accepts new data in the `newdata` argument. Before, it
+  gave the error `formal argument "newdata" matched by multiple actual
+  arguments`.
+
 * `null_model()` now works when the model was fitted inside a function and its
   call uses a local object other than the data, for example
   `family = fam`. Before, it returned `NULL` for mixed models and gave an error

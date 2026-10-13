@@ -11,13 +11,20 @@ get_predicted.hurdle <- function(
   verbose = TRUE,
   ...
 ) {
+  dots <- list(...)
+
   # pscl models return the fitted values immediately and ignores the `type`
   # argument when `data` is NULL
+  if (is.null(data)) {
+    data <- dots$newdata
+  }
   if (is.null(data)) {
     data <- get_data(x, verbose = FALSE)
   }
 
-  dots <- list(...)
+  # remove arguments that would be duplicated in the `predict()` calls
+  dots[["newdata"]] <- NULL
+  dots[["type"]] <- NULL
 
   # Sanitize input
   my_args <- .get_predicted_args(
@@ -48,11 +55,9 @@ get_predicted.hurdle <- function(
   # on the response scale, we simulate predictions for CIs...
   if (my_args$scale == "response") {
     # intermediate step: predictions for ZI model
-    zi_predictions <- stats::predict(
-      x,
-      newdata = my_args$data,
-      type = "zero",
-      ...
+    zi_predictions <- do.call(
+      stats::predict,
+      c(list(x, newdata = my_args$data, type = "zero"), dots)
     )
 
     if (inherits(x, "hurdle")) {
@@ -64,7 +69,7 @@ get_predicted.hurdle <- function(
     # 2. and 3. step: confidence intervals and backtransform
     ci_data <- .simulate_zi_predictions(
       model = x,
-      newdata = data,
+      newdata = my_args$data,
       predictions = predictions,
       nsim = iterations,
       ci = ci

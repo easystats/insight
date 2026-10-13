@@ -359,12 +359,17 @@ get_predicted.glmmTMB <- function(
     # for truncated family, behaviour in glmmTMB changed in 1.1.5  to correct
     # conditional and response predictions
     if (!my_args$info$is_hurdle) {
-      zi_predictions <- stats::predict(
-        x,
-        newdata = data,
-        type = "zprob",
-        re.form = my_args$re.form,
-        ...
+      # `data` can be NULL, and then glmmTMB re-reads the data object of the
+      # model call, so we use the data from `.get_predicted_args()`
+      zi_args <- dots
+      zi_args[["newdata"]] <- NULL
+      zi_args[["type"]] <- NULL
+      zi_predictions <- do.call(
+        stats::predict,
+        c(
+          list(x, newdata = my_args$data, type = "zprob", re.form = my_args$re.form),
+          zi_args
+        )
       )
       predictions <- link_inverse(x)(predictions) * (1 - as.vector(zi_predictions))
     }
@@ -372,7 +377,7 @@ get_predicted.glmmTMB <- function(
     # 2. and 3. step: confidence intervals and back-transform
     ci_data <- .simulate_zi_predictions(
       model = x,
-      newdata = data,
+      newdata = my_args$data,
       predictions = predictions,
       nsim = iterations,
       ci = ci

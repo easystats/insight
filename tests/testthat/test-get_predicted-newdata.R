@@ -240,3 +240,76 @@ test_that("get_predicted - lme and gls, `ci` sets the interval level", {
     }
   }
 })
+
+
+# zero-inflated models ----
+
+zipnd_fixture <- function() {
+  set.seed(11)
+  d <- data.frame(
+    x = rnorm(200),
+    grp = factor(rep(1:20, each = 10))
+  )
+  mu <- exp(0.5 + 0.4 * d$x + rnorm(20, sd = 0.3)[d$grp])
+  zero <- stats::rbinom(200, 1, stats::plogis(-1 + 0.5 * d$x))
+  d$count <- stats::rpois(200, mu) * (1 - zero)
+  d
+}
+
+test_that("get_predicted - zero-inflated glmmTMB, data object overwritten after the fit", {
+  skip_if_not_installed("glmmTMB")
+  d_zipnd <- zipnd_fixture()
+  d_copy <- d_zipnd
+  # with and without random effects; population-level predictions make
+  # glmmTMB rebuild the model frame from the data object of the call
+  m_re <- glmmTMB::glmmTMB(
+    count ~ x + (1 | grp),
+    ziformula = ~x,
+    family = poisson(),
+    data = d_zipnd
+  )
+  m_fe <- glmmTMB::glmmTMB(
+    count ~ x,
+    ziformula = ~x,
+    family = poisson(),
+    data = d_zipnd
+  )
+  expected_re <- stats::predict(m_re, newdata = d_copy, type = "response", re.form = NA)
+  expected_fe <- stats::predict(m_fe, newdata = d_copy, type = "response")
+  d_zipnd <- NULL
+
+  out <- get_predicted(m_re, predict = "expectation", include_random = FALSE)
+  expect_equal(as.numeric(out), as.numeric(expected_re), tolerance = 1e-6)
+  expect_identical(nrow(as.data.frame(out)), 200L)
+
+  out <- get_predicted(m_fe, predict = "expectation")
+  expect_equal(as.numeric(out), as.numeric(expected_fe), tolerance = 1e-6)
+
+  out <- get_predicted(m_fe, predict = "expectation", ci = NULL)
+  expect_equal(as.numeric(out), as.numeric(expected_fe), tolerance = 1e-6)
+})
+
+test_that("get_predicted - zero-inflated glmmTMB and zeroinfl, `newdata` gives the same as `data`", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("pscl")
+  d_zipnd2 <- zipnd_fixture()
+  nd_zipnd2 <- d_zipnd2[c(3, 50, 120, 199), ]
+  models <- list(
+    glmmTMB = glmmTMB::glmmTMB(
+      count ~ x + (1 | grp),
+      ziformula = ~x,
+      family = poisson(),
+      data = d_zipnd2
+    ),
+    zeroinfl = pscl::zeroinfl(count ~ x | x, data = d_zipnd2, dist = "poisson")
+  )
+  for (m in models) {
+    set.seed(3)
+    with_data <- as.data.frame(get_predicted(m, data = nd_zipnd2, ci = 0.95))
+    set.seed(3)
+    with_newdata <- as.data.frame(get_predicted(m, newdata = nd_zipnd2, ci = 0.95))
+    expect_identical(nrow(with_newdata), 4L)
+    expect_named(with_newdata, c("Predicted", "SE", "CI_low", "CI_high"))
+    expect_equal(with_newdata, with_data, tolerance = 1e-10)
+  }
+})
