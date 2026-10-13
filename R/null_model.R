@@ -167,7 +167,10 @@ null_model.lme <- function(model, verbose = TRUE, ...) {
   nullform <- stats::as.formula(paste(
     safe_deparse(model_formula$conditional[[2]]),
     "~",
-    paste(c("1", if (!is.null(offset_term)) sprintf("offset(%s)", offset_term)), collapse = " + ")
+    paste(
+      c("1", if (!is.null(offset_term)) sprintf("offset(%s)", offset_term)),
+      collapse = " + "
+    )
   ))
 
   # base arguments for call to `update()`

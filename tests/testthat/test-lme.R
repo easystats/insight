@@ -949,11 +949,9 @@ test_that("get_modelmatrix and get_variance, glmmPQL", {
     g2 = rep(1:40, each = 5),
     x = rnorm(200)
   )
-  d_pql_nested$y <- rbinom(
-    200,
-    1,
-    plogis(0.5 * d_pql_nested$x + rnorm(10)[d_pql_nested$g1] + rnorm(40, sd = 0.5)[d_pql_nested$g2])
-  )
+  eta <- 0.5 * d_pql_nested$x + rnorm(10)[d_pql_nested$g1]
+  eta <- eta + rnorm(40, sd = 0.5)[d_pql_nested$g2]
+  d_pql_nested$y <- rbinom(200, 1, plogis(eta))
   m_nested <- MASS::glmmPQL(
     y ~ x,
     random = ~ 1 | g1 / g2,
