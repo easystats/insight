@@ -49,6 +49,10 @@
 
 ## Bug fixes
 
+* If you use the hidden `variable` argument with `summary = TRUE`,
+  `get_parameters()` for *brms* models no longer fails with "object 'parms' not
+  found". The summary then has the columns `Parameter` and `Estimate`.
+
 * `null_model()` now works when the model was fitted inside a function and its
   call uses a local object other than the data, for example
   `family = fam`. Before, it returned `NULL` for mixed models and gave an error
