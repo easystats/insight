@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not_installed("reformulas")
 
 # new data with NA values or unknown factor levels ----
 
@@ -42,38 +43,40 @@ test_that("get_predicted - lme and gls, new data rows with NA or unknown levels 
     gls = nlme::gls(y ~ x + f, data = d_pnd)
   )
   # `f` as factor with the extra level "d", and as character vector
-  for (as_character in c(FALSE, TRUE)) for (m in models) {
-    nd_pnd <- pnd_newdata(d_pnd, character = as_character)
-    warning_messages <- character()
-    out <- withCallingHandlers(
-      as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)),
-      warning = function(w) {
-        warning_messages <<- c(warning_messages, conditionMessage(w))
-        invokeRestart("muffleWarning")
+  for (as_character in c(FALSE, TRUE)) {
+    for (m in models) {
+      nd_pnd <- pnd_newdata(d_pnd, character = as_character)
+      warning_messages <- character()
+      out <- withCallingHandlers(
+        as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)),
+        warning = function(w) {
+          warning_messages <<- c(warning_messages, conditionMessage(w))
+          invokeRestart("muffleWarning")
+        }
+      )
+      expect_identical(nrow(out), 5L)
+      for (column in c("Predicted", "SE", "CI_low", "CI_high")) {
+        expect_true(all(is.na(out[[column]][2:4])))
+        expect_false(anyNA(out[[column]][c(1, 5)]))
       }
-    )
-    expect_identical(nrow(out), 5L)
-    for (column in c("Predicted", "SE", "CI_low", "CI_high")) {
-      expect_true(all(is.na(out[[column]][2:4])))
-      expect_false(anyNA(out[[column]][c(1, 5)]))
+      # nlme predictions at the default level, which includes the random
+      # effects for lme models
+      expect_equal(
+        out$Predicted[c(1, 5)],
+        as.vector(stats::predict(m, newdata = pnd_newdata(d_pnd)[c(1, 5), ])),
+        tolerance = 1e-10
+      )
+      expect_equal(
+        out$SE[c(1, 5)],
+        sqrt(diag(X %*% stats::vcov(m) %*% t(X))),
+        tolerance = 1e-10,
+        ignore_attr = TRUE
+      )
+      # one warning that names both columns
+      expect_length(warning_messages, 1)
+      expect_match(warning_messages, "`x`", fixed = TRUE)
+      expect_match(warning_messages, "`f`", fixed = TRUE)
     }
-    # nlme predictions at the default level, which includes the random
-    # effects for lme models
-    expect_equal(
-      out$Predicted[c(1, 5)],
-      as.vector(stats::predict(m, newdata = pnd_newdata(d_pnd)[c(1, 5), ])),
-      tolerance = 1e-10
-    )
-    expect_equal(
-      out$SE[c(1, 5)],
-      sqrt(diag(X %*% stats::vcov(m) %*% t(X))),
-      tolerance = 1e-10,
-      ignore_attr = TRUE
-    )
-    # one warning that names both columns
-    expect_length(warning_messages, 1)
-    expect_match(warning_messages, "`x`", fixed = TRUE)
-    expect_match(warning_messages, "`f`", fixed = TRUE)
   }
 })
 
@@ -116,7 +119,11 @@ test_that("get_predicted - clmm, no fitted values of the model data for new data
     out <- get_predicted(m)
   })
   expect_length(out, nrow(d_pnd))
-  expect_equal(as.vector(out), stats::plogis(as.vector(stats::fitted(m))), tolerance = 1e-10)
+  expect_equal(
+    as.vector(out),
+    stats::plogis(as.vector(stats::fitted(m))),
+    tolerance = 1e-10
+  )
 })
 
 test_that("get_predicted - gnls, new data gives predictions", {
@@ -164,7 +171,11 @@ test_that("get_predicted - lme, `ci_type` does not drop the intervals", {
   m <- nlme::lme(y ~ x + f, random = ~ 1 | grp, data = d_pnd)
   out <- as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95, ci_type = "confidence"))
   expect_false(anyNA(out[c("SE", "CI_low", "CI_high")]))
-  expect_equal(out, as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)), tolerance = 1e-10)
+  expect_equal(
+    out,
+    as.data.frame(get_predicted(m, data = nd_pnd, ci = 0.95)),
+    tolerance = 1e-10
+  )
 })
 
 test_that("get_predicted - lme, intervals use the smallest df, also without new data", {
@@ -289,7 +300,12 @@ test_that("get_predicted - zero-inflated glmmTMB, data object overwritten after 
   set.seed(7)
   out <- as.data.frame(get_predicted(m_fe, predict = "expectation", ci = 0.95))
   set.seed(7)
-  expected <- as.data.frame(get_predicted(m_fe, data = d_copy, predict = "expectation", ci = 0.95))
+  expected <- as.data.frame(get_predicted(
+    m_fe,
+    data = d_copy,
+    predict = "expectation",
+    ci = 0.95
+  ))
   expect_named(out, c("Predicted", "SE", "CI_low", "CI_high"))
   expect_equal(out, expected, tolerance = 1e-10)
 })
