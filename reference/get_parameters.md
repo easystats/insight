@@ -35,6 +35,10 @@ a model. See the documentation for your object's class:
   tests](https://easystats.github.io/insight/reference/get_parameters.htest.md)
   (`htest`)
 
+- [Structural equation
+  models](https://easystats.github.io/insight/reference/get_parameters.blavaan.md)
+  (**lavaan**, **blavaan**)
+
 ## Usage
 
 ``` r

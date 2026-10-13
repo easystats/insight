@@ -343,3 +343,7 @@ Used in examples or for testing
 
 - [`get_parameters(`*`<htest>`*`)`](https://easystats.github.io/insight/reference/get_parameters.htest.md)
   : Get model parameters from htest-objects
+
+- [`get_parameters(`*`<blavaan>`*`)`](https://easystats.github.io/insight/reference/get_parameters.blavaan.md)
+  [`get_parameters(`*`<lavaan>`*`)`](https://easystats.github.io/insight/reference/get_parameters.blavaan.md)
+  : Get model parameters from structural equation models
