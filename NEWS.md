@@ -1,3 +1,18 @@
+# insight (devel)
+
+## Bug fixes
+
+* `export_table(format = "html")` now applies `align` to the columns that the
+  table shows, in the order shown. `align = "left"`, `"right"` or `"center"`
+  aligns all columns. Before, `export_table()` read these words as one
+  character per column, and it gave an error for tables with fewer columns
+  than letters. A string with one character per column skips the characters
+  of the group columns (like `Component` or the `by` columns). Before, this
+  worked only without `rowname_col`, and a group column with one value gave
+  an error. A string with fewer characters now applies to the shown
+  columns only. Columns that `column_groups` moves under a spanner take the
+  character of their shown position. Extra characters are ignored.
+
 # insight 1.6.0
 
 ## New supported models
@@ -63,17 +78,6 @@
   supported (#1090).
 
 ## Bug fixes
-
-* `export_table(format = "html")` now applies `align` to the columns that the
-  table shows, in the order shown. `align = "left"`, `"right"` or `"center"`
-  aligns all columns. Before, `export_table()` read these words as one
-  character per column, and it gave an error for tables with fewer columns
-  than letters. A string with one character per column skips the characters
-  of the group columns (like `Component` or the `by` columns). Before, this
-  worked only without `rowname_col`, and a group column with one value gave
-  an error. A string with fewer characters now applies to the shown
-  columns only. Columns that `column_groups` moves under a spanner take the
-  character of their shown position. Extra characters are ignored.
 
 * If one group column has one value, or a `by` column is not in the data,
   `export_table(format = "html")` now makes row groups from the other group
