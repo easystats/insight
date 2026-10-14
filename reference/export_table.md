@@ -151,10 +151,22 @@ export_table(
   indicate alignment rules for the complete table, like `"left"`,
   `"right"`, `"center"` or `"firstleft"` (to left-align first column,
   center remaining); or a string with abbreviated alignment characters,
-  where the length of the string must equal the number of columns. For
-  instance, `align = "lccrl"` would left-align the first column, center
-  the second and third, right-align column four and left-align the fifth
-  column.
+  one per column. For instance, `align = "lccrl"` would left-align the
+  first column, center the second and third, right-align column four and
+  left-align the fifth column. If `format = "html"`, the characters go
+  to the columns that the table shows, in the order shown (the
+  `rowname_col` columns first, and the columns of a `column_groups`
+  spanner where *gt* shows them). `"left"`, `"right"` and `"center"`
+  align all shown columns, and `"firstleft"` left-aligns the first shown
+  column. The group columns `Component`, `Effects`, `Group` and
+  `Response`, and the `by` columns given by name, are not shown: with
+  two or more values they become row groups, with one value they are
+  removed. With `row_groups`, if a group column is removed, the other
+  group columns do not become row groups and are shown. A string with
+  one character per column of `x` (for a list of data frames, per column
+  of one data frame) skips the characters of the group columns that are
+  not shown. A shorter string is for the shown columns only, and
+  characters beyond the number of shown columns are ignored.
 
 - by:
 
@@ -239,9 +251,10 @@ export_table(
   `id` or `rowname_col`, are passed to
   [`gt::gt()`](https://gt.rstudio.com/reference/gt.html), except `data`,
   `groupname_col` and `auto_align`. `caption` is not passed, because it
-  is an argument of `export_table()`. With `rowname_col`, the first
-  characters of `align` go to the `rowname_col` columns, which are shown
-  first, and the other characters to the remaining columns.
+  is an argument of `export_table()`. With `rowname_col`, the
+  `rowname_col` columns are shown first, so they take the first
+  characters of `align` that go to the shown columns (see `align`), and
+  the remaining columns take the other characters.
 
 ## Value
 

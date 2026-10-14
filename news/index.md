@@ -107,14 +107,11 @@ CRAN release: 2026-10-13
 
 ### Bug fixes
 
-- [`null_model()`](https://easystats.github.io/insight/reference/null_model.md)
-  now works for models from
-  [`nlme::lme()`](https://rdrr.io/pkg/nlme/man/lme.html) and
-  [`MASS::glmmPQL()`](https://rdrr.io/pkg/MASS/man/glmmPQL.html).
-  Before, it failed, so
-  [`get_variance()`](https://easystats.github.io/insight/reference/get_variance.md)
-  returned a distribution-specific variance of 0 for `glmmPQL` models of
-  families such as Poisson.
+- If one group column has one value, or a `by` column is not in the
+  data, `export_table(format = "html")` now makes row groups from the
+  other group columns with two or more values. Before, it made no row
+  groups in these cases. With `row_groups`, it still makes no row groups
+  in these cases.
 
 - [`find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.md)
   and

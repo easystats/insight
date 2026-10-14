@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-1-6-0-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-6-0-1"></a></h3>
-<ul><li><p><code><a href="../reference/null_model.html">null_model()</a></code> now works for models from <code><a href="https://rdrr.io/pkg/nlme/man/lme.html" class="external-link">nlme::lme()</a></code> and <code><a href="https://rdrr.io/pkg/MASS/man/glmmPQL.html" class="external-link">MASS::glmmPQL()</a></code>. Before, it failed, so <code><a href="../reference/get_variance.html">get_variance()</a></code> returned a distribution-specific variance of 0 for <code>glmmPQL</code> models of families such as Poisson.</p></li>
+<ul><li><p>If one group column has one value, or a <code>by</code> column is not in the data, <code>export_table(format = "html")</code> now makes row groups from the other group columns with two or more values. Before, it made no row groups in these cases. With <code>row_groups</code>, it still makes no row groups in these cases.</p></li>
 <li><p><code><a href="../reference/find_parameters.html">find_parameters()</a></code> and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> now work for multivariate <em>brms</em> models with addition terms in the response, such as <code>resp_weights()</code> or <code>trials()</code>. Before, <code><a href="../reference/find_parameters.html">find_parameters()</a></code> returned empty elements with wrong response names, and <code><a href="../reference/clean_parameters.html">clean_parameters()</a></code> gave an error (easystats/bayestestR#700).</p></li>
 <li><p>If you use the hidden <code>variable</code> argument with <code>summary = TRUE</code>, <code><a href="../reference/get_parameters.html">get_parameters()</a></code> for <em>brms</em> models no longer fails with the error <code>object 'parms' not found</code>. The summary then has the columns <code>Parameter</code> and <code>Estimate</code>.</p></li>
 <li><p><code><a href="../reference/get_predicted.html">get_predicted()</a></code> for zero-inflated <em>glmmTMB</em> models no longer fails for population-level predictions (<code>include_random = FALSE</code>, or a model without random effects) when the data object of the model call was changed or removed after the fit. Also, <code><a href="../reference/get_predicted.html">get_predicted()</a></code> for zero-inflated <em>glmmTMB</em> and <em>pscl</em> models now accepts new data in the <code>newdata</code> argument. Before, it gave the error <code>formal argument "newdata" matched by multiple actual arguments</code>.</p></li>
