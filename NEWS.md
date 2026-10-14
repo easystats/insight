@@ -1,5 +1,14 @@
 # insight (devel)
 
+## Bug fixes
+
+* `get_variance()` no longer returns `NULL` for models from `MASS::glmmPQL()`.
+  `get_modelmatrix()` failed for these models with the error
+  `object 'zz' not found`, because the model terms have the working response
+  of the fitting algorithm.
+
+# insight 1.6.0
+
 ## New supported models
 
 * Support for models of class `glmmTMB` fitted with the new `ordinal()`
@@ -63,11 +72,6 @@
   supported (#1090).
 
 ## Bug fixes
-
-* `get_variance()` no longer returns `NULL` for models from `MASS::glmmPQL()`.
-  `get_modelmatrix()` failed for these models with the error
-  `object 'zz' not found`, because the model terms have the working response
-  of the fitting algorithm.
 
 * `null_model()` now works for models from `nlme::lme()` and
   `MASS::glmmPQL()`. Before, it failed, so `get_variance()` returned a
