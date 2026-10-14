@@ -661,7 +661,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   # the score residuals of right-censored models are computed from the data
   # object of the call, unless the model frame (`model = TRUE`) or the model
   # matrix (`x = TRUE`) is stored
-  if (!counting && is.null(x$model) && .coxph_data_changed(x)) {
+  if (!counting && is.null(x$model) && is.null(x$x) && .coxph_data_changed(x)) {
     return(paste(
       "The predictor data changed after the model was fitted.",
       "Refit the model, or fit it with `model = TRUE`."

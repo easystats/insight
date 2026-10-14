@@ -537,6 +537,20 @@ test_that("is_converged.coxph, predictor data changed after the fit", {
   # one row less
   cvx_changed <- cvx_lung[-1, ]
   .cvx_expect_not_assessed(f$fit, "predictor data changed")
+
+  # with `x = TRUE`, the score residuals use the stored model matrix and
+  # offset, so a changed offset variable does not matter
+  cvx_changed_offset <- cvx_lung
+  cvx_changed_offset$off <- cvx_changed_offset$age / 100
+  f_x <- .cvx_fit(coxph(
+    Surv(time, status) ~ sex + offset(off),
+    data = cvx_changed_offset,
+    x = TRUE
+  ))
+  score_before <- sum(stats::residuals(f_x$fit, type = "score"))
+  cvx_changed_offset$off <- cvx_changed_offset$off * 3
+  expect_identical(sum(stats::residuals(f_x$fit, type = "score")), score_before)
+  expect_true(is_converged(f_x$fit))
 })
 
 
