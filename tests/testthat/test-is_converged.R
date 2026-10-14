@@ -36,7 +36,7 @@ test_that("is_converged handles singular models", {
   result <- is_converged(model_singular)
   # Result should be TRUE (if the optimizer converged) or FALSE (if it did not)
   expect_true(is.logical(result) || is.na(result))
-  # If it's TRUE, gradient attribute should be NA
+  # If it's TRUE or NA, gradient attribute should be NA
   if (is.na(result) || isTRUE(result)) {
     expect_true(is.na(attr(result, "gradient")))
   }
