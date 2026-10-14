@@ -136,9 +136,11 @@
 #' or `x = TRUE`. If these data were removed after the model was fitted,
 #' convergence cannot be assessed. If the predictor data were changed, so that
 #' the linear predictor computed from them differs from the one of the model,
-#' convergence cannot be assessed either. This check is not done for
-#' multi-state models, where changed data can give a wrong result. In all these
-#' cases, refit the model, or fit it with `model = TRUE`, which avoids them.
+#' convergence cannot be assessed either. Changes that leave the linear
+#' predictor the same, for example to a `strata()` variable, are not detected
+#' and can give a wrong result. The check is also not done for multi-state
+#' models, where changed data can give a wrong result. In all these cases,
+#' refit the model, or fit it with `model = TRUE`, which avoids them.
 #'
 #' @section Convergence versus Singularity:
 #' Note the different meaning between singularity and convergence: singularity
@@ -646,9 +648,11 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
 
 # a null model fitted without events has class "coxph", not "coxph.null", and
-# no coefficients
+# no coefficients and no terms
 .coxph_is_null <- function(x) {
-  inherits(x, "coxph.null") || (!is.null(x$coefficients) && !length(x$coefficients))
+  no_terms <- !length(attr(x$terms, "term.labels"))
+  inherits(x, "coxph.null") ||
+    (!is.null(x$coefficients) && !length(x$coefficients) && no_terms)
 }
 
 
@@ -722,7 +726,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
 # the reason why the checks cannot be recomputed, or NULL
 .coxph_not_assessed_reason <- function(x) {
-  if (is.null(x$iter) || is.null(x$coefficients)) {
+  if (is.null(x$iter) || !length(x$coefficients)) {
     return("The model object has no iterations or coefficients.")
   }
   # penalized models store the outer and inner iterations
@@ -733,7 +737,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     ))
   }
   if (length(x$iter) != 1 || is.na(x$iter)) {
-    return("The model object has no iterations or coefficients.")
+    return("The model object has no valid number of iterations.")
   }
   # without events, survival fits no coefficients and gives no warning
   if (isTRUE(x$nevent == 0)) {

@@ -544,10 +544,14 @@ test_that("is_converged.coxph, model objects with broken elements", {
   fit <- cvx_fits$clean$fit
   no_iter <- fit
   no_iter$iter <- integer(0)
-  .cvx_expect_not_assessed(no_iter, "no iterations or coefficients")
+  .cvx_expect_not_assessed(no_iter, "no valid number of iterations")
   na_iter <- fit
   na_iter$iter <- NA
-  .cvx_expect_not_assessed(na_iter, "no iterations or coefficients")
+  .cvx_expect_not_assessed(na_iter, "no valid number of iterations")
+  # a model with predictors but no coefficients is not a null model
+  no_coef <- fit
+  no_coef$coefficients <- numeric(0)
+  .cvx_expect_not_assessed(no_coef, "no iterations or coefficients")
   # check (b) gives missing values for coefficients that are not missing
   na_var <- fit
   na_var$var[] <- NA

@@ -167,9 +167,11 @@ the data of the model call, unless the model was fitted with \code{model = TRUE}
 or \code{x = TRUE}. If these data were removed after the model was fitted,
 convergence cannot be assessed. If the predictor data were changed, so that
 the linear predictor computed from them differs from the one of the model,
-convergence cannot be assessed either. This check is not done for
-multi-state models, where changed data can give a wrong result. In all these
-cases, refit the model, or fit it with \code{model = TRUE}, which avoids them.
+convergence cannot be assessed either. Changes that leave the linear
+predictor the same, for example to a \code{strata()} variable, are not detected
+and can give a wrong result. The check is also not done for multi-state
+models, where changed data can give a wrong result. In all these cases,
+refit the model, or fit it with \code{model = TRUE}, which avoids them.
 }
 
 \section{Convergence versus Singularity}{
