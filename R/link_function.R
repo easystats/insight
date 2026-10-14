@@ -782,7 +782,7 @@ link_function.brmsfit <- function(x, ...) {
 .brms_link_fun <- function(fam) {
   # do we have custom families?
   if (!is.null(fam$family) && (is.character(fam$family) && fam$family == "custom")) {
-    il <- stats::make.link(fam$link)$linkfun
+    il <- .brms_make_link(fam$link)$linkfun
   } else if ("linkfun" %in% names(fam)) {
     il <- fam$linkfun
   } else if ("link" %in% names(fam) && is.character(fam$link)) {
