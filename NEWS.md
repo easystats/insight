@@ -13,6 +13,20 @@
   columns only. Columns that `column_groups` moves under a spanner take the
   character of their shown position. Extra characters are ignored.
 
+* `null_model()` now works for models from `nlme::lme()` and
+  `MASS::glmmPQL()`. Before, it failed, so `get_variance()` returned a
+  distribution-specific variance of 0 for `glmmPQL` models of families such as
+  Poisson.
+
+# insight 1.6.0
+
+## Bug fixes
+
+* `get_variance()` no longer returns `NULL` for models from `MASS::glmmPQL()`.
+  `get_modelmatrix()` failed for these models with the error
+  `object 'zz' not found`, because the model terms have the working response
+  of the fitting algorithm.
+
 # insight 1.6.0
 
 ## New supported models

@@ -154,6 +154,55 @@ null_model.MixMod <- function(model, verbose = TRUE, ...) {
 
 
 #' @export
+null_model.lme <- function(model, verbose = TRUE, ...) {
+  model_formula <- find_formula(model, verbose = verbose)
+  offset_term <- .grep_offset_term(model_formula)
+
+  # get model data and variables
+  model_data <- get_data(model, verbose = FALSE)
+  update_data <- .prepare_update_data(model, model_data)
+
+  # the random effects are a separate argument, so only the fixed effects
+  # formula changes. Offset terms are part of that formula.
+  nullform <- stats::as.formula(paste(
+    safe_deparse(model_formula$conditional[[2]]),
+    "~",
+    paste(
+      c("1", if (!is.null(offset_term)) sprintf("offset(%s)", offset_term)),
+      collapse = " + "
+    )
+  ))
+
+  # base arguments for call to `update()`
+  base_args <- list(model, fixed = nullform, evaluate = FALSE)
+  # glmmPQL prints the iterations unless verbose is FALSE
+  if (inherits(model, "glmmPQL")) {
+    base_args$verbose <- FALSE
+  }
+
+  # add data, if any, and select appropriate environment for "eval()"
+  if (is.null(update_data)) {
+    env <- parent.frame()
+  } else {
+    base_args$data <- update_data
+    env <- NULL
+  }
+
+  out <- suppressWarnings(do.call(stats::update, base_args))
+  # the call of lme models is "lme.formula()", which is not exported, and
+  # packages may not be attached, so we name the function with its package
+  if (inherits(model, "glmmPQL")) {
+    check_if_installed(c("MASS", "nlme"))
+    out[[1]] <- quote(MASS::glmmPQL)
+  } else {
+    check_if_installed("nlme")
+    out[[1]] <- quote(nlme::lme)
+  }
+  .eval_null_model(out, model, env)
+}
+
+
+#' @export
 null_model.cpglmm <- function(model, verbose = TRUE, ...) {
   model_formula <- find_formula(model, verbose = verbose)
   offset_term <- .grep_offset_term(model_formula)
