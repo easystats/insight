@@ -4,20 +4,6 @@
 
 CRAN release: 2026-10-13
 
-### Bug fixes
-
-- [`get_variance()`](https://easystats.github.io/insight/reference/get_variance.md)
-  no longer returns `NULL` for models from
-  [`MASS::glmmPQL()`](https://rdrr.io/pkg/MASS/man/glmmPQL.html).
-  [`get_modelmatrix()`](https://easystats.github.io/insight/reference/get_modelmatrix.md)
-  failed for these models with the error `object 'zz' not found`,
-  because the model terms have the working response of the fitting
-  algorithm.
-
-## insight 1.6.0
-
-CRAN release: 2026-10-13
-
 ### New supported models
 
 - Support for models of class `glmmTMB` fitted with the new
@@ -106,12 +92,6 @@ CRAN release: 2026-10-13
   ([\#1090](https://github.com/easystats/insight/issues/1090)).
 
 ### Bug fixes
-
-- If one group column has one value, or a `by` column is not in the
-  data, `export_table(format = "html")` now makes row groups from the
-  other group columns with two or more values. Before, it made no row
-  groups in these cases. With `row_groups`, it still makes no row groups
-  in these cases.
 
 - [`find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.md)
   and
