@@ -123,17 +123,22 @@
 #' Convergence cannot be assessed, and `FALSE` is returned, for penalized
 #' models (with `frailty()`, `ridge()` or `pspline()` terms), for models with
 #' `ties = "exact"`, for models with `tt()` terms, for models with `iter.max`
-#' of 1 or less, for models fitted with `y = FALSE`, for model objects without
-#' a call, and if the control arguments of the model call or the score
-#' residuals cannot be computed. Objects of other classes that inherit from
-#' `coxph`, for example from `survival::clogit()` or `survey::svycoxph()`, are
-#' not supported: `NULL` is returned with a message.
+#' of 1 or less, for models fitted with `y = FALSE`, for models without events,
+#' for model objects without a call, and if the control arguments of the model
+#' call or the score residuals cannot be computed. A model without events and
+#' without predictors returns `TRUE`, as other null models. Objects of other
+#' classes that inherit from `coxph`, for example from `survival::clogit()` or
+#' `survey::svycoxph()`, are not supported: `NULL` is returned with a message
+#' (no message if `verbose = FALSE`).
 #'
 #' For models with right-censored data, the score residuals are computed from
 #' the data of the model call, unless the model was fitted with `model = TRUE`
 #' or `x = TRUE`. If these data were removed after the model was fitted,
-#' convergence cannot be assessed. If they were changed, the result can be
-#' wrong. In both cases, refit the model with `model = TRUE`.
+#' convergence cannot be assessed. If the predictor data were changed, so that
+#' the linear predictor computed from them differs from the one of the model,
+#' convergence cannot be assessed either. This check is not done for
+#' multi-state models, where changed data can give a wrong result. In all these
+#' cases, refit the model, or fit it with `model = TRUE`, which avoids them.
 #'
 #' @section Convergence versus Singularity:
 #' Note the different meaning between singularity and convergence: singularity
@@ -200,11 +205,13 @@ is_converged <- function(x, tolerance = 0.001, ...) {
 
 
 #' @export
-is_converged.default <- function(x, tolerance = 0.001, ...) {
-  format_alert(sprintf(
-    "`is_converged()` does not work for models of class '%s'.",
-    class(x)[1]
-  ))
+is_converged.default <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
+  if (verbose) {
+    format_alert(sprintf(
+      "`is_converged()` does not work for models of class '%s'.",
+      class(x)[1]
+    ))
+  }
 }
 
 
@@ -571,7 +578,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   check_if_installed("survival")
 
   # a null model has no coefficients that could diverge
-  if (inherits(x, "coxph.null")) {
+  if (.coxph_is_null(x)) {
     return(structure(TRUE, diagnostics = .coxph_diagnostics()))
   }
   reason <- .coxph_not_assessed_reason(x)
@@ -621,25 +628,9 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
   # check (b), only if check (a) passed, as in survival
   if (iterations_passed) {
-    infinite <- tryCatch(
-      .coxph_infinite(x, control, counting),
-      error = function(e) e
-    )
-    if (inherits(infinite, "error")) {
-      reason <- paste0(
-        "The score vector could not be computed (",
-        conditionMessage(infinite),
-        ")."
-      )
-      if (
-        is.null(x$model) && grepl("not found", conditionMessage(infinite), fixed = TRUE)
-      ) {
-        reason <- paste(
-          reason,
-          "If the data of the model are no longer available, refit the model with `model = TRUE`."
-        )
-      }
-      return(.is_converged_coxph_not_assessed(reason, verbose))
+    infinite <- .coxph_check_infinite(x, control, counting)
+    if (is.character(infinite)) {
+      return(.is_converged_coxph_not_assessed(infinite, verbose))
     }
     diagnostics <- rbind(diagnostics, infinite)
   }
@@ -651,6 +642,51 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   }
 
   structure(converged, diagnostics = diagnostics)
+}
+
+
+# without events, survival returns a null model of class "coxph" with no
+# coefficients
+.coxph_is_null <- function(x) {
+  inherits(x, "coxph.null") || (!is.null(x$coefficients) && !length(x$coefficients))
+}
+
+
+# check (b): the diagnostics, or the reason why the check cannot be computed
+.coxph_check_infinite <- function(x, control, counting) {
+  # the score residuals of right-censored models are computed from the data
+  # object of the call, unless the model frame is stored (`model = TRUE`)
+  if (!counting && is.null(x$model) && .coxph_data_changed(x)) {
+    return(paste(
+      "The predictor data changed after the model was fitted.",
+      "Refit the model, or fit it with `model = TRUE`."
+    ))
+  }
+  infinite <- tryCatch(
+    .coxph_infinite(x, control, counting),
+    error = function(e) e
+  )
+  if (inherits(infinite, "error")) {
+    reason <- paste0(
+      "The score vector could not be computed (",
+      conditionMessage(infinite),
+      ")."
+    )
+    if (
+      is.null(x$model) && grepl("not found", conditionMessage(infinite), fixed = TRUE)
+    ) {
+      reason <- paste(
+        reason,
+        "If the data of the model are no longer available, refit the model with `model = TRUE`."
+      )
+    }
+    return(reason)
+  }
+  # for example, if the variance matrix has missing values
+  if (anyNA(infinite$Value[!is.na(stats::coef(x))])) {
+    return("The check for infinite coefficients gives missing values.")
+  }
+  infinite
 }
 
 
@@ -688,11 +724,19 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   if (is.null(x$iter) || is.null(x$coefficients)) {
     return("The model object has no iterations or coefficients.")
   }
+  # penalized models store the outer and inner iterations
   if (inherits(x, "coxph.penal")) {
     return(paste(
       "The checks do not apply to penalized models, for example models",
       "with `frailty()`, `ridge()` or `pspline()` terms."
     ))
+  }
+  if (length(x$iter) != 1 || is.na(x$iter)) {
+    return("The model object has no iterations or coefficients.")
+  }
+  # without events, survival fits no coefficients and gives no warning
+  if (isTRUE(x$nevent == 0)) {
+    return("The model has no events.")
   }
   # with `ties = "exact"`, survival gives no score residuals for right-censored
   # data and stores no score vector or convergence flag for counting-process
@@ -776,6 +820,37 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     Threshold = threshold,
     Passed = !flagged
   )
+}
+
+
+# TRUE if the linear predictor, computed again from the data object of the
+# call, differs from the one of the fit. If the data cannot be read, FALSE is
+# returned, and check (b) gives the error. Multi-state models store one linear
+# predictor for each transition and are not compared.
+.coxph_data_changed <- function(x) {
+  if (inherits(x, "coxphms")) {
+    return(FALSE)
+  }
+  mf <- tryCatch(stats::model.frame(x), error = function(e) NULL)
+  mm <- tryCatch(stats::model.matrix(x), error = function(e) NULL)
+  if (is.null(mf) || is.null(mm)) {
+    return(FALSE)
+  }
+  coefs <- stats::coef(x)
+  if (!all(names(coefs) %in% colnames(mm)) || nrow(mm) != length(x$linear.predictors)) {
+    return(TRUE)
+  }
+  # aliased coefficients are missing and do not enter the linear predictor
+  coefs[is.na(coefs)] <- 0
+  means <- x$means[names(coefs)]
+  means[is.na(means)] <- 0
+  mm <- mm[, names(coefs), drop = FALSE]
+  lp <- drop(mm %*% coefs) - sum(means * coefs)
+  model_offset <- stats::model.offset(mf)
+  if (!is.null(model_offset)) {
+    lp <- lp + model_offset
+  }
+  !isTRUE(all.equal(unname(lp), unname(x$linear.predictors)))
 }
 
 

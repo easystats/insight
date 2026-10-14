@@ -2,6 +2,17 @@
 
 ## Bug fixes
 
+* `is_converged()` for `coxph` models now returns `FALSE` with a message that
+  convergence cannot be assessed in three more cases. The first case is a
+  model without events. Before, a right-censored model without events gave
+  `TRUE`. The second case is a right-censored model whose predictor data
+  changed after the fit. Before, the coefficients of such a model were
+  flagged as infinite. Models fitted with `model = TRUE` are not affected.
+  The third case is a model object with a missing number of iterations or
+  missing variances. Before, these gave an error or `TRUE`. With
+  `verbose = FALSE`, `is_converged()` now also gives no message for models
+  that it does not support.
+
 * `export_table(format = "html")` now applies `align` to the columns that the
   table shows, in the order shown. `align = "left"`, `"right"` or `"center"`
   aligns all columns. Before, `export_table()` read these words as one

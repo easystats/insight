@@ -333,6 +333,18 @@ test_that("is_converged.coxph, diagnostics", {
   messages
 }
 
+.cvx_expect_not_assessed <- function(fit, pattern) {
+  result <- is_converged(fit, verbose = FALSE)
+  expect_false(result)
+  expect_null(attr(result, "diagnostics"))
+  expect_silent(is_converged(fit, verbose = FALSE))
+  # the alert wraps long lines
+  messages <- gsub("\\s+", " ", .cvx_messages(is_converged(fit)))
+  expect_length(messages, 1)
+  expect_match(messages, "Convergence cannot be assessed", fixed = TRUE)
+  expect_match(messages, pattern, fixed = TRUE)
+}
+
 
 test_that("is_converged.coxph, messages", {
   messages <- .cvx_messages(is_converged(cvx_fits$reprex$fit))
@@ -363,18 +375,6 @@ test_that("is_converged.coxph, tolerance is not used", {
 
 
 test_that("is_converged.coxph, convergence cannot be assessed", {
-  .cvx_expect_not_assessed <- function(fit, pattern) {
-    result <- is_converged(fit, verbose = FALSE)
-    expect_false(result)
-    expect_null(attr(result, "diagnostics"))
-    expect_silent(is_converged(fit, verbose = FALSE))
-    # the alert wraps long lines
-    messages <- gsub("\\s+", " ", .cvx_messages(is_converged(fit)))
-    expect_length(messages, 1)
-    expect_match(messages, "Convergence cannot be assessed", fixed = TRUE)
-    expect_match(messages, pattern, fixed = TRUE)
-  }
-
   penalized <- list(
     .cvx_fit(coxph(Surv(time, status) ~ age + frailty(inst), data = cvx_lung)),
     .cvx_fit(coxph(Surv(time, status) ~ ridge(age, ph.ecog, theta = 1), data = cvx_lung)),
@@ -491,4 +491,84 @@ test_that("is_converged.coxph, other classes that inherit from coxph", {
     "does not work for models of class 'svycoxph'",
     fixed = TRUE
   )
+})
+
+
+test_that("is_converged.coxph, models without events", {
+  cvx_no_events <- cvx_lung
+  cvx_no_events$status <- 0
+  # right-censored: no iterations and missing coefficients, and no warning
+  f_right <- .cvx_fit(coxph(Surv(time, status) ~ age + sex, data = cvx_no_events))
+  expect_length(f_right$warnings, 0)
+  expect_identical(f_right$fit$iter, 0)
+  expect_true(all(is.na(stats::coef(f_right$fit))))
+  .cvx_expect_not_assessed(f_right$fit, "no events")
+  # counting process
+  f_counting <- .cvx_fit(coxph(
+    Surv(time - 1, time, status) ~ age + sex,
+    data = cvx_no_events
+  ))
+  expect_identical(attr(f_counting$fit$y, "type"), "counting")
+  .cvx_expect_not_assessed(f_counting$fit, "no events")
+  # a null model has no coefficients that could diverge. Without events, it
+  # has class "coxph", not "coxph.null".
+  f_null <- .cvx_fit(coxph(Surv(time, status) ~ 1, data = cvx_no_events))
+  expect_length(stats::coef(f_null$fit), 0)
+  expect_true(is_converged(f_null$fit))
+})
+
+
+test_that("is_converged.coxph, predictor data changed after the fit", {
+  cvx_changed <- cvx_lung
+  f <- .cvx_fit(coxph(Surv(time, status) ~ age + sex, data = cvx_changed))
+  f_model <- .cvx_fit(coxph(
+    Surv(time, status) ~ age + sex,
+    data = cvx_changed,
+    model = TRUE
+  ))
+  expect_true(is_converged(f$fit))
+
+  # main flagged `age` and `sex` as infinite after this shuffle
+  cvx_changed$age <- withr::with_seed(123, sample(cvx_changed$age))
+  .cvx_expect_not_assessed(f$fit, "predictor data changed")
+  # the model frame is stored with `model = TRUE`
+  expect_true(is_converged(f_model$fit))
+
+  # one row less
+  cvx_changed <- cvx_lung[-1, ]
+  .cvx_expect_not_assessed(f$fit, "predictor data changed")
+})
+
+
+test_that("is_converged.coxph, model objects with broken elements", {
+  fit <- cvx_fits$clean$fit
+  no_iter <- fit
+  no_iter$iter <- integer(0)
+  .cvx_expect_not_assessed(no_iter, "no iterations or coefficients")
+  na_iter <- fit
+  na_iter$iter <- NA
+  .cvx_expect_not_assessed(na_iter, "no iterations or coefficients")
+  # check (b) gives missing values for coefficients that are not missing
+  na_var <- fit
+  na_var$var[] <- NA
+  .cvx_expect_not_assessed(na_var, "missing values")
+})
+
+
+test_that("is_converged, verbose = FALSE for classes without a method", {
+  cvx_clogit_quiet <- survival::clogit(
+    case ~ spontaneous + survival::strata(stratum),
+    data = datasets::infert,
+    method = "efron"
+  )
+  cph_like <- cvx_fits$reprex$fit
+  class(cph_like) <- c("cph", "rms", "coxph")
+  for (x in list(cvx_clogit_quiet, cph_like)) {
+    expect_silent(expect_null(is_converged(x, verbose = FALSE)))
+    expect_message(
+      expect_null(is_converged(x)),
+      sprintf("does not work for models of class '%s'", class(x)[1]),
+      fixed = TRUE
+    )
+  }
 })
