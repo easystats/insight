@@ -814,16 +814,27 @@ link_inverse.mira <- function(x, ...) {
     tan_half = list(linkfun = function(mu) tan(mu / 2), linkinv = function(eta) 2 * atan(eta)),
     probit_approx = list(
       linkfun = function(mu) stats::qnorm(mu),
-      linkinv = function(eta) stats::plogis(0.07056 * eta^3 + 1.5976 * eta)
+      linkinv = function(eta) stats::pnorm(eta)
     ),
-    softplus = list(linkfun = function(mu) log(expm1(mu)), linkinv = function(eta) log1p(exp(eta))),
+    softplus = list(
+      linkfun = function(mu) mu + log(-expm1(-mu)),
+      linkinv = function(eta) pmax(eta, 0) + log1p(exp(-abs(eta)))
+    ),
     squareplus = list(
       linkfun = function(mu) (mu^2 - 1) / mu,
-      linkinv = function(eta) (eta + sqrt(eta^2 + 4)) / 2
+      linkinv = function(eta) {
+        ifelse(eta >= 0, (eta + sqrt(eta^2 + 4)) / 2, 2 / (sqrt(eta^2 + 4) - eta))
+      }
     ),
     softit = list(
-      linkfun = function(mu) log(expm1(stats::qlogis(mu))),
-      linkinv = function(eta) stats::plogis(log1p(exp(eta)))
+      linkfun = function(mu) {
+        odds <- mu / (1 - mu)
+        odds + log(-expm1(-odds))
+      },
+      linkinv = function(eta) {
+        s <- pmax(eta, 0) + log1p(exp(-abs(eta)))
+        ifelse(s == Inf, 1, s / (1 + s))
+      }
     ),
     stats::make.link(link)
   )
