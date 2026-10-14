@@ -645,8 +645,8 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 }
 
 
-# without events, survival returns a null model of class "coxph" with no
-# coefficients
+# a null model fitted without events has class "coxph", not "coxph.null", and
+# no coefficients
 .coxph_is_null <- function(x) {
   inherits(x, "coxph.null") || (!is.null(x$coefficients) && !length(x$coefficients))
 }
@@ -655,7 +655,8 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 # check (b): the diagnostics, or the reason why the check cannot be computed
 .coxph_check_infinite <- function(x, control, counting) {
   # the score residuals of right-censored models are computed from the data
-  # object of the call, unless the model frame is stored (`model = TRUE`)
+  # object of the call, unless the model frame (`model = TRUE`) or the model
+  # matrix (`x = TRUE`) is stored
   if (!counting && is.null(x$model) && .coxph_data_changed(x)) {
     return(paste(
       "The predictor data changed after the model was fitted.",
