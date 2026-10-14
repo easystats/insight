@@ -59,7 +59,7 @@
 #'   third, right-align column four and left-align the fifth column. If
 #'   `format = "html"`, the characters go to the columns that the table shows,
 #'   in the order shown (the `rowname_col` columns first, and the columns of a
-#'   `column_groups` spanner where gt shows them). `"left"`, `"right"` and
+#'   `column_groups` spanner where *gt* shows them). `"left"`, `"right"` and
 #'   `"center"` align all shown columns, and `"firstleft"` left-aligns the first
 #'   shown column. The group columns `Component`, `Effects`, `Group` and
 #'   `Response`, and the `by` columns given by name, are not shown: with two

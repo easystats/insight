@@ -119,7 +119,7 @@ with abbreviated alignment characters, one per column. For instance,
 third, right-align column four and left-align the fifth column. If
 \code{format = "html"}, the characters go to the columns that the table shows,
 in the order shown (the \code{rowname_col} columns first, and the columns of a
-\code{column_groups} spanner where gt shows them). \code{"left"}, \code{"right"} and
+\code{column_groups} spanner where \emph{gt} shows them). \code{"left"}, \code{"right"} and
 \code{"center"} align all shown columns, and \code{"firstleft"} left-aligns the first
 shown column. The group columns \code{Component}, \code{Effects}, \code{Group} and
 \code{Response}, and the \code{by} columns given by name, are not shown: with two
