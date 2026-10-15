@@ -154,13 +154,20 @@ of each check, with one row for each coefficient for the second check. The
 Convergence cannot be assessed, and \code{FALSE} is returned, for penalized
 models (with \code{frailty()}, \code{ridge()} or \code{pspline()} terms), for models with
 \code{ties = "exact"}, for models with \code{tt()} terms, for models with \code{iter.max}
-of 1 or less, for models fitted with \code{y = FALSE}, for models without events,
-for model objects without a call, and if the control arguments of the model
-call or the score residuals cannot be computed. A model without events and
-without predictors returns \code{TRUE}, as other null models. Objects of other
-classes that inherit from \code{coxph}, for example from \code{survival::clogit()} or
-\code{survey::svycoxph()}, are not supported: \code{NULL} is returned with a message
-(no message if \code{verbose = FALSE}).
+of 1 or less, for right-censored and multi-state models fitted with
+\code{y = FALSE}, for models without events, for model objects without a call,
+and if the control arguments of the model call or the score residuals cannot
+be computed. Single-state counting-process models fitted with \code{y = FALSE}
+are assessed, because their checks use only the stored score vector and
+convergence flag. A model without events and without predictors returns
+\code{TRUE}, as other null models.
+
+Models from \code{survival::clogit()} are assessed as other \code{coxph} models. The
+default method of \code{clogit()} is \code{"exact"}, so convergence can only be
+assessed for models fitted with \code{method = "efron"} or \code{method = "breslow"}
+(or \code{"approximate"}). Objects of other classes that inherit from \code{coxph},
+for example from \code{survey::svycoxph()}, are not supported: \code{NULL} is
+returned with a message (no message if \code{verbose = FALSE}).
 
 For models with right-censored data, the score residuals are computed from
 the data of the model call, unless the model was fitted with \code{model = TRUE}
@@ -169,9 +176,11 @@ convergence cannot be assessed. If the predictor data were changed, so that
 the linear predictor computed from them differs from the one of the model,
 convergence cannot be assessed either. Changes that leave the linear
 predictor the same, for example to a \code{strata()} variable, are not detected
-and can give a wrong result. The check is also not done for multi-state
-models, where changed data can give a wrong result. In all these cases,
-refit the model, or fit it with \code{model = TRUE}, which avoids them.
+and can give a wrong result. For multi-state models, the linear predictor
+is compared within each transition. A change that adds the same constant to
+the linear predictor of all rows of a transition is not detected, but it
+leaves the score residuals the same. In all these
+cases, refit the model, or fit it with \code{model = TRUE}, which avoids them.
 }
 
 \section{Convergence versus Singularity}{

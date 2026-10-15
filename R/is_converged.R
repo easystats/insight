@@ -123,13 +123,20 @@
 #' Convergence cannot be assessed, and `FALSE` is returned, for penalized
 #' models (with `frailty()`, `ridge()` or `pspline()` terms), for models with
 #' `ties = "exact"`, for models with `tt()` terms, for models with `iter.max`
-#' of 1 or less, for models fitted with `y = FALSE`, for models without events,
-#' for model objects without a call, and if the control arguments of the model
-#' call or the score residuals cannot be computed. A model without events and
-#' without predictors returns `TRUE`, as other null models. Objects of other
-#' classes that inherit from `coxph`, for example from `survival::clogit()` or
-#' `survey::svycoxph()`, are not supported: `NULL` is returned with a message
-#' (no message if `verbose = FALSE`).
+#' of 1 or less, for right-censored and multi-state models fitted with
+#' `y = FALSE`, for models without events, for model objects without a call,
+#' and if the control arguments of the model call or the score residuals cannot
+#' be computed. Single-state counting-process models fitted with `y = FALSE`
+#' are assessed, because their checks use only the stored score vector and
+#' convergence flag. A model without events and without predictors returns
+#' `TRUE`, as other null models.
+#'
+#' Models from `survival::clogit()` are assessed as other `coxph` models. The
+#' default method of `clogit()` is `"exact"`, so convergence can only be
+#' assessed for models fitted with `method = "efron"` or `method = "breslow"`
+#' (or `"approximate"`). Objects of other classes that inherit from `coxph`,
+#' for example from `survey::svycoxph()`, are not supported: `NULL` is
+#' returned with a message (no message if `verbose = FALSE`).
 #'
 #' For models with right-censored data, the score residuals are computed from
 #' the data of the model call, unless the model was fitted with `model = TRUE`
@@ -138,9 +145,11 @@
 #' the linear predictor computed from them differs from the one of the model,
 #' convergence cannot be assessed either. Changes that leave the linear
 #' predictor the same, for example to a `strata()` variable, are not detected
-#' and can give a wrong result. The check is also not done for multi-state
-#' models, where changed data can give a wrong result. In all these cases,
-#' refit the model, or fit it with `model = TRUE`, which avoids them.
+#' and can give a wrong result. For multi-state models, the linear predictor
+#' is compared within each transition. A change that adds the same constant to
+#' the linear predictor of all rows of a transition is not detected, but it
+#' leaves the score residuals the same. In all these
+#' cases, refit the model, or fit it with `model = TRUE`, which avoids them.
 #'
 #' @section Convergence versus Singularity:
 #' Note the different meaning between singularity and convergence: singularity
@@ -571,10 +580,10 @@ is_converged.CmdStanFit <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 #' @rdname is_converged
 #' @export
 is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
-  # objects of other classes that inherit from "coxph" (for example from
-  # survey::svycoxph(), which stores its own call, or survival::clogit()) go to
-  # the default method, as before
-  if (!class(x)[1] %in% c("coxph", "coxphms", "coxph.penal", "coxph.null")) {
+  # survival::clogit() stores the call of coxph() that it makes. Objects of
+  # other classes that inherit from "coxph" (for example from
+  # survey::svycoxph(), which stores its own call) go to the default method.
+  if (!class(x)[1] %in% c("coxph", "coxphms", "coxph.penal", "coxph.null", "clogit")) {
     return(NextMethod())
   }
   check_if_installed("survival")
@@ -601,10 +610,20 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       verbose
     ))
   }
+  # a model with events has at least one iteration
+  if (x$iter < 1) {
+    return(.is_converged_coxph_not_assessed(
+      "The model object has no valid number of iterations.",
+      verbose
+    ))
+  }
 
   # coxph() sends right-censored responses to coxph.fit() and all other
-  # responses to agreg.fit()
-  counting <- !grepl("right", attr(x$y, "type"), fixed = TRUE)
+  # responses to agreg.fit(). Without the response (`y = FALSE`), only
+  # single-state counting-process models get here, see
+  # .coxph_not_assessed_reason().
+  y_type <- attr(x$y, "type")
+  counting <- is.null(y_type) || !grepl("right", y_type, fixed = TRUE)
 
   # check (a): coxph.fit() returns one iteration more than `iter.max` if it
   # ran out of iterations, agreg.fit() stores a convergence flag
@@ -660,8 +679,11 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 .coxph_check_infinite <- function(x, control, counting) {
   # the score residuals of right-censored models are computed from the data
   # object of the call, unless the model frame (`model = TRUE`) or the model
-  # matrix (`x = TRUE`) is stored
-  if (!counting && is.null(x$model) && is.null(x$x) && .coxph_data_changed(x)) {
+  # matrix (`x = TRUE`) is stored. `[[` because `$` would match `xlevels`
+  # for `x`.
+  if (
+    !counting && is.null(x[["model"]]) && is.null(x[["x"]]) && .coxph_data_changed(x)
+  ) {
     return(paste(
       "The predictor data changed after the model was fitted.",
       "Refit the model, or fit it with `model = TRUE`."
@@ -677,8 +699,12 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       conditionMessage(infinite),
       ")."
     )
+    # the hint only if the data cannot be read: survival can also give "not
+    # found" errors for other reasons
     if (
-      is.null(x$model) && grepl("not found", conditionMessage(infinite), fixed = TRUE)
+      is.null(x[["model"]]) &&
+        grepl("not found", conditionMessage(infinite), fixed = TRUE) &&
+        is.null(tryCatch(stats::model.frame(x), error = function(e) NULL))
     ) {
       reason <- paste(
         reason,
@@ -761,7 +787,12 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   if (is.null(x$call)) {
     return("The model has no call, so the control arguments of the fit are unknown.")
   }
-  if (is.null(attr(x$y, "type"))) {
+  # without the response, the checks of agreg.fit() can still be recomputed
+  # from the stored score vector (`first`) and convergence flag (`info`) of a
+  # single-state counting-process model. Right-censored models store neither.
+  no_response <- is.null(attr(x$y, "type")) &&
+    (inherits(x, "coxphms") || is.null(x$first) || is.null(x$info))
+  if (no_response) {
     return("The model has no response. Refit the model with `y = TRUE`.")
   }
   NULL
@@ -830,16 +861,15 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
 # TRUE if the linear predictor, computed again from the data object of the
 # call, differs from the one of the fit. If the data cannot be read, FALSE is
-# returned, and check (b) gives the error. Multi-state models store one linear
-# predictor for each transition and are not compared.
+# returned, and check (b) gives the error.
 .coxph_data_changed <- function(x) {
-  if (inherits(x, "coxphms")) {
-    return(FALSE)
-  }
   mf <- tryCatch(stats::model.frame(x), error = function(e) NULL)
   mm <- tryCatch(stats::model.matrix(x), error = function(e) NULL)
   if (is.null(mf) || is.null(mm)) {
     return(FALSE)
+  }
+  if (inherits(x, "coxphms")) {
+    return(.coxphms_data_changed(x, mf, mm))
   }
   coefs <- stats::coef(x)
   if (!all(names(coefs) %in% colnames(mm)) || nrow(mm) != length(x$linear.predictors)) {
@@ -856,6 +886,43 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     lp <- lp + model_offset
   }
   !isTRUE(all.equal(unname(lp), unname(x$linear.predictors)))
+}
+
+
+# Multi-state models store one linear predictor for each row of the stacked
+# data: `rmap` gives the row of the data and the transition of each stacked
+# row, and `cmap` the coefficient of each column of the model matrix in each
+# transition (0 if the column does not enter the transition). The stored
+# predictor is centered in another way, so the two are compared up to a
+# constant within each transition. A change that shifts the linear predictor
+# of a transition by a constant does not change the score residuals.
+.coxphms_data_changed <- function(x, mf, mm) {
+  cmap <- x$cmap
+  rmap <- x$rmap
+  lp_stored <- x$linear.predictors
+  if (
+    is.null(cmap) ||
+      is.null(rmap) ||
+      !all(rownames(cmap) %in% colnames(mm)) ||
+      length(lp_stored) != nrow(rmap) ||
+      max(rmap[, 1]) > nrow(mm)
+  ) {
+    return(TRUE)
+  }
+  coefs <- stats::coef(x)
+  # aliased coefficients are missing and do not enter the linear predictor
+  coefs[is.na(coefs)] <- 0
+  # one column of coefficients for each transition
+  betas <- apply(cmap, 2, function(i) ifelse(i > 0, coefs[pmax(i, 1)], 0))
+  betas <- matrix(betas, nrow = nrow(cmap))
+  lp_rows <- mm[, rownames(cmap), drop = FALSE] %*% betas
+  lp <- lp_rows[rmap]
+  model_offset <- stats::model.offset(mf)
+  if (!is.null(model_offset)) {
+    lp <- lp + model_offset[rmap[, 1]]
+  }
+  shift <- stats::ave(lp - lp_stored, rmap[, 2])
+  !isTRUE(all.equal(unname(lp - shift), unname(lp_stored)))
 }
 
 

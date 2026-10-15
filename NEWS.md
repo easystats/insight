@@ -15,6 +15,20 @@
   returned `FALSE`. With `verbose = FALSE`, `is_converged()` now also gives
   no message for models that it does not support.
 
+* `is_converged()` for `coxph` models now assesses models from
+  `survival::clogit()` fitted with `method = "efron"` or `method = "breslow"`.
+  Before, it returned `NULL`. Models from `clogit()` with the default
+  `method = "exact"` now return `FALSE` with a message that convergence cannot
+  be assessed. Counting-process models fitted with `y = FALSE` are now
+  assessed. The check for changed predictor data now also covers multi-state
+  models with right-censored data and models with factor predictors. If their
+  data changed after the fit, they now return `FALSE` with a message that
+  convergence cannot be assessed. Before, the result depended on the change,
+  and coefficients were flagged as infinite by mistake. A model object with
+  zero iterations now also returns `FALSE` with this message. If the data of
+  the model can be read, the message no longer suggests to refit the model
+  with `model = TRUE`.
+
 * `link_inverse()` and `link_function()` now work for brms custom families with
   brms-only links like `softplus` or `squareplus`.
 

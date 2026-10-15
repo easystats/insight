@@ -676,6 +676,17 @@ test_that("is_converged.coxph, predictor data changed after the fit", {
   cvx_changed <- cvx_lung[-1, ]
   .cvx_expect_not_assessed(f$fit, "predictor data changed")
 
+  # a model with a factor stores `xlevels`, which `fit$x` would match
+  cvx_changed_factor <- cvx_lung
+  f_factor <- .cvx_fit(coxph(
+    Surv(time, status) ~ age + factor(sex),
+    data = cvx_changed_factor
+  ))
+  expect_false(is.null(f_factor$fit$xlevels))
+  expect_true(is_converged(f_factor$fit))
+  cvx_changed_factor$age <- withr::with_seed(123, sample(cvx_changed_factor$age))
+  .cvx_expect_not_assessed(f_factor$fit, "predictor data changed")
+
   # with `x = TRUE`, the score residuals use the stored model matrix and
   # offset, so a changed offset variable does not matter
   cvx_changed_offset <- cvx_lung
