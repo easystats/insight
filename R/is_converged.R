@@ -147,8 +147,8 @@
 #' predictor the same, for example to a `strata()` variable, are not detected
 #' and can give a wrong result. For multi-state models, the linear predictor
 #' is compared within each transition. A change that adds the same constant to
-#' the linear predictor of all rows of a transition is not detected, but it
-#' leaves the score residuals the same. In all these
+#' all values of a predictor is not detected, but it leaves the score residuals
+#' the same. In all these
 #' cases, refit the model, or fit it with `model = TRUE`, which avoids them.
 #'
 #' @section Convergence versus Singularity:
@@ -699,8 +699,8 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       conditionMessage(infinite),
       ")."
     )
-    # the hint only if the data cannot be read: survival can also give "not
-    # found" errors for other reasons
+    # the hint only if the data cannot be read: a "not found" error does not
+    # always mean that the data are gone
     if (
       is.null(x[["model"]]) &&
         grepl("not found", conditionMessage(infinite), fixed = TRUE) &&
@@ -894,8 +894,11 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 # row, and `cmap` the coefficient of each column of the model matrix in each
 # transition (0 if the column does not enter the transition). The stored
 # predictor is centered in another way, so the two are compared up to a
-# constant within each transition. A change that shifts the linear predictor
-# of a transition by a constant does not change the score residuals.
+# constant within each transition. A change that adds the same constant to all
+# values of a predictor is therefore not detected, but it does not change the
+# score residuals either. Each transition uses only its own columns: with
+# transition-specific formulas, a column of another transition can have
+# missing values in the rows of this transition.
 .coxphms_data_changed <- function(x, mf, mm) {
   cmap <- x$cmap
   rmap <- x$rmap
@@ -912,10 +915,16 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   coefs <- stats::coef(x)
   # aliased coefficients are missing and do not enter the linear predictor
   coefs[is.na(coefs)] <- 0
-  # one column of coefficients for each transition
-  betas <- apply(cmap, 2, function(i) ifelse(i > 0, coefs[pmax(i, 1)], 0))
-  betas <- matrix(betas, nrow = nrow(cmap))
-  lp_rows <- mm[, rownames(cmap), drop = FALSE] %*% betas
+  # one column of linear predictors for each transition
+  lp_rows <- vapply(
+    seq_len(ncol(cmap)),
+    function(i) {
+      used <- cmap[, i] > 0
+      drop(mm[, rownames(cmap)[used], drop = FALSE] %*% coefs[cmap[used, i]])
+    },
+    numeric(nrow(mm))
+  )
+  lp_rows <- matrix(lp_rows, nrow = nrow(mm))
   lp <- lp_rows[rmap]
   model_offset <- stats::model.offset(mf)
   if (!is.null(model_offset)) {

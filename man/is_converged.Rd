@@ -178,8 +178,8 @@ convergence cannot be assessed either. Changes that leave the linear
 predictor the same, for example to a \code{strata()} variable, are not detected
 and can give a wrong result. For multi-state models, the linear predictor
 is compared within each transition. A change that adds the same constant to
-the linear predictor of all rows of a transition is not detected, but it
-leaves the score residuals the same. In all these
+all values of a predictor is not detected, but it leaves the score residuals
+the same. In all these
 cases, refit the model, or fit it with \code{model = TRUE}, which avoids them.
 }
 

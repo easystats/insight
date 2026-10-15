@@ -611,12 +611,14 @@ test_that("is_converged.coxph, multi-state predictor data changed after the fit"
     data = cvx_ms_changed,
     id = id
   ))
-  # `age` enters only the transition to death
+  # `age` and `hgb` enter only the transition to death. `hgb` has missing
+  # values in rows of the other transition.
   f_list <- .cvx_fit(coxph(
-    list(Surv(etime, event) ~ sex, 1:3 ~ age),
+    list(Surv(etime, event) ~ sex, 1:3 ~ age + hgb),
     data = cvx_ms_changed,
     id = id
   ))
+  expect_true(anyNA(cvx_mgus2$hgb))
   for (f in list(f_common, f_list)) {
     expect_s3_class(f$fit, "coxphms")
     expect_true(is_converged(f$fit))
