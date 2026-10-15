@@ -1445,6 +1445,80 @@ find_formula.nlmerMod <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
+find_formula.nlme <- function(x, verbose = TRUE, ...) {
+  # same layout as for nlmer models: the response with the covariates of the
+  # fixed-effect parameter formulas, the nonlinear model, and the random part
+  model_formula <- stats::formula(x)
+  # the new formulas keep the environment of the model formula, so that
+  # `get_data()` finds the data where the model was fitted
+  model_env <- environment(model_formula)
+  parameters <- names(x$plist)
+
+  # the fixed-effect terms are named "<parameter>.<term>", e.g. "Asym.Variety",
+  # or only "<parameter>" for parameter formulas like `xmid ~ 1`
+  fixed_terms <- names(x$fixDF$terms)
+  covariates <- unlist(lapply(fixed_terms, function(i) {
+    prefix <- paste0(parameters, ".")
+    prefix <- prefix[startsWith(i, prefix)]
+    if (length(prefix)) {
+      substring(i, max(nchar(prefix)) + 1)
+    } else {
+      NULL
+    }
+  }), use.names = FALSE)
+  covariates <- unique(setdiff(covariates, "(Intercept)"))
+  if (!length(covariates)) {
+    covariates <- "1"
+  }
+  f.cond <- stats::as.formula(
+    paste(
+      safe_deparse(model_formula[[2]]),
+      "~",
+      paste(covariates, collapse = " + ")
+    ),
+    env = model_env
+  )
+  f.nonlin <- stats::as.formula(
+    paste("~", safe_deparse(model_formula[[3]])),
+    env = model_env
+  )
+
+  # one random formula per grouping level, the outer level first. Inner levels
+  # are named like in lme4, e.g. "Site:Wafer" for Site within Wafer.
+  groups <- names(x$groups)
+  re_struct <- x$modelStruct$reStruct
+  f.random <- lapply(seq_along(groups), function(i) {
+    random_parameters <- unique(unlist(
+      lapply(
+        stats::formula(re_struct[[groups[i]]], asList = TRUE),
+        function(f) all.vars(f[[2]])
+      ),
+      use.names = FALSE
+    ))
+    stats::as.formula(
+      paste(
+        "~",
+        paste(random_parameters, collapse = " + "),
+        "|",
+        paste(rev(groups[seq_len(i)]), collapse = ":")
+      ),
+      env = model_env
+    )
+  })
+  if (length(f.random) == 1L) {
+    f.random <- f.random[[1]]
+  }
+
+  f <- compact_list(list(
+    conditional = f.cond,
+    nonlinear = f.nonlin,
+    random = f.random
+  ))
+  .find_formula_return(f, verbose = verbose)
+}
+
+
+#' @export
 find_formula.hglm <- function(x, verbose = TRUE, ...) {
   mc <- get_call(x)
   f.cond <- mc$fixed
