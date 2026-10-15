@@ -180,19 +180,28 @@ check. The `tolerance` argument is not used for `coxph` models.
 Convergence cannot be assessed, and `FALSE` is returned, for penalized
 models (with `frailty()`, `ridge()` or `pspline()` terms), for models
 with `ties = "exact"`, for models with `tt()` terms, for models with
-`iter.max` of 1 or less, for models fitted with `y = FALSE`, for model
-objects without a call, and if the control arguments of the model call
-or the score residuals cannot be computed. Objects of other classes that
-inherit from `coxph`, for example from
+`iter.max` of 1 or less, for models fitted with `y = FALSE`, for models
+without events, for model objects without a call, and if the control
+arguments of the model call or the score residuals cannot be computed. A
+model without events and without predictors returns `TRUE`, as other
+null models. Objects of other classes that inherit from `coxph`, for
+example from
 [`survival::clogit()`](https://rdrr.io/pkg/survival/man/clogit.html) or
 [`survey::svycoxph()`](https://rdrr.io/pkg/survey/man/svycoxph.html),
-are not supported: `NULL` is returned with a message.
+are not supported: `NULL` is returned with a message (no message if
+`verbose = FALSE`).
 
 For models with right-censored data, the score residuals are computed
 from the data of the model call, unless the model was fitted with
 `model = TRUE` or `x = TRUE`. If these data were removed after the model
-was fitted, convergence cannot be assessed. If they were changed, the
-result can be wrong. In both cases, refit the model with `model = TRUE`.
+was fitted, convergence cannot be assessed. If the predictor data were
+changed, so that the linear predictor computed from them differs from
+the one of the model, convergence cannot be assessed either. Changes
+that leave the linear predictor the same, for example to a `strata()`
+variable, are not detected and can give a wrong result. The check is
+also not done for multi-state models, where changed data can give a
+wrong result. In all these cases, refit the model, or fit it with
+`model = TRUE`, which avoids them.
 
 ## Convergence versus Singularity
 
