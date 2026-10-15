@@ -672,9 +672,13 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 # a null model fitted without events has class "coxph", not "coxph.null", and
 # no coefficients and no terms
 .coxph_is_null <- function(x) {
-  no_terms <- !length(attr(x$terms, "term.labels"))
+  term_labels <- attr(x$terms, "term.labels")
+  # clogit() replaces the class "coxph.null" of a model with only `strata()`
+  # terms, which has no coefficients
+  only_strata <- all(grepl("^(survival::)?strata\\(", term_labels))
   inherits(x, "coxph.null") ||
-    (!is.null(x$coefficients) && !length(x$coefficients) && no_terms)
+    (!is.null(x$coefficients) && !length(x$coefficients) && !length(term_labels)) ||
+    (inherits(x, "clogit") && is.null(x$coefficients) && only_strata)
 }
 
 

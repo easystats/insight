@@ -565,6 +565,17 @@ test_that("is_converged.coxph, clogit models", {
   # no message, in particular not the one for classes without a method
   expect_silent(expect_true(is_converged(f_clean$fit)))
 
+  # a null model, as for coxph models. clogit() replaces the class
+  # "coxph.null".
+  f_null <- .cvx_fit(survival::clogit(
+    case ~ survival::strata(stratum),
+    data = cvx_infert,
+    method = "efron"
+  ))
+  expect_false(inherits(f_null$fit, "coxph.null"))
+  expect_null(f_null$fit$coefficients)
+  expect_silent(expect_true(is_converged(f_null$fit)))
+
   # changed predictor data, as for coxph models
   cvx_infert_changed <- cvx_infert
   f_changed <- .cvx_fit(survival::clogit(
@@ -693,6 +704,51 @@ test_that("is_converged.coxph, multi-state predictor data changed after the fit"
   ))
   expect_true(anyDuplicated(f_shared$fit$smap[1, ]) > 0)
   expect_true(is_converged(f_shared$fit))
+  cvx_ms_shared$age <- rev(cvx_mgus2$age)
+  expect_false(.coxph_data_changed(f_shared$fit))
+
+  # strata: `smap` has more than one row
+  cvx_ms_strata <- cvx_mgus2
+  f_strata <- .cvx_fit(coxph(
+    Surv(etime, event) ~ age + strata(sex),
+    data = cvx_ms_strata,
+    id = id
+  ))
+  expect_gt(nrow(f_strata$fit$smap), 1)
+  expect_true(is_converged(f_strata$fit))
+  cvx_ms_strata$age <- rev(cvx_mgus2$age)
+  .cvx_expect_not_assessed(f_strata$fit, "predictor data changed")
+
+  # some subjects start in state "pcm", so the model has a transition out of
+  # a state other than the first one
+  cvx_ms_istate <- cvx_mgus2
+  in_pcm <- withr::with_seed(1, stats::runif(nrow(cvx_mgus2)) < 0.3)
+  cvx_ms_istate$st <- factor(
+    ifelse(in_pcm, "pcm", "censor"),
+    c("censor", "pcm", "death")
+  )
+  cvx_ms_istate$etime <- with(
+    cvx_ms_istate,
+    ifelse(!in_pcm & pstat == 1, ptime, futime)
+  )
+  cvx_ms_istate$event <- with(
+    cvx_ms_istate,
+    factor(
+      ifelse(in_pcm, 2 * death, ifelse(pstat == 1, 1, 2 * death)),
+      0:2,
+      c("censor", "pcm", "death")
+    )
+  )
+  f_istate <- .cvx_fit(coxph(
+    Surv(etime, event) ~ age + sex,
+    data = cvx_ms_istate,
+    id = id,
+    istate = st
+  ))
+  expect_identical(ncol(f_istate$fit$cmap), 3L)
+  expect_true(is_converged(f_istate$fit))
+  cvx_ms_istate$age <- rev(cvx_ms_istate$age)
+  .cvx_expect_not_assessed(f_istate$fit, "predictor data changed")
 })
 
 
@@ -709,6 +765,12 @@ test_that("is_converged.coxph, the data hint only if the data cannot be read", {
   messages <- gsub("\\s+", " ", .cvx_messages(is_converged(f_ms$fit)))
   expect_no_match(messages, "no longer available", fixed = TRUE)
 
+  # the hint is given if the data cannot be read (survival's own error)
+  cvx_hint_gone <- cvx_lung
+  f <- .cvx_fit(coxph(Surv(time, status) ~ age + sex, data = cvx_hint_gone))
+  rm(cvx_hint_gone)
+  .cvx_expect_not_assessed(f$fit, "no longer available")
+
   # the score residuals of a single-state model fail although its data can be
   # read
   local_mocked_bindings(
@@ -719,12 +781,6 @@ test_that("is_converged.coxph, the data hint only if the data cannot be read", {
   expect_match(messages, "object 'rr' not found", fixed = TRUE)
   expect_no_match(messages, "no longer available", fixed = TRUE)
   expect_false(is_converged(cvx_fits$clean$fit, verbose = FALSE))
-
-  # the hint is given if the data cannot be read
-  cvx_hint_gone <- cvx_lung
-  f <- .cvx_fit(coxph(Surv(time, status) ~ age + sex, data = cvx_hint_gone))
-  rm(cvx_hint_gone)
-  .cvx_expect_not_assessed(f$fit, "no longer available")
 })
 
 
