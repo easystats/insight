@@ -765,7 +765,8 @@ test_that("is_converged.coxph, the data hint only if the data cannot be read", {
   messages <- gsub("\\s+", " ", .cvx_messages(is_converged(f_ms$fit)))
   expect_no_match(messages, "no longer available", fixed = TRUE)
 
-  # the hint is given if the data cannot be read (survival's own error)
+  # the hint is given if the data cannot be read (not mocked: the data object
+  # is not found)
   cvx_hint_gone <- cvx_lung
   f <- .cvx_fit(coxph(Surv(time, status) ~ age + sex, data = cvx_hint_gone))
   rm(cvx_hint_gone)
