@@ -2,6 +2,19 @@
 
 ## Bug fixes
 
+* `is_converged()` for `coxph` models now returns `FALSE` with a message that
+  convergence cannot be assessed in three more cases. The first case is a
+  model without events. Before, a right-censored model without events gave
+  `TRUE`. The second case is a right-censored model whose predictor data
+  changed after the fit. Before, the result depended on the change: `TRUE`,
+  coefficients flagged as infinite, or a message that the score vector was
+  not computed. Models fitted with `model = TRUE` are not affected. The third
+  case is a model object with a missing number of iterations or missing
+  variances. Before, these gave an error or `TRUE`. A model without events
+  and without predictors now returns `TRUE`, as other null models. Before, it
+  returned `FALSE`. With `verbose = FALSE`, `is_converged()` now also gives
+  no message for models that it does not support.
+
 * `link_inverse()` and `link_function()` now work for brms custom families with
   brms-only links like `softplus` or `squareplus`.
 
