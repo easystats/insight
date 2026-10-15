@@ -271,6 +271,18 @@ get_variance.wblm <- get_variance.merMod
 get_variance.lme <- get_variance.merMod
 
 #' @export
+get_variance.nlme <- function(x, verbose = TRUE, ...) {
+  # the random effects are on the scale of the nonlinear model parameters, not
+  # on the scale of the response, so the variance decomposition does not apply
+  if (verbose) {
+    format_alert(
+      "`get_variance()` does not support nonlinear mixed models from `nlme::nlme()`."
+    )
+  }
+  NULL
+}
+
+#' @export
 get_variance.coxme <- get_variance.merMod
 
 #' @export
