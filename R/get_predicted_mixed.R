@@ -112,6 +112,11 @@ get_predicted.lme <- function(
   }
   # nonlinear models (gnls, nlme) have no terms, so they use the default method
   if (inherits(x, c("gnls", "nlme"))) {
+    if (inherits(x, "nlme") && !is.null(ci) && verbose) {
+      format_alert(
+        "Confidence intervals are not yet supported for models of class `nlme`."
+      )
+    }
     return(get_predicted.default(
       x,
       data = data,

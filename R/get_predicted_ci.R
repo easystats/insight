@@ -259,6 +259,13 @@ get_predicted_ci.multinom <- get_predicted_ci.mlm
 #' @export
 get_predicted_ci.bracl <- get_predicted_ci.mlm
 
+# the standard errors need a linear model matrix, which nonlinear mixed models
+# do not have. get_predicted() tells the user when `ci` is requested.
+#' @export
+get_predicted_ci.nlme <- function(x, ...) {
+  NULL
+}
+
 
 ## Convert to CI -----------
 

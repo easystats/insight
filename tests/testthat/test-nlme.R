@@ -139,6 +139,13 @@ test_that("get_predicted, nlme", {
       tolerance = 1e-10
     )
   }
+  # no standard errors for nonlinear mixed models, so `ci` gives a message
+  expect_message(
+    p <- get_predicted(m_nlme1, ci = 0.95),
+    regexp = "not yet supported for models of class `nlme`"
+  )
+  expect_equal(as.vector(p), as.vector(stats::predict(m_nlme1)), tolerance = 1e-10)
+  expect_null(get_predicted_ci(m_nlme1, p))
 })
 
 
