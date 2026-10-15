@@ -1,10 +1,8 @@
 skip_if_not_installed("nlme")
 
-data(Soybean, package = "nlme")
-data(Wafer, package = "nlme")
 nlme_loblolly <- datasets::Loblolly
-nlme_soybean <- Soybean
-nlme_wafer <- Wafer
+nlme_soybean <- nlme::Soybean
+nlme_wafer <- nlme::Wafer
 
 # one grouping level, taken from grouped data, no fixed-effect covariates
 m_nlme1 <- nlme::nlme(
@@ -149,6 +147,56 @@ test_that("get_predicted, nlme", {
 })
 
 
+test_that("get_predicted, nlme, data grid without random effects", {
+  # the grouping factor of the grid has no level of the model data, so the
+  # predictions are on the population level
+  grid <- get_datagrid(m_nlme2, by = "Variety")
+  expect_no_warning(p <- get_predicted(m_nlme2, data = grid))
+  grid$Plot <- NULL
+  expect_equal(
+    as.vector(p),
+    as.vector(stats::predict(m_nlme2, newdata = grid, level = 0)),
+    tolerance = 1e-10
+  )
+  # an explicit `level` is passed to predict()
+  d <- get_data(m_nlme2)[1:3, ]
+  expect_equal(
+    as.vector(get_predicted(m_nlme2, data = d, level = 0)),
+    as.vector(stats::predict(m_nlme2, newdata = d, level = 0)),
+    tolerance = 1e-10
+  )
+  # a factor level that is not in the model data gives NA for that row
+  d$Variety <- factor(c("F", "X", "P"))
+  expect_warning(
+    p <- get_predicted(m_nlme2, data = d),
+    regexp = "factor levels that are not in the model data"
+  )
+  expect_identical(is.na(as.vector(p)), c(FALSE, TRUE, FALSE))
+})
+
+
+test_that("find_formula, nlme, parameter names with dots", {
+  set.seed(123)
+  nlme_dots <- data.frame(
+    x = rep(1:10, 10),
+    w = rep(c(0, 1), 50),
+    g = factor(rep(1:10, each = 10))
+  )
+  b <- 5 + nlme_dots$w + stats::rnorm(10, 0, 0.5)[nlme_dots$g]
+  nlme_dots$y <- b + 3 * exp(-0.3 * nlme_dots$x) + stats::rnorm(100, 0, 0.1)
+  m <- nlme::nlme(
+    y ~ b + b.1 * exp(-b.2 * x),
+    data = nlme_dots,
+    fixed = list(b ~ w, b.1 ~ 1, b.2 ~ 1),
+    random = b ~ 1 | g,
+    start = c(5, 1, 3, 0.3)
+  )
+  # "b.1" and "b.2" are parameters, not terms "1" and "2" of parameter "b"
+  expect_equal(find_formula(m)$conditional, y ~ w, ignore_attr = TRUE)
+  expect_identical(find_variables(m)$conditional, "w")
+})
+
+
 test_that("find_statistic, supported_models, nlme", {
   expect_identical(find_statistic(m_nlme1), "t-statistic")
   expect_true("nlme" %in% supported_models())
@@ -162,6 +210,17 @@ test_that("get_variance, nlme", {
   )
   expect_null(out)
   expect_silent(out <- get_variance(m_nlme1, verbose = FALSE))
+  expect_null(out)
+  # `component` is the second argument, as for other models
+  expect_message(
+    out <- get_variance(m_nlme1, "random"),
+    regexp = "nonlinear mixed models"
+  )
+  expect_null(out)
+  expect_message(
+    out <- get_variance_random(m_nlme1),
+    regexp = "nonlinear mixed models"
+  )
   expect_null(out)
 })
 

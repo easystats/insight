@@ -1465,6 +1465,10 @@ find_formula.nlme <- function(x, verbose = TRUE, ...) {
   # or only "<parameter>" for parameter formulas like `xmid ~ 1`
   fixed_terms <- names(x$fixDF$terms)
   covariates <- unlist(lapply(fixed_terms, function(i) {
+    # a parameter name with a dot, like "b.1", is not "<parameter>.<term>"
+    if (i %in% parameters) {
+      return(NULL)
+    }
     prefix <- paste0(parameters, ".")
     prefix <- prefix[startsWith(i, prefix)]
     if (length(prefix)) {
