@@ -670,7 +670,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
 
 # a null model fitted without events has class "coxph", not "coxph.null", and
-# no coefficients and no terms
+# no coefficients and no terms. A null model from clogit() is handled below.
 .coxph_is_null <- function(x) {
   term_labels <- attr(x$terms, "term.labels")
   # clogit() replaces the class "coxph.null" of a model with only `strata()`

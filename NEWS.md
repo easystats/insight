@@ -17,9 +17,9 @@
 
 * `is_converged()` for `coxph` models now assesses models from
   `survival::clogit()` fitted with `method = "efron"` or `method = "breslow"`.
-  Before, it returned `NULL`. Models from `clogit()` with the default
-  `method = "exact"` now return `FALSE` with a message that convergence cannot
-  be assessed. Single-state counting-process models fitted with `y = FALSE`
+  Before, it returned `NULL`. Models from `clogit()` with predictors and the
+  default `method = "exact"` now return `FALSE` with a message that
+  convergence cannot be assessed. Single-state counting-process models fitted with `y = FALSE`
   are now assessed. The check for changed predictor data now also runs for
   multi-state models with right-censored data. If transitions share a
   baseline hazard or the model was fitted with `x = TRUE`, it does not run.
