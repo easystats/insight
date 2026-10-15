@@ -170,8 +170,9 @@ for example from \code{survey::svycoxph()}, are not supported: \code{NULL} is
 returned with a message (no message if \code{verbose = FALSE}).
 
 For models with right-censored data, the score residuals are computed from
-the data of the model call, unless the model was fitted with \code{model = TRUE}
-or \code{x = TRUE}. If these data were removed after the model was fitted,
+the data of the model call, unless the model was fitted with \code{model = TRUE},
+or with \code{x = TRUE} for single-state models. If these data were removed after
+the model was fitted,
 convergence cannot be assessed. If the predictor data were changed, so that
 the linear predictor computed from them differs from the one of the model,
 convergence cannot be assessed either. Changes that leave the linear
@@ -179,8 +180,10 @@ predictor the same, for example to a \code{strata()} variable, are not detected
 and can give a wrong result. For multi-state models, the linear predictor
 is compared within each transition. A change that adds the same constant to
 all values of a predictor is not detected, but it leaves the score residuals
-the same. In all these
-cases, refit the model, or fit it with \code{model = TRUE}, which avoids them.
+the same. The check is not done for multi-state models in which transitions
+share a baseline hazard, or that were fitted with \code{x = TRUE}. For these
+models, changed data can give a wrong result. In all these cases, refit the
+model, or fit it with \code{model = TRUE}, which avoids them.
 }
 
 \section{Convergence versus Singularity}{

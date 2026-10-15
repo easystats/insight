@@ -139,8 +139,9 @@
 #' returned with a message (no message if `verbose = FALSE`).
 #'
 #' For models with right-censored data, the score residuals are computed from
-#' the data of the model call, unless the model was fitted with `model = TRUE`
-#' or `x = TRUE`. If these data were removed after the model was fitted,
+#' the data of the model call, unless the model was fitted with `model = TRUE`,
+#' or with `x = TRUE` for single-state models. If these data were removed after
+#' the model was fitted,
 #' convergence cannot be assessed. If the predictor data were changed, so that
 #' the linear predictor computed from them differs from the one of the model,
 #' convergence cannot be assessed either. Changes that leave the linear
@@ -148,8 +149,10 @@
 #' and can give a wrong result. For multi-state models, the linear predictor
 #' is compared within each transition. A change that adds the same constant to
 #' all values of a predictor is not detected, but it leaves the score residuals
-#' the same. In all these
-#' cases, refit the model, or fit it with `model = TRUE`, which avoids them.
+#' the same. The check is not done for multi-state models in which transitions
+#' share a baseline hazard, or that were fitted with `x = TRUE`. For these
+#' models, changed data can give a wrong result. In all these cases, refit the
+#' model, or fit it with `model = TRUE`, which avoids them.
 #'
 #' @section Convergence versus Singularity:
 #' Note the different meaning between singularity and convergence: singularity
@@ -756,7 +759,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     return("The model object has no iterations or coefficients.")
   }
   # penalized models store the outer and inner iterations
-  if (inherits(x, "coxph.penal")) {
+  if (.coxph_is_penalized(x)) {
     return(paste(
       "The checks do not apply to penalized models, for example models",
       "with `frailty()`, `ridge()` or `pspline()` terms."
@@ -787,15 +790,26 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   if (is.null(x$call)) {
     return("The model has no call, so the control arguments of the fit are unknown.")
   }
-  # without the response, the checks of agreg.fit() can still be recomputed
-  # from the stored score vector (`first`) and convergence flag (`info`) of a
-  # single-state counting-process model. Right-censored models store neither.
-  no_response <- is.null(attr(x$y, "type")) &&
-    (inherits(x, "coxphms") || is.null(x$first) || is.null(x$info))
-  if (no_response) {
+  if (.coxph_no_response(x)) {
     return("The model has no response. Refit the model with `y = TRUE`.")
   }
   NULL
+}
+
+
+# a penalized clogit() model has class c("clogit", "coxph") and stores the
+# penalized terms in `pterms`
+.coxph_is_penalized <- function(x) {
+  inherits(x, "coxph.penal") || !is.null(x[["pterms"]])
+}
+
+
+# without the response, the checks of agreg.fit() can still be recomputed
+# from the stored score vector (`first`) and convergence flag (`info`) of a
+# single-state counting-process model. Right-censored models store neither.
+.coxph_no_response <- function(x) {
+  is.null(attr(x$y, "type")) &&
+    (inherits(x, "coxphms") || is.null(x$first) || is.null(x$info))
 }
 
 
@@ -902,20 +916,32 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 .coxphms_data_changed <- function(x, mf, mm) {
   cmap <- x$cmap
   rmap <- x$rmap
+  baseline <- x$smap[1, ]
   lp_stored <- x$linear.predictors
+  if (is.null(cmap) || is.null(rmap) || is.null(baseline)) {
+    return(FALSE)
+  }
+  # `rmap[, 2]` is the baseline hazard of a stacked row, numbered in the order
+  # of the transitions that have coefficients (survival drops the others from
+  # the stacked data). If transitions share a baseline hazard, the transition
+  # of a row is not stored, and the data are not compared.
+  if (anyDuplicated(baseline)) {
+    return(FALSE)
+  }
+  has_coefs <- colSums(cmap > 0) > 0
+  transition <- match(unique(baseline[has_coefs]), baseline)[rmap[, 2]]
   if (
-    is.null(cmap) ||
-      is.null(rmap) ||
-      !all(rownames(cmap) %in% colnames(mm)) ||
+    nrow(mm) != x$n ||
+      anyNA(transition) ||
       length(lp_stored) != nrow(rmap) ||
-      max(rmap[, 1]) > nrow(mm)
+      !all(rownames(cmap) %in% colnames(mm))
   ) {
     return(TRUE)
   }
   coefs <- stats::coef(x)
   # aliased coefficients are missing and do not enter the linear predictor
   coefs[is.na(coefs)] <- 0
-  # one column of linear predictors for each transition
+  # one column of linear predictors for each transition, from its own columns
   lp_rows <- vapply(
     seq_len(ncol(cmap)),
     function(i) {
@@ -925,12 +951,12 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     numeric(nrow(mm))
   )
   lp_rows <- matrix(lp_rows, nrow = nrow(mm))
-  lp <- lp_rows[rmap]
+  lp <- lp_rows[cbind(rmap[, 1], transition)]
   model_offset <- stats::model.offset(mf)
   if (!is.null(model_offset)) {
     lp <- lp + model_offset[rmap[, 1]]
   }
-  shift <- stats::ave(lp - lp_stored, rmap[, 2])
+  shift <- stats::ave(lp - lp_stored, transition)
   !isTRUE(all.equal(unname(lp - shift), unname(lp_stored)))
 }
 

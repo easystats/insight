@@ -491,10 +491,23 @@ test_that("is_converged.coxph, counting-process models fitted with `y = FALSE`",
     data = cvx_lung,
     y = FALSE
   ))
+  # weights, strata and an offset
+  f_more <- .cvx_fit(coxph(
+    Surv(start0, time, status) ~ age + tmp + strata(sex) + offset(ph.karno / 100),
+    data = cvx_lung,
+    weights = rep(1:2, 114)
+  ))
+  f_more_no_y <- .cvx_fit(coxph(
+    Surv(start0, time, status) ~ age + tmp + strata(sex) + offset(ph.karno / 100),
+    data = cvx_lung,
+    weights = rep(1:2, 114),
+    y = FALSE
+  ))
   pairs <- list(
     list(f_pass, f_pass_no_y),
     list(cvx_fits$counting_iter2, f_iter_no_y),
-    list(cvx_fits$counting, f_infinite_no_y)
+    list(cvx_fits$counting, f_infinite_no_y),
+    list(f_more, f_more_no_y)
   )
   for (p in pairs) {
     expect_null(p[[2]]$fit$y)
@@ -536,13 +549,41 @@ test_that("is_converged.coxph, clogit models", {
   expect_match(f_iter$warnings, "Ran out of iterations", fixed = TRUE)
   expect_identical(.cvx_warned_terms(f_sep), "sep")
   expect_length(f_clean$warnings, 0)
-  for (f in list(f_iter, f_sep, f_clean)) {
+  f_cluster <- .cvx_fit(survival::clogit(
+    case ~ spontaneous + sep + survival::strata(stratum),
+    data = cvx_infert,
+    method = "efron",
+    cluster = pooled.stratum
+  ))
+  for (f in list(f_iter, f_sep, f_clean, f_cluster)) {
     expect_s3_class(f$fit, "clogit")
     .cvx_expect_as_survival(f)
   }
   expect_false(is_converged(f_iter$fit, verbose = FALSE))
   expect_identical(.cvx_flagged(is_converged(f_sep$fit, verbose = FALSE)), "sep")
-  expect_true(is_converged(f_clean$fit))
+  expect_identical(.cvx_flagged(is_converged(f_cluster$fit, verbose = FALSE)), "sep")
+  # no message, in particular not the one for classes without a method
+  expect_silent(expect_true(is_converged(f_clean$fit)))
+
+  # changed predictor data, as for coxph models
+  cvx_infert_changed <- cvx_infert
+  f_changed <- .cvx_fit(survival::clogit(
+    case ~ spontaneous + induced + survival::strata(stratum),
+    data = cvx_infert_changed,
+    method = "efron"
+  ))
+  expect_true(is_converged(f_changed$fit))
+  cvx_infert_changed$induced <- rev(cvx_infert_changed$induced)
+  .cvx_expect_not_assessed(f_changed$fit, "predictor data changed")
+
+  # a penalized clogit() model has class c("clogit", "coxph")
+  f_penal <- .cvx_fit(survival::clogit(
+    case ~ spontaneous + survival::ridge(induced, theta = 1) + survival::strata(stratum),
+    data = cvx_infert,
+    method = "efron"
+  ))
+  expect_false(inherits(f_penal$fit, "coxph.penal"))
+  .cvx_expect_not_assessed(f_penal$fit, "penalized")
 
   # the default method of clogit() is "exact"
   f_exact <- .cvx_fit(survival::clogit(
@@ -636,11 +677,40 @@ test_that("is_converged.coxph, multi-state predictor data changed after the fit"
   for (f in list(f_common, f_list)) {
     .cvx_expect_not_assessed(f$fit, "predictor data changed")
   }
+
+  # rows added to the data
+  cvx_ms_changed <- rbind(cvx_mgus2, cvx_mgus2[1:5, ])
+  cvx_ms_changed$id[nrow(cvx_mgus2) + 1:5] <- max(cvx_mgus2$id) + 1:5
+  .cvx_expect_not_assessed(f_common$fit, "predictor data changed")
+
+  # if transitions share a baseline hazard, the transition of a stacked row is
+  # not stored, and the data are not compared
+  cvx_ms_shared <- cvx_mgus2
+  f_shared <- .cvx_fit(coxph(
+    list(Surv(etime, event) ~ age + sex, 1:2 + 1:3 ~ 1 / shared),
+    data = cvx_ms_shared,
+    id = id
+  ))
+  expect_true(anyDuplicated(f_shared$fit$smap[1, ]) > 0)
+  expect_true(is_converged(f_shared$fit))
 })
 
 
 test_that("is_converged.coxph, the data hint only if the data cannot be read", {
-  # the score residuals fail although the data of the model can be read
+  # survival gives this error for a multi-state model with a transition
+  # without predictors, whose data are present
+  cvx_hint_ms <- cvx_mgus2
+  f_ms <- .cvx_fit(coxph(
+    list(Surv(etime, event) ~ 1, 1:3 ~ age),
+    data = cvx_hint_ms,
+    id = id
+  ))
+  .cvx_expect_not_assessed(f_ms$fit, "object 'rr' not found")
+  messages <- gsub("\\s+", " ", .cvx_messages(is_converged(f_ms$fit)))
+  expect_no_match(messages, "no longer available", fixed = TRUE)
+
+  # the score residuals of a single-state model fail although its data can be
+  # read
   local_mocked_bindings(
     .coxph_infinite = function(...) stop("object 'rr' not found", call. = FALSE)
   )
@@ -733,7 +803,7 @@ test_that("is_converged.coxph, model objects with broken elements", {
     data = cvx_broken_no_events
   ))$fit
   no_nevent$nevent <- NULL
-  .cvx_expect_not_assessed(no_nevent, "iterations")
+  .cvx_expect_not_assessed(no_nevent, "no valid number of iterations")
 })
 
 
