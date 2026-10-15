@@ -806,10 +806,45 @@ link_inverse.mira <- function(x, ...) {
 
 # helper --------------
 
+# links that are known by brms, but not by `stats::make.link()`
+.brms_make_link <- function(link) {
+  switch(link,
+    logm1 = list(linkfun = function(mu) log(mu - 1), linkinv = function(eta) 1 + exp(eta)),
+    log1p = list(linkfun = function(mu) log1p(mu), linkinv = function(eta) expm1(eta)),
+    tan_half = list(linkfun = function(mu) tan(mu / 2), linkinv = function(eta) 2 * atan(eta)),
+    probit_approx = list(
+      linkfun = function(mu) stats::qnorm(mu),
+      linkinv = function(eta) stats::pnorm(eta)
+    ),
+    softplus = list(
+      linkfun = function(mu) mu + log(-expm1(-mu)),
+      linkinv = function(eta) pmax(eta, 0) + log1p(exp(-abs(eta)))
+    ),
+    squareplus = list(
+      linkfun = function(mu) (mu^2 - 1) / mu,
+      linkinv = function(eta) {
+        ifelse(eta >= 0, (eta + sqrt(eta^2 + 4)) / 2, 2 / (sqrt(eta^2 + 4) - eta))
+      }
+    ),
+    softit = list(
+      linkfun = function(mu) {
+        odds <- mu / (1 - mu)
+        odds + log(-expm1(-odds))
+      },
+      linkinv = function(eta) {
+        s <- pmax(eta, 0) + log1p(exp(-abs(eta)))
+        ifelse(s == Inf, 1, s / (1 + s))
+      }
+    ),
+    stats::make.link(link)
+  )
+}
+
+
 .brms_link_inverse <- function(fam) {
   # do we have custom families?
   if (!is.null(fam$family) && (is.character(fam$family) && fam$family == "custom")) {
-    il <- stats::make.link(fam$link)$linkinv
+    il <- .brms_make_link(fam$link)$linkinv
   } else if ("linkinv" %in% names(fam)) {
     il <- fam$linkinv
   } else if ("link" %in% names(fam) && is.character(fam$link)) {

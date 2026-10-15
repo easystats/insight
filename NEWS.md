@@ -15,6 +15,9 @@
   returned `FALSE`. With `verbose = FALSE`, `is_converged()` now also gives
   no message for models that it does not support.
 
+* `link_inverse()` and `link_function()` now work for brms custom families with
+  brms-only links like `softplus` or `squareplus`.
+
 * `export_table(format = "html")` now applies `align` to the columns that the
   table shows, in the order shown. `align = "left"`, `"right"` or `"center"`
   aligns all columns. Before, `export_table()` read these words as one
@@ -26,19 +29,20 @@
   columns only. Columns that `column_groups` moves under a spanner take the
   character of their shown position. Extra characters are ignored.
 
-* `null_model()` now works for models from `nlme::lme()` and
-  `MASS::glmmPQL()`. Before, it failed, so `get_variance()` returned a
-  distribution-specific variance of 0 for `glmmPQL` models of families such as
-  Poisson.
-
-# insight 1.6.0
-
-## Bug fixes
+* If one group column has one value, or a `by` column is not in the data,
+  `export_table(format = "html")` now makes row groups from the other group
+  columns with two or more values. Before, it made no row groups in these
+  cases. With `row_groups`, it still makes no row groups in these cases.
 
 * `get_variance()` no longer returns `NULL` for models from `MASS::glmmPQL()`.
   `get_modelmatrix()` failed for these models with the error
   `object 'zz' not found`, because the model terms have the working response
   of the fitting algorithm.
+
+* `null_model()` now works for models from `nlme::lme()` and
+  `MASS::glmmPQL()`. Before, it failed, so `get_variance()` returned a
+  distribution-specific variance of 0 for `glmmPQL` models of families such as
+  Poisson.
 
 # insight 1.6.0
 
@@ -105,11 +109,6 @@
   supported (#1090).
 
 ## Bug fixes
-
-* If one group column has one value, or a `by` column is not in the data,
-  `export_table(format = "html")` now makes row groups from the other group
-  columns with two or more values. Before, it made no row groups in these
-  cases. With `row_groups`, it still makes no row groups in these cases.
 
 * `find_parameters()` and `clean_parameters()` now work for multivariate
   *brms* models with addition terms in the response, such as `resp_weights()`
