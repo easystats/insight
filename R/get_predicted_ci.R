@@ -260,9 +260,14 @@ get_predicted_ci.multinom <- get_predicted_ci.mlm
 get_predicted_ci.bracl <- get_predicted_ci.mlm
 
 # the standard errors need a linear model matrix, which nonlinear mixed models
-# do not have. get_predicted() tells the user when `ci` is requested.
+# do not have
 #' @export
-get_predicted_ci.nlme <- function(x, ...) {
+get_predicted_ci.nlme <- function(x, predictions = NULL, ci = 0.95, verbose = TRUE, ...) {
+  if (!is.null(ci) && isTRUE(verbose)) {
+    format_alert(
+      "Confidence intervals are not yet supported for models of class `nlme`."
+    )
+  }
   NULL
 }
 

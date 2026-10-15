@@ -143,7 +143,15 @@ test_that("get_predicted, nlme", {
     regexp = "not yet supported for models of class `nlme`"
   )
   expect_equal(as.vector(p), as.vector(stats::predict(m_nlme1)), tolerance = 1e-10)
-  expect_null(get_predicted_ci(m_nlme1, p))
+  expect_silent(get_predicted(m_nlme1, ci = 0.95, verbose = FALSE))
+  # called directly, get_predicted_ci() also gives the message
+  expect_message(
+    out <- get_predicted_ci(m_nlme1, p),
+    regexp = "not yet supported for models of class `nlme`"
+  )
+  expect_null(out)
+  expect_silent(out <- get_predicted_ci(m_nlme1, p, verbose = FALSE))
+  expect_null(out)
 })
 
 
@@ -151,6 +159,8 @@ test_that("get_predicted, nlme, data grid without random effects", {
   # the grouping factor of the grid has no level of the model data, so the
   # predictions are on the population level
   grid <- get_datagrid(m_nlme2, by = "Variety")
+  expect_true(all(grid$Plot == 0))
+  expect_false(any(as.character(grid$Plot) %in% levels(nlme_soybean$Plot)))
   expect_no_warning(p <- get_predicted(m_nlme2, data = grid))
   grid$Plot <- NULL
   expect_equal(
@@ -163,6 +173,15 @@ test_that("get_predicted, nlme, data grid without random effects", {
   expect_equal(
     as.vector(get_predicted(m_nlme2, data = d, level = 0)),
     as.vector(stats::predict(m_nlme2, newdata = d, level = 0)),
+    tolerance = 1e-10
+  )
+  # a data column named like a parameter is not checked as a variable
+  d_par <- d
+  d_par$Asym <- NA
+  expect_no_warning(p <- get_predicted(m_nlme2, data = d_par))
+  expect_equal(
+    as.vector(p),
+    as.vector(stats::predict(m_nlme2, newdata = d)),
     tolerance = 1e-10
   )
   # a factor level that is not in the model data gives NA for that row

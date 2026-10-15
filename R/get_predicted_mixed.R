@@ -110,13 +110,6 @@ get_predicted.lme <- function(
   if (is.null(data) && !is.null(dots$newdata)) {
     data <- dots$newdata
   }
-  # nlme models have no standard errors for predictions (see
-  # get_predicted_ci.nlme()), but use the lme path below for new data
-  if (inherits(x, "nlme") && !is.null(ci) && verbose) {
-    format_alert(
-      "Confidence intervals are not yet supported for models of class `nlme`."
-    )
-  }
   # gnls models have no terms, so they use the default method
   if (inherits(x, "gnls")) {
     return(get_predicted.default(
@@ -187,6 +180,7 @@ get_predicted.lme <- function(
     ci_method = ci_method,
     vcov = vcov,
     vcov_args = vcov_args,
+    verbose = verbose,
     ...
   ))
 
@@ -224,10 +218,13 @@ get_predicted.gls <- get_predicted.lme
   model_data <- get_data(x, verbose = FALSE)
   if (inherits(x, "nlme")) {
     # nlme models have no terms. The fixed-effect variables are the covariates
-    # of the parameter formulas and the variables of the nonlinear model, whose
-    # parameter names are not columns of `data`.
+    # of the parameter formulas and the variables of the nonlinear model, less
+    # the parameter names, which `data` can also have as columns.
     f <- find_formula(x, verbose = FALSE)
-    model_vars <- c(all.vars(f$conditional[[3]]), all.vars(f$nonlinear))
+    model_vars <- setdiff(
+      c(all.vars(f$conditional[[3]]), all.vars(f$nonlinear)),
+      names(x$plist)
+    )
   } else {
     model_vars <- all.vars(stats::delete.response(stats::terms(x)))
   }
