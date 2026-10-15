@@ -2,6 +2,9 @@
 
 ## Bug fixes
 
+* `link_inverse()` and `link_function()` now work for brms custom families with
+  brms-only links like `softplus` or `squareplus`.
+
 * `export_table(format = "html")` now applies `align` to the columns that the
   table shows, in the order shown. `align = "left"`, `"right"` or `"center"`
   aligns all columns. Before, `export_table()` read these words as one
