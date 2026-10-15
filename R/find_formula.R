@@ -64,10 +64,11 @@
 #'   the formula that describes the correlation structure
 #'
 #' - `nonlinear`, for nonlinear mixed models like `lme4::nlmer()` or
-#'   `nlme::nlme()`, the right-hand side of the nonlinear model formula. For
-#'   `nlme::nlme()` models, `conditional` has the response and the covariates
-#'   of the fixed-effect parameter formulas, and `random` has one formula for
-#'   each grouping level, like `~ Asym | Plot`.
+#'   `nlme::nlme()`, the nonlinear model as a one-sided formula, like
+#'   `~ SSlogis(Time, Asym, xmid, scal)`. For `nlme::nlme()` models,
+#'   `conditional` has the response and the covariates of the fixed-effect
+#'   parameter formulas, and `random` has one formula for each grouping level,
+#'   like `~ Asym | Plot`.
 #'
 #' - `scale`, for distributional models such as `mgcv::gaulss()` family fitted
 #'   with `mgcv::gam()`, the formula that describes the scale parameter
