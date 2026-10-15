@@ -21,8 +21,9 @@
   `method = "exact"` now return `FALSE` with a message that convergence cannot
   be assessed. Single-state counting-process models fitted with `y = FALSE`
   are now assessed. The check for changed predictor data now also runs for
-  multi-state models with right-censored data, unless transitions share a
-  baseline hazard. It also runs for models with factor predictors or a
+  multi-state models with right-censored data. If transitions share a
+  baseline hazard or the model was fitted with `x = TRUE`, it does not run.
+  It also runs for models with factor predictors or a
   `strata()` term, which skipped it before. If the predictor data of these
   models changed after the fit, they now return `FALSE` with a message that
   convergence cannot be assessed. Before, the result depended on the change,
