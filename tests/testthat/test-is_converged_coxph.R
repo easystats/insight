@@ -861,6 +861,11 @@ test_that("is_converged.coxph, model objects with broken elements", {
   ))$fit
   no_nevent$nevent <- NULL
   .cvx_expect_not_assessed(no_nevent, "no valid number of iterations")
+  # a multi-state model without the maps of the stacked data: no error
+  no_smap <- cvx_fits$ms_right$fit
+  no_smap$smap <- NULL
+  expect_false(.coxph_data_changed(no_smap))
+  .cvx_expect_not_assessed(no_smap, "score vector could not be computed")
 })
 
 

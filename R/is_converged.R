@@ -918,13 +918,13 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 # transition-specific formulas, a column of another transition can have
 # missing values in the rows of this transition.
 .coxphms_data_changed <- function(x, mf, mm) {
-  cmap <- x$cmap
-  rmap <- x$rmap
-  baseline <- x$smap[1, ]
-  lp_stored <- x$linear.predictors
-  if (is.null(cmap) || is.null(rmap) || is.null(baseline)) {
+  if (!.coxphms_has_maps(x)) {
     return(FALSE)
   }
+  cmap <- x$cmap
+  rmap <- x$rmap
+  lp_stored <- x$linear.predictors
+  baseline <- x$smap[1, ]
   # `rmap[, 2]` is the baseline hazard of a stacked row, numbered in the order
   # of the transitions that have coefficients (survival drops the others from
   # the stacked data). If transitions share a baseline hazard, the transition
@@ -962,6 +962,13 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   }
   shift <- stats::ave(lp - lp_stored, transition)
   !isTRUE(all.equal(unname(lp - shift), unname(lp_stored)))
+}
+
+
+# the maps of the stacked data that .coxphms_data_changed() reads; a model
+# object without them is not compared
+.coxphms_has_maps <- function(x) {
+  is.matrix(x$cmap) && is.matrix(x$rmap) && is.matrix(x$smap) && nrow(x$smap) > 0
 }
 
 
