@@ -1,5 +1,17 @@
 # insight (devel)
 
+## New supported models
+
+* Support for models of class `nlme` from `nlme::nlme()`. `find_formula()`
+  returns the same parts as for `lme4::nlmer()` models. `conditional` has the
+  response and the covariates of the fixed-effect parameter formulas.
+  `nonlinear` has the nonlinear model, and `random` has the random part.
+  Functions that use the formula, like `find_variables()`, `get_response()`,
+  `get_random()` and `get_predicted()`, now work for these models. Confidence
+  intervals for predictions are not yet supported. `get_variance()` returns
+  `NULL` with a message, because the random effects are on the scale of the
+  nonlinear parameters.
+
 ## Bug fixes
 
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that

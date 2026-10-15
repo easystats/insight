@@ -78,6 +78,11 @@ component of the model; for models from \emph{brms}, this component is named
 specification
 \item \code{correlation}, for models with correlation-component like \code{nlme::gls()},
 the formula that describes the correlation structure
+\item \code{nonlinear}, for nonlinear mixed models like \code{lme4::nlmer()} or
+\code{nlme::nlme()}, the right-hand side of the nonlinear model formula. For
+\code{nlme::nlme()} models, \code{conditional} has the response and the covariates
+of the fixed-effect parameter formulas, and \code{random} has one formula for
+each grouping level, like \code{~ Asym | Plot}.
 \item \code{scale}, for distributional models such as \code{mgcv::gaulss()} family fitted
 with \code{mgcv::gam()}, the formula that describes the scale parameter
 \item \code{slopes}, for fixed-effects individual-slope models like \code{feisr::feis()},
