@@ -120,6 +120,16 @@ returned list may have following elements:
   [`nlme::gls()`](https://rdrr.io/pkg/nlme/man/gls.html), the formula
   that describes the correlation structure
 
+- `nonlinear`, for nonlinear mixed models like
+  [`lme4::nlmer()`](https://rdrr.io/pkg/lme4/man/nlmer.html) or
+  [`nlme::nlme()`](https://rdrr.io/pkg/nlme/man/nlme.html), the
+  nonlinear model as a one-sided formula, like
+  `~ SSlogis(Time, Asym, xmid, scal)`. For
+  [`nlme::nlme()`](https://rdrr.io/pkg/nlme/man/nlme.html) models,
+  `conditional` has the response and the covariates of the fixed-effect
+  parameter formulas, and `random` has one formula for each grouping
+  level, like `~ Asym | Plot`.
+
 - `scale`, for distributional models such as
   [`mgcv::gaulss()`](https://rdrr.io/pkg/mgcv/man/gaulss.html) family
   fitted with [`mgcv::gam()`](https://rdrr.io/pkg/mgcv/man/gam.html),
@@ -153,7 +163,7 @@ m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 find_formula(m)
 #> $conditional
 #> mpg ~ wt + cyl + vs
-#> <environment: 0x55efb457dbe8>
+#> <environment: 0x55d8060f1790>
 #> 
 #> attr(,"class")
 #> [1] "insight_formula" "list"           
@@ -163,11 +173,11 @@ f <- find_formula(m)
 f
 #> $conditional
 #> Sepal.Length ~ Sepal.Width
-#> <environment: 0x55efb457dbe8>
+#> <environment: 0x55d8060f1790>
 #> 
 #> $random
 #> ~1 | Species
-#> <environment: 0x55efb4ef98e8>
+#> <environment: 0x55d806a71298>
 #> 
 #> attr(,"class")
 #> [1] "insight_formula" "list"           

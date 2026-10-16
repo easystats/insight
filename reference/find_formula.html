@@ -160,6 +160,12 @@ component of the model; for models from <em>brms</em>, this component is named
 specification</p></li>
 <li><p><code>correlation</code>, for models with correlation-component like <code><a href="https://rdrr.io/pkg/nlme/man/gls.html" class="external-link">nlme::gls()</a></code>,
 the formula that describes the correlation structure</p></li>
+<li><p><code>nonlinear</code>, for nonlinear mixed models like <code><a href="https://rdrr.io/pkg/lme4/man/nlmer.html" class="external-link">lme4::nlmer()</a></code> or
+<code><a href="https://rdrr.io/pkg/nlme/man/nlme.html" class="external-link">nlme::nlme()</a></code>, the nonlinear model as a one-sided formula, like
+<code>~ SSlogis(Time, Asym, xmid, scal)</code>. For <code><a href="https://rdrr.io/pkg/nlme/man/nlme.html" class="external-link">nlme::nlme()</a></code> models,
+<code>conditional</code> has the response and the covariates of the fixed-effect
+parameter formulas, and <code>random</code> has one formula for each grouping level,
+like <code>~ Asym | Plot</code>.</p></li>
 <li><p><code>scale</code>, for distributional models such as <code><a href="https://rdrr.io/pkg/mgcv/man/gaulss.html" class="external-link">mgcv::gaulss()</a></code> family fitted
 with <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">mgcv::gam()</a></code>, the formula that describes the scale parameter</p></li>
 <li><p><code>slopes</code>, for fixed-effects individual-slope models like <code><a href="https://rdrr.io/pkg/feisr/man/feis.html" class="external-link">feisr::feis()</a></code>,
@@ -184,7 +190,7 @@ returned, when it is explicitly defined as named argument (<code>form</code>), e
 <span class="r-in"><span><span class="fu">find_formula</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mpg ~ wt + cyl + vs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55efb457dbe8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55d8060f1790&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_formula" "list"           </span>
@@ -194,11 +200,11 @@ returned, when it is explicitly defined as named argument (<code>form</code>), e
 <span class="r-in"><span><span class="va">f</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conditional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length ~ Sepal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55efb457dbe8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55d8060f1790&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $random</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~1 | Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55efb4ef98e8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55d806a71298&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "insight_formula" "list"           </span>
