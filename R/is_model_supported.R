@@ -99,7 +99,7 @@ supported_models <- function() {
     "multinom", "mvord", "mmclogit", "mmrm", "mmrm_fit", "mmrm_tmb", "multinom_weightit",
 
     # n ----------------------------
-    "negbinmfx", "negbinirr", "nestedLogit",
+    "negbinmfx", "negbinirr", "nestedLogit", "nlme",
 
     # o ----------------------------
     "ols", "onesampb", "orm", "ordinal_weightit", "oohbchoice",
