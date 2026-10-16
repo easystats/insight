@@ -2,6 +2,13 @@
 
 ## Bug fixes
 
+* `get_sigma()` for models from package _VGAM_ now returns the standard
+  deviation parameter of families that have one, such as `uninormal()`,
+  `tobit()` or `binormal()`. Before, it returned a wrong value. A model with
+  more than one standard deviation parameter returns one value for each. If
+  the standard deviation is modeled with predictors, `get_sigma()` returns
+  `NULL`.
+
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that
   convergence cannot be assessed in three more cases. The first case is a
   model without events. Before, a right-censored model without events gave

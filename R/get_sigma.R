@@ -149,8 +149,40 @@ get_sigma <- function(x, ci = NULL, verbose = TRUE, ...) {
 }
 
 
-.get_sigma.VGAM <- function(x, ...) {
-  s <- .safe(exp(stats::coef(x)[["(Intercept):2"]]))
+.get_sigma.vglm <- function(x, verbose = TRUE, ...) {
+  # VGAM families with a standard deviation parameter name it "sd", or "sd1",
+  # "sd2", ... for multivariate families and multiple responses
+  links <- x@misc$link
+  sd_index <- grep("^sd[0-9]*$", names(links))
+  if (!length(sd_index)) {
+    return(.get_sigma.default(x, verbose = verbose, ...))
+  }
+  check_if_installed("VGAM")
+
+  s <- .safe(vapply(
+    sd_index,
+    function(i) {
+      values <- VGAM::eta2theta(
+        x@predictors[, i],
+        link = links[[i]],
+        earg = x@misc$earg[[i]]
+      )
+      # if sigma is modelled with predictors, there is no single sigma
+      if (isTRUE(all.equal(min(values), max(values)))) {
+        values[1]
+      } else {
+        NA_real_
+      }
+    },
+    numeric(1)
+  ))
+
+  if (is_empty_object(s) || anyNA(s)) {
+    return(NULL)
+  }
+  if (length(s) > 1) {
+    names(s) <- names(links)[sd_index]
+  }
   class(s) <- c("insight_aux", class(s))
   s
 }
