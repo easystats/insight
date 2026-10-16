@@ -14,6 +14,13 @@
 
 ## Bug fixes
 
+* `get_sigma()` for models from package _VGAM_ now returns the standard
+  deviation parameter of families that have one, such as `uninormal()`,
+  `tobit()` or `binormal()`. Before, it returned a wrong value. A model with
+  more than one standard deviation parameter returns one value for each. If
+  the standard deviation is modeled with predictors, `get_sigma()` returns
+  `NULL`.
+
 * `get_loglikelihood()` for `mgcv::gamm()` and `gamm4::gamm4()` models now
   returns the log-likelihood of the mixed model part (`$lme` or `$mer`), which
   includes the random effects. Before, it used only the `$gam` part. For
