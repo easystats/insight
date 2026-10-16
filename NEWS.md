@@ -12,6 +12,15 @@
   supported. `get_variance()` returns `NULL` with a message, because the
   random effects are on the scale of the nonlinear parameters.
 
+## Changes
+
+* `get_modelmatrix()` now works for models from `stats::arima()` (#1274). It
+  returns the columns of the `xreg` regressors, named like the coefficients.
+  For a model with an intercept, the first column is the intercept.
+  `stats::arima()` does not store `xreg`, so it is evaluated from the model
+  call, and the object must still exist. Models from `forecast::Arima()` use
+  their stored regressors. New data is not supported.
+
 ## Bug fixes
 
 * `get_sigma()` for models from package _VGAM_ now returns the standard

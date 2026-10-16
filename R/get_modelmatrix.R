@@ -166,6 +166,83 @@ get_modelmatrix.clmm <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.Arima <- function(x, ...) {
+  if (!is.null(list(...)$data)) {
+    format_error("New data is not supported for arima models.")
+  }
+  # in `coef()`, the regression coefficients follow the AR, MA, SAR and SMA
+  # coefficients. arima() names the intercept "intercept", the other
+  # coefficients take the column names of `xreg`.
+  params <- stats::coef(x)
+  regression_names <- names(params)[seq_along(params) > sum(x$arma[1:4])]
+  n_obs <- length(x$residuals)
+
+  # forecast::Arima() fits store `xreg`, stats::arima() fits only the call.
+  # We use `[[`, because `$` would partially match other arguments.
+  xreg <- x$xreg
+  xreg_call <- x$call[["xreg"]]
+  xreg_label <- if (is.null(xreg) && !is.null(xreg_call)) {
+    safe_deparse(xreg_call)
+  } else {
+    "xreg"
+  }
+  if (is.null(xreg) && !is.null(xreg_call)) {
+    # first try, parent frame, second try, global env
+    xreg <- .safe(eval(xreg_call, envir = parent.frame()))
+    if (is.null(xreg)) {
+      xreg <- .safe(eval(xreg_call, envir = globalenv()))
+    }
+    if (is.null(xreg)) {
+      format_error(paste0(
+        "Could not find the regressors `",
+        xreg_label,
+        "` of the arima model. The object must exist in the environment where",
+        " `get_modelmatrix()` is called, or in the global environment."
+      ))
+    }
+  }
+  if (is.null(xreg)) {
+    xreg <- matrix(numeric(0), nrow = n_obs, ncol = 0)
+  }
+  xreg <- as.matrix(xreg)
+
+  # an object of the same name may hold other values than those used to fit
+  # the model, so we check the number of rows and columns
+  if (nrow(xreg) != n_obs) {
+    format_error(paste0(
+      "The regressors `",
+      xreg_label,
+      "` have ",
+      nrow(xreg),
+      " rows, but the model has ",
+      n_obs,
+      " observations."
+    ))
+  }
+  has_intercept <- length(regression_names) == ncol(xreg) + 1 &&
+    regression_names[1] == "intercept"
+  if (!has_intercept && length(regression_names) != ncol(xreg)) {
+    format_error(paste0(
+      "The regressors `",
+      xreg_label,
+      "` have ",
+      ncol(xreg),
+      " columns, but the model has ",
+      length(regression_names),
+      " regression coefficients."
+    ))
+  }
+  if (has_intercept) {
+    xreg <- cbind(1, xreg)
+  }
+  matrix(
+    as.numeric(xreg),
+    nrow = n_obs,
+    dimnames = list(NULL, regression_names)
+  )
+}
+
+#' @export
 get_modelmatrix.svyglm <- function(x, ...) {
   dots <- list(...)
   if ("data" %in% names(dots)) {
