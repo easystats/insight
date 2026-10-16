@@ -199,7 +199,7 @@ get_loglikelihood.gamm <- function(
     return(out)
   }
 
-  if (inherits(x, "gamm4")) {
+  if (object_has_names(x, "mer")) {
     mixed <- x$mer
   } else {
     mixed <- x$lme
@@ -230,7 +230,14 @@ get_loglikelihood.gamm <- function(
 get_loglikelihood.gamm4 <- get_loglikelihood.gamm
 
 #' @export
-get_loglikelihood.list <- get_loglikelihood.lm
+get_loglikelihood.list <- function(x, ...) {
+  # gamm4 objects from older gamm4 versions have no "gamm4" class
+  if (all(object_has_names(x, c("mer", "gam")))) {
+    get_loglikelihood.gamm(x, ...)
+  } else {
+    get_loglikelihood.lm(x, ...)
+  }
+}
 
 
 #' @export

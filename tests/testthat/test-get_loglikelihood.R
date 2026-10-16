@@ -349,6 +349,9 @@ test_that("get_loglikelihood - gamm4 uses the mer part", {
   ll <- get_loglikelihood(x, estimator = "ML")
   ll2 <- stats::logLik(x$mer, REML = FALSE)
   expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-6)
+  # older gamm4 versions return a plain list
+  ll <- get_loglikelihood(unclass(x))
+  expect_equal(as.numeric(ll), as.numeric(stats::logLik(x$mer)), tolerance = 1e-6)
 })
 
 test_that("get_loglikelihood - lme and gls, ML for REML fits", {
