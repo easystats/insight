@@ -106,7 +106,9 @@ rather \code{variable}).
 \note{
 For models of class \code{lme}, \code{nlme} or \code{gls} the correlation-component is only
 returned, when it is explicitly defined as named argument (\code{form}), e.g.
-\code{corAR1(form = ~1 | Mare)}
+\code{corAR1(form = ~1 | Mare)}, or when the correlation structure is passed as
+an object that \code{find_formula()} can find. In the latter case, the formula of
+that object is returned, which is \code{~1} if it has no \code{form}.
 }
 \examples{
 \dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}

@@ -86,7 +86,9 @@
 #'
 #' @note For models of class `lme`, `nlme` or `gls` the correlation-component is only
 #' returned, when it is explicitly defined as named argument (`form`), e.g.
-#' `corAR1(form = ~1 | Mare)`
+#' `corAR1(form = ~1 | Mare)`, or when the correlation structure is passed as
+#' an object that `find_formula()` can find. In the latter case, the formula of
+#' that object is returned, which is `~1` if it has no `form`.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(mtcars)
@@ -1662,8 +1664,8 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
   .find_formula_return(f, verbose = verbose)
 }
 
-# the formula of the correlation structure of lme and nlme objects, read from
-# the call
+# the formula of the correlation structure of lme, glmmPQL and nlme objects,
+# read from the call, or from the structure object that the call names
 .lme_correlation_formula <- function(x) {
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
