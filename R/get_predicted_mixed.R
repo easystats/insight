@@ -110,8 +110,8 @@ get_predicted.lme <- function(
   if (is.null(data) && !is.null(dots$newdata)) {
     data <- dots$newdata
   }
-  # nonlinear models (gnls, nlme) have no terms, so they use the default method
-  if (inherits(x, c("gnls", "nlme"))) {
+  # gnls models have no terms, so they use the default method
+  if (inherits(x, "gnls")) {
     return(get_predicted.default(
       x,
       data = data,
@@ -180,6 +180,7 @@ get_predicted.lme <- function(
     ci_method = ci_method,
     vcov = vcov,
     vcov_args = vcov_args,
+    verbose = verbose,
     ...
   ))
 
@@ -215,10 +216,19 @@ get_predicted.gls <- get_predicted.lme
 # .get_predicted_args() sets missing grouping columns to NA.
 .lme_unusable_rows <- function(x, data, verbose = TRUE) {
   model_data <- get_data(x, verbose = FALSE)
-  fixed_vars <- intersect(
-    all.vars(stats::delete.response(stats::terms(x))),
-    colnames(data)
-  )
+  if (inherits(x, "nlme")) {
+    # nlme models have no terms. The fixed-effect variables are the covariates
+    # of the parameter formulas and the variables of the nonlinear model, less
+    # the parameter names, which `data` can also have as columns.
+    f <- find_formula(x, verbose = FALSE)
+    model_vars <- setdiff(
+      c(all.vars(f$conditional[[3]]), all.vars(f$nonlinear)),
+      names(x$plist)
+    )
+  } else {
+    model_vars <- all.vars(stats::delete.response(stats::terms(x)))
+  }
+  fixed_vars <- intersect(model_vars, colnames(data))
   bad_rows <- rep(FALSE, nrow(data))
   bad_columns <- NULL
   for (i in fixed_vars) {

@@ -1,5 +1,17 @@
 # insight (devel)
 
+## New supported models
+
+* Support for models of class `nlme` from `nlme::nlme()`. `find_formula()`
+  returns the same parts as for `lme4::nlmer()` models: `conditional`,
+  `nonlinear` and `random`. `conditional` has the response and the covariates
+  of the fixed-effect parameter formulas. `nonlinear` has the nonlinear model,
+  and `random` has the random part. Functions that use the formula, like
+  `find_variables()`, `get_response()`, `get_random()` and `get_predicted()`,
+  now work for these models. Confidence intervals for predictions are not yet
+  supported. `get_variance()` returns `NULL` with a message, because the
+  random effects are on the scale of the nonlinear parameters.
+
 ## Bug fixes
 
 * `get_sigma()` for models from package _VGAM_ now returns the standard
@@ -8,6 +20,16 @@
   more than one standard deviation parameter returns one value for each. If
   the standard deviation is modeled with predictors, `get_sigma()` returns
   `NULL`.
+
+* `get_loglikelihood()` for `mgcv::gamm()` and `gamm4::gamm4()` models now
+  returns the log-likelihood of the mixed model part (`$lme` or `$mer`), which
+  includes the random effects. Before, it used only the `$gam` part. For
+  `gamm()` models fitted by PQL, it now returns `NA` with a warning, because
+  the log-likelihood of the PQL working model is not the one of the GAMM.
+
+* `get_loglikelihood()` for `nlme::lme()` and `nlme::gls()` models fitted by
+  REML now returns the ML log-likelihood with `estimator = "ML"`. Before,
+  `estimator` was ignored.
 
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that
   convergence cannot be assessed in three more cases. The first case is a

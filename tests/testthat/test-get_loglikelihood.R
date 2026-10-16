@@ -277,17 +277,104 @@ test_that("get_loglikelihood - mgcv", {
   expect_equal(as.numeric(ll), -96.26613, tolerance = 1e-3)
   # TODO: I'm not sure why this differes :/
   # expect_equal(as.numeric(ll), as.numeric(ll2))
-
-  x <- mgcv::gamm(Sepal.Length ~ s(Petal.Width), random = list(Species = ~1), data = iris)
-  # Which one to get?
 })
 
-test_that("get_loglikelihood - gamm4", {
+test_that("get_loglikelihood - gamm uses the lme part", {
+  skip_if_not_installed("mgcv")
+  skip_if_not_installed("nlme")
+  x <- mgcv::gamm(
+    Sepal.Length ~ s(Petal.Width) + Petal.Length,
+    random = list(Species = ~1),
+    data = iris
+  )
+  ll <- get_loglikelihood(x)
+  ll2 <- stats::logLik(x$lme)
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-6)
+  expect_identical(attributes(ll)$df, attributes(ll2)$df)
+  expect_identical(attributes(ll)$nobs, 150L)
+  # the gam part alone gives a different value
+  expect_false(isTRUE(all.equal(as.numeric(ll), as.numeric(get_loglikelihood(x$gam)))))
+
+  # REML fit
+  x <- mgcv::gamm(
+    Sepal.Length ~ s(Petal.Width) + Petal.Length,
+    random = list(Species = ~1),
+    data = iris,
+    method = "REML"
+  )
+  ll_reml <- get_loglikelihood(x)
+  ll_ml <- get_loglikelihood(x, estimator = "ML")
+  expect_equal(as.numeric(ll_reml), as.numeric(stats::logLik(x$lme)), tolerance = 1e-6)
+  expect_equal(
+    as.numeric(ll_ml),
+    as.numeric(stats::logLik(x$lme, REML = FALSE)),
+    tolerance = 1e-6
+  )
+  expect_false(isTRUE(all.equal(as.numeric(ll_reml), as.numeric(ll_ml))))
+})
+
+test_that("get_loglikelihood - gamm fitted by PQL", {
+  skip_if_not_installed("mgcv")
+  skip_if_not_installed("nlme")
+  skip_if_not_installed("MASS")
+  set.seed(123)
+  d <- data.frame(x = stats::runif(200), f = factor(sample(1:5, 200, TRUE)))
+  d$y <- stats::rpois(200, exp(1 + sin(3 * d$x)))
+  x <- mgcv::gamm(
+    y ~ s(x),
+    random = list(f = ~1),
+    family = poisson(),
+    data = d,
+    verbosePQL = FALSE
+  )
+  expect_warning(ll <- get_loglikelihood(x), regexp = "PQL")
+  expect_true(is.na(ll))
+  expect_s3_class(ll, "logLik")
+  expect_silent(get_loglikelihood(x, verbose = FALSE))
+})
+
+test_that("get_loglikelihood - gamm4 uses the mer part", {
   skip_if_not_installed("gamm4")
-  x <- gamm4::gamm4(Sepal.Length ~ s(Petal.Width), data = iris)
-  ll <- insight::get_loglikelihood(x)
-  # It works, but it's quite diferent from the mgcv result
-  expect_equal(as.numeric(ll), -101.1107, tolerance = 1e-3)
+  x <- suppressWarnings(gamm4::gamm4(
+    Sepal.Length ~ s(Petal.Width),
+    random = ~ (1 | Species),
+    data = iris
+  ))
+  ll <- get_loglikelihood(x)
+  ll2 <- stats::logLik(x$mer)
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-6)
+  expect_identical(attributes(ll)$df, attributes(ll2)$df)
+  expect_false(isTRUE(all.equal(as.numeric(ll), as.numeric(get_loglikelihood(x$gam)))))
+  # gamm4 uses REML by default
+  ll <- get_loglikelihood(x, estimator = "ML")
+  ll2 <- stats::logLik(x$mer, REML = FALSE)
+  expect_equal(as.numeric(ll), as.numeric(ll2), tolerance = 1e-6)
+  # older gamm4 versions return a plain list
+  ll <- get_loglikelihood(unclass(x))
+  expect_equal(as.numeric(ll), as.numeric(stats::logLik(x$mer)), tolerance = 1e-6)
+})
+
+test_that("get_loglikelihood - lme and gls, ML for REML fits", {
+  skip_if_not_installed("nlme")
+  x <- nlme::lme(Sepal.Length ~ Petal.Width, random = ~ 1 | Species, data = iris)
+  ll_default <- get_loglikelihood(x)
+  ll_ml <- get_loglikelihood(x, estimator = "ML")
+  expect_equal(as.numeric(ll_default), as.numeric(stats::logLik(x)), tolerance = 1e-6)
+  expect_equal(
+    as.numeric(ll_ml),
+    as.numeric(stats::logLik(x, REML = FALSE)),
+    tolerance = 1e-6
+  )
+  expect_false(isTRUE(all.equal(as.numeric(ll_default), as.numeric(ll_ml))))
+
+  x <- nlme::gls(Sepal.Length ~ Petal.Width, data = iris)
+  ll_ml <- get_loglikelihood(x, estimator = "ML")
+  expect_equal(
+    as.numeric(ll_ml),
+    as.numeric(stats::logLik(x, REML = FALSE)),
+    tolerance = 1e-6
+  )
+  expect_false(isTRUE(all.equal(as.numeric(ll_ml), as.numeric(stats::logLik(x)))))
 })
 
 test_that("get_loglikelihood - Bernoulli with inversed levels", {

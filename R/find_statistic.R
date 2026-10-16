@@ -107,7 +107,7 @@ find_statistic.default <- function(x, ...) {
     "lmodel2", "lmRob", "lmrob", "lqm", "lqmm", "lm_weightit",
     "maxLik", "mixed", "mhurdle", "mlm", "mmrm", "mmrm_fit",
     "mmrm_tmb",
-    "nlmerMod", "nlrq", "nls",
+    "nlme", "nlmerMod", "nlrq", "nls",
     "ols", "orcutt",
     "pb1", "pb2", "polr", "phylolm",
     "rlm", "rms", "rlmerMod", "rq", "rqs", "rqss",
