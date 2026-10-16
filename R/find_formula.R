@@ -84,9 +84,13 @@
 #'
 #' For models from package **brms**, distributional parameters are also included.
 #'
-#' @note For models of class `lme` or `gls` the correlation-component is only
+#' @note For models of class `lme`, `nlme` or `gls` the correlation-component is only
 #' returned, when it is explicitly defined as named argument (`form`), e.g.
-#' `corAR1(form = ~1 | Mare)`
+#' `corAR1(form = ~1 | Mare)`, or when the correlation structure is passed as
+#' an object that is in the global environment or on the search path. In the
+#' latter case, the formula of that object is returned, which is `~1` if it has
+#' no `form`. For `nlme` models, a structure object that cannot be found gives
+#' no correlation-component.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(mtcars)
@@ -1523,10 +1527,16 @@ find_formula.nlme <- function(x, verbose = TRUE, ...) {
     f.random <- f.random[[1]]
   }
 
+  # a correlation structure that is neither in the call nor in the global
+  # environment or on the search path, e.g. one created inside the fitting
+  # function, cannot be found here, so there is no correlation part
+  f.corr <- tryCatch(.lme_correlation_formula(x), error = function(e) NULL)
+
   f <- compact_list(list(
     conditional = f.cond,
     nonlinear = f.nonlin,
-    random = f.random
+    random = f.random,
+    correlation = f.corr
   ))
   .find_formula_return(f, verbose = verbose)
 }
@@ -1649,6 +1659,17 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
   ) {
     fmr <- .nlme_random_formula(x)
   }
+  f <- compact_list(list(
+    conditional = fm,
+    random = fmr,
+    correlation = .lme_correlation_formula(x)
+  ))
+  .find_formula_return(f, verbose = verbose)
+}
+
+# the formula of the correlation structure of lme, glmmPQL and nlme objects,
+# read from the call, or from the structure object that the call names
+.lme_correlation_formula <- function(x) {
   ## TODO this is an intermediate fix to return the correlation variables from lme-objects
   fcorr <- x$call$correlation
   if (is.null(fcorr)) {
@@ -1658,13 +1679,7 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
   } else {
     fc <- parse(text = safe_deparse(fcorr))[[1]]$form
   }
-
-  f <- compact_list(list(
-    conditional = fm,
-    random = fmr,
-    correlation = stats::as.formula(fc)
-  ))
-  .find_formula_return(f, verbose = verbose)
+  stats::as.formula(fc)
 }
 
 # rebuild the random effects formula from the fitted random effects structure,
