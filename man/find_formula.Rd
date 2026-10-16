@@ -104,7 +104,7 @@ inside \code{poly()} and that no data names are used (i.e. no \code{data$variabl
 rather \code{variable}).
 }
 \note{
-For models of class \code{lme} or \code{gls} the correlation-component is only
+For models of class \code{lme}, \code{nlme} or \code{gls} the correlation-component is only
 returned, when it is explicitly defined as named argument (\code{form}), e.g.
 \code{corAR1(form = ~1 | Mare)}
 }

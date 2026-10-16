@@ -84,7 +84,7 @@
 #'
 #' For models from package **brms**, distributional parameters are also included.
 #'
-#' @note For models of class `lme` or `gls` the correlation-component is only
+#' @note For models of class `lme`, `nlme` or `gls` the correlation-component is only
 #' returned, when it is explicitly defined as named argument (`form`), e.g.
 #' `corAR1(form = ~1 | Mare)`
 #'

@@ -6,7 +6,9 @@
   returns the same parts as for `lme4::nlmer()` models: `conditional`,
   `nonlinear` and `random`. `conditional` has the response and the covariates
   of the fixed-effect parameter formulas. `nonlinear` has the nonlinear model,
-  and `random` has the random part. Functions that use the formula, like
+  and `random` has the random part. For models with a `correlation`
+  structure, `find_formula()` also returns a `correlation` part, as for
+  `nlme::lme()` models. Functions that use the formula, like
   `find_variables()`, `get_response()`, `get_random()` and `get_predicted()`,
   now work for these models. Confidence intervals for predictions are not yet
   supported. `get_variance()` returns `NULL` with a message, because the
