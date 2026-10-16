@@ -619,6 +619,8 @@ test_that("get_modelmatrix - Arima without xreg", {
 })
 
 test_that("get_modelmatrix - Arima, regressors that cannot be used", {
+  # the test creates and removes a global `z`
+  skip_if(exists("z", envir = globalenv(), inherits = FALSE), "a global `z` exists")
   arima_local_fit <- function() {
     z <- time(LakeHuron)
     stats::arima(LakeHuron, order = c(1, 0, 0), xreg = z)
@@ -658,6 +660,40 @@ test_that("get_modelmatrix - Arima, regressors that cannot be used", {
     "New data is not supported for arima models",
     fixed = TRUE
   )
+  # new data given by position
+  expect_error(
+    get_modelmatrix(arima_m1, data.frame(x = 1)),
+    "New data is not supported for arima models",
+    fixed = TRUE
+  )
+  # an argument whose name starts with "data" is not new data
+  expect_identical(dim(get_modelmatrix(arima_m1, datagrid = 1)), c(98L, 2L))
+})
+
+test_that("get_modelmatrix - Arima, regressors found by name", {
+  # a regressor object that holds NULL means no regressors
+  arima_xr_null <- NULL
+  arima_null <- stats::arima(LakeHuron, order = c(1, 0, 0), xreg = arima_xr_null)
+  out <- get_modelmatrix(arima_null)
+  expect_identical(dim(out), c(98L, 1L))
+  expect_identical(colnames(out), "intercept")
+
+  # a function that calls get_modelmatrix() has a local variable with the
+  # name of the regressors, but another size; the global object is used
+  skip_if(
+    exists("arima_xr_global", envir = globalenv(), inherits = FALSE),
+    "a global `arima_xr_global` exists"
+  )
+  assign("arima_xr_global", time(LakeHuron), envir = globalenv())
+  withr::defer(rm("arima_xr_global", envir = globalenv()))
+  arima_global <- stats::arima(LakeHuron, order = c(1, 0, 0), xreg = arima_xr_global)
+  arima_wrapper <- function(model) {
+    arima_xr_global <- 1:14
+    get_modelmatrix(model)
+  }
+  out <- arima_wrapper(arima_global)
+  expect_identical(dim(out), c(98L, 2L))
+  expect_identical(unname(out[, 2]), as.numeric(time(LakeHuron)))
 })
 
 test_that("get_modelmatrix - Arima with stored xreg set by hand, as in forecast::Arima() fits", {
