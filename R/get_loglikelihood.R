@@ -175,7 +175,59 @@ get_loglikelihood.glm <- get_loglikelihood.lm
 get_loglikelihood.gam <- get_loglikelihood.lm
 
 #' @export
-get_loglikelihood.gamm <- get_loglikelihood.lm
+get_loglikelihood.gamm <- function(
+  x,
+  estimator = NULL,
+  REML = FALSE,
+  check_response = FALSE,
+  verbose = TRUE,
+  ...
+) {
+  # the random effects, and the smooths as random effects, are in the mixed
+  # model part. For gamm() models fitted by PQL, this part is only a working
+  # model, and its log-likelihood is not the one of the GAMM (see ?mgcv::gamm)
+  if (identical(x$gam$method, "PQL")) {
+    if (verbose) {
+      format_warning(
+        "Log-likelihood is not available for `gamm()` models fitted by PQL (non-Gaussian family or an offset)."
+      )
+    }
+    out <- NA_real_
+    attr(out, "nall") <- attr(out, "nobs") <- n_obs(x)
+    attr(out, "df") <- NA_real_
+    class(out) <- c("logLik", class(x))
+    return(out)
+  }
+
+  if (inherits(x, "gamm4")) {
+    mixed <- x$mer
+  } else {
+    mixed <- x$lme
+  }
+
+  # use defaults for REML?
+  if ((missing(estimator) || is.null(estimator)) && missing(REML)) {
+    lls <- stats::logLik(mixed)
+  } else {
+    if (identical(estimator, "REML")) {
+      REML <- TRUE
+    }
+    lls <- stats::logLik(mixed, REML = REML)
+  }
+
+  .loglikelihood_prep_output(
+    x,
+    lls,
+    df = attr(lls, "df"),
+    check_response = check_response,
+    verbose = verbose,
+    REML = REML,
+    ...
+  )
+}
+
+#' @export
+get_loglikelihood.gamm4 <- get_loglikelihood.gamm
 
 #' @export
 get_loglikelihood.list <- get_loglikelihood.lm
@@ -228,6 +280,12 @@ get_loglikelihood.glmerMod <- function(x, check_response = FALSE, verbose = TRUE
 
 #' @export
 get_loglikelihood.glmmTMB <- get_loglikelihood.lmerMod
+
+#' @export
+get_loglikelihood.lme <- get_loglikelihood.lmerMod
+
+#' @export
+get_loglikelihood.gls <- get_loglikelihood.lmerMod
 
 
 #' @export

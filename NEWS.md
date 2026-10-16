@@ -2,6 +2,16 @@
 
 ## Bug fixes
 
+* `get_loglikelihood()` for `mgcv::gamm()` and `gamm4::gamm4()` models now
+  returns the log-likelihood of the mixed model part (`$lme` or `$mer`), which
+  includes the random effects. Before, it used only the `$gam` part. For
+  `gamm()` models fitted by PQL, it now returns `NA` with a warning, because
+  the log-likelihood of the PQL working model is not the one of the GAMM.
+
+* `get_loglikelihood()` for `nlme::lme()` and `nlme::gls()` models fitted by
+  REML now returns the ML log-likelihood with `estimator = "ML"`. Before,
+  `estimator` was ignored.
+
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that
   convergence cannot be assessed in three more cases. The first case is a
   model without events. Before, a right-censored model without events gave
