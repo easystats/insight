@@ -128,3 +128,52 @@ test_that("is_multivariate", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "z-statistic")
 })
+
+test_that("get_sigma, families with a standard deviation parameter", {
+  set.seed(123)
+  d <- data.frame(x2 = stats::runif(200))
+  d$y1 <- stats::rnorm(200, 1 + 2 * d$x2, sd = 1.5)
+  d$y2 <- stats::rnorm(200, 3 + 4 * d$x2, sd = 0.5)
+
+  # the ML estimate of sigma for a normal model
+  m <- VGAM::vglm(y1 ~ x2, VGAM::uninormal, data = d, trace = FALSE)
+  expect_equal(
+    unclass(get_sigma(m)),
+    sqrt(mean(stats::residuals(stats::lm(y1 ~ x2, data = d))^2)),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  m <- suppressWarnings(VGAM::vglm(y1 ~ x2, VGAM::tobit, data = d, trace = FALSE))
+  expect_equal(
+    unclass(get_sigma(m)),
+    exp(stats::coef(m)[["(Intercept):2"]]),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  # one sigma per response
+  m <- VGAM::vglm(cbind(y1, y2) ~ x2, VGAM::binormal, data = d, trace = FALSE)
+  expect_equal(
+    unclass(get_sigma(m)),
+    stats::setNames(
+      exp(stats::coef(m)[c("(Intercept):3", "(Intercept):4")]),
+      c("sd1", "sd2")
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  # sigma modelled with predictors
+  m <- VGAM::vglm(y1 ~ x2, VGAM::uninormal(zero = NULL), data = d, trace = FALSE)
+  expect_null(get_sigma(m))
+})
+
+test_that("get_sigma, families without a standard deviation parameter", {
+  expect_equal(
+    unclass(get_sigma(m1)),
+    sqrt(stats::deviance(m1) / stats::df.residual(m1)),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})
