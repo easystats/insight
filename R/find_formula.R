@@ -87,8 +87,10 @@
 #' @note For models of class `lme`, `nlme` or `gls` the correlation-component is only
 #' returned, when it is explicitly defined as named argument (`form`), e.g.
 #' `corAR1(form = ~1 | Mare)`, or when the correlation structure is passed as
-#' an object that `find_formula()` can find. In the latter case, the formula of
-#' that object is returned, which is `~1` if it has no `form`.
+#' an object that is in the global environment or on the search path. In the
+#' latter case, the formula of that object is returned, which is `~1` if it has
+#' no `form`. For `nlme` models, a structure object that cannot be found gives
+#' no correlation-component.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(mtcars)
@@ -1525,8 +1527,9 @@ find_formula.nlme <- function(x, verbose = TRUE, ...) {
     f.random <- f.random[[1]]
   }
 
-  # a correlation structure that was created inside the fitting function
-  # cannot be found here, so there is no correlation part
+  # a correlation structure that is neither in the call nor in the global
+  # environment or on the search path, e.g. one created inside the fitting
+  # function, cannot be found here, so there is no correlation part
   f.corr <- tryCatch(.lme_correlation_formula(x), error = function(e) NULL)
 
   f <- compact_list(list(

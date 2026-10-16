@@ -285,6 +285,7 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
     start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
   )
   nlme_corr_struct <<- nlme::corAR1(form = ~ t | Seed)
+  withr::defer(rm(nlme_corr_struct, envir = globalenv()))
   m_object <- nlme::nlme(
     height ~ SSasymp(age, Asym, R0, lrc),
     data = nlme_loblolly_t,
@@ -300,9 +301,24 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
     expect_identical(find_variables(m)$correlation, c("t", "Seed"))
     expect_true("t" %in% colnames(get_data(m)))
   }
-  rm(nlme_corr_struct, envir = globalenv())
 
-  # a structure without `form` has no variables, as for lme models
+  # an object without `form` gives the formula of that object, `~1`, which
+  # has no variables, as for lme models
+  nlme_corr_noform <<- nlme::corAR1()
+  withr::defer(rm(nlme_corr_noform, envir = globalenv()))
+  m_object_noform <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_loblolly_t,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme_corr_noform,
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+  expect_equal(find_formula(m_object_noform)$correlation, ~1, ignore_attr = TRUE)
+  expect_null(find_variables(m_object_noform)$correlation)
+
+  # a structure without `form` in the call has no correlation part, as for
+  # lme models
   m_noform <- nlme::nlme(
     height ~ SSasymp(age, Asym, R0, lrc),
     data = nlme_loblolly_t,
