@@ -172,14 +172,15 @@ get_modelmatrix.Arima <- function(x, ...) {
   }
   # in `coef()`, the regression coefficients follow the AR, MA, SAR and SMA
   # coefficients. arima() names the intercept "intercept", the other
-  # coefficients take the column names of `xreg`.
+  # coefficients take the column names of `xreg`, or the deparsed `xreg`
+  # argument when it has no column names.
   params <- stats::coef(x)
   regression_names <- names(params)[seq_along(params) > sum(x$arma[1:4])]
   n_obs <- length(x$residuals)
 
   # forecast::Arima() fits store `xreg`, stats::arima() fits only the call.
-  # We use `[[`, because `$` would partially match other arguments.
-  xreg <- x$xreg
+  # We use `[[` to avoid partial matching by `$`.
+  xreg <- x[["xreg"]]
   xreg_call <- x$call[["xreg"]]
   xreg_label <- if (is.null(xreg) && !is.null(xreg_call)) {
     safe_deparse(xreg_call)
@@ -187,17 +188,18 @@ get_modelmatrix.Arima <- function(x, ...) {
     "xreg"
   }
   if (is.null(xreg) && !is.null(xreg_call)) {
-    # first try, parent frame, second try, global env
+    # first try, parent frame, second try, global env. A function of the
+    # same name, like `q()`, is not the regressor.
     xreg <- .safe(eval(xreg_call, envir = parent.frame()))
-    if (is.null(xreg)) {
+    if (is.null(xreg) || is.function(xreg)) {
       xreg <- .safe(eval(xreg_call, envir = globalenv()))
     }
-    if (is.null(xreg)) {
+    if (is.null(xreg) || is.function(xreg)) {
       format_error(paste0(
         "Could not find the regressors `",
         xreg_label,
-        "` of the arima model. The object must exist in the environment where",
-        " `get_modelmatrix()` is called, or in the global environment."
+        "` of the arima model. The object must be visible from where",
+        " `get_modelmatrix()` is called, or from the global environment."
       ))
     }
   }

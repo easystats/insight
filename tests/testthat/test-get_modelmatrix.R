@@ -631,6 +631,17 @@ test_that("get_modelmatrix - Arima, regressors that cannot be used", {
     fixed = TRUE
   )
 
+  # a local regressor with the name of a base function (`q()`)
+  arima_local_q_fit <- function() {
+    q <- time(LakeHuron) # nolint: the test needs the name of a base function
+    stats::arima(LakeHuron, order = c(1, 0, 0), xreg = q)
+  }
+  expect_error(
+    get_modelmatrix(arima_local_q_fit()),
+    "Could not find the regressors `q`",
+    fixed = TRUE
+  )
+
   # a global `z` with another number of rows is not used
   assign("z", 1:3, envir = globalenv())
   withr::defer(rm("z", envir = globalenv()))
@@ -649,7 +660,7 @@ test_that("get_modelmatrix - Arima, regressors that cannot be used", {
   )
 })
 
-test_that("get_modelmatrix - Arima with stored xreg, as forecast::Arima() fits", {
+test_that("get_modelmatrix - Arima with stored xreg set by hand, as in forecast::Arima() fits", {
   arima_m1 <- stats::arima(LakeHuron, order = c(2, 0, 0), xreg = time(LakeHuron))
   arima_m1$xreg <- cbind(xreg = 2 * as.numeric(time(LakeHuron)))
   arima_m1$call$xreg <- as.name("arima_no_such_object")
