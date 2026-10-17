@@ -160,6 +160,33 @@ test_that("get_parameters, standardized draws with type", {
     get_parameters(bfit, summary = TRUE, standardize = TRUE, type = "std.lv", verbose = FALSE),
     get_parameters(bfit, summary = TRUE, standardize = TRUE, type = "std.lv")
   )
+
+  # standardize = FALSE equals the default, for the draws and the summary
+  draws_false <- get_parameters(bfit, standardize = FALSE)
+  summary_false <- get_parameters(bfit, summary = TRUE, standardize = FALSE)
+  expect_identical(draws_false, get_parameters(bfit))
+  expect_identical(summary_false, get_parameters(bfit, summary = TRUE))
+
+  # values other than TRUE or FALSE give the unstandardized parameters
+  for (v in list(1, "yes", NA, c(TRUE, TRUE), NULL)) {
+    expect_identical(get_parameters(bfit, standardize = v), draws_false)
+    expect_identical(
+      get_parameters(bfit, summary = TRUE, standardize = v),
+      summary_false
+    )
+  }
+
+  # the column of standardized estimates is "est.std", not "est"
+  withr::with_options(list(warnPartialMatchDollar = TRUE), {
+    expect_no_warning(
+      out <- get_parameters(bfit, summary = TRUE, standardize = TRUE),
+      message = "[Pp]artial match of 'est'"
+    )
+  })
+  expect_identical(
+    out$Estimate,
+    lavaan::standardizedSolution(bfit)[["est.std"]]
+  )
 })
 
 test_that("find_parameters and get_parameters, labeled parameters", {
