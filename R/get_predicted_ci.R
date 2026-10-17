@@ -315,19 +315,19 @@ get_predicted_ci.nlme <- function(
   if (!is.null(level)) {
     predict_args$level <- level
   }
-  predict_fixed <- function(beta) {
-    x$coefficients$fixed <- beta
+  predict_fixed <- function(coefs) {
+    x$coefficients$fixed <- coefs
     as.vector(do.call(stats::predict, c(list(x), predict_args)))
   }
 
   # central differences
-  beta <- x$coefficients$fixed
-  step <- pmax(abs(beta), 1) * .Machine$double.eps^(1 / 3)
+  coefs <- x$coefficients$fixed
+  steps <- pmax(abs(coefs), 1) * .Machine$double.eps^(1 / 3)
   jacobian <- vapply(
-    seq_along(beta),
+    seq_along(coefs),
     function(i) {
-      h <- replace(numeric(length(beta)), i, step[i])
-      (predict_fixed(beta + h) - predict_fixed(beta - h)) / (2 * step[i])
+      h <- replace(numeric(length(coefs)), i, steps[i])
+      (predict_fixed(coefs + h) - predict_fixed(coefs - h)) / (2 * steps[i])
     },
     numeric(nrow(data))
   )

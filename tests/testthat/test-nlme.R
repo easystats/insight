@@ -209,7 +209,7 @@ test_that("get_predicted, nlme, standard errors on the population level", {
 test_that("get_predicted, nlme, confidence intervals", {
   # oracle: invariant, the Wald interval with the t-distribution
   for (m in nlme_models) {
-    expect_silent(p <- as.data.frame(get_predicted(m, ci = 0.95)))
+    p <- expect_silent(as.data.frame(get_predicted(m, ci = 0.95)))
     expect_named(p, c("Predicted", "SE", "CI_low", "CI_high"))
     expect_false(anyNA(p$SE))
     crit <- stats::qt(0.975, min(get_df(m, type = "wald")))
@@ -221,7 +221,12 @@ test_that("get_predicted, nlme, confidence intervals", {
   # called directly without `data`, get_predicted_ci() uses the model data
   p <- get_predicted(m_nlme1, ci = 0.95)
   out <- get_predicted_ci(m_nlme1, p)
-  expect_equal(out, attributes(p)$ci_data, tolerance = 1e-10, ignore_attr = TRUE)
+  expect_equal(
+    out,
+    attributes(p)$ci_data,
+    tolerance = 1e-10,
+    ignore_attr = TRUE
+  )
 })
 
 
@@ -235,7 +240,11 @@ test_that("get_predicted, nlme, unsupported interval arguments", {
   )
   for (u in unsupported) {
     call_args <- c(list(m_nlme1, ci = 0.95), u[names(u) != "regexp"])
-    expect_message(p <- do.call(get_predicted, call_args), regexp = u$regexp, fixed = TRUE)
+    p <- expect_message(
+      do.call(get_predicted, call_args),
+      regexp = u$regexp,
+      fixed = TRUE
+    )
     expect_named(as.data.frame(p), "Predicted")
     expect_silent(do.call(get_predicted, c(call_args, verbose = FALSE)))
   }
@@ -280,8 +289,8 @@ test_that("get_predicted, nlme, data grid without random effects", {
   expect_identical(is.na(as.vector(p)), c(FALSE, TRUE, FALSE))
   # the standard errors and intervals are NA for that row, and the other rows
   # get the values they have alone
-  expect_warning(
-    p <- as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95)),
+  p <- expect_warning(
+    as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95)),
     regexp = "factor levels that are not in the model data"
   )
   p13 <- as.data.frame(get_predicted(m_nlme2, data = d[c(1, 3), ], ci = 0.95))
