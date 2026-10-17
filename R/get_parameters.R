@@ -711,15 +711,17 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
 get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   check_if_installed("lavaan")
 
-  if (standardize) {
+  if (isTRUE(standardize)) {
     type <- .lavaan_std_type(...)
     if (is.null(type)) {
       params <- lavaan::standardizedSolution(x)
     } else {
       params <- lavaan::standardizedSolution(x, type = type)
     }
+    estimates <- params[["est.std"]]
   } else {
     params <- lavaan::parameterEstimates(x)
+    estimates <- params[["est"]]
   }
 
   params$parameter <- paste0(params$lhs, params$op, params$rhs)
@@ -732,7 +734,7 @@ get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
 
   params <- data.frame(
     Parameter = params$parameter,
-    Estimate = params$est,
+    Estimate = estimates,
     Component = params$comp,
     stringsAsFactors = FALSE
   )
