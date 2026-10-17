@@ -218,6 +218,10 @@ test_that("get_predicted, nlme, confidence intervals", {
     p <- as.data.frame(get_predicted(m, ci = NULL))
     expect_named(p, "Predicted")
   }
+  # another `ci` level changes the critical value
+  p <- as.data.frame(get_predicted(m_nlme1, ci = 0.8))
+  crit <- stats::qt(0.9, min(get_df(m_nlme1, type = "wald")))
+  expect_equal(p$CI_low, p$Predicted - crit * p$SE, tolerance = 1e-10)
   # called directly without `data`, get_predicted_ci() uses the model data
   p <- get_predicted(m_nlme1, ci = 0.95)
   out <- get_predicted_ci(m_nlme1, p)
@@ -237,6 +241,7 @@ test_that("get_predicted, nlme, unsupported interval arguments", {
     list(predict = "prediction", regexp = "predict =\\s+\"prediction\""),
     list(vcov = "HC0", regexp = "`vcov`"),
     list(vcov = stats::vcov(m_nlme1), regexp = "`vcov`"),
+    list(vcov_args = list(type = "HC1"), regexp = "`vcov_args`"),
     list(ci_method = "satterthwaite", regexp = "`ci_method`")
   )
   for (u in unsupported) {
@@ -246,6 +251,17 @@ test_that("get_predicted, nlme, unsupported interval arguments", {
     expect_named(as.data.frame(p), "Predicted")
     expect_silent(do.call(get_predicted, c(call_args, verbose = FALSE)))
   }
+  # if predict() fails for the data, a message says that there are no
+  # standard errors. The data have no `age` column, which the model needs.
+  d <- data.frame(Seed = factor(301))
+  expect_message(
+    get_predicted_ci(m_nlme1, predictions = 1, data = d),
+    regexp = "Could not compute standard errors"
+  )
+  out <- expect_silent(
+    get_predicted_ci(m_nlme1, predictions = 1, data = d, verbose = FALSE)
+  )
+  expect_null(out)
 })
 
 

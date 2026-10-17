@@ -31,12 +31,13 @@
 #' matrix `X`. For these models, the standard errors are calculated with the
 #' delta method: `X` is replaced by the Jacobian of the predictions with respect
 #' to the fixed effects, computed by central differences of `predict()`, with
-#' the random effects held at their predicted values. `get_predicted()` uses the
+#' the random effects held at their predicted values. So the standard errors do
+#' not include the uncertainty of the random effects. `get_predicted()` uses the
 #' level of its predictions. A direct call to `get_predicted_ci()` uses the
 #' `level` argument, or the default level of `predict()` if `level` is missing.
-#' Only Wald confidence intervals are available. Prediction intervals,
-#' the `vcov` argument and other values of `ci_method` are not yet supported
-#' for these models.
+#' Only Wald confidence intervals are available. Prediction intervals, the
+#' `vcov` and `vcov_args` arguments and other values of `ci_method` are not yet
+#' supported for these models.
 #'
 #' It is preferred to rely on standard errors returned by `get_predicted()` (i.e.
 #' returned by the `predict()`-function), because these are more accurate than
@@ -283,6 +284,7 @@ get_predicted_ci.nlme <- function(
   ci_type = "confidence",
   ci_method = NULL,
   vcov = NULL,
+  vcov_args = NULL,
   level = NULL,
   verbose = TRUE,
   ...
@@ -298,6 +300,8 @@ get_predicted_ci.nlme <- function(
     )
   } else if (!is.null(vcov)) {
     unsupported <- "The `vcov` argument is"
+  } else if (!is.null(vcov_args)) {
+    unsupported <- "The `vcov_args` argument is"
   } else if (!is.null(ci_method) && !identical(tolower(ci_method), "wald")) {
     unsupported <- "The `ci_method` argument is"
   }
@@ -314,30 +318,17 @@ get_predicted_ci.nlme <- function(
   # without new data, predict() returns the fitted values, which do not
   # change with the fixed effects
   if (is.null(data)) {
-    data <- get_data(x, verbose = FALSE)
+    data <- .safe(get_data(x, verbose = FALSE))
   }
-  predict_args <- list(newdata = data)
-  if (!is.null(level)) {
-    predict_args$level <- level
+  se <- .safe(.get_predicted_se_nlme(x, data, level))
+  if (is.null(se)) {
+    if (isTRUE(verbose)) {
+      format_alert(
+        "Could not compute standard errors of the predictions for this model of class `nlme`."
+      )
+    }
+    return(NULL)
   }
-  predict_fixed <- function(coefs) {
-    x$coefficients$fixed <- coefs
-    as.vector(do.call(stats::predict, c(list(x), predict_args)))
-  }
-
-  # central differences
-  coefs <- x$coefficients$fixed
-  steps <- pmax(abs(coefs), 1) * .Machine$double.eps^(1 / 3)
-  jacobian <- vapply(
-    seq_along(coefs),
-    function(i) {
-      h <- replace(numeric(length(coefs)), i, steps[i])
-      (predict_fixed(coefs + h) - predict_fixed(coefs - h)) / (2 * steps[i])
-    },
-    numeric(nrow(data))
-  )
-  jacobian <- matrix(jacobian, nrow = nrow(data))
-  se <- sqrt(rowSums((jacobian %*% stats::vcov(x)) * jacobian))
 
   get_predicted_ci.default(
     x,
@@ -349,6 +340,31 @@ get_predicted_ci.nlme <- function(
     verbose = verbose,
     ...
   )
+}
+
+# standard errors of nlme predictions, from the central-difference Jacobian of
+# predict() with respect to the fixed effects
+.get_predicted_se_nlme <- function(x, data, level = NULL) {
+  predict_args <- list(newdata = data)
+  if (!is.null(level)) {
+    predict_args$level <- level
+  }
+  predict_fixed <- function(coefs) {
+    x$coefficients$fixed <- coefs
+    as.vector(do.call(stats::predict, c(list(x), predict_args)))
+  }
+  coefs <- x$coefficients$fixed
+  steps <- pmax(abs(coefs), 1) * .Machine$double.eps^(1 / 3)
+  jacobian <- vapply(
+    seq_along(coefs),
+    function(i) {
+      h <- replace(numeric(length(coefs)), i, steps[i])
+      (predict_fixed(coefs + h) - predict_fixed(coefs - h)) / (2 * steps[i])
+    },
+    numeric(nrow(data))
+  )
+  jacobian <- matrix(jacobian, nrow = nrow(data))
+  sqrt(rowSums((jacobian %*% stats::vcov(x)) * jacobian))
 }
 
 
