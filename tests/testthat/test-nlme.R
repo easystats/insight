@@ -233,18 +233,15 @@ test_that("get_predicted, nlme, confidence intervals", {
 test_that("get_predicted, nlme, unsupported interval arguments", {
   # each call gives a message that names the argument, and no intervals
   unsupported <- list(
-    list(predict = "prediction", regexp = "predict = \"prediction\""),
+    # the message is wrapped, so a line break can follow "="
+    list(predict = "prediction", regexp = "predict =\\s+\"prediction\""),
     list(vcov = "HC0", regexp = "`vcov`"),
     list(vcov = stats::vcov(m_nlme1), regexp = "`vcov`"),
     list(ci_method = "satterthwaite", regexp = "`ci_method`")
   )
   for (u in unsupported) {
     call_args <- c(list(m_nlme1, ci = 0.95), u[names(u) != "regexp"])
-    expect_message(
-      do.call(get_predicted, call_args),
-      regexp = u$regexp,
-      fixed = TRUE
-    )
+    expect_message(do.call(get_predicted, call_args), regexp = u$regexp)
     p <- suppressMessages(do.call(get_predicted, call_args))
     expect_named(as.data.frame(p), "Predicted")
     expect_silent(do.call(get_predicted, c(call_args, verbose = FALSE)))

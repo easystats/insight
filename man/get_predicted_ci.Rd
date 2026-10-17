@@ -156,9 +156,11 @@ is used, while \code{get_sigma()^2} is used for non-mixed models.
 Nonlinear mixed models of class \code{nlme} (from \code{nlme::nlme()}) have no model
 matrix \code{X}. For these models, the standard errors are calculated with the
 delta method: \code{X} is replaced by the Jacobian of the predictions with respect
-to the fixed effects, computed by central differences of \code{predict()} at the
-level of the predictions, with the random effects held at their predicted
-values. Only Wald confidence intervals are available. Prediction intervals,
+to the fixed effects, computed by central differences of \code{predict()}, with
+the random effects held at their predicted values. \code{get_predicted()} uses the
+level of its predictions. A direct call to \code{get_predicted_ci()} uses the
+\code{level} argument, or the default level of \code{predict()} if \code{level} is missing.
+Only Wald confidence intervals are available. Prediction intervals,
 the \code{vcov} argument and other values of \code{ci_method} are not yet supported
 for these models.
 

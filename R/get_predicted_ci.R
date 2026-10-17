@@ -30,9 +30,11 @@
 #' Nonlinear mixed models of class `nlme` (from `nlme::nlme()`) have no model
 #' matrix `X`. For these models, the standard errors are calculated with the
 #' delta method: `X` is replaced by the Jacobian of the predictions with respect
-#' to the fixed effects, computed by central differences of `predict()` at the
-#' level of the predictions, with the random effects held at their predicted
-#' values. Only Wald confidence intervals are available. Prediction intervals,
+#' to the fixed effects, computed by central differences of `predict()`, with
+#' the random effects held at their predicted values. `get_predicted()` uses the
+#' level of its predictions. A direct call to `get_predicted_ci()` uses the
+#' `level` argument, or the default level of `predict()` if `level` is missing.
+#' Only Wald confidence intervals are available. Prediction intervals,
 #' the `vcov` argument and other values of `ci_method` are not yet supported
 #' for these models.
 #'
@@ -290,7 +292,10 @@ get_predicted_ci.nlme <- function(
   }
   unsupported <- NULL
   if (identical(ci_type, "prediction")) {
-    unsupported <- "Prediction intervals (`predict = \"prediction\"`) are"
+    unsupported <- paste(
+      "Prediction intervals (`ci_type = \"prediction\"`, or",
+      "`predict = \"prediction\"` in `get_predicted()`) are"
+    )
   } else if (!is.null(vcov)) {
     unsupported <- "The `vcov` argument is"
   } else if (!is.null(ci_method) && !identical(tolower(ci_method), "wald")) {
