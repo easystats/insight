@@ -259,16 +259,83 @@ get_predicted_ci.multinom <- get_predicted_ci.mlm
 #' @export
 get_predicted_ci.bracl <- get_predicted_ci.mlm
 
-# the standard errors need a linear model matrix, which nonlinear mixed models
-# do not have
+# nonlinear mixed models have no linear model matrix. We use the delta method:
+# the Jacobian of predict() with respect to the fixed effects, at the level of
+# the predictions, takes the place of the model matrix. The random effects are
+# held at their predicted values.
 #' @export
-get_predicted_ci.nlme <- function(x, predictions = NULL, ci = 0.95, verbose = TRUE, ...) {
-  if (!is.null(ci) && isTRUE(verbose)) {
-    format_alert(
-      "Confidence intervals are not yet supported for models of class `nlme`."
-    )
+get_predicted_ci.nlme <- function(
+  x,
+  predictions = NULL,
+  data = NULL,
+  ci = 0.95,
+  ci_type = "confidence",
+  ci_method = NULL,
+  vcov = NULL,
+  level = NULL,
+  verbose = TRUE,
+  ...
+) {
+  if (is.null(ci)) {
+    return(NULL)
   }
-  NULL
+  unsupported <- NULL
+  if (identical(ci_type, "prediction")) {
+    unsupported <- "Prediction intervals (`predict = \"prediction\"`) are"
+  } else if (!is.null(vcov)) {
+    unsupported <- "The `vcov` argument is"
+  } else if (!is.null(ci_method) && !identical(tolower(ci_method), "wald")) {
+    unsupported <- "The `ci_method` argument is"
+  }
+  if (!is.null(unsupported)) {
+    if (isTRUE(verbose)) {
+      format_alert(paste(
+        unsupported,
+        "not yet supported for models of class `nlme`. Only Wald confidence",
+        "intervals based on `vcov()` of the model are available."
+      ))
+    }
+    return(NULL)
+  }
+
+  # without new data, predict() returns the fitted values, which do not
+  # change with the fixed effects
+  if (is.null(data)) {
+    data <- get_data(x, verbose = FALSE)
+  }
+  predict_args <- list(newdata = data)
+  if (!is.null(level)) {
+    predict_args$level <- level
+  }
+  predict_fixed <- function(beta) {
+    x$coefficients$fixed <- beta
+    as.vector(do.call(stats::predict, c(list(x), predict_args)))
+  }
+
+  # central differences
+  beta <- x$coefficients$fixed
+  step <- pmax(abs(beta), 1) * .Machine$double.eps^(1 / 3)
+  jacobian <- vapply(
+    seq_along(beta),
+    function(i) {
+      h <- replace(numeric(length(beta)), i, step[i])
+      (predict_fixed(beta + h) - predict_fixed(beta - h)) / (2 * step[i])
+    },
+    numeric(nrow(data))
+  )
+  jacobian <- matrix(jacobian, nrow = nrow(data))
+  se <- sqrt(rowSums((jacobian %*% stats::vcov(x)) * jacobian))
+
+  get_predicted_ci.default(
+    x,
+    predictions = predictions,
+    data = data,
+    se = se,
+    ci = ci,
+    ci_method = "wald",
+    verbose = verbose,
+    ...
+  )
 }
 
 
