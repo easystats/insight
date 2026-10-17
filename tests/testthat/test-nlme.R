@@ -251,6 +251,18 @@ test_that("get_predicted, nlme, unsupported interval arguments", {
     expect_named(as.data.frame(p), "Predicted")
     expect_silent(do.call(get_predicted, c(call_args, verbose = FALSE)))
   }
+  # with more than one level, predict() returns one column per level, and
+  # there are no intervals
+  expect_message(
+    p <- get_predicted(m_nlme1, ci = 0.95, level = c(0, 1)),
+    regexp = "`level` with more than one value"
+  )
+  expect_false(any(c("SE", "CI_low", "CI_high") %in% colnames(p)))
+  expect_message(
+    out <- get_predicted_ci(m_nlme1, predictions = 1, level = c(0, 1)),
+    regexp = "`level` with more than one value"
+  )
+  expect_null(out)
   # if predict() fails for the data, a message says that there are no
   # standard errors. The data have no `age` column, which the model needs.
   d <- data.frame(Seed = factor(301))

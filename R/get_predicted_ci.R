@@ -36,8 +36,8 @@
 #' level of its predictions. A direct call to `get_predicted_ci()` uses the
 #' `level` argument, or the default level of `predict()` if `level` is missing.
 #' Only Wald confidence intervals are available. Prediction intervals, the
-#' `vcov` and `vcov_args` arguments and other values of `ci_method` are not yet
-#' supported for these models.
+#' `vcov` and `vcov_args` arguments, other values of `ci_method` and a `level`
+#' with more than one value are not yet supported for these models.
 #'
 #' It is preferred to rely on standard errors returned by `get_predicted()` (i.e.
 #' returned by the `predict()`-function), because these are more accurate than
@@ -304,6 +304,9 @@ get_predicted_ci.nlme <- function(
     unsupported <- "The `vcov_args` argument is"
   } else if (!is.null(ci_method) && !identical(tolower(ci_method), "wald")) {
     unsupported <- "The `ci_method` argument is"
+  } else if (length(level) > 1L) {
+    # predict() returns one column of predictions per level
+    unsupported <- "A `level` with more than one value is"
   }
   if (!is.null(unsupported)) {
     if (isTRUE(verbose)) {

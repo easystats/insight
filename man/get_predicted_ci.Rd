@@ -162,8 +162,8 @@ not include the uncertainty of the random effects. \code{get_predicted()} uses t
 level of its predictions. A direct call to \code{get_predicted_ci()} uses the
 \code{level} argument, or the default level of \code{predict()} if \code{level} is missing.
 Only Wald confidence intervals are available. Prediction intervals, the
-\code{vcov} and \code{vcov_args} arguments and other values of \code{ci_method} are not yet
-supported for these models.
+\code{vcov} and \code{vcov_args} arguments, other values of \code{ci_method} and a \code{level}
+with more than one value are not yet supported for these models.
 
 It is preferred to rely on standard errors returned by \code{get_predicted()} (i.e.
 returned by the \code{predict()}-function), because these are more accurate than
