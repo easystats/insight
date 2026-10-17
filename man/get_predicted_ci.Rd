@@ -153,6 +153,15 @@ diagonal of the variance-covariance matrix, \code{get_predicted_ci()} adds the
 residual variance to these values. For mixed models, \code{get_variance_residual()}
 is used, while \code{get_sigma()^2} is used for non-mixed models.
 
+Nonlinear mixed models of class \code{nlme} (from \code{nlme::nlme()}) have no model
+matrix \code{X}. For these models, the standard errors are calculated with the
+delta method: \code{X} is replaced by the Jacobian of the predictions with respect
+to the fixed effects, computed by central differences of \code{predict()} at the
+level of the predictions, with the random effects held at their predicted
+values. Only Wald confidence intervals are available. Prediction intervals,
+the \code{vcov} argument and other values of \code{ci_method} are not yet supported
+for these models.
+
 It is preferred to rely on standard errors returned by \code{get_predicted()} (i.e.
 returned by the \code{predict()}-function), because these are more accurate than
 manually calculated standard errors. Use \code{get_predicted_ci()} only if standard

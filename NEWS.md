@@ -8,9 +8,12 @@
   of the fixed-effect parameter formulas. `nonlinear` has the nonlinear model,
   and `random` has the random part. Functions that use the formula, like
   `find_variables()`, `get_response()`, `get_random()` and `get_predicted()`,
-  now work for these models. Confidence intervals for predictions are not yet
-  supported. `get_variance()` returns `NULL` with a message, because the
-  random effects are on the scale of the nonlinear parameters.
+  now work for these models. `get_predicted()` returns standard errors and
+  confidence intervals for predictions, computed with the delta method from
+  the Jacobian of `predict()` with respect to the fixed effects. Prediction
+  intervals are not yet supported. `get_variance()` returns `NULL` with a
+  message, because the random effects are on the scale of the nonlinear
+  parameters.
 
 ## Changes
 

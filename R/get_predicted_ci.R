@@ -27,6 +27,15 @@
 #' residual variance to these values. For mixed models, `get_variance_residual()`
 #' is used, while `get_sigma()^2` is used for non-mixed models.
 #'
+#' Nonlinear mixed models of class `nlme` (from `nlme::nlme()`) have no model
+#' matrix `X`. For these models, the standard errors are calculated with the
+#' delta method: `X` is replaced by the Jacobian of the predictions with respect
+#' to the fixed effects, computed by central differences of `predict()` at the
+#' level of the predictions, with the random effects held at their predicted
+#' values. Only Wald confidence intervals are available. Prediction intervals,
+#' the `vcov` argument and other values of `ci_method` are not yet supported
+#' for these models.
+#'
 #' It is preferred to rely on standard errors returned by `get_predicted()` (i.e.
 #' returned by the `predict()`-function), because these are more accurate than
 #' manually calculated standard errors. Use `get_predicted_ci()` only if standard
@@ -289,11 +298,10 @@ get_predicted_ci.nlme <- function(
   }
   if (!is.null(unsupported)) {
     if (isTRUE(verbose)) {
-      format_alert(paste(
-        unsupported,
-        "not yet supported for models of class `nlme`. Only Wald confidence",
-        "intervals based on `vcov()` of the model are available."
-      ))
+      format_alert(
+        paste(unsupported, "not yet supported for models of class `nlme`."),
+        "Only Wald confidence intervals based on `vcov()` of the model are available."
+      )
     }
     return(NULL)
   }
