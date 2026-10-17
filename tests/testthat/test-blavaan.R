@@ -187,11 +187,12 @@ test_that("get_parameters, standardized draws with type", {
   withr::with_options(list(warnPartialMatchDollar = TRUE), {
     withr::with_language("en", {
       expect_no_warning(
-        out <- get_parameters(bfit, summary = TRUE, standardize = TRUE),
+        get_parameters(bfit, summary = TRUE, standardize = TRUE),
         message = "[Pp]artial match of 'est'"
       )
     })
   })
+  out <- get_parameters(bfit, summary = TRUE, standardize = TRUE)
   # oracle: the est.std column of lavaan::standardizedSolution()
   expect_identical(
     out$Estimate,

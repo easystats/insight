@@ -95,9 +95,10 @@ test_that("get_parameters, standardized estimates without partial matching", {
   withr::local_language("en")
   # the column of standardized estimates is "est.std", not "est"
   expect_no_warning(
-    out <- get_parameters(model, standardize = TRUE),
+    get_parameters(model, standardize = TRUE),
     message = "[Pp]artial match of 'est'"
   )
+  out <- get_parameters(model, standardize = TRUE)
   # oracle: the est.std column of lavaan::standardizedSolution()
   expect_identical(
     out$Estimate,
