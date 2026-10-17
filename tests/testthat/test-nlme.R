@@ -137,21 +137,108 @@ test_that("get_predicted, nlme", {
       tolerance = 1e-10
     )
   }
-  # no standard errors for nonlinear mixed models, so `ci` gives a message
-  expect_message(
-    p <- get_predicted(m_nlme1, ci = 0.95),
-    regexp = "not yet supported for models of class `nlme`"
+})
+
+
+test_that("get_predicted, nlme, standard errors", {
+  skip_if_not_installed("marginaleffects")
+  # oracle: live, marginaleffects::predictions(), which computes its own
+  # Jacobian of predict() with respect to the fixed effects
+  soybean <- as.data.frame(nlme_soybean)
+  # rows with different `Time` and both `Variety` levels, so that each fixed
+  # effect enters the Jacobian
+  d <- soybean[c(1, which(soybean$Variety == "P")[5], 300), ]
+  expect_setequal(as.character(d$Variety), c("F", "P"))
+  p <- as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95))
+  expect_equal(
+    p$SE,
+    marginaleffects::predictions(m_nlme2, newdata = d)$std.error,
+    tolerance = 1e-4
   )
-  expect_equal(as.vector(p), as.vector(stats::predict(m_nlme1)), tolerance = 1e-10)
-  expect_silent(get_predicted(m_nlme1, ci = 0.95, verbose = FALSE))
-  # called directly, get_predicted_ci() also gives the message
-  expect_message(
-    out <- get_predicted_ci(m_nlme1, p),
-    regexp = "not yet supported for models of class `nlme`"
+  # rows of different wafers, sites and voltages
+  d <- as.data.frame(nlme_wafer)[c(1, 8, 45), ]
+  p <- as.data.frame(get_predicted(m_nlme3, data = d, ci = 0.95))
+  expect_equal(
+    p$SE,
+    marginaleffects::predictions(m_nlme3, newdata = d)$std.error,
+    tolerance = 1e-4
   )
-  expect_null(out)
-  expect_silent(out <- get_predicted_ci(m_nlme1, p, verbose = FALSE))
-  expect_null(out)
+})
+
+
+test_that("get_predicted, nlme, standard errors of a linear model", {
+  # oracle: closed-form. The model is linear in its parameters, so the
+  # Jacobian is the model matrix X, and the standard errors are the square
+  # roots of the diagonal of X V X'
+  m <- nlme::nlme(
+    height ~ a + b1 * age,
+    data = nlme_loblolly,
+    fixed = a + b1 ~ 1,
+    random = a ~ 1 | Seed,
+    start = c(a = 0, b1 = 2.5)
+  )
+  loblolly <- as.data.frame(nlme_loblolly)
+  d <- loblolly[match(c(3, 10, 25), loblolly$age), ]
+  X <- cbind(1, d$age)
+  se <- sqrt(diag(X %*% stats::vcov(m) %*% t(X)))
+  p <- as.data.frame(get_predicted(m, data = d, ci = 0.95))
+  expect_equal(p$SE, se, tolerance = 1e-6, ignore_attr = TRUE)
+  p <- as.data.frame(get_predicted(m, data = d, ci = 0.95, level = 0))
+  expect_equal(p$SE, se, tolerance = 1e-6, ignore_attr = TRUE)
+})
+
+
+test_that("get_predicted, nlme, standard errors on the population level", {
+  # oracle: invariant. A grid without grouping levels of the model data gives
+  # population-level predictions, so its standard errors equal those for an
+  # explicit `level = 0`
+  grid <- get_datagrid(m_nlme2, by = "Variety")
+  p <- as.data.frame(get_predicted(m_nlme2, data = grid, ci = 0.95))
+  p0 <- as.data.frame(get_predicted(m_nlme2, data = grid, ci = 0.95, level = 0))
+  expect_equal(p$SE, p0$SE, tolerance = 1e-10)
+  expect_false(anyNA(p$SE))
+  # control: on the group level, the standard errors differ, so the
+  # comparison above depends on the level
+  d <- get_data(m_nlme2)[1:3, ]
+  p0 <- as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95, level = 0))
+  p1 <- as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95, level = 1))
+  expect_gt(max(abs(p0$SE - p1$SE)), 1e-3)
+})
+
+
+test_that("get_predicted, nlme, confidence intervals", {
+  # oracle: invariant, the Wald interval with the t-distribution
+  for (m in nlme_models) {
+    expect_silent(p <- as.data.frame(get_predicted(m, ci = 0.95)))
+    expect_named(p, c("Predicted", "SE", "CI_low", "CI_high"))
+    expect_false(anyNA(p$SE))
+    crit <- stats::qt(0.975, min(get_df(m, type = "wald")))
+    expect_equal(p$CI_low, p$Predicted - crit * p$SE, tolerance = 1e-10)
+    expect_equal(p$CI_high, p$Predicted + crit * p$SE, tolerance = 1e-10)
+    p <- as.data.frame(get_predicted(m, ci = NULL))
+    expect_named(p, "Predicted")
+  }
+  # called directly without `data`, get_predicted_ci() uses the model data
+  p <- get_predicted(m_nlme1, ci = 0.95)
+  out <- get_predicted_ci(m_nlme1, p)
+  expect_equal(out, attributes(p)$ci_data, tolerance = 1e-10, ignore_attr = TRUE)
+})
+
+
+test_that("get_predicted, nlme, unsupported interval arguments", {
+  # each call gives a message that names the argument, and no intervals
+  unsupported <- list(
+    list(predict = "prediction", regexp = "predict = \"prediction\""),
+    list(vcov = "HC0", regexp = "`vcov`"),
+    list(vcov = stats::vcov(m_nlme1), regexp = "`vcov`"),
+    list(ci_method = "satterthwaite", regexp = "`ci_method`")
+  )
+  for (u in unsupported) {
+    call_args <- c(list(m_nlme1, ci = 0.95), u[names(u) != "regexp"])
+    expect_message(p <- do.call(get_predicted, call_args), regexp = u$regexp, fixed = TRUE)
+    expect_named(as.data.frame(p), "Predicted")
+    expect_silent(do.call(get_predicted, c(call_args, verbose = FALSE)))
+  }
 })
 
 
@@ -191,6 +278,17 @@ test_that("get_predicted, nlme, data grid without random effects", {
     regexp = "factor levels that are not in the model data"
   )
   expect_identical(is.na(as.vector(p)), c(FALSE, TRUE, FALSE))
+  # the standard errors and intervals are NA for that row, and the other rows
+  # get the values they have alone
+  expect_warning(
+    p <- as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95)),
+    regexp = "factor levels that are not in the model data"
+  )
+  p13 <- as.data.frame(get_predicted(m_nlme2, data = d[c(1, 3), ], ci = 0.95))
+  for (i in c("SE", "CI_low", "CI_high")) {
+    expect_identical(is.na(p[[i]]), c(FALSE, TRUE, FALSE))
+    expect_equal(p[[i]][c(1, 3)], p13[[i]], tolerance = 1e-10)
+  }
 })
 
 
