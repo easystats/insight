@@ -240,11 +240,12 @@ test_that("get_predicted, nlme, unsupported interval arguments", {
   )
   for (u in unsupported) {
     call_args <- c(list(m_nlme1, ci = 0.95), u[names(u) != "regexp"])
-    p <- expect_message(
+    expect_message(
       do.call(get_predicted, call_args),
       regexp = u$regexp,
       fixed = TRUE
     )
+    p <- suppressMessages(do.call(get_predicted, call_args))
     expect_named(as.data.frame(p), "Predicted")
     expect_silent(do.call(get_predicted, c(call_args, verbose = FALSE)))
   }
@@ -289,9 +290,12 @@ test_that("get_predicted, nlme, data grid without random effects", {
   expect_identical(is.na(as.vector(p)), c(FALSE, TRUE, FALSE))
   # the standard errors and intervals are NA for that row, and the other rows
   # get the values they have alone
-  p <- expect_warning(
-    as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95)),
+  expect_warning(
+    get_predicted(m_nlme2, data = d, ci = 0.95),
     regexp = "factor levels that are not in the model data"
+  )
+  p <- suppressWarnings(
+    as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95))
   )
   p13 <- as.data.frame(get_predicted(m_nlme2, data = d[c(1, 3), ], ci = 0.95))
   for (i in c("SE", "CI_low", "CI_high")) {
