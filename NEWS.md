@@ -14,6 +14,12 @@
 
 ## Changes
 
+* `get_parameters()` for *lavaan* models, and for *blavaan* models with
+  `summary = TRUE`, now returns standardized parameters only for
+  `standardize = TRUE`, as it does for the posterior draws of *blavaan* models.
+  Before, values such as `1` or `"TRUE"` also returned standardized
+  parameters, and values such as `"yes"`, `NA` or `NULL` gave an error.
+
 * `get_modelmatrix()` now works for models from `stats::arima()` (#1274). It
   returns the columns of the `xreg` regressors, named like the coefficients.
   For a model with an intercept, the first column is the intercept.

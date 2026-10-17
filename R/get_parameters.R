@@ -651,7 +651,8 @@ get_parameters.metaplus <- function(x, ...) {
 #' @param summary Logical. For **blavaan** models, indicates whether the full
 #'   posterior samples (`summary = FALSE`) or point estimates
 #'   (`summary = TRUE`) should be returned.
-#' @param standardize Logical. If `TRUE`, standardized parameters are returned.
+#' @param standardize Logical. Only `TRUE` returns standardized parameters.
+#'   Other values, such as `1` or `NA`, return unstandardized parameters.
 #' @param ... If `standardize = TRUE`, a `type` argument can be used, which is
 #'   passed to `lavaan::standardizedSolution()` (or to
 #'   `blavaan::standardizedPosterior()` for the posterior samples of
