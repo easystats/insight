@@ -168,21 +168,31 @@ test_that("get_parameters, standardized draws with type", {
   expect_identical(summary_false, get_parameters(bfit, summary = TRUE))
 
   # values other than TRUE or FALSE give the unstandardized parameters
+  # oracle: the package's own output for standardize = FALSE
   for (v in list(1, "yes", NA, c(TRUE, TRUE), NULL)) {
-    expect_identical(get_parameters(bfit, standardize = v), draws_false)
+    expect_identical(
+      get_parameters(bfit, standardize = v),
+      draws_false,
+      info = paste("draws, standardize =", deparse(v))
+    )
     expect_identical(
       get_parameters(bfit, summary = TRUE, standardize = v),
-      summary_false
+      summary_false,
+      info = paste("summary, standardize =", deparse(v))
     )
   }
 
-  # the column of standardized estimates is "est.std", not "est"
+  # the column of standardized estimates is "est.std", not "est". The
+  # warning text is translated, and the pattern below is English.
   withr::with_options(list(warnPartialMatchDollar = TRUE), {
-    expect_no_warning(
-      out <- get_parameters(bfit, summary = TRUE, standardize = TRUE),
-      message = "[Pp]artial match of 'est'"
-    )
+    withr::with_language("en", {
+      expect_no_warning(
+        out <- get_parameters(bfit, summary = TRUE, standardize = TRUE),
+        message = "[Pp]artial match of 'est'"
+      )
+    })
   })
+  # oracle: the est.std column of lavaan::standardizedSolution()
   expect_identical(
     out$Estimate,
     lavaan::standardizedSolution(bfit)[["est.std"]]
