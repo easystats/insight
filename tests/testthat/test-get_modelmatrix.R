@@ -538,3 +538,177 @@ test_that("get_modelmatrix - brmsfit, ordered predictor given as character in ne
   ))
   expect_ndord_modelmatrix(m, d_ndord)
 })
+
+
+# Arima --------------------------------------------------------------
+# ====================================================================
+
+# names of `coef()` without the AR, MA, SAR and SMA coefficients
+arima_regression_names <- function(m) {
+  n_arma <- sum(m$arma[1:4])
+  names(stats::coef(m))[setdiff(seq_along(stats::coef(m)), seq_len(n_arma))]
+}
+
+test_that("get_modelmatrix - Arima with xreg", {
+  arima_m1 <- stats::arima(LakeHuron, order = c(2, 0, 0), xreg = time(LakeHuron))
+  out <- get_modelmatrix(arima_m1)
+  # a plain matrix, not a time series ("mts") matrix
+  expect_true(is.matrix(out))
+  expect_null(oldClass(out))
+  expect_identical(nrow(out), 98L)
+  expect_identical(colnames(out), c("intercept", "time(LakeHuron)"))
+  expect_identical(
+    colnames(out),
+    setdiff(get_parameters(arima_m1)$Parameter, c("ar1", "ar2"))
+  )
+  expect_identical(unname(out[, 1]), rep(1, 98))
+  expect_identical(unname(out[, 2]), as.numeric(time(LakeHuron)))
+})
+
+test_that("get_modelmatrix - Arima, columns follow coef()", {
+  # differenced series: arima fits no intercept
+  arima_d1 <- stats::arima(LakeHuron, order = c(1, 1, 0), xreg = time(LakeHuron))
+  # no mean, two named regressors
+  arima_nomean <- stats::arima(
+    LakeHuron,
+    order = c(1, 0, 0),
+    include.mean = FALSE,
+    xreg = cbind(a = time(LakeHuron), b = seq_along(LakeHuron))
+  )
+  # seasonal MA terms
+  arima_seas <- stats::arima(
+    USAccDeaths,
+    order = c(0, 1, 1),
+    seasonal = list(order = c(0, 1, 1)),
+    xreg = sin(seq_along(USAccDeaths))
+  )
+  # regressors given as a data frame
+  arima_xreg_df <- data.frame(
+    t = as.numeric(time(LakeHuron)),
+    s = sin(seq_along(LakeHuron))
+  )
+  arima_df <- stats::arima(LakeHuron, order = c(1, 0, 0), xreg = arima_xreg_df)
+  # one missing value in the series
+  arima_lh_na <- LakeHuron
+  arima_lh_na[10] <- NA
+  arima_na <- stats::arima(arima_lh_na, order = c(1, 0, 0), xreg = time(LakeHuron))
+
+  for (m in list(arima_d1, arima_nomean, arima_seas, arima_df, arima_na)) {
+    out <- get_modelmatrix(m)
+    expect_identical(colnames(out), arima_regression_names(m))
+    expect_identical(nrow(out), length(stats::residuals(m)))
+  }
+  expect_identical(colnames(get_modelmatrix(arima_d1)), "time(LakeHuron)")
+  expect_identical(colnames(get_modelmatrix(arima_seas)), "sin(seq_along(USAccDeaths))")
+  expect_identical(colnames(get_modelmatrix(arima_df)), c("intercept", "t", "s"))
+  expect_identical(unname(get_modelmatrix(arima_df)[, "s"]), sin(seq_along(LakeHuron)))
+  expect_identical(nrow(get_modelmatrix(arima_na)), 98L)
+})
+
+test_that("get_modelmatrix - Arima without xreg", {
+  arima_ar1 <- stats::arima(LakeHuron, order = c(1, 0, 0))
+  out <- get_modelmatrix(arima_ar1)
+  expect_identical(dim(out), c(98L, 1L))
+  expect_identical(colnames(out), "intercept")
+  expect_identical(unname(out[, 1]), rep(1, 98))
+
+  # no regression coefficient at all
+  arima_ari <- stats::arima(LakeHuron, order = c(1, 1, 0))
+  out <- get_modelmatrix(arima_ari)
+  expect_identical(dim(out), c(98L, 0L))
+})
+
+test_that("get_modelmatrix - Arima, regressors that cannot be used", {
+  # the test creates and removes a global `z`
+  skip_if(exists("z", envir = globalenv(), inherits = FALSE), "a global `z` exists")
+  arima_local_fit <- function() {
+    z <- time(LakeHuron)
+    stats::arima(LakeHuron, order = c(1, 0, 0), xreg = z)
+  }
+  arima_local <- arima_local_fit()
+  # `z` exists only inside the fitting function
+  expect_error(
+    get_modelmatrix(arima_local),
+    "Could not find the regressors `z`",
+    fixed = TRUE
+  )
+
+  # a local regressor with the name of a base function (`q()`)
+  arima_local_q_fit <- function() {
+    q <- time(LakeHuron) # nolint: the test needs the name of a base function
+    stats::arima(LakeHuron, order = c(1, 0, 0), xreg = q)
+  }
+  expect_error(
+    get_modelmatrix(arima_local_q_fit()),
+    "Could not find the regressors `q`",
+    fixed = TRUE
+  )
+
+  # a global `z` with another number of rows is not used
+  assign("z", 1:3, envir = globalenv())
+  withr::defer(rm("z", envir = globalenv()))
+  expect_error(
+    get_modelmatrix(arima_local),
+    "The regressors `z` have 3 rows, but the model has 98 observations",
+    fixed = TRUE
+  )
+
+  # new data
+  arima_m1 <- stats::arima(LakeHuron, order = c(2, 0, 0), xreg = time(LakeHuron))
+  expect_error(
+    get_modelmatrix(arima_m1, data = data.frame(x = 1)),
+    "New data is not supported for arima models",
+    fixed = TRUE
+  )
+  # new data given by position
+  expect_error(
+    get_modelmatrix(arima_m1, data.frame(x = 1)),
+    "New data is not supported for arima models",
+    fixed = TRUE
+  )
+  # an argument whose name starts with "data" is not new data
+  expect_identical(dim(get_modelmatrix(arima_m1, datagrid = 1)), c(98L, 2L))
+})
+
+test_that("get_modelmatrix - Arima, regressors found by name", {
+  # a regressor object that holds NULL means no regressors
+  arima_xr_null <- NULL
+  arima_null <- stats::arima(LakeHuron, order = c(1, 0, 0), xreg = arima_xr_null)
+  out <- get_modelmatrix(arima_null)
+  expect_identical(dim(out), c(98L, 1L))
+  expect_identical(colnames(out), "intercept")
+
+  # a function that calls get_modelmatrix() has a local variable with the
+  # name of the regressors, but another size; the global object is used
+  skip_if(
+    exists("arima_xr_global", envir = globalenv(), inherits = FALSE),
+    "a global `arima_xr_global` exists"
+  )
+  assign("arima_xr_global", time(LakeHuron), envir = globalenv())
+  withr::defer(rm("arima_xr_global", envir = globalenv()))
+  arima_global <- stats::arima(LakeHuron, order = c(1, 0, 0), xreg = arima_xr_global)
+  arima_wrapper <- function(model) {
+    arima_xr_global <- 1:14
+    get_modelmatrix(model)
+  }
+  out <- arima_wrapper(arima_global)
+  expect_identical(dim(out), c(98L, 2L))
+  expect_identical(unname(out[, 2]), as.numeric(time(LakeHuron)))
+})
+
+test_that("get_modelmatrix - Arima with stored xreg set by hand, as in forecast::Arima() fits", {
+  arima_m1 <- stats::arima(LakeHuron, order = c(2, 0, 0), xreg = time(LakeHuron))
+  arima_m1$xreg <- cbind(xreg = 2 * as.numeric(time(LakeHuron)))
+  arima_m1$call$xreg <- as.name("arima_no_such_object")
+  out <- get_modelmatrix(arima_m1)
+  expect_identical(unname(out[, 2]), 2 * as.numeric(time(LakeHuron)))
+  expect_identical(colnames(out), c("intercept", "time(LakeHuron)"))
+
+  # stored regressors with more columns than regression coefficients
+  arima_m1$xreg <- cbind(a = 1:98, b = 1:98, c = 1:98)
+  expect_error(
+    get_modelmatrix(arima_m1),
+    "The regressors `xreg` have 3 columns, but the model has 2",
+    fixed = TRUE
+  )
+})

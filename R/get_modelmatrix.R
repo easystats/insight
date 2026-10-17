@@ -166,6 +166,116 @@ get_modelmatrix.clmm <- function(x, ...) {
 }
 
 #' @export
+get_modelmatrix.Arima <- function(x, data = NULL, ...) {
+  if (!is.null(data)) {
+    format_error("New data is not supported for arima models.")
+  }
+  # in `coef()`, the regression coefficients follow the AR, MA, SAR and SMA
+  # coefficients. arima() names the intercept "intercept", the other
+  # coefficients take the column names of `xreg`, or the deparsed `xreg`
+  # argument when it has no column names.
+  params <- stats::coef(x)
+  regression_names <- names(params)[seq_along(params) > sum(x$arma[1:4])]
+  n_obs <- length(x$residuals)
+
+  # forecast::Arima() fits store `xreg`, stats::arima() fits only the call.
+  # We use `[[` to avoid partial matching by `$`.
+  xreg <- x[["xreg"]]
+  xreg_call <- x$call[["xreg"]]
+  xreg_label <- if (is.null(xreg) && !is.null(xreg_call)) {
+    safe_deparse(xreg_call)
+  } else {
+    "xreg"
+  }
+  if (is.null(xreg) && !is.null(xreg_call)) {
+    # first try, parent frame, second try, global env. A function of the
+    # same name, like `q()`, is not the regressor. An object that holds NULL
+    # means that the model has no regressors.
+    candidates <- list()
+    for (envir in list(parent.frame(), globalenv())) {
+      value <- tryCatch(eval(xreg_call, envir = envir), error = function(e) e)
+      if (!inherits(value, "error") && !is.function(value)) {
+        candidates[length(candidates) + 1] <- list(value)
+      }
+    }
+    if (!length(candidates)) {
+      format_error(paste0(
+        "Could not find the regressors `",
+        xreg_label,
+        "` of the arima model. The object must be visible from where",
+        " `get_modelmatrix()` is called, or from the global environment."
+      ))
+    }
+    # the parent frame can hold another object of the same name, for example
+    # a local variable of a function that calls `get_modelmatrix()`. So we
+    # take the first object whose size matches the model.
+    matching <- vapply(
+      candidates,
+      .arima_xreg_matches,
+      logical(1),
+      n_obs = n_obs,
+      regression_names = regression_names
+    )
+    xreg <- candidates[[if (any(matching)) which(matching)[1] else 1]]
+  }
+  if (is.null(xreg)) {
+    xreg <- matrix(numeric(0), nrow = n_obs, ncol = 0)
+  }
+  xreg <- as.matrix(xreg)
+
+  # an object of the same name may hold other values than those used to fit
+  # the model, so we check the number of rows and columns
+  if (nrow(xreg) != n_obs) {
+    format_error(paste0(
+      "The regressors `",
+      xreg_label,
+      "` have ",
+      nrow(xreg),
+      " rows, but the model has ",
+      n_obs,
+      " observations."
+    ))
+  }
+  has_intercept <- length(regression_names) == ncol(xreg) + 1 &&
+    regression_names[1] == "intercept"
+  if (!has_intercept && length(regression_names) != ncol(xreg)) {
+    format_error(paste0(
+      "The regressors `",
+      xreg_label,
+      "` have ",
+      ncol(xreg),
+      " columns, but the model has ",
+      length(regression_names),
+      " regression coefficients."
+    ))
+  }
+  if (has_intercept) {
+    xreg <- cbind(1, xreg)
+  }
+  matrix(
+    as.numeric(xreg),
+    nrow = n_obs,
+    dimnames = list(NULL, regression_names)
+  )
+}
+
+# TRUE if `value` has one row per observation and one column per regression
+# coefficient, or one column less when the first coefficient is the intercept
+.arima_xreg_matches <- function(value, n_obs, regression_names) {
+  if (is.null(value)) {
+    n_rows <- n_obs
+    n_cols <- 0
+  } else {
+    n_rows <- NROW(value)
+    n_cols <- NCOL(value)
+  }
+  one_per_coef <- n_cols == length(regression_names)
+  intercept_and_one_per_coef <- n_cols + 1 == length(regression_names) &&
+    regression_names[1] == "intercept"
+  n_rows == n_obs && (one_per_coef || intercept_and_one_per_coef)
+}
+
+#' @export
 get_modelmatrix.svyglm <- function(x, ...) {
   dots <- list(...)
   if ("data" %in% names(dots)) {
