@@ -486,6 +486,7 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
       start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
     )
   }
+  expect_false(exists("corr_local", envir = globalenv()))
   m_local <- fit_local()
   expect_false(exists("corr_local", envir = globalenv()))
   expect_no_error(f <- find_formula(m_local))

@@ -33,7 +33,9 @@ test_that("find_formula, get_data glmmPQL", {
 })
 
 test_that("find_formula, glmmPQL, correlation structure without `form`", {
+  # `t` is an integer position, as in the lme and gls tests
   d <- nlme::Orthodont
+  d$t <- as.integer(d$age)
   # nlme uses the grouping of the random effects
   m <- MASS::glmmPQL(
     I(distance > 25) ~ age,
