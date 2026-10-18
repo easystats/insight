@@ -1029,9 +1029,10 @@ test_that("is_converged.coxph, strata changed after the fit", {
   }
   expect_true(is_converged(f_x$fit))
 
-  # the refit does not need survival to be attached: the formula environment
-  # of these fits cannot see `coxph()`, and the stored call names `coxph`
-  # without the namespace, as after library(survival), and always for clogit()
+  # the refit calls survival::coxph(): the stored call names `coxph` without
+  # the namespace, as after library(survival), and always for clogit(). In the
+  # formula environment of these fits, `coxph` is a function that stops, so a
+  # refit through it fails whether or not survival is attached.
   bare <- new.env(parent = baseenv())
   bare$cvx_bare <- cvx_lung
   bare$cvx_bare_infert <- datasets::infert
@@ -1043,8 +1044,7 @@ test_that("is_converged.coxph, strata changed after the fit", {
     bare
   ))
   f_bare$fit$call[[1]] <- as.name("coxph")
-  # clogit() calls `coxph()` from the frame of its call, so `coxph` is there
-  # for the fit only, as in a later session without library(survival)
+  # clogit() calls `coxph()` from the frame of its call
   bare$coxph <- survival::coxph
   f_bare_clogit <- .cvx_fit(eval(
     quote(survival::clogit(
@@ -1054,10 +1054,14 @@ test_that("is_converged.coxph, strata changed after the fit", {
     )),
     bare
   ))
-  rm("coxph", envir = bare)
+  bare$coxph <- function(...) stop("not survival::coxph()", call. = FALSE)
   expect_identical(f_bare_clogit$fit$call[[1]], as.name("coxph"))
   for (f in list(f_bare, f_bare_clogit)) {
-    expect_false(exists("coxph", envir = environment(f$fit$terms)))
+    expect_error(
+      eval(f$fit$call, environment(f$fit$terms)),
+      "not survival::coxph()",
+      fixed = TRUE
+    )
     .cvx_expect_as_survival(f)
     expect_true(is_converged(f$fit))
   }

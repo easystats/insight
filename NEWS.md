@@ -91,12 +91,12 @@
   It also runs for models with factor predictors or a
   `strata()` term, which skipped it before. A change to the `strata()`
   variable of a multi-state model is still not detected. If the predictor
-  data of these models changed after the fit, they now return `FALSE` with a message that
-  convergence cannot be assessed. Before, the result depended on the change,
-  and coefficients were flagged as infinite by mistake. A model object with
-  zero iterations now also returns `FALSE` with this message. If the data of
-  the model can be read, the message no longer suggests to refit the model
-  with `model = TRUE`.
+  data of these models changed after the fit, they now return `FALSE` with a
+  message that convergence cannot be assessed. Before, the result depended on
+  the change, and coefficients were flagged as infinite by mistake. A model
+  object with zero iterations now also returns `FALSE` with this message. If
+  the data of the model can be read, the message no longer suggests to refit
+  the model with `model = TRUE`.
 
 * `link_inverse()` and `link_function()` now work for brms custom families with
   brms-only links like `softplus` or `squareplus`.
