@@ -920,7 +920,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     return(TRUE)
   }
   # a change of the strata leaves the linear predictor the same
-  !is.null(attr(x$terms, "specials")$strata) && .coxph_strata_changed(x, control)
+  !is.null(attr(x$terms, "specials")[["strata"]]) && .coxph_strata_changed(x, control)
 }
 
 
@@ -940,6 +940,9 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   coefs[is.na(coefs)] <- 0
   control$iter.max <- 0
   refit_call <- x$call
+  # the call can name `coxph` without the namespace (always so for clogit),
+  # and survival need not be attached
+  refit_call[[1]] <- quote(survival::coxph)
   refit_call$formula <- x$terms
   refit_call$init <- unname(coefs)
   refit_call$control <- control
@@ -1025,7 +1028,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 # evaluated, the reason is returned.
 .coxph_control <- function(x) {
   call_args <- as.list(x$call)[-1]
-  if (is.null(call_args$control)) {
+  if (is.null(call_args[["control"]])) {
     control_args <- call_args[!names(call_args) %in% names(formals(survival::coxph))]
   } else {
     control_args <- call_args["control"]
@@ -1046,8 +1049,8 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
         stop("The model formula has no environment.", call. = FALSE)
       }
       control <- lapply(control_args, eval, envir = env)
-      if (!is.null(call_args$control)) {
-        control <- as.list(control$control)
+      if (!is.null(call_args[["control"]])) {
+        control <- as.list(control[["control"]])
       }
       do.call(survival::coxph.control, control)
     },

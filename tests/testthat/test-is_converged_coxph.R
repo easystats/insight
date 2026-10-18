@@ -833,6 +833,8 @@ test_that("is_converged.coxph, predictor data changed after the fit", {
 
 
 test_that("is_converged.coxph, variable control arguments with a formula object", {
+  # oracle: reference implementation, the warnings survival gives at the fit
+  # (.cvx_expect_as_survival()), and the stated `iter.max` of each fit
   # insight reads the control arguments in the formula environment, which is
   # this test. coxph() read them in the frame of its call, here the function
   # with `n = 2`, so the fits ran out of iterations, while `n` is 50 here.
@@ -931,6 +933,8 @@ test_that("is_converged.coxph, variable control arguments with a formula object"
 
 
 test_that("is_converged.coxph, a data object hidden by one of the same name", {
+  # oracle: construction, the outer object is made equal to or different from
+  # the data of the fit
   # the formula environment is this test, so the data object of the call is
   # read here, and not in the function that fitted the model
   cvx_hidden_fo <- Surv(time, status) ~ age + sex
@@ -953,6 +957,8 @@ test_that("is_converged.coxph, a data object hidden by one of the same name", {
 
 
 test_that("is_converged.coxph, strata changed after the fit", {
+  # oracle: reference implementation, the warnings survival gives at the fit,
+  # and the same fits with `model = TRUE`, which read no data
   cvx_strata <- cvx_lung
   f_efron <- .cvx_fit(coxph(
     Surv(time, status) ~ age + ph.ecog + strata(sex),
@@ -977,6 +983,16 @@ test_that("is_converged.coxph, strata changed after the fit", {
     model_call$model <- TRUE
     .cvx_fit(eval(model_call))
   })
+  # the model matrix and strata are stored with `x = TRUE`
+  f_x <- .cvx_fit(coxph(
+    Surv(time, status) ~ age + ph.ecog + strata(sex),
+    data = cvx_strata,
+    x = TRUE
+  ))
+  expect_identical(
+    is_converged(f_x$fit, verbose = FALSE),
+    is_converged(fits_model[[1]]$fit, verbose = FALSE)
+  )
 
   # data unchanged
   for (i in seq_along(fits)) {
@@ -1011,6 +1027,42 @@ test_that("is_converged.coxph, strata changed after the fit", {
     .cvx_expect_not_assessed(fits[[i]]$fit, "predictor data changed")
     expect_true(is_converged(fits_model[[i]]$fit))
   }
+  expect_true(is_converged(f_x$fit))
+
+  # the refit does not need survival to be attached: the formula environment
+  # of these fits cannot see `coxph()`, and the stored call names `coxph`
+  # without the namespace, as after library(survival), and always for clogit()
+  bare <- new.env(parent = baseenv())
+  bare$cvx_bare <- cvx_lung
+  bare$cvx_bare_infert <- datasets::infert
+  f_bare <- .cvx_fit(eval(
+    quote(survival::coxph(
+      Surv(time, status) ~ age + ph.ecog + strata(sex),
+      data = cvx_bare
+    )),
+    bare
+  ))
+  f_bare$fit$call[[1]] <- as.name("coxph")
+  # clogit() calls `coxph()` from the frame of its call, so `coxph` is there
+  # for the fit only, as in a later session without library(survival)
+  bare$coxph <- survival::coxph
+  f_bare_clogit <- .cvx_fit(eval(
+    quote(survival::clogit(
+      case ~ spontaneous + induced + survival::strata(stratum),
+      data = cvx_bare_infert,
+      method = "efron"
+    )),
+    bare
+  ))
+  rm("coxph", envir = bare)
+  expect_identical(f_bare_clogit$fit$call[[1]], as.name("coxph"))
+  for (f in list(f_bare, f_bare_clogit)) {
+    expect_false(exists("coxph", envir = environment(f$fit$terms)))
+    .cvx_expect_as_survival(f)
+    expect_true(is_converged(f$fit))
+  }
+  bare$cvx_bare$sex <- withr::with_seed(123, sample(cvx_lung$sex))
+  .cvx_expect_not_assessed(f_bare$fit, "predictor data changed")
 
   # the refit runs only for fits with a `strata()` term
   cvx_strata <- cvx_lung
