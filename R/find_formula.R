@@ -779,7 +779,7 @@ find_formula.gls <- function(x, verbose = TRUE, ...) {
     }
   )
 
-  .find_formula_return(compact_list(l))
+  .find_formula_return(compact_list(l), verbose = verbose)
 }
 
 

@@ -1097,6 +1097,11 @@ test_that("find_formula, lme, correlation structure without `form`", {
   )
   expect_equal(find_formula(m)$correlation, ~ 1 | Subject, ignore_attr = TRUE)
   expect_identical(find_variables(m)$correlation, "Subject")
+  # the grouping is also a predictor, as for an explicit `form`
+  expect_identical(
+    find_predictors(m),
+    list(conditional = "age", correlation = "Subject")
+  )
 
   m_nested <- nlme::lme(
     distance ~ age,

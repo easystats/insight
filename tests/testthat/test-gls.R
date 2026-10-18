@@ -216,3 +216,37 @@ test_that("find_formula, gls, correlation structure without `form`", {
   m_none <- nlme::gls(distance ~ age, data = gls_orthodont_t)
   expect_named(find_formula(m_none), "conditional")
 })
+
+test_that("find_formula, gls, other correlation structures", {
+  m_cs <- nlme::gls(
+    distance ~ age,
+    data = gls_orthodont_t,
+    correlation = nlme::corCompSymm(form = ~ 1 | Subject)
+  )
+  expect_equal(find_formula(m_cs)$correlation, ~ 1 | Subject, ignore_attr = TRUE)
+
+  # a spatial structure with a position variable
+  m_exp <- nlme::gls(
+    distance ~ age,
+    data = gls_orthodont_t,
+    correlation = nlme::corExp(form = ~ age | Subject)
+  )
+  expect_equal(find_formula(m_exp)$correlation, ~ age | Subject, ignore_attr = TRUE)
+})
+
+test_that("find_formula, gls, phylogenetic structure object, easystats/insight#189", {
+  skip_if_not_installed("ape")
+  set.seed(123)
+  gls_tree <- ape::rtree(10)
+  gls_phylo_d <- data.frame(
+    y = rnorm(10),
+    x = rnorm(10),
+    row.names = gls_tree$tip.label
+  )
+  gls_corr_brownian <<- ape::corBrownian(phy = gls_tree)
+  withr::defer(rm(gls_corr_brownian, envir = globalenv()))
+  m <- nlme::gls(y ~ x, data = gls_phylo_d, correlation = gls_corr_brownian)
+  # the structure has no `form`, so its fitted formula `~1` has no variable
+  expect_no_error(find_formula(m))
+  expect_named(find_formula(m), "conditional")
+})
