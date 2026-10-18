@@ -651,7 +651,8 @@ get_parameters.metaplus <- function(x, ...) {
 #' @param summary Logical. For **blavaan** models, indicates whether the full
 #'   posterior samples (`summary = FALSE`) or point estimates
 #'   (`summary = TRUE`) should be returned.
-#' @param standardize Logical. If `TRUE`, standardized parameters are returned.
+#' @param standardize Logical. Only `TRUE` returns standardized parameters.
+#'   Other values, such as `1` or `NA`, return unstandardized parameters.
 #' @param ... If `standardize = TRUE`, a `type` argument can be used, which is
 #'   passed to `lavaan::standardizedSolution()` (or to
 #'   `blavaan::standardizedPosterior()` for the posterior samples of
@@ -711,15 +712,17 @@ get_parameters.blavaan <- function(x, summary = FALSE, standardize = FALSE, ...)
 get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
   check_if_installed("lavaan")
 
-  if (standardize) {
+  if (isTRUE(standardize)) {
     type <- .lavaan_std_type(...)
     if (is.null(type)) {
       params <- lavaan::standardizedSolution(x)
     } else {
       params <- lavaan::standardizedSolution(x, type = type)
     }
+    estimates <- params[["est.std"]]
   } else {
     params <- lavaan::parameterEstimates(x)
+    estimates <- params[["est"]]
   }
 
   params$parameter <- paste0(params$lhs, params$op, params$rhs)
@@ -732,7 +735,7 @@ get_parameters.lavaan <- function(x, standardize = FALSE, ...) {
 
   params <- data.frame(
     Parameter = params$parameter,
-    Estimate = params$est,
+    Estimate = estimates,
     Component = params$comp,
     stringsAsFactors = FALSE
   )

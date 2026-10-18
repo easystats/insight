@@ -16,7 +16,8 @@
 posterior samples (\code{summary = FALSE}) or point estimates
 (\code{summary = TRUE}) should be returned.}
 
-\item{standardize}{Logical. If \code{TRUE}, standardized parameters are returned.}
+\item{standardize}{Logical. Only \code{TRUE} returns standardized parameters.
+Other values, such as \code{1} or \code{NA}, return unstandardized parameters.}
 
 \item{...}{If \code{standardize = TRUE}, a \code{type} argument can be used, which is
 passed to \code{lavaan::standardizedSolution()} (or to

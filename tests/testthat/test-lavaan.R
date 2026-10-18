@@ -66,6 +66,46 @@ test_that("get_parameters, standardized parameters with type", {
   )
 })
 
+test_that("get_parameters, only standardize = TRUE standardizes", {
+  model <- lavaan::cfa(
+    "visual =~ x1 + x2 + x3",
+    data = lavaan::HolzingerSwineford1939
+  )
+  out_false <- get_parameters(model, standardize = FALSE)
+  expect_identical(out_false, get_parameters(model))
+
+  # values other than TRUE or FALSE give the unstandardized parameters
+  # oracle: the package's own output for standardize = FALSE
+  for (v in list(1, "yes", NA, c(TRUE, TRUE), NULL)) {
+    expect_identical(
+      get_parameters(model, standardize = v),
+      out_false,
+      info = paste("standardize =", deparse(v))
+    )
+  }
+})
+
+test_that("get_parameters, standardized estimates without partial matching", {
+  model <- lavaan::cfa(
+    "visual =~ x1 + x2 + x3",
+    data = lavaan::HolzingerSwineford1939
+  )
+  withr::local_options(warnPartialMatchDollar = TRUE)
+  # the warning text is translated, and the pattern below is English
+  withr::local_language("en")
+  # the column of standardized estimates is "est.std", not "est"
+  expect_no_warning(
+    get_parameters(model, standardize = TRUE),
+    message = "[Pp]artial match of 'est'"
+  )
+  out <- get_parameters(model, standardize = TRUE)
+  # oracle: the est.std column of lavaan::standardizedSolution()
+  expect_identical(
+    out$Estimate,
+    lavaan::standardizedSolution(model)[["est.std"]]
+  )
+})
+
 test_that("get_data, model frame of models with multiple groups", {
   model <- lavaan::cfa(
     "visual =~ x1 + x2 + x3",
