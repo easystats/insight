@@ -182,11 +182,12 @@ or with \code{x = TRUE} for single-state models. If these data were removed afte
 the model was fitted,
 convergence cannot be assessed. If the predictor data were changed, so that
 the linear predictor computed from them differs from the one of the model,
-convergence cannot be assessed either. Single-state models with a
-\code{strata()} term are also fitted again from these data, at the coefficients
-of the model and without iterations. If the log-likelihood of this fit
-differs from the one of the model, for example because the observations
-were moved to other strata, convergence cannot be assessed. For multi-state
+convergence cannot be assessed either. For single-state models with a
+\code{strata()} term, the log-likelihood and the martingale residuals at the
+coefficients of the model are also computed again from these data and the
+stored response. If they differ from those of the model, for example
+because observations were moved to other strata, convergence cannot be
+assessed. For multi-state
 models, the linear predictor is compared within each transition. A change
 that adds the same constant to all values of a predictor is not detected,
 but it leaves the score residuals the same. The check is not done for

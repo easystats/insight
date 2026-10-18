@@ -151,11 +151,12 @@
 #' the model was fitted,
 #' convergence cannot be assessed. If the predictor data were changed, so that
 #' the linear predictor computed from them differs from the one of the model,
-#' convergence cannot be assessed either. Single-state models with a
-#' `strata()` term are also fitted again from these data, at the coefficients
-#' of the model and without iterations. If the log-likelihood of this fit
-#' differs from the one of the model, for example because the observations
-#' were moved to other strata, convergence cannot be assessed. For multi-state
+#' convergence cannot be assessed either. For single-state models with a
+#' `strata()` term, the log-likelihood and the martingale residuals at the
+#' coefficients of the model are also computed again from these data and the
+#' stored response. If they differ from those of the model, for example
+#' because observations were moved to other strata, convergence cannot be
+#' assessed. For multi-state
 #' models, the linear predictor is compared within each transition. A change
 #' that adds the same constant to all values of a predictor is not detected,
 #' but it leaves the score residuals the same. The check is not done for
@@ -698,16 +699,18 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   # object of the call, unless the model frame (`model = TRUE`) or the model
   # matrix (`x = TRUE`) is stored. `[[` because `$` would match `xlevels`
   # for `x`.
-  if (
-    !counting &&
-      is.null(x[["model"]]) &&
-      is.null(x[["x"]]) &&
-      .coxph_data_changed(x, control)
-  ) {
-    return(paste(
-      "The predictor data changed after the model was fitted.",
-      "Refit the model, or fit it with `model = TRUE`."
-    ))
+  if (!counting && is.null(x[["model"]]) && is.null(x[["x"]])) {
+    # TRUE, FALSE, or the reason why the strata could not be compared
+    changed <- .coxph_data_changed(x)
+    if (is.character(changed)) {
+      return(changed)
+    }
+    if (changed) {
+      return(paste(
+        "The predictor data changed after the model was fitted.",
+        "Refit the model, or fit it with `model = TRUE`."
+      ))
+    }
   }
   infinite <- tryCatch(
     .coxph_infinite(x, control, counting),
@@ -893,7 +896,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 # TRUE if the linear predictor, computed again from the data object of the
 # call, differs from the one of the fit, or if the strata changed. If the data
 # cannot be read, FALSE is returned, and check (b) gives the error.
-.coxph_data_changed <- function(x, control = .coxph_control(x)) {
+.coxph_data_changed <- function(x) {
   mf <- tryCatch(stats::model.frame(x), error = function(e) NULL)
   mm <- tryCatch(stats::model.matrix(x), error = function(e) NULL)
   if (is.null(mf) || is.null(mm)) {
@@ -910,9 +913,8 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   coefs[is.na(coefs)] <- 0
   means <- x$means[names(coefs)]
   means[is.na(means)] <- 0
-  mm <- mm[, names(coefs), drop = FALSE]
-  lp <- drop(mm %*% coefs) - sum(means * coefs)
   model_offset <- stats::model.offset(mf)
+  lp <- drop(mm[, names(coefs), drop = FALSE] %*% coefs) - sum(means * coefs)
   if (!is.null(model_offset)) {
     lp <- lp + model_offset
   }
@@ -920,37 +922,52 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     return(TRUE)
   }
   # a change of the strata leaves the linear predictor the same
-  !is.null(attr(x$terms, "specials")[["strata"]]) && .coxph_strata_changed(x, control)
+  if (is.null(attr(x$terms, "specials")[["strata"]])) {
+    return(FALSE)
+  }
+  .coxph_strata_changed(x, mf, mm, coefs, model_offset)
 }
 
 
-# A fit stores no strata, so a stratified single-state fit is refitted from the
-# data object of the call, at the stored coefficients and with zero iterations.
-# The refit reads the data as survival's model.frame() does for the guard
-# above. If the grouping into strata changed, the log-likelihood of the refit
-# differs from the one of the fit. Strata relabeled without a change of
-# grouping are not detected, but they leave the score residuals the same.
-.coxph_strata_changed <- function(x, control) {
-  env <- environment(x$terms)
-  if (!is.list(control) || is.null(env)) {
-    return(TRUE)
+# A fit stores no strata. For a stratified single-state fit, the
+# log-likelihood and the martingale residuals at the stored coefficients are
+# computed again with survival::coxph.fit() and zero iterations, from the
+# model matrix and strata that the guard above read and from the stored
+# response and weights, which the score residuals also use. No argument of the
+# call is evaluated. If the grouping into strata changed, the residuals differ
+# from those of the fit, also when the log-likelihood differs by less than the
+# tolerance of all.equal(). Strata relabeled without a change of grouping are
+# not detected, but they leave the score residuals the same. TRUE, FALSE, or
+# the reason why the strata could not be compared.
+.coxph_strata_changed <- function(x, mf, mm, coefs, model_offset) {
+  strata <- attr(mm, "strata")
+  if (is.null(strata)) {
+    strata_vars <- survival::untangle.specials(x$terms, "strata", 1)$vars
+    strata <- survival::strata(mf[strata_vars], shortlabel = TRUE)
   }
-  # aliased coefficients are missing and do not enter the linear predictor
-  coefs <- stats::coef(x)
-  coefs[is.na(coefs)] <- 0
-  control$iter.max <- 0
-  refit_call <- x$call
-  # the call can name `coxph` without the namespace (always so for clogit),
-  # and survival need not be attached
-  refit_call[[1]] <- quote(survival::coxph)
-  refit_call$formula <- x$terms
-  refit_call$init <- unname(coefs)
-  refit_call$control <- control
-  refit <- tryCatch(
-    suppressWarnings(eval(refit_call, env)),
-    error = function(e) NULL
+  recomputed <- tryCatch(
+    survival::coxph.fit(
+      mm[, names(coefs), drop = FALSE],
+      x$y,
+      as.integer(strata),
+      model_offset,
+      unname(coefs),
+      survival::coxph.control(iter.max = 0),
+      x$weights,
+      x$method,
+      rownames(mm)
+    ),
+    error = function(e) e
   )
-  is.null(refit) || !isTRUE(all.equal(refit$loglik[2], x$loglik[2]))
+  if (inherits(recomputed, "error")) {
+    return(paste0(
+      "The strata of the model could not be compared with the data (",
+      conditionMessage(recomputed),
+      "). Refit the model, or fit it with `model = TRUE`."
+    ))
+  }
+  !isTRUE(all.equal(recomputed$loglik[2], x$loglik[2])) ||
+    !isTRUE(all.equal(unname(recomputed$residuals), unname(x$residuals)))
 }
 
 

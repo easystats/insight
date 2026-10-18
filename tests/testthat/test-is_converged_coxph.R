@@ -1029,10 +1029,11 @@ test_that("is_converged.coxph, strata changed after the fit", {
   }
   expect_true(is_converged(f_x$fit))
 
-  # the refit calls survival::coxph(): the stored call names `coxph` without
+  # the strata check evaluates no call: the stored call names `coxph` without
   # the namespace, as after library(survival), and always for clogit(). In the
   # formula environment of these fits, `coxph` is a function that stops, so a
-  # refit through it fails whether or not survival is attached.
+  # check that evaluated the call would fail whether or not survival is
+  # attached.
   bare <- new.env(parent = baseenv())
   bare$cvx_bare <- cvx_lung
   bare$cvx_bare_infert <- datasets::infert
@@ -1068,17 +1069,165 @@ test_that("is_converged.coxph, strata changed after the fit", {
   bare$cvx_bare$sex <- withr::with_seed(123, sample(cvx_lung$sex))
   .cvx_expect_not_assessed(f_bare$fit, "predictor data changed")
 
-  # the refit runs only for fits with a `strata()` term
+  # the strata check runs only for fits with a `strata()` term
   cvx_strata <- cvx_lung
-  refits <- 0L
+  checks <- 0L
   local_mocked_bindings(.coxph_strata_changed = function(...) {
-    refits <<- refits + 1L
+    checks <<- checks + 1L
     FALSE
   })
   expect_true(is_converged(cvx_fits$clean$fit))
-  expect_identical(refits, 0L)
+  expect_identical(checks, 0L)
   expect_true(is_converged(f_efron$fit))
-  expect_identical(refits, 1L)
+  expect_identical(checks, 1L)
+})
+
+
+test_that("is_converged.coxph, the strata check evaluates no argument of the call", {
+  # oracle: reference implementation, the same fits with `model = TRUE`, which
+  # read no data, and the warnings survival gives at the fit
+  cvx_args <- cvx_lung
+  # the fit refitted with `model = TRUE` on the current data object
+  .cvx_twin <- function(f, ...) stats::update(f, model = TRUE, ...)
+  .cvx_expect_as_twin <- function(f, twin) {
+    expect_null(f[["model"]])
+    expect_identical(
+      is_converged(f, verbose = FALSE),
+      is_converged(twin, verbose = FALSE)
+    )
+  }
+  # `ties`, `robust` and `nocenter` set from a variable in a function, with a
+  # formula object from outside, and other values here
+  cvx_args_fo <- Surv(time, status) ~ age + ph.ecog + strata(sex)
+  tie <- "efron"
+  fit_ties <- function(tie) coxph(cvx_args_fo, data = cvx_args, ties = tie)
+  fit_robust <- function(rob) coxph(cvx_args_fo, data = cvx_args, robust = rob)
+  fit_nocenter <- function(nc) coxph(cvx_args_fo, data = cvx_args, nocenter = nc)
+  f_ties <- fit_ties("breslow")
+  expect_identical(f_ties$method, "breslow")
+  twin_ties <- .cvx_twin(f_ties, ties = "breslow")
+  expect_true(is_converged(f_ties))
+  .cvx_expect_as_twin(f_ties, twin_ties)
+  f_robust <- fit_robust(TRUE)
+  expect_false(is.null(f_robust$naive.var))
+  expect_true(is_converged(f_robust))
+  .cvx_expect_as_twin(f_robust, .cvx_twin(f_robust, robust = TRUE))
+  f_nocenter <- fit_nocenter(NULL)
+  expect_true(is_converged(f_nocenter))
+  # a variable reassigned after a fit with a literal formula
+  tie2 <- "breslow"
+  f_tie2 <- coxph(
+    Surv(time, status) ~ age + ph.ecog + strata(sex),
+    data = cvx_args,
+    ties = tie2
+  )
+  tie2 <- "efron"
+  expect_true(is_converged(f_tie2))
+  .cvx_expect_as_twin(f_tie2, twin_ties)
+
+  # stratified fits whose result does not depend on the data object beyond
+  # the predictors and strata
+  cvx_args$w <- rep(1:2, 114)
+  cvx_args$off <- cvx_args$age / 100
+  cvx_args$jitter_time <- cvx_args$time + rep(c(0, 1e-11), 114)
+  silent <- list(
+    weights = coxph(Surv(time, status) ~ age + strata(sex), data = cvx_args, weights = w),
+    weights_fractional = coxph(
+      Surv(time, status) ~ age + strata(sex),
+      data = cvx_args,
+      weights = w / 3
+    ),
+    offset = coxph(
+      Surv(time, status) ~ ph.ecog + offset(off) + strata(sex),
+      data = cvx_args
+    ),
+    na_exclude = coxph(
+      Surv(time, status) ~ ph.karno + strata(sex),
+      data = cvx_args,
+      na.action = na.exclude
+    ),
+    subset = coxph(
+      Surv(time, status) ~ age + strata(sex),
+      data = cvx_args,
+      subset = age > 50
+    ),
+    cluster = coxph(
+      Surv(time, status) ~ age + strata(sex),
+      data = cvx_args,
+      cluster = inst
+    ),
+    factor = coxph(Surv(time, status) ~ factor(ph.ecog) + strata(sex), data = cvx_args),
+    two_vars = coxph(Surv(time, status) ~ age + strata(sex, ph.ecog), data = cvx_args),
+    two_terms = coxph(
+      Surv(time, status) ~ age + strata(sex) + strata(ph.ecog),
+      data = cvx_args
+    ),
+    interaction = coxph(Surv(time, status) ~ age + age:strata(sex), data = cvx_args),
+    timefix = coxph(
+      Surv(jitter_time, status) ~ age + strata(sex),
+      data = cvx_args,
+      timefix = FALSE
+    ),
+    init = coxph(Surv(time, status) ~ age + strata(sex), data = cvx_args, init = 0.01)
+  )
+  twins <- lapply(silent, .cvx_twin)
+  for (i in names(silent)) {
+    expect_true(is_converged(silent[[i]]))
+    .cvx_expect_as_twin(silent[[i]], twins[[i]])
+  }
+
+  # the response and the weights are taken from the fit, as the score
+  # residuals take them, so changing them in the data object does not matter
+  cvx_args$time <- withr::with_seed(123, sample(cvx_lung$time))
+  cvx_args$status <- withr::with_seed(124, sample(cvx_lung$status))
+  cvx_args$w <- rev(cvx_args$w)
+  expect_true(is_converged(silent$weights))
+  .cvx_expect_as_twin(silent$weights, twins$weights)
+  expect_true(is_converged(f_ties))
+
+  # an error in the recompute, here from stored weights of the wrong length,
+  # gives its own reason
+  broken <- silent$weights
+  broken$weights <- c(1, 2)
+  .cvx_expect_not_assessed(broken, "strata of the model could not be compared")
+})
+
+
+test_that("is_converged.coxph, a strata change that the log-likelihood hides", {
+  # oracle: reference implementation, the same fit with `model = TRUE`
+  cvx_pbc <- survival::pbc
+  f <- coxph(Surv(time, status == 2) ~ age + log(bili) + strata(edema), data = cvx_pbc)
+  f_model <- coxph(
+    Surv(time, status == 2) ~ age + log(bili) + strata(edema),
+    data = cvx_pbc,
+    model = TRUE
+  )
+  expect_identical(nrow(stats::model.frame(f)), nrow(cvx_pbc))
+  expect_true(is_converged(f))
+
+  # rows 13 and 238 swap their strata (edema 0 and 0.5)
+  expect_setequal(cvx_pbc$edema[c(13, 238)], c(0, 0.5))
+  cvx_pbc$edema[c(13, 238)] <- cvx_pbc$edema[c(238, 13)]
+  # the log-likelihood at the stored coefficients stays equal within the
+  # default tolerance of all.equal()
+  mm <- stats::model.matrix(f)
+  recomputed <- survival::coxph.fit(
+    mm[, names(stats::coef(f)), drop = FALSE],
+    f$y,
+    as.integer(attr(mm, "strata")),
+    NULL,
+    unname(stats::coef(f)),
+    coxph.control(iter.max = 0),
+    NULL,
+    f$method,
+    rownames(mm)
+  )
+  expect_true(isTRUE(all.equal(recomputed$loglik[2], f$loglik[2])))
+  expect_false(isTRUE(all.equal(unname(recomputed$residuals), unname(f$residuals))))
+  # the score residuals now flag `age` and `log(bili)`, while the fit with
+  # `model = TRUE` converged
+  expect_true(is_converged(f_model))
+  .cvx_expect_not_assessed(f, "predictor data changed")
 })
 
 
