@@ -170,8 +170,9 @@ get_predicted.lme <- function(
     return(NULL)
   }
 
-  # 2. step: confidence intervals
-  ci_data <- .safe(get_predicted_ci(
+  # 2. step: confidence intervals. The standard errors of nlme models depend
+  # on the level of the predictions
+  ci_args <- list(
     x,
     predictions,
     data = my_args$data,
@@ -180,9 +181,12 @@ get_predicted.lme <- function(
     ci_method = ci_method,
     vcov = vcov,
     vcov_args = vcov_args,
-    verbose = verbose,
-    ...
-  ))
+    verbose = verbose
+  )
+  if (inherits(x, "nlme")) {
+    dots$level <- predict_args$level
+  }
+  ci_data <- .safe(do.call(get_predicted_ci, c(ci_args, dots)))
 
   # 3. step: back-transform, 4. step: final preparation
   out <- .get_predicted_transform(x, predictions, my_args = my_args, ci_data, verbose = verbose, ...)
