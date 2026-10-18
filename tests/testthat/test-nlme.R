@@ -438,8 +438,8 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
     expect_true("t" %in% colnames(get_data(m)))
   }
 
-  # an object without `form` gives the formula of that object, `~1`, which
-  # has no variables, as for lme models
+  # an object without `form` gives the grouping that nlme used, as for lme
+  # models
   nlme_corr_noform <<- nlme::corAR1()
   withr::defer(rm(nlme_corr_noform, envir = globalenv()))
   m_object_noform <- nlme::nlme(
@@ -450,11 +450,15 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
     correlation = nlme_corr_noform,
     start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
   )
-  expect_equal(find_formula(m_object_noform)$correlation, ~1, ignore_attr = TRUE)
-  expect_null(find_variables(m_object_noform)$correlation)
+  expect_equal(
+    find_formula(m_object_noform)$correlation,
+    ~ 1 | Seed,
+    ignore_attr = TRUE
+  )
+  expect_identical(find_variables(m_object_noform)$correlation, "Seed")
 
-  # a structure without `form` in the call has no correlation part, as for
-  # lme models
+  # a structure without `form` in the call also gives the grouping that nlme
+  # used
   m_noform <- nlme::nlme(
     height ~ SSasymp(age, Asym, R0, lrc),
     data = nlme_loblolly_t,
@@ -463,10 +467,14 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
     correlation = nlme::corAR1(),
     start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
   )
-  expect_named(find_formula(m_noform), c("conditional", "nonlinear", "random"))
+  expect_named(
+    find_formula(m_noform),
+    c("conditional", "nonlinear", "random", "correlation")
+  )
+  expect_equal(find_formula(m_noform)$correlation, ~ 1 | Seed, ignore_attr = TRUE)
 
-  # a structure created inside the fitting function cannot be found, so there
-  # is no correlation part and no error
+  # a structure created inside the fitting function is read from the fitted
+  # model
   fit_local <- function() {
     corr_local <- nlme::corAR1(form = ~ t | Seed)
     nlme::nlme(
@@ -481,5 +489,7 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
   m_local <- fit_local()
   expect_false(exists("corr_local", envir = globalenv()))
   expect_no_error(f <- find_formula(m_local))
-  expect_named(f, c("conditional", "nonlinear", "random"))
+  expect_named(f, c("conditional", "nonlinear", "random", "correlation"))
+  # the expected formula is the `form` of the local structure
+  expect_equal(f$correlation, ~ t | Seed, ignore_attr = TRUE)
 })

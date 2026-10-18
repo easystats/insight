@@ -144,3 +144,74 @@ test_that("is_multivariate", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
 })
+
+
+# correlation part, read from the fitted correlation structure ----------------
+
+# `t` is an integer position for corAR1()
+gls_orthodont_t <- nlme::Orthodont
+gls_orthodont_t$t <- as.integer(gls_orthodont_t$age)
+
+test_that("find_formula, gls, correlation object reassigned after the fit", {
+  gls_corr_reassign <<- nlme::corAR1(form = ~ t | Subject)
+  withr::defer(rm(gls_corr_reassign, envir = globalenv()))
+  m <- nlme::gls(
+    distance ~ age,
+    data = gls_orthodont_t,
+    correlation = gls_corr_reassign
+  )
+  gls_corr_reassign <<- nlme::corAR1(form = ~ 1 | Sex)
+  # the expected formula is the `form` of the structure the fit used
+  expect_equal(find_formula(m)$correlation, ~ t | Subject, ignore_attr = TRUE)
+  expect_identical(find_variables(m)$correlation, c("t", "Subject"))
+})
+
+test_that("find_formula, gls, correlation object local to a function", {
+  fit_fresh <- function() {
+    gls_corr_local <- nlme::corAR1(form = ~ t | Subject)
+    nlme::gls(distance ~ age, data = gls_orthodont_t, correlation = gls_corr_local)
+  }
+  # `x` and `fcorr` are also names of variables inside insight
+  fit_x <- function() {
+    x <- nlme::corAR1(form = ~ t | Subject)
+    nlme::gls(distance ~ age, data = gls_orthodont_t, correlation = x)
+  }
+  fit_fcorr <- function() {
+    fcorr <- nlme::corAR1(form = ~ t | Subject)
+    nlme::gls(distance ~ age, data = gls_orthodont_t, correlation = fcorr)
+  }
+  expect_false(exists("gls_corr_local", envir = globalenv()))
+  for (m in list(fit_fresh(), fit_x(), fit_fcorr())) {
+    expect_no_error(find_formula(m))
+    # the expected formula is the `form` of the local structure
+    expect_equal(find_formula(m)$correlation, ~ t | Subject, ignore_attr = TRUE)
+  }
+})
+
+test_that("find_formula, gls, correlation `form` given by position", {
+  m <- nlme::gls(
+    distance ~ age,
+    data = gls_orthodont_t,
+    correlation = nlme::corAR1(0.2, ~ t | Subject)
+  )
+  expect_equal(find_formula(m)$correlation, ~ t | Subject, ignore_attr = TRUE)
+})
+
+test_that("find_formula, gls, correlation structure without `form`", {
+  # without `form`, the fitted formula is `~1`, which has no variable
+  m <- nlme::gls(distance ~ age, data = gls_orthodont_t, correlation = nlme::corAR1())
+  expect_named(find_formula(m), "conditional")
+
+  gls_corr_noform <<- nlme::corAR1()
+  withr::defer(rm(gls_corr_noform, envir = globalenv()))
+  m_object <- nlme::gls(
+    distance ~ age,
+    data = gls_orthodont_t,
+    correlation = gls_corr_noform
+  )
+  expect_named(find_formula(m_object), "conditional")
+
+  # no correlation structure, no correlation part
+  m_none <- nlme::gls(distance ~ age, data = gls_orthodont_t)
+  expect_named(find_formula(m_none), "conditional")
+})

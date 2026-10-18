@@ -31,3 +31,17 @@ test_that("find_formula, get_data glmmPQL", {
   expect_identical(find_formula(mn)$conditional, as.formula("prop ~ x + size"))
   expect_named(get_data(mn), c("prop", "x", "size", "species"))
 })
+
+test_that("find_formula, glmmPQL, correlation structure without `form`", {
+  d <- nlme::Orthodont
+  # nlme uses the grouping of the random effects
+  m <- MASS::glmmPQL(
+    I(distance > 25) ~ age,
+    random = ~ 1 | Subject,
+    family = binomial,
+    data = d,
+    correlation = nlme::corAR1(),
+    verbose = FALSE
+  )
+  expect_equal(find_formula(m)$correlation, ~ 1 | Subject, ignore_attr = TRUE)
+})
