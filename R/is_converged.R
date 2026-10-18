@@ -126,7 +126,15 @@
 #' of 1 or less, for right-censored and multi-state models fitted with
 #' `y = FALSE`, for models without events, for model objects without a call,
 #' and if the control arguments of the model call or the score residuals cannot
-#' be computed. Single-state counting-process models fitted with `y = FALSE`
+#' be computed. Convergence also cannot be assessed if the model call does not
+#' write the formula as a `~` expression, for example
+#' `coxph(f, data = d, iter.max = n)`, and a control argument refers to a
+#' variable. The control arguments are evaluated
+#' in the environment of the formula, which can differ from the environment in
+#' which the model was fitted, for example inside a function. This also applies
+#' to models fitted in top-level code, where the two environments are usually
+#' the same.
+#' Single-state counting-process models fitted with `y = FALSE`
 #' are assessed, because their checks use only the stored score vector and
 #' convergence flag. A model without events and without predictors returns
 #' `TRUE`, as other null models.
@@ -144,15 +152,23 @@
 #' the model was fitted,
 #' convergence cannot be assessed. If the predictor data were changed, so that
 #' the linear predictor computed from them differs from the one of the model,
-#' convergence cannot be assessed either. Changes that leave the linear
-#' predictor the same, for example to a `strata()` variable, are not detected
-#' and can give a wrong result. For multi-state models, the linear predictor
-#' is compared within each transition. A change that adds the same constant to
-#' all values of a predictor is not detected, but it leaves the score residuals
-#' the same. The check is not done for multi-state models in which transitions
-#' share a baseline hazard, or that were fitted with `x = TRUE`. For these
-#' models, changed data can give a wrong result. In all these cases, refit the
-#' model, or fit it with `model = TRUE`, which avoids them.
+#' convergence cannot be assessed either. For single-state models with a
+#' `strata()` term, the log-likelihood and the martingale residuals at the
+#' coefficients of the model are also computed again from these data and the
+#' stored response and weights. If they differ from those of the model, for
+#' example because observations were moved to other strata, or if they cannot
+#' be computed, convergence cannot be assessed. Strata that are relabeled
+#' without a change of grouping are not detected, but they leave the result
+#' the same. For multi-state models, the linear predictor is compared within
+#' each transition. A change that adds the same constant to all values of a
+#' predictor is not detected, but it leaves the score residuals the same. The
+#' check is not done for multi-state models in which transitions share a
+#' baseline hazard, or that were fitted with `x = TRUE`. Other changes that
+#' stay undetected can give a wrong result: a change of several predictors that
+#' leaves the linear predictor the same, changes to a `strata()` or `istate`
+#' variable of a multi-state model, and changes to the data of models without
+#' the check. In these cases, refit the model, or fit it with `model = TRUE`,
+#' which avoids them.
 #'
 #' @section Convergence versus Singularity:
 #' Note the different meaning between singularity and convergence: singularity
@@ -600,11 +616,8 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     return(.is_converged_coxph_not_assessed(reason, verbose))
   }
   control <- .coxph_control(x)
-  if (is.null(control)) {
-    return(.is_converged_coxph_not_assessed(
-      "The control arguments of the model call could not be evaluated.",
-      verbose
-    ))
+  if (is.character(control)) {
+    return(.is_converged_coxph_not_assessed(control, verbose))
   }
   # survival applies no check for `iter.max` <= 1
   if (control$iter.max <= 1) {
@@ -688,13 +701,18 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   # object of the call, unless the model frame (`model = TRUE`) or the model
   # matrix (`x = TRUE`) is stored. `[[` because `$` would match `xlevels`
   # for `x`.
-  if (
-    !counting && is.null(x[["model"]]) && is.null(x[["x"]]) && .coxph_data_changed(x)
-  ) {
-    return(paste(
-      "The predictor data changed after the model was fitted.",
-      "Refit the model, or fit it with `model = TRUE`."
-    ))
+  if (!counting && is.null(x[["model"]]) && is.null(x[["x"]])) {
+    # TRUE, FALSE, or the reason why the strata could not be compared
+    changed <- .coxph_data_changed(x)
+    if (is.character(changed)) {
+      return(changed)
+    }
+    if (changed) {
+      return(paste(
+        "The predictor data changed after the model was fitted.",
+        "Refit the model, or fit it with `model = TRUE`."
+      ))
+    }
   }
   infinite <- tryCatch(
     .coxph_infinite(x, control, counting),
@@ -878,8 +896,9 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
 
 # TRUE if the linear predictor, computed again from the data object of the
-# call, differs from the one of the fit. If the data cannot be read, FALSE is
-# returned, and check (b) gives the error.
+# call, differs from the one of the fit, or if the strata changed. If the data
+# cannot be read, FALSE is returned, and check (b) gives the error. If the
+# strata cannot be compared, the reason is returned.
 .coxph_data_changed <- function(x) {
   mf <- tryCatch(stats::model.frame(x), error = function(e) NULL)
   mm <- tryCatch(stats::model.matrix(x), error = function(e) NULL)
@@ -897,13 +916,73 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   coefs[is.na(coefs)] <- 0
   means <- x$means[names(coefs)]
   means[is.na(means)] <- 0
-  mm <- mm[, names(coefs), drop = FALSE]
-  lp <- drop(mm %*% coefs) - sum(means * coefs)
   model_offset <- stats::model.offset(mf)
+  lp <- drop(mm[, names(coefs), drop = FALSE] %*% coefs) - sum(means * coefs)
   if (!is.null(model_offset)) {
     lp <- lp + model_offset
   }
-  !isTRUE(all.equal(unname(lp), unname(x$linear.predictors)))
+  if (!isTRUE(all.equal(unname(lp), unname(x$linear.predictors)))) {
+    return(TRUE)
+  }
+  # a change of the strata leaves the linear predictor the same
+  if (is.null(attr(x$terms, "specials")[["strata"]])) {
+    return(FALSE)
+  }
+  .coxph_strata_changed(x, mf, mm, coefs, model_offset)
+}
+
+
+# A fit stores no strata. For a stratified single-state fit, the
+# log-likelihood and the martingale residuals at the stored coefficients are
+# computed again with survival::coxph.fit() and zero iterations, from the
+# model matrix and strata that the guard above read and from the stored
+# response and weights, which the score residuals also use. The recompute
+# evaluates no argument of the call beyond the data arguments that the model
+# frame already read. If the grouping into strata changed, the residuals
+# usually differ from those of the fit, also when the log-likelihood differs by
+# less than the tolerance of all.equal(). Strata relabeled without a change of
+# grouping, or a change that moves only observations censored before the first
+# event of both strata, are not detected, but they leave the score residuals
+# the same. TRUE, FALSE, or the reason why the strata could not be compared.
+.coxph_strata_changed <- function(x, mf, mm, coefs, model_offset) {
+  recomputed <- tryCatch(
+    {
+      strata <- attr(mm, "strata")
+      if (is.null(strata)) {
+        strata_vars <- survival::untangle.specials(x$terms, "strata", 1)$vars
+        strata <- survival::strata(mf[strata_vars], shortlabel = TRUE)
+      }
+      # a missing stratum: the data of these observations changed
+      if (anyNA(strata)) {
+        return(TRUE)
+      }
+      survival::coxph.fit(
+        mm[, names(coefs), drop = FALSE],
+        x$y,
+        as.integer(strata),
+        model_offset,
+        unname(coefs),
+        survival::coxph.control(iter.max = 0),
+        x$weights,
+        x$method,
+        rownames(mm)
+      )
+    },
+    error = function(e) e
+  )
+  if (inherits(recomputed, "error")) {
+    return(paste0(
+      "The strata of the model could not be compared with the data (",
+      conditionMessage(recomputed),
+      "). Refit the model, or fit it with `model = TRUE`."
+    ))
+  }
+  # a model object without the stored values is compared on what it has
+  loglik_changed <- length(x$loglik) == 2 &&
+    !isTRUE(all.equal(recomputed$loglik[2], x$loglik[2]))
+  residuals_changed <- length(x$residuals) == length(recomputed$residuals) &&
+    !isTRUE(all.equal(unname(recomputed$residuals), unname(x$residuals)))
+  loglik_changed || residuals_changed
 }
 
 
@@ -973,26 +1052,61 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
 
 # the control values that coxph() used: `control` if given, else the other
-# arguments of the call, which coxph() passes to coxph.control()
+# arguments of the call, which coxph() passes to coxph.control(). They are
+# evaluated in the formula environment. Only if the call writes the formula as
+# a `~` expression is this sure to be the frame of the call: a formula object
+# can come from another environment. Otherwise, a control
+# argument that refers to a variable is not evaluated. If the values are not
+# evaluated, the reason is returned.
 .coxph_control <- function(x) {
+  call_args <- as.list(x$call)[-1]
+  if (is.null(call_args[["control"]])) {
+    control_args <- call_args[!names(call_args) %in% names(formals(survival::coxph))]
+  } else {
+    control_args <- call_args["control"]
+  }
+  has_vars <- vapply(control_args, function(i) length(all.vars(i)) > 0, logical(1))
+  if (any(has_vars) && !.coxph_formula_is_literal(x)) {
+    return(paste0(
+      "The control arguments of the model call (",
+      toString(paste0("`", names(control_args)[has_vars], "`")),
+      ") refer to variables, and the call does not write the formula as a",
+      " `~` expression, so the values that the fit used are unknown."
+    ))
+  }
   tryCatch(
     {
       env <- environment(stats::formula(x))
       if (is.null(env)) {
         stop("The model formula has no environment.", call. = FALSE)
       }
-      call_args <- as.list(x$call)[-1]
-      if (is.null(call_args$control)) {
-        extra <- call_args[!names(call_args) %in% names(formals(survival::coxph))]
-        extra <- lapply(extra, eval, envir = env)
-        do.call(survival::coxph.control, extra)
-      } else {
-        control <- eval(call_args$control, envir = env)
-        do.call(survival::coxph.control, as.list(control))
+      control <- lapply(control_args, eval, envir = env)
+      if (!is.null(call_args[["control"]])) {
+        control <- as.list(control[["control"]])
       }
+      do.call(survival::coxph.control, control)
     },
-    error = function(e) NULL
+    error = function(e) "The control arguments of the model call could not be evaluated."
   )
+}
+
+
+# TRUE if the call writes the formula as a `~` expression. clogit() stores the
+# coxph() call that it makes, with the formula as an object, and the call of
+# the user as `userCall`.
+.coxph_formula_is_literal <- function(x) {
+  if (is.null(x[["userCall"]])) {
+    model_call <- tryCatch(match.call(survival::coxph, x$call), error = function(e) NULL)
+  } else {
+    model_call <- tryCatch(
+      match.call(survival::clogit, x[["userCall"]]),
+      error = function(e) NULL
+    )
+  }
+  model_formula <- model_call[["formula"]]
+  is.call(model_formula) &&
+    !inherits(model_formula, "formula") &&
+    identical(model_formula[[1]], as.name("~"))
 }
 
 
