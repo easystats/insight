@@ -180,26 +180,38 @@ check. The `tolerance` argument is not used for `coxph` models.
 Convergence cannot be assessed, and `FALSE` is returned, for penalized
 models (with `frailty()`, `ridge()` or `pspline()` terms), for models
 with `ties = "exact"`, for models with `tt()` terms, for models with
-`iter.max` of 1 or less, for models fitted with `y = FALSE`, for models
-without events, for model objects without a call, and if the control
-arguments of the model call or the score residuals cannot be computed. A
-model without events and without predictors returns `TRUE`, as other
-null models. Objects of other classes that inherit from `coxph`, for
-example from
-[`survival::clogit()`](https://rdrr.io/pkg/survival/man/clogit.html) or
+`iter.max` of 1 or less, for right-censored and multi-state models
+fitted with `y = FALSE`, for models without events, for model objects
+without a call, and if the control arguments of the model call or the
+score residuals cannot be computed. Single-state counting-process models
+fitted with `y = FALSE` are assessed, because their checks use only the
+stored score vector and convergence flag. A model without events and
+without predictors returns `TRUE`, as other null models.
+
+Models from
+[`survival::clogit()`](https://rdrr.io/pkg/survival/man/clogit.html) are
+assessed as other `coxph` models. The default method of `clogit()` is
+`"exact"`, so convergence can only be assessed for models fitted with
+`method = "efron"` or `method = "breslow"` (or `"approximate"`). Objects
+of other classes that inherit from `coxph`, for example from
 [`survey::svycoxph()`](https://rdrr.io/pkg/survey/man/svycoxph.html),
 are not supported: `NULL` is returned with a message (no message if
 `verbose = FALSE`).
 
 For models with right-censored data, the score residuals are computed
 from the data of the model call, unless the model was fitted with
-`model = TRUE` or `x = TRUE`. If these data were removed after the model
-was fitted, convergence cannot be assessed. If the predictor data were
-changed, so that the linear predictor computed from them differs from
-the one of the model, convergence cannot be assessed either. Changes
-that leave the linear predictor the same, for example to a `strata()`
-variable, are not detected and can give a wrong result. The check is
-also not done for multi-state models, where changed data can give a
+`model = TRUE`, or with `x = TRUE` for single-state models. If these
+data were removed after the model was fitted, convergence cannot be
+assessed. If the predictor data were changed, so that the linear
+predictor computed from them differs from the one of the model,
+convergence cannot be assessed either. Changes that leave the linear
+predictor the same, for example to a `strata()` variable, are not
+detected and can give a wrong result. For multi-state models, the linear
+predictor is compared within each transition. A change that adds the
+same constant to all values of a predictor is not detected, but it
+leaves the score residuals the same. The check is not done for
+multi-state models in which transitions share a baseline hazard, or that
+were fitted with `x = TRUE`. For these models, changed data can give a
 wrong result. In all these cases, refit the model, or fit it with
 `model = TRUE`, which avoids them.
 

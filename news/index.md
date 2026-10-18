@@ -3185,7 +3185,7 @@ CRAN release: 2020-12-08
 
 - `parameters_table()` formats more objects from the *easystats*
   packages, like ROPE-range or
-  [`p_rope()`](https://easystats.github.io/bayestestR/reference/p_rope.html).
+  [`p_rope()`](https://easystats.github.io/bayestestR/reference/rope.html).
 
 - [`find_statistic()`](https://easystats.github.io/insight/reference/find_statistic.md)
   now supports models of class *scam*.

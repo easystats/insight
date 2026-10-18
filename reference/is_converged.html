@@ -222,23 +222,34 @@ of each check, with one row for each coefficient for the second check. The
 <p>Convergence cannot be assessed, and <code>FALSE</code> is returned, for penalized
 models (with <code>frailty()</code>, <code>ridge()</code> or <code>pspline()</code> terms), for models with
 <code>ties = "exact"</code>, for models with <code>tt()</code> terms, for models with <code>iter.max</code>
-of 1 or less, for models fitted with <code>y = FALSE</code>, for models without events,
-for model objects without a call, and if the control arguments of the model
-call or the score residuals cannot be computed. A model without events and
-without predictors returns <code>TRUE</code>, as other null models. Objects of other
-classes that inherit from <code>coxph</code>, for example from <code><a href="https://rdrr.io/pkg/survival/man/clogit.html" class="external-link">survival::clogit()</a></code> or
-<code><a href="https://rdrr.io/pkg/survey/man/svycoxph.html" class="external-link">survey::svycoxph()</a></code>, are not supported: <code>NULL</code> is returned with a message
-(no message if <code>verbose = FALSE</code>).</p>
+of 1 or less, for right-censored and multi-state models fitted with
+<code>y = FALSE</code>, for models without events, for model objects without a call,
+and if the control arguments of the model call or the score residuals cannot
+be computed. Single-state counting-process models fitted with <code>y = FALSE</code>
+are assessed, because their checks use only the stored score vector and
+convergence flag. A model without events and without predictors returns
+<code>TRUE</code>, as other null models.</p>
+<p>Models from <code><a href="https://rdrr.io/pkg/survival/man/clogit.html" class="external-link">survival::clogit()</a></code> are assessed as other <code>coxph</code> models. The
+default method of <code>clogit()</code> is <code>"exact"</code>, so convergence can only be
+assessed for models fitted with <code>method = "efron"</code> or <code>method = "breslow"</code>
+(or <code>"approximate"</code>). Objects of other classes that inherit from <code>coxph</code>,
+for example from <code><a href="https://rdrr.io/pkg/survey/man/svycoxph.html" class="external-link">survey::svycoxph()</a></code>, are not supported: <code>NULL</code> is
+returned with a message (no message if <code>verbose = FALSE</code>).</p>
 <p>For models with right-censored data, the score residuals are computed from
-the data of the model call, unless the model was fitted with <code>model = TRUE</code>
-or <code>x = TRUE</code>. If these data were removed after the model was fitted,
+the data of the model call, unless the model was fitted with <code>model = TRUE</code>,
+or with <code>x = TRUE</code> for single-state models. If these data were removed after
+the model was fitted,
 convergence cannot be assessed. If the predictor data were changed, so that
 the linear predictor computed from them differs from the one of the model,
 convergence cannot be assessed either. Changes that leave the linear
 predictor the same, for example to a <code>strata()</code> variable, are not detected
-and can give a wrong result. The check is also not done for multi-state
-models, where changed data can give a wrong result. In all these cases,
-refit the model, or fit it with <code>model = TRUE</code>, which avoids them.</p>
+and can give a wrong result. For multi-state models, the linear predictor
+is compared within each transition. A change that adds the same constant to
+all values of a predictor is not detected, but it leaves the score residuals
+the same. The check is not done for multi-state models in which transitions
+share a baseline hazard, or that were fitted with <code>x = TRUE</code>. For these
+models, changed data can give a wrong result. In all these cases, refit the
+model, or fit it with <code>model = TRUE</code>, which avoids them.</p>
     </div>
     <div class="section level2">
     <h2 id="convergence-versus-singularity">Convergence versus Singularity<a class="anchor" aria-label="anchor" href="#convergence-versus-singularity"></a></h2>

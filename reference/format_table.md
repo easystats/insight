@@ -271,9 +271,9 @@ model <- rstanarm::stan_glm(
 x <- parameters::model_parameters(model, ci = c(0.69, 0.89, 0.95))
 as.data.frame(format_table(x))
 #>           Parameter Median       69% CI       89% CI       95% CI   pd  Rhat
-#> 1       (Intercept)   5.01 [4.93, 5.08] [4.86, 5.15] [4.88, 5.12] 100% 1.000
-#> 2 Speciesversicolor   0.93 [0.82, 1.04] [0.73, 1.14] [0.76, 1.11] 100% 1.000
-#> 3  Speciesvirginica   1.58 [1.48, 1.69] [1.39, 1.79] [1.42, 1.75] 100% 1.000
+#> 1       (Intercept)   5.01 [4.93, 5.08] [4.88, 5.12] [4.86, 5.15] 100% 1.000
+#> 2 Speciesversicolor   0.93 [0.82, 1.04] [0.76, 1.11] [0.73, 1.14] 100% 1.000
+#> 3  Speciesvirginica   1.58 [1.48, 1.69] [1.42, 1.75] [1.39, 1.79] 100% 1.000
 #>   ESS (tail)                 Prior
 #> 1       2729 Normal (5.84 +- 2.07)
 #> 2       2832 Normal (0.00 +- 4.38)
