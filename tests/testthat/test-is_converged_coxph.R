@@ -420,12 +420,28 @@ test_that("is_converged.coxph, convergence cannot be assessed", {
   no_flag$info <- no_flag$info[c("rank", "rescale")]
   .cvx_expect_not_assessed(no_flag, "no convergence flag")
 
-  # models fitted with `y = FALSE` store no response
+  # right-censored and multi-state models fitted with `y = FALSE` store no
+  # response
   f <- .cvx_fit(coxph(Surv(time, status) ~ age + tmp, data = cvx_lung, y = FALSE))
   expect_null(f$fit$y)
   .cvx_expect_not_assessed(f$fit, "`y = TRUE`")
-  f <- .cvx_fit(coxph(Surv(start0, time, status) ~ age + tmp, data = cvx_lung, y = FALSE))
+  f <- .cvx_fit(coxph(
+    Surv(etime, event) ~ age + sex,
+    data = cvx_mgus2,
+    id = id,
+    y = FALSE
+  ))
   expect_null(f$fit$y)
+  .cvx_expect_not_assessed(f$fit, "`y = TRUE`")
+  # a multi-state counting-process model stores `first` and `info`, but is
+  # not assessed without its response either
+  f <- .cvx_fit(coxph(
+    Surv(start, stop, fstatus) ~ age + sex,
+    data = cvx_mgus1,
+    id = id,
+    y = FALSE
+  ))
+  expect_false(is.null(f$fit$first))
   .cvx_expect_not_assessed(f$fit, "`y = TRUE`")
 
   # the score residuals of right-censored models need the data
@@ -455,20 +471,142 @@ test_that("is_converged.coxph, convergence cannot be assessed", {
 })
 
 
-test_that("is_converged.coxph, other classes that inherit from coxph", {
-  # an object of another class that inherits from "coxph"
-  cvx_clogit <- survival::clogit(
-    case ~ spontaneous + survival::strata(stratum),
-    data = datasets::infert,
-    method = "efron"
+test_that("is_converged.coxph, counting-process models fitted with `y = FALSE`", {
+  # the checks of agreg.fit() use only the stored score vector and the
+  # convergence flag
+  f_pass <- .cvx_fit(coxph(Surv(start0, time, status) ~ age + sex, data = cvx_lung))
+  f_pass_no_y <- .cvx_fit(coxph(
+    Surv(start0, time, status) ~ age + sex,
+    data = cvx_lung,
+    y = FALSE
+  ))
+  f_iter_no_y <- .cvx_fit(coxph(
+    Surv(start0, time, status) ~ age + sex,
+    data = cvx_lung,
+    iter.max = 2,
+    y = FALSE
+  ))
+  f_infinite_no_y <- .cvx_fit(coxph(
+    Surv(start0, time, status) ~ age + tmp,
+    data = cvx_lung,
+    y = FALSE
+  ))
+  # weights, strata and an offset
+  f_more <- .cvx_fit(coxph(
+    Surv(start0, time, status) ~ age + tmp + strata(sex) + offset(ph.karno / 100),
+    data = cvx_lung,
+    weights = rep(1:2, 114)
+  ))
+  f_more_no_y <- .cvx_fit(coxph(
+    Surv(start0, time, status) ~ age + tmp + strata(sex) + offset(ph.karno / 100),
+    data = cvx_lung,
+    weights = rep(1:2, 114),
+    y = FALSE
+  ))
+  pairs <- list(
+    list(f_pass, f_pass_no_y),
+    list(cvx_fits$counting_iter2, f_iter_no_y),
+    list(cvx_fits$counting, f_infinite_no_y),
+    list(f_more, f_more_no_y)
   )
-  expect_s3_class(cvx_clogit, "coxph")
-  expect_message(
-    expect_null(is_converged(cvx_clogit)),
-    "does not work for models of class 'clogit'",
-    fixed = TRUE
-  )
+  for (p in pairs) {
+    expect_null(p[[2]]$fit$y)
+    expect_identical(
+      is_converged(p[[2]]$fit, verbose = FALSE),
+      is_converged(p[[1]]$fit, verbose = FALSE)
+    )
+    .cvx_expect_as_survival(p[[2]])
+  }
+  # stated independently of the fits with `y = TRUE`
+  expect_true(is_converged(f_pass_no_y$fit))
+  diagnostics <- attr(is_converged(f_iter_no_y$fit, verbose = FALSE), "diagnostics")
+  expect_identical(diagnostics$Diagnostic, "Iterations")
+  expect_false(diagnostics$Passed)
+  expect_identical(.cvx_flagged(is_converged(f_infinite_no_y$fit, verbose = FALSE)), "tmp1")
+})
 
+
+test_that("is_converged.coxph, clogit models", {
+  cvx_infert <- datasets::infert
+  # all cases of the first 20 strata have `sep = 1`, so its coefficient diverges
+  cvx_infert$sep <- as.numeric(cvx_infert$case == 1 & cvx_infert$stratum <= 20)
+  f_iter <- .cvx_fit(survival::clogit(
+    case ~ spontaneous + induced + survival::strata(stratum),
+    data = cvx_infert,
+    method = "efron",
+    iter.max = 2
+  ))
+  f_sep <- .cvx_fit(survival::clogit(
+    case ~ spontaneous + sep + survival::strata(stratum),
+    data = cvx_infert,
+    method = "breslow"
+  ))
+  f_clean <- .cvx_fit(survival::clogit(
+    case ~ spontaneous + induced + survival::strata(stratum),
+    data = cvx_infert,
+    method = "efron"
+  ))
+  expect_match(f_iter$warnings, "Ran out of iterations", fixed = TRUE)
+  expect_identical(.cvx_warned_terms(f_sep), "sep")
+  expect_length(f_clean$warnings, 0)
+  f_cluster <- .cvx_fit(survival::clogit(
+    case ~ spontaneous + sep + survival::strata(stratum),
+    data = cvx_infert,
+    method = "efron",
+    cluster = pooled.stratum
+  ))
+  for (f in list(f_iter, f_sep, f_clean, f_cluster)) {
+    expect_s3_class(f$fit, "clogit")
+    .cvx_expect_as_survival(f)
+  }
+  expect_false(is_converged(f_iter$fit, verbose = FALSE))
+  expect_identical(.cvx_flagged(is_converged(f_sep$fit, verbose = FALSE)), "sep")
+  expect_identical(.cvx_flagged(is_converged(f_cluster$fit, verbose = FALSE)), "sep")
+  # no message, in particular not the one for classes without a method
+  expect_silent(expect_true(is_converged(f_clean$fit)))
+
+  # a null model, as for coxph models. clogit() replaces the class
+  # "coxph.null".
+  f_null <- .cvx_fit(survival::clogit(
+    case ~ survival::strata(stratum),
+    data = cvx_infert,
+    method = "efron"
+  ))
+  expect_false(inherits(f_null$fit, "coxph.null"))
+  expect_null(f_null$fit$coefficients)
+  expect_silent(expect_true(is_converged(f_null$fit)))
+
+  # changed predictor data, as for coxph models
+  cvx_infert_changed <- cvx_infert
+  f_changed <- .cvx_fit(survival::clogit(
+    case ~ spontaneous + induced + survival::strata(stratum),
+    data = cvx_infert_changed,
+    method = "efron"
+  ))
+  expect_true(is_converged(f_changed$fit))
+  cvx_infert_changed$induced <- rev(cvx_infert_changed$induced)
+  .cvx_expect_not_assessed(f_changed$fit, "predictor data changed")
+
+  # a penalized clogit() model has class c("clogit", "coxph")
+  f_penal <- .cvx_fit(survival::clogit(
+    case ~ spontaneous + survival::ridge(induced, theta = 1) + survival::strata(stratum),
+    data = cvx_infert,
+    method = "efron"
+  ))
+  expect_false(inherits(f_penal$fit, "coxph.penal"))
+  .cvx_expect_not_assessed(f_penal$fit, "penalized")
+
+  # the default method of clogit() is "exact"
+  f_exact <- .cvx_fit(survival::clogit(
+    case ~ spontaneous + induced + survival::strata(stratum),
+    data = cvx_infert
+  ))
+  expect_identical(f_exact$fit$method, "exact")
+  .cvx_expect_not_assessed(f_exact$fit, "Efron and Breslow")
+})
+
+
+test_that("is_converged.coxph, other classes that inherit from coxph", {
   # a class vector like that of rms::cph(); rms is not needed for the class
   cph_like <- cvx_fits$reprex$fit
   class(cph_like) <- c("cph", "rms", "coxph")
@@ -518,6 +656,135 @@ test_that("is_converged.coxph, models without events", {
 })
 
 
+test_that("is_converged.coxph, multi-state predictor data changed after the fit", {
+  cvx_ms_changed <- cvx_mgus2
+  f_common <- .cvx_fit(coxph(
+    Surv(etime, event) ~ age + sex,
+    data = cvx_ms_changed,
+    id = id
+  ))
+  # `age` and `hgb` enter only the transition to death. `hgb` has missing
+  # values in rows of the other transition.
+  f_list <- .cvx_fit(coxph(
+    list(Surv(etime, event) ~ sex, 1:3 ~ age + hgb),
+    data = cvx_ms_changed,
+    id = id
+  ))
+  expect_true(anyNA(cvx_mgus2$hgb))
+  for (f in list(f_common, f_list)) {
+    expect_s3_class(f$fit, "coxphms")
+    expect_true(is_converged(f$fit))
+  }
+
+  # a constant shift changes the linear predictor of a transition only by a
+  # constant, and the score residuals not at all
+  cvx_ms_changed$age <- cvx_mgus2$age + 10
+  for (f in list(f_common, f_list)) {
+    expect_true(is_converged(f$fit))
+  }
+
+  # main flagged all coefficients of `f_common` as infinite after this change
+  cvx_ms_changed$age <- rev(cvx_mgus2$age)
+  for (f in list(f_common, f_list)) {
+    .cvx_expect_not_assessed(f$fit, "predictor data changed")
+  }
+
+  # rows added to the data
+  cvx_ms_changed <- rbind(cvx_mgus2, cvx_mgus2[1:5, ])
+  cvx_ms_changed$id[nrow(cvx_mgus2) + 1:5] <- max(cvx_mgus2$id) + 1:5
+  .cvx_expect_not_assessed(f_common$fit, "predictor data changed")
+
+  # if transitions share a baseline hazard, the transition of a stacked row is
+  # not stored, and the data are not compared
+  cvx_ms_shared <- cvx_mgus2
+  f_shared <- .cvx_fit(coxph(
+    list(Surv(etime, event) ~ age + sex, 1:2 + 1:3 ~ 1 / shared),
+    data = cvx_ms_shared,
+    id = id
+  ))
+  expect_true(anyDuplicated(f_shared$fit$smap[1, ]) > 0)
+  expect_true(is_converged(f_shared$fit))
+  cvx_ms_shared$age <- rev(cvx_mgus2$age)
+  expect_false(.coxph_data_changed(f_shared$fit))
+
+  # strata: `smap` has more than one row
+  cvx_ms_strata <- cvx_mgus2
+  f_strata <- .cvx_fit(coxph(
+    Surv(etime, event) ~ age + strata(sex),
+    data = cvx_ms_strata,
+    id = id
+  ))
+  expect_gt(nrow(f_strata$fit$smap), 1)
+  expect_true(is_converged(f_strata$fit))
+  cvx_ms_strata$age <- rev(cvx_mgus2$age)
+  .cvx_expect_not_assessed(f_strata$fit, "predictor data changed")
+
+  # some subjects start in state "pcm", so the model has a transition out of
+  # a state other than the first one
+  cvx_ms_istate <- cvx_mgus2
+  in_pcm <- withr::with_seed(1, stats::runif(nrow(cvx_mgus2)) < 0.3)
+  cvx_ms_istate$st <- factor(
+    ifelse(in_pcm, "pcm", "censor"),
+    c("censor", "pcm", "death")
+  )
+  cvx_ms_istate$etime <- with(
+    cvx_ms_istate,
+    ifelse(!in_pcm & pstat == 1, ptime, futime)
+  )
+  cvx_ms_istate$event <- with(
+    cvx_ms_istate,
+    factor(
+      ifelse(in_pcm, 2 * death, ifelse(pstat == 1, 1, 2 * death)),
+      0:2,
+      c("censor", "pcm", "death")
+    )
+  )
+  f_istate <- .cvx_fit(coxph(
+    Surv(etime, event) ~ age + sex,
+    data = cvx_ms_istate,
+    id = id,
+    istate = st
+  ))
+  expect_identical(ncol(f_istate$fit$cmap), 3L)
+  expect_true(is_converged(f_istate$fit))
+  cvx_ms_istate$age <- rev(cvx_ms_istate$age)
+  .cvx_expect_not_assessed(f_istate$fit, "predictor data changed")
+})
+
+
+test_that("is_converged.coxph, the data hint only if the data cannot be read", {
+  # survival gives this error for a multi-state model with a transition
+  # without predictors, whose data are present
+  cvx_hint_ms <- cvx_mgus2
+  f_ms <- .cvx_fit(coxph(
+    list(Surv(etime, event) ~ 1, 1:3 ~ age),
+    data = cvx_hint_ms,
+    id = id
+  ))
+  .cvx_expect_not_assessed(f_ms$fit, "object 'rr' not found")
+  messages <- gsub("\\s+", " ", .cvx_messages(is_converged(f_ms$fit)))
+  expect_no_match(messages, "no longer available", fixed = TRUE)
+
+  # the hint is given if the data cannot be read (not mocked: the data object
+  # is not found)
+  cvx_hint_gone <- cvx_lung
+  f <- .cvx_fit(coxph(Surv(time, status) ~ age + sex, data = cvx_hint_gone))
+  rm(cvx_hint_gone)
+  .cvx_expect_not_assessed(f$fit, "no longer available")
+
+  # the score residuals of a single-state model fail although its data can be
+  # read
+  local_mocked_bindings(
+    .coxph_infinite = function(...) stop("object 'rr' not found", call. = FALSE)
+  )
+  messages <- gsub("\\s+", " ", .cvx_messages(is_converged(cvx_fits$clean$fit)))
+  expect_length(messages, 1)
+  expect_match(messages, "object 'rr' not found", fixed = TRUE)
+  expect_no_match(messages, "no longer available", fixed = TRUE)
+  expect_false(is_converged(cvx_fits$clean$fit, verbose = FALSE))
+})
+
+
 test_that("is_converged.coxph, predictor data changed after the fit", {
   cvx_changed <- cvx_lung
   f <- .cvx_fit(coxph(Surv(time, status) ~ age + sex, data = cvx_changed))
@@ -537,6 +804,17 @@ test_that("is_converged.coxph, predictor data changed after the fit", {
   # one row less
   cvx_changed <- cvx_lung[-1, ]
   .cvx_expect_not_assessed(f$fit, "predictor data changed")
+
+  # a model with a factor stores `xlevels`, which `fit$x` would match
+  cvx_changed_factor <- cvx_lung
+  f_factor <- .cvx_fit(coxph(
+    Surv(time, status) ~ age + factor(sex),
+    data = cvx_changed_factor
+  ))
+  expect_false(is.null(f_factor$fit$xlevels))
+  expect_true(is_converged(f_factor$fit))
+  cvx_changed_factor$age <- withr::with_seed(123, sample(cvx_changed_factor$age))
+  .cvx_expect_not_assessed(f_factor$fit, "predictor data changed")
 
   # with `x = TRUE`, the score residuals use the stored model matrix and
   # offset, so a changed offset variable does not matter
@@ -570,23 +848,34 @@ test_that("is_converged.coxph, model objects with broken elements", {
   na_var <- fit
   na_var$var[] <- NA
   .cvx_expect_not_assessed(na_var, "missing values")
+  # a fit with events has at least one iteration
+  zero_iter <- fit
+  zero_iter$iter <- 0L
+  .cvx_expect_not_assessed(zero_iter, "no valid number of iterations")
+  # a fit without events whose number of events was removed
+  cvx_broken_no_events <- cvx_lung
+  cvx_broken_no_events$status <- 0
+  no_nevent <- .cvx_fit(coxph(
+    Surv(time, status) ~ age + sex,
+    data = cvx_broken_no_events
+  ))$fit
+  no_nevent$nevent <- NULL
+  .cvx_expect_not_assessed(no_nevent, "no valid number of iterations")
+  # a multi-state model without the maps of the stacked data: no error
+  no_smap <- cvx_fits$ms_right$fit
+  no_smap$smap <- NULL
+  expect_false(.coxph_data_changed(no_smap))
+  .cvx_expect_not_assessed(no_smap, "score vector could not be computed")
 })
 
 
 test_that("is_converged, verbose = FALSE for classes without a method", {
-  cvx_clogit_quiet <- survival::clogit(
-    case ~ spontaneous + survival::strata(stratum),
-    data = datasets::infert,
-    method = "efron"
-  )
   cph_like <- cvx_fits$reprex$fit
   class(cph_like) <- c("cph", "rms", "coxph")
-  for (x in list(cvx_clogit_quiet, cph_like)) {
-    expect_silent(expect_null(is_converged(x, verbose = FALSE)))
-    expect_message(
-      expect_null(is_converged(x)),
-      sprintf("does not work for models of class '%s'", class(x)[1]),
-      fixed = TRUE
-    )
-  }
+  expect_silent(expect_null(is_converged(cph_like, verbose = FALSE)))
+  expect_message(
+    expect_null(is_converged(cph_like)),
+    "does not work for models of class 'cph'",
+    fixed = TRUE
+  )
 })
