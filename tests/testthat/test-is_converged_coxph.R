@@ -702,7 +702,7 @@ test_that("is_converged.coxph, multi-state predictor data changed after the fit"
     data = cvx_ms_shared,
     id = id
   ))
-  expect_true(anyDuplicated(f_shared$fit$smap[1, ]) > 0)
+  expect_gt(anyDuplicated(f_shared$fit$smap[1, ]), 0)
   expect_true(is_converged(f_shared$fit))
   cvx_ms_shared$age <- rev(cvx_mgus2$age)
   expect_false(.coxph_data_changed(f_shared$fit))
@@ -734,7 +734,7 @@ test_that("is_converged.coxph, multi-state predictor data changed after the fit"
   cvx_ms_istate$event <- with(
     cvx_ms_istate,
     factor(
-      ifelse(in_pcm, 2 * death, ifelse(pstat == 1, 1, 2 * death)),
+      ifelse(!in_pcm & pstat == 1, 1, 2 * death),
       0:2,
       c("censor", "pcm", "death")
     )
@@ -829,6 +829,200 @@ test_that("is_converged.coxph, predictor data changed after the fit", {
   cvx_changed_offset$off <- cvx_changed_offset$off * 3
   expect_identical(sum(stats::residuals(f_x$fit, type = "score")), score_before)
   expect_true(is_converged(f_x$fit))
+})
+
+
+test_that("is_converged.coxph, variable control arguments with a formula object", {
+  # insight reads the control arguments in the formula environment, which is
+  # this test. coxph() read them in the frame of its call, here the function
+  # with `n = 2`, so the fits ran out of iterations, while `n` is 50 here.
+  cvx_env_fo <- Surv(time, status) ~ ph.ecog + age
+  n <- 50
+  fit_arg <- function(n) coxph(cvx_env_fo, data = cvx_lung, iter.max = n)
+  fit_control <- function(n) {
+    coxph(cvx_env_fo, data = cvx_lung, control = coxph.control(iter.max = n))
+  }
+  fit_update <- function(n) {
+    coxph(update(cvx_env_fo, . ~ . + sex), data = cvx_lung, iter.max = n, eps = n / 1e10)
+  }
+  f_arg <- .cvx_fit(fit_arg(2))
+  f_control <- .cvx_fit(fit_control(2))
+  f_update <- .cvx_fit(fit_update(2))
+  for (f in list(f_arg, f_control, f_update)) {
+    expect_match(f$warnings, "Ran out of iterations", fixed = TRUE)
+  }
+  .cvx_expect_not_assessed(f_arg$fit, "control arguments of the model call (`iter.max`)")
+  .cvx_expect_not_assessed(
+    f_control$fit,
+    "control arguments of the model call (`control`)"
+  )
+  .cvx_expect_not_assessed(
+    f_update$fit,
+    "control arguments of the model call (`iter.max`, `eps`)"
+  )
+
+  # correct fits of this kind cannot be assessed either, for example at the
+  # level of this test, where `n` is the value that the fit used
+  f_top <- .cvx_fit(coxph(cvx_env_fo, data = cvx_lung, iter.max = n))
+  expect_length(f_top$warnings, 0)
+  .cvx_expect_not_assessed(f_top$fit, "control arguments of the model call (`iter.max`)")
+
+  # a literal formula: the formula environment is the frame of the call
+  fit_literal <- function(n) {
+    coxph(Surv(time, status) ~ ph.ecog + age, data = cvx_lung, iter.max = n)
+  }
+  f_literal_fail <- .cvx_fit(fit_literal(2))
+  f_literal_pass <- .cvx_fit(fit_literal(30))
+  # a formula object with control arguments that hold only constants
+  fit_constant <- function() coxph(cvx_env_fo, data = cvx_lung, iter.max = 2)
+  f_constant_fail <- .cvx_fit(fit_constant())
+  f_constant_pass <- .cvx_fit(coxph(
+    update(cvx_env_fo, . ~ . + sex),
+    data = cvx_lung,
+    control = coxph.control(iter.max = 30)
+  ))
+  for (f in list(f_literal_fail, f_constant_fail)) {
+    .cvx_expect_as_survival(f)
+    result <- is_converged(f$fit, verbose = FALSE)
+    expect_false(result)
+    expect_identical(attr(result, "diagnostics")$Threshold, 2)
+  }
+  for (f in list(f_literal_pass, f_constant_pass)) {
+    expect_length(f$warnings, 0)
+    .cvx_expect_as_survival(f)
+    result <- is_converged(f$fit, verbose = FALSE)
+    expect_true(result)
+    expect_identical(attr(result, "diagnostics")$Threshold[1], 30)
+  }
+
+  # clogit() stores a coxph() call with the formula as an object, and the
+  # call of the user as `userCall`
+  cvx_env_infert <- datasets::infert
+  fit_clogit <- function(n) {
+    survival::clogit(
+      case ~ spontaneous + induced + survival::strata(stratum),
+      data = cvx_env_infert,
+      method = "efron",
+      iter.max = n
+    )
+  }
+  f_clogit <- .cvx_fit(fit_clogit(2))
+  expect_match(f_clogit$warnings, "Ran out of iterations", fixed = TRUE)
+  .cvx_expect_as_survival(f_clogit)
+  expect_identical(
+    attr(is_converged(f_clogit$fit, verbose = FALSE), "diagnostics")$Threshold,
+    2
+  )
+  cvx_env_clogit_fo <- case ~ spontaneous + induced + survival::strata(stratum)
+  fit_clogit_fo <- function(n) {
+    survival::clogit(
+      cvx_env_clogit_fo,
+      data = cvx_env_infert,
+      method = "efron",
+      iter.max = n
+    )
+  }
+  f_clogit_fo <- .cvx_fit(fit_clogit_fo(2))
+  .cvx_expect_not_assessed(
+    f_clogit_fo$fit,
+    "control arguments of the model call (`iter.max`)"
+  )
+})
+
+
+test_that("is_converged.coxph, a data object hidden by one of the same name", {
+  # the formula environment is this test, so the data object of the call is
+  # read here, and not in the function that fitted the model
+  cvx_hidden_fo <- Surv(time, status) ~ age + sex
+  fit_local <- function() {
+    cvx_hidden <- cvx_lung
+    coxph(cvx_hidden_fo, data = cvx_hidden)
+  }
+  f <- .cvx_fit(fit_local())
+  expect_null(f$fit[["model"]])
+  expect_null(f$fit[["x"]])
+  expect_identical(attr(f$fit$y, "type"), "right")
+
+  # the same values here: the data are read from this object
+  cvx_hidden <- cvx_lung
+  expect_true(is_converged(f$fit))
+  # other predictor values here
+  cvx_hidden$age <- withr::with_seed(123, sample(cvx_hidden$age))
+  .cvx_expect_not_assessed(f$fit, "predictor data changed")
+})
+
+
+test_that("is_converged.coxph, strata changed after the fit", {
+  cvx_strata <- cvx_lung
+  f_efron <- .cvx_fit(coxph(
+    Surv(time, status) ~ age + ph.ecog + strata(sex),
+    data = cvx_strata
+  ))
+  f_breslow <- .cvx_fit(coxph(
+    Surv(time, status) ~ age + ph.ecog + strata(sex),
+    data = cvx_strata,
+    ties = "breslow"
+  ))
+  f_aliased <- .cvx_fit(coxph(
+    Surv(time, status) ~ age + age2 + strata(sex),
+    data = cvx_strata
+  ))
+  expect_true(is.na(stats::coef(f_aliased$fit)[["age2"]]))
+  fits <- list(f_efron, f_breslow, f_aliased)
+
+  # the model frame is stored with `model = TRUE`, so these fits read no data
+  # and get the result of main
+  fits_model <- lapply(fits, function(f) {
+    model_call <- f$fit$call
+    model_call$model <- TRUE
+    .cvx_fit(eval(model_call))
+  })
+
+  # data unchanged
+  for (i in seq_along(fits)) {
+    expect_null(fits[[i]]$fit[["model"]])
+    expect_null(fits[[i]]$fit[["x"]])
+    .cvx_expect_as_survival(fits[[i]])
+    expect_true(is_converged(fits[[i]]$fit))
+    expect_identical(
+      is_converged(fits[[i]]$fit, verbose = FALSE),
+      is_converged(fits_model[[i]]$fit, verbose = FALSE)
+    )
+  }
+
+  # strata relabeled without a change of grouping are not detected, and do
+  # not change the score residuals
+  cvx_strata$sex <- 3 - cvx_lung$sex
+  for (i in seq_along(fits)) {
+    expect_equal(
+      is_converged(fits[[i]]$fit, verbose = FALSE),
+      is_converged(fits_model[[i]]$fit, verbose = FALSE),
+      tolerance = 1e-10
+    )
+  }
+
+  # the strata variable permuted: the grouping changes, while the linear
+  # predictor stays the same. Main flagged `age` and `ph.ecog` of the Efron
+  # fit as infinite.
+  cvx_strata <- cvx_lung
+  cvx_strata$sex <- withr::with_seed(123, sample(cvx_strata$sex))
+  expect_false(identical(cvx_strata$sex, cvx_lung$sex))
+  for (i in seq_along(fits)) {
+    .cvx_expect_not_assessed(fits[[i]]$fit, "predictor data changed")
+    expect_true(is_converged(fits_model[[i]]$fit))
+  }
+
+  # the refit runs only for fits with a `strata()` term
+  cvx_strata <- cvx_lung
+  refits <- 0L
+  local_mocked_bindings(.coxph_strata_changed = function(...) {
+    refits <<- refits + 1L
+    FALSE
+  })
+  expect_true(is_converged(cvx_fits$clean$fit))
+  expect_identical(refits, 0L)
+  expect_true(is_converged(f_efron$fit))
+  expect_identical(refits, 1L)
 })
 
 

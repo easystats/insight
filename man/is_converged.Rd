@@ -157,7 +157,13 @@ models (with \code{frailty()}, \code{ridge()} or \code{pspline()} terms), for mo
 of 1 or less, for right-censored and multi-state models fitted with
 \code{y = FALSE}, for models without events, for model objects without a call,
 and if the control arguments of the model call or the score residuals cannot
-be computed. Single-state counting-process models fitted with \code{y = FALSE}
+be computed. Convergence also cannot be assessed if the model call gives the
+formula as an object, for example \code{coxph(f, data = d, iter.max = n)}, and a
+control argument refers to a variable. The control arguments are evaluated
+in the environment of the formula, which can differ from the environment in
+which the model was fitted, for example inside a function. This also applies
+to models fitted in top-level code, where the two environments are the same.
+Single-state counting-process models fitted with \code{y = FALSE}
 are assessed, because their checks use only the stored score vector and
 convergence flag. A model without events and without predictors returns
 \code{TRUE}, as other null models.
@@ -175,15 +181,21 @@ or with \code{x = TRUE} for single-state models. If these data were removed afte
 the model was fitted,
 convergence cannot be assessed. If the predictor data were changed, so that
 the linear predictor computed from them differs from the one of the model,
-convergence cannot be assessed either. Changes that leave the linear
-predictor the same, for example to a \code{strata()} variable, are not detected
-and can give a wrong result. For multi-state models, the linear predictor
-is compared within each transition. A change that adds the same constant to
-all values of a predictor is not detected, but it leaves the score residuals
-the same. The check is not done for multi-state models in which transitions
-share a baseline hazard, or that were fitted with \code{x = TRUE}. For these
-models, changed data can give a wrong result. In all these cases, refit the
-model, or fit it with \code{model = TRUE}, which avoids them.
+convergence cannot be assessed either. Single-state models with a
+\code{strata()} term are also fitted again from these data, at the coefficients
+of the model and without iterations. If the log-likelihood of this fit
+differs from the one of the model, for example because the observations
+were moved to other strata, convergence cannot be assessed. For multi-state
+models, the linear predictor is compared within each transition. A change
+that adds the same constant to all values of a predictor is not detected,
+but it leaves the score residuals the same. The check is not done for
+multi-state models in which transitions share a baseline hazard, or that
+were fitted with \code{x = TRUE}. Strata that are relabeled without a change of
+grouping are not detected, but they leave the result the same. Other
+changes that stay undetected can give a wrong result: in multi-state models,
+changes to a \code{strata()} or \code{istate} variable, and changes to the data of
+models without the check. In these cases, refit the model, or fit it with
+\code{model = TRUE}, which avoids them.
 }
 
 \section{Convergence versus Singularity}{

@@ -37,6 +37,19 @@
 
 ## Bug fixes
 
+* `is_converged()` for `coxph` models now returns `FALSE` with a message that
+  convergence cannot be assessed in two more cases. The first case is a call
+  with a formula object, such as `coxph(f, ...)`, and a control argument with
+  a variable, such as `iter.max = n`. Before,
+  `is_converged()` evaluated these arguments in the environment of the
+  formula. Inside a function, it then used other control values than the fit.
+  Models of this kind that were assessed correctly before, for example in
+  top-level code, now also return `FALSE`. The second case is a right-censored
+  single-state model with a `strata()` term whose strata variable now puts
+  observations in other strata. Before, `is_converged()`
+  flagged coefficients as infinite by mistake. Models fitted with
+  `model = TRUE` are not affected.
+
 * `get_sigma()` for models from package _VGAM_ now returns the standard
   deviation parameter of families that have one, such as `uninormal()`,
   `tobit()` or `binormal()`. Before, it returned a wrong value. A model with
@@ -77,7 +90,7 @@
   baseline hazard or the model was fitted with `x = TRUE`, it does not run.
   It also runs for models with factor predictors or a
   `strata()` term, which skipped it before. A change to the `strata()`
-  variable itself is still not detected. If the predictor data of these
+  variable of a multi-state model is still not detected. If the predictor data of these
   models changed after the fit, they now return `FALSE` with a message that
   convergence cannot be assessed. Before, the result depended on the change,
   and coefficients were flagged as infinite by mistake. A model object with
