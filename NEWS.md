@@ -38,9 +38,9 @@
 ## Bug fixes
 
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that
-  convergence cannot be assessed in two more cases. The first case is a call
-  with a formula object, such as `coxph(f, ...)`, and a control argument with
-  a variable, such as `iter.max = n`. Before,
+  convergence cannot be assessed in two more cases. In the first case, the
+  call does not write the formula as a `~` expression, such as
+  `coxph(f, ...)`. A control argument of this call uses a variable. Before,
   `is_converged()` evaluated these arguments in the environment of the
   formula. Inside a function, it then used other control values than the fit.
   Models of this kind that were assessed correctly before, for example in

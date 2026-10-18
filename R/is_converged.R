@@ -126,9 +126,10 @@
 #' of 1 or less, for right-censored and multi-state models fitted with
 #' `y = FALSE`, for models without events, for model objects without a call,
 #' and if the control arguments of the model call or the score residuals cannot
-#' be computed. Convergence also cannot be assessed if the model call gives the
-#' formula as an object, for example `coxph(f, data = d, iter.max = n)`, and a
-#' control argument refers to a variable. The control arguments are evaluated
+#' be computed. Convergence also cannot be assessed if the model call does not
+#' write the formula as a `~` expression, for example
+#' `coxph(f, data = d, iter.max = n)`, and a control argument refers to a
+#' variable. The control arguments are evaluated
 #' in the environment of the formula, which can differ from the environment in
 #' which the model was fitted, for example inside a function. This also applies
 #' to models fitted in top-level code, where the two environments are the same.
@@ -1017,8 +1018,9 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
 # the control values that coxph() used: `control` if given, else the other
 # arguments of the call, which coxph() passes to coxph.control(). They are
-# evaluated in the formula environment, which is the frame of the call only if
-# the call writes the formula as a `~` expression. Otherwise, a control
+# evaluated in the formula environment. Only if the call writes the formula as
+# a `~` expression is this sure to be the frame of the call: a formula object
+# can come from another environment. Otherwise, a control
 # argument that refers to a variable is not evaluated. If the values are not
 # evaluated, the reason is returned.
 .coxph_control <- function(x) {

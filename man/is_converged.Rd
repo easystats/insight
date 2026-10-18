@@ -157,9 +157,10 @@ models (with \code{frailty()}, \code{ridge()} or \code{pspline()} terms), for mo
 of 1 or less, for right-censored and multi-state models fitted with
 \code{y = FALSE}, for models without events, for model objects without a call,
 and if the control arguments of the model call or the score residuals cannot
-be computed. Convergence also cannot be assessed if the model call gives the
-formula as an object, for example \code{coxph(f, data = d, iter.max = n)}, and a
-control argument refers to a variable. The control arguments are evaluated
+be computed. Convergence also cannot be assessed if the model call does not
+write the formula as a \code{~} expression, for example
+\code{coxph(f, data = d, iter.max = n)}, and a control argument refers to a
+variable. The control arguments are evaluated
 in the environment of the formula, which can differ from the environment in
 which the model was fitted, for example inside a function. This also applies
 to models fitted in top-level code, where the two environments are the same.
