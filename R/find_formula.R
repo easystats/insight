@@ -771,25 +771,10 @@ find_formula.RM <- find_formula.MANOVA
 
 #' @export
 find_formula.gls <- function(x, verbose = TRUE, ...) {
-  ## TODO this is an intermediate fix to return the correlation variables from gls-objects
-  fcorr <- x$call$correlation
-  if (is.null(fcorr)) {
-    f_corr <- NULL
-  } else if (inherits(fcorr, "name")) {
-    f_corr <- attributes(eval(fcorr))$formula
-  } else {
-    f_corr <- parse(text = safe_deparse(fcorr))[[1]]
-  }
-  if (is.symbol(f_corr)) {
-    f_corr <- paste("~", safe_deparse(f_corr))
-  } else if (!inherits(f_corr, "formula")) {
-    f_corr <- f_corr$form
-  }
-
   l <- tryCatch(
     list(
       conditional = stats::formula(x),
-      correlation = stats::as.formula(f_corr)
+      correlation = .lme_correlation_formula(x)
     ),
     error = function(x) {
       NULL
@@ -1527,10 +1512,7 @@ find_formula.nlme <- function(x, verbose = TRUE, ...) {
     f.random <- f.random[[1]]
   }
 
-  # a correlation structure that is neither in the call nor in the global
-  # environment or on the search path, e.g. one created inside the fitting
-  # function, cannot be found here, so there is no correlation part
-  f.corr <- tryCatch(.lme_correlation_formula(x), error = function(e) NULL)
+  f.corr <- .lme_correlation_formula(x)
 
   f <- compact_list(list(
     conditional = f.cond,
@@ -1667,19 +1649,21 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
   .find_formula_return(f, verbose = verbose)
 }
 
-# the formula of the correlation structure of lme, glmmPQL and nlme objects,
-# read from the call, or from the structure object that the call names
+# the formula of the correlation structure of lme, glmmPQL, nlme and gls
+# objects, read from the fitted structure, so that it does not depend on where
+# the structure in the call can be found. A structure without `form` has the
+# grouping that nlme used (e.g. `~1 | Subject`), or `~1`, which has no
+# variable and gives no correlation part.
 .lme_correlation_formula <- function(x) {
-  ## TODO this is an intermediate fix to return the correlation variables from lme-objects
-  fcorr <- x$call$correlation
-  if (is.null(fcorr)) {
-    fc <- NULL
-  } else if (inherits(fcorr, "name")) {
-    fc <- attributes(eval(fcorr))$formula
-  } else {
-    fc <- parse(text = safe_deparse(fcorr))[[1]]$form
+  corr_struct <- x[["modelStruct"]][["corStruct"]]
+  if (is.null(corr_struct)) {
+    return(NULL)
   }
-  stats::as.formula(fc)
+  f_corr <- tryCatch(stats::formula(corr_struct), error = function(e) NULL)
+  if (!inherits(f_corr, "formula") || !length(all.vars(f_corr))) {
+    return(NULL)
+  }
+  f_corr
 }
 
 # rebuild the random effects formula from the fitted random effects structure,
