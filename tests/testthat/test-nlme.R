@@ -404,3 +404,82 @@ test_that("parameters, varcov, statistic, n_obs, get_data, nlme", {
     expect_true(all(data_columns[[i]] %in% colnames(get_data(m))))
   }
 })
+
+
+test_that("find_formula, find_variables, get_data, nlme with correlation", {
+  # `t` is the position of each measurement within a tree
+  nlme_loblolly_t <- nlme_loblolly
+  nlme_loblolly_t$t <- match(nlme_loblolly_t$age, sort(unique(nlme_loblolly_t$age)))
+  # the structure is given in the call, or as an object in the global
+  # environment
+  m_call <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_loblolly_t,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme::corAR1(form = ~ t | Seed),
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+  nlme_corr_struct <<- nlme::corAR1(form = ~ t | Seed)
+  withr::defer(rm(nlme_corr_struct, envir = globalenv()))
+  m_object <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_loblolly_t,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme_corr_struct,
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+  for (m in list(m_call, m_object)) {
+    f <- find_formula(m)
+    expect_named(f, c("conditional", "nonlinear", "random", "correlation"))
+    expect_equal(f$correlation, ~ t | Seed, ignore_attr = TRUE)
+    expect_identical(find_variables(m)$correlation, c("t", "Seed"))
+    expect_true("t" %in% colnames(get_data(m)))
+  }
+
+  # an object without `form` gives the formula of that object, `~1`, which
+  # has no variables, as for lme models
+  nlme_corr_noform <<- nlme::corAR1()
+  withr::defer(rm(nlme_corr_noform, envir = globalenv()))
+  m_object_noform <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_loblolly_t,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme_corr_noform,
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+  expect_equal(find_formula(m_object_noform)$correlation, ~1, ignore_attr = TRUE)
+  expect_null(find_variables(m_object_noform)$correlation)
+
+  # a structure without `form` in the call has no correlation part, as for
+  # lme models
+  m_noform <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_loblolly_t,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme::corAR1(),
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+  expect_named(find_formula(m_noform), c("conditional", "nonlinear", "random"))
+
+  # a structure created inside the fitting function cannot be found, so there
+  # is no correlation part and no error
+  fit_local <- function() {
+    corr_local <- nlme::corAR1(form = ~ t | Seed)
+    nlme::nlme(
+      height ~ SSasymp(age, Asym, R0, lrc),
+      data = nlme_loblolly_t,
+      fixed = Asym + R0 + lrc ~ 1,
+      random = Asym ~ 1,
+      correlation = corr_local,
+      start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+    )
+  }
+  m_local <- fit_local()
+  expect_false(exists("corr_local", envir = globalenv()))
+  expect_no_error(f <- find_formula(m_local))
+  expect_named(f, c("conditional", "nonlinear", "random"))
+})
