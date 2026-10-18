@@ -1194,6 +1194,45 @@ test_that("is_converged.coxph, the strata check reads only the data arguments of
 })
 
 
+test_that("is_converged.coxph, edge cases of the strata check", {
+  # oracle: reference implementation, the same fit with `model = TRUE`, which
+  # reads no data
+  cvx_edge <- cvx_lung
+  f <- coxph(Surv(time, status) ~ age + ph.ecog + strata(sex), data = cvx_edge)
+  twin <- coxph(
+    Surv(time, status) ~ age + ph.ecog + strata(sex),
+    data = cvx_edge,
+    model = TRUE
+  )
+  # a model object without the stored residuals or log-likelihood is compared
+  # on what it has, and without both it is not compared: the result is that of
+  # the twin without the same elements
+  for (removed in list("residuals", "loglik", c("residuals", "loglik"))) {
+    partial <- f
+    partial[removed] <- NULL
+    partial_twin <- twin
+    partial_twin[removed] <- NULL
+    expect_identical(
+      is_converged(partial, verbose = FALSE),
+      is_converged(partial_twin, verbose = FALSE)
+    )
+  }
+  expect_true(is_converged(f))
+  # the strata from the model frame, if the model matrix has none, give the
+  # same grouping
+  mf <- stats::model.frame(f)
+  mm <- stats::model.matrix(f)
+  coefs <- stats::coef(f)
+  expect_false(is.null(attr(mm, "strata")))
+  expect_false(.coxph_strata_changed(f, mf, mm, coefs, NULL))
+  attr(mm, "strata") <- NULL
+  expect_false(.coxph_strata_changed(f, mf, mm, coefs, NULL))
+  # a missing value in the strata variable after the fit
+  cvx_edge$sex[5] <- NA
+  .cvx_expect_not_assessed(f, "predictor data changed")
+})
+
+
 test_that("is_converged.coxph, a strata change that the log-likelihood hides", {
   # oracle: reference implementation, the same fit with `model = TRUE`
   cvx_pbc <- survival::pbc

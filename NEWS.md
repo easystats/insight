@@ -42,7 +42,8 @@
   call does not write the formula as a `~` expression, such as
   `coxph(f, ...)`. A control argument of this call uses a variable. Before,
   `is_converged()` evaluated these arguments in the environment of the
-  formula. Inside a function, it then used other control values than the fit.
+  formula. For a model fitted inside a function, an object with the same name
+  in that environment gave other control values than the fit used.
   Models of this kind that were assessed correctly before, for example in
   top-level code, now also return `FALSE`. The second case is a right-censored
   single-state model with a `strata()` term whose strata variable now puts

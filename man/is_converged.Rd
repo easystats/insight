@@ -163,7 +163,8 @@ write the formula as a \code{~} expression, for example
 variable. The control arguments are evaluated
 in the environment of the formula, which can differ from the environment in
 which the model was fitted, for example inside a function. This also applies
-to models fitted in top-level code, where the two environments are the same.
+to models fitted in top-level code, where the two environments are usually
+the same.
 Single-state counting-process models fitted with \code{y = FALSE}
 are assessed, because their checks use only the stored score vector and
 convergence flag. A model without events and without predictors returns
@@ -185,19 +186,20 @@ the linear predictor computed from them differs from the one of the model,
 convergence cannot be assessed either. For single-state models with a
 \code{strata()} term, the log-likelihood and the martingale residuals at the
 coefficients of the model are also computed again from these data and the
-stored response. If they differ from those of the model, for example
-because observations were moved to other strata, convergence cannot be
-assessed. For multi-state
-models, the linear predictor is compared within each transition. A change
-that adds the same constant to all values of a predictor is not detected,
-but it leaves the score residuals the same. The check is not done for
-multi-state models in which transitions share a baseline hazard, or that
-were fitted with \code{x = TRUE}. Strata that are relabeled without a change of
-grouping are not detected, but they leave the result the same. Other
-changes that stay undetected can give a wrong result: in multi-state models,
-changes to a \code{strata()} or \code{istate} variable, and changes to the data of
-models without the check. In these cases, refit the model, or fit it with
-\code{model = TRUE}, which avoids them.
+stored response and weights. If they differ from those of the model, for
+example because observations were moved to other strata, or if they cannot
+be computed, convergence cannot be assessed. Strata that are relabeled
+without a change of grouping are not detected, but they leave the result
+the same. For multi-state models, the linear predictor is compared within
+each transition. A change that adds the same constant to all values of a
+predictor is not detected, but it leaves the score residuals the same. The
+check is not done for multi-state models in which transitions share a
+baseline hazard, or that were fitted with \code{x = TRUE}. Other changes that
+stay undetected can give a wrong result: a change of several predictors that
+leaves the linear predictor the same, changes to a \code{strata()} or \code{istate}
+variable of a multi-state model, and changes to the data of models without
+the check. In these cases, refit the model, or fit it with \code{model = TRUE},
+which avoids them.
 }
 
 \section{Convergence versus Singularity}{

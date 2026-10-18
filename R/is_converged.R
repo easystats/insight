@@ -132,7 +132,8 @@
 #' variable. The control arguments are evaluated
 #' in the environment of the formula, which can differ from the environment in
 #' which the model was fitted, for example inside a function. This also applies
-#' to models fitted in top-level code, where the two environments are the same.
+#' to models fitted in top-level code, where the two environments are usually
+#' the same.
 #' Single-state counting-process models fitted with `y = FALSE`
 #' are assessed, because their checks use only the stored score vector and
 #' convergence flag. A model without events and without predictors returns
@@ -154,19 +155,20 @@
 #' convergence cannot be assessed either. For single-state models with a
 #' `strata()` term, the log-likelihood and the martingale residuals at the
 #' coefficients of the model are also computed again from these data and the
-#' stored response. If they differ from those of the model, for example
-#' because observations were moved to other strata, convergence cannot be
-#' assessed. For multi-state
-#' models, the linear predictor is compared within each transition. A change
-#' that adds the same constant to all values of a predictor is not detected,
-#' but it leaves the score residuals the same. The check is not done for
-#' multi-state models in which transitions share a baseline hazard, or that
-#' were fitted with `x = TRUE`. Strata that are relabeled without a change of
-#' grouping are not detected, but they leave the result the same. Other
-#' changes that stay undetected can give a wrong result: in multi-state models,
-#' changes to a `strata()` or `istate` variable, and changes to the data of
-#' models without the check. In these cases, refit the model, or fit it with
-#' `model = TRUE`, which avoids them.
+#' stored response and weights. If they differ from those of the model, for
+#' example because observations were moved to other strata, or if they cannot
+#' be computed, convergence cannot be assessed. Strata that are relabeled
+#' without a change of grouping are not detected, but they leave the result
+#' the same. For multi-state models, the linear predictor is compared within
+#' each transition. A change that adds the same constant to all values of a
+#' predictor is not detected, but it leaves the score residuals the same. The
+#' check is not done for multi-state models in which transitions share a
+#' baseline hazard, or that were fitted with `x = TRUE`. Other changes that
+#' stay undetected can give a wrong result: a change of several predictors that
+#' leaves the linear predictor the same, changes to a `strata()` or `istate`
+#' variable of a multi-state model, and changes to the data of models without
+#' the check. In these cases, refit the model, or fit it with `model = TRUE`,
+#' which avoids them.
 #'
 #' @section Convergence versus Singularity:
 #' Note the different meaning between singularity and convergence: singularity
@@ -895,7 +897,8 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 
 # TRUE if the linear predictor, computed again from the data object of the
 # call, differs from the one of the fit, or if the strata changed. If the data
-# cannot be read, FALSE is returned, and check (b) gives the error.
+# cannot be read, FALSE is returned, and check (b) gives the error. If the
+# strata cannot be compared, the reason is returned.
 .coxph_data_changed <- function(x) {
   mf <- tryCatch(stats::model.frame(x), error = function(e) NULL)
   mm <- tryCatch(stats::model.matrix(x), error = function(e) NULL)
@@ -942,23 +945,29 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 # event of both strata, are not detected, but they leave the score residuals
 # the same. TRUE, FALSE, or the reason why the strata could not be compared.
 .coxph_strata_changed <- function(x, mf, mm, coefs, model_offset) {
-  strata <- attr(mm, "strata")
-  if (is.null(strata)) {
-    strata_vars <- survival::untangle.specials(x$terms, "strata", 1)$vars
-    strata <- survival::strata(mf[strata_vars], shortlabel = TRUE)
-  }
   recomputed <- tryCatch(
-    survival::coxph.fit(
-      mm[, names(coefs), drop = FALSE],
-      x$y,
-      as.integer(strata),
-      model_offset,
-      unname(coefs),
-      survival::coxph.control(iter.max = 0),
-      x$weights,
-      x$method,
-      rownames(mm)
-    ),
+    {
+      strata <- attr(mm, "strata")
+      if (is.null(strata)) {
+        strata_vars <- survival::untangle.specials(x$terms, "strata", 1)$vars
+        strata <- survival::strata(mf[strata_vars], shortlabel = TRUE)
+      }
+      # a missing stratum: the data of these observations changed
+      if (anyNA(strata)) {
+        return(TRUE)
+      }
+      survival::coxph.fit(
+        mm[, names(coefs), drop = FALSE],
+        x$y,
+        as.integer(strata),
+        model_offset,
+        unname(coefs),
+        survival::coxph.control(iter.max = 0),
+        x$weights,
+        x$method,
+        rownames(mm)
+      )
+    },
     error = function(e) e
   )
   if (inherits(recomputed, "error")) {
@@ -968,8 +977,12 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       "). Refit the model, or fit it with `model = TRUE`."
     ))
   }
-  !isTRUE(all.equal(recomputed$loglik[2], x$loglik[2])) ||
+  # a model object without the stored values is compared on what it has
+  loglik_changed <- length(x$loglik) == 2 &&
+    !isTRUE(all.equal(recomputed$loglik[2], x$loglik[2]))
+  residuals_changed <- length(x$residuals) == length(recomputed$residuals) &&
     !isTRUE(all.equal(unname(recomputed$residuals), unname(x$residuals)))
+  loglik_changed || residuals_changed
 }
 
 
@@ -1090,7 +1103,7 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
       error = function(e) NULL
     )
   }
-  model_formula <- model_call$formula
+  model_formula <- model_call[["formula"]]
   is.call(model_formula) &&
     !inherits(model_formula, "formula") &&
     identical(model_formula[[1]], as.name("~"))
