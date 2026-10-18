@@ -1042,7 +1042,8 @@ test_that("find_formula, lme, correlation object local to a function", {
       correlation = lme_corr_local
     )
   }
-  # `x` and `fcorr` are also names of variables inside insight
+  # `x` is also a variable name inside insight, and `fcorr` was one in the
+  # code that read the structure from the call
   fit_x <- function() {
     x <- nlme::corAR1(form = ~ t | Subject)
     nlme::lme(
