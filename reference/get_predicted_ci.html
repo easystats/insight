@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -221,6 +221,17 @@ uncertainty of the model itself. Before taking the square-root of the
 diagonal of the variance-covariance matrix, <code>get_predicted_ci()</code> adds the
 residual variance to these values. For mixed models, <code><a href="get_variance.html">get_variance_residual()</a></code>
 is used, while <code>get_sigma()^2</code> is used for non-mixed models.</p>
+<p>Nonlinear mixed models of class <code>nlme</code> (from <code><a href="https://rdrr.io/pkg/nlme/man/nlme.html" class="external-link">nlme::nlme()</a></code>) have no model
+matrix <code>X</code>. For these models, the standard errors are calculated with the
+delta method: <code>X</code> is replaced by the Jacobian of the predictions with respect
+to the fixed effects, computed by central differences of <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>, with
+the random effects held at their predicted values. So the standard errors do
+not include the uncertainty of the random effects. <code><a href="get_predicted.html">get_predicted()</a></code> uses the
+level of its predictions. A direct call to <code>get_predicted_ci()</code> uses the
+<code>level</code> argument, or the default level of <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> if <code>level</code> is missing.
+Only Wald confidence intervals are available. Prediction intervals, the
+<code>vcov</code> and <code>vcov_args</code> arguments, other values of <code>ci_method</code> and a <code>level</code>
+with more than one value are not yet supported for these models.</p>
 <p>It is preferred to rely on standard errors returned by <code><a href="get_predicted.html">get_predicted()</a></code> (i.e.
 returned by the <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>-function), because these are more accurate than
 manually calculated standard errors. Use <code>get_predicted_ci()</code> only if standard

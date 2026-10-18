@@ -216,6 +216,23 @@ adds the residual variance to these values. For mixed models,
 [`get_variance_residual()`](https://easystats.github.io/insight/reference/get_variance.md)
 is used, while `get_sigma()^2` is used for non-mixed models.
 
+Nonlinear mixed models of class `nlme` (from
+[`nlme::nlme()`](https://rdrr.io/pkg/nlme/man/nlme.html)) have no model
+matrix `X`. For these models, the standard errors are calculated with
+the delta method: `X` is replaced by the Jacobian of the predictions
+with respect to the fixed effects, computed by central differences of
+[`predict()`](https://rdrr.io/r/stats/predict.html), with the random
+effects held at their predicted values. So the standard errors do not
+include the uncertainty of the random effects.
+[`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.md)
+uses the level of its predictions. A direct call to `get_predicted_ci()`
+uses the `level` argument, or the default level of
+[`predict()`](https://rdrr.io/r/stats/predict.html) if `level` is
+missing. Only Wald confidence intervals are available. Prediction
+intervals, the `vcov` and `vcov_args` arguments, other values of
+`ci_method` and a `level` with more than one value are not yet supported
+for these models.
+
 It is preferred to rely on standard errors returned by
 [`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.md)
 (i.e. returned by the

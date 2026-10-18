@@ -27,7 +27,8 @@ get_parameters(x, standardize = FALSE, ...)
 
 - standardize:
 
-  Logical. If `TRUE`, standardized parameters are returned.
+  Logical. Only `TRUE` returns standardized parameters. Other values,
+  such as `1` or `NA`, return unstandardized parameters.
 
 - ...:
 
