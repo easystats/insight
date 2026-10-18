@@ -1083,9 +1083,9 @@ test_that("is_converged.coxph, strata changed after the fit", {
 })
 
 
-test_that("is_converged.coxph, the strata check evaluates no argument of the call", {
+test_that("is_converged.coxph, the strata check reads only the data arguments of the call", {
   # oracle: reference implementation, the same fits with `model = TRUE`, which
-  # read no data, and the warnings survival gives at the fit
+  # read no data
   cvx_args <- cvx_lung
   # the fit refitted with `model = TRUE` on the current data object
   .cvx_twin <- function(f, ...) stats::update(f, model = TRUE, ...)
@@ -1097,7 +1097,8 @@ test_that("is_converged.coxph, the strata check evaluates no argument of the cal
     )
   }
   # `ties`, `robust` and `nocenter` set from a variable in a function, with a
-  # formula object from outside, and other values here
+  # formula object from outside, where `tie` has another value and `rob` and
+  # `nc` do not exist
   cvx_args_fo <- Surv(time, status) ~ age + ph.ecog + strata(sex)
   tie <- "efron"
   fit_ties <- function(tie) coxph(cvx_args_fo, data = cvx_args, ties = tie)

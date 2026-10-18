@@ -933,12 +933,14 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
 # log-likelihood and the martingale residuals at the stored coefficients are
 # computed again with survival::coxph.fit() and zero iterations, from the
 # model matrix and strata that the guard above read and from the stored
-# response and weights, which the score residuals also use. No argument of the
-# call is evaluated. If the grouping into strata changed, the residuals differ
-# from those of the fit, also when the log-likelihood differs by less than the
-# tolerance of all.equal(). Strata relabeled without a change of grouping are
-# not detected, but they leave the score residuals the same. TRUE, FALSE, or
-# the reason why the strata could not be compared.
+# response and weights, which the score residuals also use. The recompute
+# evaluates no argument of the call beyond the data arguments that the model
+# frame already read. If the grouping into strata changed, the residuals
+# usually differ from those of the fit, also when the log-likelihood differs by
+# less than the tolerance of all.equal(). Strata relabeled without a change of
+# grouping, or a change that moves only observations censored before the first
+# event of both strata, are not detected, but they leave the score residuals
+# the same. TRUE, FALSE, or the reason why the strata could not be compared.
 .coxph_strata_changed <- function(x, mf, mm, coefs, model_offset) {
   strata <- attr(mm, "strata")
   if (is.null(strata)) {
