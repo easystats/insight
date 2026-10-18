@@ -1111,6 +1111,10 @@ test_that("find_formula, lme, correlation structure without `form`", {
   expect_identical(find_variables(m_nested)$correlation, c("Sex", "Subject"))
 
   # no correlation structure, no correlation part
-  m_none <- nlme::lme(distance ~ age, random = ~ 1 | Subject, data = lme_orthodont_t)
+  m_none <- nlme::lme(
+    distance ~ age,
+    random = ~ 1 | Subject,
+    data = lme_orthodont_t
+  )
   expect_named(find_formula(m_none), c("conditional", "random"))
 })
