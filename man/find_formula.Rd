@@ -104,13 +104,11 @@ inside \code{poly()} and that no data names are used (i.e. no \code{data$variabl
 rather \code{variable}).
 }
 \note{
-For models of class \code{lme}, \code{nlme} or \code{gls} the correlation-component is only
-returned, when it is explicitly defined as named argument (\code{form}), e.g.
-\code{corAR1(form = ~1 | Mare)}, or when the correlation structure is passed as
-an object that is in the global environment or on the search path. In the
-latter case, the formula of that object is returned, which is \code{~1} if it has
-no \code{form}. For \code{nlme} models, a structure object that cannot be found gives
-no correlation-component.
+For models of class \code{lme}, \code{nlme} or \code{gls}, the correlation-component
+is the formula of the fitted correlation structure, e.g. \code{~ t | Subject} for
+\code{corAR1(form = ~ t | Subject)}. For a structure without \code{form}, this is the
+grouping that the model used, like \code{~1 | Subject}. There is no
+correlation-component when that formula has no variable, e.g. \code{~1}.
 }
 \examples{
 \dontshow{if (require("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}

@@ -84,13 +84,11 @@
 #'
 #' For models from package **brms**, distributional parameters are also included.
 #'
-#' @note For models of class `lme`, `nlme` or `gls` the correlation-component is only
-#' returned, when it is explicitly defined as named argument (`form`), e.g.
-#' `corAR1(form = ~1 | Mare)`, or when the correlation structure is passed as
-#' an object that is in the global environment or on the search path. In the
-#' latter case, the formula of that object is returned, which is `~1` if it has
-#' no `form`. For `nlme` models, a structure object that cannot be found gives
-#' no correlation-component.
+#' @note For models of class `lme`, `nlme` or `gls`, the correlation-component
+#' is the formula of the fitted correlation structure, e.g. `~ t | Subject` for
+#' `corAR1(form = ~ t | Subject)`. For a structure without `form`, this is the
+#' grouping that the model used, like `~1 | Subject`. There is no
+#' correlation-component when that formula has no variable, e.g. `~1`.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(mtcars)
