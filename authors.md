@@ -37,7 +37,7 @@
 - **Alex Reinhart**. Contributor.
   [](https://orcid.org/0000-0002-6658-514X)
 
-- **Jeffrey Girard**. Contributor.
+- **[Jeffrey Girard](https://jmgirard.com)**. Contributor.
   [](https://orcid.org/0000-0002-7359-3746)
 
 ## Citation
