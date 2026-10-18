@@ -137,20 +137,142 @@ test_that("get_predicted, nlme", {
       tolerance = 1e-10
     )
   }
-  # no standard errors for nonlinear mixed models, so `ci` gives a message
-  expect_message(
-    p <- get_predicted(m_nlme1, ci = 0.95),
-    regexp = "not yet supported for models of class `nlme`"
+})
+
+
+test_that("get_predicted, nlme, standard errors", {
+  skip_if_not_installed("marginaleffects")
+  # oracle: live, marginaleffects::predictions(), which computes its own
+  # Jacobian of predict() with respect to the fixed effects
+  soybean <- as.data.frame(nlme_soybean)
+  # rows with different `Time` and both `Variety` levels, so that each fixed
+  # effect enters the Jacobian
+  d <- soybean[c(1, which(soybean$Variety == "P")[5], 300), ]
+  expect_setequal(as.character(d$Variety), c("F", "P"))
+  p <- as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95))
+  expect_equal(
+    p$SE,
+    marginaleffects::predictions(m_nlme2, newdata = d)$std.error,
+    tolerance = 1e-4
   )
-  expect_equal(as.vector(p), as.vector(stats::predict(m_nlme1)), tolerance = 1e-10)
-  expect_silent(get_predicted(m_nlme1, ci = 0.95, verbose = FALSE))
-  # called directly, get_predicted_ci() also gives the message
+  # rows of different wafers, sites and voltages
+  d <- as.data.frame(nlme_wafer)[c(1, 8, 45), ]
+  p <- as.data.frame(get_predicted(m_nlme3, data = d, ci = 0.95))
+  expect_equal(
+    p$SE,
+    marginaleffects::predictions(m_nlme3, newdata = d)$std.error,
+    tolerance = 1e-4
+  )
+})
+
+
+test_that("get_predicted, nlme, standard errors of a linear model", {
+  # oracle: closed-form. The model is linear in its parameters, so the
+  # Jacobian is the model matrix X, and the standard errors are the square
+  # roots of the diagonal of X V X'
+  m <- nlme::nlme(
+    height ~ a + b1 * age,
+    data = nlme_loblolly,
+    fixed = a + b1 ~ 1,
+    random = a ~ 1 | Seed,
+    start = c(a = 0, b1 = 2.5)
+  )
+  loblolly <- as.data.frame(nlme_loblolly)
+  d <- loblolly[match(c(3, 10, 25), loblolly$age), ]
+  X <- cbind(1, d$age)
+  se <- sqrt(diag(X %*% stats::vcov(m) %*% t(X)))
+  p <- as.data.frame(get_predicted(m, data = d, ci = 0.95))
+  expect_equal(p$SE, se, tolerance = 1e-6, ignore_attr = TRUE)
+  p <- as.data.frame(get_predicted(m, data = d, ci = 0.95, level = 0))
+  expect_equal(p$SE, se, tolerance = 1e-6, ignore_attr = TRUE)
+})
+
+
+test_that("get_predicted, nlme, standard errors on the population level", {
+  # oracle: invariant. A grid without grouping levels of the model data gives
+  # population-level predictions, so its standard errors equal those for an
+  # explicit `level = 0`
+  grid <- get_datagrid(m_nlme2, by = "Variety")
+  p <- as.data.frame(get_predicted(m_nlme2, data = grid, ci = 0.95))
+  p0 <- as.data.frame(get_predicted(m_nlme2, data = grid, ci = 0.95, level = 0))
+  expect_equal(p$SE, p0$SE, tolerance = 1e-10)
+  expect_false(anyNA(p$SE))
+  # control: on the group level, the standard errors differ, so the
+  # comparison above depends on the level
+  d <- get_data(m_nlme2)[1:3, ]
+  p0 <- as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95, level = 0))
+  p1 <- as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95, level = 1))
+  expect_gt(max(abs(p0$SE - p1$SE)), 1e-3)
+})
+
+
+test_that("get_predicted, nlme, confidence intervals", {
+  # oracle: invariant, the Wald interval with the t-distribution
+  for (m in nlme_models) {
+    p <- expect_silent(as.data.frame(get_predicted(m, ci = 0.95)))
+    expect_named(p, c("Predicted", "SE", "CI_low", "CI_high"))
+    expect_false(anyNA(p$SE))
+    crit <- stats::qt(0.975, min(get_df(m, type = "wald")))
+    expect_equal(p$CI_low, p$Predicted - crit * p$SE, tolerance = 1e-10)
+    expect_equal(p$CI_high, p$Predicted + crit * p$SE, tolerance = 1e-10)
+    p <- as.data.frame(get_predicted(m, ci = NULL))
+    expect_named(p, "Predicted")
+  }
+  # another `ci` level changes the critical value
+  p <- as.data.frame(get_predicted(m_nlme1, ci = 0.8))
+  crit <- stats::qt(0.9, min(get_df(m_nlme1, type = "wald")))
+  expect_equal(p$CI_low, p$Predicted - crit * p$SE, tolerance = 1e-10)
+  # called directly without `data`, get_predicted_ci() uses the model data
+  p <- get_predicted(m_nlme1, ci = 0.95)
+  out <- get_predicted_ci(m_nlme1, p)
+  expect_equal(
+    out,
+    attributes(p)$ci_data,
+    tolerance = 1e-10,
+    ignore_attr = TRUE
+  )
+})
+
+
+test_that("get_predicted, nlme, unsupported interval arguments", {
+  # each call gives a message that names the argument, and no intervals
+  unsupported <- list(
+    # the message is wrapped, so a line break can follow "="
+    list(predict = "prediction", regexp = "predict =\\s+\"prediction\""),
+    list(vcov = "HC0", regexp = "`vcov`"),
+    list(vcov = stats::vcov(m_nlme1), regexp = "`vcov`"),
+    list(vcov_args = list(type = "HC1"), regexp = "`vcov_args`"),
+    list(ci_method = "satterthwaite", regexp = "`ci_method`")
+  )
+  for (u in unsupported) {
+    call_args <- c(list(m_nlme1, ci = 0.95), u[names(u) != "regexp"])
+    expect_message(do.call(get_predicted, call_args), regexp = u$regexp)
+    p <- suppressMessages(do.call(get_predicted, call_args))
+    expect_named(as.data.frame(p), "Predicted")
+    expect_silent(do.call(get_predicted, c(call_args, verbose = FALSE)))
+  }
+  # with more than one level, predict() returns one column per level, and
+  # there are no intervals
   expect_message(
-    out <- get_predicted_ci(m_nlme1, p),
-    regexp = "not yet supported for models of class `nlme`"
+    p <- get_predicted(m_nlme1, ci = 0.95, level = c(0, 1)),
+    regexp = "`level` with more than one value"
+  )
+  expect_false(any(c("SE", "CI_low", "CI_high") %in% colnames(p)))
+  expect_message(
+    out <- get_predicted_ci(m_nlme1, predictions = 1, level = c(0, 1)),
+    regexp = "`level` with more than one value"
   )
   expect_null(out)
-  expect_silent(out <- get_predicted_ci(m_nlme1, p, verbose = FALSE))
+  # if predict() fails for the data, a message says that there are no
+  # standard errors. The data have no `age` column, which the model needs.
+  d <- data.frame(Seed = factor(301))
+  expect_message(
+    get_predicted_ci(m_nlme1, predictions = 1, data = d),
+    regexp = "Could not compute standard errors"
+  )
+  out <- expect_silent(
+    get_predicted_ci(m_nlme1, predictions = 1, data = d, verbose = FALSE)
+  )
   expect_null(out)
 })
 
@@ -191,6 +313,20 @@ test_that("get_predicted, nlme, data grid without random effects", {
     regexp = "factor levels that are not in the model data"
   )
   expect_identical(is.na(as.vector(p)), c(FALSE, TRUE, FALSE))
+  # the standard errors and intervals are NA for that row, and the other rows
+  # get the values they have alone
+  expect_warning(
+    get_predicted(m_nlme2, data = d, ci = 0.95),
+    regexp = "factor levels that are not in the model data"
+  )
+  p <- suppressWarnings(
+    as.data.frame(get_predicted(m_nlme2, data = d, ci = 0.95))
+  )
+  p13 <- as.data.frame(get_predicted(m_nlme2, data = d[c(1, 3), ], ci = 0.95))
+  for (i in c("SE", "CI_low", "CI_high")) {
+    expect_identical(is.na(p[[i]]), c(FALSE, TRUE, FALSE))
+    expect_equal(p[[i]][c(1, 3)], p13[[i]], tolerance = 1e-10)
+  }
 })
 
 
@@ -267,4 +403,83 @@ test_that("parameters, varcov, statistic, n_obs, get_data, nlme", {
     expect_identical(n_obs(m), stats::nobs(m))
     expect_true(all(data_columns[[i]] %in% colnames(get_data(m))))
   }
+})
+
+
+test_that("find_formula, find_variables, get_data, nlme with correlation", {
+  # `t` is the position of each measurement within a tree
+  nlme_loblolly_t <- nlme_loblolly
+  nlme_loblolly_t$t <- match(nlme_loblolly_t$age, sort(unique(nlme_loblolly_t$age)))
+  # the structure is given in the call, or as an object in the global
+  # environment
+  m_call <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_loblolly_t,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme::corAR1(form = ~ t | Seed),
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+  nlme_corr_struct <<- nlme::corAR1(form = ~ t | Seed)
+  withr::defer(rm(nlme_corr_struct, envir = globalenv()))
+  m_object <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_loblolly_t,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme_corr_struct,
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+  for (m in list(m_call, m_object)) {
+    f <- find_formula(m)
+    expect_named(f, c("conditional", "nonlinear", "random", "correlation"))
+    expect_equal(f$correlation, ~ t | Seed, ignore_attr = TRUE)
+    expect_identical(find_variables(m)$correlation, c("t", "Seed"))
+    expect_true("t" %in% colnames(get_data(m)))
+  }
+
+  # an object without `form` gives the formula of that object, `~1`, which
+  # has no variables, as for lme models
+  nlme_corr_noform <<- nlme::corAR1()
+  withr::defer(rm(nlme_corr_noform, envir = globalenv()))
+  m_object_noform <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_loblolly_t,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme_corr_noform,
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+  expect_equal(find_formula(m_object_noform)$correlation, ~1, ignore_attr = TRUE)
+  expect_null(find_variables(m_object_noform)$correlation)
+
+  # a structure without `form` in the call has no correlation part, as for
+  # lme models
+  m_noform <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_loblolly_t,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme::corAR1(),
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+  expect_named(find_formula(m_noform), c("conditional", "nonlinear", "random"))
+
+  # a structure created inside the fitting function cannot be found, so there
+  # is no correlation part and no error
+  fit_local <- function() {
+    corr_local <- nlme::corAR1(form = ~ t | Seed)
+    nlme::nlme(
+      height ~ SSasymp(age, Asym, R0, lrc),
+      data = nlme_loblolly_t,
+      fixed = Asym + R0 + lrc ~ 1,
+      random = Asym ~ 1,
+      correlation = corr_local,
+      start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+    )
+  }
+  m_local <- fit_local()
+  expect_false(exists("corr_local", envir = globalenv()))
+  expect_no_error(f <- find_formula(m_local))
+  expect_named(f, c("conditional", "nonlinear", "random"))
 })

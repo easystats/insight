@@ -6,11 +6,17 @@
   returns the same parts as for `lme4::nlmer()` models: `conditional`,
   `nonlinear` and `random`. `conditional` has the response and the covariates
   of the fixed-effect parameter formulas. `nonlinear` has the nonlinear model,
-  and `random` has the random part. Functions that use the formula, like
+  and `random` has the random part. As for `nlme::lme()` models,
+  `find_formula()` also returns a `correlation` part. The structure must have
+  a named `form` argument in the call, or be an object in the global
+  environment. Functions that use the formula, like
   `find_variables()`, `get_response()`, `get_random()` and `get_predicted()`,
-  now work for these models. Confidence intervals for predictions are not yet
-  supported. `get_variance()` returns `NULL` with a message, because the
-  random effects are on the scale of the nonlinear parameters.
+  now work for these models. `get_predicted()` returns standard errors and
+  confidence intervals for predictions, computed with the delta method from
+  the Jacobian of `predict()` with respect to the fixed effects. Prediction
+  intervals are not yet supported. `get_variance()` returns `NULL` with a
+  message, because the random effects are on the scale of the nonlinear
+  parameters.
 
 ## Changes
 
@@ -60,6 +66,24 @@
   and without predictors now returns `TRUE`, as other null models. Before, it
   returned `FALSE`. With `verbose = FALSE`, `is_converged()` now also gives
   no message for models that it does not support.
+
+* `is_converged()` for `coxph` models now assesses models from
+  `survival::clogit()` fitted with `method = "efron"` or `method = "breslow"`.
+  Before, it returned `NULL`. Models from `clogit()` with predictors and the
+  default `method = "exact"` now return `FALSE` with a message that
+  convergence cannot be assessed. Single-state counting-process models fitted with `y = FALSE`
+  are now assessed. The check for changed predictor data now also runs for
+  multi-state models with right-censored data. If transitions share a
+  baseline hazard or the model was fitted with `x = TRUE`, it does not run.
+  It also runs for models with factor predictors or a
+  `strata()` term, which skipped it before. A change to the `strata()`
+  variable itself is still not detected. If the predictor data of these
+  models changed after the fit, they now return `FALSE` with a message that
+  convergence cannot be assessed. Before, the result depended on the change,
+  and coefficients were flagged as infinite by mistake. A model object with
+  zero iterations now also returns `FALSE` with this message. If the data of
+  the model can be read, the message no longer suggests to refit the model
+  with `model = TRUE`.
 
 * `link_inverse()` and `link_function()` now work for brms custom families with
   brms-only links like `softplus` or `squareplus`.
