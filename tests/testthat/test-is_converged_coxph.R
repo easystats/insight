@@ -757,7 +757,7 @@ test_that("is_converged.coxph, multi-state predictor data changed after the fit"
 
 test_that("is_converged.coxph, multi-state models with a transition without predictors", {
   # survival 3.8-6 numbers the baseline hazards of the stacked rows over all
-  # transitions, later versions only over the transitions with predictors.
+  # transitions, survival 3.8.12 only over the transitions with predictors.
   # The numbers differ if a transition without predictors comes before one
   # with predictors.
 
