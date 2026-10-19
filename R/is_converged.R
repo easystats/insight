@@ -1008,24 +1008,25 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   # transitions without coefficients from the stacked data. survival 3.8-6
   # numbers the baseline hazards as `smap` does, survival 3.8.12 only over the
   # transitions with coefficients, in their order. The numbers differ if a
-  # transition without coefficients comes before one with coefficients. If
-  # every number is the baseline hazard of a transition with coefficients, it
-  # is read as in `smap`, otherwise as a position among these transitions. If
+  # transition without coefficients comes before one with coefficients, and
+  # if a transition with coefficients has no stacked rows, the numbers can
+  # fit both ways. So the numbers are read both ways, a reading that gives a
+  # row a transition without coefficients is dropped, and the data changed
+  # only if no reading gives the stored predictor. If
   # transitions share a baseline hazard, the transition of a row is not
   # stored, and the data are not compared.
   if (anyDuplicated(baseline)) {
     return(FALSE)
   }
   has_coefs <- colSums(cmap > 0) > 0
-  coef_baselines <- unique(baseline[has_coefs])
-  if (all(rmap[, 2] %in% coef_baselines)) {
-    transition <- match(rmap[, 2], baseline)
-  } else {
-    transition <- match(coef_baselines, baseline)[rmap[, 2]]
-  }
+  readings <- list(
+    match(rmap[, 2], baseline),
+    match(unique(baseline[has_coefs]), baseline)[rmap[, 2]]
+  )
+  readings <- Filter(function(i) !anyNA(i) && all(has_coefs[i]), readings)
   if (
     nrow(mm) != x$n ||
-      anyNA(transition) ||
+      length(readings) == 0 ||
       length(lp_stored) != nrow(rmap) ||
       !all(rownames(cmap) %in% colnames(mm))
   ) {
@@ -1044,13 +1045,20 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
     numeric(nrow(mm))
   )
   lp_rows <- matrix(lp_rows, nrow = nrow(mm))
-  lp <- lp_rows[cbind(rmap[, 1], transition)]
   model_offset <- stats::model.offset(mf)
-  if (!is.null(model_offset)) {
-    lp <- lp + model_offset[rmap[, 1]]
-  }
-  shift <- stats::ave(lp - lp_stored, transition)
-  !isTRUE(all.equal(unname(lp - shift), unname(lp_stored)))
+  changed <- vapply(
+    readings,
+    function(transition) {
+      lp <- lp_rows[cbind(rmap[, 1], transition)]
+      if (!is.null(model_offset)) {
+        lp <- lp + model_offset[rmap[, 1]]
+      }
+      shift <- stats::ave(lp - lp_stored, transition)
+      !isTRUE(all.equal(unname(lp - shift), unname(lp_stored)))
+    },
+    logical(1)
+  )
+  all(changed)
 }
 
 

@@ -760,6 +760,8 @@ test_that("is_converged.coxph, multi-state models with a transition without pred
   # transitions, survival 3.8.12 only over the transitions with predictors.
   # The numbers differ if a transition without predictors comes before one
   # with predictors.
+  # oracle: invariant, a fit with unchanged data reports no data change, and
+  # the same fit after its `age` column is reversed reports one
 
   # the first transition has no predictors
   cvx_free_first <- cvx_mgus2_istate
@@ -772,6 +774,17 @@ test_that("is_converged.coxph, multi-state models with a transition without pred
   expect_identical(colnames(f_first$fit$cmap), c("1:2", "1:3", "2:3"))
   expect_identical(unname(colSums(f_first$fit$cmap) > 0), c(FALSE, TRUE, TRUE))
   expect_true(is_converged(f_first$fit))
+  # both numberings are read with any version of survival: the same fit with
+  # its stacked rows numbered the other way gives the same result
+  f_renumbered <- f_first$fit
+  baselines <- f_renumbered$smap[1, colSums(f_renumbered$cmap) > 0]
+  if (all(f_renumbered$rmap[, 2] %in% seq_along(baselines))) {
+    f_renumbered$rmap[, 2] <- baselines[f_renumbered$rmap[, 2]]
+  } else {
+    f_renumbered$rmap[, 2] <- match(f_renumbered$rmap[, 2], baselines)
+  }
+  expect_false(identical(f_renumbered$rmap, f_first$fit$rmap))
+  expect_true(is_converged(f_renumbered))
   cvx_free_first$age <- rev(cvx_free_first$age)
   .cvx_expect_not_assessed(f_first$fit, "predictor data changed")
 
@@ -801,6 +814,29 @@ test_that("is_converged.coxph, multi-state models with a transition without pred
   .cvx_expect_not_assessed(f_last$fit, "object 'rr' not found")
   cvx_free_last$age <- rev(cvx_free_last$age)
   .cvx_expect_not_assessed(f_last$fit, "predictor data changed")
+
+  # a transition with predictors has no stacked rows: `z` is missing in every
+  # row of state "censor", so transition 1:3 has no rows, and the numbers of
+  # the rows of transition 2:3 fit both numberings
+  cvx_free_empty <- cvx_mgus2_istate
+  cvx_free_empty$z <- ifelse(
+    cvx_in_pcm,
+    withr::with_seed(3, stats::rnorm(nrow(cvx_mgus2_istate))),
+    NA
+  )
+  f_empty <- .cvx_fit(coxph(
+    list(Surv(etime, event) ~ 1, 1:3 ~ z, 2:3 ~ age),
+    data = cvx_free_empty,
+    id = id,
+    istate = st
+  ))
+  expect_identical(unname(colSums(f_empty$fit$cmap) > 0), c(FALSE, TRUE, TRUE))
+  expect_length(unique(f_empty$fit$rmap[, 2]), 1)
+  .cvx_expect_not_assessed(f_empty$fit, "score vector could not be computed")
+  messages <- gsub("\\s+", " ", .cvx_messages(is_converged(f_empty$fit)))
+  expect_no_match(messages, "predictor data changed", fixed = TRUE)
+  cvx_free_empty$age <- rev(cvx_free_empty$age)
+  .cvx_expect_not_assessed(f_empty$fit, "predictor data changed")
 })
 
 
