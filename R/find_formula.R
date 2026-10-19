@@ -84,9 +84,10 @@
 #'
 #' For models from package **brms**, distributional parameters are also included.
 #'
-#' @note For models of class `lme`, `nlme` or `gls`, the correlation-component
-#' is the formula of the fitted correlation structure, e.g. `~ t | Subject` for
-#' `corAR1(form = ~ t | Subject)`. For a structure without `form`, this is the
+#' @note For models of class `lme`, `nlme`, `glmmPQL`, `gls` or `gnls`, the
+#' correlation-component is the formula of the fitted correlation structure,
+#' e.g. `~ t | Subject` for `corAR1(form = ~ t | Subject)`, with the
+#' environment of the model formula. For a structure without `form`, this is the
 #' grouping that the model used, like `~1 | Subject`. There is no
 #' correlation-component when that formula has no variable, e.g. `~1`.
 #'

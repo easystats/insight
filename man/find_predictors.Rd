@@ -66,7 +66,9 @@ component of the model. For models from \strong{brms}, this is named \code{zi_ra
 \item \code{instruments}, for fixed-effects regressions like \code{ivreg}, \code{felm} or \code{plm},
 the instrumental variables
 \item \code{correlation}, for models with correlation-component like \code{gls}, the
-variables used to describe the correlation structure
+variables used to describe the correlation structure (for
+\code{effects = "fixed"}, only the variables left of \code{|}, without the grouping
+factor)
 \item \code{nonlinear}, for non-linear models (like models of class \code{nlmerMod} or
 \code{nls}), the staring estimates for the nonlinear parameters
 \item \code{smooth_terms} returns smooth terms, only applies to GAMs (or similar
@@ -99,7 +101,11 @@ returns the instruments.
 \item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod} or
 \code{nls}), returns staring estimates for the nonlinear parameters.
 \item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
-variables used to describe the correlation structure are returned.
+variables used to describe the correlation structure are returned. For
+\code{find_predictors()} and \code{find_variables()}, the grouping factor of the
+structure (\code{Subject} in \code{~ age | Subject}) is returned for
+\code{effects = "all"}, but not for \code{effects = "fixed"}, which returns only the
+variables left of \code{|}.
 \item \code{"location"}: returns location parameters such as \code{conditional},
 \code{zero_inflated}, \code{smooth_terms}, or \code{instruments} (everything that are
 fixed or random effects - depending on the \code{effects} argument - but no

@@ -104,9 +104,10 @@ inside \code{poly()} and that no data names are used (i.e. no \code{data$variabl
 rather \code{variable}).
 }
 \note{
-For models of class \code{lme}, \code{nlme} or \code{gls}, the correlation-component
-is the formula of the fitted correlation structure, e.g. \code{~ t | Subject} for
-\code{corAR1(form = ~ t | Subject)}. For a structure without \code{form}, this is the
+For models of class \code{lme}, \code{nlme}, \code{glmmPQL}, \code{gls} or \code{gnls}, the
+correlation-component is the formula of the fitted correlation structure,
+e.g. \code{~ t | Subject} for \code{corAR1(form = ~ t | Subject)}, with the
+environment of the model formula. For a structure without \code{form}, this is the
 grouping that the model used, like \code{~1 | Subject}. There is no
 correlation-component when that formula has no variable, e.g. \code{~1}.
 }
