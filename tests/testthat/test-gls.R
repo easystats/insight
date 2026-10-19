@@ -29,11 +29,13 @@ test_that("model_info", {
 })
 
 test_that("find_predictors", {
+  # `Mare` groups the correlation structure, it is no fixed predictor
+  expect_identical(find_predictors(m1), list(conditional = "Time"))
+  expect_identical(find_predictors(m1, flatten = TRUE), "Time")
   expect_identical(
-    find_predictors(m1),
+    find_predictors(m1, effects = "all"),
     list(conditional = "Time", correlation = "Mare")
   )
-  expect_identical(find_predictors(m1, flatten = TRUE), c("Time", "Mare"))
   expect_null(find_predictors(m1, effects = "random"))
 })
 
@@ -85,7 +87,7 @@ test_that("find_terms", {
     list(
       response = "follicles",
       conditional = c("sin(2 * pi * Time)", "cos(2 * pi * Time)"),
-      correlation = c("1", "Mare")
+      correlation = "Mare"
     )
   )
   expect_equal(
@@ -94,7 +96,6 @@ test_that("find_terms", {
       "follicles",
       "sin(2 * pi * Time)",
       "cos(2 * pi * Time)",
-      "1",
       "Mare"
     )
   )
@@ -249,4 +250,87 @@ test_that("find_formula, gls, phylogenetic structure object, easystats/insight#1
   # the structure has no `form`, so its fitted formula `~1` has no variable
   expect_no_error(find_formula(m))
   expect_named(find_formula(m), "conditional")
+})
+
+
+# correlation grouping factor, not a fixed predictor ---------------------------
+
+gls_cg_form <- nlme::gls(
+  distance ~ age,
+  data = gls_orthodont_t,
+  correlation = nlme::corAR1(form = ~ age | Subject)
+)
+gls_cg_group <- nlme::gls(
+  distance ~ age,
+  data = gls_orthodont_t,
+  correlation = nlme::corAR1(form = ~ 1 | Subject)
+)
+gls_cg_soybean <- nlme::gnls(
+  weight ~ SSlogis(Time, Asym, xmid, scal),
+  data = nlme::Soybean,
+  params = Asym + xmid + scal ~ 1,
+  start = c(18, 52, 7.5),
+  correlation = nlme::corAR1(form = ~ 1 | Plot)
+)
+
+test_that("find_predictors, gls, correlation grouping is no fixed predictor", {
+  expect_identical(
+    find_predictors(gls_cg_form, effects = "fixed"),
+    list(conditional = "age", correlation = "age")
+  )
+  expect_identical(
+    find_variables(gls_cg_form, effects = "fixed"),
+    list(response = "distance", conditional = "age", correlation = "age")
+  )
+  expect_identical(
+    find_predictors(gls_cg_form, effects = "all")$correlation,
+    c("age", "Subject")
+  )
+  expect_identical(
+    find_variables(m1, effects = "fixed"),
+    list(response = "follicles", conditional = "Time")
+  )
+})
+
+test_that("find_predictors, gnls, correlation grouping is no fixed predictor", {
+  expect_null(find_predictors(gls_cg_soybean, effects = "fixed")$correlation)
+  expect_null(find_variables(gls_cg_soybean, effects = "fixed")$correlation)
+  expect_identical(
+    find_predictors(gls_cg_soybean, effects = "all")$correlation,
+    "Plot"
+  )
+  expect_identical(
+    find_variables(gls_cg_soybean, effects = "all")$correlation,
+    "Plot"
+  )
+})
+
+test_that("get_datagrid, gls, no variable only from the correlation part", {
+  grid <- get_datagrid(gls_cg_group)
+  expect_identical(nrow(grid), 4L)
+  expect_named(grid, "age")
+  expect_length(get_predicted(gls_cg_group, data = grid), 4L)
+  # a variable named in `by` stays in the grid
+  grid_by <- get_datagrid(gls_cg_group, by = "Subject")
+  expect_identical(nrow(grid_by), 27L)
+  expect_named(grid_by, c("Subject", "age"))
+})
+
+test_that("find_terms, gls and gnls, correlation part", {
+  expect_identical(find_terms(gls_cg_form)$correlation, c("age", "Subject"))
+  expect_identical(find_terms(gls_cg_soybean)$correlation, "Plot")
+})
+
+test_that("find_formula, gls, environment of the correlation part", {
+  fit_form <- function() {
+    nlme::gls(
+      distance ~ age,
+      data = gls_orthodont_t,
+      correlation = nlme::corAR1(form = ~ age | Subject)
+    )
+  }
+  for (m in list(gls_cg_form, fit_form())) {
+    f <- find_formula(m)
+    expect_identical(environment(f$correlation), environment(f$conditional))
+  }
 })

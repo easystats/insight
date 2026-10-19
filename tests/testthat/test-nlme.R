@@ -494,3 +494,62 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
   # the expected formula is the `form` of the local structure
   expect_equal(f$correlation, ~ t | Seed, ignore_attr = TRUE)
 })
+
+
+test_that("nlme, correlation grouping is no fixed predictor", {
+  nlme_cg_loblolly <- nlme_loblolly
+  nlme_cg_loblolly$t <- match(nlme_cg_loblolly$age, sort(unique(nlme_cg_loblolly$age)))
+  fit_nlme <- function(corr) {
+    nlme::nlme(
+      height ~ SSasymp(age, Asym, R0, lrc),
+      data = nlme_cg_loblolly,
+      fixed = Asym + R0 + lrc ~ 1,
+      random = Asym ~ 1,
+      correlation = corr,
+      start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+    )
+  }
+  m_form <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_cg_loblolly,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme::corAR1(form = ~ t | Seed),
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+  m_noform <- nlme::nlme(
+    height ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_cg_loblolly,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    correlation = nlme::corAR1(),
+    start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
+  )
+
+  # `~ t | Seed`: only `t`, left of `|`, is a fixed predictor
+  expect_identical(find_predictors(m_form, effects = "fixed")$correlation, "t")
+  expect_identical(find_variables(m_form, effects = "fixed")$correlation, "t")
+  expect_identical(
+    find_predictors(m_form, effects = "all")$correlation,
+    c("t", "Seed")
+  )
+  expect_null(find_predictors(m_noform, effects = "fixed")$correlation)
+  expect_identical(find_predictors(m_noform, effects = "all")$correlation, "Seed")
+
+  # `Seed` is in no fixed-effects formula
+  expect_false("Seed" %in% colnames(get_data(m_form, effects = "fixed")))
+  expect_true("t" %in% colnames(get_data(m_form, effects = "fixed")))
+  expect_true("Seed" %in% colnames(get_data(m_form, effects = "all")))
+
+  expect_identical(find_terms(m_form)$correlation, c("t", "Seed"))
+  expect_identical(find_terms(m_noform)$correlation, "Seed")
+
+  # the correlation part has the environment of the model formula, also for
+  # fits inside a function
+  m_fun_form <- fit_nlme(nlme::corAR1(form = ~ t | Seed))
+  m_fun_noform <- fit_nlme(nlme::corAR1())
+  for (m in list(m_form, m_noform, m_fun_form, m_fun_noform)) {
+    f <- find_formula(m)
+    expect_identical(environment(f$correlation), environment(f$conditional))
+  }
+})
