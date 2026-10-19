@@ -1004,15 +1004,25 @@ is_converged.coxph <- function(x, tolerance = 0.001, verbose = TRUE, ...) {
   rmap <- x$rmap
   lp_stored <- x$linear.predictors
   baseline <- x$smap[1, ]
-  # `rmap[, 2]` is the baseline hazard of a stacked row, numbered in the order
-  # of the transitions that have coefficients (survival drops the others from
-  # the stacked data). If transitions share a baseline hazard, the transition
-  # of a row is not stored, and the data are not compared.
+  # `rmap[, 2]` is the baseline hazard of a stacked row. survival drops the
+  # transitions without coefficients from the stacked data. survival 3.8-6
+  # numbers the baseline hazards as `smap` does, survival 3.8.12 only over the
+  # transitions with coefficients, in their order. The numbers differ if a
+  # transition without coefficients comes before one with coefficients. If
+  # every number is the baseline hazard of a transition with coefficients, it
+  # is read as in `smap`, otherwise as a position among these transitions. If
+  # transitions share a baseline hazard, the transition of a row is not
+  # stored, and the data are not compared.
   if (anyDuplicated(baseline)) {
     return(FALSE)
   }
   has_coefs <- colSums(cmap > 0) > 0
-  transition <- match(unique(baseline[has_coefs]), baseline)[rmap[, 2]]
+  coef_baselines <- unique(baseline[has_coefs])
+  if (all(rmap[, 2] %in% coef_baselines)) {
+    transition <- match(rmap[, 2], baseline)
+  } else {
+    transition <- match(coef_baselines, baseline)[rmap[, 2]]
+  }
   if (
     nrow(mm) != x$n ||
       anyNA(transition) ||

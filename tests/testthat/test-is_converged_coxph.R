@@ -24,6 +24,27 @@ cvx_mgus2$event <- with(
   factor(ifelse(pstat == 0, 2 * death, 1), 0:2, c("censor", "pcm", "death"))
 )
 
+# some subjects start in state "pcm", so the model has a transition out of
+# a state other than the first one
+cvx_mgus2_istate <- cvx_mgus2
+cvx_in_pcm <- withr::with_seed(1, stats::runif(nrow(cvx_mgus2)) < 0.3)
+cvx_mgus2_istate$st <- factor(
+  ifelse(cvx_in_pcm, "pcm", "censor"),
+  c("censor", "pcm", "death")
+)
+cvx_mgus2_istate$etime <- with(
+  cvx_mgus2_istate,
+  ifelse(!cvx_in_pcm & pstat == 1, ptime, futime)
+)
+cvx_mgus2_istate$event <- with(
+  cvx_mgus2_istate,
+  factor(
+    ifelse(!cvx_in_pcm & pstat == 1, 1, 2 * death),
+    0:2,
+    c("censor", "pcm", "death")
+  )
+)
+
 # fit a model and keep the warnings of survival
 .cvx_fit <- function(expr) {
   caught <- character(0)
@@ -719,26 +740,8 @@ test_that("is_converged.coxph, multi-state predictor data changed after the fit"
   cvx_ms_strata$age <- rev(cvx_mgus2$age)
   .cvx_expect_not_assessed(f_strata$fit, "predictor data changed")
 
-  # some subjects start in state "pcm", so the model has a transition out of
-  # a state other than the first one
-  cvx_ms_istate <- cvx_mgus2
-  in_pcm <- withr::with_seed(1, stats::runif(nrow(cvx_mgus2)) < 0.3)
-  cvx_ms_istate$st <- factor(
-    ifelse(in_pcm, "pcm", "censor"),
-    c("censor", "pcm", "death")
-  )
-  cvx_ms_istate$etime <- with(
-    cvx_ms_istate,
-    ifelse(!in_pcm & pstat == 1, ptime, futime)
-  )
-  cvx_ms_istate$event <- with(
-    cvx_ms_istate,
-    factor(
-      ifelse(!in_pcm & pstat == 1, 1, 2 * death),
-      0:2,
-      c("censor", "pcm", "death")
-    )
-  )
+  # a transition out of a state other than the first one
+  cvx_ms_istate <- cvx_mgus2_istate
   f_istate <- .cvx_fit(coxph(
     Surv(etime, event) ~ age + sex,
     data = cvx_ms_istate,
@@ -749,6 +752,55 @@ test_that("is_converged.coxph, multi-state predictor data changed after the fit"
   expect_true(is_converged(f_istate$fit))
   cvx_ms_istate$age <- rev(cvx_ms_istate$age)
   .cvx_expect_not_assessed(f_istate$fit, "predictor data changed")
+})
+
+
+test_that("is_converged.coxph, multi-state models with a transition without predictors", {
+  # survival 3.8-6 numbers the baseline hazards of the stacked rows over all
+  # transitions, later versions only over the transitions with predictors.
+  # The numbers differ if a transition without predictors comes before one
+  # with predictors.
+
+  # the first transition has no predictors
+  cvx_free_first <- cvx_mgus2_istate
+  f_first <- .cvx_fit(coxph(
+    list(Surv(etime, event) ~ 1, 1:3 + 2:3 ~ age),
+    data = cvx_free_first,
+    id = id,
+    istate = st
+  ))
+  expect_identical(colnames(f_first$fit$cmap), c("1:2", "1:3", "2:3"))
+  expect_identical(unname(colSums(f_first$fit$cmap) > 0), c(FALSE, TRUE, TRUE))
+  expect_true(is_converged(f_first$fit))
+  cvx_free_first$age <- rev(cvx_free_first$age)
+  .cvx_expect_not_assessed(f_first$fit, "predictor data changed")
+
+  # the transition in the middle has no predictors
+  cvx_free_middle <- cvx_mgus2_istate
+  f_middle <- .cvx_fit(coxph(
+    list(Surv(etime, event) ~ 1, 1:2 + 2:3 ~ age),
+    data = cvx_free_middle,
+    id = id,
+    istate = st
+  ))
+  expect_identical(colnames(f_middle$fit$cmap), c("1:2", "1:3", "2:3"))
+  expect_identical(unname(colSums(f_middle$fit$cmap) > 0), c(TRUE, FALSE, TRUE))
+  expect_true(is_converged(f_middle$fit))
+  cvx_free_middle$age <- rev(cvx_free_middle$age)
+  .cvx_expect_not_assessed(f_middle$fit, "predictor data changed")
+
+  # control: the last transition has no predictors, so both numberings are
+  # the same. survival cannot compute the score vector of this model.
+  cvx_free_last <- cvx_mgus2
+  f_last <- .cvx_fit(coxph(
+    list(Surv(etime, event) ~ 1, 1:2 ~ age),
+    data = cvx_free_last,
+    id = id
+  ))
+  expect_identical(unname(colSums(f_last$fit$cmap) > 0), c(TRUE, FALSE))
+  .cvx_expect_not_assessed(f_last$fit, "object 'rr' not found")
+  cvx_free_last$age <- rev(cvx_free_last$age)
+  .cvx_expect_not_assessed(f_last$fit, "predictor data changed")
 })
 
 
@@ -764,6 +816,10 @@ test_that("is_converged.coxph, the data hint only if the data cannot be read", {
   .cvx_expect_not_assessed(f_ms$fit, "object 'rr' not found")
   messages <- gsub("\\s+", " ", .cvx_messages(is_converged(f_ms$fit)))
   expect_no_match(messages, "no longer available", fixed = TRUE)
+  expect_no_match(messages, "predictor data changed", fixed = TRUE)
+  # the changed-data check comes first
+  cvx_hint_ms$age <- rev(cvx_hint_ms$age)
+  .cvx_expect_not_assessed(f_ms$fit, "predictor data changed")
 
   # the hint is given if the data cannot be read (not mocked: the data object
   # is not found)
