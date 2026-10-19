@@ -76,6 +76,7 @@ test_that("find_response, get_response, nlme", {
 
 
 test_that("find_random, get_random, nlme", {
+  skip_if_not_installed("reformulas")
   expect_identical(find_random(m_nlme1), list(random = "Seed"))
   expect_identical(find_random(m_nlme2), list(random = "Plot"))
   expect_identical(find_random(m_nlme3), list(random = c("Wafer", "Site:Wafer")))
@@ -93,6 +94,7 @@ test_that("find_random, get_random, nlme", {
 
 
 test_that("find_variables, nlme", {
+  skip_if_not_installed("reformulas")
   expect_identical(
     find_variables(m_nlme2),
     list(
@@ -114,6 +116,7 @@ test_that("find_variables, nlme", {
 
 
 test_that("model_info, find_terms, find_predictors, nlme", {
+  skip_if_not_installed("reformulas")
   for (m in nlme_models) {
     expect_no_warning(info <- model_info(m))
     expect_true(info$is_mixed)
@@ -126,6 +129,7 @@ test_that("model_info, find_terms, find_predictors, nlme", {
 
 
 test_that("get_predicted, nlme", {
+  skip_if_not_installed("reformulas")
   for (m in nlme_models) {
     expect_no_warning(p <- get_predicted(m))
     expect_equal(as.vector(p), as.vector(stats::predict(m)), tolerance = 1e-10)
@@ -167,6 +171,7 @@ test_that("get_predicted, nlme, standard errors", {
 
 
 test_that("get_predicted, nlme, standard errors of a linear model", {
+  skip_if_not_installed("reformulas")
   # oracle: closed-form. The model is linear in its parameters, so the
   # Jacobian is the model matrix X, and the standard errors are the square
   # roots of the diagonal of X V X'
@@ -189,6 +194,7 @@ test_that("get_predicted, nlme, standard errors of a linear model", {
 
 
 test_that("get_predicted, nlme, standard errors on the population level", {
+  skip_if_not_installed("reformulas")
   # oracle: invariant. A grid without grouping levels of the model data gives
   # population-level predictions, so its standard errors equal those for an
   # explicit `level = 0`
@@ -207,6 +213,7 @@ test_that("get_predicted, nlme, standard errors on the population level", {
 
 
 test_that("get_predicted, nlme, confidence intervals", {
+  skip_if_not_installed("reformulas")
   # oracle: invariant, the Wald interval with the t-distribution
   for (m in nlme_models) {
     p <- expect_silent(as.data.frame(get_predicted(m, ci = 0.95)))
@@ -235,6 +242,7 @@ test_that("get_predicted, nlme, confidence intervals", {
 
 
 test_that("get_predicted, nlme, unsupported interval arguments", {
+  skip_if_not_installed("reformulas")
   # each call gives a message that names the argument, and no intervals
   unsupported <- list(
     # the message is wrapped, so a line break can follow "="
@@ -278,6 +286,7 @@ test_that("get_predicted, nlme, unsupported interval arguments", {
 
 
 test_that("get_predicted, nlme, data grid without random effects", {
+  skip_if_not_installed("reformulas")
   # the grouping factor of the grid has no level of the model data, so the
   # predictions are on the population level
   grid <- get_datagrid(m_nlme2, by = "Variety")
@@ -331,6 +340,7 @@ test_that("get_predicted, nlme, data grid without random effects", {
 
 
 test_that("find_formula, nlme, parameter names with dots", {
+  skip_if_not_installed("reformulas")
   set.seed(123)
   nlme_dots <- data.frame(
     x = rep(1:10, 10),
@@ -381,6 +391,8 @@ test_that("get_variance, nlme", {
 
 
 test_that("parameters, varcov, statistic, n_obs, get_data, nlme", {
+  skip_if_not_installed("reformulas")
+  skip_if_not_installed("lme4")
   data_columns <- list(
     c("height", "age", "Seed"),
     c("weight", "Time", "Variety", "Plot"),
@@ -407,6 +419,7 @@ test_that("parameters, varcov, statistic, n_obs, get_data, nlme", {
 
 
 test_that("find_formula, find_variables, get_data, nlme with correlation", {
+  skip_if_not_installed("reformulas")
   # `t` is the position of each measurement within a tree
   nlme_loblolly_t <- nlme_loblolly
   nlme_loblolly_t$t <- match(nlme_loblolly_t$age, sort(unique(nlme_loblolly_t$age)))
