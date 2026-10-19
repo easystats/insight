@@ -48,14 +48,14 @@ get_transformation(model)
 #> $transformation
 #> function (x) 
 #> x
-#> <bytecode: 0x5619ea26de80>
-#> <environment: 0x5619eb12f048>
+#> <bytecode: 0x55a0fae797c0>
+#> <environment: 0x55a0f95a10e0>
 #> 
 #> $inverse
 #> function (x) 
 #> x
-#> <bytecode: 0x5619ea26de80>
-#> <environment: 0x5619eb12f048>
+#> <bytecode: 0x55a0fae797c0>
+#> <environment: 0x55a0f95a10e0>
 #> 
 
 # log-transformation
@@ -88,14 +88,14 @@ get_transformation(model, include_all = TRUE)
 #> $response$mpg$transformation
 #> function (x) 
 #> x
-#> <bytecode: 0x5619ea26de80>
-#> <environment: 0x5619f0841cd8>
+#> <bytecode: 0x55a0fae797c0>
+#> <environment: 0x55a0ffcf67e0>
 #> 
 #> $response$mpg$inverse
 #> function (x) 
 #> x
-#> <bytecode: 0x5619ea26de80>
-#> <environment: 0x5619f0841cd8>
+#> <bytecode: 0x55a0fae797c0>
+#> <environment: 0x55a0ffcf67e0>
 #> 
 #> 
 #> 
@@ -112,12 +112,12 @@ get_transformation(model, include_all = TRUE)
 #> $conditional$gear$transformation
 #> function (x) 
 #> x^2
-#> <environment: 0x5619f0a930f8>
+#> <environment: 0x55a0fff764d8>
 #> 
 #> $conditional$gear$inverse
 #> function (x) 
 #> x^(2^-1)
-#> <environment: 0x5619f0a930f8>
+#> <environment: 0x55a0fff764d8>
 #> 
 #> 
 #> $conditional$am
