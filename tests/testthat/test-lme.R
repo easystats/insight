@@ -1148,6 +1148,7 @@ lme_cg_wk <- nlme::lme(
 )
 
 test_that("find_predictors, lme, correlation grouping is no fixed predictor", {
+  # oracle: the `form` of the correlation structure given in the call
   # `~ age | Subject`: only `age`, left of `|`, is a fixed predictor
   expect_identical(
     find_predictors(lme_cg_form),
@@ -1187,6 +1188,7 @@ test_that("find_predictors, lme, correlation grouping is no fixed predictor", {
 })
 
 test_that("get_data, lme, correlation grouping not in fixed effects data", {
+  # oracle: the variables of the model formula `distance ~ age`
   for (m in list(lme_cg_form, lme_cg_noform)) {
     expect_named(get_data(m, effects = "fixed"), c("distance", "age"))
     expect_true("Subject" %in% colnames(get_data(m, effects = "all")))
@@ -1194,6 +1196,7 @@ test_that("get_data, lme, correlation grouping not in fixed effects data", {
 })
 
 test_that("get_datagrid, lme, no variable only from the correlation part", {
+  # oracle: the data, with 4 values of `age` and 2 levels of `Sex`
   # one row per `age`; `Subject` is the random factor, set to 0
   for (m in list(lme_cg_form, lme_cg_noform)) {
     grid <- get_datagrid(m)
@@ -1209,11 +1212,14 @@ test_that("get_datagrid, lme, no variable only from the correlation part", {
 })
 
 test_that("find_terms, lme, correlation part", {
+  # oracle: the `form` in the call, and the grouping of the random part for
+  # the structure without `form`
   expect_identical(find_terms(lme_cg_form)$correlation, c("age", "Subject"))
   expect_identical(find_terms(lme_cg_noform)$correlation, "Subject")
 })
 
 test_that("find_formula, lme, environment of the correlation part", {
+  # oracle: the environment of the conditional formula of the same output
   fit_form <- function() {
     nlme::lme(
       distance ~ age,

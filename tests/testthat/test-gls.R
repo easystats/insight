@@ -274,6 +274,7 @@ gls_cg_soybean <- nlme::gnls(
 )
 
 test_that("find_predictors, gls, correlation grouping is no fixed predictor", {
+  # oracle: the `form` of the correlation structure given in the call
   expect_identical(
     find_predictors(gls_cg_form, effects = "fixed"),
     list(conditional = "age", correlation = "age")
@@ -293,6 +294,7 @@ test_that("find_predictors, gls, correlation grouping is no fixed predictor", {
 })
 
 test_that("find_predictors, gnls, correlation grouping is no fixed predictor", {
+  # oracle: the `form` of the correlation structure given in the call
   expect_null(find_predictors(gls_cg_soybean, effects = "fixed")$correlation)
   expect_null(find_variables(gls_cg_soybean, effects = "fixed")$correlation)
   expect_identical(
@@ -306,6 +308,7 @@ test_that("find_predictors, gnls, correlation grouping is no fixed predictor", {
 })
 
 test_that("get_data, gls and gnls, correlation grouping not in fixed effects data", {
+  # oracle: the variables of the model formulas
   # `get_data.gls()` passes `effects` on to `find_variables()`
   expect_named(get_data(gls_cg_group, effects = "fixed"), c("distance", "age"))
   expect_true("Subject" %in% colnames(get_data(gls_cg_group)))
@@ -314,6 +317,7 @@ test_that("get_data, gls and gnls, correlation grouping not in fixed effects dat
 })
 
 test_that("get_datagrid, gls, no variable only from the correlation part", {
+  # oracle: the data, with 4 values of `age` and 27 levels of `Subject`
   grid <- get_datagrid(gls_cg_group)
   expect_identical(nrow(grid), 4L)
   expect_named(grid, "age")
@@ -325,11 +329,13 @@ test_that("get_datagrid, gls, no variable only from the correlation part", {
 })
 
 test_that("find_terms, gls and gnls, correlation part", {
+  # oracle: the `form` of the correlation structure given in the call
   expect_identical(find_terms(gls_cg_form)$correlation, c("age", "Subject"))
   expect_identical(find_terms(gls_cg_soybean)$correlation, "Plot")
 })
 
 test_that("find_formula, gls, environment of the correlation part", {
+  # oracle: the environment of the conditional formula of the same output
   fit_form <- function() {
     nlme::gls(
       distance ~ age,

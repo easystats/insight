@@ -32,7 +32,8 @@ rank-deficient model matrix).}
 
 \item{effects}{Should variables for fixed effects (\code{"fixed"}), random effects
 (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
-be abbreviated.}
+be abbreviated. For \code{find_predictors()} and \code{find_variables()}, it also
+applies to the correlation part of models from \emph{nlme} (like \code{gls}).}
 
 \item{component}{Which type of parameters to return, such as parameters for
 the conditional model, the zero-inflated part of the model, the dispersion

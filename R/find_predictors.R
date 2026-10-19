@@ -9,7 +9,8 @@
 #' @param x A fitted model.
 #' @param effects Should variables for fixed effects (`"fixed"`), random effects
 #' (`"random"`) or both (`"all"`) be returned? Only applies to mixed models. May
-#' be abbreviated.
+#' be abbreviated. For `find_predictors()` and `find_variables()`, it also
+#' applies to the correlation part of models from *nlme* (like `gls`).
 #' @param component Which type of parameters to return, such as parameters for
 #' the conditional model, the zero-inflated part of the model, the dispersion
 #' term, the instrumental variables or marginal effects be returned? Applies to
@@ -52,10 +53,9 @@
 #'   `nls`), returns staring estimates for the nonlinear parameters.
 #' - `"correlation"`: for models with correlation-component, like `gls`, the
 #'   variables used to describe the correlation structure are returned. For
-#'   `find_predictors()` and `find_variables()`, the grouping factor of the
-#'   structure (`Subject` in `~ age | Subject`) is returned for
-#'   `effects = "all"`, but not for `effects = "fixed"`, which returns only the
-#'   variables left of `|`.
+#'   `find_predictors()`, the grouping factor of the structure (`Subject` in
+#'   `~ age | Subject`) is returned for `effects = "all"`, but not for
+#'   `effects = "fixed"`, which returns only the variables left of `|`.
 #' - `"location"`: returns location parameters such as `conditional`,
 #'   `zero_inflated`, `smooth_terms`, or `instruments` (everything that are
 #'   fixed or random effects - depending on the `effects` argument - but no
