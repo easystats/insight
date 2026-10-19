@@ -770,10 +770,13 @@ find_formula.RM <- find_formula.MANOVA
 #' @export
 find_formula.gls <- function(x, verbose = TRUE, ...) {
   l <- tryCatch(
-    list(
-      conditional = stats::formula(x),
-      correlation = .lme_correlation_formula(x)
-    ),
+    {
+      f_cond <- stats::formula(x)
+      list(
+        conditional = f_cond,
+        correlation = .lme_correlation_formula(x, env = environment(f_cond))
+      )
+    },
     error = function(x) {
       NULL
     }
@@ -1510,7 +1513,7 @@ find_formula.nlme <- function(x, verbose = TRUE, ...) {
     f.random <- f.random[[1]]
   }
 
-  f.corr <- .lme_correlation_formula(x)
+  f.corr <- .lme_correlation_formula(x, env = environment(f.cond))
 
   f <- compact_list(list(
     conditional = f.cond,
@@ -1642,7 +1645,7 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
   f <- compact_list(list(
     conditional = fm,
     random = fmr,
-    correlation = .lme_correlation_formula(x)
+    correlation = .lme_correlation_formula(x, env = environment(fm))
   ))
   .find_formula_return(f, verbose = verbose)
 }
@@ -1651,8 +1654,11 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
 # objects, read from the fitted structure, so that it does not depend on where
 # the structure in the call can be found. A structure without `form` has the
 # grouping that nlme used (e.g. `~1 | Subject`), or `~1`, which has no
-# variable and gives no correlation part.
-.lme_correlation_formula <- function(x) {
+# variable and gives no correlation part. The formula gets the environment
+# `env` of the model formula, because for a structure without `form`, nlme
+# creates the formula in the frame of the fitting function, which holds the
+# data and model matrices.
+.lme_correlation_formula <- function(x, env = NULL) {
   corr_struct <- x[["modelStruct"]][["corStruct"]]
   if (is.null(corr_struct)) {
     return(NULL)
@@ -1660,6 +1666,9 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
   f_corr <- tryCatch(stats::formula(corr_struct), error = function(e) NULL)
   if (!inherits(f_corr, "formula") || !length(all.vars(f_corr))) {
     return(NULL)
+  }
+  if (is.environment(env)) {
+    environment(f_corr) <- env
   }
   f_corr
 }
