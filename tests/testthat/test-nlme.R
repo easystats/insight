@@ -497,6 +497,8 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
 
 
 test_that("nlme, correlation grouping is no fixed predictor", {
+  # `find_predictors()` reads the random part of nlme models with reformulas
+  skip_if_not_installed("reformulas")
   nlme_cg_loblolly <- nlme_loblolly
   nlme_cg_loblolly$t <- match(nlme_cg_loblolly$age, sort(unique(nlme_cg_loblolly$age)))
   fit_nlme <- function(corr) {
