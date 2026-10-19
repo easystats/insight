@@ -844,6 +844,16 @@ get_datagrid.default <- function(
       }
     }
 
+    # drop variables that only the correlation structure uses (like `Subject`
+    # in `gls(..., correlation = corAR1(form = ~ 1 | Subject))`), unless these
+    # are requested in `by`. Predictions do not use the correlation structure.
+    correlation_only <- .correlation_only_variables(x)
+    if (length(correlation_only)) {
+      by_names <- trim_ws(gsub("=.*$", "", by))
+      correlation_only <- setdiff(correlation_only, by_names)
+      data <- data[!colnames(data) %in% correlation_only]
+    }
+
     # user wants to include all predictors?
     if (all(by == "all")) {
       by <- colnames(data)
@@ -1831,6 +1841,24 @@ get_datagrid.comparisons <- get_datagrid.slopes
   }
 
   data
+}
+
+
+# variables of the correlation structure of nlme models (lme, gls and the
+# classes that inherit from these) that no other model part uses
+.correlation_only_variables <- function(x) {
+  if (!inherits(x, c("lme", "gls"))) {
+    return(NULL)
+  }
+  model_vars <- .safe(find_variables(x, effects = "all", verbose = FALSE))
+  if (!object_has_names(model_vars, "correlation")) {
+    return(NULL)
+  }
+  other_vars <- unlist(
+    model_vars[names(model_vars) != "correlation"],
+    use.names = FALSE
+  )
+  setdiff(model_vars$correlation, other_vars)
 }
 
 
