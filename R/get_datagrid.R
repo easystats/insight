@@ -847,6 +847,7 @@ get_datagrid.default <- function(
     # drop variables that only the correlation structure uses (like `Subject`
     # in `gls(..., correlation = corAR1(form = ~ 1 | Subject))`), unless these
     # are requested in `by`. Predictions do not use the correlation structure.
+    # Grids for `weighted` (above) keep these variables.
     correlation_only <- .correlation_only_variables(x)
     if (length(correlation_only)) {
       by_names <- trim_ws(gsub("=.*$", "", by))

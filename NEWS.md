@@ -25,9 +25,9 @@
   `find_predictors()` and `find_variables()` return only the variables left
   of `|` as `correlation` part. With `effects = "all"`, they return all
   variables of the correlation structure. `get_data(effects = "fixed")` no
-  longer returns the grouping factor for `lme`, `nlme` and `glmmPQL` models.
-  `get_datagrid()` leaves out the variables that only the correlation
-  structure uses, unless `by` names them. `find_terms()` no longer returns
+  longer returns the grouping factor. Without `weighted`, `get_datagrid()`
+  leaves out the variables that only the correlation structure uses, unless
+  `by` names them. `find_terms()` no longer returns
   `"1"` in the `correlation` part. The `correlation` formula of
   `find_formula()` has the environment of the model formula.
 

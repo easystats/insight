@@ -305,6 +305,14 @@ test_that("find_predictors, gnls, correlation grouping is no fixed predictor", {
   )
 })
 
+test_that("get_data, gls and gnls, correlation grouping not in fixed effects data", {
+  # `get_data.gls()` passes `effects` on to `find_variables()`
+  expect_named(get_data(gls_cg_group, effects = "fixed"), c("distance", "age"))
+  expect_true("Subject" %in% colnames(get_data(gls_cg_group)))
+  expect_false("Plot" %in% colnames(get_data(gls_cg_soybean, effects = "fixed")))
+  expect_true("Plot" %in% colnames(get_data(gls_cg_soybean)))
+})
+
 test_that("get_datagrid, gls, no variable only from the correlation part", {
   grid <- get_datagrid(gls_cg_group)
   expect_identical(nrow(grid), 4L)
