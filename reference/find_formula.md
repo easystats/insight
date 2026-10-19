@@ -151,13 +151,11 @@ included.
 
 ## Note
 
-For models of class `lme`, `nlme` or `gls` the correlation-component is
-only returned, when it is explicitly defined as named argument (`form`),
-e.g. `corAR1(form = ~1 | Mare)`, or when the correlation structure is
-passed as an object that is in the global environment or on the search
-path. In the latter case, the formula of that object is returned, which
-is `~1` if it has no `form`. For `nlme` models, a structure object that
-cannot be found gives no correlation-component.
+For models of class `lme`, `nlme` or `gls`, the correlation-component is
+the formula of the fitted correlation structure, e.g. `~ t | Subject`
+for `corAR1(form = ~ t | Subject)`. For a structure without `form`, this
+is the grouping that the model used, like `~1 | Subject`. There is no
+correlation-component when that formula has no variable, e.g. `~1`.
 
 ## Examples
 
@@ -167,7 +165,7 @@ m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 find_formula(m)
 #> $conditional
 #> mpg ~ wt + cyl + vs
-#> <environment: 0x561f030b2018>
+#> <environment: 0x5619da0135a8>
 #> 
 #> attr(,"class")
 #> [1] "insight_formula" "list"           
@@ -177,11 +175,11 @@ f <- find_formula(m)
 f
 #> $conditional
 #> Sepal.Length ~ Sepal.Width
-#> <environment: 0x561f030b2018>
+#> <environment: 0x5619da0135a8>
 #> 
 #> $random
 #> ~1 | Species
-#> <environment: 0x561effd61570>
+#> <environment: 0x5619d91306b8>
 #> 
 #> attr(,"class")
 #> [1] "insight_formula" "list"           
