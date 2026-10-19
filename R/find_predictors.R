@@ -162,6 +162,10 @@ find_predictors.default <- function(
     f <- lapply(f, function(.x) .prepare_predictors(x, .x, elements))
   } else {
     f <- .prepare_predictors(x, f, elements)
+    # the grouping factor of a correlation structure is no fixed predictor
+    if (effects == "fixed") {
+      f <- .remove_correlation_grouping(f)
+    }
   }
 
   # random effects are returned as list, so we need to unlist here
@@ -857,6 +861,22 @@ find_predictors.marginaleffects <- find_predictors.predictions
     }
   }
 
+  f
+}
+
+
+# keeps the left side of `|` of a correlation formula (like `~ age | Subject`
+# of nlme models), i.e. removes the grouping factor. `~ 1 | Subject` keeps no
+# variable.
+.remove_correlation_grouping <- function(f) {
+  f_corr <- f[["correlation"]]
+  if (!inherits(f_corr, "formula")) {
+    return(f)
+  }
+  rhs <- f_corr[[length(f_corr)]]
+  if (is.call(rhs) && identical(rhs[[1]], as.name("|"))) {
+    f[["correlation"]] <- rhs[[2]]
+  }
   f
 }
 
