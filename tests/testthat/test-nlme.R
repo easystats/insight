@@ -145,6 +145,7 @@ test_that("get_predicted, nlme", {
 
 
 test_that("get_predicted, nlme, standard errors", {
+  skip_if_not_installed("reformulas")
   skip_if_not_installed("marginaleffects")
   # oracle: live, marginaleffects::predictions(), which computes its own
   # Jacobian of predict() with respect to the fixed effects
