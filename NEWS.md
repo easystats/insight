@@ -7,11 +7,9 @@
   `nonlinear` and `random`. `conditional` has the response and the covariates
   of the fixed-effect parameter formulas. `nonlinear` has the nonlinear model,
   and `random` has the random part. As for `nlme::lme()` models,
-  `find_formula()` also returns a `correlation` part. The structure must have
-  a named `form` argument in the call, or be an object in the global
-  environment. Functions that use the formula, like
-  `find_variables()`, `get_response()`, `get_random()` and `get_predicted()`,
-  now work for these models. `get_predicted()` returns standard errors and
+  `find_formula()` also returns a `correlation` part. Functions that use the
+  formula, like `find_variables()`, `get_response()`, `get_random()` and
+  `get_predicted()`, now work for these models. `get_predicted()` returns standard errors and
   confidence intervals for predictions, computed with the delta method from
   the Jacobian of `predict()` with respect to the fixed effects. Prediction
   intervals are not yet supported. `get_variance()` returns `NULL` with a
@@ -19,6 +17,19 @@
   parameters.
 
 ## Changes
+
+* `find_formula()` for models from `nlme::lme()`, `nlme::gls()`,
+  `nlme::nlme()` and `MASS::glmmPQL()` now reads the `correlation` part from
+  the fitted correlation structure, not from the model call. Before, a
+  structure object that was created inside a function gave an error or no
+  `correlation` part. A `form` that was not a named argument gave no
+  `correlation` part. A global structure object that was changed after the fit
+  gave the changed formula. A structure without `form` now returns the
+  grouping that the model used, like `~1 | Subject`. `find_variables()` and
+  `find_predictors()` then also return that grouping factor as a
+  `correlation` variable, as they did before for a `form` like `~1 | Subject`.
+  If that formula has no variable, like `~1` for `gls()` models, there is no
+  `correlation` part.
 
 * `get_parameters()` for *lavaan* models, and for *blavaan* models with
   `summary = TRUE`, now returns standardized parameters only for

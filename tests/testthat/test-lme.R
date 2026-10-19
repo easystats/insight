@@ -1009,3 +1009,118 @@ test_that("null_model, lme and glmmPQL", {
   expect_gt(v$var.distribution, 0)
   expect_equal(v$var.distribution, v_null$var.distribution, tolerance = 1e-4)
 })
+
+
+# correlation part, read from the fitted correlation structure ----------------
+
+# `t` is an integer position for corAR1()
+lme_orthodont_t <- Orthodont
+lme_orthodont_t$t <- as.integer(lme_orthodont_t$age)
+
+test_that("find_formula, lme, correlation object reassigned after the fit", {
+  lme_corr_reassign <<- nlme::corAR1(form = ~ t | Subject)
+  withr::defer(rm(lme_corr_reassign, envir = globalenv()))
+  m <- nlme::lme(
+    distance ~ age,
+    random = ~ 1 | Subject,
+    data = lme_orthodont_t,
+    correlation = lme_corr_reassign
+  )
+  lme_corr_reassign <<- nlme::corAR1(form = ~ 1 | Sex)
+  # the expected formula is the `form` of the structure the fit used
+  expect_equal(find_formula(m)$correlation, ~ t | Subject, ignore_attr = TRUE)
+  expect_identical(find_variables(m)$correlation, c("t", "Subject"))
+})
+
+test_that("find_formula, lme, correlation object local to a function", {
+  fit_fresh <- function() {
+    lme_corr_local <- nlme::corAR1(form = ~ t | Subject)
+    nlme::lme(
+      distance ~ age,
+      random = ~ 1 | Subject,
+      data = lme_orthodont_t,
+      correlation = lme_corr_local
+    )
+  }
+  # `x` is also a variable name inside insight, and `fcorr` was one in the
+  # code that read the structure from the call
+  fit_x <- function() {
+    x <- nlme::corAR1(form = ~ t | Subject)
+    nlme::lme(
+      distance ~ age,
+      random = ~ 1 | Subject,
+      data = lme_orthodont_t,
+      correlation = x
+    )
+  }
+  fit_fcorr <- function() {
+    fcorr <- nlme::corAR1(form = ~ t | Subject)
+    nlme::lme(
+      distance ~ age,
+      random = ~ 1 | Subject,
+      data = lme_orthodont_t,
+      correlation = fcorr
+    )
+  }
+  expect_false(exists("lme_corr_local", envir = globalenv()))
+  for (m in list(fit_fresh(), fit_x(), fit_fcorr())) {
+    expect_no_error(find_formula(m))
+    # the expected formula is the `form` of the local structure
+    expect_equal(find_formula(m)$correlation, ~ t | Subject, ignore_attr = TRUE)
+  }
+
+  # a global object with the name of the local one is not used
+  lme_corr_local <<- nlme::corAR1(form = ~ 1 | Sex)
+  withr::defer(rm(lme_corr_local, envir = globalenv()))
+  m <- fit_fresh()
+  expect_no_error(find_formula(m))
+  expect_equal(find_formula(m)$correlation, ~ t | Subject, ignore_attr = TRUE)
+})
+
+test_that("find_formula, lme, correlation `form` given by position", {
+  m <- nlme::lme(
+    distance ~ age,
+    random = ~ 1 | Subject,
+    data = lme_orthodont_t,
+    correlation = nlme::corAR1(0.2, ~ t | Subject)
+  )
+  expect_equal(find_formula(m)$correlation, ~ t | Subject, ignore_attr = TRUE)
+})
+
+test_that("find_formula, lme, correlation structure without `form`", {
+  # nlme uses the grouping of the random effects
+  m <- nlme::lme(
+    distance ~ age,
+    random = ~ 1 | Subject,
+    data = lme_orthodont_t,
+    correlation = nlme::corAR1()
+  )
+  expect_equal(find_formula(m)$correlation, ~ 1 | Subject, ignore_attr = TRUE)
+  expect_identical(find_variables(m)$correlation, "Subject")
+  # the grouping is also a predictor, as for an explicit `form`
+  expect_identical(
+    find_predictors(m),
+    list(conditional = "age", correlation = "Subject")
+  )
+
+  m_nested <- nlme::lme(
+    distance ~ age,
+    random = ~ 1 | Sex / Subject,
+    data = lme_orthodont_t,
+    correlation = nlme::corAR1()
+  )
+  expect_equal(
+    find_formula(m_nested)$correlation,
+    ~ 1 | Sex / Subject,
+    ignore_attr = TRUE
+  )
+  expect_identical(find_variables(m_nested)$correlation, c("Sex", "Subject"))
+
+  # no correlation structure, no correlation part
+  m_none <- nlme::lme(
+    distance ~ age,
+    random = ~ 1 | Subject,
+    data = lme_orthodont_t
+  )
+  expect_named(find_formula(m_none), c("conditional", "random"))
+})
