@@ -52,9 +52,10 @@
   `betareg` models and other models that use the default method. Before, these
   arguments did not reach `predict()` by name, so they had no effect. For
   example, with `type = "quantile"`, the argument `at = 0.9` gave the median.
-  If `predict()` fails with these arguments, or if they change the shape of
-  its result (for example `se.fit`, `interval` or `na.action`),
-  `get_predicted()` computes the predictions without them, as before.
+  If `predict()` fails with these arguments, `get_predicted()` computes the
+  predictions without them, as before. If the arguments change the shape of
+  the result, for example `se.fit`, `interval` or `na.action`, it does the
+  same.
 
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that
   convergence cannot be assessed in two more cases. In the first case, the
