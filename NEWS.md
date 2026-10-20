@@ -48,6 +48,11 @@
 
 ## Bug fixes
 
+* `get_predicted()` passes the arguments in `...` to `predict()` for models
+  without their own method, such as `betareg` models. Before, `get_predicted()`
+  dropped these arguments. For example, with `type = "quantile"`, the argument
+  `at = 0.9` gave the median.
+
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that
   convergence cannot be assessed in two more cases. In the first case, the
   call does not write the formula as a `~` expression, such as
