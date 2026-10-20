@@ -265,3 +265,13 @@ test_that("get_residuals, type = 'response', family defined inside a function", 
   expect_silent(out <- get_residuals(m, type = "response"))
   expect_equal(unname(out), unname(m$y - expected), tolerance = 1e-4)
 })
+
+test_that("get_predicted, arguments passed on to predict()", {
+  # get_predicted.gamlss() passes `include_smooth` and `iterations` on to
+  # predict(), which must still give the predictions for the model data
+  expect_equal(
+    as.numeric(get_predicted(m_gamlss1)),
+    as.numeric(predict(m_gamlss1, newdata = abdom, type = "response")),
+    tolerance = 1e-8
+  )
+})

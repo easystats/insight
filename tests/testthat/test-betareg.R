@@ -204,3 +204,45 @@ withr::with_environment(
     expect_length(p, 32)
   })
 )
+
+test_that("get_predicted passes arguments in ... to predict()", {
+  m_food_dots <- betareg::betareg(
+    I(food / income) ~ income + persons,
+    data = FoodExpenditure
+  )
+  new_food <- head(FoodExpenditure)
+
+  # `at = 0.9` must reach predict(), which otherwise returns the median
+  out <- get_predicted(m_food_dots, predict = NULL, type = "quantile", at = 0.9)
+  expect_equal(
+    as.numeric(out),
+    as.numeric(predict(m_food_dots, type = "quantile", at = 0.9)),
+    tolerance = 1e-8
+  )
+
+  # the same with new data
+  out <- get_predicted(
+    m_food_dots,
+    data = new_food,
+    predict = NULL,
+    type = "quantile",
+    at = 0.9
+  )
+  expect_equal(
+    as.numeric(out),
+    as.numeric(predict(m_food_dots, newdata = new_food, type = "quantile", at = 0.9)),
+    tolerance = 1e-8
+  )
+
+  # `at = "a"` makes predict() fail, so predictions are computed without the
+  # arguments in `...` (the median), and no warning is given
+  expect_no_warning(
+    get_predicted(m_food_dots, predict = NULL, type = "quantile", at = "a")
+  )
+  out <- get_predicted(m_food_dots, predict = NULL, type = "quantile", at = "a")
+  expect_equal(
+    as.numeric(out),
+    as.numeric(predict(m_food_dots, type = "quantile")),
+    tolerance = 1e-8
+  )
+})
