@@ -267,10 +267,8 @@ get_predicted.default <- function(
   dot_args[["type"]] <- NULL
 
   # 1. step: predictions
-  predict_args <- compact_list(list(
-    x,
-    newdata = my_args$data,
-    type = my_args$type,
+  predict_args <- compact_list(c(
+    list(x, newdata = my_args$data, type = my_args$type),
     dot_args
   ))
   predictions <- .safe(do.call("predict", predict_args))
