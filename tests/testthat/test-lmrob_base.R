@@ -92,3 +92,16 @@ test_that("find_algorithm", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
 })
+
+test_that("get_predicted, arguments that change the shape of predict()", {
+  # oracle: the same call without the argument. With `se.fit = TRUE`,
+  # predict() returns a list, and with `interval`, a matrix, so get_predicted()
+  # uses the predictions without these arguments.
+  expected <- as.data.frame(get_predicted(m1, ci = 0.95))
+  out_se <- as.data.frame(get_predicted(m1, ci = 0.95, se.fit = TRUE))
+  expect_equal(out_se, expected, tolerance = 1e-6)
+  out_interval <- as.data.frame(
+    get_predicted(m1, ci = 0.95, interval = "confidence")
+  )
+  expect_equal(out_interval, expected, tolerance = 1e-6)
+})

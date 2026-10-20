@@ -267,27 +267,29 @@ get_predicted.default <- function(
   dot_args[["type"]] <- NULL
 
   # 1. step: predictions
-  predict_args <- compact_list(c(
-    list(x, newdata = my_args$data, type = my_args$type),
-    dot_args
-  ))
-  predictions <- .safe(do.call("predict", predict_args))
+  short_args <- compact_list(list(x, newdata = my_args$data, type = my_args$type))
+  dot_args <- compact_list(dot_args)
+  predictions <- .safe(do.call("predict", c(short_args, dot_args)))
 
-  # may fail due to invalid "dot_args", so try shorter argument list
-  if (is.null(predictions)) {
-    predictions <- .safe(
-      do.call(
-        "predict",
-        compact_list(list(x, newdata = my_args$data, type = my_args$type))
-      )
-    )
+  # may fail due to invalid "dot_args", so try shorter argument list. Arguments
+  # in "dot_args" can also change the shape of the predictions (like `se.fit`,
+  # `interval` or `na.action`), which the next steps cannot handle, so then we
+  # also use the predictions without these arguments.
+  if (is.null(predictions) || length(dot_args) > 0) {
+    short_predictions <- .safe(do.call("predict", short_args))
+    if (
+      !is.null(short_predictions) &&
+        (is.null(predictions) || !.same_shape(predictions, short_predictions))
+    ) {
+      predictions <- short_predictions
+    }
   }
 
   # still fails? try fitted(). The fitted values belong to the model data, so
   # for new data we only use them if the new data has the same rows and holds
   # all predictor columns of the model data with the same values.
   if (is.null(predictions)) {
-    predictions <- .safe(do.call("fitted", predict_args))
+    predictions <- .safe(do.call("fitted", short_args))
     new_data <- data
     if (is.null(new_data)) {
       new_data <- list(...)$newdata
@@ -1190,6 +1192,15 @@ get_predicted.phylolm <- function(
 
   class(predictions) <- c("get_predicted", class(predictions))
   predictions
+}
+
+
+# TRUE if two results of predict() have the same shape: both a list or both
+# not, with the same dimensions and the same length.
+.same_shape <- function(a, b) {
+  is.list(a) == is.list(b) &&
+    identical(dim(a), dim(b)) &&
+    length(a) == length(b)
 }
 
 
