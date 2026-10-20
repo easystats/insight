@@ -274,8 +274,12 @@ get_predicted.default <- function(
   # may fail due to invalid "dot_args", so try shorter argument list. Arguments
   # in "dot_args" can also change the shape of the predictions (like `se.fit`,
   # `interval` or `na.action`), which the next steps cannot handle, so then we
-  # also use the predictions without these arguments.
-  if (is.null(predictions) || length(dot_args) > 0) {
+  # also use the predictions without these arguments. A vector with one value
+  # per data row needs no check.
+  if (
+    is.null(predictions) ||
+      (length(dot_args) > 0 && !.one_value_per_row(predictions, my_args$data))
+  ) {
     short_predictions <- .safe(do.call("predict", short_args))
     if (
       !is.null(short_predictions) &&
@@ -1201,6 +1205,15 @@ get_predicted.phylolm <- function(
   is.list(a) == is.list(b) &&
     identical(dim(a), dim(b)) &&
     length(a) == length(b)
+}
+
+
+# TRUE if `predictions` is a vector with one value per row of `data`.
+.one_value_per_row <- function(predictions, data) {
+  !is.null(data) &&
+    is.atomic(predictions) &&
+    is.null(dim(predictions)) &&
+    length(predictions) == NROW(data)
 }
 
 
