@@ -48,14 +48,11 @@
 
 ## Bug fixes
 
-* `get_predicted()` passes the arguments in `...` to `predict()` by name for
-  `betareg` models and other models that use the default method. Before, these
-  arguments did not reach `predict()` by name, so they had no effect. For
-  example, with `type = "quantile"`, the argument `at = 0.9` gave the median.
-  If `predict()` fails with these arguments, `get_predicted()` computes the
-  predictions without them, as before. If the arguments change the shape of
-  the result, for example `se.fit`, `interval` or `na.action`, it does the
-  same.
+* `get_predicted()` now passes arguments in `...` to `predict()` for models
+  that use the default method, like *betareg*. Before, these arguments were
+  ignored, e.g. `at` for `type = "quantile"`. If `predict()` fails with these
+  arguments, or they change the shape of the predictions (like `se.fit`),
+  predictions are computed without them.
 
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that
   convergence cannot be assessed in two more cases. In the first case, the

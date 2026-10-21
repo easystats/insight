@@ -212,8 +212,6 @@ test_that("get_predicted passes arguments in ... to predict()", {
   )
   new_food <- head(FoodExpenditure)
 
-  # oracle for all cases: betareg's own predict() with the same arguments.
-  # `at = 0.9` must reach predict(), which otherwise returns the median
   out <- get_predicted(m_food_dots, predict = NULL, type = "quantile", at = 0.9)
   expect_equal(
     as.numeric(out),
@@ -235,8 +233,7 @@ test_that("get_predicted passes arguments in ... to predict()", {
     tolerance = 1e-8
   )
 
-  # `at = "a"` makes predict() fail, so predictions are computed without the
-  # arguments in `...` (the median), and no warning is given
+  # predict() fails, so predictions are computed without `at`
   expect_no_warning(
     get_predicted(m_food_dots, predict = NULL, type = "quantile", at = "a")
   )
@@ -247,9 +244,7 @@ test_that("get_predicted passes arguments in ... to predict()", {
     tolerance = 1e-8
   )
 
-  # `na.action = na.omit` drops the row with a missing value, so predict()
-  # returns fewer rows than the data. The predictions without the argument are
-  # used, which keep one row per data row (oracle: the call without it).
+  # `na.action = na.omit` returns fewer rows, so it is not used
   new_food_na <- new_food
   new_food_na$income[1] <- NA
   expected <- suppressWarnings(get_predicted(m_food_dots, data = new_food_na))

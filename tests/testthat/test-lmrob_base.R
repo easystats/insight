@@ -94,9 +94,7 @@ test_that("find_statistic", {
 })
 
 test_that("get_predicted, arguments that change the shape of predict()", {
-  # oracle: the same call without the argument. With `se.fit = TRUE`,
-  # predict() returns a list, and with `interval`, a matrix, so get_predicted()
-  # uses the predictions without these arguments.
+  # `se.fit` and `interval` change the shape of predict(), so they are not used
   expected <- as.data.frame(get_predicted(m1, ci = 0.95))
   out_se <- as.data.frame(get_predicted(m1, ci = 0.95, se.fit = TRUE))
   expect_equal(out_se, expected, tolerance = 1e-6)

@@ -271,11 +271,8 @@ get_predicted.default <- function(
   dot_args <- compact_list(dot_args)
   predictions <- .safe(do.call("predict", c(short_args, dot_args)))
 
-  # may fail due to invalid "dot_args", so try shorter argument list. Arguments
-  # in "dot_args" can also change the shape of the predictions (like `se.fit`,
-  # `interval` or `na.action`), which the next steps cannot handle, so then we
-  # also use the predictions without these arguments. A vector with one value
-  # per data row needs no check.
+  # may fail due to invalid "dot_args", or "dot_args" may change the shape of
+  # the predictions (like `se.fit`), so try shorter argument list
   if (
     is.null(predictions) ||
       (length(dot_args) > 0 && !.one_value_per_row(predictions, my_args$data))
@@ -1199,8 +1196,7 @@ get_predicted.phylolm <- function(
 }
 
 
-# TRUE if two results of predict() have the same shape: both a list or both
-# not, with the same dimensions and the same length.
+# TRUE if two results of predict() have the same shape
 .same_shape <- function(a, b) {
   is.list(a) == is.list(b) &&
     identical(dim(a), dim(b)) &&
