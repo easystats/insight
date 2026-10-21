@@ -1655,10 +1655,9 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
 # objects, read from the fitted structure, so that it does not depend on where
 # the structure in the call can be found. A structure without `form` has the
 # grouping that nlme used (e.g. `~1 | Subject`), or `~1`, which has no
-# variable and gives no correlation part. The formula gets the environment
-# `env` of the model formula, because for a structure without `form`, nlme
-# creates the formula in the frame of the fitting function, which holds the
-# data and model matrices.
+# variable and gives no correlation part. `env` is the environment of the
+# model formula, else a structure without `form` keeps the frame of the
+# fitting function, which holds the data and model matrices.
 .lme_correlation_formula <- function(x, env = NULL) {
   corr_struct <- x[["modelStruct"]][["corStruct"]]
   if (is.null(corr_struct)) {

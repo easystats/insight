@@ -52,10 +52,9 @@
 #' - `"nonlinear"`: for non-linear models (like models of class `nlmerMod` or
 #'   `nls`), returns staring estimates for the nonlinear parameters.
 #' - `"correlation"`: for models with correlation-component, like `gls`, the
-#'   variables used to describe the correlation structure are returned. For
-#'   `find_predictors()`, the grouping factor of the structure (`Subject` in
-#'   `~ age | Subject`) is returned for `effects = "all"`, but not for
-#'   `effects = "fixed"`, which returns only the variables left of `|`.
+#'   variables used to describe the correlation structure are returned. The
+#'   grouping factor (like `Subject` in `~ age | Subject`) is only returned for
+#'   `effects = "all"`.
 #' - `"location"`: returns location parameters such as `conditional`,
 #'   `zero_inflated`, `smooth_terms`, or `instruments` (everything that are
 #'   fixed or random effects - depending on the `effects` argument - but no
@@ -122,9 +121,8 @@
 #' - `instruments`, for fixed-effects regressions like `ivreg`, `felm` or `plm`,
 #'   the instrumental variables
 #' - `correlation`, for models with correlation-component like `gls`, the
-#'   variables used to describe the correlation structure (for
-#'   `effects = "fixed"`, only the variables left of `|`, without the grouping
-#'   factor)
+#'   variables used to describe the correlation structure (without the
+#'   grouping factor for `effects = "fixed"`)
 #' - `nonlinear`, for non-linear models (like models of class `nlmerMod` or
 #'   `nls`), the staring estimates for the nonlinear parameters
 #' - `smooth_terms` returns smooth terms, only applies to GAMs (or similar
@@ -871,9 +869,8 @@ find_predictors.marginaleffects <- find_predictors.predictions
 }
 
 
-# keeps the left side of `|` of a correlation formula (like `~ age | Subject`
-# of nlme models), i.e. removes the grouping factor. `~ 1 | Subject` keeps no
-# variable.
+# removes the grouping factor from the correlation formula of nlme models,
+# i.e. `~ age | Subject` becomes `age`
 .remove_correlation_grouping <- function(f) {
   f_corr <- f[["correlation"]]
   if (!inherits(f_corr, "formula")) {

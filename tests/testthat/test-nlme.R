@@ -542,9 +542,6 @@ test_that("nlme, correlation grouping is no fixed predictor", {
     start = c(Asym = 103, R0 = -8.5, lrc = -3.3)
   )
 
-  # oracle: the `form` of the correlation structure given in the call, the
-  # variables of the model formulas, and the environment of the conditional
-  # formula of the same output
   # `~ t | Seed`: only `t`, left of `|`, is a fixed predictor
   expect_identical(find_predictors(m_form, effects = "fixed")$correlation, "t")
   expect_identical(find_variables(m_form, effects = "fixed")$correlation, "t")

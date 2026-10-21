@@ -98,9 +98,6 @@ test_that("glmmPQL, correlation grouping is no fixed predictor", {
     verbose = FALSE
   )
 
-  # oracle: the `form` of the correlation structure given in the call, the
-  # variables of the model formulas, and the environment of the conditional
-  # formula of the same output
   # `~ 1 | Subject`: no variable left of `|`, no fixed part
   expect_null(find_predictors(m_group, effects = "fixed")$correlation)
   expect_null(find_variables(m_group, effects = "fixed")$correlation)
