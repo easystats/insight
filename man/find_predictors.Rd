@@ -166,9 +166,10 @@ variables. The return value would be \code{"gear"}.
 
 For nonlinear models from \code{stats::nls()}, \code{lme4::nlmer()} and \code{nlme::nlme()},
 the nonlinear formula holds the parameters and the variables.
-\code{find_parameters()} returns the parameters. \code{find_predictors()},
-\code{find_variables()} and the nonlinear part of \code{find_terms()} return only the
-variables.
+\code{find_parameters()} returns the parameters. \code{find_predictors()} and
+\code{find_variables()} return only the variables, and so does \code{find_terms()} for
+the nonlinear formula and the random part. For \code{nls} models, the nonlinear
+formula is the \code{conditional} part.
 }
 
 \examples{

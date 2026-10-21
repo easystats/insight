@@ -110,9 +110,10 @@
 #'
 #' For nonlinear models from `stats::nls()`, `lme4::nlmer()` and `nlme::nlme()`,
 #' the nonlinear formula holds the parameters and the variables.
-#' `find_parameters()` returns the parameters. `find_predictors()`,
-#' `find_variables()` and the nonlinear part of `find_terms()` return only the
-#' variables.
+#' `find_parameters()` returns the parameters. `find_predictors()` and
+#' `find_variables()` return only the variables, and so does `find_terms()` for
+#' the nonlinear formula and the random part. For `nls` models, the nonlinear
+#' formula is the `conditional` part.
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #' predictor variables. Depending on the combination of the arguments

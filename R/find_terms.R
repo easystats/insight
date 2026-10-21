@@ -205,8 +205,8 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 
 .find_terms_nonlinear <- function(x, l) {
   # the nonlinear formula and the random part hold the parameters, so these
-  # parts take the variables. The response and the fixed-effect covariates of
-  # nlmer and nlme models keep their terms, like `log(y)` or `factor(x)`.
+  # parts take the variables. The response, and the fixed-effect covariates of
+  # nlme models, keep their terms, like `log(y)` or `factor(x)`.
   v <- find_variables(x, effects = "all", verbose = FALSE)
   if (inherits(x, "nls")) {
     l$conditional <- v$conditional
