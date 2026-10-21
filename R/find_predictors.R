@@ -49,7 +49,11 @@
 #' - `"instruments"`: for instrumental-variable or some fixed effects regression,
 #'   returns the instruments.
 #' - `"nonlinear"`: for non-linear models (like models of class `nlmerMod` or
-#'   `nls`), returns staring estimates for the nonlinear parameters.
+#'   `nlme`), the nonlinear part of the model. For `find_parameters()` and
+#'   `get_parameters()`, these are the nonlinear parameters of `nlmerMod`
+#'   models. Functions that return variables, like `find_predictors()`, list
+#'   the variables of the nonlinear formula in this part, not the names of the
+#'   nonlinear parameters.
 #' - `"correlation"`: for models with correlation-component, like `gls`, the
 #'   variables used to describe the correlation structure are returned.
 #' - `"location"`: returns location parameters such as `conditional`,
@@ -120,7 +124,8 @@
 #' - `correlation`, for models with correlation-component like `gls`, the
 #'   variables used to describe the correlation structure
 #' - `nonlinear`, for non-linear models (like models of class `nlmerMod` or
-#'   `nls`), the staring estimates for the nonlinear parameters
+#'   `nlme`), the variables of the nonlinear formula, not the names of the
+#'   nonlinear parameters
 #' - `smooth_terms` returns smooth terms, only applies to GAMs (or similar
 #'   models that may contain smooth terms)
 #'

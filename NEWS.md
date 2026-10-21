@@ -18,6 +18,16 @@
 
 ## Changes
 
+* For models from `stats::nls()`, `lme4::nlmer()` and `nlme::nlme()`,
+  `find_predictors()`, `find_variables()`, `find_terms()` and `clean_names()`
+  no longer return the names of the nonlinear parameters. For example, for
+  `nls(density ~ SSlogis(log(conc), Asym, xmid, scal))`, `find_predictors()`
+  now returns `conc`, not `conc`, `Asym`, `xmid` and `scal`. For these models,
+  `find_terms()` returns the same variables as `find_variables()`.
+  `find_parameters()` for `nls` models now returns the names of the
+  coefficients, not the variables. So `n_parameters()` no longer counts the
+  variables (#350).
+
 * `find_formula()` for models from `nlme::lme()`, `nlme::gls()`,
   `nlme::nlme()` and `MASS::glmmPQL()` now reads the `correlation` part from
   the fitted correlation structure, not from the model call. Before, a

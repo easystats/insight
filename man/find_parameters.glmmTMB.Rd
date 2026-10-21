@@ -78,7 +78,11 @@ for models with zero-inflation or that can model the dispersion parameter.
 \item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
 returns the instruments.
 \item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod} or
-\code{nls}), returns staring estimates for the nonlinear parameters.
+\code{nlme}), the nonlinear part of the model. For \code{find_parameters()} and
+\code{get_parameters()}, these are the nonlinear parameters of \code{nlmerMod}
+models. Functions that return variables, like \code{find_predictors()}, list
+the variables of the nonlinear formula in this part, not the names of the
+nonlinear parameters.
 \item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
 variables used to describe the correlation structure are returned.
 \item \code{"location"}: returns location parameters such as \code{conditional},
