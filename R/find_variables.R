@@ -25,8 +25,7 @@
 #' - `dispersion`, the name of the dispersion terms
 #' - `instruments`, the names of instrumental variables
 #' - `nonlinear`, for nonlinear models from `lme4::nlmer()` and `nlme::nlme()`,
-#'   the variables of the nonlinear formula, not the names of the nonlinear
-#'   parameters
+#'   the variables of the nonlinear formula
 #' - `random`, the names of the random effects (grouping factors)
 #' - `zero_inflated`, the names of the predictor variables from the
 #'   *zero-inflated* part of the model. For **brms**, this is named `zi`.

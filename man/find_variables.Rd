@@ -56,8 +56,7 @@ model (as opposed to the zero-inflated part of a model)
 \item \code{dispersion}, the name of the dispersion terms
 \item \code{instruments}, the names of instrumental variables
 \item \code{nonlinear}, for nonlinear models from \code{lme4::nlmer()} and \code{nlme::nlme()},
-the variables of the nonlinear formula, not the names of the nonlinear
-parameters
+the variables of the nonlinear formula
 \item \code{random}, the names of the random effects (grouping factors)
 \item \code{zero_inflated}, the names of the predictor variables from the
 \emph{zero-inflated} part of the model. For \strong{brms}, this is named \code{zi}.
@@ -92,12 +91,9 @@ models that may contain smooth terms).
 for models with zero-inflation or that can model the dispersion parameter.
 \item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
 returns the instruments.
-\item \code{"nonlinear"}: for models of class \code{nlmerMod}, \code{find_parameters()} and
-\code{get_parameters()} return the nonlinear parameters. Functions that return
-variables, like \code{find_predictors()}, do not accept this option. For
-\code{nlmerMod} and \code{nlme} models, the output of these functions has a
-\code{nonlinear} element that holds the variables of the nonlinear formula, not
-the names of the nonlinear parameters.
+\item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod}),
+returns the nonlinear parameters. Not available for functions that return
+variables, like \code{find_predictors()}.
 \item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
 variables used to describe the correlation structure are returned.
 \item \code{"location"}: returns location parameters such as \code{conditional},
@@ -159,13 +155,10 @@ the original variable names, but excluded the \emph{dependent} (response)
 variables. The return value would be \code{"gear"}.
 }
 
-For nonlinear models from \code{stats::nls()}, \code{lme4::nlmer()} and \code{nlme::nlme()},
-the nonlinear formula holds the parameters and the variables.
-\code{find_parameters()} returns the parameters. \code{find_predictors()} and
-\code{find_variables()} return only the variables, and so does \code{find_terms()} for
-the nonlinear formula and the random part. For \code{nls} models, the nonlinear
-formula is the \code{conditional} part. Parameters that are elements of a vector,
-like \code{b[1]}, are not yet removed.
+For non-linear models (\code{nls}, \code{nlmer} or \code{nlme}), the parameters of the
+nonlinear formula are returned by \code{find_parameters()}, while
+\code{find_predictors()} and \code{find_variables()} only return the variables.
+Parameters that are elements of a vector, like \code{b[1]}, are not yet removed.
 }
 
 \examples{

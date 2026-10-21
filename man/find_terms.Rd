@@ -55,12 +55,10 @@ variables are returned (see 'Note').
 The difference to \code{\link[=find_variables]{find_variables()}} is that \code{find_terms()}
 may return a variable multiple times in case of multiple transformations
 (see examples below), while \code{find_variables()} returns each variable
-name only once. For nonlinear models from \code{stats::nls()}, \code{lme4::nlmer()}
-and \code{nlme::nlme()}, the nonlinear formula also holds the parameters, so
-its part (the \code{conditional} part of \code{nls} models, the \code{nonlinear} part of
-the other models) and the random part return the variables, as
-\code{find_variables()} does. The response and the fixed-effect covariates
-keep their terms. This does not apply to \code{as_term_labels = TRUE}.
+name only once. For non-linear models (\code{nls}, \code{nlmer} or \code{nlme}), the
+nonlinear formula and the random part return the variables, like
+\code{find_variables()}, because the nonlinear formula also holds the
+parameters.
 }
 \section{Parameters, Variables, Predictors and Terms}{
 
@@ -89,13 +87,10 @@ the original variable names, but excluded the \emph{dependent} (response)
 variables. The return value would be \code{"gear"}.
 }
 
-For nonlinear models from \code{stats::nls()}, \code{lme4::nlmer()} and \code{nlme::nlme()},
-the nonlinear formula holds the parameters and the variables.
-\code{find_parameters()} returns the parameters. \code{find_predictors()} and
-\code{find_variables()} return only the variables, and so does \code{find_terms()} for
-the nonlinear formula and the random part. For \code{nls} models, the nonlinear
-formula is the \code{conditional} part. Parameters that are elements of a vector,
-like \code{b[1]}, are not yet removed.
+For non-linear models (\code{nls}, \code{nlmer} or \code{nlme}), the parameters of the
+nonlinear formula are returned by \code{find_parameters()}, while
+\code{find_predictors()} and \code{find_variables()} only return the variables.
+Parameters that are elements of a vector, like \code{b[1]}, are not yet removed.
 }
 
 \examples{

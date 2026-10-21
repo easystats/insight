@@ -48,12 +48,9 @@
 #'   for models with zero-inflation or that can model the dispersion parameter.
 #' - `"instruments"`: for instrumental-variable or some fixed effects regression,
 #'   returns the instruments.
-#' - `"nonlinear"`: for models of class `nlmerMod`, `find_parameters()` and
-#'   `get_parameters()` return the nonlinear parameters. Functions that return
-#'   variables, like `find_predictors()`, do not accept this option. For
-#'   `nlmerMod` and `nlme` models, the output of these functions has a
-#'   `nonlinear` element that holds the variables of the nonlinear formula, not
-#'   the names of the nonlinear parameters.
+#' - `"nonlinear"`: for non-linear models (like models of class `nlmerMod`),
+#'   returns the nonlinear parameters. Not available for functions that return
+#'   variables, like `find_predictors()`.
 #' - `"correlation"`: for models with correlation-component, like `gls`, the
 #'   variables used to describe the correlation structure are returned.
 #' - `"location"`: returns location parameters such as `conditional`,
@@ -108,13 +105,10 @@
 #'   the original variable names, but excluded the *dependent* (response)
 #'   variables. The return value would be `"gear"`.
 #'
-#' For nonlinear models from `stats::nls()`, `lme4::nlmer()` and `nlme::nlme()`,
-#' the nonlinear formula holds the parameters and the variables.
-#' `find_parameters()` returns the parameters. `find_predictors()` and
-#' `find_variables()` return only the variables, and so does `find_terms()` for
-#' the nonlinear formula and the random part. For `nls` models, the nonlinear
-#' formula is the `conditional` part. Parameters that are elements of a vector,
-#' like `b[1]`, are not yet removed.
+#' For non-linear models (`nls`, `nlmer` or `nlme`), the parameters of the
+#' nonlinear formula are returned by `find_parameters()`, while
+#' `find_predictors()` and `find_variables()` only return the variables.
+#' Parameters that are elements of a vector, like `b[1]`, are not yet removed.
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #' predictor variables. Depending on the combination of the arguments
@@ -132,8 +126,7 @@
 #' - `correlation`, for models with correlation-component like `gls`, the
 #'   variables used to describe the correlation structure
 #' - `nonlinear`, for non-linear models (like models of class `nlmerMod` or
-#'   `nlme`), the variables of the nonlinear formula, not the names of the
-#'   nonlinear parameters
+#'   `nlme`), the variables of the nonlinear formula
 #' - `smooth_terms` returns smooth terms, only applies to GAMs (or similar
 #'   models that may contain smooth terms)
 #'
@@ -805,9 +798,8 @@ find_predictors.marginaleffects <- find_predictors.predictions
 }
 
 
-# names of the parameters of nonlinear models, as estimated by the fit. They
-# are no variables of the data. Most of them appear in the model formula, a
-# plinear `nls` fit adds `.lin`.
+# names of the parameters of nonlinear models, which are no variables of the
+# data. A plinear `nls` fit adds `.lin`.
 .nonlinear_parameters <- function(x) {
   if (inherits(x, "nls")) {
     names(stats::coef(x))

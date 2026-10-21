@@ -18,19 +18,13 @@
 
 ## Changes
 
-* For models from `stats::nls()`, `lme4::nlmer()` and `nlme::nlme()`,
-  `find_predictors()`, `find_variables()`, `find_terms()` and `clean_names()`
-  no longer return the names of the nonlinear parameters. For example, for
-  `nls(density ~ SSlogis(log(conc), Asym, xmid, scal))`, `find_predictors()`
-  now returns only `conc`. Before, it also returned `Asym`, `xmid` and
-  `scal`. For the nonlinear formula and the random part, `find_terms()` now
-  returns the same variables as `find_variables()`. The response and the
-  fixed-effect covariates keep their terms, like `log(density)`. So
-  `find_transformation(include_all = TRUE)` no longer reports transformations
-  inside the nonlinear formula, like `log(conc)`.
-  `find_parameters()` for `nls` models now returns the names of the
-  coefficients, not the variables. So `n_parameters()` no longer counts the
-  variables, and `clean_parameters()` no longer has rows for them (#350).
+* `find_predictors()`, `find_variables()`, `find_terms()` and `clean_names()`
+  no longer return the nonlinear parameters as variables for models from
+  `stats::nls()`, `lme4::nlmer()` and `nlme::nlme()`. For the nonlinear
+  formula, `find_terms()` now returns the same as `find_variables()`, so
+  transformations like `log(conc)` are no longer returned there.
+  `find_parameters()` for `nls` models now returns the coefficients, not the
+  variables (#350).
 
 * `find_formula()` for models from `nlme::lme()`, `nlme::gls()`,
   `nlme::nlme()` and `MASS::glmmPQL()` now reads the `correlation` part from
