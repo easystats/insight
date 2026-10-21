@@ -100,7 +100,16 @@ test_that("find_variables, nlme", {
     list(
       response = "weight",
       conditional = "Variety",
-      nonlinear = c("Time", "Asym", "xmid", "scal"),
+      nonlinear = "Time",
+      random = "Plot"
+    )
+  )
+  expect_identical(
+    find_terms(m_nlme2),
+    list(
+      response = "weight",
+      conditional = "Variety",
+      nonlinear = "Time",
       random = "Plot"
     )
   )
@@ -108,10 +117,29 @@ test_that("find_variables, nlme", {
     find_variables(m_nlme1),
     list(
       response = "height",
-      nonlinear = c("age", "Asym", "R0", "lrc"),
+      nonlinear = "age",
       random = "Seed"
     )
   )
+})
+
+
+test_that("variables of nlme models hold no nonlinear parameters", {
+  skip_if_not_installed("reformulas")
+  for (m in nlme_models) {
+    params <- names(m$plist)
+    expect_length(params, 3)
+    out <- list(
+      find_predictors(m),
+      find_predictors(m, effects = "all"),
+      find_variables(m),
+      find_terms(m),
+      clean_names(m)
+    )
+    for (i in out) {
+      expect_false(any(params %in% unlist(i, use.names = FALSE)))
+    }
+  }
 })
 
 

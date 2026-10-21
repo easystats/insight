@@ -17,3 +17,24 @@ test_that("model_info", {
 test_that("find_statistic", {
   expect_identical(find_statistic(nm1), "t-statistic")
 })
+
+test_that("variables of nlmer models hold no nonlinear parameters", {
+  expect_identical(
+    find_predictors(nm1, effects = "all"),
+    list(nonlinear = "age", random = "Tree")
+  )
+  expect_identical(
+    find_variables(nm1),
+    list(response = "circumference", nonlinear = "age", random = "Tree")
+  )
+  expect_identical(
+    find_terms(nm1),
+    list(
+      response = "circumference",
+      conditional = "1",
+      nonlinear = "age",
+      random = "Tree"
+    )
+  )
+  expect_identical(clean_names(nm1), c("circumference", "age", "Tree"))
+})
