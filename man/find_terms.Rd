@@ -52,7 +52,10 @@ preserved.
 The difference to \code{\link[=find_variables]{find_variables()}} is that \code{find_terms()}
 may return a variable multiple times in case of multiple transformations
 (see examples below), while \code{find_variables()} returns each variable
-name only once.
+name only once. For nonlinear models from \code{stats::nls()}, \code{lme4::nlmer()}
+and \code{nlme::nlme()}, the nonlinear formula also holds the parameters, so
+its part and the random part return the variables, as \code{find_variables()}
+does. The response and the fixed-effect covariates keep their terms.
 }
 \section{Parameters, Variables, Predictors and Terms}{
 
@@ -80,6 +83,12 @@ returns each variable name only once. The return value would be \code{"gear"}.
 the original variable names, but excluded the \emph{dependent} (response)
 variables. The return value would be \code{"gear"}.
 }
+
+For nonlinear models from \code{stats::nls()}, \code{lme4::nlmer()} and \code{nlme::nlme()},
+the nonlinear formula holds the parameters and the variables.
+\code{find_parameters()} returns the parameters. \code{find_predictors()},
+\code{find_variables()} and the nonlinear part of \code{find_terms()} return only the
+variables.
 }
 
 \examples{

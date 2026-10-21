@@ -136,9 +136,9 @@ returns the instruments.
 \item \code{"nonlinear"}: for models of class \code{nlmerMod}, \code{find_parameters()} and
 \code{get_parameters()} return the nonlinear parameters. Functions that return
 variables, like \code{find_predictors()}, do not accept this option. For
-\code{nlmerMod} and \code{nlme} models, their output has a \code{nonlinear} element that
-holds the variables of the nonlinear formula, not the names of the
-nonlinear parameters.
+\code{nlmerMod} and \code{nlme} models, the output of these functions has a
+\code{nonlinear} element that holds the variables of the nonlinear formula, not
+the names of the nonlinear parameters.
 \item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
 variables used to describe the correlation structure are returned.
 \item \code{"location"}: returns location parameters such as \code{conditional},

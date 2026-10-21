@@ -34,7 +34,10 @@
 #' @note The difference to [`find_variables()`] is that `find_terms()`
 #'   may return a variable multiple times in case of multiple transformations
 #'   (see examples below), while `find_variables()` returns each variable
-#'   name only once.
+#'   name only once. For nonlinear models from `stats::nls()`, `lme4::nlmer()`
+#'   and `nlme::nlme()`, the nonlinear formula also holds the parameters, so
+#'   its part and the random part return the variables, as `find_variables()`
+#'   does. The response and the fixed-effect covariates keep their terms.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(sleepstudy, package = "lme4")
@@ -201,16 +204,17 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 # helper -----------------------
 
 .find_terms_nonlinear <- function(x, l) {
-  out <- find_variables(x, effects = "all", verbose = FALSE)
-  # keep the intercept of an intercept-only fixed part, like for other models
-  if (is.null(out$conditional) && identical(l$conditional, "1")) {
-    out <- c(
-      out["response"],
-      list(conditional = "1"),
-      out[setdiff(names(out), "response")]
-    )
+  # the nonlinear formula and the random part hold the parameters, so these
+  # parts take the variables. The response and the fixed-effect covariates of
+  # nlmer and nlme models keep their terms, like `log(y)` or `factor(x)`.
+  v <- find_variables(x, effects = "all", verbose = FALSE)
+  if (inherits(x, "nls")) {
+    l$conditional <- v$conditional
+  } else {
+    l$nonlinear <- v$nonlinear
   }
-  compact_list(out)
+  l$random <- v$random
+  compact_list(l)
 }
 
 

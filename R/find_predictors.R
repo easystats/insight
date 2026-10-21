@@ -51,9 +51,9 @@
 #' - `"nonlinear"`: for models of class `nlmerMod`, `find_parameters()` and
 #'   `get_parameters()` return the nonlinear parameters. Functions that return
 #'   variables, like `find_predictors()`, do not accept this option. For
-#'   `nlmerMod` and `nlme` models, their output has a `nonlinear` element that
-#'   holds the variables of the nonlinear formula, not the names of the
-#'   nonlinear parameters.
+#'   `nlmerMod` and `nlme` models, the output of these functions has a
+#'   `nonlinear` element that holds the variables of the nonlinear formula, not
+#'   the names of the nonlinear parameters.
 #' - `"correlation"`: for models with correlation-component, like `gls`, the
 #'   variables used to describe the correlation structure are returned.
 #' - `"location"`: returns location parameters such as `conditional`,
@@ -107,6 +107,12 @@
 #' - `find_predictors()` is comparable to `find_variables()` and also returns
 #'   the original variable names, but excluded the *dependent* (response)
 #'   variables. The return value would be `"gear"`.
+#'
+#' For nonlinear models from `stats::nls()`, `lme4::nlmer()` and `nlme::nlme()`,
+#' the nonlinear formula holds the parameters and the variables.
+#' `find_parameters()` returns the parameters. `find_predictors()`,
+#' `find_variables()` and the nonlinear part of `find_terms()` return only the
+#' variables.
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #' predictor variables. Depending on the combination of the arguments

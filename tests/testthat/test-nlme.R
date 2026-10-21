@@ -124,6 +124,45 @@ test_that("find_variables, nlme", {
 })
 
 
+test_that("find_terms keeps transformed response and covariates, nlme", {
+  skip_if_not_installed("reformulas")
+  m_nlme_log <- nlme::nlme(
+    log(height) ~ SSasymp(age, Asym, R0, lrc),
+    data = nlme_loblolly,
+    fixed = Asym + R0 + lrc ~ 1,
+    random = Asym ~ 1,
+    start = c(Asym = 4.6, R0 = 0, lrc = -2.5)
+  )
+  expect_identical(
+    find_terms(m_nlme_log),
+    list(
+      response = "log(height)",
+      conditional = "1",
+      nonlinear = "age",
+      random = "Seed"
+    )
+  )
+  expect_identical(find_transformation(m_nlme_log), "log")
+
+  m_nlme_factor <- nlme::nlme(
+    weight ~ SSlogis(Time, Asym, xmid, scal),
+    data = nlme_soybean,
+    fixed = list(Asym ~ factor(Variety), xmid ~ 1, scal ~ 1),
+    random = Asym + xmid ~ 1 | Plot,
+    start = c(18, 0, 52, 7.5)
+  )
+  expect_identical(
+    find_terms(m_nlme_factor),
+    list(
+      response = "weight",
+      conditional = "factor(Variety)",
+      nonlinear = "Time",
+      random = "Plot"
+    )
+  )
+})
+
+
 test_that("variables of nlme models hold no nonlinear parameters", {
   skip_if_not_installed("reformulas")
   for (m in nlme_models) {
