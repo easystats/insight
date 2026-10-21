@@ -81,6 +81,12 @@ find_terms.default <- function(
     l <- .get_variables_list(f, resp, model = x)
   }
 
+  # for nonlinear models, the terms are the variables of the data, without the
+  # parameters of the nonlinear formula
+  if (length(.nonlinear_parameters(x))) {
+    l <- .find_terms_nonlinear(x, l)
+  }
+
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
   } else {
@@ -193,6 +199,20 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 
 
 # helper -----------------------
+
+.find_terms_nonlinear <- function(x, l) {
+  out <- find_variables(x, effects = "all", verbose = FALSE)
+  # keep the intercept of an intercept-only fixed part, like for other models
+  if (is.null(out$conditional) && identical(l$conditional, "1")) {
+    out <- c(
+      out["response"],
+      list(conditional = "1"),
+      out[setdiff(names(out), "response")]
+    )
+  }
+  compact_list(out)
+}
+
 
 .get_variables_list <- function(f, resp = NULL, model = NULL) {
   # exception for formula w/o response

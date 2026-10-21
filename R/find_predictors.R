@@ -186,6 +186,21 @@ find_predictors.default <- function(
     if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
   }
 
+  # the parameters of nonlinear models are no predictors
+  nl_parameters <- .nonlinear_parameters(x)
+  if (length(nl_parameters)) {
+    l <- compact_list(lapply(l, function(i) {
+      if (is.list(i)) {
+        compact_list(lapply(i, .remove_values, nl_parameters))
+      } else {
+        .remove_values(i, nl_parameters)
+      }
+    }))
+    if (is_empty_object(l)) {
+      return(NULL)
+    }
+  }
+
   if (flatten) {
     unique(unlist(l, use.names = FALSE))
   } else {
@@ -774,6 +789,21 @@ find_predictors.marginaleffects <- find_predictors.predictions
     }
   }
   expr
+}
+
+
+# names of the parameters of nonlinear models, as estimated by the fit. These
+# names appear in the model formula, but they are no variables of the data.
+.nonlinear_parameters <- function(x) {
+  if (inherits(x, "nls")) {
+    names(stats::coef(x))
+  } else if (inherits(x, "nlmerMod")) {
+    .safe(names(lme4::fixef(x)))
+  } else if (inherits(x, "nlme")) {
+    names(x$plist)
+  } else {
+    NULL
+  }
 }
 
 
