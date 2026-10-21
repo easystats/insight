@@ -26,6 +26,8 @@
 #' - `zero_inflated_random`, the names of the random effects (grouping factors)
 #' - `dispersion`, the name of the dispersion terms
 #' - `instruments`, the names of instrumental variables
+#' - `nonlinear`, for nonlinear models from `lme4::nlmer()` and `nlme::nlme()`,
+#'   the variables of the nonlinear formula (see 'Note')
 #'
 #' Returns `NULL` if no terms could be found (for instance, due to
 #' problems in accessing the formula).

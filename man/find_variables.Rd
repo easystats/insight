@@ -55,6 +55,9 @@ model (as opposed to the zero-inflated part of a model)
 \item \code{cluster}, the names of cluster or grouping variables
 \item \code{dispersion}, the name of the dispersion terms
 \item \code{instruments}, the names of instrumental variables
+\item \code{nonlinear}, for nonlinear models from \code{lme4::nlmer()} and \code{nlme::nlme()},
+the variables of the nonlinear formula, not the names of the nonlinear
+parameters
 \item \code{random}, the names of the random effects (grouping factors)
 \item \code{zero_inflated}, the names of the predictor variables from the
 \emph{zero-inflated} part of the model. For \strong{brms}, this is named \code{zi}.

@@ -37,6 +37,8 @@ model (as opposed to the zero-inflated part of a model)
 \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
 \item \code{dispersion}, the name of the dispersion terms
 \item \code{instruments}, the names of instrumental variables
+\item \code{nonlinear}, for nonlinear models from \code{lme4::nlmer()} and \code{nlme::nlme()},
+the variables of the nonlinear formula (see 'Note')
 }
 
 Returns \code{NULL} if no terms could be found (for instance, due to
