@@ -48,11 +48,11 @@
 #'   for models with zero-inflation or that can model the dispersion parameter.
 #' - `"instruments"`: for instrumental-variable or some fixed effects regression,
 #'   returns the instruments.
-#' - `"nonlinear"`: for non-linear models (like models of class `nlmerMod` or
-#'   `nlme`), the nonlinear part of the model. For `find_parameters()` and
-#'   `get_parameters()`, these are the nonlinear parameters of `nlmerMod`
-#'   models. Functions that return variables, like `find_predictors()`, list
-#'   the variables of the nonlinear formula in this part, not the names of the
+#' - `"nonlinear"`: for models of class `nlmerMod`, `find_parameters()` and
+#'   `get_parameters()` return the nonlinear parameters. Functions that return
+#'   variables, like `find_predictors()`, do not accept this option. For
+#'   `nlmerMod` and `nlme` models, their output has a `nonlinear` element that
+#'   holds the variables of the nonlinear formula, not the names of the
 #'   nonlinear parameters.
 #' - `"correlation"`: for models with correlation-component, like `gls`, the
 #'   variables used to describe the correlation structure are returned.
@@ -797,8 +797,9 @@ find_predictors.marginaleffects <- find_predictors.predictions
 }
 
 
-# names of the parameters of nonlinear models, as estimated by the fit. These
-# names appear in the model formula, but they are no variables of the data.
+# names of the parameters of nonlinear models, as estimated by the fit. They
+# are no variables of the data. Most of them appear in the model formula, a
+# plinear `nls` fit adds `.lin`.
 .nonlinear_parameters <- function(x) {
   if (inherits(x, "nls")) {
     names(stats::coef(x))

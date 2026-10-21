@@ -65,11 +65,11 @@ models that may contain smooth terms).
 for models with zero-inflation or that can model the dispersion parameter.
 \item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
 returns the instruments.
-\item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod} or
-\code{nlme}), the nonlinear part of the model. For \code{find_parameters()} and
-\code{get_parameters()}, these are the nonlinear parameters of \code{nlmerMod}
-models. Functions that return variables, like \code{find_predictors()}, list
-the variables of the nonlinear formula in this part, not the names of the
+\item \code{"nonlinear"}: for models of class \code{nlmerMod}, \code{find_parameters()} and
+\code{get_parameters()} return the nonlinear parameters. Functions that return
+variables, like \code{find_predictors()}, do not accept this option. For
+\code{nlmerMod} and \code{nlme} models, their output has a \code{nonlinear} element that
+holds the variables of the nonlinear formula, not the names of the
 nonlinear parameters.
 \item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
 variables used to describe the correlation structure are returned.

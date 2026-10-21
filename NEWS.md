@@ -23,7 +23,8 @@
   no longer return the names of the nonlinear parameters. For example, for
   `nls(density ~ SSlogis(log(conc), Asym, xmid, scal))`, `find_predictors()`
   now returns `conc`, not `conc`, `Asym`, `xmid` and `scal`. For these models,
-  `find_terms()` returns the same variables as `find_variables()`.
+  `find_terms()` returns the same variables as `find_variables()`, and `"1"`
+  for a fixed part with only an intercept.
   `find_parameters()` for `nls` models now returns the names of the
   coefficients, not the variables. So `n_parameters()` no longer counts the
   variables (#350).
