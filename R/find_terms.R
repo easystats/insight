@@ -4,7 +4,8 @@
 #' @description Returns a list with the names of all terms, including response
 #'   value and random effects, "as is". This means, on-the-fly tranformations
 #'   or arithmetic expressions like `log()`, `I()`, `as.factor()` etc. are
-#'   preserved.
+#'   preserved. For the nonlinear formula of nonlinear models, only the
+#'   variables are returned (see 'Note').
 #'
 #' @param as_term_labels Logical, if `TRUE`, extracts model formula and tries to
 #'   access the `"term.labels"` attribute. This should better mimic the `terms()`
@@ -36,8 +37,10 @@
 #'   (see examples below), while `find_variables()` returns each variable
 #'   name only once. For nonlinear models from `stats::nls()`, `lme4::nlmer()`
 #'   and `nlme::nlme()`, the nonlinear formula also holds the parameters, so
-#'   its part and the random part return the variables, as `find_variables()`
-#'   does. The response and the fixed-effect covariates keep their terms.
+#'   its part (the `conditional` part of `nls` models, the `nonlinear` part of
+#'   the other models) and the random part return the variables, as
+#'   `find_variables()` does. The response and the fixed-effect covariates
+#'   keep their terms. This does not apply to `as_term_labels = TRUE`.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(sleepstudy, package = "lme4")

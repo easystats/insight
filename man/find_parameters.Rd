@@ -127,7 +127,8 @@ the nonlinear formula holds the parameters and the variables.
 \code{find_parameters()} returns the parameters. \code{find_predictors()} and
 \code{find_variables()} return only the variables, and so does \code{find_terms()} for
 the nonlinear formula and the random part. For \code{nls} models, the nonlinear
-formula is the \code{conditional} part.
+formula is the \code{conditional} part. Parameters that are elements of a vector,
+like \code{b[1]}, are not yet removed.
 }
 
 \examples{

@@ -25,7 +25,9 @@
   now returns only `conc`. Before, it also returned `Asym`, `xmid` and
   `scal`. For the nonlinear formula and the random part, `find_terms()` now
   returns the same variables as `find_variables()`. The response and the
-  fixed-effect covariates keep their terms, like `log(density)`.
+  fixed-effect covariates keep their terms, like `log(density)`. So
+  `find_transformation(include_all = TRUE)` no longer reports transformations
+  inside the nonlinear formula, like `log(conc)`.
   `find_parameters()` for `nls` models now returns the names of the
   coefficients, not the variables. So `n_parameters()` no longer counts the
   variables, and `clean_parameters()` no longer has rows for them (#350).

@@ -113,7 +113,8 @@
 #' `find_parameters()` returns the parameters. `find_predictors()` and
 #' `find_variables()` return only the variables, and so does `find_terms()` for
 #' the nonlinear formula and the random part. For `nls` models, the nonlinear
-#' formula is the `conditional` part.
+#' formula is the `conditional` part. Parameters that are elements of a vector,
+#' like `b[1]`, are not yet removed.
 #'
 #' @return A list of character vectors that represent the name(s) of the
 #' predictor variables. Depending on the combination of the arguments
