@@ -48,6 +48,12 @@
 
 ## Bug fixes
 
+* `get_predicted()` now passes arguments in `...` to `predict()` for models
+  that use the default method, like *betareg*. Before, these arguments were
+  ignored, e.g. `at` for `type = "quantile"`. If `predict()` fails with these
+  arguments, or they change the shape of the predictions (like `se.fit`),
+  predictions are computed without them.
+
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that
   convergence cannot be assessed in two more cases. In the first case, the
   call does not write the formula as a `~` expression, such as
