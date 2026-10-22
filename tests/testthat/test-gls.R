@@ -29,11 +29,13 @@ test_that("model_info", {
 })
 
 test_that("find_predictors", {
+  # `Mare` groups the correlation structure, it is no fixed predictor
+  expect_identical(find_predictors(m1), list(conditional = "Time"))
+  expect_identical(find_predictors(m1, flatten = TRUE), "Time")
   expect_identical(
-    find_predictors(m1),
+    find_predictors(m1, effects = "all"),
     list(conditional = "Time", correlation = "Mare")
   )
-  expect_identical(find_predictors(m1, flatten = TRUE), c("Time", "Mare"))
   expect_null(find_predictors(m1, effects = "random"))
 })
 
@@ -80,21 +82,20 @@ test_that("find_formula", {
 })
 
 test_that("find_terms", {
-  expect_equal(
+  expect_identical(
     find_terms(m1),
     list(
       response = "follicles",
       conditional = c("sin(2 * pi * Time)", "cos(2 * pi * Time)"),
-      correlation = c("1", "Mare")
+      correlation = "Mare"
     )
   )
-  expect_equal(
+  expect_identical(
     find_terms(m1, flatten = TRUE),
     c(
       "follicles",
       "sin(2 * pi * Time)",
       "cos(2 * pi * Time)",
-      "1",
       "Mare"
     )
   )
@@ -249,4 +250,10 @@ test_that("find_formula, gls, phylogenetic structure object, easystats/insight#1
   # the structure has no `form`, so its fitted formula `~1` has no variable
   expect_no_error(find_formula(m))
   expect_named(find_formula(m), "conditional")
+})
+
+
+test_that("get_datagrid, gls, correlation grouping", {
+  expect_named(get_datagrid(m1), "Time")
+  expect_named(get_datagrid(m1, by = "Mare"), c("Mare", "Time"))
 })
