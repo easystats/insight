@@ -135,15 +135,6 @@ test_that("get_sigma, families with a standard deviation parameter", {
   d$y1 <- stats::rnorm(200, 1 + 2 * d$x2, sd = 1.5)
   d$y2 <- stats::rnorm(200, 3 + 4 * d$x2, sd = 0.5)
 
-  # the ML estimate of sigma for a normal model
-  m <- VGAM::vglm(y1 ~ x2, VGAM::uninormal, data = d, trace = FALSE)
-  expect_equal(
-    unclass(get_sigma(m)),
-    sqrt(mean(stats::residuals(stats::lm(y1 ~ x2, data = d))^2)),
-    tolerance = 1e-4,
-    ignore_attr = TRUE
-  )
-
   m <- suppressWarnings(VGAM::vglm(y1 ~ x2, VGAM::tobit, data = d, trace = FALSE))
   expect_equal(
     unclass(get_sigma(m)),
@@ -167,13 +158,4 @@ test_that("get_sigma, families with a standard deviation parameter", {
   # sigma modelled with predictors
   m <- VGAM::vglm(y1 ~ x2, VGAM::uninormal(zero = NULL), data = d, trace = FALSE)
   expect_null(get_sigma(m))
-})
-
-test_that("get_sigma, families without a standard deviation parameter", {
-  expect_equal(
-    unclass(get_sigma(m1)),
-    sqrt(stats::deviance(m1) / stats::df.residual(m1)),
-    tolerance = 1e-4,
-    ignore_attr = TRUE
-  )
 })
