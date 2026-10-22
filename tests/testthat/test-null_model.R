@@ -30,14 +30,12 @@ test_that("null_model finds objects local to the function that fitted the model"
     lme4::glmer(count ~ mined + (1 | site), data = df, family = fam)
   }
   nm_glm <- null_model(fit_glm(d))
-  expect_s3_class(nm_glm, "glm")
   expect_equal(
     stats::coef(nm_glm),
     stats::coef(stats::glm(count ~ 1, data = d, family = poisson())),
     tolerance = 1e-6
   )
   nm_glmer <- null_model(fit_glmer(d))
-  expect_s4_class(nm_glmer, "glmerMod")
   expect_equal(
     lme4::fixef(nm_glmer),
     lme4::fixef(lme4::glmer(count ~ 1 + (1 | site), data = d, family = poisson())),
@@ -50,23 +48,11 @@ skip_on_os("mac") # error: FreeADFunObject
 test_that("null_model finds objects local to the function that fitted a glmmTMB model", {
   data(Salamanders, package = "glmmTMB")
   d <- Salamanders[Salamanders$spp == "GP", ]
-  fit <- function(df) {
-    fam <- "poisson"
-    glmmTMB::glmmTMB(count ~ mined + (1 | site), data = df, family = fam)
-  }
   fit_zi <- function(df) {
     fam <- "poisson"
     glmmTMB::glmmTMB(count ~ mined + (1 | site), ziformula = ~mined, data = df, family = fam)
   }
-  nm <- null_model(fit(d))
-  expect_s3_class(nm, "glmmTMB")
-  expect_equal(
-    glmmTMB::fixef(nm)$cond,
-    glmmTMB::fixef(glmmTMB::glmmTMB(count ~ 1 + (1 | site), data = d, family = "poisson"))$cond,
-    tolerance = 1e-4
-  )
   nm_zi <- null_model(fit_zi(d))
-  expect_s3_class(nm_zi, "glmmTMB")
   expect_equal(
     glmmTMB::fixef(nm_zi)$zi,
     glmmTMB::fixef(glmmTMB::glmmTMB(

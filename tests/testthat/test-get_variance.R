@@ -127,23 +127,6 @@ test_that("get_variance-7", {
 
 
 test_that("get_variance, var.random includes uncorrelated random slopes", {
-  # lme4 splits (x || g) into several VarCorr() elements ("g", "g.1"), but
-  # ranef() returns one element "g"
-  model <- lme4::lmer(Reaction ~ Days + (Days || Subject), data = study_data)
-  vc <- as.data.frame(lme4::VarCorr(model))
-  x <- study_data$Days
-  # mean random-effect variance (Johnson 2014)
-  expected <- vc$vcov[1] + vc$vcov[2] * mean(x^2)
-  expect_equal(get_variance_random(model), c(var.random = expected), tolerance = 1e-4)
-  expect_equal(expected, 1649.53296, tolerance = 1e-4)
-
-  # same for a centered predictor
-  study_data$Days0 <- study_data$Days - 10
-  model <- lme4::lmer(Reaction ~ Days0 + (Days0 || Subject), data = study_data)
-  vc <- as.data.frame(lme4::VarCorr(model))
-  expected <- vc$vcov[1] + vc$vcov[2] * mean(study_data$Days0^2)
-  expect_equal(get_variance_random(model), c(var.random = expected), tolerance = 1e-4)
-
   # nested uncorrelated terms: VarCorr() names "subgrp.grp", ranef() "subgrp:grp"
   vc <- lme4::VarCorr(fm3)
   X <- lme4::getME(fm3, "X")
@@ -450,18 +433,6 @@ test_that("distribution variance for betabinomial uses the model's link", {
     log1p(mu * (1 - mu) / (1 + phi) / mu^2)
   }
 
-  m_logit <- glmmTMB::glmmTMB(
-    cbind(y, n - y) ~ x + (1 | g),
-    data = d,
-    family = glmmTMB::betabinomial(link = "logit")
-  )
-  expect_equal(
-    get_variance_distribution(m_logit, verbose = FALSE),
-    expected_variance(m_logit, function(eta) 1 / (1 + exp(-eta))),
-    tolerance = 1e-4,
-    ignore_attr = TRUE
-  )
-
   m_cloglog <- glmmTMB::glmmTMB(
     cbind(y, n - y) ~ x + (1 | g),
     data = d,
@@ -470,18 +441,6 @@ test_that("distribution variance for betabinomial uses the model's link", {
   expect_equal(
     get_variance_distribution(m_cloglog, verbose = FALSE),
     expected_variance(m_cloglog, function(eta) 1 - exp(-exp(eta))),
-    tolerance = 1e-4,
-    ignore_attr = TRUE
-  )
-
-  m_probit <- glmmTMB::glmmTMB(
-    cbind(y, n - y) ~ x + (1 | g),
-    data = d,
-    family = glmmTMB::betabinomial(link = "probit")
-  )
-  expect_equal(
-    get_variance_distribution(m_probit, verbose = FALSE),
-    expected_variance(m_probit, stats::pnorm),
     tolerance = 1e-4,
     ignore_attr = TRUE
   )

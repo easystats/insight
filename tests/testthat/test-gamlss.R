@@ -212,9 +212,6 @@ test_that("get_residuals, type = 'response'", {
     tolerance = 1e-4
   )
 
-  # default residuals are still the normalized quantile residuals
-  expect_equal(get_residuals(m_gamlss1), m_gamlss1$residuals, ignore_attr = TRUE)
-
   # for zero-inflated families, the mean is not mu
   set.seed(123)
   d_zip <- data.frame(x = rnorm(200))

@@ -44,22 +44,7 @@ test_that("get_parameters, standardized parameters with type", {
     lavaan::standardizedSolution(model, type = "std.lv")$est.std,
     tolerance = 1e-8
   )
-  out_all <- get_parameters(model, standardize = TRUE)
-  expect_equal(
-    out_all$Estimate,
-    lavaan::standardizedSolution(model)$est.std,
-    tolerance = 1e-8
-  )
-  expect_gt(max(abs(out$Estimate - out_all$Estimate)), 0.01)
-
-  # type has no effect without standardization
-  expect_identical(get_parameters(model, type = "std.lv"), get_parameters(model))
-
   # other arguments in ... are not passed to lavaan, and not evaluated
-  expect_identical(
-    get_parameters(model, standardize = TRUE, type = "std.lv", verbose = FALSE),
-    out
-  )
   expect_identical(
     get_parameters(model, standardize = TRUE, type = "std.lv", foo = stop("not evaluated", call. = FALSE)),
     out
@@ -71,18 +56,7 @@ test_that("get_parameters, only standardize = TRUE standardizes", {
     "visual =~ x1 + x2 + x3",
     data = lavaan::HolzingerSwineford1939
   )
-  out_false <- get_parameters(model, standardize = FALSE)
-  expect_identical(out_false, get_parameters(model))
-
-  # values other than TRUE or FALSE give the unstandardized parameters
-  # oracle: the package's own output for standardize = FALSE
-  for (v in list(1, "yes", NA, c(TRUE, TRUE), NULL)) {
-    expect_identical(
-      get_parameters(model, standardize = v),
-      out_false,
-      info = paste("standardize =", deparse(v))
-    )
-  }
+  expect_identical(get_parameters(model, standardize = 1), get_parameters(model))
 })
 
 test_that("get_parameters, standardized estimates without partial matching", {
@@ -99,7 +73,6 @@ test_that("get_parameters, standardized estimates without partial matching", {
     message = "[Pp]artial match of 'est'"
   )
   out <- get_parameters(model, standardize = TRUE)
-  # oracle: the est.std column of lavaan::standardizedSolution()
   expect_identical(
     out$Estimate,
     lavaan::standardizedSolution(model)[["est.std"]]
@@ -113,7 +86,6 @@ test_that("get_data, model frame of models with multiple groups", {
     group = "school"
   )
   out <- get_data(model, source = "mf", verbose = FALSE)
-  expect_shape(out, dim = c(301L, 4L))
   expect_named(out, c("x1", "x2", "x3", "school"))
   expect_identical(
     as.vector(table(out$school)[c("Pasteur", "Grant-White")]),

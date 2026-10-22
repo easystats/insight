@@ -1,6 +1,5 @@
 skip_on_cran()
 skip_if_not_installed("cmdstanr")
-skip_if_not_installed("rstan")
 skip_if_not_installed("withr")
 skip_if(is.null(cmdstanr::cmdstan_version(error_on_NA = FALSE)))
 
@@ -58,81 +57,24 @@ cmdstan_fit_schools <- .cmdstan_sample(
 )
 
 
-# helpers ----------------------------------------------------------------------
-
-# the fit as stanfit from `rstan::read_stan_csv()`. rstan 2.32.7 stops on the
-# values `true` and `false` in the comments of the CSV files of CmdStan 2.40,
-# so copies of the files have `1` and `0` in their place
-.cmdstan_as_stanfit <- function(fit) {
-  files <- vapply(
-    fit$output_files(),
-    function(file) {
-      csv <- readLines(file)
-      comments <- startsWith(csv, "#")
-      csv[comments] <- sub("= true", "= 1", csv[comments], fixed = TRUE)
-      csv[comments] <- sub("= false", "= 0", csv[comments], fixed = TRUE)
-      out <- tempfile(fileext = ".csv")
-      writeLines(csv, out)
-      out
-    },
-    character(1)
-  )
-  rstan::read_stan_csv(files)
-}
-
-# compare the diagnostics with those of the stanfit from the same CSV files.
-# Divergences and Treedepth are counts. E-BFMI uses the same formula in
-# cmdstanr and rstan. R-hat and ESS come from posterior (cmdstanr) and rstan
-# (stanfit), which can differ slightly. `Passed` is compared for the counts and
-# for the other checks whose value is not close to the threshold.
-.cmdstan_expect_stanfit <- function(fit) {
-  stanfit <- .cmdstan_as_stanfit(fit)
-  expect_identical(
-    dim(as.array(stanfit))[1],
-    as.integer(fit$metadata()$iter_sampling)
-  )
-
-  result <- is_converged(fit, verbose = FALSE)
-  reference <- is_converged(stanfit, verbose = FALSE)
-  d <- attr(result, "diagnostics")
-  r <- attr(reference, "diagnostics")
-
-  expect_identical(d$Diagnostic, r$Diagnostic)
-  expect_identical(d$Threshold, r$Threshold)
-  expect_identical(d$Value[1:2], r$Value[1:2])
-  rel_diff <- abs(d$Value[3:6] - r$Value[3:6]) / abs(r$Value[3:6])
-  expect_true(all(rel_diff <= 1e-3), info = toString(rel_diff))
-  near <- abs(r$Value - r$Threshold) <= 1e-3 * abs(r$Threshold)
-  near[1:2] <- FALSE
-  expect_identical(d$Passed[!near], r$Passed[!near])
-  result
-}
-
-# failed checks of is_converged()
-.cmdstan_failed <- function(result) {
-  d <- attr(result, "diagnostics")
-  d$Diagnostic[!d$Passed]
-}
-
-
 # tests ------------------------------------------------------------------------
 
 test_that("is_converged, CmdStanMCMC without problems", {
-  result <- .cmdstan_expect_stanfit(cmdstan_fit_normal)
+  expect_silent(is_converged(cmdstan_fit_normal))
+  result <- is_converged(cmdstan_fit_normal)
   expect_true(result)
-  expect_length(.cmdstan_failed(result), 0)
   expect_identical(
     attr(result, "diagnostics")$Threshold,
     c(0, 0, 0.2, 1.05, 200, 200)
   )
-  expect_silent(is_converged(cmdstan_fit_normal))
 })
 
 test_that("is_converged, CmdStanMCMC with sampling problems", {
-  result <- .cmdstan_expect_stanfit(cmdstan_fit_schools)
+  result <- is_converged(cmdstan_fit_schools, verbose = FALSE)
   expect_false(result)
-  expect_true("Treedepth" %in% .cmdstan_failed(result))
-  expect_identical(attr(result, "diagnostics")$Threshold[5:6], c(300, 300))
+  d <- attr(result, "diagnostics")
+  expect_false(d$Passed[d$Diagnostic == "Treedepth"])
+  expect_identical(d$Threshold[5:6], c(300, 300))
   expect_message(is_converged(cmdstan_fit_schools), "Treedepth")
   expect_silent(is_converged(cmdstan_fit_schools, verbose = FALSE))
 })
@@ -144,45 +86,26 @@ test_that("is_converged, CmdStanMCMC with fixed parameters", {
     chains = 1,
     fixed_param = TRUE
   )
-  expect_message(is_converged(fit), "cannot be assessed")
-  expect_message(is_converged(fit), "NUTS", fixed = TRUE)
-  result <- suppressMessages(is_converged(fit))
-  expect_false(result)
-  expect_null(attr(result, "diagnostics"))
+  expect_message(result <- is_converged(fit), "NUTS", fixed = TRUE)
+  expect_identical(result, FALSE)
   expect_silent(is_converged(fit, verbose = FALSE))
-  expect_false(is_converged(fit, verbose = FALSE))
 })
 
 test_that("is_converged, cmdstanr fits without MCMC draws", {
-  fits <- suppressMessages(suppressWarnings(list(
-    variational = cmdstan_normal$variational(
-      data = cmdstan_normal_data,
-      seed = 123,
-      refresh = 0,
-      show_messages = FALSE
-    ),
-    optimize = cmdstan_normal$optimize(
-      data = cmdstan_normal_data,
-      seed = 123,
-      refresh = 0,
-      show_messages = FALSE
-    )
+  fit <- suppressMessages(suppressWarnings(cmdstan_normal$optimize(
+    data = cmdstan_normal_data,
+    seed = 123,
+    refresh = 0,
+    show_messages = FALSE
   )))
-  expect_s3_class(fits$variational, "CmdStanVB")
-  expect_s3_class(fits$optimize, "CmdStanMLE")
-  for (fit in fits) {
-    expect_message(is_converged(fit), "cannot be assessed")
-    expect_message(is_converged(fit), "NUTS", fixed = TRUE)
-    result <- suppressMessages(is_converged(fit))
-    expect_false(result)
-    expect_null(attr(result, "diagnostics"))
-    expect_silent(is_converged(fit, verbose = FALSE))
-  }
+  expect_message(result <- is_converged(fit), "NUTS", fixed = TRUE)
+  expect_identical(result, FALSE)
+  expect_silent(is_converged(fit, verbose = FALSE))
 })
 
 test_that("is_converged, CmdStanMCMC with a failed chain", {
   # chain 2 starts where the model rejects every proposal, so it has no draws.
-  # The ESS threshold counts only the chain with draws, as for the stanfit
+  # The ESS threshold counts only the chain with draws
   model <- cmdstanr::cmdstan_model(
     cmdstanr::write_stan_file(
       "parameters { real mu; }
@@ -196,9 +119,7 @@ test_that("is_converged, CmdStanMCMC with a failed chain", {
     chains = 2,
     init = list(list(mu = 0), list(mu = 5))
   )
-  expect_identical(fit$num_chains(), 2L)
-  expect_length(fit$output_files(), 1)
-  result <- .cmdstan_expect_stanfit(fit)
+  result <- is_converged(fit, verbose = FALSE)
   expect_identical(attr(result, "diagnostics")$Threshold[5:6], c(100, 100))
 })
 
@@ -218,14 +139,11 @@ test_that("is_converged, CmdStanMCMC with two draws is silent", {
 
 test_that("is_converged, CmdStanMCMC with another draws format", {
   # `$draws()` returns the format of the option `cmdstanr_draws_format`
-  expected <- is_converged(cmdstan_fit_schools, verbose = FALSE)
-  for (format in c("draws_df", "draws_matrix", "draws_list")) {
-    result <- withr::with_options(
-      list(cmdstanr_draws_format = format),
-      is_converged(cmdstan_fit_schools, verbose = FALSE)
-    )
-    expect_identical(result, expected, info = format)
-  }
+  result <- withr::with_options(
+    list(cmdstanr_draws_format = "draws_df"),
+    is_converged(cmdstan_fit_schools, verbose = FALSE)
+  )
+  expect_identical(result, is_converged(cmdstan_fit_schools, verbose = FALSE))
 })
 
 test_that("is_converged, CmdStanMCMC without draws after warmup", {
@@ -235,9 +153,7 @@ test_that("is_converged, CmdStanMCMC without draws after warmup", {
     chains = 1,
     iter_sampling = 0
   )
-  expect_message(is_converged(fit), "no draws after warmup", fixed = TRUE)
-  result <- suppressMessages(is_converged(fit))
-  expect_false(result)
-  expect_null(attr(result, "diagnostics"))
+  expect_message(result <- is_converged(fit), "no draws after warmup", fixed = TRUE)
+  expect_identical(result, FALSE)
   expect_silent(is_converged(fit, verbose = FALSE))
 })

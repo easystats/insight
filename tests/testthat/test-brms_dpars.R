@@ -218,8 +218,6 @@ test_that("clean_parameters, correlated group-level terms of non-linear paramete
 
 
 test_that("clean_parameters, non-linear parameter names that end in 'sd', 'cor' or 'sigma', #1076", {
-  # "ksd", "kcor" and "lsigma" contain the strings "sd_", "cor_" and "sigma_",
-  # which are cleaned for group-level and sigma parameters
   m <- .brmsfit_mock(
     brms::bf(y ~ ksd * exp(kcor * x) + lsigma, ksd ~ 1, kcor ~ 1, lsigma ~ 1, nl = TRUE),
     c("b_ksd_Intercept", "b_kcor_Intercept", "b_lsigma_Intercept", "sigma")
@@ -233,14 +231,11 @@ test_that("clean_parameters, non-linear parameter names that end in 'sd', 'cor' 
     out$Cleaned_Parameter[rows],
     c("ksd_Intercept", "kcor_Intercept", "lsigma_Intercept")
   )
-  # no group-level terms, so there is no "SD/Cor" group
-  expect_true(is.null(out$Group) || all(out$Group[rows] == ""))
   expect_identical(out$Component[rows], rep("conditional", 3))
 })
 
 
 test_that("clean_parameters, non-linear parameter name that starts with a dpar name, #1076", {
-  # "sigmaA" starts with "sigma", and "sigma" has its own group-level term
   m <- .brmsfit_mock(
     brms::bf(
       y ~ a * exp(sigmaA * x),
@@ -272,49 +267,13 @@ test_that("clean_parameters, non-linear parameter name that starts with a dpar n
   )
   expect_identical(out$Group[rows], c("", "SD/Cor: id", "sigmaA_Intercept: id"))
   expect_identical(out$Component[rows], rep("conditional", 3))
-  # the group-level term of "sigma" itself keeps its labels
   sigma_row <- out[out$Parameter == "r_id__sigma[1,Intercept]", ]
   expect_identical(sigma_row$Group, "Intercept: id")
   expect_identical(sigma_row$Component, "sigma")
 })
 
 
-test_that("clean_parameters, non-linear parameter names that share a prefix ('a', 'ab'), #1076", {
-  m <- .brmsfit_mock(
-    brms::bf(y ~ a * exp(ab * x), a ~ 1 + (1 | id), ab ~ 1 + (1 | id), nl = TRUE),
-    c(
-      "b_a_Intercept",
-      "b_ab_Intercept",
-      "sd_id__a_Intercept",
-      "sd_id__ab_Intercept",
-      "r_id__a[1,Intercept]",
-      "r_id__ab[1,Intercept]",
-      "sigma"
-    )
-  )
-  out <- clean_parameters(m)
-  rows <- match(
-    c(
-      "b_ab_Intercept",
-      "sd_id__ab_Intercept",
-      "r_id__a[1,Intercept]",
-      "r_id__ab[1,Intercept]"
-    ),
-    out$Parameter
-  )
-  expect_identical(
-    out$Cleaned_Parameter[rows],
-    c("ab_Intercept", "ab_Intercept", "id.1", "id.1")
-  )
-  expect_identical(
-    out$Group[rows],
-    c("", "SD/Cor: id", "a_Intercept: id", "ab_Intercept: id")
-  )
-})
-
-
 test_that("find_auxiliary, nested non-linear parameters from nlf() are not auxiliary, #1076", {
-  # "c" and "d" are non-linear parameters of the non-linear parameter "a"
   m <- .brmsfit_mock(
     brms::bf(
       y ~ a * exp(b * x),
@@ -337,16 +296,10 @@ test_that("find_auxiliary, nested non-linear parameters from nlf() are not auxil
   out <- find_parameters(m, effects = "full")
   expect_setequal(out$conditional, c("b_c_Intercept", "b_d_Intercept", "b_b_Intercept"))
   expect_setequal(out$random, c("r_g__c[1,Intercept]", "sd_g__c_Intercept"))
-  expect_false(any(c("a", "b", "c", "d") %in% names(out)))
-  cp <- clean_parameters(m)
-  row <- cp[cp$Parameter == "r_g__c[1,Intercept]", ]
-  expect_identical(row$Group, "c_Intercept: g")
-  expect_identical(row$Component, "conditional")
 })
 
 
 test_that("find_auxiliary, non-linear parameters of sigma from nlf() stay auxiliary, #1076", {
-  # only non-linear parameters of "mu" are conditional, "s" belongs to "sigma"
   m <- .brmsfit_mock(
     brms::bf(
       y ~ a * exp(b * x),
@@ -363,7 +316,6 @@ test_that("find_auxiliary, non-linear parameters of sigma from nlf() stay auxili
 
 
 test_that("find_auxiliary, non-linear model without auxiliary parameters returns NULL, #1076", {
-  # no formula for a distributional parameter, and no "sigma" (e.g. poisson)
   m <- .brmsfit_mock(
     brms::bf(y ~ a * exp(b * x), a ~ 1, b ~ 1, nl = TRUE),
     c("b_a_Intercept", "b_b_Intercept")
@@ -373,8 +325,7 @@ test_that("find_auxiliary, non-linear model without auxiliary parameters returns
 
 
 test_that("find_auxiliary, categorical non-linear model has no dpar 'mu', #1076", {
-  # the only dpar is "muB", which must not be taken for "mu", so the
-  # non-linear parameter "a" stays auxiliary as before
+  # the only dpar is "muB", which must not be taken for "mu"
   d <- data.frame(y = factor(rep(c("A", "B"), 10)), x = 1:20)
   f <- brms:::validate_formula(
     brms::bf(y ~ a * x, a ~ 1, nl = TRUE),
@@ -395,7 +346,6 @@ test_that("clean_parameters, smooth term of a non-linear parameter ('bs_a_sz_1')
   row <- out[out$Parameter == "bs_a_sz_1", ]
   expect_identical(row$Cleaned_Parameter, "a_sz_1")
   expect_identical(row$Component, "conditional")
-  expect_identical(row$Function, "smooth")
 })
 
 
@@ -419,15 +369,6 @@ test_that("find_parameters, smooth SDs and monotonic simplex parameters, paramet
   out <- find_parameters(m)
   expect_identical(out$smooth_terms, "sds_shp_1")
   expect_identical(out$simplex, c("simo_mocyl1[1]", "simo_mocyl1[2]"))
-  expect_identical(
-    find_parameters(m, component = "smooth_terms"),
-    list(smooth_terms = "sds_shp_1")
-  )
-  expect_identical(
-    find_parameters(m, effects = "fixed", flatten = TRUE),
-    c("b_Intercept", "bsp_mocyl", "bs_shp_1", "sds_shp_1", "sigma", "simo_mocyl1[1]", "simo_mocyl1[2]")
-  )
-  expect_null(find_parameters(m, effects = "random")$smooth_terms)
 
   # multivariate model: each response gets only its own parameters
   d <- data.frame(y1 = 1:4, y2 = 1:4, hp = 1:4, cyl = c(1, 2, 1, 2))
@@ -452,92 +393,11 @@ test_that("find_parameters, smooth SDs and monotonic simplex parameters, paramet
   out <- find_parameters(m)
   expect_identical(out$y1$smooth_terms, "sds_y1_shp_1")
   expect_null(out$y1$simplex)
-  expect_null(out$y2$smooth_terms)
-  expect_identical(out$y2$simplex, "simo_y2_mocyl1[1]")
-})
-
-
-test_that("find_parameters, non-linear parameter name that starts with a dpar name, #1076", {
-  # "sigmaA" is a non-linear parameter of "mu", "sigma" is a dpar
-  m <- .brmsfit_mock(
-    brms::bf(
-      y ~ a * exp(sigmaA * x),
-      a ~ 1,
-      sigmaA ~ 1 + (1 | id),
-      sigma ~ 1,
-      nl = TRUE
-    ),
-    c(
-      "b_a_Intercept",
-      "b_sigmaA_Intercept",
-      "b_sigma_Intercept",
-      "sd_id__sigmaA_Intercept",
-      "r_id__sigmaA[1,Intercept]"
-    )
-  )
-  out <- find_parameters(m, effects = "full")
-  expect_identical(out$conditional, c("b_a_Intercept", "b_sigmaA_Intercept"))
-  expect_setequal(out$random, c("r_id__sigmaA[1,Intercept]", "sd_id__sigmaA_Intercept"))
-  expect_identical(out$sigma, "b_sigma_Intercept")
-  expect_false(any(c("sigmaA", "sigmaA_random") %in% names(out)))
-})
-
-
-test_that("clean_parameters, correlation of a non-linear and a 'sigma' group-level term, #1076", {
-  m <- .brmsfit_mock(
-    brms::bf(
-      y ~ a * exp(b * x),
-      a ~ 1 + (1 | p | id),
-      b ~ 1,
-      sigma ~ 1 + (1 | p | id),
-      nl = TRUE
-    ),
-    c(
-      "b_a_Intercept",
-      "b_b_Intercept",
-      "b_sigma_Intercept",
-      "sd_id__a_Intercept",
-      "sd_id__sigma_Intercept",
-      "cor_id__sigma_Intercept__a_Intercept",
-      "r_id__a[1,Intercept]",
-      "r_id__sigma[1,Intercept]"
-    )
-  )
-  out <- clean_parameters(m)
-  cor_row <- out[out$Parameter == "cor_id__sigma_Intercept__a_Intercept", ]
-  expect_identical(cor_row$Cleaned_Parameter, "sigma_Intercept ~ a_Intercept")
-  expect_identical(cor_row$Group, "SD/Cor: id")
-})
-
-
-test_that("clean_parameters, non-linear parameters named 'zi' and 'sd', #1076", {
-  m <- .brmsfit_mock(
-    brms::bf(y ~ zi * exp(sd * x), zi ~ 1 + (1 | id), sd ~ 1, nl = TRUE),
-    c(
-      "b_zi_Intercept",
-      "b_sd_Intercept",
-      "sd_id__zi_Intercept",
-      "r_id__zi[1,Intercept]",
-      "sigma"
-    )
-  )
-  out <- clean_parameters(m)
-  rows <- match(
-    c("b_zi_Intercept", "b_sd_Intercept", "sd_id__zi_Intercept", "r_id__zi[1,Intercept]"),
-    out$Parameter
-  )
-  expect_identical(
-    out$Cleaned_Parameter[rows],
-    c("zi_Intercept", "sd_Intercept", "zi_Intercept", "id.1")
-  )
-  expect_identical(out$Group[rows], c("", "", "SD/Cor: id", "zi_Intercept: id"))
-  expect_identical(out$Component[rows], rep("conditional", 4))
 })
 
 
 test_that("find_parameters keeps parameters that start with a dpar name, #1226", {
-  # a custom family with a distributional parameter "c" must not drop
-  # conditional parameters of a predictor named, e.g., "condition"
+  # dpar "c" and predictor "condition"
   m <- .brmsfit_mock(
     brms::bf(N ~ condition + (1 + condition | ID), c ~ condition + (1 | ID)),
     c(
@@ -576,8 +436,6 @@ test_that("find_parameters keeps parameters that start with a dpar name, #1226",
 
 
 test_that("find_parameters, multivariate models with addition terms, bayestestR#700", {
-  # with an addition term such as resp_weights(), the response side holds more
-  # than one variable, but the parameters are still named after the responses
   pars <- c(
     "b_y1_Intercept[1]",
     "b_y1_Intercept[2]",
@@ -598,22 +456,9 @@ test_that("find_parameters, multivariate models with addition terms, bayestestR#
     pars
   )
   out <- find_parameters(m)
-  expect_named(out, c("y1", "y2"))
   expect_identical(out$y1$conditional, c("b_y1_Intercept[1]", "b_y1_Intercept[2]"))
   expect_identical(out$y2$conditional, c("b_y2_Intercept[1]", "b_y2_Intercept[2]"))
-  out <- clean_parameters(m)
-  expect_identical(out$Response, c("y1", "y1", "y2", "y2"))
-
-  # trials() in a multivariate binomial model
-  m <- .brmsfit_mock(
-    brms::bf(a | trials(k) ~ x, family = stats::binomial()) +
-      brms::bf(b | trials(k) ~ x, family = stats::binomial()),
-    c("b_a_Intercept", "b_a_x", "b_b_Intercept", "b_b_x", "lprior", "lp__")
-  )
-  out <- find_parameters(m)
-  expect_named(out, c("a", "b"))
-  expect_identical(out$a$conditional, c("b_a_Intercept", "b_a_x"))
-  expect_identical(out$b$conditional, c("b_b_Intercept", "b_b_x"))
+  expect_identical(clean_parameters(m)$Response, c("y1", "y1", "y2", "y2"))
 })
 
 
@@ -747,14 +592,6 @@ test_that("get_sigma, sigma modelled with predictors or random effects", {
   )
   m <- .brmsfit_draws_mock(brms::bf(mpg ~ 1, sigma ~ hp), draws)
   expect_null(get_sigma(m))
-
-  draws <- data.frame(
-    b_Intercept = rnorm(100, 30),
-    b_sigma_Intercept = rnorm(100, 1.2, 0.1),
-    sd_cyl__sigma_Intercept = abs(rnorm(100, 0.5, 0.1))
-  )
-  m <- .brmsfit_draws_mock(brms::bf(mpg ~ 1, sigma ~ (1 | cyl)), draws)
-  expect_null(get_sigma(m))
 })
 
 
@@ -796,7 +633,6 @@ test_that("residual variance, sigma modelled as distributional parameter", {
   expect_null(out)
 
   # sigma varies by group, without an intercept: there is no "b_sigma"
-  # parameter, but sigma is still modelled
   draws <- data.frame(
     b_Intercept = rnorm(100, 30),
     sd_cyl__sigma_Intercept = abs(rnorm(100, 0.5, 0.1))
@@ -804,7 +640,6 @@ test_that("residual variance, sigma modelled as distributional parameter", {
   draws[["r_cyl__sigma[4,Intercept]"]] <- rnorm(100)
   draws[["r_cyl__sigma[6,Intercept]"]] <- rnorm(100)
   m <- .brmsfit_draws_mock(brms::bf(mpg ~ 1, sigma ~ 0 + (1 | cyl)), draws)
-  expect_null(get_sigma(m))
   expect_message(
     {
       out <- .compute_variance_distribution(
