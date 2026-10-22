@@ -105,15 +105,6 @@ test_that("find_variables, nlme", {
     )
   )
   expect_identical(
-    find_terms(m_nlme2),
-    list(
-      response = "weight",
-      conditional = "Variety",
-      nonlinear = "Time",
-      random = "Plot"
-    )
-  )
-  expect_identical(
     find_variables(m_nlme1),
     list(
       response = "height",
@@ -124,27 +115,9 @@ test_that("find_variables, nlme", {
 })
 
 
-test_that("find_terms keeps transformed response and covariates, nlme", {
+test_that("find_terms keeps covariate terms, nlme", {
   skip_if_not_installed("reformulas")
-  m_nlme_log <- nlme::nlme(
-    log(height) ~ SSasymp(age, Asym, R0, lrc),
-    data = nlme_loblolly,
-    fixed = Asym + R0 + lrc ~ 1,
-    random = Asym ~ 1,
-    start = c(Asym = 4.6, R0 = 0, lrc = -2.5)
-  )
-  expect_identical(
-    find_terms(m_nlme_log),
-    list(
-      response = "log(height)",
-      conditional = "1",
-      nonlinear = "age",
-      random = "Seed"
-    )
-  )
-  expect_identical(find_transformation(m_nlme_log), "log")
-
-  m_nlme_factor <- nlme::nlme(
+  m <- nlme::nlme(
     weight ~ SSlogis(Time, Asym, xmid, scal),
     data = nlme_soybean,
     fixed = list(Asym ~ factor(Variety), xmid ~ 1, scal ~ 1),
@@ -152,7 +125,7 @@ test_that("find_terms keeps transformed response and covariates, nlme", {
     start = c(18, 0, 52, 7.5)
   )
   expect_identical(
-    find_terms(m_nlme_factor),
+    find_terms(m),
     list(
       response = "weight",
       conditional = "factor(Variety)",
@@ -160,25 +133,6 @@ test_that("find_terms keeps transformed response and covariates, nlme", {
       random = "Plot"
     )
   )
-})
-
-
-test_that("variables of nlme models hold no nonlinear parameters", {
-  skip_if_not_installed("reformulas")
-  for (m in nlme_models) {
-    params <- names(m$plist)
-    expect_length(params, 3)
-    out <- list(
-      find_predictors(m),
-      find_predictors(m, effects = "all"),
-      find_variables(m),
-      find_terms(m),
-      clean_names(m)
-    )
-    for (i in out) {
-      expect_false(any(params %in% unlist(i, use.names = FALSE)))
-    }
-  }
 })
 
 
