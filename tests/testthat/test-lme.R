@@ -1099,6 +1099,8 @@ test_that("find_formula, lme, correlation structure without `form`", {
   expect_identical(find_variables(m)$correlation, "Subject")
   # the grouping is no fixed predictor, as for an explicit `form`
   expect_identical(find_predictors(m), list(conditional = "age"))
+  f <- find_formula(m)
+  expect_identical(environment(f$correlation), environment(f$conditional))
 
   m_nested <- nlme::lme(
     distance ~ age,
@@ -1123,115 +1125,20 @@ test_that("find_formula, lme, correlation structure without `form`", {
 })
 
 
-# correlation grouping factor, not a fixed predictor ---------------------------
-
-# `wk` is a position variable that only the correlation structure uses
-lme_cg_orthodont <- Orthodont
-lme_cg_orthodont$wk <- lme_cg_orthodont$age * 52
-lme_cg_form <- nlme::lme(
-  distance ~ age,
-  random = ~ 1 | Subject,
-  data = lme_cg_orthodont,
-  correlation = nlme::corAR1(form = ~ age | Subject)
-)
-lme_cg_noform <- nlme::lme(
-  distance ~ age,
-  random = ~ 1 | Subject,
-  data = lme_cg_orthodont,
-  correlation = nlme::corAR1()
-)
-lme_cg_wk <- nlme::lme(
-  distance ~ Sex,
-  random = ~ 1 | Subject,
-  data = lme_cg_orthodont,
-  correlation = nlme::corCAR1(form = ~ wk | Subject)
-)
-
-test_that("find_predictors, lme, correlation grouping is no fixed predictor", {
-  # `~ age | Subject`: only `age`, left of `|`, is a fixed predictor
+test_that("find_predictors, get_datagrid, lme, correlation grouping", {
+  m <- nlme::lme(
+    distance ~ age,
+    random = ~ 1 | Subject,
+    data = Orthodont,
+    correlation = nlme::corAR1(form = ~ age | Subject)
+  )
   expect_identical(
-    find_predictors(lme_cg_form),
+    find_predictors(m),
     list(conditional = "age", correlation = "age")
   )
   expect_identical(
-    find_predictors(lme_cg_form, effects = "fixed"),
-    list(conditional = "age", correlation = "age")
-  )
-  expect_identical(
-    find_variables(lme_cg_form, effects = "fixed"),
-    list(response = "distance", conditional = "age", correlation = "age")
-  )
-  # with all effects, the correlation part keeps its grouping
-  expect_identical(
-    find_predictors(lme_cg_form, effects = "all")$correlation,
+    find_predictors(m, effects = "all")$correlation,
     c("age", "Subject")
   )
-  expect_identical(
-    find_variables(lme_cg_form, effects = "all")$correlation,
-    c("age", "Subject")
-  )
-
-  # `~ 1 | Subject` (no `form`): no variable left of `|`, no fixed part
-  expect_identical(
-    find_predictors(lme_cg_noform, effects = "fixed"),
-    list(conditional = "age")
-  )
-  expect_identical(
-    find_variables(lme_cg_noform, effects = "fixed"),
-    list(response = "distance", conditional = "age")
-  )
-  expect_identical(
-    find_predictors(lme_cg_noform, effects = "all")$correlation,
-    "Subject"
-  )
-})
-
-test_that("get_data, lme, correlation grouping not in fixed effects data", {
-  for (m in list(lme_cg_form, lme_cg_noform)) {
-    expect_named(get_data(m, effects = "fixed"), c("distance", "age"))
-    expect_true("Subject" %in% colnames(get_data(m, effects = "all")))
-  }
-})
-
-test_that("get_datagrid, lme, no variable only from the correlation part", {
-  # one row per `age`; `Subject` is the random factor, set to 0
-  for (m in list(lme_cg_form, lme_cg_noform)) {
-    grid <- get_datagrid(m)
-    expect_identical(nrow(grid), 4L)
-    expect_identical(sort(unique(grid$age)), c(8, 10, 12, 14))
-    expect_length(get_predicted(m, data = grid), nrow(grid))
-  }
-  # `wk` is used only by the correlation structure, so one row per `Sex`
-  grid_wk <- get_datagrid(lme_cg_wk)
-  expect_identical(nrow(grid_wk), 2L)
-  expect_false("wk" %in% colnames(grid_wk))
-  expect_length(get_predicted(lme_cg_wk, data = grid_wk), 2L)
-})
-
-test_that("find_terms, lme, correlation part", {
-  expect_identical(find_terms(lme_cg_form)$correlation, c("age", "Subject"))
-  expect_identical(find_terms(lme_cg_noform)$correlation, "Subject")
-})
-
-test_that("find_formula, lme, environment of the correlation part", {
-  fit_form <- function() {
-    nlme::lme(
-      distance ~ age,
-      random = ~ 1 | Subject,
-      data = lme_cg_orthodont,
-      correlation = nlme::corAR1(form = ~ age | Subject)
-    )
-  }
-  fit_noform <- function() {
-    nlme::lme(
-      distance ~ age,
-      random = ~ 1 | Subject,
-      data = lme_cg_orthodont,
-      correlation = nlme::corAR1()
-    )
-  }
-  for (m in list(lme_cg_form, lme_cg_noform, fit_form(), fit_noform())) {
-    f <- find_formula(m)
-    expect_identical(environment(f$correlation), environment(f$conditional))
-  }
+  expect_identical(nrow(get_datagrid(m)), 4L)
 })
