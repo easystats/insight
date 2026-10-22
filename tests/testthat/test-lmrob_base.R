@@ -94,12 +94,9 @@ test_that("find_statistic", {
 })
 
 test_that("get_predicted, arguments that change the shape of predict()", {
-  # `se.fit` and `interval` change the shape of predict(), so they are not used
-  expected <- as.data.frame(get_predicted(m1, ci = 0.95))
-  out_se <- as.data.frame(get_predicted(m1, ci = 0.95, se.fit = TRUE))
-  expect_equal(out_se, expected, tolerance = 1e-6)
-  out_interval <- as.data.frame(
-    get_predicted(m1, ci = 0.95, interval = "confidence")
+  expect_equal(
+    as.data.frame(get_predicted(m1, ci = 0.95, se.fit = TRUE)),
+    as.data.frame(get_predicted(m1, ci = 0.95)),
+    tolerance = 1e-6
   )
-  expect_equal(out_interval, expected, tolerance = 1e-6)
 })

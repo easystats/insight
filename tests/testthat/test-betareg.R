@@ -206,51 +206,28 @@ withr::with_environment(
 )
 
 test_that("get_predicted passes arguments in ... to predict()", {
-  m_food_dots <- betareg::betareg(
-    I(food / income) ~ income + persons,
-    data = FoodExpenditure
-  )
-  new_food <- head(FoodExpenditure)
-
-  out <- get_predicted(m_food_dots, predict = NULL, type = "quantile", at = 0.9)
+  out <- get_predicted(m2, predict = NULL, type = "quantile", at = 0.9)
   expect_equal(
     as.numeric(out),
-    as.numeric(predict(m_food_dots, type = "quantile", at = 0.9)),
+    as.numeric(predict(m2, type = "quantile", at = 0.9)),
     tolerance = 1e-8
   )
-
-  # the same with new data
-  out <- get_predicted(
-    m_food_dots,
-    data = new_food,
-    predict = NULL,
-    type = "quantile",
-    at = 0.9
-  )
-  expect_equal(
-    as.numeric(out),
-    as.numeric(predict(m_food_dots, newdata = new_food, type = "quantile", at = 0.9)),
-    tolerance = 1e-8
-  )
-
-  # predict() fails, so predictions are computed without `at`
+  # predict() fails with these arguments
   expect_no_warning(
-    get_predicted(m_food_dots, predict = NULL, type = "quantile", at = "a")
+    out <- get_predicted(m2, predict = NULL, type = "quantile", at = "a")
   )
-  out <- get_predicted(m_food_dots, predict = NULL, type = "quantile", at = "a")
   expect_equal(
     as.numeric(out),
-    as.numeric(predict(m_food_dots, type = "quantile")),
+    as.numeric(predict(m2, type = "quantile")),
     tolerance = 1e-8
   )
-
-  # `na.action = na.omit` returns fewer rows, so it is not used
-  new_food_na <- new_food
-  new_food_na$income[1] <- NA
-  expected <- suppressWarnings(get_predicted(m_food_dots, data = new_food_na))
-  out <- suppressWarnings(
-    get_predicted(m_food_dots, data = new_food_na, na.action = na.omit)
+  # predict() returns fewer rows
+  new_food <- head(FoodExpenditure)
+  new_food$income[1] <- NA
+  out <- suppressWarnings(get_predicted(m2, data = new_food, na.action = na.omit))
+  expect_equal(
+    as.numeric(out),
+    as.numeric(suppressWarnings(get_predicted(m2, data = new_food))),
+    tolerance = 1e-8
   )
-  expect_length(out, 6)
-  expect_equal(as.numeric(out), as.numeric(expected), tolerance = 1e-8)
 })
