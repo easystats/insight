@@ -48,6 +48,11 @@
 
 ## Bug fixes
 
+* `get_data()` for multivariate models from package _brms_ now also returns
+  the predictors of distributional parameters, such as `sigma ~ z`, when the
+  data are taken from the model frame. This is the case for models fitted with
+  `brm_multiple()`. Before, these columns were missing.
+
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that
   convergence cannot be assessed in two more cases. In the first case, the
   call does not write the formula as a `~` expression, such as

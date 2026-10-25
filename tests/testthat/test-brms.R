@@ -1789,3 +1789,27 @@ test_that("brms dpars find_auxiliary", {
   expect_identical(dim(out), c(48L, 5L))
   expect_identical(unique(out$Component), c("conditional", "coi", "phi", "zoi"))
 })
+
+test_that("get_data, multivariate model with sigma, Issue #1296", {
+  # apparently BH is required to fit these brms models
+  skip_if_not_installed("BH")
+  # sink() writing permission fail on some Windows CI machines
+  skip_on_os("windows")
+
+  set.seed(123)
+  d <- data.frame(y1 = rnorm(30), y2 = rnorm(30), x = rnorm(30), z = rnorm(30))
+  void <- suppressMessages(suppressWarnings(capture.output({
+    mod <- brms::brm(
+      brms::bf(brms::mvbind(y1, y2) ~ x, sigma ~ z),
+      data = d,
+      refresh = 0,
+      chains = 1,
+      iter = 300,
+      cores = 1,
+      silent = 2
+    )
+  })))
+
+  out <- get_data(mod, source = "mf")
+  expect_named(out, c("y1", "y2", "x", "z"))
+})
