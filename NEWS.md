@@ -1,4 +1,4 @@
-# insight (devel)
+# insight 1.6.1
 
 ## New supported models
 

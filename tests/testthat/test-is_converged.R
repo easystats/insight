@@ -13,10 +13,11 @@ model <- suppressMessages(suppressWarnings(lme4::glmer(
 )))
 
 test_that("is_converged", {
-  expect_true(is_converged(model))
+  skip_if_not_installed("lme4", minimum_version = "2.1.0")
+  expect_false(is_converged(model))
   expect_equal(
     is_converged(model),
-    structure(TRUE, gradient = NA_real_),
+    structure(FALSE, gradient = 0.001793402),
     tolerance = 1e-3
   )
 })
