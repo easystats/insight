@@ -1,4 +1,8 @@
+skip("currently fails due to lme4 update")
 skip_if_not_installed("panelr")
+
+## FIXME: currently fails due to lme4 update, see
+## https://github.com/lme4/lme4/issues/1003
 
 data("WageData", package = "panelr")
 wages <- panelr::panel_data(WageData, id = id, wave = t)
