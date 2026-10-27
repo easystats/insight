@@ -18,6 +18,13 @@
 
 ## Changes
 
+* `find_predictors()` and `find_variables()` no longer return the grouping
+  factor of a correlation structure, like `Subject` in
+  `corAR1(form = ~ age | Subject)`, as fixed predictor for models from *nlme*
+  and `MASS::glmmPQL()`. It is still returned for `effects = "all"`.
+  `get_datagrid()` no longer includes variables that are only used in the
+  correlation structure, unless requested in `by`.
+
 * `find_formula()` for models from `nlme::lme()`, `nlme::gls()`,
   `nlme::nlme()` and `MASS::glmmPQL()` now reads the `correlation` part from
   the fitted correlation structure, not from the model call. Before, a
@@ -26,8 +33,8 @@
   `correlation` part. A global structure object that was changed after the fit
   gave the changed formula. A structure without `form` now returns the
   grouping that the model used, like `~1 | Subject`. `find_variables()` and
-  `find_predictors()` then also return that grouping factor as a
-  `correlation` variable, as they did before for a `form` like `~1 | Subject`.
+  `find_predictors()` with `effects = "all"` then also return that grouping
+  factor as a `correlation` variable.
   If that formula has no variable, like `~1` for `gls()` models, there is no
   `correlation` part.
 
