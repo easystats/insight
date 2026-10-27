@@ -1177,6 +1177,9 @@ test_that("export_table, html output for lists with group columns", {
   expect_snapshot(gt_table_lines(
     export_table(list(d_fixed, d_random), format = "html")
   ))
+  # the first caption is a row group label, not also the title
+  out <- export_table(list(d_fixed, d_random), format = "html")
+  expect_null(out[["_heading"]]$title)
   # tables that already have a "Component" column
   d_cond <- data.frame(
     Parameter = "x",

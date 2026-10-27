@@ -159,7 +159,9 @@
   column now labels the row groups with the table captions only, like
   `"Fixed Effects"`. Before, the labels repeated the `Effects` value, like
   `"fixed - Fixed Effects"`. If the `Effects` column has one value for each
-  caption, `export_table()` removes it. Otherwise, it is kept.
+  caption, `export_table()` removes it. Otherwise, it is kept. For lists with
+  an `Effects` or `Component` column, the first caption is no longer also used
+  as the table title.
 
 * `get_variance()` no longer returns `NULL` for models from `MASS::glmmPQL()`.
   `get_modelmatrix()` failed for these models with the error

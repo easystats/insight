@@ -560,6 +560,10 @@ print.insight_table <- function(x, ...) {
           i
         })
       )
+      # rbind() keeps the caption of the first table, which would also become
+      # the title. The captions are already the row group labels.
+      attr(x, "table_caption") <- NULL
+      attr(x, "table_title") <- NULL
       # the captions are the row group labels. An "Effects" column with one
       # value for each caption only repeats the caption, and gt would label
       # the row groups like "fixed - Fixed Effects"
