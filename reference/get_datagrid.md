@@ -90,7 +90,9 @@ get_datagrid(
 
   - **Select variables only:**
 
-    - `"all"`, which will include all variables or predictors.
+    - `"all"`, which will include all variables or predictors. For
+      models from *nlme*, variables that only the correlation structure
+      uses are left out.
 
     - a character vector of one or more variable or predictor names,
       like `c("Species", "Sepal.Width")`, which will create a grid of

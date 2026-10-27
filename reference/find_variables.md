@@ -25,7 +25,10 @@ find_variables(
 
   Should variables for fixed effects (`"fixed"`), random effects
   (`"random"`) or both (`"all"`) be returned? Only applies to mixed
-  models. May be abbreviated.
+  models. May be abbreviated. For
+  [`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md)
+  and `find_variables()`, it also applies to the correlation part of
+  models from *nlme* (like `gls`).
 
 - component:
 
@@ -124,6 +127,8 @@ Following are valid options:
 
 - `"correlation"`: for models with correlation-component, like `gls`,
   the variables used to describe the correlation structure are returned.
+  The grouping factor (like `Subject` in `~ age | Subject`) is only
+  returned for `effects = "all"`.
 
 - `"location"`: returns location parameters such as `conditional`,
   `zero_inflated`, `smooth_terms`, or `instruments` (everything that are

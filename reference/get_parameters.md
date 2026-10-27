@@ -113,6 +113,8 @@ Following are valid options:
 
 - `"correlation"`: for models with correlation-component, like `gls`,
   the variables used to describe the correlation structure are returned.
+  The grouping factor (like `Subject` in `~ age | Subject`) is only
+  returned for `effects = "all"`.
 
 - `"location"`: returns location parameters such as `conditional`,
   `zero_inflated`, `smooth_terms`, or `instruments` (everything that are

@@ -21,7 +21,7 @@ methods for more info)."><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -152,7 +152,8 @@ and at which values focal predictors should be represented. If not specified
 otherwise, representative values for numeric variables or predictors are
 evenly distributed from the minimum to the maximum, with a total number of
 <code>length</code> values covering that range (see 'Examples'). Possible options for
-<code>by</code> are:</p><ul><li><p><strong>Select variables only:</strong></p><ul><li><p><code>"all"</code>, which will include all variables or predictors.</p></li>
+<code>by</code> are:</p><ul><li><p><strong>Select variables only:</strong></p><ul><li><p><code>"all"</code>, which will include all variables or predictors. For models from
+<em>nlme</em>, variables that only the correlation structure uses are left out.</p></li>
 <li><p>a character vector of one or more variable or predictor names, like
 <code>c("Species", "Sepal.Width")</code>, which will create a grid of all
 combinations of unique values.</p></li>

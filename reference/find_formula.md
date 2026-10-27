@@ -151,11 +151,12 @@ included.
 
 ## Note
 
-For models of class `lme`, `nlme` or `gls`, the correlation-component is
-the formula of the fitted correlation structure, e.g. `~ t | Subject`
-for `corAR1(form = ~ t | Subject)`. For a structure without `form`, this
-is the grouping that the model used, like `~1 | Subject`. There is no
-correlation-component when that formula has no variable, e.g. `~1`.
+For models of class `lme`, `nlme`, `glmmPQL`, `gls` or `gnls`, the
+correlation-component is the formula of the fitted correlation
+structure, e.g. `~ t | Subject` for `corAR1(form = ~ t | Subject)`, with
+the environment of the model formula. For a structure without `form`,
+this is the grouping that the model used, like `~1 | Subject`. There is
+no correlation-component when that formula has no variable, e.g. `~1`.
 
 ## Examples
 
@@ -165,7 +166,7 @@ m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
 find_formula(m)
 #> $conditional
 #> mpg ~ wt + cyl + vs
-#> <environment: 0x61cc0a4976c0>
+#> <environment: 0x56ca816e45d8>
 #> 
 #> attr(,"class")
 #> [1] "insight_formula" "list"           
@@ -175,11 +176,11 @@ f <- find_formula(m)
 f
 #> $conditional
 #> Sepal.Length ~ Sepal.Width
-#> <environment: 0x61cc0a4976c0>
+#> <environment: 0x56ca816e45d8>
 #> 
 #> $random
 #> ~1 | Species
-#> <environment: 0x61cc0974e438>
+#> <environment: 0x56ca809d3528>
 #> 
 #> attr(,"class")
 #> [1] "insight_formula" "list"           
