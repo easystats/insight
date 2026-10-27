@@ -142,6 +142,12 @@
   columns with two or more values. Before, it made no row groups in these
   cases. With `row_groups`, it still makes no row groups in these cases.
 
+* `export_table(format = "html")` for a list of data frames with an `Effects`
+  column now labels the row groups with the table captions only, like
+  `"Fixed Effects"`. Before, the labels repeated the `Effects` value, like
+  `"fixed - Fixed Effects"`. If the `Effects` column has one value for each
+  caption, `export_table()` removes it. Otherwise, it is kept.
+
 * `get_variance()` no longer returns `NULL` for models from `MASS::glmmPQL()`.
   `get_modelmatrix()` failed for these models with the error
   `object 'zz' not found`, because the model terms have the working response

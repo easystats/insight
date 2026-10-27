@@ -273,7 +273,7 @@ export_table <- function(
   if (identical(format, "html") && !is.data.frame(x) && is.list(x)) {
     first_table <- Find(is.data.frame, x)
     if (!is.null(first_table)) {
-      list_columns <- ncol(first_table)
+      list_columns <- colnames(first_table)
     }
   }
 
@@ -526,17 +526,25 @@ print.insight_table <- function(x, ...) {
 # small helper ----------------------
 
 # the html output may bind a list of tables with an added "Component" column
-# (from the captions) as the last column. Then an "align" string with one
-# character per column of one table gets one more character for it, so that
+# (from the captions) as the last column, and may remove an "Effects" column.
+# Then an "align" string with one character per column of one table gets the
+# characters of the bound columns, "c" for the added one, so that
 # `.format_html_table()` skips it like the other group columns
 .html_list_align <- function(align, list_columns, x) {
   # `list_columns` is NULL if `x` was not a list of data frames
-  added_column <- is.data.frame(x) && isTRUE(ncol(x) == list_columns + 1)
   align_string <- is.character(align) &&
     length(align) == 1 &&
     !align %in% c("left", "right", "center", "firstleft")
-  if (added_column && align_string && isTRUE(nchar(align) == list_columns)) {
-    align <- paste0(align, "c")
+  if (
+    is.data.frame(x) &&
+      !is.null(list_columns) &&
+      align_string &&
+      isTRUE(nchar(align) == length(list_columns))
+  ) {
+    chars <- stats::setNames(strsplit(align, "", fixed = TRUE)[[1]], list_columns)
+    chars <- chars[colnames(x)]
+    chars[is.na(chars)] <- "c"
+    align <- paste(chars, collapse = "")
   }
   align
 }
@@ -552,6 +560,19 @@ print.insight_table <- function(x, ...) {
           i
         })
       )
+      # the captions are the row group labels. An "Effects" column with one
+      # value for each caption only repeats the caption, and gt would label
+      # the row groups like "fixed - Fixed Effects"
+      if (all(c("Effects", "Component") %in% colnames(x))) {
+        one_value <- vapply(
+          split(x$Effects, x$Component),
+          function(i) n_unique(i) <= 1,
+          logical(1)
+        )
+        if (all(one_value)) {
+          x$Effects <- NULL
+        }
+      }
     } else if (identical(format, "tt")) {
       # add table caption as group variable, and bind tables
       # we then extract row headers based on values in the group indices
