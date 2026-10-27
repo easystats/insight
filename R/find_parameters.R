@@ -854,10 +854,11 @@ find_parameters.mira <- function(x, flatten = FALSE, ...) {
 #' @export
 find_parameters.nls <- function(x, component = "all", flatten = FALSE, ...) {
   component <- validate_argument(component, c("all", "conditional", "nonlinear"))
-  f <- find_formula(x, verbose = FALSE)
-  elements <- .get_elements(effects = "fixed", component = component)
-  f <- .prepare_predictors(x, f, elements)
-  pars <- .return_vars(f, x)
+  # the parameters are the coefficients, not the variables of the formula
+  pars <- list(conditional = names(stats::coef(x)))
+  if (component == "nonlinear") {
+    pars <- pars[0]
+  }
 
   if (flatten) {
     unique(unlist(pars, use.names = FALSE))

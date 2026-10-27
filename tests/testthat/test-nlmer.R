@@ -17,3 +17,10 @@ test_that("model_info", {
 test_that("find_statistic", {
   expect_identical(find_statistic(nm1), "t-statistic")
 })
+
+test_that("find_variables", {
+  expect_identical(
+    find_variables(nm1),
+    list(response = "circumference", nonlinear = "age", random = "Tree")
+  )
+})

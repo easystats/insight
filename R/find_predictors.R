@@ -49,8 +49,9 @@
 #'   for models with zero-inflation or that can model the dispersion parameter.
 #' - `"instruments"`: for instrumental-variable or some fixed effects regression,
 #'   returns the instruments.
-#' - `"nonlinear"`: for non-linear models (like models of class `nlmerMod` or
-#'   `nls`), returns staring estimates for the nonlinear parameters.
+#' - `"nonlinear"`: for non-linear models (like models of class `nlmerMod`),
+#'   returns the nonlinear parameters. Not available for functions that return
+#'   variables, like `find_predictors()`.
 #' - `"correlation"`: for models with correlation-component, like `gls`, the
 #'   variables used to describe the correlation structure are returned. The
 #'   grouping factor (like `Subject` in `~ age | Subject`) is only returned for
@@ -107,6 +108,11 @@
 #'   the original variable names, but excluded the *dependent* (response)
 #'   variables. The return value would be `"gear"`.
 #'
+#' For non-linear models (`nls`, `nlmer` or `nlme`), the parameters of the
+#' nonlinear formula are returned by `find_parameters()`, while
+#' `find_predictors()` and `find_variables()` only return the variables.
+#' Parameters that are elements of a vector, like `b[1]`, are not yet removed.
+#'
 #' @return A list of character vectors that represent the name(s) of the
 #' predictor variables. Depending on the combination of the arguments
 #' `effects` and `component`, the returned list can have following elements:
@@ -124,7 +130,7 @@
 #'   variables used to describe the correlation structure (without the
 #'   grouping factor for `effects = "fixed"`)
 #' - `nonlinear`, for non-linear models (like models of class `nlmerMod` or
-#'   `nls`), the staring estimates for the nonlinear parameters
+#'   `nlme`), the variables of the nonlinear formula
 #' - `smooth_terms` returns smooth terms, only applies to GAMs (or similar
 #'   models that may contain smooth terms)
 #'
@@ -192,6 +198,21 @@ find_predictors.default <- function(
     all_predictors <- unlist(unique(l), use.names = FALSE)
     rs_not_in_pred <- unique(setdiff(random_slope, all_predictors))
     if (length(rs_not_in_pred)) l$random <- c(rs_not_in_pred, l$random)
+  }
+
+  # the parameters of nonlinear models are no predictors
+  nl_parameters <- .nonlinear_parameters(x)
+  if (length(nl_parameters)) {
+    l <- compact_list(lapply(l, function(i) {
+      if (is.list(i)) {
+        compact_list(lapply(i, .remove_values, nl_parameters))
+      } else {
+        .remove_values(i, nl_parameters)
+      }
+    }))
+    if (is_empty_object(l)) {
+      return(NULL)
+    }
   }
 
   if (flatten) {
@@ -782,6 +803,21 @@ find_predictors.marginaleffects <- find_predictors.predictions
     }
   }
   expr
+}
+
+
+# names of the parameters of nonlinear models, which are no variables of the
+# data. A plinear `nls` fit adds `.lin`.
+.nonlinear_parameters <- function(x) {
+  if (inherits(x, "nls")) {
+    names(stats::coef(x))
+  } else if (inherits(x, "nlmerMod")) {
+    .safe(names(lme4::fixef(x)))
+  } else if (inherits(x, "nlme")) {
+    names(x$plist)
+  } else {
+    NULL
+  }
 }
 
 

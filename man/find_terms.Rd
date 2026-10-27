@@ -37,6 +37,8 @@ model (as opposed to the zero-inflated part of a model)
 \item \code{zero_inflated_random}, the names of the random effects (grouping factors)
 \item \code{dispersion}, the name of the dispersion terms
 \item \code{instruments}, the names of instrumental variables
+\item \code{nonlinear}, for nonlinear models from \code{lme4::nlmer()} and \code{nlme::nlme()},
+the variables of the nonlinear formula (see 'Note')
 }
 
 Returns \code{NULL} if no terms could be found (for instance, due to
@@ -46,13 +48,17 @@ problems in accessing the formula).
 Returns a list with the names of all terms, including response
 value and random effects, "as is". This means, on-the-fly tranformations
 or arithmetic expressions like \code{log()}, \code{I()}, \code{as.factor()} etc. are
-preserved.
+preserved. For the nonlinear formula of nonlinear models, only the
+variables are returned (see 'Note').
 }
 \note{
 The difference to \code{\link[=find_variables]{find_variables()}} is that \code{find_terms()}
 may return a variable multiple times in case of multiple transformations
 (see examples below), while \code{find_variables()} returns each variable
-name only once.
+name only once. For non-linear models (\code{nls}, \code{nlmer} or \code{nlme}), the
+nonlinear formula and the random part return the variables, like
+\code{find_variables()}, because the nonlinear formula also holds the
+parameters.
 }
 \section{Parameters, Variables, Predictors and Terms}{
 
@@ -80,6 +86,11 @@ returns each variable name only once. The return value would be \code{"gear"}.
 the original variable names, but excluded the \emph{dependent} (response)
 variables. The return value would be \code{"gear"}.
 }
+
+For non-linear models (\code{nls}, \code{nlmer} or \code{nlme}), the parameters of the
+nonlinear formula are returned by \code{find_parameters()}, while
+\code{find_predictors()} and \code{find_variables()} only return the variables.
+Parameters that are elements of a vector, like \code{b[1]}, are not yet removed.
 }
 
 \examples{

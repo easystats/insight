@@ -70,7 +70,7 @@ the instrumental variables
 variables used to describe the correlation structure (without the
 grouping factor for \code{effects = "fixed"})
 \item \code{nonlinear}, for non-linear models (like models of class \code{nlmerMod} or
-\code{nls}), the staring estimates for the nonlinear parameters
+\code{nlme}), the variables of the nonlinear formula
 \item \code{smooth_terms} returns smooth terms, only applies to GAMs (or similar
 models that may contain smooth terms)
 }
@@ -98,8 +98,9 @@ models that may contain smooth terms).
 for models with zero-inflation or that can model the dispersion parameter.
 \item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
 returns the instruments.
-\item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod} or
-\code{nls}), returns staring estimates for the nonlinear parameters.
+\item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod}),
+returns the nonlinear parameters. Not available for functions that return
+variables, like \code{find_predictors()}.
 \item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
 variables used to describe the correlation structure are returned. The
 grouping factor (like \code{Subject} in \code{~ age | Subject}) is only returned for
@@ -162,6 +163,11 @@ returns each variable name only once. The return value would be \code{"gear"}.
 the original variable names, but excluded the \emph{dependent} (response)
 variables. The return value would be \code{"gear"}.
 }
+
+For non-linear models (\code{nls}, \code{nlmer} or \code{nlme}), the parameters of the
+nonlinear formula are returned by \code{find_parameters()}, while
+\code{find_predictors()} and \code{find_variables()} only return the variables.
+Parameters that are elements of a vector, like \code{b[1]}, are not yet removed.
 }
 
 \examples{
