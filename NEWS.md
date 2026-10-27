@@ -18,6 +18,14 @@
 
 ## Changes
 
+* `find_predictors()`, `find_variables()`, `find_terms()` and `clean_names()`
+  no longer return the nonlinear parameters as variables for models from
+  `stats::nls()`, `lme4::nlmer()` and `nlme::nlme()`. For the nonlinear
+  formula, `find_terms()` now returns the same as `find_variables()`, so
+  transformations like `log(conc)` are no longer returned there.
+  `find_parameters()` for `nls` models now returns the coefficients, not the
+  variables (#350).
+
 * `find_predictors()` and `find_variables()` no longer return the grouping
   factor of a correlation structure, like `Subject` in
   `corAR1(form = ~ age | Subject)`, as fixed predictor for models from *nlme*
