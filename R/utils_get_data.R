@@ -580,12 +580,9 @@
   if (is_mv) {
     fixed.component.data <- switch(
       component,
-      all = c(
-        sapply(model.terms[-1], function(i) i$conditional),
-        sapply(model.terms[-1], function(i) i$zero_inflated),
-        sapply(model.terms[-1], function(i) i$zi),
-        sapply(model.terms[-1], function(i) i$dispersion)
-      ),
+      all = lapply(model.terms[-1], function(i) {
+        i[intersect(names(i), .get_elements("fixed", "all"))]
+      }),
       conditional = sapply(model.terms[-1], function(i) i$conditional),
       zi = ,
       zero_inflated = c(

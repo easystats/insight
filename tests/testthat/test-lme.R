@@ -649,11 +649,10 @@ test_that("find_formula, lme, correlation structure without `form`", {
   )
   expect_equal(find_formula(m)$correlation, ~ 1 | Subject, ignore_attr = TRUE)
   expect_identical(find_variables(m)$correlation, "Subject")
-  # the grouping is also a predictor, as for an explicit `form`
-  expect_identical(
-    find_predictors(m),
-    list(conditional = "age", correlation = "Subject")
-  )
+  # the grouping is no fixed predictor, as for an explicit `form`
+  expect_identical(find_predictors(m), list(conditional = "age"))
+  f <- find_formula(m)
+  expect_identical(environment(f$correlation), environment(f$conditional))
 
   m_nested <- nlme::lme(
     distance ~ age,
@@ -675,4 +674,23 @@ test_that("find_formula, lme, correlation structure without `form`", {
     data = lme_orthodont_t
   )
   expect_named(find_formula(m_none), c("conditional", "random"))
+})
+
+
+test_that("find_predictors, get_datagrid, lme, correlation grouping", {
+  m <- nlme::lme(
+    distance ~ age,
+    random = ~ 1 | Subject,
+    data = Orthodont,
+    correlation = nlme::corAR1(form = ~ age | Subject)
+  )
+  expect_identical(
+    find_predictors(m),
+    list(conditional = "age", correlation = "age")
+  )
+  expect_identical(
+    find_predictors(m, effects = "all")$correlation,
+    c("age", "Subject")
+  )
+  expect_identical(nrow(get_datagrid(m)), 4L)
 })

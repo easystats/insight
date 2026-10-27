@@ -456,6 +456,9 @@ test_that("get_variance errors when performance is not installed, #928", {
     }
   )
   expect_error(get_variance(fm4), "to check for singularity", fixed = TRUE)
+  # afex::mixed() objects keep the lme4 fit in "full_model"
+  m <- structure(list(full_model = fm4), class = "mixed")
+  expect_error(get_variance(m), "to check for singularity", fixed = TRUE)
   skip_if_not_installed("glmmTMB")
   m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = study_data)
   expect_error(get_variance(m), "to check for singularity", fixed = TRUE)

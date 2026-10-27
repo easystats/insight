@@ -18,6 +18,21 @@
 
 ## Changes
 
+* `find_predictors()`, `find_variables()`, `find_terms()` and `clean_names()`
+  no longer return the nonlinear parameters as variables for models from
+  `stats::nls()`, `lme4::nlmer()` and `nlme::nlme()`. For the nonlinear
+  formula, `find_terms()` now returns the same as `find_variables()`, so
+  transformations like `log(conc)` are no longer returned there.
+  `find_parameters()` for `nls` models now returns the coefficients, not the
+  variables (#350).
+
+* `find_predictors()` and `find_variables()` no longer return the grouping
+  factor of a correlation structure, like `Subject` in
+  `corAR1(form = ~ age | Subject)`, as fixed predictor for models from *nlme*
+  and `MASS::glmmPQL()`. It is still returned for `effects = "all"`.
+  `get_datagrid()` no longer includes variables that are only used in the
+  correlation structure, unless requested in `by`.
+
 * `find_formula()` for models from `nlme::lme()`, `nlme::gls()`,
   `nlme::nlme()` and `MASS::glmmPQL()` now reads the `correlation` part from
   the fitted correlation structure, not from the model call. Before, a
@@ -26,8 +41,8 @@
   `correlation` part. A global structure object that was changed after the fit
   gave the changed formula. A structure without `form` now returns the
   grouping that the model used, like `~1 | Subject`. `find_variables()` and
-  `find_predictors()` then also return that grouping factor as a
-  `correlation` variable, as they did before for a `form` like `~1 | Subject`.
+  `find_predictors()` with `effects = "all"` then also return that grouping
+  factor as a `correlation` variable.
   If that formula has no variable, like `~1` for `gls()` models, there is no
   `correlation` part.
 
@@ -47,6 +62,17 @@
   error, because new data is not supported.
 
 ## Bug fixes
+
+* `get_data()` for multivariate models from package _brms_ now also returns
+  the predictors of distributional parameters, such as `sigma ~ z`, when the
+  data are taken from the model frame. This is the case for models fitted with
+  `brm_multiple()`. Before, these columns were missing.
+
+* `get_predicted()` now passes arguments in `...` to `predict()` for models
+  that use the default method, like *betareg*. Before, these arguments were
+  ignored, e.g. `at` for `type = "quantile"`. If `predict()` fails with these
+  arguments, or they change the shape of the predictions (like `se.fit`),
+  predictions are computed without them.
 
 * `is_converged()` for `coxph` models now returns `FALSE` with a message that
   convergence cannot be assessed in two more cases. In the first case, the

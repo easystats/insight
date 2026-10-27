@@ -84,9 +84,10 @@
 #'
 #' For models from package **brms**, distributional parameters are also included.
 #'
-#' @note For models of class `lme`, `nlme` or `gls`, the correlation-component
-#' is the formula of the fitted correlation structure, e.g. `~ t | Subject` for
-#' `corAR1(form = ~ t | Subject)`. For a structure without `form`, this is the
+#' @note For models of class `lme`, `nlme`, `glmmPQL`, `gls` or `gnls`, the
+#' correlation-component is the formula of the fitted correlation structure,
+#' e.g. `~ t | Subject` for `corAR1(form = ~ t | Subject)`, with the
+#' environment of the model formula. For a structure without `form`, this is the
 #' grouping that the model used, like `~1 | Subject`. There is no
 #' correlation-component when that formula has no variable, e.g. `~1`.
 #'
@@ -770,10 +771,13 @@ find_formula.RM <- find_formula.MANOVA
 #' @export
 find_formula.gls <- function(x, verbose = TRUE, ...) {
   l <- tryCatch(
-    list(
-      conditional = stats::formula(x),
-      correlation = .lme_correlation_formula(x)
-    ),
+    {
+      f_cond <- stats::formula(x)
+      list(
+        conditional = f_cond,
+        correlation = .lme_correlation_formula(x, env = environment(f_cond))
+      )
+    },
     error = function(x) {
       NULL
     }
@@ -1510,7 +1514,7 @@ find_formula.nlme <- function(x, verbose = TRUE, ...) {
     f.random <- f.random[[1]]
   }
 
-  f.corr <- .lme_correlation_formula(x)
+  f.corr <- .lme_correlation_formula(x, env = environment(f.cond))
 
   f <- compact_list(list(
     conditional = f.cond,
@@ -1642,7 +1646,7 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
   f <- compact_list(list(
     conditional = fm,
     random = fmr,
-    correlation = .lme_correlation_formula(x)
+    correlation = .lme_correlation_formula(x, env = environment(fm))
   ))
   .find_formula_return(f, verbose = verbose)
 }
@@ -1651,8 +1655,10 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
 # objects, read from the fitted structure, so that it does not depend on where
 # the structure in the call can be found. A structure without `form` has the
 # grouping that nlme used (e.g. `~1 | Subject`), or `~1`, which has no
-# variable and gives no correlation part.
-.lme_correlation_formula <- function(x) {
+# variable and gives no correlation part. `env` is the environment of the
+# model formula, else a structure without `form` keeps the frame of the
+# fitting function, which holds the data and model matrices.
+.lme_correlation_formula <- function(x, env = NULL) {
   corr_struct <- x[["modelStruct"]][["corStruct"]]
   if (is.null(corr_struct)) {
     return(NULL)
@@ -1660,6 +1666,9 @@ find_formula.glmmPQL <- function(x, verbose = TRUE, ...) {
   f_corr <- tryCatch(stats::formula(corr_struct), error = function(e) NULL)
   if (!inherits(f_corr, "formula") || !length(all.vars(f_corr))) {
     return(NULL)
+  }
+  if (is.environment(env)) {
+    environment(f_corr) <- env
   }
   f_corr
 }

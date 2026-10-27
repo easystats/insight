@@ -88,7 +88,7 @@ test_that("find_variables, nlme", {
     list(
       response = "weight",
       conditional = "Variety",
-      nonlinear = c("Time", "Asym", "xmid", "scal"),
+      nonlinear = "Time",
       random = "Plot"
     )
   )
@@ -96,8 +96,29 @@ test_that("find_variables, nlme", {
     find_variables(m_nlme1),
     list(
       response = "height",
-      nonlinear = c("age", "Asym", "R0", "lrc"),
+      nonlinear = "age",
       random = "Seed"
+    )
+  )
+})
+
+
+test_that("find_terms keeps covariate terms, nlme", {
+  skip_if_not_installed("reformulas")
+  m <- nlme::nlme(
+    weight ~ SSlogis(Time, Asym, xmid, scal),
+    data = nlme_soybean,
+    fixed = list(Asym ~ factor(Variety), xmid ~ 1, scal ~ 1),
+    random = Asym + xmid ~ 1 | Plot,
+    start = c(18, 0, 52, 7.5)
+  )
+  expect_identical(
+    find_terms(m),
+    list(
+      response = "weight",
+      conditional = "factor(Variety)",
+      nonlinear = "Time",
+      random = "Plot"
     )
   )
 })
@@ -354,6 +375,8 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
     c("conditional", "nonlinear", "random", "correlation")
   )
   expect_equal(find_formula(m_noform)$correlation, ~ 1 | Seed, ignore_attr = TRUE)
+  f <- find_formula(m_noform)
+  expect_identical(environment(f$correlation), environment(f$conditional))
 
   # a structure created inside the fitting function is read from the fitted
   # model

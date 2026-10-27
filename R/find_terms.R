@@ -4,7 +4,8 @@
 #' @description Returns a list with the names of all terms, including response
 #'   value and random effects, "as is". This means, on-the-fly tranformations
 #'   or arithmetic expressions like `log()`, `I()`, `as.factor()` etc. are
-#'   preserved.
+#'   preserved. For the nonlinear formula of nonlinear models, only the
+#'   variables are returned (see 'Note').
 #'
 #' @param as_term_labels Logical, if `TRUE`, extracts model formula and tries to
 #'   access the `"term.labels"` attribute. This should better mimic the `terms()`
@@ -25,6 +26,8 @@
 #' - `zero_inflated_random`, the names of the random effects (grouping factors)
 #' - `dispersion`, the name of the dispersion terms
 #' - `instruments`, the names of instrumental variables
+#' - `nonlinear`, for nonlinear models from `lme4::nlmer()` and `nlme::nlme()`,
+#'   the variables of the nonlinear formula (see 'Note')
 #'
 #' Returns `NULL` if no terms could be found (for instance, due to
 #' problems in accessing the formula).
@@ -34,7 +37,10 @@
 #' @note The difference to [`find_variables()`] is that `find_terms()`
 #'   may return a variable multiple times in case of multiple transformations
 #'   (see examples below), while `find_variables()` returns each variable
-#'   name only once.
+#'   name only once. For non-linear models (`nls`, `nlmer` or `nlme`), the
+#'   nonlinear formula and the random part return the variables, like
+#'   `find_variables()`, because the nonlinear formula also holds the
+#'   parameters.
 #'
 #' @examplesIf require("lme4", quietly = TRUE)
 #' data(sleepstudy, package = "lme4")
@@ -79,6 +85,12 @@ find_terms.default <- function(
     l <- lapply(f, .get_variables_list, resp = resp, model = x)
   } else {
     l <- .get_variables_list(f, resp, model = x)
+  }
+
+  # for nonlinear models, the terms are the variables of the data, without the
+  # parameters of the nonlinear formula
+  if (length(.nonlinear_parameters(x))) {
+    l <- .find_terms_nonlinear(x, l)
   }
 
   if (flatten) {
@@ -194,6 +206,20 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
 
 # helper -----------------------
 
+.find_terms_nonlinear <- function(x, l) {
+  # the nonlinear formula and the random part hold the parameters, so these
+  # parts take the variables. The response and covariates keep their terms.
+  v <- find_variables(x, effects = "all", verbose = FALSE)
+  if (inherits(x, "nls")) {
+    l$conditional <- v$conditional
+  } else {
+    l$nonlinear <- v$nonlinear
+  }
+  l$random <- v$random
+  compact_list(l)
+}
+
+
 .get_variables_list <- function(f, resp = NULL, model = NULL) {
   # exception for formula w/o response
   if (is.null(resp) || !is_empty_object(resp)) {
@@ -258,9 +284,10 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
     })
   }
 
-  # remove "1" and "0" from variables in random effects
+  # remove "1" and "0" from variables in random effects, and in the
+  # correlation part of nlme models (like `~ 1 | Subject`)
 
-  re_comp <- endsWith(names(f), "random")
+  re_comp <- endsWith(names(f), "random") | names(f) == "correlation"
   if (any(re_comp)) {
     for (i in names(f)[re_comp]) {
       pos <- which(f[[i]] %in% c("1", "0"))

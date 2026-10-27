@@ -17,7 +17,8 @@ find_variables(
 
 \item{effects}{Should variables for fixed effects (\code{"fixed"}), random effects
 (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
-be abbreviated.}
+be abbreviated. For \code{find_predictors()} and \code{find_variables()}, it also
+applies to the correlation part of models from \emph{nlme} (like \code{gls}).}
 
 \item{component}{Which type of parameters to return, such as parameters for
 the conditional model, the zero-inflated part of the model, the dispersion
@@ -55,6 +56,8 @@ model (as opposed to the zero-inflated part of a model)
 \item \code{cluster}, the names of cluster or grouping variables
 \item \code{dispersion}, the name of the dispersion terms
 \item \code{instruments}, the names of instrumental variables
+\item \code{nonlinear}, for nonlinear models from \code{lme4::nlmer()} and \code{nlme::nlme()},
+the variables of the nonlinear formula
 \item \code{random}, the names of the random effects (grouping factors)
 \item \code{zero_inflated}, the names of the predictor variables from the
 \emph{zero-inflated} part of the model. For \strong{brms}, this is named \code{zi}.
@@ -89,10 +92,13 @@ models that may contain smooth terms).
 for models with zero-inflation or that can model the dispersion parameter.
 \item \code{"instruments"}: for instrumental-variable or some fixed effects regression,
 returns the instruments.
-\item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod} or
-\code{nls}), returns staring estimates for the nonlinear parameters.
+\item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod}),
+returns the nonlinear parameters. Not available for functions that return
+variables, like \code{find_predictors()}.
 \item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
-variables used to describe the correlation structure are returned.
+variables used to describe the correlation structure are returned. The
+grouping factor (like \code{Subject} in \code{~ age | Subject}) is only returned for
+\code{effects = "all"}.
 \item \code{"location"}: returns location parameters such as \code{conditional},
 \code{zero_inflated}, \code{smooth_terms}, or \code{instruments} (everything that are
 fixed or random effects - depending on the \code{effects} argument - but no
@@ -151,6 +157,11 @@ returns each variable name only once. The return value would be \code{"gear"}.
 the original variable names, but excluded the \emph{dependent} (response)
 variables. The return value would be \code{"gear"}.
 }
+
+For non-linear models (\code{nls}, \code{nlmer} or \code{nlme}), the parameters of the
+nonlinear formula are returned by \code{find_parameters()}, while
+\code{find_predictors()} and \code{find_variables()} only return the variables.
+Parameters that are elements of a vector, like \code{b[1]}, are not yet removed.
 }
 
 \examples{
