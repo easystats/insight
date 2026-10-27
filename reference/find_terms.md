@@ -5,6 +5,8 @@ random effects, "as is". This means, on-the-fly tranformations or
 arithmetic expressions like [`log()`](https://rdrr.io/r/base/Log.html),
 [`I()`](https://rdrr.io/r/base/AsIs.html),
 [`as.factor()`](https://rdrr.io/r/base/factor.html) etc. are preserved.
+For the nonlinear formula of nonlinear models, only the variables are
+returned (see 'Note').
 
 ## Usage
 
@@ -64,6 +66,11 @@ vectors):
 
 - `instruments`, the names of instrumental variables
 
+- `nonlinear`, for nonlinear models from
+  [`lme4::nlmer()`](https://rdrr.io/pkg/lme4/man/nlmer.html) and
+  [`nlme::nlme()`](https://rdrr.io/pkg/nlme/man/nlme.html), the
+  variables of the nonlinear formula (see 'Note')
+
 Returns `NULL` if no terms could be found (for instance, due to problems
 in accessing the formula).
 
@@ -74,7 +81,11 @@ The difference to
 is that `find_terms()` may return a variable multiple times in case of
 multiple transformations (see examples below), while
 [`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md)
-returns each variable name only once.
+returns each variable name only once. For non-linear models (`nls`,
+`nlmer` or `nlme`), the nonlinear formula and the random part return the
+variables, like
+[`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md),
+because the nonlinear formula also holds the parameters.
 
 ## Parameters, Variables, Predictors and Terms
 
@@ -114,6 +125,16 @@ variables.
   [`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md)
   and also returns the original variable names, but excluded the
   *dependent* (response) variables. The return value would be `"gear"`.
+
+For non-linear models (`nls`, `nlmer` or `nlme`), the parameters of the
+nonlinear formula are returned by
+[`find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.md),
+while
+[`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md)
+and
+[`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md)
+only return the variables. Parameters that are elements of a vector,
+like `b[1]`, are not yet removed.
 
 ## Examples
 

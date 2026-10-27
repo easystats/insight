@@ -80,6 +80,11 @@ vectors):
 
 - `instruments`, the names of instrumental variables
 
+- `nonlinear`, for nonlinear models from
+  [`lme4::nlmer()`](https://rdrr.io/pkg/lme4/man/nlmer.html) and
+  [`nlme::nlme()`](https://rdrr.io/pkg/nlme/man/nlme.html), the
+  variables of the nonlinear formula
+
 - `random`, the names of the random effects (grouping factors)
 
 - `zero_inflated`, the names of the predictor variables from the
@@ -122,8 +127,10 @@ Following are valid options:
 - `"instruments"`: for instrumental-variable or some fixed effects
   regression, returns the instruments.
 
-- `"nonlinear"`: for non-linear models (like models of class `nlmerMod`
-  or `nls`), returns staring estimates for the nonlinear parameters.
+- `"nonlinear"`: for non-linear models (like models of class
+  `nlmerMod`), returns the nonlinear parameters. Not available for
+  functions that return variables, like
+  [`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md).
 
 - `"correlation"`: for models with correlation-component, like `gls`,
   the variables used to describe the correlation structure are returned.
@@ -208,6 +215,14 @@ variables.
   is comparable to `find_variables()` and also returns the original
   variable names, but excluded the *dependent* (response) variables. The
   return value would be `"gear"`.
+
+For non-linear models (`nls`, `nlmer` or `nlme`), the parameters of the
+nonlinear formula are returned by
+[`find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.md),
+while
+[`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md)
+and `find_variables()` only return the variables. Parameters that are
+elements of a vector, like `b[1]`, are not yet removed.
 
 ## Examples
 

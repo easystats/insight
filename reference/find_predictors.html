@@ -148,7 +148,7 @@ the instrumental variables</p></li>
 variables used to describe the correlation structure (without the
 grouping factor for <code>effects = "fixed"</code>)</p></li>
 <li><p><code>nonlinear</code>, for non-linear models (like models of class <code>nlmerMod</code> or
-<code>nls</code>), the staring estimates for the nonlinear parameters</p></li>
+<code>nlme</code>), the variables of the nonlinear formula</p></li>
 <li><p><code>smooth_terms</code> returns smooth terms, only applies to GAMs (or similar
 models that may contain smooth terms)</p></li>
 </ul></div>
@@ -169,8 +169,9 @@ models that may contain smooth terms).</p></li>
 for models with zero-inflation or that can model the dispersion parameter.</p></li>
 <li><p><code>"instruments"</code>: for instrumental-variable or some fixed effects regression,
 returns the instruments.</p></li>
-<li><p><code>"nonlinear"</code>: for non-linear models (like models of class <code>nlmerMod</code> or
-<code>nls</code>), returns staring estimates for the nonlinear parameters.</p></li>
+<li><p><code>"nonlinear"</code>: for non-linear models (like models of class <code>nlmerMod</code>),
+returns the nonlinear parameters. Not available for functions that return
+variables, like <code>find_predictors()</code>.</p></li>
 <li><p><code>"correlation"</code>: for models with correlation-component, like <code>gls</code>, the
 variables used to describe the correlation structure are returned. The
 grouping factor (like <code>Subject</code> in <code>~ age | Subject</code>) is only returned for
@@ -222,7 +223,11 @@ returns each variable name only once. The return value would be <code>"gear"</co
 <li><p><code>find_predictors()</code> is comparable to <code><a href="find_variables.html">find_variables()</a></code> and also returns
 the original variable names, but excluded the <em>dependent</em> (response)
 variables. The return value would be <code>"gear"</code>.</p></li>
-</ul></div>
+</ul><p>For non-linear models (<code>nls</code>, <code>nlmer</code> or <code>nlme</code>), the parameters of the
+nonlinear formula are returned by <code><a href="find_parameters.html">find_parameters()</a></code>, while
+<code>find_predictors()</code> and <code><a href="find_variables.html">find_variables()</a></code> only return the variables.
+Parameters that are elements of a vector, like <code>b[1]</code>, are not yet removed.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

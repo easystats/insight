@@ -93,8 +93,10 @@ Following are valid options:
 - `"instruments"`: for instrumental-variable or some fixed effects
   regression, returns the instruments.
 
-- `"nonlinear"`: for non-linear models (like models of class `nlmerMod`
-  or `nls`), returns staring estimates for the nonlinear parameters.
+- `"nonlinear"`: for non-linear models (like models of class
+  `nlmerMod`), returns the nonlinear parameters. Not available for
+  functions that return variables, like
+  [`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md).
 
 - `"correlation"`: for models with correlation-component, like `gls`,
   the variables used to describe the correlation structure are returned.
@@ -180,6 +182,14 @@ differences for the independent variables.
   [`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md)
   and also returns the original variable names, but excluded the
   *dependent* (response) variables. The return value would be `"gear"`.
+
+For non-linear models (`nls`, `nlmer` or `nlme`), the parameters of the
+nonlinear formula are returned by `find_parameters()`, while
+[`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md)
+and
+[`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md)
+only return the variables. Parameters that are elements of a vector,
+like `b[1]`, are not yet removed.
 
 ## Examples
 

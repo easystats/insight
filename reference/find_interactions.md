@@ -84,8 +84,10 @@ Following are valid options:
 - `"instruments"`: for instrumental-variable or some fixed effects
   regression, returns the instruments.
 
-- `"nonlinear"`: for non-linear models (like models of class `nlmerMod`
-  or `nls`), returns staring estimates for the nonlinear parameters.
+- `"nonlinear"`: for non-linear models (like models of class
+  `nlmerMod`), returns the nonlinear parameters. Not available for
+  functions that return variables, like
+  [`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md).
 
 - `"correlation"`: for models with correlation-component, like `gls`,
   the variables used to describe the correlation structure are returned.

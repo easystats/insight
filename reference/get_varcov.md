@@ -187,8 +187,10 @@ Following are valid options:
 - `"instruments"`: for instrumental-variable or some fixed effects
   regression, returns the instruments.
 
-- `"nonlinear"`: for non-linear models (like models of class `nlmerMod`
-  or `nls`), returns staring estimates for the nonlinear parameters.
+- `"nonlinear"`: for non-linear models (like models of class
+  `nlmerMod`), returns the nonlinear parameters. Not available for
+  functions that return variables, like
+  [`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md).
 
 - `"correlation"`: for models with correlation-component, like `gls`,
   the variables used to describe the correlation structure are returned.
@@ -273,7 +275,7 @@ get_varcov(
   vcov_args = list(R = 50)
 )
 #>                   count_(Intercept)     count_phd count_femWomen
-#> count_(Intercept)       0.039955437 -0.0097360198  -0.0043036878
-#> count_phd              -0.009736020  0.0029991299   0.0006021611
-#> count_femWomen         -0.004303688  0.0006021611   0.0111837031
+#> count_(Intercept)       0.039955437 -0.0097360197  -0.0043036878
+#> count_phd              -0.009736020  0.0029991299   0.0006021612
+#> count_femWomen         -0.004303688  0.0006021612   0.0111837032
 ```
