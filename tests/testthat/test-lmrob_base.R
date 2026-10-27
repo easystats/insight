@@ -92,3 +92,11 @@ test_that("find_algorithm", {
 test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
 })
+
+test_that("get_predicted, arguments that change the shape of predict()", {
+  expect_equal(
+    as.data.frame(get_predicted(m1, ci = 0.95, se.fit = TRUE)),
+    as.data.frame(get_predicted(m1, ci = 0.95)),
+    tolerance = 1e-6
+  )
+})

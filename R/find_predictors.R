@@ -9,7 +9,8 @@
 #' @param x A fitted model.
 #' @param effects Should variables for fixed effects (`"fixed"`), random effects
 #' (`"random"`) or both (`"all"`) be returned? Only applies to mixed models. May
-#' be abbreviated.
+#' be abbreviated. For `find_predictors()` and `find_variables()`, it also
+#' applies to the correlation part of models from *nlme* (like `gls`).
 #' @param component Which type of parameters to return, such as parameters for
 #' the conditional model, the zero-inflated part of the model, the dispersion
 #' term, the instrumental variables or marginal effects be returned? Applies to
@@ -52,7 +53,9 @@
 #'   returns the nonlinear parameters. Not available for functions that return
 #'   variables, like `find_predictors()`.
 #' - `"correlation"`: for models with correlation-component, like `gls`, the
-#'   variables used to describe the correlation structure are returned.
+#'   variables used to describe the correlation structure are returned. The
+#'   grouping factor (like `Subject` in `~ age | Subject`) is only returned for
+#'   `effects = "all"`.
 #' - `"location"`: returns location parameters such as `conditional`,
 #'   `zero_inflated`, `smooth_terms`, or `instruments` (everything that are
 #'   fixed or random effects - depending on the `effects` argument - but no
@@ -124,7 +127,8 @@
 #' - `instruments`, for fixed-effects regressions like `ivreg`, `felm` or `plm`,
 #'   the instrumental variables
 #' - `correlation`, for models with correlation-component like `gls`, the
-#'   variables used to describe the correlation structure
+#'   variables used to describe the correlation structure (without the
+#'   grouping factor for `effects = "fixed"`)
 #' - `nonlinear`, for non-linear models (like models of class `nlmerMod` or
 #'   `nlme`), the variables of the nonlinear formula
 #' - `smooth_terms` returns smooth terms, only applies to GAMs (or similar
@@ -168,6 +172,10 @@ find_predictors.default <- function(
     f <- lapply(f, function(.x) .prepare_predictors(x, .x, elements))
   } else {
     f <- .prepare_predictors(x, f, elements)
+    # the grouping factor of a correlation structure is no fixed predictor
+    if (effects == "fixed") {
+      f <- .remove_correlation_grouping(f)
+    }
   }
 
   # random effects are returned as list, so we need to unlist here
@@ -893,6 +901,21 @@ find_predictors.marginaleffects <- find_predictors.predictions
     }
   }
 
+  f
+}
+
+
+# removes the grouping factor from the correlation formula of nlme models,
+# i.e. `~ age | Subject` becomes `age`
+.remove_correlation_grouping <- function(f) {
+  f_corr <- f[["correlation"]]
+  if (!inherits(f_corr, "formula")) {
+    return(f)
+  }
+  rhs <- f_corr[[length(f_corr)]]
+  if (is.call(rhs) && identical(rhs[[1]], as.name("|"))) {
+    f[["correlation"]] <- rhs[[2]]
+  }
   f
 }
 

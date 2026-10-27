@@ -204,3 +204,30 @@ withr::with_environment(
     expect_length(p, 32)
   })
 )
+
+test_that("get_predicted passes arguments in ... to predict()", {
+  out <- get_predicted(m2, predict = NULL, type = "quantile", at = 0.9)
+  expect_equal(
+    as.numeric(out),
+    as.numeric(predict(m2, type = "quantile", at = 0.9)),
+    tolerance = 1e-8
+  )
+  # predict() fails with these arguments
+  expect_no_warning(
+    out <- get_predicted(m2, predict = NULL, type = "quantile", at = "a")
+  )
+  expect_equal(
+    as.numeric(out),
+    as.numeric(predict(m2, type = "quantile")),
+    tolerance = 1e-8
+  )
+  # predict() returns fewer rows
+  new_food <- head(FoodExpenditure)
+  new_food$income[1] <- NA
+  out <- suppressWarnings(get_predicted(m2, data = new_food, na.action = na.omit))
+  expect_equal(
+    as.numeric(out),
+    as.numeric(suppressWarnings(get_predicted(m2, data = new_food))),
+    tolerance = 1e-8
+  )
+})

@@ -507,6 +507,8 @@ test_that("find_formula, find_variables, get_data, nlme with correlation", {
     c("conditional", "nonlinear", "random", "correlation")
   )
   expect_equal(find_formula(m_noform)$correlation, ~ 1 | Seed, ignore_attr = TRUE)
+  f <- find_formula(m_noform)
+  expect_identical(environment(f$correlation), environment(f$conditional))
 
   # a structure created inside the fitting function is read from the fitted
   # model
