@@ -258,9 +258,10 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
     })
   }
 
-  # remove "1" and "0" from variables in random effects
+  # remove "1" and "0" from variables in random effects, and in the
+  # correlation part of nlme models (like `~ 1 | Subject`)
 
-  re_comp <- endsWith(names(f), "random")
+  re_comp <- endsWith(names(f), "random") | names(f) == "correlation"
   if (any(re_comp)) {
     for (i in names(f)[re_comp]) {
       pos <- which(f[[i]] %in% c("1", "0"))

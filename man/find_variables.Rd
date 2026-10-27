@@ -17,7 +17,8 @@ find_variables(
 
 \item{effects}{Should variables for fixed effects (\code{"fixed"}), random effects
 (\code{"random"}) or both (\code{"all"}) be returned? Only applies to mixed models. May
-be abbreviated.}
+be abbreviated. For \code{find_predictors()} and \code{find_variables()}, it also
+applies to the correlation part of models from \emph{nlme} (like \code{gls}).}
 
 \item{component}{Which type of parameters to return, such as parameters for
 the conditional model, the zero-inflated part of the model, the dispersion
@@ -92,7 +93,9 @@ returns the instruments.
 \item \code{"nonlinear"}: for non-linear models (like models of class \code{nlmerMod} or
 \code{nls}), returns staring estimates for the nonlinear parameters.
 \item \code{"correlation"}: for models with correlation-component, like \code{gls}, the
-variables used to describe the correlation structure are returned.
+variables used to describe the correlation structure are returned. The
+grouping factor (like \code{Subject} in \code{~ age | Subject}) is only returned for
+\code{effects = "all"}.
 \item \code{"location"}: returns location parameters such as \code{conditional},
 \code{zero_inflated}, \code{smooth_terms}, or \code{instruments} (everything that are
 fixed or random effects - depending on the \code{effects} argument - but no
