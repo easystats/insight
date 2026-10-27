@@ -70,7 +70,8 @@ evenly distributed from the minimum to the maximum, with a total number of
 \itemize{
 \item \strong{Select variables only:}
 \itemize{
-\item \code{"all"}, which will include all variables or predictors.
+\item \code{"all"}, which will include all variables or predictors. For models from
+\emph{nlme}, variables that only the correlation structure uses are left out.
 \item a character vector of one or more variable or predictor names, like
 \code{c("Species", "Sepal.Width")}, which will create a grid of all
 combinations of unique values.

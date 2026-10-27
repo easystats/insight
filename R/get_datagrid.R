@@ -20,7 +20,8 @@
 #' `length` values covering that range (see 'Examples'). Possible options for
 #' `by` are:
 #' - **Select variables only:**
-#'   - `"all"`, which will include all variables or predictors.
+#'   - `"all"`, which will include all variables or predictors. For models from
+#'     *nlme*, variables that only the correlation structure uses are left out.
 #'   - a character vector of one or more variable or predictor names, like
 #'     `c("Species", "Sepal.Width")`, which will create a grid of all
 #'     combinations of unique values.
@@ -842,6 +843,15 @@ get_datagrid.default <- function(
         # make sure random factors are not numeric, else, wrong "levels" will be returned
         data[random_factors] <- lapply(data[random_factors], as.factor)
       }
+    }
+
+    # drop variables only used in the correlation structure, unless requested
+    # in `by`. Predictions do not use the correlation structure.
+    correlation_only <- .correlation_only_variables(x)
+    if (length(correlation_only)) {
+      by_names <- trim_ws(gsub("=.*$", "", by))
+      correlation_only <- setdiff(correlation_only, by_names)
+      data <- data[!colnames(data) %in% correlation_only]
     }
 
     # user wants to include all predictors?
@@ -1831,6 +1841,24 @@ get_datagrid.comparisons <- get_datagrid.slopes
   }
 
   data
+}
+
+
+# variables of the correlation structure of nlme models (lme, gls and the
+# classes that inherit from these) that no other model part uses
+.correlation_only_variables <- function(x) {
+  if (!inherits(x, c("lme", "gls"))) {
+    return(NULL)
+  }
+  model_vars <- .safe(find_variables(x, effects = "all", verbose = FALSE))
+  if (!object_has_names(model_vars, "correlation")) {
+    return(NULL)
+  }
+  other_vars <- unlist(
+    model_vars[names(model_vars) != "correlation"],
+    use.names = FALSE
+  )
+  setdiff(model_vars$correlation, other_vars)
 }
 
 
