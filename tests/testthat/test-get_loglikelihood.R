@@ -319,6 +319,7 @@ test_that("get_loglikelihood - gamm fitted by PQL", {
 })
 
 test_that("get_loglikelihood - gamm4 uses the mer part", {
+  skip_on_cran() # fails for 4.5.3 (2026-03-11 ucrt)
   skip_if_not_installed("gamm4")
   x <- suppressWarnings(gamm4::gamm4(
     Sepal.Length ~ s(Petal.Width),

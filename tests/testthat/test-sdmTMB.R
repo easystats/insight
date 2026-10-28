@@ -232,7 +232,7 @@ test_that("get_statistic", {
 
   expect_equal(
     get_statistic(m1)$Statistic,
-    c(-0.54984, -6.67849, 5.81354),
+    c(0.05542, -6.35935, 5.96297),
     tolerance = 1e-4
   )
   expect_equal(

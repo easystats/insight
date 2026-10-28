@@ -1170,6 +1170,9 @@ test_that("export_table, html output for lists with group columns", {
   expect_snapshot(gt_table_lines(
     export_table(list(d_fixed, d_random), format = "html")
   ))
+  # the first caption is a row group label, not also the title
+  out <- export_table(list(d_fixed, d_random), format = "html")
+  expect_null(out[["_heading"]]$title)
   # a list footer gives one note per non-empty entry
   out <- export_table(
     list(d_fixed, d_random),
@@ -1562,6 +1565,27 @@ test_that("export_table, html align with one character per column", {
     "default"
   )
   expect_identical(shown_align(out), c(Group = "left", a = "center", b = "right"))
+  # an "Effects" column with one value for each caption is removed, also
+  # between other columns, and the string keeps one character per column
+  d_eff <- cbind(d3[1], Effects = "fixed", d3[2:3])
+  attr(d_eff, "table_caption") <- "Fixed Effects"
+  d_eff2 <- d_eff
+  d_eff2$Effects <- "random"
+  attr(d_eff2, "table_caption") <- "Random Effects"
+  out <- export_table(list(d_eff, d_eff2), format = "html", align = "lrcr")
+  expect_identical(
+    out[["_boxhead"]]$type[out[["_boxhead"]]$var == "Component"],
+    "row_group"
+  )
+  expect_false("Effects" %in% out[["_boxhead"]]$var)
+  expect_identical(shown_align(out), c(a = "left", b = "center", c = "right"))
+  # with two values for one caption, the "Effects" column is kept
+  d_eff2$Effects <- c("fixed", "random")
+  out <- export_table(list(d_eff, d_eff2), format = "html")
+  expect_identical(
+    out[["_boxhead"]]$type[out[["_boxhead"]]$var %in% c("Effects", "Component")],
+    c("row_group", "row_group")
+  )
 
   # with no shown column, nothing is aligned
   out <- export_table(data.frame(Component = c("x", "y")), format = "html")
