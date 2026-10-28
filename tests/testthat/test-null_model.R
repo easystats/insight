@@ -50,7 +50,12 @@ test_that("null_model finds objects local to the function that fitted a glmmTMB 
   d <- Salamanders[Salamanders$spp == "GP", ]
   fit_zi <- function(df) {
     fam <- "poisson"
-    glmmTMB::glmmTMB(count ~ mined + (1 | site), ziformula = ~mined, data = df, family = fam)
+    glmmTMB::glmmTMB(
+      count ~ mined + (1 | site),
+      ziformula = ~mined,
+      data = df,
+      family = fam
+    )
   }
   nm_zi <- null_model(fit_zi(d))
   expect_equal(

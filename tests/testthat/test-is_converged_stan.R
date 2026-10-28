@@ -111,8 +111,12 @@ test_that("is_converged, maximum treedepth", {
 test_that("is_converged, maximum treedepth stored outside `control`", {
   # sets every post-warmup treedepth to 1, then the treedepth of three
   # transitions in chain 2 to `depth`, and returns the Treedepth value
-  .treedepth_hits <- function(depth, control = NULL, max_depth = NULL,
-                              max_treedepth = NULL) {
+  .treedepth_hits <- function(
+    depth,
+    control = NULL,
+    max_depth = NULL,
+    max_treedepth = NULL
+  ) {
     fit <- conv_fit_brms
     fit@stan_args <- lapply(fit@stan_args, function(args) {
       args$control$max_treedepth <- control

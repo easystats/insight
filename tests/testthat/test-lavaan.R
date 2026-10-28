@@ -46,7 +46,12 @@ test_that("get_parameters, standardized parameters with type", {
   )
   # other arguments in ... are not passed to lavaan, and not evaluated
   expect_identical(
-    get_parameters(model, standardize = TRUE, type = "std.lv", foo = stop("not evaluated", call. = FALSE)),
+    get_parameters(
+      model,
+      standardize = TRUE,
+      type = "std.lv",
+      foo = stop("not evaluated", call. = FALSE)
+    ),
     out
   )
 })

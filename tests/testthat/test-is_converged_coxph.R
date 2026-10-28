@@ -275,7 +275,11 @@ test_that("is_converged.coxph, convergence cannot be assessed", {
   # the score residuals of right-censored models need the data
   cvx_gone <- cvx_lung
   f <- .cvx_fit(coxph(Surv(time, status) ~ age + tmp, data = cvx_gone))
-  f_model <- .cvx_fit(coxph(Surv(time, status) ~ age + tmp, data = cvx_gone, model = TRUE))
+  f_model <- .cvx_fit(coxph(
+    Surv(time, status) ~ age + tmp,
+    data = cvx_gone,
+    model = TRUE
+  ))
   f_counting <- .cvx_fit(coxph(Surv(start0, time, status) ~ age + tmp, data = cvx_gone))
   rm(cvx_gone)
   .cvx_expect_not_assessed(f$fit, "model = TRUE")
@@ -479,7 +483,10 @@ test_that("is_converged.coxph, variable control arguments with a formula object"
   fit_constant <- function() coxph(cvx_env_fo, data = cvx_lung, iter.max = 2)
   for (f in list(.cvx_fit(fit_literal(2)), .cvx_fit(fit_constant()))) {
     .cvx_expect_as_survival(f)
-    expect_identical(attr(is_converged(f$fit, verbose = FALSE), "diagnostics")$Threshold, 2)
+    expect_identical(
+      attr(is_converged(f$fit, verbose = FALSE), "diagnostics")$Threshold,
+      2
+    )
   }
 
   # clogit() stores a coxph() call with the formula as an object
@@ -504,7 +511,11 @@ test_that("is_converged.coxph, variable control arguments with a formula object"
 test_that("is_converged.coxph, strata changed after the fit", {
   cvx_strata <- cvx_lung
   f <- coxph(Surv(time, status) ~ age + ph.ecog + strata(sex), data = cvx_strata)
-  f_x <- coxph(Surv(time, status) ~ age + ph.ecog + strata(sex), data = cvx_strata, x = TRUE)
+  f_x <- coxph(
+    Surv(time, status) ~ age + ph.ecog + strata(sex),
+    data = cvx_strata,
+    x = TRUE
+  )
   expect_true(is_converged(f))
 
   cvx_strata$sex <- withr::with_seed(123, sample(cvx_strata$sex))
@@ -523,7 +534,10 @@ test_that("is_converged.coxph, the strata check reads only the data arguments of
   cvx_args$w <- rep(1:2, 114)
   cvx_args$off <- cvx_args$age / 100
   f_weights <- coxph(Surv(time, status) ~ age + strata(sex), data = cvx_args, weights = w)
-  f_offset <- coxph(Surv(time, status) ~ ph.ecog + offset(off) + strata(sex), data = cvx_args)
+  f_offset <- coxph(
+    Surv(time, status) ~ ph.ecog + offset(off) + strata(sex),
+    data = cvx_args
+  )
   f_interaction <- coxph(Surv(time, status) ~ age + age:strata(sex), data = cvx_args)
   expect_true(is_converged(f_weights))
   expect_true(is_converged(f_offset))
