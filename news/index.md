@@ -1,5 +1,258 @@
 # Changelog
 
+## insight 1.6.1
+
+### New supported models
+
+- Support for models of class `nlme` from
+  [`nlme::nlme()`](https://rdrr.io/pkg/nlme/man/nlme.html).
+  [`find_formula()`](https://easystats.github.io/insight/reference/find_formula.md)
+  returns the same parts as for
+  [`lme4::nlmer()`](https://rdrr.io/pkg/lme4/man/nlmer.html) models:
+  `conditional`, `nonlinear` and `random`. `conditional` has the
+  response and the covariates of the fixed-effect parameter formulas.
+  `nonlinear` has the nonlinear model, and `random` has the random part.
+  As for [`nlme::lme()`](https://rdrr.io/pkg/nlme/man/lme.html) models,
+  [`find_formula()`](https://easystats.github.io/insight/reference/find_formula.md)
+  also returns a `correlation` part. Functions that use the formula,
+  like
+  [`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md),
+  [`get_response()`](https://easystats.github.io/insight/reference/get_response.md),
+  [`get_random()`](https://easystats.github.io/insight/reference/get_random.md)
+  and
+  [`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.md),
+  now work for these models.
+  [`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.md)
+  returns standard errors and confidence intervals for predictions,
+  computed with the delta method from the Jacobian of
+  [`predict()`](https://rdrr.io/r/stats/predict.html) with respect to
+  the fixed effects. Prediction intervals are not yet supported.
+  [`get_variance()`](https://easystats.github.io/insight/reference/get_variance.md)
+  returns `NULL` with a message, because the random effects are on the
+  scale of the nonlinear parameters.
+
+### Changes
+
+- [`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md),
+  [`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md),
+  [`find_terms()`](https://easystats.github.io/insight/reference/find_terms.md)
+  and
+  [`clean_names()`](https://easystats.github.io/insight/reference/clean_names.md)
+  no longer return the nonlinear parameters as variables for models from
+  [`stats::nls()`](https://rdrr.io/r/stats/nls.html),
+  [`lme4::nlmer()`](https://rdrr.io/pkg/lme4/man/nlmer.html) and
+  [`nlme::nlme()`](https://rdrr.io/pkg/nlme/man/nlme.html). For the
+  nonlinear formula,
+  [`find_terms()`](https://easystats.github.io/insight/reference/find_terms.md)
+  now returns the same as
+  [`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md),
+  so transformations like `log(conc)` are no longer returned there.
+  [`find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.md)
+  for `nls` models now returns the coefficients, not the variables
+  ([\#350](https://github.com/easystats/insight/issues/350)).
+
+- [`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md)
+  and
+  [`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md)
+  no longer return the grouping factor of a correlation structure, like
+  `Subject` in `corAR1(form = ~ age | Subject)`, as fixed predictor for
+  models from *nlme* and
+  [`MASS::glmmPQL()`](https://rdrr.io/pkg/MASS/man/glmmPQL.html). It is
+  still returned for `effects = "all"`.
+  [`get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.md)
+  no longer includes variables that are only used in the correlation
+  structure, unless requested in `by`.
+
+- [`find_formula()`](https://easystats.github.io/insight/reference/find_formula.md)
+  for models from
+  [`nlme::lme()`](https://rdrr.io/pkg/nlme/man/lme.html),
+  [`nlme::gls()`](https://rdrr.io/pkg/nlme/man/gls.html),
+  [`nlme::nlme()`](https://rdrr.io/pkg/nlme/man/nlme.html) and
+  [`MASS::glmmPQL()`](https://rdrr.io/pkg/MASS/man/glmmPQL.html) now
+  reads the `correlation` part from the fitted correlation structure,
+  not from the model call. Before, a structure object that was created
+  inside a function gave an error or no `correlation` part. A `form`
+  that was not a named argument gave no `correlation` part. A global
+  structure object that was changed after the fit gave the changed
+  formula. A structure without `form` now returns the grouping that the
+  model used, like `~1 | Subject`.
+  [`find_variables()`](https://easystats.github.io/insight/reference/find_variables.md)
+  and
+  [`find_predictors()`](https://easystats.github.io/insight/reference/find_predictors.md)
+  with `effects = "all"` then also return that grouping factor as a
+  `correlation` variable. If that formula has no variable, like `~1` for
+  `gls()` models, there is no `correlation` part.
+
+- [`get_parameters()`](https://easystats.github.io/insight/reference/get_parameters.md)
+  for *lavaan* models, and for *blavaan* models with `summary = TRUE`,
+  now returns standardized parameters only for `standardize = TRUE`, as
+  it does for the posterior draws of *blavaan* models. Before, values
+  such as `1` or `"TRUE"` also returned standardized parameters, and
+  values such as `"yes"`, `NA` or `NULL` gave an error.
+
+- [`get_modelmatrix()`](https://easystats.github.io/insight/reference/get_modelmatrix.md)
+  now works for models from
+  [`stats::arima()`](https://rdrr.io/r/stats/arima.html)
+  ([\#1274](https://github.com/easystats/insight/issues/1274)). It
+  returns the columns of the `xreg` regressors, named like the
+  coefficients. For a model with an intercept, the first column is the
+  intercept. [`stats::arima()`](https://rdrr.io/r/stats/arima.html) does
+  not store `xreg`, so it is evaluated from the model call. The objects
+  in `xreg` must be visible from where
+  [`get_modelmatrix()`](https://easystats.github.io/insight/reference/get_modelmatrix.md)
+  is called, or from the global environment, and must be unchanged.
+  Models from
+  [`forecast::Arima()`](https://pkg.robjhyndman.com/forecast/reference/Arima.html)
+  use their stored regressors. A `data` argument gives an error, because
+  new data is not supported.
+
+### Bug fixes
+
+- [`get_data()`](https://easystats.github.io/insight/reference/get_data.md)
+  for multivariate models from package *brms* now also returns the
+  predictors of distributional parameters, such as `sigma ~ z`, when the
+  data are taken from the model frame. This is the case for models
+  fitted with `brm_multiple()`. Before, these columns were missing.
+
+- [`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.md)
+  now passes arguments in `...` to
+  [`predict()`](https://rdrr.io/r/stats/predict.html) for models that
+  use the default method, like *betareg*. Before, these arguments were
+  ignored, e.g. `at` for `type = "quantile"`. If
+  [`predict()`](https://rdrr.io/r/stats/predict.html) fails with these
+  arguments, or they change the shape of the predictions (like
+  `se.fit`), predictions are computed without them.
+
+- [`is_converged()`](https://easystats.github.io/insight/reference/is_converged.md)
+  for `coxph` models now returns `FALSE` with a message that convergence
+  cannot be assessed in two more cases. In the first case, the call does
+  not write the formula as a `~` expression, such as `coxph(f, ...)`. A
+  control argument of this call uses a variable. Before,
+  [`is_converged()`](https://easystats.github.io/insight/reference/is_converged.md)
+  evaluated these arguments in the environment of the formula. For a
+  model fitted inside a function, an object with the same name in that
+  environment gave other control values than the fit used. Models of
+  this kind that were assessed correctly before, for example in
+  top-level code, now also return `FALSE`. The second case is a
+  right-censored single-state model with a `strata()` term whose strata
+  variable now puts observations in other strata. Before,
+  [`is_converged()`](https://easystats.github.io/insight/reference/is_converged.md)
+  flagged coefficients as infinite by mistake. The second case does not
+  apply to models fitted with `model = TRUE` or `x = TRUE`.
+
+- [`get_sigma()`](https://easystats.github.io/insight/reference/get_sigma.md)
+  for models from package *VGAM* now returns the standard deviation
+  parameter of families that have one, such as `uninormal()`, `tobit()`
+  or `binormal()`. Before, it returned a wrong value. A model with more
+  than one standard deviation parameter returns one value for each. If
+  the standard deviation is modeled with predictors,
+  [`get_sigma()`](https://easystats.github.io/insight/reference/get_sigma.md)
+  returns `NULL`.
+
+- [`get_loglikelihood()`](https://easystats.github.io/insight/reference/get_loglikelihood.md)
+  for [`mgcv::gamm()`](https://rdrr.io/pkg/mgcv/man/gamm.html) and
+  [`gamm4::gamm4()`](https://rdrr.io/pkg/gamm4/man/gamm4.html) models
+  now returns the log-likelihood of the mixed model part (`$lme` or
+  `$mer`), which includes the random effects. Before, it used only the
+  `$gam` part. For `gamm()` models fitted by PQL, it now returns `NA`
+  with a warning, because the log-likelihood of the PQL working model is
+  not the one of the GAMM.
+
+- [`get_loglikelihood()`](https://easystats.github.io/insight/reference/get_loglikelihood.md)
+  for [`nlme::lme()`](https://rdrr.io/pkg/nlme/man/lme.html) and
+  [`nlme::gls()`](https://rdrr.io/pkg/nlme/man/gls.html) models fitted
+  by REML now returns the ML log-likelihood with `estimator = "ML"`.
+  Before, `estimator` was ignored.
+
+- [`is_converged()`](https://easystats.github.io/insight/reference/is_converged.md)
+  for `coxph` models now returns `FALSE` with a message that convergence
+  cannot be assessed in three more cases. The first case is a model
+  without events. Before, a right-censored model without events gave
+  `TRUE`. The second case is a right-censored model whose predictor data
+  changed after the fit. Before, the result depended on the change:
+  `TRUE`, coefficients flagged as infinite, or a message that the score
+  vector was not computed. Models fitted with `model = TRUE` are not
+  affected. The third case is a model object with a missing number of
+  iterations or missing variances. Before, these gave an error or
+  `TRUE`. A model without events and without predictors now returns
+  `TRUE`, as other null models. Before, it returned `FALSE`. With
+  `verbose = FALSE`,
+  [`is_converged()`](https://easystats.github.io/insight/reference/is_converged.md)
+  now also gives no message for models that it does not support.
+
+- [`is_converged()`](https://easystats.github.io/insight/reference/is_converged.md)
+  for `coxph` models now assesses models from
+  [`survival::clogit()`](https://rdrr.io/pkg/survival/man/clogit.html)
+  fitted with `method = "efron"` or `method = "breslow"`. Before, it
+  returned `NULL`. Models from `clogit()` with predictors and the
+  default `method = "exact"` now return `FALSE` with a message that
+  convergence cannot be assessed. Single-state counting-process models
+  fitted with `y = FALSE` are now assessed. The check for changed
+  predictor data now also runs for multi-state models with
+  right-censored data. If transitions share a baseline hazard or the
+  model was fitted with `x = TRUE`, it does not run. It also runs for
+  models with factor predictors or a `strata()` term, which skipped it
+  before. A change to the `strata()` variable of a multi-state model is
+  still not detected. If the predictor data of these models changed
+  after the fit, they now return `FALSE` with a message that convergence
+  cannot be assessed. Before, the result depended on the change, and
+  coefficients were flagged as infinite by mistake. A model object with
+  zero iterations now also returns `FALSE` with this message. If the
+  data of the model can be read, the message no longer suggests to refit
+  the model with `model = TRUE`.
+
+- [`link_inverse()`](https://easystats.github.io/insight/reference/link_inverse.md)
+  and
+  [`link_function()`](https://easystats.github.io/insight/reference/link_function.md)
+  now work for brms custom families with brms-only links like `softplus`
+  or `squareplus`.
+
+- `export_table(format = "html")` now applies `align` to the columns
+  that the table shows, in the order shown. `align = "left"`, `"right"`
+  or `"center"` aligns all columns. Before,
+  [`export_table()`](https://easystats.github.io/insight/reference/export_table.md)
+  read these words as one character per column, and it gave an error for
+  tables with fewer columns than letters. A string with one character
+  per column skips the characters of the group columns (like `Component`
+  or the `by` columns). Before, this worked only without `rowname_col`,
+  and a group column with one value gave an error. A string with fewer
+  characters now applies to the shown columns only. Columns that
+  `column_groups` moves under a spanner take the character of their
+  shown position. Extra characters are ignored.
+
+- If one group column has one value, or a `by` column is not in the
+  data, `export_table(format = "html")` now makes row groups from the
+  other group columns with two or more values. Before, it made no row
+  groups in these cases. With `row_groups`, it still makes no row groups
+  in these cases.
+
+- `export_table(format = "html")` for a list of data frames with an
+  `Effects` column now labels the row groups with the table captions
+  only, like `"Fixed Effects"`. Before, the labels repeated the
+  `Effects` value, like `"fixed - Fixed Effects"`. If the `Effects`
+  column has one value for each caption,
+  [`export_table()`](https://easystats.github.io/insight/reference/export_table.md)
+  removes it. Otherwise, it is kept. For lists with an `Effects` or
+  `Component` column, the first caption is no longer also used as the
+  table title.
+
+- [`get_variance()`](https://easystats.github.io/insight/reference/get_variance.md)
+  no longer returns `NULL` for models from
+  [`MASS::glmmPQL()`](https://rdrr.io/pkg/MASS/man/glmmPQL.html).
+  [`get_modelmatrix()`](https://easystats.github.io/insight/reference/get_modelmatrix.md)
+  failed for these models with the error `object 'zz' not found`,
+  because the model terms have the working response of the fitting
+  algorithm.
+
+- [`null_model()`](https://easystats.github.io/insight/reference/null_model.md)
+  now works for models from
+  [`nlme::lme()`](https://rdrr.io/pkg/nlme/man/lme.html) and
+  [`MASS::glmmPQL()`](https://rdrr.io/pkg/MASS/man/glmmPQL.html).
+  Before, it failed, so
+  [`get_variance()`](https://easystats.github.io/insight/reference/get_variance.md)
+  returned a distribution-specific variance of 0 for `glmmPQL` models of
+  families such as Poisson.
+
 ## insight 1.6.0
 
 CRAN release: 2026-10-13
