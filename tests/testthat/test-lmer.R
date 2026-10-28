@@ -61,6 +61,7 @@ test_that("get_df", {
     df.residual(m1),
     ignore_attr = TRUE
   )
+  skip_on_cran()
   expect_equal(
     get_df(m1, type = "satterthwaite"),
     c(`(Intercept)` = 16.99973, Days = 16.99998),
@@ -535,6 +536,7 @@ test_that("find_formula", {
 })
 
 test_that("satterthwaite dof vs. emmeans", {
+  skip_on_cran()
   skip_if_not_installed("emmeans")
   skip_if_not_installed("pbkrtest")
 
