@@ -463,16 +463,52 @@ get_predicted_ci.nlme <- function(
     format_error("The `data` argument should be a data frame.")
   }
   mm <- get_modelmatrix(x, data = data)
-  out <- sapply(
-    # nolint
-    seq_len(nrow(mm)),
-    function(i) {
-      suppressMessages(
-        lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
-      )
+  n_rows <- seq_len(nrow(mm))
+
+  # one row at a time with lmerTest, which also handles errors and warnings
+  row_df <- function(i) {
+    suppressMessages(
+      lmerTest::contestMD(x, mm[i, , drop = FALSE], ddf = type)[["DenDF"]]
+    )
+  }
+
+  # `contestMD()` repeats the slow steps for each row: it converts the model
+  # for Satterthwaite, and it adjusts the vcov for Kenward-Roger. These steps
+  # do not depend on the row, so we do them once and get the same df.
+  if (type == "Satterthwaite") {
+    if (!inherits(x, "lmerModLmerTest")) {
+      x <- suppressMessages(lmerTest::as_lmerModLmerTest(x))
     }
+    return(vapply(
+      n_rows,
+      function(i) lmerTest::contest1D(x, mm[i, ], ddf = type)[["df"]],
+      numeric(1)
+    ))
+  }
+
+  check_if_installed("pbkrtest")
+  vcov_adjusted <- NULL
+  if (isTRUE(lme4::getME(x, "is_REML"))) {
+    vcov_adjusted <- tryCatch(pbkrtest::vcovAdj(x), error = function(e) NULL)
+  }
+  # ML fits and failed adjustments go to lmerTest for its error or fallback
+  if (is.null(vcov_adjusted)) {
+    return(vapply(n_rows, row_df, numeric(1)))
+  }
+  vcov_unadjusted <- stats::vcov(x)
+  vapply(
+    n_rows,
+    function(i) {
+      if (anyNA(mm[i, ])) {
+        return(row_df(i))
+      }
+      tryCatch(
+        pbkrtest::Lb_ddf(mm[i, ], V0 = vcov_unadjusted, Vadj = vcov_adjusted),
+        error = function(e) row_df(i)
+      )
+    },
+    numeric(1)
   )
-  out
 }
 
 

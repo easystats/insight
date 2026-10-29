@@ -1,3 +1,12 @@
+# insight (devel)
+
+## Changes
+
+* `get_predicted()` with `ci_method = "satterthwaite"` or
+  `ci_method = "kenward-roger"` is faster for `lmerMod` models. The steps that
+  are the same for every row of the data are now computed once. The results
+  do not change.
+
 # insight 1.6.1
 
 ## New supported models
