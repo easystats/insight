@@ -1,3 +1,9 @@
+# insight 1.7.0
+
+## Bug fixex
+
+* Tweak test tolerance to fix CRAN check errors.
+
 # insight 1.6.1
 
 ## New supported models
