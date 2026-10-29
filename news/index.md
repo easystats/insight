@@ -2,6 +2,8 @@
 
 ## insight 1.6.1
 
+CRAN release: 2026-10-28
+
 ### New supported models
 
 - Support for models of class `nlme` from
