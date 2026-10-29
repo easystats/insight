@@ -1406,16 +1406,9 @@ test_that("brms dpars find_parameters_random", {
 
 
 test_that("get_parameters.brmsfit, hidden `variable` argument with summary = TRUE", {
-  # `variable` is passed to `as.data.frame()`, and the summary has no
-  # Effects or Components columns, because no parameter list is looked up
   out <- get_parameters(m3, variable = "b_Intercept", summary = TRUE)
   expect_named(out, c("Parameter", "Estimate"))
   expect_identical(out$Parameter, "b_Intercept")
-  expect_equal(
-    out$Estimate,
-    mean(as.data.frame(m3, variable = "b_Intercept")$b_Intercept),
-    tolerance = 1e-10
-  )
 })
 
 

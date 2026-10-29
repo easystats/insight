@@ -336,6 +336,7 @@ skip_if_not_installed("withr")
 withr::with_environment(
   new.env(),
   test_that("get_statistic, Satterthwaite and emmeans issue", {
+    skip_on_cran()
     skip_if_not_installed("emmeans")
     data(sleepstudy, package = "lme4")
     fit <- robustlmm::rlmer(

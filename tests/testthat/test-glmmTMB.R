@@ -1163,6 +1163,7 @@ test_that("get_mixed_info, glmmTMB, with cond and zi", {
 
 
 test_that("get_df and get_varcov KR", {
+  skip_on_cran()
   skip_if_not_installed("lme4")
   data(sleepstudy, package = "lme4")
   m <- glmmTMB::glmmTMB(

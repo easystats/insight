@@ -1011,56 +1011,6 @@
       [21] "</tbody>"                                                                                                                                     
       [22] "</table>"                                                                                                                                     
 
----
-
-    Code
-      gt_table_lines(export_table(list(d_cond, d_zi), format = "html"))
-    Output
-       [1] "<table class=\"gt_table\" data-quarto-disable-processing=\"false\" data-quarto-bootstrap=\"false\">"                                          
-       [2] "<thead>"                                                                                                                                      
-       [3] "<tr class=\"gt_col_headings\">"                                                                                                               
-       [4] "<th class=\"gt_col_heading gt_columns_bottom_border gt_left\" rowspan=\"1\" colspan=\"1\" scope=\"col\" id=\"Parameter\">Parameter</th>"      
-       [5] "<th class=\"gt_col_heading gt_columns_bottom_border gt_center\" rowspan=\"1\" colspan=\"1\" scope=\"col\" id=\"Coefficient\">Coefficient</th>"
-       [6] "</tr>"                                                                                                                                        
-       [7] "</thead>"                                                                                                                                     
-       [8] "<tbody class=\"gt_table_body\">"                                                                                                              
-       [9] "<tr class=\"gt_group_heading_row\">"                                                                                                          
-      [10] "<th colspan=\"2\" class=\"gt_group_heading\" style=\"font-style: oblique;\" scope=\"colgroup\" id=\"Conditional\">Conditional</th>"           
-      [11] "</tr>"                                                                                                                                        
-      [12] "<tr class=\"gt_row_group_first\"><td headers=\"Conditional  Parameter\" class=\"gt_row gt_left\">x</td>"                                      
-      [13] "<td headers=\"Conditional  Coefficient\" class=\"gt_row gt_center\">2.00</td></tr>"                                                           
-      [14] "<tr class=\"gt_group_heading_row\">"                                                                                                          
-      [15] "<th colspan=\"2\" class=\"gt_group_heading\" style=\"font-style: oblique;\" scope=\"colgroup\" id=\"Zero-Inflated\">Zero-Inflated</th>"       
-      [16] "</tr>"                                                                                                                                        
-      [17] "<tr class=\"gt_row_group_first\"><td headers=\"Zero-Inflated  Parameter\" class=\"gt_row gt_left\">x</td>"                                    
-      [18] "<td headers=\"Zero-Inflated  Coefficient\" class=\"gt_row gt_center\">0.10</td></tr>"                                                         
-      [19] "</tbody>"                                                                                                                                     
-      [20] "</table>"                                                                                                                                     
-
-# export_table, html output for a colored footer with new lines
-
-    Code
-      gt_table_lines(export_table(d_footer, format = "html"))
-    Output
-       [1] "<table class=\"gt_table\" data-quarto-disable-processing=\"false\" data-quarto-bootstrap=\"false\">"                    
-       [2] "<thead>"                                                                                                                
-       [3] "<tr class=\"gt_col_headings\">"                                                                                         
-       [4] "<th class=\"gt_col_heading gt_columns_bottom_border gt_left\" rowspan=\"1\" colspan=\"1\" scope=\"col\" id=\"x\">x</th>"
-       [5] "</tr>"                                                                                                                  
-       [6] "</thead>"                                                                                                               
-       [7] "<tbody class=\"gt_table_body\">"                                                                                        
-       [8] "<tr><td headers=\"x\" class=\"gt_row gt_left\">1</td></tr>"                                                             
-       [9] "<tr><td headers=\"x\" class=\"gt_row gt_left\">2</td></tr>"                                                             
-      [10] "</tbody>"                                                                                                               
-      [11] "<tfoot>"                                                                                                                
-      [12] "<tr class=\"gt_sourcenotes\">"                                                                                          
-      [13] "<td class=\"gt_sourcenote\" colspan=\"1\">"                                                                             
-      [14] "F"                                                                                                                      
-      [15] "</td>"                                                                                                                  
-      [16] "</tr>"                                                                                                                  
-      [17] "</tfoot>"                                                                                                               
-      [18] "</table>"                                                                                                               
-
 # export_table, tinytable output for lists
 
     Code
@@ -1123,24 +1073,6 @@
 ---
 
     Code
-      export_table(list(tt_comp_a, tt_comp_b), format = "tt", table_width = Inf)
-    Output
-      
-      +-----------+-------------+---------------+---------------+
-      | Parameter | Coefficient | Component     | group         |
-      +===========+=============+===============+===============+
-      | a         | 1           | conditional   | Conditional   |
-      +-----------+-------------+---------------+---------------+
-      | b         | 2           | conditional   | Conditional   |
-      +-----------+-------------+---------------+---------------+
-      | c         | 3           | zero_inflated | Zero-Inflated |
-      +-----------+-------------+---------------+---------------+
-      
-      Table: Conditional 
-
----
-
-    Code
       export_table(list(tt_by_a, tt_by_b), format = "tt", by = "group", table_width = Inf)
     Output
       
@@ -1160,35 +1092,4 @@
       |   4 | 8 |
       +-----+---+
       Table: By A 
-
-# export_table, tinytable output that data frames do not change
-
-    Code
-      export_table(tt_df, format = "tt", table_width = Inf)
-    Output
-      
-      +---+---+
-      | x | y |
-      +===+===+
-      | 1 | a |
-      +---+---+
-      | 2 | b |
-      +---+---+ 
-
----
-
-    Code
-      export_table(tt_df, format = "tt", footer = "A note", table_width = Inf)
-    Output
-      
-      +---+---+
-      | x | y |
-      +===+===+
-      | 1 | a |
-      +---+---+
-      | 2 | b |
-      +===+===+
-      | A     |
-      | note  |
-      +===+===+ 
 

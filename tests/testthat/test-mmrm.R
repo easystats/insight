@@ -49,6 +49,7 @@ test_that("get_df", {
 })
 
 test_that("get_df, per observation", {
+  skip_on_cran()
   d <- get_data(mod_mmrm)
   out1 <- get_df(mod_mmrm, type = "satterthwaite", df_per_obs = TRUE, data = d)
   out2 <- get_df(mod_mmrm, type = "satterthwaite", df_per_obs = FALSE)

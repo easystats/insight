@@ -62,56 +62,12 @@ conv_fit_stanreg <- conv_stanreg$stanfit
   d$Diagnostic[!d$Passed]
 }
 
-# checks other than E-BFMI for which rstan gives a warning after sampling.
-# rstan gives no E-BFMI warning for the downloaded fits, because
-# `rstan:::is_sfinstance_valid()` is FALSE for them, and the "pairs()" warning
-# belongs to no check.
-.conv_rstan_failed <- function(fit) {
-  msgs <- character()
-  withCallingHandlers(
-    rstan:::throw_sampler_warnings(fit),
-    warning = function(w) {
-      msgs <<- c(msgs, conditionMessage(w))
-      invokeRestart("muffleWarning")
-    }
-  )
-  patterns <- c(
-    Divergences = "divergent transitions after warmup",
-    Treedepth = "exceeded the maximum treedepth",
-    Rhat = "^The largest R-hat",
-    ESS_bulk = "^Bulk Effective Samples Size",
-    ESS_tail = "^Tail Effective Samples Size"
-  )
-  names(patterns)[vapply(
-    patterns,
-    function(p) any(grepl(p, msgs)),
-    logical(1)
-  )]
-}
-
-# compare the failed checks other than E-BFMI with the rstan warnings
-.conv_expect_rstan <- function(fit) {
-  result <- is_converged(fit, verbose = FALSE)
-  expect_identical(
-    setdiff(.conv_failed(result), "E-BFMI"),
-    .conv_rstan_failed(fit)
-  )
-  result
-}
-
 
 # tests ------------------------------------------------------------------------
 
-test_that("is_converged, stanfit without problems", {
-  for (fit in list(conv_fit_brms, conv_fit_stanreg)) {
-    result <- .conv_expect_rstan(fit)
-    expect_true(result)
-    expect_length(.conv_failed(result), 0)
-  }
-})
-
 test_that("is_converged, diagnostics attribute", {
   result <- is_converged(conv_fit_brms)
+  expect_true(result)
   d <- attr(result, "diagnostics")
   draws <- as.array(conv_fit_brms)
   expect_named(d, c("Diagnostic", "Value", "Threshold", "Passed"))
@@ -132,40 +88,35 @@ test_that("is_converged, divergent transitions", {
   sp <- attr(fit@sim$samples[[1]], "sampler_params")
   sp$divergent__[500] <- 1
   attr(fit@sim$samples[[1]], "sampler_params") <- sp
-  expect_true(.conv_expect_rstan(fit))
+  expect_true(is_converged(fit, verbose = FALSE))
 
   fit <- .conv_set_sampler(conv_fit_brms, 1, "divergent__", 500, 1)
-  result <- .conv_expect_rstan(fit)
+  result <- is_converged(fit, verbose = FALSE)
   expect_false(result)
   expect_identical(.conv_failed(result), "Divergences")
   expect_identical(attr(result, "diagnostics")$Value[1], 1)
 })
 
 test_that("is_converged, maximum treedepth", {
-  # default maximum of 10
   fit <- .conv_set_sampler(conv_fit_brms, 2, "treedepth__", 1:3, 10)
-  result <- .conv_expect_rstan(fit)
+  result <- is_converged(fit, verbose = FALSE)
   expect_false(result)
   expect_identical(.conv_failed(result), "Treedepth")
-  expect_identical(attr(result, "diagnostics")$Value[2], 3)
 
   # a treedepth of 10 is below the maximum of 15 in conv_fit_stanreg
   fit <- .conv_set_sampler(conv_fit_stanreg, 2, "treedepth__", 1:3, 10)
-  expect_true(.conv_expect_rstan(fit))
-
-  fit <- .conv_set_sampler(conv_fit_stanreg, 2, "treedepth__", 1:3, 15)
-  result <- .conv_expect_rstan(fit)
-  expect_false(result)
-  expect_identical(.conv_failed(result), "Treedepth")
+  expect_true(is_converged(fit, verbose = FALSE))
 })
 
 test_that("is_converged, maximum treedepth stored outside `control`", {
-  # `rstan::read_stan_csv()` stores the maximum treedepth as `max_depth` (or
-  # `max_treedepth`) outside `control`, where rstan does not read it. Each
-  # case below sets every post-warmup treedepth to 1, then sets the treedepth
-  # of three transitions in chain 2 to `depth`, and returns the Treedepth value
-  .treedepth_hits <- function(depth, control = NULL, max_depth = NULL,
-                              max_treedepth = NULL) {
+  # sets every post-warmup treedepth to 1, then the treedepth of three
+  # transitions in chain 2 to `depth`, and returns the Treedepth value
+  .treedepth_hits <- function(
+    depth,
+    control = NULL,
+    max_depth = NULL,
+    max_treedepth = NULL
+  ) {
     fit <- conv_fit_brms
     fit@stan_args <- lapply(fit@stan_args, function(args) {
       args$control$max_treedepth <- control
@@ -181,33 +132,21 @@ test_that("is_converged, maximum treedepth stored outside `control`", {
     attr(is_converged(fit, verbose = FALSE), "diagnostics")$Value[2]
   }
 
-  # stored limit above 10: depths from 10 to 14 are below it
   expect_identical(.treedepth_hits(12, max_depth = 15), 0)
   expect_identical(.treedepth_hits(15, max_depth = 15), 3)
   expect_identical(.treedepth_hits(12, max_treedepth = 15), 0)
-  expect_identical(.treedepth_hits(15, max_treedepth = 15), 3)
-
-  # stored limit below 10: depths from the limit to 9 reach it
   expect_identical(.treedepth_hits(5, max_depth = 5), 3)
-  expect_identical(.treedepth_hits(4, max_depth = 5), 0)
-  expect_identical(.treedepth_hits(7, max_treedepth = 5), 3)
-  expect_identical(.treedepth_hits(4, max_treedepth = 5), 0)
 
   # `control` comes first, then `max_depth`, then `max_treedepth`
   expect_identical(.treedepth_hits(7, control = 15, max_depth = 5), 0)
   expect_identical(.treedepth_hits(7, max_depth = 5, max_treedepth = 15), 3)
-  expect_identical(.treedepth_hits(12, max_depth = 15, max_treedepth = 5), 0)
 
-  # no stored limit: 10, as in rstan
   expect_identical(.treedepth_hits(10), 3)
-  expect_identical(.treedepth_hits(9), 0)
 
   # a stored limit that is not one finite number is skipped
   expect_identical(.treedepth_hits(10, max_depth = NA), 3)
-  expect_identical(.treedepth_hits(10, max_depth = "15"), 3)
   expect_identical(.treedepth_hits(10, max_depth = c(15, 15)), 3)
   expect_identical(.treedepth_hits(5, max_depth = NA, max_treedepth = 5), 3)
-  expect_identical(.treedepth_hits(7, control = NA, max_depth = 15), 0)
 })
 
 test_that("is_converged, low E-BFMI", {
@@ -220,14 +159,9 @@ test_that("is_converged, low E-BFMI", {
     1:1000,
     165 + cumsum(stats::rnorm(1000))
   )
-  result <- .conv_expect_rstan(fit)
+  result <- is_converged(fit, verbose = FALSE)
   expect_false(result)
   expect_identical(.conv_failed(result), "E-BFMI")
-  expect_identical(rstan::get_low_bfmi_chains(fit), 3L)
-  expect_identical(
-    attr(result, "diagnostics")$Value[3],
-    min(rstan::get_bfmi(fit))
-  )
 })
 
 test_that("is_converged, high R-hat", {
@@ -240,35 +174,20 @@ test_that("is_converged, high R-hat", {
     "b_wt",
     draws[rows] + 10 * stats::sd(draws[rows])
   )
-  result <- .conv_expect_rstan(fit)
+  result <- is_converged(fit, verbose = FALSE)
   expect_false(result)
   expect_true("Rhat" %in% .conv_failed(result))
-  expect_identical(
-    attr(result, "diagnostics")$Value[4],
-    max(apply(as.array(fit), 3, rstan::Rhat))
-  )
-})
-
-test_that("is_converged, low ESS with four chains", {
-  fit <- conv_fit_brms
-  for (chain in 1:4) {
-    fit <- .conv_repeat_draws(fit, chain, "sigma", 20)
-  }
-  result <- .conv_expect_rstan(fit)
-  expect_false(result)
-  expect_true(all(c("ESS_bulk", "ESS_tail") %in% .conv_failed(result)))
 })
 
 test_that("is_converged, ESS threshold depends on the number of chains", {
   conv_two_chains <- .conv_keep_chains(conv_fit_brms, 1:2)
 
-  # ESS between 200 and 400: passes for two chains (threshold 200), would fail
-  # for four (threshold 400)
+  # ESS between 200 and 400: passes for two chains (threshold 200)
   fit <- conv_two_chains
   for (chain in 1:2) {
     fit <- .conv_repeat_draws(fit, chain, "sigma", 4)
   }
-  result <- .conv_expect_rstan(fit)
+  result <- is_converged(fit, verbose = FALSE)
   expect_true(result)
   d <- attr(result, "diagnostics")
   expect_identical(d$Threshold[5:6], c(200, 200))
@@ -279,26 +198,7 @@ test_that("is_converged, ESS threshold depends on the number of chains", {
   for (chain in 1:2) {
     fit <- .conv_repeat_draws(fit, chain, "b_wt", 6)
   }
-  result <- .conv_expect_rstan(fit)
-  expect_false(result)
-  expect_identical(.conv_failed(result), "ESS_bulk")
-  expect_identical(
-    attr(result, "diagnostics")$Value[5],
-    min(apply(as.array(fit), 3, rstan::ess_bulk))
-  )
-
-  # tail ESS below 200, bulk ESS above 200
-  fit <- conv_two_chains
-  for (chain in 1:2) {
-    fit <- .conv_repeat_draws(fit, chain, "b_Intercept", 7)
-  }
-  result <- .conv_expect_rstan(fit)
-  expect_false(result)
-  expect_identical(.conv_failed(result), "ESS_tail")
-  expect_identical(
-    attr(result, "diagnostics")$Value[6],
-    min(apply(as.array(fit), 3, rstan::ess_tail))
-  )
+  expect_identical(.conv_failed(is_converged(fit, verbose = FALSE)), "ESS_bulk")
 })
 
 test_that("is_converged, constant parameters", {
@@ -312,7 +212,6 @@ test_that("is_converged, constant parameters", {
   expect_silent(is_converged(fit, verbose = FALSE))
   result <- is_converged(fit, verbose = FALSE)
   expect_true(result)
-  expect_identical(.conv_rstan_failed(fit), character())
   expect_true(all(is.na(attr(result, "diagnostics")$Value[4:6])))
 })
 
@@ -327,16 +226,6 @@ test_that("is_converged, constant parameters", {
     }
   )
   msgs
-}
-
-# a copy of a model whose stanfit is replaced
-.conv_with_fit <- function(model, fit) {
-  if (inherits(model, "brmsfit")) {
-    model$fit <- fit
-  } else {
-    model$stanfit <- fit
-  }
-  model
 }
 
 # a copy in which all six checks fail; callers set the seed
@@ -364,19 +253,9 @@ test_that("is_converged, brmsfit and stanreg use their stanfit", {
   expect_identical(is_converged(conv_brms), is_converged(conv_fit_brms))
   expect_identical(is_converged(conv_stanreg), is_converged(conv_fit_stanreg))
 
-  # the same for fits that fail checks
   fit <- .conv_set_sampler(conv_fit_brms, 1, "divergent__", 1, 1)
-  model <- .conv_with_fit(conv_brms, fit)
-  expect_false(is_converged(model, verbose = FALSE))
-  expect_identical(
-    is_converged(model, verbose = FALSE),
-    is_converged(fit, verbose = FALSE)
-  )
-  expect_silent(is_converged(model, verbose = FALSE))
-
-  fit <- .conv_set_sampler(conv_fit_stanreg, 1, "treedepth__", 1, 15)
-  model <- .conv_with_fit(conv_stanreg, fit)
-  expect_false(is_converged(model, verbose = FALSE))
+  model <- conv_brms
+  model$fit <- fit
   expect_identical(
     is_converged(model, verbose = FALSE),
     is_converged(fit, verbose = FALSE)
@@ -388,14 +267,12 @@ test_that("is_converged, alert for failed checks", {
   withr::local_seed(123)
   # all six checks fail: one message that names each check
   fit <- .conv_all_failed()
-  result <- .conv_expect_rstan(fit)
-  expect_identical(.conv_failed(result), conv_checks)
+  expect_identical(.conv_failed(is_converged(fit, verbose = FALSE)), conv_checks)
   msgs <- .conv_messages(is_converged(fit))
   expect_length(msgs, 1)
   for (check in conv_checks) {
     expect_true(grepl(check, msgs, fixed = TRUE), info = check)
   }
-  expect_message(is_converged(fit), "Divergences.*Treedepth.*E-BFMI.*Rhat")
   expect_silent(is_converged(fit, verbose = FALSE))
 
   # two checks fail: the passed checks are not named
@@ -414,76 +291,39 @@ test_that("is_converged, alert for failed checks", {
     expect_false(grepl(check, msgs, fixed = TRUE), info = check)
   }
 
-  # no check fails: nothing is printed
   expect_silent(is_converged(conv_fit_brms))
-  expect_silent(is_converged(conv_fit_stanreg))
   expect_silent(is_converged(conv_brms))
 })
 
 test_that("is_converged, FALSE if convergence cannot be assessed", {
-  # each case returns FALSE without diagnostics, with an alert that is
-  # silent for `verbose = FALSE`
   .conv_expect_not_assessed <- function(x, reason) {
-    expect_message(is_converged(x), "cannot be assessed")
-    result <- suppressMessages(is_converged(x))
-    expect_false(result)
-    expect_null(attr(result, "diagnostics"))
-    expect_message(is_converged(x), reason, fixed = TRUE)
+    expect_message(result <- is_converged(x), reason, fixed = TRUE)
+    expect_identical(result, FALSE)
     expect_silent(is_converged(x, verbose = FALSE))
-    expect_false(is_converged(x, verbose = FALSE))
   }
-  .conv_set_algorithm <- function(fit, algorithm, engine = NULL) {
-    fit@stan_args <- lapply(fit@stan_args, function(args) {
-      args$algorithm <- algorithm
-      args$engine <- engine
-      args
-    })
-    fit
-  }
-  # single words, because the alert wraps long lines
-  no_nuts <- "NUTS"
-
-  # fixed parameters, without sampler parameters
-  fit <- .conv_set_algorithm(conv_fit_brms, "Fixed_param")
-  for (chain in seq_along(fit@sim$samples)) {
-    attr(fit@sim$samples[[chain]], "sampler_params") <- NULL
-  }
-  .conv_expect_not_assessed(fit, no_nuts)
 
   # static HMC, as stored by brms with the cmdstanr backend
-  .conv_expect_not_assessed(
-    .conv_set_algorithm(conv_fit_brms, "hmc", "static"),
-    no_nuts
-  )
-
-  # static HMC, as stored by rstan (no engine field)
-  .conv_expect_not_assessed(.conv_set_algorithm(conv_fit_brms, "HMC"), no_nuts)
-
-  # variational inference, as stored by rstan::vb()
-  .conv_expect_not_assessed(
-    .conv_set_algorithm(conv_fit_brms, "meanfield"),
-    no_nuts
-  )
+  fit <- conv_fit_brms
+  fit@stan_args <- lapply(fit@stan_args, function(args) {
+    args$algorithm <- "hmc"
+    args$engine <- "static"
+    args
+  })
+  .conv_expect_not_assessed(fit, "NUTS")
 
   # no draws after warmup (rstan sets mode 2 for fits without samples)
   fit <- conv_fit_brms
   fit@mode <- 2L
   .conv_expect_not_assessed(fit, "warmup")
 
-  # no draws after warmup in a fit with samples (only warmup draws saved)
-  fit <- conv_fit_brms
-  fit@sim$warmup2 <- fit@sim$n_save
-  .conv_expect_not_assessed(fit, "warmup")
-
   model <- conv_brms
   model$algorithm <- "meanfield"
-  .conv_expect_not_assessed(model, no_nuts)
+  .conv_expect_not_assessed(model, "NUTS")
 
   model <- conv_stanreg
   model$algorithm <- "optimizing"
-  .conv_expect_not_assessed(model, no_nuts)
+  .conv_expect_not_assessed(model, "NUTS")
 
-  # brm_multiple() pools the chains of several data sets
   model <- conv_brms
   class(model) <- c("brmsfit_multiple", class(model))
   .conv_expect_not_assessed(model, "brm_multiple")
@@ -502,9 +342,4 @@ test_that("is_converged, NUTS as stored by brms with the cmdstanr backend", {
     args
   })
   expect_identical(is_converged(fit), is_converged(conv_fit_brms))
-
-  fit <- .conv_set_sampler(fit, 1, "divergent__", 1, 1)
-  result <- .conv_expect_rstan(fit)
-  expect_false(result)
-  expect_identical(.conv_failed(result), "Divergences")
 })

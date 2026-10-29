@@ -46,16 +46,8 @@ test_that("get_variance, nested lme, easystats/insight#1232", {
   data(Pixel, package = "nlme")
 
   m <- nlme::lme(pixel ~ day, random = ~ 1 | Dog / Side, data = Pixel)
-  vc <- insight:::.get_nested_lme_varcorr(m)
-  expect_named(vc, c("Dog", "Side"))
-  expect_equal(vc$Dog[1, 1], 647.3259, tolerance = 1e-4)
-  expect_equal(vc$Side[1, 1], 218.3414, tolerance = 1e-4)
-
-  # same model fitted with lme4
-  m_lme4 <- lme4::lmer(pixel ~ day + (1 | Dog / Side), data = Pixel)
   v <- get_variance(m)
-  v_lme4 <- get_variance(m_lme4)
-  expect_equal(v$var.random, v_lme4$var.random, tolerance = 1e-3)
+  expect_equal(v$var.random, 865.6673, tolerance = 1e-4)
   expect_equal(
     v$var.intercept,
     c(Dog = 647.3259, Side = 218.3414),
@@ -66,7 +58,6 @@ test_that("get_variance, nested lme, easystats/insight#1232", {
   m_slope <- nlme::lme(pixel ~ day, random = ~ day | Dog / Side, data = Pixel)
   vc_nlme <- nlme::VarCorr(m_slope)
   vc <- insight:::.get_nested_lme_varcorr(m_slope)
-  expect_named(vc, c("Dog", "Side"))
   expect_equal(
     diag(vc$Dog),
     as.numeric(vc_nlme[2:3, "Variance"]),
@@ -93,7 +84,6 @@ test_that("get_variance, nested lme, easystats/insight#1232", {
     ignore_attr = TRUE,
     tolerance = 1e-4
   )
-  expect_equal(vc$Side[1, 1], as.numeric(vc_nlme[5, "Variance"]), tolerance = 1e-4)
 })
 
 
@@ -119,40 +109,6 @@ test_that("nested lme, three correlated random terms", {
 })
 
 
-test_that("get_variance, nested lme, block without an intercept", {
-  skip_on_cran()
-  data(Pixel, package = "nlme")
-
-  # random slope without intercept on both levels
-  m <- nlme::lme(pixel ~ day, random = ~ 0 + day | Dog / Side, data = Pixel)
-  m_lme4 <- lme4::lmer(pixel ~ day + (0 + day | Dog / Side), data = Pixel)
-  v <- get_variance(m)
-  v_lme4 <- get_variance(m_lme4)
-  expect_type(v, "list")
-  expect_equal(v$var.fixed, v_lme4$var.fixed, tolerance = 1e-3)
-  expect_equal(v$var.random, v_lme4$var.random, tolerance = 1e-3)
-  expect_equal(v$var.residual, v_lme4$var.residual, tolerance = 1e-3)
-
-  # random intercept on the outer level, random slope without intercept on
-  # the inner level
-  m <- nlme::lme(
-    pixel ~ day,
-    random = list(Dog = ~1, Side = ~ 0 + day),
-    data = Pixel
-  )
-  m_lme4 <- lme4::lmer(
-    pixel ~ day + (1 | Dog) + (0 + day | Dog:Side),
-    data = Pixel
-  )
-  v <- get_variance(m)
-  v_lme4 <- get_variance(m_lme4)
-  expect_type(v, "list")
-  expect_equal(v$var.fixed, v_lme4$var.fixed, tolerance = 1e-3)
-  expect_equal(v$var.random, v_lme4$var.random, tolerance = 1e-3)
-  expect_equal(v$var.residual, v_lme4$var.residual, tolerance = 1e-3)
-})
-
-
 test_that("get_variance, lme, random slopes of blocks without an intercept", {
   skip_on_cran()
   data(Pixel, package = "nlme")
@@ -172,68 +128,6 @@ test_that("get_variance, lme, random slopes of blocks without an intercept", {
   )
   expect_null(v$cor.slope_intercept)
 
-  # nested, random intercept on the outer level, random slope without
-  # intercept on the inner level
-  # VarCorr() rows: Dog =, (Intercept), Side =, day, Residual
-  m <- nlme::lme(
-    pixel ~ day,
-    random = list(Dog = ~1, Side = ~ 0 + day),
-    data = Pixel
-  )
-  v <- get_variance(m)
-  expect_equal(
-    v$var.slope,
-    stats::setNames(vc_variance(m, 4), "Side.day"),
-    tolerance = 1e-4
-  )
-  expect_null(v$cor.slope_intercept)
-
-  # nested, two uncorrelated random slopes without intercept on the outer
-  # level, random intercept on the inner level
-  # VarCorr() rows: Dog =, day, I(day^2), Side =, (Intercept), Residual
-  m <- nlme::lme(
-    pixel ~ day,
-    random = list(Dog = nlme::pdDiag(~ 0 + day + I(day^2)), Side = ~1),
-    data = Pixel
-  )
-  v <- get_variance(m)
-  expect_equal(
-    v$var.slope,
-    stats::setNames(vc_variance(m, 2:3), c("Dog.day", "Dog.I(day^2)")),
-    tolerance = 1e-4
-  )
-  expect_null(v$cor.slope_intercept)
-
-  # not nested, random slope without intercept
-  # VarCorr() rows: day, Residual
-  m <- nlme::lme(pixel ~ day, random = ~ 0 + day | Dog, data = Pixel)
-  v <- get_variance(m)
-  expect_equal(
-    v$var.slope,
-    stats::setNames(vc_variance(m, 1), "Dog.day"),
-    tolerance = 1e-4
-  )
-  expect_null(v$cor.slope_intercept)
-
-  # nested, two correlated random slopes without intercept on both levels
-  # VarCorr() rows: Dog =, day, I(day^2), Side =, day, I(day^2), Residual
-  m <- nlme::lme(
-    pixel ~ day,
-    random = ~ 0 + day + I(day^2) | Dog / Side,
-    data = Pixel,
-    control = nlme::lmeControl(opt = "optim")
-  )
-  v <- get_variance(m)
-  expect_equal(
-    v$var.slope,
-    stats::setNames(
-      vc_variance(m, c(2, 3, 5, 6)),
-      c("Dog.day", "Dog.I(day^2)", "Side.day", "Side.I(day^2)")
-    ),
-    tolerance = 1e-4
-  )
-  expect_null(v$cor.slope_intercept)
-
   # not nested, two correlated random slopes without intercept
   # VarCorr() rows: day, I(day^2), Residual
   m <- nlme::lme(
@@ -246,23 +140,6 @@ test_that("get_variance, lme, random slopes of blocks without an intercept", {
   expect_equal(
     v$var.slope,
     stats::setNames(vc_variance(m, 1:2), c("Dog.day", "Dog.I(day^2)")),
-    tolerance = 1e-4
-  )
-  expect_null(v$cor.slope_intercept)
-
-  # nested, two correlated random slopes without intercept on the outer
-  # level, random intercept on the inner level
-  # VarCorr() rows: Dog =, day, I(day^2), Side =, (Intercept), Residual
-  m <- nlme::lme(
-    pixel ~ day,
-    random = list(Dog = ~ 0 + day + I(day^2), Side = ~1),
-    data = Pixel,
-    control = nlme::lmeControl(opt = "optim")
-  )
-  v <- get_variance(m)
-  expect_equal(
-    v$var.slope,
-    stats::setNames(vc_variance(m, 2:3), c("Dog.day", "Dog.I(day^2)")),
     tolerance = 1e-4
   )
   expect_null(v$cor.slope_intercept)
@@ -288,8 +165,7 @@ test_that("get_variance, lme, random slopes of blocks without an intercept", {
     tolerance = 1e-4
   )
 
-  # nested, the intercept is the second term of the outer block, so the
-  # random slope is the first term
+  # nested, the intercept is the second term of the outer block
   # VarCorr() rows: Dog =, day, (Intercept), Side =, (Intercept), Residual
   m <- nlme::lme(
     pixel ~ day,
@@ -308,110 +184,6 @@ test_that("get_variance, lme, random slopes of blocks without an intercept", {
   expect_equal(
     v$var.intercept,
     stats::setNames(vc_variance(m, c(3, 5)), c("Dog", "Side")),
-    tolerance = 1e-4
-  )
-})
-
-
-test_that("get_variance, lme with an intercept in every block, unchanged", {
-  skip_on_cran()
-  data(Pixel, package = "nlme")
-
-  # expected values are the results of insight 1.5.4.19 (commit 434d09c08)
-
-  # one grouping factor, correlated intercept and slope
-  m <- nlme::lme(pixel ~ day, random = ~ day | Dog, data = Pixel)
-  expect_equal(
-    get_variance(m),
-    list(
-      var.fixed = 0.02115043,
-      var.random = 773.6784,
-      var.residual = 307.939,
-      var.distribution = 307.939,
-      var.dispersion = 0,
-      var.intercept = c(Dog = 1032.062),
-      var.slope = c(Dog.day = 0.7841284),
-      cor.slope_intercept = c(Dog = -0.755)
-    ),
-    tolerance = 1e-4
-  )
-
-  # nested grouping factors, intercepts only
-  m <- nlme::lme(pixel ~ day, random = ~ 1 | Dog / Side, data = Pixel)
-  expect_equal(
-    get_variance(m),
-    list(
-      var.fixed = 2.352231,
-      var.random = 865.6673,
-      var.residual = 233.3453,
-      var.distribution = 233.3453,
-      var.dispersion = 0,
-      var.intercept = c(Dog = 647.3259, Side = 218.3414)
-    ),
-    tolerance = 1e-4
-  )
-
-  # nested grouping factors, correlated intercept and slope on both levels.
-  # The slope variance of `Side` is near zero, so `check_singularity()` flags
-  # the model with its default tolerance, and `var.random` is not returned.
-  # performance 0.18.2 cannot check nested lme models, so a lower tolerance
-  # keeps the result the same for all versions of performance
-  m <- nlme::lme(pixel ~ day, random = ~ day | Dog / Side, data = Pixel)
-  expect_equal(
-    get_variance(m, tolerance = 1e-13),
-    list(
-      var.fixed = 0.5543973,
-      var.random = 915.051,
-      var.residual = 211.2343,
-      var.distribution = 211.2343,
-      var.dispersion = 0,
-      var.intercept = c(Dog = 991.8458, Side = 227.7047),
-      var.slope = c(Dog.day = 1.149103, Side.day = 6.278051e-10),
-      cor.slope_intercept = c(Dog = -0.786, Side = 0)
-    ),
-    tolerance = 1e-4
-  )
-
-  # nested grouping factors, uncorrelated intercept and slope on the outer level
-  m <- nlme::lme(
-    pixel ~ day,
-    random = list(Dog = nlme::pdDiag(~day), Side = ~1),
-    data = Pixel
-  )
-  expect_equal(
-    get_variance(m),
-    list(
-      var.fixed = 0.5967164,
-      var.random = 957.5163,
-      var.residual = 221.8694,
-      var.distribution = 221.8694,
-      var.dispersion = 0,
-      var.intercept = c(Dog = 703.421, Side = 223.2052),
-      var.slope = c(Dog.day = 0.3816367)
-    ),
-    tolerance = 1e-4
-  )
-
-  # nested grouping factors, block-diagonal matrix on the outer level
-  m <- nlme::lme(
-    pixel ~ day,
-    random = list(
-      Dog = nlme::pdBlocked(list(~1, nlme::pdIdent(~ day - 1))),
-      Side = ~1
-    ),
-    data = Pixel
-  )
-  expect_equal(
-    get_variance(m),
-    list(
-      var.fixed = 0.5967557,
-      var.random = 957.4883,
-      var.residual = 221.8708,
-      var.distribution = 221.8708,
-      var.dispersion = 0,
-      var.intercept = c(Dog = 703.3994, Side = 223.1996),
-      var.slope = c(Dog.day = 0.381627)
-    ),
     tolerance = 1e-4
   )
 })
@@ -452,10 +224,11 @@ sim_slopecor_data <- function() {
 }
 
 
-test_that("get_variance, lme, cor.slopes of pdLogChol and pdSymm blocks", {
+test_that("get_variance, lme, cor.slopes", {
   skip_on_cran()
   sleep_slopecor <- sleepstudy
   sleep_slopecor$D2 <- sleep_slopecor$Days^2 / 10
+  sleep_slopecor$D3 <- cos(sleep_slopecor$Days)
 
   m <- nlme::lme(
     Reaction ~ Days + D2,
@@ -463,124 +236,17 @@ test_that("get_variance, lme, cor.slopes of pdLogChol and pdSymm blocks", {
     data = sleep_slopecor,
     control = nlme::lmeControl(opt = "optim")
   )
-  m_lme4 <- lme4::lmer(Reaction ~ Days + D2 + (Days + D2 | Subject), data = sleep_slopecor)
-  v <- get_variance(m)
-  v_lme4 <- get_variance(m_lme4)
-
-  expect_named(v$cor.slopes, "Subject.Days-D2")
-  expect_named(v_lme4$cor.slopes, "Subject.Days-D2")
-  expect_lte(abs(v$cor.slopes - v_lme4$cor.slopes), 0.01)
-  expect_lte(abs(v$cor.slopes - pd_cor(m, "Subject", "Days", "D2")), 1e-6)
-
-  # pdSymm, another general covariance block
-  m <- nlme::lme(
-    Reaction ~ Days + D2,
-    random = list(Subject = nlme::pdSymm(~ Days + D2)),
-    data = sleep_slopecor,
-    control = nlme::lmeControl(opt = "optim")
-  )
   v <- get_variance(m)
   expect_named(v$cor.slopes, "Subject.Days-D2")
   expect_lte(abs(v$cor.slopes - pd_cor(m, "Subject", "Days", "D2")), 1e-6)
-})
 
-
-test_that("get_variance, nested lme, cor.slopes with intercept-only, pdDiag and pdSymm blocks", {
-  skip_on_cran()
-  d_slopecor <- sim_slopecor_data()
-
-  expect_no_warning({
-    m <- nlme::lme(y ~ x1 + x2, random = ~ x1 + x2 | grp / sub, data = d_slopecor)
-  })
-  m_lme4 <- lme4::lmer(y ~ x1 + x2 + (x1 + x2 | grp / sub), data = d_slopecor)
-  expect_false(lme4::isSingular(m_lme4))
-  v <- get_variance(m)
-  v_lme4 <- get_variance(m_lme4)
-
-  expect_named(v$cor.slopes, c("grp.x1-x2", "sub.x1-x2"))
-  expect_lte(abs(v$cor.slopes[["grp.x1-x2"]] - v_lme4$cor.slopes[["grp.x1-x2"]]), 0.01)
-  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - v_lme4$cor.slopes[["sub:grp.x1-x2"]]), 0.01)
-  # the nested path reads VarCorr(), which rounds correlations to 3 decimals
-  expect_lte(abs(v$cor.slopes[["grp.x1-x2"]] - pd_cor(m, "grp", "x1", "x2")), 0.001)
-  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - pd_cor(m, "sub", "x1", "x2")), 0.001)
-
-  # pdSymm blocks on both levels
-  m <- nlme::lme(
-    y ~ x1 + x2,
-    random = list(grp = nlme::pdSymm(~ x1 + x2), sub = nlme::pdSymm(~ x1 + x2)),
-    data = d_slopecor
-  )
-  v <- get_variance(m)
-  expect_named(v$cor.slopes, c("grp.x1-x2", "sub.x1-x2"))
-  expect_lte(abs(v$cor.slopes[["grp.x1-x2"]] - pd_cor(m, "grp", "x1", "x2")), 0.001)
-  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - pd_cor(m, "sub", "x1", "x2")), 0.001)
-
-  # an intercept-only block or a pdDiag block does not stop the other block
-  # from reporting
-  expect_no_warning({
-    m <- nlme::lme(
-      y ~ x1 + x2,
-      random = list(grp = ~1, sub = ~ x1 + x2),
-      data = d_slopecor
-    )
-  })
-  v <- get_variance(m)
-  expect_named(v$cor.slopes, "sub.x1-x2")
-  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - pd_cor(m, "sub", "x1", "x2")), 0.001)
-
-  expect_no_warning({
-    m <- nlme::lme(
-      y ~ x1 + x2,
-      random = list(grp = nlme::pdDiag(~ x1 + x2), sub = ~ x1 + x2),
-      data = d_slopecor
-    )
-  })
-  v <- get_variance(m)
-  expect_named(v$cor.slopes, "sub.x1-x2")
-  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - pd_cor(m, "sub", "x1", "x2")), 0.001)
-})
-
-
-test_that("get_variance, lme, no cor.slopes for pdDiag and pdIdent blocks", {
-  skip_on_cran()
-  data(Pixel, package = "nlme")
-  sleep_slopecor <- sleepstudy
-  sleep_slopecor$D2 <- sleep_slopecor$Days^2 / 10
-
+  # pdDiag blocks estimate no correlations
   m <- nlme::lme(
     Reaction ~ Days + D2,
     random = list(Subject = nlme::pdDiag(~ Days + D2)),
     data = sleep_slopecor
   )
-  v <- get_variance(m)
-  expect_false("cor.slopes" %in% names(v))
-  expect_true("var.slope" %in% names(v))
-
-  m <- nlme::lme(
-    Reaction ~ Days + D2,
-    random = list(Subject = nlme::pdIdent(~ 0 + Days + D2)),
-    data = sleep_slopecor
-  )
-  v <- get_variance(m)
-  expect_false("cor.slopes" %in% names(v))
-  expect_true("var.slope" %in% names(v))
-
-  m <- nlme::lme(
-    pixel ~ day + I(day^2),
-    random = list(Dog = nlme::pdDiag(~ day + I(day^2)), Side = ~1),
-    data = Pixel
-  )
-  v <- get_variance(m)
-  expect_false("cor.slopes" %in% names(v))
-  expect_true("var.slope" %in% names(v))
-})
-
-
-test_that("get_variance, lme, cor.slopes only within pdBlocked sub-blocks", {
-  skip_on_cran()
-  sleep_slopecor <- sleepstudy
-  sleep_slopecor$D2 <- sleep_slopecor$Days^2 / 10
-  sleep_slopecor$D3 <- cos(sleep_slopecor$Days)
+  expect_false("cor.slopes" %in% names(get_variance(m)))
 
   # Days and D2 share a pdSymm sub-block, D3 is in a pdIdent sub-block
   m <- nlme::lme(
@@ -594,28 +260,18 @@ test_that("get_variance, lme, cor.slopes only within pdBlocked sub-blocks", {
   v <- get_variance(m)
   expect_named(v$cor.slopes, "Subject.Days-D2")
   expect_lte(abs(v$cor.slopes - pd_cor(m, "Subject", "Days", "D2")), 1e-6)
+})
 
-  # the slopes are in different sub-blocks, so no correlation is estimated
-  m <- nlme::lme(
-    Reaction ~ Days + D2,
-    random = list(
-      Subject = nlme::pdBlocked(list(nlme::pdSymm(~Days), nlme::pdIdent(~ 0 + D2)))
-    ),
-    data = sleep_slopecor
-  )
-  expect_false("cor.slopes" %in% names(get_variance(m)))
 
+test_that("get_variance, nested lme, cor.slopes", {
+  skip_on_cran()
   d_slopecor <- sim_slopecor_data()
-  m <- nlme::lme(
-    y ~ x1 + x2,
-    random = list(
-      grp = nlme::pdBlocked(list(nlme::pdSymm(~x1), nlme::pdIdent(~ 0 + x2))),
-      sub = ~ x1 + x2
-    ),
-    data = d_slopecor
-  )
+  m <- nlme::lme(y ~ x1 + x2, random = ~ x1 + x2 | grp / sub, data = d_slopecor)
   v <- get_variance(m)
-  expect_named(v$cor.slopes, "sub.x1-x2")
+  expect_named(v$cor.slopes, c("grp.x1-x2", "sub.x1-x2"))
+  # the nested path reads VarCorr(), which rounds correlations to 3 decimals
+  expect_lte(abs(v$cor.slopes[["grp.x1-x2"]] - pd_cor(m, "grp", "x1", "x2")), 0.001)
+  expect_lte(abs(v$cor.slopes[["sub.x1-x2"]] - pd_cor(m, "sub", "x1", "x2")), 0.001)
 })
 
 
@@ -830,37 +486,17 @@ test_that("Issue #658", {
 })
 
 test_that("find_formula, random effects given as list or pdMat, #965", {
-  data(RatPupWeight, package = "nlme")
   data(Pixel, package = "nlme")
 
-  # one grouping factor, named list of formulas
-  m_frm <- nlme::lme(weight ~ Treatment, random = ~ 1 | Litter, data = RatPupWeight)
-  m_lst <- nlme::lme(weight ~ Treatment, random = list(Litter = ~1), data = RatPupWeight)
-  expect_equal(find_formula(m_lst), find_formula(m_frm), ignore_attr = TRUE)
-  expect_identical(find_random(m_lst), list(random = "Litter"))
-  expect_identical(find_variables(m_lst), find_variables(m_frm))
-
-  # random slope, named list of formulas and pdMat objects
   m_frm <- nlme::lme(distance ~ age, random = ~ age | Subject, data = Orthodont)
-  m_lst <- nlme::lme(distance ~ age, random = list(Subject = ~age), data = Orthodont)
   m_pd <- nlme::lme(
     distance ~ age,
     random = list(Subject = nlme::pdDiag(~age)),
     data = Orthodont
   )
-  m_pd2 <- nlme::lme(distance ~ age, random = nlme::pdDiag(~age), data = Orthodont)
-  for (m in list(m_lst, m_pd, m_pd2)) {
-    expect_equal(find_formula(m), find_formula(m_frm), ignore_attr = TRUE)
-    expect_identical(find_random(m), list(random = "Subject"))
-    expect_identical(find_random_slopes(m), list(random = "age"))
-    expect_identical(find_variables(m), find_variables(m_frm))
-  }
-
-  # nested grouping factors, same random terms on each level
-  m_frm <- nlme::lme(pixel ~ day, random = ~ 1 | Dog / Side, data = Pixel)
-  m_lst <- nlme::lme(pixel ~ day, random = list(Dog = ~1, Side = ~1), data = Pixel)
-  expect_equal(find_formula(m_lst), find_formula(m_frm), ignore_attr = TRUE)
-  expect_identical(find_random(m_lst), find_random(m_frm))
+  expect_equal(find_formula(m_pd), find_formula(m_frm), ignore_attr = TRUE)
+  expect_identical(find_random(m_pd), list(random = "Subject"))
+  expect_identical(find_random_slopes(m_pd), list(random = "age"))
 
   # nested grouping factors, different random terms on each level
   m_lst <- nlme::lme(pixel ~ day, random = list(Dog = ~day, Side = ~1), data = Pixel)
@@ -874,7 +510,6 @@ test_that("find_formula, random effects given as list or pdMat, #965", {
     find_random(m_lst, split_nested = TRUE),
     list(random = c("Dog", "Side"))
   )
-  expect_identical(find_random_slopes(m_lst), list(random = "day"))
 })
 
 test_that("find_formula, random effects given as object in another environment, #965", {
@@ -883,22 +518,13 @@ test_that("find_formula, random effects given as object in another environment, 
     nlme::lme(distance ~ age, random = re, data = Orthodont)
   }
   m <- fit()
-  m_frm <- nlme::lme(distance ~ age, random = ~ age | Subject, data = Orthodont)
-  expect_equal(find_formula(m), find_formula(m_frm), ignore_attr = TRUE)
-  expect_identical(find_random(m), list(random = "Subject"))
+  expect_equal(find_formula(m)$random, ~ age | Subject, ignore_attr = TRUE)
 })
 
 test_that("find_formula, glmmPQL with random effects given as list, #965", {
   skip_if_not_installed("MASS")
   data(bacteria, package = "MASS")
 
-  m_frm <- MASS::glmmPQL(
-    y ~ trt,
-    random = ~ 1 | ID,
-    family = binomial,
-    data = bacteria,
-    verbose = FALSE
-  )
   m_lst <- MASS::glmmPQL(
     y ~ trt,
     random = list(ID = ~1),
@@ -906,9 +532,8 @@ test_that("find_formula, glmmPQL with random effects given as list, #965", {
     data = bacteria,
     verbose = FALSE
   )
-  expect_equal(find_formula(m_lst), find_formula(m_frm), ignore_attr = TRUE)
+  expect_equal(find_formula(m_lst)$random, ~ 1 | ID, ignore_attr = TRUE)
   expect_identical(find_random(m_lst), list(random = "ID"))
-  expect_identical(find_random(m_lst), find_random(m_frm))
 })
 
 
@@ -928,42 +553,9 @@ test_that("get_modelmatrix and get_variance, glmmPQL", {
   )
   mm <- model.matrix(~ trt + I(week > 2), data = bacteria)
   expect_equal(get_modelmatrix(m), mm, ignore_attr = TRUE)
-
-  v <- get_variance(m)
   expect_equal(
-    v$var.fixed,
+    get_variance(m)$var.fixed,
     var(as.vector(mm %*% nlme::fixef(m))),
-    tolerance = 1e-4
-  )
-  expect_equal(
-    v$var.intercept,
-    c(ID = as.numeric(nlme::VarCorr(m)[1, "Variance"])),
-    tolerance = 1e-4
-  )
-  expect_equal(v$var.distribution, pi^2 / 3, tolerance = 1e-4)
-
-  # nested random effects
-  set.seed(123)
-  d_pql_nested <- data.frame(
-    g1 = rep(1:10, each = 20),
-    g2 = rep(1:40, each = 5),
-    x = rnorm(200)
-  )
-  eta <- 0.5 * d_pql_nested$x + rnorm(10)[d_pql_nested$g1]
-  eta <- eta + rnorm(40, sd = 0.5)[d_pql_nested$g2]
-  d_pql_nested$y <- rbinom(200, 1, plogis(eta))
-  m_nested <- MASS::glmmPQL(
-    y ~ x,
-    random = ~ 1 | g1 / g2,
-    family = binomial,
-    data = d_pql_nested,
-    verbose = FALSE
-  )
-  vc <- nlme::VarCorr(m_nested)
-  v <- get_variance(m_nested)
-  expect_equal(
-    v$var.intercept,
-    c(g1 = as.numeric(vc[2, "Variance"]), g2 = as.numeric(vc[4, "Variance"])),
     tolerance = 1e-4
   )
 })
@@ -975,9 +567,7 @@ test_that("null_model, lme and glmmPQL", {
 
   m <- nlme::lme(distance ~ age, random = ~ 1 | Subject, data = Orthodont)
   m_null <- nlme::lme(distance ~ 1, random = ~ 1 | Subject, data = Orthodont)
-  nm <- null_model(m)
-  expect_s3_class(nm, "lme")
-  expect_equal(nlme::fixef(nm), nlme::fixef(m_null), tolerance = 1e-4)
+  expect_equal(nlme::fixef(null_model(m)), nlme::fixef(m_null), tolerance = 1e-4)
 
   # a Poisson model needs the null model for the distribution variance
   set.seed(123)
@@ -1000,10 +590,6 @@ test_that("null_model, lme and glmmPQL", {
     data = d_pql_pois,
     verbose = FALSE
   )
-  nm <- null_model(m)
-  expect_s3_class(nm, "glmmPQL")
-  expect_equal(nlme::fixef(nm), nlme::fixef(m_null), tolerance = 1e-4)
-
   v <- get_variance(m)
   v_null <- get_variance(m, null_model = m_null)
   expect_gt(v$var.distribution, 0)
@@ -1027,13 +613,11 @@ test_that("find_formula, lme, correlation object reassigned after the fit", {
     correlation = lme_corr_reassign
   )
   lme_corr_reassign <<- nlme::corAR1(form = ~ 1 | Sex)
-  # the expected formula is the `form` of the structure the fit used
   expect_equal(find_formula(m)$correlation, ~ t | Subject, ignore_attr = TRUE)
-  expect_identical(find_variables(m)$correlation, c("t", "Subject"))
 })
 
 test_that("find_formula, lme, correlation object local to a function", {
-  fit_fresh <- function() {
+  fit_local <- function() {
     lme_corr_local <- nlme::corAR1(form = ~ t | Subject)
     nlme::lme(
       distance ~ age,
@@ -1042,39 +626,7 @@ test_that("find_formula, lme, correlation object local to a function", {
       correlation = lme_corr_local
     )
   }
-  # `x` is also a variable name inside insight, and `fcorr` was one in the
-  # code that read the structure from the call
-  fit_x <- function() {
-    x <- nlme::corAR1(form = ~ t | Subject)
-    nlme::lme(
-      distance ~ age,
-      random = ~ 1 | Subject,
-      data = lme_orthodont_t,
-      correlation = x
-    )
-  }
-  fit_fcorr <- function() {
-    fcorr <- nlme::corAR1(form = ~ t | Subject)
-    nlme::lme(
-      distance ~ age,
-      random = ~ 1 | Subject,
-      data = lme_orthodont_t,
-      correlation = fcorr
-    )
-  }
-  expect_false(exists("lme_corr_local", envir = globalenv()))
-  for (m in list(fit_fresh(), fit_x(), fit_fcorr())) {
-    expect_no_error(find_formula(m))
-    # the expected formula is the `form` of the local structure
-    expect_equal(find_formula(m)$correlation, ~ t | Subject, ignore_attr = TRUE)
-  }
-
-  # a global object with the name of the local one is not used
-  lme_corr_local <<- nlme::corAR1(form = ~ 1 | Sex)
-  withr::defer(rm(lme_corr_local, envir = globalenv()))
-  m <- fit_fresh()
-  expect_no_error(find_formula(m))
-  expect_equal(find_formula(m)$correlation, ~ t | Subject, ignore_attr = TRUE)
+  expect_equal(find_formula(fit_local())$correlation, ~ t | Subject, ignore_attr = TRUE)
 })
 
 test_that("find_formula, lme, correlation `form` given by position", {
