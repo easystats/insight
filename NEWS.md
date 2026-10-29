@@ -1,5 +1,12 @@
 # insight 1.7.0
 
+## Changes
+
+* `get_predicted()` with `ci_method = "satterthwaite"` or
+  `ci_method = "kenward-roger"` is faster for `lmerMod` models. The steps that
+  are the same for every row of the data are now computed once. The results
+  do not change.
+
 ## Bug fixex
 
 * Tweak test tolerance to fix CRAN check errors.
