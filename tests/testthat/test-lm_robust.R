@@ -1,5 +1,6 @@
 skip_if_not_installed("estimatr")
 
+data(mtcars)
 m1 <- estimatr::lm_robust(mpg ~ gear + wt + cyl, data = mtcars)
 
 test_that("model_info", {
@@ -97,6 +98,44 @@ test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
 })
 
+test_that("get_df", {
+  data(mtcars)
+  fit_fe <- estimatr::lm_robust(mpg ~ hp, data = mtcars, fixed_effects = ~cyl)
+  expect_identical(get_df(m1, type = "model"), 5)
+  expect_identical(get_df(fit_fe, type = "model"), 5)
+})
+
+test_that("n_parameters", {
+  data(mtcars)
+  fit_fe <- estimatr::lm_robust(mpg ~ hp, data = mtcars, fixed_effects = ~cyl)
+  expect_identical(n_parameters(m1), 4L)
+  expect_identical(n_parameters(fit_fe), 4L)
+})
+
+test_that("Comparison AIC and BIC with lm", {
+  skip_if_not_installed("performance")
+  data(mtcars)
+  fit_fe <- estimatr::lm_robust(mpg ~ hp, data = mtcars, fixed_effects = ~cyl)
+  fit_lm <- stats::lm(mpg ~ hp + factor(cyl), data = mtcars)
+  out <- data.frame(
+    estimatr = unlist(performance::model_performance(fit_fe, metrics = c("AIC", "BIC"))),
+    lm = c(stats::AIC(fit_lm), stats::BIC(fit_lm))
+  )
+  expect_equal(out$estimatr[1], out$lm[1], tolerance = 1e-4)
+  expect_equal(out$estimatr[2], out$lm[2], tolerance = 1e-4)
+})
+
+test_that("Comparison logLik with lm", {
+  skip_if_not_installed("performance")
+  data(mtcars)
+  fit_fe <- estimatr::lm_robust(mpg ~ hp, data = mtcars, fixed_effects = ~cyl)
+  fit_lm <- stats::lm(mpg ~ hp + factor(cyl), data = mtcars)
+  expect_equal(
+    as.numeric(logLik(fit_lm)),
+    as.numeric(get_loglikelihood(fit_fe)),
+    tolerance = 1e-4
+  )
+})
 
 test_that("multivariate", {
   mod1 <- estimatr::lm_robust(cbind(mpg, qsec) ~ cyl + disp, data = mtcars)

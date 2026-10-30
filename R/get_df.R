@@ -592,10 +592,14 @@ get_df.mediate <- function(x, ...) {
 # -----------------------------------------------------------------------
 
 .model_df <- function(x) {
-  # logLik() for plm calls get_df(), so we would have a recursion here.
-  # therefore, we need to check for plm first
   if (inherits(x, "plm")) {
+    # logLik() for plm calls get_df(), so we would have a recursion here.
+    # therefore, we need to check for plm first
     dof <- NULL
+  } else if (inherits(x, "lm_robust")) {
+    # lm_robust may contain absorbed parameters. to correctly define
+    # model df, we catch this exception here
+    dof <- nobs(x) - stats::df.residual(x) + 1
   } else {
     dof <- .safe(attr(stats::logLik(x), "df"))
   }
