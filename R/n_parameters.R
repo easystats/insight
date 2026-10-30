@@ -231,7 +231,7 @@ n_parameters.stanmvreg <- n_parameters.stanreg
 
 #' @export
 n_parameters.lm_robust <- function(x, ...) {
-  nobs(x) - stats::df.residual(x)
+  stats::nobs(x) - stats::df.residual(x)
 }
 
 
