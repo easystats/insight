@@ -166,7 +166,11 @@ test_that("find_formula, gls, phylogenetic structure object, easystats/insight#1
   )
   gls_corr_brownian <<- ape::corBrownian(phy = gls_tree)
   withr::defer(rm(gls_corr_brownian, envir = globalenv()))
-  m <- nlme::gls(y ~ x, data = gls_phylo_d, correlation = gls_corr_brownian)
+  m <- suppressWarnings(nlme::gls(
+    y ~ x,
+    data = gls_phylo_d,
+    correlation = gls_corr_brownian
+  ))
   # the structure has no `form`, so its fitted formula `~1` has no variable
   expect_no_error(find_formula(m))
   expect_named(find_formula(m), "conditional")
