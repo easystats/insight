@@ -599,7 +599,7 @@ get_df.mediate <- function(x, ...) {
   } else if (inherits(x, "lm_robust")) {
     # lm_robust may contain absorbed parameters. to correctly define
     # model df, we catch this exception here
-    dof <- nobs(x) - stats::df.residual(x) + 1
+    dof <- stats::nobs(x) - stats::df.residual(x) + 1
   } else {
     dof <- .safe(attr(stats::logLik(x), "df"))
   }
