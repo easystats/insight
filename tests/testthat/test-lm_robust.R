@@ -116,6 +116,7 @@ test_that("Comparison AIC and BIC with lm", {
   skip_if_not_installed("performance")
   data(mtcars)
   fit_fe <- estimatr::lm_robust(mpg ~ hp, data = mtcars, fixed_effects = ~cyl)
+  fit_lm <- stats::lm(mpg ~ hp + factor(cyl), data = mtcars)
   out <- data.frame(
     estimatr = unlist(performance::model_performance(fit_fe, metrics = c("AIC", "BIC"))),
     lm = c(stats::AIC(fit_lm), stats::BIC(fit_lm))
