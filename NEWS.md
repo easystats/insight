@@ -1,4 +1,4 @@
-# insight (devel)
+# insight 1.7.0
 
 ## Changes
 
@@ -8,6 +8,8 @@
   do not change.
 
 ## Bug fixes
+
+* Tweak test tolerance to fix CRAN check errors.
 
 * Fixed issue, where `get_df(type = "model")` and `n_parameters()` did not
   include absorbed parameters for models of class `lm_robust`.

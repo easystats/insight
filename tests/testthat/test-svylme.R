@@ -93,7 +93,7 @@ withr::with_environment(
     })
 
     test_that("get_response", {
-      skip_on_ci()
+      skip("only works interactively")
       expect_null(get_response(m1))
     })
 
