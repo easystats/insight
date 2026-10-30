@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">insight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,19 @@
       <small>Source: <a href="https://github.com/easystats/insight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.7.0" id="insight-170">insight 1.7.0<a class="anchor" aria-label="anchor" href="#insight-170"></a></h2>
+<div class="section level3">
+<h3 id="changes-1-7-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-7-0"></a></h3>
+<ul><li>
+<code><a href="../reference/get_predicted.html">get_predicted()</a></code> with <code>ci_method = "satterthwaite"</code> or <code>ci_method = "kenward-roger"</code> is faster for <code>lmerMod</code> models. The steps that are the same for every row of the data are now computed once. The results do not change.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-7-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-7-0"></a></h3>
+<ul><li><p>Tweak test tolerance to fix CRAN check errors.</p></li>
+<li><p>Fixed issue, where <code>get_df(type = "model")</code> and <code><a href="../reference/n_parameters.html">n_parameters()</a></code> did not include absorbed parameters for models of class <code>lm_robust</code>.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.6.1" id="insight-161">insight 1.6.1<a class="anchor" aria-label="anchor" href="#insight-161"></a></h2><p class="text-muted">CRAN release: 2026-10-28</p>
 <div class="section level3">
