@@ -125,6 +125,18 @@ test_that("Comparison AIC and BIC with lm", {
   expect_equal(out$estimatr[2], out$lm[2], tolerance = 1e-4)
 })
 
+test_that("Comparison logLik with lm", {
+  skip_if_not_installed("performance")
+  data(mtcars)
+  fit_fe <- estimatr::lm_robust(mpg ~ hp, data = mtcars, fixed_effects = ~cyl)
+  fit_lm <- stats::lm(mpg ~ hp + factor(cyl), data = mtcars)
+  expect_equal(
+    as.numeric(logLik(fit_lm)),
+    as.numeric(get_loglikelihood(fit_fe)),
+    tolerance = 1e-4
+  )
+})
+
 test_that("multivariate", {
   mod1 <- estimatr::lm_robust(cbind(mpg, qsec) ~ cyl + disp, data = mtcars)
   mod2 <- estimatr::lm_robust(mpg ~ cyl + disp, data = mtcars)
