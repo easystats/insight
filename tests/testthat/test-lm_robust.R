@@ -99,11 +99,29 @@ test_that("find_statistic", {
 })
 
 test_that("get_df", {
+  data(mtcars)
+  fit_fe <- lm_robust(mpg ~ hp, data = mtcars, fixed_effects = ~cyl)
   expect_identical(get_df(m1, type = "model"), 5)
+  expect_identical(get_df(fit_fe, type = "model"), 5)
 })
 
 test_that("n_parameters", {
+  data(mtcars)
+  fit_fe <- lm_robust(mpg ~ hp, data = mtcars, fixed_effects = ~cyl)
   expect_identical(n_parameters(m1), 4L)
+  expect_identical(n_parameters(fit_fe), 4L)
+})
+
+test_that("Comparison AIC and BIC with lm", {
+  skip_if_not_installed("performance")
+  data(mtcars)
+  fit_fe <- estimatr::lm_robust(mpg ~ hp, data = mtcars, fixed_effects = ~cyl)
+  out <- data.frame(
+    estimatr = unlist(performance::model_performance(fit_fe, metrics = c("AIC", "BIC"))),
+    lm = c(stats::AIC(fit_lm), stats::BIC(fit_lm))
+  )
+  expect_equal(out$estimatr[1], out$lm[1], tolerance = 1e-4)
+  expect_equal(out$estimatr[2], out$lm[2], tolerance = 1e-4)
 })
 
 test_that("multivariate", {
