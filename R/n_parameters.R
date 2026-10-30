@@ -230,6 +230,12 @@ n_parameters.stanmvreg <- n_parameters.stanreg
 # Other models -------------------------------------
 
 #' @export
+n_parameters.lm_robust <- function(x, ...) {
+  nobs(x) - stats::df.residual(x)
+}
+
+
+#' @export
 n_parameters.gls <- function(x, ...) {
   x$dims[["p"]]
 }

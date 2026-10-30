@@ -1,5 +1,6 @@
 skip_if_not_installed("estimatr")
 
+data(mtcars)
 m1 <- estimatr::lm_robust(mpg ~ gear + wt + cyl, data = mtcars)
 
 test_that("model_info", {
@@ -97,6 +98,13 @@ test_that("find_statistic", {
   expect_identical(find_statistic(m1), "t-statistic")
 })
 
+test_that("get_df", {
+  expect_identical(get_df(m1, type = "model"), 5)
+})
+
+test_that("n_parameters", {
+  expect_identical(n_parameters(m1), 4L)
+})
 
 test_that("multivariate", {
   mod1 <- estimatr::lm_robust(cbind(mpg, qsec) ~ cyl + disp, data = mtcars)
