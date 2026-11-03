@@ -1,3 +1,12 @@
+# insight (devel)
+
+## Changes
+
+* `format_table()` with `select = "ci"` or another layout with the `{ci}` token
+  now shows the CI level in the column name, for example
+  `"Coefficient (95% CI)"` instead of `"Coefficient (CI)"`. If the CI level is
+  not known, the name still shows `"CI"`.
+
 # insight 1.7.0
 
 ## Changes
