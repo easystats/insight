@@ -245,13 +245,13 @@ as.data.frame(format_table(x, p_digits = "scientific"))
 #> 6 4.10634e-01
 # "glue" columns
 as.data.frame(format_table(x, select = "minimal"))
-#>                            Parameter   Coefficient (CI)      p
-#> 1                        (Intercept) 2.64 ( 1.51, 3.77) <0.001
-#> 2               Species [versicolor] 0.90 (-0.68, 2.48)  0.261
-#> 3                Species [virginica] 1.27 (-0.35, 2.88)  0.123
-#> 4                        Sepal Width 0.69 ( 0.36, 1.02) <0.001
-#> 5 Species [versicolor] × Sepal Width 0.17 (-0.34, 0.69)  0.503
-#> 6  Species [virginica] × Sepal Width 0.21 (-0.29, 0.72)  0.411
+#>                            Parameter Coefficient (95% CI)      p
+#> 1                        (Intercept)   2.64 ( 1.51, 3.77) <0.001
+#> 2               Species [versicolor]   0.90 (-0.68, 2.48)  0.261
+#> 3                Species [virginica]   1.27 (-0.35, 2.88)  0.123
+#> 4                        Sepal Width   0.69 ( 0.36, 1.02) <0.001
+#> 5 Species [versicolor] × Sepal Width   0.17 (-0.34, 0.69)  0.503
+#> 6  Species [virginica] × Sepal Width   0.21 (-0.29, 0.72)  0.411
 as.data.frame(format_table(x, select = "{estimate}{stars}|{p}"))
 #>                            Parameter Coefficient      p
 #> 1                        (Intercept)     2.64*** <0.001

@@ -2,6 +2,8 @@
 
 ## insight 1.7.0
 
+CRAN release: 2026-10-30
+
 ### Changes
 
 - [`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.md)
