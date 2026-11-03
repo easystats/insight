@@ -43,7 +43,7 @@ test_that("format_table with stars bayes", {
 
   # glue
   out <- format_table(x, select = "minimal")
-  expect_named(out, c("Parameter", "Median (CI)", "Rhat", "ESS (tail)"))
+  expect_named(out, c("Parameter", "Median (95% CI)", "Rhat", "ESS (tail)"))
   out <- format_table(x, select = "{estimate} ({pd})")
   expect_named(out, c("Parameter", "Median (pd)", "Rhat", "ESS (tail)"))
 })
@@ -119,7 +119,7 @@ test_that("format_table with stars freq", {
 
   # glue
   out <- format_table(x, select = "minimal")
-  expect_named(out, c("Parameter", "Coefficient (CI)", "p"))
+  expect_named(out, c("Parameter", "Coefficient (95% CI)", "p"))
   out <- format_table(x, select = "se_p")
   expect_named(out, c("Parameter", "Coefficient (SE)"))
   expect_identical(
@@ -129,7 +129,7 @@ test_that("format_table with stars freq", {
   out <- format_table(x, select = "se_p", new_column_name = "Testname")
   expect_named(out, c("Parameter", "Testname"))
   out <- format_table(x, select = "minimal", new_column_name = "Test")
-  expect_named(out, c("Parameter", "Coefficient (CI) (Test)", "p (Test)"))
+  expect_named(out, c("Parameter", "Coefficient (95% CI) (Test)", "p (Test)"))
 
   # glue, broom
   x_broom <- standardize_names(x, style = "broom")
@@ -275,7 +275,7 @@ test_that("modelbased", {
   data(iris)
   model <- lm(Petal.Length ~ Species, data = iris)
   out <- modelbased::estimate_means(model, "Species")
-  expect_named(format_table(out, select = "minimal"), c("Species", "Mean (CI)"))
+  expect_named(format_table(out, select = "minimal"), c("Species", "Mean (95% CI)"))
   expect_identical(format_table(out, select = "minimal")[2, 2], "4.26 (4.14, 4.38)")
 
   data(mtcars)
@@ -283,7 +283,7 @@ test_that("modelbased", {
   out <- modelbased::estimate_relation(model, by = "qsec")
   expect_named(
     format(out, include_grid = TRUE, select = "{estimate} ({ci})|{stars}"),
-    c("qsec", "mpg", "Predicted (CI)")
+    c("qsec", "mpg", "Predicted (95% CI)")
   )
 })
 

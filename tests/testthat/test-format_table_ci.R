@@ -70,6 +70,33 @@ test_that("format_table with NA values", {
 })
 
 
+test_that("format_table with select shows ci-level in column name", {
+  d <- data.frame(Parameter = "a", Coefficient = 2, CI = 0.8, CI_low = 1, CI_high = 3)
+  ft <- insight::format_table(d, select = "ci")
+  expect_named(ft, c("Parameter", "Coefficient (80% CI)"))
+  ft <- insight::format_table(d, select = "{estimate}|{ci}")
+  expect_named(ft, c("Parameter", "Coefficient", "80% CI"))
+
+  # multiple ci-levels: name and values are from the first one
+  d <- data.frame(
+    Parameter = "a",
+    Coefficient = 2,
+    CI_low_0.8 = 1,
+    CI_high_0.8 = 3,
+    CI_low_0.95 = 0,
+    CI_high_0.95 = 4
+  )
+  ft <- insight::format_table(d, select = "ci")
+  expect_named(ft, c("Parameter", "Coefficient (80% CI)"))
+  expect_identical(ft[[2]], "2 (1.00, 3.00)")
+
+  # unknown ci-level
+  d <- data.frame(Parameter = "a", Coefficient = 2, CI_low = 1, CI_high = 3)
+  ft <- insight::format_table(d, select = "ci")
+  expect_named(ft, c("Parameter", "Coefficient (CI)"))
+})
+
+
 skip_if_not_installed("bayestestR")
 set.seed(1234)
 test_that("format_table with multiple si-levels", {

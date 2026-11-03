@@ -75,7 +75,7 @@
   if (length(style) == 1 && !is.null(new_column_name)) {
     column_names <- new_column_name
   } else {
-    column_names <- .style_pattern_to_name(style, coef_column)
+    column_names <- .style_pattern_to_name(style, coef_column, ci_column)
   }
 
   # paste glue together
@@ -420,9 +420,15 @@
 }
 
 
-.style_pattern_to_name <- function(style, coef_column) {
+.style_pattern_to_name <- function(style, coef_column, ci_column = NULL) {
   if (is.null(coef_column)) {
     coef_column <- "Estimate"
+  }
+  # the first CI column is the one that fills the {ci} token. Its name includes
+  # the CI level, e.g. "95% CI", except for columns like "CI" or "conf.int"
+  ci_name <- "CI"
+  if (length(ci_column) && endsWith(ci_column[1], " CI")) {
+    ci_name <- ci_column[1]
   }
   column_names <- tolower(style)
   # completely remove these patterns
@@ -434,7 +440,7 @@
   column_names <- gsub("\\Qrope\\E", "% in ROPE", column_names)
   column_names <- gsub("(estimate|coefficient|coef)", coef_column, column_names)
   column_names <- gsub("\\Qse\\E", "SE", column_names)
-  column_names <- gsub("\\<ci\\>", "CI", column_names)
+  column_names <- gsub("\\<ci\\>", ci_name, column_names)
   column_names <- gsub("<br>", "", column_names, fixed = TRUE)
   column_names
 }
