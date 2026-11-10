@@ -10,10 +10,10 @@
 ## Bug fixes
 
 * `get_modelmatrix()` for *brms* models now keeps the interaction and
-  transformed terms of the population-level formula. Before, it had one column
-  per variable. Columns for interactions such as `Days:grpb` were missing, and
-  terms such as `log(Days + 1)` or `poly(Days, 2)` gave a column of the
-  untransformed variable. The columns now take the names of the *brms*
+  transformed terms of the population-level formula. Before, it used only the
+  variables of the formula. Columns for interactions such as `Days:grpb` were
+  missing, and terms such as `log(Days + 1)` or `poly(Days, 2)` gave a column
+  of the untransformed variable. The columns now take the names of the *brms*
   coefficients, for example `logBase` for `log(Base)`, and the intercept
   column stays `(Intercept)`. `offset()` terms no longer add a column. This
   also fixes `get_variance()` for these models. If the number of columns

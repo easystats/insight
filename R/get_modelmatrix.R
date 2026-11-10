@@ -370,7 +370,8 @@ get_modelmatrix.brmsfit <- function(x, ...) {
 # terms are kept as they are, so that interactions and transformations are
 # kept.
 .brms_fixed_terms <- function(f) {
-  # the special functions of brms that can be part of population-level terms
+  # the special functions that brms looks for in population-level terms (brms
+  # stops with an error for te() and ti())
   specials <- c(
     "mo",
     "me",
