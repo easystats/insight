@@ -18,8 +18,9 @@
   column stays `(Intercept)`. `offset()` terms no longer add a column. This
   also fixes `get_variance()` for these models. If the number of columns
   differed from the number of coefficients, it returned `NULL`. If the numbers
-  matched, it returned a wrong `var.fixed`, and its `var.random` left out the
-  random slopes of transformed terms.
+  matched, it returned a wrong `var.fixed`. Its `var.random` also left out a
+  random slope on a transformed term, such as `(1 + log(Base) | patient)`,
+  when `log(Base)` was also a population-level term.
 
 # insight 1.7.0
 
