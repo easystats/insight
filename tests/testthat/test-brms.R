@@ -1044,7 +1044,7 @@ test_that("clean_parameters", {
 
 test_that("get_modelmatrix", {
   out <- get_modelmatrix(m1)
-  expect_identical(dim(out), c(236L, 4L))
+  expect_identical(dim(out), c(236L, 5L))
   m9 <- suppressWarnings(insight::download_model("brms_mo2"))
   skip_if(is.null(m9))
   out <- get_modelmatrix(m9)
@@ -1143,6 +1143,50 @@ test_that("get_variance works", {
   )
 })
 
+
+# var.fixed and var.random do not use the null model, so the model itself is
+# passed to skip a refit
+test_that("get_variance, interaction terms, Issue #1307", {
+  # variance of the linear predictor from brms' own model matrix
+  expected <- stats::var(as.vector(brms::standata(m1)$X %*% brms::fixef(m1)[, 1]))
+  out <- suppressWarnings(get_variance(m1, null_model = m1))
+  expect_equal(out$var.fixed, expected, tolerance = 1e-6)
+})
+
+test_that("get_variance, random slope of a transformed term, Issue #1307", {
+  # apparently BH is required to fit these brms models
+  skip_if_not_installed("BH")
+  # sink() writing permission fail on some Windows CI machines
+  skip_on_os("windows")
+
+  void <- suppressMessages(suppressWarnings(capture.output({
+    mod <- brms::brm(
+      count ~ log(Base) + Age + (1 + log(Base) | patient),
+      data = brms::epilepsy,
+      family = poisson(),
+      refresh = 0,
+      chains = 1,
+      iter = 600,
+      warmup = 300,
+      cores = 1,
+      seed = 1,
+      silent = 2
+    )
+  })))
+  out <- suppressWarnings(get_variance(mod, null_model = mod))
+
+  # variance of the linear predictor from brms' own model matrix
+  expected <- stats::var(as.vector(brms::standata(mod)$X %*% brms::fixef(mod)[, 1]))
+  expect_equal(out$var.fixed, expected, tolerance = 1e-6)
+
+  # random-effect variance, Johnson (2014), from brms' own random-effect
+  # design matrix and the posterior means of the covariance matrix
+  sdata <- brms::standata(mod)
+  z_mat <- cbind(sdata$Z_1_1, sdata$Z_1_2)
+  s_mat <- brms::VarCorr(mod)$patient$cov[, 1, ]
+  expected <- sum(diag(crossprod(z_mat %*% s_mat, z_mat))) / n_obs(mod)
+  expect_equal(out$var.random, expected, tolerance = 1e-6)
+})
 
 # get variance
 test_that("get_variance aligns with get_sigma", {
