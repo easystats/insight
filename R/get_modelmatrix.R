@@ -324,36 +324,132 @@ get_modelmatrix.brmsfit <- function(x, ...) {
   if (identical(formula_rhs, "1")) {
     matrix(1, nrow = nrow(model_data), dimnames = list(NULL, "(Intercept)"))
   } else {
-    formula_rhs <- stats::as.formula(paste0("~", formula_rhs))
     intercept <- has_intercept(x, verbose = FALSE)
-    predictors <- setdiff(all.vars(formula_rhs), "Intercept")
-    # the formula used in model.matrix() is not allowed to have special functions,
-    # like brms::mo() and similar. Thus, we reformulate after using "all.vars()",
-    # which will only keep the variable names.
-    if (!length(predictors)) {
-      if (intercept) {
-        matrix(1, nrow = nrow(model_data), dimnames = list(NULL, "(Intercept)"))
-      } else {
-        matrix(nrow = nrow(model_data), ncol = 0)
+    predictors <- .brms_fixed_terms(stats::as.formula(paste0("~", formula_rhs)))
+    if (length(predictors)) {
+      # terms from a model frame keep the basis of poly() or scale(), which
+      # is needed for new data
+      # the environment of the model formula, so that functions used in
+      # the formula, like `log()` or a function the user wrote, are found
+      formula_env <- environment(conditional_formula)
+      if (is.null(formula_env)) {
+        formula_env <- environment()
       }
-    } else {
+      model_frame <- stats::model.frame(
+        stats::reformulate(predictors, intercept = intercept, env = formula_env),
+        data = model_data
+      )
       # brms takes the contrasts from the factors in the data. Re-leveling
       # new data drops this attribute, so we pass the contrasts explicitly.
-      # Only predictors are used, because model.matrix() warns about
-      # contrasts for variables that are not in the formula.
+      # They are read from the model frame, because model.matrix() warns about
+      # contrasts for variables that are not in the formula, like `cyl` in
+      # `factor(cyl)`.
       model_contrasts <- compact_list(lapply(
-        Filter(is.factor, model_data[intersect(predictors, colnames(model_data))]),
+        Filter(is.factor, model_frame),
         attr,
         which = "contrasts"
       ))
-      .modelmatrix_model_contrasts(
-        object = stats::reformulate(predictors, intercept = intercept),
+      mm <- .modelmatrix_model_contrasts(
+        object = attr(model_frame, "terms"),
         model_data = model_data,
         model_contrasts = model_contrasts,
         ...
       )
+      # brms names the coefficients after the columns of its model matrix,
+      # with special characters replaced, e.g. "logBase" for `log(Base)`. We
+      # keep "(Intercept)", which brms renames to "Intercept".
+      not_intercept <- colnames(mm) != "(Intercept)"
+      colnames(mm)[not_intercept] <- .brms_rename(colnames(mm)[not_intercept])
+      mm
+    } else if (intercept) {
+      matrix(1, nrow = nrow(model_data), dimnames = list(NULL, "(Intercept)"))
+    } else {
+      matrix(nrow = nrow(model_data), ncol = 0)
     }
   }
+}
+
+
+# the formula used in model.matrix() is not allowed to have special functions,
+# like brms::mo() and similar. Terms with these functions, or with the
+# `Intercept` variable of brms, are replaced by their variables. All other
+# terms are kept as they are, so that interactions and transformations are
+# kept.
+.brms_fixed_terms <- function(f) {
+  # the special functions that brms looks for in population-level terms (brms
+  # stops with an error for te() and ti())
+  specials <- c(
+    "mo",
+    "me",
+    "mi",
+    "s",
+    "t2",
+    "te",
+    "ti",
+    "gp",
+    "cs",
+    "cse",
+    "mmc",
+    "arma",
+    "ar",
+    "ma",
+    "cosy",
+    "unstr",
+    "sar",
+    "car",
+    "fcor"
+  )
+  # a function call, not a variable that has the name of a function
+  specials_pattern <- paste0(
+    "(^|[^[:alnum:]._])(",
+    paste(specials, collapse = "|"),
+    ")\\("
+  )
+  term_labels <- attr(stats::terms(f), "term.labels")
+  out <- lapply(term_labels, function(i) {
+    term_vars <- all.vars(str2lang(i))
+    if (grepl(specials_pattern, i) || "Intercept" %in% term_vars) {
+      term_vars <- setdiff(term_vars, "Intercept")
+      vapply(
+        term_vars,
+        function(v) deparse(as.name(v), backtick = TRUE),
+        character(1),
+        USE.NAMES = FALSE
+      )
+    } else {
+      i
+    }
+  })
+  unique(unlist(out, use.names = FALSE))
+}
+
+
+# the default renaming of brms' internal `rename()` (brms 2.23.0), which brms
+# uses for the names of the coefficients
+.brms_rename <- function(x) {
+  pattern <- c(
+    " ",
+    "(",
+    ")",
+    "[",
+    "]",
+    ",",
+    "\"",
+    "'",
+    "?",
+    "+",
+    "-",
+    "*",
+    "/",
+    "^",
+    "=",
+    "$"
+  )
+  replacement <- c(rep("", 9), "P", "M", "MU", "D", "E", "EQ", "USD")
+  for (i in seq_along(pattern)) {
+    x <- gsub(pattern[i], replacement[i], x, fixed = TRUE)
+  }
+  x
 }
 
 #' @export

@@ -252,10 +252,10 @@ test_that("get_modelmatrix works with NA columns, Issue #1147", {
 # clmm and brmsfit: model contrasts, new data, user contrasts, Issue #1237 ----
 
 # compare column names, then values of the plain matrices
-expect_modelmatrix <- function(out, expected) {
-  expect_identical(colnames(out), colnames(expected))
+expect_modelmatrix <- function(out, expected, info = NULL) {
+  expect_identical(colnames(out), colnames(expected), info = info)
   plain <- function(x) matrix(as.vector(x), nrow = nrow(x), ncol = ncol(x))
-  expect_equal(plain(out), plain(expected))
+  expect_equal(plain(out), plain(expected), info = info)
 }
 
 clmm_fixture <- function() {
@@ -354,6 +354,158 @@ test_that("get_modelmatrix - brmsfit, no warning for contrasts of a grouping fac
     out <- get_modelmatrix(m)
   })
   expect_identical(colnames(out), c("(Intercept)", "wt"))
+})
+
+
+# brmsfit: terms of the population-level formula, Issue #1307 ----
+
+brms_sleep_data <- function() {
+  set.seed(1307)
+  d_sleep <- lme4::sleepstudy
+  n <- nrow(d_sleep)
+  d_sleep$grp <- factor(rep_len(c("a", "b", "c"), n))
+  d_sleep$g2 <- factor(
+    sample(c("c-d", "a b", "e/f"), n, replace = TRUE),
+    levels = c("c-d", "a b", "e/f")
+  )
+  d_sleep$ord <- factor(
+    sample(c("lo", "mid", "hi"), n, replace = TRUE),
+    levels = c("lo", "mid", "hi"),
+    ordered = TRUE
+  )
+  d_sleep$z <- rnorm(n)
+  d_sleep$sdx <- runif(n, 0.1, 1)
+  d_sleep
+}
+
+brms_rhs_fit <- function(rhs, d_fit) {
+  suppressMessages(suppressWarnings(brms::brm(
+    stats::as.formula(paste("Reaction ~", rhs)),
+    data = d_fit,
+    empty = TRUE
+  )))
+}
+
+# brms names the intercept column "Intercept", insight keeps "(Intercept)"
+standata_x <- function(model, ...) {
+  out <- brms::standata(model, ...)$X
+  colnames(out)[colnames(out) == "Intercept"] <- "(Intercept)"
+  out
+}
+
+test_that("get_modelmatrix - brmsfit, interactions and transformations", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("lme4")
+  d_sleep <- brms_sleep_data()
+  rhs <- c(
+    "Days * grp",
+    "grp / Days",
+    "poly(Days, 2) * grp",
+    "poly(Days, degree = 2) * grp",
+    "log(Days + 1) + grp",
+    "I(Days^2) + Days",
+    "I(Days - 1) + g2",
+    "I(Days * 2) + I(Days/2)",
+    "factor(Days) + grp",
+    "scale(Days) + grp",
+    "0 + Days * grp",
+    "Days + offset(z)",
+    "0 + Intercept + Days * grp"
+  )
+  for (i in rhs) {
+    m <- brms_rhs_fit(i, d_sleep)
+    expect_modelmatrix(get_modelmatrix(m), standata_x(m), info = i)
+  }
+})
+
+test_that("get_modelmatrix - brmsfit, interactions and transformations, new data", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("lme4")
+  d_sleep <- brms_sleep_data()
+  nd <- d_sleep[d_sleep$grp != "c" & d_sleep$Days < 5, ]
+  rhs <- c(
+    "Days * grp",
+    "poly(Days, 2) + grp",
+    "scale(Days) + grp",
+    "log(Days + 1) + grp"
+  )
+  for (i in rhs) {
+    m <- brms_rhs_fit(i, d_sleep)
+    expect_modelmatrix(
+      get_modelmatrix(m, data = nd),
+      standata_x(m, newdata = nd),
+      info = i
+    )
+  }
+})
+
+test_that("get_modelmatrix - brmsfit, function from the environment of the fit", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("lme4")
+  fit_local <- function(d_fit) {
+    half <- function(x) x / 2
+    suppressMessages(suppressWarnings(
+      brms::brm(Reaction ~ half(Days) + grp, data = d_fit, empty = TRUE)
+    ))
+  }
+  m <- fit_local(brms_sleep_data())
+  expect_modelmatrix(get_modelmatrix(m), standata_x(m))
+})
+
+test_that("get_modelmatrix - brmsfit, special terms give their variables", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("withr")
+  d_sleep <- brms_sleep_data()
+  expected <- list(
+    "mo(ord) + Days" = c("(Intercept)", "ord.L", "ord.Q", "Days"),
+    "me(z, sdx) + Days" = c("(Intercept)", "z", "sdx", "Days"),
+    "s(Days) + grp" = c("(Intercept)", "Days", "grpb", "grpc"),
+    "gp(Days) + grp" = c("(Intercept)", "Days", "grpb", "grpc"),
+    "Days + ar(time = Days, gr = Subject)" = c(
+      "(Intercept)",
+      "Days",
+      paste0("Subject", levels(d_sleep$Subject)[-1])
+    ),
+    "mo(ord) + Days * grp" = c(
+      "(Intercept)",
+      "ord.L",
+      "ord.Q",
+      "Days",
+      "grpb",
+      "grpc",
+      "Days:grpb",
+      "Days:grpc"
+    ),
+    # a variable with the name of a special function is kept as a variable
+    "Days * s" = c("(Intercept)", "Days", "s", "Days:s")
+  )
+  d_sleep$s <- d_sleep$sdx
+  for (i in names(expected)) {
+    # brm() finds me() only when brms is attached
+    m <- withr::with_package("brms", brms_rhs_fit(i, d_sleep))
+    expect_identical(colnames(get_modelmatrix(m)), expected[[i]], info = i)
+  }
+})
+
+test_that("get_modelmatrix - brmsfit, interaction with sum contrasts", {
+  skip_if_not_installed("brms")
+  d_brms <- mtcars
+  d_brms$cyl <- factor(d_brms$cyl)
+  contrasts(d_brms$cyl) <- contr.sum(3)
+  m <- suppressMessages(suppressWarnings(
+    brms::brm(mpg ~ cyl * wt, data = d_brms, empty = TRUE)
+  ))
+  expect_modelmatrix(get_modelmatrix(m), standata_x(m))
+  nd <- droplevels(d_brms[d_brms$cyl != "8", ])
+  expect_modelmatrix(get_modelmatrix(m, data = nd), standata_x(m, newdata = nd))
+  m <- suppressMessages(suppressWarnings(
+    brms::brm(mpg ~ factor(cyl) + wt, data = d_brms, empty = TRUE)
+  ))
+  expect_no_warning({
+    out <- get_modelmatrix(m)
+  })
+  expect_modelmatrix(out, standata_x(m))
 })
 
 test_that("get_modelmatrix - clmm fitted with model = FALSE", {

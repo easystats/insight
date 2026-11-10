@@ -7,6 +7,21 @@
   `"Coefficient (95% CI)"` instead of `"Coefficient (CI)"`. If the CI level is
   not known, the name still shows `"CI"`.
 
+## Bug fixes
+
+* `get_modelmatrix()` for *brms* models now keeps the interaction and
+  transformed terms of the population-level formula. Before, it used only the
+  variables of the formula. Columns for interactions such as `Days:grpb` were
+  missing, and terms such as `log(Days + 1)` or `poly(Days, 2)` gave a column
+  of the untransformed variable. The columns now take the names of the *brms*
+  coefficients, for example `logBase` for `log(Base)`, and the intercept
+  column stays `(Intercept)`. `offset()` terms no longer add a column. This
+  also fixes `get_variance()` for these models. If the number of columns
+  differed from the number of coefficients, it returned `NULL`. If the numbers
+  matched, it returned a wrong `var.fixed`. Its `var.random` also left out a
+  random slope on a transformed term, such as `(1 + log(Base) | patient)`,
+  when `log(Base)` was also a population-level term.
+
 # insight 1.7.0
 
 ## Changes
