@@ -463,8 +463,11 @@ test_that("get_modelmatrix - brmsfit, special terms give their variables", {
       "grpc",
       "Days:grpb",
       "Days:grpc"
-    )
+    ),
+    # a variable with the name of a special function is kept as a variable
+    "Days * s" = c("(Intercept)", "Days", "s", "Days:s")
   )
+  d_sleep$s <- d_sleep$sdx
   for (i in names(expected)) {
     # brm() finds me() only when brms is attached
     m <- withr::with_package("brms", brms_rhs_fit(i, d_sleep))
