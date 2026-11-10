@@ -329,8 +329,14 @@ get_modelmatrix.brmsfit <- function(x, ...) {
     if (length(predictors)) {
       # terms from a model frame keep the basis of poly() or scale(), which
       # is needed for new data
+      # the environment of the model formula, so that functions used in
+      # the formula, like `log()` or a function the user wrote, are found
+      formula_env <- environment(conditional_formula)
+      if (is.null(formula_env)) {
+        formula_env <- environment()
+      }
       model_frame <- stats::model.frame(
-        stats::reformulate(predictors, intercept = intercept),
+        stats::reformulate(predictors, intercept = intercept, env = formula_env),
         data = model_data
       )
       # brms takes the contrasts from the factors in the data. Re-leveling

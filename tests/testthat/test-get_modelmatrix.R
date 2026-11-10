@@ -439,6 +439,19 @@ test_that("get_modelmatrix - brmsfit, interactions and transformations, new data
   }
 })
 
+test_that("get_modelmatrix - brmsfit, function from the environment of the fit", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("lme4")
+  fit_local <- function(d_fit) {
+    half <- function(x) x / 2
+    suppressMessages(suppressWarnings(
+      brms::brm(Reaction ~ half(Days) + grp, data = d_fit, empty = TRUE)
+    ))
+  }
+  m <- fit_local(brms_sleep_data())
+  expect_modelmatrix(get_modelmatrix(m), standata_x(m))
+})
+
 test_that("get_modelmatrix - brmsfit, special terms give their variables", {
   skip_if_not_installed("brms")
   skip_if_not_installed("lme4")
