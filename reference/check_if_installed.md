@@ -37,10 +37,9 @@ check_if_installed(
 
   A character vector, representing the minimum package version that is
   required for each package. Should be of same length as `package`. If
-  `NULL`, will automatically check the DESCRIPTION file for the correct
-  minimum version. If using `minimum_version` with more than one
-  package, `NA` should be used instead of `NULL` for packages where a
-  specific version is not necessary.
+  `NULL`, minimum version requirements are ignored. If using
+  `minimum_version` with more than one package, `NA` should be used for
+  packages where a specific version is not necessary.
 
 - quietly:
 

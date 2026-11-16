@@ -93,10 +93,9 @@ needed package is not installed. Ignored if <code>quietly = TRUE</code>.</p></dd
 <dt id="arg-minimum-version">minimum_version<a class="anchor" aria-label="anchor" href="#arg-minimum-version"></a></dt>
 <dd><p>A character vector, representing the minimum package
 version that is required for each package. Should be of same length as
-<code>package</code>. If <code>NULL</code>, will automatically check the DESCRIPTION file for
-the correct minimum version. If using <code>minimum_version</code> with more than one
-package, <code>NA</code> should be used instead of <code>NULL</code> for packages where a
-specific version is not necessary.</p></dd>
+<code>package</code>. If <code>NULL</code>, minimum version requirements are ignored. If using
+<code>minimum_version</code> with more than one package, <code>NA</code> should be used for
+packages where a specific version is not necessary.</p></dd>
 
 
 <dt id="arg-quietly">quietly<a class="anchor" aria-label="anchor" href="#arg-quietly"></a></dt>
