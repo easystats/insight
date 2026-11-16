@@ -12,13 +12,13 @@
 #'   ignored. Use this argument to internally check for package dependencies
 #'   without stopping or warnings.
 #' @param prompt If `TRUE`, will prompt the user to install needed package(s).
-#'   Ignored if `quietly = TRUE`.
+#'   Ignored if `quietly = TRUE`. By default, `prompt` is set to `interactive()`.
 #' @param minimum_version A character vector, representing the minimum package
 #'   version that is required for each package. Should be of same length as
 #'   `package`. If `NULL`, minimum version requirements are ignored. If using
 #'   `minimum_version` with more than one package, `NA` should be used for
 #'   packages where a specific version is not necessary.
-#' @param ... Currently ignored
+#' @param ... Further arguments passed down to `utils::install.packages()`.
 #'
 #' @return If `stop = TRUE`, and `package` is not yet installed, the
 #'   function stops and throws an error. Else, a named logical vector is

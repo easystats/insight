@@ -37,9 +37,9 @@ ignored. Use this argument to internally check for package dependencies
 without stopping or warnings.}
 
 \item{prompt}{If \code{TRUE}, will prompt the user to install needed package(s).
-Ignored if \code{quietly = TRUE}.}
+Ignored if \code{quietly = TRUE}. By default, \code{prompt} is set to \code{interactive()}.}
 
-\item{...}{Currently ignored}
+\item{...}{Further arguments passed down to \code{utils::install.packages()}.}
 }
 \value{
 If \code{stop = TRUE}, and \code{package} is not yet installed, the
