@@ -52,11 +52,13 @@ check_if_installed(
 - prompt:
 
   If `TRUE`, will prompt the user to install needed package(s). Ignored
-  if `quietly = TRUE`.
+  if `quietly = TRUE`. By default, `prompt` is set to
+  [`interactive()`](https://rdrr.io/r/base/interactive.html).
 
 - ...:
 
-  Currently ignored
+  Further arguments passed down to
+  [`utils::install.packages()`](https://rdrr.io/r/utils/install.packages.html).
 
 ## Value
 
