@@ -26,10 +26,9 @@ needed package is not installed. Ignored if \code{quietly = TRUE}.}
 
 \item{minimum_version}{A character vector, representing the minimum package
 version that is required for each package. Should be of same length as
-\code{package}. If \code{NULL}, will automatically check the DESCRIPTION file for
-the correct minimum version. If using \code{minimum_version} with more than one
-package, \code{NA} should be used instead of \code{NULL} for packages where a
-specific version is not necessary.}
+\code{package}. If \code{NULL}, minimum version requirements are ignored. If using
+\code{minimum_version} with more than one package, \code{NA} should be used for
+packages where a specific version is not necessary.}
 
 \item{quietly}{Logical, if \code{TRUE}, invisibly returns a vector of logicals
 (\code{TRUE} for each installed package, \code{FALSE} otherwise), and does not stop

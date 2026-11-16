@@ -15,10 +15,9 @@
 #'   Ignored if `quietly = TRUE`.
 #' @param minimum_version A character vector, representing the minimum package
 #'   version that is required for each package. Should be of same length as
-#'   `package`. If `NULL`, will automatically check the DESCRIPTION file for
-#'   the correct minimum version. If using `minimum_version` with more than one
-#'   package, `NA` should be used instead of `NULL` for packages where a
-#'   specific version is not necessary.
+#'   `package`. If `NULL`, minimum version requirements are ignored. If using
+#'   `minimum_version` with more than one package, `NA` should be used for
+#'   packages where a specific version is not necessary.
 #' @param ... Currently ignored
 #'
 #' @return If `stop = TRUE`, and `package` is not yet installed, the
@@ -50,14 +49,6 @@ check_if_installed <- function(
 ) {
   is_installed <- vapply(package, requireNamespace, quietly = TRUE, FUN.VALUE = TRUE)
   what_is_wrong <- what_you_can_do <- NULL
-
-  # This function is currently not reliable, as it reads the suggests field
-  # from "insight", even when called from other functions. See when running
-  # this example: https://github.com/easystats/bayestestR/issues/627
-
-  # if (is.null(minimum_version)) {
-  #   minimum_version <- .safe(.get_dep_version(dep = package))
-  # }
 
   # validation check for equal length of package and minimum_version
   if (!is.null(minimum_version) && length(package) != length(minimum_version)) {
@@ -162,35 +153,4 @@ print.check_if_installed <- function(x, ...) {
     cat("Following packages are not installed:\n")
     print_color(paste0("- ", names(x)[!x], collapse = "\n"), "red")
   }
-}
-
-## BUG This function is currently not reliable, as it reads the suggests field
-## from "insight", even when called from other functions. See when running
-## this example: https://github.com/easystats/bayestestR/issues/627
-
-.get_dep_version <- function(dep) {
-  # iterate environments, to find the correct package
-  minframe <- 1L
-  n <- sys.nframe()
-  pkg <- NULL
-  while (n > minframe && is.null(pkg)) {
-    pkg <- utils::packageName(env = sys.frame(n))
-  }
-  # if still NULL, or if "insight", return
-  if (is.null(pkg) || pkg == "insight") {
-    return(NULL)
-  }
-  suggests_field <- utils::packageDescription(pkg, fields = "Suggests")
-  suggests_list <- unlist(strsplit(suggests_field, ",", fixed = TRUE))
-  out <- lapply(dep, function(x) {
-    dep_string <- grep(x, suggests_list, value = TRUE, fixed = TRUE)
-    dep_string <- dep_string[which.min(nchar(dep_string))]
-    dep_string <- unlist(strsplit(dep_string, ">", fixed = TRUE))
-    gsub("[^0-9.]+", "", dep_string[2])
-  })
-  out <- unlist(compact_list(out))
-  if (all(is.na(out)) || !length(out)) {
-    out <- NULL
-  }
-  out
 }
