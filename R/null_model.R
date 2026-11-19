@@ -74,6 +74,14 @@ null_model.default <- function(model, verbose = TRUE, ...) {
 
 #' @export
 null_model.brmsfit <- function(model, verbose = TRUE, ...) {
+  # `update.brmsfit()` can't update the formulas of multivariate models
+  if (is_multivariate(model)) {
+    if (verbose) {
+      format_warning("Can't calculate null-model for multivariate brms models.")
+    }
+    return(NULL)
+  }
+
   model_formula <- find_formula(model, verbose = verbose)
   offset_term <- .grep_offset_term(model_formula)
 
