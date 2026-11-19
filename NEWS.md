@@ -22,6 +22,12 @@
   random slope on a transformed term, such as `(1 + log(Base) | patient)`,
   when `log(Base)` was also a population-level term.
 
+* `null_model()` now works for *brms* models. Before, it returned `NULL`, so
+  `get_variance()` returned a `var.distribution` of 0 for every non-Gaussian
+  *brms* mixed model unless a null model was passed by hand. Results of
+  functions that use it, such as `performance::r2_nakagawa()` and
+  `performance::icc()`, were wrong for these models: the adjusted ICC was 1.
+
 # insight 1.7.0
 
 ## Changes

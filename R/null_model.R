@@ -73,6 +73,48 @@ null_model.default <- function(model, verbose = TRUE, ...) {
 
 
 #' @export
+null_model.brmsfit <- function(model, verbose = TRUE, ...) {
+  # `update.brmsfit()` can't update the formulas of multivariate models
+  if (is_multivariate(model)) {
+    if (verbose) {
+      format_warning("Can't calculate null-model for multivariate brms models.")
+    }
+    return(NULL)
+  }
+
+  model_formula <- find_formula(model, verbose = verbose)
+  offset_term <- .grep_offset_term(model_formula)
+
+  # `update.brmsfit()` has no `evaluate` argument and always refits the model,
+  # using the data stored in the model object. Offset terms are part of the
+  # formula, and the left-hand side keeps addition terms like `trials()`.
+  f <- stats::formula(model)$formula
+  re_terms <- vapply(.findbars(f), safe_deparse, character(1))
+  rhs <- c(
+    if (length(re_terms)) paste0("(", re_terms, ")") else "1",
+    if (!is.null(offset_term)) sprintf("offset(%s)", offset_term)
+  )
+  nullform <- stats::reformulate(rhs, response = f[[2]])
+
+  tryCatch(
+    suppressWarnings(suppressMessages(
+      stats::update(model, formula. = nullform, refresh = 0)
+    )),
+    error = function(e) {
+      if (verbose) {
+        format_warning(paste0(
+          "Can't calculate null-model (",
+          e$message,
+          ")."
+        ))
+      }
+      NULL
+    }
+  )
+}
+
+
+#' @export
 null_model.multinom <- function(model, verbose = TRUE, ...) {
   model_formula <- find_formula(model, verbose = verbose)
   offset_term <- .grep_offset_term(model_formula)
@@ -282,10 +324,6 @@ null_model.glmmTMB <- function(model, verbose = TRUE, ...) {
   } else {
     f <- stats::formula(model)
     resp <- find_response(model)
-    # fix for brms models
-    if (inherits(model, "brmsfit")) {
-      f <- f$formula
-    }
     re.terms <- paste0("(", sapply(.findbars(f), safe_deparse), ")")
     nullform <- stats::reformulate(re.terms, response = resp)
 
