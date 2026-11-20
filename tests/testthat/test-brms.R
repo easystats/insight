@@ -1194,6 +1194,7 @@ test_that("get_variance aligns with get_sigma", {
   data(mtcars)
   set.seed(123)
   mdl <- suppressWarnings(insight::download_model("brms_mixed_9"))
+  skip_if(is.null(mdl))
   VC <- lme4::VarCorr(mdl)
   out1 <- VC$residual__$sd[1, 1]^2 # Residual variance
   out2 <- get_variance(mdl)$var.residual
