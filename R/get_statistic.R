@@ -46,9 +46,10 @@ get_statistic <- function(x, ...) {
 #' @rdname get_statistic
 #' @export
 get_statistic.default <- function(x, column_index = 3, verbose = TRUE, ...) {
-  cs <- suppressWarnings(stats::coef(summary(x)))
+  cs <- .safe(suppressWarnings(stats::coef(summary(x))))
 
-  if (column_index > ncol(cs)) {
+  # check if we had a valid object at all
+  if (is.null(cs) || !length(cs) || column_index > ncol(cs)) {
     if (isTRUE(verbose)) {
       format_warning("Could not access test statistic of model parameters.")
     }

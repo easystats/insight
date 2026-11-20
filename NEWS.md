@@ -28,6 +28,9 @@
   functions that use it, such as `performance::r2_nakagawa()` and
   `performance::icc()`, were wrong for these models: the adjusted ICC was 1.
 
+* Fixed issue in `get_statistic()` when the (model) object had no appropriate
+  `summary()` method.
+
 # insight 1.7.0
 
 ## Changes
