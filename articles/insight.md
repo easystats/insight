@@ -46,7 +46,11 @@ website, <https://easystats.github.io/insight/>, for a detailed list of
 the arguments associated with each function as well as the returned
 values from each function.
 
-![](insight_design_1.png)
+![In results \<- model(y ~ x, data), get_parameters() and get_variance()
+describe the results. model_info() and find_algorithm() describe the
+model. find\_\* functions identify parts of the formula, while get\_\*
+functions extract data, response values, predictors, random effects, and
+priors.](insight_design_1.png)
 
 ## Definition of Model Components
 
@@ -77,7 +81,9 @@ as *coefficients*.
   are “unique”. As such, if a variable appears as a fixed effect and a
   random slope, it is treated as one (the same) predictor.
 
-![](figure3a.png)
+![In y ~ x1 + x2 + (rs \| g), find_response() identifies y and
+find_predictors() identifies the fixed predictors x1 and
+x2.](figure3a.png)
 
 ### Variables
 
@@ -86,7 +92,9 @@ response variable, predictors or random effects. A “variable” only
 relates to the unique occurrence of a term, or the term name. For
 instance, the expression `x + poly(x, 2)` has only the variable `x`.
 
-![](figure3b.png)
+![In log(y) ~ x1 + I(x1^2) + (x1 + rs \| g), find_variables() identifies
+the unique names y, x1, rs, and g. x1 appears in several places and
+counts as one variable.](figure3b.png)
 
 ### Terms
 
@@ -95,7 +103,9 @@ operators, or involve arithmetic expressions. For instance, the
 expression `x + poly(x, 2)` has *one* variable `x`, but *two* terms `x`
 and `poly(x, 2)`.
 
-![](figure3c.png)
+![In log(y) ~ x1 + I(x1^2) + (x1 + rs \| g), find_terms() identifies the
+transformed response log(y), fixed terms x1 and I(x1^2), random slope
+rs, and grouping factor g.](figure3c.png)
 
 ### Random Effects
 
@@ -104,7 +114,9 @@ and `poly(x, 2)`.
 - **random or grouping factors**: variables that are specified as
   grouping variables in a mixed effects model.
 
-![](figure3d.png)
+![In the random-effects term (rs \| g), find_random_slopes() identifies
+the slope variable rs and find_random() identifies grouping factor
+g.](figure3d.png)
 
 ## Examples
 

@@ -96,7 +96,9 @@ captions.
 Since the coloured text is not rendered, we provide a screenshot as
 example here:
 
-![](export_table.png)
+![R console output from export_table() shows the caption A green title
+in green above three rows of iris data. The columns are Sepal.Length,
+Sepal.Width, and Species.](export_table.png)
 
 ## Adding (coloured) table footers
 
