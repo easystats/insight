@@ -69,6 +69,10 @@ export_table(out)
 Since the coloured text is not rendered, we provide a screenshot as example here:
 
 ```{r echo=FALSE, out.width="50%"}
+#| fig.alt: >-
+#|   R console output from export_table() shows the caption A green title
+#|   in green above three rows of iris data. The columns are Sepal.Length,
+#|   Sepal.Width, and Species.
 knitr::include_graphics("export_table.png", dpi = 72)
 ```
 
