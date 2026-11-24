@@ -53,3 +53,43 @@ test_that("check_if_installed", {
   )
   expect_equal(out, c(TRUE, TRUE), ignore_attr = TRUE)
 })
+
+test_that("installed packages that fail to load report the load error", {
+  skip_if_not_installed("withr")
+
+  lib <- withr::local_tempdir()
+  package <- "insighttestbroken"
+  dir.create(file.path(lib, package))
+  writeLines(
+    c(paste("Package:", package), "Version: 1.0"),
+    file.path(lib, package, "DESCRIPTION")
+  )
+  withr::local_libpaths(lib, action = "prefix")
+  withr::local_options(list(width = 500L))
+
+  cause <- tryCatch(loadNamespace(package), error = conditionMessage)
+  result <- tryCatch(
+    check_if_installed(package, prompt = FALSE),
+    error = conditionMessage
+  )
+  expect_match(result, "Could not load package `insighttestbroken`", fixed = TRUE)
+  expect_match(result, cause, fixed = TRUE)
+  expect_false(grepl("install.packages", result, fixed = TRUE))
+
+  expect_warning(
+    check_if_installed(package, stop = FALSE, prompt = FALSE),
+    "Could not load package"
+  )
+  out <- expect_silent(
+    check_if_installed(c(working = "stats", broken = package), quietly = TRUE)
+  )
+  expect_identical(unclass(out), c(working = TRUE, broken = FALSE))
+  expect_output(print(out), "Packages that failed the check:", fixed = TRUE)
+
+  result <- tryCatch(
+    check_if_installed(c(package, "insighttestmissing"), prompt = FALSE),
+    error = conditionMessage
+  )
+  expect_match(result, "Could not load package", fixed = TRUE)
+  expect_match(result, 'install.packages("insighttestmissing")', fixed = TRUE)
+})

@@ -21,8 +21,8 @@ needs to be checked in any of the libraries.}
 \item{reason}{A phrase describing why the package is needed. The default is a
 generic description.}
 
-\item{stop}{Logical that decides whether the function should stop if the
-needed package is not installed. Ignored if \code{quietly = TRUE}.}
+\item{stop}{Logical controlling whether a failed check stops or warns when
+\code{prompt = FALSE}. Ignored if \code{quietly = TRUE}.}
 
 \item{minimum_version}{A character vector, representing the minimum package
 version that is required for each package. Should be of same length as
@@ -30,11 +30,8 @@ version that is required for each package. Should be of same length as
 \code{minimum_version} with more than one package, \code{NA} should be used for
 packages where a specific version is not necessary.}
 
-\item{quietly}{Logical, if \code{TRUE}, invisibly returns a vector of logicals
-(\code{TRUE} for each installed package, \code{FALSE} otherwise), and does not stop
-or throw a warning. If \code{quietly = TRUE}, arguments \code{stop} and \code{prompt} are
-ignored. Use this argument to internally check for package dependencies
-without stopping or warnings.}
+\item{quietly}{Logical, if \code{TRUE}, returns the result invisibly without
+reporting failed checks. Arguments \code{stop} and \code{prompt} are ignored.}
 
 \item{prompt}{If \code{TRUE}, will prompt the user to install needed package(s).
 Ignored if \code{quietly = TRUE}. By default, \code{prompt} is set to \code{interactive()}.}
@@ -42,12 +39,15 @@ Ignored if \code{quietly = TRUE}. By default, \code{prompt} is set to \code{inte
 \item{...}{Further arguments passed down to \code{utils::install.packages()}.}
 }
 \value{
-If \code{stop = TRUE}, and \code{package} is not yet installed, the
-function stops and throws an error. Else, a named logical vector is
-returned, indicating which of the packages are installed, and which not.
+A named logical vector indicating which packages passed the check.
 }
 \description{
 Checking if needed package is installed
+}
+\details{
+Installed packages that fail to load are reported with the original
+load error. Installation prompts apply to missing packages and packages
+below the requested minimum version.
 }
 \examples{
 \dontshow{if (interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}

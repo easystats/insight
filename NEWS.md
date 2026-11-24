@@ -9,6 +9,10 @@
 
 ## Bug fixes
 
+* `check_if_installed()` now reports the original load error when an installed
+  package cannot be loaded. Installation prompts only include packages that are
+  missing or require an update (easystats/performance#692).
+
 * `get_modelmatrix()` for *brms* models now keeps the interaction and
   transformed terms of the population-level formula. Before, it used only the
   variables of the formula. Columns for interactions such as `Days:grpb` were
