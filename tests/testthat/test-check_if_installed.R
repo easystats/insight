@@ -73,9 +73,14 @@ test_that("installed packages that fail to load report the load error", {
     error = conditionMessage
   )
   expect_match(result, "Could not load package `insighttestbroken`", fixed = TRUE)
-  expect_match(result, cause, fixed = TRUE)
+  expect_match(result, trimws(cause, which = "right"), fixed = TRUE)
   expect_false(grepl("install.packages", result, fixed = TRUE))
 
+  expect_error(
+    check_if_installed(package, stop = TRUE, prompt = TRUE),
+    "Could not load package `insighttestbroken`",
+    fixed = TRUE
+  )
   expect_warning(
     check_if_installed(package, stop = FALSE, prompt = FALSE),
     "Could not load package"
@@ -90,6 +95,21 @@ test_that("installed packages that fail to load report the load error", {
     check_if_installed(c(package, "insighttestmissing"), prompt = FALSE),
     error = conditionMessage
   )
-  expect_match(result, "Could not load package", fixed = TRUE)
-  expect_match(result, 'install.packages("insighttestmissing")', fixed = TRUE)
+  expect_identical(
+    result,
+    paste0(
+      "Could not load package `insighttestbroken`: ", trimws(cause, which = "right"),
+      "\n  Package `insighttestmissing` required for this function to work.",
+      '\n  Please install it by running `install.packages("insighttestmissing")`.'
+    )
+  )
+})
+
+test_that("namespace diagnostics trim trailing whitespace", {
+  diagnostics <- .package_load_diagnostics(
+    "stats",
+    "DLL load failed:\n  missing symbol\r\n\t",
+    "for this function to work"
+  )
+  expect_identical(diagnostics$problems, "Could not load package `stats`: DLL load failed:\n  missing symbol")
 })

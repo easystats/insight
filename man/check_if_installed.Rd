@@ -22,7 +22,7 @@ needs to be checked in any of the libraries.}
 generic description.}
 
 \item{stop}{Logical controlling whether a failed check stops or warns when
-\code{prompt = FALSE}. Ignored if \code{quietly = TRUE}.}
+no installation or update prompt is shown. Ignored if \code{quietly = TRUE}.}
 
 \item{minimum_version}{A character vector, representing the minimum package
 version that is required for each package. Should be of same length as

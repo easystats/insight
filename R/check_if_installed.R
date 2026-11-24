@@ -5,7 +5,7 @@
 #' @param reason A phrase describing why the package is needed. The default is a
 #'   generic description.
 #' @param stop Logical controlling whether a failed check stops or warns when
-#'   `prompt = FALSE`. Ignored if `quietly = TRUE`.
+#'   no installation or update prompt is shown. Ignored if `quietly = TRUE`.
 #' @param quietly Logical, if `TRUE`, returns the result invisibly without
 #'   reporting failed checks. Arguments `stop` and `prompt` are ignored.
 #' @param prompt If `TRUE`, will prompt the user to install needed package(s).
@@ -141,7 +141,7 @@ check_if_installed <- function(
       }
     } else {
       msg <- format_message(what_is_wrong, what_you_can_do)
-      if (stop && !prompt) stop(msg, call. = FALSE) else warning(msg, call. = FALSE)
+      if (stop) stop(msg, call. = FALSE) else warning(msg, call. = FALSE)
     }
   }
 
@@ -154,7 +154,7 @@ check_if_installed <- function(
   problems <- sprintf(
     "Could not load package `%s`: %s",
     package[present],
-    load_errors[present]
+    trimws(load_errors[present], which = "right")
   )
   missing_packages <- package[!present]
   advice <- NULL
