@@ -98,7 +98,8 @@ test_that("installed packages that fail to load report the load error", {
   expect_identical(
     result,
     paste0(
-      "Could not load package `insighttestbroken`: ", trimws(cause, which = "right"),
+      "Could not load package `insighttestbroken`: ",
+      trimws(cause, which = "right"),
       "\n  Package `insighttestmissing` required for this function to work.",
       '\n  Please install it by running `install.packages("insighttestmissing")`.'
     )
@@ -111,5 +112,8 @@ test_that("namespace diagnostics trim trailing whitespace", {
     "DLL load failed:\n  missing symbol\r\n\t",
     "for this function to work"
   )
-  expect_identical(diagnostics$problems, "Could not load package `stats`: DLL load failed:\n  missing symbol")
+  expect_identical(
+    diagnostics$problems,
+    "Could not load package `stats`: DLL load failed:\n  missing symbol"
+  )
 })
