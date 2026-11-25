@@ -31,6 +31,12 @@
 * Fixed issue in `get_statistic()` when the (model) object had no appropriate
   `summary()` method.
 
+* `get_data()` for `forecast::Arima()` models returned the regressors (`xreg`)
+  instead of the time series, or `NULL` for models without regressors. It now
+  returns the time series. Some `stats::arima()` series have the name of a
+  function, such as `q`. If `get_data()` cannot find such a series, it now
+  returns `NULL` instead of that function.
+
 # insight 1.7.0
 
 ## Changes
