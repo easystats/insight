@@ -330,6 +330,8 @@ format_table <- function(
       style = select,
       coef_column = coef_column_name,
       p_stars = p_stars,
+      ci_brackets = ci_brackets,
+      ci_separator = ci_separator,
       ...
     )
   }

@@ -1,5 +1,13 @@
 # this function does the main composition of columns for the output.
-.format_glue_table <- function(x, style, coef_column = NULL, p_stars = NULL, ...) {
+.format_glue_table <- function(
+  x,
+  style,
+  coef_column = NULL,
+  p_stars = NULL,
+  ci_brackets = TRUE,
+  ci_separator = ", ",
+  ...
+) {
   # evaluate dots
   dots <- list(...)
   original_x <- x
@@ -86,7 +94,9 @@
       ci_column,
       style[i],
       format,
-      column_names[i]
+      column_names[i],
+      ci_brackets = ci_brackets,
+      ci_separator = ci_separator
     )
     # fix invalid columns
     if (all(nzchar(colnames(result)))) {
@@ -117,6 +127,11 @@
     i <- gsub(" (, )", "", i, fixed = TRUE)
     i[i == "()"] <- ""
     i[i == "(, )"] <- ""
+    # empty CI with another separator
+    empty_ci <- paste0("(", ci_separator, ")")
+    i <- gsub(paste0("<br>", empty_ci), "", i, fixed = TRUE)
+    i <- gsub(paste0(" ", empty_ci), "", i, fixed = TRUE)
+    i[i == empty_ci] <- ""
     # remove other non-matched patterns
     i <- gsub("{stars}", "", i, fixed = TRUE)
     i <- gsub("{rhat}", "", i, fixed = TRUE)
@@ -215,7 +230,16 @@
 }
 
 
-.format_glue_output <- function(x, coef_column, ci_column, style, format, column_names) {
+.format_glue_output <- function(
+  x,
+  coef_column,
+  ci_column,
+  style,
+  format,
+  column_names,
+  ci_brackets = TRUE,
+  ci_separator = ", "
+) {
   # check whether we have broom styled or easystats styled columns
   se_column <- ifelse("SE" %in% colnames(x), "SE", "std.error")
   p_column <- ifelse("p" %in% colnames(x), "p", "p.value")
@@ -229,15 +253,15 @@
 
   # separate CI columns, for custom layout
   ci <- ci_low <- ci_high <- NULL
-  if (!insight::is_empty_object(ci_column)) {
-    ci <- x[[ci_column[1]]]
-    ci_low <- insight::trim_ws(gsub("(\\(|\\[)(.*),(.*)(\\)|\\])", "\\2", ci))
-    ci_high <- insight::trim_ws(gsub("(\\(|\\[)(.*),(.*)(\\)|\\])", "\\3", ci))
+  if (!is_empty_object(ci_column)) {
+    ci <- .split_ci_column(x[[ci_column[1]]], ci_brackets, ci_separator)
+    ci_low <- ci$low
+    ci_high <- ci$high
   }
 
   # fix p-layout
   if (p_column %in% colnames(x)) {
-    x[[p_column]] <- insight::trim_ws(x[[p_column]])
+    x[[p_column]] <- trim_ws(x[[p_column]])
     x[[p_column]] <- gsub("< .", "<0.", x[[p_column]], fixed = TRUE)
   }
 
@@ -249,7 +273,12 @@
   style <- gsub("{standard error}", "{se}", style, fixed = TRUE)
   style <- gsub("{pval}", "{p}", style, fixed = TRUE)
   style <- gsub("{p.value}", "{p}", style, fixed = TRUE)
-  style <- gsub("{ci}", "{ci_low}, {ci_high}", style, fixed = TRUE)
+  style <- gsub(
+    "{ci}",
+    paste0("{ci_low}", ci_separator, "{ci_high}"),
+    style,
+    fixed = TRUE
+  )
 
   # we put all elements (coefficient, SE, CI, p, ...) in one column.
   # for text format, where columns are not center aligned, this can result in
@@ -278,7 +307,8 @@
     p_column,
     rhat_column,
     ess_column,
-    rope_column
+    rope_column,
+    ci_separator
   )
 
   # replace glue-tokens with columns
@@ -307,11 +337,66 @@
 }
 
 
+# split the formatted CI column into lower and upper limits. The brackets and
+# the separator are those that format_table() used to format the column.
+.split_ci_column <- function(ci, ci_brackets = TRUE, ci_separator = ", ") {
+  if (isTRUE(ci_brackets)) {
+    ci_brackets <- c("[", "]")
+  } else if (is.null(ci_brackets) || isFALSE(ci_brackets)) {
+    ci_brackets <- c("", "")
+  }
+  # `ci_width` pads the formatted CI with leading whitespace, which we remove
+  # before the opening bracket. Without brackets, the separator can start
+  # with a whitespace.
+  values <- ci
+  if (nzchar(ci_brackets[1])) {
+    values <- sub("^\\s+", "", values)
+  }
+  has_open <- !is.na(values) & startsWith(values, ci_brackets[1])
+  values[has_open] <- substring(values[has_open], nchar(ci_brackets[1]) + 1)
+  has_close <- !is.na(values) & endsWith(values, ci_brackets[2])
+  values[has_close] <- substr(
+    values[has_close],
+    1,
+    nchar(values[has_close]) - nchar(ci_brackets[2])
+  )
+  # the separator can also occur in the lower limit, for example "-" in
+  # "-2.00--1.00". So we split at the first separator that follows a lower
+  # limit, which ends with neither a sign nor an exponent. If there is none,
+  # the lower limit is missing, and we split at the first separator.
+  pos <- vapply(
+    values,
+    function(value) {
+      if (is.na(value)) {
+        return(NA_integer_)
+      }
+      candidates <- gregexpr(ci_separator, value, fixed = TRUE)[[1]]
+      lower <- trim_ws(substring(value, 1, candidates - 1))
+      after_limit <- nzchar(lower) & !grepl("[-+eE]$", lower)
+      if (any(after_limit)) candidates[after_limit][1] else candidates[1]
+    },
+    integer(1),
+    USE.NAMES = FALSE
+  )
+  ci_low <- trim_ws(substr(values, 1, pos - 1))
+  ci_high <- trim_ws(substring(values, pos + nchar(ci_separator)))
+
+  # other formats, for example a CI column that was formatted before, are
+  # split at the last comma inside parentheses or square brackets
+  other <- is.na(pos) | pos < 1 | !has_open | !has_close
+  if (any(other)) {
+    ci_low[other] <- trim_ws(gsub("(\\(|\\[)(.*),(.*)(\\)|\\])", "\\2", ci[other]))
+    ci_high[other] <- trim_ws(gsub("(\\(|\\[)(.*),(.*)(\\)|\\])", "\\3", ci[other]))
+  }
+  list(low = ci_low, high = ci_high)
+}
+
+
 # align columns width for text format
 .align_values <- function(i) {
   if (!is.null(i)) {
     non_empty <- !is.na(i) & nzchar(i, keepNA = TRUE)
-    i[non_empty] <- format(insight::trim_ws(i[non_empty]), justify = "right")
+    i[non_empty] <- format(trim_ws(i[non_empty]), justify = "right")
   }
   i
 }
@@ -329,7 +414,8 @@
   p_column,
   rhat_column,
   ess_column,
-  rope_column
+  rope_column,
+  ci_separator = ", "
 ) {
   if (!p_column %in% colnames(x) && any(grepl("(\\{p\\}|\\{stars\\})", style))) {
     style <- gsub("(\\{p\\}|\\{stars\\})", "", style)
@@ -349,12 +435,10 @@
   if (!"pd" %in% colnames(x) && any(grepl("{pd}", style, fixed = TRUE))) {
     style <- gsub("{pd}", "", style, fixed = TRUE)
   }
-  if (
-    is.null(ci_low) &&
-      is.null(ci_high) &&
-      any(grepl("{ci_low}, {ci_high}", style, fixed = TRUE))
-  ) {
-    style <- gsub("{ci_low}, {ci_high}", "", style, fixed = TRUE)
+  if (is.null(ci_low) && is.null(ci_high)) {
+    for (ci_pattern in unique(paste0("{ci_low}", c(", ", ci_separator), "{ci_high}"))) {
+      style <- gsub(ci_pattern, "", style, fixed = TRUE)
+    }
   }
 
   compact_character(style)

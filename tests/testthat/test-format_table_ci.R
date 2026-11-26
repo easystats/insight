@@ -97,6 +97,27 @@ test_that("format_table with select shows ci-level in column name", {
 })
 
 
+test_that("format_table with select, other ci brackets and separators", {
+  d <- data.frame(Parameter = "a", Coefficient = 2, CI_low = 1, CI_high = 3)
+  ft <- insight::format_table(d, select = "ci", ci_brackets = FALSE)
+  expect_identical(ft[[2]], "2 (1.00, 3.00)")
+  ft <- insight::format_table(d, select = "ci", ci_brackets = c("<", ">"))
+  expect_identical(ft[[2]], "2 (1.00, 3.00)")
+  ft <- insight::format_table(d, select = "ci", ci_separator = " to ")
+  expect_identical(ft[[2]], "2 (1.00 to 3.00)")
+
+  # the separator also occurs in negative limits
+  d <- data.frame(Parameter = "a", Coefficient = -2, CI_low = -3, CI_high = -1)
+  ft <- insight::format_table(d, select = "{ci_low}|{ci_high}", ci_separator = "-")
+  expect_identical(unlist(ft[2:3], use.names = FALSE), c("-3.00", "-1.00"))
+
+  # no CI column
+  d <- data.frame(Parameter = "a", Coefficient = 2)
+  ft <- insight::format_table(d, select = "ci", ci_separator = " to ")
+  expect_identical(ft[[2]], "2")
+})
+
+
 skip_if_not_installed("bayestestR")
 set.seed(1234)
 test_that("format_table with multiple si-levels", {
