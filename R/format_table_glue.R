@@ -307,7 +307,8 @@
     p_column,
     rhat_column,
     ess_column,
-    rope_column
+    rope_column,
+    ci_separator
   )
 
   # replace glue-tokens with columns
@@ -359,7 +360,24 @@
     1,
     nchar(values[has_close]) - nchar(ci_brackets[2])
   )
-  pos <- regexpr(ci_separator, values, fixed = TRUE)
+  # the separator can also occur in the lower limit, for example "-" in
+  # "-2.00--1.00". So we split at the first separator that follows a lower
+  # limit, which ends with neither a sign nor an exponent. If there is none,
+  # the lower limit is missing, and we split at the first separator.
+  pos <- vapply(
+    values,
+    function(value) {
+      if (is.na(value)) {
+        return(NA_integer_)
+      }
+      candidates <- gregexpr(ci_separator, value, fixed = TRUE)[[1]]
+      lower <- insight::trim_ws(substring(value, 1, candidates - 1))
+      after_limit <- nzchar(lower) & !grepl("[-+eE]$", lower)
+      if (any(after_limit)) candidates[after_limit][1] else candidates[1]
+    },
+    integer(1),
+    USE.NAMES = FALSE
+  )
   ci_low <- insight::trim_ws(substr(values, 1, pos - 1))
   ci_high <- insight::trim_ws(substring(values, pos + nchar(ci_separator)))
 
@@ -396,7 +414,8 @@
   p_column,
   rhat_column,
   ess_column,
-  rope_column
+  rope_column,
+  ci_separator = ", "
 ) {
   if (!p_column %in% colnames(x) && any(grepl("(\\{p\\}|\\{stars\\})", style))) {
     style <- gsub("(\\{p\\}|\\{stars\\})", "", style)
@@ -416,12 +435,10 @@
   if (!"pd" %in% colnames(x) && any(grepl("{pd}", style, fixed = TRUE))) {
     style <- gsub("{pd}", "", style, fixed = TRUE)
   }
-  if (
-    is.null(ci_low) &&
-      is.null(ci_high) &&
-      any(grepl("{ci_low}, {ci_high}", style, fixed = TRUE))
-  ) {
-    style <- gsub("{ci_low}, {ci_high}", "", style, fixed = TRUE)
+  if (is.null(ci_low) && is.null(ci_high)) {
+    for (ci_pattern in unique(paste0("{ci_low}", c(", ", ci_separator), "{ci_high}"))) {
+      style <- gsub(ci_pattern, "", style, fixed = TRUE)
+    }
   }
 
   compact_character(style)
