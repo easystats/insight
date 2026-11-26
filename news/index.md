@@ -123,9 +123,9 @@ CRAN release: 2026-10-28
   [`get_modelmatrix()`](https://easystats.github.io/insight/reference/get_modelmatrix.md)
   is called, or from the global environment, and must be unchanged.
   Models from
-  [`forecast::Arima()`](https://rdrr.io/pkg/forecast/man/Arima.html) use
-  their stored regressors. A `data` argument gives an error, because new
-  data is not supported.
+  [`forecast::Arima()`](https://pkg.robjhyndman.com/forecast/reference/Arima.html)
+  use their stored regressors. A `data` argument gives an error, because
+  new data is not supported.
 
 ### Bug fixes
 
