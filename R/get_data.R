@@ -2334,7 +2334,7 @@ get_data.Arima <- function(x, ...) {
   # first try, parent frame, second try, global env. A function of the same
   # name, like `q()`, is not the series.
   for (envir in list(parent.frame(), globalenv())) {
-    dat <- tryCatch(eval(series, envir = envir), error = function(e) NULL)
+    dat <- .safe(eval(series, envir = envir))
     if (!is.null(dat) && !is.function(dat)) {
       return(dat)
     }
