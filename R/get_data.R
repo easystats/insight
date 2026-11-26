@@ -2323,15 +2323,23 @@ get_data.averaging <- function(x, ...) {
 
 #' @export
 get_data.Arima <- function(x, ...) {
-  # first try, parent frame
-  dat <- tryCatch(eval(x$call$x, envir = parent.frame()), error = function(e) NULL)
-
-  if (is.null(dat)) {
-    # second try, global env
-    dat <- tryCatch(eval(x$call$x, envir = globalenv()), error = function(e) NULL)
+  # forecast::Arima() fits store the series. We use `[[` to avoid partial
+  # matching by `$`, and because forecast names the series `y` in the call,
+  # where `$x` partly matches `xreg`.
+  if (!is.null(x[["x"]])) {
+    return(x[["x"]])
   }
+  series <- x$call[["x"]]
 
-  dat
+  # first try, parent frame, second try, global env. A function of the same
+  # name, like `q()`, is not the series.
+  for (envir in list(parent.frame(), globalenv())) {
+    dat <- .safe(eval(series, envir = envir))
+    if (!is.null(dat) && !is.function(dat)) {
+      return(dat)
+    }
+  }
+  NULL
 }
 
 
