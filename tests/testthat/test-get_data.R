@@ -668,3 +668,25 @@ test_that("get_data, can't parse subset", {
   expect_named(out, c("mpg", "gear", "cyl"))
   expect_identical(nrow(out), 18L)
 })
+
+
+test_that("get_data, forecast::Arima() fits return the series, not xreg", {
+  arima_series <- LakeHuron
+  arima_xreg <- as.numeric(time(LakeHuron))
+  m <- stats::arima(arima_series, order = c(1, 0, 0), xreg = arima_xreg)
+  # forecast::Arima() names the series `y` in the call and stores it as `x`
+  m$call$y <- m$call$x
+  m$call$x <- NULL
+  m$x <- arima_series
+  expect_identical(get_data(m), LakeHuron)
+})
+
+
+test_that("get_data, arima series named like a function", {
+  fit_arima <- function() {
+    q <- LakeHuron
+    stats::arima(q, order = c(1, 0, 0))
+  }
+  m <- fit_arima()
+  expect_null(get_data(m))
+})
