@@ -31,6 +31,11 @@
 * Fixed issue in `get_statistic()` when the (model) object had no appropriate
   `summary()` method.
 
+* If `ci_brackets` was not `TRUE` or `ci_separator` was not `", "`,
+  `format_table()` with `select = "ci"` or another layout with the CI tokens
+  showed the CI limits twice, for example `2 (1.00, 3.00, 1.00, 3.00)`. The
+  `{ci}` token now also uses `ci_separator`.
+
 # insight 1.7.0
 
 ## Changes
