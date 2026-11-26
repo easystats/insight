@@ -253,7 +253,7 @@
 
   # separate CI columns, for custom layout
   ci <- ci_low <- ci_high <- NULL
-  if (!insight::is_empty_object(ci_column)) {
+  if (!is_empty_object(ci_column)) {
     ci <- .split_ci_column(x[[ci_column[1]]], ci_brackets, ci_separator)
     ci_low <- ci$low
     ci_high <- ci$high
@@ -261,7 +261,7 @@
 
   # fix p-layout
   if (p_column %in% colnames(x)) {
-    x[[p_column]] <- insight::trim_ws(x[[p_column]])
+    x[[p_column]] <- trim_ws(x[[p_column]])
     x[[p_column]] <- gsub("< .", "<0.", x[[p_column]], fixed = TRUE)
   }
 
@@ -371,22 +371,22 @@
         return(NA_integer_)
       }
       candidates <- gregexpr(ci_separator, value, fixed = TRUE)[[1]]
-      lower <- insight::trim_ws(substring(value, 1, candidates - 1))
+      lower <- trim_ws(substring(value, 1, candidates - 1))
       after_limit <- nzchar(lower) & !grepl("[-+eE]$", lower)
       if (any(after_limit)) candidates[after_limit][1] else candidates[1]
     },
     integer(1),
     USE.NAMES = FALSE
   )
-  ci_low <- insight::trim_ws(substr(values, 1, pos - 1))
-  ci_high <- insight::trim_ws(substring(values, pos + nchar(ci_separator)))
+  ci_low <- trim_ws(substr(values, 1, pos - 1))
+  ci_high <- trim_ws(substring(values, pos + nchar(ci_separator)))
 
   # other formats, for example a CI column that was formatted before, are
   # split at the last comma inside parentheses or square brackets
   other <- is.na(pos) | pos < 1 | !has_open | !has_close
   if (any(other)) {
-    ci_low[other] <- insight::trim_ws(gsub("(\\(|\\[)(.*),(.*)(\\)|\\])", "\\2", ci[other]))
-    ci_high[other] <- insight::trim_ws(gsub("(\\(|\\[)(.*),(.*)(\\)|\\])", "\\3", ci[other]))
+    ci_low[other] <- trim_ws(gsub("(\\(|\\[)(.*),(.*)(\\)|\\])", "\\2", ci[other]))
+    ci_high[other] <- trim_ws(gsub("(\\(|\\[)(.*),(.*)(\\)|\\])", "\\3", ci[other]))
   }
   list(low = ci_low, high = ci_high)
 }
@@ -396,7 +396,7 @@
 .align_values <- function(i) {
   if (!is.null(i)) {
     non_empty <- !is.na(i) & nzchar(i, keepNA = TRUE)
-    i[non_empty] <- format(insight::trim_ws(i[non_empty]), justify = "right")
+    i[non_empty] <- format(trim_ws(i[non_empty]), justify = "right")
   }
   i
 }
