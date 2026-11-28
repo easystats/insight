@@ -30,8 +30,8 @@ check_if_installed(
 
 - stop:
 
-  Logical that decides whether the function should stop if the needed
-  package is not installed. Ignored if `quietly = TRUE`.
+  Logical controlling whether a failed check stops or warns when no
+  installation or update prompt is shown. Ignored if `quietly = TRUE`.
 
 - minimum_version:
 
@@ -43,11 +43,8 @@ check_if_installed(
 
 - quietly:
 
-  Logical, if `TRUE`, invisibly returns a vector of logicals (`TRUE` for
-  each installed package, `FALSE` otherwise), and does not stop or throw
-  a warning. If `quietly = TRUE`, arguments `stop` and `prompt` are
-  ignored. Use this argument to internally check for package
-  dependencies without stopping or warnings.
+  Logical, if `TRUE`, returns the result invisibly without reporting
+  failed checks. Arguments `stop` and `prompt` are ignored.
 
 - prompt:
 
@@ -62,9 +59,13 @@ check_if_installed(
 
 ## Value
 
-If `stop = TRUE`, and `package` is not yet installed, the function stops
-and throws an error. Else, a named logical vector is returned,
-indicating which of the packages are installed, and which not.
+A named logical vector indicating which packages passed the check.
+
+## Details
+
+Installed packages that fail to load are reported with the original load
+error. Installation prompts apply to missing packages and packages below
+the requested minimum version.
 
 ## Examples
 

@@ -86,8 +86,8 @@ generic description.</p></dd>
 
 
 <dt id="arg-stop">stop<a class="anchor" aria-label="anchor" href="#arg-stop"></a></dt>
-<dd><p>Logical that decides whether the function should stop if the
-needed package is not installed. Ignored if <code>quietly = TRUE</code>.</p></dd>
+<dd><p>Logical controlling whether a failed check stops or warns when
+no installation or update prompt is shown. Ignored if <code>quietly = TRUE</code>.</p></dd>
 
 
 <dt id="arg-minimum-version">minimum_version<a class="anchor" aria-label="anchor" href="#arg-minimum-version"></a></dt>
@@ -99,11 +99,8 @@ packages where a specific version is not necessary.</p></dd>
 
 
 <dt id="arg-quietly">quietly<a class="anchor" aria-label="anchor" href="#arg-quietly"></a></dt>
-<dd><p>Logical, if <code>TRUE</code>, invisibly returns a vector of logicals
-(<code>TRUE</code> for each installed package, <code>FALSE</code> otherwise), and does not stop
-or throw a warning. If <code>quietly = TRUE</code>, arguments <code>stop</code> and <code>prompt</code> are
-ignored. Use this argument to internally check for package dependencies
-without stopping or warnings.</p></dd>
+<dd><p>Logical, if <code>TRUE</code>, returns the result invisibly without
+reporting failed checks. Arguments <code>stop</code> and <code>prompt</code> are ignored.</p></dd>
 
 
 <dt id="arg-prompt">prompt<a class="anchor" aria-label="anchor" href="#arg-prompt"></a></dt>
@@ -117,9 +114,13 @@ Ignored if <code>quietly = TRUE</code>. By default, <code>prompt</code> is set t
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>If <code>stop = TRUE</code>, and <code>package</code> is not yet installed, the
-function stops and throws an error. Else, a named logical vector is
-returned, indicating which of the packages are installed, and which not.</p>
+    <p>A named logical vector indicating which packages passed the check.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Installed packages that fail to load are reported with the original
+load error. Installation prompts apply to missing packages and packages
+below the requested minimum version.</p>
     </div>
 
     <div class="section level2">
