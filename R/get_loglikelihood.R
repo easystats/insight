@@ -102,13 +102,13 @@ get_loglikelihood_adjustment <- function(x) {
         NULL
       } else if (trans == "scale") {
         scale_denominator <- .extract_scale_denominator(x)
-        .weighted_sum(log(1 / rep.int(scale_denominator, n_obs(x))), w = weights) # nolint
+        .weighted_sum(log(1 / rep.int(scale_denominator, n_obs(x))), w = weights)
       } else if (trans == "power") {
         trans_power <- .extract_power_transformation(x)
         .weighted_sum(
           log(trans_power * (get_response(x, as_proportion = TRUE)^(trans_power - 1))),
           w = weights
-        ) # nolint
+        )
       } else {
         .ll_jacobian_adjustment(x, weights)
       }
@@ -618,13 +618,13 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
       if (is.null(ll_adjustment) && isTRUE(verbose)) {
         format_warning(
           "Could not compute corrected log-likelihood for models with transformed response. Log-likelihood value is probably inaccurate."
-        ) # nolint
+        )
       } else if (!is.null(ll_adjustment)) {
         out[1] <- out[1] + ll_adjustment
         if (isTRUE(list(...)$REML) && isTRUE(verbose)) {
           format_warning(
             "Log-likelihood is corrected for models with transformed response. However, this ignores `REML=TRUE`. Log-likelihood value is probably inaccurate."
-          ) # nolint
+          )
         }
       }
     }

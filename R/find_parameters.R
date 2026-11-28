@@ -422,7 +422,7 @@ find_parameters.crr <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.riskRegression <- function(x, flatten = FALSE, ...) {
-  junk <- utils::capture.output(cs <- stats::coef(x)) # nolint
+  junk <- utils::capture.output(cs <- stats::coef(x))
   out <- list(conditional = as.vector(cs[, 1]))
 
   if (flatten) {
@@ -617,7 +617,7 @@ find_parameters.mlm <- function(x, flatten = FALSE, ...) {
 
 #' @export
 find_parameters.mvord <- function(x, flatten = FALSE, ...) {
-  junk <- utils::capture.output(s <- summary(x)) # nolint
+  junk <- utils::capture.output(s <- summary(x))
 
   out <- list(
     thresholds = text_remove_backticks(rownames(s$thresholds)),

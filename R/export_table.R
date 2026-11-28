@@ -1187,7 +1187,7 @@ print.insight_table <- function(x, ...) {
   # check if user requested automatic width-adjustment of tables,
   # or if a given width is required
   table_width_adjustment <- identical(table_width, "auto") ||
-    (!is.null(table_width) && !is.infinite(table_width) && is.numeric(table_width)) # nolint
+    (!is.null(table_width) && !is.infinite(table_width) && is.numeric(table_width))
 
   if (table_width_adjustment) {
     # define the length of a table line. if specific table width is defined
@@ -1218,7 +1218,6 @@ print.insight_table <- function(x, ...) {
           line_width &&
           e <= length(final_extra)
       ) {
-        # nolint
         .final_temp <- final_extra[[e]]
 
         i <- 1
@@ -1273,7 +1272,7 @@ print.insight_table <- function(x, ...) {
   if (overlength_warning && verbose) {
     format_warning(
       "The table contains very wide columns that don't fit into the available display-width of the console. Splitting tables into multiple parts did not have the desired effect."
-    ) # nolint
+    )
   }
 
   # Transform table matrix into a string value that can be printed

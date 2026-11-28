@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 1.7.0.5
+Version: 1.7.0.6
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -115,6 +115,7 @@ Suggests:
     cplm,
     crch,
     curl,
+    data.table,
     datawizard (>= 1.2.0),
     dbarts,
     effectsize,
@@ -217,6 +218,7 @@ Suggests:
     survival,
     svylme,
     testthat,
+    tibble,
     tidymodels,
     tinytable (>= 0.13.0),
     TMB,

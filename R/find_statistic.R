@@ -44,7 +44,7 @@ find_statistic.default <- function(x, ...) {
         t = "t-statistic",
         Z = "z-statistic",
         `Quade F` = ,
-        `F` = "F-statistic", # nolint
+        `F` = "F-statistic",
         `Bartlett's K-squared` = ,
         `Fligner-Killeen:med chi-squared` = ,
         `Friedman chi-squared` = ,

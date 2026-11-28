@@ -561,7 +561,7 @@ clean_parameters.mlm <- function(x, ...) {
     pattern = "^(b_zi_|bs_zi_|bsp_zi_|bcs_zi_)(.*)",
     "\\2",
     out$Cleaned_Parameter
-  ) # nolint
+  )
 
   if (!is.null(class_params)) {
     # remove "mu<number>_" from parameters
