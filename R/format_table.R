@@ -522,7 +522,7 @@ format_table <- function(
   for (stats in c("t", "Chi2")) {
     if (stats %in% names(x) && "df" %in% names(x)) {
       if (is.character(x$df)) {
-        x$df[x$df == ""] <- NA_character_ # nolint
+        x$df[x$df == ""] <- NA_character_
       }
       dof <- unique(x$df)
       dof <- dof[!is.na(dof)]
@@ -532,7 +532,7 @@ format_table <- function(
       }
     } else if (stats %in% names(x) && "df_error" %in% names(x)) {
       if (is.character(x$df_error)) {
-        x$df_error[x$df_error == ""] <- NA_character_ # nolint
+        x$df_error[x$df_error == ""] <- NA_character_
       }
       dof <- unique(x$df_error)
       dof <- dof[!is.na(dof)]

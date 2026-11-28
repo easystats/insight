@@ -270,7 +270,7 @@ find_parameters.HLfit <- function(x, effects = "all", flatten = FALSE, ...) {
   if (effects == "fixed") {
     l <- list(conditional = names(lme4::fixef(x)))
   } else {
-    utils::capture.output(s <- summary(x)) # nolint
+    utils::capture.output(s <- summary(x))
     l <- compact_list(list(
       conditional = names(lme4::fixef(x)),
       random = s$lambda_table$Term

@@ -158,7 +158,6 @@ clean_names.character <- function(x, include_names = FALSE, ...) {
             out <- sub("(.*)::(.*)", "\\2", out)
           }
           if (pattern[j] == "offset") {
-            # nolint
             out <- trim_ws(unique(sub("^offset\\(([^-+ )]*).*", "\\1", out)))
           } else if (pattern[j] == "I") {
             if (!ignore_asis && grepl("I\\((.*)\\)", out)) {

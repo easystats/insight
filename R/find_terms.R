@@ -273,7 +273,6 @@ find_terms.mipo <- function(x, flatten = FALSE, ...) {
       !is_empty_object(original_response) &&
       startsWith(original_response, "1/")
   ) {
-    # nolint
     f$response <- original_response
   }
 

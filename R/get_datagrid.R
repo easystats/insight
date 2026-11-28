@@ -1267,7 +1267,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
           if (is.null(n_to_sample) || is.na(n_to_sample) || !length(n_to_sample)) {
             format_error(
               "The token `sample` must be followed by the number of samples to be drawn, e.g. `[sample 15]`."
-            ) # nolint
+            )
           }
           by_expression <- paste0(
             "c(",
@@ -1286,7 +1286,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
               ",",
               round(center + spread, digits),
               ")"
-            ) # nolint
+            )
           } else if (parts == "mad") {
             center <- stats::median(x, na.rm = TRUE)
             spread <- stats::mad(x, na.rm = TRUE)
@@ -1298,7 +1298,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
               ",",
               round(center + spread, digits),
               ")"
-            ) # nolint
+            )
           } else if (parts == "fivenum") {
             by_expression <- paste0(
               "c(",
@@ -1307,7 +1307,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
                 collapse = ","
               ),
               ")"
-            ) # nolint
+            )
           } else if (parts == "quartiles") {
             by_expression <- paste0(
               "c(",
@@ -1316,7 +1316,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
                 collapse = ","
               ),
               ")"
-            ) # nolint
+            )
           } else if (parts == "terciles") {
             by_expression <- paste0(
               "c(",
@@ -1328,7 +1328,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
                 collapse = ","
               ),
               ")"
-            ) # nolint
+            )
           } else if (parts == "terciles2") {
             by_expression <- paste0(
               "c(",
@@ -1340,7 +1340,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
                 collapse = ","
               ),
               ")"
-            ) # nolint
+            )
           } else if (parts == "pretty") {
             by_expression <- paste0(
               "c(",
@@ -1725,7 +1725,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
       labs <- ifelse(
         sign(spread) == -1,
         paste(spread, "SD"),
-        ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean") # nolint
+        ifelse(sign(spread) == 1, paste0("+", spread, " SD"), "Mean")
       )
     } else {
       disp <- stats::mad(x, na.rm = TRUE)
@@ -1733,7 +1733,7 @@ get_datagrid.comparisons <- get_datagrid.slopes
       labs <- ifelse(
         sign(spread) == -1,
         paste(spread, "MAD"),
-        ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median") # nolint
+        ifelse(sign(spread) == 1, paste0("+", spread, " MAD"), "Median")
       )
     }
     out <- round(center + spread * disp, digits)

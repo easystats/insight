@@ -2133,7 +2133,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     if (verbose) {
       msg <- c(
         prefix_msg,
-        "Looks like you are using `poly()` with \"raw = T\". This results in unexpected behaviour, because `all.vars()` considers `T` as variable.", # nolint
+        "Looks like you are using `poly()` with \"raw = T\". This results in unexpected behaviour, because `all.vars()` considers `T` as variable.",
         "Please use \"raw = TRUE\"."
       )
       format_alert(msg, type = action)
@@ -2167,7 +2167,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
       msg <- c(
         prefix_msg,
         paste0(
-          "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.", # nolint
+          "Using `$` in model formulas can produce unexpected results. Specify your model using the `data` argument instead.",
           "\n  Try: ",
           fc$formula,
           ", data = ",
@@ -2201,7 +2201,7 @@ find_formula.model_fit <- function(x, verbose = TRUE, ...) {
     if (verbose) {
       msg <- c(
         prefix_msg,
-        "Using indexed data frames, such as `df[, 5]`, as model response can produce unexpected results. Specify your model using the literal name of the response variable instead." # nolint
+        "Using indexed data frames, such as `df[, 5]`, as model response can produce unexpected results. Specify your model using the literal name of the response variable instead."
       )
       format_alert(msg, type = action)
     }
