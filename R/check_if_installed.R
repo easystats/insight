@@ -4,13 +4,10 @@
 #'   needs to be checked in any of the libraries.
 #' @param reason A phrase describing why the package is needed. The default is a
 #'   generic description.
-#' @param stop Logical that decides whether the function should stop if the
-#'   needed package is not installed. Ignored if `quietly = TRUE`.
-#' @param quietly Logical, if `TRUE`, invisibly returns a vector of logicals
-#'   (`TRUE` for each installed package, `FALSE` otherwise), and does not stop
-#'   or throw a warning. If `quietly = TRUE`, arguments `stop` and `prompt` are
-#'   ignored. Use this argument to internally check for package dependencies
-#'   without stopping or warnings.
+#' @param stop Logical controlling whether a failed check stops or warns when
+#'   no installation or update prompt is shown. Ignored if `quietly = TRUE`.
+#' @param quietly Logical, if `TRUE`, returns the result invisibly without
+#'   reporting failed checks. Arguments `stop` and `prompt` are ignored.
 #' @param prompt If `TRUE`, will prompt the user to install needed package(s).
 #'   Ignored if `quietly = TRUE`. By default, `prompt` is set to `interactive()`.
 #' @param minimum_version A character vector, representing the minimum package
@@ -20,9 +17,11 @@
 #'   packages where a specific version is not necessary.
 #' @param ... Further arguments passed down to `utils::install.packages()`.
 #'
-#' @return If `stop = TRUE`, and `package` is not yet installed, the
-#'   function stops and throws an error. Else, a named logical vector is
-#'   returned, indicating which of the packages are installed, and which not.
+#' @return A named logical vector indicating which packages passed the check.
+#'
+#' @details Installed packages that fail to load are reported with the original
+#'   load error. Installation prompts apply to missing packages and packages
+#'   below the requested minimum version.
 #'
 #' @examplesIf interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' \donttest{
@@ -47,7 +46,20 @@ check_if_installed <- function(
   prompt = interactive(),
   ...
 ) {
-  is_installed <- vapply(package, requireNamespace, quietly = TRUE, FUN.VALUE = TRUE)
+  load_errors <- vapply(
+    package,
+    function(pkg) {
+      tryCatch(
+        {
+          loadNamespace(pkg)
+          NA_character_
+        },
+        error = conditionMessage
+      )
+    },
+    FUN.VALUE = NA_character_
+  )
+  is_installed <- is.na(load_errors)
   what_is_wrong <- what_you_can_do <- NULL
 
   # validation check for equal length of package and minimum_version
@@ -57,21 +69,16 @@ check_if_installed <- function(
 
   ## Test
   if (!all(is_installed)) {
-    # only keep not-installed packages
-    package <- package[!is_installed]
-
-    what_is_wrong <- sprintf(
-      "Package%s %s required %s.",
-      if (length(package) > 1L) "s" else "",
-      paste(sprintf("`%s`", package), collapse = " and "),
-      reason
-    )
-
-    what_you_can_do <- sprintf(
-      "Please install %s by running `install.packages(%s)`.",
-      if (length(package) > 1L) "them" else "it",
-      toString(sprintf("\"%s\"", package))
-    )
+    if (!quietly) {
+      diagnostics <- .package_load_diagnostics(
+        package[!is_installed],
+        load_errors[!is_installed],
+        reason
+      )
+      package <- diagnostics$missing_packages
+      what_is_wrong <- diagnostics$problems
+      what_you_can_do <- diagnostics$advice
+    }
   } else if (!is.null(minimum_version)) {
     needs_update <- unlist(Map(
       function(p, m) {
@@ -92,20 +99,23 @@ check_if_installed <- function(
       # only keep not-up-to-date packages
       package <- package[needs_update]
       minimum_version <- minimum_version[needs_update]
+      plural <- length(package) > 1L
+      suffix <- if (plural) "s" else ""
+      verb <- if (plural) "are" else "is"
 
       what_is_wrong <- sprintf(
         "Package%s %s %s installed, but package version%s %s %s required.",
-        if (length(package) > 1L) "s" else "",
+        suffix,
         paste(sprintf("`%s`", package), collapse = " and "),
-        if (length(package) > 1L) "are" else "is",
-        if (length(package) > 1L) "s" else "",
+        verb,
+        suffix,
         paste(sprintf("`%s`", minimum_version), collapse = " and "),
-        if (length(package) > 1L) "are" else "is"
+        verb
       )
 
       what_you_can_do <- sprintf(
         "Please update %s by running `install.packages(%s)`.",
-        if (length(package) > 1L) "them" else "it",
+        if (plural) "them" else "it",
         toString(sprintf("\"%s\"", package))
       )
     }
@@ -114,8 +124,8 @@ check_if_installed <- function(
   class(is_installed) <- c("check_if_installed", class(is_installed))
 
   ## What do?
-  if (!is.null(what_is_wrong) && !quietly) {
-    if (prompt) {
+  if (length(what_is_wrong) && !quietly) {
+    if (prompt && !is.null(what_you_can_do)) {
       what_you_can_do <- sprintf(
         "\nWould you like to %s %s? [y/n] ",
         if (grepl("update", what_you_can_do, fixed = TRUE)) "update" else "install",
@@ -139,10 +149,41 @@ check_if_installed <- function(
 }
 
 
+.package_load_diagnostics <- function(package, load_errors, reason) {
+  present <- lengths(lapply(package, find.package, quiet = TRUE)) > 0L
+  problems <- sprintf(
+    "Could not load package `%s`: %s",
+    package[present],
+    trimws(load_errors[present], which = "right")
+  )
+  missing_packages <- package[!present]
+  advice <- NULL
+
+  if (length(missing_packages)) {
+    problems <- c(
+      problems,
+      sprintf(
+        "Package%s %s required %s.",
+        if (length(missing_packages) > 1L) "s" else "",
+        paste(sprintf("`%s`", missing_packages), collapse = " and "),
+        reason
+      )
+    )
+    advice <- sprintf(
+      "Please install %s by running `install.packages(%s)`.",
+      if (length(missing_packages) > 1L) "them" else "it",
+      toString(sprintf("\"%s\"", missing_packages))
+    )
+  }
+
+  list(missing_packages = missing_packages, problems = problems, advice = advice)
+}
+
+
 #' @export
 print.check_if_installed <- function(x, ...) {
   if (any(x)) {
-    cat("Following packages are installed:\n")
+    cat("Packages that passed the check:\n")
     print_color(paste0("- ", names(x)[x], collapse = "\n"), "green")
   }
 
@@ -150,7 +191,7 @@ print.check_if_installed <- function(x, ...) {
     if (any(x)) {
       cat("\n\n")
     }
-    cat("Following packages are not installed:\n")
+    cat("Packages that failed the check:\n")
     print_color(paste0("- ", names(x)[!x], collapse = "\n"), "red")
   }
 }
