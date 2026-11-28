@@ -74,10 +74,10 @@ get_loglikelihood_adjustment <- function(x) {
 
       if (trans == "identity") {
         # nolint
-        .weighted_sum(log(get_response(x, as_proportion = TRUE)), w = weights)
+        0
       } else if (trans == "log") {
         .weighted_sum(log(1 / get_response(x, as_proportion = TRUE)), w = weights)
-      } else if (trans == "log1p") {
+      } else if (trans %in% c("log1p", "log(x+1)")) {
         .weighted_sum(log(1 / (get_response(x, as_proportion = TRUE) + 1)), w = weights)
       } else if (trans == "log2") {
         .weighted_sum(
@@ -89,10 +89,8 @@ get_loglikelihood_adjustment <- function(x) {
           log(1 / (get_response(x, as_proportion = TRUE) * log(10))),
           w = weights
         )
-      } else if (trans == "exp") {
+      } else if (trans %in% c("exp", "expm1")) {
         .weighted_sum(get_response(x, as_proportion = TRUE), w = weights)
-      } else if (trans == "expm1") {
-        .weighted_sum((get_response(x, as_proportion = TRUE) - 1), w = weights)
       } else if (trans == "sqrt") {
         .weighted_sum(log(0.5 / sqrt(get_response(x, as_proportion = TRUE))), w = weights)
       } else if (trans == "inverse") {
@@ -111,8 +109,6 @@ get_loglikelihood_adjustment <- function(x) {
           log(trans_power * (get_response(x, as_proportion = TRUE)^(trans_power - 1))),
           w = weights
         )
-      } else if (is.null(weights)) {
-        .ll_log_adjustment(x)
       } else {
         .ll_jacobian_adjustment(x, weights)
       }
@@ -649,32 +645,13 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
 }
 
 
-.ll_log_adjustment <- function(x) {
-  out <- tryCatch(
-    {
-      suppressWarnings(sum(stats::dlnorm(
-        x = get_response(x, as_proportion = TRUE),
-        meanlog = stats::fitted(x),
-        sdlog = get_sigma(x, ci = NULL, verbose = FALSE),
-        log = TRUE
-      )))
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-  # if adjustment failed, e.g. due to negative numbers for the log, return NULL instead
-  if (is.na(out) || is.infinite(out)) {
-    out <- NULL
-  }
-  out
-}
-
-
 .ll_jacobian_adjustment <- function(model, weights = NULL) {
   out <- tryCatch(
     {
-      trans <- get_transformation(model)$transformation
+      trans <- get_transformation(model, verbose = FALSE)$transformation
+      if (is.null(trans)) {
+        return(NULL)
+      }
       suppressWarnings(.weighted_sum(
         log(
           diag(attr(
@@ -698,7 +675,7 @@ get_loglikelihood.externVar <- get_loglikelihood.lcmm
     }
   )
   # if adjustment failed, e.g. due to negative numbers for the log, return NULL instead
-  if (is.na(out) || is.infinite(out)) {
+  if (is.null(out) || is.na(out) || is.infinite(out)) {
     out <- NULL
   }
   out
